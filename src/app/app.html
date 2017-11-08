@@ -1,19 +1,47 @@
-<ion-menu [content]="content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-content>
-    <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
-      </button>
+<ion-menu [content]="mainContent">
+  <ion-content id="side-menu21" class="side-menu-gradient-after-login">
+    
+    <div class="album-image">
+    <img src = "assets/img/gogle.jpg" style="display: block; width: 100%; height: 150px; margin-left: auto; margin-right: auto;">
+      <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
+    </div>
+    <ion-list id="menu-list1">
+      <ion-item color="none" menuClose="" on-click="goToHOME()" id="menu-list-item1" class="side-menu-item">
+        <ion-icon name="home" item-left></ion-icon>
+        HOME
+      </ion-item>
+      <ion-item color="none" menuClose="" on-click="goToTIMETABLE()" id="menu-list-item2" class="side-menu-item">
+        <ion-icon name="calendar" item-left></ion-icon>
+        TIMETABLE
+      </ion-item>
+      <ion-item color="none" menuClose="" on-click="goToRESULTS()" id="menu-list-item3" class="side-menu-item">
+        <ion-icon name="checkbox" item-left></ion-icon>
+        RESULTS
+      </ion-item>
+      <ion-item color="none" menuClose="" on-click="goToFEES()" id="menu-list-item4" class="side-menu-item">
+        <ion-icon name="cash" item-left></ion-icon>
+        FEES
+      </ion-item>
+      <ion-item color="none" menuClose="" on-click="goToNOTIFICATION()" id="menu-list-item5" class="side-menu-item">
+        <ion-icon name="chatbubbles" item-left></ion-icon>
+        NOTIFICATION
+      </ion-item>
+      <ion-item color="none" menuClose="" on-click="goToFEEDBACK()" id="menu-list-item6" class="side-menu-item">
+        <ion-icon name="at" item-left></ion-icon>
+        FEEDBACK
+      </ion-item>
+      <ion-item color="none" menuClose="" on-click="goToRESULTS()" id="menu-list-item7" class="side-menu-item-logout">
+        <ion-icon name="log-out" item-left></ion-icon>
+        LOGOUT
+      </ion-item>
     </ion-list>
+    <div class = "profile-image-after-login">
+      <img src = "assets/img/XE6qYQ5RUQNFXf2Xcttg_profile_user.jpg" style="display:block; width:25%;height:;">
+      <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
+    </div>
+    <h5 id="menu-heading8" style="color:#FFFFFF;font-weight:400;text-align:center;" class="name-menu">Esen Zheenchoroev</h5>
+    <h5 id="menu-heading9" style="color:#FFFFFF;font-weight:400;text-align:center;" class="name-menu">TP034790</h5>
   </ion-content>
-
 </ion-menu>
 
-<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
-<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
+<ion-nav #mainContent [root]="rootPage"></ion-nav>

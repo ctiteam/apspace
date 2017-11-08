@@ -1,4 +1,98 @@
-// http://ionicframework.com/docs/theming/
+// http://ionicframework.com/docs/v2/theming/
+
+$positive: #4682B4;
+$assertive: #FF5819;
+$calm: #FFE3D9;
+$SIDEMENU_BOTTOM: #4682B4;
+$SIDEMENU_TRANSPARENCY: rgba(255,255,255,0.4);
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+//Category in login page
+.select-cat-login {
+	height: 50px;
+}
+
+.side-menu-gradient-after-login {
+	background: $SIDEMENU_BOTTOM;
+}
+
+.profile-image-after-login {
+	img {
+		border-radius: 60%;
+		margin: 10px;
+		border: 4px solid $SIDEMENU_TRANSPARENCY;
+		-webkit-box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.75);
+		-moz-box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.75);
+		box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.75);
+		position: relative;
+		top: -470px;
+		left: 0px;
+		z-index: 2;
+	}
+	
+}
+.side-menu-item {
+	background: none;
+	color: white;
+	font-weight: 500;
+	border: 0px;
+	height: 50px;
+	.item-content {
+		background: none;
+		&.activated {
+			background: $SIDEMENU_TRANSPARENCY;
+		}
+		
+	}
+	&.active-page-highlight {
+		.item-content {
+			background: $SIDEMENU_TRANSPARENCY;
+		}
+		
+	}
+}
+
+.side-menu-item-logout {
+	background: #FF4500;
+	color: white;
+	font-weight: 500;
+	border: 0px;
+	height: 50px;
+	.item-content {
+		background: none;
+		&.activated {
+			background: $SIDEMENU_TRANSPARENCY;
+		}
+		
+	}
+	&.active-page-highlight {
+		.item-content {
+			background: $SIDEMENU_TRANSPARENCY;
+		}
+		
+	}
+}
+
+.name-menu {
+	position: relative;
+	top: -553px;
+	left: 20px;
+	right: 60px;
+	z-index: 3;
+}
+
+.album-image {
+	img {
+		position: relative;
+		top: 0px;
+		z-index: 1;
+		//border: 3px solid $SIDEMENU_TRANSPARENCY;
+		-webkit-filter: brightness(70%);
+		-moz-filter: brightness(70%);
+	}
+	
+}
+
+
 
 
 // App Global Sass

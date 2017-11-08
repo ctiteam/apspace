@@ -1,44 +1,54 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { NewsService } from './services/news.service';
 
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+
+import { HOMEPage } from '../pages/h-ome/h-ome';
+import { TIMETABLEPage } from '../pages/t-imetable/t-imetable';
+import { RESULTSPage } from '../pages/r-esults/r-esults';
+import { FEESPage } from '../pages/f-ees/f-ees';
+import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
+import { FEEDBACKPage } from '../pages/f-eedback/f-eedback';
+import {LOGINPage} from '../pages/l-ogin/l-ogin';
+
+
+
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
+  providers: [NewsService]
 })
 export class MyApp {
-  @ViewChild(Nav) nav: Nav;
+  @ViewChild(Nav) navCtrl: Nav;
+    rootPage:any = LOGINPage;
 
-  rootPage: any = HomePage;
-
-  pages: Array<{title: string, component: any}>;
-
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
-    this.initializeApp();
-
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
-    ];
-
-  }
-
-  initializeApp() {
-    this.platform.ready().then(() => {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
+    platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      statusBar.styleDefault();
+      splashScreen.hide();
     });
   }
-
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+  goToHOME(params){
+    if (!params) params = {};
+    this.navCtrl.setRoot(HOMEPage);
+  }goToTIMETABLE(params){
+    if (!params) params = {};
+    this.navCtrl.setRoot(TIMETABLEPage);
+  }goToRESULTS(params){
+    if (!params) params = {};
+    this.navCtrl.setRoot(RESULTSPage);
+  }goToFEES(params){
+    if (!params) params = {};
+    this.navCtrl.setRoot(FEESPage);
+  }goToNOTIFICATION(params){
+    if (!params) params = {};
+    this.navCtrl.setRoot(NOTIFICATIONPage);
+  }goToFEEDBACK(params){
+    if (!params) params = {};
+    this.navCtrl.setRoot(FEEDBACKPage);
   }
 }
