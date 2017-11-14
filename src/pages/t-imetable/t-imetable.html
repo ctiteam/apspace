@@ -18,7 +18,7 @@
         <ion-item id="tIMETABLE-select1">
             <ion-label>INTAKE: </ion-label>
             <ion-select>
-                <ion-option *ngFor = "let data of dataList" >{{data.INTAKE}}</ion-option> 
+                <ion-option *ngFor = "let timetable of (timetables | async)?.results">{{timetable.INTAKE}}</ion-option>
             </ion-select>
         </ion-item>
 

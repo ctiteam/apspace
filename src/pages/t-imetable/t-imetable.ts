@@ -1,49 +1,42 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { TimetableDataProvider } from '../../providers/timetable-data/timetable-data'
+import { Storage } from '@ionic/storage';
+import { Observable } from 'rxjs/Observable';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
+import { TimetableProvider} from '../../providers/timetable/timetable';
 
 @Component({
   selector: 'page-t-imetable',
   templateUrl: 't-imetable.html',
-  providers: [TimetableDataProvider]
 })
 export class TIMETABLEPage {
 
-  segments: string = "mon"
+  timetables: any = [];
 
-  dataList = [];
-  tueList = [];
-  wedList = [];
-  thurList = [];
-  friList = [];
+  constructor(public navCtrl: NavController, private storage: Storage, public http: Http, public timetableProvider: TimetableProvider ) {
+    
+    this.timetables = this.timetableProvider.getTimetable();
+    console.log(this.timetables);
+    
 
-  constructor(public navCtrl: NavController, private timetabledataProvider: TimetableDataProvider) {
-    this.getTimeTableData();
-    /* this.getTimeTableDataTue();
-    this.getTimeTableDataWed();
-    this.getTimeTableDataThur();
-    this.getTimeTableDataFri(); */
+
+    this.getvalue();
   }
 
-  getTimeTableData(){
-    this.timetabledataProvider.getTimeTableData().subscribe(data  => this.dataList = data);
+  test: any;
 
+  getvalue() {
+    this.storage.get('ticket').then((val) => {
+      this.test  = val;
+     console.log("GET VALUE   :"+ this.test)
+    });
   }
-  /*
-  getTimeTableDataTue(){
-    this.timetabledataProvider.getTimeTableDataTue().subscribe(data  => this.tueList = data);
 
-  }
-  getTimeTableDataWed(){
-    this.timetabledataProvider.getTimeTableDataWed().subscribe(data  => this.wedList = data);
-  }
-  getTimeTableDataThur(){
-    this.timetabledataProvider.getTimeTableDataThur().subscribe(data  => this.thurList = data);
-  }
-  getTimeTableDataFri(){
-    this.timetabledataProvider.getTimeTableDataFri().subscribe(data  => this.friList = data);
-  }
-  */
+  
+
+
+
 
 
  }

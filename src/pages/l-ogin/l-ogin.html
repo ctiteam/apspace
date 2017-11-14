@@ -20,21 +20,22 @@
         WELCOME TO iWEBSPACE
       </h4>
     </div>
-    <!-- <ion-list id="lOGIN-list12">
-      <ion-item id="lOGIN-input5">
+     <ion-list id="lOGIN-list12">
+     <ion-item id="lOGIN-input5">
         <ion-label></ion-label>
-        <ion-input type="email" placeholder="Email"></ion-input>
+        <ion-input type="email" placeholder="TP Number" [(ngModel)] = "this.userData.username" [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
       <ion-item id="lOGIN-input6">
         <ion-label></ion-label>
-        <ion-input type="password" placeholder="Password"></ion-input>
-      </ion-item>
-    </ion-list> -->
+        <ion-input type="password" placeholder="Password" [(ngModel)] ="this.userData.password" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item> 
+    </ion-list> 
     <div class="spacer" style="width:300px;height:6px;" id="lOGIN-spacer7"></div>
   
-    <button (click) = "openCas(url)"  id="lOGIN-button5" ion-button color="primary2" block style="border-radius:10px 10px 10px 10px;" >
+    <button (click) = "getTicket(ticketUrl)"  id="lOGIN-button5" ion-button color="primary2" block style="border-radius:10px 10px 10px 10px;" >
       Login to iWebspace
     </button> 
+
     <div class="spacer" style="width:300px;height:10px;" id="lOGIN-spacer7"></div>
     <ion-item id="lOGIN-checkbox1">
       <ion-label>

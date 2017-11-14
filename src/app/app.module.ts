@@ -10,18 +10,17 @@ import { FEESPage } from '../pages/f-ees/f-ees';
 import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
 import { FEEDBACKPage } from '../pages/f-eedback/f-eedback';
 import { LOGINPage } from '../pages/l-ogin/l-ogin';
-
-
+import { JsonpModule } from '@angular/http';
+import { IonicStorageModule } from '@ionic/storage';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { FeedServiceProvider } from '../providers/feed-service/feed-service';
-import { TimetableDataProvider } from '../providers/timetable-data/timetable-data';
 import { ResultProvider } from '../providers/result/result-data';
 
 import { Camera } from '@ionic-native/camera';
 import { EmailComposer } from '@ionic-native/email-composer';
-
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { TimetableProvider } from '../providers/timetable/timetable';
 
 @NgModule({
   declarations: [
@@ -37,7 +36,9 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp)
+    JsonpModule,
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -58,8 +59,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
     InAppBrowser,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FeedServiceProvider,
-    TimetableDataProvider,
-    ResultProvider
+    ResultProvider,
+    TimetableProvider
   ]
     
 })

@@ -30,6 +30,7 @@ export class HOMEPage {
   getPosts(){
     this.newsService.getPosts().subscribe(response => {
       this.items = response;
+      console.log(this.items);
 
       
       
