@@ -21,22 +21,22 @@
   <div *ngSwitchCase="'submit'">
   <form id="fEEDBACK-form2">
     <ion-item id="fEEDBACK-input1">
-      <ion-input type="text" placeholder="Name"></ion-input>
+      <ion-input type="text" placeholder="Name" [(ngModel)] = "this.feedbackData.name" [ngModelOptions]="{standalone: true}"></ion-input>
     </ion-item>
     <ion-item id="fEEDBACK-input2">
-      <ion-input type="email" placeholder="Email"></ion-input>
+      <ion-input type="email" placeholder="Email" [(ngModel)] = "this.feedbackData.email" [ngModelOptions]="{standalone: true}"></ion-input>
     </ion-item>
     <ion-item id="fEEDBACK-input3">
-      <ion-input type="tel" placeholder="Contact Number"></ion-input>
+      <ion-input type="tel" placeholder="Contact Number" [(ngModel)] = "this.feedbackData.contactNumber" [ngModelOptions]="{standalone: true}"></ion-input>
     </ion-item>
     <ion-item id="fEEDBACK-input4">
-      <ion-input type="text" placeholder="Subject"></ion-input>
+      <ion-input type="text" placeholder="Subject" [(ngModel)] = "this.feedbackData.subject" [ngModelOptions]="{standalone: true}"></ion-input>
     </ion-item>
     <ion-item id="fEEDBACK-textarea1">
       <ion-label>
         Message
       </ion-label>
-      <ion-textarea placeholder=""></ion-textarea>
+      <ion-textarea placeholder=""  [(ngModel)] = "this.feedbackData.message" [ngModelOptions]="{standalone: true}"></ion-textarea>
     </ion-item>
   </form>
   <button  (click)="sendEmail()" id="fEEDBACK-button4" ion-button color="primary2" block style="border-radius:10px 10px 10px 10px;">

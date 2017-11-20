@@ -5,10 +5,11 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser'
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
+import { AlertController } from 'ionic-angular';
 
-import {Injectable} from "@angular/core";
+import { Injectable } from "@angular/core";
 
-import {Observable} from "rxjs/Rx";
+import { Observable } from "rxjs/Rx";
 import 'rxjs/add/operator/map';
 
 
@@ -17,7 +18,7 @@ import 'rxjs/add/operator/map';
   templateUrl: 'l-ogin.html'
 })
 export class LOGINPage {
-  constructor(private storage: Storage, public navCtrl: NavController, public http: Http, private inAppBrowser: InAppBrowser, private toastCtrl: ToastController) {
+  constructor(private alertCtrl: AlertController,private storage: Storage, public navCtrl: NavController, public http: Http, private inAppBrowser: InAppBrowser, private toastCtrl: ToastController) {
 
   }
 
@@ -49,15 +50,17 @@ export class LOGINPage {
     this.http.post(ticketUrl, this.body, options)
       .subscribe(res => {
         this.responds = res.text()
-          console.log(this.responds);
-          this.break = this.responds.split("=")[1];
-          this.ticket = this.break.split("\"")[1];
-          console.log('here is the break final result');
-          console.log(this.ticket);
-          this.getServiceTicket();
-        
+        console.log(this.responds);
+        this.break = this.responds.split("=")[1];
+        this.ticket = this.break.split("\"")[1];
+        console.log('here is the break final result');
+        console.log(this.ticket);
+        this.getServiceTicket();
+        this.setTGTurlvalue();
+
       }, error => {
         console.log(error);
+        this.presentAlert();
       })
   }
 
@@ -71,7 +74,7 @@ export class LOGINPage {
       .subscribe(res => {
         this.serviceTicket = res.text()
         this.validateST();
-        
+
 
         console.log("Service Ticket = " + this.serviceTicket);
       })
@@ -84,11 +87,18 @@ export class LOGINPage {
     this.http.get(webService)
       .subscribe(res => {
         this.respond = res;
-        console.log(this.respond);
+        console.log("this is what we get    :" + this.respond);
         this.setvalue();
+        this.navCtrl.setRoot(HOMEPage);
       }, error => {
         console.log('Error message' + error);
       })
+  }
+
+  setTGTurlvalue() {
+    console.log("set value TGT URL    :" + this.ticket)
+    this.storage.set('tgturl', this.ticket);
+
   }
 
   setvalue() {
@@ -98,10 +108,21 @@ export class LOGINPage {
 
   getvalue() {
     this.storage.get('ticket').then((val) => {
-      this.test  = val;
-     console.log("GET VALUE   :"+ this.test)
+      this.test = val;
+      console.log("GET VALUE   :" + this.test)
     });
   }
+
+
+
+presentAlert() {
+  let alert = this.alertCtrl.create({
+    title: 'Acess Denied',
+    subTitle: 'Please check your username and password',
+    buttons: ['Dismiss']
+  });
+  alert.present();
+}
 
   // presentToast(msg) {
   //   let toast = this.toastCtrl.create({

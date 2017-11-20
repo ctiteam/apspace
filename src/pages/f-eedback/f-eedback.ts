@@ -12,6 +12,8 @@ export class FEEDBACKPage {
   constructor(public navCtrl: NavController, private emailComposer: EmailComposer, private inAppBrowser: InAppBrowser) {
   }
 
+  feedbackData = { "name": "", "email": "", "contactNumber": "", "subject": "", "message": ""};
+
   url: string ="https://www.facebook.com/apuniversity/?ref=br_rs";
   twitUrl: string ="https://twitter.com/AsiaPacificU";
   googleUrl: string ="https://plus.google.com/+AsiaPacificUniversityKualaLumpur";

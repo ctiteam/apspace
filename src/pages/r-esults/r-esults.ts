@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import {ResultProvider} from '../../providers/result/result-data';
+import { ResultProvider } from '../../providers/result/result-data';
+import { Storage } from '@ionic/storage';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Header } from 'ionic-angular/components/toolbar/toolbar-header';
+
+
 
 @Component({
   selector: 'page-r-esults',
@@ -8,19 +13,62 @@ import {ResultProvider} from '../../providers/result/result-data';
   providers: [ResultProvider]
 })
 export class RESULTSPage {
-  seg: string = "lev2"
+
+  service: any;
+  seg: string = "lev2";
   resultList = [];
-  resultList2  = [];
+  resultList2 = [];
 
-  constructor(public navCtrl: NavController, private resultProvider: ResultProvider) {
-    this.getResultData();
-    this.getResultData2();
-  }
-  getResultData(){
-    this.resultProvider.getResultData().subscribe(data => this.resultList = data);
+  serviceTicket: any;
+  respond: any;
+  ticket: any;
+  constructor(public navCtrl: NavController, public http: Http, private resultProvider: ResultProvider, public storage: Storage) {
+    this.getTGTvalue();
+  
   }
 
-  getResultData2(){
-    this.resultProvider.getResultData2().subscribe(data => this.resultList2 = data);
+  getTGTvalue() {
+    this.storage.get('tgturl').then((val) => {
+      this.ticket = val;      
+    });
+  }
+
+  getServiceTicket() {
+    var headers = new Headers();
+    headers.append('Content-type', 'application/x-www-form-urlencoded');
+    let options = new RequestOptions({ headers: headers });
+    this.service = 'service=https://ws.apiit.edu.my/web-services/index.php/student/courses?format=json&callback=__ng_jsonp__.__req3.finished';
+    this.http.post(this.ticket, this.service, options)
+      .subscribe(res => {
+        this.serviceTicket = res.text()
+        console.log("Service Ticket = " + this.serviceTicket);
+        this.validateST();
+      })
+  }
+
+  validateST() {
+    
+    // var validateUrl = 'https://cas.apiit.edu.my/cas/validate';
+    // var webService = validateUrl + '?' + this.service + '&ticket=' + this.serviceTicket;
+    // this.http.get(webService)
+    //   .subscribe(res => {
+    //     this.respond = res;
+    //     console.log("validate respond is this  :" + this.respond);
+   
+        var url = 'https://ws.apiit.edu.my/web-services/index.php/student/courses?format=json&callback=__ng_jsonp__.__req3.finished';
+        var webServiceurl = url + "&ticket=" + this.serviceTicket;    
+         
+        this.http.get(webServiceurl)
+          .subscribe(ress => {
+           
+            this.respond = ress;
+            console.log("this is what we get    :" + this.respond);
+          }, error => {
+            
+            console.log('Error message' + error);
+          })
+      // }, error => {
+      //   console.log('Error message' + error);
+      // })
   }
 }
