@@ -18,6 +18,10 @@
     </ion-segment>
 </ion-header>
 <ion-content [ngSwitch]="seg" padding id="page3" style="background-color:#C8DAE8;">
+        <ion-refresher (ionRefresh)="doRefresh($event)">
+                <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
+                </ion-refresher-content>
+        </ion-refresher>
     <div>
         <div *ngSwitchCase="'lev2'" id="rESULTS-container1">
             <ion-card>

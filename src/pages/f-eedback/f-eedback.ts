@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser'
+import { AlertController } from 'ionic-angular';
 
 @Component({
   selector: 'page-f-eedback',
@@ -9,10 +10,10 @@ import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser'
 })
 export class FEEDBACKPage {
   feedback: string = "submit"
-  constructor(public navCtrl: NavController, private emailComposer: EmailComposer, private inAppBrowser: InAppBrowser) {
+  constructor(private alertCtrl: AlertController, public navCtrl: NavController, private emailComposer: EmailComposer, private inAppBrowser: InAppBrowser) {
   }
 
-  feedbackData = { "name": "", "email": "", "contactNumber": "", "subject": "", "message": ""};
+  feedbackData = { "name": "", "contactNumber": "", "message": ""};
 
   url: string ="https://www.facebook.com/apuniversity/?ref=br_rs";
   twitUrl: string ="https://twitter.com/AsiaPacificU";
@@ -20,12 +21,27 @@ export class FEEDBACKPage {
   linkedinUrl: string ="https://www.linkedin.com/school/989991/";
   
 
+  validateField(){
+    if(!this.feedbackData.name || !this.feedbackData.contactNumber || !this.feedbackData.message){
+      this.presentAlert();
+    }else{
+      this.sendEmail();
+    }
+  }
 
+  presentAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Denied',
+      subTitle: 'Please, fill up first',
+      buttons: ['Dismiss']
+    });
+    alert.present();
+  }
   sendEmail(){
     let email = {
       to: 'stefunic@mail.ru',
-      subject: 'Feedback/Enquiries',
-      body: 'Esen Zheenchoroev - TP034790',
+      subject: "Mobile iWebspace Feedback",
+      body: this.feedbackData.name + '\n' + this.feedbackData.contactNumber + '\n' +  this.feedbackData.message,
       isHTML: true
     };
     this.emailComposer.open(email);

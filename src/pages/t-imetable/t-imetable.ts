@@ -26,6 +26,15 @@ export class TIMETABLEPage {
 
   test: any;
 
+  doRefresh(refresher) {
+    console.log('Begin async operation', refresher);
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      refresher.complete();
+    }, 2000);
+  }
+
   getvalue() {
     this.storage.get('ticket').then((val) => {
       this.test  = val;

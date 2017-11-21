@@ -21,16 +21,10 @@
   <div *ngSwitchCase="'submit'">
   <form id="fEEDBACK-form2">
     <ion-item id="fEEDBACK-input1">
-      <ion-input type="text" placeholder="Name" [(ngModel)] = "this.feedbackData.name" [ngModelOptions]="{standalone: true}"></ion-input>
-    </ion-item>
-    <ion-item id="fEEDBACK-input2">
-      <ion-input type="email" placeholder="Email" [(ngModel)] = "this.feedbackData.email" [ngModelOptions]="{standalone: true}"></ion-input>
+      <ion-input type="text" placeholder="Fullname & TP number" [(ngModel)] = "this.feedbackData.name" [ngModelOptions]="{standalone: true}"></ion-input>
     </ion-item>
     <ion-item id="fEEDBACK-input3">
       <ion-input type="tel" placeholder="Contact Number" [(ngModel)] = "this.feedbackData.contactNumber" [ngModelOptions]="{standalone: true}"></ion-input>
-    </ion-item>
-    <ion-item id="fEEDBACK-input4">
-      <ion-input type="text" placeholder="Subject" [(ngModel)] = "this.feedbackData.subject" [ngModelOptions]="{standalone: true}"></ion-input>
     </ion-item>
     <ion-item id="fEEDBACK-textarea1">
       <ion-label>
@@ -39,7 +33,7 @@
       <ion-textarea placeholder=""  [(ngModel)] = "this.feedbackData.message" [ngModelOptions]="{standalone: true}"></ion-textarea>
     </ion-item>
   </form>
-  <button  (click)="sendEmail()" id="fEEDBACK-button4" ion-button color="primary2" block style="border-radius:10px 10px 10px 10px;">
+  <button  (click)="validateField()" id="fEEDBACK-button4" ion-button color="primary2" block style="border-radius:10px 10px 10px 10px;">
     SUBMIT
   </button>
   <h5 id="fEEDBACK-heading3" style="color:primary2; text-align:justify;">

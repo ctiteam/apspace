@@ -10,9 +10,14 @@
 </ion-header>
 
 
-<ion-content padding id="page2" style="background-color:#C8DAE8;">
-    <div>
 
+<ion-content padding id="page2" style="background-color:#C8DAE8;">
+        <ion-refresher (ionRefresh)="doRefresh($event)">
+                <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
+                </ion-refresher-content>
+        </ion-refresher>
+
+    <div>
     <form id="tIMETABLE-form1">
         <ion-searchbar placeholder="Search Intake" name="" id="tIMETABLE-search1"></ion-searchbar>
         <ion-item id="tIMETABLE-select1">
@@ -46,8 +51,10 @@
     <!--<button id="tIMETABLE-button1" ion-button color="positive" block >
     Tap me!
   </button> -->
+  
     <div [ngSwitch]="segments">
     <div>
+            
         <ion-card  *ngSwitchCase="'mon'" >
             <ion-list id="tIMETABLE-list1" >
                 <ion-item id="tIMETABLE-list-item-container3" color = "segment">

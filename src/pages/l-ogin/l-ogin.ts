@@ -117,8 +117,8 @@ export class LOGINPage {
 
 presentAlert() {
   let alert = this.alertCtrl.create({
-    title: 'Acess Denied',
-    subTitle: 'Please check your username and password',
+    title: 'Access Denied',
+    subTitle: 'Please, check your username and password',
     buttons: ['Dismiss']
   });
   alert.present();
