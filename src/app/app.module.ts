@@ -14,12 +14,9 @@ import { JsonpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { ResultProvider } from '../providers/result/result-data';
 
-import { Camera } from '@ionic-native/camera';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
-import { TimetableProvider } from '../providers/timetable/timetable';
 import { FeedServiceProvider } from '../providers/feed-service/feed-service';
 import { Network } from '@ionic-native/network';
 
@@ -57,11 +54,8 @@ import { Network } from '@ionic-native/network';
     StatusBar,
     SplashScreen,
     EmailComposer,
-    Camera,
     InAppBrowser,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ResultProvider,
-    TimetableProvider,
     FeedServiceProvider,
     Network
   ]

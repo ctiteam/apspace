@@ -13,22 +13,23 @@ export class FEEDBACKPage {
   constructor(private alertCtrl: AlertController, public navCtrl: NavController, private emailComposer: EmailComposer, private inAppBrowser: InAppBrowser) {
   }
 
-  feedbackData = { "name": "", "contactNumber": "", "message": ""};
+  feedbackData = { "name": "", "contactNumber": "", "message": "" };
 
-  url: string ="https://www.facebook.com/apuniversity/?ref=br_rs";
-  twitUrl: string ="https://twitter.com/AsiaPacificU";
-  googleUrl: string ="https://plus.google.com/+AsiaPacificUniversityKualaLumpur";
-  linkedinUrl: string ="https://www.linkedin.com/school/989991/";
-  
+  url: string = "https://www.facebook.com/apuniversity/?ref=br_rs";
+  twitUrl: string = "https://twitter.com/AsiaPacificU";
+  googleUrl: string = "https://plus.google.com/+AsiaPacificUniversityKualaLumpur";
+  linkedinUrl: string = "https://www.linkedin.com/school/989991/";
 
-  validateField(){
-    if(!this.feedbackData.name || !this.feedbackData.contactNumber || !this.feedbackData.message){
+
+  validateField() {
+    if (!this.feedbackData.name || !this.feedbackData.contactNumber || !this.feedbackData.message) {
       this.presentAlert();
-    }else{
+    } else {
       this.sendEmail();
     }
   }
 
+  //Alerts the user to fill up all the empty field before sending the Feedback
   presentAlert() {
     let alert = this.alertCtrl.create({
       title: 'Denied',
@@ -37,40 +38,41 @@ export class FEEDBACKPage {
     });
     alert.present();
   }
-  sendEmail(){
+  
+  sendEmail() {
     let email = {
       to: 'stefunic@mail.ru',
       subject: "Mobile iWebspace Feedback",
-      body: this.feedbackData.name + '\n' + this.feedbackData.contactNumber + '\n' +  this.feedbackData.message,
+      body: this.feedbackData.name + '\n' + this.feedbackData.contactNumber + '\n' + this.feedbackData.message,
       isHTML: true
     };
     this.emailComposer.open(email);
   }
 
-  openFacebook(url : string){
+  openFacebook(url: string) {
     const options: InAppBrowserOptions = {
       zoom: 'no'
     }
     const browser = this.inAppBrowser.create(url, '_self', options)
   }
-  openTwitter(twitUrl : string){
+  openTwitter(twitUrl: string) {
     const options: InAppBrowserOptions = {
       zoom: 'no'
     }
     const browser = this.inAppBrowser.create(twitUrl, '_self', options)
   }
-  openGooglePlus(googleUrl : string){
+  openGooglePlus(googleUrl: string) {
     const options: InAppBrowserOptions = {
       zoom: 'no'
     }
     const browser = this.inAppBrowser.create(googleUrl, '_self', options)
   }
 
-  openLinkedIn(linkedinUrl : string){
+  openLinkedIn(linkedinUrl: string) {
     const options: InAppBrowserOptions = {
       zoom: 'no'
     }
     const browser = this.inAppBrowser.create(linkedinUrl, '_self', options)
   }
-  
+
 }

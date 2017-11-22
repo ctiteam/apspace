@@ -4,7 +4,6 @@ import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { TimetableProvider} from '../../providers/timetable/timetable';
 
 @Component({
   selector: 'page-t-imetable',
@@ -14,13 +13,8 @@ export class TIMETABLEPage {
 
   timetables: any = [];
 
-  constructor(public navCtrl: NavController, private storage: Storage, public http: Http, public timetableProvider: TimetableProvider ) {
+  constructor(public navCtrl: NavController, private storage: Storage, public http: Http ) {
     
-    this.timetables = this.timetableProvider.getTimetable();
-    console.log(this.timetables);
-    
-
-
     this.getvalue();
   }
 
