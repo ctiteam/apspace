@@ -21,6 +21,8 @@ import { EmailComposer } from '@ionic-native/email-composer';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { TimetableProvider } from '../providers/timetable/timetable';
 import { FeedServiceProvider } from '../providers/feed-service/feed-service';
+import { Network } from '@ionic-native/network';
+
 
 @NgModule({
   declarations: [
@@ -60,7 +62,8 @@ import { FeedServiceProvider } from '../providers/feed-service/feed-service';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ResultProvider,
     TimetableProvider,
-    FeedServiceProvider
+    FeedServiceProvider,
+    Network
   ]
     
 })

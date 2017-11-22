@@ -2,15 +2,10 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { HOMEPage } from '../h-ome/h-ome';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser'
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
-
 import { Injectable } from "@angular/core";
-
-import { Observable } from "rxjs/Rx";
-import 'rxjs/add/operator/map';
 
 
 @Component({
@@ -18,26 +13,27 @@ import 'rxjs/add/operator/map';
   templateUrl: 'l-ogin.html'
 })
 export class LOGINPage {
-  constructor(private alertCtrl: AlertController,private storage: Storage, public navCtrl: NavController, public http: Http, private inAppBrowser: InAppBrowser, private toastCtrl: ToastController) {
+  constructor(private alertCtrl: AlertController, private storage: Storage, public navCtrl: NavController, public http: Http, private toastCtrl: ToastController) {
 
   }
 
-  //url: string = "https://cas.apiit.edu.my/cas/login";
-
+  //Cas Url where username and password are sent
   ticketUrl: string = "https://cas.apiit.edu.my/cas/v1/tickets";
 
-
-  body: any;
+  body: any;                //username and password
   responds: any;
   break: any;
-  public ticket: any;
-  serviceTicket: any;
-  service: any;
-  respond: any;
-  intakecode: any;
+  public ticket: any;       //TGT-ticket
+  serviceTicket: any;       //Service Ticket - TGT is sent to get Service Ticket
+  service: any;             //Service - in this page is Cas Login Url
+  respond: any;             //Used to Vaidate the Service Ticket
   public test: any;
+  cred: any;
+
 
   userData = { "username": "", "password": "" };
+
+
 
   getTicket(ticketUrl) {
 
@@ -50,20 +46,15 @@ export class LOGINPage {
     this.http.post(ticketUrl, this.body, options)
       .subscribe(res => {
         this.responds = res.text()
-        console.log(this.responds);
         this.break = this.responds.split("=")[1];
         this.ticket = this.break.split("\"")[1];
-        console.log('here is the break final result');
-        console.log(this.ticket);
         this.getServiceTicket();
         this.setTGTurlvalue();
-
       }, error => {
-        console.log(error);
+        console.log("Error to get TGT: " + error);
         this.presentAlert();
       })
   }
-
 
   getServiceTicket() {
     var headers = new Headers();
@@ -74,112 +65,56 @@ export class LOGINPage {
       .subscribe(res => {
         this.serviceTicket = res.text()
         this.validateST();
-
-
-        console.log("Service Ticket = " + this.serviceTicket);
+      }, error => {
+        console.log("Error to get Service Ticket: " + error);
       })
   }
 
   validateST() {
-    var validateUrl = 'https://cas.apiit.edu.my/cas/validate';
-    var webService = validateUrl + '?' + this.service + '&ticket=' + this.serviceTicket;
+    var validateCasUrl = 'https://cas.apiit.edu.my/cas/validate';
+    var webService = validateCasUrl + '?' + this.service + '&ticket=' + this.serviceTicket; //Format to send to validate the Service Ticket
 
     this.http.get(webService)
       .subscribe(res => {
         this.respond = res;
-        console.log("this is what we get    :" + this.respond);
-        this.setvalue();
+        this.saveST();
         this.navCtrl.setRoot(HOMEPage);
       }, error => {
-        console.log('Error message' + error);
+        console.log('Error message - ST Validation: ' + error);
       })
   }
 
+  //Saves TGT and Service Ticket in Local Storage
+
   setTGTurlvalue() {
-    console.log("set value TGT URL    :" + this.ticket)
+    console.log("save value of TGT URL :" + this.ticket)
     this.storage.set('tgturl', this.ticket);
 
   }
 
-  setvalue() {
-    console.log("set value respond:" + this.serviceTicket)
+  saveST() {
+    console.log("save value of Service Ticket: " + this.serviceTicket)
     this.storage.set('ticket', this.serviceTicket);
   }
 
-  getvalue() {
+  getST() {
     this.storage.get('ticket').then((val) => {
       this.test = val;
       console.log("GET VALUE   :" + this.test)
     });
   }
 
-
-
+//Alerts users that the credentials are wrong
 presentAlert() {
   let alert = this.alertCtrl.create({
-    title: 'Access Denied',
-    subTitle: 'Please, check your username and password',
+    title: 'Access Denied!',
+    subTitle: 'Please, re-enter your username or password',
     buttons: ['Dismiss']
   });
   alert.present();
 }
-
-  // presentToast(msg) {
-  //   let toast = this.toastCtrl.create({
-  //     message: msg,
-  //     duration: 3000,
-  //     position: 'top'
-  //   });
-  //   toast.present();
-  // }
 }
 
 
 
-//         this.responds = res.text()
-//         console.log(this.responds);
-//         this.break1 = this.responds.split("=")[1];
-//         this.break2 = this.break1.split("\"")[1]
-//         console.log(this.break2);
-
-
-
-//        var test2 = this.responds.split("=")[1];
-//         var test3 = test2.split("\"")[1]
-//         console.log(test3);
-
-
-// 
-//     return new Promise ((resolve, reject) =>{
-//       this.http.post(casUrl, data, options)
-//       .toPromise()
-//       .then((response) =>
-//       {
-//         console.log('API Response : ', response.json());
-//         resolve(response.json());
-//       })
-//       .catch((error) =>
-//       {
-//         console.error('API Error : ', error.status);
-//         console.error('API Error : ', JSON.stringify(error));
-//         reject(error.json());
-//       });
-//     })
-
-//   
-//     this.http.post(casUrl, data, options )
-//     .subscribe(res => {
-//       console.log(res.json());
-//     },error =>{
-//       console.log(error);
-//     })
-//     
-
-// 
-//   }
-//   goToHOME(params){
-//     if (!params) params = {};
-//     this.navCtrl.push(HOMEPage);
-//   }
-//   
 

@@ -4,14 +4,13 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { NewsService } from './services/news.service';
 
-
 import { HOMEPage } from '../pages/h-ome/h-ome';
 import { TIMETABLEPage } from '../pages/t-imetable/t-imetable';
 import { RESULTSPage } from '../pages/r-esults/r-esults';
 import { FEESPage } from '../pages/f-ees/f-ees';
 import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
 import { FEEDBACKPage } from '../pages/f-eedback/f-eedback';
-import {LOGINPage} from '../pages/l-ogin/l-ogin';
+import { LOGINPage } from '../pages/l-ogin/l-ogin';
 
 
 
@@ -20,9 +19,10 @@ import {LOGINPage} from '../pages/l-ogin/l-ogin';
   templateUrl: 'app.html',
   providers: [NewsService]
 })
+
 export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
-    rootPage:any = LOGINPage;
+  rootPage: any = LOGINPage;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
@@ -32,22 +32,24 @@ export class MyApp {
       splashScreen.hide();
     });
   }
-  goToHOME(params){
+
+
+  goToHOME(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(HOMEPage);
-  }goToTIMETABLE(params){
+  } goToTIMETABLE(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(TIMETABLEPage);
-  }goToRESULTS(params){
+  } goToRESULTS(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(RESULTSPage);
-  }goToFEES(params){
+  } goToFEES(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(FEESPage);
-  }goToNOTIFICATION(params){
+  } goToNOTIFICATION(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(NOTIFICATIONPage);
-  }goToFEEDBACK(params){
+  } goToFEEDBACK(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(FEEDBACKPage);
   }
