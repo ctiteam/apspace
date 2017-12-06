@@ -10,6 +10,8 @@ import { FEESPage } from '../pages/f-ees/f-ees';
 import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
 import { FEEDBACKPage } from '../pages/f-eedback/f-eedback';
 import { LOGINPage } from '../pages/l-ogin/l-ogin';
+import { WelcomePage} from '../pages/welcome/welcome';
+
 import { JsonpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -30,7 +32,8 @@ import { Network } from '@ionic-native/network';
     FEESPage,
     NOTIFICATIONPage,
     FEEDBACKPage,
-    LOGINPage
+    LOGINPage,
+    WelcomePage
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,8 @@ import { Network } from '@ionic-native/network';
     FEESPage,
     NOTIFICATIONPage,
     FEEDBACKPage,
-    LOGINPage
+    LOGINPage,
+    WelcomePage
   ],
   providers: [
     StatusBar,
@@ -59,6 +63,6 @@ import { Network } from '@ionic-native/network';
     FeedServiceProvider,
     Network
   ]
-    
+
 })
 export class AppModule {}

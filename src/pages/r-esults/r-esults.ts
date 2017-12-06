@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { Header } from 'ionic-angular/components/toolbar/toolbar-header';
+
 
 
 
@@ -52,8 +52,8 @@ export class RESULTSPage {
     //     this.respond = res;
     //     console.log("validate respond is this  :" + this.respond);
 
-    var url = 'https://ws.apiit.edu.my/web-services/index.php/student/courses?format=json&callback=__ng_jsonp__.__req3.finished';
-    var webServiceurl = url + "&ticket=" + this.serviceTicket;
+    var url = 'https://ws.apiit.edu.my/web-services/index.php/student/courses?';
+    var webServiceurl = url + "sticket=" + this.serviceTicket;
 
     this.http.get(webServiceurl)
       .subscribe(ress => {
@@ -64,7 +64,7 @@ export class RESULTSPage {
 
         console.log('Error message' + error);
       })
-      
+
     // }, error => {
     //   console.log('Error message' + error);
     // })

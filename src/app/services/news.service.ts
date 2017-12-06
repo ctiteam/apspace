@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Jsonp ,Response} from '@angular/http';
 import 'rxjs/Rx';
 
 @Injectable()
@@ -9,7 +8,7 @@ export class NewsService{
     http: any;
     baseUrl = 'https://api.myjson.com/bins/gb6br';
 
-    constructor(private _http: Http, private _jsonp: Jsonp){
+    constructor(private _http: Http){
         
     }
     getPosts(){

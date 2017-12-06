@@ -33,8 +33,6 @@ export class LOGINPage {
 
   userData = { "username": "", "password": "" };
 
-
-
   getTicket(ticketUrl) {
 
     var headers = new Headers();
@@ -78,17 +76,31 @@ export class LOGINPage {
       .subscribe(res => {
         this.respond = res;
         this.saveST();
+        this.saveUsername();
+        this.savePassword();
         this.navCtrl.setRoot(HOMEPage);
       }, error => {
         console.log('Error message - ST Validation: ' + error);
       })
   }
 
-  //Saves TGT and Service Ticket in Local Storage
+  //Saves TGT, User Credendials and Service Ticket in Local Storage
 
   setTGTurlvalue() {
     console.log("save value of TGT URL :" + this.ticket)
     this.storage.set('tgturl', this.ticket);
+
+  }
+
+  saveUsername() {
+    console.log("save value of username :" + this.userData.username)
+    this.storage.set('username', this.userData.username);
+
+  }
+
+  savePassword() {
+    console.log("save value of password :" + this.userData.password)
+    this.storage.set('password', this.userData.password);
 
   }
 
@@ -104,17 +116,13 @@ export class LOGINPage {
     });
   }
 
-//Alerts users that the credentials are wrong
-presentAlert() {
-  let alert = this.alertCtrl.create({
-    title: 'Access Denied!',
-    subTitle: 'Please, re-enter your username or password',
-    buttons: ['Dismiss']
-  });
-  alert.present();
+  //Alerts users that the credentials are wrong
+  presentAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Access Denied!',
+      subTitle: 'Please, re-enter your username or password',
+      buttons: ['Dismiss']
+    });
+    alert.present();
+  }
 }
-}
-
-
-
-

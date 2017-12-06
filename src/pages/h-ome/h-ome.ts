@@ -1,8 +1,10 @@
-import { Component, NgModule } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { NewsService } from '../../app/services/news.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { Storage } from '@ionic/storage';
+import { ToastController } from 'ionic-angular';
+import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
 
 
@@ -16,30 +18,65 @@ export class HOMEPage {
   counter: number;
 
   items = [];       //All the news posts inside items
-  getNews: any;     //Local News
+  getNews= [];     //Local News
 
-  constructor(public navCtrl: NavController, private newsService: NewsService, private storage: Storage, private network: Network) {
+
+  connected: Subscription;
+  disconnected: Subscription;
+
+  constructor(public network: Network, private toast: ToastController,public navCtrl: NavController, private newsService: NewsService, private storage: Storage){
+  }
+
+  ionViewDidLoad() {
     this.getPosts();
-    this.networkConnection();
+  }
+
+  networkConnection() {
+    this.connected = this.network.onConnect().subscribe(data => {
+      this.getPosts();
+      this.displayNetworkUpdate(data.type);
+      console.log(data)
+    }, error => console.error(error));
+
+
+    this.disconnected = this.network.onDisconnect().subscribe(data => {
+      this.loadPosts();
+      this.displayNetworkUpdate(data.type);
+       
+      console.log(data)
+    }, error => console.error(error));
+
+    // stop connect watch
+    //connectSubscription.unsubscribe()
+  }
+
+  displayNetworkUpdate(connectionState: string) {
+    let networkType = this.network.type;
+    this.toast.create({
+      message: `You are now ${connectionState} via ${networkType}`,
+      duration: 3000
+    }).present();
   }
 
   //Loads the news from Web Service
   getPosts() {
     this.newsService.getPosts().subscribe(response => {
       this.items = response;
-      this.savePosts()
+       this.savePosts()
     });
   }
 
   //Saves the news to Local Storage
   savePosts() {
     this.storage.set('news', this.items);
+    console.log("News are saved locally: " + this.items);
   }
 
   //Loads the saved news from Local Storage
   loadPosts() {
     this.storage.get('news').then((val) => {
-      this.getNews = val;
+      this.items = val;
+      console.log(this.items)
     });
   }
 
@@ -48,39 +85,10 @@ export class HOMEPage {
     console.log('Begin async operation', refresher);
     setTimeout(() => {
       console.log('Async operation has ended');
+      this.getPosts();
       refresher.complete();
+      
     }, 1500);
-    this.getPosts();
-  }
-
-
-  //Check whether the Network Connection is off/on
-  networkConnection() {
-    // watch network for a disconnect
-    let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
-      console.log('network was disconnected!');
-    });
-
-    // stop disconnect watch
-    //disconnectSubscription.unsubscribe();
-
-
-
-    // watch network for a connection
-    let connectSubscription = this.network.onConnect().subscribe(() => {
-      console.log('network connected!');
-
-      // We just got a connection but we need to wait briefly
-      // before we determine the connection type. Might need to wait.
-      // prior to doing any api requests as well.
-      setTimeout(() => {
-        if (this.network.type === 'wifi') {
-          console.log('we got a wifi connection, woohoo!');
-        }
-      }, 3000);
-    });
-
-    // stop connect watch
-    //connectSubscription.unsubscribe();
+    
   }
 }

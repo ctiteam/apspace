@@ -13,7 +13,7 @@ export class FEEDBACKPage {
   constructor(private alertCtrl: AlertController, public navCtrl: NavController, private emailComposer: EmailComposer, private inAppBrowser: InAppBrowser) {
   }
 
-  feedbackData = { "name": "", "contactNumber": "", "message": "" };
+  feedbackData = { "name": "", "studentNumber": "", "contactNumber": "", "message": "" };
 
   url: string = "https://www.facebook.com/apuniversity/?ref=br_rs";
   twitUrl: string = "https://twitter.com/AsiaPacificU";
@@ -38,12 +38,12 @@ export class FEEDBACKPage {
     });
     alert.present();
   }
-  
+
   sendEmail() {
     let email = {
       to: 'stefunic@mail.ru',
       subject: "Mobile iWebspace Feedback",
-      body: this.feedbackData.name + '\n' + this.feedbackData.contactNumber + '\n' + this.feedbackData.message,
+      body: this.feedbackData.name + '\n' +this.feedbackData.studentNumber + '\n' + this.feedbackData.contactNumber + '\n' + this.feedbackData.message,
       isHTML: true
     };
     this.emailComposer.open(email);

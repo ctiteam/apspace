@@ -7,77 +7,79 @@
       FEEDBACK
     </ion-title>
   </ion-navbar>
-  <div class="spacer" style="width:300px;height:10px;" id="lOGIN-spacer8"></div>
-  <ion-segment [(ngModel)]="feedback" color="primary2">
-    <ion-segment-button value="submit">
-      SUBMIT FEEDBACK
-    </ion-segment-button>
-    <ion-segment-button value="history">
-      FEEDBACK HISTORY
-    </ion-segment-button>
-  </ion-segment>
 </ion-header>
-<ion-content [ngSwitch]="feedback" padding id="page6" style="background-color:#C8DAE8;">
-  <div *ngSwitchCase="'submit'">
-  <form id="fEEDBACK-form2">
-    <ion-item id="fEEDBACK-input1">
-      <ion-input type="text" placeholder="Fullname & TP number" [(ngModel)] = "this.feedbackData.name" [ngModelOptions]="{standalone: true}"></ion-input>
-    </ion-item>
-    <ion-item id="fEEDBACK-input3">
-      <ion-input type="tel" placeholder="Contact Number" [(ngModel)] = "this.feedbackData.contactNumber" [ngModelOptions]="{standalone: true}"></ion-input>
-    </ion-item>
-    <ion-item id="fEEDBACK-textarea1">
-      <ion-label>
-        Message
-      </ion-label>
-      <ion-textarea placeholder=""  [(ngModel)] = "this.feedbackData.message" [ngModelOptions]="{standalone: true}"></ion-textarea>
-    </ion-item>
-  </form>
-  <button  (click)="validateField()" id="fEEDBACK-button4" ion-button color="primary2" block style="border-radius:10px 10px 10px 10px;">
-    SUBMIT
-  </button>
-  <h5 id="fEEDBACK-heading3" style="color:primary2; text-align:justify;">
-    ASIA PACIFIC UNIVERSITY OF TECHNOLOGY & INNOVATION (APU)
-  </h5>
-  <div id="fEEDBACK-markdown28" style="text-align:justify;" class="show-list-numbers-and-dots">
-    <p style="color:#000000;font-size:11px;">
-      Technology Park Malaysia, Bulit Jalil, Kuala Lumpur 57000 Malaysia
-    </p>
+
+<div class="spacer" style="width:300px;height:10px;" id="lOGIN-spacer8"></div>
+<ion-content padding id="page6" style="background-color:#C8DAE8;">
+  <div>
+    <form id="fEEDBACK-form2">
+      <ion-item id="fEEDBACK-input1">
+        <ion-input type="text" placeholder="Fullname" [(ngModel)]="this.feedbackData.name" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item id="fEEDBACK-input2">
+        <ion-input type="text" placeholder="TP number" [(ngModel)]="this.feedbackData.studentNumber" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item id="fEEDBACK-input3">
+        <ion-input type="tel" placeholder="Contact Number" [(ngModel)]="this.feedbackData.contactNumber" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+      <ion-item id="fEEDBACK-textarea1">
+        <ion-label>
+          Message
+        </ion-label>
+        <ion-textarea placeholder="" [(ngModel)]="this.feedbackData.message" [ngModelOptions]="{standalone: true}"></ion-textarea>
+      </ion-item>
+    </form>
+    <button (click)="validateField()" id="fEEDBACK-button4" ion-button color="primary2" block style="border-radius:10px 10px 10px 10px;">
+      SUBMIT
+    </button>
+    <h5 id="fEEDBACK-heading3" style="color:primary2; text-align:justify;">
+      ASIA PACIFIC UNIVERSITY OF TECHNOLOGY & INNOVATION (APU)
+    </h5>
+    <div id="fEEDBACK-markdown28" style="text-align:justify;" class="show-list-numbers-and-dots">
+      <p style="color:#000000;font-size:11px;">
+        Technology Park Malaysia, Bulit Jalil, Kuala Lumpur 57000 Malaysia
+      </p>
+    </div>
+    <div id="fEEDBACK-markdown34" class="show-list-numbers-and-dots">
+      <p style="color:#000000;font-size:11px;">
+        Phone: +60389961000
+        <br> Fax: +60389961001
+      </p>
+    </div>
+    <div id="fEEDBACK-markdown40" class="show-list-numbers-and-dots">
+      <p style="color:#000000;font-size:13px;">
+        Follow Us:
+      </p>
+    </div>
+    <ion-fab>
+      <div class="row">
+        <div class="col">
+          <button color="primary2" ion-fab (click)="openFacebook(url)" style="display:block; margin-left: -10px; width:40px;height:40px;">
+            <ion-icon name="logo-facebook"></ion-icon>
+          </button>
+        </div>
+
+        <div class="col">
+          <button color="primary2" ion-fab (click)="openTwitter(twitUrl)" style="display:block; width:40px;height:40px;">
+            <ion-icon name="logo-twitter"></ion-icon>
+          </button>
+        </div>
+
+        <div class="col">
+          <button color="primary2" ion-fab (click)="openGooglePlus(googleUrl)" style="display:block; width:40px;height:40px;">
+            <ion-icon name="logo-linkedin"></ion-icon>
+          </button>
+        </div>
+
+        <div class="col">
+          <button color="primary2" ion-fab (click)="openLinkedIn(linkedinUrl)" style="display:block; width:40px;height:40px;">
+            <ion-icon name="logo-googleplus"></ion-icon>
+          </button>
+        </div>
+
+        <div class="col"></div>
+        <div class="col"></div>
+      </div>
+    </ion-fab>
   </div>
-  <div id="fEEDBACK-markdown34" class="show-list-numbers-and-dots">
-    <p style="color:#000000;font-size:11px;">
-      Phone: +60389961000
-      <br> Fax: +60389961001
-    </p>
-  </div>
-  <div id="fEEDBACK-markdown40" class="show-list-numbers-and-dots">
-    <p style="color:#000000;font-size:13px;">
-      Follow Us:
-    </p>
-  </div>
-  <div class="row">
-  <div class="col">
-      <a style="display:block; margin-left: -10px;" (click) = "openFacebook(url)">
-    <img src="assets/img/GgpePoQS0KaavnY1G9HP_PwIZK7ZoTWeRlVY2S2xb_facebook-logo-1.png" style="display:block;width:55%;height:auto;" />
-  </a>
-  </div>
-  <div class="col">
-      <a style="display:block; margin-left: -15px;" (click)  = "openTwitter(twitUrl)">
-    <img src="assets/img/dHn38msQzCGpjOTailut_MulZtqoSSKeYeop0QBPb_697029-twitter-512.png" style="display:block;width:50%;height:auto;" />
-    </a>
-  </div>
-  <div class="col">
-      <a style="display:block; margin-left: -16px;" (click) = "openGooglePlus(googleUrl)">
-    <img src="assets/img/uwSn5RUdRx2461dszcpB_hxVXzFM3TSe9O6q2N83z_social-circle-google-plus-2-512.png" style="display:block;width:49%;height:auto;" />
-    </a>
-  </div>
-  <div class="col">
-      <a style="display:block; margin-left: -16px;" (click) = "openLinkedIn(linkedinUrl)">
-    <img src="assets/img/AVeL5cydTcqh1Kyy8A1v_d75k8IZmSrW7QtubCZiK_linkedin-3-512.png" style="display:block;width:48%;height:auto;" />
-    </a>
-  </div>
-  <div class = "col"></div>
-  <div class = "col"></div>
-</div>
-</div>
 </ion-content>
