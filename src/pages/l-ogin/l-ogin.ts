@@ -6,32 +6,85 @@ import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import { Injectable } from "@angular/core";
+import { Platform } from 'ionic-angular';
+import { Network } from '@ionic-native/network';
+import { MenuController } from 'ionic-angular';
 
-
+declare var Connection;
 @Component({
   selector: 'page-l-ogin',
   templateUrl: 'l-ogin.html'
 })
 export class LOGINPage {
-  constructor(private alertCtrl: AlertController, private storage: Storage, public navCtrl: NavController, public http: Http, private toastCtrl: ToastController) {
+
+ 
+  //Cas Url where username and password are sent
+  ticketUrl: string = "https://cas.apiit.edu.my/cas/v1/tickets";
+  
+    body: any;                //username and password
+    responds: any;
+    break: any;
+    public ticket: any;       //TGT-ticket
+    serviceTicket: any;       //Service Ticket - TGT is sent to get Service Ticket
+    service: any;             //Service - in this page is Cas Login Url
+    respond: any;             //Used to Vaidate the Service Ticket
+    public test: any;
+    cred: any;
+    onDevice: boolean;
+  
+  
+    userData = { "username": "", "password": "" };
+  
+
+  constructor(public menu: MenuController, public platform: Platform, private network: Network, private alertCtrl: AlertController, private storage: Storage, public navCtrl: NavController, public http: Http, private toastCtrl: ToastController) {
+    this.onDevice = this.platform.is('cordova');
 
   }
 
-  //Cas Url where username and password are sent
-  ticketUrl: string = "https://cas.apiit.edu.my/cas/v1/tickets";
+  ionViewDidEnter() {
+    this.menu.enable(false, 'menu1');
+  }
 
-  body: any;                //username and password
-  responds: any;
-  break: any;
-  public ticket: any;       //TGT-ticket
-  serviceTicket: any;       //Service Ticket - TGT is sent to get Service Ticket
-  service: any;             //Service - in this page is Cas Login Url
-  respond: any;             //Used to Vaidate the Service Ticket
-  public test: any;
-  cred: any;
+  ionViewDidLeave(){
+    this.menu.enable(true, 'menu1');
+  }
+  
+  clearStorage(){
+    this.storage.clear();
+    setTimeout(() => this.checknetwork(), 1000)
+  }
+
+  checknetwork(){
+    if(this.isOnline()){
+   this.getTicket(this.ticketUrl);
+    }else{
+      this.presentToast();
+    }
+  }
+
+  isOnline(): boolean {
+    if(this.onDevice && this.network.type){
+      return this.network.type !== Connection.NONE;
+    } else {
+      return navigator.onLine; 
+    }
+  }
+
+  presentToast() {
+    let toast = this.toastCtrl.create({
+      message: 'You are offline, please connect to network',
+      duration: 3000,
+      position: 'bottom'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
+  }
 
 
-  userData = { "username": "", "password": "" };
 
   getTicket(ticketUrl) {
 

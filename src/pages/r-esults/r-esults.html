@@ -7,120 +7,80 @@
             RESULTS
         </ion-title>
     </ion-navbar>
-    <div class="spacer" style="width:300px;height:10px;" id="lOGIN-spacer8"></div>
-    <ion-segment [(ngModel)]="seg" color="primary2">
-        <ion-segment-button value="lev2">
-            UC2F1609SE
-        </ion-segment-button>
-        <ion-segment-button value="lev1">
-            UC1F1509SE
+</ion-header>
+
+
+
+
+<ion-content padding id="page3" style="background-color:#C8DAE8;">
+
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
+        </ion-refresher-content>
+    </ion-refresher>
+
+    <ion-segment  [(ngModel)]="seg" color="primary2">
+        <ion-segment-button *ngFor="let result of respond4" value="{{result.INTAKE_CODE}}" style="font-size:1.0rem;">
+            {{result.INTAKE_CODE}}
         </ion-segment-button>
     </ion-segment>
-</ion-header>
-<ion-content [ngSwitch]="seg" padding id="page3" style="background-color:#C8DAE8;">
-        <ion-refresher (ionRefresh)="doRefresh($event)">
-                <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
-                </ion-refresher-content>
-        </ion-refresher>
-    <div>
-        <div *ngSwitchCase="'lev2'" id="rESULTS-container1">
-            <ion-card>
-                <ion-list id="rESULTS-list5">
-                    <ion-item color="resultsCard" id="rESULTS-list-item13">
-                        
-                    </ion-item>
-                    <ion-item id="rESULTS-list-item-container5" color="segment">
-                        <div id="rESULTS-markdown8" class="show-list-numbers-and-dots">
-                            <button (click)="getServiceTicket()" id="lOGIN-button5" ion-button color="primary2" block style="border-radius:10px 10px 10px 10px;">
-                                Log
-                            </button>
-                            <p style="margin-top:0px;color:#000000;">
-                                Result:
-                                <span style="float:right; text-align:right;">
-                                    <strong>
 
-                                    </strong>
-                                </span>
-                            </p>
-                            <br>
-                        </div>
-                        <div id="rESULTS-markdown9" class="show-list-numbers-and-dots">
-                            <p style="margin-top:0px;color:#000000;">
-                                Grade Point:
-                                <span style="float:right; text-align:right;">
-                                    <strong></strong>
-                                </span>
-                            </p>
-                            <br>
-                        </div>
-                        <div id="rESULTS-markdown10" class="show-list-numbers-and-dots">
-                            <p style="margin-top:0px;color:#000000;">
-                                Internal Result Release Date:
-                                <span style="float:right; text-align:right;">
-                                    <strong></strong>
-                                </span>
-                            </p>
-                            <br>
-                        </div>
-                        <div id="rESULTS-markdown11" class="show-list-numbers-and-dots">
-                            <p style="margin-top:0px;color:#000000;">
-                                Recommendation:
-                                <span style="float:right; text-align:right;">
-                                    <strong></strong>
-                                </span>
-                            </p>
-                        </div>
-                    </ion-item>
-                </ion-list>
-            </ion-card>
-        </div>
-    </div>
-    <div>
-        <div *ngSwitchCase="'lev1'" id="rESULTS-container2">
-            <ion-card>
-                <ion-list id="rESULTS-list6">
-                    <ion-item color="resultsCard" id="rESULTS-list-item14">
+ 
 
-                    </ion-item>
-                    <ion-item id="rESULTS-list-item-container6" color="segment">
-                        <div id="rESULTS-markdown8" class="show-list-numbers-and-dots">
-                            <p style="margin-top:0px;color:#000000;">
-                                Result:
-                                <span style="float:right; text-align:right;">
-                                    <strong></strong>
-                                </span>
-                            </p>
-                            <br>
-                        </div>
-                        <div id="rESULTS-markdown9" class="show-list-numbers-and-dots">
-                            <p style="margin-top:0px;color:#000000;">
-                                Grade Point:
-                                <span style="float:right; text-align:right;">
-                                    <strong></strong>
-                                </span>
-                            </p>
-                            <br>
-                        </div>
-                        <div id="rESULTS-markdown10" class="show-list-numbers-and-dots">
-                            <p style="margin-top:0px;color:#000000;">
-                                Internal Result Release Date:
-                                <span style="float:right; text-align:right;">
-                                    <strong></strong>
-                                </span>
-                            </p>
-                            <br>
-                        </div>
-                        <div id="rESULTS-markdown11" class="show-list-numbers-and-dots">
-                            <p style="margin-top:0px;color:#000000;">
-                                Recommendation:
-                                <span style="float:right; text-align:right;">
-                                    <strong></strong>
-                                </span>
-                            </p>
-                        </div>
-                    </ion-item>
-                </ion-list>
-            </ion-card>
-        </div>
+    <div *ngFor = "let res of respond5"  id="rESULTS-container1">
+        <ion-card >
+            <ion-list id="rESULTS-list5">
+                <ion-item color="resultsCard" id="rESULTS-list-item13">
+                    {{res.MODULE_DESCRIPTION}}
+                </ion-item>
+                <ion-item id="rESULTS-list-item-container5" color="segment">
+                    <div id="rESULTS-markdown8" class="show-list-numbers-and-dots">
+                        <p style="margin-top:0px;color:#000000;">
+                            Grade: 
+                            <span style="float:right; text-align:right;">
+                                <strong>
+                                    {{res.GRADE}}
+                                </strong>
+                            </span>
+                        </p>
+                        <br>
+                    </div>
+                    <div id="rESULTS-markdown9" class="show-list-numbers-and-dots">
+                        <p style="margin-top:0px;color:#000000;">
+                            Grade Point:
+                            <span style="float:right; text-align:right;">
+                                <strong>
+                                    {{res.GRADE_POINT}}
+                                </strong>
+                            </span>
+                        </p>
+                        <br>
+                    </div>
+                    <div id="rESULTS-markdown10" class="show-list-numbers-and-dots">
+                        <p style="margin-top:0px;color:#000000;">
+                            Internal Result Release Date:
+                            <span style="float:right; text-align:right;">
+                                <strong>
+                                    {{res.INTERNAL_RESULT_RELEASE_DATE}}
+                                </strong>
+                            </span>
+                        </p>
+                        <br>
+                    </div>
+                    <div id="rESULTS-markdown11" class="show-list-numbers-and-dots">
+                        <p style="margin-top:0px;color:#000000;">
+                            Recommendation:
+                            <span style="float:right; text-align:right;">
+                                <strong>
+                                    {{res.RECOMMENDATION}}
+                                </strong>
+                            </span>
+                        </p>
+                    </div>
+                </ion-item>
+            </ion-list>
+        </ion-card>
     </div>
+
+
 </ion-content>

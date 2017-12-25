@@ -80,16 +80,16 @@
     </platform>
     <allow-navigation href="http://10.101.178.133:8100" />
     <allow-navigation href="http://192.168.0.8:8100" />
-    <engine name="android" spec="~6.3.0" />
+    <engine name="android" spec="6.3.0" />
     <plugin name="cordova-plugin-email" spec="^1.2.6" />
     <plugin name="cordova-plugin-email-composer" spec="^0.8.11" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.1" />
     <plugin name="cordova-plugin-device" spec="^1.1.4" />
+    <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
     <plugin name="cordova-plugin-ionic-webview" spec="^1.1.16" />
     <plugin name="cordova-plugin-inappbrowser" spec="^1.7.1" />
     <plugin name="cordova-sqlite-storage" spec="^2.1.1" />
-    <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
-    <plugin name="cordova.plugins.diagnostic" spec="^3.7.2" />
     <plugin name="cordova-plugin-network-information" spec="^1.3.4" />
+    <plugin name="cordova.plugins.diagnostic" spec="^3.7.2" />
 </widget>

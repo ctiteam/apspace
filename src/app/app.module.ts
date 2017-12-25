@@ -21,6 +21,11 @@ import { EmailComposer } from '@ionic-native/email-composer';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { FeedServiceProvider } from '../providers/feed-service/feed-service';
 import { Network } from '@ionic-native/network';
+import { SuperTabsModule } from 'ionic2-super-tabs';
+import { MenuController } from 'ionic-angular';
+
+
+
 
 
 @NgModule({
@@ -40,7 +45,8 @@ import { Network } from '@ionic-native/network';
     HttpModule,
     JsonpModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    SuperTabsModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [

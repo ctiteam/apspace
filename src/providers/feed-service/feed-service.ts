@@ -47,12 +47,4 @@ export class FeedServiceProvider {
     });
   }
 
-  public addFeed(newFeed: Feed){
-
-  }
-
-  public getArticleForUrl(feedUrl: string){
-
-  }
-
 }
