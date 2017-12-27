@@ -6,6 +6,7 @@ import { NewsService } from './services/news.service';
 
 import { HOMEPage } from '../pages/h-ome/h-ome';
 import { TIMETABLEPage } from '../pages/t-imetable/t-imetable';
+import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
 import { RESULTSPage } from '../pages/r-esults/r-esults';
 import { FEESPage } from '../pages/f-ees/f-ees';
 import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
@@ -54,6 +55,11 @@ export class MyApp {
   goToTIMETABLE(params) {
     if (!params) params = {};
     this.navCtrl.setRoot(TIMETABLEPage);
+  }
+
+  goToStaffDirectory(params) {
+    if (!params) params = {};
+    this.navCtrl.setRoot(StaffDirectoryPage);
   }
 
   goToRESULTS(params) {

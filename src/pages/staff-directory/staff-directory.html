@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Staff Directory</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-searchbar (ionInput)="search($event.target.value)">
+  </ion-searchbar>
+  <ion-grid>
+    <ion-row wrap justify-content-center>
+      <ion-col col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 *ngFor="let staff of listing$ | async">
+        <ion-card>
+          <ion-icon *ngIf="!staff.PHOTO" name="contacts"></ion-icon>
+          <img *ngIf="staff.PHOTO" [src]="staff.PHOTO">
+          <ion-card-content>
+            <ion-card-title>{{ staff.FULLNAME }}</ion-card-title>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

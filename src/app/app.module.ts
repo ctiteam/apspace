@@ -1,10 +1,12 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
+import { HttpModule } from '@angular/http'; // TODO: switch to HttpClientModule
+import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HOMEPage } from '../pages/h-ome/h-ome';
 import { TIMETABLEPage } from '../pages/t-imetable/t-imetable';
+import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
 import { RESULTSPage } from '../pages/r-esults/r-esults';
 import { FEESPage } from '../pages/f-ees/f-ees';
 import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
@@ -23,6 +25,8 @@ import { FeedServiceProvider } from '../providers/feed-service/feed-service';
 import { Network } from '@ionic-native/network';
 import { SuperTabsModule } from 'ionic2-super-tabs';
 import { MenuController } from 'ionic-angular';
+import { StaffDirectoryProvider } from '../providers/staff-directory/staff-directory';
+import { CasTicketProvider } from '../providers/cas-ticket/cas-ticket';
 
 
 
@@ -33,6 +37,7 @@ import { MenuController } from 'ionic-angular';
     MyApp,
     HOMEPage,
     TIMETABLEPage,
+    StaffDirectoryPage,
     RESULTSPage,
     FEESPage,
     NOTIFICATIONPage,
@@ -43,6 +48,7 @@ import { MenuController } from 'ionic-angular';
   imports: [
     BrowserModule,
     HttpModule,
+    HttpClientModule,
     JsonpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
@@ -53,6 +59,7 @@ import { MenuController } from 'ionic-angular';
     MyApp,
     HOMEPage,
     TIMETABLEPage,
+    StaffDirectoryPage,
     RESULTSPage,
     FEESPage,
     NOTIFICATIONPage,
@@ -67,7 +74,9 @@ import { MenuController } from 'ionic-angular';
     InAppBrowser,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FeedServiceProvider,
-    Network
+    Network,
+    StaffDirectoryProvider,
+    CasTicketProvider
   ]
 
 })
