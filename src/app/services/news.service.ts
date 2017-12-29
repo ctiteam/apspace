@@ -6,7 +6,7 @@ import 'rxjs/Rx';
 
 export class NewsService{
     http: any;
-    baseUrl = 'https://api.myjson.com/bins/gb6br';
+    baseUrl = 'https://webspace.apiit.edu.my/news/rss.xml';
 
     constructor(private _http: Http){
         

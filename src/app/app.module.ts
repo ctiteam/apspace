@@ -27,9 +27,7 @@ import { SuperTabsModule } from 'ionic2-super-tabs';
 import { MenuController } from 'ionic-angular';
 import { StaffDirectoryProvider } from '../providers/staff-directory/staff-directory';
 import { CasTicketProvider } from '../providers/cas-ticket/cas-ticket';
-
-
-
+import { PipesModule } from '../pipes/pipes.module';
 
 
 @NgModule({
@@ -52,7 +50,8 @@ import { CasTicketProvider } from '../providers/cas-ticket/cas-ticket';
     JsonpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    SuperTabsModule.forRoot()
+    SuperTabsModule.forRoot(),
+    PipesModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

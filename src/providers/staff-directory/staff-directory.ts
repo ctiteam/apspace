@@ -12,19 +12,27 @@ import { StaffDirectory } from '../../models/staff-directory';
 @Injectable()
 export class StaffDirectoryProvider {
 
-  staffDirectoryRequest$: Observable<StaffDirectory[]>;
+  staffRequest$: Observable<StaffDirectory[]>;
 
   constructor(
     public http: HttpClient,
     public storage: Storage,
     private casService: CasTicketProvider
-  ) { }
+  ) {
+    this.initProviderCache();
+  }
+
+  initProviderCache(): void {
+    this.staffRequest$ = Observable.from(this.storage.get(this.constructor.name));
+    this.staffRequest$ = this.getStaffDirectory(true);
+  }
 
   /** GET: get lists of staff */
   getStaffDirectory(refresh: boolean = false): Observable<StaffDirectory[]> {
     const service = 'https://ws.apiit.edu.my/web-services/index.php/staff/listing';
-    if (refresh || !this.staffDirectoryRequest$) {
-      this.staffDirectoryRequest$ = this.casService.getTicket(service).switchMap(ticket =>
+    console.log(`last ${this.staffRequest$ && this.staffRequest$.takeLast(1)}`);
+    if (refresh || !(this.staffRequest$ && this.staffRequest$.takeLast(1))) {
+      this.staffRequest$ = this.casService.getTicket(service).switchMap(ticket =>
         this.http.get<StaffDirectory[]>(`${service}?ticket=${ticket}`, { withCredentials: true })
         .pipe(
           tap(cache => this.storage.set(this.constructor.name, cache)),
@@ -32,7 +40,7 @@ export class StaffDirectoryProvider {
         ).publishLast().refCount()
       );
     }
-    return this.staffDirectoryRequest$;
+    return this.staffRequest$;
   }
 
   searchStaffDirectory(term: string): Observable<StaffDirectory[]> {

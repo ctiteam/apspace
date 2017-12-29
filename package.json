@@ -23,7 +23,6 @@
     "@angular/tsc-wrapped": "^4.4.6",
     "@ionic-native/camera": "^4.3.3",
     "@ionic-native/core": "^4.3.3",
-    "@ionic-native/diagnostic": "^4.4.2",
     "@ionic-native/email-composer": "^4.5.2",
     "@ionic-native/in-app-browser": "^4.3.3",
     "@ionic-native/network": "^4.5.2",
@@ -31,21 +30,16 @@
     "@ionic-native/status-bar": "^4.5.2",
     "@ionic/pro": "1.0.16",
     "@ionic/storage": "^2.0.1",
-    "angular2-cookie": "^1.2.6",
     "autoprefixer": "^7.2.3",
-    "cordova-android": "7.0.0",
-    "cordova-plugin-device": "^2.0.0",
-    "cordova-plugin-email": "^1.2.6",
+    "cordova-android": "6.3.0",
+    "cordova-ios": "4.5.4",
     "cordova-plugin-email-composer": "^0.8.11",
     "cordova-plugin-inappbrowser": "^2.0.0",
-    "cordova-plugin-ionic-webview": "^1.1.16",
     "cordova-plugin-network-information": "^2.0.0",
     "cordova-plugin-splashscreen": "^5.0.0",
-    "cordova-plugin-whitelist": "^1.3.1",
-    "cordova-sqlite-storage": "^2.1.1",
-    "cordova.plugins.diagnostic": "^3.7.2",
+    "cordova-plugin-whitelist": "^1.3.3",
+    "cordova-sqlite-storage": "^2.1.4",
     "ionic-angular": "3.9.2",
-    "ionic-plugin-keyboard": "^2.2.1",
     "ionic2-super-tabs": "^4.1.5",
     "ionicons": "3.0.0",
     "localforage": "^1.5.5",
@@ -66,20 +60,16 @@
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
-      "cordova-plugin-email": {},
       "cordova-plugin-email-composer": {},
-      "ionic-plugin-keyboard": {},
-      "cordova-plugin-whitelist": {},
-      "cordova-plugin-device": {},
-      "cordova-plugin-splashscreen": {},
-      "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-inappbrowser": {},
-      "cordova-sqlite-storage": {},
       "cordova-plugin-network-information": {},
-      "cordova.plugins.diagnostic": {}
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-sqlite-storage": {}
     },
     "platforms": [
-      "android"
+      "android",
+      "ios"
     ]
   }
 }

@@ -8,17 +8,35 @@
 </ion-header>
 
 
-<ion-content padding>
-  <ion-searchbar (ionInput)="search($event.target.value)">
-  </ion-searchbar>
+<ion-content>
+  <ion-list no-lines>
+    <ion-item>
+      <ion-searchbar [(ngModel)]="term">
+      </ion-searchbar>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Department</ion-label>
+      <ion-select [(ngModel)]="department" interface="popover">
+        <ion-option selected></ion-option>
+        <ion-option *ngFor="let type of staffType$ | async">{{type}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
   <ion-grid>
     <ion-row wrap justify-content-center>
-      <ion-col col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 *ngFor="let staff of listing$ | async">
+      <ion-col *ngFor="let staff of staff$ | async | filter:search(term):which(department)"
+        col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3>
         <ion-card>
           <ion-icon *ngIf="!staff.PHOTO" name="contacts"></ion-icon>
           <img *ngIf="staff.PHOTO" [src]="staff.PHOTO">
           <ion-card-content>
             <ion-card-title>{{ staff.FULLNAME }}</ion-card-title>
+            <ion-card-content>
+              <a href="mailto:{{ staff.EMAIL }}">
+                <ion-icon name="mail"></ion-icon>
+                {{ staff.EMAIL }}
+              </a>
+            </ion-card-content>
           </ion-card-content>
         </ion-card>
       </ion-col>
