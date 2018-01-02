@@ -1,0 +1,31 @@
+page-staff-directory-info {
+  /* XXX: ugly hack to do the display the back-button */
+  ion-navbar button[ion-button].back-button {
+    display: inline-block;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .staff-directory-info-header {
+    background-color: #bbb;
+    position: relative;
+
+    ion-icon {
+      font-size: 18em;
+      position: relative;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%);
+      padding-bottom: 9px;
+    }
+
+    p {
+      position: absolute;
+      bottom: 1ex;
+      left: 1em;
+      color: #fff;
+    }
+  }
+}

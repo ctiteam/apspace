@@ -1,9 +1,10 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
-import { NavController, Searchbar } from 'ionic-angular';
+import { NavController, ModalController, Searchbar } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 
 import { StaffDirectory } from '../../models/staff-directory';
+import { StaffDirectoryInfoPage } from './staff-directory-info';
 import { StaffDirectoryProvider } from '../../providers/staff-directory/staff-directory';
 
 @Component({
@@ -21,6 +22,7 @@ export class StaffDirectoryPage {
 
   constructor(
     public navCtrl: NavController,
+    public modalCtrl: ModalController,
     public sd: StaffDirectoryProvider
   ) { }
 
@@ -28,6 +30,12 @@ export class StaffDirectoryPage {
     if (e.keyCode == 13) {
       let activeElement = <HTMLElement>document.activeElement;
       activeElement && activeElement.blur && activeElement.blur();
+    }
+  }
+
+  info(ev: UIEvent, staff: StaffDirectory) {
+    if ((<Element>ev.target).tagName !== 'A') {
+      this.modalCtrl.create(StaffDirectoryInfoPage, { staff: staff }).present();
     }
   }
 

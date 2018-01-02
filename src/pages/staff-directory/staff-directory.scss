@@ -1,11 +1,21 @@
 page-staff-directory {
   ion-content ion-col ion-card {
+    cursor: pointer;
+
     > ion-icon {
       font-size: 18em;
       position: relative;
       left: 50%;
       top: 50%;
       transform: translateX(-50%);
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    ion-card-title {
+      font-size: 2rem !important;
     }
   }
 }

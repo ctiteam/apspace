@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
+    <button ion-button icon-only menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Staff Directory</ion-title>
@@ -26,7 +26,7 @@
     <ion-row wrap justify-content-center>
       <ion-col *ngFor="let staff of staff$ | async | filter:search(term):which(department)"
         col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3>
-        <ion-card>
+        <ion-card (click)="info($event, staff)">
           <ion-icon *ngIf="!staff.PHOTO" name="contacts"></ion-icon>
           <img *ngIf="staff.PHOTO" [src]="staff.PHOTO">
           <ion-card-content>
