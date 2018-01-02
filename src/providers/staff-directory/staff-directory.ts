@@ -43,13 +43,4 @@ export class StaffDirectoryProvider {
     return this.staffRequest$;
   }
 
-  searchStaffDirectory(term: string): Observable<StaffDirectory[]> {
-    return this.getStaffDirectory()
-    .map(ss => ss.filter(s => s.FULLNAME.toLowerCase().indexOf(term.toLowerCase()) !== -1))
-    .pipe(
-      tap(_ => console.log(`found staffs matching ${term}`)),
-      catchError(err => Observable.of([] as StaffDirectory[]))
-    );
-  }
-
 }
