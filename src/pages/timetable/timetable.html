@@ -177,4 +177,10 @@
     </div>
   </div>
 
+  <ion-list *ngIf="timetable$ | async">
+    <ion-item *ngFor="let t of timetable$ | async | filter:which('UC1F1705CS(DA)')">
+      {{ t.INTAKE }}
+    </ion-item>
+  </ion-list>
+
 </ion-content>

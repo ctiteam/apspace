@@ -34,6 +34,11 @@ export class TimetablePage {
 
   ionViewDidLoad() {
     this.timetable$ = this.tt.getTimetable();
+    this.timetable$.subscribe(console.log);
+  }
+
+  which(intake: string) {
+    return (t: Timetable): boolean => intake === t.INTAKE;
   }
 
 }
