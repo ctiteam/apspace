@@ -30,7 +30,6 @@ export class StaffDirectoryProvider {
   /** GET: get lists of staff */
   getStaffDirectory(refresh: boolean = false): Observable<StaffDirectory[]> {
     const service = 'https://ws.apiit.edu.my/web-services/index.php/staff/listing';
-    console.log(`last ${this.staffRequest$ && this.staffRequest$.takeLast(1)}`);
     if (refresh || !(this.staffRequest$ && this.staffRequest$.takeLast(1))) {
       this.staffRequest$ = this.casService.getTicket(service).switchMap(ticket =>
         this.http.get<StaffDirectory[]>(`${service}?ticket=${ticket}`, { withCredentials: true })

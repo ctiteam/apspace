@@ -40,14 +40,13 @@ export class StaffDirectoryPage {
   }
 
   which(department: string) {
-    return (ss: StaffDirectory[]): StaffDirectory[] =>
-      ss.filter(s => !department ||
-        [s.DEPARTMENT, s.DEPARTMENT2, s.DEPARTMENT3].indexOf(department) !== -1);
+    return (s: StaffDirectory): boolean => !department ||
+      [s.DEPARTMENT, s.DEPARTMENT2, s.DEPARTMENT3].indexOf(department) !== -1;
   }
 
   search(term: string) {
-    return (ss: StaffDirectory[]): StaffDirectory[] =>
-      ss.filter(s => s.FULLNAME.toLowerCase().indexOf(term.toLowerCase()) !== -1);
+    return (s: StaffDirectory): boolean =>
+      s.FULLNAME.toLowerCase().indexOf(term.toLowerCase()) !== -1;
   }
 
   ionViewDidLoad() {

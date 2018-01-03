@@ -6,7 +6,7 @@ export class FilterPipe implements PipeTransform {
   transform(value: any, ...args): any {
     for (let func of args) {
       if (value) {
-        value = func(value);
+        value = value.filter(func);
       }
     }
     return value;
