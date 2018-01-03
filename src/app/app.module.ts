@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HOMEPage } from '../pages/h-ome/h-ome';
-import { TIMETABLEPage } from '../pages/t-imetable/t-imetable';
+import { TimetablePage } from '../pages/timetable/timetable';
 import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
 import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory-info';
 import { RESULTSPage } from '../pages/r-esults/r-esults';
@@ -29,13 +29,14 @@ import { MenuController } from 'ionic-angular';
 import { StaffDirectoryProvider } from '../providers/staff-directory/staff-directory';
 import { CasTicketProvider } from '../providers/cas-ticket/cas-ticket';
 import { PipesModule } from '../pipes/pipes.module';
+import { TimetableProvider } from '../providers/timetable/timetable';
 
 
 @NgModule({
   declarations: [
     MyApp,
     HOMEPage,
-    TIMETABLEPage,
+    TimetablePage,
     StaffDirectoryPage,
     StaffDirectoryInfoPage,
     RESULTSPage,
@@ -59,7 +60,7 @@ import { PipesModule } from '../pipes/pipes.module';
   entryComponents: [
     MyApp,
     HOMEPage,
-    TIMETABLEPage,
+    TimetablePage,
     StaffDirectoryPage,
     StaffDirectoryInfoPage,
     RESULTSPage,
@@ -78,7 +79,8 @@ import { PipesModule } from '../pipes/pipes.module';
     FeedServiceProvider,
     Network,
     StaffDirectoryProvider,
-    CasTicketProvider
+    CasTicketProvider,
+    TimetableProvider
   ]
 
 })

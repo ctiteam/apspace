@@ -5,7 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { NewsService } from './services/news.service';
 
 import { HOMEPage } from '../pages/h-ome/h-ome';
-import { TIMETABLEPage } from '../pages/t-imetable/t-imetable';
+import { TimetablePage } from '../pages/timetable/timetable';
 import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
 import { RESULTSPage } from '../pages/r-esults/r-esults';
 import { FEESPage } from '../pages/f-ees/f-ees';
@@ -54,7 +54,7 @@ export class MyApp {
 
   goToTIMETABLE(params) {
     if (!params) params = {};
-    this.navCtrl.setRoot(TIMETABLEPage);
+    this.navCtrl.setRoot(TimetablePage);
   }
 
   goToStaffDirectory(params) {
