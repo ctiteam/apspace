@@ -14,13 +14,13 @@ export class CasTicketProvider {
   getTicket(serviceUrl: string): Observable<string> {
     const options = {
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-      params: { 'service': serviceUrl },
+      params: { 'service': new URL(serviceUrl).origin },
       responseType: 'text' as 'text', /* TODO: fix this in future angular */
       withCredentials: true
     };
     return Observable.fromPromise(this.storage.get('tgturl')).switchMap(url =>
       this.http.post(url, null, options).pipe(
-        // tap(() => console.log(`fetched ${serviceUrl}`)),
+        // tap(() => console.log(`getTicket ${options.params.service}`)),
         catchError(this.handleError<string>('getServiceTicket', ''))
       )
     );
