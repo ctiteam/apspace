@@ -1,10 +1,7 @@
 <ion-menu [content]="mainContent" id="menu1">
   <ion-content id="side-menu21" class="side-menu-gradient-after-login">
 
-    <div class="album-image">
-      <img src="assets/img/gogle.jpg" style="display: block; width: 100%; height: 150px; margin-left: auto; margin-right: auto;">
-      <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
-    </div>
+    <div class="album-image"></div>
     <ion-list id="menu-list1">
       <ion-item color="none" menuClose="" on-click="goToHOME()" id="menu-list-item1" class="side-menu-item">
         <ion-icon name="home" item-left></ion-icon>
@@ -40,8 +37,8 @@
       </ion-item>      
     </ion-list>
     <div class="profile-image-after-login">
-      <!-- <img src="assets/img/XE6qYQ5RUQNFXf2Xcttg_profile_user.jpg" style="display:block; width:25%;height:;"> -->
-      <img *ngIf = "respond4" src="data:image/jpg;base64,{{this.respond4[0].PHOTO_NO}}" style="display:block; width:25%;height:null;" >
+      <img [src]="photo" style="display:block; width:25%;height:;">
+      <!-- <img *ngIf = "respond4" src="data:image/jpg;base64,{{this.respond4[0].PHOTO_NO}}" style="display:block; width:25%;height:null;" > -->
       <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
     </div>
     <h5 id="menu-heading8" style="color:#FFFFFF;font-weight:400;text-align:center;" class="name-menu" *ngIf="respond4">{{this.respond4[0].NAME}}</h5>
