@@ -19,7 +19,7 @@
         </ion-refresher-content>
     </ion-refresher>
 
-    <ion-segment  [(ngModel)]="seg" color="primary2">
+    <ion-segment  [(ngModel)]="seg" color="primary">
         <ion-segment-button *ngFor="let result of respond4" value="{{result.INTAKE_CODE}}" style="font-size:1.0rem;">
             {{result.INTAKE_CODE}}
         </ion-segment-button>
