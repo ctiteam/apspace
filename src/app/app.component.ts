@@ -176,6 +176,7 @@ testNav: any;
       .subscribe(res => {
         this.respond = res;
         this.getUserInfo();
+        this.getUserPhoto();
       }, error => {
         console.log('Error message - ST Validation: ' + error);
       })
@@ -198,4 +199,20 @@ testNav: any;
         console.log('Error message' + error);
       })
   }
+
+  getUserPhoto() {
+    let url1 = "https://ws.apiit.edu.my/web-services/index.php/student/photo?ticket=" + this.serviceTicket4;
+    let headers = new Headers();
+    let options = new RequestOptions({ headers: headers, withCredentials: true });
+
+    this.http.get(url1, options)
+      .subscribe(ress => {
+        this.photo = 'data:image/jpg;base64,' + ress.json().base64_photo;
+        console.log("Get photo", this.photo);
+
+      }, error => {
+        console.log('Error message' + error);
+      })
+  }
+
 }
