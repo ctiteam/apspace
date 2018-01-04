@@ -1,0 +1,186 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Timetable</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div>
+    <form id="tIMETABLE-form1">
+      <ion-searchbar placeholder="Search Intake" name="" id="tIMETABLE-search1"></ion-searchbar>
+      <ion-item id="tIMETABLE-select1">
+        <ion-label>INTAKE: </ion-label>
+        <ion-select>
+          <ion-option></ion-option>
+        </ion-select>
+      </ion-item>
+
+    </form>
+    <div class="spacer" style="width:300px;height:15px;" id="lOGIN-spacer8"></div>
+    <div>
+      <ion-segment [(ngModel)]="segments" color="primary2">
+        <ion-segment-button value="mon">
+          MON
+        </ion-segment-button>
+        <ion-segment-button value="tue">
+          TUE
+        </ion-segment-button>
+        <ion-segment-button value="wed">
+          WED
+        </ion-segment-button>
+        <ion-segment-button value="thur">
+          THU
+        </ion-segment-button>
+        <ion-segment-button value="fri">
+          FRI
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+    <!--<button id="tIMETABLE-button1" ion-button color="positive" block >
+      Tap me!
+    </button> -->
+
+    <div [ngSwitch]="segments">
+      <div>
+
+        <ion-card  *ngSwitchCase="'mon'" >
+          <ion-list id="tIMETABLE-list1" >
+            <ion-item id="tIMETABLE-list-item-container3" color = "segment">
+              <div id="tIMETABLE-markdown4" class="show-list-numbers-and-dots">
+                <p style="margin-top:0px;color:#000000;">
+                  <strong>
+
+                  </strong>
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+              </div>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+      </div>
+      <div>
+        <ion-card *ngSwitchCase="'tue'">
+          <ion-list id="tIMETABLE-list2">
+            <ion-item id="tIMETABLE-list-item-container3" color = "segment">
+              <div id="tIMETABLE-markdown4" class="show-list-numbers-and-dots">
+                <p style="margin-top:0px;color:#000000;">
+                  <strong>
+
+                  </strong>
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+              </div>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+      </div>
+      <div>
+        <ion-card *ngSwitchCase="'wed'">
+          <ion-list id="tIMETABLE-list2">
+            <ion-item id="tIMETABLE-list-item-container3" color = "segment">
+              <div id="tIMETABLE-markdown4" class="show-list-numbers-and-dots">
+
+                <p style="margin-top:0px;color:#000000;">
+                  <strong>
+
+                  </strong>
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+              </div>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+      </div>
+      <div>
+        <ion-card *ngSwitchCase="'thur'">
+          <ion-list id="tIMETABLE-list2">
+            <ion-item id="tIMETABLE-list-item-container3" color = "segment">
+              <div id="tIMETABLE-markdown4" class="show-list-numbers-and-dots">
+
+                <p style="margin-top:0px;color:#000000;">
+                  <strong>
+
+                  </strong>
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+              </div>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+      </div>
+      <div >
+        <ion-card *ngSwitchCase="'fri'">
+          <ion-list id="tIMETABLE-list2">
+            <ion-item id="tIMETABLE-list-item-container3" color = "segment">
+              <div id="tIMETABLE-markdown4" class="show-list-numbers-and-dots">
+
+                <p style="margin-top:0px;color:#000000;">
+                  <strong>
+
+                  </strong>
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+                <p style="margin-top:0px;color:#000000;">
+
+                </p>
+              </div>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+      </div>
+
+    </div>
+  </div>
+
+  <ion-list *ngIf="timetable$ | async">
+    <ion-item *ngFor="let t of timetable$ | async | filter:which('UC1F1705CS(DA)')">
+      {{ t.INTAKE }}
+    </ion-item>
+  </ion-list>
+
+</ion-content>

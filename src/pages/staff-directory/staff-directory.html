@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Staff Directory</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content *ngIf="staff$ | async"> <!-- staff is not [] -->
+  <ion-list no-lines>
+    <ion-item>
+      <ion-searchbar [(ngModel)]="term">
+      </ion-searchbar>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Department</ion-label>
+      <ion-select [(ngModel)]="department" interface="popover">
+        <ion-option selected></ion-option>
+        <ion-option *ngFor="let type of staffType$ | async">{{type}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <ion-grid>
+    <ion-row wrap justify-content-center *ngIf="staff$ | async">
+      <ion-col *ngFor="let staff of staff$ | async | filter:search(term):which(department)"
+        col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3>
+        <ion-card (click)="info($event, staff)">
+          <ion-icon *ngIf="!staff.PHOTO" name="contacts"></ion-icon>
+          <img *ngIf="staff.PHOTO" [src]="staff.PHOTO">
+          <ion-card-content>
+            <ion-card-title>{{ staff.FULLNAME }}</ion-card-title>
+            <ion-card-content>
+              <a href="mailto:{{ staff.EMAIL }}">
+                <ion-icon name="mail"></ion-icon>
+                {{ staff.EMAIL }}
+              </a>
+            </ion-card-content>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

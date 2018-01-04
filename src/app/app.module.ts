@@ -1,10 +1,13 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
+import { HttpModule } from '@angular/http'; // TODO: switch to HttpClientModule
+import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HOMEPage } from '../pages/h-ome/h-ome';
-import { TIMETABLEPage } from '../pages/t-imetable/t-imetable';
+import { TimetablePage } from '../pages/timetable/timetable';
+import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
+import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory-info';
 import { RESULTSPage } from '../pages/r-esults/r-esults';
 import { FEESPage } from '../pages/f-ees/f-ees';
 import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
@@ -23,16 +26,19 @@ import { FeedServiceProvider } from '../providers/feed-service/feed-service';
 import { Network } from '@ionic-native/network';
 import { SuperTabsModule } from 'ionic2-super-tabs';
 import { MenuController } from 'ionic-angular';
-
-
-
+import { StaffDirectoryProvider } from '../providers/staff-directory/staff-directory';
+import { CasTicketProvider } from '../providers/cas-ticket/cas-ticket';
+import { PipesModule } from '../pipes/pipes.module';
+import { TimetableProvider } from '../providers/timetable/timetable';
 
 
 @NgModule({
   declarations: [
     MyApp,
     HOMEPage,
-    TIMETABLEPage,
+    TimetablePage,
+    StaffDirectoryPage,
+    StaffDirectoryInfoPage,
     RESULTSPage,
     FEESPage,
     NOTIFICATIONPage,
@@ -43,16 +49,20 @@ import { MenuController } from 'ionic-angular';
   imports: [
     BrowserModule,
     HttpModule,
+    HttpClientModule,
     JsonpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    SuperTabsModule.forRoot()
+    SuperTabsModule.forRoot(),
+    PipesModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HOMEPage,
-    TIMETABLEPage,
+    TimetablePage,
+    StaffDirectoryPage,
+    StaffDirectoryInfoPage,
     RESULTSPage,
     FEESPage,
     NOTIFICATIONPage,
@@ -67,7 +77,10 @@ import { MenuController } from 'ionic-angular';
     InAppBrowser,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FeedServiceProvider,
-    Network
+    Network,
+    StaffDirectoryProvider,
+    CasTicketProvider,
+    TimetableProvider
   ]
 
 })
