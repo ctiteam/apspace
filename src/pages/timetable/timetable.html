@@ -32,9 +32,8 @@
     </ion-card-header>
     <ion-card-content>
       <h3>{{ t.ROOM }} │ {{ t.LOCATION }}</h3>
-      {{ t.TIME_FROM }}
-      {{ t.TIME_TO }}
-      {{ t.LECTID }}
+      <p>{{ t.TIME_FROM }} - {{ t.TIME_TO }}</p>
+      <p>{{ getStaff(t) }}</p>
     </ion-card-content>
   </ion-card>
 

@@ -5,8 +5,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { NewsService } from './services/news.service';
 
 import { HOMEPage } from '../pages/h-ome/h-ome';
-import { TimetablePage } from '../pages/timetable/timetable';
-import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
 import { RESULTSPage } from '../pages/r-esults/r-esults';
 import { FEESPage } from '../pages/f-ees/f-ees';
 import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
@@ -27,7 +25,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 
 export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
-  rootPage: any = WelcomePage;
+  rootPage: any = 'TimetablePage';
   
 
   constructor(public app: App, private http: Http, private alertCtrl: AlertController, private storage: Storage, platform: Platform, statusBar: StatusBar, public _platform: Platform, public _SplashScreen: SplashScreen) {
@@ -54,12 +52,12 @@ export class MyApp {
 
   goToTIMETABLE(params) {
     if (!params) params = {};
-    this.navCtrl.setRoot(TimetablePage);
+    this.navCtrl.setRoot('TimetablePage');
   }
 
   goToStaffDirectory(params) {
     if (!params) params = {};
-    this.navCtrl.setRoot(StaffDirectoryPage);
+    this.navCtrl.setRoot('StaffDirectoryPage');
   }
 
   goToRESULTS(params) {
@@ -203,13 +201,9 @@ testNav: any;
     let options = new RequestOptions({ headers: headers, withCredentials: true });
 
     this.http.get(url1, options)
-      .subscribe(ress => {
-        this.photo = 'data:image/jpg;base64,' + ress.json().base64_photo;
-        console.log("Get photo", this.photo);
-
-      }, error => {
-        console.log('Error message' + error);
-      })
+      .subscribe(ress =>
+        this.photo = 'data:image/jpg;base64,' + ress.json().base64_photo, console.error
+      )
   }
 
 }

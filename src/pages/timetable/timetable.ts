@@ -1,12 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, ToastController,
+import { IonicPage, NavController, ToastController, ModalController,
   Content } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { catchError, finalize, tap } from 'rxjs/operators';
 
-import { TimetableProvider } from '../../providers/timetable/timetable';
+import { StaffDirectory } from '../../interfaces/staff-directory';
+import { StaffDirectoryProvider } from '../../providers/staff-directory/staff-directory';
 import { Timetable } from '../../interfaces/timetable';
+import { TimetableProvider } from '../../providers/timetable/timetable';
 
 @IonicPage()
 @Component({
@@ -16,6 +18,7 @@ import { Timetable } from '../../interfaces/timetable';
 export class TimetablePage {
 
   timetable$: Observable<Timetable[]>;
+  staff = [] as StaffDirectory[];
   selectedDay: string;
 
   @ViewChild(Content) content: Content;
@@ -26,10 +29,15 @@ export class TimetablePage {
   constructor(
     public navCtrl: NavController,
     public toastCtrl: ToastController,
-    private tt: TimetableProvider
+    public modalCtrl: ModalController,
+    private sd: StaffDirectoryProvider,
+    private tt: TimetableProvider,
   ) { }
 
-  test: any;
+  /** TODO: Get staff from timetable */
+  getStaff(t: Timetable): string {
+    return this.staff.length ? this.staff.find(s => s.ID === t.LECTID).FULLNAME : '';
+  }
 
   /** Get all classes for student. */
   classes(tt: Timetable[]): Timetable[] {
@@ -71,6 +79,7 @@ export class TimetablePage {
   }
 
   ionViewDidLoad() {
+    this.sd.getStaffDirectory().subscribe(staff => this.staff = staff);
     this.timetable$ = this.tt.getTimetable().pipe(
       tap(tt => this.updateDay(tt))
     );

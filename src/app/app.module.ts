@@ -5,8 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HOMEPage } from '../pages/h-ome/h-ome';
-import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
-import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory-info';
 import { RESULTSPage } from '../pages/r-esults/r-esults';
 import { FEESPage } from '../pages/f-ees/f-ees';
 import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
@@ -27,7 +25,6 @@ import { SuperTabsModule } from 'ionic2-super-tabs';
 import { MenuController } from 'ionic-angular';
 import { StaffDirectoryProvider } from '../providers/staff-directory/staff-directory';
 import { CasTicketProvider } from '../providers/cas-ticket/cas-ticket';
-import { PipesModule } from '../pipes/pipes.module';
 import { TimetableProvider } from '../providers/timetable/timetable';
 
 
@@ -35,8 +32,6 @@ import { TimetableProvider } from '../providers/timetable/timetable';
   declarations: [
     MyApp,
     HOMEPage,
-    StaffDirectoryPage,
-    StaffDirectoryInfoPage,
     RESULTSPage,
     FEESPage,
     NOTIFICATIONPage,
@@ -51,15 +46,12 @@ import { TimetableProvider } from '../providers/timetable/timetable';
     JsonpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    SuperTabsModule.forRoot(),
-    PipesModule
+    SuperTabsModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HOMEPage,
-    StaffDirectoryPage,
-    StaffDirectoryInfoPage,
     RESULTSPage,
     FEESPage,
     NOTIFICATIONPage,

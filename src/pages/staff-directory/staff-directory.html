@@ -18,13 +18,14 @@
       <ion-label floating>Department</ion-label>
       <ion-select [(ngModel)]="department" interface="popover" *ngIf="staff$ | async">
         <ion-option selected></ion-option>
-        <ion-option *ngFor="let type of staffType$ | async">{{type}}</ion-option>
+        <ion-option *ngFor="let type of staffType$ | async"
+          [innerHTML]="type" [value]="type"></ion-option>
       </ion-select>
     </ion-item>
   </ion-list>
   <ion-grid>
     <ion-row wrap justify-content-center *ngIf="staff$ | async">
-      <ion-col *ngFor="let staff of staff$ | async | filter:search(term):which(department)"
+      <ion-col *ngFor="let staff of selected(staff$ | async)"
         col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3>
         <ion-card (click)="info($event, staff)">
           <ion-icon *ngIf="!staff.PHOTO" name="contacts"></ion-icon>

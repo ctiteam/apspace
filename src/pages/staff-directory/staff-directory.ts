@@ -1,12 +1,12 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
-import { NavController, ModalController, Searchbar } from 'ionic-angular';
+import { NavController, ModalController, Searchbar, IonicPage } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 
 import { StaffDirectory } from '../../interfaces/staff-directory';
-import { StaffDirectoryInfoPage } from './staff-directory-info';
 import { StaffDirectoryProvider } from '../../providers/staff-directory/staff-directory';
 
+@IonicPage({ segment: 'staff/' })
 @Component({
   selector: 'page-staff-directory',
   templateUrl: 'staff-directory.html',
@@ -35,18 +35,15 @@ export class StaffDirectoryPage {
 
   info(ev: UIEvent, staff: StaffDirectory) {
     if ((<Element>ev.target).tagName !== 'A') {
-      this.modalCtrl.create(StaffDirectoryInfoPage, { staff: staff }).present();
+      this.modalCtrl.create('StaffDirectoryInfoPage', { staff: staff, id: staff.CODE }).present();
     }
   }
 
-  which(department: string) {
-    return (s: StaffDirectory): boolean => !department ||
-      [s.DEPARTMENT, s.DEPARTMENT2, s.DEPARTMENT3].indexOf(department) !== -1;
-  }
-
-  search(term: string) {
-    return (s: StaffDirectory): boolean =>
-      s.FULLNAME.toLowerCase().indexOf(term.toLowerCase()) !== -1;
+  selected(staff: StaffDirectory[]): StaffDirectory[] {
+    return staff ? (staff).filter(s =>
+      (!this.department || [s.DEPARTMENT, s.DEPARTMENT2, s.DEPARTMENT3].indexOf(this.department) !== -1)
+      && (s.FULLNAME.toLowerCase().indexOf(this.term.toLowerCase()) !== -1)
+    ) : [] as StaffDirectory[];
   }
 
   ionViewDidLoad() {

@@ -33,7 +33,8 @@ export class StaffDirectoryProvider {
       );
     } else if (!this.staff$ || !this.staff$.takeLast(1)) {
       this.staff$ = Observable.from(this.storage.get('staffDirectory'))
-        .map(v => v || this.getStaffDirectory(true)).publishLast().refCount();
+        .switchMap(v => v ? Observable.of(v) : this.getStaffDirectory(true))
+        .publishLast().refCount();
     }
     return this.staff$;
   }
