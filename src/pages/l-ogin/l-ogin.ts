@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { HOMEPage } from '../h-ome/h-ome';
 import { Http, Headers, RequestOptions } from '@angular/http';
@@ -17,6 +17,7 @@ declare var Connection;
 })
 export class LOGINPage {
 
+  @ViewChild('autofocus') autofocus;
  
   //Cas Url where username and password are sent
   ticketUrl: string = "https://cas.apiit.edu.my/cas/v1/tickets";
@@ -47,6 +48,10 @@ export class LOGINPage {
 
   ionViewDidLeave(){
     this.menu.enable(true, 'menu1');
+  }
+
+  ionViewDidLoad() {
+    setTimeout(() => this.autofocus.setFocus(), 150);
   }
   
   clearStorage(){
