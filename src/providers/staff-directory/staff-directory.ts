@@ -7,39 +7,35 @@ import { Observable } from 'rxjs/Observable';
 import { catchError, tap } from 'rxjs/operators';
 
 import { CasTicketProvider } from '../cas-ticket/cas-ticket';
-import { StaffDirectory } from '../../models/staff-directory';
+import { StaffDirectory } from '../../interfaces/staff-directory';
 
 @Injectable()
 export class StaffDirectoryProvider {
 
-  staffRequest$: Observable<StaffDirectory[]>;
+  staff$: Observable<StaffDirectory[]>;
 
   constructor(
     public http: HttpClient,
     public storage: Storage,
     private casService: CasTicketProvider
-  ) {
-    this.initProviderCache();
-  }
+  ) { }
 
-  initProviderCache(): void {
-    this.staffRequest$ = Observable.from(this.storage.get(this.constructor.name));
-    this.staffRequest$ = this.getStaffDirectory(true);
-  }
-
-  /** GET: get lists of staff */
+  /** GET: get staff directory */
   getStaffDirectory(refresh: boolean = false): Observable<StaffDirectory[]> {
     const service = 'https://ws.apiit.edu.my/web-services/index.php/staff/listing';
-    if (refresh || !(this.staffRequest$ && this.staffRequest$.takeLast(1))) {
-      this.staffRequest$ = this.casService.getTicket(service).switchMap(ticket =>
+    if (refresh || !(this.staff$ && this.staff$.takeLast(1))) {
+      this.staff$ = this.casService.getTicket(service).switchMap(ticket =>
         this.http.get<StaffDirectory[]>(`${service}?ticket=${ticket}`, { withCredentials: true })
-        .pipe(
-          tap(cache => this.storage.set(this.constructor.name, cache)),
-          catchError(_ => Observable.from(this.storage.get(this.constructor.name)))
+        .timeout(3000).pipe(
+          tap(cache => this.storage.set('staffDirectory', cache)),
+          catchError(_ => Observable.from(this.storage.get('staffDirectory')))
         ).publishLast().refCount()
       );
+    } else if (!this.staff$ || !this.staff$.takeLast(1)) {
+      this.staff$ = Observable.from(this.storage.get('staffDirectory'))
+        .map(v => v || this.getStaffDirectory(true)).publishLast().refCount();
     }
-    return this.staffRequest$;
+    return this.staff$;
   }
 
 }

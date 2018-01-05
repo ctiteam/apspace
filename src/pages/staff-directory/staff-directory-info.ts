@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 
-import { StaffDirectory } from '../../models/staff-directory';
+import { StaffDirectory } from '../../interfaces/staff-directory';
 
 @Component({
   selector: 'page-staff-directory-info',

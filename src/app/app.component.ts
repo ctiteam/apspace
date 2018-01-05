@@ -193,11 +193,8 @@ testNav: any;
     this.http.get(url1, options)
       .subscribe(ress => {
         this.respond4 = ress.json();
-        console.log("this is what we get    :" + this.photo);
 
-      }, error => {
-        console.log('Error message' + error);
-      })
+      }, console.error)
   }
 
   getUserPhoto() {

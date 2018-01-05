@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HOMEPage } from '../pages/h-ome/h-ome';
-import { TimetablePage } from '../pages/timetable/timetable';
 import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
 import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory-info';
 import { RESULTSPage } from '../pages/r-esults/r-esults';
@@ -36,7 +35,6 @@ import { TimetableProvider } from '../providers/timetable/timetable';
   declarations: [
     MyApp,
     HOMEPage,
-    TimetablePage,
     StaffDirectoryPage,
     StaffDirectoryInfoPage,
     RESULTSPage,
@@ -60,7 +58,6 @@ import { TimetableProvider } from '../providers/timetable/timetable';
   entryComponents: [
     MyApp,
     HOMEPage,
-    TimetablePage,
     StaffDirectoryPage,
     StaffDirectoryInfoPage,
     RESULTSPage,

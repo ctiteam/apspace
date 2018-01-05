@@ -8,7 +8,7 @@
 </ion-header>
 
 
-<ion-content *ngIf="staff$ | async"> <!-- staff is not [] -->
+<ion-content> <!-- staff is not [] -->
   <ion-list no-lines>
     <ion-item>
       <ion-searchbar [(ngModel)]="term">
@@ -16,7 +16,7 @@
     </ion-item>
     <ion-item>
       <ion-label floating>Department</ion-label>
-      <ion-select [(ngModel)]="department" interface="popover">
+      <ion-select [(ngModel)]="department" interface="popover" *ngIf="staff$ | async">
         <ion-option selected></ion-option>
         <ion-option *ngFor="let type of staffType$ | async">{{type}}</ion-option>
       </ion-select>

@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
 import { Observable } from 'rxjs/Observable';
-import { catchError, tap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 
-import { Timetable } from '../../models/timetable';
+import { Timetable } from '../../interfaces/timetable';
 
 @Injectable()
 export class TimetableProvider {
 
+  // timetable$: ReplaySubject<Timetable[]> = new ReplaySubject(1);
   timetable$: Observable<Timetable[]>;
 
   constructor(
@@ -19,15 +20,28 @@ export class TimetableProvider {
 
   /** GET: timetable */
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
-    const service = 'https://ws.apiit.edu.my/web-services/index.php/open/weektimetable';
+    const service = 'http://127.0.0.1:8000/weektimetable';
     if (refresh) {
+      // this.http.get<Timetable[]>(service).timeout(3000).subscribe({
+      //   next: v => {
+      //     this.timetable$.next(v);
+      //     this.timetable$.complete();
+      //     this.storage.set('timetable', v);
+      //   },
+      //   error: this.timetable$.error
+      // });
       this.timetable$ = this.http.get<Timetable[]>(service).timeout(3000).pipe(
-        tap(cache => this.storage.set(this.constructor.name, cache)),
-        catchError(_ => Observable.from(this.storage.get(this.constructor.name)))
+        tap(cache => this.storage.set('timetable', cache)),
+        catchError(_ => Observable.from(this.storage.get('timetable')))
       ).publishLast().refCount();
+      // } else if (!this.timetable$.observers.length) {
     } else if (!this.timetable$ || !this.timetable$.takeLast(1)) {
-      this.timetable$ = Observable.from(this.storage.get(this.constructor.name))
-        .map(v => v || this.getTimetable(true)).publishLast().refCount();
+      // this.storage.get('timetable')
+      //   .then(this.timetable$.next)
+      //   .catch(_ => this.getTimetable(true));
+      this.timetable$ = Observable.from(this.storage.get('timetable'))
+        .switchMap(v => v ? Observable.of(v) : this.getTimetable(true))
+        .publishLast().refCount();
     }
     return this.timetable$;
   }

@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
-import { NavController, ToastController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, ToastController,
+  Content } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { catchError, finalize } from 'rxjs/operators';
+import { catchError, finalize, tap } from 'rxjs/operators';
 
 import { TimetableProvider } from '../../providers/timetable/timetable';
-import { Timetable } from '../../models/timetable';
+import { Timetable } from '../../interfaces/timetable';
 
+@IonicPage()
 @Component({
   selector: 'page-timetable',
   templateUrl: 'timetable.html',
@@ -14,7 +16,12 @@ import { Timetable } from '../../models/timetable';
 export class TimetablePage {
 
   timetable$: Observable<Timetable[]>;
-  timetables: any = [];
+  selectedDay: string;
+
+  @ViewChild(Content) content: Content;
+
+  /* config */
+  intake: string = 'UC1F1705CS(DA)';
 
   constructor(
     public navCtrl: NavController,
@@ -24,21 +31,49 @@ export class TimetablePage {
 
   test: any;
 
+  /** Get all classes for student. */
+  classes(tt: Timetable[]): Timetable[] {
+    if (tt) {
+      return this.intake ? tt.filter(t => this.intake === t.INTAKE) : tt;
+    }
+    return [] as Timetable[];
+  }
+
+  /** Select the classes of the day. */
+  theday(tt: Timetable[]): Timetable[] {
+    return this.classes(tt).filter(t => t.DAY === this.selectedDay);
+  }
+
+  /** Get days in week of the classes. */
+  schoolDays(tt: Timetable[]): string[] {
+    let days = this.classes(tt).map(t => t.DAY);
+    days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
+      .filter(d => days.indexOf(d) !== -1);
+    return days;
+  }
+
+  /** Update value of selected day in segment. */
+  updateDay(tt: Timetable[]): void {
+    let days = this.schoolDays(tt);
+    if (!this.selectedDay || days.indexOf(this.selectedDay) === -1) {
+      this.selectedDay = days.shift();
+    }
+    this.content.resize();
+  }
+
   doRefresh(refresher) {
     let t = this.toastCtrl.create({ message: 'Request fail', duration: 3000 });
     this.timetable$ = this.tt.getTimetable(true).pipe(
+      tap(tt => this.updateDay(tt)),
       catchError(err => t.present(err)),
       finalize(() => refresher.complete()),
     );
   }
 
   ionViewDidLoad() {
-    this.timetable$ = this.tt.getTimetable();
-    this.timetable$.subscribe(console.log);
-  }
-
-  which(intake: string) {
-    return (t: Timetable): boolean => intake === t.INTAKE;
+    this.timetable$ = this.tt.getTimetable().pipe(
+      tap(tt => this.updateDay(tt))
+    );
   }
 
 }

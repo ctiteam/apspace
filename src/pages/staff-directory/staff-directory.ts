@@ -3,7 +3,7 @@ import { NavController, ModalController, Searchbar } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 
-import { StaffDirectory } from '../../models/staff-directory';
+import { StaffDirectory } from '../../interfaces/staff-directory';
 import { StaffDirectoryInfoPage } from './staff-directory-info';
 import { StaffDirectoryProvider } from '../../providers/staff-directory/staff-directory';
 
