@@ -43,7 +43,7 @@ export class TimetablePage {
       this.intake = data['intake'];
     });
     conf.present();
-    this.timetable$ = this.tt.getTimetable().pipe(tap(tt => this.updateDay(tt)));
+    this.timetable$.subscribe(tt => this.updateDay(tt));
   }
 
   /** TODO: Get staff from timetable */
