@@ -35,7 +35,7 @@ export class StaffDirectoryPage {
 
   info(ev: UIEvent, staff: StaffDirectory) {
     if ((<Element>ev.target).tagName !== 'A') {
-      this.modalCtrl.create('StaffDirectoryInfoPage', { staff: staff, id: staff.CODE }).present();
+      this.modalCtrl.create('StaffDirectoryInfoPage', { id: staff.CODE }).present();
     }
   }
 
@@ -47,7 +47,7 @@ export class StaffDirectoryPage {
   }
 
   ionViewDidLoad() {
-    this.staff$ = this.sd.getStaffDirectory();
+    this.staff$ = this.sd.getStaffDirectory(true);
     this.staffType$ = this.staff$.map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT))));
   }
 

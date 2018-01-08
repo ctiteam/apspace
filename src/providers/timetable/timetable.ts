@@ -16,7 +16,7 @@ export class TimetableProvider {
 
   /** GET: timetable */
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
-    const service = 'http://127.0.0.1:8000/weektimetable';
+    const service = 'https://ws.apiit.edu.my/web-services/index.php/open/weektimetable';
     if (refresh) {
       this.timetable$ = this.http.get<Timetable[]>(service).timeout(3000).pipe(
         tap(cache => this.storage.set('timetable', cache)),

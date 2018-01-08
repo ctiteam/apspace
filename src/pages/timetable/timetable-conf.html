@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left padding-left>
+      <button ion-button icon-only (click)="dismiss()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Filter</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>Intake</ion-label>
+      <ion-select [(ngModel)]="intake" interface="popover">
+        <ion-option *ngFor="let i of intakes" [value]="i">{{ i }}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>

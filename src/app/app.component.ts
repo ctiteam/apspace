@@ -25,7 +25,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 
 export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
-  rootPage: any = 'TimetablePage';
+  rootPage: any = WelcomePage;
   
 
   constructor(public app: App, private http: Http, private alertCtrl: AlertController, private storage: Storage, platform: Platform, statusBar: StatusBar, public _platform: Platform, public _SplashScreen: SplashScreen) {

@@ -18,6 +18,7 @@ import { TimetableProvider } from '../../providers/timetable/timetable';
 export class TimetablePage {
 
   timetable$: Observable<Timetable[]>;
+  staff$: Observable<StaffDirectory[]>;
   staff = [] as StaffDirectory[];
   selectedDay: string;
 
@@ -34,9 +35,24 @@ export class TimetablePage {
     private tt: TimetableProvider,
   ) { }
 
+  /** Set the data with TimetableConfPage */
+  confPage(): void {
+    let conf = this.modalCtrl.create('TimetableConfPage', { intake: this.intake });
+    conf.onDidDismiss(data => {
+      console.log('data', data['intake']);
+      this.intake = data['intake'];
+    });
+    conf.present();
+    this.timetable$ = this.tt.getTimetable().pipe(tap(tt => this.updateDay(tt)));
+  }
+
   /** TODO: Get staff from timetable */
-  getStaff(t: Timetable): string {
-    return this.staff.length ? this.staff.find(s => s.ID === t.LECTID).FULLNAME : '';
+  getStaff(t: Timetable): Observable<string> {
+    return this.staff$.map(ss => {
+      console.log(ss.length);
+      return ss.find(s => s.ID === t.LECTID).FULLNAME
+    });
+    // return this.staff.length ? this.staff.find(s => s.ID === t.LECTID).FULLNAME : '';
   }
 
   /** Get all classes for student. */
@@ -79,10 +95,9 @@ export class TimetablePage {
   }
 
   ionViewDidLoad() {
+    this.staff$ = this.sd.getStaffDirectory();
     this.sd.getStaffDirectory().subscribe(staff => this.staff = staff);
-    this.timetable$ = this.tt.getTimetable().pipe(
-      tap(tt => this.updateDay(tt))
-    );
+    this.timetable$ = this.tt.getTimetable().pipe(tap(tt => this.updateDay(tt)));
   }
 
 }
