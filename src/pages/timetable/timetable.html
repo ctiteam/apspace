@@ -3,9 +3,9 @@
     <button ion-button icon-only menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title *ngIf="!classes(timetable$ | async).length">Timetable</ion-title>
-    <ion-title *ngIf="classes(timetable$ | async).length">
-      Timetable {{ theday(timetable$ | async)[0].DATESTAMP }}
+    <ion-title *ngIf="!theday(timetable$ | async).length">Timetable</ion-title>
+    <ion-title *ngIf="theday(timetable$ | async).length">
+      {{ theday(timetable$ | async)[0].DATESTAMP }}
     </ion-title>
     <ion-buttons end padding-right>
       <button ion-button icon-only (click)="confPage()">
@@ -15,8 +15,11 @@
   </ion-navbar>
 
   <ion-toolbar no-border-top *ngIf="classes(timetable$ | async).length > 0">
-    <ion-segment text-uppercase [(ngModel)]="selectedDay" color="foreground">
-      <ion-segment-button *ngFor="let d of schoolDays(timetable$ | async)" [value]="d">
+    <ion-segment #segment [(ngModel)]="selectedDay"
+      text-uppercase color="foreground">
+      <!-- Use CSS for dynamically updated segment -->
+      <ion-segment-button *ngFor="let d of this.wday" [value]="d"
+        [style.display]="schoolDays(timetable$ | async).indexOf(d) !== -1 ? 'inline-block' : 'none'">
         {{ d }}
       </ion-segment-button>
     </ion-segment>
@@ -29,7 +32,8 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-card *ngFor="let t of theday(timetable$ | async)">
+  <ion-card [ngStyle]="{'border-left': '1rem solid ' + strToColor(t.MODID) }"
+    *ngFor="let t of theday(timetable$ | async)">
     <ion-card-header>
       {{ t.MODID }}
     </ion-card-header>
@@ -40,7 +44,7 @@
     <ion-row no-padding>
       <ion-col text-right>
         <button ion-button clear item-start navPush="StaffDirectoryInfoPage" [navParams]="{id: t.LECTID}">
-          <ion-icon name="people"></ion-icon>
+          <ion-icon padding name="school"></ion-icon>
           {{ t.LECTID }}
         </button>
       </ion-col>

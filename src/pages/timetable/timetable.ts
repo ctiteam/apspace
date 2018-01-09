@@ -20,7 +20,10 @@ export class TimetablePage {
   timetable$: Observable<Timetable[]>;
   staff$: Observable<StaffDirectory[]>;
   staff = [] as StaffDirectory[];
+  colors: string[];
   selectedDay: string;
+
+  wday = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
   @ViewChild(Content) content: Content;
 
@@ -39,19 +42,23 @@ export class TimetablePage {
   confPage(): void {
     let conf = this.modalCtrl.create('TimetableConfPage', { intake: this.intake });
     conf.onDidDismiss(data => {
-      console.log('data', data['intake']);
-      this.intake = data['intake'];
+      if (this.intake !== data['intake']) {
+        this.intake = data['intake'];
+        this.timetable$.subscribe(tt => this.updateDay(tt));
+      }
     });
     conf.present();
-    this.timetable$.subscribe(tt => this.updateDay(tt));
   }
 
   /** TODO: Get staff from timetable */
-  getStaff(t: Timetable): Observable<string> {
-    return this.staff$.map(ss => {
-      console.log(ss.length);
-      return ss.find(s => s.ID === t.LECTID).FULLNAME
-    });
+  getStaff(t: Timetable): Observable<StaffDirectory> {
+    return this.sd.getStaffDirectory().map(ss => ss.find(s => s.ID === t.LECTID));
+    // console.log(this.staff.length);
+    // return this.staff.find(s => s.ID === t.LECTID);
+      // let s = this.staff$.map(ss => {
+      //   console.log(ss.length);
+      //   return ss.find(s => s.ID === t.LECTID)
+      // });
     // return this.staff.length ? this.staff.find(s => s.ID === t.LECTID).FULLNAME : '';
   }
 
@@ -71,18 +78,23 @@ export class TimetablePage {
   /** Get days in week of the classes. */
   schoolDays(tt: Timetable[]): string[] {
     let days = this.classes(tt).map(t => t.DAY);
-    days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
-      .filter(d => days.indexOf(d) !== -1);
-    return days;
+    return this.wday.filter(d => days.indexOf(d) !== -1);
   }
 
-  /** Update value of selected day in segment. */
+  /** Update selected day in segment and style when day change. */
   updateDay(tt: Timetable[]): void {
     let days = this.schoolDays(tt);
     if (!this.selectedDay || days.indexOf(this.selectedDay) === -1) {
       this.selectedDay = days.shift();
     }
     this.content.resize();
+  }
+
+  strToColor(s: string): string {
+    let hash = 0;
+    s.split('').forEach(c => hash = c.charCodeAt(0) + ((hash << 5) - hash));
+    return '#' + [1,2,3].map(i => ('00' + (hash >> (i * 8) & 0xFF).toString(16))
+                                  .substr(-2)).join('');
   }
 
   doRefresh(refresher) {
@@ -96,7 +108,7 @@ export class TimetablePage {
 
   ionViewDidLoad() {
     this.staff$ = this.sd.getStaffDirectory();
-    this.sd.getStaffDirectory().subscribe(staff => this.staff = staff);
+    this.staff$.subscribe(staff => this.staff = staff);
     this.timetable$ = this.tt.getTimetable().pipe(tap(tt => this.updateDay(tt)));
   }
 

@@ -8,32 +8,29 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding id="page1" style="background-color:#C8DAE8;">
+<ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
 
-  <div *ngFor = "let item of items">
-    <ion-card id="hOME-card21">
-      <ion-list>
-        <div>
-          <img src="{{item.field_news_image[0].url}}" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
-          <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
+  <ion-card *ngFor="let item of items" margin-bottom>
+    <ion-list>
+      <div>
+        <img src="{{item.field_news_image[0].url}}" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
+        <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
+      </div>
+      <div>
+        <ion-item style="color:#FFFF;" id="hOME-list-item11" class="title-news">
+          {{item.title[0].value}}
+        </ion-item>
+      </div>
+      <div id="hOME-list-item-container2" class="item item-body">
+        <div id="hOME-markdown2" style="text-align:justify; background-color: secondary;" class="show-list-numbers-and-dots">
+          <p style="margin-top:0px; margin-left:10px; margin-right:10px; color:#000000; font-size: 12px;" [innerHTML]="item.body[0].value">
+          </p>
         </div>
-        <div>
-          <ion-item style="color:#FFFF;" id="hOME-list-item11" class="title-news">
-            {{item.title[0].value}}
-          </ion-item>
-        </div>
-        <div id="hOME-list-item-container2" class=" item item-body">
-          <div id="hOME-markdown2" style="text-align:justify; background-color: #9A94BF;" class="show-list-numbers-and-dots">
-            <p style="margin-top:0px; margin-left:10px; margin-right:10px; color:#000000; font-size: 12px;" [innerHTML]="item.body[0].value">
-            </p>
-          </div>
-        </div>
-      </ion-list>
-    </ion-card>
-    <div class="spacer" style="width:300px;height:15px;" id="lOGIN-spacer8"></div>
-  </div>
+      </div>
+    </ion-list>
+  </ion-card>
 </ion-content>
