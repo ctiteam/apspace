@@ -3,9 +3,8 @@
     <button ion-button icon-only menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title *ngIf="!theday(timetable$ | async).length">Timetable</ion-title>
-    <ion-title *ngIf="theday(timetable$ | async).length">
-      {{ theday(timetable$ | async)[0].DATESTAMP }}
+    <ion-title>
+      Timetable {{ (theday(timetable$ | async).shift() || {}).DATESTAMP }}
     </ion-title>
     <ion-buttons end padding-right>
       <button ion-button icon-only (click)="confPage()">
@@ -38,17 +37,19 @@
       {{ t.MODID }}
     </ion-card-header>
     <ion-card-content no-padding-bottom>
-      <h3>{{ t.ROOM }} │ {{ t.LOCATION }}</h3>
-      <p>{{ t.TIME_FROM }} - {{ t.TIME_TO }}</p>
+      <p no-margin>
+        <ion-icon padding-right name="locate"></ion-icon>
+        {{ t.ROOM }} │ {{ t.LOCATION }}
+      </p>
+      <p>
+        <ion-icon padding-right name="time"></ion-icon>
+        {{ t.TIME_FROM }} - {{ t.TIME_TO }}
+      </p>
+      <a *ngIf="t.STAFFNAME" navPush="StaffDirectoryInfoPage" [navParams]="{id: t.LECTID}">
+        <ion-icon padding-right name="contact"></ion-icon>
+        {{ t.STAFFNAME }}
+      </a>
     </ion-card-content>
-    <ion-row no-padding>
-      <ion-col text-right>
-        <button ion-button clear item-start navPush="StaffDirectoryInfoPage" [navParams]="{id: t.LECTID}">
-          <ion-icon padding name="school"></ion-icon>
-          {{ t.LECTID }}
-        </button>
-      </ion-col>
-    </ion-row>
   </ion-card>
 
   <ion-card *ngIf="timetable$ | async">

@@ -8,4 +8,6 @@ export interface Timetable {
   DATESTAMP: string;
   TIME_FROM: string;
   TIME_TO: string;
+
+  STAFFNAME: string; /* StaffDirectory.FULLNAME */
 };

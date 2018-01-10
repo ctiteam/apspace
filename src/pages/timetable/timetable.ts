@@ -17,13 +17,10 @@ import { TimetableProvider } from '../../providers/timetable/timetable';
 })
 export class TimetablePage {
 
-  timetable$: Observable<Timetable[]>;
-  staff$: Observable<StaffDirectory[]>;
-  staff = [] as StaffDirectory[];
-  colors: string[];
-  selectedDay: string;
-
   wday = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+  timetable$: Observable<Timetable[]>;
+  selectedDay: string;
 
   @ViewChild(Content) content: Content;
 
@@ -38,7 +35,7 @@ export class TimetablePage {
     private tt: TimetableProvider,
   ) { }
 
-  /** Set the data with TimetableConfPage */
+  /** Set the data with TimetableConfPage. */
   confPage(): void {
     let conf = this.modalCtrl.create('TimetableConfPage', { intake: this.intake });
     conf.onDidDismiss(data => {
@@ -48,18 +45,6 @@ export class TimetablePage {
       }
     });
     conf.present();
-  }
-
-  /** TODO: Get staff from timetable */
-  getStaff(t: Timetable): Observable<StaffDirectory> {
-    return this.sd.getStaffDirectory().map(ss => ss.find(s => s.ID === t.LECTID));
-    // console.log(this.staff.length);
-    // return this.staff.find(s => s.ID === t.LECTID);
-      // let s = this.staff$.map(ss => {
-      //   console.log(ss.length);
-      //   return ss.find(s => s.ID === t.LECTID)
-      // });
-    // return this.staff.length ? this.staff.find(s => s.ID === t.LECTID).FULLNAME : '';
   }
 
   /** Get all classes for student. */
@@ -90,6 +75,16 @@ export class TimetablePage {
     this.content.resize();
   }
 
+  /** Get and merge Timetable with StaffDirectory. */
+  getTimetable(refresh: boolean = false): Observable<Timetable[]> {
+    return this.tt.getTimetable(refresh).switchMap(tt => tt
+      /* Find and merge with { ..t, STAFFNAME: s.FULLNAME } */
+      ? this.sd.getStaffDirectory().map(ss => tt.map(t => <Timetable>Object.assign(t,
+        { STAFFNAME: (ss.find(s => s.CODE === t.LECTID) || <StaffDirectory>{}).FULLNAME })))
+      : Observable.empty()
+    );
+  }
+
   strToColor(s: string): string {
     let hash = 0;
     s.split('').forEach(c => hash = c.charCodeAt(0) + ((hash << 5) - hash));
@@ -99,7 +94,7 @@ export class TimetablePage {
 
   doRefresh(refresher) {
     let t = this.toastCtrl.create({ message: 'Request fail', duration: 3000 });
-    this.timetable$ = this.tt.getTimetable(true).pipe(
+    this.timetable$ = this.getTimetable(true).pipe(
       tap(tt => this.updateDay(tt)),
       catchError(err => t.present(err)),
       finalize(() => refresher.complete()),
@@ -107,9 +102,7 @@ export class TimetablePage {
   }
 
   ionViewDidLoad() {
-    this.staff$ = this.sd.getStaffDirectory();
-    this.staff$.subscribe(staff => this.staff = staff);
-    this.timetable$ = this.tt.getTimetable().pipe(tap(tt => this.updateDay(tt)));
+    this.timetable$ = this.getTimetable().pipe(tap(tt => this.updateDay(tt)));
   }
 
 }
