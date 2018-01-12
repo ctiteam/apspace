@@ -25,7 +25,7 @@
           {{item.title[0].value}}
         </ion-item>
       </div>
-      <div id="hOME-list-item-container2" class="item item-body">
+      <div *ngIf="item.body.length" id="hOME-list-item-container2" class="item item-body">
         <div id="hOME-markdown2" style="text-align:justify; background-color: secondary;" class="show-list-numbers-and-dots">
           <p style="margin-top:0px; margin-left:10px; margin-right:10px; color:#000000; font-size: 12px;" [innerHTML]="item.body[0].value">
           </p>
