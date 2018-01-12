@@ -13,31 +13,28 @@
   },
   "dependencies": {
     "@angular/common": "^5.1.3",
-    "@angular/compiler": "5.1.2",
-    "@angular/compiler-cli": "5.1.2",
+    "@angular/compiler": "5.2.0",
+    "@angular/compiler-cli": "5.2.0",
     "@angular/core": "^5.1.3",
-    "@angular/forms": "5.1.2",
-    "@angular/http": "5.1.2",
-    "@angular/platform-browser": "5.1.2",
-    "@angular/platform-browser-dynamic": "5.1.2",
+    "@angular/forms": "5.2.0",
+    "@angular/http": "5.2.0",
+    "@angular/platform-browser": "5.2.0",
+    "@angular/platform-browser-dynamic": "5.2.0",
     "@angular/tsc-wrapped": "^4.4.6",
     "@ionic-native/camera": "^4.3.3",
     "@ionic-native/core": "^4.3.3",
     "@ionic-native/email-composer": "^4.5.2",
     "@ionic-native/in-app-browser": "^4.3.3",
     "@ionic-native/network": "^4.5.2",
-    "@ionic-native/splash-screen": "^4.5.2",
     "@ionic-native/status-bar": "^4.5.2",
     "@ionic/pro": "1.0.16",
     "@ionic/storage": "^2.0.1",
     "autoprefixer": "^7.2.4",
-    "cordova-android": "6.3.0",
+    "cordova-android": "7.0.0",
     "cordova-ios": "4.5.4",
-    "cordova-plugin-email-composer": "^0.8.11",
+    "cordova-plugin-email-composer": "^0.8.12",
     "cordova-plugin-inappbrowser": "^2.0.1",
     "cordova-plugin-network-information": "^2.0.1",
-    "cordova-plugin-splashscreen": "^5.0.1",
-    "cordova-plugin-whitelist": "^1.3.3",
     "cordova-sqlite-storage": "^2.2.0",
     "ionic-angular": "3.9.2",
     "ionic2-super-tabs": "^4.1.5",
@@ -50,7 +47,7 @@
     "sw-toolbox": "3.6.0",
     "tslib": "^1.8.1",
     "web": "0.0.2",
-    "zone.js": "0.8.18"
+    "zone.js": "0.8.20"
   },
   "devDependencies": {
     "@angular/cli": "^1.6.3",
@@ -62,14 +59,12 @@
     "plugins": {
       "cordova-plugin-email-composer": {},
       "cordova-plugin-network-information": {},
-      "cordova-plugin-whitelist": {},
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-splashscreen": {},
       "cordova-sqlite-storage": {}
     },
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }
