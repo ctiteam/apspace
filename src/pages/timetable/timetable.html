@@ -38,12 +38,12 @@
     </ion-card-header>
     <ion-card-content no-padding-bottom>
       <p no-margin>
-        <ion-icon padding-right name="locate"></ion-icon>
-        {{ t.ROOM }} │ {{ t.LOCATION }}
+        <ion-icon padding-right name="time"></ion-icon>
+        <b>{{ t.TIME_FROM }} - {{ t.TIME_TO }}</b>
       </p>
       <p>
-        <ion-icon padding-right name="time"></ion-icon>
-        {{ t.TIME_FROM }} - {{ t.TIME_TO }}
+        <ion-icon padding-right name="locate"></ion-icon>
+        {{ t.ROOM }} │ {{ t.LOCATION }}
       </p>
       <a *ngIf="t.STAFFNAME" navPush="StaffDirectoryInfoPage" [navParams]="{id: t.LECTID}">
         <ion-icon padding-right name="contact"></ion-icon>
@@ -52,8 +52,8 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="timetable$ | async">
-    <ion-card-content *ngIf="schoolDays(timetable$ | async).length < 1">
+  <ion-card *ngIf="!refresher.progress && !selectedDay">
+    <ion-card-content>
       <p>Hooray! No classes this week! :D</p>
     </ion-card-content>
 	</ion-card>

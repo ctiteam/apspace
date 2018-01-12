@@ -14,7 +14,7 @@
   <ion-list>
     <ion-item>
       <ion-label>Intake</ion-label>
-      <ion-select [(ngModel)]="intake" interface="popover">
+      <ion-select [(ngModel)]="intake" interface="action-sheet">
         <ion-option *ngFor="let i of intakes" [value]="i">{{ i }}</ion-option>
       </ion-select>
     </ion-item>

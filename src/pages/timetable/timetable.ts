@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, ToastController, ModalController,
-  Content } from 'ionic-angular';
+  Content, Refresher } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { catchError, finalize, tap } from 'rxjs/operators';
@@ -23,6 +23,7 @@ export class TimetablePage {
   selectedDay: string;
 
   @ViewChild(Content) content: Content;
+  @ViewChild(Refresher) refresher: Refresher;
 
   /* config */
   intake: string = 'UC1F1705CS(DA)';
@@ -71,6 +72,8 @@ export class TimetablePage {
     let days = this.schoolDays(tt);
     if (!this.selectedDay || days.indexOf(this.selectedDay) === -1) {
       this.selectedDay = days.shift();
+    } else if (!days.length) {
+      this.selectedDay = undefined;
     }
     this.content.resize();
   }
@@ -102,6 +105,7 @@ export class TimetablePage {
   }
 
   ionViewDidLoad() {
+    this.refresher.progress = -1; /* Never display the no classes card on load */
     this.timetable$ = this.getTimetable().pipe(tap(tt => this.updateDay(tt)));
   }
 
