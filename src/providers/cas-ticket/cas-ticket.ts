@@ -8,19 +8,26 @@ import { catchError } from 'rxjs/operators';
 @Injectable()
 export class CasTicketProvider {
 
+  private casUrl = 'https://cas.apiit.edu.my/';
+
   constructor(public http: HttpClient, public storage: Storage) { }
 
-  /** POST: retrieve service ticket from CAS */
-  getTicket(serviceUrl: string): Observable<string> {
+  /** POST: request ticket-granting ticket from CAS */
+  // getTGT() {
+  //   this.http.post('')
+  // }
+
+  /** POST: request service ticket from CAS */
+  getST(serviceUrl: string): Observable<string> {
     const options = {
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-      params: { 'service': new URL(serviceUrl).origin },
+      params: { 'service': serviceUrl },
       responseType: 'text' as 'text', /* TODO: fix this in future angular */
       withCredentials: true
     };
     return Observable.fromPromise(this.storage.get('tgturl')).switchMap(url =>
       this.http.post(url, null, options).pipe(
-        // tap(() => console.log(`getTicket ${options.params.service}`)),
+        // tap(() => console.log(`getST ${serviceUrl}`)),
         catchError(this.handleError<string>('getServiceTicket', ''))
       )
     );

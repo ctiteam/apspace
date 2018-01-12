@@ -15,7 +15,6 @@ import { WelcomePage} from '../pages/welcome/welcome';
 import { JsonpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { EmailComposer } from '@ionic-native/email-composer';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
@@ -61,7 +60,6 @@ import { TimetableProvider } from '../providers/timetable/timetable';
   ],
   providers: [
     StatusBar,
-    SplashScreen,
     EmailComposer,
     InAppBrowser,
     {provide: ErrorHandler, useClass: IonicErrorHandler},

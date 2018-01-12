@@ -24,7 +24,7 @@ export class StaffDirectoryProvider {
   getStaffDirectory(refresh: boolean = false): Observable<StaffDirectory[]> {
     const service = 'https://ws.apiit.edu.my/web-services/index.php/staff/listing';
     if (refresh || !(this.staff$ && this.staff$.takeLast(1))) {
-      this.staff$ = this.casService.getTicket(service).switchMap(ticket =>
+      this.staff$ = this.casService.getST(service).switchMap(ticket =>
         this.http.get<StaffDirectory[]>(`${service}?ticket=${ticket}`, { withCredentials: true })
         .timeout(3000).pipe(
           tap(cache => this.storage.set('staffDirectory', cache)),

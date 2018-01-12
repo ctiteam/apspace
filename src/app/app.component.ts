@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
 import { NewsService } from './services/news.service';
 
 import { HOMEPage } from '../pages/h-ome/h-ome';
@@ -28,22 +27,11 @@ export class MyApp {
   rootPage: any = WelcomePage;
   
 
-  constructor(public app: App, private http: Http, private alertCtrl: AlertController, private storage: Storage, platform: Platform, statusBar: StatusBar, public _platform: Platform, public _SplashScreen: SplashScreen) {
-    this.initializeApp();
+  constructor(public app: App, private http: Http, private alertCtrl: AlertController, private storage: Storage, platform: Platform, statusBar: StatusBar, public _platform: Platform) {
     this.getTGT();
   }
 
   photo: any;
-
-  initializeApp() {
-    this._platform.ready().then(() => {
-      // do whatever you need to do here.
-      setTimeout(() => {
-        this._SplashScreen.hide();
-      }, 100);
-    });
-  }
-
 
   goToHOME(params) {
     if (!params) params = {};

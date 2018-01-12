@@ -9,23 +9,19 @@
   <div class="staff-directory-info-header">
     <ion-icon *ngIf="!staff?.PHOTO" name="contacts"></ion-icon>
     <img *ngIf="staff?.PHOTO" [src]="staff?.PHOTO">
-    <p>{{ staff?.FULLNAME }}</p>
   </div>
   <ion-list>
     <ion-item>
-      <h2>{{ staff?.ID }}</h2>
-      <p>ID</p>
+      <h2>{{ staff?.FULLNAME }}</h2>
     </ion-item>
     <ion-item>
       <a href="mailto:{{ staff?.EMAIL }}">
         <h2>{{ staff?.EMAIL }}</h2>
-        <p>Email</p>
       </a>
     </ion-item>
     <ion-item *ngIf="staff?.EXTENSION">
       <a href="tel:{{ staff?.EXTENSION }}">
         <h2>{{ staff?.EXTENSION }}</h2>
-        <p>Tel</p>
       </a>
     </ion-item>
     <ion-list-header>Department</ion-list-header>

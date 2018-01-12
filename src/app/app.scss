@@ -6,22 +6,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   background: $SIDEMENU_BOTTOM;
 }
 
-.profile-image-after-login {
-  img {
-    border-radius: 60%;
-    margin: 10px;
-    border: 4px solid $SIDEMENU_TRANSPARENCY;
-    -webkit-box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.75);
-    box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.75);
-    position: relative;
-    top: -480px;
-    left: -5px;
-    // z-index: 1;
-  }
-
-}
-
 .side-menu-item {
   background: none;
   color: white;
@@ -64,20 +48,23 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   }
 }
 
-.name-menu {
-  position: relative;
-  top: -553px;
-  left: 30px;
-  right: 60px;
-  // z-index: 1;
-}
-
-.album-image {
-  position: relative;
-  top: 0px;
+#menu-info {
   height: 150px;
   background: url(/assets/img/gogle.jpg) 100%;
-  //border: 3px solid $SIDEMENU_TRANSPARENCY;
-  -webkit-filter: brightness(70%);
-  -moz-filter: brightness(70%);
+
+  * {
+    margin: 0 3ex 1ex;
+  }
+
+  img {
+    border-radius: 60%;
+    border: 3px solid $SIDEMENU_TRANSPARENCY;
+    max-width: 9ex;
+    margin-top: 4ex;
+  }
+
+  p {
+    color: map-get($colors, foreground);
+  }
+
 }

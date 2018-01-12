@@ -167,12 +167,12 @@ export class LOGINPage {
     this.storage.set('ticket', this.serviceTicket);
   }
 
-  getST() {
-    this.storage.get('ticket').then((val) => {
-      this.test = val;
-      console.log("GET VALUE   :" + this.test)
-    });
-  }
+  // getST() {
+  //   this.storage.get('ticket').then((val) => {
+  //     this.test = val;
+  //     console.log("GET VALUE   :" + this.test)
+  //   });
+  // }
 
   //Alerts users that the credentials are wrong
   presentAlert() {

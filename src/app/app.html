@@ -1,7 +1,10 @@
 <ion-menu [content]="mainContent" id="menu1">
   <ion-content id="side-menu21" class="side-menu-gradient-after-login">
+    <div id="menu-info">
+      <img [src]="photo" onerror="this.src='/assets/img/profile.svg'">
+      <p *ngIf="respond4">{{this.respond4[0].NAME}}</p>
+    </div>
 
-    <div class="album-image"></div>
     <ion-list id="menu-list1">
       <ion-item color="none" menuClose="" on-click="goToHOME()" id="menu-list-item1" class="side-menu-item">
         <ion-icon name="home" item-left></ion-icon>
@@ -36,13 +39,6 @@
         LOGOUT
       </ion-item>      
     </ion-list>
-    <div class="profile-image-after-login">
-      <img [src]="photo" style="display:block; width:25%;height:;">
-      <!-- <img *ngIf = "respond4" src="data:image/jpg;base64,{{this.respond4[0].PHOTO_NO}}" style="display:block; width:25%;height:null;" > -->
-      <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
-    </div>
-    <h5 id="menu-heading8" style="color:#FFFFFF;font-weight:400;text-align:center;" class="name-menu" *ngIf="respond4">{{this.respond4[0].NAME}}</h5>
-    <h5 id="menu-heading9" style="color:#FFFFFF;font-weight:400;text-align:center;" class="name-menu" *ngIf="respond4">{{this.respond4[0].STUDENT_NUMBER}}</h5>
   </ion-content>
 </ion-menu>
 
