@@ -1,86 +1,51 @@
 <ion-header>
-    <ion-navbar>
-        <button ion-button menuToggle>
-            <ion-icon name="menu"></ion-icon>
-        </button>
-        <ion-title>
-            RESULTS
-        </ion-title>
-    </ion-navbar>
+  <ion-navbar>
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      Results
+    </ion-title>
+  </ion-navbar>
 </ion-header>
 
 
+<ion-content id="page3">
 
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
 
-<ion-content padding id="page3">
+  <ion-segment [(ngModel)]="seg" color="primary">
+    <ion-segment-button *ngFor="let result of respond4" [value]="result.INTAKE_CODE" style="font-size:1.0rem;">
+      {{result.INTAKE_CODE}}
+    </ion-segment-button>
+  </ion-segment>
 
-    <ion-refresher (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
-        </ion-refresher-content>
-    </ion-refresher>
+  <ion-card *ngFor="let res of respond5">
+    <ion-card-header>
+      {{res.MODULE_DESCRIPTION}}
+    </ion-card-header>
 
-    <ion-segment  [(ngModel)]="seg" color="primary">
-        <ion-segment-button *ngFor="let result of respond4" value="{{result.INTAKE_CODE}}" style="font-size:1.0rem;">
-            {{result.INTAKE_CODE}}
-        </ion-segment-button>
-    </ion-segment>
-
- 
-
-    <div *ngFor = "let res of respond5"  id="rESULTS-container1">
-        <ion-card >
-            <ion-list id="rESULTS-list5">
-                <ion-item style="background-color: #ffab00" id="rESULTS-list-item13">
-                    {{res.MODULE_DESCRIPTION}}
-                </ion-item>
-                <ion-item style="background-color: #ffe57f" id="rESULTS-list-item-container5">
-                    <div id="rESULTS-markdown8" class="show-list-numbers-and-dots">
-                        <p style="margin-top:0px;color:#000000;">
-                            Grade: 
-                            <span style="float:right; text-align:right;">
-                                <strong>
-                                    {{res.GRADE}}
-                                </strong>
-                            </span>
-                        </p>
-                        <br>
-                    </div>
-                    <div id="rESULTS-markdown9" class="show-list-numbers-and-dots">
-                        <p style="margin-top:0px;color:#000000;">
-                            Grade Point:
-                            <span style="float:right; text-align:right;">
-                                <strong>
-                                    {{res.GRADE_POINT}}
-                                </strong>
-                            </span>
-                        </p>
-                        <br>
-                    </div>
-                    <div id="rESULTS-markdown10" class="show-list-numbers-and-dots">
-                        <p style="margin-top:0px;color:#000000;">
-                            Internal Result Release Date:
-                            <span style="float:right; text-align:right;">
-                                <strong>
-                                    {{res.INTERNAL_RESULT_RELEASE_DATE}}
-                                </strong>
-                            </span>
-                        </p>
-                        <br>
-                    </div>
-                    <div id="rESULTS-markdown11" class="show-list-numbers-and-dots">
-                        <p style="margin-top:0px;color:#000000;">
-                            Recommendation:
-                            <span style="float:right; text-align:right;">
-                                <strong>
-                                    {{res.RECOMMENDATION}}
-                                </strong>
-                            </span>
-                        </p>
-                    </div>
-                </ion-item>
-            </ion-list>
-        </ion-card>
-    </div>
-
+    <ion-list>
+      <ion-item>
+        <ion-label>Grade</ion-label>
+        <div item-content>{{ res.GRADE || 'N/A' }}</div>
+      </ion-item>
+      <ion-item>
+        <ion-label>Grade Point</ion-label>
+        <div item-content>{{ res.GRADE_POINT || 'N/A' }}</div>
+      </ion-item>
+      <ion-item *ngIf="res.INTERNAL_RESULT_RELEASE_DATE">
+        <ion-label>Internal Result Release Date</ion-label>
+        <div item-content>{{ res.INTERNAL_RESULT_RELEASE_DATE }}</div>
+      </ion-item>
+      <ion-item *ngIf="res.RECOMMENDATION">
+        <ion-label>Recommendation</ion-label>
+        <div item-content>{{ res.RECOMMENDATION }}</div>
+      </ion-item>
+    </ion-list>
+  </ion-card>
 
 </ion-content>

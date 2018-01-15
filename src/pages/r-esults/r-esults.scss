@@ -1,4 +1,16 @@
 page-r-esults {
-    
-}
+  ion-content ion-card {
+    ion-card-header {
+      background: color($colors, secondary);
+    }
 
+    .item {
+      background-color: #cfd8dc;
+    }
+
+    ion-label {
+      font-size: 90%;
+      font-weight: lighter !important;
+    }
+  }
+}
