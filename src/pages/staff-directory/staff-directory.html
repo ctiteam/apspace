@@ -23,24 +23,14 @@
       </ion-select>
     </ion-item>
   </ion-list>
-  <ion-grid>
-    <ion-row wrap justify-content-center *ngIf="staff$ | async">
-      <ion-col *ngFor="let staff of selected(staff$ | async)"
-        col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3>
-        <ion-card (click)="info($event, staff)">
-          <ion-icon *ngIf="!staff.PHOTO" name="contacts"></ion-icon>
-          <img *ngIf="staff.PHOTO" [src]="staff.PHOTO">
-          <ion-card-content>
-            <ion-card-title>{{ staff.FULLNAME }}</ion-card-title>
-            <ion-card-content>
-              <a href="mailto:{{ staff.EMAIL }}">
-                <ion-icon name="mail"></ion-icon>
-                {{ staff.EMAIL }}
-              </a>
-            </ion-card-content>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+
+  <ion-list *ngIf="staff$ | async">
+    <ion-item *ngFor="let staff of selected(staff$ | async)" (click)="info(staff)">
+      <ion-avatar item-start>
+        <img [src]="staff.PHOTO" onerror="this.src='/assets/img/profile.svg'">
+      </ion-avatar>
+      <h2>{{ staff.FULLNAME }}</h2>
+      <p>{{ staff.EMAIL }}</p>
+    </ion-item>
+  </ion-list>
 </ion-content>

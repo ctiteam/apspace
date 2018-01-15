@@ -33,10 +33,8 @@ export class StaffDirectoryPage {
     }
   }
 
-  info(ev: UIEvent, staff: StaffDirectory) {
-    if ((<Element>ev.target).tagName !== 'A') {
-      this.modalCtrl.create('StaffDirectoryInfoPage', { id: staff.CODE }).present();
-    }
+  info(staff: StaffDirectory) {
+    this.modalCtrl.create('StaffDirectoryInfoPage', { id: staff.CODE }).present();
   }
 
   selected(staff: StaffDirectory[]): StaffDirectory[] {
