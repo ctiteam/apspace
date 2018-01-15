@@ -12,7 +12,7 @@
 
 
 
-<ion-content padding id="page3" style="background-color:#C8DAE8;">
+<ion-content padding id="page3">
 
     <ion-refresher (ionRefresh)="doRefresh($event)">
         <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
@@ -30,10 +30,10 @@
     <div *ngFor = "let res of respond5"  id="rESULTS-container1">
         <ion-card >
             <ion-list id="rESULTS-list5">
-                <ion-item color="resultsCard" id="rESULTS-list-item13">
+                <ion-item style="background-color: #ffab00" id="rESULTS-list-item13">
                     {{res.MODULE_DESCRIPTION}}
                 </ion-item>
-                <ion-item id="rESULTS-list-item-container5" color="segment">
+                <ion-item style="background-color: #ffe57f" id="rESULTS-list-item-container5">
                     <div id="rESULTS-markdown8" class="show-list-numbers-and-dots">
                         <p style="margin-top:0px;color:#000000;">
                             Grade: 
