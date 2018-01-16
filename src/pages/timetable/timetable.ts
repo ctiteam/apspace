@@ -26,7 +26,7 @@ export class TimetablePage {
   @ViewChild(Refresher) refresher: Refresher;
 
   /* config */
-  intake: string = 'UC1F1705CS(DA)';
+  intake: string = '';
 
   constructor(
     public actionSheetCtrl: ActionSheetController,

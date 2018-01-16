@@ -2,4 +2,8 @@ page-timetable {
   ion-content ion-card-content a {
     text-decoration: none;
   }
+
+  ion-content ion-card-header + ion-card-content p:nth-child(odd) {
+    background: #eceff1;
+  }
 }

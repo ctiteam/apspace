@@ -39,16 +39,18 @@
     <ion-card-content no-padding-bottom>
       <p no-margin>
         <ion-icon padding-right name="time"></ion-icon>
-        <b>{{ t.TIME_FROM }} - {{ t.TIME_TO }}</b>
+        <b>{{ t.TIME_FROM }}</b> - <b>{{ t.TIME_TO }}</b>
       </p>
       <p>
         <ion-icon padding-right name="locate"></ion-icon>
         {{ t.ROOM }} │ {{ t.LOCATION }}
       </p>
-      <a *ngIf="t.STAFFNAME" navPush="StaffDirectoryInfoPage" [navParams]="{id: t.LECTID}">
-        <ion-icon padding-right name="contact"></ion-icon>
-        {{ t.STAFFNAME }}
-      </a>
+      <p>
+        <a *ngIf="t.STAFFNAME" navPush="StaffDirectoryInfoPage" [navParams]="{id: t.LECTID}">
+          <ion-icon padding-right name="contact"></ion-icon>
+          {{ t.STAFFNAME }}
+        </a>
+      </p>
     </ion-card-content>
   </ion-card>
 

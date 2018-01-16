@@ -27,7 +27,7 @@
   <ion-list *ngIf="staff$ | async">
     <ion-item *ngFor="let staff of selected(staff$ | async)" (click)="info(staff)">
       <ion-avatar item-start>
-        <img [src]="staff.PHOTO" onerror="this.src='/assets/img/profile.svg'">
+        <img [src]="staff.PHOTO" onerror="this.src='assets/img/profile.svg'">
       </ion-avatar>
       <h2>{{ staff.FULLNAME }}</h2>
       <p>{{ staff.EMAIL }}</p>
