@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, ToastController, ModalController,
-  Content, Refresher } from 'ionic-angular';
+import { ActionSheetController, ActionSheetButton, Content, IonicPage,
+  NavController, Refresher } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { catchError, finalize, tap } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 
 import { StaffDirectory } from '../../interfaces/staff-directory';
 import { StaffDirectoryProvider } from '../../providers/staff-directory/staff-directory';
@@ -29,28 +29,42 @@ export class TimetablePage {
   intake: string = 'UC1F1705CS(DA)';
 
   constructor(
+    public actionSheetCtrl: ActionSheetController,
     public navCtrl: NavController,
-    public toastCtrl: ToastController,
-    public modalCtrl: ModalController,
     private sd: StaffDirectoryProvider,
     private tt: TimetableProvider,
   ) { }
 
-  /** Set the data with TimetableConfPage. */
-  confPage(): void {
-    let conf = this.modalCtrl.create('TimetableConfPage', { intake: this.intake });
-    conf.onDidDismiss(data => {
-      if (this.intake !== data['intake']) {
-        this.intake = data['intake'];
-        this.timetable$.subscribe(tt => this.updateDay(tt));
-      }
+  presentActionSheet() {
+    this.timetable$.subscribe(tt => {
+      let intakes = Array.from(new Set((tt || []).map(t => t.INTAKE)))
+        .map(intake => <ActionSheetButton>{
+          text: intake,
+          handler: () => {
+            this.intake = intake;
+            this.timetable$.subscribe(tt => this.updateDay(tt));
+          }
+        });
+      let actionSheet = this.actionSheetCtrl.create({
+        buttons: [
+          {
+            text: 'My Classes', handler: () => {
+              this.intake = '';
+              this.timetable$.subscribe(tt => this.updateDay(tt));
+            }
+          },
+          ...intakes, { text: 'Cancel', role: 'cancel' }
+        ]
+      });
+      actionSheet.present();
     });
-    conf.present();
   }
 
   /** Get all classes for student. */
   classes(tt: Timetable[]): Timetable[] {
-    if (tt) {
+    if (!this.intake) {
+      return [] as Timetable[]; /* TODO: My Classes */
+    } else if (Array.isArray(tt) && tt.length) {
       return this.intake ? tt.filter(t => this.intake === t.INTAKE) : tt;
     }
     return [] as Timetable[];
@@ -95,18 +109,16 @@ export class TimetablePage {
                                   .substr(-2)).join('');
   }
 
-  doRefresh(refresher) {
-    let t = this.toastCtrl.create({ message: 'Request fail', duration: 3000 });
-    this.timetable$ = this.getTimetable(true).pipe(
+  doRefresh(refresher, forceRefresh: boolean = true) {
+    this.timetable$ = this.getTimetable(forceRefresh).pipe(
       tap(tt => this.updateDay(tt)),
-      catchError(err => t.present(err)),
       finalize(() => refresher.complete()),
     );
   }
 
   ionViewDidLoad() {
-    this.refresher.progress = -1; /* Never display the no classes card on load */
-    this.timetable$ = this.getTimetable().pipe(tap(tt => this.updateDay(tt)));
+    this.refresher.progress = 1; /* Never display the no classes card on load */
+    this.doRefresh(this.refresher, false);
   }
 
 }

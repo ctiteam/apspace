@@ -4,11 +4,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      Timetable {{ (theday(timetable$ | async).shift() || {}).DATESTAMP }}
+      {{ (theday(timetable$ | async).shift() || {}).DATESTAMP || 'Timetable' }}
     </ion-title>
-    <ion-buttons end padding-right>
-      <button ion-button icon-only (click)="confPage()">
-        <ion-icon name="funnel"></ion-icon>
+    <ion-buttons end>
+      <button ion-button outline small (click)="presentActionSheet()">
+        {{ this.intake || 'My Classes' }}
       </button>
     </ion-buttons>
   </ion-navbar>
