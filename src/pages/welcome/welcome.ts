@@ -40,11 +40,12 @@ export class WelcomePage {
   }
 
   ionViewDidLoad() {
-    this.checknetwork();
+    this.checknetwork(); //checking network
   }
 
 
   checknetwork(){
+    document.getElementById("network").innerHTML = 'Checking the connection...';
     if(this.isOnline()){
       this.getStorageOnline();
     }else{
@@ -112,10 +113,11 @@ export class WelcomePage {
   }
 
 
-  checkTgTUrl() {
+  checkTgTUrl() {  
     if (!this.TgtUrl) {
       this.clearData();  
     } else {
+      //Check the username and password
       this.getServiceTicket()
       
     }
@@ -130,7 +132,8 @@ export class WelcomePage {
     this.service = 'service=https://cas.apiit.edu.my/cas/login';
     this.http.post(this.TgtUrl, this.service, options)
     .subscribe(res => {
-      this.serviceTicket = res.text()
+      this.serviceTicket = res.text() 
+      document.getElementById("validate").innerHTML = "Validating username and password...";//Validating username and password
       this.validateST();
     }, error => {
       console.log("Error getting Service Ticekt on welcome : " + error);
@@ -145,11 +148,14 @@ export class WelcomePage {
     var webService = validateUrl + '?' + this.service + '&ticket=' + this.serviceTicket;
     this.http.get(webService)
     .subscribe(res => {
-      this.respond = res;
+      this.respond = res; //Access granted
+      document.getElementById("granted").innerHTML = "Access Granted!";
       this.showHome();
     }, error => {
       this.getTgt();
+      document.getElementById("denied").innerHTML = "Access Denied!";
       console.log("Error validating Service Ticekt on welcome : " + error);
+      //Access Denied
       
     })
   }

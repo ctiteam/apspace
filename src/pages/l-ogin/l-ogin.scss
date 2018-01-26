@@ -2,12 +2,26 @@ page-l-ogin {
     
 }
 
-.img-login {
-	border: 2px solid #FF5819;
-}
+
 .loginPage{
-    background-color: #C8DAE8;
+    background-color: rgb(255, 255, 255);
 }
 .allHeaders{
     background-color: red;
+}
+
+.button{
+
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: 4px 2px;
+    cursor: pointer;
+    width: (40%-60%);
+    position: relative;
+    height: 2.5em;
+ 
+    
 }

@@ -28,8 +28,16 @@ export class MyApp {
   
 
   constructor(public app: App, private http: Http, private alertCtrl: AlertController, private storage: Storage, platform: Platform, statusBar: StatusBar, public _platform: Platform) {
-    this.getTGT();
+  
   }
+
+
+
+ngOnInit(){
+  this.getTGT();
+  console.log("app components run");
+}
+
 
   photo: any;
 

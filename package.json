@@ -35,7 +35,7 @@
     "cordova-plugin-email-composer": "^0.8.12",
     "cordova-plugin-inappbrowser": "^2.0.1",
     "cordova-plugin-network-information": "^2.0.1",
-    "cordova-plugin-whitelist": "~1.3.3",
+    "cordova-plugin-whitelist": "^1.3.3",
     "cordova-sqlite-storage": "^2.2.0",
     "ionic-angular": "3.9.2",
     "ionic2-super-tabs": "^4.1.5",
