@@ -13,7 +13,7 @@ import { WelcomePage } from '../pages/welcome/welcome';
 import { Storage } from '@ionic/storage';
 import { AlertController, App } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
-
+import { ToastController } from 'ionic-angular';
 
 
 
@@ -25,23 +25,25 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
   rootPage: any = WelcomePage;
-  
 
-  constructor(public app: App, private http: Http, private alertCtrl: AlertController, private storage: Storage, platform: Platform, statusBar: StatusBar, public _platform: Platform) {
-  
+  photo: any;
+  res: any;
+  testNav: any;
+  tgt: string;
+  serv_ticket: string;
+  service_url: string = 'service=https://ws.apiit.edu.my/web-services/index.php/student/profile'
+  user_info: string;
+  validation: any;
+ 
+
+
+  constructor(private toastCtrl: ToastController, public app: App, private http: Http, private alertCtrl: AlertController, private storage: Storage, platform: Platform, statusBar: StatusBar, public _platform: Platform) {
+    
   }
 
 
-
-ngOnInit(){
-  this.getTGT();
-  console.log("app components run");
-}
-
-
-  photo: any;
-
   goToHOME(params) {
+    this.getTGT();
     if (!params) params = {};
     this.navCtrl.setRoot(HOMEPage);
   }
@@ -90,14 +92,14 @@ ngOnInit(){
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
+           
           }
         },
         {
           text: 'Yes',
           handler: () => {
-            this.deleteTGT();
-            setTimeout(() => this.storage.clear(), 1500) 
+            this.deleteTGT(this.tgt);
+            setTimeout(() => this.storage.clear(), 1500)
             setTimeout(() => this.backToLoginPage(), 1000);
           }
         }
@@ -106,100 +108,87 @@ ngOnInit(){
     alert.present();
   }
 
-  test2: any;
-
   getTGT() {
     this.storage.get('tgturl').then((val) => {
-      this.test2 = val;
-      this.getServiceTicket();
-      console.log("GET VALUE   :" + this.test2)
+      this.tgt = val;
+      console.log("From app:  " + this.tgt )
+      this.getServiceTicket(this.tgt);      
     });
   }
 
-  res: any;
-testNav: any;
-
-  backToLoginPage(){
+  backToLoginPage() {
     this.testNav = this.app.getRootNavById("n4");
     this.testNav.setRoot(LOGINPage);
   }
 
-  deleteTGT() {
+  deleteTGT(tgt) {
+    let options = new RequestOptions({ withCredentials: true });
+    this.http.get("https://ws.apiit.edu.my/web-services/index.php/student/close_session", options)
+      .subscribe(res => {
+        this.res = res;
+        
 
-    this.http.delete(this.test2)
-    .subscribe(res =>{
-      this.res = res;
-      console.log("This is the logout response: " + this.res);
-      
-    }, error => {
-      console.log(error)
-    })
-
-
+      }, error => {
+        console.log("ERRRRROOOOORRR" + error)
+      })
   }
-
-  serviceTicket4: any;
-  service: any;
-  respond5: any;
-  ticket: any;
-
-
-
 
   //send tgt to get service ticket
-  getServiceTicket() {
-    var headers = new Headers();
+  getServiceTicket(tgt) {
+    let headers = new Headers();
     headers.append('Content-type', 'application/x-www-form-urlencoded');
     let options = new RequestOptions({ headers: headers });
-    this.service = 'service=https://ws.apiit.edu.my/web-services/index.php/student/profile';
-    this.http.post(this.test2, this.service, options)
+    this.http.post(tgt, this.service_url, options)
       .subscribe(res => {
-        this.serviceTicket4 = res.text();
-        this.validateST();
-        console.log("Service Ticket 4: " + this.serviceTicket4);
+        this.serv_ticket = res.text();
+        this.getUserInfo(this.serv_ticket);
+        //this.validateST(this.serv_ticket);
+        
       }, error => {
-        console.log("Error to get Service Ticket: " + error);
+        console.log("Error to get Service Ticket for profile: " + error);
       })
   }
-  respond: any;
 
-  validateST() {
-    var validateCasUrl = 'https://cas.apiit.edu.my/cas/validate';
-    var webService = validateCasUrl + '?' + this.service + '&ticket=' + this.serviceTicket4; //Format to send to validate the Service Ticket
-    this.http.get(webService)
+
+
+  validateST(serv_ticket) {
+    let validation_url = 'https://cas.apiit.edu.my/cas/validate';
+    let web_service = validation_url + '?' + this.service_url + '&ticket=' + serv_ticket; //Format to send to validate the Service Ticket
+    this.http.get(web_service)
       .subscribe(res => {
-        this.respond = res;
-        this.getUserInfo();
+        this.validation = res;
+       
+        this.getUserInfo(serv_ticket);
+        
+      }, error => {
+        console.log(error);
+      })
+  }
+
+  getUserInfo(serv_ticket) {
+    let user_info_api = "https://ws.apiit.edu.my/web-services/index.php/student/profile?ticket=" + serv_ticket;
+    let headers = new Headers();
+    let options = new RequestOptions({ headers: headers, withCredentials: true });
+    this.http.get(user_info_api, options)
+      .subscribe(ress => {
+        this.user_info = ress.json();
+        
+        this.storage.set('user_info', this.user_info);
         this.getUserPhoto();
       }, error => {
-        console.log('Error message - ST Validation: ' + error);
+        console.log("ERRRRRRRRROOOOOOOORRRR: "+ error);
       })
   }
 
-  respond4: any;
-  
-
-  getUserInfo() {
-    var url1 = "https://ws.apiit.edu.my/web-services/index.php/student/profile?ticket=" + this.serviceTicket4;
-    var headers = new Headers();
-    let options = new RequestOptions({ headers: headers, withCredentials: true });
-
-    this.http.get(url1, options)
-      .subscribe(ress => {
-        this.respond4 = ress.json();
-
-      }, console.error)
-  }
 
   getUserPhoto() {
-    let url1 = "https://ws.apiit.edu.my/web-services/index.php/student/photo?ticket=" + this.serviceTicket4;
+    let user_photo_api = "https://ws.apiit.edu.my/web-services/index.php/student/photo";
     let headers = new Headers();
     let options = new RequestOptions({ headers: headers, withCredentials: true });
 
-    this.http.get(url1, options)
+    this.http.get(user_photo_api, options)
       .subscribe(ress =>
         this.photo = 'data:image/jpg;base64,' + ress.json().base64_photo, console.error
       )
   }
-
 }

@@ -9,6 +9,7 @@ import { Injectable } from "@angular/core";
 import { Platform } from 'ionic-angular';
 import { Network } from '@ionic-native/network';
 import { MenuController } from 'ionic-angular';
+import { Body } from '@angular/http/src/body';
 
 declare var Connection;
 @Component({
@@ -20,7 +21,7 @@ export class LOGINPage {
   @ViewChild('autofocus') autofocus;
  
   //Cas Url where username and password are sent
-  ticketUrl: string = "https://cas.apiit.edu.my/cas/v1/tickets";
+    ticketUrl: string = "https://cas.apiit.edu.my/cas/v1/tickets";
   
     body: any;                //username and password
     responds: any;
@@ -61,7 +62,7 @@ export class LOGINPage {
 
   checknetwork(){
     if(this.isOnline()){
-   this.getTicket(this.ticketUrl);
+   this.getTicket();
     }else{
       this.presentToast();
     }
@@ -91,51 +92,50 @@ export class LOGINPage {
 
 
 
-  getTicket(ticketUrl) {
-
-    var headers = new Headers();
+  getTicket() {
+    let headers = new Headers();
     headers.append('Content-type', 'application/x-www-form-urlencoded');
     let options = new RequestOptions({ headers: headers });
 
     this.body = 'username=' + this.userData.username + '&password=' + this.userData.password;
-
-    this.http.post(ticketUrl, this.body, options)
+    console.log(this.body)
+    this.http.post(this.ticketUrl, this.body, options)
       .subscribe(res => {
         this.responds = res.text()
         this.break = this.responds.split("=")[1];
         this.ticket = this.break.split("\"")[1];
-        this.getServiceTicket();
-        this.setTGTurlvalue();
+        console.log("From login: " + this.ticket)
+        this.getServiceTicket(this.ticket);
+        this.setTGTurlvalue(this.ticket);
       }, error => {
         console.log("Error to get TGT: " + error);
         this.presentAlert();
       })
   }
 
-  getServiceTicket() {
-    var headers = new Headers();
+  getServiceTicket(ticket) {
+    let headers = new Headers();
     headers.append('Content-type', 'application/x-www-form-urlencoded');
     let options = new RequestOptions({ headers: headers });
     this.service = 'service=https://cas.apiit.edu.my/cas/login';
-    this.http.post(this.ticket, this.service, options)
+    this.http.post(ticket, this.service, options)
       .subscribe(res => {
         this.serviceTicket = res.text()
-        this.validateST();
+        this.validateST(this.serviceTicket);
       }, error => {
         console.log("Error to get Service Ticket: " + error);
       })
   }
 
-  validateST() {
-    var validateCasUrl = 'https://cas.apiit.edu.my/cas/validate';
-    var webService = validateCasUrl + '?' + this.service + '&ticket=' + this.serviceTicket; //Format to send to validate the Service Ticket
+  validateST(serviceTicket) {
+    let validateCasUrl = 'https://cas.apiit.edu.my/cas/serviceValidate';
+    let webService = validateCasUrl + '?service=' + this.service + '&ticket=' + serviceTicket; //Format to send to validate the Service Ticket
 
     this.http.get(webService)
       .subscribe(res => {
         this.respond = res;
         this.saveST();
         this.saveUsername();
-        this.savePassword();
         this.navCtrl.setRoot(HOMEPage);
       }, error => {
         console.log('Error message - ST Validation: ' + error);
@@ -144,26 +144,17 @@ export class LOGINPage {
 
   //Saves TGT, User Credendials and Service Ticket in Local Storage
 
-  setTGTurlvalue() {
-    console.log("save value of TGT URL :" + this.ticket)
-    this.storage.set('tgturl', this.ticket);
+  setTGTurlvalue(ticket) {
+    this.storage.set('tgturl', ticket);
 
   }
 
   saveUsername() {
-    console.log("save value of username :" + this.userData.username)
     this.storage.set('username', this.userData.username);
 
   }
 
-  savePassword() {
-    console.log("save value of password :" + this.userData.password)
-    this.storage.set('password', this.userData.password);
-
-  }
-
   saveST() {
-    console.log("save value of Service Ticket: " + this.serviceTicket)
     this.storage.set('ticket', this.serviceTicket);
   }
 

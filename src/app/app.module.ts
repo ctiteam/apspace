@@ -25,6 +25,10 @@ import { MenuController } from 'ionic-angular';
 import { StaffDirectoryProvider } from '../providers/staff-directory/staff-directory';
 import { CasTicketProvider } from '../providers/cas-ticket/cas-ticket';
 import { TimetableProvider } from '../providers/timetable/timetable';
+import { ScrollableTabs } from '../components/scrollable-tabs/scrollable-tabs';
+import { Firebase } from '@ionic-native/firebase';
+
+
 
 
 @NgModule({
@@ -67,7 +71,8 @@ import { TimetableProvider } from '../providers/timetable/timetable';
     Network,
     StaffDirectoryProvider,
     CasTicketProvider,
-    TimetableProvider
+    TimetableProvider,
+    Firebase
   ]
 
 })

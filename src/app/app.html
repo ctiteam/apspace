@@ -2,7 +2,7 @@
   <ion-content id="side-menu21" class="side-menu-gradient-after-login">
     <div id="menu-info">
       <img [src]="photo" onerror="this.src='assets/img/profile.svg'">
-      <p *ngIf="respond4">{{this.respond4[0].NAME}}</p>
+      <p *ngIf="user_info">{{this.user_info[0].NAME}}</p>
     </div>
 
     <ion-list id="menu-list1">
@@ -22,10 +22,10 @@
         <ion-icon name="checkbox" item-left></ion-icon>
         Results
       </ion-item>
-      <ion-item color="none" menuClose="" on-click="goToFEES()" id="menu-list-item5" class="side-menu-item">
+      <!-- <ion-item color="none" menuClose="" on-click="goToFEES()" id="menu-list-item5" class="side-menu-item">
         <ion-icon name="cash" item-left></ion-icon>
         Fees
-      </ion-item>
+      </ion-item> -->
       <ion-item color="none" menuClose="" on-click="goToNOTIFICATION()" id="menu-list-item6" class="side-menu-item">
         <ion-icon name="chatbubbles" item-left></ion-icon>
         Notification

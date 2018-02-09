@@ -7,28 +7,28 @@
       Results
     </ion-title>
   </ion-navbar>
+  <ion-toolbar no-border-top>
+    <ion-segment color="foreground">
+      <ion-segment-button *ngFor="let int of INTAKES" [value]="int.INTAKE_CODE" style="font-weight: bold; font-size:13px; color:#170b00; "
+        (click)="loadResults(student_id, int.INTAKE_CODE)">
+        {{int.INTAKE_CODE}}
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
-
-
-<ion-content id="page3">
+<ion-content>
 
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
 
-  <ion-segment [(ngModel)]="seg" color="primary">
-    <ion-segment-button *ngFor="let result of respond4" [value]="result.INTAKE_CODE" style="font-size:1.0rem;">
-      {{result.INTAKE_CODE}}
-    </ion-segment-button>
-  </ion-segment>
 
-  <ion-card *ngFor="let res of respond5">
-    <ion-card-header>
-      {{res.MODULE_DESCRIPTION}}
-    </ion-card-header>
-
+  <ion-card *ngFor="let res of results">
     <ion-list>
+      <ion-item class="subj-title">
+        {{res.MODULE_DESCRIPTION}}
+      </ion-item>
       <ion-item>
         <ion-label>Grade</ion-label>
         <div item-content>{{ res.GRADE || 'N/A' }}</div>
@@ -47,5 +47,4 @@
       </ion-item>
     </ion-list>
   </ion-card>
-
 </ion-content>

@@ -23,10 +23,10 @@ export class TimetableProvider {
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
     const service = 'https://ws.apiit.edu.my/web-services/index.php/open/weektimetable';
     if (refresh) {
-      this.timetable$ = this.http.get<Timetable[]>(service).timeout(3000).pipe(
+      this.timetable$ = this.http.get<Timetable[]>(service).timeout(1000).pipe(
         tap(cache => this.storage.set('timetable', cache)),
         catchError(err => {
-          this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
+          this.toastCtrl.create({ message: err.message, duration: 1000 }).present();
           return Observable.from(this.storage.get('timetable'));
         }),
       ).publishLast().refCount();

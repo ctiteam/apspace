@@ -2,122 +2,154 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Http, Headers, RequestOptions } from '@angular/http';
+import { Network } from '@ionic-native/network';
+import { Platform } from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
 
 
-
-
-
+declare var Connection;
 @Component({
   selector: 'page-r-esults',
   templateUrl: 'r-esults.html',
   providers: []
 })
+
 export class RESULTSPage {
 
+  INTAKES: any;
+  intake_url: string;
+  results: any;
+  intake: string;
+  studentNumber: string;
+  resultURL: string;
+  student_id: string;
+  student_intake: string;
+  onDevice: boolean;
+  offline_intakes: any;
 
-  service: any;
-  service2:any;
+ 
 
-  seg = '{{this.respond4[0].INTAKE_CODE}}';
-
-  serviceTicket4: any;
-  serviceTicket5: any;
-  respond: any;
-  ticket: any;
-
-  constructor(public navCtrl: NavController, public http: Http, public storage: Storage) {
-  this.getTGTvalue();
-    
+  constructor(
+    public navCtrl: NavController,
+    public http: Http,
+    public storage: Storage,
+    private network: Network,
+    public platform: Platform,
+    private toastCtrl: ToastController) {
+    this.onDevice = this.platform.is('cordova');
   }
 
-  getTGTvalue() {
-    console.log("in constructor");
-    this.storage.get('tgturl').then((val) => {
-      this.ticket = val;
-      this.getServiceTicket();
+  ionViewDidLoad() {
+    this.checknetwork(); //checking network
+  }
+
+  ionViewDidEnter() {
+    this.network.onConnect().subscribe(data => {
+      this.displayNetworkUpdate(data.type)
+    }, error => {
+      console.log(error);
+    })
+
+    this.network.onDisconnect().subscribe(data => {
+      this.displayNetworkUpdate(data.type)
+    }, error => {
+      console.log(error);
+    })
+  }
+
+  displayNetworkUpdate(connectionState: string){
+    let networkType = this.network.type;
+    this.toastCtrl.create({
+      message: `You are now ${connectionState} via ${networkType}`,
+      duration: 3000
+    }).present();
+  }
+  
+
+  checknetwork() {
+    if (this.isOnline()) {
+      this.loadIntakes();
+    } else {
+      this.showToastWithCloseButton();
+      this.loadIntakesFromStorage();
+    }
+  }
+
+  isOnline(): boolean {
+    if (this.onDevice && this.network.type) {
+      return this.network.type !== Connection.NONE;
+    } else {
+      return navigator.onLine;
+    }
+  }
+
+  loadIntakes() {
+    this.intake_url = "https://ws.apiit.edu.my/web-services/index.php/student/courses";
+    let headers = new Headers();
+    let options = new RequestOptions({ headers: headers, withCredentials: true });
+
+    this.http.get(this.intake_url, options)
+      .subscribe(res => {
+        this.INTAKES = res.json();
+        this.student_id = this.INTAKES[0].STUDENT_NUMBER
+        this.storage.set('intakes', this.INTAKES);
+
+        this.loadResults(this.student_id, this.INTAKES[0].INTAKE_CODE);
+
+      }, error => {
+        console.log(error);
+      })
+  }
+
+  loadResults(st_id, intake_code) {
+    this.resultURL = "https://ws.apiit.edu.my/web-services/index.php/student/subcourses?format=json&id=" + st_id + '&intake=' + intake_code;
+    var headers = new Headers();
+    let options = new RequestOptions({ headers: headers, withCredentials: true });
+    this.http.get(this.resultURL, options)
+      .subscribe(ress => {
+        this.results = ress.json();
+        this.storage.set('results', this.results);
+      }, error => {
+        console.log(error);
+      })
+  }
+
+  loadIntakesFromStorage() {
+    this.storage.get('intakes').then((val) => {
+      this.INTAKES = val;
+      this.loadResultsFromStorage();
+      console.log(this.INTAKES);
     });
   }
 
-
-
-  //send tgt to get service ticket
-  getServiceTicket() {
-    var headers = new Headers();
-    headers.append('Content-type', 'application/x-www-form-urlencoded');
-    let options = new RequestOptions({ headers: headers });
-    this.service = 'service=https://ws.apiit.edu.my/web-services/index.php/student/courses';
-    this.http.post(this.ticket, this.service, options)
-      .subscribe(res => {
-        this.serviceTicket4 = res.text();
-        this.getIntakes();
-        console.log("Service Ticket 4: " + this.serviceTicket4);
-      }, error => {
-        console.log("Error to get Service Ticket: " + error);
-      })
+  loadResultsFromStorage() {
+    this.storage.get('results').then((val) => {
+      this.results = val;
+      console.log(this.results);
+    });
   }
-
-  respond4: any;
-
-  getIntakes() {
-    var url1 = "https://ws.apiit.edu.my/web-services/index.php/student/courses?ticket=" + this.serviceTicket4;
-    var headers = new Headers();
-    let options = new RequestOptions({ headers: headers, withCredentials: true });
-
-    this.http.get(url1, options)
-      .subscribe(ress => {
-        this.respond4 = ress.json();
-        this.getServiceTicketForResults();
-        console.log("this is what we get    :" + this.respond4[0].INTAKE_CODE);
-      }, error => {
-        console.log('Error message' + error);
-      })
-  }
-
-
-
-  getServiceTicketForResults() {
-    var headers = new Headers();
-    headers.append('Content-type', 'application/x-www-form-urlencoded');
-    let options = new RequestOptions({ headers: headers });
-    this.service2 = 'service=https://ws.apiit.edu.my/web-services/index.php/student/subcourses?format=json&id=' + this.respond4[0].STUDENT_NUMBER + '&intake='+this.respond4[0].INTAKE_CODE;
-    this.http.post(this.ticket, this.service2, options)
-      .subscribe(res => {
-        this.serviceTicket5 = res.text();
-        this.getResults();
-        console.log("Service Ticket 5: " + this.serviceTicket5);
-      }, error => {
-        console.log("Error to get Service Ticket: " + error);
-      })
-  }
-
-  respond5: any;
-  
-    getResults() {
-      var url2 = "https://ws.apiit.edu.my/web-services/index.php/student/subcourses?format=json&id=" + this.respond4[0].STUDENT_NUMBER + '&intake='+this.respond4[0].INTAKE_CODE + '&ticket='+ this.serviceTicket5;
-      var headers = new Headers();
-      let options = new RequestOptions({ headers: headers, withCredentials: true });
-  
-      this.http.get(url2, options)
-        .subscribe(ress => {
-          this.respond5 = ress.json();
-          console.log("this is what we get as a result    :" + this.respond5[0]);
-        }, error => {
-          console.log('Error message' + error);
-        })
-    }
-  
-
 
   doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
-
+    this.checknetwork();
     setTimeout(() => {
-      console.log('Async operation has ended');
       refresher.complete();
     }, 2000);
   }
 
-  getItems(type: any) {
-    return this.respond4[type];
+  showToastWithCloseButton() {
+    const toast = this.toastCtrl.create({
+      message: 'Your internet connection appears to be offline. Data integrity is not guaranteed.',
+      showCloseButton: true,
+      closeButtonText: 'Retry'
+    });
+    toast.onDidDismiss(this.dismissHandler);
+    toast.present();
 }
+private dismissHandler() {
+  console.info('Toast onDidDismiss()');
+}
+
+  getItems(type: any) {
+    return this.INTAKES[type];
+  }
 }
