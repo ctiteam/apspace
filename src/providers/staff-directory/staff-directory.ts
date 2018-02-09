@@ -26,7 +26,7 @@ export class StaffDirectoryProvider {
     if (refresh) {
       this.staff$ = this.casService.getST(service).switchMap(ticket =>
         this.http.get<StaffDirectory[]>(`${service}?ticket=${ticket}`, { withCredentials: true })
-        .timeout(3000).pipe(
+        .timeout(1000).pipe(
           tap(cache => this.storage.set('staffDirectory', cache)),
           catchError(_ => Observable.from(this.storage.get('staffDirectory')))
         ).publishLast().refCount()

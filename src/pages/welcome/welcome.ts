@@ -43,6 +43,7 @@ export class WelcomePage {
     this.checknetwork(); //checking network
   }
 
+ 
 
   checknetwork(){
     document.getElementById("network").innerHTML = 'Checking the connection...';
@@ -87,7 +88,7 @@ export class WelcomePage {
 
   
   getStorageOnline(){
-
+    
     this.storage.get('username').then((val) => {
       this.username = val;
     })
@@ -126,7 +127,7 @@ export class WelcomePage {
 
   getServiceTicket() {
   
-    var headers = new Headers();
+    let headers = new Headers();
     headers.append('Content-type', 'application/x-www-form-urlencoded');
     let options = new RequestOptions({ headers: headers });
     this.service = 'service=https://cas.apiit.edu.my/cas/login';
@@ -134,18 +135,17 @@ export class WelcomePage {
     .subscribe(res => {
       this.serviceTicket = res.text() 
       document.getElementById("validate").innerHTML = "Validating username and password...";//Validating username and password
-      this.validateST();
+      this.validateST(this.serviceTicket);
     }, error => {
-      console.log("Error getting Service Ticekt on welcome : " + error);
-      
+      console.log(error);
       this.getTgt();
     })
   }
 
 
-  validateST() {
-    var validateUrl = 'https://cas.apiit.edu.my/cas/validate';
-    var webService = validateUrl + '?' + this.service + '&ticket=' + this.serviceTicket;
+  validateST(serviceTicket) {
+    let validateUrl = 'https://cas.apiit.edu.my/cas/validate';
+    let webService = validateUrl + '?' + this.service + '&ticket=' + serviceTicket;
     this.http.get(webService)
     .subscribe(res => {
       this.respond = res; //Access granted
@@ -154,15 +154,14 @@ export class WelcomePage {
     }, error => {
       this.getTgt();
       document.getElementById("denied").innerHTML = "Access Denied!";
-      console.log("Error validating Service Ticekt on welcome : " + error);
+      console.log(error);
       //Access Denied
-      
     })
   }
 
 
   getTgt(){
-    var headers = new Headers();
+    let headers = new Headers();
     headers.append('Content-type', 'application/x-www-form-urlencoded');
     let options = new RequestOptions({ headers: headers });
 
@@ -172,25 +171,23 @@ export class WelcomePage {
     .subscribe(res => {
       this.responds = res.text()
       this.break = this.responds.split("=")[1];
-      this.ticket = this.break.split("\"")[1];
-      console.log("THIS iS BACK UP pLAN to GET THe TGT");
-      
-      this.setTGTurlvalue();
+      this.ticket = this.break.split("\"")[1];      
+      this.setTGTurlvalue(this.ticket);
     }, error => {
       this.clearData();
     })  
   }
 
 
-  setTGTurlvalue(){
-    this.storage.set('tgturl', this.ticket);
-    this.getServiceTicket2(this.ticket);
+  setTGTurlvalue(ticket){
+    this.storage.set('tgturl', ticket);
+    this.getServiceTicket2(ticket);
   }
 
 
   getServiceTicket2(val) {
     this.ticket = val
-    var headers = new Headers();
+    let headers = new Headers();
     headers.append('Content-type', 'application/x-www-form-urlencoded');
     let options = new RequestOptions({ headers: headers });
     this.service = 'service=https://cas.apiit.edu.my/cas/login';
@@ -205,15 +202,14 @@ export class WelcomePage {
 
 
   validateST2() {
-    var validateUrl = 'https://cas.apiit.edu.my/cas/validate';
-    var webService = validateUrl + '?' + this.service + '&ticket=' + this.serviceTicket;
+    let validateUrl = 'https://cas.apiit.edu.my/cas/validate';
+    let webService = validateUrl + '?' + this.service + '&ticket=' + this.serviceTicket;
 
     this.http.get(webService)
     .subscribe(res => {
       this.respond = res;
       this.showHome();
     }, error => {
-
       this.clearData();
     })
   }

@@ -7,6 +7,7 @@ import { ToastController } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
 import { Platform } from 'ionic-angular';
+import { MyApp } from '../../app/app.component';
 
 
 declare var Connection;
@@ -66,7 +67,6 @@ export class HOMEPage {
   getPosts() {
     this.newsService.getPosts().subscribe(response => {
       this.items = response;
-      console.log("News: " + this.items);
       
        this.savePosts()
     });
@@ -75,15 +75,12 @@ export class HOMEPage {
   //Saves news to Local Storage
   savePosts() {
     this.storage.set('news', this.items);
-    console.log("News are saved locally: " + this.items);
   }
 
   //Loads saved news from Local Storage
   loadPosts() {
     this.storage.get('news').then((val) => {
       this.items = val;
-      console.log("News from local storage:");
-      console.log(this.items)
     });
   }
 
