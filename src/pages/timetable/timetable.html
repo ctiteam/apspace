@@ -36,27 +36,28 @@
     <ion-card-header>
       {{ t.MODID }}
     </ion-card-header>
-    <ion-card-content no-padding-bottom>
-      <p no-margin>
+    <ion-card-content>
+      <ion-label no-margin>
         <ion-icon padding-right name="time"></ion-icon>
         <b>{{ t.TIME_FROM }}</b> - <b>{{ t.TIME_TO }}</b>
-      </p>
-      <p>
+      </ion-label>
+      <ion-label no-margin>
         <ion-icon padding-right name="locate"></ion-icon>
         {{ t.ROOM }} │ {{ t.LOCATION }}
-      </p>
-      <p>
+      </ion-label>
+      <ion-label no-margin>
         <a *ngIf="t.STAFFNAME" navPush="StaffDirectoryInfoPage" [navParams]="{id: t.LECTID}">
           <ion-icon padding-right name="contact"></ion-icon>
           {{ t.STAFFNAME }}
         </a>
-      </p>
+      </ion-label>
     </ion-card-content>
   </ion-card>
 
   <ion-card *ngIf="!refresher.progress && !selectedDay">
     <ion-card-content>
-      <p>Hooray! No classes this week! :D</p>
+      <p *ngIf="intake">Hooray! No classes this week! :D</p>
+      <p *ngIf="!intake" color="warning">WIP. Select your intake above. ;)</p>
     </ion-card-content>
 	</ion-card>
 </ion-content>
