@@ -94,12 +94,9 @@ export class TimetablePage {
 
   /** Get and merge Timetable with StaffDirectory. */
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
-    return this.tt.getTimetable(refresh).switchMap(tt => tt
-      /* Find and merge with { ..t, STAFFNAME: s.FULLNAME } */
-      ? this.sd.getStaffDirectory().map(ss => tt.map(t => <Timetable>Object.assign(t,
-        { STAFFNAME: (ss.find(s => s.CODE === t.LECTID) || <StaffDirectory>{}).FULLNAME })))
-      : Observable.empty()
-    );
+    return Observable.forkJoin([this.tt.getTimetable(), this.sd.getStaffDirectory(true)])
+      .map(data => data[0].map(t => <Timetable>Object.assign(t, { STAFFNAME:
+        ((data[1] || []).find(s => s.CODE === t.LECTID) || <StaffDirectory>{}).FULLNAME })));
   }
 
   strToColor(s: string): string {

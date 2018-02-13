@@ -3,7 +3,12 @@ page-timetable {
     text-decoration: none;
   }
 
-  ion-content ion-card-header + ion-card-content p:nth-child(odd) {
+  ion-content ion-card-content ion-icon {
+    vertical-align: -1.5px;
+    padding-left: 4px;
+  }
+
+  ion-content ion-card-header + ion-card-content ion-label:nth-child(odd) {
     background: #eceff1;
   }
 }

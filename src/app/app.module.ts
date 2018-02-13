@@ -40,7 +40,8 @@ import { Firebase } from '@ionic-native/firebase';
     NOTIFICATIONPage,
     FEEDBACKPage,
     LOGINPage,
-    WelcomePage
+    WelcomePage,
+    ScrollableTabs,
   ],
   imports: [
     BrowserModule,
@@ -49,7 +50,7 @@ import { Firebase } from '@ionic-native/firebase';
     JsonpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    SuperTabsModule.forRoot()
+    SuperTabsModule.forRoot(),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -60,7 +61,7 @@ import { Firebase } from '@ionic-native/firebase';
     NOTIFICATIONPage,
     FEEDBACKPage,
     LOGINPage,
-    WelcomePage
+    WelcomePage,
   ],
   providers: [
     StatusBar,
@@ -72,7 +73,7 @@ import { Firebase } from '@ionic-native/firebase';
     StaffDirectoryProvider,
     CasTicketProvider,
     TimetableProvider,
-    Firebase
+    Firebase,
   ]
 
 })
