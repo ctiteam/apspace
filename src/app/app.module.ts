@@ -44,8 +44,11 @@ import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory
     FEEDBACKPage,
     LOGINPage,
     WelcomePage,
+
     TimetablePage,
     StaffDirectoryPage
+
+
   ],
   imports: [
     BrowserModule,
@@ -54,7 +57,7 @@ import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory
     JsonpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    SuperTabsModule.forRoot()
+    SuperTabsModule.forRoot(),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -68,6 +71,7 @@ import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory
     WelcomePage,
     TimetablePage,
     StaffDirectoryPage
+
   ],
   providers: [
     StatusBar,
@@ -79,7 +83,7 @@ import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory
     StaffDirectoryProvider,
     CasTicketProvider,
     TimetableProvider,
-    Firebase
+    Firebase,
   ]
 
 })
