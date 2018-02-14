@@ -4,7 +4,9 @@ import { Storage } from '@ionic/storage';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { Network } from '@ionic-native/network';
 import { Platform } from 'ionic-angular';
-import { ToastController } from 'ionic-angular';
+import { ToastController, Toast } from 'ionic-angular';
+import { Subscription } from 'rxjs/Subscription';
+import { LoadingController } from 'ionic-angular';
 
 
 declare var Connection;
@@ -27,10 +29,16 @@ export class RESULTSPage {
   onDevice: boolean;
   offline_intakes: any;
 
- 
+
+  connected: Subscription;
+  disconnected: Subscription;
+
+  activeSeg: any;
+
 
   constructor(
     public navCtrl: NavController,
+    public loadingCtrl: LoadingController,
     public http: Http,
     public storage: Storage,
     private network: Network,
@@ -44,27 +52,50 @@ export class RESULTSPage {
   }
 
   ionViewDidEnter() {
-    this.network.onConnect().subscribe(data => {
+    this.connected = this.network.onConnect().subscribe(data => {
       this.displayNetworkUpdate(data.type)
+      this.presentLoading();
     }, error => {
       console.log(error);
     })
 
-    this.network.onDisconnect().subscribe(data => {
+   this.disconnected = this.network.onDisconnect().subscribe(data => {
       this.displayNetworkUpdate(data.type)
     }, error => {
       console.log(error);
     })
   }
-
-  displayNetworkUpdate(connectionState: string){
-    let networkType = this.network.type;
-    this.toastCtrl.create({
-      message: `You are now ${connectionState} via ${networkType}`,
-      duration: 3000
-    }).present();
+  ionViewWillLeave(){
+    this.connected.unsubscribe();
+    this.disconnected.unsubscribe();
   }
   
+  
+
+  displayNetworkUpdate(connectionState: string) {
+    let networkType = this.network.type;
+     const toast1 = this.toastCtrl.create({
+      message: `You are now ${connectionState} via ${networkType}`,
+      cssClass: 'danger',
+      showCloseButton: true,
+      closeButtonText: 'OK'
+     
+    });
+    toast1.onDidDismiss(this.dismissHandler);
+    toast1.present();
+  }
+
+
+  showToastWithCloseButton() {
+    let newtworkType1 = this.network.type;
+    const toast = this.toastCtrl.create({
+      message: 'You are now offline',
+      showCloseButton: true,
+      closeButtonText: 'OK'
+    });
+    toast.onDidDismiss(this.dismissHandler);
+    toast.present();
+  }
 
   checknetwork() {
     if (this.isOnline()) {
@@ -83,6 +114,14 @@ export class RESULTSPage {
     }
   }
 
+  presentLoading() {
+    let loader = this.loadingCtrl.create({
+      content: "Please wait...",
+      duration: 2000
+    });
+    loader.present();
+  }
+
   loadIntakes() {
     this.intake_url = "https://ws.apiit.edu.my/web-services/index.php/student/courses";
     let headers = new Headers();
@@ -91,6 +130,7 @@ export class RESULTSPage {
     this.http.get(this.intake_url, options)
       .subscribe(res => {
         this.INTAKES = res.json();
+        this.activeSeg = this.INTAKES[0].INTAKE_CODE;
         this.student_id = this.INTAKES[0].STUDENT_NUMBER
         this.storage.set('intakes', this.INTAKES);
 
@@ -101,6 +141,7 @@ export class RESULTSPage {
       })
   }
 
+
   loadResults(st_id, intake_code) {
     this.resultURL = "https://ws.apiit.edu.my/web-services/index.php/student/subcourses?format=json&id=" + st_id + '&intake=' + intake_code;
     var headers = new Headers();
@@ -108,10 +149,15 @@ export class RESULTSPage {
     this.http.get(this.resultURL, options)
       .subscribe(ress => {
         this.results = ress.json();
+        this.activeSeg = intake_code;
         this.storage.set('results', this.results);
       }, error => {
         console.log(error);
       })
+  }
+
+  checkActive(intake_code){
+    return intake_code == this.activeSeg;
   }
 
   loadIntakesFromStorage() {
@@ -136,18 +182,11 @@ export class RESULTSPage {
     }, 2000);
   }
 
-  showToastWithCloseButton() {
-    const toast = this.toastCtrl.create({
-      message: 'Your internet connection appears to be offline. Data integrity is not guaranteed.',
-      showCloseButton: true,
-      closeButtonText: 'Retry'
-    });
-    toast.onDidDismiss(this.dismissHandler);
-    toast.present();
-}
-private dismissHandler() {
-  console.info('Toast onDidDismiss()');
-}
+
+  private dismissHandler() {
+    this.checknetwork();
+    console.info('Toast onDidDismiss()');
+  }
 
   getItems(type: any) {
     return this.INTAKES[type];

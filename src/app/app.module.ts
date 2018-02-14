@@ -27,6 +27,9 @@ import { CasTicketProvider } from '../providers/cas-ticket/cas-ticket';
 import { TimetableProvider } from '../providers/timetable/timetable';
 import { ScrollableTabs } from '../components/scrollable-tabs/scrollable-tabs';
 import { Firebase } from '@ionic-native/firebase';
+import { TimetablePage } from '../pages/timetable/timetable';
+import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
+import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory-info';
 
 
 
@@ -40,7 +43,9 @@ import { Firebase } from '@ionic-native/firebase';
     NOTIFICATIONPage,
     FEEDBACKPage,
     LOGINPage,
-    WelcomePage
+    WelcomePage,
+    TimetablePage,
+    StaffDirectoryPage
   ],
   imports: [
     BrowserModule,
@@ -60,7 +65,9 @@ import { Firebase } from '@ionic-native/firebase';
     NOTIFICATIONPage,
     FEEDBACKPage,
     LOGINPage,
-    WelcomePage
+    WelcomePage,
+    TimetablePage,
+    StaffDirectoryPage
   ],
   providers: [
     StatusBar,

@@ -37,10 +37,11 @@ $colors: (
   primary:     #2962ff,
   secondary:   #ffab00,
   warn:        #fd5000,
-  foreground:  white,
+  foreground:  #FFFFFF,
   background:  #303030,
   segment:     #6200ea,
   resultsCard: #484c73,
+  active_highlight:  #f5d3bc
 );
 
 
@@ -57,6 +58,8 @@ $colors: (
 
 
 $toolbar-md-background: color($colors, primary);
+
+
 
 
 // App Windows Variables

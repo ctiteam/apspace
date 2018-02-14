@@ -1,43 +1,18 @@
 <ion-menu [content]="mainContent" id="menu1">
   <ion-content id="side-menu21" class="side-menu-gradient-after-login">
     <div id="menu-info">
-      <img [src]="photo" onerror="this.src='assets/img/profile.svg'">
+      <img class="user_photo" [src]="photo" onerror="this.src='assets/img/profile.svg'" alt="Avatar">
       <p *ngIf="user_info">{{this.user_info[0].NAME}}</p>
     </div>
-
-    <ion-list id="menu-list1">
-      <ion-item color="none" menuClose="" on-click="goToHOME()" id="menu-list-item1" class="side-menu-item">
-        <ion-icon name="home" item-left></ion-icon>
-        Home
+    <ion-list id="menu-list1" no-lines>
+      <ion-item menuClose  *ngFor='let p of pages' (click) = 'openPage(p)' color="none"  class="side-menu-item" [class.activeHighlight] = 'checkActive(p)' >
+        <ion-icon item-left [name] = 'p.icon'></ion-icon>
+        {{p.title}}
       </ion-item>
-      <ion-item color="none" menuClose="" on-click="goToTIMETABLE()" id="menu-list-item2" class="side-menu-item">
-        <ion-icon name="calendar" item-left></ion-icon>
-        Timetable
-      </ion-item>
-      <ion-item color="none" menuClose="" on-click="goToStaffDirectory()" id="menu-list-item3" class="side-menu-item">
-        <ion-icon name="people" item-left></ion-icon>
-        Staff Directory
-      </ion-item>
-      <ion-item color="none" menuClose="" on-click="goToRESULTS()" id="menu-list-item4" class="side-menu-item">
-        <ion-icon name="checkbox" item-left></ion-icon>
-        Results
-      </ion-item>
-      <!-- <ion-item color="none" menuClose="" on-click="goToFEES()" id="menu-list-item5" class="side-menu-item">
-        <ion-icon name="cash" item-left></ion-icon>
-        Fees
-      </ion-item> -->
-      <ion-item color="none" menuClose="" on-click="goToNOTIFICATION()" id="menu-list-item6" class="side-menu-item">
-        <ion-icon name="chatbubbles" item-left></ion-icon>
-        Notification
-      </ion-item>
-      <ion-item color="none" menuClose="" on-click="goToFEEDBACK()" id="menu-list-item7" class="side-menu-item">
-        <ion-icon name="at" item-left></ion-icon>
-        Feedback
-      </ion-item>
-      <ion-item color="none" menuClose="" on-click="logOut()" id="menu-list-item8" class="side-menu-item-logout">
-        <ion-icon name="log-out" item-left></ion-icon>
-        Logout
-      </ion-item>      
+      <ion-item color="none" menuClose="" on-click="logOut()" id="menu-list-item8" class="side-menu-item">
+          <ion-icon name="log-out" item-left></ion-icon>
+          Logout
+        </ion-item> 
     </ion-list>
   </ion-content>
 </ion-menu>
