@@ -9,20 +9,19 @@
   </ion-navbar>
   <ion-toolbar no-border-top>
     <ion-segment color="foreground">
-      <ion-segment-button *ngFor="let int of INTAKES" [value]="int.INTAKE_CODE" style="font-weight: bold; font-size:13px; color:#170b00; "
-        (click)="loadResults(student_id, int.INTAKE_CODE)">
+      <ion-segment-button *ngFor="let int of INTAKES" [value]="int.INTAKE_CODE" style="font-weight: bold; font-size:13px; color:#FFFFFF; "
+        (click)="loadResults(student_id, int.INTAKE_CODE)" [class.activeHighlight]='checkActive(int)'>
         {{int.INTAKE_CODE}}
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content> 
 
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
-
 
   <ion-card *ngFor="let res of results">
     <ion-list>

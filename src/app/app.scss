@@ -10,7 +10,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   background: none;
   color: white;
   font-weight: 500;
-  border: 0px;
+  border: none;
   height: 50px;
   .item-content {
     background: none;
@@ -48,6 +48,12 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   }
 }
 
+.activeHighlight {
+  background-color: map-get($colors, active_highlight);
+}
+
+
+
 #menu-info {
   height: 150px;
   background: url(../assets/img/gogle.jpg) 100% ;
@@ -58,14 +64,24 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   }
 
   img {
-    border-radius: 60%;
+    display: block;
+    text-align: center;
+    border-radius: 50%;
     border: 3px solid $SIDEMENU_TRANSPARENCY;
-    max-width: 9ex;
-    margin-top: 4ex;
+    width: 70px;
+    height: auto;
+   
+    margin-left: auto;
+    margin-right: auto;
   }
 
   p {
+    font-weight: bold;
     color: map-get($colors, foreground);
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
   }
 
 }
+

@@ -10,6 +10,7 @@ import { ToastController } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
+import { Events } from 'ionic-angular';
 
 declare var Connection;
 @Component({
@@ -35,15 +36,13 @@ export class WelcomePage {
   onDevice: boolean;
 
 
-  constructor(public platform: Platform, private network: Network, private toast: ToastController, public navCtrl: NavController, private storage: Storage, public http: Http) {
+  constructor(public events: Events, public platform: Platform, private network: Network, private toast: ToastController, public navCtrl: NavController, private storage: Storage, public http: Http) {
     this.onDevice = this.platform.is('cordova');
   }
 
   ionViewDidLoad() {
     this.checknetwork(); //checking network
   }
-
- 
 
   checknetwork(){
     document.getElementById("network").innerHTML = 'Checking the connection...';
@@ -53,7 +52,6 @@ export class WelcomePage {
       this.getOfflineStorage();
     }
   }
-
 
   isOnline(): boolean {
     if(this.onDevice && this.network.type){
@@ -126,7 +124,6 @@ export class WelcomePage {
 
 
   getServiceTicket() {
-  
     let headers = new Headers();
     headers.append('Content-type', 'application/x-www-form-urlencoded');
     let options = new RequestOptions({ headers: headers });
@@ -150,7 +147,9 @@ export class WelcomePage {
     .subscribe(res => {
       this.respond = res; //Access granted
       document.getElementById("granted").innerHTML = "Access Granted!";
+      this.events.publish('user:login');
       this.showHome();
+          
     }, error => {
       this.getTgt();
       document.getElementById("denied").innerHTML = "Access Denied!";
@@ -208,6 +207,7 @@ export class WelcomePage {
     this.http.get(webService)
     .subscribe(res => {
       this.respond = res;
+      this.events.publish('user:login');
       this.showHome();
     }, error => {
       this.clearData();

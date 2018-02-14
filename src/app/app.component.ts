@@ -14,6 +14,9 @@ import { Storage } from '@ionic/storage';
 import { AlertController, App } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { ToastController } from 'ionic-angular';
+import { Events } from 'ionic-angular';
+import { TimetablePage } from '../pages/timetable/timetable';
+import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
 
 
 
@@ -26,6 +29,10 @@ export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
   rootPage: any = WelcomePage;
 
+  activePage: any;
+
+  pages: Array<{title: string, component: any, icon: any}>;
+
   photo: any;
   res: any;
   testNav: any;
@@ -37,45 +44,30 @@ export class MyApp {
  
 
 
-  constructor(private toastCtrl: ToastController, public app: App, private http: Http, private alertCtrl: AlertController, private storage: Storage, platform: Platform, statusBar: StatusBar, public _platform: Platform) {
-    
+  constructor(public events: Events, private toastCtrl: ToastController, public app: App, private http: Http, private alertCtrl: AlertController, private storage: Storage, platform: Platform, statusBar: StatusBar, public _platform: Platform) {
+    this.events.subscribe('user:login', () =>{
+      this.getTGT();
+    })
+
+    this.pages = [
+      {title: 'Home', component: HOMEPage, icon: 'home'},
+      {title: 'Timetable', component: TimetablePage, icon: 'calendar'},
+      {title: 'Staff Directory', component: StaffDirectoryPage, icon: 'people'},
+      {title: 'Results', component: RESULTSPage, icon: 'checkbox'},
+      {title: 'Notification', component: NOTIFICATIONPage, icon: 'chatbubbles'},
+      {title: 'Feedback', component: FEEDBACKPage, icon: 'at'}
+    ];
+
+    this.activePage = this.pages[0];
   }
 
-
-  goToHOME(params) {
-    this.getTGT();
-    if (!params) params = {};
-    this.navCtrl.setRoot(HOMEPage);
+  openPage(page) {
+    this.navCtrl.setRoot(page.component);
+    this.activePage = page;
   }
 
-  goToTIMETABLE(params) {
-    if (!params) params = {};
-    this.navCtrl.setRoot('TimetablePage');
-  }
-
-  goToStaffDirectory(params) {
-    if (!params) params = {};
-    this.navCtrl.setRoot('StaffDirectoryPage');
-  }
-
-  goToRESULTS(params) {
-    if (!params) params = {};
-    this.navCtrl.setRoot(RESULTSPage);
-  }
-
-  goToFEES(params) {
-    if (!params) params = {};
-    this.navCtrl.setRoot(FEESPage);
-  }
-
-  goToNOTIFICATION(params) {
-    if (!params) params = {};
-    this.navCtrl.setRoot(NOTIFICATIONPage);
-  }
-
-  goToFEEDBACK(params) {
-    if (!params) params = {};
-    this.navCtrl.setRoot(FEEDBACKPage);
+  checkActive(page){
+    return page == this.activePage;
   }
 
   logOut(params) {
@@ -108,6 +100,7 @@ export class MyApp {
     alert.present();
   }
 
+
   getTGT() {
     this.storage.get('tgturl').then((val) => {
       this.tgt = val;
@@ -126,10 +119,7 @@ export class MyApp {
     this.http.get("https://ws.apiit.edu.my/web-services/index.php/student/close_session", options)
       .subscribe(res => {
         this.res = res;
-        
-
       }, error => {
-        console.log("ERRRRROOOOORRR" + error)
       })
   }
 
@@ -142,28 +132,26 @@ export class MyApp {
       .subscribe(res => {
         this.serv_ticket = res.text();
         this.getUserInfo(this.serv_ticket);
-        //this.validateST(this.serv_ticket);
-        
-      }, error => {
-        console.log("Error to get Service Ticket for profile: " + error);
-      })
-  }
-
-
-
-  validateST(serv_ticket) {
-    let validation_url = 'https://cas.apiit.edu.my/cas/validate';
-    let web_service = validation_url + '?' + this.service_url + '&ticket=' + serv_ticket; //Format to send to validate the Service Ticket
-    this.http.get(web_service)
-      .subscribe(res => {
-        this.validation = res;
-       
-        this.getUserInfo(serv_ticket);
-        
       }, error => {
         console.log(error);
       })
   }
+
+
+
+  // validateST(serv_ticket) {
+  //   let validation_url = 'https://cas.apiit.edu.my/cas/validate';
+  //   let web_service = validation_url + '?' + this.service_url + '&ticket=' + serv_ticket; //Format to send to validate the Service Ticket
+  //   this.http.get(web_service)
+  //     .subscribe(res => {
+  //       this.validation = res;
+       
+  //       this.getUserInfo(serv_ticket);
+        
+  //     }, error => {
+  //       console.log(error);
+  //     })
+  // }
 
   getUserInfo(serv_ticket) {
     let user_info_api = "https://ws.apiit.edu.my/web-services/index.php/student/profile?ticket=" + serv_ticket;
@@ -173,10 +161,10 @@ export class MyApp {
       .subscribe(ress => {
         this.user_info = ress.json();
         
-        this.storage.set('user_info', this.user_info);
+        this.storage.set('user_info', this.user_info); //save student'd name and number in local storage
         this.getUserPhoto();
       }, error => {
-        console.log("ERRRRRRRRROOOOOOOORRRR: "+ error);
+        console.log(error);
       })
   }
 

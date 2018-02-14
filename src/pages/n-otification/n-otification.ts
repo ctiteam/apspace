@@ -69,10 +69,8 @@ export class NOTIFICATIONPage {
       console.log("In send place");
       this.http.post('https://jlnowdh399.execute-api.us-west-2.amazonaws.com/prod/sns_subscribe', body, options)
         .subscribe(ress => {
-          this.createToast(ress.json().Message)
-          
+              
           console.log("RESSSSSPONSE " + JSON.stringify(ress.json()));
-
         }, err => {
           console.log("LAST STEP ERROR: " + err);
 
@@ -90,6 +88,8 @@ export class NOTIFICATIONPage {
 
   handleNotification(data) {
     this.notification = data;
+    console.log("NOTIFICATION :" + this.notification);
+    
     this.presentAlert(this.notification);
   }
 
@@ -100,18 +100,6 @@ export class NOTIFICATIONPage {
       buttons: ['Dismiss']
     });
     alert.present();
-  }
-
-
-
-  createToast(text: any) {
-    let toast = this.toastCtrl.create({
-      message: "No Error",
-      duration: 4000,
-      position: "bottom"
-    });
-    toast.present();
-    return 1;
   }
 }
 

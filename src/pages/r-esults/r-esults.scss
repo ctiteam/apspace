@@ -37,4 +37,8 @@ page-r-esults {
     }
 }
 
+.activeHighlight {
+  background-color: map-get($colors, active_highlight);
+}
+
 }

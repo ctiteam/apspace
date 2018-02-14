@@ -10,6 +10,7 @@ import { Platform } from 'ionic-angular';
 import { Network } from '@ionic-native/network';
 import { MenuController } from 'ionic-angular';
 import { Body } from '@angular/http/src/body';
+import { Events } from 'ionic-angular';
 
 declare var Connection;
 @Component({
@@ -19,60 +20,59 @@ declare var Connection;
 export class LOGINPage {
 
   @ViewChild('autofocus') autofocus;
- 
+
   //Cas Url where username and password are sent
-    ticketUrl: string = "https://cas.apiit.edu.my/cas/v1/tickets";
-  
-    body: any;                //username and password
-    responds: any;
-    break: any;
-    public ticket: any;       //TGT-ticket
-    serviceTicket: any;       //Service Ticket - TGT is sent to get Service Ticket
-    service: any;             //Service - in this page is Cas Login Url
-    respond: any;             //Used to Vaidate the Service Ticket
-    public test: any;
-    cred: any;
-    onDevice: boolean;
-  
-  
-    userData = { "username": "", "password": "" };
-  
+  ticketUrl: string = "https://cas.apiit.edu.my/cas/v1/tickets";
 
-  constructor(public menu: MenuController, public platform: Platform, private network: Network, private alertCtrl: AlertController, private storage: Storage, public navCtrl: NavController, public http: Http, private toastCtrl: ToastController) {
+  body: any;                //username and password
+  responds: any;
+  break: any;
+  public ticket: any;       //TGT-ticket
+  serviceTicket: any;       //Service Ticket - TGT is sent to get Service Ticket
+  service: any;             //Service - in this page is Cas Login Url
+  respond: any;             //Used to Vaidate the Service Ticket
+  public test: any;
+  cred: any;
+  onDevice: boolean;
+
+
+  userData = { "username": "", "password": "" };
+
+
+  constructor(public events: Events, public menu: MenuController, public platform: Platform, private network: Network, private alertCtrl: AlertController, private storage: Storage, public navCtrl: NavController, public http: Http, private toastCtrl: ToastController) {
     this.onDevice = this.platform.is('cordova');
-
   }
 
   ionViewDidEnter() {
     this.menu.enable(false, 'menu1');
   }
 
-  ionViewDidLeave(){
+  ionViewDidLeave() {
     this.menu.enable(true, 'menu1');
   }
 
   ionViewDidLoad() {
     setTimeout(() => this.autofocus.setFocus(), 150);
   }
-  
-  clearStorage(){
+
+  clearStorage() {
     this.storage.clear();
     setTimeout(() => this.checknetwork(), 1000)
   }
 
-  checknetwork(){
-    if(this.isOnline()){
-   this.getTicket();
-    }else{
+  checknetwork() {
+    if (this.isOnline()) {
+      this.getTicket();
+    } else {
       this.presentToast();
     }
   }
 
   isOnline(): boolean {
-    if(this.onDevice && this.network.type){
+    if (this.onDevice && this.network.type) {
       return this.network.type !== Connection.NONE;
     } else {
-      return navigator.onLine; 
+      return navigator.onLine;
     }
   }
 
@@ -82,11 +82,10 @@ export class LOGINPage {
       duration: 3000,
       position: 'bottom'
     });
-  
+
     toast.onDidDismiss(() => {
-      console.log('Dismissed toast');
     });
-  
+
     toast.present();
   }
 
@@ -108,7 +107,7 @@ export class LOGINPage {
         this.getServiceTicket(this.ticket);
         this.setTGTurlvalue(this.ticket);
       }, error => {
-        console.log("Error to get TGT: " + error);
+        console.log(error);
         this.presentAlert();
       })
   }
@@ -123,7 +122,7 @@ export class LOGINPage {
         this.serviceTicket = res.text()
         this.validateST(this.serviceTicket);
       }, error => {
-        console.log("Error to get Service Ticket: " + error);
+        console.log(error);
       })
   }
 
@@ -136,11 +135,17 @@ export class LOGINPage {
         this.respond = res;
         this.saveST();
         this.saveUsername();
+        this.loadProfile();
         this.navCtrl.setRoot(HOMEPage);
       }, error => {
-        console.log('Error message - ST Validation: ' + error);
+        console.log(error);
       })
   }
+
+  loadProfile() {
+    this.events.publish('user:login');
+  }
+
 
   //Saves TGT, User Credendials and Service Ticket in Local Storage
 
