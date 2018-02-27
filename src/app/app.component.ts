@@ -17,6 +17,9 @@ import { ToastController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 import { TimetablePage } from '../pages/timetable/timetable';
 import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
+import { Push, PushObject, PushOptions } from '@ionic-native/push';
+import { LocalNotifications } from '@ionic-native/local-notifications';
+import { Firebase } from "@ionic-native/firebase";
 
 
 
@@ -31,7 +34,7 @@ export class MyApp {
 
   activePage: any;
 
-  pages: Array<{title: string, component: any, icon: any}>;
+  pages: Array<{ title: string, component: any, icon: any }>;
 
   photo: any;
   res: any;
@@ -41,21 +44,46 @@ export class MyApp {
   service_url: string = 'service=https://ws.apiit.edu.my/web-services/index.php/student/profile'
   user_info: string;
   validation: any;
- 
+  notificationData: any;
 
 
-  constructor(public events: Events, private toastCtrl: ToastController, public app: App, private http: Http, private alertCtrl: AlertController, private storage: Storage, platform: Platform, statusBar: StatusBar, public _platform: Platform) {
-    this.events.subscribe('user:login', () =>{
+
+  constructor( private firebase: Firebase, 
+    private localnotifications: LocalNotifications, 
+    private push: Push, 
+    public events: Events, 
+    private toastCtrl: ToastController, 
+    public app: App, 
+    private http: Http, 
+    private alertCtrl: AlertController, 
+    private storage: Storage, 
+    public platform: Platform, 
+    public statusBar: StatusBar, 
+    public _platform: Platform) {
+
+    this.events.subscribe('user:login', () => {
       this.getTGT();
+      this._platform.ready().then((rdy) => {   
+
+        this.localnotifications.on('click', (notification, state) =>{
+          let json = JSON.parse(notification.data);
+          let alert = this.alertCtrl.create({
+            title: notification.title,
+            subTitle: json.mydata
+          });
+          alert.present();
+        })
+        
+      })
     })
 
     this.pages = [
-      {title: 'Home', component: HOMEPage, icon: 'home'},
-      {title: 'Timetable', component: TimetablePage, icon: 'calendar'},
-      {title: 'Staff Directory', component: StaffDirectoryPage, icon: 'people'},
-      {title: 'Results', component: RESULTSPage, icon: 'checkbox'},
-      {title: 'Notification', component: NOTIFICATIONPage, icon: 'chatbubbles'},
-      {title: 'Feedback', component: FEEDBACKPage, icon: 'at'}
+      { title: 'Home', component: HOMEPage, icon: 'home' },
+      { title: 'Timetable', component: TimetablePage, icon: 'calendar' },
+      { title: 'Staff Directory', component: StaffDirectoryPage, icon: 'people' },
+      { title: 'Results', component: RESULTSPage, icon: 'checkbox' },
+      { title: 'Notification', component: NOTIFICATIONPage, icon: 'chatbubbles' },
+      { title: 'Feedback', component: FEEDBACKPage, icon: 'at' }
     ];
 
     this.activePage = this.pages[0];
@@ -66,7 +94,7 @@ export class MyApp {
     this.activePage = page;
   }
 
-  checkActive(page){
+  checkActive(page) {
     return page == this.activePage;
   }
 
@@ -84,7 +112,7 @@ export class MyApp {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-           
+
           }
         },
         {
@@ -104,8 +132,8 @@ export class MyApp {
   getTGT() {
     this.storage.get('tgturl').then((val) => {
       this.tgt = val;
-      console.log("From app:  " + this.tgt )
-      this.getServiceTicket(this.tgt);      
+      console.log("From app:  " + this.tgt)
+      this.getServiceTicket(this.tgt);
     });
   }
 
@@ -137,22 +165,6 @@ export class MyApp {
       })
   }
 
-
-
-  // validateST(serv_ticket) {
-  //   let validation_url = 'https://cas.apiit.edu.my/cas/validate';
-  //   let web_service = validation_url + '?' + this.service_url + '&ticket=' + serv_ticket; //Format to send to validate the Service Ticket
-  //   this.http.get(web_service)
-  //     .subscribe(res => {
-  //       this.validation = res;
-       
-  //       this.getUserInfo(serv_ticket);
-        
-  //     }, error => {
-  //       console.log(error);
-  //     })
-  // }
-
   getUserInfo(serv_ticket) {
     let user_info_api = "https://ws.apiit.edu.my/web-services/index.php/student/profile?ticket=" + serv_ticket;
     let headers = new Headers();
@@ -160,7 +172,6 @@ export class MyApp {
     this.http.get(user_info_api, options)
       .subscribe(ress => {
         this.user_info = ress.json();
-        
         this.storage.set('user_info', this.user_info); //save student'd name and number in local storage
         this.getUserPhoto();
       }, error => {
@@ -168,15 +179,32 @@ export class MyApp {
       })
   }
 
-
   getUserPhoto() {
     let user_photo_api = "https://ws.apiit.edu.my/web-services/index.php/student/photo";
     let headers = new Headers();
     let options = new RequestOptions({ headers: headers, withCredentials: true });
 
+
     this.http.get(user_photo_api, options)
       .subscribe(ress =>
         this.photo = 'data:image/jpg;base64,' + ress.json().base64_photo, console.error
+
       )
   }
+
+  scheduleNotification(){
+    this.storage.get('notificationData').then((val) => {
+      this.notificationData = val;
+      this.localnotifications.schedule({
+        id: 1,
+        title: this.notificationData[0].title,
+        text: this.notificationData[0].text,
+        at: new Date(new Date().getTime() + 5 * 1000),
+        data: {mydata: 'My hidden message this is' }
+      })
+    });
+
+    
+  }
+
 }

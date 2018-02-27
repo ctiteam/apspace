@@ -1,4 +1,4 @@
-$SIDEMENU_BOTTOM: #4682B4;
+$SIDEMENU_BOTTOM: #2c2a28;
 $SIDEMENU_TRANSPARENCY: rgba(255,255,255,0.4);
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
@@ -49,7 +49,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 
 .activeHighlight {
-  background-color: map-get($colors, active_highlight);
+  background-color: map-get($colors, primary);
 }
 
 

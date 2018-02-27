@@ -92,6 +92,9 @@ export class TimetablePage {
     this.content.resize();
   }
 
+
+  
+
   /** Get and merge Timetable with StaffDirectory. */
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
     return Observable.forkJoin([this.tt.getTimetable(), this.sd.getStaffDirectory(true)])

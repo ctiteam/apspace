@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color = "primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -9,12 +9,16 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page5">
-  <ion-card >
-    <ion-list>
-     
-    </ion-list>
-    <ion-list>
-      
-    </ion-list>
+  <div *ngFor="let notification of test">
+  <ion-card>
+    <ion-card-title>
+    <ion-item>
+      {{notification.title}}
+    </ion-item>
+  </ion-card-title>
+    <ion-card-content>
+   {{notification.text}}
+    </ion-card-content>
   </ion-card>
+</div>
 </ion-content>

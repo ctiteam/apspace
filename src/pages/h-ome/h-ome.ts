@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, ModalController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { NewsService } from '../../app/services/news.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { Storage } from '@ionic/storage';
-import { ToastController } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
 import { Platform } from 'ionic-angular';
 import { MyApp } from '../../app/app.component';
-import { LoadingController } from 'ionic-angular';
+import { HomeModalPage } from '../home-modal/home-modal';
+
+
+
+
 
 
 declare var Connection;
@@ -25,11 +28,11 @@ export class HOMEPage {
 
   items = [];       //All the news posts are inside items
   getNews = [];     //News from local storage
-
+  itemDetail = {}
   connected: Subscription;
   disconnected: Subscription;
 
-  constructor(public loadingCtrl: LoadingController, public platform: Platform, public network: Network, private toastCtrl: ToastController, public navCtrl: NavController, private newsService: NewsService, private storage: Storage) {
+  constructor(private modalCtrl: ModalController, public loadingCtrl: LoadingController, public platform: Platform, public network: Network, private toastCtrl: ToastController, public navCtrl: NavController, private newsService: NewsService, private storage: Storage) {
     this.onDevice = this.platform.is('cordova');
   }
 
@@ -151,5 +154,11 @@ export class HOMEPage {
       refresher.complete();
     }, 1500);
 
+  }
+
+  openBasicModal(item){
+   this.navCtrl.push( HomeModalPage,{
+      itemDetail : item
+    });
   }
 }
