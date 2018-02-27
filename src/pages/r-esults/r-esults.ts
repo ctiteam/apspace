@@ -156,9 +156,7 @@ export class RESULTSPage {
       })
   }
 
-  checkActive(intake_code){
-    return intake_code == this.activeSeg;
-  }
+
 
   loadIntakesFromStorage() {
     this.storage.get('intakes').then((val) => {

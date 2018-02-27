@@ -41,9 +41,9 @@ export class FEEDBACKPage {
 
   sendEmail() {
     let email = {
-      to: 'stefunic@mail.ru',
+      to: 'cti@apiit.edu.my',
       subject: "Mobile iWebspace Feedback",
-      body: this.feedbackData.name + '\n' +this.feedbackData.studentNumber + '\n' + this.feedbackData.contactNumber + '\n' + this.feedbackData.message,
+      body: this.feedbackData.message + "<br><br>" +this.feedbackData.name + '<br>' +this.feedbackData.studentNumber + '<br>' + this.feedbackData.contactNumber, 
       isHTML: true
     };
     this.emailComposer.open(email);

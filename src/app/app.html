@@ -1,5 +1,5 @@
 <ion-menu [content]="mainContent" id="menu1">
-  <ion-content id="side-menu21" class="side-menu-gradient-after-login">
+  <ion-content id="side-menu21" class="side-menu-gradient-after-login" color = "menu-background">
     <div id="menu-info">
       <img class="user_photo" [src]="photo" onerror="this.src='assets/img/profile.svg'" alt="Avatar">
       <p *ngIf="user_info">{{this.user_info[0].NAME}}</p>
@@ -12,6 +12,9 @@
       <ion-item color="none" menuClose="" on-click="logOut()" id="menu-list-item8" class="side-menu-item">
           <ion-icon name="log-out" item-left></ion-icon>
           Logout
+        </ion-item> 
+        <ion-item color="none" menuClose="" on-click="scheduleNotification()" id="menu-list-item8" class="side-menu-item">
+          Notify
         </ion-item> 
     </ion-list>
   </ion-content>

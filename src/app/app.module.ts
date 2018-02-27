@@ -11,6 +11,7 @@ import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
 import { FEEDBACKPage } from '../pages/f-eedback/f-eedback';
 import { LOGINPage } from '../pages/l-ogin/l-ogin';
 import { WelcomePage} from '../pages/welcome/welcome';
+import { HomeModalPage } from '../pages/home-modal/home-modal'
 
 import { JsonpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
@@ -30,6 +31,8 @@ import { Firebase } from '@ionic-native/firebase';
 import { TimetablePage } from '../pages/timetable/timetable';
 import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
 import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory-info';
+import { Push, PushObject, PushOptions } from '@ionic-native/push';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 
 
@@ -44,7 +47,7 @@ import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory
     FEEDBACKPage,
     LOGINPage,
     WelcomePage,
-
+    HomeModalPage,
     TimetablePage,
     StaffDirectoryPage
 
@@ -70,7 +73,8 @@ import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory
     LOGINPage,
     WelcomePage,
     TimetablePage,
-    StaffDirectoryPage
+    StaffDirectoryPage,
+    HomeModalPage
 
   ],
   providers: [
@@ -84,6 +88,8 @@ import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory
     CasTicketProvider,
     TimetableProvider,
     Firebase,
+    Push,
+    LocalNotifications
   ]
 
 })
