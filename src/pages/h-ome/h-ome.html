@@ -3,9 +3,13 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>
+    <div class="row">
+    <ion-title class="col">
       HOME
     </ion-title>
+    <p class="col" id="offline_indicator">
+    </p>
+  </div>
   </ion-navbar>
 </ion-header>
 <ion-content>
@@ -18,21 +22,16 @@
   <ion-card  (click)="openBasicModal(item)">
     <ion-list>
       <div>
-        <img src="{{item.field_news_image[0].url}}" style="display: block; width: 100%; height: auto; margin-left: auto; margin-right: auto;">
-        <i class="icon ion-image" style="font-size:64px;color:#888;vertical-align:middle;"></i>
+        <img class="news_image" src="{{item.field_news_image[0].url}}">
       </div>
       <div>
-        <ion-item style="color:#FFFFFF;" id="hOME-list-item11" class="title-news">
+        <ion-item class="title-news">
           {{item.title[0].value}}
         </ion-item>
       </div>
-      <div *ngIf="item.body.length" id="hOME-list-item-container2" class="item item-body">
-        <div id="hOME-markdown2" style="text-align:justify; background-color: secondary;" class="show-list-numbers-and-dots">
-        </div>
-      </div>
     </ion-list>
   </ion-card>
-  <div class="spacer" style="width:300px;height:15px;" id="lOGIN-spacer8"></div>
+  <div class="spacer"></div>
 </div>
   
 </ion-content>

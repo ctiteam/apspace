@@ -10,6 +10,9 @@ import { LoadingController } from 'ionic-angular';
 
 
 declare var Connection;
+
+const intake_url = "https://ws.apiit.edu.my/web-services/index.php/student/courses";
+
 @Component({
   selector: 'page-r-esults',
   templateUrl: 'r-esults.html',
@@ -19,7 +22,6 @@ declare var Connection;
 export class RESULTSPage {
 
   INTAKES: any;
-  intake_url: string;
   results: any;
   intake: string;
   studentNumber: string;
@@ -53,18 +55,21 @@ export class RESULTSPage {
 
   ionViewDidEnter() {
     this.connected = this.network.onConnect().subscribe(data => {
-      this.displayNetworkUpdate(data.type)
+      document.getElementById("offline_indicator").innerHTML = '';
+      this.displayNetworkUpdateOnline(data.type)
       this.presentLoading();
     }, error => {
       console.log(error);
     })
 
    this.disconnected = this.network.onDisconnect().subscribe(data => {
-      this.displayNetworkUpdate(data.type)
+    document.getElementById("offline_indicator").innerHTML = 'OFFLINE';
+      this.displayNetworkUpdateOffline(data.type)
     }, error => {
       console.log(error);
     })
   }
+
   ionViewWillLeave(){
     this.connected.unsubscribe();
     this.disconnected.unsubscribe();
@@ -72,37 +77,45 @@ export class RESULTSPage {
   
   
 
-  displayNetworkUpdate(connectionState: string) {
+  displayNetworkUpdateOnline(connectionState: string) {
     let networkType = this.network.type;
-     const toast1 = this.toastCtrl.create({
+    const toast_online = this.toastCtrl.create({
       message: `You are now ${connectionState} via ${networkType}`,
-      cssClass: 'danger',
-      showCloseButton: true,
-      closeButtonText: 'OK'
-     
+      duration: 3000,
     });
-    toast1.onDidDismiss(this.dismissHandler);
-    toast1.present();
+    toast_online.present();
   }
 
 
-  showToastWithCloseButton() {
-    let newtworkType1 = this.network.type;
-    const toast = this.toastCtrl.create({
-      message: 'You are now offline',
-      showCloseButton: true,
-      closeButtonText: 'OK'
+  displayNetworkUpdateOffline(connectionState: string) {
+    const toast_offline = this.toastCtrl.create({
+      message: `You are now ${connectionState} `,
+      duration: 3000,
+      position: 'bottom'
     });
-    toast.onDidDismiss(this.dismissHandler);
+    toast_offline.present();
+  }
+
+
+
+  presentToast() {
+    let toast = this.toastCtrl.create({
+      message: 'You are now offline',
+      duration: 3000,
+      position: 'bottom'
+    });
+
     toast.present();
   }
+
 
   checknetwork() {
     if (this.isOnline()) {
       this.loadIntakes();
     } else {
-      this.showToastWithCloseButton();
+      this.presentToast();
       this.loadIntakesFromStorage();
+      document.getElementById("offline_indicator").innerHTML = 'OFFLINE';
     }
   }
 
@@ -123,19 +136,15 @@ export class RESULTSPage {
   }
 
   loadIntakes() {
-    this.intake_url = "https://ws.apiit.edu.my/web-services/index.php/student/courses";
     let headers = new Headers();
     let options = new RequestOptions({ headers: headers, withCredentials: true });
-
-    this.http.get(this.intake_url, options)
+    this.http.get(intake_url, options)
       .subscribe(res => {
         this.INTAKES = res.json();
         this.activeSeg = this.INTAKES[0].INTAKE_CODE;
-        this.student_id = this.INTAKES[0].STUDENT_NUMBER
+        this.student_id = this.INTAKES[0].STUDENT_NUMBER;
         this.storage.set('intakes', this.INTAKES);
-
         this.loadResults(this.student_id, this.INTAKES[0].INTAKE_CODE);
-
       }, error => {
         console.log(error);
       })
@@ -155,8 +164,6 @@ export class RESULTSPage {
         console.log(error);
       })
   }
-
-
 
   loadIntakesFromStorage() {
     this.storage.get('intakes').then((val) => {
@@ -178,15 +185,5 @@ export class RESULTSPage {
     setTimeout(() => {
       refresher.complete();
     }, 2000);
-  }
-
-
-  private dismissHandler() {
-    this.checknetwork();
-    console.info('Toast onDidDismiss()');
-  }
-
-  getItems(type: any) {
-    return this.INTAKES[type];
   }
 }

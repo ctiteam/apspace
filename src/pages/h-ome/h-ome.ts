@@ -8,6 +8,10 @@ import { Network } from '@ionic-native/network';
 import { Platform } from 'ionic-angular';
 import { MyApp } from '../../app/app.component';
 import { HomeModalPage } from '../home-modal/home-modal';
+import { Firebase } from "@ionic-native/firebase";
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Events } from 'ionic-angular';
+
 
 
 
@@ -20,21 +24,31 @@ declare var Connection;
   templateUrl: 'h-ome.html'
 })
 export class HOMEPage {
-  
+
   name: string;
   content: any[] = new Array();
-  counter: number;
   onDevice: boolean;
-
   items = [];       //All the news posts are inside items
   getNews = [];     //News from local storage
   itemDetail = {}
   connected: Subscription;
   disconnected: Subscription;
 
-  constructor(private modalCtrl: ModalController, public loadingCtrl: LoadingController, public platform: Platform, public network: Network, private toastCtrl: ToastController, public navCtrl: NavController, private newsService: NewsService, private storage: Storage) {
+  constructor(private http: Http,
+    private firebase: Firebase,
+    private modalCtrl: ModalController,
+    public loadingCtrl: LoadingController,
+    public platform: Platform,
+    public network: Network,
+    private toastCtrl: ToastController,
+    public navCtrl: NavController,
+    private newsService: NewsService,
+    public events: Events,
+    private storage: Storage) {
     this.onDevice = this.platform.is('cordova');
   }
+
+
 
   ionViewDidLoad() {
     this.checknetwork();
@@ -45,7 +59,9 @@ export class HOMEPage {
       this.getPosts();
     } else {
       this.loadPosts();
-      this.showToastWithCloseButton();
+      this.presentToast();
+      document.getElementById("offline_indicator").innerHTML = 'OFFLINE'
+     ;
 
     }
   }
@@ -60,6 +76,7 @@ export class HOMEPage {
 
   ionViewDidEnter() {
     this.connected = this.network.onConnect().subscribe(data => {
+      document.getElementById("offline_indicator").innerHTML = '';
       this.displayNetworkUpdateOnline(data.type)
       this.presentLoading();
       this.getPosts();
@@ -68,6 +85,7 @@ export class HOMEPage {
     })
 
     this.disconnected = this.network.onDisconnect().subscribe(data => {
+      document.getElementById("offline_indicator").innerHTML = 'OFFLINE';
       this.displayNetworkUpdateOffline(data.type)
     }, error => {
       console.log(error);
@@ -81,38 +99,31 @@ export class HOMEPage {
 
   displayNetworkUpdateOnline(connectionState: string) {
     let networkType = this.network.type;
-    const toast_online =  this.toastCtrl.create({
+    const toast_online = this.toastCtrl.create({
       message: `You are now ${connectionState} via ${networkType}`,
       duration: 3000,
-    }); 
+    });
     toast_online.present();
   }
 
 
   displayNetworkUpdateOffline(connectionState: string) {
-    const toast_offline =  this.toastCtrl.create({
+    const toast_offline = this.toastCtrl.create({
       message: `You are now ${connectionState} `,
-      showCloseButton: true,
-      closeButtonText: 'TRY AGAIN'
+      duration: 3000,
+      position: 'bottom'
     });
-    toast_offline.onDidDismiss(this.dismissHandler)
     toast_offline.present();
   }
 
-  showToastWithCloseButton() {
-    let newtworkType1 = this.network.type;
-    const toast = this.toastCtrl.create({
+  presentToast() {
+    let toast = this.toastCtrl.create({
       message: 'You are now offline',
-      showCloseButton: true,
-      closeButtonText: 'TRY AGAIN'
+      duration: 3000,
+      position: 'bottom'
     });
-    toast.onDidDismiss(this.dismissHandler);
+
     toast.present();
-  }
-
-  private dismissHandler() {
-
-    console.info('Toast onDidDismiss()');
   }
 
 
@@ -129,19 +140,14 @@ export class HOMEPage {
   getPosts() {
     this.newsService.getPosts().subscribe(response => {
       this.items = response;
-
-      this.savePosts(this.items)
+      this.storage.set('news', this.items);
 
     });
   }
 
-  //Saves news to Local Storage
-  savePosts(post: any) {
-    this.storage.set('news', post);
-  }
-
   //Loads saved news from Local Storage
   loadPosts() {
+    document.getElementById("offline_indicator").innerHTML = 'OFFLINE'
     this.storage.get('news').then((val) => {
       this.items = val;
     });
@@ -150,15 +156,15 @@ export class HOMEPage {
   //Pull to Refresh function
   doRefresh(refresher) {
     setTimeout(() => {
-      this.getPosts();
+      this.checknetwork();
       refresher.complete();
     }, 1500);
 
   }
 
-  openBasicModal(item){
-   this.navCtrl.push( HomeModalPage,{
-      itemDetail : item
+  openBasicModal(item) {
+    this.navCtrl.push(HomeModalPage, {
+      itemDetail: item
     });
   }
 }

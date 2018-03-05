@@ -9,15 +9,15 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding id="page5">
-  <div *ngFor="let notification of test">
-  <ion-card>
+  <div>
+  <ion-card *ngFor = "let notification of test">
     <ion-card-title>
     <ion-item>
-      {{notification.title}}
+    {{notification.title}}
     </ion-item>
   </ion-card-title>
     <ion-card-content>
-   {{notification.text}}
+      {{notification.text}}
     </ion-card-content>
   </ion-card>
 </div>

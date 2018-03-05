@@ -34,11 +34,20 @@ page-r-esults {
         display: inline-block;
         min-width: 100px;
         width: auto;
+        font-weight: bold; 
+        font-size:13px;
     }
+
+ 
+
 }
 
-.activeHighlight {
-  background-color: map-get($colors, active_highlight);
-}
+ 
 
+  #offline_indicator{
+    text-align: end;
+    color:red;
+    font-weight: 600;
+    font-size: 17px;
+  }
 }
