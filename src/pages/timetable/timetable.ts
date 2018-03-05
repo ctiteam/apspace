@@ -21,6 +21,7 @@ export class TimetablePage {
 
   timetable$: Observable<Timetable[]>;
   selectedDay: string;
+  availableDays: string[];
 
   @ViewChild(Content) content: Content;
   @ViewChild(Refresher) refresher: Refresher;
@@ -32,7 +33,7 @@ export class TimetablePage {
     public actionSheetCtrl: ActionSheetController,
     public navCtrl: NavController,
     private sd: StaffDirectoryProvider,
-    private tt: TimetableProvider,
+    private tp: TimetableProvider,
   ) { }
 
   presentActionSheet() {
@@ -83,10 +84,10 @@ export class TimetablePage {
 
   /** Update selected day in segment and style when day change. */
   updateDay(tt: Timetable[]): void {
-    let days = this.schoolDays(tt);
-    if (!this.selectedDay || days.indexOf(this.selectedDay) === -1) {
-      this.selectedDay = days.shift();
-    } else if (!days.length) {
+    this.availableDays = this.schoolDays(tt);
+    if (!this.selectedDay || this.availableDays.indexOf(this.selectedDay) === -1) {
+      this.selectedDay = this.availableDays.shift();
+    } else if (!this.availableDays.length) {
       this.selectedDay = undefined;
     }
     this.content.resize();
@@ -97,7 +98,7 @@ export class TimetablePage {
 
   /** Get and merge Timetable with StaffDirectory. */
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
-    return Observable.forkJoin([this.tt.getTimetable(), this.sd.getStaffDirectory(true)])
+    return Observable.forkJoin([this.tp.getTimetable(refresh), this.sd.getStaffDirectory()])
       .map(data => data[0].map(t => <Timetable>Object.assign(t, { STAFFNAME:
         ((data[1] || []).find(s => s.CODE === t.LECTID) || <StaffDirectory>{}).FULLNAME })));
   }
