@@ -18,7 +18,7 @@
       text-uppercase color="foreground">
       <!-- Use CSS for dynamically updated segment -->
       <ion-segment-button *ngFor="let d of this.wday" [value]="d"
-        [style.display]="schoolDays(timetable$ | async).indexOf(d) !== -1 ? 'inline-block' : 'none'">
+        [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
         {{ d }}
       </ion-segment-button>
     </ion-segment>
