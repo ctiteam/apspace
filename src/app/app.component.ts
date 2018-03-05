@@ -20,9 +20,17 @@ import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Firebase } from "@ionic-native/firebase";
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { Subscription } from 'rxjs/Subscription';
+import { Network } from '@ionic-native/network';
+
+const service_url = "service=https://ws.apiit.edu.my/web-services/index.php/student/profile";
+const close_session_url = "https://ws.apiit.edu.my/web-services/index.php/student/close_session";
+const user_info_url = "https://ws.apiit.edu.my/web-services/index.php/student/profile";
+const user_photo_url = "https://ws.apiit.edu.my/web-services/index.php/student/photo";
 
 
-
+declare var Connection;
 @Component({
   templateUrl: 'app.html',
   providers: [NewsService]
@@ -32,40 +40,46 @@ export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
   rootPage: any = WelcomePage;
 
+  onDevice: boolean;
+  connected: Subscription;
+  disconnected: Subscription;
+
   activePage: any;
-
   pages: Array<{ title: string, component: any, icon: any }>;
-
   photo: any;
   res: any;
   testNav: any;
   tgt: string;
   serv_ticket: string;
-  service_url: string = 'service=https://ws.apiit.edu.my/web-services/index.php/student/profile'
+
   user_info: string;
   validation: any;
   notificationData: any;
 
 
-
-  constructor( private firebase: Firebase, 
-    private localnotifications: LocalNotifications, 
-    private push: Push, 
-    public events: Events, 
-    private toastCtrl: ToastController, 
-    public app: App, 
-    private http: Http, 
-    private alertCtrl: AlertController, 
-    private storage: Storage, 
-    public platform: Platform, 
-    public statusBar: StatusBar, 
-    public _platform: Platform) {
+  constructor(
+    private network: Network,
+    private firebase: Firebase,
+    private localnotifications: LocalNotifications,
+    private push: Push,
+    public events: Events,
+    private toastCtrl: ToastController,
+    public app: App,
+    private http: Http,
+    private alertCtrl: AlertController,
+    private storage: Storage,
+    public platform: Platform,
+    public statusBar: StatusBar,
+    public _platform: Platform,
+    private splashScreen: SplashScreen) {
 
     this.events.subscribe('user:login', () => {
-      this.getTGT();
-      this._platform.ready().then((rdy) => {   
+      this.onDevice = this.platform.is('cordova');
+      this.checknetwork();
+      this._platform.ready().then((rdy) => {
+        this.splashScreen.hide();
 
-        this.localnotifications.on('click', (notification, state) =>{
+        this.localnotifications.on('click', (notification, state) => {
           let json = JSON.parse(notification.data);
           let alert = this.alertCtrl.create({
             title: notification.title,
@@ -73,9 +87,12 @@ export class MyApp {
           });
           alert.present();
         })
-        
+
       })
     })
+
+    //================Slide Menu Navigation======================================
+    //===========================================================================
 
     this.pages = [
       { title: 'Home', component: HOMEPage, icon: 'home' },
@@ -88,6 +105,9 @@ export class MyApp {
 
     this.activePage = this.pages[0];
   }
+
+  //=============================================================================
+  //=============================================================================
 
   openPage(page) {
     this.navCtrl.setRoot(page.component);
@@ -129,10 +149,42 @@ export class MyApp {
   }
 
 
+
+
+  checknetwork() {
+    if (this.isOnline()) {
+      this.getTGT();
+    } else {
+      this.loadOfflineUserInfo();
+    }
+  }
+
+  isOnline(): boolean {
+    if (this.onDevice && this.network.type) {
+      return this.network.type !== Connection.NONE;
+    } else {
+      return navigator.onLine;
+    }
+  }
+
+  loadOfflineUserInfo() {
+    this.storage.get('user_info').then((val) => {
+      this.user_info = val;
+      console.log("SUCCCEESSSS" + this.user_info);
+      
+    });
+    this.storage.get('user_photo').then((val) => {
+      this.photo = val;
+      console.log("SUCESSSSS2" + this.photo);
+      
+    });
+  }
+
+
   getTGT() {
-    this.storage.get('tgturl').then((val) => {
+    this.storage.get('tgtUrl').then((val) => {
       this.tgt = val;
-      console.log("From app:  " + this.tgt)
+      console.log("From app2:  " + this.tgt)
       this.getServiceTicket(this.tgt);
     });
   }
@@ -143,8 +195,13 @@ export class MyApp {
   }
 
   deleteTGT(tgt) {
-    let options = new RequestOptions({ withCredentials: true });
-    this.http.get("https://ws.apiit.edu.my/web-services/index.php/student/close_session", options)
+    let headers = new Headers();
+    headers.append('Content-type', 'application/x-www-form-urlencoded');
+    let options = new RequestOptions({ 
+      headers: headers,
+      withCredentials: true 
+    });
+    this.http.get(close_session_url, options)
       .subscribe(res => {
         this.res = res;
       }, error => {
@@ -155,8 +212,10 @@ export class MyApp {
   getServiceTicket(tgt) {
     let headers = new Headers();
     headers.append('Content-type', 'application/x-www-form-urlencoded');
-    let options = new RequestOptions({ headers: headers });
-    this.http.post(tgt, this.service_url, options)
+    let options = new RequestOptions({ 
+      headers: headers 
+    });
+    this.http.post(tgt, service_url, options)
       .subscribe(res => {
         this.serv_ticket = res.text();
         this.getUserInfo(this.serv_ticket);
@@ -166,9 +225,12 @@ export class MyApp {
   }
 
   getUserInfo(serv_ticket) {
-    let user_info_api = "https://ws.apiit.edu.my/web-services/index.php/student/profile?ticket=" + serv_ticket;
+    let user_info_api = user_info_url + "?ticket=" + serv_ticket;
     let headers = new Headers();
-    let options = new RequestOptions({ headers: headers, withCredentials: true });
+    let options = new RequestOptions({ 
+      headers: headers, 
+      withCredentials: true 
+    });
     this.http.get(user_info_api, options)
       .subscribe(ress => {
         this.user_info = ress.json();
@@ -180,19 +242,18 @@ export class MyApp {
   }
 
   getUserPhoto() {
-    let user_photo_api = "https://ws.apiit.edu.my/web-services/index.php/student/photo";
     let headers = new Headers();
-    let options = new RequestOptions({ headers: headers, withCredentials: true });
-
-
-    this.http.get(user_photo_api, options)
+    let options = new RequestOptions({ 
+      headers: headers, 
+      withCredentials: true });
+    this.http.get(user_photo_url, options)
       .subscribe(ress =>
-        this.photo = 'data:image/jpg;base64,' + ress.json().base64_photo, console.error
-
-      )
+        this.photo = 'data:image/jpg;base64,' + ress.json().base64_photo, console.error)
+        this.storage.set('user_photo', this.photo);
+        
   }
 
-  scheduleNotification(){
+  scheduleNotification() {
     this.storage.get('notificationData').then((val) => {
       this.notificationData = val;
       this.localnotifications.schedule({
@@ -200,11 +261,8 @@ export class MyApp {
         title: this.notificationData[0].title,
         text: this.notificationData[0].text,
         at: new Date(new Date().getTime() + 5 * 1000),
-        data: {mydata: 'My hidden message this is' }
+        data: { mydata: 'My hidden message this is' }
       })
     });
-
-    
   }
-
 }

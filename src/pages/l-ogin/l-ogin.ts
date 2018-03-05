@@ -11,8 +11,16 @@ import { Network } from '@ionic-native/network';
 import { MenuController } from 'ionic-angular';
 import { Body } from '@angular/http/src/body';
 import { Events } from 'ionic-angular';
+import { Subscription } from 'rxjs/Subscription';
+import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 
 declare var Connection;
+
+
+const ticketUrl = "https://cas.apiit.edu.my/cas/v1/tickets";
+const service = 'service=https://cas.apiit.edu.my/cas/login';
+const validateCasUrl = 'https://cas.apiit.edu.my/cas/serviceValidate';
+
 @Component({
   selector: 'page-l-ogin',
   templateUrl: 'l-ogin.html'
@@ -21,48 +29,77 @@ export class LOGINPage {
 
   @ViewChild('autofocus') autofocus;
 
-  //Cas Url where username and password are sent
-  ticketUrl: string = "https://cas.apiit.edu.my/cas/v1/tickets";
-
-  body: any;                //username and password
-  responds: any;
-  break: any;
-  public ticket: any;       //TGT-ticket
-  serviceTicket: any;       //Service Ticket - TGT is sent to get Service Ticket
-  service: any;             //Service - in this page is Cas Login Url
-  respond: any;             //Used to Vaidate the Service Ticket
-  public test: any;
-  cred: any;
   onDevice: boolean;
 
+  connected: Subscription;
+  disconnected: Subscription;
 
-  userData = { "username": "", "password": "" };
+
+  userCredentails = { "username": "", "password": "" };
 
 
-  constructor(public events: Events, public menu: MenuController, public platform: Platform, private network: Network, private alertCtrl: AlertController, private storage: Storage, public navCtrl: NavController, public http: Http, private toastCtrl: ToastController) {
+  constructor(public events: Events, 
+    public menu: MenuController, 
+    public platform: Platform, 
+    private network: Network, 
+    private alertCtrl: AlertController, 
+    private storage: Storage, 
+    public navCtrl: NavController, 
+    public http: Http, 
+    private toastCtrl: ToastController,
+    private authSerivce: AuthServiceProvider) {
     this.onDevice = this.platform.is('cordova');
   }
 
   ionViewDidEnter() {
     this.menu.enable(false, 'menu1');
+    
+    this.connected = this.network.onConnect().subscribe(data => {
+      this.displayNetworkUpdateOnline(data.type)
+    }, error => {
+      console.log(error);
+    })
+    this.disconnected = this.network.onDisconnect().subscribe(data => {
+      this.displayNetworkUpdateOffline(data.type)
+    }, error => {
+      console.log(error);
+    })
   }
 
   ionViewDidLeave() {
     this.menu.enable(true, 'menu1');
+
+    this.connected.unsubscribe();
+    this.disconnected.unsubscribe();
   }
 
   ionViewDidLoad() {
     setTimeout(() => this.autofocus.setFocus(), 150);
   }
 
-  clearStorage() {
-    this.storage.clear();
-    setTimeout(() => this.checknetwork(), 1000)
+
+  displayNetworkUpdateOnline(connectionState: string) {
+    let networkType = this.network.type;
+    const toast_online =  this.toastCtrl.create({
+      message: `You are now ${connectionState} via ${networkType}`,
+      duration: 3000,
+    }); 
+    toast_online.present();
   }
+
+
+  displayNetworkUpdateOffline(connectionState: string) {
+    const toast_offline =  this.toastCtrl.create({
+      message: `You are now ${connectionState} `,
+      duration: 3000,
+    });
+    toast_offline.present();
+  }
+
 
   checknetwork() {
     if (this.isOnline()) {
-      this.getTicket();
+      this.login();
     } else {
       this.presentToast();
     }
@@ -78,12 +115,9 @@ export class LOGINPage {
 
   presentToast() {
     let toast = this.toastCtrl.create({
-      message: 'You are offline, please connect to network',
+      message: 'You are now offline',
       duration: 3000,
       position: 'bottom'
-    });
-
-    toast.onDidDismiss(() => {
     });
 
     toast.present();
@@ -91,79 +125,27 @@ export class LOGINPage {
 
 
 
-  getTicket() {
-    let headers = new Headers();
-    headers.append('Content-type', 'application/x-www-form-urlencoded');
-    let options = new RequestOptions({ headers: headers });
-
-    this.body = 'username=' + this.userData.username + '&password=' + this.userData.password;
-    console.log(this.body)
-    this.http.post(this.ticketUrl, this.body, options)
-      .subscribe(res => {
-        this.responds = res.text()
-        this.break = this.responds.split("=")[1];
-        this.ticket = this.break.split("\"")[1];
-        console.log("From login: " + this.ticket)
-        this.getServiceTicket(this.ticket);
-        this.setTGTurlvalue(this.ticket);
-      }, error => {
-        console.log(error);
-        this.presentAlert();
-      })
-  }
-
-  getServiceTicket(ticket) {
-    let headers = new Headers();
-    headers.append('Content-type', 'application/x-www-form-urlencoded');
-    let options = new RequestOptions({ headers: headers });
-    this.service = 'service=https://cas.apiit.edu.my/cas/login';
-    this.http.post(ticket, this.service, options)
-      .subscribe(res => {
-        this.serviceTicket = res.text()
-        this.validateST(this.serviceTicket);
-      }, error => {
-        console.log(error);
-      })
-  }
-
-  validateST(serviceTicket) {
-    let validateCasUrl = 'https://cas.apiit.edu.my/cas/serviceValidate';
-    let webService = validateCasUrl + '?service=' + this.service + '&ticket=' + serviceTicket; //Format to send to validate the Service Ticket
-
-    this.http.get(webService)
-      .subscribe(res => {
-        this.respond = res;
-        this.saveST();
-        this.saveUsername();
-        this.loadProfile();
-        this.navCtrl.setRoot(HOMEPage);
-      }, error => {
-        console.log(error);
-      })
+  async login(){
+    let validateResult = await this.authSerivce
+    .authenticate(this.userCredentails.username, this.userCredentails.password)
+    .catch((err)=>{
+      console.log(err)
+    })
+    if (validateResult){
+      this.loadProfile();
+      this.navCtrl.setRoot(HOMEPage);
+    }
+    else{
+      this.presentAlert();
+    }
+    
   }
 
   loadProfile() {
     this.events.publish('user:login');
   }
 
-
-  //Saves TGT, User Credendials and Service Ticket in Local Storage
-
-  setTGTurlvalue(ticket) {
-    this.storage.set('tgturl', ticket);
-
-  }
-
-  saveUsername() {
-    this.storage.set('username', this.userData.username);
-
-  }
-
-  saveST() {
-    this.storage.set('ticket', this.serviceTicket);
-  }
-
-
+  
   //Alerts users that the credentials are wrong
   presentAlert() {
     let alert = this.alertCtrl.create({

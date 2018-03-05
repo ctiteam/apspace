@@ -1,27 +1,39 @@
 page-l-ogin {
+    .loginPageBackground{
+        background-color: rgb(255, 255, 255);
+    }
     
+    .button{
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 18px;
+        margin: 4px 2px;
+        cursor: pointer;
+        width: (40%-60%);
+        position: relative;
+        height: 2.5em;
+        border-radius:10px 10px 10px 10px;
+    }
+
+    .login_logo{
+        display: block; 
+        width: 100%; 
+        height: auto; 
+        margin: auto;
+    }
+
+    h4{
+        text-align:center; 
+        font-weight: 550;
+        color: #ff8000;
+    }
+
+    .spacer{
+        width:300px;
+        height:24.9931px;
+    }
 }
 
 
-.loginPage{
-    background-color: rgb(255, 255, 255);
-}
-.allHeaders{
-    background-color: red;
-}
-
-.button{
-
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 18px;
-    margin: 4px 2px;
-    cursor: pointer;
-    width: (40%-60%);
-    position: relative;
-    height: 2.5em;
- 
-    
-}

@@ -3,13 +3,17 @@
     <button ion-button icon-only menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>
+    <div class="row">
+    <ion-title class="col">
       Results
     </ion-title>
+    <p class="col" id="offline_indicator">
+      </p>
+    </div>
   </ion-navbar>
   <ion-toolbar no-border-top color = "primary">
     <ion-segment color="foreground">
-      <ion-segment-button *ngFor="let int of INTAKES" [value]="int.INTAKE_CODE" style="font-weight: bold; font-size:13px;" color = "foreground"
+      <ion-segment-button *ngFor="let int of INTAKES" [value]="int.INTAKE_CODE"  color = "foreground"
         (click)="loadResults(student_id, int.INTAKE_CODE)">
         {{int.INTAKE_CODE}}
       </ion-segment-button>
