@@ -33,7 +33,6 @@ import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
 import { StaffDirectoryInfoPage } from '../pages/staff-directory/staff-directory-info';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 
 
@@ -92,7 +91,6 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
     Firebase,
     Push,
     LocalNotifications,
-    SplashScreen,
     AuthServiceProvider
   ]
 
