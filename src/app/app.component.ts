@@ -20,7 +20,6 @@ import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
 import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Firebase } from "@ionic-native/firebase";
-import { SplashScreen } from '@ionic-native/splash-screen';
 import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
 
@@ -70,15 +69,12 @@ export class MyApp {
     private storage: Storage,
     public platform: Platform,
     public statusBar: StatusBar,
-    public _platform: Platform,
-    private splashScreen: SplashScreen) {
+    public _platform: Platform) {
 
     this.events.subscribe('user:login', () => {
       this.onDevice = this.platform.is('cordova');
       this.checknetwork();
       this._platform.ready().then((rdy) => {
-        this.splashScreen.hide();
-
         this.localnotifications.on('click', (notification, state) => {
           let json = JSON.parse(notification.data);
           let alert = this.alertCtrl.create({
