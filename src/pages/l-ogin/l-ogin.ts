@@ -13,6 +13,7 @@ import { Body } from '@angular/http/src/body';
 import { Events } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
+import { CasTicketProvider } from '../../providers/cas-ticket/cas-ticket';
 
 declare var Connection;
 
@@ -47,7 +48,8 @@ export class LOGINPage {
     public navCtrl: NavController, 
     public http: Http, 
     private toastCtrl: ToastController,
-    private authSerivce: AuthServiceProvider) {
+    private authSerivce: AuthServiceProvider,
+    private casTicket: CasTicketProvider) {
     this.onDevice = this.platform.is('cordova');
   }
 
@@ -126,11 +128,9 @@ export class LOGINPage {
 
 
   async login(){
-    let validateResult = await this.authSerivce
-    .authenticate(this.userCredentails.username, this.userCredentails.password)
-    .catch((err)=>{
-      console.log(err)
-    })
+    let validateResult = await this.casTicket
+      .getTGT(this.userCredentails.username, this.userCredentails.password)
+      .first().toPromise();
     if (validateResult){
       this.loadProfile();
       this.navCtrl.setRoot(HOMEPage);
