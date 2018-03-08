@@ -1,14 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { Observable } from 'rxjs/Observable';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http } from '@angular/http';
 import { LOGINPage } from '../l-ogin/l-ogin';
 import { HOMEPage } from '../h-ome/h-ome';
 import { Network } from '@ionic-native/network';
-import { ToastController } from 'ionic-angular';
-import { Subscription } from 'rxjs/Subscription';
-import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
@@ -17,8 +13,6 @@ import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 declare var Connection;
 
 const serviceUrl = 'https://cas.apiit.edu.my';
-const validateUrl = 'https://cas.apiit.edu.my/cas/validate';
-const ticketUrl = 'https://cas.apiit.edu.my/cas/v1/tickets';
 
 @Component({
   selector: 'page-welcome',
@@ -50,7 +44,6 @@ export class WelcomePage {
     public events: Events,
     public platform: Platform,
     private network: Network,
-    private toast: ToastController,
     public navCtrl: NavController,
     private storage: Storage,
     public http: Http,
@@ -106,6 +99,13 @@ export class WelcomePage {
     }
   }
 
+  loadProfile() {
+    this.events.publish('user:login');
+  }
+  clearLocalStorage() {
+    this.storage.clear();
+  }
+}
 
 
   // getServiceTicket(tgt) {
@@ -198,10 +198,7 @@ export class WelcomePage {
   //   })
   // }
 
-  loadProfile() {
-    this.events.publish('user:login');
-  }
-
+  
   //==========================================================================
   //==========================================================================
 
@@ -214,7 +211,4 @@ export class WelcomePage {
   //=========================================================================
   //=========================================================================
 
-  clearLocalStorage() {
-    this.storage.clear();
-  }
-}
+ 

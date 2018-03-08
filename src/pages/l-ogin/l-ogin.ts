@@ -1,27 +1,21 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { HOMEPage } from '../h-ome/h-ome';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
-import { Injectable } from "@angular/core";
 import { Platform } from 'ionic-angular';
 import { Network } from '@ionic-native/network';
 import { MenuController } from 'ionic-angular';
-import { Body } from '@angular/http/src/body';
 import { Events } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
-import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { CasTicketProvider } from '../../providers/cas-ticket/cas-ticket';
 
 declare var Connection;
 
-
-const ticketUrl = "https://cas.apiit.edu.my/cas/v1/tickets";
-const service = 'service=https://cas.apiit.edu.my/cas/login';
 const serviceAPI: string = 'https://cas.apiit.edu.my';
-const validateCasUrl = 'https://cas.apiit.edu.my/cas/serviceValidate';
+
 
 @Component({
   selector: 'page-l-ogin',
@@ -49,7 +43,6 @@ export class LOGINPage {
     public navCtrl: NavController, 
     public http: Http, 
     private toastCtrl: ToastController,
-    private authSerivce: AuthServiceProvider,
     private casTicket: CasTicketProvider) {
     this.onDevice = this.platform.is('cordova');
   }
@@ -130,8 +123,8 @@ export class LOGINPage {
     let tgt = await this.casTicket
       .getTGT(this.userCredentails.username, this.userCredentails.password)
       .first().toPromise();
-    await this.storage.set('tgt', tgt);
-    await this.storage.set('tgturl', `${this.casTicket.casUrl}/cas/v1/tickets/${tgt}`);
+    this.storage.set('tgt', tgt);
+    this.storage.set('tgturl', `${this.casTicket.casUrl}/cas/v1/tickets/${tgt}`);
     console.log(tgt);
     console.log(`${this.casTicket.casUrl}/cas/v1/tickets/${tgt}`);
     let st = await this.casTicket.getST(serviceAPI, tgt).first().toPromise();

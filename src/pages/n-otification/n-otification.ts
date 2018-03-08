@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, ToastController } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 import { Storage } from "@ionic/storage";
 import { Firebase } from "@ionic-native/firebase";
 import { Platform } from "ionic-angular";
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/finally';
-import { AlertController } from 'ionic-angular';
-import { Push } from '@ionic-native/push';
 import { Events } from 'ionic-angular';
 
 
@@ -35,7 +33,13 @@ export class NOTIFICATIONPage {
     }
 
 
-   constructor(public events: Events, private push: Push, private alertCtrl: AlertController, private toastCtrl: ToastController, private http: Http, private platform: Platform, private firebase: Firebase, public navCtrl: NavController, private storage: Storage) {
+   constructor(
+     public events: Events, 
+     private http: Http, 
+     private platform: Platform, 
+     private firebase: Firebase, 
+     public navCtrl: NavController, 
+     private storage: Storage) {
     
     this.platform.ready().then(() => {
         //=======Create the Device Token=============

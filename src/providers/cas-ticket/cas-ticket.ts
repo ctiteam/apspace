@@ -24,6 +24,7 @@ export class CasTicketProvider {
   }
 
   /** POST: request service ticket from CAS */
+
   getST(serviceUrl: string, tgt: string): Observable<string> {
     const options = {
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
