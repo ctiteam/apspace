@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { EmailComposer } from '@ionic-native/email-composer';
-import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser'
 import { AlertController } from 'ionic-angular';
 
 @Component({
@@ -10,7 +9,7 @@ import { AlertController } from 'ionic-angular';
 })
 export class FEEDBACKPage {
   feedback: string = "submit"
-  constructor(private alertCtrl: AlertController, public navCtrl: NavController, private emailComposer: EmailComposer, private inAppBrowser: InAppBrowser) {
+  constructor(private alertCtrl: AlertController, public navCtrl: NavController, private emailComposer: EmailComposer) {
   }
 
   feedbackData = { "name": "", "studentNumber": "", "contactNumber": "", "message": "" };
@@ -43,36 +42,23 @@ export class FEEDBACKPage {
     let email = {
       to: 'cti@apiit.edu.my',
       subject: "Mobile iWebspace Feedback",
-      body: this.feedbackData.message + "<br><br>" +this.feedbackData.name + '<br>' +this.feedbackData.studentNumber + '<br>' + this.feedbackData.contactNumber, 
+      body: this.feedbackData.message + "<br><br>" + this.feedbackData.name + '<br>' + this.feedbackData.studentNumber + '<br>' + this.feedbackData.contactNumber,
       isHTML: true
     };
     this.emailComposer.open(email);
   }
 
   openFacebook(url: string) {
-    const options: InAppBrowserOptions = {
-      zoom: 'no'
-    }
-    const browser = this.inAppBrowser.create(url, '_self', options)
+   
   }
   openTwitter(twitUrl: string) {
-    const options: InAppBrowserOptions = {
-      zoom: 'no'
-    }
-    const browser = this.inAppBrowser.create(twitUrl, '_self', options)
+    
   }
   openGooglePlus(googleUrl: string) {
-    const options: InAppBrowserOptions = {
-      zoom: 'no'
-    }
-    const browser = this.inAppBrowser.create(googleUrl, '_self', options)
+   
   }
 
   openLinkedIn(linkedinUrl: string) {
-    const options: InAppBrowserOptions = {
-      zoom: 'no'
-    }
-    const browser = this.inAppBrowser.create(linkedinUrl, '_self', options)
+   
   }
-
 }

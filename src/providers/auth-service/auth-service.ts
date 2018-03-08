@@ -1,10 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { ToastController } from 'ionic-angular';
 import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/finally';
-import { Observable } from 'rxjs/Observable';
 import { Storage } from '@ionic/storage';
 
 const tgtAPI: string = "https://cas.apiit.edu.my/cas/v1/tickets/";
@@ -21,7 +18,6 @@ export class AuthServiceProvider {
 
   constructor(
     public http: Http,
-    private toastController: ToastController,
     public storage: Storage) {
 
   }

@@ -13,13 +13,10 @@ import { WelcomePage } from '../pages/welcome/welcome';
 import { Storage } from '@ionic/storage';
 import { AlertController, App } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { ToastController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 import { TimetablePage } from '../pages/timetable/timetable';
 import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
-import { Push, PushObject, PushOptions } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { Firebase } from "@ionic-native/firebase";
 import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
 
@@ -58,11 +55,8 @@ export class MyApp {
 
   constructor(
     private network: Network,
-    private firebase: Firebase,
     private localnotifications: LocalNotifications,
-    private push: Push,
     public events: Events,
-    private toastCtrl: ToastController,
     public app: App,
     private http: Http,
     private alertCtrl: AlertController,

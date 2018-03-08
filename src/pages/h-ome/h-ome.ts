@@ -1,19 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { Platform, Events, NavController, LoadingController, ToastController } from 'ionic-angular';
 import { NewsService } from '../../app/services/news.service';
-import { BrowserModule } from '@angular/platform-browser';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
-import { Platform } from 'ionic-angular';
-import { MyApp } from '../../app/app.component';
 import { HomeModalPage } from '../home-modal/home-modal';
-import { Firebase } from "@ionic-native/firebase";
-import { Http, Headers, RequestOptions } from '@angular/http';
-import { Events } from 'ionic-angular';
-
-
-
 
 
 
@@ -34,9 +25,7 @@ export class HOMEPage {
   connected: Subscription;
   disconnected: Subscription;
 
-  constructor(private http: Http,
-    private firebase: Firebase,
-    private modalCtrl: ModalController,
+  constructor(
     public loadingCtrl: LoadingController,
     public platform: Platform,
     public network: Network,
@@ -138,7 +127,8 @@ export class HOMEPage {
 
   //Loads news from Web Service
   getPosts() {
-    this.newsService.getPosts().subscribe(response => {
+    this.newsService.getPosts()
+    .subscribe(response => {
       this.items = response;
       this.storage.set('news', this.items);
 

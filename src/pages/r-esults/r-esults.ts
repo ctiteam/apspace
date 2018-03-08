@@ -4,7 +4,7 @@ import { Storage } from '@ionic/storage';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { Network } from '@ionic-native/network';
 import { Platform } from 'ionic-angular';
-import { ToastController, Toast } from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
 import { LoadingController } from 'ionic-angular';
 
