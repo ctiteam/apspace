@@ -4,80 +4,61 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      FEEDBACK
+      Feedback
     </ion-title>
   </ion-navbar>
 </ion-header>
 
-<div class="spacer" style="width:300px;height:10px;" id="lOGIN-spacer8"></div>
-<ion-content padding id="page6" style="background-color:#C8DAE8;">
-  <div>
-    <form  id="fEEDBACK-form2">
-      <ion-item class="input" id="fEEDBACK-input1">
-        <ion-input  #autofocus type="text" placeholder="Fullname" [(ngModel)]="this.feedbackData.name" [ngModelOptions]="{standalone: true}"></ion-input>
-      </ion-item>
-      <ion-item  id="fEEDBACK-input2">
-        <ion-input type="text" placeholder="TP number" [(ngModel)]="this.feedbackData.studentNumber" [ngModelOptions]="{standalone: true}"></ion-input>
-      </ion-item>
-      <ion-item  id="fEEDBACK-input3">
-        <ion-input type="tel" placeholder="Contact Number" [(ngModel)]="this.feedbackData.contactNumber" [ngModelOptions]="{standalone: true}"></ion-input>
-      </ion-item>
-      <ion-item class = "textarea"   id="fEEDBACK-textarea1">
-        <ion-label>
-          &nbsp;Message
-        </ion-label>
-        <ion-textarea  placeholder="" [(ngModel)]="this.feedbackData.message" [ngModelOptions]="{standalone: true}"></ion-textarea>
-      </ion-item>
-    </form>
-    <div class="spacer" style="width:300px;height:15px;" id="lOGIN-spacer8"></div>
-    <button (click)="validateField()" id="fEEDBACK-button4" ion-button color="primary" block style="border-radius:10px 10px 10px 10px;">
-      SUBMIT
-    </button>
-    <h5 id="fEEDBACK-heading3" style="color:primary; text-align:justify;">
-      ASIA PACIFIC UNIVERSITY OF TECHNOLOGY & INNOVATION (APU)
-    </h5>
-    <div id="fEEDBACK-markdown28" style="text-align:justify;" class="show-list-numbers-and-dots">
-      <p style="color:#000000;font-size:11px;">
-        Technology Park Malaysia, Bulit Jalil, Kuala Lumpur 57000 Malaysia
-      </p>
-    </div>
-    <div id="fEEDBACK-markdown34" class="show-list-numbers-and-dots">
-      <p style="color:#000000;font-size:11px;">
-        Phone: +60389961000
-        <br> Fax:&nbsp;&nbsp;&nbsp;+60389961001
-      </p>
-    </div>
-    <div id="fEEDBACK-markdown40" class="show-list-numbers-and-dots">
-      <p class="follow-us" style="color:#000000;font-size:13px;">
-        Follow Us:
-      </p>
-    </div>
-    <ion-fab>
-      <div class="row">
-        <div class="col">
-          <button color="primary" ion-fab (click)="openFacebook(url)" style="display:block; margin-left: -10px; width:40px;height:40px;">
-            <ion-icon name="logo-facebook"></ion-icon>
-          </button>
-        </div>
-
-        <div class="col">
-          <button color="primary" ion-fab (click)="openTwitter(twitUrl)" style="display:block; width:40px;height:40px;">
-            <ion-icon name="logo-twitter"></ion-icon>
-          </button>
-        </div>
-
-        <div class="col">
-          <button color="primary" ion-fab (click)="openLinkedIn(linkedinUrl)" style="display:block; width:40px;height:40px;">
-            <ion-icon name="logo-linkedin"></ion-icon>
-          </button>
-        </div>
-
-        <div class="col">
-          <button color="primary" ion-fab (click)="openGooglePlus(googleUrl)" style="display:block; width:40px;height:40px;">
-            <ion-icon name="logo-googleplus"></ion-icon>
-          </button>
-        </div>
-      </div>
-    </ion-fab>
+<ion-content padding>
+  <ion-list>
+    <ion-item no-padding>
+      <ion-input #autofocus placeholder="Fullname" [(ngModel)]="this.feedbackData.name" [ngModelOptions]="{standalone: true}"></ion-input>
+    </ion-item>
+    <ion-item no-padding>
+      <ion-input type="text" placeholder="TP number" [(ngModel)]="this.feedbackData.studentNumber" [ngModelOptions]="{standalone: true}"></ion-input>
+    </ion-item>
+    <ion-item no-padding>
+      <ion-input type="tel" placeholder="Contact Number" [(ngModel)]="this.feedbackData.contactNumber" [ngModelOptions]="{standalone: true}"></ion-input>
+    </ion-item>
+    <ion-item no-padding>
+      <ion-textarea placeholder="Message" [(ngModel)]="this.feedbackData.message" [ngModelOptions]="{standalone: true}"></ion-textarea>
+    </ion-item>
+  </ion-list>
+  <div class="spacer" style="width:300px;height:15px;" id="lOGIN-spacer8"></div>
+  <button (click)="validateField()" id="fEEDBACK-button4" ion-button color="primary" block style="border-radius:10px 10px 10px 10px;">
+    SUBMIT
+  </button>
+  <h5 id="fEEDBACK-heading3" style="color:primary; text-align:justify;">
+    ASIA PACIFIC UNIVERSITY OF TECHNOLOGY & INNOVATION (APU)
+  </h5>
+  <div id="fEEDBACK-markdown28" style="text-align:justify;" class="show-list-numbers-and-dots">
+    <p style="color:#000000;font-size:11px;">
+      Technology Park Malaysia, Bulit Jalil, Kuala Lumpur 57000 Malaysia
+    </p>
   </div>
+  <div id="fEEDBACK-markdown34" class="show-list-numbers-and-dots">
+    <p style="color:#000000;font-size:11px;">
+      Phone: +60389961000
+      <br> Fax:&nbsp;&nbsp;&nbsp;+60389961001
+    </p>
+  </div>
+  <div id="fEEDBACK-markdown40" class="show-list-numbers-and-dots">
+    <p class="follow-us" style="color:#000000;font-size:13px;">
+      Follow Us:
+    </p>
+  </div>
+  <ion-row>
+    <button ion-fab (click)="openFacebook(url)">
+      <ion-icon name="logo-facebook"></ion-icon>
+    </button>
+    <button ion-fab (click)="openTwitter(twitUrl)">
+      <ion-icon name="logo-twitter"></ion-icon>
+    </button>
+    <button ion-fab (click)="openLinkedIn(linkedinUrl)">
+      <ion-icon name="logo-linkedin"></ion-icon>
+    </button>
+    <button ion-fab (click)="openGooglePlus(googleUrl)">
+      <ion-icon name="logo-googleplus"></ion-icon>
+    </button>
+  </ion-row>
 </ion-content>

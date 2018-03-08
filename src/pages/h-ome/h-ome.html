@@ -1,25 +1,27 @@
 <ion-header>
-  <ion-navbar hideBackButton color = "primary">
+  <ion-navbar hideBackButton color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
     <div class="row">
     <ion-title class="col">
-      HOME
+      Home
     </ion-title>
     <p class="col" id="offline_indicator">
     </p>
   </div>
   </ion-navbar>
 </ion-header>
+
+
 <ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
   
-  <div *ngFor="let item of items" margin-bottom >
-  <ion-card  (click)="openBasicModal(item)">
+  <div *ngFor="let item of items">
+  <ion-card (click)="openBasicModal(item)">
     <ion-list>
       <div>
         <img class="news_image" src="{{item.field_news_image[0].url}}">
@@ -31,7 +33,6 @@
       </div>
     </ion-list>
   </ion-card>
-  <div class="spacer"></div>
 </div>
   
 </ion-content>
