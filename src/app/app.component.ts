@@ -5,7 +5,6 @@ import { NewsService } from './services/news.service';
 
 import { HOMEPage } from '../pages/h-ome/h-ome';
 import { RESULTSPage } from '../pages/r-esults/r-esults';
-import { FEESPage } from '../pages/f-ees/f-ees';
 import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
 import { FEEDBACKPage } from '../pages/f-eedback/f-eedback';
 import { LOGINPage } from '../pages/l-ogin/l-ogin';
@@ -14,8 +13,6 @@ import { Storage } from '@ionic/storage';
 import { AlertController, App } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { Events } from 'ionic-angular';
-import { TimetablePage } from '../pages/timetable/timetable';
-import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
@@ -86,8 +83,8 @@ export class MyApp {
 
     this.pages = [
       { title: 'Home', component: HOMEPage, icon: 'home' },
-      { title: 'Timetable', component: TimetablePage, icon: 'calendar' },
-      { title: 'Staff Directory', component: StaffDirectoryPage, icon: 'people' },
+      { title: 'Timetable', component: 'TimetablePage', icon: 'calendar' },
+      { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people' },
       { title: 'Results', component: RESULTSPage, icon: 'checkbox' },
       { title: 'Notification', component: NOTIFICATIONPage, icon: 'chatbubbles' },
       { title: 'Feedback', component: FEEDBACKPage, icon: 'at' }

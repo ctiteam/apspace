@@ -11,7 +11,6 @@ import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
 import { FEEDBACKPage } from '../pages/f-eedback/f-eedback';
 import { LOGINPage } from '../pages/l-ogin/l-ogin';
 import { WelcomePage} from '../pages/welcome/welcome';
-import { HomeModalPage } from '../pages/home-modal/home-modal'
 
 import { JsonpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
@@ -25,9 +24,8 @@ import { SuperTabsModule } from 'ionic2-super-tabs';
 import { StaffDirectoryProvider } from '../providers/staff-directory/staff-directory';
 import { CasTicketProvider } from '../providers/cas-ticket/cas-ticket';
 import { TimetableProvider } from '../providers/timetable/timetable';
+import { ScrollableTabs } from '../components/scrollable-tabs/scrollable-tabs';
 import { Firebase } from '@ionic-native/firebase';
-import { TimetablePage } from '../pages/timetable/timetable';
-import { StaffDirectoryPage } from '../pages/staff-directory/staff-directory';
 import { Push } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
@@ -45,11 +43,7 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
     FEEDBACKPage,
     LOGINPage,
     WelcomePage,
-    HomeModalPage,
-    TimetablePage,
-    StaffDirectoryPage
-
-
+    ScrollableTabs,
   ],
   imports: [
     BrowserModule,
@@ -70,10 +64,6 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
     FEEDBACKPage,
     LOGINPage,
     WelcomePage,
-    TimetablePage,
-    StaffDirectoryPage,
-    HomeModalPage
-
   ],
   providers: [
     StatusBar,

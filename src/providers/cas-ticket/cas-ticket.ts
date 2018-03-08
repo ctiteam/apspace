@@ -20,7 +20,10 @@ export class CasTicketProvider {
       observe: 'response' as 'body'
     };
     return this.http.post(this.casUrl + '/cas/v1/tickets', data, options)
-    .catch(res => Observable.of(res.headers.get('Location').split('/').pop()));
+    .catch(res => res.headers.get('Location')
+      ? Observable.of(res.headers.get('Location').split('/').pop())
+      : Observable.throw('Invalid credentials.')
+    );
   }
 
   /** POST: request service ticket from CAS */
