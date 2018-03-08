@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 @Injectable()
 export class CasTicketProvider {
 
-  casUrl = 'https://cas.apiit.edu.my';
+  casUrl = 'https://cas1.apiit.edu.my';
 
   constructor(public http: HttpClient, public storage: Storage) { }
 
@@ -47,18 +47,19 @@ export class CasTicketProvider {
       withCredentials: true
     };
     return Observable.fromPromise(this.storage.get('tgturl')).first()
-    .switchMap(url =>
-      this.http.post(`${this.casUrl}/cas/v1/tickets/${tgt}`, null, options).pipe(
-        // tap(() => console.log(`getST ${serviceUrl}`)),
-        catchError(this.handleError<string>('getServiceTicket', ''))
-      )
-    );
+    .switchMap(url => this.http.post(url, null, options).pipe(
+      // tap(() => console.log(`getST ${serviceUrl}`)),
+      catchError(this.handleError<string>('getServiceTicket', ''))
+    ));
   }
 
   /** GET: validate service ticket */
   validateST(serviceUrl: string, st: string): Observable<string> {
+    const options = {
+      responseType: 'text' as 'text'
+    };
     const url = `${this.casUrl}/cas/p3/serviceValidate?service=${serviceUrl}&ticket=${st}`;
-    return this.http.get(url);
+    return this.http.get(url, options);
   }
 
   /**
