@@ -5,44 +5,23 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
+
+
 <ion-content class="loginPageBackground" padding>
-  <div class="spacer"></div>
-  <form>
-    <div>
-      <img class="login_logo" src="assets/img/login.jpg">
-    </div>
-    <div class="spacer"></div>
-    <div>
-      <h4>
-        WELCOME TO iWEBSPACE
-      </h4>
-    </div>
-    <ion-list>
-      <div class="spacer"></div>
-      <ion-item no-padding>
+  <form (ngSubmit)="login()">
+    <img padding-bottom class="login_logo" src="assets/img/login.jpg">
+    <h4>WELCOME TO iWEBSPACE</h4>
+    <ion-list padding-top padding-bottom>
+      <ion-item no-padding margin-bottom>
         <ion-input #autofocus type="email" placeholder="TP Number" [(ngModel)]="userCredentails.username" [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
-      <div style="height:15px;"></div>
       <ion-item no-padding>
         <ion-input type="password" placeholder="Password" [(ngModel)]="userCredentails.password" [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
     </ion-list>
-    <div class="spacer"></div>
-    <button class="button" (click)="checknetwork()" ion-button block color="primary">
+    <button ion-button block type="submit"
+      [disabled]="!userCredentails.username || !userCredentails.password">
       Login
     </button>
-
-
-    <!-- <ion-item id="lOGIN-checkbox1">
-      <ion-label>
-        Remember Me
-      </ion-label>
-      <ion-checkbox></ion-checkbox>
-    </ion-item> -->
   </form>
-  <!-- <div id="lOGIN-markdown41" style="text-align:center;" class="show-list-numbers-and-dots">
-    <p style="color:#000000;">
-      Forgot your password?
-    </p>
-  </div> -->
 </ion-content>

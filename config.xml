@@ -17,7 +17,12 @@
     <icon src="resources/icon.png" />
     <platform name="android">
         <allow-intent href="market:*" />
-        <resource-file src="google-services.json" target="google-services.json" />
+        <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
+        <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
+        <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
+        <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
+        <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
+        <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -49,8 +54,7 @@
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-sqlite-storage" spec="^2.1.4" />
     <plugin name="cordova-plugin-firebase" spec="^0.1.25" />
-    <plugin name="phonegap-plugin-push" spec="~2.1.3" />
     <plugin name="cordova-plugin-local-notification" spec="~0.9.0-beta.2" />
-    <engine name="android" spec="~6.4.0" />
     <engine name="ios" spec="4.4.0" />
+    <engine name="android" spec="6.4.0" />
 </widget>
