@@ -126,7 +126,7 @@ export class LOGINPage {
     toast.present();
   }
 
-  async authenticate() {
+  async login() {
     let tgt = await this.casTicket
       .getTGT(this.userCredentails.username, this.userCredentails.password)
       .first().toPromise();
@@ -135,13 +135,10 @@ export class LOGINPage {
     console.log(tgt);
     console.log(`${this.casTicket.casUrl}/cas/v1/tickets/${tgt}`);
     let st = await this.casTicket.getST(serviceAPI, tgt).first().toPromise();
-    return this.casTicket.validateST(serviceAPI, st);
-  }
-
-  async login(){
-    await this.authenticate()
-      .do(_ => { this.loadProfile(); this.navCtrl.setRoot(HOMEPage); })
-      .catch(_ => this.presentAlert());
+    await this.casTicket.validateST(serviceAPI, st).subscribe(
+      _ => { this.loadProfile(); this.navCtrl.setRoot(HOMEPage); },
+      _ => this.presentAlert()
+    );
   }
 
   loadProfile() {

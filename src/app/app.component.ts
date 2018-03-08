@@ -178,7 +178,7 @@ export class MyApp {
 
 
   getTGT() {
-    this.storage.get('tgtUrl').then((val) => {
+    this.storage.get('tgturl').then((val) => {
       this.tgt = val;
       console.log("From app2:  " + this.tgt)
       this.getServiceTicket(this.tgt);
