@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 @Injectable()
 export class CasTicketProvider {
 
-  private casUrl = 'https://cas1.apiit.edu.my/cas/v1/tickets';
+  casUrl = 'https://cas.apiit.edu.my';
 
   constructor(public http: HttpClient, public storage: Storage) { }
 
@@ -19,12 +19,27 @@ export class CasTicketProvider {
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
       observe: 'response' as 'body'
     };
-    return this.http.post(this.casUrl, data, options)
+    return this.http.post(this.casUrl + '/cas/v1/tickets', data, options)
     .catch(res => Observable.of(res.headers.get('Location').split('/').pop()));
   }
 
   /** POST: request service ticket from CAS */
-  getST(serviceUrl: string): Observable<string> {
+  getST(serviceUrl: string, tgt: string): Observable<string> {
+    const options = {
+      headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+      params: { 'service': serviceUrl },
+      responseType: 'text' as 'text', /* TODO: fix this in future angular */
+      withCredentials: true
+    };
+    const url = `${this.casUrl}/cas/v1/tickets/${tgt}`;
+    return this.http.post(url, null, options).pipe(
+      // tap(() => console.log(`getST ${serviceUrl}`)),
+      catchError(this.handleError<string>('getServiceTicket', ''))
+    );
+  }
+
+  /** POST: request service ticket from CAS (deprecated) */
+  getSTOld(serviceUrl: string): Observable<string> {
     const options = {
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
       params: { 'service': serviceUrl },
@@ -33,11 +48,17 @@ export class CasTicketProvider {
     };
     return Observable.fromPromise(this.storage.get('tgturl')).first()
     .switchMap(url =>
-      this.http.post(url, null, options).pipe(
+      this.http.post(`${this.casUrl}/cas/v1/tickets/${tgt}`, null, options).pipe(
         // tap(() => console.log(`getST ${serviceUrl}`)),
         catchError(this.handleError<string>('getServiceTicket', ''))
       )
     );
+  }
+
+  /** GET: validate service ticket */
+  validateST(serviceUrl: string, st: string): Observable<string> {
+    const url = `${this.casUrl}/cas/p3/serviceValidate?service=${serviceUrl}&ticket=${st}`;
+    return this.http.get(url);
   }
 
   /**
