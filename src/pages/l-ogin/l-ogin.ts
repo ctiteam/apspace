@@ -20,6 +20,7 @@ declare var Connection;
 
 const ticketUrl = "https://cas.apiit.edu.my/cas/v1/tickets";
 const service = 'service=https://cas.apiit.edu.my/cas/login';
+const serviceAPI: string = 'https://cas.apiit.edu.my';
 const validateCasUrl = 'https://cas.apiit.edu.my/cas/serviceValidate';
 
 @Component({
@@ -125,20 +126,22 @@ export class LOGINPage {
     toast.present();
   }
 
-
-
-  async login(){
-    let validateResult = await this.casTicket
+  async authenticate() {
+    let tgt = await this.casTicket
       .getTGT(this.userCredentails.username, this.userCredentails.password)
       .first().toPromise();
-    if (validateResult){
-      this.loadProfile();
-      this.navCtrl.setRoot(HOMEPage);
-    }
-    else{
-      this.presentAlert();
-    }
-    
+    await this.storage.set('tgt', tgt);
+    await this.storage.set('tgturl', `${this.casTicket.casUrl}/cas/v1/tickets/${tgt}`);
+    console.log(tgt);
+    console.log(`${this.casTicket.casUrl}/cas/v1/tickets/${tgt}`);
+    let st = await this.casTicket.getST(serviceAPI, tgt).first().toPromise();
+    return this.casTicket.validateST(serviceAPI, st);
+  }
+
+  async login(){
+    await this.authenticate()
+      .do(_ => { this.loadProfile(); this.navCtrl.setRoot(HOMEPage); })
+      .catch(_ => this.presentAlert());
   }
 
   loadProfile() {
