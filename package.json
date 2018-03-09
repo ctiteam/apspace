@@ -21,6 +21,7 @@
     "@angular/platform-browser": "~5.2.1",
     "@angular/platform-browser-dynamic": "~5.2.1",
     "@angular/tsc-wrapped": "^4.4.6",
+    "@ionic-native/action-sheet": "^4.5.3",
     "@ionic-native/camera": "^4.3.3",
     "@ionic-native/core": "^4.3.3",
     "@ionic-native/email-composer": "^4.5.2",
@@ -35,6 +36,7 @@
     "autoprefixer": "^7.2.4",
     "cordova-android": "6.4.0",
     "cordova-ios": "4.4.0",
+    "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-email-composer": "^0.8.12",
     "cordova-plugin-firebase": "^0.1.25",
     "cordova-plugin-inappbrowser": "^2.0.1",
@@ -69,7 +71,8 @@
       "cordova-plugin-whitelist": {},
       "cordova-sqlite-storage": {},
       "cordova-plugin-firebase": {},
-      "cordova-plugin-local-notification": {}
+      "cordova-plugin-local-notification": {},
+      "cordova-plugin-actionsheet": {}
     },
     "platforms": [
       "ios",

@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
+import { ActionSheet } from '@ionic-native/action-sheet';
 import { ActionSheetController, ActionSheetButton, Content, IonicPage,
-  NavController, Refresher } from 'ionic-angular';
+  NavController, Platform, Refresher } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { finalize, tap } from 'rxjs/operators';
@@ -30,34 +31,49 @@ export class TimetablePage {
   intake: string = '';
 
   constructor(
+    public actionSheet: ActionSheet,
     public actionSheetCtrl: ActionSheetController,
     public navCtrl: NavController,
+    public plt: Platform,
     private sd: StaffDirectoryProvider,
     private tp: TimetableProvider,
   ) { }
 
   presentActionSheet() {
     this.timetable$.subscribe(tt => {
-      let intakes = Array.from(new Set((tt || []).map(t => t.INTAKE)))
-        .map(intake => <ActionSheetButton>{
+      let intakes = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort();
+      if (this.plt.is('cordova')) {
+        const options = {
+          buttonLabels: [ 'My Classes', ...intakes ],
+          addCancelButtonWithLabel: 'Cancel'
+        };
+        this.actionSheet.show(options).then((buttonIndex: number) => {
+          if (buttonIndex <= 1 + intakes.length) {
+            this.intake = intakes[buttonIndex - 2] || '';
+            this.timetable$.subscribe(tt => this.updateDay(tt));
+          }
+        });
+      } else {
+        let intakesButton = intakes.map(intake => <ActionSheetButton>{
           text: intake,
           handler: () => {
             this.intake = intake;
             this.timetable$.subscribe(tt => this.updateDay(tt));
           }
         });
-      let actionSheet = this.actionSheetCtrl.create({
-        buttons: [
-          {
-            text: 'My Classes', handler: () => {
-              this.intake = '';
-              this.timetable$.subscribe(tt => this.updateDay(tt));
-            }
-          },
-          ...intakes, { text: 'Cancel', role: 'cancel' }
-        ]
-      });
-      actionSheet.present();
+        let actionSheet = this.actionSheetCtrl.create({
+          buttons: [
+            {
+              text: 'My Classes', handler: () => {
+                this.intake = '';
+                this.timetable$.subscribe(tt => this.updateDay(tt));
+              }
+            },
+            ...intakesButton, { text: 'Cancel', role: 'cancel' }
+          ]
+        });
+        actionSheet.present();
+      }
     });
   }
 
@@ -92,9 +108,6 @@ export class TimetablePage {
     }
     this.content.resize();
   }
-
-
-  
 
   /** Get and merge Timetable with StaffDirectory. */
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
