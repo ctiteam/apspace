@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 @Injectable()
 export class CasTicketProvider {
 
-  casUrl = 'https://cas1.apiit.edu.my';
+  casUrl = 'https://cas.apiit.edu.my';
 
   constructor(public http: HttpClient, public storage: Storage) { }
 
@@ -66,6 +66,11 @@ export class CasTicketProvider {
     return this.http.get(url, options);
   }
 
+  // /** DELETE: delete ticket granting ticket */
+  // deleteST(tgt: string): Observable<> {
+  //   return this.http.delete()
+  // }
+
   /**
    * Handle Http operation that failed.
    * Let the app continue.
@@ -80,5 +85,8 @@ export class CasTicketProvider {
       return Observable.of(result as T);
     };
   }
+
+
+  
 
 }

@@ -77,7 +77,7 @@ export class LOGINPage {
       this.casTicket
         .getTGT(this.userCredentails.username, this.userCredentails.password)
         .subscribe(
-          tgt => {
+          tgt => {            
             this.storage.set('tgt', tgt);
             this.storage.set('tgturl', `${this.casTicket.casUrl}/cas/v1/tickets/${tgt}`);
             this.casTicket.getST(serviceAPI, tgt).subscribe(
@@ -94,7 +94,7 @@ export class LOGINPage {
       this.presentToast('You are now offline.');
     }
   }
-
+  
   loadProfile() {
     this.events.publish('user:login');
   }

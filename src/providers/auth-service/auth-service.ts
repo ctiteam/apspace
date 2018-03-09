@@ -5,7 +5,7 @@ import 'rxjs/add/operator/finally';
 import { Storage } from '@ionic/storage';
 
 const tgtAPI: string = "https://cas.apiit.edu.my/cas/v1/tickets/";
-const serviceAPI: string = 'https://cas.apiit.edu.my';
+const serviceAPI: string = 'https://cas1.apiit.edu.my';
 const validateAPI: string = 'https://cas.apiit.edu.my/cas/serviceValidate?ticket=';
 
 

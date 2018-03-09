@@ -153,7 +153,7 @@ export class HOMEPage {
   }
 
   openBasicModal(item) {
-    this.navCtrl.push(HomeModalPage, {
+    this.navCtrl.push('HomeModalPage', {
       itemDetail: item
     });
   }
