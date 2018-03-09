@@ -91,6 +91,7 @@ export class MyApp {
     this.storage.get('tgt')
       .then(tgt => this.navCtrl.setRoot(tgt ? HOMEPage : LOGINPage)
     )
+    this.getTGT()
   }
 
 
