@@ -10,7 +10,6 @@ import { FEESPage } from '../pages/f-ees/f-ees';
 import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
 import { FEEDBACKPage } from '../pages/f-eedback/f-eedback';
 import { LOGINPage } from '../pages/l-ogin/l-ogin';
-import { WelcomePage} from '../pages/welcome/welcome';
 
 import { JsonpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
@@ -42,7 +41,6 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
     NOTIFICATIONPage,
     FEEDBACKPage,
     LOGINPage,
-    WelcomePage,
     ScrollableTabs,
   ],
   imports: [
@@ -63,7 +61,6 @@ import { AuthServiceProvider } from '../providers/auth-service/auth-service';
     NOTIFICATIONPage,
     FEEDBACKPage,
     LOGINPage,
-    WelcomePage,
   ],
   providers: [
     StatusBar,
