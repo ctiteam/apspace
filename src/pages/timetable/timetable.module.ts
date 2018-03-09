@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 
+import { ActionSheet } from '@ionic-native/action-sheet';
+
 import { TimetablePage } from './timetable';
 
 @NgModule({
@@ -8,6 +10,7 @@ import { TimetablePage } from './timetable';
   imports: [
     IonicPageModule.forChild(TimetablePage),
   ],
-  entryComponents: [TimetablePage]
+  entryComponents: [TimetablePage],
+  providers: [ActionSheet]
 })
 export class TimetablePageModule {}

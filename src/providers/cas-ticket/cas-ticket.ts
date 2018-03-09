@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 @Injectable()
 export class CasTicketProvider {
 
-  casUrl = 'https://cas1.apiit.edu.my';
+  casUrl = 'https://cas.apiit.edu.my';
 
   constructor(public http: HttpClient, public storage: Storage) { }
 
