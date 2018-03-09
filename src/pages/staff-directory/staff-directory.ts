@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { StaffDirectory } from '../../interfaces/staff-directory';
 import { StaffDirectoryProvider } from '../../providers/staff-directory/staff-directory';
 
-@IonicPage({ segment: 'staff/' })
+@IonicPage({ segment: 'staff' })
 @Component({
   selector: 'page-staff-directory',
   templateUrl: 'staff-directory.html',

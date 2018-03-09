@@ -16,16 +16,17 @@
     </ion-item>
     <ion-item>
       <ion-label floating>Department</ion-label>
-      <ion-select [(ngModel)]="department" interface="popover" *ngIf="staff$ | async">
+      <ion-select [(ngModel)]="department" interface="popover"
+        *ngIf="staffType$ | async as staffTypes">
         <ion-option selected></ion-option>
-        <ion-option *ngFor="let type of staffType$ | async"
+        <ion-option *ngFor="let type of staffTypes"
           [innerHTML]="type" [value]="type"></ion-option>
       </ion-select>
     </ion-item>
   </ion-list>
 
-  <ion-list *ngIf="staff$ | async">
-    <ion-item *ngFor="let staff of selected(staff$ | async)" (click)="info(staff)">
+  <ion-list *ngIf="staff$ | async as staffs">
+    <ion-item *ngFor="let staff of selected(staffs)" (click)="info(staff)">
       <ion-avatar item-start>
         <img [src]="staff.PHOTO" onerror="this.src='assets/img/profile.svg'">
       </ion-avatar>
