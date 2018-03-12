@@ -61,7 +61,7 @@ export class CasTicketProvider {
    * @param serviceUrl - service url for CAS authentication
    * @param tgt - ticket granting ticket (default: cached `tgt`)
    */
-  getST(serviceUrl: string = this.casUrl, tgt?: string): Observable<string> {
+  getST(serviceUrl: string = this.casUrl, tgt?: string | {}): Observable<string> {
     const options = {
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
       params: { 'service': serviceUrl },

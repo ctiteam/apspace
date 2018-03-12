@@ -13,14 +13,13 @@
     <h4>WELCOME TO iWEBSPACE</h4>
     <ion-list padding-top padding-bottom>
       <ion-item no-padding margin-bottom>
-        <ion-input #autofocus type="email" placeholder="TP Number" [(ngModel)]="userCredentails.username" [ngModelOptions]="{standalone: true}"></ion-input>
+        <ion-input #autofocus type="email" placeholder="TP Number" [(ngModel)]="username" [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
       <ion-item no-padding>
-        <ion-input type="password" placeholder="Password" [(ngModel)]="userCredentails.password" [ngModelOptions]="{standalone: true}"></ion-input>
+        <ion-input type="password" placeholder="Password" [(ngModel)]="password" [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
     </ion-list>
-    <button ion-button block type="submit"
-      [disabled]="!userCredentails.username || !userCredentails.password">
+    <button ion-button block type="submit" [disabled]="!username || !password">
       Login
     </button>
   </form>
