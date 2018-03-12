@@ -1,92 +1,99 @@
+import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { NavController, App } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
-import { Observable } from 'rxjs/Observable';
-import { catchError } from 'rxjs/operators';
+import { LOGINPage } from '../../pages/l-ogin/l-ogin';
 
+/**
+ * CAS Authentication with fallback mechanism.
+ *
+ *             Authenticate          (request on failure/after login)
+ * +-----------+ --------> +--------+ - - - - > +-------+ - - - - > +---------+
+ * | LoginPage |           | getTGT |           | getST |           | Service |
+ * +-----------+ <-x------ +--------+ <-------- +-------+ <-------- +---------+
+ *         Invalid Credentials      Service Ticket       PHP Session
+ *          (Observable.never)         Expired             Expired
+ */
 @Injectable()
 export class CasTicketProvider {
 
   casUrl = 'https://cas.apiit.edu.my';
 
-  constructor(public http: HttpClient, public storage: Storage) { }
+  constructor(public http: HttpClient, public storage: Storage, protected app: App) { }
 
-  /** POST: request ticket-granting ticket from CAS */
-  getTGT(username: string, password: string): Observable<string> {
-    const data = `username=${username}&password=${password}`;
+  /* https://github.com/ionic-team/ionic/issues/9581#issuecomment-287701528 */
+  get navCtrl(): NavController {
+    return this.app.getRootNav();
+  }
+
+  /**
+   * POST: request ticket-granting ticket from CAS and cache tgt and credentials
+   * If username and password are not provided, use `cred` from storage and
+   * logout and return never() instead of throwing an error on failure.
+   * @param username - username for CAS
+   * @param password - password for CAS
+   */
+  getTGT(username?: string, password?: string): Observable<string> {
     const options = {
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
       observe: 'response' as 'body'
     };
-    return this.http.post(this.casUrl + '/cas/v1/tickets', data, options)
-    .catch(res => res.headers.get('Location')
-      ? Observable.of(res.headers.get('Location').split('/').pop())
-      : Observable.throw('Invalid credentials.')
+    return (username && password
+      ? Observable.of(`username=${username}&password=${password}`)
+      : Observable.fromPromise(this.storage.get('cred'))
+    ).switchMap(data =>
+      this.http.post(this.casUrl + '/cas/v1/tickets', data, options)
+      .catch(res => res.status === 201 && res.headers.get('Location')
+        ? Observable.of(res.headers.get('Location').split('/').pop())
+        : username && password
+        ? Observable.throw('Invalid credentials')
+        : this.logout() || Observable.never())
+      .do(tgt => this.storage.set('tgt', tgt))
+      .do(_ => this.storage.set('cred', data))
     );
   }
-
-  /** POST: request service ticket from CAS */
-
-  getST(serviceUrl: string, tgt: string): Observable<string> {
-    const options = {
-      headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-      params: { 'service': serviceUrl },
-      responseType: 'text' as 'text', /* TODO: fix this in future angular */
-      withCredentials: true
-    };
-    const url = `${this.casUrl}/cas/v1/tickets/${tgt}`;
-    return this.http.post(url, null, options).pipe(
-      // tap(() => console.log(`getST ${serviceUrl}`)),
-      catchError(this.handleError<string>('getServiceTicket', ''))
-    );
-  }
-
-  /** POST: request service ticket from CAS (deprecated) */
-  getSTOld(serviceUrl: string): Observable<string> {
-    const options = {
-      headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-      params: { 'service': serviceUrl },
-      responseType: 'text' as 'text', /* TODO: fix this in future angular */
-      withCredentials: true
-    };
-    return Observable.fromPromise(this.storage.get('tgturl')).first()
-    .switchMap(url => this.http.post(url, null, options).pipe(
-      // tap(() => console.log(`getST ${serviceUrl}`)),
-      catchError(this.handleError<string>('getServiceTicket', ''))
-    ));
-  }
-
-  /** GET: validate service ticket */
-  validateST(serviceUrl: string, st: string): Observable<string> {
-    const options = {
-      responseType: 'text' as 'text'
-    };
-    const url = `${this.casUrl}/cas/p3/serviceValidate?service=${serviceUrl}&ticket=${st}`;
-    return this.http.get(url, options);
-  }
-
-  // /** DELETE: delete ticket granting ticket */
-  // deleteST(tgt: string): Observable<> {
-  //   return this.http.delete()
-  // }
 
   /**
-   * Handle Http operation that failed.
-   * Let the app continue.
-   * @param operation - name of the operation that failed
-   * @param result - optional value to return as the observable result
+   * POST: request service ticket from CAS
+   * Use `tgt` from storage if not provided.
+   * @param serviceUrl - service url for CAS authentication
+   * @param tgt - ticket granting ticket (default: cached `tgt`)
    */
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(operation, error);
-
-      // Let the app keep running by returning an empty result.
-      return Observable.of(result as T);
+  getST(serviceUrl: string = this.casUrl, tgt?: string): Observable<string> {
+    const options = {
+      headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+      params: { 'service': serviceUrl },
+      responseType: 'text' as 'text', /* TODO: fix this in future angular */
+      withCredentials: true
     };
+    return (tgt ? Observable.of(tgt) : Observable.fromPromise(this.storage.get('tgt')))
+    .switchMap(tgt =>
+      this.http.post(`${this.casUrl}/cas/v1/tickets/${tgt}`, null, options)
+      .catch(_ => this.getTGT().switchMap(tgt => this.getST(serviceUrl, tgt)))
+    );
   }
 
+  /**
+   * DELETE: delete ticket granting ticket
+   * Use `tgt` from storage if not provided.
+   * @param tgt - ticket granting ticket (default: cached `tgt`)
+   */
+  deleteTGT(tgt?: string): Observable<string> {
+    const options = {
+      responseType: 'text' as 'text',
+      withCredentials: true
+    };
+    return (tgt ? Observable.of(tgt) : Observable.fromPromise(this.storage.get('tgt')))
+    .switchMap(tgt => this.http.delete(this.casUrl + '/cas/v1/tickets/' + tgt, options));
+  }
 
-  
-
+  /** TODO: Move logout to AuthService. */
+  logout() {
+    this.deleteTGT().subscribe(_ => {
+      this.navCtrl.setRoot(LOGINPage);
+      this.navCtrl.popToRoot;
+    })
+  }
 }
