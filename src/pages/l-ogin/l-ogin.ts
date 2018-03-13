@@ -24,6 +24,7 @@ export class LOGINPage {
 
   username: string;
   password: string;
+  initializers: Observable<any>[] = [];
 
   constructor(
     public events: Events, 
@@ -90,8 +91,10 @@ export class LOGINPage {
       [ '/student/profile', true ],
       [ '/staff/listing', true ],
     ].forEach(d =>
-      this.ws.get(d[0] as string, true, { auth: d[1] as boolean, timeout: 5000 })
-      .do(_ => console.log(d[0])).subscribe());
+      this.initializers[d[0] as string] = this.ws.get(d[0] as string, true,
+        { auth: d[1] as boolean, timeout: 5000 })
+      // use .subscribe instead of .take (probably GC collected)
+      .subscribe(_ => this.initializers[d[0] as string].unsubscribe()));
   }
 
   loadProfile() {
