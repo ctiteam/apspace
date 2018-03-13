@@ -12,10 +12,8 @@ import { Storage } from '@ionic/storage';
 import { AlertController, App } from 'ionic-angular';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { Events } from 'ionic-angular';
-import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
-import { CasTicketProvider } from '../providers/cas-ticket/cas-ticket';
 
 const service_url = "service=https://ws.apiit.edu.my/web-services/index.php/student/profile";
 const close_session_url = "https://ws.apiit.edu.my/web-services/index.php/student/close_session";
@@ -51,7 +49,6 @@ export class MyApp {
 
   constructor(
     private network: Network,
-    private localnotifications: LocalNotifications,
     public events: Events,
     public app: App,
     private http: Http,
@@ -59,8 +56,7 @@ export class MyApp {
     private storage: Storage,
     public platform: Platform,
     public statusBar: StatusBar,
-    public _platform: Platform,
-    private casTicket: CasTicketProvider) {
+    public _platform: Platform) {
     this.welcome_auth();
 
     this.events.subscribe('user:login', () => {

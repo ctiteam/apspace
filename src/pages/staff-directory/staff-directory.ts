@@ -4,7 +4,7 @@ import { NavController, ModalController, Searchbar, IonicPage } from 'ionic-angu
 import { Observable } from 'rxjs/Observable';
 
 import { StaffDirectory } from '../../interfaces/staff-directory';
-import { StaffDirectoryProvider } from '../../providers/staff-directory/staff-directory';
+import { WsApiProvider } from '../../providers/ws-api/ws-api';
 
 @IonicPage({ segment: 'staff' })
 @Component({
@@ -23,7 +23,7 @@ export class StaffDirectoryPage {
   constructor(
     public navCtrl: NavController,
     public modalCtrl: ModalController,
-    public sd: StaffDirectoryProvider
+    private ws: WsApiProvider,
   ) { }
 
   @HostListener('keydown', ['$event']) onkeydown(e) {
@@ -45,7 +45,7 @@ export class StaffDirectoryPage {
   }
 
   ionViewDidLoad() {
-    this.staff$ = this.sd.getStaffDirectory(true);
+    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', true);
     this.staffType$ = this.staff$.map(ss =>
       Array.from(new Set(ss.map(s => s.DEPARTMENT))));
   }

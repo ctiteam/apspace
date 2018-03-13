@@ -4,10 +4,6 @@ import { NewsService } from '../../app/services/news.service';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
-import { HomeModalPage } from '../home-modal/home-modal';
-
-
-
 
 declare var Connection;
 @Component({
