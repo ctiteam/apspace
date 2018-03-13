@@ -36,20 +36,15 @@ export class WsApiProvider {
 
     return (refresh
       ? this.http.get<T>(url, opt)
-      // get service ticket when failed if options.auth and retry
-      .catch(err => !options.auth ? Observable.throw(err) : this.cas.getST(url)
-        .switchMap(st => this.http.get<T>(`${url}?ticket=${st}`, opt)))
-      // cache on success and timeout on stream
+      .catch(err => options.auth === false ? Observable.throw(err)
+        : this.cas.getST(url).switchMap(st => this.http.get<T>(`${url}?ticket=${st}`, opt)))
       .do(cache => this.storage.set(path, cache)).timeout(options.timeout || 3000)
-      // display error on failure and return cached storage
       .catch(err => {
         this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
         return Observable.fromPromise(this.storage.get(path));
       })
       : Observable.fromPromise(this.storage.get(path))
-      // force refresh if not cached
       .switchMap(v => v ? Observable.of(v) : this.get(path, true, options))
-      // .share() the result
     ).publishLast().refCount();
   }
 }
