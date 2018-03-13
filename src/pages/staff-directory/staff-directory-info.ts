@@ -13,9 +13,11 @@ export class StaffDirectoryInfoPage {
 
   staff: StaffDirectory;
 
-  constructor(public params: NavParams, private ws: WsApiProvider) {
-    ws.get<StaffDirectory[]>('/staff/listing').subscribe(
-      ss => this.staff = ss.find(s => params.get('id') === s.CODE)
+  constructor(public params: NavParams, private ws: WsApiProvider) { }
+
+  ionViewDidLoad() {
+    this.ws.get<StaffDirectory[]>('/staff/listing').subscribe(
+      ss => this.staff = ss.find(s => this.params.get('id') === s.CODE)
     );
   }
 
