@@ -10,6 +10,7 @@ import { Network } from '@ionic-native/network';
 import { MenuController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 import { CasTicketProvider } from '../../providers/cas-ticket/cas-ticket';
+import { WsApiProvider } from '../../providers/ws-api/ws-api';
 
 declare var Connection;
 
@@ -33,7 +34,8 @@ export class LOGINPage {
     public navCtrl: NavController, 
     public http: Http, 
     private toastCtrl: ToastController,
-    private casTicket: CasTicketProvider
+    private casTicket: CasTicketProvider,
+    private ws: WsApiProvider,
   ) { }
 
   ionViewDidEnter() {
@@ -77,7 +79,19 @@ export class LOGINPage {
       .switchMap(tgt => this.casTicket.getST(this.casTicket.casUrl, tgt))
       .catch(_ => this.toast('Fail to get service ticket.') || Observable.empty())
       .do(_ => this.loadProfile())
+      .do(_ => this.cacheApi())
       .subscribe(_ => this.navCtrl.setRoot(HOMEPage));
+  }
+
+  cacheApi() {
+    [
+      [ '/student/photo', true ],
+      [ '/open/weektimetable', false ],
+      [ '/student/profile', true ],
+      [ '/staff/listing', true ],
+    ].forEach(d =>
+      this.ws.get(d[0] as string, true, { auth: d[1] as boolean, timeout: 5000 })
+      .do(_ => console.log(d[0])).subscribe());
   }
 
   loadProfile() {
