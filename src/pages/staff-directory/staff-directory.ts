@@ -46,7 +46,8 @@ export class StaffDirectoryPage {
 
   ionViewDidLoad() {
     this.staff$ = this.sd.getStaffDirectory(true);
-    this.staffType$ = this.staff$.map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT))));
+    this.staffType$ = this.staff$.map(ss =>
+      Array.from(new Set(ss.map(s => s.DEPARTMENT))));
   }
 
 }
