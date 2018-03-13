@@ -1,15 +1,12 @@
+import { Observable } from 'rxjs/Observable';
 import { Component, ViewChild } from '@angular/core';
 import { ActionSheet } from '@ionic-native/action-sheet';
 import { ActionSheetController, ActionSheetButton, Content, IonicPage,
   NavController, Platform, Refresher } from 'ionic-angular';
 
-import { Observable } from 'rxjs/Observable';
-import { finalize, tap } from 'rxjs/operators';
-
 import { StaffDirectory } from '../../interfaces/staff-directory';
-import { StaffDirectoryProvider } from '../../providers/staff-directory/staff-directory';
 import { Timetable } from '../../interfaces/timetable';
-import { TimetableProvider } from '../../providers/timetable/timetable';
+import { WsApiProvider } from '../../providers/ws-api/ws-api';
 
 @IonicPage()
 @Component({
@@ -35,8 +32,7 @@ export class TimetablePage {
     public actionSheetCtrl: ActionSheetController,
     public navCtrl: NavController,
     public plt: Platform,
-    private sd: StaffDirectoryProvider,
-    private tp: TimetableProvider,
+    private ws: WsApiProvider,
   ) { }
 
   presentActionSheet() {
@@ -111,9 +107,11 @@ export class TimetablePage {
 
   /** Get and merge Timetable with StaffDirectory. */
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
-    return Observable.forkJoin([this.tp.getTimetable(refresh), this.sd.getStaffDirectory()])
-      .map(data => data[0].map(t => <Timetable>Object.assign(t, { STAFFNAME:
-        ((data[1] || []).find(s => s.CODE === t.LECTID) || <StaffDirectory>{}).FULLNAME })));
+    return Observable.forkJoin([
+      this.ws.get<Timetable[]>('/open/weektimetable', refresh, { auth: false, timeout: 6000 }),
+      this.ws.get<StaffDirectory[]>('/staff/listing'),
+    ]).map(data => data[0].map(t => <Timetable>Object.assign(t, { STAFFNAME:
+      ((data[1] || []).find(s => s.CODE === t.LECTID) || <StaffDirectory>{}).FULLNAME })));
   }
 
   strToColor(s: string): string {
@@ -123,16 +121,15 @@ export class TimetablePage {
                                   .substr(-2)).join('');
   }
 
-  doRefresh(refresher, forceRefresh: boolean = true) {
-    this.timetable$ = this.getTimetable(forceRefresh).pipe(
-      tap(tt => this.updateDay(tt)),
-      finalize(() => refresher.complete()),
-    );
+  doRefresh(forceRefresh: boolean = true) {
+    this.timetable$ = this.getTimetable(forceRefresh)
+      .do(tt => this.updateDay(tt))
+      .finally(() => this.refresher.complete());
   }
 
   ionViewDidLoad() {
     this.refresher.progress = 1; /* Never display the no classes card on load */
-    this.doRefresh(this.refresher, false);
+    this.doRefresh(false);
   }
 
 }
