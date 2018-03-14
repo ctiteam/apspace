@@ -70,7 +70,7 @@ export class MyApp {
 
     this.events.subscribe('user:login', () => {
       this.onDevice = this.platform.is('cordova');
-      this.getUserProfile()
+      //this.getUserProfile()
     })
 
     //================Slide Menu Navigation======================================
@@ -100,7 +100,7 @@ export class MyApp {
         if (!tgt) {
           this.navCtrl.setRoot(LoginPage);
         } else {
-          this.getUserProfile();
+          //this.getUserProfile();
           this.navCtrl.setRoot(HomePage)
         }
       })
@@ -135,7 +135,7 @@ export class MyApp {
           handler: () => {
             this.deleteTGT(this.tgt);
             this.storage.clear()
-            this.testNav.setRoot(LoginPage);
+            this.navCtrl.setRoot(LoginPage);
           }
         }
       ]
@@ -160,15 +160,17 @@ export class MyApp {
 
 
   getUserProfile() {
-    this.user_profile$ = this.ws.get<UserProfile>('/student/profile')
-    .do(d => console.log('profile', d));
-    
-    this.ws.get<UserPhoto>('/student/photo')
-    .subscribe(d =>{
-      this.user_photo = 'data:image/jpg;base64,' + d.base64_photo;
-      console.log(this.user_photo);
-      
+    this.ws.get<UserProfile>('/student/profile')
+    .subscribe(userprofile =>{ console.log(userprofile[0].NAME)
     });
+    
+
+    // this.ws.get<UserPhoto>('/student/photo')
+    // .subscribe(d =>{
+    //   this.user_photo = 'data:image/jpg;base64,' + d.base64_photo;
+    //   console.log(this.user_photo);
+      
+    // });
      
   }
 

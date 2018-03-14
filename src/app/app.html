@@ -3,7 +3,7 @@
     <div id="menu-info">
       <img class="user_photo" [src]="user_photo"
         onerror="this.src='assets/img/profile.svg'" alt="Avatar">
-      <p *ngIf="user_profile$ | async as user_profile">{{user_profile[0].NAME}}</p>
+      <p *ngIf="userprofile" > {{userprofile[0].NAME}} </p>
     </div>
     <ion-list id="menu-list1" no-lines>
       <ion-item menuClose  *ngFor='let p of pages' (click) = 'openPage(p)' color="none"  class="side-menu-item" [class.activeHighlight] = 'checkActive(p)' >
@@ -14,6 +14,11 @@
           <ion-icon name="log-out" item-left></ion-icon>
           Logout
         </ion-item> 
+        <ion-item color="none" menuClose="" on-click="getUserProfile()" id="menu-list-item8" class="side-menu-item">
+ 
+          Profile
+        </ion-item> 
+        
     </ion-list>
   </ion-content>
 </ion-menu>
