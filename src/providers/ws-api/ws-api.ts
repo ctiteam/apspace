@@ -3,11 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Platform, ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-<<<<<<< ab061e9b62600668278d28f2360a940aabc79cb4
 import { Network } from '@ionic-native/network';
 
-=======
->>>>>>> renamed needed files and scode to proper names
 import { CasTicketProvider } from '../cas-ticket/cas-ticket';
 
 @Injectable()
