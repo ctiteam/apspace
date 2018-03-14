@@ -1,8 +1,9 @@
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ToastController } from 'ionic-angular';
+import { Platform, ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { Network } from '@ionic-native/network';
 
 import { CasTicketProvider } from '../cas-ticket/cas-ticket';
 
@@ -13,6 +14,8 @@ export class WsApiProvider {
 
   constructor(
     public http: HttpClient,
+    public plt: Platform,
+    public network: Network,
     public storage: Storage,
     public toastCtrl: ToastController,
     private cas: CasTicketProvider,
@@ -34,7 +37,7 @@ export class WsApiProvider {
     const url = this.apiUrl + path;
     const opt = { withCredentials: Boolean(options.auth !== false) };
 
-    return (refresh
+    return (refresh && (!this.plt.is('cordova') || this.network.type !== 'none')
       ? this.http.get<T>(url, opt)
       .catch(err => options.auth === false ? Observable.throw(err)
         : this.cas.getST(url).switchMap(st => this.http.get<T>(`${url}?ticket=${st}`, opt)))
