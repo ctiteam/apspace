@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { Component, ViewChild } from '@angular/core';
 import { ActionSheet } from '@ionic-native/action-sheet';
 import { ActionSheetController, ActionSheetButton, Content, IonicPage,
-  NavController, Platform, Refresher } from 'ionic-angular';
+  NavController, Platform } from 'ionic-angular';
 
 import { StaffDirectory } from '../../interfaces/staff-directory';
 import { Timetable } from '../../interfaces/timetable';
@@ -22,7 +22,6 @@ export class TimetablePage {
   availableDays: string[];
 
   @ViewChild(Content) content: Content;
-  @ViewChild(Refresher) refresher: Refresher;
 
   /* config */
   intake: string = '';
@@ -122,15 +121,14 @@ export class TimetablePage {
                                   .substr(-2)).join('');
   }
 
-  doRefresh(forceRefresh: boolean = true) {
-    this.timetable$ = this.getTimetable(forceRefresh)
+  doRefresh(refresher?) {
+    this.timetable$ = this.getTimetable(Boolean(refresher))
       .do(tt => this.updateDay(tt))
-      .finally(() => this.refresher.complete());
+      .finally(() => refresher && refresher.complete());
   }
 
   ionViewDidLoad() {
-    this.refresher.progress = 1; /* Never display the no classes card on load */
-    this.doRefresh(false);
+    this.doRefresh();
   }
 
 }
