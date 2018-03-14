@@ -51,10 +51,10 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="!refresher.progress && !selectedDay">
+  <ion-card *ngIf="!selectedDay">
     <ion-card-content>
       <p *ngIf="intake">Hooray! No classes this week! :D</p>
-      <p *ngIf="!intake">WIP. Select your intake above. ;)</p>
+      <p *ngIf="!intake">WIP. Select intake from top right button. ;)</p>
     </ion-card-content>
 	</ion-card>
 </ion-content>
