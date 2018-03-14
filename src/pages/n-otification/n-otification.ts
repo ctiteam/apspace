@@ -33,23 +33,14 @@ export class NOTIFICATIONPage {
     }
 
 
-   constructor(
-     public events: Events, 
-     private http: Http, 
-     private platform: Platform, 
-     private firebase: Firebase, 
-     public navCtrl: NavController, 
-     private storage: Storage) {
-    
-    this.platform.ready().then(() => {
-        //=======Create the Device Token=============
-        this.firebase.onTokenRefresh()
-          .subscribe((token: string) =>
-            this.setStorageToken(token))
-        this.firebase.onNotificationOpen().subscribe(notification => this.handleNotification(notification));
-    })
-        //===========================================
-  }
+  constructor(
+    public events: Events,
+    private http: Http,
+    private platform: Platform,
+    private firebase: Firebase,
+    public navCtrl: NavController,
+    private storage: Storage,
+  ) { }
 
   setStorageToken(token: string) {
     this.deviceToken = token;
@@ -92,12 +83,23 @@ export class NOTIFICATIONPage {
       })
     }
   }
+
   handleNotification(data) {
     this.notification = data;
     this.test.push(this.notification)
     this.storage.set('notificationData', this.test);
   }
 
+  ionViewDidLoad() {
+    if (this.platform.is('cordova')) {
+      this.platform.ready().then(() => {
+        // Create device token
+        this.firebase.onTokenRefresh()
+          .subscribe((token: string) =>
+            this.setStorageToken(token))
+        this.firebase.onNotificationOpen().subscribe(notification => this.handleNotification(notification));
+      });
+    }
+  }
 
 }
-
