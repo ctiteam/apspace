@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 @Component({
-  selector: 'page-f-ees',
-  templateUrl: 'f-ees.html'
+  selector: 'page-fees',
+  templateUrl: 'fees.html'
 })
-export class FEESPage {
+export class FeesPage {
 
   fee: string = "summary";
 

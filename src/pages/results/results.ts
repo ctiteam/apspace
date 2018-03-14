@@ -14,12 +14,12 @@ declare var Connection;
 const intake_url = "https://ws.apiit.edu.my/web-services/index.php/student/courses";
 
 @Component({
-  selector: 'page-r-esults',
-  templateUrl: 'r-esults.html',
+  selector: 'page-results',
+  templateUrl: 'results.html',
   providers: []
 })
 
-export class RESULTSPage {
+export class ResultsPage {
 
   INTAKES: any;
   results: any;

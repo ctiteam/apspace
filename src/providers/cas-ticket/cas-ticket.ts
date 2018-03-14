@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { NavController, App } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
-import { LOGINPage } from '../../pages/l-ogin/l-ogin';
+import { LoginPage } from '../../pages/login/login';
 
 /**
  * CAS Authentication with fallback mechanism.
@@ -92,7 +92,7 @@ export class CasTicketProvider {
   /** TODO: Move logout to AuthService. */
   logout() {
     this.deleteTGT().subscribe(_ => {
-      this.navCtrl.setRoot(LOGINPage);
+      this.navCtrl.setRoot(LoginPage);
       this.navCtrl.popToRoot;
     })
   }

@@ -128,7 +128,13 @@ export class TimetablePage {
   }
 
   ionViewDidLoad() {
+<<<<<<< ab061e9b62600668278d28f2360a940aabc79cb4
     this.doRefresh();
+=======
+    this.refresher.progress = 1; /* Never display the no classes card on load */
+    this.doRefresh(false);
+    //this.ws.get('/student/photo').subscribe(d => console.log("from tibleble:  "+d));
+>>>>>>> renamed needed files and scode to proper names
   }
 
 }

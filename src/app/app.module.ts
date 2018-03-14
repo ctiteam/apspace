@@ -4,12 +4,12 @@ import { HttpModule } from '@angular/http'; // TODO: switch to HttpClientModule
 import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
-import { HOMEPage } from '../pages/h-ome/h-ome';
-import { RESULTSPage } from '../pages/r-esults/r-esults';
-import { FEESPage } from '../pages/f-ees/f-ees';
-import { NOTIFICATIONPage } from '../pages/n-otification/n-otification';
-import { FEEDBACKPage } from '../pages/f-eedback/f-eedback';
-import { LOGINPage } from '../pages/l-ogin/l-ogin';
+import { HomePage } from '../pages/home/home';
+import { ResultsPage } from '../pages/results/results';
+import { FeesPage } from '../pages/fees/fees';
+import { NotificationPage } from '../pages/notification/notification';
+import { FeedbackPage } from '../pages/feedback/feedback';
+import { LoginPage } from '../pages/login/login';
 
 import { JsonpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
@@ -27,17 +27,19 @@ import { Push } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 import { WsApiProvider } from '../providers/ws-api/ws-api';
+import { UserProfile } from '../interfaces/user-pofile';
+import { UserPhoto } from '../interfaces/user-photo';
 
 
 @NgModule({
   declarations: [
     MyApp,
-    HOMEPage,
-    RESULTSPage,
-    FEESPage,
-    NOTIFICATIONPage,
-    FEEDBACKPage,
-    LOGINPage,
+    HomePage,
+    ResultsPage,
+    FeesPage,
+    NotificationPage,
+    FeedbackPage,
+    LoginPage,
     ScrollableTabs,
   ],
   imports: [
@@ -52,12 +54,12 @@ import { WsApiProvider } from '../providers/ws-api/ws-api';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HOMEPage,
-    RESULTSPage,
-    FEESPage,
-    NOTIFICATIONPage,
-    FEEDBACKPage,
-    LOGINPage,
+    HomePage,
+    ResultsPage,
+    FeesPage,
+    NotificationPage,
+    FeedbackPage,
+    LoginPage,
   ],
   providers: [
     StatusBar,
