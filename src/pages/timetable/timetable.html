@@ -31,8 +31,8 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-card [ngStyle]="{'border-left': '1rem solid ' + strToColor(t.MODID) }"
-    *ngFor="let t of theday(timetable$ | async)">
+  <ion-card *ngFor="let t of theday(timetable$ | async)"
+    [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
     <ion-card-header>
       {{ t.MODID }}
     </ion-card-header>
@@ -57,7 +57,7 @@
   <ion-card *ngIf="!refresher.progress && !selectedDay">
     <ion-card-content>
       <p *ngIf="intake">Hooray! No classes this week! :D</p>
-      <p *ngIf="!intake" color="warning">WIP. Select your intake above. ;)</p>
+      <p *ngIf="!intake">WIP. Select your intake above. ;)</p>
     </ion-card-content>
 	</ion-card>
 </ion-content>
