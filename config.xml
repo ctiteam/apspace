@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="my.edu.apiit.iwebspace" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="my.edu.apiit.iwebspace" version="0.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>iWebspace</name>
     <description>The Asia Pacific University APP provides convenient access to important information and to most of our services in your hand.</description>
     <author email="cti@apiit.edu.my" href="http://cti.my/">CTI @ APIIT</author>
@@ -48,6 +48,7 @@
         <icon height="1024" src="resources/ios/icon/icon-1024.png" width="1024" />
     </platform>
     <allow-navigation href="http://10.10.107.27:8101" />
+    <plugin name="cordova-plugin-actionsheet" spec="~2.3.3" />
     <plugin name="cordova-plugin-email-composer" spec="^0.8.11" />
     <plugin name="cordova-plugin-firebase" spec="^0.1.25" />
     <plugin name="cordova-plugin-inappbrowser" spec="^2.0.0" />
@@ -57,5 +58,4 @@
     <plugin name="cordova-sqlite-storage" spec="^2.1.4" />
     <engine name="ios" spec="4.4.0" />
     <engine name="android" spec="6.4.0" />
-    <plugin name="cordova-plugin-actionsheet" spec="~2.3.3" />
 </widget>
