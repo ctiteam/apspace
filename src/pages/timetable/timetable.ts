@@ -75,12 +75,13 @@ export class TimetablePage {
 
   /** Get all classes for student. */
   classes(tt: Timetable[]): Timetable[] {
-    if (!this.intake) {
+    if (!Array.isArray(tt)) {
+      return [] as Timetable[];
+    } else if (!this.intake) {
       return [] as Timetable[]; /* TODO: My Classes */
-    } else if (Array.isArray(tt) && tt.length) {
+    } else {
       return this.intake ? tt.filter(t => this.intake === t.INTAKE) : tt;
     }
-    return [] as Timetable[];
   }
 
   /** Select the classes of the day. */

@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar no-border-bottom color = "primary">
+  <ion-navbar no-border-bottom>
     <button ion-button icon-only menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -12,17 +12,6 @@
       </button>
     </ion-buttons>
   </ion-navbar>
-
-  <ion-toolbar no-border-top *ngIf="classes(timetable$ | async).length > 0">
-    <ion-segment #segment [(ngModel)]="selectedDay"
-      text-uppercase color="foreground">
-      <!-- Use CSS for dynamically updated segment -->
-      <ion-segment-button *ngFor="let d of this.wday" [value]="d"
-        [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
-        {{ d }}
-      </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>
 </ion-header>
 
 
@@ -30,6 +19,14 @@
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
+  <ion-segment *ngIf="availableDays" [(ngModel)]="selectedDay">
+    <!-- Use CSS for dynamically updated segment -->
+    <ion-segment-button *ngFor="let d of this.wday" [value]="d"
+      [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
+      {{ d }}
+    </ion-segment-button>
+  </ion-segment>
 
   <ion-card *ngFor="let t of theday(timetable$ | async)"
     [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
