@@ -26,7 +26,7 @@ export class WsApiProvider {
    *
    * @param path - <apiUrl>/<path> for service, used for caching
    * @param refresh - force refresh (default: false)
-   * @param options.timeout - request timeout (default: 3000)
+   * @param options.timeout - request timeout (default: 5000)
    * @param options.auth - authentication required (default: true)
    * @return shared cached observable
    */
@@ -41,7 +41,7 @@ export class WsApiProvider {
       ? this.http.get<T>(url, opt)
       .catch(err => options.auth === false ? Observable.throw(err)
         : this.cas.getST(url).switchMap(st => this.http.get<T>(`${url}?ticket=${st}`, opt)))
-      .do(cache => this.storage.set(path, cache)).timeout(options.timeout || 3000)
+      .do(cache => this.storage.set(path, cache)).timeout(options.timeout || 5000)
       .catch(err => {
         this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
         return Observable.fromPromise(this.storage.get(path));

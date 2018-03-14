@@ -92,7 +92,7 @@ export class LOGINPage {
       [ '/staff/listing', true ],
     ].forEach(d =>
       this.initializers[d[0] as string] = this.ws.get(d[0] as string, true,
-        { auth: d[1] as boolean, timeout: 5000 })
+        { auth: d[1] as boolean, timeout: 10000 })
       // use .subscribe instead of .take (probably GC collected)
       .subscribe(_ => this.initializers[d[0] as string].unsubscribe()));
   }
