@@ -5,12 +5,13 @@ import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
 
+
 declare var Connection;
 @Component({
-  selector: 'page-h-ome',
-  templateUrl: 'h-ome.html'
+  selector: 'page-home',
+  templateUrl: 'home.html'
 })
-export class HOMEPage {
+export class HomePage {
 
   name: string;
   content: any[] = new Array();

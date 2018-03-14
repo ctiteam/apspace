@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { HOMEPage } from '../h-ome/h-ome';
+import { HomePage } from '../home/home';
 import { Http } from '@angular/http';
 import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
@@ -15,10 +15,10 @@ import { WsApiProvider } from '../../providers/ws-api/ws-api';
 declare var Connection;
 
 @Component({
-  selector: 'page-l-ogin',
-  templateUrl: 'l-ogin.html'
+  selector: 'page-login',
+  templateUrl: 'login.html'
 })
-export class LOGINPage {
+export class LoginPage {
 
   @ViewChild('autofocus') autofocus;
 
@@ -79,9 +79,9 @@ export class LOGINPage {
       .catch(_ => this.toast('Invalid username or password.') || Observable.empty())
       .switchMap(tgt => this.casTicket.getST(this.casTicket.casUrl, tgt))
       .catch(_ => this.toast('Fail to get service ticket.') || Observable.empty())
-      .do(_ => this.loadProfile())
       .do(_ => this.cacheApi())
-      .subscribe(_ => this.navCtrl.setRoot(HOMEPage));
+      .do(_ => this.loadProfile())
+      .subscribe(_ => this.navCtrl.setRoot(HomePage));
   }
 
   cacheApi() {

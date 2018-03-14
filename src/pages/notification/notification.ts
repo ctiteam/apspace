@@ -11,10 +11,10 @@ import { Events } from 'ionic-angular';
 
 
 @Component({
-  selector: 'page-n-otification',
-  templateUrl: 'n-otification.html'
+  selector: 'page-notification',
+  templateUrl: 'notification.html'
 })
-export class NOTIFICATIONPage {
+export class NotificationPage {
 
 
   deviceToken: string;

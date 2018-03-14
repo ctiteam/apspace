@@ -4,10 +4,10 @@ import { EmailComposer } from '@ionic-native/email-composer';
 import { AlertController } from 'ionic-angular';
 
 @Component({
-  selector: 'page-f-eedback',
-  templateUrl: 'f-eedback.html'
+  selector: 'page-feedback',
+  templateUrl: 'feedback.html'
 })
-export class FEEDBACKPage {
+export class FeedbackPage {
   feedback: string = "submit"
   constructor(private alertCtrl: AlertController, public navCtrl: NavController, private emailComposer: EmailComposer) {
   }
