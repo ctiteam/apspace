@@ -13,17 +13,13 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { EmailComposer } from '@ionic-native/email-composer';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
-import { FeedServiceProvider } from '../providers/feed-service/feed-service';
 import { Network } from '@ionic-native/network';
 import { SuperTabsModule } from 'ionic2-super-tabs';
-import { CasTicketProvider } from '../providers/cas-ticket/cas-ticket';
 import { ScrollableTabs } from '../components/scrollable-tabs/scrollable-tabs';
 import { Firebase } from '@ionic-native/firebase';
 import { Push } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { AuthServiceProvider } from '../providers/auth-service/auth-service';
-import { WsApiProvider } from '../providers/ws-api/ws-api';
-
+import { FeedServiceProvider, CasTicketProvider, WsApiProvider } from '../providers';
 
 @NgModule({
   declarations: [
@@ -56,7 +52,6 @@ import { WsApiProvider } from '../providers/ws-api/ws-api';
     Firebase,
     Push,
     LocalNotifications,
-    AuthServiceProvider,
     WsApiProvider,
   ]
 
