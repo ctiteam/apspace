@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NavParams, IonicPage } from 'ionic-angular';
 
-import { StaffDirectory } from '../../interfaces/staff-directory';
-import { WsApiProvider } from '../../providers/ws-api/ws-api';
+import { StaffDirectory } from '../../interfaces';
+import { WsApiProvider } from '../../providers';
 
 @IonicPage({ segment: 'staff/:id' })
 @Component({
