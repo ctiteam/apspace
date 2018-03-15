@@ -2,10 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, Nav } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { NewsService } from './services/news.service';
-import { HomePage } from '../pages/home/home';
-import { ResultsPage } from '../pages/results/results';
-import { NotificationPage } from '../pages/notification/notification';
-import { FeedbackPage } from '../pages/feedback/feedback';
 import { LoginPage } from '../pages/login/login';
 
 import { Observable } from 'rxjs/Observable';
@@ -77,12 +73,12 @@ export class MyApp {
     //===========================================================================
 
     this.pages = [
-      { title: 'Home', component: HomePage, icon: 'home' },
+      { title: 'Home', component: 'HomePage', icon: 'home' },
       { title: 'Timetable', component: 'TimetablePage', icon: 'calendar' },
       { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people' },
-      { title: 'Results', component: ResultsPage, icon: 'checkbox' },
-      { title: 'Notification', component: NotificationPage, icon: 'chatbubbles' },
-      { title: 'Feedback', component: FeedbackPage, icon: 'at' }
+      { title: 'Results', component: 'ResultsPage', icon: 'checkbox' },
+      { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
+      { title: 'Feedback', component: 'FeedbackPage', icon: 'at' }
     ];
 
     this.activePage = this.pages[0];
@@ -101,7 +97,7 @@ export class MyApp {
           this.navCtrl.setRoot(LoginPage);
         } else {
           //this.getUserProfile();
-          this.navCtrl.setRoot(HomePage)
+          this.navCtrl.setRoot('HomePage')
         }
       })
   }

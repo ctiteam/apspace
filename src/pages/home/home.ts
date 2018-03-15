@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform, Events, NavController, LoadingController, ToastController } from 'ionic-angular';
+import { Platform, Events, NavController, LoadingController, ToastController, IonicPage } from 'ionic-angular';
 import { NewsService } from '../../app/services/news.service';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs/Subscription';
@@ -7,6 +7,8 @@ import { Network } from '@ionic-native/network';
 
 
 declare var Connection;
+
+@IonicPage()
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'

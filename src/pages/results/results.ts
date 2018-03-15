@@ -1,18 +1,17 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, IonicPage, LoadingController, Platform, ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { Network } from '@ionic-native/network';
-import { Platform } from 'ionic-angular';
-import { ToastController } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
-import { LoadingController } from 'ionic-angular';
 
 
 declare var Connection;
 
 const intake_url = "https://ws.apiit.edu.my/web-services/index.php/student/courses";
 
+
+@IonicPage()
 @Component({
   selector: 'page-results',
   templateUrl: 'results.html',
