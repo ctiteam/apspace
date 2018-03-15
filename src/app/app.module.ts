@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-import { FeesPage } from '../pages/fees/fees';
 import { LoginPage } from '../pages/login/login';
 
 import { JsonpModule } from '@angular/http';
@@ -24,8 +23,6 @@ import { Push } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 import { WsApiProvider } from '../providers/ws-api/ws-api';
-import { UserProfile } from '../interfaces/user-pofile';
-import { UserPhoto } from '../interfaces/user-photo';
 
 
 @NgModule({
