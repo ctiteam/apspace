@@ -15,9 +15,8 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { Events } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
-import { WsApiProvider } from '../providers/ws-api/ws-api';
-import { UserProfile } from '../interfaces/user-pofile';
-import { UserPhoto } from '../interfaces/user-photo';
+import { WsApiProvider } from '../providers';
+import { UserPhoto, UserProfile } from '../interfaces';
 
 const service_url = "service=https://ws.apiit.edu.my/web-services/index.php/student/profile";
 const close_session_url = "https://ws.apiit.edu.my/web-services/index.php/student/close_session";

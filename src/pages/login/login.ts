@@ -9,8 +9,7 @@ import { Platform } from 'ionic-angular';
 import { Network } from '@ionic-native/network';
 import { MenuController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
-import { CasTicketProvider } from '../../providers/cas-ticket/cas-ticket';
-import { WsApiProvider } from '../../providers/ws-api/ws-api';
+import { CasTicketProvider, WsApiProvider } from '../../providers';
 
 declare var Connection;
 

@@ -4,9 +4,8 @@ import { ActionSheet } from '@ionic-native/action-sheet';
 import { ActionSheetController, ActionSheetButton, Content, IonicPage,
   NavController, Platform } from 'ionic-angular';
 
-import { StaffDirectory } from '../../interfaces/staff-directory';
-import { Timetable } from '../../interfaces/timetable';
-import { WsApiProvider } from '../../providers/ws-api/ws-api';
+import { StaffDirectory, Timetable } from '../../interfaces';
+import { WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
