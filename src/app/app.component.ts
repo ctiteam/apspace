@@ -50,7 +50,8 @@ export class MyApp {
   notificationData: any;
   pages: Array<{ title: string, component: any, icon: any }>;
 
-  user_profile$: Observable<UserProfile>;
+  profile$: Observable<UserProfile[]>;
+
   user_photo: string;
 
   constructor(
@@ -69,7 +70,7 @@ export class MyApp {
 
     this.events.subscribe('user:login', () => {
       this.onDevice = this.platform.is('cordova');
-      //this.getUserProfile()
+      this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
     })
 
     //================Slide Menu Navigation======================================
@@ -99,7 +100,7 @@ export class MyApp {
         if (!tgt) {
           this.navCtrl.setRoot(LoginPage);
         } else {
-          //this.getUserProfile();
+          this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
           this.navCtrl.setRoot(HomePage)
         }
       })
@@ -154,28 +155,6 @@ export class MyApp {
       return navigator.onLine;
     }
   }
-
-
-
-
-  getUserProfile() {
-    this.ws.get<UserProfile>('/student/profile')
-    .subscribe(userprofile =>{ console.log(userprofile[0].NAME)
-    });
-    
-
-    // this.ws.get<UserPhoto>('/student/photo')
-    // .subscribe(d =>{
-    //   this.user_photo = 'data:image/jpg;base64,' + d.base64_photo;
-    //   console.log(this.user_photo);
-      
-    // });
-     
-  }
-
-
-
-
 
   getTGT() {
     this.storage.get('tgturl').then((val) => {
