@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, IonicPage, Events } from 'ionic-angular';
 import { Storage } from "@ionic/storage";
 import { Firebase } from "@ionic-native/firebase";
 import { Platform } from "ionic-angular";
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/finally';
-import { Events } from 'ionic-angular';
 
 
 
+@IonicPage()
 @Component({
   selector: 'page-notification',
   templateUrl: 'notification.html'

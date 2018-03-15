@@ -4,11 +4,8 @@ import { HttpModule } from '@angular/http'; // TODO: switch to HttpClientModule
 import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
-import { ResultsPage } from '../pages/results/results';
+
 import { FeesPage } from '../pages/fees/fees';
-import { NotificationPage } from '../pages/notification/notification';
-import { FeedbackPage } from '../pages/feedback/feedback';
 import { LoginPage } from '../pages/login/login';
 
 import { JsonpModule } from '@angular/http';
@@ -34,11 +31,6 @@ import { UserPhoto } from '../interfaces/user-photo';
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
-    ResultsPage,
-    FeesPage,
-    NotificationPage,
-    FeedbackPage,
     LoginPage,
     ScrollableTabs,
   ],
@@ -54,11 +46,6 @@ import { UserPhoto } from '../interfaces/user-photo';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
-    ResultsPage,
-    FeesPage,
-    NotificationPage,
-    FeedbackPage,
     LoginPage,
   ],
   providers: [

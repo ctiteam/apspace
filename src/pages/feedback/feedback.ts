@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, IonicPage } from 'ionic-angular';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { AlertController } from 'ionic-angular';
 
+@IonicPage()
 @Component({
   selector: 'page-feedback',
   templateUrl: 'feedback.html'
