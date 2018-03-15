@@ -15,10 +15,9 @@ import { WsApiProvider } from '../providers/ws-api/ws-api';
 import { UserProfile } from '../interfaces/user-pofile';
 import { UserPhoto } from '../interfaces/user-photo';
 
-const service_url = "service=https://ws.apiit.edu.my/web-services/index.php/student/profile";
+
 const close_session_url = "https://ws.apiit.edu.my/web-services/index.php/student/close_session";
-const user_info_url = "https://ws.apiit.edu.my/web-services/index.php/student/profile";
-const user_photo_url = "https://ws.apiit.edu.my/web-services/index.php/student/photo";
+
 
 
 declare var Connection;
@@ -66,7 +65,7 @@ export class MyApp {
 
     this.events.subscribe('user:login', () => {
       this.onDevice = this.platform.is('cordova');
-      //this.getUserProfile()
+      this.getUserProfile()
     })
 
     //================Slide Menu Navigation======================================
@@ -96,7 +95,7 @@ export class MyApp {
         if (!tgt) {
           this.navCtrl.setRoot(LoginPage);
         } else {
-          //this.getUserProfile();
+          this.getUserProfile();
           this.navCtrl.setRoot('HomePage')
         }
       })
@@ -161,12 +160,12 @@ export class MyApp {
     });
     
 
-    // this.ws.get<UserPhoto>('/student/photo')
-    // .subscribe(d =>{
-    //   this.user_photo = 'data:image/jpg;base64,' + d.base64_photo;
-    //   console.log(this.user_photo);
+    this.ws.get<UserPhoto>('/student/photo')
+    .subscribe(d =>{
+      this.user_photo = 'data:image/jpg;base64,' + d.base64_photo;
+      console.log(this.user_photo);
       
-    // });
+    });
      
   }
 
