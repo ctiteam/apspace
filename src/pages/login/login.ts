@@ -39,11 +39,11 @@ export class LoginPage {
   ) { }
 
   ionViewDidEnter() {
-    this.menu.enable(false, 'menu1');
+    this.menu.enable(false);
   }
 
   ionViewDidLeave() {
-    this.menu.enable(true, 'menu1');
+    this.menu.enable(true);
   }
 
   ionViewDidLoad() {
