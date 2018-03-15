@@ -3,8 +3,8 @@ import { NavController, ModalController, Searchbar, IonicPage } from 'ionic-angu
 
 import { Observable } from 'rxjs/Observable';
 
-import { StaffDirectory } from '../../interfaces/staff-directory';
-import { WsApiProvider } from '../../providers/ws-api/ws-api';
+import { StaffDirectory } from '../../interfaces';
+import { WsApiProvider } from '../../providers';
 
 @IonicPage({ segment: 'staff' })
 @Component({
