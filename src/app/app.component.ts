@@ -11,7 +11,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { Events } from 'ionic-angular';
 import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
-import { WsApiProvider } from '../providers';
+import { CasTicketProvider, WsApiProvider } from '../providers';
 import { UserPhoto, UserProfile } from '../interfaces';
 
 
@@ -40,6 +40,7 @@ export class MyApp {
   testNav: any;
   tgt: string;
   serv_ticket: string;
+  exit: boolean = false;
 
   validation: any;
   notificationData: any;
@@ -59,14 +60,23 @@ export class MyApp {
     public platform: Platform,
     public statusBar: StatusBar,
     public _platform: Platform,
-    private ws: WsApiProvider) {
+    private cas: CasTicketProvider,
+    private ws: WsApiProvider,
+  ) {
 
     this.welcome_auth();
 
     this.events.subscribe('user:login', () => {
       this.onDevice = this.platform.is('cordova');
       this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
-    })
+    });
+
+    this.events.subscribe('user:logout', () => {
+      this.cas.deleteTGT().subscribe(_ => {
+        this.navCtrl.setRoot(LoginPage);
+        this.navCtrl.popToRoot();
+      });
+    });
 
     //================Slide Menu Navigation======================================
     //===========================================================================
@@ -88,7 +98,6 @@ export class MyApp {
 
 
  
-
   welcome_auth() {
     this.storage.get('tgt')
       .then(tgt => {

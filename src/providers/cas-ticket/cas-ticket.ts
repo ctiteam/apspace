@@ -1,18 +1,16 @@
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NavController, App } from 'ionic-angular';
+import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-
-import { LoginPage } from '../../pages/login/login';
 
 /**
  * CAS Authentication with fallback mechanism.
  *
- *             Authenticate          (request on failure/after login)
- * +-----------+ --------> +--------+ - - - - > +-------+ - - - - > +---------+
- * | LoginPage |           | getTGT |           | getST |           | Service |
- * +-----------+ <-x------ +--------+ <-------- +-------+ <-------- +---------+
+ *               Authenticate        (request on failure/after login)
+ * +-------------+ -------> +--------+  - - - > +-------+  - - - > +---------+
+ * | user:logout |          | getTGT |          | getST |          | Service |
+ * +-------------+ <-x----- +--------+ <------- +-------+ <------- +---------+
  *         Invalid Credentials      Service Ticket       PHP Session
  *          (Observable.never)         Expired             Expired
  */
@@ -21,12 +19,11 @@ export class CasTicketProvider {
 
   casUrl = 'https://cas.apiit.edu.my';
 
-  constructor(public http: HttpClient, public storage: Storage, protected app: App) { }
-
-  /* https://github.com/ionic-team/ionic/issues/9581#issuecomment-287701528 */
-  get navCtrl(): NavController {
-    return this.app.getRootNav();
-  }
+  constructor(
+    public http: HttpClient,
+    public storage: Storage,
+    public events: Events,
+  ) { }
 
   /**
    * POST: request ticket-granting ticket from CAS and cache tgt and credentials
@@ -49,7 +46,7 @@ export class CasTicketProvider {
         ? Observable.of(res.headers.get('Location').split('/').pop())
         : username && password
         ? Observable.throw('Invalid credentials')
-        : this.logout() || Observable.never())
+        : this.events.publish('user:logout') || Observable.never())
       .do(tgt => this.storage.set('tgt', tgt))
       .do(_ => this.storage.set('cred', data))
     );
@@ -87,13 +84,5 @@ export class CasTicketProvider {
     };
     return (tgt ? Observable.of(tgt) : Observable.fromPromise(this.storage.get('tgt')))
     .switchMap(tgt => this.http.delete(this.casUrl + '/cas/v1/tickets/' + tgt, options));
-  }
-
-  /** TODO: Move logout to AuthService. */
-  logout() {
-    this.deleteTGT().subscribe(_ => {
-      this.navCtrl.setRoot(LoginPage);
-      this.navCtrl.popToRoot;
-    })
   }
 }

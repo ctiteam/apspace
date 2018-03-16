@@ -47,7 +47,7 @@ export class StaffDirectoryPage {
   doRefresh(refresher?) {
     this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', Boolean(refresher));
     this.staffType$ = this.staff$.map(ss =>
-      Array.from(new Set(ss.map(s => s.DEPARTMENT))))
+      Array.from(new Set((ss || []).map(s => s.DEPARTMENT))))
         .finally(() => refresher && refresher.complete());
   }
 
