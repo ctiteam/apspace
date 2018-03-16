@@ -68,8 +68,8 @@ export class MyApp {
       this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
     })
 
-    //================Slide Menu Navigation======================================
-    //===========================================================================
+    //================Slide Menu Navigation=========================================
+    //==============================================================================
 
     this.pages = [
       { title: 'Home', component: 'HomePage', icon: 'home' },
@@ -83,11 +83,9 @@ export class MyApp {
     this.activePage = this.pages[0];
   }
 
-  //=============================================================================
-  //=============================================================================
+  //================================================================================
+  //================================================================================
 
-
- 
 
   welcome_auth() {
     this.storage.get('tgt')
@@ -101,17 +99,16 @@ export class MyApp {
       })
   }
 
- 
 
   openPage(page) {
     this.navCtrl.setRoot(page.component);
     this.activePage = page;
   }
 
+
   checkActive(page) {
     return page == this.activePage;
   }
-
 
 
   logOut() {
@@ -139,10 +136,6 @@ export class MyApp {
   }
 
 
-
-
-
-
   get online(): boolean {
     if (this.onDevice && this.network.type) {
       return this.network.type !== Connection.NONE;
@@ -159,6 +152,7 @@ export class MyApp {
     });
   }
 
+  
   deleteTGT(tgt) {
     let headers = new Headers();
     headers.append('Content-type', 'application/x-www-form-urlencoded');
