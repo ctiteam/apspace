@@ -109,7 +109,7 @@ export class TimetablePage {
     return Observable.forkJoin([
       this.ws.get<Timetable[]>('/open/weektimetable', refresh, { auth: false, timeout: 10000 }),
       this.ws.get<StaffDirectory[]>('/staff/listing'),
-    ]).map(data => data[0].map(t => <Timetable>Object.assign(t, { STAFFNAME:
+    ]).map(data => (data[0] || []).map(t => <Timetable>Object.assign(t, { STAFFNAME:
       ((data[1] || []).find(s => s.CODE === t.LECTID) || <StaffDirectory>{}).FULLNAME })));
   }
 

@@ -1,9 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, ViewChild } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { HomePage } from '../home/home';
+import { NavController, IonicPage } from 'ionic-angular';
 import { Http } from '@angular/http';
-import { Storage } from '@ionic/storage';
 import { ToastController } from 'ionic-angular';
 import { Platform } from 'ionic-angular';
 import { Network } from '@ionic-native/network';
@@ -13,6 +11,7 @@ import { CasTicketProvider, WsApiProvider } from '../../providers';
 
 declare var Connection;
 
+@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html'
@@ -30,7 +29,6 @@ export class LoginPage {
     public menu: MenuController, 
     public platform: Platform, 
     private network: Network, 
-    private storage: Storage, 
     public navCtrl: NavController, 
     public http: Http, 
     private toastCtrl: ToastController,
@@ -74,7 +72,6 @@ export class LoginPage {
       return this.toast('You are now offline.');
     }
     this.casTicket.getTGT(this.username, this.password)
-      .do(tgt => this.storage.set('tgturl', `${this.casTicket.casUrl}/cas/v1/tickets/${tgt}`))
       .catch(_ => this.toast('Invalid username or password.') || Observable.empty())
       .switchMap(tgt => this.casTicket.getST(this.casTicket.casUrl, tgt))
       .catch(_ => this.toast('Fail to get service ticket.') || Observable.empty())

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Platform, Events, NavController, LoadingController, ToastController, IonicPage } from 'ionic-angular';
+import { Platform, Events, MenuController, NavController, LoadingController,
+  ToastController, IonicPage } from 'ionic-angular';
 import { NewsService } from '../../app/services/news.service';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs/Subscription';
@@ -24,19 +25,46 @@ export class HomePage {
   connected: Subscription;
   disconnected: Subscription;
 
+  exit = false;
+  back = null;
+
   constructor(
-    public loadingCtrl: LoadingController,
-    public platform: Platform,
-    public network: Network,
-    private toastCtrl: ToastController,
-    public navCtrl: NavController,
-    private newsService: NewsService,
     public events: Events,
-    private storage: Storage) {
+    public loadingCtrl: LoadingController,
+    public menuCtrl: MenuController,
+    public navCtrl: NavController,
+    public network: Network,
+    public platform: Platform,
+    private newsService: NewsService,
+    private storage: Storage,
+    private toastCtrl: ToastController,
+  ) {
     this.onDevice = this.platform.is('cordova');
+
+    this.platform.ready().then(() => {
+      if (this.platform.is('cordova')) {
+        // TODO: fix this event
+        this.events.subscribe('user:logout', _ => this.back && this.back());
+        this.back = this.platform.registerBackButtonAction(() => {
+          if (this.menuCtrl.isOpen()) {
+            this.menuCtrl.close();
+          } else if (this.navCtrl.canGoBack()) {
+            this.navCtrl.pop();
+          } else if (this.exit) {
+            this.platform.exitApp();
+          } else {
+            let toast = this.toastCtrl.create({
+              message: 'Tap again to exit.',
+              duration: 2000,
+            });
+            this.exit = true;
+            toast.onDidDismiss(() => this.exit = false);
+            toast.present();
+          }
+        });
+      }
+    });
   }
-
-
 
   ionViewDidLoad() {
     this.checknetwork();

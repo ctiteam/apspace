@@ -5,8 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-import { LoginPage } from '../pages/login/login';
-
 import { JsonpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -24,7 +22,6 @@ import { FeedServiceProvider, CasTicketProvider, WsApiProvider } from '../provid
 @NgModule({
   declarations: [
     MyApp,
-    LoginPage,
     ScrollableTabs,
   ],
   imports: [
@@ -39,7 +36,6 @@ import { FeedServiceProvider, CasTicketProvider, WsApiProvider } from '../provid
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LoginPage,
   ],
   providers: [
     StatusBar,
