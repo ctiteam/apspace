@@ -46,7 +46,7 @@ export class CasTicketProvider {
         ? Observable.of(res.headers.get('Location').split('/').pop())
         : username && password
         ? Observable.throw('Invalid credentials')
-        : this.events.publish('user:logout') || Observable.never())
+        : (this.events.publish('user:logout'), Observable.empty()))
       .do(tgt => this.storage.set('tgt', tgt))
       .do(_ => this.storage.set('cred', data))
     );
