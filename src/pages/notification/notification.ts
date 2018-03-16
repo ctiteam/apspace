@@ -20,8 +20,7 @@ export class NotificationPage {
   deviceToken: string;
   token: any;
   user_info1: any;
-  tgt_url: string;
-  tgt1: string;
+  tgt: string;
   test: any = []
   notification:
     {
@@ -63,11 +62,10 @@ export class NotificationPage {
   checkAndSubscribe(username: string) { 
     if ("TP032678" == username) {
 
-      this.storage.get('tgturl').then((val) => {
-        this.tgt_url = val;
-        this.tgt1 = this.tgt_url.split("/")[6];
+      this.storage.get('tgt').then(tgt => {
+        this.tgt = tgt;
 
-        let body = 'action=sub&student_id=' + username + '&tgt=' + this.tgt1 + '&device_token=' + this.deviceToken;
+        let body = 'action=sub&student_id=' + username + '&tgt=' + this.tgt + '&device_token=' + this.deviceToken;
         let headers = new Headers();
         headers.append('Content-type', 'application/x-www-form-urlencoded');
         let options = new RequestOptions({ headers: headers });
