@@ -28,19 +28,27 @@ export class WsApiProvider {
    * @param refresh - force refresh (default: false)
    * @param options.timeout - request timeout (default: 5000)
    * @param options.auth - authentication required (default: true)
+   * @
    * @return shared cached observable
    */
   get<T>(endpoint: string, refresh?: boolean, options: {
     timeout?: number,
     auth?: boolean,
+    params?: any,
   } = {}): Observable<T> {
     const url = this.apiUrl + endpoint;
-    const opt = { withCredentials: Boolean(options.auth !== false) };
+    const opt = {
+      withCredentials: Boolean(options.auth !== false),
+      params: options.params || {},
+    };
 
     return (refresh && (!this.plt.is('cordova') || this.network.type !== 'none')
       ? this.http.get<T>(url, opt)
       .catch(err => options.auth === false ? Observable.throw(err)
-        : this.cas.getST(url).switchMap(st => this.http.get<T>(`${url}?ticket=${st}`, opt)))
+        : this.cas.getST(url).switchMap(st => {
+          opt.params.ticket = st;
+          return this.http.get<T>(url, opt);
+        }))
       .do(cache => this.storage.set(endpoint, cache)).timeout(options.timeout || 5000)
       .catch(err => {
         this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
