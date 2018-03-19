@@ -11,20 +11,17 @@
       </p>
     </div>
   </ion-navbar>
-  <ion-toolbar no-border-top color="primary">
-    <ion-segment color="foreground" *ngIf='INTAKES$ | async as INTAKES'>
-      <ion-segment-button *ngFor="let INTAKE of INTAKES" [value]="INTAKE.INTAKE_CODE" 
-      color="foreground" (click)="getSubcourses(INTAKE.STUDENT_NUMBER, INTAKE.INTAKE_CODE)">
-        {{INTAKE.INTAKE_CODE}}
-      </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>
 </ion-header>
 <ion-content>
-
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  <ion-segment *ngIf='INTAKES$ | async as INTAKES'>
+    <ion-segment-button *ngFor="let INTAKE of INTAKES" [value]="INTAKE.INTAKE_CODE" 
+     (click)="getSubcourses(INTAKE.STUDENT_NUMBER, INTAKE.INTAKE_CODE)">
+      {{INTAKE.INTAKE_CODE}}
+    </ion-segment-button>
+  </ion-segment>
 
   <div *ngIf='COURSES$ | async as COURSES'>
     <ion-card *ngFor="let COURSE of COURSES">

@@ -1,46 +1,48 @@
-page-r-esults {
+page-results {
   ion-content ion-card {
     ion-card-header {
       background: color($colors, secondary);
     }
-
+  
     .item {
-      background-color: #cfd8dc;
+      background-color: foreground;
     }
-
+  
     ion-label {
       font-size: 90%;
       font-weight: lighter !important;
     }
   }
-
+  
   .subj-title{
     font-weight: 900;
   }
-}
-
-ion-segment {
-  display: block;
-  white-space: nowrap;
-  font-size: 0;
-  overflow: auto;
-
-  &::-webkit-scrollbar {
-      width: 0;
-      height: 0;
-      display: none;
+  
+  ion-segment {
+    display: block;
+    white-space: nowrap;
+    font-size: 0;
+    overflow: auto;
+  
+    &::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        display: none;
+    }
+  
+    ion-segment-button.segment-button {
+      display: inline-block;
+      min-width: 105px;
+      width: auto;
+    }
   }
-
-  ion-segment-button.segment-button {
-    display: inline-block;
-    min-width: 105px;
-    width: auto;
+  
+  #offline_indicator{
+    text-align: end;
+    color:red;
+    font-weight: 600;
+    font-size: 17px;
   }
 }
 
-#offline_indicator{
-  text-align: end;
-  color:red;
-  font-weight: 600;
-  font-size: 17px;
-}
+

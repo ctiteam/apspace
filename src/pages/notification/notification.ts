@@ -39,23 +39,29 @@ export class NotificationPage {
     private firebase: Firebase,
     public navCtrl: NavController,
     private storage: Storage,
-  ) { }
+  ) {
+    platform.ready().then(() => {
+      this.firebase.onTokenRefresh()
+        .subscribe((token: string) => this.setStorageToken(token));
+      this.firebase.onNotificationOpen().subscribe(notification => this.handleNotification(notification));
+    });
+   }
 
   setStorageToken(token: string) {
     this.deviceToken = token;
-
-
     this.storage.set('loggedIn', 'true');
     this.storage.get('loggedIn').then((val) => {
       this.token = val;
-      this.checkAndSubscribe("TP032678");
+      this.loadUserInfo();
     })
   }
 
   loadUserInfo() {
-    this.storage.get('user_info').then((val) => {
+    this.storage.get('/student/profile').then((val) => {
       this.user_info1 = val;
       this.checkAndSubscribe(this.user_info1[0].STUDENT_NUMBER);
+      console.log(this.user_info1[0].STUDENT_NUMBER);
+      
     });
   }
 
@@ -87,17 +93,4 @@ export class NotificationPage {
     this.test.push(this.notification)
     this.storage.set('notificationData', this.test);
   }
-
-  ionViewDidLoad() {
-    if (this.platform.is('cordova')) {
-      this.platform.ready().then(() => {
-        // Create device token
-        this.firebase.onTokenRefresh()
-          .subscribe((token: string) =>
-            this.setStorageToken(token))
-        this.firebase.onNotificationOpen().subscribe(notification => this.handleNotification(notification));
-      });
-    }
-  }
-
 }

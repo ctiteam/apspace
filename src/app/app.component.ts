@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import { NewsService } from './services/news.service';
 import { CasTicketProvider, WsApiProvider } from '../providers';
 import { UserProfile } from '../interfaces';
+import { UserPhoto } from '../interfaces/user-photo';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class MyApp {
   pages: Array<{ title: string, component: any, icon: any }>;
 
   profile$: Observable<UserProfile[]>;
+  photo$: Observable<UserPhoto[]>;
 
   constructor(
     public alertCtrl: AlertController,
@@ -33,6 +35,7 @@ export class MyApp {
         if (tgt) {
           this.events.subscribe('user:logout', () => this.onLogout());        
           this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
+          this.photo$ = this.ws.get<UserPhoto[]>('/student/photo')
           this.navCtrl.setRoot('HomePage');
         } else {
           this.events.subscribe('user:login', () => this.onLogin());
@@ -59,6 +62,7 @@ export class MyApp {
 
   onLogin() {
     this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
+    this.photo$ = this.ws.get<UserPhoto[]>('/student/photo');
     this.events.unsubscribe('user:login');
     this.events.subscribe('user:logout', () => this.onLogout());
   }
