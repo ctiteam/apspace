@@ -14,7 +14,6 @@ import { UserProfile } from '../interfaces';
 })
 export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
-  // rootPage: any = LOGINPage;
 
   activePage: any;
 
@@ -32,7 +31,7 @@ export class MyApp {
     this.storage.get('tgt')
       .then(tgt => {
         if (tgt) {
-          this.events.subscribe('user:logout', () => this.onLogout());
+          this.events.subscribe('user:logout', () => this.onLogout());        
           this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
           this.navCtrl.setRoot('HomePage');
         } else {

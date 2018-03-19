@@ -81,10 +81,11 @@ export class LoginPage {
   }
 
   cacheApi() {
-    [
-      [ '/student/photo', true ],
+    [ 
+      ['/student/profile', false ],
+      ['/student/photo', false ],
+      ['/student/subcourses', false ],
       [ '/open/weektimetable', false ],
-      [ '/student/profile', true ],
       [ '/staff/listing', true ],
     ].forEach(d =>
       this.initializers[d[0] as string] = this.ws.get(d[0] as string, true,

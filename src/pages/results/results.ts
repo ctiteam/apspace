@@ -24,23 +24,18 @@ export class ResultsPage {
   constructor(
     private network: Network,
     private ws: WsApiProvider) {
-    
   }
 
   ionViewDidLoad() {
-   this.getIntakes();
-  }
-
-
-
-  getIntakes() {
     this.INTAKES$ = this.ws.get<Courses[]>('/student/courses')
-    .do(res =>{this.getSubcourses(res)})
+    .do(res =>{
+      this.getSubcourses(res[0].STUDENT_NUMBER, res[0].INTAKE_CODE)
+    })
   }
 
-  getSubcourses(res){    
-    let params = { format: 'json', id: res[0].STUDENT_NUMBER, intake: res[0].INTAKE_CODE };
-    this.COURSES$ = this.ws.get<Subcourses[]>('/student/subcourses', false, { params: params });
+  getSubcourses(student_id, intake_code ){
+    let params = { format: 'json', id: student_id, intake: intake_code };
+    this.COURSES$ = this.ws.get<Subcourses[]>('/student/subcourses', true, { params: params });
   }
 
   doRefresh(refresher) {
