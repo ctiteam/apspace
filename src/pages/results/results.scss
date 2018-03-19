@@ -17,32 +17,30 @@ page-r-esults {
   .subj-title{
     font-weight: 900;
   }
+}
 
-  ion-segment {
-    display: block;
-    white-space: nowrap;
-    font-size: 0;
-    overflow: auto;
+ion-segment {
+  display: block;
+  white-space: nowrap;
+  font-size: 0;
+  overflow: auto;
 
-    &::-webkit-scrollbar {
-        width: 0;
-        height: 0;
-        display: none;
-    }
-
-    ion-segment-button.segment-button {
-        display: inline-block;
-        min-width: 100px;
-        width: auto;
-        // font-weight: bold; 
-        // font-size:13px;
-    }
+  &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
   }
 
-  #offline_indicator{
-    text-align: end;
-    color:red;
-    font-weight: 600;
-    font-size: 17px;
+  ion-segment-button.segment-button {
+    display: inline-block;
+    min-width: 105px;
+    width: auto;
   }
+}
+
+#offline_indicator{
+  text-align: end;
+  color:red;
+  font-weight: 600;
+  font-size: 17px;
 }
