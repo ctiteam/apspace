@@ -1,12 +1,13 @@
 <ion-menu [content]="content">
   <ion-content class="side-menu-gradient-after-login" color="menu-background">
     <div id="menu-info">
-      <img class="user_photo" [src]="user_photo"
+      <img class="user_photo" [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo"
            onerror="this.src='assets/img/profile.svg'" alt="Avatar">
       <p>{{ ((profile$ | async) || [{}])[0].NAME }}</p>
     </div>
     <ion-list id="menu-list1" no-lines>
-      <ion-item menuClose *ngFor='let p of pages' (click)='openPage(p)' class="side-menu-item" [class.activeHighlight]='p === activePage'>
+      <ion-item menuClose *ngFor='let p of pages' (click)='openPage(p)' class="side-menu-item" 
+      [class.activeHighlight]='p === activePage'>
         <ion-icon item-left [name]='p.icon'></ion-icon>
         {{p.title}}
       </ion-item>

@@ -82,9 +82,9 @@ export class LoginPage {
 
   cacheApi() {
     [ 
-      ['/student/profile', false ],
-      ['/student/photo', false ],
-      ['/student/subcourses', false ],
+      ['/student/profile', true ],
+      ['/student/photo', true ],
+      ['/student/subcourses', true ],
       [ '/open/weektimetable', false ],
       [ '/staff/listing', true ],
     ].forEach(d =>
