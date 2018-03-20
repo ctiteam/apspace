@@ -8,7 +8,6 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
-
 <ion-content padding>
   <ion-list>
     <ion-item no-padding>
@@ -24,30 +23,24 @@
       <ion-textarea placeholder="Message" [(ngModel)]="this.feedbackData.message" [ngModelOptions]="{standalone: true}"></ion-textarea>
     </ion-item>
   </ion-list>
-  <div class="spacer" style="width:300px;height:15px;" id="lOGIN-spacer8"></div>
-  <button (click)="validateField()" id="fEEDBACK-button4" ion-button color="primary" block style="border-radius:10px 10px 10px 10px;">
+  <div class="spacer"></div>
+  <button class="send-button" (click)="sendEmail()" ion-button block [disabled]="!this.feedbackData.name || !this.feedbackData.studentNumber || !this.feedbackData.contactNumber || !this.feedbackData.message">
     SUBMIT
   </button>
-  <h5 id="fEEDBACK-heading3" style="color:primary; text-align:justify;">
+  <h5>
     ASIA PACIFIC UNIVERSITY OF TECHNOLOGY & INNOVATION (APU)
   </h5>
-  <div id="fEEDBACK-markdown28" style="text-align:justify;" class="show-list-numbers-and-dots">
-    <p style="color:#000000;font-size:11px;">
-      Technology Park Malaysia, Bulit Jalil, Kuala Lumpur 57000 Malaysia
-    </p>
-  </div>
-  <div class="show-list-numbers-and-dots">
-    <p style="color:#000000;font-size:11px;">Phone:&nbsp;
-      <a href="tel:+60389961000" > +60389961000</a>
-      <br> Fax:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <a href="tel:+60389961001" > +60389961001</a>
-    </p>
-  </div>
-  <div class="show-list-numbers-and-dots">
-    <p class="follow-us" style="color:#000000;font-size:13px;">
-      Follow Us:
-    </p>
-  </div>
+  <p style="font-size:11px; text-align:justify;">
+    Technology Park Malaysia, Bulit Jalil, Kuala Lumpur 57000 Malaysia
+  </p>
+  <p style="font-size:11px;">Phone:&nbsp;
+    <a href="tel:+60389961000"> +60389961000</a>
+    <br> Fax:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="tel:+60389961001"> +60389961001</a>
+  </p>
+  <p class="follow-us" style="font-size:13px;">
+    Follow Us:
+  </p>
   <ion-row>
     <button ion-fab (click)="openFacebook(url)">
       <ion-icon name="logo-facebook"></ion-icon>

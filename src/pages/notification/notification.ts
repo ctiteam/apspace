@@ -1,26 +1,22 @@
 import { Component } from '@angular/core';
-import { NavController, IonicPage, Events } from 'ionic-angular';
+import { NavController, IonicPage, Platform, AlertController } from 'ionic-angular';
 import { Storage } from "@ionic/storage";
 import { Firebase } from "@ionic-native/firebase";
-import { Platform } from "ionic-angular";
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/finally';
 
-
+const NOTIFICATION_URL = "https://jlnowdh399.execute-api.us-west-2.amazonaws.com/prod/sns_lambda";
 
 @IonicPage()
 @Component({
   selector: 'page-notification',
   templateUrl: 'notification.html'
 })
+
 export class NotificationPage {
 
-
   deviceToken: string;
-  token: any;
-  user_info1: any;
-  tgt: string;
   test: any = []
   notification:
     {
@@ -31,66 +27,56 @@ export class NotificationPage {
       "text": ""
     }
 
-
   constructor(
-    public events: Events,
     private http: Http,
     private platform: Platform,
     private firebase: Firebase,
     public navCtrl: NavController,
     private storage: Storage,
+    private alertCtrl: AlertController
   ) {
+
     platform.ready().then(() => {
       this.firebase.onTokenRefresh()
-        .subscribe((token: string) => this.setStorageToken(token));
+        .subscribe(token => {
+          this.storage.get('/student/profile').then((user_info) => {
+            this.checkAndSubscribe(user_info[0].STUDENT_NUMBER, token);
+            console.log(user_info[0].STUDENT_NUMBER);
+          })
+        });
       this.firebase.onNotificationOpen().subscribe(notification => this.handleNotification(notification));
     });
-   }
+  }
 
-  setStorageToken(token: string) {
-    this.deviceToken = token;
-    this.storage.set('loggedIn', 'true');
-    this.storage.get('loggedIn').then((val) => {
-      this.token = val;
-      this.loadUserInfo();
+  checkAndSubscribe(username, token) {
+    this.storage.get('tgt').then(tgt => {
+      let body = 'action=sub&device_token=' + token + '&student_id=' + username + '&tgt=' + tgt;
+      let headers = new Headers();
+      headers.append('Content-type', 'application/x-www-form-urlencoded');
+      let options = new RequestOptions({ headers: headers });
+      this.http.post(NOTIFICATION_URL, body, options)
+        .subscribe(res => {
+          console.log("SUCESSSSSSSS: " + res);
+        }, err => {
+          console.log("ERRRRORR : " + err);
+        })
     })
   }
 
-  loadUserInfo() {
-    this.storage.get('/student/profile').then((val) => {
-      this.user_info1 = val;
-      this.checkAndSubscribe(this.user_info1[0].STUDENT_NUMBER);
-      console.log(this.user_info1[0].STUDENT_NUMBER);
-      
-    });
-  }
-
-  checkAndSubscribe(username: string) { 
-    if ("TP032678" == username) {
-
-      this.storage.get('tgt').then(tgt => {
-        this.tgt = tgt;
-
-        let body = 'action=sub&student_id=' + username + '&tgt=' + this.tgt + '&device_token=' + this.deviceToken;
-        let headers = new Headers();
-        headers.append('Content-type', 'application/x-www-form-urlencoded');
-        let options = new RequestOptions({ headers: headers });
-        console.log(body);
-        console.log("In send place");
-        this.http.post('https://jlnowdh399.execute-api.us-west-2.amazonaws.com/prod/sns_subscribe', body, options)
-          .subscribe(ress => {
-            console.log("SUCESSSSSSSS" + ress);
-
-          }, err => {
-            console.log("ERRRRORR : " + err);
-          })
-      })
-    }
-  }
-
   handleNotification(data) {
+    console.log("HANDLE NOTIFICATION");
     this.notification = data;
-    this.test.push(this.notification)
-    this.storage.set('notificationData', this.test);
+    this.presentAlert(this.notification)
+    //this.test.push(this.notification)
+  }
+
+
+  presentAlert(notification) {
+    let alert = this.alertCtrl.create({
+      title: notification.title,
+      subTitle: notification.text,
+      buttons: ['Dismiss']
+    });
+    alert.present();
   }
 }

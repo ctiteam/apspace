@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { Platform, Events, MenuController, NavController, LoadingController,
-  ToastController, IonicPage } from 'ionic-angular';
-import { NewsService } from '../../app/services/news.service';
+import { Platform, Events, MenuController, NavController, 
+LoadingController,ToastController, IonicPage } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
-
+import { NewsServiceProvider } from '../../providers/news-service/news-service';
 
 declare var Connection;
 
@@ -16,12 +15,9 @@ declare var Connection;
 })
 export class HomePage {
 
-  name: string;
-  content: any[] = new Array();
   onDevice: boolean;
-  items = [];       //All the news posts are inside items
-  getNews = [];     //News from local storage
-  itemDetail = {}
+  items: any;      
+       
   connected: Subscription;
   disconnected: Subscription;
 
@@ -35,7 +31,7 @@ export class HomePage {
     public navCtrl: NavController,
     public network: Network,
     public platform: Platform,
-    private newsService: NewsService,
+    private newsService: NewsServiceProvider,
     private storage: Storage,
     private toastCtrl: ToastController,
   ) {
@@ -138,10 +134,8 @@ export class HomePage {
       duration: 3000,
       position: 'bottom'
     });
-
     toast.present();
   }
-
 
   presentLoading() {
     let loader = this.loadingCtrl.create({
@@ -158,7 +152,6 @@ export class HomePage {
     .subscribe(response => {
       this.items = response;
       this.storage.set('news', this.items);
-
     });
   }
 
@@ -176,7 +169,6 @@ export class HomePage {
       this.checknetwork();
       refresher.complete();
     }, 1500);
-
   }
 
   openBasicModal(item) {

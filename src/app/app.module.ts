@@ -17,7 +17,8 @@ import { ScrollableTabs } from '../components/scrollable-tabs/scrollable-tabs';
 import { Firebase } from '@ionic-native/firebase';
 import { Push } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { FeedServiceProvider, CasTicketProvider, WsApiProvider } from '../providers';
+import { CasTicketProvider, WsApiProvider } from '../providers';
+import { NewsServiceProvider } from '../providers/news-service/news-service';
 
 @NgModule({
   declarations: [
@@ -42,14 +43,13 @@ import { FeedServiceProvider, CasTicketProvider, WsApiProvider } from '../provid
     EmailComposer,
     InAppBrowser,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    FeedServiceProvider,
     Network,
     CasTicketProvider,
     Firebase,
     Push,
     LocalNotifications,
     WsApiProvider,
+    NewsServiceProvider,
   ]
-
 })
 export class AppModule {}

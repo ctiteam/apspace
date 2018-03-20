@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { AlertController, Events, Nav } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
-import { NewsService } from './services/news.service';
+import { NewsServiceProvider } from '../providers/news-service/news-service';
 import { CasTicketProvider, WsApiProvider } from '../providers';
 import { UserProfile } from '../interfaces';
 import { UserPhoto } from '../interfaces/user-photo';
@@ -11,7 +11,7 @@ import { UserPhoto } from '../interfaces/user-photo';
 
 @Component({
   templateUrl: 'app.html',
-  providers: [NewsService]
+  providers: [NewsServiceProvider]
 })
 export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
