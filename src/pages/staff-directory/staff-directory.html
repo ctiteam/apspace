@@ -20,7 +20,7 @@
     </ion-item>
     <ion-item>
       <ion-label floating>Department</ion-label>
-      <ion-select [(ngModel)]="department" interface="popover"
+      <ion-select [(ngModel)]="dept" interface="popover"
         *ngIf="staffType$ | async as staffTypes">
         <ion-option selected></ion-option>
         <ion-option *ngFor="let type of staffTypes"
@@ -30,7 +30,8 @@
   </ion-list>
 
   <ion-list *ngIf="staff$ | async as staffs">
-    <ion-item *ngFor="let staff of selected(staffs)" (click)="info(staff)">
+    <ion-item *ngFor="let staff of selected(staffs)"
+      navPush="StaffDirectoryInfoPage" [navParams]="{id: staff.CODE}">
       <ion-avatar item-start>
         <img [src]="staff.PHOTO" onerror="this.src='assets/img/profile.svg'">
       </ion-avatar>
