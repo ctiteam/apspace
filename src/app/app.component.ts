@@ -95,6 +95,7 @@ export class MyApp {
   }
 
   onLogout() {
+    this.unsubscribe();
     this.ws.get('/student/close_session').subscribe();
     this.cas.deleteTGT().subscribe(_ => {
       // TODO: keep reusable cache

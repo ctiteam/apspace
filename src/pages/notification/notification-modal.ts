@@ -10,12 +10,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 export class NotificationModalPage {
   itemDetails: any;
   constructor(
-    public navCtrl: NavController, 
+    public navCtrl: NavController,
     public navParams: NavParams) {
-      this.itemDetails = this.navParams.get('itemDetails')
-      this.itemDetails = this.itemDetails;
-      console.log('itemDetails: ' + this.itemDetails.title );
-      
-
+    this.itemDetails = this.navParams.get('itemDetails')
+    this.itemDetails = this.itemDetails;
   }
 }
