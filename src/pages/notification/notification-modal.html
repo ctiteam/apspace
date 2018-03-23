@@ -1,0 +1,11 @@
+
+<ion-header>
+  <ion-navbar>
+    <ion-title *ngIf = "itemDetails" >{{itemDetails.title}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding *ngIf = "itemDetails">
+<h2>{{itemDetails.title}}</h2>
+<p>{{itemDetails.text}}</p>
+</ion-content>

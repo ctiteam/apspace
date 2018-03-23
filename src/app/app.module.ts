@@ -19,6 +19,7 @@ import { Push } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { CasTicketProvider, WsApiProvider } from '../providers';
 import { NewsServiceProvider } from '../providers/news-service/news-service';
+import { NotificationServiceProvider } from '../providers/notification-service/notification-service';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { NewsServiceProvider } from '../providers/news-service/news-service';
     LocalNotifications,
     WsApiProvider,
     NewsServiceProvider,
+    NotificationServiceProvider,
   ]
 })
 export class AppModule {}

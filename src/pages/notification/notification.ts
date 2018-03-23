@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
-import { NavController, IonicPage, Platform, AlertController } from 'ionic-angular';
+import { Component, NgZone } from '@angular/core';
+import { IonicPage, Platform, AlertController, ToastController, NavController, NavParams } from 'ionic-angular';
 import { Storage } from "@ionic/storage";
 import { Firebase } from "@ionic-native/firebase";
-import { Http, Headers, RequestOptions } from '@angular/http';
-import 'rxjs/add/operator/timeout';
-import 'rxjs/add/operator/finally';
 
-const NOTIFICATION_URL = "https://jlnowdh399.execute-api.us-west-2.amazonaws.com/prod/sns_lambda";
+import { WsApiProvider } from '../../providers/ws-api/ws-api';
+import { NotificationServiceProvider } from '../../providers/notification-service/notification-service';
+import { CasTicketProvider } from '../../providers/cas-ticket/cas-ticket';
+import { LoginPage } from '../login/login';
 
 @IonicPage()
 @Component({
@@ -16,67 +16,57 @@ const NOTIFICATION_URL = "https://jlnowdh399.execute-api.us-west-2.amazonaws.com
 
 export class NotificationPage {
 
-  deviceToken: string;
-  test: any = []
-  notification:
-    {
-      title: string,
-      text: string
-    } = {
+  notification: {
+    title: string,
+    text: string
+  } = {
       "title": "",
       "text": ""
     }
 
+  items: { title: string, text: string }[] = [];
+  token: string;
+
   constructor(
-    private http: Http,
     private platform: Platform,
-    private firebase: Firebase,
-    public navCtrl: NavController,
-    private storage: Storage,
-    private alertCtrl: AlertController
+    private readonly ngZone: NgZone,
+    private readonly firebase: Firebase,
+    private readonly storage: Storage,
+    private toastCtrl: ToastController,
+    private navParams: NavParams,
+    private navCtrl: NavController,
+    private notificationService: NotificationServiceProvider,
   ) {
+    // let notification = this.navParams.get('data');
+    // if (notification.title != '')
+    this.storage.get('notification').then(data => {
+      this.notification = data;
+      this.handleNotification(this.notification)
+    })
+
 
     platform.ready().then(() => {
       this.firebase.onTokenRefresh()
-        .subscribe(token => {
-          this.storage.get('/student/profile').then((user_info) => {
-            this.checkAndSubscribe(user_info[0].STUDENT_NUMBER, token);
-            console.log(user_info[0].STUDENT_NUMBER);
-          })
-        });
+        .subscribe((token: string) => this.token = token);
+
       this.firebase.onNotificationOpen().subscribe(notification => this.handleNotification(notification));
     });
   }
 
-  checkAndSubscribe(username, token) {
-    this.storage.get('tgt').then(tgt => {
-      let body = 'action=sub&device_token=' + token + '&student_id=' + username + '&tgt=' + tgt;
-      let headers = new Headers();
-      headers.append('Content-type', 'application/x-www-form-urlencoded');
-      let options = new RequestOptions({ headers: headers });
-      this.http.post(NOTIFICATION_URL, body, options)
-        .subscribe(res => {
-          console.log("SUCESSSSSSSS: " + res);
-        }, err => {
-          console.log("ERRRRORR : " + err);
-        })
-    })
-  }
-
   handleNotification(data) {
-    console.log("HANDLE NOTIFICATION");
-    this.notification = data;
-    this.presentAlert(this.notification)
-    //this.test.push(this.notification)
+    this.ngZone.run(() => {
+      this.items.splice(0, 0, { title: data.title, text: data.text });
+      this.storage.set('items', this.items);
+      this.storage.get('items').then(data => {
+        this.items = data;
+        if (this.items.length > 5) {
+          this.items.pop();
+        }
+      })
+    });
   }
 
-
-  presentAlert(notification) {
-    let alert = this.alertCtrl.create({
-      title: notification.title,
-      subTitle: notification.text,
-      buttons: ['Dismiss']
-    });
-    alert.present();
+  openBasicModal(item) {
+    this.navCtrl.push('NotificationModalPage', { itemDetails: item });
   }
 }
