@@ -47,7 +47,8 @@ export class WsApiProvider {
       .catch(err => options.auth === false ? Observable.throw(err)
         : this.cas.getST(url).switchMap(st => this.http.get<T>(url,
           Object.assign(opt, { params: Object.assign(opt.params, { ticket: st }) }))))
-      .do(cache => this.storage.set(endpoint, cache)).timeout(options.timeout || 5000)
+      .do(cache => this.storage.set(endpoint, cache))
+      .retry(1).timeout(options.timeout || 5000)
       .catch(err => {
         this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
         return Observable.fromPromise(this.storage.get(endpoint));

@@ -17,7 +17,9 @@ import { ScrollableTabs } from '../components/scrollable-tabs/scrollable-tabs';
 import { Firebase } from '@ionic-native/firebase';
 import { Push } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { FeedServiceProvider, CasTicketProvider, WsApiProvider } from '../providers';
+import { CasTicketProvider, FeedServiceProvider, RequestCache,
+  RequestCacheWithMapStorage, WsApiProvider, httpInterceptorProviders
+} from '../providers';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,8 @@ import { FeedServiceProvider, CasTicketProvider, WsApiProvider } from '../provid
     Push,
     LocalNotifications,
     WsApiProvider,
+    { provide: RequestCache, useClass: RequestCacheWithMapStorage },
+    httpInterceptorProviders,
   ]
 
 })
