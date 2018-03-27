@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { Platform, Events, MenuController, NavController, LoadingController,
   ToastController, IonicPage } from 'ionic-angular';
-import { NewsService } from '../../app/services/news.service';
 import { Storage } from '@ionic/storage';
 import { Subscription } from 'rxjs/Subscription';
 import { Network } from '@ionic-native/network';
 
+import { NewsProvider } from '../../providers/';
 
 declare var Connection;
 
@@ -35,7 +35,7 @@ export class HomePage {
     public navCtrl: NavController,
     public network: Network,
     public platform: Platform,
-    private newsService: NewsService,
+    private news: NewsProvider,
     private storage: Storage,
     private toastCtrl: ToastController,
   ) {
@@ -67,7 +67,7 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    this.checknetwork();
+    this.getPosts();
   }
 
   checknetwork() {
@@ -95,7 +95,6 @@ export class HomePage {
       document.getElementById("offline_indicator").innerHTML = '';
       this.displayNetworkUpdateOnline(data.type)
       this.presentLoading();
-      this.getPosts();
     }, error => {
       console.log(error);
     })
@@ -154,11 +153,9 @@ export class HomePage {
 
   //Loads news from Web Service
   getPosts() {
-    this.newsService.getPosts()
-    .subscribe(response => {
+    this.news.get().subscribe(response => {
       this.items = response;
       this.storage.set('news', this.items);
-
     });
   }
 
