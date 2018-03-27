@@ -1,15 +1,15 @@
-export interface Subcourses{
-    MODULE_CODE: string;
-    MODULE_DESCRIPTION: string;
-    CREDIT_HOURS: number;
-    SUBJECT_GRADE_SU: string;
-    GRADE: string;
-    GRADE_NO_STAR: string;
-    GRADE_POINT: number;
-    GRADE_POINT_NO_STAR: string;
-    INTERNAL_RESULT_RELEASE_DATE: string;
-    RECOMMENDATION: string;
-    SEMESTER: number;
-    YEAR: string;
-    GRADING_SCHEME: string;
+export interface Subcourses {
+  MODULE_CODE: string;
+  MODULE_DESCRIPTION: string;
+  CREDIT_HOURS: number;
+  SUBJECT_GRADE_SU: string;
+  GRADE: string;
+  GRADE_NO_STAR: string;
+  GRADE_POINT: number;
+  GRADE_POINT_NO_STAR: string;
+  INTERNAL_RESULT_RELEASE_DATE: string;
+  RECOMMENDATION: string;
+  SEMESTER: number;
+  YEAR: string;
+  GRADING_SCHEME: string;
 }

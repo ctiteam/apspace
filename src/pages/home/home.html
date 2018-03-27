@@ -1,15 +1,9 @@
 <ion-header>
-  <ion-navbar hideBackButton color="primary">
+  <ion-navbar>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <div class="row">
-    <ion-title class="col">
-      Home
-    </ion-title>
-    <p class="col" id="offline_indicator">
-    </p>
-  </div>
+    <ion-title class="col">Home</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -19,19 +13,12 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   
-  <div *ngFor="let item of items">
-  <ion-card (click)="openBasicModal(item)">
-    <ion-list>
-      <div>
-        <img class="news_image" src="{{item.field_news_image[0].url}}">
-      </div>
-      <div>
-        <ion-item class="title-news">
-          {{item.title[0].value}}
-        </ion-item>
-      </div>
-    </ion-list>
+  <ion-card *ngFor="let item of items$ | async"
+    navPush="HomeModalPage" [navParams]="{item: item}">
+    <img [src]="item.field_news_image[0].url">
+    <ion-card-content>
+      {{ item.title[0].value }}
+    </ion-card-content>
   </ion-card>
-</div>
-  
+
 </ion-content>

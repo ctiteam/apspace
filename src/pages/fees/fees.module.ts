@@ -11,4 +11,4 @@ import { FeesPage } from './fees';
   ],
 
 })
-export class FeesPageModule {}
+export class FeesPageModule { }

@@ -1,11 +1,11 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{itemDetails['title'][0].value}}</ion-title>
+    <ion-title>{{item?.title[0].value}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content>
-  <img src="{{itemDetails.field_news_image[0].url}}" width="100%">
-  <article [innerHTML]="itemDetails['body'][0].value"></article>
+  <img [src]="item?.field_news_image[0].url" width="100%">
+  <article [innerHTML]="sanitize(item?.body[0].value)"></article>
 </ion-content>

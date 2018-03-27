@@ -2,6 +2,7 @@ import { Component, HostListener, ViewChild } from '@angular/core';
 import { NavController, Searchbar, IonicPage } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
+import { finalize, map } from 'rxjs/operators';
 
 import { StaffDirectory } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
@@ -37,9 +38,10 @@ export class StaffDirectoryPage {
 
   doRefresh(refresher?) {
     this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', Boolean(refresher));
-    this.staffType$ = this.staff$.map(ss =>
-      Array.from(new Set((ss || []).map(s => s.DEPARTMENT))))
-        .finally(() => refresher && refresher.complete());
+    this.staffType$ = this.staff$.pipe(
+      map(ss => Array.from(new Set((ss || []).map(s => s.DEPARTMENT)))),
+      finalize(() => refresher && refresher.complete()),
+    );
   }
 
   ionViewDidLoad() {
