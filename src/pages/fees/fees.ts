@@ -12,5 +12,5 @@ export class FeesPage {
 
   constructor(public navCtrl: NavController) {
   }
-  
+
 }

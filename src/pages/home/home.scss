@@ -1,31 +1,6 @@
-
-ion-navbar[hidebackbutton] button[menutoggle] {
-    display: block !important;
-}
-
-.title-news {
+page-home {
+  ion-card-content {
+    color: #fff;
     background-color: #484c73;
-    font-size: 17px;
-    color:#FFFFFF;
-    
+  }
 }
-
-.item-body {
-    background-color: #cfd8dc;
-}
-
-.news_image{
-    display: block; 
-    width: 100%; 
-    height: auto; 
-    margin: auto;
-}
-
-#offline_indicator{
-    text-align: end;
-    color:red;
-    font-weight: 600;
-    font-size: 17px;
-}
-
-

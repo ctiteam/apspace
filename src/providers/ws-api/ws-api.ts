@@ -1,9 +1,14 @@
-import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Platform, ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
+
+import { Observable } from 'rxjs/Observable';
+import { _throw as obs_throw } from 'rxjs/observable/throw';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+import { of } from 'rxjs/observable/of';
+import { catchError, publishLast, refCount, retry, switchMap, tap, timeout } from 'rxjs/operators';
 
 import { CasTicketProvider } from '../cas-ticket/cas-ticket';
 
@@ -43,18 +48,23 @@ export class WsApiProvider {
     };
 
     return (refresh && (!this.plt.is('cordova') || this.network.type !== 'none')
-      ? this.http.get<T>(url, opt)
-      .catch(err => options.auth === false ? Observable.throw(err)
-        : this.cas.getST(url).switchMap(st => this.http.get<T>(url,
-          Object.assign(opt, { params: Object.assign(opt.params, { ticket: st }) }))))
-      .do(cache => this.storage.set(endpoint, cache))
-      .retry(1).timeout(options.timeout || 5000)
-      .catch(err => {
-        this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
-        return Observable.fromPromise(this.storage.get(endpoint));
-      })
-      : Observable.fromPromise(this.storage.get(endpoint))
-      .switchMap(v => v ? Observable.of(v) : this.get(endpoint, true, options))
-    ).publishLast().refCount();
+      ? this.http.get<T>(url, opt).pipe(
+        catchError(err => options.auth === false ? obs_throw(err)
+          : this.cas.getST(url).pipe(
+            switchMap(st => this.http.get<T>(url,
+              Object.assign(opt, { params: Object.assign(opt.params, { ticket: st }) })))
+          )),
+        tap(cache => this.storage.set(endpoint, cache)),
+        retry(1),
+        timeout(options.timeout || 5000),
+        catchError(err => {
+          this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
+          return fromPromise(this.storage.get(endpoint));
+        })
+      )
+      : fromPromise(this.storage.get(endpoint)).pipe(
+        switchMap(v => v ? of(v) : this.get(endpoint, true, options))
+      )
+    ).pipe(publishLast(), refCount());
   }
 }

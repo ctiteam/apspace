@@ -12,4 +12,4 @@ import { HomePage } from './home';
   entryComponents: [HomePage],
   providers: [NewsProvider]
 })
-export class HomePageModule {}
+export class HomePageModule { }

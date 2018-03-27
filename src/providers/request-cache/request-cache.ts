@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
+
 import { Observable } from 'rxjs/Observable';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+import { of } from 'rxjs/observable/of';
+import { map } from 'rxjs/operators';
 
 import { Storage } from '@ionic/storage';
 
@@ -26,7 +30,7 @@ export class RequestCacheWithMap implements RequestCache {
     const url = req.urlWithParams;
     const cached = this.cache.get(url);
 
-    return Observable.of(cached);
+    return of(cached);
   }
 
   set(req: HttpRequest<any>, response: HttpResponse<any>): void {
@@ -45,14 +49,14 @@ export class RequestCacheWithStorage implements RequestCache {
 
   get(req: HttpRequest<any>): Observable<HttpResponse<any> | undefined> {
     const url = req.urlWithParams;
-    return Observable.fromPromise(this.storage.get(url)).map(cached => {
+    return fromPromise(this.storage.get(url)).pipe(map(cached => {
       if (!cached) {
         return undefined;
       }
 
       const headers = new HttpHeaders(cached.headers);
       return new HttpResponse({ url, headers, body: cached.body });
-    });
+    }));
   }
 
   set(req: HttpRequest<any>, response: HttpResponse<any>): void {
@@ -77,16 +81,16 @@ export class RequestCacheWithMapStorage implements RequestCache {
     const url = req.urlWithParams;
     const cached = this.cache.get(url);
 
-    if (cached) { return Observable.of(cached); }
+    if (cached) { return of(cached); }
 
-    return Observable.fromPromise(this.storage.get(url)).map(cached => {
+    return fromPromise(this.storage.get(url)).pipe(map(cached => {
       if (!cached) {
         return undefined;
       }
 
       const headers = new HttpHeaders(cached.headers);
       return new HttpResponse({ url, headers, body: cached.body });
-    });
+    }));
   }
 
   set(req: HttpRequest<any>, response: HttpResponse<any>): void {

@@ -50,16 +50,16 @@ export class FeedbackPage {
   }
 
   openFacebook(url: string) {
-   
+
   }
   openTwitter(twitUrl: string) {
-    
+
   }
   openGooglePlus(googleUrl: string) {
-   
+
   }
 
   openLinkedIn(linkedinUrl: string) {
-   
+
   }
 }

@@ -1,17 +1,18 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, ViewChild } from '@angular/core';
-import { AlertController, Events, Nav } from 'ionic-angular';
+import {
+  AlertController, Events, Platform, ToastController,
+  Nav
+} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { Network } from '@ionic-native/network';
 
-import { NewsService } from './services/news.service';
 import { CasTicketProvider, WsApiProvider } from '../providers';
-import { UserProfile } from '../interfaces';
-import { UserPhoto } from '../interfaces/user-photo';
+import { UserProfile, UserPhoto } from '../interfaces';
 
 
 @Component({
-  templateUrl: 'app.html',
-  providers: [NewsService]
+  templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
@@ -26,14 +27,17 @@ export class MyApp {
   constructor(
     public alertCtrl: AlertController,
     public events: Events,
+    public network: Network,
+    public plt: Platform,
     public storage: Storage,
+    public toastCtrl: ToastController,
     private cas: CasTicketProvider,
     private ws: WsApiProvider,
   ) {
     this.storage.get('tgt')
       .then(tgt => {
         if (tgt) {
-          this.events.subscribe('user:logout', () => this.onLogout());        
+          this.events.subscribe('user:logout', () => this.onLogout());
           this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
           this.photo$ = this.ws.get<UserPhoto[]>('/student/photo')
           this.navCtrl.setRoot('HomePage');
@@ -44,15 +48,19 @@ export class MyApp {
       });
 
     this.pages = [
-      { title: 'Home',            component: 'HomePage',           icon: 'home'        },
-      { title: 'Timetable',       component: 'TimetablePage',      icon: 'calendar'    },
-      { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people'      },
-      { title: 'Results',         component: 'ResultsPage',        icon: 'checkbox'    },
-      { title: 'Notification',    component: 'NotificationPage',   icon: 'chatbubbles' },
-      { title: 'Feedback',        component: 'FeedbackPage',       icon: 'at'          },
+      { title: 'Home', component: 'HomePage', icon: 'home' },
+      { title: 'Timetable', component: 'TimetablePage', icon: 'calendar' },
+      { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people' },
+      { title: 'Results', component: 'ResultsPage', icon: 'checkbox' },
+      { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
+      { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
     ];
 
     this.activePage = this.pages[0];
+
+    if (this.plt.is('cordova') && this.network.type === 'none') {
+      this.toastCtrl.create({ message: 'You are now offline.', duration: 3000 }).present();
+    }
   }
 
   openPage(page) {

@@ -10,4 +10,4 @@ import { LoginPage } from './login';
   ],
   entryComponents: [LoginPage]
 })
-export class LoginPageModule {}
+export class LoginPageModule { }

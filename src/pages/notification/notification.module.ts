@@ -11,4 +11,4 @@ import { NotificationPage } from './notification';
   ],
 
 })
-export class NotificationPageModule {}
+export class NotificationPageModule { }

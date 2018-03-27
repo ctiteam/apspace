@@ -4,10 +4,6 @@ import { Storage } from "@ionic/storage";
 import { Firebase } from "@ionic-native/firebase";
 import { Platform } from "ionic-angular";
 import { Http, Headers, RequestOptions } from '@angular/http';
-import 'rxjs/add/operator/timeout';
-import 'rxjs/add/operator/finally';
-
-
 
 @IonicPage()
 @Component({
@@ -45,7 +41,7 @@ export class NotificationPage {
         .subscribe((token: string) => this.setStorageToken(token));
       this.firebase.onNotificationOpen().subscribe(notification => this.handleNotification(notification));
     });
-   }
+  }
 
   setStorageToken(token: string) {
     this.deviceToken = token;
@@ -61,11 +57,11 @@ export class NotificationPage {
       this.user_info1 = val;
       this.checkAndSubscribe(this.user_info1[0].STUDENT_NUMBER);
       console.log(this.user_info1[0].STUDENT_NUMBER);
-      
+
     });
   }
 
-  checkAndSubscribe(username: string) { 
+  checkAndSubscribe(username: string) {
     if ("TP032678" == username) {
 
       this.storage.get('tgt').then(tgt => {
