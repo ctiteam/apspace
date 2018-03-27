@@ -1,8 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, ViewChild } from '@angular/core';
-import { AlertController, Events, Nav, ToastController } from 'ionic-angular';
+import { AlertController, Events, Nav } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { Http, Headers, RequestOptions } from '@angular/http';
 import { Firebase } from "@ionic-native/firebase";
 
 import { NewsServiceProvider } from '../providers/news-service/news-service';
@@ -13,8 +12,6 @@ import { UserPhoto } from '../interfaces/user-photo';
 
 
 
-const NOTIFICATION_URL = "https://zdbuv8iicb.execute-api.ap-southeast-1.amazonaws.com/production/sns_lambda";
-
 @Component({
   templateUrl: 'app.html',
   providers: [NewsServiceProvider]
@@ -23,9 +20,6 @@ export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
 
   activePage: any;
-  tgt: any;
-  student_id: any;
-  device_token: any;
 
   notification: {
     title: string,
@@ -45,9 +39,7 @@ export class MyApp {
   photo$: Observable<UserPhoto[]>;
 
   constructor(
-    private http: Http,
     public alertCtrl: AlertController,
-    private toastCtrl: ToastController,
     public events: Events,
     private firebase: Firebase,
     public storage: Storage,
@@ -89,13 +81,13 @@ export class MyApp {
   onLogin() {
     this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
     this.photo$ = this.ws.get<UserPhoto[]>('/student/photo');
-    this.subscribe();
+    //this.subscribe();
     this.events.unsubscribe('user:login');
     this.events.subscribe('user:logout', () => this.onLogout());
   }
 
   onLogout() {
-    this.unsubscribe();
+    //this.unsubscribe();
     this.ws.get('/student/close_session').subscribe();
     this.cas.deleteTGT().subscribe(_ => {
       // TODO: keep reusable cache
