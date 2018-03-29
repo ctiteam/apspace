@@ -7,7 +7,7 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { finalize, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, finalize, map, tap } from 'rxjs/operators';
 
 import { StaffDirectory, Timetable } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
@@ -115,6 +115,7 @@ export class TimetablePage {
       this.ws.get<Timetable[]>('/open/weektimetable', refresh, { auth: false, timeout: 10000 }),
       this.ws.get<StaffDirectory[]>('/staff/listing'),
     ]).pipe(
+      distinctUntilChanged(),
       map(data => (data[0] || []).map(t => <Timetable>Object.assign(t,
         { STAFFNAME: ((data[1] || []).find(s => s.CODE === t.LECTID) || <StaffDirectory>{}).FULLNAME }))),
     );
