@@ -18,10 +18,9 @@
       <ion-searchbar [(ngModel)]="term">
       </ion-searchbar>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="staffType$ | async as staffTypes">
       <ion-label floating>Department</ion-label>
-      <ion-select [(ngModel)]="dept" interface="popover"
-        *ngIf="staffType$ | async as staffTypes">
+      <ion-select [(ngModel)]="dept" interface="popover">
         <ion-option selected></ion-option>
         <ion-option *ngFor="let type of staffTypes"
           [innerHTML]="type" [value]="type"></ion-option>
@@ -29,8 +28,8 @@
     </ion-item>
   </ion-list>
 
-  <ion-list *ngIf="staff$ | async as staffs">
-    <ion-item *ngFor="let staff of selected(staffs)"
+  <ion-list>
+    <ion-item *ngFor="let staff of selected(staff$ | async)"
       navPush="StaffDirectoryInfoPage" [navParams]="{id: staff.CODE}">
       <ion-avatar item-start>
         <img [src]="staff.PHOTO" onerror="this.src='assets/img/profile.svg'">
