@@ -7,7 +7,7 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { distinctUntilChanged, filter, finalize, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, finalize, map, tap } from 'rxjs/operators';
 
 import { StaffDirectory, Timetable } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
