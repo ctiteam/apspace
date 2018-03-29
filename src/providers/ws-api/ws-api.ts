@@ -8,7 +8,12 @@ import { Observable } from 'rxjs/Observable';
 import { _throw as obs_throw } from 'rxjs/observable/throw';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
-import { catchError, publishLast, refCount, retry, switchMap, tap, timeout } from 'rxjs/operators';
+import { range } from 'rxjs/observable/range';
+import { timer } from 'rxjs/observable/timer';
+import {
+  catchError, mergeMap, publishLast, refCount, retryWhen, switchMap,
+  tap, timeout, zip
+} from 'rxjs/operators';
 
 import { CasTicketProvider } from '../cas-ticket/cas-ticket';
 
@@ -55,12 +60,17 @@ export class WsApiProvider {
               Object.assign(opt, { params: Object.assign(opt.params, { ticket: st }) })))
           )),
         tap(cache => this.storage.set(endpoint, cache)),
-        retry(1),
         timeout(options.timeout || 5000),
         catchError(err => {
           this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
-          return fromPromise(this.storage.get(endpoint));
-        })
+          return fromPromise(this.storage.get(endpoint))
+            .switchMap(v => v || obs_throw('retrying'));
+        }),
+        retryWhen(attempts => range(1, 4).pipe(
+          zip(attempts, i => 2 ** i - 1),
+          mergeMap(i => timer(i * 1000)),
+        )),
+        catchError(of),
       )
       : fromPromise(this.storage.get(endpoint)).pipe(
         switchMap(v => v ? of(v) : this.get(endpoint, true, options))
