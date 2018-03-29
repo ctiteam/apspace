@@ -63,8 +63,9 @@ export class WsApiProvider {
         timeout(options.timeout || 5000),
         catchError(err => {
           this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
-          return fromPromise(this.storage.get(endpoint))
-            .switchMap(v => v || obs_throw('retrying'));
+          return fromPromise(this.storage.get(endpoint)).pipe(
+            switchMap(v => v || obs_throw('retrying'))
+          );
         }),
         retryWhen(attempts => range(1, 4).pipe(
           zip(attempts, i => 2 ** i - 1),
