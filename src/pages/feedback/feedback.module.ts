@@ -11,4 +11,4 @@ import { FeedbackPage } from './feedback';
   ],
 
 })
-export class FeedbackPageModule {}
+export class FeedbackPageModule { }

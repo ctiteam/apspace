@@ -1,20 +1,20 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, ViewChild } from '@angular/core';
-import { AlertController, Events, Nav, Platform } from 'ionic-angular';
+import { Firebase } from '@ionic-native/firebase';
+import {
+  AlertController, Events, Platform, ToastController,
+  Nav
+} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { Firebase } from "@ionic-native/firebase";
+import { Network } from '@ionic-native/network';
 
-import { NewsServiceProvider } from '../providers/news-service/news-service';
-import { CasTicketProvider, WsApiProvider } from '../providers';
-import { NotificationServiceProvider } from '../providers/notification-service/notification-service';
-import { UserProfile } from '../interfaces';
-import { UserPhoto } from '../interfaces/user-photo';
+import { CasTicketProvider, WsApiProvider, NotificationServiceProvider } from '../providers';
+import { UserProfile, UserPhoto } from '../interfaces';
 
 
 
 @Component({
-  templateUrl: 'app.html',
-  providers: [NewsServiceProvider]
+  templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
@@ -34,12 +34,15 @@ export class MyApp {
   constructor(
     public alertCtrl: AlertController,
     public events: Events,
-    private firebase: Firebase,
+    public network: Network,
+    public plt: Platform,
     public storage: Storage,
+    public toastCtrl: ToastController,
     private cas: CasTicketProvider,
     private ws: WsApiProvider,
     private notificationService: NotificationServiceProvider,
-    private platform: Platform
+    private platform: Platform,
+    private firebase: Firebase
   ) {
 
     this.storage.get('tgt')
@@ -49,7 +52,6 @@ export class MyApp {
           this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
           this.photo$ = this.ws.get<UserPhoto[]>('/student/photo')
           this.activePage = this.pages[0];
-          this.subscribe();
           this.navCtrl.setRoot('HomePage');
         } else {
           this.events.subscribe('user:login', () => this.onLogin());
@@ -85,6 +87,11 @@ export class MyApp {
           })
         })
     })
+    this.activePage = this.pages[0];
+
+    if (this.plt.is('cordova') && this.network.type === 'none') {
+      this.toastCtrl.create({ message: 'You are now offline.', duration: 3000 }).present();
+    }
   }
 
   openPage(page) {

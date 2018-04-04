@@ -14,8 +14,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 export class FeedbackPage {
 
 
-  url: string = "https://www.facebook.com/apuniversity/?ref=br_rs";
-  twitUrl: string = "https://twitter.com/AsiaPacificU";
+  facebookUrl: string = "https://www.facebook.com/apuniversity/?ref=br_rs";
+  twitterUrl: string = "https://twitter.com/AsiaPacificU";
   googleUrl: string = "https://plus.google.com/+AsiaPacificUniversityKualaLumpur";
   linkedinUrl: string = "https://www.linkedin.com/school/989991/";
 
@@ -41,16 +41,8 @@ export class FeedbackPage {
     this.emailComposer.open(email);
   }
 
-  openFacebook(url) {
+  openUrl(url) {
     this.inAppBrowser.create(url)
   }
-  openTwitter(twitUrl) {
-    this.inAppBrowser.create(twitUrl)
-  }
-  openGooglePlus(googleUrl) {
-    this.inAppBrowser.create(googleUrl)
-  }
-  openLinkedIn(linkedinUrl) {
-    this.inAppBrowser.create(linkedinUrl)
-  }
+
 }

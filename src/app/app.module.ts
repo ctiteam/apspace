@@ -17,15 +17,13 @@ import { ScrollableTabs } from '../components/scrollable-tabs/scrollable-tabs';
 import { Firebase } from '@ionic-native/firebase';
 import { Push } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { CasTicketProvider, WsApiProvider } from '../providers';
-import { NewsServiceProvider } from '../providers/news-service/news-service';
-import { NotificationServiceProvider } from '../providers/notification-service/notification-service';
+import {
+  CasTicketProvider, RequestCache,
+  RequestCacheWithMapStorage, WsApiProvider, httpInterceptorProviders, NotificationServiceProvider
+} from '../providers';
 
 @NgModule({
-  declarations: [
-    MyApp,
-    ScrollableTabs,
-  ],
+  declarations: [MyApp, ScrollableTabs],
   imports: [
     BrowserModule,
     HttpModule,
@@ -36,22 +34,21 @@ import { NotificationServiceProvider } from '../providers/notification-service/n
     SuperTabsModule.forRoot(),
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-  ],
+  entryComponents: [MyApp],
   providers: [
     StatusBar,
     EmailComposer,
     InAppBrowser,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
     Network,
     CasTicketProvider,
     Firebase,
     Push,
     LocalNotifications,
     WsApiProvider,
-    NewsServiceProvider,
     NotificationServiceProvider,
+    { provide: RequestCache, useClass: RequestCacheWithMapStorage },
+    httpInterceptorProviders,
   ]
 })
-export class AppModule {}
+export class AppModule { }

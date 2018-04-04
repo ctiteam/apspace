@@ -13,4 +13,4 @@ import { TimetablePage } from './timetable';
   entryComponents: [TimetablePage],
   providers: [ActionSheet]
 })
-export class TimetablePageModule {}
+export class TimetablePageModule { }

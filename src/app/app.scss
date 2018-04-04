@@ -1,5 +1,5 @@
 $SIDEMENU_BOTTOM: #2c2a28;
-$SIDEMENU_TRANSPARENCY: rgba(255,255,255,0.4);
+$SIDEMENU_TRANSPARENCY: rgba(255, 255, 255, 0.4);
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 .side-menu-gradient-after-login {
@@ -12,39 +12,41 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   font-weight: 500;
   border: none;
   height: 50px;
+
   .item-content {
     background: none;
+
     &.activated {
       background: $SIDEMENU_TRANSPARENCY;
     }
-
   }
+
   &.active-page-highlight {
     .item-content {
       background: $SIDEMENU_TRANSPARENCY;
     }
-
   }
 }
 
 .side-menu-item-logout {
-  background: #FF4500;
+  background: #ff4500;
   color: white;
   font-weight: 500;
   border: 0px;
   height: 50px;
+
   .item-content {
     background: none;
+
     &.activated {
       background: $SIDEMENU_TRANSPARENCY;
     }
-
   }
+
   &.active-page-highlight {
     .item-content {
       background: $SIDEMENU_TRANSPARENCY;
     }
-
   }
 }
 
@@ -52,12 +54,9 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   background-color: map-get($colors, primary);
 }
 
-
-
 #menu-info {
   height: 150px;
-  background: url(../assets/img/gogle.jpg) 100% ;
-
+  background: url(../assets/img/gogle.jpg) 100%;
 
   * {
     margin: 0 3ex 1ex;
@@ -70,7 +69,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     border: 3px solid $SIDEMENU_TRANSPARENCY;
     width: 70px;
     height: auto;
-   
     margin-left: auto;
     margin-right: auto;
   }
@@ -82,6 +80,4 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     margin-left: auto;
     margin-right: auto;
   }
-
 }
-

@@ -10,4 +10,4 @@ import { HomeModalPage } from './home-modal';
     IonicPageModule.forChild(HomeModalPage),
   ],
 })
-export class HomeModalPageModule {}
+export class HomeModalPageModule { }

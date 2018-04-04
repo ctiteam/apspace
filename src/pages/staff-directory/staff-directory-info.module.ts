@@ -10,4 +10,4 @@ import { StaffDirectoryInfoPage } from './staff-directory-info';
   ],
   entryComponents: [StaffDirectoryInfoPage]
 })
-export class StaffDirectoryInfoPageModule {}
+export class StaffDirectoryInfoPageModule { }

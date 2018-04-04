@@ -1,8 +1,13 @@
-import { Observable } from 'rxjs/Observable';
 import { Component, ViewChild } from '@angular/core';
 import { ActionSheet } from '@ionic-native/action-sheet';
-import { ActionSheetController, ActionSheetButton, Content, IonicPage,
-  NavController, Platform } from 'ionic-angular';
+import {
+  ActionSheetController, ActionSheetButton, Content, IonicPage,
+  NavController, Platform
+} from 'ionic-angular';
+
+import { Observable } from 'rxjs/Observable';
+import { forkJoin } from 'rxjs/observable/forkJoin';
+import { distinctUntilChanged, finalize, map, tap } from 'rxjs/operators';
 
 import { StaffDirectory, Timetable } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
@@ -38,7 +43,7 @@ export class TimetablePage {
       let intakes = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort();
       if (this.plt.is('cordova')) {
         const options = {
-          buttonLabels: [ 'My Classes', ...intakes ],
+          buttonLabels: ['My Classes', ...intakes],
           addCancelButtonWithLabel: 'Cancel'
         };
         this.actionSheet.show(options).then((buttonIndex: number) => {
@@ -106,24 +111,28 @@ export class TimetablePage {
 
   /** Get and merge Timetable with StaffDirectory. */
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
-    return Observable.forkJoin([
+    return forkJoin([
       this.ws.get<Timetable[]>('/open/weektimetable', refresh, { auth: false, timeout: 10000 }),
       this.ws.get<StaffDirectory[]>('/staff/listing'),
-    ]).map(data => (data[0] || []).map(t => <Timetable>Object.assign(t, { STAFFNAME:
-      ((data[1] || []).find(s => s.CODE === t.LECTID) || <StaffDirectory>{}).FULLNAME })));
+    ]).pipe(
+      distinctUntilChanged(),
+      map(data => (data[0] || []).map(t => <Timetable>Object.assign(t,
+        { STAFFNAME: ((data[1] || []).find(s => s.CODE === t.LECTID) || <StaffDirectory>{}).FULLNAME }))),
+    );
   }
 
   strToColor(s: string): string {
     let hash = 0;
     s.split('').forEach(c => hash = c.charCodeAt(0) + ((hash << 5) - hash));
-    return '#' + [1,2,3].map(i => ('00' + (hash >> (i * 8) & 0xFF).toString(16))
-                                  .substr(-2)).join('');
+    return '#' + [1, 2, 3].map(i => ('00' + (hash >> (i * 8) & 0xFF).toString(16))
+      .substr(-2)).join('');
   }
 
   doRefresh(refresher?) {
-    this.timetable$ = this.getTimetable(Boolean(refresher))
-      .do(tt => this.updateDay(tt))
-      .finally(() => refresher && refresher.complete());
+    this.timetable$ = this.getTimetable(Boolean(refresher)).pipe(
+      tap(tt => this.updateDay(tt)),
+      finalize(() => refresher && refresher.complete()),
+    );
   }
 
   ionViewDidLoad() {

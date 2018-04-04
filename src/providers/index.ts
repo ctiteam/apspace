@@ -1,3 +1,9 @@
-export { NewsServiceProvider } from './news-service/news-service';
 export { CasTicketProvider } from './cas-ticket/cas-ticket';
+export { NewsProvider } from './news/news';
+export {
+  RequestCache, RequestCacheWithMap, RequestCacheWithStorage,
+  RequestCacheWithMapStorage
+} from './request-cache/request-cache';
 export { WsApiProvider } from './ws-api/ws-api';
+export { httpInterceptorProviders } from './http-interceptors';
+export { NotificationServiceProvider } from './notification-service/notification-service';

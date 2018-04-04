@@ -3,7 +3,6 @@ import { IonicPage, Platform, NavController } from 'ionic-angular';
 import { Storage } from "@ionic/storage";
 import { Firebase } from "@ionic-native/firebase";
 
-
 @IonicPage()
 @Component({
   selector: 'page-notification',

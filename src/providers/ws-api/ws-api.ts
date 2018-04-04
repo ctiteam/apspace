@@ -1,9 +1,19 @@
-import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Platform, ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
+
+import { Observable } from 'rxjs/Observable';
+import { _throw as obs_throw } from 'rxjs/observable/throw';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+import { of } from 'rxjs/observable/of';
+import { range } from 'rxjs/observable/range';
+import { timer } from 'rxjs/observable/timer';
+import {
+  catchError, mergeMap, publishLast, refCount, retryWhen, switchMap,
+  tap, timeout, zip
+} from 'rxjs/operators';
 
 import { CasTicketProvider } from '../cas-ticket/cas-ticket';
 
@@ -43,17 +53,29 @@ export class WsApiProvider {
     };
 
     return (refresh && (!this.plt.is('cordova') || this.network.type !== 'none')
-      ? this.http.get<T>(url, opt)
-      .catch(err => options.auth === false ? Observable.throw(err)
-        : this.cas.getST(url).switchMap(st => this.http.get<T>(url,
-          Object.assign(opt, { params: Object.assign(opt.params, { ticket: st }) }))))
-      .do(cache => this.storage.set(endpoint, cache)).timeout(options.timeout || 5000)
-      .catch(err => {
-        this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
-        return Observable.fromPromise(this.storage.get(endpoint));
-      })
-      : Observable.fromPromise(this.storage.get(endpoint))
-      .switchMap(v => v ? Observable.of(v) : this.get(endpoint, true, options))
-    ).publishLast().refCount();
+      ? this.http.get<T>(url, opt).pipe(
+        catchError(err => options.auth === false ? obs_throw(err)
+          : this.cas.getST(url).pipe(
+            switchMap(st => this.http.get<T>(url,
+              Object.assign(opt, { params: Object.assign(opt.params, { ticket: st }) })))
+          )),
+        tap(cache => this.storage.set(endpoint, cache)),
+        timeout(options.timeout || 5000),
+        catchError(err => {
+          this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
+          return fromPromise(this.storage.get(endpoint)).pipe(
+            switchMap(v => v || obs_throw('retrying'))
+          );
+        }),
+        retryWhen(attempts => range(1, 4).pipe(
+          zip(attempts, i => 2 ** i - 1),
+          mergeMap(i => timer(i * 1000)),
+        )),
+        catchError(of),
+      )
+      : fromPromise(this.storage.get(endpoint)).pipe(
+        switchMap(v => v ? of(v) : this.get(endpoint, true, options))
+      )
+    ).pipe(publishLast(), refCount());
   }
 }

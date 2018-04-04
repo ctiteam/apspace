@@ -11,4 +11,4 @@ import { ResultsPage } from './results';
   ],
 
 })
-export class ResultsPageModule {}
+export class ResultsPageModule { }
