@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, Platform, AlertController, ToastController, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, Platform, NavController } from 'ionic-angular';
 import { Storage } from "@ionic/storage";
 import { Firebase } from "@ionic-native/firebase";
 
@@ -12,15 +12,8 @@ import { Firebase } from "@ionic-native/firebase";
 
 export class NotificationPage {
 
-  notification: {
-    title: string,
-    text: string
-  } = {
-      "title": "",
-      "text": ""
-    }
-
   items: { title: string, text: string }[] = [];
+  reversed: any;
   token: string;
 
   constructor(
@@ -28,36 +21,39 @@ export class NotificationPage {
     private readonly ngZone: NgZone,
     private readonly firebase: Firebase,
     private readonly storage: Storage,
-    private navCtrl: NavController
+    private navCtrl: NavController,
   ) {
-    this.storage.get('notification').then(data => {
-      this.notification = data;
-      this.handleNotification(this.notification)
+
+
+
+    this.platform.ready().then(() => {
+      this.firebase.onNotificationOpen()
+        .subscribe(notification => { this.handleNotification(notification) })
     })
-
-
-    platform.ready().then(() => {
-      this.firebase.onTokenRefresh()
-        .subscribe((token: string) => this.token = token);
-
-      this.firebase.onNotificationOpen().subscribe(notification => this.handleNotification(notification));
-    });
   }
 
-  handleNotification(data) {
+  ionViewDidLoad() {
+    this.storage.get('items').then(res => {
+      if (!res) {
+        console.log("res is empty");
+      } else {
+        this.items = res;
+      }
+    })
+  }
+
+  handleNotification(notification) {
     this.ngZone.run(() => {
-      this.items.splice(0, 0, { title: data.title, text: data.text });
+      this.items.splice(0, 0,  { title: notification.title, text: notification.text });
+      if (this.items.length > 10) {
+        this.items.pop();
+      }
       this.storage.set('items', this.items);
-      this.storage.get('items').then(data => {
-        this.items = data;
-        if (this.items.length > 15) {
-          this.items.pop();
-        }
-      })
-    });
+    })
   }
 
   openBasicModal(item) {
     this.navCtrl.push('NotificationModalPage', { itemDetails: item });
   }
+
 }

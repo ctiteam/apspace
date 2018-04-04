@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, ViewChild } from '@angular/core';
-import { AlertController, Events, Nav } from 'ionic-angular';
+import { AlertController, Events, Nav, Platform } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Firebase } from "@ionic-native/firebase";
 
@@ -20,14 +20,7 @@ export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
 
   activePage: any;
-
-  notification: {
-    title: string,
-    text: string
-  } = {
-      "title": "",
-      "text": ""
-    }
+  items: { title: string, text: string }[] = [];
 
   pages: Array<{
     title: string,
@@ -45,14 +38,17 @@ export class MyApp {
     public storage: Storage,
     private cas: CasTicketProvider,
     private ws: WsApiProvider,
-    private notificationService: NotificationServiceProvider
+    private notificationService: NotificationServiceProvider,
+    private platform: Platform
   ) {
+
     this.storage.get('tgt')
       .then(tgt => {
         if (tgt) {
           this.events.subscribe('user:logout', () => this.onLogout());
           this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
           this.photo$ = this.ws.get<UserPhoto[]>('/student/photo')
+          this.activePage = this.pages[0];
           this.subscribe();
           this.navCtrl.setRoot('HomePage');
         } else {
@@ -70,7 +66,25 @@ export class MyApp {
       { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
     ];
 
-    this.activePage = this.pages[0];
+    this.platform.ready().then(() => {
+      this.firebase.onNotificationOpen()
+        .subscribe(notification => {
+          console.log("Notification receieved");
+          this.storage.get('items').then(data => {
+            if (!data) {
+              console.log(";ist is empty");
+            } else {
+              this.items = data;
+              this.items.splice(0, 0, { title: notification.title, text: notification.text });
+              if (this.items.length > 10) {
+                this.items.pop();
+              }
+              this.storage.set('items', this.items);
+              this.presentConfirm(notification.title, notification);
+            }
+          })
+        })
+    })
   }
 
   openPage(page) {
@@ -81,13 +95,14 @@ export class MyApp {
   onLogin() {
     this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
     this.photo$ = this.ws.get<UserPhoto[]>('/student/photo');
-    //this.subscribe();
+    this.activePage = this.pages[0];
+    this.subscribe();
     this.events.unsubscribe('user:login');
     this.events.subscribe('user:logout', () => this.onLogout());
   }
 
   onLogout() {
-    //this.unsubscribe();
+    this.unsubscribe();
     this.ws.get('/student/close_session').subscribe();
     this.cas.deleteTGT().subscribe(_ => {
       // TODO: keep reusable cache
@@ -127,14 +142,7 @@ export class MyApp {
               })
           })
       })
-    this.firebase.onNotificationOpen()
-      .subscribe(notification => this.handleNotification(notification))
-  }
 
-  handleNotification(data) {
-    this.notification = data;
-    this.storage.set('notification', this.notification);
-    this.navCtrl.setRoot('NotificationPage')
   }
 
   unsubscribe() {
@@ -149,4 +157,24 @@ export class MyApp {
         })
     })
   }
+
+  presentConfirm(title, notification) {
+    let alert = this.alertCtrl.create({
+      title: 'New Notification',
+      message: title,
+      buttons: [
+        { text: 'Cancel', role: 'cancel' },
+        {
+          text: 'Open',
+          handler: () => {
+            this.navCtrl.push("NotificationModalPage", { itemDetails: notification })
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+
 }
+

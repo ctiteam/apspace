@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
 
 
 const NOTIFICATION_URL = "https://zdbuv8iicb.execute-api.ap-southeast-1.amazonaws.com/production/sns_lambda";
