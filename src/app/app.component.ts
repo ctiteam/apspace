@@ -5,12 +5,13 @@ import {
   AlertController, Events, Platform, ToastController,
   Nav
 } from 'ionic-angular';
+import { forkJoin } from 'rxjs/observable/forkJoin';
+import { tap } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
 
 import { CasTicketProvider, WsApiProvider, NotificationServiceProvider } from '../providers';
 import { UserProfile, UserPhoto } from '../interfaces';
-
 
 
 @Component({
@@ -77,7 +78,8 @@ export class MyApp {
               console.log(";ist is empty");
             } else {
               this.items = data;
-              this.items.splice(0, 0, { title: notification.title, text: notification.text });
+              this.items.splice(0, 0,
+                { title: notification.title, text: notification.text });
               if (this.items.length > 10) {
                 this.items.pop();
               }
@@ -87,10 +89,12 @@ export class MyApp {
           })
         })
     })
+
     this.activePage = this.pages[0];
 
     if (this.plt.is('cordova') && this.network.type === 'none') {
-      this.toastCtrl.create({ message: 'You are now offline.', duration: 3000 }).present();
+      this.toastCtrl.create({ message: 'You are now offline.', duration: 3000 })
+        .present();
     }
   }
 
@@ -109,7 +113,6 @@ export class MyApp {
   }
 
   onLogout() {
-    this.unsubscribe();
     this.ws.get('/student/close_session').subscribe();
     this.cas.deleteTGT().subscribe(_ => {
       // TODO: keep reusable cache
@@ -129,6 +132,7 @@ export class MyApp {
         { text: 'Cancel', role: 'cancel' },
         {
           text: 'Logout', handler: () => {
+            this.unsubscribe();
             this.events.publish('user:logout');
           }
         },
@@ -137,31 +141,24 @@ export class MyApp {
   }
 
   subscribe() {
-    this.firebase.onTokenRefresh()
-      .subscribe(token => {
-        this.storage.set('token', token);
-        this.ws.get('/student/profile')
-          .subscribe((user_info) => {
-            this.cas.getTGT('tgt')
-              .subscribe((tgt) => {
-                this.notificationService
-                  .Subscribe(user_info[0].STUDENT_NUMBER, token, tgt)
-              })
-          })
-      })
-
+    forkJoin([
+      this.firebase.onTokenRefresh().pipe(
+        tap(token => this.storage.set('token', token))),
+      this.ws.get('/student/profile'),
+      this.cas.getTGT()
+    ]).subscribe(d => {
+      this.notificationService.Subscribe(d[1], d[0], d[2])
+    })
   }
 
   unsubscribe() {
-    this.cas.getTGT('tgt').subscribe(tgt => {
-      this.ws.get('/student/profile')
-        .subscribe(user_info => {
-          this.storage.get('token')
-            .then(token => {
-              this.notificationService
-                .Unsubscribe(user_info[0].STUDENT_NUMBER, token, tgt)
-            })
-        })
+    forkJoin([
+      this.cas.getTGT(),
+      this.ws.get('/student/profile'),
+      this.storage.get('token').
+        then(t => { })
+    ]).subscribe(d => {
+      this.notificationService.Unsubscribe(d[1], d[2], d[0])
     })
   }
 
@@ -174,14 +171,14 @@ export class MyApp {
         {
           text: 'Open',
           handler: () => {
-            this.navCtrl.push("NotificationModalPage", { itemDetails: notification })
+            this.navCtrl.push("NotificationModalPage",
+              { itemDetails: notification })
           }
         }
       ]
     });
     alert.present();
   }
-
 
 }
 

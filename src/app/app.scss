@@ -56,7 +56,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 #menu-info {
   height: 150px;
-  background: url(../assets/img/gogle.jpg) 100%;
+  background: url(../assets/img/back2.jpg) 100%;
+  
 
   * {
     margin: 0 3ex 1ex;
@@ -69,15 +70,13 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     border: 3px solid $SIDEMENU_TRANSPARENCY;
     width: 70px;
     height: auto;
-    margin-left: auto;
-    margin-right: auto;
+    margin:auto;
   }
 
   p {
     font-weight: bold;
     color: map-get($colors, foreground);
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
   }
 }

@@ -11,6 +11,7 @@ import { distinctUntilChanged, finalize, map, tap } from 'rxjs/operators';
 
 import { StaffDirectory, Timetable } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
+import { UserProfile } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -21,6 +22,7 @@ export class TimetablePage {
 
   wday = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
+  setIntake$: Observable<UserProfile[]>;
   timetable$: Observable<Timetable[]>;
   selectedDay: string;
   availableDays: string[];
@@ -138,5 +140,4 @@ export class TimetablePage {
   ionViewDidLoad() {
     this.doRefresh();
   }
-
 }

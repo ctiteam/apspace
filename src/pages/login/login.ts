@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, IonicPage } from 'ionic-angular';
+import { NavController, IonicPage, LoadingController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { Platform } from 'ionic-angular';
 import { Network } from '@ionic-native/network';
@@ -8,7 +8,7 @@ import { Events } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { empty } from 'rxjs/observable/empty';
-import { catchError, tap, switchMap } from 'rxjs/operators';
+import { catchError, finalize, tap, timeout, switchMap } from 'rxjs/operators';
 
 import { CasTicketProvider, WsApiProvider } from '../../providers';
 
@@ -21,18 +21,29 @@ export class LoginPage {
 
   @ViewChild('autofocus') autofocus;
 
+  cache1 = [
+    {path: '/student/profile',    auth: true},
+    {path: '/student/photo',      auth: true}
+  ];
+  cache2 = [
+    {path: '/student/subcourses', auth: true},
+    {path: '/open/weektimetable', auth: false},
+    {path: '/staff/listing',      auth: true}
+  ];
+
   username: string;
   password: string;
   initializers: Observable<any>[] = [];
 
   constructor(
     public events: Events,
+    public plt: Platform,
+    private network: Network,
     public menu: MenuController,
     public navCtrl: NavController,
-    public plt: Platform,
-    private casTicket: CasTicketProvider,
-    private network: Network,
+    private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
+    private casTicket: CasTicketProvider,
     private ws: WsApiProvider,
   ) { }
 
@@ -60,23 +71,31 @@ export class LoginPage {
     if (this.plt.is('cordova') && this.network.type === 'none') {
       return this.toast('You are now offline.');
     }
+    //Show loading on Login Button click
+    let loading = this.loadingCtrl
+    .create({
+      content: "Loading...",
+      spinner: "crescent"
+    });
+    loading.present();
+
     this.casTicket.getTGT(this.username, this.password).pipe(
       catchError(_ => this.toast('Invalid username or password.') || empty()),
       switchMap(tgt => this.casTicket.getST(this.casTicket.casUrl, tgt)),
       catchError(_ => this.toast('Fail to get service ticket.') || empty()),
-      tap(_ => this.cacheApi()),
-      tap(_ => this.loadProfile()),
+      switchMap(st => this.casTicket.validate(st)),
+      catchError(_ => this.toast('You are not authorized to use iWebspace') || empty()),
+      tap(_ => this.cacheApi(this.cache1)),
+      timeout(3000),
+      finalize(() => loading.dismiss()),
+      tap(_ => this.cacheApi(this.cache2)),
+    ).pipe(
+      tap(_ => this.loadProfile())
     ).subscribe(_ => this.navCtrl.setRoot('HomePage'));
   }
 
-  cacheApi() {
-    [
-      ['/student/profile', true],
-      ['/student/photo', true],
-      ['/student/subcourses', true],
-      ['/open/weektimetable', false],
-      ['/staff/listing', true],
-    ].forEach(d =>
+  cacheApi(data) {
+      data  = [].forEach(d =>
       this.initializers[d[0] as string] = this.ws.get(d[0] as string, true,
         { auth: d[1] as boolean, timeout: 10000 })
         // use .subscribe instead of .take (probably GC collected)
@@ -86,4 +105,5 @@ export class LoginPage {
   loadProfile() {
     this.events.publish('user:login');
   }
+
 }

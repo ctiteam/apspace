@@ -5,7 +5,7 @@ import { Courses } from '../../interfaces';
 import { Subcourses } from '../../interfaces/subcourses';
 
 import { Observable } from 'rxjs/Observable';
-import { tap } from 'rxjs/operators';
+import { tap, finalize} from 'rxjs/operators';
 
 
 @IonicPage()
@@ -17,28 +17,33 @@ import { tap } from 'rxjs/operators';
 
 export class ResultsPage {
 
-  INTAKES$: Observable<Courses[]>;
-  COURSES$: Observable<Subcourses[]>;
+  intakes$: Observable<Courses[]>;
+  courses$: Observable<Subcourses[]>;
+  response: any;
 
 
   constructor(
     private ws: WsApiProvider) {
   }
 
-  ionViewDidLoad() {
-    this.INTAKES$ = this.ws.get<Courses[]>('/student/courses').pipe(
-      tap(res => this.getSubcourses(res[0].STUDENT_NUMBER, res[0].INTAKE_CODE))
-    );
-  }
-
-  getSubcourses(student_id, intake_code) {
+  getSubcourses(student_id: string, intake_code: string) {
     let params = { format: 'json', id: student_id };
-    this.COURSES$ = this.ws.get<Subcourses[]>(`/student/subcourses?intake=${intake_code}`, false, { params: params });
+
+    this.courses$ = this.ws.get<Subcourses[]>
+      (`/student/subcourses?intake=${intake_code}`,
+      false, { params: params });
   }
 
   doRefresh(refresher?) {
-    setTimeout(() => {
-      refresher.complete();
-    }, 2000);
+    this.intakes$ = this.ws.get<Courses[]>('/student/courses', Boolean(refresher))
+      .pipe(
+        tap(i => this.getSubcourses(i[0].STUDENT_NUMBER, i[0].INTAKE_CODE)),
+        finalize(() => refresher && refresher.complete())
+      )
   }
+
+  ionViewDidLoad() {
+    this.doRefresh();
+  }
+
 }

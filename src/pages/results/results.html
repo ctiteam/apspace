@@ -3,50 +3,48 @@
     <button ion-button icon-only menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <div class="row">
-      <ion-title class="col">
-        Results
-      </ion-title>
-      <p class="col" id="offline_indicator">
-      </p>
-    </div>
+    <ion-title>
+      Results
+    </ion-title>
   </ion-navbar>
+  <ion-toolbar no-border-top color="primary">
+    <ion-segment *ngIf='intakes$ | async as intakes' color="foreground">
+      <ion-segment-button *ngFor="let intake of intakes" [value]="intake.INTAKE_CODE" 
+      (click)="getSubcourses(intake.STUDENT_NUMBER, intake.INTAKE_CODE)">
+        {{intake.INTAKE_CODE}}
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
+
 <ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-segment *ngIf='INTAKES$ | async as INTAKES'>
-    <ion-segment-button *ngFor="let INTAKE of INTAKES" [value]="INTAKE.INTAKE_CODE" 
-     (click)="getSubcourses(INTAKE.STUDENT_NUMBER, INTAKE.INTAKE_CODE)">
-      {{INTAKE.INTAKE_CODE}}
-    </ion-segment-button>
-  </ion-segment>
 
-  <div *ngIf='COURSES$ | async as COURSES'>
-    <ion-card *ngFor="let COURSE of COURSES">
+  <div *ngIf='courses$ | async as courses'>
+    <ion-card *ngFor="let course of courses">
       <ion-list>
         <ion-item class="subj-title">
-          {{COURSE.MODULE_DESCRIPTION}}
+          {{course.MODULE_DESCRIPTION}}
         </ion-item>
         <ion-item>
           <ion-label>Grade</ion-label>
-          <div item-content>{{ COURSE.GRADE || 'N/A' }}</div>
+          <div item-content>{{ course.GRADE || 'N/A' }}</div>
         </ion-item>
         <ion-item>
           <ion-label>Grade Point</ion-label>
-          <div item-content>{{ COURSE.GRADE_POINT || 'N/A' }}</div>
+          <div item-content>{{ course.GRADE_POINT || 'N/A' }}</div>
         </ion-item>
         <ion-item>
           <ion-label>Internal Result Release Date</ion-label>
-          <div item-content>{{ COURSE.INTERNAL_RESULT_RELEASE_DATE || 'N/A' }}</div>
+          <div item-content>{{ course.INTERNAL_RESULT_RELEASE_DATE || 'N/A' }}</div>
         </ion-item>
-        <ion-item *ngIf="COURSE.RECOMMENDATION">
+        <ion-item *ngIf="course.RECOMMENDATION">
           <ion-label>Recommendation</ion-label>
-          <div item-content>{{ COURSE.RECOMMENDATION }}</div>
+          <div item-content>{{ course.RECOMMENDATION }}</div>
         </ion-item>
       </ion-list>
     </ion-card>
   </div>
-
 </ion-content>

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import {Observable} from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 
 import { empty } from 'rxjs/observable/empty';
 import { of } from 'rxjs/observable/of';
@@ -24,6 +24,7 @@ import { catchError, switchMap, tap } from 'rxjs/operators';
 export class CasTicketProvider {
 
   casUrl = 'https://cas.apiit.edu.my';
+  res: any;
 
   constructor(
     public http: HttpClient,
@@ -56,7 +57,7 @@ export class CasTicketProvider {
         tap(tgt => this.storage.set('tgt', tgt)),
         tap(_ => this.storage.set('cred', data)),
       ))
-      );
+    );
   }
 
   /**
@@ -95,4 +96,26 @@ export class CasTicketProvider {
       switchMap(tgt => this.http.delete(this.casUrl + '/cas/v1/tickets/' + tgt, options))
     );
   }
+
+  /**
+   * GET: 
+   * @return tgt
+   */
+  validate(st?: any): Observable<any> {
+    console.log('ST: ' + st);
+    const options = {
+      headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+      params: { 'format': 'json', 'service': this.casUrl, 'ticket': st },
+      withCredentials: true
+    };
+
+    return this.http.get(this.casUrl + '/cas/p3/serviceValidate', options).pipe(
+      switchMap(res =>
+        res['serviceResponse']['authenticationSuccess']['attributes']['memberOf'][0]
+          .toLowerCase().split(',').indexOf('ou=students') !== -1
+          ? of(res) : obs_throw('Group not supported')
+      )
+    )
+  }
+
 }
