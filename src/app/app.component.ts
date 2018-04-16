@@ -6,6 +6,7 @@ import {
   Nav
 } from 'ionic-angular';
 import { forkJoin } from 'rxjs/observable/forkJoin';
+import { fromPromise } from 'rxjs/observable/fromPromise';
 import { tap } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
@@ -70,24 +71,26 @@ export class MyApp {
     ];
 
     this.platform.ready().then(() => {
-      this.firebase.onNotificationOpen()
-        .subscribe(notification => {
-          console.log("Notification receieved");
-          this.storage.get('items').then(data => {
-            if (!data) {
-              console.log(";ist is empty");
-            } else {
-              this.items = data;
-              this.items.splice(0, 0,
-                { title: notification.title, text: notification.text });
-              if (this.items.length > 10) {
-                this.items.pop();
+      if (this.plt.is('cordova')) {
+        this.firebase.onNotificationOpen()
+          .subscribe(notification => {
+            console.log("Notification receieved");
+            this.storage.get('items').then(data => {
+              if (!data) {
+                console.log(";ist is empty");
+              } else {
+                this.items = data;
+                this.items.splice(0, 0,
+                  { title: notification.title, text: notification.text });
+                if (this.items.length > 10) {
+                  this.items.pop();
+                }
+                this.storage.set('items', this.items);
+                this.presentConfirm(notification.title, notification);
               }
-              this.storage.set('items', this.items);
-              this.presentConfirm(notification.title, notification);
-            }
+            })
           })
-        })
+      }
     })
 
     this.activePage = this.pages[0];
@@ -104,15 +107,23 @@ export class MyApp {
   }
 
   onLogin() {
+    if (this.plt.is('cordova')) {
+      this.subscribe();
+    }
     this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
     this.photo$ = this.ws.get<UserPhoto[]>('/student/photo');
     this.activePage = this.pages[0];
-    this.subscribe();
     this.events.unsubscribe('user:login');
     this.events.subscribe('user:logout', () => this.onLogout());
   }
 
   onLogout() {
+    forkJoin([
+      this.cas.getTGT(),
+      this.ws.get('/student/profile'),
+      fromPromise(this.storage.get('token')),
+    ]).subscribe(d => this.notificationService.Unsubscribe(d[1], d[2], d[0]))
+
     this.ws.get('/student/close_session').subscribe();
     this.cas.deleteTGT().subscribe(_ => {
       // TODO: keep reusable cache
@@ -132,7 +143,6 @@ export class MyApp {
         { text: 'Cancel', role: 'cancel' },
         {
           text: 'Logout', handler: () => {
-            this.unsubscribe();
             this.events.publish('user:logout');
           }
         },
@@ -148,17 +158,6 @@ export class MyApp {
       this.cas.getTGT()
     ]).subscribe(d => {
       this.notificationService.Subscribe(d[1], d[0], d[2])
-    })
-  }
-
-  unsubscribe() {
-    forkJoin([
-      this.cas.getTGT(),
-      this.ws.get('/student/profile'),
-      this.storage.get('token').
-        then(t => { })
-    ]).subscribe(d => {
-      this.notificationService.Unsubscribe(d[1], d[2], d[0])
     })
   }
 

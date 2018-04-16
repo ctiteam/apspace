@@ -98,11 +98,10 @@ export class CasTicketProvider {
   }
 
   /**
-   * GET: 
+   * GET: ??
    * @return tgt
    */
   validate(st?: any): Observable<any> {
-    console.log('ST: ' + st);
     const options = {
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
       params: { 'format': 'json', 'service': this.casUrl, 'ticket': st },
@@ -112,9 +111,8 @@ export class CasTicketProvider {
     return this.http.get(this.casUrl + '/cas/p3/serviceValidate', options).pipe(
       switchMap(res =>
         res['serviceResponse']['authenticationSuccess']['attributes']['memberOf'][0]
-          .toLowerCase().split(',').indexOf('ou=students') !== -1
-          ? of(res) : obs_throw('Group not supported')
-      )
+        .toLowerCase().split(',').indexOf('ou=students') !== -1
+        ? of(res) : obs_throw('Group not supported'))
     )
   }
 

@@ -6,7 +6,7 @@ import { Network } from '@ionic-native/network';
 import { MenuController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
 
-import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { empty } from 'rxjs/observable/empty';
 import { catchError, finalize, tap, timeout, switchMap } from 'rxjs/operators';
 
@@ -33,7 +33,7 @@ export class LoginPage {
 
   username: string;
   password: string;
-  initializers: Observable<any>[] = [];
+  initializers: Subscription[] = [];
 
   constructor(
     public events: Events,
@@ -95,11 +95,11 @@ export class LoginPage {
   }
 
   cacheApi(data) {
-      data  = [].forEach(d =>
-      this.initializers[d[0] as string] = this.ws.get(d[0] as string, true,
-        { auth: d[1] as boolean, timeout: 10000 })
-        // use .subscribe instead of .take (probably GC collected)
-        .subscribe(_ => this.initializers[d[0] as string].unsubscribe()));
+    data.forEach(d =>
+      this.initializers[d.path] = this.ws.get(d.path, true,
+        { auth: d.auth, timeout: 10000 })
+      // use .subscribe instead of .take (probably GC collected)
+      .subscribe(_ => this.initializers[d.path].unsubscribe()));
   }
 
   loadProfile() {
