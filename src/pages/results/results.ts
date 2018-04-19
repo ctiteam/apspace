@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, ToastController } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-import { tap, finalize, switchMap } from 'rxjs/operators';
-import { empty } from 'rxjs/observable/empty';
+import { tap, finalize } from 'rxjs/operators';
 
 import { WsApiProvider } from '../../providers';
 import { Courses, Subcourses } from '../../interfaces';
@@ -25,7 +24,6 @@ export class ResultsPage {
   selectedIntake: string;
 
   constructor(
-    private toastCtrl: ToastController,
     private ws: WsApiProvider) {
   }
 
