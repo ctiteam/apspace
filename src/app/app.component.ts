@@ -38,7 +38,6 @@ export class MyApp {
     public events: Events,
     public menuCtrl: MenuController,
     public network: Network,
-    public plt: Platform,
     public storage: Storage,
     public toastCtrl: ToastController,
     private cas: CasTicketProvider,
@@ -73,7 +72,7 @@ export class MyApp {
     ];
 
     this.platform.ready().then(() => {
-      if (this.plt.is('cordova')) {
+      if (this.platform.is('cordova')) {
         this.firebase.onNotificationOpen()
           .subscribe(notification => {
             console.log("Notification receieved");
@@ -97,7 +96,7 @@ export class MyApp {
 
     this.activePage = this.pages[0];
 
-    if (this.plt.is('cordova') && this.network.type === 'none') {
+    if (this.platform.is('cordova') && this.network.type === 'none') {
       this.toastCtrl.create({ message: 'You are now offline.', duration: 3000 })
         .present();
     }
@@ -114,7 +113,7 @@ export class MyApp {
   }
 
   onLogin() {
-    if (this.plt.is('cordova')) {
+    if (this.platform.is('cordova')) {
       this.subscribe();
     }
     this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
@@ -125,11 +124,13 @@ export class MyApp {
   }
 
   onLogout() {
-    forkJoin([
-      this.cas.getTGT(),
-      this.ws.get('/student/profile'),
-      fromPromise(this.storage.get('token')),
-    ]).subscribe(d => this.notificationService.Unsubscribe(d[1], d[2], d[0]))
+    if (this.platform.is('cordova')) {
+      forkJoin([
+        this.cas.getTGT(),
+        this.ws.get('/student/profile'),
+        fromPromise(this.storage.get('token')),
+      ]).subscribe(d => this.notificationService.Unsubscribe(d[1], d[2], d[0]))
+    }
 
     this.ws.get('/student/close_session').subscribe();
     this.cas.deleteTGT().subscribe(_ => {

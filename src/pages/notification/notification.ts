@@ -22,19 +22,18 @@ export class NotificationPage {
     private readonly storage: Storage,
     private navCtrl: NavController,
   ) {
-
-
-
+    
     this.platform.ready().then(() => {
+      if(this.platform.is('cordova')){
       this.firebase.onNotificationOpen()
         .subscribe(notification => { this.handleNotification(notification) })
+      }
     })
   }
 
   ionViewDidLoad() {
     this.storage.get('items').then(res => {
       if (!res) {
-        console.log("res is empty");
       } else {
         this.items = res;
       }
@@ -43,7 +42,7 @@ export class NotificationPage {
 
   handleNotification(notification) {
     this.ngZone.run(() => {
-      this.items.splice(0, 0,  { title: notification.title, text: notification.text });
+      this.items.splice(0, 0, { title: notification.title, text: notification.text });
       if (this.items.length > 10) {
         this.items.pop();
       }

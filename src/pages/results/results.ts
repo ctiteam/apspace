@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
-import { WsApiProvider } from '../../providers';
-import { Courses } from '../../interfaces';
-import { Subcourses } from '../../interfaces/subcourses';
-
+import { IonicPage, ToastController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-import { tap, finalize} from 'rxjs/operators';
+import { tap, finalize, switchMap } from 'rxjs/operators';
+import { empty } from 'rxjs/observable/empty';
+
+import { WsApiProvider } from '../../providers';
+import { Courses, Subcourses } from '../../interfaces';
+
+
 
 
 @IonicPage()
@@ -19,11 +21,25 @@ export class ResultsPage {
 
   intakes$: Observable<Courses[]>;
   courses$: Observable<Subcourses[]>;
-  response: any;
 
+  selectedIntake: string;
 
   constructor(
+    private toastCtrl: ToastController,
     private ws: WsApiProvider) {
+  }
+
+  ionViewDidLoad() {
+    this.doRefresh();
+  }
+
+  doRefresh(refresher?) {
+    this.intakes$ = this.ws.get<Courses[]>('/student/courses', Boolean(refresher))
+      .pipe(
+        tap(i => this.selectedIntake = i[0].INTAKE_CODE),
+        tap(i => this.getSubcourses(i[0].STUDENT_NUMBER, i[0].INTAKE_CODE)),
+        finalize(() => refresher && refresher.complete())
+      )
   }
 
   getSubcourses(student_id: string, intake_code: string) {
@@ -33,17 +49,4 @@ export class ResultsPage {
       (`/student/subcourses?intake=${intake_code}`,
       false, { params: params });
   }
-
-  doRefresh(refresher?) {
-    this.intakes$ = this.ws.get<Courses[]>('/student/courses', Boolean(refresher))
-      .pipe(
-        tap(i => this.getSubcourses(i[0].STUDENT_NUMBER, i[0].INTAKE_CODE)),
-        finalize(() => refresher && refresher.complete())
-      )
-  }
-
-  ionViewDidLoad() {
-    this.doRefresh();
-  }
-
 }
