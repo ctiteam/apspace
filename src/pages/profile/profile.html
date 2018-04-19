@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Profile</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding-top>
+  <ion-list>
+    <button ion-item *ngFor="let p of pages" [navPush]="p.component">
+      {{ p.title }}
+    </button>
+  </ion-list>
+</ion-content>

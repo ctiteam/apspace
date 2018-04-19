@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Firebase } from '@ionic-native/firebase';
 import {
   AlertController, Events, Platform, ToastController,
-  Nav
+  MenuController, Nav
 } from 'ionic-angular';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { fromPromise } from 'rxjs/observable/fromPromise';
@@ -36,6 +36,7 @@ export class MyApp {
   constructor(
     public alertCtrl: AlertController,
     public events: Events,
+    public menuCtrl: MenuController,
     public network: Network,
     public plt: Platform,
     public storage: Storage,
@@ -68,6 +69,7 @@ export class MyApp {
       { title: 'Results', component: 'ResultsPage', icon: 'checkbox' },
       { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
       { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
+      { title: 'Profile', component: 'ProfilePage', icon: 'contact' },
     ];
 
     this.platform.ready().then(() => {
@@ -104,6 +106,11 @@ export class MyApp {
   openPage(page) {
     this.navCtrl.setRoot(page.component);
     this.activePage = page;
+  }
+
+  openProfile() {
+    this.menuCtrl.close();
+    this.openPage(this.pages.find(p => p.component === 'ProfilePage'));
   }
 
   onLogin() {
