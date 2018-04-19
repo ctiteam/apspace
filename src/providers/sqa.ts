@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { publishLast, refCount, switchMap } from 'rxjs/operators';
 
-import { CasTicketProvider } from '../cas-ticket/cas-ticket';
-import { Sqa } from '../../interfaces';
+import { CasTicketProvider } from './';
+import { Sqa } from '../interfaces';
 
 @Injectable()
 export class SqaProvider {

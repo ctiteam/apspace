@@ -6,8 +6,8 @@ export {
 export { httpInterceptorProviders } from './http-interceptors';
 
 /* User providers */
-export { CasTicketProvider } from './cas-ticket/cas-ticket';
-export { NewsProvider } from './news/news';
-export { NotificationServiceProvider } from './notification-service/notification-service';
-export { SqaProvider } from './sqa/sqa';
-export { WsApiProvider } from './ws-api/ws-api';
+export { CasTicketProvider } from './cas-ticket';
+export { NewsProvider } from './news';
+export { NotificationServiceProvider } from './notification-service';
+export { SqaProvider } from './sqa';
+export { WsApiProvider } from './ws-api';

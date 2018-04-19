@@ -15,7 +15,7 @@ import {
   tap, timeout, zip
 } from 'rxjs/operators';
 
-import { CasTicketProvider } from '../cas-ticket/cas-ticket';
+import { CasTicketProvider } from './';
 
 @Injectable()
 export class WsApiProvider {

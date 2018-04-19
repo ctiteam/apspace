@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { publishLast, refCount } from 'rxjs/operators';
 
-import { News } from '../../interfaces';
+import { News } from '../interfaces';
 
 @Injectable()
 export class NewsProvider {
