@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-import { tap, finalize } from 'rxjs/operators';
+import { tap, finalize, findIndex } from 'rxjs/operators';
 
 import { WsApiProvider } from '../../providers';
 import { Course, Subcourse } from '../../interfaces';
-
-
-
 
 @IonicPage()
 @Component({
@@ -19,31 +16,29 @@ import { Course, Subcourse } from '../../interfaces';
 export class ResultsPage {
 
   intakes$: Observable<Course[]>;
-  courses$: Observable<Subcourse[]>;
+  results$: Observable<Subcourse>;
 
   selectedIntake: string;
+  studentId: string;
 
-  constructor(
-    private ws: WsApiProvider) {
+  constructor(private ws: WsApiProvider) { }
+
+  getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
+    const opt = { params: { id: this.studentId, format: 'json' } };
+    return this.results$ = this.ws.get(`/student/subcourses?intake=${intake}`, refresh, opt);
   }
 
   ionViewDidLoad() {
-    this.doRefresh();
+    this.intakes$ = this.ws.get<Course[]>('/student/courses').pipe(
+      tap(i => this.selectedIntake = i[0].INTAKE_CODE),
+      tap(i => this.studentId = i[0].STUDENT_NUMBER),
+      tap(i => this.getResults(this.selectedIntake))
+    );
   }
 
   doRefresh(refresher?) {
-    this.intakes$ = this.ws.get<Course[]>('/student/courses', Boolean(refresher))
-      .pipe(
-        tap(i => this.selectedIntake = i[0].INTAKE_CODE),
-        tap(i => this.getSubcourse(i[0].STUDENT_NUMBER, i[0].INTAKE_CODE)),
-        finalize(() => refresher && refresher.complete())
-      )
-  }
-
-  getSubcourse(student_id: string, intake_code: string) {
-    let params = { format: 'json', id: student_id };
-    this.courses$ = this.ws.get<Subcourse[]>
-      (`/student/subcourses?intake=${intake_code}`,
-      false, { params: params });
+    this.results$ = this.getResults(this.selectedIntake, true).pipe(
+      finalize(() => refresher.complete())
+    )
   }
 }

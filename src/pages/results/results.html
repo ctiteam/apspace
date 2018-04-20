@@ -10,7 +10,7 @@
   <ion-toolbar no-border-top color="primary">
     <ion-segment *ngIf='intakes$ | async as intakes' [(ngModel)]="selectedIntake" color="foreground">
       <ion-segment-button *ngFor="let intake of intakes" [value]="intake.INTAKE_CODE" 
-      (click)="getSubcourse(intake.STUDENT_NUMBER, intake.INTAKE_CODE)">
+      (click)="getResults(intake.INTAKE_CODE)">
         {{intake.INTAKE_CODE}}
       </ion-segment-button>
     </ion-segment>
@@ -22,27 +22,27 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <div *ngIf='courses$ | async as courses'>
-    <ion-card *ngFor="let course of courses">
+  <div *ngIf='results$ | async as results'>
+    <ion-card *ngFor="let result of results">
       <ion-list>
         <ion-item class="subj-title">
-          {{course.MODULE_DESCRIPTION}}
+          {{result.MODULE_DESCRIPTION}}
         </ion-item>
         <ion-item>
           <ion-label>Grade</ion-label>
-          <div item-content>{{ course.GRADE || 'N/A' }}</div>
+          <div item-content>{{ result.GRADE || 'N/A' }}</div>
         </ion-item>
         <ion-item>
           <ion-label>Grade Point</ion-label>
-          <div item-content>{{ course.GRADE_POINT || 'N/A' }}</div>
+          <div item-content>{{ result.GRADE_POINT || 'N/A' }}</div>
         </ion-item>
         <ion-item>
           <ion-label>Internal Result Release Date</ion-label>
-          <div item-content>{{ course.INTERNAL_RESULT_RELEASE_DATE || 'N/A' }}</div>
+          <div item-content>{{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A' }}</div>
         </ion-item>
-        <ion-item *ngIf="course.RECOMMENDATION">
+        <ion-item *ngIf="result.RECOMMENDATION">
           <ion-label>Recommendation</ion-label>
-          <div item-content>{{ course.RECOMMENDATION }}</div>
+          <div item-content>{{ result.RECOMMENDATION }}</div>
         </ion-item>
       </ion-list>
     </ion-card>

@@ -23,7 +23,6 @@ export class AttendancePage {
   constructor(private ws: WsApiProvider) { }
 
   getAttendance(intake: string, refresh: boolean = false): Observable<Attendance> {
-    console.debug('getAttendance', this.studentId, intake, refresh);
     const opt = { params: { id: this.studentId, format: 'json' } };
     return this.attendance$ = this.ws.get(`/student/attendance?intake=${intake}`, refresh, opt);
   }
@@ -32,12 +31,11 @@ export class AttendancePage {
     this.courses$ = this.ws.get<Course[]>('/student/courses').pipe(
       tap(c => this.selectedIntake = c[0].INTAKE_CODE),
       tap(c => this.studentId = c[0].STUDENT_NUMBER),
-      tap(c => this.getAttendance(c[0].INTAKE_CODE))
+      tap(c => this.getAttendance(this.selectedIntake))
     );
   }
 
-  doRefresh(refresher?) {
-    console.debug(this.selectedIntake);
+  doRefresh(refresher) {
     this.attendance$ = this.getAttendance(this.selectedIntake, true).pipe(
       finalize(() => refresher.complete())
     );
