@@ -12,8 +12,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Network } from '@ionic-native/network';
-import { SuperTabsModule } from 'ionic2-super-tabs';
-import { ScrollableTabs } from '../components/scrollable-tabs/scrollable-tabs';
 import { Firebase } from '@ionic-native/firebase';
 import { Push } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
@@ -23,7 +21,7 @@ import {
 } from '../providers';
 
 @NgModule({
-  declarations: [MyApp, ScrollableTabs],
+  declarations: [MyApp],
   imports: [
     BrowserModule,
     HttpModule,
@@ -31,7 +29,6 @@ import {
     JsonpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    SuperTabsModule.forRoot(),
   ],
   bootstrap: [IonicApp],
   entryComponents: [MyApp],
