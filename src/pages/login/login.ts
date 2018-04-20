@@ -33,6 +33,7 @@ export class LoginPage {
 
   username: string;
   password: string;
+  showPasswordText: boolean;
   initializers: Subscription[] = [];
 
   constructor(
@@ -104,6 +105,10 @@ export class LoginPage {
 
   loadProfile() {
     this.events.publish('user:login');
+  }
+
+  getPasswordVisibility() {
+    return (this.showPasswordText ? "text" : "password");
   }
 
 }

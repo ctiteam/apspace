@@ -5,20 +5,34 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
-
-
-<ion-content class="loginPageBackground" padding>
+<ion-content class="background" padding>
   <form (ngSubmit)="login()">
-    <img padding-bottom class="login_logo" src="assets/img/login.jpg">
-    <h4>WELCOME TO iWEBSPACE</h4>
-    <ion-list padding-top padding-bottom>
+    <img padding-bottom class="logo" src="assets/img/login.jpg">
+    <div class="spacer-10"></div>
+    <div>
+      <h1>
+        WELCOME TO
+      </h1>
+      <h1>
+        <span>iWebspace</span>
+      </h1>
+    </div>
+    <div class="spacer-10"></div>
+    <div padding-top padding-bottom>
       <ion-item no-padding margin-bottom>
+        <ion-icon name="contact" item-left></ion-icon>
         <ion-input #autofocus type="email" placeholder="'APKey'" [(ngModel)]="username" [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
       <ion-item no-padding>
-        <ion-input type="password" placeholder="Password" [(ngModel)]="password" [ngModelOptions]="{standalone: true}"></ion-input>
+        <ion-icon name="lock" item-left></ion-icon>
+        <ion-input [type]="getPasswordVisibility()" placeholder="Password" [(ngModel)]="password" [ngModelOptions]="{standalone: true}"></ion-input>
+        <button (click)="showPasswordText = !showPasswordText" ion-button clear type="button" item-right>
+          <ion-icon *ngIf="showPasswordText" class="password-is-shown-icon" name="eye"></ion-icon>
+          <ion-icon *ngIf="!showPasswordText" class="password-is-hidden-icon" name="eye"></ion-icon>
+        </button>
       </ion-item>
-    </ion-list>
+    </div>
+    <div class="spacer-10"></div>
     <button ion-button block type="submit" [disabled]="!username || !password">
       Login
     </button>

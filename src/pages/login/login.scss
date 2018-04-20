@@ -1,39 +1,49 @@
 page-login {
    
-.loginPageBackground{
+.background{
     background-color: rgb(255, 255, 255);
 }
 
 .button{
     padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 18px;
-    margin: 4px 2px;
-    cursor: pointer;
-    width: (40%-60%);
-    position: relative;
-    height: 2.5em;
-    border-radius:10px 10px 10px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 18px;
+        margin: 4px 2px;
+        cursor: pointer;
+        width: (40%-60%);
+        position: relative;
+        height: 2.5em;
+        border-radius:10px 10px 10px 10px;
+        background-color: color($colors, primary);
+        color: white;
+
 }
 
-.login_logo{
+.logo{
     display: block; 
     width: 100%; 
     height: auto; 
     margin: auto;
 }
 
-.spacer{
-    width:300px;
-    height:24.9931px;
+.spacer-50{width:300px;height:50px;}
+.spacer-10{width:300px;height:10px;}
+
+
+h1 {
+    color: #424141;
+    font-family: 'Bungee', cursive;
+    font-size: 2em;
+    letter-spacing: 2px;
+    text-align: center;
+
+    span {
+        color: color($colors, primary);
+    }
 }
 
-h4{
-    text-align:center; 
-    font-weight: 550;
-}
 }
 
 
