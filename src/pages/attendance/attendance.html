@@ -14,8 +14,7 @@
   </ion-refresher>
 
   <ion-segment [(ngModel)]="selectedIntake">
-    <ion-segment-button *ngFor="let c of courses$ | async"
-      [value]="c.INTAKE_CODE" (click)="getAttendance(c.INTAKE_CODE)">
+    <ion-segment-button *ngFor="let c of courses$ | async" [value]="c.INTAKE_CODE">
       {{ c.INTAKE_CODE }}
     </ion-segment-button>
   </ion-segment>

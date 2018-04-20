@@ -22,10 +22,10 @@ export class AttendancePage {
 
   constructor(private ws: WsApiProvider) { }
 
-  getAttendance(intake: string, refresh: boolean = false) {
+  getAttendance(intake: string, refresh: boolean = false): Observable<Attendance> {
     console.debug('getAttendance', this.studentId, intake, refresh);
     const opt = { params: { id: this.studentId, format: 'json' } };
-    this.attendance$ = this.ws.get(`/student/attendance?intake=${intake}`, refresh, opt);
+    return this.ws.get(`/student/attendance?intake=${intake}`, refresh, opt);
   }
 
   ionViewDidLoad() {
@@ -33,13 +33,13 @@ export class AttendancePage {
       tap(c => this.studentId = c[0].STUDENT_NUMBER),
       tap(c => this.selectedIntake = c[0].INTAKE_CODE),
       tap(_ => console.debug('tap courses$', this.selectedIntake)),
-      tap(_ => this.getAttendance(this.selectedIntake)),
+      tap(_ => this.attendance$ = this.getAttendance(this.selectedIntake)),
     );
   }
 
   doRefresh(refresher) {
     console.debug(this.selectedIntake);
-    this.getAttendance(this.selectedIntake, true).pipe(
+    this.attendance$ = this.getAttendance(this.selectedIntake, true).pipe(
       finalize(() => refresher.complete())
     );
   }
