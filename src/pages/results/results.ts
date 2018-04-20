@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-import { tap, finalize, findIndex } from 'rxjs/operators';
+import { tap, finalize } from 'rxjs/operators';
 
 import { WsApiProvider } from '../../providers';
 import { Course, Subcourse } from '../../interfaces';
