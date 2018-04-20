@@ -68,6 +68,7 @@ export class MyApp {
       { title: 'Results', component: 'ResultsPage', icon: 'checkbox' },
       { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
       { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
+      { title: 'Attendance', component: 'AttendancePage', icon: 'alarm' },
       { title: 'Profile', component: 'ProfilePage', icon: 'contact' },
     ];
 

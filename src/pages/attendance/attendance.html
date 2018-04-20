@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Attendance</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-segment [(ngModel)]="selectedIntake">
+    <ion-segment-button *ngFor="let c of courses$ | async"
+      [value]="c.INTAKE_CODE" (click)="getAttendance(c.INTAKE_CODE)">
+      {{ c.INTAKE_CODE }}
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-list>
+    <ion-item *ngFor="let a of attendance$ | async">
+      {{ a.MODULE_ATTENDANCE }}
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,3 +1,4 @@
+export { Attendance } from './attendance';
 export { Courses } from './courses';
 export { News } from './news';
 export { Sqa } from './sqa';
