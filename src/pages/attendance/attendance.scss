@@ -1,3 +1,26 @@
 page-attendance {
+    
+    ion-segment {
+        display: block;
+        white-space: nowrap;
+        font-size: 0;
+        overflow: auto;
+      
+        &::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            display: none;
+        }
+      
+        ion-segment-button.segment-button {
+          display: inline-block;
+          min-width: 105px;
+          width: auto;
+        }
+      }
+
+      .subj-title{
+        font-weight: 900;
+      }
 
 }

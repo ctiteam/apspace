@@ -25,19 +25,18 @@ export class AttendancePage {
   getAttendance(intake: string, refresh: boolean = false): Observable<Attendance> {
     console.debug('getAttendance', this.studentId, intake, refresh);
     const opt = { params: { id: this.studentId, format: 'json' } };
-    return this.ws.get(`/student/attendance?intake=${intake}`, refresh, opt);
+    return this.attendance$ = this.ws.get(`/student/attendance?intake=${intake}`, refresh, opt);
   }
 
   ionViewDidLoad() {
     this.courses$ = this.ws.get<Course[]>('/student/courses').pipe(
-      tap(c => this.studentId = c[0].STUDENT_NUMBER),
       tap(c => this.selectedIntake = c[0].INTAKE_CODE),
-      tap(_ => console.debug('tap courses$', this.selectedIntake)),
-      tap(_ => this.attendance$ = this.getAttendance(this.selectedIntake)),
+      tap(c => this.studentId = c[0].STUDENT_NUMBER),
+      tap(c => this.getAttendance(c[0].INTAKE_CODE))
     );
   }
 
-  doRefresh(refresher) {
+  doRefresh(refresher?) {
     console.debug(this.selectedIntake);
     this.attendance$ = this.getAttendance(this.selectedIntake, true).pipe(
       finalize(() => refresher.complete())

@@ -42,7 +42,6 @@ export class ResultsPage {
 
   getSubcourse(student_id: string, intake_code: string) {
     let params = { format: 'json', id: student_id };
-
     this.courses$ = this.ws.get<Subcourse[]>
       (`/student/subcourses?intake=${intake_code}`,
       false, { params: params });
