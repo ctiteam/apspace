@@ -1,4 +1,4 @@
-export interface Courses {
+export interface Course {
   STUDENT_NUMBER: string;
   INTAKE_CODE: string;
   COURSE_DESCRIPTION: string;

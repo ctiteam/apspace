@@ -10,7 +10,7 @@
   <ion-toolbar no-border-top color="primary">
     <ion-segment *ngIf='intakes$ | async as intakes' [(ngModel)]="selectedIntake" color="foreground">
       <ion-segment-button *ngFor="let intake of intakes" [value]="intake.INTAKE_CODE" 
-      (click)="getSubcourses(intake.STUDENT_NUMBER, intake.INTAKE_CODE)">
+      (click)="getSubcourse(intake.STUDENT_NUMBER, intake.INTAKE_CODE)">
         {{intake.INTAKE_CODE}}
       </ion-segment-button>
     </ion-segment>

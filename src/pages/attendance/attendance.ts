@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { tap, finalize } from 'rxjs/operators';
 
 import { WsApiProvider } from '../../providers';
-import { Attendance, Courses } from '../../interfaces';
+import { Attendance, Course } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -15,7 +15,7 @@ import { Attendance, Courses } from '../../interfaces';
 export class AttendancePage {
 
   attendance$: Observable<Attendance>;
-  courses$: Observable<Courses[]>;
+  courses$: Observable<Course[]>;
 
   selectedIntake: string;
   studentId: string;
@@ -29,7 +29,7 @@ export class AttendancePage {
   }
 
   ionViewDidLoad() {
-    this.courses$ = this.ws.get<Courses[]>('/student/courses').pipe(
+    this.courses$ = this.ws.get<Course[]>('/student/courses').pipe(
       tap(c => this.studentId = c[0].STUDENT_NUMBER),
       tap(c => this.selectedIntake = c[0].INTAKE_CODE),
       tap(_ => console.debug('tap courses$', this.selectedIntake)),

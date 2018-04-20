@@ -1,4 +1,4 @@
-export interface Subcourses {
+export interface Subcourse {
   MODULE_CODE: string;
   MODULE_DESCRIPTION: string;
   CREDIT_HOURS: number;

@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { distinctUntilChanged, finalize, map, tap } from 'rxjs/operators';
 
-import { UserProfile, StaffDirectory, Timetable } from '../../interfaces';
+import { StaffDirectory, StudentProfile, Timetable } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
 
 @IonicPage()
@@ -136,7 +136,7 @@ export class TimetablePage {
   }
 
   ionViewDidLoad() {
-    this.ws.get<UserProfile[]>('/student/profile')
+    this.ws.get<StudentProfile[]>('/student/profile')
       .subscribe(p => this.intake = p[0].INTAKE_CODE || '');
     this.doRefresh();
   }
