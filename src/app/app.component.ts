@@ -12,7 +12,7 @@ import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
 
 import { CasTicketProvider, WsApiProvider, NotificationServiceProvider } from '../providers';
-import { UserProfile, UserPhoto } from '../interfaces';
+import { StudentPhoto, StudentProfile } from '../interfaces';
 
 
 @Component({
@@ -30,8 +30,8 @@ export class MyApp {
     icon: any
   }>;
 
-  profile$: Observable<UserProfile[]>;
-  photo$: Observable<UserPhoto[]>;
+  photo$: Observable<StudentPhoto[]>;
+  profile$: Observable<StudentProfile[]>;
 
   constructor(
     public alertCtrl: AlertController,
@@ -51,8 +51,8 @@ export class MyApp {
       .then(tgt => {
         if (tgt) {
           this.events.subscribe('user:logout', () => this.onLogout());
-          this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
-          this.photo$ = this.ws.get<UserPhoto[]>('/student/photo')
+          this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo')
+          this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
           this.activePage = this.pages[0];
           this.navCtrl.setRoot('HomePage');
         } else {
@@ -68,6 +68,7 @@ export class MyApp {
       { title: 'Results', component: 'ResultsPage', icon: 'checkbox' },
       { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
       { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
+      { title: 'Attendance', component: 'AttendancePage', icon: 'alarm' },
       { title: 'Profile', component: 'ProfilePage', icon: 'contact' },
     ];
 
@@ -116,8 +117,8 @@ export class MyApp {
     if (this.platform.is('cordova')) {
       this.subscribe();
     }
-    this.profile$ = this.ws.get<UserProfile[]>('/student/profile');
-    this.photo$ = this.ws.get<UserPhoto[]>('/student/photo');
+    this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
+    this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
     this.activePage = this.pages[0];
     this.events.unsubscribe('user:login');
     this.events.subscribe('user:logout', () => this.onLogout());

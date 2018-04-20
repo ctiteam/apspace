@@ -47,7 +47,6 @@
     "cordova-plugin-whitelist": "^1.3.3",
     "cordova-sqlite-storage": "^2.3.0",
     "ionic-angular": "3.9.2",
-    "ionic2-super-tabs": "^4.1.5",
     "ionicons": "3.0.0",
     "localforage": "^1.7.1",
     "localforage-cordovasqlitedriver": "^1.6.0",

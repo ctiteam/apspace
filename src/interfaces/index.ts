@@ -1,8 +1,9 @@
-export { Courses } from './courses';
+export { Attendance } from './attendance';
+export { Course } from './courses';
 export { News } from './news';
 export { Sqa } from './sqa';
 export { StaffDirectory } from './staff-directory';
-export { Subcourses } from './subcourses';
+export { StudentPhoto } from './student-photo';
+export { StudentProfile } from './student-profile';
+export { Subcourse } from './subcourses';
 export { Timetable } from './timetable';
-export { UserPhoto } from './user-photo';
-export { UserProfile } from './user-profile';
