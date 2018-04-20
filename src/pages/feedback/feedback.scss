@@ -21,13 +21,23 @@ page-feedback {
     height:15px;
   }
   
-  .send-button{
+  .button{
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: 4px 2px;
+    cursor: pointer;
+    width: (40%-60%);
+    position: relative;
+    height: 2.5em;
     border-radius:10px 10px 10px 10px;
-    color: primary;
+    background-color: color($colors, primary);
+    color: white;
   }
 
   h5{
-    color: primary; 
     text-align: justify;
   }
 }

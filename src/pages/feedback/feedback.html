@@ -9,22 +9,26 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <ion-list>
+  <div>
     <ion-item no-padding>
-      <ion-input #autofocus placeholder="Fullname" [(ngModel)]="this.feedbackData.name" [ngModelOptions]="{standalone: true}"></ion-input>
+      <ion-label floating>Full name</ion-label>
+      <ion-input #autofocus [(ngModel)]="this.feedbackData.name" [ngModelOptions]="{standalone: true}"></ion-input>
     </ion-item>
     <ion-item no-padding>
-      <ion-input type="text" placeholder="TP number" [(ngModel)]="this.feedbackData.studentNumber" [ngModelOptions]="{standalone: true}"></ion-input>
+      <ion-label floating>TP number</ion-label>
+      <ion-input type="text" [(ngModel)]="this.feedbackData.studentNumber" [ngModelOptions]="{standalone: true}"></ion-input>
     </ion-item>
     <ion-item no-padding>
-      <ion-input type="tel" placeholder="Contact Number" [(ngModel)]="this.feedbackData.contactNumber" [ngModelOptions]="{standalone: true}"></ion-input>
+      <ion-label floating>Contact Number</ion-label>
+      <ion-input type="tel" [(ngModel)]="this.feedbackData.contactNumber" [ngModelOptions]="{standalone: true}"></ion-input>
     </ion-item>
     <ion-item no-padding>
-      <ion-textarea placeholder="Message" [(ngModel)]="this.feedbackData.message" [ngModelOptions]="{standalone: true}"></ion-textarea>
+        <ion-label floating>Message </ion-label>
+      <ion-textarea [(ngModel)]="this.feedbackData.message" [ngModelOptions]="{standalone: true}"></ion-textarea>
     </ion-item>
-  </ion-list>
+  </div>
   <div class="spacer"></div>
-  <button class="send-button" (click)="sendEmail()" ion-button block [disabled]="!this.feedbackData.name || !this.feedbackData.studentNumber || !this.feedbackData.contactNumber || !this.feedbackData.message">
+  <button class="button" (click)="sendEmail()" ion-button block [disabled]="!this.feedbackData.name || !this.feedbackData.studentNumber || !this.feedbackData.contactNumber || !this.feedbackData.message">
     SUBMIT
   </button>
   <h5>
