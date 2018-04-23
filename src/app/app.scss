@@ -1,82 +1,51 @@
-$SIDEMENU_BOTTOM: #2c2a28;
-$SIDEMENU_TRANSPARENCY: rgba(255, 255, 255, 0.4);
-$ionicons-font-path: "../lib/ionic/fonts" !default;
 
-.side-menu-gradient-after-login {
-  background: $SIDEMENU_BOTTOM;
+.side-menu-background {
+  background-color: map-get($colors, menu-backgroud);
+  font-family: 'Francois One', sans-serif;
 }
 
 .side-menu-item {
   background: none;
-  color: white;
-  font-weight: 500;
-  border: none;
+  color: #292525;
+  font-weight: 100;
   height: 50px;
-
-  .item-content {
-    background: none;
-
-    &.activated {
-      background: $SIDEMENU_TRANSPARENCY;
-    }
-  }
-
-  &.active-page-highlight {
-    .item-content {
-      background: $SIDEMENU_TRANSPARENCY;
-    }
-  }
-}
-
-.side-menu-item-logout {
-  background: #ff4500;
-  color: white;
-  font-weight: 500;
-  border: 0px;
-  height: 50px;
-
-  .item-content {
-    background: none;
-
-    &.activated {
-      background: $SIDEMENU_TRANSPARENCY;
-    }
-  }
-
-  &.active-page-highlight {
-    .item-content {
-      background: $SIDEMENU_TRANSPARENCY;
-    }
-  }
 }
 
 .activeHighlight {
-  background-color: map-get($colors, primary);
+  background-color: map-get($colors, highlighter);
 }
 
-#menu-info {
-  height: 150px;
-  background: url(../assets/img/back2.jpg) 100%;
-  
+.spacer{width: 10px;height: 10px;}
+.spacer-5{width: 10px;height: 3px;}
 
-  * {
-    margin: 0 3ex 1ex;
-  }
+#menu-info {
+  background-color: #0088cc;
+  height: 150px;
+  padding-top: 10px; 
 
   img {
     display: block;
-    text-align: center;
+    text-align: left;
     border-radius: 50%;
-    border: 3px solid $SIDEMENU_TRANSPARENCY;
-    width: 70px;
-    height: auto;
-    margin:auto;
+    border: 2px solid map-get($colors, foreground);
+    width: 60px;
+    height: 65px;
+    margin-left: 16px;
   }
 
   p {
-    font-weight: bold;
     color: map-get($colors, foreground);
-    text-align: center;
-    margin: auto;
+    text-align: left;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    margin-left: 16px; 
+    font-family: 'Do Hyeon', sans-serif;
+  
+  }
+
+  span{
+    color: color($colors, menu-backgroud);
+    font-size: 1.4em;
+    letter-spacing: 2px;
   }
 }

@@ -63,13 +63,13 @@ export class MyApp {
 
     this.pages = [
       { title: 'Home', component: 'HomePage', icon: 'home' },
+      { title: 'Profile', component: 'ProfilePage', icon: 'contact' },
       { title: 'Timetable', component: 'TimetablePage', icon: 'calendar' },
-      { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people' },
+      { title: 'Attendance', component: 'AttendancePage', icon: 'alarm' },
       { title: 'Results', component: 'ResultsPage', icon: 'checkbox' },
+      { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people' },
       { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
       { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
-      { title: 'Attendance', component: 'AttendancePage', icon: 'alarm' },
-      { title: 'Profile', component: 'ProfilePage', icon: 'contact' },
     ];
 
     this.platform.ready().then(() => {

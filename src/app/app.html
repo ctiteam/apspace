@@ -1,9 +1,13 @@
 <ion-menu [content]="content">
-  <ion-content class="side-menu-gradient-after-login" color="menu-background">
-    <div id="menu-info" (click)="openProfile()">
+  <ion-content class="side-menu-background" color="menu-background">
+    <div id="menu-info">
       <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo"
-        onerror="this.src='assets/img/profile.svg'" alt="Avatar">
-      <p>{{ ((profile$ | async) || [{}])[0].NAME }}</p>
+        onerror="this.src='assets/img/profile.svg'" alt="Avatar" (click)="openProfile()">
+        <div class="spacer-5"></div>
+      <p>
+        {{ ((profile$ | async) || [{}])[0].NAME }} <br>
+        <span> {{ ((profile$ | async) || [{}])[0].STUDENT_NUMBER }}</span>
+      </p>
     </div>
     <ion-list id="menu-list1" no-lines>
       <ion-item menuClose *ngFor='let p of pages' (click)='openPage(p)'
