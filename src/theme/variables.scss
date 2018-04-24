@@ -45,15 +45,23 @@ $colors: (
   highlighter: #bfbcbc
 );
 
-
-
 @font-face {
   font-family: 'Bungee';
-  font-style: normal;
-  src: url('../assets/fonts/Bungee-Regular.ttf');
+  src: url('../assets/fonts/Bungee.woff2');
 }
 
-//
+@font-face {
+  font-family: 'Do Hyeon';
+  src: url('../assets/fonts/Do_Hyeon.woff2');
+}
+
+@font-face {
+  font-family: 'Francois One';
+  src: url('../assets/fonts/Francois_One.woff2');
+}
+
+
+
 
 
 // App iOS Variables
