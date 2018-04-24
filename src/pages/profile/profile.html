@@ -7,11 +7,57 @@
   </ion-navbar>
 </ion-header>
 
+<ion-content padding>
+  <div class="cover">
+    <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" onerror="this.src='assets/img/profile.svg'"
+      alt="Avatar">
+  </div>
+  <ion-card class="profile-info">
+    <p class="bold">
+      {{ ((profile$ | async) || [{}])[0].NAME }}</p>
+    <p>
+      {{ ((profile$ | async) || [{}])[0].STUDENT_NUMBER }}
+    </p>
+  </ion-card>
 
-<ion-content padding-top>
-  <ion-list>
-    <button ion-item *ngFor="let p of pages" [navPush]="p.component">
-      {{ p.title }}
-    </button>
-  </ion-list>
+  <ion-card class="ion-card-style">
+    <ion-card-header>
+      Basic Information
+    </ion-card-header>
+
+    <ion-card-content class="text-left">
+      <p class="bold">Country:</p>
+      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].COUNTRY }}</p>
+      <br class="break">
+      <p class="bold">Current Intake Code:</p>
+      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].INTAKE_CODE }}</p>
+      <br class="break">
+      <p class="bold">Programme:</p>
+      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].PROGRAMME }}</p>
+      <br class="break">
+      <p class="bold">Student Status:</p>
+      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].STUDENT_STATUS }}</p>
+      <br class="break">
+      <p class="bold">Intake Status:</p>
+      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].INTAKE_STATUS }}</p>
+      <br class="break">
+      <p class="bold">Programm Leader:</p>
+      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].PL_NAME }}</p>
+      <br class="break">
+      <p class="bold">Mentor Name:</p>
+      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].MENTOR_NAME }}</p>
+      <br class="break">
+    </ion-card-content>
+  </ion-card>
+  <br>
+  <ion-card class="ion-card-style">
+    <ion-item *ngFor="let p of pages" [navPush]="p.component">
+      <p>
+        {{ p.title }}
+      </p>
+      <ion-icon item-left name = "lock"></ion-icon>
+      <ion-icon item-right name = "arrow-round-forward"></ion-icon>
+    </ion-item>
+  </ion-card>
+  <div class="spacer"></div>
 </ion-content>

@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+
+import { StudentPhoto, StudentProfile } from '../../interfaces';
+import { WsApiProvider } from '../../providers';
 
 
 @IonicPage()
@@ -9,12 +13,18 @@ import { IonicPage } from 'ionic-angular';
 })
 export class ProfilePage {
 
+  photo$: Observable<StudentPhoto[]>;
+  profile$: Observable<StudentProfile[]>;
+
   pages = [
     { title: 'Password Recovery', component: 'PasswordRecoveryPage' }
   ];
 
-  constructor() { }
+  constructor(private ws: WsApiProvider) { }
 
-  ionViewDidLoad() { }
+  ionViewDidLoad() {
+    this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo')
+    this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
+   }
 
 }
