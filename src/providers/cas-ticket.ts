@@ -24,7 +24,6 @@ import { catchError, switchMap, tap } from 'rxjs/operators';
 export class CasTicketProvider {
 
   casUrl = 'https://cas.apiit.edu.my';
-  res: any;
 
   constructor(
     public http: HttpClient,
@@ -110,8 +109,10 @@ export class CasTicketProvider {
 
     return this.http.get(this.casUrl + '/cas/p3/serviceValidate', options).pipe(
       switchMap(res =>
-        res['serviceResponse']['authenticationSuccess']['attributes']['memberOf'][0]
-        .toLowerCase().split(',').indexOf('ou=students') !== -1
+        res['serviceResponse']['authenticationSuccess']['attributes']['distinguishedName'][0]
+        .toLowerCase().split(',').indexOf('ou=students') !== -1 ||
+        res['serviceResponse']['authenticationSuccess']['attributes']['distinguishedName'][0]
+        .toLowerCase().split(',').indexOf('ou=academic') !== -1
         ? of(res) : obs_throw('Group not supported'))
     )
   }
