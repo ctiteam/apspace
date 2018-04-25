@@ -5,6 +5,7 @@ import { Platform } from 'ionic-angular';
 import { Network } from '@ionic-native/network';
 import { MenuController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 import { Subscription } from 'rxjs/Subscription';
 import { empty } from 'rxjs/observable/empty';
@@ -26,7 +27,7 @@ export class LoginPage {
     {path: '/student/photo',      auth: true}
   ];
   cache2 = [
-    {path: '/student/subcourses', auth: true},
+    {path: '/student/courses', auth: true},
     {path: '/open/weektimetable', auth: false},
     {path: '/staff/listing',      auth: true}
   ];
@@ -42,6 +43,7 @@ export class LoginPage {
     private network: Network,
     public menu: MenuController,
     public navCtrl: NavController,
+    public storage: Storage,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private casTicket: CasTicketProvider,
@@ -85,7 +87,11 @@ export class LoginPage {
       switchMap(tgt => this.casTicket.getST(this.casTicket.casUrl, tgt)),
       catchError(_ => this.toast('Fail to get service ticket.') || empty()),
       switchMap(st => this.casTicket.validate(st)),
-      catchError(_ => this.toast('You are not authorized to use iWebspace') || empty()),
+      catchError(_ => {
+        this.toast('You are not authorized to use iWebspace');
+        this.storage.clear();
+        return empty();
+      }),
       tap(_ => this.cacheApi(this.cache1)),
       timeout(3000),
       finalize(() => loading.dismiss()),
