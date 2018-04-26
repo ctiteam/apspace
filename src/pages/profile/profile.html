@@ -9,8 +9,7 @@
 
 <ion-content padding>
   <div class="cover">
-    <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" onerror="this.src='assets/img/profile.svg'"
-      alt="Avatar">
+    <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" onerror="this.src='assets/img/profile.svg'" alt="Avatar">
   </div>
   <ion-card class="profile-info">
     <p class="bold">
@@ -35,12 +34,6 @@
       <p class="bold">Programme:</p>
       <p>&nbsp; {{ ((profile$ | async) || [{}])[0].PROGRAMME }}</p>
       <br class="break">
-      <p class="bold">Student Status:</p>
-      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].STUDENT_STATUS }}</p>
-      <br class="break">
-      <p class="bold">Intake Status:</p>
-      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].INTAKE_STATUS }}</p>
-      <br class="break">
       <p class="bold">Programm Leader:</p>
       <p>&nbsp; {{ ((profile$ | async) || [{}])[0].PL_NAME }}</p>
       <br class="break">
@@ -55,8 +48,8 @@
       <p>
         {{ p.title }}
       </p>
-      <ion-icon item-left name = "lock"></ion-icon>
-      <ion-icon item-right name = "arrow-round-forward"></ion-icon>
+      <ion-icon item-left name="lock"></ion-icon>
+      <ion-icon item-right name="arrow-round-forward"></ion-icon>
     </ion-item>
   </ion-card>
   <div class="spacer"></div>
