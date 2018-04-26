@@ -8,26 +8,35 @@
     </ion-title>
   </ion-navbar>
 </ion-header>
+
+
 <ion-content padding>
-    <ion-item no-padding>
-      <ion-label floating>Full name</ion-label>
-      <ion-input #autofocus [(ngModel)]="this.feedbackData.name" [ngModelOptions]="{standalone: true}"></ion-input>
-    </ion-item>
-    <ion-item no-padding>
-      <ion-label floating>TP number</ion-label>
-      <ion-input type="text" [(ngModel)]="this.feedbackData.studentNumber" [ngModelOptions]="{standalone: true}"></ion-input>
-    </ion-item>
-    <ion-item no-padding>
-      <ion-label floating>Contact Number</ion-label>
-      <ion-input type="tel" [(ngModel)]="this.feedbackData.contactNumber" [ngModelOptions]="{standalone: true}"></ion-input>
-    </ion-item>
-    <ion-item no-padding>
-        <ion-label floating>Message </ion-label>
-      <ion-textarea [(ngModel)]="this.feedbackData.message" [ngModelOptions]="{standalone: true}"></ion-textarea>
-    </ion-item>
- 
-  <div class="spacer"></div>
-  <button class="button" ion-button round full (click)="sendEmail()" [disabled]="!this.feedbackData.name || !this.feedbackData.studentNumber || !this.feedbackData.contactNumber || !this.feedbackData.message">
-    SUBMIT
+  <ion-item no-padding>
+    <ion-label floating>Full name</ion-label>
+    <ion-input #autofocus disabled [(ngModel)]="feedbackData.name"
+      [ngModelOptions]="{standalone: true}">
+    </ion-input>
+  </ion-item>
+  <ion-item no-padding>
+    <ion-label floating>Student ID</ion-label>
+    <ion-input disabled type="text" [(ngModel)]="feedbackData.studentNumber"
+      [ngModelOptions]="{standalone: true}">
+    </ion-input>
+  </ion-item>
+  <ion-item no-padding>
+    <ion-label floating>Contact Number</ion-label>
+    <ion-input type="tel" [(ngModel)]="feedbackData.contactNumber"
+      [ngModelOptions]="{standalone: true}">
+    </ion-input>
+  </ion-item>
+  <ion-item no-padding>
+    <ion-label floating>Message</ion-label>
+    <ion-textarea [(ngModel)]="feedbackData.message"
+      [ngModelOptions]="{standalone: true}">
+    </ion-textarea>
+  </ion-item>
+  <button ion-button round full margin-top (click)="sendEmail()"
+    [disabled]="!feedbackData.name || !feedbackData.studentNumber || !feedbackData.contactNumber || !feedbackData.message">
+    Submit
   </button>
 </ion-content>
