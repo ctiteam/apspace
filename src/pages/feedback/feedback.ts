@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { EmailComposer } from '@ionic-native/email-composer';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
-
-
-
 
 @IonicPage()
 @Component({
@@ -13,20 +9,12 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 })
 export class FeedbackPage {
 
-
-  facebookUrl: string = "https://www.facebook.com/apuniversity/?ref=br_rs";
-  twitterUrl: string = "https://twitter.com/AsiaPacificU";
-  googleUrl: string = "https://plus.google.com/+AsiaPacificUniversityKualaLumpur";
-  linkedinUrl: string = "https://www.linkedin.com/school/989991/";
-
   feedbackData = {
     "name": "", "studentNumber": "",
     "contactNumber": "", "message": ""
   };
 
-  constructor(
-    private emailComposer: EmailComposer,
-    private inAppBrowser: InAppBrowser) { }
+  constructor(private emailComposer: EmailComposer) { }
 
 
   sendEmail() {
@@ -39,10 +27,6 @@ export class FeedbackPage {
       isHTML: true
     };
     this.emailComposer.open(email);
-  }
-
-  openUrl(url) {
-    this.inAppBrowser.create(url)
   }
 
 }

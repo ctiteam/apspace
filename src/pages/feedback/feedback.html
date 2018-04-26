@@ -9,7 +9,6 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <div>
     <ion-item no-padding>
       <ion-label floating>Full name</ion-label>
       <ion-input #autofocus [(ngModel)]="this.feedbackData.name" [ngModelOptions]="{standalone: true}"></ion-input>
@@ -26,35 +25,9 @@
         <ion-label floating>Message </ion-label>
       <ion-textarea [(ngModel)]="this.feedbackData.message" [ngModelOptions]="{standalone: true}"></ion-textarea>
     </ion-item>
-  </div>
+ 
   <div class="spacer"></div>
-  <button class="button" (click)="sendEmail()" ion-button block [disabled]="!this.feedbackData.name || !this.feedbackData.studentNumber || !this.feedbackData.contactNumber || !this.feedbackData.message">
+  <button class="button" ion-button round full (click)="sendEmail()" [disabled]="!this.feedbackData.name || !this.feedbackData.studentNumber || !this.feedbackData.contactNumber || !this.feedbackData.message">
     SUBMIT
   </button>
-  <h5>
-    ASIA PACIFIC UNIVERSITY OF TECHNOLOGY & INNOVATION (APU)
-  </h5>
-  <p style="font-size:11px; text-align:justify;">
-    Technology Park Malaysia, Bulit Jalil, Kuala Lumpur 57000 Malaysia
-  </p>
-  <p style="font-size:11px;">Phone:&nbsp;
-    <a href="tel:+60389961000"> +60389961000</a>
-    <br> Fax:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <a href="tel:+60389961001"> +60389961001</a>
-  </p>
-  <p class="follow-us" style="font-size:13px;">
-    Follow Us:
-  </p>
-    <button (click)="openUrl(facebookUrl)">
-      <ion-icon name="logo-facebook"></ion-icon>
-    </button>
-    <button (click)="openUrl(twitterUrl)">
-      <ion-icon name="logo-twitter"></ion-icon>
-    </button>
-    <button (click)="openUrl(linkedinUrl)">
-      <ion-icon name="logo-linkedin"></ion-icon>
-    </button>
-    <button (click)="openUrl(googleUrl)">
-      <ion-icon name="logo-googleplus"></ion-icon>
-    </button>
 </ion-content>
