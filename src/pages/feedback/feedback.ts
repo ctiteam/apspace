@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { EmailComposer } from '@ionic-native/email-composer';
 
+import { StudentProfile } from '../../interfaces';
+import { WsApiProvider } from '../../providers';
+
 @IonicPage()
 @Component({
   selector: 'page-feedback',
@@ -9,13 +12,9 @@ import { EmailComposer } from '@ionic-native/email-composer';
 })
 export class FeedbackPage {
 
-  feedbackData = {
-    "name": "", "studentNumber": "",
-    "contactNumber": "", "message": ""
-  };
+  feedbackData = { name: '', studentNumber: '', contactNumber: '', message: '' };
 
-  constructor(private emailComposer: EmailComposer) { }
-
+  constructor(private emailComposer: EmailComposer, private ws: WsApiProvider) { }
 
   sendEmail() {
     let email = {
@@ -27,6 +26,13 @@ export class FeedbackPage {
       isHTML: true
     };
     this.emailComposer.open(email);
+  }
+
+  ionViewDidLoad() {
+    this.ws.get<StudentProfile[]>('/student/profile').subscribe(p => {
+      this.feedbackData.name = p[0].NAME;
+      this.feedbackData.studentNumber = p[0].STUDENT_NUMBER
+    });
   }
 
 }

@@ -1,31 +1,5 @@
 page-feedback {
-  form {
-    border-radius: 1rem;
-    background-color: white;
-    margin-left: 1ex;
-  }
-
-  ion-fab {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-  }
-
-  ion-icon {
-    width: 10px;
-  }
-
-  .spacer{
-    width:300px;
-    height:15px;
-  }
-  
-  .button{
+  button[ion-button] {
     height: 3em;
-  }
-    
-  h5{
-    text-align: justify;
   }
 }
