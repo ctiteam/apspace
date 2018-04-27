@@ -7,10 +7,13 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <div class="cover">
-    <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" onerror="this.src='assets/img/profile.svg'" alt="Avatar">
+      <img class="profile-photo" [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" 
+      onerror="this.src='assets/img/profile.svg'" alt="Avatar">
   </div>
+  
+  <div class="spacer-40"></div>
   <ion-card class="profile-info">
     <p class="bold">
       {{ ((profile$ | async) || [{}])[0].NAME }}</p>
