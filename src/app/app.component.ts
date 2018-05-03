@@ -70,6 +70,7 @@ export class MyApp {
       { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
       { title: 'Profile', component: 'ProfilePage', icon: 'contact' },
       { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
+      { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle' },
     ];
 
     this.platform.ready().then(() => {

@@ -7,3 +7,4 @@ export { StudentPhoto } from './student-photo';
 export { StudentProfile } from './student-profile';
 export { Subcourse } from './subcourses';
 export { Timetable } from './timetable';
+export { OperationHours } from './operation-hours';

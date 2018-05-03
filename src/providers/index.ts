@@ -11,3 +11,4 @@ export { NewsProvider } from './news';
 export { NotificationServiceProvider } from './notification-service';
 export { SqaProvider } from './sqa';
 export { WsApiProvider } from './ws-api';
+export { OperationHoursProvider } from './operation-hours';

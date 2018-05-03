@@ -17,8 +17,9 @@ import { Push } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import {
   CasTicketProvider, RequestCache,
-  RequestCacheWithMapStorage, WsApiProvider, httpInterceptorProviders, NotificationServiceProvider
+  RequestCacheWithMapStorage, WsApiProvider, httpInterceptorProviders, NotificationServiceProvider, OperationHoursProvider
 } from '../providers';
+
 
 @NgModule({
   declarations: [MyApp],
@@ -46,6 +47,7 @@ import {
     NotificationServiceProvider,
     { provide: RequestCache, useClass: RequestCacheWithMapStorage },
     httpInterceptorProviders,
+    OperationHoursProvider,
   ]
 })
 export class AppModule { }

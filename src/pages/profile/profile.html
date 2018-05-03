@@ -29,19 +29,19 @@
 
     <ion-card-content class="text-left">
       <p class="bold">Country:</p>
-      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].COUNTRY }}</p>
+      <p>{{ ((profile$ | async) || [{}])[0].COUNTRY }}</p>
       <br class="break">
       <p class="bold">Current Intake Code:</p>
-      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].INTAKE_CODE }}</p>
+      <p>{{ ((profile$ | async) || [{}])[0].INTAKE_CODE }}</p>
       <br class="break">
       <p class="bold">Programme:</p>
-      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].PROGRAMME }}</p>
+      <p>{{ ((profile$ | async) || [{}])[0].PROGRAMME }}</p>
       <br class="break">
       <p class="bold">Programm Leader:</p>
-      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].PL_NAME }}</p>
+      <p>{{ ((profile$ | async) || [{}])[0].PL_NAME }}</p>
       <br class="break">
       <p class="bold">Mentor Name:</p>
-      <p>&nbsp; {{ ((profile$ | async) || [{}])[0].MENTOR_NAME }}</p>
+      <p>{{ ((profile$ | async) || [{}])[0].MENTOR_NAME }}</p>
       <br class="break">
     </ion-card-content>
   </ion-card>
