@@ -1,22 +1,28 @@
 <ion-menu [content]="content">
   <ion-content class="side-menu-background" color="menu-background">
     <div id="menu-info">
-      <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo"
-        onerror="this.src='assets/img/profile.svg'" alt="Avatar" (click)="openProfile()">
+        <ion-row>
+          <ion-col col-4>
+              <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo"
+              onerror="this.src='assets/img/profile.svg'" alt="Avatar" (click)="openProfile()">
+          </ion-col>
+          <ion-col col-8 class="ion-col">
+              <p class="p"> {{ ((profile$ | async) || [{}])[0].STUDENT_NUMBER }}</p>
+          </ion-col>
+        </ion-row>
         <div class="spacer-5"></div>
       <p>
         {{ ((profile$ | async) || [{}])[0].NAME }} <br>
-        <span> {{ ((profile$ | async) || [{}])[0].STUDENT_NUMBER }}</span>
       </p>
     </div>
     <ion-list id="menu-list1" no-lines>
       <ion-item menuClose *ngFor='let p of pages' (click)='openPage(p)'
         class="side-menu-item" [class.activeHighlight]='p === activePage'>
-        <ion-icon item-left [name]='p.icon'></ion-icon>
+        <ion-icon class="ion-icon" item-left [name]='p.icon'></ion-icon>
         {{ p.title }}
       </ion-item>
       <ion-item (click)="logout()" class="side-menu-item">
-        <ion-icon name="log-out" item-left></ion-icon>
+        <ion-icon class="ion-icon" name="log-out" item-left></ion-icon>
         Logout
       </ion-item>
     </ion-list>

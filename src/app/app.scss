@@ -17,8 +17,22 @@
 .spacer{width: 10px;height: 10px;}
 .spacer-5{width: 10px;height: 3px;}
 
+.ion-icon{
+  color: color($colors, primary);
+}
+ 
+.ion-col{
+  margin-top: 0px;
+
+  .p{
+    font-size: 2em;
+    padding-top: 5px;
+  }
+
+}
+
 #menu-info {
-  background-color: #0088cc;
+  background-color: color($colors, primary);
   height: 150px;
   padding-top: 10px; 
 
@@ -28,7 +42,7 @@
     border-radius: 50%;
     border: 2px solid map-get($colors, foreground);
     width: 60px;
-    height: 65px;
+    height: 70px;
     margin-left: 16px;
   }
 
@@ -40,10 +54,5 @@
     margin-left: 16px; 
     font-weight: 500;
   }
-
-  span{
-    color: color($colors, menu-backgroud);
-    letter-spacing: 1px;
-    font-weight: bold;
-  }
+  
 }
