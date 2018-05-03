@@ -1,13 +1,12 @@
 
 .side-menu-background {
   background-color: map-get($colors, menu-backgroud);
-  font-family: 'Francois One', sans-serif;
 }
 
 .side-menu-item {
   background: none;
   color: #292525;
-  font-weight: 100;
+  font-weight: 600;
   height: 50px;
 }
 
@@ -36,16 +35,15 @@
   p {
     color: map-get($colors, foreground);
     text-align: left;
-    letter-spacing: 1px;
+    letter-spacing: 0.3px;
     margin-top: 10px;
     margin-left: 16px; 
-    font-family: 'Do Hyeon', sans-serif;
-  
+    font-weight: 500;
   }
 
   span{
     color: color($colors, menu-backgroud);
-    font-size: 1.4em;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    font-weight: bold;
   }
 }
