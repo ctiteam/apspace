@@ -136,6 +136,9 @@ export class TimetablePage {
   }
 
   ionViewDidLoad() {
+    // select current day by default
+    this.selectedDay = this.wday[new Date().getDay()];
+
     this.ws.get<StudentProfile[]>('/student/profile')
       .subscribe(p => this.intake = p[0].INTAKE_CODE || '');
     this.doRefresh();
