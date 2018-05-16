@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { trigger, style, animate, transition } from '@angular/animations';
 import { IonicPage } from 'ionic-angular';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
@@ -12,6 +13,20 @@ import { OperationHoursProvider } from '../../providers';
 @Component({
   selector: 'page-operation-hours',
   templateUrl: 'operation-hours.html',
+  animations: [
+    trigger('easeIn', [
+      transition(':enter', [
+        style({ opacity: '.8', height: '0' }),
+        animate('250ms ease-in', style({ opacity: '1', height: '*' })),
+      ]),
+    ]),
+    trigger('easeOut', [
+      transition(':leave', [
+        style({ opacity: '1', height: '*' }),
+        animate('150ms ease-out', style({ opacity: '.7', height: '0', paddingBottom: '0' })),
+      ]),
+    ])
+  ]
 })
 export class OperationHoursPage {
 

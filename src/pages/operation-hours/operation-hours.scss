@@ -1,32 +1,31 @@
 page-operation-hours {
+  p {
+    font-size: 0.8em;
+  }
 
-      p{
-          font-size: 0.8em;
-      }
+  .p {
+    font-size: 1em;
+    font-weight: bold;
+  }
 
-      .p{
-          font-size: 1em;
-          font-weight: bold;
-      }
+  ion-content button {
+    height: auto;
+    width: 100%;
+  }
 
-      ion-content button{
-        height: auto;
-        width: 100%;
-      }
+  .tab-content-container .paragraph {
+    padding-left: 20px;
+    border-left: 2px solid #0e2a3a;
+  }
 
-      .tab-content-container .paragraph {
-        padding-left: 20px;
-        border-left: 2px solid #0e2a3a;
-    }
-    .tab-content-container h5.special {
-        color: #0e2a3a;
-        text-decoration: underline;
-        font-weight: 600;
-    }
+  .tab-content-container h5.special {
+    color: #0e2a3a;
+    text-decoration: underline;
+    font-weight: 600;
+  }
 
-    .tab-content-container h5 {
-        color: #0e2a3a;
-        font-weight: 600;
-    }
-
+  .tab-content-container h5 {
+    color: #0e2a3a;
+    font-weight: 600;
+  }
 }

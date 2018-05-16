@@ -18,9 +18,9 @@
       <ion-icon [name]="service.icon" item-start></ion-icon>
       {{ service.name }}
     </ion-card-header>
-    <ion-card-content *ngIf="selectedService === service.id">
+    <ion-card-content *ngIf="selectedService === service.id" [@easeOut]>
       <ng-template ngFor let-item [ngForOf]="hours$ | async">
-        <article [innerHTML]="sanitize(item.body[0].value)"></article>
+        <article [innerHTML]="sanitize(item.body[0].value)" [@easeIn]></article>
       </ng-template>
     </ion-card-content>
   </ion-card>
