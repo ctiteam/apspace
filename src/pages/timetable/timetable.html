@@ -53,8 +53,8 @@
 
   <ion-card *ngIf="!selectedDay">
     <ion-card-content>
-      <p *ngIf="intake">Hooray! No classes this week! :D</p>
-      <p *ngIf="!intake">WIP. Select intake from top right button. ;)</p>
+      <p *ngIf="intake; else classes">Hooray! No classes this week! :D</p>
+      <ng-template #classes>WIP. Select intake from top right button. ;)</ng-template>
     </ion-card-content>
   </ion-card>
 </ion-content>

@@ -7,8 +7,12 @@
 
 <ion-content>
   <div class="staff-directory-info-header">
-    <ion-icon *ngIf="!staff?.PHOTO" name="contacts"></ion-icon>
-    <img *ngIf="staff?.PHOTO" [src]="staff?.PHOTO">
+    <ng-template [ngIf]="staff?.PHOTO" [ngIfElse]="errorIcon">
+      <img [src]="staff?.PHOTO">
+    </ng-template>
+    <ng-template #errorIcon>
+      <ion-icon name="contacts"></ion-icon>
+    </ng-template>
   </div>
   <ion-list>
     <ion-item>
