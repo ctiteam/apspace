@@ -15,7 +15,7 @@
 
   <ion-card *ngFor="let service of services">
     <ion-card-header ion-item (click)="get(service.id)">
-      <ion-icon [name]="service.icon" item-start></ion-icon>
+      <ion-icon [name]="service.icon" [style.color]="service.fg" item-start></ion-icon>
       {{ service.name }}
     </ion-card-header>
     <ion-card-content *ngIf="selectedService === service.id" [@easeOut]>

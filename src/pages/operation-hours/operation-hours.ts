@@ -34,14 +34,14 @@ export class OperationHoursPage {
   selectedService: string;
 
   services = [
-    { name: 'Immigration', id: 'immigration', icon: 'globe' },
-    { name: 'Student Service', id: 'studentservices', icon: 'bookmarks' },
-    { name: 'Admin', id: 'admin', icon: 'list-box' },
-    { name: 'Accomodation', id: 'accomodation', icon: 'home' },
-    { name: 'Library', id: 'library', icon: 'book' },
-    { name: 'Cashier', id: 'cashier', icon: 'cash' },
-    { name: 'Labs', id: 'labs', icon: 'desktop' },
-    { name: 'Clinic', id: 'clinic', icon: 'medkit' },
+    { name: 'Immigration', id: 'immigration', icon: 'globe', fg: '#66d174' },
+    { name: 'Student Service', id: 'studentservices', icon: 'bookmarks', fg: '#dd803e' },
+    { name: 'Admin', id: 'admin', icon: 'list-box', fg: '#626b70' },
+    { name: 'Accomodation', id: 'accomodation', icon: 'home', fg: '#2392ce' },
+    { name: 'Library', id: 'library', icon: 'book', fg: '#26205e' },
+    { name: 'Cashier', id: 'cashier', icon: 'cash', fg: '#ccbf37' },
+    { name: 'Labs', id: 'labs', icon: 'desktop', fg: '#33688e' },
+    { name: 'Clinic', id: 'clinic', icon: 'medkit', fg: '#f23239' },
   ];
 
   constructor(
