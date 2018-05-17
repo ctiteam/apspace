@@ -3,40 +3,37 @@ page-results {
     ion-card-header {
       background: color($colors, secondary);
     }
-  
+
     .item {
       background-color: foreground;
     }
-  
+
     ion-label {
       font-size: 90%;
       font-weight: lighter !important;
     }
   }
-  
-  .subj-title{
+
+  .subj-title {
     font-weight: 900;
   }
-  
+
   ion-segment {
     display: block;
     white-space: nowrap;
     font-size: 0;
     overflow: auto;
-  
+
     &::-webkit-scrollbar {
-        width: 0;
-        height: 0;
-        display: none;
+      width: 0;
+      height: 0;
+      display: none;
     }
-  
+
     ion-segment-button.segment-button {
       display: inline-block;
       min-width: 105px;
       width: auto;
     }
   }
-
 }
-
-
