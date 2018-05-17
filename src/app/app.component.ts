@@ -69,8 +69,8 @@ export class MyApp {
       { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people' },
       { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
       { title: 'Profile', component: 'ProfilePage', icon: 'contact' },
-      { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
       { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle' },
+      { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
     ];
 
     this.platform.ready().then(() => {
