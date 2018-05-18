@@ -68,7 +68,7 @@ export class WsApiProvider {
           );
         }),
         retryWhen(attempts => range(1, 4).pipe(
-          zip(attempts, i => 2 ** i - 1),
+          zip(attempts, i => 2 ** i + Math.random() * 8), // 2^n + random 0-8
           mergeMap(i => timer(i * 1000)),
         )),
         catchError(of),
