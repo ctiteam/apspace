@@ -4,11 +4,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      {{ (theday(timetable$ | async).shift() || {}).DATESTAMP || 'Timetable' }}
+      {{ date[wday.indexOf(selectedDay)] || 'Timetable' }}
     </ion-title>
     <ion-buttons end>
       <button ion-button outline small (click)="presentActionSheet()">
-        {{ this.intake || 'Intakes' }}
+        {{ intake || 'Intakes' }}
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -22,13 +22,13 @@
 
   <ion-segment *ngIf="availableDays" [(ngModel)]="selectedDay">
     <!-- Use CSS for dynamically updated segment -->
-    <ion-segment-button *ngFor="let d of this.wday" [value]="d"
+    <ion-segment-button *ngFor="let d of wday" [value]="d"
       [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
       {{ d }}
     </ion-segment-button>
   </ion-segment>
 
-  <ion-card *ngFor="let t of theday(timetable$ | async)"
+  <ion-card *ngFor="let t of timetable$ | async | classes:intake | theday:selectedDay"
     [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
     <ion-card-header>
       {{ t.MODID }}

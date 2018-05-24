@@ -11,6 +11,7 @@ import { distinctUntilChanged, finalize, map, tap } from 'rxjs/operators';
 
 import { StaffDirectory, StudentProfile, Timetable } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
+import { ClassesPipe } from './classes.pipe';
 
 @IonicPage()
 @Component({
@@ -20,6 +21,7 @@ import { WsApiProvider } from '../../providers';
 export class TimetablePage {
 
   wday = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  date: string[] = []; // map wday to date
 
   timetable$: Observable<Timetable[]>;
   selectedDay: string;
@@ -76,25 +78,9 @@ export class TimetablePage {
     });
   }
 
-  /** Get all classes for student. */
-  classes(tt: Timetable[]): Timetable[] {
-    if (!Array.isArray(tt)) {
-      return [] as Timetable[];
-    } else if (!this.intake) {
-      return [] as Timetable[]; /* TODO: My Classes */
-    } else {
-      return this.intake ? tt.filter(t => this.intake === t.INTAKE) : tt;
-    }
-  }
-
-  /** Select the classes of the day. */
-  theday(tt: Timetable[]): Timetable[] {
-    return this.classes(tt).filter(t => t.DAY === this.selectedDay);
-  }
-
   /** Get days in week of the classes. */
   schoolDays(tt: Timetable[]): string[] {
-    let days = this.classes(tt).map(t => t.DAY);
+    let days = new ClassesPipe().transform(tt, this.intake).map(t => t.DAY);
     return this.wday.filter(d => days.indexOf(d) !== -1);
   }
 
@@ -118,9 +104,16 @@ export class TimetablePage {
       distinctUntilChanged(),
       map(data => (data[0] || []).map(t => <Timetable>Object.assign(t,
         { STAFFNAME: ((data[1] || []).find(s => s.CODE === t.LECTID) || <StaffDirectory>{}).FULLNAME }))),
+      tap(tt => this.wdayToDate(tt)),
     );
   }
 
+  /** Convert week days into datestamp in timetable. */
+  wdayToDate(tt: Timetable[]) {
+    this.date = this.wday.map(d => tt.find(t => t.DAY === d).DATESTAMP);
+  }
+
+  /** Convert string to color with hashing. */
   strToColor(s: string): string {
     let hash = 0;
     s.split('').forEach(c => hash = c.charCodeAt(0) + ((hash << 5) - hash));
