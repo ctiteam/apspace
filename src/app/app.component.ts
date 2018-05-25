@@ -77,11 +77,8 @@ export class MyApp {
       if (this.platform.is('cordova')) {
         this.firebase.onNotificationOpen()
           .subscribe(notification => {
-            console.log("Notification receieved");
             this.storage.get('items').then(data => {
-              if (!data) {
-                console.log(";ist is empty");
-              } else {
+              if (data) {
                 this.items = data;
                 this.items.splice(0, 0,
                   { title: notification.title, text: notification.text });

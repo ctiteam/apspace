@@ -11,7 +11,7 @@ export class ClassesPipe implements PipeTransform {
    * Filter timetable by intake.
    *
    * @param tt - timetable
-   * @param intake - filter intaek on timetable
+   * @param intake - filter intake if exists
    */
   transform(tt: Timetable[] | null, intake: string, ...args): Timetable[] {
     if (!Array.isArray(tt)) {
