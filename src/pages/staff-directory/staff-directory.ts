@@ -30,12 +30,6 @@ export class StaffDirectoryPage {
     }
   }
 
-  selected(staffs: StaffDirectory[]): StaffDirectory[] {
-    return (staffs || []).filter(s =>
-      (!this.dept || [s.DEPARTMENT, s.DEPARTMENT2, s.DEPARTMENT3].indexOf(this.dept) !== -1)
-      && s.FULLNAME.toLowerCase().indexOf(this.term.toLowerCase()) !== -1);
-  }
-
   doRefresh(refresher?) {
     this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', Boolean(refresher));
     this.staffType$ = this.staff$.pipe(
