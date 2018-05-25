@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { NavParams, IonicPage } from 'ionic-angular';
 
+import { Observable } from 'rxjs/Observable';
+import { map, share } from 'rxjs/operators';
+
 import { StaffDirectory } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
 
@@ -11,13 +14,14 @@ import { WsApiProvider } from '../../providers';
 })
 export class StaffDirectoryInfoPage {
 
-  staff: StaffDirectory;
+  staff$: Observable<StaffDirectory>;
 
   constructor(public params: NavParams, private ws: WsApiProvider) { }
 
   ionViewDidLoad() {
-    this.ws.get<StaffDirectory[]>('/staff/listing').subscribe(
-      ss => this.staff = ss.find(s => this.params.get('id') === s.CODE)
+    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing').pipe(
+      map(ss => ss.find(s => this.params.get('id') === s.CODE)),
+      share()
     );
   }
 
