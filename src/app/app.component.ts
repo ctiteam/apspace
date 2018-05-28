@@ -67,6 +67,7 @@ export class MyApp {
       { title: 'Attendance', component: 'AttendancePage', icon: 'alarm' },
       { title: 'Results', component: 'ResultsPage', icon: 'checkbox' },
       { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people' },
+      { title: 'Fees', component: 'FeesPage', icon: 'md-cash' },
       { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
       { title: 'Profile', component: 'ProfilePage', icon: 'contact' },
       { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle' },

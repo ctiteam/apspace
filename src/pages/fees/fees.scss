@@ -5,3 +5,15 @@
     color: #000000;
     font-weight: bold;
 }
+
+ion-segment{
+  .segment-md .segment-button{
+    font-size: 1.1em;
+    font-weight: 600;
+  }
+
+  .toolbar-ios .segment-button{
+    font-size: 1.1em;
+    font-weight: 600;
+  }
+}

@@ -8,3 +8,6 @@ export { StudentProfile } from './student-profile';
 export { Subcourse } from './subcourses';
 export { Timetable } from './timetable';
 export { OperationHours } from './operation-hours';
+export { FeesSummary } from './fees-summary';
+export { FeesBankDraft } from './fees-bank-draft';
+export { FeesDetails } from './fees-details';

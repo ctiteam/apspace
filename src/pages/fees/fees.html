@@ -22,27 +22,11 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [ngSwitch]="fee" padding id="page4" style="background-color:#C8DAE8;">
-  <div *ngSwitchCase="'summary'" id="fEES-container6">
-    <ion-list id="fEES-list10">
-      <ion-item color="none" id="fEES-list-item18" class="list-fees">
+  <div *ngSwitchCase="'summary'">
+    <ion-list *ngIf ='summary$ | async as summarys'>
+      <ion-item *ngFor='let s of summarys' color="none" class="list-fees">
         Total Payable:
-        <ion-note class="right-item" item-right>RM0</ion-note>
-      </ion-item>
-      <ion-item color="none" id="fEES-list-item19" class="list-fees">
-        Total Paid:
-        <ion-note class="right-item" item-right>RM0</ion-note>
-      </ion-item>
-      <ion-item color="none" id="fEES-list-item23" class="list-fees">
-        Total Overdue:
-        <ion-note class="right-item" item-right>RM0</ion-note>
-      </ion-item>
-      <ion-item color="none" id="fEES-list-item24" class="list-fees">
-        Total Outstanding:
-        <ion-note class="right-item" item-right>RM0</ion-note>
-      </ion-item>
-      <ion-item color="none" id="fEES-list-item25" class="list-fees">
-        Total Fine:
-        <ion-note class="right-item" item-right>RM0</ion-note>
+        <ion-note class="right-item" item-right>{{s.PAYABLE_AMOUNT}}</ion-note>
       </ion-item>
     </ion-list>
   </div>
