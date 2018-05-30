@@ -11,7 +11,7 @@
 
 
 <ion-content padding>
-  <div *ngIf='totalSummary$ | async as totalSummary'>
+  <ng-container *ngIf='totalSummary$ | async as totalSummary'>
     <ion-list-header no-lines>
       Total summary
     </ion-list-header>
@@ -31,43 +31,27 @@
       Total overdue:
       <ion-note item-right color='warn'>{{ totalSummary[0]?.TOTAL_OVERDUE || 0 }}</ion-note>
     </ion-item>
-  </div>
+  </ng-container>
 
   <ion-segment [(ngModel)]="selectedSegment">
-    <ion-segment-button value="Summary">
-      Summary
-    </ion-segment-button>
-    <ion-segment-button value="Bank Draft">
-      Bank Draft
-    </ion-segment-button>
-    <ion-segment-button value="Details">
-      Details
-    </ion-segment-button>
+    <ion-segment-button value="Summary">Summary</ion-segment-button>
+    <ion-segment-button value="Bank Draft">Bank Draft</ion-segment-button>
+    <ion-segment-button value="Details">Details</ion-segment-button>
   </ion-segment>
 
-  <div [ngSwitch]='selectedSegment'>
-    <div *ngSwitchCase="'Summary'">
-      <ion-card>
-        <ion-list-header>
-          {{ selectedSegment }}
-        </ion-list-header>
+  <ng-container [ngSwitch]='selectedSegment'>
+    <ion-card *ngSwitchCase="'Summary'">
+      <ion-list-header>{{ selectedSegment }}</ion-list-header>
+    </ion-card>
+    <ng-container *ngSwitchCase="'Bank Draft'">
+      <ion-card *ngFor='let b of bankDrafts$ | async'>
+        <ion-list-header>{{ selectedSegment }}</ion-list-header>
       </ion-card>
-    </div>
-    <div *ngSwitchCase="'Bank Draft'">
-      <div *ngIf='bankDraft$ | async as bankDrafts'>
-        <ion-card *ngFor='let b of bankDrafts'>
-          <ion-list-header>
-            {{ selectedSegment }}
-          </ion-list-header>
-        </ion-card>
-      </div>
-    </div>
-    <div *ngSwitchCase="'Details'">
-      <ion-card>
-        <ion-list-header>
-          {{ selectedSegment }}
-        </ion-list-header>
-      </ion-card>
-    </div>
-  </div>
+    </ng-container>
+    <ion-card *ngSwitchCase="'Details'">
+      <ion-list-header>
+        {{ selectedSegment }}
+      </ion-list-header>
+    </ion-card>
+  </ng-container>
 </ion-content>
