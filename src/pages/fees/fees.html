@@ -7,117 +7,77 @@
       FEES
     </ion-title>
   </ion-navbar>
-  <ion-toolbar no-border-top color='primary'>
-  <ion-segment [(ngModel)]="fee" color="foreground">
-    <ion-segment-button value="summary">
-      SUMMARY
-    </ion-segment-button>
-    <ion-segment-button value="bankDraft">
-      BANK DRAFTS
-    </ion-segment-button>
-    <ion-segment-button value="details">
-      DETAILS
-    </ion-segment-button>
-  </ion-segment>
-  </ion-toolbar>
 </ion-header>
-<ion-content [ngSwitch]="fee" padding id="page4" style="background-color:#C8DAE8;">
-  <div *ngSwitchCase="'summary'">
-    <ion-list *ngIf ='summary$ | async as summarys'>
-      <ion-item *ngFor='let s of summarys' color="none" class="list-fees">
-        Total Payable:
-        <ion-note class="right-item" item-right>{{s.PAYABLE_AMOUNT}}</ion-note>
+<ion-content padding>
+
+  <div *ngIf='totalSummary$ | async as totalSummarys'>
+    <ion-list *ngFor='let t of totalSummarys'>
+      <ion-list-header no-lines>
+        Total summary
+      </ion-list-header>
+      <ion-item>
+        Total payable:
+        <ion-note item-right>{{t.TOTAL_PAYABLE}}</ion-note>
+      </ion-item>
+      <ion-item>
+        Total paid:
+        <ion-note item-right>{{t.TOTAL_PAID}}</ion-note>
+      </ion-item>
+      <ion-item>
+        Total outstanding:
+        <ion-note item-right>{{t.TOTAL_OUTSTANDING}}</ion-note>
+      </ion-item>
+      <ion-item>
+        Total overdue:
+        <ion-note item-right color='warn'>{{t.TOTAL_OVERDUE}}</ion-note>
       </ion-item>
     </ion-list>
   </div>
-  <div *ngSwitchCase="'bankDraft'" id="fEES-container8">
-    <ion-card id="fEES-card22">
-      <ion-list>
-        <ion-item color="resultsCard" id="fEES-list-item30">
-          Intake 1
+
+  <ion-segment [(ngModel)]="fee">
+    <ion-segment-button value="Summary">
+      Summary
+    </ion-segment-button>
+    <ion-segment-button value="Bank Draft">
+      Bank Draft
+    </ion-segment-button>
+    <ion-segment-button value="Details">
+      Details
+    </ion-segment-button>
+  </ion-segment>
+
+  <div [ngSwitch]='fee'>
+    <div *ngSwitchCase="'Summary'">
+      <ion-card >
+        <ion-list-header>
+          {{fee}}
+        </ion-list-header>
+        <ion-item>
+
         </ion-item>
-        <ion-item id="fEES-list-item-container11" class="list-fees">
-          <div id="fEES-markdown29" class="show-list-numbers-and-dots">
-            <p style="margin-top:0px;color:#000000;">
-              Amount Payable:
-              <span style="float:right; text-align:right;">0</span>
-            </p>
-            <br>
-          </div>
-          <div id="fEES-markdown30" class="show-list-numbers-and-dots">
-            <p style="margin-top:0px;color:#000000;">
-              Bank Draft Due Date:
-              <span style="float:right; text-align:right;">0</span>
-            </p>
-            <br>
-          </div>
-          <div id="fEES-markdown31" class="show-list-numbers-and-dots">
-            <p style="margin-top:0px;color:#000000;">
-              Bank Draft No:
-              <span style="float:right; text-align:right;">0</span>
-            </p>
-            <br>
-          </div>
-          <div id="fEES-markdown32" class="show-list-numbers-and-dots">
-            <p style="margin-top:0px;color:#000000;">
-              Amount Collected:
-              <span style="float:right; text-align:right;">0</span>
-            </p>
-            <br>
-          </div>
-          <div id="fEES-markdown33" class="show-list-numbers-and-dots">
-            <p style="margin-top:0px;color:#000000;">
-              Date Collected:
-              <span style="float:right; text-align:right;">0</span>
-            </p>
-          </div>
+      </ion-card>
+    </div>
+    <div *ngSwitchCase="'Bank Draft'">
+      <div *ngIf='bankDraft$ | async as bankDrafts'>
+      <ion-card *ngFor='let b of bankDrafts'>
+        <ion-list-header>
+          {{fee}}
+        </ion-list-header>
+        <ion-item>
+
         </ion-item>
-      </ion-list>
-    </ion-card>
-  </div>
-  <div *ngSwitchCase="'details'" id="fEES-container9">
-    <ion-card id="fEES-card23">
-      <ion-list>
-        <ion-item color="resultsCard" id="fEES-list-item34">
-          Title of the Payment
+      </ion-card>
+    </div>
+    </div>
+    <div *ngSwitchCase="'Details'">
+      <ion-card >
+        <ion-list-header>
+          {{fee}}
+        </ion-list-header>
+        <ion-item>
+
         </ion-item>
-        <ion-item id="fEES-list-item-container13" class="list-fees">
-          <div id="fEES-markdown35" class="show-list-numbers-and-dots">
-            <p style="margin-top:0px;color:#000000;">
-              Due:
-              <span style="float:right; text-align:right;">14-Apr-2017</span>
-            </p>
-            <br>
-          </div>
-          <div id="fEES-markdown36" class="show-list-numbers-and-dots">
-            <p style="margin-top:0px;color:#000000;">
-              Payable:
-              <span style="float:right; text-align:right;">RM100.00</span>
-            </p>
-            <br>
-          </div>
-          <div id="fEES-markdown37" class="show-list-numbers-and-dots">
-            <p style="margin-top:0px;color:#000000;">
-              Collected:
-              <span style="float:right; text-align:right;">RM0.00</span>
-            </p>
-            <br>
-          </div>
-          <div id="fEES-markdown38" class="show-list-numbers-and-dots">
-            <p style="margin-top:0px;color:#000000;">
-              Outstanding:
-              <span style="float:right; text-align:right;">RM100.00</span>
-            </p>
-            <br>
-          </div>
-          <div id="fEES-markdown39" class="show-list-numbers-and-dots">
-            <p style="margin-top:0px;color:#000000;">
-              Fine:
-              <span style="float:right; text-align:right;">RM0.00</span>
-            </p>
-          </div>
-        </ion-item>
-      </ion-list>
-    </ion-card>
+      </ion-card>
+    </div>
   </div>
 </ion-content>
