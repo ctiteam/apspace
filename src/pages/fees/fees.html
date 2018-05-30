@@ -4,37 +4,36 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      FEES
+      Fees
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
 
-  <div *ngIf='totalSummary$ | async as totalSummarys'>
-    <ion-list *ngFor='let t of totalSummarys'>
-      <ion-list-header no-lines>
-        Total summary
-      </ion-list-header>
-      <ion-item>
-        Total payable:
-        <ion-note item-right>{{t.TOTAL_PAYABLE}}</ion-note>
-      </ion-item>
-      <ion-item>
-        Total paid:
-        <ion-note item-right>{{t.TOTAL_PAID}}</ion-note>
-      </ion-item>
-      <ion-item>
-        Total outstanding:
-        <ion-note item-right>{{t.TOTAL_OUTSTANDING}}</ion-note>
-      </ion-item>
-      <ion-item>
-        Total overdue:
-        <ion-note item-right color='warn'>{{t.TOTAL_OVERDUE}}</ion-note>
-      </ion-item>
-    </ion-list>
+
+<ion-content padding>
+  <div *ngIf='totalSummary$ | async as totalSummary'>
+    <ion-list-header no-lines>
+      Total summary
+    </ion-list-header>
+    <ion-item>
+      Total payable:
+      <ion-note item-right>{{ totalSummary[0]?.TOTAL_PAYABLE || 0 }}</ion-note>
+    </ion-item>
+    <ion-item>
+      Total paid:
+      <ion-note item-right>{{ totalSummary[0]?.TOTAL_PAID || 0 }}</ion-note>
+    </ion-item>
+    <ion-item>
+      Total outstanding:
+      <ion-note item-right>{{ totalSummary[0]?.TOTAL_OUTSTANDING || 0 }}</ion-note>
+    </ion-item>
+    <ion-item>
+      Total overdue:
+      <ion-note item-right color='warn'>{{ totalSummary[0]?.TOTAL_OVERDUE || 0 }}</ion-note>
+    </ion-item>
   </div>
 
-  <ion-segment [(ngModel)]="fee">
+  <ion-segment [(ngModel)]="selectedSegment">
     <ion-segment-button value="Summary">
       Summary
     </ion-segment-button>
@@ -46,37 +45,28 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div [ngSwitch]='fee'>
+  <div [ngSwitch]='selectedSegment'>
     <div *ngSwitchCase="'Summary'">
-      <ion-card >
+      <ion-card>
         <ion-list-header>
-          {{fee}}
+          {{ selectedSegment }}
         </ion-list-header>
-        <ion-item>
-
-        </ion-item>
       </ion-card>
     </div>
     <div *ngSwitchCase="'Bank Draft'">
       <div *ngIf='bankDraft$ | async as bankDrafts'>
-      <ion-card *ngFor='let b of bankDrafts'>
-        <ion-list-header>
-          {{fee}}
-        </ion-list-header>
-        <ion-item>
-
-        </ion-item>
-      </ion-card>
-    </div>
+        <ion-card *ngFor='let b of bankDrafts'>
+          <ion-list-header>
+            {{ selectedSegment }}
+          </ion-list-header>
+        </ion-card>
+      </div>
     </div>
     <div *ngSwitchCase="'Details'">
-      <ion-card >
+      <ion-card>
         <ion-list-header>
-          {{fee}}
+          {{ selectedSegment }}
         </ion-list-header>
-        <ion-item>
-
-        </ion-item>
       </ion-card>
     </div>
   </div>
