@@ -1,4 +1,23 @@
 
 page-fees{
+  ion-segment{
+    width: 95%;
+    height: auto;
+    margin-left: 12px;
+    margin-top: 10px;
+  }
 
+  .total-summary{
+    background-color: color($colors, red);
+    color: color($colors, foreground);
+    font-weight: bold;
+  }
+
+  .card-ios{
+    border-radius: 10px;
+  }
+
+  .card-md{
+    border-radius: 10px;
+  }
 }
