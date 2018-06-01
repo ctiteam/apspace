@@ -4,8 +4,7 @@
 
 .side-menu-item {
   background: none;
-  color: #292525;
-  font-weight: 600;
+  color: color($colors, text-color);
   height: 50px;
 }
 
@@ -24,7 +23,7 @@
 }
 
 .ion-icon {
-  color: color($colors, primary);
+  color: color($colors, text-color);
 }
 
 .ion-col {

@@ -16,15 +16,15 @@
       </p>
     </div>
     <ion-list id="menu-list1" no-lines>
-      <ion-item menuClose *ngFor='let p of pages' (click)='openPage(p)'
+      <button ion-item menuClose *ngFor='let p of pages' (click)='openPage(p)'
         class="side-menu-item" [class.activeHighlight]='p === activePage'>
         <ion-icon class="ion-icon" item-left [name]='p.icon'></ion-icon>
         {{ p.title }}
-      </ion-item>
-      <ion-item (click)="logout()" class="side-menu-item">
-        <ion-icon class="ion-icon" name="log-out" item-left></ion-icon>
+    </button>
+      <button ion-item (click)="logout()" class="side-menu-item">
+        <ion-icon class="ion-icon" name="md-log-out" item-left></ion-icon>
         Logout
-      </ion-item>
+      </button>
     </ion-list>
   </ion-content>
 </ion-menu>
