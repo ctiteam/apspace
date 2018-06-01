@@ -1,17 +1,17 @@
 page-profile {
   .cover {
-    width: 100%;
-    height: 180px;
     text-align: center;
-    background-image: url(../assets/img/2.png);
-    padding-top: 28px;
+    padding-top: 40px;
+    width: 100%;
+    height: 250px;
+    background-image: url(../assets/img/profile-back.jpg);
   }
 
   .profile-photo {
     width: auto;
     height: 80%;
     border-radius: 10%;
-    border: 4px solid #fff;
+    border: 2px solid #ffffff;
   }
 
   .profile-info {
@@ -24,6 +24,7 @@ page-profile {
 
   .bold {
     font-weight: bold;
+    color: color($colors, text-color);
   }
 
   .ion-card-style {
@@ -46,23 +47,9 @@ page-profile {
     width: 100%;
   }
 
-  ion-card-header {
-    text-align: center;
-    font-weight: bold;
-  }
-
   ion-card-content p {
     line-height: 1.8;
     text-align: center;
   }
 
-  .spacer {
-    width: 10px;
-    height: 5px;
-  }
-
-  .spacer-40 {
-    width: 10px;
-    height: 0px;
-  }
 }

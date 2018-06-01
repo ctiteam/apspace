@@ -9,24 +9,17 @@
 
 <ion-content>
   <div class="cover">
-      <img class="profile-photo" [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" 
-      onerror="this.src='assets/img/profile.svg'" alt="Avatar">
+    <img class="profile-photo" [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" onerror="this.src='assets/img/profile.svg'"
+      alt="Avatar">
   </div>
-  
-  <div class="spacer-40"></div>
   <ion-card class="profile-info">
     <p class="bold">
       {{ ((profile$ | async) || [{}])[0].NAME }}</p>
-    <p>
+    <p class="bold">
       {{ ((profile$ | async) || [{}])[0].STUDENT_NUMBER }}
     </p>
   </ion-card>
-
   <ion-card class="ion-card-style">
-    <ion-card-header>
-      Basic Information
-    </ion-card-header>
-
     <ion-card-content class="text-left">
       <p class="bold">Country:</p>
       <p>{{ ((profile$ | async) || [{}])[0].COUNTRY }}</p>
@@ -46,13 +39,9 @@
     </ion-card-content>
   </ion-card>
   <ion-card class="ion-card-style">
-    <ion-item *ngFor="let p of pages" [navPush]="p.component">
-      <p>
-        {{ p.title }}
-      </p>
-      <ion-icon item-left name="lock"></ion-icon>
-      <ion-icon item-right name="arrow-round-forward"></ion-icon>
-    </ion-item>
+    <button margin-bottom ion-item *ngFor='let p of pages' [navPush]='p.component'>
+      {{ p.title }}
+      <ion-icon item-left name='md-lock'></ion-icon>
+    </button>
   </ion-card>
-  <div class="spacer"></div>
 </ion-content>
