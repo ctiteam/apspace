@@ -1,6 +1,6 @@
 <ion-menu [content]="content">
-  <ion-content class="side-menu-background" color="menu-background">
-    <div id="menu-info">
+  <ion-content color="menu-background">
+    <div class='menu-info'>
         <ion-row>
           <ion-col col-4>
               <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo"
