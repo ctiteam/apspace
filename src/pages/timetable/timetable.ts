@@ -26,6 +26,7 @@ export class TimetablePage {
   timetable$: Observable<Timetable[]>;
   selectedDay: string;
   availableDays: string[];
+  intakeLabels: string[] = [];
 
   @ViewChild(Content) content: Content;
 
@@ -41,41 +42,38 @@ export class TimetablePage {
   ) { }
 
   presentActionSheet() {
-    this.timetable$.subscribe(tt => {
-      let intakes = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort();
-      if (this.plt.is('cordova')) {
-        const options = {
-          buttonLabels: ['My Classes', ...intakes],
-          addCancelButtonWithLabel: 'Cancel'
-        };
-        this.actionSheet.show(options).then((buttonIndex: number) => {
-          if (buttonIndex <= 1 + intakes.length) {
-            this.intake = intakes[buttonIndex - 2] || '';
-            this.timetable$.subscribe(tt => this.updateDay(tt));
-          }
-        });
-      } else {
-        let intakesButton = intakes.map(intake => <ActionSheetButton>{
-          text: intake,
-          handler: () => {
-            this.intake = intake;
-            this.timetable$.subscribe(tt => this.updateDay(tt));
-          }
-        });
-        let actionSheet = this.actionSheetCtrl.create({
-          buttons: [
-            {
-              text: 'My Classes', handler: () => {
-                this.intake = '';
-                this.timetable$.subscribe(tt => this.updateDay(tt));
-              }
-            },
-            ...intakesButton, { text: 'Cancel', role: 'cancel' }
-          ]
-        });
-        actionSheet.present();
-      }
-    });
+    if (this.plt.is('cordova')) {
+      const options = {
+        buttonLabels: ['My Classes', ...this.intakeLabels],
+        addCancelButtonWithLabel: 'Cancel'
+      };
+      this.actionSheet.show(options).then((buttonIndex: number) => {
+        if (buttonIndex <= 1 + this.intakeLabels.length) {
+          this.intake = this.intakeLabels[buttonIndex - 2] || '';
+          this.timetable$.subscribe(tt => this.updateDay(tt));
+        }
+      });
+    } else {
+      let intakesButton = this.intakeLabels.map(intake => <ActionSheetButton>{
+        text: intake,
+        handler: () => {
+          this.intake = intake;
+          this.timetable$.subscribe(tt => this.updateDay(tt));
+        }
+      });
+      let actionSheet = this.actionSheetCtrl.create({
+        buttons: [
+          {
+            text: 'My Classes', handler: () => {
+              this.intake = '';
+              this.timetable$.subscribe(tt => this.updateDay(tt));
+            }
+          },
+          ...intakesButton, { text: 'Cancel', role: 'cancel' }
+        ]
+      });
+      actionSheet.present();
+    }
   }
 
   /** Get days in week of the classes. */
@@ -124,6 +122,7 @@ export class TimetablePage {
   doRefresh(refresher?) {
     this.timetable$ = this.getTimetable(Boolean(refresher)).pipe(
       tap(tt => this.updateDay(tt)),
+      tap(tt => this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort()),
       finalize(() => refresher && refresher.complete()),
     );
   }
