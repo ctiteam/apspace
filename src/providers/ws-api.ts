@@ -45,12 +45,15 @@ export class WsApiProvider {
     timeout?: number,
     auth?: boolean,
     params?: any,
+    url?: string,
   } = {}): Observable<T> {
-    const url = this.apiUrl + endpoint;
+    const url = (options.url || this.apiUrl) + endpoint;
     const opt = {
       withCredentials: Boolean(options.auth !== false),
       params: options.params || {},
     };
+
+    console.debug(url);
 
     return (refresh && (!this.plt.is('cordova') || this.network.type !== 'none')
       ? this.http.get<T>(url, opt).pipe(

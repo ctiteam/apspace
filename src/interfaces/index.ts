@@ -1,3 +1,4 @@
+export { Apcard } from './apcard';
 export { Attendance } from './attendance';
 export { Course } from './courses';
 export { News } from './news';

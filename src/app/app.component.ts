@@ -66,6 +66,7 @@ export class MyApp {
       { title: 'Timetable', component: 'TimetablePage', icon: 'calendar' },
       { title: 'Attendance', component: 'AttendancePage', icon: 'alarm' },
       { title: 'Results', component: 'ResultsPage', icon: 'checkbox' },
+      { title: 'Apcard', component: 'ApcardPage', icon: 'card' },
       { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people' },
       { title: 'Fees', component: 'FeesPage', icon: 'cash' },
       { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
