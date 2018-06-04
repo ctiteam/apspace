@@ -1,32 +1,26 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <ion-title>Login</ion-title>
-  </ion-navbar>
-</ion-header>
-
-
-<ion-content padding>
-  <img padding-bottom class="logo" src="assets/img/login.jpg">
-  <h1 padding>WELCOME TO <span>iWebspace</span></h1>
+<ion-content class="background" padding>
+  <img src="assets/img/login.jpg">
+  <h1 padding>WELCOME TO
+    <span>iWebspace</span>
+  </h1>
   <form (ngSubmit)="login()">
-    <ion-item no-padding>
-      <ion-icon name="contact" item-left></ion-icon>
-      <ion-input #autofocus type="email" placeholder="'APKey'"
-        [(ngModel)]="username" [ngModelOptions]="{standalone: true}">
+    <ion-item color='background-login' no-padding>
+      <ion-label floating>'APKey'</ion-label>
+      <ion-icon color='primary' name="contact" item-left></ion-icon>
+      <ion-input #autofocus type="email" [(ngModel)]="username" [ngModelOptions]="{standalone: true}">
       </ion-input>
     </ion-item>
-    <ion-item no-padding margin-bottom>
-      <ion-icon name="lock" item-left></ion-icon>
-      <ion-input [type]="getPasswordVisibility()" placeholder="Password"
-        [(ngModel)]="password" [ngModelOptions]="{standalone: true}">
+    <ion-item color='background-login' no-padding margin-bottom>
+      <ion-label floating>Password</ion-label>
+      <ion-icon color='primary' name="lock" item-left></ion-icon>
+      <ion-input [type]="getPasswordVisibility()" [(ngModel)]="password" [ngModelOptions]="{standalone: true}">
       </ion-input>
-      <button ion-button item-right clear type="button"
-        (click)="showPasswordText = !showPasswordText">
+      <button ion-button item-right clear type="button" (click)="showPasswordText = !showPasswordText">
         <ion-icon name="eye"></ion-icon>
       </button>
     </ion-item>
-    <button ion-button margin-top block type="submit" [disabled]="!username || !password">
-      Login
+    <button color='login-text-color' ion-button margin-top block type="submit" [disabled]="!username || !password">
+      Log in
     </button>
   </form>
 </ion-content>

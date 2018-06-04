@@ -1,6 +1,13 @@
 page-login {
-  ion-icon[item-left] {
-    margin-right: 0 !important;
+
+  .background{
+    background-color: color($colors, background-login);
+  }
+
+  ion-content{
+    img{
+      margin-top: 50px;
+    }
   }
 
   ion-content button[ion-button] {
@@ -15,20 +22,15 @@ page-login {
     background-color: color($colors, primary);
   }
 
-  .logo {
-    display: block;
-    margin: 0 auto;
-  }
-
   h1 {
-    color: #424141;
+    color: color($colors, primary);
     font-family: 'Bungee', cursive;
     font-size: 2em;
     letter-spacing: 2px;
     text-align: center;
 
     span {
-      color: color($colors, primary);
+      color: color($colors, login-text-color);
     }
   }
 }
