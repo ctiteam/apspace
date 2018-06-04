@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
+import { IonicPage, LoadingController } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { tap, finalize } from 'rxjs/operators';
@@ -14,17 +14,25 @@ import { Attendance, Course } from '../../interfaces';
 })
 export class AttendancePage {
 
-  attendance$: Observable<Attendance>;
+  attendance$: Observable<Attendance[]>;
   courses$: Observable<Course[]>;
 
   selectedIntake: string;
   studentId: string;
+  loading: any;
+  averageAttendance: any;
 
-  constructor(private ws: WsApiProvider) { }
+  constructor(
+    private ws: WsApiProvider,
+    public loadingCtrl: LoadingController) { }
 
-  getAttendance(intake: string, refresh: boolean = false): Observable<Attendance> {
+  getAttendance(intake: string, refresh: boolean = false): Observable<Attendance[]> {
+    this.presentLoading();
     const opt = { params: { id: this.studentId, format: 'json' } };
-    return this.attendance$ = this.ws.get(`/student/attendance?intake=${intake}`, refresh, opt);
+    return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh, opt).pipe(
+      tap(a => this.loading.dismiss()),
+      tap(a => this.calculateAverage(a))
+    );
   }
 
   ionViewDidLoad() {
@@ -37,8 +45,21 @@ export class AttendancePage {
 
   doRefresh(refresher) {
     this.attendance$ = this.getAttendance(this.selectedIntake, true).pipe(
-      finalize(() => refresher.complete())
+      finalize(() => refresher && refresher.complete())
     );
+  }
+
+  presentLoading(){
+    this.loading = this.loadingCtrl.create({
+      content: 'Please wait...'
+    });
+    this.loading.present();
+  }
+
+  calculateAverage(a: any){
+    for(let attendance of a){
+      console.log((attendance.PERCENTAGE))
+    }
   }
 
 }

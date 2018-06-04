@@ -18,8 +18,8 @@
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
   <ion-card *ngFor="let a of attendance$ | async">
-  <ion-list>
     <ion-item class="subj-title" >
       {{ a.MODULE_ATTENDANCE }}
     </ion-item>
@@ -31,6 +31,6 @@
       <ion-label>Exam Eligibility</ion-label>
       <div item-content>{{ a.EXAM_ELIGIBILITY || 'N/A' }}</div>
     </ion-item>
-  </ion-list>
 </ion-card>
+
 </ion-content>

@@ -4,8 +4,12 @@
   height: 50px;
 }
 
+.menu-content{
+  background-color: color($colors, background-login);
+}
+
 .activeHighlight {
-  background-color: map-get($colors, highlighter);
+  background-color: map-get($colors, secondary);
 }
 
 .spacer-5 {
@@ -17,9 +21,24 @@
   color: color($colors, text-color);
 }
 
-.p {
+.tpnumber {
   font-size: 2em;
   padding-top: 5px;
+  color: map-get($colors, secondary);
+  text-align: left;
+  letter-spacing: 0.3px;
+  margin-top: 10px;
+  margin-left: 16px;
+  font-weight: 500;
+}
+
+.name{
+  color: map-get($colors, foreground);
+  text-align: left;
+  letter-spacing: 0.3px;
+  margin-top: 10px;
+  margin-left: 16px;
+  font-weight: 500;
 }
 
 .menu-info {
@@ -35,14 +54,5 @@
     width: 60px;
     height: 70px;
     margin-left: 16px;
-  }
-
-  p {
-    color: map-get($colors, foreground);
-    text-align: left;
-    letter-spacing: 0.3px;
-    margin-top: 10px;
-    margin-left: 16px;
-    font-weight: 500;
   }
 }

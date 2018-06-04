@@ -2,7 +2,6 @@ page-attendance {
   ion-segment {
     display: block;
     white-space: nowrap;
-    font-size: 0;
     overflow: auto;
 
     &::-webkit-scrollbar {
@@ -13,9 +12,17 @@ page-attendance {
 
     ion-segment-button.segment-button {
       display: inline-block;
-      min-width: 105px;
+      min-width: 125px;
       width: auto;
     }
+  }
+
+  .segment-md .segment-button{
+    font-size: 1.1em;
+  }
+
+  .segment-ios .segment-button{
+    font-size: 1.1em;
   }
 
   .subj-title {

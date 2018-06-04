@@ -7,15 +7,15 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="content">
   <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
+    </ion-refresher-content>
   </ion-refresher>
 
-  <ion-card *ngFor="let item of items$ | async"
-    navPush="HomeModalPage" [navParams]="{item: item}">
+  <ion-card *ngFor="let item of items$ | async" navPush="HomeModalPage" [navParams]="{item: item}">
     <img [src]="item.field_news_image[0].url">
-    <ion-card-content>
+    <ion-card-content color='foreground'>
       {{ item.title[0].value }}
     </ion-card-content>
   </ion-card>

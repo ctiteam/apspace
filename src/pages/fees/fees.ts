@@ -24,7 +24,7 @@ export class FeesPage {
   constructor(private ws: WsApiProvider) { }
 
   ionViewDidLoad() {
-    this.totalSummary$ = this.ws.get('/student/summary_outstanding_fee', true);
+    this.totalSummary$ = this.ws.get('/student/summary_overall_fee', true);
     this.summary$ = this.ws.get('/student/outstanding_fee', true);
     this.bankDraft$ = this.ws.get('/student/bankdraft_amount', true);
     this.details$ = this.ws.get('/student/overall_fee', true);

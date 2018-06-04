@@ -42,23 +42,23 @@
         <ion-card-content no-padding>
           <ion-item>
             Due Date:
-            <ion-note color='dark-grey' item-right>{{ summary.PAYMENT_DUE_DATE }}</ion-note>
+            <ion-note color='dark-grey' item-right>{{ summary.PAYMENT_DUE_DATE || 'N/A' }}</ion-note>
           </ion-item>
           <ion-item>
             Amount Payable:
-            <ion-note color='dark-grey' item-right>{{ summary.PAYABLE_AMOUNT }}</ion-note>
+            <ion-note color='dark-grey' item-right>{{ summary.PAYABLE_AMOUNT || 'N/A' }}</ion-note>
           </ion-item>
           <ion-item>
             Total Collected:
-            <ion-note color='green' item-right>{{ summary.TOTAL_COLLECTED }}</ion-note>
+            <ion-note color='dark-grey' item-right>{{ summary.TOTAL_COLLECTED || 'N/A' }}</ion-note>
           </ion-item>
           <ion-item>
             Outstanding:
-            <ion-note color='red' item-right>{{ summary.OUTSTANDING }}</ion-note>
+            <ion-note color='dark-grey' item-right>{{ summary.OUTSTANDING || 'N/A' }}</ion-note>
           </ion-item>
           <ion-item>
             Fine:
-            <ion-note color='warn' item-right>{{ summary.FINE }}</ion-note>
+            <ion-note color='dark-grey' item-right>{{ summary.FINE || 'N/A' }}</ion-note>
           </ion-item>
         </ion-card-content>
       </ion-card>

@@ -1,6 +1,9 @@
 page-home {
   ion-card-content {
-    color: #fff;
-    background-color: #484c73;
+    background-color: color($colors, secondary);
+  }
+
+  .content{
+    background-color: color($colors, background-login);
   }
 }
