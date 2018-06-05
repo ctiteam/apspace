@@ -62,16 +62,16 @@ export class MyApp {
       });
 
     this.pages = [
-      { title: 'Home', component: 'HomePage', icon: 'md-home' },
-      { title: 'Timetable', component: 'TimetablePage', icon: 'md-calendar' },
-      { title: 'Attendance', component: 'AttendancePage', icon: 'md-alarm' },
-      { title: 'Results', component: 'ResultsPage', icon: 'md-checkbox' },
-      { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'md-people' },
-      { title: 'Fees', component: 'FeesPage', icon: 'md-cash' },
-      { title: 'Notification', component: 'NotificationPage', icon: 'md-chatbubbles' },
-      { title: 'Profile', component: 'ProfilePage', icon: 'md-contact' },
-      { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'md-information-circle' },
-      { title: 'Feedback', component: 'FeedbackPage', icon: 'md-at' },
+      { title: 'Home', component: 'HomePage', icon: 'home' },
+      { title: 'Timetable', component: 'TimetablePage', icon: 'calendar' },
+      { title: 'Attendance', component: 'AttendancePage', icon: 'alarm' },
+      { title: 'Results', component: 'ResultsPage', icon: 'checkbox' },
+      { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people' },
+      { title: 'Fees', component: 'FeesPage', icon: 'cash' },
+      { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
+      { title: 'Profile', component: 'ProfilePage', icon: 'contact' },
+      { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle' },
+      { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
     ];
 
     this.platform.ready().then(() => {
