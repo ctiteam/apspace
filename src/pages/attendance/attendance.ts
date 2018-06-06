@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { IonicPage, LoadingController } from 'ionic-angular';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 import { Observable } from 'rxjs/Observable';
 import { tap, finalize } from 'rxjs/operators';
@@ -12,6 +13,7 @@ import { Attendance, Course } from '../../interfaces';
   selector: 'page-attendance',
   templateUrl: 'attendance.html',
 })
+
 export class AttendancePage {
 
   attendance$: Observable<Attendance[]>;
@@ -20,7 +22,7 @@ export class AttendancePage {
   selectedIntake: string;
   studentId: string;
   loading: any;
-  averageAttendance: any;
+  percent: any;
 
   constructor(
     private ws: WsApiProvider,
@@ -57,9 +59,16 @@ export class AttendancePage {
   }
 
   calculateAverage(a: any){
+    let sumOfAttendances = 0;
+    let sumOfClasses = 0;
+
     for(let attendance of a){
-      console.log((attendance.PERCENTAGE))
+      sumOfAttendances += attendance.PERCENTAGE;
+      sumOfClasses += attendance.TOTAL_CLASSES;
     }
+    let averageAttendance = (sumOfAttendances/a.length).toFixed(2)
+    console.log(averageAttendance);
+    this.percent = averageAttendance;
   }
 
 }

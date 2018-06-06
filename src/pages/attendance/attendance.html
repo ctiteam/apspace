@@ -6,12 +6,11 @@
     <ion-title>Attendance</ion-title>
   </ion-navbar>
   <ion-toolbar no-border-top color="primary">
-  <ion-segment *ngIf="courses$ | async as courses" [(ngModel)]="selectedIntake" color="foreground">
-    <ion-segment-button *ngFor="let c of courses" [value]="c.INTAKE_CODE"
-    (click)="getAttendance(c.INTAKE_CODE)">
-      {{ c.INTAKE_CODE }}
-    </ion-segment-button>
-  </ion-segment>
+    <ion-segment *ngIf="courses$ | async as courses" [(ngModel)]="selectedIntake" color="light">
+      <ion-segment-button *ngFor="let c of courses" [value]="c.INTAKE_CODE" (click)="getAttendance(c.INTAKE_CODE)">
+        {{ c.INTAKE_CODE }}
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -19,18 +18,28 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <ion-card>
+    <circle-progress [percent]="percent" [radius]="90" [outerStrokeWidth]="16" [innerStrokeWidth]="8" [outerStrokeColor]="'#78C000'"
+      [innerStrokeColor]="'#C7E596'" [animation]="true" [animationDuration]="700" [title]="ESEN">
+    </circle-progress>
+    <ion-card-content>Total Average Percent of Attendance</ion-card-content>
+  </ion-card>
+
   <ion-card *ngFor="let a of attendance$ | async">
-    <ion-item class="subj-title" >
+    <ion-item class="subj-title">
       {{ a.MODULE_ATTENDANCE }}
     </ion-item>
     <ion-item>
       <ion-label>Percentage</ion-label>
       <div item-content>{{ a.PERCENTAGE || 'N/A' }}</div>
     </ion-item>
+    <circle-progress [percent]="a.PERCENTAGE" [radius]="40" [outerStrokeWidth]="6" [innerStrokeWidth]="4" [outerStrokeColor]="'#78C000'"
+      [innerStrokeColor]="'#C7E596'" [animation]="false" [showSubtitle]="false" [title]="s">
+    </circle-progress>
     <ion-item>
       <ion-label>Exam Eligibility</ion-label>
       <div item-content>{{ a.EXAM_ELIGIBILITY || 'N/A' }}</div>
     </ion-item>
-</ion-card>
+  </ion-card>
 
 </ion-content>

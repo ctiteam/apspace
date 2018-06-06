@@ -8,8 +8,8 @@ page-fees{
   }
 
   .total-summary{
-    background-color: color($colors, red);
-    color: color($colors, foreground);
+    background-color: color($colors, danger);
+    color: color($colors, light);
     font-weight: bold;
   }
 

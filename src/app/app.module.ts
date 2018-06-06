@@ -21,7 +21,6 @@ import {
   RequestCacheWithMapStorage, WsApiProvider, httpInterceptorProviders, NotificationServiceProvider, OperationHoursProvider
 } from '../providers';
 
-
 @NgModule({
   declarations: [MyApp],
   imports: [

@@ -1,7 +1,7 @@
 page-login {
 
   .background{
-    background-color: color($colors, background-login);
+    background-color: color($colors, light);
   }
 
   ion-content{
@@ -23,14 +23,14 @@ page-login {
   }
 
   h1 {
-    color: color($colors, primary);
+    color: color($colors, text-color);
     font-family: 'Bungee', cursive;
     font-size: 2em;
     letter-spacing: 2px;
     text-align: center;
 
     span {
-      color: color($colors, secondary);
+      color: color($colors, primary);
     }
   }
 }

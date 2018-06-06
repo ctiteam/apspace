@@ -5,11 +5,11 @@
 }
 
 .menu-content{
-  background-color: color($colors, background-login);
+  background-color: color($colors, light-tint);
 }
 
 .activeHighlight {
-  background-color: map-get($colors, secondary);
+  background-color: map-get($colors, highlighter);
 }
 
 .spacer-5 {
@@ -24,7 +24,7 @@
 .tpnumber {
   font-size: 2em;
   padding-top: 5px;
-  color: map-get($colors, secondary);
+  color: map-get($colors, light);
   text-align: left;
   letter-spacing: 0.3px;
   margin-top: 10px;
@@ -33,7 +33,7 @@
 }
 
 .name{
-  color: map-get($colors, foreground);
+  color: map-get($colors, light);
   text-align: left;
   letter-spacing: 0.3px;
   margin-top: 10px;
@@ -50,7 +50,7 @@
     display: block;
     text-align: left;
     border-radius: 50%;
-    border: 2px solid map-get($colors, foreground);
+    border: 2px solid map-get($colors, light);
     width: 60px;
     height: 70px;
     margin-left: 16px;

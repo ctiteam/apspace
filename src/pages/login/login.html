@@ -4,22 +4,22 @@
     <span>iWebspace</span>
   </h1>
   <form (ngSubmit)="login()">
-    <ion-item color='background-login' no-padding>
+    <ion-item no-padding>
       <ion-label floating>'APKey'</ion-label>
-      <ion-icon color='primary' name="contact" item-left></ion-icon>
+      <ion-icon color='text-color' name="contact" item-left></ion-icon>
       <ion-input #autofocus type="email" [(ngModel)]="username" [ngModelOptions]="{standalone: true}">
       </ion-input>
     </ion-item>
-    <ion-item color='background-login' no-padding margin-bottom>
+    <ion-item no-padding margin-bottom>
       <ion-label floating>Password</ion-label>
-      <ion-icon color='primary' name="lock" item-left></ion-icon>
+      <ion-icon color='text-color' name="lock" item-left></ion-icon>
       <ion-input [type]="getPasswordVisibility()" [(ngModel)]="password" [ngModelOptions]="{standalone: true}">
       </ion-input>
       <button ion-button item-right clear type="button" (click)="showPasswordText = !showPasswordText">
         <ion-icon name="eye"></ion-icon>
       </button>
     </ion-item>
-    <button color='secondary' ion-button margin-top block type="submit" [disabled]="!username || !password">
+    <button color='primary' ion-button margin-top block type="submit" [disabled]="!username || !password">
       Log in
     </button>
   </form>

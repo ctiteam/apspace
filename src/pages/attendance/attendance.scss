@@ -17,6 +17,14 @@ page-attendance {
     }
   }
 
+  .scroll-content {
+    background-color: map-get($colors, light);
+  }
+
+  ion-card-header {
+    font-weight: bold;
+  }
+
   .segment-md .segment-button{
     font-size: 1.1em;
   }
@@ -28,4 +36,13 @@ page-attendance {
   .subj-title {
     font-weight: 900;
   }
+
+  .content-ios{
+    text-align: center;
+  }
+
+  .content-md{
+    text-align: center;
+  }
+
 }
