@@ -108,7 +108,7 @@ export class TimetablePage {
 
   /** Convert week days into datestamp in timetable. */
   wdayToDate(tt: Timetable[]) {
-    this.date = this.wday.map(d => (tt.find(t => t.DAY === d) || {} as Timetable).DATESTAMP);
+    this.date = this.wday.map(d => (tt.find(t => t.DAY === d) || {} as Timetable).DATESTAMP_ISO);
   }
 
   /** Convert string to color with hashing. */

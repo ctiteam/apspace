@@ -4,7 +4,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      {{ date[wday.indexOf(selectedDay)] || 'Timetable' }}
+      {{ (date[wday.indexOf(selectedDay)] | date) || 'Timetable' }}
     </ion-title>
     <ion-buttons end>
       <button ion-button outline small (click)="presentActionSheet()">
