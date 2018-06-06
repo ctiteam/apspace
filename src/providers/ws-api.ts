@@ -53,8 +53,6 @@ export class WsApiProvider {
       params: options.params || {},
     };
 
-    console.debug(url);
-
     return (refresh && (!this.plt.is('cordova') || this.network.type !== 'none')
       ? this.http.get<T>(url, opt).pipe(
         catchError(err => options.auth === false ? obs_throw(err)
