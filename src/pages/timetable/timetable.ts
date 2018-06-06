@@ -7,7 +7,8 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { distinctUntilChanged, finalize, map, tap } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
+import { distinctUntilChanged, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { StaffDirectory, StudentProfile, Timetable } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
@@ -82,6 +83,13 @@ export class TimetablePage {
     return this.wday.filter(d => days.indexOf(d) !== -1);
   }
 
+  /** Check if the timetable is outdated. */
+  outdated(tt: Timetable[]): boolean {
+    const date = new Date(); // beginning of week
+    date.setDate(date.getDate() - date.getDay());
+    return date < new Date(tt[0].DATESTAMP_ISO);
+  }
+
   /** Update selected day in segment and style when day change. */
   updateDay(tt: Timetable[]): void {
     this.availableDays = this.schoolDays(tt);
@@ -121,6 +129,7 @@ export class TimetablePage {
 
   doRefresh(refresher?) {
     this.timetable$ = this.getTimetable(Boolean(refresher)).pipe(
+      switchMap(tt => !refresher && this.outdated(tt) ? this.getTimetable(true) : of(tt)),
       tap(tt => this.updateDay(tt)),
       tap(tt => this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort()),
       finalize(() => refresher && refresher.complete()),
