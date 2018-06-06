@@ -45,4 +45,19 @@ page-attendance {
     text-align: center;
   }
 
+  .progress-inner{
+    height: 8px;
+  }
+
+  .progress-outer[_ngcontent-c0] {
+    width: 100px;
+    margin: 10px 2%;
+    padding: 3px;
+    text-align: center;
+    background-color: color($colors, 'medium');
+    border: 1px solid #dcdcdc;
+    color: color($colors, success);
+    border-radius: 20px;
+}
+
 }

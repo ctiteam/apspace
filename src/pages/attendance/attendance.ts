@@ -29,19 +29,19 @@ export class AttendancePage {
     public loadingCtrl: LoadingController) { }
 
   getAttendance(intake: string, refresh: boolean = false): Observable<Attendance[]> {
-    this.presentLoading();
     const opt = { params: { id: this.studentId, format: 'json' } };
     return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh, opt).pipe(
-      tap(a => this.loading.dismiss()),
       tap(a => this.calculateAverage(a))
     );
   }
 
   ionViewDidLoad() {
+    const loading = this.presentLoading();
     this.courses$ = this.ws.get<Course[]>('/student/courses').pipe(
       tap(c => this.selectedIntake = c[0].INTAKE_CODE),
       tap(c => this.studentId = c[0].STUDENT_NUMBER),
-      tap(c => this.getAttendance(this.selectedIntake))
+      tap(c => this.getAttendance(this.selectedIntake)),
+      finalize(() => loading.dismiss())
     );
   }
 
@@ -51,24 +51,28 @@ export class AttendancePage {
     );
   }
 
-  presentLoading(){
-    this.loading = this.loadingCtrl.create({
+  presentLoading() {
+    const loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
-    this.loading.present();
+    loading.present();
+    return loading;
   }
 
-  calculateAverage(a: any){
+  calculateAverage(a: any) {
     let sumOfAttendances = 0;
     let sumOfClasses = 0;
 
-    for(let attendance of a){
-      sumOfAttendances += attendance.PERCENTAGE;
-      sumOfClasses += attendance.TOTAL_CLASSES;
+    if (!a) {
+      this.percent = 0;
     }
-    let averageAttendance = (sumOfAttendances/a.length).toFixed(2)
-    console.log(averageAttendance);
-    this.percent = averageAttendance;
+    else {
+      for (let attendance of a) {
+        sumOfAttendances += attendance.PERCENTAGE;
+        sumOfClasses += attendance.TOTAL_CLASSES;
+      }
+      let averageAttendance = (sumOfAttendances / a.length).toFixed(2)
+      this.percent = averageAttendance;
+    }
   }
-
 }

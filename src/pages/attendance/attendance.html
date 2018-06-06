@@ -19,8 +19,9 @@
   </ion-refresher>
 
   <ion-card>
-    <circle-progress [percent]="percent" [radius]="90" [outerStrokeWidth]="16" [innerStrokeWidth]="8" [outerStrokeColor]="'#78C000'"
-      [innerStrokeColor]="'#C7E596'" [animation]="true" [animationDuration]="700" [title]="ESEN">
+    <circle-progress [percent]="percent" [radius]="90" [outerStrokeWidth]="16" [innerStrokeWidth]="8" [outerStrokeColor]="'#10dc60'"
+      [innerStrokeColor]="'#C7E596'" [animation]="true" [animationDuration]="700" [unitsFontSize]="30" [titleFontSize]="40"
+      [showSubtitle]="false">
     </circle-progress>
     <ion-card-content>Total Average Percent of Attendance</ion-card-content>
   </ion-card>
@@ -31,11 +32,13 @@
     </ion-item>
     <ion-item>
       <ion-label>Percentage</ion-label>
-      <div item-content>{{ a.PERCENTAGE || 'N/A' }}</div>
+      <div item-content>
+        {{a.PERCENTAGE}}
+        <progress-bar [progress]="a.PERCENTAGE" [color]="'#10dc60'">
+        </progress-bar>
+
+      </div>
     </ion-item>
-    <circle-progress [percent]="a.PERCENTAGE" [radius]="40" [outerStrokeWidth]="6" [innerStrokeWidth]="4" [outerStrokeColor]="'#78C000'"
-      [innerStrokeColor]="'#C7E596'" [animation]="false" [showSubtitle]="false" [title]="s">
-    </circle-progress>
     <ion-item>
       <ion-label>Exam Eligibility</ion-label>
       <div item-content>{{ a.EXAM_ELIGIBILITY || 'N/A' }}</div>
