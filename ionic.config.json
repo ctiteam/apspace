@@ -4,5 +4,6 @@
   "integrations": {
     "cordova": {}
   },
-  "hooks": {}
+  "hooks": {},
+  "pro_id": "ddfaaefc"
 }
