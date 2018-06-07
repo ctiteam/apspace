@@ -22,7 +22,9 @@ export class AttendancePage {
   selectedIntake: string;
   studentId: string;
   loading: any;
-  percent: any;
+  percent: number;
+  color: string;
+  averageColor: string;
 
   constructor(
     private ws: WsApiProvider,
@@ -72,7 +74,14 @@ export class AttendancePage {
         sumOfClasses += attendance.TOTAL_CLASSES;
       }
       let averageAttendance = (sumOfAttendances / a.length).toFixed(2)
-      this.percent = averageAttendance;
+      this.percent = parseInt(averageAttendance);
+      this.averageColor= "#21e06d";
+      if(this.percent >= 70 && this.percent <= 80){
+        this.averageColor = "#fd5000";
+      }else if(this.percent >=0 && this.percent <= 69){
+        this.averageColor = "#f04141";
+      }
+
     }
   }
 }

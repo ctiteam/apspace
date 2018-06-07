@@ -18,30 +18,30 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-card>
-    <circle-progress [percent]="percent" [radius]="90" [outerStrokeWidth]="16" [innerStrokeWidth]="8" [outerStrokeColor]="'#10dc60'"
-      [innerStrokeColor]="'#C7E596'" [animation]="true" [animationDuration]="700" [unitsFontSize]="30" [titleFontSize]="40"
-      [showSubtitle]="false">
+  <!-- <img src="assets/img/attendance.jpg"> -->
+
+  <div class="cover" style="height:277px; background: rgb(77,169,255);
+  background: linear-gradient(150deg, rgba(77,169,255,1) 0%, rgba(148,233,186,1) 100%);">
+    <circle-progress class="cicle-progress" [percent]="percent" radius="60" outerStrokeWidth="10" innerStrokeWidth="8" [outerStrokeColor]="averageColor"
+      innerStrokeColor="#FFFFFF" titleColor="#FFFFFF" unitsColor="#FFFFFF" animation="true" animationDuration="500" unitsFontSize="20"
+      titleFontSize="30" [showSubtitle]="false" [responsive]="true">
     </circle-progress>
-    <ion-card-content>Total Average Percent of Attendance</ion-card-content>
-  </ion-card>
+  </div>
 
   <ion-card *ngFor="let a of attendance$ | async">
+    <div class="meter" [style.width]="a.PERCENTAGE + '%'" [style.background]="(a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100) ? '#10dc60' : '#f04141'"></div>
     <ion-item class="subj-title">
       {{ a.MODULE_ATTENDANCE }}
     </ion-item>
     <ion-item>
-      <ion-label>Percentage</ion-label>
+      Classes
       <div item-content>
-        {{a.PERCENTAGE}}
-        <progress-bar [progress]="a.PERCENTAGE" [color]="'#10dc60'">
-        </progress-bar>
-
+        {{ (a.TOTAL_CLASSES - a.TOTAL_ABSENT) + '/' + a.TOTAL_CLASSES + ' (' + a.PERCENTAGE + '%)' }}
       </div>
     </ion-item>
     <ion-item>
-      <ion-label>Exam Eligibility</ion-label>
-      <div item-content>{{ a.EXAM_ELIGIBILITY || 'N/A' }}</div>
+      Exam Eligibility
+      <div item-content [style.font-weight]="'bold'" [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#10dc60' : '#f04141'">{{ a.EXAM_ELIGIBILITY }}</div>
     </ion-item>
   </ion-card>
 

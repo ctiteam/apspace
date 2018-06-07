@@ -12,7 +12,7 @@ page-attendance {
 
     ion-segment-button.segment-button {
       display: inline-block;
-      min-width: 125px;
+      min-width: 135px;
       width: auto;
     }
   }
@@ -37,14 +37,6 @@ page-attendance {
     font-weight: 900;
   }
 
-  .content-ios{
-    text-align: center;
-  }
-
-  .content-md{
-    text-align: center;
-  }
-
   .progress-inner{
     height: 8px;
   }
@@ -58,6 +50,20 @@ page-attendance {
     border: 1px solid #dcdcdc;
     color: color($colors, success);
     border-radius: 20px;
-}
+  }
+
+  img{
+    -webkit-filter: blur(2px); /* Safari 6.0 - 9.0 */
+    filter: blur(2px);
+  }
+
+  .meter {
+    position: relative;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+    padding: 5px;
+  }
 
 }
