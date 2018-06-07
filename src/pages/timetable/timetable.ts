@@ -104,7 +104,7 @@ export class TimetablePage {
   /** Get and merge Timetable with StaffDirectory. */
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
     return forkJoin([
-      this.ws.get<Timetable[]>('/open/weektimetable', refresh, { auth: false, timeout: 10000 }),
+      this.ws.get<Timetable[]>('/open/weektimetable', refresh, { auth: false }),
       this.ws.get<StaffDirectory[]>('/staff/listing'),
     ]).pipe(
       distinctUntilChanged(),

@@ -36,9 +36,10 @@ export class WsApiProvider {
    *
    * @param endpoint - <apiUrl>/<endpoint> for service, used for caching
    * @param refresh - force refresh (default: false)
-   * @param options.timeout - request timeout (default: 5000)
+   * @param options.timeout - request timeout (default: 10000)
    * @param options.auth - authentication required (default: true)
    * @param options.params - additional request parameters (default: {})
+   * @param options.url - url of webservice (default: this.apiUrl)
    * @return shared cached observable
    */
   get<T>(endpoint: string, refresh?: boolean, options: {
@@ -61,7 +62,7 @@ export class WsApiProvider {
               Object.assign(opt, { params: Object.assign(opt.params, { ticket: st }) })))
           )),
         tap(cache => this.storage.set(endpoint, cache)),
-        timeout(options.timeout || 5000),
+        timeout(options.timeout || 10000),
         catchError(err => {
           this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
           return fromPromise(this.storage.get(endpoint)).pipe(
