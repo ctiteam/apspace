@@ -15,13 +15,13 @@ import { OperationHoursProvider } from '../../providers';
   templateUrl: 'operation-hours.html',
   animations: [
     trigger('easeIn', [
-      transition(':enter', [
+      transition('void => *', [
         style({ opacity: '.8', height: '0' }),
         animate('250ms ease-in', style({ opacity: '1', height: '*' })),
       ]),
     ]),
     trigger('easeOut', [
-      transition(':leave', [
+      transition('* => void', [
         style({ opacity: '1', height: '*' }),
         animate('150ms ease-out', style({ opacity: '.7', height: '0', paddingBottom: '0' })),
       ]),

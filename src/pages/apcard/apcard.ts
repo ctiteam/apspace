@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { trigger, style, animate, transition, state } from '@angular/animations';
 import { IonicPage } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -10,7 +11,19 @@ import { Apcard } from '../../interfaces';
 @IonicPage()
 @Component({
   selector: 'page-apcard',
-  templateUrl: 'apcard.html'
+  templateUrl: 'apcard.html',
+  animations: [
+    trigger('flyInOut', [
+      state('in', style({ transform: 'translateX(0)' })),
+      transition('void => *', [
+        style({ transform: 'translateX(-30%)' }),
+        animate(700)
+      ]),
+      transition('* => void', [
+        animate(700, style({ transform: 'translateX(30%)' }))
+      ])
+    ])
+  ]
 })
 export class ApcardPage {
   transaction$: Observable<Apcard[]>;

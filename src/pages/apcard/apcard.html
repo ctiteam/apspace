@@ -17,11 +17,11 @@
     <ion-row>
       <ion-col>
         <h6 ion-text>Balance</h6>
-        <p ion-text item-end>{{ balance | currency:'RM' }}</p>
+        <p ion-text item-end [@flyInOut]="'in'">{{ balance | currency:'RM' }}</p>
       </ion-col>
       <ion-col>
         <h6 ion-text>Month-to-Date Spend</h6>
-        <p ion-text item-end>{{ monthly | currency:'RM' }}</p>
+        <p ion-text item-end [@flyInOut]="'in'">{{ monthly | currency:'RM' }}</p>
       </ion-col>
     </ion-row>
   </ion-grid>
