@@ -25,7 +25,7 @@ export class ParallaxHeaderDirective {
 
     this.headerHeight = this.header.clientHeight;
 
-    this.renderer.setElementStyle(this.header, 'webkitTransformOrigin', 'center bottom');
+    this.renderer.setElementStyle(this.header, 'webkitTransformOrigin', 'center top');
     this.renderer.setElementStyle(this.header, 'background-size', 'cover');
     this.renderer.setElementStyle(mainContent, 'position', 'relative');
   }

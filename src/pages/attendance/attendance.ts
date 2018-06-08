@@ -22,7 +22,6 @@ export class AttendancePage {
   studentId: string;
   loading: any;
   percent: number;
-  color: string;
   averageColor: string;
 
   constructor(
@@ -31,33 +30,34 @@ export class AttendancePage {
 
   getAttendance(intake: string, refresh: boolean = false): Observable<Attendance[]> {
     const opt = { params: { id: this.studentId, format: 'json' } };
-    return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh, opt).pipe(
-      tap(a => this.calculateAverage(a))
-    );
+    return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh, opt)
+      .pipe(
+        tap(a => this.calculateAverage(a)),
+        finalize(() => this.loading.dismiss())
+      );
   }
 
   ionViewDidLoad() {
-    const loading = this.presentLoading();
+    this.presentLoading();
     this.courses$ = this.ws.get<Course[]>('/student/courses').pipe(
       tap(c => this.selectedIntake = c[0].INTAKE_CODE),
       tap(c => this.studentId = c[0].STUDENT_NUMBER),
       tap(c => this.getAttendance(this.selectedIntake)),
-      finalize(() => loading.dismiss())
     );
   }
 
   doRefresh(refresher) {
+    this.presentLoading();
     this.attendance$ = this.getAttendance(this.selectedIntake, true).pipe(
-      finalize(() => refresher && refresher.complete())
+      finalize(() => refresher && refresher.complete() && this.loading.dismiss())
     );
   }
 
   presentLoading() {
-    const loading = this.loadingCtrl.create({
+    this.loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
-    loading.present();
-    return loading;
+    this.loading.present();
   }
 
   calculateAverage(a: any) {
@@ -65,6 +65,7 @@ export class AttendancePage {
 
     if (!a) {
       this.percent = 0;
+      this.averageColor = "#f04141";
     }
     else {
       for (let attendance of a) {
@@ -73,12 +74,9 @@ export class AttendancePage {
       let averageAttendance = (sumOfAttendances / a.length).toFixed(2)
       this.percent = parseInt(averageAttendance);
       this.averageColor = "#0dbd53";
-      if (this.percent >= 70 && this.percent <= 80) {
-        this.averageColor = "#fd5000";
-      } else if (this.percent >= 0 && this.percent <= 69) {
+      if (this.percent <= 80) {
         this.averageColor = "#f04141";
       }
-
     }
   }
 }
