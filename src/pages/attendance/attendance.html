@@ -13,36 +13,34 @@
     </ion-segment>
   </ion-toolbar>
 </ion-header>
-<ion-content>
+<ion-content parallax-header>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- <img src="assets/img/attendance.jpg"> -->
-
-  <div class="cover" style="height:277px; background: rgb(77,169,255);
-  background: linear-gradient(150deg, rgba(77,169,255,1) 0%, rgba(148,233,186,1) 100%);">
-    <circle-progress class="cicle-progress" [percent]="percent" radius="60" outerStrokeWidth="10" innerStrokeWidth="8" [outerStrokeColor]="averageColor"
+  <div class="cover">
+    <circle-progress [percent]="percent" radius="60" outerStrokeWidth="7" innerStrokeWidth="4" [outerStrokeColor]="averageColor"
       innerStrokeColor="#FFFFFF" titleColor="#FFFFFF" unitsColor="#FFFFFF" animation="true" animationDuration="500" unitsFontSize="20"
       titleFontSize="30" [showSubtitle]="false" [responsive]="true">
     </circle-progress>
   </div>
 
-  <ion-card *ngFor="let a of attendance$ | async">
-    <div class="meter" [style.width]="a.PERCENTAGE + '%'" [style.background]="(a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100) ? '#10dc60' : '#f04141'"></div>
-    <ion-item class="subj-title">
-      {{ a.MODULE_ATTENDANCE }}
-    </ion-item>
-    <ion-item>
-      Classes
-      <div item-content>
-        {{ (a.TOTAL_CLASSES - a.TOTAL_ABSENT) + '/' + a.TOTAL_CLASSES + ' (' + a.PERCENTAGE + '%)' }}
-      </div>
-    </ion-item>
-    <ion-item>
-      Exam Eligibility
-      <div item-content [style.font-weight]="'bold'" [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#10dc60' : '#f04141'">{{ a.EXAM_ELIGIBILITY }}</div>
-    </ion-item>
-  </ion-card>
-
+  <div class="main-content">
+    <ion-card *ngFor="let a of attendance$ | async">
+      <div class="progress-bar" [style.width]="a.PERCENTAGE + '%'" [style.background]="(a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100) ? '#0dbd53' : '#f04141'"></div>
+      <ion-item color="light-shade" class="subj-title">
+        {{ a.MODULE_ATTENDANCE }}
+      </ion-item>
+      <ion-item>
+        Classes
+        <div item-content>
+          {{ (a.TOTAL_CLASSES - a.TOTAL_ABSENT) + '/' + a.TOTAL_CLASSES + ' (' + a.PERCENTAGE + '%)' }}
+        </div>
+      </ion-item>
+      <ion-item>
+        Exam Eligibility
+        <div item-content [style.font-weight]="'bold'" [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'">{{ a.EXAM_ELIGIBILITY }}</div>
+      </ion-item>
+    </ion-card>
+  </div>
 </ion-content>

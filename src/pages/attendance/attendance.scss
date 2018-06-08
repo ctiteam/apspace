@@ -17,14 +17,6 @@ page-attendance {
     }
   }
 
-  .scroll-content {
-    background-color: map-get($colors, light);
-  }
-
-  ion-card-header {
-    font-weight: bold;
-  }
-
   .segment-md .segment-button{
     font-size: 1.1em;
   }
@@ -34,7 +26,8 @@ page-attendance {
   }
 
   .subj-title {
-    font-weight: 900;
+    font-size: small;
+    font-weight: 500;
   }
 
   .progress-inner{
@@ -52,12 +45,7 @@ page-attendance {
     border-radius: 20px;
   }
 
-  img{
-    -webkit-filter: blur(2px); /* Safari 6.0 - 9.0 */
-    filter: blur(2px);
-  }
-
-  .meter {
+  .progress-bar {
     position: relative;
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
@@ -66,4 +54,18 @@ page-attendance {
     padding: 5px;
   }
 
+  .cover{
+    height:40vh;
+    background: rgb(77,169,255);
+    background: linear-gradient(150deg, rgba(77,169,255,1) 0%, rgba(148,233,186,1) 100%);
+  }
+
+  ion-card{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+  }
+
+  .item-header{
+    font-size: small;
+    font-weight: 500;
+  }
 }
