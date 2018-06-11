@@ -13,7 +13,9 @@ export class HomeModalPage {
 
   item: News;
 
-  constructor(public params: NavParams, private sanitizer: DomSanitizer) { }
+  constructor(
+    public params: NavParams,
+    private sanitizer: DomSanitizer) { }
 
   sanitize(value: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(value);
