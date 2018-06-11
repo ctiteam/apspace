@@ -8,8 +8,8 @@
     </ion-title>
   </ion-navbar>
   <ion-toolbar no-border-top color="primary">
-    <ion-segment *ngIf='intakes$ | async as intakes' [(ngModel)]="selectedIntake" color="foreground">
-      <ion-segment-button *ngFor="let intake of intakes" [value]="intake.INTAKE_CODE" 
+    <ion-segment *ngIf='intakes$ | async as intakes' [(ngModel)]="selectedIntake" color="light">
+      <ion-segment-button *ngFor="let intake of intakes" [value]="intake.INTAKE_CODE"
       (click)="getResults(intake.INTAKE_CODE)">
         {{intake.INTAKE_CODE}}
       </ion-segment-button>

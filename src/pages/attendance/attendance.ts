@@ -28,6 +28,7 @@ export class AttendancePage {
     public loading: LoadingControllerProvider) { }
 
   getAttendance(intake: string, refresh: boolean = false): Observable<Attendance[]> {
+    this.loading.presentLoading();
     const opt = { params: { id: this.studentId, format: 'json' } };
     return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh, opt)
       .pipe(
@@ -37,7 +38,6 @@ export class AttendancePage {
   }
 
   ionViewDidLoad() {
-    this.loading.presentLoading();
     this.courses$ = this.ws.get<Course[]>('/student/courses').pipe(
       tap(c => this.selectedIntake = c[0].INTAKE_CODE),
       tap(c => this.studentId = c[0].STUDENT_NUMBER),

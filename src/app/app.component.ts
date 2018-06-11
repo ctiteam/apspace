@@ -48,19 +48,18 @@ export class MyApp {
     private loading: LoadingControllerProvider
   ) {
 
-    this.storage.get('tgt')
-      .then(tgt => {
-        if (tgt) {
-          this.events.subscribe('user:logout', () => this.onLogout());
-          this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo')
-          this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
-          this.activePage = this.pages[0];
-          this.navCtrl.setRoot('HomePage');
-        } else {
-          this.events.subscribe('user:login', () => this.onLogin());
-          this.navCtrl.setRoot('LoginPage');
-        }
-      });
+    this.storage.get('tgt').then(tgt => {
+      if (tgt) {
+        this.events.subscribe('user:logout', () => this.onLogout());
+        this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo')
+        this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
+        this.activePage = this.pages[0];
+        this.navCtrl.setRoot('HomePage');
+      } else {
+        this.events.subscribe('user:login', () => this.onLogin());
+        this.navCtrl.setRoot('LoginPage');
+      }
+    });
 
     this.pages = [
       { title: 'News', component: 'HomePage', icon: 'home' },
@@ -119,9 +118,10 @@ export class MyApp {
       this.subscribe();
     }
     this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
-    this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo').pipe(
+    this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
+    forkJoin([this.profile$, this.photo$]).pipe(
       finalize(() => this.loading.dismissLoading())
-    )
+    ).subscribe();
     this.activePage = this.pages[0];
     this.events.unsubscribe('user:login');
     this.events.subscribe('user:logout', () => this.onLogout());
