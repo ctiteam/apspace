@@ -43,4 +43,18 @@ page-results {
   .segment-ios .segment-button{
     font-size: 1.1em;
   }
+
+  .total-summary{
+    background-color: color($colors, success);
+    color: color($colors, light);
+    font-weight: bolder;
+  }
+
+  .card-ios{
+    border-radius: 10px;
+  }
+
+  .card-md{
+    border-radius: 10px;
+  }
 }

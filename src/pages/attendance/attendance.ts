@@ -46,9 +46,8 @@ export class AttendancePage {
   }
 
   doRefresh(refresher) {
-    this.loading.presentLoading();
     this.attendance$ = this.getAttendance(this.selectedIntake, true).pipe(
-      finalize(() => refresher && refresher.complete() && this.loading.dismissLoading())
+      finalize(() => refresher && refresher.complete())
     );
   }
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-import { tap, finalize } from 'rxjs/operators';
+import { tap, finalize, filter } from 'rxjs/operators';
 
 import { WsApiProvider, LoadingControllerProvider } from '../../providers';
 import { Course, Subcourse, Attendance } from '../../interfaces';
@@ -21,6 +21,7 @@ export class ResultsPage {
   selectedIntake: string;
   studentId: string;
   grade_point: number = 0;
+  totalModulePassed = 0;
 
   constructor(
     private ws: WsApiProvider,
@@ -30,7 +31,7 @@ export class ResultsPage {
     this.loading.presentLoading();
     const opt = { params: { id: this.studentId, format: 'json' } };
     return this.results$ = this.ws.get<Subcourse>(`/student/subcourses?intake=${intake}`, refresh, opt).pipe(
-      tap(r => this.calculateAverageGradePoint(r)),
+      tap(r => this.calculateAverage(r)),
       finalize(() => this.loading.dismissLoading())
     )
   }
@@ -44,20 +45,24 @@ export class ResultsPage {
   }
 
   doRefresh(refresher?) {
-    this.loading.presentLoading();
     this.results$ = this.getResults(this.selectedIntake, true).pipe(
-      finalize(() => refresher.complete() && this.loading.dismissLoading())
+      finalize(() => refresher.complete())
     )
   }
 
-  calculateAverageGradePoint(results: any){
+  calculateAverage(results: any) {
     let sumOfGradePoint = 0;
+    let parsedGradePoints: any = [];
 
-    for(let gradePoint of results){
+    for (let gradePoint of results) {
       sumOfGradePoint += parseFloat(gradePoint.GRADE_POINT);
+      parsedGradePoints = gradePoint.GRADE_POINT;
+      //console.log(parsedGradePoints.filter(gpa => (gpa >= 1.7)))
     }
-    let averageGradePoint = (sumOfGradePoint/results.length).toFixed(2);
+    let averageGradePoint = (sumOfGradePoint / results.length).toFixed(2);
     this.grade_point = parseFloat(averageGradePoint);
-    console.log(this.grade_point)
+    //let modulesPassed = parsedGradePoints.filter(gpa => gpa >= 1.7);
+    //console.log(modulesPassed);
+
   }
 }
