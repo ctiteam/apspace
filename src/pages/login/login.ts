@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, IonicPage, LoadingController } from 'ionic-angular';
+import { NavController, IonicPage } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { Platform } from 'ionic-angular';
 import { Network } from '@ionic-native/network';
@@ -23,13 +23,13 @@ export class LoginPage {
   @ViewChild('autofocus') autofocus;
 
   cache1 = [
-    {path: '/student/profile',    auth: true},
-    {path: '/student/photo',      auth: true}
+    { path: '/student/profile', auth: true },
+    { path: '/student/photo', auth: true }
   ];
   cache2 = [
-    {path: '/student/courses', auth: true},
-    {path: '/open/weektimetable', auth: false},
-    {path: '/staff/listing',      auth: true}
+    { path: '/student/courses', auth: true },
+    { path: '/open/weektimetable', auth: false },
+    { path: '/staff/listing', auth: true }
   ];
 
   username: string;
@@ -44,7 +44,6 @@ export class LoginPage {
     public menu: MenuController,
     public navCtrl: NavController,
     public storage: Storage,
-    private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private casTicket: CasTicketProvider,
     private ws: WsApiProvider,
@@ -74,13 +73,6 @@ export class LoginPage {
     if (this.plt.is('cordova') && this.network.type === 'none') {
       return this.toast('You are now offline.');
     }
-    //Show loading on Login Button click
-    let loading = this.loadingCtrl
-    .create({
-      content: "Loading...",
-      spinner: "crescent"
-    });
-    loading.present();
 
     this.casTicket.getTGT(this.username, this.password).pipe(
       catchError(_ => this.toast('Invalid username or password.') || empty()),
@@ -94,7 +86,6 @@ export class LoginPage {
       }),
       tap(_ => this.cacheApi(this.cache1)),
       timeout(3000),
-      finalize(() => loading.dismiss()),
       tap(_ => this.cacheApi(this.cache2)),
     ).pipe(
       tap(_ => this.loadProfile())
@@ -105,8 +96,8 @@ export class LoginPage {
     data.forEach(d =>
       this.initializers[d.path] = this.ws.get(d.path, true,
         { auth: d.auth, timeout: 10000 })
-      // use .subscribe instead of .take (probably GC collected)
-      .subscribe(_ => this.initializers[d.path].unsubscribe()));
+        // use .subscribe instead of .take (probably GC collected)
+        .subscribe(_ => this.initializers[d.path].unsubscribe()));
   }
 
   loadProfile() {
@@ -116,5 +107,4 @@ export class LoginPage {
   getPasswordVisibility() {
     return (this.showPasswordText ? "text" : "password");
   }
-
 }

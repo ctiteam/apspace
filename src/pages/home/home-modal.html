@@ -5,9 +5,7 @@
 </ion-header>
 
 
-<ion-content parallax-header>
+<ion-content>
   <img class="cover" [src]="item?.field_news_image[0].url" height="auto" width="100%">
-  <div class="main-content">
-    <article [innerHTML]="sanitize(item?.body[0].value)"></article>
-  </div>
+  <article [innerHTML]="sanitize(item?.body[0].value)"></article>
 </ion-content>

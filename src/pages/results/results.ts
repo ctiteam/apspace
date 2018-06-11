@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, LoadingController } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { tap, finalize } from 'rxjs/operators';
 
-import { WsApiProvider } from '../../providers';
+import { WsApiProvider, LoadingControllerProvider } from '../../providers';
 import { Course, Subcourse, Attendance } from '../../interfaces';
 
 @IonicPage()
@@ -20,21 +20,20 @@ export class ResultsPage {
 
   selectedIntake: string;
   studentId: string;
-  loading: any;
 
   constructor(
     private ws: WsApiProvider,
-    public loadingCtrl: LoadingController) { }
+    public loading: LoadingControllerProvider) { }
 
   getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
-    this.presentLoading();
     const opt = { params: { id: this.studentId, format: 'json' } };
     return this.results$ = this.ws.get<Subcourse>(`/student/subcourses?intake=${intake}`, refresh, opt).pipe(
-      tap(r => this.loading.dismiss())
+      finalize(() => this.loading.dismissLoading())
     )
   }
 
   ionViewDidLoad() {
+    this.loading.presentLoading();
     this.intakes$ = this.ws.get<Course[]>('/student/courses').pipe(
       tap(i => this.selectedIntake = i[0].INTAKE_CODE),
       tap(i => this.studentId = i[0].STUDENT_NUMBER),
@@ -43,15 +42,9 @@ export class ResultsPage {
   }
 
   doRefresh(refresher?) {
+    this.loading.presentLoading();
     this.results$ = this.getResults(this.selectedIntake, true).pipe(
-      finalize(() => refresher.complete())
+      finalize(() => refresher.complete() && this.loading.dismissLoading())
     )
-  }
-
-  presentLoading(){
-    this.loading = this.loadingCtrl.create({
-      content: 'Please wait...'
-    });
-    this.loading.present();
   }
 }

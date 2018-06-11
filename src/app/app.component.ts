@@ -7,11 +7,11 @@ import {
 } from 'ionic-angular';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { fromPromise } from 'rxjs/observable/fromPromise';
-import { tap } from 'rxjs/operators';
+import { tap, finalize } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
 
-import { CasTicketProvider, WsApiProvider, NotificationServiceProvider } from '../providers';
+import { CasTicketProvider, WsApiProvider, NotificationServiceProvider, LoadingControllerProvider } from '../providers';
 import { StudentPhoto, StudentProfile } from '../interfaces';
 
 
@@ -44,7 +44,8 @@ export class MyApp {
     private ws: WsApiProvider,
     private notificationService: NotificationServiceProvider,
     private platform: Platform,
-    private firebase: Firebase
+    private firebase: Firebase,
+    private loading: LoadingControllerProvider
   ) {
 
     this.storage.get('tgt')
@@ -113,11 +114,14 @@ export class MyApp {
   }
 
   onLogin() {
+    this.loading.presentLoading();
     if (this.platform.is('cordova')) {
       this.subscribe();
     }
-    this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
     this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
+    this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo').pipe(
+      finalize(() => this.loading.dismissLoading())
+    )
     this.activePage = this.pages[0];
     this.events.unsubscribe('user:login');
     this.events.subscribe('user:logout', () => this.onLogout());
