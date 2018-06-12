@@ -57,4 +57,9 @@ page-results {
   .card-md{
     border-radius: 10px;
   }
+
+  .scroll-content {
+    background-color: map-get($colors, light);
+  }
+
 }

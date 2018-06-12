@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-import { tap, finalize, filter } from 'rxjs/operators';
+import { tap, finalize } from 'rxjs/operators';
+import { Chart } from 'chart.js';
 
 import { WsApiProvider, LoadingControllerProvider } from '../../providers';
-import { Course, Subcourse, Attendance } from '../../interfaces';
+import { Course, Subcourse } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -15,9 +16,12 @@ import { Course, Subcourse, Attendance } from '../../interfaces';
 
 export class ResultsPage {
 
+  @ViewChild('barCanvas') barCanvas;
+
   intakes$: Observable<Course[]>;
   results$: Observable<Subcourse>;
 
+  barChart: any;
   selectedIntake: string;
   studentId: string;
   grade_point: number = 0;
@@ -50,8 +54,6 @@ export class ResultsPage {
     )
   }
 
-
-
   calculateAverage(results: any) {
     let sumOfGradePoint = 0;
 
@@ -60,16 +62,56 @@ export class ResultsPage {
       || gpa.GRADE == 'B' || gpa.GRADE == 'B-' || gpa.GRADE == 'C+' || gpa.GRADE == 'C' || gpa.GRADE == 'C-' || gpa.GRADE == 'Pass')).length;
 
     //Calculate total average GPA
-    let test = (results.filter(grade => grade.GRADE_POINT == 0 && grade.GRADE == 'Pass' || grade.GRADE == 'Fail'))
+    let test = (results.filter(grade => grade.GRADE_POINT == '0.00' && grade.GRADE == 'Pass' || grade.GRADE == 'Fail'))
     for (let gradePoint of results) {
       sumOfGradePoint += parseFloat(gradePoint.GRADE_POINT);
     }
-    if (!test) {
+    if (test.length == 0) {
       let averageGradePoint = (sumOfGradePoint / (results.length)).toFixed(2);
       this.grade_point = parseFloat(averageGradePoint);
     } else {
       let averageGradePoint = (sumOfGradePoint / (results.length - 1)).toFixed(2);
       this.grade_point = parseFloat(averageGradePoint);
     }
+
+
+    this.barChart = new Chart(this.barCanvas.nativeElement, {
+
+      type: 'bar',
+      data: {
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        datasets: [{
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+
+    });
   }
 }

@@ -21,6 +21,14 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <ion-card>
+    <ion-card-header>
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #barCanvas></canvas>
+    </ion-card-content>
+  </ion-card>
+
   <ion-card class="total-summary" padding>
     <ion-item class="total-summary" *ngIf="passedModule || 'N/A'">
       Total Modules Passed

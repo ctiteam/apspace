@@ -38,6 +38,7 @@
     "angular2-chartjs": "^0.5.1",
     "angular-progress-bar": "^1.0.0",
     "autoprefixer": "^8.1.0",
+    "chart.js": "^2.7.2",
     "cordova-android": "7.1.0",
     "cordova-ios": "4.4.0",
     "cordova-plugin-actionsheet": "^2.3.3",

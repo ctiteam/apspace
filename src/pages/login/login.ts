@@ -9,7 +9,7 @@ import { Storage } from '@ionic/storage';
 
 import { Subscription } from 'rxjs/Subscription';
 import { empty } from 'rxjs/observable/empty';
-import { catchError, finalize, tap, timeout, switchMap } from 'rxjs/operators';
+import { catchError, tap, timeout, switchMap } from 'rxjs/operators';
 
 import { CasTicketProvider, WsApiProvider } from '../../providers';
 
