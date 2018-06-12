@@ -21,7 +21,7 @@ export class ResultsPage {
   selectedIntake: string;
   studentId: string;
   grade_point: number = 0;
-  totalModulePassed = 0;
+  passedModule: any = 0;
 
   constructor(
     private ws: WsApiProvider,
@@ -50,19 +50,26 @@ export class ResultsPage {
     )
   }
 
+
+
   calculateAverage(results: any) {
     let sumOfGradePoint = 0;
-    let parsedGradePoints: any = [];
 
+    //Calculate total module passed
+    this.passedModule = (results.filter(gpa => gpa.GRADE == 'A+' || gpa.GRADE == 'A' || gpa.GRADE == 'A-' || gpa.GRADE == 'B+'
+      || gpa.GRADE == 'B' || gpa.GRADE == 'B-' || gpa.GRADE == 'C+' || gpa.GRADE == 'C' || gpa.GRADE == 'C-' || gpa.GRADE == 'Pass')).length;
+
+    //Calculate total average GPA
+    let test = (results.filter(grade => grade.GRADE_POINT == 0 && grade.GRADE == 'Pass' || grade.GRADE == 'Fail'))
     for (let gradePoint of results) {
       sumOfGradePoint += parseFloat(gradePoint.GRADE_POINT);
-      parsedGradePoints = gradePoint.GRADE_POINT;
-      //console.log(parsedGradePoints.filter(gpa => (gpa >= 1.7)))
     }
-    let averageGradePoint = (sumOfGradePoint / results.length).toFixed(2);
-    this.grade_point = parseFloat(averageGradePoint);
-    //let modulesPassed = parsedGradePoints.filter(gpa => gpa >= 1.7);
-    //console.log(modulesPassed);
-
+    if (!test) {
+      let averageGradePoint = (sumOfGradePoint / (results.length)).toFixed(2);
+      this.grade_point = parseFloat(averageGradePoint);
+    } else {
+      let averageGradePoint = (sumOfGradePoint / (results.length - 1)).toFixed(2);
+      this.grade_point = parseFloat(averageGradePoint);
+    }
   }
 }

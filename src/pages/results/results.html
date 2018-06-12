@@ -22,13 +22,13 @@
   </ion-refresher>
 
   <ion-card class="total-summary" padding>
-    <ion-item class="total-summary">
+    <ion-item class="total-summary" *ngIf="passedModule || 'N/A'">
       Total Modules Passed
-      <ion-note color='light' item-right>7</ion-note>
+      <ion-note color='light' item-right>{{this.passedModule || 0}}</ion-note>
     </ion-item>
     <ion-item class="total-summary" *ngIf="grade_point || 'N/A'">
       GPA
-      <ion-note color='light' item-right>{{this.grade_point || 'N/A' }}</ion-note>
+      <ion-note color='light' item-right>{{this.grade_point || 0 }}</ion-note>
     </ion-item>
   </ion-card>
 
