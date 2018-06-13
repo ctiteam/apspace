@@ -10,3 +10,4 @@ export { Subcourse } from './subcourses';
 export { Timetable } from './timetable';
 export { OperationHours } from './operation-hours';
 export { FeesBankDraft, FeesDetails, FeesSummary, FeesTotalSummary } from './fees';
+export { CourseDetails } from './course-details';

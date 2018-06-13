@@ -1,9 +1,5 @@
 page-results {
   ion-content ion-card {
-    ion-card-header {
-      background: color($colors, secondary);
-    }
-
     .item {
       background-color: foreground;
     }
@@ -45,7 +41,7 @@ page-results {
   }
 
   .total-summary{
-    background-color: color($colors, success);
+    background-color: rgba(54, 162, 235, 0.7);
     color: color($colors, light);
     font-weight: bolder;
   }
@@ -62,4 +58,12 @@ page-results {
     background-color: map-get($colors, light);
   }
 
+  .semester-header{
+      text-align: center;
+      background: rgba(54, 162, 235, 0.7);
+  }
+
+  .canvas-header{
+    background: color($colors, primary);
+  }
 }

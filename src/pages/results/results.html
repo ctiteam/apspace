@@ -22,45 +22,98 @@
   </ion-refresher>
 
   <ion-card>
-    <ion-card-header>
-    </ion-card-header>
     <ion-card-content>
-      <canvas #barCanvas></canvas>
+      <chart [type]="type" [data]="data" [options]="options"></chart>
     </ion-card-content>
   </ion-card>
 
-  <ion-card class="total-summary" padding>
-    <ion-item class="total-summary" *ngIf="passedModule || 'N/A'">
-      Total Modules Passed
-      <ion-note color='light' item-right>{{this.passedModule || 0}}</ion-note>
-    </ion-item>
-    <ion-item class="total-summary" *ngIf="grade_point || 'N/A'">
-      GPA
-      <ion-note color='light' item-right>{{this.grade_point || 0 }}</ion-note>
-    </ion-item>
+  <ion-card>
+    <div *ngFor="let details of courseDetails$ | async" class="total-summary">
+      <div *ngIf="details.SEMESTER">
+        <ion-card-header class="semester-header" color='light'>SEMESTER {{details.SEMESTER}}</ion-card-header>
+        <ion-item class="total-summary">
+          Total Modules Passed
+          <ion-note color='light' item-right>{{details.TOTAL_MODULES_PASSED}}</ion-note>
+        </ion-item>
+        <ion-item class="total-summary">
+          GPA
+          <ion-note color='light' item-right>{{details.GPA}}</ion-note>
+        </ion-item>
+      </div>
+    </div>
   </ion-card>
 
-  <ion-card *ngFor="let result of results$ | async">
-    <ion-list>
-      <ion-item class="subj-title">
-        {{result.MODULE_DESCRIPTION}}
-      </ion-item>
-      <ion-item>
-        <ion-label>Grade</ion-label>
-        <div item-content>{{ result.GRADE || 'N/A' }}</div>
-      </ion-item>
-      <ion-item>
-        <ion-label>Grade Point</ion-label>
-        <div item-content>{{ result.GRADE_POINT || 'N/A' }}</div>
-      </ion-item>
-      <ion-item>
-        <ion-label>Internal Result Release Date</ion-label>
-        <div item-content>{{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A' }}</div>
-      </ion-item>
-      <ion-item *ngIf="result.RECOMMENDATION">
-        <ion-label>Recommendation</ion-label>
-        <div item-content>{{ result.RECOMMENDATION }}</div>
-      </ion-item>
-    </ion-list>
-  </ion-card>
+  <div *ngIf="results$ | async">
+    <ion-card *ngFor="let result of semester3">
+      <ion-list>
+        <ion-item class="subj-title">
+          {{result.MODULE_DESCRIPTION}}
+        </ion-item>
+        <ion-item>
+          <ion-label>Grade</ion-label>
+          <div item-content>{{ result.GRADE || 'N/A' }}</div>
+        </ion-item>
+        <ion-item>
+          <ion-label>Grade Point</ion-label>
+          <div item-content>{{ result.GRADE_POINT || 'N/A' }}</div>
+        </ion-item>
+        <ion-item>
+          <ion-label>Internal Result Release Date</ion-label>
+          <div item-content>{{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A' }}</div>
+        </ion-item>
+        <ion-item *ngIf="result.RECOMMENDATION">
+          <ion-label>Recommendation</ion-label>
+          <div item-content>{{ result.RECOMMENDATION }}</div>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+
+    <ion-card *ngFor="let result of semester2">
+      <ion-list>
+        <ion-item class="subj-title">
+          {{result.MODULE_DESCRIPTION}}
+        </ion-item>
+        <ion-item>
+          <ion-label>Grade</ion-label>
+          <div item-content>{{ result.GRADE || 'N/A' }}</div>
+        </ion-item>
+        <ion-item>
+          <ion-label>Grade Point</ion-label>
+          <div item-content>{{ result.GRADE_POINT || 'N/A' }}</div>
+        </ion-item>
+        <ion-item>
+          <ion-label>Internal Result Release Date</ion-label>
+          <div item-content>{{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A' }}</div>
+        </ion-item>
+        <ion-item *ngIf="result.RECOMMENDATION">
+          <ion-label>Recommendation</ion-label>
+          <div item-content>{{ result.RECOMMENDATION }}</div>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+
+    <ion-card *ngFor="let result of semester1">
+      <ion-list>
+        <ion-item class="subj-title">
+          {{result.MODULE_DESCRIPTION}}
+        </ion-item>
+        <ion-item>
+          <ion-label>Grade</ion-label>
+          <div item-content>{{ result.GRADE || 'N/A' }}</div>
+        </ion-item>
+        <ion-item>
+          <ion-label>Grade Point</ion-label>
+          <div item-content>{{ result.GRADE_POINT || 'N/A' }}</div>
+        </ion-item>
+        <ion-item>
+          <ion-label>Internal Result Release Date</ion-label>
+          <div item-content>{{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A' }}</div>
+        </ion-item>
+        <ion-item *ngIf="result.RECOMMENDATION">
+          <ion-label>Recommendation</ion-label>
+          <div item-content>{{ result.RECOMMENDATION }}</div>
+        </ion-item>
+      </ion-list>
+    </ion-card>
+  </div>
 </ion-content>

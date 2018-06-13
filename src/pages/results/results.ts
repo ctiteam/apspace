@@ -1,11 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { tap, finalize } from 'rxjs/operators';
-import { Chart } from 'chart.js';
 
 import { WsApiProvider, LoadingControllerProvider } from '../../providers';
-import { Course, Subcourse } from '../../interfaces';
+import { Course, Subcourse, CourseDetails } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -16,16 +15,33 @@ import { Course, Subcourse } from '../../interfaces';
 
 export class ResultsPage {
 
-  @ViewChild('barCanvas') barCanvas;
-
   intakes$: Observable<Course[]>;
   results$: Observable<Subcourse>;
+  courseDetails$: Observable<CourseDetails>;
+
+  type = 'bar';
+  data: any;
+  options = {
+    legend: {
+      display: false
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
+  }
 
   barChart: any;
   selectedIntake: string;
   studentId: string;
   grade_point: number = 0;
   passedModule: any = 0;
+  semester1: any;
+  semester2: any;
+  semester3: any;
 
   constructor(
     private ws: WsApiProvider,
@@ -35,16 +51,25 @@ export class ResultsPage {
     this.loading.presentLoading();
     const opt = { params: { id: this.studentId, format: 'json' } };
     return this.results$ = this.ws.get<Subcourse>(`/student/subcourses?intake=${intake}`, refresh, opt).pipe(
-      tap(r => this.calculateAverage(r)),
+      tap(r => this.seperateBySemesters(r)),
+      tap(r => this.sortArray(r)),
+      tap(_ => this.getCourseDetails(intake)),
       finalize(() => this.loading.dismissLoading())
     )
+  }
+
+  seperateBySemesters(results: any) {
+    this.semester1 = (results.filter(res => res.SEMESTER == 1));
+    this.semester2 = (results.filter(res => res.SEMESTER == 2));
+    this.semester3 = (results.filter(res => res.SEMESTER == 3));
+
   }
 
   ionViewDidLoad() {
     this.intakes$ = this.ws.get<Course[]>('/student/courses').pipe(
       tap(i => this.selectedIntake = i[0].INTAKE_CODE),
       tap(i => this.studentId = i[0].STUDENT_NUMBER),
-      tap(i => this.getResults(this.selectedIntake))
+      tap(_ => this.getResults(this.selectedIntake))
     );
   }
 
@@ -54,64 +79,68 @@ export class ResultsPage {
     )
   }
 
-  calculateAverage(results: any) {
-    let sumOfGradePoint = 0;
+  getCourseDetails(intake: string, refresh: boolean = false): Observable<CourseDetails> {
+    const opt = { params: { id: this.studentId, format: 'json' } };
+    return this.courseDetails$ = this.ws.get<CourseDetails>(`/student/sub_and_course_details?intake=${intake}`, refresh, opt);
+  }
 
-    //Calculate total module passed
-    this.passedModule = (results.filter(gpa => gpa.GRADE == 'A+' || gpa.GRADE == 'A' || gpa.GRADE == 'A-' || gpa.GRADE == 'B+'
-      || gpa.GRADE == 'B' || gpa.GRADE == 'B-' || gpa.GRADE == 'C+' || gpa.GRADE == 'C' || gpa.GRADE == 'C-' || gpa.GRADE == 'Pass')).length;
-
-    //Calculate total average GPA
-    let test = (results.filter(grade => grade.GRADE_POINT == '0.00' && grade.GRADE == 'Pass' || grade.GRADE == 'Fail'))
-    for (let gradePoint of results) {
-      sumOfGradePoint += parseFloat(gradePoint.GRADE_POINT);
+  sortArray(r) {
+    let list = [];
+    let listItems = [];
+    for (let grade of r) {
+      list.push(grade.GRADE)
     }
-    if (test.length == 0) {
-      let averageGradePoint = (sumOfGradePoint / (results.length)).toFixed(2);
-      this.grade_point = parseFloat(averageGradePoint);
-    } else {
-      let averageGradePoint = (sumOfGradePoint / (results.length - 1)).toFixed(2);
-      this.grade_point = parseFloat(averageGradePoint);
-    }
+    list.sort();
+    listItems = list.filter(function (item, pos) {
+      return list.indexOf(item) == pos;
+    })
 
+    let a = [], prev;
 
-    this.barChart = new Chart(this.barCanvas.nativeElement, {
-
-      type: 'bar',
-      data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
+    for (let i = 0; i < list.length; i++) {
+      if (list[i] !== prev) {
+        a.push(1);
+      } else {
+        a[a.length - 1]++;
       }
+      prev = list[i]
+    }
 
-    });
+    let randomColor = [
+      'rgba(255, 99, 132, 0.7)',
+      'rgba(54, 162, 235, 0.7)',
+      'rgba(255, 206, 86, 0.7)',
+      'rgba(75, 192, 192, 0.7)',
+      'rgba(153, 102, 255, 0.7)',
+      'rgba(255, 159, 64, 0.7)',
+      'rgba(54,72,87,0.7)',
+      'rgba(247,89,64,0.7)',
+      'rgba(61,199,190,0.7)'
+    ]
+
+    let randomBorderColor = [
+      'rgba(255,99,132,1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)',
+      'rgba(54,72,87,1)',
+      'rgba(247,89,64,1)',
+      'rgba(61,199,190,1)'
+    ]
+    this.showBarChart(listItems, a, randomColor, randomBorderColor)
+  }
+
+  showBarChart(listItems, listCount, backgroundColor, borderColor) {
+    this.data = {
+      labels: listItems,
+      datasets: [{
+        data: listCount,
+        backgroundColor: backgroundColor,
+        borderColor: borderColor,
+        borderWidth: 2
+      }]
+    };
   }
 }
