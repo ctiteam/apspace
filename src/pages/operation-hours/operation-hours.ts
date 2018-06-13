@@ -42,6 +42,7 @@ export class OperationHoursPage {
     { name: 'Cashier', id: 'cashier', icon: 'cash', fg: '#ccbf37' },
     { name: 'Labs', id: 'labs', icon: 'desktop', fg: '#33688e' },
     { name: 'Clinic', id: 'clinic', icon: 'medkit', fg: '#f23239' },
+    { name: 'Printshop @ APU', id: 'printshop', icon: 'print', fg: '#f23239' },
   ];
 
   constructor(
