@@ -65,7 +65,7 @@ export class AttendancePage {
       let averageAttendance = (sumOfAttendances / a.length).toFixed(2)
       this.percent = parseInt(averageAttendance);
       this.averageColor = "#0dbd53";
-      if (this.percent <= 80) {
+      if (this.percent < 80) {
         this.averageColor = "#f04141";
       }
     }
