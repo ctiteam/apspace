@@ -119,11 +119,13 @@ export class TimetablePage {
     this.date = this.wday.map(d => (tt.find(t => t.DAY === d) || {} as Timetable).DATESTAMP_ISO);
   }
 
-  /** Convert string to color with hashing. */
-  strToColor(s: string): string {
-    let hash = 0;
-    s.split('').forEach(c => hash = c.charCodeAt(0) + ((hash << 5) - hash));
-    return '#' + [1, 2, 3].map(i => ('00' + (hash >> (i * 8) & 0xFF).toString(16))
+  /** Convert string to color with djb2 hash function. */
+  strToColor(str: string): string {
+    let hash = 5381;
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) + hash) + str.charCodeAt(i); /* hash * 33 + c */
+    }
+    return '#' + [16, 8, 0].map(i => ('0' + (hash >> i & 0xFF).toString(16))
       .substr(-2)).join('');
   }
 
