@@ -21,11 +21,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-card>
-    <ion-card-content>
-      <chart [type]="type" [data]="data" [options]="options"></chart>
-    </ion-card-content>
-  </ion-card>
+  <chart margin-top *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
 
   <ion-card>
     <div *ngFor="let details of courseDetails$ | async" class="total-summary">

@@ -18,7 +18,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <div class="cover">
+  <div class="cover" *ngIf="percent">
     <circle-progress [percent]="percent" radius="60" outerStrokeWidth="7" innerStrokeWidth="4" [outerStrokeColor]="averageColor"
       innerStrokeColor="#FFFFFF" titleColor="#FFFFFF" unitsColor="#FFFFFF" animation="true" animationDuration="500" unitsFontSize="20"
       titleFontSize="30" [showSubtitle]="false" [responsive]="true">
