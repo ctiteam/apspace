@@ -23,13 +23,12 @@ export class LoginPage {
   @ViewChild('autofocus') autofocus;
 
   cache1 = [
-    { path: '/student/profile', auth: true },
-    { path: '/student/photo', auth: true }
+    '/student/profile',
+    '/student/photo',
   ];
   cache2 = [
-    { path: '/student/courses', auth: true },
-    { path: '/open/weektimetable', auth: false },
-    { path: '/staff/listing', auth: true }
+    '/student/courses',
+    '/staff/listing',
   ];
 
   username: string;
@@ -93,11 +92,9 @@ export class LoginPage {
   }
 
   cacheApi(data) {
-    data.forEach(d =>
-      this.initializers[d.path] = this.ws.get(d.path, true,
-        { auth: d.auth, timeout: 10000 })
-        // use .subscribe instead of .take (probably GC collected)
-        .subscribe(_ => this.initializers[d.path].unsubscribe()));
+    data.forEach(d => this.initializers[d] = this.ws.get(d, true)
+      // use .subscribe instead of .take (probably GC collected)
+      .subscribe(_ => this.initializers[d].unsubscribe()));
   }
 
   loadProfile() {

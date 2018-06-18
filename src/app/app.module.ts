@@ -17,9 +17,10 @@ import { Firebase } from '@ionic-native/firebase';
 import { Push } from '@ionic-native/push';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import {
-  CasTicketProvider, RequestCache,
-  RequestCacheWithMapStorage, WsApiProvider, httpInterceptorProviders, NotificationServiceProvider, OperationHoursProvider,
-  LoadingControllerProvider} from '../providers';
+  CasTicketProvider, LoadingControllerProvider, NotificationServiceProvider,
+  OperationHoursProvider, RequestCache, RequestCacheWithMapStorage,
+  WsApiProvider, httpInterceptorProviders
+} from '../providers';
 
 @NgModule({
   declarations: [MyApp],

@@ -11,6 +11,7 @@ import { of } from 'rxjs/observable/of';
 import { distinctUntilChanged, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { StaffDirectory, StudentProfile, Timetable } from '../../interfaces';
+import { TimetableProvider } from '../../providers';
 import { WsApiProvider } from '../../providers';
 import { ClassesPipe } from './classes.pipe';
 
@@ -39,6 +40,7 @@ export class TimetablePage {
     public actionSheetCtrl: ActionSheetController,
     public navCtrl: NavController,
     public plt: Platform,
+    private tt: TimetableProvider,
     private ws: WsApiProvider,
   ) { }
 
@@ -104,7 +106,7 @@ export class TimetablePage {
   /** Get and merge Timetable with StaffDirectory. */
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
     return forkJoin([
-      this.ws.get<Timetable[]>('/open/weektimetable', refresh, { auth: false }),
+      this.tt.get(refresh),
       this.ws.get<StaffDirectory[]>('/staff/listing'),
     ]).pipe(
       distinctUntilChanged(),
