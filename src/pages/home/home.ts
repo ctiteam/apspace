@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
 
 import { News } from '../../interfaces';
-import { NewsProvider } from '../../providers';
+import { NewsProvider, LoadingControllerProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -29,6 +29,7 @@ export class HomePage {
     public plt: Platform,
     private news: NewsProvider,
     private toastCtrl: ToastController,
+    private loading: LoadingControllerProvider
   ) {
     this.plt.ready().then(() => {
       if (this.plt.is('cordova')) {
@@ -40,6 +41,8 @@ export class HomePage {
             this.navCtrl.pop();
           } else if (this.exit) {
             this.plt.exitApp();
+          } else if (this.loading.dismissLoading()){
+            this.loading.dismissLoading();
           } else {
             let toast = this.toastCtrl.create({
               message: 'Tap again to exit.',
