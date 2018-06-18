@@ -44,6 +44,7 @@ export class HomePage {
             let toast = this.toastCtrl.create({
               message: 'Tap again to exit.',
               duration: 2000,
+              cssClass: 'normalToast'
             });
             this.exit = true;
             toast.onDidDismiss(() => this.exit = false);
@@ -63,5 +64,4 @@ export class HomePage {
   ionViewDidLoad() {
     this.doRefresh();
   }
-
 }

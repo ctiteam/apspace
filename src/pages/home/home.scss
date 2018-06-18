@@ -7,3 +7,9 @@ page-home {
     background-color: color($colors, light-tint);
   }
 }
+
+.normalToast {
+  .toast-message {
+    background: color($colors, danger)
+  }
+}
