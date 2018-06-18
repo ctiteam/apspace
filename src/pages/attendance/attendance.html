@@ -26,11 +26,11 @@
   </div>
 
   <div class="main-content">
-    <ion-card *ngFor="let a of attendance$ | async">
-      <div class="progress-bar" [style.width]="a.PERCENTAGE + '%'" [style.background]="(a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100) ? '#0dbd53' : '#f04141'"></div>
+    <ion-card margin-bottom *ngFor="let a of attendance$ | async">
       <ion-item color="light-shade" class="subj-title">
         {{ a.MODULE_ATTENDANCE }}
       </ion-item>
+      <div class="progress-bar" [style.width]="a.PERCENTAGE + '%'" [style.background]="(a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100) ? '#0dbd53' : '#f04141'"></div>
       <ion-item>
         Classes
         <div item-content>

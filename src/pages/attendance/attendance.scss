@@ -51,7 +51,7 @@ page-attendance {
     border-bottom-right-radius: 2px;
     border-top-left-radius: 1px;
     border-bottom-left-radius: 1px;
-    padding: 5px;
+    padding: 3px;
   }
 
   .cover{
@@ -67,5 +67,12 @@ page-attendance {
   .item-header{
     font-size: small;
     font-weight: 500;
+  }
+
+  ion-spinner * {
+    width: 28px;
+    height: 28px;
+    stroke: #444;
+    fill: #222;
   }
 }
