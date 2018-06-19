@@ -1,0 +1,35 @@
+page-more {
+    .menu-info {
+        background-color: color($colors, primary);
+        height: 90px;
+        text-align: left;
+      
+        img {
+          border-radius: 50%;
+          border: 2px solid map-get($colors, light);
+          width: 55px;
+          height: 69px;
+        }
+    }
+
+    .name{
+        color: map-get($colors, light);
+        letter-spacing: 0.1px;
+        font-size: 0.9em;
+    }
+
+    .tpnumber {
+        color: map-get($colors, light);
+        letter-spacing: 0.1px;
+        font-size: 0.9em;
+    }
+
+    [col-9]{
+        padding: 0px;
+    }
+
+    .spacer{
+        width: auto;
+        height: 20px;
+    }
+}

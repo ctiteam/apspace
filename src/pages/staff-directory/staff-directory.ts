@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { filter, finalize, map } from 'rxjs/operators';
 
 import { StaffDirectory } from '../../interfaces';
-import { WsApiProvider } from '../../providers';
+import { WsApiProvider, LoadingControllerProvider } from '../../providers';
 
 @IonicPage({ segment: 'staff' })
 @Component({
@@ -21,7 +21,10 @@ export class StaffDirectoryPage {
   staff$: Observable<StaffDirectory[]>;
   staffType$: Observable<string[]>;
 
-  constructor(public navCtrl: NavController, private ws: WsApiProvider) { }
+  constructor(
+    public navCtrl: NavController,
+    private ws: WsApiProvider,
+    public loading: LoadingControllerProvider) { }
 
   @HostListener('keydown', ['$event']) onkeydown(e) {
     if (e.keyCode == 13) {
@@ -31,11 +34,12 @@ export class StaffDirectoryPage {
   }
 
   doRefresh(refresher?) {
+    this.loading.presentLoading();
     this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', Boolean(refresher));
     this.staffType$ = this.staff$.pipe(
       filter(ss => ss instanceof Array),
       map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT)))),
-      finalize(() => refresher && refresher.complete()),
+      finalize(() => {refresher && refresher.complete(), this.loading.dismissLoading()}),
     );
   }
 

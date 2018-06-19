@@ -13,7 +13,7 @@
     </ion-refresher-content>
   </ion-refresher>
 
-  <ion-card *ngFor="let item of items$ | async" navPush="HomeModalPage" [navParams]="{item: item}">
+  <ion-card *ngFor="let item of items$ | async" (click)="openModal(item)">
     <img [src]="item.field_news_image[0].url">
     <ion-card-content color='light'>
       {{ item.title[0].value }}

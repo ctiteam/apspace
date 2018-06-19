@@ -88,7 +88,7 @@ export class LoginPage {
       tap(_ => this.cacheApi(this.cache2)),
     ).pipe(
       tap(_ => this.loadProfile())
-    ).subscribe(_ => this.navCtrl.setRoot('HomePage'));
+    ).subscribe(_ => this.navCtrl.setRoot('TabsPage'));
   }
 
   cacheApi(data) {

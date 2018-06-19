@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {
   Platform, Events, MenuController, NavController,
-  ToastController, IonicPage
+  ToastController, IonicPage, App
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -9,6 +9,7 @@ import { finalize } from 'rxjs/operators';
 
 import { News } from '../../interfaces';
 import { NewsProvider, LoadingControllerProvider } from '../../providers';
+import { HomeModalPage } from './home-modal';
 
 @IonicPage()
 @Component({
@@ -29,7 +30,8 @@ export class HomePage {
     public plt: Platform,
     private news: NewsProvider,
     private toastCtrl: ToastController,
-    private loading: LoadingControllerProvider
+    private loading: LoadingControllerProvider,
+    private app: App
   ) {
     this.plt.ready().then(() => {
       if (this.plt.is('cordova')) {
@@ -66,5 +68,9 @@ export class HomePage {
 
   ionViewDidLoad() {
     this.doRefresh();
+  }
+
+  openModal(item){
+    this.app.getRootNav().push("HomeModalPage", {item: item})
   }
 }

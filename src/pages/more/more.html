@@ -1,0 +1,25 @@
+<ion-content>
+  <div class="menu-info">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-3>
+          <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" onerror="this.src='assets/img/profile.svg'"
+            alt="Avatar" (click)="openProfile()">
+        </ion-col>
+        <ion-col col-9>
+          <p class="name">{{ ((profile$ | async) || [{}])[0].NAME }}</p>
+          <p class="tpnumber">{{ ((profile$ | async) || [{}])[0].STUDENT_NUMBER }}</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div class="spacer"></div>
+  <button no-lines ion-item *ngFor='let p of pages' (click)='openPage(p)'>
+    <ion-icon class="ion-icon" item-left [name]='p.icon'></ion-icon>
+    {{ p.title }}
+  </button>
+  <button no-lines ion-item (click)='logout()'>
+    <ion-icon class="ion-icon" item-left name='md-log-out'></ion-icon>
+    Log out
+  </button>
+</ion-content>
