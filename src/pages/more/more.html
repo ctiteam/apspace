@@ -2,11 +2,11 @@
   <div class="menu-info">
     <ion-grid>
       <ion-row>
-        <ion-col col-3>
+        <ion-col col-2>
           <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" onerror="this.src='assets/img/profile.svg'"
             alt="Avatar" (click)="openProfile()">
         </ion-col>
-        <ion-col col-9>
+        <ion-col col-10>
           <p class="name">{{ ((profile$ | async) || [{}])[0].NAME }}</p>
           <p class="tpnumber">{{ ((profile$ | async) || [{}])[0].STUDENT_NUMBER }}</p>
         </ion-col>
