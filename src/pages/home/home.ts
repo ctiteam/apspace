@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 import {
-  Platform, Events, MenuController, NavController,
-  ToastController, IonicPage, App
+  Platform,
+  Events,
+  NavController,
+  ToastController,
+  IonicPage,
+  App
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -9,7 +13,6 @@ import { finalize } from 'rxjs/operators';
 
 import { News } from '../../interfaces';
 import { NewsProvider, LoadingControllerProvider } from '../../providers';
-import { HomeModalPage } from './home-modal';
 
 @IonicPage()
 @Component({
@@ -25,7 +28,6 @@ export class HomePage {
 
   constructor(
     public events: Events,
-    public menuCtrl: MenuController,
     public navCtrl: NavController,
     public plt: Platform,
     private news: NewsProvider,
@@ -37,13 +39,11 @@ export class HomePage {
       if (this.plt.is('cordova')) {
         this.events.subscribe('user:logout', _ => this.back && this.back());
         this.back = this.plt.registerBackButtonAction(() => {
-          if (this.menuCtrl.isOpen()) {
-            this.menuCtrl.close();
-          } else if (this.navCtrl.canGoBack()) {
-            this.navCtrl.pop();
+          if (this.app.getRootNav().canGoBack()) {
+            this.app.getRootNav().pop();
           } else if (this.exit) {
             this.plt.exitApp();
-          } else if (this.loading.dismissLoading()){
+          } else if (this.loading.dismissLoading()) {
             this.loading.dismissLoading();
           } else {
             let toast = this.toastCtrl.create({
@@ -70,7 +70,7 @@ export class HomePage {
     this.doRefresh();
   }
 
-  openModal(item){
-    this.app.getRootNav().push("HomeModalPage", {item: item})
+  openModal(item) {
+    this.app.getRootNav().push("HomeModalPage", { item: item })
   }
 }
