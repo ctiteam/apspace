@@ -38,7 +38,8 @@
     <ion-item *ngFor="let transaction of transaction$ | async | for:filterEntry">
       <h2 ion-text>{{ transaction.ItemName }}</h2>
       <p ion-text>{{ transaction.SpendDate | date }}</p>
-      <p ion-text item-end [color]="transaction.SpendVal > 0 ? 'red' : 'green'">
+      <p ion-text item-end
+        [style.color]="transaction.SpendVal > 0 ? 'red' : 'green'">
         {{ -transaction.SpendVal | currency:'RM' }}
       </p>
     </ion-item>
