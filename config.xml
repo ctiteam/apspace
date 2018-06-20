@@ -49,7 +49,6 @@
     </platform>
     <allow-navigation href="http://10.10.107.27:8101" />
     <plugin name="cordova-plugin-actionsheet" spec="^2.3.3" />
-    <plugin name="cordova-plugin-device" spec="~2.0.2" />
     <plugin name="cordova-plugin-email-composer" spec="^0.8.15" />
     <plugin name="cordova-plugin-firebase" spec="^1.0.4" />
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
@@ -59,4 +58,5 @@
     <plugin name="cordova-sqlite-storage" spec="^2.3.1" />
     <engine name="ios" spec="4.4.0" />
     <engine name="android" spec="~7.1.0" />
+    <plugin name="cordova-plugin-device" spec="^2.0.2" />
 </widget>

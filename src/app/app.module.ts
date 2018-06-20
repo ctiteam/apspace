@@ -9,6 +9,7 @@ import { MyApp } from './app.component';
 import { JsonpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { StatusBar } from '@ionic-native/status-bar';
+import { Device } from '@ionic-native/device';
 
 import { EmailComposer } from '@ionic-native/email-composer';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
@@ -38,6 +39,7 @@ import {
   providers: [
     StatusBar,
     EmailComposer,
+    Device,
     InAppBrowser,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Network,
