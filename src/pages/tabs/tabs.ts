@@ -8,17 +8,24 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class TabsPage {
 
-  seeTabs: boolean = true;
+  tabs: Array<{
+    title: string,
+    icon: any,
+    root: any
+  }>;
 
-  root1="HomePage";
-  root2="TimetablePage";
-  root3="AttendancePage";
-  root4="ApcardPage";
-  root5="MorePage";
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams) {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+      this.tabs = [
+        { title: 'Home', icon: 'md-home', root: 'HomePage' },
+        { title: 'Timetable', icon: 'md-calendar', root: 'TimetablePage' },
+        { title: 'Attendance', icon: 'md-alarm', root: 'AttendancePage' },
+        { title: 'APCard', icon: 'md-card', root: 'ApcardPage' },
+        { title: 'More', icon: 'ios-more', root: 'MorePage' },
+      ]
   }
 
   ionViewDidLoad() {}
-
 }
