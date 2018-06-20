@@ -9,7 +9,7 @@
   <ng-template let-staff [ngIf]="staff$ | async">
     <div class="staff-directory-info-header">
       <ng-template [ngIf]="staff.PHOTO" [ngIfElse]="errorIcon">
-        <img [src]="staff.PHOTO">
+        <img [src]="staff.PHOTO" onerror="this.src='assets/img/profile.svg'">
       </ng-template>
       <ng-template #errorIcon>
         <ion-icon name="contacts"></ion-icon>
