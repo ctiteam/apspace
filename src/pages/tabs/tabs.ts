@@ -12,7 +12,6 @@ export class TabsPage {
   @ViewChild(SuperTabs) superTabs: SuperTabs;
 
   tabs: Array<{
-    title: string,
     icon: any,
     root: any
   }>;
@@ -20,11 +19,11 @@ export class TabsPage {
   constructor(public navParams: NavParams) {
 
     this.tabs = [
-      { title: 'Home', icon: 'md-home', root: 'HomePage' },
-      { title: 'Timetable', icon: 'md-calendar', root: 'TimetablePage' },
-      { title: 'Attendance', icon: 'md-alarm', root: 'AttendancePage' },
-      { title: 'APCard', icon: 'md-card', root: 'ApcardPage' },
-      { title: 'More', icon: 'ios-more', root: 'MorePage' },
+      { icon: 'md-home', root: 'HomePage' },
+      { icon: 'md-calendar', root: 'TimetablePage' },
+      { icon: 'md-alarm', root: 'AttendancePage' },
+      { icon: 'md-card', root: 'ApcardPage' },
+      { icon: 'ios-more', root: 'MorePage' },
     ]
   }
 

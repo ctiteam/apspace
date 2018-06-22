@@ -1,12 +1,8 @@
 <ion-header>
   <ion-navbar color="primary">
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
     <ion-title>APCard</ion-title>
   </ion-navbar>
 </ion-header>
-
 
 <ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
@@ -34,7 +30,7 @@
     <ion-segment-button value='cr'>Credit</ion-segment-button>
   </ion-segment>
 
-  <ion-list no-lines>
+  <ion-list margin-top no-lines>
     <ion-item *ngFor="let transaction of transaction$ | async | for:filterEntry">
       <h2 ion-text>{{ transaction.ItemName }}</h2>
       <p ion-text>{{ transaction.SpendDate | date }}</p>

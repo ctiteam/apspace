@@ -1,16 +1,10 @@
 page-more {
-    .menu-info {
-        background-color: color($colors, primary);
-        height: 90px;
-        text-align: left;
-        padding-top: 5px;
-
-        img {
-          border-radius: 50%;
-          border: 2px solid map-get($colors, light);
-          width: 50px;
-          height: 60px;
-        }
+   
+    img {
+        border-radius: 50%;
+        border: 1px solid map-get($colors, light);
+        width: 50px;
+        height: 60px;
     }
 
     .name{

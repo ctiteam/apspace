@@ -1,13 +1,10 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button icon-only menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
+  <ion-navbar color="primary">
     <ion-title>
       {{ (date[wday.indexOf(selectedDay)] | date) || 'Timetable' }}
     </ion-title>
     <ion-buttons end>
-      <button ion-button outline small (click)="presentActionSheet()">
+      <button color="light" ion-button outline small (click)="presentActionSheet()">
         {{ intake || 'Intakes' }}
       </button>
     </ion-buttons>
@@ -20,7 +17,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-segment *ngIf="availableDays" [(ngModel)]="selectedDay">
+  <ion-segment margin-top *ngIf="availableDays" [(ngModel)]="selectedDay">
     <!-- Use CSS for dynamically updated segment -->
     <ion-segment-button *ngFor="let d of wday" [value]="d"
       [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">

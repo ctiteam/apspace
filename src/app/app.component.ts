@@ -14,6 +14,7 @@ import { fromPromise } from "rxjs/observable/fromPromise";
 import { tap, finalize } from "rxjs/operators";
 import { Storage } from "@ionic/storage";
 import { Network } from "@ionic-native/network";
+import { StatusBar } from '@ionic-native/status-bar';
 
 import {
   CasTicketProvider,
@@ -46,8 +47,10 @@ export class MyApp {
     private notificationService: NotificationServiceProvider,
     private platform: Platform,
     private firebase: Firebase,
-    private loading: LoadingControllerProvider
+    private loading: LoadingControllerProvider,
+    public statusBar: StatusBar
   ) {
+
     this.storage.get("tgt").then(tgt => {
       if (tgt) {
         this.events.subscribe("user:logout", () => this.onLogout());

@@ -1,8 +1,5 @@
 <ion-header>
   <ion-navbar color="primary">
-    <button ion-button icon-only menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
     <ion-title>Attendance</ion-title>
   </ion-navbar>
   <ion-toolbar no-border-top color="primary">
@@ -25,22 +22,20 @@
     </circle-progress>
   </div>
 
-  <div class="main-content">
     <ion-card margin-bottom *ngFor="let a of attendance$ | async">
       <ion-item color="light-shade" class="subj-title">
         {{ a.MODULE_ATTENDANCE }}
       </ion-item>
       <div class="progress-bar" [style.width]="a.PERCENTAGE + '%'" [style.background]="(a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100) ? '#0dbd53' : '#f04141'"></div>
-      <ion-item>
+      <ion-item class="transparent">
         Classes
         <div item-content>
           {{ (a.TOTAL_CLASSES - a.TOTAL_ABSENT) + '/' + a.TOTAL_CLASSES + ' (' + a.PERCENTAGE + '%)' }}
         </div>
       </ion-item>
-      <ion-item>
+      <ion-item class="transparent">
         Exam Eligibility
         <div item-content [style.font-weight]="'bold'" [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'">{{ a.EXAM_ELIGIBILITY }}</div>
       </ion-item>
     </ion-card>
-  </div>
 </ion-content>

@@ -1,5 +1,4 @@
 <ion-content class="background" padding>
-  <div padding>
   <img src="assets/img/login.jpg">
   <h1 padding>WELCOME TO
     <span>iWebspace</span>
@@ -11,7 +10,7 @@
       <ion-input #autofocus type="email" [(ngModel)]="username" [ngModelOptions]="{standalone: true}">
       </ion-input>
     </ion-item>
-    <ion-item no-padding margin-bottom>
+    <ion-item no-padding>
       <ion-label floating>Password</ion-label>
       <ion-icon color='text-color' name="lock" item-left></ion-icon>
       <ion-input [type]="getPasswordVisibility()" [(ngModel)]="password" [ngModelOptions]="{standalone: true}">
@@ -24,5 +23,4 @@
       Log in
     </button>
   </form>
-</div>
 </ion-content>
