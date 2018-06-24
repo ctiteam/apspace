@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [elasticHeader]="myContent">
   <ion-navbar color="primary">
     <ion-title>
       Fees
@@ -6,7 +6,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen #myContent>
   <ion-card class="total-summary" padding *ngIf='totalSummary$ | async as totalSummary'>
     <ion-item class="total-summary">
       Total Payable:

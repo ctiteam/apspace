@@ -1,10 +1,10 @@
-<ion-header>
+<ion-header [elasticHeader]="myContent">
   <ion-navbar color="primary">
     <ion-title>APCard</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen #myContent>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>

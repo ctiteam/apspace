@@ -1,11 +1,11 @@
-<ion-header>
+<ion-header [elasticHeader]="myContent">
   <ion-navbar color="primary">
     <ion-title>
       Results
     </ion-title>
   </ion-navbar>
   <ion-toolbar no-border-top color="primary">
-    <ion-segment *ngIf='intakes$ | async as intakes' [(ngModel)]="selectedIntake" color="light">
+    <ion-segment *ngIf="intakes$ | async as intakes" [(ngModel)]="selectedIntake" color="light">
       <ion-segment-button *ngFor="let intake of intakes" [value]="intake.INTAKE_CODE" (click)="getResults(intake.INTAKE_CODE)">
         {{intake.INTAKE_CODE}}
       </ion-segment-button>
@@ -13,7 +13,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen #myContent>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -23,14 +23,14 @@
   <ion-card>
     <div *ngFor="let details of courseDetails$ | async" class="total-summary">
       <div *ngIf="details.SEMESTER">
-        <ion-card-header class="semester-header" color='light'>SEMESTER {{details.SEMESTER}}</ion-card-header>
+        <ion-card-header class="semester-header" color="light">SEMESTER {{details.SEMESTER}}</ion-card-header>
         <ion-item class="total-summary">
           Total Modules Passed
-          <ion-note color='light' item-right>{{details.TOTAL_MODULES_PASSED}}</ion-note>
+          <ion-note color="light" item-right>{{details.TOTAL_MODULES_PASSED}}</ion-note>
         </ion-item>
         <ion-item class="total-summary">
           GPA
-          <ion-note color='light' item-right>{{details.GPA}}</ion-note>
+          <ion-note color="light" item-right>{{details.GPA}}</ion-note>
         </ion-item>
       </div>
     </div>

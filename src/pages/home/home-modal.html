@@ -1,11 +1,11 @@
-<ion-header>
+<ion-header [elasticHeader]="myContent">
   <ion-navbar color="primary">
     <ion-title>{{item?.title[0].value}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content>
+<ion-content fullscreen #myContent>
   <img class="cover" [src]="item?.field_news_image[0].url" height="auto" width="100%">
   <article [innerHTML]="sanitize(item?.body[0].value)"></article>
 </ion-content>

@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [elasticHeader]="myContent">
   <ion-navbar color="primary">
     <ion-title>Attendance</ion-title>
   </ion-navbar>
@@ -10,7 +10,7 @@
     </ion-segment>
   </ion-toolbar>
 </ion-header>
-<ion-content parallax-header>
+<ion-content fullscreen #myContent>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>

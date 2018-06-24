@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { ProgressBarModule } from 'angular-progress-bar';
+import { ElasticHeaderModule } from "ionic2-elastic-header/dist";
 
 import { AttendancePage } from './attendance';
 
@@ -10,7 +11,8 @@ import { AttendancePage } from './attendance';
   imports: [
     IonicPageModule.forChild(AttendancePage),
     NgCircleProgressModule.forRoot(),
-    ProgressBarModule
+    ProgressBarModule,
+    ElasticHeaderModule
   ],
   entryComponents: [AttendancePage]
 })

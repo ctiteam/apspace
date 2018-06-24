@@ -1,11 +1,11 @@
-<ion-header>
+<ion-header [elasticHeader]="myContent">
   <ion-navbar color="primary">
     <ion-title>{{ (staff$ | async)?.TITLE }} Info</ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content>
+<ion-content fullscreen #myContent>
   <ng-template let-staff [ngIf]="staff$ | async">
     <div class="staff-directory-info-header">
       <ng-template [ngIf]="staff.PHOTO" [ngIfElse]="errorIcon">

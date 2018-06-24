@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { ChartModule } from 'angular2-chartjs';
+import { ElasticHeaderModule } from "ionic2-elastic-header/dist";
 
 import { ApcardPage } from './apcard';
 import { EntryPipe } from './entry.pipe';
@@ -10,6 +11,7 @@ import { EntryPipe } from './entry.pipe';
   imports: [
     IonicPageModule.forChild(ApcardPage),
     ChartModule,
+    ElasticHeaderModule
   ],
   entryComponents: [ApcardPage]
 })
