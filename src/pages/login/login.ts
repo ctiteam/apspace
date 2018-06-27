@@ -84,10 +84,10 @@ export class LoginPage {
         return empty();
       }),
       tap(_ => this.cacheApi(this.cache1)),
-      timeout(3000),
+      timeout(2000),
       tap(_ => this.cacheApi(this.cache2)),
     ).pipe(
-      tap(_ => this.loadProfile())
+      tap(_ => this.events.publish('user:login'))
     ).subscribe(_ => this.navCtrl.setRoot('TabsPage'));
   }
 
@@ -95,10 +95,6 @@ export class LoginPage {
     data.forEach(d => this.initializers[d] = this.ws.get(d, true)
       // use .subscribe instead of .take (probably GC collected)
       .subscribe(_ => this.initializers[d].unsubscribe()));
-  }
-
-  loadProfile() {
-    this.events.publish('user:login');
   }
 
   getPasswordVisibility() {

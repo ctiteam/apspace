@@ -1,19 +1,17 @@
-<ion-header [elasticHeader]="myContent">
+<ion-header>
   <ion-navbar color="primary">
-    <ion-title>
-      Results
+    <ion-title *ngIf="intakes$ | async">
+      {{this.selectedIntake || 'Results'}}
     </ion-title>
+    <ion-buttons end>
+      <button color="light" ion-button outline small (click)="showActionSheet()">
+        Intakes
+      </button>
+    </ion-buttons>
   </ion-navbar>
-  <ion-toolbar no-border-top color="primary">
-    <ion-segment *ngIf="intakes$ | async as intakes" [(ngModel)]="selectedIntake" color="light">
-      <ion-segment-button *ngFor="let intake of intakes" [value]="intake.INTAKE_CODE" (click)="getResults(intake.INTAKE_CODE)">
-        {{intake.INTAKE_CODE}}
-      </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen #myContent>
+<ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>

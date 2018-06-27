@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import {
   Platform,
   Events,
-  NavController,
   ToastController,
   IonicPage,
-  App
+  App,
+  NavController
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -28,12 +28,12 @@ export class HomePage {
 
   constructor(
     public events: Events,
-    public navCtrl: NavController,
     public plt: Platform,
     private news: NewsProvider,
     private toastCtrl: ToastController,
     private loading: LoadingControllerProvider,
-    private app: App
+    private app: App,
+    private navCtrl: NavController
   ) {
     this.plt.ready().then(() => {
       if (this.plt.is('cordova')) {
@@ -72,5 +72,11 @@ export class HomePage {
 
   openModal(item) {
     this.app.getRootNav().push("HomeModalPage", { item: item })
+  }
+
+  swipe(event) {
+    if(event.direction === 2) {
+      this.navCtrl.parent.select(1);
+    }
   }
 }

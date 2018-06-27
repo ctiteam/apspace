@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { ElasticHeaderModule } from "ionic2-elastic-header/dist";
 import { HomeModalPage } from './home-modal';
 
 @NgModule({
@@ -8,8 +7,7 @@ import { HomeModalPage } from './home-modal';
     HomeModalPage
   ],
   imports: [
-    IonicPageModule.forChild(HomeModalPage),
-    ElasticHeaderModule
+    IonicPageModule.forChild(HomeModalPage)
   ],
 })
 export class HomeModalPageModule { }

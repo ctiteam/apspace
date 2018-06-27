@@ -1,26 +1,25 @@
-<ion-header [elasticHeader]="myContent">
+<ion-header>
   <ion-navbar color="primary">
-    <ion-title>Attendance</ion-title>
+    <ion-title *ngIf="courses$ | async">{{this.selectedIntake || 'Attendance'}}</ion-title>
+    <ion-buttons end>
+      <button color="light" ion-button outline small (click)="showActionSheet()">
+        Intakes
+      </button>
+    </ion-buttons>
   </ion-navbar>
-  <ion-toolbar no-border-top color="primary">
-    <ion-segment *ngIf="courses$ | async as courses" [(ngModel)]="selectedIntake" color="light">
-      <ion-segment-button *ngFor="let c of courses" [value]="c.INTAKE_CODE" (click)="getAttendance(c.INTAKE_CODE)">
-        {{ c.INTAKE_CODE }}
-      </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>
 </ion-header>
-<ion-content fullscreen #myContent>
+
+<ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-
-  <div class="cover" *ngIf="percent">
-    <circle-progress [percent]="percent" radius="60" outerStrokeWidth="7" innerStrokeWidth="4" [outerStrokeColor]="averageColor"
-      innerStrokeColor="#FFFFFF" titleColor="#FFFFFF" unitsColor="#FFFFFF" animation="true" animationDuration="500" unitsFontSize="20"
-      titleFontSize="30" [showSubtitle]="false" [responsive]="true">
-    </circle-progress>
-  </div>
+  <div class="main-content" (swipe)='swipe($event)'>
+    <div class="cover" *ngIf="percent">
+      <circle-progress [percent]="percent" radius="60" outerStrokeWidth="7" innerStrokeWidth="4" [outerStrokeColor]="averageColor"
+        innerStrokeColor="#FFFFFF" titleColor="#FFFFFF" unitsColor="#FFFFFF" animation="true" animationDuration="500" unitsFontSize="20"
+        titleFontSize="30" [showSubtitle]="false" [responsive]="true">
+      </circle-progress>
+    </div>
 
     <ion-card margin-bottom *ngFor="let a of attendance$ | async">
       <ion-item color="light-shade" class="subj-title">
@@ -38,4 +37,5 @@
         <div item-content [style.font-weight]="'bold'" [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'">{{ a.EXAM_ELIGIBILITY }}</div>
       </ion-item>
     </ion-card>
+  </div>
 </ion-content>

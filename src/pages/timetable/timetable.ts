@@ -1,7 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { ActionSheet } from '@ionic-native/action-sheet';
+import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import {
-  ActionSheetController, ActionSheetButton, Content, IonicPage,
+  ActionSheetController,
+  ActionSheetButton,
+  Content, IonicPage,
   NavController, Platform
 } from 'ionic-angular';
 
@@ -46,7 +48,7 @@ export class TimetablePage {
 
   presentActionSheet() {
     if (this.plt.is('cordova')) {
-      const options = {
+      const options: ActionSheetOptions = {
         buttonLabels: ['My Classes', ...this.intakeLabels],
         addCancelButtonWithLabel: 'Cancel'
       };
@@ -149,4 +151,12 @@ export class TimetablePage {
     this.doRefresh();
   }
 
+  swipe(event) {
+    if(event.direction === 2) {
+      this.navCtrl.parent.select(2);
+    }
+    if(event.direction === 4) {
+      this.navCtrl.parent.select(0);
+    }
+  }
 }

@@ -25,10 +25,12 @@ export class CasTicketProvider {
 
   casUrl = 'https://cas.apiit.edu.my';
 
+  validationResponse: any;
+
   constructor(
     public http: HttpClient,
     public storage: Storage,
-    public events: Events,
+    public events: Events
   ) { }
 
   /**
@@ -101,6 +103,7 @@ export class CasTicketProvider {
    * @return tgt
    */
   validate(st?: any): Observable<any> {
+
     const options = {
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
       params: { 'format': 'json', 'service': this.casUrl, 'ticket': st },
@@ -110,11 +113,15 @@ export class CasTicketProvider {
     return this.http.get(this.casUrl + '/cas/p3/serviceValidate', options).pipe(
       switchMap(res =>
         res['serviceResponse']['authenticationSuccess']['attributes']['distinguishedName']
-        .join().toLowerCase().split(',').indexOf('ou=students') !== -1 ||
-        res['serviceResponse']['authenticationSuccess']['attributes']['distinguishedName']
-        .join().toLowerCase().split(',').indexOf('ou=academic') !== -1
-        ? of(res) : obs_throw('Group not supported'))
+          .join().toLowerCase().split(',').indexOf('ou=students') !== -1 ||
+          res['serviceResponse']['authenticationSuccess']['attributes']['distinguishedName']
+            .join().toLowerCase().split(',').indexOf('ou=academic') !== -1 ||
+          res['serviceResponse']['authenticationSuccess']['attributes']['distinguishedName']
+            .join().toLowerCase().split(',').indexOf('ou=apiit tpm') !== -1
+          ? of(res) : obs_throw('Group not supported')
+      ),
+      tap(res => this.validationResponse = res['serviceResponse']['authenticationSuccess']['attributes']['distinguishedName'].join().toLowerCase().split(',')),
+      tap(_ => this.storage.set('userGroup', this.validationResponse))
     )
   }
-
 }

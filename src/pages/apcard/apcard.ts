@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { trigger, style, animate, transition, state } from '@angular/animations';
-import { IonicPage } from 'ionic-angular';
+import { IonicPage, NavController } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { finalize, map, tap } from 'rxjs/operators';
@@ -38,7 +38,9 @@ export class ApcardPage {
     maintainAspectRatio: false
   };
 
-  constructor(private ws: WsApiProvider) { }
+  constructor(
+    private ws: WsApiProvider,
+    private navCtrl: NavController) { }
 
   /** Analyze transactions. */
   analyzeTransactions(transactions: Apcard[]) {
@@ -96,5 +98,14 @@ export class ApcardPage {
 
   ionViewDidLoad() {
     this.doRefresh();
+  }
+
+  swipe(event) {
+    if(event.direction === 2) {
+      this.navCtrl.parent.select(4);
+    }
+    if(event.direction === 4) {
+      this.navCtrl.parent.select(2);
+    }
   }
 }

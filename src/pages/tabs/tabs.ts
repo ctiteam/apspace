@@ -1,6 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavParams } from 'ionic-angular';
-import { SuperTabs } from 'ionic2-super-tabs';
+import { Component } from '@angular/core';
+import { IonicPage, NavParams, NavController } from 'ionic-angular';
+import { StatusBar } from '@ionic-native/status-bar';
+import { Storage } from '@ionic/storage';
 
 @IonicPage()
 @Component({
@@ -9,27 +10,69 @@ import { SuperTabs } from 'ionic2-super-tabs';
 })
 export class TabsPage {
 
-  @ViewChild(SuperTabs) superTabs: SuperTabs;
-
   tabs: Array<{
+    title: string,
     icon: any,
     root: any
   }>;
 
-  constructor(public navParams: NavParams) {
+  staffTabs: Array<{
+    title: string,
+    icon: any,
+    root: any
+  }>;
+
+  lecturerTabs: Array<{
+    title: string,
+    icon: any,
+    root: any
+  }>;
+
+  loaded: boolean = false;
+  tabIndex: number = 0;
+  
+  constructor(
+    public navParams: NavParams,
+    public statusBar: StatusBar,
+    public navCtrl: NavController,
+    private storage: Storage) {
 
     this.tabs = [
-      { icon: 'md-home', root: 'HomePage' },
-      { icon: 'md-calendar', root: 'TimetablePage' },
-      { icon: 'md-alarm', root: 'AttendancePage' },
-      { icon: 'md-card', root: 'ApcardPage' },
-      { icon: 'ios-more', root: 'MorePage' },
+      { title: 'News', icon: 'md-home', root: 'HomePage' },
+      { title: 'Timetable', icon: 'md-calendar', root: 'TimetablePage' },
+      { title: 'Attendance', icon: 'md-alarm', root: 'AttendancePage' },
+      { title: 'APCard', icon: 'md-card', root: 'ApcardPage' },
+      { title: 'More', icon: 'ios-more', root: 'MorePage' },
     ]
+
+    this.staffTabs = [
+      { title: 'News', icon: 'md-home', root: 'HomePage' },
+      { title: 'APCard', icon: 'md-card', root: 'ApcardPage' },
+      { title: 'More', icon: 'ios-more', root: 'MorePage' },
+    ]
+
+    this.lecturerTabs = [
+      { title: 'News', icon: 'md-home', root: 'HomePage' },
+      { title: 'Timetable', icon: 'md-calendar', root: 'TimetablePage' },
+      { title: 'APCard', icon: 'md-card', root: 'ApcardPage' },
+      { title: 'More', icon: 'ios-more', root: 'MorePage' },
+    ]
+    // this.storage.get('userGroup').then((val) => {
+    //   this.userGroup = val;
+    //   if(this.userGroup.indexOf('ou=students') > -1){
+    //     // this.tabs = [
+    //     //   { title: 'News', icon: 'md-home', root: 'HomePage' },
+    //     //   { title: 'Timetable', icon: 'md-calendar', root: 'TimetablePage' },
+    //     //   { title: 'Attendance', icon: 'md-alarm', root: 'AttendancePage' },
+    //     //   { title: 'APCard', icon: 'md-card', root: 'ApcardPage' },
+    //     //   { title: 'More', icon: 'ios-more', root: 'MorePage' },
+    //     // ]
+    //     this.student = true;
+    //   }
+    // });
   }
 
-  ionViewDidLoad() { }
-
-  slideToIndex(index: number) {
-    this.superTabs.slideTo(index);
+  ionViewDidLoad() {
+    this.statusBar.backgroundColorByHexString('#4da9ff');
   }
 }

@@ -1,10 +1,10 @@
-<ion-header [elasticHeader]="myContent">
+<ion-header>
   <ion-navbar color="primary">
     <ion-title>Profile</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content fullscreen #myContent>
+<ion-content>
   <div class="cover">
     <img class="profile-photo" [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" onerror="this.src='assets/img/profile.svg'"
       alt="Avatar">

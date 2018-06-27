@@ -64,6 +64,7 @@ export class MyApp {
     });
 
     this.platform.ready().then(() => {
+     this.statusBar.overlaysWebView(false);
       if (this.platform.is("cordova")) {
         this.firebase.onNotificationOpen().subscribe(notification => {
           this.storage.get("items").then(data => {

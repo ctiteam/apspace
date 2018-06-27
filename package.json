@@ -53,7 +53,6 @@
     "cordova-sqlite-storage": "^2.3.2",
     "ionic-angular": "^3.9.2",
     "ionic2-elastic-header": "0.0.10",
-    "ionic2-super-tabs": "^4.2.2",
     "ionicons": "3.0.0",
     "localforage": "^1.7.1",
     "localforage-cordovasqlitedriver": "^1.6.0",

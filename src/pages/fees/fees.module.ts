@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { ElasticHeaderModule } from "ionic2-elastic-header/dist";
 import { FeesPage } from './fees';
 
 @NgModule({
@@ -8,8 +7,7 @@ import { FeesPage } from './fees';
     FeesPage,
   ],
   imports: [
-    IonicPageModule.forChild(FeesPage),
-    ElasticHeaderModule
+    IonicPageModule.forChild(FeesPage)
   ],
 
 })

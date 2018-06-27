@@ -11,4 +11,12 @@ page-timetable {
   ion-content ion-card-header + ion-card-content ion-label:nth-child(odd) {
     background-color: #eceff1;
   }
+
+  .toolbar-ios ion-title {
+    padding: 0 12px 1px;
+  }
+  
+  .toolbar-title-ios {
+    text-align: left;
+  }
 }

@@ -21,6 +21,7 @@ import { CasTicketProvider } from './';
 export class WsApiProvider {
 
   apiUrl = 'https://ws.apiit.edu.my/web-services/index.php';
+  apiUrlStaff = 'https://api.apiit.edu.my/monthlyreturns/view/all-employees';
 
   constructor(
     public http: HttpClient,

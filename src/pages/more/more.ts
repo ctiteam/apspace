@@ -4,12 +4,13 @@ import {
   NavController,
   NavParams,
   AlertController,
-  Events, 
-  App} from 'ionic-angular';
+  Events,
+  App
+} from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 import { WsApiProvider } from '../../providers';
-import { StudentPhoto, StudentProfile } from '../../interfaces';
+import { StudentPhoto, StudentProfile, AcademicProfile } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -18,7 +19,12 @@ import { StudentPhoto, StudentProfile } from '../../interfaces';
 })
 export class MorePage {
 
-  pages: Array<{
+  studentPages: Array<{
+    title: string,
+    component: any,
+    icon: any
+  }>;
+  staffPages: Array<{
     title: string,
     component: any,
     icon: any
@@ -26,6 +32,7 @@ export class MorePage {
 
   photo$: Observable<StudentPhoto[]>;
   profile$: Observable<StudentProfile[]>;
+  academicProfile$: Observable<AcademicProfile[]>;
 
   constructor(
     public navCtrl: NavController,
@@ -35,7 +42,7 @@ export class MorePage {
     public events: Events,
     public app: App) {
 
-    this.pages = [
+    this.studentPages = [
       { title: 'Results', component: 'ResultsPage', icon: 'checkbox' },
       { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people' },
       { title: 'Fees', component: 'FeesPage', icon: 'cash' },
@@ -44,11 +51,21 @@ export class MorePage {
       { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle' },
       { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
     ];
+
+    // Pages that are available to staff
+
+    this.staffPages = [
+      { title: 'Profile', component: 'ProfilePage', icon: 'contact' },
+      { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
+      { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle' },
+      { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
+    ];
   }
 
   ionViewDidLoad() {
     this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
     this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
+    this.academicProfile$ = this.ws.get<AcademicProfile[]>('/staff/profile');
   }
 
   openPage(page) {
@@ -56,7 +73,7 @@ export class MorePage {
   }
 
   openProfile() {
-    this.openPage(this.pages.find(p => p.component === 'ProfilePage'));
+    this.openPage(this.studentPages.find(p => p.component === 'ProfilePage'));
   }
 
   logout() {
@@ -75,5 +92,11 @@ export class MorePage {
         ]
       })
       .present();
+  }
+
+  swipe(event) {
+    if (event.direction === 4) {
+      this.navCtrl.parent.select(3);
+    }
   }
 }

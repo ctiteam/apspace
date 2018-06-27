@@ -1,19 +1,19 @@
-<ion-header [elasticHeader]="myContent">
+<ion-header>
   <ion-navbar color="primary">
     <ion-title>News</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content fullscreen #myContent>
+<ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles" refreshingText="Refreshing...">
-    </ion-refresher-content>
+    <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-
-  <ion-card *ngFor="let item of items$ | async" (click)="openModal(item)">
-    <img [src]="item.field_news_image[0].url">
-    <ion-card-content color='light'>
-      {{ item.title[0].value }}
-    </ion-card-content>
-  </ion-card>
+  <div class="main-content" (swipe)='swipe($event)'>
+    <ion-card *ngFor="let item of items$ | async" (click)="openModal(item)">
+      <img [src]="item.field_news_image[0].url">
+      <ion-card-content color='light'>
+        {{ item.title[0].value }}
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

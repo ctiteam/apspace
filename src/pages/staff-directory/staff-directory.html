@@ -1,11 +1,11 @@
-<ion-header [elasticHeader]="myContent">
+<ion-header>
   <ion-navbar color="primary">
     <ion-title>Staff Directory</ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content fullscreen #myContent> <!-- staff is not [] -->
+<ion-content> <!-- staff is not [] -->
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>

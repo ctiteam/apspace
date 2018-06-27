@@ -1,7 +1,8 @@
 import { Component } from "@angular/core";
-import { IonicPage } from "ionic-angular";
+import { IonicPage, Platform, ActionSheetController, ActionSheetButton } from "ionic-angular";
 import { Observable } from "rxjs/Observable";
 import { tap, finalize } from "rxjs/operators";
+import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 
 import { WsApiProvider, LoadingControllerProvider } from "../../providers";
 import { Course, Subcourse, CourseDetails } from "../../interfaces";
@@ -35,18 +36,21 @@ export class ResultsPage {
   };
 
   barChart: any;
-  selectedIntake: string;
+  selectedIntake: string = '';
   studentId: string;
   grade_point: number = 0;
   passedModule: any = 0;
   semester1: any;
   semester2: any;
   semester3: any;
+  intakeLabels: any;
 
   constructor(
     private ws: WsApiProvider,
-    public loading: LoadingControllerProvider
-  ) {}
+    public loading: LoadingControllerProvider,
+    public plt: Platform,
+    private actionSheet: ActionSheet,
+    private actionSheetCtrl: ActionSheetController) {}
 
   getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
     this.loading.presentLoading();
@@ -71,7 +75,8 @@ export class ResultsPage {
     this.intakes$ = this.ws.get<Course[]>("/student/courses").pipe(
       tap(i => (this.selectedIntake = i[0].INTAKE_CODE)),
       tap(i => (this.studentId = i[0].STUDENT_NUMBER)),
-      tap(_ => this.getResults(this.selectedIntake))
+      tap(_ => this.getResults(this.selectedIntake)),
+      tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE))))
     );
   }
 
@@ -154,5 +159,39 @@ export class ResultsPage {
         }
       ]
     };
+  }
+
+  showActionSheet() {
+    if (this.plt.is('cordova')) {
+      const options: ActionSheetOptions = {
+        buttonLabels: ['Intakes', ...this.intakeLabels],
+        addCancelButtonWithLabel: 'Cancel',
+      };
+      this.actionSheet.show(options).then((buttonIndex: number) => {
+        if (buttonIndex <= 1 + this.intakeLabels.length) {
+          this.selectedIntake = this.intakeLabels[buttonIndex - 2] || '';
+          this.getResults(this.selectedIntake);
+        }
+      });
+    } else {
+      let intakesButton = this.intakeLabels.map(intake => <ActionSheetButton>{
+        text: intake,
+        handler: () => {
+          this.selectedIntake = intake;
+          this.getResults(this.selectedIntake);
+        }
+      });
+      let actionSheet = this.actionSheetCtrl.create({
+        buttons: [
+          {
+            text: 'Intakes', handler: () => {
+
+            }
+          },
+          ...intakesButton, { text: 'Cancel', role: 'cancel' },
+        ]
+      });
+      actionSheet.present();
+    }
   }
 }

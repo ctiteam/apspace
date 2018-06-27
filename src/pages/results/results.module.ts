@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { ChartModule } from 'angular2-chartjs';
-import { ElasticHeaderModule } from "ionic2-elastic-header/dist";
+import { ActionSheet} from "@ionic-native/action-sheet";
 
 import { ResultsPage } from './results';
 
@@ -9,9 +9,9 @@ import { ResultsPage } from './results';
   declarations: [ResultsPage],
   imports: [
     IonicPageModule.forChild(ResultsPage),
-    ChartModule,
-    ElasticHeaderModule
+    ChartModule
   ],
-  entryComponents: [ResultsPage]
+  entryComponents: [ResultsPage],
+  providers: [ActionSheet]
 })
 export class ResultsPageModule { }
