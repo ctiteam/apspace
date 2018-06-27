@@ -1,22 +1,21 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpModule } from '@angular/http'; // TODO: switch to HttpClientModule
 import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { MyApp } from './app.component';
-
-import { JsonpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
-import { StatusBar } from '@ionic-native/status-bar';
-import { Device } from '@ionic-native/device';
 
+import { Device } from '@ionic-native/device';
 import { EmailComposer } from '@ionic-native/email-composer';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
-import { Network } from '@ionic-native/network';
 import { Firebase } from '@ionic-native/firebase';
-import { Push } from '@ionic-native/push';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { Network } from '@ionic-native/network';
+import { Push } from '@ionic-native/push';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SecureStorage } from '@ionic-native/secure-storage';
+
+import { MyApp } from './app.component';
 import {
   CasTicketProvider, LoadingControllerProvider, NotificationServiceProvider,
   OperationHoursProvider, RequestCache, RequestCacheWithMapStorage,
@@ -28,9 +27,7 @@ import {
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    HttpModule,
     HttpClientModule,
-    JsonpModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
   ],
@@ -48,6 +45,7 @@ import {
     Push,
     LocalNotifications,
     WsApiProvider,
+    SecureStorage,
     NotificationServiceProvider,
     { provide: RequestCache, useClass: RequestCacheWithMapStorage },
     httpInterceptorProviders,

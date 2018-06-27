@@ -60,4 +60,5 @@
     <plugin name="cordova-plugin-statusbar" spec="https://github.com/apache/cordova-plugin-statusbar.git" />
     <engine name="ios" spec="4.4.0" />
     <engine name="android" spec="7.1.0" />
+    <plugin name="cordova-plugin-secure-storage" spec="^2.6.8" />
 </widget>
