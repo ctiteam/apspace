@@ -1,25 +1,23 @@
-<ion-content class="background" padding>
+<ion-content padding>
   <img src="assets/img/login.jpg">
-  <h1 padding>WELCOME TO
-    <span>iWebspace</span>
-  </h1>
+  <h1 padding>WELCOME TO <br><span>iWebspace</span></h1>
   <form (ngSubmit)="login()">
     <ion-item no-padding>
-      <ion-label floating>'APKey'</ion-label>
       <ion-icon color='text-color' name="contact" item-left></ion-icon>
-      <ion-input #autofocus type="email" [(ngModel)]="username" [ngModelOptions]="{standalone: true}">
-      </ion-input>
+      <ion-input #autofocus type="email" placeholder='"APKey"'
+        [(ngModel)]="username" [ngModelOptions]="{standalone: true}"></ion-input>
     </ion-item>
-    <ion-item no-padding>
-      <ion-label floating>Password</ion-label>
+    <ion-item no-padding margin-top>
       <ion-icon color='text-color' name="lock" item-left></ion-icon>
-      <ion-input [type]="getPasswordVisibility()" [(ngModel)]="password" [ngModelOptions]="{standalone: true}">
-      </ion-input>
-      <button ion-button item-right clear type="button" (click)="showPasswordText = !showPasswordText">
+      <ion-input [type]="getPasswordVisibility()" placeholder='Password'
+        [(ngModel)]="password" [ngModelOptions]="{standalone: true}"></ion-input>
+      <button ion-button item-right clear type="button"
+        (click)="showPasswordText = !showPasswordText">
         <ion-icon name="eye"></ion-icon>
       </button>
     </ion-item>
-    <button color='primary' ion-button margin-top block type="submit" [disabled]="!username || !password">
+    <button ion-button margin-top block type="submit"
+      [disabled]="!username || !password" color='primary'>
       Log in
     </button>
   </form>

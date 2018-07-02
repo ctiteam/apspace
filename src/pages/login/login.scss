@@ -1,16 +1,15 @@
 page-login {
+  background-color: color($colors, light);
 
-  .background{
-    background-color: color($colors, light);
+  img {
+    margin-top: 50px;
   }
 
-  ion-content{
-    img{
-      margin-top: 50px;
-    }
+  ion-icon {
+    margin-right: 0 !important;
   }
 
-  ion-content button[ion-button] {
+  button[ion-button] {
     display: inline-block;
     padding: 15px 32px;
     margin: 4px 2px;
