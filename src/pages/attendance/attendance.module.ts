@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { NgCircleProgressModule } from 'ng-circle-progress';
-import { ProgressBarModule } from 'angular-progress-bar';
 import { ActionSheet} from "@ionic-native/action-sheet";
 
 import { AttendancePage } from './attendance';
@@ -10,8 +9,7 @@ import { AttendancePage } from './attendance';
   declarations: [AttendancePage],
   imports: [
     IonicPageModule.forChild(AttendancePage),
-    NgCircleProgressModule.forRoot(),
-    ProgressBarModule
+    NgCircleProgressModule.forRoot()
   ],
   entryComponents: [AttendancePage],
   providers: [ActionSheet]

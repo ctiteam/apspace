@@ -7,18 +7,18 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { Device } from '@ionic-native/device';
 import { EmailComposer } from '@ionic-native/email-composer';
-import { Firebase } from '@ionic-native/firebase';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Network } from '@ionic-native/network';
 import { Push } from '@ionic-native/push';
 import { StatusBar } from '@ionic-native/status-bar';
+import { FCM } from '@ionic-native/fcm';
 
 import { MyApp } from './app.component';
 import {
-  BusTrackingProvider, CasTicketProvider, LoadingControllerProvider,
-  NotificationServiceProvider, OperationHoursProvider, RequestCache,
-  RequestCacheWithMapStorage, WsApiProvider, httpInterceptorProviders
+  CasTicketProvider, LoadingControllerProvider, NotificationServiceProvider,
+  OperationHoursProvider, RequestCache, RequestCacheWithMapStorage,
+  WsApiProvider, httpInterceptorProviders, SettingsProvider, ExamScheduleProvider, BusTrackingProvider
 } from '../providers';
 
 @NgModule({
@@ -40,8 +40,8 @@ import {
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Network,
     CasTicketProvider,
-    Firebase,
     Push,
+    FCM,
     LocalNotifications,
     WsApiProvider,
     NotificationServiceProvider,
@@ -49,7 +49,9 @@ import {
     httpInterceptorProviders,
     OperationHoursProvider,
     LoadingControllerProvider,
-    BusTrackingProvider,
+    SettingsProvider,
+    ExamScheduleProvider,
+    BusTrackingProvider
   ]
 })
 export class AppModule { }

@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavParams, NavController } from 'ionic-angular';
+import { IonicPage, NavParams, NavController, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
-import { Storage } from '@ionic/storage';
+
+import { Role } from '../../interfaces';
+import { SettingsProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -10,69 +12,33 @@ import { Storage } from '@ionic/storage';
 })
 export class TabsPage {
 
+  pages = [
+    { title: 'News', icon: 'home', root: 'HomePage', role: Role.Student | Role.Lecturer | Role.Admin },
+    { title: 'Timetable', icon: 'calendar', root: 'TimetablePage', role: Role.Student },
+    { title: 'Attendance', icon: 'alarm', root: 'AttendancePage', role: Role.Student },
+    { title: 'APCard', icon: 'card', root: 'ApcardPage', role: Role.Student | Role.Lecturer | Role.Admin },
+  ];
+
+  morePages = { title: 'More', icon: 'ios-more', root: 'MorePage', role: Role.Student | Role.Lecturer | Role.Admin };
+
   tabs: Array<{
     title: string,
-    icon: any,
-    root: any
+    icon: string,
+    root: string,
+    role: Role
   }>;
 
-  staffTabs: Array<{
-    title: string,
-    icon: any,
-    root: any
-  }>;
-
-  lecturerTabs: Array<{
-    title: string,
-    icon: any,
-    root: any
-  }>;
-
-  loaded: boolean = false;
-  tabIndex: number = 0;
-  
   constructor(
     public navParams: NavParams,
     public statusBar: StatusBar,
     public navCtrl: NavController,
-    private storage: Storage) {
-
-    this.tabs = [
-      { title: 'News', icon: 'md-home', root: 'HomePage' },
-      { title: 'Timetable', icon: 'md-calendar', root: 'TimetablePage' },
-      { title: 'Attendance', icon: 'md-alarm', root: 'AttendancePage' },
-      { title: 'APCard', icon: 'md-card', root: 'ApcardPage' },
-      { title: 'More', icon: 'ios-more', root: 'MorePage' },
-    ]
-
-    this.staffTabs = [
-      { title: 'News', icon: 'md-home', root: 'HomePage' },
-      { title: 'APCard', icon: 'md-card', root: 'ApcardPage' },
-      { title: 'More', icon: 'ios-more', root: 'MorePage' },
-    ]
-
-    this.lecturerTabs = [
-      { title: 'News', icon: 'md-home', root: 'HomePage' },
-      { title: 'Timetable', icon: 'md-calendar', root: 'TimetablePage' },
-      { title: 'APCard', icon: 'md-card', root: 'ApcardPage' },
-      { title: 'More', icon: 'ios-more', root: 'MorePage' },
-    ]
-    // this.storage.get('userGroup').then((val) => {
-    //   this.userGroup = val;
-    //   if(this.userGroup.indexOf('ou=students') > -1){
-    //     // this.tabs = [
-    //     //   { title: 'News', icon: 'md-home', root: 'HomePage' },
-    //     //   { title: 'Timetable', icon: 'md-calendar', root: 'TimetablePage' },
-    //     //   { title: 'Attendance', icon: 'md-alarm', root: 'AttendancePage' },
-    //     //   { title: 'APCard', icon: 'md-card', root: 'ApcardPage' },
-    //     //   { title: 'More', icon: 'ios-more', root: 'MorePage' },
-    //     // ]
-    //     this.student = true;
-    //   }
-    // });
-  }
-
-  ionViewDidLoad() {
-    this.statusBar.backgroundColorByHexString('#4da9ff');
+    private platform: Platform,
+    public settings: SettingsProvider
+  ) {
+    if (this.platform.is("cordova")) {
+      this.statusBar.backgroundColorByHexString('#4da9ff');
+    }
+    const role = this.settings.get('role');
+    this.tabs = this.pages.filter(page => page.role & role).slice(0, 4).concat(this.morePages);
   }
 }

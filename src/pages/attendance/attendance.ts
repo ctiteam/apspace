@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { 
+import {
   IonicPage,
   Platform,
   ActionSheetController,
@@ -29,7 +29,7 @@ export class AttendancePage {
   percent: number;
   averageColor: string;
   intakeLabels: any;
-  
+
   constructor(
     private ws: WsApiProvider,
     public loading: LoadingControllerProvider,

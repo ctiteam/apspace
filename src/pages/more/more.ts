@@ -9,8 +9,8 @@ import {
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
-import { WsApiProvider } from '../../providers';
-import { StudentPhoto, StudentProfile, AcademicProfile } from '../../interfaces';
+import { WsApiProvider, SettingsProvider } from '../../providers';
+import { StudentPhoto, StudentProfile, AcademicProfile, Role } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -19,15 +19,22 @@ import { StudentPhoto, StudentProfile, AcademicProfile } from '../../interfaces'
 })
 export class MorePage {
 
-  studentPages: Array<{
+  menuItems = [
+    { title: 'Results', component: 'ResultsPage', icon: 'checkbox', role: Role.Student },
+    { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people', role: Role.Student },
+    { title: 'Bus Tracking', component: 'BusTrackingPage', icon: 'bus', role: Role.Student | Role.Lecturer | Role.Admin },
+    { title: 'Fees', component: 'FeesPage', icon: 'cash', role: Role.Student },
+    { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles', role: Role.Student },
+    { title: 'Profile', component: 'ProfilePage', icon: 'contact', role: Role.Student | Role.Lecturer | Role.Admin },
+    { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle', role: Role.Student | Role.Lecturer | Role.Admin },
+    { title: 'Feedback', component: 'FeedbackPage', icon: 'at', role: Role.Student | Role.Lecturer | Role.Admin },
+  ];
+
+  pages: Array<{
     title: string,
     component: any,
-    icon: any
-  }>;
-  staffPages: Array<{
-    title: string,
-    component: any,
-    icon: any
+    icon: any,
+    role: Role
   }>;
 
   photo$: Observable<StudentPhoto[]>;
@@ -40,33 +47,16 @@ export class MorePage {
     public ws: WsApiProvider,
     public alertCtrl: AlertController,
     public events: Events,
-    public app: App) {
-
-    this.studentPages = [
-      { title: 'Results', component: 'ResultsPage', icon: 'checkbox' },
-      { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people' },
-      { title: 'Fees', component: 'FeesPage', icon: 'cash' },
-      { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
-      { title: 'Profile', component: 'ProfilePage', icon: 'contact' },
-      { title: 'Bus Tracking', component: 'BusTrackingPage', icon: 'bus' },
-      { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle' },
-      { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
-    ];
-
-    // Pages that are available to staff
-
-    this.staffPages = [
-      { title: 'Profile', component: 'ProfilePage', icon: 'contact' },
-      { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
-      { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle' },
-      { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
-    ];
+    public app: App,
+    public settings: SettingsProvider,
+  ) {
+    const role = this.settings.get('role');
+    this.pages = this.menuItems.filter(page => page.role & role).slice(0, 7);
   }
 
   ionViewDidLoad() {
     this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
     this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
-    this.academicProfile$ = this.ws.get<AcademicProfile[]>('/staff/profile');
   }
 
   openPage(page) {
@@ -74,7 +64,7 @@ export class MorePage {
   }
 
   openProfile() {
-    this.openPage(this.studentPages.find(p => p.component === 'ProfilePage'));
+    this.openPage(this.pages.find(p => p.component === 'ProfilePage'));
   }
 
   logout() {

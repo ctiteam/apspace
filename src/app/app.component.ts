@@ -1,6 +1,5 @@
 import { Observable } from "rxjs/Observable";
 import { Component, ViewChild } from "@angular/core";
-import { Firebase } from "@ionic-native/firebase";
 import {
   AlertController,
   Events,
@@ -11,10 +10,11 @@ import {
 } from "ionic-angular";
 import { forkJoin } from "rxjs/observable/forkJoin";
 import { fromPromise } from "rxjs/observable/fromPromise";
-import { tap, finalize } from "rxjs/operators";
+import { finalize } from "rxjs/operators";
 import { Storage } from "@ionic/storage";
 import { Network } from "@ionic-native/network";
 import { StatusBar } from '@ionic-native/status-bar';
+import { FCM } from '@ionic-native/fcm';
 
 import {
   CasTicketProvider,
@@ -46,11 +46,10 @@ export class MyApp {
     private ws: WsApiProvider,
     private notificationService: NotificationServiceProvider,
     private platform: Platform,
-    private firebase: Firebase,
     private loading: LoadingControllerProvider,
-    public statusBar: StatusBar
+    public statusBar: StatusBar,
+    public fcm: FCM,
   ) {
-
     this.storage.get("tgt").then(tgt => {
       if (tgt) {
         this.events.subscribe("user:logout", () => this.onLogout());
@@ -64,24 +63,17 @@ export class MyApp {
     });
 
     this.platform.ready().then(() => {
-     this.statusBar.overlaysWebView(false);
       if (this.platform.is("cordova")) {
-        this.firebase.onNotificationOpen().subscribe(notification => {
-          this.storage.get("items").then(data => {
-            if (data) {
-              this.items = data;
-              this.items.splice(0, 0, {
-                title: notification.title,
-                text: notification.text
-              });
-              if (this.items.length > 10) {
-                this.items.pop();
-              }
-              this.storage.set("items", this.items);
-              this.presentConfirm(notification.title, notification);
-            }
-          });
-        });
+        this.statusBar.overlaysWebView(false);
+        this.fcm.onNotification().subscribe(data => {
+          if (data.wasTapped) {
+            this.storage.set("items", data);
+            this.navCtrl.push("NotificationModalPage", { itemDetails: data });
+          } else {
+            this.storage.set("items", data);
+            this.presentConfirm(data);
+          };
+        })
       }
     });
 
@@ -108,6 +100,7 @@ export class MyApp {
 
   onLogout() {
     if (this.platform.is("cordova")) {
+      this.unsubscribe();
       forkJoin([
         this.cas.getTGT(),
         this.ws.get("/student/profile"),
@@ -127,29 +120,33 @@ export class MyApp {
   }
 
   subscribe() {
-    forkJoin([
-      this.firebase
-        .onTokenRefresh()
-        .pipe(tap(token => this.storage.set("token", token))),
-      this.ws.get("/student/profile"),
-      this.cas.getTGT()
-    ]).subscribe(d => {
-      this.notificationService.Subscribe(d[1], d[0], d[2]);
-    });
+    this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
+    this.profile$.subscribe(profile => {
+      let studentNumber = profile[0].STUDENT_NUMBER;
+      //let intakeCode = profile[0].INTAKE_CODE;
+      this.fcm.subscribeToTopic(studentNumber);
+      //this.fcm.subscribeToTopic(this.intakeCode); // TODO: validation for intake code
+    })
   }
 
-  presentConfirm(title, notification) {
+  unsubscribe() {
+    this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
+    this.profile$.subscribe(profile => {
+      let studentNumber = profile[0].STUDENT_NUMBER;
+      this.fcm.unsubscribeFromTopic(studentNumber);
+    })
+  }
+
+  presentConfirm(data) {
     let alert = this.alertCtrl.create({
-      title: "New Notification",
-      message: title,
+      title: data.title,
+      message: data.body,
       buttons: [
         { text: "Cancel", role: "cancel" },
         {
           text: "Open",
           handler: () => {
-            this.navCtrl.push("NotificationModalPage", {
-              itemDetails: notification
-            });
+            this.navCtrl.push("NotificationModalPage", { itemDetails: data });
           }
         }
       ]

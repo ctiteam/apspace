@@ -3,31 +3,15 @@
     <ion-grid>
       <ion-row>
         <ion-col col-3>
-          <ng-template [ngIf]="photo$ | async" [ngIfElse]="academicProfile$ | async" else="log">
+          <ng-template [ngIf]="photo$ | async">
             <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" onerror="this.src='assets/img/profile.svg'"
               alt="Avatar" (click)="openProfile()">
           </ng-template>
-          <ng-template #(academicProfile$ | async)>
-            <!-- academic staff photo -->
-            academic
-          </ng-template>
-          <ng-template #log>
-            <!-- non academic staff photo -->
-            non academic
-          </ng-template>
         </ion-col>
         <ion-col col-9>
-          <ng-template [ngIf]="profile$ | async" [ngIfElse]="academicProfile$ | async" else="log">
+          <ng-template [ngIf]="profile$ | async">
             <p class="name">{{ ((profile$ | async) || [{}])[0].NAME }}</p>
             <p class="tpnumber">{{ ((profile$ | async) || [{}])[0].STUDENT_NUMBER }}</p>
-          </ng-template>
-          <ng-template #(academicProfile$ | async)>
-            <!-- academic staff profile -->
-            academic
-          </ng-template>
-          <ng-template #log>
-            <!-- non academic staff profile -->
-            non academic
           </ng-template>
         </ion-col>
       </ion-row>
@@ -37,20 +21,10 @@
 
 <ion-content>
   <div class="main-content" (swipe)='swipe($event)'>
-    <ng-template [ngIf]="profile$ | async" [ngIfElse]="academicProfile$ | async" else="log">
-      <button no-lines ion-item *ngFor='let p of studentPages' (click)='openPage(p)'>
+      <button no-lines ion-item *ngFor='let p of pages' (click)='openPage(p)'>
         <ion-icon class="ion-icon" item-left [name]='p.icon'></ion-icon>
         {{ p.title }}
       </button>
-    </ng-template>
-    <ng-template #(academicProfile$ | async)>
-      <!-- academic staff menu -->
-      academic
-    </ng-template>
-    <ng-template #log>
-      <!-- non academic staff menu -->
-      non academic
-    </ng-template>
     <button no-lines ion-item (click)='logout()'>
       <ion-icon class="ion-icon" item-left name='md-log-out'></ion-icon>
       Log out

@@ -1,0 +1,20 @@
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
+@IonicPage()
+@Component({
+  selector: 'page-exam-schedule',
+  templateUrl: 'exam-schedule.html',
+})
+export class ExamSchedulePage {
+
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+  ) { }
+
+  ionViewDidLoad() {
+
+  }
+
+}

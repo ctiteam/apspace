@@ -10,6 +10,9 @@ import { fromPromise } from 'rxjs/observable/fromPromise';
 import { _throw as obs_throw } from 'rxjs/observable/throw';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
+import { Role } from '../interfaces';
+import { SettingsProvider } from './settings';
+
 /**
  * CAS Authentication with fallback mechanism.
  *
@@ -25,12 +28,11 @@ export class CasTicketProvider {
 
   casUrl = 'https://cas.apiit.edu.my';
 
-  validationResponse: any;
-
   constructor(
     public http: HttpClient,
     public storage: Storage,
     public events: Events,
+    private settings: SettingsProvider,
   ) { }
 
   /**
@@ -99,7 +101,9 @@ export class CasTicketProvider {
   }
 
   /**
-   * GET: ??
+   * GET: Validate service ticekt and set role to user
+   *
+   * @param st service ticket
    * @return tgt
    */
   validate(st?: any): Observable<any> {
@@ -111,17 +115,24 @@ export class CasTicketProvider {
     };
 
     return this.http.get(this.casUrl + '/cas/p3/serviceValidate', options).pipe(
-      switchMap(res =>
-        res['serviceResponse']['authenticationSuccess']['attributes']['distinguishedName']
-          .join().toLowerCase().split(',').indexOf('ou=students') !== -1 ||
-          res['serviceResponse']['authenticationSuccess']['attributes']['distinguishedName']
-            .join().toLowerCase().split(',').indexOf('ou=academic') !== -1 ||
-          res['serviceResponse']['authenticationSuccess']['attributes']['distinguishedName']
-            .join().toLowerCase().split(',').indexOf('ou=apiit tpm') !== -1
-          ? of(res) : obs_throw('Group not supported')
+      switchMap(res => {
+        const parts = res['serviceResponse']['authenticationSuccess']['attributes']['distinguishedName']
+          .join().toLowerCase().split(',');
+        let role: Role;
+
+        if (parts.indexOf('ou=students') !== -1) {
+          role = Role.Student;
+        } else if (parts.indexOf('ou=academic') !== -1) {
+          role = Role.Lecturer;
+        } else if (parts.indexOf('ou=apiit tpm') !== -1) {
+          role = Role.Admin;
+        } else {
+          return obs_throw('Group not supported');
+        }
+        this.settings.set('role', role);
+        return of(res);
+      }
       ),
-      tap(res => this.validationResponse = res['serviceResponse']['authenticationSuccess']['attributes']['distinguishedName'].join().toLowerCase().split(',')),
-      tap(_ => this.storage.set('userGroup', this.validationResponse))
     )
   }
 }

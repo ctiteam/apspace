@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "845901724172",
+    "firebase_url": "https://iwebspace-81f9d.firebaseio.com",
+    "project_id": "iwebspace-81f9d",
+    "storage_bucket": "iwebspace-81f9d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:845901724172:android:c4ea87485d8c7221",
+        "android_client_info": {
+          "package_name": "my.edu.apiit.iwebspace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "845901724172-tlsbti9naamfslacrr9joc42raf47ps2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFGaXi2i-IvCQGGFek5GNnkxn41QE-Gcw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

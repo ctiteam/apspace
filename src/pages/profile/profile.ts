@@ -17,7 +17,7 @@ export class ProfilePage {
   profile$: Observable<StudentProfile[]>;
 
   pages = [
-    { title: 'Password Recovery', component: 'PasswordRecoveryPage' }
+    { title: 'Password Recovery', component: 'PasswordRecoveryPage', icon: 'lock' }
   ];
 
   constructor(private ws: WsApiProvider) { }

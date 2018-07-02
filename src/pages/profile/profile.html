@@ -38,7 +38,7 @@
   <ion-card class="ion-card-style">
     <button margin-bottom ion-item *ngFor='let p of pages' [navPush]='p.component'>
       {{ p.title }}
-      <ion-icon item-left name='md-lock'></ion-icon>
+      <ion-icon item-left [name]='p.icon'></ion-icon>
     </button>
   </ion-card>
 </ion-content>

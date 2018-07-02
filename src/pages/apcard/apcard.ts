@@ -5,7 +5,7 @@ import { IonicPage, NavController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { finalize, map, tap } from 'rxjs/operators';
 
-import { WsApiProvider } from '../../providers';
+import { WsApiProvider, LoadingControllerProvider } from '../../providers';
 import { Apcard } from '../../interfaces';
 
 @IonicPage()
@@ -40,7 +40,9 @@ export class ApcardPage {
 
   constructor(
     private ws: WsApiProvider,
-    private navCtrl: NavController) { }
+    private navCtrl: NavController,
+    private loading: LoadingControllerProvider,
+  ) { }
 
   /** Analyze transactions. */
   analyzeTransactions(transactions: Apcard[]) {
@@ -92,11 +94,13 @@ export class ApcardPage {
   }
 
   doRefresh(refresher?) {
+    this.loading.presentLoading();
     const options = { url: 'https://api.apiit.edu.my' };
     this.transaction$ = this.ws.get<Apcard[]>('/apcard/', true, options).pipe(
       map(t => this.signTransactions(t)),
       tap(t => this.analyzeTransactions(t)),
       finalize(() => refresher && refresher.complete()),
+      finalize(() => this.loading.dismissLoading())
     );
   }
 
@@ -105,10 +109,10 @@ export class ApcardPage {
   }
 
   swipe(event) {
-    if(event.direction === 2) {
+    if (event.direction === 2) {
       this.navCtrl.parent.select(4);
     }
-    if(event.direction === 4) {
+    if (event.direction === 4) {
       this.navCtrl.parent.select(2);
     }
   }
