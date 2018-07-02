@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Events, Platform } from 'ionic-angular';
+import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { SecureStorage } from '@ionic-native/secure-storage';
 import { Observable } from 'rxjs/Observable';
 
 import { empty } from 'rxjs/observable/empty';
@@ -25,24 +24,14 @@ import { catchError, switchMap, tap } from 'rxjs/operators';
 export class CasTicketProvider {
 
   casUrl = 'https://cas.apiit.edu.my';
-  storage: any;
 
   validationResponse: any;
 
   constructor(
     public http: HttpClient,
-    public baseStorage: Storage,
-    public plt: Platform,
-    public secureStorage: SecureStorage,
+    public storage: Storage,
     public events: Events,
-  ) {
-    if (this.plt.is('cordova')) {
-      this.secureStorage.create('ticket')
-        .then(storage => this.storage = storage);
-    } else {
-      this.storage = this.baseStorage;
-    }
-  }
+  ) { }
 
   /**
    * POST: request ticket-granting ticket from CAS and cache tgt and credentials

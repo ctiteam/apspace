@@ -32,7 +32,6 @@
     "@ionic-native/local-notifications": "^4.5.3",
     "@ionic-native/network": "^4.5.2",
     "@ionic-native/push": "^4.5.3",
-    "@ionic-native/secure-storage": "^4.8.0",
     "@ionic-native/status-bar": "^4.7.0",
     "@ionic/pro": "^1.0.20",
     "@ionic/storage": "^2.0.1",
@@ -85,8 +84,7 @@
       "cordova-plugin-local-notification": {},
       "cordova-plugin-actionsheet": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-statusbar": {},
-      "cordova-plugin-secure-storage": {}
+      "cordova-plugin-statusbar": {}
     },
     "platforms": [
       "ios",

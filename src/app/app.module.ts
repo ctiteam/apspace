@@ -13,7 +13,6 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Network } from '@ionic-native/network';
 import { Push } from '@ionic-native/push';
 import { StatusBar } from '@ionic-native/status-bar';
-import { SecureStorage } from '@ionic-native/secure-storage';
 
 import { MyApp } from './app.component';
 import {
@@ -45,7 +44,6 @@ import {
     Push,
     LocalNotifications,
     WsApiProvider,
-    SecureStorage,
     NotificationServiceProvider,
     { provide: RequestCache, useClass: RequestCacheWithMapStorage },
     httpInterceptorProviders,
