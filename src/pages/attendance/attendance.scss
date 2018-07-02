@@ -17,11 +17,11 @@ page-attendance {
     }
   }
 
-  .segment-md .segment-button{
+  .segment-md .segment-button {
     font-size: 1.1em;
   }
 
-  .segment-ios .segment-button{
+  .segment-ios .segment-button {
     font-size: 1.1em;
   }
 
@@ -30,7 +30,7 @@ page-attendance {
     font-weight: 500;
   }
 
-  .progress-inner{
+  .progress-inner {
     height: 8px;
   }
 
@@ -39,7 +39,7 @@ page-attendance {
     margin: 10px 2%;
     padding: 3px;
     text-align: center;
-    background-color: color($colors, 'medium');
+    background-color: color($colors, "medium");
     border: 1px solid #dcdcdc;
     color: color($colors, success);
     border-radius: 20px;
@@ -54,13 +54,13 @@ page-attendance {
     padding: 1.5px;
   }
 
-  .cover{
+  .cover {
     height: 200px;
-    background: rgb(77,169,255);
-    background: linear-gradient(150deg, rgba(77,169,255,1) 0%, rgba(148,233,186,1) 100%);
+    background: rgb(77, 169, 255);
+    background: linear-gradient(150deg, rgba(77, 169, 255, 1) 0%, rgba(148, 233, 186, 1) 100%);
   }
 
-  .item-header{
+  .item-header {
     font-size: small;
     font-weight: 500;
   }

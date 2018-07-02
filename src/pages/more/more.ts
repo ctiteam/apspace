@@ -48,6 +48,7 @@ export class MorePage {
       { title: 'Fees', component: 'FeesPage', icon: 'cash' },
       { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles' },
       { title: 'Profile', component: 'ProfilePage', icon: 'contact' },
+      { title: 'Bus Tracking', component: 'BusTrackingPage', icon: 'bus' },
       { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle' },
       { title: 'Feedback', component: 'FeedbackPage', icon: 'at' },
     ];

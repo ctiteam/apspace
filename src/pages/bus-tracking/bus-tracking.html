@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-navbar color='primary'>
+    <button ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Bus Tracking</ion-title>
+    <ion-buttons end>
+      <button ion-button outline small color='foreground' (click)="presentActionSheet()">
+        {{ selectedDay }}
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="background-image">
+  <ion-refresher (ionRefresh)='getTrips($event)'>
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-item class="selection">
+    <ion-item no-padding>
+      <ion-select [(ngModel)]="selectedFrom" interface='popover' placeholder='From'>
+        <ion-option *ngFor="let trip of tripFrom" [value]="trip">
+          {{ trip }}
+        </ion-option>
+        <ion-option></ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item no-padding>
+      <ion-select [(ngModel)]="selectedTo" interface='popover' placeholder='To'>
+        <ion-option *ngFor="let trip of tripTo" [value]="trip">
+          {{ trip }}
+        </ion-option>
+        <ion-option></ion-option>
+      </ion-select>
+    </ion-item>
+    <button class="swap" ion-button icon-only small item-end (click)="swapTrip()">
+      <ion-icon name='swap'></ion-icon>
+    </button>
+  </ion-item>
+
+  <ion-card *ngFor="let ts of trip$ | async | on:selectedDay | during:selectedFrom:selectedTo">
+    <ion-card-header ion-item>
+      <h2 ion-text item-start>{{ ts.trip_from }} -> {{ ts.trip_to }}</h2>
+      <h4 ion-text item-end>{{ ts.trip_time }}</h4>
+    </ion-card-header>
+  </ion-card>
+</ion-content>

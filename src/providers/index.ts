@@ -6,11 +6,12 @@ export {
 export { httpInterceptorProviders } from './http-interceptors';
 
 /* User providers */
+export { BusTrackingProvider } from './bus-tracking';
 export { CasTicketProvider } from './cas-ticket';
 export { LoadingControllerProvider } from './loading-controller';
 export { NewsProvider } from './news';
 export { NotificationServiceProvider } from './notification-service';
 export { OperationHoursProvider } from './operation-hours';
 export { SqaProvider } from './sqa';
-export { WsApiProvider } from './ws-api';
 export { TimetableProvider } from './timetable';
+export { WsApiProvider } from './ws-api';

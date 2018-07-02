@@ -16,9 +16,9 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import {
-  CasTicketProvider, LoadingControllerProvider, NotificationServiceProvider,
-  OperationHoursProvider, RequestCache, RequestCacheWithMapStorage,
-  WsApiProvider, httpInterceptorProviders
+  BusTrackingProvider, CasTicketProvider, LoadingControllerProvider,
+  NotificationServiceProvider, OperationHoursProvider, RequestCache,
+  RequestCacheWithMapStorage, WsApiProvider, httpInterceptorProviders
 } from '../providers';
 
 @NgModule({
@@ -49,6 +49,7 @@ import {
     httpInterceptorProviders,
     OperationHoursProvider,
     LoadingControllerProvider,
+    BusTrackingProvider,
   ]
 })
 export class AppModule { }

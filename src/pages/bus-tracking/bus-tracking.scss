@@ -1,0 +1,32 @@
+page-bus-tracking {
+  .background-image {
+    background: url("../../assets/img/map.png") center;
+    width: 100%;
+  }
+
+  ion-select {
+    max-width: 100%;
+  }
+
+  .item-inner {
+    border-bottom: 0 !important;
+  }
+
+  button[ion-button] {
+    height: 3em;
+  }
+
+  .selection {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  #map {
+    height: 100%;
+  }
+
+  .swap {
+    border-radius: 50%;
+    width: 40px;
+    height: auto;
+  }
+}
