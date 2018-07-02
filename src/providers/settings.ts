@@ -22,7 +22,6 @@ export class SettingsProvider {
   set(key: keyof Settings, value: any) {
     this.data[key] = value;
     this.storage.set('settings', this.data);
-    console.log(this.data);
   }
 
   get(key: keyof Settings) {

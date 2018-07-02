@@ -6,7 +6,7 @@
 
 <ion-content>
   <div *ngIf='profile$ | async'>
-    <ion-card *ngFor='let e of examSchedule$ | async'>
+    <ion-card *ngFor='let e of exams'>
       <ion-item>
         Subject Code
         <ion-note item-right>{{e.subjectCode}}</ion-note>

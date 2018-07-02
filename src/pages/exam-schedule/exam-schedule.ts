@@ -16,6 +16,8 @@ export class ExamSchedulePage {
   examSchedule$: Observable<ExamSchedule[]>;
   profile$: Observable<StudentProfile[]>;
 
+  exams: any = '';
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -28,8 +30,15 @@ export class ExamSchedulePage {
     this.loading.presentLoading();
     this.profile$ = this.ws.get<StudentProfile[]>('/student/profile').pipe(
       tap(p => this.getExamSchedule(p[0].STUDENT_NUMBER, p[0].INTAKE_CODE)),
+      tap(_ => this.filterByAssesmentType()),
       finalize(() => this.loading.dismissLoading())
     )
+  }
+
+  filterByAssesmentType(){
+    this.examSchedule$.subscribe(e => {
+      this.exams = e.filter(res => res.assesmentType = 'Exam');
+    })
   }
 
   getExamSchedule(tpnumber: string, intake: string): Observable<ExamSchedule[]> {
