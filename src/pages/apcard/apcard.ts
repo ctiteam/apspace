@@ -46,6 +46,7 @@ export class ApcardPage {
   analyzeTransactions(transactions: Apcard[]) {
     this.balance = transactions[0].Balance;
 
+    const now = new Date();
     const monthlyData = transactions.reduce((tt, t) => {
       const c = t.SpendVal > 0 ? 'cr' : 'dr'; // classify spent type
       const d = new Date(t.SpendDate);
@@ -54,7 +55,10 @@ export class ApcardPage {
       tt[c][d.getFullYear()][d.getMonth()] += Math.abs(t.SpendVal);
 
       return tt;
-    }, { cr: {}, dr: {} });
+    }, {  // default array with current year
+      cr: { [now.getFullYear()]: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+      dr: { [now.getFullYear()]: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+    });
 
     // plot graph
     this.data = {
@@ -62,19 +66,19 @@ export class ApcardPage {
       datasets: [
         {
           label: 'Monthly Debit',
-          data: monthlyData['dr'][Object.keys(monthlyData['dr']).pop()],
+          data: monthlyData.dr[now.getFullYear()],
           backgroundColor: 'rgba(0, 200, 83, .5)'
         },
         {
           label: 'Monthly Credit',
-          data: monthlyData['cr'][Object.keys(monthlyData['cr']).pop()],
+          data: monthlyData.cr[now.getFullYear()],
           backgroundColor: 'rgba(213, 0, 0, .5)'
         }
       ]
     };
 
     // reverse monthlyData last year
-    this.monthly = monthlyData['cr'][Object.keys(monthlyData['cr']).pop()].slice().reverse().find(x => x > 0);
+    this.monthly = monthlyData.cr[now.getFullYear()][now.getMonth()];
   }
 
   /** Negate spend value for top ups. */
