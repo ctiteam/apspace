@@ -24,6 +24,7 @@ export class MorePage {
     { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people', role: Role.Student },
     { title: 'Bus Tracking', component: 'BusTrackingPage', icon: 'bus', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Fees', component: 'FeesPage', icon: 'cash', role: Role.Student },
+    { title: 'Exam Schedule', component: 'ExamSchedulePage', icon: 'book', role: Role.Student },
     { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles', role: Role.Student },
     { title: 'Profile', component: 'ProfilePage', icon: 'contact', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle', role: Role.Student | Role.Lecturer | Role.Admin },

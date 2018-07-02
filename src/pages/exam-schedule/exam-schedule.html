@@ -1,9 +1,28 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color='primary'>
     <ion-title>Exam-schedule</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-
+<ion-content>
+  <div *ngIf='profile$ | async'>
+    <ion-card *ngFor='let e of examSchedule$ | async'>
+      <ion-item>
+        Subject Code
+        <ion-note item-right>{{e.subjectCode}}</ion-note>
+      </ion-item>
+      <ion-item>
+        Assessment Type
+        <ion-note item-right>{{e.assesmentType}}</ion-note>
+      </ion-item>
+      <ion-item>
+        Exam Date
+        <ion-note item-right>{{e.examDate}}</ion-note>
+      </ion-item>
+      <ion-item>
+        Exam Status
+        <ion-note item-right>{{e.examStatus}}</ion-note>
+      </ion-item>
+    </ion-card>
+  </div>
 </ion-content>
