@@ -9,7 +9,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div class="main-content" (swipe)='swipe($event)'>
-    <ion-card *ngFor="let item of items$ | async" (click)="openModal(item)">
+    <ion-card tappable *ngFor="let item of items$ | async" (click)="openModal(item)">
       <img [src]="item.field_news_image[0].url">
       <ion-card-content color='light'>
         {{ item.title[0].value }}

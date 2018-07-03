@@ -1,11 +1,11 @@
 <ion-header>
   <ion-navbar color="primary">
     <ion-grid>
-      <ion-row>
+      <ion-row tappable (click)="openProfile()">
         <ion-col col-3>
           <ng-template [ngIf]="photo$ | async">
             <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" onerror="this.src='assets/img/profile.svg'"
-              alt="Avatar" (click)="openProfile()">
+              alt="Avatar">
           </ng-template>
         </ion-col>
         <ion-col col-9>

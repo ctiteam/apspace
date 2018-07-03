@@ -52,7 +52,7 @@ export class MorePage {
     public settings: SettingsProvider,
   ) {
     const role = this.settings.get('role');
-    this.pages = this.menuItems.filter(page => page.role & role).slice(0, 7);
+    this.pages = this.menuItems.filter(page => page.role & role).slice(0, 9);
   }
 
   ionViewDidLoad() {
