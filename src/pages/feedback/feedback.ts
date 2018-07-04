@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
+import { IonicPage, Platform } from 'ionic-angular';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { Device } from '@ionic-native/device';
 
@@ -29,29 +29,34 @@ export class FeedbackPage {
   constructor(
     private emailComposer: EmailComposer,
     private ws: WsApiProvider,
-    private device: Device) { }
+    private device: Device,
+    private plt: Platform,
+  ) { }
 
   sendEmail() {
-    let email = {
-      to: 'cti@apiit.edu.my',
-      subject: "iWebspace Feedback",
-      body: this.feedbackData.message + "<br><br>"
-        + this.feedbackData.name + '<br>'
-        + this.feedbackData.studentNumber + '<br>'
-        + this.feedbackData.contactNumber + '<br><br>'
-        + 'Device Information:' + '<br>'
-        + 'Platform: ' + this.feedbackData.platform + '<br>'
-        + 'Cordova: ' + this.feedbackData.cordova + '<br>'
-        + 'OS Version: ' + this.feedbackData.version + '<br>'
-        + 'Model: ' + this.feedbackData.model + '<br>'
-        + 'Manufacturer: ' + this.feedbackData.manufacturer + '<br>'
-        + 'isVirtual: ' + this.feedbackData.isVirtual,
-      isHTML: true
-    };
-    this.emailComposer.open(email);
+    if(this.plt.is('cordova')){
+      let email = {
+        to: 'cti@apiit.edu.my',
+        subject: "iWebspace Feedback",
+        body: this.feedbackData.message + "<br><br>"
+          + this.feedbackData.name + '<br>'
+          + this.feedbackData.studentNumber + '<br>'
+          + this.feedbackData.contactNumber + '<br><br>'
+          + 'Device Information:' + '<br>'
+          + 'Platform: ' + this.feedbackData.platform + '<br>'
+          + 'Cordova: ' + this.feedbackData.cordova + '<br>'
+          + 'OS Version: ' + this.feedbackData.version + '<br>'
+          + 'Model: ' + this.feedbackData.model + '<br>'
+          + 'Manufacturer: ' + this.feedbackData.manufacturer + '<br>'
+          + 'isVirtual: ' + this.feedbackData.isVirtual,
+        isHTML: true
+      };
+      this.emailComposer.open(email);
+    }
   }
 
   ionViewDidLoad() {
+    /* TODO: Add staff name */
     this.ws.get<StudentProfile[]>('/student/profile').subscribe(p => {
       this.feedbackData.name = p[0].NAME;
       this.feedbackData.studentNumber = p[0].STUDENT_NUMBER
