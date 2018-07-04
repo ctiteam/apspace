@@ -6,7 +6,7 @@
 
 
 <ion-content>
-  <ion-refresher (ionRefresh)="get(selectedService, $event)">
+  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="get(selectedService, $event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 

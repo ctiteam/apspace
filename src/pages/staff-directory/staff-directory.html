@@ -6,7 +6,7 @@
 
 
 <ion-content overflow-scroll='true'> <!-- staff is not [] -->
-  <ion-refresher (ionRefresh)="doRefresh($event)">
+  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
@@ -25,8 +25,8 @@
     </ion-item>
   </ion-list>
 
-  <ion-list>
-    <ion-item *ngFor="let staff of staff$ | async | in:dept | search:term"
+  <ion-list [virtualScroll]="staff$ | async | in:dept | search:term">
+    <ion-item *virtualItem="let staff"
       navPush="StaffDirectoryInfoPage" [navParams]="{id: staff.CODE}">
       <ion-avatar item-start>
         <img [src]="staff.PHOTO" onerror="this.src='assets/img/profile.svg'">
