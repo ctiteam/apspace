@@ -9,36 +9,43 @@
     <img class="profile-photo" [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" onerror="this.src='assets/img/profile.svg'"
       alt="Avatar">
   </div>
-  <ion-card class="profile-info">
-    <p class="bold">
-      {{ ((profile$ | async) || [{}])[0].NAME }}</p>
-    <p class="bold">
-      {{ ((profile$ | async) || [{}])[0].STUDENT_NUMBER }}
-    </p>
-  </ion-card>
-  <ion-card class="ion-card-style">
-    <ion-card-content class="text-left">
-      <p class="bold">Country:</p>
-      <p>{{ ((profile$ | async) || [{}])[0].COUNTRY }}</p>
-      <br class="break">
-      <p class="bold">Current Intake Code:</p>
-      <p>{{ ((profile$ | async) || [{}])[0].INTAKE_CODE }}</p>
-      <br class="break">
-      <p class="bold">Programme:</p>
-      <p>{{ ((profile$ | async) || [{}])[0].PROGRAMME }}</p>
-      <br class="break">
-      <p class="bold">Programme Leader:</p>
-      <p>{{ ((profile$ | async) || [{}])[0].PL_NAME }}</p>
-      <br class="break">
-      <p class="bold">Mentor Name:</p>
-      <p>{{ ((profile$ | async) || [{}])[0].MENTOR_NAME }}</p>
-      <br class="break">
-    </ion-card-content>
-  </ion-card>
-  <ion-card class="ion-card-style">
-    <button margin-bottom ion-item *ngFor='let p of pages' [navPush]='p.component'>
-      {{ p.title }}
-      <ion-icon item-left [name]='p.icon'></ion-icon>
-    </button>
-  </ion-card>
+  <ng-template let-profile [ngIf]="((profile$ | async) || [{}])[0]" [ngIfElse]="na">
+    <ion-card class="profile-info">
+      <p class="bold">
+        {{ profile.NAME }}</p>
+      <p class="bold">
+        {{ profile.STUDENT_NUMBER }}
+      </p>
+    </ion-card>
+    <ion-card class="ion-card-style">
+      <ion-card-content class="text-left">
+        <p class="bold">Country:</p>
+        <p>{{ profile.COUNTRY }}</p>
+        <br class="break">
+        <p class="bold">Current Intake Code:</p>
+        <p>{{ profile.INTAKE_CODE }}</p>
+        <br class="break">
+        <p class="bold">Programme:</p>
+        <p>{{ profile.PROGRAMME }}</p>
+        <br class="break">
+        <p class="bold">Programme Leader:</p>
+        <p>{{ profile.PL_NAME }}</p>
+        <br class="break">
+        <p class="bold">Mentor Name:</p>
+        <p>{{ profile.MENTOR_NAME }}</p>
+        <br class="break">
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="ion-card-style">
+      <button margin-bottom ion-item *ngFor='let p of pages' [navPush]='p.component'>
+        {{ p.title }}
+        <ion-icon item-left [name]='p.icon'></ion-icon>
+      </button>
+    </ion-card>
+  </ng-template>
+  <ng-template #na>
+    <ion-card>
+      <ion-card-content>No profile found. Who are you?</ion-card-content>
+    </ion-card>
+  </ng-template>
 </ion-content>

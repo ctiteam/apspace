@@ -4,14 +4,14 @@
       <ion-row tappable (click)="openProfile()">
         <ion-col col-3>
           <ng-template [ngIf]="photo$ | async">
-            <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" onerror="this.src='assets/img/profile.svg'"
+            <img [src]="'data:image/jpg;base64,' + (photo$ | async)?.base64_photo" onerror="this.src='assets/img/profile.svg'"
               alt="Avatar">
           </ng-template>
         </ion-col>
         <ion-col col-9>
           <ng-template [ngIf]="profile$ | async">
-            <p class="name">{{ ((profile$ | async) || [{}])[0].NAME }}</p>
-            <p class="tpnumber">{{ ((profile$ | async) || [{}])[0].STUDENT_NUMBER }}</p>
+            <p class="name">{{ ((profile$ | async) || [{}])[0]?.NAME }}</p>
+            <p class="tpnumber">{{ ((profile$ | async) || [{}])[0]?.STUDENT_NUMBER }}</p>
           </ng-template>
         </ion-col>
       </ion-row>
