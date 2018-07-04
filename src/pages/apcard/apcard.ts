@@ -46,6 +46,9 @@ export class ApcardPage {
 
   /** Analyze transactions. */
   analyzeTransactions(transactions: Apcard[]) {
+    // stop analyzing if transactions is empty
+    if (transactions.length === 0)
+      return;
     this.balance = transactions[0].Balance;
 
     const now = new Date();
