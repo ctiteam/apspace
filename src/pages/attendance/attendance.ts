@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/Observable';
 import { tap, finalize } from 'rxjs/operators';
 
 import { WsApiProvider, LoadingControllerProvider } from '../../providers';
-import { Attendance, Course } from '../../interfaces';
+import { Attendance, Course, AttendanceLegend } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -23,6 +23,8 @@ export class AttendancePage {
 
   attendance$: Observable<Attendance[]>;
   courses$: Observable<Course[]>;
+  legend$: Observable<AttendanceLegend[]>;
+
 
   selectedIntake: string = '';
   studentId: string;
@@ -83,6 +85,7 @@ export class AttendancePage {
   }
 
   ionViewDidLoad() {
+    this.legend$ = this.ws.get<AttendanceLegend[]>("/student/attendance_legend");
     this.courses$ = this.ws.get<Course[]>('/student/courses').pipe(
       tap(c => this.selectedIntake = c[0].INTAKE_CODE),
       tap(c => this.studentId = c[0].STUDENT_NUMBER),

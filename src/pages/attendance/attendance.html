@@ -37,5 +37,52 @@
         <div item-content [style.font-weight]="'bold'" [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'">{{ a.EXAM_ELIGIBILITY }}</div>
       </ion-item>
     </ion-card>
+    <ion-card class="legend" *ngIf="legend$ | async as legend">
+        <ion-item class="legend-title">
+          Legend
+        </ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-2>
+              BA
+            </ion-col>
+            <ion-col col-10>
+              {{ (legend || [{}])[0]?.BA }}
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-2>
+              BF
+            </ion-col>
+            <ion-col col-10>
+              {{ (legend || [{}])[0]?.BF }}
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-2>
+              BD
+            </ion-col>
+            <ion-col col-10>
+              {{ (legend || [{}])[0]?.BD }}
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-2>
+              N/A
+            </ion-col>
+            <ion-col col-10>
+              Not Applicable
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-2>
+              ***
+            </ion-col>
+            <ion-col col-10>
+              Check on final week of your course schedule
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
   </div>
 </ion-content>

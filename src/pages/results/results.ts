@@ -20,6 +20,16 @@ export class ResultsPage {
 
   type = "bar";
   data: any;
+  barChart: any;
+  selectedIntake: string = '';
+  studentId: string;
+  grade_point: number = 0;
+  passedModule: any = 0;
+  semester1: any;
+  semester2: any;
+  semester3: any;
+  intakeLabels: any;
+
   options = {
     legend: {
       display: false
@@ -35,22 +45,12 @@ export class ResultsPage {
     }
   };
 
-  barChart: any;
-  selectedIntake: string = '';
-  studentId: string;
-  grade_point: number = 0;
-  passedModule: any = 0;
-  semester1: any;
-  semester2: any;
-  semester3: any;
-  intakeLabels: any;
-
   constructor(
     private ws: WsApiProvider,
     public loading: LoadingControllerProvider,
     public plt: Platform,
     private actionSheet: ActionSheet,
-    private actionSheetCtrl: ActionSheetController) {}
+    private actionSheetCtrl: ActionSheetController) { }
 
   getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
     this.loading.presentLoading();
@@ -86,10 +86,7 @@ export class ResultsPage {
     );
   }
 
-  getCourseDetails(
-    intake: string,
-    refresh: boolean = false
-  ): Observable<CourseDetails> {
+  getCourseDetails(intake: string, refresh: boolean = false): Observable<CourseDetails> {
     const opt = { params: { id: this.studentId, format: "json" } };
     return (this.courseDetails$ = this.ws.get<CourseDetails>(
       `/student/sub_and_course_details?intake=${intake}`,
@@ -105,7 +102,7 @@ export class ResultsPage {
       list.push(grade.GRADE);
     }
     list.sort();
-    listItems = list.filter(function(item, pos) {
+    listItems = list.filter(function (item, pos) {
       return list.indexOf(item) == pos;
     });
 
