@@ -113,9 +113,6 @@ export class ResultsPage {
     this.mpuLegend$ = this.ws.get<MPULegend[]>(`/student/mpu_legend?id=${this.studentId}&intake=${intake}`);
     this.determinationLegend$ = this.ws.get<DeterminationLegend[]>(`/student/determination_legend?id=${this.studentId}&intake=${intake}`);
     this.classificationLegend$ = this.ws.get<ClassificationLegend[]>(`/student/classification_legend?id=${this.studentId}&intake=${intake}`);
-    this.determinationLegend$.subscribe(s=> console.log(s))
-    this.classificationLegend$.subscribe(s=> console.log(s))
-
   }
 
   sortArray(r) {
