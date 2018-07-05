@@ -7,20 +7,20 @@
 </ion-header>
 
 <ion-content>
-  <ion-card class="total-summary" padding *ngIf='totalSummary$ | async as totalSummary'>
-    <ion-item class="total-summary">
+  <ion-card class="total-summary" [style.background]="(totalSummary[0].TOTAL_OUTSTANDING == 0 && totalSummary[0].TOTAL_OUTSTANDING) ? '#f04141' : '#0dbd53'" padding *ngIf='totalSummary$ | async as totalSummary'>
+    <ion-item class="total-summary" [style.background]="(totalSummary[0].TOTAL_OUTSTANDING == 0 && totalSummary[0].TOTAL_OUTSTANDING) ? '#f04141' : '#0dbd53'">
       Total Payable:
       <ion-note color='light' item-right>{{ totalSummary[0]?.TOTAL_PAYABLE || 0 }}</ion-note>
     </ion-item>
-    <ion-item class="total-summary">
+    <ion-item class="total-summary" [style.background]="(totalSummary[0].TOTAL_OUTSTANDING == 0 && totalSummary[0].TOTAL_OUTSTANDING) ? '#f04141' : '#0dbd53'">
       Total Paid:
       <ion-note color='light' item-right>{{ totalSummary[0]?.TOTAL_PAID || 0 }}</ion-note>
     </ion-item>
-    <ion-item class="total-summary">
+    <ion-item class="total-summary" [style.background]="(totalSummary[0].TOTAL_OUTSTANDING == 0 && totalSummary[0].TOTAL_OUTSTANDING) ? '#f04141' : '#0dbd53'">
       Total Outstanding:
       <ion-note color='light' item-right>{{ totalSummary[0]?.TOTAL_OUTSTANDING || 0 }}</ion-note>
     </ion-item>
-    <ion-item class="total-summary">
+    <ion-item class="total-summary" [style.background]="(totalSummary[0].TOTAL_OUTSTANDING == 0 && totalSummary[0].TOTAL_OUTSTANDING) ? '#f04141' : '#0dbd53'">
       Total Overdue:
       <ion-note color='light' item-right>{{ totalSummary[0]?.TOTAL_OVERDUE || 0 }}</ion-note>
     </ion-item>
