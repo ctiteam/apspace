@@ -31,8 +31,9 @@ export interface FeesSummary {
 
 export interface FeesTotalSummary {
   STUDENT_NUMBER: string;
-  TOTAL_FINE: number;
+  FINE: number;
   TOTAL_OUTSTANDING: number;
   TOTAL_PAID: number;
   TOTAL_PAYABLE: number;
+  TOTAL_OVERDUE: number;
 }
