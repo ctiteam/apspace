@@ -9,19 +9,19 @@
 <ion-content>
   <ion-card class="total-summary" [style.background]="(totalSummary[0].TOTAL_OUTSTANDING == 0 && totalSummary[0].TOTAL_OUTSTANDING) ? '#f04141' : '#0dbd53'" padding *ngIf='totalSummary$ | async as totalSummary'>
     <ion-item class="total-summary" [style.background]="(totalSummary[0].TOTAL_OUTSTANDING == 0 && totalSummary[0].TOTAL_OUTSTANDING) ? '#f04141' : '#0dbd53'">
-      Total Payable:
+      Total Payable
       <ion-note color='light' item-right>{{ totalSummary[0]?.TOTAL_PAYABLE || 0 }}</ion-note>
     </ion-item>
     <ion-item class="total-summary" [style.background]="(totalSummary[0].TOTAL_OUTSTANDING == 0 && totalSummary[0].TOTAL_OUTSTANDING) ? '#f04141' : '#0dbd53'">
-      Total Paid:
+      Total Paid
       <ion-note color='light' item-right>{{ totalSummary[0]?.TOTAL_PAID || 0 }}</ion-note>
     </ion-item>
     <ion-item class="total-summary" [style.background]="(totalSummary[0].TOTAL_OUTSTANDING == 0 && totalSummary[0].TOTAL_OUTSTANDING) ? '#f04141' : '#0dbd53'">
-      Total Outstanding:
+      Total Outstanding
       <ion-note color='light' item-right>{{ totalSummary[0]?.TOTAL_OUTSTANDING || 0 }}</ion-note>
     </ion-item>
     <ion-item class="total-summary" [style.background]="(totalSummary[0].TOTAL_OUTSTANDING == 0 && totalSummary[0].TOTAL_OUTSTANDING) ? '#f04141' : '#0dbd53'">
-      Total Overdue:
+      Total Overdue
       <ion-note color='light' item-right>{{ totalSummary[0]?.TOTAL_OVERDUE || 0 }}</ion-note>
     </ion-item>
   </ion-card>
@@ -38,23 +38,23 @@
         <h4 margin>{{ summary.INVOICE_DESCRIPTION }}</h4>
         <ion-card-content no-padding>
           <ion-item>
-            Due Date:
+            Due Date
             <ion-note color='text-color' item-right>{{ summary.PAYMENT_DUE_DATE || 'N/A' }}</ion-note>
           </ion-item>
           <ion-item>
-            Amount Payable:
+            Amount Payable
             <ion-note color='text-color' item-right>{{ summary.PAYABLE_AMOUNT || 'N/A' }}</ion-note>
           </ion-item>
           <ion-item>
-            Total Collected:
+            Total Collected
             <ion-note color='text-color' item-right>{{ summary.TOTAL_COLLECTED || 'N/A' }}</ion-note>
           </ion-item>
           <ion-item>
-            Outstanding:
+            Outstanding
             <ion-note color='text-color' item-right>{{ summary.OUTSTANDING || 'N/A' }}</ion-note>
           </ion-item>
           <ion-item>
-            Fine:
+            Fine
             <ion-note color='text-color' item-right>{{ summary.FINE || 'N/A' }}</ion-note>
           </ion-item>
         </ion-card-content>
@@ -66,23 +66,23 @@
         <ion-list-header>{{ bankDraft.COURSE_CODE || 'Course Code' }}</ion-list-header>
         <ion-card-content no-padding>
           <ion-item>
-            Bank Draft Amount:
+            Bank Draft Amount
             <ion-note color='text-color' item-right>{{ bankDraft.BANKDRAFT_AMOUNT }}</ion-note>
           </ion-item>
           <ion-item>
-            Due Date:
+            Due Date
             <ion-note color='text-color' item-right>{{ bankDraft.BANKDRAFT_DUE_DATE }}</ion-note>
           </ion-item>
           <ion-item>
-            Date Collected:
+            Date Collected
             <ion-note color='text-color' item-right>{{ bankDraft.DATE_COLLECTED }}</ion-note>
           </ion-item>
           <ion-item>
-            Registration Date:
+            Registration Date
             <ion-note color='text-color' item-right>{{ bankDraft.REGISTRATION_DATE }}</ion-note>
           </ion-item>
           <ion-item>
-            Amount Collected:
+            Amount Collected
             <ion-note color='success' item-right>{{ bankDraft.AMOUNT_COLLECTED }}</ion-note>
           </ion-item>
         </ion-card-content>
@@ -93,23 +93,23 @@
         <h4 margin>{{ details.ITEM_DESCRIPTION }}</h4>
         <ion-card-content no-padding>
           <ion-item>
-            Due Date:
+            Due Date
             <ion-note color='text-color' item-right>{{ details.DUE_DATE }}</ion-note>
           </ion-item>
           <ion-item>
-            Amount Payable:
+            Amount Payable
             <ion-note color='text-color' item-right>{{ details.AMOUNT_PAYABLE }}</ion-note>
           </ion-item>
           <ion-item>
-            Total Collected:
+            Total Collected
             <ion-note color='success' item-right>{{ details.TOTAL_COLLECTED }}</ion-note>
           </ion-item>
           <ion-item>
-            Outstanding:
+            Outstanding
             <ion-note color='danger' item-right>{{ details.OUTSTANDING }}</ion-note>
           </ion-item>
           <ion-item>
-            Fine:
+            Fine
             <ion-note color='warn' item-right>{{ details.FINE }}</ion-note>
           </ion-item>
         </ion-card-content>
