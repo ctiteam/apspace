@@ -16,9 +16,10 @@ import { FCM } from '@ionic-native/fcm';
 
 import { MyApp } from './app.component';
 import {
-  CasTicketProvider, LoadingControllerProvider, NotificationServiceProvider,
-  OperationHoursProvider, RequestCache, RequestCacheWithMapStorage,
-  WsApiProvider, httpInterceptorProviders, SettingsProvider, ExamScheduleProvider, BusTrackingProvider
+  BusTrackingProvider, CasTicketProvider, LoadingControllerProvider,
+  NotificationServiceProvider, OperationHoursProvider, RequestCache,
+  RequestCacheWithMapStorage, WsApiProvider, httpInterceptorProviders,
+  SettingsProvider
 } from '../providers';
 
 @NgModule({
@@ -50,8 +51,7 @@ import {
     OperationHoursProvider,
     LoadingControllerProvider,
     SettingsProvider,
-    ExamScheduleProvider,
-    BusTrackingProvider
+    BusTrackingProvider,
   ]
 })
 export class AppModule { }

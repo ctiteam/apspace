@@ -1,28 +1,41 @@
 <ion-header>
   <ion-navbar color='primary'>
-    <ion-title>Exam-schedule</ion-title>
+    <ion-title>Exam Schedule</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <div *ngIf='profile$ | async'>
-    <ion-card *ngFor='let e of exams'>
-      <ion-item>
-        Subject Code
-        <ion-note item-right>{{e.subjectCode}}</ion-note>
-      </ion-item>
-      <ion-item>
-        Assessment Type
-        <ion-note item-right>{{e.assesmentType}}</ion-note>
-      </ion-item>
-      <ion-item>
-        Exam Date
-        <ion-note item-right>{{e.examDate}}</ion-note>
-      </ion-item>
-      <ion-item>
-        Exam Status
-        <ion-note item-right>{{e.examStatus}}</ion-note>
-      </ion-item>
-    </ion-card>
-  </div>
+  <ion-card *ngFor='let exam of exam$ | async'>
+    <ion-card-header>
+      <b>{{ exam.subjectDescription }}</b>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item no-padding>
+          Module
+          <p item-right>{{ exam.module }}</p>
+        </ion-item>
+        <ion-item no-padding>
+          Venue
+          <p item-right>{{ exam.venue }}</p>
+        </ion-item>
+        <ion-item no-padding>
+          Date Time
+          <p item-right>{{ exam.since | date:'medium' }}</p>
+        </ion-item>
+        <ion-item no-padding>
+          Dockets Due
+          <p item-right>{{ exam.docketsDue | date }}</p>
+        </ion-item>
+        <ion-item *ngIf="exam.appraisalsDue" no-padding>
+          Appraisals Due
+          <p item-right>{{ exam.appraisalsDue | date }}</p>
+        </ion-item>
+        <ion-item *ngIf="exam.resultDate" no-padding>
+          Result Release Date
+          <p item-right>{{ exam.resultDate | date }}</p>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
