@@ -56,8 +56,15 @@ export class MorePage {
   }
 
   ionViewDidLoad() {
-    this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
-    this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
+    const role = this.settings.get('role');
+    if (role === Role.Student) {
+      this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
+      this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
+    }else if(role === Role.Lecturer){
+      this.academicProfile$ = this.ws.get<AcademicProfile[]>('/staff/profile');
+    }else if(role === Role.Admin){
+
+    }
   }
 
   openPage(page) {
@@ -87,8 +94,20 @@ export class MorePage {
   }
 
   swipe(event) {
-    if (event.direction === 4) {
-      this.navCtrl.parent.select(3);
+    const role = this.settings.get('role');
+    if(role === Role.Student){
+      if (event.direction === 4) {
+        this.navCtrl.parent.select(3);
+      }
+    }else if(role === Role.Lecturer){
+      if(event.direction === 4){
+        this.navCtrl.parent.select(1);
+      }
+    }else if(role === Role.Admin){
+      if(event.direction === 4){
+        this.navCtrl.parent.select(1);
+      }
     }
+
   }
 }

@@ -5,8 +5,8 @@ import { IonicPage, NavController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { finalize, map, tap } from 'rxjs/operators';
 
-import { WsApiProvider, LoadingControllerProvider } from '../../providers';
-import { Apcard } from '../../interfaces';
+import { WsApiProvider, LoadingControllerProvider, SettingsProvider } from '../../providers';
+import { Apcard, Role } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -42,6 +42,7 @@ export class ApcardPage {
     private ws: WsApiProvider,
     private navCtrl: NavController,
     private loading: LoadingControllerProvider,
+    private settings: SettingsProvider,
   ) { }
 
   /** Analyze transactions. */
@@ -112,11 +113,21 @@ export class ApcardPage {
   }
 
   swipe(event) {
-    if (event.direction === 2) {
-      this.navCtrl.parent.select(4);
-    }
-    if (event.direction === 4) {
-      this.navCtrl.parent.select(2);
+    const role = this.settings.get('role');
+    if(role === Role.Student){
+      if (event.direction === 2) {
+        this.navCtrl.parent.select(4);
+      }
+      if (event.direction === 4) {
+        this.navCtrl.parent.select(2);
+      }
+    }else if(role === Role.Lecturer || Role.Admin){
+      if (event.direction === 2) {
+        this.navCtrl.parent.select(2);
+      }
+      if (event.direction === 4) {
+        this.navCtrl.parent.select(0);
+      }
     }
   }
 }
