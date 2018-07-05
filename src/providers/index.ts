@@ -8,7 +8,6 @@ export { httpInterceptorProviders } from './http-interceptors';
 /* User providers */
 export { BusTrackingProvider } from './bus-tracking';
 export { CasTicketProvider } from './cas-ticket';
-export { ExamScheduleProvider } from './exam-schedule';
 export { LoadingControllerProvider } from './loading-controller';
 export { NewsProvider } from './news';
 export { NotificationServiceProvider } from './notification-service';

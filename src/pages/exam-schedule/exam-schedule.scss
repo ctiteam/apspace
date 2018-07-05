@@ -1,3 +1,9 @@
 page-exam-schedule {
+  ion-card-header {
+    background-color: color($colors, light-shade);
+  }
 
+  ion-list {
+    margin-top: 1px !important;
+  }
 }

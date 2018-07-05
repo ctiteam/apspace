@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable';
-import { tap, finalize } from 'rxjs/operators';
+import { IonicPage } from 'ionic-angular';
 
-import { ExamScheduleProvider, WsApiProvider, LoadingControllerProvider } from '../../providers';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { finalize, switchMap } from 'rxjs/operators';
+
+import { WsApiProvider, LoadingControllerProvider } from '../../providers';
 import { ExamSchedule, StudentProfile } from '../../interfaces';
 
 @IonicPage()
@@ -13,35 +15,26 @@ import { ExamSchedule, StudentProfile } from '../../interfaces';
 })
 export class ExamSchedulePage {
 
-  examSchedule$: Observable<ExamSchedule[]>;
-  profile$: Observable<StudentProfile[]>;
-
-  exams: any = '';
+  exam$: Observable<ExamSchedule[]>;
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    private exam: ExamScheduleProvider,
     private ws: WsApiProvider,
     private loading: LoadingControllerProvider,
   ) { }
 
   ionViewDidLoad() {
     this.loading.presentLoading();
-    this.profile$ = this.ws.get<StudentProfile[]>('/student/profile').pipe(
-      tap(p => this.getExamSchedule(p[0].STUDENT_NUMBER, p[0].INTAKE_CODE)),
-      tap(_ => this.filterByAssesmentType()),
-      finalize(() => this.loading.dismissLoading())
-    )
-  }
-
-  filterByAssesmentType(){
-    this.examSchedule$.subscribe(e => {
-      this.exams = e.filter(res => res.assesmentType = 'Exam');
-    })
-  }
-
-  getExamSchedule(tpnumber: string, intake: string): Observable<ExamSchedule[]> {
-    return this.examSchedule$ = this.exam.get(tpnumber, intake);
+    this.exam$ = this.ws.get<StudentProfile[]>('/student/profile').pipe(
+      switchMap(p => {
+        if (p.length !== 1) {
+          console.error(p);
+          throw new Error('Invalid profile');
+        };
+        const url = `/examination/${p[0].INTAKE_CODE}`;
+        const options = { url: 'https://api.apiit.edu.my', auth: false };
+        return this.ws.get<ExamSchedule[]>(url, true, options);
+      }),
+      finalize(() => this.loading.dismissLoading()),
+    );
   }
 }
