@@ -20,7 +20,7 @@
 </ion-header>
 
 <ion-content>
-  <div class="main-content" (swipe)='swipe($event)'>
+  <div class="main-content"  (swipe)='swipe($event)'>
       <button no-lines ion-item *ngFor='let p of pages' (click)='openPage(p)'>
         <ion-icon class="ion-icon" item-left [name]='p.icon'></ion-icon>
         {{ p.title }}

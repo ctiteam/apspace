@@ -22,7 +22,7 @@ export class MorePage {
   menuItems = [
     { title: 'Results', component: 'ResultsPage', icon: 'checkbox', role: Role.Student },
     { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people', role: Role.Student },
-    { title: 'Bus Tracking', component: 'BusTrackingPage', icon: 'bus', role: Role.Student | Role.Lecturer | Role.Admin },
+    { title: 'Bus Tracking', component: 'BusTrackingPage', icon: 'bus', role: Role.Student },
     { title: 'Fees', component: 'FeesPage', icon: 'cash', role: Role.Student },
     { title: 'Exam Schedule', component: 'ExamSchedulePage', icon: 'book', role: Role.Student },
     { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles', role: Role.Student },

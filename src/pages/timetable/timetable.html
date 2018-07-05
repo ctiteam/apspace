@@ -15,26 +15,23 @@
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-
-
-  <div class="main-content" (swipe)='swipe($event)'>
+  <div class="main-content" (swipe)='swipe($event)'></div>
   <ion-segment *ngIf="availableDays" [(ngModel)]="selectedDay">
     <!-- Use CSS for dynamically updated segment -->
-    <ion-segment-button *ngFor="let d of wday" [value]="d"
-      [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
+    <ion-segment-button *ngFor="let d of wday" [value]="d" [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
       {{ d }}
     </ion-segment-button>
   </ion-segment>
 
-  <ion-card *ngFor="let t of timetable$ | async | classes:intake | theday:selectedDay"
-    [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
+  <ion-card *ngFor="let t of timetable$ | async | classes:intake | theday:selectedDay" [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
     <ion-card-header>
       {{ t.MODID }}
     </ion-card-header>
     <ion-card-content>
       <ion-label no-margin>
         <ion-icon padding-right name="time"></ion-icon>
-        <b>{{ t.TIME_FROM }}</b> - <b>{{ t.TIME_TO }}</b>
+        <b>{{ t.TIME_FROM }}</b> -
+        <b>{{ t.TIME_TO }}</b>
       </ion-label>
       <ion-label no-margin>
         <ion-icon padding-right name="locate"></ion-icon>
