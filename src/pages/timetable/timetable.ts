@@ -6,6 +6,7 @@ import {
   Content, IonicPage,
   NavController, Platform
 } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
@@ -44,6 +45,7 @@ export class TimetablePage {
     public plt: Platform,
     private tt: TimetableProvider,
     private ws: WsApiProvider,
+    private storage: Storage,
   ) { }
 
   presentActionSheet() {
@@ -55,6 +57,7 @@ export class TimetablePage {
       this.actionSheet.show(options).then((buttonIndex: number) => {
         if (buttonIndex <= 1 + this.intakeLabels.length) {
           this.intake = this.intakeLabels[buttonIndex - 2] || '';
+          this.storage.set('choosenIntake', this.intake);
           this.timetable$.subscribe(tt => this.updateDay(tt));
         }
       });
@@ -62,6 +65,7 @@ export class TimetablePage {
       let intakesButton = this.intakeLabels.map(intake => <ActionSheetButton>{
         text: intake,
         handler: () => {
+          this.storage.set('choosenIntake', intake);
           this.intake = intake;
           this.timetable$.subscribe(tt => this.updateDay(tt));
         }
@@ -145,17 +149,23 @@ export class TimetablePage {
   ionViewDidLoad() {
     // select current day by default
     this.selectedDay = this.wday[new Date().getDay()];
-
-    this.ws.get<StudentProfile[]>('/student/profile')
-      .subscribe(p => this.intake = p[0].INTAKE_CODE || '');
-    this.doRefresh();
+    this.storage.get('choosenIntake').then(intake => {
+      if (intake) {
+        this.intake = intake;
+      } else {
+        this.ws.get<StudentProfile[]>('/student/profile')
+          .subscribe(p => this.intake = p[0].INTAKE_CODE || '');
+      }
+      this.doRefresh();
+      this.timetable$.subscribe(tt => this.updateDay(tt))
+    })
   }
 
   swipe(event) {
-    if(event.direction === 2) {
+    if (event.direction === 2) {
       this.navCtrl.parent.select(2);
     }
-    if(event.direction === 4) {
+    if (event.direction === 4) {
       this.navCtrl.parent.select(0);
     }
   }

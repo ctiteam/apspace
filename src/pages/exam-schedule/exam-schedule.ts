@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
 import { finalize, switchMap } from 'rxjs/operators';
 
 import { WsApiProvider, LoadingControllerProvider } from '../../providers';
