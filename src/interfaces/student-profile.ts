@@ -11,4 +11,6 @@ export interface StudentProfile {
   PL_NAME: string;
   MENTOR_NAME: string;
   PROVIDER_CODE: string;
+  BLOCK: boolean;
+  MESSAGE: string;
 };

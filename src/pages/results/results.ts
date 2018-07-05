@@ -13,6 +13,7 @@ import {
   MPULegend,
   DeterminationLegend,
   ClassificationLegend,
+  StudentProfile,
 } from "../../interfaces";
 
 @IonicPage()
@@ -29,6 +30,7 @@ export class ResultsPage {
   mpuLegend$: Observable<MPULegend[]>;
   determinationLegend$: Observable<DeterminationLegend[]>;
   classificationLegend$: Observable<ClassificationLegend[]>;
+  profile$: Observable<StudentProfile[]>;
 
   type = "bar";
   data: any;
@@ -41,6 +43,7 @@ export class ResultsPage {
   semester2: any;
   semester3: any;
   intakeLabels: any;
+  block: boolean = false;
 
   options = {
     legend: {
@@ -84,13 +87,21 @@ export class ResultsPage {
   }
 
   ionViewDidLoad() {
-    this.intakes$ = this.ws.get<Course[]>("/student/courses").pipe(
-      tap(i => (this.selectedIntake = i[0].INTAKE_CODE)),
-      tap(i => (this.studentId = i[0].STUDENT_NUMBER)),
-      tap(_ => this.getLegend(this.selectedIntake)),
-      tap(_ => this.getResults(this.selectedIntake)),
-      tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE))))
-    );
+    this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
+    this.profile$.subscribe(p => {
+      if (p[0].BLOCK == true) {
+        this.block = false;
+        this.intakes$ = this.ws.get<Course[]>("/student/courses").pipe(
+          tap(i => (this.selectedIntake = i[0].INTAKE_CODE)),
+          tap(i => (this.studentId = i[0].STUDENT_NUMBER)),
+          tap(_ => this.getLegend(this.selectedIntake)),
+          tap(_ => this.getResults(this.selectedIntake)),
+          tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE))))
+        );
+      }else{
+        this.block = true;
+      }
+    })
   }
 
   doRefresh(refresher?) {

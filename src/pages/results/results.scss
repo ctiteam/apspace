@@ -70,4 +70,19 @@ page-results {
   .notes{
     color: color($colors, dark);
   }
+
+  .block-note{
+    color: color($colors, light);
+  }
+
+  .content-message{
+    text-align: justify;
+  }
+
+  .warning-logo {
+    display: block;
+    font-size: 5em;
+    text-align: center;
+    color: white;
+  }
 }

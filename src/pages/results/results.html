@@ -3,7 +3,7 @@
     <ion-title *ngIf="intakes$ | async">
       {{this.selectedIntake || 'Results'}}
     </ion-title>
-    <ion-buttons end>
+    <ion-buttons *ngIf="this.block == false" end>
       <button color="light" ion-button outline small (click)="showActionSheet()">
         Intakes
       </button>
@@ -12,7 +12,19 @@
 </ion-header>
 
 <ion-content>
-  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+  <ng-template [ngIf]="this.block == true">
+    <ion-card style="background: #f04141">
+      <ion-card-header>
+        <ion-icon class="warning-logo" name="alert"></ion-icon>
+      </ion-card-header>
+      <ion-card-content class="content-message">
+        <ion-note class="block-note">
+          {{ (profile$ | async)[0].MESSAGE }}
+        </ion-note>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+  <ion-refresher *ngIf="intake$ | async" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
@@ -107,48 +119,50 @@
       </ion-list>
     </ion-card>
   </div>
-  <ion-card>
-    <ion-card-header>
-      <b>Marks And Grade Points</b>
-    </ion-card-header>
-    <ion-grid>
-      <ion-row *ngFor="let interim of interimLegend$ | async">
-        <ion-col col-3>
-          <div *ngIf="interim.MARK_FROM">
-            <ion-note class="notes">{{ (interim.MARK_FROM + '-' + interim.MARK_TO) || '' }}</ion-note>
-          </div>
-        </ion-col>
-        <ion-col col-2>
-          <ion-note class="notes">{{ interim.GRADE || '' }}</ion-note>
-        </ion-col>
-        <ion-col col-3>
-          <ion-note class="notes">{{ interim.GRADING_POINT || '' }}</ion-note>
-        </ion-col>
-        <ion-col col-4>
-          <ion-note class="notes">{{ interim.GRADE_DESCRIPTION || '' }}</ion-note>
-        </ion-col>
-      </ion-row>
-      <ion-note>R = Awarding of module credit by passing module referral assessments.</ion-note>
-      <ion-note margin-top>C = Awarding of module credit through compensation at the discretion of the Examination Board, based on the student's
-        overall academic performance. No referral assessment is requried for module.</ion-note>
-      <ion-note *ngIf="mpuLegend$ | async as mpu" margin-top>{{mpu[0].MPU || ''}}</ion-note>
-    </ion-grid>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
-      <b>Degree Classification</b>
-    </ion-card-header>
-    <ion-grid>
-      <ion-row *ngFor="let classification of classificationLegend$ | async">
-        <ion-col col-7>
-          <ion-note class="notes">{{ classification.GRADE || '' }}</ion-note>
-        </ion-col>
-        <ion-col col-5>
-          <ion-note class="notes">{{ classification.CLASSIFICATION || '' }}</ion-note>
-        </ion-col>
-      </ion-row>
-      <ion-note *ngIf="determinationLegend$ | async as determination" margin-top>
-        {{determination[0].DETERMINATION || ''}}</ion-note>
-    </ion-grid>
-  </ion-card>
+  <ng-template [ngIf]="this.block === false">
+    <ion-card>
+      <ion-card-header>
+        <b>Marks And Grade Points</b>
+      </ion-card-header>
+      <ion-grid>
+        <ion-row *ngFor="let interim of interimLegend$ | async">
+          <ion-col col-3>
+            <div *ngIf="interim.MARK_FROM">
+              <ion-note class="notes">{{ (interim.MARK_FROM + '-' + interim.MARK_TO) || '' }}</ion-note>
+            </div>
+          </ion-col>
+          <ion-col col-2>
+            <ion-note class="notes">{{ interim.GRADE || '' }}</ion-note>
+          </ion-col>
+          <ion-col col-3>
+            <ion-note class="notes">{{ interim.GRADING_POINT || '' }}</ion-note>
+          </ion-col>
+          <ion-col col-4>
+            <ion-note class="notes">{{ interim.GRADE_DESCRIPTION || '' }}</ion-note>
+          </ion-col>
+        </ion-row>
+        <ion-note>R = Awarding of module credit by passing module referral assessments.</ion-note>
+        <ion-note margin-top>C = Awarding of module credit through compensation at the discretion of the Examination Board, based on the student's
+          overall academic performance. No referral assessment is requried for module.</ion-note>
+        <ion-note *ngIf="mpuLegend$ | async as mpu" margin-top>{{mpu[0].MPU || ''}}</ion-note>
+      </ion-grid>
+    </ion-card>
+    <ion-card>
+      <ion-card-header>
+        <b>Degree Classification</b>
+      </ion-card-header>
+      <ion-grid>
+        <ion-row *ngFor="let classification of classificationLegend$ | async">
+          <ion-col col-7>
+            <ion-note class="notes">{{ classification.GRADE || '' }}</ion-note>
+          </ion-col>
+          <ion-col col-5>
+            <ion-note class="notes">{{ classification.CLASSIFICATION || '' }}</ion-note>
+          </ion-col>
+        </ion-row>
+        <ion-note *ngIf="determinationLegend$ | async as determination" margin-top>
+          {{determination[0].DETERMINATION || ''}}</ion-note>
+      </ion-grid>
+    </ion-card>
+  </ng-template>
 </ion-content>
