@@ -16,7 +16,7 @@
       </ion-searchbar>
     </ion-item>
     <ion-item *ngIf="staffType$ | async as staffTypes">
-      <ion-label floating>Department</ion-label>
+      <ion-label floating>Functional Area</ion-label>
       <ion-select [(ngModel)]="dept" interface="popover">
         <ion-option selected></ion-option>
         <ion-option *ngFor="let type of staffTypes"
