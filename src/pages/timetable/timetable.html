@@ -15,7 +15,7 @@
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="main-content" (swipe)='swipe($event)'></div>
+  <div class="main-content" (swipe)='swipe($event)'>
   <ion-segment *ngIf="availableDays" [(ngModel)]="selectedDay">
     <!-- Use CSS for dynamically updated segment -->
     <ion-segment-button *ngFor="let d of wday" [value]="d" [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">

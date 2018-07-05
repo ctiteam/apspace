@@ -20,9 +20,15 @@ import {
   CasTicketProvider,
   WsApiProvider,
   NotificationServiceProvider,
-  LoadingControllerProvider
+  LoadingControllerProvider,
+  SettingsProvider
 } from "../providers";
-import { StudentPhoto, StudentProfile } from "../interfaces";
+import {
+  StudentPhoto,
+  StudentProfile,
+  Role,
+  StaffProfile
+} from "../interfaces";
 
 @Component({
   templateUrl: "app.html"
@@ -34,6 +40,7 @@ export class MyApp {
 
   photo$: Observable<StudentPhoto[]>;
   profile$: Observable<StudentProfile[]>;
+  staffProfile$: Observable<StaffProfile[]>;
 
   constructor(
     public alertCtrl: AlertController,
@@ -49,12 +56,18 @@ export class MyApp {
     private loading: LoadingControllerProvider,
     public statusBar: StatusBar,
     public fcm: FCM,
+    private settings: SettingsProvider,
   ) {
     this.storage.get("tgt").then(tgt => {
       if (tgt) {
         this.events.subscribe("user:logout", () => this.onLogout());
-        this.photo$ = this.ws.get<StudentPhoto[]>("/student/photo");
-        this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
+        const role = this.settings.get('role');
+        if (role === Role.Student) {
+          this.photo$ = this.ws.get<StudentPhoto[]>("/student/photo");
+          this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
+        } else if (role === Role.Lecturer || Role.Admin) {
+          this.staffProfile$ = this.ws.get<StaffProfile[]>("/staff/profile");
+        }
         this.navCtrl.setRoot("TabsPage");
       } else {
         this.events.subscribe("user:login", () => this.onLogin());
@@ -87,10 +100,18 @@ export class MyApp {
   onLogin() {
     this.loading.presentLoading();
     if (this.platform.is("cordova")) {
-      this.subscribe();
+      const role = this.settings.get('role');
+      if (role === Role.Student) {
+        this.subscribe();
+      }
     }
-    this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
-    this.photo$ = this.ws.get<StudentPhoto[]>("/student/photo");
+    const role = this.settings.get('role');
+    if (role === Role.Student) {
+      this.photo$ = this.ws.get<StudentPhoto[]>("/student/photo");
+      this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
+    } else if (role === Role.Lecturer || Role.Admin) {
+      this.staffProfile$ = this.ws.get<StaffProfile[]>("/staff/profile");
+    }
     forkJoin([this.profile$, this.photo$])
       .pipe(finalize(() => this.loading.dismissLoading()))
       .subscribe();
@@ -100,7 +121,10 @@ export class MyApp {
 
   onLogout() {
     if (this.platform.is("cordova")) {
-      this.unsubscribe();
+      const role = this.settings.get('role');
+      if (role === Role.Student) {
+        this.unsubscribe();
+      }
       forkJoin([
         this.cas.getTGT(),
         this.ws.get("/student/profile"),
