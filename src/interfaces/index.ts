@@ -16,3 +16,7 @@ export { StudentProfile } from './student-profile';
 export { Subcourse } from './subcourses';
 export { Timetable } from './timetable';
 export { AttendanceLegend } from './attendance-legend';
+export { InterimLegend } from './interim-legend';
+export { MPULegend } from './mpu-legend';
+export { DeterminationLegend } from './determination-legend';
+export { ClassificationLegend } from './classfication-legend';

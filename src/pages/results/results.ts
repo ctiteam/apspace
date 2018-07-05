@@ -5,7 +5,15 @@ import { tap, finalize } from "rxjs/operators";
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 
 import { WsApiProvider, LoadingControllerProvider } from "../../providers";
-import { Course, Subcourse, CourseDetails } from "../../interfaces";
+import {
+  Course,
+  Subcourse,
+  CourseDetails,
+  InterimLegend,
+  MPULegend,
+  DeterminationLegend,
+  ClassificationLegend,
+} from "../../interfaces";
 
 @IonicPage()
 @Component({
@@ -17,6 +25,10 @@ export class ResultsPage {
   intakes$: Observable<Course[]>;
   results$: Observable<Subcourse>;
   courseDetails$: Observable<CourseDetails>;
+  interimLegend$: Observable<InterimLegend[]>;
+  mpuLegend$: Observable<MPULegend[]>;
+  determinationLegend$: Observable<DeterminationLegend[]>;
+  classificationLegend$: Observable<ClassificationLegend[]>;
 
   type = "bar";
   data: any;
@@ -75,6 +87,7 @@ export class ResultsPage {
     this.intakes$ = this.ws.get<Course[]>("/student/courses").pipe(
       tap(i => (this.selectedIntake = i[0].INTAKE_CODE)),
       tap(i => (this.studentId = i[0].STUDENT_NUMBER)),
+      tap(_ => this.getLegend(this.selectedIntake)),
       tap(_ => this.getResults(this.selectedIntake)),
       tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE))))
     );
@@ -93,6 +106,16 @@ export class ResultsPage {
       refresh,
       opt
     ));
+  }
+
+  getLegend(intake: string) {
+    this.interimLegend$ = this.ws.get<InterimLegend[]>(`/student/interim_legend?id=${this.studentId}&intake=${intake}`);
+    this.mpuLegend$ = this.ws.get<MPULegend[]>(`/student/mpu_legend?id=${this.studentId}&intake=${intake}`);
+    this.determinationLegend$ = this.ws.get<DeterminationLegend[]>(`/student/determination_legend?id=${this.studentId}&intake=${intake}`);
+    this.classificationLegend$ = this.ws.get<ClassificationLegend[]>(`/student/classification_legend?id=${this.studentId}&intake=${intake}`);
+    this.determinationLegend$.subscribe(s=> console.log(s))
+    this.classificationLegend$.subscribe(s=> console.log(s))
+
   }
 
   sortArray(r) {
@@ -168,6 +191,7 @@ export class ResultsPage {
         if (buttonIndex <= 1 + this.intakeLabels.length) {
           this.selectedIntake = this.intakeLabels[buttonIndex - 2] || '';
           this.getResults(this.selectedIntake);
+          this.getLegend(this.selectedIntake);
         }
       });
     } else {
@@ -176,6 +200,7 @@ export class ResultsPage {
         handler: () => {
           this.selectedIntake = intake;
           this.getResults(this.selectedIntake);
+          this.getLegend(this.selectedIntake);
         }
       });
       let actionSheet = this.actionSheetCtrl.create({
