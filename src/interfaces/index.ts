@@ -1,4 +1,4 @@
-export { AcademicProfile } from './academic-profile';
+export { StaffProfile } from './staff-profile';
 export { Apcard } from './apcard';
 export { Attendance } from './attendance';
 export { BusTrips, Trips } from './bus-trips';

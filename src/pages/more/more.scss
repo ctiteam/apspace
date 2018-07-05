@@ -1,25 +1,34 @@
 page-more {
-   
     img {
-        border-radius: 50%;
-        border: 1px solid map-get($colors, light);
-        width: 50px;
-        height: 60px;
+      border-radius: 50%;
+      border: 1px solid map-get($colors, light);
+      width: 50px;
+      height: 60px;
     }
 
     .name{
-        color: map-get($colors, light);
-        letter-spacing: 0.1px;
-        font-size: 0.9em;
+      color: map-get($colors, light);
+      letter-spacing: 0.1px;
+      font-size: 0.9em;
     }
 
-    .tpnumber {
-        color: map-get($colors, light);
-        letter-spacing: 0.1px;
-        font-size: 0.9em;
+    .staffName{
+      color: map-get($colors, light);
+      letter-spacing: 0.1px;
+      font-size: 0.9em;
+      padding-top: 15px;
     }
 
-    [col-9]{
-        padding: 0px;
+    .cover{
+      background-color: color($colors, primary);
+      height: 100px;
+    }
+
+    [col-3]{
+      padding-top: 15px;
+    }
+
+    .more-content{
+      height: 80%;
     }
 }

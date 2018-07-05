@@ -10,7 +10,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 
 import { WsApiProvider, SettingsProvider } from '../../providers';
-import { StudentPhoto, StudentProfile, AcademicProfile, Role } from '../../interfaces';
+import { StudentPhoto, StudentProfile, StaffProfile, Role } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -40,7 +40,7 @@ export class MorePage {
 
   photo$: Observable<StudentPhoto[]>;
   profile$: Observable<StudentProfile[]>;
-  academicProfile$: Observable<AcademicProfile[]>;
+  staffProfile$: Observable<StaffProfile[]>;
 
   constructor(
     public navCtrl: NavController,
@@ -60,10 +60,8 @@ export class MorePage {
     if (role === Role.Student) {
       this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
-    }else if(role === Role.Lecturer){
-      this.academicProfile$ = this.ws.get<AcademicProfile[]>('/staff/profile');
-    }else if(role === Role.Admin){
-
+    }else if(role === Role.Lecturer || Role.Admin){
+      this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
     }
   }
 

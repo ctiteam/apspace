@@ -24,7 +24,6 @@ export class NotificationPage {
   ionViewDidLoad() {
     this.storage.get('items').then(res => {
       if (!res) {
-        alert('empty')
       } else {
         this.items.push(res);
         console.log(this.items);

@@ -1,30 +1,34 @@
-<ion-header>
-  <ion-navbar color="primary">
+<ion-content>
+  <div class="cover">
     <ion-grid>
       <ion-row tappable (click)="openProfile()">
         <ion-col col-3>
           <ng-template [ngIf]="photo$ | async">
-            <img [src]="'data:image/jpg;base64,' + (photo$ | async)?.base64_photo" onerror="this.src='assets/img/profile.svg'"
-              alt="Avatar">
+            <img [src]="'data:image/jpg;base64,' + (photo$ | async)?.base64_photo" onerror="this.src='assets/img/profile.svg'" alt="Avatar">
+          </ng-template>
+          <ng-template [ngIf]="staffProfile$ | async">
+            <img [src]="(staffProfile$ | async)[0]?.PHOTO" onerror="this.src='assets/img/profile.svg'">
           </ng-template>
         </ion-col>
         <ion-col col-9>
           <ng-template [ngIf]="profile$ | async">
-            <p class="name">{{ ((profile$ | async) || [{}])[0]?.NAME }}</p>
-            <p class="tpnumber">{{ ((profile$ | async) || [{}])[0]?.STUDENT_NUMBER }}</p>
+            <p class="name">{{ ((profile$ | async) || [{}])[0]?.NAME }}
+              <br>
+              <br> {{ ((profile$ | async) || [{}])[0]?.STUDENT_NUMBER }}
+            </p>
+          </ng-template>
+          <ng-template [ngIf]="staffProfile$ | async">
+            <p class="staffName">{{ ((staffProfile$ | async) || [{}])[0]?.FULLNAME }}</p>
           </ng-template>
         </ion-col>
       </ion-row>
     </ion-grid>
-  </ion-navbar>
-</ion-header>
-
-<ion-content>
-  <div class="main-content"  (swipe)='swipe($event)'>
-      <button no-lines ion-item *ngFor='let p of pages' (click)='openPage(p)'>
-        <ion-icon class="ion-icon" item-left [name]='p.icon'></ion-icon>
-        {{ p.title }}
-      </button>
+  </div>
+  <div class="more-content" (swipe)='swipe($event)'>
+    <button no-lines ion-item *ngFor='let p of pages' (click)='openPage(p)'>
+      <ion-icon class="ion-icon" item-left [name]='p.icon'></ion-icon>
+      {{ p.title }}
+    </button>
     <button no-lines ion-item (click)='logout()'>
       <ion-icon class="ion-icon" item-left name='md-log-out'></ion-icon>
       Log out
