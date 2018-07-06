@@ -62,10 +62,10 @@ export class MyApp {
       if (tgt) {
         this.events.subscribe("user:logout", () => this.onLogout());
         const role = this.settings.get('role');
-        if (role === Role.Student) {
+        if (role & Role.Student) {
           this.photo$ = this.ws.get<StudentPhoto[]>("/student/photo");
           this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
-        } else if (role === Role.Lecturer || Role.Admin) {
+        } else if (role & (Role.Lecturer | Role.Admin)) {
           this.staffProfile$ = this.ws.get<StaffProfile[]>("/staff/profile");
         }
         this.navCtrl.setRoot("TabsPage");
