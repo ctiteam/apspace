@@ -9,18 +9,18 @@ import { Timetable } from '../interfaces';
 @Injectable()
 export class TimetableProvider {
 
-  newsUrl = 'https://s3-ap-southeast-1.amazonaws.com/open-ws/weektimetable';
+  timetableUrl = 'https://s3-ap-southeast-1.amazonaws.com/open-ws/weektimetable';
 
   constructor(public http: HttpClient) { }
 
   /**
-   * GET: Request news feed
+   * GET: Request timetable
    *
    * @param refresh - force refresh (default: false)
    */
   get(refresh?: boolean): Observable<Timetable[]> {
     const options = refresh ? { headers: { 'x-refresh': '' } } : {};
-    return this.http.get<Timetable[]>(this.newsUrl, options).pipe(publishLast(), refCount());
+    return this.http.get<Timetable[]>(this.timetableUrl, options).pipe(publishLast(), refCount());
   }
 
 }

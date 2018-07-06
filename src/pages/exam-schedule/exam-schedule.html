@@ -1,10 +1,18 @@
 <ion-header>
   <ion-navbar color='primary'>
-    <ion-title>Exam Schedule</ion-title>
+    <ion-title>{{ intake || 'Exam Schedule' }}</ion-title>
+    <ion-buttons end>
+      <button color="light" ion-button outline small (click)="presentActionSheet()">
+        Intakes
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
+  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-card *ngFor='let exam of exam$ | async'>
     <ion-card-header>
       <b>{{ exam.subjectDescription }}</b>

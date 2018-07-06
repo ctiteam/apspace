@@ -11,8 +11,7 @@ import { of } from 'rxjs/observable/of';
 import { distinctUntilChanged, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { StaffDirectory, StudentProfile, Timetable } from '../../interfaces';
-import { SettingsProvider, TimetableProvider } from '../../providers';
-import { WsApiProvider } from '../../providers';
+import { SettingsProvider, TimetableProvider, WsApiProvider } from '../../providers';
 import { ClassesPipe } from './classes.pipe';
 
 @IonicPage()
