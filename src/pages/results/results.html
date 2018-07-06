@@ -3,7 +3,7 @@
     <ion-title *ngIf="intakes$ | async">
       {{this.selectedIntake || 'Results'}}
     </ion-title>
-    <ion-buttons *ngIf="this.block == false" end>
+    <ion-buttons *ngIf="!this.block" end>
       <button color="light" ion-button outline small (click)="showActionSheet()">
         Intakes
       </button>
@@ -12,7 +12,7 @@
 </ion-header>
 
 <ion-content>
-  <ng-template [ngIf]="this.block == true">
+  <ng-template [ngIf]="this.block">
     <ion-card style="background: #f04141">
       <ion-card-header>
         <ion-icon class="warning-logo" name="alert"></ion-icon>
