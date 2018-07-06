@@ -4,7 +4,6 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content overflow-scroll='true'> <!-- staff is not [] -->
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
@@ -20,7 +19,7 @@
       <ion-select [(ngModel)]="dept" interface="popover">
         <ion-option selected></ion-option>
         <ion-option *ngFor="let type of staffTypes"
-          [innerHTML]="type" [value]="type"></ion-option>
+          [innerHTML]="type.toUpperCase()" [value]="type"></ion-option>
       </ion-select>
     </ion-item>
   </ion-list>
