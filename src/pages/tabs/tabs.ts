@@ -15,6 +15,7 @@ export class TabsPage {
   pages = [
     { title: 'News', icon: 'home', root: 'HomePage', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Timetable', icon: 'calendar', root: 'TimetablePage', role: Role.Student },
+    { title: 'Timetable', icon: 'calendar', root: 'LecturerTimetablePage', role: Role.Lecturer },
     { title: 'Attendance', icon: 'alarm', root: 'AttendancePage', role: Role.Student },
     { title: 'APCard', icon: 'card', root: 'ApcardPage', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Bus Tracking', icon: 'bus', root: 'BusTrackingPage', role: Role.Lecturer | Role.Admin },

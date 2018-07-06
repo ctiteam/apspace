@@ -34,5 +34,6 @@
       <ion-item *ngIf="staff.DEPARTMENT2.trim()" [innerHTML]="staff.DEPARTMENT2"></ion-item>
       <ion-item *ngIf="staff.DEPARTMENT3.trim()" [innerHTML]="staff.DEPARTMENT3"></ion-item>
     </ion-list>
+    <lecturer-timetable *ngIf="staff.TITLE === 'Lecturer'" [id]="staff.CODE"></lecturer-timetable>
   </ng-template>
 </ion-content>

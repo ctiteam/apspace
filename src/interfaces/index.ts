@@ -6,6 +6,7 @@ export { Course } from './courses';
 export { CourseDetails } from './course-details';
 export { ExamSchedule } from './exam-schedule';
 export { FeesBankDraft, FeesDetails, FeesSummary, FeesTotalSummary } from './fees';
+export { LecturerTimetable } from './lecturer-timetable';
 export { News } from './news';
 export { OperationHours } from './operation-hours';
 export { Role, Settings } from './settings';

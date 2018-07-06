@@ -1,0 +1,24 @@
+<div *ngIf="calendar$ | async as calendar">
+  <div *ngFor="let week of calendar" class="schedule-week">
+    <div class="schedule-week-head" (click)='show(week)'>
+      {{ week.week | date }}
+      <span class="right">{{ selectedWeeks.indexOf(week) !== -1 ? '_«' : '»' }}</span>
+    </div>
+    <div *ngIf="selectedWeeks.indexOf(week) !== -1" [@easeInOut]>
+      <div *ngFor="let day of week.days" class="schedule-day">
+        <div class="schedule-day-head center">
+          <span>{{ day.day | date:'d' }}</span>
+          <span>{{ day.day | date:'E' }}</span>
+        </div>
+        <div class="schedule-day-body">
+          <div *ngFor="let event of day.events" class="event">
+            <span class="name">{{ event.name }}</span>
+            <br>
+            <span class="small">{{ event.loc }}</span>
+            <span class="small right">{{ event.start | date:'shortTime' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
