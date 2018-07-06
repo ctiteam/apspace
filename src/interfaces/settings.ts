@@ -6,4 +6,5 @@ export enum Role {
 
 export interface Settings {
   role: Role;
+  intake: string;
 }

@@ -19,12 +19,12 @@ export class SettingsProvider {
    * @param key
    * @param value
    */
-  set(key: keyof Settings, value: any) {
+  set(key: keyof Settings, value: any): void {
     this.data[key] = value;
     this.storage.set('settings', this.data);
   }
 
-  get(key: keyof Settings) {
+  get<K extends keyof Settings>(key: K): Settings[K] {
     return this.data[key];
   }
 }

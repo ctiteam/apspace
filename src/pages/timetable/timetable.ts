@@ -1,12 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import {
-  ActionSheetController,
-  ActionSheetButton,
-  Content, IonicPage,
-  NavController, Platform
+  ActionSheetController, ActionSheetButton, Content, IonicPage, NavController,
+  Platform
 } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
 
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
@@ -14,7 +11,7 @@ import { of } from 'rxjs/observable/of';
 import { distinctUntilChanged, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { StaffDirectory, StudentProfile, Timetable } from '../../interfaces';
-import { TimetableProvider } from '../../providers';
+import { SettingsProvider, TimetableProvider } from '../../providers';
 import { WsApiProvider } from '../../providers';
 import { ClassesPipe } from './classes.pipe';
 
@@ -45,7 +42,7 @@ export class TimetablePage {
     public plt: Platform,
     private tt: TimetableProvider,
     private ws: WsApiProvider,
-    private storage: Storage,
+    private settings: SettingsProvider,
   ) { }
 
   presentActionSheet() {
@@ -56,32 +53,29 @@ export class TimetablePage {
       };
       this.actionSheet.show(options).then((buttonIndex: number) => {
         if (buttonIndex <= 1 + this.intakeLabels.length) {
-          this.intake = this.intakeLabels[buttonIndex - 2] || '';
-          this.storage.set('choosenIntake', this.intake);
-          this.timetable$.subscribe(tt => this.updateDay(tt));
+          this.changeIntake(this.intakeLabels[buttonIndex - 2] || '');
         }
       });
     } else {
       let intakesButton = this.intakeLabels.map(intake => <ActionSheetButton>{
         text: intake,
-        handler: () => {
-          this.storage.set('choosenIntake', intake);
-          this.intake = intake;
-          this.timetable$.subscribe(tt => this.updateDay(tt));
-        }
+        handler: () => this.changeIntake(intake)
       });
       let actionSheet = this.actionSheetCtrl.create({
         buttons: [
-          {
-            text: 'My Classes', handler: () => {
-              this.intake = '';
-              this.timetable$.subscribe(tt => this.updateDay(tt));
-            }
-          },
+          { text: 'My Classes', handler: () => this.changeIntake('') },
           ...intakesButton, { text: 'Cancel', role: 'cancel' }
         ]
       });
       actionSheet.present();
+    }
+  }
+
+  /** Check and update intake on change. */
+  changeIntake(intake: string) {
+    if (intake !== this.intake) {
+      this.settings.set('intake', this.intake = intake);
+      this.timetable$.subscribe(tt => this.updateDay(tt));
     }
   }
 
@@ -149,16 +143,15 @@ export class TimetablePage {
   ionViewDidLoad() {
     // select current day by default
     this.selectedDay = this.wday[new Date().getDay()];
-    this.storage.get('choosenIntake').then(intake => {
-      if (intake) {
-        this.intake = intake;
-      } else {
-        this.ws.get<StudentProfile[]>('/student/profile')
-          .subscribe(p => this.intake = p[0].INTAKE_CODE || '');
-      }
-      this.doRefresh();
-      this.timetable$.subscribe(tt => this.updateDay(tt))
-    })
+
+    const intake = this.settings.get('intake');
+    if (intake !== undefined) { // intake might be ''
+      this.intake = intake;
+    } else {
+      this.ws.get<StudentProfile[]>('/student/profile')
+        .subscribe(p => this.intake = p[0].INTAKE_CODE || '');
+    }
+    this.doRefresh();
   }
 
   swipe(event) {
@@ -169,4 +162,5 @@ export class TimetablePage {
       this.navCtrl.parent.select(0);
     }
   }
+
 }
