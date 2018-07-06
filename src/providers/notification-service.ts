@@ -12,7 +12,7 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class NotificationServiceProvider {
 
-  serviceUrl = "http://sns-admin.s3-website-ap-southeast-1.amazonaws.com";
+  serviceUrl = "http://sns-admin.s3-website-ap-southeast-1.amazonaws.com/";
   APIUrl = "https://15frgbdxil.execute-api.ap-southeast-1.amazonaws.com/dev";
 
   constructor(
@@ -49,7 +49,7 @@ export class NotificationServiceProvider {
     let token = '';
     this.fcm.getToken().then(t => token = t);
     let body = {
-      "studentId": studentId,
+      "student_id": studentId,
       "device_token": token
     }
     let url = this.APIUrl + '/student/logout'
@@ -57,4 +57,20 @@ export class NotificationServiceProvider {
       alert(res);
     })
   }
+
+  /**
+* GET: Request for notification messages
+*
+*/
+  getNotificationMessages(){
+    this.cas.getST(this.serviceUrl).subscribe(st => {
+      let url = this.APIUrl + '/student/messages?service_ticket=' + st;
+      this.http.get(url).subscribe(res => {
+        this.storage.set('messages', res);
+      })
+    })
+  }
+
+
+
 }
