@@ -9,7 +9,6 @@ import {
   Nav
 } from "ionic-angular";
 import { forkJoin } from "rxjs/observable/forkJoin";
-import { fromPromise } from "rxjs/observable/fromPromise";
 import { finalize } from "rxjs/operators";
 import { Storage } from "@ionic/storage";
 import { Network } from "@ionic-native/network";

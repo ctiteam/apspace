@@ -4,10 +4,6 @@ import { FCM } from '@ionic-native/fcm';
 import { Storage } from '@ionic/storage';
 
 import { CasTicketProvider } from '../providers';
-import { StudentProfile } from '../interfaces';
-import { Observable } from 'rxjs/Observable';
-
-
 
 @Injectable()
 export class NotificationServiceProvider {
@@ -36,7 +32,7 @@ export class NotificationServiceProvider {
       }
       let url = this.APIUrl + '/student/login'
       this.http.post(url, body).subscribe(res => {
-        alert(res);
+        console.log('success');
       })
     })
   }
@@ -54,7 +50,7 @@ export class NotificationServiceProvider {
     }
     let url = this.APIUrl + '/student/logout'
     this.http.post(url, body).subscribe(res => {
-      alert(res);
+      console.log('success');
     })
   }
 
@@ -70,7 +66,4 @@ export class NotificationServiceProvider {
       })
     })
   }
-
-
-
 }

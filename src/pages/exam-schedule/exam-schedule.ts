@@ -3,7 +3,7 @@ import { IonicPage, Platform, ActionSheetController, ActionSheetButton } from 'i
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 
 import { Observable } from 'rxjs/Observable';
-import { finalize, tap } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import { WsApiProvider, LoadingControllerProvider, SettingsProvider, TimetableProvider } from '../../providers';
 import { ExamSchedule, StudentProfile, Timetable } from '../../interfaces';

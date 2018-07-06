@@ -3,7 +3,7 @@ import { IonicPage, Platform } from 'ionic-angular';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { Device } from '@ionic-native/device';
 
-import { StudentProfile, StaffDirectory, Role, StaffProfile } from '../../interfaces';
+import { StudentProfile, Role, StaffProfile } from '../../interfaces';
 import { WsApiProvider, SettingsProvider } from '../../providers';
 
 @IonicPage()
