@@ -41,7 +41,7 @@ export class FeedbackPage {
       if (this.role === Role.Student) {
         let email = {
           to: 'cti@apiit.edu.my',
-          subject: "iWebspace Feedback",
+          subject: "APSpace Feedback",
           body: this.feedbackData.message + "<br><br>"
             + this.feedbackData.name + '<br>'
             + this.feedbackData.studentNumber + '<br>'
@@ -60,7 +60,7 @@ export class FeedbackPage {
       if (this.role === Role.Lecturer || Role.Admin) {
         let email = {
           to: 'cti@apiit.edu.my',
-          subject: "iWebspace Feedback",
+          subject: "APSpace Feedback",
           body: this.feedbackData.message + "<br><br>"
             + this.feedbackData.name + '<br>'
             + this.feedbackData.contactNumber + '<br><br>'

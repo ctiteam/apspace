@@ -79,7 +79,7 @@ export class LoginPage {
       catchError(_ => this.toast('Fail to get service ticket.') || empty()),
       switchMap(st => this.casTicket.validate(st)),
       catchError(_ => {
-        this.toast('You are not authorized to use iWebspace');
+        this.toast('You are not authorized to use APSpace');
         this.storage.clear();
         return empty();
       }),
