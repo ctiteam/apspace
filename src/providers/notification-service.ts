@@ -1,26 +1,60 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { FCM } from '@ionic-native/fcm';
+import { Storage } from '@ionic/storage';
+
+import { CasTicketProvider } from '../providers';
+import { StudentProfile } from '../interfaces';
+import { Observable } from 'rxjs/Observable';
 
 
-const NOTIFICATION_URL = "https://zdbuv8iicb.execute-api.ap-southeast-1.amazonaws.com/production/sns_lambda";
 
 @Injectable()
 export class NotificationServiceProvider {
 
-  constructor(
-    public http: HttpClient) {}
+  serviceUrl = "http://sns-admin.s3-website-ap-southeast-1.amazonaws.com";
+  APIUrl = "https://15frgbdxil.execute-api.ap-southeast-1.amazonaws.com/dev";
 
-  Subscribe(username, token, tgt){
-    let body = 'action=sub&device_token=' + token
-    + '&student_id=' + username + '&tgt=' + tgt;
-    this.http.post(NOTIFICATION_URL, body)
-    .subscribe(res =>{}), err => {}
+  constructor(
+    public http: HttpClient,
+    public cas: CasTicketProvider,
+    public fcm: FCM,
+    public storage: Storage,
+  ) { }
+
+  /**
+ * POST: send token and service ticket on Log in
+ *
+ */
+  sendTokenOnLogin() {
+    let token = '';
+    this.fcm.getToken().then(t => token = t);
+    this.cas.getST(this.serviceUrl).subscribe(st => {
+      let body = {
+        "service_ticket": st,
+        "device_token": token
+      }
+      let url = this.APIUrl + '/student/login'
+      this.http.post(url, body).subscribe(res => {
+        alert(res);
+      })
+    })
   }
 
-  Unsubscribe(username, token, tgt){
-    let body = 'action=unsub&device_token=' + token
-    + '&student_id=' + username + '&tgt=' + tgt;
-    this.http.post(NOTIFICATION_URL, body)
-    .subscribe(res =>{}), err => {}
+  /**
+* POST: send token and service ticket on Log out
+*
+*/
+  sendTokenOnLogout(studentId: string) {
+    let token = '';
+    this.fcm.getToken().then(t => token = t);
+    let body = {
+      "studentId": studentId,
+      "device_token": token
+    }
+    let url = this.APIUrl + '/student/logout'
+    this.http.post(url, body).subscribe(res => {
+      alert(res);
+    })
   }
 }

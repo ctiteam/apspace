@@ -125,11 +125,6 @@ export class MyApp {
       if (role === Role.Student) {
         this.unsubscribe();
       }
-      forkJoin([
-        this.cas.getTGT(),
-        this.ws.get("/student/profile"),
-        fromPromise(this.storage.get("token"))
-      ]).subscribe(d => this.notificationService.Unsubscribe(d[1], d[2], d[0]));
     }
 
     this.ws.get("/student/close_session").subscribe();
@@ -144,21 +139,12 @@ export class MyApp {
   }
 
   subscribe() {
-    this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
-    this.profile$.subscribe(profile => {
-      let studentNumber = profile[0].STUDENT_NUMBER;
-      //let intakeCode = profile[0].INTAKE_CODE;
-      this.fcm.subscribeToTopic(studentNumber);
-      //this.fcm.subscribeToTopic(this.intakeCode); // TODO: validation for intake code
-    })
+    this.notificationService.sendTokenOnLogin();
   }
 
   unsubscribe() {
-    this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
-    this.profile$.subscribe(profile => {
-      let studentNumber = profile[0].STUDENT_NUMBER;
-      this.fcm.unsubscribeFromTopic(studentNumber);
-    })
+    this.ws.get<StudentProfile[]>("/student/profile")
+    .subscribe(p => this.notificationService.sendTokenOnLogout(p[0].STUDENT_NUMBER));
   }
 
   presentConfirm(data) {
