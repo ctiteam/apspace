@@ -24,7 +24,7 @@
       </ion-card-content>
     </ion-card>
   </ng-template>
-  <ion-refresher *ngIf="intake$ | async" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+  <ion-refresher *ngIf="this.block==false" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
