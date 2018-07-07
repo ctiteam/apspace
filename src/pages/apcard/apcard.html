@@ -25,9 +25,9 @@
   <chart *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
 
   <ion-segment [(ngModel)]='filterEntry'>
-    <ion-segment-button value='dr'>Debit</ion-segment-button>
-    <ion-segment-button value=''>Transactions</ion-segment-button>
     <ion-segment-button value='cr'>Credit</ion-segment-button>
+    <ion-segment-button value=''>Transactions</ion-segment-button>
+    <ion-segment-button value='dr'>Debit</ion-segment-button>
   </ion-segment>
 
   <ion-list margin-top no-lines>

@@ -98,17 +98,11 @@ export class MyApp {
 
   onLogin() {
     this.loading.presentLoading();
-    if (this.platform.is("cordova")) {
-      const role = this.settings.get('role');
-      if (role === Role.Student) {
-        this.subscribe();
-      }
-    }
     const role = this.settings.get('role');
-    if (role === Role.Student) {
+    if (role & Role.Student) {
       this.photo$ = this.ws.get<StudentPhoto[]>("/student/photo");
       this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
-    } else if (role === Role.Lecturer || Role.Admin) {
+    } else if (role & (Role.Lecturer | Role.Admin)) {
       this.staffProfile$ = this.ws.get<StaffProfile[]>("/staff/profile");
     }
     forkJoin([this.profile$, this.photo$])
@@ -119,13 +113,6 @@ export class MyApp {
   }
 
   onLogout() {
-    if (this.platform.is("cordova")) {
-      const role = this.settings.get('role');
-      if (role === Role.Student) {
-        this.unsubscribe();
-      }
-    }
-
     this.ws.get("/student/close_session").subscribe();
     this.cas.deleteTGT().subscribe(_ => {
       // TODO: keep reusable cache

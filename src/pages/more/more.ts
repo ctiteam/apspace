@@ -26,7 +26,7 @@ export class MorePage {
     { title: 'Student Timetable', component: 'TimetablePage', icon: 'calendar', role: Role.Lecturer },
     { title: 'Fees', component: 'FeesPage', icon: 'cash', role: Role.Student },
     { title: 'Exam Schedule', component: 'ExamSchedulePage', icon: 'book', role: Role.Student },
-    { title: 'Notification', component: 'NotificationPage', icon: 'chatbubbles', role: Role.Student },
+    { title: 'Notifications', component: 'NotificationPage', icon: 'chatbubbles', role: Role.Student },
     { title: 'Profile', component: 'ProfilePage', icon: 'contact', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Feedback', component: 'FeedbackPage', icon: 'at', role: Role.Student | Role.Lecturer | Role.Admin },

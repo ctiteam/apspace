@@ -54,7 +54,7 @@ export class ApcardPage {
 
     const now = new Date();
     const monthlyData = transactions.reduce((tt, t) => {
-      const c = t.SpendVal > 0 ? 'cr' : 'dr'; // classify spent type
+      const c = t.SpendVal > 0 ? 'dr' : 'cr'; // classify spent type
       const d = new Date(t.SpendDate);
 
       d.getFullYear() in tt[c] || (tt[c][d.getFullYear()] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
@@ -62,8 +62,8 @@ export class ApcardPage {
 
       return tt;
     }, {  // default array with current year
-      cr: { [now.getFullYear()]: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-      dr: { [now.getFullYear()]: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+      dr: { [now.getFullYear()]: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+      cr: { [now.getFullYear()]: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
     });
 
     // plot graph
@@ -72,19 +72,19 @@ export class ApcardPage {
       datasets: [
         {
           label: 'Monthly Debit',
-          data: monthlyData.dr[now.getFullYear()],
+          data: monthlyData.cr[now.getFullYear()],
           backgroundColor: 'rgba(0, 200, 83, .5)'
         },
         {
           label: 'Monthly Credit',
-          data: monthlyData.cr[now.getFullYear()],
+          data: monthlyData.dr[now.getFullYear()],
           backgroundColor: 'rgba(213, 0, 0, .5)'
         }
       ]
     };
 
     // reverse monthlyData last year
-    this.monthly = monthlyData.cr[now.getFullYear()][now.getMonth()];
+    this.monthly = monthlyData.dr[now.getFullYear()][now.getMonth()];
   }
 
   /** Negate spend value for top ups. */

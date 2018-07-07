@@ -34,5 +34,5 @@ $ ionic cordova build android --prod --release
 Contributing
 ------------
 - [Conventional commit messages](https://github.com/conventional-changelog/conventional-changelog/blob/a5505865ff3dd710cf757f50530e73ef0ca641da/conventions/angular.md)
-- [Issues / Features](https://bitbucket.org/imobileappdevelopment/iwebspace/issues)
-- [Projects / Ideas](https://bitbucket.org/imobileappdevelopment/iwebspace/addon/trello/trello-board)
+- [Issues / Features](https://bitbucket.org/imobileappdevelopment/apspace/issues)
+- [Projects / Ideas](https://bitbucket.org/imobileappdevelopment/apspace/addon/trello/trello-board)
