@@ -9,7 +9,7 @@ import { BusTrips } from '../interfaces';
 @Injectable()
 export class BusTrackingProvider {
 
-  busTrackingUrl = 'https://uczon6ogr0.execute-api.ap-southeast-1.amazonaws.com/dev';
+  busTrackingUrl = 'https://api.apiit.edu.my/transix';
 
   constructor(public http: HttpClient) { }
 
