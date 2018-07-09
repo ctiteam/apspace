@@ -38,7 +38,7 @@ export class StaffDirectoryPage {
     this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', Boolean(refresher));
     this.staffType$ = this.staff$.pipe(
       filter(ss => ss instanceof Array),
-      map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT)))),
+      map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT))).sort()),
       finalize(() => { refresher && refresher.complete(), this.loading.dismissLoading() }),
     );
   }
