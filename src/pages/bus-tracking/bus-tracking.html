@@ -38,10 +38,19 @@
     </button>
   </ion-item>
 
-  <ion-card *ngFor="let ts of trip$ | async | on:selectedDay | during:selectedFrom:selectedTo">
-    <ion-card-header ion-item>
-      <h2 ion-text item-start>{{ ts.trip_from }} -> {{ ts.trip_to }}</h2>
-      <h4 ion-text item-end>{{ ts.trip_time }}</h4>
-    </ion-card-header>
-  </ion-card>
+  <ng-container *ngIf="trip$ | async | on:selectedDay | during:selectedFrom:selectedTo as trips">
+    <ng-container *ngIf="trips.length > 0; else empty">
+      <ion-card *ngFor="let ts of trips">
+        <ion-card-header ion-item>
+          <h2 ion-text item-start>{{ ts.trip_from }} -> {{ ts.trip_to }}</h2>
+          <h4 ion-text item-end>{{ ts.trip_time }}</h4>
+        </ion-card-header>
+      </ion-card>
+    </ng-container>
+    <ng-template #empty>
+      <ion-card>
+        <ion-card-header>Service Unavailable</ion-card-header>
+      </ion-card>
+    </ng-template>
+  </ng-container>
 </ion-content>
