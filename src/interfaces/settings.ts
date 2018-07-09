@@ -6,6 +6,11 @@ export enum Role {
 
 export interface Settings {
   role: Role;
+  /* bus tracking */
+  tripFrom: string;
+  tripTo: string;
+  /* timetable */
   intake: string;
+  /* exam schedule */
   examIntake: string;
 }
