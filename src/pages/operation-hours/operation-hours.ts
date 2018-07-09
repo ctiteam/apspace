@@ -37,7 +37,7 @@ export class OperationHoursPage {
     { name: 'Immigration', id: 'immigration', icon: 'globe', fg: '#66d174' },
     { name: 'Student Service', id: 'studentservices', icon: 'bookmarks', fg: '#dd803e' },
     { name: 'Admin', id: 'admin', icon: 'list-box', fg: '#626b70' },
-    { name: 'Accomodation', id: 'accomodation', icon: 'home', fg: '#2392ce' },
+    { name: 'Accommodation', id: 'accomodation', icon: 'home', fg: '#2392ce' },
     { name: 'Library', id: 'library', icon: 'book', fg: '#26205e' },
     { name: 'Cashier', id: 'cashier', icon: 'cash', fg: '#ccbf37' },
     { name: 'Labs', id: 'labs', icon: 'desktop', fg: '#33688e' },
