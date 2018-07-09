@@ -53,18 +53,17 @@ export class ApcardPage {
     this.balance = transactions[0].Balance;
 
     const now = new Date();
+    const a = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const monthlyData = transactions.reduce((tt, t) => {
       const c = t.SpendVal > 0 ? 'dr' : 'cr'; // classify spent type
       const d = new Date(t.SpendDate);
 
-      d.getFullYear() in tt[c] || (tt[c][d.getFullYear()] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+      d.getFullYear() in tt[c] || (tt[c][d.getFullYear()] = a.slice());
       tt[c][d.getFullYear()][d.getMonth()] += Math.abs(t.SpendVal);
 
       return tt;
-    }, {  // default array with current year
-      dr: { [now.getFullYear()]: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-      cr: { [now.getFullYear()]: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
-    });
+      // default array with current year
+    }, { dr: { [now.getFullYear()]: a.slice() }, cr: { [now.getFullYear()]: a.slice() } });
 
     // plot graph
     this.data = {
@@ -114,14 +113,14 @@ export class ApcardPage {
 
   swipe(event) {
     const role = this.settings.get('role');
-    if(role === Role.Student){
+    if (role & Role.Student) {
       if (event.direction === 2) {
         this.navCtrl.parent.select(4);
       }
       if (event.direction === 4) {
         this.navCtrl.parent.select(2);
       }
-    }else if(role === Role.Lecturer || Role.Admin){
+    } else if (role & (Role.Lecturer || Role.Admin)) {
       if (event.direction === 2) {
         this.navCtrl.parent.select(2);
       }

@@ -38,7 +38,7 @@ export class FeedbackPage {
 
   sendEmail() {
     if (this.plt.is('cordova')) {
-      if (this.role === Role.Student) {
+      if (this.role & Role.Student) {
         let email = {
           to: 'cti@apiit.edu.my',
           subject: "APSpace Feedback",
@@ -57,7 +57,7 @@ export class FeedbackPage {
         }
         this.emailComposer.open(email);
       }
-      if (this.role === Role.Lecturer || Role.Admin) {
+      if (this.role & (Role.Lecturer || Role.Admin)) {
         let email = {
           to: 'cti@apiit.edu.my',
           subject: "APSpace Feedback",
@@ -81,12 +81,12 @@ export class FeedbackPage {
   ionViewDidLoad() {
     /* TODO: Add staff name */
     this.role = this.settings.get('role');
-    if (this.role === Role.Student) {
+    if (this.role & Role.Student) {
       this.ws.get<StudentProfile[]>('/student/profile').subscribe(p => {
         this.feedbackData.name = p[0].NAME;
         this.feedbackData.studentNumber = p[0].STUDENT_NUMBER
       });
-    } else if (this.role === Role.Lecturer || Role.Admin) {
+    } else if (this.role & (Role.Lecturer || Role.Admin)) {
       this.ws.get<StaffProfile[]>('/staff/profile').subscribe(p => {
         this.feedbackData.name = p[0].FULLNAME;
       })
