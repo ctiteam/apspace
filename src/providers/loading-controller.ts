@@ -9,16 +9,16 @@ export class LoadingControllerProvider {
 
   constructor(
     public http: HttpClient,
-    public loadingCtrl: LoadingController) {}
+    public loadingCtrl: LoadingController) { }
 
-  presentLoading(){
+  presentLoading() {
     this.loading = this.loadingCtrl.create({
       content: 'Please wait...'
     });
     this.loading.present();
   }
 
-  dismissLoading(){
+  dismissLoading() {
     this.loading.dismiss();
   }
 }

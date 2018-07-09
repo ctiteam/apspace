@@ -16,4 +16,4 @@ import { SqaProvider } from '../../providers';
   entryComponents: [PasswordRecoveryPage],
   providers: [SqaProvider]
 })
-export class PasswordRecoveryPageModule {}
+export class PasswordRecoveryPageModule { }

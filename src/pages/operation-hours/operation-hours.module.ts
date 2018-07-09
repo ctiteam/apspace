@@ -10,4 +10,4 @@ import { OperationHoursPage } from './operation-hours';
     IonicPageModule.forChild(OperationHoursPage),
   ],
 })
-export class OperationHoursPageModule {}
+export class OperationHoursPageModule { }

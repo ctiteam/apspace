@@ -11,6 +11,6 @@ import { TimetableProvider } from '../../providers';
   imports: [
     IonicPageModule.forChild(ExamSchedulePage),
   ],
-  providers:[ActionSheet, TimetableProvider]
+  providers: [ActionSheet, TimetableProvider]
 })
-export class ExamSchedulePageModule {}
+export class ExamSchedulePageModule { }

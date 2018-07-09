@@ -98,7 +98,7 @@ export class ResultsPage {
           tap(_ => this.getResults(this.selectedIntake)),
           tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE))))
         );
-      }else{
+      } else {
         this.block = true;
       }
     })
@@ -133,7 +133,7 @@ export class ResultsPage {
       list.push(grade.GRADE);
     }
     list.sort();
-    listItems = list.filter(function (item, pos) {
+    listItems = list.filter(function(item, pos) {
       return list.indexOf(item) == pos;
     });
 

@@ -14,11 +14,11 @@ export class SettingsProvider {
     this.storage.get('settings').then(data => this.data = data || {});
   }
 
-   /**
-   *
-   * @param key
-   * @param value
-   */
+  /**
+  *
+  * @param key
+  * @param value
+  */
   set(key: keyof Settings, value: any): void {
     this.data[key] = value;
     this.storage.set('settings', this.data);

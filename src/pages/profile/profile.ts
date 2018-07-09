@@ -28,12 +28,12 @@ export class ProfilePage {
 
   ionViewDidLoad() {
     const role = this.settings.get('role');
-    if(role === Role.Student){
+    if (role === Role.Student) {
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo')
       this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
-    }else if(role === Role.Lecturer || Role.Admin){
+    } else if (role === Role.Lecturer || Role.Admin) {
       this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
-      this.staffProfile$.subscribe(s=>console.log(s))
+      this.staffProfile$.subscribe(s => console.log(s))
     }
   }
 }

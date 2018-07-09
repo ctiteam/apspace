@@ -130,7 +130,7 @@ export class MyApp {
 
   unsubscribe() {
     this.ws.get<StudentProfile[]>("/student/profile")
-    .subscribe(p => this.notificationService.sendTokenOnLogout(p[0].STUDENT_NUMBER));
+      .subscribe(p => this.notificationService.sendTokenOnLogout(p[0].STUDENT_NUMBER));
   }
 
   presentConfirm(data) {

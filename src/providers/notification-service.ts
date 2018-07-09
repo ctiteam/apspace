@@ -58,7 +58,7 @@ export class NotificationServiceProvider {
 * GET: Request for notification messages
 *
 */
-  getNotificationMessages(){
+  getNotificationMessages() {
     this.cas.getST(this.serviceUrl).subscribe(st => {
       let url = this.APIUrl + '/student/messages?service_ticket=' + st;
       this.http.get(url).subscribe(res => {

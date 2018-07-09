@@ -4,7 +4,8 @@ import {
   Platform,
   ActionSheetController,
   ActionSheetButton,
-  NavController } from 'ionic-angular';
+  NavController
+} from 'ionic-angular';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 
 import { Observable } from 'rxjs/Observable';
@@ -120,10 +121,10 @@ export class AttendancePage {
   }
 
   swipe(event) {
-    if(event.direction === 2) {
+    if (event.direction === 2) {
       this.navCtrl.parent.select(3);
     }
-    if(event.direction === 4) {
+    if (event.direction === 4) {
       this.navCtrl.parent.select(1);
     }
   }

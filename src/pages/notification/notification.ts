@@ -17,7 +17,7 @@ export class NotificationPage {
   constructor(
     private readonly storage: Storage,
     private navCtrl: NavController,
-  ) {}
+  ) { }
 
   ionViewDidLoad() {
     this.storage.get('items').then(res => {

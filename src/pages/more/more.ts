@@ -61,7 +61,7 @@ export class MorePage {
     if (role === Role.Student) {
       this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
-    }else if(role === Role.Lecturer || Role.Admin){
+    } else if (role === Role.Lecturer || Role.Admin) {
       this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
     }
   }
@@ -94,16 +94,16 @@ export class MorePage {
 
   swipe(event) {
     const role = this.settings.get('role');
-    if(role === Role.Student){
+    if (role === Role.Student) {
       if (event.direction === 4) {
         this.navCtrl.parent.select(3);
       }
-    }else if(role === Role.Lecturer){
-      if(event.direction === 4){
+    } else if (role === Role.Lecturer) {
+      if (event.direction === 4) {
         this.navCtrl.parent.select(1);
       }
-    }else if(role === Role.Admin){
-      if(event.direction === 4){
+    } else if (role === Role.Admin) {
+      if (event.direction === 4) {
         this.navCtrl.parent.select(1);
       }
     }

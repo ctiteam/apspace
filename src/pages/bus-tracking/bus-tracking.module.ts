@@ -16,4 +16,4 @@ import { TripTimePipe } from './trip-time.pipe';
     IonicPageModule.forChild(BusTrackingPage),
   ],
 })
-export class BusTrackingPageModule {}
+export class BusTrackingPageModule { }

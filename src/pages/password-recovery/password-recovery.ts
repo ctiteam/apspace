@@ -29,7 +29,7 @@ export class PasswordRecoveryPage {
 
   getConfig() {
     this.isLoading = true;
-    this.sqa.get().pipe( finalize(() => this.isLoading = false) )
+    this.sqa.get().pipe(finalize(() => this.isLoading = false))
       .subscribe(qa => this.qa = qa);
   }
 

@@ -12,4 +12,4 @@ import { LecturerTimetablePage } from './lecturer-timetable';
   ],
   entryComponents: [LecturerTimetablePage]
 })
-export class LecturerTimetablePageModule {}
+export class LecturerTimetablePageModule { }

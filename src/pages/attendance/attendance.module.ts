@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { NgCircleProgressModule } from 'ng-circle-progress';
-import { ActionSheet} from "@ionic-native/action-sheet";
+import { ActionSheet } from "@ionic-native/action-sheet";
 
 import { AttendancePage } from './attendance';
 

@@ -10,4 +10,4 @@ import { NotificationModalPage } from './notification-modal';
     IonicPageModule.forChild(NotificationModalPage),
   ],
 })
-export class NotificationModalPageModule {}
+export class NotificationModalPageModule { }

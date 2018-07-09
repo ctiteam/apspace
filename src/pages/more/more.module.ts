@@ -11,4 +11,4 @@ import { MorePage } from './more';
   ],
   entryComponents: [MorePage],
 })
-export class MorePageModule {}
+export class MorePageModule { }

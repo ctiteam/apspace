@@ -75,7 +75,7 @@ export class HomePage {
   }
 
   swipe(event) {
-    if(event.direction === 2) {
+    if (event.direction === 2) {
       this.navCtrl.parent.select(1);
     }
   }

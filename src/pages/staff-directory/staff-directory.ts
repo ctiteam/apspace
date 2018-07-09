@@ -39,7 +39,7 @@ export class StaffDirectoryPage {
     this.staffType$ = this.staff$.pipe(
       filter(ss => ss instanceof Array),
       map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT)))),
-      finalize(() => {refresher && refresher.complete(), this.loading.dismissLoading()}),
+      finalize(() => { refresher && refresher.complete(), this.loading.dismissLoading() }),
     );
   }
 

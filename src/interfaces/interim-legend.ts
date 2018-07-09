@@ -1,4 +1,4 @@
-export interface InterimLegend{
+export interface InterimLegend {
   SUBJECT_GRADING_SCHEME: string;
   MARK_FROM: string;
   MARK_TO: string;

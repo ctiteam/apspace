@@ -1,4 +1,4 @@
-export interface AttendanceLegend{
+export interface AttendanceLegend {
   BA: string;
   BF: string;
   BD: string;

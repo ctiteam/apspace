@@ -10,4 +10,4 @@ import { ProfilePage } from './profile';
   ],
   entryComponents: [ProfilePage]
 })
-export class ProfilePageModule {}
+export class ProfilePageModule { }
