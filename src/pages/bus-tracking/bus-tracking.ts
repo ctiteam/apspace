@@ -57,7 +57,7 @@ export class BusTrackingPage {
       map(d => d.trips_times),
       tap(ts => {
         this.tripDays = Array.from(new Set(ts.map(t => t.trip_day)));
-        this.selectedDay = this.tripDays.find(d => d.indexOf(days[new Date().getDay()]) !== -1);
+        this.selectedDay = this.selectedDay || this.tripDays.find(d => d.indexOf(days[new Date().getDay()]) !== -1);
         this.tripFrom = Array.from(new Set(ts.map(t => t.trip_from)));
         this.tripTo = Array.from(new Set(ts.map(t => t.trip_to)));
         this.selectedFrom = this.settings.get('tripFrom');
