@@ -55,9 +55,28 @@ page-attendance {
   }
 
   .cover {
+    padding-top: 10px;
     height: 200px;
+    width: 100%;
     background: rgb(77, 169, 255);
     background: linear-gradient(150deg, rgba(77, 169, 255, 1) 0%, rgba(148, 233, 186, 1) 100%);
+  }
+
+  .circle-progress{
+    display: block;
+    margin: auto;
+  }
+
+  .current{
+    position: absolute;
+    color: color($colors, light);
+    font-weight: 100;
+    line-height: 1;
+    top: 90px;
+    bottom: auto;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    font-size: 3em;
   }
 
   .item-header {

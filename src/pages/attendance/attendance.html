@@ -15,10 +15,9 @@
   </ion-refresher>
   <div class="main-content" (swipe)='swipe($event)'>
     <div class="cover" *ngIf="percent">
-      <circle-progress [percent]="percent" radius="60" outerStrokeWidth="7" innerStrokeWidth="4" [outerStrokeColor]="averageColor"
-        innerStrokeColor="#FFFFFF" titleColor="#FFFFFF" unitsColor="#FFFFFF" animation="true" animationDuration="500" unitsFontSize="20"
-        titleFontSize="30" [showSubtitle]="false" [responsive]="true">
-      </circle-progress>
+        <ion-label class="current"><b>{{percent + '%'}}</b></ion-label>
+        <round-progress class="circle-progress" [current]="percent" max="100" [radius]="90" [rounded]="true"
+        [color]="averageColor" background="#d7d8da" stroke="15"></round-progress>
     </div>
 
     <ion-card margin-bottom *ngFor="let a of attendance$ | async">

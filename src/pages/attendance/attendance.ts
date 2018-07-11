@@ -28,9 +28,9 @@ export class AttendancePage {
 
 
   selectedIntake: string = '';
-  studentId: string;
-  percent: number;
-  averageColor: string;
+  studentId: string = '';
+  percent: number = 0;
+  averageColor: string = '';
   intakeLabels: any;
 
   constructor(
