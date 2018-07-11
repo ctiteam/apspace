@@ -7,28 +7,6 @@ import { map, tap } from 'rxjs/operators';
 import { WsApiProvider } from '../../providers';
 import { LecturerTimetable } from '../../interfaces';
 
-interface ScheduleWeek {
-  week: Date;
-  days: ScheduleDay[];
-}
-
-interface ScheduleDay {
-  day: Date;
-  events: Event[];
-}
-
-interface Event {
-  name: string;
-  type: EventType;
-  start: string;
-  end: string;
-  loc: string;
-}
-
-enum EventType {
-  LecturerTimetable,
-}
-
 @Component({
   selector: 'lecturer-timetable',
   templateUrl: 'lecturer-timetable.html',
@@ -49,7 +27,19 @@ export class LecturerTimetableComponent implements OnInit {
 
   @Input() id: string;
 
-  calendar$: Observable<ScheduleWeek[]>;
+  calendar$: Observable<{
+    week: Date,
+    days: {
+      day: Date,
+      events: {
+        name: string,
+        type: 'lecturerTimetable',
+        start: string,
+        end: string,
+        loc: string,
+      }[]
+    }[]
+  }[]>;
   selectedWeeks = [];
 
   constructor(private ws: WsApiProvider) { }
@@ -72,7 +62,7 @@ export class LecturerTimetableComponent implements OnInit {
 
           const day = since.getDay();
           t[week][day] = (t[week][day] || []).concat({
-            type: EventType.LecturerTimetable,
+            type: 'lecturerTimetable',
             name: d.module,
             start: since,
             end: d.until,
@@ -80,7 +70,7 @@ export class LecturerTimetableComponent implements OnInit {
           });
         });
 
-        let l: ScheduleWeek[] = Object.keys(t).map(w => {
+        return Object.keys(t).map(w => {
           const week = parseInt(w) * 604800000;
           return {
             week: new Date(week),
@@ -92,8 +82,6 @@ export class LecturerTimetableComponent implements OnInit {
             })
           };
         });
-
-        return l;
       }),
       tap(w => this.selectedWeeks.push(w[0])),
     );
