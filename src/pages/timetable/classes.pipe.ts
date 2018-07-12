@@ -14,12 +14,10 @@ export class ClassesPipe implements PipeTransform {
    * @param intake - filter intake if exists
    */
   transform(tt: Timetable[] | null, intake: string, ...args): Timetable[] {
-    if (!Array.isArray(tt)) {
-      return [] as Timetable[];
-    } else if (!intake) {
-      return [] as Timetable[]; /* TODO: My Classes */
-    } else {
+    if (Array.isArray(tt)) {
       return intake ? tt.filter(t => intake === t.INTAKE) : tt;
+    } else {
+      return [] as Timetable[];
     }
   }
 }

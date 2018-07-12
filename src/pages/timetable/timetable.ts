@@ -32,7 +32,7 @@ export class TimetablePage {
   @ViewChild(Content) content: Content;
 
   /* config */
-  intake: string = '';
+  intake: string;
 
   constructor(
     public actionSheet: ActionSheet,
@@ -47,7 +47,7 @@ export class TimetablePage {
   presentActionSheet() {
     if (this.plt.is('cordova')) {
       const options: ActionSheetOptions = {
-        buttonLabels: ['My Classes', ...this.intakeLabels],
+        buttonLabels: this.intakeLabels,
         addCancelButtonWithLabel: 'Cancel'
       };
       this.actionSheet.show(options).then((buttonIndex: number) => {
@@ -61,10 +61,7 @@ export class TimetablePage {
         handler: () => this.changeIntake(intake)
       });
       let actionSheet = this.actionSheetCtrl.create({
-        buttons: [
-          { text: 'My Classes', handler: () => this.changeIntake('') },
-          ...intakesButton, { text: 'Cancel', role: 'cancel' }
-        ]
+        buttons: [ ...intakesButton, { text: 'Cancel', role: 'cancel' } ]
       });
       actionSheet.present();
     }
@@ -143,12 +140,13 @@ export class TimetablePage {
     // select current day by default
     this.selectedDay = this.wday[new Date().getDay()];
 
-    const intake = this.settings.get('intake');
-    if (intake !== undefined) { // intake might be ''
-      this.intake = intake;
-    } else {
-      this.ws.get<StudentProfile[]>('/student/profile')
-        .subscribe(p => this.intake = p[0].INTAKE_CODE || '');
+    this.intake = this.settings.get('intake');
+    // default intake to student current intake
+    if (this.intake === undefined) {
+      this.ws.get<StudentProfile[]>('/student/profile').subscribe(p => {
+        this.intake = (p[0] || {} as StudentProfile).INTAKE_CODE || '';
+        this.settings.set('intake', this.intake);
+      });
     }
     this.doRefresh();
   }
