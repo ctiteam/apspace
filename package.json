@@ -1,9 +1,9 @@
 {
   "name": "APSpace",
   "version": "0.3.0",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
-  "private": true,
+  "author": "CTI Team <cti@apiit.edu.my>",
+  "homepage": "http://www.cti.my/",
+  "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
