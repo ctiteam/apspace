@@ -94,7 +94,7 @@
       </ion-card>
     </ng-container>
     <ng-container *ngSwitchCase="'Details'">
-      <ion-card *ngFor='let details of detail$ | async | rev'>
+      <ion-card *ngFor='let details of details$ | async | rev'>
         <h4 margin>{{ details.ITEM_DESCRIPTION }}</h4>
         <ion-card-content no-padding>
           <ion-item>

@@ -47,7 +47,7 @@ export class TimetablePage {
   presentActionSheet() {
     if (this.plt.is('cordova')) {
       const options: ActionSheetOptions = {
-        buttonLabels: this.intakeLabels,
+        buttonLabels: ['INTAKES', ...this.intakeLabels],
         addCancelButtonWithLabel: 'Cancel'
       };
       this.actionSheet.show(options).then((buttonIndex: number) => {

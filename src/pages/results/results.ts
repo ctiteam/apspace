@@ -192,7 +192,7 @@ export class ResultsPage {
   showActionSheet() {
     if (this.plt.is('cordova')) {
       const options: ActionSheetOptions = {
-        buttonLabels: ['Intakes', ...this.intakeLabels],
+        buttonLabels: ['INTAKES', ...this.intakeLabels],
         addCancelButtonWithLabel: 'Cancel',
       };
       this.actionSheet.show(options).then((buttonIndex: number) => {
@@ -213,11 +213,6 @@ export class ResultsPage {
       });
       let actionSheet = this.actionSheetCtrl.create({
         buttons: [
-          {
-            text: 'Intakes', handler: () => {
-
-            }
-          },
           ...intakesButton, { text: 'Cancel', role: 'cancel' },
         ]
       });
