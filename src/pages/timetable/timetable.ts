@@ -47,12 +47,12 @@ export class TimetablePage {
   presentActionSheet() {
     if (this.plt.is('cordova')) {
       const options: ActionSheetOptions = {
-        buttonLabels: ['INTAKES', ...this.intakeLabels],
+        buttonLabels: this.intakeLabels,
         addCancelButtonWithLabel: 'Cancel'
       };
       this.actionSheet.show(options).then((buttonIndex: number) => {
-        if (buttonIndex <= 1 + this.intakeLabels.length) {
-          this.changeIntake(this.intakeLabels[buttonIndex - 2] || '');
+        if (buttonIndex <= this.intakeLabels.length) {
+          this.changeIntake(this.intakeLabels[buttonIndex - 1] || '');
         }
       });
     } else {
