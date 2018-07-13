@@ -131,8 +131,7 @@ export class CasTicketProvider {
         }
         this.settings.set('role', role);
         return of(res);
-      }
-      ),
+      }),
     )
   }
 }

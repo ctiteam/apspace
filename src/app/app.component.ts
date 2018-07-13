@@ -1,72 +1,43 @@
-import { Observable } from "rxjs/Observable";
 import { Component, ViewChild } from "@angular/core";
 import {
-  AlertController,
-  Events,
-  Platform,
-  ToastController,
-  MenuController,
-  Nav
+  AlertController, Events, MenuController, Nav, Platform, ToastController
 } from "ionic-angular";
-import { forkJoin } from "rxjs/observable/forkJoin";
-import { finalize } from "rxjs/operators";
 import { Storage } from "@ionic/storage";
 import { Network } from "@ionic-native/network";
 import { StatusBar } from '@ionic-native/status-bar';
 import { FCM } from '@ionic-native/fcm';
 
 import {
-  CasTicketProvider,
-  WsApiProvider,
-  NotificationServiceProvider,
-  LoadingControllerProvider,
-  SettingsProvider
+  CasTicketProvider, NotificationServiceProvider, SettingsProvider,
+  WsApiProvider
 } from "../providers";
-import {
-  StudentPhoto,
-  StudentProfile,
-  Role,
-  StaffProfile
-} from "../interfaces";
+import { StudentProfile, Role } from "../interfaces";
 
 @Component({
   templateUrl: "app.html"
 })
 export class MyApp {
+
   @ViewChild(Nav) navCtrl: Nav;
-
-  items: { title: string; text: string }[] = [];
-
-  photo$: Observable<StudentPhoto[]>;
-  profile$: Observable<StudentProfile[]>;
-  staffProfile$: Observable<StaffProfile[]>;
 
   constructor(
     public alertCtrl: AlertController,
     public events: Events,
+    public fcm: FCM,
     public menuCtrl: MenuController,
     public network: Network,
+    public statusBar: StatusBar,
     public storage: Storage,
     public toastCtrl: ToastController,
     private cas: CasTicketProvider,
-    private ws: WsApiProvider,
     private notificationService: NotificationServiceProvider,
     private platform: Platform,
-    private loading: LoadingControllerProvider,
-    public statusBar: StatusBar,
-    public fcm: FCM,
     private settings: SettingsProvider,
+    private ws: WsApiProvider,
   ) {
     this.storage.get("tgt").then(tgt => {
       if (tgt) {
         this.events.subscribe("user:logout", () => this.onLogout());
-        const role = this.settings.get('role');
-        if (role & Role.Student) {
-          this.photo$ = this.ws.get<StudentPhoto[]>("/student/photo");
-          this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
-        } else if (role & (Role.Lecturer | Role.Admin)) {
-          this.staffProfile$ = this.ws.get<StaffProfile[]>("/staff/profile");
-        }
         this.navCtrl.setRoot("TabsPage");
       } else {
         this.events.subscribe("user:login", () => this.onLogin());
@@ -97,24 +68,16 @@ export class MyApp {
   }
 
   onLogin() {
-    this.loading.presentLoading();
-    const role = this.settings.get('role');
-    if (role & Role.Student) {
-      this.photo$ = this.ws.get<StudentPhoto[]>("/student/photo");
-      this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
-    } else if (role & (Role.Lecturer | Role.Admin)) {
-      this.staffProfile$ = this.ws.get<StaffProfile[]>("/staff/profile");
-    }
-    forkJoin([this.profile$, this.photo$])
-      .pipe(finalize(() => this.loading.dismissLoading()))
-      .subscribe();
     this.events.unsubscribe("user:login");
     this.events.subscribe("user:logout", () => this.onLogout());
   }
 
   onLogout() {
-    this.ws.get("/student/close_session").subscribe();
+    const role = this.settings.get('role') & Role.Student ? 'student' : 'staff';
+    this.ws.get(`/${role}/close_session`, true, { attempts: 0 }).subscribe();
+
     this.cas.deleteTGT().subscribe(_ => {
+      this.settings.clear();
       // TODO: keep reusable cache
       this.storage.clear();
       this.navCtrl.setRoot("LoginPage");
@@ -134,19 +97,17 @@ export class MyApp {
   }
 
   presentConfirm(data) {
-    let alert = this.alertCtrl.create({
+    this.alertCtrl.create({
       title: data.title,
       message: data.body,
       buttons: [
         { text: "Cancel", role: "cancel" },
         {
           text: "Open",
-          handler: () => {
-            this.navCtrl.push("NotificationModalPage", { itemDetails: data });
-          }
+          handler: () => { this.navCtrl.push("NotificationModalPage", { itemDetails: data }); }
         }
       ]
-    });
-    alert.present();
+    }).present();
   }
+
 }
