@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
-import { Storage } from "@ionic/storage";
+import { IonicPage, NavController, Platform } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+
+import { NotificationServiceProvider } from '../../providers';
+import { Notification } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -10,23 +13,18 @@ import { Storage } from "@ionic/storage";
 
 export class NotificationPage {
 
-  items: { title: string, body: string }[] = [];
-  reversed: any;
-  token: string;
+  items$: Observable<Notification[]>;
 
   constructor(
-    private readonly storage: Storage,
     private navCtrl: NavController,
+    private notification: NotificationServiceProvider,
+    private platform: Platform,
   ) { }
 
   ionViewDidLoad() {
-    this.storage.get('items').then(res => {
-      if (!res) {
-      } else {
-        this.items.push(res);
-        console.log(this.items);
-      }
-    })
+    if(this.platform.is('cordova')){
+      this.items$ = this.notification.getNotificationMessages(true);
+    }
   }
 
   openBasicModal(item) {

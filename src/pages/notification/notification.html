@@ -7,9 +7,10 @@
 </ion-header>
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let item of items" (click)="openBasicModal(item)">
-      <ion-icon name="mail" item-left></ion-icon>
-      <h2>{{ item.title }}</h2>
+    <ion-item *ngFor="let item of items$ | async">
+            <ion-icon name="mail" item-left></ion-icon>
+            <!-- <ion-icon name="mail-open"></ion-icon> -->
+      New Notification
     </ion-item>
   </ion-list>
 </ion-content>

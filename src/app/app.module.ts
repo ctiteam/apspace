@@ -13,6 +13,8 @@ import { Network } from '@ionic-native/network';
 import { Push } from '@ionic-native/push';
 import { StatusBar } from '@ionic-native/status-bar';
 import { FCM } from '@ionic-native/fcm';
+import { NetworkInterface } from '@ionic-native/network-interface';
+import { Badge } from '@ionic-native/badge';
 
 import { MyApp } from './app.component';
 import {
@@ -37,12 +39,14 @@ import {
     StatusBar,
     EmailComposer,
     Device,
+    NetworkInterface,
     InAppBrowser,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Network,
     CasTicketProvider,
     Push,
     FCM,
+    Badge,
     LocalNotifications,
     WsApiProvider,
     NotificationServiceProvider,
