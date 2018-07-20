@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavParams, NavController, Platform } from 'ionic-angular';
+import { IonicPage, NavParams, NavController, AlertController, Platform, App, Events, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
+import { FCM } from '@ionic-native/fcm';
 
 import { Role } from '../../interfaces';
-import { SettingsProvider } from '../../providers';
+import { SettingsProvider, LoadingControllerProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -30,17 +31,78 @@ export class TabsPage {
     role: Role
   }>;
 
+  exit = false;
+  back = null;
+
   constructor(
     public navParams: NavParams,
     public statusBar: StatusBar,
     public navCtrl: NavController,
-    private platform: Platform,
-    public settings: SettingsProvider
+    private plt: Platform,
+    public settings: SettingsProvider,
+    public alertCtrl: AlertController,
+    public fcm: FCM,
+    public events: Events,
+    public app: App,
+    private loading: LoadingControllerProvider,
+    public toastCtrl: ToastController,
   ) {
-    if (this.platform.is("cordova")) {
-      this.statusBar.backgroundColorByHexString('#4da9ff');
-    }
+    // if (this.plt.is("cordova")) {
+    //   this.statusBar.backgroundColorByHexString('#4da9ff');
+    // }
+    this.plt.ready().then(() => {
+      if (this.plt.is('cordova')) {
+        this.events.subscribe('user:logout', _ => this.back && this.back());
+        this.back = this.plt.registerBackButtonAction(() => {
+          if (this.app.getRootNav().canGoBack()) {
+            this.app.getRootNav().pop();
+          } else if (this.exit) {
+            this.plt.exitApp();
+          } else if (this.loading.dismissLoading()) {
+            this.loading.dismissLoading();
+          } else {
+            let toast = this.toastCtrl.create({
+              message: 'Tap again to exit.',
+              duration: 2000,
+              cssClass: 'normalToast'
+            });
+            this.exit = true;
+            toast.onDidDismiss(() => this.exit = false);
+            toast.present();
+          }
+        });
+      }
+    });
     const role = this.settings.get('role');
     this.tabs = this.pages.filter(page => page.role & role).slice(0, 4).concat(this.morePages);
+
+    // this.platform.ready().then(() => {
+    //   if (this.platform.is("cordova")) {
+    //     this.fcm.onNotification().subscribe(data => {
+    //       if (data.wasTapped) {
+    //         console.log('tapped background')
+    //         console.log("wastapped" + JSON.stringify(data));
+    //         //this.navCtrl.push("NotificationPage");
+    //       } else {
+    //         console.log("asdsd" + JSON.stringify(data));
+    //         //this.presentConfirm(data);
+    //       };
+    //     })
+    //   }
+    // })
+  }
+
+  presentConfirm(data) {
+    this.alertCtrl.create({
+      title: data.title,
+      message: data.body,
+      buttons: [
+        { text: "Cancel", role: "cancel" },
+        {
+          text: "Open",
+          handler: () => { this.navCtrl.push("NotificationModalPage", { itemDetails: data }); }
+        }
+      ]
+    }).present();
   }
 }
