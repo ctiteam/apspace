@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import {
   ActionSheetController, ActionSheetButton, Content, IonicPage, NavController,
-  Platform
+  Platform, App
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -42,17 +42,18 @@ export class TimetablePage {
     private tt: TimetableProvider,
     private ws: WsApiProvider,
     private settings: SettingsProvider,
+    public app: App,
   ) { }
 
   presentActionSheet() {
     if (this.plt.is('cordova')) {
       const options: ActionSheetOptions = {
-        buttonLabels: ['INTAKES', ...this.intakeLabels],
+        buttonLabels: this.intakeLabels,
         addCancelButtonWithLabel: 'Cancel'
       };
       this.actionSheet.show(options).then((buttonIndex: number) => {
-        if (buttonIndex <= 1 + this.intakeLabels.length) {
-          this.changeIntake(this.intakeLabels[buttonIndex - 2] || '');
+        if (buttonIndex <= this.intakeLabels.length) {
+          this.changeIntake(this.intakeLabels[buttonIndex - 1] || '');
         }
       });
     } else {
@@ -158,6 +159,10 @@ export class TimetablePage {
     if (event.direction === 4) {
       this.navCtrl.parent.select(0);
     }
+  }
+
+  openStaffDirectory(id: string){
+    this.app.getRootNav().push("StaffDirectoryInfoPage", { id: id });
   }
 
 }
