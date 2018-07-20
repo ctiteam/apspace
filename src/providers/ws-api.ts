@@ -37,16 +37,18 @@ export class WsApiProvider {
    *
    * @param endpoint - <apiUrl>/<endpoint> for service, used for caching
    * @param refresh - force refresh (default: false)
-   * @param options.timeout - request timeout (default: 10000)
+   * @param options.attempts - number of retries (default: 4)
    * @param options.auth - authentication required (default: true)
    * @param options.params - additional request parameters (default: {})
+   * @param options.timeout - request timeout (default: 10000)
    * @param options.url - url of webservice (default: this.apiUrl)
    * @return shared cached observable
    */
   get<T>(endpoint: string, refresh?: boolean, options: {
-    timeout?: number,
+    attempts?: number,
     auth?: boolean,
     params?: any,
+    timeout?: number,
     url?: string,
   } = {}): Observable<T> {
     const url = (options.url || this.apiUrl) + endpoint;
@@ -70,8 +72,8 @@ export class WsApiProvider {
             switchMap(v => v || obs_throw('retrying'))
           );
         }),
-        retryWhen(attempts => range(1, 4).pipe(
-          zip(attempts, i => 2 ** i + Math.random() * 8), // 2^n + random 0-8
+        retryWhen(errors => range(1, options.attempts || 4).pipe(
+          zip(errors, i => 2 ** i + Math.random() * 8), // 2^n + random 0-8
           mergeMap(i => timer(i * 1000)),
         )),
         catchError(of),
@@ -81,4 +83,5 @@ export class WsApiProvider {
       )
     ).pipe(publishLast(), refCount());
   }
+
 }

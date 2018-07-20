@@ -11,7 +11,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { empty } from 'rxjs/observable/empty';
 import { catchError, tap, timeout, switchMap } from 'rxjs/operators';
 
-import { CasTicketProvider, WsApiProvider } from '../../providers';
+import { CasTicketProvider, SettingsProvider, WsApiProvider } from '../../providers';
+import { Role } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -22,15 +23,6 @@ export class LoginPage {
 
   @ViewChild('autofocus') autofocus;
 
-  cache1 = [
-    '/student/profile',
-    '/student/photo',
-  ];
-  cache2 = [
-    '/student/courses',
-    '/staff/listing',
-  ];
-
   username: string;
   password: string;
   showPasswordText: boolean;
@@ -38,13 +30,14 @@ export class LoginPage {
 
   constructor(
     public events: Events,
-    public plt: Platform,
-    private network: Network,
     public menu: MenuController,
     public navCtrl: NavController,
+    public plt: Platform,
     public storage: Storage,
-    private toastCtrl: ToastController,
     private casTicket: CasTicketProvider,
+    private network: Network,
+    private settings: SettingsProvider,
+    private toastCtrl: ToastController,
     private ws: WsApiProvider,
   ) { }
 
@@ -83,10 +76,11 @@ export class LoginPage {
         this.storage.clear();
         return empty();
       }),
-      tap(_ => this.cacheApi(this.cache1)),
-      timeout(2000),
-      tap(_ => this.cacheApi(this.cache2)),
-    ).pipe(
+      tap(_ => this.cacheApi(this.settings.get('role') & Role.Student
+        ? ['/student/profile', '/student/photo', '/student/courses', '/staff/listing']
+        : ['/staff/profile', '/staff/listing'])
+      ),
+      timeout(3000),
       tap(_ => this.events.publish('user:login'))
     ).subscribe(_ => this.navCtrl.setRoot('TabsPage'));
   }
@@ -100,4 +94,5 @@ export class LoginPage {
   getPasswordVisibility() {
     return (this.showPasswordText ? "text" : "password");
   }
+
 }

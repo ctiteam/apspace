@@ -120,7 +120,7 @@ export class ApcardPage {
       if (event.direction === 4) {
         this.navCtrl.parent.select(2);
       }
-    } else if (role & (Role.Lecturer || Role.Admin)) {
+    } else if (role & (Role.Lecturer | Role.Admin)) {
       if (event.direction === 2) {
         this.navCtrl.parent.select(2);
       }

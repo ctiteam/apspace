@@ -3,12 +3,13 @@ import { Storage } from '@ionic/storage';
 
 import { Settings } from '../interfaces';
 
+/**
+ * Settings storage with a similar interface to ionic storage with memory cache.
+ */
 @Injectable()
 export class SettingsProvider {
 
   data: Settings;
-
-  defaultData: undefined;
 
   constructor(public storage: Storage) {
     this.storage.get('settings').then(data => this.data = data || {});
@@ -34,4 +35,12 @@ export class SettingsProvider {
   get<K extends keyof Settings>(key: K): Settings[K] {
     return this.data[key];
   }
+
+  /** Clear settings. */
+  clear(): void {
+    for (let key in this.data) {
+      delete this.data[key];
+    }
+  }
+
 }

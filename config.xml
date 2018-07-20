@@ -60,8 +60,8 @@
     <plugin name="cordova-sqlite-storage" spec="^2.3.3" />
     <plugin name="cordova-plugin-statusbar" spec="git+https://github.com/apache/cordova-plugin-statusbar.git" />
     <plugin name="cordova-plugin-fcm" spec="^2.1.2" />
-    <engine name="ios" spec="4.4.0" />
-    <engine name="android" spec="7.1.0" />
     <plugin name="cordova-plugin-networkinterface" spec="^2.0.0" />
     <plugin name="cordova-plugin-badge" spec="^0.8.7" />
+    <engine name="ios" spec="4.4.0" />
+    <engine name="android" spec="7.1.0" />
 </widget>
