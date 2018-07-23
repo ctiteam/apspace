@@ -8,7 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { FCM } from '@ionic-native/fcm';
 
 import {
-  CasTicketProvider, NotificationServiceProvider, SettingsProvider,
+  CasTicketProvider, NotificationProvider, SettingsProvider,
   WsApiProvider
 } from "../providers";
 import { StudentProfile, Role } from "../interfaces";
@@ -30,7 +30,7 @@ export class MyApp {
     public storage: Storage,
     public toastCtrl: ToastController,
     private cas: CasTicketProvider,
-    private notificationService: NotificationServiceProvider,
+    private notificationService: NotificationProvider,
     private platform: Platform,
     private settings: SettingsProvider,
     private ws: WsApiProvider,
