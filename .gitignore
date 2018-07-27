@@ -35,3 +35,6 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+GoogleService-Info.plist
+google-services.json
+my-release-key.keystore
