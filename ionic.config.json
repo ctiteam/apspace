@@ -1,10 +1,9 @@
 {
   "name": "APSpace",
-  "type": "ionic-angular",
   "integrations": {
     "cordova": {}
   },
+  "type": "ionic-angular",
   "hooks": {},
-  "pro_id": "ddfaaefc",
-  "app_id": ""
+  "pro_id": "ddfaaefc"
 }

@@ -24,5 +24,4 @@ export class HomeModalPage {
   ionViewDidLoad() {
     this.item = this.params.get('item');
   }
-
 }

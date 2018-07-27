@@ -35,6 +35,7 @@
     "@ionic-native/network-interface": "^4.9.2",
     "@ionic-native/push": "^4.5.3",
     "@ionic-native/status-bar": "^4.7.0",
+    "@ionic/lab": "^1.0.0",
     "@ionic/pro": "^1.0.20",
     "@ionic/storage": "^2.0.1",
     "angular-svg-round-progressbar": "^2.0.0",

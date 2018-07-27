@@ -1,16 +1,18 @@
 <ion-header>
   <ion-navbar color="primary">
     <ion-title>
-      Notification
+      Notifications
     </ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content>
+<ion-content no-padding>
+  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-list>
-    <ion-item *ngFor="let item of items$ | async">
-            <ion-icon name="mail" item-left></ion-icon>
-            <!-- <ion-icon name="mail-open"></ion-icon> -->
-      New Notification
-    </ion-item>
+    <button id="message-btn" *ngFor="let message of message$ | async" (click)="openBasicModal(message, message.message_id)" ion-item>
+      <ion-icon name="mail" item-left></ion-icon>
+      {{message.title}}
+    </button>
   </ion-list>
 </ion-content>

@@ -3,10 +3,9 @@ import { Injectable } from '@angular/core';
 import { FCM } from '@ionic-native/fcm';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
-import { publishLast, refCount } from 'rxjs/operators';
-
+import { catchError, switchMap } from 'rxjs/operators';
+import { fromPromise } from 'rxjs/observable/fromPromise'
 import { CasTicketProvider } from '../providers';
-import { Notification } from '../interfaces';
 
 @Injectable()
 export class NotificationServiceProvider {
@@ -24,52 +23,66 @@ export class NotificationServiceProvider {
   ) { }
 
   /**
- * POST: send token and service ticket on Log in
+ * POST: send token and service ticket on Log in and response is the history of notifications
  *
  */
-  sendTokenOnLogin() {
+  getMessage(): Observable<any> {
     let token = '';
-    this.fcm.getToken().then(t => token = t);
-    this.cas.getST(this.serviceUrl).subscribe(st => {
-      let body = {
-        "service_ticket": st,
-        "device_token": token
-      }
-      let url = this.APIUrl + '/client/login'
-      this.http.post(url, body).subscribe(res => {
-        console.log('success');
-      })
-    })
+    return fromPromise(this.fcm.getToken()).pipe(
+      switchMap(
+        responseToken => {
+          console.log(responseToken);
+          token = responseToken;
+          return this.cas.getST(this.serviceUrl)
+        }
+      ),
+      switchMap(
+        st => {
+          let body = {
+            "service_ticket": st,
+            "device_token": token
+          };
+          let url = this.APIUrl + '/client/login';
+          return this.http.post(url, body);
+        }
+      )
+    );
   }
 
   /**
-* POST: send token and service ticket on Log out
-*
-* @param id - user id
-*/
+ * POST: send token and service ticket on Log out
+ *
+ * @param id - user id
+ */
   sendTokenOnLogout(id: string) {
     this.fcm.getToken().then(t => {
       let body = {
         "client_id": id,
         "device_token": t
       }
-      let url = this.APIUrl + '/client/logout'
+      let url = this.APIUrl + '/client/logout';
       this.http.post(url, body).subscribe(res => {
-        console.log('success');
+        console.log(res);
       })
     });
   }
 
   /**
-* GET: Request for notification messages
-*
-* @param refresh - force refresh (default: false)
-*/
-  getNotificationMessages(refresh?: boolean): Observable<Notification[]> {
-    const options = refresh ? { headers: { 'x-refresh': '' } } : {};
-    this.cas.getST(this.serviceUrl).subscribe(st => {
-      this.url = this.APIUrl + '/client/messages?service_ticket=' + st;
-    })
-    return this.http.get<Notification[]>(this.url, options).pipe(publishLast(), refCount())
+ * POST: send message id and service ticket
+ *
+ * @param messageID - id of the notification message
+ */
+  sendRead(messageID: string): Observable<any>{
+    return this.cas.getST(this.serviceUrl).pipe(
+      switchMap(st => {
+        let body = {
+          "message_id": messageID,
+          "service_ticket": st
+        }
+        let url  = this.APIUrl + '/client/read';
+        return this.http.post(url, body);
+      })
+    )
   }
+
 }

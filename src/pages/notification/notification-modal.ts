@@ -8,11 +8,15 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'notification-modal.html',
 })
 export class NotificationModalPage {
+
   itemDetails: any;
+
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams) {
-    this.itemDetails = this.navParams.get('itemDetails')
-    this.itemDetails = this.itemDetails;
+    public navParams: NavParams,
+  ) {}
+
+  ionViewDidLoad(){
+    this.itemDetails = this.navParams.get('itemDetails');
   }
 }

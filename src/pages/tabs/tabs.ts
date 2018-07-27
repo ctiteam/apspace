@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavParams, NavController, AlertController, Platform, App, Events, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { FCM } from '@ionic-native/fcm';
+import { Storage } from '@ionic/storage';
 
 import { Role } from '../../interfaces';
 import { SettingsProvider, LoadingControllerProvider } from '../../providers';
@@ -46,6 +47,7 @@ export class TabsPage {
     public app: App,
     private loading: LoadingControllerProvider,
     public toastCtrl: ToastController,
+    public storage: Storage, // XXX
   ) {
     // if (this.plt.is("cordova")) {
     //   this.statusBar.backgroundColorByHexString('#4da9ff');
@@ -71,31 +73,33 @@ export class TabsPage {
             toast.present();
           }
         });
+
+        this.fcm.onNotification().subscribe(data => {
+          this.storage.set('test', `${new Date()} ${data.wasTapped}`);
+          if (data.wasTapped) {
+            console.log('tapped background')
+            console.log("wastapped" + JSON.stringify(data));
+            this.navCtrl.push("NotificationPage");
+          } else {
+            console.log("asdsd" + JSON.stringify(data));
+            this.presentConfirm(data);
+          }
+        });
       }
     });
+
     const role = this.settings.get('role');
     this.tabs = this.pages.filter(page => page.role & role).slice(0, 4).concat(this.morePages);
+  }
 
-    // this.platform.ready().then(() => {
-    //   if (this.platform.is("cordova")) {
-    //     this.fcm.onNotification().subscribe(data => {
-    //       if (data.wasTapped) {
-    //         console.log('tapped background')
-    //         console.log("wastapped" + JSON.stringify(data));
-    //         //this.navCtrl.push("NotificationPage");
-    //       } else {
-    //         console.log("asdsd" + JSON.stringify(data));
-    //         //this.presentConfirm(data);
-    //       };
-    //     })
-    //   }
-    // })
+  ionViewDidLoad() {
+    this.storage.get('test').then(data => console.log('test', data));
   }
 
   presentConfirm(data) {
     this.alertCtrl.create({
       title: data.title,
-      message: data.body,
+      message: data.content,
       buttons: [
         { text: "Cancel", role: "cancel" },
         {

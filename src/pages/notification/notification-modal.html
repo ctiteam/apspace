@@ -1,11 +1,27 @@
-
-<ion-header>
+<ion-header no-border>
   <ion-navbar>
-    <ion-title *ngIf = "itemDetails" >{{itemDetails.title}}</ion-title>
+    <ion-title *ngIf="itemDetails">{{ itemDetails.title }}</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding *ngIf = "itemDetails">
-<h2>{{itemDetails.title}}</h2>
-<p>{{itemDetails.body}}</p>
+<ion-content *ngIf="itemDetails">
+  <div id="fill"></div>
+  <button id="icon-button" ion-button icon-only>
+      <ion-icon id="mail-icon" name="mail-open"></ion-icon>
+    </button>
+    <div padding>
+      <br>
+      <br>
+      <h4 id="h4">
+        {{ itemDetails.title }}
+      </h4>
+      <br>
+      <ion-note id="note">
+        Issued by: <span id="staff-name">{{ itemDetails.staff_name }}</span>
+      </ion-note>
+      <br>
+      <p>
+        {{ itemDetails.content }}
+      </p>
+    </div>
 </ion-content>

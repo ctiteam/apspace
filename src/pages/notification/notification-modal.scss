@@ -1,6 +1,38 @@
 page-notification-modal {
-    h2{
-        text-align: center;
+
+    #fill{
+      width: 100%;
+      height: 60px;
+      background-color: color($colors, primary)
     }
 
+    #icon-button{
+      width: 45px;
+      height: 45px;
+      position: absolute;
+      top: 32px;
+      left: 44%;
+    }
+
+    .button-md{
+      border-radius: 50%;
+      background-color: color($colors, light);
+    }
+
+    #mail-icon{
+      color: color($colors, dark-shade);
+    }
+
+    #h4{
+      margin: auto;
+      text-align: center;
+    }
+
+    #staff-name{
+      color: color($colors, dark);
+    }
+
+    #note{
+      font-size: 0.7em;
+    }
 }
