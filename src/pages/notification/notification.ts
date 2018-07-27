@@ -3,9 +3,8 @@ import { IonicPage, NavController, Platform } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { Storage } from '@ionic/storage';
 
-import { NotificationServiceProvider } from '../../providers';
-import { Notification } from '../../interfaces';
-import { finalize, tap, map } from '../../../node_modules/rxjs/operators';
+import { NotificationProvider } from '../../providers';
+import { finalize, map } from '../../../node_modules/rxjs/operators';
 
 @IonicPage()
 @Component({
@@ -20,7 +19,7 @@ export class NotificationPage {
 
   constructor(
     private navCtrl: NavController,
-    private notification: NotificationServiceProvider,
+    private notification: NotificationProvider,
     private platform: Platform,
     private storage: Storage,
   ) { }

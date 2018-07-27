@@ -19,7 +19,7 @@ import { Badge } from '@ionic-native/badge';
 import { MyApp } from './app.component';
 import {
   BusTrackingProvider, CasTicketProvider, LoadingControllerProvider,
-  NotificationServiceProvider, OperationHoursProvider, RequestCache,
+  NotificationProvider, OperationHoursProvider, RequestCache,
   RequestCacheWithMapStorage, WsApiProvider, httpInterceptorProviders,
   SettingsProvider
 } from '../providers';
@@ -49,7 +49,7 @@ import {
     Badge,
     LocalNotifications,
     WsApiProvider,
-    NotificationServiceProvider,
+    NotificationProvider,
     { provide: RequestCache, useClass: RequestCacheWithMapStorage },
     httpInterceptorProviders,
     OperationHoursProvider,

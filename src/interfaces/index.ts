@@ -21,4 +21,3 @@ export { InterimLegend } from './interim-legend';
 export { MPULegend } from './mpu-legend';
 export { DeterminationLegend } from './determination-legend';
 export { ClassificationLegend } from './classfication-legend';
-export { Notification } from './notification';

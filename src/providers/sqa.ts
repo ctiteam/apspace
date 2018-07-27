@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { publishLast, refCount, switchMap } from 'rxjs/operators';
 
-import { CasTicketProvider } from './';
+import { CasTicketProvider } from '../providers';
 import { Sqa } from '../interfaces';
 
 @Injectable()

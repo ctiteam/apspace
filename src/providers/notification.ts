@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { FCM } from '@ionic-native/fcm';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
-import { catchError, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { fromPromise } from 'rxjs/observable/fromPromise'
 import { CasTicketProvider } from '../providers';
 
 @Injectable()
-export class NotificationServiceProvider {
+export class NotificationProvider {
 
   serviceUrl = "http://sns-admin.s3-website-ap-southeast-1.amazonaws.com/";
   APIUrl = "https://15frgbdxil.execute-api.ap-southeast-1.amazonaws.com/dev";

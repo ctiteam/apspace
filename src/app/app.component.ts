@@ -15,7 +15,7 @@ import { forkJoin } from 'rxjs/observable/forkJoin';
 
 import {
   CasTicketProvider,
-  NotificationServiceProvider,
+  NotificationProvider,
   SettingsProvider,
   WsApiProvider,
   LoadingControllerProvider
@@ -39,7 +39,7 @@ export class MyApp {
     public statusBar: StatusBar,
     public storage: Storage,
     public toastCtrl: ToastController,
-    private notificationService: NotificationServiceProvider,
+    private notificationService: NotificationProvider,
     private platform: Platform,
     private settings: SettingsProvider,
     private ws: WsApiProvider,
