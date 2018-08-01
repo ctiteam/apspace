@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { IonicPage, Platform, ActionSheetController, ActionSheetButton } from "ionic-angular";
 import { Observable } from "rxjs/Observable";
-import { tap, finalize } from "rxjs/operators";
+import { tap, finalize, switchMap } from "rxjs/operators";
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 
 import { WsApiProvider, LoadingControllerProvider } from "../../providers";
@@ -39,11 +39,13 @@ export class ResultsPage {
   studentId: string;
   grade_point: number = 0;
   passedModule: any = 0;
-  semester1: any;
-  semester2: any;
-  semester3: any;
+  semester1: any[] = [];
+  semester2: any[] = [];
+  semester3: any[] = [];
   intakeLabels: any;
   block: boolean = false;
+  studentProgramme: boolean = false;
+  results: any;
 
   options = {
     legend: {
@@ -73,10 +75,9 @@ export class ResultsPage {
     return (this.results$ = this.ws
       .get<Subcourse>(`/student/subcourses?intake=${intake}`, refresh, opt)
       .pipe(
-        tap(r => this.seperateBySemesters(r)),
-        tap(r => this.sortArray(r)),
         tap(_ => this.getCourseDetails(intake)),
-        finalize(() => this.loading.dismissLoading())
+        tap(r => this.seperateBySemesters(r)),
+        tap(r => this.getLegend(intake, r)),
       ));
   }
 
@@ -89,12 +90,12 @@ export class ResultsPage {
   ionViewDidLoad() {
     this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
     this.profile$.subscribe(p => {
+      this.identifyUser(p[0].PROGRAMME);
       if (p[0].BLOCK == true) {
         this.block = false;
         this.intakes$ = this.ws.get<Course[]>("/student/courses").pipe(
-          tap(i => (this.selectedIntake = i[0].INTAKE_CODE)),
-          tap(i => (this.studentId = i[0].STUDENT_NUMBER)),
-          tap(_ => this.getLegend(this.selectedIntake)),
+          tap(i => this.selectedIntake = i[0].INTAKE_CODE),
+          tap(i => this.studentId = i[0].STUDENT_NUMBER),
           tap(_ => this.getResults(this.selectedIntake)),
           tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE))))
         );
@@ -119,34 +120,87 @@ export class ResultsPage {
     ));
   }
 
-  getLegend(intake: string) {
-    this.interimLegend$ = this.ws.get<InterimLegend[]>(`/student/interim_legend?id=${this.studentId}&intake=${intake}`);
+  //gradeList: string[];
+
+  getLegend(intake: string, results: any) {
+    this.interimLegend$ = this.ws.get<InterimLegend[]>(`/student/interim_legend?id=${this.studentId}&intake=${intake}`).pipe(
+      tap(res => {
+        let gradeList: any;
+        gradeList = Array.from(new Set((res || []).map(grade => grade.GRADE)))
+        gradeList.push("Pass", "Fail");
+        this.sortArray(results, gradeList);
+      }),
+      finalize(() => this.loading.dismissLoading())
+      // tap(_ => this.gradeList.push("Pass", "Fail"))
+    )
     this.mpuLegend$ = this.ws.get<MPULegend[]>(`/student/mpu_legend?id=${this.studentId}&intake=${intake}`);
     this.determinationLegend$ = this.ws.get<DeterminationLegend[]>(`/student/determination_legend?id=${this.studentId}&intake=${intake}`);
     this.classificationLegend$ = this.ws.get<ClassificationLegend[]>(`/student/classification_legend?id=${this.studentId}&intake=${intake}`);
   }
 
-  sortArray(r) {
+  identifyUser(programme: string) {
+    let masters: string[] = [
+      'M.Sc. in Information Technology Management',
+      'Master of Technology Management',
+      'M.Sc. in Software Engineering',
+      'Master of Business Administration',
+      'M.Sc. in Global Marketing Management',
+      'M.Sc. in International Business Communications',
+      'MBA (Euro - Asia Business)',
+      'Master of Finance',
+      'Master of Islamic Finance and Banking',
+      'Master of Accounting',
+      'Master of Accounting in Forensic Analysis',
+      'Master of Project Management'
+    ]
+
+    for (let i = 0; i <= masters.length; i++) {
+      if (programme === masters[i]) {
+        this.studentProgramme = true;
+      } else {
+        this.studentProgramme = false;
+      }
+    }
+  }
+
+  sortArray(results: any, gradeList: any) {
     let list = [];
     let listItems = [];
-    for (let grade of r) {
-      list.push(grade.GRADE);
+
+    if (this.studentProgramme === false) {
+      for (let grade of results) {
+        list.push(grade.GRADE);
+      }
+    } else {
+      for (let grade of results) {
+        list.push(grade.GRADE_POINT);
+      }
     }
-    list.sort();
-    listItems = list.filter(function(item, pos) {
-      return list.indexOf(item) == pos;
+
+    //TODO: finish sorting
+    let matches: string[] = [];
+    for (let i = 0; i < gradeList.length; i++) {
+      for (let e = 0; e < list.length; e++) {
+        if (gradeList[i] === list[e]) {
+          matches.push(gradeList[i]);
+        }
+      }
+    }
+
+    listItems = matches.filter(function (item, pos) {
+      return matches.indexOf(item) == pos;
     });
 
     let a = [],
       prev;
 
-    for (let i = 0; i < list.length; i++) {
-      if (list[i] !== prev) {
+    for (let i = 0; i < matches.length; i++) {
+      if (matches[i] !== prev) {
         a.push(1);
       } else {
         a[a.length - 1]++;
       }
-      prev = list[i];
+      prev = matches[i];
     }
 
     let randomColor = [
@@ -192,14 +246,13 @@ export class ResultsPage {
   showActionSheet() {
     if (this.plt.is('cordova')) {
       const options: ActionSheetOptions = {
-        buttonLabels: ['INTAKES', ...this.intakeLabels],
+        buttonLabels: [...this.intakeLabels],
         addCancelButtonWithLabel: 'Cancel',
       };
       this.actionSheet.show(options).then((buttonIndex: number) => {
         if (buttonIndex <= 1 + this.intakeLabels.length) {
-          this.selectedIntake = this.intakeLabels[buttonIndex - 2] || '';
+          this.selectedIntake = this.intakeLabels[buttonIndex - 1] || '';
           this.getResults(this.selectedIntake);
-          this.getLegend(this.selectedIntake);
         }
       });
     } else {
@@ -208,7 +261,6 @@ export class ResultsPage {
         handler: () => {
           this.selectedIntake = intake;
           this.getResults(this.selectedIntake);
-          this.getLegend(this.selectedIntake);
         }
       });
       let actionSheet = this.actionSheetCtrl.create({

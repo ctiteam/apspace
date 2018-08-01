@@ -44,12 +44,12 @@ export class AttendancePage {
   showActionSheet() {
     if (this.plt.is('cordova')) {
       const options: ActionSheetOptions = {
-        buttonLabels: ['INTAKES', ...this.intakeLabels],
+        buttonLabels: [...this.intakeLabels],
         addCancelButtonWithLabel: 'Cancel',
       };
       this.actionSheet.show(options).then((buttonIndex: number) => {
         if (buttonIndex <= 1 + this.intakeLabels.length) {
-          this.selectedIntake = this.intakeLabels[buttonIndex - 2] || '';
+          this.selectedIntake = this.intakeLabels[buttonIndex - 1] || '';
           this.getAttendance(this.selectedIntake);
         }
       });

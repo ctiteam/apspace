@@ -24,7 +24,7 @@
     </ion-item>
   </ion-list>
 
-  <ion-list [virtualScroll]="staff$ | async | in:dept | search:term">
+  <ion-list [virtualScroll]="staff$ | async | in:dept | search:term" [approxItemHeight]="'20px'">
     <ion-item *virtualItem="let staff"
       navPush="StaffDirectoryInfoPage" [navParams]="{id: staff.CODE}">
       <ion-avatar item-start>

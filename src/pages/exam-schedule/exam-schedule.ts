@@ -69,12 +69,12 @@ export class ExamSchedulePage {
   presentActionSheet() {
     if (this.plt.is('cordova')) {
       const options: ActionSheetOptions = {
-        buttonLabels: ['INTAKES', ...this.intakes],
+        buttonLabels: [...this.intakes],
         addCancelButtonWithLabel: 'Cancel'
       };
       this.actionSheet.show(options).then((buttonIndex: number) => {
         if (buttonIndex <= 1 + this.intakes.length) {
-          this.intake = this.intakes[buttonIndex - 2] || '';
+          this.intake = this.intakes[buttonIndex - 1] || '';
           this.settings.set('examIntake', this.intake);
           this.getExam(this.intake);
         }

@@ -24,7 +24,8 @@ export class StaffDirectoryPage {
   constructor(
     public navCtrl: NavController,
     private ws: WsApiProvider,
-    public loading: LoadingControllerProvider) { }
+    public loading: LoadingControllerProvider,
+  ) { }
 
   @HostListener('keydown', ['$event']) onkeydown(e) {
     if (e.keyCode == 13) {
