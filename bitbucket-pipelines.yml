@@ -6,7 +6,7 @@ pipelines:
     - step:
         script:
           - npm install
-          - ionic cordova build browser
+          - ionic cordova build browser --prod
           - apt-get update
           - apt-get install -y software-properties-common
           - add-apt-repository ppa:deadsnakes/ppa
