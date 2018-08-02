@@ -93,7 +93,7 @@ export class TimetablePage {
   updateDay(tt: Timetable[]): void {
     this.availableDays = this.schoolDays(tt);
     if (!this.selectedDay || this.availableDays.indexOf(this.selectedDay) === -1) {
-      this.selectedDay = this.availableDays.shift();
+      this.selectedDay = this.availableDays[0];
     } else if (!this.availableDays.length) {
       this.selectedDay = undefined;
     }
