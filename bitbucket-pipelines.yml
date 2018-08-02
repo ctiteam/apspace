@@ -2,7 +2,7 @@ image: beevelop/ionic:latest
 
 pipelines:
   branches:
-    production:
+    master:
     - step:
         script:
           - npm install
