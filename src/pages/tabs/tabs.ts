@@ -66,6 +66,7 @@ export class TabsPage {
             let toast = this.toastCtrl.create({
               message: 'Tap again to exit.',
               duration: 2000,
+              position: 'top',
               cssClass: 'normalToast'
             });
             this.exit = true;
