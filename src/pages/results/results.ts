@@ -1,7 +1,12 @@
 import { Component } from "@angular/core";
-import { IonicPage, Platform, ActionSheetController, ActionSheetButton } from "ionic-angular";
+import {
+  IonicPage,
+  Platform,
+  ActionSheetController,
+  ActionSheetButton,
+} from "ionic-angular";
 import { Observable } from "rxjs/Observable";
-import { tap, finalize, switchMap } from "rxjs/operators";
+import { tap, finalize } from "rxjs/operators";
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 
 import { WsApiProvider, LoadingControllerProvider } from "../../providers";
@@ -44,7 +49,6 @@ export class ResultsPage {
   semester3: any[] = [];
   intakeLabels: any;
   block: boolean = false;
-  studentProgramme: boolean = false;
   results: any;
 
   options = {
@@ -78,6 +82,7 @@ export class ResultsPage {
         tap(_ => this.getCourseDetails(intake)),
         tap(r => this.seperateBySemesters(r)),
         tap(r => this.getLegend(intake, r)),
+        finalize(() => this.loading.dismissLoading())
       ));
   }
 
@@ -90,15 +95,15 @@ export class ResultsPage {
   ionViewDidLoad() {
     this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
     this.profile$.subscribe(p => {
-      this.identifyUser(p[0].PROGRAMME);
       if (p[0].BLOCK == true) {
         this.block = false;
-        this.intakes$ = this.ws.get<Course[]>("/student/courses").pipe(
-          tap(i => this.selectedIntake = i[0].INTAKE_CODE),
-          tap(i => this.studentId = i[0].STUDENT_NUMBER),
-          tap(_ => this.getResults(this.selectedIntake)),
-          tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE))))
-        );
+        this.intakes$ = this.ws.get<Course[]>("/student/courses")
+          .pipe(
+            tap(i => this.selectedIntake = i[0].INTAKE_CODE),
+            tap(i => this.studentId = i[0].STUDENT_NUMBER),
+            tap(_ => this.getResults(this.selectedIntake)),
+            tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE))))
+          );
       } else {
         this.block = true;
       }
@@ -106,9 +111,10 @@ export class ResultsPage {
   }
 
   doRefresh(refresher?) {
-    this.results$ = this.getResults(this.selectedIntake, true).pipe(
-      finalize(() => refresher.complete())
-    );
+    this.results$ = this.getResults(this.selectedIntake, true)
+      .pipe(
+        finalize(() => refresher.complete())
+      );
   }
 
   getCourseDetails(intake: string, refresh: boolean = false): Observable<CourseDetails> {
@@ -120,64 +126,28 @@ export class ResultsPage {
     ));
   }
 
-  //gradeList: string[];
-
   getLegend(intake: string, results: any) {
     this.interimLegend$ = this.ws.get<InterimLegend[]>(`/student/interim_legend?id=${this.studentId}&intake=${intake}`).pipe(
       tap(res => {
         let gradeList: any;
         gradeList = Array.from(new Set((res || []).map(grade => grade.GRADE)))
-        gradeList.push("Pass", "Fail");
+        //gradeList.push("Pass", "Fail");
         this.sortArray(results, gradeList);
-      }),
-      finalize(() => this.loading.dismissLoading())
-      // tap(_ => this.gradeList.push("Pass", "Fail"))
+      })
     )
     this.mpuLegend$ = this.ws.get<MPULegend[]>(`/student/mpu_legend?id=${this.studentId}&intake=${intake}`);
     this.determinationLegend$ = this.ws.get<DeterminationLegend[]>(`/student/determination_legend?id=${this.studentId}&intake=${intake}`);
     this.classificationLegend$ = this.ws.get<ClassificationLegend[]>(`/student/classification_legend?id=${this.studentId}&intake=${intake}`);
   }
 
-  identifyUser(programme: string) {
-    let masters: string[] = [
-      'M.Sc. in Information Technology Management',
-      'Master of Technology Management',
-      'M.Sc. in Software Engineering',
-      'Master of Business Administration',
-      'M.Sc. in Global Marketing Management',
-      'M.Sc. in International Business Communications',
-      'MBA (Euro - Asia Business)',
-      'Master of Finance',
-      'Master of Islamic Finance and Banking',
-      'Master of Accounting',
-      'Master of Accounting in Forensic Analysis',
-      'Master of Project Management'
-    ]
-
-    for (let i = 0; i <= masters.length; i++) {
-      if (programme === masters[i]) {
-        this.studentProgramme = true;
-      } else {
-        this.studentProgramme = false;
-      }
-    }
-  }
-
   sortArray(results: any, gradeList: any) {
     let list = [];
     let listItems = [];
 
-    if (this.studentProgramme === false) {
-      for (let grade of results) {
-        list.push(grade.GRADE);
-      }
-    } else {
-      for (let grade of results) {
-        list.push(grade.GRADE_POINT);
-      }
+    for (let grade of results) {
+      list.push(grade.GRADE);
     }
 
-    //TODO: finish sorting
     let matches: string[] = [];
     for (let i = 0; i < gradeList.length; i++) {
       for (let e = 0; e < list.length; e++) {

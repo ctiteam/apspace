@@ -4,10 +4,12 @@ import {
   Nav,
   Platform,
   ToastController,
+  AlertController,
 } from "ionic-angular";
 import { Storage } from "@ionic/storage";
 import { Network } from "@ionic-native/network";
 import { StatusBar } from '@ionic-native/status-bar';
+import { FCM } from '@ionic-native/fcm';
 
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
@@ -45,6 +47,8 @@ export class MyApp {
     private ws: WsApiProvider,
     private loading: LoadingControllerProvider,
     private cas: CasTicketProvider,
+    private alertCtrl: AlertController,
+    private fcm: FCM,
   ) {
     this.storage.get("tgt").then(tgt => {
       if (tgt) {
@@ -58,6 +62,14 @@ export class MyApp {
 
     if (this.platform.is("cordova")) {
       this.statusBar.overlaysWebView(false);
+      this.fcm.onNotification().subscribe(data => {
+        this.storage.set('test', `${new Date()} ${data.wasTapped}`);
+        if (data.wasTapped) {
+          this.navCtrl.push("NotificationPage");
+        } else {
+          this.presentConfirm(data);
+        }
+      });
       if (this.network.type === "none") {
         this.toastCtrl
           .create({ message: "You are now offline.", duration: 3000 })
@@ -117,6 +129,20 @@ export class MyApp {
 
   unsubscribeNotification(id: string) {
     this.notificationService.sendTokenOnLogout(id);
+  }
+
+  presentConfirm(data) {
+    this.alertCtrl.create({
+      title: data.title,
+      message: data.content,
+      buttons: [
+        { text: "Cancel", role: "cancel" },
+        {
+          text: "Open",
+          handler: () => { this.navCtrl.push("NotificationModalPage", { itemDetails: data }); }
+        }
+      ]
+    }).present();
   }
 
 }

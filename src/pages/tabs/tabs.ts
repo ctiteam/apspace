@@ -49,44 +49,30 @@ export class TabsPage {
     public toastCtrl: ToastController,
     public storage: Storage, // XXX
   ) {
-    // if (this.plt.is("cordova")) {
-    //   this.statusBar.backgroundColorByHexString('#4da9ff');
-    // }
-    this.plt.ready().then(() => {
-      if (this.plt.is('cordova')) {
-        this.events.subscribe('user:logout', _ => this.back && this.back());
-        this.back = this.plt.registerBackButtonAction(() => {
-          if (this.app.getRootNav().canGoBack()) {
-            this.app.getRootNav().pop();
-          } else if (this.exit) {
-            this.plt.exitApp();
-          } else if (this.loading.dismissLoading()) {
-            this.loading.dismissLoading();
-          } else {
-            let toast = this.toastCtrl.create({
-              message: 'Tap again to exit.',
-              duration: 2000,
-              cssClass: 'normalToast'
-            });
-            this.exit = true;
-            toast.onDidDismiss(() => this.exit = false);
-            toast.present();
-          }
-        });
-
-        this.fcm.onNotification().subscribe(data => {
-          this.storage.set('test', `${new Date()} ${data.wasTapped}`);
-          if (data.wasTapped) {
-            console.log('tapped background')
-            console.log("wastapped" + JSON.stringify(data));
-            this.navCtrl.push("NotificationPage");
-          } else {
-            console.log("asdsd" + JSON.stringify(data));
-            this.presentConfirm(data);
-          }
-        });
-      }
-    });
+    // this.plt.ready().then(() => {
+    //   if (this.plt.is('cordova')) {
+    //     this.statusBar.backgroundColorByHexString('#4da9ff');
+    //     this.events.subscribe('user:logout', _ => this.back && this.back());
+    //     this.back = this.plt.registerBackButtonAction(() => {
+    //       if (this.app.getRootNav().canGoBack()) {
+    //         this.app.getRootNav().pop();
+    //       } else if (this.exit) {
+    //         this.plt.exitApp();
+    //       } else if (this.loading.dismissLoading()) {
+    //         this.loading.dismissLoading();
+    //       } else {
+    //         let toast = this.toastCtrl.create({
+    //           message: 'Tap again to exit.',
+    //           duration: 2000,
+    //           cssClass: 'normalToast'
+    //         });
+    //         this.exit = true;
+    //         toast.onDidDismiss(() => this.exit = false);
+    //         toast.present();
+    //       }
+    //     });
+    //   }
+    // });
 
     const role = this.settings.get('role');
     this.tabs = this.pages.filter(page => page.role & role).slice(0, 4).concat(this.morePages);
@@ -94,19 +80,5 @@ export class TabsPage {
 
   ionViewDidLoad() {
     this.storage.get('test').then(data => console.log('test', data));
-  }
-
-  presentConfirm(data) {
-    this.alertCtrl.create({
-      title: data.title,
-      message: data.content,
-      buttons: [
-        { text: "Cancel", role: "cancel" },
-        {
-          text: "Open",
-          handler: () => { this.navCtrl.push("NotificationModalPage", { itemDetails: data }); }
-        }
-      ]
-    }).present();
   }
 }

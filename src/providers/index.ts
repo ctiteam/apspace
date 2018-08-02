@@ -16,3 +16,4 @@ export { SettingsProvider } from './settings';
 export { SqaProvider } from './sqa';
 export { TimetableProvider } from './timetable';
 export { WsApiProvider } from './ws-api';
+export { FeedbackProvider } from './feedback';
