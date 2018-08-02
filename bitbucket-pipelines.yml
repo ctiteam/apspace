@@ -14,7 +14,7 @@ pipelines:
           - apt-get install -y python3.6 python3-pip
           - python3.6 -m pip install awscli --upgrade --user
           - export PATH=~/.local/bin:$PATH
-          - aws s3 sync www/ s3://apspace-production/
+          - aws s3 sync www/ s3://apspace-production/ --acl public-read
     staging:
     - step:
         script:
@@ -27,4 +27,4 @@ pipelines:
           - apt-get install -y python3.6 python3-pip
           - python3.6 -m pip install awscli --upgrade --user
           - export PATH=~/.local/bin:$PATH
-          - aws s3 sync www/ s3://apspace-staging/
+          - aws s3 sync www/ s3://apspace-staging/ --acl public-read
