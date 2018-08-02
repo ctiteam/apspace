@@ -49,30 +49,32 @@ export class TabsPage {
     public toastCtrl: ToastController,
     public storage: Storage, // XXX
   ) {
-    // this.plt.ready().then(() => {
-    //   if (this.plt.is('cordova')) {
-    //     this.statusBar.backgroundColorByHexString('#4da9ff');
-    //     this.events.subscribe('user:logout', _ => this.back && this.back());
-    //     this.back = this.plt.registerBackButtonAction(() => {
-    //       if (this.app.getRootNav().canGoBack()) {
-    //         this.app.getRootNav().pop();
-    //       } else if (this.exit) {
-    //         this.plt.exitApp();
-    //       } else if (this.loading.dismissLoading()) {
-    //         this.loading.dismissLoading();
-    //       } else {
-    //         let toast = this.toastCtrl.create({
-    //           message: 'Tap again to exit.',
-    //           duration: 2000,
-    //           cssClass: 'normalToast'
-    //         });
-    //         this.exit = true;
-    //         toast.onDidDismiss(() => this.exit = false);
-    //         toast.present();
-    //       }
-    //     });
-    //   }
-    // });
+
+    this.plt.ready().then(() => {
+      if (this.plt.is('cordova')) {
+        this.statusBar.backgroundColorByHexString('#4da9ff');
+        this.events.subscribe('user:logout', _ => this.back && this.back());
+        this.back = this.plt.registerBackButtonAction(() => {
+          if (this.app.getRootNav().canGoBack()) {
+            this.app.getRootNav().pop();
+          } else if (this.exit) {
+            this.plt.exitApp();
+          } else if (this.loading.dismissLoading()) {
+            this.loading.dismissLoading();
+          } else {
+            let toast = this.toastCtrl.create({
+              message: 'Tap again to exit.',
+              duration: 2000,
+              position: 'top',
+              cssClass: 'normalToast'
+            });
+            this.exit = true;
+            toast.onDidDismiss(() => this.exit = false);
+            toast.present();
+          }
+        });
+      }
+    });
 
     const role = this.settings.get('role');
     this.tabs = this.pages.filter(page => page.role & role).slice(0, 4).concat(this.morePages);

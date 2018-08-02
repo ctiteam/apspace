@@ -1,0 +1,24 @@
+image: beevelop/ionic:v3.20.0
+
+pipelines:
+  branches:
+    production:
+    - step:
+        caches:
+          - node
+        script:
+          - npm install
+          - ionic cordova build browser --prod
+          - apt-get update
+          - apt-get install -y awscli
+          - aws s3 sync www/ s3://apspace-production/ --acl public-read
+    staging:
+    - step:
+        caches:
+          - node
+        script:
+          - npm install
+          - ionic cordova build browser --prod
+          - apt-get update
+          - apt-get install -y awscli
+          - aws s3 sync www/ s3://apspace-staging/ --acl public-read
