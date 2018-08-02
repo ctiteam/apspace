@@ -1,30 +1,24 @@
-image: beevelop/ionic:latest
+image: beevelop/ionic:v3.20.0
 
 pipelines:
   branches:
-    master:
+    production:
     - step:
+        caches:
+          - node
         script:
           - npm install
           - ionic cordova build browser --prod
           - apt-get update
-          - apt-get install -y software-properties-common
-          - add-apt-repository ppa:deadsnakes/ppa
-          - apt-get update
-          - apt-get install -y python3.6 python3-pip
-          - python3.6 -m pip install awscli --upgrade --user
-          - export PATH=~/.local/bin:$PATH
+          - apt-get install -y awscli
           - aws s3 sync www/ s3://apspace-production/ --acl public-read
     staging:
     - step:
+        caches:
+          - node
         script:
           - npm install
           - ionic cordova build browser --prod
           - apt-get update
-          - apt-get install -y software-properties-common
-          - add-apt-repository ppa:deadsnakes/ppa
-          - apt-get update
-          - apt-get install -y python3.6 python3-pip
-          - python3.6 -m pip install awscli --upgrade --user
-          - export PATH=~/.local/bin:$PATH
+          - apt-get install -y awscli
           - aws s3 sync www/ s3://apspace-staging/ --acl public-read

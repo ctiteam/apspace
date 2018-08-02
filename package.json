@@ -72,7 +72,7 @@
   },
   "devDependencies": {
     "@angular/cli": "^6.0.3",
-    "@ionic/app-scripts": "^3.1.9",
+    "@ionic/app-scripts": "3.1.11",
     "typescript": "2.6"
   },
   "description": "An Ionic project",
