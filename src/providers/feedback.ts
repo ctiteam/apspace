@@ -19,6 +19,7 @@ export class FeedbackProvider {
     name: '',
     email: '',
     contact_number: '',
+    device_info: '',
     message: ''
   };
   public cas: CasTicketProvider;
@@ -34,6 +35,8 @@ export class FeedbackProvider {
   /**
    * POST: Send post request to enpoint
    *
+   * @param name user's full name
+   * @param email user's contant number
    * @param contactNumber user's contact number
    * @param message feedback message from user
    */
@@ -43,10 +46,9 @@ export class FeedbackProvider {
     this.loading.presentLoading();
     return this.cas.getST(SERVICE_URL).pipe(
       switchMap(st => {
-        let deviceInfo = '';
         this.feedbackData.service_ticket = st;
         if (this.plt.is("cordova")) {
-          deviceInfo = "Platform: " + this.device.platform + '\n'
+          this.feedbackData.device_info = "Platform: " + this.device.platform + '\n'
             + "Cordova: " + this.device.cordova + '\n'
             + "OS Version: " + this.device.version + '\n'
             + "Model: " + this.device.model + '\n'
@@ -56,7 +58,7 @@ export class FeedbackProvider {
         this.feedbackData.name = name;
         this.feedbackData.email = email;
         this.feedbackData.contact_number = contactNumber;
-        this.feedbackData.message = message + '\n \n' + deviceInfo;
+        this.feedbackData.message = message;
         const options = {
           headers: { 'Content-type': 'application/json' },
         };
