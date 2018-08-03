@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Platform, ToastController } from 'ionic-angular';
+import { Injectable, Injector } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import { Device } from '@ionic-native/device';
 
 import { CasTicketProvider, LoadingControllerProvider } from '../providers';
+import { Observable } from 'rxjs/Observable';
+import { switchMap, finalize } from 'rxjs/operators';
 
 
 const FEEDBACK_URL = "https://rgnsa0bpif.execute-api.ap-southeast-1.amazonaws.com/dev";
@@ -14,56 +16,54 @@ export class FeedbackProvider {
 
   feedbackData: any = {
     service_ticket: '',
+    name: '',
+    email: '',
     contact_number: '',
-    message: '',
+    message: ''
   };
+  public cas: CasTicketProvider;
+  public loading: LoadingControllerProvider;
 
   constructor(
     public http: HttpClient,
-    private cas: CasTicketProvider,
     private device: Device,
     private plt: Platform,
-    private laoding: LoadingControllerProvider,
-    private toastCtrl: ToastController,
-  ) {}
+    private injector: Injector,
+  ) { }
 
   /**
    * POST: Send post request to enpoint
    *
-   * @param contactNumber - user's contact number
-   * @param message - feedback message from user
+   * @param contactNumber user's contact number
+   * @param message feedback message from user
    */
-  sendFeedback(contactNumber: string, message: string){
-    this.laoding.presentLoading();
-    let deviceInfo = '';
-    this.feedbackData.contact_number = contactNumber;
-    this.feedbackData.message = message;
-    this.cas.getST(SERVICE_URL).subscribe(res=> {
-      this.feedbackData.service_ticket = res;
-      if(this.plt.is("cordova")){
-        deviceInfo = "Platform: " + this.device.platform + '<br>'
-        + "Cordova: " + this.device.cordova + '<br>'
-        + "OS Version: " + this.device.version + '<br>'
-        + "Model: " + this.device.model + '<br>'
-        + "Manufacturer: " + this.device.manufacturer + '<br>'
-        + "isVirtual: " + this.device.isVirtual;
-      }
-      this.feedbackData.contact_number = contactNumber;
-      this.feedbackData.message = message + '<br><br>' + deviceInfo;
-
-      const options = {
-        headers: { 'Content-type': 'application/json' },
-      };
-
-      this.http.post(`${FEEDBACK_URL}/user/feature_request`, this.feedbackData, options)
-      .subscribe(res => {
-        this.laoding.dismissLoading();
-        this.toastCtrl.create({ message: "Feedback submitted!", position: 'bottom', duration: 3000 }).present();
-      }), err => {
-        this.laoding.dismissLoading();
-        this.toastCtrl.create({ message: "Failed submitting feedback!", position: 'bottom', duration: 3000 }).present();
-      }
-    })
+  sendFeedback(name: string, email: string, contactNumber: string, message: string): Observable<any> {
+    this.loading = this.injector.get(LoadingControllerProvider);
+    this.cas = this.injector.get(CasTicketProvider);
+    this.loading.presentLoading();
+    return this.cas.getST(SERVICE_URL).pipe(
+      switchMap(st => {
+        let deviceInfo = '';
+        this.feedbackData.service_ticket = st;
+        if (this.plt.is("cordova")) {
+          deviceInfo = "Platform: " + this.device.platform + '\n'
+            + "Cordova: " + this.device.cordova + '\n'
+            + "OS Version: " + this.device.version + '\n'
+            + "Model: " + this.device.model + '\n'
+            + "Manufacturer: " + this.device.manufacturer + '\n'
+            + "isVirtual: " + this.device.isVirtual;
+        }
+        this.feedbackData.name = name;
+        this.feedbackData.email = email;
+        this.feedbackData.contact_number = contactNumber;
+        this.feedbackData.message = message + '\n \n' + deviceInfo;
+        const options = {
+          headers: { 'Content-type': 'application/json' },
+        };
+        return this.http.post(`${FEEDBACK_URL}/user/feature_request`, this.feedbackData, options)
+      }),
+      finalize(() => this.loading.dismissLoading())
+    )
   }
 
 }

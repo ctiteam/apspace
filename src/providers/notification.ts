@@ -31,7 +31,6 @@ export class NotificationProvider {
     return fromPromise(this.fcm.getToken()).pipe(
       switchMap(
         responseToken => {
-          console.log(responseToken);
           token = responseToken;
           return this.cas.getST(this.serviceUrl)
         }
@@ -61,9 +60,7 @@ export class NotificationProvider {
         "device_token": t
       }
       let url = this.APIUrl + '/client/logout';
-      this.http.post(url, body).subscribe(res => {
-        console.log(res);
-      })
+      this.http.post(url, body).subscribe(res => {})
     });
   }
 
