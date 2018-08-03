@@ -93,6 +93,18 @@ export class ResultsPage {
   }
 
   ionViewDidLoad() {
+    // this.intakes$ = this.ws.get<StudentProfile[]>("/student/profile").pipe(
+    //   switchMap(p => (this.block = p[0].BLOCK)
+    //     ? this.ws.get<Course[]>("/student/courses").pipe(
+    //       tap(i => this.selectedIntake = i[0].INTAKE_CODE),
+    //       tap(i => this.studentId = i[0].STUDENT_NUMBER),
+    //       tap(_ => this.getResults(this.selectedIntake)),
+    //       tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE)))),
+    //     )
+    //     : of([] as Course[])
+    //   )
+    // );
+
     this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
     this.profile$.subscribe(p => {
       if (p[0].BLOCK == true) {
@@ -141,38 +153,30 @@ export class ResultsPage {
   }
 
   sortArray(results: any, gradeList: any) {
-    let list = [];
-    let listItems = [];
-
-    for (let grade of results) {
-      list.push(grade.GRADE);
+     let studentGrades: any[] = [];
+     for (let grade of results) {
+      studentGrades.push(grade.GRADE);
     }
+    let t = studentGrades.reduce((acc, v) => {
+      acc[v] = (acc[v] || 0) + 1; return acc;
+    }, {})
 
-    let matches: string[] = [];
-    for (let i = 0; i < gradeList.length; i++) {
-      for (let e = 0; e < list.length; e++) {
-        if (gradeList[i] === list[e]) {
-          matches.push(gradeList[i]);
-        }
-      }
+    let studentResults = Object.keys(t).sort((studentGrades, b) =>
+    gradeList.indexOf(studentGrades) - gradeList.indexOf(b))
+    .map(k => { return { grade: k, count: t[k] }; })
+
+    let grades: any[] = [];
+    let count : any[] = [];
+    for (let g of studentResults) {
+      grades.push(g.grade);
     }
-
-    listItems = matches.filter(function (item, pos) {
-      return matches.indexOf(item) == pos;
-    });
-
-    let a = [],
-      prev;
-
-    for (let i = 0; i < matches.length; i++) {
-      if (matches[i] !== prev) {
-        a.push(1);
-      } else {
-        a[a.length - 1]++;
-      }
-      prev = matches[i];
+    for (let c of studentResults) {
+      count.push(c.count);
     }
+   this.showBarChart(grades, count);
+  }
 
+  showBarChart(listItems, listCount) {
     let randomColor = [
       "rgba(255, 99, 132, 0.7)",
       "rgba(54, 162, 235, 0.7)",
@@ -196,17 +200,14 @@ export class ResultsPage {
       "rgba(247,89,64,1)",
       "rgba(61,199,190,1)"
     ];
-    this.showBarChart(listItems, a, randomColor, randomBorderColor);
-  }
 
-  showBarChart(listItems, listCount, backgroundColor, borderColor) {
     this.data = {
       labels: listItems,
       datasets: [
         {
           data: listCount,
-          backgroundColor: backgroundColor,
-          borderColor: borderColor,
+          backgroundColor: randomColor,
+          borderColor: randomBorderColor,
           borderWidth: 2
         }
       ]

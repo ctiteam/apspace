@@ -3,7 +3,7 @@
     <ion-title *ngIf="intakes$ | async">
       {{this.selectedIntake || 'Results'}}
     </ion-title>
-    <ion-buttons *ngIf="!this.block" end>
+    <ion-buttons *ngIf="!block" end>
       <button color="light" ion-button outline small (click)="showActionSheet()">
         Intakes
       </button>
@@ -12,7 +12,7 @@
 </ion-header>
 
 <ion-content>
-  <ng-template *ngIf="block">
+  <ng-template [ngIf]="block">
     <ion-card style="background: #f04141">
       <ion-card-header>
         <ion-icon class="warning-logo" name="alert"></ion-icon>
@@ -24,7 +24,7 @@
       </ion-card-content>
     </ion-card>
   </ng-template>
-  <ion-refresher *ngIf="this.block === false" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+  <ion-refresher *ngIf="!block" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
@@ -120,8 +120,7 @@
     </ion-card>
   </div>
 
-  <ng-template [ngIf]="this.block === false">
-
+  <ng-template [ngIf]="!block">
     <ion-card>
       <ion-card-header>
         <b>Marks And Grade Points</b>
