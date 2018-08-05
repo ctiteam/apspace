@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import {
-  ActionSheetController, ActionSheetButton, Content, IonicPage, NavController,
-  Platform, App
+  ActionSheetButton, ActionSheetController, App, Content, IonicPage,
+  NavController, Platform
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -82,13 +82,6 @@ export class TimetablePage {
     return this.wday.filter(d => days.indexOf(d) !== -1);
   }
 
-  /** Check if the timetable is outdated. */
-  outdated(tt: Timetable[]): boolean {
-    const date = new Date(); // beginning of week
-    date.setDate(date.getDate() - date.getDay());
-    return date < new Date(tt[0].DATESTAMP_ISO);
-  }
-
   /** Update selected day in segment and style when day change. */
   updateDay(tt: Timetable[]): void {
     this.availableDays = this.schoolDays(tt);
@@ -100,22 +93,44 @@ export class TimetablePage {
     this.content.resize();
   }
 
-  /** Get and merge Timetable with StaffDirectory. */
+  /** Check if the timetable is outdated. */
+  outdated(tt: Timetable[]): boolean {
+    const date = new Date(); // beginning of week
+    date.setDate(date.getDate() - date.getDay());
+    return date < new Date(tt[0].DATESTAMP_ISO);
+  }
+
+  /** Refresh timetable, forcefully if refresher is passed. */
+  doRefresh(refresher?) {
+    this.timetable$ = this.getTimetable(Boolean(refresher)).pipe(
+      switchMap(tt => !refresher && this.outdated(tt) ? this.getTimetable(true) : of(tt)),
+      tap(tt => this.updateDay(tt)),
+      tap(tt => this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort()),
+      finalize(() => refresher && refresher.complete()),
+    );
+  }
+
+  /** Merge StaffDirectory FULLNAME into Timetable. */
+  joinTimetable(tt: Timetable[], sd: StaffDirectory[]): Timetable[] {
+    const sm = sd.reduce((m, s) => (m[s.CODE] = s.FULLNAME, m), {});
+    return tt.map(t => Object.assign(t, { STAFFNAME: sm[t.LECTID] }));
+  }
+
+  /** Convert week days into datestamp in timetable. */
+  wdayToDate(tt: Timetable[]) {
+    this.date = this.wday.map(d => (tt.find(t => t.DAY === d) || {} as Timetable).DATESTAMP_ISO);
+  }
+
+  /** Get and merge Timetable and StaffDirectory. */
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
     return forkJoin([
       this.tt.get(refresh),
       this.ws.get<StaffDirectory[]>('/staff/listing'),
     ]).pipe(
       distinctUntilChanged(),
-      map(data => (data[0] || []).map(t => <Timetable>Object.assign(t,
-        { STAFFNAME: ((data[1] || []).find(s => s.CODE === t.LECTID) || <StaffDirectory>{}).FULLNAME }))),
+      map(d => this.joinTimetable(d[0] || [], d[1] || [])),
       tap(tt => this.wdayToDate(tt)),
     );
-  }
-
-  /** Convert week days into datestamp in timetable. */
-  wdayToDate(tt: Timetable[]) {
-    this.date = this.wday.map(d => (tt.find(t => t.DAY === d) || {} as Timetable).DATESTAMP_ISO);
   }
 
   /** Convert string to color with djb2 hash function. */
@@ -128,13 +143,9 @@ export class TimetablePage {
       .substr(-2)).join('');
   }
 
-  doRefresh(refresher?) {
-    this.timetable$ = this.getTimetable(Boolean(refresher)).pipe(
-      switchMap(tt => !refresher && this.outdated(tt) ? this.getTimetable(true) : of(tt)),
-      tap(tt => this.updateDay(tt)),
-      tap(tt => this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort()),
-      finalize(() => refresher && refresher.complete()),
-    );
+  /** Open staff info for lecturer id. */
+  openStaffDirectoryInfo(id: string) {
+    this.app.getRootNav().push("StaffDirectoryInfoPage", { id: id });
   }
 
   ionViewDidLoad() {
@@ -159,10 +170,6 @@ export class TimetablePage {
     if (event.direction === 4) {
       this.navCtrl.parent.select(0);
     }
-  }
-
-  openStaffDirectory(id: string){
-    this.app.getRootNav().push("StaffDirectoryInfoPage", { id: id });
   }
 
 }
