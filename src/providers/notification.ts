@@ -60,7 +60,7 @@ export class NotificationProvider {
         "device_token": t
       }
       let url = this.APIUrl + '/client/logout';
-      this.http.post(url, body).subscribe(res => {})
+      this.http.post(url, body).subscribe()
     });
   }
 

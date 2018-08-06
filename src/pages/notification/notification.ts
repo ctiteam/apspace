@@ -3,7 +3,7 @@ import { IonicPage, NavController, Platform } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { Storage } from '@ionic/storage';
 
-import { NotificationProvider } from '../../providers';
+import { NotificationProvider, LoadingControllerProvider } from '../../providers';
 import { finalize, map } from '../../../node_modules/rxjs/operators';
 
 @IonicPage()
@@ -22,6 +22,7 @@ export class NotificationPage {
     private notification: NotificationProvider,
     private platform: Platform,
     private storage: Storage,
+    private loading: LoadingControllerProvider,
   ) { }
 
   ionViewDidLoad() {
@@ -31,9 +32,10 @@ export class NotificationPage {
   }
 
   doRefresh(refresher?) {
+    this.loading.presentLoading();
     this.message$ = this.notification.getMessage().pipe(
       map(res => res["history"]),
-      finalize(() => refresher && refresher.complete())
+      finalize(() => {refresher && refresher.complete(), this.loading.dismissLoading()})
     )
   }
 
