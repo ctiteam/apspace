@@ -79,18 +79,18 @@
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
-      "cordova-plugin-email-composer": {},
-      "cordova-plugin-network-information": {},
-      "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-whitelist": {},
-      "cordova-sqlite-storage": {},
-      "cordova-plugin-local-notification": {},
       "cordova-plugin-actionsheet": {},
+      "cordova-plugin-badge": {},
       "cordova-plugin-device": {},
-      "cordova-plugin-statusbar": {},
+      "cordova-plugin-email-composer": {},
       "cordova-plugin-fcm": {},
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-local-notification": {},
+      "cordova-plugin-network-information": {},
       "cordova-plugin-networkinterface": {},
-      "cordova-plugin-badge": {}
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-whitelist": {},
+      "cordova-sqlite-storage": {}
     },
     "platforms": [
       "ios",
