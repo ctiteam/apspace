@@ -41,7 +41,7 @@ export class NotificationProvider {
             "service_ticket": st,
             "device_token": token
           };
-          let url = this.APIUrl + '/client/login';
+          let url = `${this.APIUrl}/client/login`;
           return this.http.post(url, body);
         }
       )
@@ -59,7 +59,7 @@ export class NotificationProvider {
         "client_id": id,
         "device_token": t
       }
-      let url = this.APIUrl + '/client/logout';
+      let url = `${this.APIUrl}/client/logout`;
       this.http.post(url, body).subscribe()
     });
   }
@@ -76,7 +76,7 @@ export class NotificationProvider {
           "message_id": messageID,
           "service_ticket": st
         }
-        let url  = this.APIUrl + '/client/read';
+        let url  = `${this.APIUrl}/client/read`;
         return this.http.post(url, body);
       })
     )

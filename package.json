@@ -32,7 +32,7 @@
     "@ionic-native/in-app-browser": "^4.3.3",
     "@ionic-native/local-notifications": "^4.5.3",
     "@ionic-native/network": "^4.5.2",
-    "@ionic-native/network-interface": "^4.9.2",
+    "@ionic-native/network-interface": "^4.11.0",
     "@ionic-native/push": "^4.5.3",
     "@ionic-native/status-bar": "^4.7.0",
     "@ionic/lab": "^1.0.0",
@@ -68,6 +68,7 @@
     "sw-toolbox": "3.6.0",
     "tslib": "^1.8.1",
     "web": "0.0.2",
+    "wifiwizard": "^0.2.11",
     "zone.js": "0.8.20"
   },
   "devDependencies": {
@@ -89,7 +90,8 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-whitelist": {},
       "cordova-sqlite-storage": {},
-      "cordova-plugin-fcm-with-dependecy-updated": {}
+      "cordova-plugin-fcm-with-dependecy-updated": {},
+      "com.pylonproducts.wifiwizard": {}
     },
     "platforms": [
       "ios",

@@ -20,7 +20,8 @@ import {
   NotificationProvider,
   SettingsProvider,
   WsApiProvider,
-  LoadingControllerProvider
+  LoadingControllerProvider,
+  DataCollectorProvider
 } from "../providers";
 import { StudentProfile, StudentPhoto, StaffProfile, Role } from "../interfaces";
 
@@ -49,6 +50,7 @@ export class MyApp {
     private cas: CasTicketProvider,
     private alertCtrl: AlertController,
     private fcm: FCM,
+    private dataCollector: DataCollectorProvider,
   ) {
     this.storage.get("tgt").then(tgt => {
       if (tgt) {
@@ -81,7 +83,11 @@ export class MyApp {
   onLogin() {
     this.loading.presentLoading();
     if (this.platform.is('cordova')) {
-      this.subscribeNotification();
+      forkJoin(
+        [
+          this.notificationService.getMessage(),
+          this.dataCollector.sendDeviceInfo()
+        ]).subscribe();
     }
     const role = this.settings.get('role');
     if (role & Role.Student) {
@@ -99,17 +105,24 @@ export class MyApp {
 
   onLogout() {
     if (this.platform.is('cordova')) {
-      const role = this.settings.get('role');
-      if (role & Role.Student) {
-        this.ws.get<StudentProfile[]>("/student/profile").subscribe(p =>
-          this.unsubscribeNotification(p[0].STUDENT_NUMBER)
-        )
-      } else if (role & (Role.Lecturer | Role.Admin)) {
-        this.ws.get<StaffProfile[]>("/staff/profile").subscribe(p =>
-          this.unsubscribeNotification(p[0].ID)
-        )
-      }
+      this.dataCollector.sendOnLogout().subscribe(_ => {
+        const role = this.settings.get('role');
+        if (role & Role.Student) {
+          this.ws.get<StudentProfile[]>("/student/profile").subscribe(p => {
+            this.unsubscribeNotification(p[0].STUDENT_NUMBER);
+            this.logout();
+          })
+        } else if (role & (Role.Lecturer | Role.Admin)) {
+          this.ws.get<StaffProfile[]>("/staff/profile").subscribe(p => {
+            this.unsubscribeNotification(p[0].ID);
+            this.logout()
+          })
+        }
+      })
     }
+  }
+
+  logout() {
     const role = this.settings.get('role') & Role.Student ? 'student' : 'staff';
     this.ws.get(`/${role}/close_session`, true, { attempts: 0 }).subscribe();
     this.cas.deleteTGT().subscribe(_ => {
@@ -121,10 +134,6 @@ export class MyApp {
     });
     this.events.unsubscribe("user:logout");
     this.events.subscribe("user:login", () => this.onLogin());
-  }
-
-  subscribeNotification() {
-    this.notificationService.getMessage().subscribe();
   }
 
   unsubscribeNotification(id: string) {
