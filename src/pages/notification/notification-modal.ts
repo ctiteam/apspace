@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 
 @IonicPage()
@@ -14,9 +15,14 @@ export class NotificationModalPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    private sanitizer: DomSanitizer,
   ) {}
 
   ionViewDidLoad(){
     this.itemDetails = this.navParams.get('itemDetails');
+  }
+
+  sanitize(value: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(value);
   }
 }

@@ -20,8 +20,6 @@
         Issued by: <span id="staff-name">{{ itemDetails.staff_name }}</span>
       </ion-note>
       <br>
-      <p>
-        {{ itemDetails.content }}
-      </p>
+      <article [innerHTML]="sanitize(itemDetails?.content)"></article>
     </div>
 </ion-content>
