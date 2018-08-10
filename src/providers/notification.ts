@@ -69,7 +69,7 @@ export class NotificationProvider {
  *
  * @param messageID - id of the notification message
  */
-  sendRead(messageID: string): Observable<any>{
+  sendRead(messageID: any): Observable<any>{
     return this.cas.getST(this.serviceUrl).pipe(
       switchMap(st => {
         let body = {

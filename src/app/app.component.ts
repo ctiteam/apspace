@@ -146,8 +146,9 @@ export class MyApp {
         {
           text: "Open",
           handler: () => {
-            this.notificationService.sendRead(data.messageID).subscribe();
-            this.navCtrl.push("NotificationModalPage", { itemDetails: data });
+            this.notificationService.sendRead(parseInt(data.message_id)).subscribe(_ => {
+              this.navCtrl.push("NotificationModalPage", { itemDetails: data });
+            });
           }
         }
       ]
