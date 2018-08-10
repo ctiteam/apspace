@@ -21,7 +21,7 @@ import {
   SettingsProvider,
   WsApiProvider,
   LoadingControllerProvider,
-  DataCollectorProvider
+  DataCollectorProvider,
 } from "../providers";
 import { StudentProfile, StudentPhoto, StaffProfile, Role } from "../interfaces";
 
@@ -54,6 +54,9 @@ export class MyApp {
   ) {
     this.storage.get("tgt").then(tgt => {
       if (tgt) {
+        if (this.platform.is("cordova")) {
+          this.dataCollector.sendDeviceInfo().subscribe();
+        }
         this.events.subscribe("user:logout", () => this.onLogout());
         this.navCtrl.setRoot("TabsPage");
       } else {
@@ -142,7 +145,10 @@ export class MyApp {
         { text: "Cancel", role: "cancel" },
         {
           text: "Open",
-          handler: () => { this.navCtrl.push("NotificationModalPage", { itemDetails: data }); }
+          handler: () => {
+            this.notificationService.sendRead(data.messageID).subscribe();
+            this.navCtrl.push("NotificationModalPage", { itemDetails: data });
+          }
         }
       ]
     }).present();
