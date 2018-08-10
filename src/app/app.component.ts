@@ -105,24 +105,18 @@ export class MyApp {
 
   onLogout() {
     if (this.platform.is('cordova')) {
-      this.dataCollector.sendOnLogout().subscribe(_ => {
-        const role = this.settings.get('role');
-        if (role & Role.Student) {
-          this.ws.get<StudentProfile[]>("/student/profile").subscribe(p => {
-            this.unsubscribeNotification(p[0].STUDENT_NUMBER);
-            this.logout();
-          })
-        } else if (role & (Role.Lecturer | Role.Admin)) {
-          this.ws.get<StaffProfile[]>("/staff/profile").subscribe(p => {
-            this.unsubscribeNotification(p[0].ID);
-            this.logout()
-          })
-        }
-      })
+      this.dataCollector.sendOnLogout().subscribe()
+      const role = this.settings.get('role');
+      if (role & Role.Student) {
+        this.ws.get<StudentProfile[]>("/student/profile").subscribe(p => {
+          this.unsubscribeNotification(p[0].STUDENT_NUMBER);
+        })
+      } else if (role & (Role.Lecturer | Role.Admin)) {
+        this.ws.get<StaffProfile[]>("/staff/profile").subscribe(p => {
+          this.unsubscribeNotification(p[0].ID);
+        })
+      }
     }
-  }
-
-  logout() {
     const role = this.settings.get('role') & Role.Student ? 'student' : 'staff';
     this.ws.get(`/${role}/close_session`, true, { attempts: 0 }).subscribe();
     this.cas.deleteTGT().subscribe(_ => {
