@@ -140,7 +140,7 @@ export class MyApp {
   presentConfirm(data) {
     this.alertCtrl.create({
       title: data.title,
-      message: data.content,
+      message: data.content.substring(0, 70) + '...',
       buttons: [
         { text: "Cancel", role: "cancel" },
         {
@@ -154,5 +154,4 @@ export class MyApp {
       ]
     }).present();
   }
-
 }

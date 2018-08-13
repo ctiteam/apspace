@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, Platform } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { Storage } from '@ionic/storage';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { finalize, map } from 'rxjs/operators';
 
 import { NotificationProvider, LoadingControllerProvider } from '../../providers';
-import { finalize, map } from '../../../node_modules/rxjs/operators';
 
 @IonicPage()
 @Component({
@@ -21,11 +22,11 @@ export class NotificationPage {
     private navCtrl: NavController,
     private notification: NotificationProvider,
     private platform: Platform,
-    private storage: Storage,
     private loading: LoadingControllerProvider,
+    private sanitizer: DomSanitizer,
   ) { }
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     if (this.platform.is('cordova')) {
       this.doRefresh();
     }
@@ -42,5 +43,14 @@ export class NotificationPage {
   openBasicModal(item: any, messageID: string) {
     this.notification.sendRead(messageID).subscribe();
     this.navCtrl.push('NotificationModalPage', { itemDetails: item });
+  }
+
+  displayDate(message_id) {
+    let date = this.notification.timeConverter(message_id);
+    return date[0];
+  }
+
+  sanitize(value: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(value);
   }
 }

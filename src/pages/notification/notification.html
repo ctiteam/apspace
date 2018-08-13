@@ -10,9 +10,12 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <button id="message-btn" *ngFor="let message of message$ | async" (click)="openBasicModal(message, message.message_id)" ion-item>
-      <ion-icon name="mail" item-left></ion-icon>
-      {{message.title}}
+    <button id="message-btn" *ngFor="let message of message$ | async" (click)="openBasicModal(message, message.message_id)" [style.font-weight]="(message.read === true) ? '400' : 'bold'" ion-item>
+      <ion-icon [name]="(message.read === true) ? 'mail-open' : 'mail'" item-left></ion-icon>
+      {{ message.title }}
+      <br>
+      <ion-note id="message_content" [innerHTML]="sanitize(message?.content)"></ion-note>
+      <ion-note id="message-time" item-right>{{ displayDate(message.message_id) }}</ion-note>
     </button>
   </ion-list>
 </ion-content>

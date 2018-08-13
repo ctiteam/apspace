@@ -20,6 +20,12 @@
         Issued by: <span id="staff-name">{{ itemDetails.staff_name }}</span>
       </ion-note>
       <br>
+      <ion-note id="note">
+        Time & Date: <span id="staff-name">{{ displayDate(itemDetails.message_id) }}</span>
+      </ion-note>
+      <br>
+      <br>
+      <br>
       <article [innerHTML]="sanitize(itemDetails?.content)"></article>
     </div>
 </ion-content>

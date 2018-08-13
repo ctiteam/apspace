@@ -1,13 +1,14 @@
 page-notification {
-  #icon-button{
-    border-radius: 50%;
-  }
-
   #message-time {
     font-size: 0.7em;
   }
 
   #message-btn {
     height: 75px;
+  }
+
+  #message_content{
+    font-size: 0.8em;
+    color: color($colors, medium-shade)
   }
 }
