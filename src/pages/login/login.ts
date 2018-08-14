@@ -24,7 +24,7 @@ export class LoginPage {
   @ViewChild('autofocus') autofocus;
 
   username: string;
-  password: string;
+  password: any;
   showPasswordText: boolean;
   initializers: Subscription[] = [];
 
@@ -65,7 +65,6 @@ export class LoginPage {
     if (this.plt.is('cordova') && this.network.type === 'none') {
       return this.toast('You are now offline.');
     }
-
     this.casTicket.getTGT(this.username, this.password).pipe(
       catchError(_ => this.toast('Invalid username or password.') || empty()),
       switchMap(tgt => this.casTicket.getST(this.casTicket.casUrl, tgt)),
@@ -77,7 +76,7 @@ export class LoginPage {
         return empty();
       }),
       tap(_ => this.cacheApi(this.settings.get('role') & Role.Student
-        ? ['/student/profile', '/student/photo', '/student/courses', '/staff/listing']
+        ? ['/student/courses', '/staff/listing']
         : ['/staff/profile', '/staff/listing'])
       ),
       timeout(3000),

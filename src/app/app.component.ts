@@ -35,6 +35,7 @@ export class MyApp {
   photo$: Observable<StudentPhoto[]>;
   profile$: Observable<StudentProfile[]>;
   staffProfile$: Observable<StaffProfile[]>;
+  notification: any;
 
   constructor(
     public events: Events,
@@ -59,6 +60,12 @@ export class MyApp {
         }
         this.events.subscribe("user:logout", () => this.onLogout());
         this.navCtrl.setRoot("TabsPage");
+        if (this.notification) {
+          this.notificationService.sendRead(parseInt(this.notification.message_id)).subscribe(_ => {
+            this.navCtrl.push("NotificationModalPage", { itemDetails: this.notification });
+          });
+
+        }
       } else {
         this.events.subscribe("user:login", () => this.onLogin());
         this.navCtrl.setRoot("LoginPage");
@@ -68,9 +75,8 @@ export class MyApp {
     if (this.platform.is("cordova")) {
       this.statusBar.overlaysWebView(false);
       this.fcm.onNotification().subscribe(data => {
-        this.storage.set('test', `${new Date()} ${data.wasTapped}`);
         if (data.wasTapped) {
-          this.navCtrl.push("NotificationPage");
+          this.notification = data;
         } else {
           this.presentConfirm(data);
         }
@@ -108,18 +114,25 @@ export class MyApp {
 
   onLogout() {
     if (this.platform.is('cordova')) {
-      this.dataCollector.sendOnLogout().subscribe()
+      this.dataCollector.sendOnLogout().subscribe();
       const role = this.settings.get('role');
       if (role & Role.Student) {
         this.ws.get<StudentProfile[]>("/student/profile").subscribe(p => {
           this.unsubscribeNotification(p[0].STUDENT_NUMBER);
+          this.logout();
         })
       } else if (role & (Role.Lecturer | Role.Admin)) {
         this.ws.get<StaffProfile[]>("/staff/profile").subscribe(p => {
           this.unsubscribeNotification(p[0].ID);
+          this.logout();
         })
       }
+    } else {
+      this.logout();
     }
+  }
+
+  logout() {
     const role = this.settings.get('role') & Role.Student ? 'student' : 'staff';
     this.ws.get(`/${role}/close_session`, true, { attempts: 0 }).subscribe();
     this.cas.deleteTGT().subscribe(_ => {

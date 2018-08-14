@@ -26,7 +26,6 @@ export class MorePage {
     { title: 'Student Timetable', component: 'TimetablePage', icon: 'calendar', role: Role.Lecturer },
     { title: 'Fees', component: 'FeesPage', icon: 'cash', role: Role.Student },
     { title: 'Exam Schedule', component: 'ExamSchedulePage', icon: 'book', role: Role.Student },
-    { title: 'Notifications', component: 'NotificationPage', icon: 'chatbubbles', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Profile', component: 'ProfilePage', icon: 'contact', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Feedback', component: 'FeedbackPage', icon: 'at', role: Role.Student | Role.Lecturer | Role.Admin },
@@ -53,7 +52,7 @@ export class MorePage {
     public settings: SettingsProvider,
   ) {
     const role = this.settings.get('role');
-    this.pages = this.menuItems.filter(page => page.role & role).slice(0, 9);
+    this.pages = this.menuItems.filter(page => page.role & role).slice(0, 8);
   }
 
   ionViewDidLoad() {
@@ -68,6 +67,9 @@ export class MorePage {
 
   openPage(page) {
     this.app.getRootNav().push(page.component);
+  }
+  openNotification(){
+    this.app.getRootNav().push("NotificationPage");
   }
 
   openProfile() {

@@ -67,7 +67,6 @@ export class DataCollectorProvider {
           'service_ticket': st,
           'uuid': this.device.uuid,
         };
-        console.log(body)
         const options = {
           headers: { 'Content-type': 'application/json' }
         }
