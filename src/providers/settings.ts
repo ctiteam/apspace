@@ -41,6 +41,7 @@ export class SettingsProvider {
     for (let key in this.data) {
       delete this.data[key];
     }
+    this.storage.set('settings', this.data);
   }
 
 }
