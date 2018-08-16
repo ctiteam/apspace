@@ -9,7 +9,7 @@ import { News } from '../interfaces';
 @Injectable()
 export class NewsProvider {
 
-  newsUrl = 'https://webspace.apiit.edu.my/news/rss.xml';  // json output
+  newsUrl = 'https://api.apiit.edu.my/webspace/news';  // json output
 
   constructor(public http: HttpClient) { }
 
