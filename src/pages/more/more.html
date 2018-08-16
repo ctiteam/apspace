@@ -29,10 +29,10 @@
       <ion-icon class="ion-icon" item-left [name]='p.icon'></ion-icon>
       {{ p.title }}
     </button>
-    <button no-lines ion-item (click)="openNotification()">
+    <button no-lines ion-item (click)='openNotification()'>
       <ion-icon class="ion-icon" item-left name='chatbubbles'></ion-icon>
       Notifications
-      <ion-badge item-right color="danger"></ion-badge>
+      <ion-badge *ngIf="badge" item-right color="danger">{{ badge }}</ion-badge>
     </button>
     <button no-lines ion-item (click)='logout()'>
       <ion-icon class="ion-icon" item-left name='md-log-out'></ion-icon>

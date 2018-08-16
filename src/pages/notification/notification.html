@@ -4,18 +4,44 @@
       Notifications
     </ion-title>
   </ion-navbar>
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="notifications" color='light'>
+      <ion-segment-button value='all'>
+        All messages
+      </ion-segment-button>
+      <ion-segment-button value='unread'>
+        Unread messages
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 <ion-content no-padding>
+
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list>
-    <button id="message-btn" *ngFor="let message of message$ | async" (click)="openBasicModal(message, message.message_id)" [style.font-weight]="(message.read === true) ? '400' : 'bold'" ion-item>
-      <ion-icon [name]="(message.read === true) ? 'mail-open' : 'mail'" item-left></ion-icon>
-      {{ message.title }}
-      <br>
-      <ion-note id="message_content" [innerHTML]="sanitize(message?.content)"></ion-note>
-      <ion-note id="message-time" item-right>{{ displayDate(message.message_id) }}</ion-note>
-    </button>
-  </ion-list>
+
+  <ng-container [ngSwitch]='notifications'>
+    <ion-list *ngSwitchCase="'all'">
+      <button class="message-btn" *ngFor="let message of message$ | async" (click)="openBasicModal(message, message.message_id)"
+        [style.font-weight]="message.read ? '400' : 'bold'" ion-item>
+        <ion-icon [name]="message.read ? 'mail-open' : 'mail'" [style.color]="message.read ? '#0dbd53' : '#f04141'" item-left></ion-icon>
+        {{ message.title }}
+        <br>
+        <ion-note class="message_content" [innerHTML]="sanitize(message?.content)"></ion-note>
+        <ion-note class="message-time" item-right>{{ displayDate(message.message_id) }}</ion-note>
+      </button>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'unread'">
+        <button class="message-btn" *ngFor="let message of message$ | async | unread" (click)="openBasicModal(message, message.message_id)"
+          [style.font-weight]="message.read ? '400' : 'bold'" ion-item>
+          <ion-icon name='mail' style='color: #f04141' item-left></ion-icon>
+          {{ message.title }}
+          <br>
+          <ion-note class="message_content" [innerHTML]="sanitize(message?.content)"></ion-note>
+          <ion-note class="message-time" item-right>{{ displayDate(message.message_id) }}</ion-note>
+        </button>
+    </ion-list>
+  </ng-container>
 </ion-content>

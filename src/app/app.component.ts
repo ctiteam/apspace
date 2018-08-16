@@ -56,7 +56,7 @@ export class MyApp {
     this.storage.get("tgt").then(tgt => {
       if (tgt) {
         if (this.platform.is("cordova")) {
-          this.dataCollector.sendDeviceInfo().subscribe();
+          this.notificationService.getMessage().subscribe();
         }
         this.events.subscribe("user:logout", () => this.onLogout());
         this.navCtrl.setRoot("TabsPage");
@@ -79,6 +79,7 @@ export class MyApp {
           this.notification = data;
         } else {
           this.presentConfirm(data);
+          this.events.publish("newNotification");
         }
       });
       if (this.network.type === "none") {

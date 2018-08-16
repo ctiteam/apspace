@@ -1,13 +1,13 @@
 page-notification {
-  #message-time {
+  .message-time {
     font-size: 0.7em;
   }
 
-  #message-btn {
+  .message-btn {
     height: 75px;
   }
 
-  #message_content{
+  .message_content{
     font-size: 0.8em;
     color: color($colors, medium-shade)
   }

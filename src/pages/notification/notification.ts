@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, Platform, NavParams } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { Storage } from '@ionic/storage';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { finalize, map } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 
 import { NotificationProvider, LoadingControllerProvider } from '../../providers';
+import { stringify } from 'querystring';
 
 @IonicPage()
 @Component({
@@ -15,11 +16,14 @@ import { NotificationProvider, LoadingControllerProvider } from '../../providers
 
 export class NotificationPage {
 
+  notifications = 'all';
+  unreadMessages: any;
+
   message$: Observable<any>;
-  messages: any;
 
   constructor(
     private navCtrl: NavController,
+    private navParams: NavParams,
     private notification: NotificationProvider,
     private platform: Platform,
     private loading: LoadingControllerProvider,
@@ -32,11 +36,18 @@ export class NotificationPage {
     }
   }
 
+  ionViewDidLeave() {
+    let callback = this.navParams.get("callback");
+    if (callback) {
+      callback();
+    }
+  }
+
   doRefresh(refresher?) {
     this.loading.presentLoading();
     this.message$ = this.notification.getMessage().pipe(
       map(res => res["history"]),
-      finalize(() => {refresher && refresher.complete(), this.loading.dismissLoading()})
+      finalize(() => { refresher && refresher.complete(), this.loading.dismissLoading() })
     )
   }
 

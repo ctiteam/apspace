@@ -5,11 +5,12 @@ import {
   NavParams,
   AlertController,
   Events,
-  App
+  App,
+  Platform,
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
-import { WsApiProvider, SettingsProvider } from '../../providers';
+import { WsApiProvider, SettingsProvider, NotificationProvider } from '../../providers';
 import { StudentPhoto, StudentProfile, StaffProfile, Role } from '../../interfaces';
 
 @IonicPage()
@@ -24,7 +25,7 @@ export class MorePage {
     { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Bus Tracking', component: 'BusTrackingPage', icon: 'bus', role: Role.Student },
     { title: 'Student Timetable', component: 'TimetablePage', icon: 'calendar', role: Role.Lecturer },
-    { title: 'Fees', component: 'FeesPage', icon: 'cash', role: Role.Student },
+    { title: 'Fees', component: 'FeesPage', icon: 'cash', badge: '', role: Role.Student },
     { title: 'Exam Schedule', component: 'ExamSchedulePage', icon: 'book', role: Role.Student },
     { title: 'Profile', component: 'ProfilePage', icon: 'contact', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle', role: Role.Student | Role.Lecturer | Role.Admin },
@@ -42,6 +43,8 @@ export class MorePage {
   profile$: Observable<StudentProfile[]>;
   staffProfile$: Observable<StaffProfile[]>;
 
+  badge: string;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -50,9 +53,15 @@ export class MorePage {
     public events: Events,
     public app: App,
     public settings: SettingsProvider,
+    public notification: NotificationProvider,
+    public plt: Platform,
   ) {
     const role = this.settings.get('role');
-    this.pages = this.menuItems.filter(page => page.role & role).slice(0, 8);
+    this.pages = this.menuItems.filter(page => page.role & role).slice(0, 9);
+
+    this.events.subscribe("newNotification", () => {
+      this.getBadge();
+    })
   }
 
   ionViewDidLoad() {
@@ -65,11 +74,27 @@ export class MorePage {
     }
   }
 
+  ionViewWillEnter() {
+    if (this.plt.is("cordova")) {
+      this.getBadge();
+    }
+  }
+
+  getBadge() {
+    this.notification.getMessage().subscribe(res => {
+      this.badge = res["num_of_unread_msgs"];
+    })
+  }
+
+  openNotification() {
+    let callback = () => {
+      this.getBadge();
+    };
+    this.app.getRootNav().push('NotificationPage', { callback: callback })
+  }
+
   openPage(page) {
     this.app.getRootNav().push(page.component);
-  }
-  openNotification(){
-    this.app.getRootNav().push("NotificationPage");
   }
 
   openProfile() {

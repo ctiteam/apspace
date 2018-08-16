@@ -5,7 +5,11 @@ import { FCM } from '@ionic-native/fcm';
 import { Storage } from '@ionic/storage';
 
 import { Role } from '../../interfaces';
-import { SettingsProvider, LoadingControllerProvider } from '../../providers';
+import {
+  SettingsProvider,
+  LoadingControllerProvider,
+  NotificationProvider,
+} from '../../providers';
 
 @IonicPage()
 @Component({
@@ -17,7 +21,7 @@ export class TabsPage {
   pages = [
     { title: 'News', icon: 'home', root: 'HomePage', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Timetable', icon: 'calendar', root: 'TimetablePage', role: Role.Student },
-    { title: 'Timetable', icon: 'calendar', root: 'LecturerTimetablePage', role: Role.Lecturer },
+    { title: 'Timetable', icon: 'calendar', root: 'LecturerTimetablePage',  role: Role.Lecturer },
     { title: 'Attendance', icon: 'alarm', root: 'AttendancePage', role: Role.Student },
     { title: 'APCard', icon: 'card', root: 'ApcardPage', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Bus Tracking', icon: 'bus', root: 'BusTrackingPage', role: Role.Lecturer | Role.Admin },
@@ -35,6 +39,8 @@ export class TabsPage {
   exit = false;
   back = null;
 
+  badge: string;
+
   constructor(
     public navParams: NavParams,
     public statusBar: StatusBar,
@@ -48,7 +54,15 @@ export class TabsPage {
     private loading: LoadingControllerProvider,
     public toastCtrl: ToastController,
     public storage: Storage, // XXX
+    public notification: NotificationProvider,
   ) {
+
+    const role = this.settings.get('role');
+    this.tabs = this.pages.filter(page => page.role & role).slice(0, 4)
+
+    this.events.subscribe("newNotification", () => {
+      this.getBadge();
+    })
 
     this.plt.ready().then(() => {
       if (this.plt.is('cordova')) {
@@ -75,12 +89,17 @@ export class TabsPage {
         });
       }
     });
-
-    const role = this.settings.get('role');
-    this.tabs = this.pages.filter(page => page.role & role).slice(0, 4).concat(this.morePages);
   }
 
-  ionViewDidLoad() {
-    this.storage.get('test').then(data => console.log('test', data));
+  ionViewWillEnter(){
+    if(this.plt.is("cordova")){
+      this.getBadge();
+    }
+  }
+
+  getBadge() {
+    this.notification.getMessage().subscribe(res => {
+      this.badge = res["num_of_unread_msgs"];
+    })
   }
 }
