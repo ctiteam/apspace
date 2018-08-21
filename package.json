@@ -90,8 +90,8 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-whitelist": {},
       "cordova-sqlite-storage": {},
-      "cordova-plugin-fcm-with-dependecy-updated": {},
-      "com.pylonproducts.wifiwizard": {}
+      "com.pylonproducts.wifiwizard": {},
+      "cordova-plugin-fcm-with-dependecy-updated": {}
     },
     "platforms": [
       "ios",

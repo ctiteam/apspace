@@ -1,5 +1,14 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavParams, NavController, AlertController, Platform, App, Events, ToastController } from 'ionic-angular';
+import {
+  IonicPage,
+  NavParams,
+  NavController,
+  AlertController,
+  Platform,
+  App,
+  Events,
+  ToastController,
+} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { FCM } from '@ionic-native/fcm';
 import { Storage } from '@ionic/storage';
@@ -102,4 +111,5 @@ export class TabsPage {
       this.badge = res["num_of_unread_msgs"];
     })
   }
+
 }

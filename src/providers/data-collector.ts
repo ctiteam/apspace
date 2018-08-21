@@ -31,7 +31,7 @@ export class DataCollectorProvider {
   sendDeviceInfo(): Observable<any> {
     let ip: any;
     this.cas = this.injector.get(CasTicketProvider);
-    return fromPromise(this.networkInterface.getWiFiIPAddress()).pipe(
+    return fromPromise(this.networkInterface.getCarrierIPAddress()).pipe(
       switchMap(responseIP => {
         ip = responseIP.ip;
         return this.cas.getST(this.SERVICE_URL);
