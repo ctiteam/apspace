@@ -70,12 +70,12 @@ export class ApcardPage {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       datasets: [
         {
-          label: 'Monthly Debit',
+          label: 'Monthly Credit',
           data: monthlyData.cr[now.getFullYear()],
           backgroundColor: 'rgba(0, 200, 83, .5)'
         },
         {
-          label: 'Monthly Credit',
+          label: 'Monthly Debit',
           data: monthlyData.dr[now.getFullYear()],
           backgroundColor: 'rgba(213, 0, 0, .5)'
         }
