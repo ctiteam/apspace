@@ -72,12 +72,16 @@ export class ApcardPage {
         {
           label: 'Monthly Credit',
           data: monthlyData.cr[now.getFullYear()],
-          backgroundColor: 'rgba(0, 200, 83, .5)'
+          borderColor: 'rgba(0, 200, 83, .5)',
+          backgroundColor: 'rgba(0, 200, 83, .5)',
+          fill: false
         },
         {
           label: 'Monthly Debit',
           data: monthlyData.dr[now.getFullYear()],
-          backgroundColor: 'rgba(213, 0, 0, .5)'
+          borderColor: 'rgba(230, 0, 0, .5)',
+          backgroundColor: 'rgba(230, 0, 0, .5)',
+          fill: false
         }
       ]
     };
