@@ -64,7 +64,6 @@ export class MyApp {
           this.notificationService.sendRead(parseInt(this.notification.message_id)).subscribe(_ => {
             this.navCtrl.push("NotificationModalPage", { itemDetails: this.notification });
           });
-
         }
       } else {
         this.events.subscribe("user:login", () => this.onLogin());
@@ -72,22 +71,24 @@ export class MyApp {
       }
     });
 
-    if (this.platform.is("cordova")) {
-      this.statusBar.overlaysWebView(false);
-      this.fcm.onNotification().subscribe(data => {
-        if (data.wasTapped) {
-          this.notification = data;
-        } else {
-          this.presentConfirm(data);
-          this.events.publish("newNotification");
+    this.platform.ready().then(() => {
+      if (this.platform.is("cordova")) {
+        this.statusBar.overlaysWebView(false);
+        this.fcm.onNotification().subscribe(data => {
+          if (data.wasTapped) {
+            this.notification = data;
+          } else {
+            this.presentConfirm(data);
+            this.events.publish("newNotification");
+          }
+        });
+        if (this.network.type === "none") {
+          this.toastCtrl
+            .create({ message: "You are now offline.", duration: 3000 })
+            .present();
         }
-      });
-      if (this.network.type === "none") {
-        this.toastCtrl
-          .create({ message: "You are now offline.", duration: 3000 })
-          .present();
       }
-    }
+    });
   }
 
   onLogin() {

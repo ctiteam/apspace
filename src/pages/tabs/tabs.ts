@@ -111,5 +111,4 @@ export class TabsPage {
       this.badge = res["num_of_unread_msgs"];
     })
   }
-
 }

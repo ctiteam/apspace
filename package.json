@@ -28,7 +28,7 @@
     "@ionic-native/core": "^4.3.3",
     "@ionic-native/device": "^4.7.0",
     "@ionic-native/email-composer": "^4.5.2",
-    "@ionic-native/fcm": "^4.11.0",
+    "@ionic-native/fcm": "^4.12.0",
     "@ionic-native/in-app-browser": "^4.3.3",
     "@ionic-native/local-notifications": "^4.5.3",
     "@ionic-native/network": "^4.5.2",

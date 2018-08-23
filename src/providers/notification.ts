@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FCM } from '@ionic-native/fcm';
-import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
 import { switchMap } from 'rxjs/operators';
 import { fromPromise } from 'rxjs/observable/fromPromise'
@@ -17,7 +16,6 @@ export class NotificationProvider {
     public http: HttpClient,
     public cas: CasTicketProvider,
     public fcm: FCM,
-    public storage: Storage,
   ) { }
 
   /**
@@ -29,6 +27,7 @@ export class NotificationProvider {
     return fromPromise(this.fcm.getToken()).pipe(
       switchMap(
         responseToken => {
+          console.log(responseToken)
           token = responseToken;
           return this.cas.getST(this.serviceUrl)
         }

@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, Platform, NavParams } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-import { Storage } from '@ionic/storage';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { finalize, map, tap } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import { NotificationProvider, LoadingControllerProvider } from '../../providers';
-import { stringify } from 'querystring';
 
 @IonicPage()
 @Component({
@@ -37,9 +35,11 @@ export class NotificationPage {
   }
 
   ionViewDidLeave() {
-    let callback = this.navParams.get("callback");
-    if (callback) {
-      callback();
+    if (this.platform.is('cordova')) {
+      let callback = this.navParams.get("callback");
+      if (callback) {
+        callback();
+      }
     }
   }
 
