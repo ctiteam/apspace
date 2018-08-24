@@ -1,8 +1,10 @@
 page-login {
   background-color: color($colors, light);
 
-  img {
-    margin-top: 50px;
+  .apu-logo {
+    margin: auto;
+    display: block;
+    text-align: center;
   }
 
   button[ion-button] {
