@@ -68,7 +68,6 @@
     "sw-toolbox": "3.6.0",
     "tslib": "^1.8.1",
     "web": "0.0.2",
-    "wifiwizard": "^0.2.11",
     "zone.js": "0.8.20"
   },
   "devDependencies": {
@@ -90,7 +89,6 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-whitelist": {},
       "cordova-sqlite-storage": {},
-      "com.pylonproducts.wifiwizard": {},
       "cordova-plugin-fcm-with-dependecy-updated": {}
     },
     "platforms": [
