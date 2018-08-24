@@ -11,7 +11,7 @@ import { of } from 'rxjs/observable/of';
 import { distinctUntilChanged, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { StaffDirectory, StudentProfile, Timetable } from '../../interfaces';
-import { SettingsProvider, TimetableProvider, WsApiProvider } from '../../providers';
+import { SettingsProvider, TimetableProvider, WsApiProvider, ApiApiitProvider } from '../../providers';
 import { ClassesPipe } from './classes.pipe';
 
 @IonicPage()
@@ -43,26 +43,38 @@ export class TimetablePage {
     private ws: WsApiProvider,
     private settings: SettingsProvider,
     public app: App,
+    public api_apiit: ApiApiitProvider,
   ) { }
 
   presentActionSheet() {
     if (this.plt.is('cordova')) {
-      const options: ActionSheetOptions = {
-        buttonLabels: this.intakeLabels,
-        addCancelButtonWithLabel: 'Cancel'
-      };
-      this.actionSheet.show(options).then((buttonIndex: number) => {
-        if (buttonIndex <= this.intakeLabels.length) {
-          this.changeIntake(this.intakeLabels[buttonIndex - 1] || '');
-        }
-      });
+      if (this.plt.is('ios')) {
+        let intakesButton = this.intakeLabels.map(intake => <ActionSheetButton>{
+          text: intake,
+          handler: () => this.changeIntake(intake)
+        });
+        let actionSheet = this.actionSheetCtrl.create({
+          buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }]
+        });
+        actionSheet.present();
+      } else if (this.plt.is('android')) {
+        const options: ActionSheetOptions = {
+          buttonLabels: this.intakeLabels,
+          addCancelButtonWithLabel: 'Cancel'
+        };
+        this.actionSheet.show(options).then((buttonIndex: number) => {
+          if (buttonIndex <= this.intakeLabels.length) {
+            this.changeIntake(this.intakeLabels[buttonIndex - 1] || '');
+          }
+        });
+      }
     } else {
       let intakesButton = this.intakeLabels.map(intake => <ActionSheetButton>{
         text: intake,
         handler: () => this.changeIntake(intake)
       });
       let actionSheet = this.actionSheetCtrl.create({
-        buttons: [ ...intakesButton, { text: 'Cancel', role: 'cancel' } ]
+        buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }]
       });
       actionSheet.present();
     }
@@ -125,7 +137,7 @@ export class TimetablePage {
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
     return forkJoin([
       this.tt.get(refresh),
-      this.ws.get<StaffDirectory[]>('/staff/listing'),
+      this.api_apiit.get<StaffDirectory[]>('/staff/listing'),
     ]).pipe(
       distinctUntilChanged(),
       map(d => this.joinTimetable(d[0] || [], d[1] || [])),

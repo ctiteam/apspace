@@ -68,17 +68,35 @@ export class ExamSchedulePage {
 
   presentActionSheet() {
     if (this.plt.is('cordova')) {
-      const options: ActionSheetOptions = {
-        buttonLabels: [...this.intakes],
-        addCancelButtonWithLabel: 'Cancel'
-      };
-      this.actionSheet.show(options).then((buttonIndex: number) => {
-        if (buttonIndex <= 1 + this.intakes.length) {
-          this.intake = this.intakes[buttonIndex - 1] || '';
-          this.settings.set('examIntake', this.intake);
-          this.getExam(this.intake);
-        }
-      });
+      if (this.plt.is('ios')) {
+        let intakesButton = this.intakes.map(intake => <ActionSheetButton>{
+          text: intake,
+          handler: () => {
+            this.intake = intake;
+            this.settings.set('examIntake', this.intake);
+            this.getExam(this.intake)
+          }
+        });
+        let actionSheet = this.actionSheetCtrl.create({
+          buttons: [
+            { text: 'Intakes', handler: () => { } },
+            ...intakesButton, { text: 'Cancel', role: 'cancel' }
+          ]
+        });
+        actionSheet.present();
+      } else if (this.plt.is('android')) {
+        const options: ActionSheetOptions = {
+          buttonLabels: [...this.intakes],
+          addCancelButtonWithLabel: 'Cancel'
+        };
+        this.actionSheet.show(options).then((buttonIndex: number) => {
+          if (buttonIndex <= 1 + this.intakes.length) {
+            this.intake = this.intakes[buttonIndex - 1] || '';
+            this.settings.set('examIntake', this.intake);
+            this.getExam(this.intake);
+          }
+        });
+      }
     } else {
       let intakesButton = this.intakes.map(intake => <ActionSheetButton>{
         text: intake,
