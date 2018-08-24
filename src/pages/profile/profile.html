@@ -14,30 +14,30 @@
       <img class="profile-photo" [src]="(staffProfile$ | async)[0]?.PHOTO" onerror="this.src='assets/img/profile.svg'" alt="Avatar">
     </ng-template>
   </div>
-  <ng-template [ngIf]="(profile$ | async)">
+  <ng-container *ngIf="profile$ | async as profile">
     <ion-card class="profile-info">
       <p class="bold">
-        {{ (profile$ | async)[0].NAME }}</p>
+        {{ (profile || [{}])[0]?.NAME }}</p>
       <p class="bold">
-        {{ (profile$ | async)[0].STUDENT_NUMBER }}
+        {{ (profile || [{}])[0]?.STUDENT_NUMBER}}
       </p>
     </ion-card>
     <ion-card class="ion-card-style">
       <ion-card-content class="text-left">
         <p class="bold">Country:</p>
-        <p>{{ (profile$ | async)[0].COUNTRY }}</p>
+        <p>{{ (profile || [{}])[0]?.COUNTRY }}</p>
         <br class="break">
         <p class="bold">Current Intake Code:</p>
-        <p>{{ (profile$ | async)[0].INTAKE_CODE }}</p>
+        <p>{{ (profile || [{}])[0]?.INTAKE_CODE }}</p>
         <br class="break">
         <p class="bold">Programme:</p>
-        <p>{{ (profile$ | async)[0].PROGRAMME }}</p>
+        <p>{{ (profile || [{}])[0]?.PROGRAMME }}</p>
         <br class="break">
         <p class="bold">Programme Leader:</p>
-        <p>{{ (profile$ | async)[0].PL_NAME }}</p>
+        <p>{{ (profile || [{}])[0]?.PL_NAME }}</p>
         <br class="break">
         <p class="bold">Mentor Name:</p>
-        <p>{{ (profile$ | async)[0].MENTOR_NAME }}</p>
+        <p>{{ (profile || [{}])[0]?.MENTOR_NAME }}</p>
         <br class="break">
       </ion-card-content>
     </ion-card>
@@ -47,36 +47,36 @@
         <ion-icon item-left [name]='p.icon'></ion-icon>
       </button>
     </ion-card>
-  </ng-template>
+  </ng-container>
 
   <!-- Staff Profile -->
-  <ng-template [ngIf]="(staffProfile$ | async)">
+  <ng-container *ngIf="staffProfile$ | async as staffProfile">
     <ion-card class="profile-info">
       <p class="bold">
-        {{ (staffProfile$ | async)[0].FULLNAME }}</p>
+        {{ (staffProfile || [{}])[0]?.FULLNAME }}</p>
     </ion-card>
     <ion-card class="ion-card-style">
       <ion-card-content class="text-left">
         <p class="bold">Title:</p>
-        <p>{{ (staffProfile$ | async)[0].TITLE }}</p>
+        <p>{{ (staffProfile || [{}])[0]?.TITLE }}</p>
         <br class="break">
         <p class="bold">Nationality:</p>
-        <p>{{ (staffProfile$ | async)[0].NATIONALITY }}</p>
+        <p>{{ (staffProfile || [{}])[0]?.NATIONALITY }}</p>
         <br class="break">
         <p class="bold">Current Job Title:</p>
-        <p>{{ (staffProfile$ | async)[0].CURRENT_JOB_TYPE }}</p>
+        <p>{{ (staffProfile || [{}])[0]?.CURRENT_JOB_TYPE }}</p>
         <br class="break">
         <p class="bold">Department:</p>
-        <p>{{ (staffProfile$ | async)[0].DEPARTMENT }}</p>
+        <p>{{ (staffProfile || [{}])[0]?.DEPARTMENT }}</p>
         <br class="break">
         <p class="bold">Department 2:</p>
-        <p>{{ ((staffProfile$ | async)[0].DEPARTMENT2 ) || 'N/A'}}</p>
+        <p>{{ (staffProfile || [{}])[0]?.DEPARTMENT2 }}</p>
         <br class="break">
         <p class="bold">Department 3:</p>
-        <p>{{ ((staffProfile$ | async)[0].DEPARTMENT3) || 'N/A'}}</p>
+        <p>{{ (staffProfile || [{}])[0]?.DEPARTMENT3 }}</p>
         <br class="break">
       </ion-card-content>
     </ion-card>
-  </ng-template>
+  </ng-container>
 
 </ion-content>

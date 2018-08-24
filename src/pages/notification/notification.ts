@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, Platform, NavParams, App } from 'ionic-angular';
+import { IonicPage, Platform, NavParams, App } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { finalize, map } from 'rxjs/operators';
@@ -20,7 +20,6 @@ export class NotificationPage {
   message$: Observable<any>;
 
   constructor(
-    private navCtrl: NavController,
     private navParams: NavParams,
     private notification: NotificationProvider,
     private platform: Platform,

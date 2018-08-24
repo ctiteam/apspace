@@ -121,7 +121,6 @@ export class MyApp {
 
   onLogout() {
     if (this.platform.is('cordova')) {
-      this.dataCollector.sendOnLogout().subscribe();
       const role = this.settings.get('role');
       if (role & Role.Student) {
         this.ws.get<StudentProfile[]>("/student/profile").subscribe(p => {

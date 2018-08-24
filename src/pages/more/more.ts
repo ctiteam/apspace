@@ -10,7 +10,7 @@ import {
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
-import { WsApiProvider, SettingsProvider, NotificationProvider, ApiApiitProvider } from '../../providers';
+import { WsApiProvider, DataCollectorProvider, SettingsProvider, NotificationProvider, ApiApiitProvider } from '../../providers';
 import { StudentPhoto, StudentProfile, StaffProfile, Role } from '../../interfaces';
 
 @IonicPage()
@@ -56,6 +56,7 @@ export class MorePage {
     public notification: NotificationProvider,
     public plt: Platform,
     public api_apiit: ApiApiitProvider,
+    public dataCollector: DataCollectorProvider,
   ) {
     const role = this.settings.get('role');
     this.pages = this.menuItems.filter(page => page.role & role).slice(0, 9);
@@ -112,6 +113,7 @@ export class MorePage {
           {
             text: "Log out",
             handler: () => {
+              this.dataCollector.sendOnLogout().subscribe();
               this.events.publish("user:logout");
             }
           }
