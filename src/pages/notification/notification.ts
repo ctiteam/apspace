@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, Platform, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, Platform, NavParams, App } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { finalize, map } from 'rxjs/operators';
@@ -26,6 +26,7 @@ export class NotificationPage {
     private platform: Platform,
     private loading: LoadingControllerProvider,
     private sanitizer: DomSanitizer,
+    public app: App,
   ) { }
 
   ionViewDidEnter() {
@@ -53,7 +54,7 @@ export class NotificationPage {
 
   openBasicModal(item: any, messageID: string) {
     this.notification.sendRead(messageID).subscribe();
-    this.navCtrl.push('NotificationModalPage', { itemDetails: item });
+    this.app.getRootNav().push('NotificationModalPage', { itemDetails: item });
   }
 
   displayDate(message_id) {

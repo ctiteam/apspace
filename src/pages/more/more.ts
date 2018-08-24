@@ -10,7 +10,7 @@ import {
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
-import { WsApiProvider, SettingsProvider, NotificationProvider } from '../../providers';
+import { WsApiProvider, SettingsProvider, NotificationProvider, ApiApiitProvider } from '../../providers';
 import { StudentPhoto, StudentProfile, StaffProfile, Role } from '../../interfaces';
 
 @IonicPage()
@@ -55,6 +55,7 @@ export class MorePage {
     public settings: SettingsProvider,
     public notification: NotificationProvider,
     public plt: Platform,
+    public api_apiit: ApiApiitProvider,
   ) {
     const role = this.settings.get('role');
     this.pages = this.menuItems.filter(page => page.role & role).slice(0, 9);
@@ -70,7 +71,7 @@ export class MorePage {
       this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
     } else if (role & (Role.Lecturer | Role.Admin)) {
-      this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
+      this.staffProfile$ = this.api_apiit.get<StaffProfile[]>('/staff/profile');
     }
   }
 

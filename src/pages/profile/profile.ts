@@ -3,7 +3,7 @@ import { IonicPage } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 import { StudentPhoto, StudentProfile, StaffProfile, Role } from '../../interfaces';
-import { WsApiProvider, SettingsProvider } from '../../providers';
+import { WsApiProvider, SettingsProvider, ApiApiitProvider } from '../../providers';
 
 
 @IonicPage()
@@ -24,6 +24,7 @@ export class ProfilePage {
   constructor(
     private ws: WsApiProvider,
     private settings: SettingsProvider,
+    private api_apiit: ApiApiitProvider,
   ) { }
 
   ionViewDidLoad() {
@@ -32,8 +33,7 @@ export class ProfilePage {
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
       this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
     } else if (role & (Role.Lecturer || Role.Admin)) {
-      this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
-      this.staffProfile$.subscribe(s => console.log(s))
+      this.staffProfile$ = this.api_apiit.get<StaffProfile[]>('/staff/profile');
     }
   }
 }

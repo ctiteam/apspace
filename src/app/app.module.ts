@@ -21,7 +21,7 @@ import {
   BusTrackingProvider, CasTicketProvider, LoadingControllerProvider,
   NotificationProvider, OperationHoursProvider, RequestCache,
   RequestCacheWithMapStorage, WsApiProvider, httpInterceptorProviders,
-  SettingsProvider, FeedbackProvider, DataCollectorProvider
+  SettingsProvider, FeedbackProvider, DataCollectorProvider, ApiApiitProvider
 } from '../providers';
 
 @NgModule({
@@ -57,7 +57,8 @@ import {
     SettingsProvider,
     BusTrackingProvider,
     FeedbackProvider,
-    DataCollectorProvider
+    DataCollectorProvider,
+    ApiApiitProvider
   ]
 })
 export class AppModule { }

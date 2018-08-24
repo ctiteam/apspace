@@ -27,7 +27,6 @@ export class NotificationProvider {
     return fromPromise(this.fcm.getToken()).pipe(
       switchMap(
         responseToken => {
-          console.log(responseToken)
           token = responseToken;
           return this.cas.getST(this.serviceUrl)
         }

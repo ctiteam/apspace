@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 
-import { WsApiProvider } from '../../providers';
+import { ApiApiitProvider } from '../../providers';
 import { StaffProfile } from '../../interfaces';
 
 @IonicPage()
@@ -13,10 +13,10 @@ export class LecturerTimetablePage {
 
   lecturerId: string;
 
-  constructor(private ws: WsApiProvider) { }
+  constructor(private api_apiit: ApiApiitProvider) { }
 
   ionViewDidLoad() {
-    this.ws.get<StaffProfile[]>('/staff/profile')
+    this.api_apiit.get<StaffProfile[]>('/staff/profile')
       .subscribe(p => this.lecturerId = (p[0] || {} as StaffProfile).EXTENSION);
   }
 

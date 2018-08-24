@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { filter, finalize, map } from 'rxjs/operators';
 
 import { StaffDirectory } from '../../interfaces';
-import { WsApiProvider, LoadingControllerProvider } from '../../providers';
+import { ApiApiitProvider, LoadingControllerProvider } from '../../providers';
 
 @IonicPage({ segment: 'staff' })
 @Component({
@@ -23,7 +23,7 @@ export class StaffDirectoryPage {
 
   constructor(
     public navCtrl: NavController,
-    private ws: WsApiProvider,
+    private api_apiit: ApiApiitProvider,
     public loading: LoadingControllerProvider,
   ) { }
 
@@ -36,7 +36,7 @@ export class StaffDirectoryPage {
 
   doRefresh(refresher?) {
     this.loading.presentLoading();
-    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', Boolean(refresher));
+    this.staff$ = this.api_apiit.get<StaffDirectory[]>('/staff/listing', Boolean(refresher));
     this.staffType$ = this.staff$.pipe(
       filter(ss => ss instanceof Array),
       map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT))).sort()),

@@ -7,6 +7,7 @@ import {
   WsApiProvider,
   SettingsProvider,
   FeedbackProvider,
+  ApiApiitProvider,
 } from '../../providers';
 
 @IonicPage()
@@ -31,6 +32,7 @@ export class FeedbackPage {
     private settings: SettingsProvider,
     private feedback: FeedbackProvider,
     private toastCtrl: ToastController,
+    private api_apiit: ApiApiitProvider,
   ) { }
 
   submitFeedback() {
@@ -50,7 +52,7 @@ export class FeedbackPage {
         this.userInfo.email = p[0].STUDENT_NUMBER + "@mail.apu.edu.my";
       });
     } else if (this.role & (Role.Lecturer || Role.Admin)) {
-      this.ws.get<StaffProfile[]>('/staff/profile').subscribe(p => {
+      this.api_apiit.get<StaffProfile[]>('/staff/profile').subscribe(p => {
         this.userInfo.name = p[0].FULLNAME;
         this.userInfo.email = p[0].EMAIL + "@apu.edu.my";
       })

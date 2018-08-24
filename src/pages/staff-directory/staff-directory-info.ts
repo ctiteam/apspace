@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { map, share } from 'rxjs/operators';
 
 import { StaffDirectory } from '../../interfaces';
-import { WsApiProvider } from '../../providers';
+import { ApiApiitProvider } from '../../providers';
 
 @IonicPage({ segment: 'staff/:id' })
 @Component({
@@ -16,10 +16,11 @@ export class StaffDirectoryInfoPage {
 
   staff$: Observable<StaffDirectory>;
 
-  constructor(public params: NavParams, private ws: WsApiProvider) { }
+  constructor(public params: NavParams,
+    private api_apiit: ApiApiitProvider,) { }
 
   ionViewDidLoad() {
-    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing').pipe(
+    this.staff$ = this.api_apiit.get<StaffDirectory[]>('/staff/listing').pipe(
       map(ss => ss.find(s => this.params.get('id') === s.CODE)),
       share()
     );

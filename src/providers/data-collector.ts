@@ -31,8 +31,9 @@ export class DataCollectorProvider {
   sendDeviceInfo(): Observable<any> {
     let ip: any;
     this.cas = this.injector.get(CasTicketProvider);
-    return fromPromise(this.networkInterface.getCarrierIPAddress()).pipe(
+    return fromPromise(this.networkInterface.getWiFiIPAddress()).pipe(
       switchMap(responseIP => {
+        console.log(responseIP)
         ip = responseIP.ip;
         return this.cas.getST(this.SERVICE_URL);
       }),
@@ -46,6 +47,7 @@ export class DataCollectorProvider {
           'ip': ip,
           'is_virtual': this.device.isVirtual
         };
+        console.log(body);
         const options = {
           headers: { 'Content-type': 'application/json' }
         }

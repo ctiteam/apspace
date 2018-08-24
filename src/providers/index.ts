@@ -18,3 +18,4 @@ export { TimetableProvider } from './timetable';
 export { WsApiProvider } from './ws-api';
 export { FeedbackProvider } from './feedback';
 export { DataCollectorProvider } from './data-collector';
+export { ApiApiitProvider } from './api-apiit';
