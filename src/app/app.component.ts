@@ -22,6 +22,7 @@ import {
   WsApiProvider,
   LoadingControllerProvider,
   DataCollectorProvider,
+  ApiApiitProvider
 } from "../providers";
 import { StudentProfile, StudentPhoto, StaffProfile, Role } from "../interfaces";
 
@@ -51,6 +52,7 @@ export class MyApp {
     private cas: CasTicketProvider,
     private alertCtrl: AlertController,
     private fcm: FCM,
+    private api_apiit: ApiApiitProvider,
     private dataCollector: DataCollectorProvider,
   ) {
     this.storage.get("tgt").then(tgt => {
@@ -104,12 +106,15 @@ export class MyApp {
     if (role & Role.Student) {
       this.photo$ = this.ws.get<StudentPhoto[]>("/student/photo");
       this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
+      forkJoin([this.profile$, this.photo$])
+        .pipe(finalize(() => this.loading.dismissLoading()))
+        .subscribe();
     } else if (role & (Role.Lecturer | Role.Admin)) {
-      this.staffProfile$ = this.ws.get<StaffProfile[]>("/staff/profile");
-    }
-    forkJoin([this.profile$, this.photo$])
+      this.staffProfile$ = this.api_apiit.get<StaffProfile[]>("/staff/profile");
+      this.staffProfile$
       .pipe(finalize(() => this.loading.dismissLoading()))
       .subscribe();
+    }
     this.events.unsubscribe("user:login");
     this.events.subscribe("user:logout", () => this.onLogout());
   }
@@ -124,7 +129,7 @@ export class MyApp {
           this.logout();
         })
       } else if (role & (Role.Lecturer | Role.Admin)) {
-        this.ws.get<StaffProfile[]>("/staff/profile").subscribe(p => {
+        this.api_apiit.get<StaffProfile[]>("/staff/profile").subscribe(p => {
           this.unsubscribeNotification(p[0].ID);
           this.logout();
         })
