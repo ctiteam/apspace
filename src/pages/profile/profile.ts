@@ -32,7 +32,7 @@ export class ProfilePage {
     if (role & Role.Student) {
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
       this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
-    } else if (role & (Role.Lecturer || Role.Admin)) {
+    } else if (role & (Role.Lecturer | Role.Admin)) {
       this.staffProfile$ = this.api_apiit.get<StaffProfile[]>('/staff/profile');
     }
   }
