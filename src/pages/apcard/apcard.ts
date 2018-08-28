@@ -1,12 +1,12 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
-import { trigger, style, animate, transition, state } from '@angular/animations';
 import { IonicPage, NavController } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { finalize, map, tap } from 'rxjs/operators';
 
-import { WsApiProvider, LoadingControllerProvider, SettingsProvider } from '../../providers';
 import { Apcard, Role } from '../../interfaces';
+import { LoadingControllerProvider, SettingsProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -17,13 +17,13 @@ import { Apcard, Role } from '../../interfaces';
       state('in', style({ transform: 'translateX(0)' })),
       transition('void => *', [
         style({ transform: 'translateX(-30%)' }),
-        animate(700)
+        animate(700),
       ]),
       transition('* => void', [
-        animate(700, style({ transform: 'translateX(30%)' }))
-      ])
-    ])
-  ]
+        animate(700, style({ transform: 'translateX(30%)' })),
+      ]),
+    ]),
+  ],
 })
 export class ApcardPage {
   transaction$: Observable<Apcard[]>;
@@ -35,7 +35,7 @@ export class ApcardPage {
   data: any;
   options = {
     responsive: true,
-    maintainAspectRatio: false
+    maintainAspectRatio: false,
   };
 
   constructor(
@@ -48,8 +48,9 @@ export class ApcardPage {
   /** Analyze transactions. */
   analyzeTransactions(transactions: Apcard[]) {
     // stop analyzing if transactions is empty
-    if (transactions.length === 0)
+    if (transactions.length === 0) {
       return;
+    }
     this.balance = transactions[0].Balance;
 
     const now = new Date();
@@ -74,16 +75,16 @@ export class ApcardPage {
           data: monthlyData.cr[now.getFullYear()],
           borderColor: 'rgba(0, 200, 83, .5)',
           backgroundColor: 'rgba(0, 200, 83, .5)',
-          fill: false
+          fill: false,
         },
         {
           label: 'Monthly Debit',
           data: monthlyData.dr[now.getFullYear()],
           borderColor: 'rgba(230, 0, 0, .5)',
           backgroundColor: 'rgba(230, 0, 0, .5)',
-          fill: false
-        }
-      ]
+          fill: false,
+        },
+      ],
     };
 
     // reverse monthlyData last year
@@ -107,7 +108,7 @@ export class ApcardPage {
       map(t => this.signTransactions(t)),
       tap(t => this.analyzeTransactions(t)),
       finalize(() => refresher && refresher.complete()),
-      finalize(() => this.loading.dismissLoading())
+      finalize(() => this.loading.dismissLoading()),
     );
   }
 

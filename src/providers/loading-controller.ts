@@ -1,19 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoadingController } from 'ionic-angular';
+import { Loading, LoadingController } from 'ionic-angular';
 
 @Injectable()
 export class LoadingControllerProvider {
 
-  loading: any;
+  loading: Loading;
 
-  constructor(
-    public http: HttpClient,
-    public loadingCtrl: LoadingController) { }
+  constructor(public http: HttpClient, public loadingCtrl: LoadingController) { }
 
   presentLoading() {
     this.loading = this.loadingCtrl.create({
-      content: 'Please wait...'
+      content: 'Please wait...',
     });
     this.loading.present();
   }
@@ -21,4 +19,5 @@ export class LoadingControllerProvider {
   dismissLoading() {
     this.loading.dismiss();
   }
+
 }

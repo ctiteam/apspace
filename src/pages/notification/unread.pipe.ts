@@ -1,6 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-
 /**
  * Filter day for timetable.
  */

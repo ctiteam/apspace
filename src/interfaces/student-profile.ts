@@ -13,4 +13,4 @@ export interface StudentProfile {
   PROVIDER_CODE: string;
   BLOCK: boolean;
   MESSAGE: string;
-};
+}

@@ -10,7 +10,7 @@ export class ReversePipe implements PipeTransform {
    *
    * @param array - array to be reversed
    */
-  transform<T>(array: T[]): T[] {
-    return array.slice().reverse();
+  transform<T>(array: T[] | null): T[] {
+    return (array || []).slice().reverse();
   }
 }

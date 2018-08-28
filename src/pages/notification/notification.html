@@ -29,7 +29,7 @@
         {{ message.title }}
         <br>
         <ion-note class="message_content" [innerHTML]="sanitize(message?.content)"></ion-note>
-        <ion-note class="message-time" item-right>{{ displayDate(message.message_id) }}</ion-note>
+        <ion-note class="message-time" item-right>{{ message.message_id * 1000 | date }}</ion-note>
       </button>
     </ion-list>
 
@@ -40,7 +40,7 @@
           {{ message.title }}
           <br>
           <ion-note class="message_content" [innerHTML]="sanitize(message?.content)"></ion-note>
-          <ion-note class="message-time" item-right>{{ displayDate(message.message_id) }}</ion-note>
+          <ion-note class="message-time" item-right>{{ message.message_id * 1000 | date }}</ion-note>
         </button>
     </ion-list>
   </ng-container>

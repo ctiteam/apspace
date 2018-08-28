@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavParams } from 'ionic-angular';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { IonicPage, NavParams } from 'ionic-angular';
 
 import { News } from '../../interfaces';
 

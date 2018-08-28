@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { NavParams, IonicPage } from 'ionic-angular';
+import { IonicPage, NavParams } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { map, share } from 'rxjs/operators';
 
 import { StaffDirectory } from '../../interfaces';
-import { ApiApiitProvider } from '../../providers';
+import { WsApiProvider } from '../../providers';
 
 @IonicPage({ segment: 'staff/:id' })
 @Component({
@@ -16,13 +16,12 @@ export class StaffDirectoryInfoPage {
 
   staff$: Observable<StaffDirectory>;
 
-  constructor(public params: NavParams,
-    private api_apiit: ApiApiitProvider,) { }
+  constructor(public params: NavParams, private ws: WsApiProvider) { }
 
   ionViewDidLoad() {
-    this.staff$ = this.api_apiit.get<StaffDirectory[]>('/staff/listing').pipe(
+    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', false, { url: 'https://api.apiit.edu.my' }).pipe(
       map(ss => ss.find(s => this.params.get('id') === s.CODE)),
-      share()
+      share(),
     );
   }
 

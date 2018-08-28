@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { IonicPage, Platform, NavParams, App } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { App, IonicPage, NavParams, Platform } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
 import { finalize, map } from 'rxjs/operators';
 
-import { NotificationProvider, LoadingControllerProvider } from '../../providers';
+import { LoadingControllerProvider, NotificationProvider } from '../../providers';
 
 @IonicPage()
 @Component({
   selector: 'page-notification',
-  templateUrl: 'notification.html'
+  templateUrl: 'notification.html',
 })
 
 export class NotificationPage {
@@ -36,7 +36,7 @@ export class NotificationPage {
 
   ionViewDidLeave() {
     if (this.platform.is('cordova')) {
-      let callback = this.navParams.get("callback");
+      const callback = this.navParams.get('callback');
       if (callback) {
         callback();
       }
@@ -46,9 +46,9 @@ export class NotificationPage {
   doRefresh(refresher?) {
     this.loading.presentLoading();
     this.message$ = this.notification.getMessage().pipe(
-      map(res => res["history"]),
-      finalize(() => { refresher && refresher.complete(), this.loading.dismissLoading() })
-    )
+      map(res => res.history),
+      finalize(() => { refresher && refresher.complete(), this.loading.dismissLoading(); }),
+    );
   }
 
   openBasicModal(item: any, messageID: string) {
@@ -56,8 +56,8 @@ export class NotificationPage {
     this.app.getRootNav().push('NotificationModalPage', { itemDetails: item });
   }
 
-  displayDate(message_id) {
-    let date = this.notification.timeConverter(message_id);
+  displayDate(msgId) {
+    const date = this.notification.timeConverter(msgId);
     return date[0];
   }
 

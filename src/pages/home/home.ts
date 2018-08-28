@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import {
-  Platform,
+  App,
   Events,
   IonicPage,
-  App,
-  NavController
+  NavController,
+  Platform,
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -16,7 +16,7 @@ import { NewsProvider } from '../../providers';
 @IonicPage()
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
 })
 export class HomePage {
 
@@ -28,11 +28,11 @@ export class HomePage {
     private news: NewsProvider,
     private app: App,
     private navCtrl: NavController,
-  ) {}
+  ) { }
 
   doRefresh(refresher?) {
     this.items$ = this.news.get(Boolean(refresher)).pipe(
-      finalize(() => refresher && refresher.complete())
+      finalize(() => refresher && refresher.complete()),
     );
   }
 
@@ -41,7 +41,7 @@ export class HomePage {
   }
 
   openModal(item) {
-    this.app.getRootNav().push("HomeModalPage", { item: item })
+    this.app.getRootNav().push('HomeModalPage', { item });
   }
 
   swipe(event) {

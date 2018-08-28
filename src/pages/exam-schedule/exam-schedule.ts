@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, Platform, ActionSheetController, ActionSheetButton } from 'ionic-angular';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
+import { ActionSheetButton, ActionSheetController, IonicPage, Platform } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
 
-import { WsApiProvider, LoadingControllerProvider, SettingsProvider, TimetableProvider } from '../../providers';
 import { ExamSchedule, StudentProfile, Timetable } from '../../interfaces';
+import { LoadingControllerProvider, SettingsProvider, TimetableProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -16,7 +16,6 @@ import { ExamSchedule, StudentProfile, Timetable } from '../../interfaces';
 export class ExamSchedulePage {
 
   exam$: Observable<ExamSchedule[]>;
-  intakes$: Observable<Timetable[]>;
 
   intake: string = '';
   intakes: string[] = [];
@@ -32,87 +31,71 @@ export class ExamSchedulePage {
     public tt: TimetableProvider,
   ) { }
 
+  presentActionSheet() {
+    if (this.plt.is('cordova') && !this.plt.is('ios')) {
+      const options: ActionSheetOptions = {
+        buttonLabels: this.intakes,
+        addCancelButtonWithLabel: 'Cancel',
+      };
+      this.actionSheet.show(options).then((buttonIndex: number) => {
+        if (buttonIndex <= 1 + this.intakes.length) {
+          this.intake = this.intakes[buttonIndex - 1] || '';
+          this.settings.set('examIntake', this.intake);
+          this.doRefresh();
+        }
+      });
+    } else {
+      const intakesButton = this.intakes.map(intake => {
+        return {
+          text: intake,
+          handler: () => {
+            this.intake = intake;
+            this.settings.set('examIntake', this.intake);
+            this.doRefresh();
+          },
+        } as ActionSheetButton;
+      });
+      const actionSheet = this.actionSheetCtrl.create({
+        buttons: [
+          ...intakesButton, { text: 'Cancel', role: 'cancel' },
+        ],
+      });
+      actionSheet.present();
+    }
+  }
+
+  /** Check and update intake on change. */
+  changeIntake(intake: string) {
+    if (intake !== this.intake) {
+      this.settings.set('examIntake', this.intake = intake);
+      this.doRefresh();
+    }
+  }
+
   ionViewDidLoad() {
     this.loading.presentLoading();
     const intake = this.settings.get('examIntake');
     if (intake !== undefined) { // intake might be ''
       this.intake = intake;
-      this.getExam(this.intake);
+      this.doRefresh();
     } else {
       this.ws.get<StudentProfile[]>('/student/profile')
         .subscribe(p => {
           this.intake = p[0].INTAKE_CODE;
-          this.getExam(this.intake);
-        })
+          this.doRefresh();
+        });
     }
     this.tt.get().subscribe(tt => {
       this.intakes = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort();
-    })
+    });
   }
 
   doRefresh(refresher?) {
     const url = `/examination/${this.intake}`;
     const options = { url: 'https://api.apiit.edu.my', auth: false };
     this.exam$ = this.ws.get<ExamSchedule[]>(url, true, options).pipe(
-      finalize(() => refresher && refresher.complete())
-    )
+      finalize(() => (refresher && refresher.complete(), this.loading.dismissLoading())),
+    );
   }
 
-  getExam(intake: string) {
-    const url = `/examination/${intake}`;
-    const options = { url: 'https://api.apiit.edu.my', auth: false };
-    this.exam$ = this.ws.get<ExamSchedule[]>(url, true, options).pipe(
-      finalize(() => this.loading.dismissLoading()),
-    )
-  }
-
-  presentActionSheet() {
-    if (this.plt.is('cordova')) {
-      if (this.plt.is('ios')) {
-        let intakesButton = this.intakes.map(intake => <ActionSheetButton>{
-          text: intake,
-          handler: () => {
-            this.intake = intake;
-            this.settings.set('examIntake', this.intake);
-            this.getExam(this.intake)
-          }
-        });
-        let actionSheet = this.actionSheetCtrl.create({
-          buttons: [
-            { text: 'Intakes', handler: () => { } },
-            ...intakesButton, { text: 'Cancel', role: 'cancel' }
-          ]
-        });
-        actionSheet.present();
-      } else if (this.plt.is('android')) {
-        const options: ActionSheetOptions = {
-          buttonLabels: [...this.intakes],
-          addCancelButtonWithLabel: 'Cancel'
-        };
-        this.actionSheet.show(options).then((buttonIndex: number) => {
-          if (buttonIndex <= 1 + this.intakes.length) {
-            this.intake = this.intakes[buttonIndex - 1] || '';
-            this.settings.set('examIntake', this.intake);
-            this.getExam(this.intake);
-          }
-        });
-      }
-    } else {
-      let intakesButton = this.intakes.map(intake => <ActionSheetButton>{
-        text: intake,
-        handler: () => {
-          this.intake = intake;
-          this.settings.set('examIntake', this.intake);
-          this.getExam(this.intake)
-        }
-      });
-      let actionSheet = this.actionSheetCtrl.create({
-        buttons: [
-          { text: 'Intakes', handler: () => { } },
-          ...intakesButton, { text: 'Cancel', role: 'cancel' }
-        ]
-      });
-      actionSheet.present();
-    }
-  }
 }

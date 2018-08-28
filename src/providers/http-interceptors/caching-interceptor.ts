@@ -1,7 +1,4 @@
-import {
-  HttpEvent, HttpInterceptor, HttpHandler,
-  HttpRequest, HttpResponse
-} from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
@@ -45,10 +42,10 @@ export class CachingInterceptor implements HttpInterceptor {
         }
 
         const results$ = sendRequest(req, next, this.cache).pipe(
-          catchError(_ => of(cachedResponse))
+          catchError(_ => of(cachedResponse)),
         );
         return refresh ? results$.pipe(startWith(cachedResponse)) : results$;
-      })
+      }),
     );
   }
 }
@@ -64,7 +61,7 @@ function sendRequest(req: HttpRequest<any>, next: HttpHandler, cache: RequestCac
   return next.handle(req).pipe(tap(event => {
     if (event instanceof HttpResponse) {
       if (event.headers.has('ETag') || event.headers.has('Last-Modified')) {
-        cache.set(req, event)
+        cache.set(req, event);
       }
     }
   }));

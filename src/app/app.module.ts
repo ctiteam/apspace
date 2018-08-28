@@ -1,28 +1,28 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
+import { Badge } from '@ionic-native/badge';
 import { Device } from '@ionic-native/device';
 import { EmailComposer } from '@ionic-native/email-composer';
+import { FCM } from '@ionic-native/fcm';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Network } from '@ionic-native/network';
+import { NetworkInterface } from '@ionic-native/network-interface';
 import { Push } from '@ionic-native/push';
 import { StatusBar } from '@ionic-native/status-bar';
-import { FCM } from '@ionic-native/fcm';
-import { NetworkInterface } from '@ionic-native/network-interface';
-import { Badge } from '@ionic-native/badge';
 
-import { MyApp } from './app.component';
 import {
-  BusTrackingProvider, CasTicketProvider, LoadingControllerProvider,
+  BusTrackingProvider, CasTicketProvider, DataCollectorProvider,
+  FeedbackProvider, httpInterceptorProviders, LoadingControllerProvider,
   NotificationProvider, OperationHoursProvider, RequestCache,
-  RequestCacheWithMapStorage, WsApiProvider, httpInterceptorProviders,
-  SettingsProvider, FeedbackProvider, DataCollectorProvider, ApiApiitProvider
+  RequestCacheWithMapStorage, SettingsProvider, WsApiProvider,
 } from '../providers';
+import { MyApp } from './app.component';
 
 @NgModule({
   declarations: [MyApp],
@@ -33,8 +33,6 @@ import {
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
   ],
-  bootstrap: [IonicApp],
-  entryComponents: [MyApp],
   providers: [
     StatusBar,
     EmailComposer,
@@ -58,7 +56,8 @@ import {
     BusTrackingProvider,
     FeedbackProvider,
     DataCollectorProvider,
-    ApiApiitProvider
-  ]
+  ],
+  entryComponents: [MyApp],
+  bootstrap: [IonicApp],
 })
 export class AppModule { }

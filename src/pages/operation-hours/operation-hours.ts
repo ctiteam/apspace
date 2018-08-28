@@ -1,7 +1,7 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
-import { trigger, style, animate, transition } from '@angular/animations';
-import { IonicPage } from 'ionic-angular';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { IonicPage } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
@@ -25,8 +25,8 @@ import { OperationHoursProvider } from '../../providers';
         style({ opacity: '1', height: '*' }),
         animate('150ms ease-out', style({ opacity: '.7', height: '0', paddingBottom: '0' })),
       ]),
-    ])
-  ]
+    ]),
+  ],
 })
 export class OperationHoursPage {
 

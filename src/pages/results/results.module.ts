@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
+import { ActionSheet } from '@ionic-native/action-sheet';
 import { ChartModule } from 'angular2-chartjs';
-import { ActionSheet } from "@ionic-native/action-sheet";
+import { IonicPageModule } from 'ionic-angular';
 
 import { ResultsPage } from './results';
 
@@ -9,9 +9,9 @@ import { ResultsPage } from './results';
   declarations: [ResultsPage],
   imports: [
     IonicPageModule.forChild(ResultsPage),
-    ChartModule
+    ChartModule,
   ],
   entryComponents: [ResultsPage],
-  providers: [ActionSheet]
+  providers: [ActionSheet],
 })
 export class ResultsPageModule { }

@@ -3,19 +3,19 @@ import { Injectable, Injector } from '@angular/core';
 import { Device } from '@ionic-native/device';
 import { NetworkInterface } from '@ionic-native/network-interface';
 import { Observable } from 'rxjs/Observable';
+import { fromPromise } from 'rxjs/observable/fromPromise';
 import { switchMap } from 'rxjs/operators';
-import { fromPromise } from 'rxjs/observable/fromPromise'
 
 import { CasTicketProvider } from '../providers';
 
 @Injectable()
 export class DataCollectorProvider {
 
-  DATACOLLECTOR_URL = "https://4tkasy3xf6.execute-api.ap-southeast-1.amazonaws.com/api";
-  SERVICE_URL = "http://ws.apiit.edu.my";
-  public results = {};
+  DATACOLLECTOR_URL = 'https://4tkasy3xf6.execute-api.ap-southeast-1.amazonaws.com/api';
+  SERVICE_URL = 'http://ws.apiit.edu.my';
+  results = {};
 
-  public cas: CasTicketProvider;
+  cas: CasTicketProvider;
 
   constructor(
     public http: HttpClient,
@@ -37,22 +37,22 @@ export class DataCollectorProvider {
         return this.cas.getST(this.SERVICE_URL);
       }),
       switchMap(st => {
-        let body: any = {
-          'service_ticket': st,
-          'uuid': this.device.uuid,
-          'model': this.device.model,
-          'os': this.device.version,
-          'wifi': 'testing',
-          'ip': ip,
-          'is_virtual': this.device.isVirtual
+        const body: any = {
+          ip,
+          is_virtual: this.device.isVirtual,
+          model: this.device.model,
+          os: this.device.version,
+          service_ticket: st,
+          uuid: this.device.uuid,
+          wifi: 'testing',
         };
         const options = {
-          headers: { 'Content-type': 'application/json' }
-        }
-        let enpoint = `${this.DATACOLLECTOR_URL}/login`;
+          headers: { 'Content-type': 'application/json' },
+        };
+        const enpoint = `${this.DATACOLLECTOR_URL}/login`;
         return this.http.post(enpoint, body, options);
-      })
-    )
+      }),
+    );
   }
 
   /**
@@ -63,16 +63,16 @@ export class DataCollectorProvider {
     this.cas = this.injector.get(CasTicketProvider);
     return this.cas.getST(this.SERVICE_URL).pipe(
       switchMap(st => {
-        let body: any = {
-          'service_ticket': st,
-          'uuid': this.device.uuid,
+        const body: any = {
+          service_ticket: st,
+          uuid: this.device.uuid,
         };
         const options = {
-          headers: { 'Content-type': 'application/json' }
-        }
-        let endpoint = `${this.DATACOLLECTOR_URL}/logout`;
+          headers: { 'Content-type': 'application/json' },
+        };
+        const endpoint = `${this.DATACOLLECTOR_URL}/logout`;
         return this.http.post(endpoint, body, options);
-      })
-    )
+      }),
+    );
   }
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { NotificationPage } from './notification';
 import { UnreadPipe } from '../notification/unread.pipe';
+import { NotificationPage } from './notification';
 
 @NgModule({
   declarations: [

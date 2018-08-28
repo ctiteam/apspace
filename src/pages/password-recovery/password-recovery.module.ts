@@ -14,6 +14,6 @@ import { SqaProvider } from '../../providers';
     FormsModule,
   ],
   entryComponents: [PasswordRecoveryPage],
-  providers: [SqaProvider]
+  providers: [SqaProvider],
 })
 export class PasswordRecoveryPageModule { }

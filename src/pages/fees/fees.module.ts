@@ -7,8 +7,8 @@ import { ReversePipe } from './reverse.pipe';
 @NgModule({
   declarations: [FeesPage, ReversePipe],
   imports: [
-    IonicPageModule.forChild(FeesPage)
+    IonicPageModule.forChild(FeesPage),
   ],
-  entryComponents: [FeesPage]
+  entryComponents: [FeesPage],
 })
 export class FeesPageModule { }

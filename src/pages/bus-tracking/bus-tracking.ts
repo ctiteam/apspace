@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {
-  ActionSheetController, ActionSheetButton, AlertController, IonicPage
+  ActionSheetButton, ActionSheetController, AlertController, IonicPage,
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -38,9 +38,11 @@ export class BusTrackingPage {
   /** Display trip days. */
   presentActionSheet() {
     this.actionSheetCtrl.create({
-      buttons: this.tripDays.map(day => <ActionSheetButton>{
-        text: day.toUpperCase(),
-        handler: () => { this.selectedDay = day; }
+      buttons: this.tripDays.map(day => {
+        return {
+          text: day.toUpperCase(),
+          handler: () => { this.selectedDay = day; },
+        } as ActionSheetButton;
       }),
     }).present();
   }

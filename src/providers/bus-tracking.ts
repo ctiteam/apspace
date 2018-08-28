@@ -16,11 +16,11 @@ export class BusTrackingProvider {
   /**
    * GET: Request bus trips
    *
-   *@param refresh - force refresh (default: false)
+   * @param refresh - force refresh (default: false)
    */
   getTrips(refresh?: boolean): Observable<BusTrips> {
     const url = `${this.busTrackingUrl}/trips`;
-    return this.http.get<BusTrips>(url).pipe(publishLast(), refCount())
+    return this.http.get<BusTrips>(url).pipe(publishLast(), refCount());
   }
 
 }

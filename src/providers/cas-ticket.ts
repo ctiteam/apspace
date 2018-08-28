@@ -1,12 +1,13 @@
+/* tslint:disable:no-shadowed-variable */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Events } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { Events } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 import { empty } from 'rxjs/observable/empty';
-import { of } from 'rxjs/observable/of';
 import { fromPromise } from 'rxjs/observable/fromPromise';
+import { of } from 'rxjs/observable/of';
 import { _throw as obs_throw } from 'rxjs/observable/throw';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
@@ -45,7 +46,7 @@ export class CasTicketProvider {
   getTGT(username?: string, password?: string): Observable<string> {
     const options = {
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-      observe: 'response' as 'body'
+      observe: 'response' as 'body',
     };
     return (username && password
       ? of(`username=${username}&password=${password}`)
@@ -59,7 +60,7 @@ export class CasTicketProvider {
             : (this.events.publish('user:logout'), empty())),
         tap(tgt => this.storage.set('tgt', tgt)),
         tap(_ => this.storage.set('cred', data)),
-      ))
+      )),
     );
   }
 
@@ -72,16 +73,16 @@ export class CasTicketProvider {
   getST(serviceUrl: string = this.casUrl, tgt?: string | {}): Observable<string> {
     const options = {
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-      params: { 'service': serviceUrl },
+      params: { service: serviceUrl },
       responseType: 'text' as 'text', /* TODO: fix this in future angular */
-      withCredentials: true
+      withCredentials: true,
     };
     return (tgt ? of(tgt) : fromPromise(this.storage.get('tgt'))).pipe(
       switchMap(tgt => this.http.post(`${this.casUrl}/cas/v1/tickets/${tgt}`, null, options).pipe(
         catchError(_ => this.getTGT().pipe(
-          switchMap(tgt => this.getST(serviceUrl, tgt))
-        ))
-      ))
+          switchMap(tgt => this.getST(serviceUrl, tgt)),
+        )),
+      )),
     );
   }
 
@@ -93,10 +94,10 @@ export class CasTicketProvider {
   deleteTGT(tgt?: string): Observable<string> {
     const options = {
       responseType: 'text' as 'text',
-      withCredentials: true
+      withCredentials: true,
     };
     return (tgt ? of(tgt) : fromPromise(this.storage.get('tgt'))).pipe(
-      switchMap(tgt => this.http.delete(this.casUrl + '/cas/v1/tickets/' + tgt, options))
+      switchMap(tgt => this.http.delete(this.casUrl + '/cas/v1/tickets/' + tgt, options)),
     );
   }
 
@@ -110,13 +111,13 @@ export class CasTicketProvider {
 
     const options = {
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-      params: { 'format': 'json', 'service': this.casUrl, 'ticket': st },
-      withCredentials: true
+      params: { format: 'json', service: this.casUrl, ticket: st },
+      withCredentials: true,
     };
 
-    return this.http.get(this.casUrl + '/cas/p3/serviceValidate', options).pipe(
+    return this.http.get<any>(this.casUrl + '/cas/p3/serviceValidate', options).pipe(
       switchMap(res => {
-        const parts = res['serviceResponse']['authenticationSuccess']['attributes']['distinguishedName']
+        const parts = res.serviceResponse.authenticationSuccess.attributes.distinguishedName
           .join().toLowerCase().split(',');
         let role: Role;
 
@@ -132,6 +133,6 @@ export class CasTicketProvider {
         this.settings.set('role', role);
         return of(res);
       }),
-    )
+    );
   }
 }

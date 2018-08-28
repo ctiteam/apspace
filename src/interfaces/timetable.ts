@@ -11,4 +11,4 @@ export interface Timetable {
   TIME_TO: string;
 
   STAFFNAME: string; /* StaffDirectory.FULLNAME */
-};
+}

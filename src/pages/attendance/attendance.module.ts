@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
+import { ActionSheet } from '@ionic-native/action-sheet';
+import { RoundProgressModule } from 'angular-svg-round-progressbar';
 import { IonicPageModule } from 'ionic-angular';
-import {RoundProgressModule} from 'angular-svg-round-progressbar';
-import { ActionSheet } from "@ionic-native/action-sheet";
 
 import { AttendancePage } from './attendance';
 
@@ -12,6 +12,6 @@ import { AttendancePage } from './attendance';
     RoundProgressModule,
   ],
   entryComponents: [AttendancePage],
-  providers: [ActionSheet]
+  providers: [ActionSheet],
 })
 export class AttendancePageModule { }

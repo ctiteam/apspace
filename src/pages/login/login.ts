@@ -1,23 +1,23 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, IonicPage } from 'ionic-angular';
+import { Network } from '@ionic-native/network';
+import { Storage } from '@ionic/storage';
+import { IonicPage, NavController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { Platform } from 'ionic-angular';
-import { Network } from '@ionic-native/network';
 import { MenuController } from 'ionic-angular';
 import { Events } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
 
-import { Subscription } from 'rxjs/Subscription';
 import { empty } from 'rxjs/observable/empty';
-import { catchError, tap, timeout, switchMap } from 'rxjs/operators';
+import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
+import { Subscription } from 'rxjs/Subscription';
 
-import { CasTicketProvider, SettingsProvider, WsApiProvider } from '../../providers';
 import { Role } from '../../interfaces';
+import { CasTicketProvider, SettingsProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
   selector: 'page-login',
-  templateUrl: 'login.html'
+  templateUrl: 'login.html',
 })
 export class LoginPage {
 
@@ -57,7 +57,7 @@ export class LoginPage {
     this.toastCtrl.create({
       message: msg,
       duration: 3000,
-      position: 'top'
+      position: 'top',
     }).present();
   }
 
@@ -77,10 +77,10 @@ export class LoginPage {
       }),
       tap(_ => this.cacheApi(this.settings.get('role') & Role.Student
         ? ['/student/courses', '/staff/listing']
-        : ['/staff/profile', '/staff/listing'])
+        : ['/staff/profile', '/staff/listing']),
       ),
       timeout(3000),
-      tap(_ => this.events.publish('user:login'))
+      tap(_ => this.events.publish('user:login')),
     ).subscribe(_ => this.navCtrl.setRoot('TabsPage'));
   }
 
@@ -91,7 +91,7 @@ export class LoginPage {
   }
 
   getPasswordVisibility() {
-    return (this.showPasswordText ? "text" : "password");
+    return (this.showPasswordText ? 'text' : 'password');
   }
 
 }

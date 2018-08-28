@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import {
   ActionSheetButton, ActionSheetController, App, Content, IonicPage,
-  NavController, Platform
+  NavController, Platform,
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -11,7 +11,7 @@ import { of } from 'rxjs/observable/of';
 import { distinctUntilChanged, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { StaffDirectory, StudentProfile, Timetable } from '../../interfaces';
-import { SettingsProvider, TimetableProvider, WsApiProvider, ApiApiitProvider } from '../../providers';
+import { SettingsProvider, TimetableProvider, WsApiProvider } from '../../providers';
 import { ClassesPipe } from './classes.pipe';
 
 @IonicPage()
@@ -21,7 +21,7 @@ import { ClassesPipe } from './classes.pipe';
 })
 export class TimetablePage {
 
-  wday = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+  wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   date: string[] = []; // map wday to date
 
   timetable$: Observable<Timetable[]>;
@@ -43,38 +43,25 @@ export class TimetablePage {
     private ws: WsApiProvider,
     private settings: SettingsProvider,
     public app: App,
-    public api_apiit: ApiApiitProvider,
   ) { }
 
   presentActionSheet() {
-    if (this.plt.is('cordova')) {
-      if (this.plt.is('ios')) {
-        let intakesButton = this.intakeLabels.map(intake => <ActionSheetButton>{
-          text: intake,
-          handler: () => this.changeIntake(intake)
-        });
-        let actionSheet = this.actionSheetCtrl.create({
-          buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }]
-        });
-        actionSheet.present();
-      } else if (this.plt.is('android')) {
-        const options: ActionSheetOptions = {
-          buttonLabels: this.intakeLabels,
-          addCancelButtonWithLabel: 'Cancel'
-        };
-        this.actionSheet.show(options).then((buttonIndex: number) => {
-          if (buttonIndex <= this.intakeLabels.length) {
-            this.changeIntake(this.intakeLabels[buttonIndex - 1] || '');
-          }
-        });
-      }
-    } else {
-      let intakesButton = this.intakeLabels.map(intake => <ActionSheetButton>{
-        text: intake,
-        handler: () => this.changeIntake(intake)
+    if (this.plt.is('cordova') && !this.plt.is('ios')) {
+      const options: ActionSheetOptions = {
+        buttonLabels: this.intakeLabels,
+        addCancelButtonWithLabel: 'Cancel',
+      };
+      this.actionSheet.show(options).then((buttonIndex: number) => {
+        if (buttonIndex <= this.intakeLabels.length) {
+          this.changeIntake(this.intakeLabels[buttonIndex - 1] || '');
+        }
       });
-      let actionSheet = this.actionSheetCtrl.create({
-        buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }]
+    } else {
+      const intakesButton = this.intakeLabels.map(intake => {
+        return { text: intake, handler: () => this.changeIntake(intake) } as ActionSheetButton;
+      });
+      const actionSheet = this.actionSheetCtrl.create({
+        buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }],
       });
       actionSheet.present();
     }
@@ -90,7 +77,7 @@ export class TimetablePage {
 
   /** Get days in week of the classes. */
   schoolDays(tt: Timetable[]): string[] {
-    let days = new ClassesPipe().transform(tt, this.intake).map(t => t.DAY);
+    const days = new ClassesPipe().transform(tt, this.intake).map(t => t.DAY);
     return this.wday.filter(d => days.indexOf(d) !== -1);
   }
 
@@ -137,7 +124,7 @@ export class TimetablePage {
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
     return forkJoin([
       this.tt.get(refresh),
-      this.api_apiit.get<StaffDirectory[]>('/staff/listing'),
+      this.ws.get<StaffDirectory[]>('/staff/listing', false, { url: 'https://api.apiit.edu.my' }),
     ]).pipe(
       distinctUntilChanged(),
       map(d => this.joinTimetable(d[0] || [], d[1] || [])),
@@ -157,7 +144,7 @@ export class TimetablePage {
 
   /** Open staff info for lecturer id. */
   openStaffDirectoryInfo(id: string) {
-    this.app.getRootNav().push("StaffDirectoryInfoPage", { id: id });
+    this.app.getRootNav().push('StaffDirectoryInfoPage', { id });
   }
 
   ionViewDidLoad() {

@@ -10,6 +10,6 @@ import { LecturerTimetablePage } from './lecturer-timetable';
     IonicPageModule.forChild(LecturerTimetablePage),
     ComponentsModule,
   ],
-  entryComponents: [LecturerTimetablePage]
+  entryComponents: [LecturerTimetablePage],
 })
 export class LecturerTimetablePageModule { }

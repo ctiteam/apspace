@@ -1,13 +1,15 @@
 /* HttpClient modifier (ordered) */
 export {
   RequestCache, RequestCacheWithMap, RequestCacheWithStorage,
-  RequestCacheWithMapStorage
+  RequestCacheWithMapStorage,
 } from './request-cache/request-cache';
 export { httpInterceptorProviders } from './http-interceptors';
 
 /* User providers */
 export { BusTrackingProvider } from './bus-tracking';
 export { CasTicketProvider } from './cas-ticket';
+export { DataCollectorProvider } from './data-collector';
+export { FeedbackProvider } from './feedback';
 export { LoadingControllerProvider } from './loading-controller';
 export { NewsProvider } from './news';
 export { NotificationProvider } from './notification';
@@ -16,6 +18,3 @@ export { SettingsProvider } from './settings';
 export { SqaProvider } from './sqa';
 export { TimetableProvider } from './timetable';
 export { WsApiProvider } from './ws-api';
-export { FeedbackProvider } from './feedback';
-export { DataCollectorProvider } from './data-collector';
-export { ApiApiitProvider } from './api-apiit';

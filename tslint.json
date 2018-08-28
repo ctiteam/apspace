@@ -1,9 +1,14 @@
 {
+  "extends": "tslint:recommended",
   "rules": {
-    "no-duplicate-variable": true,
-    "no-unused-variable": [
-      true
-    ]
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "indent": [true, "spaces", 2],
+    "interface-name": false,
+    "member-access": [true, "no-public"],
+    "no-bitwise": false,
+    "no-unused-expression": [true, "allow-fast-null-checks"],
+    "object-literal-sort-keys": false,
+    "quotemark": [true, "single", "avoid-escape"]
   },
   "rulesDirectory": [
     "node_modules/tslint-eslint-rules/dist/rules"

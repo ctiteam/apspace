@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { ExamSchedulePage } from './exam-schedule';
 import { ActionSheet } from '@ionic-native/action-sheet';
+import { IonicPageModule } from 'ionic-angular';
 import { TimetableProvider } from '../../providers';
+import { ExamSchedulePage } from './exam-schedule';
 
 @NgModule({
   declarations: [
@@ -11,6 +11,6 @@ import { TimetableProvider } from '../../providers';
   imports: [
     IonicPageModule.forChild(ExamSchedulePage),
   ],
-  providers: [ActionSheet, TimetableProvider]
+  providers: [ActionSheet, TimetableProvider],
 })
 export class ExamSchedulePageModule { }

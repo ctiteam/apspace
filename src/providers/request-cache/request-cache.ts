@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+/* tslint:disable:max-classes-per-file */
 import { HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { fromPromise } from 'rxjs/observable/fromPromise';
@@ -15,7 +16,7 @@ export interface RequestCacheEntry {
 
 export abstract class RequestCache {
   abstract get(req: HttpRequest<any>): Observable<HttpResponse<any> | undefined>;
-  abstract set(req: HttpRequest<any>, response: HttpResponse<any>): void
+  abstract set(req: HttpRequest<any>, response: HttpResponse<any>): void;
 }
 
 /** RequestCache implementation with Map object */
@@ -23,8 +24,6 @@ export abstract class RequestCache {
 export class RequestCacheWithMap implements RequestCache {
 
   cache = new Map<string, HttpResponse<any>>();
-
-  constructor() { }
 
   get(req: HttpRequest<any>): Observable<HttpResponse<any> | undefined> {
     const url = req.urlWithParams;
@@ -83,13 +82,13 @@ export class RequestCacheWithMapStorage implements RequestCache {
 
     if (cached) { return of(cached); }
 
-    return fromPromise(this.storage.get(url)).pipe(map(cached => {
-      if (!cached) {
+    return fromPromise(this.storage.get(url)).pipe(map(cache => {
+      if (!cache) {
         return undefined;
       }
 
-      const headers = new HttpHeaders(cached.headers);
-      return new HttpResponse({ url, headers, body: cached.body });
+      const headers = new HttpHeaders(cache.headers);
+      return new HttpResponse({ url, headers, body: cache.body });
     }));
   }
 

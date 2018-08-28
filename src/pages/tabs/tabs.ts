@@ -1,23 +1,15 @@
 import { Component } from '@angular/core';
+import { FCM } from '@ionic-native/fcm';
+import { StatusBar } from '@ionic-native/status-bar';
+import { Storage } from '@ionic/storage';
 import {
-  IonicPage,
-  NavParams,
-  NavController,
-  AlertController,
-  Platform,
-  App,
-  Events,
+  AlertController, App, Events, IonicPage, NavController, NavParams, Platform,
   ToastController,
 } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
-import { FCM } from '@ionic-native/fcm';
-import { Storage } from '@ionic/storage';
 
 import { Role } from '../../interfaces';
 import {
-  SettingsProvider,
-  LoadingControllerProvider,
-  NotificationProvider,
+  LoadingControllerProvider, NotificationProvider, SettingsProvider,
 } from '../../providers';
 
 @IonicPage()
@@ -30,7 +22,7 @@ export class TabsPage {
   pages = [
     { title: 'News', icon: 'home', root: 'HomePage', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Timetable', icon: 'calendar', root: 'TimetablePage', role: Role.Student },
-    { title: 'Timetable', icon: 'calendar', root: 'LecturerTimetablePage',  role: Role.Lecturer },
+    { title: 'Timetable', icon: 'calendar', root: 'LecturerTimetablePage', role: Role.Lecturer },
     { title: 'Attendance', icon: 'alarm', root: 'AttendancePage', role: Role.Student },
     { title: 'APCard', icon: 'card', root: 'ApcardPage', role: Role.Student | Role.Lecturer | Role.Admin },
     { title: 'Bus Tracking', icon: 'bus', root: 'BusTrackingPage', role: Role.Lecturer | Role.Admin },
@@ -42,7 +34,7 @@ export class TabsPage {
     title: string,
     icon: string,
     root: string,
-    role: Role
+    role: Role,
   }>;
 
   exit = false;
@@ -67,11 +59,11 @@ export class TabsPage {
   ) {
 
     const role = this.settings.get('role');
-    this.tabs = this.pages.filter(page => page.role & role).slice(0, 4)
+    this.tabs = this.pages.filter(page => page.role & role).slice(0, 4);
 
-    this.events.subscribe("newNotification", () => {
+    this.events.subscribe('newNotification', () => {
       this.getBadge();
-    })
+    });
 
     this.plt.ready().then(() => {
       if (this.plt.is('cordova')) {
@@ -85,11 +77,11 @@ export class TabsPage {
           } else if (this.loading.dismissLoading()) {
             this.loading.dismissLoading();
           } else {
-            let toast = this.toastCtrl.create({
+            const toast = this.toastCtrl.create({
               message: 'Tap again to exit.',
+              cssClass: 'normalToast',
               duration: 2000,
               position: 'top',
-              cssClass: 'normalToast'
             });
             this.exit = true;
             toast.onDidDismiss(() => this.exit = false);
@@ -100,15 +92,15 @@ export class TabsPage {
     });
   }
 
-  ionViewWillEnter(){
-    if(this.plt.is("cordova")){
+  ionViewWillEnter() {
+    if (this.plt.is('cordova')) {
       this.getBadge();
     }
   }
 
   getBadge() {
     this.notification.getMessage().subscribe(res => {
-      this.badge = res["num_of_unread_msgs"];
-    })
+      this.badge = res.num_of_unread_msgs;
+    });
   }
 }

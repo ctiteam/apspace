@@ -1,11 +1,11 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
-import { NavController, Searchbar, IonicPage } from 'ionic-angular';
+import { IonicPage, NavController, Searchbar } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { filter, finalize, map } from 'rxjs/operators';
 
 import { StaffDirectory } from '../../interfaces';
-import { ApiApiitProvider, LoadingControllerProvider } from '../../providers';
+import { LoadingControllerProvider, WsApiProvider } from '../../providers';
 
 @IonicPage({ segment: 'staff' })
 @Component({
@@ -23,24 +23,25 @@ export class StaffDirectoryPage {
 
   constructor(
     public navCtrl: NavController,
-    private api_apiit: ApiApiitProvider,
     public loading: LoadingControllerProvider,
+    private ws: WsApiProvider,
   ) { }
 
   @HostListener('keydown', ['$event']) onkeydown(e) {
-    if (e.keyCode == 13) {
-      let activeElement = <HTMLElement>document.activeElement;
+    if (e.keyCode === 13) {
+      const activeElement = document.activeElement as HTMLElement;
       activeElement && activeElement.blur && activeElement.blur();
     }
   }
 
   doRefresh(refresher?) {
     this.loading.presentLoading();
-    this.staff$ = this.api_apiit.get<StaffDirectory[]>('/staff/listing', Boolean(refresher));
+    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', Boolean(refresher),
+      { url: 'https://api.apiit.edu.my' });
     this.staffType$ = this.staff$.pipe(
       filter(ss => ss instanceof Array),
       map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT))).sort()),
-      finalize(() => { refresher && refresher.complete(), this.loading.dismissLoading() }),
+      finalize(() => { refresher && refresher.complete(), this.loading.dismissLoading(); }),
     );
   }
 

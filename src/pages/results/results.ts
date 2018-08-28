@@ -1,31 +1,22 @@
-import { Component } from "@angular/core";
-import {
-  IonicPage,
-  Platform,
-  ActionSheetController,
-  ActionSheetButton,
-} from "ionic-angular";
-import { Observable } from "rxjs/Observable";
-import { tap, finalize } from "rxjs/operators";
+import { Component } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
-
-import { WsApiProvider, LoadingControllerProvider } from "../../providers";
 import {
-  Course,
-  Subcourse,
-  CourseDetails,
-  InterimLegend,
-  MPULegend,
-  DeterminationLegend,
-  ClassificationLegend,
-  StudentProfile,
-} from "../../interfaces";
+  ActionSheetButton, ActionSheetController, IonicPage, Platform,
+} from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+import { finalize, tap } from 'rxjs/operators';
+
+import {
+  ClassificationLegend, Course, CourseDetails, DeterminationLegend,
+  InterimLegend, MPULegend, StudentProfile, Subcourse,
+} from '../../interfaces';
+import { LoadingControllerProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
-  selector: "page-results",
-  templateUrl: "results.html",
-  providers: []
+  providers: [],
+  selector: 'page-results',
+  templateUrl: 'results.html',
 })
 export class ResultsPage {
   intakes$: Observable<Course[]>;
@@ -37,13 +28,10 @@ export class ResultsPage {
   classificationLegend$: Observable<ClassificationLegend[]>;
   profile$: Observable<StudentProfile[]>;
 
-  type = "bar";
+  type = 'bar';
   data: any;
-  barChart: any;
   selectedIntake: string = '';
   studentId: string;
-  grade_point: number = 0;
-  passedModule: any = 0;
   semester1: any[] = [];
   semester2: any[] = [];
   semester3: any[] = [];
@@ -53,17 +41,17 @@ export class ResultsPage {
 
   options = {
     legend: {
-      display: false
+      display: false,
     },
     scales: {
       yAxes: [
         {
           ticks: {
-            beginAtZero: true
-          }
-        }
-      ]
-    }
+            beginAtZero: true,
+          },
+        },
+      ],
+    },
   };
 
   constructor(
@@ -75,142 +63,124 @@ export class ResultsPage {
 
   getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
     this.loading.presentLoading();
-    const opt = { params: { id: this.studentId, format: "json" } };
+    const opt = { params: { id: this.studentId, format: 'json' } };
     return (this.results$ = this.ws
       .get<Subcourse>(`/student/subcourses?intake=${intake}`, refresh, opt)
       .pipe(
         tap(_ => this.getCourseDetails(intake)),
         tap(r => this.seperateBySemesters(r)),
         tap(r => this.getLegend(intake, r)),
-        finalize(() => this.loading.dismissLoading())
-      ));
+        finalize(() => this.loading.dismissLoading()),
+    ));
   }
 
   seperateBySemesters(results: any) {
-    this.semester1 = results.filter(res => res.SEMESTER == 1);
-    this.semester2 = results.filter(res => res.SEMESTER == 2);
-    this.semester3 = results.filter(res => res.SEMESTER == 3);
+    this.semester1 = results.filter(res => res.SEMESTER === 1);
+    this.semester2 = results.filter(res => res.SEMESTER === 2);
+    this.semester3 = results.filter(res => res.SEMESTER === 3);
   }
 
   ionViewDidLoad() {
-    // this.intakes$ = this.ws.get<StudentProfile[]>("/student/profile").pipe(
-    //   switchMap(p => (this.block = p[0].BLOCK)
-    //     ? this.ws.get<Course[]>("/student/courses").pipe(
-    //       tap(i => this.selectedIntake = i[0].INTAKE_CODE),
-    //       tap(i => this.studentId = i[0].STUDENT_NUMBER),
-    //       tap(_ => this.getResults(this.selectedIntake)),
-    //       tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE)))),
-    //     )
-    //     : of([] as Course[])
-    //   )
-    // );
-
-    this.profile$ = this.ws.get<StudentProfile[]>("/student/profile");
+    this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
     this.profile$.subscribe(p => {
-      if (p[0].BLOCK == true) {
+      if (p[0].BLOCK === true) {
         this.block = false;
-        this.intakes$ = this.ws.get<Course[]>("/student/courses")
+        this.intakes$ = this.ws.get<Course[]>('/student/courses')
           .pipe(
             tap(i => this.selectedIntake = i[0].INTAKE_CODE),
             tap(i => this.studentId = i[0].STUDENT_NUMBER),
             tap(_ => this.getResults(this.selectedIntake)),
-            tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE))))
-          );
+            tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE)))),
+        );
       } else {
         this.block = true;
       }
-    })
+    });
   }
 
   doRefresh(refresher?) {
-    this.results$ = this.getResults(this.selectedIntake, true)
-      .pipe(
-        finalize(() => refresher.complete())
-      );
+    this.results$ = this.getResults(this.selectedIntake, true).pipe(
+      finalize(() => refresher.complete()),
+    );
   }
 
   getCourseDetails(intake: string, refresh: boolean = false): Observable<CourseDetails> {
-    const opt = { params: { id: this.studentId, format: "json" } };
+    const opt = { params: { id: this.studentId, format: 'json' } };
     return (this.courseDetails$ = this.ws.get<CourseDetails>(
       `/student/sub_and_course_details?intake=${intake}`,
       refresh,
-      opt
+      opt,
     ));
   }
 
   getLegend(intake: string, results: any) {
-    this.interimLegend$ = this.ws.get<InterimLegend[]>(`/student/interim_legend?id=${this.studentId}&intake=${intake}`).pipe(
-      tap(res => {
-        let gradeList: any;
-        gradeList = Array.from(new Set((res || []).map(grade => grade.GRADE)))
-        //gradeList.push("Pass", "Fail");
-        this.sortArray(results, gradeList);
-      })
-    )
+    this.interimLegend$ = this.ws.get<InterimLegend[]>(
+      `/student/interim_legend?id=${this.studentId}&intake=${intake}`).pipe(
+        tap(res => {
+          let gradeList: any;
+          gradeList = Array.from(new Set((res || []).map(grade => grade.GRADE)));
+          // gradeList.push("Pass", "Fail");
+          this.sortArray(results, gradeList);
+        }),
+    );
     this.mpuLegend$ = this.ws.get<MPULegend[]>(`/student/mpu_legend?id=${this.studentId}&intake=${intake}`);
-    this.determinationLegend$ = this.ws.get<DeterminationLegend[]>(`/student/determination_legend?id=${this.studentId}&intake=${intake}`);
-    this.classificationLegend$ = this.ws.get<ClassificationLegend[]>(`/student/classification_legend?id=${this.studentId}&intake=${intake}`);
+    this.determinationLegend$ = this.ws.get<DeterminationLegend[]>(
+      `/student/determination_legend?id=${this.studentId}&intake=${intake}`);
+    this.classificationLegend$ = this.ws.get<ClassificationLegend[]>(
+      `/student/classification_legend?id=${this.studentId}&intake=${intake}`);
   }
 
   sortArray(results: any, gradeList: any) {
-     let studentGrades: any[] = [];
-     for (let grade of results) {
-      studentGrades.push(grade.GRADE);
-    }
-    let t = studentGrades.reduce((acc, v) => {
-      acc[v] = (acc[v] || 0) + 1; return acc;
-    }, {})
+    const t = results.map(r => r.GRADE)
+      .reduce((acc, v) => {
+        acc[v] = (acc[v] || 0) + 1;
+        return acc;
+      }, {});
 
-    let studentResults = Object.keys(t).sort((studentGrades, b) =>
-    gradeList.indexOf(studentGrades) - gradeList.indexOf(b))
-    .map(k => { return { grade: k, count: t[k] }; })
+    const studentResults = Object.keys(t)
+      .sort((a, b) => gradeList.indexOf(a) - gradeList.indexOf(b))
+      .map(k => ({ grade: k, count: t[k] }));
 
-    let grades: any[] = [];
-    let count : any[] = [];
-    for (let g of studentResults) {
-      grades.push(g.grade);
-    }
-    for (let c of studentResults) {
-      count.push(c.count);
-    }
-   this.showBarChart(grades, count);
+    const grades = studentResults.map(r => r.grade);
+    const count = studentResults.map(r => r.count);
+    this.showBarChart(grades, count);
   }
 
   showBarChart(listItems, listCount) {
-    let randomColor = [
-      "rgba(255, 99, 132, 0.7)",
-      "rgba(54, 162, 235, 0.7)",
-      "rgba(255, 206, 86, 0.7)",
-      "rgba(75, 192, 192, 0.7)",
-      "rgba(153, 102, 255, 0.7)",
-      "rgba(255, 159, 64, 0.7)",
-      "rgba(54,72,87,0.7)",
-      "rgba(247,89,64,0.7)",
-      "rgba(61,199,190,0.7)"
+    const randomColor = [
+      'rgba(255, 99, 132, 0.7)',
+      'rgba(54, 162, 235, 0.7)',
+      'rgba(255, 206, 86, 0.7)',
+      'rgba(75, 192, 192, 0.7)',
+      'rgba(153, 102, 255, 0.7)',
+      'rgba(255, 159, 64, 0.7)',
+      'rgba(54,72,87,0.7)',
+      'rgba(247,89,64,0.7)',
+      'rgba(61,199,190,0.7)',
     ];
 
-    let randomBorderColor = [
-      "rgba(255,99,132,1)",
-      "rgba(54, 162, 235, 1)",
-      "rgba(255, 206, 86, 1)",
-      "rgba(75, 192, 192, 1)",
-      "rgba(153, 102, 255, 1)",
-      "rgba(255, 159, 64, 1)",
-      "rgba(54,72,87,1)",
-      "rgba(247,89,64,1)",
-      "rgba(61,199,190,1)"
+    const randomBorderColor = [
+      'rgba(255,99,132,1)',
+      'rgba(54, 162, 235, 1)',
+      'rgba(255, 206, 86, 1)',
+      'rgba(75, 192, 192, 1)',
+      'rgba(153, 102, 255, 1)',
+      'rgba(255, 159, 64, 1)',
+      'rgba(54,72,87,1)',
+      'rgba(247,89,64,1)',
+      'rgba(61,199,190,1)',
     ];
 
     this.data = {
-      labels: listItems,
       datasets: [
         {
-          data: listCount,
           backgroundColor: randomColor,
           borderColor: randomBorderColor,
-          borderWidth: 2
-        }
-      ]
+          borderWidth: 2,
+          data: listCount,
+        },
+      ],
+      labels: listItems,
     };
   }
 
@@ -227,17 +197,16 @@ export class ResultsPage {
         }
       });
     } else {
-      let intakesButton = this.intakeLabels.map(intake => <ActionSheetButton>{
-        text: intake,
-        handler: () => {
-          this.selectedIntake = intake;
-          this.getResults(this.selectedIntake);
-        }
+      const intakesButton = this.intakeLabels.map(intake => {
+        return {
+          text: intake, handler: () => {
+            this.selectedIntake = intake;
+            this.getResults(this.selectedIntake);
+          },
+        } as ActionSheetButton;
       });
-      let actionSheet = this.actionSheetCtrl.create({
-        buttons: [
-          ...intakesButton, { text: 'Cancel', role: 'cancel' },
-        ]
+      const actionSheet = this.actionSheetCtrl.create({
+        buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }],
       });
       actionSheet.present();
     }

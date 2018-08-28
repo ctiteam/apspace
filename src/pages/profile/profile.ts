@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
-import { StudentPhoto, StudentProfile, StaffProfile, Role } from '../../interfaces';
-import { WsApiProvider, SettingsProvider, ApiApiitProvider } from '../../providers';
-
+import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
+import { SettingsProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -18,13 +17,12 @@ export class ProfilePage {
   staffProfile$: Observable<StaffProfile[]>;
 
   pages = [
-    { title: 'Password Recovery', component: 'PasswordRecoveryPage', icon: 'lock' }
+    { title: 'Password Recovery', component: 'PasswordRecoveryPage', icon: 'lock' },
   ];
 
   constructor(
     private ws: WsApiProvider,
     private settings: SettingsProvider,
-    private api_apiit: ApiApiitProvider,
   ) { }
 
   ionViewDidLoad() {
@@ -33,7 +31,8 @@ export class ProfilePage {
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
       this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
     } else if (role & (Role.Lecturer | Role.Admin)) {
-      this.staffProfile$ = this.api_apiit.get<StaffProfile[]>('/staff/profile');
+      this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile', false, { url: 'https://api.apiit.edu.my' });
     }
   }
+
 }

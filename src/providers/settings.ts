@@ -22,7 +22,7 @@ export class SettingsProvider {
    * @param value - value to be set
    */
   set(key: keyof Settings, value: any): void {
-    if (this.data[key] === value) return;
+    if (this.data[key] === value) { return; }
     this.data[key] = value;
     this.storage.set('settings', this.data);
   }
@@ -38,8 +38,10 @@ export class SettingsProvider {
 
   /** Clear settings. */
   clear(): void {
-    for (let key in this.data) {
-      delete this.data[key];
+    for (const key in this.data) {
+      if (this.data.hasOwnProperty(key)) {
+        delete this.data[key];
+      }
     }
     this.storage.set('settings', this.data);
   }

@@ -8,8 +8,8 @@ import { StaffDirectoryInfoPage } from './staff-directory-info';
   declarations: [StaffDirectoryInfoPage],
   imports: [
     IonicPageModule.forChild(StaffDirectoryInfoPage),
-    ComponentsModule
+    ComponentsModule,
   ],
-  entryComponents: [StaffDirectoryInfoPage]
+  entryComponents: [StaffDirectoryInfoPage],
 })
 export class StaffDirectoryInfoPageModule { }

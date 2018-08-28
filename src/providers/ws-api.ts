@@ -1,18 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Platform, ToastController } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
+import { Storage } from '@ionic/storage';
+import { Platform, ToastController } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { _throw as obs_throw } from 'rxjs/observable/throw';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { of } from 'rxjs/observable/of';
 import { range } from 'rxjs/observable/range';
+import { _throw as obs_throw } from 'rxjs/observable/throw';
 import { timer } from 'rxjs/observable/timer';
 import {
   catchError, mergeMap, publishLast, refCount, retryWhen, switchMap,
-  tap, timeout, zip
+  tap, timeout, zip,
 } from 'rxjs/operators';
 
 import { CasTicketProvider } from './';
@@ -53,8 +53,8 @@ export class WsApiProvider {
   } = {}): Observable<T> {
     const url = (options.url || this.apiUrl) + endpoint;
     const opt = {
-      withCredentials: Boolean(options.auth !== false),
       params: options.params || {},
+      withCredentials: Boolean(options.auth !== false),
     };
 
     return (refresh && (!this.plt.is('cordova') || this.network.type !== 'none')
@@ -62,14 +62,14 @@ export class WsApiProvider {
         catchError(err => options.auth === false ? obs_throw(err)
           : this.cas.getST(url).pipe(
             switchMap(st => this.http.get<T>(url,
-              Object.assign(opt, { params: Object.assign(opt.params, { ticket: st }) })))
+              Object.assign(opt, { params: Object.assign(opt.params, { ticket: st }) }))),
           )),
         tap(cache => this.storage.set(endpoint, cache)),
         timeout(options.timeout || 10000),
         catchError(err => {
-          //this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
+          // this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
           return fromPromise(this.storage.get(endpoint)).pipe(
-            switchMap(v => v || obs_throw('retrying'))
+            switchMap(v => v || obs_throw('retrying')),
           );
         }),
         retryWhen(errors => range(1, options.attempts || 4).pipe(
@@ -79,7 +79,7 @@ export class WsApiProvider {
         catchError(of),
       )
       : fromPromise(this.storage.get(endpoint)).pipe(
-        switchMap(v => v ? of(v) : this.get(endpoint, true, options))
+        switchMap(v => v ? of(v) : this.get(endpoint, true, options)),
       )
     ).pipe(publishLast(), refCount());
   }

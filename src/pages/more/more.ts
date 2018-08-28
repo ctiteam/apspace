@@ -1,17 +1,11 @@
 import { Component } from '@angular/core';
 import {
-  IonicPage,
-  NavController,
-  NavParams,
-  AlertController,
-  Events,
-  App,
-  Platform,
+  AlertController, App, Events, IonicPage, NavController, NavParams, Platform,
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
-import { WsApiProvider, DataCollectorProvider, SettingsProvider, NotificationProvider, ApiApiitProvider } from '../../providers';
-import { StudentPhoto, StudentProfile, StaffProfile, Role } from '../../interfaces';
+import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
+import { DataCollectorProvider, NotificationProvider, SettingsProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -20,23 +14,72 @@ import { StudentPhoto, StudentProfile, StaffProfile, Role } from '../../interfac
 })
 export class MorePage {
 
-  menuItems = [
-    { title: 'Results', component: 'ResultsPage', icon: 'checkbox', role: Role.Student },
-    { title: 'Staff Directory', component: 'StaffDirectoryPage', icon: 'people', role: Role.Student | Role.Lecturer | Role.Admin },
-    { title: 'Bus Tracking', component: 'BusTrackingPage', icon: 'bus', role: Role.Student },
-    { title: 'Student Timetable', component: 'TimetablePage', icon: 'calendar', role: Role.Lecturer },
-    { title: 'Fees', component: 'FeesPage', icon: 'cash', badge: '', role: Role.Student },
-    { title: 'Exam Schedule', component: 'ExamSchedulePage', icon: 'book', role: Role.Student },
-    { title: 'Profile', component: 'ProfilePage', icon: 'contact', role: Role.Student | Role.Lecturer | Role.Admin },
-    { title: 'Operation Hours', component: 'OperationHoursPage', icon: 'information-circle', role: Role.Student | Role.Lecturer | Role.Admin },
-    { title: 'Feedback', component: 'FeedbackPage', icon: 'at', role: Role.Student | Role.Lecturer | Role.Admin },
+  menuItems: Array<{
+    title: string,
+    component: any,
+    icon: any,
+    role: Role,
+  }> = [
+    {
+      title: 'Results',
+      component: 'ResultsPage',
+      icon: 'checkbox',
+      role: Role.Student,
+    },
+    {
+      title: 'Staff Directory',
+      component: 'StaffDirectoryPage',
+      icon: 'people',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+    },
+    {
+      title: 'Bus Tracking',
+      component: 'BusTrackingPage',
+      icon: 'bus',
+      role: Role.Student,
+    },
+    {
+      title: 'Student Timetable',
+      component: 'TimetablePage',
+      icon: 'calendar',
+      role: Role.Lecturer,
+    },
+    {
+      title: 'Fees',
+      component: 'FeesPage',
+      icon: 'cash',
+      role: Role.Student,
+    },
+    {
+      title: 'Exam Schedule',
+      component: 'ExamSchedulePage',
+      icon: 'book',
+      role: Role.Student,
+    },
+    {
+      title: 'Profile',
+      component: 'ProfilePage',
+      icon: 'contact',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+    },
+    {
+      title: 'Operation Hours',
+      component: 'OperationHoursPage',
+      icon: 'information-circle',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+    },
+    {
+      title: 'Feedback',
+      component: 'FeedbackPage',
+      icon: 'at',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+    },
   ];
-
   pages: Array<{
     title: string,
     component: any,
     icon: any,
-    role: Role
+    role: Role,
   }>;
 
   photo$: Observable<StudentPhoto[]>;
@@ -55,15 +98,14 @@ export class MorePage {
     public settings: SettingsProvider,
     public notification: NotificationProvider,
     public plt: Platform,
-    public api_apiit: ApiApiitProvider,
     public dataCollector: DataCollectorProvider,
   ) {
     const role = this.settings.get('role');
     this.pages = this.menuItems.filter(page => page.role & role).slice(0, 9);
 
-    this.events.subscribe("newNotification", () => {
+    this.events.subscribe('newNotification', () => {
       this.getBadge();
-    })
+    });
   }
 
   ionViewDidLoad() {
@@ -72,27 +114,27 @@ export class MorePage {
       this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
     } else if (role & (Role.Lecturer | Role.Admin)) {
-      this.staffProfile$ = this.api_apiit.get<StaffProfile[]>('/staff/profile');
+      this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile', false, { url: 'https://apiit.edu.my' });
     }
   }
 
   ionViewWillEnter() {
-    if (this.plt.is("cordova")) {
+    if (this.plt.is('cordova')) {
       this.getBadge();
     }
   }
 
   getBadge() {
     this.notification.getMessage().subscribe(res => {
-      this.badge = res["num_of_unread_msgs"];
-    })
+      this.badge = res.num_of_unread_msgs;
+    });
   }
 
   openNotification() {
-    let callback = () => {
+    const callback = () => {
       this.getBadge();
     };
-    this.app.getRootNav().push('NotificationPage', { callback: callback })
+    this.app.getRootNav().push('NotificationPage', { callback });
   }
 
   openPage(page) {
@@ -106,18 +148,18 @@ export class MorePage {
   logout() {
     this.alertCtrl
       .create({
-        title: "Confirm Log out",
-        message: "Do you want to log out?",
+        title: 'Confirm Log out',
+        message: 'Do you want to log out?',
         buttons: [
-          { text: "Cancel", role: "cancel" },
+          { text: 'Cancel', role: 'cancel' },
           {
-            text: "Log out",
+            text: 'Log out',
             handler: () => {
               this.dataCollector.sendOnLogout().subscribe();
-              this.events.publish("user:logout");
-            }
-          }
-        ]
+              this.events.publish('user:logout');
+            },
+          },
+        ],
       })
       .present();
   }

@@ -4,10 +4,10 @@ import { HomeModalPage } from './home-modal';
 
 @NgModule({
   declarations: [
-    HomeModalPage
+    HomeModalPage,
   ],
   imports: [
-    IonicPageModule.forChild(HomeModalPage)
+    IonicPageModule.forChild(HomeModalPage),
   ],
 })
 export class HomeModalPageModule { }

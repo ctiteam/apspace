@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { NotificationProvider } from '../../providers';
-
 
 @IonicPage()
 @Component({
@@ -18,9 +17,9 @@ export class NotificationModalPage {
     public navParams: NavParams,
     private sanitizer: DomSanitizer,
     private notification: NotificationProvider,
-  ) {}
+  ) { }
 
-  ionViewDidLoad(){
+  ionViewDidLoad() {
     this.itemDetails = this.navParams.get('itemDetails');
   }
 
@@ -28,8 +27,8 @@ export class NotificationModalPage {
     return this.sanitizer.bypassSecurityTrustHtml(value);
   }
 
-  displayDate(message_id) {
-    let date = this.notification.timeConverter(message_id);
+  displayDate(msgId) {
+    const date = this.notification.timeConverter(msgId);
     return date[1];
   }
 }

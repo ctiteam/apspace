@@ -10,6 +10,6 @@ import { HomePage } from './home';
     IonicPageModule.forChild(HomePage),
   ],
   entryComponents: [HomePage],
-  providers: [NewsProvider]
+  providers: [NewsProvider],
 })
 export class HomePageModule { }

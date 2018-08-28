@@ -1,11 +1,11 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
-import { trigger, style, animate, transition } from '@angular/animations';
 
 import { Observable } from 'rxjs/Observable';
 import { map, tap } from 'rxjs/operators';
 
-import { WsApiProvider } from '../../providers';
 import { LecturerTimetable } from '../../interfaces';
+import { WsApiProvider } from '../../providers';
 
 @Component({
   selector: 'lecturer-timetable',
@@ -21,25 +21,25 @@ import { LecturerTimetable } from '../../interfaces';
         animate('150ms ease-out', style({ opacity: '.7', height: '0', paddingBottom: '0' })),
       ]),
     ]),
-  ]
+  ],
 })
 export class LecturerTimetableComponent implements OnInit {
 
   @Input() id: string;
 
-  calendar$: Observable<{
+  calendar$: Observable<Array<{
     week: Date,
-    days: {
+    days: Array<{
       day: Date,
-      events: {
+      events: Array<{
         name: string,
         type: 'lecturerTimetable',
         start: string,
         end: string,
         loc: string,
-      }[]
-    }[]
-  }[]>;
+      }>,
+    }>,
+  }>>;
   selectedWeeks = [];
 
   constructor(private ws: WsApiProvider) { }
@@ -52,7 +52,7 @@ export class LecturerTimetableComponent implements OnInit {
 
     this.calendar$ = this.ws.get<LecturerTimetable[]>(this.id, true, options).pipe(
       map(data => {
-        let t = {} as any; // temporary Map for data processing
+        const t = {} as any; // temporary Map for data processing
         data.forEach(d => {
           const since = new Date(d.since);
 
@@ -71,15 +71,15 @@ export class LecturerTimetableComponent implements OnInit {
         });
 
         return Object.keys(t).map(w => {
-          const week = parseInt(w) * 604800000;
+          const week = parseInt(w, 10) * 604800000;
           return {
             week: new Date(week),
             days: Object.keys(t[w]).map(d => {
               return {
-                day: new Date(week + parseInt(d) * 86400000),
-                events: t[w][d]
+                day: new Date(week + parseInt(d, 10) * 86400000),
+                events: t[w][d],
               };
-            })
+            }),
           };
         });
       }),

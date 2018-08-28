@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
-import {
-  IonicPage,
-  Platform,
-  ActionSheetController,
-  ActionSheetButton,
-  NavController
-} from 'ionic-angular';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
+import {
+  ActionSheetButton,
+  ActionSheetController,
+  IonicPage,
+  NavController,
+  Platform,
+} from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { tap, finalize } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 
-import { WsApiProvider, LoadingControllerProvider } from '../../providers';
-import { Attendance, Course, AttendanceLegend } from '../../interfaces';
+import { Attendance, AttendanceLegend, Course } from '../../interfaces';
+import { LoadingControllerProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -25,7 +25,6 @@ export class AttendancePage {
   attendance$: Observable<Attendance[]>;
   courses$: Observable<Course[]>;
   legend$: Observable<AttendanceLegend[]>;
-
 
   selectedIntake: string = '';
   studentId: string = '';
@@ -54,17 +53,19 @@ export class AttendancePage {
         }
       });
     } else {
-      let intakesButton = this.intakeLabels.map(intake => <ActionSheetButton>{
-        text: intake,
-        handler: () => {
-          this.selectedIntake = intake;
-          this.getAttendance(this.selectedIntake);
-        }
+      const intakesButton = this.intakeLabels.map(intake => {
+        return {
+          text: intake,
+          handler: () => {
+            this.selectedIntake = intake;
+            this.getAttendance(this.selectedIntake);
+          },
+        } as ActionSheetButton;
       });
-      let actionSheet = this.actionSheetCtrl.create({
+      const actionSheet = this.actionSheetCtrl.create({
         buttons: [
           ...intakesButton, { text: 'Cancel', role: 'cancel' },
-        ]
+        ],
       });
       actionSheet.present();
     }
@@ -76,23 +77,23 @@ export class AttendancePage {
     return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh, opt)
       .pipe(
         tap(a => this.calculateAverage(a)),
-        finalize(() => this.loading.dismissLoading())
-      );
+        finalize(() => this.loading.dismissLoading()),
+    );
   }
 
   ionViewDidLoad() {
-    this.legend$ = this.ws.get<AttendanceLegend[]>("/student/attendance_legend");
+    this.legend$ = this.ws.get<AttendanceLegend[]>('/student/attendance_legend');
     this.courses$ = this.ws.get<Course[]>('/student/courses').pipe(
       tap(c => this.selectedIntake = c[0].INTAKE_CODE),
       tap(c => this.studentId = c[0].STUDENT_NUMBER),
       tap(_ => this.getAttendance(this.selectedIntake)),
-      tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE))))
+      tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE)))),
     );
   }
 
   doRefresh(refresher) {
     this.attendance$ = this.getAttendance(this.selectedIntake, true).pipe(
-      finalize(() => refresher && refresher.complete())
+      finalize(() => refresher && refresher.complete()),
     );
   }
 
@@ -100,17 +101,16 @@ export class AttendancePage {
     let sumOfAttendances = 0;
     if (!a) {
       this.percent = 0;
-      this.averageColor = "#f04141";
-    }
-    else {
-      for (let attendance of a) {
+      this.averageColor = '#f04141';
+    } else {
+      for (const attendance of a) {
         sumOfAttendances += attendance.PERCENTAGE;
       }
-      let averageAttendance = (sumOfAttendances / a.length).toFixed(2)
-      this.percent = parseInt(averageAttendance);
-      this.averageColor = "#0dbd53";
+      const averageAttendance = (sumOfAttendances / a.length).toFixed(2);
+      this.percent = parseInt(averageAttendance, 10);
+      this.averageColor = '#0dbd53';
       if (this.percent < 80) {
-        this.averageColor = "#f04141";
+        this.averageColor = '#f04141';
       }
     }
   }

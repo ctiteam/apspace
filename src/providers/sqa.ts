@@ -4,8 +4,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { publishLast, refCount, switchMap } from 'rxjs/operators';
 
-import { CasTicketProvider } from '../providers';
 import { Sqa } from '../interfaces';
+import { CasTicketProvider } from '../providers';
 
 @Injectable()
 export class SqaProvider {
@@ -19,7 +19,7 @@ export class SqaProvider {
    */
   get(): Observable<Sqa> {
     return this.cas.getST(this.sqaUrl).pipe(
-      switchMap(st => this.http.get<Sqa>(this.sqaUrl, { params: { ticket: st } }))
+      switchMap(st => this.http.get<Sqa>(this.sqaUrl, { params: { ticket: st } })),
     ).pipe(publishLast(), refCount());
   }
 
@@ -31,10 +31,9 @@ export class SqaProvider {
     return this.cas.getST(this.sqaUrl).pipe(
       switchMap(st => this.http.post(this.sqaUrl, params.toString(), {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        params: { ticket: st }
-      }))
+        params: { ticket: st },
+      })),
     ).pipe(publishLast(), refCount());
   }
-
 
 }

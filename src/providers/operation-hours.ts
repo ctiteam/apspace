@@ -22,7 +22,7 @@ export class OperationHoursProvider {
   get(endpoint: string, refresh?: boolean): Observable<OperationHours[]> {
     const url = this.operationHourUrl + endpoint + '/rss.xml';
     const options = refresh ? { headers: { 'x-refresh': '' } } : {};
-    return this.http.get<OperationHours[]>(url, options).pipe(publishLast(), refCount())
+    return this.http.get<OperationHours[]>(url, options).pipe(publishLast(), refCount());
   }
 
 }

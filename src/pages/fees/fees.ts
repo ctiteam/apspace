@@ -5,15 +5,15 @@ import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { finalize } from 'rxjs/operators';
 
-import { WsApiProvider, LoadingControllerProvider } from '../../providers';
 import {
-  FeesTotalSummary, FeesBankDraft, FeesDetails, FeesSummary
+  FeesBankDraft, FeesDetails, FeesSummary, FeesTotalSummary,
 } from '../../interfaces';
+import { LoadingControllerProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
   selector: 'page-fees',
-  templateUrl: 'fees.html'
+  templateUrl: 'fees.html',
 })
 export class FeesPage {
   selectedSegment: string = 'Summary';
@@ -34,7 +34,7 @@ export class FeesPage {
     this.bankDraft$ = this.ws.get('/student/bankdraft_amount', true);
     this.details$ = this.ws.get('/student/overall_fee', true);
     forkJoin([this.totalSummary$, this.summary$]).pipe(
-      finalize(() => this.loading.dismissLoading())
+      finalize(() => this.loading.dismissLoading()),
     ).subscribe();
   }
 }
