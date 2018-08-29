@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 
-import { StaffDirectory, StudentProfile, Timetable } from '../../interfaces';
+import { StudentProfile, Timetable } from '../../interfaces';
 import { SettingsProvider, TimetableProvider, WsApiProvider } from '../../providers';
 import { ClassesPipe } from './classes.pipe';
 
@@ -107,25 +107,14 @@ export class TimetablePage {
     );
   }
 
-  /** Merge StaffDirectory FULLNAME into Timetable. */
-  joinTimetable(tt: Timetable[], sd: StaffDirectory[]): Timetable[] {
-    const sm = sd.reduce((m, s) => (m[s.CODE] = s.FULLNAME, m), {});
-    return tt.map(t => Object.assign(t, { STAFFNAME: sm[t.LECTID] }));
-  }
-
   /** Convert week days into datestamp in timetable. */
   wdayToDate(tt: Timetable[]) {
     this.date = this.wday.map(d => (tt.find(t => t.DAY === d) || {} as Timetable).DATESTAMP_ISO);
   }
 
-  /** Get and merge Timetable and StaffDirectory. */
+  /** Get and process Timetable. */
   getTimetable(refresh: boolean = false): Observable<Timetable[]> {
-    return forkJoin([
-      this.tt.get(refresh),
-      this.ws.get<StaffDirectory[]>('/staff/listing', false, { url: 'https://api.apiit.edu.my' }),
-    ]).pipe(
-      distinctUntilChanged(),
-      map(d => this.joinTimetable(d[0] || [], d[1] || [])),
+    return this.tt.get(refresh).pipe(
       tap(tt => this.wdayToDate(tt)),
     );
   }

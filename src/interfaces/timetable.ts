@@ -5,10 +5,10 @@ export interface Timetable {
   LOCATION: string;
   ROOM: string;
   LECTID: string;
+  NAME: string;
+  SAMACCOUNTNAME: string;
   DATESTAMP: string;
   DATESTAMP_ISO: string;
   TIME_FROM: string;
   TIME_TO: string;
-
-  STAFFNAME: string; /* StaffDirectory.FULLNAME */
 }

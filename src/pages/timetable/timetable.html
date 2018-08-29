@@ -38,9 +38,9 @@
         {{ t.ROOM }} │ {{ t.LOCATION }}
       </ion-label>
       <ion-label no-margin>
-        <a *ngIf="t.STAFFNAME" (click)="openStaffDirectoryInfo(t.LECTID)">
+        <a (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
           <ion-icon padding-right name="contact"></ion-icon>
-          {{ t.STAFFNAME }}
+          {{ t.NAME }}
         </a>
       </ion-label>
     </ion-card-content>

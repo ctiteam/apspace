@@ -20,7 +20,7 @@ export class StaffDirectoryInfoPage {
 
   ionViewDidLoad() {
     this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', false, { url: 'https://api.apiit.edu.my' }).pipe(
-      map(ss => ss.find(s => this.params.get('id') === s.CODE)),
+      map(ss => ss.find(s => this.params.get('id') === s.ID)),
       share(),
     );
   }
