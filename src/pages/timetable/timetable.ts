@@ -6,9 +6,8 @@ import {
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { forkJoin } from 'rxjs/observable/forkJoin';
 import { of } from 'rxjs/observable/of';
-import { distinctUntilChanged, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { finalize, switchMap, tap } from 'rxjs/operators';
 
 import { StaffDirectory, StudentProfile, Timetable } from '../../interfaces';
 import { SettingsProvider, TimetableProvider, WsApiProvider } from '../../providers';
@@ -60,10 +59,9 @@ export class TimetablePage {
       const intakesButton = this.intakeLabels.map(intake => {
         return { text: intake, handler: () => this.changeIntake(intake) } as ActionSheetButton;
       });
-      const actionSheet = this.actionSheetCtrl.create({
+      this.actionSheetCtrl.create({
         buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }],
-      });
-      actionSheet.present();
+      }).present();
     }
   }
 
@@ -94,9 +92,9 @@ export class TimetablePage {
 
   /** Check if the timetable is outdated. */
   outdated(tt: Timetable[]): boolean {
-    const date = new Date(); // beginning of week
+    const date = new Date(); // first day of week (Sunday)
     date.setDate(date.getDate() - date.getDay());
-    return date < new Date(tt[0].DATESTAMP_ISO);
+    return new Date(tt[0].DATESTAMP_ISO) < date;
   }
 
   /** Refresh timetable, forcefully if refresher is passed. */
