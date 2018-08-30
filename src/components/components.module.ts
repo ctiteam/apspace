@@ -6,6 +6,6 @@ import { LecturerTimetableComponent } from './lecturer-timetable/lecturer-timeta
 @NgModule({
   declarations: [LecturerTimetableComponent],
   imports: [IonicModule],
-  exports: [LecturerTimetableComponent]
+  exports: [LecturerTimetableComponent],
 })
 export class ComponentsModule { }
