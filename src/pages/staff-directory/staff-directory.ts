@@ -34,6 +34,11 @@ export class StaffDirectoryPage {
     }
   }
 
+  /** Track staff directory objects. */
+  trackById(index: number, item: StaffDirectory): string {
+    return item.ID;
+  }
+
   doRefresh(refresher?) {
     this.loading.presentLoading();
     this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', Boolean(refresher),
