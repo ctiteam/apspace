@@ -187,11 +187,11 @@ export class ResultsPage {
   showActionSheet() {
     if (this.plt.is('cordova')) {
       const options: ActionSheetOptions = {
-        buttonLabels: [...this.intakeLabels],
+        buttonLabels: this.intakeLabels,
         addCancelButtonWithLabel: 'Cancel',
       };
       this.actionSheet.show(options).then((buttonIndex: number) => {
-        if (buttonIndex <= 1 + this.intakeLabels.length) {
+        if (buttonIndex <= this.intakeLabels.length) {
           this.selectedIntake = this.intakeLabels[buttonIndex - 1] || '';
           this.getResults(this.selectedIntake);
         }
