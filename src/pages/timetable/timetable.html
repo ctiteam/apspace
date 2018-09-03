@@ -22,7 +22,7 @@
     </ion-segment-button>
   </ion-segment>
 
-  <ion-card *ngFor="let t of timetable$ | async | classes:intake | theday:selectedDay"
+  <ion-card *ngFor="let t of timetable$ | async | classes:intake | theday:selectedDay; trackBy: trackByIndex"
     [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
     <ion-card-header>
       {{ t.MODID }}

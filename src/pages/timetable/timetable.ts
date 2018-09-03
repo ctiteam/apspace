@@ -134,6 +134,11 @@ export class TimetablePage {
     this.app.getRootNav().push('StaffDirectoryInfoPage', { id });
   }
 
+  /** Track timetable objects. */
+  trackByIndex(index: number, item: Timetable): number {
+    return index;
+  }
+
   ionViewDidLoad() {
     // select current day by default
     this.selectedDay = this.wday[new Date().getDay()];
