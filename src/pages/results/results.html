@@ -164,12 +164,12 @@
       <ion-card-content>
         <ion-grid>
           <ion-row *ngFor="let classification of classificationLegend$ | async">
-            <ion-col col-7>
+            <ion-col col-8>
               <ion-note class="notes">
                 {{ classification.GRADE || '' }}
               </ion-note>
             </ion-col>
-            <ion-col col-5>
+            <ion-col col-4>
               <ion-note class="notes">
                 {{ classification.CLASSIFICATION || '' }}
               </ion-note>
