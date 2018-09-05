@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import {
@@ -21,11 +22,13 @@ import { ClassesPipe } from './classes.pipe';
 export class TimetablePage {
 
   wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-  date: string[] = []; // map wday to date
 
   timetable$: Observable<Timetable[]>;
-  selectedDay: string;
-  availableDays: string[];
+  selectedWeek: Date; // week is the first day of week
+  availableWeek: Date[];
+  selectedDate: Date;
+  availableDate: Date[];
+  availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
 
   @ViewChild(Content) content: Content;
@@ -44,25 +47,37 @@ export class TimetablePage {
     public app: App,
   ) { }
 
-  presentActionSheet() {
+  presentActionSheet(labels: string[], handler: (_: string) => void) {
     if (this.plt.is('cordova') && !this.plt.is('ios')) {
       const options: ActionSheetOptions = {
-        buttonLabels: this.intakeLabels,
+        buttonLabels: labels,
         addCancelButtonWithLabel: 'Cancel',
       };
       this.actionSheet.show(options).then((buttonIndex: number) => {
         if (buttonIndex <= this.intakeLabels.length) {
-          this.changeIntake(this.intakeLabels[buttonIndex - 1] || '');
+          handler.call(this, labels[buttonIndex - 1]);
         }
       });
     } else {
-      const intakesButton = this.intakeLabels.map(intake => {
-        return { text: intake, handler: () => this.changeIntake(intake) } as ActionSheetButton;
+      const buttons = labels.map(text => {
+        return { text, handler: () => handler.call(this, text) } as ActionSheetButton;
       });
       this.actionSheetCtrl.create({
-        buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }],
+        buttons: [...buttons, { text: 'Cancel', role: 'cancel' }],
       }).present();
     }
+  }
+
+  /** Choose week with presentActionSheet. */
+  chooseWeek() {
+    const date = new DatePipe('en');
+    const labels = this.availableWeek.map(d => date.transform(d));
+    this.presentActionSheet(labels, (weekStr: string) => {
+      const week = this.availableWeek[labels.indexOf(weekStr)];
+      if (this.selectedWeek.getDate() !== week.getDate()) {
+        this.timetable$.subscribe(tt => this.updateDay(tt, { week }));
+      }
+    });
   }
 
   /** Check and update intake on change. */
@@ -73,49 +88,28 @@ export class TimetablePage {
     }
   }
 
-  /** Get days in week of the classes. */
-  schoolDays(tt: Timetable[]): string[] {
-    const days = new ClassesPipe().transform(tt, this.intake).map(t => t.DAY);
-    return this.wday.filter(d => days.indexOf(d) !== -1);
-  }
-
-  /** Update selected day in segment and style when day change. */
-  updateDay(tt: Timetable[]): void {
-    this.availableDays = this.schoolDays(tt);
-    if (!this.selectedDay || this.availableDays.indexOf(this.selectedDay) === -1) {
-      this.selectedDay = this.availableDays[0];
-    } else if (!this.availableDays.length) {
-      this.selectedDay = undefined;
-    }
-    this.content.resize();
+  /** Check if the day is in week. */
+  dayInWeek(date: Date) {
+    date.setDate(date.getDate() - date.getDay());
+    return date.getFullYear() === this.selectedWeek.getFullYear()
+      && date.getMonth() === this.selectedWeek.getMonth()
+      && date.getDate() === this.selectedWeek.getDate();
   }
 
   /** Check if the timetable is outdated. */
   outdated(tt: Timetable[]): boolean {
     const date = new Date(); // first day of week (Sunday)
     date.setDate(date.getDate() - date.getDay());
-    return new Date(tt[0].DATESTAMP_ISO) < date;
+    return tt.some(t => new Date(t.DATESTAMP_ISO) < date);
   }
 
   /** Refresh timetable, forcefully if refresher is passed. */
   doRefresh(refresher?) {
-    this.timetable$ = this.getTimetable(Boolean(refresher)).pipe(
-      switchMap(tt => !refresher && this.outdated(tt) ? this.getTimetable(true) : of(tt)),
+    this.timetable$ = this.tt.get(Boolean(refresher)).pipe(
+      switchMap(tt => !refresher && this.outdated(tt) ? this.tt.get(true) : of(tt)),
       tap(tt => this.updateDay(tt)),
       tap(tt => this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort()),
       finalize(() => refresher && refresher.complete()),
-    );
-  }
-
-  /** Convert week days into datestamp in timetable. */
-  wdayToDate(tt: Timetable[]) {
-    this.date = this.wday.map(d => (tt.find(t => t.DAY === d) || {} as Timetable).DATESTAMP_ISO);
-  }
-
-  /** Get and process Timetable. */
-  getTimetable(refresh: boolean = false): Observable<Timetable[]> {
-    return this.tt.get(refresh).pipe(
-      tap(tt => this.wdayToDate(tt)),
     );
   }
 
@@ -139,9 +133,49 @@ export class TimetablePage {
     return index;
   }
 
+  /** Track and update week and date. */
+  updateDay(tt: Timetable[], changes: { week?: Date } = {}) {
+    // filter by intake (need not to track intake)
+    tt = new ClassesPipe().transform(tt, this.intake);
+
+    // get week
+    this.availableWeek = Array.from(new Set(tt.map(t => {
+      const date = new Date(t.DATESTAMP_ISO);
+      date.setDate(date.getDate() - date.getDay());
+      return date.valueOf();
+    }))).sort().map(d => new Date(d));
+
+    // set default week
+    if (this.availableWeek.length === 0) {
+      this.selectedDate = undefined; // rollback displayed date to selected week
+      return;
+    }
+    this.selectedWeek = changes.week || this.availableWeek[0];
+
+    // get days in week for intake
+    this.availableDate = Array.from(new Set(tt
+      .filter(t => this.dayInWeek(new Date(t.DATESTAMP_ISO)))
+      .map(t => t.DATESTAMP_ISO))).map(d => new Date(d));
+    this.availableDays = this.availableDate.map(d => this.wday[d.getDay()]);
+    this.content.resize(); // TODO: track changes of day
+
+    // set default day
+    if (!this.selectedDate || !this.availableDate.some(d => d.getDay() === this.selectedDate.getDay())) {
+      this.selectedDate = this.availableDate[0];
+    } else if (this.availableDate.length === 0) {
+      this.selectedDate = undefined;
+    }
+  }
+
   ionViewDidLoad() {
     // select current day by default
-    this.selectedDay = this.wday[new Date().getDay()];
+    this.selectedDate = new Date();
+    this.selectedDate.setHours(0, 0, 0, 0);
+
+    // select current start of week
+    const date = new Date();
+    date.setDate(date.getDate() - date.getDay());
+    this.selectedWeek = date;
 
     this.intake = this.settings.get('intake');
     // default intake to student current intake

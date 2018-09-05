@@ -1,10 +1,14 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>
-      {{ (date[wday.indexOf(selectedDay)] | date) || 'Timetable' }}
-    </ion-title>
-    <ion-buttons end>
-      <button color="light" ion-button outline small (click)="presentActionSheet()">
+  <ion-navbar primary>
+    <ion-buttons left>
+      <button color="light" ion-button outline small (click)="chooseWeek()"
+        [disabled]="availableWeek && availableWeek.length === 0">
+        {{ (selectedDate || selectedWeek) | date }}
+      </button>
+    </ion-buttons>
+    <ion-buttons right>
+      <button color="light" ion-button outline small
+        (click)="presentActionSheet(intakeLabels, changeIntake)">
         {{ intake || 'Intakes' }}
       </button>
     </ion-buttons>
@@ -15,14 +19,16 @@
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-segment *ngIf="availableDays" [(ngModel)]="selectedDay">
+  <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date:'E' | uppercase"
+    (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
     <!-- Use CSS for dynamically updated segment -->
-    <ion-segment-button *ngFor="let d of wday" [value]="d" [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
+    <ion-segment-button *ngFor="let d of wday; index as i" [value]="d"
+      [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
       {{ d }}
     </ion-segment-button>
   </ion-segment>
 
-  <ion-card *ngFor="let t of timetable$ | async | classes:intake | theday:selectedDay; trackBy: trackByIndex"
+  <ion-card *ngFor="let t of timetable$ | async | classes:intake | theday:selectedDate; trackBy: trackByIndex"
     [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
     <ion-card-header>
       {{ t.MODID }}
@@ -46,7 +52,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="!selectedDay">
+  <ion-card *ngIf="!selectedDate">
     <ion-card-content>
       <p *ngIf="intake">Hooray! No classes this week! :D</p>
     </ion-card-content>

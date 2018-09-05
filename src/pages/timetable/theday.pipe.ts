@@ -11,9 +11,9 @@ export class TheDayPipe implements PipeTransform {
    * Filter timetable by day.
    *
    * @param tt - timetable
-   * @param day - filter day if exists
+   * @param date - filter day if exists
    */
-  transform(tt: Timetable[], day: string): Timetable[] {
-    return tt.filter(t => t.DAY === day);
+  transform(tt: Timetable[], date: Date): Timetable[] {
+    return tt.filter(t => new Date(t.DATESTAMP_ISO).getDate() === date.getDate());
   }
 }
