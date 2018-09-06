@@ -65,4 +65,5 @@
     <plugin name="cordova-plugin-fcm-with-dependecy-updated" spec="^2.2.4" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.0.0" />
+    <plugin name="com.telerik.plugins.nativepagetransitions" spec="^0.6.5" />
 </widget>

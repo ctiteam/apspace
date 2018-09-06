@@ -1,0 +1,99 @@
+page-bus-trip-info-modal {
+  .busModelContentContainer {
+    background-color: tan !important;
+    border-radius: 6px;
+    position: relative;
+  }
+
+  .mainContentBusTrackingModal {
+    height: 100% !important;
+    border-radius: 6px;
+    background-color: #fefefe !important;
+    overflow-y: scroll !important;
+  }
+
+  .destinationHeader {
+    background-color: #d8d8d8;
+    border-radius: 6px 6px 0 0;
+    height: 4em !important;
+    padding: 19px 0 0 15px;
+  }
+
+  .bussTrackingHeaderTitle {
+    margin: 0 !important;
+    font-size: 17px;
+    float: left !important;
+    padding: 0 0 0 1em;
+  }
+
+  .pickUpPlaceTitle {
+    margin: 23px 0 0 12px;
+  }
+
+  .pickUpPlaceImage {
+    height: 100% !important;
+  }
+
+  .highlightedNextTrip {
+    animation-name: orangePulse;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+  }
+
+  .highlightedNextTripCard {
+    animation-name: orangeBgPulse;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes orangePulse {
+    from {
+      color: #e64d3e;
+    }
+
+    50% {
+      color: black;
+    }
+
+    to {
+      color: #e64d3e;
+    }
+  }
+
+  @keyframes orangeBgPulse {
+    from {
+      background-color: #e64d3e;
+      box-shadow: 0 0 3px #fefefe;
+    }
+
+    50% {
+      background-color: #e64d3e;
+      box-shadow: 0 0 8px #e64d3e;
+    }
+
+    to {
+      background-color: #e64d3e;
+      box-shadow: 0 0 3px #fefefe;
+    }
+  }
+
+  .h4Time {
+    margin: 0px 8px 0 8px !important;
+  }
+}
+
+.busTrackingModal .modal-wrapper {
+  position: relative;
+  top: 10em !important;
+}
+
+.ios .modal-fullscreen {
+  .modal-wrapper {
+    top: 26px;
+  }
+}
+
+ion-modal ion-backdrop {
+  z-index: 0 !important;
+  visibility: visible !important;
+}

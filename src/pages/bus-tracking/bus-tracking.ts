@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {
-  ActionSheetButton, ActionSheetController, AlertController, IonicPage,
+  ActionSheetButton, ActionSheetController, AlertController, IonicPage, ModalController,
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -19,12 +19,141 @@ export class BusTrackingPage {
   locations: Location[];
 
   selectedDay: string;
-  selectedFrom: string;
-  selectedTo: string;
+  selectedFrom = 'APU';
+  selectedTo = 'APIIT@TPM';
 
   tripDays: string[];
   tripFrom: string[];
   tripTo: string[];
+
+  detailsJson = [{
+    name: 'APU',
+    address:
+      [{
+        firstStreet: 'Jalan Teknologi 5',
+        secondStreet: 'Technology Park Malaysia',
+        area: 'Bukit Jalil',
+        city: '',
+        state: '',
+        postalCode: '57000',
+        contactNumber: '+603 8996 1000',
+      }],
+    longitude: '',
+    latitude: '',
+    locationImg: 'assets/img/pickUpLocations/APU.jpg',
+  },
+  {
+    name: 'LRT',
+    address:
+      [{
+        firstStreet: 'Bukit Jalil LRT Station',
+        secondStreet: '',
+        area: 'Bukit Jalil',
+        city: '',
+        state: '',
+        postalCode: '57000',
+        contactNumber: '+603-7885 2585',
+      }],
+    longitude: '',
+    latitude: '',
+    locationImg: 'assets/img/pickUpLocations/LRT.jpg',
+  },
+  {
+    name: 'APIIT@TPM',
+    address:
+      [{
+        firstStreet: 'Jalan Innovasi 1',
+        secondStreet: 'Technology Park Malaysia',
+        area: 'Bukit Jalil',
+        city: '',
+        state: '',
+        postalCode: '57000',
+        contactNumber: '+603 8996 1000',
+      }],
+    longitude: '',
+    latitude: '',
+    locationImg: 'assets/img/pickUpLocations/APIIT.jpg',
+  },
+  {
+    name: 'SCP',
+    address:
+      [{
+        firstStreet: 'South City Plaza Mall',
+        secondStreet: 'Persiaran Serdang Perdana',
+        area: 'Taman Serdang Perdana',
+        city: 'Seri Kembangan',
+        state: 'Selangor',
+        postalCode: '43300',
+        contactNumber: '+603-8948 1888',
+      }],
+    longitude: '',
+    latitude: '',
+    locationImg: 'assets/img/pickUpLocations/SCP.jpg',
+  },
+  {
+    name: 'F.PARK',
+    address:
+      [{
+        firstStreet: 'Fortune Park Apartments',
+        secondStreet: 'Persiaran Serdang Perdana',
+        area: 'Taman Serdang Perdana',
+        city: 'Seri Kembangan',
+        state: 'Selangor',
+        postalCode: '43300',
+        contactNumber: '+6016-910 5905',
+      }],
+    longitude: '',
+    latitude: '',
+    locationImg: 'assets/img/pickUpLocations/FP.jpg',
+  },
+  {
+    name: 'ENDAH',
+    address:
+      [{
+        firstStreet: 'Endah Promenade',
+        secondStreet: 'Jalan 1/149e',
+        area: 'Taman Sri Endah',
+        city: '',
+        state: 'Kuala Lumper',
+        postalCode: '57000',
+        contactNumber: '+6013-653 2564',
+      }],
+    longitude: '',
+    latitude: '',
+    locationImg: 'assets/img/pickUpLocations/ENDAH.jpg',
+  },
+  {
+    name: 'VISTA',
+    address:
+      [{
+        firstStreet: 'Vista Komanwel',
+        secondStreet: 'Jalan Jalil Perkasa 19',
+        area: 'Bukit Jalil',
+        city: '',
+        state: 'Kuala Lumpur',
+        postalCode: '57000',
+        contactNumber: '+603-2201 1125',
+      }],
+    longitude: '',
+    latitude: '',
+    locationImg: 'assets/img/pickUpLocations/VISTA.jpg',
+  },
+  {
+    name: 'MOSQUE',
+    address:
+      [{
+        firstStreet: 'Masjid Sri Petaling - Markaz Tabligh',
+        secondStreet: 'Jalan Radin Anum',
+        area: 'Sri Petaling',
+        city: '',
+        state: 'Kuala Lumpur',
+        postalCode: '57000',
+        contactNumber: '',
+      }],
+    longitude: '',
+    latitude: '',
+    locationImg: 'assets/img/pickUpLocations/MOSQUE.jpg',
+  }];
 
   trip$: Observable<Trips[]>;
 
@@ -33,6 +162,7 @@ export class BusTrackingPage {
     public bus: BusTrackingProvider,
     public alertCtrl: AlertController,
     private settings: SettingsProvider,
+    private modalCtrl: ModalController,
   ) { }
 
   /** Display trip days. */
@@ -76,6 +206,29 @@ export class BusTrackingPage {
   ionViewDidLeave() {
     this.settings.set('tripFrom', this.selectedFrom);
     this.settings.set('tripTo', this.selectedTo);
+  }
+
+  presentMoreInfoModal(trips: Trips[], nextTrip: string, section?) {
+    let tripDetails: any;
+    const modalOpts = {
+      showBackdrop: true,
+      enableBackdropDismiss: true,
+      cssClass: 'busTrackingModal',
+    };
+    this.detailsJson.forEach(location => {
+      if (this.selectedFrom === location.name) {
+        tripDetails = location;
+      }
+    });
+    // XXX: Technical debt for transition to Ionic 4 (pass object)
+    const busTrackingModal = this.modalCtrl.create('BusTripInfoModalPage', {
+      trips,
+      tripDetails,
+      selectedFrom: this.selectedFrom,
+      section,
+      nextTrip,
+    }, modalOpts);
+    busTrackingModal.present();
   }
 
 }

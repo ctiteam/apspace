@@ -4,53 +4,79 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Bus Tracking</ion-title>
-    <ion-buttons end>
-      <button ion-button outline small color='foreground' (click)="presentActionSheet()">
-        {{ selectedDay || 'Day' }}
-      </button>
-    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content class="background-image">
+<ion-content>
+  <!-- refresher -->
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)='getTrips($event)'>
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-item class="selection">
-    <ion-item no-padding>
-      <ion-select [(ngModel)]="selectedFrom" interface='popover' placeholder='From'>
-        <ion-option *ngFor="let trip of tripFrom" [value]="trip">
-          {{ trip }}
-        </ion-option>
-        <ion-option></ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item no-padding>
-      <ion-select [(ngModel)]="selectedTo" interface='popover' placeholder='To'>
-        <ion-option *ngFor="let trip of tripTo" [value]="trip">
-          {{ trip }}
-        </ion-option>
-        <ion-option></ion-option>
-      </ion-select>
-    </ion-item>
-    <button class="swap" ion-button icon-only small item-end (click)="swapTrip()">
-      <ion-icon name='swap'></ion-icon>
-    </button>
-  </ion-item>
+
 
   <ng-container *ngIf="trip$ | async | on:selectedDay | during:selectedFrom:selectedTo as trips">
-    <ng-container *ngIf="trips.length > 0; else empty">
-      <ion-card *ngFor="let ts of trips">
-        <ion-card-header ion-item>
-          <h2 ion-text item-start>{{ ts.trip_from }} -> {{ ts.trip_to }}</h2>
-          <h4 ion-text item-end>{{ ts.trip_time }}</h4>
-        </ion-card-header>
-      </ion-card>
-    </ng-container>
-    <ng-template #empty>
-      <ion-card>
-        <ion-card-header>Service Unavailable</ion-card-header>
-      </ion-card>
+
+
+    <!-- Location Tap -->
+    <div class="miniLocationButtonDiv">
+      <img id="mapButton" tappable src="assets/img/miniMapF.png" alt="Smiley face" height="42" width="42" (click)="presentMoreInfoModal(trips, 'location')">
+    </div>
+    <!-- backgroundImage -->
+    <!-- Vertical -->
+    <img class="BgImageVertical" src="assets/img/mapWithMarkers.png" alt="Map with markers">
+    <!-- Horizontal -->
+    <img class="BgImageHorizontal" src="assets/img/mapWithMarkersHorizontal.jpg" alt="Map with markers Horizontal">
+    <!-- this is the fade div under the location choices div  -->
+
+    <div class="underFadeDiv"></div>
+    <!-- Chosen location div -->
+    <div class="chosenLocationDiv" *ngIf="trips | nextTrip as trip; else unAvail">
+      <ion-icon class="moreInfoIcon" name="md-arrow-dropup"></ion-icon>
+      <div class="iconAndTimeDIv">
+        <button detail-none ion-item class="itemButton" style="background-color: #fefefe !important" (click)="presentMoreInfoModal(trips, trip, 'timings')">
+          <ion-icon class="shk" style="float: left !important; color: #a9a9a9" name="md-bus"></ion-icon>
+          <h3 class="busTime">{{ trip }}</h3>
+        </button>
+      </div>
+    </div>
+    <ng-template #unAvail>
+      <div class="chosenLocationDiv">
+        <div class="iconAndTimeDIv">
+          <button detail-none ion-item class="itemButton" style="background-color: #fefefe !important" (click)="presentMoreInfoModal(trips, trip, 'timings')">
+            <ion-icon class="shk" style="float: left !important; color: #a9a9a9" name="md-bus"></ion-icon>
+            <h3 class="busTime">Buses unavailable</h3>
+          </button>
+        </div>
+      </div>
     </ng-template>
+
+    <!-- location choices div -->
+    <div class="destinationDiv">
+      <div class="destinationItemsDiv">
+        <ion-item no-padding>
+          <ion-select [(ngModel)]="selectedFrom" interface='popover' placeholder='From'>
+            <ion-option *ngFor="let trip of tripFrom" [value]="trip" style="z-index: 0 !important">
+              {{ trip }}
+            </ion-option>
+            <ion-option></ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item no-padding>
+          <ion-select [(ngModel)]="selectedTo" interface='popover' placeholder='To'>
+            <ion-option *ngFor="let trip of tripTo" [value]="trip">
+              {{ trip }}
+            </ion-option>
+            <ion-option></ion-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <button class="swap" ion-button icon-only small item-end (click)="swapTrip()">
+        <ion-icon name='swap'></ion-icon>
+      </button>
+    </div>
+
   </ng-container>
+
+
 </ion-content>
