@@ -146,11 +146,14 @@ export class TimetablePage {
     }))).sort().map(d => new Date(d));
 
     // set default week
-    if (this.availableWeek.length === 0) {
+    if (!this.selectedWeek || !this.availableWeek.some(d => d.getDate() === this.selectedWeek.getDate())) {
+      this.selectedWeek = this.availableWeek[0];
+    } else if (changes.week) {
+      this.selectedWeek = changes.week;
+    } else if (this.availableWeek.length === 0) {
       this.selectedDate = undefined; // rollback displayed date to selected week
       return;
     }
-    this.selectedWeek = changes.week || this.availableWeek[0];
 
     // get days in week for intake
     this.availableDate = Array.from(new Set(tt
