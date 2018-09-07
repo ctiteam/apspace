@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
+
 import { BusTrackingPage } from './bus-tracking';
 import { TripDatePipe } from './trip-date.pipe';
 import { TripNextPipe } from './trip-next.pipe';

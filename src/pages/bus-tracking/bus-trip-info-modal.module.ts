@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { IonicSwipeAllModule } from 'ionic-swipe-all';
+
+import { DirectivesModule } from '../../directives/directives.module';
 import { BusTripInfoModalPage } from './bus-trip-info-modal';
 
 @NgModule({
@@ -9,7 +10,7 @@ import { BusTripInfoModalPage } from './bus-trip-info-modal';
   ],
   imports: [
     IonicPageModule.forChild(BusTripInfoModalPage),
-    IonicSwipeAllModule,
+    DirectivesModule,
   ],
 })
 export class BusTripInfoModalPageModule {}
