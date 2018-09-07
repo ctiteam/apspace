@@ -4,6 +4,10 @@
   "author": "CTI Team <cti@apiit.edu.my>",
   "homepage": "http://www.cti.my/",
   "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/ctiteam/apspace.git"
+  },
   "scripts": {
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
