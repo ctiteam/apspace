@@ -30,9 +30,9 @@
         </a>
       </ion-item>
       <ion-list-header>Functional Area</ion-list-header>
-      <ion-item *ngIf="staff.DEPARTMENT.trim()" [innerHTML]="staff.DEPARTMENT"></ion-item>
-      <ion-item *ngIf="staff.DEPARTMENT2.trim()" [innerHTML]="staff.DEPARTMENT2"></ion-item>
-      <ion-item *ngIf="staff.DEPARTMENT3.trim()" [innerHTML]="staff.DEPARTMENT3"></ion-item>
+      <ion-item *ngIf="staff.DEPARTMENT" [innerHTML]="staff.DEPARTMENT"></ion-item>
+      <ion-item *ngIf="staff.DEPARTMENT2" [innerHTML]="staff.DEPARTMENT2"></ion-item>
+      <ion-item *ngIf="staff.DEPARTMENT3" [innerHTML]="staff.DEPARTMENT3"></ion-item>
     </ion-list>
     <lecturer-timetable *ngIf="staff.TITLE === 'Lecturer'" [id]="staff.CODE"></lecturer-timetable>
   </ng-template>
