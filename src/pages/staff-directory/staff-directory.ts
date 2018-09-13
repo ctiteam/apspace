@@ -41,8 +41,7 @@ export class StaffDirectoryPage {
 
   doRefresh(refresher?) {
     this.loading.presentLoading();
-    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', Boolean(refresher),
-      { url: 'https://api.apiit.edu.my' });
+    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing');
     this.staffType$ = this.staff$.pipe(
       filter(ss => ss instanceof Array),
       map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT))).sort()),

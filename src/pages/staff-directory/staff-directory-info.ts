@@ -19,7 +19,7 @@ export class StaffDirectoryInfoPage {
   constructor(public params: NavParams, private ws: WsApiProvider) { }
 
   ionViewDidLoad() {
-    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', false, { url: 'https://api.apiit.edu.my' }).pipe(
+    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing').pipe(
       map(ss => ss.find(s => this.params.get('id') === s.ID)),
       share(),
     );

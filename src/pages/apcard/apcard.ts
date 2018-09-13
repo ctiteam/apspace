@@ -103,8 +103,7 @@ export class ApcardPage {
 
   doRefresh(refresher?) {
     this.loading.presentLoading();
-    const options = { url: 'https://api.apiit.edu.my' };
-    this.transaction$ = this.ws.get<Apcard[]>('/apcard/', true, options).pipe(
+    this.transaction$ = this.ws.get<Apcard[]>('/apcard/').pipe(
       map(t => this.signTransactions(t)),
       tap(t => this.analyzeTransactions(t)),
       finalize(() => refresher && refresher.complete()),

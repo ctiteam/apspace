@@ -45,12 +45,11 @@ export class LecturerTimetableComponent implements OnInit {
   constructor(private ws: WsApiProvider) { }
 
   ngOnInit() {
-    const options = { url: 'https://api.apiit.edu.my/lecturer-timetable/', auth: false };
-
     // January 5, 1970 00:00:00
     const lastDateOfWeekZero = new Date(318599999).getTime();
 
-    this.calendar$ = this.ws.get<LecturerTimetable[]>(this.id, true, options).pipe(
+    const endpoint = '/lecturer-timetable/' + this.id;
+    this.calendar$ = this.ws.get<LecturerTimetable[]>(endpoint, true, { auth: false }).pipe(
       map(data => {
         const t = {} as any; // temporary Map for data processing
         data.forEach(d => {

@@ -42,11 +42,10 @@ export class FeedbackPage {
         this.info.email = p[0].STUDENT_NUMBER + '@mail.apu.edu.my';
       });
     } else if (role & (Role.Lecturer || Role.Admin)) {
-      this.ws.get<StaffProfile[]>('/staff/profile', false, { url: 'https://api.apiit.edu.my' })
-        .subscribe(p => {
-          this.info.name = p[0].FULLNAME;
-          this.info.email = p[0].EMAIL + '@apu.edu.my';
-        });
+      this.ws.get<StaffProfile[]>('/staff/profile').subscribe(p => {
+        this.info.name = p[0].FULLNAME;
+        this.info.email = p[0].EMAIL + '@apu.edu.my';
+      });
     }
   }
 

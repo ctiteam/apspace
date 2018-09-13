@@ -1,10 +1,11 @@
+import { HttpParams } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 
 import { finalize } from 'rxjs/operators';
 
 import { Sqa } from '../../interfaces';
-import { SqaProvider } from '../../providers';
+import { WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -17,7 +18,7 @@ export class PasswordRecoveryPage {
   editMode = false;
   isLoading = false;
 
-  constructor(private sqa: SqaProvider) { }
+  constructor(private ws: WsApiProvider) { }
 
   ionViewDidLoad() {
     this.getConfig();
@@ -29,12 +30,15 @@ export class PasswordRecoveryPage {
 
   getConfig() {
     this.isLoading = true;
-    this.sqa.get().pipe(finalize(() => this.isLoading = false))
+    this.ws.get<Sqa>('/sqa/', true)
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe(qa => this.qa = qa);
   }
 
   setConfig(v: Sqa) {
-    this.sqa.set(v).subscribe();
+    const body = new HttpParams({ fromObject: { ...v }}).toString();
+    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    this.ws.post('/sqa/', { body, headers }).subscribe();
     this.editMode = false;
   }
 

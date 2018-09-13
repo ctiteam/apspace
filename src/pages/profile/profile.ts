@@ -31,7 +31,7 @@ export class ProfilePage {
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
       this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
     } else if (role & (Role.Lecturer | Role.Admin)) {
-      this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile', false, { url: 'https://api.apiit.edu.my' });
+      this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
     }
   }
 

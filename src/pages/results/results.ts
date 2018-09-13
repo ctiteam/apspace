@@ -81,8 +81,7 @@ export class ResultsPage {
   }
 
   ionViewDidLoad() {
-    this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
-    this.profile$.subscribe(p => {
+    this.ws.get<StudentProfile[]>('/student/profile').subscribe(p => {
       if (p[0].BLOCK === true) {
         this.block = false;
         this.intakes$ = this.ws.get<Course[]>('/student/courses')
@@ -106,11 +105,8 @@ export class ResultsPage {
 
   getCourseDetails(intake: string, refresh: boolean = false): Observable<CourseDetails> {
     const opt = { params: { id: this.studentId, format: 'json' } };
-    return (this.courseDetails$ = this.ws.get<CourseDetails>(
-      `/student/sub_and_course_details?intake=${intake}`,
-      refresh,
-      opt,
-    ));
+    return this.courseDetails$ = this.ws.get<CourseDetails>(
+      `/student/sub_and_course_details?intake=${intake}`, refresh, opt);
   }
 
   getLegend(intake: string, results: any) {
@@ -123,7 +119,8 @@ export class ResultsPage {
           this.sortArray(results, gradeList);
         }),
     );
-    this.mpuLegend$ = this.ws.get<MPULegend[]>(`/student/mpu_legend?id=${this.studentId}&intake=${intake}`);
+    this.mpuLegend$ = this.ws.get<MPULegend[]>(
+      `/student/mpu_legend?id=${this.studentId}&intake=${intake}`);
     this.determinationLegend$ = this.ws.get<DeterminationLegend[]>(
       `/student/determination_legend?id=${this.studentId}&intake=${intake}`);
     this.classificationLegend$ = this.ws.get<ClassificationLegend[]>(

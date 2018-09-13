@@ -108,7 +108,7 @@ export class MyApp {
         .pipe(finalize(() => this.loading.dismissLoading()))
         .subscribe();
     } else if (role & (Role.Lecturer | Role.Admin)) {
-      this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile', false, { url: 'https://api.apiit.edu.my' });
+      this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
       this.staffProfile$
         .pipe(finalize(() => this.loading.dismissLoading()))
         .subscribe();
@@ -126,7 +126,7 @@ export class MyApp {
           this.logout();
         });
       } else if (role & (Role.Lecturer | Role.Admin)) {
-        this.ws.get<StaffProfile[]>('/staff/profile', false, { url: 'https://api.apiit.edu.my' }).subscribe(p => {
+        this.ws.get<StaffProfile[]>('/staff/profile').subscribe(p => {
           this.unsubscribeNotification(p[0].ID);
           this.logout();
         });

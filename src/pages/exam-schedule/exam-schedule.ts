@@ -91,9 +91,7 @@ export class ExamSchedulePage {
   }
 
   doRefresh(refresher?) {
-    const url = `/examination/${this.intake}`;
-    const options = { url: 'https://api.apiit.edu.my', auth: false };
-    this.exam$ = this.ws.get<ExamSchedule[]>(url, true, options).pipe(
+    this.exam$ = this.ws.get<ExamSchedule[]>(`/examination/${this.intake}`).pipe(
       finalize(() => (refresher && refresher.complete(), this.loading.dismissLoading())),
     );
   }
