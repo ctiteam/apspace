@@ -12,7 +12,7 @@ page-bus-tracking {
   .chosenLocationDiv {
     background-color: #fefefe !important;
     z-index: 2 !important;
-    position: fixed;
+    position: absolute !important;
     bottom: 9.2em !important;
     width: 92.5% !important;
     margin-left: 3.5% !important;
@@ -48,7 +48,7 @@ page-bus-tracking {
     padding-top: 10px !important;
     height: 111px !important;
     width: 93% !important;
-    position: fixed !important;
+    position: absolute !important;
     bottom: 0.8em !important;
     margin-left: 3.5% !important;
     border-radius: 8px !important;
@@ -92,6 +92,22 @@ page-bus-tracking {
     float: left;
     margin: 13px 0 0 26px !important;
     font-size: 16px;
+  }
+
+  .BgImageVertical {
+    position: relative !important;
+    margin-top: -69px !important;
+    z-index: 0;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .BgImageHorizontal {
+    position: relative !important;
+    width: 100% !important;
+    z-index: 0;
+    height: 100% !important;
+    display: none;
   }
 
   .BgImageVertical {
@@ -161,6 +177,11 @@ page-bus-tracking {
 
   img#mapButton:active {
     filter: brightness(82%);
+  }
+
+  .bar-button-outline-ios {
+    color: white !important;
+    border-color: white !important;
   }
 
   @media only screen and (min-width: 500px) {

@@ -15,7 +15,7 @@
           <ion-segment-button value='timings'>
             Timings
           </ion-segment-button>
-          <ion-segment-button value='location'>
+          <ion-segment-button value='location' *ngIf="tripDetails !== undefined">
             Location
           </ion-segment-button>
         </ion-segment>

@@ -4,6 +4,11 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Bus Tracking</ion-title>
+    <ion-buttons end>
+      <button ion-button outline small color='foreground' (click)="presentActionSheet()">
+        {{ selectedDay || 'Day' }}
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -18,8 +23,8 @@
 
 
     <!-- Location Tap -->
-    <div class="miniLocationButtonDiv">
-      <img id="mapButton" tappable src="assets/img/miniMapF.png" alt="Smiley face" height="42" width="42" (click)="presentMoreInfoModal(trips, 'location')">
+    <div class="miniLocationButtonDiv" *ngIf="selectedFrom !== 'Any'">
+      <img id="mapButton" tappable src="assets/img/miniMapF.png" alt="Smiley face" height="42" width="42" (click)="presentMoreInfoModal(trips, trip, 'location')">
     </div>
     <!-- backgroundImage -->
     <!-- Vertical -->
@@ -34,16 +39,16 @@
       <ion-icon class="moreInfoIcon" name="md-arrow-dropup"></ion-icon>
       <div class="iconAndTimeDIv">
         <button detail-none ion-item class="itemButton" style="background-color: #fefefe !important" (click)="presentMoreInfoModal(trips, trip, 'timings')">
-          <ion-icon class="shk" style="float: left !important; color: #a9a9a9" name="md-bus"></ion-icon>
-          <h3 class="busTime">{{ trip }}</h3>
+          <ion-icon class="shk" style="float: left !important; color: #a9a9a9" name="bus"></ion-icon>
+          <h3 class="busTime">Next bus at {{ trip }}</h3>
         </button>
       </div>
     </div>
     <ng-template #unAvail>
       <div class="chosenLocationDiv">
         <div class="iconAndTimeDIv">
-          <button detail-none ion-item class="itemButton" style="background-color: #fefefe !important" (click)="presentMoreInfoModal(trips, trip, 'timings')">
-            <ion-icon class="shk" style="float: left !important; color: #a9a9a9" name="md-bus"></ion-icon>
+          <button detail-none ion-item disabled>
+            <ion-icon style="float: left !important; color: #a9a9a9" name="bus"></ion-icon>
             <h3 class="busTime">Buses unavailable</h3>
           </button>
         </div>
@@ -58,7 +63,7 @@
             <ion-option *ngFor="let trip of tripFrom" [value]="trip" style="z-index: 0 !important">
               {{ trip }}
             </ion-option>
-            <ion-option></ion-option>
+            <ion-option>Any</ion-option>
           </ion-select>
         </ion-item>
         <ion-item no-padding>
@@ -66,7 +71,7 @@
             <ion-option *ngFor="let trip of tripTo" [value]="trip">
               {{ trip }}
             </ion-option>
-            <ion-option></ion-option>
+            <ion-option>Any</ion-option>
           </ion-select>
         </ion-item>
       </div>

@@ -19,8 +19,8 @@ export class BusTrackingPage {
   locations: Location[];
 
   selectedDay: string;
-  selectedFrom = 'APU';
-  selectedTo = 'APIIT@TPM';
+  selectedFrom: string;
+  selectedTo: string;
 
   tripDays: string[];
   tripFrom: string[];
@@ -184,7 +184,7 @@ export class BusTrackingPage {
 
   /** Get bus tracking trips and set the first day. */
   getTrips(refresher?) {
-    const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+    const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
     this.trip$ = this.bus.getTrips(Boolean(refresher)).pipe(
       map(d => d.trips_times),
       tap(ts => {
@@ -192,8 +192,8 @@ export class BusTrackingPage {
         this.selectedDay = this.selectedDay || this.tripDays.find(d => d.indexOf(days[new Date().getDay()]) !== -1);
         this.tripFrom = Array.from(new Set(ts.map(t => t.trip_from)));
         this.tripTo = Array.from(new Set(ts.map(t => t.trip_to)));
-        this.selectedFrom = this.settings.get('tripFrom');
-        this.selectedTo = this.settings.get('tripTo');
+        this.selectedFrom = this.settings.get('tripFrom') || 'Any';
+        this.selectedTo = this.settings.get('tripTo') || 'Any';
       }),
       finalize(() => refresher && refresher.complete()),
     );
@@ -215,11 +215,7 @@ export class BusTrackingPage {
       enableBackdropDismiss: true,
       cssClass: 'busTrackingModal',
     };
-    this.detailsJson.forEach(location => {
-      if (this.selectedFrom === location.name) {
-        tripDetails = location;
-      }
-    });
+    tripDetails = this.detailsJson.find(location => this.selectedFrom === location.name);
     // XXX: Technical debt for transition to Ionic 4 (pass object)
     const busTrackingModal = this.modalCtrl.create('BusTripInfoModalPage', {
       trips,

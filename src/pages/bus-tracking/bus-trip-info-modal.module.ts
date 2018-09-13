@@ -13,4 +13,4 @@ import { BusTripInfoModalPage } from './bus-trip-info-modal';
     DirectivesModule,
   ],
 })
-export class BusTripInfoModalPageModule {}
+export class BusTripInfoModalPageModule { }
