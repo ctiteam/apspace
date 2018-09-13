@@ -10,7 +10,7 @@ import { CasTicketProvider } from '../providers';
 export class NotificationProvider {
 
   serviceUrl = 'http://sns-admin.s3-website-ap-southeast-1.amazonaws.com/';
-  APIUrl = 'https://15frgbdxil.execute-api.ap-southeast-1.amazonaws.com/dev';
+  APIUrl = 'https://api.apiit.edu.my/dingdong';
 
   constructor(
     public http: HttpClient,
@@ -20,7 +20,6 @@ export class NotificationProvider {
 
   /**
    * POST: send token and service ticket on Log in and response is the history of notifications
-   *
    */
   getMessage(): Observable<any> {
     let token = '';
