@@ -8,6 +8,7 @@ export interface Subcourse {
   GRADE_POINT: number;
   GRADE_POINT_NO_STAR: string;
   INTERNAL_RESULT_RELEASE_DATE: string;
+  INTERNAL_RESULT_RELEASE_DATE_ISO: string;
   RECOMMENDATION: string;
   SEMESTER: number;
   YEAR: string;

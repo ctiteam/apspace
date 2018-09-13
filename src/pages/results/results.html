@@ -62,7 +62,7 @@
         </ion-item>
         <ion-item>
           <ion-label>Internal Result Release Date</ion-label>
-          <div item-content>{{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A' }}</div>
+          <div item-content>{{ result.INTERNAL_RESULT_RELEASE_DATE_ISO | date }}</div>
         </ion-item>
         <ion-item *ngIf="result.RECOMMENDATION">
           <ion-label>Recommendation</ion-label>

@@ -75,9 +75,9 @@ export class ResultsPage {
   }
 
   seperateBySemesters(results: any) {
-    this.semester1 = results.filter(res => res.SEMESTER === 1);
-    this.semester2 = results.filter(res => res.SEMESTER === 2);
-    this.semester3 = results.filter(res => res.SEMESTER === 3);
+    this.semester1 = results.filter(res => +res.SEMESTER === 1);
+    this.semester2 = results.filter(res => +res.SEMESTER === 2);
+    this.semester3 = results.filter(res => +res.SEMESTER === 3);
   }
 
   ionViewDidLoad() {
