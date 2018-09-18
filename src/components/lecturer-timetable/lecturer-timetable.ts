@@ -45,8 +45,9 @@ export class LecturerTimetableComponent implements OnInit {
   constructor(private ws: WsApiProvider) { }
 
   ngOnInit() {
-    // January 5, 1970 00:00:00
-    const lastDateOfWeekZero = new Date(318599999).getTime();
+    // GPS counts weeks with January 1, 1980 as first Sunday
+    // new Date('1970-01-06').getTime() + new Date().getTimezoneOffset() * 60 * 1000 - 1
+    const lastDateOfWeekZero = 431999999;
 
     const endpoint = '/lecturer-timetable/' + this.id;
     this.calendar$ = this.ws.get<LecturerTimetable[]>(endpoint, true, { auth: false }).pipe(
@@ -55,8 +56,8 @@ export class LecturerTimetableComponent implements OnInit {
         data.forEach(d => {
           const since = new Date(d.since);
 
-          // unique week - subtract from week zero and by 24 * 3600 * 1000 * 7
-          const week = Math.ceil((since.getTime() - lastDateOfWeekZero) / 604800000);
+          // unique week - subtract from week zero and by 7 * 24 * 60 * 60 * 1000
+          const week = Math.floor((since.getTime() - lastDateOfWeekZero) / 604800000);
           t[week] = t[week] || {};
 
           const day = since.getDay();
@@ -70,7 +71,8 @@ export class LecturerTimetableComponent implements OnInit {
         });
 
         return Object.keys(t).map(w => {
-          const week = parseInt(w, 10) * 604800000;
+          // convert week since epoch to date (*weekMagic + 2d)
+          const week = parseInt(w, 10) * 604800000 + 259200000;
           return {
             week: new Date(week),
             days: Object.keys(t[w]).map(d => {
