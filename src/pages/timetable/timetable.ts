@@ -54,7 +54,7 @@ export class TimetablePage {
         addCancelButtonWithLabel: 'Cancel',
       };
       this.actionSheet.show(options).then((buttonIndex: number) => {
-        if (buttonIndex <= this.intakeLabels.length) {
+        if (buttonIndex <= labels.length) {
           handler.call(this, labels[buttonIndex - 1]);
         }
       });
