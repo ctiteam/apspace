@@ -91,7 +91,9 @@ export class ExamSchedulePage {
   }
 
   doRefresh(refresher?) {
-    this.exam$ = this.ws.get<ExamSchedule[]>(`/examination/${this.intake}`).pipe(
+    const url = `/examination/${this.intake}`;
+    const opt = { auth: false };
+    this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt).pipe(
       finalize(() => (refresher && refresher.complete(), this.loading.dismissLoading())),
     );
   }
