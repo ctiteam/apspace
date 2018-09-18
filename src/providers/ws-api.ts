@@ -117,7 +117,11 @@ export class WsApiProvider {
     };
 
     if (this.plt.is('cordova') && this.network.type === 'none') {
-      this.toastCtrl.create({ message: 'You are now offline.', duration: 3000 }).present();
+      this.toastCtrl.create({
+        message: 'You are now offline.',
+        duration: 3000,
+        position: 'top',
+      }).present();
       return obs_throw('offline');
     }
 
