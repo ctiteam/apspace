@@ -28,7 +28,8 @@
     [virtualTrackBy]="trackById" approxItemHeight="68px">
     <ion-item *virtualItem="let staff" navPush="StaffDirectoryInfoPage" [navParams]="{id: staff.ID}">
       <ion-avatar item-start>
-        <ion-img [src]="staff.PHOTO" onerror="this.src='assets/img/profile.svg'"></ion-img>
+        <ion-img [src]="'http://s3-ap-southeast-1.amazonaws.com/photocache-prod/' + staff.RefNo + '_64x64.jpg'"
+          onerror="this.src='assets/img/profile.svg'"></ion-img>
       </ion-avatar>
       <h2>{{ staff.FULLNAME }}</h2>
       <p>{{ staff.EMAIL }}</p>
