@@ -75,7 +75,8 @@ export class TimetablePage {
     this.presentActionSheet(labels, (weekStr: string) => {
       const week = this.availableWeek[labels.indexOf(weekStr)];
       if (this.selectedWeek.getDate() !== week.getDate()) {
-        this.timetable$.subscribe(tt => this.updateDay(tt, { week }));
+        this.selectedWeek = week;
+        this.timetable$.subscribe();
       }
     });
   }
@@ -84,7 +85,7 @@ export class TimetablePage {
   changeIntake(intake: string) {
     if (intake !== this.intake) {
       this.settings.set('intake', this.intake = intake);
-      this.timetable$.subscribe(tt => this.updateDay(tt));
+      this.timetable$.subscribe();
     }
   }
 
@@ -108,7 +109,9 @@ export class TimetablePage {
     this.timetable$ = this.tt.get(Boolean(refresher)).pipe(
       switchMap(tt => !refresher && this.outdated(tt) ? this.tt.get(true) : of(tt)),
       tap(tt => this.updateDay(tt)),
-      tap(tt => this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort()),
+      // initialize or update intake labels only if timetable might change
+      tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)
+        && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
       finalize(() => refresher && refresher.complete()),
     );
   }
@@ -133,8 +136,8 @@ export class TimetablePage {
     return index;
   }
 
-  /** Track and update week and date. */
-  updateDay(tt: Timetable[], changes: { week?: Date } = {}) {
+  /** Track and update week and date in the order of day, week, intake. */
+  updateDay(tt: Timetable[]) {
     // filter by intake (need not to track intake)
     tt = new ClassesPipe().transform(tt, this.intake);
 
@@ -148,8 +151,6 @@ export class TimetablePage {
     // set default week
     if (!this.selectedWeek || !this.availableWeek.some(d => d.getDate() === this.selectedWeek.getDate())) {
       this.selectedWeek = this.availableWeek[0];
-    } else if (changes.week) {
-      this.selectedWeek = changes.week;
     } else if (this.availableWeek.length === 0) {
       this.selectedDate = undefined; // rollback displayed date to selected week
       return;
@@ -165,6 +166,8 @@ export class TimetablePage {
     // set default day
     if (!this.selectedDate || !this.availableDate.some(d => d.getDay() === this.selectedDate.getDay())) {
       this.selectedDate = this.availableDate[0];
+    } else if (!this.availableDate.some(d => d.getDate() === this.selectedDate.getDate())) {
+      this.selectedDate = this.availableDate.find(d => d.getDay() === this.selectedDate.getDay());
     } else if (this.availableDate.length === 0) {
       this.selectedDate = undefined;
     }

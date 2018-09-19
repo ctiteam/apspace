@@ -3,7 +3,7 @@
     <ion-buttons left>
       <button color="light" ion-button outline small (click)="chooseWeek()"
         [disabled]="availableWeek && availableWeek.length === 0">
-        {{ ((selectedDate || selectedWeek) | date) || 'Weeks' }}
+        {{ (selectedDate | date) || 'Weeks' }}
       </button>
     </ion-buttons>
     <ion-buttons right>
