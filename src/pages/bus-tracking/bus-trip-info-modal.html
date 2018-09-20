@@ -15,7 +15,9 @@
           <ion-segment-button value='timings'>
             Timings
           </ion-segment-button>
-          <ion-segment-button value='location' *ngIf="tripDetails !== undefined">
+          <!-- Use CSS for dynamic segment, fixed in Ionic 4 -->
+          <ion-segment-button value='location'
+            [style.display]="tripDetails ? 'block' : 'none'">
             Location
           </ion-segment-button>
         </ion-segment>
