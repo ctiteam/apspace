@@ -15,7 +15,7 @@ export class TripTimePipe implements PipeTransform {
    * @param tripTo - filter trip to if exist
    */
   transform(ts: Trips[], tripFrom: string, tripTo: string): Trips[] {
-    return (ts || []).filter(trip => (!tripFrom || trip.trip_from === tripFrom)
-                                  && (!tripTo || trip.trip_to === tripTo));
+    return (ts || []).filter(trip => (tripFrom === 'Any' || trip.trip_from === tripFrom)
+                                  && (tripTo === 'Any' || trip.trip_to === tripTo));
   }
 }
