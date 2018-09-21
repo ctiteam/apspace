@@ -8,13 +8,8 @@
 <ion-content>
   <ng-template let-staff [ngIf]="staff$ | async">
     <div class="staff-directory-info-header">
-      <ng-template [ngIf]="staff.PHOTO" [ngIfElse]="errorIcon">
-        <img [src]="'http://s3-ap-southeast-1.amazonaws.com/photocache-prod/' + staff.RefNo + '.jpg'"
-          onerror="this.src='assets/img/profile.svg'">
-      </ng-template>
-      <ng-template #errorIcon>
-        <ion-icon name="contacts"></ion-icon>
-      </ng-template>
+      <img [src]="'http://s3-ap-southeast-1.amazonaws.com/photocache-prod/'+staff.RefNo+'.jpg'"
+        onerror="this.src='assets/img/profile.svg'; this.style.padding='36px'">
     </div>
     <ion-list>
       <ion-item>

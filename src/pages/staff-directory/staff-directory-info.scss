@@ -13,16 +13,11 @@ page-staff-directory-info {
   }
 
   .staff-directory-info-header {
-    background-color: #bbb;
-    position: relative;
+    background-color: #ddd;
 
-    ion-icon {
-      font-size: 18em;
-      position: relative;
-      left: 50%;
-      top: 50%;
-      transform: translateX(-50%);
-      padding-bottom: 9px;
+    img {
+      display: block;
+      margin: 0 auto;
     }
   }
 }
