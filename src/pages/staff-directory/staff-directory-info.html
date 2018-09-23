@@ -8,7 +8,7 @@
 <ion-content>
   <ng-template let-staff [ngIf]="staff$ | async">
     <div class="staff-directory-info-header">
-      <img [src]="'http://s3-ap-southeast-1.amazonaws.com/photocache-prod/'+staff.RefNo+'.jpg'"
+      <img [src]="'https://d37plr7tnxt7lb.cloudfront.net/'+staff.RefNo+'.jpg'"
         onerror="this.src='assets/img/profile.svg'; this.style.padding='36px'">
     </div>
     <ion-list>
