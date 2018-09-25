@@ -9,7 +9,6 @@ import { Badge } from '@ionic-native/badge';
 import { Device } from '@ionic-native/device';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { FCM } from '@ionic-native/fcm';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Network } from '@ionic-native/network';
 import { NetworkInterface } from '@ionic-native/network-interface';
@@ -38,7 +37,6 @@ import { MyApp } from './app.component';
     EmailComposer,
     Device,
     NetworkInterface,
-    InAppBrowser,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Network,
     CasTicketProvider,

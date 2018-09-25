@@ -1,11 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  App,
-  Events,
-  IonicPage,
-  NavController,
-  Platform,
-} from 'ionic-angular';
+import { App, IonicPage, NavController } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
@@ -23,11 +17,9 @@ export class HomePage {
   items$: Observable<News[]>;
 
   constructor(
-    public events: Events,
-    public plt: Platform,
-    private news: NewsProvider,
     private app: App,
     private navCtrl: NavController,
+    private news: NewsProvider,
   ) { }
 
   doRefresh(refresher?) {

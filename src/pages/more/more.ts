@@ -57,6 +57,12 @@ export class MorePage {
       role: Role.Student,
     },
     {
+      title: 'LMS (Course Material)',
+      component: 'LmsPage',
+      icon: 'open',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+    },
+    {
       title: 'Profile',
       component: 'ProfilePage',
       icon: 'contact',
