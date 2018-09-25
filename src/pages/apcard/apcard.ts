@@ -103,7 +103,7 @@ export class ApcardPage {
 
   doRefresh(refresher?) {
     this.loading.presentLoading();
-    this.transaction$ = this.ws.get<Apcard[]>('/apcard/').pipe(
+    this.transaction$ = this.ws.get<Apcard[]>('/apcard/', true).pipe(
       map(t => this.signTransactions(t)),
       tap(t => this.analyzeTransactions(t)),
       finalize(() => refresher && refresher.complete()),
