@@ -13,11 +13,20 @@ page-staff-directory-info {
   }
 
   .staff-directory-info-header {
-    background-color: #ddd;
+    #bg {
+      position: absolute;
+      left: 0;
+      right: 0;
+      transform: scale(2) translateY(8%);
+      z-index: -1;
+      filter: blur(5px);
+      max-height: 35vh;
+    }
 
     img {
       display: block;
       margin: 0 auto;
+      box-shadow: 0 0 6px 2px #fff, 0 0 2px 1px #ddd;
     }
   }
 }
