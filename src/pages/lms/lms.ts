@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
-import { IonicPage } from 'ionic-angular';
+import { IonicPage, NavController } from 'ionic-angular';
 
 import { CasTicketProvider } from '../../providers';
 
@@ -16,10 +16,12 @@ export class LmsPage {
   constructor(
     private cas: CasTicketProvider,
     private iab: InAppBrowser,
+    private navCtrl: NavController,
   ) { }
 
   ionViewDidLoad() {
     this.cas.getST(this.lmsUrl)
       .subscribe(st => this.iab.create(`${this.lmsUrl}?ticket=${st}`));
+    this.navCtrl.pop();
   }
 }
