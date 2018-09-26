@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { IonicPage } from 'ionic-angular';
 
@@ -17,7 +16,6 @@ export class LmsPage {
   constructor(
     private cas: CasTicketProvider,
     private iab: InAppBrowser,
-    private sanitizer: DomSanitizer,
   ) { }
 
   ionViewDidLoad() {
