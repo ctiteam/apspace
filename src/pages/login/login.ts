@@ -76,7 +76,7 @@ export class LoginPage {
         return empty();
       }),
       tap(_ => this.cacheApi(this.settings.get('role') & Role.Student
-        ? ['student/courses', '/staff/listing']
+        ? ['/student/courses', '/staff/listing']
         : ['/staff/profile', '/staff/listing']),
       ),
       timeout(3000),
