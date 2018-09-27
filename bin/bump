@@ -17,6 +17,16 @@ do_bump() {
   sed -i "s/\(\"version\":\s*\"\)$prev\(\"\)/\1$vers\2/" package.json
   git add config.xml package.json
 
+  local file=fastlane/metadata/android/en-GB/changelogs/$code.txt
+  clog -F -s Changelog\ $(jq -r .version package.json) | sed '
+    1,4d
+    s/####/#/    # use header 1
+    s/\*\*//g    # remove double asterisk
+    s/  / /g     # remove double blank space
+    s/ (\[.*//g  # remove commit line
+    ' > $file
+  ${EDITOR:-vi} $file
+
   git commit -m "chore: bump version to $vers"
   git push
 

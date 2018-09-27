@@ -13,6 +13,7 @@ log.txt
 npm-debug.log*
 package-lock.json
 yarn.lock
+Gemfile.lock
 
 .idea/
 .sourcemaps/
@@ -37,4 +38,6 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 GoogleService-Info.plist
 google-services.json
-my-release-key.keystore
+apspace-release.keystore
+provision.mobileprovision
+*.cer

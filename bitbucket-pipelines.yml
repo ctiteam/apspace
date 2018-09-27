@@ -1,6 +1,14 @@
 image: beevelop/ionic:v3.20.0
 
 pipelines:
+  tags:
+    v*:
+      - step:
+          caches:
+            - pip
+          script:
+            - find -name '*.enc' -type f -exec sh -c 'openssl chacha20 -d -K $ENCRYPTED_KEY -iv $ENCRYPTED_IV -in "$0" -out "${0%.enc}"' '{}' \;
+            - bundle exec fastlane android deploy
   branches:
     production:
     - step:

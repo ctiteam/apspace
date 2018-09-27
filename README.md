@@ -31,6 +31,17 @@ Android live-reload have CORS issues.
 $ ionic cordova build android --prod --release
 ```
 
+### Continuous Delivery
+
+Environment variables for `fastlane`.
+- `CORDOVA_ANDROID_KEYSTORE_PATH`
+- `CORDOVA_ANDROID_KEYSTORE_ALIAS`
+- `CORDOVA_ANDROID_KEYSTORE_PASSWORD`
+
+Environment variables for `openssl`.
+- `ENCRYPTED_KEY` (`openssl rand -hex 32`)
+- `ENCRYPTED_IV` (`openssl rand -hex 16`)
+
 Contributing
 ------------
 - [Conventional commit messages](https://github.com/conventional-changelog/conventional-changelog/blob/a5505865ff3dd710cf757f50530e73ef0ca641da/conventions/angular.md)

@@ -1,0 +1,42 @@
+platform :ios do
+  desc "Deploy ios app on the appstore"
+
+  lane :beta do
+    get_certificates
+    get_provisioning_profile
+    ionic(platform: 'ios')
+  end
+
+  lane :deploy do
+    match(type: "appstore")
+    ionic(platform: 'ios')
+    deliver(ipa: ENV['CORDOVA_IOS_RELEASE_BUILD_PATH'])
+  end
+end
+
+platform :android do
+  desc "Deploy android app on play store"
+
+  lane :alpha do
+    ionic(platform: 'android')
+    changelog_from_git_commits
+    supply(
+      track: 'internal',
+      apk: './platforms/android/app/build/outputs/apk/release/app-release.apk'
+    )
+  end
+
+  lane :beta do
+    ionic(platform: 'android', prod: true)
+    changelog_from_git_commits
+    supply(
+      track: 'internal',
+      apk: './platforms/android/app/build/outputs/apk/release/app-release.apk'
+    )
+  end
+
+  lane :deploy do
+    ionic(platform: 'android', prod: true)
+    supply(apk: './platforms/android/app/build/outputs/apk/release/app-release.apk')
+  end
+end
