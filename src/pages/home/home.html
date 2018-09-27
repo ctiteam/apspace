@@ -8,6 +8,7 @@
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
   <div class="main-content" (swipe)='swipe($event)'>
     <ion-card tappable *ngFor="let item of items$ | async" (click)="openModal(item)">
       <img [src]="item.field_news_image[0].url">
@@ -15,5 +16,11 @@
         {{ item.title[0].value }}
       </ion-card-content>
     </ion-card>
+
+    <ng-container *ngFor="let i of numOfSkeletons">
+      <ion-item *ngIf="isLoading">
+        <skeleton-item height="200px" width="100%"></skeleton-item>
+      </ion-item>
+    </ng-container>
   </div>
 </ion-content>

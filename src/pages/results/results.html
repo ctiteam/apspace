@@ -24,6 +24,7 @@
       </ion-card-content>
     </ion-card>
   </ng-template>
+
   <ion-refresher *ngIf="!block" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -121,13 +122,13 @@
   </div>
 
   <ng-template [ngIf]="!block">
-    <ion-card>
+    <ion-card *ngIf='interimLegend$ | async as interims'>
       <ion-card-header>
         <b>Marks And Grade Points</b>
       </ion-card-header>
       <ion-card-content>
         <ion-grid>
-          <ion-row *ngFor="let interim of interimLegend$ | async">
+          <ion-row *ngFor="let interim of interims">
             <ion-col col-3>
               <div *ngIf="interim.MARK_FROM">
                 <ion-note class="notes">{{ (interim.MARK_FROM + '-' + interim.MARK_TO) || '' }}</ion-note>
@@ -157,13 +158,13 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-card>
+    <ion-card *ngIf='classificationLegend$ | async as classificationLegends'>
       <ion-card-header>
         <b>Degree Classification</b>
       </ion-card-header>
       <ion-card-content>
         <ion-grid>
-          <ion-row *ngFor="let classification of classificationLegend$ | async">
+          <ion-row *ngFor="let classification of classificationLegends">
             <ion-col col-8>
               <ion-note class="notes">
                 {{ classification.GRADE || '' }}
@@ -181,6 +182,11 @@
         </ion-grid>
       </ion-card-content>
     </ion-card>
-
   </ng-template>
+
+  <ng-container *ngFor="let i of numOfSkeletons">
+    <ion-item *ngIf="isLoading">
+      <skeleton-item height="150px" width="100%"></skeleton-item>
+    </ion-item>
+  </ng-container>
 </ion-content>

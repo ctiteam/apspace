@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 
+import { ComponentsModule } from './../../components/components.module';
 import { FeesPage } from './fees';
 import { ReversePipe } from './reverse.pipe';
 
@@ -8,6 +9,7 @@ import { ReversePipe } from './reverse.pipe';
   declarations: [FeesPage, ReversePipe],
   imports: [
     IonicPageModule.forChild(FeesPage),
+    ComponentsModule,
   ],
   entryComponents: [FeesPage],
 })

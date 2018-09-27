@@ -54,6 +54,9 @@ export class ResultsPage {
     },
   };
 
+  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  isLoading: boolean;
+
   constructor(
     private ws: WsApiProvider,
     public loading: LoadingControllerProvider,
@@ -62,7 +65,7 @@ export class ResultsPage {
     private actionSheetCtrl: ActionSheetController) { }
 
   getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
-    this.loading.presentLoading();
+    this.isLoading = true;
     const opt = { params: { id: this.studentId, format: 'json' } };
     return (this.results$ = this.ws
       .get<Subcourse>(`/student/subcourses?intake=${intake}`, refresh, opt)
@@ -70,7 +73,7 @@ export class ResultsPage {
         tap(_ => this.getCourseDetails(intake)),
         tap(r => this.seperateBySemesters(r)),
         tap(r => this.getLegend(intake, r)),
-        finalize(() => this.loading.dismissLoading()),
+        finalize(() => this.isLoading = false),
     ));
   }
 

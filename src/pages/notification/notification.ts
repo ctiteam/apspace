@@ -19,6 +19,9 @@ export class NotificationPage {
 
   message$: Observable<any>;
 
+  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  isLoading: boolean;
+
   constructor(
     private navParams: NavParams,
     private notification: NotificationProvider,
@@ -44,10 +47,10 @@ export class NotificationPage {
   }
 
   doRefresh(refresher?) {
-    this.loading.presentLoading();
+    this.isLoading = true;
     this.message$ = this.notification.getMessage().pipe(
       map(res => res.history),
-      finalize(() => { refresher && refresher.complete(), this.loading.dismissLoading(); }),
+      finalize(() => { refresher && refresher.complete(), this.isLoading = false; }),
     );
   }
 

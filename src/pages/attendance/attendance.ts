@@ -32,6 +32,9 @@ export class AttendancePage {
   averageColor: string = '';
   intakeLabels: any;
 
+  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  isLoading: boolean;
+
   constructor(
     private ws: WsApiProvider,
     public loading: LoadingControllerProvider,
@@ -72,12 +75,12 @@ export class AttendancePage {
   }
 
   getAttendance(intake: string, refresh: boolean = false): Observable<Attendance[]> {
-    this.loading.presentLoading();
+    this.isLoading = true;
     const opt = { params: { id: this.studentId, format: 'json' } };
     return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh, opt)
       .pipe(
         tap(a => this.calculateAverage(a)),
-        finalize(() => this.loading.dismissLoading()),
+        finalize(() => this.isLoading = false),
     );
   }
 

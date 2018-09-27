@@ -16,6 +16,9 @@ export class HomePage {
 
   items$: Observable<News[]>;
 
+  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  isLoading: boolean;
+
   constructor(
     private app: App,
     private navCtrl: NavController,
@@ -23,8 +26,9 @@ export class HomePage {
   ) { }
 
   doRefresh(refresher?) {
+    this.isLoading = true;
     this.items$ = this.news.get(Boolean(refresher)).pipe(
-      finalize(() => refresher && refresher.complete()),
+      finalize(() => { refresher && refresher.complete(), this.isLoading = false; }),
     );
   }
 

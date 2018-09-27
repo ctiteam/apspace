@@ -38,6 +38,9 @@ export class ApcardPage {
     maintainAspectRatio: false,
   };
 
+  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  isLoading: boolean;
+
   constructor(
     private ws: WsApiProvider,
     private navCtrl: NavController,
@@ -102,12 +105,12 @@ export class ApcardPage {
   }
 
   doRefresh(refresher?) {
-    this.loading.presentLoading();
+    this.isLoading = true;
     this.transaction$ = this.ws.get<Apcard[]>('/apcard/', true).pipe(
       map(t => this.signTransactions(t)),
       tap(t => this.analyzeTransactions(t)),
       finalize(() => refresher && refresher.complete()),
-      finalize(() => this.loading.dismissLoading()),
+      finalize(() => this.isLoading = false),
     );
   }
 

@@ -23,18 +23,21 @@ export class FeesPage {
   details$: Observable<FeesDetails[]>;
   summary$: Observable<FeesSummary[]>;
 
+  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  isLoading: boolean;
+
   constructor(
     private ws: WsApiProvider,
     public loading: LoadingControllerProvider) { }
 
   ionViewDidLoad() {
-    this.loading.presentLoading();
+    this.isLoading = true;
     this.totalSummary$ = this.ws.get('/student/summary_overall_fee', true);
     this.summary$ = this.ws.get('/student/outstanding_fee', true);
     this.bankDraft$ = this.ws.get('/student/bankdraft_amount', true);
     this.details$ = this.ws.get('/student/overall_fee', true);
     forkJoin([this.totalSummary$, this.summary$]).pipe(
-      finalize(() => this.loading.dismissLoading()),
+      finalize(() => this.isLoading = false),
     ).subscribe();
   }
 }

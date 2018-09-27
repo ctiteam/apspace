@@ -21,6 +21,9 @@ export class ExamSchedulePage {
   intakes: string[] = [];
   selectedIntake: string = '';
 
+  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  isLoading: boolean;
+
   constructor(
     public plt: Platform,
     public actionSheet: ActionSheet,
@@ -73,7 +76,7 @@ export class ExamSchedulePage {
   }
 
   ionViewDidLoad() {
-    this.loading.presentLoading();
+    this.isLoading = true;
     const intake = this.settings.get('examIntake');
     if (intake !== undefined) { // intake might be ''
       this.intake = intake;
@@ -94,7 +97,7 @@ export class ExamSchedulePage {
     const url = `/examination/${this.intake}`;
     const opt = { auth: false };
     this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt).pipe(
-      finalize(() => (refresher && refresher.complete(), this.loading.dismissLoading())),
+      finalize(() => (refresher && refresher.complete(), this.isLoading = false)),
     );
   }
 

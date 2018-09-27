@@ -21,6 +21,9 @@ export class StaffDirectoryPage {
   staff$: Observable<StaffDirectory[]>;
   staffType$: Observable<string[]>;
 
+  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  isLoading: boolean;
+
   constructor(
     public navCtrl: NavController,
     public loading: LoadingControllerProvider,
@@ -40,17 +43,16 @@ export class StaffDirectoryPage {
   }
 
   doRefresh(refresher?) {
-    this.loading.presentLoading();
+    this.isLoading = true;
     this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing');
     this.staffType$ = this.staff$.pipe(
       filter(ss => ss instanceof Array),
       map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT))).sort()),
-      finalize(() => { refresher && refresher.complete(), this.loading.dismissLoading(); }),
+      finalize(() => { refresher && refresher.complete(), this.isLoading = false; }),
     );
   }
 
   ionViewDidLoad() {
     this.doRefresh();
   }
-
 }

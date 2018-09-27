@@ -35,4 +35,14 @@
       <p>{{ staff.EMAIL }}</p>
     </ion-item>
   </ion-list>
+
+  <ng-container *ngFor="let i of numOfSkeletons">
+      <ion-item *ngIf="isLoading">
+        <ion-avatar item-start>
+          <skeleton-item height="50px" width="50px" rounded></skeleton-item>
+        </ion-avatar>
+        <skeleton-item width="200px"></skeleton-item>
+        <skeleton-item height="5px" width="150px"></skeleton-item>
+      </ion-item>
+    </ng-container>
 </ion-content>
