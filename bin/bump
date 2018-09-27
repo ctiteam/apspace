@@ -1,0 +1,47 @@
+#!/bin/sh
+# Bump project version (default increment patch version)
+# Usage: bin/bump [version]
+
+do_bump() {
+  if git diff-index --cached --quiet HEAD; then
+    echo "fail: there are changes in git index" >&2
+    exit
+  fi
+
+  echo "Bump version to $vers" >&2
+
+  local code=$(echo $vers | awk -F. '{print $1*10000 + $2*100 + $3}')
+  local prev=$(sed -n 's/.*widget.*version="\([^"]*\)".*/\1/p' < config.xml)
+
+  sed -i "s/\(widget.*version=\"\)$prev\(\"\)/\1$vers\2/" config.xml
+  sed -i "s/\(\"version\":\s*\"\)$prev\(\"\)/\1$vers\2/" package.json
+  git add config.xml package.json
+
+  git commit -m "chore: bump version to $vers"
+  git push
+
+  git tag $vers
+  git push --tags
+}
+
+
+# check dependencies
+deps="clog git jq"
+for dep in $deps; do
+  if ! command -v $dep >/dev/null; then
+    echo $dep is required >&2
+    exit
+  fi
+done
+
+# use version if specified or default increment patch
+vers=$1
+
+if [ -z "$vers" ]; then
+  vers=$(awk '/widget.*version/ {
+    match($0, /([0-9]+)\.([0-9]+)\.([0-9]+)/, v);
+    print v[1] "." v[2] "." ++v[3]; exit;
+  }' config.xml)
+fi
+
+do_bump
