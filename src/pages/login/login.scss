@@ -19,6 +19,10 @@ page-login {
     background-color: color($colors, primary);
   }
 
+  form > ion-item > ion-icon {
+    margin: 0 0 0 8px !important;
+  }
+
   h1 {
     color: color($colors, text-color);
     font-family: 'Bungee', cursive;

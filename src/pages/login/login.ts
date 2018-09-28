@@ -24,7 +24,7 @@ export class LoginPage {
   @ViewChild('autofocus') autofocus;
 
   username: string;
-  password: any;
+  password: string;
   showPasswordText: boolean;
   initializers: Subscription[] = [];
 
