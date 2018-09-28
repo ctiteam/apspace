@@ -36,7 +36,7 @@
     <div class="underFadeDiv"></div>
     <!-- Chosen location div -->
     <div class="chosenLocationDiv" *ngIf="trips | nextTrip as trip; else unAvail">
-      <ion-icon class="moreInfoIcon" name="md-arrow-dropup"></ion-icon>
+      <ion-icon class="moreInfoIcon" name="arrow-dropup"></ion-icon>
       <div class="iconAndTimeDIv">
         <button detail-none ion-item class="itemButton" style="background-color: #fefefe !important" (click)="presentMoreInfoModal(trips, trip, 'timings')">
           <ion-icon class="shk" style="float: left !important; color: #a9a9a9" name="bus"></ion-icon>

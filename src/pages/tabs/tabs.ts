@@ -28,7 +28,7 @@ export class TabsPage {
     { title: 'Bus Tracking', icon: 'bus', root: 'BusTrackingPage', role: Role.Lecturer | Role.Admin },
   ];
 
-  morePages = { title: 'More', icon: 'ios-more', root: 'MorePage', role: Role.Student | Role.Lecturer | Role.Admin };
+  morePages = { title: 'More', icon: 'more', root: 'MorePage', role: Role.Student | Role.Lecturer | Role.Admin };
 
   tabs: Array<{
     title: string,
