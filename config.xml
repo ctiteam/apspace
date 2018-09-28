@@ -30,6 +30,7 @@
         <resource-file src="GoogleService-Info.plist" />
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <hook src="scripts/afterPrepare.js" type="after_prepare" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
         <icon height="114" src="resources/ios/icon/icon@2x.png" width="114" />
         <icon height="40" src="resources/ios/icon/icon-40.png" width="40" />
@@ -65,5 +66,5 @@
     <plugin name="cordova-plugin-fcm-with-dependecy-updated" spec="^2.2.4" />
     <plugin name="com.telerik.plugins.nativepagetransitions" spec="^0.6.5" />
     <engine name="ios" spec="4.5.5" />
-    <engine name="android" spec="7.0.0" />
+    <engine name="android" spec="^7.1.1" />
 </widget>
