@@ -3,7 +3,7 @@
 # Usage: bin/bump [version]
 
 do_bump() {
-  if git diff-index --cached --quiet HEAD; then
+  if [ -n "$(git diff-index --cached HEAD)" ]; then
     echo "fail: there are changes in git index" >&2
     exit
   fi
