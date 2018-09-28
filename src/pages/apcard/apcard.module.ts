@@ -10,7 +10,7 @@ import { EntryPipe } from './entry.pipe';
   imports: [
     IonicPageModule.forChild(ApcardPage),
     ChartModule,
-    ComponentsModule
+    ComponentsModule,
   ],
   entryComponents: [ApcardPage],
 })
