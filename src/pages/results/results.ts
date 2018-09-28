@@ -10,7 +10,7 @@ import {
   ClassificationLegend, Course, CourseDetails, DeterminationLegend,
   InterimLegend, MPULegend, StudentProfile, Subcourse,
 } from '../../interfaces';
-import { LoadingControllerProvider, WsApiProvider } from '../../providers';
+import { WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -54,12 +54,11 @@ export class ResultsPage {
     },
   };
 
-  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  numOfSkeletons = new Array(5);
   isLoading: boolean;
 
   constructor(
     private ws: WsApiProvider,
-    public loading: LoadingControllerProvider,
     public plt: Platform,
     private actionSheet: ActionSheet,
     private actionSheetCtrl: ActionSheetController) { }
@@ -74,7 +73,7 @@ export class ResultsPage {
         tap(r => this.seperateBySemesters(r)),
         tap(r => this.getLegend(intake, r)),
         finalize(() => this.isLoading = false),
-    ));
+      ));
   }
 
   seperateBySemesters(results: any) {
@@ -93,7 +92,7 @@ export class ResultsPage {
             tap(i => this.studentId = i[0].STUDENT_NUMBER),
             tap(_ => this.getResults(this.selectedIntake)),
             tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE)))),
-        );
+          );
       } else {
         this.block = true;
       }
@@ -121,7 +120,7 @@ export class ResultsPage {
           // gradeList.push("Pass", "Fail");
           this.sortArray(results, gradeList);
         }),
-    );
+      );
     this.mpuLegend$ = this.ws.get<MPULegend[]>(
       `/student/mpu_legend?id=${this.studentId}&intake=${intake}`);
     this.determinationLegend$ = this.ws.get<DeterminationLegend[]>(

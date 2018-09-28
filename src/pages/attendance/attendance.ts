@@ -12,7 +12,7 @@ import { Observable } from 'rxjs/Observable';
 import { finalize, tap } from 'rxjs/operators';
 
 import { Attendance, AttendanceLegend, Course } from '../../interfaces';
-import { LoadingControllerProvider, WsApiProvider } from '../../providers';
+import { WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -32,12 +32,11 @@ export class AttendancePage {
   averageColor: string = '';
   intakeLabels: any;
 
-  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  numOfSkeletons = new Array(5);
   isLoading: boolean;
 
   constructor(
     private ws: WsApiProvider,
-    public loading: LoadingControllerProvider,
     private actionSheet: ActionSheet,
     private plt: Platform,
     public actionSheetCtrl: ActionSheetController,
@@ -81,7 +80,7 @@ export class AttendancePage {
       .pipe(
         tap(a => this.calculateAverage(a)),
         finalize(() => this.isLoading = false),
-    );
+      );
   }
 
   ionViewDidLoad() {

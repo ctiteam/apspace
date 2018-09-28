@@ -5,8 +5,8 @@ import { ActionSheetButton, ActionSheetController, IonicPage, Platform } from 'i
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
 
-import { ExamSchedule, StudentProfile, Timetable } from '../../interfaces';
-import { LoadingControllerProvider, SettingsProvider, TimetableProvider, WsApiProvider } from '../../providers';
+import { ExamSchedule, StudentProfile } from '../../interfaces';
+import { SettingsProvider, TimetableProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -21,7 +21,7 @@ export class ExamSchedulePage {
   intakes: string[] = [];
   selectedIntake: string = '';
 
-  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  numOfSkeletons = new Array(5);
   isLoading: boolean;
 
   constructor(
@@ -29,7 +29,6 @@ export class ExamSchedulePage {
     public actionSheet: ActionSheet,
     public actionSheetCtrl: ActionSheetController,
     private ws: WsApiProvider,
-    private loading: LoadingControllerProvider,
     private settings: SettingsProvider,
     public tt: TimetableProvider,
   ) { }

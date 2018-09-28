@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { finalize, map, tap } from 'rxjs/operators';
 
 import { Apcard, Role } from '../../interfaces';
-import { LoadingControllerProvider, SettingsProvider, WsApiProvider } from '../../providers';
+import { SettingsProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -25,6 +25,7 @@ import { LoadingControllerProvider, SettingsProvider, WsApiProvider } from '../.
     ]),
   ],
 })
+
 export class ApcardPage {
   transaction$: Observable<Apcard[]>;
   filterEntry: string = '';
@@ -38,13 +39,12 @@ export class ApcardPage {
     maintainAspectRatio: false,
   };
 
-  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  numOfSkeletons = new Array(5);
   isLoading: boolean;
 
   constructor(
     private ws: WsApiProvider,
     private navCtrl: NavController,
-    private loading: LoadingControllerProvider,
     private settings: SettingsProvider,
   ) { }
 

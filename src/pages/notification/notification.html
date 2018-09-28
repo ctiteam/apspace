@@ -45,8 +45,8 @@
     </ion-list>
   </ng-container>
 
-  <ng-container *ngFor="let i of numOfSkeletons">
-    <ion-item *ngIf="isLoading">
+  <ng-container *ngIf="isLoading">
+    <ion-item *ngFor="let i of numOfSkeletons">
       <ion-avatar item-start>
         <skeleton-item height="50px" width="50px" rounded></skeleton-item>
       </ion-avatar>

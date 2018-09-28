@@ -16,7 +16,7 @@ export class HomePage {
 
   items$: Observable<News[]>;
 
-  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  numOfSkeletons = new Array(5);
   isLoading: boolean;
 
   constructor(

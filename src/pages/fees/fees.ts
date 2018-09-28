@@ -8,7 +8,7 @@ import { finalize } from 'rxjs/operators';
 import {
   FeesBankDraft, FeesDetails, FeesSummary, FeesTotalSummary,
 } from '../../interfaces';
-import { LoadingControllerProvider, WsApiProvider } from '../../providers';
+import { WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -23,12 +23,12 @@ export class FeesPage {
   details$: Observable<FeesDetails[]>;
   summary$: Observable<FeesSummary[]>;
 
-  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  numOfSkeletons = new Array(5);
   isLoading: boolean;
 
   constructor(
     private ws: WsApiProvider,
-    public loading: LoadingControllerProvider) { }
+  ) { }
 
   ionViewDidLoad() {
     this.isLoading = true;

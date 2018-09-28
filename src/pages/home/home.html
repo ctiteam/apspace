@@ -17,8 +17,8 @@
       </ion-card-content>
     </ion-card>
 
-    <ng-container *ngFor="let i of numOfSkeletons">
-      <ion-item *ngIf="isLoading">
+    <ng-container *ngIf="isLoading">
+      <ion-item *ngFor="let i of numOfSkeletons">
         <skeleton-item height="200px" width="100%"></skeleton-item>
       </ion-item>
     </ng-container>

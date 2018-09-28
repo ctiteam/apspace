@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { filter, finalize, map } from 'rxjs/operators';
 
 import { StaffDirectory } from '../../interfaces';
-import { LoadingControllerProvider, WsApiProvider } from '../../providers';
+import { WsApiProvider } from '../../providers';
 
 @IonicPage({ segment: 'staff' })
 @Component({
@@ -21,12 +21,11 @@ export class StaffDirectoryPage {
   staff$: Observable<StaffDirectory[]>;
   staffType$: Observable<string[]>;
 
-  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  numOfSkeletons = new Array(5);
   isLoading: boolean;
 
   constructor(
     public navCtrl: NavController,
-    public loading: LoadingControllerProvider,
     private ws: WsApiProvider,
   ) { }
 

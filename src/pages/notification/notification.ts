@@ -4,7 +4,7 @@ import { App, IonicPage, NavParams, Platform } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { finalize, map } from 'rxjs/operators';
 
-import { LoadingControllerProvider, NotificationProvider } from '../../providers';
+import { NotificationProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -19,14 +19,13 @@ export class NotificationPage {
 
   message$: Observable<any>;
 
-  numOfSkeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // temp solution
+  numOfSkeletons = new Array(5);
   isLoading: boolean;
 
   constructor(
     private navParams: NavParams,
     private notification: NotificationProvider,
     private platform: Platform,
-    private loading: LoadingControllerProvider,
     private sanitizer: DomSanitizer,
     public app: App,
   ) { }
