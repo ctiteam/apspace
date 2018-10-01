@@ -14,9 +14,10 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div class="main-content" (swipe)='swipe($event)'>
-    <div class="cover" *ngIf="percent">
+    <div class="cover">
       <ion-label class="current"><b>{{percent + '%'}}</b></ion-label>
-      <round-progress class="circle-progress" [current]="percent" max="100" [radius]="90" [rounded]="true" [color]="averageColor"
+      <round-progress class="circle-progress" [current]="percent" max="100" [radius]="90"
+        [rounded]="true" [color]="percent !== 0 ? averageColor : '#d7d8da'"
         background="#d7d8da" stroke="15"></round-progress>
     </div>
 
@@ -37,6 +38,12 @@
           a.EXAM_ELIGIBILITY }}</div>
       </ion-item>
     </ion-card>
+
+    <ng-container *ngIf="isLoading">
+      <ion-item *ngFor="let i of numOfSkeletons">
+        <skeleton-item height="137px" width="100%"></skeleton-item>
+      </ion-item>
+    </ng-container>
 
     <ion-card class="legend" *ngIf="legend$ | async as legend">
       <ion-item class="legend-title">
@@ -85,11 +92,5 @@
         </ion-row>
       </ion-grid>
     </ion-card>
-
-    <ng-container *ngIf="isLoading">
-      <ion-item *ngFor="let i of numOfSkeletons">
-        <skeleton-item height="150px" width="100%"></skeleton-item>
-      </ion-item>
-    </ng-container>
   </div>
 </ion-content>

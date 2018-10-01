@@ -75,6 +75,7 @@ export class AttendancePage {
 
   getAttendance(intake: string, refresh: boolean = false): Observable<Attendance[]> {
     this.isLoading = true;
+    this.percent = 0;
     const opt = { params: { id: this.studentId, format: 'json' } };
     return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh, opt)
       .pipe(
