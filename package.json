@@ -11,9 +11,7 @@
   "scripts": {
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
-    "lint": "ionic-app-scripts lint",
-    "ionic:build": "ionic-app-scripts build",
-    "ionic:serve": "ionic-app-scripts serve"
+    "lint": "ionic-app-scripts lint"
   },
   "dependencies": {
     "@angular/animations": "^5.2.1",
@@ -39,8 +37,7 @@
     "@ionic-native/network-interface": "^4.15.0",
     "@ionic-native/push": "^4.15.0",
     "@ionic-native/status-bar": "^4.15.0",
-    "@ionic/lab": "^1.0.0",
-    "@ionic/storage": "^2.0.1",
+    "@ionic/storage": "^2.2.0",
     "angular-svg-round-progressbar": "~1.2.1",
     "angular2-chartjs": "^0.5.1",
     "autoprefixer": "^8.1.0",
