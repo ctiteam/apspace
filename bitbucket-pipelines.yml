@@ -7,7 +7,7 @@ pipelines:
         caches:
           - node
         script:
-          - npm install
+          - npm ci
           - ionic cordova build browser --prod
           - apt-get update
           - apt-get install -y awscli
@@ -17,7 +17,7 @@ pipelines:
         caches:
           - node
         script:
-          - npm install
+          - npm ci
           - ionic cordova build browser --prod
           - apt-get update
           - apt-get install -y awscli
