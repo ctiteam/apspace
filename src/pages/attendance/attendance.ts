@@ -51,7 +51,7 @@ export class AttendancePage {
       this.actionSheet.show(options).then((buttonIndex: number) => {
         if (buttonIndex <= 1 + this.intakeLabels.length) {
           this.selectedIntake = this.intakeLabels[buttonIndex - 1] || '';
-          this.getAttendance(this.selectedIntake);
+          this.attendance$ = this.getAttendance(this.selectedIntake);
         }
       });
     } else {
@@ -60,7 +60,7 @@ export class AttendancePage {
           text: intake,
           handler: () => {
             this.selectedIntake = intake;
-            this.getAttendance(this.selectedIntake);
+            this.attendance$ = this.getAttendance(this.selectedIntake);
           },
         } as ActionSheetButton;
       });
@@ -88,7 +88,7 @@ export class AttendancePage {
     this.courses$ = this.ws.get<Course[]>('/student/courses').pipe(
       tap(c => this.selectedIntake = c[0].INTAKE_CODE),
       tap(c => this.studentId = c[0].STUDENT_NUMBER),
-      tap(_ => this.getAttendance(this.selectedIntake)),
+      tap(_ => this.attendance$ = this.getAttendance(this.selectedIntake, true)),
       tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE)))),
     );
   }
