@@ -20,8 +20,8 @@ do_bump() {
   git commit -m "chore: bump version to $vers"
   git push
 
-  git tag $vers
-  git push --tags
+  git tag v$vers
+  git push origin v$vers
 }
 
 
