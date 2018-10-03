@@ -58,7 +58,7 @@
     "hammerjs": "^2.0.8",
     "ionic-angular": "^3.9.2",
     "ionic2-elastic-header": "0.0.10",
-    "ionicons": "^4.0.0",
+    "ionicons": "^3.0.0",
     "localforage": "^1.7.1",
     "localforage-cordovasqlitedriver": "^1.6.0",
     "npm": "^6.4.1",
