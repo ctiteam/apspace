@@ -21,7 +21,7 @@ export class LmsPage {
 
   ionViewDidLoad() {
     this.cas.getST(this.lmsUrl)
-      .subscribe(st => this.iab.create(`${this.lmsUrl}?ticket=${st}`));
+      .subscribe(st => this.iab.create(`${this.lmsUrl}?ticket=${st}`, '_blank', 'location=true'));
     this.navCtrl.pop();
   }
 }
