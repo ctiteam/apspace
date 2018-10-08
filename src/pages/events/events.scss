@@ -1,0 +1,34 @@
+page-events {
+    ion-content ion-card-content a {
+        text-decoration: none;
+    }
+    
+    ion-content ion-card-content ion-icon {
+        vertical-align: -1.5px;
+        padding-left: 4px;
+    }
+    
+    ion-content ion-card-header + ion-card-content ion-label:nth-child(odd) {
+        background-color: #eceff1;
+    }
+
+    .cover {
+        text-align: center;
+        padding-top: 60px;
+        width: 100%;
+        height: 250px;
+        background-image: url(../assets/img/events.jpg);
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        text-align:center;
+    }
+
+    .events {
+        width: auto;
+        font-weight: bold;
+        font-size: 4em;
+        -webkit-text-fill-color: white;
+        -webkit-text-stroke-width: 1px;
+      }
+}
