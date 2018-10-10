@@ -36,7 +36,7 @@
             {{ c.ROOM }} │ {{ c.LOCATION }}
           </ion-label>
           <ion-label no-margin>
-            <a (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
+            <a (click)="openStaffDirectoryInfo(c.LECTID)">
               <ion-icon padding-right name="contact"></ion-icon>
               {{ c.NAME }}
             </a>
@@ -50,5 +50,19 @@
       </ion-card>
     </ng-template>
     <ion-item>Upcoming Holiday</ion-item>
+    <ion-card padding>
+      <ion-note>You have no upcoming holidays</ion-note>
+    </ion-card>
+    <ion-item>Total Overdue Fee</ion-item>
+    <ion-card>
+      <chart margin-top [type]="type" [data]="data" [options]="options"></chart>
+    </ion-card>
+    <!-- <ion-grid>
+      <ion-row justify-content-center align-items-center style="height: 100%">
+        <ion-card class="fee">
+          <ion-label class="amount">RM0</ion-label>
+        </ion-card>
+      </ion-row>
+    </ion-grid> -->
   </div>
 </ion-content>

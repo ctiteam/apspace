@@ -35,4 +35,18 @@ page-events {
     .main-content{
         background-color: white;
     }
+
+    .fee{
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        background: #0dbd53;
+        text-align: center;
+    }
+
+    .amount{
+        font-size: 2em;
+        color: #FFFFFF;
+        margin-top: 40%;
+    }
 }
