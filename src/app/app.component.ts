@@ -53,24 +53,27 @@ export class MyApp {
     private fcm: FCM,
     private dataCollector: DataCollectorProvider,
   ) {
-    this.platform.ready().then(() => {
-      this.storage.get('tgt').then(tgt => {
-        if (tgt) {
-          if (this.platform.is('cordova')) {
-            this.notificationService.getMessage().subscribe();
-          }
-          this.events.subscribe('user:logout', () => this.onLogout());
-          this.navCtrl.setRoot('TabsPage');
-          if (this.notification) {
-            this.notificationService.sendRead(parseInt(this.notification.message_id, 10)).subscribe(_ => {
-              this.navCtrl.push('NotificationModalPage', { itemDetails: this.notification });
-            });
-          }
-        } else {
-          this.events.subscribe('user:login', () => this.onLogin());
-          this.navCtrl.setRoot('LoginPage');
+    // platform required to be ready before everything else
+    this.platform.ready().then(() => Promise.all([
+      this.settings.ready(),
+      this.storage.get('tgt'),
+    ])).then(values => {
+      const tgt = values[1];
+      if (tgt) { // check if the user is logged in
+        if (this.platform.is('cordova')) {
+          this.notificationService.getMessage().subscribe();
         }
-      });
+        this.events.subscribe('user:logout', () => this.onLogout());
+        this.navCtrl.setRoot('TabsPage');
+        if (this.notification) {
+          this.notificationService.sendRead(parseInt(this.notification.message_id, 10)).subscribe(_ => {
+            this.navCtrl.push('NotificationModalPage', { itemDetails: this.notification });
+          });
+        }
+      } else {
+        this.events.subscribe('user:login', () => this.onLogin());
+        this.navCtrl.setRoot('LoginPage');
+      }
 
       if (this.platform.is('cordova')) {
         this.statusBar.overlaysWebView(false);

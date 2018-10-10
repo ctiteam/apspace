@@ -11,8 +11,15 @@ export class SettingsProvider {
 
   data: Settings;
 
+  private readyPromise: Promise<void>;
+
   constructor(public storage: Storage) {
-    this.storage.get('settings').then(data => this.data = data || {});
+    this.readyPromise = this.storage.get('settings').then(data => this.data = data || {});
+  }
+
+  /** Return a promise to check if settings provider is initialized. */
+  ready(): Promise<void> {
+    return this.readyPromise;
   }
 
   /**
