@@ -2,6 +2,7 @@
   "extends": "tslint:recommended",
   "rules": {
     "arrow-parens": [true, "ban-single-arg-parens"],
+    "cyclomatic-complexity": true,
     "indent": [true, "spaces", 2],
     "interface-name": false,
     "member-access": [true, "no-public"],
