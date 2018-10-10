@@ -42,7 +42,7 @@
     "angular2-chartjs": "^0.5.1",
     "autoprefixer": "^8.1.0",
     "com.telerik.plugins.nativepagetransitions": "^0.6.5",
-    "cordova-android": "^7.1.1",
+    "cordova-android": "7.1.1",
     "cordova-ios": "4.5.5",
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-badge": "^0.8.7",
@@ -75,6 +75,7 @@
   "devDependencies": {
     "@angular/cli": "^6.0.3",
     "@ionic/app-scripts": "3.2.0",
+    "@ionic/lab": "1.0.11",
     "@types/hammerjs": "^2.0.35",
     "typescript": "2.6"
   },
