@@ -36,7 +36,7 @@ export class MorePage {
       title: 'Events',
       component: 'EventsPage',
       icon: 'calendar',
-      role: Role.Student | Role.Lecturer | Role.Admin,
+      role: Role.Student,
     },
     {
       title: 'Bus Tracking',
