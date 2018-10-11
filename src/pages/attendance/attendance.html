@@ -16,8 +16,7 @@
   <div class="main-content" (swipe)='swipe($event)'>
     <div class="cover">
       <ion-label class="current"><b>{{percent + '%'}}</b></ion-label>
-      <round-progress class="circle-progress" [current]="percent" max="100" [radius]="90"
-        [rounded]="true" [color]="percent !== 0 ? averageColor : '#d7d8da'"
+      <round-progress class="circle-progress" [current]="percent" max="100" [radius]="90" [rounded]="true" [color]="percent !== 0 ? averageColor : '#d7d8da'"
         background="#d7d8da" stroke="15"></round-progress>
     </div>
 
@@ -52,10 +51,18 @@
       <ion-grid>
         <ion-row>
           <ion-col col-2>
+            Eligible
+          </ion-col>
+          <ion-col col-10>
+            {{ legend['Eligible'] }}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-2>
             BA
           </ion-col>
           <ion-col col-10>
-            {{ (legend || [{}])[0]?.BA }}
+            {{ legend['BA'] }}
           </ion-col>
         </ion-row>
         <ion-row>
@@ -63,7 +70,7 @@
             BF
           </ion-col>
           <ion-col col-10>
-            {{ (legend || [{}])[0]?.BF }}
+            {{ legend['BF'] }}
           </ion-col>
         </ion-row>
         <ion-row>
@@ -71,7 +78,7 @@
             BD
           </ion-col>
           <ion-col col-10>
-            {{ (legend || [{}])[0]?.BD }}
+            {{ legend['BD'] }}
           </ion-col>
         </ion-row>
         <ion-row>
@@ -79,7 +86,7 @@
             N/A
           </ion-col>
           <ion-col col-10>
-            Not Applicable
+              {{ legend['N/A'] }}
           </ion-col>
         </ion-row>
         <ion-row>
@@ -87,7 +94,7 @@
             ***
           </ion-col>
           <ion-col col-10>
-            Check on final week of your course schedule
+              {{ legend['***'] }}
           </ion-col>
         </ion-row>
       </ion-grid>

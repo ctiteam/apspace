@@ -52,6 +52,7 @@ export class WsApiProvider {
     url?: string,
   } = {}): Observable<T> {
     let url;
+    let serviceUrl;
     const opt = {
       params: options.params || {},
       withCredentials: Boolean(options.auth !== false),
@@ -60,15 +61,20 @@ export class WsApiProvider {
     // all student/ still uses old api
     if (endpoint.indexOf('student/') === -1) {
       url = (options.url || this.apiUrl) + endpoint;
+      serviceUrl = (options.url || this.apiUrl) + endpoint;
+    } else if(endpoint.indexOf('student/attendance') === 1) {
+      url = (options.url || this.apiUrl) + endpoint;
+      serviceUrl = `${this.apiUrl}/student/attendance`;
     } else {
       url = (options.url || this.oldApiUrl) + endpoint;
+      serviceUrl = (options.url || this.oldApiUrl) + endpoint;
       // opt.params.source = 'mobile';
     }
 
     return (refresh && (!this.plt.is('cordova') || this.network.type !== 'none')
       ? (options.auth === false // always get ticket if auth is true
         ? this.http.get<T>(url, opt)
-        : this.cas.getST(url).pipe(switchMap(st => this.http.get<T>(url,
+        : this.cas.getST(serviceUrl).pipe(switchMap(st => this.http.get<T>(url,
           Object.assign(opt, { params: Object.assign(opt.params, { ticket: st }) }))))
       ).pipe(
         tap(cache => this.storage.set(endpoint, cache)),
