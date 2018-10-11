@@ -1,0 +1,52 @@
+page-events {
+    ion-content ion-card-content a {
+        text-decoration: none;
+    }
+    
+    ion-content ion-card-content ion-icon {
+        vertical-align: -1.5px;
+        padding-left: 4px;
+    }
+    
+    ion-content ion-card-header + ion-card-content ion-label:nth-child(odd) {
+        background-color: #eceff1;
+    }
+
+    .cover {
+        text-align: center;
+        padding-top: 60px;
+        width: 100%;
+        height: 250px;
+        background-image: url(../assets/img/events.jpg);
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        text-align:center;
+    }
+
+    .events {
+        width: auto;
+        font-weight: bold;
+        font-size: 4em;
+        -webkit-text-fill-color: white;
+        -webkit-text-stroke-width: 1px;
+    }
+
+    .main-content{
+        background-color: white;
+    }
+
+    .fee{
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        background: #0dbd53;
+        text-align: center;
+    }
+
+    .amount{
+        font-size: 2em;
+        color: #FFFFFF;
+        margin-top: 40%;
+    }
+}

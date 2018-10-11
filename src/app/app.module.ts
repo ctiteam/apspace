@@ -19,7 +19,7 @@ import {
   BusTrackingProvider, CasTicketProvider, DataCollectorProvider,
   FeedbackProvider, httpInterceptorProviders,
   NotificationProvider, OperationHoursProvider, RequestCache,
-  RequestCacheWithMapStorage, SettingsProvider, WsApiProvider,
+  RequestCacheWithMapStorage, SettingsProvider, WsApiProvider, EventsProvider,
 } from '../providers';
 import { MyApp } from './app.component';
 
@@ -53,6 +53,7 @@ import { MyApp } from './app.component';
     BusTrackingProvider,
     FeedbackProvider,
     DataCollectorProvider,
+    EventsProvider,
   ],
   entryComponents: [MyApp],
   bootstrap: [IonicApp],

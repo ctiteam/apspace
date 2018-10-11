@@ -16,3 +16,4 @@ export { OperationHoursProvider } from './operation-hours';
 export { SettingsProvider } from './settings';
 export { TimetableProvider } from './timetable';
 export { WsApiProvider } from './ws-api';
+export { EventsProvider } from './events';

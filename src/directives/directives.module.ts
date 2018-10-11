@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-
 import { SwipeAllDirective } from './swipe-all/swipe-all';
 
 @NgModule({
