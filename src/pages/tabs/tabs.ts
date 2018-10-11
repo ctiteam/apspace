@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FCM } from '@ionic-native/fcm';
 import { StatusBar } from '@ionic-native/status-bar';
-import { Storage } from '@ionic/storage';
 import {
   AlertController, App, Events, IonicPage, NavController, NavParams, Platform,
   ToastController,
@@ -54,7 +53,6 @@ export class TabsPage {
     public app: App,
     private loading: LoadingControllerProvider,
     public toastCtrl: ToastController,
-    public storage: Storage, // XXX
     public notification: NotificationProvider,
   ) {
 
