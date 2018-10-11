@@ -20,6 +20,7 @@ export class EventsPage {
   exam$: Observable<ExamSchedule[]>;
 
   classes: boolean;
+  exam: boolean;
 
   type = 'doughnut';
   data: any;
@@ -72,7 +73,15 @@ export class EventsPage {
     .subscribe(p => {
       let url = `/examination/${p[0].INTAKE_CODE}`;
       const opt = { auth: false };
-      this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt)
+      this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt).pipe(
+        tap(e => {
+          if (e.length == 0) {
+            this.exam = false;
+          } else {
+            this.exam = true;
+          }
+        })
+      )
     })
   }
 
@@ -93,6 +102,11 @@ export class EventsPage {
 
     };
   }
+
+  openExamPage(){
+    this.app.getRootNav().push('ExamSchedulePage');
+  }
+
   /** Open staff info for lecturer id. */
   openStaffDirectoryInfo(id: string) {
     this.app.getRootNav().push('StaffDirectoryInfoPage', { id });

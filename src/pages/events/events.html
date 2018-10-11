@@ -59,11 +59,16 @@
     </ion-card>
     <ion-item>Upcoming Exams</ion-item>
     <ng-container *ngIf='exam$ | async as exam'>
-      <ion-card *ngFor='let e of exam'>
+      <ion-card tappable *ngFor='let e of exam' (click)='openExamPage()'>
         <ion-item>{{ e.module }}
           <p item-right> {{ e.since | date:'medium'}}</p>
         </ion-item>
       </ion-card>
     </ng-container>
+    <ng-template [ngIf]='!exam'>
+      <ion-card padding>
+        <ion-note>You have no upcoming exams</ion-note>
+      </ion-card>
+    </ng-template>
   </div>
 </ion-content>
