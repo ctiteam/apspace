@@ -7,8 +7,7 @@ import {
 } from 'ionic-angular';
 
 import { Role } from '../../interfaces';
-import {
-  LoadingControllerProvider, NotificationProvider, SettingsProvider,
+import { NotificationProvider, SettingsProvider,
 } from '../../providers';
 
 @IonicPage()
@@ -51,7 +50,6 @@ export class TabsPage {
     public fcm: FCM,
     public events: Events,
     public app: App,
-    private loading: LoadingControllerProvider,
     public toastCtrl: ToastController,
     public notification: NotificationProvider,
   ) {
@@ -72,8 +70,6 @@ export class TabsPage {
             this.app.getRootNav().pop();
           } else if (this.exit) {
             this.plt.exitApp();
-          } else if (this.loading.dismissLoading()) {
-            this.loading.dismissLoading();
           } else {
             const toast = this.toastCtrl.create({
               message: 'Tap again to exit.',

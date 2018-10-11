@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Device } from '@ionic-native/device';
-import { Platform } from 'ionic-angular';
+import { LoadingController, Platform } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { finalize, switchMap } from 'rxjs/operators';
-import { CasTicketProvider, LoadingControllerProvider } from '../providers';
+import { CasTicketProvider } from '../providers';
 
 const FEEDBACK_URL = 'https://rgnsa0bpif.execute-api.ap-southeast-1.amazonaws.com/dev';
 const SERVICE_URL = 'http://ws.apiit.edu.my/';
@@ -22,13 +22,14 @@ export class FeedbackProvider {
     service_ticket: '',
   };
   cas: CasTicketProvider;
-  loading: LoadingControllerProvider;
+  loading: any;
 
   constructor(
     public http: HttpClient,
     private device: Device,
     private plt: Platform,
     private injector: Injector,
+    public loadingCtrl: LoadingController,
   ) { }
 
   /**
@@ -40,9 +41,8 @@ export class FeedbackProvider {
    * @param message feedback message from user
    */
   sendFeedback(name: string, email: string, contactNumber: string, message: string): Observable<any> {
-    this.loading = this.injector.get(LoadingControllerProvider);
     this.cas = this.injector.get(CasTicketProvider);
-    this.loading.presentLoading();
+    this.presentLoading();
     return this.cas.getST(SERVICE_URL).pipe(
       switchMap(st => {
         this.feedbackData.service_ticket = st;
@@ -63,8 +63,15 @@ export class FeedbackProvider {
         };
         return this.http.post(`${FEEDBACK_URL}/user/feature_request`, this.feedbackData, options);
       }),
-      finalize(() => this.loading.dismissLoading()),
+      finalize(() => this.loading.dismiss()),
     );
+  }
+
+  presentLoading() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Please wait...',
+    });
+    this.loading.present();
   }
 
 }

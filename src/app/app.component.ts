@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import {
   AlertController,
   Events,
+  LoadingController,
   Nav,
   Platform,
   ToastController,
@@ -19,7 +20,6 @@ import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../interfaces'
 import {
   CasTicketProvider,
   DataCollectorProvider,
-  LoadingControllerProvider,
   NotificationProvider,
   SettingsProvider,
   WsApiProvider,
@@ -36,10 +36,12 @@ export class MyApp {
   profile$: Observable<StudentProfile[]>;
   staffProfile$: Observable<StaffProfile[]>;
   notification: any;
+  loading: any;
 
   constructor(
     public events: Events,
     public network: Network,
+    public loadingCtrl: LoadingController,
     public statusBar: StatusBar,
     public storage: Storage,
     public toastCtrl: ToastController,
@@ -47,7 +49,6 @@ export class MyApp {
     private platform: Platform,
     private settings: SettingsProvider,
     private ws: WsApiProvider,
-    private loading: LoadingControllerProvider,
     private cas: CasTicketProvider,
     private alertCtrl: AlertController,
     private fcm: FCM,
@@ -94,8 +95,15 @@ export class MyApp {
     });
   }
 
+  presentLoading() {
+    this.loading = this.loadingCtrl.create({
+      content: 'Please wait...',
+    });
+    this.loading.present();
+  }
+
   onLogin() {
-    this.loading.presentLoading();
+    this.presentLoading();
     if (this.platform.is('cordova')) {
       forkJoin(
         [
@@ -108,12 +116,12 @@ export class MyApp {
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
       this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
       forkJoin([this.profile$, this.photo$])
-        .pipe(finalize(() => this.loading.dismissLoading()))
+        .pipe(finalize(() => this.loading.dismiss()))
         .subscribe();
     } else if (role & (Role.Lecturer | Role.Admin)) {
       this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
       this.staffProfile$
-        .pipe(finalize(() => this.loading.dismissLoading()))
+        .pipe(finalize(() => this.loading.dismiss()))
         .subscribe();
     }
     this.events.unsubscribe('user:login');
