@@ -36,9 +36,9 @@
             {{ c.ROOM }} │ {{ c.LOCATION }}
           </ion-label>
           <ion-label no-margin>
-            <a (click)="openStaffDirectoryInfo(c.LECTID)">
+            <a (click)="openStaffDirectoryInfo(c.SAMACCOUNTNAME)">
               <ion-icon padding-right name="contact"></ion-icon>
-              {{ c.NAME }}
+              {{ c.LECTURER_NAME }}
             </a>
           </ion-label>
         </ion-card-content>
@@ -57,12 +57,13 @@
     <ion-card>
       <chart margin-top [type]="type" [data]="data" [options]="options"></chart>
     </ion-card>
-    <!-- <ion-grid>
-      <ion-row justify-content-center align-items-center style="height: 100%">
-        <ion-card class="fee">
-          <ion-label class="amount">RM0</ion-label>
-        </ion-card>
-      </ion-row>
-    </ion-grid> -->
+    <ion-item>Upcoming Exams</ion-item>
+    <ng-container *ngIf='exam$ | async as exam'>
+      <ion-card *ngFor='let e of exam'>
+        <ion-item>{{ e.module }}
+          <p item-right> {{ e.since | date:'medium'}}</p>
+        </ion-item>
+      </ion-card>
+    </ng-container>
   </div>
 </ion-content>

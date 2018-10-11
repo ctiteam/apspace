@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { tap, finalize } from 'rxjs/operators';
 
 import { WsApiProvider } from '../../providers';
-import { FeesTotalSummary } from '../../interfaces';
+import { FeesTotalSummary, ExamSchedule, StudentProfile } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -17,6 +17,7 @@ export class EventsPage {
 
   upcomingClass$: Observable<any[]>;
   holidays$: Observable<any[]>;
+  exam$: Observable<ExamSchedule[]>;
 
   classes: boolean;
 
@@ -53,12 +54,26 @@ export class EventsPage {
           this.classes = true;
         }
       }),
+      tap(_ => this.getOverdueFee()),
+      tap(_ => this.getUpcomingExam()),
       finalize(() => { refresher && refresher.complete(), this.isLoading = false; })
     )
     this.upcomingClass$.subscribe();
+  }
+
+  getOverdueFee(){
     this.ws.get('/student/summary_overall_fee', true).pipe(
-      tap(c => this.getDougnutChart(c[0].TOTAL_PAID, c[0].TOTAL_PAYABLE, c[0].TOTAL_OVERDUE))
+      tap(c => this.getDougnutChart(c[0].TOTAL_PAID, c[0].TOTAL_PAYABLE, c[0].TOTAL_OVERDUE)),
     ).subscribe();
+  }
+
+  getUpcomingExam(){
+    this.ws.get<StudentProfile[]>('/student/profile')
+    .subscribe(p => {
+      let url = `/examination/${p[0].INTAKE_CODE}`;
+      const opt = { auth: false };
+      this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt)
+    })
   }
 
   getDougnutChart(totalPaid: any, totalPayable: any, overdue: any) {
