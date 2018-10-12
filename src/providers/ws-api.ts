@@ -62,7 +62,7 @@ export class WsApiProvider {
     if (endpoint.indexOf('student/') === -1) {
       url = (options.url || this.apiUrl) + endpoint;
       serviceUrl = (options.url || this.apiUrl) + endpoint;
-    } else if(endpoint.indexOf('student/attendance') === 1) {
+    } else if(endpoint.indexOf('student/attendance') !== -1) {
       url = (options.url || this.apiUrl) + endpoint;
       serviceUrl = `${this.apiUrl}/student/attendance`;
     } else {
