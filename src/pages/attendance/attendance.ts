@@ -74,6 +74,7 @@ export class AttendancePage {
   }
 
   getAttendance(intake: string, refresh: boolean = false): Observable<Attendance[]> {
+    this.legend$ = this.ws.get<AttendanceLegend[]>('/student/attendance_legend', true);
     this.isLoading = true;
     this.percent = 0;
     const opt = { params: { id: this.studentId, format: 'json' } };
@@ -85,7 +86,6 @@ export class AttendancePage {
   }
 
   ionViewDidLoad() {
-    this.legend$ = this.ws.get<AttendanceLegend[]>('/student/attendance_legend');
     this.courses$ = this.ws.get<Course[]>('/student/courses').pipe(
       tap(c => this.selectedIntake = c[0].INTAKE_CODE),
       tap(c => this.studentId = c[0].STUDENT_NUMBER),
