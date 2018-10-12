@@ -52,30 +52,25 @@ export class WsApiProvider {
     url?: string,
   } = {}): Observable<T> {
     let url;
-    let serviceUrl;
     const opt = {
       params: options.params || {},
       withCredentials: Boolean(options.auth !== false),
     };
 
     // all student/ still uses old api
-    if (endpoint.indexOf('student/') === -1) {
+    if (endpoint.indexOf('student/') === -1 && endpoint.indexOf('/attendance') === -1) {
       url = (options.url || this.apiUrl) + endpoint;
-      serviceUrl = (options.url || this.apiUrl) + endpoint;
-    } else if (endpoint.indexOf('student/attendance') !== -1) {
-      url = (options.url || this.apiUrl) + endpoint;
-      serviceUrl = `${this.apiUrl}/student/attendance`;
     } else {
       url = (options.url || this.oldApiUrl) + endpoint;
-      serviceUrl = (options.url || this.oldApiUrl) + endpoint;
       // opt.params.source = 'mobile';
     }
 
     return (refresh && (!this.plt.is('cordova') || this.network.type !== 'none')
       ? (options.auth === false // always get ticket if auth is true
         ? this.http.get<T>(url, opt)
-        : this.cas.getST(serviceUrl).pipe(switchMap(st => this.http.get<T>(url,
-          Object.assign(opt, { params: Object.assign(opt.params, { ticket: st }) }))))
+        : this.cas.getST(url.split('?').shift()).pipe( // remove service url params
+          switchMap(ticket => this.http.get<T>(url, { ...opt, params: { ...opt.params, ticket } })),
+        )
       ).pipe(
         tap(cache => this.storage.set(endpoint, cache)),
         timeout(options.timeout || 10000),
