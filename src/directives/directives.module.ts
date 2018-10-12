@@ -6,4 +6,4 @@ import { SwipeAllDirective } from './swipe-all/swipe-all';
   imports: [],
   exports: [SwipeAllDirective],
 })
-export class DirectivesModule {}
+export class DirectivesModule { }

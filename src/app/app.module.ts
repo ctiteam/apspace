@@ -17,9 +17,9 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import {
   BusTrackingProvider, CasTicketProvider, DataCollectorProvider,
-  FeedbackProvider, httpInterceptorProviders,
+  EventsProvider, FeedbackProvider, httpInterceptorProviders,
   NotificationProvider, OperationHoursProvider, RequestCache,
-  RequestCacheWithMapStorage, SettingsProvider, WsApiProvider, EventsProvider,
+  RequestCacheWithMapStorage, SettingsProvider, WsApiProvider,
 } from '../providers';
 import { MyApp } from './app.component';
 

@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { EventsProvider } from '../../providers';
 import { Observable } from 'rxjs/Observable';
-import { tap, finalize } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
+import { EventsProvider } from '../../providers';
 
+import { ExamSchedule, FeesTotalSummary, StudentProfile } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
-import { FeesTotalSummary, ExamSchedule, StudentProfile } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -30,7 +30,7 @@ export class EventsPage {
   options = {
     legend: {
       display: true,
-    }
+    },
   };
 
   constructor(
@@ -48,48 +48,36 @@ export class EventsPage {
   doRefresh(refresher?) {
     this.isLoading = true;
     this.upcomingClass$ = this.eventsProvider.getUpcomingClass().pipe(
-      tap(c => {
-        if (c.length == 0) {
-          this.classes = false;
-        } else {
-          this.classes = true;
-        }
-      }),
+      tap(c => this.classes = c.length !== 0),
       tap(_ => this.getOverdueFee()),
       tap(_ => this.getUpcomingExam()),
-      finalize(() => { refresher && refresher.complete(), this.isLoading = false; })
-    )
+      finalize(() => { refresher && refresher.complete(), this.isLoading = false; }),
+    );
     this.upcomingClass$.subscribe();
   }
 
-  getOverdueFee(){
+  getOverdueFee() {
     this.ws.get('/student/summary_overall_fee', true).pipe(
       tap(c => this.getDougnutChart(c[0].TOTAL_PAID, c[0].TOTAL_PAYABLE, c[0].TOTAL_OVERDUE)),
     ).subscribe();
   }
 
-  getUpcomingExam(){
+  getUpcomingExam() {
     this.ws.get<StudentProfile[]>('/student/profile')
     .subscribe(p => {
-      let url = `/examination/${p[0].INTAKE_CODE}`;
+      const url = `/examination/${p[0].INTAKE_CODE}`;
       const opt = { auth: false };
       this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt).pipe(
-        tap(e => {
-          if (e.length == 0) {
-            this.exam = false;
-          } else {
-            this.exam = true;
-          }
-        })
-      )
-    })
+        tap(e => this.exam = e.length !== 0),
+      );
+    });
   }
 
   getDougnutChart(totalPaid: any, totalPayable: any, overdue: any) {
     const randomColor = [
       'rgba(75, 192, 192, 1)',
       'rgba(255,99,132,1)',
-    ]
+    ];
     this.data = {
       datasets: [{
         data: [totalPaid, overdue],
@@ -103,7 +91,7 @@ export class EventsPage {
     };
   }
 
-  openExamPage(){
+  openExamPage() {
     this.app.getRootNav().push('ExamSchedulePage');
   }
 

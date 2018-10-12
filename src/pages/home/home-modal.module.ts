@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { HomeModalPage } from './home-modal';
 import { ParallaxHeader } from '../../directives/parallax-header/parallax-header';
-
+import { HomeModalPage } from './home-modal';
 
 @NgModule({
   declarations: [
     HomeModalPage,
-    ParallaxHeader
+    ParallaxHeader,
   ],
   imports: [
     IonicPageModule.forChild(HomeModalPage),

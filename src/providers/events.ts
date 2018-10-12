@@ -27,10 +27,10 @@ export class EventsProvider {
         const options = {
           headers: { 'Content-type': 'application/json' },
         };
-        let url = `${this.UPCOMINGCLASS_URL}?ticket=${st}`;
+        const url = `${this.UPCOMINGCLASS_URL}?ticket=${st}`;
         return this.http.get(url, options);
-      })
-    )
+      }),
+    );
   }
 
   /**
@@ -43,9 +43,9 @@ export class EventsProvider {
         const options = {
           headers: { 'Content-type': 'application/json' },
         };
-        let url = `${this.HOLIDAYS_URL}?ticket=${st}`;
+        const url = `${this.HOLIDAYS_URL}?ticket=${st}`;
         return this.http.get(url, options);
-      })
-    )
+      }),
+    );
   }
 }
