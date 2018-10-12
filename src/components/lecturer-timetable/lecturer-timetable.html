@@ -1,24 +1,38 @@
-<div *ngIf="calendar$ | async as calendar">
-  <div *ngFor="let week of calendar" class="schedule-week">
-    <div class="schedule-week-head" (click)='show(week)'>
-      {{ week.week | date }}
-      <span class="right">{{ selectedWeeks.indexOf(week) !== -1 ? '_«' : '»' }}</span>
-    </div>
-    <div *ngIf="selectedWeeks.indexOf(week) !== -1" [@easeInOut]>
-      <div *ngFor="let day of week.days" class="schedule-day">
-        <div class="schedule-day-head center">
-          <span>{{ day.day | date:'d' }}</span>
-          <span>{{ day.day | date:'E' }}</span>
-        </div>
-        <div class="schedule-day-body">
-          <div *ngFor="let event of day.events" class="event">
-            <span class="name">{{ event.name }}</span>
-            <br>
-            <span class="small">{{ event.loc }}</span>
-            <span class="small right">{{ event.start | date:'shortTime' }}</span>
+<ng-template let-calendar [ngIf]="calendar$ | async" [ngIfElse]="loading">
+  <ng-template [ngIf]="calendar.length" [ngIfElse]="empty">
+    <div *ngFor="let week of calendar" class="schedule-week">
+      <div class="schedule-week-head" (click)='show(week, $event.target)'>
+        {{ week.week | date }}
+        <span class="right">{{ selectedWeeks.indexOf(week) !== -1 ? '_«' : '»' }}</span>
+      </div>
+      <div *ngIf="selectedWeeks.indexOf(week) !== -1" [@easeInOut]>
+        <div *ngFor="let day of week.days" class="schedule-day">
+          <div class="schedule-day-head center">
+            <span>{{ day.day | date:'d' }}</span>
+            <span>{{ day.day | date:'E' }}</span>
+          </div>
+          <div class="schedule-day-body">
+            <div *ngFor="let event of day.events" class="event">
+              <span class="name">{{ event.name }}</span>
+              <br>
+              <span class="small">{{ event.intakes.join() }}</span>
+              <br>
+              <span class="small right">
+                {{ event.start | date:'shortTime' }} - {{ event.end | date:'shortTime' }}
+              </span>
+              <span class="small">{{ event.loc }}</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
+  </ng-template>
+  <ng-template #empty>
+    <ion-card>
+      <ion-card-header>No timetable for lecturer!</ion-card-header>
+    </ion-card>
+  </ng-template>
+</ng-template>
+<ng-template #loading>
+  <skeleton-item height="30px" class="schedule-week"></skeleton-item>
+</ng-template>

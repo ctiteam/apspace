@@ -7,6 +7,22 @@ import { map, tap } from 'rxjs/operators';
 import { LecturerTimetable } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
 
+// simple local interface used for displaying data
+interface DispCalEvent {
+  week: Date;
+  days: Array<{
+    day: Date,
+    events: Array<{
+      name: string,
+      type: 'lecturerTimetable',
+      intake: string[],
+      start: string,
+      end: number,
+      loc: string,
+    }>,
+  }>;
+}
+
 @Component({
   selector: 'lecturer-timetable',
   templateUrl: 'lecturer-timetable.html',
@@ -27,20 +43,8 @@ export class LecturerTimetableComponent implements OnInit {
 
   @Input() id: string;
 
-  calendar$: Observable<Array<{
-    week: Date,
-    days: Array<{
-      day: Date,
-      events: Array<{
-        name: string,
-        type: 'lecturerTimetable',
-        start: string,
-        end: string,
-        loc: string,
-      }>,
-    }>,
-  }>>;
-  selectedWeeks = [];
+  calendar$: Observable<DispCalEvent[]>;
+  selectedWeeks: DispCalEvent[] = [];
 
   constructor(private ws: WsApiProvider) { }
 
@@ -49,29 +53,30 @@ export class LecturerTimetableComponent implements OnInit {
     // new Date('1970-01-06').getTime() + new Date().getTimezoneOffset() * 60 * 1000 - 1
     const lastDateOfWeekZero = 431999999;
 
-    const endpoint = '/lecturer-timetable/' + this.id;
+    const endpoint = '/lecturer-timetable/v2/' + this.id;
     this.calendar$ = this.ws.get<LecturerTimetable[]>(endpoint, true, { auth: false }).pipe(
       map(data => {
         const t = {} as any; // temporary Map for data processing
         data.forEach(d => {
-          const since = new Date(d.since);
+          const time = new Date(d.time);
 
           // unique week - subtract from week zero and by 7 * 24 * 60 * 60 * 1000
-          const week = Math.floor((since.getTime() - lastDateOfWeekZero) / 604800000);
+          const week = Math.floor((time.getTime() - lastDateOfWeekZero) / 604800000);
           t[week] = t[week] || {};
 
-          const day = since.getDay();
+          const day = time.getDay();
           t[week][day] = (t[week][day] || []).concat({
             type: 'lecturerTimetable',
             name: d.module,
-            start: since,
-            end: d.until,
-            loc: `${d.room} @ ${d.location}`,
+            start: time,
+            end: time.getTime() - d.duration * 1000,
+            loc: d.room + ' ' + d.location,
+            intakes: d.intakes,
           });
         });
 
         return Object.keys(t).map(w => {
-          // convert week since epoch to date (*weekMagic + 2d)
+          // convert week time epoch to date (*weekMagic + 2d)
           const week = parseInt(w, 10) * 604800000 + 259200000;
           return {
             week: new Date(week),
@@ -89,9 +94,10 @@ export class LecturerTimetableComponent implements OnInit {
   }
 
   /** Display schedule. */
-  show(week: any) {
+  show(week: DispCalEvent, el: HTMLElement) {
     if (this.selectedWeeks.indexOf(week) === -1) {
       this.selectedWeeks.push(week);
+      setTimeout(() => el.parentElement.scrollIntoView({ behavior: 'smooth' }), 100);
     } else {
       this.selectedWeeks.splice(this.selectedWeeks.indexOf(week), 1);
     }

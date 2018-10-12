@@ -24,7 +24,7 @@ lecturer-timetable {
 
   .schedule-week-head {
     font-size: large;
-    margin: 15px 5px;
+    padding: 5px 5px 15px;  /* use padding for larger press area */
   }
 
   .schedule-day {
@@ -34,7 +34,7 @@ lecturer-timetable {
 
   .schedule-day-head {
     background-color: lightgray;
-    width: 50px;
+    min-width: 50px;
     height: 50px;
     margin-right: 8px;
     border-radius: 100%;
@@ -45,6 +45,7 @@ lecturer-timetable {
 
   .schedule-day-body {
     flex: 1;
+    min-width: 0;   /* limit width of container */
   }
 
   .event {
@@ -52,5 +53,14 @@ lecturer-timetable {
     padding: 8px;
     margin-bottom: 5px;
     border-radius: 3px;
+
+    /* scroll long text but stick to box if possible */
+    overflow-x: scroll;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  skeleton-item {
+    padding-bottom: 15px !important;
   }
 }

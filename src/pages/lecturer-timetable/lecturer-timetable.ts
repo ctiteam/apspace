@@ -17,7 +17,7 @@ export class LecturerTimetablePage {
 
   ionViewDidLoad() {
     this.ws.get<StaffProfile[]>('/staff/profile')
-      .subscribe(p => this.lecturerId = (p[0] || {} as StaffProfile).EXTENSION);
+      .subscribe(p => this.lecturerId = (p[0] || {} as StaffProfile).ID);
   }
 
 }
