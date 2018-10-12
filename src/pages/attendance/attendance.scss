@@ -90,15 +90,4 @@ page-attendance {
     stroke: #444;
     fill: #222;
   }
-
-  .legend{
-    background-color: color($colors, danger);
-    color: color($colors, light);
-  }
-
-  .legend-title{
-    background-color: color($colors, danger);
-    color: color($colors, light);
-    font-weight: 900;
-  }
 }

@@ -44,60 +44,14 @@
       </ion-item>
     </ng-container>
 
-    <ion-card class="legend" *ngIf="legend$ | async as legend">
-      <ion-item class="legend-title">
-        Legend
-      </ion-item>
-      <ion-grid>
-        <ion-row>
-          <ion-col col-2>
-            Eligible
-          </ion-col>
-          <ion-col col-10>
-            {{ legend['Eligible'] }}
-          </ion-col>
+    <ion-card color="warn" *ngIf="legend$ | async as legend">
+      <ion-card-header><h2>Legend</h2></ion-card-header>
+      <ion-card-content>
+        <ion-row *ngFor="let l of objectKeys(legend)">
+          <ion-col col-3>{{ l }}</ion-col>
+          <ion-col col-9>{{ legend[l] }}</ion-col>
         </ion-row>
-        <ion-row>
-          <ion-col col-2>
-            BA
-          </ion-col>
-          <ion-col col-10>
-            {{ legend['BA'] }}
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-2>
-            BF
-          </ion-col>
-          <ion-col col-10>
-            {{ legend['BF'] }}
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-2>
-            BD
-          </ion-col>
-          <ion-col col-10>
-            {{ legend['BD'] }}
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-2>
-            N/A
-          </ion-col>
-          <ion-col col-10>
-              {{ legend['N/A'] }}
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-2>
-            ***
-          </ion-col>
-          <ion-col col-10>
-              {{ legend['***'] }}
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      </ion-card-content>
     </ion-card>
   </div>
 </ion-content>

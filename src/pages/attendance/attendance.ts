@@ -22,6 +22,8 @@ import { WsApiProvider } from '../../providers';
 
 export class AttendancePage {
 
+  objectKeys = Object.keys; /** bindings for template */
+
   attendance$: Observable<Attendance[]>;
   courses$: Observable<Course[]>;
   legend$: Observable<AttendanceLegend[]>;
