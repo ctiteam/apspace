@@ -58,7 +58,7 @@ export class WsApiProvider {
     };
 
     // all student/ still uses old api
-    if (endpoint.indexOf('student/') === -1 && endpoint.indexOf('/attendance') === -1) {
+    if (endpoint.indexOf('student/') === -1 || endpoint.indexOf('/attendance') !== -1) {
       url = (options.url || this.apiUrl) + endpoint;
     } else {
       url = (options.url || this.oldApiUrl) + endpoint;

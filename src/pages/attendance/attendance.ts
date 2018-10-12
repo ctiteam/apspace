@@ -76,7 +76,7 @@ export class AttendancePage {
   }
 
   getAttendance(intake: string, refresh: boolean = false): Observable<Attendance[]> {
-    this.legend$ = this.ws.get<AttendanceLegend[]>('/student/attendance_legend', true);
+    this.legend$ = this.ws.get<AttendanceLegend[]>('/student/attendance_legend', refresh);
     this.isLoading = true;
     this.percent = 0;
     const opt = { params: { id: this.studentId, format: 'json' } };
