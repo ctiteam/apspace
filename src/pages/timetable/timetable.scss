@@ -1,6 +1,7 @@
 page-timetable {
   ion-content ion-card-content a {
     text-decoration: none;
+    cursor: pointer;
   }
 
   ion-content ion-card-content ion-icon {
@@ -15,7 +16,7 @@ page-timetable {
   .toolbar-ios ion-title {
     padding: 0 12px 1px;
   }
-  
+
   .toolbar-title-ios {
     text-align: left;
   }
