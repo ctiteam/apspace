@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Device } from '@ionic-native/device';
-import { NetworkInterface } from '@ionic-native/network-interface';
 import { Observable } from 'rxjs/Observable';
-import { fromPromise } from 'rxjs/observable/fromPromise';
 import { switchMap } from 'rxjs/operators';
 
 import { CasTicketProvider } from '../providers';
@@ -21,7 +19,6 @@ export class DataCollectorProvider {
     public http: HttpClient,
     private device: Device,
     private injector: Injector,
-    private networkInterface: NetworkInterface,
   ) { }
 
   /**
@@ -29,11 +26,11 @@ export class DataCollectorProvider {
    *
    */
   sendDeviceInfo(): Observable<any> {
-    let ip: any;
+    let ip: string;
     this.cas = this.injector.get(CasTicketProvider);
-    return fromPromise(this.networkInterface.getWiFiIPAddress()).pipe(
+    return this.http.get('https://api.ipify.org?format=json').pipe(
       switchMap(responseIP => {
-        ip = responseIP.ip;
+        ip = responseIP['ip'];
         return this.cas.getST(this.SERVICE_URL);
       }),
       switchMap(st => {
@@ -44,7 +41,7 @@ export class DataCollectorProvider {
           os: this.device.version,
           service_ticket: st,
           uuid: this.device.uuid,
-          wifi: 'testing',
+          wifi: 't',
         };
         const options = {
           headers: { 'Content-type': 'application/json' },
