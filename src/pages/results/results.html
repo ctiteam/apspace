@@ -32,7 +32,7 @@
   <chart margin-top *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
 
   <ion-card>
-    <div *ngFor="let details of courseDetails$ | async" class="total-summary">
+    <div *ngFor="let details of courseDetails$ | async:trackBy: trackByFn" class="total-summary">
       <div *ngIf="details.SEMESTER">
         <ion-card-header class="semester-header" color="light">SEMESTER {{details.SEMESTER}}</ion-card-header>
         <ion-item class="total-summary">
@@ -48,7 +48,7 @@
   </ion-card>
 
   <ng-template let-results [ngIf]="results$ | async">
-    <ion-card *ngFor="let result of results | sem">
+    <ion-card *ngFor="let result of results;trackBy: trackByFn">
       <ion-list>
         <ion-item class="subj-title">
           {{result.MODULE_DESCRIPTION}}

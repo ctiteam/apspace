@@ -203,4 +203,8 @@ export class ResultsPage {
       actionSheet.present();
     }
   }
+
+  trackByFn(index, item) {
+    return index;
+  }
 }
