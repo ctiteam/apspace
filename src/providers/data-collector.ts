@@ -9,7 +9,7 @@ import { CasTicketProvider } from '../providers';
 @Injectable()
 export class DataCollectorProvider {
 
-  DATACOLLECTOR_URL = 'https://4tkasy3xf6.execute-api.ap-southeast-1.amazonaws.com/api';
+  DATACOLLECTOR_URL = 'https://3mv92hk9xe.execute-api.ap-southeast-1.amazonaws.com/api';
   SERVICE_URL = 'http://ws.apiit.edu.my';
   results = {};
 
