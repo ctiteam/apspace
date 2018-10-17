@@ -70,16 +70,9 @@ export class ResultsPage {
       .get<Subcourse>(`/student/subcourses?intake=${intake}`, refresh, opt)
       .pipe(
         tap(_ => this.getCourseDetails(intake)),
-        tap(r => this.seperateBySemesters(r)),
         tap(r => this.getLegend(intake, r)),
         finalize(() => this.isLoading = false),
       ));
-  }
-
-  seperateBySemesters(results: any) {
-    this.semester1 = results.filter(res => +res.SEMESTER === 1);
-    this.semester2 = results.filter(res => +res.SEMESTER === 2);
-    this.semester3 = results.filter(res => +res.SEMESTER === 3);
   }
 
   ionViewDidLoad() {

@@ -47,32 +47,8 @@
     </div>
   </ion-card>
 
-  <div *ngIf="results$ | async">
-    <ion-card *ngFor="let result of semester3">
-      <ion-list>
-        <ion-item class="subj-title">
-          {{result.MODULE_DESCRIPTION}}
-        </ion-item>
-        <ion-item>
-          <ion-label>Grade</ion-label>
-          <div item-content>{{ result.GRADE || 'N/A' }}</div>
-        </ion-item>
-        <ion-item>
-          <ion-label>Grade Point</ion-label>
-          <div item-content>{{ result.GRADE_POINT || 'N/A' }}</div>
-        </ion-item>
-        <ion-item>
-          <ion-label>Internal Result Release Date</ion-label>
-          <div item-content>{{ result.INTERNAL_RESULT_RELEASE_DATE_ISO | date }}</div>
-        </ion-item>
-        <ion-item *ngIf="result.RECOMMENDATION">
-          <ion-label>Recommendation</ion-label>
-          <div item-content>{{ result.RECOMMENDATION }}</div>
-        </ion-item>
-      </ion-list>
-    </ion-card>
-
-    <ion-card *ngFor="let result of semester2">
+  <ng-template let-results [ngIf]="results$ | async">
+    <ion-card *ngFor="let result of results | sem">
       <ion-list>
         <ion-item class="subj-title">
           {{result.MODULE_DESCRIPTION}}
@@ -95,31 +71,7 @@
         </ion-item>
       </ion-list>
     </ion-card>
-
-    <ion-card *ngFor="let result of semester1">
-      <ion-list>
-        <ion-item class="subj-title">
-          {{result.MODULE_DESCRIPTION}}
-        </ion-item>
-        <ion-item>
-          <ion-label>Grade</ion-label>
-          <div item-content>{{ result.GRADE || 'N/A' }}</div>
-        </ion-item>
-        <ion-item>
-          <ion-label>Grade Point</ion-label>
-          <div item-content>{{ result.GRADE_POINT || 'N/A' }}</div>
-        </ion-item>
-        <ion-item>
-          <ion-label>Internal Result Release Date</ion-label>
-          <div item-content>{{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A' }}</div>
-        </ion-item>
-        <ion-item *ngIf="result.RECOMMENDATION">
-          <ion-label>Recommendation</ion-label>
-          <div item-content>{{ result.RECOMMENDATION }}</div>
-        </ion-item>
-      </ion-list>
-    </ion-card>
-  </div>
+  </ng-template>
 
   <ng-template [ngIf]="!block">
     <ion-card *ngIf='interimLegend$ | async as interims'>
@@ -148,7 +100,8 @@
             R = Awarding of module credit by passing module referral assessments.
           </ion-note>
           <ion-note margin-top>
-            C = Awarding of module credit through compensation at the discretion of the Examination Board, based on the student's
+            C = Awarding of module credit through compensation at the discretion of the Examination Board, based on
+            the student's
             overall academic performance. No referral assessment is requried for module.
           </ion-note>
           <ion-note *ngIf="mpuLegend$ | async as mpu" margin-top>
