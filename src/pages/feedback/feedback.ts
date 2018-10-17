@@ -37,9 +37,9 @@ export class FeedbackPage {
   ionViewDidLoad() {
     const role = this.settings.get('role');
     if (role & Role.Student) {
-      this.ws.get<StudentProfile[]>('/student/profile').subscribe(p => {
-        this.info.name = p[0].NAME;
-        this.info.email = p[0].STUDENT_NUMBER + '@mail.apu.edu.my';
+      this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+        this.info.name = p.NAME;
+        this.info.email = p.STUDENT_NUMBER + '@mail.apu.edu.my';
       });
     } else if (role & (Role.Lecturer || Role.Admin)) {
       this.ws.get<StaffProfile[]>('/staff/profile').subscribe(p => {

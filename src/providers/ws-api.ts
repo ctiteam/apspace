@@ -60,6 +60,8 @@ export class WsApiProvider {
     // all student/ still uses old api
     if (endpoint.indexOf('student/') === -1 || endpoint.indexOf('/attendance') !== -1) {
       url = (options.url || this.apiUrl) + endpoint;
+    } else if (endpoint.indexOf('/profile') !== -1) {
+      url = (options.url || this.apiUrl) + endpoint;
     } else {
       url = (options.url || this.oldApiUrl) + endpoint;
       // opt.params.source = 'mobile';

@@ -81,9 +81,9 @@ export class ExamSchedulePage {
       this.intake = intake;
       this.doRefresh();
     } else {
-      this.ws.get<StudentProfile[]>('/student/profile')
+      this.ws.get<StudentProfile>('/student/profile')
         .subscribe(p => {
-          this.intake = p[0].INTAKE_CODE;
+          this.intake = p.INTAKE;
           this.doRefresh();
         });
     }

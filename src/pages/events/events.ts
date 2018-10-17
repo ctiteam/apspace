@@ -63,9 +63,9 @@ export class EventsPage {
   }
 
   getUpcomingExam() {
-    this.ws.get<StudentProfile[]>('/student/profile')
+    this.ws.get<StudentProfile>('/student/profile')
     .subscribe(p => {
-      const url = `/examination/${p[0].INTAKE_CODE}`;
+      const url = `/examination/${p.INTAKE}`;
       const opt = { auth: false };
       this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt).pipe(
         tap(e => this.exam = e.length !== 0),

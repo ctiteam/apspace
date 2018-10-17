@@ -26,7 +26,7 @@ export class ResultsPage {
   mpuLegend$: Observable<MPULegend[]>;
   determinationLegend$: Observable<DeterminationLegend[]>;
   classificationLegend$: Observable<ClassificationLegend[]>;
-  profile$: Observable<StudentProfile[]>;
+  profile$: Observable<StudentProfile>;
 
   type = 'bar';
   data: any;
@@ -76,8 +76,8 @@ export class ResultsPage {
   }
 
   ionViewDidLoad() {
-    this.ws.get<StudentProfile[]>('/student/profile').subscribe(p => {
-      if (p[0].BLOCK === true) {
+    this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+      if (p.BLOCK === true) {
         this.block = false;
         this.intakes$ = this.ws.get<Course[]>('/student/courses')
           .pipe(

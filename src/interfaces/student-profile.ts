@@ -2,7 +2,7 @@ export interface StudentProfile {
   STUDENT_NUMBER: string;
   COUNTRY: string;
   NAME: string;
-  INTAKE_CODE: string;
+  INTAKE: string;
   PROGRAMME: string;
   MENTOR_PROGRAMME_LEADER: string;
   STUDENT_STATUS: string;

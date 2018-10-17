@@ -33,7 +33,7 @@ export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
 
   photo$: Observable<StudentPhoto[]>;
-  profile$: Observable<StudentProfile[]>;
+  profile$: Observable<StudentProfile>;
   staffProfile$: Observable<StaffProfile[]>;
   notification: any;
   loading: any;
@@ -114,7 +114,7 @@ export class MyApp {
     const role = this.settings.get('role');
     if (role & Role.Student) {
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
-      this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
+      this.profile$ = this.ws.get<StudentProfile>('/student/profile');
       forkJoin([this.profile$, this.photo$])
         .pipe(finalize(() => this.loading.dismiss()))
         .subscribe();
@@ -132,8 +132,8 @@ export class MyApp {
     if (this.platform.is('cordova')) {
       const role = this.settings.get('role');
       if (role & Role.Student) {
-        this.ws.get<StudentProfile[]>('/student/profile').subscribe(p => {
-          this.unsubscribeNotification(p[0].STUDENT_NUMBER);
+        this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+          this.unsubscribeNotification(p.STUDENT_NUMBER);
           this.logout();
         });
       } else if (role & (Role.Lecturer | Role.Admin)) {

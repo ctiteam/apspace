@@ -14,30 +14,30 @@
       <img class="profile-photo" [src]="(staffProfile$ | async)[0]?.PHOTO" onerror="this.src='assets/img/profile.svg'" alt="Avatar">
     </ng-template>
   </div>
-  <ng-container *ngIf="profile$ | async as profile">
+  <ng-template let-profile [ngIf]="profile$ | async">
     <ion-card class="profile-info">
       <p class="bold">
-        {{ (profile || [{}])[0]?.NAME }}</p>
+        {{ (profile || [{}])?.NAME }}</p>
       <p class="bold">
-        {{ (profile || [{}])[0]?.STUDENT_NUMBER}}
+        {{ (profile || [{}])?.STUDENT_NUMBER}}
       </p>
     </ion-card>
     <ion-card class="ion-card-style">
       <ion-card-content class="text-left">
         <p class="bold">Country:</p>
-        <p>{{ (profile || [{}])[0]?.COUNTRY }}</p>
+        <p>{{ (profile || [{}])?.COUNTRY }}</p>
         <br class="break">
         <p class="bold">Current Intake Code:</p>
-        <p>{{ (profile || [{}])[0]?.INTAKE_CODE }}</p>
+        <p>{{ (profile || [{}])?.INTAKE }}</p>
         <br class="break">
         <p class="bold">Programme:</p>
-        <p>{{ (profile || [{}])[0]?.PROGRAMME }}</p>
+        <p>{{ (profile || [{}])?.PROGRAMME }}</p>
         <br class="break">
         <p class="bold">Programme Leader:</p>
-        <p>{{ (profile || [{}])[0]?.PL_NAME }}</p>
+        <p>{{ (profile || [{}])?.PL_NAME }}</p>
         <br class="break">
         <p class="bold">Mentor Name:</p>
-        <p>{{ (profile || [{}])[0]?.MENTOR_NAME }}</p>
+        <p>{{ (profile || [{}])?.MENTOR_NAME }}</p>
         <br class="break">
       </ion-card-content>
     </ion-card>
@@ -47,10 +47,10 @@
         <ion-icon item-left [name]='p.icon'></ion-icon>
       </button>
     </ion-card>
-  </ng-container>
+  </ng-template>
 
   <!-- Staff Profile -->
-  <ng-container *ngIf="staffProfile$ | async as staffProfile">
+  <ng-template let-staffProfile [ngIf]="staffProfile$ | async">
     <ion-card class="profile-info">
       <p class="bold">
         {{ (staffProfile || [{}])[0]?.FULLNAME }}</p>
@@ -77,6 +77,6 @@
         <br class="break">
       </ion-card-content>
     </ion-card>
-  </ng-container>
+  </ng-template>
 
 </ion-content>

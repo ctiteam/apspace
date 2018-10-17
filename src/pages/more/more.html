@@ -11,14 +11,14 @@
           </ng-template>
         </ion-col>
         <ion-col col-9>
-          <ng-template [ngIf]="profile$ | async">
-            <p class="name">{{ ((profile$ | async) || [{}])[0]?.NAME }}
+          <ng-template let-profile [ngIf]="profile$ | async">
+            <p class="name">{{ (profile || [{}])?.NAME }}
               <br>
-              <br> {{ ((profile$ | async) || [{}])[0]?.STUDENT_NUMBER }}
+              <br> {{ (profile || [{}])?.STUDENT_NUMBER }}
             </p>
           </ng-template>
-          <ng-template [ngIf]="staffProfile$ | async">
-            <p class="staffName">{{ ((staffProfile$ | async) || [{}])[0]?.FULLNAME }}</p>
+          <ng-template let-staffProfile [ngIf]="staffProfile$ | async">
+            <p class="staffName">{{ (staffProfile || [{}])[0]?.FULLNAME }}</p>
           </ng-template>
         </ion-col>
       </ion-row>

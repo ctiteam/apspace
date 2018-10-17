@@ -13,7 +13,7 @@ import { SettingsProvider, WsApiProvider } from '../../providers';
 export class ProfilePage {
 
   photo$: Observable<StudentPhoto[]>;
-  profile$: Observable<StudentProfile[]>;
+  profile$: Observable<StudentProfile>;
   staffProfile$: Observable<StaffProfile[]>;
 
   pages = [
@@ -29,7 +29,7 @@ export class ProfilePage {
     const role = this.settings.get('role');
     if (role & Role.Student) {
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
-      this.profile$ = this.ws.get<StudentProfile[]>('/student/profile');
+      this.profile$ = this.ws.get<StudentProfile>('/student/profile');
     } else if (role & (Role.Lecturer | Role.Admin)) {
       this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
     }

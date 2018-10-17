@@ -186,8 +186,8 @@ export class TimetablePage {
     this.intake = this.settings.get('intake');
     // default intake to student current intake
     if (this.intake === undefined) {
-      this.ws.get<StudentProfile[]>('/student/profile').subscribe(p => {
-        this.intake = (p[0] || {} as StudentProfile).INTAKE_CODE || '';
+      this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+        this.intake = (p || {} as StudentProfile).INTAKE || '';
         this.settings.set('intake', this.intake);
       });
     }
