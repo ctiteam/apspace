@@ -26,7 +26,6 @@ export class ResultsPage {
   mpuLegend$: Observable<MPULegend[]>;
   determinationLegend$: Observable<DeterminationLegend[]>;
   classificationLegend$: Observable<ClassificationLegend[]>;
-  profile$: Observable<StudentProfile>;
 
   type = 'bar';
   data: any;
@@ -38,6 +37,7 @@ export class ResultsPage {
   intakeLabels: any;
   block: boolean = false;
   results: any;
+  message: string;
 
   options = {
     legend: {
@@ -88,6 +88,7 @@ export class ResultsPage {
           );
       } else {
         this.block = true;
+        this.message = p.MESSAGE;
       }
     });
   }
