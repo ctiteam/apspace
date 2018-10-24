@@ -61,36 +61,41 @@ export class MyApp {
     ])).then(values => {
       const tgt = values[1];
       if (tgt) { // check if the user is logged in
-        if (this.platform.is('cordova')) {
-          this.notificationService.getMessage().subscribe();
-        }
         this.events.subscribe('user:logout', () => this.onLogout());
         this.navCtrl.setRoot('TabsPage');
-        if (this.notification) {
-          this.notificationService.sendRead(parseInt(this.notification.message_id, 10)).subscribe(_ => {
-            this.navCtrl.push('NotificationModalPage', { itemDetails: this.notification });
-          });
+        if (this.platform.is('cordova')) {
+          this.checkNewNotification();
+          this.notificationService.getMessage().subscribe();
         }
       } else {
         this.events.subscribe('user:login', () => this.onLogin());
+        if (this.platform.is('cordova')) {
+          this.checkNewNotification();
+        }
         this.navCtrl.setRoot('LoginPage');
       }
-
       if (this.platform.is('cordova')) {
-        this.statusBar.overlaysWebView(false);
-        this.fcm.onNotification().subscribe(data => {
-          if (data.wasTapped) {
-            this.notification = data;
-          } else {
-            this.presentConfirm(data);
-            this.events.publish('newNotification');
-          }
-        });
+        if (this.platform.is('ios')) {
+          this.statusBar.overlaysWebView(false);
+        }
         if (this.network.type === 'none') {
           this.toastCtrl
             .create({ message: 'You are now offline.', duration: 3000 })
             .present();
         }
+      }
+    });
+  }
+
+  checkNewNotification() {
+    this.fcm.onNotification().subscribe(data => {
+      if (data.wasTapped) {
+        this.notificationService.sendRead(parseInt(data.message_id, 10)).subscribe(_ => {
+          this.navCtrl.push('NotificationModalPage', { itemDetails: data });
+        });
+      } else {
+        this.presentConfirm(data);
+        this.events.publish('newNotification');
       }
     });
   }
