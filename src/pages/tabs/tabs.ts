@@ -7,7 +7,8 @@ import {
 } from 'ionic-angular';
 
 import { Role } from '../../interfaces';
-import { NotificationProvider, SettingsProvider,
+import {
+  NotificationProvider, SettingsProvider,
 } from '../../providers';
 
 @IonicPage()
@@ -63,7 +64,9 @@ export class TabsPage {
 
     this.plt.ready().then(() => {
       if (this.plt.is('cordova')) {
-        this.statusBar.backgroundColorByHexString('#4da9ff');
+        if (this.plt.is('ios')) {
+          this.statusBar.backgroundColorByHexString('#4da9ff');
+        }
         this.events.subscribe('user:logout', _ => this.back && this.back());
         this.back = this.plt.registerBackButtonAction(() => {
           if (this.app.getRootNav().canGoBack()) {
