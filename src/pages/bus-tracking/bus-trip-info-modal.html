@@ -16,8 +16,7 @@
             Timings
           </ion-segment-button>
           <!-- Use CSS for dynamic segment, fixed in Ionic 4 -->
-          <ion-segment-button value='location'
-            [style.display]="tripDetails ? 'block' : 'none'">
+          <ion-segment-button value='location' [style.display]="tripDetails ? 'block' : 'none'">
             Location
           </ion-segment-button>
         </ion-segment>
@@ -46,22 +45,16 @@
           <ion-card *ngIf="tripDetails != undefined">
             <ion-card-header>Address:</ion-card-header>
             <ion-card-content>
-              <p *ngIf="tripDetails['address'][0]['firstStreet']">{{tripDetails['address'][0]['firstStreet']}},
-                <br *ngIf='tripDetails["address"][0]["secondStreet"] !== "" ' />
-                {{tripDetails['address'][0]['secondStreet']}},
-                <br *ngIf='tripDetails["address"][0]["area"] !== "" ' /> {{tripDetails['address'][0]['area']}},
-                <br *ngIf='tripDetails["address"][0]["city"] !== "" ' /> {{tripDetails['address'][0]['city']}}
-                <br *ngIf='tripDetails["address"][0]["state"] !== "" ' /> {{tripDetails['address'][0]['state']}}
-                <br *ngIf='tripDetails["address"][0]["postalCode"] !== "" ' />
-                {{tripDetails['address'][0]['postalCode']}}
-                <br *ngIf='tripDetails["address"][0]["contactNumber"] !== "" ' /><a [href]="'tel:' + tripDetails['address'][0]['contactNumber']">{{tripDetails['address'][0]['contactNumber']}}</a>
+              <p *ngIf="tripDetails['location_full_address']['location_address']">{{tripDetails['location_full_address']['location_address']}}
+                <br *ngIf='tripDetails["location_full_address"]["location_contact_number"] !== "" ' /><a [href]="'tel:' + tripDetails['location_full_address']['location_contact_number']">{{tripDetails['location_full_address']['location_contact_number']}}</a>
               </p>
             </ion-card-content>
           </ion-card>
-          <ion-card style="height: 17.5em !important;">
+          <ion-card style="height: 100% !important;">
             <ion-card-header>Pick Up Location:</ion-card-header>
-            <ion-card-content style="height: 14.5em !important;">
-              <img style="width: 100% !important; height: 100% !important;" src="{{tripDetails['locationImg']}}" alt="">
+            <ion-card-content style="height: 100% !important;">
+              <img style="width: 100% !important; height: 400% !important;" src="{{tripDetails['location_image_path']}}"
+                alt="">
             </ion-card-content>
           </ion-card>
         </div>
