@@ -111,16 +111,15 @@ export class MyApp {
     this.presentLoading();
     if (this.platform.is('cordova')) {
       forkJoin(
-        [
-          this.notificationService.getMessage(),
-          this.dataCollector.sendDeviceInfo(),
-        ]).subscribe();
+        this.notificationService.getMessage(),
+        this.dataCollector.sendDeviceInfo(),
+      ).subscribe();
     }
     const role = this.settings.get('role');
     if (role & Role.Student) {
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
       this.profile$ = this.ws.get<StudentProfile>('/student/profile');
-      forkJoin([this.profile$, this.photo$])
+      forkJoin(this.profile$, this.photo$)
         .pipe(finalize(() => this.loading.dismiss()))
         .subscribe();
     } else if (role & (Role.Lecturer | Role.Admin)) {

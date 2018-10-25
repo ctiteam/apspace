@@ -36,7 +36,7 @@ export class FeesPage {
     this.summary$ = this.ws.get('/student/outstanding_fee', true);
     this.bankDraft$ = this.ws.get('/student/bankdraft_amount', true);
     this.details$ = this.ws.get('/student/overall_fee', true);
-    forkJoin([this.totalSummary$, this.summary$]).pipe(
+    forkJoin(this.totalSummary$, this.summary$).pipe(
       finalize(() => this.isLoading = false),
     ).subscribe();
   }
