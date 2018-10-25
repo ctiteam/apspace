@@ -20,7 +20,7 @@ import { BusTrackingProvider, SettingsProvider } from '../../providers';
 })
 export class BusTrackingPage {
   locations: Location[];
-
+  // pickUpLocationDetails: LocationDetails;
   pickUpLocationDetails: any;
 
   selectedDay: string;
@@ -87,9 +87,6 @@ export class BusTrackingPage {
 
   ionViewDidLoad() {
     this.getTrips();
-    this.busProv
-      .getLocationDetails()
-      .subscribe(data => (this.pickUpLocationDetails = data));
   }
 
   ionViewDidLeave() {
@@ -104,23 +101,28 @@ export class BusTrackingPage {
       enableBackdropDismiss: true,
       cssClass: 'busTrackingModal',
     };
-    tripDetails = this.pickUpLocationDetails.locations.find(
-      location => this.selectedFrom === location.location_nice_name,
-    );
-    console.log(tripDetails);
 
-    // XXX: Technical debt for transition to Ionic 4 (pass object)
-    const busTrackingModal = this.modalCtrl.create(
-      'BusTripInfoModalPage',
-      {
-        trips,
-        tripDetails,
-        selectedFrom: this.selectedFrom,
-        section,
-        nextTrip,
+    this.busProv.getLocationDetails().subscribe(
+      data => (this.pickUpLocationDetails = data),
+      error => console.log('Error:', error),
+      () => {
+        tripDetails = this.pickUpLocationDetails.locations.find(
+          location => this.selectedFrom === location.location_nice_name,
+        );
+        const busTrackingModal = this.modalCtrl.create(
+          'BusTripInfoModalPage',
+          {
+            trips,
+            tripDetails,
+            selectedFrom: this.selectedFrom,
+            section,
+            nextTrip,
+          },
+          modalOpts,
+        );
+        busTrackingModal.present();
       },
-      modalOpts,
     );
-    busTrackingModal.present();
+    // XXX: Technical debt for transition to Ionic 4 (pass object)
   }
 }

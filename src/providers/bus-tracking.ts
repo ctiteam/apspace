@@ -1,14 +1,15 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
-import { Observable } from "rxjs/Observable";
-import { publishLast, refCount } from "rxjs/operators";
+import { Observable } from 'rxjs/Observable';
+import { publishLast, refCount } from 'rxjs/operators';
 
-import { BusTrips } from "../interfaces";
+import { BusTrips, LocationDetails } from '../interfaces';
 
 @Injectable()
 export class BusTrackingProvider {
-  busTrackingUrl = "https://api.apiit.edu.my/transix";
+  busTrackingUrl = 'https://api.apiit.edu.my/transix';
+  url = `${this.busTrackingUrl}/locations`;
 
   constructor(public http: HttpClient) {}
 
@@ -21,7 +22,7 @@ export class BusTrackingProvider {
     const url = `${this.busTrackingUrl}/trips`;
     return this.http.get<BusTrips>(url).pipe(
       publishLast(),
-      refCount()
+      refCount(),
     );
   }
 
