@@ -69,7 +69,10 @@ export class TabsPage {
         }
         this.events.subscribe('user:logout', _ => this.back && this.back());
         this.back = this.plt.registerBackButtonAction(() => {
-          if (this.app.getRootNav().canGoBack()) {
+          const overlay = this.app._appRoot._overlayPortal.getActive();
+          if (overlay && overlay.dismiss) {
+            overlay.dismiss();
+          } else if (this.app.getRootNav().canGoBack()) {
             this.app.getRootNav().pop();
           } else if (this.exit) {
             this.plt.exitApp();
