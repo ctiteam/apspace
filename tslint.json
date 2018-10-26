@@ -10,7 +10,8 @@
     "no-unused-expression": [true, "allow-fast-null-checks"],
     "object-literal-sort-keys": false,
     "quotemark": [true, "single", "avoid-escape"],
-    "no-console": [false, "log", "error"]
+    "no-console": [false, "log", "error"],
+    "no-var-keyword": true,
   },
   "rulesDirectory": [
     "node_modules/tslint-eslint-rules/dist/rules"
