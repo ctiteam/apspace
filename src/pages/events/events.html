@@ -20,8 +20,8 @@
       </ion-item>
     </ng-container>
 
-    <ng-template [ngIf]='classes'>
-      <ion-card *ngFor='let c of upcomingClass$ | async'>
+    <ng-template let-classes [ngIf]='upcomingClass$ | async' [ngIfElse]='noclasses'>
+      <ion-card *ngFor='let c of classes'>
         <ion-card-header>
           {{ c.SUBJECT_CODE }}
         </ion-card-header>
@@ -44,31 +44,48 @@
         </ion-card-content>
       </ion-card>
     </ng-template>
-    <ng-template [ngIf]='!classes'>
+    <ng-template #noclasses>
       <ion-card padding>
         <ion-note>You have no upcoming class for today</ion-note>
       </ion-card>
     </ng-template>
+
     <ion-item>Upcoming Holiday</ion-item>
-    <ion-card padding>
-      <ion-note>You have no upcoming holidays</ion-note>
-    </ion-card>
+    <ng-template let-holiday [ngIf]="holidays" [ngIfElse]='noholidays'>
+      <ion-card *ngFor='let h of holiday'>
+        <ion-item>
+          {{ h.holiday_name }}
+          <ion-note item-right> ({{ h.holiday_start_date }}) - ({{ h.holiday_end_date }})</ion-note>
+        </ion-item>
+        <ion-card-content>
+          {{ h.holiday_description }}
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+    <ng-template #noholidays>
+      <ion-card padding>
+        <ion-note>You have no upcoming holidays</ion-note>
+      </ion-card>
+    </ng-template>
+
     <ion-item>Total Overdue Fee</ion-item>
     <ion-card>
       <chart margin-top [type]="type" [data]="data" [options]="options"></chart>
     </ion-card>
+
     <ion-item>Upcoming Exams</ion-item>
-    <ng-container *ngIf='exam$ | async as exam'>
+    <ng-template let-exam [ngIf]='exam$ | async'>
       <ion-card tappable *ngFor='let e of exam' (click)='openExamPage()'>
         <ion-item>{{ e.module }}
           <p item-right> {{ e.since | date:'medium'}}</p>
         </ion-item>
       </ion-card>
-    </ng-container>
+    </ng-template>
     <ng-template [ngIf]='!exam'>
       <ion-card padding>
         <ion-note>You have no upcoming exams</ion-note>
       </ion-card>
     </ng-template>
+
   </div>
 </ion-content>
