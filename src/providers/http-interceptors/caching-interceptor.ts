@@ -1,5 +1,7 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Network } from '@ionic-native/network';
+import { Platform } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
@@ -18,7 +20,11 @@ import { RequestCache } from '../';
 @Injectable()
 export class CachingInterceptor implements HttpInterceptor {
 
-  constructor(private cache: RequestCache) { }
+  constructor(
+    public network: Network,
+    public plt: Platform,
+    private cache: RequestCache,
+  ) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (req.method !== 'GET') { return next.handle(req); }
@@ -29,6 +35,8 @@ export class CachingInterceptor implements HttpInterceptor {
 
         if (!cachedResponse) {
           return sendRequest(req, next, this.cache);
+        } else if (this.plt.is('cordova') && this.network.type === 'none') {
+          return of(cachedResponse);
         } else if (!refresh) {
           return of(cachedResponse);
         }
