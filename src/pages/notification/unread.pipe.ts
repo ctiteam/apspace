@@ -1,14 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 /**
- * Filter day for timetable.
+ * Filter unread messages.
  */
 @Pipe({ name: 'unread' })
 export class UnreadPipe implements PipeTransform {
   /**
-   * asdf
+   * @param mm - notiications
    */
-  transform(mm: any[] | null, day: string): any[] {
+  transform(mm: any[] | null): any[] {
     return (mm || []).filter(m => !m.read);
   }
 }
