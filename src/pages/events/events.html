@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar color='primary'>
-    <ion-title>Events</ion-title>
+    <ion-title>Dashboard</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -8,9 +8,9 @@
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="cover header-image">
+  <!-- <div class="cover header-image">
     <h1 class="events">EVENTS</h1>
-  </div>
+  </div> -->
   <div class="main-content">
     <ion-item>Upcoming Classes</ion-item>
 
@@ -51,14 +51,14 @@
     </ng-template>
 
     <ion-item>Upcoming Holiday</ion-item>
-    <ng-template let-holiday [ngIf]="holidays" [ngIfElse]='noholidays'>
-      <ion-card *ngFor='let h of holiday'>
+    <ng-template [ngIf]="holidays " [ngIfElse]='noholidays'>
+      <ion-card>
         <ion-item>
-          {{ h.holiday_name }}
-          <ion-note item-right> ({{ h.holiday_start_date }}) - ({{ h.holiday_end_date }})</ion-note>
+          {{ holidays.holiday_name }}
+          <ion-note *ngIf='date' item-right> {{ date | date}}</ion-note>
         </ion-item>
         <ion-card-content>
-          {{ h.holiday_description }}
+          {{ holidays.holiday_description }}
         </ion-card-content>
       </ion-card>
     </ng-template>
@@ -69,16 +69,15 @@
     </ng-template>
 
     <ion-item>Total Overdue Fee</ion-item>
-    <ion-card>
       <chart margin-top [type]="type" [data]="data" [options]="options"></chart>
-    </ion-card>
+    
 
     <ion-item>Upcoming Exams</ion-item>
-    <ng-template let-exam [ngIf]='exam$ | async'>
+    <ng-template let-exam [ngIf]='exam$ | async | nextExams'>
       <ion-card tappable *ngFor='let e of exam' (click)='openExamPage()'>
         <ion-item>{{ e.module }}
-          <p item-right> {{ e.since | date:'medium'}}</p>
         </ion-item>
+        <ion-note> {{ e.since | date:'medium'}}</ion-note>
       </ion-card>
     </ng-template>
     <ng-template [ngIf]='!exam'>

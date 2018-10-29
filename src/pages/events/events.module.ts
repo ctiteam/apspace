@@ -3,12 +3,12 @@ import { ChartModule } from 'angular2-chartjs';
 import { IonicPageModule } from 'ionic-angular';
 import { ComponentsModule } from './../../components/components.module';
 import { EventsPage } from './events';
-import { HolidayPipe } from './holiday.pipe';
+import { ExamPipe } from './exam.pipe';
 
 @NgModule({
   declarations: [
     EventsPage,
-    HolidayPipe,
+    ExamPipe,
   ],
   imports: [
     IonicPageModule.forChild(EventsPage),
