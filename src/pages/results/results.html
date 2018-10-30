@@ -32,19 +32,12 @@
   <chart margin-top *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
 
   <ion-card>
-    <div *ngFor="let details of courseDetails$ | async:trackBy: trackByFn" class="total-summary">
-      <div *ngIf="details.SEMESTER">
-        <ion-card-header class="semester-header" color="light">SEMESTER {{details.SEMESTER}}</ion-card-header>
-        <ion-item class="total-summary">
-          Total Modules Passed
-          <ion-note color="light" item-right>{{details.TOTAL_MODULES_PASSED}}</ion-note>
-        </ion-item>
-        <ion-item class="total-summary">
-          GPA
-          <ion-note color="light" item-right>{{details.GPA}}</ion-note>
-        </ion-item>
-      </div>
-    </div>
+    <ion-list no-lines *ngFor="let detail of courseDetails$ | async:trackBy: trackByFn">
+      <ion-item *ngIf="detail.SEMESTER" class="primary-color">
+        <ion-note class="block-note" item-left>Semester {{ detail.SEMESTER }}</ion-note>
+        <ion-note class="block-note" item-right>{{ detail.TOTAL_MODULES_PASSED }} passed (GPA {{ detail.GPA }})</ion-note>
+      </ion-item>
+    </ion-list>
   </ion-card>
 
   <ng-template let-results [ngIf]="results$ | async">
