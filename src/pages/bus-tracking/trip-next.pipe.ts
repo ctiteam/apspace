@@ -19,8 +19,8 @@ export class TripNextPipe implements PipeTransform {
     const nextTrip = ts.find(trip => now <= +trip.trip_time.replace(':', ''));
 
     if (nextTrip) {
-      const time = nextTrip.trip_time.split(':');
-      date.setHours(+time[0], +time[1]);
+      const [hour, minute] = nextTrip.trip_time.split(':');
+      date.setHours(+hour, +minute);
       return new DatePipe('en').transform(date, 'H:mm');
     }
     return null;

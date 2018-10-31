@@ -58,8 +58,7 @@ export class MyApp {
     this.platform.ready().then(() => Promise.all([
       this.settings.ready(),
       this.storage.get('tgt'),
-    ])).then(values => {
-      const tgt = values[1];
+    ])).then(([, tgt]) => {
       if (tgt) { // check if the user is logged in
         this.events.subscribe('user:logout', () => this.onLogout());
         this.navCtrl.setRoot('TabsPage');
