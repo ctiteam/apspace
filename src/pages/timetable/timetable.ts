@@ -59,9 +59,8 @@ export class TimetablePage {
         }
       });
     } else {
-      const buttons = labels.map(text => {
-        return { text, handler: () => handler.call(this, text) } as ActionSheetButton;
-      });
+      const buttons = labels.map(text => Object.assign(
+        { text, handler: () => handler.call(this, text) } as ActionSheetButton));
       this.actionSheetCtrl.create({
         buttons: [...buttons, { text: 'Cancel', role: 'cancel' }],
       }).present();

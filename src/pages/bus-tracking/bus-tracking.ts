@@ -46,14 +46,12 @@ export class BusTrackingPage {
   presentActionSheet() {
     this.actionSheetCtrl
       .create({
-        buttons: this.tripDays.map(day => {
-          return {
-            text: day.toUpperCase(),
-            handler: () => {
-              this.selectedDay = day;
-            },
-          } as ActionSheetButton;
-        }),
+        buttons: this.tripDays.map(day => Object.assign({
+          text: day.toUpperCase(),
+          handler: () => {
+            this.selectedDay = day;
+          },
+        } as ActionSheetButton)),
       })
       .present();
   }
