@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import {
-  ActionSheetButton, ActionSheetController, AlertController, IonicPage, ModalController,
+  ActionSheetButton,
+  ActionSheetController,
+  AlertController,
+  IonicPage,
+  ModalController,
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -15,8 +19,9 @@ import { BusTrackingProvider, SettingsProvider } from '../../providers';
   templateUrl: 'bus-tracking.html',
 })
 export class BusTrackingPage {
-
   locations: Location[];
+  // pickUpLocationDetails: LocationDetails;
+  pickUpLocationDetails: any;
 
   selectedDay: string;
   selectedFrom: string;
@@ -26,135 +31,6 @@ export class BusTrackingPage {
   tripFrom: string[];
   tripTo: string[];
 
-  detailsJson = [{
-    name: 'APU',
-    address:
-      [{
-        firstStreet: 'Jalan Teknologi 5',
-        secondStreet: 'Technology Park Malaysia',
-        area: 'Bukit Jalil',
-        city: '',
-        state: '',
-        postalCode: '57000',
-        contactNumber: '+603 8996 1000',
-      }],
-    longitude: '',
-    latitude: '',
-    locationImg: 'assets/img/pickUpLocations/APU.jpg',
-  },
-  {
-    name: 'LRT',
-    address:
-      [{
-        firstStreet: 'Bukit Jalil LRT Station',
-        secondStreet: '',
-        area: 'Bukit Jalil',
-        city: '',
-        state: '',
-        postalCode: '57000',
-        contactNumber: '+603-7885 2585',
-      }],
-    longitude: '',
-    latitude: '',
-    locationImg: 'assets/img/pickUpLocations/LRT.jpg',
-  },
-  {
-    name: 'APIIT@TPM',
-    address:
-      [{
-        firstStreet: 'Jalan Innovasi 1',
-        secondStreet: 'Technology Park Malaysia',
-        area: 'Bukit Jalil',
-        city: '',
-        state: '',
-        postalCode: '57000',
-        contactNumber: '+603 8996 1000',
-      }],
-    longitude: '',
-    latitude: '',
-    locationImg: 'assets/img/pickUpLocations/APIIT.jpg',
-  },
-  {
-    name: 'SCP',
-    address:
-      [{
-        firstStreet: 'South City Plaza Mall',
-        secondStreet: 'Persiaran Serdang Perdana',
-        area: 'Taman Serdang Perdana',
-        city: 'Seri Kembangan',
-        state: 'Selangor',
-        postalCode: '43300',
-        contactNumber: '+603-8948 1888',
-      }],
-    longitude: '',
-    latitude: '',
-    locationImg: 'assets/img/pickUpLocations/SCP.jpg',
-  },
-  {
-    name: 'F.PARK',
-    address:
-      [{
-        firstStreet: 'Fortune Park Apartments',
-        secondStreet: 'Persiaran Serdang Perdana',
-        area: 'Taman Serdang Perdana',
-        city: 'Seri Kembangan',
-        state: 'Selangor',
-        postalCode: '43300',
-        contactNumber: '+6016-910 5905',
-      }],
-    longitude: '',
-    latitude: '',
-    locationImg: 'assets/img/pickUpLocations/FP.jpg',
-  },
-  {
-    name: 'ENDAH',
-    address:
-      [{
-        firstStreet: 'Endah Promenade',
-        secondStreet: 'Jalan 1/149e',
-        area: 'Taman Sri Endah',
-        city: '',
-        state: 'Kuala Lumper',
-        postalCode: '57000',
-        contactNumber: '+6013-653 2564',
-      }],
-    longitude: '',
-    latitude: '',
-    locationImg: 'assets/img/pickUpLocations/ENDAH.jpg',
-  },
-  {
-    name: 'VISTA',
-    address:
-      [{
-        firstStreet: 'Vista Komanwel',
-        secondStreet: 'Jalan Jalil Perkasa 19',
-        area: 'Bukit Jalil',
-        city: '',
-        state: 'Kuala Lumpur',
-        postalCode: '57000',
-        contactNumber: '+603-2201 1125',
-      }],
-    longitude: '',
-    latitude: '',
-    locationImg: 'assets/img/pickUpLocations/VISTA.jpg',
-  },
-  {
-    name: 'MOSQUE',
-    address:
-      [{
-        firstStreet: 'Masjid Sri Petaling - Markaz Tabligh',
-        secondStreet: 'Jalan Radin Anum',
-        area: 'Sri Petaling',
-        city: '',
-        state: 'Kuala Lumpur',
-        postalCode: '57000',
-        contactNumber: '',
-      }],
-    longitude: '',
-    latitude: '',
-    locationImg: 'assets/img/pickUpLocations/MOSQUE.jpg',
-  }];
-
   trip$: Observable<Trips[]>;
 
   constructor(
@@ -163,23 +39,31 @@ export class BusTrackingPage {
     public alertCtrl: AlertController,
     private settings: SettingsProvider,
     private modalCtrl: ModalController,
-  ) { }
+    private busProv: BusTrackingProvider,
+  ) {}
 
   /** Display trip days. */
   presentActionSheet() {
-    this.actionSheetCtrl.create({
-      buttons: this.tripDays.map(day => {
-        return {
-          text: day.toUpperCase(),
-          handler: () => { this.selectedDay = day; },
-        } as ActionSheetButton;
-      }),
-    }).present();
+    this.actionSheetCtrl
+      .create({
+        buttons: this.tripDays.map(day => {
+          return {
+            text: day.toUpperCase(),
+            handler: () => {
+              this.selectedDay = day;
+            },
+          } as ActionSheetButton;
+        }),
+      })
+      .present();
   }
 
   /** Swap selectedFrom and selectedTo value. */
   swapTrip() {
-    this.selectedFrom = [this.selectedTo, this.selectedTo = this.selectedFrom][0];
+    this.selectedFrom = [
+      this.selectedTo,
+      (this.selectedTo = this.selectedFrom),
+    ][0];
   }
 
   /** Get bus tracking trips and set the first day. */
@@ -189,7 +73,9 @@ export class BusTrackingPage {
       map(d => d.trips_times),
       tap(ts => {
         this.tripDays = Array.from(new Set(ts.map(t => t.trip_day)));
-        this.selectedDay = this.selectedDay || this.tripDays.find(d => d.indexOf(days[new Date().getDay()]) !== -1);
+        this.selectedDay =
+          this.selectedDay ||
+          this.tripDays.find(d => d.indexOf(days[new Date().getDay()]) !== -1);
         this.tripFrom = Array.from(new Set(ts.map(t => t.trip_from)));
         this.tripTo = Array.from(new Set(ts.map(t => t.trip_to)));
         this.selectedFrom = this.settings.get('tripFrom') || 'Any';
@@ -215,16 +101,28 @@ export class BusTrackingPage {
       enableBackdropDismiss: true,
       cssClass: 'busTrackingModal',
     };
-    tripDetails = this.detailsJson.find(location => this.selectedFrom === location.name);
-    // XXX: Technical debt for transition to Ionic 4 (pass object)
-    const busTrackingModal = this.modalCtrl.create('BusTripInfoModalPage', {
-      trips,
-      tripDetails,
-      selectedFrom: this.selectedFrom,
-      section,
-      nextTrip,
-    }, modalOpts);
-    busTrackingModal.present();
-  }
 
+    this.busProv.getLocationDetails().subscribe(
+      data => (this.pickUpLocationDetails = data),
+      error => console.log('Error:', error),
+      () => {
+        tripDetails = this.pickUpLocationDetails.locations.find(
+          location => this.selectedFrom === location.location_nice_name,
+        );
+        const busTrackingModal = this.modalCtrl.create(
+          'BusTripInfoModalPage',
+          {
+            trips,
+            tripDetails,
+            selectedFrom: this.selectedFrom,
+            section,
+            nextTrip,
+          },
+          modalOpts,
+        );
+        busTrackingModal.present();
+      },
+    );
+    // XXX: Technical debt for transition to Ionic 4 (pass object)
+  }
 }
