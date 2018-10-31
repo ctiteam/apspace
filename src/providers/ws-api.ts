@@ -41,7 +41,7 @@ export class WsApiProvider {
    * @param options.auth - authentication required (default: true)
    * @param options.params - additional request parameters (default: {})
    * @param options.timeout - request timeout (default: 10000)
-   * @param options.url - url of web service (default: this.apiUrl)
+   * @param options.url - url of web service (default: apiUrl or oldApiUrl)
    * @return shared cached observable
    */
   get<T>(endpoint: string, refresh?: boolean, options: {
@@ -51,38 +51,38 @@ export class WsApiProvider {
     timeout?: number,
     url?: string,
   } = {}): Observable<T> {
-    let url;
+    const useNewApi = endpoint.indexOf('student/') === -1
+      || endpoint.indexOf('/attendance') !== -1
+      || endpoint.indexOf('/profile') !== -1;
+    options = Object.assign({
+      attempts: 4,
+      auth: true,
+      params: {},
+      timeout: 10000,
+      url: useNewApi ? this.apiUrl : this.oldApiUrl,
+    }, options);
+
+    const url = options.url + endpoint;
     const opt = {
-      params: options.params || {},
-      withCredentials: Boolean(options.auth !== false),
+      params: options.params,
+      withCredentials: options.auth,
     };
 
-    // all student/ still uses old api
-    if (endpoint.indexOf('student/') === -1 || endpoint.indexOf('/attendance') !== -1) {
-      url = (options.url || this.apiUrl) + endpoint;
-    } else if (endpoint.indexOf('/profile') !== -1) {
-      url = (options.url || this.apiUrl) + endpoint;
-    } else {
-      url = (options.url || this.oldApiUrl) + endpoint;
-      // opt.params.source = 'mobile';
-    }
-
     return (refresh && (!this.plt.is('cordova') || this.network.type !== 'none')
-      ? (options.auth === false // always get ticket if auth is true
+      ? (!options.auth // always get ticket if auth is true
         ? this.http.get<T>(url, opt)
         : this.cas.getST(url.split('?').shift()).pipe( // remove service url params
-          switchMap(ticket => this.http.get<T>(url, { ...opt, params: { ...opt.params, ticket } })),
-        )
+          switchMap(ticket => this.http.get<T>(url, { ...opt, params: { ...opt.params, ticket } })))
       ).pipe(
         tap(cache => this.storage.set(endpoint, cache)),
-        timeout(options.timeout || 10000),
+        timeout(options.timeout),
         catchError(err => {
           // this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
           return fromPromise(this.storage.get(endpoint)).pipe(
             switchMap(v => v || obs_throw('retrying')),
           );
         }),
-        retryWhen(errors => range(1, options.attempts || 4).pipe(
+        retryWhen(errors => range(1, options.attempts).pipe(
           zip(errors, i => 2 ** i + Math.random() * 8), // 2^n + random 0-8
           mergeMap(i => timer(i * 1000)),
         )),
@@ -98,11 +98,11 @@ export class WsApiProvider {
    * POST: Simple request WS API.
    *
    * @param endpoint - <apiUrl><endpoint> for service, used for caching
-   * @param options.headers - http headers
    * @param options.body - request body (default: null)
+   * @param options.headers - http headers (default: {})
    * @param options.params - additional request parameters (default: {})
    * @param options.timeout - request timeout (default: 10000)
-   * @param options.url - url of web service (default: this.apiUrl)
+   * @param options.url - url of web service (default: apiUrl)
    * @return shared cached observable
    */
   post<T>(endpoint: string, options: {
@@ -112,10 +112,18 @@ export class WsApiProvider {
     timeout?: number,
     url?: string,
   } = {}): Observable<T> {
-    const url = (options.url || this.apiUrl) + endpoint;
+    options = Object.assign({
+      body: null,
+      headers: {},
+      params: {},
+      timeout: 10000,
+      url: this.apiUrl,
+    }, options);
+
+    const url = options.url + endpoint;
     const opt = {
-      headers: options.headers || {},
-      params: options.params || {},
+      headers: options.headers,
+      params: options.params,
       withCredentials: true,
     };
 
@@ -129,9 +137,9 @@ export class WsApiProvider {
     }
 
     return this.cas.getST().pipe(
-      switchMap(st => this.http.post<T>(url, options.body || null,
-        Object.assign(opt, { params: Object.assign(opt.params, { ticket: st }) }))),
-      timeout(options.timeout || 10000),
+      switchMap(ticket => this.http.post<T>(url, options.body,
+        { ...opt, params: { ...opt.params, ticket } })),
+      timeout(options.timeout),
       publishLast(),
       refCount(),
     );
