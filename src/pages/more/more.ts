@@ -69,6 +69,12 @@ export class MorePage {
       role: Role.Student | Role.Lecturer | Role.Admin,
     },
     {
+      title: 'My Library',
+      component: 'KohaPage',
+      icon: 'book',
+      role: Role.Student | Role.Lecturer,
+    },
+    {
       title: 'Profile',
       component: 'ProfilePage',
       icon: 'contact',
