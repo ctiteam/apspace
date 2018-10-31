@@ -7,4 +7,5 @@ export interface Course {
   TYPE_OF_COURSE: string;
   PROGRAM_CODE: string;
   PROVIDER_CODE: string;
+  INTAKE_NUMBER: string;
 }
