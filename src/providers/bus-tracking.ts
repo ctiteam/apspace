@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { publishLast, refCount } from 'rxjs/operators';
 
-import { BusTrips, LocationDetails } from '../interfaces';
+import { BusTrips } from '../interfaces';
 
 @Injectable()
 export class BusTrackingProvider {
