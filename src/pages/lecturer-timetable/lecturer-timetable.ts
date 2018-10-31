@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
 
 import { StaffProfile } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
@@ -11,13 +12,12 @@ import { WsApiProvider } from '../../providers';
 })
 export class LecturerTimetablePage {
 
-  lecturerId: string;
+  staffProfile$: Observable<StaffProfile[]>;
 
   constructor(private ws: WsApiProvider) { }
 
   ionViewDidLoad() {
-    this.ws.get<StaffProfile[]>('/staff/profile')
-      .subscribe(p => this.lecturerId = (p[0] || {} as StaffProfile).ID);
+    this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile', true);
   }
 
 }

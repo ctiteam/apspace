@@ -6,5 +6,7 @@
 
 
 <ion-content padding>
-  <lecturer-timetable [id]="lecturerId"></lecturer-timetable>
+  <ng-template let-staff [ngIf]="staffProfile$ | async">
+    <lecturer-timetable [id]="staff[0].ID"></lecturer-timetable>
+  </ng-template>
 </ion-content>
