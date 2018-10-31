@@ -79,7 +79,7 @@ export class MyApp {
         }
         if (this.network.type === 'none') {
           this.toastCtrl
-            .create({ message: 'You are now offline.', duration: 3000 })
+            .create({ message: 'You are now offline.', duration: 3000, position: 'top' })
             .present();
         }
       }
