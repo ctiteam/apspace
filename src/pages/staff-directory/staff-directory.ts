@@ -16,8 +16,8 @@ export class StaffDirectoryPage {
 
   @ViewChild(Searchbar) searchbar: Searchbar;
 
-  term: string = '';
-  dept: string = '';
+  term = '';
+  dept = '';
   staff$: Observable<StaffDirectory[]>;
   staffType$: Observable<string[]>;
 
