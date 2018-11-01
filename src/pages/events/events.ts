@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { concatMap, finalize, flatMap, tap, toArray, map} from 'rxjs/operators';
+import { concatMap, finalize, flatMap, tap, toArray, map } from 'rxjs/operators';
 import { EventsProvider, WsApiProvider } from '../../providers';
 import {
   ExamSchedule,
@@ -31,11 +31,12 @@ export class EventsPage {
   percent: any;
   averageColor: string;
   studentIntake: string;
+  overdueFee: boolean;
 
   type = ['doughnut', 'horizontalBar'];
   data: any;
   barChartData: any;
-  numOfSkeletons = new Array(5);
+  numOfSkeletons = new Array(2);
   isLoading: boolean;
 
   options = [
@@ -125,6 +126,7 @@ export class EventsPage {
 
   getOverdueFee() {
     this.ws.get('/student/summary_overall_fee', true).pipe(
+      tap(c => this.overdueFee = c[0].TOTAL_OVERDUE == '0'),
       tap(c => this.getDougnutChart(c[0].TOTAL_PAID, c[0].TOTAL_OVERDUE)),
     ).subscribe();
   }
@@ -132,7 +134,6 @@ export class EventsPage {
   getUpcomingExam() {
     this.ws.get<StudentProfile>('/student/profile')
       .subscribe(p => {
-        this.studentIntake = p.INTAKE;
         const url = `/examination/${p.INTAKE}`;
         const opt = { auth: false };
         this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt).pipe(
@@ -233,6 +234,7 @@ export class EventsPage {
 
   getAttendance(intake: string, studentID: string) {
     const opt = { params: { id: studentID } };
+    this.studentIntake = intake;
     this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, true, opt)
       .pipe(
         tap(attendances => {
