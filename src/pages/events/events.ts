@@ -30,6 +30,7 @@ export class EventsPage {
   date;
   percent: any;
   averageColor: string;
+  studentIntake: string;
 
   type = ['doughnut', 'horizontalBar'];
   data: any;
@@ -131,6 +132,7 @@ export class EventsPage {
   getUpcomingExam() {
     this.ws.get<StudentProfile>('/student/profile')
       .subscribe(p => {
+        this.studentIntake = p.INTAKE;
         const url = `/examination/${p.INTAKE}`;
         const opt = { auth: false };
         this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt).pipe(

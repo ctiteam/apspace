@@ -97,16 +97,25 @@
       Total Overdue Fee
       <ion-icon item-left name='cash'></ion-icon>
     </ion-item>
-    <chart margin-top [type]="type[0]" [data]="data" [options]="options[0]"></chart>
+    <ion-card>
+      <chart margin-top [type]="type[0]" [data]="data" [options]="options[0]"></chart>
+    </ion-card>
 
     <ion-item>
       GPA per Intake
       <ion-icon item-left name='checkbox'></ion-icon>
     </ion-item>
-    <chart margin-top *ngIf="barChartData" [type]="type[1]" [data]="barChartData" [options]="options[1]"></chart>
-    <!-- <ion-item>
-      Total Attendance Percentage
+    <ion-card>
+      <chart margin-top *ngIf="barChartData" [type]="type[1]" [data]="barChartData" [options]="options[1]"></chart>
+    </ion-card>
+
+    <ion-item *ngIf='studentIntake'>
+      {{ studentIntake }} - Attendance
       <ion-icon item-left name='alarm'></ion-icon>
-    </ion-item> -->
+    </ion-item>
+    <ion-card class="attendance-card">
+      <circle-progress [percent]="percent" innerStrokeColor='#d7d8da' [outerStrokeColor]="percent !== 0 ? averageColor : '#d7d8da'"
+      ></circle-progress>
+    </ion-card>
   </div>
 </ion-content>

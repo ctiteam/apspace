@@ -5,6 +5,7 @@ import { ComponentsModule } from './../../components/components.module';
 import { EventsPage } from './events';
 import { ExamPipe } from './exam.pipe';
 import { RoundProgressModule } from 'angular-svg-round-progressbar';
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,17 @@ import { RoundProgressModule } from 'angular-svg-round-progressbar';
     ComponentsModule,
     ChartModule,
     RoundProgressModule,
+    NgCircleProgressModule.forRoot({
+      radius: 80,
+      maxPercent: 100,
+      titleFontSize: '30',
+      responsive: true,
+      showSubtitle: false,
+      unitsFontSize: '30',
+      outerStrokeWidth: 16,
+      innerStrokeWidth: 14,
+      animationDuration: 600,
+    })
   ],
 })
-export class EventsPageModule {}
+export class EventsPageModule { }
