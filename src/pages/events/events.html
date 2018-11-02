@@ -45,7 +45,7 @@
     </ng-template>
     <ng-template [ngIf]='!isLoading && !classes'>
       <ion-card padding>
-        <ion-note>You have no upcoming classes for today</ion-note>
+        <ion-note>No upcoming classes for today</ion-note>
       </ion-card>
     </ng-template>
 
@@ -58,20 +58,25 @@
         <skeleton-item height="137px" width="100%"></skeleton-item>
       </ion-item>
     </ng-container>
-    <ng-template [ngIf]="holidays " [ngIfElse]='noholidays'>
+    <ng-template let-holiday [ngIf]="nextHoliday$ | async" [ngIfElse]='noholidays'>
       <ion-card>
         <ion-item>
-          {{ holidays.holiday_name }}
-          <ion-note *ngIf='date' item-right> {{ date | date}}</ion-note>
+          {{ holiday.holiday_name }}
+          <ion-note item-right>
+            {{ holiday.holiday_start_date | date }}
+            <ng-template [ngIf]='holiday.holiday_start_date !== holiday.holiday_end_date'>
+              - {{ holiday.holiday_end_date | date }}
+            </ng-template>
+          </ion-note>
         </ion-item>
         <ion-card-content>
-          {{ holidays.holiday_description }}
+          {{ holiday.holiday_description }}
         </ion-card-content>
       </ion-card>
     </ng-template>
     <ng-template [ngIf]="!isLoading && !holidays">
       <ion-card padding>
-        <ion-note>You have no upcoming holidays</ion-note>
+        <ion-note>No upcoming holidays</ion-note>
       </ion-card>
     </ng-template>
 
@@ -95,7 +100,7 @@
     </ng-template>
     <ng-template [ngIf]='!isLoading && !exam'>
       <ion-card padding>
-        <ion-note>You have no upcoming exams</ion-note>
+        <ion-note>No upcoming exams</ion-note>
       </ion-card>
     </ng-template>
 

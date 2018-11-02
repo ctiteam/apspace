@@ -10,6 +10,8 @@ import {
   StudentProfile,
   Course,
   CourseDetails,
+  Holiday,
+  Holidays,
 } from '../../interfaces';
 
 @IonicPage()
@@ -23,11 +25,10 @@ export class EventsPage {
   exam$: Observable<ExamSchedule[]>;
   intake$: Observable<Course[]>;
   courseDetails$: Observable<CourseDetails>;
+  nextHoliday$: Observable<Holiday>;
 
   classes: boolean;
   exam: boolean;
-  holidays: any;
-  date;
   percent: any;
   averageColor: string;
   studentIntake: string;
@@ -75,6 +76,7 @@ export class EventsPage {
   doRefresh(refresher?) {
     this.isLoading = true;
     this.upcomingClass$ = this.eventsProvider.getUpcomingClass().pipe(
+      tap(c => console.log(c)),
       tap(c => this.classes = c.length !== 0),
       tap(_ => this.getOverdueFee()),
       tap(_ => this.getHolidays()),
@@ -84,44 +86,32 @@ export class EventsPage {
   }
 
   getHolidays() {
-    let now = new Date();
     const months = {
-      'January': 0,
-      'February': 1,
-      'March': 2,
-      'April': 3,
-      'May': 4,
-      'June': 5,
-      'July': 6,
-      'August': 7,
-      'September': 8,
-      'October': 9,
-      'November': 10,
-      'December': 11,
+      'January': '01',
+      'February': '02',
+      'March': '03',
+      'April': '04',
+      'May': '05',
+      'June': '06',
+      'July': '07',
+      'August': '08',
+      'September': '09',
+      'October': '10',
+      'November': '11',
+      'December': '12',
     };
-    this.eventsProvider.getHolidays().pipe(
-      map(response => {
-        let holidaysA = response.holidays;
-        for (let holiday of holidaysA) {
-          let holidayDate = new Date();
-          holidayDate.setMonth(months[holiday.holiday_start_date.split('-')[1]]);
-          holidayDate.setDate(+holiday.holiday_start_date.split('-')[0]);
-          holidayDate.setMonth(months[holiday.holiday_end_date.split('-')[1]]);
-          holidayDate.setDate(+holiday.holiday_end_date.split('-')[0]);
-          holiday.holiday_start_date = holidayDate;
-          holiday.holiday_end_date = holidayDate;
-        }
-        return holidaysA;
-      })
-    ).subscribe(holidays => {
-      let filteredHoliday = holidays.filter(h => h.holiday_start_date >= now);
-      if (filteredHoliday[0].holiday_start_date == filteredHoliday[0].holiday_end_date) {
-        this.date = filteredHoliday[0].holiday_start_date;
-      } else {
-        this.date = `${filteredHoliday[0].holiday_start_date} - ${filteredHoliday[0].holiday_end_date}`;
-      }
-      this.holidays = filteredHoliday[0];
-    });
+
+    const now = new Date();
+    this.nextHoliday$ = this.ws.get<Holidays>('/transix/holidays/filtered/students', true).pipe(
+      map(res => res.holidays),
+      map(hh => hh.map(h => {
+        let [d, m] = h.holiday_start_date.split('-');
+        h.holiday_start_date = `2018-${months[m]}-${('0' + d).slice(-2)}`;
+        [d, m] = h.holiday_end_date.split('-');
+        h.holiday_end_date = `2018-${months[m]}-${('0' + d).slice(-2)}`;
+        return h;
+      }).find(h => now < new Date(h.holiday_start_date))),
+    );
   }
 
   getOverdueFee() {
@@ -187,12 +177,8 @@ export class EventsPage {
         })
       )));
       let filteredData = data.filter(res => res.gpa.INTAKE_GPA);
-      let labels = [];
-      let gpa = [];
-      for (let intake of filteredData) {
-        labels.push(intake.intakeCode);
-        gpa.push(intake.gpa.INTAKE_GPA);
-      }
+      let labels = filteredData.map(i => i.intakeCode);
+      let gpa = filteredData.map(i=>i.gpa.INTAKE_GPA)
 
       const randomColor = [
         'rgba(255, 99, 132, 0.7)',
