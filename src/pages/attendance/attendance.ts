@@ -30,7 +30,7 @@ export class AttendancePage {
 
   selectedIntake: string = '';
   studentId: string = '';
-  percent: number = 0;
+  percent;
   averageColor: string = '';
   intakeLabels: any;
 
@@ -103,16 +103,11 @@ export class AttendancePage {
   }
 
   calculateAverage(a: any) {
-    let sumOfAttendances = 0;
     if (!a) {
-      this.percent = 0;
       this.averageColor = '#f04141';
     } else {
-      for (const attendance of a) {
-        sumOfAttendances += attendance.PERCENTAGE;
-      }
-      const averageAttendance = (sumOfAttendances / a.length).toFixed(2);
-      this.percent = parseInt(averageAttendance, 10);
+      let average = a.reduce((a, b) => a + b.PERCENTAGE, 0) / a.length;
+      this.percent = average.toFixed(0);
       this.averageColor = '#0dbd53';
       if (this.percent < 80) {
         this.averageColor = '#f04141';

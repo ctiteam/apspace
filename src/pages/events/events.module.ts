@@ -21,6 +21,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
       radius: 80,
       maxPercent: 100,
       titleFontSize: '30',
+      innerStrokeColor: '#d7d8da',
       responsive: true,
       showSubtitle: false,
       unitsFontSize: '30',

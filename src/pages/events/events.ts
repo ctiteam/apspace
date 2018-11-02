@@ -2,7 +2,14 @@ import { Component } from '@angular/core';
 import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { concatMap, finalize, flatMap, tap, toArray, map } from 'rxjs/operators';
+import {
+  concatMap,
+  finalize,
+  flatMap,
+  tap,
+  toArray,
+  map,
+} from 'rxjs/operators';
 import { EventsProvider, WsApiProvider } from '../../providers';
 import {
   ExamSchedule,
@@ -21,24 +28,25 @@ import {
 })
 export class EventsPage {
 
-  upcomingClass$: Observable<any[]>;
+  courseDetails$: Observable<CourseDetails>;
   exam$: Observable<ExamSchedule[]>;
   intake$: Observable<Course[]>;
-  courseDetails$: Observable<CourseDetails>;
   nextHoliday$: Observable<Holiday>;
+  percent$: Observable<number>;
+  profile$: Observable<StudentProfile>;
+  upcomingClass$: Observable<any[]>;
+  chartData$: Observable<any>;
 
   classes: boolean;
   exam: boolean;
-  percent: any;
-  averageColor: string;
-  studentIntake: string;
+  holiday: boolean;
   overdueFee: boolean;
+  isLoading: boolean;
+
+  numOfSkeletons = new Array(2);
 
   type = ['doughnut', 'horizontalBar'];
-  data: any;
   barChartData: any;
-  numOfSkeletons = new Array(2);
-  isLoading: boolean;
 
   options = [
     {
@@ -75,14 +83,14 @@ export class EventsPage {
 
   doRefresh(refresher?) {
     this.isLoading = true;
-    this.upcomingClass$ = this.eventsProvider.getUpcomingClass().pipe(
-      tap(c => console.log(c)),
-      tap(c => this.classes = c.length !== 0),
-      tap(_ => this.getOverdueFee()),
-      tap(_ => this.getHolidays()),
-      tap(_ => this.getUpcomingExam()),
-      finalize(() => { refresher && refresher.complete(), this.isLoading = false; }),
-    );
+    this.upcomingClass$ = this.eventsProvider.getUpcomingClass()
+      .pipe(
+        tap(c => this.classes = c.length !== 0),
+        tap(_ => this.getProfile()),
+        tap(_ => this.getHolidays()),
+        tap(_ => this.getOverdueFee()),
+        finalize(() => { refresher && refresher.complete(), this.isLoading = false; }),
+      );
   }
 
   getHolidays() {
@@ -102,53 +110,54 @@ export class EventsPage {
     };
 
     const now = new Date();
-    this.nextHoliday$ = this.ws.get<Holidays>('/transix/holidays/filtered/students', true).pipe(
-      map(res => res.holidays),
-      map(hh => hh.map(h => {
-        let [d, m] = h.holiday_start_date.split('-');
-        h.holiday_start_date = `2018-${months[m]}-${('0' + d).slice(-2)}`;
-        [d, m] = h.holiday_end_date.split('-');
-        h.holiday_end_date = `2018-${months[m]}-${('0' + d).slice(-2)}`;
-        return h;
-      }).find(h => now < new Date(h.holiday_start_date))),
-    );
+    this.nextHoliday$ = this.ws.get<Holidays>('/transix/holidays/filtered/students', true)
+      .pipe(
+        map(res => res.holidays),
+        tap(res => this.holiday = res.length !== 0),
+        map(hh => hh.map(h => {
+          let [d, m] = h.holiday_start_date.split('-');
+          h.holiday_start_date = `2018-${months[m]}-${('0' + d).slice(-2)}`;
+          [d, m] = h.holiday_end_date.split('-');
+          h.holiday_end_date = `2018-${months[m]}-${('0' + d).slice(-2)}`;
+          return h;
+        }).find(h => now < new Date(h.holiday_start_date))),
+      );
+  }
+
+  getProfile() {
+    this.profile$ = this.ws.get<StudentProfile>('/student/profile').pipe(
+      tap(p => this.getUpcomingExam(p.INTAKE)),
+      tap(p => this.getAttendance(p.INTAKE, p.STUDENT_NUMBER)),
+      tap(p => this.getGPA(p.STUDENT_NUMBER)),
+    )
+  }
+
+  getUpcomingExam(intake: string) {
+    const opt = { auth: false };
+    this.exam$ = this.ws.get<ExamSchedule[]>(`/examination/${intake}`, true, opt)
+      .pipe(
+        tap(e => this.exam = e.length !== 0),
+      );
   }
 
   getOverdueFee() {
-    this.ws.get('/student/summary_overall_fee', true).pipe(
-      tap(c => this.overdueFee = c[0].TOTAL_OVERDUE == '0'),
-      tap(c => this.getDougnutChart(c[0].TOTAL_PAID, c[0].TOTAL_OVERDUE)),
-    ).subscribe();
-  }
-
-  getUpcomingExam() {
-    this.ws.get<StudentProfile>('/student/profile')
-      .subscribe(p => {
-        const url = `/examination/${p.INTAKE}`;
-        const opt = { auth: false };
-        this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt).pipe(
-          tap(_ => this.getAttendance(p.INTAKE, p.STUDENT_NUMBER)),
-          tap(_ => this.getGPA(p.STUDENT_NUMBER)),
-          tap(e => this.exam = e.length !== 0),
-        );
-      });
-  }
-
-  getDougnutChart(totalPaid: any, overdue: any) {
-    const randomColor = [
-      'rgba(75, 192, 192, 1)',
-      'rgba(255,99,132,1)',
-    ];
-    this.data = {
-      datasets: [{
-        data: [totalPaid, overdue],
-        backgroundColor: randomColor,
-      }],
-      labels: [
-        `Total Paid: RM${totalPaid}`,
-        `Total Overdue: RM${overdue}`,
-      ],
-    };
+    this.chartData$ = this.ws.get('/student/summary_overall_fee', true).pipe(
+      tap(fee => this.overdueFee = fee[0].TOTAL_OVERDUE == '0'),
+      map(fee => {
+        return {
+          'data': {
+            datasets: [{
+              data: [fee[0].TOTAL_PAID, fee[0].TOTAL_OVERDUE],
+              backgroundColor: ['rgba(75, 192, 192, 1)', 'rgba(255,99,132,1)'],
+            }],
+            labels: [
+              `Total Paid: RM${fee[0].TOTAL_PAID}`,
+              `Total Overdue: RM${fee[0].TOTAL_OVERDUE}`,
+            ],
+          }
+        }
+      }),
+    )
   }
 
   /** Retrieve GPA.
@@ -178,9 +187,9 @@ export class EventsPage {
       )));
       let filteredData = data.filter(res => res.gpa.INTAKE_GPA);
       let labels = filteredData.map(i => i.intakeCode);
-      let gpa = filteredData.map(i=>i.gpa.INTAKE_GPA)
+      let gpa = filteredData.map(i => i.gpa.INTAKE_GPA)
 
-      const randomColor = [
+      const color = [
         'rgba(255, 99, 132, 0.7)',
         'rgba(54, 162, 235, 0.7)',
         'rgba(255, 206, 86, 0.7)',
@@ -192,7 +201,7 @@ export class EventsPage {
         'rgba(61,199,190,0.7)',
       ];
 
-      const randomBorderColor = [
+      const borderColor = [
         'rgba(255,99,132,1)',
         'rgba(54, 162, 235, 1)',
         'rgba(255, 206, 86, 1)',
@@ -208,8 +217,8 @@ export class EventsPage {
         labels: labels,
         datasets: [
           {
-            backgroundColor: randomColor,
-            borderColor: randomBorderColor,
+            backgroundColor: color,
+            borderColor: borderColor,
             borderWidth: 2,
             data: gpa,
           },
@@ -219,28 +228,11 @@ export class EventsPage {
   }
 
   getAttendance(intake: string, studentID: string) {
+    const url = `/student/attendance?intake=${intake}`;
     const opt = { params: { id: studentID } };
-    this.studentIntake = intake;
-    this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, true, opt)
-      .pipe(
-        tap(attendances => {
-          let sumOfAttendances = 0;
-          if (!attendances) {
-            this.percent = 0;
-            this.averageColor = '#f04141';
-          } else {
-            for (const attendance of attendances) {
-              sumOfAttendances += attendance.PERCENTAGE;
-            }
-            const averageAttendance = (sumOfAttendances / attendances.length).toFixed(2);
-            this.percent = parseInt(averageAttendance, 10);
-            this.averageColor = '#0dbd53';
-            if (this.percent < 80) {
-              this.averageColor = '#f04141';
-            }
-          }
-        })
-      ).subscribe();
+    this.percent$ = this.ws.get<Attendance[]>(url, true, opt).pipe(
+      map(attendances => attendances.reduce((a, b) => a + b.PERCENTAGE, 0) / attendances.length)
+    );
   }
 
   openExamPage() {

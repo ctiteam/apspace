@@ -10,12 +10,12 @@
   </ion-refresher>
   <div class="main-content">
 
-    <ion-item>
+    <ion-item no-lines>
       Upcoming Classes
       <ion-icon item-left name='clock' color='primary'></ion-icon>
     </ion-item>
     <ng-container *ngIf="isLoading">
-      <ion-item *ngFor="let i of numOfSkeletons">
+      <ion-item no-lines *ngFor="let i of numOfSkeletons">
         <skeleton-item height="137px" width="100%"></skeleton-item>
       </ion-item>
     </ng-container>
@@ -49,18 +49,18 @@
       </ion-card>
     </ng-template>
 
-    <ion-item>
+    <ion-item no-lines>
       Upcoming Holiday
       <ion-icon item-left name='calendar' style='color: #5AC8FA;'></ion-icon>
     </ion-item>
     <ng-container *ngIf="isLoading">
-      <ion-item>
+      <ion-item no-lines>
         <skeleton-item height="137px" width="100%"></skeleton-item>
       </ion-item>
     </ng-container>
     <ng-template let-holiday [ngIf]="nextHoliday$ | async" [ngIfElse]='noholidays'>
       <ion-card>
-        <ion-item>
+        <ion-item no-lines>
           {{ holiday.holiday_name }}
           <ion-note item-right>
             {{ holiday.holiday_start_date | date }}
@@ -74,18 +74,18 @@
         </ion-card-content>
       </ion-card>
     </ng-template>
-    <ng-template [ngIf]="!isLoading && !holidays">
+    <ng-template [ngIf]="!isLoading && !holiday">
       <ion-card padding>
         <ion-note>No upcoming holidays</ion-note>
       </ion-card>
     </ng-template>
 
-    <ion-item>
+    <ion-item no-lines>
       Upcoming Exams
       <ion-icon item-left name='book' style='color: #2042A6;'></ion-icon>
     </ion-item>
     <ng-container *ngIf="isLoading">
-      <ion-item *ngFor="let i of numOfSkeletons">
+      <ion-item no-lines *ngFor="let i of numOfSkeletons">
         <skeleton-item height="100px" width="100%"></skeleton-item>
       </ion-item>
     </ng-container>
@@ -93,7 +93,7 @@
       <ion-card tappable *ngFor='let e of exam' (click)='openExamPage()'>
         <ion-item>{{ e.module }}
         </ion-item>
-        <ion-item>
+        <ion-item no-lines>
           <ion-note> {{ e.since | date:'medium'}}</ion-note>
         </ion-item>
       </ion-card>
@@ -104,8 +104,8 @@
       </ion-card>
     </ng-template>
 
-    <ng-template [ngIf]='!overdueFee'>
-      <ion-item>
+    <ng-template let-data [ngIf]="chartData$ | async">
+      <ion-item no-lines>
         Total Overdue Fee
         <ion-icon item-left name='cash' style='color: #5856D6;'></ion-icon>
       </ion-item>
@@ -114,17 +114,17 @@
           <skeleton-item height="150px" width="100%"></skeleton-item>
         </ion-item>
       </ng-container>
-      <ion-card *ngIf='data'>
-        <chart margin-top [type]="type[0]" [data]="data" [options]="options[0]"></chart>
+      <ion-card >
+        <chart margin-top [type]="type[0]" [data]="data.data" [options]="options[0]"></chart>
       </ion-card>
     </ng-template>
 
-    <ion-item>
+    <ion-item no-lines>
       GPA per Intake
       <ion-icon item-left name='checkbox' style='color: #FF0DFF;'></ion-icon>
     </ion-item>
     <ng-container *ngIf="!barChartData">
-      <ion-item>
+      <ion-item no-lines>
         <skeleton-item height="160px" width="100%"></skeleton-item>
       </ion-item>
     </ng-container>
@@ -132,17 +132,17 @@
       <chart margin-top [type]="type[1]" [data]="barChartData" [options]="options[1]"></chart>
     </ion-card>
 
-    <ion-item *ngIf='studentIntake'>
-      {{ studentIntake }} Attendance
+    <ion-item no-lines *ngIf='profile$ | async as profile'>
+      {{ profile.INTAKE }} Attendance
       <ion-icon item-left name='alarm' style='color: #E82C0C;'></ion-icon>
     </ion-item>
-    <ng-container *ngIf="!percent">
-      <ion-item>
+    <ion-card class="attendance-card" *ngIf='percent$ | async as percent; else percentLoading'>
+      <circle-progress [percent]="percent" [outerStrokeColor]="percent >= 80 ? '#0dbd53' : '#f04141'"></circle-progress>
+    </ion-card>
+    <ng-template #percentLoading>
+      <ion-item no-lines>
         <skeleton-item height="160px" width="100%"></skeleton-item>
       </ion-item>
-    </ng-container>
-    <ion-card class="attendance-card" *ngIf='percent'>
-      <circle-progress [percent]="percent" innerStrokeColor='#d7d8da' [outerStrokeColor]="percent !== 0 ? averageColor : '#d7d8da'"></circle-progress>
-    </ion-card>
+    </ng-template>
   </div>
 </ion-content>
