@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { switchMap } from 'rxjs/operators';
 
+import { Role } from '../interfaces';
+import { SettingsProvider } from '../providers';
 import { CasTicketProvider } from './cas-ticket';
 
 @Injectable()
@@ -14,6 +16,7 @@ export class EventsProvider {
   constructor(
     public http: HttpClient,
     public cas: CasTicketProvider,
+    public settings: SettingsProvider,
   ) { }
 
   /**
