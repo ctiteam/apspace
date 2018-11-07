@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { map, finalize } from 'rxjs/operators';
 
-import { Role } from '../../interfaces';
+import { Role, Holiday, Holidays } from '../../interfaces';
 import { WsApiProvider, SettingsProvider } from '../../providers';
 
 @IonicPage()
@@ -14,7 +14,7 @@ import { WsApiProvider, SettingsProvider } from '../../providers';
 
 export class HolidaysPage {
 
-  holiday$: Observable<any>;
+  holiday$: Observable<Holiday[]>;
 
   numOfSkeletons = new Array(6);
   selectedRole: string;
@@ -32,8 +32,6 @@ export class HolidaysPage {
   }
 
   doRefresh(refresher?) {
-    this.selectedRole = this.settings.get('role') & Role.Student ? 'students' : 'staff';
-
     const months = {
       'January': '01',
       'February': '02',
@@ -48,8 +46,8 @@ export class HolidaysPage {
       'November': '11',
       'December': '12',
     };
-
-    this.holiday$ = this.ws.get<any>(`/transix/holidays`, refresher).pipe(
+    this.selectedRole = this.settings.get('role') & Role.Student ? 'students' : 'staff';
+    this.holiday$ = this.ws.get<Holidays>(`/transix/holidays`, refresher).pipe(
       map(res => res.holidays),
       map(hh => hh.map(h => {
         let [d, m] = h.holiday_start_date.split('-');
