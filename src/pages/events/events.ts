@@ -37,12 +37,6 @@ export class EventsPage {
   upcomingClass$: Observable<any[]>;
   chartData$: Observable<any>;
 
-  classes: boolean;
-  exam: boolean;
-  holiday: boolean;
-  overdueFee: boolean;
-  isLoading: boolean;
-
   numOfSkeletons = new Array(2);
 
   type = ['doughnut', 'horizontalBar'];
@@ -82,14 +76,12 @@ export class EventsPage {
   }
 
   doRefresh(refresher?) {
-    this.isLoading = true;
     this.upcomingClass$ = this.eventsProvider.getUpcomingClass()
       .pipe(
-        tap(c => this.classes = c.length !== 0),
         tap(_ => this.getProfile()),
         tap(_ => this.getHolidays()),
         tap(_ => this.getOverdueFee()),
-        finalize(() => { refresher && refresher.complete(), this.isLoading = false; }),
+        finalize(() => { refresher && refresher.complete() }),
       );
   }
 
@@ -113,7 +105,6 @@ export class EventsPage {
     this.nextHoliday$ = this.ws.get<Holidays>('/transix/holidays/filtered/students', true)
       .pipe(
         map(res => res.holidays),
-        tap(res => this.holiday = res.length !== 0),
         map(hh => hh.map(h => {
           let [d, m] = h.holiday_start_date.split('-');
           h.holiday_start_date = `2018-${months[m]}-${('0' + d).slice(-2)}`;
@@ -134,15 +125,11 @@ export class EventsPage {
 
   getUpcomingExam(intake: string) {
     const opt = { auth: false };
-    this.exam$ = this.ws.get<ExamSchedule[]>(`/examination/${intake}`, true, opt)
-      .pipe(
-        tap(e => this.exam = e.length !== 0),
-      );
+    this.exam$ = this.ws.get<ExamSchedule[]>(`/examination/${intake}`, true, opt);
   }
 
   getOverdueFee() {
     this.chartData$ = this.ws.get('/student/summary_overall_fee', true).pipe(
-      tap(fee => this.overdueFee = fee[0].TOTAL_OVERDUE == '0'),
       map(fee => {
         return {
           'data': {
@@ -233,10 +220,6 @@ export class EventsPage {
     this.percent$ = this.ws.get<Attendance[]>(url, true, opt).pipe(
       map(attendances => attendances.reduce((a, b) => a + b.PERCENTAGE, 0) / attendances.length)
     );
-  }
-
-  openExamPage() {
-    this.app.getRootNav().push('ExamSchedulePage');
   }
 
   /** Open staff info for lecturer id. */
