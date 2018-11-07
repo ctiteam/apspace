@@ -24,9 +24,9 @@
       <ion-card-content>
         <ion-label no-margin>
           <ion-icon padding-right name='calendar'></ion-icon>
-          {{ holiday.holiday_start_date }}
+          {{ holiday.holiday_start_date | date:'mediumDate' }}
           <ng-template [ngIf]='holiday.holiday_start_date !== holiday.holiday_end_date'>
-            - {{ holiday.holiday_end_date }}
+            - {{ holiday.holiday_end_date | date:'mediumDate'}}
           </ng-template>
         </ion-label>
         <ng-template [ngIf]='holiday.holiday_description'>

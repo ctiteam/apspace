@@ -33,10 +33,32 @@ export class HolidaysPage {
 
   doRefresh(refresher?) {
     this.selectedRole = this.settings.get('role') & Role.Student ? 'students' : 'staff';
+
+    const months = {
+      'January': '01',
+      'February': '02',
+      'March': '03',
+      'April': '04',
+      'May': '05',
+      'June': '06',
+      'July': '07',
+      'August': '08',
+      'September': '09',
+      'October': '10',
+      'November': '11',
+      'December': '12',
+    };
+
     this.holiday$ = this.ws.get<any>(`/transix/holidays`, refresher).pipe(
       map(res => res.holidays),
+      map(hh => hh.map(h => {
+        let [d, m] = h.holiday_start_date.split('-');
+        h.holiday_start_date = `2018-${months[m]}-${('0' + d).slice(-2)}`;
+        [d, m] = h.holiday_end_date.split('-');
+        h.holiday_end_date = `2018-${months[m]}-${('0' + d).slice(-2)}`;
+        return h;
+      })),
       finalize(() => refresher && refresher.complete())
     )
   }
-
 }
