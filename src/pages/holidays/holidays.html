@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-navbar color='primary'>
+    <ion-title>Holidays</ion-title>
+  </ion-navbar>
+
+  <ion-toolbar no-border-top color='primary'>
+    <ion-segment [(ngModel)]="selectedRole" color='light'>
+      <ion-segment-button value='students'>Student Holidays</ion-segment-button>
+      <ion-segment-button value='staff'>Staff Holidays</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ng-template let-holidays [ngIf]='holiday$ | async' [ngIfElse]='loadingHolidays'>
+    <ion-card *ngFor='let holiday of holidays | filter:selectedRole'>
+      <ion-card-header>
+        {{ holiday.holiday_name }}
+      </ion-card-header>
+      <ion-card-content>
+        <ion-label no-margin>
+          <ion-icon padding-right name='calendar'></ion-icon>
+          {{ holiday.holiday_start_date }}
+          <ng-template [ngIf]='holiday.holiday_start_date !== holiday.holiday_end_date'>
+            - {{ holiday.holiday_end_date }}
+          </ng-template>
+        </ion-label>
+        <ng-template [ngIf]='holiday.holiday_description'>
+          <p no-margin>
+            <ion-icon padding-right name='text'></ion-icon>
+            {{ holiday.holiday_description }}
+          </p>
+        </ng-template>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+  <ng-template #loadingHolidays>
+    <ion-card *ngFor="let i of numOfSkeletons">
+      <ion-card-content>
+        <skeleton-item height="20px" width="80%"></skeleton-item>
+        <skeleton-item height="16px" width="40%"></skeleton-item>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+</ion-content>

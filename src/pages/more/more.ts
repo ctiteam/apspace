@@ -20,79 +20,85 @@ export class MorePage {
     icon: any,
     role: Role,
   }> = [
-    {
-      title: 'Results',
-      component: 'ResultsPage',
-      icon: 'checkbox',
-      role: Role.Student,
-    },
-    {
-      title: 'Staff Directory',
-      component: 'StaffDirectoryPage',
-      icon: 'people',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-    },
-    {
-      title: 'Events',
-      component: 'EventsPage',
-      icon: 'calendar',
-      role: Role.Student,
-    },
-    {
-      title: 'Bus Tracking',
-      component: 'BusTrackingPage',
-      icon: 'bus',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-    },
-    {
-      title: 'Student Timetable',
-      component: 'TimetablePage',
-      icon: 'calendar',
-      role: Role.Lecturer,
-    },
-    {
-      title: 'Fees',
-      component: 'FeesPage',
-      icon: 'cash',
-      role: Role.Student,
-    },
-    {
-      title: 'Exam Schedule',
-      component: 'ExamSchedulePage',
-      icon: 'book',
-      role: Role.Student,
-    },
-    {
-      title: 'LMS (Course Material)',
-      component: 'LmsPage',
-      icon: 'open',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-    },
-    {
-      title: 'My Library',
-      component: 'KohaPage',
-      icon: 'book',
-      role: Role.Student | Role.Lecturer,
-    },
-    {
-      title: 'Profile',
-      component: 'ProfilePage',
-      icon: 'contact',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-    },
-    {
-      title: 'Operation Hours',
-      component: 'OperationHoursPage',
-      icon: 'information-circle',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-    },
-    {
-      title: 'Feedback',
-      component: 'FeedbackPage',
-      icon: 'at',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-    },
-  ];
+      {
+        title: 'Results',
+        component: 'ResultsPage',
+        icon: 'checkbox',
+        role: Role.Student,
+      },
+      {
+        title: 'Staff Directory',
+        component: 'StaffDirectoryPage',
+        icon: 'people',
+        role: Role.Student | Role.Lecturer | Role.Admin,
+      },
+      {
+        title: 'Events',
+        component: 'EventsPage',
+        icon: 'calendar',
+        role: Role.Student,
+      },
+      {
+        title: 'Bus Tracking',
+        component: 'BusTrackingPage',
+        icon: 'bus',
+        role: Role.Student | Role.Lecturer | Role.Admin,
+      },
+      {
+        title: 'Student Timetable',
+        component: 'TimetablePage',
+        icon: 'calendar',
+        role: Role.Lecturer,
+      },
+      {
+        title: 'Fees',
+        component: 'FeesPage',
+        icon: 'cash',
+        role: Role.Student,
+      },
+      {
+        title: 'Exam Schedule',
+        component: 'ExamSchedulePage',
+        icon: 'book',
+        role: Role.Student,
+      },
+      {
+        title: 'LMS (Course Material)',
+        component: 'LmsPage',
+        icon: 'open',
+        role: Role.Student | Role.Lecturer | Role.Admin,
+      },
+      {
+        title: 'My Library',
+        component: 'KohaPage',
+        icon: 'book',
+        role: Role.Student | Role.Lecturer,
+      },
+      {
+        title: 'Profile',
+        component: 'ProfilePage',
+        icon: 'contact',
+        role: Role.Student | Role.Lecturer | Role.Admin,
+      },
+      {
+        title: 'Holidays',
+        component: 'HolidaysPage',
+        icon: 'globe',
+        role: Role.Student | Role.Lecturer | Role.Admin,
+      },
+      {
+        title: 'Operation Hours',
+        component: 'OperationHoursPage',
+        icon: 'information-circle',
+        role: Role.Student | Role.Lecturer | Role.Admin,
+      },
+      {
+        title: 'Feedback',
+        component: 'FeedbackPage',
+        icon: 'at',
+        role: Role.Student | Role.Lecturer | Role.Admin,
+      },
+    ];
   pages: Array<{
     title: string,
     component: any,
@@ -119,7 +125,7 @@ export class MorePage {
     public dataCollector: DataCollectorProvider,
   ) {
     const role = this.settings.get('role');
-    this.pages = this.menuItems.filter(page => page.role & role).slice(0, 10);
+    this.pages = this.menuItems.filter(page => page.role & role).slice(0, 12);
 
     this.events.subscribe('newNotification', () => {
       this.getBadge();

@@ -60,7 +60,7 @@
     </ion-item>
     <ng-template let-holiday [ngIf]='nextHoliday$ | async' [ngIfElse]='loadingHoliday'>
       <ng-template [ngIf]='holiday' [ngIfElse]='noHoliday'>
-        <ion-card>
+        <ion-card tappable [navPush]="'HolidaysPage'">
           <ion-card-header>
             {{ holiday.holiday_name }}
           </ion-card-header>
@@ -99,7 +99,8 @@
           <ion-item>{{ exam.module }}
           </ion-item>
           <ion-item no-lines>
-            <ion-note> {{ exam.since | date:'mediumDate'}} ({{ exam.since | date:'shortTime'}} - {{ exam.until | date:'shortTime'}})</ion-note>
+            <ion-note> {{ exam.since | date:'mediumDate'}} ({{ exam.since | date:'shortTime'}} - {{ exam.until |
+              date:'shortTime'}})</ion-note>
           </ion-item>
         </ion-card>
       </ng-template>
