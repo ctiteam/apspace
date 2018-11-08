@@ -104,14 +104,7 @@ export class EventsPage {
     const now = new Date();
     this.nextHoliday$ = this.ws.get<Holidays>('/transix/holidays/filtered/students', true)
       .pipe(
-        map(res => res.holidays),
-        map(hh => hh.map(h => {
-          let [d, m] = h.holiday_start_date.split('-');
-          h.holiday_start_date = `2018-${months[m]}-${('0' + d).slice(-2)}`;
-          [d, m] = h.holiday_end_date.split('-');
-          h.holiday_end_date = `2018-${months[m]}-${('0' + d).slice(-2)}`;
-          return h;
-        }).find(h => now < new Date(h.holiday_start_date))),
+        map(res => res.holidays.find(h => now < new Date(h.holiday_start_date))),
       );
   }
 
