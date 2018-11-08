@@ -65,13 +65,19 @@
             {{ holiday.holiday_name }}
           </ion-card-header>
           <ion-card-content>
-            <ion-note item-right>
+            <ion-label no-margin>
+              <ion-icon padding-right name='calendar'></ion-icon>
               {{ holiday.holiday_start_date | date:'mediumDate' }}
               <ng-template [ngIf]='holiday.holiday_start_date !== holiday.holiday_end_date'>
-                - {{ holiday.holiday_end_date | date:'mediumDate' }}
+                - {{ holiday.holiday_end_date | date:'mediumDate'}}
               </ng-template>
-            </ion-note>
-            {{ holiday.holiday_description }}
+            </ion-label>
+            <ng-template [ngIf]='holiday.holiday_description'>
+              <p no-margin>
+                <ion-icon padding-right name='text'></ion-icon>
+                {{ holiday.holiday_description }}
+              </p>
+            </ng-template>
           </ion-card-content>
         </ion-card>
       </ng-template>
@@ -96,12 +102,16 @@
     <ng-template let-exams [ngIf]='exam$ | async | nextExams' [ngIfElse]='loadingExams'>
       <ng-template [ngIf]='exams && exams.length > 0' [ngIfElse]='noExam'>
         <ion-card tappable *ngFor='let exam of exams' [navPush]="'ExamSchedulePage'">
-          <ion-item>{{ exam.module }}
-          </ion-item>
-          <ion-item no-lines>
-            <ion-note> {{ exam.since | date:'mediumDate'}} ({{ exam.since | date:'shortTime'}} - {{ exam.until |
-              date:'shortTime'}})</ion-note>
-          </ion-item>
+          <ion-card-header>
+            {{ exam.module }}
+          </ion-card-header>
+          <ion-card-content>
+            <ion-label no-margin>
+              <ion-icon padding-right name='clock'></ion-icon>
+              {{ exam.since | date:'mediumDate'}} ({{ exam.since | date:'shortTime'}} - {{ exam.until |
+              date:'shortTime'}})
+            </ion-label>
+          </ion-card-content>
         </ion-card>
       </ng-template>
       <ng-template #noExam>
