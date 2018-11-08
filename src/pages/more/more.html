@@ -4,7 +4,8 @@
       <ion-row tappable (click)="openProfile()">
         <ion-col col-3>
           <ng-template [ngIf]="photo$ | async">
-            <img [src]="'data:image/jpg;base64,' + (photo$ | async)?.base64_photo" onerror="this.src='assets/img/profile.svg'" alt="Avatar">
+            <img [src]="'data:image/jpg;base64,' + (photo$ | async)?.base64_photo" onerror="this.src='assets/img/profile.svg'"
+              alt="Avatar">
           </ng-template>
           <ng-template [ngIf]="staffProfile$ | async">
             <img [src]="(staffProfile$ | async)[0]?.PHOTO" onerror="this.src='assets/img/profile.svg'">
@@ -24,19 +25,17 @@
       </ion-row>
     </ion-grid>
   </div>
-  <div class="more-content" (swipe)='swipe($event)'>
-    <button no-lines ion-item *ngFor='let p of pages' (click)='openPage(p)'>
-      <ion-icon class="ion-icon" item-left [name]='p.icon'></ion-icon>
-      {{ p.title }}
-    </button>
-    <button no-lines ion-item (click)='openNotification()'>
-      <ion-icon class="ion-icon" item-left name='chatbubbles'></ion-icon>
-      Notifications
-      <ion-badge *ngIf="badge" item-right color="danger">{{ badge }}</ion-badge>
-    </button>
-    <button no-lines ion-item (click)='logout()'>
-      <ion-icon class="ion-icon" item-left name='log-out'></ion-icon>
-      Log out
-    </button>
-  </div>
+  <button no-lines ion-item *ngFor='let p of pages' (click)='openPage(p)'>
+    <ion-icon class="ion-icon" item-left [name]='p.icon'></ion-icon>
+    {{ p.title }}
+  </button>
+  <button no-lines ion-item (click)='openNotification()'>
+    <ion-icon class="ion-icon" item-left name='chatbubbles'></ion-icon>
+    Notifications
+    <ion-badge *ngIf="badge" item-right color="danger">{{ badge }}</ion-badge>
+  </button>
+  <button no-lines ion-item (click)='logout()'>
+    <ion-icon class="ion-icon" item-left name='log-out'></ion-icon>
+    Log out
+  </button>
 </ion-content>

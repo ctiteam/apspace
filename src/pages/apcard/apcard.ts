@@ -1,12 +1,12 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { finalize, map, tap } from 'rxjs/operators';
 
-import { Apcard, Role } from '../../interfaces';
-import { SettingsProvider, WsApiProvider } from '../../providers';
+import { Apcard } from '../../interfaces';
+import { WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -44,8 +44,6 @@ export class ApcardPage {
 
   constructor(
     private ws: WsApiProvider,
-    private navCtrl: NavController,
-    private settings: SettingsProvider,
   ) { }
 
   /** Analyze transactions. */
@@ -116,24 +114,5 @@ export class ApcardPage {
 
   ionViewDidLoad() {
     this.doRefresh();
-  }
-
-  swipe(event) {
-    const role = this.settings.get('role');
-    if (role & Role.Student) {
-      if (event.direction === 2) {
-        this.navCtrl.parent.select(4);
-      }
-      if (event.direction === 4) {
-        this.navCtrl.parent.select(2);
-      }
-    } else if (role & (Role.Lecturer | Role.Admin)) {
-      if (event.direction === 2) {
-        this.navCtrl.parent.select(2);
-      }
-      if (event.direction === 4) {
-        this.navCtrl.parent.select(0);
-      }
-    }
   }
 }

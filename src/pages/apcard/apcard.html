@@ -8,7 +8,6 @@
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="main-content" (swipe)='swipe($event)'>
     <ion-grid>
       <ion-row>
         <ion-col>
@@ -46,5 +45,4 @@
         <skeleton-item height="5px" width="150px"></skeleton-item>
       </ion-item>
     </ng-container>
-  </div>
 </ion-content>

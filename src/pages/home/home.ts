@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { App, IonicPage, NavController } from 'ionic-angular';
+import { App, IonicPage } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
@@ -21,7 +21,6 @@ export class HomePage {
 
   constructor(
     private app: App,
-    private navCtrl: NavController,
     private news: NewsProvider,
   ) { }
 
@@ -38,11 +37,5 @@ export class HomePage {
 
   openModal(item) {
     this.app.getRootNav().push('HomeModalPage', { item });
-  }
-
-  swipe(event) {
-    if (event.direction === 2) {
-      this.navCtrl.parent.select(1);
-    }
   }
 }

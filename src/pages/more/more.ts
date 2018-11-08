@@ -187,22 +187,4 @@ export class MorePage {
       })
       .present();
   }
-
-  swipe(event) {
-    const role = this.settings.get('role');
-    if (role & Role.Student) {
-      if (event.direction === 4) {
-        this.navCtrl.parent.select(3);
-      }
-    } else if (role & Role.Lecturer) {
-      if (event.direction === 4) {
-        this.navCtrl.parent.select(1);
-      }
-    } else if (role & Role.Admin) {
-      if (event.direction === 4) {
-        this.navCtrl.parent.select(1);
-      }
-    }
-
-  }
 }
