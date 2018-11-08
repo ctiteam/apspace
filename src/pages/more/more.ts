@@ -48,7 +48,7 @@ export class MorePage {
         title: 'Student Timetable',
         component: 'TimetablePage',
         icon: 'calendar',
-        role: Role.Lecturer,
+        role: Role.Lecturer | Role.Admin,
       },
       {
         title: 'Fees',
