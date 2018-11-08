@@ -119,15 +119,18 @@ export class CasTicketProvider {
       switchMap(res => {
         const parts = res.serviceResponse.authenticationSuccess.attributes.distinguishedName
           .join().toLowerCase().split(',');
-        let role: Role;
+        let role: Role = 0;
 
-        if (parts.indexOf('ou=students') !== -1) {
-          role = Role.Student;
-        } else if (parts.indexOf('ou=academic') !== -1) {
-          role = Role.Lecturer;
-        } else if (parts.indexOf('ou=apiit tpm') !== -1) {
-          role = Role.Admin;
-        } else {
+        if (parts.indexOf('ou=students') !== -1){
+          role |= Role.Student;
+        }
+        if (parts.indexOf('ou=academic') !== -1){
+          role |= Role.Lecturer;
+        }
+        if (parts.indexOf('ou=apiit tpm') !== -1){
+          role |= Role.Admin;
+        }
+        if (!role) {
           return obs_throw('Group not supported');
         }
         this.settings.set('role', role);
