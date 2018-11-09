@@ -1,29 +1,7 @@
 page-events {
-    ion-content ion-card-content a {
-        text-decoration: none;
-    }
-
-    ion-content ion-card-content ion-icon {
-        vertical-align: -1.5px;
-        padding-left: 4px;
-    }
-
-    ion-content ion-card-header + ion-card-content ion-label:nth-child(odd) {
+    ion-content ion-card-content ion-label:nth-child(odd) {
         background-color: #eceff1;
     }
-
-    .cover {
-        text-align: center;
-        padding-top: 60px;
-        width: 100%;
-        height: 250px;
-        background-image: url(../assets/img/events.jpg);
-        background-size: cover;
-        background-position: center center;
-        background-repeat: no-repeat;
-        text-align:center;
-    }
-
     .events {
         width: auto;
         font-weight: bold;
@@ -31,27 +9,61 @@ page-events {
         -webkit-text-fill-color: white;
         -webkit-text-stroke-width: 1px;
     }
-
-    .main-content{
-        background-color: white;
-    }
-
-    .fee{
+    .fee {
         border-radius: 50%;
         width: 150px;
         height: 150px;
         background: #0dbd53;
         text-align: center;
     }
-
-    .amount{
+    .amount {
         font-size: 2em;
         color: #FFFFFF;
         margin-top: 40%;
     }
-
-    .attendance-card{
-      width: auto;
-      height: 200px;
+    .attendance-card {
+        height: 200px;
+    }
+    .big-icons {
+        display: block;
+        margin: auto;
+        text-align: center;
+        font-size: 40px;
+    }
+    .top-value {
+        display: block;
+        margin: auto;
+        text-align: center;
+        font-size: 1.1em;
+        font-weight: bold;
+        color: color($colors, warn)
+    }
+    .icon-title {
+        display: block;
+        margin: auto;
+        text-align: center;
+        font-size: 0.8em;
+    }
+    .side-line {
+        border-width: 0px 0px 0px 5px;
+        border-style: solid;
+        border-color: color($colors, warn);
+    }
+    .line {
+        display: block;
+        text-align: center;
+        margin: auto;
+        width: 50%;
+        height: 2px;
+        background-color: color($colors, warn);
+        border-radius: 5px;
+    }
+    #cover {
+        background-image: linear-gradient(to bottom, color($colors, primary), white);
+        height: 300px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: -1;
     }
 }

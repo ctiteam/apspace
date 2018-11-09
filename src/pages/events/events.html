@@ -4,23 +4,50 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content parallax-header>
+<ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="main-content">
 
-    <ion-item no-lines>
-      Upcoming Classes
-      <ion-icon item-left name='clock' color='primary'></ion-icon>
-    </ion-item>
-    <ng-template let-classes [ngIf]='upcomingClass$ | async' [ngIfElse]='loadingClasses'>
-      <ng-template [ngIf]='classes && classes.length > 0' [ngIfElse]='noclass'>
-        <ion-card *ngFor='let c of classes'>
-          <ion-card-header>
-            {{ c.SUBJECT_CODE }}
-          </ion-card-header>
-          <ion-card-content>
+  <div id='cover'></div>
+  <ion-card padding>
+    <ion-row>
+      <ion-col col-6>
+        <ion-icon class='big-icons' name='md-calendar'></ion-icon>
+        <p class='icon-title'>Today's Classes</p>
+        <p class='top-value'>{{ totalClasses !== undefined ? totalClasses : '…' }}</p>
+      </ion-col>
+      <ion-col col-6>
+        <ion-icon class='big-icons' name='md-alarm'></ion-icon>
+        <p class='icon-title'>Overall Attendance</p>
+        <p class='top-value' *ngIf='percent$ | async as percent'>{{ percent.toFixed(0) + "%" }}</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6>
+        <ion-icon class='big-icons' name='md-card'></ion-icon>
+        <p class='icon-title'>APCard Balance</p>
+        <p class='top-value' *ngIf='transaction$ | async as balance'>{{ balance | currency:'MYR':'RM' }}</p>
+      </ion-col>
+      <ion-col col-6>
+        <ion-icon class='big-icons' name='md-cash'></ion-icon>
+        <p class='icon-title'>Total Overdue</p>
+        <p class='top-value'>{{ overdueFee | currency:'MYR':'RM':'1.0-0' }}</p>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+  <ng-template let-classes [ngIf]='upcomingClass$ | async' [ngIfElse]='loadingClasses'>
+    <ng-template [ngIf]='classes && classes.length > 0' [ngIfElse]='noclass'>
+      <ion-card>
+        <ion-item no-lines>
+          <b>Todays' Classes</b>
+          <ion-icon item-left name='clock' color='primary'></ion-icon>
+        </ion-item>
+        <ion-card-content>
+          <ion-list margin-top no-lines *ngFor='let c of classes'>
+            <div class="line"></div>
+            <h2 margin-bottom margin-top><b>{{ c.SUBJECT_CODE }}</b></h2>
             <ion-label no-margin>
               <ion-icon padding-right name="time"></ion-icon>
               <b>{{ c.TIME_FROM }}</b> -
@@ -36,150 +63,130 @@
                 {{ c.LECTURER_NAME }}
               </a>
             </ion-label>
-          </ion-card-content>
-        </ion-card>
-      </ng-template>
-      <ng-template #noclass>
-        <ion-card padding>
-          <ion-note>No upcoming classes for today</ion-note>
-        </ion-card>
-      </ng-template>
-    </ng-template>
-    <ng-template #loadingClasses>
-      <ion-card>
-        <ion-item no-lines *ngFor="let i of numOfSkeletons">
-          <skeleton-item height="137px" width="100%"></skeleton-item>
-        </ion-item>
+          </ion-list>
+        </ion-card-content>
       </ion-card>
     </ng-template>
-
-
-    <ion-item no-lines>
-      Upcoming Holiday
-      <ion-icon item-left name='calendar' style='color: #5AC8FA;'></ion-icon>
-    </ion-item>
-    <ng-template let-holiday [ngIf]='nextHoliday$ | async' [ngIfElse]='loadingHoliday'>
-      <ng-template [ngIf]='holiday' [ngIfElse]='noHoliday'>
-        <ion-card tappable [navPush]="'HolidaysPage'">
-          <ion-card-header>
-            {{ holiday.holiday_name }}
-          </ion-card-header>
-          <ion-card-content>
-            <ion-label no-margin>
-              <ion-icon padding-right name='calendar'></ion-icon>
-              {{ holiday.holiday_start_date | date:'mediumDate' }}
-              <ng-template [ngIf]='holiday.holiday_start_date !== holiday.holiday_end_date'>
-                - {{ holiday.holiday_end_date | date:'mediumDate'}}
-              </ng-template>
-            </ion-label>
-            <ng-template [ngIf]='holiday.holiday_description'>
-              <p no-margin>
-                <ion-icon padding-right name='text'></ion-icon>
-                {{ holiday.holiday_description }}
-              </p>
-            </ng-template>
-          </ion-card-content>
-        </ion-card>
-      </ng-template>
-      <ng-template #noHoliday>
-        <ion-card padding>
-          <ion-note>No upcoming holidays</ion-note>
-        </ion-card>
-      </ng-template>
-    </ng-template>
-    <ng-template #loadingHoliday>
+    <ng-template #noclass>
       <ion-card>
         <ion-item no-lines>
-          <skeleton-item height="137px" width="100%"></skeleton-item>
+          <b>Todays' Classes</b>
+          <ion-icon item-left name='clock' color='primary'></ion-icon>
         </ion-item>
+        <ion-card-content>
+          <ion-note>No upcoming classes for today</ion-note>
+        </ion-card-content>
       </ion-card>
     </ng-template>
+  </ng-template>
+  <ng-template #loadingClasses>
+    <ion-card>
+      <ion-item no-lines *ngFor="let i of numOfSkeletons">
+        <skeleton-item height="137px" width="100%"></skeleton-item>
+      </ion-item>
+    </ion-card>
+  </ng-template>
 
-    <ion-item no-lines>
-      Upcoming Exams
-      <ion-icon item-left name='book' style='color: #2042A6;'></ion-icon>
-    </ion-item>
-    <ng-template let-exams [ngIf]='exam$ | async | nextExams' [ngIfElse]='loadingExams'>
-      <ng-template [ngIf]='exams && exams.length > 0' [ngIfElse]='noExam'>
-        <ion-card tappable *ngFor='let exam of exams' [navPush]="'ExamSchedulePage'">
-          <ion-card-header>
-            {{ exam.module }}
-          </ion-card-header>
-          <ion-card-content>
+  <ng-template let-holiday [ngIf]='nextHoliday$ | async' [ngIfElse]='loadingHoliday'>
+    <ng-template [ngIf]='holiday' [ngIfElse]='noHoliday'>
+      <ion-card tappable [navPush]="'HolidaysPage'">
+        <ion-item no-lines>
+          <b>Upcoming Holiday</b>
+          <ion-icon item-left name='calendar' style='color: #5AC8FA;'></ion-icon>
+        </ion-item>
+        <ion-card-header>
+          {{ holiday.holiday_name }}
+        </ion-card-header>
+        <ion-card-content>
+          <ion-label no-margin>
+            <ion-icon padding-right name='calendar'></ion-icon>
+            {{ holiday.holiday_start_date | date:'mediumDate' }}
+            <ng-template [ngIf]='holiday.holiday_start_date !== holiday.holiday_end_date'>
+              - {{ holiday.holiday_end_date | date:'mediumDate'}}
+            </ng-template>
+          </ion-label>
+          <ng-template [ngIf]='holiday.holiday_description'>
+            <p no-margin>
+              <ion-icon padding-right name='text'></ion-icon>
+              {{ holiday.holiday_description }}
+            </p>
+          </ng-template>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+    <ng-template #noHoliday>
+      <ion-card>
+        <ion-item no-lines>
+          <b>Upcoming Holiday</b>
+          <ion-icon item-left name='calendar' style='color: #5AC8FA;'></ion-icon>
+        </ion-item>
+        <ion-card-content>
+          <ion-note>No upcoming holidays</ion-note>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+  </ng-template>
+  <ng-template #loadingHoliday>
+    <ion-card>
+      <ion-item no-lines>
+        <skeleton-item height="137px" width="100%"></skeleton-item>
+      </ion-item>
+    </ion-card>
+  </ng-template>
+
+  <ng-template let-exams [ngIf]='exam$ | async | nextExams' [ngIfElse]='loadingExams'>
+    <ng-template [ngIf]='exams && exams.length > 0' [ngIfElse]='noExam'>
+      <ion-card tappable [navPush]="'ExamSchedulePage'">
+        <ion-item no-lines>
+          <b>Upcoming Exams</b>
+          <ion-icon item-left name='book' style='color: #2042A6;'></ion-icon>
+        </ion-item>
+        <ion-card-content>
+          <ion-list class='side-line' no-lines *ngFor='let exam of exams'>
+            <h2 margin-left margin-bottom margin-top>{{ exam.module }}</h2>
             <ion-label no-margin>
-              <ion-icon padding-right name='clock'></ion-icon>
+              <ion-icon margin-left padding-right name='clock'></ion-icon>
               {{ exam.since | date:'mediumDate'}} ({{ exam.since | date:'shortTime'}} - {{ exam.until |
               date:'shortTime'}})
             </ion-label>
-          </ion-card-content>
-        </ion-card>
-      </ng-template>
-      <ng-template #noExam>
-        <ion-card padding>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+    <ng-template #noExam>
+      <ion-card>
+        <ion-item no-lines>
+          <b>Upcoming Exams</b>
+          <ion-icon item-left name='book' style='color: #2042A6;'></ion-icon>
+        </ion-item>
+        <ion-card-content>
           <ion-note>No upcoming exams</ion-note>
-        </ion-card>
-      </ng-template>
-    </ng-template>
-    <ng-template #loadingExams>
-      <ion-card>
-        <ion-item no-lines *ngFor="let i of numOfSkeletons">
-          <skeleton-item height="100px" width="100%"></skeleton-item>
-        </ion-item>
+        </ion-card-content>
       </ion-card>
     </ng-template>
+  </ng-template>
+  <ng-template #loadingExams>
+    <ion-card>
+      <ion-item no-lines *ngFor="let i of numOfSkeletons">
+        <skeleton-item height="100px" width="100%"></skeleton-item>
+      </ion-item>
+    </ion-card>
+  </ng-template>
 
-    <ng-template let-data [ngIf]='chartData$ | async' [ngIfElse]='loadingFees'>
-      <ng-template [ngIf]='data.data.datasets[0].data[1] !== 0' [ngIfElse]='noOverdueFee'>
-        <ion-card>
-          <ion-card-header>
-            Total Overdue Fee
-          </ion-card-header>
-          <chart margin-bottom [type]="type[0]" [data]="data.data" [options]="options[0]"></chart>
-        </ion-card>
-      </ng-template>
-      <ng-template #noOverdueFee>
-      </ng-template>
-    </ng-template>
-    <ng-template #loadingFees>
-      <ion-card>
-        <ion-item>
-          <skeleton-item height="150px" width="100%"></skeleton-item>
-        </ion-item>
-      </ion-card>
-    </ng-template>
-
-    <ion-item no-lines>
-      GPA per Intake
-      <ion-icon item-left name='checkmark-circle' style='color: rgb(247, 143, 8);'></ion-icon>
-    </ion-item>
-    <ng-template [ngIf]='barChartData' [ngIfElse]='loadingGPA'>
-      <ion-card>
-        <chart margin-top [type]="type[1]" [data]="barChartData" [options]="options[1]"></chart>
-      </ion-card>
-    </ng-template>
-    <ng-template #loadingGPA>
-      <ion-card>
-        <ion-item no-lines>
-          <skeleton-item height="160px" width="100%"></skeleton-item>
-        </ion-item>
-      </ion-card>
-    </ng-template>
-
-    <ion-item no-lines *ngIf='profile$ | async as profile'>
-      {{ profile.INTAKE }} Attendance
-      <ion-icon item-left name='alarm' style='color: #E82C0C;'></ion-icon>
-    </ion-item>
-    <ng-template let-percent [ngIf]='percent$ | async' [ngIfElse]='loadingPercent'>
-      <ion-card class="attendance-card">
-        <circle-progress [percent]="percent" [outerStrokeColor]="percent >= 80 ? '#0dbd53' : '#f04141'"></circle-progress>
-      </ion-card>
-    </ng-template>
-    <ng-template #loadingPercent>
-      <ion-card>
-        <ion-item no-lines>
-          <skeleton-item height="160px" width="100%"></skeleton-item>
-        </ion-item>
-      </ion-card>
-    </ng-template>
-  </div>
+  <ng-template [ngIf]='barChartData' [ngIfElse]='loadingGPA'>
+    <ion-card>
+      <ion-item no-lines>
+        GPA per Intake
+        <ion-icon item-left name='checkmark-circle' style='color: rgb(247, 143, 8);'></ion-icon>
+      </ion-item>
+      <chart margin-top [type]="type[1]" [data]="barChartData" [options]="options[1]"></chart>
+    </ion-card>
+  </ng-template>
+  <ng-template #loadingGPA>
+    <ion-card>
+      <ion-item no-lines>
+        <skeleton-item height="160px" width="100%"></skeleton-item>
+      </ion-item>
+    </ion-card>
+  </ng-template>
 </ion-content>

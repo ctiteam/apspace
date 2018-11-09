@@ -6,9 +6,9 @@ import {
   concatMap,
   finalize,
   flatMap,
+  map,
   tap,
   toArray,
-  map,
 } from 'rxjs/operators';
 import { EventsProvider, WsApiProvider } from '../../providers';
 import {
@@ -19,6 +19,7 @@ import {
   CourseDetails,
   Holiday,
   Holidays,
+  Apcard,
 } from '../../interfaces';
 
 @IonicPage()
@@ -35,12 +36,15 @@ export class EventsPage {
   percent$: Observable<number>;
   profile$: Observable<StudentProfile>;
   upcomingClass$: Observable<any[]>;
-  chartData$: Observable<any>;
+  transaction$: Observable<Apcard>;
 
   numOfSkeletons = new Array(2);
 
   type = ['doughnut', 'horizontalBar'];
   barChartData: any;
+  totalClasses: number;
+  overallAttendance: number;
+  overdueFee: number;
 
   options = [
     {
@@ -76,29 +80,36 @@ export class EventsPage {
   }
 
   doRefresh(refresher?) {
-    this.upcomingClass$ = this.eventsProvider.getUpcomingClass()
-      .pipe(
-        tap(_ => this.getProfile()),
-        tap(_ => this.getHolidays()),
-        tap(_ => this.getOverdueFee()),
-        finalize(() => { refresher && refresher.complete() }),
-      );
+    this.totalClasses = undefined;
+    this.upcomingClass$ = this.eventsProvider.getUpcomingClass().pipe(
+      tap(_ => this.getProfile()),
+      tap(_ => this.getAPCardBalance()),
+      tap(_ => this.getHolidays()),
+      tap(_ => this.getOverdueFee()),
+      tap(cc => this.totalClasses = cc.length),
+      finalize(() => refresher && refresher.complete()),
+    );
+  }
+
+  getAPCardBalance() {
+    this.transaction$ = this.ws.get<Apcard>('/apcard/', true).pipe(
+      map(transactions => transactions[0].Balance),
+    )
   }
 
   getHolidays() {
     const now = new Date();
-    this.nextHoliday$ = this.ws.get<Holidays>('/transix/holidays/filtered/students', true)
-      .pipe(
-        map(res => res.holidays.find(h => now < new Date(h.holiday_start_date))),
-      );
+    this.nextHoliday$ = this.ws.get<Holidays>('/transix/holidays/filtered/students', true).pipe(
+      map(res => res.holidays.find(h => now < new Date(h.holiday_start_date))),
+    );
   }
 
   getProfile() {
-    this.profile$ = this.ws.get<StudentProfile>('/student/profile').pipe(
+    this.ws.get<StudentProfile>('/student/profile').pipe(
       tap(p => this.getUpcomingExam(p.INTAKE)),
       tap(p => this.getAttendance(p.INTAKE, p.STUDENT_NUMBER)),
       tap(p => this.getGPA(p.STUDENT_NUMBER)),
-    )
+    ).subscribe();
   }
 
   getUpcomingExam(intake: string) {
@@ -107,22 +118,10 @@ export class EventsPage {
   }
 
   getOverdueFee() {
-    this.chartData$ = this.ws.get('/student/summary_overall_fee', true).pipe(
-      map(fee => {
-        return {
-          'data': {
-            datasets: [{
-              data: [fee[0].TOTAL_PAID, fee[0].TOTAL_OVERDUE],
-              backgroundColor: ['rgba(75, 192, 192, 1)', 'rgba(255,99,132,1)'],
-            }],
-            labels: [
-              `Total Paid: RM${fee[0].TOTAL_PAID}`,
-              `Total Overdue: RM${fee[0].TOTAL_OVERDUE}`,
-            ],
-          }
-        }
-      }),
-    )
+    this.ws.get('/student/summary_overall_fee', true).pipe(
+      map(fees => fees[0].TOTAL_OVERDUE),
+      tap(overdue => this.overdueFee = overdue),
+    ).subscribe();
   }
 
   /** Retrieve GPA.
