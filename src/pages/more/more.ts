@@ -32,12 +32,12 @@ export class MorePage {
         icon: 'people',
         role: Role.Student | Role.Lecturer | Role.Admin,
       },
-      {
-        title: 'Events',
-        component: 'EventsPage',
-        icon: 'calendar',
-        role: Role.Student,
-      },
+      // {
+      //   title: 'Events',
+      //   component: 'EventsPage',
+      //   icon: 'calendar',
+      //   role: Role.Student,
+      // },
       {
         title: 'Bus Tracking',
         component: 'BusTrackingPage',
