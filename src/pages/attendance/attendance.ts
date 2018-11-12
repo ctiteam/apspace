@@ -79,8 +79,7 @@ export class AttendancePage {
     this.legend$ = this.ws.get<AttendanceLegend[]>('/student/attendance_legend', refresh);
     this.isLoading = true;
     this.percent = 0;
-    const opt = { params: { id: this.studentId, format: 'json' } };
-    return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh, opt)
+    return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh)
       .pipe(
         tap(a => this.calculateAverage(a)),
         finalize(() => this.isLoading = false),

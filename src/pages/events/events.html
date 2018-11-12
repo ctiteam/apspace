@@ -45,21 +45,20 @@
           <ion-icon item-left name='clock' color='primary'></ion-icon>
         </ion-item>
         <ion-card-content>
-          <ion-list margin-top no-lines *ngFor='let c of classes'>
-            <div class="line"></div>
-            <h2 margin-bottom margin-top><b>{{ c.SUBJECT_CODE }}</b></h2>
+          <ion-list class="side-line" [style.border-color]='strToColor(c.MODID)' margin-top no-lines *ngFor='let c of classes'>
+            <h2 class="timetable-value" margin-bottom margin-top><b>{{ c.SUBJECT_CODE }}</b></h2>
             <ion-label no-margin>
-              <ion-icon padding-right name="time"></ion-icon>
+              <ion-icon class="timetable-value" padding-right name="time"></ion-icon>
               <b>{{ c.TIME_FROM }}</b> -
               <b>{{ c.TIME_TO }}</b>
             </ion-label>
             <ion-label no-margin>
-              <ion-icon padding-right name="locate"></ion-icon>
+              <ion-icon class="timetable-value" padding-right name="locate"></ion-icon>
               {{ c.ROOM }} │ {{ c.LOCATION }}
             </ion-label>
             <ion-label no-margin>
               <a (click)="openStaffDirectoryInfo(c.SAMACCOUNTNAME)">
-                <ion-icon padding-right name="contact"></ion-icon>
+                <ion-icon class="timetable-value" padding-right name="contact"></ion-icon>
                 {{ c.LECTURER_NAME }}
               </a>
             </ion-label>
@@ -83,6 +82,37 @@
     <ion-card>
       <ion-item no-lines *ngFor="let i of numOfSkeletons">
         <skeleton-item height="137px" width="100%"></skeleton-item>
+      </ion-item>
+    </ion-card>
+  </ng-template>
+
+  <ng-template [ngIf]='attendances' [ngIfElse]='loadingLowAttendances'>
+  <ng-template [ngIf]='attendances && attendances.length > 0' [ngIfElse]='nosubject'>
+    <ion-card>
+      <ion-item no-lines>
+        <b>Low Attendance Subjects</b>
+        <ion-icon item-left name='alarm' style='color: #2042A6;'></ion-icon>
+      </ion-item>
+      <ion-card-header>
+        <ion-segment [(ngModel)]="subject">
+          <ion-segment-button *ngFor='let a of attendances' [value]='a.SUBJECT_CODE' (click)='getPieChart(a.TOTAL_CLASSES, a.TOTAL_ABSENT, a.SUBJECT_CODE, a.PERCENTAGE)'>
+            {{ a.SUBJECT_CODE.split('-')[a.SUBJECT_CODE.split('-').length -1] }}
+          </ion-segment-button>
+        </ion-segment>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-label *ngIf='subjectCode'>{{ subjectCode + ': ' + percent + '%' }}</ion-label>
+        <chart margin-top [type]="type[0]" [data]="pieChartData" [options]="options[0]"></chart>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+  <ng-template #nosubject>
+  </ng-template>
+</ng-template>
+  <ng-template #loadingLowAttendances>
+    <ion-card>
+      <ion-item no-lines>
+        <skeleton-item height="200px" width="100%"></skeleton-item>
       </ion-item>
     </ion-card>
   </ng-template>
@@ -142,13 +172,15 @@
           <ion-icon item-left name='book' style='color: #2042A6;'></ion-icon>
         </ion-item>
         <ion-card-content>
-          <ion-list class='side-line' no-lines *ngFor='let exam of exams'>
+          <ion-list no-lines class="side-line" style="border-color: #fd5000;" *ngFor='let exam of exams'>
             <h2 margin-left margin-bottom margin-top>{{ exam.module }}</h2>
             <ion-label no-margin>
               <ion-icon margin-left padding-right name='clock'></ion-icon>
               {{ exam.since | date:'mediumDate'}} ({{ exam.since | date:'shortTime'}} - {{ exam.until |
               date:'shortTime'}})
             </ion-label>
+            <p margin-left padding-right>Dockets will be released on <b>{{ exam.docketsDue | date }}</b>, and the
+              results will be published on <b>{{ exam.resultDate | date }}.</b></p>
           </ion-list>
         </ion-card-content>
       </ion-card>

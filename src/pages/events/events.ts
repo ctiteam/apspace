@@ -40,16 +40,21 @@ export class EventsPage {
 
   numOfSkeletons = new Array(2);
 
-  type = ['doughnut', 'horizontalBar'];
+  type = ['pie', 'horizontalBar'];
+  pieChartData: any;
   barChartData: any;
   totalClasses: number;
   overallAttendance: number;
   overdueFee: number;
+  attendances = [];
+  subjectCode: string;
+  percent: number;
 
   options = [
     {
       legend: {
         display: true,
+        position: 'right'
       },
     },
     {
@@ -106,8 +111,8 @@ export class EventsPage {
 
   getProfile() {
     this.ws.get<StudentProfile>('/student/profile').pipe(
-      tap(p => this.getUpcomingExam(p.INTAKE)),
       tap(p => this.getAttendance(p.INTAKE, p.STUDENT_NUMBER)),
+      tap(p => this.getUpcomingExam(p.INTAKE)),
       tap(p => this.getGPA(p.STUDENT_NUMBER)),
     ).subscribe();
   }
@@ -115,6 +120,16 @@ export class EventsPage {
   getUpcomingExam(intake: string) {
     const opt = { auth: false };
     this.exam$ = this.ws.get<ExamSchedule[]>(`/examination/${intake}`, true, opt);
+  }
+
+  /** Convert string to color with djb2 hash function. */
+  strToColor(str: string): string {
+    let hash = 5381;
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) + hash) + str.charCodeAt(i); /* hash * 33 + c */
+    }
+    return '#' + [16, 8, 0].map(i => ('0' + (hash >> i & 0xFF).toString(16))
+      .substr(-2)).join('');
   }
 
   getOverdueFee() {
@@ -195,8 +210,31 @@ export class EventsPage {
     const url = `/student/attendance?intake=${intake}`;
     const opt = { params: { id: studentID } };
     this.percent$ = this.ws.get<Attendance[]>(url, true, opt).pipe(
+      tap(attendances => {
+        this.attendances = (attendances || []).filter(res => res.PERCENTAGE < 80);
+        if (this.attendances.length > 0) {
+          this.getPieChart(this.attendances[0].TOTAL_CLASSES, this.attendances[0].TOTAL_ABSENT, this.attendances[0].SUBJECT_CODE, this.attendances[0].PERCENTAGE);
+        }
+      }),
       map(attendances => attendances.reduce((a, b) => a + b.PERCENTAGE, 0) / attendances.length)
     );
+  }
+
+  getPieChart(totalClasses: number, totalAbsent: number, code: string, percent: number) {
+    this.subjectCode = code;
+    this.percent = percent;
+    let attendedClasses = totalClasses - totalAbsent;
+    this.pieChartData = {
+      datasets: [{
+        data: [attendedClasses, totalAbsent],
+        backgroundColor: ['rgba(54, 162, 235, 0.7)', 'rgba(255, 99, 132, 0.7)'],
+        borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255,99,132,1)'],
+      }],
+      labels: [
+        `Attended Classes: ${attendedClasses}`,
+        `Total Absent: ${totalAbsent}`,
+      ]
+    }
   }
 
   /** Open staff info for lecturer id. */

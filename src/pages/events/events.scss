@@ -1,28 +1,7 @@
 page-events {
-    ion-content ion-card-content ion-label:nth-child(odd) {
-        background-color: #eceff1;
-    }
-    .events {
-        width: auto;
-        font-weight: bold;
-        font-size: 4em;
-        -webkit-text-fill-color: white;
-        -webkit-text-stroke-width: 1px;
-    }
-    .fee {
-        border-radius: 50%;
-        width: 150px;
-        height: 150px;
-        background: #0dbd53;
-        text-align: center;
-    }
-    .amount {
-        font-size: 2em;
-        color: #FFFFFF;
-        margin-top: 40%;
-    }
-    .attendance-card {
-        height: 200px;
+    .timetable-value {
+        vertical-align: -1.5px;
+        padding-left: 4px;
     }
     .big-icons {
         display: block;
@@ -47,19 +26,9 @@ page-events {
     .side-line {
         border-width: 0px 0px 0px 5px;
         border-style: solid;
-        border-color: color($colors, warn);
-    }
-    .line {
-        display: block;
-        text-align: center;
-        margin: auto;
-        width: 50%;
-        height: 2px;
-        background-color: color($colors, warn);
-        border-radius: 5px;
     }
     #cover {
-        background-image: linear-gradient(to bottom, color($colors, primary), white);
+        background-image: linear-gradient(to bottom, color($colors, primary), color($colors, light));
         height: 300px;
         position: absolute;
         left: 0;
