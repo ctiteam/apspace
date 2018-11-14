@@ -13,43 +13,55 @@
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-card *ngFor='let exam of exam$ | async'>
-    <ion-card-header>
-      <b>{{ exam.subjectDescription }}</b>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list no-lines>
-        <ion-item no-padding>
-          Module
-          <p item-right>{{ exam.module }}</p>
-        </ion-item>
-        <ion-item no-padding>
-          Venue
-          <p item-right>{{ exam.venue }}</p>
-        </ion-item>
-        <ion-item no-padding>
-          Date Time
-          <p item-right>{{ exam.since | date:'medium' }}</p>
-        </ion-item>
-        <ion-item no-padding>
-          Dockets Due
-          <p item-right>{{ exam.docketsDue | date }}</p>
-        </ion-item>
-        <ion-item *ngIf="exam.appraisalsDue" no-padding>
-          Appraisals Due
-          <p item-right>{{ exam.appraisalsDue | date }}</p>
-        </ion-item>
-        <ion-item *ngIf="exam.resultDate" no-padding>
-          Result Release Date
-          <p item-right>{{ exam.resultDate | date }}</p>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
 
-  <ng-container *ngIf="isLoading">
-      <ion-item *ngFor="let i of numOfSkeletons">
-        <skeleton-item height="200px" width="100%"></skeleton-item>
+  <ng-template let-exams [ngIf]='exam$ | async' [ngIfElse]='loadingExams'>
+    <ion-card *ngFor='let exam of exams'>
+      <ion-card-header>
+        <b>{{ exam.subjectDescription }}</b>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list no-lines>
+          <ion-item no-padding>
+            Module
+            <p item-right>{{ exam.module }}</p>
+          </ion-item>
+          <ion-item no-padding>
+            Venue
+            <p item-right>{{ exam.venue }}</p>
+          </ion-item>
+          <ion-item no-padding>
+            Date Time
+            <p item-right>{{ exam.since | date:'medium' }}</p>
+          </ion-item>
+          <ion-item no-padding>
+            Dockets Due
+            <p item-right>{{ exam.docketsDue | date }}</p>
+          </ion-item>
+          <ion-item *ngIf="exam.appraisalsDue" no-padding>
+            Appraisals Due
+            <p item-right>{{ exam.appraisalsDue | date }}</p>
+          </ion-item>
+          <ion-item *ngIf="exam.resultDate" no-padding>
+            Result Release Date
+            <p item-right>{{ exam.resultDate | date }}</p>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+  <ng-template #loadingExams>
+    <ion-card *ngFor="let i of numOfSkeletons">
+      <skeleton-item height="50px" width="100%"></skeleton-item>
+      <ion-item>
+        <ion-row *ngFor="let i of numOfSkeletons">
+          <ion-col col-6>
+            <skeleton-item height="25px" width="35%"></skeleton-item>
+          </ion-col>
+          <ion-col col-6>
+            <skeleton-item height="25px" width="100%"></skeleton-item>
+          </ion-col>
+        </ion-row>
       </ion-item>
-    </ng-container>
+    </ion-card>
+  </ng-template>
 </ion-content>

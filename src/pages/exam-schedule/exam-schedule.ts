@@ -17,12 +17,11 @@ export class ExamSchedulePage {
 
   exam$: Observable<ExamSchedule[]>;
 
-  intake: string = '';
-  intakes: string[] = [];
-  selectedIntake: string = '';
+  intake: string;
+  intakes: string[];
+  selectedIntake: string;
 
   numOfSkeletons = new Array(5);
-  isLoading: boolean;
 
   constructor(
     public plt: Platform,
@@ -73,17 +72,15 @@ export class ExamSchedulePage {
   }
 
   ionViewDidLoad() {
-    this.isLoading = true;
     const intake = this.settings.get('examIntake');
     if (intake !== undefined) { // intake might be ''
       this.intake = intake;
       this.doRefresh();
     } else {
-      this.ws.get<StudentProfile>('/student/profile')
-        .subscribe(p => {
-          this.intake = p.INTAKE;
-          this.doRefresh();
-        });
+      this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+        this.intake = p.INTAKE;
+        this.doRefresh();
+      });
     }
     this.tt.get().subscribe(tt => {
       this.intakes = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort();
@@ -93,9 +90,8 @@ export class ExamSchedulePage {
   doRefresh(refresher?) {
     const url = `/examination/${this.intake}`;
     const opt = { auth: false };
-    this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt).pipe(
-      finalize(() => (refresher && refresher.complete(), this.isLoading = false)),
+    this.exam$ = this.ws.get<ExamSchedule[]>(url, refresher, opt).pipe(
+      finalize(() => (refresher && refresher.complete())),
     );
   }
-
 }
