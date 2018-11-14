@@ -91,6 +91,7 @@ export class EventsPage {
       tap(_ => this.getAPCardBalance()),
       tap(_ => this.getHolidays()),
       tap(_ => this.getOverdueFee()),
+      tap(_ => this.getGPA()),
       tap(cc => this.totalClasses = cc.length),
       finalize(() => refresher && refresher.complete()),
     );
@@ -113,7 +114,6 @@ export class EventsPage {
     this.ws.get<StudentProfile>('/student/profile').pipe(
       tap(p => this.getAttendance(p.INTAKE, p.STUDENT_NUMBER)),
       tap(p => this.getUpcomingExam(p.INTAKE)),
-      tap(p => this.getGPA(p.STUDENT_NUMBER)),
     ).subscribe();
   }
 
@@ -143,12 +143,12 @@ export class EventsPage {
    *
    * @param id - student id
    */
-  getGPA(id: string) {
+  getGPA() {
     this.ws.get<Course[]>('/student/courses').pipe(
       flatMap(intakes => intakes),
       concatMap(intake => {
         const url = `/student/sub_and_course_details?intake=${intake.INTAKE_CODE}`;
-        return this.ws.get<CourseDetails>(url, true, { params: { id } }).pipe(
+        return this.ws.get<CourseDetails>(url, true).pipe(
           map(intakeDetails => Object.assign({
             intakeDate: intake.INTAKE_NUMBER,
             intakeCode: intake.INTAKE_CODE,
