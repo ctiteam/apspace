@@ -1,14 +1,23 @@
 import { Component } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import {
-  ActionSheetButton, ActionSheetController, IonicPage, Platform,
+  ActionSheetButton,
+  ActionSheetController,
+  IonicPage,
+  Platform,
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { finalize, tap } from 'rxjs/operators';
 
 import {
-  ClassificationLegend, Course, CourseDetails, DeterminationLegend,
-  InterimLegend, MPULegend, StudentProfile, Subcourse,
+  ClassificationLegend,
+  Course,
+  CourseDetails,
+  DeterminationLegend,
+  InterimLegend,
+  MPULegend,
+  StudentProfile,
+  Subcourse,
 } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
 
@@ -19,9 +28,9 @@ import { WsApiProvider } from '../../providers';
   templateUrl: 'results.html',
 })
 export class ResultsPage {
-  intakes$: Observable<Course[]>;
+  course$: Observable<Course[]>;
   results$: Observable<Subcourse>;
-  courseDetails$: Observable<CourseDetails>;
+  courseDetail$: Observable<CourseDetails>;
   interimLegend$: Observable<InterimLegend[]>;
   mpuLegend$: Observable<MPULegend[]>;
   determinationLegend$: Observable<DeterminationLegend[]>;
@@ -29,14 +38,9 @@ export class ResultsPage {
 
   type = 'bar';
   data: any;
-  selectedIntake: string = '';
-  studentId: string;
-  semester1: any[] = [];
-  semester2: any[] = [];
-  semester3: any[] = [];
+  selectedIntake: string;
   intakeLabels: any;
   block: boolean = false;
-  results: any;
   message: string;
 
   options = {
@@ -54,8 +58,7 @@ export class ResultsPage {
     },
   };
 
-  numOfSkeletons = new Array(5);
-  isLoading: boolean;
+  numOfSkeletons = new Array(4);
 
   constructor(
     private ws: WsApiProvider,
@@ -64,28 +67,25 @@ export class ResultsPage {
     private actionSheetCtrl: ActionSheetController) { }
 
   getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
-    this.isLoading = true;
-    const opt = { params: { id: this.studentId, format: 'json' } };
-    return (this.results$ = this.ws
-      .get<Subcourse>(`/student/subcourses?intake=${intake}`, refresh, opt)
-      .pipe(
-        tap(_ => this.getCourseDetails(intake)),
-        tap(r => this.getLegend(intake, r)),
-        finalize(() => this.isLoading = false),
-      ));
+    let url = `/student/subcourses?intake=${intake}`;
+    return (this.results$ = this.ws.get<Subcourse>(url, refresh).pipe(
+      tap(r => this.getInterimLegend(intake, r, refresh)),
+      tap(_ => this.getCourseDetails(intake, refresh)),
+      tap(_ => this.getMpuLegend(intake, refresh)),
+      tap(_ => this.getDeterminationLegend(intake, refresh)),
+      tap(_ => this.getClassificatinLegend(intake, refresh)),
+    ));
   }
 
   ionViewDidLoad() {
     this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
       if (p.BLOCK === true) {
         this.block = false;
-        this.intakes$ = this.ws.get<Course[]>('/student/courses')
-          .pipe(
-            tap(i => this.selectedIntake = i[0].INTAKE_CODE),
-            tap(i => this.studentId = i[0].STUDENT_NUMBER),
-            tap(_ => this.getResults(this.selectedIntake)),
-            tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE)))),
-          );
+        this.course$ = this.ws.get<Course[]>('/student/courses').pipe(
+          tap(i => this.selectedIntake = i[0].INTAKE_CODE),
+          tap(i => this.getResults(i[0].INTAKE_CODE)),
+          tap(i => this.intakeLabels = Array.from(new Set((i || []).map(t => t.INTAKE_CODE)))),
+        );
       } else {
         this.block = true;
         this.message = p.MESSAGE;
@@ -93,37 +93,45 @@ export class ResultsPage {
     });
   }
 
-  doRefresh(refresher?) {
+  doRefresh(refresher) {
     this.results$ = this.getResults(this.selectedIntake, true).pipe(
       finalize(() => refresher.complete()),
     );
   }
 
-  getCourseDetails(intake: string, refresh: boolean = false): Observable<CourseDetails> {
-    const opt = { params: { id: this.studentId, format: 'json' } };
-    return this.courseDetails$ = this.ws.get<CourseDetails>(
-      `/student/sub_and_course_details?intake=${intake}`, refresh, opt);
+  getCourseDetails(intake: string, refresh: boolean): Observable<CourseDetails> {
+    let url = `/student/sub_and_course_details?intake=${intake}`;
+    return this.courseDetail$ = this.ws.get<CourseDetails>(url, refresh);
   }
 
-  getLegend(intake: string, results: any) {
-    this.interimLegend$ = this.ws.get<InterimLegend[]>(
-      `/student/interim_legend?id=${this.studentId}&intake=${intake}`).pipe(
-        tap(res => {
-          let gradeList: any;
-          gradeList = Array.from(new Set((res || []).map(grade => grade.GRADE)));
-          // gradeList.push("Pass", "Fail");
-          this.sortArray(results, gradeList);
-        }),
-      );
-    this.mpuLegend$ = this.ws.get<MPULegend[]>(
-      `/student/mpu_legend?id=${this.studentId}&intake=${intake}`);
-    this.determinationLegend$ = this.ws.get<DeterminationLegend[]>(
-      `/student/determination_legend?id=${this.studentId}&intake=${intake}`);
-    this.classificationLegend$ = this.ws.get<ClassificationLegend[]>(
-      `/student/classification_legend?id=${this.studentId}&intake=${intake}`);
+  getInterimLegend(intake: string, results: any, refresh: boolean) {
+    let url = `/student/interim_legend?intake=${intake}`;
+    this.interimLegend$ = this.ws.get<InterimLegend[]>(url, refresh).pipe(
+      tap(res => {
+        let gradeList = Array.from(new Set((res || []).map(grade => grade.GRADE)));
+        this.sortGrades(results, gradeList);
+      }),
+    );
   }
 
-  sortArray(results: any, gradeList: any) {
+  getMpuLegend(intake: string, refresh: boolean) {
+    let url = `/student/mpu_legend?intake=${intake}`;
+    this.mpuLegend$ = this.ws.get<MPULegend[]>(url, refresh);
+  }
+
+  getDeterminationLegend(intake: string, refresh: boolean) {
+    let url = `/student/determination_legend?intake=${intake}`;
+    this.determinationLegend$ = this.ws.get<DeterminationLegend[]>(url, refresh);
+  }
+
+  getClassificatinLegend(intake: string, refresh: boolean) {
+    let url = `/student/classification_legend?intake=${intake}`;
+    this.classificationLegend$ = this.ws.get<ClassificationLegend[]>(url, refresh);
+  }
+
+
+
+  sortGrades(results: any, gradeList: any) {
     const t = results.map(r => r.GRADE)
       .reduce((acc, v) => {
         acc[v] = (acc[v] || 0) + 1;
@@ -205,7 +213,7 @@ export class ResultsPage {
     }
   }
 
-  trackByFn(index, item) {
+  trackByFn(index) {
     return index;
   }
 }
