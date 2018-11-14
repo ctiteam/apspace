@@ -14,10 +14,9 @@ import { NewsProvider } from '../../providers';
 })
 export class HomePage {
 
-  items$: Observable<News[]>;
+  item$: Observable<News[]>;
 
-  numOfSkeletons = new Array(5);
-  isLoading: boolean;
+  numOfSkeletons = new Array(3);
 
   constructor(
     private app: App,
@@ -25,9 +24,8 @@ export class HomePage {
   ) { }
 
   doRefresh(refresher?) {
-    this.isLoading = true;
-    this.items$ = this.news.get(Boolean(refresher)).pipe(
-      finalize(() => { refresher && refresher.complete(), this.isLoading = false; }),
+    this.item$ = this.news.get(Boolean(refresher)).pipe(
+      finalize(() => refresher && refresher.complete()),
     );
   }
 
