@@ -15,24 +15,27 @@
       <ion-col col-6>
         <ion-icon class='big-icons' name='md-calendar'></ion-icon>
         <p class='icon-title'>Today's Classes</p>
-        <p class='top-value'>{{ totalClasses !== undefined ? totalClasses : '…' }}</p>
+        <p class='top-value' style='color: #0dbd53'>{{ totalClasses !== undefined ? totalClasses : '…' }}</p>
       </ion-col>
       <ion-col col-6>
         <ion-icon class='big-icons' name='md-alarm'></ion-icon>
         <p class='icon-title'>Overall Attendance</p>
-        <p class='top-value' *ngIf='percent$ | async as percent'>{{ percent.toFixed(0) + "%" }}</p>
+        <p class='top-value' *ngIf='percent$ | async as percent' [style.color]="(percent.toFixed(0) >= 80 && percent.toFixed(0) <= 100) ? '#0dbd53' : '#f04141'">{{
+          percent.toFixed(0) + "%" }}</p>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col col-6>
         <ion-icon class='big-icons' name='md-card'></ion-icon>
         <p class='icon-title'>APCard Balance</p>
-        <p class='top-value' *ngIf='transaction$ | async as balance'>{{ balance | currency:'MYR':'RM' }}</p>
+        <p class='top-value' *ngIf='transaction$ | async as balance' [style.color]="(balance == 0) ? '#f04141' : '#0dbd53'">{{
+          balance | currency:'MYR':'RM' }}</p>
       </ion-col>
       <ion-col col-6>
         <ion-icon class='big-icons' name='md-cash'></ion-icon>
         <p class='icon-title'>Total Overdue</p>
-        <p class='top-value'>{{ overdueFee | currency:'MYR':'RM':'1.0-0' }}</p>
+        <p class='top-value' [style.color]="(overdueFee == 0) ? '#0dbd53' : '#f04141'">{{ overdueFee |
+          currency:'MYR':'RM':'1.0-0' }}</p>
       </ion-col>
     </ion-row>
   </ion-card>
@@ -87,28 +90,28 @@
   </ng-template>
 
   <ng-template [ngIf]='attendances' [ngIfElse]='loadingLowAttendances'>
-  <ng-template [ngIf]='attendances && attendances.length > 0' [ngIfElse]='nosubject'>
-    <ion-card>
-      <ion-item no-lines>
-        <b>Low Attendance Subjects</b>
-        <ion-icon item-left name='alarm' style='color: #2042A6;'></ion-icon>
-      </ion-item>
-      <ion-card-header>
-        <ion-segment [(ngModel)]="subject">
-          <ion-segment-button *ngFor='let a of attendances' [value]='a.SUBJECT_CODE' (click)='getPieChart(a.TOTAL_CLASSES, a.TOTAL_ABSENT, a.SUBJECT_CODE, a.PERCENTAGE)'>
-            {{ a.SUBJECT_CODE.split('-')[a.SUBJECT_CODE.split('-').length -1] }}
-          </ion-segment-button>
-        </ion-segment>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-label *ngIf='subjectCode'>{{ subjectCode + ': ' + percent + '%' }}</ion-label>
-        <chart margin-top [type]="type[0]" [data]="pieChartData" [options]="options[0]"></chart>
-      </ion-card-content>
-    </ion-card>
+    <ng-template [ngIf]='attendances && attendances.length > 0' [ngIfElse]='nosubject'>
+      <ion-card>
+        <ion-item no-lines>
+          <b>Low Attendance Subjects</b>
+          <ion-icon item-left name='alarm' style='color: #2042A6;'></ion-icon>
+        </ion-item>
+        <ion-card-header>
+          <ion-segment [(ngModel)]="subject">
+            <ion-segment-button *ngFor='let a of attendances' [value]='a.SUBJECT_CODE' (click)='getPieChart(a.TOTAL_CLASSES, a.TOTAL_ABSENT, a.SUBJECT_CODE, a.PERCENTAGE)'>
+              {{ a.SUBJECT_CODE.split('-')[a.SUBJECT_CODE.split('-').length -1] }}
+            </ion-segment-button>
+          </ion-segment>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-label *ngIf='subjectCode'>{{ subjectCode + ': ' + percent + '%' }}</ion-label>
+          <chart margin-top [type]="type[0]" [data]="pieChartData" [options]="options[0]"></chart>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+    <ng-template #nosubject>
+    </ng-template>
   </ng-template>
-  <ng-template #nosubject>
-  </ng-template>
-</ng-template>
   <ng-template #loadingLowAttendances>
     <ion-card>
       <ion-item no-lines>
