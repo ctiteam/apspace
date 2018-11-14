@@ -3,7 +3,6 @@ import { IonicPage } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { finalize } from 'rxjs/operators';
 
 import {
   FeesBankDraft, FeesDetails, FeesSummary, FeesTotalSummary,
@@ -20,7 +19,7 @@ export class FeesPage {
 
   totalSummary$: Observable<FeesTotalSummary[]>;
   bankDraft$: Observable<FeesBankDraft[]>;
-  details$: Observable<FeesDetails[]>;
+  detail$: Observable<FeesDetails[]>;
   summary$: Observable<FeesSummary[]>;
 
   numOfSkeletons = new Array(5);
@@ -31,13 +30,11 @@ export class FeesPage {
   ) { }
 
   ionViewDidLoad() {
-    this.isLoading = true;
     this.totalSummary$ = this.ws.get('/student/summary_overall_fee', true);
     this.summary$ = this.ws.get('/student/outstanding_fee', true);
     this.bankDraft$ = this.ws.get('/student/bankdraft_amount', true);
-    this.details$ = this.ws.get('/student/overall_fee', true);
+    this.detail$ = this.ws.get('/student/overall_fee', true);
     forkJoin(this.totalSummary$, this.summary$).pipe(
-      finalize(() => this.isLoading = false),
     ).subscribe();
   }
 }
