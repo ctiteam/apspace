@@ -29,7 +29,6 @@ export class AttendancePage {
   legend$: Observable<AttendanceLegend[]>;
 
   selectedIntake: string = '';
-  studentId: string = '';
   percent;
   averageColor: string = '';
   intakeLabels: any;
@@ -75,28 +74,29 @@ export class AttendancePage {
     }
   }
 
-  getAttendance(intake: string, refresh: boolean = false): Observable<Attendance[]> {
-    this.legend$ = this.ws.get<AttendanceLegend[]>('/student/attendance_legend', refresh);
-    this.isLoading = true;
+  getAttendance(intake: string, refresh?: boolean): Observable<Attendance[]> {
     this.percent = 0;
     return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh)
       .pipe(
-        tap(a => this.calculateAverage(a)),
-        finalize(() => this.isLoading = false),
+        tap(_ => this.getLegend(refresh)),
+        tap(a => this.calculateAverage(a))
       );
+  }
+
+  getLegend(refresh: boolean) {
+    this.legend$ = this.ws.get<AttendanceLegend[]>('/student/attendance_legend', refresh);
   }
 
   ionViewDidLoad() {
     this.courses$ = this.ws.get<Course[]>('/student/courses').pipe(
       tap(c => this.selectedIntake = c[0].INTAKE_CODE),
-      tap(c => this.studentId = c[0].STUDENT_NUMBER),
-      tap(_ => this.attendance$ = this.getAttendance(this.selectedIntake, true)),
+      tap(_ => this.getAttendance(this.selectedIntake, true)),
       tap(c => this.intakeLabels = Array.from(new Set((c || []).map(t => t.INTAKE_CODE)))),
     );
   }
 
-  doRefresh(refresher) {
-    this.attendance$ = this.getAttendance(this.selectedIntake, true).pipe(
+  doRefresh(refresher?) {
+    this.attendance$ = this.getAttendance(this.selectedIntake, refresher).pipe(
       finalize(() => refresher && refresher.complete()),
     );
   }

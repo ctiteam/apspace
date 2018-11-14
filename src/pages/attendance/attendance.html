@@ -19,39 +19,51 @@
       background="#d7d8da" stroke="15"></round-progress>
   </div>
 
-  <ion-card margin-bottom *ngFor="let a of attendance$ | async">
-    <ion-item color="light-shade" class="subj-title">
-      {{ a.MODULE_ATTENDANCE }}
-    </ion-item>
-    <div class="progress-bar" [style.width]="a.PERCENTAGE + '%'" [style.background]="(a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100) ? '#0dbd53' : '#f04141'"></div>
-    <ion-item class="transparent">
-      Classes
-      <div item-content>
-        {{ (a.TOTAL_CLASSES - a.TOTAL_ABSENT) + '/' + a.TOTAL_CLASSES + ' (' + a.PERCENTAGE + '%)' }}
-      </div>
-    </ion-item>
-    <ion-item class="transparent">
-      Exam Eligibility
-      <div item-content [style.font-weight]="'bold'" [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'">{{
-        a.EXAM_ELIGIBILITY }}</div>
-    </ion-item>
-  </ion-card>
+  <ng-template let-attendances [ngIf]='attendance$ | async' [ngIfElse]='loadAttendance'>
+    <ion-card margin-bottom *ngFor="let a of attendances">
+      <ion-item color="light-shade" class="subj-title">
+        {{ a.MODULE_ATTENDANCE }}
+      </ion-item>
+      <div class="progress-bar" [style.width]="a.PERCENTAGE + '%'" [style.background]="(a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100) ? '#0dbd53' : '#f04141'"></div>
+      <ion-item class="transparent">
+        Classes
+        <div item-content>
+          {{ (a.TOTAL_CLASSES - a.TOTAL_ABSENT) + '/' + a.TOTAL_CLASSES + ' (' + a.PERCENTAGE + '%)' }}
+        </div>
+      </ion-item>
+      <ion-item class="transparent">
+        Exam Eligibility
+        <div item-content [style.font-weight]="'bold'" [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'">{{
+          a.EXAM_ELIGIBILITY }}</div>
+      </ion-item>
+    </ion-card>
+  </ng-template>
+  <ng-template #loadAttendance>
+    <ion-card *ngFor="let i of numOfSkeletons">
+      <ion-item>
+        <skeleton-item height="137px" width="100%"></skeleton-item>
+      </ion-item>
+    </ion-card>
+  </ng-template>
 
-  <ng-container *ngIf="isLoading">
-    <ion-item *ngFor="let i of numOfSkeletons">
-      <skeleton-item height="137px" width="100%"></skeleton-item>
-    </ion-item>
-  </ng-container>
-
-  <ion-card color="warn" *ngIf="legend$ | async as legend">
-    <ion-card-header>
-      <h2>Legend</h2>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-row *ngFor="let l of objectKeys(legend)">
-        <ion-col col-3>{{ l }}</ion-col>
-        <ion-col col-9>{{ legend[l] }}</ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
+  <ng-template let-legend [ngIf]='legend$ | async' [ngIfElse]='loadLegend'>
+    <ion-card color="warn">
+      <ion-card-header>
+        <h2>Legend</h2>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-row *ngFor="let l of objectKeys(legend)">
+          <ion-col col-3>{{ l }}</ion-col>
+          <ion-col col-9>{{ legend[l] }}</ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+  <ng-template #loadLegend>
+    <ion-card>
+      <ion-item>
+        <skeleton-item height="137px" width="100%"></skeleton-item>
+      </ion-item>
+    </ion-card>
+  </ng-template>
 </ion-content>
