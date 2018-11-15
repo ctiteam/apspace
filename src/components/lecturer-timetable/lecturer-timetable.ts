@@ -69,7 +69,7 @@ export class LecturerTimetableComponent implements OnInit {
             type: 'lecturerTimetable',
             name: d.module,
             start: time,
-            end: time.getTime() - d.duration * 1000,
+            end: time.getTime() + d.duration * 1000,
             loc: d.room + ' ' + d.location,
             intakes: d.intakes,
           });
