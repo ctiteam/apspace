@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="my.edu.apiit.apspace" version="0.5.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="my.edu.apiit.apspace" version="0.5.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>APSpace</name>
     <description>The Asia Pacific University APP provides convenient access to important information and to most of our services in your hand.</description>
     <author email="cti@apiit.edu.my" href="http://cti.my/">CTI @ APIIT</author>
@@ -52,6 +52,9 @@
         <icon height="1024" src="resources/ios/icon/icon-1024.png" width="1024" />
     </platform>
     <allow-navigation href="http://10.10.107.27:8101" />
+    <plugin name="cordova-plugin-ionic-webview" spec="^2.2.3">
+        <variable name="ANDROID_SUPPORT_ANNOTATIONS_VERSION" value="27.+" />
+    </plugin>
     <plugin name="cordova-plugin-actionsheet" spec="^2.3.3" />
     <plugin name="cordova-plugin-badge" spec="^0.8.7" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
@@ -64,7 +67,6 @@
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-sqlite-storage" spec="^2.4.0" />
     <plugin name="cordova-plugin-fcm-with-dependecy-updated" spec="^2.2.4" />
-    <plugin name="com.telerik.plugins.nativepagetransitions" spec="^0.6.5" />
     <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.1" />
 </widget>

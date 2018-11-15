@@ -1,6 +1,6 @@
 {
   "name": "APSpace",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "author": "CTI Team <cti@apiit.edu.my>",
   "homepage": "http://www.cti.my/",
   "license": "SEE LICENSE IN LICENSE",
@@ -41,7 +41,6 @@
     "angular-svg-round-progressbar": "~1.2.1",
     "angular2-chartjs": "^0.5.1",
     "autoprefixer": "^8.1.0",
-    "com.telerik.plugins.nativepagetransitions": "^0.6.5",
     "cordova-android": "7.1.1",
     "cordova-ios": "4.5.5",
     "cordova-plugin-actionsheet": "^2.3.3",
@@ -50,6 +49,7 @@
     "cordova-plugin-email-composer": "^0.8.15",
     "cordova-plugin-fcm-with-dependecy-updated": "^2.2.4",
     "cordova-plugin-inappbrowser": "^3.0.0",
+    "cordova-plugin-ionic-webview": "^2.2.3",
     "cordova-plugin-local-notification": "^0.9.0-beta.3",
     "cordova-plugin-network-information": "^2.0.1",
     "cordova-plugin-networkinterface": "^2.0.0",
@@ -95,7 +95,9 @@
       "cordova-plugin-whitelist": {},
       "cordova-sqlite-storage": {},
       "cordova-plugin-fcm-with-dependecy-updated": {},
-      "com.telerik.plugins.nativepagetransitions": {}
+      "cordova-plugin-ionic-webview": {
+        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
+      }
     },
     "platforms": [
       "ios",
