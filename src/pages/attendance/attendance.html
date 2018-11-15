@@ -14,8 +14,9 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div class="cover">
-    <ion-label class="current"><b>{{percent + '%'}}</b></ion-label>
-    <round-progress class="circle-progress" [current]="percent" max="100" [radius]="90" [rounded]="true" [color]="percent !== 0 ? averageColor : '#d7d8da'"
+    <ion-label class="current"><b>{{ average | percent }}</b></ion-label>
+    <round-progress class="circle-progress" [current]="average" max="1" [radius]="90"
+      [rounded]="true" [color]="average != 0 ? average >= .8 ? '#0dbd53' : '#f04141' : '#d7d8da'"
       background="#d7d8da" stroke="15"></round-progress>
   </div>
 

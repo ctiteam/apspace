@@ -12,7 +12,7 @@ export class ExamPipe implements PipeTransform {
      * @param exams - all exams of student
      */
     transform(exams: ExamSchedule[] | null): ExamSchedule[] {
-        let now = new Date();
+        const now = new Date();
         return (exams || []).filter(exam => new Date(exam.since) >= now);
     }
 }

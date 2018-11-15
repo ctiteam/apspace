@@ -68,7 +68,7 @@ export class ResultsPage {
     private actionSheetCtrl: ActionSheetController) { }
 
   getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
-    let url = `/student/subcourses?intake=${intake}`;
+    const url = `/student/subcourses?intake=${intake}`;
     return (this.results$ = this.ws.get<Subcourse>(url, refresh).pipe(
       tap(r => this.getInterimLegend(intake, r, refresh)),
       tap(_ => this.getCourseDetails(intake, refresh)),
@@ -101,36 +101,34 @@ export class ResultsPage {
   }
 
   getCourseDetails(intake: string, refresh: boolean): Observable<CourseDetails> {
-    let url = `/student/sub_and_course_details?intake=${intake}`;
+    const url = `/student/sub_and_course_details?intake=${intake}`;
     return this.courseDetail$ = this.ws.get<CourseDetails>(url, refresh);
   }
 
   getInterimLegend(intake: string, results: any, refresh: boolean) {
-    let url = `/student/interim_legend?intake=${intake}`;
+    const url = `/student/interim_legend?intake=${intake}`;
     this.interimLegend$ = this.ws.get<InterimLegend[]>(url, refresh).pipe(
       tap(res => {
-        let gradeList = Array.from(new Set((res || []).map(grade => grade.GRADE)));
+        const gradeList = Array.from(new Set((res || []).map(grade => grade.GRADE)));
         this.sortGrades(results, gradeList);
       }),
     );
   }
 
   getMpuLegend(intake: string, refresh: boolean) {
-    let url = `/student/mpu_legend?intake=${intake}`;
+    const url = `/student/mpu_legend?intake=${intake}`;
     this.mpuLegend$ = this.ws.get<MPULegend[]>(url, refresh);
   }
 
   getDeterminationLegend(intake: string, refresh: boolean) {
-    let url = `/student/determination_legend?intake=${intake}`;
+    const url = `/student/determination_legend?intake=${intake}`;
     this.determinationLegend$ = this.ws.get<DeterminationLegend[]>(url, refresh);
   }
 
   getClassificatinLegend(intake: string, refresh: boolean) {
-    let url = `/student/classification_legend?intake=${intake}`;
+    const url = `/student/classification_legend?intake=${intake}`;
     this.classificationLegend$ = this.ws.get<ClassificationLegend[]>(url, refresh);
   }
-
-
 
   sortGrades(results: any, gradeList: any) {
     const gradeCounter: { [index: string]: number } = results

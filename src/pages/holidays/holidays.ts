@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-import { map, finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
-import { Role, Holiday, Holidays } from '../../interfaces';
-import { WsApiProvider, SettingsProvider } from '../../providers';
+import { Holiday, Holidays, Role } from '../../interfaces';
+import { SettingsProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -35,7 +35,7 @@ export class HolidaysPage {
     this.selectedRole = this.settings.get('role') & Role.Student ? 'students' : 'staff';
     this.holiday$ = this.ws.get<Holidays>(`/transix/holidays`, refresher).pipe(
       map(res => res.holidays),
-      finalize(() => refresher && refresher.complete())
-    )
+      finalize(() => refresher && refresher.complete()),
+    );
   }
 }
