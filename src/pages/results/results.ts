@@ -52,6 +52,7 @@ export class ResultsPage {
         {
           ticks: {
             beginAtZero: true,
+            stepSize: 1,
           },
         },
       ],
@@ -132,15 +133,17 @@ export class ResultsPage {
 
 
   sortGrades(results: any, gradeList: any) {
-    const t = results.map(r => r.GRADE)
+    const gradeCounter: { [index: string]: number } = results
+      .map(r => r.GRADE)
       .reduce((acc, v) => {
         acc[v] = (acc[v] || 0) + 1;
         return acc;
       }, {});
 
-    const studentResults = Object.keys(t)
+    const studentResults = Object.keys(gradeCounter)
+      .filter(g => g.length <= 2)
       .sort((a, b) => gradeList.indexOf(a) - gradeList.indexOf(b))
-      .map(k => ({ grade: k, count: t[k] }));
+      .map(k => ({ grade: k, count: gradeCounter[k] }));
 
     const grades = studentResults.map(r => r.grade);
     const count = studentResults.map(r => r.count);
