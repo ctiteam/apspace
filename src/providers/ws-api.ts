@@ -66,7 +66,7 @@ export class WsApiProvider {
       attempts: 4,
       auth: true,
       params: {},
-      timeout: 15000,
+      timeout: 20000,
       url: useNewApi ? this.apiUrl : this.oldApiUrl,
     }, options);
 
