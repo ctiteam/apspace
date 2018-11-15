@@ -20,7 +20,7 @@ import {
   Holidays,
   StudentProfile,
 } from '../../interfaces';
-import { EventsProvider, WsApiProvider } from '../../providers';
+import { WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -75,7 +75,6 @@ export class EventsPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public eventsProvider: EventsProvider,
     public app: App,
     public ws: WsApiProvider,
   ) { }
@@ -86,7 +85,7 @@ export class EventsPage {
 
   doRefresh(refresher?) {
     this.totalClasses = undefined;
-    this.upcomingClass$ = this.eventsProvider.getUpcomingClass().pipe(
+    this.upcomingClass$ = this.ws.get<any[]>('/student/upcoming_class').pipe(
       tap(_ => this.getProfile()),
       tap(_ => this.getAPCardBalance()),
       tap(_ => this.getHolidays()),

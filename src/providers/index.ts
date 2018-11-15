@@ -9,7 +9,6 @@ export { httpInterceptorProviders } from './http-interceptors';
 export { BusTrackingProvider } from './bus-tracking';
 export { CasTicketProvider } from './cas-ticket';
 export { DataCollectorProvider } from './data-collector';
-export { EventsProvider } from './events';
 export { FeedbackProvider } from './feedback';
 export { NewsProvider } from './news';
 export { NotificationProvider } from './notification';
