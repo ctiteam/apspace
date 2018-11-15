@@ -16,7 +16,7 @@
   <div class="cover">
     <ion-label class="current"><b>{{ average | percent }}</b></ion-label>
     <round-progress class="circle-progress" [current]="average" max="1" [radius]="90"
-      [rounded]="true" [color]="average == 0 ? average >= 80 ? '#f04141' : '#d7d8da' : '#0dbd53'"
+      [rounded]="true" [color]="average != 0 ? average >= .8 ? '#0dbd53' : '#f04141' : '#d7d8da'"
       background="#d7d8da" stroke="15"></round-progress>
   </div>
 
