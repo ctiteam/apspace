@@ -21,6 +21,7 @@ export class NotificationPage {
 
   numOfSkeletons = new Array(5);
   isLoading: boolean;
+  cordova: boolean;
 
   constructor(
     private navParams: NavParams,
@@ -46,6 +47,7 @@ export class NotificationPage {
   }
 
   doRefresh(refresher?) {
+    this.cordova = true;
     this.isLoading = true;
     this.message$ = this.notification.getMessage().pipe(
       map(res => res.history),

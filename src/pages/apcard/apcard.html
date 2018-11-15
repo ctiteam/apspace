@@ -6,43 +6,44 @@
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh">
+    </ion-refresher-content>
   </ion-refresher>
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <h6 ion-text>Balance</h6>
-          <p ion-text item-end [@flyInOut]="'in'">{{ balance | currency:'RM' }}</p>
-        </ion-col>
-        <ion-col>
-          <h6 ion-text>Month-to-Date Spend</h6>
-          <p ion-text item-end [@flyInOut]="'in'">{{ monthly | currency:'RM' }}</p>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <h6 ion-text>Balance</h6>
+        <p ion-text item-end [@flyInOut]="'in'">{{ balance | currency:'RM' }}</p>
+      </ion-col>
+      <ion-col>
+        <h6 ion-text>Month-to-Date Spend</h6>
+        <p ion-text item-end [@flyInOut]="'in'">{{ monthly | currency:'RM' }}</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-    <chart *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
+  <chart *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
 
-    <ion-segment [(ngModel)]='filterEntry'>
-      <ion-segment-button value='dr'>Debit</ion-segment-button>
-      <ion-segment-button value=''>Transactions</ion-segment-button>
-      <ion-segment-button value='cr'>Credit</ion-segment-button>
-    </ion-segment>
+  <ion-segment [(ngModel)]='filterEntry'>
+    <ion-segment-button value='dr'>Debit</ion-segment-button>
+    <ion-segment-button value=''>Transactions</ion-segment-button>
+    <ion-segment-button value='cr'>Credit</ion-segment-button>
+  </ion-segment>
 
-    <ion-list margin-top no-lines>
-      <ion-item *ngFor="let transaction of transaction$ | async | for:filterEntry">
-        <h2 ion-text>{{ transaction.ItemName }}</h2>
-        <p ion-text>{{ transaction.SpendDate | date }}</p>
-        <p ion-text item-end [style.color]="transaction.SpendVal > 0 ? 'red' : 'green'">
-          {{ -transaction.SpendVal | currency:'RM' }}
-        </p>
-      </ion-item>
-    </ion-list>
+  <ion-list margin-top no-lines>
+    <ion-item *ngFor="let transaction of transaction$ | async | for:filterEntry">
+      <h2 ion-text>{{ transaction.ItemName }}</h2>
+      <p ion-text>{{ transaction.SpendDate | date }}</p>
+      <p ion-text item-end [style.color]="transaction.SpendVal > 0 ? 'red' : 'green'">
+        {{ -transaction.SpendVal | currency:'RM' }}
+      </p>
+    </ion-item>
+  </ion-list>
 
-    <ng-container *ngIf="isLoading">
-      <ion-item *ngFor="let i of numOfSkeletons">
-        <skeleton-item height="50px" width="100%"></skeleton-item>
-        <skeleton-item height="5px" width="150px"></skeleton-item>
-      </ion-item>
-    </ng-container>
+  <ng-container *ngIf="isLoading">
+    <ion-item *ngFor="let i of numOfSkeletons">
+      <skeleton-item height="50px" width="100%"></skeleton-item>
+      <skeleton-item height="5px" width="150px"></skeleton-item>
+    </ion-item>
+  </ng-container>
 </ion-content>

@@ -4,9 +4,11 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content overflow-scroll='true'> <!-- staff is not [] -->
+<ion-content overflow-scroll='true'>
+  <!-- staff is not [] -->
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh">
+    </ion-refresher-content>
   </ion-refresher>
 
   <ion-list no-lines>
@@ -18,18 +20,15 @@
       <ion-label floating>Functional Area</ion-label>
       <ion-select [(ngModel)]="dept" interface="popover">
         <ion-option selected></ion-option>
-        <ion-option *ngFor="let type of staffTypes"
-          [innerHTML]="type.toUpperCase()" [value]="type"></ion-option>
+        <ion-option *ngFor="let type of staffTypes" [innerHTML]="type.toUpperCase()" [value]="type"></ion-option>
       </ion-select>
     </ion-item>
   </ion-list>
 
-  <ion-list [virtualScroll]="staff$ | async | in:dept | search:term"
-    [virtualTrackBy]="trackById" approxItemHeight="68px">
+  <ion-list [virtualScroll]="staff$ | async | in:dept | search:term" [virtualTrackBy]="trackById" approxItemHeight="68px">
     <ion-item *virtualItem="let staff" navPush="StaffDirectoryInfoPage" [navParams]="{id: staff.ID}">
       <ion-avatar item-start>
-        <ion-img [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '_64x64.jpg'"
-          onerror="this.src='assets/img/profile.svg'"></ion-img>
+        <ion-img [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '_64x64.jpg'" onerror="this.src='assets/img/profile.svg'"></ion-img>
       </ion-avatar>
       <h2>{{ staff.FULLNAME }}</h2>
       <p>{{ staff.EMAIL }}</p>
@@ -37,12 +36,12 @@
   </ion-list>
 
   <ng-container *ngIf="isLoading">
-      <ion-item *ngFor="let i of numOfSkeletons">
-        <ion-avatar item-start>
-          <skeleton-item height="50px" width="50px" rounded></skeleton-item>
-        </ion-avatar>
-        <skeleton-item width="200px"></skeleton-item>
-        <skeleton-item height="5px" width="150px"></skeleton-item>
-      </ion-item>
-    </ng-container>
+    <ion-item *ngFor="let i of numOfSkeletons">
+      <ion-avatar item-start>
+        <skeleton-item height="50px" width="50px" rounded></skeleton-item>
+      </ion-avatar>
+      <skeleton-item width="200px"></skeleton-item>
+      <skeleton-item height="5px" width="150px"></skeleton-item>
+    </ion-item>
+  </ng-container>
 </ion-content>

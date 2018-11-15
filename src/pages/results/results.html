@@ -12,7 +12,6 @@
 </ion-header>
 
 <ion-content>
-
   <ng-template [ngIf]="block">
     <ion-card style="background: #f04141">
       <ion-card-header>
@@ -27,7 +26,8 @@
   </ng-template>
 
   <ion-refresher *ngIf="!block" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh">
+    </ion-refresher-content>
   </ion-refresher>
 
   <ng-template [ngIf]="data" [ngIfElse]='loadingBarChart'>

@@ -15,13 +15,11 @@
 <ion-content>
   <!-- refresher -->
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)='getTrips($event)'>
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh">
+    </ion-refresher-content>
   </ion-refresher>
 
-
   <ng-container *ngIf="trip$ | async | on:selectedDay | during:selectedFrom:selectedTo as trips">
-
-
     <!-- Location Tap -->
     <div class="miniLocationButtonDiv" *ngIf="selectedFrom !== 'Any'">
       <img id="mapButton" tappable src="assets/img/miniMapF.png" alt="Smiley face" height="42" width="42" (click)="presentMoreInfoModal(trips, trip, 'location')">

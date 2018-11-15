@@ -11,7 +11,8 @@
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh">
+    </ion-refresher-content>
   </ion-refresher>
 
   <ng-template let-exams [ngIf]='exam$ | async' [ngIfElse]='loadingExams'>

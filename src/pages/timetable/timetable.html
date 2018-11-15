@@ -1,14 +1,12 @@
 <ion-header>
   <ion-navbar color="primary">
     <ion-buttons left>
-      <button color="light" ion-button outline small (click)="chooseWeek()"
-        [disabled]="availableWeek && availableWeek.length === 0">
+      <button color="light" ion-button outline small (click)="chooseWeek()" [disabled]="availableWeek && availableWeek.length === 0">
         {{ (selectedDate | date) || 'Weeks' }}
       </button>
     </ion-buttons>
     <ion-buttons right>
-      <button color="light" ion-button outline small
-        (click)="presentActionSheet(intakeLabels, changeIntake)">
+      <button color="light" ion-button outline small (click)="presentActionSheet(intakeLabels, changeIntake)">
         {{ intake || 'Intakes' }}
       </button>
     </ion-buttons>
@@ -17,13 +15,12 @@
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh">
+    </ion-refresher-content>
   </ion-refresher>
-  <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date:'E' | uppercase"
-    (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
+  <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date:'E' | uppercase" (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
     <!-- Use CSS for dynamically updated segment -->
-    <ion-segment-button *ngFor="let d of wday; index as i" [value]="d"
-      [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
+    <ion-segment-button *ngFor="let d of wday; index as i" [value]="d" [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
       {{ d }}
     </ion-segment-button>
   </ion-segment>

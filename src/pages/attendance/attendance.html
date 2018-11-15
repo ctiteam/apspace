@@ -11,7 +11,8 @@
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh">
+    </ion-refresher-content>
   </ion-refresher>
   <div class="cover">
     <ion-label class="current"><b>{{ average | percent }}</b></ion-label>
