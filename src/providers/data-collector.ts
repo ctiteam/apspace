@@ -30,7 +30,7 @@ export class DataCollectorProvider {
     this.cas = this.injector.get(CasTicketProvider);
     return this.http.get('https://api.ipify.org?format=json').pipe(
       switchMap(responseIP => {
-        ip = responseIP.ip;
+        ip = responseIP['ip'];
         return this.cas.getST(this.SERVICE_URL);
       }),
       switchMap(st => {

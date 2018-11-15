@@ -29,7 +29,7 @@ export class AttendancePage {
   legend$: Observable<AttendanceLegend[]>;
 
   selectedIntake: string = '';
-  percent;
+  average: number;
   averageColor: string = '';
   intakeLabels: any;
 
@@ -75,16 +75,23 @@ export class AttendancePage {
   }
 
   getAttendance(intake: string, refresh?: boolean): Observable<Attendance[]> {
-    this.percent = 0;
-    return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh)
-      .pipe(
-        tap(_ => this.getLegend(refresh)),
-        tap(a => this.calculateAverage(a)),
-      );
+    this.average = 0;
+    return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh).pipe(
+      tap(_ => this.getLegend(refresh)),
+      tap(a => this.calculateAverage(a)),
+    );
   }
 
   getLegend(refresh: boolean) {
     this.legend$ = this.ws.get<AttendanceLegend[]>('/student/attendance_legend', refresh);
+  }
+
+  calculateAverage(aa: Attendance[] | null) {
+    if (!Array.isArray(aa)) {
+      return;
+    }
+    console.log(aa);
+    this.average = aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100;
   }
 
   ionViewDidLoad() {
@@ -99,18 +106,5 @@ export class AttendancePage {
     this.attendance$ = this.getAttendance(this.selectedIntake, refresher).pipe(
       finalize(() => refresher && refresher.complete()),
     );
-  }
-
-  calculateAverage(a: any) {
-    if (!a) {
-      this.averageColor = '#f04141';
-    } else {
-      const average = a.reduce((a, b) => a + b.PERCENTAGE, 0) / a.length;
-      this.percent = average.toFixed(0);
-      this.averageColor = '#0dbd53';
-      if (this.percent < 80) {
-        this.averageColor = '#f04141';
-      }
-    }
   }
 }
