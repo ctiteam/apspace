@@ -112,7 +112,7 @@ export class EventsPage {
 
   getProfile() {
     this.ws.get<StudentProfile>('/student/profile').pipe(
-      tap(p => this.getAttendance(p.INTAKE, p.STUDENT_NUMBER)),
+      tap(p => this.getAttendance(p.INTAKE)),
       tap(p => this.getUpcomingExam(p.INTAKE)),
     ).subscribe();
   }
@@ -139,10 +139,6 @@ export class EventsPage {
     ).subscribe();
   }
 
-  /** Retrieve GPA.
-   *
-   * @param id - student id
-   */
   getGPA() {
     this.ws.get<Course[]>('/student/courses').pipe(
       flatMap(intakes => intakes),
@@ -206,14 +202,14 @@ export class EventsPage {
     });
   }
 
-  getAttendance(intake: string, studentID: string) {
+  getAttendance(intake: string) {
     const url = `/student/attendance?intake=${intake}`;
-    const opt = { params: { id: studentID } };
-    this.percent$ = this.ws.get<Attendance[]>(url, true, opt).pipe(
+    this.percent$ = this.ws.get<Attendance[]>(url, true).pipe(
       tap(attendances => {
         this.attendances = (attendances || []).filter(res => res.PERCENTAGE < 80);
         if (this.attendances.length > 0) {
-          this.getPieChart(this.attendances[0].TOTAL_CLASSES, this.attendances[0].TOTAL_ABSENT, this.attendances[0].SUBJECT_CODE, this.attendances[0].PERCENTAGE);
+          this.getPieChart(this.attendances[0].TOTAL_CLASSES, this.attendances[0].TOTAL_ABSENT,
+            this.attendances[0].SUBJECT_CODE, this.attendances[0].PERCENTAGE);
         }
       }),
       map(attendances => attendances.reduce((a, b) => a + b.PERCENTAGE, 0) / attendances.length),

@@ -90,7 +90,6 @@ export class AttendancePage {
     if (!Array.isArray(aa)) {
       return;
     }
-    console.log(aa);
     this.average = aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100;
   }
 
