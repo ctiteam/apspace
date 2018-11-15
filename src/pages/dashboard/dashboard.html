@@ -6,7 +6,8 @@
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh">
+    </ion-refresher-content>
   </ion-refresher>
 
   <div id='cover'></div>
@@ -44,8 +45,8 @@
     <ng-template [ngIf]='classes && classes.length > 0' [ngIfElse]='noclass'>
       <ion-card>
         <ion-item no-lines>
-          <b>Todays' Classes</b>
-          <ion-icon item-left name='clock' color='primary'></ion-icon>
+          <b>Today's Classes</b>
+          <ion-icon item-left name='calendar' color='primary'></ion-icon>
         </ion-item>
         <ion-card-content>
           <ion-list class="side-line" [style.border-color]='strToColor(c.MODID)' margin-top no-lines *ngFor='let c of classes'>
@@ -72,8 +73,8 @@
     <ng-template #noclass>
       <ion-card>
         <ion-item no-lines>
-          <b>Todays' Classes</b>
-          <ion-icon item-left name='clock' color='primary'></ion-icon>
+          <b>Today's Classes</b>
+          <ion-icon item-left name='calendar' color='primary'></ion-icon>
         </ion-item>
         <ion-card-content>
           <ion-note>No upcoming classes for today</ion-note>
@@ -122,10 +123,10 @@
 
   <ng-template let-holiday [ngIf]='nextHoliday$ | async' [ngIfElse]='loadingHoliday'>
     <ng-template [ngIf]='holiday' [ngIfElse]='noHoliday'>
-      <ion-card tappable [navPush]="'HolidaysPage'">
+      <ion-card tappable (click)="openPage('HolidaysPage')">
         <ion-item no-lines>
           <b>Upcoming Holiday</b>
-          <ion-icon item-left name='calendar' style='color: #5AC8FA;'></ion-icon>
+          <ion-icon item-left name='globe' style='color: #5AC8FA;'></ion-icon>
         </ion-item>
         <ion-card-header>
           {{ holiday.holiday_name }}
@@ -151,7 +152,7 @@
       <ion-card>
         <ion-item no-lines>
           <b>Upcoming Holiday</b>
-          <ion-icon item-left name='calendar' style='color: #5AC8FA;'></ion-icon>
+          <ion-icon item-left name='globe' style='color: #5AC8FA;'></ion-icon>
         </ion-item>
         <ion-card-content>
           <ion-note>No upcoming holidays</ion-note>
@@ -169,7 +170,7 @@
 
   <ng-template let-exams [ngIf]='exam$ | async | nextExams' [ngIfElse]='loadingExams'>
     <ng-template [ngIf]='exams && exams.length > 0' [ngIfElse]='noExam'>
-      <ion-card tappable [navPush]="'ExamSchedulePage'">
+      <ion-card tappable (click)="openPage('ExamSchedulePage')">
         <ion-item no-lines>
           <b>Upcoming Exams</b>
           <ion-icon item-left name='book' style='color: #2042A6;'></ion-icon>

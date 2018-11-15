@@ -3,19 +3,19 @@ import { RoundProgressModule } from 'angular-svg-round-progressbar';
 import { ChartModule } from 'angular2-chartjs';
 import { IonicPageModule } from 'ionic-angular';
 import { ComponentsModule } from './../../components/components.module';
-import { EventsPage } from './events';
+import { DashboardPage } from './dashboard';
 import { ExamPipe } from './exam.pipe';
 
 @NgModule({
   declarations: [
-    EventsPage,
+    DashboardPage,
     ExamPipe,
   ],
   imports: [
-    IonicPageModule.forChild(EventsPage),
+    IonicPageModule.forChild(DashboardPage),
     ComponentsModule,
     ChartModule,
     RoundProgressModule,
   ],
 })
-export class EventsPageModule { }
+export class DashboardPageModule { }

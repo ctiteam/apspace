@@ -32,12 +32,12 @@ export class MorePage {
         icon: 'people',
         role: Role.Student | Role.Lecturer | Role.Admin,
       },
-      // {
-      //   title: 'Events',
-      //   component: 'EventsPage',
-      //   icon: 'calendar',
-      //   role: Role.Student,
-      // },
+      {
+        title: 'News',
+        component: 'NewsPage',
+        icon: 'paper',
+        role: Role.Student,
+      },
       {
         title: 'Bus Tracking',
         component: 'BusTrackingPage',
@@ -71,7 +71,7 @@ export class MorePage {
       {
         title: 'My Library',
         component: 'KohaPage',
-        icon: 'book',
+        icon: 'bookmarks',
         role: Role.Student | Role.Lecturer,
       },
       {
@@ -136,7 +136,7 @@ export class MorePage {
     const role = this.settings.get('role');
     if (role & Role.Student) {
       this.profile$ = this.ws.get<StudentProfile>('/student/profile');
-      this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
+      // this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
     } else if (role & (Role.Lecturer | Role.Admin)) {
       this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
     }

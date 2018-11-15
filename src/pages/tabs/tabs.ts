@@ -19,7 +19,8 @@ import {
 export class TabsPage {
 
   pages = [
-    { title: 'News', icon: 'home', root: 'HomePage', role: Role.Student | Role.Lecturer | Role.Admin },
+    { title: 'Dashboard', icon: 'podium', root: 'DashboardPage', role: Role.Student },
+    { title: 'News', icon: 'home', root: 'NewsPage', role: Role.Lecturer | Role.Admin },
     { title: 'Timetable', icon: 'calendar', root: 'TimetablePage', role: Role.Student },
     { title: 'Timetable', icon: 'calendar', root: 'LecturerTimetablePage', role: Role.Lecturer },
     { title: 'Attendance', icon: 'alarm', root: 'AttendancePage', role: Role.Student },
@@ -56,7 +57,7 @@ export class TabsPage {
   ) {
 
     const role = this.settings.get('role');
-    this.tabs = this.pages.filter(page => page.role & role).slice(0, 4);
+    this.tabs = this.pages.filter(page => page.role & role).slice(0, 5);
 
     this.events.subscribe('newNotification', () => {
       this.getBadge();

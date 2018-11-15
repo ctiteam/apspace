@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { ParallaxHeader } from '../../directives/parallax-header/parallax-header';
-import { HomeModalPage } from './home-modal';
+import { NewsModalPage } from './news-modal';
 
 @NgModule({
   declarations: [
-    HomeModalPage,
+    NewsModalPage,
     ParallaxHeader,
   ],
   imports: [
-    IonicPageModule.forChild(HomeModalPage),
+    IonicPageModule.forChild(NewsModalPage),
   ],
 })
-export class HomeModalPageModule { }
+export class NewsModalPageModule { }

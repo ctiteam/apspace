@@ -9,10 +9,10 @@ import { NewsProvider } from '../../providers';
 
 @IonicPage()
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html',
+  selector: 'page-news',
+  templateUrl: 'news.html',
 })
-export class HomePage {
+export class NewsPage {
 
   item$: Observable<News[]>;
 
@@ -34,6 +34,6 @@ export class HomePage {
   }
 
   openModal(item) {
-    this.app.getRootNav().push('HomeModalPage', { item });
+    this.app.getRootNav().push('NewsModalPage', { item });
   }
 }

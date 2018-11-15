@@ -24,10 +24,10 @@ import { WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
-  selector: 'page-events',
-  templateUrl: 'events.html',
+  selector: 'page-dashboard',
+  templateUrl: 'dashboard.html',
 })
-export class EventsPage {
+export class DashboardPage {
 
   courseDetails$: Observable<CourseDetails>;
   exam$: Observable<ExamSchedule[]>;
@@ -235,5 +235,9 @@ export class EventsPage {
   /** Open staff info for lecturer id. */
   openStaffDirectoryInfo(id: string) {
     this.app.getRootNav().push('StaffDirectoryInfoPage', { id });
+  }
+
+  openPage(page: string) {
+    this.app.getRootNav().push(page);
   }
 }

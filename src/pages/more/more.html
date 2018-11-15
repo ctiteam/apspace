@@ -3,10 +3,10 @@
     <ion-grid>
       <ion-row tappable (click)="openProfile()">
         <ion-col col-3>
-          <ng-template [ngIf]="photo$ | async">
+          <!-- <ng-template [ngIf]="photo$ | async">
             <img [src]="'data:image/jpg;base64,' + (photo$ | async)?.base64_photo" onerror="this.src='assets/img/profile.svg'"
               alt="Avatar">
-          </ng-template>
+          </ng-template> -->
           <ng-template [ngIf]="staffProfile$ | async">
             <img [src]="(staffProfile$ | async)[0]?.PHOTO" onerror="this.src='assets/img/profile.svg'">
           </ng-template>

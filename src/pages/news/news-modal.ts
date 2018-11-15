@@ -6,10 +6,10 @@ import { News } from '../../interfaces';
 
 @IonicPage()
 @Component({
-  selector: 'page-home-modal',
-  templateUrl: 'home-modal.html',
+  selector: 'page-news-modal',
+  templateUrl: 'news-modal.html',
 })
-export class HomeModalPage {
+export class NewsModalPage {
 
   item: News;
 
