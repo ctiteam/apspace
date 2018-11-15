@@ -79,7 +79,7 @@ export class AttendancePage {
     return this.attendance$ = this.ws.get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh)
       .pipe(
         tap(_ => this.getLegend(refresh)),
-        tap(a => this.calculateAverage(a))
+        tap(a => this.calculateAverage(a)),
       );
   }
 
@@ -105,7 +105,7 @@ export class AttendancePage {
     if (!a) {
       this.averageColor = '#f04141';
     } else {
-      let average = a.reduce((a, b) => a + b.PERCENTAGE, 0) / a.length;
+      const average = a.reduce((a, b) => a + b.PERCENTAGE, 0) / a.length;
       this.percent = average.toFixed(0);
       this.averageColor = '#0dbd53';
       if (this.percent < 80) {

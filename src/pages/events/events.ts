@@ -10,17 +10,17 @@ import {
   tap,
   toArray,
 } from 'rxjs/operators';
-import { EventsProvider, WsApiProvider } from '../../providers';
 import {
-  ExamSchedule,
+  Apcard,
   Attendance,
-  StudentProfile,
   Course,
   CourseDetails,
+  ExamSchedule,
   Holiday,
   Holidays,
-  Apcard,
+  StudentProfile,
 } from '../../interfaces';
+import { EventsProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -54,7 +54,7 @@ export class EventsPage {
     {
       legend: {
         display: true,
-        position: 'right'
+        position: 'right',
       },
     },
     {
@@ -69,8 +69,8 @@ export class EventsPage {
           },
         }],
       },
-    }
-  ]
+    },
+  ];
 
   constructor(
     public navCtrl: NavController,
@@ -100,7 +100,7 @@ export class EventsPage {
   getAPCardBalance() {
     this.transaction$ = this.ws.get<Apcard>('/apcard/', true).pipe(
       map(transactions => transactions[0].Balance),
-    )
+    );
   }
 
   getHolidays() {
@@ -152,21 +152,21 @@ export class EventsPage {
           map(intakeDetails => Object.assign({
             intakeDate: intake.INTAKE_NUMBER,
             intakeCode: intake.INTAKE_CODE,
-            intakeDetails
-          }))
+            intakeDetails,
+          })),
         );
       }),
       toArray(),
     ).subscribe(d => {
-      let data = Array.from(new Set((d || []).map(t =>
+      const data = Array.from(new Set((d || []).map(t =>
         Object.assign({
           intakeCode: t.intakeCode,
-          gpa: t.intakeDetails.slice(-1)[0]
-        })
+          gpa: t.intakeDetails.slice(-1)[0],
+        }),
       )));
-      let filteredData = data.filter(res => res.gpa.INTAKE_GPA);
-      let labels = filteredData.map(i => i.intakeCode);
-      let gpa = filteredData.map(i => i.gpa.INTAKE_GPA)
+      const filteredData = data.filter(res => res.gpa.INTAKE_GPA);
+      const labels = filteredData.map(i => i.intakeCode);
+      const gpa = filteredData.map(i => i.gpa.INTAKE_GPA);
 
       const color = [
         'rgba(255, 99, 132, 0.7)',
@@ -193,11 +193,11 @@ export class EventsPage {
       ];
 
       this.barChartData = {
-        labels: labels,
+        labels,
         datasets: [
           {
             backgroundColor: color,
-            borderColor: borderColor,
+            borderColor,
             borderWidth: 2,
             data: gpa,
           },
@@ -216,14 +216,14 @@ export class EventsPage {
           this.getPieChart(this.attendances[0].TOTAL_CLASSES, this.attendances[0].TOTAL_ABSENT, this.attendances[0].SUBJECT_CODE, this.attendances[0].PERCENTAGE);
         }
       }),
-      map(attendances => attendances.reduce((a, b) => a + b.PERCENTAGE, 0) / attendances.length)
+      map(attendances => attendances.reduce((a, b) => a + b.PERCENTAGE, 0) / attendances.length),
     );
   }
 
   getPieChart(totalClasses: number, totalAbsent: number, code: string, percent: number) {
     this.subjectCode = code;
     this.percent = percent;
-    let attendedClasses = totalClasses - totalAbsent;
+    const attendedClasses = totalClasses - totalAbsent;
     this.pieChartData = {
       datasets: [{
         data: [attendedClasses, totalAbsent],
@@ -233,8 +233,8 @@ export class EventsPage {
       labels: [
         `Attended Classes: ${attendedClasses}`,
         `Total Absent: ${totalAbsent}`,
-      ]
-    }
+      ],
+    };
   }
 
   /** Open staff info for lecturer id. */
