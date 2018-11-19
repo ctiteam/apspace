@@ -46,14 +46,14 @@ export class ExamSchedulePage {
         }
       });
     } else {
-      const intakesButton = this.intakes.map(intake => Object.assign({
+      const intakesButton = this.intakes.map(intake => ({
         text: intake,
         handler: () => {
           this.intake = intake;
           this.settings.set('examIntake', this.intake);
           this.doRefresh();
         },
-      } as ActionSheetButton));
+      }));
       const actionSheet = this.actionSheetCtrl.create({
         buttons: [
           ...intakesButton, { text: 'Cancel', role: 'cancel' },
