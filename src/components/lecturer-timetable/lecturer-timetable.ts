@@ -80,7 +80,7 @@ export class LecturerTimetableComponent implements OnInit {
           const week = parseInt(w, 10) * 604800000 + 259200000;
           return {
             week: new Date(week),
-            days: Object.keys(t[w]).map(d => Object.assign({
+            days: Object.keys(t[w]).map(d => ({
               day: new Date(week + parseInt(d, 10) * 86400000),
               events: t[w][d],
             })),

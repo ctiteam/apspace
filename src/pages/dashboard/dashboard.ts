@@ -153,12 +153,10 @@ export class DashboardPage {
       }),
       toArray(),
     ).subscribe(d => {
-      const data = Array.from(new Set((d || []).map(t =>
-        Object.assign({
-          intakeCode: t.intakeCode,
-          gpa: t.intakeDetails.slice(-1)[0],
-        }),
-      )));
+      const data = Array.from(new Set((d || []).map(t => ({
+        intakeCode: t.intakeCode,
+        gpa: t.intakeDetails.slice(-1)[0],
+      }))));
       const filteredData = data.filter(res => res.gpa.INTAKE_GPA);
       const labels = filteredData.map(i => i.intakeCode);
       const gpa = filteredData.map(i => i.gpa.INTAKE_GPA);
