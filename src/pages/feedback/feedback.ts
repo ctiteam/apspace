@@ -27,11 +27,16 @@ export class FeedbackPage {
 
   submitFeedback() {
     this.feedback.sendFeedback(this.info.name, this.info.email, this.info.contactNumber, this.info.message)
-      .subscribe(_ => {
-        this.toastCtrl.create({ message: 'Feedback submitted!', position: 'bottom', duration: 3000 }).present();
-        this.info.contactNumber = '';
-        this.info.message = '';
-      });
+      .subscribe();
+    this.info.contactNumber = '';
+    this.info.message = '';
+    this.toastCtrl.create(
+      {
+        message: 'Feedback submitted!',
+        position: 'top',
+        duration: 3000
+      }).present();
+    
   }
 
   ionViewDidLoad() {
