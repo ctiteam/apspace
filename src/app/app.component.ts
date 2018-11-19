@@ -6,15 +6,12 @@ import { Storage } from '@ionic/storage';
 import {
   AlertController,
   Events,
-  LoadingController,
   Nav,
   Platform,
   ToastController,
 } from 'ionic-angular';
 
-import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { finalize } from 'rxjs/operators';
 
 import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../interfaces';
 import {
@@ -32,16 +29,9 @@ export class MyApp {
 
   @ViewChild(Nav) navCtrl: Nav;
 
-  photo$: Observable<StudentPhoto[]>;
-  profile$: Observable<StudentProfile>;
-  staffProfile$: Observable<StaffProfile[]>;
-  notification: any;
-  loading: any;
-
   constructor(
     public events: Events,
     public network: Network,
-    public loadingCtrl: LoadingController,
     public statusBar: StatusBar,
     public storage: Storage,
     public toastCtrl: ToastController,
@@ -99,15 +89,7 @@ export class MyApp {
     });
   }
 
-  presentLoading() {
-    this.loading = this.loadingCtrl.create({
-      content: 'Please wait...',
-    });
-    this.loading.present();
-  }
-
   onLogin() {
-    this.presentLoading();
     if (this.platform.is('cordova')) {
       forkJoin(
         this.notificationService.getMessage(),
@@ -116,16 +98,9 @@ export class MyApp {
     }
     const role = this.settings.get('role');
     if (role & Role.Student) {
-      this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
-      this.profile$ = this.ws.get<StudentProfile>('/student/profile');
-      forkJoin(this.profile$, this.photo$)
-        .pipe(finalize(() => this.loading.dismiss()))
-        .subscribe();
+      // this.ws.get<StudentPhoto[]>('/student/photo').subscribe();
     } else if (role & (Role.Lecturer | Role.Admin)) {
-      this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
-      this.staffProfile$
-        .pipe(finalize(() => this.loading.dismiss()))
-        .subscribe();
+      this.ws.get<StaffProfile[]>('/staff/profile').subscribe();
     }
     this.events.unsubscribe('user:login');
     this.events.subscribe('user:logout', () => this.onLogout());
