@@ -61,7 +61,9 @@ export class WsApiProvider {
       || endpoint.indexOf('/determination_legend') !== -1
       || endpoint.indexOf('/mpu_legend') !== -1
       || endpoint.indexOf('/subcourses') !== -1
-      || endpoint.indexOf('/upcoming_class') !== -1;
+      || endpoint.indexOf('/upcoming_class') !== -1
+      || endpoint.indexOf('/summary_overall_fee') !== -1
+      || endpoint.indexOf('/outstanding_fee') !== -1;
     options = Object.assign({
       attempts: 4,
       auth: true,
