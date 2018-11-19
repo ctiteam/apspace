@@ -1,35 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
-import { Device } from '@ionic-native/device';
-import { LoadingController, Platform } from 'ionic-angular';
+import { Platform } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { finalize, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { CasTicketProvider } from '../providers';
 
-const FEEDBACK_URL = 'https://rgnsa0bpif.execute-api.ap-southeast-1.amazonaws.com/dev';
-const SERVICE_URL = 'http://ws.apiit.edu.my/';
+declare var detectBrowser;
+
+const FEEDBACK_URL = 'https://api.apiit.edu.my/apspacefeedback';
+const SERVICE_URL = 'http://api.apiit.edu.my/';
 
 @Injectable()
 export class FeedbackProvider {
 
-  feedbackData: any = {
-    contact_number: '',
-    device_info: '',
-    email: '',
-    message: '',
-    name: '',
-    service_ticket: '',
-  };
+  feedbackData: any = {};
   cas: CasTicketProvider;
-  loading: any;
 
   constructor(
     public http: HttpClient,
-    private device: Device,
     private plt: Platform,
     private injector: Injector,
-    public loadingCtrl: LoadingController,
   ) { }
 
   /**
@@ -42,36 +33,34 @@ export class FeedbackProvider {
    */
   sendFeedback(name: string, email: string, contactNumber: string, message: string): Observable<any> {
     this.cas = this.injector.get(CasTicketProvider);
-    this.presentLoading();
     return this.cas.getST(SERVICE_URL).pipe(
       switchMap(st => {
-        this.feedbackData.service_ticket = st;
-        if (this.plt.is('cordova')) {
-          this.feedbackData.device_info = 'Platform: ' + this.device.platform + '\n'
-            + 'Cordova: ' + this.device.cordova + '\n'
-            + 'OS Version: ' + this.device.version + '\n'
-            + 'Model: ' + this.device.model + '\n'
-            + 'Manufacturer: ' + this.device.manufacturer + '\n'
-            + 'isVirtual: ' + this.device.isVirtual;
-        }
-        this.feedbackData.name = name;
-        this.feedbackData.email = email;
-        this.feedbackData.contact_number = contactNumber;
-        this.feedbackData.message = message;
+        this.feedbackData['ticket'] = st;
+        this.feedbackData['platform'] = this.determinePlatform();
+        this.feedbackData['name'] = name;
+        this.feedbackData['email'] = email;
+        this.feedbackData['contact_number'] = contactNumber;
+        this.feedbackData['message'] = message;
         const options = {
           headers: { 'Content-type': 'application/json' },
         };
         return this.http.post(`${FEEDBACK_URL}/user/feature_request`, this.feedbackData, options);
       }),
-      finalize(() => this.loading.dismiss()),
     );
   }
 
-  presentLoading() {
-    this.loading = this.loadingCtrl.create({
-      content: 'Please wait...',
-    });
-    this.loading.present();
+  determinePlatform(): string {
+    if (this.plt.platforms().find(ele => ele === "core")) {
+      return detectBrowser();
+    } else if (this.plt.platforms().find(ele => ele === "android")) {
+      return "Android";
+    } else if (this.plt.platforms().find(ele => ele === "ios")) {
+      return "iOS";
+    } else if (this.plt.platforms().find(ele => ele === "windows")) {
+      return "Window Mobile"
+    } else {
+      return this.plt.platforms().toString();
+    }
   }
 
 }
