@@ -62,26 +62,30 @@ export class LoginPage {
   }
 
   login() {
-    if (this.plt.is('cordova') && this.network.type === 'none') {
-      return this.toast('You are now offline.');
+    if (!this.username || !this.password) {
+      this.toast('Please, fill up username and password');
+    } else {
+      if (this.plt.is('cordova') && this.network.type === 'none') {
+        return this.toast('You are now offline.');
+      }
+      this.casTicket.getTGT(this.username, this.password).pipe(
+        catchError(_ => this.toast('Invalid username or password.') || empty()),
+        switchMap(tgt => this.casTicket.getST(this.casTicket.casUrl, tgt)),
+        catchError(_ => this.toast('Fail to get service ticket.') || empty()),
+        switchMap(st => this.casTicket.validate(st)),
+        catchError(_ => {
+          this.toast('You are not authorized to use APSpace');
+          this.storage.clear();
+          return empty();
+        }),
+        tap(_ => this.cacheApi(this.settings.get('role') & Role.Student
+          ? ['/student/courses', '/staff/listing']
+          : ['/staff/profile', '/staff/listing']),
+        ),
+        timeout(3000),
+        tap(_ => this.events.publish('user:login')),
+      ).subscribe(_ => this.navCtrl.setRoot('TabsPage'));
     }
-    this.casTicket.getTGT(this.username, this.password).pipe(
-      catchError(_ => this.toast('Invalid username or password.') || empty()),
-      switchMap(tgt => this.casTicket.getST(this.casTicket.casUrl, tgt)),
-      catchError(_ => this.toast('Fail to get service ticket.') || empty()),
-      switchMap(st => this.casTicket.validate(st)),
-      catchError(_ => {
-        this.toast('You are not authorized to use APSpace');
-        this.storage.clear();
-        return empty();
-      }),
-      tap(_ => this.cacheApi(this.settings.get('role') & Role.Student
-        ? ['/student/courses', '/staff/listing']
-        : ['/staff/profile', '/staff/listing']),
-      ),
-      timeout(3000),
-      tap(_ => this.events.publish('user:login')),
-    ).subscribe(_ => this.navCtrl.setRoot('TabsPage'));
   }
 
   cacheApi(data) {
@@ -93,5 +97,4 @@ export class LoginPage {
   getPasswordVisibility() {
     return (this.showPasswordText ? 'text' : 'password');
   }
-
 }

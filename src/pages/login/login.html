@@ -4,20 +4,16 @@
   <form (ngSubmit)="login()">
     <ion-item no-padding>
       <ion-icon color='text-color' name="contact" item-left></ion-icon>
-      <ion-input #autofocus type="email" placeholder='"APKey"'
-        [(ngModel)]="username" [ngModelOptions]="{standalone: true}"></ion-input>
+      <ion-input #autofocus type="email" placeholder='"APKey"' [(ngModel)]="username" [ngModelOptions]="{standalone: true}"></ion-input>
     </ion-item>
     <ion-item no-padding margin-top>
       <ion-icon color='text-color' name="lock" item-left></ion-icon>
-      <ion-input [type]="getPasswordVisibility()" placeholder='Password'
-        [(ngModel)]="password" [ngModelOptions]="{standalone: true}"></ion-input>
-      <button ion-button item-right clear type="button"
-        (click)="showPasswordText = !showPasswordText">
+      <ion-input [type]="getPasswordVisibility()" placeholder='Password' [(ngModel)]="password" [ngModelOptions]="{standalone: true}"></ion-input>
+      <button ion-button item-right clear type="button" (click)="showPasswordText = !showPasswordText">
         <ion-icon name="eye"></ion-icon>
       </button>
     </ion-item>
-    <button ion-button margin-top block type="submit"
-      [disabled]="!username || !password" color='primary'>
+    <button ion-button margin-top block type="submit" color='primary'>
       Log in
     </button>
   </form>
