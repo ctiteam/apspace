@@ -2,20 +2,24 @@ import { Component } from '@angular/core';
 import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 import {
   concatMap,
   finalize,
   flatMap,
   map,
+  share,
   tap,
   toArray,
 } from 'rxjs/operators';
+
 import {
   Apcard,
   Attendance,
   Course,
   CourseDetails,
   ExamSchedule,
+  FeesTotalSummary,
   Holiday,
   Holidays,
   StudentProfile,
@@ -29,14 +33,16 @@ import { WsApiProvider } from '../../providers';
 })
 export class DashboardPage {
 
+  attendance$: Observable<Attendance[]>;
   courseDetails$: Observable<CourseDetails>;
   exam$: Observable<ExamSchedule[]>;
   intake$: Observable<Course[]>;
   nextHoliday$: Observable<Holiday>;
+  overdue$: Observable<FeesTotalSummary[]>;
   percent$: Observable<number>;
   profile$: Observable<StudentProfile>;
-  upcomingClass$: Observable<any[]>;
   transaction$: Observable<Apcard>;
+  upcomingClass$: Observable<any[]>;
 
   numOfSkeletons = new Array(2);
 
@@ -45,10 +51,9 @@ export class DashboardPage {
   barChartData: any;
   totalClasses: number;
   overallAttendance: number;
-  overdueFee: number;
-  attendances = [];
   subjectCode: string;
   percent: number;
+  subject: string;
 
   options = [
     {
@@ -85,32 +90,35 @@ export class DashboardPage {
 
   doRefresh(refresher?) {
     this.totalClasses = undefined;
-    this.upcomingClass$ = this.ws.get<any[]>('/student/upcoming_class').pipe(
-      tap(_ => this.getProfile()),
-      tap(_ => this.getAPCardBalance()),
-      tap(_ => this.getHolidays()),
-      tap(_ => this.getOverdueFee()),
-      tap(_ => this.getGPA()),
+    this.upcomingClass$ = this.ws.get<any[]>('/student/upcoming_class', refresher).pipe(
       tap(cc => this.totalClasses = cc.length),
+    );
+    this.nextHoliday$ = this.getHolidays(refresher);
+    this.getProfile(refresher);
+    this.transaction$ = this.getAPCardBalance();
+    this.overdue$ = this.getOverdueFee();
+
+    forkJoin(this.upcomingClass$, this.nextHoliday$, this.overdue$).pipe(
       finalize(() => refresher && refresher.complete()),
     );
+    this.getGPA();
   }
 
   getAPCardBalance() {
-    this.transaction$ = this.ws.get<Apcard>('/apcard/', true).pipe(
-      map(transactions => transactions[0].Balance),
+    return this.ws.get<Apcard>('/apcard/', true).pipe(
+      map(transactions => (transactions[0] || {} as Apcard).Balance || 0),
     );
   }
 
-  getHolidays() {
+  getHolidays(refresh: boolean) {
     const now = new Date();
-    this.nextHoliday$ = this.ws.get<Holidays>('/transix/holidays/filtered/students', true).pipe(
+    return this.ws.get<Holidays>('/transix/holidays/filtered/students', refresh).pipe(
       map(res => res.holidays.find(h => now < new Date(h.holiday_start_date))),
     );
   }
 
-  getProfile() {
-    this.ws.get<StudentProfile>('/student/profile').pipe(
+  getProfile(refresh: boolean) {
+    this.ws.get<StudentProfile>('/student/profile', refresh).pipe(
       tap(p => this.getAttendance(p.INTAKE)),
       tap(p => this.getUpcomingExam(p.INTAKE)),
     ).subscribe();
@@ -132,10 +140,7 @@ export class DashboardPage {
   }
 
   getOverdueFee() {
-    this.ws.get('/student/summary_overall_fee', true).pipe(
-      map(fees => fees[0].TOTAL_OVERDUE),
-      tap(overdue => this.overdueFee = overdue),
-    ).subscribe();
+    return this.ws.get<FeesTotalSummary[]>('/student/summary_overall_fee', true);
   }
 
   getGPA() {
@@ -201,14 +206,15 @@ export class DashboardPage {
 
   getAttendance(intake: string) {
     const url = `/student/attendance?intake=${intake}`;
-    this.percent$ = this.ws.get<Attendance[]>(url, true).pipe(
-      tap(attendances => {
-        this.attendances = (attendances || []).filter(res => res.PERCENTAGE < 80);
-        if (this.attendances.length > 0) {
-          this.getPieChart(this.attendances[0].TOTAL_CLASSES, this.attendances[0].TOTAL_ABSENT,
-            this.attendances[0].SUBJECT_CODE, this.attendances[0].PERCENTAGE);
-        }
-      }),
+    this.attendance$ = this.ws.get<Attendance[]>(url, true).pipe(
+      map(attendances => (attendances || []).filter(attendance => attendance.PERCENTAGE < 80)),
+      tap(attendances => attendances.length > 0 && this.getPieChart(
+        attendances[0].TOTAL_CLASSES, attendances[0].TOTAL_ABSENT,
+        attendances[0].SUBJECT_CODE, attendances[0].PERCENTAGE)),
+      tap(attendances => this.subject = attendances[0] && attendances[0].SUBJECT_CODE),
+      share(),
+    );
+    this.percent$ = this.attendance$.pipe(
       map(attendances => attendances.reduce((a, b) => a + b.PERCENTAGE, 0) / attendances.length),
     );
   }

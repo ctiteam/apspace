@@ -35,8 +35,9 @@
       <ion-col col-6>
         <ion-icon class='big-icons' name='md-cash'></ion-icon>
         <p class='icon-title'>Total Overdue</p>
-        <p class='top-value' [style.color]="(overdueFee == 0) ? '#0dbd53' : '#f04141'">{{ overdueFee |
-          currency:'MYR':'RM':'1.0-0' }}</p>
+        <p *ngIf="overdue$ | async as overdue" class='top-value' [style.color]="overdue[0]?.TOTAL_OVERDUE == 0 ? '#0dbd53' : '#f04141'">
+          {{ overdue[0]?.TOTAL_OVERDUE | currency:'MYR':'RM':'1.0-0' }}
+        </p>
       </ion-col>
     </ion-row>
   </ion-card>
@@ -90,8 +91,8 @@
     </ion-card>
   </ng-template>
 
-  <ng-template [ngIf]='attendances' [ngIfElse]='loadingLowAttendances'>
-    <ng-template [ngIf]='attendances && attendances.length > 0' [ngIfElse]='nosubject'>
+  <ng-template let-attendances [ngIf]='attendance$ | async' [ngIfElse]='loadingLowAttendances'>
+    <ng-template [ngIf]='attendances.length > 0' [ngIfElse]='nosubject'>
       <ion-card>
         <ion-item no-lines>
           <b>Low Attendance Subjects</b>
