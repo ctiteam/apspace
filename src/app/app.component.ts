@@ -98,7 +98,7 @@ export class MyApp {
     }
     const role = this.settings.get('role');
     if (role & Role.Student) {
-      // this.ws.get<StudentPhoto[]>('/student/photo').subscribe();
+      this.ws.get<StudentPhoto[]>('/student/photo').subscribe();
     } else if (role & (Role.Lecturer | Role.Admin)) {
       this.ws.get<StaffProfile[]>('/staff/profile').subscribe();
     }

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { forkJoin } from 'rxjs/observable/forkJoin';
 import {
   concatMap,
   finalize,
@@ -92,15 +91,12 @@ export class DashboardPage {
     this.totalClasses = undefined;
     this.upcomingClass$ = this.ws.get<any[]>('/student/upcoming_class', refresher).pipe(
       tap(cc => this.totalClasses = cc.length),
-    );
-    this.nextHoliday$ = this.getHolidays(refresher);
-    this.getProfile(refresher);
-    this.transaction$ = this.getAPCardBalance();
-    this.overdue$ = this.getOverdueFee();
-
-    forkJoin(this.upcomingClass$, this.nextHoliday$, this.overdue$).pipe(
       finalize(() => refresher && refresher.complete()),
     );
+    this.nextHoliday$ = this.getHolidays(refresher);
+    this.getProfile();
+    this.transaction$ = this.getAPCardBalance();
+    this.overdue$ = this.getOverdueFee();
     this.getGPA();
   }
 
@@ -117,8 +113,8 @@ export class DashboardPage {
     );
   }
 
-  getProfile(refresh: boolean) {
-    this.ws.get<StudentProfile>('/student/profile', refresh).pipe(
+  getProfile() {
+    this.ws.get<StudentProfile>('/student/profile').pipe(
       tap(p => this.getAttendance(p.INTAKE)),
       tap(p => this.getUpcomingExam(p.INTAKE)),
     ).subscribe();
@@ -214,7 +210,7 @@ export class DashboardPage {
       tap(attendances => this.subject = attendances[0] && attendances[0].SUBJECT_CODE),
       share(),
     );
-    this.percent$ = this.attendance$.pipe(
+    this.percent$ = this.ws.get<Attendance[]>(url).pipe(
       map(attendances => attendances.reduce((a, b) => a + b.PERCENTAGE, 0) / attendances.length),
     );
   }

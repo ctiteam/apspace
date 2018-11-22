@@ -136,7 +136,7 @@ export class MorePage {
     const role = this.settings.get('role');
     if (role & Role.Student) {
       this.profile$ = this.ws.get<StudentProfile>('/student/profile');
-      // this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
+      this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
     } else if (role & (Role.Lecturer | Role.Admin)) {
       this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
     }
