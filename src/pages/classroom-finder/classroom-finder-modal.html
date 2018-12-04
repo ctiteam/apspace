@@ -1,0 +1,62 @@
+<ion-header>
+    <ion-navbar color="primary">
+      <ion-title>{{selectedRoom}}</ion-title>
+      <ion-buttons right>
+        <button color="light" ion-button outline small (click)="chooseWeek()"
+          [disabled]="availableWeek && availableWeek.length === 0">
+          {{ (selectedDate | date) || 'Weeks' }}
+        </button>
+      </ion-buttons>
+    </ion-navbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date:'E' | uppercase"
+      (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
+      <!-- Use CSS for dynamically updated segment -->
+      <ion-segment-button *ngFor="let d of wday; index as i" [value]="d"
+        [style.display]="'inline-block'">
+        {{ d }}
+      </ion-segment-button>
+    </ion-segment>
+
+    <span *ngFor="let t of timetable$ | async | in:selectedRoom | filterday:selectedDate; trackBy: trackByIndex;">
+      <ion-card *ngIf="t.MODID !== 'FREE'" [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
+        <ion-card-header>
+          {{ t.MODID }}
+        </ion-card-header>
+        <ion-card-content>
+          <ion-label no-margin>
+            <ion-icon padding-right name="time"></ion-icon>
+            <b>{{ t.TIME_FROM }}</b> -
+            <b>{{ t.TIME_TO }}</b>
+          </ion-label>
+          <ion-label no-margin>
+            <ion-icon padding-right name="arrow-forward"></ion-icon>
+            <b> {{ t.INTAKE }}</b>
+          </ion-label>
+          <ion-label no-margin>
+            <a (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
+              <ion-icon padding-right name="contact"></ion-icon>
+              {{ t.NAME }}
+            </a>
+          </ion-label>
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngIf="t.MODID === 'FREE'" style="background-color: rgb(146, 252, 175);" [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
+        <ion-card-header>
+          <strong>FREE</strong>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-label no-margin>
+            <ion-icon padding-right name="time"></ion-icon>
+            <b>{{ t.TIME_FROM }}</b> -
+            <b>{{ t.TIME_TO }}</b>
+          </ion-label>
+        </ion-card-content>
+      </ion-card>
+    </span>
+  </ion-content>

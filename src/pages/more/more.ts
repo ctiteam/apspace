@@ -33,6 +33,12 @@ export class MorePage {
         role: Role.Student | Role.Lecturer | Role.Admin,
       },
       {
+        title: 'Classroom Finder',
+        component: 'ClassroomFinderPage',
+        icon: 'search',
+        role: Role.Student | Role.Lecturer | Role.Admin,
+      },
+      {
         title: 'News',
         component: 'NewsPage',
         icon: 'paper',
