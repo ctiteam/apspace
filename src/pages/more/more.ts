@@ -131,7 +131,7 @@ export class MorePage {
     public dataCollector: DataCollectorProvider,
   ) {
     const role = this.settings.get('role');
-    this.pages = this.menuItems.filter(page => page.role & role).slice(0, 12);
+    this.pages = this.menuItems.filter(page => page.role & role).slice(0, 13);
 
     this.events.subscribe('newNotification', () => {
       this.getBadge();
