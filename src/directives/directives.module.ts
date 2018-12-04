@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { SwipeAllDirective } from './swipe-all/swipe-all';
+import { AutosizeDirective } from './autoSize/auto-size';
 
 @NgModule({
-  declarations: [SwipeAllDirective],
+  declarations: [AutosizeDirective],
   imports: [],
-  exports: [SwipeAllDirective],
+  exports: [AutosizeDirective],
 })
 export class DirectivesModule { }

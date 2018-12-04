@@ -24,7 +24,7 @@
   </ion-item>
   <ion-item no-padding>
     <ion-label floating>Message</ion-label>
-    <ion-textarea [(ngModel)]="info.message" [ngModelOptions]="{standalone: true}">
+    <ion-textarea class='textarea' autosize row='1' [(ngModel)]="info.message" [ngModelOptions]="{standalone: true}">
     </ion-textarea>
   </ion-item>
   <button ion-button round full margin-top (click)="submitFeedback()"
