@@ -29,7 +29,7 @@ import { WsApiProvider } from '../../providers';
 })
 export class ResultsPage {
   course$: Observable<Course[]>;
-  results$: Observable<Subcourse>;
+  result$: Observable<Subcourse>;
   courseDetail$: Observable<CourseDetails>;
   interimLegend$: Observable<InterimLegend[]>;
   mpuLegend$: Observable<MPULegend[]>;
@@ -69,7 +69,7 @@ export class ResultsPage {
 
   getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
     const url = `/student/subcourses?intake=${intake}`;
-    return (this.results$ = this.ws.get<Subcourse>(url, refresh).pipe(
+    return (this.result$ = this.ws.get<Subcourse>(url, refresh).pipe(
       tap(r => this.getInterimLegend(intake, r, refresh)),
       tap(_ => this.getCourseDetails(intake, refresh)),
       tap(_ => this.getMpuLegend(intake, refresh)),
@@ -95,7 +95,7 @@ export class ResultsPage {
   }
 
   doRefresh(refresher) {
-    this.results$ = this.getResults(this.selectedIntake, true).pipe(
+    this.result$ = this.getResults(this.selectedIntake, true).pipe(
       finalize(() => refresher.complete()),
     );
   }

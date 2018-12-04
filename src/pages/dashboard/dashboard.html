@@ -210,20 +210,24 @@
     </ion-card>
   </ng-template>
 
-  <ng-template [ngIf]='barChartData' [ngIfElse]='loadingGPA'>
-    <ion-card>
-      <ion-item no-lines>
-        GPA per Intake
-        <ion-icon item-left name='checkmark-circle' style='color: rgb(247, 143, 8);'></ion-icon>
-      </ion-item>
-      <chart margin-top [type]="type[1]" [data]="barChartData" [options]="options[1]"></chart>
-    </ion-card>
+  <ng-template [ngIf]='!block' [ngIfElse]='blocked'>
+    <ng-template [ngIf]='barChartData' [ngIfElse]='loadingGPA'>
+      <ion-card>
+        <ion-item no-lines>
+          GPA per Intake
+          <ion-icon item-left name='checkmark-circle' style='color: rgb(247, 143, 8);'></ion-icon>
+        </ion-item>
+        <chart margin-top [type]="type[1]" [data]="barChartData" [options]="options[1]"></chart>
+      </ion-card>
+    </ng-template>
+    <ng-template #loadingGPA>
+      <ion-card>
+        <ion-item no-lines>
+          <skeleton-item height="160px" width="100%"></skeleton-item>
+        </ion-item>
+      </ion-card>
+    </ng-template>
   </ng-template>
-  <ng-template #loadingGPA>
-    <ion-card>
-      <ion-item no-lines>
-        <skeleton-item height="160px" width="100%"></skeleton-item>
-      </ion-item>
-    </ion-card>
+  <ng-template #blocked>
   </ng-template>
 </ion-content>

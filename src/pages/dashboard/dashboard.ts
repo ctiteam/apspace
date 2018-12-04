@@ -53,6 +53,7 @@ export class DashboardPage {
   subjectCode: string;
   percent: number;
   subject: string;
+  block: boolean = false;
 
   options = [
     {
@@ -97,7 +98,6 @@ export class DashboardPage {
     this.getProfile();
     this.transaction$ = this.getAPCardBalance();
     this.overdue$ = this.getOverdueFee();
-    this.getGPA();
   }
 
   getAPCardBalance() {
@@ -115,6 +115,14 @@ export class DashboardPage {
 
   getProfile() {
     this.ws.get<StudentProfile>('/student/profile').pipe(
+      tap(p => {
+        if (p.BLOCK === true) {
+          this.block = false;
+          this.getGPA();
+        } else {
+          this.block = true;
+        }
+      }),
       tap(p => this.getAttendance(p.INTAKE)),
       tap(p => this.getUpcomingExam(p.INTAKE)),
     ).subscribe();

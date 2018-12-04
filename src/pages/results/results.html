@@ -12,103 +12,103 @@
 </ion-header>
 
 <ion-content>
-  <ng-template [ngIf]="block">
-    <ion-card style="background: #f04141">
-      <ion-card-header>
-        <ion-icon class="warning-logo" name="alert"></ion-icon>
-      </ion-card-header>
-      <ion-card-content class="content-message">
-        <ion-note class="block-note">
-          {{ message }}
-        </ion-note>
-      </ion-card-content>
-    </ion-card>
-  </ng-template>
+  <ng-template [ngIf]='!block'>
 
-  <ion-refresher *ngIf="!block" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="refresh">
-    </ion-refresher-content>
-  </ion-refresher>
+    <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingIcon="refresh">
+      </ion-refresher-content>
+    </ion-refresher>
 
-  <ng-template [ngIf]="data" [ngIfElse]='loadingBarChart'>
-    <chart margin-top [type]="type" [data]="data" [options]="options"></chart>
-  </ng-template>
-  <ng-template #loadingBarChart>
-    <ion-card>
-      <ion-item>
-        <skeleton-item height="150px" width="100%"></skeleton-item>
-      </ion-item>
-    </ion-card>
-  </ng-template>
-
-  <ng-template let-courseDetails [ngIf]='courseDetail$ | async:trackBy: trackByFn' [ngIfElse]='loadingCourseDetails'>
-    <ion-card>
-      <ion-list no-lines *ngFor="let detail of courseDetails">
-        <ion-item *ngIf="detail.SEMESTER" class="primary-color">
-          <ion-note class="block-note" item-left>Semester {{ detail.SEMESTER }}</ion-note>
-          <ion-note class="block-note" item-right>{{ detail.TOTAL_MODULES_PASSED }} passed (GPA {{ detail.GPA }})</ion-note>
-        </ion-item>
-      </ion-list>
-    </ion-card>
-  </ng-template>
-  <ng-template #loadingCourseDetails>
-    <ion-card>
-      <ion-item>
-        <ion-row>
-          <ion-col col-6>
-            <skeleton-item height="15px" width="60%"></skeleton-item>
-          </ion-col>
-          <ion-col col-6>
-            <skeleton-item height="15px" width="90%"></skeleton-item>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-6>
-            <skeleton-item height="15px" width="60%"></skeleton-item>
-          </ion-col>
-          <ion-col col-6>
-            <skeleton-item height="15px" width="90%"></skeleton-item>
-          </ion-col>
-        </ion-row>
-      </ion-item>
-    </ion-card>
-  </ng-template>
-
-
-  <ng-template let-results [ngIf]="results$ | async" [ngIfElse]='loadingResults'>
-    <ion-card *ngFor="let result of results;trackBy: trackByFn">
-      <ion-list>
-        <ion-item class="subj-title">
-          {{result.MODULE_DESCRIPTION}}
-        </ion-item>
+    <ng-template let-results [ngIf]='result$ | async' [ngIfElse]='loadingBarChart'>
+      <ng-template [ngIf]='results && results.length > 0' [ngIfElse]='nodata'>
+        <chart *ngIf='data' margin-top [type]="type" [data]="data" [options]="options"></chart>
+      </ng-template>
+      <ng-template #nodata>
+      </ng-template>
+    </ng-template>
+    <ng-template #loadingBarChart>
+      <ion-card>
         <ion-item>
-          <ion-label>Grade</ion-label>
-          <div item-content>{{ result.GRADE || 'N/A' }}</div>
+          <skeleton-item height="150px" width="100%"></skeleton-item>
         </ion-item>
-        <ion-item>
-          <ion-label>Grade Point</ion-label>
-          <div item-content>{{ result.GRADE_POINT || 'N/A' }}</div>
-        </ion-item>
-        <ion-item>
-          <ion-label>Internal Result Release Date</ion-label>
-          <div item-content>{{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A' }}</div>
-        </ion-item>
-        <ion-item *ngIf="result.RECOMMENDATION">
-          <ion-label>Recommendation</ion-label>
-          <div item-content>{{ result.RECOMMENDATION }}</div>
-        </ion-item>
-      </ion-list>
-    </ion-card>
-  </ng-template>
-  <ng-template #loadingResults>
-    <ion-card *ngFor='let s of numOfSkeletons'>
-      <ion-item>
-        <skeleton-item height="150px" width="100%"></skeleton-item>
-      </ion-item>
-    </ion-card>
-  </ng-template>
+      </ion-card>
+    </ng-template>
 
-  <ng-template [ngIf]="!block">
+    <ng-template let-courseDetails [ngIf]='courseDetail$ | async:trackBy: trackByFn' [ngIfElse]='loadingCourseDetails'>
+      <ion-card>
+        <ion-list no-lines *ngFor="let detail of courseDetails">
+          <ion-item *ngIf="detail.SEMESTER" class="primary-color">
+            <ion-note class="block-note" item-left>Semester {{ detail.SEMESTER }}</ion-note>
+            <ion-note class="block-note" item-right>{{ detail.TOTAL_MODULES_PASSED }} passed (GPA {{ detail.GPA }})</ion-note>
+          </ion-item>
+        </ion-list>
+      </ion-card>
+    </ng-template>
+    <ng-template #loadingCourseDetails>
+      <ion-card>
+        <ion-item>
+          <ion-row>
+            <ion-col col-6>
+              <skeleton-item height="15px" width="60%"></skeleton-item>
+            </ion-col>
+            <ion-col col-6>
+              <skeleton-item height="15px" width="90%"></skeleton-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col col-6>
+              <skeleton-item height="15px" width="60%"></skeleton-item>
+            </ion-col>
+            <ion-col col-6>
+              <skeleton-item height="15px" width="90%"></skeleton-item>
+            </ion-col>
+          </ion-row>
+        </ion-item>
+      </ion-card>
+    </ng-template>
+
+    <ng-template let-results [ngIf]="result$ | async" [ngIfElse]='loadingResults'>
+      <ng-template [ngIf]='results && results.length > 0' [ngIfElse]='noresults'>
+        <ion-card *ngFor="let result of results;trackBy: trackByFn">
+          <ion-list>
+            <ion-item class="subj-title">
+              {{result.MODULE_DESCRIPTION}}
+            </ion-item>
+            <ion-item>
+              <ion-label>Grade</ion-label>
+              <div item-content>{{ result.GRADE || 'N/A' }}</div>
+            </ion-item>
+            <ion-item>
+              <ion-label>Grade Point</ion-label>
+              <div item-content>{{ result.GRADE_POINT || 'N/A' }}</div>
+            </ion-item>
+            <ion-item>
+              <ion-label>Internal Result Release Date</ion-label>
+              <div item-content>{{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A' }}</div>
+            </ion-item>
+            <ion-item *ngIf="result.RECOMMENDATION">
+              <ion-label>Recommendation</ion-label>
+              <div item-content>{{ result.RECOMMENDATION }}</div>
+            </ion-item>
+          </ion-list>
+        </ion-card>
+      </ng-template>
+      <ng-template #noresults>
+        <ion-card>
+          <ion-card-content>
+            There are no results for this intake
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
+    </ng-template>
+    <ng-template #loadingResults>
+      <ion-card *ngFor='let s of numOfSkeletons'>
+        <ion-item>
+          <skeleton-item height="150px" width="100%"></skeleton-item>
+        </ion-item>
+      </ion-card>
+    </ng-template>
+
     <ng-template let-interims [ngIf]='interimLegend$ | async' [ngIfElse]='loadingInterimLegend'>
       <ion-card>
         <ion-card-header>
@@ -188,5 +188,18 @@
         </ion-item>
       </ion-card>
     </ng-template>
+  </ng-template>
+
+  <ng-template [ngIf]="block">
+    <ion-card style="background: #f04141">
+      <ion-card-header>
+        <ion-icon class="warning-logo" name="alert"></ion-icon>
+      </ion-card-header>
+      <ion-card-content class="content-message">
+        <ion-note class="block-note">
+          {{ message }}
+        </ion-note>
+      </ion-card-content>
+    </ion-card>
   </ng-template>
 </ion-content>
