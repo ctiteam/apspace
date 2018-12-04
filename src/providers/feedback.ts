@@ -35,12 +35,12 @@ export class FeedbackProvider {
     this.cas = this.injector.get(CasTicketProvider);
     return this.cas.getST(SERVICE_URL).pipe(
       switchMap(st => {
-        this.feedbackData['ticket'] = st;
-        this.feedbackData['platform'] = this.determinePlatform();
-        this.feedbackData['name'] = name;
-        this.feedbackData['email'] = email;
-        this.feedbackData['contact_number'] = contactNumber;
-        this.feedbackData['message'] = message;
+        this.feedbackData.ticket = st;
+        this.feedbackData.platform = this.determinePlatform();
+        this.feedbackData.name = name;
+        this.feedbackData.email = email;
+        this.feedbackData.contact_number = contactNumber;
+        this.feedbackData.message = message;
         const options = {
           headers: { 'Content-type': 'application/json' },
         };
@@ -50,14 +50,14 @@ export class FeedbackProvider {
   }
 
   determinePlatform(): string {
-    if (this.plt.platforms().find(ele => ele === "core")) {
+    if (this.plt.platforms().find(ele => ele === 'core')) {
       return detectBrowser();
-    } else if (this.plt.platforms().find(ele => ele === "android")) {
-      return "Android";
-    } else if (this.plt.platforms().find(ele => ele === "ios")) {
-      return "iOS";
-    } else if (this.plt.platforms().find(ele => ele === "windows")) {
-      return "Window Mobile"
+    } else if (this.plt.platforms().find(ele => ele === 'android')) {
+      return 'Android';
+    } else if (this.plt.platforms().find(ele => ele === 'ios')) {
+      return 'iOS';
+    } else if (this.plt.platforms().find(ele => ele === 'windows')) {
+      return 'Window Mobile';
     } else {
       return this.plt.platforms().toString();
     }

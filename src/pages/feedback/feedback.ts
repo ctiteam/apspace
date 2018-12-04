@@ -34,9 +34,9 @@ export class FeedbackPage {
       {
         message: 'Feedback submitted!',
         position: 'top',
-        duration: 3000
+        duration: 3000,
       }).present();
-    
+
   }
 
   ionViewDidLoad() {
