@@ -81,6 +81,12 @@ export class MorePage {
         role: Role.Student | Role.Lecturer,
       },
       {
+        title: 'Forms & Application',
+        component: 'FormsApplicationPage',
+        icon: 'clipboard',
+        role: Role.Student | Role.Lecturer | Role.Admin,
+      },
+      {
         title: 'Profile',
         component: 'ProfilePage',
         icon: 'contact',
@@ -131,7 +137,7 @@ export class MorePage {
     public dataCollector: DataCollectorProvider,
   ) {
     const role = this.settings.get('role');
-    this.pages = this.menuItems.filter(page => page.role & role).slice(0, 13);
+    this.pages = this.menuItems.filter(page => page.role & role).slice(0, 14);
 
     this.events.subscribe('newNotification', () => {
       this.getBadge();
