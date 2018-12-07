@@ -49,9 +49,11 @@ export class LecturerTimetableComponent implements OnInit {
   constructor(private ws: WsApiProvider) { }
 
   ngOnInit() {
-    // GPS counts weeks with January 1, 1980 as first Sunday
-    // new Date('1970-01-06').getTime() + new Date().getTimezoneOffset() * 60 * 1000 - 1
-    const lastDateOfWeekZero = 431999999;
+    // GPS counts weeks with January 1, 1980 as first Sunday (Epoch)
+    // new Date('1980-01-06').getTime() - new Date().getTimezoneOffset() * 60 * 1000
+    const lastDateOfWeekZero = 315993600000;
+    const secondsPerWeek = 604800000;  // 7 * 24 * 60 * 60 * 1000
+    const secondsPerDay = 86400000;  // 24 * 60 * 60 * 1000
 
     const endpoint = '/lecturer-timetable/v2/' + this.id;
     this.calendar$ = this.ws.get<LecturerTimetable[]>(endpoint, true, { auth: false }).pipe(
@@ -60,8 +62,8 @@ export class LecturerTimetableComponent implements OnInit {
         data.forEach(d => {
           const time = new Date(d.time);
 
-          // unique week - subtract from week zero and by 7 * 24 * 60 * 60 * 1000
-          const week = Math.floor((time.getTime() - lastDateOfWeekZero) / 604800000);
+          // unique week - subtract from week zero (-1ms to exclude 0000ms)
+          const week = Math.floor((time.getTime() - lastDateOfWeekZero - 1) / secondsPerWeek);
           t[week] = t[week] || {};
 
           const day = time.getDay();
@@ -76,12 +78,12 @@ export class LecturerTimetableComponent implements OnInit {
         });
 
         return Object.keys(t).map(w => {
-          // convert week time epoch to date (*weekMagic + 2d)
-          const week = parseInt(w, 10) * 604800000 + 259200000;
+          // convert week time epoch to date
+          const week = parseInt(w, 10) * secondsPerWeek + lastDateOfWeekZero;
           return {
-            week: new Date(week),
+            week: new Date(week + secondsPerDay),  // displayed week as Monday (+1d)
             days: Object.keys(t[w]).map(d => ({
-              day: new Date(week + parseInt(d, 10) * 86400000),
+              day: new Date(week + parseInt(d, 10) * secondsPerDay),
               events: t[w][d],
             })),
           };
