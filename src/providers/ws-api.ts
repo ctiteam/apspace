@@ -53,17 +53,20 @@ export class WsApiProvider {
   } = {}): Observable<T> {
     const useNewApi = endpoint.indexOf('student/') === -1
       || endpoint.indexOf('/attendance') !== -1
-      || endpoint.indexOf('/profile') !== -1
-      || endpoint.indexOf('/courses') !== -1
-      || endpoint.indexOf('/sub_and_course_details') !== -1
-      || endpoint.indexOf('/interim_legend') !== -1
+      // || endpoint.indexOf('/student/bankdraft_amount') !== -1
       || endpoint.indexOf('/classification_legend') !== -1
+      || endpoint.indexOf('/courses') !== -1
       || endpoint.indexOf('/determination_legend') !== -1
+      || endpoint.indexOf('/interim_legend') !== -1
       || endpoint.indexOf('/mpu_legend') !== -1
+      // || endpoint.indexOf('/student/outstanding_fee') !== -1
+      // || endpoint.indexOf('/student/overall_fee') !== -1
+      || endpoint.indexOf('/photo') !== -1
+      || endpoint.indexOf('/profile') !== -1
+      || endpoint.indexOf('/sub_and_course_details') !== -1
       || endpoint.indexOf('/subcourses') !== -1
+      // || endpoint.indexOf('/student/summary_overall_fee') !== -1
       || endpoint.indexOf('/upcoming_class') !== -1;
-      // || endpoint.indexOf('/summary_overall_fee') !== -1
-      // || endpoint.indexOf('/outstanding_fee') !== -1;
     options = Object.assign({
       attempts: 4,
       auth: true,
