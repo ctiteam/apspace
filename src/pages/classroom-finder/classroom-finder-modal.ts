@@ -111,7 +111,7 @@ export class ClassroomFinderModalPage {
   doRefresh(refresher?) {
     this.timetable$ = this.tt.get(Boolean(refresher)).pipe(
       switchMap(tt => !refresher && this.outdated(tt) ? this.tt.get(true) : of(tt)),
-      tap(tt => this.updateDay(tt)),
+      tap(tt => setTimeout(() => this.updateDay(tt), 0)),
       finalize(() => refresher && refresher.complete()),
     );
   }

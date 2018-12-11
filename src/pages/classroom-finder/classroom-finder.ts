@@ -90,7 +90,7 @@ export class ClassroomFinderPage {
     if (this.location.apiitTpm) {
       selectedLocations.push('TPM');
     }
-    this.timetableProv.get().subscribe((res => {
+    this.timetableProv.get(true).subscribe((res => {
       this.timetableData = res;
       for (let i = 0; i < this.timetableData.length; i++) {
         if (this.listOfClassrooms.indexOf(res[i].ROOM) === -1
