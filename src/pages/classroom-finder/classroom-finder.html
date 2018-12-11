@@ -1,67 +1,66 @@
 <ion-header>
-    <ion-navbar color="primary">
-      <ion-title>
-        Classroom Finder
-      </ion-title>
-    </ion-navbar>
-  </ion-header>
+  <ion-navbar color="primary">
+    <ion-title>
+      Classroom Finder
+    </ion-title>
+  </ion-navbar>
+</ion-header>
 
-  <ion-content>
-    <ion-card>
-        <ion-card-content>
-          <ion-card-title><strong>When do you need a room?</strong></ion-card-title>
-          <ion-item>
-              <ion-label><strong>Day</strong></ion-label>
-              <ion-select [(ngModel)]="selectedDay" interface="popover">
-                <ion-option value="1">Monday</ion-option>
-                <ion-option value="2">Tuesday</ion-option>
-                <ion-option value="3">Wednesday</ion-option>
-                <ion-option value="4">Thursday</ion-option>
-                <ion-option value="5">Friday</ion-option>
-                <ion-option value="6">Saturday</ion-option>
-              </ion-select>
-          </ion-item>
-        <ion-item>
-          <ion-label><strong>Start Time</strong></ion-label>
-          <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="selectedTime"></ion-datetime>
-        </ion-item>
-          <ion-item>
-          <ion-label><strong>Duration in Minutes</strong></ion-label>
-          <ion-input type="number" [(ngModel)]="selectedDuration"></ion-input>
-          </ion-item>
-          <ion-label><strong>Type of Rooms</strong></ion-label>
-          <ion-item>
-            <ion-label>Auditoriums / Lecture Halls</ion-label>
-            <ion-checkbox [(ngModel)]="typeOfRooms.auditorium"></ion-checkbox>
-          </ion-item>
-          <ion-item>
-            <ion-label>Classrooms</ion-label>
-            <ion-checkbox [(ngModel)]="typeOfRooms.classroom"></ion-checkbox>
-          </ion-item>
-          <ion-item>
-            <ion-label>Labs / Studios / Suites</ion-label>
-            <ion-checkbox [(ngModel)]="typeOfRooms.lab"></ion-checkbox>
-          </ion-item>
-          <ion-label><strong>Location</strong></ion-label>
-          <ion-item>
-            <ion-label>New Campus</ion-label>
-            <ion-checkbox [(ngModel)]="location.newCampus"></ion-checkbox>
-          </ion-item>
-          <ion-item>
-            <ion-label>APIIT TPM</ion-label>
-            <ion-checkbox [(ngModel)]="location.apiitTpm"></ion-checkbox>
-          </ion-item>
-          <br>
-        <button ion-button round expand="block" (click)='getFreeRoom()'><ion-icon name="search"></ion-icon> Search</button>
-        </ion-card-content>
-      </ion-card>
-  <ion-card *ngIf="listOfFreeRooms.length > 0">
-      <ion-card-content>
-        <ion-card-title>{{listOfFreeRooms.length}} Available Rooms</ion-card-title>
-          <ion-chip *ngFor="let room of listOfFreeRooms" (click)='presentRoomTimetable(room)'>
-              <ion-label>{{ room }}</ion-label>
-          </ion-chip>
-      </ion-card-content>
-    </ion-card>
-  </ion-content>
-
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <ion-card-title><strong>When do you need a room?</strong></ion-card-title>
+      <ion-item>
+        <ion-label><strong>Day</strong></ion-label>
+        <ion-select [(ngModel)]="selectedDay" interface="popover">
+          <ion-option value="1">Monday</ion-option>
+          <ion-option value="2">Tuesday</ion-option>
+          <ion-option value="3">Wednesday</ion-option>
+          <ion-option value="4">Thursday</ion-option>
+          <ion-option value="5">Friday</ion-option>
+          <ion-option value="6">Saturday</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label><strong>Start Time</strong></ion-label>
+        <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="selectedTime"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label><strong>Duration in Minutes</strong></ion-label>
+        <ion-input type="number" [(ngModel)]="selectedDuration"></ion-input>
+      </ion-item>
+      <ion-label><strong>Type of Rooms</strong></ion-label>
+      <ion-item>
+        <ion-label>Auditoriums / Lecture Halls</ion-label>
+        <ion-checkbox [(ngModel)]="typeOfRooms.auditorium"></ion-checkbox>
+      </ion-item>
+      <ion-item>
+        <ion-label>Classrooms</ion-label>
+        <ion-checkbox [(ngModel)]="typeOfRooms.classroom"></ion-checkbox>
+      </ion-item>
+      <ion-item>
+        <ion-label>Labs / Studios / Suites</ion-label>
+        <ion-checkbox [(ngModel)]="typeOfRooms.lab"></ion-checkbox>
+      </ion-item>
+      <ion-label><strong>Location</strong></ion-label>
+      <ion-item>
+        <ion-label>New Campus</ion-label>
+        <ion-checkbox [(ngModel)]="location.newCampus"></ion-checkbox>
+      </ion-item>
+      <ion-item>
+        <ion-label>APIIT TPM</ion-label>
+        <ion-checkbox [(ngModel)]="location.apiitTpm"></ion-checkbox>
+      </ion-item>
+      <br>
+      <button ion-button round expand="block" (click)='getFreeRoom()'><ion-icon name="search"></ion-icon> Search</button>
+    </ion-card-content>
+  </ion-card>
+  <ion-card #rooms *ngIf="listOfFreeRooms.length > 0">
+    <ion-card-content>
+      <ion-card-title>{{ listOfFreeRooms.length }} Available Rooms</ion-card-title>
+      <ion-chip *ngFor="let room of listOfFreeRooms" (click)='presentRoomTimetable(room)'>
+        <ion-label>{{ room }}</ion-label>
+      </ion-chip>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

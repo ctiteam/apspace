@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   IonicPage, LoadingController, ModalController, NavController, NavParams,
   ToastController,
@@ -11,6 +11,8 @@ import { TimetableProvider } from '../../providers';
   templateUrl: 'classroom-finder.html',
 })
 export class ClassroomFinderPage {
+  @ViewChild('rooms') rooms;
+
   now = new Date();
   selectedDay = this.now.getDay().toString();
   selectedTime: string;
@@ -111,29 +113,13 @@ export class ClassroomFinderPage {
       this.listOfClassrooms.sort();
     }));
     if (this.selectedDay && this.selectedTime && this.selectedDuration) {
-      this.presentLoading().then((_ => {
-        switch (this.selectedDay) {
-          case '1':
-            this.searchTimetable('MON', this.selectedTime, this.selectedDuration * 60);
-            break;
-          case '2':
-            this.searchTimetable('TUE', this.selectedTime, this.selectedDuration * 60);
-            break;
-          case '3':
-            this.searchTimetable('WED', this.selectedTime, this.selectedDuration * 60);
-            break;
-          case '4':
-            this.searchTimetable('THU', this.selectedTime, this.selectedDuration * 60);
-            break;
-          case '5':
-            this.searchTimetable('FRI', this.selectedTime, this.selectedDuration * 60);
-            break;
-          case '6':
-            this.searchTimetable('SAT', this.selectedTime, this.selectedDuration * 60);
-            break;
-        }
+      this.presentLoading().then(_ => {
+        const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+        this.searchTimetable(days[this.selectedDay], this.selectedTime, this.selectedDuration * 60);
+        // TODO: scroll to rooms
+        // console.log(this.rooms);
         this.loading.dismiss();
-      }));
+      });
     } else {
       this.presentToast('Make sure you fill in everything!');
     }

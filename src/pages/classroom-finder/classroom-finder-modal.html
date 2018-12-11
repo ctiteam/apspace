@@ -24,39 +24,43 @@
     </ion-segment>
 
     <span *ngFor="let t of timetable$ | async | in:selectedRoom | filterday:selectedDate; trackBy: trackByIndex;">
-      <ion-card *ngIf="t.MODID !== 'FREE'" [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
-        <ion-card-header>
-          {{ t.MODID }}
-        </ion-card-header>
-        <ion-card-content>
-          <ion-label no-margin>
-            <ion-icon padding-right name="time"></ion-icon>
-            <b>{{ t.TIME_FROM }}</b> -
-            <b>{{ t.TIME_TO }}</b>
-          </ion-label>
-          <ion-label no-margin>
-            <ion-icon padding-right name="arrow-forward"></ion-icon>
-            <b> {{ t.INTAKE }}</b>
-          </ion-label>
-          <ion-label no-margin>
-            <a (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
-              <ion-icon padding-right name="contact"></ion-icon>
-              {{ t.NAME }}
-            </a>
-          </ion-label>
-        </ion-card-content>
-      </ion-card>
-      <ion-card *ngIf="t.MODID === 'FREE'" style="background-color: rgb(146, 252, 175);" [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
-        <ion-card-header>
-          <strong>FREE</strong>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-label no-margin>
-            <ion-icon padding-right name="time"></ion-icon>
-            <b>{{ t.TIME_FROM }}</b> -
-            <b>{{ t.TIME_TO }}</b>
-          </ion-label>
-        </ion-card-content>
-      </ion-card>
+      <ng-template [ngIf]="t.MODID !== 'FREE'" [ngIfElse]="free">
+        <ion-card [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
+          <ion-card-header>
+            {{ t.MODID }}
+          </ion-card-header>
+          <ion-card-content>
+            <ion-label no-margin>
+              <ion-icon padding-right name="time"></ion-icon>
+              <b>{{ t.TIME_FROM }}</b> -
+              <b>{{ t.TIME_TO }}</b>
+            </ion-label>
+            <ion-label no-margin>
+              <ion-icon padding-right name="arrow-forward"></ion-icon>
+              <b> {{ t.INTAKE }}</b>
+            </ion-label>
+            <ion-label no-margin>
+              <a (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
+                <ion-icon padding-right name="contact"></ion-icon>
+                {{ t.NAME }}
+              </a>
+            </ion-label>
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
+      <ng-template #free>
+        <ion-card class="free">
+          <ion-card-header>
+            <strong>FREE</strong>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-label no-margin>
+              <ion-icon padding-right name="time"></ion-icon>
+              <b>{{ t.TIME_FROM }}</b> -
+              <b>{{ t.TIME_TO }}</b>
+            </ion-label>
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
     </span>
   </ion-content>
