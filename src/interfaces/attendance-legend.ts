@@ -1,8 +1,8 @@
 export interface AttendanceLegend {
+  '***': string;
   BA: string;
-  BF: string;
   BD: string;
+  BF: string;
   Eligible: string;
   'N/A': string;
-  '***': string;
 }

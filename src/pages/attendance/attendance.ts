@@ -26,7 +26,7 @@ export class AttendancePage {
 
   attendance$: Observable<Attendance[]>;
   courses$: Observable<Course[]>;
-  legend$: Observable<AttendanceLegend[]>;
+  legend$: Observable<AttendanceLegend>;
 
   selectedIntake: string = '';
   average: number;
@@ -83,7 +83,7 @@ export class AttendancePage {
   }
 
   getLegend(refresh: boolean) {
-    this.legend$ = this.ws.get<AttendanceLegend[]>('/student/attendance_legend', refresh);
+    this.legend$ = this.ws.get<AttendanceLegend>('/student/attendance_legend', refresh);
   }
 
   calculateAverage(aa: Attendance[] | null) {
