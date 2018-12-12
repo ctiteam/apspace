@@ -126,8 +126,6 @@ export class MyApp {
   }
 
   logout() {
-    const role = this.settings.get('role') & Role.Student ? 'student' : 'staff';
-    this.ws.get(`/${role}/close_session`, true, { attempts: 0 }).subscribe();
     this.cas.deleteTGT().subscribe(_ => {
       this.settings.clear();
       // TODO: keep reusable cache
