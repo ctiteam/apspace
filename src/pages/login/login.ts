@@ -82,7 +82,7 @@ export class LoginPage {
           ? ['/student/courses', '/staff/listing']
           : ['/staff/profile', '/staff/listing']),
         ),
-        timeout(3000),
+        timeout(15000),
         tap(_ => this.events.publish('user:login')),
       ).subscribe(_ => this.navCtrl.setRoot('TabsPage'));
     }
