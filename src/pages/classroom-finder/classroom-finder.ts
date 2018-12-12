@@ -111,18 +111,18 @@ export class ClassroomFinderPage {
         }
       }
       this.listOfClassrooms.sort();
+      if (this.selectedDay && this.selectedTime && this.selectedDuration) {
+        this.presentLoading().then(_ => {
+          const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+          this.searchTimetable(days[this.selectedDay], this.selectedTime, this.selectedDuration * 60);
+          // TODO: scroll to rooms
+          // console.log(this.rooms);
+          this.loading.dismiss();
+        });
+      } else {
+        this.presentToast('Make sure you fill in everything!');
+      }
     }));
-    if (this.selectedDay && this.selectedTime && this.selectedDuration) {
-      this.presentLoading().then(_ => {
-        const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-        this.searchTimetable(days[this.selectedDay], this.selectedTime, this.selectedDuration * 60);
-        // TODO: scroll to rooms
-        // console.log(this.rooms);
-        this.loading.dismiss();
-      });
-    } else {
-      this.presentToast('Make sure you fill in everything!');
-    }
   }
 
   checkIfLabClosed(timetable, selectedTimeFrom, selectedTimeTo) {
