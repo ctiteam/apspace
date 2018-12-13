@@ -1,5 +1,5 @@
 /* tslint:disable:no-shadowed-variable */
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Events } from 'ionic-angular';
@@ -49,7 +49,7 @@ export class CasTicketProvider {
       observe: 'response' as 'body',
     };
     return (username && password
-      ? of(`username=${username}&password=${password}`)
+      ? of(new HttpParams().set('username', username).set('password', password).toString())
       : fromPromise(this.storage.get('cred'))
     ).pipe(
       switchMap(data => this.http.post(this.casUrl + '/cas/v1/tickets', data, options).pipe(
