@@ -1,6 +1,6 @@
 #!/bin/sh
 # Bump project version (default increment patch version)
-# Usage: bin/bump [version]
+# Usage: bin/bump [version], version - 0.0.0
 
 do_bump() {
   if [ -n "$(git diff-index --cached HEAD)" ]; then
