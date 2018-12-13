@@ -15,21 +15,26 @@
     <ion-row>
       <ion-col col-6>
         <ion-icon class='big-icons' name='md-calendar'></ion-icon>
-        <p class='icon-title'>Today's Classes</p>
-        <p class='top-value' style='color: #0dbd53'>{{ totalClasses !== undefined ? totalClasses : '…' }}</p>
+        <p class='icon-title'>Classes Today</p>
+        <p class='top-value' [style.color]="'#0dbd53'">
+          {{ totalClasses !== undefined ? totalClasses : '…' }}
+        </p>
       </ion-col>
       <ion-col col-6>
         <ion-icon class='big-icons' name='md-alarm'></ion-icon>
         <p class='icon-title'>Overall Attendance</p>
-        <p class='top-value' *ngIf='percent$ | async as percent' [style.color]="(percent.toFixed(0) >= 80 && percent.toFixed(0) <= 100) ? '#0dbd53' : '#f04141'">{{
-          percent.toFixed(0) + "%" }}</p>
+        <p *ngIf='attendancePercent$ | async as ap' class='top-value'
+          [style.color]=".8 <= ap && ap <= 1 ? '#0dbd53' : '#f04141'">
+          {{ ap | percent }}
+        </p>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col col-6>
         <ion-icon class='big-icons' name='md-card'></ion-icon>
         <p class='icon-title'>APCard Balance</p>
-        <p class='top-value' *ngIf='transaction$ | async as balance' [style.color]="(balance == 0) ? '#f04141' : '#0dbd53'">{{
+        <p class='top-value' *ngIf='transaction$ | async as balance'
+          [style.color]="balance == 0 ? '#f04141' : '#0dbd53'">{{
           balance | currency:'MYR':'RM' }}</p>
       </ion-col>
       <ion-col col-6>
@@ -44,29 +49,31 @@
 
   <ng-template let-classes [ngIf]='upcomingClass$ | async' [ngIfElse]='loadingClasses'>
     <ng-template [ngIf]='classes && classes.length > 0' [ngIfElse]='noclass'>
-      <ion-card>
-        <ion-item no-lines>
-          <b>Today's Classes</b>
-          <ion-icon item-left name='calendar' color='primary'></ion-icon>
-        </ion-item>
+      <ion-card class="list-block">
+        <ion-card-header>
+          <ion-icon padding-right name='calendar' color='primary'></ion-icon>
+          Classes Today
+        </ion-card-header>
         <ion-card-content>
-          <ion-list class="side-line" [style.border-color]='strToColor(c.MODID)' margin-top no-lines *ngFor='let c of classes'>
-            <h2 class="timetable-value" margin-bottom margin-top><b>{{ c.MODID }}</b></h2>
-            <ion-label no-margin>
-              <ion-icon class="timetable-value" padding-right name="time"></ion-icon>
-              <b>{{ c.TIME_FROM }}</b> -
-              <b>{{ c.TIME_TO }}</b>
-            </ion-label>
-            <ion-label no-margin>
-              <ion-icon class="timetable-value" padding-right name="locate"></ion-icon>
-              {{ c.ROOM }} │ {{ c.LOCATION }}
-            </ion-label>
-            <ion-label no-margin>
-              <a (click)="openStaffDirectoryInfo(c.SAMACCOUNTNAME)">
-                <ion-icon class="timetable-value" padding-right name="contact"></ion-icon>
-                {{ c.LECTURER_NAME }}
-              </a>
-            </ion-label>
+          <ion-list no-lines>
+            <div *ngFor="let c of classes" class="side-line"
+              [style.borderColor]='strToColor(c.MODID)'>
+              <h2><b>{{ c.MODID }}</b></h2>
+              <ion-label no-margin>
+                <ion-icon class="timetable-value" padding-right name="time"></ion-icon>
+                <b>{{ c.TIME_FROM }}</b> - <b>{{ c.TIME_TO }}</b>
+              </ion-label>
+              <ion-label no-margin>
+                <ion-icon class="timetable-value" padding-right name="locate"></ion-icon>
+                {{ c.ROOM }} │ {{ c.LOCATION }}
+              </ion-label>
+              <ion-label no-margin>
+                <a (click)="openStaffDirectoryInfo(c.SAMACCOUNTNAME)">
+                  <ion-icon class="timetable-value" padding-right name="contact"></ion-icon>
+                  {{ c.LECTURER_NAME }}
+                </a>
+              </ion-label>
+            </div>
           </ion-list>
         </ion-card-content>
       </ion-card>
@@ -74,7 +81,7 @@
     <ng-template #noclass>
       <ion-card>
         <ion-item no-lines>
-          <b>Today's Classes</b>
+          <b>Classes Today</b>
           <ion-icon item-left name='calendar' color='primary'></ion-icon>
         </ion-item>
         <ion-card-content>
@@ -94,10 +101,10 @@
   <ng-template let-attendances [ngIf]='attendance$ | async' [ngIfElse]='loadingLowAttendances'>
     <ng-template [ngIf]='attendances.length > 0' [ngIfElse]='nosubject'>
       <ion-card>
-        <ion-item no-lines>
-          <b>Low Attendance Subjects</b>
-          <ion-icon item-left name='alarm' style='color: #2042A6;'></ion-icon>
-        </ion-item>
+        <ion-card-header>
+          <ion-icon padding-right name='alarm' [style.color]="'#2042A6'"></ion-icon>
+          Low Attendance Subjects
+        </ion-card-header>
         <ion-card-content>
           <ion-segment [(ngModel)]="subject">
             <ion-segment-button *ngFor='let a of attendances' [value]='a.SUBJECT_CODE' (click)='getPieChart(a.TOTAL_CLASSES, a.TOTAL_ABSENT, a.SUBJECT_CODE, a.PERCENTAGE)'>
@@ -105,7 +112,7 @@
             </ion-segment-button>
           </ion-segment>
           <ion-label *ngIf='subjectCode'>{{ subjectCode + ': ' + percent + '%' }}</ion-label>
-          <chart margin-top [type]="type[0]" [data]="pieChartData" [options]="options[0]"></chart>
+          <chart [type]="type[0]" [data]="pieChartData" [options]="options[0]"></chart>
         </ion-card-content>
       </ion-card>
     </ng-template>
@@ -123,14 +130,12 @@
   <ng-template let-holiday [ngIf]='nextHoliday$ | async' [ngIfElse]='loadingHoliday'>
     <ng-template [ngIf]='holiday' [ngIfElse]='noHoliday'>
       <ion-card tappable (click)="openPage('HolidaysPage')">
-        <ion-item no-lines>
-          <b>Upcoming Holiday</b>
-          <ion-icon item-left name='globe' style='color: #5AC8FA;'></ion-icon>
-        </ion-item>
         <ion-card-header>
-          {{ holiday.holiday_name }}
+          <ion-icon padding-right name='globe' [style.color]="'#5AC8FA'"></ion-icon>
+          Upcoming Holiday
         </ion-card-header>
         <ion-card-content>
+          <h2 padding-bottom>{{ holiday.holiday_name }}</h2>
           <ion-label no-margin>
             <ion-icon padding-right name='calendar'></ion-icon>
             {{ holiday.holiday_start_date | date:'mediumDate' }}
@@ -151,7 +156,7 @@
       <ion-card>
         <ion-item no-lines>
           <b>Upcoming Holiday</b>
-          <ion-icon item-left name='globe' style='color: #5AC8FA;'></ion-icon>
+          <ion-icon item-left name='globe'  [style.color]="'#5AC8FA'"></ion-icon>
         </ion-item>
         <ion-card-content>
           <ion-note>No upcoming holidays</ion-note>
@@ -169,31 +174,33 @@
 
   <ng-template let-exams [ngIf]='exam$ | async | nextExams' [ngIfElse]='loadingExams'>
     <ng-template [ngIf]='exams && exams.length > 0' [ngIfElse]='noExam'>
-      <ion-card tappable (click)="openPage('ExamSchedulePage')">
-        <ion-item no-lines>
-          <b>Upcoming Exams</b>
-          <ion-icon item-left name='book' style='color: #2042A6;'></ion-icon>
-        </ion-item>
+      <ion-card tappable class="list-block" (click)="openPage('ExamSchedulePage')">
+        <ion-card-header>
+          <ion-icon padding-right name='globe' [style.color]="'#5AC8FA'"></ion-icon>
+          Upcoming Exams
+        </ion-card-header>
         <ion-card-content>
-          <ion-list no-lines class="side-line" style="border-color: #fd5000;" *ngFor='let exam of exams'>
-            <h2 margin-left margin-bottom margin-top>{{ exam.module }}</h2>
-            <ion-label no-margin>
-              <ion-icon margin-left padding-right name='clock'></ion-icon>
-              {{ exam.since | date:'mediumDate'}} ({{ exam.since | date:'shortTime'}} - {{ exam.until |
-              date:'shortTime'}})
-            </ion-label>
-            <p margin-left padding-right>Dockets will be released on <b>{{ exam.docketsDue | date }}</b>, and the
-              results will be published on <b>{{ exam.resultDate | date }}.</b></p>
+          <ion-list no-lines>
+            <div *ngFor="let exam of exams" class="side-line" [style.borderColor]="'#fd5000'">
+              <h2>{{ exam.module }}</h2>
+              <ion-label no-margin>
+                <ion-icon padding-right name='clock'></ion-icon>
+                {{ exam.since | date:'mediumDate'}} ({{ exam.since | date:'shortTime'}} - {{ exam.until |
+                date:'shortTime'}})
+              </ion-label>
+              <p padding-right>Dockets will be released on <b>{{ exam.docketsDue | date }}</b>, and the
+                results will be published on <b>{{ exam.resultDate | date }}.</b></p>
+            </div>
           </ion-list>
         </ion-card-content>
       </ion-card>
     </ng-template>
     <ng-template #noExam>
       <ion-card>
-        <ion-item no-lines>
-          <b>Upcoming Exams</b>
-          <ion-icon item-left name='book' style='color: #2042A6;'></ion-icon>
-        </ion-item>
+        <ion-card-header>
+          <ion-icon padding-right name='book' [style.color]="'#2042A6'"></ion-icon>
+          Upcoming Exams
+        </ion-card-header>
         <ion-card-content>
           <ion-note>No upcoming exams</ion-note>
         </ion-card-content>
@@ -211,11 +218,11 @@
   <ng-template [ngIf]='!block' [ngIfElse]='blocked'>
     <ng-template [ngIf]='barChartData' [ngIfElse]='loadingGPA'>
       <ion-card>
-        <ion-item no-lines>
+        <ion-card-header>
+          <ion-icon padding-right name='checkmark-circle' [style.color]="'#F78F08'"></ion-icon>
           GPA per Intake
-          <ion-icon item-left name='checkmark-circle' style='color: rgb(247, 143, 8);'></ion-icon>
-        </ion-item>
-        <chart margin-top [type]="type[1]" [data]="barChartData" [options]="options[1]"></chart>
+        </ion-card-header>
+        <chart [type]="type[1]" [data]="barChartData" [options]="options[1]"></chart>
       </ion-card>
     </ng-template>
     <ng-template #loadingGPA>

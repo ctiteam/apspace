@@ -18,12 +18,12 @@ import { WsApiProvider } from '../../providers';
 export class DashboardPage {
 
   attendance$: Observable<Attendance[]>;
+  attendancePercent$: Observable<number>;
   courseDetails$: Observable<CourseDetails>;
   exam$: Observable<ExamSchedule[]>;
   intake$: Observable<Course[]>;
   nextHoliday$: Observable<Holiday>;
   overdue$: Observable<FeesTotalSummary[]>;
-  percent$: Observable<number>;
   profile$: Observable<StudentProfile>;
   transaction$: Observable<Apcard>;
   upcomingClass$: Observable<any[]>;
@@ -203,8 +203,8 @@ export class DashboardPage {
       tap(attendances => this.subject = attendances[0] && attendances[0].SUBJECT_CODE),
       share(),
     );
-    this.percent$ = this.ws.get<Attendance[]>(url).pipe(
-      map(attendances => attendances.reduce((a, b) => a + b.PERCENTAGE, 0) / attendances.length),
+    this.attendancePercent$ = this.ws.get<Attendance[]>(url).pipe(
+      map(aa => aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100),
     );
   }
 
