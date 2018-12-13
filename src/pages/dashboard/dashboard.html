@@ -98,14 +98,12 @@
           <b>Low Attendance Subjects</b>
           <ion-icon item-left name='alarm' style='color: #2042A6;'></ion-icon>
         </ion-item>
-        <ion-card-header>
+        <ion-card-content>
           <ion-segment [(ngModel)]="subject">
             <ion-segment-button *ngFor='let a of attendances' [value]='a.SUBJECT_CODE' (click)='getPieChart(a.TOTAL_CLASSES, a.TOTAL_ABSENT, a.SUBJECT_CODE, a.PERCENTAGE)'>
               {{ a.SUBJECT_CODE.split('-')[a.SUBJECT_CODE.split('-').length -1] }}
             </ion-segment-button>
           </ion-segment>
-        </ion-card-header>
-        <ion-card-content>
           <ion-label *ngIf='subjectCode'>{{ subjectCode + ': ' + percent + '%' }}</ion-label>
           <chart margin-top [type]="type[0]" [data]="pieChartData" [options]="options[0]"></chart>
         </ion-card-content>
