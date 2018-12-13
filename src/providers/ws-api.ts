@@ -40,7 +40,7 @@ export class WsApiProvider {
    * @param options.auth - authentication required (default: true)
    * @param options.params - additional request parameters (default: {})
    * @param options.timeout - request timeout (default: 10000)
-   * @param options.url - url of web service (default: apiUrl or oldApiUrl)
+   * @param options.url - url of web service (default: apiUrl)
    * @return shared cached observable
    */
   get<T>(endpoint: string, refresh?: boolean, options: {
