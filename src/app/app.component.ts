@@ -4,14 +4,11 @@ import { Network } from '@ionic-native/network';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Storage } from '@ionic/storage';
 import {
-  AlertController,
-  Events,
-  Nav,
-  Platform,
-  ToastController,
+  AlertController, Events, Nav, Platform, ToastController,
 } from 'ionic-angular';
 
 import { forkJoin } from 'rxjs/observable/forkJoin';
+import { switchMapTo, timeout } from 'rxjs/operators';
 
 import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../interfaces';
 import {
@@ -42,7 +39,7 @@ export class MyApp {
     private cas: CasTicketProvider,
     private alertCtrl: AlertController,
     private fcm: FCM,
-    private dataCollector: DataCollectorProvider,
+    private dc: DataCollectorProvider,
   ) {
     // platform required to be ready before everything else
     this.platform.ready().then(() => Promise.all([
@@ -91,10 +88,7 @@ export class MyApp {
 
   onLogin() {
     if (this.platform.is('cordova')) {
-      forkJoin(
-        this.notificationService.getMessage(),
-        this.dataCollector.sendDeviceInfo(),
-      ).subscribe();
+      forkJoin(this.dc.login(), this.notificationService.getMessage()).subscribe();
     }
     const role = this.settings.get('role');
     if (role & Role.Student) {
@@ -126,9 +120,11 @@ export class MyApp {
   }
 
   logout() {
-    this.cas.deleteTGT().subscribe(_ => {
+    (this.platform.is('cordova')
+      ? this.dc.logout().pipe(timeout(5000), switchMapTo(this.cas.deleteTGT()))
+      : this.cas.deleteTGT()
+    ).subscribe(_ => {
       this.settings.clear();
-      // TODO: keep reusable cache
       this.storage.clear();
       this.navCtrl.setRoot('LoginPage');
       this.navCtrl.popToRoot();

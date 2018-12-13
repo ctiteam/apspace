@@ -5,7 +5,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 
 import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
-import { DataCollectorProvider, NotificationProvider, SettingsProvider, WsApiProvider } from '../../providers';
+import { NotificationProvider, SettingsProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -134,7 +134,6 @@ export class MorePage {
     public settings: SettingsProvider,
     public notification: NotificationProvider,
     public plt: Platform,
-    public dataCollector: DataCollectorProvider,
   ) {
     const role = this.settings.get('role');
     this.pages = this.menuItems.filter(page => page.role & role);
@@ -190,10 +189,7 @@ export class MorePage {
           { text: 'Cancel', role: 'cancel' },
           {
             text: 'Log out',
-            handler: () => {
-              this.dataCollector.sendOnLogout().subscribe();
-              this.events.publish('user:logout');
-            },
+            handler: () => { this.events.publish('user:logout'); },
           },
         ],
       })
