@@ -2,26 +2,11 @@ import { Component } from '@angular/core';
 import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import {
-  concatMap,
-  finalize,
-  flatMap,
-  map,
-  share,
-  tap,
-  toArray,
-} from 'rxjs/operators';
+import { concatMap, finalize, flatMap, map, share, tap, toArray } from 'rxjs/operators';
 
 import {
-  Apcard,
-  Attendance,
-  Course,
-  CourseDetails,
-  ExamSchedule,
-  FeesTotalSummary,
-  Holiday,
-  Holidays,
-  StudentProfile,
+  Apcard, Attendance, Course, CourseDetails, ExamSchedule, FeesTotalSummary,
+  Holiday, Holidays, StudentProfile,
 } from '../../interfaces';
 import { WsApiProvider } from '../../providers';
 
