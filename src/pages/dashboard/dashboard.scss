@@ -1,4 +1,6 @@
 page-dashboard {
+  @import "_snowflakes";
+
   .list-block a {
     text-decoration: none;
     cursor: pointer;
