@@ -58,15 +58,19 @@
 
   <ng-template [ngIf]='!local' [ngIfElse]='localStudent'>
     <ng-template let-visa [ngIf]='visa$ | async' [ngIfElse]='locadingVisaStatus'>
-      <ion-card>
-        <ion-card-header>
-          <ion-icon padding-right name='md-globe' [style.color]="'#F78F08'"></ion-icon>
-          Visa Expiry Date
-        </ion-card-header>
-        <ion-card-content>
-          {{ visa[0].VISA_EXPIRY_DATE | date: 'mediumDate' }}
-        </ion-card-content>
-      </ion-card>
+      <ng-template [ngIf]='visa[0].VISA_EXPIRY_DATE' [ngIfElse]='noVisa'>
+        <ion-card>
+          <ion-card-header>
+            <ion-icon padding-right name='md-globe' [style.color]="'#F78F08'"></ion-icon>
+            Visa Expiry Date
+          </ion-card-header>
+          <ion-card-content>
+            {{ visa[0].VISA_EXPIRY_DATE | date: 'mediumDate' }}
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
+      <ng-template #noVisa>
+      </ng-template>
     </ng-template>
     <ng-template #locadingVisaStatus>
       <ion-card>
@@ -112,8 +116,8 @@
     <ng-template #noclass>
       <ion-card>
         <ion-item no-lines>
-          <b>Classes Today</b>
-          <ion-icon item-left name='calendar' color='primary'></ion-icon>
+          <ion-icon padding-right name='calendar' color='primary'></ion-icon>
+          Classes Today
         </ion-item>
         <ion-card-content>
           <ion-note>No upcoming classes for today</ion-note>
