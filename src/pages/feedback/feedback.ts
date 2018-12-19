@@ -36,7 +36,6 @@ export class FeedbackPage {
         position: 'top',
         duration: 3000,
       }).present();
-
   }
 
   ionViewDidLoad() {
@@ -46,12 +45,11 @@ export class FeedbackPage {
         this.info.name = p.NAME;
         this.info.email = p.STUDENT_NUMBER + '@mail.apu.edu.my';
       });
-    } else if (role & (Role.Lecturer || Role.Admin)) {
+    } else if (role & (Role.Lecturer | Role.Admin)) {
       this.ws.get<StaffProfile[]>('/staff/profile').subscribe(p => {
         this.info.name = p[0].FULLNAME;
-        this.info.email = p[0].EMAIL + '@apu.edu.my';
+        this.info.email = p[0].EMAIL;
       });
     }
   }
-
 }
