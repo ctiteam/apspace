@@ -16,7 +16,7 @@ export class ClassroomFinderPage {
   now = new Date();
   selectedDay = this.now.getDay().toString();
   selectedTime: string;
-  selectedDuration = 60;
+  selectedEndTime: string;
   timetableData;
   listOfClassrooms = [];
   listOfFreeRooms = [];
@@ -44,13 +44,18 @@ export class ClassroomFinderPage {
   ) {
     let hour = this.now.getHours().toString();
     let minute = this.now.getMinutes().toString();
+    let endHour = (this.now.getHours() + 1).toString();
     if (hour.length === 1) {
       hour = '0' + hour;
     }
     if (minute.length === 1) {
       minute = '0' + minute;
     }
+    if (endHour.length === 1) {
+      endHour = '0' + endHour;
+    }
     this.selectedTime = hour + ':' + minute;
+    this.selectedEndTime = endHour + ':' + minute;
   }
 
   async presentLoading() {
@@ -73,56 +78,91 @@ export class ClassroomFinderPage {
   }
 
   getFreeRoom() {
-    // Get array of selected locations
-    this.listOfClassrooms = [];
-    this.listOfFreeRooms = [];
-    let selectedTypeOfRooms = []; // Besides normal classrooms
-    if (this.typeOfRooms.lab) {
-      selectedTypeOfRooms = ['Lab', 'LAB', 'Studio', 'Suite'];
-    }
-    if (this.typeOfRooms.auditorium) {
-      selectedTypeOfRooms.push('Auditorium');
-    }
-    const selectedLocations = [];
-    if (this.location.newCampus) {
-      selectedLocations.push('NEW CAMPUS');
-    }
-    if (this.location.apiitTpm) {
-      selectedLocations.push('TPM');
-    }
-    this.timetableProv.get(true).subscribe((res => {
-      this.timetableData = res;
-      for (let i = 0; i < this.timetableData.length; i++) {
-        if (this.listOfClassrooms.indexOf(res[i].ROOM) === -1
-          && selectedLocations.indexOf(res[i].LOCATION) !== -1) {
-          if (this.typeOfRooms.classroom && this.location.newCampus
-            && res[i].LOCATION === 'NEW CAMPUS' && res[i].ROOM.length === 7) { // If classroom e.g. B-07-08
-            this.listOfClassrooms.push(res[i].ROOM);
-          }
-          if (this.typeOfRooms.classroom && this.location.apiitTpm
-            && res[i].LOCATION === 'TPM' && res[i].ROOM.length === 8) { // If APIIT Lecture Halls e.g. L3-2
-            this.listOfClassrooms.push(res[i].ROOM);
-          }
-          selectedTypeOfRooms.forEach(typeOfRoom => {
-            if (res[i].ROOM.indexOf(typeOfRoom) !== -1) {
-              this.listOfClassrooms.push(res[i].ROOM);
-            }
-          });
+    if ((this.typeOfRooms.auditorium || this.typeOfRooms.classroom || this.typeOfRooms.lab)
+      && (this.location.newCampus || this.location.apiitTpm)) {
+      this.presentLoading().then(_ => {
+        // Get array of selected locations
+        this.listOfClassrooms = [];
+        this.listOfFreeRooms = [];
+
+        let selectedTypeOfRooms = []; // Besides normal classrooms
+        if (this.typeOfRooms.lab) {
+          selectedTypeOfRooms = ['Lab', 'LAB', 'Studio', 'Suite'];
         }
-      }
-      this.listOfClassrooms.sort();
-      if (this.selectedDay && this.selectedTime && this.selectedDuration) {
-        this.presentLoading().then(_ => {
+        if (this.typeOfRooms.auditorium) {
+          selectedTypeOfRooms.push('Auditorium');
+        }
+
+        const selectedLocations = [];
+        if (this.location.newCampus) {
+          selectedLocations.push('NEW CAMPUS');
+        }
+        if (this.location.apiitTpm) {
+          selectedLocations.push('TPM');
+        }
+
+        this.timetableProv.get(true).subscribe((res => {
+          this.timetableData = res;
+          for (let i = 0; i < this.timetableData.length; i++) {
+            if (this.listOfClassrooms.indexOf(res[i].ROOM) === -1
+              && selectedLocations.indexOf(res[i].LOCATION) !== -1) {
+              if (this.typeOfRooms.classroom && this.location.newCampus
+                && res[i].LOCATION === 'NEW CAMPUS' && res[i].ROOM.length === 7) { // If classroom e.g. B-07-08
+                this.listOfClassrooms.push(res[i].ROOM);
+              }
+              if (this.typeOfRooms.classroom && this.location.apiitTpm
+                && res[i].LOCATION === 'TPM' && res[i].ROOM.length === 8) { // If APIIT Lecture Halls e.g. L3-2
+                this.listOfClassrooms.push(res[i].ROOM);
+              }
+              selectedTypeOfRooms.forEach(typeOfRoom => {
+                if (res[i].ROOM.indexOf(typeOfRoom) !== -1) {
+                  this.listOfClassrooms.push(res[i].ROOM);
+                }
+              });
+            }
+          }
+          this.listOfClassrooms.sort();
           const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-          this.searchTimetable(days[this.selectedDay], this.selectedTime, this.selectedDuration * 60);
+          this.searchTimetable(days[this.selectedDay], this.selectedTime, this.selectedEndTime);
           // TODO: scroll to rooms
           // console.log(this.rooms);
           this.loading.dismiss();
-        });
-      } else {
-        this.presentToast('Make sure you fill in everything!');
+        }));
+      });
+    } else {
+      this.presentToast('You have to select a type of room and a location to search.');
+    }
+  }
+
+  searchTimetable(selectedDay, selectedTime, selectedEndTime) {
+    this.listOfFreeRooms = [];
+    const occupiedRooms = [];
+    this.timetableData.forEach(timetable => {
+      if (timetable.DAY === selectedDay) {
+        const timeFrom = Date.parse(timetable.DATESTAMP_ISO.split('-').join('/')
+          + ' ' + this.convertTime12to24(timetable.TIME_FROM).toString() + ':00') / 1000;
+        const timeTo = Date.parse(timetable.DATESTAMP_ISO.split('-').join('/')
+          + ' ' + this.convertTime12to24(timetable.TIME_TO).toString() + ':00') / 1000;
+        const selectedTimeFrom = Date.parse(timetable.DATESTAMP_ISO.split('-').join('/')
+          + ' ' + selectedTime + ':00') / 1000;
+        const selectedTimeTo = Date.parse(timetable.DATESTAMP_ISO.split('-').join('/')
+        + ' ' + selectedEndTime + ':00') / 1000;
+
+        if ((selectedTimeFrom <= timeFrom && timeFrom < selectedTimeTo)
+          || (selectedTimeFrom <= timeTo && timeTo < selectedTimeTo)
+          || (timeFrom <= selectedTimeFrom && selectedTimeTo <= timeTo)
+          || this.checkIfLabClosed(timetable, selectedTimeFrom, selectedTimeTo)) {
+          // If class is used at that time
+          if (occupiedRooms.indexOf(timetable.ROOM) === -1) {
+            occupiedRooms.push(timetable.ROOM);
+          }
+        }
       }
-    }));
+    });
+    this.listOfFreeRooms = this.listOfClassrooms.filter(el => occupiedRooms.indexOf(el) === -1);
+    if (this.listOfFreeRooms.length === 0) {
+      this.presentToast('No rooms available.');
+    }
   }
 
   checkIfLabClosed(timetable, selectedTimeFrom, selectedTimeTo) {
@@ -140,31 +180,6 @@ export class ClassroomFinderPage {
       }
     }
     return false;
-  }
-
-  searchTimetable(selectedDay, selectedTime, duration) {
-    this.listOfFreeRooms = [];
-    const occupiedRooms = [];
-    this.timetableData.forEach(timetable => {
-      if (timetable.DAY === selectedDay) {
-        const timeFrom = Date.parse(timetable.DATESTAMP_ISO.split('-').join('/')
-          + ' ' + this.convertTime12to24(timetable.TIME_FROM).toString() + ':00') / 1000;
-        const timeTo = Date.parse(timetable.DATESTAMP_ISO.split('-').join('/')
-          + ' ' + this.convertTime12to24(timetable.TIME_TO).toString() + ':00') / 1000;
-        const selectedTimeFrom = Date.parse(timetable.DATESTAMP_ISO.split('-').join('/')
-          + ' ' + selectedTime + ':00') / 1000;
-        const selectedTimeTo = selectedTimeFrom + duration;
-        if ((selectedTimeFrom <= timeFrom && timeFrom < selectedTimeTo)
-          || (selectedTimeFrom <= timeTo && timeTo < selectedTimeTo)
-          || this.checkIfLabClosed(timetable, selectedTimeFrom, selectedTimeTo)) {
-          // If class is used at that time
-          if (occupiedRooms.indexOf(timetable.ROOM) === -1) {
-            occupiedRooms.push(timetable.ROOM);
-          }
-        }
-      }
-    });
-    this.listOfFreeRooms = this.listOfClassrooms.filter(el => occupiedRooms.indexOf(el) === -1);
   }
 
   convertTime12to24(time12h) {

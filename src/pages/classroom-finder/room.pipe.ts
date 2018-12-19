@@ -35,6 +35,7 @@ export class RoomPipe implements PipeTransform {
   generateFreeSlots(tt) {
     const ttWithFreeSlots: Timetable[] = [];
     // let days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+    // tslint:disable-next-line:cyclomatic-complexity
     tt.forEach((t, index, self) => {
       // Classrooms are available from 08:30 AM
       if (index === 0 && t.TIME_FROM !== '08:30 AM') {
