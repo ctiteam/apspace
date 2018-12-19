@@ -132,7 +132,7 @@ export class WsApiProvider {
       return obs_throw('offline');
     }
 
-    return this.cas.getST().pipe(
+    return this.cas.getST(url.split('?').shift()).pipe(
       switchMap(ticket => this.http.post<T>(url, options.body,
         { ...opt, params: { ...opt.params, ticket } })),
       timeout(options.timeout),
