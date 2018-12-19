@@ -27,6 +27,7 @@ export class DashboardPage {
   profile$: Observable<StudentProfile>;
   transaction$: Observable<Apcard>;
   upcomingClass$: Observable<any[]>;
+  visa$: Observable<any>;
 
   numOfSkeletons = new Array(2);
 
@@ -39,6 +40,7 @@ export class DashboardPage {
   percent: number;
   subject: string;
   block: boolean = false;
+  local: boolean = false;
 
   options = [
     {
@@ -110,12 +112,24 @@ export class DashboardPage {
       }),
       tap(p => this.getAttendance(p.INTAKE)),
       tap(p => this.getUpcomingExam(p.INTAKE)),
+      tap(p => {
+        if (p.COUNTRY === 'Malaysia') {
+          this.local = true;
+        } else {
+          this.local = false;
+          this.visa$ = this.getVisaStatus();
+        }
+      }),
     ).subscribe();
   }
 
   getUpcomingExam(intake: string) {
     const opt = { auth: false };
     this.exam$ = this.ws.get<ExamSchedule[]>(`/examination/${intake}`, true, opt);
+  }
+
+  getVisaStatus() {
+    return this.ws.get<any>('/student/visa_status');
   }
 
   /** Convert string to color with djb2 hash function. */

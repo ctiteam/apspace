@@ -34,8 +34,7 @@
       <ion-col col-6>
         <ion-icon class='big-icons' name='md-alarm'></ion-icon>
         <p class='icon-title'>Overall Attendance</p>
-        <p *ngIf='attendancePercent$ | async as ap' class='top-value'
-          [style.color]=".8 <= ap && ap <= 1 ? '#0dbd53' : '#f04141'">
+        <p *ngIf='attendancePercent$ | async as ap' class='top-value' [style.color]=".8 <= ap && ap <= 1 ? '#0dbd53' : '#f04141'">
           {{ ap | percent }}
         </p>
       </ion-col>
@@ -44,8 +43,7 @@
       <ion-col col-6>
         <ion-icon class='big-icons' name='md-card'></ion-icon>
         <p class='icon-title'>APCard Balance</p>
-        <p class='top-value' *ngIf='transaction$ | async as balance'
-          [style.color]="balance == 0 ? '#f04141' : '#0dbd53'">{{
+        <p class='top-value' *ngIf='transaction$ | async as balance' [style.color]="balance == 0 ? '#f04141' : '#0dbd53'">{{
           balance | currency:'MYR':'RM' }}</p>
       </ion-col>
       <ion-col col-6>
@@ -58,6 +56,29 @@
     </ion-row>
   </ion-card>
 
+  <ng-template [ngIf]='!local' [ngIfElse]='localStudent'>
+    <ng-template let-visa [ngIf]='visa$ | async' [ngIfElse]='locadingVisaStatus'>
+      <ion-card>
+        <ion-card-header>
+          <ion-icon padding-right name='md-globe' [style.color]="'#F78F08'"></ion-icon>
+          Visa Expiry Date
+        </ion-card-header>
+        <ion-card-content>
+          {{ visa[0].VISA_EXPIRY_DATE | date: 'mediumDate' }}
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+    <ng-template #locadingVisaStatus>
+      <ion-card>
+        <ion-item no-lines>
+          <skeleton-item height="100px" width="100%"></skeleton-item>
+        </ion-item>
+      </ion-card>
+    </ng-template>
+  </ng-template>
+  <ng-template #localStudent>
+  </ng-template>
+
   <ng-template let-classes [ngIf]='upcomingClass$ | async' [ngIfElse]='loadingClasses'>
     <ng-template [ngIf]='classes && classes.length > 0' [ngIfElse]='noclass'>
       <ion-card class="list-block">
@@ -67,8 +88,7 @@
         </ion-card-header>
         <ion-card-content>
           <ion-list no-lines>
-            <div *ngFor="let c of classes" class="side-line"
-              [style.borderColor]='strToColor(c.MODID)'>
+            <div *ngFor="let c of classes" class="side-line" [style.borderColor]='strToColor(c.MODID)'>
               <h2><b>{{ c.MODID }}</b></h2>
               <ion-label no-margin>
                 <ion-icon class="timetable-value" padding-right name="time"></ion-icon>
@@ -167,7 +187,7 @@
       <ion-card>
         <ion-item no-lines>
           <b>Upcoming Holiday</b>
-          <ion-icon item-left name='globe'  [style.color]="'#5AC8FA'"></ion-icon>
+          <ion-icon item-left name='globe' [style.color]="'#5AC8FA'"></ion-icon>
         </ion-item>
         <ion-card-content>
           <ion-note>No upcoming holidays</ion-note>
