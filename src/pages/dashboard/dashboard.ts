@@ -210,7 +210,11 @@ export class DashboardPage {
   getAttendance(intake: string) {
     const url = `/student/attendance?intake=${intake}`;
     this.attendance$ = this.ws.get<Attendance[]>(url, true).pipe(
-      map(attendances => (attendances || []).filter(attendance => attendance.PERCENTAGE < 80)),
+      map(attendances => {
+        const currentSemester = Math.max(...attendances.map(attendance => attendance.SEMESTER));
+        return (attendances || []).filter(attendance =>
+          attendance.SEMESTER === currentSemester && attendance.PERCENTAGE < 80);
+      }),
       tap(attendances => attendances.length > 0 && this.getPieChart(
         attendances[0].TOTAL_CLASSES, attendances[0].TOTAL_ABSENT,
         attendances[0].SUBJECT_CODE, attendances[0].PERCENTAGE)),

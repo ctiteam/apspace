@@ -7,6 +7,7 @@ export interface Attendance {
   MODULE_ATTENDANCE: string;
   NAME: string;
   PERCENTAGE: number;
+  SEMESTER: number;
   STUDENT_NUMBER: string;
   SUBJECT_CODE: string;
   TOTAL_ABSENT: number;
