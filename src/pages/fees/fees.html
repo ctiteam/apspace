@@ -12,23 +12,23 @@
       padding>
       <ion-item class="total-summary" [style.background]="totalSummary[0].TOTAL_OVERDUE === 0 ? '#0dbd53' : '#f04141'">
         Total Payable
-        <ion-note color='light' item-right>{{ totalSummary[0]?.TOTAL_PAYABLE || 0 }}</ion-note>
+        <ion-note color='light' item-right>{{ (totalSummary[0]?.TOTAL_PAYABLE || 0) | currency:'MYR':'RM' }}</ion-note>
       </ion-item>
       <ion-item class="total-summary" [style.background]="totalSummary[0].TOTAL_OVERDUE === 0 ? '#0dbd53' : '#f04141'">
         Total Paid
-        <ion-note color='light' item-right>{{ totalSummary[0]?.TOTAL_PAID || 0 }}</ion-note>
+        <ion-note color='light' item-right>{{ (totalSummary[0]?.TOTAL_PAID || 0) | currency:'MYR':'RM' }}</ion-note>
       </ion-item>
       <ion-item class="total-summary" [style.background]="totalSummary[0].TOTAL_OVERDUE === 0 ? '#0dbd53' : '#f04141'">
         Total Outstanding
-        <ion-note color='light' item-right>{{ totalSummary[0]?.TOTAL_OUTSTANDING || 0 }}</ion-note>
+        <ion-note color='light' item-right>{{ (totalSummary[0]?.TOTAL_OUTSTANDING || 0) | currency:'MYR':'RM' }}</ion-note>
       </ion-item>
       <ion-item class="total-summary" [style.background]="totalSummary[0].TOTAL_OVERDUE === 0 ? '#0dbd53' : '#f04141'">
         Total Overdue
-        <ion-note color='light' item-right>{{ totalSummary[0]?.TOTAL_OVERDUE || 0 }}</ion-note>
+        <ion-note color='light' item-right>{{ (totalSummary[0]?.TOTAL_OVERDUE || 0) | currency:'MYR':'RM' }}</ion-note>
       </ion-item>
       <ion-item class="total-summary" [style.background]="totalSummary[0].TOTAL_OVERDUE === 0 ? '#0dbd53' : '#f04141'">
         Fine
-        <ion-note color='light' item-right>{{ totalSummary[0]?.FINE || 0 }}</ion-note>
+        <ion-note color='light' item-right>{{ (totalSummary[0]?.FINE || 0) | currency:'MYR':'RM' }}</ion-note>
       </ion-item>
     </ion-card>
   </ng-template>
@@ -54,23 +54,33 @@
           <ion-card-content no-padding>
             <ion-item>
               Due Date
-              <ion-note color='text-color' item-right>{{ summary.PAYMENT_DUE_DATE || 'N/A' }}</ion-note>
+              <ion-note color='text-color' item-right>
+                {{ (summary.PAYMENT_DUE_DATE | currency:'MYR':'RM') || 'N/A' }}
+              </ion-note>
             </ion-item>
             <ion-item>
               Amount Payable
-              <ion-note color='text-color' item-right>{{ summary.PAYABLE_AMOUNT || 'N/A' }}</ion-note>
+              <ion-note color='text-color' item-right>
+                {{ (summary.PAYABLE_AMOUNT | currency:'MYR':'RM') || 'N/A' }}
+              </ion-note>
             </ion-item>
             <ion-item>
               Total Collected
-              <ion-note color='text-color' item-right>{{ summary.TOTAL_COLLECTED || 'N/A' }}</ion-note>
+              <ion-note color='text-color' item-right>
+                {{ (summary.TOTAL_COLLECTED | currency:'MYR':'RM') || 'N/A' }}
+              </ion-note>
             </ion-item>
             <ion-item>
               Outstanding
-              <ion-note color='text-color' item-right>{{ summary.OUTSTANDING || 'N/A' }}</ion-note>
+              <ion-note color='text-color' item-right>
+                {{ (summary.OUTSTANDING | currency:'MYR':'RM') || 'N/A' }}
+              </ion-note>
             </ion-item>
             <ion-item>
               Fine
-              <ion-note color='text-color' item-right>{{ summary.FINE || 'N/A' }}</ion-note>
+              <ion-note color='text-color' item-right>
+                {{ (summary.FINE | currency:'MYR':'RM') || 'N/A' }}
+              </ion-note>
             </ion-item>
           </ion-card-content>
         </ion-card>
@@ -91,23 +101,43 @@
           <ion-card-content no-padding>
             <ion-item>
               Bank Draft Amount
-              <ion-note color='text-color' item-right>{{ bankDraft.BANKDRAFT_AMOUNT }}</ion-note>
+              <ion-note color='text-color' item-right>
+                {{ isNumber(bankDraft.BANKDRAFT_AMOUNT)
+                ? (bankDraft.BANKDRAFT_AMOUNT | currency:'MYR':'RM')
+                : bankDraft.BANKDRAFT_AMOUNT }}
+              </ion-note>
             </ion-item>
             <ion-item>
               Due Date
-              <ion-note color='text-color' item-right>{{ bankDraft.BANKDRAFT_DUE_DATE }}</ion-note>
+              <ion-note color='text-color' item-right>
+                {{ isNumber(bankDraft.BANKDRAFT_DUE_DATE)
+                ? (bankDraft.BANKDRAFT_DUE_DATE | currency:'MYR':'RM')
+                : bankDraft.BANKDRAFT_DUE_DATE }}
+              </ion-note>
             </ion-item>
             <ion-item>
               Date Collected
-              <ion-note color='text-color' item-right>{{ bankDraft.DATE_COLLECTED }}</ion-note>
+              <ion-note color='text-color' item-right>
+                {{ isNumber(bankDraft.DATE_COLLECTED)
+                ? (bankDraft.DATE_COLLECTED | currency:'MYR':'RM')
+                : bankDraft.DATE_COLLECTED }}
+              </ion-note>
             </ion-item>
             <ion-item>
               Registration Date
-              <ion-note color='text-color' item-right>{{ bankDraft.REGISTRATION_DATE }}</ion-note>
+              <ion-note color='text-color' item-right>
+                {{ isNumber(bankDraft.REGISTRATION_DATE)
+                ? (bankDraft.REGISTRATION_DATE | currency:'MYR':'RM')
+                : bankDraft.REGISTRATION_DATE }}
+              </ion-note>
             </ion-item>
             <ion-item>
               Amount Collected
-              <ion-note color='success' item-right>{{ bankDraft.AMOUNT_COLLECTED }}</ion-note>
+              <ion-note color='success' item-right>
+                {{ isNumber(bankDraft.AMOUNT_COLLECTED)
+                ? (bankDraft.AMOUNT_COLLECTED | currency:'MYR':'RM')
+                : bankDraft.AMOUNT_COLLECTED }}
+              </ion-note>
             </ion-item>
           </ion-card-content>
         </ion-card>
@@ -128,23 +158,43 @@
           <ion-card-content no-padding>
             <ion-item>
               Due Date
-              <ion-note color='text-color' item-right>{{ detail.DUE_DATE }}</ion-note>
+              <ion-note color='text-color' item-right
+                >{{ isNumber(detail.DUE_DATE)
+                ? (detail.DUE_DATE | currency:'MYR':'RM')
+                : detail.DUE_DATE }}
+              </ion-note>
             </ion-item>
             <ion-item>
               Amount Payable
-              <ion-note color='text-color' item-right>{{ detail.AMOUNT_PAYABLE }}</ion-note>
+              <ion-note color='text-color' item-right>
+                {{ isNumber(detail.AMOUNT_PAYABLE)
+                ? (detail.AMOUNT_PAYABLE | currency:'MYR':'RM')
+                : detail.AMOUNT_PAYABLE }}
+              </ion-note>
             </ion-item>
             <ion-item>
               Total Collected
-              <ion-note color='success' item-right>{{ detail.TOTAL_COLLECTED }}</ion-note>
+              <ion-note color='success' item-right>
+                {{ isNumber(detail.TOTAL_COLLECTED)
+                ? (detail.TOTAL_COLLECTED | currency:'MYR':'RM')
+                : detail.TOTAL_COLLECTED }}
+              </ion-note>
             </ion-item>
             <ion-item>
               Outstanding
-              <ion-note color='danger' item-right>{{ detail.OUTSTANDING }}</ion-note>
+              <ion-note color='danger' item-right>
+                {{ isNumber(detail.OUTSTANDING)
+                ? (detail.OUTSTANDING | currency:'MYR':'RM')
+                : detail.OUTSTANDING }}
+              </ion-note>
             </ion-item>
             <ion-item>
               Fine
-              <ion-note color='warn' item-right>{{ detail.FINE }}</ion-note>
+              <ion-note color='warn' item-right>
+                {{ isNumber(detail.FINE)
+                ? (detail.FINE | currency:'MYR':'RM')
+                : detail.FINE }}
+              </ion-note>
             </ion-item>
           </ion-card-content>
         </ion-card>
