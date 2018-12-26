@@ -163,13 +163,13 @@
   </ng-template>
 
   <ng-template let-holiday [ngIf]='nextHoliday$ | async' [ngIfElse]='loadingHoliday'>
-    <ng-template [ngIf]='holiday.holiday_name' [ngIfElse]='noHoliday'>
-      <ion-card tappable (click)="openPage('HolidaysPage')">
-        <ion-card-header>
-          <ion-icon padding-right name='globe' [style.color]="'#5AC8FA'"></ion-icon>
-          Upcoming Holiday
-        </ion-card-header>
-        <ion-card-content>
+    <ion-card tappable (click)="openPage('HolidaysPage')">
+      <ion-card-header>
+        <ion-icon padding-right name='globe' [style.color]="'#5AC8FA'"></ion-icon>
+        Upcoming Holiday
+      </ion-card-header>
+      <ng-template [ngIf]='holiday.holiday_name' [ngIfElse]='noHoliday'>
+        <ion-card-content *ngIf="holiday.holiday_name; else noHoliday">
           <h2 padding-bottom>{{ holiday.holiday_name }}</h2>
           <ion-label no-margin>
             <ion-icon padding-right name='calendar'></ion-icon>
@@ -185,24 +185,18 @@
             </p>
           </ng-template>
         </ion-card-content>
-      </ion-card>
-    </ng-template>
-    <ng-template #noHoliday>
-      <ion-card>
-        <ion-item no-lines>
-          <b>Upcoming Holiday</b>
-          <ion-icon item-left name='globe' [style.color]="'#5AC8FA'"></ion-icon>
-        </ion-item>
+      </ng-template>
+      <ng-template #noHoliday>
         <ion-card-content>
           <ion-note>No upcoming holidays</ion-note>
         </ion-card-content>
-      </ion-card>
-    </ng-template>
+      </ng-template>
+    </ion-card>
   </ng-template>
   <ng-template #loadingHoliday>
     <ion-card>
       <ion-item no-lines>
-        <skeleton-item height="137px" width="100%"></skeleton-item>
+        <skeleton-item height="1.5em" width="100%"></skeleton-item>
       </ion-item>
     </ion-card>
   </ng-template>
