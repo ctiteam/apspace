@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-searchbar #autofocus [formControl]="searchControl"></ion-searchbar>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="searching" class="spinner-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ion-list no-lines *ngIf="searchIntake$ | async as intakes">
+    <ng-template [ngIf]="intakes.length > 0" [ngIfElse]="notFound">
+      <button ion-item *ngFor="let intake of intakes" (click)="select(intake)">
+        {{ intake }}
+      </button>
+    </ng-template>
+    <ng-template #notFound>
+      <ion-item>Not Intake Found</ion-item>
+    </ng-template>
+  </ion-list>
+</ion-content>

@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import {
   ActionSheetButton, ActionSheetController, App, Content, IonicPage,
-  NavController, Platform,
+  ModalController, NavController, Platform,
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -39,6 +39,7 @@ export class TimetablePage {
   constructor(
     public actionSheet: ActionSheet,
     public actionSheetCtrl: ActionSheetController,
+    public modalCtrl: ModalController,
     public navCtrl: NavController,
     public plt: Platform,
     private tt: TimetableProvider,
@@ -85,6 +86,13 @@ export class TimetablePage {
       this.settings.set('intake', this.intake = intake);
       this.timetable$.subscribe();
     }
+  }
+
+  /** Display intake search modal. */
+  presentIntakeSearch() {
+    const intakeSearchModal = this.modalCtrl.create('IntakeSearchPage');
+    intakeSearchModal.onDidDismiss(data => data && this.changeIntake(data.intake));
+    intakeSearchModal.present();
   }
 
   /** Check if the day is in week. */
