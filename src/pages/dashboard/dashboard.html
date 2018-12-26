@@ -163,7 +163,7 @@
   </ng-template>
 
   <ng-template let-holiday [ngIf]='nextHoliday$ | async' [ngIfElse]='loadingHoliday'>
-    <ng-template [ngIf]='holiday' [ngIfElse]='noHoliday'>
+    <ng-template [ngIf]='holiday.holiday_name' [ngIfElse]='noHoliday'>
       <ion-card tappable (click)="openPage('HolidaysPage')">
         <ion-card-header>
           <ion-icon padding-right name='globe' [style.color]="'#5AC8FA'"></ion-icon>

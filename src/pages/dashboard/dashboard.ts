@@ -96,7 +96,7 @@ export class DashboardPage {
   getHolidays(refresh: boolean) {
     const now = new Date();
     return this.ws.get<Holidays>('/transix/holidays/filtered/students', refresh).pipe(
-      map(res => res.holidays.find(h => now < new Date(h.holiday_start_date))),
+      map(res => res.holidays.find(h => now < new Date(h.holiday_start_date)) || {} as Holiday),
     );
   }
 
