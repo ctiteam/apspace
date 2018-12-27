@@ -43,17 +43,17 @@ export class TabsPage {
   badge: string;
 
   constructor(
-    public navParams: NavParams,
-    public statusBar: StatusBar,
-    public navCtrl: NavController,
-    private plt: Platform,
-    public settings: SettingsProvider,
     public alertCtrl: AlertController,
-    public fcm: FCM,
-    public events: Events,
     public app: App,
-    public toastCtrl: ToastController,
+    public events: Events,
+    public fcm: FCM,
+    public navCtrl: NavController,
+    public navParams: NavParams,
     public notification: NotificationProvider,
+    public settings: SettingsProvider,
+    public statusBar: StatusBar,
+    public toastCtrl: ToastController,
+    private plt: Platform,
   ) {
 
     const role = this.settings.get('role');
