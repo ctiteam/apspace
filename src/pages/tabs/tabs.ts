@@ -70,7 +70,10 @@ export class TabsPage {
         }
         this.events.subscribe('user:logout', _ => this.back && this.back());
         this.back = this.plt.registerBackButtonAction(() => {
-          const overlay = this.app._appRoot._overlayPortal.getActive();
+          const overlay = this.app._appRoot._loadingPortal.getActive() ||
+            this.app._appRoot._modalPortal.getActive() ||
+            this.app._appRoot._overlayPortal.getActive();
+
           if (overlay && overlay.dismiss) {
             overlay.dismiss();
           } else if (this.app.getRootNav().canGoBack()) {
