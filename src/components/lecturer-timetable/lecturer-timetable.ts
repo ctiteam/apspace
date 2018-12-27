@@ -95,7 +95,7 @@ export class LecturerTimetableComponent implements OnInit {
 
   /** Display schedule. */
   show(week: DispCalEvent, el: HTMLElement) {
-    if (this.selectedWeeks.indexOf(week) === -1) {
+    if (!this.selectedWeeks.includes(week)) {
       this.selectedWeeks.push(week);
       setTimeout(() => el.parentElement.scrollIntoView({ behavior: 'smooth' }), 100);
     } else {

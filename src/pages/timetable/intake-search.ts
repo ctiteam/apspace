@@ -39,7 +39,7 @@ export class IntakeSearchPage {
       switchMap(term => intake$.pipe(
         // start filter on input but accept empty input too
         map(intakes => term.length !== 0
-          ? intakes.filter(intake => intake.indexOf(term) !== -1)
+          ? intakes.filter(intake => intake.includes(term))
           : intakes),
         // auto-select if there is only one intake left
         tap(intakes => intakes.length === 1 && this.select(intakes[0])),

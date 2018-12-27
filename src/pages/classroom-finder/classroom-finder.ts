@@ -104,8 +104,8 @@ export class ClassroomFinderPage {
         this.timetableProv.get(true).subscribe((res => {
           this.timetableData = res;
           for (let i = 0; i < this.timetableData.length; i++) {
-            if (this.listOfClassrooms.indexOf(res[i].ROOM) === -1
-              && selectedLocations.indexOf(res[i].LOCATION) !== -1) {
+            if (!this.listOfClassrooms.includes(res[i].ROOM)
+              && selectedLocations.includes(res[i].LOCATION)) {
               if (this.typeOfRooms.classroom && this.location.newCampus
                 && res[i].LOCATION === 'NEW CAMPUS' && res[i].ROOM.length === 7) { // If classroom e.g. B-07-08
                 this.listOfClassrooms.push(res[i].ROOM);
@@ -115,7 +115,7 @@ export class ClassroomFinderPage {
                 this.listOfClassrooms.push(res[i].ROOM);
               }
               selectedTypeOfRooms.forEach(typeOfRoom => {
-                if (res[i].ROOM.indexOf(typeOfRoom) !== -1) {
+                if (res[i].ROOM.includes(typeOfRoom)) {
                   this.listOfClassrooms.push(res[i].ROOM);
                 }
               });
@@ -153,13 +153,13 @@ export class ClassroomFinderPage {
           || (timeFrom <= selectedTimeFrom && selectedTimeTo <= timeTo)
           || this.checkIfLabClosed(timetable, selectedTimeFrom, selectedTimeTo)) {
           // If class is used at that time
-          if (occupiedRooms.indexOf(timetable.ROOM) === -1) {
+          if (!occupiedRooms.includes(timetable.ROOM)) {
             occupiedRooms.push(timetable.ROOM);
           }
         }
       }
     });
-    this.listOfFreeRooms = this.listOfClassrooms.filter(el => occupiedRooms.indexOf(el) === -1);
+    this.listOfFreeRooms = this.listOfClassrooms.filter(el => !occupiedRooms.includes(el));
     if (this.listOfFreeRooms.length === 0) {
       this.presentToast('No rooms available.');
     }
@@ -167,7 +167,7 @@ export class ClassroomFinderPage {
 
   checkIfLabClosed(timetable, selectedTimeFrom, selectedTimeTo) {
     // If Lab
-    if (timetable.ROOM.toUpperCase().indexOf('LAB') !== -1) {
+    if (timetable.ROOM.toUpperCase().includes('LAB')) {
       // If selectedTimeFrom is after 07:00 PM
       if (selectedTimeFrom >
         (Date.parse(timetable.DATESTAMP_ISO.split('-').join('/') + ' ' +

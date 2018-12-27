@@ -13,6 +13,6 @@ export class FilterRolePipe implements PipeTransform {
    */
   transform(holidays: any[] | null, role: 'student' | 'staff'): any[] {
     return (holidays || []).filter(holiday =>
-      holiday.holiday_people_affected.split(',').indexOf(role) !== -1);
+      holiday.holiday_people_affected.split(',').includes(role));
   }
 }

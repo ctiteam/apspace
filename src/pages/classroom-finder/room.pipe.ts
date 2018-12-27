@@ -54,14 +54,14 @@ export class RoomPipe implements PipeTransform {
         ttWithFreeSlots.push(t);
         ttWithFreeSlots.push(this.freeSlots(t.TIME_TO, self[index + 1].TIME_FROM, t));
       } else if (index + 1 !== self.length && t.TIME_TO !== '07:00 PM'
-        && t.ROOM.toUpperCase().indexOf('LAB') !== -1 && t.DAY !== self[index + 1].DAY) {
+        && t.ROOM.toUpperCase().includes('LAB') && t.DAY !== self[index + 1].DAY) {
         ttWithFreeSlots.push(t);
         // Only show Free slot before 09:30 PM
         if (Date.parse(t.DATESTAMP_ISO.split('-').join('/') + ' ' + t.TIME_TO)
           < Date.parse(t.DATESTAMP_ISO.split('-').join('/') + ' ' + '07:00 PM')) {
           ttWithFreeSlots.push(this.freeSlots(t.TIME_TO, '07:00 PM', t));
         }
-      } else if (index + 1 === self.length && t.TIME_TO !== '07:00 PM' && t.ROOM.toUpperCase().indexOf('LAB') !== -1) {
+      } else if (index + 1 === self.length && t.TIME_TO !== '07:00 PM' && t.ROOM.toUpperCase().includes('LAB')) {
         ttWithFreeSlots.push(t);
         // Only show Free slot before 09:30 PM
         if (Date.parse(t.DATESTAMP_ISO.split('-').join('/') + ' ' + t.TIME_TO)

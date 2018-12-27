@@ -14,6 +14,6 @@ export class SearchPipe implements PipeTransform {
    * @param term - filter staff name if exists
    */
   transform(sd: StaffDirectory[], term: string): StaffDirectory[] {
-    return sd.filter(s => s.FULLNAME.toLowerCase().indexOf(term.toLowerCase()) !== -1);
+    return sd.filter(s => s.FULLNAME.toLowerCase().includes(term.toLowerCase()));
   }
 }
