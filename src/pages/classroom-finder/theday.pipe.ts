@@ -34,7 +34,7 @@ export class FilterDayPipe implements PipeTransform {
           DATESTAMP_ISO: '',
           TIME_FROM: '08:30 AM',
         }];
-        if (tt[0].ROOM.toUpperCase().includes('LAB')) {
+        if (tt[0].ROOM.toUpperCase().indexOf('LAB') !== -1) {
           ttWithFreeSlots[0].TIME_TO = '07:00 PM';
         } else {
           ttWithFreeSlots[0].TIME_TO = '09:30 PM';

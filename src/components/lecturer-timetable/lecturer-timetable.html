@@ -3,9 +3,9 @@
     <div *ngFor="let week of calendar" class="schedule-week">
       <div class="schedule-week-head" (click)='show(week, $event.target)'>
         {{ week.week | date }}
-        <span class="right">{{ selectedWeeks.includes(week) ? '_«' : '»' }}</span>
+        <span class="right">{{ selectedWeeks.indexOf(week) !== -1 ? '_«' : '»' }}</span>
       </div>
-      <div *ngIf="selectedWeeks.includes(week)" [@easeInOut]>
+      <div *ngIf="selectedWeeks.indexOf(week) !== -1" [@easeInOut]>
         <div *ngFor="let day of week.days" class="schedule-day">
           <div class="schedule-day-head center">
             <span>{{ day.day | date:'d' }}</span>

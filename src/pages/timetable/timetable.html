@@ -20,7 +20,7 @@
   </ion-refresher>
   <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date:'E' | uppercase" (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
     <!-- Use CSS for dynamically updated segment -->
-    <ion-segment-button *ngFor="let d of wday; index as i" [value]="d" [style.display]="availableDays.includes(d) ? 'inline-block' : 'none'">
+    <ion-segment-button *ngFor="let d of wday; index as i" [value]="d" [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
       {{ d }}
     </ion-segment-button>
   </ion-segment>

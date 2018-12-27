@@ -121,13 +121,13 @@ export class CasTicketProvider {
           .join().toLowerCase().split(',');
         let role: Role = 0;
 
-        if (parts.includes('ou=students')) {
+        if (parts.indexOf('ou=students') !== -1) {
           role |= Role.Student;
         }
-        if (parts.includes('ou=academic')) {
+        if (parts.indexOf('ou=academic') !== -1) {
           role |= Role.Lecturer;
         }
-        if (parts.includes('ou=apiit tpm')) {
+        if (parts.indexOf('ou=apiit tpm') !== -1) {
           role |= Role.Admin;
         }
         if (!role) {
