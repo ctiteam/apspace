@@ -38,6 +38,7 @@ export class WsApiProvider {
    * @param refresh - force refresh (default: false)
    * @param options.attempts - number of retries (default: 4)
    * @param options.auth - authentication required (default: true)
+   * @param options.headers - http headers (default: {})
    * @param options.params - additional request parameters (default: {})
    * @param options.timeout - request timeout (default: 10000)
    * @param options.url - url of web service (default: apiUrl)
@@ -46,6 +47,7 @@ export class WsApiProvider {
   get<T>(endpoint: string, refresh?: boolean, options: {
     attempts?: number,
     auth?: boolean,
+    headers?: HttpHeaders | { [header: string]: string | string[]; },
     params?: HttpParams | { [param: string]: string | string[]; },
     timeout?: number,
     url?: string,
@@ -53,6 +55,7 @@ export class WsApiProvider {
     options = Object.assign({
       attempts: 4,
       auth: true,
+      headers: {},
       params: {},
       timeout: 20000,
       url: this.apiUrl,
@@ -60,6 +63,7 @@ export class WsApiProvider {
 
     const url = options.url + endpoint;
     const opt = {
+      headers: options.headers,
       params: options.params,
       withCredentials: options.auth,
     };
