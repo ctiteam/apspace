@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <!--student view appointment details-->
+    <ion-title>Appointment Details</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="card card-ios" *ngFor="let details of detail$ | async" padding>
+    <ion-card-header class="detailimage">
+      <ion-avatar item-start>
+        <img src="assets/img/profile.svg" width="100" height="100">
+      </ion-avatar>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item class="lecturerdetails" style="margin-bottom:-2px">
+        <ion-icon name="person" item-start></ion-icon>
+        <p>Lecturer Name : </p>
+        <h2 class="my-content line-break">{{ details.lecname }}</h2>
+        <p>Lecturer Email : </p>
+        <a href="mailto:{{ details.LecEmail }}" style="text-decoration:none;">
+          <h2 class="my-content line-break" style="color: currentColor;">{{ details.LecEmail }}</h2>
+        </a>
+        <p>Consultation With : </p>
+        <h2 class="my-content line-break">{{ details.con_with }}</h2>
+      </ion-item>
+
+      <ion-item class="lecturerdetails" style="margin-bottom:-2px">
+        <ion-icon name="time" item-start></ion-icon>
+        <p>Date : </p>
+        <b>{{ details.datetime }}</b>
+        <p>Time : </p>
+        <b>{{ details.contime }} - {{ details.endTime }}</b>
+      </ion-item>
+
+      <ion-item class="lecturerdetails" style="margin-bottom:-2px">
+        <ion-icon name="pin" item-start></ion-icon>
+        <p>Location : </p>
+        <b class="my-content line-break">{{ details.location }}</b>
+        <p>Venue : </p>
+        <b class="my-content line-break">{{ details.venue }}</b>
+      </ion-item>
+
+      <ion-item class="lecturerdetails" style="margin-bottom:-2px">
+        <ion-icon name="pricetags" item-start></ion-icon>
+        <p>Appointment reason : </p>
+        <h2 class="my-content line-break">{{ details.reason }}</h2>
+      </ion-item>
+
+      <ion-item class="lecturerdetails" style="margin-bottom:-2px" *ngIf="details.note != ''">
+        <ion-icon name="paper" item-start></ion-icon>
+        <p>Appointment note :</p>
+        <h2 class="my-content line-break">{{ details.note }}</h2>
+      </ion-item>
+
+      <ion-item class="lecturerdetails" *ngIf="details.status == 'cancelledbylec'">
+        <ion-icon name="document" item-start></ion-icon>
+        <p>Cancel Reason :</p>
+        <b class="my-content line-break">{{ details.cancelreason }}</b>
+      </ion-item>
+
+      <ion-buttons end *ngIf="details.status != 'cancelledbylec'">
+        <button class="cancel" ion-button round color="danger" (click)="cancelslot()" style="text-transform: capitalize">
+          Cancel Appointment</button>
+      </ion-buttons>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

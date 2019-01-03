@@ -14,12 +14,15 @@ import { Network } from '@ionic-native/network';
 import { NetworkInterface } from '@ionic-native/network-interface';
 import { Push } from '@ionic-native/push';
 import { StatusBar } from '@ionic-native/status-bar';
+import { IonicSelectableModule } from 'ionic-selectable';
 
 import {
   BusTrackingProvider, CasTicketProvider, DataCollectorProvider,
   FeedbackProvider, httpInterceptorProviders,
   NotificationProvider, OperationHoursProvider, RequestCache,
-  RequestCacheWithMapStorage, SettingsProvider, WsApiProvider,
+  RequestCacheWithMapStorage, SettingsProvider, SlotsProvider,
+  UpcomingConLecProvider, UpcomingConStuProvider, UserserviceProvider,
+  WsApiProvider,
 } from '../providers';
 import { MyApp } from './app.component';
 
@@ -31,6 +34,7 @@ import { MyApp } from './app.component';
     HttpClientModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
+    IonicSelectableModule,
   ],
   providers: [
     StatusBar,
@@ -53,6 +57,10 @@ import { MyApp } from './app.component';
     BusTrackingProvider,
     FeedbackProvider,
     DataCollectorProvider,
+    SlotsProvider,
+    UserserviceProvider,
+    UpcomingConLecProvider,
+    UpcomingConStuProvider,
   ],
   entryComponents: [MyApp],
   bootstrap: [IonicApp],

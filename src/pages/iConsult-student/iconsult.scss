@@ -1,0 +1,46 @@
+page-iconsult {
+    .card-ios {
+        margin-bottom:10px;
+        border-radius: 2px;
+        width: calc(100% - 4px);
+        font-size: 1.4rem;
+        background: #fff;
+        -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    .item-ios.item-block .item-inner {
+        padding-right: 8px;
+        padding-right: 8px;
+        border-bottom: none;
+    }
+
+    ion-badge.bookedHour{
+        background-color: red !important;
+    }
+
+    .bookedcard {
+        border-left: 1rem solid red
+    }
+
+    .Availablecard {
+        border-left: 1rem solid #1e90ff
+    }
+
+    .line-break{
+        overflow: inherit ;
+        text-overflow: inherit ;
+        white-space: normal;
+        font-size: initial;
+        font-family: initial;
+        color: slategrey;
+        vertical-align: middle; 
+        text-align: center;
+        margin-left: 15px;
+        margin-top: 0px;
+    }
+
+    .lecimage {
+        margin-left: 137px;
+    }
+
+}

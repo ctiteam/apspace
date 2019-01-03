@@ -1,0 +1,85 @@
+<ion-header>
+  <!--iConsult for student-->
+  <ion-toolbar>
+    <ion-buttons>
+      <button ion-button icon-only navPush="MorePage" class="backbutton">
+        <ion-icon name="arrow-round-back"></ion-icon>
+        <ion-title>My Appointment(s)</ion-title>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ng-template let-slots [ngIf]="slots$ | async" [ngIfElse]="loadingUpComLec">
+    <ng-template [ngIf]="slots && slots.length > 0" [ngIfElse]="nodata">
+      <ion-card class="card card-ios" *ngFor="let slot of slots" [ngClass]="{'canceledcard':slot.status == 'cancelledbylec', 'availablecard':slot.status == 'normal', 'canceledstucard':slot.status == 'cancelledbystu'}">
+        <ion-card-header>
+          <button ion-button round small style="float:right;" (click)="gotoChat()">CHAT</button>
+          <a (click)="goStaffDirectoryInfoPage(slot.casid)">{{ slot.lecname }}</a>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-label no-margin>
+            <ion-icon padding-right name="calendar"></ion-icon>
+            {{ slot.datetime }}
+          </ion-label>
+          <ion-label no-margin>
+            <ion-icon padding-right name="time"></ion-icon>
+            <b>{{ slot.starttime}} - {{ slot.endtime }}</b>
+          </ion-label>
+          <ion-label no-margin>
+            <ion-icon padding-right name="locate"></ion-icon>
+            {{ slot.venue }} │ {{ slot.location }}
+          </ion-label>
+
+          <ion-label no-margin *ngIf="slot.status == 'cancelledbylec'">
+            <ion-icon padding-right name="contact"></ion-icon>
+            <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbylec'">Cancelled By Lecturer</ion-badge>
+            <a (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
+              | View Details
+            </a>
+          </ion-label>
+
+          <ion-label no-margin *ngIf="slot.status == 'cancelledbystu'">
+            <ion-icon padding-right name="contact"></ion-icon>
+            <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbystu'">Cancelled By Student</ion-badge>
+            <a (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
+              | View Details
+            </a>
+          </ion-label>
+
+          <ion-label no-margin *ngIf="slot.status == 'normal'">
+            <ion-icon padding-right name="contact"></ion-icon>
+            <a (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
+              Appointment Details
+            </a>
+          </ion-label>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+
+    <ng-template #nodata>
+      <ion-label class="my-content line-break">
+        There is no upcoming consultation hours
+      </ion-label>
+    </ng-template>
+  </ng-template>
+
+  <ng-template #loadingUpComLec>
+    <ion-card *ngFor="let sk of skeletonArray">
+      <skeleton-item style="height: 160px;">
+      </skeleton-item>
+    </ion-card>
+  </ng-template>
+
+  <ion-fab right bottom>
+    <button ion-fab (click)="gotostaffDir()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+
+</ion-content>

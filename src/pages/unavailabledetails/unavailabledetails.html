@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>UnAvailable Slots Details</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-card *ngFor="let unfreeslots of unfreeslots$ | async">
+      <ion-card-content>
+        <ion-item>
+          <ion-icon name="calendar" item-start></ion-icon>
+          <p>Start Date: </p>
+          {{ unfreeslots.start_date }}
+          <p>End Date: </p>
+          {{ unfreeslots.end_date }}
+        </ion-item>
+        <ion-item>
+          <ion-icon name="repeat" item-start></ion-icon>
+          <p>Repeat days: </p>
+          {{ unfreeslots.repeat }}
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngFor="let starttimes of starttimes$ | async">
+      <ion-card-content>
+        <ion-item>
+          <ion-icon name="time" item-start></ion-icon>
+          <p>Start Time: </p>
+          {{ starttimes.start_time }}
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-buttons end>
+      <button ion-button round color="secondary" (click)="disable()" style="text-transform: capitalize">Disable</button>
+    </ion-buttons>
+  </ion-list>
+</ion-content>

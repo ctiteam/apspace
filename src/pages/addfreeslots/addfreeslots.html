@@ -1,0 +1,104 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Add Free Slots</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="firstcard" style="border-left: 0.01rem solid rgb(109, 248, 253);">
+    <ion-card-content>
+      <ion-item *ngIf="!hidden[i]" class="options">
+        <ion-label>Date</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate" [min]="minDate" [max]="maxDate" [(ngModel)]="freeslots.date"
+          [ngModelOptions]="{standalone: true}"></ion-datetime>
+      </ion-item>
+
+      <ion-label *ngIf="!hidden[i]" class="orclass">OR</ion-label>
+
+      <ion-item class="options">
+        <ion-label>Repeat</ion-label>
+        <ion-checkbox (click)="repeatisClicked(i, repeatisClicked)"></ion-checkbox>
+      </ion-item>
+
+      <ion-item *ngIf="hidden[i]">
+        <ion-label>Select Repeat Day</ion-label>
+        <ion-select [(ngModel)]="repeatday" multiple="true" [(ngModel)]="freeslots.repeat" [ngModelOptions]="{standalone: true}">
+          <ion-option *ngFor="let item of items" value="{{item.text}}">{{item.text}}</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="hidden[i]">
+        <ion-label>Start Date</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="startDate" [min]="minDate" [max]="maxDate" [(ngModel)]="freeslots.start_date"
+          (ionChange)="onchangedate()"></ion-datetime>
+      </ion-item>
+
+      <ion-item *ngIf="hidden[i]">
+        <ion-label>End Date</ion-label>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="endDate" [min]="minEndDate" [max]="maxDate" [(ngModel)]="freeslots.end_date"></ion-datetime>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <form [formGroup]="form">
+    <ion-list margin-bottom>
+      <div formArrayName="slots" margin-bottom>
+        <span ion-button float-right icon-left clear (click)="addNewInputField()" style="text-transform: capitalize">
+          <ion-icon name="add"></ion-icon>Add Slot
+        </span>
+        <section [formGroupName]="i" *ngFor="let slo of form.controls.slots.controls; let i = index">
+          <ion-card class="secondcard" style="border-left: 0.01rem solid rgb(111, 164, 250);">
+            <ion-card-content>
+              <ion-item>
+                <ion-label>Start Time</ion-label>
+                <ion-icon name="calendar" item-end small></ion-icon>
+                <ion-datetime displayFormat="hh:mm A" pickerFormat="hh mm A" [(ngModel)]="time[i]" minuteValues="[00,30]"
+                  formControlName="slotsTime" [(ngModel)]="freeslots.start_time[i]"></ion-datetime>
+              </ion-item>
+              <span float-right ion-button icon-left clear *ngIf="form.controls.slots.length > 1" (click)="removeInputField(i)"
+                style="text-transform: capitalize; margin-right:-23px; color: red">
+                <ion-icon name="close"></ion-icon>Remove
+              </span>
+              <!-- <ion-fab right>
+                <button ion-fab class="remove-card" *ngIf="form.controls.slots.length > 1" (click)="removeInputField(i)">
+                  <ion-icon name="remove"></ion-icon>
+                </button>
+              </ion-fab> -->
+            </ion-card-content>
+          </ion-card>
+        </section>
+      </div>
+    </ion-list>
+  </form>
+
+  <ion-card class="card card-ios" style="border-left: 0.01rem solid rgb(109, 253, 109);">
+    <ion-card-content>
+      <ion-item class="item">
+        <ion-label>Location</ion-label>
+        <ion-select #C [(ngModel)]="freeslots.location" (ionChange)="onchange(C.value)" [ngModelOptions]="{standalone: true}"
+          interface="popover">
+          <ion-option *ngFor="let location of locations" value="{{location.title}}">{{location.title}}</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Venue</ion-label>
+        <ionic-selectable item-content [items]="rooms$ | async" itemValueField="id" itemTextField="rooms" [canSearch]="true"
+          (onChange)="freeslots.venue = $event.value.rooms">
+        </ionic-selectable>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-buttons *ngIf="!hidden[i]">
+    <button ion-button round full margin-top (click)="confirmation()" [disabled]="!freeslots.date || !freeslots.start_time || !freeslots.location || !freeslots.venue">
+      Submit
+    </button>
+  </ion-buttons>
+
+  <ion-buttons *ngIf="hidden[i]">
+    <button ion-button round full margin-top (click)="confirmation()" [disabled]="!freeslots.repeat || !freeslots.start_date || !freeslots.end_date || !freeslots.start_time || !freeslots.location || !freeslots.venue">
+      Submit
+    </button>
+  </ion-buttons>
+</ion-content>

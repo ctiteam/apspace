@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Enter Appointment Details</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-item style="margin-bottom:5px">
+    <ion-avatar item-start>
+      <img src="assets/img/profile.svg">
+    </ion-avatar>
+    <h2>{{ lecid }}</h2>
+    <p>{{date | date:'EEEE, dd MMM'}} ({{ datetime }} - {{ endTime }})
+      <!--Mon, 11th June (08:30 AM- 09:00 AM)-->
+    </p>
+  </ion-item>
+
+  <ng-template let-verification [ngIf]='verifyslot$ | async'>
+    <ng-template [ngIf]="verification.res == 'Duplicated'" [ngIfElse]='noduplicate'>
+      <ion-label class="my-content line-break">
+        You already have the consultation hour at this time
+      </ion-label>
+    </ng-template>
+
+    <ng-template #noduplicate>
+      <ion-item>
+        <ion-label class="with required">Consultation With</ion-label>
+        <ion-select [(ngModel)]="conWith" [(ngModel)]="booking.con_with" placeholder="Select One" class="with"
+          [ngModelOptions]="{standalone: true}">
+          <ion-option value="Lecturer">Lecturer</ion-option>
+          <ion-option value="Masters Supervisor">Masters Supervisor</ion-option>
+          <ion-option value="Doctoral Supervisor">Doctoral Supervisor</ion-option>
+          <ion-option value="Internship Supervisor">Internship Supervisor</ion-option>
+          <ion-option value="FYP Supervisor">FYP Supervisor</ion-option>
+          <ion-option value="Academic Mentor">Academic Mentor</ion-option>
+          <ion-option value="Programme Leader">Programme Leader</ion-option>
+          <ion-option value="Head of School">Head of School</ion-option>
+          <ion-option value="Dean">Dean</ion-option>
+          <ion-option value="Registrar">Registrar</ion-option>
+          <ion-option value="Manager Student Relations">Manager Student Relations</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label class="required" stacked>Reason for Appointment</ion-label>
+        <ion-textarea [(ngModel)]="reason" [(ngModel)]="booking.reason" [ngModelOptions]="{standalone: true}"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Contact Number</ion-label>
+        <ion-input type="tel" [(ngModel)]="telnumber" [(ngModel)]="booking.phone" placeholder="e.g. 0121234567" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked class="required">Email Address</ion-label>
+        <ion-input type="text" [(ngModel)]="emialaddress" [(ngModel)]="booking.email" [ngModelOptions]="{standalone: true}"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Note</ion-label>
+        <ion-textarea [(ngModel)]="notes" [(ngModel)]="booking.note" [ngModelOptions]="{standalone: true}"></ion-textarea>
+      </ion-item>
+
+      <button ion-button round full margin-top (click)="confirmation()" [disabled]="!booking.con_with || !booking.reason || !booking.email">
+        Submit
+      </button>
+    </ng-template>
+  </ng-template>
+
+</ion-content>

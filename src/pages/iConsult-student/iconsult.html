@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <!--iConsult for student-->
+    <ion-title>Book Consultation Hour</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ng-template let-slots [ngIf]="slots$ | async" [ngIfElse]="loadingUpComLec">
+    <ng-template [ngIf]="slots && slots.length > 0" [ngIfElse]="nodata">
+      <ion-item>
+        <ion-avatar item-start>
+          <img src="assets/img/profile.svg">
+        </ion-avatar>
+        <h2 *ngIf="staffName$ | async as staffName">{{ staffName.name }}</h2>
+      </ion-item>
+
+      <ion-card class="card card-ios" *ngFor="let slot of slots" [ngClass]="slot.status == 'Booked' ? 'bookedcard' : 'Availablecard'">
+        <ion-card-header>
+          {{ slot.datetime }}
+        </ion-card-header>
+        <ion-card-content>
+          <ion-label no-margin>
+            <ion-icon padding-right name="time"></ion-icon>
+            <b>{{ slot.time }} - {{ slot.endtime }}</b>
+          </ion-label>
+          <ion-label no-margin>
+            <ion-icon padding-right name="locate"></ion-icon>
+            {{ slot.venue }} │ {{ slot.location }}
+          </ion-label>
+          <ion-label no-margin *ngIf="staffName$ | async as staffName">
+            <ion-icon padding-right name="contact"></ion-icon>
+            <ion-badge class="bookedHour" *ngIf="slot.status == 'Booked'">{{ slot.status }}</ion-badge>
+            <ion-badge *ngIf="slot.status == 'Available'">{{ slot.status }}</ion-badge>
+            <a *ngIf="slot.status == 'Available'" (click)="openBookingPage(slot.availibilityid, slot.date, slot.timee, slot.time, slot.datetime, slot.endtime, staffName.name, casId)">
+              | Book Now
+            </a>
+          </ion-label>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+
+    <ng-template #nodata>
+      <ion-card-header class="lecimage">
+        <ion-avatar item-start>
+          <img src="assets/img/profile.svg" width="70" height="70">
+        </ion-avatar>
+      </ion-card-header>
+      <h2 class="my-content line-break" *ngIf="staffName$ | async as staffName">{{ staffName.name }}
+        <a href="mailto:{{ EMAIL }}" style="text-decoration:none;">
+          <h2 class="my-content line-break" style="color: currentColor;">{{ EMAIL }}</h2>
+        </a>
+      </h2>
+    </ng-template>
+  </ng-template>
+
+  <ng-template #loadingUpComLec>
+    <ion-card *ngFor="let sk of skeletonArray">
+      <skeleton-item style="height: 160px;">
+      </skeleton-item>
+    </ion-card>
+  </ng-template>
+</ion-content>

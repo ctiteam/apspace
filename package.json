@@ -25,7 +25,7 @@
     "@angular/platform-browser": "^5.2.11",
     "@angular/platform-browser-dynamic": "^5.2.11",
     "@ionic-native/action-sheet": "^4.15.0",
-    "@ionic-native/badge": "^4.15.0",
+    "@ionic-native/badge": "^4.18.0",
     "@ionic-native/camera": "^4.15.0",
     "@ionic-native/core": "^4.15.0",
     "@ionic-native/device": "^4.15.0",
@@ -34,7 +34,7 @@
     "@ionic-native/in-app-browser": "^4.15.0",
     "@ionic-native/local-notifications": "^4.15.0",
     "@ionic-native/network": "^4.15.0",
-    "@ionic-native/network-interface": "^4.15.0",
+    "@ionic-native/network-interface": "^4.18.0",
     "@ionic-native/push": "^4.15.0",
     "@ionic-native/status-bar": "^4.15.0",
     "@ionic/storage": "^2.2.0",
@@ -56,6 +56,7 @@
     "cordova-plugin-whitelist": "^1.3.3",
     "cordova-sqlite-storage": "2.6.0",
     "ionic-angular": "^3.9.2",
+    "ionic-selectable": "^3.2.0",
     "ionicons": "^3.0.0",
     "localforage": "^1.7.1",
     "localforage-cordovasqlitedriver": "^1.6.0",
@@ -64,7 +65,7 @@
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "^3.2.1",
+    "@ionic/app-scripts": "3.2.1",
     "typescript": "2.6"
   },
   "description": "An Ionic project",

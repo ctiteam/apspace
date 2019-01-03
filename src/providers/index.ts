@@ -1,4 +1,5 @@
 /* HttpClient modifier (ordered) */
+
 export {
   RequestCache, RequestCacheWithMap, RequestCacheWithStorage,
   RequestCacheWithMapStorage,
@@ -14,5 +15,9 @@ export { NewsProvider } from './news';
 export { NotificationProvider } from './notification';
 export { OperationHoursProvider } from './operation-hours';
 export { SettingsProvider } from './settings';
+export { SlotsProvider } from './slots';
 export { TimetableProvider } from './timetable';
+export { UpcomingConLecProvider } from './upcoming-con-lec';
+export { UpcomingConStuProvider } from './upcoming-con-stu';
+export { UserserviceProvider } from './userservice';
 export { WsApiProvider } from './ws-api';

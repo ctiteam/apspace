@@ -5,10 +5,14 @@ import { LecturerTimetableComponent } from './lecturer-timetable/lecturer-timeta
 import { SkeletonItemComponent } from './skeleton-item/skeleton-item';
 
 @NgModule({
-  declarations: [LecturerTimetableComponent,
-    SkeletonItemComponent],
+  declarations: [
+    LecturerTimetableComponent,
+    SkeletonItemComponent,
+  ],
   imports: [IonicModule],
-  exports: [LecturerTimetableComponent,
-    SkeletonItemComponent],
+  exports: [
+    LecturerTimetableComponent,
+    SkeletonItemComponent,
+  ],
 })
 export class ComponentsModule { }

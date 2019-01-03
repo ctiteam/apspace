@@ -39,6 +39,18 @@ export class MorePage {
         role: Role.Student | Role.Lecturer | Role.Admin,
       },
       {
+        title: 'iConsult',
+        component: 'UpcomingstdPage',
+        icon: 'clipboard',
+        role: Role.Student,
+      },
+      {
+        title: 'iConsult',
+        component: 'UpcominglecPage',
+        icon: 'clipboard',
+        role: Role.Lecturer | Role.Admin,
+      },
+      {
         title: 'News',
         component: 'NewsPage',
         icon: 'paper',

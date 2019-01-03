@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Available Slot Details</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      {{ datetime }}
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-label>
+        <ion-icon padding-right name="time"></ion-icon>
+        {{ time }} - {{ endTime }}
+      </ion-label>
+
+      <ion-label>
+        <ion-icon padding-right name="pin"></ion-icon>
+        {{ venue}} | {{ location }}
+      </ion-label>
+
+      <ion-buttons end>
+        <button ion-button round color="danger" (click)="closelslot()" style="text-transform: capitalize">Close</button>
+      </ion-buttons>
+
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

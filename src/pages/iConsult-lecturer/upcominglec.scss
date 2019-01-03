@@ -1,0 +1,92 @@
+page-upcominglec {
+    .card-ios {
+        margin-bottom:10px;
+        border-radius: 2px;
+        width: calc(100% - 4px);
+        font-size: 1.4rem;
+        background: #fff;
+        -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .item-ios.item-block .item-inner {
+        padding-right: 8px;
+        padding-right: 8px;
+        border-bottom: none;
+    }
+
+    ion-badge.available{
+        background-color: #1e90ff
+    }
+
+    ion-badge.bookedHour{
+        background-color: red !important;
+    }
+
+    ion-badge.passedHour{
+        background-color: gray !important;
+    }
+
+    ion-badge.unavailable{
+        background-color: silver !important;
+    }
+
+    ion-badge.closed{
+        background-color: dimgray !important;
+    }
+
+    .bookedcard {
+        border-left: 0.5rem solid red
+    }
+
+    .Availablecard {
+        border-left: 0.5rem solid #1e90ff
+    }
+
+    .UnAvailablecard {
+        border-left: 0.5rem solid silver;
+    }
+
+    .closedcard {
+       border-left: 0.5rem solid dimgray;
+    }
+
+    .passeCard {
+        border-left: 0.5rem solid gray;
+     }
+
+    .Availablitem{
+        margin-left: -35px;
+        font-size: 1.4rem;
+        color: #33cccc;
+    }
+
+    .AvailablIteam{
+        font-size: 1.4rem;
+    }
+
+    .UnAvailablIteam{
+        font-size: 1.4rem;
+    }
+
+    .backbutton{
+        text-transform: capitalize;
+        margin-left: 3px;
+    }
+    
+    .line-break{
+        overflow: inherit ;
+        text-overflow: inherit ;
+        white-space: normal;
+        vertical-align: middle; 
+        text-align: center; 
+        font-size: large;
+        font-family: initial;
+        margin-top: 181px;
+        margin-left: 20px;
+        color: slategrey;
+    }
+
+}
+
+

@@ -21,6 +21,11 @@
           <h2>{{ staff.EMAIL }}</h2>
         </a>
       </ion-item>
+      <ion-item>
+        <a (click)="GoToIconsult(staff.ID, staff.EMAIL)">
+          <h2>Book Consultation Hour</h2>
+        </a>
+      </ion-item>
       <ion-item *ngIf="staff.EXTENSION">
         <a href="tel:+60389961000">
           <h2>+6 03-8996 1000 (Ext. {{ staff.EXTENSION }})</h2>
