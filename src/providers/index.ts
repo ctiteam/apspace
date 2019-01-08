@@ -13,7 +13,6 @@ export { DataCollectorProvider } from './data-collector';
 export { FeedbackProvider } from './feedback';
 export { NewsProvider } from './news';
 export { NotificationProvider } from './notification';
-export { OperationHoursProvider } from './operation-hours';
 export { SettingsProvider } from './settings';
 export { SlotsProvider } from './slots';
 export { TimetableProvider } from './timetable';

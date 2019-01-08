@@ -18,9 +18,8 @@ import { IonicSelectableModule } from 'ionic-selectable';
 
 import {
   BusTrackingProvider, CasTicketProvider, DataCollectorProvider,
-  FeedbackProvider, httpInterceptorProviders,
-  NotificationProvider, OperationHoursProvider, RequestCache,
-  RequestCacheWithMapStorage, SettingsProvider, SlotsProvider,
+  FeedbackProvider, httpInterceptorProviders, NotificationProvider,
+  RequestCache, RequestCacheWithMapStorage, SettingsProvider, SlotsProvider,
   UpcomingConLecProvider, UpcomingConStuProvider, UserserviceProvider,
   WsApiProvider,
 } from '../providers';
@@ -52,7 +51,6 @@ import { MyApp } from './app.component';
     NotificationProvider,
     { provide: RequestCache, useClass: RequestCacheWithMapStorage },
     httpInterceptorProviders,
-    OperationHoursProvider,
     SettingsProvider,
     BusTrackingProvider,
     FeedbackProvider,

@@ -13,7 +13,6 @@ export { InterimLegend } from './interim-legend';
 export { LecturerTimetable } from './lecturer-timetable';
 export { MPULegend } from './mpu-legend';
 export { News } from './news';
-export { OperationHours } from './operation-hours';
 export { Role, Settings } from './settings';
 export { Sqa } from './sqa';
 export { StaffDirectory } from './staff-directory';

@@ -6,19 +6,269 @@
 
 
 <ion-content>
-  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="get(selectedService, $event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
 
-  <ion-card *ngFor="let service of services">
-    <ion-card-header ion-item (click)="get(service.id)">
-      <ion-icon [name]="service.icon" [style.color]="service.fg" item-start></ion-icon>
-      {{ service.name }}
+  <ion-card>
+    <ion-card-header ion-item (click)="expand('Immigration')">
+      <ion-icon name="globe" [style.color]="'#66d174'" item-start></ion-icon>
+      Immigration
     </ion-card-header>
-    <ion-card-content *ngIf="selectedService === service.id" [@easeOut]>
-      <ng-template ngFor let-item [ngForOf]="hours$ | async">
-        <article [innerHTML]="sanitize(item.body[0].value)" [@easeIn]></article>
-      </ng-template>
+    <ion-card-content *ngIf="selectedService === 'Immigration'" [@easeInOut]>
+      <h4>Monday - Thursday</h4>
+      <ul>
+        <li>10.30am to 01.00pm</li>
+        <li>03.00pm to 05.00pm</li>
+      </ul>
+      <h4>Friday</h4>
+      <ul>
+        <li>10.30am to 01.00pm</li>
+        <li>03.00pm to 04.00pm</li>
+      </ul>
+      <p>Closed on Sundays and Public Holidays</p>
+      <h4>Email</h4>
+      <ul>
+        <li><a href="mailto:visa@apu.edu.my">visa@apu.edu.my</a></li>
+      </ul>
+      <h4>Phone/General Line</h4>
+      <ul>
+        <li><a href="tel:03-8992-5237">03 8992 5237</a></li>
+        <li><a href="tel:03-8992-5238">03 8992 5238</a></li>
+        <li><a href="tel:03-8992-5239">03 8992 5239</a></li>
+      </ul>
     </ion-card-content>
   </ion-card>
+
+  <ion-card>
+    <ion-card-header ion-item (click)="expand('Student Service')">
+      <ion-icon name="bookmarks" [style.color]="'#dd803e'" item-start></ion-icon>
+      Student Service
+    </ion-card-header>
+    <ion-card-content *ngIf="selectedService === 'Student Service'" [@easeInOut]>
+      <h4>Monday - Friday</h4>
+      <ul>
+        <li>08.30am to 07.00pm</li>
+      </ul>
+      <h4>Saturday</h4>
+      <ul>
+        <li>08.30am to 01.00pm</li>
+      </ul>
+      <p>Closed on Sundays and Public Holidays</p>
+      <h4>Email</h4>
+      <ul>
+        <li><a href="mailto:info@apu.edu.my">info@apu.edu.my</a></li>
+      </ul>
+      <h4>Phone/General Line</h4>
+      <ul>
+        <li><a href="tel:03-8992-5211">03 8992 5211</a></li>
+        <li><a href="tel:03-8992-5212">03 8992 5212</a></li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header ion-item (click)="expand('Admin')">
+      <ion-icon name="list-box" [style.color]="'#626b70'" item-start></ion-icon>
+      Admin
+    </ion-card-header>
+    <ion-card-content *ngIf="selectedService === 'Admin'" [@easeInOut]>
+      <h4>Monday - Thursday</h4>
+      <ul>
+        <li>08.30am to 08.00pm</li>
+      </ul>
+      <h4>Friday</h4>
+      <ul>
+        <li>08.30am to 07.30pm</li>
+      </ul>
+      <h4>Saturday (only on 2<sup>nd</sup> and 4<sup>th</sup> Saturdays)</h4>
+      <ul>
+        <li>09.00am to 01.00pm</li>
+      </ul>
+      <p>Closed on Sundays and Public Holidays</p>
+      <h4>Email</h4>
+      <ul>
+        <li><a href="mailto:admin@apu.edu.my">admin@apu.edu.my</a></li>
+      </ul>
+      <h4>Phone/General Line</h4>
+      <ul>
+        <li><a href="tel:03-8992-5250">03 8992 5250</a></li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header ion-item (click)="expand('Accommodation')">
+      <ion-icon name="home" [style.color]="'#2392ce'" item-start></ion-icon>
+      Accommodation
+    </ion-card-header>
+    <ion-card-content *ngIf="selectedService === 'Accommodation'" [@easeInOut]>
+      <h4>Monday - Thursday</h4>
+      <ul>
+        <li>10.30am to 01.00pm</li>
+        <li>02.30am to 05.30pm</li>
+      </ul>
+      <h4>Friday</h4>
+      <ul>
+        <li>10.30am to 01.00pm</li>
+        <li>02.30am to 05.00pm</li>
+      </ul>
+      <p>Closed on Sundays and Public Holidays</p>
+      <h4>Phone/General Line</h4>
+      <ul>
+        <li><a href="tel:03-8992-5240">03 8992 5240</a></li>
+        <li><a href="tel:03-8992-5241">03 8992 5241</a></li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header ion-item (click)="expand('Library')">
+      <ion-icon name="book" [style.color]="'#26205e'" item-start></ion-icon>
+      Library
+    </ion-card-header>
+    <ion-card-content *ngIf="selectedService === 'Library'" [@easeInOut]>
+      <h2>APU @ New Campus</h2>
+      <h4>Monday - Friday</h4>
+      <ul>
+        <li>08.30am to 08.00pm</li>
+      </ul>
+      <h4>Saturday</h4>
+      <ul>
+        <li>09.00am to 01.00pm</li>
+      </ul>
+      <h2>APIIT @ TPM</h2>
+      <h4>Monday - Friday</h4>
+      <ul>
+        <li>08.30am to 06.00pm</li>
+      </ul>
+      <h4>Saturday</h4>
+      <ul>
+        <li>Closed</li>
+      </ul>
+      <p>Closed on Sundays and Public Holidays</p>
+      <h4>Email</h4>
+      <ul>
+        <li><a href="mailto:library@apu.edu.my">library@apu.edu.my</a></li>
+      </ul>
+      <h4>Phone/General Line</h4>
+      <ul>
+        <li><a href="tel:03-8992-5207">03 8992 5207</a></li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header ion-item (click)="expand('Cashier')">
+      <ion-icon name="cash" [style.color]="'#ccbf37'" item-start></ion-icon>
+      Cashier
+    </ion-card-header>
+    <ion-card-content *ngIf="selectedService === 'Cashier'" [@easeInOut]>
+      <h2>APU @ New Campus</h2>
+      <h4>Monday - Friday</h4>
+      <ul>
+        <li>09.15am to 06.15pm</li>
+      </ul>
+      <h4>Saturday (2<sup>nd</sup>, 4<sup>th</sup> and 5<sup>th</sup> Saturdays of the month)</h4>
+      <ul>
+        <li>09.15am to 01.00pm</li>
+      </ul>
+      <h2>APIIT @ TPM</h2>
+      <h4>Monday - Friday</h4>
+      <ul>
+        <li>10.00am to 01.00pm</li>
+      </ul>
+      <p>Closed on Sundays and Public Holidays</p>
+      <p>For both libraries, counter service starts at 9.00am</p>
+      <h4>Email</h4>
+      <ul>
+        <li><a href="mailto:bursary@apu.edu.my">bursary@apu.edu.my</a></li>
+      </ul>
+      <h4>Phone/General Line</h4>
+      <ul>
+        <li><a href="tel:03-8992-5228">03 8992 5228</a></li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header ion-item (click)="expand('Labs')">
+      <ion-icon name="desktop" [style.color]="'#33688e'" item-start></ion-icon>
+      Labs
+    </ion-card-header>
+    <ion-card-content *ngIf="selectedService === 'Labs'" [@easeInOut]>
+      <h2>APU @ New Campus</h2>
+      <h4>Monday - Friday</h4>
+      <ul>
+        <li>08.30am to 07.00pm</li>
+        <li>(Tech-Lab-06-06 closes at 9.30pm)</li>
+      </ul>
+      <h4>Saturday</h4>
+      <ul>
+        <li>09.00am to 01.00pm</li>
+        <li>(Only Tech-Lab-06-06)</li>
+      </ul>
+      <h2>APIIT @ TPM</h2>
+      <h4>Monday - Friday</h4>
+      <ul>
+        <li>08.30am to 07.00pm</li>
+      </ul>
+      <p>Closed on Sundays and Public Holidays</p>
+      <h4>Email</h4>
+      <ul>
+        <li><a href="mailto:techlab@apu.edu.my">techlab@apu.edu.my</a></li>
+      </ul>
+      <h4>Phone/General Line</h4>
+      <ul>
+        <li><a href="tel:03-8992-5252">03 8992 5252</a></li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header ion-item (click)="expand('Clinic')">
+      <ion-icon name="medkit" [style.color]="'#f23239'" item-start></ion-icon>
+      Clinic
+    </ion-card-header>
+    <ion-card-content *ngIf="selectedService === 'Clinic'" [@easeInOut]>
+      <h4>Monday - Friday</h4>
+      <ul>
+        <li>09.00am to 05.00pm</li>
+      </ul>
+      <p>Closed on Sundays and Public Holidays</p>
+      <h4>Email</h4>
+      <ul>
+        <li><a href="mailto:klinikoceana@gmail.com">klinikoceana@gmail.com</a></li>
+      </ul>
+      <h4>Phone</h4>
+      <ul>
+        <li><a href="tel:03-8992-5114">03 8992 5114</a></li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header ion-item (click)="expand('Printshop @ APU')">
+      <ion-icon name="print" [style.color]="'#f23239'" item-start></ion-icon>
+      Printshop @ APU
+    </ion-card-header>
+    <ion-card-content *ngIf="selectedService === 'Printshop @ APU'" [@easeInOut]>
+      <h4>Monday - Thursday</h4>
+      <ul>
+        <li>10.30am to 07.00pm</li>
+      </ul>
+      <h4>Friday</h4>
+      <ul>
+        <li>10.30am to 12.45pm</li>
+        <li>02.45pm to 07.00pm</li>
+      </ul>
+      <p>Closed on Saturdays, Sundays and Public Holidays</p>
+      <h4>Website</h4>
+      <ul>
+        <li><a href="https://www.uprint.com.my/">https://www.uprint.com.my/</a></li>
+      </ul>
+      <h4>Phone</h4>
+      <ul>
+        <li><a href="tel:03-8992-5171">03 8992 5171</a></li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>
