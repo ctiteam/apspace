@@ -1,119 +1,117 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { switchMap } from 'rxjs/operators';
+
+import { ConDetail, Feedback, FreeSlotsLec, Starttimes, UnavailruleDet } from '../interfaces';
 import { CasTicketProvider } from './cas-ticket';
+import { WsApiProvider } from './ws-api';
 
 @Injectable()
 export class UpcomingConLecProvider {
 
   // Slots API URL
-  upcomingConLec = 'https://api.apiit.edu.my/iconsult/freeslotslec';
+  upcomingConLec = '/iconsult/freeslotslec';
 
   // AvailabilityRules API URL
-  detailPage = 'https://api.apiit.edu.my/iconsult/detailpage';
+  detailPage = '/iconsult/detailpage';
 
   // lec add canceled booked slot
-  updatebookedsloturl = 'https://api.apiit.edu.my/iconsult/lecCancelbookedslot';
+  updatebookedsloturl = '/iconsult/lecCancelbookedslot';
 
   // lec get rule details
-  unavaildetails = 'https://api.apiit.edu.my/iconsult/get_unavailrule_details';
+  unavaildetails = '/iconsult/get_unavailrule_details';
 
   // lec get starttimes
-  starttimes = 'https://api.apiit.edu.my/iconsult/get_all_starttime';
+  starttimes = '/iconsult/get_all_starttime';
 
   // lec add canceled booked slot
-  unavailabilityRulesUpdate = 'https://api.apiit.edu.my/iconsult/UnavailabilityRules_update';
+  unavailabilityRulesUpdate = '/iconsult/UnavailabilityRules_update';
 
   // lec add feedback
-  feedbackurl = 'https://api.apiit.edu.my/iconsult/lecaddfeedback';
+  feedbackurl = '/iconsult/lecaddfeedback';
 
   // lec get feedback
-  getfeedbackurl = 'https://api.apiit.edu.my/iconsult/lecgetfeedback';
+  getfeedbackurl = '/iconsult/lecgetfeedback';
 
-  constructor(public http: HttpClient, private cas: CasTicketProvider) {
+  constructor(public http: HttpClient,
+              private cas: CasTicketProvider,
+              private ws: WsApiProvider,
+) {
   }
 
-  getUpcomingConLec(): Observable<any> {
-    return this.cas.getST(this.upcomingConLec).pipe(
-      switchMap(st => {
-        const httpOptions = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': 'my-auth-token',
-          }),
-          withCredentials: true,
-        };
-        const url = `${this.upcomingConLec}?ticket=${st}`;
-        return this.http.get(url, httpOptions);
-      }),
-    );
+  getUpcomingConLec(): Observable<FreeSlotsLec[]> {
+    return this.ws.get<FreeSlotsLec[]>('/iconsult/freeslotslec', true, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'my-auth-token',
+    },
+  });
   }
 
-  getDetailPage(id): Observable<any[]> {
-    return this.http.get<any[]>(this.detailPage + '/' + id).do(res => console.log(res));
-  }
-
-  getUnavailrulesdetails(unavailibilityid): Observable<any[]> {
-    const httpOptions = {
-      headers: new HttpHeaders({
+  getDetailPage(id): Observable<ConDetail[]> {
+    return this.ws.get<ConDetail[]>('/iconsult/detailpage/' + id, true, {
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
-      }),
-      withCredentials: true,
-    };
-    return this.http.get<any[]>(this.unavaildetails + '/' + unavailibilityid, httpOptions).do(res => console.log(res));
+      },
+    });
   }
 
-  getallstarttimes(unavailibilityId): Observable<any[]> {
-    const httpOptions = {
-      headers: new HttpHeaders({
+  getUnavailrulesdetails(unavailibilityid): Observable<UnavailruleDet[]> {
+     return this.ws.get<UnavailruleDet[]>('/iconsult/get_unavailrule_details/' + unavailibilityid, true, {
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
-      }),
-      withCredentials: true,
-    };
-    return this.http.get<any[]>(this.starttimes + '/' + unavailibilityId, httpOptions).do(res => console.log(res));
+      },
+    });
+  }
+
+  getallstarttimes(unavailibilityId): Observable<Starttimes[]> {
+      return this.ws.get<Starttimes[]>('/iconsult/get_all_starttime/' + unavailibilityId, true, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'my-auth-token',
+      },
+    });
   }
 
   cancelbookedslot(cancelbookedslots) {
-    const httpOptions = {
-      headers: new HttpHeaders({
+    return this.ws.post<any>(this.updatebookedsloturl,  {
+      body: cancelbookedslots,
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
-      }),
-      withCredentials: true,
-    };
-    return this.http.post(this.updatebookedsloturl, cancelbookedslots, httpOptions);
-
+      },
+    });
   }
 
   disableunailrules(unavailibilityid, disableunavailslots) {
-    const httpOptions = {
-      headers: new HttpHeaders({
+        return this.ws.put<any>(this.unavailabilityRulesUpdate + '/' + unavailibilityid, {
+      body: disableunavailslots,
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
-      }),
-      withCredentials: true,
-    };
-    return this.http.put(this.unavailabilityRulesUpdate + '/' + unavailibilityid, disableunavailslots, httpOptions);
-
+      },
+    });
   }
 
-  addlecFeedback(lecfeedback) {
-    const httpOptions = {
-      headers: new HttpHeaders({
+  addlecFeedback(lecfeedback: { slotid: number; entry_datetime: string; feedback: string; }): Observable<any>  {
+    return this.ws.post<any>(this.feedbackurl, {
+      body: lecfeedback,
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
-      }),
-      withCredentials: true,
-    };
-    return this.http.post(this.feedbackurl, lecfeedback, httpOptions);
-
+      },
+    });
   }
 
-  getfeedback(id): Observable<any[]> {
-    return this.http.get<any[]>(this.getfeedbackurl + '/' + id, { withCredentials: true }).do(res => console.log(res));
+  getfeedback(id): Observable<Feedback[]> {
+         return this.ws.get<Feedback[]>('/iconsult/lecgetfeedback/' + id, true, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'my-auth-token',
+      },
+    });
   }
 
 }

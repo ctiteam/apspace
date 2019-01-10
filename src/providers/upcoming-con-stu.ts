@@ -2,128 +2,104 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { switchMap } from 'rxjs/operators';
+import { DepName, DetailpageStudent, FreeSlots, StaffName, Upcomingcon } from '../interfaces';
 import { CasTicketProvider } from './cas-ticket';
+import { WsApiProvider } from './ws-api';
 
 @Injectable()
 export class UpcomingConStuProvider {
 
   // Slots API URL
-  upcomingConStu = 'https://api.apiit.edu.my/iconsult/upcomingconstu';
+  upcomingConStu = '/iconsult/upcomingconstu';
 
   // AvailabilityRules API URL
-  detailPage = 'https://api.apiit.edu.my/iconsult/detailpageconstu';
+  detailPage = '/iconsult/detailpageconstu';
 
   // Get Slots (for students) API URL
-  getslots = 'https://api.apiit.edu.my/iconsult/freeslots';
+  getslots = '/iconsult/freeslots';
 
   // add Slots (for students) API URL
-  addBookingUrl = 'https://api.apiit.edu.my/iconsult/addbooking';
+  addBookingUrl = '/iconsult/addbooking';
 
   // Get user name API url
-  getusername = 'https://api.apiit.edu.my/iconsult/getusername';
+  getusername = '/iconsult/getusername';
 
   // lec add canceled booked slot
-  updatebookedsloturl = 'https://api.apiit.edu.my/iconsult/lecCancelbookedslot';
+  updatebookedsloturl = '/iconsult/lecCancelbookedslot';
 
   // student verify duplicate slot
-  verifyDupSlotUrl = 'https://api.apiit.edu.my/iconsult/verifyduplicateslot';
+  verifyDupSlotUrl = '/iconsult/verifyduplicateslot';
 
-  constructor(public http: HttpClient, private cas: CasTicketProvider) {
+  constructor(public http: HttpClient, private cas: CasTicketProvider, private ws: WsApiProvider,
+) {
   }
 
-  getUpcomingConStu(): Observable<any[]> {
-    return this.cas.getST(this.upcomingConStu).pipe(
-      switchMap(st => {
-        const httpOptions = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': 'my-auth-token',
-          }),
-          withCredentials: true,
-        };
-        const url = `${this.upcomingConStu}?ticket=${st}`;
-        return this.http.get<any[]>(url, httpOptions).do(res => console.log(res));
-      }),
-    );
-
-  }
-
-  getDetailPageStu(id): Observable<any[]> {
-    const httpOptions = {
-      headers: new HttpHeaders({
+  getUpcomingConStu(): Observable<Upcomingcon[]> {
+             return this.ws.get<Upcomingcon[]>('/iconsult/upcomingconstu', true, {
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
-      }),
-      withCredentials: true,
-    };
-    return this.http.get<any[]>(this.detailPage + '/' + id, httpOptions).do(res => console.log(res));
+      },
+    });
   }
 
-  getSlots(casId): Observable<any[]> {
-    return this.cas.getST(this.getslots).pipe(
-      switchMap(st => {
-        const httpOptions = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': 'my-auth-token',
-          }),
-          withCredentials: true,
-        };
-        const url = `${this.getslots}/${casId}?ticket=${st}`;
-        return this.http.get<any[]>(url, httpOptions);
-      }),
-    );
+  getDetailPageStu(id): Observable<DetailpageStudent[]> {
+    return this.ws.get<DetailpageStudent[]>('/iconsult/detailpageconstu/' + id, true, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'my-auth-token',
+      },
+    });
+   }
 
+  getSlots(casId): Observable<FreeSlots[]> {
+    return this.ws.get<FreeSlots[]>('/iconsult/freeslots/' + casId, true, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'my-auth-token',
+      },
+    });
   }
 
   addbooking(booking) {
-    const httpOptions = {
-      headers: new HttpHeaders({
+    return this.ws.post<any>(this.addBookingUrl,  {
+      body: booking,
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
-      }),
-      withCredentials: true,
-    };
-    return this.http.post(this.addBookingUrl, booking, httpOptions);
-  }
+      },
+    });
+    }
 
-  getstaffname(casid: string): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
+  getstaffname(casid: string): Observable<StaffName[]> {
+        return this.ws.get<StaffName[]>('/iconsult/getusername/' + casid, true, {
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
-      }),
-      withCredentials: true,
-
-    };
-    return this.http.get(`${this.getusername}/${casid}`, httpOptions);
+      },
+    });
   }
 
   /**
    * POST Method: add student cancel booked slots.
    */
   cancelbookedslot(cancelbookedslots) {
-    const httpOptions = {
-      headers: new HttpHeaders({
+    return this.ws.post<any>(this.updatebookedsloturl,  {
+      body: cancelbookedslots,
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
-      }),
-      withCredentials: true,
-    };
-    return this.http.post(this.updatebookedsloturl, cancelbookedslots, httpOptions);
-
+      },
+    });
   }
 
-  verifyduplicateslotsfun(usefuldata: string) {
-    const httpOptions = {
-      headers: new HttpHeaders({
+  verifyduplicateslotsfun(usefuldata: string): Observable<DepName[]> {
+    return this.ws.get<DepName[]>('/iconsult/verifyduplicateslot/' + usefuldata, true, {
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
-      }),
-      withCredentials: true,
-    };
-    return this.http.get(`${this.verifyDupSlotUrl}/${usefuldata}`, httpOptions);
-
+      },
+    });
   }
 
 }
