@@ -7,6 +7,7 @@ import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { UpcomingConLecProvider, UserserviceProvider } from '../../providers';
 import { UpcominglecPage } from '../iConsult-lecturer/upcominglec';
+import { TabsPage } from '../tabs/tabs';
 
 @IonicPage()
 @Component({
@@ -57,7 +58,8 @@ export class ConsuldetailpagePage {
   addfeedback() {
     this.UpcomingConLec.addlecFeedback(this.lecfeedback).subscribe(
       () => {
-        this.navCtrl.setRoot(UpcominglecPage);
+        this.app.getRootNav().setRoot(TabsPage);
+        this.app.getRootNav().push(UpcominglecPage);
         this.presentToast();
       },
     );
@@ -120,7 +122,8 @@ export class ConsuldetailpagePage {
               this.presentLoading();
               this.pro.cancelbookedslot(cancelbookedslots).subscribe(
                 () => {
-                  this.navCtrl.setRoot(UpcominglecPage);
+                  this.app.getRootNav().setRoot(TabsPage);
+                  this.app.getRootNav().push(UpcominglecPage);
                   this.presentcanceledToast();
                 },
               );
@@ -134,7 +137,7 @@ export class ConsuldetailpagePage {
 
   presentcanceledToast() {
     const toast = this.toastCtrl.create({
-      message: 'This consultation hour has been cancelled successfully',
+      message: 'This consultation hour has been canceled successfully',
       duration: 3000,
       position: 'bottom',
     });

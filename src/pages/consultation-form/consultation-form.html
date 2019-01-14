@@ -26,7 +26,7 @@
       <ion-item>
         <ion-label class="with required">Consultation With</ion-label>
         <ion-select [(ngModel)]="conWith" [(ngModel)]="booking.con_with" placeholder="Select One" class="with"
-          [ngModelOptions]="{standalone: true}">
+          [ngModelOptions]="{standalone: true}" interface="popover">
           <ion-option value="Lecturer">Lecturer</ion-option>
           <ion-option value="Masters Supervisor">Masters Supervisor</ion-option>
           <ion-option value="Doctoral Supervisor">Doctoral Supervisor</ion-option>
@@ -48,7 +48,8 @@
 
       <ion-item>
         <ion-label stacked>Contact Number</ion-label>
-        <ion-input type="tel" [(ngModel)]="telnumber" [(ngModel)]="booking.phone" placeholder="e.g. 0121234567" [ngModelOptions]="{standalone: true}"></ion-input>
+        <ion-input type="tel" [(ngModel)]="telnumber" [(ngModel)]="booking.phone" placeholder="e.g. 0121234567"
+          [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
 
       <ion-item>

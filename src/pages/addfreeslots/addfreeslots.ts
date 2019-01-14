@@ -7,6 +7,7 @@ import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { SlotsProvider } from '../../providers';
 import { UpcominglecPage } from '../iConsult-lecturer/upcominglec';
+import { TabsPage } from '../tabs/tabs';
 
 @IonicPage()
 @Component({
@@ -145,7 +146,8 @@ export class AddfreeslotsPage {
           handler: () => {
             this.slotsProvider.addfreeslots(this.freeslots).subscribe(
               () => {
-                this.navCtrl.setRoot(UpcominglecPage);
+                this.app.getRootNav().setRoot(TabsPage);
+                this.app.getRootNav().push(UpcominglecPage);
                 this.presentToast();
               },
             );

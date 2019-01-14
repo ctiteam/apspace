@@ -1,18 +1,12 @@
 <ion-header>
-  <!--iConsult for student-->
-  <ion-toolbar>
-    <ion-buttons>
-      <button ion-button icon-only navPush="MorePage" class="backbutton">
-        <ion-icon name="arrow-round-back"></ion-icon>
-        <ion-title>My Appointment(s)</ion-title>
-      </button>
-    </ion-buttons>
-  </ion-toolbar>
+  <ion-navbar color="primary">
+    <ion-title>My Appointments</ion-title>
+  </ion-navbar>
 </ion-header>
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
   <ng-template let-slots [ngIf]="slots$ | async" [ngIfElse]="loadingUpComLec">
     <ng-template [ngIf]="slots && slots.length > 0" [ngIfElse]="nodata">
@@ -38,7 +32,7 @@
 
           <ion-label no-margin *ngIf="slot.status == 'cancelledbylec'">
             <ion-icon padding-right name="contact"></ion-icon>
-            <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbylec'">Cancelled By Lecturer</ion-badge>
+            <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbylec'">Canceled By Lecturer</ion-badge>
             <a (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
               | View Details
             </a>
@@ -46,7 +40,7 @@
 
           <ion-label no-margin *ngIf="slot.status == 'cancelledbystu'">
             <ion-icon padding-right name="contact"></ion-icon>
-            <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbystu'">Cancelled By Student</ion-badge>
+            <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbystu'">Canceled By Student</ion-badge>
             <a (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
               | View Details
             </a>

@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import {
-  AlertController, IonicPage, LoadingController, NavController, NavParams, ToastController,
+  AlertController, IonicPage, LoadingController, NavController, NavParams, ToastController, App,
 } from 'ionic-angular';
 import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { UpcomingConStuProvider } from '../../providers';
 import { UpcomingstdPage } from '../upcomingstd/upcomingstd';
+import { TabsPage } from '../tabs/tabs';
 
 @IonicPage()
 @Component({
@@ -24,11 +25,12 @@ export class StudentConsulDetailPage {
   timee = this.navParams.get('starttime');
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public pro: UpcomingConStuProvider,
-              public alertCtrl: AlertController,
-              public loadingCtrl: LoadingController,
-              private toastCtrl: ToastController,
+    public navParams: NavParams,
+    public pro: UpcomingConStuProvider,
+    public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
+    private toastCtrl: ToastController,
+    public app: App,
   ) { }
 
   gotoChat() {
@@ -88,7 +90,8 @@ export class StudentConsulDetailPage {
               this.presentLoading();
               this.pro.cancelbookedslot(cancelbookedslots).subscribe(
                 () => {
-                  this.navCtrl.setRoot(UpcomingstdPage);
+                  this.app.getRootNav().setRoot(TabsPage);
+                  this.app.getRootNav().push(UpcomingstdPage);
                   this.presentToast();
                 },
               );

@@ -5,6 +5,7 @@ import { AlertController, App, IonicPage, NavController, NavParams, ToastControl
 import moment from 'moment';
 import { SlotsProvider } from '../../providers';
 import { UpcominglecPage } from '../iConsult-lecturer/upcominglec';
+import { TabsPage } from '../tabs/tabs';
 
 @IonicPage()
 @Component({
@@ -105,7 +106,8 @@ export class UnavailabilitySlotsPage {
           handler: () => {
             this.slotsProvider.addUnfreeslots(this.unfreeslots).subscribe(
               () => {
-                this.navCtrl.setRoot(UpcominglecPage);
+                this.app.getRootNav().setRoot(TabsPage);
+                this.app.getRootNav().push(UpcominglecPage);
                 this.presentToast();
               },
             );

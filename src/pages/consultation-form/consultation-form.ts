@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import {
-  AlertController, App, IonicPage, LoadingController, NavController, NavParams, ToastController,
+  AlertController, App, IonicPage, LoadingController, NavController, NavParams, ToastController, Tabs,
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { UpcomingConStuProvider } from '../../providers/upcoming-con-stu';
 import { UpcomingstdPage } from '../upcomingstd/upcomingstd';
+import { TabsPage } from '../tabs/tabs';
 
 @IonicPage()
 @Component({
@@ -77,7 +78,8 @@ export class ConsultationFormPage {
             this.presentLoading();
             this.UpcomingConStu.addbooking(this.booking).subscribe(
               () => {
-                this.navCtrl.setRoot(UpcomingstdPage);
+                this.app.getRootNav().setRoot(TabsPage);
+                this.app.getRootNav().push(UpcomingstdPage);
                 this.presentToast();
               },
             );
@@ -102,9 +104,7 @@ export class ConsultationFormPage {
     const loading = this.loadingCtrl.create({
       content: 'Please wait...Sending your request',
     });
-
     loading.present();
-
     setTimeout(() => {
       loading.dismiss();
     }, 8000);

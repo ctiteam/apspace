@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
 import { UpcomingConLecProvider } from '../../providers/upcoming-con-lec';
+import { TabsPage } from '../tabs/tabs';
 
 @IonicPage()
 @Component({
@@ -114,7 +115,8 @@ export class UpcominglecPage {
 
             this.UpcomingConLec.addlecFeedback(feedback).subscribe(
               () => {
-                this.navCtrl.setRoot(UpcominglecPage);
+                this.app.getRootNav().setRoot(TabsPage);
+                this.app.getRootNav().push(UpcominglecPage);
               },
             );
           },

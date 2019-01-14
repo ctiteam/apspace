@@ -1,18 +1,12 @@
 <ion-header>
-  <!--iConsult for lecturer-->
-  <ion-toolbar>
-    <ion-buttons>
-      <button ion-button icon-only navPush="MorePage" class="backbutton">
-        <ion-icon name="arrow-round-back"></ion-icon>
-        <ion-title>My Consultation Hour</ion-title>
-      </button>
-    </ion-buttons>
-  </ion-toolbar>
+  <ion-navbar color="primary">
+    <ion-title>My Consultation Hour</ion-title>
+  </ion-navbar>
 </ion-header>
-
+ 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
   <ng-template let-slots [ngIf]="slots$ | async" [ngIfElse]="loadingUpComLec">
     <ng-template [ngIf]="slots && slots.length > 0" [ngIfElse]="nodata">

@@ -7,7 +7,7 @@
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
   <ng-template let-slots [ngIf]="slots$ | async" [ngIfElse]="loadingUpComLec">
     <ng-template [ngIf]="slots && slots.length > 0" [ngIfElse]="nodata">
@@ -22,6 +22,7 @@
         <ion-card-header>
           {{ slot.datetime }}
         </ion-card-header>
+
         <ion-card-content>
           <ion-label no-margin>
             <ion-icon padding-right name="time"></ion-icon>
@@ -49,11 +50,10 @@
           <img src="assets/img/profile.svg" width="70" height="70">
         </ion-avatar>
       </ion-card-header>
-      <h2 class="my-content line-break" *ngIf="staffName$ | async as staffName">{{ staffName.name }}
-        <a href="mailto:{{ EMAIL }}" style="text-decoration:none;">
-          <h2 class="my-content line-break" style="color: currentColor;">{{ EMAIL }}</h2>
-        </a>
-      </h2>
+      <h2 class="my-content line-break" *ngIf="staffName$ | async as staffName">{{ staffName.name }}</h2>
+      <a href="mailto:{{ EMAIL }}" style="text-decoration:none;">
+        <h2 class="my-content line-break" style="color: currentColor;">{{ EMAIL }}</h2>
+      </a>
     </ng-template>
   </ng-template>
 

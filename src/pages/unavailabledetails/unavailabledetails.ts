@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { UpcomingConLecProvider } from '../../providers/upcoming-con-lec';
 import { UpcominglecPage } from '../iConsult-lecturer/upcominglec';
+import { TabsPage } from '../tabs/tabs';
 
 @IonicPage()
 @Component({
@@ -27,8 +28,9 @@ export class UnavailabledetailsPage {
   };
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              private UpcomingConLec: UpcomingConLecProvider) {
+    public navParams: NavParams,
+    private UpcomingConLec: UpcomingConLecProvider,
+    public app: App, ) {
   }
 
   ionViewDidLoad() {
@@ -38,8 +40,9 @@ export class UnavailabledetailsPage {
 
   disable() {
     this.UpcomingConLec.disableunailrules(this.unavailibilityid, this.disableunavailslots).subscribe(freeslots => {
-        this.navCtrl.setRoot(UpcominglecPage);
-      },
+      this.app.getRootNav().setRoot(TabsPage);
+      this.app.getRootNav().push(UpcominglecPage);
+    },
     );
   }
 
