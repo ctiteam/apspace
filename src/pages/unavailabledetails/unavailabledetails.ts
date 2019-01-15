@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
 import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { UpcomingConLecProvider } from '../../providers/upcoming-con-lec';
@@ -28,9 +28,9 @@ export class UnavailabledetailsPage {
   };
 
   constructor(public navCtrl: NavController,
-    public navParams: NavParams,
-    private UpcomingConLec: UpcomingConLecProvider,
-    public app: App, ) {
+              public navParams: NavParams,
+              private UpcomingConLec: UpcomingConLecProvider,
+              public app: App ) {
   }
 
   ionViewDidLoad() {

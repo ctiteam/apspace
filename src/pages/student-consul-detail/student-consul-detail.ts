@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import {
-  AlertController, IonicPage, LoadingController, NavController, NavParams, ToastController, App,
+  AlertController, App, IonicPage, LoadingController, NavController, NavParams, ToastController,
 } from 'ionic-angular';
 import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { UpcomingConStuProvider } from '../../providers';
-import { UpcomingstdPage } from '../upcomingstd/upcomingstd';
 import { TabsPage } from '../tabs/tabs';
+import { UpcomingstdPage } from '../upcomingstd/upcomingstd';
 
 @IonicPage()
 @Component({
@@ -25,12 +25,12 @@ export class StudentConsulDetailPage {
   timee = this.navParams.get('starttime');
 
   constructor(public navCtrl: NavController,
-    public navParams: NavParams,
-    public pro: UpcomingConStuProvider,
-    public alertCtrl: AlertController,
-    public loadingCtrl: LoadingController,
-    private toastCtrl: ToastController,
-    public app: App,
+              public navParams: NavParams,
+              public pro: UpcomingConStuProvider,
+              public alertCtrl: AlertController,
+              public loadingCtrl: LoadingController,
+              private toastCtrl: ToastController,
+              public app: App,
   ) { }
 
   gotoChat() {

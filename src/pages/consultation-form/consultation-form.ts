@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import {
-  AlertController, App, IonicPage, LoadingController, NavController, NavParams, ToastController, Tabs,
+  AlertController, App, IonicPage, LoadingController, NavController, NavParams, Tabs, ToastController,
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { UpcomingConStuProvider } from '../../providers/upcoming-con-stu';
-import { UpcomingstdPage } from '../upcomingstd/upcomingstd';
 import { TabsPage } from '../tabs/tabs';
+import { UpcomingstdPage } from '../upcomingstd/upcomingstd';
 
 @IonicPage()
 @Component({

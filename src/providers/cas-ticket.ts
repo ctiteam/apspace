@@ -1,5 +1,5 @@
 /* tslint:disable:no-shadowed-variable */
-import { HttpClient, HttpParams, HttpParameterCodec } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Events } from 'ionic-angular';
@@ -11,6 +11,7 @@ import { of } from 'rxjs/observable/of';
 import { _throw as obs_throw } from 'rxjs/observable/throw';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
+import { CustomEncoder } from '../helpers/custom-encoder';
 import { Role } from '../interfaces';
 import { SettingsProvider } from './settings';
 
@@ -139,23 +140,5 @@ export class CasTicketProvider {
         return of(res);
       }),
     );
-  }
-}
-
-class CustomEncoder implements HttpParameterCodec {
-  encodeKey(key: string): string {
-    return encodeURIComponent(key);
-  }
-
-  encodeValue(value: string): string {
-    return encodeURIComponent(value);
-  }
-
-  decodeKey(key: string): string {
-    return decodeURIComponent(key);
-  }
-
-  decodeValue(value: string): string {
-    return decodeURIComponent(value);
   }
 }
