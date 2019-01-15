@@ -213,7 +213,7 @@ export class DashboardPage {
       map(attendances => {
         const currentSemester = Math.max(...attendances.map(attendance => attendance.SEMESTER));
         return (attendances || []).filter(attendance =>
-          attendance.SEMESTER === currentSemester && attendance.PERCENTAGE < 80);
+          attendance.SEMESTER === currentSemester && attendance.EXAM_ELIGIBILITY === 'BA');
       }),
       tap(attendances => attendances.length > 0 && this.getPieChart(
         attendances[0].TOTAL_CLASSES, attendances[0].TOTAL_ABSENT,
