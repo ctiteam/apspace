@@ -1,5 +1,5 @@
 /* tslint:disable:no-shadowed-variable */
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpParameterCodec } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Events } from 'ionic-angular';
@@ -49,7 +49,8 @@ export class CasTicketProvider {
       observe: 'response' as 'body',
     };
     return (username && password
-      ? of(new HttpParams().set('username', username).set('password', password).toString())
+      ? of(new HttpParams({ encoder: new CustomEncoder() })
+        .set('username', username).set('password', password).toString())
       : fromPromise(this.storage.get('cred'))
     ).pipe(
       switchMap(data => this.http.post(this.casUrl + '/cas/v1/tickets', data, options).pipe(
@@ -138,5 +139,23 @@ export class CasTicketProvider {
         return of(res);
       }),
     );
+  }
+}
+
+class CustomEncoder implements HttpParameterCodec {
+  encodeKey(key: string): string {
+    return encodeURIComponent(key);
+  }
+
+  encodeValue(value: string): string {
+    return encodeURIComponent(value);
+  }
+
+  decodeKey(key: string): string {
+    return decodeURIComponent(key);
+  }
+
+  decodeValue(value: string): string {
+    return decodeURIComponent(value);
   }
 }
