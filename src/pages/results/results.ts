@@ -79,7 +79,7 @@ export class ResultsPage {
   }
 
   ionViewDidLoad() {
-    this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+    this.ws.get<StudentProfile>('/student/profile', true).subscribe(p => {
       if (p.BLOCK === true) {
         this.block = false;
         this.course$ = this.ws.get<Course[]>('/student/courses').pipe(

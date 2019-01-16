@@ -28,10 +28,10 @@ export class ProfilePage {
   ionViewDidLoad() {
     const role = this.settings.get('role');
     if (role & Role.Student) {
-      this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
-      this.profile$ = this.ws.get<StudentProfile>('/student/profile');
+      this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo', true);
+      this.profile$ = this.ws.get<StudentProfile>('/student/profile', true);
     } else if (role & (Role.Lecturer | Role.Admin)) {
-      this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
+      this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile', true);
     }
   }
 
