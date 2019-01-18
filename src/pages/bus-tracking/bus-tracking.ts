@@ -66,7 +66,7 @@ export class BusTrackingPage {
   getTrips(refresher?) {
     const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
     this.trip$ = this.bus.getTrips(Boolean(refresher)).pipe(
-      map(d => d.trips_times),
+      map(d => d.applicable_trips),
       tap(ts => {
         this.tripDays = Array.from(new Set(ts.map(t => t.trip_day)));
         this.selectedDay =

@@ -9,7 +9,6 @@ import { BusTrips } from '../interfaces';
 @Injectable()
 export class BusTrackingProvider {
   busTrackingUrl = 'https://api.apiit.edu.my/transix';
-  url = `${this.busTrackingUrl}/locations`;
 
   constructor(public http: HttpClient) {}
 
@@ -19,7 +18,7 @@ export class BusTrackingProvider {
    * @param refresh - force refresh (default: false)
    */
   getTrips(refresh?: boolean): Observable<BusTrips> {
-    const url = `${this.busTrackingUrl}/trips`;
+    const url = `${this.busTrackingUrl}/trips/applicable`;
     return this.http.get<BusTrips>(url).pipe(
       publishLast(),
       refCount(),
