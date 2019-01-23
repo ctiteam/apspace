@@ -90,7 +90,7 @@ export class MorePage {
         title: 'My Library',
         component: 'KohaPage',
         icon: 'bookmarks',
-        role: Role.Student | Role.Lecturer,
+        role: Role.Student | Role.Lecturer | Role.Admin,
       },
       {
         title: 'Forms & Application',
