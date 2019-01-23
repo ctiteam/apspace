@@ -7,7 +7,6 @@ import {
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 
 import { StudentProfile, Timetable } from '../../interfaces';
@@ -103,17 +102,9 @@ export class TimetablePage {
       && date.getDate() === this.selectedWeek.getDate();
   }
 
-  /** Check if the timetable is outdated. */
-  outdated(tt: Timetable[]): boolean {
-    const date = new Date(); // first day of week (Sunday)
-    date.setDate(date.getDate() - date.getDay());
-    return tt.some(t => new Date(t.DATESTAMP_ISO) < date);
-  }
-
   /** Refresh timetable, forcefully if refresher is passed. */
   doRefresh(refresher?) {
     this.timetable$ = this.tt.get(Boolean(refresher)).pipe(
-      switchMap(tt => !refresher && this.outdated(tt) ? this.tt.get(true) : of(tt)),
       tap(tt => this.updateDay(tt)),
       // initialize or update intake labels only if timetable might change
       tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)
