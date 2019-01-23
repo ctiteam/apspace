@@ -19,6 +19,8 @@ import { BusTrackingProvider, SettingsProvider } from '../../providers';
   templateUrl: 'bus-tracking.html',
 })
 export class BusTrackingPage {
+  objectKeys = Object.keys;
+
   locations: Location[];
   // pickUpLocationDetails: LocationDetails;
   pickUpLocationDetails: any;
@@ -28,8 +30,8 @@ export class BusTrackingPage {
   selectedTo: string;
 
   tripDays: string[];
-  tripFrom: string[];
-  tripTo: string[];
+  tripFrom = {} as Array<{ [name: string]: string }>;
+  tripTo = {} as Array<{ [name: string]: string}>;
 
   trip$: Observable<Trips[]>;
 
@@ -72,8 +74,13 @@ export class BusTrackingPage {
         this.selectedDay =
           this.selectedDay ||
           this.tripDays.find(d => d.indexOf(days[new Date().getDay()]) !== -1);
-        this.tripFrom = Array.from(new Set(ts.map(t => t.trip_from)));
-        this.tripTo = Array.from(new Set(ts.map(t => t.trip_to)));
+        this.tripFrom = {} as Array<{ [name: string]: string }>;
+        this.tripTo = {} as Array<{ [name: string]: string }>;
+        // unique set of object
+        ts.forEach(t => {
+          this.tripFrom[t.trip_from] = t.trip_from_display_name;
+          this.tripTo[t.trip_to] = t.trip_to_display_name;
+        });
         this.selectedFrom = this.settings.get('tripFrom') || 'Any';
         this.selectedTo = this.settings.get('tripTo') || 'Any';
       }),

@@ -58,16 +58,17 @@
       <div class="destinationItemsDiv">
         <ion-item no-padding>
           <ion-select [(ngModel)]="selectedFrom" interface='popover' placeholder='From'>
-            <ion-option *ngFor="let trip of tripFrom" [value]="trip" style="z-index: 0 !important">
-              {{ trip }}
+            <ion-option *ngFor="let trip of objectKeys(tripFrom)" [value]="trip"
+              style="z-index: 0 !important">
+              {{ tripFrom[trip] }}
             </ion-option>
             <ion-option>Any</ion-option>
           </ion-select>
         </ion-item>
         <ion-item no-padding>
           <ion-select [(ngModel)]="selectedTo" interface='popover' placeholder='To'>
-            <ion-option *ngFor="let trip of tripTo" [value]="trip">
-              {{ trip }}
+            <ion-option *ngFor="let trip of objectKeys(tripTo)" [value]="trip">
+              {{ tripTo[trip] }}
             </ion-option>
             <ion-option>Any</ion-option>
           </ion-select>

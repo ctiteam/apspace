@@ -28,7 +28,7 @@
             <ion-card *ngFor="let ts of trips" [class.highlightedNextTripCard]="ts.trip_time === nextTrip">
               <ion-card-header ion-item>
                 <h2 ion-text item-start [class.highlightedNextTrip]="ts.trip_time === nextTrip">{{
-                  ts.trip_from }} -> {{ ts.trip_to }}</h2>
+                  ts.trip_from_display_name }} -> {{ ts.trip_to_display_name }}</h2>
                 <h4 class="h4Time" ion-text item-end [class.highlightedNextTrip]="ts.trip_time === nextTrip">{{
                   ts.trip_time }}</h4>
               </ion-card-header>
