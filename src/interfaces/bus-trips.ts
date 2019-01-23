@@ -1,5 +1,5 @@
 export interface BusTrips {
-  applicable_trips: Trips[];
+  trips: Trips[];
 }
 
 export interface Trips {
