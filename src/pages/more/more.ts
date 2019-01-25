@@ -39,13 +39,13 @@ export class MorePage {
         role: Role.Student | Role.Lecturer | Role.Admin,
       },
       {
-        title: 'iConsult',
+        title: 'iConsult (Beta)',
         component: 'UpcomingstdPage',
         icon: 'clipboard',
         role: Role.Student,
       },
       {
-        title: 'iConsult',
+        title: 'iConsult (Beta)',
         component: 'UpcominglecPage',
         icon: 'clipboard',
         role: Role.Lecturer | Role.Admin,
