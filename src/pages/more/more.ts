@@ -81,7 +81,7 @@ export class MorePage {
         role: Role.Student,
       },
       {
-        title: 'LMS (Course Material)',
+        title: 'Moodle (Course Material)',
         component: 'LmsPage',
         icon: 'open',
         role: Role.Student | Role.Lecturer | Role.Admin,
