@@ -8,7 +8,7 @@ import {
   Apcard, Attendance, Course, CourseDetails, ExamSchedule, FeesTotalSummary,
   Holiday, Holidays, StudentProfile,
 } from '../../interfaces';
-import { WsApiProvider } from '../../providers';
+import { SettingsProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -26,7 +26,6 @@ export class DashboardPage {
   overdue$: Observable<FeesTotalSummary[]>;
   profile$: Observable<StudentProfile>;
   transaction$: Observable<Apcard>;
-  upcomingClass$: Observable<any[]>;
   visa$: Observable<any>;
 
   numOfSkeletons = new Array(2);
@@ -69,6 +68,7 @@ export class DashboardPage {
     public navParams: NavParams,
     public app: App,
     public ws: WsApiProvider,
+    public settings: SettingsProvider,
   ) { }
 
   ionViewDidLoad() {
@@ -77,10 +77,6 @@ export class DashboardPage {
 
   doRefresh(refresher?) {
     this.totalClasses = undefined;
-    this.upcomingClass$ = this.ws.get<any[]>('/student/upcoming_class', refresher).pipe(
-      tap(cc => this.totalClasses = cc.length),
-      finalize(() => refresher && refresher.complete()),
-    );
     this.nextHoliday$ = this.getHolidays(refresher);
     this.getProfile();
     this.transaction$ = this.getAPCardBalance();

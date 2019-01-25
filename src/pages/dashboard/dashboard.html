@@ -74,56 +74,6 @@
   <ng-template #localStudent>
   </ng-template>
 
-  <ng-template let-classes [ngIf]='upcomingClass$ | async' [ngIfElse]='loadingClasses'>
-    <ng-template [ngIf]='classes && classes.length > 0' [ngIfElse]='noclass'>
-      <ion-card class="list-block">
-        <ion-card-header>
-          <ion-icon padding-right name='calendar' color='primary'></ion-icon>
-          Classes Today
-        </ion-card-header>
-        <ion-card-content>
-          <ion-list no-lines>
-            <div *ngFor="let c of classes" class="side-line" [style.borderColor]='strToColor(c.MODID)'>
-              <h2><b>{{ c.MODID }}</b></h2>
-              <ion-label no-margin>
-                <ion-icon class="timetable-value" padding-right name="time"></ion-icon>
-                <b>{{ c.TIME_FROM }}</b> - <b>{{ c.TIME_TO }}</b>
-              </ion-label>
-              <ion-label no-margin>
-                <ion-icon class="timetable-value" padding-right name="locate"></ion-icon>
-                {{ c.ROOM }} │ {{ c.LOCATION }}
-              </ion-label>
-              <ion-label no-margin>
-                <a (click)="openStaffDirectoryInfo(c.SAMACCOUNTNAME)">
-                  <ion-icon class="timetable-value" padding-right name="contact"></ion-icon>
-                  {{ c.LECTURER_NAME }}
-                </a>
-              </ion-label>
-            </div>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-    </ng-template>
-    <ng-template #noclass>
-      <ion-card>
-        <ion-item no-lines>
-          <ion-icon padding-right name='calendar' color='primary'></ion-icon>
-          Classes Today
-        </ion-item>
-        <ion-card-content>
-          <ion-note>No upcoming classes for today</ion-note>
-        </ion-card-content>
-      </ion-card>
-    </ng-template>
-  </ng-template>
-  <ng-template #loadingClasses>
-    <ion-card>
-      <ion-item no-lines *ngFor="let i of numOfSkeletons">
-        <skeleton-item height="137px" width="100%"></skeleton-item>
-      </ion-item>
-    </ion-card>
-  </ng-template>
-
   <ng-template let-attendances [ngIf]='attendance$ | async' [ngIfElse]='loadingLowAttendances'>
     <ng-template [ngIf]='attendances.length > 0' [ngIfElse]='nosubject'>
       <ion-card>
