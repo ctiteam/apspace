@@ -78,7 +78,7 @@ export class MorePage {
         title: 'Exam Schedule',
         component: 'ExamSchedulePage',
         icon: 'book',
-        role: Role.Student,
+        role: Role.Student | Role.Lecturer | Role.Admin,
       },
       {
         title: 'Moodle (Course Material)',
