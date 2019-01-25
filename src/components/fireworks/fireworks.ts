@@ -103,6 +103,7 @@ export class FireworksComponent implements OnInit {
       window.requestAnimationFrame(t => this.draw(t));
     } else {
       this.canvas.style.display = 'none';
+      this.canvas.style.zIndex = 0;
     }
   }
 
@@ -112,6 +113,7 @@ export class FireworksComponent implements OnInit {
       this.running = true;
       this.draw();
       this.canvas.style.display = 'block';
+      this.canvas.style.zIndex = 200;
     }
   }
 
