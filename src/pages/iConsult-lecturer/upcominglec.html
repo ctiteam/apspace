@@ -19,7 +19,7 @@
         <ion-card-content>
           <ion-label no-margin *ngIf="slot.status == 'Booked'">
             <ion-icon padding-right name="time"></ion-icon>
-            <b>{{ slot.time }} - {{ slot.endTime }}</b>
+            <b>{{ slot.time }} - {{ slot.endTime }} -- {{slot.date}}</b>
           </ion-label>
 
           <ion-label no-margin *ngIf="slot.status == 'Booked'">
@@ -60,7 +60,7 @@
           <ion-label no-margin *ngIf="slot.status == 'Unavailable'">
             <ion-icon padding-right name="contact"></ion-icon>
             <ion-badge class="unavailable" *ngIf="slot.status == 'Unavailable'">{{ slot.status }}</ion-badge>
-            <a *ngIf="slot.status == 'Unavailable'" (click)="openUnavailabledetailsPage(slot.unavailibilityid)">
+            <a style="font-size: initial;" *ngIf="slot.status == 'Unavailable'" (click)="openUnavailabledetailsPage(slot.unavailibilityid)">
               | View
             </a>
           </ion-label>
@@ -73,7 +73,7 @@
           <ion-label no-margin *ngIf="slot.status == 'Booked' && dateString < slot.date">
             <ion-icon padding-right name="contact"></ion-icon>
             <ion-badge class="bookedHour" *ngIf="slot.status == 'Booked' && dateString < slot.date">{{ slot.status }}</ion-badge>
-            <a *ngIf="slot.status == 'Booked' && dateString < slot.date" (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
+            <a style="font-size: initial;" *ngIf="slot.status == 'Booked' && dateString < slot.date" (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
               | View Detail
             </a>
           </ion-label>
@@ -81,7 +81,7 @@
           <ion-label no-margin *ngIf="slot.status == 'Booked' && dateString > slot.date">
             <ion-icon padding-right name="contact"></ion-icon>
             <ion-badge class="passedHour" *ngIf="slot.status == 'Booked' && dateString > slot.date">Passed</ion-badge>
-            <a *ngIf="slot.status == 'Booked' && dateString > slot.date" (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
+            <a style="font-size: initial;" *ngIf="slot.status == 'Booked' && dateString > slot.date" (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
               | Remarks
             </a>
           </ion-label>

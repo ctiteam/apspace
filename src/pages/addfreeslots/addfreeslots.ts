@@ -57,6 +57,7 @@ export class AddfreeslotsPage {
   time: string[] = [];
   minEndDate: string;
   room: string;
+  MinDate: string;
 
   constructor(
     public http: HttpClient,
@@ -88,7 +89,8 @@ export class AddfreeslotsPage {
     });
 
     this.minDate = new Date().toISOString();
-    this.maxDate = moment(this.minDate).add(6, 'month').toISOString();
+    this.MinDate = moment(this.minDate).add(1, 'day').toISOString();
+    this.maxDate = moment(this.MinDate).add(2, 'month').toISOString();
   }
 
   initslots(): FormGroup {

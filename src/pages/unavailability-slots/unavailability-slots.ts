@@ -41,6 +41,7 @@ export class UnavailabilitySlotsPage {
   endDate: string;
   time: string[] = [];
   minEndDate: string;
+  MinDate: string;
 
   constructor(public http: HttpClient,
               public slotsProvider: SlotsProvider,
@@ -66,7 +67,8 @@ export class UnavailabilitySlotsPage {
     });
 
     this.minDate = new Date().toISOString();
-    this.maxDate = moment(this.minDate).add(6, 'month').toISOString();
+    this.MinDate = moment(this.minDate).add(1, 'day').toISOString();
+    this.maxDate = moment(this.MinDate).add(2, 'month').toISOString();
   }
 
   initslots(): FormGroup {
@@ -95,7 +97,7 @@ export class UnavailabilitySlotsPage {
   async confirmation() {
     const alert = await this.alertCtrl.create({
       title: 'Confirm',
-      message: 'Are you sure you want to add this Unavailability slots?',
+      message: 'Are you sure you want to add this unavailability slots?',
       buttons: [
         {
           text: 'No',

@@ -54,22 +54,13 @@
             <ion-icon padding-right name="locate"></ion-icon>
             {{ slot.venue }} │ {{ slot.location }}
           </ion-label>
-          <ion-label class="mt-3 mb-0" *ngIf="slot.status == 'Available'">
-                <a class="btn btn-lg btn-block btn-outline-dark" *ngIf="(staffName$ | async) as staffName" (click)="
-                  openBookingPage(
-                    slot.availibilityid,
-                    slot.date,
-                    slot.timee,
-                    slot.time,
-                    slot.datetime,
-                    slot.endtime,
-                    staffName.name,
-                    casId
-                  )
-                ">
-                Book Now
-              </a>
-
+          <ion-label no-margin *ngIf="staffName$ | async as staffName">
+            <ion-icon padding-right name="contact"></ion-icon>
+            <ion-badge class="bookedHour" *ngIf="slot.status == 'Booked'">{{ slot.status }}</ion-badge>
+            <ion-badge *ngIf="slot.status == 'Available'">{{ slot.status }}</ion-badge>
+            <a style="font-size: initial;" *ngIf="slot.status == 'Available'" (click)="openBookingPage(slot.availibilityid, slot.date, slot.timee, slot.time, slot.datetime, slot.endtime, staffName.name, casId)">
+              | Book Now
+            </a>
           </ion-label>
         </ion-card-content>
       </ion-card>

@@ -46,7 +46,7 @@ export class StudentConsulDetailPage {
   // stu cancel booked slot
   async cancelslot() {
     const alert = await this.alertCtrl.create({
-      title: 'Cancel booked Slot',
+      title: 'Cancel Appointment',
       message: 'Are you sure you want to cancel this slot?',
       inputs: [
         {
@@ -115,14 +115,14 @@ export class StudentConsulDetailPage {
 
   presentLoading() {
     const loading = this.loadingCtrl.create({
-      content: 'Please wait...sending your request',
+      content: 'Sending your request',
     });
 
     loading.present();
 
     setTimeout(() => {
       loading.dismiss();
-    }, 8000);
+    }, 2000);
   }
 
 }

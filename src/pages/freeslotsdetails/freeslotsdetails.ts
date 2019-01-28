@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, App, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController, App, IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { SlotsProvider } from '../../providers';
@@ -43,6 +43,7 @@ export class FreeslotsdetailsPage {
               public slotsProvider: SlotsProvider,
               public alertCtrl: AlertController,
               public app: App,
+              private toastCtrl: ToastController,
   ) {
   }
 
@@ -68,6 +69,7 @@ export class FreeslotsdetailsPage {
               () => {
                 this.app.getRootNav().setRoot(TabsPage);
                 this.app.getRootNav().push(UpcominglecPage);
+                this.presentToast();
               },
             );
           },
@@ -75,6 +77,15 @@ export class FreeslotsdetailsPage {
       ],
     });
     await alert.present();
+  }
+
+  presentToast() {
+    const toast = this.toastCtrl.create({
+      message: 'Available slot was closed successfully',
+      duration: 3000,
+      position: 'bottom',
+    });
+    toast.present();
   }
 
 }

@@ -16,13 +16,14 @@
 
       <ion-item>
         <ion-label>Start Date</ion-label>
-        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="startDate" [min]="minDate" [max]="maxDate" [(ngModel)]="unfreeslots.start_date"
-          (ionChange)="onchangedate()"></ion-datetime>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="startDate" [min]="MinDate" [max]="maxDate" [(ngModel)]="unfreeslots.start_date"
+          [ngModelOptions]="{standalone: true}" (ionChange)="onchangedate()"></ion-datetime>
       </ion-item>
 
       <ion-item>
         <ion-label>End Date</ion-label>
-        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="endDate" [min]="minEndDate" [max]="maxDate" [(ngModel)]="unfreeslots.end_date"></ion-datetime>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="endDate" [min]="minEndDate" [max]="maxDate" [(ngModel)]="unfreeslots.end_date"
+          [ngModelOptions]="{standalone: true}"></ion-datetime>
       </ion-item>
     </ion-card-content>
   </ion-card>
@@ -53,7 +54,6 @@
       </div>
     </ion-list>
   </form>
-
 
   <ion-buttons>
     <button ion-button round full margin-top (click)="confirmation()" [disabled]="!unfreeslots.repeat || !unfreeslots.start_date || !unfreeslots.end_date || !unfreeslots.start_time">

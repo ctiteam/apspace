@@ -7,11 +7,11 @@
 
 <ion-content>
   <ion-card *ngFor="let details of detail$ | async" padding>
-    <ion-card-header class="detailimage">
+    <!-- <ion-card-header class="detailimage">
       <ion-avatar item-start>
         <img src="assets/img/profile.svg" width="100" height="100">
       </ion-avatar>
-    </ion-card-header>
+    </ion-card-header> -->
 
     <ion-card-content>
       <ion-item class="studentdetails">
@@ -19,14 +19,14 @@
         <p>Student Name : </p>
         <h2 class="my-content line-break">{{details.studentname}}</h2>
         <p>Student ID : </p>
-        {{ details.tpnumber }}
+        <h2 class="my-content line-break">{{ details.tpnumber }}</h2>
         <p *ngIf="details.stuPhone != ''">Student Phone Number : </p>
         <a href="tel:{{ details.stuPhone }}" style="text-decoration:none;">
-          <h2>{{ details.stuPhone }}</h2>
+          <h2 class="my-content line-break">{{ details.stuPhone }}</h2>
         </a>
         <p>Student Email : </p>
         <a href="mailto:{{ details.stuEmail }}" style="text-decoration:none;">
-          <h2 style="color: currentColor;">{{ details.stuEmail }}</h2>
+          <h2 style="color: currentColor; margin-bottom: 7px;">{{ details.stuEmail }}</h2>
         </a>
       </ion-item>
 

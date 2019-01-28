@@ -22,6 +22,8 @@ export class UpcominglecPage {
   currentDateTime: string = moment().format();
   skeletonArray = new Array(5);
   dateString = moment().format();
+  timeString = moment().format('HH:mm:ss');
+  // myDate: String = new Date().toISOString();
 
   constructor(
     public http: HttpClient,
@@ -69,7 +71,7 @@ export class UpcominglecPage {
     endTime: string,
   ) {
     this.app.getRootNav().push('FreeslotsdetailsPage',
-      { id, slotid, date, time, timee, datetime, venue, location, endTime});
+      { id, slotid, date, time, timee, datetime, venue, location, endTime });
   }
 
   openUnavailabledetailsPage(unavailibilityid: number) {

@@ -7,17 +7,25 @@
 <ion-content>
   <ion-card class="firstcard" style="border-left: 0.01rem solid rgb(109, 248, 253);">
     <ion-card-content>
-      <ion-item *ngIf="!hidden[i]" class="options">
+      <!-- <ion-item *ngIf="!hidden[i]">
         <ion-label>Date</ion-label>
+        <ion-icon name="calendar" item-end small></ion-icon>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate" [min]="MinDate" [max]="maxDate" [(ngModel)]="freeslots.date"
+          [ngModelOptions]="{standalone: true}"></ion-datetime>
+      </ion-item> -- add one day-->
+
+
+      <ion-item *ngIf="!hidden[i]">
+        <ion-label>Date</ion-label>
+        <ion-icon name="calendar" item-end small></ion-icon>
         <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate" [min]="minDate" [max]="maxDate" [(ngModel)]="freeslots.date"
           [ngModelOptions]="{standalone: true}"></ion-datetime>
       </ion-item>
 
-      <ion-label *ngIf="!hidden[i]" class="orclass">OR</ion-label>
 
-      <ion-item class="options">
+      <ion-item>
         <ion-label>Repeat</ion-label>
-        <ion-checkbox (click)="repeatisClicked(i, repeatisClicked)"></ion-checkbox>
+        <ion-checkbox item-right (click)="repeatisClicked(i, repeatisClicked)"></ion-checkbox>
       </ion-item>
 
       <ion-item *ngIf="hidden[i]">
@@ -29,13 +37,14 @@
 
       <ion-item *ngIf="hidden[i]">
         <ion-label>Start Date</ion-label>
-        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="startDate" [min]="minDate" [max]="maxDate" [(ngModel)]="freeslots.start_date"
-          (ionChange)="onchangedate()"></ion-datetime>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="startDate" [min]="MinDate" [max]="maxDate" [(ngModel)]="freeslots.start_date"
+          [ngModelOptions]="{standalone: true}" (ionChange)="onchangedate()"></ion-datetime>
       </ion-item>
 
       <ion-item *ngIf="hidden[i]">
         <ion-label>End Date</ion-label>
-        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="endDate" [min]="minEndDate" [max]="maxDate" [(ngModel)]="freeslots.end_date"></ion-datetime>
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="endDate" [min]="minEndDate" [max]="maxDate" [(ngModel)]="freeslots.end_date"
+          [ngModelOptions]="{standalone: true}"></ion-datetime>
       </ion-item>
     </ion-card-content>
   </ion-card>
@@ -51,7 +60,7 @@
             <ion-card-content>
               <ion-item>
                 <ion-label>Start Time</ion-label>
-                <ion-icon name="calendar" item-end small></ion-icon>
+                <ion-icon name="time" item-end small></ion-icon>
                 <ion-datetime displayFormat="hh:mm A" pickerFormat="hh mm A" [(ngModel)]="time[i]" minuteValues="[00,30]"
                   formControlName="slotsTime" [(ngModel)]="freeslots.start_time[i]"></ion-datetime>
               </ion-item>

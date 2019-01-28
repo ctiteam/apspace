@@ -1,17 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
+import { AlertController, Events, Nav, Platform, ToastController } from 'ionic-angular';
 import { FCM } from '@ionic-native/fcm';
 import { Network } from '@ionic-native/network';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Storage } from '@ionic/storage';
-import {
-  AlertController,
-  Events,
-  Nav,
-  Platform,
-  ToastController,
-} from 'ionic-angular';
 
 import { forkJoin } from 'rxjs/observable/forkJoin';
+import { of } from 'rxjs/observable/of';
 import { switchMapTo, timeout } from 'rxjs/operators';
 
 import {
@@ -25,6 +20,7 @@ import {
   DataCollectorProvider,
   NotificationProvider,
   SettingsProvider,
+  UpcomingConLecProvider,
   UserSettingsProvider,
   WsApiProvider,
 } from '../providers';
@@ -52,6 +48,7 @@ export class MyApp {
     private fcm: FCM,
     private dc: DataCollectorProvider,
     private userSettings: UserSettingsProvider,
+    private upcominglec: UpcomingConLecProvider,
   ) {
     // platform required to be ready before everything else
     this.platform
@@ -150,12 +147,12 @@ export class MyApp {
   }
 
   logout() {
-    (this.platform.is('cordova')
-      ? this.dc.logout().pipe(
-          timeout(5000),
-          switchMapTo(this.cas.deleteTGT()),
-        )
-      : this.cas.deleteTGT()
+    forkJoin(
+      this.upcominglec.usersessionlogout(),
+      this.platform.is('cordova') ? this.dc.logout() : of(null),
+    ).pipe(
+      timeout(5000),
+      switchMapTo(this.cas.deleteTGT()),
     ).subscribe(_ => {
       this.settings.clear();
       this.storage.clear();

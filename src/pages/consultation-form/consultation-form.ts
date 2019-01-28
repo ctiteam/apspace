@@ -72,6 +72,12 @@ export class ConsultationFormPage {
         {
           text: 'Yes',
           handler: () => {
+            // if () {
+            //   console.log('check');
+            // }
+            // else {
+
+            // }
             this.conWith = '';
             this.reason = '';
             this.telnumber = '';
@@ -86,6 +92,7 @@ export class ConsultationFormPage {
                 this.settings.set('contactNo', this.booking.phone);
               },
             );
+
           },
         },
       ],
@@ -105,12 +112,12 @@ export class ConsultationFormPage {
 
   presentLoading() {
     const loading = this.loadingCtrl.create({
-      content: 'Please wait...Sending your request',
+      content: 'Sending your request',
     });
     loading.present();
     setTimeout(() => {
       loading.dismiss();
-    }, 8000);
+    }, 500);
   }
 
 }

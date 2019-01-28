@@ -1,13 +1,32 @@
 page-student-consul-detail {
-  ion-card {
-    width: 100% !important;
-    ion-card-content {
-      ion-item {
-        h2 {
-          padding-top: 4px;
-          font-weight: 500 !important;
-        }
-      }
+
+    div.consultationNote{
+        margin-top: 10px;
     }
-  }
+
+    div.consultationNote .icon{
+        margin-bottom: 5px;
+    }
+
+    .cancel{
+        top: 21px;
+        left: 28px;
+    }
+
+    .lecturerdetails {
+        margin-left: -22px;
+        margin-bottom: -14px;
+    }
+
+    .line-break{
+        overflow: inherit ;
+        text-overflow: inherit ;
+        white-space: normal;
+        margin-bottom: 7px;
+    }
+
+    .detailimage{
+        margin-top: -27px;
+    }
+
 }

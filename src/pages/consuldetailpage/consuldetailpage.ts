@@ -78,7 +78,7 @@ export class ConsuldetailpagePage {
   // lec cancel booked slot
   async cancelslot() {
     const alert = await this.alertCtrl.create({
-      title: 'Cancel booked Slot',
+      title: 'Cancel Appointment',
       message: 'Are you sure you want to cancel this slot?',
       inputs: [
         {
@@ -147,14 +147,14 @@ export class ConsuldetailpagePage {
 
   presentLoading() {
     const loading = this.loadingCtrl.create({
-      content: 'Please wait...',
+      content: 'Sending your request',
     });
 
     loading.present();
 
     setTimeout(() => {
       loading.dismiss();
-    }, 3000);
+    }, 2000);
   }
 
 }

@@ -33,19 +33,22 @@ export class UpcomingConLecProvider {
   // lec get feedback
   getfeedbackurl = '/iconsult/lecgetfeedback';
 
+  // user logout session
+  userlogoutsession = '/iconsult/close-session';
+
   constructor(public http: HttpClient,
               private cas: CasTicketProvider,
               private ws: WsApiProvider,
-) {
+  ) {
   }
 
   getUpcomingConLec(): Observable<FreeSlotsLec[]> {
     return this.ws.get<FreeSlotsLec[]>('/iconsult/freeslotslec', true, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'my-auth-token',
-    },
-  });
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'my-auth-token',
+      },
+    });
   }
 
   getDetailPage(id): Observable<ConDetail[]> {
@@ -58,7 +61,7 @@ export class UpcomingConLecProvider {
   }
 
   getUnavailrulesdetails(unavailibilityid): Observable<UnavailruleDet[]> {
-     return this.ws.get<UnavailruleDet[]>('/iconsult/get_unavailrule_details/' + unavailibilityid, true, {
+    return this.ws.get<UnavailruleDet[]>('/iconsult/get_unavailrule_details/' + unavailibilityid, true, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -67,7 +70,7 @@ export class UpcomingConLecProvider {
   }
 
   getallstarttimes(unavailibilityId): Observable<Starttimes[]> {
-      return this.ws.get<Starttimes[]>('/iconsult/get_all_starttime/' + unavailibilityId, true, {
+    return this.ws.get<Starttimes[]>('/iconsult/get_all_starttime/' + unavailibilityId, true, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -76,7 +79,7 @@ export class UpcomingConLecProvider {
   }
 
   cancelbookedslot(cancelbookedslots) {
-    return this.ws.post<any>(this.updatebookedsloturl,  {
+    return this.ws.post<any>(this.updatebookedsloturl, {
       body: cancelbookedslots,
       headers: {
         'Content-Type': 'application/json',
@@ -86,7 +89,7 @@ export class UpcomingConLecProvider {
   }
 
   disableunailrules(unavailibilityid, disableunavailslots) {
-        return this.ws.put<any>(this.unavailabilityRulesUpdate + '/' + unavailibilityid, {
+    return this.ws.put<any>(this.unavailabilityRulesUpdate + '/' + unavailibilityid, {
       body: disableunavailslots,
       headers: {
         'Content-Type': 'application/json',
@@ -95,7 +98,7 @@ export class UpcomingConLecProvider {
     });
   }
 
-  addlecFeedback(lecfeedback: { slotid: number; entry_datetime: string; feedback: string; }): Observable<any>  {
+  addlecFeedback(lecfeedback: { slotid: number; entry_datetime: string; feedback: string; }): Observable<any> {
     return this.ws.post<any>(this.feedbackurl, {
       body: lecfeedback,
       headers: {
@@ -106,7 +109,16 @@ export class UpcomingConLecProvider {
   }
 
   getfeedback(id): Observable<Feedback[]> {
-         return this.ws.get<Feedback[]>('/iconsult/lecgetfeedback/' + id, true, {
+    return this.ws.get<Feedback[]>('/iconsult/lecgetfeedback/' + id, true, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'my-auth-token',
+      },
+    });
+  }
+
+  usersessionlogout(): Observable<any> {
+    return this.ws.get('/iconsult/close-session', true, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
