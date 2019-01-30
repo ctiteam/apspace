@@ -80,6 +80,10 @@ page-bus-trip-info-modal {
   .h4Time {
     margin: 0px 8px 0 8px !important;
   }
+
+  .card-header {
+    overflow-x: scroll;
+  }
 }
 
 .busTrackingModal .modal-wrapper {
