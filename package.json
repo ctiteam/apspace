@@ -4,6 +4,9 @@
   "author": "CTI Team <cti@apiit.edu.my>",
   "homepage": "https://www.cti.my/",
   "license": "SEE LICENSE IN LICENSE",
+  "config": {
+    "ionic_copy": "./config/copy.config.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://bitbucket.org/ctiteam/apspace.git"
@@ -40,6 +43,7 @@
     "@ionic/storage": "^2.2.0",
     "angular-svg-round-progressbar": "~1.2.1",
     "angular2-chartjs": "^0.5.1",
+    "bootstrap": "^4.2.1",
     "cordova-android": "7.1.4",
     "cordova-ios": "4.5.5",
     "cordova-plugin-actionsheet": "^2.3.3",
