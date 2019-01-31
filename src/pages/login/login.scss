@@ -1,37 +1,33 @@
 page-login {
-  background-color: color($colors, light);
-
   .apu-logo {
     margin: auto;
     display: block;
     text-align: center;
   }
 
+  h1 {
+    font-family: "Bungee", cursive;
+    font-size: 2em;
+    letter-spacing: 2px;
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  form {
+    margin-top: 50px;
+  }
+
   button[ion-button] {
     display: inline-block;
     padding: 15px 32px;
-    margin: 4px 2px;
+    margin: 50px 2px 4px 2px;
     font-size: 18px;
     cursor: pointer;
     height: 2.5em;
     border-radius: 10px;
-    color: white;
-    background-color: color($colors, primary);
   }
 
   form > ion-item > ion-icon {
     margin: 0 0 0 8px !important;
-  }
-
-  h1 {
-    color: color($colors, text-color);
-    font-family: 'Bungee', cursive;
-    font-size: 2em;
-    letter-spacing: 2px;
-    text-align: center;
-
-    span {
-      color: color($colors, primary);
-    }
   }
 }
