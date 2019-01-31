@@ -1,9 +1,142 @@
 page-apcard {
-  ion-grid {
-    background-color: #f5f5f5;
+  .apcard-card-section {
+    margin-top: 20px;
+    .outter-circle {
+      padding: 28px;
+      border-radius: 7.5em;
+      overflow: hidden;
+      position: relative;
+      width: 200px;
+      height: 200px;
+      z-index: 500;
+      .inner-circle {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        width: 160px;
+        height: 160px;
 
-    ion-row {
-      margin: 0 8px;
+        &:before {
+          content: "";
+          position: relative;
+          display: block;
+          width: 300%;
+          height: 300%;
+          box-sizing: border-box;
+          margin-left: -100%;
+          margin-top: -100%;
+          border-radius: 240px; // ELEMENT WIDTH + 1/2 ELEMENT WIDTH
+          animation: pulse-ring 1.75s cubic-bezier(0.215, 0.61, 0.355, 1)
+            infinite;
+        }
+
+        &:after {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          display: block;
+          width: 100%;
+          height: 100%;
+          border-radius: 80px; // 1/2 FROM THE ELEMENT WIDTH
+          box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+          animation: pulse-dot 1.75s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s
+            infinite;
+        }
+        .balance {
+          font-size: 2.5rem;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          z-index: 900;
+          transform: translateX(-50%) translateY(-50%);
+        }
+      }
     }
+    .ball {
+      position: absolute;
+      border-radius: 100%;
+      opacity: 0.7;
+    }
+  }
+  .apcard-history-section {
+    .apcard-history-section-body {
+      .apcard-history-group {
+        .apcard-history-group-title {
+          padding: 12px 10px 12px 20px;
+          h3,
+          h2,
+          p {
+            margin: 0 !important;
+          }
+          .month {
+            margin-top: 3px !important;
+          }
+          .total-amount {
+            font-weight: bold;
+          }
+          .past {
+            padding: 3px;
+            margin-top: 0px;
+            .credit-amount,
+            .debit-amount {
+              p {
+                padding-top: 5px;
+                font-size: 1.2rem;
+              }
+            }
+          }
+        }
+        .apcard-history-group-messages {
+          padding: 10px 3px;
+          .apcard-history-record {
+            padding: 3px;
+            .icon-div {
+              padding: 0px;
+              font-size: 3rem;
+              line-height: 0.7;
+              padding-left: 15px;
+            }
+            .text-div {
+              .record-title {
+                font-size: 1.2rem !important;
+                font-weight: bold;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin: 0 !important;
+              }
+              p {
+                margin: 0 !important;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// ANIMATION KEY FRAMES
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.33);
+  }
+  80%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.8);
   }
 }

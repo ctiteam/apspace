@@ -1,50 +1,54 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
-
-import { Observable } from 'rxjs/Observable';
-import { finalize, map, tap } from 'rxjs/operators';
-
-import { Apcard } from '../../interfaces';
-import { WsApiProvider } from '../../providers';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger
+} from "@angular/animations";
+import { Component, ViewChild, ElementRef } from "@angular/core";
+import { IonicPage } from "ionic-angular";
+import { Observable } from "rxjs/Observable";
+import { finalize, map, tap } from "rxjs/operators";
+import { Apcard } from "../../interfaces";
+import { WsApiProvider, AppAnimationProvider } from "../../providers";
+import * as _ from "lodash";
 
 @IonicPage()
 @Component({
-  selector: 'page-apcard',
-  templateUrl: 'apcard.html',
+  selector: "page-apcard",
+  templateUrl: "apcard.html",
   animations: [
-    trigger('flyInOut', [
-      state('in', style({ transform: 'translateX(0)' })),
-      transition('void => *', [
-        style({ transform: 'translateX(-30%)' }),
-        animate(700),
+    trigger("flyInOut", [
+      state("in", style({ transform: "translateX(0)" })),
+      transition("void => *", [
+        style({ transform: "translateX(-30%)" }),
+        animate(700)
       ]),
-      transition('* => void', [
-        animate(700, style({ transform: 'translateX(30%)' })),
-      ]),
-    ]),
-  ],
+      transition("* => void", [
+        animate(700, style({ transform: "translateX(30%)" }))
+      ])
+    ])
+  ]
 })
-
 export class ApcardPage {
+  @ViewChild("apcardBalanceBackground") balanceBackgroundElement: ElementRef;
+
   transaction$: Observable<Apcard[]>;
-  filterEntry: string = '';
+  objectKeys = Object.keys; // USED FOR GROUPING TRANSACTIONS PER MONTH
+  filterEntry: string = "";
   balance: number;
   monthly: number;
-
-  type = 'line';
-  data: any;
-  options = {
-    responsive: true,
-    maintainAspectRatio: false,
-  };
+  monthlyTransactions: any;
+  monthlyData: any;
+  transactionsGroupedByDate: any;
 
   numOfSkeletons = new Array(5);
   isLoading: boolean;
 
   constructor(
     private ws: WsApiProvider,
-  ) { }
+    private appAnimationProvider: AppAnimationProvider,
+  ) {}
 
   /** Analyze transactions. */
   analyzeTransactions(transactions: Apcard[]) {
@@ -56,46 +60,39 @@ export class ApcardPage {
 
     const now = new Date();
     const a = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    const monthlyData = transactions.reduce((tt, t) => {
-      const c = t.SpendVal > 0 ? 'dr' : 'cr'; // classify spent type
-      const d = new Date(t.SpendDate);
+    this.monthlyData = transactions.reduce(
+      (tt, t) => {
+        const c = t.SpendVal > 0 ? "dr" : "cr"; // classify spent type
+        const d = new Date(t.SpendDate);
+        d.getFullYear() in tt[c] || (tt[c][d.getFullYear()] = a.slice());
+        tt[c][d.getFullYear()][d.getMonth()] += Math.abs(t.SpendVal);
 
-      d.getFullYear() in tt[c] || (tt[c][d.getFullYear()] = a.slice());
-      tt[c][d.getFullYear()][d.getMonth()] += Math.abs(t.SpendVal);
+        return tt;
+        // default array with current year
+      },
+      {
+        dr: { [now.getFullYear()]: a.slice() },
+        cr: { [now.getFullYear()]: a.slice() }
+      }
+    );
 
-      return tt;
-      // default array with current year
-    }, { dr: { [now.getFullYear()]: a.slice() }, cr: { [now.getFullYear()]: a.slice() } });
-
-    // plot graph
-    this.data = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      datasets: [
-        {
-          label: 'Monthly Credit',
-          data: monthlyData.cr[now.getFullYear()],
-          borderColor: 'rgba(0, 200, 83, .5)',
-          backgroundColor: 'rgba(0, 200, 83, .5)',
-          fill: false,
-        },
-        {
-          label: 'Monthly Debit',
-          data: monthlyData.dr[now.getFullYear()],
-          borderColor: 'rgba(230, 0, 0, .5)',
-          backgroundColor: 'rgba(230, 0, 0, .5)',
-          fill: false,
-        },
-      ],
-    };
-
+    this.transactionsGroupedByDate = _.mapValues(
+      _.groupBy(transactions, item => {
+        return (
+          new Date(item.SpendDate).getMonth() +
+          ", " +
+          new Date(item.SpendDate).getFullYear()
+        );
+      })
+    );
     // reverse monthlyData last year
-    this.monthly = monthlyData.dr[now.getFullYear()][now.getMonth()];
+    this.monthly = this.monthlyData.dr[now.getFullYear()][now.getMonth()];
   }
 
   /** Negate spend value for top ups. */
   signTransactions(transactions: Apcard[]): Apcard[] {
     transactions.forEach(transaction => {
-      if (transaction.ItemName === 'Top Up') {
+      if (transaction.ItemName === "Top Up") {
         transaction.SpendVal *= -1;
       }
     });
@@ -104,15 +101,18 @@ export class ApcardPage {
 
   doRefresh(refresher?) {
     this.isLoading = true;
-    this.transaction$ = this.ws.get<Apcard[]>('/apcard/', true).pipe(
+    this.transaction$ = this.ws.get<Apcard[]>("/apcard/", true).pipe(
       map(t => this.signTransactions(t)),
       tap(t => this.analyzeTransactions(t)),
       finalize(() => refresher && refresher.complete()),
-      finalize(() => this.isLoading = false),
+      finalize(() => (this.isLoading = false))
     );
   }
 
   ionViewDidLoad() {
     this.doRefresh();
+    this.appAnimationProvider.animateBalanceBackground(
+      this.balanceBackgroundElement
+    );
   }
 }
