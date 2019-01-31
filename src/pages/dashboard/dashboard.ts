@@ -199,13 +199,16 @@ export class DashboardPage {
     );
   }
 
+  // START FEES & OUTSTANDING METHODS
   getOverdueFee() {
     return this.ws.get<FeesTotalSummary[]>(
       "/student/summary_overall_fee",
       true
     );
   }
+  // END FEES & OUTSTANDING METHODS
 
+  // GPA METHODS
   getGPA() {
     this.ws
       .get<Course[]>("/student/courses")
@@ -277,7 +280,9 @@ export class DashboardPage {
         };
       });
   }
+  // END OF GPA METHODS 
 
+  // START ATTENDANCE METHODS
   getAttendance(intake: string) {
     const url = `/student/attendance?intake=${intake}`;
     this.attendance$ = this.ws.get<Attendance[]>(url, true).pipe(
@@ -303,6 +308,7 @@ export class DashboardPage {
         map(aa => aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100)
       );
   }
+  // END ATTENDANCE METHODS
 
   // START HEADER METHODS
   capitalizeString(text: string) {
