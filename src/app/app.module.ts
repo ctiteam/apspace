@@ -22,6 +22,8 @@ import {
   RequestCache, RequestCacheWithMapStorage, SettingsProvider, SlotsProvider,
   UpcomingConLecProvider, UpcomingConStuProvider, UserserviceProvider,
   WsApiProvider,
+  UserSettingsProvider,
+  AppAnimationProvider,
 } from '../providers';
 import { MyApp } from './app.component';
 
@@ -59,6 +61,8 @@ import { MyApp } from './app.component';
     UserserviceProvider,
     UpcomingConLecProvider,
     UpcomingConStuProvider,
+    AppAnimationProvider,
+    UserSettingsProvider
   ],
   entryComponents: [MyApp],
   bootstrap: [IonicApp],

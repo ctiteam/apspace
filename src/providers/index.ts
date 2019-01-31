@@ -20,3 +20,5 @@ export { UpcomingConLecProvider } from './upcoming-con-lec';
 export { UpcomingConStuProvider } from './upcoming-con-stu';
 export { UserserviceProvider } from './userservice';
 export { WsApiProvider } from './ws-api';
+export { UserSettingsProvider } from './user-settings';
+export { AppAnimationProvider } from './app-animation';

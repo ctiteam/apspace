@@ -1,3 +1,4 @@
+// ***************** START OLD STYLES (TO BE REMOVED) ******
 .side-menu-item {
   background: none;
   color: color($colors, text-color);
@@ -35,4 +36,146 @@
 body {
   padding-top: constant(safe-area-inset-top); //for iOS 11.2
   padding-top: env(safe-area-inset-top); //for iOS 11.1
+}
+// ***************** END OLD STYLES (TO BE REMOVED) ******
+// NEW STYLES
+
+// GLOBAL STYLING
+.menu-button {
+  margin: 0 !important;
+}
+.main-content {
+  z-index: 3;
+
+  .main-content {
+    // USED WITH THE ANIMATION
+    transform: translateY(100px);
+    opacity: 0.2;
+  }
+  .section {
+    border-width: 5px 1px 1px 1px;
+    border-style: solid;
+    border-radius: 5px;
+    // z-index: 3;
+    margin-top: 8px;
+    margin-bottom: 25px;
+    .section-header {
+      .section-header-icon {
+        position: relative;
+        top: 8px;
+        right: 15px;
+        width: 50px;
+        float: right;
+        border-radius: 44px;
+        padding: 5px;
+        text-align: center;
+        ion-icon {
+          font-size: 2.5em;
+        }
+      }
+      .section-header-text {
+        h3 {
+          font-size: 1.5em;
+          padding: 12px 0px 12px 12px;
+          line-height: 1.7;
+          margin-bottom: 0px !important;
+        }
+      }
+    }
+    .section-body {
+      min-height: 60px;
+      padding: 6px;
+      .section-body-header {
+        padding: 0px 7px 2px 0px;
+        h4 {
+          font-weight: bolder;
+          font-size: 1.3rem;
+          padding: 0px 0px 10px 10px;
+          span {
+            font-weight: normal !important;
+            font-size: 1.1rem !important;
+          }
+        }
+      }
+      .section-body-content {
+        padding: 0px 0px 10px 10px;
+        ion-icon {
+          font-size: 1.5em;
+          padding-right: 0 !important;
+        }
+        .content-item-with-icon {
+          ion-icon {
+          }
+          .item-info-text {
+            padding-left: 0;
+            p {
+              font-size: 1em;
+              ion-icon {
+                font-size: 1em !important;
+              }
+            }
+          }
+          .item-info-text-not-bold {
+            padding-left: 0;
+          }
+        }
+      }
+    }
+  }
+}
+.searchbar .searchbar-input,
+.searchbar-md .searchbar-input {
+  box-shadow: none !important;
+}
+// OVERRIDING THE CHARTIST STYLES:
+.no-padding {
+  padding: 0 !important;
+}
+
+.no-padding-left {
+  padding-left: 0px !important;
+}
+
+/* Hide ion-content scrollbar */
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/*  NOTE:
+      THIS IS THE SECTION USED FOR ADDING ANIMATION FOR DISPLAYING THE PAGE ELEMENTS FROM LEFT AND RIGHT
+  TO REMOVE IT:
+      REMOVE THIS ENTIRE CSS SECTION FROM 'START' TO 'END' AS WELL AS REMOVE THE FOLLOWING METHODS FROM THE TS FILE:
+          1. isElementInViewport(EL)
+          2. showElementsWithAnimation() */
+
+// START
+.main-section {
+  opacity: 0.2;
+  transform: translateY(100px);
+}
+
+@keyframes come-in {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// END
+
+// OVERRIDING BOOTSTRAP
+a:hover {
+  text-decoration: none !important;
+  opacity: 1 !important;
+}
+
+// OVERRIDE IONIC ION-SELECT
+ion-select {
+  max-width: 95% !important;
+}
+
+.popover-md .popover-content,
+.popover-ios .popover-content {
+  width: 90% !important;
 }
