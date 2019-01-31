@@ -46,6 +46,7 @@ import {
 export class DashboardPage {
   @ViewChild(Content) content: Content;
 
+  // OBSERVABLES
   attendance$: Observable<Attendance[]>;
   attendancePercent$: Observable<number>;
   courseDetails$: Observable<CourseDetails>;
@@ -58,12 +59,14 @@ export class DashboardPage {
   visa$: Observable<any>;
   apcardTransaction$: Observable<Apcard[]>;
 
+  // LOADING VARS
   numOfSkeletons = new Array(2);
 
+  // ATTENDANCE VARS 
   overallAttendance: number;
-  subjectCode: string;
-  percent: number;
   subject: string;
+  
+  // VISA VARS 
   local: boolean = false;
 
   // HEADER VARS
@@ -156,9 +159,8 @@ export class DashboardPage {
   openPage(page: string) {
     this.app.getRootNav().push(page);
   }
-  // END OF GENERAL METHODS
 
-  // START OF HOLIDAYS METHODS
+  // HOLIDAYS METHODS
   getHolidays(refresh: boolean) {
     const now = new Date();
     return this.ws
@@ -172,6 +174,7 @@ export class DashboardPage {
       );
   }
 
+  // UPCOMING EXAMS METHODS
   getUpcomingExam(intake: string) {
     const opt = { auth: false };
     this.exam$ = this.ws.get<ExamSchedule[]>(
@@ -181,32 +184,18 @@ export class DashboardPage {
     );
   }
 
+  // VISA METHODS
   getVisaStatus() {
     return this.ws.get<any>("/student/visa_status");
   }
 
-  /** Convert string to color with djb2 hash function. */
-  strToColor(str: string): string {
-    let hash = 5381;
-    for (let i = 0; i < str.length; i++) {
-      hash = (hash << 5) + hash + str.charCodeAt(i); /* hash * 33 + c */
-    }
-    return (
-      "#" +
-      [16, 8, 0]
-        .map(i => ("0" + ((hash >> i) & 0xff).toString(16)).substr(-2))
-        .join("")
-    );
-  }
-
-  // START FEES & OUTSTANDING METHODS
+  // FEES & OUTSTANDING METHODS
   getOverdueFee() {
     return this.ws.get<FeesTotalSummary[]>(
       "/student/summary_overall_fee",
       true
     );
   }
-  // END FEES & OUTSTANDING METHODS
 
   // GPA METHODS
   getGPA() {
@@ -280,9 +269,8 @@ export class DashboardPage {
         };
       });
   }
-  // END OF GPA METHODS 
 
-  // START ATTENDANCE METHODS
+  // ATTENDANCE METHODS
   getAttendance(intake: string) {
     const url = `/student/attendance?intake=${intake}`;
     this.attendance$ = this.ws.get<Attendance[]>(url, true).pipe(
@@ -308,9 +296,8 @@ export class DashboardPage {
         map(aa => aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100)
       );
   }
-  // END ATTENDANCE METHODS
 
-  // START HEADER METHODS
+  // HEADER METHODS
   capitalizeString(text: string) {
     let capitalizedString =
       text.charAt(0).toUpperCase() + text.toLowerCase().slice(1);
@@ -352,9 +339,8 @@ export class DashboardPage {
       )
       .subscribe();
   }
-  // END HEADER METHODS
 
-  // START APCARD TRANSACTIONS & BALANCE METHODS
+  // APCARD TRANSACTIONS & BALANCE METHODS
   getAPCardBalance() {
     return this.ws
       .get<Apcard>("/apcard/", true)
@@ -435,7 +421,6 @@ export class DashboardPage {
     });
     return transactions;
   }
-  // END APCARD TRANSACTIONS METHODS
 
   // NOTIFICATIONS METHODS
   getBadge() {
@@ -443,5 +428,4 @@ export class DashboardPage {
       this.badge = res.num_of_unread_msgs;
     });
   }
-  // END NOTIFICATIONS METHODS
 }
