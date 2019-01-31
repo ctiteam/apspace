@@ -14,6 +14,17 @@ $app-direction: ltr;
 
 @import "ionic.globals";
 
+// Themes
+@import "../theme/theme.dark";
+@import "../theme/theme.light";
+
+// Color Schemes
+@import "../theme/color.blue.scss";
+@import "../theme/color.green.scss";
+@import "../theme/color.orange.scss";
+@import "../theme/color.pink.scss";
+@import "../theme/color.grey.scss";
+
 
 // Shared Variables
 // --------------------------------------------------

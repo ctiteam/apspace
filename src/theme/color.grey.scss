@@ -1,0 +1,358 @@
+$primary_color: #7f8c8d;
+
+.grey-color-scheme {
+  // GENERAL STYLES (USED IN DIFFERENT PAGES)
+  .main-content .section {
+    border-color: $primary_color;
+  }
+  .main-content .section .section-header {
+    color: $primary_color;
+  }
+  .tabs .tab-button[aria-selected="true"],
+  .tabs .tab-button[aria-selected="true"] .tab-button-icon {
+    color: $primary_color;
+  }
+  .item-md.activeItem,
+  .item-ios.activeItem {
+    background-color: $primary_color;
+  }
+  .dark-theme .quick-access-item {
+    background-image: radial-gradient(
+      circle,
+      #141010,
+      #191717,
+      #1e1d1e,
+      #232323,
+      #292929
+    );
+    box-shadow: 1px 1px 1px #292929, -1px -1px 1px #292929;
+  }
+  .light-theme .quick-access-item {
+    box-shadow: 1px 1px 1px $primary_color, -1px -1px 1px $primary_color;
+    background-color: $primary_color;
+  }
+  .notification-button.colored-border {
+    border-color: $primary_color !important;
+  }
+  .notification-button,
+  .notification-button ion-icon,
+  .menu-button ion-icon {
+    color: $primary_color !important;
+  }
+  // END OF GENERAL STYLES
+
+  // SETTINGS PAGE
+  page-settings {
+    // STYLING THE ACTIVE RADIO BUTTONS
+    .item-radio-checked ion-label {
+      color: $primary_color !important;
+    }
+    .radio-md .radio-checked .radio-inner {
+      background-color: $primary_color;
+    }
+    .radio-md .radio-icon.radio-checked {
+      border-color: $primary_color;
+    }
+    .radio-ios .radio-checked .radio-inner {
+      border-color: $primary_color;
+    }
+  }
+
+  // PROFILE PAGE
+  page-profile {
+    .profile-info-section .profile-div img {
+      box-shadow: 2px 2px 9px $primary_color, -2px -2px 9px $primary_color;
+    }
+
+    .profile-info-section .info-div h1 {
+      color: $primary_color;
+    }
+  }
+
+  // LOGIN PAGE
+  page-login {
+    h1 {
+      span {
+        color: $primary_color;
+      }
+    }
+    form {
+      .item-md,
+      .item-ios {
+        ion-icon {
+          color: $primary_color;
+        }
+        button {
+          background-color: $primary_color;
+        }
+        &.item-input-has-focus {
+          .item-inner {
+            border-bottom: $primary_color;
+            box-shadow: inset 0 -1px 0 0 $primary_color;
+          }
+        }
+      }
+      button {
+        background-color: $primary_color;
+      }
+    }
+  }
+
+  // APCARD PAGE
+  page-apcard {
+    .apcard-card-section .outter-circle .inner-circle {
+      color: $primary_color;
+      &:before {
+        background-color: $primary_color;
+      }
+      // box-shadow: 1px 1px 5px $primary_color, -1px -1px 5px $primary_color,
+      //   2px 2px 20px $primary_color, -2px -2px 20px $primary_color;
+    }
+    .apcard-history-section
+      .apcard-history-section-body
+      .apcard-history-group
+      .apcard-history-group-title {
+      border-left: 4px solid $primary_color;
+      .month {
+        color: $primary_color;
+      }
+    }
+  }
+
+  // STUDENTS DASHBOARD PAGE
+  page-dashboard {
+    .profile .notification .notification-wrapper {
+      border: 1px solid $primary_color;
+      color: $primary_color;
+    }
+    .profile .info .greeting-message {
+      color: $primary_color;
+    }
+    .financials-section .section-body .bar-left-info {
+      color: $primary_color !important;
+    }
+  }
+
+  // STUDENTS ATTENDANCE PAGE
+  page-attendance {
+    .cover {
+      #waveShape {
+        fill: $primary_color;
+      }
+    }
+  }
+
+  // FEEDBACK PAGE
+  page-feedback {
+    ion-label.label {
+      color: $primary_color;
+    }
+    .submit-button {
+      background-color: $primary_color;
+    }
+    .input-has-focus {
+      .label {
+        color: $primary_color;
+      }
+    }
+    .item-input.input-has-focus {
+      .item-inner {
+        border-bottom-color: $primary_color;
+        box-shadow: inset 0 -1px 0 0 $primary_color;
+      }
+    }
+  }
+
+  // HOLIDAYS PAGE
+  page-holidays {
+    .holidays-section {
+      .holiday-item {
+        .holiday-date {
+          background-color: $primary_color;
+        }
+      }
+    }
+  }
+
+  // EXAM SCHEDULE PAGE
+  page-exam-schedule {
+    .card {
+      ion-card-header {
+        color: $primary_color;
+      }
+    }
+  }
+
+  // NEWS PAGE
+  page-news {
+    ion-card {
+      box-shadow: -1px -1px 3px $primary_color;
+    }
+  }
+
+  // NEWS MODAL
+  page-news-modal {
+    .main-content {
+      h3 {
+        color: $primary_color;
+      }
+    }
+  }
+
+  // STAFF DIRECTORY INFORMATION PAGE
+  page-staff-directory-info {
+    .cover-page {
+      box-shadow: 0 0 6px 1px $primary_color;
+    }
+    .info-items {
+      .staff-directory-info-header {
+        img {
+          box-shadow: 0 0 6px 2px $primary_color, 0 0 2px 1px $primary_color;
+        }
+      }
+      .info-item {
+        h2 {
+          text-shadow: 1px 1px 1px $primary_color;
+        }
+        button.btn-outline-dark {
+          border-color: $primary_color;
+          color: $primary_color;
+          &:hover {
+            background-color: $primary_color;
+            border-color: transparent;
+          }
+        }
+        a h3 {
+          color: $primary_color;
+          &:hover {
+            color: $primary_color;
+          }
+        }
+      }
+    }
+  }
+
+  // LECTURER TIMETABLE COMPONENT
+  lecturer-timetable {
+    .schedule-week {
+      .schedule-week-head {
+        color: $primary_color;
+      }
+      .schedule-day {
+        .schedule-day-head {
+          background-color: $primary_color;
+        }
+        .schedule-day-body {
+          .event {
+            border: 1px solid $primary_color;
+          }
+        }
+      }
+    }
+  }
+
+  // FEES PAGE
+  page-fees {
+    ion-card {
+      h4 {
+        color: $primary_color;
+      }
+      ion-list-header {
+        border-color: $primary_color !important;
+
+        ion-label {
+          color: $primary_color;
+        }
+      }
+    }
+  }
+
+  // RESULTS PAGE
+  page-results {
+    ion-card {
+      ion-list {
+        ion-item {
+          &.summary {
+            background-color: $primary_color !important;
+          }
+          &.subj-title {
+            color: $primary_color;
+          }
+        }
+      }
+    }
+  }
+
+  // STUDENTS TIMETABLE PAGE
+  page-timetable {
+    ion-card {
+      ion-card-header {
+        h2 {
+          text-shadow: 0.1px 0.1px 0.1px $primary_color,
+            0.1px 0.1px 0.1px $primary_color;
+        }
+        p {
+          color: $primary_color !important;
+        }
+      }
+    }
+  }
+
+  // NOTIFICATION MODAL
+  page-notification-modal {
+    #mail-icon {
+      color: $primary_color !important;
+    }
+    h2 {
+      text-shadow: 0.1px 0.1px 0.1px $primary_color,
+      0.1px 0.1px 0.1px $primary_color !important;
+    }
+  }
+
+  // OVERRIDE BOOTSTRAP COLORS
+  .bg-success {
+    background-color: $primary_color !important;
+  }
+
+  // OVERRIDING THE IONIC SEGMENTS DESIGN (ALL PAGES)
+  .segment-ios .segment-button {
+    border-color: $primary_color;
+    color: $primary_color;
+  }
+
+  .segment-md .segment-button.activated,
+  .segment-md .segment-button.segment-activated {
+    border-color: $primary_color;
+    color: $primary_color;
+  }
+  .segment-ios .segment-button.activated,
+  .segment-ios .segment-button.segment-activated {
+    border-color: $primary_color;
+    background-color: $primary_color;
+  }
+
+  // .notifications-section
+  //   .notifications-section-body
+  //   .notification-group
+  //   .notification-group-messages
+  //   .notification.unread {
+  //   color: $primary_color;
+  // }
+
+  // .nav-pills .nav-link.active,
+  // .nav-pills .show > .nav-link {
+  //   background-color: $primary_color;
+  // }
+
+  // .nav-pills .nav-link {
+  //   color: $primary_color;
+  // }
+
+  // .main-content .section .low-attendance-pills .col-12 {
+  //   border-top: 2px solid $primary_color;
+  // }
+
+  // .side-menu-item.activated {
+  //   background: $primary_color;
+  // }
+}
