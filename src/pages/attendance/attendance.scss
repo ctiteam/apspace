@@ -58,16 +58,16 @@ page-attendance {
     padding-top: 10px;
     height: 200px;
     width: 100%;
-    background: rgb(77, 169, 255);
-    background: linear-gradient(150deg, rgba(77, 169, 255, 1) 0%, rgba(148, 233, 186, 1) 100%);
+    margin-bottom: -7px;
+    overflow: hidden;
   }
 
-  .circle-progress{
+  .circle-progress {
     display: block;
     margin: auto;
   }
 
-  .current{
+  .current {
     position: absolute;
     color: color($colors, light);
     font-weight: 100;
@@ -90,4 +90,89 @@ page-attendance {
     stroke: #444;
     fill: #222;
   }
+
+  // UPPER PART - TOTAL OVERALL ATTENDANCE (ANIMATIONS)
+  #widget-value {
+    font-size: 2.6em;
+    // color: #fff;
+    font-weight: 600;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    position: absolute;
+    top: 69px;
+  }
+
+  #widget-content {
+    width: 150px;
+    height: 150px;
+    border-radius: 200px;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    overflow: hidden;
+  }
+
+  // START WAVES' STYLES
+  .fill {
+    animation-name: fillAction;
+    animation-timing-function: cubic-bezier(0.2, 0.6, 0.8, 0.4);
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+  }
+  #waveShape {
+    animation-name: waveAction;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-duration: 1.7s;
+    width: 100%;
+    height: 100%;
+  }
+  @keyframes fillAction {
+    0% {
+      transform: translate(0, 90px);
+    }
+    100% {
+      transform: translate(0, 0px);
+    }
+  }
+  @keyframes waveAction {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(-120px, 0);
+    }
+  }
+  // END WAVES' STYLES
+
+  // START BLUR CLASS
+  .blur {
+    overflow: hidden;
+    position: absolute;
+    height: 200px;
+    top: 0;
+    left: 0px;
+    right: -50px;
+    bottom: -50px;
+    width: 100%;
+    opacity: 0.9;
+  }
+
+  .blur:after {
+    content: "";
+    // -webkit-filter: blur(60px);
+    // -moz-filter: blur(60px);
+    // -ms-filter: blur(60px);
+    // filter: blur(60px);
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    border-radius: 100%;
+    width: 150px;
+    height: 150px;
+    transform: translateX(-50%);
+  }
+  // END BLUR CLASS
 }

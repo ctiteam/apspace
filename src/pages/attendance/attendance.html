@@ -1,8 +1,16 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <ion-title *ngIf="courses$ | async">{{this.selectedIntake || 'Attendance'}}</ion-title>
+<ion-header no-border>
+  <ion-navbar>
+    <ion-title *ngIf="(courses$ | async)">{{
+      this.selectedIntake || "Attendance"
+    }}</ion-title>
     <ion-buttons end>
-      <button color="light" ion-button outline small (click)="showActionSheet()">
+      <button
+        ion-button
+        outline
+        small
+        class="notification-button colored-border"
+        (click)="showActionSheet()"
+      >
         Intakes
       </button>
     </ion-buttons>
@@ -11,32 +19,100 @@
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="refresh">
-    </ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
+  <!-- START COVER -->
   <div class="cover">
-    <ion-label class="current"><b>{{ average | percent }}</b></ion-label>
-    <round-progress class="circle-progress" [current]="average" max="1" [radius]="90"
-      [rounded]="true" [color]="average != 0 ? average >= .8 ? '#0dbd53' : '#f04141' : '#d7d8da'"
-      background="#d7d8da" stroke="15"></round-progress>
-  </div>
+    <!-- START BACKGROUND WAVES -->
+    <div class="fill" [style.animation-iteration-count]="average">
+      <svg width="200%" height="500px" viewBox="0 0 240 140" version="1.1">
+        <defs>
+          <linearGradient
+            x1="50%"
+            y1="0%"
+            x2="50%"
+            y2="100%"
+            id="linearGradient-1"
+          >
+            <stop stop-color="#4B96E2" offset="0%"></stop>
+            <stop stop-color="#235496" offset="50%"></stop>
+          </linearGradient>
+        </defs>
+        <g
+          id="Page-1"
+          stroke="none"
+          stroke-width="1"
+          fill="none"
+          fill-rule="evenodd"
+        >
+          <g id="widget-copy-2" fill="url(#linearGradient-1)">
+            <g id="wave-copy" transform="translate(0.000000, 1.000000)">
+              <path
+                d="M0,140 L0,2.59259259 C0,2.6670255 28.08,-4.12156133 66,3.88888889 C83.6331044,8.10263543 102,6.61060503 120,2.59259259 L120,140 L0,140 Z M120,140 L120,2.59259259 C120,2.6670255 148.08,-4.12156133 186,3.88888889 C203.633104,8.10263543 222,6.61060503 240,2.59259259 L240,140 L120,140 Z"
+                id="waveShape"
+              ></path>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <!-- END BACKGROUND WAVES -->
 
-  <ng-template let-attendances [ngIf]='attendance$ | async' [ngIfElse]='loadAttendance'>
+    <!-- START BLUR LAYER (OVERLAY) -->
+    <div class="blur"></div>
+    <!-- END BLUR LAYER (OVERLAY) -->
+
+    <!-- START CIRCLE -->
+    <div class="circle text-center" id="widget-content"></div>
+    <!-- END CIRCLE -->
+
+    <!-- START TEXT -->
+    <div id="widget-value">{{ average | percent }}</div>
+    <!-- END TEXT -->
+  </div>
+  <!-- END COVER -->
+
+  <ng-template
+    let-attendances
+    [ngIf]="attendance$ | async"
+    [ngIfElse]="loadAttendance"
+  >
     <ion-card margin-bottom *ngFor="let a of attendances">
       <ion-item color="light-shade" class="subj-title">
         {{ a.MODULE_ATTENDANCE }}
       </ion-item>
-      <div class="progress-bar" [style.width]="a.PERCENTAGE + '%'" [style.background]="(a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100) ? '#0dbd53' : '#f04141'"></div>
+      <div
+        class="progress-bar"
+        [style.width]="a.PERCENTAGE + '%'"
+        [style.background]="
+          a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100 ? '#0dbd53' : '#f04141'
+        "
+      ></div>
       <ion-item class="transparent">
         Classes
         <div item-content>
-          {{ (a.TOTAL_CLASSES - a.TOTAL_ABSENT) + '/' + a.TOTAL_CLASSES + ' (' + a.PERCENTAGE + '%)' }}
+          {{
+            a.TOTAL_CLASSES -
+              a.TOTAL_ABSENT +
+              "/" +
+              a.TOTAL_CLASSES +
+              " (" +
+              a.PERCENTAGE +
+              "%)"
+          }}
         </div>
       </ion-item>
       <ion-item class="transparent">
         Exam Eligibility
-        <div item-content [style.font-weight]="'bold'" [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'">{{
-          a.EXAM_ELIGIBILITY }}</div>
+        <div
+          item-content
+          [style.font-weight]="'bold'"
+          [style.color]="
+            a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'
+          "
+        >
+          {{ a.EXAM_ELIGIBILITY }}
+        </div>
       </ion-item>
     </ion-card>
   </ng-template>
@@ -48,11 +124,9 @@
     </ion-card>
   </ng-template>
 
-  <ng-template let-legend [ngIf]='legend$ | async' [ngIfElse]='loadLegend'>
-    <ion-card color="warn">
-      <ion-card-header>
-        <h2>Legend</h2>
-      </ion-card-header>
+  <ng-template let-legend [ngIf]="legend$ | async" [ngIfElse]="loadLegend">
+    <ion-card class="legend">
+      <ion-card-header> <h2>Legend</h2> </ion-card-header>
       <ion-card-content>
         <ion-row *ngFor="let l of objectKeys(legend)">
           <ion-col col-3>{{ l }}</ion-col>
