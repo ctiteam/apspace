@@ -1,5 +1,18 @@
-  <ion-tabs selectedIndex="0">
-    <ion-tab *ngFor='let t of tabs' [tabTitle]='t.title' [tabIcon]='t.icon' [tabBadge]='t.badge' [root]='t.root' height='10'></ion-tab>
-    <ion-tab *ngIf='morePages' [tabTitle]='morePages.title' [tabIcon]='morePages.icon' [tabBadge]='badge' tabBadgeStyle='danger' [root]='morePages.root' height='10'></ion-tab>
-  </ion-tabs>
-
+<ion-tabs selectedIndex="0">
+  <ion-tab
+    *ngFor="let t of tabs"
+    [tabTitle]="t.title"
+    [tabIcon]="t.icon"
+    [tabBadge]="t.badge"
+    [root]="t.root"
+    height="10"
+  ></ion-tab>
+  <ion-tab
+    *ngIf="morePages"
+    [tabTitle]="morePages.title"
+    [tabIcon]="morePages.icon"
+    tabBadgeStyle="danger"
+    [root]="morePages.root"
+    height="10"
+  ></ion-tab>
+</ion-tabs>

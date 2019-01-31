@@ -40,8 +40,6 @@ export class TabsPage {
   exit = false;
   back = null;
 
-  badge: string;
-
   constructor(
     public alertCtrl: AlertController,
     public app: App,
@@ -49,7 +47,6 @@ export class TabsPage {
     public fcm: FCM,
     public navCtrl: NavController,
     public navParams: NavParams,
-    public notification: NotificationProvider,
     public settings: SettingsProvider,
     public statusBar: StatusBar,
     public toastCtrl: ToastController,
@@ -58,10 +55,6 @@ export class TabsPage {
 
     const role = this.settings.get('role');
     this.tabs = this.pages.filter(page => page.role & role).slice(0, 5);
-
-    this.events.subscribe('newNotification', () => {
-      this.getBadge();
-    });
 
     this.plt.ready().then(() => {
       if (this.plt.is('cordova')) {
@@ -93,18 +86,6 @@ export class TabsPage {
           }
         });
       }
-    });
-  }
-
-  ionViewWillEnter() {
-    if (this.plt.is('cordova')) {
-      this.getBadge();
-    }
-  }
-
-  getBadge() {
-    this.notification.getMessage().subscribe(res => {
-      this.badge = res.num_of_unread_msgs;
     });
   }
 }

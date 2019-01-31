@@ -1,21 +1,50 @@
-import { Component } from '@angular/core';
-import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild, ElementRef } from "@angular/core";
+import {
+  App,
+  IonicPage,
+  NavController,
+  NavParams,
+  Content,
+  Events,
+  Platform
+} from "ionic-angular";
 
-import { Observable } from 'rxjs/Observable';
-import { concatMap, finalize, flatMap, map, share, tap, toArray } from 'rxjs/operators';
+import { Observable } from "rxjs/Observable";
+import {
+  concatMap,
+  finalize,
+  flatMap,
+  map,
+  share,
+  tap,
+  toArray
+} from "rxjs/operators";
 
 import {
-  Apcard, Attendance, Course, CourseDetails, ExamSchedule, FeesTotalSummary,
-  Holiday, Holidays, StudentProfile,
-} from '../../interfaces';
-import { SettingsProvider, WsApiProvider } from '../../providers';
+  Apcard,
+  Attendance,
+  Course,
+  CourseDetails,
+  ExamSchedule,
+  FeesTotalSummary,
+  Holiday,
+  Holidays,
+  StudentProfile
+} from "../../interfaces";
+import {
+  SettingsProvider,
+  WsApiProvider,
+  AppAnimationProvider,
+  NotificationProvider
+} from "../../providers";
 
 @IonicPage()
 @Component({
-  selector: 'page-dashboard',
-  templateUrl: 'dashboard.html',
+  selector: "page-dashboard",
+  templateUrl: "dashboard.html"
 })
 export class DashboardPage {
+  @ViewChild(Content) content: Content;
 
   attendance$: Observable<Attendance[]>;
   attendancePercent$: Observable<number>;
@@ -27,224 +56,386 @@ export class DashboardPage {
   profile$: Observable<StudentProfile>;
   transaction$: Observable<Apcard>;
   visa$: Observable<any>;
+  apcardTransaction$: Observable<Apcard[]>;
 
   numOfSkeletons = new Array(2);
 
-  type = ['pie', 'horizontalBar'];
-  pieChartData: any;
-  barChartData: any;
-  totalClasses: number;
   overallAttendance: number;
   subjectCode: string;
   percent: number;
   subject: string;
-  block: boolean = false;
   local: boolean = false;
 
+  // HEADER VARS
+  greetingMessage = "";
+  badge: string;
+
+  // APCARD TRANSACTIONS VARS
+  monthlyData: any;
+  monthly: number;
+  apcardChartData: any;
+  balance: number;
+
+  // GPA PER INTAKE VARS
+  barChartData: any;
+  block: boolean = false;
+
+  // CHARTS OPTIONS AND TYPES VARS
+  type = ["horizontalBar", "line"];
   options = [
     {
       legend: {
         display: true,
-        position: 'right',
-      },
+        position: "right"
+      }
     },
     {
       legend: {
-        display: false,
+        display: false
       },
       scales: {
-        xAxes: [{
-          ticks: {
-            beginAtZero: true,
-            max: 4,
-          },
-        }],
-      },
-    },
+        xAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+              max: 4
+            }
+          }
+        ]
+      }
+    }
   ];
 
+  // GENERAL METHODS
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public app: App,
     public ws: WsApiProvider,
     public settings: SettingsProvider,
-  ) { }
+    private appAnimationProvider: AppAnimationProvider,
+    private elRef: ElementRef,
+    public events: Events,
+    public notification: NotificationProvider,
+    private plt: Platform
+  ) {
+    this.events.subscribe("newNotification", () => {
+      this.getBadge();
+    });
+  }
 
   ionViewDidLoad() {
     this.doRefresh();
+    this.appAnimationProvider.addAnimationsToSections(this.elRef);
+    // ON PAGE SCROLL
+    this.content.ionScroll.subscribe((ev: any) => {
+      this.appAnimationProvider.addAnimationsToSections(this.elRef);
+    });
+  }
+
+  ionViewWillEnter() {
+    if (this.plt.is("cordova")) {
+      this.getBadge();
+    }
   }
 
   doRefresh(refresher?) {
-    this.totalClasses = undefined;
+    this.displayGreetingMessage();
+    this.profile$ = this.ws.get<StudentProfile>("/student/profile");
     this.nextHoliday$ = this.getHolidays(refresher);
     this.getProfile();
     this.transaction$ = this.getAPCardBalance();
     this.overdue$ = this.getOverdueFee();
-  }
-
-  getAPCardBalance() {
-    return this.ws.get<Apcard>('/apcard/', true).pipe(
-      map(transactions => (transactions[0] || {} as Apcard).Balance || 0),
+    this.apcardTransaction$ = this.ws.get<Apcard[]>("/apcard/", true).pipe(
+      map(t => this.signTransactions(t)),
+      tap(t => this.analyzeTransactions(t)),
+      finalize(() => refresher && refresher.complete())
     );
   }
 
+  openPage(page: string) {
+    this.app.getRootNav().push(page);
+  }
+  // END OF GENERAL METHODS
+
+  // START OF HOLIDAYS METHODS
   getHolidays(refresh: boolean) {
     const now = new Date();
-    return this.ws.get<Holidays>('/transix/holidays/filtered/students', refresh).pipe(
-      map(res => res.holidays.find(h => now < new Date(h.holiday_start_date)) || {} as Holiday),
-    );
-  }
-
-  getProfile() {
-    this.ws.get<StudentProfile>('/student/profile').pipe(
-      tap(p => {
-        if (p.BLOCK === true) {
-          this.block = false;
-          this.getGPA();
-        } else {
-          this.block = true;
-        }
-      }),
-      tap(p => this.getAttendance(p.INTAKE)),
-      tap(p => this.getUpcomingExam(p.INTAKE)),
-      tap(p => {
-        if (p.COUNTRY === 'Malaysia') {
-          this.local = true;
-        } else {
-          this.local = false;
-          this.visa$ = this.getVisaStatus();
-        }
-      }),
-    ).subscribe();
+    return this.ws
+      .get<Holidays>("/transix/holidays/filtered/students", refresh)
+      .pipe(
+        map(
+          res =>
+            res.holidays.find(h => now < new Date(h.holiday_start_date)) ||
+            ({} as Holiday)
+        )
+      );
   }
 
   getUpcomingExam(intake: string) {
     const opt = { auth: false };
-    this.exam$ = this.ws.get<ExamSchedule[]>(`/examination/${intake}`, true, opt);
+    this.exam$ = this.ws.get<ExamSchedule[]>(
+      `/examination/${intake}`,
+      true,
+      opt
+    );
   }
 
   getVisaStatus() {
-    return this.ws.get<any>('/student/visa_status');
+    return this.ws.get<any>("/student/visa_status");
   }
 
   /** Convert string to color with djb2 hash function. */
   strToColor(str: string): string {
     let hash = 5381;
     for (let i = 0; i < str.length; i++) {
-      hash = ((hash << 5) + hash) + str.charCodeAt(i); /* hash * 33 + c */
+      hash = (hash << 5) + hash + str.charCodeAt(i); /* hash * 33 + c */
     }
-    return '#' + [16, 8, 0].map(i => ('0' + (hash >> i & 0xFF).toString(16))
-      .substr(-2)).join('');
+    return (
+      "#" +
+      [16, 8, 0]
+        .map(i => ("0" + ((hash >> i) & 0xff).toString(16)).substr(-2))
+        .join("")
+    );
   }
 
   getOverdueFee() {
-    return this.ws.get<FeesTotalSummary[]>('/student/summary_overall_fee', true);
+    return this.ws.get<FeesTotalSummary[]>(
+      "/student/summary_overall_fee",
+      true
+    );
   }
 
   getGPA() {
-    this.ws.get<Course[]>('/student/courses').pipe(
-      flatMap(intakes => intakes),
-      concatMap(intake => {
-        const url = `/student/sub_and_course_details?intake=${intake.INTAKE_CODE}`;
-        return this.ws.get<CourseDetails>(url, true).pipe(
-          map(intakeDetails => Object.assign({
-            intakeDate: intake.INTAKE_NUMBER,
-            intakeCode: intake.INTAKE_CODE,
-            intakeDetails,
-          })),
+    this.ws
+      .get<Course[]>("/student/courses")
+      .pipe(
+        flatMap(intakes => intakes),
+        concatMap(intake => {
+          const url = `/student/sub_and_course_details?intake=${
+            intake.INTAKE_CODE
+          }`;
+          return this.ws.get<CourseDetails>(url, true).pipe(
+            map(intakeDetails =>
+              Object.assign({
+                intakeDate: intake.INTAKE_NUMBER,
+                intakeCode: intake.INTAKE_CODE,
+                intakeDetails
+              })
+            )
+          );
+        }),
+        toArray()
+      )
+      .subscribe(d => {
+        const data = Array.from(
+          new Set(
+            (d || []).map(t => ({
+              intakeCode: t.intakeCode,
+              gpa: t.intakeDetails.slice(-1)[0]
+            }))
+          )
         );
-      }),
-      toArray(),
-    ).subscribe(d => {
-      const data = Array.from(new Set((d || []).map(t => ({
-        intakeCode: t.intakeCode,
-        gpa: t.intakeDetails.slice(-1)[0],
-      }))));
-      const filteredData = data.filter(res => res.gpa.INTAKE_GPA);
-      const labels = filteredData.map(i => i.intakeCode);
-      const gpa = filteredData.map(i => i.gpa.INTAKE_GPA);
+        const filteredData = data.filter(res => res.gpa.INTAKE_GPA);
+        const labels = filteredData.map(i => i.intakeCode);
+        const gpa = filteredData.map(i => i.gpa.INTAKE_GPA);
 
-      const color = [
-        'rgba(255, 99, 132, 0.7)',
-        'rgba(54, 162, 235, 0.7)',
-        'rgba(255, 206, 86, 0.7)',
-        'rgba(75, 192, 192, 0.7)',
-        'rgba(153, 102, 255, 0.7)',
-        'rgba(255, 159, 64, 0.7)',
-        'rgba(54,72,87,0.7)',
-        'rgba(247,89,64,0.7)',
-        'rgba(61,199,190,0.7)',
-      ];
+        const color = [
+          "rgba(255, 99, 132, 0.7)",
+          "rgba(54, 162, 235, 0.7)",
+          "rgba(255, 206, 86, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(153, 102, 255, 0.7)",
+          "rgba(255, 159, 64, 0.7)",
+          "rgba(54,72,87,0.7)",
+          "rgba(247,89,64,0.7)",
+          "rgba(61,199,190,0.7)"
+        ];
 
-      const borderColor = [
-        'rgba(255,99,132,1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)',
-        'rgba(54,72,87,1)',
-        'rgba(247,89,64,1)',
-        'rgba(61,199,190,1)',
-      ];
+        const borderColor = [
+          "rgba(255,99,132,1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+          "rgba(255, 159, 64, 1)",
+          "rgba(54,72,87,1)",
+          "rgba(247,89,64,1)",
+          "rgba(61,199,190,1)"
+        ];
 
-      this.barChartData = {
-        labels,
-        datasets: [
-          {
-            backgroundColor: color,
-            borderColor,
-            borderWidth: 2,
-            data: gpa,
-          },
-        ],
-      };
-    });
+        this.barChartData = {
+          labels,
+          datasets: [
+            {
+              backgroundColor: color,
+              borderColor,
+              borderWidth: 2,
+              data: gpa
+            }
+          ]
+        };
+      });
   }
 
   getAttendance(intake: string) {
     const url = `/student/attendance?intake=${intake}`;
     this.attendance$ = this.ws.get<Attendance[]>(url, true).pipe(
       map(attendances => {
-        const currentSemester = Math.max(...attendances.map(attendance => attendance.SEMESTER));
-        return (attendances || []).filter(attendance =>
-          attendance.SEMESTER === currentSemester && attendance.PERCENTAGE < 80);
+        const currentSemester = Math.max(
+          ...attendances.map(attendance => attendance.SEMESTER)
+        );
+        return (attendances || []).filter(
+          attendance =>
+            attendance.SEMESTER === currentSemester &&
+            attendance.PERCENTAGE < 80
+        );
       }),
-      tap(attendances => attendances.length > 0 && this.getPieChart(
-        attendances[0].TOTAL_CLASSES, attendances[0].TOTAL_ABSENT,
-        attendances[0].SUBJECT_CODE, attendances[0].PERCENTAGE)),
-      tap(attendances => this.subject = attendances[0] && attendances[0].SUBJECT_CODE),
-      share(),
+      tap(
+        attendances =>
+          (this.subject = attendances[0] && attendances[0].SUBJECT_CODE)
+      ),
+      share()
     );
-    this.attendancePercent$ = this.ws.get<Attendance[]>(url).pipe(
-      map(aa => aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100),
-    );
+    this.attendancePercent$ = this.ws
+      .get<Attendance[]>(url)
+      .pipe(
+        map(aa => aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100)
+      );
   }
 
-  getPieChart(totalClasses: number, totalAbsent: number, code: string, percent: number) {
-    this.subjectCode = code;
-    this.percent = percent;
-    const attendedClasses = totalClasses - totalAbsent;
-    this.pieChartData = {
-      datasets: [{
-        data: [attendedClasses, totalAbsent],
-        backgroundColor: ['rgba(54, 162, 235, 0.7)', 'rgba(255, 99, 132, 0.7)'],
-        borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255,99,132,1)'],
-      }],
+  // START HEADER METHODS
+  capitalizeString(text: string) {
+    let capitalizedString =
+      text.charAt(0).toUpperCase() + text.toLowerCase().slice(1);
+    return capitalizedString;
+  }
+  displayGreetingMessage() {
+    let hoursNow = new Date().getHours();
+    if (hoursNow < 12) {
+      this.greetingMessage = "Good morning";
+    } else if (hoursNow >= 12 && hoursNow <= 18) {
+      this.greetingMessage = "Good afternoon";
+    } else {
+      this.greetingMessage = "Good evening";
+    }
+  }
+
+  getProfile() {
+    this.ws
+      .get<StudentProfile>("/student/profile")
+      .pipe(
+        tap(p => {
+          if (p.BLOCK === true) {
+            this.block = false;
+            this.getGPA();
+          } else {
+            this.block = true;
+          }
+        }),
+        tap(p => this.getAttendance(p.INTAKE)),
+        tap(p => this.getUpcomingExam(p.INTAKE)),
+        tap(p => {
+          if (p.COUNTRY === "Malaysia") {
+            this.local = true;
+          } else {
+            this.local = false;
+            this.visa$ = this.getVisaStatus();
+          }
+        })
+      )
+      .subscribe();
+  }
+  // END HEADER METHODS
+
+  // START APCARD TRANSACTIONS & BALANCE METHODS
+  getAPCardBalance() {
+    return this.ws
+      .get<Apcard>("/apcard/", true)
+      .pipe(
+        map(transactions => (transactions[0] || ({} as Apcard)).Balance || 0)
+      );
+  }
+
+  /** Analyze transactions. */
+  analyzeTransactions(transactions: Apcard[]) {
+    // stop analyzing if transactions is empty
+    if (transactions.length === 0) {
+      return;
+    }
+    this.balance = transactions[0].Balance;
+
+    const now = new Date();
+    const a = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    this.monthlyData = transactions.reduce(
+      (tt, t) => {
+        const c = t.SpendVal > 0 ? "dr" : "cr"; // classify spent type
+        const d = new Date(t.SpendDate);
+        d.getFullYear() in tt[c] || (tt[c][d.getFullYear()] = a.slice());
+        tt[c][d.getFullYear()][d.getMonth()] += Math.abs(t.SpendVal);
+
+        return tt;
+        // default array with current year
+      },
+      {
+        dr: { [now.getFullYear()]: a.slice() },
+        cr: { [now.getFullYear()]: a.slice() }
+      }
+    );
+    // plot graph
+    this.apcardChartData = {
       labels: [
-        `Attended Classes: ${attendedClasses}`,
-        `Total Absent: ${totalAbsent}`,
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
       ],
+      datasets: [
+        {
+          label: "Monthly Credit",
+          data: this.monthlyData.cr[now.getFullYear()],
+          borderColor: "rgba(0, 200, 83, .5)",
+          backgroundColor: "rgba(0, 200, 83, .5)",
+          fill: false
+        },
+        {
+          label: "Monthly Debit",
+          data: this.monthlyData.dr[now.getFullYear()],
+          borderColor: "rgba(230, 0, 0, .5)",
+          backgroundColor: "rgba(230, 0, 0, .5)",
+          fill: false
+        }
+      ]
     };
+
+    // reverse monthlyData last year
+    this.monthly = this.monthlyData.dr[now.getFullYear()][now.getMonth()];
   }
 
-  /** Open staff info for lecturer id. */
-  openStaffDirectoryInfo(id: string) {
-    this.app.getRootNav().push('StaffDirectoryInfoPage', { id });
+  /** Negate spend value for top ups. */
+  signTransactions(transactions: Apcard[]): Apcard[] {
+    transactions.forEach(transaction => {
+      if (transaction.ItemName === "Top Up") {
+        transaction.SpendVal *= -1;
+      }
+    });
+    return transactions;
   }
+  // END APCARD TRANSACTIONS METHODS
 
-  openPage(page: string) {
-    this.app.getRootNav().push(page);
+  // NOTIFICATIONS METHODS
+  getBadge() {
+    this.notification.getMessage().subscribe(res => {
+      this.badge = res.num_of_unread_msgs;
+    });
   }
+  // END NOTIFICATIONS METHODS
 }
