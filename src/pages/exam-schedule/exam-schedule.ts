@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
-import { ActionSheetButton, ActionSheetController, IonicPage, Platform } from 'ionic-angular';
+import { ActionSheetController, IonicPage, Platform, Content } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
@@ -30,7 +30,8 @@ export class ExamSchedulePage {
     private ws: WsApiProvider,
     private settings: SettingsProvider,
     public tt: TimetableProvider,
-  ) { }
+
+  ) {}
 
   presentActionSheet() {
     if (this.plt.is('cordova') && !this.plt.is('ios')) {
