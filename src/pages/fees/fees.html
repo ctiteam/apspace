@@ -1,37 +1,105 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <ion-title>
-      Fees
-    </ion-title>
+<ion-header no-border>
+  <ion-navbar>
+    <ion-title>Fees</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ng-template let-totalSummary [ngIf]='totalSummary$ | async' [ngIfElse]='loadingTotalSummary'>
-    <ion-card class="total-summary" [style.background]="totalSummary[0].TOTAL_OVERDUE === 0 ? '#0dbd53' : '#f04141'"
-      padding>
-      <ion-item class="total-summary" [style.background]="totalSummary[0].TOTAL_OVERDUE === 0 ? '#0dbd53' : '#f04141'">
+  <ng-template
+    let-totalSummary
+    [ngIf]="totalSummary$ | async"
+    [ngIfElse]="loadingTotalSummary"
+  >
+    <ion-card
+      class="total-summary"
+      [style.color]="
+        totalSummary[0].TOTAL_OUTSTANDING == 0 ? '#0dbd53' : '#f04141'
+      "
+      [style.boxShadow]="
+        totalSummary[0].TOTAL_OUTSTANDING == 0
+          ? '1px 1px 2px #0dbd53, -1px -1px 2px #0dbd53'
+          : '1px 1px 2px #f04141, -1px -1px 2px #f04141'
+      "
+      padding
+    >
+      <ion-item
+        class="total-summary"
+        [style.color]="
+          totalSummary[0].TOTAL_OUTSTANDING == 0 ? '#0dbd53' : '#f04141'
+        "
+      >
         Total Payable
-        <ion-note color='light' item-right>{{ (totalSummary[0]?.TOTAL_PAYABLE || 0) | currency:'MYR':'RM' }}</ion-note>
+        <ion-note
+          [style.color]="
+            totalSummary[0].TOTAL_OUTSTANDING == 0 ? '#0dbd53' : '#f04141'
+          "
+          item-right
+          >{{ (totalSummary[0]?.TOTAL_PAYABLE || 0) | currency:'MYR':'RM' }}</ion-note
+        >
       </ion-item>
-      <ion-item class="total-summary" [style.background]="totalSummary[0].TOTAL_OVERDUE === 0 ? '#0dbd53' : '#f04141'">
+      <ion-item
+        class="total-summary"
+        [style.color]="
+          totalSummary[0].TOTAL_OUTSTANDING == 0 ? '#0dbd53' : '#f04141'
+        "
+      >
         Total Paid
-        <ion-note color='light' item-right>{{ (totalSummary[0]?.TOTAL_PAID || 0) | currency:'MYR':'RM' }}</ion-note>
+        <ion-note
+          [style.color]="
+            totalSummary[0].TOTAL_OUTSTANDING == 0 ? '#0dbd53' : '#f04141'
+          "
+          item-right
+          >{{ (totalSummary[0]?.TOTAL_PAID || 0) | currency:'MYR':'RM' }}</ion-note
+        >
       </ion-item>
-      <ion-item class="total-summary" [style.background]="totalSummary[0].TOTAL_OVERDUE === 0 ? '#0dbd53' : '#f04141'">
+      <ion-item
+        class="total-summary"
+        [style.color]="
+          totalSummary[0].TOTAL_OUTSTANDING == 0 ? '#0dbd53' : '#f04141'
+        "
+      >
         Total Outstanding
-        <ion-note color='light' item-right>{{ (totalSummary[0]?.TOTAL_OUTSTANDING || 0) | currency:'MYR':'RM' }}</ion-note>
+        <ion-note
+          [style.color]="
+            totalSummary[0].TOTAL_OUTSTANDING == 0 ? '#0dbd53' : '#f04141'
+          "
+          item-right
+          >{{ (totalSummary[0]?.TOTAL_OUTSTANDING || 0) | currency:'MYR':'RM' }}</ion-note
+        >
       </ion-item>
-      <ion-item class="total-summary" [style.background]="totalSummary[0].TOTAL_OVERDUE === 0 ? '#0dbd53' : '#f04141'">
+      <ion-item
+        class="total-summary"
+        [style.color]="
+          totalSummary[0].TOTAL_OUTSTANDING == 0 ? '#0dbd53' : '#f04141'
+        "
+      >
         Total Overdue
-        <ion-note color='light' item-right>{{ (totalSummary[0]?.TOTAL_OVERDUE || 0) | currency:'MYR':'RM' }}</ion-note>
+        <ion-note
+          [style.color]="
+            totalSummary[0].TOTAL_OUTSTANDING == 0 ? '#0dbd53' : '#f04141'
+          "
+          item-right
+          >{{ (totalSummary[0]?.TOTAL_OVERDUE || 0) | currency:'MYR':'RM' }}</ion-note
+        >
       </ion-item>
-      <ion-item class="total-summary" [style.background]="totalSummary[0].TOTAL_OVERDUE === 0 ? '#0dbd53' : '#f04141'">
+      <ion-item
+        class="total-summary"
+        [style.color]="
+          totalSummary[0].TOTAL_OUTSTANDING == 0 ? '#0dbd53' : '#f04141'
+        "
+      >
         Fine
-        <ion-note color='light' item-right>{{ (totalSummary[0]?.FINE || 0) | currency:'MYR':'RM' }}</ion-note>
+        <ion-note
+          item-right
+          [style.color]="
+            totalSummary[0].TOTAL_OUTSTANDING == 0 ? '#0dbd53' : '#f04141'
+          "
+          >{{ (totalSummary[0]?.FINE || 0) | currency:'MYR':'RM' }}</ion-note
+        >
       </ion-item>
     </ion-card>
   </ng-template>
+
   <ng-template #loadingTotalSummary>
     <ion-card>
       <ion-item>
@@ -47,38 +115,43 @@
   </ion-segment>
 
   <ng-container [ngSwitch]='selectedSegment'>
+
     <ng-container *ngSwitchCase="'Summary'">
-      <ng-template let-summaries [ngIf]='summary$ | async' [ngIfElse]='loadingSummary'>
-        <ion-card *ngFor='let summary of summaries'>
+      <ng-template
+        let-summaries
+        [ngIf]="summary$ | async"
+        [ngIfElse]="loadingSummary"
+      >
+        <ion-card *ngFor="let summary of summaries">
           <h4 margin>{{ summary.INVOICE_DESCRIPTION }}</h4>
           <ion-card-content no-padding>
             <ion-item>
               Due Date
-              <ion-note color='text-color' item-right>
-                {{ (summary.PAYMENT_DUE_DATE | currency:'MYR':'RM') || 'N/A' }}
+              <ion-note color="text-color" item-right>
+                {{ (summary.PAYMENT_DUE_DATE | date:'dd-LLL-yy') || 'N/A' }}
               </ion-note>
             </ion-item>
             <ion-item>
               Amount Payable
-              <ion-note color='text-color' item-right>
+              <ion-note color="text-color" item-right>
                 {{ (summary.PAYABLE_AMOUNT | currency:'MYR':'RM') || 'N/A' }}
               </ion-note>
             </ion-item>
             <ion-item>
               Total Collected
-              <ion-note color='text-color' item-right>
+              <ion-note color="text-color" item-right>
                 {{ (summary.TOTAL_COLLECTED | currency:'MYR':'RM') || 'N/A' }}
               </ion-note>
             </ion-item>
             <ion-item>
               Outstanding
-              <ion-note color='text-color' item-right>
+              <ion-note color="text-color" item-right>
                 {{ (summary.OUTSTANDING | currency:'MYR':'RM') || 'N/A' }}
               </ion-note>
             </ion-item>
             <ion-item>
               Fine
-              <ion-note color='text-color' item-right>
+              <ion-note color="text-color" item-right>
                 {{ (summary.FINE | currency:'MYR':'RM') || 'N/A' }}
               </ion-note>
             </ion-item>
@@ -95,118 +168,120 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="'Bank Draft'">
-      <ng-template let-bankDrafts [ngIf]='bankDraft$ | async' [ngIfElse]='loadingBankDraft'>
-        <ion-card *ngFor='let bankDraft of bankDrafts'>
-          <ion-list-header>{{ bankDraft.COURSE_CODE || 'Course Code' }}</ion-list-header>
-          <ion-card-content no-padding>
+        <ng-template
+          let-bankDrafts
+          [ngIf]="bankDraft$ | async"
+          [ngIfElse]="loadingBankDraft"
+        >
+          <ion-card *ngFor="let bankDraft of bankDrafts">
+            <ion-list-header>
+                {{ bankDraft.COURSE_CODE || 'Course Code' }}
+            </ion-list-header>
+            <ion-card-content no-padding>
+              <ion-item>
+                Bank Draft Amount
+                <ion-note color="text-color" item-right>
+                    {{ isNumber(bankDraft.BANKDRAFT_AMOUNT)
+                      ? (bankDraft.BANKDRAFT_AMOUNT | currency:'MYR':'RM')
+                      : bankDraft.BANKDRAFT_AMOUNT }}
+                </ion-note>
+              </ion-item>
+              <ion-item>
+                Due Date
+                <ion-note color="text-color" item-right>
+                    {{ bankDraft.BANKDRAFT_DUE_DATE }}
+                </ion-note>
+              </ion-item>
+              <ion-item>
+                Date Collected
+                <ion-note color="text-color" item-right>
+                    {{ bankDraft.DATE_COLLECTED }}
+                </ion-note>
+              </ion-item>
+              <ion-item>
+                Registration Date
+                <ion-note color="text-color" item-right>
+                  {{ bankDraft.REGISTRATION_DATE }}
+                </ion-note>
+              </ion-item>
+              <ion-item>
+                Amount Collected
+                <ion-note color="success" item-right>
+                    {{ isNumber(bankDraft.AMOUNT_COLLECTED)
+                      ? (bankDraft.AMOUNT_COLLECTED | currency:'MYR':'RM')
+                      : bankDraft.AMOUNT_COLLECTED }}
+                </ion-note>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
+        <ng-template #loadingBankDraft>
+          <ion-card>
             <ion-item>
-              Bank Draft Amount
-              <ion-note color='text-color' item-right>
-                {{ isNumber(bankDraft.BANKDRAFT_AMOUNT)
-                ? (bankDraft.BANKDRAFT_AMOUNT | currency:'MYR':'RM')
-                : bankDraft.BANKDRAFT_AMOUNT }}
-              </ion-note>
+              <skeleton-item height="210px" width="100%"></skeleton-item>
             </ion-item>
-            <ion-item>
-              Due Date
-              <ion-note color='text-color' item-right>
-                {{ isNumber(bankDraft.BANKDRAFT_DUE_DATE)
-                ? (bankDraft.BANKDRAFT_DUE_DATE | currency:'MYR':'RM')
-                : bankDraft.BANKDRAFT_DUE_DATE }}
-              </ion-note>
-            </ion-item>
-            <ion-item>
-              Date Collected
-              <ion-note color='text-color' item-right>
-                {{ isNumber(bankDraft.DATE_COLLECTED)
-                ? (bankDraft.DATE_COLLECTED | currency:'MYR':'RM')
-                : bankDraft.DATE_COLLECTED }}
-              </ion-note>
-            </ion-item>
-            <ion-item>
-              Registration Date
-              <ion-note color='text-color' item-right>
-                {{ isNumber(bankDraft.REGISTRATION_DATE)
-                ? (bankDraft.REGISTRATION_DATE | currency:'MYR':'RM')
-                : bankDraft.REGISTRATION_DATE }}
-              </ion-note>
-            </ion-item>
-            <ion-item>
-              Amount Collected
-              <ion-note color='success' item-right>
-                {{ isNumber(bankDraft.AMOUNT_COLLECTED)
-                ? (bankDraft.AMOUNT_COLLECTED | currency:'MYR':'RM')
-                : bankDraft.AMOUNT_COLLECTED }}
-              </ion-note>
-            </ion-item>
-          </ion-card-content>
-        </ion-card>
-      </ng-template>
-      <ng-template #loadingBankDraft>
-        <ion-card>
-          <ion-item>
-            <skeleton-item height="210px" width="100%"></skeleton-item>
-          </ion-item>
-        </ion-card>
-      </ng-template>
-    </ng-container>
+          </ion-card>
+        </ng-template>
+      </ng-container>
 
     <ng-container *ngSwitchCase="'Details'">
-      <ng-template let-details [ngIf]='detail$ | async' [ngIfElse]='laodingDetails'>
-        <ion-card *ngFor='let detail of details | rev'>
-          <h4 margin>{{ detail.ITEM_DESCRIPTION }}</h4>
-          <ion-card-content no-padding>
+        <ng-template
+          let-details
+          [ngIf]="detail$ | async"
+          [ngIfElse]="laodingDetails"
+        >
+          <ion-card *ngFor="let detail of (details | rev)">
+            <h4 margin>{{ detail.ITEM_DESCRIPTION }}</h4>
+            <ion-card-content no-padding>
+              <ion-item>
+                Due Date
+                <ion-note color="text-color" item-right>
+                  {{ detail.DUE_DATE }}
+                </ion-note>
+              </ion-item>
+              <ion-item>
+                Amount Payable
+                <ion-note color="text-color" item-right>
+                    {{ isNumber(detail.AMOUNT_PAYABLE)
+                      ? (detail.AMOUNT_PAYABLE | currency:'MYR':'RM')
+                      : detail.AMOUNT_PAYABLE }}
+                </ion-note>
+              </ion-item>
+              <ion-item>
+                Total Collected
+                <ion-note color="success" item-right>
+                    {{ isNumber(detail.TOTAL_COLLECTED)
+                      ? (detail.TOTAL_COLLECTED | currency:'MYR':'RM')
+                      : detail.TOTAL_COLLECTED }}
+                </ion-note>
+              </ion-item>
+              <ion-item>
+                Outstanding
+                <ion-note color="danger" item-right>
+                    {{ isNumber(detail.OUTSTANDING)
+                      ? (detail.OUTSTANDING | currency:'MYR':'RM')
+                      : detail.OUTSTANDING }}
+                </ion-note>
+              </ion-item>
+              <ion-item>
+                Fine
+                <ion-note color="warn" item-right>
+                    {{ isNumber(detail.FINE)
+                      ? (detail.FINE | currency:'MYR':'RM')
+                      : detail.FINE }}
+                </ion-note>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
+        <ng-template #laodingDetails>
+          <ion-card>
             <ion-item>
-              Due Date
-              <ion-note color='text-color' item-right
-                >{{ isNumber(detail.DUE_DATE)
-                ? (detail.DUE_DATE | currency:'MYR':'RM')
-                : detail.DUE_DATE }}
-              </ion-note>
+              <skeleton-item height="210px" width="100%"></skeleton-item>
             </ion-item>
-            <ion-item>
-              Amount Payable
-              <ion-note color='text-color' item-right>
-                {{ isNumber(detail.AMOUNT_PAYABLE)
-                ? (detail.AMOUNT_PAYABLE | currency:'MYR':'RM')
-                : detail.AMOUNT_PAYABLE }}
-              </ion-note>
-            </ion-item>
-            <ion-item>
-              Total Collected
-              <ion-note color='success' item-right>
-                {{ isNumber(detail.TOTAL_COLLECTED)
-                ? (detail.TOTAL_COLLECTED | currency:'MYR':'RM')
-                : detail.TOTAL_COLLECTED }}
-              </ion-note>
-            </ion-item>
-            <ion-item>
-              Outstanding
-              <ion-note color='danger' item-right>
-                {{ isNumber(detail.OUTSTANDING)
-                ? (detail.OUTSTANDING | currency:'MYR':'RM')
-                : detail.OUTSTANDING }}
-              </ion-note>
-            </ion-item>
-            <ion-item>
-              Fine
-              <ion-note color='warn' item-right>
-                {{ isNumber(detail.FINE)
-                ? (detail.FINE | currency:'MYR':'RM')
-                : detail.FINE }}
-              </ion-note>
-            </ion-item>
-          </ion-card-content>
-        </ion-card>
-      </ng-template>
-      <ng-template #laodingDetails>
-        <ion-card>
-          <ion-item>
-            <skeleton-item height="210px" width="100%"></skeleton-item>
-          </ion-item>
-        </ion-card>
-      </ng-template>
-    </ng-container>
+          </ion-card>
+        </ng-template>
+      </ng-container>
 
   </ng-container>
 </ion-content>
