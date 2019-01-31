@@ -1,8 +1,6 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <ion-title>
-      Feedback
-    </ion-title>
+<ion-header no-border>
+  <ion-navbar>
+    <ion-title>Feedback</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -27,7 +25,7 @@
     <ion-textarea class='textarea' autosize row='1' [(ngModel)]="info.message" [ngModelOptions]="{standalone: true}">
     </ion-textarea>
   </ion-item>
-  <button ion-button round full margin-top (click)="submitFeedback()"
+  <button ion-button round full margin-top (click)="submitFeedback()" class="submit-button"
   [disabled]="!info.name || !info.email || !info.contactNumber || !info.message">
     Submit
   </button>
