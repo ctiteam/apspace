@@ -33,9 +33,10 @@ export class HolidaysPage {
   }
 
   doRefresh(refresher?) {
+    let yearNow = new Date().getFullYear();
     this.selectedRole = this.settings.get('role') & Role.Student ? 'students' : 'staff';
     this.holiday$ = this.ws.get<Holidays>(`/transix/holidays`, refresher).pipe(
-      map(res => res.holidays),
+      map(res => res.holidays.filter(holiday => +holiday.holiday_start_date.split('-')[0] == yearNow)),
       finalize(() => refresher && refresher.complete()),
     );
   }
