@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { finalize, map } from 'rxjs/operators';
@@ -24,6 +24,7 @@ export class HolidaysPage {
     public navParams: NavParams,
     public ws: WsApiProvider,
     public settings: SettingsProvider,
+    private textElRef: ElementRef,
   ) {
   }
 
@@ -37,5 +38,14 @@ export class HolidaysPage {
       map(res => res.holidays),
       finalize(() => refresher && refresher.complete()),
     );
+  }
+
+  toggleFullText(holidayId){
+    let holdiayElement = this.textElRef.nativeElement.querySelector("#holiday" + holidayId);
+    if(holdiayElement.classList.contains("text-ellipsis")){
+      holdiayElement.classList.remove("text-ellipsis");
+    } else{
+      holdiayElement.classList.add("text-ellipsis");
+    }
   }
 }

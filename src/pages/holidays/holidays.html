@@ -1,43 +1,53 @@
-<ion-header>
-  <ion-navbar color='primary'>
+<ion-header no-border>
+  <ion-navbar>
     <ion-title>Holidays</ion-title>
   </ion-navbar>
-
-  <ion-toolbar no-border-top color='primary'>
-    <ion-segment [(ngModel)]="selectedRole" color='light'>
-      <ion-segment-button value='students'>Student Holidays</ion-segment-button>
-      <ion-segment-button value='staff'>Staff Holidays</ion-segment-button>
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="selectedRole">
+      <ion-segment-button value="students">Student Holidays</ion-segment-button>
+      <ion-segment-button value="staff">Staff Holidays</ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="refresh">
-    </ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
 
-  <ng-template let-holidays [ngIf]='holiday$ | async' [ngIfElse]='loadingHolidays'>
-    <ion-card *ngFor='let holiday of holidays | filter:selectedRole'>
-      <ion-card-header>
-        {{ holiday.holiday_name }}
-      </ion-card-header>
-      <ion-card-content>
-        <ion-label no-margin>
-          <ion-icon padding-right name='calendar'></ion-icon>
-          {{ holiday.holiday_start_date | date:'mediumDate' }}
-          <ng-template [ngIf]='holiday.holiday_start_date !== holiday.holiday_end_date'>
-            - {{ holiday.holiday_end_date | date:'mediumDate'}}
-          </ng-template>
-        </ion-label>
-        <ng-template [ngIf]='holiday.holiday_description'>
-          <p no-margin>
-            <ion-icon padding-right name='text'></ion-icon>
-            {{ holiday.holiday_description }}
-          </p>
-        </ng-template>
-      </ion-card-content>
-    </ion-card>
+  <ng-template let-holidays [ngIf]="holiday$ | async" [ngIfElse]="loadingHolidays">
+    <div class="row">
+      <div class="col-12 holidays-section">
+        <div class="row holiday-item" *ngFor="let holiday of (holidays | filter: selectedRole)">
+          <div class="col-3 pt-1 m-auto">
+            <div class="holiday-date">
+              <h5>{{ holiday.holiday_start_date | date: "MMM" }}</h5>
+              <p>{{ holiday.holiday_start_date | date: "dd" }}</p>
+            </div>
+          </div>
+          <div class="col-6 pl-2 pr-0" (click)="toggleFullText(holiday.holiday_id)">
+            <div class="holiday-title">
+              <h4 class="mb-0 text-ellipsis" id="holiday{{holiday.holiday_id}}">
+                {{ holiday.holiday_name }}
+              </h4>
+              <p class="mb-0">{{ holiday.holiday_start_date | date: "EEEE" }}</p>
+              <p class="mb-0" *ngIf="holiday.holiday_end_date != holiday.holiday_start_date">
+                Until: {{holiday.holiday_end_date | date: "dd-LLL-yyyy"}}
+              </p>
+              <p class="mb-0" *ngIf="holiday.holiday_end_date == holiday.holiday_start_date">
+                  One day
+                </p>
+            </div>
+
+          </div>
+          <div class="col-3 m-auto">
+            <div class="holiday-year text-center">
+              <p>{{ holiday.holiday_start_date | date: "yyyy" }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </ng-template>
   <ng-template #loadingHolidays>
     <ion-card *ngFor="let i of numOfSkeletons">

@@ -1,3 +1,29 @@
 page-holidays {
-
+    .holidays-section{
+        padding-right: 30px;
+        padding-left: 30px;
+        .holiday-item{
+            padding: 10px;
+            .holiday-date{
+                border-radius: 70px;
+                width: 70px;
+                height: 70px;
+                text-align: center;
+                padding: 13px;
+                overflow: hidden;
+            }
+            .holiday-title{
+                padding: 13px 0;
+                transition: all 1s ease 1s;
+                .text-ellipsis{
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+            }
+            .holiday-year{
+                padding: 13px 0;
+            }
+        }
+    }
 }
