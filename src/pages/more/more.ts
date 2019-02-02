@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import {
   AlertController, App, Events, IonicPage, NavController, NavParams, Platform,
 } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable';
 
-import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
+import { Role } from '../../interfaces';
 import { NotificationProvider, SettingsProvider, WsApiProvider } from '../../providers';
 
 
@@ -214,12 +213,6 @@ export class MorePage {
     public plt: Platform,
   ) {
     this.setMenuItems();
-  }
-
-  ionViewDidLoad() {
-  }
-
-  ionViewWillEnter() {
   }
 
   setMenuItems() {
