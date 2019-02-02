@@ -1,11 +1,11 @@
 page-news {
-  ion-card-content {
-    background-color: color($colors, primary);
+  .card{
+    border: none !important;
   }
 }
 
 .normalToast {
   .toast-message {
-    background: color($colors, danger);
+    background: color($colors, danger)
   }
 }

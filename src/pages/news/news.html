@@ -1,25 +1,28 @@
 <fireworks></fireworks>
 
-<ion-header>
-  <ion-navbar color="primary">
+<ion-header no-border>
+  <ion-navbar>
     <ion-title>News</ion-title>
   </ion-navbar>
 </ion-header>
+
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ng-template let-items [ngIf]='item$ | async' [ngIfElse]='loadingNews'>
-    <ng-template [ngIf]='items && items.length > 0' [ngIfElse]='nonews'>
-      <ion-card tappable *ngFor="let item of items" (click)="openModal(item)">
-        <img [src]="item.field_news_image[0].url">
-        <ion-card-content color='light'>
-          {{ item.title[0].value }}
-        </ion-card-content>
-      </ion-card>
-    </ng-template>
+  <ng-template let-items [ngIf]="item$ | async" [ngIfElse]="loadingNews">
+
+      <ng-template [ngIf]='items && items.length > 0' [ngIfElse]='nonews'>
+        <ion-card tappable *ngFor="let item of items" (click)="openModal(item)">
+          <img [src]="item.field_news_image[0].url" />
+          <ion-card-content color="light">
+            {{ item.title[0].value }}
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
+  
     <ng-template #loadingNews>
       <ion-card *ngFor="let i of numOfSkeletons">
         <ion-item>
@@ -28,10 +31,12 @@
         </ion-item>
       </ion-card>
     </ng-template>
+  
     <ng-template #nonews>
-      <ion-card padding>
-        <p>No news available</p>
-      </ion-card>
+        <ion-card padding>
+          <p>No news available</p>
+        </ion-card>
+      </ng-template>
+      
     </ng-template>
-  </ng-template>
 </ion-content>

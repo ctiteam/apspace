@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-navbar color="primary">
+<ion-header no-border>
+  <ion-navbar>
     <ion-title>{{item?.title[0].value}}</ion-title>
   </ion-navbar>
 </ion-header>
@@ -8,7 +8,8 @@
   <div class="header-image">
     <img class="cover" [src]="item?.field_news_image[0].url" height="auto" width="100%">
   </div>
-  <div class="main-content">
-    <article [innerHTML]="sanitize(item?.body[0].value)"></article>
+  <div class="main-content pt-5 px-3 pb-3">
+    <h3>{{item?.title[0].value}}</h3>
+    <article class="p-3" [innerHTML]="sanitize(item?.body[0].value)"></article>
   </div>
 </ion-content>
