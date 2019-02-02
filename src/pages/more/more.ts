@@ -7,134 +7,200 @@ import { Observable } from 'rxjs/Observable';
 import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
 import { NotificationProvider, SettingsProvider, WsApiProvider } from '../../providers';
 
+
+interface MenuGroup {
+  title: string;
+  items: MenuItem[];
+}
+
+interface MenuItem {
+  title: string;
+  component: string;
+  icon: string;
+  size: string;
+  desc: string;
+  color: string;
+  role: Role;
+}
+
+
 @IonicPage()
 @Component({
   selector: 'page-more',
   templateUrl: 'more.html',
 })
 export class MorePage {
-
-  menuItems: Array<{
-    title: string,
-    component: any,
-    icon: any,
-    role: Role,
-  }> = [
-      {
-        title: 'Results',
-        component: 'ResultsPage',
-        icon: 'checkbox',
-        role: Role.Student,
-      },
-      {
-        title: 'Staff Directory',
-        component: 'StaffDirectoryPage',
-        icon: 'people',
-        role: Role.Student | Role.Lecturer | Role.Admin,
-      },
-      {
-        title: 'Classroom Finder',
-        component: 'ClassroomFinderPage',
-        icon: 'search',
-        role: Role.Student | Role.Lecturer | Role.Admin,
-      },
-      {
-        title: 'iConsult (Beta)',
-        component: 'UpcomingstdPage',
-        icon: 'clipboard',
-        role: Role.Student,
-      },
-      {
-        title: 'iConsult (Beta)',
-        component: 'UpcominglecPage',
-        icon: 'clipboard',
-        role: Role.Lecturer | Role.Admin,
-      },
-      {
-        title: 'News',
-        component: 'NewsPage',
-        icon: 'paper',
-        role: Role.Student,
-      },
-      {
-        title: 'Bus Tracking',
-        component: 'BusTrackingPage',
-        icon: 'bus',
-        role: Role.Student | Role.Lecturer | Role.Admin,
-      },
-      {
-        title: 'Student Timetable',
-        component: 'TimetablePage',
-        icon: 'calendar',
-        role: Role.Lecturer | Role.Admin,
-      },
-      {
-        title: 'Fees',
-        component: 'FeesPage',
-        icon: 'cash',
-        role: Role.Student,
-      },
-      {
-        title: 'Exam Schedule',
-        component: 'ExamSchedulePage',
-        icon: 'book',
-        role: Role.Student | Role.Lecturer | Role.Admin,
-      },
-      {
-        title: 'Moodle (Course Material)',
-        component: 'LmsPage',
-        icon: 'open',
-        role: Role.Student | Role.Lecturer | Role.Admin,
-      },
-      {
-        title: 'My Library',
-        component: 'KohaPage',
-        icon: 'bookmarks',
-        role: Role.Student | Role.Lecturer | Role.Admin,
-      },
-      {
-        title: 'Forms & Application',
-        component: 'FormsApplicationPage',
-        icon: 'clipboard',
-        role: Role.Student | Role.Lecturer | Role.Admin,
-      },
-      {
-        title: 'Profile',
-        component: 'ProfilePage',
-        icon: 'contact',
-        role: Role.Student | Role.Lecturer | Role.Admin,
-      },
-      {
-        title: 'Holidays',
-        component: 'HolidaysPage',
-        icon: 'globe',
-        role: Role.Student | Role.Lecturer | Role.Admin,
-      },
-      {
-        title: 'Operation Hours',
-        component: 'OperationHoursPage',
-        icon: 'information-circle',
-        role: Role.Student | Role.Lecturer | Role.Admin,
-      },
-      {
-        title: 'Feedback',
-        component: 'FeedbackPage',
-        icon: 'at',
-        role: Role.Student | Role.Lecturer | Role.Admin,
-      },
+  menuFull: MenuGroup[] = [
+    {
+      title: 'Main',
+      items: [
+        {
+          title: 'Results',
+          component: 'ResultsPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'checkbox',
+          role: Role.Student,
+        },
+        {
+          title: 'Staff Directory',
+          component: 'StaffDirectoryPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'people',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'Classroom Finder',
+          component: 'ClassroomFinderPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'search',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'iConsult (Beta)',
+          component: 'UpcomingstdPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'clipboard',
+          role: Role.Student,
+        },
+        {
+          title: 'iConsult (Beta)',
+          component: 'UpcominglecPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'clipboard',
+          role: Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'News',
+          component: 'NewsPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'paper',
+          role: Role.Student,
+        },
+        {
+          title: 'Bus Tracking',
+          component: 'BusTrackingPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'bus',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'Student Timetable',
+          component: 'TimetablePage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'calendar',
+          role: Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'Fees',
+          component: 'FeesPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'cash',
+          role: Role.Student,
+        },
+        {
+          title: 'Exam Schedule',
+          component: 'ExamSchedulePage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'book',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'Moodle (Course Material)',
+          component: 'LmsPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'open',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'My Library',
+          component: 'KohaPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'bookmarks',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'Forms & Application',
+          component: 'FormsApplicationPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'clipboard',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'Profile',
+          component: 'ProfilePage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'contact',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'Holidays',
+          component: 'HolidaysPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'globe',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'Operation Hours',
+          component: 'OperationHoursPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'information-circle',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'Feedback',
+          component: 'FeedbackPage',
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          icon: 'at',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: "Logout",
+          component: "LogoutPage",
+          icon: "log-out",
+          size: "xlarge",
+          desc: "red",
+          color: "red",
+          role: Role.Student | Role.Lecturer | Role.Admin
+        },
+      ]
+    }
     ];
-  pages: Array<{
-    title: string,
-    component: any,
-    icon: any,
-    role: Role,
-  }>;
 
-  photo$: Observable<StudentPhoto[]>;
-  profile$: Observable<StudentProfile>;
-  staffProfile$: Observable<StaffProfile[]>;
-
-  badge: string;
+  menuFiltered: MenuGroup[] = [];
 
   constructor(
     public navCtrl: NavController,
@@ -147,49 +213,49 @@ export class MorePage {
     public notification: NotificationProvider,
     public plt: Platform,
   ) {
-    const role = this.settings.get('role');
-    this.pages = this.menuItems.filter(page => page.role & role);
-
-    this.events.subscribe('newNotification', () => {
-      this.getBadge();
-    });
+    this.setMenuItems();
   }
 
   ionViewDidLoad() {
-    const role = this.settings.get('role');
-    if (role & Role.Student) {
-      this.profile$ = this.ws.get<StudentProfile>('/student/profile');
-      this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
-    } else if (role & (Role.Lecturer | Role.Admin)) {
-      this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
-    }
   }
 
   ionViewWillEnter() {
-    if (this.plt.is('cordova')) {
-      this.getBadge();
+  }
+
+  setMenuItems() {
+    const role = this.settings.get("role");
+    this.menuFiltered = this.menuFull
+      .map(({ title, items }) => ({
+        title,
+        items: items.filter(page => page.role & role)
+      }))
+      .filter(group => group.items.length > 0);
+  }
+
+  filterMenu(event: any) {
+    this.setMenuItems();
+    let val = event.target.value;
+    if (val && val.trim() !== "") {
+      this.menuFiltered = this.menuFiltered
+        .map(({ title, items }) => ({
+          title,
+          items: items.filter(
+            page =>
+              page.title.toLowerCase().includes(val.toLowerCase()) ||
+              page.desc.toLowerCase().includes(val.toLowerCase())
+          )
+        }))
+        .filter(group => group.items.length > 0);
     }
   }
 
-  getBadge() {
-    this.notification.getMessage().subscribe(res => {
-      this.badge = res.num_of_unread_msgs;
-    });
-  }
-
-  openNotification() {
-    const callback = () => {
-      this.getBadge();
-    };
-    this.app.getRootNav().push('NotificationPage', { callback });
-  }
-
   openPage(page) {
-    this.app.getRootNav().push(page.component);
-  }
-
-  openProfile() {
-    this.openPage(this.pages.find(p => p.component === 'ProfilePage'));
+    if (page.component == "LogoutPage") {
+      this.logout();
+    }
+    else {
+      this.app.getRootNav().push(page.component);
+    }
   }
 
   logout() {

@@ -1,34 +1,64 @@
 page-more {
-    img {
-      border-radius: 50%;
-      border: 1px solid map-get($colors, light);
-      width: 50px;
-      height: 60px;
+  .menu-container {
+    height: 140px;
+  }
+  ion-searchbar {
+    background: none !important;
+  }
+  .menu-section {
+    width: auto;
+    height: auto;
+    .menu-section-header {
+      padding: 15px 15px 7px;
+      position: sticky;
+      top: 0;
+      z-index: 99;
     }
+    .menu-section-items {
+      width: 100%;
+      padding: 5px 10px 5px 5px;
+      height: auto;
+      display: table;
+      .menu-item {
+        height: 100px;
+        width: 24.5%;
+        float: left;
+        margin: 3px 0.5% 2px 0.5%;
+        padding: 2px;
+        border-radius: 5px;
+        ion-icon {
+          width: 100%;
+          font-size: 50px;
+          margin-top: 15px;
+        }
+        .menu-item-title {
+          width: 100%;
+          font-size: 1em;
+          padding-bottom: 1px;
+          padding-left: 2px;
+        }
+      }
+      .menu-item.small {
+        width: 24%;
+      }
+      .menu-item.medium {
+        width: 49%;
+      }
+      .menu-item.large {
+        width: 74%;
+      }
+      .menu-item.xlarge {
+        width: 100%;
+      }
+    }
+  }
 
-    .name{
-      color: map-get($colors, light);
-      letter-spacing: 0.1px;
-      font-size: 0.9em;
-    }
-
-    .staffName{
-      color: map-get($colors, light);
-      letter-spacing: 0.1px;
-      font-size: 0.9em;
-      padding-top: 15px;
-    }
-
-    .cover{
-      background-color: color($colors, primary);
-      height: 100px;
-    }
-
-    [col-3]{
-      padding-top: 15px;
-    }
-
-    .more-content{
-      height: 80%;
-    }
+  /*
+  4 SIZES:
+    1. SMALL
+    2. MEDIUM
+    3. LARGE
+    4. XLARGE
+  5 COLORS:
+  */
 }
