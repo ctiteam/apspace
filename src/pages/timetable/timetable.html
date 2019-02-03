@@ -1,3 +1,4 @@
+<ion-header>
 <ion-navbar>
   <ion-buttons left>
     <button ion-button outline small (click)="chooseWeek()" [disabled]="availableWeek && availableWeek.length === 0"
@@ -11,7 +12,7 @@
     </button>
   </ion-buttons>
 </ion-navbar>
-
+</ion-header>
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="refresh">
