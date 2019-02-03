@@ -1,17 +1,16 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <ion-buttons left>
-      <button color="light" ion-button outline small (click)="chooseWeek()" [disabled]="availableWeek && availableWeek.length === 0">
-        {{ (selectedDate | date) || 'Weeks' }}
-      </button>
-    </ion-buttons>
-    <ion-buttons right>
-      <button color="light" ion-button outline small (click)="presentIntakeSearch()">
-        {{ intake || 'Intakes' }}
-      </button>
-    </ion-buttons>
-  </ion-navbar>
-</ion-header>
+<ion-navbar>
+  <ion-buttons left>
+    <button ion-button outline small (click)="chooseWeek()" [disabled]="availableWeek && availableWeek.length === 0"
+      class="notification-button colored-border">
+      {{ (selectedDate | date) || "Weeks" }}
+    </button>
+  </ion-buttons>
+  <ion-buttons right>
+    <button ion-button outline small (click)="presentIntakeSearch()" class="notification-button colored-border">
+      {{ intake || "Intakes" }}
+    </button>
+  </ion-buttons>
+</ion-navbar>
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
@@ -25,17 +24,19 @@
     </ion-segment-button>
   </ion-segment>
 
-  <ion-card *ngFor="let t of timetable$ | async | classes:intake | theday:selectedDate; trackBy: trackByIndex"
-    [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
+  <ion-card
+    class="p-0 my-1 mx-0"
+    *ngFor="
+      let t of (timetable$ | async | classes: intake | theday: selectedDate);
+      trackBy: trackByIndex
+    "
+    [style.borderLeft]="'0.4rem solid ' + strToColor(t.MODID)"
+  >
     <ion-card-header>
-      {{ t.MODID }}
+      <h2>{{ t.MODID }}</h2>
+      <p class="font-weight-bold">{{ t.TIME_FROM }} - {{ t.TIME_TO }}</p>
     </ion-card-header>
     <ion-card-content>
-      <ion-label no-margin>
-        <ion-icon padding-right name="time"></ion-icon>
-        <b>{{ t.TIME_FROM }}</b> -
-        <b>{{ t.TIME_TO }}</b>
-      </ion-label>
       <ion-label no-margin>
         <ion-icon padding-right name="locate"></ion-icon>
         {{ t.ROOM }} │ {{ t.LOCATION }}

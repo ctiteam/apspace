@@ -1,16 +1,22 @@
 page-timetable {
-  ion-content ion-card-content a {
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  ion-content ion-card-content ion-icon {
-    vertical-align: -1.5px;
-    padding-left: 4px;
-  }
-
-  ion-content ion-card-header + ion-card-content ion-label:nth-child(odd) {
-    background-color: #eceff1;
+  ion-card {
+    width: 100% !important;
+    ion-card-header {
+      border: none !important;
+      p {
+        font-size: 1.3rem !important;
+      }
+    }
+    ion-card-content {
+      a {
+        text-decoration: none;
+        cursor: pointer;
+      }
+      ion-icon {
+        vertical-align: -1.5px;
+        padding-left: 4px;
+      }
+    }
   }
 
   .toolbar-ios ion-title {
