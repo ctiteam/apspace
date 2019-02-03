@@ -1,82 +1,129 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <ion-title>Profile</ion-title>
-  </ion-navbar>
-</ion-header>
+<ion-header no-border>
+    <ion-navbar>
+      <ion-title>Profile</ion-title>
+    </ion-navbar>
+  </ion-header>
 
-<ion-content>
-  <div class="cover">
-    <ng-template [ngIf]="(photo$ | async)">
-      <img class="profile-photo" [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo" onerror="this.src='assets/img/profile.svg'"
-        alt="Avatar">
-    </ng-template>
-    <ng-template [ngIf]="(staffProfile$ | async)">
-      <img class="profile-photo" [src]="(staffProfile$ | async)[0]?.PHOTO" onerror="this.src='assets/img/profile.svg'" alt="Avatar">
-    </ng-template>
-  </div>
-  <ng-template let-profile [ngIf]="profile$ | async">
-    <ion-card class="profile-info">
-      <p class="bold">
-        {{ (profile || [{}])?.NAME }}</p>
-      <p class="bold">
-        {{ (profile || [{}])?.STUDENT_NUMBER}}
-      </p>
-    </ion-card>
-    <ion-card class="ion-card-style">
-      <ion-card-content class="text-left">
-        <p class="bold">Country:</p>
-        <p>{{ (profile || [{}])?.COUNTRY }}</p>
-        <br class="break">
-        <p class="bold">Current Intake Code:</p>
-        <p>{{ (profile || [{}])?.INTAKE }}</p>
-        <br class="break">
-        <p class="bold">Programme:</p>
-        <p>{{ (profile || [{}])?.PROGRAMME }}</p>
-        <br class="break">
-        <p class="bold">Programme Leader:</p>
-        <p>{{ (profile || [{}])?.PL_NAME }}</p>
-        <br class="break">
-        <p class="bold">Mentor Name:</p>
-        <p>{{ (profile || [{}])?.MENTOR_NAME }}</p>
-        <br class="break">
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="ion-card-style">
-      <button margin-bottom ion-item *ngFor='let p of pages' [navPush]='p.component'>
-        {{ p.title }}
-        <ion-icon item-left [name]='p.icon'></ion-icon>
-      </button>
-    </ion-card>
-  </ng-template>
-
-  <!-- Staff Profile -->
-  <ng-template let-staffProfile [ngIf]="staffProfile$ | async">
-    <ion-card class="profile-info">
-      <p class="bold">
-        {{ (staffProfile || [{}])[0]?.FULLNAME }}</p>
-    </ion-card>
-    <ion-card class="ion-card-style">
-      <ion-card-content class="text-left">
-        <p class="bold">Title:</p>
-        <p>{{ (staffProfile || [{}])[0]?.TITLE }}</p>
-        <br class="break">
-        <p class="bold">Nationality:</p>
-        <p>{{ (staffProfile || [{}])[0]?.NATIONALITY }}</p>
-        <br class="break">
-        <p class="bold">Current Job Title:</p>
-        <p>{{ (staffProfile || [{}])[0]?.CURRENT_JOB_TYPE }}</p>
-        <br class="break">
-        <p class="bold">Department:</p>
-        <p>{{ (staffProfile || [{}])[0]?.DEPARTMENT }}</p>
-        <br class="break">
-        <p class="bold">Department 2:</p>
-        <p>{{ (staffProfile || [{}])[0]?.DEPARTMENT2 }}</p>
-        <br class="break">
-        <p class="bold">Department 3:</p>
-        <p>{{ (staffProfile || [{}])[0]?.DEPARTMENT3 }}</p>
-        <br class="break">
-      </ion-card-content>
-    </ion-card>
-  </ng-template>
-
-</ion-content>
+  <ion-content>
+      <!-- START MAIN -->
+      <div class="main" id="main">
+        <!-- START PAGE BODY -->
+        <div class="main-content">
+          <!-- START PAGE CONTAINER -->
+          <div class="container">
+            <!-- START SECTION 1: PERSONAL INFORMATION -->
+            <div class="main-section section profile-info-section">
+              <!-- START SECTION 1 BODY -->
+              <div class="section-body">
+                <div class="section-body-content row">
+                  <div class="col-12 text-center profile-div">
+                    <ng-template [ngIf]="photo$ | async">
+                      <img
+                        class="profile-photo"
+                        [src]="
+                          'data:image/jpg;base64,' +
+                          ((photo$ | async) || {}).base64_photo
+                        "
+                        onerror="this.src='assets/img/profile.svg'"
+                        alt="Avatar"
+                      />
+                    </ng-template>
+                    <ng-template [ngIf]="staffProfile$ | async">
+                      <img
+                        class="profile-photo"
+                        [src]="(staffProfile$ | async)[0]?.PHOTO"
+                        onerror="this.src='assets/img/profile.svg'"
+                        alt="Avatar"
+                      />
+                    </ng-template>
+                  </div>
+    
+                  <ng-template let-profile [ngIf]="profile$ | async">
+                    <div class="col-12 text-center info-div">
+                      <h1>{{ profile.NAME }}</h1>
+                      <h3>{{ profile.STUDENT_NUMBER }} | {{ profile.INTAKE }}</h3>
+                    </div>
+    
+                    <div class="col-12 text-center info-div">
+                      <h4>Programme</h4>
+                      <p>{{ profile.PROGRAMME }}</p>
+                    </div>
+    
+                    <div class="col-12 text-center info-div">
+                      <h4>Mentor Name</h4>
+                      <p>{{ profile.MENTOR_NAME }}</p>
+                    </div>
+    
+                    <div class="col-12 text-center info-div">
+                      <h4>Programme Leader</h4>
+                      <p>{{ profile.PL_NAME }}</p>
+                    </div>
+    
+                    <div class="col-12 text-center info-div">
+                      <h4>Student Pass Expiry Date</h4>
+                      <p>???</p>
+                    </div>
+    
+                    <div class="col-12 text-center info-div">
+                      <h4>Country</h4>
+                      <p>{{ profile.COUNTRY }}</p>
+                    </div>
+                  </ng-template>
+    
+                  <ng-template let-staffProfile [ngIf]="staffProfile$ | async">
+                    <div class="col-12 text-center info-div">
+                      <h1>{{ staffProfile[0].FULLNAME }}</h1>
+                    </div>
+    
+                    <div class="col-12 text-center info-div">
+                      <h4>ID</h4>
+                      <p>{{ staffProfile[0].ID }}</p>
+                    </div>
+    
+                    <div class="col-12 text-center info-div">
+                      <h4>Title</h4>
+                      <p>{{ staffProfile[0].TITLE }}</p>
+                    </div>
+    
+                    <div class="col-12 text-center info-div">
+                      <h4>Nationality</h4>
+                      <p>{{ staffProfile[0].NATIONALITY }}</p>
+                    </div>
+    
+                    <div class="col-12 text-center info-div">
+                      <h4>Current Job Type</h4>
+                      <p>{{ staffProfile[0].CURRENT_JOB_TYPE }}</p>
+                    </div>
+    
+                    <div class="col-12 text-center info-div">
+                      <h4>Department</h4>
+                      <p>{{ staffProfile[0].DEPARTMENT }}</p>
+                    </div>
+    
+                    <ng-template [ngIf]="staffProfile[0].DEPARTMENT1">
+                      <div class="col-12 text-center info-div">
+                        <h4>Department 1</h4>
+                        <p>{{ staffProfile[0].DEPARTMENT1 }}</p>
+                      </div>
+                    </ng-template>
+    
+                    <ng-template [ngIf]="staffProfile[0].DEPARTMENT2">
+                      <div class="col-12 text-center info-div">
+                        <h4>Department 2</h4>
+                        <p>{{ staffProfile[0].DEPARTMENT2 }}</p>
+                      </div>
+                    </ng-template>
+                  </ng-template>
+                </div>
+              </div>
+              <!-- END SECTION 1 BODY -->
+            </div>
+            <!-- END SECTION 1: PROFILE -->
+          </div>
+          <!-- END OF PAGE CONTAINER -->
+        </div>
+        <!-- END PAGE BODY -->
+      </div>
+      <!-- END MAIN -->
+    </ion-content>
+    

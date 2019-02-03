@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
-import { SettingsProvider, WsApiProvider } from '../../providers';
+import { SettingsProvider, WsApiProvider, AppAnimationProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -23,9 +23,12 @@ export class ProfilePage {
   constructor(
     private ws: WsApiProvider,
     private settings: SettingsProvider,
+    private appAnimationProvider: AppAnimationProvider,
+    private elRef: ElementRef
   ) { }
 
   ionViewDidLoad() {
+    this.appAnimationProvider.addAnimationsToSections(this.elRef);
     const role = this.settings.get('role');
     if (role & Role.Student) {
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo', true);
