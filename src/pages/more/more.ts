@@ -187,6 +187,15 @@ export class MorePage {
           role: Role.Student | Role.Lecturer | Role.Admin,
         },
         {
+          title: "Settings",
+          component: "SettingsPage",
+          icon: "settings",
+          size: "small",
+          desc: "purple",
+          color: "purple",
+          role: Role.Student,
+        },
+        {
           title: "Logout",
           component: "LogoutPage",
           icon: "log-out",

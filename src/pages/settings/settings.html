@@ -1,0 +1,135 @@
+<ion-header no-border>
+  <ion-navbar>
+    <button class="menu-button" ion-button icon-only menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>App Settings</ion-title>
+    <ion-buttons end>
+      <button
+        ion-button
+        icon-only
+        class="notification-button"
+        (click)="openNotification()"
+      >
+        <ion-icon name="notifications"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <!-- START MAIN -->
+  <div class="main" id="main">
+    <!-- START PAGE BODY -->
+    <div class="main-content">
+      <!-- START PAGE CONTAINER -->
+      <div class="container">
+        <!-- START SECTION 1: APP SETTINGS -->
+        <div class="main-section section theme-settings-section">
+          <!-- START SECTION 1 HEADER -->
+          <div class="section-header">
+            <div class="section-header-icon">
+              <ion-icon item-left name="hammer"></ion-icon>
+            </div>
+            <div class="section-header-text"><h3>App Settings</h3></div>
+          </div>
+          <!-- END SECTION 1 HEADER -->
+
+          <!-- START SECTION 1 BODY -->
+          <div class="section-body">
+            <div class="section-body-header">
+              <h4 class="col-12">Selected Theme</h4>
+            </div>
+
+            <div class="section-body-content row">
+              <div class="container no-padding-left">
+                <ion-list radio-group [(ngModel)]="activeTheme">
+                  <ion-item *ngFor="let themeOption of themeOptions">
+                    <ion-label>{{ themeOption.title }}</ion-label>
+                    <ion-radio
+                      value="{{themeOption.value}}"
+                      (ionSelect)="toggleTheme($event, themeOption.value)"
+                    ></ion-radio>
+                  </ion-item>
+                </ion-list>
+              </div>
+            </div>
+            <!-- HERE -->
+            <div class="section-body-header">
+              <h4 class="col-12">Selected Color Scheme</h4>
+            </div>
+
+            <div class="section-body-content row">
+              <div class="container no-padding-left">
+                <ion-list radio-group [(ngModel)]="activeColorScheme">
+                  <ion-item *ngFor="let colorOption of colorSchemeOptions">
+                    <ion-label>{{ colorOption.title }}</ion-label>
+                    <ion-radio
+                      value="{{colorOption.value}}"
+                      (ionSelect)="toggleColorScheme($event, colorOption.value)"
+                    ></ion-radio>
+                  </ion-item>
+                </ion-list>
+              </div>
+            </div>
+          </div>
+          <!-- END SECTION 1 BODY -->
+        </div>
+        <!-- END SECTION 1: APP SETTINGS -->
+
+        <!-- START SECTION 2: PRIVACY SETTINGS -->
+        <div class="main-section section theme-settings-section">
+          <!-- START SECTION 2 HEADER -->
+          <div class="section-header">
+            <div class="section-header-icon">
+              <ion-icon item-left name="lock"></ion-icon>
+            </div>
+            <div class="section-header-text">
+              <h3>Security & Privacy Settings</h3>
+            </div>
+          </div>
+          <!-- END SECTION 2 HEADER -->
+
+          <!-- START SECTION 2 BODY -->
+          <div class="section-body">
+            <div class="section-body-header">
+              <h4 class="col-12">Set Security Questions</h4>
+            </div>
+
+            <div class="section-body-header">
+              <h4 class="col-12">Reset Password</h4>
+            </div>
+          </div>
+          <!-- END SECTION 2 BODY -->
+        </div>
+        <!-- END SECTION 2: PRIVACY SETTINGS -->
+
+        <!-- START SECTION 3: NOTIFICATIONS SETTINGS -->
+        <div class="main-section section theme-settings-section">
+          <!-- START SECTION 3 HEADER -->
+          <div class="section-header">
+            <div class="section-header-icon">
+              <ion-icon item-left name="notifications"></ion-icon>
+            </div>
+            <div class="section-header-text">
+              <h3>Notification Settings</h3>
+            </div>
+          </div>
+          <!-- END SECTION 3 HEADER -->
+
+          <!-- START SECTION 3 BODY -->
+          <div class="section-body">
+            <div class="section-body-header">
+              <h4 class="col-12">To be added later</h4>
+            </div>
+          </div>
+          <!-- END SECTION 3 BODY -->
+        </div>
+        <!-- END SECTION 3: NOTIFICATIONS SETTINGS -->
+      </div>
+      <!-- END OF PAGE CONTAINER -->
+    </div>
+    <!-- END PAGE BODY -->
+  </div>
+  <!-- END MAIN -->
+</ion-content>
