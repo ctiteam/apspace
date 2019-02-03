@@ -56,7 +56,7 @@ export class DashboardPage {
   overdue$: Observable<FeesTotalSummary[]>;
   profile$: Observable<StudentProfile>;
   transaction$: Observable<Apcard>;
-  visa$: Observable<any>;
+  // visa$: Observable<any>;
   apcardTransaction$: Observable<Apcard[]>;
 
   // LOADING VARS
@@ -67,7 +67,7 @@ export class DashboardPage {
   subject: string;
   
   // VISA VARS 
-  local: boolean = false;
+  // local: boolean = false;
 
   // HEADER VARS
   greetingMessage = "";
@@ -185,9 +185,9 @@ export class DashboardPage {
   }
 
   // VISA METHODS
-  getVisaStatus() {
-    return this.ws.get<any>("/student/visa_status");
-  }
+  // getVisaStatus() {
+  //   return this.ws.get<any>("/student/visa_status");
+  // }
 
   // FEES & OUTSTANDING METHODS
   getOverdueFee() {
@@ -328,14 +328,14 @@ export class DashboardPage {
         }),
         tap(p => this.getAttendance(p.INTAKE)),
         tap(p => this.getUpcomingExam(p.INTAKE)),
-        tap(p => {
-          if (p.COUNTRY === "Malaysia") {
-            this.local = true;
-          } else {
-            this.local = false;
-            this.visa$ = this.getVisaStatus();
-          }
-        })
+        // tap(p => {
+        //   if (p.COUNTRY === "Malaysia") {
+        //     this.local = true;
+        //   } else {
+        //     this.local = false;
+        //     this.visa$ = this.getVisaStatus();
+        //   }
+        // })
       )
       .subscribe();
   }

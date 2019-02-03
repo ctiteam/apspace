@@ -1,32 +1,4 @@
  <!-- <fireworks></fireworks> -->
-<!--
-  <ng-template [ngIf]='!local' [ngIfElse]='localStudent'>
-    <ng-template let-visa [ngIf]='visa$ | async' [ngIfElse]='locadingVisaStatus'>
-      <ng-template [ngIf]='visa[0].VISA_EXPIRY_DATE' [ngIfElse]='noVisa'>
-        <ion-card>
-          <ion-card-header>
-            <ion-icon padding-right name='md-globe' [style.color]="'#F78F08'"></ion-icon>
-            Visa Expiry Date
-          </ion-card-header>
-          <ion-card-content>
-            {{ visa[0].VISA_EXPIRY_DATE | date: 'mediumDate' }}
-          </ion-card-content>
-        </ion-card>
-      </ng-template>
-      <ng-template #noVisa>
-      </ng-template>
-    </ng-template>
-    <ng-template #locadingVisaStatus>
-      <ion-card>
-        <ion-item no-lines>
-          <skeleton-item height="100px" width="100%"></skeleton-item>
-        </ion-item>
-      </ion-card>
-    </ng-template>
-  </ng-template>
-  <ng-template #localStudent>
-  </ng-template>
- -->
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">

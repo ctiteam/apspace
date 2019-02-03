@@ -59,9 +59,15 @@
                       <p>{{ profile.PL_NAME }}</p>
                     </div>
     
-                    <div class="col-12 text-center info-div">
-                      <h4>Student Pass Expiry Date</h4>
-                      <p>???</p>
+                    <div class="col-12 text-center info-div" *ngIf='!local'>
+                      <ng-template let-visa [ngIf]='visa$ | async'>
+                        <ng-template [ngIf]='visa[0].VISA_EXPIRY_DATE' [ngIfElse]='noVisa'>
+                          <h4>Student Pass Expiry Date</h4>
+                          <p>
+                            {{ visa[0].VISA_EXPIRY_DATE | date: 'dd-LLL-yyyy' }}
+                          </p>
+                        </ng-template>
+                      </ng-template>
                     </div>
     
                     <div class="col-12 text-center info-div">
