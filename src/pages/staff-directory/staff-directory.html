@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-navbar color="primary">
+<ion-header no-border>
+  <ion-navbar>
     <ion-title>Staff Directory</ion-title>
   </ion-navbar>
 </ion-header>
@@ -10,20 +10,32 @@
     <ion-refresher-content pullingIcon="refresh">
     </ion-refresher-content>
   </ion-refresher>
+  
+  <div class="sticky-top">
+      <div class="row">
+        <div class="col-12 search-bar-div">
+          <ion-searchbar [(ngModel)]="term"> </ion-searchbar>
+        </div>
+      </div>
+      <div class="row mt-0" *ngIf="(staffType$ | async) as staffTypes">
+        <div class="col-12 functional-area-div">
+          <ion-label stacked class="ml-4">Functional Area</ion-label>
+          <ion-select
+            [(ngModel)]="dept"
+            interface="popover"
+            placeholder="Functional Area"
+          >
+            <ion-option selected [value]="''">Any</ion-option>
+            <ion-option
+              *ngFor="let type of staffTypes"
+              [innerHTML]="type.toUpperCase()"
+              [value]="type"
+            ></ion-option>
+          </ion-select>
+        </div>
+      </div>
+    </div>
 
-  <ion-list no-lines>
-    <ion-item>
-      <ion-searchbar [(ngModel)]="term">
-      </ion-searchbar>
-    </ion-item>
-    <ion-item *ngIf="staffType$ | async as staffTypes">
-      <ion-label floating>Functional Area</ion-label>
-      <ion-select [(ngModel)]="dept" interface="popover">
-        <ion-option selected></ion-option>
-        <ion-option *ngFor="let type of staffTypes" [innerHTML]="type.toUpperCase()" [value]="type"></ion-option>
-      </ion-select>
-    </ion-item>
-  </ion-list>
 
   <ion-list [virtualScroll]="staff$ | async | in:dept | search:term" [virtualTrackBy]="trackById" approxItemHeight="68px">
     <ion-item *virtualItem="let staff" navPush="StaffDirectoryInfoPage" [navParams]="{id: staff.ID}">

@@ -493,11 +493,6 @@ $dark_menu_colors: (
     .cover-page {
       background-color: color($dark_colors, dark_header_background);
     }
-    .staff-back-button {
-      button {
-        color: color($dark_colors, dark_search_background_color);
-      }
-    }
     .info-items {
       .info-item {
         button.btn-outline-dark {

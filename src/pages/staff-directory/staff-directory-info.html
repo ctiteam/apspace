@@ -1,18 +1,84 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <ion-title>{{ (staff$ | async)?.TITLE | urldecode }} Info</ion-title>
+<ion-header no-border>
+  <ion-navbar>
+    <ion-title>Staff Directory</ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content>
   <ng-template let-staff [ngIf]="staff$ | async">
-    <div class="staff-directory-info-header">
+
+    <div class="cover-page"></div>
+    <div class="container info-items px-4 py-3">
+      <div class="info-items-inner">
+        <div class="row">
+          <div class="col-12 staff-directory-info-header">
+            <!-- <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/'+staff.RefNo+'.jpg'"> -->
+            <img [src]="'https://d37plr7tnxt7lb.cloudfront.net/'+staff.RefNo+'.jpg'" onerror="this.src='assets/img/profile.svg'; this.style.padding='5px'; this.style.boxShadow='none'">
+          </div>
+          <div class="col-12 text-center info-item name mb-3 mt-5">
+            <h2 class="h1">
+              {{ (staff$ | async)?.FULLNAME | urldecode }}
+            </h2>
+            <button class="btn btn-outline-dark mt-3 consult-btn" (click)="GoToIconsult(staff.ID, staff.EMAIL)">
+              Book Consultation Hour (Beta)
+            </button>
+          </div>
+
+          <div class="col-12 info-item title my-2">
+            <p class="m-0 p-0">Job Title:</p>
+            <h3 class="pt-1 pl-3">{{ staff.TITLE }}</h3>
+          </div>
+
+          <div class="col-12 info-item email my-2" *ngIf="staff.EMAIL">
+            <p class="m-0 p-0">Email Address:</p>
+            <a href="mailto:{{ staff.EMAIL }}">
+              <h3 class="pt-1 pl-3">{{ staff.EMAIL }}</h3>
+            </a>
+          </div>
+
+          <div class="col-12 info-item location my-2" *ngIf="staff.LOCATION">
+            <p class="m-0 p-0">Office Location:</p>
+            <h3 class="pt-1 pl-3">{{ staff.LOCATION }}</h3>
+          </div>
+
+          <div class="col-12 info-item contact my-2" *ngIf="staff.EXTENSION">
+            <p class="m-0 p-0">Contact Number:</p>
+            <a href="tel:+60389961000">
+              <h3 class="pt-1 pl-3">
+                +6 03-8996 1000 (Ext. {{ staff.EXTENSION }})
+              </h3>
+            </a>
+          </div>
+
+          <div class="col-12 info-item area mt-2" *ngIf="staff.DEPARTMENT || staff.DEPARTMENT2 || staff.DEPARTMENT">
+            <p class="m-0 p-0">Functional Area(s):</p>
+            <ul class="list-unstyled pt-2 pl-3">
+              <li *ngIf="staff.DEPARTMENT" class="py-1">
+                <h3 class="h4" [innerHTML]="staff.DEPARTMENT"></h3>
+              </li>
+              <li *ngIf="staff.DEPARTMENT2" class="py-1">
+                <h3 class="h4" [innerHTML]="staff.DEPARTMENT2"></h3>
+              </li>
+              <li *ngIf="staff.DEPARTMENT3" class="py-1">
+                <h3 class="h4" [innerHTML]="staff.DEPARTMENT3"></h3>
+              </li>
+            </ul>
+          </div>
+          <div class="col-12 info-item area mt-2">
+            <p class="m-0 p-0">Timetable:</p>
+            <lecturer-timetable [id]="staff.ID"></lecturer-timetable>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="staff-directory-info-header">
       <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/'+staff.RefNo+'.jpg'">
       <img [src]="'https://d37plr7tnxt7lb.cloudfront.net/'+staff.RefNo+'.jpg'"
         onerror="this.src='assets/img/profile.svg'; this.style.padding='36px'">
-    </div>
-    <ion-list>
+    </div> -->
+    <!-- <ion-list>
       <ion-item>
         <h2>{{ staff.FULLNAME }}</h2>
       </ion-item>
@@ -35,7 +101,7 @@
       <ion-item *ngIf="staff.DEPARTMENT" [innerHTML]="staff.DEPARTMENT"></ion-item>
       <ion-item *ngIf="staff.DEPARTMENT2" [innerHTML]="staff.DEPARTMENT2"></ion-item>
       <ion-item *ngIf="staff.DEPARTMENT3" [innerHTML]="staff.DEPARTMENT3"></ion-item>
-    </ion-list>
-    <lecturer-timetable [id]="staff.ID"></lecturer-timetable>
+    </ion-list> -->
+    <!-- <lecturer-timetable [id]="staff.ID"></lecturer-timetable> -->
   </ng-template>
 </ion-content>

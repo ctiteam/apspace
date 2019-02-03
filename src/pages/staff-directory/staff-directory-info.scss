@@ -1,33 +1,45 @@
 page-staff-directory-info {
-  /* XXX: ugly hack to do the display the back-button */
-  ion-navbar button[ion-button].back-button {
-    display: inline-block;
+  .cover-page {
+    height: 110px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  .info-items {
+    position: absolute;
+    top: 33px;
+    .info-items-inner {
+      .staff-directory-info-header {
+        text-align: center;
+        align-content: center;
+        margin: 1px auto;
+        // #bg {
+        //   position: absolute;
+        //   left: 0;
+        //   right: 0;
+        //   transform: scale(2) translateY(8%);
+        //   z-index: -1;
+        //   filter: blur(5px);
+        //   max-height: 90px;
+        //   max-width: 120px;
+        // }
+
+        img {
+          display: block;
+          margin: 0 auto;
+          max-height: 225px;
+        }
+      }
+      .info-item{
+        .consult-btn{
+          border-radius: 12px;font-size: 1.3rem;
+        }
+      }
+    }
   }
 
   a {
     text-decoration: none;
-  }
-
-  lecturer-timetable .schedule-week {
-    padding: 0 12px;
-  }
-
-  .staff-directory-info-header {
-    #bg {
-      position: absolute;
-      left: 0;
-      right: 0;
-      transform: scale(2) translateY(8%);
-      z-index: -1;
-      filter: blur(5px);
-      max-height: 35vh;
-    }
-
-    img {
-      display: block;
-      margin: 0 auto;
-      box-shadow: 0 0 6px 2px #fff, 0 0 2px 1px #ddd;
-      max-height: 75vh;
-    }
   }
 }
