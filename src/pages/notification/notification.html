@@ -23,30 +23,57 @@
       </ion-refresher-content>
     </ion-refresher>
 
-    <ng-container [ngSwitch]='notifications'>
-      <ion-list *ngSwitchCase="'all'">
-        <button class="message-btn" *ngFor="let message of message$ | async" (click)="openBasicModal(message, message.message_id)"
-          [style.font-weight]="message.read ? '400' : 'bold'" ion-item>
-          <ion-icon [name]="message.read ? 'mail-open' : 'mail'" [style.color]="message.read ? '#0dbd53' : '#f04141'"
-            item-left></ion-icon>
-          {{ message.title }}
-          <br>
-          <ion-note class="message_content" [innerHTML]="sanitize(message?.content)"></ion-note>
-          <ion-note class="message-time" item-right>{{ message.message_id * 1000 | date }}</ion-note>
-        </button>
-      </ion-list>
-
-      <ion-list *ngSwitchCase="'unread'">
-        <button class="message-btn" *ngFor="let message of message$ | async | unread" (click)="openBasicModal(message, message.message_id)"
-          [style.font-weight]="message.read ? '400' : 'bold'" ion-item>
-          <ion-icon name='mail' style='color: #f04141' item-left></ion-icon>
-          {{ message.title }}
-          <br>
-          <ion-note class="message_content" [innerHTML]="sanitize(message?.content)"></ion-note>
-          <ion-note class="message-time" item-right>{{ message.message_id * 1000 | date }}</ion-note>
-        </button>
-      </ion-list>
-    </ng-container>
+    <ng-container [ngSwitch]="notifications">
+        <ion-list *ngSwitchCase="'all'">
+          <button
+            class="message-btn"
+            *ngFor="let message of (message$ | async)"
+            (click)="openBasicModal(message, message.message_id)"
+            [style.font-weight]="message.read ? '400' : 'bold'"
+            ion-item
+          >
+            <ion-icon
+              [name]="message.read ? 'mail-open' : 'mail'"
+              [style.color]="message.read ? '#c6c2c2' : '#f04141'"
+              item-left
+            ></ion-icon>
+            <h4 [style.color]="message.read ? '#c6c2c2' : '#f04141'">
+              {{ message.title }}
+            </h4>
+            <ion-note
+              class="message_content"
+              [innerHTML]="sanitize(message?.content)"
+            ></ion-note>
+            <ion-note
+              class="message-time"
+              [style.color]="message.read ? '#c6c2c2' : '#f04141'"
+              item-right
+            >
+              {{ message.message_id * 1000 | date }}
+            </ion-note>
+          </button>
+        </ion-list>
+    
+        <ion-list *ngSwitchCase="'unread'">
+          <button
+            class="message-btn"
+            *ngFor="let message of (message$ | async | unread)"
+            (click)="openBasicModal(message, message.message_id)"
+            [style.font-weight]="message.read ? '400' : 'bold'"
+            ion-item
+          >
+            <ion-icon name="mail" style="color: #f04141" item-left></ion-icon>
+            {{ message.title }} <br />
+            <ion-note
+              class="message_content"
+              [innerHTML]="sanitize(message?.content)"
+            ></ion-note>
+            <ion-note class="message-time" item-right>{{
+              message.message_id * 1000 | date
+            }}</ion-note>
+          </button>
+        </ion-list>
+      </ng-container>
 
     <ng-container *ngIf="isLoading">
       <ion-item *ngFor="let i of numOfSkeletons">

@@ -1,31 +1,31 @@
 <ion-header no-border>
-  <ion-navbar color='primary'>
-    <ion-title *ngIf="itemDetails">{{ itemDetails.title }}</ion-title>
-  </ion-navbar>
-</ion-header>
+    <ion-navbar>
+      <ion-title *ngIf="itemDetails">{{ itemDetails.title }}</ion-title>
+    </ion-navbar>
+  </ion-header>
 
 <ion-content *ngIf="itemDetails">
-  <div id="fill"></div>
-  <button id="icon-button" ion-button icon-only>
+    <div id="fill"></div>
+    <button id="icon-button" ion-button icon-only>
       <ion-icon id="mail-icon" name="mail-open"></ion-icon>
-    </button>
-    <div padding>
-      <br>
-      <br>
-      <h4 id="h4">
-        {{ itemDetails.title }}
-      </h4>
-      <br>
-      <ion-note id="note">
-        Issued by: <span id="staff-name">{{ itemDetails.staff_name }}</span>
-      </ion-note>
-      <br>
-      <ion-note id="note">
-        Time & Date: <span id="staff-name">{{ displayDate(itemDetails.message_id) }}</span>
-      </ion-note>
-      <br>
-      <br>
-      <br>
-      <article [innerHTML]="sanitize(itemDetails?.content)"></article>
+    </button> 
+    <div class="row pt-5 px-3 pb-3">
+      <div class="col-12">
+        <h2 class="m-0 p-0">{{ itemDetails.title }}</h2>
+      </div>
+      <div class="col-12">
+        <p class="p-3 content" [innerHTML]="sanitize(itemDetails?.content)">
+        </p>
+      </div>
+      <div class="col-12 info">
+        <p>
+          Issued by:
+          <span>{{ itemDetails.staff_name }}</span>
+        </p>
+        <p>
+          Time & Date:
+          <span>{{ displayDate(itemDetails.message_id) }}</span>
+        </p>
+      </div>
     </div>
-</ion-content>
+  </ion-content>
