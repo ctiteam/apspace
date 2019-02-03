@@ -1,15 +1,21 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <ion-title *ngIf="course$ | async">
-      {{this.selectedIntake || 'Results'}}
-    </ion-title>
-    <ion-buttons *ngIf="!block" end>
-      <button color="light" ion-button outline small (click)="showActionSheet()">
-        Intakes
-      </button>
-    </ion-buttons>
-  </ion-navbar>
-</ion-header>
+<ion-header no-border>
+    <ion-navbar>
+      <ion-title *ngIf="course$ | async">
+          {{this.selectedIntake || 'Results'}}
+      </ion-title>
+      <ion-buttons *ngIf="!block" end>
+        <button
+          ion-button
+          outline
+          small
+          class="notification-button colored-border"
+          (click)="showActionSheet()"
+        >
+          Intakes
+        </button>
+      </ion-buttons>
+    </ion-navbar>
+  </ion-header>
 
 <ion-content>
   <ng-template [ngIf]='!block'>
@@ -21,7 +27,7 @@
 
     <ng-template let-results [ngIf]='result$ | async' [ngIfElse]='loadingBarChart'>
       <ng-template [ngIf]='results && results.length > 0' [ngIfElse]='nodata'>
-        <chart *ngIf='data' margin-top [type]="type" [data]="data" [options]="options"></chart>
+          <chart *ngIf='data' class="mt-2" [type]="type" [data]="data" [options]="options"></chart>
       </ng-template>
       <ng-template #nodata>
       </ng-template>
@@ -37,7 +43,7 @@
     <ng-template let-courseDetails [ngIf]='courseDetail$ | async:trackBy: trackByFn' [ngIfElse]='loadingCourseDetails'>
       <ion-card>
         <ion-list no-lines *ngFor="let detail of courseDetails">
-          <ion-item *ngIf="detail.SEMESTER" class="primary-color">
+          <ion-item *ngIf="detail.SEMESTER" class="primary-color summary">
             <ion-note class="block-note" item-left>Semester {{ detail.SEMESTER }}</ion-note>
             <ion-note class="block-note" item-right>{{ detail.TOTAL_MODULES_PASSED }} passed (GPA {{ detail.GPA }})</ion-note>
           </ion-item>
@@ -132,15 +138,15 @@
                 <ion-note class="notes">{{ interim.GRADE_DESCRIPTION || '' }}</ion-note>
               </ion-col>
             </ion-row>
-            <ion-note>
+            <ion-note class="special-note">
               R = Awarding of module credit by passing module referral assessments.
             </ion-note>
-            <ion-note margin-top>
+            <ion-note class="special-note mt-2">
               C = Awarding of module credit through compensation at the discretion of the Examination Board, based on
               the student's
               overall academic performance. No referral assessment is requried for module.
             </ion-note>
-            <ion-note *ngIf="mpuLegend$ | async as mpu" margin-top>
+            <ion-note *ngIf="mpuLegend$ | async as mpu" class="special-note mt-2">
               {{mpu[0].MPU || ''}}
             </ion-note>
           </ion-grid>
@@ -174,7 +180,7 @@
                 </ion-note>
               </ion-col>
             </ion-row>
-            <ion-note *ngIf="determinationLegend$ | async as determination" margin-top>
+            <ion-note *ngIf="determinationLegend$ | async as determination" class="mt-2">
               {{determination[0]?.DETERMINATION || ''}}
             </ion-note>
           </ion-grid>

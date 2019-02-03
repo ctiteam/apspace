@@ -1,88 +1,33 @@
 page-results {
-  ion-content ion-card {
-    .item {
-      background-color: foreground;
-    }
-
-    ion-label {
-      font-size: 90%;
-      font-weight: lighter !important;
-    }
-  }
-
-  .subj-title {
-    font-weight: 900;
-  }
-
-  ion-segment {
-    display: block;
-    white-space: nowrap;
-    overflow: auto;
-
-    &::-webkit-scrollbar {
-      width: 0;
-      height: 0;
-      display: none;
-    }
-
-    ion-segment-button.segment-button {
-      display: inline-block;
-      min-width: 135px;
-      width: auto;
+  ion-card {
+    ion-list {
+        ion-item {
+            &.subj-title {
+                font-weight: 900;
+            }
+            ion-label {
+                font-size: 90%;
+                font-weight: lighter !important;
+            }
+        }
     }
   }
-
-  .segment-md .segment-button{
-    font-size: 1.1em;
+  .card-ios {
+      border-radius: 10px;
   }
-
-  .segment-ios .segment-button{
-    font-size: 1.1em;
+  .card-md {
+      border-radius: 10px;
   }
-
-  .total-summary{
-    background-color: rgba(54, 162, 235, 0.7);
-    color: color($colors, light);
-    font-weight: bolder;
-  }
-
-  .card-ios{
-    border-radius: 10px;
-  }
-
-  .card-md{
-    border-radius: 10px;
-  }
-
   .scroll-content {
-    background-color: map-get($colors, light);
+      background-color: map-get($colors, light);
   }
-
-  .semester-header{
-      text-align: center;
-      background: rgba(54, 162, 235, 0.7);
+  .content-message {
+      text-align: justify;
   }
-
-  .primary-color{
-    background: color($colors, primary);
-  }
-
-  .notes{
-    color: color($colors, dark);
-  }
-
-  .block-note{
-    color: color($colors, light);
-  }
-
-  .content-message{
-    text-align: justify;
-  }
-
   .warning-logo {
-    display: block;
-    font-size: 5em;
-    text-align: center;
-    color: white;
+      display: block;
+      font-size: 5em;
+      text-align: center;
+      color: white;
   }
 }
