@@ -10,6 +10,14 @@ lecturer-timetable {
     font-size: small;
   }
 
+  .wrap-text{
+    white-space: pre-wrap;      /* CSS3 */   
+    white-space: -moz-pre-wrap; /* Firefox */    
+    white-space: -pre-wrap;     /* Opera <7 */   
+    white-space: -o-pre-wrap;   /* Opera 7 */    
+    word-wrap: break-word;
+  }
+
   .right {
     float: right;
   }
@@ -20,11 +28,12 @@ lecturer-timetable {
 
   .schedule-week {
     margin-bottom: 12px;
+    padding: 10px 12px;
   }
 
   .schedule-week-head {
     font-size: large;
-    padding: 5px 5px 15px;  /* use padding for larger press area */
+    padding: 5px 5px 15px; /* use padding for larger press area */
   }
 
   .schedule-day {
@@ -45,7 +54,7 @@ lecturer-timetable {
 
   .schedule-day-body {
     flex: 1;
-    min-width: 0;   /* limit width of container */
+    min-width: 0; /* limit width of container */
   }
 
   .event {
