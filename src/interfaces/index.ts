@@ -2,6 +2,7 @@ export { Apcard } from './apcard';
 export { Attendance } from './attendance';
 export { AttendanceLegend } from './attendance-legend';
 export { BusTrips, Trips } from './bus-trips';
+export { ApuLocations, LocationsInterface } from './bus-locations';
 export { ClassificationLegend } from './classfication-legend';
 export { Course } from './courses';
 export { CourseDetails } from './course-details';

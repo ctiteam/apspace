@@ -1,255 +1,262 @@
 page-bus-tracking {
-  .underFadeDiv {
-    z-index: 1 !important;
-    background: rgb(238, 238, 238);
-    background: linear-gradient(0deg, rgba(238, 238, 238, 1) 80%, rgba(254, 254, 254, 0) 100%);
-    padding: 94px !important;
-    position: fixed !important;
-    bottom: 0 !important;
-    width: 100% !important;
-  }
-
-  .chosenLocationDiv {
-    background-color: #fefefe !important;
-    z-index: 2 !important;
-    position: absolute !important;
-    bottom: 9.2em !important;
-    width: 92.5% !important;
-    margin-left: 3.5% !important;
-    border-radius: 10px !important;
-    padding: 4px;
-    box-shadow: 0px 2.5px 3px 0px rgba(50, 50, 50, 0.30);
-  }
-
-  .chosenLocationDiv ion-icon {
-    font-size: 32px;
-    float: left !important;
-    display: inline;
-    margin: 6px 0 0 10px !important;
-  }
-
-  .chosenLocationDiv .itemButton {
-    display: inline;
-    width: 84% !important;
-  }
-
-  .chosenLocationDiv ion-icon.moreInfoIcon {
-    width: 93%;
-    line-height: 5px;
-    text-align: center;
-    font-size: 24px;
-    color: #a9a9a9 !important;
-    margin: 3px 0 0 10px !important;
-  }
-
-  .destinationDiv {
-    z-index: 3 !important;
-    background-color: #fefefe !important;
-    padding-top: 10px !important;
-    height: 111px !important;
-    width: 93% !important;
-    position: absolute !important;
-    bottom: 0.8em !important;
-    margin-left: 3.5% !important;
-    border-radius: 8px !important;
-    box-shadow: 0px 2.5px 3px 0px rgba(50, 50, 50, 0.30) !important;
-  }
-
-  .destinationItemsDiv {
-    width: 71% !important;
-    float: left !important;
-  }
-
-  .destinationItemsDiv ion-item .select-placeholder {
-    background-color: #fefefe !important;
-    color: black !important;
-  }
-
-  .miniLocationButtonDiv {
-    position: fixed;
-    z-index: 6 !important;
-    background-color: #fefefe;
-    width: 4.5em;
-    padding: 4px 0 0 3px !important;
-    border-radius: 27px 0 0 27px !important;
-    box-shadow: -1px 0px 8px -5px rgba(0, 0, 0, 0.74);
-    right: -69px;
-    top: 7em;
-    animation: mapSlide 0.5s forwards;
-    animation-delay: 0.5s;
-  }
-
-  .darkenedBackGround {
-    padding: 300px;
-    position: relative;
-    z-index: 4 !important;
-    background-color: rgba(0, 0, 0, 0.41) !important;
-    visibility: visible;
-    transition: visibility 1s, opacity 0.5s linear;
-  }
-
-  h3.busTime {
-    float: left;
-    margin: 13px 0 0 26px !important;
-    font-size: 16px;
-  }
-
-  .BgImageVertical {
-    position: relative !important;
-    margin-top: -69px !important;
-    z-index: 0;
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  .BgImageHorizontal {
-    position: relative !important;
-    width: 100% !important;
-    z-index: 0;
-    height: 100% !important;
-    display: none;
-  }
-
-  .BgImageVertical {
-    position: relative !important;
-    margin-top: -69px !important;
-    z-index: 0;
-    width: 100% !important;
-    height: 100% !important;
-  }
-
-  .BgImageHorizontal {
-    position: relative !important;
-    width: 100% !important;
-    z-index: 0;
-    height: 100% !important;
-    display: none;
-  }
-
-  .iconAndTimeDIv {
-    height: 51px !important;
-  }
-
-  .iconAndTimeDIv .label {
-    margin: 0;
-  }
-
-  ion-select {
-    max-width: 100%;
-  }
-
-  .item-inner {
-    border-bottom: 0 !important;
-  }
-
-  button[ion-button] {
-    height: 3em;
-  }
-
-  .selection {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.1);
-  }
-
-  #map {
-    height: 100%;
-  }
-
-  .swap {
-    border-radius: 50%;
-    width: 40px;
-    height: auto;
-    margin: 21px;
-    transform: rotate(90deg);
-  }
-
-  .shk {
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    animation-name: shakeMe, colorChange;
-    animation-duration: 5s;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear, step-start;
-  }
-
-  img#mapButton {
-    filter: brightness(100%);
-  }
-
-  img#mapButton:active {
-    filter: brightness(82%);
-  }
-
-  .bar-button-outline-ios {
-    color: white !important;
-    border-color: white !important;
-  }
-
-  @media only screen and (min-width: 500px) {
-
-    //some value
-    .BgImageVertical {
-      display: none;
-    }
-
-    .BgImageHorizontal {
-      display: block;
+  .trips-card{
+    color: #c6c2c2;
+    .trips-card-header{
+      background-color: #292929;
+      color: #fff
     }
   }
+  // .underFadeDiv {
+  //   z-index: 1 !important;
+  //   background: rgb(238, 238, 238);
+  //   background: linear-gradient(0deg, rgba(238, 238, 238, 1) 80%, rgba(254, 254, 254, 0) 100%);
+  //   padding: 94px !important;
+  //   position: fixed !important;
+  //   bottom: 0 !important;
+  //   width: 100% !important;
+  // }
 
-  @keyframes shakeMe {
+  // .chosenLocationDiv {
+  //   background-color: #fefefe !important;
+  //   z-index: 2 !important;
+  //   position: absolute !important;
+  //   bottom: 9.2em !important;
+  //   width: 92.5% !important;
+  //   margin-left: 3.5% !important;
+  //   border-radius: 10px !important;
+  //   padding: 4px;
+  //   box-shadow: 0px 2.5px 3px 0px rgba(50, 50, 50, 0.30);
+  // }
 
-    2%,
-    18% {
-      transform: translate3d(-5px, 0, 0);
-    }
+  // .chosenLocationDiv ion-icon {
+  //   font-size: 32px;
+  //   float: left !important;
+  //   display: inline;
+  //   margin: 6px 0 0 10px !important;
+  // }
 
-    4%,
-    16% {
-      transform: translate3d(5px, 0, 0);
-    }
+  // .chosenLocationDiv .itemButton {
+  //   display: inline;
+  //   width: 84% !important;
+  // }
 
-    6%,
-    10%,
-    14% {
-      transform: translate3d(-5px, 0, 0);
-    }
+  // .chosenLocationDiv ion-icon.moreInfoIcon {
+  //   width: 93%;
+  //   line-height: 5px;
+  //   text-align: center;
+  //   font-size: 24px;
+  //   color: #a9a9a9 !important;
+  //   margin: 3px 0 0 10px !important;
+  // }
 
-    8%,
-    12% {
-      transform: translate3d(5px, 0, 0);
-    }
+  // .destinationDiv {
+  //   z-index: 3 !important;
+  //   background-color: #fefefe !important;
+  //   padding-top: 10px !important;
+  //   height: 111px !important;
+  //   width: 93% !important;
+  //   position: absolute !important;
+  //   bottom: 0.8em !important;
+  //   margin-left: 3.5% !important;
+  //   border-radius: 8px !important;
+  //   box-shadow: 0px 2.5px 3px 0px rgba(50, 50, 50, 0.30) !important;
+  // }
 
-    18.1% {
-      transform: translate3d(0px, 0, 0);
-    }
-  }
+  // .destinationItemsDiv {
+  //   width: 71% !important;
+  //   float: left !important;
+  // }
 
-  @keyframes colorChange {
+  // .destinationItemsDiv ion-item .select-placeholder {
+  //   background-color: #fefefe !important;
+  //   color: black !important;
+  // }
 
-    4%,
-    16% {
-      color: #e64d3e;
-    }
+  // .miniLocationButtonDiv {
+  //   position: fixed;
+  //   z-index: 6 !important;
+  //   background-color: #fefefe;
+  //   width: 4.5em;
+  //   padding: 4px 0 0 3px !important;
+  //   border-radius: 27px 0 0 27px !important;
+  //   box-shadow: -1px 0px 8px -5px rgba(0, 0, 0, 0.74);
+  //   right: -69px;
+  //   top: 7em;
+  //   animation: mapSlide 0.5s forwards;
+  //   animation-delay: 0.5s;
+  // }
 
-    6%,
-    10%,
-    14% {
-      color: #e64d3e;
-    }
+  // .darkenedBackGround {
+  //   padding: 300px;
+  //   position: relative;
+  //   z-index: 4 !important;
+  //   background-color: rgba(0, 0, 0, 0.41) !important;
+  //   visibility: visible;
+  //   transition: visibility 1s, opacity 0.5s linear;
+  // }
 
-    8%,
-    12% {
-      color: #e64d3e;
-    }
+  // h3.busTime {
+  //   float: left;
+  //   margin: 13px 0 0 26px !important;
+  //   font-size: 16px;
+  // }
 
-    18.1% {
-      color: #e64d3e;
-    }
-  }
+  // .BgImageVertical {
+  //   position: relative !important;
+  //   margin-top: -69px !important;
+  //   z-index: 0;
+  //   width: 100% !important;
+  //   height: 100% !important;
+  // }
 
-  @keyframes mapSlide {
-    100% {
-      right: -12px;
-    }
-  }
+  // .BgImageHorizontal {
+  //   position: relative !important;
+  //   width: 100% !important;
+  //   z-index: 0;
+  //   height: 100% !important;
+  //   display: none;
+  // }
+
+  // .BgImageVertical {
+  //   position: relative !important;
+  //   margin-top: -69px !important;
+  //   z-index: 0;
+  //   width: 100% !important;
+  //   height: 100% !important;
+  // }
+
+  // .BgImageHorizontal {
+  //   position: relative !important;
+  //   width: 100% !important;
+  //   z-index: 0;
+  //   height: 100% !important;
+  //   display: none;
+  // }
+
+  // .iconAndTimeDIv {
+  //   height: 51px !important;
+  // }
+
+  // .iconAndTimeDIv .label {
+  //   margin: 0;
+  // }
+
+  // ion-select {
+  //   max-width: 100%;
+  // }
+
+  // .item-inner {
+  //   border-bottom: 0 !important;
+  // }
+
+  // button[ion-button] {
+  //   height: 3em;
+  // }
+
+  // .selection {
+  //   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.1);
+  // }
+
+  // #map {
+  //   height: 100%;
+  // }
+
+  // .swap {
+  //   border-radius: 50%;
+  //   width: 40px;
+  //   height: auto;
+  //   margin: 21px;
+  //   transform: rotate(90deg);
+  // }
+
+  // .shk {
+  //   transform: translate3d(0, 0, 0);
+  //   backface-visibility: hidden;
+  //   animation-name: shakeMe, colorChange;
+  //   animation-duration: 5s;
+  //   animation-iteration-count: infinite;
+  //   animation-timing-function: linear, step-start;
+  // }
+
+  // img#mapButton {
+  //   filter: brightness(100%);
+  // }
+
+  // img#mapButton:active {
+  //   filter: brightness(82%);
+  // }
+
+  // .bar-button-outline-ios {
+  //   color: white !important;
+  //   border-color: white !important;
+  // }
+
+  // @media only screen and (min-width: 500px) {
+
+  //   //some value
+  //   .BgImageVertical {
+  //     display: none;
+  //   }
+
+  //   .BgImageHorizontal {
+  //     display: block;
+  //   }
+  // }
+
+  // @keyframes shakeMe {
+
+  //   2%,
+  //   18% {
+  //     transform: translate3d(-5px, 0, 0);
+  //   }
+
+  //   4%,
+  //   16% {
+  //     transform: translate3d(5px, 0, 0);
+  //   }
+
+  //   6%,
+  //   10%,
+  //   14% {
+  //     transform: translate3d(-5px, 0, 0);
+  //   }
+
+  //   8%,
+  //   12% {
+  //     transform: translate3d(5px, 0, 0);
+  //   }
+
+  //   18.1% {
+  //     transform: translate3d(0px, 0, 0);
+  //   }
+  // }
+
+  // @keyframes colorChange {
+
+  //   4%,
+  //   16% {
+  //     color: #e64d3e;
+  //   }
+
+  //   6%,
+  //   10%,
+  //   14% {
+  //     color: #e64d3e;
+  //   }
+
+  //   8%,
+  //   12% {
+  //     color: #e64d3e;
+  //   }
+
+  //   18.1% {
+  //     color: #e64d3e;
+  //   }
+  // }
+
+  // @keyframes mapSlide {
+  //   100% {
+  //     right: -12px;
+  //   }
+  // }
 }
