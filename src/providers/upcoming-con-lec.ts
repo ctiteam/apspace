@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { publishLast, refCount } from 'rxjs/operators';
 
 import { ConDetail, Feedback, FreeSlotsLec, Starttimes, UnavailruleDet } from '../interfaces';
 import { CasTicketProvider } from './cas-ticket';
@@ -37,8 +38,8 @@ export class UpcomingConLecProvider {
   userlogoutsession = '/iconsult/close-session';
 
   constructor(public http: HttpClient,
-              private cas: CasTicketProvider,
-              private ws: WsApiProvider,
+    private cas: CasTicketProvider,
+    private ws: WsApiProvider,
   ) {
   }
 
@@ -123,6 +124,7 @@ export class UpcomingConLecProvider {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
       },
+      responseType: 'text',
     });
   }
 

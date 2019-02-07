@@ -40,6 +40,7 @@ export class WsApiProvider {
    * @param options.auth - authentication required (default: true)
    * @param options.headers - http headers (default: {})
    * @param options.params - additional request parameters (default: {})
+   * @param options.responseType - override Http response type (default: "json")
    * @param options.timeout - request timeout (default: 10000)
    * @param options.url - url of web service (default: apiUrl)
    * @return shared cached observable
@@ -49,6 +50,7 @@ export class WsApiProvider {
     auth?: boolean,
     headers?: HttpHeaders | { [header: string]: string | string[]; },
     params?: HttpParams | { [param: string]: string | string[]; },
+    responseType?: any,
     timeout?: number,
     url?: string,
   } = {}): Observable<T> {
@@ -57,6 +59,7 @@ export class WsApiProvider {
       auth: true,
       headers: {},
       params: {},
+      responseType: 'json',
       timeout: 20000,
       url: this.apiUrl,
     }, options);
@@ -65,6 +68,7 @@ export class WsApiProvider {
     const opt = {
       headers: options.headers,
       params: options.params,
+      responseType: options.responseType,
       withCredentials: options.auth,
     };
 
@@ -77,7 +81,7 @@ export class WsApiProvider {
         tap(cache => this.storage.set(endpoint, cache)),
         timeout(options.timeout),
         catchError(err => {
-          // this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
+          this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
           return fromPromise(this.storage.get(endpoint)).pipe(
             switchMap(v => v || obs_throw('retrying')),
           );
@@ -101,6 +105,7 @@ export class WsApiProvider {
    * @param options.body - request body (default: null)
    * @param options.headers - http headers (default: {})
    * @param options.params - additional request parameters (default: {})
+   * @param options.responseType - override Http response type (default: "json")
    * @param options.timeout - request timeout (default: 10000)
    * @param options.url - url of web service (default: apiUrl)
    * @return shared cached observable
@@ -109,6 +114,7 @@ export class WsApiProvider {
     body?: any | null,
     headers?: HttpHeaders | { [header: string]: string | string[]; },
     params?: HttpParams | { [param: string]: string | string[]; },
+    responseType?: any,
     timeout?: number,
     url?: string,
   } = {}): Observable<T> {
@@ -116,6 +122,7 @@ export class WsApiProvider {
       body: null,
       headers: {},
       params: {},
+      responseType: 'json',
       timeout: 10000,
       url: this.apiUrl,
     }, options);
@@ -124,6 +131,7 @@ export class WsApiProvider {
     const opt = {
       headers: options.headers,
       params: options.params,
+      responseType: options.responseType,
       withCredentials: true,
     };
 
@@ -152,6 +160,7 @@ export class WsApiProvider {
    * @param options.body - request body (default: null)
    * @param options.headers - http headers (default: {})
    * @param options.params - additional request parameters (default: {})
+   * @param options.responseType - override Http response type (default: "json")
    * @param options.timeout - request timeout (default: 10000)
    * @param options.url - url of web service (default: apiUrl)
    * @return shared cached observable
@@ -160,6 +169,7 @@ export class WsApiProvider {
     body?: any | null,
     headers?: HttpHeaders | { [header: string]: string | string[]; },
     params?: HttpParams | { [param: string]: string | string[]; },
+    responseType?: any,
     timeout?: number,
     url?: string,
   } = {}): Observable<T> {
@@ -167,6 +177,7 @@ export class WsApiProvider {
       body: null,
       headers: {},
       params: {},
+      responseType: 'json',
       timeout: 10000,
       url: this.apiUrl,
     }, options);
@@ -175,6 +186,7 @@ export class WsApiProvider {
     const opt = {
       headers: options.headers,
       params: options.params,
+      responseType: options.responseType,
       withCredentials: true,
     };
 

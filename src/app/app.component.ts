@@ -151,7 +151,7 @@ export class MyApp {
       this.upcominglec.usersessionlogout(),
       this.platform.is('cordova') ? this.dc.logout() : of(null),
     ).pipe(
-      timeout(5000),
+      // timeout(10000),
       switchMapTo(this.cas.deleteTGT()),
     ).subscribe(_ => {
       this.settings.clear();

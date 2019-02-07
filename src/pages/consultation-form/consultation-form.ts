@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { SettingsProvider, UpcomingConStuProvider } from '../../providers';
 import { TabsPage } from '../tabs/tabs';
 import { UpcomingstdPage } from '../upcomingstd/upcomingstd';
+import { IconsultPage } from '../iConsult-student/iconsult';
 
 @IonicPage()
 @Component({
@@ -72,27 +73,39 @@ export class ConsultationFormPage {
         {
           text: 'Yes',
           handler: () => {
-            // if () {
-            //   console.log('check');
-            // }
-            // else {
-
-            // }
-            this.conWith = '';
-            this.reason = '';
-            this.telnumber = '';
-            this.emialaddress = '';
-            this.notes = '';
-            this.presentLoading();
-            this.UpcomingConStu.addbooking(this.booking).subscribe(
-              () => {
-                this.app.getRootNav().setRoot(TabsPage);
-                this.app.getRootNav().push(UpcomingstdPage);
-                this.presentToast();
-                this.settings.set('contactNo', this.booking.phone);
-              },
-            );
-
+            this.UpcomingConStu.addbooking(this.booking)
+              .subscribe(result => {
+                if (result === true) {
+                  this.conWith = '';
+                  this.reason = '';
+                  this.telnumber = '';
+                  this.emialaddress = '';
+                  this.notes = '';
+                  this.presentLoading();
+                  this.UpcomingConStu.addbooking(this.booking).subscribe(
+                    () => {
+                      this.app.getRootNav().setRoot(TabsPage);
+                      this.app.getRootNav().push(UpcomingstdPage);
+                      this.presentToast();
+                    },
+                  );
+                } else {
+                  const innerAlert = this.alertCtrl.create({
+                    message: 'This slot just booked by a student, please book another slot.',
+                    buttons: [
+                      {
+                        text: 'OK',
+                        handler: () => {
+                          this.app.getRootNav().setRoot(TabsPage);
+                          this.app.getRootNav().push(UpcomingstdPage);
+                          this.settings.set('contactNo', this.booking.phone);
+                        },
+                      },
+                    ],
+                  });
+                  innerAlert.present();
+                }
+              });
           },
         },
       ],

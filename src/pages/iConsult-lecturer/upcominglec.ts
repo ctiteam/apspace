@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { AlertController, App, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController, App, DateTime, IonicPage, NavController, NavParams } from 'ionic-angular';
 import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
@@ -21,9 +21,8 @@ export class UpcominglecPage {
   items: any;
   currentDateTime: string = moment().format();
   skeletonArray = new Array(5);
-  dateString = moment().format();
-  timeString = moment().format('HH:mm:ss');
-  // myDate: String = new Date().toISOString();
+
+  currenttime = moment().format('YYYY-MM-DD HH:mm:ss');
 
   constructor(
     public http: HttpClient,
@@ -38,6 +37,12 @@ export class UpcominglecPage {
 
   ionViewDidLoad() {
     this.slots$ = this.UpcomingConLec.getUpcomingConLec();
+  }
+
+  doRefresh(refresher?) {
+    this.slots$ = this.UpcomingConLec.getUpcomingConLec().pipe(
+      finalize(() => refresher.complete()),
+    );
   }
 
   getUpcomingConLec() {
@@ -76,12 +81,6 @@ export class UpcominglecPage {
 
   openUnavailabledetailsPage(unavailibilityid: number) {
     this.app.getRootNav().push('UnavailabledetailsPage', { unavailibilityid });
-  }
-
-  doRefresh(refresher?) {
-    this.slots$ = this.UpcomingConLec.getUpcomingConLec().pipe(
-      finalize(() => refresher.complete()),
-    );
   }
 
   gotoChat() {
