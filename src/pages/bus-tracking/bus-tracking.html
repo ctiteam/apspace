@@ -2,7 +2,13 @@
   <ion-navbar>
     <ion-title>Bus Tracking</ion-title>
     <ion-buttons end>
-      <button ion-button outline small class='notification-button colored-border' (click)="openFilterMenu()">
+      <button
+        ion-button
+        outline
+        small
+        class="notification-button colored-border"
+        (click)="openFilterMenu()"
+      >
         <ion-icon name="options"></ion-icon>
       </button>
     </ion-buttons>
@@ -11,44 +17,56 @@
 
 <ion-menu [content]="content" side="right">
   <ion-header>
-    <ion-toolbar>
-      <ion-title>Filter Trips</ion-title>
-    </ion-toolbar>
+    <ion-toolbar> <ion-title>Filter Trips</ion-title> </ion-toolbar>
   </ion-header>
   <ion-content>
     <ion-list>
       <ion-item-divider>
-        <ion-label>
-          Filter by locations:
-        </ion-label>
+        <ion-label> Filter by locations: </ion-label>
       </ion-item-divider>
       <ion-item>
         <ion-label>From</ion-label>
         <ion-select [(ngModel)]="fromLocation">
           <ion-option selected value="">Any</ion-option>
-          <ion-option *ngFor="let location of locations" [value]="location.location_name">{{location.location_nice_name}}</ion-option>
+          <ion-option
+            *ngFor="let location of locations"
+            [value]="location.location_name"
+            >{{ location.location_nice_name }}</ion-option
+          >
         </ion-select>
       </ion-item>
       <ion-item>
         <ion-label>To</ion-label>
         <ion-select [(ngModel)]="toLocation">
           <ion-option selected value="">Any</ion-option>
-          <ion-option *ngFor="let location of locations" [value]="location.location_name">{{location.location_nice_name}}</ion-option>
+          <ion-option
+            *ngFor="let location of locations"
+            [value]="location.location_name"
+            >{{ location.location_nice_name }}</ion-option
+          >
         </ion-select>
       </ion-item>
       <ion-item-divider color="secondary">
-        <ion-label>
-          Filter by days:
-        </ion-label>
+        <ion-label> Filter by days: </ion-label>
       </ion-item-divider>
       <ion-item>
         <ion-label>Day</ion-label>
         <ion-select [(ngModel)]="tripDay">
-          <ion-option selected value="mon-fri">Monday-Friday</ion-option>
-          <ion-option value="fri">Friday</ion-option>
+          <ion-option value="mon-fri">Monday-Friday</ion-option>
           <ion-option value="sat">Saturday</ion-option>
           <ion-option value="sun">Sunday</ion-option>
         </ion-select>
+      </ion-item>
+      <ion-item>
+        <button
+          ion-button
+          outline
+          small
+          class="notification-button colored-border"
+          (click)="filterTrips(fromLocation, toLocation, tripDay)"
+        >
+          Search
+        </button>
       </ion-item>
     </ion-list>
   </ion-content>
@@ -56,9 +74,8 @@
 
 <ion-content #content>
   <!-- refresher -->
-  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)='getTrips($event)'>
-    <ion-refresher-content pullingIcon="refresh">
-    </ion-refresher-content>
+  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="getTrips($event)">
+    <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
 
   <!-- <ng-container *ngIf="trip$ | async | on:selectedDay | during:selectedFrom:selectedTo as trips">
@@ -118,22 +135,58 @@
 
   </ng-container> -->
 
-  <ng-template let-trips [ngIf]="trip$ | async" [ngIfElse]="loadingTrips">
-    <div class="row mt-3">
+  <ng-template
+    let-trips
+    [ngIf]="filteredTrip$ | async"
+    [ngIfElse]="loadingTrips"
+  >
+    <div class="row mt-3" *ngIf="numberOfTrips!=0">
       <div class="col-12">
         <div *ngFor="let sourceKey of objectKeys(trips)">
-          <div class="px-0 trips-card" *ngFor="let destinationKey of objectKeys(trips[sourceKey])">
-            <h2 class=" trips-card-header py-4 px-3 mb-3 sticky-top" [ngStyle]="{'background':'linear-gradient(to right, ' + getLocationColor(sourceKey) + ',' + getLocationColor(destinationKey) + ')'}">
-              {{getLocationDisplayName(sourceKey) + ' -> ' + getLocationDisplayName(destinationKey)}}
+          <div
+            class="px-0 trips-card"
+            *ngFor="let destinationKey of objectKeys(trips[sourceKey])"
+          >
+            <h2
+              class=" trips-card-header py-4 px-3 mb-3 sticky-top"
+              [ngStyle]="{
+                background:
+                  'linear-gradient(to right, ' +
+                  getLocationColor(sourceKey) +
+                  ',' +
+                  getLocationColor(destinationKey) +
+                  ')'
+              }"
+            >
+              {{
+                getLocationDisplayName(sourceKey) +
+                  " -> " +
+                  getLocationDisplayName(destinationKey)
+              }}
             </h2>
             <div class="row trips-card-data">
-              <p *ngFor="let trip of trips[sourceKey][destinationKey]" class="col-3 text-center trip-time"
-                [style.color]="strToTime(trip.trip_time) >= dateNow ? '#fff' : '#c6c2c2'" [style.fontWeight]="strToTime(trip.trip_time) >= dateNow ? 'bold' : 'lighter'">
-                {{trip.trip_time}}
+              <p
+                *ngFor="let trip of trips[sourceKey][destinationKey]"
+                class="col-3 text-center trip-time"
+                [style.color]="
+                  strToTime(trip.trip_time) >= dateNow ? '#fff' : '#c6c2c2'
+                "
+                [style.fontWeight]="
+                  strToTime(trip.trip_time) >= dateNow ? 'bold' : 'lighter'
+                "
+              >
+                {{ trip.trip_time }}
               </p>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row d-flex justify-content-center" *ngIf="numberOfTrips==0">
+      <div class="col-6">
+          <h4 style="color: white">
+              There is no more trips from {{fromLocation}} to {{toLocation}} on {{tripDay}}
+          </h4>
       </div>
     </div>
   </ng-template>
@@ -145,5 +198,4 @@
       </ion-card-content>
     </ion-card>
   </ng-template>
-
 </ion-content>

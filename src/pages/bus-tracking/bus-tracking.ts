@@ -1,25 +1,30 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 import {
   ActionSheetButton,
   ActionSheetController,
   AlertController,
   IonicPage,
   ModalController,
-  MenuController,
-} from 'ionic-angular';
+  MenuController
+} from "ionic-angular";
 
-import { Observable } from 'rxjs/Observable';
-import { finalize, map, tap, filter } from 'rxjs/operators';
+import { Observable } from "rxjs/Observable";
+import { finalize, map, tap, filter } from "rxjs/operators";
 
-import { Trips, BusTrips, ApuLocations, LocationsInterface } from '../../interfaces';
-import { BusTrackingProvider, SettingsProvider } from '../../providers';
+import {
+  Trips,
+  BusTrips,
+  ApuLocations,
+  LocationsInterface
+} from "../../interfaces";
+import { BusTrackingProvider, SettingsProvider } from "../../providers";
 
 import * as _ from "lodash";
 
 @IonicPage()
 @Component({
-  selector: 'page-bus-tracking',
-  templateUrl: 'bus-tracking.html',
+  selector: "page-bus-tracking",
+  templateUrl: "bus-tracking.html"
 })
 export class BusTrackingPage {
   objectKeys = Object.keys;
@@ -40,7 +45,14 @@ export class BusTrackingPage {
   numOfSkeletons = new Array(6);
 
   trip$: Observable<Trips[]>;
+  filteredTrip$: Observable<Trips[]>;
   location$: Observable<LocationsInterface[]>;
+
+  // FILTER NG MODEL VALUES
+  tripDay: string;
+  toLocation: string;
+  fromLocation: string;
+  numberOfTrips = 0;
 
   constructor(
     public actionSheetCtrl: ActionSheetController,
@@ -50,13 +62,67 @@ export class BusTrackingPage {
     private modalCtrl: ModalController,
     private busProv: BusTrackingProvider,
     public menu: MenuController
-  ) {
+  ) {}
+
+  filterTrips(source, destination, day) {
+    console.log(source + " , " + destination + " , " + day);
+    let tripsWithoutSourceObj = Object.create(null);
+    let fullTripsObj = Object.create(null);
+    this.filteredTrip$ = this.trip$.pipe(
+      map(tripsObj => {
+        this.numberOfTrips = 0;
+        for (var key in tripsObj) {
+          if (tripsObj.hasOwnProperty(key)) {
+            if (key.includes(source)) {
+              for (var destKey in tripsObj[key]) {
+                if (tripsObj[key].hasOwnProperty(destKey)) {
+                  if (destKey.includes(destination)) {
+                    let filteredbyDayArray = tripsObj[key][destKey].filter(
+                      trip => {
+                        if (day == "mon-fri") {
+                          return trip.trip_day == day || trip.trip_day == "fri";
+                        }
+                        return trip.trip_day == day;
+                      }
+                    );
+                    this.numberOfTrips++;
+                    tripsWithoutSourceObj[destKey] = filteredbyDayArray;
+                    fullTripsObj[key] = tripsWithoutSourceObj;
+                  } else {
+                  }
+                }
+              }
+            }
+          }
+        }
+        return fullTripsObj;
+      })
+    );
   }
 
-  
+  getTodayDay(date: Date) {
+    let shortDayName = "";
+    let dayRank = date.getDay();
+    if (dayRank == 0) {
+      shortDayName = "sun";
+    } else if (dayRank > 0 && dayRank <= 5) {
+      shortDayName = "mon-fri";
+    } else {
+      shortDayName = "sat";
+    }
+    return shortDayName;
+  }
+
+  IsItFriday(date: Date) {
+    if (date.getDay() == 5) {
+      return true;
+    }
+    return false;
+  }
+
   openFilterMenu() {
     this.menu.toggle();
-}
+  }
 
   /** Display trip days. */
   // presentActionSheet() {
@@ -80,29 +146,28 @@ export class BusTrackingPage {
 
   /** Get bus tracking trips and set the first day. */
   getTrips(refresher?) {
-    this.trip$ = this.bus.getTrips(Boolean(refresher))
-    .pipe(
-      map((response) => { //group items by trip_from
-      return _.mapValues(
-          _.groupBy(response.trips, item => {
-            return item.trip_from;
-          })
-        );
-      }),
-      map((filteredTrips) => { // group items by trip_to
-        return _.forEach(filteredTrips, function(value, key) {
-              filteredTrips[key] = _.groupBy(filteredTrips[key], function(item) {
-                return item.trip_to;
-              });
+    this.filteredTrip$ = this.trip$ = this.bus
+      .getTrips(Boolean(refresher))
+      .pipe(
+        map(response => {
+          //group items by trip_from
+          return _.mapValues(
+            _.groupBy(response.trips, item => {
+              return item.trip_from;
+            })
+          );
+        }),
+        map(filteredTrips => {
+          // group items by trip_to
+          this.numberOfTrips++;
+          return _.forEach(filteredTrips, function(value, key) {
+            filteredTrips[key] = _.groupBy(filteredTrips[key], function(item) {
+              return item.trip_to;
             });
-        }
-      ),
-      map((t) => {
-        console.log(t);
-        return t;
-      }),
-      finalize(() => refresher && refresher.complete())
-    );
+          });
+        }),
+        finalize(() => refresher && refresher.complete())
+      );
     // const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
     // this.trip$ = this.bus.getTrips(Boolean(refresher)).pipe(
     //   map(d => d.trips),
@@ -125,41 +190,43 @@ export class BusTrackingPage {
     // );
   }
 
-  getLocations(refresher?){
-    this.bus.getLocationDetails(Boolean(refresher))
-    .subscribe(
-      (response) => {
-        this.locations = response.locations;
-      }
-    );
+  getLocations(refresher?) {
+    this.bus.getLocationDetails(Boolean(refresher)).subscribe(response => {
+      this.locations = response.locations;
+    });
   }
 
-  getLocationDisplayName(locationName: string){
-    for (let location of this.locations){
-      if(location.location_name == locationName){
+  getLocationDisplayName(locationName: string) {
+    for (let location of this.locations) {
+      if (location.location_name == locationName) {
         return location.location_nice_name;
       }
     }
   }
 
-  getLocationColor(locationName: string){
-    for (let location of this.locations){
-      if(location.location_name == locationName){
+  getLocationColor(locationName: string) {
+    for (let location of this.locations) {
+      if (location.location_name == locationName) {
         return location.location_color;
       }
     }
   }
 
-  strToTime(strTime: string){
+  strToTime(strTime: string) {
     let customDate = new Date();
     customDate.setHours(+strTime.split(":")[0]);
-    customDate.setMinutes(+strTime.split(":")[1]);    
+    customDate.setMinutes(+strTime.split(":")[1]);
     return customDate;
   }
 
   ionViewDidLoad() {
+    // FILTER OPTIONS
+    this.tripDay = this.getTodayDay(this.dateNow); // SET THE TRIP DAY TO THE CURRENT DAY
+    this.toLocation = "";
+    this.fromLocation = "";
+
     this.getTrips();
-    this.getLocations(); 
+    this.getLocations();
   }
 
   ionViewDidLeave() {
