@@ -609,6 +609,11 @@ $light_menu_colors: (
         }
       }
     }
+    .no-trips-message{
+      h2{
+        color: color($light_colors, ligth_grey_color);
+      }
+    }
   }
 
   // OPERATION HOURS PAGE
