@@ -544,7 +544,7 @@ $light_menu_colors: (
   }
 
   // STUDENTS TIMETABLE PAGE
-  page-timetable {
+  page-timetable, page-classroom-finder-modal {
     ion-card {
       background-color: color($light_colors, light_white_background) !important;
       ion-card-header {

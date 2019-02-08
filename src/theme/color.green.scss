@@ -286,7 +286,7 @@ $primary_color: #2ecc71;
   }
 
   // STUDENTS TIMETABLE PAGE
-  page-timetable {
+  page-timetable, page-classroom-finder-modal {
     ion-card {
       ion-card-header {
         h2 {
@@ -297,6 +297,10 @@ $primary_color: #2ecc71;
           color: $primary_color !important;
         }
       }
+    }
+    ion-card.free {
+      background-color: $primary_color !important;
+      border-left: 0.4rem solid $primary_color;
     }
   }
 

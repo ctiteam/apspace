@@ -1,8 +1,8 @@
 <ion-header>
-  <ion-navbar color="primary">
+  <ion-navbar>
     <ion-title>{{selectedRoom}}</ion-title>
-    <ion-buttons end>
-      <button color="light" ion-button outline small (click)="chooseWeek()" [disabled]="availableWeek && availableWeek.length === 0">
+    <ion-buttons right>
+        <button ion-button outline small (click)="chooseWeek()" [disabled]="availableWeek && availableWeek.length === 0" class="notification-button colored-border">
         {{ (selectedDate | date) || 'Weeks' }}
       </button>
     </ion-buttons>
@@ -13,6 +13,7 @@
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
   <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date:'E' | uppercase" (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
     <!-- Use CSS for dynamically updated segment -->
     <ion-segment-button *ngFor="let d of wday; index as i" [value]="d" [style.display]="'inline-block'">
@@ -22,9 +23,9 @@
 
   <span *ngFor="let t of timetable$ | async | in:selectedRoom | filterday:selectedDate; trackBy: trackByIndex;">
     <ng-template [ngIf]="t.MODID !== 'FREE'" [ngIfElse]="free">
-      <ion-card [style.borderLeft]="'1rem solid ' + strToColor(t.MODID)">
+      <ion-card class="p-0 my-1 mx-0" [style.borderLeft]="'0.4rem solid ' + strToColor(t.MODID)">
         <ion-card-header>
-          {{ t.MODID }}
+          <h2>{{ t.MODID }}</h2>
         </ion-card-header>
         <ion-card-content>
           <ion-label no-margin>
@@ -46,7 +47,7 @@
       </ion-card>
     </ng-template>
     <ng-template #free>
-      <ion-card class="free">
+      <ion-card class="free p-0 my-1 mx-0">
         <ion-card-header>
           <strong>FREE</strong>
         </ion-card-header>
