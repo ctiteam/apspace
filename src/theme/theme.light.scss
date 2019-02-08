@@ -37,7 +37,8 @@ $light_menu_colors: (
     color: color($light_colors, ligth_grey_color);
   }
 
-  .toolbar-title-ios, .toolbar-title-md {
+  .toolbar-title-ios,
+  .toolbar-title-md {
     color: color($light_colors, ligth_grey_color);
   }
 
@@ -555,10 +556,13 @@ $light_menu_colors: (
       ion-card-content {
         color: color($light_colors, ligth_grey_color);
       }
-      &.no-classes-message{
-        background-color: color($light_colors, light_white_background) !important;
-        ion-card-content{
-          p{
+      &.no-classes-message {
+        background-color: color(
+          $light_colors,
+          light_white_background
+        ) !important;
+        ion-card-content {
+          p {
             color: color($light_colors, ligth_grey_color) !important;
           }
         }
@@ -588,24 +592,54 @@ $light_menu_colors: (
     }
   }
 
-    // BUS TRACKING PAGE
-    page-bus-tracking {
-      .trips-card{
-        color: color($light_colors, ligth_grey_color);
-        .trips-card-header{
-          background-color: color($light_colors, light_white_background);
-          color: color($light_colors, light_white_background) !important;
-        }
-        .trips-card-data{
-          p{
-            color: color($light_colors, ligth_grey_color);
-            &.coming{
-              color: color($light_colors, light_blue_color);
-            }
+  // BUS TRACKING PAGE
+  page-bus-tracking {
+    .trips-card {
+      color: color($light_colors, ligth_grey_color);
+      .trips-card-header {
+        background-color: color($light_colors, light_white_background);
+        color: color($light_colors, light_white_background) !important;
+      }
+      .trips-card-data {
+        p {
+          color: color($light_colors, ligth_grey_color);
+          &.coming {
+            color: color($light_colors, light_blue_color);
           }
         }
       }
     }
+  }
+
+  // OPERATION HOURS PAGE
+  page-operation-hours {
+    ion-card {
+      border: 1px solid color($light_colors, light_background) !important;
+      box-shadow: 1px 1px 1px color($light_colors, light_background),
+        -1px -1px 1px color($light_colors, light_white_background) !important;
+      ion-card-header {
+        color: color($light_colors, light_blue_color) !important;
+        background-color: color(
+          $light_colors,
+          light_background
+        ) !important;
+        border: 1px solid color($light_colors, light_white_background) !important;
+      }
+      ion-card-content {
+        background-color: color($light_colors, light_white_background);
+        h4 {
+          color: color($light_colors, light_blue_color) !important;
+        }
+        h2 {
+          color: color($light_colors, light_blue_color) !important;
+        }
+        ul li,
+        p {
+          color: color($light_colors, ligth_grey_color) !important;
+        }
+      }
+    }
+  }
 
   // OVERRIDING THE IONIC SEGMENTS DESIGN (ALL PAGES)
   .segment-md .segment-button {

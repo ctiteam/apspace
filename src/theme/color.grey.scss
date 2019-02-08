@@ -305,22 +305,37 @@ $primary_color: #7f8c8d;
     }
     h2 {
       text-shadow: 0.1px 0.1px 0.1px $primary_color,
-      0.1px 0.1px 0.1px $primary_color !important;
+        0.1px 0.1px 0.1px $primary_color !important;
     }
   }
 
-      // BUS TRACKING PAGE
-      page-bus-tracking {
-        .trips-card{
-          .trips-card-data{
-            p{
-              &.coming{
-                text-shadow: 0.1px 0.1px 0.1px $primary_color;
-              }
-            }
+  // BUS TRACKING PAGE
+  page-bus-tracking {
+    .trips-card {
+      .trips-card-data {
+        p {
+          &.coming {
+            text-shadow: 0.1px 0.1px 0.1px $primary_color;
           }
         }
       }
+    }
+  }
+
+  // OPERATION HOURS PAGE
+  page-operation-hours {
+    ion-card {
+      ion-card-content {
+        h2 {
+          text-shadow: 0.2px 0.2px 0.2px $primary_color,
+            -0.2px -0.2px 0.2px $primary_color;
+        }
+        a {
+          color: $primary_color;
+        }
+      }
+    }
+  }
 
   // OVERRIDE BOOTSTRAP COLORS
   .bg-success {

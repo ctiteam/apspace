@@ -37,7 +37,8 @@ $dark_menu_colors: (
     color: color($dark_colors, dark_search_background_color);
   }
 
-  .toolbar-title-ios, .toolbar-title-md {
+  .toolbar-title-ios,
+  .toolbar-title-md {
     color: color($dark_colors, dark_search_background_color);
   }
 
@@ -593,10 +594,10 @@ $dark_menu_colors: (
       ion-card-content {
         color: color($dark_colors, dark_search_background_color);
       }
-      &.no-classes-message{
+      &.no-classes-message {
         background-color: color($dark_colors, dark_item_background) !important;
-        ion-card-content{
-          p{
+        ion-card-content {
+          p {
             color: color($dark_colors, dark_search_background_color) !important;
           }
         }
@@ -632,18 +633,45 @@ $dark_menu_colors: (
 
   // BUS TRACKING PAGE
   page-bus-tracking {
-    .trips-card{
+    .trips-card {
       color: color($dark_colors, dark_search_background_color);
-      .trips-card-header{
+      .trips-card-header {
         background-color: color($dark_colors, dark_item_background);
         color: color($dark_colors, dark_white_color) !important;
       }
-      .trips-card-data{
-        p{
+      .trips-card-data {
+        p {
           color: color($dark_colors, dark_search_background_color);
-          &.coming{
+          &.coming {
             color: color($dark_colors, dark_white_color);
           }
+        }
+      }
+    }
+  }
+
+  // OPERATION HOURS PAGE
+  page-operation-hours {
+    ion-card {
+      border: 1px solid color($dark_colors, dark_item_background) !important;
+      box-shadow: 1px 1px 1px color($dark_colors, dark_item_background),
+        -1px -1px 1px color($dark_colors, dark_item_background) !important;
+      ion-card-header {
+        color: color($dark_colors, dark_white_color) !important;
+        background-color: color($dark_colors, dark_item_background) !important;
+        border: 1px solid color($dark_colors, dark_item_background) !important;
+      }
+      ion-card-content {
+        background-color: color($dark_colors, dark_background);
+        h4 {
+          color: color($dark_colors, dark_white_color) !important;
+        }
+        h2 {
+          color: color($dark_colors, dark_white_color) !important;
+        }
+        ul li,
+        p {
+          color: color($dark_colors, dark_search_background_color) !important;
         }
       }
     }
