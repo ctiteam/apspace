@@ -54,10 +54,10 @@
         </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label>Upcoming Trips Only</ion-label>
+        <ion-label>Show</ion-label>
         <ion-select [(ngModel)]="comingTripsOnly">
-          <ion-option value="">No</ion-option>
-          <ion-option value="true">Yes</ion-option>
+          <ion-option value="">All Trips</ion-option>
+          <ion-option value="true">Upcoming Trips</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
@@ -72,7 +72,7 @@
             filterTrips(fromLocation, toLocation, tripDay, comingTripsOnly)
           "
         >
-          Apply
+          Apply Filters
           <ion-icon name="checkmark"></ion-icon>
         </button>
       </ion-item>

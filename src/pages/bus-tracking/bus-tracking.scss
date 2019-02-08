@@ -1,4 +1,15 @@
 page-bus-tracking {
+  ion-menu{
+    ion-content{
+      ion-list{
+        ion-item{
+          button{
+            height: 2em !important;
+          }
+        }
+      }
+    }
+  }
   .trips-card {
     .trips-card-data {
       p.coming {
