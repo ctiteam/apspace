@@ -2,7 +2,13 @@
   <ion-navbar>
     <ion-title>Bus Tracking</ion-title>
     <ion-buttons end>
-      <button ion-button outline small class="notification-button colored-border" (click)="toggleFilterMenu()">
+      <button
+        ion-button
+        outline
+        small
+        class="notification-button colored-border"
+        (click)="toggleFilterMenu()"
+      >
         <ion-icon name="options"></ion-icon>
       </button>
     </ion-buttons>
@@ -21,16 +27,22 @@
         <ion-label>From</ion-label>
         <ion-select [(ngModel)]="fromLocation">
           <ion-option selected value="">Any</ion-option>
-          <ion-option *ngFor="let location of locations" [value]="location.location_name">{{
-            location.location_nice_name }}</ion-option>
+          <ion-option
+            *ngFor="let location of locations"
+            [value]="location.location_name"
+            >{{ location.location_nice_name }}</ion-option
+          >
         </ion-select>
       </ion-item>
       <ion-item>
         <ion-label>To</ion-label>
         <ion-select [(ngModel)]="toLocation">
           <ion-option selected value="">Any</ion-option>
-          <ion-option *ngFor="let location of locations" [value]="location.location_name">{{
-            location.location_nice_name }}</ion-option>
+          <ion-option
+            *ngFor="let location of locations"
+            [value]="location.location_name"
+            >{{ location.location_nice_name }}</ion-option
+          >
         </ion-select>
       </ion-item>
       <ion-item>
@@ -49,7 +61,15 @@
         </ion-select>
       </ion-item>
       <ion-item>
-        <button ion-button outline small class="notification-button colored-border" (click)="filterTrips(fromLocation, toLocation, tripDay, comingTripsOnly)">
+        <button
+          ion-button
+          outline
+          small
+          class="notification-button colored-border"
+          (click)="
+            filterTrips(fromLocation, toLocation, tripDay, comingTripsOnly)
+          "
+        >
           Search
         </button>
       </ion-item>
@@ -63,30 +83,43 @@
     <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
 
-  <ng-template let-trips [ngIf]="filteredTrip$ | async" [ngIfElse]="loadingTrips">
-    <div class="row mt-3" *ngIf="numberOfTrips!=0">
+  <ng-template
+    let-trips
+    [ngIf]="filteredTrip$ | async"
+    [ngIfElse]="loadingTrips"
+  >
+    <div class="row mt-3" *ngIf="numberOfTrips != 0">
       <div class="col-12">
         <div *ngFor="let sourceKey of objectKeys(trips)">
-          <div class="px-0 trips-card" *ngFor="let destinationKey of objectKeys(trips[sourceKey])">
-            <h2 class=" trips-card-header py-4 px-3 mb-3 sticky-top" [ngStyle]="{
+          <div
+            class="px-0 trips-card"
+            *ngFor="let destinationKey of objectKeys(trips[sourceKey])"
+          >
+            <h2
+              class=" trips-card-header py-4 px-3 mb-3 sticky-top"
+              [ngStyle]="{
                 background:
                   'linear-gradient(to right, ' +
                   getLocationColor(sourceKey) +
                   ',' +
                   getLocationColor(destinationKey) +
                   ')'
-              }">
+              }"
+            >
               {{
-              getLocationDisplayName(sourceKey) +
-              " -> " +
-              getLocationDisplayName(destinationKey)
+                getLocationDisplayName(sourceKey) +
+                  " -> " +
+                  getLocationDisplayName(destinationKey)
               }}
-              <span *ngIf="sourceKey == 'mosque' || destinationKey == 'mosque'">(Friday only)</span>
+              <span *ngIf="sourceKey == 'mosque' || destinationKey == 'mosque'"
+                >(Friday only)</span
+              >
             </h2>
             <div class="row trips-card-data">
-              <p *ngFor="let trip of trips[sourceKey][destinationKey]"
+              <p
+                *ngFor="let trip of trips[sourceKey][destinationKey]"
                 class="col-3 text-center trip-time"
-                [class.coming] ="strToDate(trip.trip_time) >= dateNow"
+                [class.coming]="strToDate(trip.trip_time) >= dateNow"
               >
                 {{ trip.trip_time }}
               </p>
@@ -95,10 +128,11 @@
         </div>
       </div>
     </div>
-    <div class="row d-flex justify-content-center" *ngIf="numberOfTrips==0">
+    <div class="row d-flex justify-content-center" *ngIf="numberOfTrips == 0">
       <div class="col-6">
         <h4 style="color: white">
-          There is no more trips from {{fromLocation}} to {{toLocation}} on {{tripDay}}
+          There is no more trips from {{ fromLocation }} to {{ toLocation }} on
+          {{ tripDay }}
         </h4>
       </div>
     </div>

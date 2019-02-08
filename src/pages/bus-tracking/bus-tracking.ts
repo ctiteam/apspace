@@ -7,7 +7,6 @@ import { BusTrackingProvider } from "../../providers";
 import { Observable } from "rxjs/Observable";
 import { finalize, map } from "rxjs/operators";
 
-
 import * as _ from "lodash";
 
 @IonicPage()
@@ -26,7 +25,6 @@ export class BusTrackingPage {
   objectKeys = Object.keys;
   numOfSkeletons = new Array(6);
 
-
   // FILTER NG MODEL VALUES
   tripDay: string;
   toLocation: string;
@@ -34,10 +32,7 @@ export class BusTrackingPage {
   comingTripsOnly: string;
   numberOfTrips = 0;
 
-  constructor(
-    public bus: BusTrackingProvider,
-    public menu: MenuController
-  ) { }
+  constructor(public bus: BusTrackingProvider, public menu: MenuController) {}
 
   ionViewDidLoad() {
     // FILTER OPTIONS
@@ -50,25 +45,29 @@ export class BusTrackingPage {
     this.getLocations();
   }
 
-  // GET TRIPS
+  // GET TRIPS FOR FIRST TIME
   getTrips(refresher?) {
     // TRIP$ IS USED FOR FILTERING
-    this.trip$ = this.bus
-      .getTrips(Boolean(refresher))
-      .pipe(
-        map(res => res.trips),
-        finalize(() => refresher && refresher.complete())
-      );
+    this.trip$ = this.bus.getTrips(Boolean(refresher)).pipe(
+      map(res => res.trips),
+      finalize(() => refresher && refresher.complete())
+    );
 
     // FILTEREDTRIP$ IS USED IN THE TEMPLATE AFTER GROUPING TRIP$
     this.filteredTrip$ = this.trip$.pipe(
       map(trips =>
-      // FILTER TRIPS BY TODAYS DAY
-      {
-        return _.filter(trips, (trip) => { // FILTER TRIPS TO UPCOMING TRIPS ONLY
-          return (trip.trip_day == this.getTodayDay(this.dateNow));
-        });
-      }
+        // FILTER TRIPS BY TODAYS DAY
+        {
+          return _.filter(trips, trip => {
+            // FILTER TRIPS TO UPCOMING TRIPS ONLY
+            if(this.tripDay == "mon-fri"){
+              return trip.trip_day == 'mon-fri' || trip.trip_day == 'fri';
+            }
+            else{
+              return trip.trip_day == this.getTodayDay(this.dateNow);
+            }
+          });
+        }
       ),
       map(trips => {
         //group items by trip_from
@@ -81,8 +80,8 @@ export class BusTrackingPage {
       map(filteredTrips => {
         // group items by trip_to
         this.numberOfTrips++;
-        return _.forEach(filteredTrips, function (value, key) {
-          filteredTrips[key] = _.groupBy(filteredTrips[key], function (item) {
+        return _.forEach(filteredTrips, function(value, key) {
+          filteredTrips[key] = _.groupBy(filteredTrips[key], function(item) {
             return item.trip_to;
           });
         });
@@ -103,19 +102,34 @@ export class BusTrackingPage {
   }
 
   // FILTER TRIPS BY FROM LOCATION , TO LOCATION, TRIP DAY AND COMING TRIPS ONLY
-  filterTrips(source: string, destination: string, day: string, comingTripsOnly: string) {
+  filterTrips(
+    source: string,
+    destination: string,
+    day: string,
+    comingTripsOnly: string
+  ) {
     this.filteredTrip$ = this.trip$.pipe(
       map(trips => {
-        let filteredArray = _.filter(trips, (trip) => { // FILTER TRIPS BY (FROM, TO) LOCATIONS, AND DAY
-          if (day == 'mon-fri') {
-            return (trip.trip_from.includes(source) && trip.trip_to.includes(destination) && (trip.trip_day == 'mon-fri' || trip.trip_day == 'fri'))
+        let filteredArray = _.filter(trips, trip => {
+          // FILTER TRIPS BY (FROM, TO) LOCATIONS, AND DAY
+          if (day == "mon-fri") {
+            return (
+              trip.trip_from.includes(source) &&
+              trip.trip_to.includes(destination) &&
+              (trip.trip_day == "mon-fri" || trip.trip_day == "fri")
+            );
           } else {
-            return (trip.trip_from.includes(source) && trip.trip_to.includes(destination) && trip.trip_day == day);
+            return (
+              trip.trip_from.includes(source) &&
+              trip.trip_to.includes(destination) &&
+              trip.trip_day == day
+            );
           }
         });
-        if (comingTripsOnly == 'true') {
-          filteredArray = _.filter(filteredArray, (trip) => { // FILTER TRIPS TO UPCOMING TRIPS ONLY
-            return (this.strToDate(trip.trip_time) >= this.dateNow)
+        if (comingTripsOnly == "true") {
+          filteredArray = _.filter(filteredArray, trip => {
+            // FILTER TRIPS TO UPCOMING TRIPS ONLY
+            return this.strToDate(trip.trip_time) >= this.dateNow;
           });
         }
         return filteredArray;
@@ -130,8 +144,8 @@ export class BusTrackingPage {
       }),
       map(filteredTrips => {
         // group items by trip_to
-        return _.forEach(filteredTrips, function (value, key) {
-          filteredTrips[key] = _.groupBy(filteredTrips[key], function (item) {
+        return _.forEach(filteredTrips, function(value, key) {
+          filteredTrips[key] = _.groupBy(filteredTrips[key], function(item) {
             return item.trip_to;
           });
         });
