@@ -6,4 +6,15 @@ page-bus-tracking {
       }
     }
   }
+
+  .no-trips-message{
+    margin-top: 70%;
+    h2{
+      color: #c6c2c2;
+      line-height: 34px;
+    }
+    ion-icon{
+      font-size: 2.5em;
+    }
+  }
 }

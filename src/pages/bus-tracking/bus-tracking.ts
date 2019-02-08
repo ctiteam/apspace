@@ -30,7 +30,7 @@ export class BusTrackingPage {
   toLocation: string;
   fromLocation: string;
   comingTripsOnly: string;
-  numberOfTrips = 0;
+  numberOfTrips = 1;
 
   constructor(public bus: BusTrackingProvider, public menu: MenuController) {}
 
@@ -79,7 +79,7 @@ export class BusTrackingPage {
       }),
       map(filteredTrips => {
         // group items by trip_to
-        this.numberOfTrips++;
+        // this.numberOfTrips++;
         return _.forEach(filteredTrips, function(value, key) {
           filteredTrips[key] = _.groupBy(filteredTrips[key], function(item) {
             return item.trip_to;
@@ -110,6 +110,7 @@ export class BusTrackingPage {
   ) {
     this.filteredTrip$ = this.trip$.pipe(
       map(trips => {
+        this.numberOfTrips = 1; // HIDE 'THERE ARE NO TRIPS' MESSAGE
         let filteredArray = _.filter(trips, trip => {
           // FILTER TRIPS BY (FROM, TO) LOCATIONS, AND DAY
           if (day == "mon-fri") {
@@ -131,6 +132,9 @@ export class BusTrackingPage {
             // FILTER TRIPS TO UPCOMING TRIPS ONLY
             return this.strToDate(trip.trip_time) >= this.dateNow;
           });
+        }
+        if(filteredArray.length == 0){ // NO RESULTS => SHOW 'THERE ARE NO TRIPS' MESSAGE
+          this.numberOfTrips = 0;
         }
         return filteredArray;
       }),

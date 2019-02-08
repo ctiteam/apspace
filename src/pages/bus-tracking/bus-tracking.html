@@ -56,21 +56,24 @@
       <ion-item>
         <ion-label>Upcoming Trips Only</ion-label>
         <ion-select [(ngModel)]="comingTripsOnly">
-          <ion-option value="">False</ion-option>
-          <ion-option value="true">True</ion-option>
+          <ion-option value="">No</ion-option>
+          <ion-option value="true">Yes</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
         <button
           ion-button
           outline
-          small
+          large
+          block
+          icon-end
           class="notification-button colored-border"
           (click)="
             filterTrips(fromLocation, toLocation, tripDay, comingTripsOnly)
           "
         >
-          Search
+          Apply
+          <ion-icon name="checkmark"></ion-icon>
         </button>
       </ion-item>
     </ion-list>
@@ -128,12 +131,21 @@
         </div>
       </div>
     </div>
-    <div class="row d-flex justify-content-center" *ngIf="numberOfTrips == 0">
-      <div class="col-6">
-        <h4 style="color: white">
-          There is no more trips from {{ fromLocation }} to {{ toLocation }} on
-          {{ tripDay }}
-        </h4>
+    <div class="row d-flex justify-content-center no-trips-message" *ngIf="numberOfTrips == 0">
+      <div class="col-10">
+        <h2 class="text-center">
+          No 
+          <span *ngIf="comingTripsOnly">Upcoming</span>
+           Trips For The Selected Route <br> (
+           <span *ngIf="fromLocation">{{getLocationDisplayName(fromLocation)}}</span>
+           <span *ngIf="!fromLocation">Any</span>
+           <span> -> </span>
+           <span *ngIf="toLocation">{{getLocationDisplayName(toLocation)}}</span>
+           <span *ngIf="!toLocation">Any</span>
+           ) <br> On {{tripDay.toUpperCase()}}
+           <br>
+           <ion-icon name="sad"></ion-icon>
+        </h2>
       </div>
     </div>
   </ng-template>
