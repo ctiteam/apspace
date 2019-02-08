@@ -1,11 +1,20 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 import {
-  AlertController, App, Events, IonicPage, NavController, NavParams, Platform,
-} from 'ionic-angular';
+  AlertController,
+  App,
+  Events,
+  IonicPage,
+  NavController,
+  NavParams,
+  Platform
+} from "ionic-angular";
 
-import { Role } from '../../interfaces';
-import { NotificationProvider, SettingsProvider, WsApiProvider } from '../../providers';
-
+import { Role } from "../../interfaces";
+import {
+  NotificationProvider,
+  SettingsProvider,
+  WsApiProvider
+} from "../../providers";
 
 interface MenuGroup {
   title: string;
@@ -22,191 +31,191 @@ interface MenuItem {
   role: Role;
 }
 
-
 @IonicPage()
 @Component({
-  selector: 'page-more',
-  templateUrl: 'more.html',
+  selector: "page-more",
+  templateUrl: "more.html"
 })
 export class MorePage {
   menuFull: MenuGroup[] = [
     {
-      title: 'Main',
+      title: "Main",
       items: [
         {
-          title: 'Results',
-          component: 'ResultsPage',
+          title: "Profile",
+          component: "ProfilePage",
           size: "small",
           desc: "purple",
           color: "purple",
-          icon: 'checkbox',
-          role: Role.Student,
+          icon: "contact",
+          role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
-          title: 'Staff Directory',
-          component: 'StaffDirectoryPage',
+          title: "Fees",
+          component: "FeesPage",
           size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'people',
-          role: Role.Student | Role.Lecturer | Role.Admin,
+          desc: "dark-orange",
+          color: "dark-orange",
+          icon: "cash",
+          role: Role.Student
         },
         {
-          title: 'Classroom Finder',
-          component: 'ClassroomFinderPage',
-          size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'search',
-          role: Role.Student | Role.Lecturer | Role.Admin,
+          title: "Bus Tracking",
+          component: "BusTrackingPage",
+          size: "medium",
+          desc: "orange",
+          color: "orange",
+          icon: "bus",
+          role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
-          title: 'iConsult (Beta)',
-          component: 'UpcomingstdPage',
+          title: "Holidays",
+          component: "HolidaysPage",
           size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'clipboard',
-          role: Role.Student,
+          desc: "green",
+          color: "green",
+          icon: "globe",
+          role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
-          title: 'iConsult (Beta)',
-          component: 'UpcominglecPage',
+          title: "Forms & Application",
+          component: "FormsApplicationPage",
+          size: "large",
+          desc: "blue",
+          color: "blue",
+          icon: "clipboard",
+          role: Role.Student | Role.Lecturer | Role.Admin
+        }
+      ]
+    },
+    {
+      title: "Course Related",
+      items: [
+        {
+          title: "Results",
+          component: "ResultsPage",
           size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'clipboard',
-          role: Role.Lecturer | Role.Admin,
+          desc: "red",
+          color: "red",
+          icon: "checkbox",
+          role: Role.Student
         },
         {
-          title: 'News',
-          component: 'NewsPage',
-          size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'paper',
-          role: Role.Student,
+          title: "iConsult (Beta)",
+          component: "UpcominglecPage",
+          size: "large",
+          desc: "green",
+          color: "green",
+          icon: "clipboard",
+          role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
-          title: 'Bus Tracking',
-          component: 'BusTrackingPage',
-          size: "small",
+          title: "Exam Schedule",
+          component: "ExamSchedulePage",
+          size: "medium",
           desc: "purple",
           color: "purple",
-          icon: 'bus',
-          role: Role.Student | Role.Lecturer | Role.Admin,
+          icon: "book",
+          role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
-          title: 'Student Timetable',
-          component: 'TimetablePage',
-          size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'calendar',
-          role: Role.Lecturer | Role.Admin,
+          title: "My Library",
+          component: "KohaPage",
+          size: "medium",
+          desc: "blue",
+          color: "blue",
+          icon: "bookmarks",
+          role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
-          title: 'Fees',
-          component: 'FeesPage',
+          title: "Student Timetable",
+          component: "TimetablePage",
           size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'cash',
-          role: Role.Student,
+          desc: "red",
+          color: "red",
+          icon: "calendar",
+          role: Role.Lecturer | Role.Admin
         },
         {
-          title: 'Exam Schedule',
-          component: 'ExamSchedulePage',
-          size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'book',
-          role: Role.Student | Role.Lecturer | Role.Admin,
+          title: "Moodle (Course Material)",
+          component: "LmsPage",
+          size: "xlarge",
+          desc: "dark-orange",
+          color: "dark-orange",
+          icon: "open",
+          role: Role.Student | Role.Lecturer | Role.Admin
+        }
+      ]
+    },
+    {
+      title: "Others",
+      items: [
+        {
+          title: "Staff Directory",
+          component: "StaffDirectoryPage",
+          size: "medium",
+          desc: "dark-orange",
+          color: "dark-orange",
+          icon: "people",
+          role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
-          title: 'Moodle (Course Material)',
-          component: 'LmsPage',
-          size: "small",
+          title: "Classroom Finder",
+          component: "ClassroomFinderPage",
+          size: "medium",
           desc: "purple",
           color: "purple",
-          icon: 'open',
-          role: Role.Student | Role.Lecturer | Role.Admin,
+          icon: "search",
+          role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
-          title: 'My Library',
-          component: 'KohaPage',
+          title: "News",
+          component: "NewsPage",
           size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'bookmarks',
-          role: Role.Student | Role.Lecturer | Role.Admin,
+          desc: "blue",
+          color: "blue",
+          icon: "paper",
+          role: Role.Student
         },
         {
-          title: 'Forms & Application',
-          component: 'FormsApplicationPage',
-          size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'clipboard',
-          role: Role.Student | Role.Lecturer | Role.Admin,
+          title: "Operation Hours",
+          component: "OperationHoursPage",
+          size: "medium",
+          desc: "orange",
+          color: "orange",
+          icon: "information-circle",
+          role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
-          title: 'Profile',
-          component: 'ProfilePage',
+          title: "Feedback",
+          component: "FeedbackPage",
           size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'contact',
-          role: Role.Student | Role.Lecturer | Role.Admin,
-        },
-        {
-          title: 'Holidays',
-          component: 'HolidaysPage',
-          size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'globe',
-          role: Role.Student | Role.Lecturer | Role.Admin,
-        },
-        {
-          title: 'Operation Hours',
-          component: 'OperationHoursPage',
-          size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'information-circle',
-          role: Role.Student | Role.Lecturer | Role.Admin,
-        },
-        {
-          title: 'Feedback',
-          component: 'FeedbackPage',
-          size: "small",
-          desc: "purple",
-          color: "purple",
-          icon: 'at',
-          role: Role.Student | Role.Lecturer | Role.Admin,
+          desc: "green",
+          color: "green",
+          icon: "at",
+          role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
           title: "Settings",
           component: "SettingsPage",
           icon: "settings",
           size: "small",
-          desc: "purple",
-          color: "purple",
-          role: Role.Student,
+          desc: "blue",
+          color: "blue",
+          role: Role.Student
         },
         {
           title: "Logout",
           component: "LogoutPage",
           icon: "log-out",
-          size: "xlarge",
+          size: "large",
           desc: "red",
           color: "red",
           role: Role.Student | Role.Lecturer | Role.Admin
-        },
+        }
       ]
     }
-    ];
+  ];
 
   menuFiltered: MenuGroup[] = [];
 
@@ -219,7 +228,7 @@ export class MorePage {
     public app: App,
     public settings: SettingsProvider,
     public notification: NotificationProvider,
-    public plt: Platform,
+    public plt: Platform
   ) {
     this.setMenuItems();
   }
@@ -254,8 +263,7 @@ export class MorePage {
   openPage(page) {
     if (page.component == "LogoutPage") {
       this.logout();
-    }
-    else {
+    } else {
       this.app.getRootNav().push(page.component);
     }
   }
@@ -263,15 +271,17 @@ export class MorePage {
   logout() {
     this.alertCtrl
       .create({
-        title: 'Confirm Log out',
-        message: 'Do you want to log out?',
+        title: "Confirm Log out",
+        message: "Do you want to log out?",
         buttons: [
-          { text: 'Cancel', role: 'cancel' },
+          { text: "Cancel", role: "cancel" },
           {
-            text: 'Log out',
-            handler: () => { this.events.publish('user:logout'); },
-          },
-        ],
+            text: "Log out",
+            handler: () => {
+              this.events.publish("user:logout");
+            }
+          }
+        ]
       })
       .present();
   }
