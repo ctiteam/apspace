@@ -8,27 +8,27 @@
 
 <ion-content padding>
   <ion-item no-padding>
-    <ion-label floating>Full name</ion-label>
-    <ion-input #autofocus disabled [(ngModel)]="info.name" [ngModelOptions]="{standalone: true}">
-    </ion-input>
+    <ion-label>Screen Size</ion-label>
+    <ion-input disabled type="text" [value]="screenSize"></ion-input>
   </ion-item>
-    <ion-item no-padding>
-      <ion-label floating>Email</ion-label>
-      <ion-input disabled type="text" [(ngModel)]="info.email" [ngModelOptions]="{standalone: true}">
-      </ion-input>
-    </ion-item>
+  <ion-item no-padding>
+    <ion-label>Platform</ion-label>
+    <ion-input disabled type="text" [value]="platform"></ion-input>
+  </ion-item>
   <ion-item no-padding>
     <ion-label floating>Contact Number</ion-label>
-    <ion-input type="number" [(ngModel)]="info.contactNumber" [ngModelOptions]="{standalone: true}">
+    <ion-input type="number" [(ngModel)]="contactNo" [ngModelOptions]="{standalone: true}">
     </ion-input>
   </ion-item>
   <ion-item no-padding>
     <ion-label floating>Message</ion-label>
-    <ion-textarea class='textarea' autosize row='1' [(ngModel)]="info.message" [ngModelOptions]="{standalone: true}">
+    <ion-textarea #autofocus class='textarea' autosize row='1'
+      [(ngModel)]="message" [ngModelOptions]="{standalone: true}">
     </ion-textarea>
   </ion-item>
   <button ion-button round full margin-top (click)="submitFeedback()"
-  [disabled]="!info.name || !info.email || !info.contactNumber || !info.message">
+          [disabled]="!contactNo || !message || submitting">
     Submit
+    <ion-spinner *ngIf="submitting"></ion-spinner>
   </button>
 </ion-content>

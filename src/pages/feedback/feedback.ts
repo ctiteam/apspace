@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, ToastController } from 'ionic-angular';
 
-import { Role, StaffProfile, StudentProfile } from '../../interfaces';
-import { FeedbackProvider, SettingsProvider, WsApiProvider } from '../../providers';
+import { FeedbackData } from '../../interfaces';
+import { FeedbackProvider, SettingsProvider, VersionProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -11,47 +11,50 @@ import { FeedbackProvider, SettingsProvider, WsApiProvider } from '../../provide
 })
 export class FeedbackPage {
 
-  info: any = {
-    contactNumber: '',
-    email: '',
-    message: '',
-    name: '',
-  };
+  contactNo: string;
+  message: string;
+
+  submitting = false;
+
+  readonly screenSize = screen.width + 'x' + screen.height;
+  platform: string;
+  appVersion: string;
 
   constructor(
     private feedback: FeedbackProvider,
     private settings: SettingsProvider,
     private toastCtrl: ToastController,
-    private ws: WsApiProvider,
+    private version: VersionProvider,
   ) { }
 
   submitFeedback() {
-    this.feedback.sendFeedback(this.info.name, this.info.email, this.info.contactNumber, this.info.message)
-      .subscribe();
-    this.info.contactNumber = '';
-    this.info.message = '';
-    this.toastCtrl.create(
-      {
+    const feedback: FeedbackData = {
+      contactNo: this.contactNo,
+      platform: this.platform,
+      message: this.message,
+      appVersion: this.appVersion,
+      screenSize: this.screenSize,
+    };
+
+    this.submitting = true;
+    this.feedback.sendFeedback(feedback).subscribe(_ => {
+      this.settings.set('contactNo', this.contactNo);
+
+      this.message = '';
+      this.toastCtrl.create({
         message: 'Feedback submitted!',
         position: 'top',
         duration: 3000,
       }).present();
-
+      this.submitting = false;
+    });
   }
 
   ionViewDidLoad() {
-    const role = this.settings.get('role');
-    if (role & Role.Student) {
-      this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
-        this.info.name = p.NAME;
-        this.info.email = p.STUDENT_NUMBER + '@mail.apu.edu.my';
-      });
-    } else if (role & (Role.Lecturer || Role.Admin)) {
-      this.ws.get<StaffProfile[]>('/staff/profile').subscribe(p => {
-        this.info.name = p[0].FULLNAME;
-        this.info.email = p[0].EMAIL + '@apu.edu.my';
-      });
-    }
+    this.contactNo = this.settings.get('contactNo');
+
+    this.platform = this.feedback.platform();
+    this.appVersion = this.version.name;
   }
 
 }

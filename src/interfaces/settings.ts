@@ -13,4 +13,6 @@ export interface Settings {
   intake: string;
   /* exam schedule */
   examIntake: string;
+  /* contact number */
+  contactNo: string;
 }
