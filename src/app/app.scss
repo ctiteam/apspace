@@ -127,6 +127,9 @@ a:hover {
   text-decoration: none !important;
   opacity: 1 !important;
 }
+.btn:focus, button:focus {
+  outline: none !important;
+}
 
 // OVERRIDE IONIC ION-SELECT
 ion-select {
