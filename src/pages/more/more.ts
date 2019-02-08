@@ -74,7 +74,7 @@ export class MorePage {
           size: "small",
           desc: "green",
           color: "green",
-          icon: "globe",
+          icon: "bicycle",
           role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
