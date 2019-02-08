@@ -33,7 +33,10 @@ $dark_menu_colors: (
 
   .bar-button-default-ios,
   .bar-button-default.bar-button-ios-default,
-  .bar-button-clear-ios-default {
+  .bar-button-clear-ios-default,
+  .bar-button-default-md,
+  .bar-button-clear-md-default,
+  .bar-button-md-default {
     color: color($dark_colors, dark_search_background_color);
   }
 
@@ -648,8 +651,8 @@ $dark_menu_colors: (
         }
       }
     }
-    .no-trips-message{
-      h2{
+    .no-trips-message {
+      h2 {
         color: color($dark_colors, dark_search_background_color);
       }
     }

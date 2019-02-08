@@ -33,7 +33,10 @@ $light_menu_colors: (
 
   .bar-button-default-ios,
   .bar-button-default.bar-button-ios-default,
-  .bar-button-clear-ios-default {
+  .bar-button-clear-ios-default,
+  .bar-button-default-md,
+  .bar-button-clear-md-default,
+  .bar-button-md-default {
     color: color($light_colors, ligth_grey_color);
   }
 
@@ -609,8 +612,8 @@ $light_menu_colors: (
         }
       }
     }
-    .no-trips-message{
-      h2{
+    .no-trips-message {
+      h2 {
         color: color($light_colors, ligth_grey_color);
       }
     }
@@ -624,10 +627,7 @@ $light_menu_colors: (
         -1px -1px 1px color($light_colors, light_white_background) !important;
       ion-card-header {
         color: color($light_colors, light_blue_color) !important;
-        background-color: color(
-          $light_colors,
-          light_background
-        ) !important;
+        background-color: color($light_colors, light_background) !important;
         border: 1px solid color($light_colors, light_white_background) !important;
       }
       ion-card-content {
