@@ -608,6 +608,13 @@ $dark_menu_colors: (
     }
   }
 
+  // NOTIFICATIONS PAGE
+  page-notification { 
+    .notification-desktop{
+      color: color($dark_colors, dark_search_background_color);
+    }
+  }
+
   // NOTIFICATION MODAL
   page-notification-modal {
     #fill {

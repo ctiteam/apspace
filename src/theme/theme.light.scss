@@ -573,6 +573,13 @@ $light_menu_colors: (
     }
   }
 
+    // NOTIFICATIONS PAGE
+    page-notification { 
+      .notification-desktop{
+        color: color($light_colors, ligth_grey_color);
+      }
+    }
+
   // NOTIFICATION MODAL
   page-notification-modal {
     #fill {

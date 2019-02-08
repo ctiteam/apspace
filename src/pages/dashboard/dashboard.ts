@@ -428,4 +428,11 @@ export class DashboardPage {
       this.badge = res.num_of_unread_msgs;
     });
   }
+
+  openNotification() {
+    const callback = () => {
+      this.getBadge();
+    };
+    this.app.getRootNav().push('NotificationPage', { callback });
+  }
 }

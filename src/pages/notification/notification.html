@@ -1,17 +1,11 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <ion-title>
-      Notifications
-    </ion-title>
+<ion-header no-border>
+  <ion-navbar>
+    <ion-title>Notifications</ion-title>
   </ion-navbar>
-  <ion-toolbar no-border-top color='primary'>
-    <ion-segment [(ngModel)]="notifications" color='light'>
-      <ion-segment-button value='all'>
-        All messages
-      </ion-segment-button>
-      <ion-segment-button value='unread'>
-        Unread messages
-      </ion-segment-button>
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="notifications" color="light">
+      <ion-segment-button value="all"> All messages </ion-segment-button>
+      <ion-segment-button value="unread"> Unread messages </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
@@ -86,12 +80,8 @@
     </ng-container>
   </ng-template>
   <ng-template #notCordova>
-    <ion-card>
-      <ion-card-content>
-        <ion-note>
-          Notification is only available in mobile application
-        </ion-note>
-      </ion-card-content>
-    </ion-card>
+        <h5 class="p-4 text-center notification-desktop">
+          Notification is only available in the mobile application
+        </h5>
   </ng-template>
 </ion-content>
