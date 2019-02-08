@@ -653,6 +653,26 @@ $light_menu_colors: (
     }
   }
 
+    // CLASSROOM FINDER
+    page-classroom-finder {
+      ion-card.card{
+        background-color: color($light_colors, light_white_background) !important;
+        ion-card-content{
+          ion-card-title{
+            color: color($light_colors, light_blue_color);
+          }
+          ion-label.header-label{
+            color: color($light_colors, light_blue_color);
+          }
+          ion-chip{
+            cursor: pointer;
+            background-color: color($light_colors, light_background);
+            color: color($light_colors, light_blue_color);;
+          }
+        }
+      }
+    }
+
   // OVERRIDING THE IONIC SEGMENTS DESIGN (ALL PAGES)
   .segment-md .segment-button {
     color: color($light_colors, ligth_grey_color);

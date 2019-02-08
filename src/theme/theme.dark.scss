@@ -692,6 +692,26 @@ $dark_menu_colors: (
     }
   }
 
+  // CLASSROOM FINDER
+  page-classroom-finder {
+    ion-card.card{
+      background-color: color($dark_colors, dark_item_background) !important;
+      ion-card-content{
+        ion-card-title{
+          color: color($dark_colors, dark_white_color);
+        }
+        ion-label.header-label{
+          color: color($dark_colors, dark_white_color);
+        }
+        ion-chip{
+          cursor: pointer;
+          background-color: color($dark_colors, dark_background);
+          color: color($dark_colors, dark_white_color);
+        }
+      }
+    }
+  }
+
   // OVERRIDING IONIC SEGMENTS DESIGN (ALL PAGES)
   .segment-md .segment-button {
     color: color($dark_colors, dark_search_background_color);

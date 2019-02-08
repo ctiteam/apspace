@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar color="primary">
+  <ion-navbar>
     <ion-title>
       Classroom Finder
     </ion-title>
@@ -29,7 +29,7 @@
         <ion-label><strong>End Time</strong></ion-label>
         <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A" [(ngModel)]="selectedEndTime"></ion-datetime>
       </ion-item>
-      <ion-label><strong>Type of Rooms</strong></ion-label>
+      <ion-label class="header-label h3">Type of Rooms</ion-label>
       <ion-item>
         <ion-label>Auditoriums / Lecture Halls</ion-label>
         <ion-checkbox [(ngModel)]="typeOfRooms.auditorium"></ion-checkbox>
@@ -42,7 +42,7 @@
         <ion-label>Labs / Studios / Suites</ion-label>
         <ion-checkbox [(ngModel)]="typeOfRooms.lab"></ion-checkbox>
       </ion-item>
-      <ion-label><strong>Location</strong></ion-label>
+      <ion-label class="header-label h3">Location</ion-label>
       <ion-item>
         <ion-label>New Campus</ion-label>
         <ion-checkbox [(ngModel)]="location.newCampus"></ion-checkbox>
@@ -52,13 +52,16 @@
         <ion-checkbox [(ngModel)]="location.apiitTpm"></ion-checkbox>
       </ion-item>
       <br>
-      <button ion-button round expand="block" (click)='getFreeRoom()'><ion-icon name="search"></ion-icon> Search</button>
+      <button ion-button block outline icon-end class="notification-button colored-border" (click)='getFreeRoom()'>
+        Search
+        <ion-icon name="search"></ion-icon>
+        </button>
     </ion-card-content>
   </ion-card>
   <ion-card #rooms *ngIf="listOfFreeRooms.length > 0">
     <ion-card-content>
       <ion-card-title>{{ listOfFreeRooms.length }} Available Rooms</ion-card-title>
-      <ion-chip *ngFor="let room of listOfFreeRooms" (click)='presentRoomTimetable(room)'>
+      <ion-chip class="mx-1 my-2" *ngFor="let room of listOfFreeRooms" (click)='presentRoomTimetable(room)'>
         <ion-label>{{ room }}</ion-label>
       </ion-chip>
     </ion-card-content>

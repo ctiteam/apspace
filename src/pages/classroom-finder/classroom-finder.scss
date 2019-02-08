@@ -1,6 +1,12 @@
 page-classroom-finder {
-  ion-chip {
-    cursor: pointer;
-    margin: 3px !important;
+  ion-card.card{
+    ion-card-content{
+      ion-label.header-label{
+        font-weight: bold;
+      }
+      ion-chip{
+        cursor: pointer;
+      }
+    }
   }
 }
