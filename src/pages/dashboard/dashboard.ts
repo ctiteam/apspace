@@ -71,7 +71,7 @@ export class DashboardPage {
 
   // HEADER VARS
   greetingMessage = "";
-  badge: string;
+  notificationNumber: string;
 
   // APCARD TRANSACTIONS VARS
   monthlyData: any;
@@ -425,7 +425,8 @@ export class DashboardPage {
   // NOTIFICATIONS METHODS
   getBadge() {
     this.notification.getMessage().subscribe(res => {
-      this.badge = res.num_of_unread_msgs;
+      console.log(res);
+      this.notificationNumber = res.num_of_unread_msgs;
     });
   }
 

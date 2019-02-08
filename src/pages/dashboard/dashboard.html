@@ -30,7 +30,7 @@
               class="notification-wrapper float-right text-center"
               (click)="openNotification()"
             >
-              <ion-icon name="notifications"></ion-icon>
+              <ion-icon [class.animate-bell] ="notificationNumber" name="notifications"></ion-icon>
               <ion-badge item-right *ngIf="notificationNumber" color="danger">{{
                 notificationNumber
               }}</ion-badge>

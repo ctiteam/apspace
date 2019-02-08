@@ -53,48 +53,6 @@ export class AppAnimationProvider {
     }
   }
 
-  /*
-  USED TO ADD ANIMATION TO THE BELL ICON WHEN THERE IS A NOTIFICATION.
-  */
-  showNotificationsAnimation(elRef: ElementRef, hasNotification: boolean) {
-    if (hasNotification) {
-      let elementToAnimate = elRef.nativeElement.querySelector(
-        ".notificationIcon"
-      );
-      elementToAnimate.style.animation = "notification 0.7s ease infinite";
-    }
-  }
-
-  // CAN BE MERGED WITH 2
-  giveQuickAccessItemsRandomColors(elRef: ElementRef) {
-    let quickAccessItems = elRef.nativeElement.querySelectorAll(
-      ".quick-access-item"
-    );
-    for (let i = 0; i < quickAccessItems.length; i++) {
-      let value = Math.floor(Math.random() * colorsSet1.length);
-      quickAccessItems[i].style.backgroundColor = colorsSet1[value];
-      quickAccessItems[i].style.boxShadow =
-        "1px 1px 1px " +
-        colorsSet1[value] +
-        ", -1px -1px 1px " +
-        colorsSet1[value];
-      quickAccessItems[i].style.color = "#FFFFFF";
-    }
-  }
-
-  // 2
-  giveSectionsRandomBorderColors(elRef: ElementRef) {
-    let sections = elRef.nativeElement.querySelectorAll(".section");
-    let sectionsHeader = elRef.nativeElement.querySelectorAll(
-      ".section-header"
-    );
-    for (let i = 0; i < sections.length; i++) {
-      let value = Math.floor(Math.random() * colorsSet2.length);
-      sections[i].style.borderColor = colorsSet2[value];
-      sectionsHeader[i].style.color = colorsSet2[value];
-    }
-  }
-
   animateBalanceBackground(balanceBackgroundElement) {
     // Some random colors
     const colors = ["#3CC157", "#2AA7FF", "#1B1B1B", "#FCBC0F", "#F85F36"];
@@ -138,4 +96,34 @@ export class AppAnimationProvider {
       );
     });
   }
+
+  // CAN BE MERGED WITH 2
+  // giveQuickAccessItemsRandomColors(elRef: ElementRef) {
+  //   let quickAccessItems = elRef.nativeElement.querySelectorAll(
+  //     ".quick-access-item"
+  //   );
+  //   for (let i = 0; i < quickAccessItems.length; i++) {
+  //     let value = Math.floor(Math.random() * colorsSet1.length);
+  //     quickAccessItems[i].style.backgroundColor = colorsSet1[value];
+  //     quickAccessItems[i].style.boxShadow =
+  //       "1px 1px 1px " +
+  //       colorsSet1[value] +
+  //       ", -1px -1px 1px " +
+  //       colorsSet1[value];
+  //     quickAccessItems[i].style.color = "#FFFFFF";
+  //   }
+  // }
+
+  // 2
+  // giveSectionsRandomBorderColors(elRef: ElementRef) {
+  //   let sections = elRef.nativeElement.querySelectorAll(".section");
+  //   let sectionsHeader = elRef.nativeElement.querySelectorAll(
+  //     ".section-header"
+  //   );
+  //   for (let i = 0; i < sections.length; i++) {
+  //     let value = Math.floor(Math.random() * colorsSet2.length);
+  //     sections[i].style.borderColor = colorsSet2[value];
+  //     sectionsHeader[i].style.color = colorsSet2[value];
+  //   }
+  // }
 }
