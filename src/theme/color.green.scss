@@ -311,6 +311,19 @@ $primary_color: #2ecc71;
     }
   }
 
+      // BUS TRACKING PAGE
+      page-bus-tracking {
+        .trips-card{
+          .trips-card-data{
+            p{
+              &.coming{
+                text-shadow: 0.1px 0.1px 0.1px $primary_color;
+              }
+            }
+          }
+        }
+      }
+
   // OVERRIDE BOOTSTRAP COLORS
   .bg-success {
     background-color: $primary_color !important;

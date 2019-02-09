@@ -630,6 +630,25 @@ $dark_menu_colors: (
     }
   }
 
+  // BUS TRACKING PAGE
+  page-bus-tracking {
+    .trips-card{
+      color: color($dark_colors, dark_search_background_color);
+      .trips-card-header{
+        background-color: color($dark_colors, dark_item_background);
+        color: color($dark_colors, dark_white_color) !important;
+      }
+      .trips-card-data{
+        p{
+          color: color($dark_colors, dark_search_background_color);
+          &.coming{
+            color: color($dark_colors, dark_white_color);
+          }
+        }
+      }
+    }
+  }
+
   // OVERRIDING IONIC SEGMENTS DESIGN (ALL PAGES)
   .segment-md .segment-button {
     color: color($dark_colors, dark_search_background_color);
