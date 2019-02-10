@@ -130,7 +130,7 @@ export class MorePage {
         {
           title: "Student Timetable",
           component: "TimetablePage",
-          size: "small",
+          size: "medium",
           desc: "red",
           color: "red",
           icon: "calendar",
