@@ -17,7 +17,10 @@
             <ng-template let-profile [ngIf]="profile$ | async">
               <p class="h3 username">
                 {{ greetingMessage }},
-                {{ capitalizeString(profile?.NAME.split(" ")[0]) }}!
+                <span class="font-weight-bold" (click)="openPage('ProfilePage')">
+                  {{ capitalizeString(profile?.NAME.split(" ")[0]) }}
+                </span>
+                !
               </p>
               <p class="h4 greeting-message">Nice to see you again.</p>
             </ng-template>
@@ -45,7 +48,7 @@
             <div class="row">
               <!-- START QUICK ACCESS MENU ITEM 1 -->
               <div class="col-4 scroll-item">
-                <div class="quick-access-item">
+                <div class="quick-access-item" (click)="openPage('AttendancePage')">
                   <ion-icon name="alarm"></ion-icon>
                   <div class="quick-access-item-title">
                     Overall <span class="second-line">Attendance</span>
@@ -62,7 +65,7 @@
 
               <!-- START QUICK ACCESS MENU ITEM 2 -->
               <div class="col-4 scroll-item">
-                <div class="quick-access-item">
+                <div class="quick-access-item" (click)="openPage('ApcardPage')">
                   <ion-icon name="card"></ion-icon>
                   <div class="quick-access-item-title">
                     APCard <span class="second-line">Balance</span>
@@ -79,7 +82,7 @@
 
               <!-- START QUICK ACCESS MENU ITEM 3 -->
               <div class="col-4 scroll-item">
-                <div class="quick-access-item">
+                <div class="quick-access-item" (click)="openPage('FeesPage')">
                   <ion-icon name="logo-usd"></ion-icon>
                   <div class="quick-access-item-title">
                     Total <span class="second-line">Overdue</span>
