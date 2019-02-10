@@ -141,7 +141,7 @@ $primary_color: #1297e0;
   }
 
   // FEEDBACK PAGE
-  page-feedback {
+  page-feedback, page-password-recovery {
     ion-label.label {
       color: $primary_color;
     }
@@ -158,6 +158,9 @@ $primary_color: #1297e0;
         border-bottom-color: $primary_color;
         box-shadow: inset 0 -1px 0 0 $primary_color;
       }
+    }
+    button[ion-fab]{
+      background-color: $primary_color;
     }
   }
 

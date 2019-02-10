@@ -378,7 +378,7 @@ $light_menu_colors: (
   }
 
   // FEEDBACK PAGE
-  page-feedback {
+  page-feedback, page-password-recovery {
     .item-md,
     .item-ios {
       background-color: color($light_colors, light_background);

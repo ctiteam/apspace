@@ -404,8 +404,8 @@ $dark_menu_colors: (
     }
   }
 
-  // FEEDBACK PAGE
-  page-feedback {
+  // FEEDBACK PAGE & SET SECURITY QUESTIONS PAGE
+  page-feedback, page-password-recovery {
     .item-md,
     .item-ios {
       background-color: color($dark_colors, dark_background);
