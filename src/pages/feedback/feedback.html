@@ -1,12 +1,28 @@
 <ion-header>
   <ion-navbar color="primary">
-    <ion-title>
-      Feedback
-    </ion-title>
+    <ion-title>Feedback</ion-title>
+    <ion-buttons end>
+      <button ion-button small (click)="submitFeedback()"
+              [disabled]="submitting || !contactNo || !message">
+        Send
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+  <ion-item no-padding>
+    <ion-label floating>Contact Number</ion-label>
+    <ion-input type="number" [(ngModel)]="contactNo" [ngModelOptions]="{standalone: true}">
+    </ion-input>
+  </ion-item>
+  <ion-item no-padding>
+    <ion-label floating>Message</ion-label>
+    <ion-textarea #autofocus class="textarea" autosize row="2"
+      [(ngModel)]="message" [ngModelOptions]="{standalone: true}">
+    </ion-textarea>
+  </ion-item>
+  <h4 color="medium" ion-text>Additional Information</h4>
   <ion-item no-padding>
     <ion-label>Screen Size</ion-label>
     <ion-input disabled type="text" [value]="screenSize"></ion-input>
@@ -16,19 +32,7 @@
     <ion-input disabled type="text" [value]="platform"></ion-input>
   </ion-item>
   <ion-item no-padding>
-    <ion-label floating>Contact Number</ion-label>
-    <ion-input type="number" [(ngModel)]="contactNo" [ngModelOptions]="{standalone: true}">
-    </ion-input>
+    <ion-label>Version</ion-label>
+    <ion-input disabled type="text" [value]="appVersion"></ion-input>
   </ion-item>
-  <ion-item no-padding>
-    <ion-label floating>Message</ion-label>
-    <ion-textarea #autofocus class='textarea' autosize row='1'
-      [(ngModel)]="message" [ngModelOptions]="{standalone: true}">
-    </ion-textarea>
-  </ion-item>
-  <button ion-button round full margin-top (click)="submitFeedback()"
-          [disabled]="!contactNo || !message || submitting">
-    Submit
-    <ion-spinner *ngIf="submitting"></ion-spinner>
-  </button>
 </ion-content>
