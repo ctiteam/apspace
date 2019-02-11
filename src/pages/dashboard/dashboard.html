@@ -246,7 +246,12 @@
         <!-- END SECTION 3: UPCOMING HOLIDAY -->
         <!-- ********************************************* -->
         <!-- START SECTION 4: UPCOMING EXAM -->
-        <div class="main-section section upcoming-exam-section">
+        <ng-template
+        let-exams
+        [ngIf]="exam$ | async | nextExams"
+        [ngIfElse]="loadingExams"
+      >
+        <div class="main-section section upcoming-exam-section" *ngIf="exams && exams.length > 0">
           <!-- START SECTION 4 HEADER -->
           <div class="section-header">
             <div class="section-header-icon">
@@ -258,20 +263,10 @@
 
           <!-- START SECTION 4 BODY -->
           <div class="section-body">
-            <ng-template
-              let-exams
-              [ngIf]="exam$ | async | nextExams"
-              [ngIfElse]="loadingExams"
-            >
-              <ng-template
-                [ngIf]="exams && exams.length > 0"
-                [ngIfElse]="noExam"
-              >
                 <div *ngFor="let exam of exams">
                   <div class="section-body-header">
                     <h4 class="col-12">{{ exam.module }}</h4>
                   </div>
-
                   <div class="section-body-content row">
                     <div class="container">
                       <div class="content-item-with-icon col-12 row">
@@ -309,19 +304,17 @@
                     </div>
                   </div>
                 </div>
-              </ng-template>
-              <ng-template #noExam> There is no exam </ng-template>
-            </ng-template>
-            <ng-template #loadingExams>
-              <ion-card>
-                <ion-item no-lines *ngFor="let i of numOfSkeletons">
-                  <skeleton-item height="100px" width="100%"></skeleton-item>
-                </ion-item>
-              </ion-card>
-            </ng-template>
           </div>
           <!-- END SECTION 4 BODY -->
         </div>
+      </ng-template>
+      <ng-template #loadingExams>
+        <ion-card>
+          <ion-item no-lines *ngFor="let i of numOfSkeletons">
+            <skeleton-item height="100px" width="100%"></skeleton-item>
+          </ion-item>
+        </ion-card>
+      </ng-template>
         <!-- END SECTION 4: UPCOMING EXAM -->
         <!-- ********************************************* -->
         <!-- START SECTION 5: CONSULTATION -->
@@ -679,7 +672,6 @@
                       style="padding-bottom: 5px !important;margin-bottom: 0 !important"
                     >
                       {{ attendance.MODULE_ATTENDANCE }}
-                      <!-- <p>{{attendance | json}}</p> -->
                     </h4>
                   </div>
                   <div class="attendance-chart col-12">
