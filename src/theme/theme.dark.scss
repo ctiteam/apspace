@@ -480,7 +480,7 @@ $dark_menu_colors: (
   page-staff-directory {
     .search-bar-div,
     .functional-area-div {
-      background-color: color($dark_colors, dark_background);
+      background-color: color($dark_colors, dark_header_background);
     }
     .functional-area-div {
       ion-label {
