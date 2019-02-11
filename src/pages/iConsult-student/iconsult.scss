@@ -1,46 +1,65 @@
 page-iconsult {
-    .card-ios {
-        margin-bottom:10px;
-        border-radius: 2px;
-        width: calc(100% - 4px);
-        font-size: 1.4rem;
-        background: #fff;
-        -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    }
-    .item-ios.item-block .item-inner {
-        padding-right: 8px;
-        padding-right: 8px;
-        border-bottom: none;
+
+    h2.staff-name{
+        color: white;
+        text-shadow: 0.1px 0.1px 0.1px #ec644b, -0.1px -0.1px 0.1px #ec644b;
     }
 
+    ion-card{
+        width: 99% !important;
+    }
+
+    .staff-info-label{
+        color: #c6c2c2;
+    }
+
+    .availableHour{
+        background-color: #2ecc71;
+    }
+
+
+    // .card-ios {
+    //     margin-bottom:10px;
+    //     border-radius: 2px;
+    //     width: calc(100% - 4px);
+    //     font-size: 1.4rem;
+    //     background: #fff;
+    //     -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    //     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    // }
+    // .item-ios.item-block .item-inner {
+    //     padding-right: 8px;
+    //     padding-right: 8px;
+    //     border-bottom: none;
+    // }
+
     ion-badge.bookedHour{
-        background-color: red !important;
+        background-color: #d5040a !important;
     }
 
     .bookedcard {
-        border-left: 1rem solid red
+        border-left: 0.4rem solid #d5040a
     }
 
     .Availablecard {
-        border-left: 1rem solid #1e90ff
+        border-left: 0.4rem solid #2ecc71
     }
 
-    .line-break{
-        overflow: inherit ;
-        text-overflow: inherit ;
-        white-space: normal;
-        vertical-align: middle; 
-        text-align: center; 
-        font-size: large;
-        font-family: initial;
-        margin-top: auto;
-        margin-left: auto;
-        color: slategrey;
-    }
+    // .line-break{
+    //     overflow: inherit ;
+    //     text-overflow: inherit ;
+    //     white-space: normal;
+    //     vertical-align: middle; 
+    //     text-align: center; 
+    //     font-size: large;
+    //     font-family: initial;
+    //     margin-top: auto;
+    //     margin-left: auto;
+    //     color: slategrey;
+    // }
 
-    .lecimage {
-        margin-left: 137px;
-    }
+    // .lecimage {
+    //     margin-left: 137px;
+    // }
 
 }
