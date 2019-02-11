@@ -654,7 +654,8 @@
         <!-- END SECTION 9: FINANCE -->
         <!-- ********************************************* -->
         <!-- START SECTION 10: ATTENDANCE -->
-        <div class="main-section section low-attendance-section">
+        <ng-template let-attendance [ngIf]="attendance$ | async">
+        <div class="main-section section low-attendance-section" *ngIf="attendance.length > 0">
           <!-- START SECTION 10 HEADER -->
           <div class="section-header">
             <div class="section-header-icon">
@@ -667,7 +668,6 @@
           <!-- START SECTION 10 BODY -->
 
           <div class="section-body">
-            <ng-template let-attendance [ngIf]="attendance$ | async">
               <div class="row low-attendance-div">
                 <div
                   class=" col-12 low-attendance-details"
@@ -706,10 +706,10 @@
                   </div>
                 </div>
               </div>
-            </ng-template>
+            </div>
+            <!-- END SECTION 10 BODY -->
           </div>
-          <!-- END SECTION 10 BODY -->
-        </div>
+        </ng-template>
         <!-- END SECTION 10: ATTENDANCE -->
         <!-- ********************************************* -->
         <!-- START SECTION 11: APCARD -->
