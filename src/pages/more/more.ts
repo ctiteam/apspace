@@ -78,6 +78,15 @@ export class MorePage {
           role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
+          title: "News",
+          component: "NewsPage",
+          size: "large",
+          desc: "dark-orange",
+          color: "dark-orange",
+          icon: "paper",
+          role: Role.Student
+        },
+        {
           title: "Forms & Application",
           component: "FormsApplicationPage",
           size: "large",
@@ -107,7 +116,16 @@ export class MorePage {
           desc: "green",
           color: "green",
           icon: "clipboard",
-          role: Role.Student | Role.Lecturer | Role.Admin
+          role: Role.Lecturer | Role.Admin
+        },
+        {
+          title: "iConsult (Beta)",
+          component: "UpcomingstdPage",
+          size: "large",
+          desc: "green",
+          color: "green",
+          icon: "clipboard",
+          role: Role.Student
         },
         {
           title: "Exam Schedule",
@@ -169,15 +187,6 @@ export class MorePage {
           role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
-          title: "News",
-          component: "NewsPage",
-          size: "small",
-          desc: "blue",
-          color: "blue",
-          icon: "paper",
-          role: Role.Student
-        },
-        {
           title: "Operation Hours",
           component: "OperationHoursPage",
           size: "medium",
@@ -208,7 +217,7 @@ export class MorePage {
           title: "Logout",
           component: "LogoutPage",
           icon: "log-out",
-          size: "large",
+          size: "xlarge",
           desc: "red",
           color: "red",
           role: Role.Student | Role.Lecturer | Role.Admin
