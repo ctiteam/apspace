@@ -27,13 +27,30 @@
         <p class="staff-info-label m-0">Free Slots:</p>
       </div>
 
-      <ion-card
-        class="card card-ios p-0 my-1 mx-auto"
-        *ngFor="let slot of slots"
-        [ngClass]="slot.status == 'Booked' ? 'bookedcard' : 'Availablecard'"
-      >
+      <ion-card class="card card-ios p-0 my-2 mx-auto" *ngFor="let slot of slots"
+        [ngClass]="slot.status == 'Booked' ? 'bookedcard' : 'Availablecard'">
         <ion-card-header>
-          {{ slot.datetime }}
+          <div class="row">
+            <div class="col-8 text-left">
+              {{ slot.datetime }}
+            </div>
+            <div class="col-4 text-right" *ngIf="(staffName$ | async) as staffName">
+              <a class="btn btn-outline-dark" *ngIf="slot.status == 'Available'" (click)="
+                  openBookingPage(
+                    slot.availibilityid,
+                    slot.date,
+                    slot.timee,
+                    slot.time,
+                    slot.datetime,
+                    slot.endtime,
+                    staffName.name,
+                    casId
+                  )
+                ">
+                Book Now
+              </a>
+            </div>
+          </div>
         </ion-card-header>
 
         <ion-card-content class="py-3 px-4">
@@ -45,7 +62,7 @@
             <ion-icon padding-right name="locate"></ion-icon>
             {{ slot.venue }} │ {{ slot.location }}
           </ion-label>
-          <ion-label no-margin *ngIf="(staffName$ | async) as staffName">
+          <ion-label no-margin>
             <ion-icon padding-right name="contact"></ion-icon>
             <ion-badge class="bookedHour" *ngIf="slot.status == 'Booked'">{{
               slot.status
@@ -53,45 +70,31 @@
             <ion-badge class="availableHour" *ngIf="slot.status == 'Available'">{{
               slot.status
             }}</ion-badge>
-            <a
-              *ngIf="slot.status == 'Available'"
-              (click)="
-                openBookingPage(
-                  slot.availibilityid,
-                  slot.date,
-                  slot.timee,
-                  slot.time,
-                  slot.datetime,
-                  slot.endtime,
-                  staffName.name,
-                  casId
-                )
-              "
-            >
-              | Book Now
-            </a>
           </ion-label>
         </ion-card-content>
       </ion-card>
     </ng-template>
 
     <ng-template #nodata>
-      <ion-card-header class="lecimage">
-        <ion-avatar item-start>
+      <div class="row mt-5">
+        <!-- <div class="mt-5 col-12">
+          <ion-avatar item-start>
           <img src="assets/img/profile.svg" width="70" height="70" />
         </ion-avatar>
-      </ion-card-header>
-      <h2
-        class="my-content line-break"
-        *ngIf="(staffName$ | async) as staffName"
-      >
-        {{ staffName.name }}
-      </h2>
-      <a href="mailto:{{ EMAIL }}" style="text-decoration:none;">
-        <h2 class="my-content line-break" style="color: currentColor;">
-          {{ EMAIL }}
-        </h2>
-      </a>
+        </div> -->
+        <div class="mt-5 col-12">
+          <h2 class="pt-5 px-4 text-center no-consultation message" *ngIf="(staffName$ | async) as staffName">
+            {{ staffName.name }}
+          </h2>
+        </div>
+        <div class="col-12">
+          <h2 class="pt-5 px-4 text-center no-consultation email">
+            <a href="mailto:{{ EMAIL }}">
+              {{ EMAIL }}
+            </a>
+          </h2>
+        </div>
+      </div>
     </ng-template>
   </ng-template>
 

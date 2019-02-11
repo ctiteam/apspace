@@ -346,6 +346,29 @@ $primary_color: #2ecc71;
     }
   }
 
+      // ICONSULT (STUDENTS) PAGE
+      page-iconsult {
+        h2.staff-name {
+            text-shadow: 0.1px 0.1px 0.1px $primary_color, -0.1px -0.1px 0.1px $primary_color;
+        }
+        ion-card {
+            ion-card-header {
+                .btn-outline-dark {
+                    border-color: $primary_color !important;
+                    color: $primary_color !important;
+                    &:hover{
+                      background-color: $primary_color;
+                    }
+                }
+            }
+        }
+        .no-consultation {
+            a {
+                color: $primary_color;
+            }
+        }
+    }
+
   // OVERRIDE BOOTSTRAP COLORS
   .bg-success {
     background-color: $primary_color !important;

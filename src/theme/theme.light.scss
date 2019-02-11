@@ -673,6 +673,37 @@ $light_menu_colors: (
       }
     }
 
+      // ICONSULT (STUDENTS) PAGE
+  page-iconsult {
+    h2.staff-name {
+        color: color($light_colors, ligth_grey_color);
+    }
+    .staff-info-label {
+        color: color($light_colors, ligth_grey_color);
+    }
+    ion-card {
+        background-color: color($light_colors, light_white_background) !important;
+        &.bookedcard {
+            color: color($light_colors, ligth_grey_color) !important;
+        }
+        &.Availablecard {
+            color: color($light_colors, light_blue_color) !important;
+        }
+        ion-card-header{
+          background-color: color($light_colors, light_white_background) !important;
+          .btn-outline-dark:hover {
+            color: color($light_colors, light_white_background) !important;
+        }
+        }
+    }
+    ion-badge {
+        color: color($light_colors, light_white_background) !important;
+    }
+    .no-consultation {
+        color: color($light_colors, ligth_grey_color);
+    }
+}
+
   // OVERRIDING THE IONIC SEGMENTS DESIGN (ALL PAGES)
   .segment-md .segment-button {
     color: color($light_colors, ligth_grey_color);
