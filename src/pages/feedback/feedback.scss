@@ -1,16 +1,26 @@
 page-feedback {
-    button[ion-button] {
-        height: 3em;
+  button[ion-button] {
+    height: 3em;
+  }
+
+  .textarea {
+    height: auto;
+
+    div.input-wrapper {
+      background-color: #fff;
+      border-radius: 20px;
+
+      textarea.text-input {
+        margin-left: 8px;
+
+        //overflow-y: auto;
+        //max-height: 100px;
+
+      }
     }
-    .textarea {
-        height: auto;
-        div.input-wrapper {
-            background-color: #fff;
-            border-radius: 20px;
-            textarea.text-input {
-                margin-left: 8px; //overflow-y: auto;
-                //max-height: 100px;
-            }
-        }
-    }
+  }
+
+  .danger {
+    background-color: color($colors, danger);
+  }
 }

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, ToastController } from 'ionic-angular';
 
-import { FeedbackData } from '../../interfaces';
 import { FeedbackProvider, SettingsProvider, VersionProvider } from '../../providers';
 
 @IonicPage()
@@ -28,7 +27,7 @@ export class FeedbackPage {
   ) { }
 
   submitFeedback() {
-    const feedback: FeedbackData = {
+    const feedback = {
       contactNo: this.contactNo,
       platform: this.platform,
       message: this.message,
@@ -46,6 +45,15 @@ export class FeedbackPage {
         position: 'top',
         duration: 3000,
       }).present();
+      this.submitting = false;
+    }, err => {
+      this.toastCtrl.create({
+        message: err.message,
+        cssClass: 'danger',
+        position: 'top',
+        duration: 3000,
+      }).present();
+      // finally not invoked as error does not complete
       this.submitting = false;
     });
   }
