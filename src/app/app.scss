@@ -127,7 +127,8 @@ a:hover {
   text-decoration: none !important;
   opacity: 1 !important;
 }
-.btn:focus, button:focus {
+.btn:focus,
+button:focus {
   outline: none !important;
 }
 
@@ -139,4 +140,11 @@ ion-select {
 .popover-md .popover-content,
 .popover-ios .popover-content {
   width: 90% !important;
+  body {
+    padding-top: constant(safe-area-inset-top); //for iOS 11.2
+    padding-top: env(safe-area-inset-top); //for iOS 11.1
+
+    /* Temporary fix for ionic 3 to make text selectable. */
+    user-select: text;
+  }
 }

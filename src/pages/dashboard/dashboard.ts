@@ -9,16 +9,9 @@ import {
   Platform
 } from "ionic-angular";
 
-import { Observable } from "rxjs/Observable";
-import {
-  concatMap,
-  finalize,
-  flatMap,
-  map,
-  share,
-  tap,
-  toArray
-} from "rxjs/operators";
+import { Observable } from 'rxjs/Observable';
+import { forkJoin } from 'rxjs/observable/forkJoin';
+import { concatMap, finalize, flatMap, map, share, tap, toArray } from 'rxjs/operators';
 
 import {
   Apcard,
@@ -62,7 +55,6 @@ export class DashboardPage {
   // LOADING VARS
   numOfSkeletons = new Array(2);
 
-  // ATTENDANCE VARS 
   overallAttendance: number;
   subject: string;
   
@@ -145,15 +137,12 @@ export class DashboardPage {
   doRefresh(refresher?) {
     this.displayGreetingMessage();
     this.profile$ = this.ws.get<StudentProfile>("/student/profile");
-    this.nextHoliday$ = this.getHolidays(refresher);
-    this.getProfile();
-    this.transaction$ = this.getAPCardBalance();
-    this.overdue$ = this.getOverdueFee();
-    this.apcardTransaction$ = this.ws.get<Apcard[]>("/apcard/", true).pipe(
-      map(t => this.signTransactions(t)),
-      tap(t => this.analyzeTransactions(t)),
-      finalize(() => refresher && refresher.complete())
-    );
+    forkJoin(
+      this.getProfile(),
+      this.nextHoliday$ = this.getHolidays(Boolean(refresher)),
+      this.transaction$ = this.getAPCardBalance(),
+      this.overdue$ = this.getOverdueFee(),
+    ).pipe(finalize(() => refresher && refresher.complete())).subscribe();
   }
 
   openPage(page: string) {
@@ -163,15 +152,24 @@ export class DashboardPage {
   // HOLIDAYS METHODS
   getHolidays(refresh: boolean) {
     const now = new Date();
-    return this.ws
-      .get<Holidays>("/transix/holidays/filtered/students", refresh)
-      .pipe(
-        map(
-          res =>
-            res.holidays.find(h => now < new Date(h.holiday_start_date)) ||
-            ({} as Holiday)
-        )
-      );
+    return this.ws.get<Holidays>('/transix/holidays/filtered/students', refresh).pipe(
+      map(res => res.holidays.find(h => now < new Date(h.holiday_start_date)) || {} as Holiday),
+    );
+  }
+
+  getProfile() {
+    return this.ws.get<StudentProfile>('/student/profile').pipe(
+      tap(p => {
+        if (p.BLOCK === true) {
+          this.block = false;
+          this.getGPA();
+        } else {
+          this.block = true;
+        }
+      }),
+      tap(p => this.getAttendance(p.INTAKE)),
+      tap(p => this.getUpcomingExam(p.INTAKE)),
+    );
   }
 
   // UPCOMING EXAMS METHODS
@@ -312,32 +310,6 @@ export class DashboardPage {
     } else {
       this.greetingMessage = "Good evening";
     }
-  }
-
-  getProfile() {
-    this.ws
-      .get<StudentProfile>("/student/profile")
-      .pipe(
-        tap(p => {
-          if (p.BLOCK === true) {
-            this.block = false;
-            this.getGPA();
-          } else {
-            this.block = true;
-          }
-        }),
-        tap(p => this.getAttendance(p.INTAKE)),
-        tap(p => this.getUpcomingExam(p.INTAKE)),
-        // tap(p => {
-        //   if (p.COUNTRY === "Malaysia") {
-        //     this.local = true;
-        //   } else {
-        //     this.local = false;
-        //     this.visa$ = this.getVisaStatus();
-        //   }
-        // })
-      )
-      .subscribe();
   }
 
   // APCARD TRANSACTIONS & BALANCE METHODS

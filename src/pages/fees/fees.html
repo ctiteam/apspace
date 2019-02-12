@@ -128,7 +128,7 @@
             <ion-item>
               Due Date
               <ion-note color="text-color" item-right>
-                {{ (summary.PAYMENT_DUE_DATE | date:'dd-LLL-yy') || 'N/A' }}
+                {{ summary.PAYMENT_DUE_DATE || 'N/A' }}
               </ion-note>
             </ion-item>
             <ion-item>
@@ -245,7 +245,7 @@
               </ion-item>
               <ion-item>
                 Total Collected
-                <ion-note color="success" item-right>
+                <ion-note item-right>
                     {{ isNumber(detail.TOTAL_COLLECTED)
                       ? (detail.TOTAL_COLLECTED | currency:'MYR':'RM')
                       : detail.TOTAL_COLLECTED }}
@@ -253,7 +253,7 @@
               </ion-item>
               <ion-item>
                 Outstanding
-                <ion-note color="danger" item-right>
+                <ion-note [style.color]="detail.OUTSTANDING>0 ? 'rgb(240, 65, 65)': '#fff'" item-right>
                     {{ isNumber(detail.OUTSTANDING)
                       ? (detail.OUTSTANDING | currency:'MYR':'RM')
                       : detail.OUTSTANDING }}
@@ -261,7 +261,7 @@
               </ion-item>
               <ion-item>
                 Fine
-                <ion-note color="warn" item-right>
+                <ion-note [style.color]="detail.FINE>0 ? 'rgb(240, 65, 65)': '#fff'" item-right>
                     {{ isNumber(detail.FINE)
                       ? (detail.FINE | currency:'MYR':'RM')
                       : detail.FINE }}
