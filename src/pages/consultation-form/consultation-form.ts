@@ -4,7 +4,7 @@ import {
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
-import { UpcomingConStuProvider, SettingsProvider } from '../../providers';
+import { SettingsProvider, UpcomingConStuProvider } from '../../providers';
 import { TabsPage } from '../tabs/tabs';
 import { UpcomingstdPage } from '../upcomingstd/upcomingstd';
 
