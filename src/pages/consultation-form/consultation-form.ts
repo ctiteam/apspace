@@ -3,7 +3,8 @@ import {
   AlertController, App, IonicPage, LoadingController, NavController, NavParams, Tabs, ToastController,
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-import { UpcomingConStuProvider } from '../../providers/upcoming-con-stu';
+
+import { UpcomingConStuProvider, SettingsProvider } from '../../providers';
 import { TabsPage } from '../tabs/tabs';
 import { UpcomingstdPage } from '../upcomingstd/upcomingstd';
 
@@ -50,11 +51,12 @@ export class ConsultationFormPage {
     public alertCtrl: AlertController,
     private toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
-  ) {
-  }
+    private settings: SettingsProvider,
+  ) { }
 
   ionViewDidLoad() {
     this.verifyslot$ = this.UpcomingConStu.verifyduplicateslotsfun(this.verifydata);
+    this.booking.phone = this.settings.get('contactNo');
   }
 
   // student confirmation
@@ -81,6 +83,7 @@ export class ConsultationFormPage {
                 this.app.getRootNav().setRoot(TabsPage);
                 this.app.getRootNav().push(UpcomingstdPage);
                 this.presentToast();
+                this.settings.set('contactNo', this.booking.phone);
               },
             );
           },
