@@ -29,6 +29,8 @@ page-classroom-finder-modal {
   }
 
   ion-card.free {
+    background-color: #2ecc71 !important;
+    border-left: 0.4rem solid #2ecc71;
     ion-card-header, ion-card-content{
       color: #fff !important;
     }
