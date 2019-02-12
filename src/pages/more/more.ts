@@ -94,6 +94,15 @@ export class MorePage {
           color: "blue",
           icon: "clipboard",
           role: Role.Student | Role.Lecturer | Role.Admin
+        },
+        {
+          title: "APCard",
+          component: "ApcardPage",
+          size: "small",
+          desc: "red",
+          color: "red",
+          icon: "card",
+          role: Role.Student | Role.Lecturer | Role.Admin
         }
       ]
     },
@@ -121,9 +130,18 @@ export class MorePage {
         {
           title: "iConsult (Beta)",
           component: "UpcomingstdPage",
-          size: "large",
+          size: "medium",
           desc: "green",
           color: "green",
+          icon: "clipboard",
+          role: Role.Student
+        },
+        {
+          title: "Timetable",
+          component: "TimetablePage",
+          size: "small",
+          desc: "orange",
+          color: "orange",
           icon: "clipboard",
           role: Role.Student
         },
@@ -157,10 +175,19 @@ export class MorePage {
         {
           title: "Moodle (Course Material)",
           component: "LmsPage",
-          size: "xlarge",
+          size: "large",
           desc: "dark-orange",
           color: "dark-orange",
           icon: "open",
+          role: Role.Student | Role.Lecturer | Role.Admin
+        },
+        {
+          title: "Attendance",
+          component: "AttendancePage",
+          size: "small",
+          desc: "orange",
+          color: "orange",
+          icon: "alarm",
           role: Role.Student | Role.Lecturer | Role.Admin
         }
       ]
