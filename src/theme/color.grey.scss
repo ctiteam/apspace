@@ -143,7 +143,8 @@ $primary_color: #7f8c8d;
   }
 
   // FEEDBACK PAGE
-  page-feedback, page-password-recovery {
+  page-feedback,
+  page-password-recovery {
     ion-label.label {
       color: $primary_color;
     }
@@ -161,7 +162,7 @@ $primary_color: #7f8c8d;
         box-shadow: inset 0 -1px 0 0 $primary_color;
       }
     }
-    button[ion-fab]{
+    button[ion-fab] {
       background-color: $primary_color;
     }
   }
@@ -287,7 +288,8 @@ $primary_color: #7f8c8d;
   }
 
   // STUDENTS TIMETABLE PAGE
-  page-timetable, page-classroom-finder-modal {
+  page-timetable,
+  page-classroom-finder-modal {
     ion-card {
       ion-card-header {
         h2 {
@@ -344,28 +346,38 @@ $primary_color: #7f8c8d;
     }
   }
 
-      // ICONSULT (STUDENTS) PAGE
-      page-iconsult {
-        h2.staff-name {
-            text-shadow: 0.1px 0.1px 0.1px $primary_color, -0.1px -0.1px 0.1px $primary_color;
-        }
-        ion-card {
-            ion-card-header {
-                .btn-outline-dark {
-                    border-color: $primary_color !important;
-                    color: $primary_color !important;
-                    &:hover{
-                      background-color: $primary_color;
-                    }
-                }
-            }
-        }
-        .no-consultation {
-            a {
-                color: $primary_color;
-            }
-        }
+  // ICONSULT (STUDENTS) PAGE
+  page-iconsult {
+    h2.staff-name {
+      text-shadow: 0.1px 0.1px 0.1px $primary_color,
+        -0.1px -0.1px 0.1px $primary_color;
     }
+    ion-card {
+      ion-card-header {
+        .btn-outline-dark {
+          border-color: $primary_color !important;
+          color: $primary_color !important;
+          &:hover {
+            background-color: $primary_color;
+          }
+        }
+      }
+    }
+    .no-consultation {
+      a {
+        color: $primary_color;
+      }
+    }
+  }
+
+  // ICONSULT CONSULTATION FORM PAGE
+  page-consultation-form {
+    .button-wrapper {
+      button.btn-dark.btn {
+        background-color: $primary_color;
+      }
+    }
+  }
 
   // OVERRIDE BOOTSTRAP COLORS
   .bg-success {

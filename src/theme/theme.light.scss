@@ -700,7 +700,7 @@ $light_menu_colors: (
           &:hover {
             color: color($light_colors, light_white_background) !important;
           }
-          &:active{
+          &:active {
             background-color: color($light_colors, light_background) !important;
           }
         }
@@ -711,6 +711,26 @@ $light_menu_colors: (
     }
     .no-consultation {
       color: color($light_colors, ligth_grey_color);
+    }
+  }
+
+  // ICONSULT CONSULTATION FORM PAGE
+  page-consultation-form {
+    .booking-details {
+      h2 {
+        color: color($light_colors, light_blue_color);
+      }
+      p {
+        color: color($light_colors, ligth_grey_color);
+      }
+    }
+    ion-label {
+      color: color($light_colors, light_blue_color) !important;
+    }
+    .button-wrapper {
+      button.btn-dark.btn {
+        color: color($light_colors, light_background) !important;
+      }
     }
   }
 

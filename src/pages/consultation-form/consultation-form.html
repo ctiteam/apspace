@@ -1,11 +1,11 @@
 <ion-header>
-  <ion-navbar color="primary">
+  <ion-navbar>
     <ion-title>Enter Appointment Details</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-item style="margin-bottom:5px">
+  <ion-item class="booking-details" style="margin-bottom:5px">
     <ion-avatar item-start>
       <img src="assets/img/profile.svg">
     </ion-avatar>
@@ -23,7 +23,7 @@
     </ng-template>
 
     <ng-template #noduplicate>
-      <ion-item>
+      <ion-item class="my-2">
         <ion-label class="with required">Consultation With</ion-label>
         <ion-select [(ngModel)]="conWith" [(ngModel)]="booking.con_with" placeholder="Select One" class="with"
           [ngModelOptions]="{standalone: true}" interface="popover">
@@ -41,30 +41,31 @@
         </ion-select>
       </ion-item>
 
-      <ion-item>
-        <ion-label class="required" stacked>Reason for Appointment</ion-label>
+      <ion-item class="my-2">
+        <ion-label class="field-title required" stacked>Reason for Appointment</ion-label>
         <ion-textarea [(ngModel)]="reason" [(ngModel)]="booking.reason" [ngModelOptions]="{standalone: true}"></ion-textarea>
       </ion-item>
 
-      <ion-item>
-        <ion-label stacked>Contact Number</ion-label>
+      <ion-item class="my-2">
+        <ion-label class="field-title" stacked>Contact Number</ion-label>
         <ion-input type="tel" [(ngModel)]="telnumber" [(ngModel)]="booking.phone" placeholder="e.g. 0121234567"
           [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
 
-      <ion-item>
-        <ion-label stacked class="required">Email Address</ion-label>
+      <ion-item class="my-2">
+        <ion-label stacked class="field-title required">Email Address</ion-label>
         <ion-input type="text" [(ngModel)]="emialaddress" [(ngModel)]="booking.email" [ngModelOptions]="{standalone: true}"></ion-input>
       </ion-item>
 
-      <ion-item>
-        <ion-label stacked>Note</ion-label>
+      <ion-item class="my-2 mx-1">
+        <ion-label class="field-title" stacked>Note</ion-label>
         <ion-textarea [(ngModel)]="notes" [(ngModel)]="booking.note" [ngModelOptions]="{standalone: true}"></ion-textarea>
       </ion-item>
-
-      <button ion-button round full margin-top (click)="confirmation()" [disabled]="!booking.con_with || !booking.reason || !booking.email">
-        Submit
-      </button>
+      <div class="button-wrapper p-3 mt-2">
+        <button ion-button block (click)="confirmation()" class="btn btn-lg btn-dark" [disabled]="!booking.con_with || !booking.reason || !booking.email">
+          Submit
+        </button>
+      </div>
     </ng-template>
   </ng-template>
 

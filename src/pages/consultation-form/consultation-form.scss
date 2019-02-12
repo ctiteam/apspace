@@ -1,37 +1,50 @@
 page-consultation-form {
-    .item-ios.item-block .item-inner {
-        padding-right: 8px;
-        padding-right: 8px;
-        border-bottom: none;
-    }
+  .item-ios.item-block .item-inner {
+    padding-right: 8px;
+    padding-right: 8px;
+    border-bottom: none;
+  }
 
-    .with{
-        font-size: 1.4rem;  
-    }
+  .with {
+    font-size: 1.4rem;
+  }
 
-    .fileds{
-        font-size: 1.4rem;
-    }
+  .fileds {
+    font-size: 1.4rem;
+  }
 
-    .label[stacked] {
-        font-size: 1.4rem;
-    }
+  .label[stacked] {
+    font-size: 1.4rem;
+  }
 
-    .label.required:after {
-        content: " *"; 
-        color: red;
-    }
+  .label.required:after {
+    content: " *";
+    color: #d5040a;
+  }
 
-    .line-break{
-        overflow: inherit ;
-        text-overflow: inherit ;
-        white-space: normal;
-        vertical-align: middle; 
-        text-align: center; 
-        font-size: large;
-        font-family: initial;
-        margin-top: 181px;
-        margin-left: 20px;
-        color: slategrey;
+  .line-break {
+    overflow: inherit;
+    text-overflow: inherit;
+    white-space: normal;
+    vertical-align: middle;
+    text-align: center;
+    font-size: large;
+    font-family: initial;
+    margin-top: 181px;
+    margin-left: 20px;
+    color: slategrey;
+  }
+
+  ion-item {
+    .item-inner {
+      border-bottom: 0px !important;
     }
+  }
+
+  .button-wrapper {
+    button.btn-dark.btn {
+      font-size: 1.2em;
+      padding: 25px 10px;
+    }
+  }
 }
