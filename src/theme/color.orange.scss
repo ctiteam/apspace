@@ -381,6 +381,27 @@ $primary_color: #ec644b;
     }
   }
 
+  // PAGE UPCOMING APPOINTMENT FOR STUDENTS
+  page-upcomingstd {
+    ion-card {
+      ion-card-content {
+        button {
+          border-color: $primary_color !important;
+          color: $primary_color !important;
+          &:hover,
+          &:active {
+            background-color: $primary_color !important;
+          }
+        }
+      }
+    }
+    ion-fab{
+      button{
+        background-color: $primary_color;
+      }
+    }
+  }
+
   // OVERRIDE BOOTSTRAP COLORS
   .bg-success {
     background-color: $primary_color !important;

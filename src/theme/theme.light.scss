@@ -734,6 +734,33 @@ $light_menu_colors: (
     }
   }
 
+  // PAGE UPCOMING APPOINTMENT FOR STUDENTS
+  page-upcomingstd {
+    .cancelledbylec {
+      color: color($light_colors, light_header_background);
+    }
+
+    ion-card {
+      background-color: color($light_colors, light_white_background) !important;
+      color: color($light_colors, ligth_grey_color) !important;
+      ion-card-header {
+        color: color($light_colors, light_blue_color);
+        background-color: color(
+          $light_colors,
+          light_header_background
+        ) !important;
+      }
+      ion-card-content {
+        button {
+          &:hover,
+          &:active {
+            color: color($light_colors, light_blue_color) !important;
+          }
+        }
+      }
+    }
+  }
+
   // OVERRIDING THE IONIC SEGMENTS DESIGN (ALL PAGES)
   .segment-md .segment-button {
     color: color($light_colors, ligth_grey_color);

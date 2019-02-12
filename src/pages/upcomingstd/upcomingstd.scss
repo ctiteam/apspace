@@ -1,55 +1,39 @@
 page-upcomingstd {
-    div.consultationNote{
-        margin-top: 10px;
-    }
+  div.consultationNote {
+    margin-top: 10px;
+  }
 
-    .icon1{
-        background-color: green;
-    }
+  div.consultationNote .icon {
+    margin-bottom: 5px;
+  }
 
-    .icon2{
-        background-color: rgb(240, 31, 31);
-    }
+  .cancelledbylec {
+    background-color: #c02a2e;
+  }
 
-    .icon3{
-        background-color: rgb(250, 170, 21);
-    }
+  .backbutton {
+    text-transform: capitalize;
+    margin-left: 3px;
+  }
 
-    div.consultationNote .icon{
-        margin-bottom: 5px;
-    }
+  .line-break {
+    overflow: inherit;
+    text-overflow: inherit;
+    white-space: normal;
+    vertical-align: middle;
+    text-align: center;
+    font-size: large;
+    font-family: initial;
+    margin-top: 181px;
+    margin-left: 20px;
+    color: slategrey;
+  }
 
-    .canceledcard{
-        border-left: 1rem solid red
+  ion-card {
+    ion-card-content {
+      button {
+        width: 100% !important;
+      }
     }
-    .availablecard{
-        border-left: 1rem solid rgb(24, 237, 124)
-    }
-    .cancelledbylec{
-        background-color: rgb(240, 31, 31);
-    }
-
-    .canceledstucard {
-      border-left: 1rem solid red
-    }
-    
-    .backbutton{
-        text-transform: capitalize;
-        margin-left: 3px;
-    }
-
-    .line-break{
-        overflow: inherit ;
-        text-overflow: inherit ;
-        white-space: normal;
-        vertical-align: middle; 
-        text-align: center; 
-        font-size: large;
-        font-family: initial;
-        margin-top: 181px;
-        margin-left: 20px;
-        color: slategrey;
-    }
-
+  }
 }
-
