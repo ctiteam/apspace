@@ -9,6 +9,7 @@ export { CourseDetails } from './course-details';
 export { DeterminationLegend } from './determination-legend';
 import { DepName, UnavailruleDet } from './iconsult';
 export { ExamSchedule } from './exam-schedule';
+export { FeedbackData } from './feedback';
 export { FeesBankDraft, FeesDetails, FeesSummary, FeesTotalSummary } from './fees';
 export { Holidays, Holiday } from './holiday';
 export {

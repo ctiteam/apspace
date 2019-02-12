@@ -104,7 +104,7 @@ export class CasTicketProvider {
   }
 
   /**
-   * GET: Validate service ticekt and set role to user
+   * GET: Validate service ticket and record user role.
    *
    * @param st service ticket
    * @return tgt
@@ -121,8 +121,9 @@ export class CasTicketProvider {
       switchMap(res => {
         const parts = res.serviceResponse.authenticationSuccess.attributes.distinguishedName
           .join().toLowerCase().split(',');
-        let role: Role = 0;
 
+        // record user role
+        let role: Role = 0b0;
         if (parts.indexOf('ou=students') !== -1) {
           role |= Role.Student;
         }
@@ -135,8 +136,8 @@ export class CasTicketProvider {
         if (!role) {
           return obs_throw('Group not supported');
         }
-
         this.settings.set('role', role);
+
         return of(res);
       }),
     );
