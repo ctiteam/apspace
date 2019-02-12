@@ -50,6 +50,7 @@
               <path
                 d="M0,140 L0,2.59259259 C0,2.6670255 28.08,-4.12156133 66,3.88888889 C83.6331044,8.10263543 102,6.61060503 120,2.59259259 L120,140 L0,140 Z M120,140 L120,2.59259259 C120,2.6670255 148.08,-4.12156133 186,3.88888889 C203.633104,8.10263543 222,6.61060503 240,2.59259259 L240,140 L120,140 Z"
                 id="waveShape"
+                [class.danger-attendance-fill]="0.8 >= average"
               ></path>
             </g>
           </g>
@@ -63,7 +64,7 @@
     <!-- END BLUR LAYER (OVERLAY) -->
 
     <!-- START CIRCLE -->
-    <div class="circle text-center" id="widget-content"></div>
+    <div class="circle text-center" id="widget-content" [class.danger-attendance-box-shadow]="0.8 >= average"></div>
     <!-- END CIRCLE -->
 
     <!-- START TEXT -->

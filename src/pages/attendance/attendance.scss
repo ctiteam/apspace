@@ -1,4 +1,10 @@
 page-attendance {
+  .danger-attendance-fill {
+    fill: #c02a2e !important;
+  }
+  .danger-attendance-box-shadow {
+    box-shadow: 2px 2px 22px #c02a2e, -2px -2px 22px #c02a2e !important;
+  }
   ion-segment {
     display: block;
     white-space: nowrap;
