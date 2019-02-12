@@ -1,5 +1,8 @@
 page-staff-directory {
   ion-content ion-item {
     cursor: pointer;
+    .item-inner{
+      border-bottom: 0px !important;
+    }
   }
 }
