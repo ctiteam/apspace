@@ -754,6 +754,24 @@ $light_menu_colors: (
         button {
           &:hover,
           &:active {
+            color: color($light_colors, light_white_background) !important;
+          }
+        }
+      }
+    }
+  }
+
+  // ICONSULT MY APPOINTMENTS PAGE
+  page-student-consul-detail {
+    ion-card {
+      background-color: color($light_colors, light_white_background) !important;
+      color: color($light_colors, light_blue_color) !important;
+      ion-card-content {
+        ion-item {
+          p {
+            color: color($light_colors, ligth_grey_color) !important;
+          }
+          h2 {
             color: color($light_colors, light_blue_color) !important;
           }
         }

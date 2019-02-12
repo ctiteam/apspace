@@ -393,9 +393,22 @@ $primary_color: #7f8c8d;
         }
       }
     }
-    ion-fab{
-      button{
+    ion-fab {
+      button {
         background-color: $primary_color;
+      }
+    }
+  }
+
+  // ICONSULT MY APPOINTMENTS PAGE
+  page-student-consul-detail {
+    ion-card {
+      ion-card-content {
+        ion-item {
+          a h2 {
+            color: $primary_color !important;
+          }
+        }
       }
     }
   }
