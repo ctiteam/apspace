@@ -378,7 +378,8 @@ $light_menu_colors: (
   }
 
   // FEEDBACK PAGE
-  page-feedback, page-password-recovery {
+  page-feedback,
+  page-password-recovery {
     .item-md,
     .item-ios {
       background-color: color($light_colors, light_background);
@@ -544,7 +545,8 @@ $light_menu_colors: (
   }
 
   // STUDENTS TIMETABLE PAGE
-  page-timetable, page-classroom-finder-modal {
+  page-timetable,
+  page-classroom-finder-modal {
     ion-card:not(.free) {
       background-color: color($light_colors, light_white_background) !important;
       ion-card-header {
@@ -573,12 +575,12 @@ $light_menu_colors: (
     }
   }
 
-    // NOTIFICATIONS PAGE
-    page-notification { 
-      .notification-desktop{
-        color: color($light_colors, ligth_grey_color);
-      }
+  // NOTIFICATIONS PAGE
+  page-notification {
+    .notification-desktop {
+      color: color($light_colors, ligth_grey_color);
     }
+  }
 
   // NOTIFICATION MODAL
   page-notification-modal {
@@ -653,56 +655,64 @@ $light_menu_colors: (
     }
   }
 
-    // CLASSROOM FINDER
-    page-classroom-finder {
-      ion-card.card{
-        background-color: color($light_colors, light_white_background) !important;
-        ion-card-content{
-          ion-card-title{
-            color: color($light_colors, light_blue_color);
+  // CLASSROOM FINDER
+  page-classroom-finder {
+    ion-card.card {
+      background-color: color($light_colors, light_white_background) !important;
+      ion-card-content {
+        ion-card-title {
+          color: color($light_colors, light_blue_color);
+        }
+        ion-label.header-label {
+          color: color($light_colors, light_blue_color);
+        }
+        ion-chip {
+          cursor: pointer;
+          background-color: color($light_colors, light_background);
+          color: color($light_colors, light_blue_color);
+        }
+      }
+    }
+  }
+
+  // ICONSULT (STUDENTS) PAGE
+  page-iconsult {
+    h2.staff-name {
+      color: color($light_colors, ligth_grey_color);
+    }
+    .staff-info-label {
+      color: color($light_colors, ligth_grey_color);
+    }
+    ion-card {
+      background-color: color($light_colors, light_white_background) !important;
+      &.bookedcard {
+        color: color($light_colors, ligth_grey_color) !important;
+      }
+      &.Availablecard {
+        color: color($light_colors, light_blue_color) !important;
+      }
+      ion-card-header {
+        background-color: color(
+          $light_colors,
+          light_white_background
+        ) !important;
+        .btn-outline-dark {
+          &:hover {
+            color: color($light_colors, light_white_background) !important;
           }
-          ion-label.header-label{
-            color: color($light_colors, light_blue_color);
-          }
-          ion-chip{
-            cursor: pointer;
-            background-color: color($light_colors, light_background);
-            color: color($light_colors, light_blue_color);;
+          &:active{
+            background-color: color($light_colors, light_background) !important;
           }
         }
       }
     }
-
-      // ICONSULT (STUDENTS) PAGE
-  page-iconsult {
-    h2.staff-name {
-        color: color($light_colors, ligth_grey_color);
-    }
-    .staff-info-label {
-        color: color($light_colors, ligth_grey_color);
-    }
-    ion-card {
-        background-color: color($light_colors, light_white_background) !important;
-        &.bookedcard {
-            color: color($light_colors, ligth_grey_color) !important;
-        }
-        &.Availablecard {
-            color: color($light_colors, light_blue_color) !important;
-        }
-        ion-card-header{
-          background-color: color($light_colors, light_white_background) !important;
-          .btn-outline-dark:hover {
-            color: color($light_colors, light_white_background) !important;
-        }
-        }
-    }
     ion-badge {
-        color: color($light_colors, light_white_background) !important;
+      color: color($light_colors, light_white_background) !important;
     }
     .no-consultation {
-        color: color($light_colors, ligth_grey_color);
+      color: color($light_colors, ligth_grey_color);
     }
-}
+  }
 
   // OVERRIDING THE IONIC SEGMENTS DESIGN (ALL PAGES)
   .segment-md .segment-button {

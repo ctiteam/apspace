@@ -405,7 +405,8 @@ $dark_menu_colors: (
   }
 
   // FEEDBACK PAGE & SET SECURITY QUESTIONS PAGE
-  page-feedback, page-password-recovery {
+  page-feedback,
+  page-password-recovery {
     .item-md,
     .item-ios {
       background-color: color($dark_colors, dark_background);
@@ -586,7 +587,8 @@ $dark_menu_colors: (
   }
 
   // STUDENTS TIMETABLE PAGE
-  page-timetable, page-classroom-finder-modal  {
+  page-timetable,
+  page-classroom-finder-modal {
     ion-card {
       background-color: color($dark_colors, dark_item_background) !important;
       ion-card-header {
@@ -609,8 +611,8 @@ $dark_menu_colors: (
   }
 
   // NOTIFICATIONS PAGE
-  page-notification { 
-    .notification-desktop{
+  page-notification {
+    .notification-desktop {
       color: color($dark_colors, dark_search_background_color);
     }
   }
@@ -694,16 +696,16 @@ $dark_menu_colors: (
 
   // CLASSROOM FINDER
   page-classroom-finder {
-    ion-card.card{
+    ion-card.card {
       background-color: color($dark_colors, dark_item_background) !important;
-      ion-card-content{
-        ion-card-title{
+      ion-card-content {
+        ion-card-title {
           color: color($dark_colors, dark_white_color);
         }
-        ion-label.header-label{
+        ion-label.header-label {
           color: color($dark_colors, dark_white_color);
         }
-        ion-chip{
+        ion-chip {
           cursor: pointer;
           background-color: color($dark_colors, dark_background);
           color: color($dark_colors, dark_white_color);
@@ -715,37 +717,43 @@ $dark_menu_colors: (
   // ICONSULT (STUDENTS) PAGE
   page-iconsult {
     h2.staff-name {
-        color: color($dark_colors, dark_white_color);
-        text-shadow: 0.1px 0.1px 0.1px #ec644b, -0.1px -0.1px 0.1px #ec644b;
+      color: color($dark_colors, dark_white_color);
+      text-shadow: 0.1px 0.1px 0.1px #ec644b, -0.1px -0.1px 0.1px #ec644b;
     }
     .staff-info-label {
-        color: color($dark_colors, dark_search_background_color);
+      color: color($dark_colors, dark_search_background_color);
     }
     ion-card {
-        background-color: color($dark_colors, dark_item_background) !important;
-        &.bookedcard {
-            color: color($dark_colors, dark_search_background_color) !important;
+      background-color: color($dark_colors, dark_item_background) !important;
+      &.bookedcard {
+        color: color($dark_colors, dark_search_background_color) !important;
+      }
+      &.Availablecard {
+        color: color($dark_colors, dark_white_color) !important;
+      }
+      ion-card-header {
+        .btn-outline-dark {
+          border-color: #ec644b !important;
+          color: #ec644b !important;
+          &:hover {
+            color: color($dark_colors, dark_item_background) !important;
+          }
+          &:active{
+            background-color: color($dark_colors, dark_background) !important;
+          }
         }
-        &.Availablecard {
-            color: color($dark_colors, dark_white_color) !important;
-        }
-        ion-card-header {
-            .btn-outline-dark {
-                border-color: #ec644b !important;
-                color: #ec644b !important;
-            }
-        }
+      }
     }
     ion-badge {
-        color: color($dark_colors, dark_item_background) !important;
+      color: color($dark_colors, dark_item_background) !important;
     }
     .no-consultation {
-        color: color($dark_colors, dark_search_background_color);
-        a {
-            color: #ec644b;
-        }
+      color: color($dark_colors, dark_search_background_color);
+      a {
+        color: #ec644b;
+      }
     }
-}
+  }
 
   // OVERRIDING IONIC SEGMENTS DESIGN (ALL PAGES)
   .segment-md .segment-button {
