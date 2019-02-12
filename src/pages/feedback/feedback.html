@@ -2,8 +2,7 @@
   <ion-navbar color="primary">
     <ion-title>Feedback</ion-title>
     <ion-buttons end>
-      <button ion-button small (click)="submitFeedback()"
-              [disabled]="submitting || !contactNo || !message">
+      <button ion-button small (click)="submitFeedback()" [disabled]="submitting || !message">
         Send
       </button>
     </ion-buttons>
