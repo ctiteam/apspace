@@ -686,16 +686,28 @@ $light_menu_colors: (
     ion-card {
       background-color: color($light_colors, light_white_background) !important;
       &.bookedcard {
-        color: color($light_colors, ligth_grey_color) !important;
+        ion-card-header{
+          color: color($light_colors, ligth_grey_color) !important;
+          h2{
+            color: color($light_colors, ligth_grey_color) !important;
+          }
+        }
       }
       &.Availablecard {
         color: color($light_colors, light_blue_color) !important;
+        ion-card-header{
+          h2{
+            color: color($light_colors, light_blue_color) !important;
+          }
+        }
       }
       ion-card-header {
         background-color: color(
           $light_colors,
           light_white_background
         ) !important;
+      }
+      ion-card-content{
         .btn-outline-dark {
           &:hover {
             color: color($light_colors, light_white_background) !important;

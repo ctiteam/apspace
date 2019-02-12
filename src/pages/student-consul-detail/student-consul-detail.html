@@ -21,12 +21,12 @@
       <ion-item class="lecturerdetails">
         <ion-icon name="person" item-start></ion-icon>
         <div class="row">
-          <div class="col-12 py-2">
-            <p>Lecturer Name :</p>
+          <div class="col-12 py-1">
+            <p>Lecturer Name:</p>
             <h2 class="my-content line-break">{{ details.lecname }}</h2>
           </div>
-          <div class="col-12 py-2">
-            <p>Lecturer Email :</p>
+          <div class="col-12 py-1">
+            <p>Lecturer Email:</p>
             <a
               href="mailto:{{ details.LecEmail }}"
               style="text-decoration:none;"
@@ -36,8 +36,8 @@
               </h2>
             </a>
           </div>
-          <div class="col-12 py-2">
-            <p>Consultation With :</p>
+          <div class="col-12 py-1">
+            <p>Consultation With:</p>
             <h2 class="my-content line-break">{{ details.con_with }}</h2>
           </div>
         </div>
@@ -46,12 +46,12 @@
       <ion-item class="lecturerdetails">
         <ion-icon name="time" item-start></ion-icon>
         <div class="row">
-          <div class="col-12 py-2">
-            <p>Date :</p>
+          <div class="col-12 py-1">
+            <p>Date:</p>
             <h2>{{ details.datetime }}</h2>
           </div>
-          <div class="col-12 py-2">
-            <p>Time :</p>
+          <div class="col-12 py-1">
+            <p>Time:</p>
             <h2>{{ details.contime }} - {{ details.endTime }}</h2>
           </div>
         </div>
@@ -60,13 +60,13 @@
       <ion-item class="lecturerdetails">
         <ion-icon name="pin" item-start></ion-icon>
         <div class="row">
-          <div class="col-12 py-2">
-            <p>Location :</p>
-            <b class="my-content line-break">{{ details.location }}</b>
+          <div class="col-12 py-1">
+            <p>Location:</p>
+            <h2 class="my-content line-break">{{ details.location }}</h2>
           </div>
-          <div class="col-12 py-2">
-            <p>Venue :</p>
-            <b class="my-content line-break">{{ details.venue }}</b>
+          <div class="col-12 py-1">
+            <p>Venue:</p>
+            <h2 class="my-content line-break">{{ details.venue }}</h2>
           </div>
         </div>
       </ion-item>
@@ -74,8 +74,8 @@
       <ion-item class="lecturerdetails">
         <ion-icon name="pricetags" item-start></ion-icon>
         <div class="row">
-          <div class="col-12 py-2">
-            <p>Appointment reason :</p>
+          <div class="col-12 py-1">
+            <p>Appointment reason:</p>
             <h2 class="my-content line-break">{{ details.reason }}</h2>
           </div>
         </div>
@@ -84,8 +84,8 @@
       <ion-item class="lecturerdetails" *ngIf="details.note != ''">
         <ion-icon name="paper" item-start></ion-icon>
         <div class="row">
-          <div class="col-12 py-2">
-            <p>Appointment note :</p>
+          <div class="col-12 py-1">
+            <p>Appointment note:</p>
             <h2 class="my-content line-break">{{ details.note }}</h2>
           </div>
         </div>
@@ -96,7 +96,7 @@
         *ngIf="details.status == 'cancelledbylec'"
       >
         <ion-icon name="document" item-start></ion-icon>
-        <p>Cancel Reason :</p>
+        <p>Cancel Reason:</p>
         <b class="my-content line-break">{{ details.cancelreason }}</b>
       </ion-item>
 

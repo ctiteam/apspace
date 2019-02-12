@@ -62,7 +62,7 @@
           </ion-label>
 
           <div class="row mt-3">
-            <div class="col-6">
+            <div class="col-8">
               <button
                 *ngIf="slot.status == 'normal'"
                 class="btn btn-lg btn-outline-primary"
@@ -75,7 +75,7 @@
                   )
                 "
               >
-                View appointment details
+                Appointment details
               </button>
               <button
                 *ngIf="slot.status == 'cancelledbylec'"
@@ -106,7 +106,7 @@
                 View details
               </button>
             </div>
-            <div class="col-6">
+            <div class="col-4">
               <button
                 class="btn btn-lg btn-outline-success"
                 (click)="gotoChat()"

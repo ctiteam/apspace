@@ -6,11 +6,15 @@ page-iconsult {
         }
         &.Availablecard {
             border-left: 0.4rem solid #2ecc71;
+            ion-card-header{
+                h2{
+                    font-weight: 500 !important;
+                }
+            }
         }
-        ion-card-header {
+        ion-card-content {
             .btn-outline-dark {
                 border-radius: 5px;
-                width: 100%;
             }
         }
     }
