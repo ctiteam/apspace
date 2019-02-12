@@ -181,9 +181,7 @@
               <ion-item>
                 Bank Draft Amount
                 <ion-note color="text-color" item-right>
-                    {{ isNumber(bankDraft.BANKDRAFT_AMOUNT)
-                      ? (bankDraft.BANKDRAFT_AMOUNT | currency:'MYR':'RM')
-                      : bankDraft.BANKDRAFT_AMOUNT }}
+                    {{ bankDraft.BANKDRAFT_AMOUNT | currency:'GBP' }}
                 </ion-note>
               </ion-item>
               <ion-item>
@@ -207,9 +205,7 @@
               <ion-item>
                 Amount Collected
                 <ion-note color="success" item-right>
-                    {{ isNumber(bankDraft.AMOUNT_COLLECTED)
-                      ? (bankDraft.AMOUNT_COLLECTED | currency:'MYR':'RM')
-                      : bankDraft.AMOUNT_COLLECTED }}
+                    {{ bankDraft.AMOUNT_COLLECTED | currency:'GBP' }}
                 </ion-note>
               </ion-item>
             </ion-card-content>
