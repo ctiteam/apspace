@@ -130,6 +130,7 @@ a:hover {
 .btn:focus,
 button:focus {
   outline: none !important;
+  box-shadow: none !important;
 }
 
 // OVERRIDE IONIC ION-SELECT
