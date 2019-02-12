@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 import { concatMap, finalize, flatMap, map, share, tap, toArray } from 'rxjs/operators';
 
 import {
@@ -33,7 +34,6 @@ export class DashboardPage {
   type = ['pie', 'horizontalBar'];
   pieChartData: any;
   barChartData: any;
-  totalClasses: number;
   overallAttendance: number;
   subjectCode: string;
   percent: number;
@@ -76,11 +76,12 @@ export class DashboardPage {
   }
 
   doRefresh(refresher?) {
-    this.totalClasses = undefined;
-    this.nextHoliday$ = this.getHolidays(refresher);
-    this.getProfile();
-    this.transaction$ = this.getAPCardBalance();
-    this.overdue$ = this.getOverdueFee();
+    forkJoin(
+      this.getProfile(),
+      this.nextHoliday$ = this.getHolidays(Boolean(refresher)),
+      this.transaction$ = this.getAPCardBalance(),
+      this.overdue$ = this.getOverdueFee(),
+    ).pipe(finalize(() => refresher && refresher.complete())).subscribe();
   }
 
   getAPCardBalance() {
@@ -97,7 +98,7 @@ export class DashboardPage {
   }
 
   getProfile() {
-    this.ws.get<StudentProfile>('/student/profile').pipe(
+    return this.ws.get<StudentProfile>('/student/profile').pipe(
       tap(p => {
         if (p.BLOCK === true) {
           this.block = false;
@@ -116,7 +117,7 @@ export class DashboardPage {
           this.visa$ = this.getVisaStatus();
         }
       }),
-    ).subscribe();
+    );
   }
 
   getUpcomingExam(intake: string) {

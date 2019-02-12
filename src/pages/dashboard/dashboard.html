@@ -15,29 +15,20 @@
   <div id='cover'></div>
   <ion-card padding>
     <ion-row>
-      <ion-col col-6>
-        <ion-icon class='big-icons' name='md-calendar'></ion-icon>
-        <p class='icon-title'>Classes Today</p>
-        <p class='top-value' [style.color]="'#0dbd53'">
-          {{ totalClasses !== undefined ? totalClasses : '…' }}
-        </p>
-      </ion-col>
-      <ion-col col-6>
+      <ion-col col-4>
         <ion-icon class='big-icons' name='md-alarm'></ion-icon>
         <p class='icon-title'>Overall Attendance</p>
         <p *ngIf='attendancePercent$ | async as ap' class='top-value' [style.color]=".8 <= ap && ap <= 1 ? '#0dbd53' : '#f04141'">
           {{ ap | percent }}
         </p>
       </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col col-6>
+      <ion-col col-4>
         <ion-icon class='big-icons' name='md-card'></ion-icon>
         <p class='icon-title'>APCard Balance</p>
         <p class='top-value' *ngIf='transaction$ | async as balance' [style.color]="balance == 0 ? '#f04141' : '#0dbd53'">{{
           balance | currency:'MYR':'RM' }}</p>
       </ion-col>
-      <ion-col col-6>
+      <ion-col col-4>
         <ion-icon class='big-icons' name='md-cash'></ion-icon>
         <p class='icon-title'>Total Overdue</p>
         <p *ngIf="overdue$ | async as overdue" class='top-value' [style.color]="overdue[0]?.TOTAL_OVERDUE == 0 ? '#0dbd53' : '#f04141'">
