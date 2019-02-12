@@ -96,7 +96,7 @@ export class TimetablePage {
 
   /** Check if the day is in week. */
   dayInWeek(date: Date) {
-    date.setDate(date.getDate() - date.getDay());
+    date.setDate(date.getDate() - date.getDay() + 1);
     return date.getFullYear() === this.selectedWeek.getFullYear()
       && date.getMonth() === this.selectedWeek.getMonth()
       && date.getDate() === this.selectedWeek.getDate();
@@ -141,7 +141,7 @@ export class TimetablePage {
     // get week
     this.availableWeek = Array.from(new Set(tt.map(t => {
       const date = new Date(t.DATESTAMP_ISO);
-      date.setDate(date.getDate() - date.getDay());
+      date.setDate(date.getDate() - date.getDay() + 1);
       return date.valueOf();
     }))).sort().map(d => new Date(d));
 
@@ -177,7 +177,7 @@ export class TimetablePage {
 
     // select current start of week
     const date = new Date();
-    date.setDate(date.getDate() - date.getDay());
+    date.setDate(date.getDate() - date.getDay() + 1);
     this.selectedWeek = date;
 
     this.intake = this.settings.get('intake');
