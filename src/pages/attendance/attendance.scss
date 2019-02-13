@@ -135,6 +135,24 @@ page-attendance {
     width: 100%;
     height: 100%;
   }
+  @-webkit-keyframes fillAction {
+    0% {
+      transform: translate(0, 90px);
+    }
+    100% {
+      transform: translate(0, 0px);
+    }
+  }
+
+  @-moz-keyframes fillAction {
+    0% {
+      transform: translate(0, 90px);
+    }
+    100% {
+      transform: translate(0, 0px);
+    }
+  }
+
   @keyframes fillAction {
     0% {
       transform: translate(0, 90px);
@@ -143,6 +161,25 @@ page-attendance {
       transform: translate(0, 0px);
     }
   }
+
+  @-webkit-keyframes waveAction {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(-120px, 0);
+    }
+  }
+
+  @-moz-keyframes waveAction {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(-120px, 0);
+    }
+  }
+
   @keyframes waveAction {
     0% {
       transform: translate(0, 0);

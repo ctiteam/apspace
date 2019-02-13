@@ -113,6 +113,20 @@
   transform: translateY(100px);
 }
 
+@-webkit-keyframes come-in {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes come-in {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 @keyframes come-in {
   to {
     transform: translateY(0);

@@ -119,6 +119,26 @@ page-apcard {
 }
 
 // ANIMATION KEY FRAMES
+@-webkit-keyframes pulse-ring {
+  0% {
+    transform: scale(0.33);
+  }
+  80%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes pulse-ring {
+  0% {
+    transform: scale(0.33);
+  }
+  80%,
+  100% {
+    opacity: 0;
+  }
+}
+
 @keyframes pulse-ring {
   0% {
     transform: scale(0.33);
@@ -126,6 +146,30 @@ page-apcard {
   80%,
   100% {
     opacity: 0;
+  }
+}
+
+@-webkit-keyframes pulse-dot {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.8);
+  }
+}
+
+@-moz-keyframes pulse-dot {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.8);
   }
 }
 
