@@ -238,7 +238,7 @@ export class MorePage {
           size: "small",
           desc: "blue",
           color: "blue",
-          role: Role.Student
+          role: Role.Student | Role.Lecturer | Role.Admin
         },
         {
           title: "Logout",
