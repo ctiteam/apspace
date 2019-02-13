@@ -1,42 +1,42 @@
-import { Component, ViewChild } from "@angular/core";
-import { FCM } from "@ionic-native/fcm";
-import { Network } from "@ionic-native/network";
-import { StatusBar } from "@ionic-native/status-bar";
-import { Storage } from "@ionic/storage";
+import { Component, ViewChild } from '@angular/core';
+import { FCM } from '@ionic-native/fcm';
+import { Network } from '@ionic-native/network';
+import { StatusBar } from '@ionic-native/status-bar';
+import { Storage } from '@ionic/storage';
 import {
   AlertController,
   Events,
   Nav,
   Platform,
-  ToastController
-} from "ionic-angular";
+  ToastController,
+} from 'ionic-angular';
 
-import { forkJoin } from "rxjs/observable/forkJoin";
-import { switchMapTo, timeout } from "rxjs/operators";
+import { forkJoin } from 'rxjs/observable/forkJoin';
+import { switchMapTo, timeout } from 'rxjs/operators';
 
 import {
   Role,
   StaffProfile,
   StudentPhoto,
-  StudentProfile
-} from "../interfaces";
+  StudentProfile,
+} from '../interfaces';
 import {
   CasTicketProvider,
   DataCollectorProvider,
   NotificationProvider,
   SettingsProvider,
+  UserSettingsProvider,
   WsApiProvider,
-  UserSettingsProvider
-} from "../providers";
+} from '../providers';
 
 @Component({
-  templateUrl: "app.html"
+  templateUrl: 'app.html',
 })
 export class MyApp {
   @ViewChild(Nav) navCtrl: Nav;
-  selectedTheme = "light-theme";
-  selectedColorScheme = "blue-color-scheme";
-  
+  selectedTheme = 'light-theme';
+  selectedColorScheme = 'blue-color-scheme';
+
   constructor(
     public events: Events,
     public network: Network,
@@ -51,12 +51,12 @@ export class MyApp {
     private alertCtrl: AlertController,
     private fcm: FCM,
     private dc: DataCollectorProvider,
-    private userSettings: UserSettingsProvider
+    private userSettings: UserSettingsProvider,
   ) {
     // platform required to be ready before everything else
     this.platform
       .ready()
-      .then(() => Promise.all([this.settings.ready(), this.storage.get("tgt")]))
+      .then(() => Promise.all([this.settings.ready(), this.storage.get('tgt')]))
       .then(([, tgt]) => {
         this.userSettings.getUserSettingsFromStorage();
         this.userSettings
@@ -68,29 +68,29 @@ export class MyApp {
 
         if (tgt) {
           // check if the user is logged in
-          this.events.subscribe("user:logout", () => this.onLogout());
-          this.navCtrl.setRoot("TabsPage");
-          if (this.platform.is("cordova")) {
+          this.events.subscribe('user:logout', () => this.onLogout());
+          this.navCtrl.setRoot('TabsPage');
+          if (this.platform.is('cordova')) {
             this.checkNewNotification();
             this.notificationService.getMessage().subscribe();
           }
         } else {
-          this.events.subscribe("user:login", () => this.onLogin());
-          if (this.platform.is("cordova")) {
+          this.events.subscribe('user:login', () => this.onLogin());
+          if (this.platform.is('cordova')) {
             this.checkNewNotification();
           }
-          this.navCtrl.setRoot("LoginPage");
+          this.navCtrl.setRoot('LoginPage');
         }
-        if (this.platform.is("cordova")) {
-          if (this.platform.is("ios")) {
+        if (this.platform.is('cordova')) {
+          if (this.platform.is('ios')) {
             this.statusBar.overlaysWebView(false);
           }
-          if (this.network.type === "none") {
+          if (this.network.type === 'none') {
             this.toastCtrl
               .create({
-                message: "You are now offline.",
+                message: 'You are now offline.',
                 duration: 3000,
-                position: "top"
+                position: 'top',
               })
               .present();
           }
@@ -104,42 +104,42 @@ export class MyApp {
         this.notificationService
           .sendRead(parseInt(data.message_id, 10))
           .subscribe(_ => {
-            this.navCtrl.push("NotificationModalPage", { itemDetails: data });
+            this.navCtrl.push('NotificationModalPage', { itemDetails: data });
           });
       } else {
         this.presentConfirm(data);
-        this.events.publish("newNotification");
+        this.events.publish('newNotification');
       }
     });
   }
 
   onLogin() {
-    if (this.platform.is("cordova")) {
+    if (this.platform.is('cordova')) {
       forkJoin(
         this.dc.login(),
-        this.notificationService.getMessage()
+        this.notificationService.getMessage(),
       ).subscribe();
     }
-    const role = this.settings.get("role");
+    const role = this.settings.get('role');
     if (role & Role.Student) {
-      this.ws.get<StudentPhoto[]>("/student/photo").subscribe();
+      this.ws.get<StudentPhoto[]>('/student/photo').subscribe();
     } else if (role & (Role.Lecturer | Role.Admin)) {
-      this.ws.get<StaffProfile[]>("/staff/profile").subscribe();
+      this.ws.get<StaffProfile[]>('/staff/profile').subscribe();
     }
-    this.events.unsubscribe("user:login");
-    this.events.subscribe("user:logout", () => this.onLogout());
+    this.events.unsubscribe('user:login');
+    this.events.subscribe('user:logout', () => this.onLogout());
   }
 
   onLogout() {
-    if (this.platform.is("cordova")) {
-      const role = this.settings.get("role");
+    if (this.platform.is('cordova')) {
+      const role = this.settings.get('role');
       if (role & Role.Student) {
-        this.ws.get<StudentProfile>("/student/profile").subscribe(p => {
+        this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
           this.unsubscribeNotification(p.STUDENT_NUMBER);
           this.logout();
         });
       } else if (role & (Role.Lecturer | Role.Admin)) {
-        this.ws.get<StaffProfile[]>("/staff/profile").subscribe(p => {
+        this.ws.get<StaffProfile[]>('/staff/profile').subscribe(p => {
           this.unsubscribeNotification(p[0].ID);
           this.logout();
         });
@@ -150,20 +150,20 @@ export class MyApp {
   }
 
   logout() {
-    (this.platform.is("cordova")
+    (this.platform.is('cordova')
       ? this.dc.logout().pipe(
           timeout(5000),
-          switchMapTo(this.cas.deleteTGT())
+          switchMapTo(this.cas.deleteTGT()),
         )
       : this.cas.deleteTGT()
     ).subscribe(_ => {
       this.settings.clear();
       this.storage.clear();
-      this.navCtrl.setRoot("LoginPage");
+      this.navCtrl.setRoot('LoginPage');
       this.navCtrl.popToRoot();
     });
-    this.events.unsubscribe("user:logout");
-    this.events.subscribe("user:login", () => this.onLogin());
+    this.events.unsubscribe('user:logout');
+    this.events.subscribe('user:login', () => this.onLogin());
   }
 
   unsubscribeNotification(id: string) {
@@ -174,22 +174,22 @@ export class MyApp {
     this.alertCtrl
       .create({
         title: data.title,
-        message: data.content.substring(0, 70) + "...",
+        message: data.content.substring(0, 70) + '...',
         buttons: [
-          { text: "Cancel", role: "cancel" },
+          { text: 'Cancel', role: 'cancel' },
           {
-            text: "Open",
+            text: 'Open',
             handler: () => {
               this.notificationService
                 .sendRead(parseInt(data.message_id, 10))
                 .subscribe(_ => {
-                  this.navCtrl.push("NotificationModalPage", {
-                    itemDetails: data
+                  this.navCtrl.push('NotificationModalPage', {
+                    itemDetails: data,
                   });
                 });
-            }
-          }
-        ]
+            },
+          },
+        ],
       })
       .present();
   }

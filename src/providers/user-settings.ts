@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/Rx';
 import { Storage } from '@ionic/storage';
-
+import { BehaviorSubject } from 'rxjs/Rx';
 
 @Injectable()
 export class UserSettingsProvider {
@@ -11,7 +10,7 @@ export class UserSettingsProvider {
 
   constructor(
     public http: HttpClient,
-    private storage: Storage
+    private storage: Storage,
   ) {
     this.theme = new BehaviorSubject('light-theme');
     this.colorScheme = new BehaviorSubject('blue-color');
@@ -39,15 +38,15 @@ export class UserSettingsProvider {
     // GETTING THE USER SETTINGS FROM STORAGE (THEME + COLOR SCHEME)
     // IT IS CALLED ONLY HERE AND THE VALUE PASSED TO THE USER SETTINGS PROVIDER
     // BY DEFAULT THE LIGHT THEME WILL BE APPLIED
-    this.storage.get("theme").then(value => {
+    this.storage.get('theme').then(value => {
       value
         ? this.setActiveTheme(value)
-        : this.setActiveTheme("light-theme");
+        : this.setActiveTheme('light-theme');
     });
-    this.storage.get("colorScheme").then(value => {
+    this.storage.get('colorScheme').then(value => {
       value
         ? this.setColorScheme(value)
-        : this.setColorScheme("blue-color-scheme");
+        : this.setColorScheme('blue-color-scheme');
     });
   }
 }

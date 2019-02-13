@@ -1,23 +1,23 @@
-import { Component } from "@angular/core";
-import { ActionSheet, ActionSheetOptions } from "@ionic-native/action-sheet";
+import { Component } from '@angular/core';
+import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import {
   ActionSheetButton,
   ActionSheetController,
   IonicPage,
   NavController,
-  Platform
-} from "ionic-angular";
+  Platform,
+} from 'ionic-angular';
 
-import { Observable } from "rxjs/Observable";
-import { finalize, tap } from "rxjs/operators";
+import { Observable } from 'rxjs/Observable';
+import { finalize, tap } from 'rxjs/operators';
 
-import { Attendance, AttendanceLegend, Course } from "../../interfaces";
-import { WsApiProvider } from "../../providers";
+import { Attendance, AttendanceLegend, Course } from '../../interfaces';
+import { WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
-  selector: "page-attendance",
-  templateUrl: "attendance.html"
+  selector: 'page-attendance',
+  templateUrl: 'attendance.html',
 })
 export class AttendancePage {
   objectKeys = Object.keys; /** bindings for template */
@@ -26,9 +26,9 @@ export class AttendancePage {
   courses$: Observable<Course[]>;
   legend$: Observable<AttendanceLegend>;
 
-  selectedIntake: string = "";
+  selectedIntake: string = '';
   average: number;
-  averageColor: string = "";
+  averageColor: string = '';
   intakeLabels: any;
 
   numOfSkeletons = new Array(5);
@@ -39,18 +39,18 @@ export class AttendancePage {
     private actionSheet: ActionSheet,
     private plt: Platform,
     public actionSheetCtrl: ActionSheetController,
-    public navCtrl: NavController
+    public navCtrl: NavController,
   ) {}
 
   showActionSheet() {
-    if (this.plt.is("cordova")) {
+    if (this.plt.is('cordova')) {
       const options: ActionSheetOptions = {
         buttonLabels: [...this.intakeLabels],
-        addCancelButtonWithLabel: "Cancel"
+        addCancelButtonWithLabel: 'Cancel',
       };
       this.actionSheet.show(options).then((buttonIndex: number) => {
         if (buttonIndex <= 1 + this.intakeLabels.length) {
-          this.selectedIntake = this.intakeLabels[buttonIndex - 1] || "";
+          this.selectedIntake = this.intakeLabels[buttonIndex - 1] || '';
           this.attendance$ = this.getAttendance(this.selectedIntake);
         }
       });
@@ -61,11 +61,11 @@ export class AttendancePage {
           handler: () => {
             this.selectedIntake = intake;
             this.attendance$ = this.getAttendance(this.selectedIntake);
-          }
+          },
         } as ActionSheetButton;
       });
       const actionSheet = this.actionSheetCtrl.create({
-        buttons: [...intakesButton, { text: "Cancel", role: "cancel" }]
+        buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }],
       });
       actionSheet.present();
     }
@@ -77,14 +77,14 @@ export class AttendancePage {
       .get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh)
       .pipe(
         tap(_ => this.getLegend(refresh)),
-        tap(a => this.calculateAverage(a))
+        tap(a => this.calculateAverage(a)),
       ));
   }
 
   getLegend(refresh: boolean) {
     this.legend$ = this.ws.get<AttendanceLegend>(
-      "/student/attendance_legend",
-      refresh
+      '/student/attendance_legend',
+      refresh,
     );
   }
 
@@ -96,21 +96,21 @@ export class AttendancePage {
   }
 
   ionViewDidLoad() {
-    this.courses$ = this.ws.get<Course[]>("/student/courses").pipe(
+    this.courses$ = this.ws.get<Course[]>('/student/courses').pipe(
       tap(c => (this.selectedIntake = c[0].INTAKE_CODE)),
       tap(_ => this.getAttendance(this.selectedIntake, true)),
       tap(
         c =>
           (this.intakeLabels = Array.from(
-            new Set((c || []).map(t => t.INTAKE_CODE))
-          ))
-      )
+            new Set((c || []).map(t => t.INTAKE_CODE)),
+          )),
+      ),
     );
   }
 
   doRefresh(refresher?) {
     this.attendance$ = this.getAttendance(this.selectedIntake, refresher).pipe(
-      finalize(() => refresher && refresher.complete())
+      finalize(() => refresher && refresher.complete()),
     );
   }
 }

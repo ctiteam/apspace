@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { publishLast, refCount } from 'rxjs/operators';
 
-import { BusTrips, ApuLocations } from '../interfaces';
+import { ApuLocations, BusTrips } from '../interfaces';
 
 @Injectable()
 export class BusTrackingProvider {
@@ -25,7 +25,7 @@ export class BusTrackingProvider {
     );
   }
 
-  getLocationDetails(refresh?: boolean): Observable<ApuLocations>{
+  getLocationDetails(refresh?: boolean): Observable<ApuLocations> {
     const url = `${this.busTrackingUrl}/locations`;
     return this.http.get<ApuLocations>(url).pipe(
       publishLast(),

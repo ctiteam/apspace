@@ -1,36 +1,36 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
+  Content,
   IonicPage,
   NavController,
   NavParams,
-  Content,
-  Platform
-} from "ionic-angular";
+  Platform,
+} from 'ionic-angular';
 import {
   AppAnimationProvider,
-  UserSettingsProvider
-} from "../../providers";
+  UserSettingsProvider,
+} from '../../providers';
 
 @IonicPage()
 @Component({
-  selector: "page-settings",
-  templateUrl: "settings.html"
+  selector: 'page-settings',
+  templateUrl: 'settings.html',
 })
 export class SettingsPage {
   @ViewChild(Content) content: Content;
-  public activeTheme: string;
-  public activeColorScheme: string;
+  activeTheme: string;
+  activeColorScheme: string;
   themeOptions = [
-    { title: "Light Theme (Default)", value: "light-theme" },
-    { title: "Dark Theme", value: "dark-theme" }
+    { title: 'Light Theme (Default)', value: 'light-theme' },
+    { title: 'Dark Theme', value: 'dark-theme' },
   ];
 
   colorSchemeOptions = [
-    { title: "Blue (Default)", value: "blue-color-scheme" },
-    { title: "Green", value: "green-color-scheme" },
-    { title: "Grey", value: "grey-color-scheme" },
-    { title: "Orange", value: "orange-color-scheme" },
-    { title: "Pink", value: "pink-color-scheme" }
+    { title: 'Blue (Default)', value: 'blue-color-scheme' },
+    { title: 'Green', value: 'green-color-scheme' },
+    { title: 'Grey', value: 'grey-color-scheme' },
+    { title: 'Orange', value: 'orange-color-scheme' },
+    { title: 'Pink', value: 'pink-color-scheme' },
   ];
 
   constructor(
@@ -39,7 +39,7 @@ export class SettingsPage {
     private elRef: ElementRef,
     private appAnimationProvider: AppAnimationProvider,
     private userSettings: UserSettingsProvider,
-    public platform: Platform
+    public platform: Platform,
   ) {
     this.userSettings
       .getActiveTheme()

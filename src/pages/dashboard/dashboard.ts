@@ -1,13 +1,13 @@
-import { Component, ViewChild, ElementRef } from "@angular/core";
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
   App,
+  Content,
+  Events,
   IonicPage,
   NavController,
   NavParams,
-  Content,
-  Events,
-  Platform
-} from "ionic-angular";
+  Platform,
+} from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
@@ -22,19 +22,19 @@ import {
   FeesTotalSummary,
   Holiday,
   Holidays,
-  StudentProfile
-} from "../../interfaces";
+  StudentProfile,
+} from '../../interfaces';
 import {
+  AppAnimationProvider,
+  NotificationProvider,
   SettingsProvider,
   WsApiProvider,
-  AppAnimationProvider,
-  NotificationProvider
-} from "../../providers";
+} from '../../providers';
 
 @IonicPage()
 @Component({
-  selector: "page-dashboard",
-  templateUrl: "dashboard.html"
+  selector: 'page-dashboard',
+  templateUrl: 'dashboard.html',
 })
 export class DashboardPage {
   @ViewChild(Content) content: Content;
@@ -57,12 +57,12 @@ export class DashboardPage {
 
   overallAttendance: number;
   subject: string;
-  
-  // VISA VARS 
+
+  // VISA VARS
   // local: boolean = false;
 
   // HEADER VARS
-  greetingMessage = "";
+  greetingMessage = '';
   notificationNumber: string;
 
   // APCARD TRANSACTIONS VARS
@@ -76,29 +76,29 @@ export class DashboardPage {
   block: boolean = false;
 
   // CHARTS OPTIONS AND TYPES VARS
-  type = ["horizontalBar", "line"];
+  type = ['horizontalBar', 'line'];
   options = [
     {
       legend: {
         display: true,
-        position: "right"
-      }
+        position: 'right',
+      },
     },
     {
       legend: {
-        display: false
+        display: false,
       },
       scales: {
         xAxes: [
           {
             ticks: {
               beginAtZero: true,
-              max: 4
-            }
-          }
-        ]
-      }
-    }
+              max: 4,
+            },
+          },
+        ],
+      },
+    },
   ];
 
   // GENERAL METHODS
@@ -112,9 +112,9 @@ export class DashboardPage {
     private elRef: ElementRef,
     public events: Events,
     public notification: NotificationProvider,
-    private plt: Platform
+    private plt: Platform,
   ) {
-    this.events.subscribe("newNotification", () => {
+    this.events.subscribe('newNotification', () => {
       this.getBadge();
     });
   }
@@ -129,14 +129,14 @@ export class DashboardPage {
   }
 
   ionViewWillEnter() {
-    if (this.plt.is("cordova")) {
+    if (this.plt.is('cordova')) {
       this.getBadge();
     }
   }
 
   doRefresh(refresher?) {
     this.displayGreetingMessage();
-    this.profile$ = this.ws.get<StudentProfile>("/student/profile");
+    this.profile$ = this.ws.get<StudentProfile>('/student/profile');
     forkJoin(
       this.getProfile(),
       this.nextHoliday$ = this.getHolidays(Boolean(refresher)),
@@ -178,7 +178,7 @@ export class DashboardPage {
     this.exam$ = this.ws.get<ExamSchedule[]>(
       `/examination/${intake}`,
       true,
-      opt
+      opt,
     );
   }
 
@@ -190,15 +190,15 @@ export class DashboardPage {
   // FEES & OUTSTANDING METHODS
   getOverdueFee() {
     return this.ws.get<FeesTotalSummary[]>(
-      "/student/summary_overall_fee",
-      true
+      '/student/summary_overall_fee',
+      true,
     );
   }
 
   // GPA METHODS
   getGPA() {
     this.ws
-      .get<Course[]>("/student/courses")
+      .get<Course[]>('/student/courses')
       .pipe(
         flatMap(intakes => intakes),
         concatMap(intake => {
@@ -210,48 +210,48 @@ export class DashboardPage {
               Object.assign({
                 intakeDate: intake.INTAKE_NUMBER,
                 intakeCode: intake.INTAKE_CODE,
-                intakeDetails
-              })
-            )
+                intakeDetails,
+              }),
+            ),
           );
         }),
-        toArray()
+        toArray(),
       )
       .subscribe(d => {
         const data = Array.from(
           new Set(
             (d || []).map(t => ({
               intakeCode: t.intakeCode,
-              gpa: t.intakeDetails.slice(-1)[0]
-            }))
-          )
+              gpa: t.intakeDetails.slice(-1)[0],
+            })),
+          ),
         );
         const filteredData = data.filter(res => res.gpa.INTAKE_GPA);
         const labels = filteredData.map(i => i.intakeCode);
         const gpa = filteredData.map(i => i.gpa.INTAKE_GPA);
 
         const color = [
-          "rgba(255, 99, 132, 0.7)",
-          "rgba(54, 162, 235, 0.7)",
-          "rgba(255, 206, 86, 0.7)",
-          "rgba(75, 192, 192, 0.7)",
-          "rgba(153, 102, 255, 0.7)",
-          "rgba(255, 159, 64, 0.7)",
-          "rgba(54,72,87,0.7)",
-          "rgba(247,89,64,0.7)",
-          "rgba(61,199,190,0.7)"
+          'rgba(255, 99, 132, 0.7)',
+          'rgba(54, 162, 235, 0.7)',
+          'rgba(255, 206, 86, 0.7)',
+          'rgba(75, 192, 192, 0.7)',
+          'rgba(153, 102, 255, 0.7)',
+          'rgba(255, 159, 64, 0.7)',
+          'rgba(54,72,87,0.7)',
+          'rgba(247,89,64,0.7)',
+          'rgba(61,199,190,0.7)',
         ];
 
         const borderColor = [
-          "rgba(255,99,132,1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-          "rgba(54,72,87,1)",
-          "rgba(247,89,64,1)",
-          "rgba(61,199,190,1)"
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(54,72,87,1)',
+          'rgba(247,89,64,1)',
+          'rgba(61,199,190,1)',
         ];
 
         this.barChartData = {
@@ -261,9 +261,9 @@ export class DashboardPage {
               backgroundColor: color,
               borderColor,
               borderWidth: 2,
-              data: gpa
-            }
-          ]
+              data: gpa,
+            },
+          ],
         };
       });
   }
@@ -274,50 +274,50 @@ export class DashboardPage {
     this.attendance$ = this.ws.get<Attendance[]>(url, true).pipe(
       map(attendances => {
         const currentSemester = Math.max(
-          ...attendances.map(attendance => attendance.SEMESTER)
+          ...attendances.map(attendance => attendance.SEMESTER),
         );
         return (attendances || []).filter(
           attendance =>
             attendance.SEMESTER === currentSemester &&
-            attendance.PERCENTAGE < 80
+            attendance.PERCENTAGE < 80,
         );
       }),
       tap(
         attendances =>
-          (this.subject = attendances[0] && attendances[0].SUBJECT_CODE)
+          (this.subject = attendances[0] && attendances[0].SUBJECT_CODE),
       ),
-      share()
+      share(),
     );
     this.attendancePercent$ = this.ws
       .get<Attendance[]>(url)
       .pipe(
-        map(aa => aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100)
+        map(aa => aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100),
       );
   }
 
   // HEADER METHODS
   capitalizeString(text: string) {
-    let capitalizedString =
+    const capitalizedString =
       text.charAt(0).toUpperCase() + text.toLowerCase().slice(1);
     return capitalizedString;
   }
   displayGreetingMessage() {
-    let hoursNow = new Date().getHours();
+    const hoursNow = new Date().getHours();
     if (hoursNow < 12) {
-      this.greetingMessage = "Good morning";
+      this.greetingMessage = 'Good morning';
     } else if (hoursNow >= 12 && hoursNow <= 18) {
-      this.greetingMessage = "Good afternoon";
+      this.greetingMessage = 'Good afternoon';
     } else {
-      this.greetingMessage = "Good evening";
+      this.greetingMessage = 'Good evening';
     }
   }
 
   // APCARD TRANSACTIONS & BALANCE METHODS
   getAPCardBalance() {
     return this.ws
-      .get<Apcard>("/apcard/", true)
+      .get<Apcard>('/apcard/', true)
       .pipe(
-        map(transactions => (transactions[0] || ({} as Apcard)).Balance || 0)
+        map(transactions => (transactions[0] || ({} as Apcard)).Balance || 0),
       );
   }
 
@@ -333,7 +333,7 @@ export class DashboardPage {
     const a = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     this.monthlyData = transactions.reduce(
       (tt, t) => {
-        const c = t.SpendVal > 0 ? "dr" : "cr"; // classify spent type
+        const c = t.SpendVal > 0 ? 'dr' : 'cr'; // classify spent type
         const d = new Date(t.SpendDate);
         d.getFullYear() in tt[c] || (tt[c][d.getFullYear()] = a.slice());
         tt[c][d.getFullYear()][d.getMonth()] += Math.abs(t.SpendVal);
@@ -343,41 +343,41 @@ export class DashboardPage {
       },
       {
         dr: { [now.getFullYear()]: a.slice() },
-        cr: { [now.getFullYear()]: a.slice() }
-      }
+        cr: { [now.getFullYear()]: a.slice() },
+      },
     );
     // plot graph
     this.apcardChartData = {
       labels: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec"
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ],
       datasets: [
         {
-          label: "Monthly Credit",
+          label: 'Monthly Credit',
           data: this.monthlyData.cr[now.getFullYear()],
-          borderColor: "rgba(0, 200, 83, .5)",
-          backgroundColor: "rgba(0, 200, 83, .5)",
-          fill: false
+          borderColor: 'rgba(0, 200, 83, .5)',
+          backgroundColor: 'rgba(0, 200, 83, .5)',
+          fill: false,
         },
         {
-          label: "Monthly Debit",
+          label: 'Monthly Debit',
           data: this.monthlyData.dr[now.getFullYear()],
-          borderColor: "rgba(230, 0, 0, .5)",
-          backgroundColor: "rgba(230, 0, 0, .5)",
-          fill: false
-        }
-      ]
+          borderColor: 'rgba(230, 0, 0, .5)',
+          backgroundColor: 'rgba(230, 0, 0, .5)',
+          fill: false,
+        },
+      ],
     };
 
     // reverse monthlyData last year
@@ -387,7 +387,7 @@ export class DashboardPage {
   /** Negate spend value for top ups. */
   signTransactions(transactions: Apcard[]): Apcard[] {
     transactions.forEach(transaction => {
-      if (transaction.ItemName === "Top Up") {
+      if (transaction.ItemName === 'Top Up') {
         transaction.SpendVal *= -1;
       }
     });

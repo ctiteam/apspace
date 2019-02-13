@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
-import { ActionSheetController, IonicPage, Platform, Content } from 'ionic-angular';
+import { ActionSheetController, Content, IonicPage, Platform } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';

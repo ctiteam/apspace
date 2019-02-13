@@ -2,9 +2,9 @@ import { Component, ElementRef } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
-import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
-import { SettingsProvider, WsApiProvider, AppAnimationProvider } from '../../providers';
 import { tap } from 'rxjs/operators';
+import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
+import { AppAnimationProvider, SettingsProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -20,7 +20,6 @@ export class ProfilePage {
 
   local: boolean = false;
 
-
   pages = [
     { title: 'Password Recovery', component: 'PasswordRecoveryPage', icon: 'lock' },
   ];
@@ -29,7 +28,7 @@ export class ProfilePage {
     private ws: WsApiProvider,
     private settings: SettingsProvider,
     private appAnimationProvider: AppAnimationProvider,
-    private elRef: ElementRef
+    private elRef: ElementRef,
   ) { }
 
   ionViewDidLoad() {
@@ -38,7 +37,7 @@ export class ProfilePage {
     if (role & Role.Student) {
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo', true);
       this.profile$ = this.ws.get<StudentProfile>('/student/profile', true);
-      this.getProfile();      
+      this.getProfile();
     } else if (role & (Role.Lecturer | Role.Admin)) {
       this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile', true);
     }
@@ -46,22 +45,22 @@ export class ProfilePage {
 
   getProfile() {
     this.ws
-      .get<StudentProfile>("/student/profile")
+      .get<StudentProfile>('/student/profile')
       .pipe(
         tap(p => {
-          if (p.COUNTRY === "Malaysia") {
+          if (p.COUNTRY === 'Malaysia') {
             this.local = true;
           } else {
             this.local = false;
             this.visa$ = this.getVisaStatus();
           }
-        })
+        }),
       )
       .subscribe();
   }
 
   getVisaStatus() {
-    return this.ws.get<any>("/student/visa_status");
+    return this.ws.get<any>('/student/visa_status');
   }
 
 }

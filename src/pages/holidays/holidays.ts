@@ -33,7 +33,7 @@ export class HolidaysPage {
   }
 
   doRefresh(refresher?) {
-    let yearNow = new Date().getFullYear();
+    const yearNow = new Date().getFullYear();
     this.selectedRole = this.settings.get('role') & Role.Student ? 'students' : 'staff';
     this.holiday$ = this.ws.get<Holidays>(`/transix/holidays`, refresher).pipe(
       map(res => res.holidays.filter(holiday => +holiday.holiday_start_date.split('-')[0] == yearNow)),
@@ -41,12 +41,12 @@ export class HolidaysPage {
     );
   }
 
-  toggleFullText(holidayId){
-    let holdiayElement = this.textElRef.nativeElement.querySelector("#holiday" + holidayId);
-    if(holdiayElement.classList.contains("text-ellipsis")){
-      holdiayElement.classList.remove("text-ellipsis");
-    } else{
-      holdiayElement.classList.add("text-ellipsis");
+  toggleFullText(holidayId) {
+    const holdiayElement = this.textElRef.nativeElement.querySelector('#holiday' + holidayId);
+    if (holdiayElement.classList.contains('text-ellipsis')) {
+      holdiayElement.classList.remove('text-ellipsis');
+    } else {
+      holdiayElement.classList.add('text-ellipsis');
     }
   }
 }

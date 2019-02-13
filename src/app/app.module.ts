@@ -17,13 +17,13 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { IonicSelectableModule } from 'ionic-selectable';
 
 import {
-  BusTrackingProvider, CasTicketProvider, DataCollectorProvider,
-  FeedbackProvider, httpInterceptorProviders, NotificationProvider,
-  RequestCache, RequestCacheWithMapStorage, SettingsProvider, SlotsProvider,
-  UpcomingConLecProvider, UpcomingConStuProvider, UserserviceProvider,
-  WsApiProvider,
+  AppAnimationProvider, BusTrackingProvider, CasTicketProvider,
+  DataCollectorProvider, FeedbackProvider, httpInterceptorProviders,
+  NotificationProvider, RequestCache, RequestCacheWithMapStorage, SettingsProvider,
+  SlotsProvider, UpcomingConLecProvider, UpcomingConStuProvider,
+  UserserviceProvider,
   UserSettingsProvider,
-  AppAnimationProvider,
+  WsApiProvider,
 } from '../providers';
 import { MyApp } from './app.component';
 
@@ -62,7 +62,7 @@ import { MyApp } from './app.component';
     UpcomingConLecProvider,
     UpcomingConStuProvider,
     AppAnimationProvider,
-    UserSettingsProvider
+    UserSettingsProvider,
   ],
   entryComponents: [MyApp],
   bootstrap: [IonicApp],

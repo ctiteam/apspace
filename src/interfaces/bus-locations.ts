@@ -13,7 +13,7 @@ export interface LocationsInterface {
   location_pickup_longitude: string;
   location_full_address: {
     location_address: string,
-    location_contact_number: string | null
+    location_contact_number: string | null,
   };
   location_image_path: string | null;
 }
