@@ -1,5 +1,3 @@
-<!-- <fireworks></fireworks> -->
-
 <ion-header no-border>
   <ion-navbar>
     <ion-title>News</ion-title>
@@ -22,7 +20,7 @@
           </ion-card-content>
         </ion-card>
       </ng-template>
-  
+
     <ng-template #loadingNews>
       <ion-card *ngFor="let i of numOfSkeletons">
         <ion-item>
@@ -31,12 +29,12 @@
         </ion-item>
       </ion-card>
     </ng-template>
-  
+
     <ng-template #nonews>
         <ion-card padding>
           <p>No news available</p>
         </ion-card>
       </ng-template>
-      
+
     </ng-template>
 </ion-content>
