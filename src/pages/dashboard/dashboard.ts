@@ -291,7 +291,13 @@ export class DashboardPage {
     this.attendancePercent$ = this.ws
       .get<Attendance[]>(url)
       .pipe(
-        map(aa => aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100),
+        map(aa => {
+          if(aa.length > 0){            
+            return aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100
+          } else{
+            return -1 // -1 means there is no attendance data in the selected intake 
+          }
+        }),
       );
   }
 

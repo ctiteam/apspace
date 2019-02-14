@@ -55,7 +55,12 @@
                     class="quick-access-item-subtitle"
                     *ngIf="(attendancePercent$ | async) as ap"
                   >
+                  <div *ngIf="ap != -1">
                     {{ ap | percent }}
+                  </div>
+                  <div *ngIf="ap === -1">
+                      --
+                  </div>
                   </div>
                 </div>
               </div>
