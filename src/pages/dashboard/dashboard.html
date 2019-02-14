@@ -27,11 +27,8 @@
             </ng-template> -->
           </div>
           <div class="col-3 notification">
-            <div
-              class="notification-wrapper float-right text-center"
-              (click)="openNotification()"
-            >
-              <ion-icon [class.animate-bell] ="notificationNumber" name="notifications"></ion-icon>
+            <div class="notification-wrapper float-right text-center" (click)="openNotification()">
+              <ion-icon [class.animate-bell]="notificationNumber" name="notifications"></ion-icon>
               <ion-badge item-right *ngIf="notificationNumber" color="danger">{{
                 notificationNumber
               }}</ion-badge>
@@ -51,17 +48,20 @@
                   <div class="quick-access-item-title">
                     Overall <span class="second-line">Attendance</span>
                   </div>
-                  <div
-                    class="quick-access-item-subtitle"
-                    *ngIf="(attendancePercent$ | async) as ap"
-                  >
-                  <div *ngIf="ap != -1">
-                    {{ ap | percent }}
-                  </div>
-                  <div *ngIf="ap === -1">
+                  <div class="quick-access-item-subtitle"
+                    *ngIf="(attendancePercent$ | async) as ap; else loadingOverallAttendance">
+                    <div *ngIf="ap != -1">
+                      {{ ap | percent }}
+                    </div>
+                    <div *ngIf="ap === -1">
                       --
+                    </div>
                   </div>
-                  </div>
+                  <ng-template #loadingOverallAttendance>
+                    <div class="quick-access-item-subtitle">
+                      <loading-spinner></loading-spinner>
+                    </div>
+                  </ng-template>
                 </div>
               </div>
               <!-- END QUICK ACCESS MENU ITEM 1 -->
@@ -73,12 +73,15 @@
                   <div class="quick-access-item-title">
                     APCard <span class="second-line">Balance</span>
                   </div>
-                  <div
-                    class="quick-access-item-subtitle"
-                    *ngIf="(transaction$ | async) as balance"
-                  >
+                  <div class="quick-access-item-subtitle"
+                    *ngIf="(transaction$ | async) as balance; else loadingApcardBalance">
                     {{ balance | currency: "MYR":"RM" }}
                   </div>
+                  <ng-template #loadingApcardBalance>
+                    <div class="quick-access-item-subtitle">
+                      <loading-spinner></loading-spinner>
+                    </div>
+                  </ng-template>
                 </div>
               </div>
               <!-- END QUICK ACCESS MENU ITEM 2 -->
@@ -90,14 +93,17 @@
                   <div class="quick-access-item-title">
                     Total <span class="second-line">Overdue</span>
                   </div>
-                  <div
-                    class="quick-access-item-subtitle"
-                    *ngIf="(overdue$ | async) as overdue"
-                  >
+                  <div class="quick-access-item-subtitle"
+                    *ngIf="(overdue$ | async) as overdue; else loadingTotalOverDue">
                     {{
                       overdue[0]?.TOTAL_OVERDUE | currency: "MYR":"RM":"1.0-0"
                     }}
                   </div>
+                  <ng-template #loadingTotalOverDue>
+                    <div class="quick-access-item-subtitle">
+                      <loading-spinner></loading-spinner>
+                    </div>
+                  </ng-template>
                 </div>
               </div>
               <!-- END QUICK ACCESS MENU ITEM 3 -->
@@ -197,17 +203,15 @@
             <div class="section-header-icon">
               <ion-icon item-left name="bicycle"></ion-icon>
             </div>
-            <div class="section-header-text"><h3>Upcoming Holiday</h3></div>
+            <div class="section-header-text">
+              <h3>Upcoming Holiday</h3>
+            </div>
           </div>
           <!-- END SECTION 3 HEADER -->
 
           <!-- START SECTION 3 BODY -->
           <div class="section-body">
-            <ng-template
-              let-holiday
-              [ngIf]="nextHoliday$ | async"
-              [ngIfElse]="loadingHoliday"
-            >
+            <ng-template let-holiday [ngIf]="nextHoliday$ | async" [ngIfElse]="loadingHoliday">
               <ng-template [ngIf]="holiday.holiday_name" [ngIfElse]="noHoliday">
                 <div class="section-body-header">
                   <h4 class="col-12">{{ holiday.holiday_name }}</h4>
@@ -249,75 +253,72 @@
         <!-- END SECTION 3: UPCOMING HOLIDAY -->
         <!-- ********************************************* -->
         <!-- START SECTION 4: UPCOMING EXAM -->
-        <ng-template
-        let-exams
-        [ngIf]="exam$ | async | nextExams"
-        [ngIfElse]="loadingExams"
-      >
-        <div class="main-section section upcoming-exam-section" *ngIf="exams && exams.length > 0">
-          <!-- START SECTION 4 HEADER -->
-          <div class="section-header">
-            <div class="section-header-icon">
-              <ion-icon item-left name="book"></ion-icon>
+        <ng-template let-exams [ngIf]="exam$ | async | nextExams" [ngIfElse]="loadingExams">
+          <div class="main-section section upcoming-exam-section" *ngIf="exams && exams.length > 0">
+            <!-- START SECTION 4 HEADER -->
+            <div class="section-header">
+              <div class="section-header-icon">
+                <ion-icon item-left name="book"></ion-icon>
+              </div>
+              <div class="section-header-text">
+                <h3>Upcoming Exam</h3>
+              </div>
             </div>
-            <div class="section-header-text"><h3>Upcoming Exam</h3></div>
-          </div>
-          <!-- END SECTION 4 HEADER -->
+            <!-- END SECTION 4 HEADER -->
 
-          <!-- START SECTION 4 BODY -->
-          <div class="section-body">
-                <div *ngFor="let exam of exams">
-                  <div class="section-body-header">
-                    <h4 class="col-12">{{ exam.module }}</h4>
-                  </div>
-                  <div class="section-body-content row">
-                    <div class="container">
-                      <div class="content-item-with-icon col-12 row">
-                        <div class="col-2 text-right">
-                          <ion-icon item-left name="time"></ion-icon>
-                        </div>
-                        <div class="col-10 item-info-text">
-                          <p ion-text>
-                            {{ exam.since | date: "mediumDate" }} ({{
+            <!-- START SECTION 4 BODY -->
+            <div class="section-body">
+              <div *ngFor="let exam of exams">
+                <div class="section-body-header">
+                  <h4 class="col-12">{{ exam.module }}</h4>
+                </div>
+                <div class="section-body-content row">
+                  <div class="container">
+                    <div class="content-item-with-icon col-12 row">
+                      <div class="col-2 text-right">
+                        <ion-icon item-left name="time"></ion-icon>
+                      </div>
+                      <div class="col-10 item-info-text">
+                        <p ion-text>
+                          {{ exam.since | date: "mediumDate" }} ({{
                               exam.since | date: "shortTime"
                             }}
-                            - {{ exam.until | date: "shortTime" }})
-                          </p>
-                        </div>
+                          - {{ exam.until | date: "shortTime" }})
+                        </p>
                       </div>
+                    </div>
 
-                      <div class="content-item-with-icon col-12 row">
-                        <div class="col-2 text-right">
-                          <ion-icon item-left name="locate"></ion-icon>
-                        </div>
-                        <div class="col-10 item-info-text">
-                          <p ion-text>APIIT @ TPM, Exam Hall</p>
-                        </div>
+                    <div class="content-item-with-icon col-12 row">
+                      <div class="col-2 text-right">
+                        <ion-icon item-left name="locate"></ion-icon>
                       </div>
-                      <div class="content-item-without-icon col-12 row">
-                        <div>
-                          <p ion-text>
-                            Dockets will be released on
-                            <b>{{ exam.docketsDue | date }}</b
-                            >, and the results will be published on
-                            <b>{{ exam.resultDate | date }}.</b>
-                          </p>
-                        </div>
+                      <div class="col-10 item-info-text">
+                        <p ion-text>APIIT @ TPM, Exam Hall</p>
+                      </div>
+                    </div>
+                    <div class="content-item-without-icon col-12 row">
+                      <div>
+                        <p ion-text>
+                          Dockets will be released on
+                          <b>{{ exam.docketsDue | date }}</b>, and the results will be published on
+                          <b>{{ exam.resultDate | date }}.</b>
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+            <!-- END SECTION 4 BODY -->
           </div>
-          <!-- END SECTION 4 BODY -->
-        </div>
-      </ng-template>
-      <ng-template #loadingExams>
-        <ion-card>
-          <ion-item no-lines *ngFor="let i of numOfSkeletons">
-            <skeleton-item height="100px" width="100%"></skeleton-item>
-          </ion-item>
-        </ion-card>
-      </ng-template>
+        </ng-template>
+        <ng-template #loadingExams>
+          <ion-card>
+            <ion-item no-lines *ngFor="let i of numOfSkeletons">
+              <skeleton-item height="100px" width="100%"></skeleton-item>
+            </ion-item>
+          </ion-card>
+        </ng-template>
         <!-- END SECTION 4: UPCOMING EXAM -->
         <!-- ********************************************* -->
         <!-- START SECTION 5: CONSULTATION -->
@@ -547,7 +548,9 @@
             <div class="section-header-icon">
               <ion-icon item-left name="logo-usd"></ion-icon>
             </div>
-            <div class="section-header-text"><h3>Financials</h3></div>
+            <div class="section-header-text">
+              <h3>Financials</h3>
+            </div>
           </div>
           <!-- END SECTION 9 HEADER -->
 
@@ -558,17 +561,12 @@
                 <div class="container">
                   <div class="content-item-with-icon col-12 row">
                     <div class="progress">
-                      <div
-                        class="progress-bar progress-bar-striped bg-success progress-bar-animated"
-                        role="progressbar"
+                      <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar"
                         [style.width]="
                           outstanding[0].TOTAL_PAID /
                             outstanding[0].TOTAL_PAYABLE | percent: '1.0-5'
-                        "
-                        [attr.aria-valuenow]="outstanding[0].TOTAL_PAID"
-                        aria-valuemin="0"
-                        [attr.aria-valuemax]="outstanding[0].TOTAL_PAYABLE"
-                      >
+                        " [attr.aria-valuenow]="outstanding[0].TOTAL_PAID" aria-valuemin="0"
+                        [attr.aria-valuemax]="outstanding[0].TOTAL_PAYABLE">
                         <strong>
                           {{
                             outstanding[0].TOTAL_PAID /
@@ -576,17 +574,12 @@
                           }}
                         </strong>
                       </div>
-                      <div
-                        class="prprogress-bar progress-bar-striped bg-danger progress-bar-animated"
-                        role="progressbar"
-                        [style.width]="
+                      <div class="prprogress-bar progress-bar-striped bg-danger progress-bar-animated"
+                        role="progressbar" [style.width]="
                           outstanding[0].TOTAL_OUTSTANDING /
                             outstanding[0].TOTAL_PAYABLE | percent: '1.0-5'
-                        "
-                        [attr.aria-valuenow]="outstanding[0].TOTAL_OUTSTANDING"
-                        aria-valuemin="0"
-                        [attr.aria-valuemax]="outstanding[0].TOTAL_PAYABLE"
-                      ></div>
+                        " [attr.aria-valuenow]="outstanding[0].TOTAL_OUTSTANDING" aria-valuemin="0"
+                        [attr.aria-valuemax]="outstanding[0].TOTAL_PAYABLE"></div>
                     </div>
                   </div>
                   <div class="col-12 row content-item-with-icon">
@@ -651,52 +644,38 @@
         <!-- ********************************************* -->
         <!-- START SECTION 10: ATTENDANCE -->
         <ng-template let-attendance [ngIf]="attendance$ | async">
-        <div class="main-section section low-attendance-section" *ngIf="attendance.length > 0">
-          <!-- START SECTION 10 HEADER -->
-          <div class="section-header">
-            <div class="section-header-icon">
-              <ion-icon item-left name="alarm"></ion-icon>
+          <div class="main-section section low-attendance-section" *ngIf="attendance.length > 0">
+            <!-- START SECTION 10 HEADER -->
+            <div class="section-header">
+              <div class="section-header-icon">
+                <ion-icon item-left name="alarm"></ion-icon>
+              </div>
+              <div class="section-header-text">
+                <h3>Low Attendance</h3>
+              </div>
             </div>
-            <div class="section-header-text"><h3>Low Attendance</h3></div>
-          </div>
-          <!-- END SECTION 10 HEADER -->
+            <!-- END SECTION 10 HEADER -->
 
-          <!-- START SECTION 10 BODY -->
+            <!-- START SECTION 10 BODY -->
 
-          <div class="section-body">
+            <div class="section-body">
               <div class="row low-attendance-div">
-                <div
-                  class=" col-12 low-attendance-details"
-                  *ngFor="let attendance of attendance"
-                >
+                <div class=" col-12 low-attendance-details" *ngFor="let attendance of attendance">
                   <div class="section-body-header">
-                    <h4
-                      class="col-12"
-                      style="padding-bottom: 5px !important;margin-bottom: 0 !important"
-                    >
+                    <h4 class="col-12" style="padding-bottom: 5px !important;margin-bottom: 0 !important">
                       {{ attendance.MODULE_ATTENDANCE }}
                     </h4>
                   </div>
                   <div class="attendance-chart col-12">
                     <div class="progress" style="height: 20px;">
-                      <div
-                        class="progress-bar progress-bar-striped bg-success progress-bar-animated"
-                        role="progressbar"
-                        [style.width]="attendance.PERCENTAGE + '%'"
-                        aria-valuenow="attendance.PERCENTAGE"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      >
+                      <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar"
+                        [style.width]="attendance.PERCENTAGE + '%'" aria-valuenow="attendance.PERCENTAGE"
+                        aria-valuemin="0" aria-valuemax="100">
                         <strong>{{ attendance.PERCENTAGE + "%" }}</strong>
                       </div>
-                      <div
-                        class="progress-bar progress-bar-striped bg-danger progress-bar-animated"
-                        role="progressbar"
-                        [style.width]="100 - attendance.PERCENTAGE + '%'"
-                        aria-valuenow="100 - attendance.PERCENTAGE"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
+                      <div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar"
+                        [style.width]="100 - attendance.PERCENTAGE + '%'" aria-valuenow="100 - attendance.PERCENTAGE"
+                        aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                 </div>
@@ -708,28 +687,22 @@
         <!-- END SECTION 10: ATTENDANCE -->
         <!-- ********************************************* -->
         <!-- START SECTION 11: APCARD -->
-        <div
-          class="main-section section low-attendance-section"
-          *ngIf="(apcardTransaction$ | async)"
-        >
+        <div class="main-section section low-attendance-section" *ngIf="(apcardTransaction$ | async)">
           <!-- START SECTION 11 HEADER -->
           <div class="section-header">
             <div class="section-header-icon">
               <ion-icon item-left name="card"></ion-icon>
             </div>
-            <div class="section-header-text"><h3>APCard Transactions</h3></div>
+            <div class="section-header-text">
+              <h3>APCard Transactions</h3>
+            </div>
           </div>
           <!-- END SECTION 11 HEADER -->
 
           <!-- START SECTION 11 BODY -->
           <div class="section-body">
             <div class="apcard-chart">
-              <chart
-                *ngIf="apcardChartData"
-                [type]="type[1]"
-                [data]="apcardChartData"
-                [options]="options"
-              ></chart>
+              <chart *ngIf="apcardChartData" [type]="type[1]" [data]="apcardChartData" [options]="options"></chart>
             </div>
           </div>
           <!-- END SECTION 11 BODY -->
@@ -744,7 +717,9 @@
             <div class="section-header-icon">
               <ion-icon item-left name="medal"></ion-icon>
             </div>
-            <div class="section-header-text"><h3>GPA Per Intake</h3></div>
+            <div class="section-header-text">
+              <h3>GPA Per Intake</h3>
+            </div>
           </div>
           <!-- END SECTION 12 HEADER -->
           <!-- START SECTION 12 BODY -->
@@ -752,11 +727,7 @@
             <ng-template [ngIf]="!block" [ngIfElse]="blocked">
               <ng-template [ngIf]="barChartData" [ngIfElse]="loadingGPA">
                 <div class="apcard-chart">
-                  <chart
-                  [type]="type[0]"
-                  [data]="barChartData"
-                  [options]="options[1]"
-                  ></chart>
+                  <chart [type]="type[0]" [data]="barChartData" [options]="options[1]"></chart>
                 </div>
               </ng-template>
               <ng-template #loadingGPA>
