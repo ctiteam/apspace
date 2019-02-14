@@ -41,7 +41,7 @@ export class ProfilePage {
         switchMap(p => this.ws.get<StaffDirectory[]>('/staff/listing').pipe(
           map(ss => ss.find(s => s.CODE === p.MENTOR_PROGRAMME_LEADER)),
         )),
-        map(s => (s || {}).ID),
+        map(s => (s || {} as StaffDirectory).ID),
       );
       this.getProfile();
     } else if (role & (Role.Lecturer | Role.Admin)) {
