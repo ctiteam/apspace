@@ -12,12 +12,12 @@ export class FeedbackPage {
 
   contactNo: string;
   message: string;
+  platform: string;
+  appVersion: string;
 
   submitting = false;
 
   readonly screenSize = screen.width + 'x' + screen.height;
-  platform: string;
-  appVersion: string;
 
   constructor(
     private feedback: FeedbackProvider,
@@ -28,7 +28,7 @@ export class FeedbackPage {
 
   submitFeedback() {
     const feedback = {
-      contactNo: this.contactNo,
+      contactNo: this.contactNo || "",
       platform: this.platform,
       message: this.message,
       appVersion: this.appVersion,
@@ -37,8 +37,6 @@ export class FeedbackPage {
 
     this.submitting = true;
     this.feedback.sendFeedback(feedback).subscribe(_ => {
-      this.settings.set('contactNo', this.contactNo);
-
       this.message = '';
       this.toastCtrl.create({
         message: 'Feedback submitted!',
@@ -59,8 +57,6 @@ export class FeedbackPage {
   }
 
   ionViewDidLoad() {
-    this.contactNo = this.settings.get('contactNo');
-
     this.platform = this.feedback.platform();
     this.appVersion = this.version.name;
   }
