@@ -92,7 +92,12 @@ export class AttendancePage {
     if (!Array.isArray(aa)) {
       return;
     }
-    this.average = aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100;
+    if(aa.length > 0){
+      this.average = aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100;
+    }
+    else{
+      this.average = -1;
+    }
   }
 
   ionViewDidLoad() {

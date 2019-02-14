@@ -22,7 +22,7 @@
     <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
   <!-- START COVER -->
-  <div class="cover">
+  <div class="cover" *ngIf="average >= 0">
     <!-- START BACKGROUND WAVES -->
     <div class="fill" [style.animation-iteration-count]="average">
       <svg width="200%" height="100%" viewBox="0 0 240 140" version="1.1">
@@ -64,7 +64,11 @@
     <!-- END BLUR LAYER (OVERLAY) -->
 
     <!-- START CIRCLE -->
-    <div class="circle text-center" id="widget-content" [class.danger-attendance-box-shadow]="0.8 >= average"></div>
+    <div
+      class="circle text-center"
+      id="widget-content"
+      [class.danger-attendance-box-shadow]="0.8 >= average"
+    ></div>
     <!-- END CIRCLE -->
 
     <!-- START TEXT -->
@@ -72,6 +76,13 @@
     <!-- END TEXT -->
   </div>
   <!-- END COVER -->
+
+  <!-- IF THERE IS NO DATA RETURNED FROM API -->
+  <div class="cover" *ngIf="average == -1">
+    <div id="widget-value" style="font-size: 1.6em">
+      No attendance data for the selected intake
+    </div>
+  </div>
 
   <ng-template
     let-attendances
