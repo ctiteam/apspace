@@ -39,11 +39,11 @@
         <div class="apcard-history-section-body">
           <div
             class="perYear"
-            *ngFor="let year of objectKeys(monthlyData.cr).reverse()"
+            *ngFor="let year of transactonsYears.reverse()"
           >
             <div
               class="perMonth"
-              *ngFor="let month of objectKeys(monthlyData.cr[year]).reverse()"
+              *ngFor="let month of transactionsMonths"
             >
               <div
                 class="apcard-history-group"
@@ -82,7 +82,6 @@
                     </h2>
                   </h2>
                 </div>
-
                 <div
                   class="apcard-history-group-messages"
                   *ngFor="
