@@ -38,8 +38,8 @@ export class UpcomingConLecProvider {
   userlogoutsession = '/iconsult/close-session';
 
   constructor(public http: HttpClient,
-    private cas: CasTicketProvider,
-    private ws: WsApiProvider,
+              private cas: CasTicketProvider,
+              private ws: WsApiProvider,
   ) {
   }
 

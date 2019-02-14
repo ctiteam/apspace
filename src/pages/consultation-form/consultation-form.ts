@@ -5,9 +5,9 @@ import {
 import { Observable } from 'rxjs/Observable';
 
 import { SettingsProvider, UpcomingConStuProvider } from '../../providers';
+import { IconsultPage } from '../iConsult-student/iconsult';
 import { TabsPage } from '../tabs/tabs';
 import { UpcomingstdPage } from '../upcomingstd/upcomingstd';
-import { IconsultPage } from '../iConsult-student/iconsult';
 
 @IonicPage()
 @Component({

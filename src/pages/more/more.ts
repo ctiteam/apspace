@@ -187,7 +187,7 @@ export class MorePage {
           desc: 'orange',
           color: 'orange',
           icon: 'alarm',
-          role: Role.Student
+          role: Role.Student,
         },
       ],
     },

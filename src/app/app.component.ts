@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { AlertController, Events, Nav, Platform, ToastController } from 'ionic-angular';
 import { FCM } from '@ionic-native/fcm';
 import { Network } from '@ionic-native/network';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Storage } from '@ionic/storage';
+import { AlertController, Events, Nav, Platform, ToastController } from 'ionic-angular';
 
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { of } from 'rxjs/observable/of';

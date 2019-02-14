@@ -20,9 +20,9 @@ export class IconsultPage {
   skeletonArray = new Array(5);
 
   constructor(public navCtrl: NavController,
-    public navParams: NavParams,
-    private UpcomingConStu: UpcomingConStuProvider,
-    public app: App,
+              public navParams: NavParams,
+              private UpcomingConStu: UpcomingConStuProvider,
+              public app: App,
   ) { }
 
   ionViewDidLoad() {
@@ -37,7 +37,7 @@ export class IconsultPage {
   }
 
   openBookingPage(id: number, date: string, time: string,
-    datetime: string, datetimee: string, endtime: string, lecid: string, casid: string) {
+                  datetime: string, datetimee: string, endtime: string, lecid: string, casid: string) {
     this.app.getRootNav().push('ConsultationFormPage',
       { id, date, time, datetime, datetimee: datetime, endtime, lecid, casid });
   }
