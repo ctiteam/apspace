@@ -50,10 +50,18 @@
                     </div>
     
                     <div class="col-12 text-center info-div">
-                      <h4>Mentor Name</h4>
-                      <p>{{ profile.MENTOR_NAME }}</p>
+                      <ng-template let-mentorId [ngIf]="mentorLink$ | async" [ngIfElse]="mentorLost">
+                        <a (click)="openStaffDirectoryInfo(mentorId)" class="font-weight-bold">
+                          <h4>Mentor Name</h4>
+                          <p>{{ profile.MENTOR_NAME }}</p>
+                        </a>
+                      </ng-template>
+                      <ng-template #mentorLost>
+                        <h4>Mentor Name</h4>
+                        <p>{{ profile.MENTOR_NAME }}</p>
+                      </ng-template>
                     </div>
-    
+
                     <div class="col-12 text-center info-div">
                       <h4>Programme Leader</h4>
                       <p>{{ profile.PL_NAME }}</p>
@@ -132,4 +140,3 @@
       </div>
       <!-- END MAIN -->
     </ion-content>
-    
