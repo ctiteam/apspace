@@ -11,7 +11,6 @@ import {
 
 import { Role } from '../../interfaces';
 import {
-  NotificationProvider,
   SettingsProvider,
   WsApiProvider,
 } from '../../providers';
@@ -217,9 +216,18 @@ export class MorePage {
           title: 'Operation Hours',
           component: 'OperationHoursPage',
           size: 'medium',
+          desc: 'green',
+          color: 'green',
+          icon: 'information-circle',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'Notification',
+          component: 'NotificationPage',
+          size: 'small',
           desc: 'orange',
           color: 'orange',
-          icon: 'information-circle',
+          icon: 'notifications',
           role: Role.Student | Role.Lecturer | Role.Admin,
         },
         {
@@ -244,7 +252,7 @@ export class MorePage {
           title: 'Logout',
           component: 'LogoutPage',
           icon: 'log-out',
-          size: 'xlarge',
+          size: 'large',
           desc: 'red',
           color: 'red',
           role: Role.Student | Role.Lecturer | Role.Admin,
@@ -263,7 +271,6 @@ export class MorePage {
     public events: Events,
     public app: App,
     public settings: SettingsProvider,
-    public notification: NotificationProvider,
     public plt: Platform,
   ) {
     this.setMenuItems();
