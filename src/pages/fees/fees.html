@@ -251,17 +251,17 @@
                       : detail.TOTAL_COLLECTED }}
                 </ion-note>
               </ion-item>
-              <ion-item>
+              <ion-item [style.color]="detail.OUTSTANDING>0 ? 'rgb(240, 65, 65)': ''">
                 Outstanding
-                <ion-note [style.color]="detail.OUTSTANDING>0 ? 'rgb(240, 65, 65)': '#fff'" item-right>
+                <ion-note [style.color]="detail.OUTSTANDING>0 ? 'rgb(240, 65, 65)': ''" item-right>
                     {{ isNumber(detail.OUTSTANDING)
                       ? (detail.OUTSTANDING | currency:'MYR':'RM')
                       : detail.OUTSTANDING }}
                 </ion-note>
               </ion-item>
-              <ion-item>
+              <ion-item [style.color]="detail.FINE>0 ? 'rgb(240, 65, 65)': ''">
                 Fine
-                <ion-note [style.color]="detail.FINE>0 ? 'rgb(240, 65, 65)': '#fff'" item-right>
+                <ion-note [style.color]="detail.FINE>0 ? 'rgb(240, 65, 65)': ''" item-right>
                     {{ isNumber(detail.FINE)
                       ? (detail.FINE | currency:'MYR':'RM')
                       : detail.FINE }}
