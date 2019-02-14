@@ -54,19 +54,16 @@ export class ProfilePage {
   }
 
   getProfile() {
-    this.ws
-      .get<StudentProfile>('/student/profile')
-      .pipe(
-        tap(p => {
-          if (p.COUNTRY === 'Malaysia') {
-            this.local = true;
-          } else {
-            this.local = false;
-            this.visa$ = this.getVisaStatus();
-          }
-        }),
-      )
-      .subscribe();
+    this.ws.get<StudentProfile>('/student/profile').pipe(
+      tap(p => {
+        if (p.COUNTRY === 'Malaysia') {
+          this.local = true;
+        } else {
+          this.local = false;
+          this.visa$ = this.getVisaStatus();
+        }
+      }),
+    ).subscribe();
   }
 
   getVisaStatus() {
