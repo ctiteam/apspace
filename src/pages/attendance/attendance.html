@@ -83,6 +83,16 @@
       No attendance data for the selected intake
     </div>
   </div>
+  <!-- END THERE IS NO DATA -->
+
+  <!-- SHOWING LOADING WHEN ATTENDANCE VALUE IS -2 (INITIAL VALUE) -->
+  <div class="cover" *ngIf="average == -2">
+    <div class="blur"></div>
+    <div id="widget-value" style="font-size: 1.6em">
+      <loading-spinner></loading-spinner>
+    </div>
+  </div>
+  <!-- END LOADING -->
 
   <ng-template
     let-attendances

@@ -72,7 +72,7 @@ export class AttendancePage {
   }
 
   getAttendance(intake: string, refresh?: boolean): Observable<Attendance[]> {
-    this.average = 0;
+    this.average = -2;
     return (this.attendance$ = this.ws
       .get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh)
       .pipe(
