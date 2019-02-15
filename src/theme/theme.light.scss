@@ -686,17 +686,17 @@ $light_menu_colors: (
     ion-card {
       background-color: color($light_colors, light_white_background) !important;
       &.bookedcard {
-        ion-card-header{
+        ion-card-header {
           color: color($light_colors, ligth_grey_color) !important;
-          h2{
+          h2 {
             color: color($light_colors, ligth_grey_color) !important;
           }
         }
       }
       &.Availablecard {
         color: color($light_colors, light_blue_color) !important;
-        ion-card-header{
-          h2{
+        ion-card-header {
+          h2 {
             color: color($light_colors, light_blue_color) !important;
           }
         }
@@ -707,7 +707,7 @@ $light_menu_colors: (
           light_white_background
         ) !important;
       }
-      ion-card-content{
+      ion-card-content {
         .btn-outline-dark {
           &:hover {
             color: color($light_colors, light_white_background) !important;
@@ -787,6 +787,15 @@ $light_menu_colors: (
             color: color($light_colors, light_blue_color) !important;
           }
         }
+      }
+    }
+  }
+
+  // LOADING SPINNER COMPONENT
+  loading-spinner {
+    .loader {
+      .inner {
+        border-color: color($light_colors, ligth_grey_color);
       }
     }
   }
