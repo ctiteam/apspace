@@ -22,10 +22,15 @@
               <div class="inner-circle text-center">
                 <h2
                   class="balance d-inline-block"
-                  *ngIf="(transaction$ | async)"
+                  *ngIf="(transaction$ | async); else apcaradBalanceLoading"
                 >
                   {{ balance | currency: "RM" }}
                 </h2>
+                <ng-template #apcaradBalanceLoading>
+                  <h2 class="balance inline-block">
+                      <loading-spinner></loading-spinner>
+                  </h2>
+                </ng-template>
               </div>
             </div>
           </div>

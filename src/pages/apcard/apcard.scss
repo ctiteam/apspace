@@ -1,4 +1,12 @@
 page-apcard {
+  loading-spinner {
+    .loader {
+      top: calc(50% - 80px);
+      left: calc(50% - 40px);
+      width: 80px;
+      height: 80px;
+    }
+  }
   .apcard-card-section {
     margin-top: 20px;
     .outter-circle {
