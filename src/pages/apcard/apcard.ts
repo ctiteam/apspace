@@ -96,7 +96,7 @@ export class ApcardPage {
   /** Negate spend value for top ups. */
   signTransactions(transactions: Apcard[]): Apcard[] {
     transactions.forEach(transaction => {
-      if (transaction.ItemName === "Top Up") {
+      if (transaction.ItemName !== "Top Up") {
         transaction.SpendVal *= -1;
       }
     });

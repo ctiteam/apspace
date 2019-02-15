@@ -113,9 +113,9 @@
                       </div>
                       <div
                         class="col-3 text-center price-div px-0"
-                        [ngClass]="{ add: 0 > transaction.SpendVal }"
+                        [class.add]="0 > transaction.SpendVal"
                       >
-                        {{ -transaction.SpendVal }}
+                        {{ transaction.SpendVal | currency: "RM" }}
                       </div>
                     </div>
                   </div>
