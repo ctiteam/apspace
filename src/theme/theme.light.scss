@@ -265,24 +265,6 @@ $light_menu_colors: (
     }
   }
 
-  // LOGIN PAGE
-  page-login {
-    h1 {
-      color: color($light_colors, ligth_grey_color);
-    }
-    form {
-      .item-md,
-      .item-ios {
-        background-color: color($light_colors, light_background);
-        button {
-          ion-icon {
-            color: color($light_colors, light_background);
-          }
-        }
-      }
-    }
-  }
-
   // STUDENTS DASHBOARD PAGE
   page-dashboard {
     .financials-section .section-body .bar-right-info {

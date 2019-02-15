@@ -272,27 +272,6 @@ $dark_menu_colors: (
     }
   }
 
-  // LOGIN PAGE
-  page-login {
-    h1 {
-      color: color($dark_colors, dark_search_background_color);
-    }
-    form {
-      .item-md,
-      .item-ios {
-        .item-inner {
-          border-bottom: 1px solid color($dark_colors, dark_item_background);
-        }
-        background-color: color($dark_colors, dark_background);
-        button {
-          ion-icon {
-            color: color($dark_colors, dark_background);
-          }
-        }
-      }
-    }
-  }
-
   // APCARD PAGE
   page-apcard {
     .apcard-card-section .outter-circle {

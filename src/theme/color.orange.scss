@@ -69,35 +69,6 @@ $primary_color: #ec644b;
     }
   }
 
-  // LOGIN PAGE
-  page-login {
-    h1 {
-      span {
-        color: $primary_color;
-      }
-    }
-    form {
-      .item-md,
-      .item-ios {
-        ion-icon {
-          color: $primary_color;
-        }
-        button {
-          background-color: $primary_color;
-        }
-        &.item-input-has-focus {
-          .item-inner {
-            border-bottom: $primary_color;
-            box-shadow: inset 0 -1px 0 0 $primary_color;
-          }
-        }
-      }
-      button {
-        background-color: $primary_color;
-      }
-    }
-  }
-
   // APCARD PAGE
   page-apcard {
     .apcard-card-section .outter-circle .inner-circle {
