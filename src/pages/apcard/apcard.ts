@@ -121,6 +121,7 @@ export class ApcardPage {
       map(t => this.signTransactions(t)),
       tap(t => this.analyzeTransactions(t)),
       tap(t => this.getTransactionsYears()),
+      tap(t => this.appAnimationProvider.animateBalanceBackground(this.balanceBackgroundElement)),
       finalize(() => refresher && refresher.complete()),
       finalize(() => (this.isLoading = false))
     );
@@ -128,8 +129,5 @@ export class ApcardPage {
 
   ionViewDidLoad() {
     this.doRefresh();
-    this.appAnimationProvider.animateBalanceBackground(
-      this.balanceBackgroundElement
-    );
   }
 }
