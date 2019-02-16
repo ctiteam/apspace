@@ -15,7 +15,6 @@
 </ion-header>
 
 <ion-content>
-  
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="refresh">
     </ion-refresher-content>
@@ -29,7 +28,6 @@
   </ion-segment>
 
   <ion-card
-    class="p-0 my-1 mx-0"
     *ngFor="
       let t of (timetable$ | async | classes: intake | theday: selectedDate);
       trackBy: trackByIndex

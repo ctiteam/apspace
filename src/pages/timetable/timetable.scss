@@ -1,12 +1,10 @@
 page-timetable {
+  // FIXME: bootstrap mess
+  .card-header {
+    border-bottom: none;
+  }
+
   ion-card {
-    width: 100% !important;
-    ion-card-header {
-      border: none !important;
-      p {
-        font-size: 1.3rem !important;
-      }
-    }
     ion-card-content {
       a {
         text-decoration: none;
