@@ -49,7 +49,6 @@ export class DashboardPage {
   overdue$: Observable<FeesTotalSummary[]>;
   profile$: Observable<StudentProfile>;
   transaction$: Observable<Apcard>;
-  // visa$: Observable<any>;
   apcardTransaction$: Observable<Apcard[]>;
 
   // LOADING VARS
@@ -58,16 +57,12 @@ export class DashboardPage {
   overallAttendance: number;
   subject: string;
 
-  // VISA VARS
-  // local: boolean = false;
-
   // HEADER VARS
   greetingMessage = '';
   notificationNumber: string;
 
   // APCARD TRANSACTIONS VARS
   monthlyData: any;
-  monthly: number;
   apcardChartData: any;
   balance: number;
 
@@ -137,6 +132,7 @@ export class DashboardPage {
   doRefresh(refresher?) {
     this.displayGreetingMessage();
     this.profile$ = this.ws.get<StudentProfile>('/student/profile');
+    this.apcardTransaction$ = this.getTransactions();
     forkJoin(
       this.getProfile(),
       this.nextHoliday$ = this.getHolidays(Boolean(refresher)),
@@ -181,11 +177,6 @@ export class DashboardPage {
       opt,
     );
   }
-
-  // VISA METHODS
-  // getVisaStatus() {
-  //   return this.ws.get<any>("/student/visa_status");
-  // }
 
   // FEES & OUTSTANDING METHODS
   getOverdueFee() {
@@ -327,6 +318,13 @@ export class DashboardPage {
       );
   }
 
+  getTransactions(){
+    return this.ws.get<Apcard[]>("/apcard/").pipe(
+      map(t => this.signTransactions(t)),
+      tap(t => this.analyzeTransactions(t))
+    )
+  }
+
   /** Analyze transactions. */
   analyzeTransactions(transactions: Apcard[]) {
     // stop analyzing if transactions is empty
@@ -339,7 +337,7 @@ export class DashboardPage {
     const a = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     this.monthlyData = transactions.reduce(
       (tt, t) => {
-        const c = t.SpendVal > 0 ? 'dr' : 'cr'; // classify spent type
+        const c = t.SpendVal < 0 ? "dr" : "cr"; // classify spent type
         const d = new Date(t.SpendDate);
         d.getFullYear() in tt[c] || (tt[c][d.getFullYear()] = a.slice());
         tt[c][d.getFullYear()][d.getMonth()] += Math.abs(t.SpendVal);
@@ -349,8 +347,8 @@ export class DashboardPage {
       },
       {
         dr: { [now.getFullYear()]: a.slice() },
-        cr: { [now.getFullYear()]: a.slice() },
-      },
+        cr: { [now.getFullYear()]: a.slice() }
+      }
     );
     // plot graph
     this.apcardChartData = {
@@ -385,15 +383,12 @@ export class DashboardPage {
         },
       ],
     };
-
-    // reverse monthlyData last year
-    this.monthly = this.monthlyData.dr[now.getFullYear()][now.getMonth()];
   }
 
   /** Negate spend value for top ups. */
   signTransactions(transactions: Apcard[]): Apcard[] {
     transactions.forEach(transaction => {
-      if (transaction.ItemName === 'Top Up') {
+      if (transaction.ItemName !== "Top Up") {
         transaction.SpendVal *= -1;
       }
     });
@@ -403,7 +398,6 @@ export class DashboardPage {
   // NOTIFICATIONS METHODS
   getBadge() {
     this.notification.getMessage().subscribe(res => {
-      console.log(res);
       this.notificationNumber = res.num_of_unread_msgs;
     });
   }

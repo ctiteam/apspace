@@ -64,7 +64,7 @@ export class ApcardPage {
     const a = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     this.monthlyData = transactions.reduce(
       (tt, t) => {
-        const c = t.SpendVal > 0 ? "dr" : "cr"; // classify spent type
+        const c = t.SpendVal < 0 ? "dr" : "cr"; // classify spent type
         const d = new Date(t.SpendDate);
         d.getFullYear() in tt[c] || (tt[c][d.getFullYear()] = a.slice());
         tt[c][d.getFullYear()][d.getMonth()] += Math.abs(t.SpendVal);
@@ -88,9 +88,7 @@ export class ApcardPage {
       })
     );
     // reverse monthlyData last year
-    this.monthly = this.monthlyData.dr[now.getFullYear()][now.getMonth()];
-    console.log(this.monthlyData);
-    
+    this.monthly = this.monthlyData.dr[now.getFullYear()][now.getMonth()];    
   }
 
   /** Negate spend value for top ups. */
@@ -107,7 +105,6 @@ export class ApcardPage {
     let firstTransactionYear = this.objectKeys(this.monthlyData.cr)[0];
     let currentYear = new Date().getFullYear();
     for (let year=+firstTransactionYear; year<=currentYear;year++){
-      console.log(year.toString());
       this.transactonsYears.push(year.toString());
     }
     for(let month=11; month>=0;month--){
