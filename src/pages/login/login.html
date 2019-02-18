@@ -7,7 +7,7 @@
       <ion-input
         #autofocus
         type="email"
-        placeholder="&quot;APKey&quot;"
+        placeholder='"APKey"'
         [(ngModel)]="username"
         [ngModelOptions]="{ standalone: true }"
       ></ion-input>
@@ -30,6 +30,9 @@
         <ion-icon name="eye"></ion-icon>
       </button>
     </ion-item>
-    <button ion-button block type="submit" color="primary">Log in</button>
+    <button ion-button block type="submit" [disabled]="showLoadingSpinner" color="primary">
+      <span *ngIf="!showLoadingSpinner">Log in</span>
+      <span *ngIf="showLoadingSpinner">Loading...</span>
+    </button>
   </form>
 </ion-content>
