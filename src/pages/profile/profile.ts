@@ -21,6 +21,7 @@ export class ProfilePage {
   visa$: Observable<any>;
 
   local: boolean = false;
+  studentRole = false;
 
   constructor(
     private ws: WsApiProvider,
@@ -34,6 +35,7 @@ export class ProfilePage {
     this.appAnimationProvider.addAnimationsToSections(this.elRef);
     const role = this.settings.get('role');
     if (role & Role.Student) {
+      this.studentRole = true;
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo', true);
       this.profile$ = this.ws.get<StudentProfile>('/student/profile', true);
       this.mentorLink$ = this.profile$.pipe(
