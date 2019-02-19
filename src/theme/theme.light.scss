@@ -189,14 +189,22 @@ $light_menu_colors: (
     .apcard-history-section-body
     .apcard-history-group
     .apcard-history-group-title {
-    background-color: color($light_colors, light_white_background);
-    box-shadow: 1px 1px 9px color($light_colors, light_header_background),
-      -1px -1px 9px color($light_colors, light_header_background);
+    background-color: color($light_colors, light_header_background);
+    box-shadow: 1px 1px 9px color($light_colors, light_white_background),
+      -1px -1px 9px color($light_colors, light_white_background);
     color: color($light_colors, ligth_grey_color);
     .color-pri {
       color: color($light_colors, ligth_grey_color);
     }
   }
+
+  .apcard-history-section 
+    .apcard-history-section-body
+    .apcard-history-group
+    .apcard-history-group-messages{
+      background-color: color($light_colors, light_white_background);
+    }
+
 
   .apcard-history-section
     .apcard-history-section-body

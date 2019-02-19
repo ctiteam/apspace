@@ -187,13 +187,20 @@ $dark_menu_colors: (
     .apcard-history-section-body
     .apcard-history-group
     .apcard-history-group-title {
-    background-color: color($dark_colors, dark_item_background);
-    box-shadow: 1px 1px 9px color($dark_colors, dark_background),
-      -1px -1px 9px color($dark_colors, dark_background);
+    background-color: color($dark_colors, dark_header_background);
+    box-shadow: 1px 1px 9px color($dark_colors, dark_item_background),
+      -1px -1px 9px color($dark_colors, dark_item_background);
     color: color($dark_colors, dark_search_background_color);
     .color-pri {
       color: color($dark_colors, dark_search_background_color);
     }
+  }
+
+  .apcard-history-section 
+  .apcard-history-section-body
+  .apcard-history-group
+  .apcard-history-group-messages{
+    background-color: color($dark_colors, dark_item_background);
   }
 
   .apcard-history-section
