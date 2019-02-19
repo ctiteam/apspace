@@ -591,14 +591,6 @@ $dark_menu_colors: (
       ion-card-content {
         color: color($dark_colors, dark_search_background_color);
       }
-      &.no-classes-message {
-        background-color: color($dark_colors, dark_item_background) !important;
-        ion-card-content {
-          p {
-            color: color($dark_colors, dark_search_background_color) !important;
-          }
-        }
-      }
     }
   }
 
@@ -842,16 +834,19 @@ $dark_menu_colors: (
   }
   // END OVERRIDING IONIC SEGMENTS DESIGN (ALL PAGES)
 
-  // OVERRIDE THE MAIN STYLE FOR IONIC ELEMENTS
-  // .popover-md .popover-content,
-  // .popover-ios .popover-content {
-  //   ion-list {
-  //     ion-item.item.item-md {
-  //       background: color($dark_colors, dark_background) !important;
-  //       color: color($dark_colors, dark_search_background_color) !important;
-  //     }
-  //   }
-  // }
+
+// TEMP GENERAL STYLES FOR ION CARDS
+  ion-card{
+    &.no-classes-message {
+      background-color: color($dark_colors, dark_item_background) !important;
+      ion-card-content {
+        p {
+          color: color($dark_colors, dark_search_background_color) !important;
+        }
+      }
+    }
+  }
+
   // OVERRIDE BOOTSTRAP COLORS:
   .bg-danger {
     background-color: color(

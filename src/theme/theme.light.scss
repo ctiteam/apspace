@@ -557,17 +557,6 @@ $light_menu_colors: (
       ion-card-content {
         color: color($light_colors, ligth_grey_color);
       }
-      &.no-classes-message {
-        background-color: color(
-          $light_colors,
-          light_white_background
-        ) !important;
-        ion-card-content {
-          p {
-            color: color($light_colors, ligth_grey_color) !important;
-          }
-        }
-      }
     }
   }
 
@@ -812,29 +801,20 @@ $light_menu_colors: (
     border-left: 1px solid !important;
   }
 
-  // OVERRIDE THE MAIN STYLE FOR IONIC ELEMENTS
-  // .popover-md .popover-content,
-  // .popover-ios .popover-content {
-  //   ion-list {
-  //     ion-item {
-  //       background: color($light_colors, light_background);
-  //       color: color($light_colors, ligth_grey_color);
-  //       ion-radio {
-  //         .radio-checked {
-  //           border-color: black;
-  //           .radio-inner {
-  //             background-color: black;
-  //           }
-  //         }
-  //       }
-  //       &.item-radio-checked {
-  //         ion-label {
-  //           color: black;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
+// TEMP GENERAL STYLES FOR ION CARDS
+ion-card{
+  &.no-classes-message {
+    background-color: color(
+      $light_colors,
+      light_white_background
+    ) !important;
+    ion-card-content {
+      p {
+        color: color($light_colors, ligth_grey_color) !important;
+      }
+    }
+  }
+}
 
   // OVERRIDE BOOTSTRAP COLORS:
   .bg-danger {
