@@ -10,8 +10,10 @@ import { Observable } from 'rxjs/Observable';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 
 import { StudentProfile, Timetable } from '../../interfaces';
+import { Role } from "../../interfaces";
 import { SettingsProvider, TimetableProvider, WsApiProvider } from '../../providers';
 import { ClassesPipe } from './classes.pipe';
+
 
 @IonicPage()
 @Component({
@@ -29,6 +31,7 @@ export class TimetablePage {
   availableDate: Date[];
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
+  showNoIntakeMessage = false;
 
   @ViewChild(Content) content: Content;
 
@@ -83,6 +86,7 @@ export class TimetablePage {
   changeIntake(intake: string) {
     if (intake !== this.intake) {
       this.settings.set('intake', this.intake = intake);
+      this.showNoIntakeMessage = false;
       this.timetable$.subscribe();
     }
   }
@@ -183,10 +187,15 @@ export class TimetablePage {
     this.intake = this.settings.get('intake');
     // default intake to student current intake
     if (this.intake === undefined) {
-      this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
-        this.intake = (p || {} as StudentProfile).INTAKE || '';
-        this.settings.set('intake', this.intake);
-      });
+      if(this.settings.get("role") & Role.Student){
+        this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+          this.intake = (p || {} as StudentProfile).INTAKE || '';
+          this.settings.set('intake', this.intake);
+        });
+      }
+      else{
+        this.showNoIntakeMessage = true;
+      }
     }
     this.doRefresh();
   }
