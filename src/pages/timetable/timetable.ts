@@ -86,7 +86,6 @@ export class TimetablePage {
   changeIntake(intake: string) {
     if (intake !== this.intake) {
       this.settings.set('intake', this.intake = intake);
-      this.showNoIntakeMessage = false;
       this.timetable$.subscribe();
     }
   }

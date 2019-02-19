@@ -5,7 +5,7 @@ import { ActionSheetController, Content, IonicPage, Platform } from 'ionic-angul
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
 
-import { ExamSchedule, StudentProfile } from '../../interfaces';
+import { ExamSchedule, StudentProfile, Role } from '../../interfaces';
 import { SettingsProvider, TimetableProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
@@ -20,7 +20,7 @@ export class ExamSchedulePage {
   intake: string;
   intakes: string[];
   selectedIntake: string;
-
+  showNoIntakeMessage = false;
   numOfSkeletons = new Array(5);
 
   constructor(
@@ -52,6 +52,8 @@ export class ExamSchedulePage {
         handler: () => {
           this.intake = intake;
           this.settings.set('examIntake', this.intake);
+          this.showNoIntakeMessage = false;
+          console.log("hi");      
           this.doRefresh();
         },
       }));
@@ -67,7 +69,7 @@ export class ExamSchedulePage {
   /** Check and update intake on change. */
   changeIntake(intake: string) {
     if (intake !== this.intake) {
-      this.settings.set('examIntake', this.intake = intake);
+      this.settings.set('examIntake', this.intake = intake);      
       this.doRefresh();
     }
   }
@@ -78,10 +80,14 @@ export class ExamSchedulePage {
       this.intake = intake;
       this.doRefresh();
     } else {
-      this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
-        this.intake = p.INTAKE;
-        this.doRefresh();
-      });
+      if(this.settings.get("role") & Role.Student){
+        this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+          this.intake = p.INTAKE;
+        });
+      } else{
+        this.showNoIntakeMessage = true;
+      }
+      this.doRefresh();
     }
     this.tt.get().subscribe(tt => {
       this.intakes = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort();
