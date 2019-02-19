@@ -394,6 +394,12 @@ $dark_menu_colors: (
     .item-label-floating .text-input-md {
       color: color($dark_colors, dark_search_background_color);
     }
+    ion-item {
+      .item-inner {
+          border-bottom: 1px solid color($dark_colors, dark_item_background) !important;
+          background-color: #29292980 !important;
+      }
+  }
   }
 
   // HOLIDAYS PAGE

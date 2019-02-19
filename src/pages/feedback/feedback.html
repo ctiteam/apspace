@@ -5,47 +5,31 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-item no-padding>
-    <ion-label stacked>Contact Number</ion-label>
-    <ion-input
-      type="number"
-      [(ngModel)]="contactNo"
-      [ngModelOptions]="{ standalone: true }"
-    >
-    </ion-input>
-  </ion-item>
-  <ion-item no-padding>
-    <ion-label stacked>Message</ion-label>
-    <ion-textarea
-      #autofocus
-      class="textarea"
-      autosize
-      row="1"
-      [(ngModel)]="message"
-      [ngModelOptions]="{ standalone: true }"
-    >
+  <ion-item class="mt-3" no-padding>
+    <ion-label stacked>Message <span style="color: red">*</span></ion-label>
+    <ion-textarea #autofocus class="textarea" autosize row="1" [(ngModel)]="message"
+      [ngModelOptions]="{ standalone: true }">
     </ion-textarea>
   </ion-item>
+  <ion-item class="mt-3" no-padding>
+    <ion-label stacked>Contact Number</ion-label>
+    <ion-input type="number" [(ngModel)]="contactNo" [ngModelOptions]="{ standalone: true }">
+    </ion-input>
+  </ion-item>
   <br class="my-3" />
-  <ion-item no-padding>
+  <ion-item class="mt-3" no-padding>
     <ion-label stacked>Screen Size</ion-label>
     <ion-input disabled type="text" [value]="screenSize"></ion-input>
   </ion-item>
-  <ion-item no-padding>
+  <ion-item class="mt-3" no-padding>
     <ion-label stacked>Platform</ion-label>
     <ion-input disabled type="text" [value]="platform"></ion-input>
   </ion-item>
-  <ion-item no-padding>
+  <ion-item class="mt-3" no-padding>
     <ion-label stacked>Version</ion-label>
     <ion-input disabled type="text" [value]="appVersion"></ion-input>
   </ion-item>
-  <button
-    ion-button
-    full
-    (click)="submitFeedback()"
-    class="submit-button mt-5"
-    [disabled]="submitting || !message"
-  >
+  <button ion-button full (click)="submitFeedback()" class="submit-button mt-5" [disabled]="submitting || !message">
     Submit
   </button>
 </ion-content>

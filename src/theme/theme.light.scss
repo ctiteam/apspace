@@ -370,6 +370,12 @@ $light_menu_colors: (
     .item-label-floating .text-input-md {
       color: color($light_colors, light_blue_color);
     }
+    ion-item {
+      .item-inner {
+          border-bottom: 1px solid #dedede !important;
+          background-color: #ffffff4d !important;
+      }
+  }
   }
 
   // HOLIDAYS PAGE
