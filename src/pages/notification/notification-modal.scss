@@ -1,26 +1,25 @@
 page-notification-modal {
-  #fill {
-    width: 100%;
-    height: 60px;
-  }
-
-  #icon-button {
-    width: 45px;
-    height: 45px;
-    position: absolute;
-    top: 32px;
-    left: 44%;
-  }
-
-  .button-md {
-    border-radius: 50%;
-  }
-
-  h2 {
-    text-shadow: 0.1px 0.1px 0.1px green, -0.1px -0.1px -0.1px green;
-  }
-
-  .content {
-    font-weight: 1.5rem;
-  }
+    #fill {
+        width: 100%;
+        height: 60px;
+    }
+    #icon-button {
+        width: 45px;
+        height: 45px;
+        position: absolute;
+        top: 32px;
+        left: 44%;
+    }
+    .button-md {
+        border-radius: 50%;
+    }
+    h2 {
+        text-shadow: 0.1px 0.1px 0.1px green, -0.1px -0.1px -0.1px green;
+    }
+    .content {
+        font-weight: 1.5rem;
+    }
+    article {
+        white-space: pre-line;
+    }
 }
