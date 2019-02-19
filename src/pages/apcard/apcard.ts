@@ -118,13 +118,13 @@ export class ApcardPage {
       map(t => this.signTransactions(t)),
       tap(t => this.analyzeTransactions(t)),
       tap(t => this.getTransactionsYears()),
-      tap(t => this.appAnimationProvider.animateBalanceBackground(this.balanceBackgroundElement)),
       finalize(() => refresher && refresher.complete()),
       finalize(() => (this.isLoading = false))
     );
   }
 
   ionViewDidLoad() {
+    this.appAnimationProvider.animateBalanceBackground(this.balanceBackgroundElement);
     this.doRefresh();
   }
 }
