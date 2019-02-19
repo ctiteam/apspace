@@ -50,11 +50,20 @@
     </div>
   </ng-template>
   <ng-template #loadingHolidays>
-    <ion-card *ngFor="let i of numOfSkeletons">
-      <ion-card-content>
-        <skeleton-item height="20px" width="80%"></skeleton-item>
-        <skeleton-item height="16px" width="40%"></skeleton-item>
-      </ion-card-content>
-    </ion-card>
+    <div *ngFor="let i of numOfSkeletons">
+      <div class="row my-5 px-3">
+        <div class="col-3 m-auto">
+        <skeleton-item class="circle" height="64px" width="100%"></skeleton-item>
+        </div>
+        <div class="col-6 m-auto">
+            <skeleton-item height="20px" width="100%"></skeleton-item>
+            <skeleton-item height="16px" width="40%"></skeleton-item>
+            <skeleton-item height="16px" width="20%"></skeleton-item>
+        </div>
+        <div class="col-3 m-auto">
+            <skeleton-item height="16px" width="70%"></skeleton-item>
+        </div>
+      </div>
+    </div>
   </ng-template>
 </ion-content>
