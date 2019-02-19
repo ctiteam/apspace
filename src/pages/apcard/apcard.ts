@@ -104,7 +104,7 @@ export class ApcardPage {
   getTransactionsYears(){
     let firstTransactionYear = this.objectKeys(this.monthlyData.cr)[0];
     let currentYear = new Date().getFullYear();
-    for (let year=+firstTransactionYear; year<=currentYear;year++){
+    for (let year=currentYear; year>=+firstTransactionYear;year--){
       this.transactonsYears.push(year.toString());
     }
     for(let month=11; month>=0;month--){
