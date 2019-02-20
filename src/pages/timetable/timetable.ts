@@ -114,7 +114,6 @@ export class TimetablePage {
         && this.il.get(refresher).subscribe(ii => this.intakeLabels = ii.map(i => i.INTAKE_CODE))),
       finalize(() => refresher && refresher.complete()),
     );
-    console.log(this.intakeLabels);
   }
 
   /** Convert string to color with djb2 hash function. */
