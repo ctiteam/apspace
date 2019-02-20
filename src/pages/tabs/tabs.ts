@@ -25,7 +25,7 @@ export class TabsPage {
     { title: 'Timetable', icon: 'calendar', root: 'LecturerTimetablePage', role: Role.Lecturer },
     { title: 'Attendance', icon: 'alarm', root: 'AttendancePage', role: Role.Student },
     { title: 'APCard', icon: 'card', root: 'ApcardPage', role: Role.Student | Role.Lecturer | Role.Admin },
-    { title: 'Bus Tracking', icon: 'bus', root: 'BusTrackingPage', role: Role.Lecturer | Role.Admin },
+    { title: 'Forms & Application', icon: 'clipboard', root: 'FormsApplicationPage', role: Role.Lecturer | Role.Admin },
   ];
 
   morePages = { title: 'More', icon: 'more', root: 'MorePage', role: Role.Student | Role.Lecturer | Role.Admin };
