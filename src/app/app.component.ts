@@ -147,10 +147,9 @@ export class MyApp {
   }
 
   logout() {
-    forkJoin(
-      this.upcominglec.usersessionlogout(),
-      this.platform.is('cordova') ? this.dc.logout() : of(null),
-    ).pipe(
+    // XXX: temporary asynchronous logout
+    this.upcominglec.usersessionlogout().subscribe();
+    (this.platform.is('cordova') ? this.dc.logout() : of(null)).pipe(
       // timeout(10000),
       switchMapTo(this.cas.deleteTGT()),
     ).subscribe(_ => {
