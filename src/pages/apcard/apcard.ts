@@ -39,7 +39,7 @@ export class ApcardPage {
   balance: number;
   monthly: number;
   monthlyTransactions: any;
-  monthlyData: any;
+  monthlyData: {cr: {}, dr:{}};
   transactionsGroupedByDate: any;
   transactonsYears: string[] = [];
   transactionsMonths: string[] = [];
@@ -88,7 +88,7 @@ export class ApcardPage {
       })
     );
     // reverse monthlyData last year
-    this.monthly = this.monthlyData.dr[now.getFullYear()][now.getMonth()];    
+    this.monthly = this.monthlyData.dr[now.getFullYear()][now.getMonth()];
   }
 
   /** Negate spend value for top ups. */
@@ -102,6 +102,8 @@ export class ApcardPage {
   }
 
   getTransactionsYears(){
+    this.transactonsYears = [];
+    this.transactionsMonths = [];
     let firstTransactionYear = this.objectKeys(this.monthlyData.cr)[0];
     let currentYear = new Date().getFullYear();
     for (let year=currentYear; year>=+firstTransactionYear;year--){
@@ -124,7 +126,7 @@ export class ApcardPage {
   }
 
   ionViewDidLoad() {
-    this.appAnimationProvider.animateBalanceBackground(this.balanceBackgroundElement);
     this.doRefresh();
+    this.appAnimationProvider.animateBalanceBackground(this.balanceBackgroundElement);
   }
 }
