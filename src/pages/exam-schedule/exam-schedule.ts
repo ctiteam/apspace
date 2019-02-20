@@ -42,8 +42,14 @@ export class ExamSchedulePage {
       this.actionSheet.show(options).then((buttonIndex: number) => {
         if (buttonIndex <= 1 + this.intakes.length) {
           this.intake = this.intakes[buttonIndex - 1] || '';
-          this.settings.set('examIntake', this.intake);
-          this.doRefresh();
+          if(this.intake !== ''){
+            this.showNoIntakeMessage = false;
+            this.settings.set('examIntake', this.intake);
+            this.doRefresh();
+          }
+          else{
+            this.showNoIntakeMessage = true;
+          }
         }
       });
     } else {
@@ -53,7 +59,6 @@ export class ExamSchedulePage {
           this.intake = intake;
           this.settings.set('examIntake', this.intake);
           this.showNoIntakeMessage = false;
-          console.log("hi");      
           this.doRefresh();
         },
       }));
@@ -69,6 +74,7 @@ export class ExamSchedulePage {
   /** Check and update intake on change. */
   changeIntake(intake: string) {
     if (intake !== this.intake) {
+      this.showNoIntakeMessage = false;      
       this.settings.set('examIntake', this.intake = intake);      
       this.doRefresh();
     }
