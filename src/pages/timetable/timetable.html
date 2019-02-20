@@ -1,17 +1,19 @@
 <ion-header>
-<ion-navbar>
-  <ion-buttons left>
-    <button ion-button outline small (click)="chooseWeek()" [disabled]="availableWeek && availableWeek.length === 0"
-      class="notification-button colored-border">
-      {{ (selectedDate | date) || "Weeks" }}
-    </button>
-  </ion-buttons>
-  <ion-buttons right>
-    <button ion-button outline small (click)="presentIntakeSearch()" class="notification-button colored-border">
-      {{ intake || "Intakes" }}
-    </button>
-  </ion-buttons>
-</ion-navbar>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button outline small (click)="chooseWeek()"
+        [disabled]="availableWeek && availableWeek.length === 0"
+        class="notification-button colored-border">
+        {{ (selectedDate | date) || "Weeks" }}
+      </button>
+    </ion-buttons>
+    <ion-buttons right>
+      <button ion-button outline small (click)="presentIntakeSearch()"
+        class="notification-button colored-border">
+        {{ intake || "Intakes" }}
+      </button>
+    </ion-buttons>
+  </ion-navbar>
 </ion-header>
 
 <ion-content>
@@ -19,50 +21,40 @@
     <ion-refresher-content pullingIcon="refresh">
     </ion-refresher-content>
   </ion-refresher>
-  <ng-template [ngIf]="!showNoIntakeMessage" [ngIfElse]="noIntake">
-    <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date:'E' | uppercase" (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
-      <!-- Use CSS for dynamically updated segment -->
-      <ion-segment-button *ngFor="let d of wday; index as i" [value]="d" [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
-        {{ d }}
-      </ion-segment-button>
-    </ion-segment>
-  
-    <ion-card
-      *ngFor="
-        let t of (timetable$ | async | classes: intake | theday: selectedDate);
-        trackBy: trackByIndex
-      "
-      [style.borderLeft]="'0.4rem solid ' + strToColor(t.MODID)"
-    >
-      <ion-card-header>
-        <h2>{{ t.MODID }}</h2>
-        <p class="font-weight-bold">{{ t.TIME_FROM }} - {{ t.TIME_TO }}</p>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-label no-margin>
-          <ion-icon padding-right name="locate"></ion-icon>
-          {{ t.ROOM }} │ {{ t.LOCATION }}
-        </ion-label>
-        <ion-label no-margin>
-          <a (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
-            <ion-icon padding-right name="contact"></ion-icon>
-            {{ t.NAME }}
-          </a>
-        </ion-label>
-      </ion-card-content>
-    </ion-card>
-  
-    <ion-card *ngIf="!selectedDate" class="no-classes-message">
-      <ion-card-content>
-        <p *ngIf="intake">Hooray! No classes this week! :D</p>
-      </ion-card-content>
-    </ion-card>  
-  </ng-template>
-  <ng-template #noIntake>
-    <ion-card class="no-classes-message">
-      <ion-card-content>
-        <p>No Intake Selected!, Please select one :D</p>
-      </ion-card-content>
-    </ion-card>  
-  </ng-template>
+
+  <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date:'E' | uppercase"
+    (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
+    <!-- Use CSS for dynamically updated segment -->
+    <ion-segment-button *ngFor="let d of wday; index as i" [value]="d"
+      [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
+      {{ d }}
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-card *ngFor="let t of timetable$ | async | classes:intake | theday:selectedDate; trackBy: trackByIndex"
+    [style.borderLeft]="'0.4rem solid ' + strToColor(t.MODID)">
+    <ion-card-header>
+      <h2>{{ t.MODID }}</h2>
+      <p class="font-weight-bold">{{ t.TIME_FROM }} - {{ t.TIME_TO }}</p>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-label no-margin>
+        <ion-icon padding-right name="locate"></ion-icon>
+        {{ t.ROOM }} │ {{ t.LOCATION }}
+      </ion-label>
+      <ion-label no-margin>
+        <a (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
+          <ion-icon padding-right name="contact"></ion-icon>
+          {{ t.NAME }}
+        </a>
+      </ion-label>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="!selectedDate || !intake" class="no-classes-message">
+    <ion-card-content>
+      <p *ngIf="intake; else noIntake">Hooray! No classes this week! :D</p>
+      <ng-template #noIntake>Please select an intake.</ng-template>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

@@ -9,13 +9,11 @@ import {
 import { Observable } from 'rxjs/Observable';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 
-import { StudentProfile, Timetable } from '../../interfaces';
-import { Role } from "../../interfaces";
+import { Role, StudentProfile, Timetable } from '../../interfaces';
 import {
   IntakeListingProvider, SettingsProvider, TimetableProvider, WsApiProvider,
 } from '../../providers';
 import { ClassesPipe } from './classes.pipe';
-
 
 @IonicPage()
 @Component({
@@ -33,7 +31,6 @@ export class TimetablePage {
   availableDate: Date[];
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
-  showNoIntakeMessage = false;
 
   @ViewChild(Content) content: Content;
 
@@ -88,7 +85,6 @@ export class TimetablePage {
   /** Check and update intake on change. */
   changeIntake(intake: string) {
     if (intake !== this.intake) {
-      this.showNoIntakeMessage = false;
       this.settings.set('intake', this.intake = intake);
       this.timetable$.subscribe();
     }
@@ -118,6 +114,7 @@ export class TimetablePage {
         && this.il.get(refresher).subscribe(ii => this.intakeLabels = ii.map(i => i.INTAKE_CODE))),
       finalize(() => refresher && refresher.complete()),
     );
+    console.log(this.intakeLabels);
   }
 
   /** Convert string to color with djb2 hash function. */
@@ -189,16 +186,11 @@ export class TimetablePage {
 
     this.intake = this.settings.get('intake');
     // default intake to student current intake
-    if (this.intake === undefined) {
-      if(this.settings.get("role") & Role.Student){
-        this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
-          this.intake = (p || {} as StudentProfile).INTAKE || '';
-          this.settings.set('intake', this.intake);
-        });
-      }
-      else{
-        this.showNoIntakeMessage = true;
-      }
+    if (this.intake === undefined && this.settings.get('role') & Role.Student) {
+      this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+        this.intake = (p || {} as StudentProfile).INTAKE || '';
+        this.settings.set('intake', this.intake);
+      });
     }
     this.doRefresh();
   }
