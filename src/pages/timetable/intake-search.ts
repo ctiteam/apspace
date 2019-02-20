@@ -8,7 +8,7 @@ import {
 } from 'rxjs/operators';
 
 import { Timetable } from '../../interfaces';
-import { TimetableProvider } from '../../providers';
+import { IntakeListingProvider, TimetableProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -23,11 +23,11 @@ export class IntakeSearchPage {
   searchIntake$: Observable<string[]>;
   searching: boolean;
 
-  constructor(public viewCtrl: ViewController, private tt: TimetableProvider) { }
+  constructor(public viewCtrl: ViewController, private il: IntakeListingProvider) { }
 
   ionViewDidLoad() {
-    const intake$ = this.tt.get().pipe(
-      map(tt => Array.from(new Set((tt || []).map(t => t.INTAKE.toUpperCase()))).sort()),
+    const intake$ = this.il.get().pipe(
+      map(ii => ii.map(i => i.INTAKE_CODE.toUpperCase()).sort()),
       share(),
     );
 
