@@ -4,11 +4,12 @@ export interface StudentProfile {
   NAME: string;
   INTAKE: string;
   PROGRAMME: string;
-  MENTOR_PROGRAMME_LEADER: string;
+  MENTOR_SAMACCOUNTNAME: string;
   STUDENT_STATUS: string;
   INTAKE_STATUS: string;
   PHOTO_NO: any;
   PL_NAME: string;
+  PL_SAMACCOUNTNAME: string;
   MENTOR_NAME: string;
   PROVIDER_CODE: string;
   BLOCK: boolean;

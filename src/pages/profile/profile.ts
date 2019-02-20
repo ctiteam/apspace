@@ -2,9 +2,9 @@ import { Component, ElementRef } from '@angular/core';
 import { App, IonicPage } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
-import { Role, StaffDirectory, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
+import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
 import { AppAnimationProvider, SettingsProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
@@ -16,7 +16,6 @@ export class ProfilePage {
 
   photo$: Observable<StudentPhoto[]>;
   profile$: Observable<StudentProfile>;
-  mentorLink$: Observable<string>;
   staffProfile$: Observable<StaffProfile[]>;
   visa$: Observable<any>;
 
@@ -38,13 +37,6 @@ export class ProfilePage {
       this.studentRole = true;
       this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo', true);
       this.profile$ = this.ws.get<StudentProfile>('/student/profile', true);
-      this.mentorLink$ = this.profile$.pipe(
-        // TODO: switch back to sam account name if implemented
-        switchMap(p => this.ws.get<StaffDirectory[]>('/staff/listing').pipe(
-          map(ss => ss.find(s => s.CODE === p.MENTOR_PROGRAMME_LEADER)),
-        )),
-        map(s => (s || {} as StaffDirectory).ID),
-      );
       this.getProfile();
     } else if (role & (Role.Lecturer | Role.Admin)) {
       this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile', true);
