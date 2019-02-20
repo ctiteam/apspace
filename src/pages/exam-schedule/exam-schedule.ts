@@ -81,19 +81,26 @@ export class ExamSchedulePage {
   }
 
   ionViewDidLoad() {
+    // GET LIST OF INTAKES WHEN PAGE LOADED
+    this.il.get().subscribe(ii => {
+      this.intakes = ii.map(i => i.INTAKE_CODE);
+    });
     const intake = this.settings.get('examIntake');
     if (intake !== undefined) { // intake might be ''
       this.intake = intake;
       this.doRefresh();
     } else {
       if(this.settings.get("role") & Role.Student){
+        
         this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
           this.intake = p.INTAKE;
-        });
+        },
+        (_) => {},
+        () => this.doRefresh()
+        );
       } else{
         this.showNoIntakeMessage = true;
       }
-      this.doRefresh();
     }
   }
 
