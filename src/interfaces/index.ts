@@ -17,6 +17,7 @@ export {
   Upcomingcon, DetailpageStudent, FreeSlots, StaffName, DepName,
   LecGetRulesDet, GetRooms,
 } from './iconsult';
+export { IntakeListing } from './intake-listing';
 export { InterimLegend } from './interim-legend';
 export { LecturerTimetable } from './lecturer-timetable';
 export { MPULegend } from './mpu-legend';

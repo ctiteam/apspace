@@ -11,7 +11,9 @@ import { finalize, switchMap, tap } from 'rxjs/operators';
 
 import { StudentProfile, Timetable } from '../../interfaces';
 import { Role } from "../../interfaces";
-import { SettingsProvider, TimetableProvider, WsApiProvider } from '../../providers';
+import {
+  IntakeListingProvider, SettingsProvider, TimetableProvider, WsApiProvider,
+} from '../../providers';
 import { ClassesPipe } from './classes.pipe';
 
 
@@ -44,6 +46,7 @@ export class TimetablePage {
     public modalCtrl: ModalController,
     public navCtrl: NavController,
     public plt: Platform,
+    private il: IntakeListingProvider,
     private tt: TimetableProvider,
     private ws: WsApiProvider,
     private settings: SettingsProvider,
@@ -110,9 +113,9 @@ export class TimetablePage {
   doRefresh(refresher?) {
     this.timetable$ = this.tt.get(Boolean(refresher)).pipe(
       tap(tt => this.updateDay(tt)),
-      // initialize or update intake labels only if timetable might change
-      tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)
-        && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
+      // initialize or update intake labels only if current intake does not exist
+      tap(_ => (Boolean(refresher) || this.intakeLabels.indexOf(this.intake) === -1)
+        && this.il.get(refresher).subscribe(ii => this.intakeLabels = ii.map(i => i.INTAKE_CODE))),
       finalize(() => refresher && refresher.complete()),
     );
   }
