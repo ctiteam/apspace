@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, MenuController } from 'ionic-angular';
 
 import { LocationsInterface, Trips } from '../../interfaces';
-import { BusTrackingProvider } from '../../providers';
+import { BusTrackingProvider, SettingsProvider } from '../../providers';
 
 import { Observable } from 'rxjs/Observable';
 import { finalize, map } from 'rxjs/operators';
@@ -32,15 +32,19 @@ export class BusTrackingPage {
   comingTripsOnly: string;
   numberOfTrips = 1;
 
-  constructor(public bus: BusTrackingProvider, public menu: MenuController) {}
+  constructor(public bus: BusTrackingProvider, public menu: MenuController, private settings: SettingsProvider) {}
 
   ionViewDidLoad() {
     // FILTER OPTIONS
+    if(!this.settings.get('tripTo') || !this.settings.get('tripFrom')){
+      this.toLocation = '';
+      this.fromLocation = '';
+    } else{
+        this.toLocation = this.settings.get('tripTo');
+        this.fromLocation = this.settings.get('tripFrom');  
+    }
     this.tripDay = this.getTodayDay(this.dateNow); // SET THE TRIP DAY TO THE CURRENT DAY
-    this.toLocation = '';
-    this.fromLocation = '';
     this.comingTripsOnly = '';
-
     this.getTrips();
     this.getLocations();
   }
@@ -57,11 +61,11 @@ export class BusTrackingPage {
     this.filteredTrip$ = this.trip$.pipe(
       map(trips => {
           return _.filter(trips, trip => {
-            // FILTER TRIPS TO UPCOMING TRIPS ONLY
+            // FILTER TRIPS TO TODAYS' TRIPS ONLY
             if (this.tripDay == 'mon-fri') {
-              return trip.trip_day == 'mon-fri' || trip.trip_day == 'fri';
+              return trip.trip_from.includes(this.fromLocation) && trip.trip_to.includes(this.toLocation) && (trip.trip_day == 'mon-fri' || trip.trip_day == 'fri');
             } else {
-              return trip.trip_day == this.getTodayDay(this.dateNow);
+              return trip.trip_from.includes(this.fromLocation) && trip.trip_to.includes(this.toLocation) && trip.trip_day == this.getTodayDay(this.dateNow);
             }
           });
         },
@@ -105,6 +109,8 @@ export class BusTrackingPage {
     day: string,
     comingTripsOnly: string,
   ) {
+    this.settings.set('tripFrom', source);    
+    this.settings.set('tripTo', destination);    
     this.filteredTrip$ = this.trip$.pipe(
       map(trips => {
         this.numberOfTrips = 1; // HIDE 'THERE ARE NO TRIPS' MESSAGE
@@ -149,7 +155,7 @@ export class BusTrackingPage {
           filteredTrips[key] = _.groupBy(filteredTrips[key], function(item) {
             return item.trip_to;
           });
-        });
+        })
       }),
     );
     this.toggleFilterMenu();
