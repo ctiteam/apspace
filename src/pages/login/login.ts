@@ -104,7 +104,9 @@ export class LoginPage {
           _ => {
             this.navCtrl.setRoot("TabsPage");
           },
-          _ => {},
+          _ => {
+            this.hideLoading();  
+          },
           () => {
             this.hideLoading();
           }
