@@ -3,7 +3,7 @@ import { IonicPageModule } from 'ionic-angular';
 
 import { ActionSheet } from '@ionic-native/action-sheet';
 
-import { TimetableProvider } from '../../providers';
+import { IntakeListingProvider, TimetableProvider } from '../../providers';
 import { ClassesPipe } from './classes.pipe';
 import { TheDayPipe } from './theday.pipe';
 import { TimetablePage } from './timetable';
@@ -14,6 +14,6 @@ import { TimetablePage } from './timetable';
     IonicPageModule.forChild(TimetablePage),
   ],
   entryComponents: [TimetablePage],
-  providers: [ActionSheet, TimetableProvider],
+  providers: [ActionSheet, IntakeListingProvider, TimetableProvider],
 })
 export class TimetablePageModule { }
