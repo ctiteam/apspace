@@ -5,8 +5,8 @@ import { ActionSheetController, Content, IonicPage, Platform } from 'ionic-angul
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
 
-import { ExamSchedule, StudentProfile, Role } from '../../interfaces';
-import { SettingsProvider, TimetableProvider, WsApiProvider } from '../../providers';
+import { ExamSchedule, Role , StudentProfile } from '../../interfaces';
+import { SettingsProvider, IntakeListingProvider, WsApiProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -27,9 +27,9 @@ export class ExamSchedulePage {
     public plt: Platform,
     public actionSheet: ActionSheet,
     public actionSheetCtrl: ActionSheetController,
+    private il: IntakeListingProvider,
     private ws: WsApiProvider,
     private settings: SettingsProvider,
-    public tt: TimetableProvider,
 
   ) {}
 
@@ -74,8 +74,8 @@ export class ExamSchedulePage {
   /** Check and update intake on change. */
   changeIntake(intake: string) {
     if (intake !== this.intake) {
-      this.showNoIntakeMessage = false;      
-      this.settings.set('examIntake', this.intake = intake);      
+      this.showNoIntakeMessage = false;
+      this.settings.set('examIntake', this.intake = intake);
       this.doRefresh();
     }
   }
@@ -95,9 +95,6 @@ export class ExamSchedulePage {
       }
       this.doRefresh();
     }
-    this.tt.get().subscribe(tt => {
-      this.intakes = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort();
-    });
   }
 
   doRefresh(refresher?) {
@@ -106,5 +103,8 @@ export class ExamSchedulePage {
     this.exam$ = this.ws.get<ExamSchedule[]>(url, refresher, opt).pipe(
       finalize(() => (refresher && refresher.complete())),
     );
+    this.il.get(Boolean(refresher)).subscribe(ii => {
+      this.intakes = ii.map(i => i.INTAKE_CODE);
+    });
   }
 }

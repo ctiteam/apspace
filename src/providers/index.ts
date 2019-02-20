@@ -11,6 +11,7 @@ export { BusTrackingProvider } from './bus-tracking';
 export { CasTicketProvider } from './cas-ticket';
 export { DataCollectorProvider } from './data-collector';
 export { FeedbackProvider } from './feedback';
+export { IntakeListingProvider } from './intake-listing';
 export { NewsProvider } from './news';
 export { NotificationProvider } from './notification';
 export { SettingsProvider } from './settings';
