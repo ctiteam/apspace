@@ -65,17 +65,17 @@
             <div class="col-8">
               <button *ngIf="slot.status == 'normal'"
                 class="btn btn-lg btn-outline-primary"
-                (click)="openDetailPage(slot.slotid, slot.slotavailibilityid, slot.poststarttime, slot.date)">
+                (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
                 Appointment details
               </button>
               <button *ngIf="slot.status == 'cancelledbylec'"
                 class="btn btn-lg btn-outline-primary"
-                (click)="openDetailPage(slot.slotid, slot.slotavailibilityid, slot.poststarttime, slot.date)">
+                (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
                 View details
               </button>
               <button *ngIf="slot.status == 'cancelledbystu'"
                 class="btn btn-lg btn-outline-primary"
-                (click)="openDetailPage(slot.slotid, slot.slotavailibilityid, slot.poststarttime, slot.date)">
+                (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
                 View details
               </button>
             </div>
