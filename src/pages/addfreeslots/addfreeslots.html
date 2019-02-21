@@ -7,18 +7,11 @@
 <ion-content>
   <ion-card class="firstcard" style="border-left: 0.01rem solid rgb(109, 248, 253);">
     <ion-card-content>
-      <!-- <ion-item *ngIf="!hidden[i]">
-        <ion-label>Date</ion-label>
-        <ion-icon name="calendar" item-end small></ion-icon>
-        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate" [min]="MinDate" [max]="maxDate" [(ngModel)]="freeslots.date"
-          [ngModelOptions]="{standalone: true}"></ion-datetime>
-      </ion-item> -- add one day-->
-
-
+      
       <ion-item *ngIf="!hidden[i]">
         <ion-label>Date</ion-label>
         <ion-icon name="calendar" item-end small></ion-icon>
-        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate" [min]="minDate" [max]="maxDate" [(ngModel)]="freeslots.date"
+        <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate" [min]="MinDate" [max]="maxDate" [(ngModel)]="freeslots.date"
           [ngModelOptions]="{standalone: true}"></ion-datetime>
       </ion-item>
 
