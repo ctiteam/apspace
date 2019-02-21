@@ -60,58 +60,58 @@ export class ConsultationFormPage {
     this.booking.phone = this.settings.get('contactNo');
   }
 
-  // student confirmation
-  async confirmation() {
-    const alert = await this.alertCtrl.create({
-      title: 'Confirm booking',
-      message: 'Are you sure you want to book this consultation hour?',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel',
-        },
-        {
-          text: 'Yes',
-          handler: () => {
-            this.UpcomingConStu.addbooking(this.booking)
-              .subscribe(result => {
-                if (result === true) {
-                  this.conWith = '';
-                  this.reason = '';
-                  this.telnumber = '';
-                  this.emialaddress = '';
-                  this.notes = '';
-                  this.presentLoading();
-                  this.UpcomingConStu.addbooking(this.booking).subscribe(
-                    () => {
-                      this.app.getRootNav().setRoot(TabsPage);
-                      this.app.getRootNav().push(UpcomingstdPage);
-                      this.presentToast();
-                    },
-                  );
-                } else {
-                  const innerAlert = this.alertCtrl.create({
-                    message: 'This slot just booked by a student, please book another slot.',
-                    buttons: [
-                      {
-                        text: 'OK',
-                        handler: () => {
-                          this.app.getRootNav().setRoot(TabsPage);
-                          this.app.getRootNav().push(UpcomingstdPage);
-                          this.settings.set('contactNo', this.booking.phone);
-                        },
-                      },
-                    ],
-                  });
-                  innerAlert.present();
-                }
-              });
+    // student confirmation
+    async confirmation() {
+      const alert = await this.alertCtrl.create({
+        title: 'Confirm booking',
+        message: 'Are you sure you want to book this consultation hour?',
+        buttons: [
+          {
+            text: 'No',
+            role: 'cancel',
           },
-        },
-      ],
-    });
-    await alert.present();
-  }
+          {
+            text: 'Yes',
+            handler: () => {
+              this.UpcomingConStu.addbooking(this.booking)
+                .subscribe(result => {
+                  console.log(result);
+                    this.conWith = '';
+                    this.reason = '';
+                    this.telnumber = '';
+                    this.emialaddress = '';
+                    this.notes = '';
+                    this.presentLoading();
+                },
+                  () => {
+                    const innerAlert = this.alertCtrl.create({
+                      message: 'This slot just booked by a student, please book another slot.',
+                      buttons: [
+                        {
+                          text: 'OK',
+                          handler: () => {
+                            this.app.getRootNav().setRoot(TabsPage);
+                            this.app.getRootNav().push(UpcomingstdPage);
+                            this.settings.set('contactNo', this.booking.phone);
+                          },
+                        },
+                      ],
+                    });
+                    innerAlert.present();
+                  },
+                  () => {
+                    console.log("booked")
+                    this.app.getRootNav().setRoot(TabsPage);
+                    this.app.getRootNav().push(UpcomingstdPage);
+                    this.presentToast();
+                  }
+                );
+            },
+          },
+        ],
+      });
+      await alert.present();
+    }
 
   presentToast() {
     const toast = this.toastCtrl.create({
