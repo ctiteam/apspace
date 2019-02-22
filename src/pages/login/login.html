@@ -1,38 +1,54 @@
 <ion-content padding>
-  <img class="apu-logo" src="assets/img/login.png" />
-  <h1 padding>WELCOME TO <br /><span>APSpace</span></h1>
-  <form (ngSubmit)="login()">
-    <ion-item no-padding>
-      <ion-icon color="text-color" name="contact" item-left></ion-icon>
-      <ion-input
-        #autofocus
-        type="email"
-        placeholder='"APKey"'
-        [(ngModel)]="username"
-        [ngModelOptions]="{ standalone: true }"
-      ></ion-input>
-    </ion-item>
-    <ion-item no-padding margin-top>
-      <ion-icon color="text-color" name="lock" item-left></ion-icon>
-      <ion-input
-        [type]="getPasswordVisibility()"
-        placeholder="Password"
-        [(ngModel)]="password"
-        [ngModelOptions]="{ standalone: true }"
-      ></ion-input>
-      <button
-        ion-button
-        item-right
-        clear
-        type="button"
-        (click)="showPasswordText = !showPasswordText"
-      >
-        <ion-icon name="eye"></ion-icon>
-      </button>
-    </ion-item>
-    <button ion-button block type="submit" [disabled]="showLoadingSpinner" color="primary">
-      <span *ngIf="!showLoadingSpinner">Log in</span>
-      <span *ngIf="showLoadingSpinner">Loading...</span>
-    </button>
-  </form>
+  <div class="row d-flex justify-content-center">
+    <div class="col-sm-6 col-md-5 p-4">
+      <img class="apu-logo" src="assets/img/login.png" />
+      <h1 padding>
+        WELCOME TO <br class="d-block d-sm-none" /><span>APSpace</span>
+      </h1>
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-8">
+          <form (ngSubmit)="login()">
+            <ion-item no-padding>
+              <ion-icon color="text-color" name="contact" item-left></ion-icon>
+              <ion-input
+                #autofocus
+                type="email"
+                placeholder='"APKey"'
+                [(ngModel)]="username"
+                [ngModelOptions]="{ standalone: true }"
+              ></ion-input>
+            </ion-item>
+            <ion-item no-padding margin-top>
+              <ion-icon color="text-color" name="lock" item-left></ion-icon>
+              <ion-input
+                [type]="getPasswordVisibility()"
+                placeholder="Password"
+                [(ngModel)]="password"
+                [ngModelOptions]="{ standalone: true }"
+              ></ion-input>
+              <button
+                ion-button
+                item-right
+                clear
+                type="button"
+                (click)="showPasswordText = !showPasswordText"
+              >
+                <ion-icon name="eye"></ion-icon>
+              </button>
+            </ion-item>
+            <button
+              ion-button
+              block
+              type="submit"
+              [disabled]="showLoadingSpinner"
+              color="primary"
+            >
+              <span *ngIf="!showLoadingSpinner">Log in</span>
+              <span *ngIf="showLoadingSpinner">Loading...</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>

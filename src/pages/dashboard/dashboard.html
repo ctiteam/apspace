@@ -9,121 +9,161 @@
     <div class="main-content">
       <!-- START SECTIONS (1 to 10)'s CONTAINER -->
       <div class="container">
-        <!-- START HEADER (GREETING MESSAGE SECTION) -->
-        <div class="profile-section profile row pr-3">
-          <div class="col-9 info pr-0">
-            <ng-template let-profile [ngIf]="profile$ | async" [ngIfElse]="loadingGreetingMessage">
-              <p class="h3 username">
-                {{ greetingMessage }},
-                <span class="font-weight-bold" (click)="openPage('ProfilePage')">
-                  {{ capitalizeString(profile?.NAME.split(" ")[0]) }}</span>!
-              </p>
-              <p class="h4 greeting-message">Nice to see you again.</p>
-            </ng-template>
-            <ng-template #loadingGreetingMessage>
-                  <skeleton-item height="21px" width="100%"></skeleton-item>
-                  <skeleton-item height="18px" width="70%"></skeleton-item>
-            </ng-template>
-          </div>
-          <div class="col-3 notification">
-            <div class="notification-wrapper float-right text-center" (click)="openNotification()">
-              <ion-icon [class.animate-bell]="notificationNumber" name="notifications"></ion-icon>
-              <ion-badge item-right *ngIf="notificationNumber" color="danger">{{
-                notificationNumber
-              }}</ion-badge>
+        <!-- START ROW -->
+        <div class="row">
+          <!-- START HEADER (GREETING MESSAGE SECTION) -->
+          <div class="col-12 profile-section profile row pr-3">
+            <div class="col-9 col-md-10 col-lg-11 info pr-0">
+              <ng-template
+                let-profile
+                [ngIf]="profile$ | async"
+                [ngIfElse]="loadingGreetingMessage"
+              >
+                <p class="h3 username">
+                  {{ greetingMessage }},
+                  <span
+                    class="font-weight-bold"
+                    (click)="openPage('ProfilePage')"
+                  >
+                    {{ capitalizeString(profile?.NAME.split(" ")[0]) }}</span
+                  >!
+                </p>
+                <p class="h4 greeting-message">Nice to see you again.</p>
+              </ng-template>
+              <ng-template #loadingGreetingMessage>
+                <skeleton-item height="21px" width="100%"></skeleton-item>
+                <skeleton-item height="18px" width="70%"></skeleton-item>
+              </ng-template>
+            </div>
+            <div class="col-3 col-md-2 col-lg-1 notification">
+              <div
+                class="notification-wrapper float-right text-center"
+                (click)="openNotification()"
+              >
+                <ion-icon
+                  [class.animate-bell]="notificationNumber"
+                  name="notifications"
+                ></ion-icon>
+                <ion-badge
+                  item-right
+                  *ngIf="notificationNumber"
+                  color="danger"
+                  >{{ notificationNumber }}</ion-badge
+                >
+              </div>
             </div>
           </div>
-        </div>
-        <!-- END HEADER (GREETING MESSAGE SECTION) -->
+          <!-- END HEADER (GREETING MESSAGE SECTION) -->
 
-        <!-- START SECTION 1: QUICK ACCESS MENU -->
-        <div class="quick-access">
-          <div class="container special-conainer">
-            <div class="row">
-              <!-- START QUICK ACCESS MENU ITEM 1 -->
-              <div class="col-4 scroll-item">
-                <div class="quick-access-item" (click)="openPage('AttendancePage')">
-                  <ion-icon name="alarm"></ion-icon>
-                  <div class="quick-access-item-title">
-                    Overall <span class="second-line">Attendance</span>
+          <!-- START SECTION 1: QUICK ACCESS MENU -->
+          <div class="col-12 quick-access">
+            <div class="container special-conainer">
+              <div class="row">
+                <!-- START QUICK ACCESS MENU ITEM 1 -->
+                <div class="col-4 scroll-item">
+                  <div
+                    class="quick-access-item"
+                    (click)="openPage('AttendancePage')"
+                  >
+                    <ion-icon name="alarm"></ion-icon>
+                    <div class="quick-access-item-title">
+                      Overall <span class="second-line">Attendance</span>
+                    </div>
+                    <div
+                      class="quick-access-item-subtitle"
+                      *ngIf="
+                        (attendancePercent$ | async) as ap;
+                        else loadingOverallAttendance
+                      "
+                    >
+                      <div *ngIf="ap != -1">
+                        {{ ap | percent }}
+                      </div>
+                      <div *ngIf="ap === -1">
+                        --
+                      </div>
+                    </div>
+                    <ng-template #loadingOverallAttendance>
+                      <div class="quick-access-item-subtitle">
+                        <loading-spinner></loading-spinner>
+                      </div>
+                    </ng-template>
                   </div>
-                  <div class="quick-access-item-subtitle"
-                    *ngIf="(attendancePercent$ | async) as ap; else loadingOverallAttendance">
-                    <div *ngIf="ap != -1">
-                      {{ ap | percent }}
-                    </div>
-                    <div *ngIf="ap === -1">
-                      --
-                    </div>
-                  </div>
-                  <ng-template #loadingOverallAttendance>
-                    <div class="quick-access-item-subtitle">
-                      <loading-spinner></loading-spinner>
-                    </div>
-                  </ng-template>
                 </div>
-              </div>
-              <!-- END QUICK ACCESS MENU ITEM 1 -->
+                <!-- END QUICK ACCESS MENU ITEM 1 -->
 
-              <!-- START QUICK ACCESS MENU ITEM 2 -->
-              <div class="col-4 scroll-item">
-                <div class="quick-access-item" (click)="openPage('ApcardPage')">
-                  <ion-icon name="card"></ion-icon>
-                  <div class="quick-access-item-title">
-                    APCard <span class="second-line">Balance</span>
-                  </div>
-                  <div class="quick-access-item-subtitle"
-                    *ngIf="(transaction$ | async) as balance; else loadingApcardBalance">
-                    {{ balance | currency: "MYR":"RM" }}
-                  </div>
-                  <ng-template #loadingApcardBalance>
-                    <div class="quick-access-item-subtitle">
-                      <loading-spinner></loading-spinner>
+                <!-- START QUICK ACCESS MENU ITEM 2 -->
+                <div class="col-4 scroll-item">
+                  <div
+                    class="quick-access-item"
+                    (click)="openPage('ApcardPage')"
+                  >
+                    <ion-icon name="card"></ion-icon>
+                    <div class="quick-access-item-title">
+                      APCard <span class="second-line">Balance</span>
                     </div>
-                  </ng-template>
+                    <div
+                      class="quick-access-item-subtitle"
+                      *ngIf="
+                        (transaction$ | async) as balance;
+                        else loadingApcardBalance
+                      "
+                    >
+                      {{ balance | currency: "MYR":"RM" }}
+                    </div>
+                    <ng-template #loadingApcardBalance>
+                      <div class="quick-access-item-subtitle">
+                        <loading-spinner></loading-spinner>
+                      </div>
+                    </ng-template>
+                  </div>
                 </div>
-              </div>
-              <!-- END QUICK ACCESS MENU ITEM 2 -->
+                <!-- END QUICK ACCESS MENU ITEM 2 -->
 
-              <!-- START QUICK ACCESS MENU ITEM 3 -->
-              <div class="col-4 scroll-item">
-                <div class="quick-access-item" (click)="openPage('FeesPage')">
-                  <ion-icon name="logo-usd"></ion-icon>
-                  <div class="quick-access-item-title">
-                    Total <span class="second-line">Overdue</span>
-                  </div>
-                  <div class="quick-access-item-subtitle"
-                    *ngIf="(overdue$ | async) as overdue; else loadingTotalOverDue">
-                    {{
-                      overdue[0]?.TOTAL_OVERDUE | currency: "MYR":"RM":"1.0-0"
-                    }}
-                  </div>
-                  <ng-template #loadingTotalOverDue>
-                    <div class="quick-access-item-subtitle">
-                      <loading-spinner></loading-spinner>
+                <!-- START QUICK ACCESS MENU ITEM 3 -->
+                <div class="col-4 scroll-item">
+                  <div class="quick-access-item" (click)="openPage('FeesPage')">
+                    <ion-icon name="logo-usd"></ion-icon>
+                    <div class="quick-access-item-title">
+                      Total <span class="second-line">Overdue</span>
                     </div>
-                  </ng-template>
+                    <div
+                      class="quick-access-item-subtitle"
+                      *ngIf="
+                        (overdue$ | async) as overdue;
+                        else loadingTotalOverDue
+                      "
+                    >
+                      {{
+                        overdue[0]?.TOTAL_OVERDUE | currency: "MYR":"RM":"1.0-0"
+                      }}
+                    </div>
+                    <ng-template #loadingTotalOverDue>
+                      <div class="quick-access-item-subtitle">
+                        <loading-spinner></loading-spinner>
+                      </div>
+                    </ng-template>
+                  </div>
                 </div>
+                <!-- END QUICK ACCESS MENU ITEM 3 -->
               </div>
-              <!-- END QUICK ACCESS MENU ITEM 3 -->
             </div>
           </div>
-        </div>
-        <!-- END SECTION 1: QUICK ACCESS MENU -->
-        <!-- ********************************************* -->
-        <!-- START SECTION 2: TODAY'S CLASSES -->
-        <!-- <div class="main-section section todays-classes-section"> -->
-        <!-- START SECTION 2 HEADER -->
-        <!-- <div class="section-header">
+          <!-- END SECTION 1: QUICK ACCESS MENU -->
+          <!-- ********************************************* -->
+          <!-- START SECTION 2: TODAY'S CLASSES -->
+          <!-- <div class="main-section section todays-classes-section"> -->
+          <!-- START SECTION 2 HEADER -->
+          <!-- <div class="section-header">
             <div class="section-header-icon">
               <ion-icon item-left name="calendar"></ion-icon>
             </div>
             <div class="section-header-text"><h3>Upcoming Classes</h3></div>
           </div> -->
-        <!-- END SECTION 2 HEADER -->
+          <!-- END SECTION 2 HEADER -->
 
-        <!-- START SECTION 2 BODY -->
-        <!-- <div class="section-body">
+          <!-- START SECTION 2 BODY -->
+          <!-- <div class="section-body">
             <ng-template
               let-classes
               [ngIf]="upcomingClass$ | async"
@@ -191,139 +231,160 @@
               </ion-card>
             </ng-template>
           </div> -->
-        <!-- END SECTION 2 BODY -->
-        <!-- </div> -->
-        <!-- END SECTION 2: TODAYS' CLASSES -->
-        <!-- ********************************************* -->
-        <!-- START SECTION 3: UPCOMING HOLIDAY -->
-        <ng-template class="main-section" let-holiday [ngIf]="nextHoliday$ | async" [ngIfElse]="loadingHoliday">
-        <div class="section upcoming-holiday-section">
-          <!-- START SECTION 3 HEADER -->
-          <div class="section-header">
-            <div class="section-header-icon">
-              <ion-icon item-left name="bicycle"></ion-icon>
-            </div>
-            <div class="section-header-text">
-              <h3>Upcoming Holiday</h3>
-            </div>
-          </div>
-          <!-- END SECTION 3 HEADER -->
-
-          <!-- START SECTION 3 BODY -->
-          <div class="section-body">
-              <ng-template [ngIf]="holiday.holiday_name" [ngIfElse]="noHoliday">
-                <div class="section-body-header">
-                  <h4 class="col-12">{{ holiday.holiday_name }}</h4>
+          <!-- END SECTION 2 BODY -->
+          <!-- </div> -->
+          <!-- END SECTION 2: TODAYS' CLASSES -->
+          <!-- ********************************************* -->
+          <!-- START SECTION 3: UPCOMING HOLIDAY -->
+          <ng-template
+            class="main-section"
+            let-holiday
+            [ngIf]="nextHoliday$ | async"
+            [ngIfElse]="loadingHoliday"
+          >
+          <div class="col-12 col-md-6">
+            <div class="section upcoming-holiday-section">
+              
+              <!-- START SECTION 3 HEADER -->
+              <div class="section-header">
+                <div class="section-header-icon">
+                  <ion-icon item-left name="bicycle"></ion-icon>
                 </div>
+                <div class="section-header-text">
+                  <h3>Upcoming Holiday</h3>
+                </div>
+              </div>
+              <!-- END SECTION 3 HEADER -->
 
-                <div class="section-body-content row">
-                  <div class="container">
-                    <div class="content-item-with-icon col-12 row">
-                      <div class="col-2 text-right">
-                        <ion-icon item-left name="time"></ion-icon>
-                      </div>
-                      <div class="col-10 item-info-text">
-                        <p ion-text>
-                          {{ holiday.holiday_start_date | date: "mediumDate" }}
-                        </p>
-                      </div>
-                    </div>
+              <!-- START SECTION 3 BODY -->
+              <div class="section-body">
+                <ng-template
+                  [ngIf]="holiday.holiday_name"
+                  [ngIfElse]="noHoliday"
+                >
+                  <div class="section-body-header">
+                    <h4 class="col-12">{{ holiday.holiday_name }}</h4>
+                  </div>
 
-                    <div class="content-item-with-icon col-12 row">
-                      <div>
-                        <p ion-text>{{ holiday.holiday_description }}</p>
+                  <div class="section-body-content row">
+                    <div class="container">
+                      <div class="content-item-with-icon col-12 row">
+                        <div class="col-2 text-right">
+                          <ion-icon item-left name="time"></ion-icon>
+                        </div>
+                        <div class="col-10 item-info-text">
+                          <p ion-text>
+                            {{
+                              holiday.holiday_start_date | date: "mediumDate"
+                            }}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="content-item-with-icon col-12 row">
+                        <div>
+                          <p ion-text>{{ holiday.holiday_description }}</p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </ng-template>
-              <ng-template #noHoliday> There is no holiday </ng-template>
-          </div>
-          <!-- END SECTION 3 BODY -->
-        </div>
-      </ng-template>
-      <ng-template #loadingHoliday>
-        <ion-card>
-          <ion-item no-lines>
-            <skeleton-item height="137px" width="100%"></skeleton-item>
-          </ion-item>
-        </ion-card>
-      </ng-template>
-        <!-- END SECTION 3: UPCOMING HOLIDAY -->
-        <!-- ********************************************* -->
-        <!-- START SECTION 4: UPCOMING EXAM -->
-        <ng-template class="main-section" let-exams [ngIf]="exam$ | async | nextExams" [ngIfElse]="loadingExams">
-          <div class="section upcoming-exam-section" *ngIf="exams && exams.length > 0">
-            <!-- START SECTION 4 HEADER -->
-            <div class="section-header">
-              <div class="section-header-icon">
-                <ion-icon item-left name="book"></ion-icon>
+                </ng-template>
+                <ng-template #noHoliday> There is no holiday </ng-template>
               </div>
-              <div class="section-header-text">
-                <h3>Upcoming Exam</h3>
+              <!-- END SECTION 3 BODY -->
               </div>
             </div>
-            <!-- END SECTION 4 HEADER -->
-
-            <!-- START SECTION 4 BODY -->
-            <div class="section-body">
-              <div *ngFor="let exam of exams">
-                <div class="section-body-header">
-                  <h4 class="col-12">{{ exam.module }}</h4>
+          </ng-template>
+          <ng-template #loadingHoliday>
+            <ion-card>
+              <ion-item no-lines>
+                <skeleton-item height="137px" width="100%"></skeleton-item>
+              </ion-item>
+            </ion-card>
+          </ng-template>
+          <!-- END SECTION 3: UPCOMING HOLIDAY -->
+          <!-- ********************************************* -->
+          <!-- START SECTION 4: UPCOMING EXAM -->
+          <ng-template
+            class="main-section"
+            let-exams
+            [ngIf]="exam$ | async | nextExams"
+            [ngIfElse]="loadingExams"
+          >
+          <div class="col-12 col-md-6" *ngIf="exams && exams.length > 0">
+              <div class="section upcoming-exam-section">
+              <!-- START SECTION 4 HEADER -->
+              <div class="section-header">
+                <div class="section-header-icon">
+                  <ion-icon item-left name="book"></ion-icon>
                 </div>
-                <div class="section-body-content row">
-                  <div class="container">
-                    <div class="content-item-with-icon col-12 row">
-                      <div class="col-2 text-right">
-                        <ion-icon item-left name="time"></ion-icon>
-                      </div>
-                      <div class="col-10 item-info-text">
-                        <p ion-text>
-                          {{ exam.since | date: "mediumDate" }} ({{
+                <div class="section-header-text">
+                  <h3>Upcoming Exam</h3>
+                </div>
+              </div>
+              <!-- END SECTION 4 HEADER -->
+
+              <!-- START SECTION 4 BODY -->
+              <div class="section-body">
+                <div *ngFor="let exam of exams">
+                  <div class="section-body-header">
+                    <h4 class="col-12">{{ exam.module }}</h4>
+                  </div>
+                  <div class="section-body-content row">
+                    <div class="container">
+                      <div class="content-item-with-icon col-12 row">
+                        <div class="col-2 text-right">
+                          <ion-icon item-left name="time"></ion-icon>
+                        </div>
+                        <div class="col-10 item-info-text">
+                          <p ion-text>
+                            {{ exam.since | date: "mediumDate" }} ({{
                               exam.since | date: "shortTime"
                             }}
-                          - {{ exam.until | date: "shortTime" }})
-                        </p>
+                            - {{ exam.until | date: "shortTime" }})
+                          </p>
+                        </div>
                       </div>
-                    </div>
 
-                    <div class="content-item-with-icon col-12 row">
-                      <div class="col-2 text-right">
-                        <ion-icon item-left name="locate"></ion-icon>
+                      <div class="content-item-with-icon col-12 row">
+                        <div class="col-2 text-right">
+                          <ion-icon item-left name="locate"></ion-icon>
+                        </div>
+                        <div class="col-10 item-info-text">
+                          <p ion-text>APIIT @ TPM, Exam Hall</p>
+                        </div>
                       </div>
-                      <div class="col-10 item-info-text">
-                        <p ion-text>APIIT @ TPM, Exam Hall</p>
-                      </div>
-                    </div>
-                    <div class="content-item-without-icon col-12 row">
-                      <div>
-                        <p ion-text>
-                          Dockets will be released on
-                          <b>{{ exam.docketsDue | date }}</b>, and the results will be published on
-                          <b>{{ exam.resultDate | date }}.</b>
-                        </p>
+                      <div class="content-item-without-icon col-12 row">
+                        <div>
+                          <p ion-text>
+                            Dockets will be released on
+                            <b>{{ exam.docketsDue | date }}</b
+                            >, and the results will be published on
+                            <b>{{ exam.resultDate | date }}.</b>
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <!-- END SECTION 4 BODY -->
             </div>
-            <!-- END SECTION 4 BODY -->
           </div>
-        </ng-template>
-        <ng-template #loadingExams>
+          </ng-template>
+          <ng-template #loadingExams>
             <ion-card>
-                <ion-item no-lines>
-                  <skeleton-item height="137px" width="100%"></skeleton-item>
-                </ion-item>
-              </ion-card>
-        </ng-template>
-        <!-- END SECTION 4: UPCOMING EXAM -->
-        <!-- ********************************************* -->
-        <!-- START SECTION 5: CONSULTATION -->
-        <!-- <div class="main-section section consultation-appointment-section"> -->
-        <!-- START SECTION 5 HEADER -->
-        <!-- <div class="section-header">
+              <ion-item no-lines>
+                <skeleton-item height="137px" width="100%"></skeleton-item>
+              </ion-item>
+            </ion-card>
+          </ng-template>
+          <!-- END SECTION 4: UPCOMING EXAM -->
+          <!-- ********************************************* -->
+          <!-- START SECTION 5: CONSULTATION -->
+          <!-- <div class="main-section section consultation-appointment-section"> -->
+          <!-- START SECTION 5 HEADER -->
+          <!-- <div class="section-header">
             <div class="section-header-icon">
               <ion-icon item-left name="briefcase"></ion-icon>
             </div>
@@ -331,10 +392,10 @@
               <h3>Consultation Appointment</h3>
             </div>
           </div> -->
-        <!-- END SECTION 5 HEADER -->
+          <!-- END SECTION 5 HEADER -->
 
-        <!-- START SECTION 5 BODY -->
-        <!-- <div class="section-body">
+          <!-- START SECTION 5 BODY -->
+          <!-- <div class="section-body">
             <div class="section-body-header">
               <h4 class="col-12">HALIMATON BITI YOUSOF</h4>
             </div>
@@ -369,23 +430,23 @@
               </div>
             </div>
           </div> -->
-        <!-- END SECTION 5 BODY -->
-        <!-- </div> -->
-        <!-- END SECTION 5: CONSULTATION -->
-        <!-- ********************************************* -->
-        <!-- START SECTION 6: FYP MEETING -->
-        <!-- <div class="main-section section fyp-meetings-section"> -->
-        <!-- START SECTION 6 HEADER -->
-        <!-- <div class="section-header">
+          <!-- END SECTION 5 BODY -->
+          <!-- </div> -->
+          <!-- END SECTION 5: CONSULTATION -->
+          <!-- ********************************************* -->
+          <!-- START SECTION 6: FYP MEETING -->
+          <!-- <div class="main-section section fyp-meetings-section"> -->
+          <!-- START SECTION 6 HEADER -->
+          <!-- <div class="section-header">
             <div class="section-header-icon">
               <ion-icon item-left name="flask"></ion-icon>
             </div>
             <div class="section-header-text"><h3>FYP Meetings</h3></div>
           </div> -->
-        <!-- END SECTION 6 HEADER -->
+          <!-- END SECTION 6 HEADER -->
 
-        <!-- START SECTION 6 BODY -->
-        <!-- <div class="section-body">
+          <!-- START SECTION 6 BODY -->
+          <!-- <div class="section-body">
             <div class="section-body-header">
               <h4 class="col-12">12 Dec, 2018 | 12:30 PM</h4>
             </div>
@@ -419,23 +480,23 @@
               </div>
             </div>
           </div> -->
-        <!-- END SECTION 6 BODY -->
-        <!-- </div> -->
-        <!-- END SECTION 6: FYP MEETING -->
-        <!-- ********************************************* -->
-        <!-- START SECTION 7: BUS ROUTE -->
-        <!-- <div class="main-section section preferred-bus-route-section"> -->
-        <!-- START SECTION 7 HEADER -->
-        <!-- <div class="section-header">
+          <!-- END SECTION 6 BODY -->
+          <!-- </div> -->
+          <!-- END SECTION 6: FYP MEETING -->
+          <!-- ********************************************* -->
+          <!-- START SECTION 7: BUS ROUTE -->
+          <!-- <div class="main-section section preferred-bus-route-section"> -->
+          <!-- START SECTION 7 HEADER -->
+          <!-- <div class="section-header">
             <div class="section-header-icon">
               <ion-icon item-left name="bus"></ion-icon>
             </div>
             <div class="section-header-text"><h3>Preferred Bus Route</h3></div>
           </div> -->
-        <!-- END SECTION 7 HEADER -->
+          <!-- END SECTION 7 HEADER -->
 
-        <!-- START SECTION 7 BODY -->
-        <!-- <div class="section-body">
+          <!-- START SECTION 7 BODY -->
+          <!-- <div class="section-body">
             <div class="section-body-header">
               <h4 class="col-12">APU - Endah Promenade</h4>
             </div>
@@ -484,23 +545,23 @@
               </div>
             </div>
           </div> -->
-        <!-- END SECTION 7 BODY -->
-        <!-- </div> -->
-        <!-- END SECTION 7: BUS ROUTE -->
-        <!-- ********************************************* -->
-        <!-- START SECTION 8: UPCOMING EVENT -->
-        <!-- <div class="main-section section upcoming-event-section"> -->
-        <!-- START SECTION 8 HEADER -->
-        <!-- <div class="section-header">
+          <!-- END SECTION 7 BODY -->
+          <!-- </div> -->
+          <!-- END SECTION 7: BUS ROUTE -->
+          <!-- ********************************************* -->
+          <!-- START SECTION 8: UPCOMING EVENT -->
+          <!-- <div class="main-section section upcoming-event-section"> -->
+          <!-- START SECTION 8 HEADER -->
+          <!-- <div class="section-header">
             <div class="section-header-icon">
               <ion-icon item-left name="bonfire"></ion-icon>
             </div>
             <div class="section-header-text"><h3>Upcoming Event</h3></div>
           </div> -->
-        <!-- END SECTION 3 HEADER -->
+          <!-- END SECTION 3 HEADER -->
 
-        <!-- START SECTION 3 BODY -->
-        <!-- <div class="section-body">
+          <!-- START SECTION 3 BODY -->
+          <!-- <div class="section-body">
             <div class="section-body-header">
               <h4 class="col-12">Football Competation Event</h4>
             </div>
@@ -536,235 +597,300 @@
               </div>
             </div>
           </div> -->
-        <!-- END SECTION 8 BODY -->
-        <!-- </div> -->
-        <!-- END SECTION 8: UPCOMING EVENTS -->
-        <!-- ********************************************* -->
-        <!-- START SECTION 9: FINANCE -->
-        <ng-template class="main-section" let-outstanding [ngIf]="overdue$ | async" [ngIfElse]="loadingFinancials">
-        <div class="section financials-section">
-          <!-- START SECTION 9 HEADER -->
-          <div class="section-header">
-            <div class="section-header-icon">
-              <ion-icon item-left name="logo-usd"></ion-icon>
-            </div>
-            <div class="section-header-text">
-              <h3>Financials</h3>
-            </div>
-          </div>
-          <!-- END SECTION 9 HEADER -->
+          <!-- END SECTION 8 BODY -->
+          <!-- </div> -->
+          <!-- END SECTION 8: UPCOMING EVENTS -->
+          <!-- ********************************************* -->
+          <!-- START SECTION 9: FINANCE -->
+          <ng-template
+            class="main-section"
+            let-outstanding
+            [ngIf]="overdue$ | async"
+            [ngIfElse]="loadingFinancials"
+          >
+          <div class="col-12 col-md-6">
+              <div class="section financials-section">
+              <!-- START SECTION 9 HEADER -->
+              <div class="section-header">
+                <div class="section-header-icon">
+                  <ion-icon item-left name="logo-usd"></ion-icon>
+                </div>
+                <div class="section-header-text">
+                  <h3>Financials</h3>
+                </div>
+              </div>
+              <!-- END SECTION 9 HEADER -->
 
-          <!-- START SECTION 9 BODY -->
-          <div class="section-body">
-              <div class="section-body-content row">
-                <div class="container">
-                  <div class="content-item-with-icon col-12 row">
-                    <div class="progress">
-                      <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar"
-                        [style.width]="
-                          outstanding[0].TOTAL_PAID /
-                            outstanding[0].TOTAL_PAYABLE | percent: '1.0-5'
-                        " [attr.aria-valuenow]="outstanding[0].TOTAL_PAID" aria-valuemin="0"
-                        [attr.aria-valuemax]="outstanding[0].TOTAL_PAYABLE">
-                        <strong>
-                          {{
+              <!-- START SECTION 9 BODY -->
+              <div class="section-body">
+                <div class="section-body-content row">
+                  <div class="container">
+                    <div class="content-item-with-icon col-12 row">
+                      <div class="progress">
+                        <div
+                          class="progress-bar progress-bar-striped bg-success progress-bar-animated"
+                          role="progressbar"
+                          [style.width]="
                             outstanding[0].TOTAL_PAID /
-                              outstanding[0].TOTAL_PAYABLE | percent: "1.0-1"
-                          }}
-                        </strong>
+                              outstanding[0].TOTAL_PAYABLE | percent: '1.0-5'
+                          "
+                          [attr.aria-valuenow]="outstanding[0].TOTAL_PAID"
+                          aria-valuemin="0"
+                          [attr.aria-valuemax]="outstanding[0].TOTAL_PAYABLE"
+                        >
+                          <strong>
+                            {{
+                              outstanding[0].TOTAL_PAID /
+                                outstanding[0].TOTAL_PAYABLE | percent: "1.0-1"
+                            }}
+                          </strong>
+                        </div>
+                        <div
+                          class="prprogress-bar progress-bar-striped bg-danger progress-bar-animated"
+                          role="progressbar"
+                          [style.width]="
+                            outstanding[0].TOTAL_OUTSTANDING /
+                              outstanding[0].TOTAL_PAYABLE | percent: '1.0-5'
+                          "
+                          [attr.aria-valuenow]="
+                            outstanding[0].TOTAL_OUTSTANDING
+                          "
+                          aria-valuemin="0"
+                          [attr.aria-valuemax]="outstanding[0].TOTAL_PAYABLE"
+                        ></div>
                       </div>
-                      <div class="prprogress-bar progress-bar-striped bg-danger progress-bar-animated"
-                        role="progressbar" [style.width]="
-                          outstanding[0].TOTAL_OUTSTANDING /
-                            outstanding[0].TOTAL_PAYABLE | percent: '1.0-5'
-                        " [attr.aria-valuenow]="outstanding[0].TOTAL_OUTSTANDING" aria-valuemin="0"
-                        [attr.aria-valuemax]="outstanding[0].TOTAL_PAYABLE"></div>
+                    </div>
+                    <div class="col-12 row content-item-with-icon">
+                      <div class="bar-left-info col-6 text-left no-padding">
+                        {{ outstanding[0].TOTAL_PAID | currency: "MYR":"RM" }}
+                      </div>
+                      <div class="bar-right-info col-6 text-right no-padding">
+                        {{
+                          outstanding[0].TOTAL_OUTSTANDING
+                            | currency: "MYR":"RM"
+                        }}
+                      </div>
                     </div>
                   </div>
-                  <div class="col-12 row content-item-with-icon">
-                    <div class="bar-left-info col-6 text-left no-padding">
-                      {{ outstanding[0].TOTAL_PAID | currency: "MYR":"RM" }}
+                </div>
+                <div class="section-body-header">
+                  <h4 class="col-12">
+                    Total Payable:
+                    <span>{{
+                      outstanding[0].TOTAL_PAYABLE | currency: "MYR":"RM"
+                    }}</span>
+                  </h4>
+                </div>
+
+                <div class="section-body-header">
+                  <h4 class="col-12">
+                    Total Paid:
+                    <span>{{
+                      outstanding[0].TOTAL_PAID | currency: "MYR":"RM"
+                    }}</span>
+                  </h4>
+                </div>
+
+                <div class="section-body-header">
+                  <h4 class="col-12">
+                    Total Outstanding:
+                    <span>{{
+                      outstanding[0].TOTAL_OUTSTANDING | currency: "MYR":"RM"
+                    }}</span>
+                  </h4>
+                </div>
+
+                <div class="section-body-header">
+                  <h4 class="col-12">
+                    Total Overdue:
+                    <span>{{
+                      outstanding[0].TOTAL_OVERDUE | currency: "MYR":"RM"
+                    }}</span>
+                  </h4>
+                </div>
+
+                <div class="section-body-header">
+                  <h4 class="col-12">
+                    Fine:
+                    <span>{{
+                      outstanding[0].FINE | currency: "MYR":"RM"
+                    }}</span>
+                  </h4>
+                </div>
+              </div>
+              <!-- END SECTION 9 BODY -->
+            </div>
+          </div>
+          </ng-template>
+          <ng-template #loadingFinancials>
+            <ion-card>
+              <ion-item no-lines>
+                <skeleton-item height="137px" width="100%"></skeleton-item>
+              </ion-item>
+            </ion-card>
+          </ng-template>
+          <!-- END SECTION 9: FINANCE -->
+          <!-- ********************************************* -->
+          <!-- START SECTION 10: ATTENDANCE -->
+          <ng-template
+            class="main-section"
+            let-attendance
+            [ngIf]="attendance$ | async"
+            [ngIfElse]="loadingAttendance"
+          >
+          <div class="col-12 col-md-6" *ngIf="attendance.length > 0">
+            <div class="section low-attendance-section">
+              <!-- START SECTION 10 HEADER -->
+              <div class="section-header">
+                <div class="section-header-icon">
+                  <ion-icon item-left name="alarm"></ion-icon>
+                </div>
+                <div class="section-header-text">
+                  <h3>Low Attendance</h3>
+                </div>
+              </div>
+              <!-- END SECTION 10 HEADER -->
+
+              <!-- START SECTION 10 BODY -->
+
+              <div class="section-body">
+                <div class="row low-attendance-div">
+                  <div
+                    class=" col-12 low-attendance-details"
+                    *ngFor="let attendance of attendance"
+                  >
+                    <div class="section-body-header">
+                      <h4
+                        class="col-12"
+                        style="padding-bottom: 5px !important;margin-bottom: 0 !important"
+                      >
+                        {{ attendance.MODULE_ATTENDANCE }}
+                      </h4>
                     </div>
-                    <div class="bar-right-info col-6 text-right no-padding">
-                      {{
-                        outstanding[0].TOTAL_OUTSTANDING | currency: "MYR":"RM"
-                      }}
+                    <div class="attendance-chart col-12">
+                      <div class="progress" style="height: 20px;">
+                        <div
+                          class="progress-bar progress-bar-striped bg-success progress-bar-animated"
+                          role="progressbar"
+                          [style.width]="attendance.PERCENTAGE + '%'"
+                          aria-valuenow="attendance.PERCENTAGE"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        >
+                          <strong>{{ attendance.PERCENTAGE + "%" }}</strong>
+                        </div>
+                        <div
+                          class="progress-bar progress-bar-striped bg-danger progress-bar-animated"
+                          role="progressbar"
+                          [style.width]="100 - attendance.PERCENTAGE + '%'"
+                          aria-valuenow="100 - attendance.PERCENTAGE"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        ></div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="section-body-header">
-                <h4 class="col-12">
-                  Total Payable:
-                  <span>{{
-                    outstanding[0].TOTAL_PAYABLE | currency: "MYR":"RM"
-                  }}</span>
-                </h4>
-              </div>
-
-              <div class="section-body-header">
-                <h4 class="col-12">
-                  Total Paid:
-                  <span>{{
-                    outstanding[0].TOTAL_PAID | currency: "MYR":"RM"
-                  }}</span>
-                </h4>
-              </div>
-
-              <div class="section-body-header">
-                <h4 class="col-12">
-                  Total Outstanding:
-                  <span>{{
-                    outstanding[0].TOTAL_OUTSTANDING | currency: "MYR":"RM"
-                  }}</span>
-                </h4>
-              </div>
-
-              <div class="section-body-header">
-                <h4 class="col-12">
-                  Total Overdue:
-                  <span>{{
-                    outstanding[0].TOTAL_OVERDUE | currency: "MYR":"RM"
-                  }}</span>
-                </h4>
-              </div>
-
-              <div class="section-body-header">
-                <h4 class="col-12">
-                  Fine:
-                  <span>{{ outstanding[0].FINE | currency: "MYR":"RM" }}</span>
-                </h4>
-              </div>
+              <!-- END SECTION 10 BODY -->
             </div>
-            <!-- END SECTION 9 BODY -->
           </div>
-        </ng-template>
-        <ng-template #loadingFinancials>
+          </ng-template>
+          <ng-template #loadingAttendance>
             <ion-card>
-                <ion-item no-lines>
-                  <skeleton-item height="137px" width="100%"></skeleton-item>
-                </ion-item>
-              </ion-card>
-        </ng-template>
-        <!-- END SECTION 9: FINANCE -->
-        <!-- ********************************************* -->
-        <!-- START SECTION 10: ATTENDANCE -->
-        <ng-template class="main-section" let-attendance [ngIf]="attendance$ | async" [ngIfElse]="loadingAttendance">
-          <div class="section low-attendance-section" *ngIf="attendance.length > 0">
-            <!-- START SECTION 10 HEADER -->
-            <div class="section-header">
-              <div class="section-header-icon">
-                <ion-icon item-left name="alarm"></ion-icon>
-              </div>
-              <div class="section-header-text">
-                <h3>Low Attendance</h3>
-              </div>
-            </div>
-            <!-- END SECTION 10 HEADER -->
-
-            <!-- START SECTION 10 BODY -->
-
-            <div class="section-body">
-              <div class="row low-attendance-div">
-                <div class=" col-12 low-attendance-details" *ngFor="let attendance of attendance">
-                  <div class="section-body-header">
-                    <h4 class="col-12" style="padding-bottom: 5px !important;margin-bottom: 0 !important">
-                      {{ attendance.MODULE_ATTENDANCE }}
-                    </h4>
-                  </div>
-                  <div class="attendance-chart col-12">
-                    <div class="progress" style="height: 20px;">
-                      <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar"
-                        [style.width]="attendance.PERCENTAGE + '%'" aria-valuenow="attendance.PERCENTAGE"
-                        aria-valuemin="0" aria-valuemax="100">
-                        <strong>{{ attendance.PERCENTAGE + "%" }}</strong>
-                      </div>
-                      <div class="progress-bar progress-bar-striped bg-danger progress-bar-animated" role="progressbar"
-                        [style.width]="100 - attendance.PERCENTAGE + '%'" aria-valuenow="100 - attendance.PERCENTAGE"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
+              <ion-item no-lines>
+                <skeleton-item height="137px" width="100%"></skeleton-item>
+              </ion-item>
+            </ion-card>
+          </ng-template>
+          <!-- END SECTION 10: ATTENDANCE -->
+          <!-- ********************************************* -->
+          <!-- START SECTION 11: APCARD -->
+          <ng-template
+            class="main-section"
+            let-attendance
+            [ngIf]="apcardTransaction$ | async"
+            [ngIfElse]="loadingApcard"
+          >
+          <div class="col-12 col-md-6">
+            <div class="section low-attendance-section">
+              <!-- START SECTION 11 HEADER -->
+              <div class="section-header">
+                <div class="section-header-icon">
+                  <ion-icon item-left name="card"></ion-icon>
+                </div>
+                <div class="section-header-text">
+                  <h3>APCard Transactions</h3>
                 </div>
               </div>
-            </div>
-            <!-- END SECTION 10 BODY -->
-          </div>
-        </ng-template>
-        <ng-template #loadingAttendance>
-            <ion-card>
-                <ion-item no-lines>
-                  <skeleton-item height="137px" width="100%"></skeleton-item>
-                </ion-item>
-              </ion-card>
-        </ng-template>
-        <!-- END SECTION 10: ATTENDANCE -->
-        <!-- ********************************************* -->
-        <!-- START SECTION 11: APCARD -->
-        <ng-template class="main-section" let-attendance [ngIf]="apcardTransaction$ | async" [ngIfElse]="loadingApcard">
-        <div class="section low-attendance-section">
-          <!-- START SECTION 11 HEADER -->
-          <div class="section-header">
-            <div class="section-header-icon">
-              <ion-icon item-left name="card"></ion-icon>
-            </div>
-            <div class="section-header-text">
-              <h3>APCard Transactions</h3>
-            </div>
-          </div>
-          <!-- END SECTION 11 HEADER -->
+              <!-- END SECTION 11 HEADER -->
 
-          <!-- START SECTION 11 BODY -->
-          <div class="section-body">
-            <div class="apcard-chart">
-              <chart *ngIf="apcardChartData" [type]="type[1]" [data]="apcardChartData" [options]="options"></chart>
-            </div>
-          </div>
-          <!-- END SECTION 11 BODY -->
-        </div>
-        </ng-template>
-        <ng-template #loadingApcard>
-            <ion-card>
-                <ion-item no-lines>
-                  <skeleton-item height="137px" width="100%"></skeleton-item>
-                </ion-item>
-              </ion-card>
-        </ng-template>
-        <!-- END SECTION 11: APCARD -->
-        <!-- ********************************************* -->
-        <!-- ********************************************* -->
-        <!-- START SECTION 12: GPA -->
-        <ng-template [ngIf]="!block">
-          <ng-template [ngIf]="barChartData" [ngIfElse]="loadingGPA">
-        <div class="main-section section low-attendance-section">
-          <!-- START SECTION 12 HEADER -->
-          <div class="section-header">
-            <div class="section-header-icon">
-              <ion-icon item-left name="medal"></ion-icon>
-            </div>
-            <div class="section-header-text">
-              <h3>GPA Per Intake</h3>
-            </div>
-          </div>
-          <!-- END SECTION 12 HEADER -->
-          <!-- START SECTION 12 BODY -->
-          <div class="section-body">
+              <!-- START SECTION 11 BODY -->
+              <div class="section-body">
                 <div class="apcard-chart">
-                  <chart [type]="type[0]" [data]="barChartData" [options]="options[1]"></chart>
+                  <chart
+                    *ngIf="apcardChartData"
+                    [type]="type[1]"
+                    [data]="apcardChartData"
+                    [options]="options"
+                  ></chart>
                 </div>
+              </div>
+              <!-- END SECTION 11 BODY -->
             </div>
-            <!-- END SECTION 12 BODY -->
           </div>
-        </ng-template>
-      <ng-template #loadingGPA>
-        <ion-card>
-          <ion-item no-lines>
-            <skeleton-item height="160px" width="100%"></skeleton-item>
-          </ion-item>
-        </ion-card>
-      </ng-template>
-        </ng-template>
-        <!-- END SECTION 12: GPA -->
-        <!-- ********************************************* -->
+          </ng-template>
+          <ng-template #loadingApcard>
+            <ion-card>
+              <ion-item no-lines>
+                <skeleton-item height="137px" width="100%"></skeleton-item>
+              </ion-item>
+            </ion-card>
+          </ng-template>
+          <!-- END SECTION 11: APCARD -->
+          <!-- ********************************************* -->
+          <!-- ********************************************* -->
+          <!-- START SECTION 12: GPA -->
+          <ng-template [ngIf]="!block">
+              <div class="col-12 col-md-6">
+            <ng-template [ngIf]="barChartData" [ngIfElse]="loadingGPA">
+              <div class="main-section section low-attendance-section">
+                <!-- START SECTION 12 HEADER -->
+                <div class="section-header">
+                  <div class="section-header-icon">
+                    <ion-icon item-left name="medal"></ion-icon>
+                  </div>
+                  <div class="section-header-text">
+                    <h3>GPA Per Intake</h3>
+                  </div>
+                </div>
+                <!-- END SECTION 12 HEADER -->
+                <!-- START SECTION 12 BODY -->
+                <div class="section-body">
+                  <div class="apcard-chart">
+                    <chart
+                      [type]="type[0]"
+                      [data]="barChartData"
+                      [options]="options[1]"
+                    ></chart>
+                  </div>
+                </div>
+                <!-- END SECTION 12 BODY -->
+              </div>
+            </ng-template>
+          </div>
+            <ng-template #loadingGPA>
+              <ion-card>
+                <ion-item no-lines>
+                  <skeleton-item height="160px" width="100%"></skeleton-item>
+                </ion-item>
+              </ion-card>
+            </ng-template>
+          </ng-template>
+          <!-- END SECTION 12: GPA -->
+          <!-- ********************************************* -->
+        </div>
+        <!-- END ROW -->
       </div>
       <!-- END SECTIONS 2->12 CONTAINER -->
     </div>
