@@ -1,0 +1,7 @@
+{
+  "name": "apspace",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

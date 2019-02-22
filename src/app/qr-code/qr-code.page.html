@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title text-center>QR Scan</ion-title>
+    <ion-buttons slot="end">
+      <ion-button size="small" (click)="scanCode()">
+        <ion-label>Scan Code</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>  
+</ion-header>
+
+<ion-content padding>
+  
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-tabs>
+      <ion-tab-bar slot="bottom">
+        <ion-buttons>
+          <ion-tab-button (click)="scanCode()" fill="solid" tab="qr-scan" layout="icon-bottom" class="qr">
+            <ion-icon name="qr-scanner"></ion-icon>
+            <ion-label>Scan Code</ion-label>
+          </ion-tab-button>
+        </ion-buttons>
+      </ion-tab-bar>
+    </ion-tabs>
+  </ion-toolbar>
+</ion-footer>

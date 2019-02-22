@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">APSpace</string>
+    <string name="title_activity_main">APSpace</string>
+    <string name="package_name">my.edu.apiit.apspace</string>
+    <string name="fileprovider_authority">my.edu.apiit.apspace.fileprovider</string>
+    <string name="custom_url_scheme">my.edu.apiit.apspace</string>
+</resources>

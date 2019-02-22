@@ -1,0 +1,22 @@
+<ion-content padding>
+  <img class="apu-logo" src="assets/img/login.jpg">
+  <h1 padding>WELCOME TO <br><span>APSpace</span></h1>
+  <form (ngSubmit)="login()" #loginForm="ngForm">
+    <ion-item no-padding>
+      <ion-icon color='text-color' name="contact" item-left></ion-icon>
+      <ion-input [(ngModel)]="username" name="username" type="email"
+        placeholder='"APKey"' autofocus></ion-input>
+    </ion-item>
+    <ion-item no-padding margin-top>
+      <ion-icon color='text-color' name="lock" item-left></ion-icon>
+      <ion-input [(ngModel)]="password" name="password"
+        [type]="showPassword ? 'text' : 'password'" placeholder='Password'></ion-input>
+      <ion-button type="button" clear item-right (click)="showPassword = !showPassword">
+        <ion-icon name="eye"></ion-icon>
+      </ion-button>
+    </ion-item>
+    <ion-button type="submit" margin-top block>
+      Log in
+    </ion-button>
+  </form>
+</ion-content>

@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Staff Directory</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list lines="none">
+    <ion-item>
+      <ion-searchbar [(ngModel)]="term"></ion-searchbar>
+    </ion-item>
+    <ion-item *ngIf="staffType$ | async as staffTypes">
+      <ion-label floating>Functional Area</ion-label>
+      <ion-select [(ngModel)]="dept" interface="popover">
+        <ion-select-option selected></ion-select-option>
+        <ion-select-option *ngFor="let type of staffTypes"
+          [innerHTML]="type.toUpperCase()" [value]="type"></ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <ng-template let-staffs [ngIf]="staff$ | async">
+    <ion-virtual-scroll [items]="staffs | department:dept | search:term"
+      virtualTrackBy="trackById" approxItemHeight="68px">
+      <ion-item *virtualItem="let staff" button>
+        <ion-avatar slot="start">
+          <!-- ionError WIP https://github.com/ionic-team/ionic/pull/17134 -->
+          <ion-img [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '_64x64.jpg'"
+            (ionError)="this.src = 'assets/img/profile.svg'"></ion-img>
+        </ion-avatar>
+        <ion-text>
+          <h2>{{ staff.FULLNAME }}</h2>
+          <p>{{ staff.EMAIL }}</p>
+        </ion-text>
+      </ion-item>
+    </ion-virtual-scroll>
+  </ng-template>
+</ion-content>

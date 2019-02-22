@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button color="light" outline small (click)="chooseWeek()" [disabled]="availableWeek && availableWeek.length === 0">
+        {{ (selectedDate | date) || 'Weeks' }}
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button color="light" outline small (click)="presentIntakeSearch()">
+        {{ intake || 'Intakes' }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event.target)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-segment [ngModel]="selectedDate | date:'E' | uppercase"
+    (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
+    <ion-segment-button *ngFor="let day of availableDays" [value]="day">
+      {{ day }}
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-card *ngFor="let timetable of timetable$ | async | classes:intake | theday:selectedDate; trackBy: trackByIndex"
+    [style.borderLeft]="'1rem solid ' + strToColor(timetable.MODID)">
+    <ion-card-header>
+      <h4 no-margin-bottom>{{ timetable.MODID }}</h4>
+    </ion-card-header>
+    <ion-card-content>
+      <p>
+        <ion-icon name="time"></ion-icon>
+        <b>{{ timetable.TIME_FROM }}</b> - <b>{{ timetable.TIME_TO }}</b>
+      </p>
+      <p>
+        <ion-icon name="locate"></ion-icon>
+        <span>{{ timetable.ROOM }} │ {{ timetable.LOCATION }}</span>
+      </p>
+      <p>
+        <a [routerLink]="['/staff', timetable.SAMACCOUNTNAME]">
+          <ion-icon name="contact"></ion-icon>
+          <span>{{ timetable.NAME }}</span>
+        </a>
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="!selectedDate">
+    <ion-card-content>
+      <ion-text>Hooray! No classes this week! :D</ion-text>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

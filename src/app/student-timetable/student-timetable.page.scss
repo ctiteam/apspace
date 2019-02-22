@@ -1,0 +1,18 @@
+ion-content ion-card-header h4 {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+ion-content ion-card-content a {
+  text-decoration: none;
+}
+
+ion-content ion-card-content ion-icon {
+  vertical-align: -2.5px;
+  padding-left: 4px;
+  padding-right: 8px;
+}
+
+ion-content ion-card-header + ion-card-content p:nth-child(odd) {
+  background-color: #eceff1;
+}

@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{ (staff$ | async)?.TITLE | urldecode }} Info</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ng-template let-staff [ngIf]="staff$ | async">
+    <div class="staff-directory-info-header">
+      <!-- TODO: add responsive image -->
+      <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/${staff.RefNo}.jpg'">
+    </div>
+  </ng-template>
+</ion-content>
