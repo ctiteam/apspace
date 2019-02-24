@@ -151,6 +151,8 @@
           </div>
           <!-- END SECTION 1: QUICK ACCESS MENU -->
           <!-- ********************************************* -->
+          <div class="col-12 col-md-6 col-lg-4 sections-wrapper">
+
           <!-- START SECTION 2: TODAY'S CLASSES -->
           <!-- <div class="main-section section todays-classes-section"> -->
           <!-- START SECTION 2 HEADER -->
@@ -242,7 +244,6 @@
             [ngIf]="nextHoliday$ | async"
             [ngIfElse]="loadingHoliday"
           >
-          <div class="col-12 col-md-6">
             <div class="section upcoming-holiday-section">
               
               <!-- START SECTION 3 HEADER -->
@@ -293,7 +294,6 @@
               </div>
               <!-- END SECTION 3 BODY -->
               </div>
-            </div>
           </ng-template>
           <ng-template #loadingHoliday>
             <ion-card>
@@ -311,8 +311,7 @@
             [ngIf]="exam$ | async | nextExams"
             [ngIfElse]="loadingExams"
           >
-          <div class="col-12 col-md-6" *ngIf="exams && exams.length > 0">
-              <div class="section upcoming-exam-section">
+              <div class="section upcoming-exam-section" *ngIf="exams && exams.length > 0">
               <!-- START SECTION 4 HEADER -->
               <div class="section-header">
                 <div class="section-header-icon">
@@ -370,7 +369,6 @@
               </div>
               <!-- END SECTION 4 BODY -->
             </div>
-          </div>
           </ng-template>
           <ng-template #loadingExams>
             <ion-card>
@@ -608,7 +606,6 @@
             [ngIf]="overdue$ | async"
             [ngIfElse]="loadingFinancials"
           >
-          <div class="col-12 col-md-6">
               <div class="section financials-section">
               <!-- START SECTION 9 HEADER -->
               <div class="section-header">
@@ -720,7 +717,6 @@
               </div>
               <!-- END SECTION 9 BODY -->
             </div>
-          </div>
           </ng-template>
           <ng-template #loadingFinancials>
             <ion-card>
@@ -738,8 +734,7 @@
             [ngIf]="attendance$ | async"
             [ngIfElse]="loadingAttendance"
           >
-          <div class="col-12 col-md-6" *ngIf="attendance.length > 0">
-            <div class="section low-attendance-section">
+            <div class="section low-attendance-section" *ngIf="attendance.length > 0">
               <!-- START SECTION 10 HEADER -->
               <div class="section-header">
                 <div class="section-header-icon">
@@ -794,7 +789,6 @@
               </div>
               <!-- END SECTION 10 BODY -->
             </div>
-          </div>
           </ng-template>
           <ng-template #loadingAttendance>
             <ion-card>
@@ -812,7 +806,6 @@
             [ngIf]="apcardTransaction$ | async"
             [ngIfElse]="loadingApcard"
           >
-          <div class="col-12 col-md-6">
             <div class="section low-attendance-section">
               <!-- START SECTION 11 HEADER -->
               <div class="section-header">
@@ -838,7 +831,6 @@
               </div>
               <!-- END SECTION 11 BODY -->
             </div>
-          </div>
           </ng-template>
           <ng-template #loadingApcard>
             <ion-card>
@@ -852,7 +844,6 @@
           <!-- ********************************************* -->
           <!-- START SECTION 12: GPA -->
           <ng-template [ngIf]="!block">
-              <div class="col-12 col-md-6">
             <ng-template [ngIf]="barChartData" [ngIfElse]="loadingGPA">
               <div class="main-section section low-attendance-section">
                 <!-- START SECTION 12 HEADER -->
@@ -878,7 +869,6 @@
                 <!-- END SECTION 12 BODY -->
               </div>
             </ng-template>
-          </div>
             <ng-template #loadingGPA>
               <ion-card>
                 <ion-item no-lines>
@@ -889,6 +879,10 @@
           </ng-template>
           <!-- END SECTION 12: GPA -->
           <!-- ********************************************* -->
+        </div>
+        <div class="col-md-6 col-lg-4 d-none d-md-block d-lg-block d-xl-block d-xl-none">
+          NEWS, EVENTS AND SLIDER SECTIONS 
+        </div>
         </div>
         <!-- END ROW -->
       </div>

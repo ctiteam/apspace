@@ -112,6 +112,13 @@ page-dashboard {
 
   // WEB VERSION
   @media only screen and (min-width: 768px) {
+    .sections-wrapper{
+      background-color: red;
+      .section{
+        border: none !important
+      }
+    }
+
     .quick-access {
       .quick-access-item {
         .second-line {
