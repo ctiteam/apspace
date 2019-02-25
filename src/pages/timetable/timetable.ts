@@ -31,7 +31,8 @@ export class TimetablePage {
   availableDate: Date[];
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
-  showTimetable = true;
+  numOfSkeletons = new Array(5);
+
 
   @ViewChild(Content) content: Content;
 
@@ -112,20 +113,16 @@ export class TimetablePage {
       // initialize or update intake labels only if timetable might change
       tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)      
       && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
-      tap(_ => this.checkIntake()),
       finalize(() => refresher && refresher.complete()),
     );
-    console.log(this.intakeLabels);
   }
 
-  checkIntake(){
-    if(this.intake){
-      for(let intake of this.intakeLabels){
-        if(intake === this.intake){
-          this.showTimetable = true;
-        }
-      }
-    }
+  getTimetableData(){
+    return this.timetable$ = this.tt.get().pipe(
+      tap(tt => this.updateDay(tt)),
+      tap(tt => (this.intakeLabels.length === 0)      
+      && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
+    );
   }
 
   /** Convert string to color with djb2 hash function. */
@@ -194,15 +191,24 @@ export class TimetablePage {
     const date = new Date();
     date.setDate(date.getDate() - date.getDay() + 1);
     this.selectedWeek = date;
-
     this.intake = this.settings.get('intake');
-    // default intake to student current intake
-    if (this.intake === undefined && this.settings.get('role') & Role.Student) {
-      this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
-        this.intake = (p || {} as StudentProfile).INTAKE || '';
-        this.settings.set('intake', this.intake);
-      });
-    }
-    this.doRefresh();    
+    this.getTimetableData().subscribe(
+      _ => { },
+      _ => { },
+      () => {
+        // default intake to student current intake
+        if (this.intake === undefined && this.settings.get('role') & Role.Student) {
+          this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+            for (let intake of this.intakeLabels) {
+              if (intake === (p || {} as StudentProfile).INTAKE) {
+                this.intake = (p || {} as StudentProfile).INTAKE || '';
+                this.settings.set('intake', this.intake);
+                this.doRefresh();
+              }
+            }
+          });
+        }
+      }
+    );
   }
 }
