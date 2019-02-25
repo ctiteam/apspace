@@ -80,6 +80,7 @@ export class AddfreeslotsPage {
     this.items.push({ text: 'Wed' });
     this.items.push({ text: 'Thu' });
     this.items.push({ text: 'Fri' });
+    this.items.push({ text: 'Sat' });
 
     this.form = this._FB.group({
       slotsTime: ['', Validators.required],
