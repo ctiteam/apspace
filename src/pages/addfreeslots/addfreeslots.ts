@@ -91,7 +91,7 @@ export class AddfreeslotsPage {
 
     this.minDate = new Date().toISOString();
     this.MinDate = moment(this.minDate).add(1, 'day').toISOString();
-    this.maxDate = moment(this.MinDate).add(2, 'month').toISOString();
+    this.maxDate = moment(this.MinDate).add(6, 'month').toISOString();
   }
 
   initslots(): FormGroup {
