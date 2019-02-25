@@ -11,7 +11,7 @@ import { finalize, switchMap, tap } from 'rxjs/operators';
 
 import { Role, StudentProfile, Timetable } from '../../interfaces';
 import {
-  IntakeListingProvider, SettingsProvider, TimetableProvider, WsApiProvider,
+  SettingsProvider, TimetableProvider, WsApiProvider,
 } from '../../providers';
 import { ClassesPipe } from './classes.pipe';
 
@@ -31,6 +31,7 @@ export class TimetablePage {
   availableDate: Date[];
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
+  showTimetable = true;
 
   @ViewChild(Content) content: Content;
 
@@ -43,7 +44,6 @@ export class TimetablePage {
     public modalCtrl: ModalController,
     public navCtrl: NavController,
     public plt: Platform,
-    private il: IntakeListingProvider,
     private tt: TimetableProvider,
     private ws: WsApiProvider,
     private settings: SettingsProvider,
@@ -109,11 +109,23 @@ export class TimetablePage {
   doRefresh(refresher?) {
     this.timetable$ = this.tt.get(Boolean(refresher)).pipe(
       tap(tt => this.updateDay(tt)),
-      // initialize or update intake labels only if current intake does not exist
-      tap(_ => (Boolean(refresher) || this.intakeLabels.indexOf(this.intake) === -1)
-        && this.il.get(refresher).subscribe(ii => this.intakeLabels = ii.map(i => i.INTAKE_CODE))),
+      // initialize or update intake labels only if timetable might change
+      tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)      
+      && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
+      tap(_ => this.checkIntake()),
       finalize(() => refresher && refresher.complete()),
     );
+    console.log(this.intakeLabels);
+  }
+
+  checkIntake(){
+    if(this.intake){
+      for(let intake of this.intakeLabels){
+        if(intake === this.intake){
+          this.showTimetable = true;
+        }
+      }
+    }
   }
 
   /** Convert string to color with djb2 hash function. */
@@ -191,6 +203,6 @@ export class TimetablePage {
         this.settings.set('intake', this.intake);
       });
     }
-    this.doRefresh();
+    this.doRefresh();    
   }
 }
