@@ -58,6 +58,9 @@ export class AddfreeslotsPage {
   minEndDate: string;
   room: string;
   MinDate: string;
+  sundaySelected = false;
+
+  formattedSelectedDate: any;
 
   constructor(
     public http: HttpClient,
@@ -116,6 +119,7 @@ export class AddfreeslotsPage {
     if (this.hidden[i]) {
       this.hidden[i] = false;
       this.myDate = '';
+      this.sundaySelected = false;
     } else {
       this.hidden[i] = true;
       this.repeatday = '';
@@ -131,7 +135,7 @@ export class AddfreeslotsPage {
 
   onchangedate() {
     this.minEndDate = moment(this.startDate).add(1, 'day').toISOString();
-    this.endDate = '';
+    this.endDate = '';    
   }
 
   // lec confirmation
@@ -175,6 +179,16 @@ export class AddfreeslotsPage {
     value: any,
   }) {
     console.log(event.value);
+  }
+
+  onChangeOneFreeSlotDate(){
+    this.sundaySelected = false;
+    let dateInMilliSeconds = Date.parse(this.myDate);
+    this.formattedSelectedDate = new Date(dateInMilliSeconds);
+    if(this.formattedSelectedDate.getDay() == 0){
+      console.log(this.myDate);
+      this.sundaySelected = true;
+    }
   }
 
 }

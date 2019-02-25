@@ -12,7 +12,7 @@
         <ion-label>Date</ion-label>
         <ion-icon name="calendar" item-end small></ion-icon>
         <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="myDate" [min]="MinDate" [max]="maxDate" [(ngModel)]="freeslots.date"
-          [ngModelOptions]="{standalone: true}"></ion-datetime>
+          [ngModelOptions]="{standalone: true}"  (ionChange)="onChangeOneFreeSlotDate()"></ion-datetime>
       </ion-item>
 
 
@@ -39,6 +39,9 @@
         <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="endDate" [min]="minEndDate" [max]="maxDate" [(ngModel)]="freeslots.end_date"
           [ngModelOptions]="{standalone: true}"></ion-datetime>
       </ion-item>
+      <small class="sundaySelectedMessage" *ngIf="sundaySelected && !hidden[i]">
+        {{myDate}} is a Sunday. No consultation hours can be added on Sunday.
+      </small>
     </ion-card-content>
   </ion-card>
 
@@ -93,7 +96,7 @@
   </ion-card>
 
   <ion-buttons *ngIf="!hidden[i]">
-    <button ion-button round full margin-top (click)="confirmation()" [disabled]="!freeslots.date || !freeslots.start_time || !freeslots.location || !freeslots.venue">
+    <button ion-button round full margin-top (click)="confirmation()" [disabled]="sundaySelected || !freeslots.date || !freeslots.start_time || !freeslots.location || !freeslots.venue">
       Submit
     </button>
   </ion-buttons>
