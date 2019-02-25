@@ -54,7 +54,7 @@
               <ion-item>
                 <ion-label>Start Time</ion-label>
                 <ion-icon name="time" item-end small></ion-icon>
-                <ion-datetime displayFormat="hh:mm A" pickerFormat="hh mm A" [(ngModel)]="time[i]" minuteValues="[00,30]"
+                <ion-datetime displayFormat="hh:mm A" pickerFormat="hh mm" [(ngModel)]="time[i]" hourValues="[8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]" minuteValues="[00,30]"
                   formControlName="slotsTime" [(ngModel)]="freeslots.start_time[i]"></ion-datetime>
               </ion-item>
               <span float-right ion-button icon-left clear *ngIf="form.controls.slots.length > 1" (click)="removeInputField(i)"
