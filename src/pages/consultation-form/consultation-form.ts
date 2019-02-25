@@ -75,7 +75,6 @@ export class ConsultationFormPage {
             handler: () => {
               this.UpcomingConStu.addbooking(this.booking)
                 .subscribe(result => {
-                  console.log(result);
                     this.conWith = '';
                     this.reason = '';
                     this.telnumber = '';
@@ -100,7 +99,6 @@ export class ConsultationFormPage {
                     innerAlert.present();
                   },
                   () => {
-                    console.log("booked")
                     this.app.getRootNav().setRoot(TabsPage);
                     this.app.getRootNav().push(UpcomingstdPage);
                     this.presentToast();
