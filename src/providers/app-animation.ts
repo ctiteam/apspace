@@ -53,50 +53,6 @@ export class AppAnimationProvider {
     }
   }
 
-  animateBalanceBackground(balanceBackgroundElement) {
-    // Some random colors
-    const colors = ['#3CC157', '#2AA7FF', '#1B1B1B', '#FCBC0F', '#F85F36'];
-
-    const numBalls = 150;
-    const balls = [];
-
-    for (let i = 0; i < numBalls; i++) {
-      const ball = document.createElement('div');
-      ball.classList.add('ball');
-      ball.style.background = colors[Math.floor(Math.random() * colors.length)];
-      ball.style.left = `${Math.floor(Math.random() * 110)}vw`;
-      ball.style.top = `${Math.floor(Math.random() * 150)}px`;
-      ball.style.transform = `scale(${Math.random()})`;
-      ball.style.width = `${Math.random()}em`;
-      ball.style.height = ball.style.width;
-
-      balls.push(ball);
-      this.renderer.appendChild(balanceBackgroundElement.nativeElement, ball);
-    }
-
-    // KEYFRAMES
-    balls.forEach((el, i, ra) => {
-      const to = {
-        x: Math.random() * (i % 2 === 0 ? -11 : 11),
-        y: Math.random() * 18,
-      };
-
-      const anim = el.animate(
-        [
-          { transform: 'translate(0, 0)' },
-          { transform: `translate(${to.x}rem, ${to.y}rem)` },
-        ],
-        {
-          duration: (Math.random() + 2) * 2000, // random duration
-          direction: 'alternate',
-          fill: 'both',
-          iterations: Infinity,
-          easing: 'ease-in-out',
-        },
-      );
-    });
-  }
-
   // CAN BE MERGED WITH 2
   // giveQuickAccessItemsRandomColors(elRef: ElementRef) {
   //   let quickAccessItems = elRef.nativeElement.querySelectorAll(

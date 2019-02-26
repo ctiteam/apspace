@@ -11,7 +11,7 @@ import * as _ from "lodash";
 import { Observable } from "rxjs/Observable";
 import { finalize, map, tap } from "rxjs/operators";
 import { Apcard } from "../../interfaces";
-import { AppAnimationProvider, WsApiProvider } from "../../providers";
+import { WsApiProvider } from "../../providers";
 
 @IonicPage()
 @Component({
@@ -31,8 +31,6 @@ import { AppAnimationProvider, WsApiProvider } from "../../providers";
   ]
 })
 export class ApcardPage {
-  // @ViewChild("apcardBalanceBackground") balanceBackgroundElement: ElementRef;
-
   transaction$: Observable<Apcard[]>;
   objectKeys = Object.keys; // USED FOR GROUPING TRANSACTIONS PER MONTH
   filterEntry: string = "";
@@ -47,10 +45,7 @@ export class ApcardPage {
   numOfSkeletons = new Array(5);
   isLoading: boolean;
 
-  constructor(
-    private ws: WsApiProvider,
-    private appAnimationProvider: AppAnimationProvider
-  ) { }
+  constructor(private ws: WsApiProvider) { }
 
   /** Analyze transactions. */
   analyzeTransactions(transactions: Apcard[]) {
@@ -135,6 +130,5 @@ export class ApcardPage {
 
   ionViewDidLoad() {
     this.doRefresh();
-    // this.appAnimationProvider.animateBalanceBackground(this.balanceBackgroundElement);
   }
 }
