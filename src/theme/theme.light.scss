@@ -185,6 +185,14 @@ $light_menu_colors: (
     border-bottom: 2px solid color($light_colors, light_white_background);
   }
 
+  page-apcard{
+    .main-content{
+      .no-transactions-message{
+        color: color($light_colors, ligth_grey_color);
+      }
+    }
+  }
+
   .apcard-history-section
     .apcard-history-section-body
     .apcard-history-group

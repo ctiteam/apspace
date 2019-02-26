@@ -183,6 +183,14 @@ $dark_menu_colors: (
     color: color($dark_colors, dark_search_background_color);
   }
 
+  page-apcard{
+    .main-content{
+      .no-transactions-message{
+        color: color($dark_colors, dark_search_background_color);
+      }
+    }
+  }
+
   .apcard-history-section
     .apcard-history-section-body
     .apcard-history-group

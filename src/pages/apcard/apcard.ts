@@ -31,7 +31,7 @@ import { AppAnimationProvider, WsApiProvider } from "../../providers";
   ]
 })
 export class ApcardPage {
-  @ViewChild("apcardBalanceBackground") balanceBackgroundElement: ElementRef;
+  // @ViewChild("apcardBalanceBackground") balanceBackgroundElement: ElementRef;
 
   transaction$: Observable<Apcard[]>;
   objectKeys = Object.keys; // USED FOR GROUPING TRANSACTIONS PER MONTH
@@ -39,7 +39,7 @@ export class ApcardPage {
   balance: number;
   monthly: number;
   monthlyTransactions: any;
-  monthlyData: {cr: {}, dr:{}};
+  monthlyData: { cr: {}, dr: {} } = { cr: {}, dr: {} };
   transactionsGroupedByDate: any;
   transactonsYears: string[] = [];
   transactionsMonths: string[] = [];
@@ -50,7 +50,7 @@ export class ApcardPage {
   constructor(
     private ws: WsApiProvider,
     private appAnimationProvider: AppAnimationProvider
-  ) {}
+  ) { }
 
   /** Analyze transactions. */
   analyzeTransactions(transactions: Apcard[]) {
@@ -101,17 +101,25 @@ export class ApcardPage {
     return transactions;
   }
 
-  getTransactionsYears(){
+  getTransactionsYears() {
     this.transactonsYears = [];
     this.transactionsMonths = [];
     let firstTransactionYear = this.objectKeys(this.monthlyData.cr)[0];
     let currentYear = new Date().getFullYear();
-    for (let year=currentYear; year>=+firstTransactionYear;year--){
+    for (let year = currentYear; year >= +firstTransactionYear; year--) {
       this.transactonsYears.push(year.toString());
     }
-    for(let month=11; month>=0;month--){
+    for (let month = 11; month >= 0; month--) {
       this.transactionsMonths.push(month.toString());
     }
+  }
+
+  isEmpty(object: {}) {
+    for (var key in object) {
+      if (object.hasOwnProperty(key))
+        return false;
+    }
+    return true;
   }
 
   doRefresh(refresher?) {
@@ -127,6 +135,6 @@ export class ApcardPage {
 
   ionViewDidLoad() {
     this.doRefresh();
-    this.appAnimationProvider.animateBalanceBackground(this.balanceBackgroundElement);
+    // this.appAnimationProvider.animateBalanceBackground(this.balanceBackgroundElement);
   }
 }

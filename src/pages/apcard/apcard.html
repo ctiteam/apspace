@@ -12,130 +12,112 @@
   <!-- START MAIN -->
   <div class="main" id="main">
     <!-- START PAGE BODY -->
-    <div class="main-content">
-      <!-- START PAGE CONTAINER -->
-      <div class="container">
-        <!-- START SECTION 1: APCARD CARD NEW -->
-        <div class="apcard-card-section" #apcardBalanceBackground>
-          <div class="m-5 p-2 text-center">
-            <div class="outter-circle d-inline-block shadow-lg">
-              <div class="inner-circle text-center">
-                <h2
-                  class="balance d-inline-block"
-                  *ngIf="(transaction$ | async); else apcaradBalanceLoading"
-                >
-                  {{ balance | currency: "RM" }}
-                </h2>
-                <ng-template #apcaradBalanceLoading>
-                  <h2 class="balance inline-block">
-                      <loading-spinner></loading-spinner>
-                  </h2>
-                </ng-template>
+    <ng-template [ngIf]="(transaction$ | async)" [ngIfElse]="apcaradBalanceLoading">
+        <div class="main-content">
+          <!-- START PAGE CONTAINER -->
+          <div class="container">
+            <!-- START SECTION 1: APCARD CARD NEW -->
+            <div class="apcard-card-section">
+              <div class="m-5 p-2 text-center">
+                <div class="outter-circle d-inline-block shadow-lg">
+                  <div class="inner-circle text-center">
+                    <h2 class="balance d-inline-block" *ngIf="!isEmpty(monthlyData.cr); else noBalance">
+                      {{ balance | currency: "RM" }}
+                    </h2>
+                    <ng-template #noBalance>
+                      <h2 class="balance inline-block">
+                        {{ 0.00 | currency: "RM" }} 
+                      </h2>
+                    </ng-template>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <!-- END CONTAINER -->
+          <!-- END CONTAINER -->
 
-      <!-- START SECTION 2: APCARD HISTORY -->
-      <div class="apcard-history-section" *ngIf="monthlyData">
-        <!-- START SECTION 1 BODY -->
-        <div class="apcard-history-section-body">
-          <div
-            class="perYear"
-            *ngFor="let year of transactonsYears"
-          >
-            <div
-              class="perMonth"
-              *ngFor="let month of transactionsMonths"
-            >
-              <div
-                class="apcard-history-group"
-                *ngIf="transactionsGroupedByDate[month + ', ' + year]"
-              >
-                <div class="sticky-top apcard-history-group-title">
-                  <!-- <h2 class="month">
-                    {{
-                      +month + 1 + " " + "1" + " " + year | date: "MMM, yyyy"
-                    }}
-                  </h2>
-                  <div class="row past">
-                    <div class="col-6 credit-amount">
-                      <h3>
-                        {{ monthlyData.cr[year][month] | number: "1.0-2" }}
-                      </h3>
-                      <p>Total Credit</p>
+          <!-- START SECTION 2: APCARD HISTORY -->
+          <div class="apcard-history-section" *ngIf="!isEmpty(monthlyData.cr); else noTransactions">
+            <!-- START SECTION 1 BODY -->
+            <div class="apcard-history-section-body">
+              <div class="perYear" *ngFor="let year of transactonsYears">
+                <div class="perMonth" *ngFor="let month of transactionsMonths">
+                  <div class="apcard-history-group" *ngIf="transactionsGroupedByDate[month + ', ' + year]">
+                    <div class="sticky-top apcard-history-group-title">
+                      <h2 class="h5" *ngIf="monthlyData.dr[year]; else noDebit">
+                        You spent RM{{
+                              monthlyData.dr[year][month] | number: "1.0-2"
+                            }}
+                        <h2 class="month h5">
+                          <span class="color-pri">in</span>
+                          {{
+                                +month + 1 + "/" + "1" + "/" + year | date: "MMMM, yyyy"
+                              }}
+                        </h2>
+                      </h2>
                     </div>
-                    <div class="col-6 debit-amount">
-                      <h3 *ngIf="monthlyData.dr[year]; else noDebit">
-                        {{ monthlyData.dr[year][month] | number: "1.0-2" }}
-                      </h3>
-                      <ng-template #noDebit> <h3>0</h3> </ng-template>
-                      <p>Total Debit</p>
-                    </div>
-                  </div> -->
-                  <h2 class="h5" *ngIf="monthlyData.dr[year]; else noDebit">
-                    You spent RM{{
-                      monthlyData.dr[year][month] | number: "1.0-2"
-                    }}
-                    <h2 class="month h5">
-                      <span class="color-pri">in</span>
-                      {{
-                        +month + 1 + "/" + "1" + "/" + year | date: "MMMM, yyyy"
-                      }}
-                    </h2>
-                  </h2>
-                </div>
-                <div
-                  class="apcard-history-group-messages"
-                  *ngFor="
-                    let transaction of transactionsGroupedByDate[
-                      month + ', ' + year
-                    ]
-                  "
-                >
-                  <div class="apcard-history-record">
-                    <div class="row">
-                      <div class="col-2 text-center icon-div">
-                        <ion-icon
-                          name="remove-circle"
-                          *ngIf="transaction.SpendVal < 0"
-                        ></ion-icon>
-                        <ion-icon
-                          name="add-circle"
-                          *ngIf="0 < transaction.SpendVal"
-                        ></ion-icon>
-                      </div>
-                      <div class="col-7 text-div px-0">
-                        <h3 class="record-title">{{ transaction.ItemName }}</h3>
-                        <p>{{ transaction.SpendDate | date: "d, MMM, y" }}</p>
-                      </div>
-                      <div
-                        class="col-3 text-center price-div px-0"
-                        [class.add]="0 < transaction.SpendVal"
-                      >
-                        {{ transaction.SpendVal | currency: "RM" }}
+                    <div class="apcard-history-group-messages" *ngFor="
+                            let transaction of transactionsGroupedByDate[
+                              month + ', ' + year
+                            ]
+                          ">
+                      <div class="apcard-history-record">
+                        <div class="row">
+                          <div class="col-2 text-center icon-div">
+                            <ion-icon name="remove-circle" *ngIf="transaction.SpendVal < 0"></ion-icon>
+                            <ion-icon name="add-circle" *ngIf="0 < transaction.SpendVal"></ion-icon>
+                          </div>
+                          <div class="col-7 text-div px-0">
+                            <h3 class="record-title">{{ transaction.ItemName }}</h3>
+                            <p>{{ transaction.SpendDate | date: "d, MMM, y" }}</p>
+                          </div>
+                          <div class="col-3 text-center price-div px-0" [class.add]="0 < transaction.SpendVal">
+                            {{ transaction.SpendVal | currency: "RM" }}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <!-- END SECTION 2 BODY -->
+          </div>
+          <!-- END SECTION 2: APCARD History -->
+          <ng-template #noTransactions>
+            <h2 class="mt-5 p-3 text-center no-transactions-message">No transactions have been made yet</h2>
+          </ng-template>
+        </div>
+        <!-- END PAGE BODY -->
+    </ng-template>
+    <!-- LOADING TEMPLATE -->
+    <ng-template #apcaradBalanceLoading>
+      <div class="container">
+        <div class="apcard-card-section">
+          <div class="m-5 p-2 text-center">
+            <div class="outter-circle d-inline-block shadow-lg">
+              <div class="inner-circle text-center">
+                <h2 class="balance inline-block">
+                  <loading-spinner></loading-spinner>
+                </h2>
+              </div>
+            </div>
           </div>
         </div>
-        <!-- END SECTION 2 BODY -->
       </div>
-      <!-- END SECTION 2: APCARD History -->
-    </div>
-    <!-- END PAGE BODY -->
+      <div class="my-1 p-2" *ngFor="let i of numOfSkeletons">
+        <skeleton-item height="45px" width="100%"></skeleton-item>
+        <div class="row px-3 mt-3">
+          <div class="col-12 my-2" *ngFor="let i of numOfSkeletons">
+            <div class="row">
+              <div class="col-2"><skeleton-item height="25px" width="100%"></skeleton-item></div>
+              <div class="col-7"><skeleton-item height="25px" width="100%"></skeleton-item></div>
+              <div class="col-3"><skeleton-item height="25px" width="100%"></skeleton-item></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
   </div>
   <!-- END MAIN -->
-
-  <ng-container *ngIf="isLoading">
-    <ion-item *ngFor="let i of numOfSkeletons">
-      <skeleton-item height="50px" width="100%"></skeleton-item>
-      <skeleton-item height="5px" width="150px"></skeleton-item>
-    </ion-item>
-  </ng-container>
 </ion-content>
