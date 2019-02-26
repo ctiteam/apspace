@@ -117,15 +117,4 @@ export class UpcomingConLecProvider {
       },
     });
   }
-
-  usersessionlogout(): Observable<any> {
-    return this.ws.get('/iconsult/close-session', true, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'my-auth-token',
-      },
-      responseType: 'text',
-    });
-  }
-
 }

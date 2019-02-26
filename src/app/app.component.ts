@@ -148,7 +148,6 @@ export class MyApp {
 
   logout() {
     // XXX: temporary asynchronous logout
-    this.upcominglec.usersessionlogout().subscribe();
     (this.platform.is('cordova') ? this.dc.logout() : of(null)).pipe(
       // timeout(10000),
       switchMapTo(this.cas.deleteTGT()),
