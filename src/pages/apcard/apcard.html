@@ -13,67 +13,89 @@
   <div class="main" id="main">
     <!-- START PAGE BODY -->
     <ng-template [ngIf]="(transaction$ | async)" [ngIfElse]="apcaradBalanceLoading">
-        <div class="main-content">
-          <!-- START PAGE CONTAINER -->
-          <div class="container">
-            <!-- START SECTION 1: APCARD CARD NEW -->
-            <div class="apcard-card-section">
-              <div class="m-5 p-2 text-center">
-                <div class="outter-circle d-inline-block shadow-lg">
-                  <div class="inner-circle text-center">
-                    <h2 class="balance d-inline-block" *ngIf="!isEmpty(monthlyData.cr); else noBalance">
-                      {{ balance | currency: "RM" }}
-                    </h2>
-                    <ng-template #noBalance>
-                      <h2 class="balance inline-block">
-                        {{ 0.00 | currency: "RM" }} 
-                      </h2>
-                    </ng-template>
-                  </div>
+      <div class="main-content">
+        <!-- START PAGE CONTAINER -->
+        <div class="container" id="bubbles" *ngIf="!isEmpty(monthlyData.cr); else noBalance">
+          <!-- START SECTION 1: APCARD CARD NEW -->
+          <div class="apcard-card-section">
+            <div class="m-5 p-2 text-center">
+              <div class="outter-circle d-inline-block shadow-lg">
+                <div class="inner-circle text-center">
+                  <h2 class="balance d-inline-block">
+                    {{ balance | currency: "RM" }}
+                  </h2>
                 </div>
               </div>
             </div>
           </div>
-          <!-- END CONTAINER -->
+          <div class="bubble x1">
+            <ion-icon name="logo-usd"></ion-icon>
+          </div>
+          <div class="bubble x2">
+            <ion-icon name="logo-euro"></ion-icon>
+          </div>
+          <div class="bubble x3">
+            <ion-icon name="logo-yen"></ion-icon>
+          </div>
+          <div class="bubble x4">
+            <ion-icon name="logo-bitcoin"></ion-icon>
+          </div>
+          <div class="bubble x5">
+            <ion-icon name="logo-usd"></ion-icon>
+          </div>
+        </div>
+        <ng-template #noBalance>
+          <div class="apcard-card-section">
+            <div class="m-5 p-2 text-center">
+              <div class="outter-circle d-inline-block shadow-lg">
+                <div class="inner-circle text-center">
+                  <h2 class="balance inline-block">
+                    {{ 0.00 | currency: "RM" }}
+                  </h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <!-- END CONTAINER -->
 
-          <!-- START SECTION 2: APCARD HISTORY -->
-          <div class="apcard-history-section" *ngIf="!isEmpty(monthlyData.cr); else noTransactions">
-            <!-- START SECTION 1 BODY -->
-            <div class="apcard-history-section-body">
-              <div class="perYear" *ngFor="let year of transactonsYears">
-                <div class="perMonth" *ngFor="let month of transactionsMonths">
-                  <div class="apcard-history-group" *ngIf="transactionsGroupedByDate[month + ', ' + year]">
-                    <div class="sticky-top apcard-history-group-title">
-                      <h2 class="h5" *ngIf="monthlyData.dr[year]; else noDebit">
-                        You spent RM{{
+        <!-- START SECTION 2: APCARD HISTORY -->
+        <div class="apcard-history-section" *ngIf="!isEmpty(monthlyData.cr); else noTransactions">
+          <!-- START SECTION 1 BODY -->
+          <div class="apcard-history-section-body">
+            <div class="perYear" *ngFor="let year of transactonsYears">
+              <div class="perMonth" *ngFor="let month of transactionsMonths">
+                <div class="apcard-history-group" *ngIf="transactionsGroupedByDate[month + ', ' + year]">
+                  <div class="sticky-top apcard-history-group-title">
+                    <h2 class="h5" *ngIf="monthlyData.dr[year]; else noDebit">
+                      You spent RM{{
                               monthlyData.dr[year][month] | number: "1.0-2"
                             }}
-                        <h2 class="month h5">
-                          <span class="color-pri">in</span>
-                          {{
+                      <h2 class="month h5">
+                        <span class="color-pri">in</span>
+                        {{
                                 +month + 1 + "/" + "1" + "/" + year | date: "MMMM, yyyy"
                               }}
-                        </h2>
                       </h2>
-                    </div>
-                    <div class="apcard-history-group-messages" *ngFor="
+                    </h2>
+                  </div>
+                  <div class="apcard-history-group-messages" *ngFor="
                             let transaction of transactionsGroupedByDate[
                               month + ', ' + year
                             ]
                           ">
-                      <div class="apcard-history-record">
-                        <div class="row">
-                          <div class="col-2 text-center icon-div">
-                            <ion-icon name="remove-circle" *ngIf="transaction.SpendVal < 0"></ion-icon>
-                            <ion-icon name="add-circle" *ngIf="0 < transaction.SpendVal"></ion-icon>
-                          </div>
-                          <div class="col-7 text-div px-0">
-                            <h3 class="record-title">{{ transaction.ItemName }}</h3>
-                            <p>{{ transaction.SpendDate | date: "d, MMM, y" }}</p>
-                          </div>
-                          <div class="col-3 text-center price-div px-0" [class.add]="0 < transaction.SpendVal">
-                            {{ transaction.SpendVal | currency: "RM" }}
-                          </div>
+                    <div class="apcard-history-record">
+                      <div class="row">
+                        <div class="col-2 text-center icon-div">
+                          <ion-icon name="remove-circle" *ngIf="transaction.SpendVal < 0"></ion-icon>
+                          <ion-icon name="add-circle" *ngIf="0 < transaction.SpendVal"></ion-icon>
+                        </div>
+                        <div class="col-7 text-div px-0">
+                          <h3 class="record-title">{{ transaction.ItemName }}</h3>
+                          <p>{{ transaction.SpendDate | date: "d, MMM, y" }}</p>
+                        </div>
+                        <div class="col-3 text-center price-div px-0" [class.add]="0 < transaction.SpendVal">
+                          {{ transaction.SpendVal | currency: "RM" }}
                         </div>
                       </div>
                     </div>
@@ -81,14 +103,15 @@
                 </div>
               </div>
             </div>
-            <!-- END SECTION 2 BODY -->
           </div>
-          <!-- END SECTION 2: APCARD History -->
-          <ng-template #noTransactions>
-            <h2 class="mt-5 p-3 text-center no-transactions-message">No transactions have been made yet</h2>
-          </ng-template>
+          <!-- END SECTION 2 BODY -->
         </div>
-        <!-- END PAGE BODY -->
+        <!-- END SECTION 2: APCARD History -->
+        <ng-template #noTransactions>
+          <h2 class="mt-5 p-3 text-center no-transactions-message">Card is not activated or No transactions have been made yet</h2>
+        </ng-template>
+      </div>
+      <!-- END PAGE BODY -->
     </ng-template>
     <!-- LOADING TEMPLATE -->
     <ng-template #apcaradBalanceLoading>
@@ -110,9 +133,15 @@
         <div class="row px-3 mt-3">
           <div class="col-12 my-2" *ngFor="let i of numOfSkeletons">
             <div class="row">
-              <div class="col-2"><skeleton-item height="25px" width="100%"></skeleton-item></div>
-              <div class="col-7"><skeleton-item height="25px" width="100%"></skeleton-item></div>
-              <div class="col-3"><skeleton-item height="25px" width="100%"></skeleton-item></div>
+              <div class="col-2">
+                <skeleton-item height="25px" width="100%"></skeleton-item>
+              </div>
+              <div class="col-7">
+                <skeleton-item height="25px" width="100%"></skeleton-item>
+              </div>
+              <div class="col-3">
+                <skeleton-item height="25px" width="100%"></skeleton-item>
+              </div>
             </div>
           </div>
         </div>

@@ -97,6 +97,8 @@ page-apcard {
           }
         }
         .apcard-history-group-messages {
+          position: relative;
+          z-index: 499;
           padding: 10px 3px;
           .apcard-history-record {
             padding: 3px;
@@ -124,28 +126,63 @@ page-apcard {
       }
     }
   }
+  #bubbles { height: 100%; overflow: hidden !important; }
+  .bubble {
+      width: 60px;
+      height: 60px;
+      border-radius: 200px;
+      -moz-border-radius: 200px;
+      -webkit-border-radius: 200px;
+      position: absolute;
+      text-align: center;
+      font-size: 3rem;
+  }
+  
+  .x1 {
+      -webkit-transform: scale(0.9);
+      -moz-transform: scale(0.9);
+      transform: scale(0.9);
+      font-size: 4rem;
+      opacity: 0.2;
+      animation: moveclouds 15s linear infinite, sideWays 4s ease-in-out infinite alternate;
+  }
+  
+  .x2 {
+      left: 200px;
+      font-size: 2rem;
+      -webkit-transform: scale(0.6);
+      -moz-transform: scale(0.6);
+      transform: scale(0.6);
+      opacity: 0.5;
+      animation: moveclouds 25s linear infinite, sideWays 5s ease-in-out infinite alternate;
+  }
+  .x3 {
+      left: 350px;
+      -webkit-transform: scale(0.8);
+      -moz-transform: scale(0.8);
+      transform: scale(0.8);
+      opacity: 0.3;
+      animation: moveclouds 20s linear infinite, sideWays 4s ease-in-out infinite alternate;
+  }
+  .x4 {
+      left: 470px;
+      -webkit-transform: scale(0.75);
+      -moz-transform: scale(0.75);
+      transform: scale(0.75);
+      opacity: 0.35;
+      animation: moveclouds 18s linear infinite, sideWays 2s ease-in-out infinite alternate;
+  }
+  .x5 {
+      left: 150px;
+      -webkit-transform: scale(0.8);
+      -moz-transform: scale(0.8);
+      transform: scale(0.8);
+      opacity: 0.3; 
+      animation: moveclouds 7s linear infinite, sideWays 1s ease-in-out infinite alternate;
+  }
 }
 
 // ANIMATION KEY FRAMES
-@-webkit-keyframes pulse-ring {
-  0% {
-    transform: scale(0.33);
-  }
-  80%,
-  100% {
-    opacity: 0;
-  }
-}
-
-@-moz-keyframes pulse-ring {
-  0% {
-    transform: scale(0.33);
-  }
-  80%,
-  100% {
-    opacity: 0;
-  }
-}
 
 @keyframes pulse-ring {
   0% {
@@ -154,30 +191,6 @@ page-apcard {
   80%,
   100% {
     opacity: 0;
-  }
-}
-
-@-webkit-keyframes pulse-dot {
-  0% {
-    transform: scale(0.8);
-  }
-  50% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0.8);
-  }
-}
-
-@-moz-keyframes pulse-dot {
-  0% {
-    transform: scale(0.8);
-  }
-  50% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0.8);
   }
 }
 
@@ -191,4 +204,24 @@ page-apcard {
   100% {
     transform: scale(0.8);
   }
+}
+
+@keyframes moveclouds {     
+  0% { 
+      top: 500px;
+  }
+
+  100% { 
+      top: -500px;
+  }
+}
+
+
+@keyframes sideWays {
+0% {
+    margin-left:0px;
+}
+100% {
+    margin-left:50px;
+}
 }
