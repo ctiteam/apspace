@@ -7,13 +7,13 @@
 <ion-content padding>
   <ion-item class="mt-3" no-padding>
     <ion-label stacked>Message <span style="color: red">*</span></ion-label>
-    <ion-textarea #autofocus class="textarea" autosize row="1" [(ngModel)]="message"
+    <ion-textarea #autofocus class="textarea" autosize row="1" [(ngModel)]="message" [disabled]="submitting"
       [ngModelOptions]="{ standalone: true }">
     </ion-textarea>
   </ion-item>
   <ion-item class="mt-3" no-padding>
     <ion-label stacked>Contact Number</ion-label>
-    <ion-input type="number" [(ngModel)]="contactNo" [ngModelOptions]="{ standalone: true }">
+    <ion-input type="number" [disabled]="submitting" [(ngModel)]="contactNo" [ngModelOptions]="{ standalone: true }">
     </ion-input>
   </ion-item>
   <br class="my-3" />
@@ -30,6 +30,11 @@
     <ion-input disabled type="text" [value]="appVersion"></ion-input>
   </ion-item>
   <button ion-button full (click)="submitFeedback()" class="submit-button mt-5" [disabled]="submitting || !message">
-    Submit
+    <span *ngIf="!submitting">
+      Submit
+    </span>
+    <span *ngIf="submitting">
+      Loading...
+    </span>
   </button>
 </ion-content>

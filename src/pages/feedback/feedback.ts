@@ -27,6 +27,7 @@ export class FeedbackPage {
   ) { }
 
   submitFeedback() {
+    this.submitting = true;
     const feedback = {
       contactNo: this.contactNo || "",
       platform: this.platform,
@@ -35,15 +36,7 @@ export class FeedbackPage {
       screenSize: this.screenSize,
     };
 
-    this.submitting = true;
     this.feedback.sendFeedback(feedback).subscribe(_ => {
-      this.message = '';
-      this.toastCtrl.create({
-        message: 'Feedback submitted!',
-        position: 'top',
-        duration: 3000,
-      }).present();
-      this.submitting = false;
     }, err => {
       this.toastCtrl.create({
         message: err.message,
@@ -52,6 +45,16 @@ export class FeedbackPage {
         duration: 3000,
       }).present();
       // finally not invoked as error does not complete
+      this.submitting = false;
+    },
+    () => {
+      this.message = '';
+      this.contactNo = '';
+      this.toastCtrl.create({
+        message: 'Feedback submitted!',
+        position: 'top',
+        duration: 3000,
+      }).present();
       this.submitting = false;
     });
   }
