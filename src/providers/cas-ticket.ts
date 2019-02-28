@@ -58,13 +58,14 @@ export class CasTicketProvider {
         catchError(res => res.status === 201 && res.headers.get('Location')
           ? of(res.headers.get('Location').split('/').pop())
           : username && password
-            ? obs_throw('Invalid credentials')
+            ? obs_throw(JSON.stringify(res)) // CONVERT RESPONSE TO STRING TO CHECK IF CONTAINS SPECIFIC WORD (AccountPasswordMustChangeException)
             : (this.events.publish('user:logout'), empty())),
         tap(tgt => this.storage.set('tgt', tgt)),
         tap(_ => this.storage.set('cred', data)),
       )),
     );
   }
+  // .authentication_exceptions[1][0].split(':')[0]
 
   /**
    * POST: request service ticket from CAS
@@ -142,4 +143,4 @@ export class CasTicketProvider {
       }),
     );
   }
-}
+} 

@@ -1,7 +1,7 @@
 import { Component, ViewChild } from "@angular/core";
 import { Network } from "@ionic-native/network";
 import { Storage } from "@ionic/storage";
-import { IonicPage, NavController } from "ionic-angular";
+import { IonicPage, NavController, AlertController } from "ionic-angular";
 import { ToastController } from "ionic-angular";
 import { Platform } from "ionic-angular";
 import { MenuController } from "ionic-angular";
@@ -17,6 +17,7 @@ import {
   SettingsProvider,
   WsApiProvider
 } from "../../providers";
+import { InAppBrowser } from "@ionic-native/in-app-browser";
 
 @IonicPage()
 @Component({
@@ -42,7 +43,9 @@ export class LoginPage {
     private network: Network,
     private settings: SettingsProvider,
     private toastCtrl: ToastController,
-    private ws: WsApiProvider
+    private ws: WsApiProvider,
+    public alertCtrl: AlertController,
+    private iab: InAppBrowser
   ) {}
 
   ionViewDidEnter() {
@@ -80,8 +83,16 @@ export class LoginPage {
         .getTGT(this.username, this.password)
         .pipe(
           catchError(
-            _ => this.toast("Invalid username or password.") || empty()
-          ),
+            err => 
+            {
+            if(err.includes('AccountPasswordMustChangeException')){
+              this.toast("Your password has expired")
+              this.showConfirm();
+            }
+            else{
+              this.toast("Invalid username or password")
+            }
+          }),
           switchMap(tgt => this.casTicket.getST(this.casTicket.casUrl, tgt)),
           catchError(_ => this.toast("Fail to get service ticket.") || empty()),
           switchMap(st => this.casTicket.validate(st)),
@@ -112,6 +123,28 @@ export class LoginPage {
           }
         );
     }
+  }
+
+  showConfirm() {
+    const confirm = this.alertCtrl.create({
+      title: 'Your password has expired..',
+      message: 'You are required to change your password to be able to login to APSpace and other applications. The following documentation provides the steps to do that.',
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: () => {
+            console.log('Disagree clicked');
+          }
+        },
+        {
+          text: 'Open The documentation',
+          handler: () => {
+            this.iab.create('http://kb.sites.apiit.edu.my/question/apkey-troubleshooting/', '_blank', 'location=true');
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 
   showLoading() {
