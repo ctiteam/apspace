@@ -1,11 +1,13 @@
 page-bus-tracking {
   ion-menu{
     ion-content{
-      ion-list{
-        ion-item{
-          button{
-            height: 2em !important;
-          }
+      ion-item{
+        background-color: inherit !important;
+        .item-inner{
+          border-bottom: 0px !important;
+        }
+        button{
+          height: 2em !important;
         }
       }
     }

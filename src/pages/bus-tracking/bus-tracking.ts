@@ -102,6 +102,12 @@ export class BusTrackingPage {
     this.menu.toggle();
   }
 
+  changeLocations(){
+    let temp = this.toLocation;
+    this.toLocation = this.fromLocation;
+    this.fromLocation = temp;
+  }
+
   // FILTER TRIPS BY FROM LOCATION , TO LOCATION, TRIP DAY AND COMING TRIPS ONLY
   filterTrips(
     source: string,
