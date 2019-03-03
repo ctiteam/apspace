@@ -18,6 +18,7 @@ import {
   WsApiProvider
 } from "../../providers";
 import { InAppBrowser } from "@ionic-native/in-app-browser";
+import { Observable } from "rxjs";
 
 @IonicPage()
 @Component({
@@ -83,15 +84,16 @@ export class LoginPage {
         .getTGT(this.username, this.password)
         .pipe(
           catchError(
-            err => 
+            (err) => 
             {
             if(err.includes('AccountPasswordMustChangeException')){
-              this.toast("Your password has expired")
               this.showConfirm();
+              this.toast("Your password has expired")
             }
             else{
               this.toast("Invalid username or password")
             }
+            return Observable.throw(err);
           }),
           switchMap(tgt => this.casTicket.getST(this.casTicket.casUrl, tgt)),
           catchError(_ => this.toast("Fail to get service ticket.") || empty()),
