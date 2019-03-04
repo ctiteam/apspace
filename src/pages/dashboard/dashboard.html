@@ -276,7 +276,7 @@
                         <div class="col-10 item-info-text">
                           <p ion-text>
                             {{
-                              holiday.holiday_start_date | date: "mediumDate"
+                              holiday.holiday_start_date | date: "EEE, d MMM, y"
                             }}
                           </p>
                         </div>
@@ -325,9 +325,9 @@
 
               <!-- START SECTION 4 BODY -->
               <div class="section-body">
-                <div *ngFor="let exam of exams">
+                <div *ngFor="let exam of exams" class="py-1">
                   <div class="section-body-header">
-                    <h4 class="col-12">{{ exam.module }}</h4>
+                    <h4 class="col-12" ion-text>{{ exam.module }}</h4>
                   </div>
                   <div class="section-body-content row">
                     <div class="container">
@@ -337,7 +337,7 @@
                         </div>
                         <div class="col-10 item-info-text">
                           <p ion-text>
-                            {{ exam.since | date: "mediumDate" }} ({{
+                            {{ exam.since | date: "EEE, d MMM, y" }} ({{
                               exam.since | date: "shortTime"
                             }}
                             - {{ exam.until | date: "shortTime" }})
@@ -353,7 +353,7 @@
                           <p ion-text>APIIT @ TPM, Exam Hall</p>
                         </div>
                       </div>
-                      <div class="content-item-without-icon col-12 row">
+                      <!-- <div class="content-item-without-icon col-12 row">
                         <div>
                           <p ion-text>
                             Dockets will be released on
@@ -362,7 +362,7 @@
                             <b>{{ exam.resultDate | date }}.</b>
                           </p>
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
                 </div>
