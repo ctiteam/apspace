@@ -12,12 +12,13 @@ import { SettingsService } from './settings.service';
 /**
  * CAS Authentication with fallback mechanism.
  *
- *               Authenticate        (request on failure/after login)
- * +-------------+ -------> +--------+  - - - > +-------+  - - - > +---------+
+ *          Authentication <--+
+ *                            v               (post-login)
+ * +-------------+          +--------+  - - - > +-------+  - - - > +---------+
  * | user:logout |          | getTGT |          | getST |          | Service |
  * +-------------+ <-x----- +--------+ <------- +-------+ <------- +---------+
- *         Invalid Credentials      Service Ticket       PHP Session
- *          (Observable.EMPTY)         Expired             Expired
+ *         Invalid Credentials      Service Ticket     Session Expired
+ *          (Observable.EMPTY)         Expired         (if applicable)
  */
 @Injectable({
   providedIn: 'root'
@@ -45,8 +46,8 @@ export class CasTicketService {
    * POST: request ticket-granting ticket from CAS and cache tgt and credentials
    * If username and password are not provided, use `cred` from storage and
    * logout and return EMPTY instead of throwing an error on failure.
-   * @param username - username for CAS
-   * @param password - password for CAS
+   * @param username CAS username
+   * @param password CAS password
    */
   getTGT(username?: string, password?: string): Observable<string> {
     const options = {
@@ -61,7 +62,7 @@ export class CasTicketService {
         catchError(res => res.status === 201 && res.headers.get('Location')
           ? of(res.headers.get('Location').split('/').pop())
           : username && password
-            ? throwError('Invalid credentials')
+            ? throwError(res.status === 0 ? 'Network error' : 'Invalid username or password')
             : (this.events.publish('user:logout'), EMPTY)),
         tap(tgt => this.storage.set('tgt', tgt)),
         tap(_ => this.storage.set('cred', data)),
@@ -72,8 +73,8 @@ export class CasTicketService {
   /**
    * POST: request service ticket from CAS
    * Use `tgt` from storage if not provided.
-   * @param serviceUrl - service url for CAS authentication
-   * @param tgt - ticket granting ticket (default: cached `tgt`)
+   * @param serviceUrl Service url for CAS authentication
+   * @param tgt Ticket granting ticket (default: cached `tgt`)
    */
   getST(serviceUrl: string = this.casUrl, tgt?: string | {}): Observable<string> {
     const options = {
@@ -83,18 +84,15 @@ export class CasTicketService {
       withCredentials: true,
     };
     return (tgt ? of(tgt) : fromPromise(this.storage.get('tgt'))).pipe(
-      switchMap(tgt => this.http.post(`${this.casUrl}/cas/v1/tickets/${tgt}`, null, options).pipe(
-        catchError(_ => this.getTGT().pipe(
-          switchMap(tgt => this.getST(serviceUrl, tgt)),
-        )),
-      )),
+      switchMap(tgt => this.http.post(`${this.casUrl}/cas/v1/tickets/${tgt}`, null, options)),
+      catchError(_ => this.getTGT().pipe(switchMap(tgt => this.getST(serviceUrl, tgt)))),
     );
   }
 
   /**
    * DELETE: delete ticket granting ticket
    * Use `tgt` from storage if not provided.
-   * @param tgt - ticket granting ticket (default: cached `tgt`)
+   * @param tgt Ticket granting ticket (default: cached `tgt`)
    */
   deleteTGT(tgt?: string): Observable<string> {
     const options = {
@@ -109,8 +107,8 @@ export class CasTicketService {
   /**
    * GET: Validate service ticket and set role to user
    *
-   * @param st service ticket
-   * @return tgt
+   * @param st Service ticket
+   * @return tgt Ticket granting ticket
    */
   validate(st?: string): Observable<Role> {
 

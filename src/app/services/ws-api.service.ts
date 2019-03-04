@@ -70,7 +70,8 @@ export class WsApiService {
         tap(cache => this.storage.set(endpoint, cache)),
         timeout(options.timeout),
         catchError(err => {
-          // this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
+          this.toastCtrl.create({ message: err.message, duration: 3000, position: 'top' })
+            .then(toast => toast.present());
           return from(this.storage.get(endpoint)).pipe(
             switchMap(v => v || throwError('retrying')),
           );

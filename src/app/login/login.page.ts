@@ -47,7 +47,7 @@ export class LoginPage implements OnInit {
       return this.toast('You are now offline.');
     }
     this.cas.getTGT(this.username, this.password).pipe(
-      catchError(_ => (this.toast('Invalid username or password.'), EMPTY)),
+      catchError(e => (this.toast(e), EMPTY)),
       switchMap(tgt => this.cas.getST(this.cas.casUrl, tgt)),
       catchError(_ => (this.toast('Fail to get service ticket.'), EMPTY)),
       switchMap(st => this.cas.validate(st)),
