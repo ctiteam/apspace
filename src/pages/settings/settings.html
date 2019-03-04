@@ -34,7 +34,7 @@
                   <ion-item *ngFor="let themeOption of themeOptions">
                     <ion-label>{{ themeOption.title }}</ion-label>
                     <ion-radio
-                      value="{{themeOption.value}}"
+                      value="{{ themeOption.value }}"
                       (ionSelect)="toggleTheme($event, themeOption.value)"
                     ></ion-radio>
                   </ion-item>
@@ -52,7 +52,7 @@
                   <ion-item *ngFor="let colorOption of colorSchemeOptions">
                     <ion-label>{{ colorOption.title }}</ion-label>
                     <ion-radio
-                      value="{{colorOption.value}}"
+                      value="{{ colorOption.value }}"
                       (ionSelect)="toggleColorScheme($event, colorOption.value)"
                     ></ion-radio>
                   </ion-item>
@@ -80,7 +80,9 @@
           <!-- START SECTION 2 BODY -->
           <div class="section-body">
             <div class="section-body-header">
-              <h4 class="col-12" [navPush]="'PasswordRecoveryPage'">Set Security Questions</h4>
+              <h4 class="col-12" [navPush]="'PasswordRecoveryPage'">
+                Set Security Questions
+              </h4>
             </div>
 
             <!-- <div class="section-body-header">
@@ -91,28 +93,36 @@
         </div>
         <!-- END SECTION 2: PRIVACY SETTINGS -->
 
-        <!-- START SECTION 3: NOTIFICATIONS SETTINGS -->
-        <!-- <div class="main-section section theme-settings-section"> -->
-          <!-- START SECTION 3 HEADER -->
-          <!-- <div class="section-header">
+        <!-- START SECTION 2: PRIVACY SETTINGS -->
+        <div class="main-section section theme-settings-section">
+          <!-- START SECTION 2 HEADER -->
+          <div class="section-header">
             <div class="section-header-icon">
-              <ion-icon item-left name="notifications"></ion-icon>
+              <ion-icon item-left name="help"></ion-icon>
             </div>
             <div class="section-header-text">
-              <h3>Notification Settings</h3>
+              <h3>About</h3>
             </div>
-          </div> -->
-          <!-- END SECTION 3 HEADER -->
+          </div>
+          <!-- END SECTION 2 HEADER -->
 
-          <!-- START SECTION 3 BODY -->
-          <!-- <div class="section-body">
+          <!-- START SECTION 2 BODY -->
+          <div class="section-body">
             <div class="section-body-header">
-              <h4 class="col-12">To be added later</h4>
+              <h4 class="px-5 py-2">
+                <div class="row">
+                  <div class="col-6 p-0">App Version</div>
+                  <div class="col-6 p-0 text-right">{{appVersion}}</div>
+                </div>
+              </h4>
+              <h4 class="px-5">
+
+              </h4>
             </div>
-          </div> -->
-          <!-- END SECTION 3 BODY -->
-        <!-- </div> -->
-        <!-- END SECTION 3: NOTIFICATIONS SETTINGS -->
+          </div>
+          <!-- END SECTION 2 BODY -->
+        </div>
+        <!-- END SECTION 2: PRIVACY SETTINGS -->
       </div>
       <!-- END OF PAGE CONTAINER -->
     </div>

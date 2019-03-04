@@ -9,6 +9,7 @@ import {
 import {
   AppAnimationProvider,
   UserSettingsProvider,
+  VersionProvider,
 } from '../../providers';
 
 @IonicPage()
@@ -20,6 +21,7 @@ export class SettingsPage {
   @ViewChild(Content) content: Content;
   activeTheme: string;
   activeColorScheme: string;
+  appVersion: string;
   themeOptions = [
     { title: 'Light Theme (Default)', value: 'light-theme' },
     { title: 'Dark Theme', value: 'dark-theme' },
@@ -40,6 +42,7 @@ export class SettingsPage {
     private appAnimationProvider: AppAnimationProvider,
     private userSettings: UserSettingsProvider,
     public platform: Platform,
+    private version: VersionProvider
   ) {
     this.userSettings
       .getActiveTheme()
@@ -50,6 +53,7 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
+    this.appVersion = this.version.name;
     this.appAnimationProvider.addAnimationsToSections(this.elRef);
     // ON PAGE SCROLL
     this.content.ionScroll.subscribe((ev: any) => {
