@@ -2,7 +2,7 @@
   <ion-navbar>
     <ion-title>Bus Tracking</ion-title>
     <ion-buttons end>
-      <button ion-button outline small class="notification-button colored-border" (click)="toggleFilterMenu()">
+      <button ion-button icon-only clear class="notification-button colored-border" (click)="toggleFilterMenu()">
         <ion-icon name="options"></ion-icon>
       </button>
     </ion-buttons>
@@ -12,6 +12,11 @@
 <ion-menu [content]="content" side="right">
   <ion-header>
     <ion-toolbar>
+      <ion-buttons end>
+        <button ion-button icon-only (click)="toggleFilterMenu()">
+          <ion-icon name="close"></ion-icon>
+        </button>
+      </ion-buttons>
       <ion-title>Filter Trips</ion-title>
     </ion-toolbar>
   </ion-header>
@@ -20,7 +25,7 @@
       <div class="col-9 pr-0">
         <ion-item>
           <ion-label>From</ion-label>
-          <ion-select [(ngModel)]="fromLocation">
+          <ion-select [(ngModel)]="fromLocation" (ngModelChange)="onFilter()">
             <ion-option selected value="">Any</ion-option>
             <ion-option *ngFor="let location of locations" [value]="location.location_name">
               {{ location.location_nice_name }}</ion-option>
@@ -28,7 +33,7 @@
         </ion-item>
         <ion-item>
           <ion-label>To</ion-label>
-          <ion-select [(ngModel)]="toLocation">
+          <ion-select [(ngModel)]="toLocation" (ngModelChange)="onFilter()">
             <ion-option selected value="">Any</ion-option>
             <ion-option *ngFor="let location of locations" [value]="location.location_name">
               {{ location.location_nice_name }}</ion-option>
@@ -36,8 +41,8 @@
         </ion-item>
       </div>
       <div class="col-3 pl-0 m-auto text-center">
-        <button ion-button small round outline icon-only class="notification-button colored-border"
-          (click)="changeLocations()">
+        <button ion-button clear icon-only class="notification-button colored-border"
+          (click)="changeLocations()" style="transform: rotate(90deg)">
           <ion-icon name="swap"></ion-icon>
         </button>
       </div>
@@ -46,7 +51,7 @@
       <div class="col-12">
         <ion-item>
           <ion-label>Day</ion-label>
-          <ion-select [(ngModel)]="tripDay">
+          <ion-select [(ngModel)]="tripDay" (ngModelChange)="onFilter()">
             <ion-option value="mon-fri">Monday-Friday</ion-option>
             <ion-option value="sat">Saturday</ion-option>
             <ion-option value="sun">Sunday</ion-option>
@@ -54,77 +59,13 @@
         </ion-item>
         <ion-item>
           <ion-label>Show</ion-label>
-          <ion-select [(ngModel)]="comingTripsOnly">
+          <ion-select [(ngModel)]="comingTripsOnly" (ngModelChange)="onFilter()">
             <ion-option value="">All Trips</ion-option>
             <ion-option value="true">Upcoming Trips</ion-option>
           </ion-select>
         </ion-item>
-        <ion-item>
-          <button ion-button outline large block icon-end class="notification-button colored-border" (click)="
-            filterTrips(fromLocation, toLocation, tripDay, comingTripsOnly)
-          ">
-            Apply Filters
-            <ion-icon name="checkmark"></ion-icon>
-          </button>
-        </ion-item>
       </div>
     </div>
-    <!-- <ion-list>
-      <ion-item>
-        <ion-label>From</ion-label>
-        <ion-select [(ngModel)]="fromLocation">
-          <ion-option selected value="">Any</ion-option>
-          <ion-option
-            *ngFor="let location of locations"
-            [value]="location.location_name"
-            >{{ location.location_nice_name }}</ion-option
-          >
-        </ion-select>
-      </ion-item>
-      <ion-item>
-        <ion-label>To</ion-label>
-        <ion-select [(ngModel)]="toLocation">
-          <ion-option selected value="">Any</ion-option>
-          <ion-option
-            *ngFor="let location of locations"
-            [value]="location.location_name"
-            >{{ location.location_nice_name }}</ion-option
-          >
-        </ion-select>
-      </ion-item>
-      <ion-item>
-        <ion-label>Day</ion-label>
-        <ion-select [(ngModel)]="tripDay">
-          <ion-option value="mon-fri">Monday-Friday</ion-option>
-          <ion-option value="sat">Saturday</ion-option>
-          <ion-option value="sun">Sunday</ion-option>
-        </ion-select>
-      </ion-item>
-      <ion-item>
-        <ion-label>Show</ion-label>
-        <ion-select [(ngModel)]="comingTripsOnly">
-          <ion-option value="">All Trips</ion-option>
-          <ion-option value="true">Upcoming Trips</ion-option>
-        </ion-select>
-      </ion-item>
-      <ion-item>
-        <button
-          ion-button
-          outline
-          large
-          block
-          icon-end
-          class="notification-button colored-border"
-          (click)="
-            filterTrips(fromLocation, toLocation, tripDay, comingTripsOnly)
-          "
-        >
-          Apply Filters
-          <ion-icon name="checkmark"></ion-icon>
-        </button>
-        <button ion-button outline large block class="notification-button colored-border" (click)="changeLocations()">change locations</button>
-      </ion-item>
-    </ion-list> -->
   </ion-content>
 </ion-menu>
 
