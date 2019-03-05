@@ -454,6 +454,9 @@ $dark_menu_colors: (
             }
           }
         }
+        .note-section p {
+          color: color($dark_colors, dark_search_background_color);
+        }
       }
     }
   }

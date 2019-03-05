@@ -1,12 +1,15 @@
 page-exam-schedule {
-  ion-card-content{
-    ion-list{
+  ion-card-content {
+    ion-list {
       margin-top: 1px !important;
-      ion-item{
-        ion-label{
+      ion-item {
+        ion-label {
           font-weight: bold;
         }
       }
+    }
+    .note-section p {
+      text-align: justify;
     }
   }
 }

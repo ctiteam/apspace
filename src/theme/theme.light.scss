@@ -428,6 +428,9 @@ $light_menu_colors: (
           }
         }
       }
+      .note-section p {
+        color: color($light_colors, ligth_grey_color);
+      }
     }
   }
 

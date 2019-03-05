@@ -153,6 +153,11 @@ $primary_color: #1297e0;
       ion-card-header {
         color: $primary_color;
       }
+      ion-card-content{
+        hr {
+          border-color: $primary_color;
+        }
+      }
     }
   }
 
