@@ -87,6 +87,59 @@ page-upcominglec {
         color: slategrey;
     }
 
+    .fablabelavailable {
+        position: absolute;
+        width: 100%;
+        padding-right: 350px;
+        padding-bottom: 75px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        font-weight: bold;
+    }
+         
+    .fablabelunavailable {
+        position: absolute;
+        width: 100%;
+        padding-right: 350px;
+        padding-bottom: 18px;
+        margin-top: 10px;
+        margin-bottom: 0px;
+        font-weight: bold;
+    }
+         
+    .ListBackdrop {
+        background-color: white !important;
+        position: fixed !important;
+        height: 100%;
+        width: 100%;
+        z-index: 1;
+        opacity: 0.8
+    }
+
+    .noListBackdrop {
+        position: fixed !important;
+        height: 100%;
+        width: 100%;
+        z-index: 1;
+        opacity: 0.8
+    }
+    
+    ion-fab {
+        ion-fab-list button[ion-fab] {
+          overflow: visible;
+    
+          div.label {
+            position: absolute;
+            right: 48px;
+            height: 24px;
+            line-height: 16px;
+            padding: 5px 8px;
+            border-radius: 3px;
+            color: black;
+        }
+      }
+    }
+
 }
 
 
