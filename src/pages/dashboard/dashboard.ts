@@ -11,13 +11,11 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { concatMap, finalize, flatMap, map, share, tap, toArray } from 'rxjs/operators';
+import { finalize, map, share, tap } from 'rxjs/operators';
 
 import {
   Apcard,
   Attendance,
-  Course,
-  CourseDetails,
   ExamSchedule,
   FeesTotalSummary,
   Holiday,
@@ -42,9 +40,7 @@ export class DashboardPage {
   // OBSERVABLES
   attendance$: Observable<Attendance[]>;
   attendancePercent$: Observable<number>;
-  courseDetails$: Observable<CourseDetails>;
   exam$: Observable<ExamSchedule[]>;
-  intake$: Observable<Course[]>;
   nextHoliday$: Observable<Holiday>;
   overdue$: Observable<FeesTotalSummary[]>;
   profile$: Observable<StudentProfile>;
