@@ -101,21 +101,20 @@ export class AttendancePage {
   }
 
   ionViewDidLoad() {
-    this.courses$ = this.ws.get<Course[]>('/student/courses').pipe(
+    this.doRefresh();
+  }
+
+  doRefresh(refresher?) {
+    this.courses$ = this.ws.get<Course[]>('/student/courses', true).pipe(
       tap(c => (this.selectedIntake = c[0].INTAKE_CODE)),
-      tap(_ => this.getAttendance(this.selectedIntake, true)),
+      tap(_ => this.attendance$ = this.getAttendance(this.selectedIntake, true)),
       tap(
         c =>
           (this.intakeLabels = Array.from(
             new Set((c || []).map(t => t.INTAKE_CODE)),
           )),
       ),
-    );
-  }
-
-  doRefresh(refresher?) {
-    this.attendance$ = this.getAttendance(this.selectedIntake, refresher).pipe(
-      finalize(() => refresher && refresher.complete()),
+      finalize(() => refresher && refresher.complete())
     );
   }
 }
