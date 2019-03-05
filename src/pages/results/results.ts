@@ -79,25 +79,24 @@ export class ResultsPage {
   }
 
   ionViewDidLoad() {
+    this.doRefresh();
+  }
+
+  doRefresh(refresher?) {
     this.ws.get<StudentProfile>('/student/profile', true).subscribe(p => {
       if (p.BLOCK === true) {
         this.block = false;
-        this.course$ = this.ws.get<Course[]>('/student/courses').pipe(
+        this.course$ = this.ws.get<Course[]>('/student/courses', true).pipe(
           tap(i => this.selectedIntake = i[0].INTAKE_CODE),
-          tap(i => this.getResults(i[0].INTAKE_CODE)),
+          tap(i => this.result$ = this.getResults(i[0].INTAKE_CODE)),
           tap(i => this.intakeLabels = Array.from(new Set((i || []).map(t => t.INTAKE_CODE)))),
+          finalize(() => refresher && refresher.complete())
         );
       } else {
         this.block = true;
         this.message = p.MESSAGE;
       }
     });
-  }
-
-  doRefresh(refresher) {
-    this.result$ = this.getResults(this.selectedIntake, true).pipe(
-      finalize(() => refresher.complete()),
-    );
   }
 
   getCourseDetails(intake: string, refresh: boolean): Observable<CourseDetails> {
