@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { AlertController, App, DateTime, IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AlertController, App, DateTime, IonicPage, NavController, NavParams, FabContainer } from 'ionic-angular';
 import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
@@ -24,6 +24,8 @@ export class UpcominglecPage {
 
   currenttime = moment().format('YYYY-MM-DD HH:mm:ss');
 
+  fabButtonOpened: Boolean;
+
   constructor(
     public http: HttpClient,
     public navCtrl: NavController,
@@ -32,7 +34,22 @@ export class UpcominglecPage {
     public app: App,
     public alertCtrl: AlertController,
   ) {
+    this.fabButtonOpened = false;
+  }
 
+  openFabButton() {
+    if (this.fabButtonOpened == false) {
+      this.fabButtonOpened = true;
+    } else {
+      this.fabButtonOpened = false;
+    }
+  }
+
+  closeFabButton(fab: FabContainer) {
+    fab.close();
+    if (this.closeFabButton) {
+      this.fabButtonOpened = false;
+    }
   }
 
   ionViewDidLoad() {
