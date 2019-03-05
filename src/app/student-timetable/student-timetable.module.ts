@@ -7,9 +7,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { StudentTimetablePage } from './student-timetable.page';
-import { IntakeSearchModalComponent } from './intake-search-modal.component';
 import { ClassesPipe } from './classes.pipe';
 import { ThedayPipe } from './theday.pipe';
+import { SearchModalComponent } from '../components/search-modal/search-modal.component';
 
 const routes: Routes = [
   {
@@ -28,10 +28,10 @@ const routes: Routes = [
   ],
   declarations: [
     StudentTimetablePage,
-    IntakeSearchModalComponent,
     ClassesPipe,
-    ThedayPipe
+    ThedayPipe,
+    SearchModalComponent
   ],
-  entryComponents: [IntakeSearchModalComponent]
+  entryComponents: [SearchModalComponent]
 })
 export class StudentTimetablePageModule {}

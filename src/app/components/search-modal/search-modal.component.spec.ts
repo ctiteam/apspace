@@ -16,7 +16,7 @@ describe('SearchModalComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ SearchModalComponent ],
       providers: [
-        { provider: ModalController, useValue: modalControllerSpy },
+        { provide: ModalController, useValue: modalControllerSpy },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
@@ -29,7 +29,7 @@ describe('SearchModalComponent', () => {
     fixture.detectChanges();
   });
 
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

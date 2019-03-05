@@ -22,7 +22,6 @@ const routes: Routes = [
   },
   {
     path: 'student-timetable',
-    canActivate: [AuthGuard],
     children: [
       {
         path: '',

@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { IonSearchbar, ModalController } from '@ionic/angular';
+import { Observable, merge, of } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 
 @Component({
@@ -9,9 +9,18 @@ import { distinctUntilChanged, map, tap } from 'rxjs/operators';
   templateUrl: './search-modal.component.html',
   styleUrls: ['./search-modal.component.scss'],
 })
-export class SearchModalComponent implements OnInit {
+export class SearchModalComponent implements AfterViewInit, OnInit {
 
-  @Input() items: string[];
+  @ViewChild(IonSearchbar) searchbar;
+
+  /** Items to be searched or filtered. */
+  @Input() items: string[] = [];
+
+  /** Displayed items before searching. */
+  @Input() defaultItems: string[] = [];
+
+  /** Message to display when no items. */
+  @Input() notFound = 'Type to search';
 
   searchControl = new FormControl();
   searchItem$: Observable<string[]>;
@@ -20,14 +29,24 @@ export class SearchModalComponent implements OnInit {
   constructor(private modalCtrl: ModalController) { }
 
   ngOnInit() {
+    // convert all items to be searched to uppercase
     const searchItems = Array.from(new Set(this.items.map(item => item.toUpperCase()))).sort();
 
-    this.searchItem$ = this.searchControl.valueChanges.pipe(
+    // observable to process inputs when value changes
+    const searchChange$ = this.searchControl.valueChanges.pipe(
       distinctUntilChanged(),
       tap(() => this.searching = true),
       map(term => this.search(searchItems, term)),
       tap(() => this.searching = false),
     );
+
+    // continue default observable with searched result
+    this.searchItem$ = merge(of(this.defaultItems), searchChange$);
+  }
+
+  ngAfterViewInit() {
+    // XXX: Why Ionic?
+    setTimeout(() => this.searchbar.setFocus(), 200);
   }
 
   select(item: string) {

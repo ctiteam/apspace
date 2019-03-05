@@ -11,7 +11,7 @@ import { finalize, tap } from 'rxjs/operators';
 import { StudentProfile, StudentTimetable } from '../interfaces';
 import { SettingsService, StudentTimetableService, WsApiService } from '../services';
 import { ClassesPipe } from './classes.pipe';
-import { IntakeSearchModalComponent } from './intake-search-modal.component';
+import { SearchModalComponent } from '../components/search-modal/search-modal.component';
 
 @Component({
   selector: 'app-timetable',
@@ -107,8 +107,9 @@ export class StudentTimetablePage implements OnInit {
   /** Display intake search modal. */
   async presentIntakeSearch() {
     const modal = await this.modalCtrl.create({
-      component: IntakeSearchModalComponent,
-      componentProps: { items: this.intakeLabels },
+      component: SearchModalComponent,
+      // TODO: store search history
+      componentProps: { items: this.intakeLabels, notFound: 'No Intake Selected' },
     });
     await modal.present();
     // default item to current intake if model dismissed without data

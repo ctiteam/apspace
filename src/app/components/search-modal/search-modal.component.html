@@ -10,13 +10,13 @@
   </div>
 
   <ion-list no-lines *ngIf="searchItem$ | async as items">
-    <ng-template [ngIf]="items.length > 0" [ngIfElse]="notFound">
+    <ng-template [ngIf]="items.length > 0" [ngIfElse]="noItem">
       <ion-item button *ngFor="let item of items" (click)="select(item)">
         {{ item }}
       </ion-item>
     </ng-template>
-    <ng-template #notFound>
-      <ion-item>Not Intake Found</ion-item>
+    <ng-template #noItem>
+      <ion-item>{{ notFound }}</ion-item>
     </ng-template>
   </ion-list>
 </ion-content>
