@@ -841,44 +841,6 @@
           </ng-template>
           <!-- END SECTION 11: APCARD -->
           <!-- ********************************************* -->
-          <!-- ********************************************* -->
-          <!-- START SECTION 12: GPA -->
-          <ng-template [ngIf]="!block">
-            <ng-template [ngIf]="barChartData" [ngIfElse]="loadingGPA">
-              <div class="main-section section low-attendance-section">
-                <!-- START SECTION 12 HEADER -->
-                <div class="section-header">
-                  <div class="section-header-icon">
-                    <ion-icon item-left name="medal"></ion-icon>
-                  </div>
-                  <div class="section-header-text">
-                    <h3>GPA Per Intake</h3>
-                  </div>
-                </div>
-                <!-- END SECTION 12 HEADER -->
-                <!-- START SECTION 12 BODY -->
-                <div class="section-body">
-                  <div class="apcard-chart">
-                    <chart
-                      [type]="type[0]"
-                      [data]="barChartData"
-                      [options]="options[1]"
-                    ></chart>
-                  </div>
-                </div>
-                <!-- END SECTION 12 BODY -->
-              </div>
-            </ng-template>
-            <ng-template #loadingGPA>
-              <ion-card>
-                <ion-item no-lines>
-                  <skeleton-item height="160px" width="100%"></skeleton-item>
-                </ion-item>
-              </ion-card>
-            </ng-template>
-          </ng-template>
-          <!-- END SECTION 12: GPA -->
-          <!-- ********************************************* -->
         </div>
         <div class="col-md-6 col-lg-4 d-none d-md-block d-lg-block d-xl-block d-xl-none">
           NEWS, EVENTS AND SLIDER SECTIONS 
