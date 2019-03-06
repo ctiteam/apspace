@@ -105,43 +105,6 @@ export class UpcominglecPage {
     window.open('https://products.office.com/en-us/microsoft-teams/group-chat-software', '_system');
   }
 
-  // add feedback
-  async addfeedback(slotid: number) {
-    this.app.getRootNav().push('UpcominglecPage', { slotid });
-    const alert = await this.alertCtrl.create({
-      title: 'Remarks',
-      inputs: [
-        {
-          name: 'remarks',
-          placeholder: 'Please provide remarks',
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-        },
-        {
-          text: 'Submit',
-          handler: data => {
 
-            const feedback = {
-              slotid,
-              entry_datetime: this.currentDateTime,
-              feedback: data.remarks,
-            };
-
-            this.UpcomingConLec.addlecFeedback(feedback).subscribe(
-              () => {
-                this.app.getRootNav().setRoot(TabsPage);
-                this.app.getRootNav().push(UpcominglecPage);
-              },
-            );
-          },
-        },
-      ],
-    });
-    await alert.present();
-  }
 
 }

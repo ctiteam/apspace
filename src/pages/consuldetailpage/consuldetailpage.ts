@@ -34,6 +34,7 @@ export class ConsuldetailpagePage {
     slotid: this.slotid,
     entry_datetime: this.currentDateTime,
     feedback: '',
+    gims_status: 0
   };
 
   constructor(
@@ -55,14 +56,35 @@ export class ConsuldetailpagePage {
     this.feedback$ = this.pro.getfeedback(id1);
   }
 
-  addfeedback() {
-    this.UpcomingConLec.addlecFeedback(this.lecfeedback).subscribe(
-      () => {
-        this.app.getRootNav().setRoot(TabsPage);
-        this.app.getRootNav().push(UpcominglecPage);
-        this.presentToast();
-      },
-    );
+  changeTest() {
+    this.lecfeedback.gims_status = +this.lecfeedback.gims_status;
+  }
+
+  // confirm copy remarks to gims
+  async confirmation() {
+    const alert = await this.alertCtrl.create({
+      title: 'Confirm',
+      message: 'Are you sure you want to add this remarks?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.UpcomingConLec.addlecFeedback(this.lecfeedback).subscribe(
+              () => {
+                this.app.getRootNav().setRoot(TabsPage);
+                this.app.getRootNav().push(UpcominglecPage);
+                this.presentToast();
+              },
+            );
+          },
+        },
+      ],
+    });
+    await alert.present();
   }
 
   presentToast() {
