@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { LecturerTimetableComponent } from './lecturer-timetable/lecturer-timetable.component';
@@ -11,7 +13,12 @@ import { SearchModalComponent } from './search-modal/search-modal.component';
     SkeletonItemComponent,
     SearchModalComponent
   ],
-  imports: [IonicModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    IonicModule
+  ],
   exports: [
     LecturerTimetableComponent,
     SkeletonItemComponent,
