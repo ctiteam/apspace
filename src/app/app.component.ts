@@ -62,7 +62,7 @@ export class MyApp {
             this.selectedTheme = val;
             if(this.selectedTheme === 'light-theme'){
               this.statusBar.backgroundColorByHexString('#e7e7e7');
-              this.statusBar.styleBlackOpaque();
+              this.statusBar.styleDefault();
             } else if (this.selectedTheme === 'dark-theme'){
               this.statusBar.backgroundColorByHexString('#1d1b1b');
               this.statusBar.styleLightContent();
