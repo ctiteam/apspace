@@ -58,7 +58,15 @@ export class MyApp {
         this.userSettings.getUserSettingsFromStorage();
         this.userSettings
           .getActiveTheme()
-          .subscribe(val => (this.selectedTheme = val));
+          .subscribe((val) => {
+            this.selectedTheme = val;
+            if(this.selectedTheme === 'light-theme'){
+              this.statusBar.backgroundColorByHexString('#e7e7e7');
+            } else if (this.selectedTheme === 'dark-theme'){
+              this.statusBar.backgroundColorByHexString('#1d1b1b');
+              this.statusBar.styleLightContent();
+            }
+          });
         this.userSettings
           .getColorScheme()
           .subscribe(val => (this.selectedColorScheme = val));
