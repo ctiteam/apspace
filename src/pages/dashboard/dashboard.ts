@@ -184,80 +184,79 @@ export class DashboardPage {
     );
   }
 
-    // GPA METHODS
-
-    getGPA() {
-      this.ws
-        .get<Course[]>('/student/courses')
-        .pipe(
-          flatMap(intakes => intakes),
-          concatMap(intake => {
-            const url = `/student/sub_and_course_details?intake=${
-              intake.INTAKE_CODE
+  // GPA METHODS
+  getGPA() {
+    this.ws
+      .get<Course[]>('/student/courses')
+      .pipe(
+        flatMap(intakes => intakes),
+        concatMap(intake => {
+          const url = `/student/sub_and_course_details?intake=${
+            intake.INTAKE_CODE
             }`;
-            return this.ws.get<CourseDetails>(url, true).pipe(
-              map(intakeDetails =>
-                Object.assign({
-                  intakeDate: intake.INTAKE_NUMBER,
-                  intakeCode: intake.INTAKE_CODE,
-                  intakeDetails,
-                }),
-              ),
-            );
-          }),
-          toArray(),
-        )
-        .subscribe(d => {
-          const data = Array.from(
-            new Set(
-              (d || []).map(t => ({
-                intakeCode: t.intakeCode,
-                gpa: t.intakeDetails.slice(-1)[0],
-              })),
+          return this.ws.get<CourseDetails>(url, true).pipe(
+            tap(intakeDet => console.log(intakeDet)),
+            map(intakeDetails =>
+              Object.assign({
+                intakeDate: intake.INTAKE_NUMBER,
+                intakeCode: intake.INTAKE_CODE,
+                intakeDetails,
+              }),
             ),
           );
-          const filteredData = data.filter(res => res.gpa.IMMIGRATION_GPA);
-          const labels = filteredData.map(i => i.intakeCode);
-          const gpa = filteredData.map(i => i.gpa.IMMIGRATION_GPA);
-          console.log(data);
-          const color = [
-            'rgba(255, 99, 132, 0.7)',
-            'rgba(54, 162, 235, 0.7)',
-            'rgba(255, 206, 86, 0.7)',
-            'rgba(75, 192, 192, 0.7)',
-            'rgba(153, 102, 255, 0.7)',
-            'rgba(255, 159, 64, 0.7)',
-            'rgba(54,72,87,0.7)',
-            'rgba(247,89,64,0.7)',
-            'rgba(61,199,190,0.7)',
-          ];
-  
-          const borderColor = [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)',
-            'rgba(54,72,87,1)',
-            'rgba(247,89,64,1)',
-            'rgba(61,199,190,1)',
-          ];
-  
-          this.barChartData = {
-            labels,
-            datasets: [
-              {
-                backgroundColor: color,
-                borderColor,
-                borderWidth: 2,
-                data: gpa,
-              },
-            ],
-          };
-        });
-    }
-  
+        }),
+        toArray(),
+      )
+      .subscribe(d => {
+        const data = Array.from(
+          new Set(
+            (d || []).map(t => ({
+              intakeCode: t.intakeCode,
+              gpa: t.intakeDetails[t.intakeDetails.length - 2].IMMIGRATION_GPA,
+            })),
+          ),
+        );
+        console.log(data);
+        const filteredData = data.filter(res => res.gpa);
+        const labels = filteredData.map(i => i.intakeCode);
+        const gpa = filteredData.map(i => i.gpa);
+        const color = [
+          'rgba(255, 99, 132, 0.7)',
+          'rgba(54, 162, 235, 0.7)',
+          'rgba(255, 206, 86, 0.7)',
+          'rgba(75, 192, 192, 0.7)',
+          'rgba(153, 102, 255, 0.7)',
+          'rgba(255, 159, 64, 0.7)',
+          'rgba(54,72,87,0.7)',
+          'rgba(247,89,64,0.7)',
+          'rgba(61,199,190,0.7)',
+        ];
+        const borderColor = [
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(54,72,87,1)',
+          'rgba(247,89,64,1)',
+          'rgba(61,199,190,1)',
+        ];
+
+        this.barChartData = {
+          labels,
+          datasets: [
+            {
+              backgroundColor: color,
+              borderColor,
+              borderWidth: 2,
+              data: gpa,
+            },
+          ],
+        };
+      });
+  }
+
 
   // ATTENDANCE METHODS
   getAttendance(intake: string) {
