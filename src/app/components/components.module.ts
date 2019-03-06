@@ -17,5 +17,8 @@ import { SearchModalComponent } from './search-modal/search-modal.component';
     SkeletonItemComponent,
     SearchModalComponent
   ],
+  entryComponents: [
+    SearchModalComponent
+  ]
 })
 export class ComponentsModule { }

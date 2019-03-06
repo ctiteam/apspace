@@ -10,6 +10,7 @@ import { StudentTimetablePage } from './student-timetable.page';
 import { ClassesPipe } from './classes.pipe';
 import { ThedayPipe } from './theday.pipe';
 import { SearchModalComponent } from '../components/search-modal/search-modal.component';
+import { ComponentsModule } from '../components/components.module';
 
 const routes: Routes = [
   {
@@ -30,8 +31,7 @@ const routes: Routes = [
     StudentTimetablePage,
     ClassesPipe,
     ThedayPipe,
-    SearchModalComponent
   ],
-  entryComponents: [SearchModalComponent]
+  entryComponents: []
 })
 export class StudentTimetablePageModule {}
