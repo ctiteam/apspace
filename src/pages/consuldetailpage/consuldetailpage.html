@@ -7,12 +7,6 @@
 
 <ion-content>
   <ion-card *ngFor="let details of detail$ | async" padding>
-    <!-- <ion-card-header class="detailimage">
-      <ion-avatar item-start>
-        <img src="assets/img/profile.svg" width="100" height="100">
-      </ion-avatar>
-    </ion-card-header> -->
-
     <ion-card-content>
       <ion-item class="studentdetails">
         <ion-icon name="person" item-start></ion-icon>
@@ -65,7 +59,8 @@
       </ion-item>
 
       <ion-buttons end *ngIf="status == 'Booked' && dateString < date">
-        <button ion-button round color="danger" (click)="cancelslot()" style="text-transform: capitalize; top: 19px; left: 28px;">
+        <button ion-button round color="danger" (click)="cancelslot()"
+          style="text-transform: capitalize; top: 19px; left: 28px;">
           Cancel Appointment</button>
       </ion-buttons>
     </ion-card-content>
@@ -91,8 +86,15 @@
           <ion-textarea [(ngModel)]="lecfeedback.feedback" [ngModelOptions]="{standalone: true}">
           </ion-textarea>
         </ion-item>
+        <ion-item>
+          <ion-label>Copy to GIMS</ion-label>
+          <ion-checkbox item-right [checked]="lecfeedback.gims_status" (ionChange)="changeTest()"
+            [(ngModel)]="lecfeedback.gims_status">
+          </ion-checkbox>
+        </ion-item>
         <ion-buttons end>
-          <button ion-button round color="primary" (click)="addfeedback()" style="text-transform: capitalize">Submit</button>
+          <button ion-button block color="primary" (click)="confirmation()" style="text-transform: capitalize"
+            [disabled]="!lecfeedback.feedback">Submit</button>
         </ion-buttons>
       </ion-card>
     </ng-template>
