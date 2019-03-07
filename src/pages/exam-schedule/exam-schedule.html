@@ -4,8 +4,14 @@
       Exam Schedule
     </ion-title>
     <ion-buttons end>
-      <button ion-button outline small class="notification-button colored-border" (click)="presentActionSheet()">
-        {{ intake || 'Intakes' }}
+      <button
+        ion-button
+        outline
+        small
+        class="notification-button colored-border"
+        (click)="presentActionSheet()"
+      >
+        {{ intake || "Intakes" }}
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -13,13 +19,12 @@
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="refresh">
-    </ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
   <ng-template [ngIf]="!showNoIntakeMessage" [ngIfElse]="noIntakeMessage">
-    <ng-template let-exams [ngIf]='exam$ | async' [ngIfElse]='loadingExams'>
+    <ng-template let-exams [ngIf]="examv$ | async" [ngIfElse]="loadingExams">
       <ng-template [ngIf]="exams.length !== 0" [ngIfElse]="noExams">
-        <ion-card *ngFor='let exam of exams'>
+        <ion-card *ngFor="let exam of exams">
           <ion-card-header>
             <b>{{ exam.subjectDescription }}</b>
           </ion-card-header>
@@ -35,28 +40,30 @@
               </ion-item>
               <ion-item no-padding>
                 Date Time
-                <p item-right>{{ exam.since | date: 'EEE, d MMM, y, h:mm a' }}</p>
+                <p item-right>
+                  {{ exam.since | date: "EEE, d MMM, y, h:mm a" }}
+                </p>
               </ion-item>
             </ion-list>
             <div class="row mb-1">
               <div class="col-8 m-auto">
-                <hr>
+                <hr />
               </div>
             </div>
             <div class="note-section">
               <p ion-text>
                 <span *ngIf="exam.docketsDue">
                   * Dockets for this exam will be released on
-                  <b>{{ exam.docketsDue | date: 'd MMM, y' }}</b>
+                  <b>{{ exam.docketsDue | date: "d MMM, y" }}</b>
                 </span>
-                <br>
+                <br />
                 <span *ngIf="exam.appraisalsDue">
                   * Appraisals will be on
-                  <b>{{ exam.appraisalsDue | date: 'd MMM, y' }}.</b>
+                  <b>{{ exam.appraisalsDue | date: "d MMM, y" }}.</b>
                 </span>
                 <span *ngIf="exam.resultDate">
                   * The results will be published on
-                  <b>{{ exam.resultDate | date: 'd MMM, y' }}</b>
+                  <b>{{ exam.resultDate | date: "d MMM, y" }}</b>
                 </span>
               </p>
             </div>
@@ -74,20 +81,23 @@
 
     <ng-template #loadingExams>
       <ion-card *ngFor="let i of numOfSkeletons">
-        <skeleton-item height="50px" width="100%"></skeleton-item>
-        <ion-item>
-          <ion-row *ngFor="let i of numOfSkeletons">
-            <ion-col col-6>
-              <skeleton-item height="25px" width="35%"></skeleton-item>
-            </ion-col>
-            <ion-col col-6>
-              <skeleton-item height="25px" width="100%"></skeleton-item>
-            </ion-col>
-          </ion-row>
-        </ion-item>
+        <ion-card-header>
+          <skeleton-item height="50px" width="100%"></skeleton-item>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item>
+            <ion-row *ngFor="let i of numOfSkeletons">
+              <ion-col col-6>
+                <skeleton-item height="25px" width="35%"></skeleton-item>
+              </ion-col>
+              <ion-col col-6>
+                <skeleton-item height="25px" width="100%"></skeleton-item>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+        </ion-card-content>
       </ion-card>
     </ng-template>
-
   </ng-template>
   <ng-template #noIntakeMessage>
     <ion-card class="no-classes-message">

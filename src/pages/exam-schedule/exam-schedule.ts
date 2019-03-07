@@ -21,7 +21,7 @@ export class ExamSchedulePage {
   intakes: string[];
   selectedIntake: string;
   showNoIntakeMessage = false;
-  numOfSkeletons = new Array(5);
+  numOfSkeletons = new Array(4);
 
   constructor(
     public plt: Platform,
