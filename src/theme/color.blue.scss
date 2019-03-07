@@ -96,12 +96,19 @@ $primary_color: #1297e0;
 
   // STUDENTS DASHBOARD PAGE
   page-dashboard {
-    .profile .notification .notification-wrapper {
-      border: 1px solid $primary_color;
-      color: $primary_color;
-    }
-    .profile .info .greeting-message {
-      color: $primary_color;
+    .profile{
+      .notification .notification-wrapper {
+        border: 1px solid $primary_color;
+        color: $primary_color;
+      }
+      .info{
+        .greeting-message {
+          color: $primary_color;
+        }
+        .user-first-name{
+          text-shadow:.3px .3px .3px $primary_color, -.3px -.3px .3px $primary_color;
+        }
+      }
     }
     .financials-section .section-body .bar-left-info {
       color: $primary_color !important;
