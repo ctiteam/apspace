@@ -228,13 +228,13 @@ export class DashboardPage {
           new Set(
             (d || []).map(t => ({
               intakeCode: t.intakeCode,
-              gpa: t.intakeDetails[t.intakeDetails.length - 2].IMMIGRATION_GPA,
+              gpa: t.intakeDetails,
             })),
           ),
         );
-        const filteredData = data.filter(res => res.gpa);
+        const filteredData = data.filter(res => res.gpa[res.gpa.length - 2]);
         const labels = filteredData.map(i => i.intakeCode);
-        const gpa = filteredData.map(i => i.gpa);
+        const gpa = filteredData.map(i => i.gpa[i.gpa.length - 2].IMMIGRATION_GPA);
         const color = [
           'rgba(255, 99, 132, 0.7)',
           'rgba(54, 162, 235, 0.7)',
