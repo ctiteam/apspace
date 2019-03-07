@@ -22,7 +22,7 @@
     <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
   <ng-template [ngIf]="!showNoIntakeMessage" [ngIfElse]="noIntakeMessage">
-    <ng-template let-exams [ngIf]="examv$ | async" [ngIfElse]="loadingExams">
+    <ng-template let-exams [ngIf]="exam$ | async" [ngIfElse]="loadingExams">
       <ng-template [ngIf]="exams.length !== 0" [ngIfElse]="noExams">
         <ion-card *ngFor="let exam of exams">
           <ion-card-header>
