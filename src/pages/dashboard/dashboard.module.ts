@@ -5,6 +5,7 @@ import { IonicPageModule } from 'ionic-angular';
 import { ComponentsModule } from './../../components/components.module';
 import { DashboardPage } from './dashboard';
 import { ExamPipe } from './exam.pipe';
+import { TimetableProvider } from '../../providers';
 
 @NgModule({
   declarations: [
@@ -17,5 +18,6 @@ import { ExamPipe } from './exam.pipe';
     ChartModule,
     RoundProgressModule,
   ],
+  providers: [TimetableProvider],
 })
 export class DashboardPageModule { }

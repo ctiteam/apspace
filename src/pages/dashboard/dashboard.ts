@@ -12,6 +12,8 @@ import {
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { finalize, map, share, tap, flatMap, concatMap, toArray } from 'rxjs/operators';
+import moment from 'moment';
+
 
 import {
   Apcard,
@@ -23,12 +25,14 @@ import {
   StudentProfile,
   Course,
   CourseDetails,
+  Timetable,
 } from '../../interfaces';
 import {
   AppAnimationProvider,
   NotificationProvider,
   SettingsProvider,
   WsApiProvider,
+  TimetableProvider,
 } from '../../providers';
 
 @IonicPage()
@@ -48,6 +52,7 @@ export class DashboardPage {
   profile$: Observable<StudentProfile>;
   transaction$: Observable<Apcard>;
   apcardTransaction$: Observable<Apcard[]>;
+  upcomingClasse$: Observable<Timetable[]>;
 
   // LOADING VARS
   numOfSkeletons = new Array(2);
@@ -106,6 +111,7 @@ export class DashboardPage {
     public events: Events,
     public notification: NotificationProvider,
     private plt: Platform,
+    private tt: TimetableProvider,
   ) {
     this.events.subscribe('newNotification', () => {
       this.getBadge();
@@ -161,8 +167,19 @@ export class DashboardPage {
           this.block = true;
         }
       }),
+      tap(p => this.getUpcomingClasses(p.INTAKE)),
       tap(p => this.getAttendance(p.INTAKE)),
       tap(p => this.getUpcomingExam(p.INTAKE)),
+    );
+  }
+
+  // UPCOMING CLASSES METHODS
+  getUpcomingClasses(intake: string){
+    let dateNow = new Date();    
+    return this.upcomingClasse$ = this.tt.get().pipe(
+      map(tt => tt.filter(t => t.INTAKE === intake)),
+      map(tt => tt.filter (t => new Date(t.DATESTAMP_ISO).getFullYear() == dateNow.getFullYear() && new Date(t.DATESTAMP_ISO).getMonth() == dateNow.getMonth() && new Date(t.DATESTAMP_ISO).getDate() == dateNow.getDate())),
+      map(tt => tt.filter(t => moment(t.TIME_TO, 'HH:mm A').toDate() >= dateNow))
     );
   }
 
@@ -195,7 +212,6 @@ export class DashboardPage {
             intake.INTAKE_CODE
             }`;
           return this.ws.get<CourseDetails>(url, true).pipe(
-            tap(intakeDet => console.log(intakeDet)),
             map(intakeDetails =>
               Object.assign({
                 intakeDate: intake.INTAKE_NUMBER,
@@ -216,7 +232,6 @@ export class DashboardPage {
             })),
           ),
         );
-        console.log(data);
         const filteredData = data.filter(res => res.gpa);
         const labels = filteredData.map(i => i.intakeCode);
         const gpa = filteredData.map(i => i.gpa);

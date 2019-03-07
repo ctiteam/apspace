@@ -153,21 +153,21 @@
           <!-- ********************************************* -->
           <div class="col-12 col-md-6 col-lg-4 sections-wrapper">
             <!-- START SECTION 2: TODAY'S CLASSES -->
-            <!-- <div class="main-section section todays-classes-section"> -->
+            <div class="main-section section todays-classes-section">
             <!-- START SECTION 2 HEADER -->
-            <!-- <div class="section-header">
+            <div class="section-header">
             <div class="section-header-icon">
               <ion-icon item-left name="calendar"></ion-icon>
             </div>
             <div class="section-header-text"><h3>Upcoming Classes</h3></div>
-          </div> -->
+          </div>
             <!-- END SECTION 2 HEADER -->
 
             <!-- START SECTION 2 BODY -->
-            <!-- <div class="section-body">
+            <div class="section-body">
             <ng-template
               let-classes
-              [ngIf]="upcomingClass$ | async"
+              [ngIf]="upcomingClasse$ | async"
               [ngIfElse]="loadingClasses"
             >
               <ng-template
@@ -195,15 +195,6 @@
                           <ion-icon item-left name="locate"></ion-icon>
                         </div>
                         <div class="col-10 item-info-text">
-                          <p ion-text>{{ c.SUBJECT_DESCRIPTION }}</p>
-                        </div>
-                      </div>
-
-                      <div class="content-item-with-icon col-12 row">
-                        <div class="col-2 text-right">
-                          <ion-icon item-left name="locate"></ion-icon>
-                        </div>
-                        <div class="col-10 item-info-text">
                           <p ion-text>{{ c.LOCATION }} | {{ c.ROOM }}</p>
                         </div>
                       </div>
@@ -213,7 +204,7 @@
                           <ion-icon item-left name="person"></ion-icon>
                         </div>
                         <div class="col-10 item-info-text">
-                          <p ion-text>{{ c.LECTURER_NAME }}</p>
+                          <p ion-text>{{ c.NAME }}</p>
                         </div>
                       </div>
                     </div>
@@ -231,9 +222,9 @@
                 </ion-item>
               </ion-card>
             </ng-template>
-          </div> -->
+          </div>
             <!-- END SECTION 2 BODY -->
-            <!-- </div> -->
+            </div>
             <!-- END SECTION 2: TODAYS' CLASSES -->
             <!-- ********************************************* -->
             <!-- START SECTION 3: UPCOMING HOLIDAY -->
