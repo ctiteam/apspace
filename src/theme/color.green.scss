@@ -60,13 +60,19 @@ $primary_color: #2ecc71;
 
   // PROFILE PAGE
   page-profile {
-    .profile-info-section .profile-div img {
-      box-shadow: 2px 2px 9px $primary_color, -2px -2px 9px $primary_color;
-    }
-
-    .profile-info-section .info-div h1 {
-      color: $primary_color;
-    }
+    .profile-info-section{
+      .profile-div img {
+        box-shadow: 2px 2px 9px $primary_color, -2px -2px 9px $primary_color;
+      } 
+      .info-div {
+        h1 {
+          color: $primary_color;
+        }
+        a p{
+          color: $primary_color;
+        }
+      }
+    }      
   }
 
   // APCARD PAGE
