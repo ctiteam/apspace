@@ -38,24 +38,25 @@
                 <p item-right>{{ exam.since | date: 'EEE, d MMM, y, h:mm a' }}</p>
               </ion-item>
             </ion-list>
-            <div class="row mb-2">
+            <div class="row mb-1">
               <div class="col-8 m-auto">
                 <hr>
               </div>
             </div>
             <div class="note-section">
               <p ion-text>
-                <span>
-                  *** The dockets for this exam will be released on
+                <span *ngIf="exam.docketsDue">
+                  * Dockets for this exam will be released on
                   <b>{{ exam.docketsDue | date: 'd MMM, y' }}</b>
                 </span>
+                <br>
                 <span *ngIf="exam.appraisalsDue">
-                  , appraisals will be on
+                  * Appraisals will be on
                   <b>{{ exam.appraisalsDue | date: 'd MMM, y' }}.</b>
                 </span>
                 <span *ngIf="exam.resultDate">
-                    , and the results will be published on
-                    <b>{{ exam.resultDate | date: 'd MMM, y' }}.</b>
+                  * The results will be published on
+                  <b>{{ exam.resultDate | date: 'd MMM, y' }}</b>
                 </span>
               </p>
             </div>
