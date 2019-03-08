@@ -113,6 +113,9 @@ $primary_color: #1297e0;
     .financials-section .section-body .bar-left-info {
       color: $primary_color !important;
     }
+    hr{
+      border-color: $primary_color;
+    }
   }
 
   // STUDENTS ATTENDANCE PAGE
