@@ -3,7 +3,7 @@ import { FCM } from '@ionic-native/fcm';
 import { Network } from '@ionic-native/network';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Storage } from '@ionic/storage';
-import { AlertController, Events, Nav, Platform, ToastController, App } from 'ionic-angular';
+import { AlertController, Events, Nav, Platform, ToastController } from 'ionic-angular';
 
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { of } from 'rxjs/observable/of';
@@ -46,8 +46,7 @@ export class MyApp {
     private alertCtrl: AlertController,
     private fcm: FCM,
     private dc: DataCollectorProvider,
-    private userSettings: UserSettingsProvider,
-    public app: App,
+    private userSettings: UserSettingsProvider
   ) {
     // platform required to be ready before everything else
     this.platform
@@ -106,10 +105,12 @@ export class MyApp {
   checkNewNotification() {
     this.fcm.onNotification().subscribe(data => {
       if (data.wasTapped) {
+        console.log(data);
         this.notificationService
-          .sendRead(parseInt(data.message_id, 10))
+          .sendRead(data.message_id)
           .subscribe(_ => {
-            this.app.getRootNav().push('NotificationModalPage', { itemDetails: data });
+            console.log('opened');
+            this.navCtrl.push('NotificationModalPage', { itemDetails: data });
           });
       } else {
         this.presentConfirm(data);
@@ -184,9 +185,10 @@ export class MyApp {
             text: 'Open',
             handler: () => {
               this.notificationService
-                .sendRead(parseInt(data.message_id, 10))
+                .sendRead(data.message_id)
                 .subscribe(_ => {
-                  this.app.getRootNav().push('NotificationModalPage', { itemDetails: data });
+                  console.log("Heeeeey");
+                  this.navCtrl.push('NotificationModalPage', { itemDetails: data });
                 });
             },
           },
