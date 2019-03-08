@@ -3,11 +3,11 @@ import { FCM } from '@ionic-native/fcm';
 import { Network } from '@ionic-native/network';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Storage } from '@ionic/storage';
-import { AlertController, Events, Nav, Platform, ToastController } from 'ionic-angular';
+import { AlertController, Events, Nav, Platform, ToastController, App } from 'ionic-angular';
 
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { of } from 'rxjs/observable/of';
-import { switchMapTo, timeout } from 'rxjs/operators';
+import { switchMapTo } from 'rxjs/operators';
 
 import {
   Role,
@@ -20,7 +20,6 @@ import {
   DataCollectorProvider,
   NotificationProvider,
   SettingsProvider,
-  UpcomingConLecProvider,
   UserSettingsProvider,
   WsApiProvider,
 } from '../providers';
@@ -48,7 +47,7 @@ export class MyApp {
     private fcm: FCM,
     private dc: DataCollectorProvider,
     private userSettings: UserSettingsProvider,
-    private upcominglec: UpcomingConLecProvider,
+    public app: App,
   ) {
     // platform required to be ready before everything else
     this.platform
@@ -110,7 +109,7 @@ export class MyApp {
         this.notificationService
           .sendRead(parseInt(data.message_id, 10))
           .subscribe(_ => {
-            this.navCtrl.push('NotificationModalPage', { itemDetails: data });
+            this.app.getRootNav().push('NotificationModalPage', { itemDetails: data });
           });
       } else {
         this.presentConfirm(data);
@@ -187,9 +186,7 @@ export class MyApp {
               this.notificationService
                 .sendRead(parseInt(data.message_id, 10))
                 .subscribe(_ => {
-                  this.navCtrl.push('NotificationModalPage', {
-                    itemDetails: data,
-                  });
+                  this.app.getRootNav().push('NotificationModalPage', { itemDetails: data });
                 });
             },
           },
