@@ -105,11 +105,9 @@ export class MyApp {
   checkNewNotification() {
     this.fcm.onNotification().subscribe(data => {
       if (data.wasTapped) {
-        console.log(data);
         this.notificationService
           .sendRead(data.message_id)
           .subscribe(_ => {
-            console.log('opened');
             this.navCtrl.push('NotificationModalPage', { itemDetails: data });
           });
       } else {
@@ -187,7 +185,6 @@ export class MyApp {
               this.notificationService
                 .sendRead(data.message_id)
                 .subscribe(_ => {
-                  console.log("Heeeeey");
                   this.navCtrl.push('NotificationModalPage', { itemDetails: data });
                 });
             },
