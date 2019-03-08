@@ -59,6 +59,7 @@ export class DashboardPage {
 
   overallAttendance: number;
   subject: string;
+  defaultIntake = '';
 
   // HEADER VARS
   greetingMessage = '';
@@ -167,6 +168,7 @@ export class DashboardPage {
           this.block = true;
         }
       }),
+      tap(p => this.defaultIntake = p.INTAKE),
       tap(p => this.getUpcomingClasses(p.INTAKE)),
       tap(p => this.getAttendance(p.INTAKE)),
       tap(p => this.getUpcomingExam(p.INTAKE)),
