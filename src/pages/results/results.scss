@@ -1,33 +1,34 @@
 page-results {
   ion-card {
     ion-list {
-        ion-item {
-            &.subj-title {
-                font-weight: 900;
-            }
-            ion-label {
-                font-size: 90%;
-                font-weight: lighter !important;
-            }
+      ion-item {
+        &.subj-title {
+          font-weight: 900;
         }
+        ion-label {
+          font-size: 90%;
+          font-weight: lighter !important;
+        }
+      }
     }
   }
   .card-ios {
-      border-radius: 10px;
+    border-radius: 10px;
   }
   .card-md {
-      border-radius: 10px;
+    border-radius: 10px;
   }
   .scroll-content {
-      background-color: map-get($colors, light);
+    background-color: map-get($colors, light);
   }
   .content-message {
-      text-align: justify;
+    text-align: justify;
   }
   .warning-logo {
-      display: block;
-      font-size: 5em;
-      text-align: center;
-      color: white;
+    color: #f04141 !important;
+    display: block;
+    font-size: 5em;
+    text-align: center;
+    color: white;
   }
 }

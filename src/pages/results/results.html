@@ -197,12 +197,12 @@
   </ng-template>
 
   <ng-template [ngIf]="block">
-    <ion-card style="background: #f04141">
-      <ion-card-header>
+    <ion-card style="border-color: #f04141 !important">
+      <ion-card-header style="border: none !important">
         <ion-icon class="warning-logo" name="alert"></ion-icon>
       </ion-card-header>
       <ion-card-content class="content-message">
-        <ion-note class="block-note">
+        <ion-note class="block-note" style="color: #f04141;">
           {{ message }}
         </ion-note>
       </ion-card-content>
