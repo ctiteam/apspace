@@ -113,9 +113,8 @@ page-dashboard {
   // WEB VERSION
   @media only screen and (min-width: 768px) {
     .sections-wrapper{
-      background-color: red;
       .section{
-        border: none !important
+        border-width:  1px 1px 1px 5px !important;
       }
     }
 
