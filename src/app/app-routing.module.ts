@@ -22,12 +22,7 @@ const routes: Routes = [
   },
   {
     path: 'student-timetable',
-    children: [
-      {
-        path: '',
-        loadChildren: './student-timetable/student-timetable.module#StudentTimetablePageModule'
-      }
-    ]
+    loadChildren: './student-timetable/student-timetable.module#StudentTimetablePageModule'
   },
   {
     path: 'staffs',
