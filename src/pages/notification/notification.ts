@@ -158,7 +158,7 @@ export class NotificationPage {
     }
   }
 
-  notifications = 'all';
+  notifications = 'unread';
   unreadMessages: any;
 
   message$: Observable<any>;

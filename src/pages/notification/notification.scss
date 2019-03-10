@@ -13,7 +13,7 @@ page-notification {
   }
 
   .row{
-    .category{
+    .category, .badge{
       color: #FFF;
     }
     .notification{
@@ -33,6 +33,14 @@ page-notification {
         }
         small{
           color: #424242;
+        }
+      }
+      .category-badge{
+        span{
+          color: #fff;
+          text-shadow: none;
+          white-space: normal;
+          font-weight: normal;
         }
       }
       &.unread{
