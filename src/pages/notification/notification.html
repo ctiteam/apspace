@@ -11,42 +11,59 @@
 </ion-header>
 
 <ion-content no-padding>
-  <ng-template [ngIf]='cordova' [ngIfElse]='notCordova'>
+  <div class="container">
+    <div class="row">
+      <div class="col-12" *ngFor="let category of objectKeys(testRes.history)">
+        <div class="row">
+          <div class="col-12 py-4 px-3 category" [ngStyle]="{
+              background:
+                'linear-gradient(to right, ' +
+                testRes.history[category].firstColor +
+                ',' +
+                testRes.history[category].secondColor   +
+                ')'
+            }">
+            <h3 class="mb-0">
+              {{category}}
+            </h3>
+          </div>
+        </div>
+        <div
+          class="row p-3 notification"
+          *ngFor="let message of testRes.history[category].items"
+          (click)="openBasicModal(message, message.message_id)"
+          [class.unread]="!message.read"
+        >
+          <div class="col-2 notification-icon m-auto text-center">
+            <ion-icon [name]="message.read ? 'mail-open' : 'mail'"
+              item-left></ion-icon>
+          </div>
+          <div class="col-10 notification-message">
+            <div class="row">
+              <div class="col-12 title">
+                <h4 class="mb-0">
+                  {{message.title}}
+                </h4>
+              </div>
+              <div class="col-12">
+                <small>{{message.message_id * 1000 | date : "EEE, d MMM y"}}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <ng-template [ngIf]='cordova' [ngIfElse]='notCordova'>
     <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
       <ion-refresher-content pullingIcon="refresh">
       </ion-refresher-content>
     </ion-refresher>
 
     <ng-container [ngSwitch]="notifications">
-        <ion-list *ngSwitchCase="'all'">
-          <button
-            class="message-btn"
-            *ngFor="let message of (message$ | async)"
-            (click)="openBasicModal(message, message.message_id)"
-            [style.font-weight]="message.read ? '400' : 'bold'"
-            ion-item
-          >
-            <ion-icon
-              [name]="message.read ? 'mail-open' : 'mail'"
-              [style.color]="message.read ? '#c6c2c2' : '#f04141'"
-              item-left
-            ></ion-icon>
-            <h4 [style.color]="message.read ? '#c6c2c2' : '#f04141'">
-              {{ message.title }}
-            </h4>
-            <ion-note
-              class="message_content"
-              [innerHTML]="sanitize(message?.content)"
-            ></ion-note>
-            <ion-note
-              class="message-time"
-              [style.color]="message.read ? '#c6c2c2' : '#f04141'"
-              item-right
-            >
-              {{ message.message_id * 1000 | date }}
-            </ion-note>
-          </button>
-        </ion-list>
+        <div *ngSwitchCase="'all'">
+        </div>
     
         <ion-list *ngSwitchCase="'unread'">
           <button
@@ -83,5 +100,5 @@
         <h5 class="p-4 text-center notification-desktop">
           Notification is only available in the mobile application
         </h5>
-  </ng-template>
+  </ng-template> -->
 </ion-content>

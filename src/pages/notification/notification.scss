@@ -11,4 +11,39 @@ page-notification {
     font-size: 0.8em;
     color: color($colors, medium-shade)
   }
+
+  .row{
+    .category{
+      color: #FFF;
+    }
+    .notification{
+      background-color: #fff;
+      color: #1f222e;
+      .notification-icon{
+        color: #424242;
+        ion-icon{
+          font-size: 2.2rem;
+        }
+      }
+      .notification-message{
+        h4{
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        small{
+          color: #424242;
+        }
+      }
+      &.unread{
+        font-weight: 700;
+        text-shadow: .1px .1px .1px red, -.1px -.1px .1px red;
+        .notification-icon{
+          ion-icon{
+            color: red;
+          }
+        }
+      }
+    } 
+  }
 }
