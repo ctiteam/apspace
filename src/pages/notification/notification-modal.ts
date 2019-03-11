@@ -11,6 +11,9 @@ import { NotificationProvider } from '../../providers';
 export class NotificationModalPage {
 
   itemDetails: any;
+  category: string;
+  firstColor: string;
+  secondColor: string;
 
   constructor(
     public navCtrl: NavController,
@@ -21,6 +24,9 @@ export class NotificationModalPage {
 
   ionViewDidLoad() {
     this.itemDetails = this.navParams.get('itemDetails');
+    this.category = this.navParams.get('category');
+    this.firstColor = this.navParams.get('firstColor');
+    this.secondColor = this.navParams.get('secondColor');
   }
 
   sanitize(value: string): SafeHtml {

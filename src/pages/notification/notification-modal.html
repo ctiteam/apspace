@@ -1,31 +1,54 @@
 <ion-header no-border>
-    <ion-navbar>
-      <ion-title *ngIf="itemDetails">{{ itemDetails.title }}</ion-title>
-    </ion-navbar>
-  </ion-header>
+  <ion-navbar>
+    <ion-title *ngIf="itemDetails">{{ itemDetails.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
 
 <ion-content *ngIf="itemDetails">
-    <div id="fill"></div>
-    <button id="icon-button" ion-button icon-only>
-      <ion-icon id="mail-icon" name="mail-open"></ion-icon>
-    </button> 
-    <div class="row pt-5 px-3 pb-3">
-      <div class="col-12">
-        <h2 class="m-0 p-0">{{ itemDetails.title }}</h2>
-      </div>
-      <div class="col-12">
-        <p class="p-3 content" [innerHTML]="sanitize(itemDetails?.content)">
-        </p>
-      </div>
-      <div class="col-12 info">
-        <p>
-          Issued by:
-          <span>{{ itemDetails.staff_name }}</span>
-        </p>
-        <p>
-          Time & Date:
-          <span>{{ displayDate(itemDetails.message_id) }}</span>
-        </p>
-      </div>
+  <div
+    id="fill"
+    [ngStyle]="{
+      background:
+        'linear-gradient(to right, ' + firstColor + ',' + secondColor + ')'
+    }"
+  ></div>
+  <button id="icon-button" ion-button icon-only>
+    <ion-icon id="mail-icon" name="mail-open"></ion-icon>
+  </button>
+  <div class="row pt-5 px-3 pb-3">
+    <div class="col-12">
+      <h2 class="m-0 p-0">
+        {{ itemDetails.title }}
+        <span
+          class="badge badge-pill"
+          [ngStyle]="{
+            background:
+              'linear-gradient(to right, ' +
+              firstColor +
+              ',' +
+              secondColor +
+              ')'
+          }"
+        >
+          {{ category }}</span
+        >
+      </h2>
     </div>
-  </ion-content>
+    <div class="col-12">
+      <article
+        class="p-3 content"
+        [innerHTML]="sanitize(itemDetails?.content)"
+      ></article>
+    </div>
+    <div class="col-12 info">
+      <p>
+        <strong>Issued by:</strong>
+        <span>{{ itemDetails.staff_name }}</span>
+      </p>
+      <p>
+        <strong>Date & Time:</strong>
+        <span>{{ displayDate(itemDetails.message_id) }}</span>
+      </p>
+    </div>
+  </div>
+</ion-content>
