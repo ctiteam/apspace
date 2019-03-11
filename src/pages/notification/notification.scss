@@ -17,8 +17,7 @@ page-notification {
       color: #FFF;
     }
     .notification{
-      background-color: #fff;
-      color: #1f222e;
+      color: #424242;
       .notification-icon{
         color: #424242;
         ion-icon{
@@ -40,12 +39,12 @@ page-notification {
           color: #fff;
           text-shadow: none;
           white-space: normal;
-          font-weight: normal;
+          font-weight: 500;
         }
       }
       &.unread{
         font-weight: 700;
-        text-shadow: .1px .1px .1px red, -.1px -.1px .1px red;
+        text-shadow: .1px .1px .1px red;
         .notification-icon{
           ion-icon{
             color: red;

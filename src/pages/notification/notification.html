@@ -1,98 +1,213 @@
 <ion-header no-border>
   <ion-navbar>
     <ion-title>Notifications</ion-title>
+    <ion-buttons *ngIf="cordova" end>
+      <button
+        ion-button
+        icon-only
+        clear
+        class="notification-button colored-border"
+        (click)="toggleFilterMenu()"
+      >
+        <ion-icon name="options"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
-  <ion-toolbar no-border-top>
-    <ion-segment [(ngModel)]="notifications" color="light">
-      <ion-segment-button value="unread"> Unread messages </ion-segment-button>
-      <ion-segment-button value="all"> History </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>
 </ion-header>
 
-<ion-content no-padding>
-  <ng-template [ngIf]='cordova' [ngIfElse]='notCordova'>
-    <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-      <ion-refresher-content pullingIcon="refresh">
-      </ion-refresher-content>
-    </ion-refresher>
-    <ng-container [ngSwitch]="notifications">
-      <div *ngSwitchCase="'all'">
-        <div class="container">
-          <div class="row">
-            <div class="col-12" *ngFor="let category of objectKeys(message$ | async)">
-              <div class="row">
-                <div class="col-12 py-4 px-3 category" [ngStyle]="{
-                background:
-                  'linear-gradient(to right, ' +
-                  testRes.history[category].firstColor +
-                  ',' +
-                  testRes.history[category].secondColor   +
-                  ')'
-              }">
-                  <h3 class="mb-0">
-                    {{category}}
-                  </h3>
-                </div>
-              </div>
-              <div class="row p-3 notification" *ngFor="let message of testRes.history[category].items"
-                (click)="openBasicModal(message, message.message_id)" [class.unread]="!message.read">
-                <div class="col-2 notification-icon m-auto text-center">
-                  <ion-icon [name]="message.read ? 'mail-open' : 'mail'" item-left></ion-icon>
-                </div>
-                <div class="col-10 notification-message">
-                  <div class="row">
-                    <div class="col-12 title">
-                      <h4 class="mb-0">
-                        {{message.title}}
-                      </h4>
-                    </div>
-                    <div class="col-12">
-                      <small>{{message.message_id * 1000 | date : "EEE, d MMM y"}}</small>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+<ion-menu [content]="content" side="right" *ngIf="cordova">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons end>
+        <button ion-button icon-only (click)="toggleFilterMenu()">
+          <ion-icon name="close"></ion-icon>
+        </button>
+      </ion-buttons>
+      <ion-title>Filter Notifications</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <div class="row">
+      <div class="col-12">
+        <ion-item>
+          <ion-label>Category</ion-label>
+          <ion-select
+            [(ngModel)]="notificationCategory"
+            (ngModelChange)="onFilter()"
+          >
+            <ion-option selected value="">Any</ion-option>
+            <ion-option *ngFor="let category of categories" [value]="category">
+              {{ category }}</ion-option
+            >
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Title</ion-label>
+          <ion-input
+            [(ngModel)]="notificationTitle"
+            (ngModelChange)="onFilter()"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Sender</ion-label>
+          <ion-input
+            [(ngModel)]="notificationSender"
+            (ngModelChange)="onFilter()"
+          ></ion-input>
+        </ion-item>
+        <div class="py-4 px-2">
+          <button
+            class="btn btn-outline btn-dark btn-block btn-lg"
+            (click)="showHistory()"
+          >
+            <span *ngIf="notifications === 'all'">
+              Show unread only
+            </span>
+            <span *ngIf="notifications === 'unread'">
+              Show History
+            </span>
+          </button>
         </div>
       </div>
-      <div *ngSwitchCase="'unread'">
-        <div class="container">
-          <div class="row">
-            <div class="col-12" *ngFor="let category of objectKeys(message$ | async)">
-              <div class="row p-3 notification" *ngFor="let message of testRes.history[category].items | unread"
-                (click)="openBasicModal(message, message.message_id)" [class.unread]="!message.read">
-                <div class="col-2 notification-icon m-auto text-center">
-                  <ion-icon [name]="message.read ? 'mail-open' : 'mail'" item-left></ion-icon>
-                </div>
-                <div class="col-6 notification-message">
-                  <div class="row">
-                    <div class="col-12 title">
-                      <h4 class="mb-0">
-                        {{message.title}}
-                      </h4>
-                    </div>
-                    <div class="col-12">
-                      <small>{{message.message_id * 1000 | date : "EEE, d MMM y"}}</small>
-                    </div>
+    </div>
+  </ion-content>
+</ion-menu>
+
+<ion-content #content no-padding>
+  <ng-template [ngIf]="cordova" [ngIfElse]="notCordova">
+    <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
+    </ion-refresher>
+
+    <ng-container [ngSwitch]="notifications">
+      <div *ngSwitchCase="'all'">
+        <ng-template let-messages [ngIf]="filteredMessage$ | async">
+          <div class="container">
+            <div class="row">
+              <div class="col-12" *ngFor="let category of objectKeys(messages)">
+                <div class="row sticky-top">
+                  <div
+                    class="col-12 py-4 px-3 category"
+                    [ngStyle]="{
+                      background:
+                        'linear-gradient(to right, ' +
+                        messages[category].first_color +
+                        ',' +
+                        messages[category].second_color +
+                        ')'
+                    }"
+                  >
+                    <h3 class="mb-0">
+                      {{ category }}
+                    </h3>
                   </div>
                 </div>
-                <div class="col-4 m-auto text-center category-badge">
-                  <span class="badge" [ngStyle]="{
-                    background:
-                      'linear-gradient(to right, ' +
-                      testRes.history[category].firstColor +
-                      ',' +
-                      testRes.history[category].secondColor   +
-                      ')'
-                  }">
-                    {{category}}</span>
+                <div
+                  class="row p-3 notification"
+                  *ngFor="let message of messages[category].items"
+                  (click)="
+                    openBasicModal(
+                      message,
+                      message.message_id,
+                      category,
+                      messages[category].first_color,
+                      messages[category].second_color
+                    )
+                  "
+                  [class.unread]="!message.read"
+                >
+                  <div class="col-2 notification-icon m-auto text-center">
+                    <ion-icon
+                      [name]="message.read ? 'mail-open' : 'mail'"
+                      item-left
+                    ></ion-icon>
+                  </div>
+                  <div class="col-10 notification-message">
+                    <div class="row">
+                      <div class="col-12 title">
+                        <h4 class="mb-0">
+                          {{ message.title }}
+                        </h4>
+                      </div>
+                      <div class="col-12">
+                        <small>{{ message.staff_name }}</small>
+                      </div>
+                      <div class="col-12">
+                        <small>{{
+                          message.message_id * 1000 | date: "EEE, d MMM y"
+                        }}</small>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </ng-template>
+      </div>
+
+      <div *ngSwitchCase="'unread'">
+        <ng-template let-messages [ngIf]="filteredMessage$ | async | unread">
+          <div class="container">
+            <div class="row">
+              <div class="col-12" *ngFor="let category of objectKeys(messages)">
+                <div
+                  class="row p-3 notification"
+                  *ngFor="let message of (messages[category].items | unread)"
+                  (click)="
+                    openBasicModal(
+                      message,
+                      message.message_id,
+                      category,
+                      messages[category].first_color,
+                      messages[category].second_color
+                    )
+                  "
+                  [class.unread]="!message.read"
+                >
+                  <div class="col-2 notification-icon m-auto text-center">
+                    <ion-icon
+                      [name]="message.read ? 'mail-open' : 'mail'"
+                      item-left
+                    ></ion-icon>
+                  </div>
+                  <div class="col-6 notification-message">
+                    <div class="row">
+                      <div class="col-12 title">
+                        <h4 class="mb-0">
+                          {{ message.title }}
+                        </h4>
+                      </div>
+                      <div class="col-12">
+                        <small>{{ message.staff_name }}</small>
+                      </div>
+                      <div class="col-12">
+                        <small>{{
+                          message.message_id * 1000 | date: "EEE, d MMM y"
+                        }}</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-4 m-auto text-center category-badge">
+                    <span
+                      class="badge"
+                      [ngStyle]="{
+                        background:
+                          'linear-gradient(to right, ' +
+                          messages[category].first_color +
+                          ',' +
+                          messages[category].second_color +
+                          ')'
+                      }"
+                    >
+                      {{ category }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
       </div>
     </ng-container>
     <ng-container *ngIf="isLoading">
@@ -104,7 +219,6 @@
         <skeleton-item height="5px" width="150px"></skeleton-item>
       </ion-item>
     </ng-container>
-
   </ng-template>
   <ng-template #notCordova>
     <h5 class="p-4 text-center notification-desktop">
