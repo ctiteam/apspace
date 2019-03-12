@@ -22,7 +22,7 @@ export class NotificationPage {
   notificationCategory: string = '';
   notificationTitle: string = '';
   notificationSender: string = '';
-  categories: string[];
+  categories: string[] = [];
 
   message$: Observable<any>;
   filteredMessage$: Observable<any>;
@@ -57,13 +57,14 @@ export class NotificationPage {
   doRefresh(refresher?) {
     this.cordova = true;
     this.isLoading = true;
-    this.getMessageForFirstTime();
-  }
-
-  getMessageForFirstTime(refresher?){
+    this.categories = [];
     this.message$ = this.notification.getMessage().pipe(
       map(res => res.history),
-      tap(history => this.objectKeys(history).forEach(category => this.categories.push(category))),
+      tap(history => this.objectKeys(history).forEach((category) => {
+        if(this.categories.indexOf(category) <= -1){
+          this.categories.push(category)
+        }
+      })),
       finalize(() => { refresher && refresher.complete(), this.isLoading = false; }),
     );
     this.onFilter();
@@ -78,21 +79,36 @@ export class NotificationPage {
     this.filteredMessage$ = this.message$.pipe(
       map(
         (history) => {
-          return _.filter(this.objectKeys(history), category => {
-            // FILTER NOTIFICATIONS BY CATEGORY
-            return category.includes(this.notificationCategory);
-          });
+          return this.filterObjByCategory(history);
         }
       ),
       map(
         (history) => {
-          return _.filter(this.objectKeys(history)['items'], notification => {
-            // FILTER NOTIFICATIONS BY SENDER AND TITLE
-            return notification['staff_name'].toLowerCase().includes(this.notificationSender.toLowerCase()) && notification['title'].toLowerCase().includes(this.notificationTitle.toLowerCase());
+          let filteredMessages = {};
+          this.objectKeys(history).forEach(key => {
+            let listOfMessagesFiltered = [];
+            filteredMessages[key] = history[key];
+            for (let item of history[key]['items']){
+              if(item['staff_name'].toLowerCase().includes(this.notificationSender.toLowerCase()) && item['title'].toLowerCase().includes(this.notificationTitle.toLowerCase())){
+                listOfMessagesFiltered.push(item);
+              }
+            }
+            filteredMessages[key]['items'] = listOfMessagesFiltered;
           });
+          return filteredMessages;
         }
-      ),
+      )
     ); 
+  }
+
+  filterObjByCategory(obj){
+    let result: any = {};
+    for (let key of this.objectKeys(obj)){
+      if(key.toLowerCase().includes(this.notificationCategory.toLowerCase())){
+        result[key] = obj[key];
+      }
+    }
+    return result;
   }
 
   showHistory(){
