@@ -108,7 +108,7 @@ export class MyApp {
         this.notificationService
           .sendRead(data.message_id)
           .subscribe(_ => {
-            this.navCtrl.push('NotificationModalPage', { itemDetails: data });
+            this.navCtrl.push('NotificationModalPage', { itemDetails: data, category: data.category, firstColor: data.first_color, secondColor: data.second_color });
           });
       } else {
         this.presentConfirm(data);
@@ -176,7 +176,7 @@ export class MyApp {
     this.alertCtrl
       .create({
         title: data.title,
-        message: data.content.substring(0, 70) + '...',
+        message: data.non_html_content.substring(0, 150) + '...',
         buttons: [
           { text: 'Cancel', role: 'cancel' },
           {
@@ -185,7 +185,7 @@ export class MyApp {
               this.notificationService
                 .sendRead(data.message_id)
                 .subscribe(_ => {
-                  this.navCtrl.push('NotificationModalPage', { itemDetails: data });
+                  this.navCtrl.push('NotificationModalPage', { itemDetails: data, category: data.category, firstColor: data.first_color, secondColor: data.second_color });
                 });
             },
           },
