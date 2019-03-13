@@ -148,7 +148,7 @@
 
       <div *ngSwitchCase="'unread'">
         <ng-template let-messages [ngIf]="filteredMessage$ | async">
-          <div class="container">
+          <div class="container" *ngIf="messages; else noUnreadMessage">
             <div class="row">
               <div class="col-12" *ngFor="let category of objectKeys(messages)">
                 <div
@@ -207,6 +207,10 @@
               </div>
             </div>
           </div>
+          <ng-template #noUnreadMessage>
+            <p class="text-center p-4">You do not have any unread messages</p>
+          </ng-template>
+          
         </ng-template>
       </div>
     </ng-container>
