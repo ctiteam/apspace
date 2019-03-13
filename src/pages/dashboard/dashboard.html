@@ -174,7 +174,7 @@
                 [ngIf]="classes && classes.length > 0"
                 [ngIfElse]="noclass"
               >
-                <div *ngFor="let c of classes">
+                <div class="my-2 todaysClass" *ngFor="let c of classes">
                   <div class="section-body-header">
                     <h4 class="col-12">{{ c.TIME_FROM }} - {{ c.TIME_TO }}</h4>
                   </div>

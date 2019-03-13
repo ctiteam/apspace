@@ -110,6 +110,33 @@ page-dashboard {
     }
   }
 
+  .todaysClass{
+    &:nth-child(1){
+      border-left: 5px solid #7a2811;
+    }  
+    &:nth-child(2){
+      border-left: 5px solid #223a50;
+    }  
+    &:nth-child(3){
+      border-left: 5px solid #345344;
+    }   
+    &:nth-child(4){
+      border-left: 5px solid #4e354c;
+    }  
+    &:nth-child(5){
+      border-left: 5px solid #634832;
+    }  
+    &:nth-child(6){
+      border-left: 5px solid #742123;
+    }  
+    &:nth-child(7){
+      border-left: 5px solid #1d1b1b;
+    }  
+    &:nth-child(8){
+      border-left: 5px solid #96564e;
+    }  
+  }
+
   // WEB VERSION
   @media only screen and (min-width: 768px) {
     .sections-wrapper{
