@@ -7,50 +7,34 @@ page-notification {
     height: 75px;
   }
 
-  .message_content{
+  .message_content {
     font-size: 0.8em;
-    color: color($colors, medium-shade)
   }
 
-  .row{
-    .category, .badge{
-      color: #FFF;
-    }
-    .notification{
-      color: #424242;
-      .notification-icon{
-        color: #424242;
-        ion-icon{
+  .row {
+    .notification {
+      .notification-icon {
+        ion-icon {
           font-size: 2.2rem;
         }
       }
-      .notification-message{
-        h4{
+      .notification-message {
+        h4 {
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
         }
-        small{
-          color: #424242;
-        }
       }
-      .category-badge{
-        span{
-          color: #fff;
+      .category-badge {
+        span {
           text-shadow: none;
           white-space: normal;
           font-weight: 500;
         }
       }
-      &.unread{
+      &.unread {
         font-weight: 700;
-        text-shadow: .1px .1px .1px red;
-        .notification-icon{
-          ion-icon{
-            color: red;
-          }
-        }
       }
-    } 
+    }
   }
 }

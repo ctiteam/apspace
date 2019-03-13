@@ -576,6 +576,40 @@ $light_menu_colors: (
     .notification-desktop {
       color: color($light_colors, ligth_grey_color);
     }
+ 
+    .message_content{
+      color: color($light_colors, ligth_grey_color)
+    }
+  
+    .row{
+      .category, .badge{
+        color: color($light_colors, light_background);
+      }
+      .notification{
+        color: color($light_colors, ligth_grey_color);
+        .notification-icon{
+          color: color($light_colors, ligth_grey_color);
+        }
+        .notification-message{
+          small{
+            color: color($light_colors, ligth_grey_color);
+          }
+        }
+        .category-badge{
+          span{
+            color: color($light_colors, light_background);
+          }
+        }
+        &.unread{
+          text-shadow: .1px .1px .1px color($light_colors, light_red_color);
+          .notification-icon{
+            ion-icon{
+              color: color($light_colors, light_red_color);
+            }
+          }
+        }
+      } 
+    }
   }
 
   // NOTIFICATION MODAL
