@@ -5,12 +5,16 @@ import {
   NavController,
   NavParams,
   Platform,
+  ToastController,
 } from 'ionic-angular';
 import {
   AppAnimationProvider,
   UserSettingsProvider,
   VersionProvider,
+  WsApiProvider,
+  SettingsProvider,
 } from '../../providers';
+import { Role, StudentProfile, StaffProfile } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -35,6 +39,19 @@ export class SettingsPage {
     { title: 'Pink', value: 'pink-color-scheme' },
   ];
 
+  toast(msg: string) {
+    this.toastCtrl
+      .create({
+        message: msg,
+        duration: 7000,
+        position: "bottom",
+        showCloseButton: true
+      })
+      .present();
+  }
+
+  byodData: {username: string, userEmail: string};
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -42,7 +59,11 @@ export class SettingsPage {
     private appAnimationProvider: AppAnimationProvider,
     private userSettings: UserSettingsProvider,
     public platform: Platform,
-    private version: VersionProvider
+    private version: VersionProvider,
+    private settings: SettingsProvider,
+    private ws: WsApiProvider,
+    private toastCtrl: ToastController
+
   ) {
     this.userSettings
       .getActiveTheme()
@@ -68,4 +89,37 @@ export class SettingsPage {
   toggleColorScheme($event, value: string) {
     this.userSettings.setColorScheme(value);
   }
+
+  resetByod(){
+    const role = this.settings.get('role');
+    if (role & Role.Student) {
+      this.ws.get<StudentProfile>('/student/profile').subscribe(
+        res => {
+          this.byodData = {username: res.STUDENT_NUMBER, userEmail: res.STUDENT_EMAIL}
+        },
+        _ => {},
+        () => {          
+          this.sendByodResetRequest(this.byodData);
+        }
+      );
+    } else {
+      this.ws.get<StaffProfile>('/staff/profile').subscribe(
+        res => {
+          this.byodData = {username: res[0].ID, userEmail: res[0].EMAIL}
+        },
+        _ => {},
+        () => {
+          this.sendByodResetRequest(this.byodData);
+        }
+      );
+    }
+  }
+
+  sendByodResetRequest(byodData: {username: string, userEmail: string}){
+    console.log('username is : ' + byodData.username);
+    console.log('email is : ' + byodData.userEmail);
+    this.toast("Your request has been sent to the helpdesk support system. You will be notified through email.")
+
+  }
+
 }
