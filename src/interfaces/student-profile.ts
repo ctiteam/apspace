@@ -6,6 +6,7 @@ export interface StudentProfile {
   PROGRAMME: string;
   MENTOR_SAMACCOUNTNAME: string;
   STUDENT_STATUS: string;
+  STUDENT_EMAIL: string;
   INTAKE_STATUS: string;
   PHOTO_NO: any;
   PL_NAME: string;
