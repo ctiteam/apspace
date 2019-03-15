@@ -6,7 +6,8 @@ $light_colors: (
   light_blue_color: #1f222e,
   light_green_color: #228b22,
   light_red_color: #ff0000,
-  ligth_grey_color: #424242
+  ligth_grey_color: #424242,
+  light_light_grey_color: #908989
 );
 
 $light_menu_colors: (
@@ -185,9 +186,9 @@ $light_menu_colors: (
     border-bottom: 2px solid color($light_colors, light_white_background);
   }
 
-  page-apcard{
-    .main-content{
-      .no-transactions-message{
+  page-apcard {
+    .main-content {
+      .no-transactions-message {
         color: color($light_colors, ligth_grey_color);
       }
     }
@@ -206,13 +207,12 @@ $light_menu_colors: (
     }
   }
 
-  .apcard-history-section 
+  .apcard-history-section
     .apcard-history-section-body
     .apcard-history-group
-    .apcard-history-group-messages{
-      background-color: color($light_colors, light_white_background);
-    }
-
+    .apcard-history-group-messages {
+    background-color: color($light_colors, light_white_background);
+  }
 
   .apcard-history-section
     .apcard-history-section-body
@@ -388,10 +388,10 @@ $light_menu_colors: (
     }
     ion-item {
       .item-inner {
-          border-bottom: 1px solid #dedede !important;
-          background-color: #ffffff4d !important;
+        border-bottom: 1px solid #dedede !important;
+        background-color: #ffffff4d !important;
       }
-  }
+    }
   }
 
   // HOLIDAYS PAGE
@@ -576,39 +576,40 @@ $light_menu_colors: (
     .notification-desktop {
       color: color($light_colors, ligth_grey_color);
     }
- 
-    .message_content{
-      color: color($light_colors, ligth_grey_color)
+
+    .message_content {
+      color: color($light_colors, ligth_grey_color);
     }
-  
-    .row{
-      .category, .badge{
+
+    .row {
+      .category,
+      .badge {
         color: color($light_colors, light_background);
       }
-      .notification{
+      .notification {
         color: color($light_colors, ligth_grey_color);
-        .notification-icon{
+        .notification-icon {
           color: color($light_colors, ligth_grey_color);
         }
-        .notification-message{
-          small{
+        .notification-message {
+          small {
             color: color($light_colors, ligth_grey_color);
           }
         }
-        .category-badge{
-          span{
+        .category-badge {
+          span {
             color: color($light_colors, light_background);
           }
         }
-        &.unread{
-          text-shadow: .1px .1px .1px color($light_colors, light_red_color);
-          .notification-icon{
-            ion-icon{
+        &.unread {
+          text-shadow: 0.1px 0.1px 0.1px color($light_colors, light_red_color);
+          .notification-icon {
+            ion-icon {
               color: color($light_colors, light_red_color);
             }
           }
         }
-      } 
+      }
     }
   }
 
@@ -702,6 +703,12 @@ $light_menu_colors: (
           color: color($light_colors, light_blue_color);
         }
       }
+    }
+  }
+
+  page-settings {
+    .static-data {
+      color: color($light_colors, light_light_grey_color);
     }
   }
 
@@ -846,20 +853,17 @@ $light_menu_colors: (
     border-left: 1px solid !important;
   }
 
-// TEMP GENERAL STYLES FOR ION CARDS
-ion-card{
-  &.no-classes-message {
-    background-color: color(
-      $light_colors,
-      light_white_background
-    ) !important;
-    ion-card-content {
-      p {
-        color: color($light_colors, ligth_grey_color) !important;
+  // TEMP GENERAL STYLES FOR ION CARDS
+  ion-card {
+    &.no-classes-message {
+      background-color: color($light_colors, light_white_background) !important;
+      ion-card-content {
+        p {
+          color: color($light_colors, ligth_grey_color) !important;
+        }
       }
     }
   }
-}
 
   // OVERRIDE BOOTSTRAP COLORS:
   .bg-danger {

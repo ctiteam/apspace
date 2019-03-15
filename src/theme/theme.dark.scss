@@ -6,7 +6,8 @@ $dark_colors: (
   dark_white_color: #ffffff,
   dark_green_color: #2ecc71,
   dark_red_color: #96564e,
-  dark_search_background_color: #c6c2c2
+  dark_search_background_color: #c6c2c2,
+  dark_dark_grey_color: #908989
 );
 
 $dark_menu_colors: (
@@ -740,6 +741,12 @@ $dark_menu_colors: (
           color: color($dark_colors, dark_white_color);
         }
       }
+    }
+  }
+
+  page-settings {
+    .static-data {
+      color: color($dark_colors, dark_dark_grey_color);
     }
   }
 
