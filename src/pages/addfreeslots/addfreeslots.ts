@@ -60,6 +60,8 @@ export class AddfreeslotsPage {
   MinDate: string;
   sundaySelected = false;
 
+  showTimeConflictMessage = false;
+
   formattedSelectedDate: any;
 
   constructor(
@@ -103,6 +105,15 @@ export class AddfreeslotsPage {
     });
   }
 
+  onSelectTime(item, index){
+      if(this.time.indexOf(item) > -1){
+        console.log("item exists")
+        this.showTimeConflictMessage = true;
+      }
+    // console.log(item);
+    // console.log(index);
+  }
+
   addNewInputField(): void {
     const control = this.form.controls.slots as FormArray;
     control.push(this.initslots());
@@ -110,7 +121,10 @@ export class AddfreeslotsPage {
 
   removeInputField(i: number): void {
     const control = this.form.controls.slots as FormArray;
-    this.time[i] = '';
+    let itemToRemove = this.time[i];
+    this.time = this.time.filter((item) => {
+      return item !== itemToRemove
+    });
     control.removeAt(i);
   }
 
