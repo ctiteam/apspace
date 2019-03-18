@@ -105,17 +105,19 @@ export class AddfreeslotsPage {
     });
   }
 
-  onSelectTime(item, index){
-      if(this.time.indexOf(item) > -1){
-        console.log("item exists")
-        this.showTimeConflictMessage = true;
+  onSelectTime(index: number){
+    const control = this.form.controls.slots as FormArray;
+    this.time = this.time.filter((v, i) => {
+      if(this.time.indexOf(v) !== i){
+        control.removeAt(index);
       }
-    // console.log(item);
-    // console.log(index);
+      return this.time.indexOf(v) === i
+    })
   }
 
   addNewInputField(): void {
     const control = this.form.controls.slots as FormArray;
+    
     control.push(this.initslots());
   }
 
@@ -192,7 +194,6 @@ export class AddfreeslotsPage {
     component: IonicSelectableComponent,
     value: any,
   }) {
-    console.log(event.value);
   }
 
   onChangeOneFreeSlotDate(){
@@ -200,7 +201,6 @@ export class AddfreeslotsPage {
     let dateInMilliSeconds = Date.parse(this.myDate);
     this.formattedSelectedDate = new Date(dateInMilliSeconds);
     if(this.formattedSelectedDate.getDay() == 0){
-      console.log(this.myDate);
       this.sundaySelected = true;
     }
   }
