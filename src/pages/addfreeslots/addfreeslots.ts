@@ -50,8 +50,7 @@ export class AddfreeslotsPage {
 
   minDate: string;
   maxDate: string;
-  myDate: string;
-  repeatday: string;
+  repeatday: any;
   startDate: string;
   endDate: string;
   time: string[] = [];
@@ -59,10 +58,18 @@ export class AddfreeslotsPage {
   room: string;
   MinDate: string;
   sundaySelected = false;
-
   showTimeConflictMessage = false;
-
   formattedSelectedDate: any;
+  repeatstartDate: string;
+  repeatselected: any;
+  no_of_weeks: number;
+  alldate: string;
+  alldates: string;
+  enddatebefore: string;
+  enddateafter: string;
+  i: string;
+  repeatweekbefore: number;
+  repeatweekafter: number;
 
   constructor(
     public http: HttpClient,
@@ -97,6 +104,40 @@ export class AddfreeslotsPage {
     this.minDate = new Date().toISOString();
     this.MinDate = moment(this.minDate).add(1, 'day').toISOString();
     this.maxDate = moment(this.MinDate).add(6, 'month').toISOString();
+    this.repeatselected = "repeatnone";
+    this.alldate = moment(this.MinDate).format('YYYY-MM-DD');
+    this.no_of_weeks = 1;
+  }
+
+  selectRepeatType(value) {
+    if (value == 'repeatnone') {
+      this.repeatday = '';
+      this.freeslots.repeat = [];
+      this.freeslots.end_date = '';
+      this.no_of_weeks = 1;
+      this.freeslots.end_date = '';
+    }
+    else if (value == 'repeatweekly') {
+      this.repeatday = ['Mon'];
+      this.freeslots.repeat = this.repeatday;
+      this.repeatweek();
+    }
+    else if (value == 'repeatenddate') {
+      this.repeatday = ['Mon'];
+      this.freeslots.repeat = this.repeatday;
+      this.no_of_weeks = 1;
+      this.minEndDate = moment(this.alldate).add(1, 'day').toISOString();
+      this.enddateafter = moment(this.minEndDate).format('YYYY-MM-DD');
+      this.endDate = this.enddateafter;
+      this.freeslots.end_date = this.endDate;
+    }
+  }
+
+  repeatweek() {
+    this.repeatweekbefore = this.no_of_weeks * 7;
+    this.repeatweekafter = this.repeatweekbefore - 1;
+    this.enddatebefore = moment(this.alldate + 'T00:00:00.000Z').add(this.repeatweekafter, 'days').toISOString();
+    this.freeslots.end_date = moment(this.enddatebefore).format('YYYY-MM-DD');
   }
 
   initslots(): FormGroup {
@@ -105,20 +146,20 @@ export class AddfreeslotsPage {
     });
   }
 
-  onSelectTime(index: number){
-    const control = this.form.controls.slots as FormArray;
-    this.time = this.time.filter((v, i) => {
-      if(this.time.indexOf(v) !== i){
-        control.removeAt(index);
-      }
-      return this.time.indexOf(v) === i
-    })
-  }
-
   addNewInputField(): void {
     const control = this.form.controls.slots as FormArray;
-    
     control.push(this.initslots());
+  }
+
+  onSelectTime(index: number) {
+    const control = this.form.controls.slots as FormArray;
+    this.time = this.time.filter((v, i) => {
+      if (this.time.indexOf(v) !== i) {
+        control.removeAt(index);
+      }
+      return this.time.indexOf(v) === i;
+    });
+    this.freeslots.start_time = this.time;
   }
 
   removeInputField(i: number): void {
@@ -128,20 +169,7 @@ export class AddfreeslotsPage {
       return item !== itemToRemove
     });
     control.removeAt(i);
-  }
-
-  // check repeat is selected
-  repeatisClicked(i: number): void {
-    if (this.hidden[i]) {
-      this.hidden[i] = false;
-      this.myDate = '';
-      this.sundaySelected = false;
-    } else {
-      this.hidden[i] = true;
-      this.repeatday = '';
-      this.startDate = '';
-      this.endDate = '';
-    }
+    this.freeslots.start_time = this.time;
   }
 
   // change venue base on location
@@ -149,16 +177,11 @@ export class AddfreeslotsPage {
     this.rooms$ = this.slotsProvider.getrooms(cvalue);
   }
 
-  onchangedate() {
-    this.minEndDate = moment(this.startDate).add(1, 'day').toISOString();
-    this.endDate = '';    
-  }
-
   // lec confirmation
   async confirmation() {
     const alert = await this.alertCtrl.create({
       title: 'Confirm',
-      message: 'Are you sure you want to add this consultation hour?',
+      message: 'Are you sure you want to add this availability?',
       buttons: [
         {
           text: 'No',
@@ -167,6 +190,13 @@ export class AddfreeslotsPage {
         {
           text: 'Yes',
           handler: () => {
+            if (this.alldate != '' && this.repeatselected !== 'repeatweekly' && this.repeatselected !== 'repeatenddate') {
+              this.freeslots.start_date = '';
+              this.freeslots.date = this.alldate;
+            } else if (this.alldate != '' && this.repeatselected !== 'repeatnone') {
+              this.freeslots.date = '';
+              this.freeslots.start_date = this.alldate;
+            }
             this.slotsProvider.addfreeslots(this.freeslots).subscribe(
               () => {
                 this.app.getRootNav().setRoot(TabsPage);
@@ -196,11 +226,11 @@ export class AddfreeslotsPage {
   }) {
   }
 
-  onChangeOneFreeSlotDate(){
+  onChangeOneFreeSlotDate() {
     this.sundaySelected = false;
-    let dateInMilliSeconds = Date.parse(this.myDate);
+    let dateInMilliSeconds = Date.parse(this.alldate);
     this.formattedSelectedDate = new Date(dateInMilliSeconds);
-    if(this.formattedSelectedDate.getDay() == 0){
+    if (this.formattedSelectedDate.getDay() == 0) {
       this.sundaySelected = true;
     }
   }
