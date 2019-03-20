@@ -77,7 +77,7 @@
                       "
                     >
                       <div *ngIf="ap != -1">
-                        {{ ap | percent }}
+                        {{ ap * 100 | number: "1.0-1" }}%
                       </div>
                       <div *ngIf="ap === -1">
                         --
