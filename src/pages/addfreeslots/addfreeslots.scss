@@ -1,14 +1,8 @@
 page-addfreeslots {
+
   .item {
     font-size: 1.3rem;
     height: 40px;
-  }
-  .or {
-    color: #a1c1e7;
-  }
-
-  .secondcard {
-    margin-bottom: 18px !important;
   }
 
   .remove-card {
@@ -18,100 +12,49 @@ page-addfreeslots {
     background-color: #ff0000;
   }
 
-  .sundaySelectedMessage {
-    color: #ff0000;
-  }
-
-  .add-card {
-    top: -15px;
-    left: 412px;
-    width: 30px;
-    height: 30px;
-  }
-
-  .item-selectdate {
-    font-size: 1.4rem;
-    height: 70px;
-  }
-
-  .item-repeatday {
-    height: 85px;
-  }
-
-  .fab[mini] {
-    margin: 8px;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-  }
-
-  .label[stacked] {
-    font-size: 1.4rem;
-  }
-
-  .M {
-    left: -53px;
-    top: 22px;
-    background: transparent;
-    color: black;
-    border: 1px solid #b4b4b4;
-  }
-
-  .Tu {
-    left: -3px;
-    top: 22px;
-    background: transparent;
-    color: black;
-    border: 1px solid #b4b4b4;
-  }
-
-  .W {
-    left: 51px;
-    top: 22px;
-    background: transparent;
-    color: #18c4d5;
-    border: 1px solid #b4b4b4;
-  }
-
-  .T {
-    left: 105px;
-    top: 22px;
-    background: transparent;
-    color: #18c4d5;
-    border: 1px solid #b4b4b4;
-  }
-
-  .F {
-    left: 160px;
-    top: 22px;
-    background: transparent;
-    color: black;
-    border: 1px solid #b4b4b4;
-  }
-
-  .S {
-    left: 211px;
-    top: 22px;
-    background: transparent;
-    color: black;
-    border: 1px solid #b4b4b4;
-  }
-
-  .hide {
-    visibility: hidden;
-  }
-
-  .options {
-    width: 43%;
-    float: left;
-  }
-
-  .orclass {
-    width: 10%;
-    float: left;
-  }
   button[ion-button] {
     height: 3em;
     text-transform: capitalize;
   }
+
+  ion-list:first-child {
+    margin-top: 30px;
+  }
+ 
+  .repeatlabel{
+    color: gray;
+    padding-left: 10px;
+    margin-top: 25px;
+    font-size: small;
+  }
+
+  .locationlabel{
+    color: gray;
+    padding-left: 10px;
+    margin-top: 45px;
+    font-size: small;
+  }
+
+  .sundaySelectedMessage {
+    color: #ff0000;
+    font-size: 95%;
+  }
+
+  .startAndEndDateMessage{
+    font-size: 95%;
+  }
+
+  .durationnote{
+    color: gray;
+    padding-left: 10px;
+    font-size: 95%;
+  }
+
+  .timelabel{
+    font-size: 95%;
+    padding-left: 10px;
+    color: gray;
+    margin-bottom: 0px;
+  }
+ 
 }
