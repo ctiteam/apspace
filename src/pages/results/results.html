@@ -122,7 +122,8 @@
         </ion-card-header>
         <ion-card-content>
           <ion-grid>
-            <ion-row *ngFor="let interim of interims">
+            <div *ngFor="let interim of interims">
+              <ion-row class="test" *ngIf="!interim.CLASSIFICATION; else suMaster">                
               <ion-col col-3>
                 <div *ngIf="interim.MARK_FROM">
                   <ion-note class="notes">{{ (interim.MARK_FROM + '-' + interim.MARK_TO) || '' }}</ion-note>
@@ -131,13 +132,20 @@
               <ion-col col-2>
                 <ion-note class="notes">{{ interim.GRADE || '' }}</ion-note>
               </ion-col>
-              <ion-col col-3>
-                <ion-note class="notes">{{ interim.GRADING_POINT || '' }}</ion-note>
-              </ion-col>
-              <ion-col col-4>
-                <ion-note class="notes">{{ interim.GRADE_DESCRIPTION || '' }}</ion-note>
-              </ion-col>
-            </ion-row>
+                <ion-col col-3>
+                  <ion-note class="notes">{{ interim.GRADING_POINT || '' }}</ion-note>
+                </ion-col>
+                <ion-col col-4>
+                  <ion-note class="notes">{{ interim.GRADE_DESCRIPTION || '' }}</ion-note>
+                </ion-col>
+              </ion-row>
+              <ng-template #suMaster>
+                <ion-row>
+                  <ion-col>{{interim.CLASSIFICATION}}:</ion-col>
+                  <ion-col>{{interim.GRADE}}</ion-col>
+                </ion-row>
+              </ng-template>
+            </div>
             <ion-note class="special-note">
               R = Awarding of module credit by passing module referral assessments.
             </ion-note>
