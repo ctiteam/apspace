@@ -195,6 +195,15 @@ export class MorePage {
       title: 'Others',
       items: [
         {
+          title: 'Qualification Authenticity Verification',
+          component: 'QualificationVerificationPage',
+          size: 'xlarge',
+          desc: 'blue',
+          color: ' blue',
+          icon: 'document',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
           title: 'Staff Directory',
           component: 'StaffDirectoryPage',
           size: 'medium',
