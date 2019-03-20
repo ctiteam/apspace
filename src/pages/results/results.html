@@ -167,7 +167,7 @@
           <b>Degree Classification</b>
         </ion-card-header>
         <ion-card-content>
-          <ion-grid>
+          <ion-grid *ngIf="classificationLegends">
             <ion-row *ngFor="let classification of classificationLegends">
               <ion-col col-8>
                 <ion-note class="notes">
@@ -180,8 +180,8 @@
                 </ion-note>
               </ion-col>
             </ion-row>
-            <ion-note *ngIf="determinationLegend$ | async as determination" class="mt-2">
-              {{determination[0]?.DETERMINATION || ''}}
+            <ion-note *ngIf="determinationLegend$ | async as determination" class="special-note mt-2">
+              {{determination[0]?.DETERMINATON || ''}}
             </ion-note>
           </ion-grid>
         </ion-card-content>
