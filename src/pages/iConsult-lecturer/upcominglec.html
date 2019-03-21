@@ -5,7 +5,6 @@
 </ion-header>
 
 <ion-content>
-
   <div [ngClass]="{'ListBackdrop':fabButtonOpened == true, 'noListBackdrop':fabButtonOpened == false}"
     *ngIf="fabButtonOpened==true" (click)="closeFabButton(fab)">
   </div>
@@ -17,14 +16,44 @@
   <ng-template let-slots [ngIf]="slots$ | async" [ngIfElse]="loadingUpComLec">
     <ng-template [ngIf]="slots && slots.length > 0" [ngIfElse]="nodata">
       <ion-card class="card card-ios" *ngFor="let slot of slots"
-        [ngClass]="{'UnAvailablecard':slot.status == 'Unavailable', 'bookedcard':slot.status == 'Booked' && currenttime < slot.dateandtime, 'Availablecard':slot.status == 'Available', 'closedcard':slot.status == 'Clossed', 'passeCard':slot.status == 'Booked' && currenttime > slot.dateandtime}">
-        <ion-card-header *ngIf="slot.status == 'Booked'">
-          <button *ngIf="slot.status == 'Booked'" ion-button round small style="float:right;"
-            (click)="gotoChat()">Chat</button>
+        [ngClass]="{'UnAvailablecard':slot.status == 'Unavailable', 'bookedcard':slot.status == 'Booked' && currenttime < slot.dateandtime, 'Availablecard':slot.status == 'Available', 'closedcard':slot.status == 'Clossed', 'passedCard':slot.status == 'Booked' && currenttime > slot.dateandtime}">
+        <ion-card-header *ngIf="slot.status == 'Available'">
+          <ion-badge class="available">Available</ion-badge>
+          {{ slot.datetime}}
+        </ion-card-header>
+
+        <ion-card-header *ngIf="slot.status == 'Booked' && currenttime < slot.dateandtime">
+          <ion-badge class="bookedHour">Booked</ion-badge>
           {{slot.datetime}}
         </ion-card-header>
 
-        <ion-card-content>
+        <ion-card-header *ngIf="slot.status == 'Booked' && currenttime > slot.dateandtime">
+          <ion-badge class="passedHour">Passed</ion-badge>
+          {{slot.datetime}}
+        </ion-card-header>
+
+        <ion-card-header *ngIf="slot.status == 'Clossed'">
+          <ion-badge class="closed">Closed</ion-badge>
+          {{slot.datetime}}
+        </ion-card-header>
+
+        <ion-card-header *ngIf="slot.status == 'Unavailable'">
+          <ion-badge class="unavailable">Unavailable</ion-badge>
+          {{ slot.startdate | date:'EEEE, dd MMMM' }}
+        </ion-card-header>
+
+
+        <ion-card-content style="padding-top: 10px;">
+          <ion-label no-margin *ngIf="slot.status == 'Clossed'">
+            <ion-icon padding-right name="time"></ion-icon>
+            {{ slot.time }} - {{slot.endTime}}
+          </ion-label>
+
+          <ion-label no-margin *ngIf="slot.status == 'Clossed'">
+            <ion-icon padding-right name="locate"></ion-icon>
+            {{ slot.venue }} │ {{ slot.location }}
+          </ion-label>
+
           <ion-label no-margin *ngIf="slot.status == 'Booked'">
             <ion-icon padding-right name="time"></ion-icon>
             <b>{{ slot.time }} - {{ slot.endTime }}</b>
@@ -42,63 +71,47 @@
           </ion-label>
 
           <ion-label no-margin *ngIf="slot.status == 'Unavailable'">
-            <ion-icon padding-right name="calendar"></ion-icon>
+            <ion-icon padding-right name="ios-calendar-outline"></ion-icon>
             <b>To : </b>
             {{ slot.enddate | date:'EEEE, dd MMMM' }}
           </ion-label>
 
-          <ion-label no-margin *ngIf="slot.status == 'Clossed'">
-            <ion-icon padding-right name="calendar"></ion-icon>
-            {{ slot.datetime }}
-          </ion-label>
+          <button class="btn btn-lg btn-block btn-outline-info" *ngIf="slot.status == 'Unavailable'"
+            style="margin-top: 10px;" (click)="openUnavailabledetailsPage(slot.unavailibilityid)">
+            View Unavailability
+          </button>
 
-          <ion-label no-margin *ngIf="slot.status == 'Clossed'">
+          <ion-label no-margin *ngIf="slot.status == 'Available'">
             <ion-icon padding-right name="time"></ion-icon>
-            {{ slot.time }}
+            {{ slot.time }} - {{slot.endTime}}
           </ion-label>
 
-          <ion-item *ngIf="slot.status == 'Available'"
-            (click)="openAvailableslotspage(slot.availibilityid, slot.slotid, slot.date, slot.time, slot.timee, slot.datetime, slot.venue, slot.location, slot.endTime)"
-            class="AvailablIteam">
-            <ion-label no-margin>
-              {{ slot.time }}
-            </ion-label>
-            <ion-label text-right class="Availablitem">{{ slot.datetime }}</ion-label>
-          </ion-item>
-
-          <ion-label no-margin *ngIf="slot.status == 'Unavailable'">
-            <ion-icon padding-right name="contact"></ion-icon>
-            <ion-badge class="unavailable" *ngIf="slot.status == 'Unavailable'">{{ slot.status }}</ion-badge>
-            <a style="font-size: initial;" *ngIf="slot.status == 'Unavailable'"
-              (click)="openUnavailabledetailsPage(slot.unavailibilityid)">
-              | View
-            </a>
+          <ion-label no-margin *ngIf="slot.status == 'Available'">
+            <ion-icon padding-right name="locate"></ion-icon>
+            {{ slot.venue }} │ {{ slot.location }}
           </ion-label>
 
-          <ion-label no-margin *ngIf="slot.status == 'Clossed'">
-            <ion-icon padding-right name="contact"></ion-icon>
-            <ion-badge class="closed" *ngIf="slot.status == 'Clossed'">Closed</ion-badge>
-          </ion-label>
+          <button class="btn btn-lg btn-block btn-outline-success" *ngIf="slot.status == 'Available'"
+            style="margin-top: 10px;"
+            (click)="closeAvailableSlots(slot.availibilityid, slot.slotid, slot.date, slot.time, slot.timee, slot.datetime, slot.venue, slot.location, slot.endTime)">
+            Close open slot
+          </button>
 
-          <ion-label no-margin *ngIf="slot.status == 'Booked' && currenttime < slot.dateandtime">
-            <ion-icon padding-right name="contact"></ion-icon>
-            <ion-badge class="bookedHour" *ngIf="slot.status == 'Booked' && currenttime < slot.dateandtime">
-              {{slot.status}}</ion-badge>
-            <a style="font-size: initial;" *ngIf="slot.status == 'Booked' && currenttime < slot.dateandtime"
-              (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
-              | View Detail
-            </a>
-          </ion-label>
+          <div class="row mt-3" *ngIf="slot.status == 'Booked' && currenttime < slot.dateandtime">
+            <div class="col-4"><button class="btn btn-lg btn-block btn-outline-danger"
+                (click)="gotoChat()">Chat</button></div>
+            <div class="col-8"><button class="btn btn-lg btn-block btn-outline-danger"
+                (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
+                View Appointment Details</button></div>
+          </div>
 
-          <ion-label no-margin *ngIf="slot.status == 'Booked' && currenttime > slot.dateandtime">
-            <ion-icon padding-right name="contact"></ion-icon>
-            <ion-badge class="passedHour" *ngIf="slot.status == 'Booked' && currenttime > slot.dateandtime">Passed
-            </ion-badge>
-            <a style="font-size: initial;" *ngIf="slot.status == 'Booked' && currenttime > slot.dateandtime"
-              (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
-              | Remarks
-            </a>
-          </ion-label>
+          <div class="row mt-3" *ngIf="slot.status == 'Booked' && currenttime > slot.dateandtime">
+            <div class="col-4"><button class="btn btn-lg btn-block btn-outline-secondary"
+                (click)="gotoChat()">Chat</button></div>
+            <div class="col-8"><button class="btn btn-lg btn-block btn-outline-secondary"
+                (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
+                Add Remarks</button></div>
+          </div>
 
         </ion-card-content>
       </ion-card>

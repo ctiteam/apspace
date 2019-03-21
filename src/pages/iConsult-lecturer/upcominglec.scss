@@ -16,63 +16,54 @@ page-upcominglec {
     }
 
     ion-badge.available{
-        background-color: #1e90ff
+        background-color: #2ecc71;
+        float:right; 
+        font-size: smaller;
     }
 
     ion-badge.bookedHour{
-        background-color: red !important;
+        background-color: #ff0000 !important;
+        float:right; 
+        font-size: smaller;
     }
 
     ion-badge.passedHour{
         background-color: gray !important;
+        float:right; 
+        font-size: smaller;
     }
 
     ion-badge.unavailable{
-        background-color: silver !important;
+        background-color: #138496 !important;
+        float:right; 
+        font-size: smaller;
     }
 
     ion-badge.closed{
-        background-color: dimgray !important;
+        background-color: #222428 !important;
+        float:right; 
+        font-size: smaller;
     }
 
     .bookedcard {
-        border-left: 0.5rem solid red
+        border-left: 0.4rem solid #ff0000;
     }
 
     .Availablecard {
-        border-left: 0.5rem solid #1e90ff
+        border-left: 0.4rem solid #2ecc71;
     }
 
     .UnAvailablecard {
-        border-left: 0.5rem solid silver;
+        border-left: 0.4rem solid #138496;
     }
 
     .closedcard {
-       border-left: 0.5rem solid dimgray;
+       border-left: 0.4rem solid #222428;
     }
 
-    .passeCard {
-        border-left: 0.5rem solid gray;
+    .passedCard {
+        border-left: 0.4rem solid gray;
      }
-
-    .Availablitem{
-        margin-left: -35px;
-        font-size: 1.4rem;
-        color: #33cccc;
-    }
-
-    .AvailablIteam{
-        font-size: 1.4rem;
-    }
-
-    .UnAvailablIteam{
-        font-size: 1.4rem;
-    }
-
-    .backbutton{
-        text-transform: capitalize;
-        margin-left: 3px;
-    }
     
     .line-break{
         overflow: inherit ;
@@ -85,26 +76,6 @@ page-upcominglec {
         margin-top: 181px;
         margin-left: 20px;
         color: slategrey;
-    }
-
-    .fablabelavailable {
-        position: absolute;
-        width: 100%;
-        padding-right: 350px;
-        padding-bottom: 75px;
-        margin-top: 0px;
-        margin-bottom: 0px;
-        font-weight: bold;
-    }
-         
-    .fablabelunavailable {
-        position: absolute;
-        width: 100%;
-        padding-right: 350px;
-        padding-bottom: 18px;
-        margin-top: 10px;
-        margin-bottom: 0px;
-        font-weight: bold;
     }
          
     .ListBackdrop {
