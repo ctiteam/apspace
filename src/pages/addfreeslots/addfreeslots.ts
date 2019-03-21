@@ -103,7 +103,7 @@ export class AddfreeslotsPage {
 
     this.minDate = new Date().toISOString();
     this.MinDate = moment(this.minDate).add(1, 'day').toISOString();
-    this.maxDate = moment(this.MinDate).add(6, 'month').toISOString();
+    this.maxDate = moment(this.MinDate).add(12, 'month').toISOString();
     this.repeatselected = "repeatnone";
     this.alldate = moment(this.MinDate).format('YYYY-MM-DD');
     this.no_of_weeks = 1;
