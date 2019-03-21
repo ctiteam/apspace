@@ -72,7 +72,7 @@
     <!-- END CIRCLE -->
 
     <!-- START TEXT -->
-    <div id="widget-value">{{ average | percent }}</div>
+    <div id="widget-value">{{ average * 100 | number: "1.0-1" }}%</div>
     <!-- END TEXT -->
   </div>
   <!-- END COVER -->

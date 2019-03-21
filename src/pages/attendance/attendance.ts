@@ -93,7 +93,11 @@ export class AttendancePage {
       return;
     }
     if(aa.length > 0){
-      this.average = aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100;
+      let totalClasses = aa.reduce((a, b) => a + b.TOTAL_CLASSES, 0);
+      let totalAbsentClasses = aa.reduce((a, b) => a + b.TOTAL_ABSENT, 0);
+      let totalAttendedClasses = totalClasses - totalAbsentClasses;
+      
+      this.average = (totalAttendedClasses / totalClasses);
     }
     else{
       this.average = -1;

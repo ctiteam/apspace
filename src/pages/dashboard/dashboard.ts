@@ -299,8 +299,11 @@ export class DashboardPage {
       .get<Attendance[]>(url)
       .pipe(
         map(aa => {
-          if(aa.length > 0){            
-            return aa.reduce((a, b) => a + b.PERCENTAGE, 0) / aa.length / 100
+          if(aa.length > 0){
+            let totalClasses = aa.reduce((a, b) => a + b.TOTAL_CLASSES, 0);
+            let totalAbsentClasses = aa.reduce((a, b) => a + b.TOTAL_ABSENT, 0);
+            let totalAttendedClasses = totalClasses - totalAbsentClasses;           
+            return totalAttendedClasses / totalClasses
           } else{
             return -1 // -1 means there is no attendance data in the selected intake 
           }
