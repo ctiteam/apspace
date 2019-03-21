@@ -10,7 +10,7 @@
   <ion-list>
     <ion-item>
       <ion-label>Date</ion-label>
-      <ion-icon name="calendar" item-start small></ion-icon>
+      <ion-icon ios="ios-calendar-outline" md="md-calendar" item-start small></ion-icon>
       <ion-datetime displayFormat="DDDD, D MMM YYYY" pickerFormat="DD MM YYYY" [(ngModel)]="alldate" [min]="MinDate"
         [max]="maxDate" [ngModelOptions]="{standalone: true}" (ionChange)="onChangeOneFreeSlotDate()">
       </ion-datetime>
@@ -23,6 +23,7 @@
 
   <ion-label class="repeatlabel">Select Repeat Type:</ion-label>
   <ion-list radio-group [(ngModel)]="repeatselected" (ionChange)="selectRepeatType($event)">
+    <ion-list-header hidden></ion-list-header>
     <ion-item>
       <ion-label>None</ion-label>
       <ion-radio item-start value="repeatnone"></ion-radio>
@@ -40,6 +41,7 @@
   <!--Repeats weekly section-->
   <ion-label class="repeatlabel" *ngIf="repeatselected == 'repeatweekly'">Repeats weekly</ion-label>
   <ion-list *ngIf="repeatselected == 'repeatweekly'">
+    <ion-list-header hidden></ion-list-header>
     <ion-item>
       <ion-label>On days</ion-label>
       <ion-select [(ngModel)]="repeatday" multiple="true" [(ngModel)]="freeslots.repeat">
@@ -69,6 +71,7 @@
   <!--Repeats until end date section-->
   <ion-label class="repeatlabel" *ngIf="repeatselected == 'repeatenddate'">Repeat days and end date</ion-label>
   <ion-list *ngIf="repeatselected == 'repeatenddate'">
+    <ion-list-header hidden></ion-list-header>
     <ion-item>
       <ion-label>On days</ion-label>
       <ion-select [(ngModel)]="repeatday" multiple="true" [(ngModel)]="freeslots.repeat"
@@ -122,6 +125,7 @@
 
   <ion-label class="locationlabel">Select location and venue:</ion-label>
   <ion-list>
+    <ion-list-header hidden></ion-list-header>
     <ion-item>
       <ion-label>Location</ion-label>
       <ion-icon name="ios-pin-outline" item-start small></ion-icon>
