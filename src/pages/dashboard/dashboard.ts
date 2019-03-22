@@ -50,7 +50,7 @@ export class DashboardPage {
   nextHoliday$: Observable<Holiday>;
   overdue$: Observable<FeesTotalSummary[]>;
   profile$: Observable<StudentProfile>;
-  transaction$: Observable<Apcard>;
+  balance$: Observable<number>;
   apcardTransaction$: Observable<Apcard[]>;
   upcomingClasse$: Observable<Timetable[]>;
 
@@ -141,7 +141,7 @@ export class DashboardPage {
     forkJoin(
       this.getProfile(),
       this.nextHoliday$ = this.getHolidays(Boolean(refresher)),
-      this.transaction$ = this.getAPCardBalance(),
+      this.balance$ = this.getAPCardBalance(),
       this.overdue$ = this.getOverdueFee(),
     ).pipe(finalize(() => refresher && refresher.complete())).subscribe();
   }
@@ -331,9 +331,16 @@ export class DashboardPage {
   // APCARD TRANSACTIONS & BALANCE METHODS
   getAPCardBalance() {
     return this.ws
-      .get<Apcard>('/apcard/', true)
+      .get<Apcard[]>('/apcard/', true)
       .pipe(
-        map(transactions => (transactions[0] || ({} as Apcard)).Balance || 0),
+        map((transactions) => {
+          if(transactions.length > 0){
+            console.log(transactions);
+            return (transactions[0] || ({} as Apcard)).Balance;
+          }
+          return -1;
+
+        }),
       );
   }
 
