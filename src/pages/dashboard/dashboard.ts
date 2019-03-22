@@ -335,7 +335,6 @@ export class DashboardPage {
       .pipe(
         map((transactions) => {
           if(transactions.length > 0){
-            console.log(transactions);
             return (transactions[0] || ({} as Apcard)).Balance;
           }
           return -1;

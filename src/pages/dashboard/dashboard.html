@@ -806,10 +806,11 @@
             <!-- START SECTION 11: APCARD -->
             <ng-template
               class="main-section"
-              let-attendance
+              let-transactions
               [ngIf]="apcardTransaction$ | async"
               [ngIfElse]="loadingApcard"
             >
+            <ng-template [ngIf]="transactions.length > 0">
               <div class="section low-attendance-section">
                 <!-- START SECTION 11 HEADER -->
                 <div class="section-header">
@@ -835,6 +836,7 @@
                 </div>
                 <!-- END SECTION 11 BODY -->
               </div>
+              </ng-template>
             </ng-template>
             <ng-template #loadingApcard>
               <ion-card>
