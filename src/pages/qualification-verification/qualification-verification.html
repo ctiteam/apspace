@@ -11,7 +11,8 @@
         <ion-label stacked>Enter student's number/name:</ion-label>
         <ion-input
           type="text"
-          [(ngModel)]="keyword"
+          no-lines
+          [(ngModel)]="searchKeyword"
           [ngModelOptions]="{ standalone: true }"
         >
         </ion-input>
@@ -25,7 +26,7 @@
         block
         outline
         icon-end
-        (click)="submitFeedback()"
+        (click)="searchForGraduaters()"
         class="submit-button mt-4"
       >
         Search
@@ -33,35 +34,69 @@
       </button>
     </div>
   </div>
-
-  <div class="row pt-4">
-    <div class="col-12 p-0">
-      <ion-list>
-        <ion-item>
-          <div class="item">
-            <small stacked>Student Name:</small>
-            <h3 class="student-name font-weight-bold">Mohamad Al Ghayeb</h3>
-          </div>
-          <div class="item mt-3">
-            <small>Student Number:</small>
-            <h4 class="student-tp">TP037354</h4>
-          </div>
-          <div class="item mt-3">
-            <small>Programme:</small>
-            <h4 class="student-programme">
-              BSc (Hons) in Electronic Commerce
+  <ng-template [ngIf]="userSearched" [ngIfElse]="noSearchDone">
+    <ng-template
+      let-graduaters
+      [ngIf]="graduater$ | async"
+      [ngIfElse]="loading"
+    >
+      <ng-template [ngIf]="graduaters" [ngIfElse]="noGraduaters">
+        <div class="row pt-4">
+          <div class="col-12 p-0">
+            <h4 class="text-center font-weight-normal">
+              We found <span>{{graduaters.length}}</span> results for <strong>{{resultKeyWord}}</strong>
             </h4>
           </div>
-          <div class="item mt-3">
-            <small>Year Of Graduaiton:</small>
-            <h4 class="student-yog">2015</h4>
+          <div class="col-12 p-0">
+            <ion-list>
+              <ion-item no-lines class="my-3" *ngFor="let graduater of graduaters">
+                <div class="item">
+                  <small stacked>Student Name:</small>
+                  <h3 class="student-name font-weight-bold">
+                    {{ graduater.Name }}
+                  </h3>
+                </div>
+                <div class="item mt-3">
+                  <small>Student Number:</small>
+                  <h4 class="student-tp">{{ graduater.StudentID }}</h4>
+                </div>
+                <div class="item mt-3">
+                  <small>Programme:</small>
+                  <h4 class="student-programme">
+                      {{ graduater.Programme }}
+                  </h4>
+                </div>
+                <div class="item mt-3">
+                  <small>Year Of Graduaiton:</small>
+                  <h4 class="student-yog">{{ graduater.yog }}</h4>
+                </div>
+                <div class="item mt-3" *ngIf="graduater.AwardAchieved">
+                  <small>Award Achieved:</small>
+                  <h4 class="student-award">
+                      {{ graduater.AwardAchieved }}
+                  </h4>
+                </div>
+              </ion-item>
+            </ion-list>
           </div>
-          <div class="item mt-3">
-            <small>Award Achieved:</small>
-            <h4 class="student-award">This award is for testing only :)</h4>
-          </div>
-        </ion-item>
-      </ion-list>
+        </div>
+      </ng-template>
+      <ng-template #noGraduaters>
+        <h4>There is no results for <strong>TP037354</strong></h4>
+      </ng-template>
+    </ng-template>
+    <ng-template #loading>
+      loading...
+    </ng-template>
+  </ng-template>
+  <ng-template #noSearchDone>
+    <div class="row mt-5 pt-5 px-4">
+      <div class="col-12">
+        <h3 class="text-center">
+          Enter student's name or number (TP number) in the text box above to
+          verify his/her qualification
+        </h3>
+      </div>
     </div>
-  </div>
+  </ng-template>
 </ion-content>
