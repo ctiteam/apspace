@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, ToastController } from 'ionic-angular';
 
-import { FeedbackProvider, SettingsProvider, VersionProvider } from '../../providers';
+import { FeedbackProvider, VersionProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -21,7 +21,6 @@ export class FeedbackPage {
 
   constructor(
     private feedback: FeedbackProvider,
-    private settings: SettingsProvider,
     private toastCtrl: ToastController,
     private version: VersionProvider,
   ) { }
