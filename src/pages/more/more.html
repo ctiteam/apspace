@@ -1,29 +1,33 @@
 <ion-header class="menu-header" no-border>
   <ion-toolbar>
-    <ion-searchbar
-      placeholder="Filter Menu"
-      (ionInput)="filterMenu($event)"
-    ></ion-searchbar>
+    <div class="container p-0">
+        <ion-searchbar
+        placeholder="Filter Menu"
+        (ionInput)="filterMenu($event)"
+      ></ion-searchbar>
+    </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="menu-section" *ngFor="let menu of menuFiltered">
-    <div class="menu-section-header">
-      <h3>{{ menu.title }}</h3>
-    </div>
-    <div class="menu-section-items">
-      <div
-        [ngClass]="['menu-item', 'row', page.color, page.size]"
-        *ngFor="let page of menu.items"
-        (click)="openPage(page)"
-      >
-        <ion-icon
-          class="ion-icon align-self-center text-center"
-          [name]="page.icon"
-        ></ion-icon>
-        <div class="menu-item-title align-self-end">{{ page.title }}</div>
-      </div>
-    </div>
+  <div class="container p-0">
+      <div class="menu-section" *ngFor="let menu of menuFiltered">
+          <div class="menu-section-header">
+            <h3>{{ menu.title }}</h3>
+          </div>
+          <div class="menu-section-items">
+            <div
+              [ngClass]="['menu-item', 'row', page.color, page.size]"
+              *ngFor="let page of menu.items"
+              (click)="openPage(page)"
+            >
+              <ion-icon
+                class="ion-icon align-self-center text-center"
+                [name]="page.icon"
+              ></ion-icon>
+              <div class="menu-item-title align-self-end">{{ page.title }}</div>
+            </div>
+          </div>
+        </div>
   </div>
 </ion-content>
