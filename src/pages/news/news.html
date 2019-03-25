@@ -8,7 +8,7 @@
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="container">
+  <div class="container p-0">
     <ng-template let-items [ngIf]="item$ | async" [ngIfElse]="loadingNews">
       <ng-template [ngIf]="items && items.length > 0" [ngIfElse]="nonews">
         <ion-card tappable *ngFor="let item of items" (click)="openModal(item)">
