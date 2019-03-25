@@ -16,10 +16,10 @@ export class UpcomingstdPage {
   skeletonArray = new Array(5);
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              public app: App,
-              private UpcomingConStu: UpcomingConStuProvider,
-              public alertCtrl: AlertController,
+    public navParams: NavParams,
+    public app: App,
+    private UpcomingConStu: UpcomingConStuProvider,
+    public alertCtrl: AlertController,
   ) {
   }
 
@@ -33,26 +33,8 @@ export class UpcomingstdPage {
     }));
   }
 
-  gotoChat() {
-    // window.open('https://play.google.com/store/apps/details?id=com.microsoft.teams', '_system');
-    // let confirm = this.alertCtrl.create({
-    //   title: 'Open "Microsoft Teams"?',
-    //   buttons: [
-    //     {
-    //       text: 'No',
-    //       handler: () => {
-    //       }
-    //     },
-    //     {
-    //       text: 'Yes',
-    //       handler: () => {
-    //         //window.open('https://play.google.com/store/apps/details?id=com.microsoft.teams', '_system');
-    //         this.market.open('details?id=com.microsoft.teams');
-    //       }
-    //     }
-    //   ]
-    // });
-    // confirm.present();
+  gotoChat(lecname: string) {
+    window.open('https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/conversations/8:orgid:2b3a316c-0730-4a54-9ce6-a62be7fe8b84?ctx=chat&q=' + lecname, '_system');
   }
 
   doRefresh(refresher?) {

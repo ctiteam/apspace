@@ -44,13 +44,13 @@ export class UnavailabilitySlotsPage {
   MinDate: string;
 
   constructor(public http: HttpClient,
-              public slotsProvider: SlotsProvider,
-              public navCtrl: NavController,
-              public navParams: NavParams,
-              public alertCtrl: AlertController,
-              private _FB: FormBuilder,
-              public app: App,
-              private toastCtrl: ToastController,
+    public slotsProvider: SlotsProvider,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public alertCtrl: AlertController,
+    private _FB: FormBuilder,
+    public app: App,
+    private toastCtrl: ToastController,
   ) {
 
     this.items.push({ text: 'Mon' });
@@ -58,6 +58,7 @@ export class UnavailabilitySlotsPage {
     this.items.push({ text: 'Wed' });
     this.items.push({ text: 'Thur' });
     this.items.push({ text: 'Fri' });
+    this.items.push({ text: 'Sat' });
 
     this.form = this._FB.group({
       slotsTime: ['', Validators.required],
@@ -68,7 +69,7 @@ export class UnavailabilitySlotsPage {
 
     this.minDate = new Date().toISOString();
     this.MinDate = moment(this.minDate).add(1, 'day').toISOString();
-    this.maxDate = moment(this.MinDate).add(2, 'month').toISOString();
+    this.maxDate = moment(this.MinDate).add(12, 'month').toISOString();
   }
 
   initslots(): FormGroup {
@@ -84,8 +85,23 @@ export class UnavailabilitySlotsPage {
 
   removeInputField(i: number): void {
     const control = this.form.controls.slots as FormArray;
+    let itemToRemove = this.time[i];
+    this.time = this.time.filter((item) => {
+      return item !== itemToRemove
+    });
     control.removeAt(i);
-    this.time[i] = '';
+    this.unfreeslots.start_time = this.time;
+  }
+
+  onSelectTime(index: number) {
+    const control = this.form.controls.slots as FormArray;
+    this.time = this.time.filter((v, i) => {
+      if (this.time.indexOf(v) !== i) {
+        control.removeAt(index);
+      }
+      return this.time.indexOf(v) === i;
+    });
+    this.unfreeslots.start_time = this.time;
   }
 
   onchangedate() {

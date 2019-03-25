@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { AlertController, App, DateTime, IonicPage, NavController, NavParams, FabContainer } from 'ionic-angular';
+import { AlertController, App, DateTime, IonicPage, NavController, NavParams, FabContainer, ToastController } from 'ionic-angular';
 import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
 import { UpcomingConLecProvider } from '../../providers/upcoming-con-lec';
 import { TabsPage } from '../tabs/tabs';
+import { SlotsProvider } from '../../providers';
 
 @IonicPage()
 @Component({
@@ -15,16 +16,15 @@ import { TabsPage } from '../tabs/tabs';
 export class UpcominglecPage {
 
   slotid = this.navParams.get('slotid');
-
   slots$: Observable<any[]>;
   slotsRules: any;
   items: any;
   currentDateTime: string = moment().format();
   skeletonArray = new Array(5);
-
   currenttime = moment().format('YYYY-MM-DD HH:mm:ss');
-
   fabButtonOpened: Boolean;
+  status: number = 1;
+  canceledslots: any;
 
   constructor(
     public http: HttpClient,
@@ -33,8 +33,20 @@ export class UpcominglecPage {
     private UpcomingConLec: UpcomingConLecProvider,
     public app: App,
     public alertCtrl: AlertController,
+    public slotsProvider: SlotsProvider,
+    private toastCtrl: ToastController,
   ) {
     this.fabButtonOpened = false;
+  }
+
+  ionViewDidLoad() {
+    this.slots$ = this.UpcomingConLec.getUpcomingConLec();
+  }
+
+  doRefresh(refresher?) {
+    this.slots$ = this.UpcomingConLec.getUpcomingConLec().pipe(
+      finalize(() => refresher.complete()),
+    );
   }
 
   openFabButton() {
@@ -50,16 +62,6 @@ export class UpcominglecPage {
     if (this.closeFabButton) {
       this.fabButtonOpened = false;
     }
-  }
-
-  ionViewDidLoad() {
-    this.slots$ = this.UpcomingConLec.getUpcomingConLec();
-  }
-
-  doRefresh(refresher?) {
-    this.slots$ = this.UpcomingConLec.getUpcomingConLec().pipe(
-      finalize(() => refresher.complete()),
-    );
   }
 
   getUpcomingConLec() {
@@ -81,7 +83,7 @@ export class UpcominglecPage {
       { id, status, availibilityid, date, time, timee, datetime });
   }
 
-  openAvailableslotspage(
+  closeAvailableSlots(
     id: number,
     slotid: number,
     date: string,
@@ -92,8 +94,51 @@ export class UpcominglecPage {
     location: string,
     endTime: string,
   ) {
-    this.app.getRootNav().push('FreeslotsdetailsPage',
-      { id, slotid, date, time, timee, datetime, venue, location, endTime });
+    this.canceledslots = {
+      availibility_id: id,
+      slotid: slotid,
+      date: date,
+      timee: timee,
+      datetime: '',
+      cancelled_datetime: this.currentDateTime,
+      status: this.status,
+    };
+    this.closelslot();
+  }
+
+  async closelslot() {
+    const alert = await this.alertCtrl.create({
+      title: 'Close Slot',
+      message: 'Are you sure you want to cancel this open slot?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.slotsProvider.addCanceledslot(this.canceledslots).subscribe(
+              () => {
+                this.app.getRootNav().setRoot(TabsPage);
+                this.app.getRootNav().push(UpcominglecPage);
+                this.presentToast();
+              },
+            );
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
+  presentToast() {
+    const toast = this.toastCtrl.create({
+      message: 'Available slot was closed successfully',
+      duration: 3000,
+      position: 'bottom',
+    });
+    toast.present();
   }
 
   openUnavailabledetailsPage(unavailibilityid: number) {
@@ -102,9 +147,7 @@ export class UpcominglecPage {
 
   gotoChat() {
     // link to  MS Temas webpage
-    window.open('https://products.office.com/en-us/microsoft-teams/group-chat-software', '_system');
+    window.open('https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/conversations/8:orgid:2b3a316c-0730-4a54-9ce6-a62be7fe8b84?ctx=chat&q=tp045194', '_system');
   }
-
-
 
 }

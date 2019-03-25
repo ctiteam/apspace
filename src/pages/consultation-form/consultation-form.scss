@@ -47,4 +47,16 @@ page-consultation-form {
       padding: 25px 10px;
     }
   }
+
+  .error-message {
+    color: #ff0000;
+    font-size: 95%;
+  }
+
+  .errorAlertIcon{
+    margin-right: 10px;
+    margin-top: 5px;
+    color: red;
+  }
+
 }
