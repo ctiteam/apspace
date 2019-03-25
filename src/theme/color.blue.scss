@@ -336,6 +336,9 @@ $primary_color: #1297e0;
 
   // ICONSULT (STUDENTS) PAGE
   page-iconsult {
+    .slot-month{
+      background-color: $primary_color;
+    }
     h2.staff-name {
       text-shadow: 0.1px 0.1px 0.1px $primary_color,
         -0.1px -0.1px 0.1px $primary_color;

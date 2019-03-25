@@ -752,6 +752,9 @@ $dark_menu_colors: (
 
   // ICONSULT (STUDENTS) PAGE
   page-iconsult {
+    .slot-month{
+     color: color($dark_colors, dark_item_background);
+    }
     h2.staff-name {
       color: color($dark_colors, dark_white_color);
     }

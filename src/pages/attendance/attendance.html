@@ -1,5 +1,6 @@
 <ion-header no-border>
   <ion-navbar>
+    
     <ion-title *ngIf="(courses$ | async)">{{
       this.selectedIntake || "Attendance"
     }}</ion-title>
@@ -99,44 +100,50 @@
     [ngIf]="attendance$ | async"
     [ngIfElse]="loadAttendance"
   >
-    <ion-card margin-bottom *ngFor="let a of attendances">
-      <ion-item color="light-shade" class="subj-title">
-        {{ a.MODULE_ATTENDANCE }}
-      </ion-item>
-      <div
-        class="progress-bar"
-        [style.width]="a.PERCENTAGE + '%'"
-        [style.background]="
-          a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100 ? '#0dbd53' : '#f04141'
-        "
-      ></div>
-      <ion-item class="transparent">
-        Classes
-        <div item-content>
-          {{
-            a.TOTAL_CLASSES -
-              a.TOTAL_ABSENT +
-              "/" +
-              a.TOTAL_CLASSES +
-              " (" +
-              a.PERCENTAGE +
-              "%)"
-          }}
+    <div class="container p-0">
+      <div class="row">
+        <div class="col-12 col-md-6" *ngFor="let a of attendances">
+            <ion-card margin-bottom>
+                <ion-item color="light-shade" class="subj-title">
+                  {{ a.MODULE_ATTENDANCE }}
+                </ion-item>
+                <div
+                  class="progress-bar"
+                  [style.width]="a.PERCENTAGE + '%'"
+                  [style.background]="
+                    a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100 ? '#0dbd53' : '#f04141'
+                  "
+                ></div>
+                <ion-item class="transparent">
+                  Classes
+                  <div item-content>
+                    {{
+                      a.TOTAL_CLASSES -
+                        a.TOTAL_ABSENT +
+                        "/" +
+                        a.TOTAL_CLASSES +
+                        " (" +
+                        a.PERCENTAGE +
+                        "%)"
+                    }}
+                  </div>
+                </ion-item>
+                <ion-item class="transparent">
+                  Exam Eligibility
+                  <div
+                    item-content
+                    [style.font-weight]="'bold'"
+                    [style.color]="
+                      a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'
+                    "
+                  >
+                    {{ a.EXAM_ELIGIBILITY }}
+                  </div>
+                </ion-item>
+              </ion-card>
         </div>
-      </ion-item>
-      <ion-item class="transparent">
-        Exam Eligibility
-        <div
-          item-content
-          [style.font-weight]="'bold'"
-          [style.color]="
-            a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'
-          "
-        >
-          {{ a.EXAM_ELIGIBILITY }}
-        </div>
-      </ion-item>
-    </ion-card>
+      </div>
+    </div>
   </ng-template>
   <ng-template #loadAttendance>
     <ion-card *ngFor="let i of numOfSkeletons">
@@ -147,15 +154,18 @@
   </ng-template>
 
   <ng-template let-legend [ngIf]="legend$ | async" [ngIfElse]="loadLegend">
-    <ion-card class="legend">
-      <ion-card-header> <h2>Legend</h2> </ion-card-header>
-      <ion-card-content>
-        <ion-row *ngFor="let l of objectKeys(legend)">
-          <ion-col col-3>{{ l }}</ion-col>
-          <ion-col col-9>{{ legend[l] }}</ion-col>
-        </ion-row>
-      </ion-card-content>
-    </ion-card>
+    <div class="container p-0">
+        <ion-card class="legend">
+            <ion-card-header> <h2>Legend</h2> </ion-card-header>
+            <ion-card-content>
+              <ion-row *ngFor="let l of objectKeys(legend)">
+                <ion-col col-3>{{ l }}</ion-col>
+                <ion-col col-9>{{ legend[l] }}</ion-col>
+              </ion-row>
+            </ion-card-content>
+          </ion-card>
+    </div>
+
   </ng-template>
   <ng-template #loadLegend>
     <ion-card>

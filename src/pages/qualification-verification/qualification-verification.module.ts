@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { QualificationVerificationPage } from './qualification-verification';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @NgModule({
   declarations: [
@@ -9,5 +10,6 @@ import { QualificationVerificationPage } from './qualification-verification';
   imports: [
     IonicPageModule.forChild(QualificationVerificationPage),
   ],
+  providers: [InAppBrowser],
 })
 export class QualificationVerificationPageModule {}

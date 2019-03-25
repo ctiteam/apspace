@@ -94,23 +94,23 @@
 
                 <!-- START QUICK ACCESS MENU ITEM 2 -->
                 <div class="col-4 scroll-item">
-                  <div
-                    class="quick-access-item"
-                    (click)="openPage('ApcardPage')"
-                  >
+                  <div class="quick-access-item" (click)="openPage('ApcardPage')">
                     <ion-icon name="card"></ion-icon>
                     <div class="quick-access-item-title">
                       APCard <span class="second-line">Balance</span>
                     </div>
-                    <div
-                      class="quick-access-item-subtitle"
-                      *ngIf="
-                        (transaction$ | async) as balance;
-                        else loadingApcardBalance
-                      "
-                    >
-                      {{ balance | currency: "MYR":"RM" }}
-                    </div>
+                    <ng-template let-balance [ngIf]="balance$ | async" [ngIfElse]="loadingApcardBalance">
+                      <ng-template [ngIf]="balance !== -1" [ngIfElse]="userHasNoBalance">
+                        <div class="quick-access-item-subtitle">
+                          {{ balance | currency: "MYR":"RM" }}
+                        </div>
+                      </ng-template>
+                      <ng-template #userHasNoBalance>
+                          <div class="quick-access-item-subtitle">
+                              {{ 0 | currency: "MYR":"RM" }}
+                            </div>                       
+                      </ng-template>
+                    </ng-template>
                     <ng-template #loadingApcardBalance>
                       <div class="quick-access-item-subtitle">
                         <loading-spinner></loading-spinner>
@@ -806,10 +806,11 @@
             <!-- START SECTION 11: APCARD -->
             <ng-template
               class="main-section"
-              let-attendance
+              let-transactions
               [ngIf]="apcardTransaction$ | async"
               [ngIfElse]="loadingApcard"
             >
+            <ng-template [ngIf]="transactions.length > 0">
               <div class="section low-attendance-section">
                 <!-- START SECTION 11 HEADER -->
                 <div class="section-header">
@@ -835,6 +836,7 @@
                 </div>
                 <!-- END SECTION 11 BODY -->
               </div>
+              </ng-template>
             </ng-template>
             <ng-template #loadingApcard>
               <ion-card>

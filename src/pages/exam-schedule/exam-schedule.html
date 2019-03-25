@@ -21,89 +21,95 @@
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
-  <ng-template [ngIf]="!showNoIntakeMessage" [ngIfElse]="noIntakeMessage">
-    <ng-template let-exams [ngIf]="exam$ | async" [ngIfElse]="loadingExams">
-      <ng-template [ngIf]="exams.length !== 0" [ngIfElse]="noExams">
-        <ion-card *ngFor="let exam of exams">
+  <div class="container p-0">
+    <ng-template [ngIf]="!showNoIntakeMessage" [ngIfElse]="noIntakeMessage">
+      <ng-template let-exams [ngIf]="exam$ | async" [ngIfElse]="loadingExams">
+        <ng-template [ngIf]="exams.length !== 0" [ngIfElse]="noExams">
+          <div class="row">
+            <div class="col-12 col-md-6" *ngFor="let exam of exams">
+              <ion-card>
+                <ion-card-header>
+                  <b>{{ exam.subjectDescription }}</b>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-list no-lines>
+                    <ion-item no-padding>
+                      Module
+                      <p item-right>{{ exam.module }}</p>
+                    </ion-item>
+                    <ion-item no-padding>
+                      Venue
+                      <p item-right>{{ exam.venue }}</p>
+                    </ion-item>
+                    <ion-item no-padding>
+                      Date Time
+                      <p item-right>
+                        {{ exam.since | date: "EEE, d MMM, y, h:mm a" }}
+                      </p>
+                    </ion-item>
+                  </ion-list>
+                  <div class="row mb-1">
+                    <div class="col-8 m-auto">
+                      <hr />
+                    </div>
+                  </div>
+                  <div class="note-section">
+                    <p ion-text>
+                      <span *ngIf="exam.docketsDue">
+                        * Dockets for this exam will be released on
+                        <b>{{ exam.docketsDue | date: "d MMM, y" }}</b>
+                      </span>
+                      <br />
+                      <span *ngIf="exam.appraisalsDue">
+                        * Appraisals will be on
+                        <b>{{ exam.appraisalsDue | date: "d MMM, y" }}.</b>
+                      </span>
+                      <span *ngIf="exam.resultDate">
+                        * The results will be published on
+                        <b>{{ exam.resultDate | date: "d MMM, y" }}</b>
+                      </span>
+                    </p>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template #noExams>
+          <ion-card class="no-classes-message">
+            <ion-card-content>
+              <p>There is no exams for the selected intake :D</p>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
+      </ng-template>
+
+      <ng-template #loadingExams>
+        <ion-card *ngFor="let i of numOfSkeletons">
           <ion-card-header>
-            <b>{{ exam.subjectDescription }}</b>
+            <skeleton-item height="50px" width="100%"></skeleton-item>
           </ion-card-header>
           <ion-card-content>
-            <ion-list no-lines>
-              <ion-item no-padding>
-                Module
-                <p item-right>{{ exam.module }}</p>
-              </ion-item>
-              <ion-item no-padding>
-                Venue
-                <p item-right>{{ exam.venue }}</p>
-              </ion-item>
-              <ion-item no-padding>
-                Date Time
-                <p item-right>
-                  {{ exam.since | date: "EEE, d MMM, y, h:mm a" }}
-                </p>
-              </ion-item>
-            </ion-list>
-            <div class="row mb-1">
-              <div class="col-8 m-auto">
-                <hr />
-              </div>
-            </div>
-            <div class="note-section">
-              <p ion-text>
-                <span *ngIf="exam.docketsDue">
-                  * Dockets for this exam will be released on
-                  <b>{{ exam.docketsDue | date: "d MMM, y" }}</b>
-                </span>
-                <br />
-                <span *ngIf="exam.appraisalsDue">
-                  * Appraisals will be on
-                  <b>{{ exam.appraisalsDue | date: "d MMM, y" }}.</b>
-                </span>
-                <span *ngIf="exam.resultDate">
-                  * The results will be published on
-                  <b>{{ exam.resultDate | date: "d MMM, y" }}</b>
-                </span>
-              </p>
-            </div>
-          </ion-card-content>
-        </ion-card>
-      </ng-template>
-      <ng-template #noExams>
-        <ion-card class="no-classes-message">
-          <ion-card-content>
-            <p>There is no exams for the selected intake :D</p>
+            <ion-item>
+              <ion-row *ngFor="let i of numOfSkeletons">
+                <ion-col col-6>
+                  <skeleton-item height="25px" width="35%"></skeleton-item>
+                </ion-col>
+                <ion-col col-6>
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </ion-col>
+              </ion-row>
+            </ion-item>
           </ion-card-content>
         </ion-card>
       </ng-template>
     </ng-template>
-
-    <ng-template #loadingExams>
-      <ion-card *ngFor="let i of numOfSkeletons">
-        <ion-card-header>
-          <skeleton-item height="50px" width="100%"></skeleton-item>
-        </ion-card-header>
+    <ng-template #noIntakeMessage>
+      <ion-card class="no-classes-message">
         <ion-card-content>
-          <ion-item>
-            <ion-row *ngFor="let i of numOfSkeletons">
-              <ion-col col-6>
-                <skeleton-item height="25px" width="35%"></skeleton-item>
-              </ion-col>
-              <ion-col col-6>
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </ion-col>
-            </ion-row>
-          </ion-item>
+          <p>No Intake Selected!, Please select one :D</p>
         </ion-card-content>
       </ion-card>
     </ng-template>
-  </ng-template>
-  <ng-template #noIntakeMessage>
-    <ion-card class="no-classes-message">
-      <ion-card-content>
-        <p>No Intake Selected!, Please select one :D</p>
-      </ion-card-content>
-    </ion-card>
-  </ng-template>
+  </div>
 </ion-content>

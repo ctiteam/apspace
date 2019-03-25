@@ -3,10 +3,12 @@
     <ion-title>Holidays</ion-title>
   </ion-navbar>
   <ion-toolbar no-border-top>
-    <ion-segment [(ngModel)]="selectedRole">
-      <ion-segment-button value="students">Student Holidays</ion-segment-button>
-      <ion-segment-button value="staff">Staff Holidays</ion-segment-button>
-    </ion-segment>
+    <div class="container p-0">
+        <ion-segment [(ngModel)]="selectedRole">
+            <ion-segment-button value="students">Student Holidays</ion-segment-button>
+            <ion-segment-button value="staff">Staff Holidays</ion-segment-button>
+          </ion-segment>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -14,56 +16,58 @@
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
-
-  <ng-template let-holidays [ngIf]="holiday$ | async" [ngIfElse]="loadingHolidays">
-    <div class="row">
-      <div class="col-12 holidays-section">
-        <div class="row holiday-item" *ngFor="let holiday of (holidays | filter: selectedRole)">
-          <div class="col-3 pt-1 m-auto">
-            <div class="holiday-date">
-              <h5>{{ holiday.holiday_start_date | date: "MMM" }}</h5>
-              <p>{{ holiday.holiday_start_date | date: "dd" }}</p>
+  <div class="container p-0">
+      <ng-template let-holidays [ngIf]="holiday$ | async" [ngIfElse]="loadingHolidays">
+          <div class="row">
+            <div class="col-12 holidays-section">
+              <div class="row holiday-item" *ngFor="let holiday of (holidays | filter: selectedRole)">
+                <div class="col-3 col-md-2 pt-1 m-auto">
+                  <div class="holiday-date">
+                    <h5>{{ holiday.holiday_start_date | date: "MMM" }}</h5>
+                    <p>{{ holiday.holiday_start_date | date: "dd" }}</p>
+                  </div>
+                </div>
+                <div class="col-6 col-md-8 pl-2 pr-0" (click)="toggleFullText(holiday.holiday_id)">
+                  <div class="holiday-title">
+                    <h4 class="mb-0 text-ellipsis" id="holiday{{holiday.holiday_id}}">
+                      {{ holiday.holiday_name }}
+                    </h4>
+                    <p class="mb-0">{{ holiday.holiday_start_date | date: "EEEE" }}</p>
+                    <p class="mb-0" *ngIf="holiday.holiday_end_date != holiday.holiday_start_date">
+                      Until: {{holiday.holiday_end_date | date: "dd-LLL-yyyy"}}
+                    </p>
+                    <p class="mb-0" *ngIf="holiday.holiday_end_date == holiday.holiday_start_date">
+                        One day
+                      </p>
+                  </div>
+      
+                </div>
+                <div class="col-3 col-md-2 m-auto">
+                  <div class="holiday-year text-center">
+                    <p>{{ holiday.holiday_start_date | date: "yyyy" }}</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="col-6 pl-2 pr-0" (click)="toggleFullText(holiday.holiday_id)">
-            <div class="holiday-title">
-              <h4 class="mb-0 text-ellipsis" id="holiday{{holiday.holiday_id}}">
-                {{ holiday.holiday_name }}
-              </h4>
-              <p class="mb-0">{{ holiday.holiday_start_date | date: "EEEE" }}</p>
-              <p class="mb-0" *ngIf="holiday.holiday_end_date != holiday.holiday_start_date">
-                Until: {{holiday.holiday_end_date | date: "dd-LLL-yyyy"}}
-              </p>
-              <p class="mb-0" *ngIf="holiday.holiday_end_date == holiday.holiday_start_date">
-                  One day
-                </p>
-            </div>
-
-          </div>
-          <div class="col-3 m-auto">
-            <div class="holiday-year text-center">
-              <p>{{ holiday.holiday_start_date | date: "yyyy" }}</p>
+        </ng-template>
+        <ng-template #loadingHolidays>
+          <div *ngFor="let i of numOfSkeletons">
+            <div class="row my-5 px-3">
+              <div class="col-3 m-auto">
+              <skeleton-item class="circle" height="64px" width="100%"></skeleton-item>
+              </div>
+              <div class="col-6 m-auto">
+                  <skeleton-item height="20px" width="100%"></skeleton-item>
+                  <skeleton-item height="16px" width="40%"></skeleton-item>
+                  <skeleton-item height="16px" width="20%"></skeleton-item>
+              </div>
+              <div class="col-3 m-auto">
+                  <skeleton-item height="16px" width="70%"></skeleton-item>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </ng-template>
-  <ng-template #loadingHolidays>
-    <div *ngFor="let i of numOfSkeletons">
-      <div class="row my-5 px-3">
-        <div class="col-3 m-auto">
-        <skeleton-item class="circle" height="64px" width="100%"></skeleton-item>
-        </div>
-        <div class="col-6 m-auto">
-            <skeleton-item height="20px" width="100%"></skeleton-item>
-            <skeleton-item height="16px" width="40%"></skeleton-item>
-            <skeleton-item height="16px" width="20%"></skeleton-item>
-        </div>
-        <div class="col-3 m-auto">
-            <skeleton-item height="16px" width="70%"></skeleton-item>
-        </div>
-      </div>
-    </div>
-  </ng-template>
+        </ng-template>
+      
+  </div>
 </ion-content>
