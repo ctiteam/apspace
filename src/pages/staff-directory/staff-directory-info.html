@@ -39,24 +39,24 @@
             </button>
           </div>
 
-          <div class="col-12 info-item title my-2">
+          <div class="col-12 info-item text-md-center title my-2">
             <p class="m-0 p-0">Job Title:</p>
             <h3 class="pt-1 pl-3">{{ staff.TITLE }}</h3>
           </div>
 
-          <div class="col-12 info-item email my-2" *ngIf="staff.EMAIL">
+          <div class="col-12 info-item email text-md-center my-2" *ngIf="staff.EMAIL">
             <p class="m-0 p-0">Email Address:</p>
             <a href="mailto:{{ staff.EMAIL }}">
               <h3 class="pt-1 pl-3">{{ staff.EMAIL }}</h3>
             </a>
           </div>
 
-          <div class="col-12 info-item location my-2" *ngIf="staff.LOCATION">
+          <div class="col-12 info-item location text-md-center my-2" *ngIf="staff.LOCATION">
             <p class="m-0 p-0">Office Location:</p>
             <h3 class="pt-1 pl-3">{{ staff.LOCATION }}</h3>
           </div>
 
-          <div class="col-12 info-item contact my-2" *ngIf="staff.EXTENSION">
+          <div class="col-12 info-item contact text-md-center my-2" *ngIf="staff.EXTENSION">
             <p class="m-0 p-0">Contact Number:</p>
             <a href="tel:+60389961000">
               <h3 class="pt-1 pl-3">
@@ -66,7 +66,7 @@
           </div>
 
           <div
-            class="col-12 info-item area mt-2"
+            class="col-12 info-item area mt-2 text-md-center"
             *ngIf="staff.DEPARTMENT || staff.DEPARTMENT2 || staff.DEPARTMENT"
           >
             <p class="m-0 p-0">Functional Area(s):</p>
@@ -82,7 +82,7 @@
               </li>
             </ul>
           </div>
-          <div class="col-12 info-item area mt-2">
+          <div class="col-12 info-item area mt-2 text-md-center">
             <p class="m-0 p-0">Timetable:</p>
             <lecturer-timetable [id]="staff.ID"></lecturer-timetable>
           </div>
