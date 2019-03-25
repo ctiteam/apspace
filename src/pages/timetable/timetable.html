@@ -21,7 +21,7 @@
     <ion-refresher-content pullingIcon="refresh">
     </ion-refresher-content>
   </ion-refresher>
-  <div class="container">
+  <div class="container p-0">
 
   <ng-template let-timetables [ngIf]="timetable$ | async" [ngIfElse]="timetableLoading">
       <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date:'E' | uppercase"
