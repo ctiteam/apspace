@@ -21,15 +21,16 @@
     <ion-refresher-content pullingIcon="refresh">
     </ion-refresher-content>
   </ion-refresher>
+  <div class="container">
 
   <ng-template let-timetables [ngIf]="timetable$ | async" [ngIfElse]="timetableLoading">
       <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date:'E' | uppercase"
     (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
-    <ion-segment-button *ngFor="let d of wday; index as i" [value]="d"
-      [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
-      {{ d }}
-    </ion-segment-button>
-  </ion-segment>
+      <ion-segment-button *ngFor="let d of wday; index as i" [value]="d"
+        [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
+        {{ d }}
+      </ion-segment-button>
+    </ion-segment>
 
     <ion-card *ngFor="let t of timetables | classes:intake | theday:selectedDate"
     [style.borderLeft]="'0.4rem solid ' + strToColor(t.MODID)">
@@ -77,4 +78,6 @@
       </ion-card-content>
     </ion-card>
   </ng-template>
+</div>
+
 </ion-content>
