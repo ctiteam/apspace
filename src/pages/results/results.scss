@@ -1,5 +1,12 @@
 page-results {
   ion-card {
+    &.failed {
+      border: 1px solid #f04141;
+      .subj-title,
+      .item-content {
+        color: #f04141 !important;
+      }
+    }
     ion-list {
       ion-item {
         &.subj-title {

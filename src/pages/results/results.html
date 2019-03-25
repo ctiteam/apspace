@@ -101,29 +101,33 @@
       >
       <div class="row">
         <div class="col-12 col-md-6" *ngFor="let result of results; trackBy: trackByFn">
-            <ion-card>
+            <ion-card [class.failed]="result.RECOMMENDATION">
                 <ion-list>
                   <ion-item class="subj-title">
                     {{ result.MODULE_DESCRIPTION }}
                   </ion-item>
                   <ion-item>
                     <ion-label>Grade</ion-label>
-                    <div item-content>{{ result.GRADE || "N/A" }}</div>
+                    <div item-content class="item-content">{{ result.GRADE || "N/A" }}</div>
                   </ion-item>
                   <ion-item>
                     <ion-label>Grade Point</ion-label>
-                    <div item-content>{{ result.GRADE_POINT || "N/A" }}</div>
+                    <div item-content class="item-content">{{ result.GRADE_POINT || "N/A" }}</div>
                   </ion-item>
                   <ion-item>
                     <ion-label>Internal Result Release Date</ion-label>
-                    <div item-content>
+                    <div item-content class="item-content">
                       {{ result.INTERNAL_RESULT_RELEASE_DATE || "N/A" }}
                     </div>
                   </ion-item>
-                  <ion-item *ngIf="result.RECOMMENDATION">
-                    <ion-label>Recommendation</ion-label>
-                    <div item-content>{{ result.RECOMMENDATION }}</div>
-                  </ion-item>
+                  <div *ngIf="result.RECOMMENDATION">
+                    <ion-item>
+                      <ion-label class="my-1">Recommendation</ion-label>
+                    </ion-item>
+                    <p class="px-4 pt-0 pb-4 item-content">
+                     {{ result.RECOMMENDATION }}
+                    </p>
+                  </div>
                 </ion-list>
               </ion-card>
         </div>
