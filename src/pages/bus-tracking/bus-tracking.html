@@ -80,7 +80,7 @@
       <div class="col-12">
         <div *ngFor="let sourceKey of objectKeys(trips)">
           <div class="px-0 trips-card" *ngFor="let destinationKey of objectKeys(trips[sourceKey])">
-            <h2 class=" trips-card-header py-4 px-3 mb-3 sticky-top" [ngStyle]="{
+            <h2 class="text-md-center trips-card-header py-4 px-3 mb-3 sticky-top" [ngStyle]="{
                 background:
                   'linear-gradient(to right, ' +
                   getLocationColor(sourceKey) +
@@ -88,18 +88,22 @@
                   getLocationColor(destinationKey) +
                   ')'
               }">
+              <div class="container p-0">
               {{
                 getLocationDisplayName(sourceKey) +
                   " -> " +
                   getLocationDisplayName(destinationKey)
               }}
               <span *ngIf="sourceKey == 'mosque' || destinationKey == 'mosque'">(Friday only)</span>
+            </div>
             </h2>
+            <div class="container">
             <div class="row trips-card-data">
               <p *ngFor="let trip of trips[sourceKey][destinationKey]" class="col-3 text-center trip-time"
                 [class.coming]="strToDate(trip.trip_time) >= dateNow">
                 {{ trip.trip_time }}
               </p>
+            </div>
             </div>
           </div>
         </div>
