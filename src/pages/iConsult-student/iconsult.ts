@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { App, IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-import { finalize } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 import { UpcomingConStuProvider } from '../../providers/upcoming-con-stu';
+
+import * as _ from 'lodash';
 
 @IonicPage()
 @Component({
@@ -18,6 +20,7 @@ export class IconsultPage {
   slotsRules: any;
   staffname: any;
   skeletonArray = new Array(5);
+  objectKeys = Object.keys;
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -26,7 +29,18 @@ export class IconsultPage {
   ) { }
 
   ionViewDidLoad() {
-    this.slots$ = this.UpcomingConStu.getSlots(this.casId);
+    this.slots$ = this.UpcomingConStu.getSlots(this.casId).pipe(
+      map(slots => {
+        return _.mapValues(
+          _.groupBy(slots, item => {
+            console.log(item.date);
+            return item.datetime.split(' ')[2];
+          }),
+        );
+      }),
+      tap(data => console.log(data)
+      )
+    );
     this.staffName$ = this.UpcomingConStu.getstaffname(this.casId);
   }
 
@@ -49,6 +63,14 @@ export class IconsultPage {
     this.staffName$ = this.UpcomingConStu.getstaffname(this.casId).pipe(
       finalize(() => refresher.complete()),
     );
+  }
+
+  isEmpty(obj): boolean {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key))
+        return false;
+    }
+    return true;
   }
 
 }

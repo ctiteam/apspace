@@ -714,6 +714,9 @@ $light_menu_colors: (
 
   // ICONSULT (STUDENTS) PAGE
   page-iconsult {
+    .slot-month{
+      color: color($light_colors, light_white_background);
+     }
     h2.staff-name {
       color: color($light_colors, ligth_grey_color);
     }
