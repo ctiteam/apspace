@@ -203,6 +203,9 @@ export class AddfreeslotsPage {
                 this.app.getRootNav().push(UpcominglecPage);
                 this.presentToast();
               },
+              () => {
+                this.duplicateSlotAlert();
+              }
             );
           },
         },
@@ -233,6 +236,23 @@ export class AddfreeslotsPage {
     if (this.formattedSelectedDate.getDay() == 0) {
       this.sundaySelected = true;
     }
+
+    this.minEndDate = moment(this.alldate).add(1, 'day').toISOString();
+    this.endDate = '';
+  }
+
+  async duplicateSlotAlert() {
+    const alert = await this.alertCtrl.create({
+      title: 'Message',
+      message: 'This slot is already exists.',
+      buttons: [
+        {
+          text: 'OK',
+          role: 'cancel',
+        },
+      ],
+    });
+    await alert.present();
   }
 
 }

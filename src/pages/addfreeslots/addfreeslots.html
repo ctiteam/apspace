@@ -11,11 +11,14 @@
     <ion-item>
       <ion-label>Date</ion-label>
       <ion-icon ios="ios-calendar-outline" md="md-calendar" item-start small></ion-icon>
-      <ion-datetime displayFormat="DDDD, D MMM YYYY" pickerFormat="DD MM YYYY" [(ngModel)]="alldate" [min]="MinDate"
+      <ion-datetime displayFormat="DDDD, D MMM YYYY" picker-format="DD MMM YYYY" [(ngModel)]="alldate" [min]="MinDate"
         [max]="maxDate" [ngModelOptions]="{standalone: true}" (ionChange)="onChangeOneFreeSlotDate()">
       </ion-datetime>
     </ion-item>
+
     <div style="margin: 0 15px;">
+      <ion-icon name="ios-alert-outline" style="color: red; padding-right: 5px; margin-top: 5px;" item-start
+        *ngIf="sundaySelected && !hidden[i]"></ion-icon>
       <small class="sundaySelectedMessage" *ngIf="sundaySelected && !hidden[i]">{{alldate | date:'EEEE, dd MMM yyyy'}}
         is Sunday. No consultation hours can be added on Sundays.</small>
     </div>
@@ -29,7 +32,7 @@
       <ion-radio item-start value="repeatnone"></ion-radio>
     </ion-item>
     <ion-item>
-      <ion-label>Weekly</ion-label>
+      <ion-label>Repeat Weekly</ion-label>
       <ion-radio item-start value="repeatweekly"></ion-radio>
     </ion-item>
     <ion-item>
@@ -49,12 +52,15 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>Number of occurrences</ion-label>
+      <ion-label>Number of weeks</ion-label>
       <ion-input [(ngModel)]="no_of_weeks" type="number" min="1" (ionChange)="repeatweek()"></ion-input>
     </ion-item>
-    <small class="sundaySelectedMessage" style="margin: 0 15px;" *ngIf="no_of_weeks > 51">Maximum number of occurrence
-      is 52 weeks</small>
-    <small class="sundaySelectedMessage" style="margin: 0 15px;" *ngIf="no_of_weeks < 1">Minimum number of occurrence
+
+    <ion-icon name="ios-alert-outline" class="errorAlertIcon" item-start *ngIf="no_of_weeks > 51 || no_of_weeks < 1">
+    </ion-icon>
+    <small class="sundaySelectedMessage" style="margin-left: 5px;" *ngIf="no_of_weeks > 51">
+      Maximum number of weeks is 52 weeks</small>
+    <small class="sundaySelectedMessage" style="margin-left: 5px;" *ngIf="no_of_weeks < 1">Minimum number of weeks
       is 1 week</small>
     <div style="margin: 0 15px;" *ngIf="no_of_weeks < 52 && no_of_weeks > 0">
       <small class="startAndEndDateMessage">Open slots occurs every
@@ -81,9 +87,15 @@
     </ion-item>
     <ion-item>
       <ion-label>End Date</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY" [(ngModel)]="endDate" [min]="minEndDate" [max]="maxDate"
-        [(ngModel)]="freeslots.end_date" [ngModelOptions]="{standalone: true}"></ion-datetime>
+      <ion-datetime displayFormat="DDDD, D MMM YYYY" picker-format="DD MMM YYYY" [(ngModel)]="endDate"
+        [min]="minEndDate" [max]="maxDate" [(ngModel)]="freeslots.end_date" [ngModelOptions]="{standalone: true}">
+      </ion-datetime>
     </ion-item>
+    <div style="margin: 0 15px;" *ngIf="endDate == ''">
+      <ion-icon name="ios-alert-outline" style="color: red; padding-right: 5px; margin-top: 5px;" item-start
+        *ngIf="endDate == ''"></ion-icon>
+      <small class="sundaySelectedMessage">End date is required.</small>
+    </div>
     <div style="margin: 0 15px;" *ngIf="endDate !== ''">
       <small class="startAndEndDateMessage">Open slots occurs every
         {{this.repeatday}} starts from </small>
@@ -145,21 +157,21 @@
 
   <ion-buttons *ngIf="repeatselected == 'repeatnone'">
     <button ion-button round full margin-top (click)="confirmation()"
-      [disabled]="sundaySelected || !alldate || !freeslots.start_time || !freeslots.location || !freeslots.venue">
+      [disabled]="sundaySelected || !alldate || freeslots.start_time == '' || !freeslots.location || !freeslots.venue">
       Submit
     </button>
   </ion-buttons>
 
   <ion-buttons *ngIf="repeatselected == 'repeatweekly'">
     <button ion-button round full margin-top (click)="confirmation()"
-      [disabled]="sundaySelected || !freeslots.repeat || !no_of_weeks || !alldate || !freeslots.start_time || !freeslots.location || !freeslots.venue">
+      [disabled]="sundaySelected || !freeslots.repeat || no_of_weeks < 1 || !alldate || freeslots.start_time == '' || !freeslots.location || !freeslots.venue">
       Submit
     </button>
   </ion-buttons>
 
   <ion-buttons *ngIf="repeatselected == 'repeatenddate'">
     <button ion-button round full margin-top (click)="confirmation()"
-      [disabled]="sundaySelected || !freeslots.repeat || !freeslots.end_date || !alldate || !freeslots.start_time || !freeslots.location || !freeslots.venue">
+      [disabled]="sundaySelected || !freeslots.repeat || !freeslots.end_date || endDate == '' || !alldate || freeslots.start_time == '' || !freeslots.location || !freeslots.venue">
       Submit
     </button>
   </ion-buttons>

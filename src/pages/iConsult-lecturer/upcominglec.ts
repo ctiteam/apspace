@@ -109,7 +109,7 @@ export class UpcominglecPage {
   async closelslot() {
     const alert = await this.alertCtrl.create({
       title: 'Close Slot',
-      message: 'Are you sure you want to close this open slot?',
+      message: 'Are you sure you want to cancel this open slot?',
       buttons: [
         {
           text: 'No',
@@ -147,7 +147,7 @@ export class UpcominglecPage {
 
   gotoChat() {
     // link to  MS Temas webpage
-    window.open('https://products.office.com/en-us/microsoft-teams/group-chat-software', '_system');
+    window.open('https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/conversations/8:orgid:2b3a316c-0730-4a54-9ce6-a62be7fe8b84?ctx=chat&q=tp045194', '_system');
   }
 
 }
