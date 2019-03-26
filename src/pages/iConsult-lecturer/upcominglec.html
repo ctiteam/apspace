@@ -96,22 +96,17 @@
             Cancel slot
           </button>
 
-          <div class="row mt-3" *ngIf="slot.status == 'Booked' && currenttime < slot.dateandtime">
-            <div class="col-4"><button class="btn btn-lg btn-block btn-outline-success"
-                (click)="gotoChat()">Chat</button></div>
-            <div class="col-8"><button class="btn btn-lg btn-block btn-outline-success"
-                (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
-                View Appointment Details</button></div>
-          </div>
+          <button class="btn btn-lg btn-block btn-outline-success"
+            *ngIf="slot.status == 'Booked' && currenttime < slot.dateandtime" style="margin-top: 10px;"
+            (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
+            View Appointment Details
+          </button>
 
-          <div class="row mt-3" *ngIf="slot.status == 'Booked' && currenttime > slot.dateandtime">
-            <div class="col-4"><button class="btn btn-lg btn-block btn-outline-secondary"
-                (click)="gotoChat()">Chat</button></div>
-            <div class="col-8"><button class="btn btn-lg btn-block btn-outline-secondary"
-                (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
-                Add Remarks</button></div>
-          </div>
-
+          <button class="btn btn-lg btn-block btn-outline-secondary"
+            *ngIf="slot.status == 'Booked' && currenttime > slot.dateandtime" style="margin-top: 10px;"
+            (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
+            Add Remarks
+          </button>
         </ion-card-content>
       </ion-card>
     </ng-template>
