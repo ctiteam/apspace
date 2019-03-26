@@ -848,8 +848,8 @@ $dark_menu_colors: (
     }
   }
 
-  // ICONSULT MY APPOINTMENTS PAGE
-  page-student-consul-detail {
+  // ICONSULT MY APPOINTMENTS PAGE (STUDENTS) & UNAVAILABLE SLOTS DETAILS
+  page-student-consul-detail, page-unavailabledetails {
     ion-card {
       background-color: color($dark_colors, dark_item_background) !important;
       color: color($dark_colors, dark_white_color) !important;
