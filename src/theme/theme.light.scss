@@ -787,7 +787,7 @@ $light_menu_colors: (
   }
 
   // PAGE UPCOMING APPOINTMENT FOR STUDENTS
-  page-upcomingstd {
+  page-upcomingstd, page-upcominglec {
     .cancelledbylec {
       color: color($light_colors, light_header_background);
     }
@@ -804,9 +804,12 @@ $light_menu_colors: (
       }
       ion-card-content {
         button {
+          border-color: color($light_colors, ligth_grey_color) !important;
+          color: color($light_colors, ligth_grey_color) !important;
           &:hover,
           &:active {
             color: color($light_colors, light_white_background) !important;
+            background-color: color($light_colors, ligth_grey_color) !important;
           }
         }
       }

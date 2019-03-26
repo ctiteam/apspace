@@ -818,8 +818,8 @@ $dark_menu_colors: (
     }
   }
 
-  // PAGE UPCOMING APPOINTMENT FOR STUDENTS
-  page-upcomingstd {
+  // ICONSULT PAGE UPCOMING APPOINTMENT FOR STUDENTS & LECTURERS
+  page-upcomingstd, page-upcominglec {
     .cancelledbylec {
       color: color($dark_colors, dark_header_background);
     }
@@ -836,9 +836,12 @@ $dark_menu_colors: (
       }
       ion-card-content {
         button {
+          border-color: color($dark_colors, dark_search_background_color) !important;
+          color: color($dark_colors, dark_search_background_color) !important;
           &:hover,
           &:active {
-            color: color($dark_colors, dark_white_color) !important;
+            color: color($dark_colors, dark_item_background) !important;
+            background-color: color($dark_colors, dark_search_background_color) !important;
           }
         }
       }

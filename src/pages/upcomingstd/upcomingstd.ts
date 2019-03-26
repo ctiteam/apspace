@@ -34,7 +34,7 @@ export class UpcomingstdPage {
   }
 
   gotoChat(lecname: string) {
-    window.open('https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/conversations/8:orgid:2b3a316c-0730-4a54-9ce6-a62be7fe8b84?ctx=chat&q=' + lecname, '_system');
+    window.open('https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/search?q=' + lecname, '_system');
   }
 
   doRefresh(refresher?) {
