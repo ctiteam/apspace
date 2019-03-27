@@ -96,11 +96,17 @@
             Cancel slot
           </button>
 
-          <button class="btn btn-lg btn-block btn-outline-success"
-            *ngIf="slot.status == 'Booked' && currenttime < slot.dateandtime" style="margin-top: 10px;"
-            (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
-            View Appointment Details
-          </button>
+          <div class="row mt-3" *ngIf="slot.status == 'Booked' && currenttime < slot.dateandtime">
+            <div class="col-12"><button class="btn btn-lg btn-block btn-outline-primary"
+                (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
+                View Appointment Details</button></div>
+          </div>
+
+          <div class="row mt-3" *ngIf="slot.status == 'Booked' && currenttime > slot.dateandtime">
+            <div class="col-12"><button class="btn btn-lg btn-block btn-outline-primary"
+                (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
+                Add Remarks</button></div>
+          </div>
 
           <button class="btn btn-lg btn-block btn-outline-secondary"
             *ngIf="slot.status == 'Booked' && currenttime > slot.dateandtime" style="margin-top: 10px;"

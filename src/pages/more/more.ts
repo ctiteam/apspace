@@ -118,7 +118,7 @@ export class MorePage {
           role: Role.Student,
         },
         {
-          title: 'iConsult (Beta)',
+          title: 'iConsult',
           component: 'UpcominglecPage',
           size: 'large',
           desc: 'green',
@@ -127,7 +127,7 @@ export class MorePage {
           role: Role.Lecturer | Role.Admin,
         },
         {
-          title: 'iConsult (Beta)',
+          title: 'iConsult',
           component: 'UpcomingstdPage',
           size: 'medium',
           desc: 'green',

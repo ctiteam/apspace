@@ -1,179 +1,332 @@
 <ion-header>
-  <ion-navbar color="primary">
+  <ion-navbar>
     <ion-title>Add Free Slots</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-
-  <ion-label class="repeatlabel">Select Date:</ion-label>
+  <ion-label class="repeatlabel px-4 py-0">Date:</ion-label>
   <ion-list>
-    <ion-item>
+    <ion-item no-lines>
       <ion-label>Date</ion-label>
-      <ion-icon ios="ios-calendar-outline" md="md-calendar" item-start small></ion-icon>
-      <ion-datetime displayFormat="DDDD, D MMM YYYY" pickerFormat="DD MM YYYY" [(ngModel)]="alldate" [min]="MinDate"
-        [max]="maxDate" [ngModelOptions]="{standalone: true}" (ionChange)="onChangeOneFreeSlotDate()">
+      <ion-icon
+        ios="ios-calendar-outline"
+        md="md-calendar"
+        item-start
+        small
+      ></ion-icon>
+      <ion-datetime
+        displayFormat="DDDD, D MMM YYYY"
+        pickerFormat="DD MM YYYY"
+        [(ngModel)]="alldate"
+        [min]="MinDate"
+        [max]="maxDate"
+        [ngModelOptions]="{ standalone: true }"
+        (ionChange)="onChangeOneFreeSlotDate()"
+      >
       </ion-datetime>
     </ion-item>
 
     <div style="margin: 0 15px;">
-      <ion-icon name="ios-alert-outline" style="color: red; padding-right: 5px; margin-top: 5px;" item-start
-        *ngIf="sundaySelected && !hidden[i]"></ion-icon>
-      <small class="sundaySelectedMessage" *ngIf="sundaySelected && !hidden[i]">{{alldate | date:'EEEE, dd MMM yyyy'}}
-        is Sunday. No consultation hours can be added on Sundays.</small>
+      <ion-icon
+        name="ios-alert-outline"
+        style="color: red; padding-right: 5px; margin-top: 5px;"
+        item-start
+        *ngIf="sundaySelected && !hidden[i]"
+      ></ion-icon>
+      <small class="sundaySelectedMessage" *ngIf="sundaySelected && !hidden[i]"
+        >{{ alldate | date: "EEEE, dd MMM yyyy" }} is Sunday. No consultation
+        hours can be added on Sundays.</small
+      >
     </div>
   </ion-list>
 
-  <ion-label class="repeatlabel">Select Repeat Type:</ion-label>
-  <ion-list radio-group [(ngModel)]="repeatselected" (ionChange)="selectRepeatType($event)">
+  <ion-label class="repeatlabel px-4 py-0">Repeat Type:</ion-label>
+  <ion-list
+    radio-group
+    [(ngModel)]="repeatselected"
+    (ionChange)="selectRepeatType($event)"
+  >
     <ion-list-header hidden></ion-list-header>
-    <ion-item>
+    <ion-item no-lines>
       <ion-label>None</ion-label>
       <ion-radio item-start value="repeatnone"></ion-radio>
     </ion-item>
-    <ion-item>
+    <ion-item no-lines>
       <ion-label>Repeat Weekly</ion-label>
       <ion-radio item-start value="repeatweekly"></ion-radio>
     </ion-item>
-    <ion-item>
+    <ion-item no-lines>
       <ion-label>Repeat until a specific date</ion-label>
       <ion-radio item-start value="repeatenddate"></ion-radio>
     </ion-item>
   </ion-list>
 
   <!--Repeats weekly section-->
-  <ion-label class="repeatlabel" *ngIf="repeatselected == 'repeatweekly'">Repeats weekly</ion-label>
+  <ion-label
+    class="repeatlabel px-4 py-0"
+    *ngIf="repeatselected == 'repeatweekly'"
+    >Repeats weekly</ion-label
+  >
   <ion-list *ngIf="repeatselected == 'repeatweekly'">
     <ion-list-header hidden></ion-list-header>
-    <ion-item>
+    <ion-item no-lines>
       <ion-label>On days</ion-label>
-      <ion-select [(ngModel)]="repeatday" multiple="true" [(ngModel)]="freeslots.repeat">
-        <ion-option *ngFor="let item of items" value="{{item.text}}">{{item.text}}</ion-option>
+      <ion-select
+        [(ngModel)]="repeatday"
+        multiple="true"
+        [(ngModel)]="freeslots.repeat"
+      >
+        <ion-option *ngFor="let item of items" value="{{ item.text }}">{{
+          item.text
+        }}</ion-option>
       </ion-select>
     </ion-item>
-    <ion-item>
+    <ion-item no-lines>
       <ion-label>Number of weeks</ion-label>
-      <ion-input [(ngModel)]="no_of_weeks" type="number" min="1" (ionChange)="repeatweek()"></ion-input>
+      <ion-input
+        [(ngModel)]="no_of_weeks"
+        type="number"
+        min="1"
+        (ionChange)="repeatweek()"
+      ></ion-input>
     </ion-item>
 
-    <ion-icon name="ios-alert-outline" class="errorAlertIcon" item-start *ngIf="no_of_weeks > 51 || no_of_weeks < 1">
+    <ion-icon
+      name="ios-alert-outline"
+      class="errorAlertIcon"
+      item-start
+      *ngIf="no_of_weeks > 51 || no_of_weeks < 1"
+    >
     </ion-icon>
-    <small class="sundaySelectedMessage" style="margin-left: 5px;" *ngIf="no_of_weeks > 51">
-      Maximum number of weeks is 52 weeks</small>
-    <small class="sundaySelectedMessage" style="margin-left: 5px;" *ngIf="no_of_weeks < 1">Minimum number of weeks
-      is 1 week</small>
-    <div style="margin: 0 15px;" *ngIf="no_of_weeks < 52 && no_of_weeks > 0">
-      <small class="startAndEndDateMessage">Open slots occurs every
-        {{this.repeatday}} starts from </small>
-    </div>
-    <div style="margin: 0 15px;" *ngIf="no_of_weeks < 52 && no_of_weeks > 0">
-      <small class="startAndEndDateMessage" style="color: rgb(0, 120, 215);">
-        {{this.alldate | date:'EEEE, dd MMM yyyy'}} </small> <small class="startAndEndDateMessage">until </small>
-      <small class="startAndEndDateMessage" style="color: rgb(0, 120, 215);">
-        {{freeslots.end_date | date:'EEEE, dd MMM yyyy'}}</small>
+    <small
+      class="sundaySelectedMessage"
+      style="margin-left: 5px;"
+      *ngIf="no_of_weeks > 51"
+    >
+      Maximum number of weeks is 52 weeks</small
+    >
+    <small
+      class="sundaySelectedMessage"
+      style="margin-left: 5px;"
+      *ngIf="no_of_weeks < 1"
+      >Minimum number of weeks is 1 week</small
+    >
+    <div class="pt-4 px-4 pb-0" *ngIf="no_of_weeks < 52 && no_of_weeks > 0">
+      <small class="startAndEndDateMessage">
+        *Open slots occurs every {{ this.repeatday }} starts from
+      </small>
+      <small class="startAndEndDateMessage colorful-color">
+        {{ this.alldate | date: "EEEE, dd MMM yyyy" }}
+      </small>
+      <small class="startAndEndDateMessage">until </small>
+      <small class="startAndEndDateMessage colorful-color">
+        {{ freeslots.end_date | date: "EEEE, dd MMM yyyy" }}
+      </small>
     </div>
   </ion-list>
 
   <!--Repeats until end date section-->
-  <ion-label class="repeatlabel" *ngIf="repeatselected == 'repeatenddate'">Repeat days and end date</ion-label>
+  <ion-label
+    class="repeatlabel px-4 py-0"
+    *ngIf="repeatselected == 'repeatenddate'"
+    >Repeat days and end date</ion-label
+  >
   <ion-list *ngIf="repeatselected == 'repeatenddate'">
     <ion-list-header hidden></ion-list-header>
-    <ion-item>
+    <ion-item no-lines>
       <ion-label>On days</ion-label>
-      <ion-select [(ngModel)]="repeatday" multiple="true" [(ngModel)]="freeslots.repeat"
-        [ngModelOptions]="{standalone: true}">
-        <ion-option *ngFor="let item of items" value="{{item.text}}">{{item.text}}</ion-option>
+      <ion-select
+        [(ngModel)]="repeatday"
+        multiple="true"
+        [(ngModel)]="freeslots.repeat"
+        [ngModelOptions]="{ standalone: true }"
+      >
+        <ion-option *ngFor="let item of items" value="{{ item.text }}">{{
+          item.text
+        }}</ion-option>
       </ion-select>
     </ion-item>
-    <ion-item>
+    <ion-item no-lines>
       <ion-label>End Date</ion-label>
-      <ion-datetime displayFormat="DDDD, D MMM YYYY" picker-format="DD MMM YYYY" [(ngModel)]="endDate"
-        [min]="minEndDate" [max]="maxDate" [(ngModel)]="freeslots.end_date" [ngModelOptions]="{standalone: true}">
+      <ion-datetime
+        displayFormat="DDDD, D MMM YYYY"
+        picker-format="DD MMM YYYY"
+        [(ngModel)]="endDate"
+        [min]="minEndDate"
+        [max]="maxDate"
+        [(ngModel)]="freeslots.end_date"
+        [ngModelOptions]="{ standalone: true }"
+      >
       </ion-datetime>
     </ion-item>
     <div style="margin: 0 15px;" *ngIf="endDate == ''">
-      <ion-icon name="ios-alert-outline" style="color: red; padding-right: 5px; margin-top: 5px;" item-start
-        *ngIf="endDate == ''"></ion-icon>
+      <ion-icon
+        name="ios-alert-outline"
+        style="color: red; padding-right: 5px; margin-top: 5px;"
+        item-start
+        *ngIf="endDate == ''"
+      ></ion-icon>
       <small class="sundaySelectedMessage">End date is required.</small>
     </div>
     <div style="margin: 0 15px;" *ngIf="endDate !== ''">
-      <small class="startAndEndDateMessage">Open slots occurs every
-        {{this.repeatday}} starts from </small>
+      <small class="startAndEndDateMessage"
+        >*Open slots occurs every {{ this.repeatday }} starts from
+      </small>
     </div>
     <div style="margin: 0 15px;" *ngIf="endDate !== ''">
-      <small class="startAndEndDateMessage" style="color: rgb(0, 120, 215);">
-        {{this.alldate | date:'EEEE, dd MMM yyyy'}} </small> <small class="startAndEndDateMessage">until </small>
-      <small class="startAndEndDateMessage" style="color: rgb(0, 120, 215);">
-        {{freeslots.end_date | date:'EEEE, dd MMM yyyy'}}</small>
+      <small class="startAndEndDateMessage colorful-color">
+        {{ this.alldate | date: "EEEE, dd MMM yyyy" }}
+      </small>
+      <small class="startAndEndDateMessage">until </small>
+      <small class="startAndEndDateMessage colorful-color">
+        {{ freeslots.end_date | date: "EEEE, dd MMM yyyy" }}</small
+      >
     </div>
   </ion-list>
 
   <form [formGroup]="form">
-    <ion-label class="timelabel">Select Start time:</ion-label>
-    <small class="durationnote">Every slot duration is 30 minutes</small>
+    <ion-label class="repeatlabel px-4 py-0">
+      Start time
+      <small class="durationnote">(Every slot duration is 30 minutes)</small>:
+    </ion-label>
+
     <ion-list margin-bottom>
       <div formArrayName="slots" margin-bottom>
-        <section [formGroupName]="i" *ngFor="let slo of form.controls.slots.controls; let i = index">
-          <ion-item>
+        <section
+          [formGroupName]="i"
+          *ngFor="let slo of form.controls.slots.controls; let i = index"
+        >
+          <ion-item no-lines>
             <ion-label>Start Time</ion-label>
             <ion-icon name="ios-clock-outline" item-start small></ion-icon>
-            <ion-datetime displayFormat="hh:mm A" pickerFormat="hh mm" [(ngModel)]="time[i]"
-              hourValues="[8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]" minuteValues="[00,30]" formControlName="slotsTime"
-              (ionChange)="onSelectTime(i)"></ion-datetime>
+            <ion-datetime
+              displayFormat="hh:mm A"
+              pickerFormat="hh mm"
+              [(ngModel)]="time[i]"
+              hourValues="[8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]"
+              minuteValues="[00,30]"
+              formControlName="slotsTime"
+              (ionChange)="onSelectTime(i)"
+            ></ion-datetime>
           </ion-item>
-          <span float-right ion-button icon-left clear *ngIf="form.controls.slots.length > 1"
+          <span
+            float-right
+            ion-button
+            icon-left
+            clear
+            *ngIf="form.controls.slots.length > 1"
             (click)="removeInputField(i)"
-            style="text-transform: capitalize; margin-right:-10px; color: red; font-size: small;">
+            style="text-transform: capitalize; margin-right:-10px; color: red; font-size: small;"
+          >
             <ion-icon name="close"></ion-icon>Remove
           </span>
         </section>
-        <span ion-button float-right icon-left clear (click)="addNewInputField()"
-          style="text-transform: capitalize; margin-right:-10px; font-size: small;">
+        <span
+          ion-button
+          float-right
+          icon-left
+          clear
+          (click)="addNewInputField()"
+          style="text-transform: capitalize; margin-right:-10px; font-size: small;"
+          class="colorful-color"
+        >
           <ion-icon name="add"></ion-icon>Add another slot
         </span>
       </div>
     </ion-list>
   </form>
-
-  <ion-label class="locationlabel">Select location and venue:</ion-label>
+  <div class="clearfix"></div>
+  <ion-label class="repeatlabel px-4 py-0"
+    >location and venue:</ion-label
+  >
   <ion-list>
     <ion-list-header hidden></ion-list-header>
-    <ion-item>
+    <ion-item no-lines>
       <ion-label>Location</ion-label>
       <ion-icon name="ios-pin-outline" item-start small></ion-icon>
-      <ion-select #C [(ngModel)]="freeslots.location" (ionChange)="onchange(C.value)"
-        [ngModelOptions]="{standalone: true}" interface="popover">
-        <ion-option *ngFor="let location of locations" value="{{location.title}}">{{location.title}}</ion-option>
+      <ion-select
+        #C
+        [(ngModel)]="freeslots.location"
+        (ionChange)="onchange(C.value)"
+        [ngModelOptions]="{ standalone: true }"
+        interface="popover"
+      >
+        <ion-option
+          *ngFor="let location of locations"
+          value="{{ location.title }}"
+          >{{ location.title }}</ion-option
+        >
       </ion-select>
     </ion-item>
-    <ion-item>
+    <ion-item no-lines>
       <ion-label>Venue</ion-label>
       <ion-icon name="locate" item-start small></ion-icon>
-      <ionic-selectable item-content [items]="rooms$ | async" itemValueField="id" itemTextField="rooms"
-        [canSearch]="true" (onChange)="freeslots.venue = $event.value.rooms">
+      <ionic-selectable
+        item-content
+        [items]="rooms$ | async"
+        itemValueField="id"
+        itemTextField="rooms"
+        [canSearch]="true"
+        (onChange)="freeslots.venue = $event.value.rooms"
+      >
       </ionic-selectable>
     </ion-item>
   </ion-list>
 
   <ion-buttons *ngIf="repeatselected == 'repeatnone'">
-    <button ion-button round full margin-top (click)="confirmation()"
-      [disabled]="sundaySelected || !alldate || freeslots.start_time == '' || !freeslots.location || !freeslots.venue">
+    <button
+      ion-button
+      class="cancel btn btn-outline-dark btn-block btn-lg"
+      (click)="confirmation()"
+      [disabled]="
+        sundaySelected ||
+        !alldate ||
+        freeslots.start_time == '' ||
+        !freeslots.location ||
+        !freeslots.venue
+      "
+    >
       Submit
     </button>
   </ion-buttons>
 
   <ion-buttons *ngIf="repeatselected == 'repeatweekly'">
-    <button ion-button round full margin-top (click)="confirmation()"
-      [disabled]="sundaySelected || !freeslots.repeat || no_of_weeks < 1 || !alldate || freeslots.start_time == '' || !freeslots.location || !freeslots.venue">
+    <button
+      ion-button
+      class="cancel btn btn-outline-dark btn-block btn-lg"
+      (click)="confirmation()"
+      [disabled]="
+        sundaySelected ||
+        !freeslots.repeat ||
+        no_of_weeks < 1 ||
+        !alldate ||
+        freeslots.start_time == '' ||
+        !freeslots.location ||
+        !freeslots.venue
+      "
+    >
       Submit
     </button>
   </ion-buttons>
 
   <ion-buttons *ngIf="repeatselected == 'repeatenddate'">
-    <button ion-button round full margin-top (click)="confirmation()"
-      [disabled]="sundaySelected || !freeslots.repeat || !freeslots.end_date || endDate == '' || !alldate || freeslots.start_time == '' || !freeslots.location || !freeslots.venue">
+    <button
+      ion-button
+      class="cancel btn btn-outline-dark btn-block btn-lg"
+      (click)="confirmation()"
+      [disabled]="
+        sundaySelected ||
+        !freeslots.repeat ||
+        !freeslots.end_date ||
+        endDate == '' ||
+        !alldate ||
+        freeslots.start_time == '' ||
+        !freeslots.location ||
+        !freeslots.venue
+      "
+    >
       Submit
     </button>
   </ion-buttons>
-
 </ion-content>

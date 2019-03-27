@@ -184,9 +184,9 @@ $dark_menu_colors: (
     color: color($dark_colors, dark_search_background_color);
   }
 
-  page-apcard{
-    .main-content{
-      .no-transactions-message{
+  page-apcard {
+    .main-content {
+      .no-transactions-message {
         color: color($dark_colors, dark_search_background_color);
       }
     }
@@ -205,10 +205,10 @@ $dark_menu_colors: (
     }
   }
 
-  .apcard-history-section 
-  .apcard-history-section-body
-  .apcard-history-group
-  .apcard-history-group-messages{
+  .apcard-history-section
+    .apcard-history-section-body
+    .apcard-history-group
+    .apcard-history-group-messages {
     background-color: color($dark_colors, dark_item_background);
   }
 
@@ -412,10 +412,10 @@ $dark_menu_colors: (
     }
     ion-item {
       .item-inner {
-          border-bottom: 1px solid color($dark_colors, dark_item_background) !important;
-          background-color: #29292980 !important;
+        border-bottom: 1px solid color($dark_colors, dark_item_background) !important;
+        background-color: #29292980 !important;
       }
-  }
+    }
   }
 
   // HOLIDAYS PAGE
@@ -611,39 +611,40 @@ $dark_menu_colors: (
     .notification-desktop {
       color: color($dark_colors, dark_search_background_color);
     }
- 
-    .message_content{
-      color: color($dark_colors, dark_search_background_color)
+
+    .message_content {
+      color: color($dark_colors, dark_search_background_color);
     }
-  
-    .row{
-      .category, .badge{
+
+    .row {
+      .category,
+      .badge {
         color: color($dark_colors, dark_background);
       }
-      .notification{
+      .notification {
         color: color($dark_colors, dark_search_background_color);
-        .notification-icon{
+        .notification-icon {
           color: color($dark_colors, dark_search_background_color);
         }
-        .notification-message{
-          small{
+        .notification-message {
+          small {
             color: color($dark_colors, dark_search_background_color);
           }
         }
-        .category-badge{
-          span{
+        .category-badge {
+          span {
             color: color($dark_colors, dark_background);
           }
         }
-        &.unread{
-          text-shadow: .1px .1px .1px color($dark_colors, dark_red_color);
-          .notification-icon{
-            ion-icon{
+        &.unread {
+          text-shadow: 0.1px 0.1px 0.1px color($dark_colors, dark_red_color);
+          .notification-icon {
+            ion-icon {
               color: color($dark_colors, dark_red_color);
             }
           }
         }
-      } 
+      }
     }
   }
 
@@ -660,7 +661,8 @@ $dark_menu_colors: (
     }
     h2 {
       color: color($dark_colors, dark_search_background_color);
-      text-shadow: 0.1px 0.1px 0.1px color($dark_colors, dark_green_color), -0.1px -0.1px -0.1px color($dark_colors, dark_green_color);;
+      text-shadow: 0.1px 0.1px 0.1px color($dark_colors, dark_green_color),
+        -0.1px -0.1px -0.1px color($dark_colors, dark_green_color);
     }
     .content {
       color: color($dark_colors, dark_search_background_color);
@@ -752,8 +754,8 @@ $dark_menu_colors: (
 
   // ICONSULT (STUDENTS) PAGE
   page-iconsult {
-    .slot-month{
-     color: color($dark_colors, dark_item_background);
+    .slot-month {
+      color: color($dark_colors, dark_item_background);
     }
     h2.staff-name {
       color: color($dark_colors, dark_white_color);
@@ -819,7 +821,8 @@ $dark_menu_colors: (
   }
 
   // ICONSULT PAGE UPCOMING APPOINTMENT FOR STUDENTS & LECTURERS
-  page-upcomingstd, page-upcominglec {
+  page-upcomingstd,
+  page-upcominglec {
     .cancelledbylec {
       color: color($dark_colors, dark_header_background);
     }
@@ -836,20 +839,28 @@ $dark_menu_colors: (
       }
       ion-card-content {
         button {
-          border-color: color($dark_colors, dark_search_background_color) !important;
+          border-color: color(
+            $dark_colors,
+            dark_search_background_color
+          ) !important;
           color: color($dark_colors, dark_search_background_color) !important;
           &:hover,
           &:active {
             color: color($dark_colors, dark_item_background) !important;
-            background-color: color($dark_colors, dark_search_background_color) !important;
+            background-color: color(
+              $dark_colors,
+              dark_search_background_color
+            ) !important;
           }
         }
       }
     }
   }
 
-  // ICONSULT MY APPOINTMENTS PAGE
-  page-student-consul-detail {
+  // ICONSULT MY APPOINTMENTS PAGE (STUDENTS AND LECTURER) & UNAVAILABLE SLOTS DETAILS &
+  page-student-consul-detail,
+  page-consuldetailpage,
+  page-unavailabledetails {
     ion-card {
       background-color: color($dark_colors, dark_item_background) !important;
       color: color($dark_colors, dark_white_color) !important;
@@ -861,6 +872,23 @@ $dark_menu_colors: (
           h2 {
             color: color($dark_colors, dark_white_color) !important;
           }
+        }
+      }
+    }
+  }
+
+  // ICONSULT ADD FREE SLOTS (LECTURER) & ADD UNAVAILABILITY SLOTS
+  page-addfreeslots,
+  page-unavailability-slots {
+    ion-label.repeatlabel,
+    .durationnote,
+    .startAndEndDateMessage {
+      color: color($dark_colors, dark_search_background_color);
+    }
+    button {
+      &.btn-outline-dark {
+        &:hover {
+          color: color($dark_colors, dark_background) !important;
         }
       }
     }
@@ -892,9 +920,8 @@ $dark_menu_colors: (
   }
   // END OVERRIDING IONIC SEGMENTS DESIGN (ALL PAGES)
 
-
-// TEMP GENERAL STYLES FOR ION CARDS
-  ion-card{
+  // TEMP GENERAL STYLES FOR ION CARDS
+  ion-card {
     &.no-classes-message {
       background-color: color($dark_colors, dark_item_background) !important;
       ion-card-content {

@@ -179,8 +179,7 @@ export class ConsuldetailpagePage {
     }, 2000);
   }
 
-  gotoChat(tpnumber: string) {
-    window.open('https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/conversations/8:orgid:2b3a316c-0730-4a54-9ce6-a62be7fe8b84?ctx=chat&q=' + tpnumber, '_system');
-  }
-
+ gotoChat(tpnumber: string) {
+    window.open('https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/search?q=' + tpnumber, '_system');
+    }
 }

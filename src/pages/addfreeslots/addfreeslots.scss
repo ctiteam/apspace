@@ -1,5 +1,4 @@
 page-addfreeslots {
-
   .item {
     font-size: 1.3rem;
     height: 40px;
@@ -20,19 +19,9 @@ page-addfreeslots {
   ion-list:first-child {
     margin-top: 30px;
   }
- 
-  .repeatlabel{
-    color: gray;
-    padding-left: 10px;
-    margin-top: 25px;
-    font-size: small;
-  }
 
-  .locationlabel{
-    color: gray;
-    padding-left: 10px;
-    margin-top: 45px;
-    font-size: small;
+  .repeatlabel {
+    margin: 10px 0 3px 0;
   }
 
   .sundaySelectedMessage {
@@ -40,26 +29,19 @@ page-addfreeslots {
     font-size: 95%;
   }
 
-  .startAndEndDateMessage{
+  .startAndEndDateMessage {
     font-size: 95%;
   }
 
-  .durationnote{
-    color: gray;
-    padding-left: 10px;
-    font-size: 95%;
+  .errorAlertIcon {
+    margin-top: 2px;
+    color: #ff0000;
+  }
+  .list-md .item-input:last-child {
+    border-width: 0 !important;
   }
 
-  .timelabel{
-    font-size: 95%;
-    padding-left: 10px;
-    color: gray;
-    margin-bottom: 0px;
+  .item-inner {
+    box-shadow: none !important;
   }
-
-  .errorAlertIcon{
-      margin-top: 2px;
-      color: red;
-  }
- 
 }
