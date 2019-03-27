@@ -29,7 +29,18 @@ export class IconsultPage {
   ) { }
 
   ionViewDidLoad() {
-    this.slots$ = this.UpcomingConStu.getSlots(this.casId).pipe(
+    this.getSlotsForFirstTime();
+    this.staffName$ = this.UpcomingConStu.getstaffname(this.casId);
+  }
+
+  getSlots(staffEmail) {
+    this.UpcomingConStu.getSlots(staffEmail).subscribe((res => {
+      this.slotsRules = res;
+    }));
+  }
+
+  getSlotsForFirstTime(){
+    return this.slots$ = this.UpcomingConStu.getSlots(this.casId).pipe(
       map(slots => {
         return _.mapValues(
           _.groupBy(slots, item => {
@@ -41,13 +52,6 @@ export class IconsultPage {
       tap(data => console.log(data)
       )
     );
-    this.staffName$ = this.UpcomingConStu.getstaffname(this.casId);
-  }
-
-  getSlots(staffEmail) {
-    this.UpcomingConStu.getSlots(staffEmail).subscribe((res => {
-      this.slotsRules = res;
-    }));
   }
 
   openBookingPage(id: number, date: string, time: string,
@@ -57,8 +61,8 @@ export class IconsultPage {
   }
 
   doRefresh(refresher?) {
-    this.slots$ = this.UpcomingConStu.getSlots(this.casId).pipe(
-      finalize(() => refresher.complete()),
+    this.getSlotsForFirstTime().pipe(
+      finalize(() => refresher.complete())
     );
     this.staffName$ = this.UpcomingConStu.getstaffname(this.casId).pipe(
       finalize(() => refresher.complete()),

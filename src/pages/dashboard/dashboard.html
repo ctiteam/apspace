@@ -239,12 +239,11 @@
             <!-- ********************************************* -->
             <!-- START SECTION 3: UPCOMING HOLIDAY -->
             <ng-template
-              class="main-section"
               let-holiday
               [ngIf]="nextHoliday$ | async"
               [ngIfElse]="loadingHoliday"
             >
-              <div class="section upcoming-holiday-section">
+              <div class="main-section section upcoming-holiday-section">
                 <!-- START SECTION 3 HEADER -->
                 <div class="section-header">
                   <div class="section-header-icon" (click)="openPage('HolidaysPage')">
@@ -306,13 +305,12 @@
             <!-- ********************************************* -->
             <!-- START SECTION 4: UPCOMING EXAM -->
             <ng-template
-              class="main-section"
               let-exams
               [ngIf]="exam$ | async | nextExams"
               [ngIfElse]="loadingExams"
             >
               <div
-                class="section upcoming-exam-section"
+                class="main-section section upcoming-exam-section"
                 *ngIf="exams && exams.length > 0"
               >
                 <!-- START SECTION 4 HEADER -->
@@ -594,12 +592,11 @@
             <!-- ********************************************* -->
             <!-- START SECTION 9: FINANCE -->
             <ng-template
-              class="main-section"
               let-outstanding
               [ngIf]="overdue$ | async"
               [ngIfElse]="loadingFinancials"
             >
-              <div class="section financials-section">
+              <div class="main-section section financials-section">
                 <!-- START SECTION 9 HEADER -->
                 <div class="section-header">
                   <div class="section-header-icon" (click)="openPage('FeesPage')">
@@ -723,13 +720,12 @@
             <!-- ********************************************* -->
             <!-- START SECTION 10: ATTENDANCE -->
             <ng-template
-              class="main-section"
               let-attendance
               [ngIf]="attendance$ | async"
               [ngIfElse]="loadingAttendance"
             >
               <div
-                class="section low-attendance-section"
+                class="main-section section low-attendance-section"
                 *ngIf="attendance.length > 0"
               >
                 <!-- START SECTION 10 HEADER -->
@@ -798,13 +794,12 @@
             <!-- ********************************************* -->
             <!-- START SECTION 11: APCARD -->
             <ng-template
-              class="main-section"
               let-transactions
               [ngIf]="apcardTransaction$ | async"
               [ngIfElse]="loadingApcard"
             >
             <ng-template [ngIf]="transactions.length > 0">
-              <div class="section low-attendance-section">
+              <div class="main-section section low-attendance-section">
                 <!-- START SECTION 11 HEADER -->
                 <div class="section-header">
                   <div class="section-header-icon" (click)="openPage('ApcardPage')">
@@ -841,9 +836,7 @@
             <!-- END SECTION 11: APCARD -->
             <!-- ********************************************* -->
             <!-- ********************************************* -->
-
             <!-- START SECTION 12: GPA -->
-
             <ng-template [ngIf]="!block">
               <ng-template [ngIf]="barChartData" [ngIfElse]="loadingGPA">
                 <div class="main-section section low-attendance-section">
