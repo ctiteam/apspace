@@ -9,18 +9,26 @@
     <div class="row mt-3">
       <div class="col-12 mt-2 mb-4">
         <p class="normaltext">
-          Welcome to the <span class="font-weight-bold">Asia Pacific University of Technology & Innovation
-          (APU) online Award Verification Service</span>. This service can be used to
-          verify qualifications awarded to APU graduates after the year XXXX.
+          Welcome to the
+          <span class="font-weight-bold"
+            >Asia Pacific University of Technology & Innovation (APU) online
+            Award Verification Service</span
+          >. This service can be used to verify qualifications awarded to APU
+          graduates after the year 2015.
         </p>
         <p class="font-weight-bold">
-          This online service will only verify academic qualifications where
-          the completed course has been conferred by APU’s Senate.
+          This online service will only verify academic qualifications where the
+          completed course has been conferred by APU’s Senate.
         </p>
         <p class="normaltext">
           If you cannot verify an award and/or suspect it may be fraudulent,
           please submit an
-          <a color="primary" (click)="openForms()">ONLINE WEB REQUEST</a>
+          <a
+            style="text-decoration: underline"
+            class="colorful-text font-weight-bold"
+            (click)="openForms()"
+            >Online Web Request</a
+          >
           to report and confirm the qualifications.
         </p>
         <small>
@@ -28,9 +36,9 @@
           in the Academic Transcript.
         </small>
       </div>
-      <div class="col-12 px-0">
+      <div class="col-12">
         <ion-item no-lines>
-          <ion-label stacked
+          <ion-label class="colorful-text" stacked
             >Enter student's name/identification number:</ion-label
           >
           <ion-input
@@ -51,7 +59,7 @@
           outline
           icon-end
           (click)="searchForGraduaters()"
-          class="submit-button mt-4"
+          class="btn colorful-button btn-primary mt-4"
         >
           Search
           <ion-icon name="search"></ion-icon>
@@ -115,18 +123,36 @@
         </ng-template>
       </ng-template>
       <ng-template #loading>
-        loading...
+        <div class="row pt-4">
+          <div class="col-8 p-0 m-auto">
+              <skeleton-item class="m-auto" height="30px" width="100%"></skeleton-item>
+          </div>
+          <div class="col-12 p-0 mt-3">
+            <ion-list>
+              <ion-item>
+                  <skeleton-item class="mt-3" height="15px" width="20%"></skeleton-item>
+                  <skeleton-item class="mt-3" height="15px" width="50%"></skeleton-item>
+                  <skeleton-item class="mt-3" height="15px" width="17%"></skeleton-item>
+                  <skeleton-item class="mt-3" height="15px" width="20%"></skeleton-item>
+                  <skeleton-item class="mt-3" height="15px" width="18%"></skeleton-item>      
+                  <skeleton-item class="mt-3" height="15px" width="60%"></skeleton-item>      
+                  <skeleton-item class="mt-3" height="15px" width="45%"></skeleton-item>      
+                  <skeleton-item class="mt-3" height="15px" width="15%"></skeleton-item>      
+              </ion-item>
+            </ion-list>
+          </div>          
+        </div>
       </ng-template>
     </ng-template>
     <ng-template #noSearchDone>
-      <div class="row mt-5 pt-5 px-4">
+      <!-- <div class="row mt-5 pt-5 px-4">
         <div class="col-12">
           <h3 class="text-center">
             Enter student's name or student's ID in the text box above to
             verify his/her qualification
           </h3>
         </div>
-      </div>
+      </div> -->
     </ng-template>
   </div>
 </ion-content>

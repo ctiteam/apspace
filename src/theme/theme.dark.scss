@@ -894,6 +894,19 @@ $dark_menu_colors: (
     }
   }
 
+  // QUALIFICATION AUTHENTICITY VERIFICATION PAGE
+  page-qualification-verification {
+    ion-content{
+      background-color: color($dark_colors, dark_item_background) !important;
+    }
+    ion-item{
+      background-color: color($dark_colors, dark_background) !important;
+    }
+    p, small{
+      color: color($dark_colors, dark_dark_grey_color);
+    }
+  }
+
   // LOADING SPINNER COMPONENT
   loading-spinner {
     .loader {
