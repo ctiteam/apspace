@@ -94,21 +94,31 @@
 
                 <!-- START QUICK ACCESS MENU ITEM 2 -->
                 <div class="col-4 scroll-item">
-                  <div class="quick-access-item" (click)="openPage('ApcardPage')">
+                  <div
+                    class="quick-access-item"
+                    (click)="openPage('ApcardPage')"
+                  >
                     <ion-icon name="card"></ion-icon>
                     <div class="quick-access-item-title">
                       APCard <span class="second-line">Balance</span>
                     </div>
-                    <ng-template let-balance [ngIf]="balance$ | async" [ngIfElse]="loadingApcardBalance">
-                      <ng-template [ngIf]="balance !== -1" [ngIfElse]="userHasNoBalance">
+                    <ng-template
+                      let-balance
+                      [ngIf]="balance$ | async"
+                      [ngIfElse]="loadingApcardBalance"
+                    >
+                      <ng-template
+                        [ngIf]="balance !== -1"
+                        [ngIfElse]="userHasNoBalance"
+                      >
                         <div class="quick-access-item-subtitle">
                           {{ balance | currency: "MYR":"RM" }}
                         </div>
                       </ng-template>
                       <ng-template #userHasNoBalance>
-                          <div class="quick-access-item-subtitle">
-                              {{ 0 | currency: "MYR":"RM" }}
-                            </div>                       
+                        <div class="quick-access-item-subtitle">
+                          {{ 0 | currency: "MYR":"RM" }}
+                        </div>
                       </ng-template>
                     </ng-template>
                     <ng-template #loadingApcardBalance>
@@ -152,89 +162,95 @@
           <!-- END SECTION 1: QUICK ACCESS MENU -->
           <!-- ********************************************* -->
           <div class="col-12 sections-wrapper">
-
             <!-- START SECTION 2: TODAY'S CLASSES -->
             <ng-template
-            let-classes
-            [ngIf]="upcomingClasse$ | async"
-            [ngIfElse]="loadingClasses"
-          >
-            <ng-template
-              [ngIf]="classes && classes.length > 0"
+              let-classes
+              [ngIf]="upcomingClasse$ | async"
+              [ngIfElse]="loadingClasses"
             >
-            <div class="main-section section todays-classes-section">
-            <!-- START SECTION 2 HEADER -->
-            <div class="section-header">
-            <div class="section-header-icon" (click)="openPage('TimetablePage')">
-              <ion-icon item-left name="calendar"></ion-icon>
-            </div>
-            <div class="section-header-text"><h3>Upcoming Classes</h3></div>
-          </div>
-            <!-- END SECTION 2 HEADER -->
-
-            <!-- START SECTION 2 BODY -->
-            <div class="section-body">
-
-                <div class="my-2 todaysClass" *ngFor="let c of classes">
-                  <div class="section-body-header">
-                    <h4 class="col-12">{{ c.TIME_FROM }} - {{ c.TIME_TO }}</h4>
+              <ng-template [ngIf]="classes && classes.length > 0">
+                <div class="  section todays-classes-section">
+                  <!-- START SECTION 2 HEADER -->
+                  <div class="section-header">
+                    <div
+                      class="section-header-icon"
+                      (click)="openPage('TimetablePage')"
+                    >
+                      <ion-icon item-left name="calendar"></ion-icon>
+                    </div>
+                    <div class="section-header-text">
+                      <h3>Upcoming Classes</h3>
+                    </div>
                   </div>
+                  <!-- END SECTION 2 HEADER -->
 
-                  <div class="section-body-content row">
-                    <div class="container">
-                      <div class="content-item-with-icon col-12 row">
-                        <div class="col-2 text-right">
-                          <ion-icon item-left name="book"></ion-icon>
-                        </div>
-                        <div class="col-10 item-info-text">
-                          <p ion-text>{{ c.MODID }}</p>
-                        </div>
+                  <!-- START SECTION 2 BODY -->
+                  <div class="section-body">
+                    <div class="my-2 todaysClass" *ngFor="let c of classes">
+                      <div class="section-body-header">
+                        <h4 class="col-12">
+                          {{ c.TIME_FROM }} - {{ c.TIME_TO }}
+                        </h4>
                       </div>
 
-                      <div class="content-item-with-icon col-12 row">
-                        <div class="col-2 text-right">
-                          <ion-icon item-left name="locate"></ion-icon>
-                        </div>
-                        <div class="col-10 item-info-text">
-                          <p ion-text>{{ c.LOCATION }} | {{ c.ROOM }}</p>
+                      <div class="section-body-content row">
+                        <div class="container">
+                          <div class="content-item-with-icon col-12 row">
+                            <div class="col-2 text-right">
+                              <ion-icon item-left name="book"></ion-icon>
+                            </div>
+                            <div class="col-10 item-info-text">
+                              <p ion-text>{{ c.MODID }}</p>
+                            </div>
+                          </div>
+
+                          <div class="content-item-with-icon col-12 row">
+                            <div class="col-2 text-right">
+                              <ion-icon item-left name="locate"></ion-icon>
+                            </div>
+                            <div class="col-10 item-info-text">
+                              <p ion-text>{{ c.LOCATION }} | {{ c.ROOM }}</p>
+                            </div>
+                          </div>
+
+                          <div class="content-item-with-icon col-12 row">
+                            <div class="col-2 text-right">
+                              <ion-icon item-left name="person"></ion-icon>
+                            </div>
+                            <div class="col-10 item-info-text">
+                              <p ion-text>{{ c.NAME }}</p>
+                            </div>
+                          </div>
                         </div>
                       </div>
-
-                      <div class="content-item-with-icon col-12 row">
-                        <div class="col-2 text-right">
-                          <ion-icon item-left name="person"></ion-icon>
+                    </div>
+                    <div class="row">
+                      <div class="container">
+                        <div class="col-6 m-auto">
+                          <hr />
                         </div>
-                        <div class="col-10 item-info-text">
-                          <p ion-text>{{ c.NAME }}</p>
+                        <div class="col-12">
+                          <p>
+                            * <b>Note:</b> The list of the upcoming classes
+                            shown here (if any) are based on the intake
+                            <b>{{ defaultIntake }}</b
+                            >.
+                          </p>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <!-- END SECTION 2 BODY -->
                 </div>
-                <div class="row">
-                  <div class="container">
-                      <div class="col-6 m-auto">
-                        <hr>
-                      </div>
-                      <div class="col-12">
-                        <p>
-                          * <b>Note:</b> The list of the upcoming classes shown here (if any) are based on the intake <b>{{defaultIntake}}</b>.
-                        </p>
-                    </div>
-                  </div>
-                </div>
-          </div>
-            <!-- END SECTION 2 BODY -->
-            </div>
-          </ng-template>
+              </ng-template>
             </ng-template>
-          <ng-template #loadingClasses>
-            <ion-card>
-              <ion-item no-lines *ngFor="let i of numOfSkeletons">
-                <skeleton-item height="137px" width="100%"></skeleton-item>
-              </ion-item>
-            </ion-card>
-          </ng-template>
+            <ng-template #loadingClasses>
+              <ion-card>
+                <ion-item no-lines *ngFor="let i of numOfSkeletons">
+                  <skeleton-item height="137px" width="100%"></skeleton-item>
+                </ion-item>
+              </ion-card>
+            </ng-template>
             <!-- END SECTION 2: TODAYS' CLASSES -->
             <!-- ********************************************* -->
             <!-- START SECTION 3: UPCOMING HOLIDAY -->
@@ -243,10 +259,13 @@
               [ngIf]="nextHoliday$ | async"
               [ngIfElse]="loadingHoliday"
             >
-              <div class="main-section section upcoming-holiday-section">
+              <div class="  section upcoming-holiday-section">
                 <!-- START SECTION 3 HEADER -->
                 <div class="section-header">
-                  <div class="section-header-icon" (click)="openPage('HolidaysPage')">
+                  <div
+                    class="section-header-icon"
+                    (click)="openPage('HolidaysPage')"
+                  >
                     <ion-icon item-left name="bicycle"></ion-icon>
                   </div>
                   <div class="section-header-text">
@@ -310,12 +329,15 @@
               [ngIfElse]="loadingExams"
             >
               <div
-                class="main-section section upcoming-exam-section"
+                class="  section upcoming-exam-section"
                 *ngIf="exams && exams.length > 0"
               >
                 <!-- START SECTION 4 HEADER -->
                 <div class="section-header">
-                  <div class="section-header-icon" (click)="openPage('ExamSchedulePage')">
+                  <div
+                    class="section-header-icon"
+                    (click)="openPage('ExamSchedulePage')"
+                  >
                     <ion-icon item-left name="book"></ion-icon>
                   </div>
                   <div class="section-header-text">
@@ -370,236 +392,19 @@
             </ng-template>
             <!-- END SECTION 4: UPCOMING EXAM -->
             <!-- ********************************************* -->
-            <!-- START SECTION 5: CONSULTATION -->
-            <!-- <div class="main-section section consultation-appointment-section"> -->
-            <!-- START SECTION 5 HEADER -->
-            <!-- <div class="section-header">
-            <div class="section-header-icon">
-              <ion-icon item-left name="briefcase"></ion-icon>
-            </div>
-            <div class="section-header-text">
-              <h3>Consultation Appointment</h3>
-            </div>
-          </div> -->
-            <!-- END SECTION 5 HEADER -->
-
-            <!-- START SECTION 5 BODY -->
-            <!-- <div class="section-body">
-            <div class="section-body-header">
-              <h4 class="col-12">HALIMATON BITI YOUSOF</h4>
-            </div>
-
-            <div class="section-body-content row">
-              <div class="container">
-                <div class="content-item-with-icon col-12 row">
-                  <div class="col-2 text-right">
-                    <ion-icon item-left name="time"></ion-icon>
-                  </div>
-                  <div class="col-10 item-info-text">
-                    <p ion-text>12 Dec, 2018 | 12:30 PM</p>
-                  </div>
-                </div>
-
-                <div class="content-item-with-icon col-12 row">
-                  <div class="col-2 text-right">
-                    <ion-icon item-left name="locate"></ion-icon>
-                  </div>
-                  <div class="col-10 item-info-text">
-                    <p ion-text>NEW CAMPUS | D-07-14</p>
-                  </div>
-                </div>
-                <div class="content-item-without-icon col-12 row">
-                  <div>
-                    <p ion-text>
-                      To sign some papers related to my FYP and discuss about
-                      XYZ which cannot be used in the project.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
-            <!-- END SECTION 5 BODY -->
-            <!-- </div> -->
-            <!-- END SECTION 5: CONSULTATION -->
-            <!-- ********************************************* -->
-            <!-- START SECTION 6: FYP MEETING -->
-            <!-- <div class="main-section section fyp-meetings-section"> -->
-            <!-- START SECTION 6 HEADER -->
-            <!-- <div class="section-header">
-            <div class="section-header-icon">
-              <ion-icon item-left name="flask"></ion-icon>
-            </div>
-            <div class="section-header-text"><h3>FYP Meetings</h3></div>
-          </div> -->
-            <!-- END SECTION 6 HEADER -->
-
-            <!-- START SECTION 6 BODY -->
-            <!-- <div class="section-body">
-            <div class="section-body-header">
-              <h4 class="col-12">12 Dec, 2018 | 12:30 PM</h4>
-            </div>
-
-            <div class="section-body-content row">
-              <div class="container">
-                <div class="content-item-with-icon col-12 row">
-                  <div class="col-2 text-right">
-                    <ion-icon item-left name="person"></ion-icon>
-                  </div>
-                  <div class="col-10 item-info-text">
-                    <p ion-text>HALIMATON BITI YOUSOF</p>
-                  </div>
-                </div>
-
-                <div class="content-item-with-icon col-12 row">
-                  <div class="col-2 text-right">
-                    <ion-icon item-left name="locate"></ion-icon>
-                  </div>
-                  <div class="col-10 item-info-text">
-                    <p ion-text>NEW CAMPUS | D-07-14</p>
-                  </div>
-                </div>
-                <div class="content-item-without-icon col-12 row">
-                  <div>
-                    <p ion-text>
-                      <strong>Purpose: </strong>Final Presentation.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
-            <!-- END SECTION 6 BODY -->
-            <!-- </div> -->
-            <!-- END SECTION 6: FYP MEETING -->
-            <!-- ********************************************* -->
-            <!-- START SECTION 7: BUS ROUTE -->
-            <!-- <div class="main-section section preferred-bus-route-section"> -->
-            <!-- START SECTION 7 HEADER -->
-            <!-- <div class="section-header">
-            <div class="section-header-icon">
-              <ion-icon item-left name="bus"></ion-icon>
-            </div>
-            <div class="section-header-text"><h3>Preferred Bus Route</h3></div>
-          </div> -->
-            <!-- END SECTION 7 HEADER -->
-
-            <!-- START SECTION 7 BODY -->
-            <!-- <div class="section-body">
-            <div class="section-body-header">
-              <h4 class="col-12">APU - Endah Promenade</h4>
-            </div>
-
-            <div class="section-body-content row">
-              <div class="container">
-                <div class="content-item-with-icon col-12 row">
-                  <div class="col-2 text-right">
-                    <ion-icon item-left name="locate"></ion-icon>
-                  </div>
-                  <div class="col-10 item-info-text">
-                    <p ion-text>
-                      APU
-                      <ion-icon name="arrow-forward"></ion-icon>
-                      Endah Promenade
-                    </p>
-                  </div>
-                </div>
-
-                <div class="content-item-with-icon col-12 row">
-                  <div class="col-2 text-right"></div>
-                  <div class="col-10 item-info-text-not-bold">
-                    <p ion-text>12:30 PM</p>
-                  </div>
-                </div>
-
-                <div class="content-item-with-icon col-12 row">
-                  <div class="col-2 text-right">
-                    <ion-icon item-left name="locate"></ion-icon>
-                  </div>
-                  <div class="col-10 item-info-text">
-                    <p ion-text>
-                      Endah Promenade
-                      <ion-icon name="arrow-forward"></ion-icon>
-                      APU
-                    </p>
-                  </div>
-                </div>
-
-                <div class="content-item-with-icon col-12 row">
-                  <div class="col-2 text-right"></div>
-                  <div class="col-10 item-info-text-not-bold">
-                    <p ion-text>13:30 PM</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
-            <!-- END SECTION 7 BODY -->
-            <!-- </div> -->
-            <!-- END SECTION 7: BUS ROUTE -->
-            <!-- ********************************************* -->
-            <!-- START SECTION 8: UPCOMING EVENT -->
-            <!-- <div class="main-section section upcoming-event-section"> -->
-            <!-- START SECTION 8 HEADER -->
-            <!-- <div class="section-header">
-            <div class="section-header-icon">
-              <ion-icon item-left name="bonfire"></ion-icon>
-            </div>
-            <div class="section-header-text"><h3>Upcoming Event</h3></div>
-          </div> -->
-            <!-- END SECTION 3 HEADER -->
-
-            <!-- START SECTION 3 BODY -->
-            <!-- <div class="section-body">
-            <div class="section-body-header">
-              <h4 class="col-12">Football Competation Event</h4>
-            </div>
-
-            <div class="section-body-content row">
-              <div class="container">
-                <div class="content-item-with-icon col-12 row">
-                  <div class="col-2 text-right">
-                    <ion-icon item-left name="time"></ion-icon>
-                  </div>
-                  <div class="col-10 item-info-text">
-                    <p ion-text>24 Dec, 2018 | 07:30 PM</p>
-                  </div>
-                </div>
-
-                <div class="content-item-with-icon col-12 row">
-                  <div class="col-2 text-right">
-                    <ion-icon item-left name="locate"></ion-icon>
-                  </div>
-                  <div class="col-10 item-info-text">
-                    <p ion-text>TPM, APU New Campus</p>
-                  </div>
-                </div>
-
-                <div class="content-item-with-icon col-12 row">
-                  <div>
-                    <p ion-text>
-                      This event organized by APU Football Club members and it
-                      aims to imrpove the ...
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
-            <!-- END SECTION 8 BODY -->
-            <!-- </div> -->
-            <!-- END SECTION 8: UPCOMING EVENTS -->
-            <!-- ********************************************* -->
             <!-- START SECTION 9: FINANCE -->
             <ng-template
               let-outstanding
               [ngIf]="overdue$ | async"
               [ngIfElse]="loadingFinancials"
             >
-              <div class="main-section section financials-section">
+              <div class="  section financials-section">
                 <!-- START SECTION 9 HEADER -->
                 <div class="section-header">
-                  <div class="section-header-icon" (click)="openPage('FeesPage')">
+                  <div
+                    class="section-header-icon"
+                    (click)="openPage('FeesPage')"
+                  >
                     <ion-icon item-left name="logo-usd"></ion-icon>
                   </div>
                   <div class="section-header-text">
@@ -725,12 +530,15 @@
               [ngIfElse]="loadingAttendance"
             >
               <div
-                class="main-section section low-attendance-section"
+                class="  section low-attendance-section"
                 *ngIf="attendance.length > 0"
               >
                 <!-- START SECTION 10 HEADER -->
                 <div class="section-header">
-                  <div class="section-header-icon" (click)="openPage('AttendancePage')">
+                  <div
+                    class="section-header-icon"
+                    (click)="openPage('AttendancePage')"
+                  >
                     <ion-icon item-left name="alarm"></ion-icon>
                   </div>
                   <div class="section-header-text">
@@ -798,32 +606,35 @@
               [ngIf]="apcardTransaction$ | async"
               [ngIfElse]="loadingApcard"
             >
-            <ng-template [ngIf]="transactions.length > 0">
-              <div class="main-section section low-attendance-section">
-                <!-- START SECTION 11 HEADER -->
-                <div class="section-header">
-                  <div class="section-header-icon" (click)="openPage('ApcardPage')">
-                    <ion-icon item-left name="card"></ion-icon>
+              <ng-template [ngIf]="transactions.length > 0">
+                <div class="  section low-attendance-section">
+                  <!-- START SECTION 11 HEADER -->
+                  <div class="section-header">
+                    <div
+                      class="section-header-icon"
+                      (click)="openPage('ApcardPage')"
+                    >
+                      <ion-icon item-left name="card"></ion-icon>
+                    </div>
+                    <div class="section-header-text">
+                      <h3>APCard Transactions</h3>
+                    </div>
                   </div>
-                  <div class="section-header-text">
-                    <h3>APCard Transactions</h3>
-                  </div>
-                </div>
-                <!-- END SECTION 11 HEADER -->
+                  <!-- END SECTION 11 HEADER -->
 
-                <!-- START SECTION 11 BODY -->
-                <div class="section-body">
-                  <div class="apcard-chart">
-                    <chart
-                      *ngIf="apcardChartData"
-                      [type]="type[1]"
-                      [data]="apcardChartData"
-                      [options]="options"
-                    ></chart>
+                  <!-- START SECTION 11 BODY -->
+                  <div class="section-body">
+                    <div class="apcard-chart">
+                      <chart
+                        *ngIf="apcardChartData"
+                        [type]="type[1]"
+                        [data]="apcardChartData"
+                        [options]="options"
+                      ></chart>
+                    </div>
                   </div>
+                  <!-- END SECTION 11 BODY -->
                 </div>
-                <!-- END SECTION 11 BODY -->
-              </div>
               </ng-template>
             </ng-template>
             <ng-template #loadingApcard>
@@ -839,11 +650,14 @@
             <!-- START SECTION 12: GPA -->
             <ng-template [ngIf]="!block">
               <ng-template [ngIf]="barChartData" [ngIfElse]="loadingGPA">
-                <div class="main-section section low-attendance-section">
+                <div class="  section low-attendance-section">
                   <!-- START SECTION 12 HEADER -->
 
                   <div class="section-header">
-                    <div class="section-header-icon" (click)="openPage('ResultsPage')">
+                    <div
+                      class="section-header-icon"
+                      (click)="openPage('ResultsPage')"
+                    >
                       <ion-icon item-left name="medal"></ion-icon>
                     </div>
 
@@ -892,3 +706,224 @@
   </div>
   <!-- END ALL THE PAGE CONTENT -->
 </ion-content>
+
+<!-- ********************************************* -->
+<!-- START SECTION 5: CONSULTATION -->
+<!-- <div class="  section consultation-appointment-section"> -->
+<!-- START SECTION 5 HEADER -->
+<!-- <div class="section-header">
+            <div class="section-header-icon">
+              <ion-icon item-left name="briefcase"></ion-icon>
+            </div>
+            <div class="section-header-text">
+              <h3>Consultation Appointment</h3>
+            </div>
+          </div> -->
+<!-- END SECTION 5 HEADER -->
+
+<!-- START SECTION 5 BODY -->
+<!-- <div class="section-body">
+            <div class="section-body-header">
+              <h4 class="col-12">HALIMATON BITI YOUSOF</h4>
+            </div>
+
+            <div class="section-body-content row">
+              <div class="container">
+                <div class="content-item-with-icon col-12 row">
+                  <div class="col-2 text-right">
+                    <ion-icon item-left name="time"></ion-icon>
+                  </div>
+                  <div class="col-10 item-info-text">
+                    <p ion-text>12 Dec, 2018 | 12:30 PM</p>
+                  </div>
+                </div>
+
+                <div class="content-item-with-icon col-12 row">
+                  <div class="col-2 text-right">
+                    <ion-icon item-left name="locate"></ion-icon>
+                  </div>
+                  <div class="col-10 item-info-text">
+                    <p ion-text>NEW CAMPUS | D-07-14</p>
+                  </div>
+                </div>
+                <div class="content-item-without-icon col-12 row">
+                  <div>
+                    <p ion-text>
+                      To sign some papers related to my FYP and discuss about
+                      XYZ which cannot be used in the project.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+<!-- END SECTION 5 BODY -->
+<!-- </div> -->
+<!-- END SECTION 5: CONSULTATION -->
+<!-- ********************************************* -->
+<!-- START SECTION 6: FYP MEETING -->
+<!-- <div class="  section fyp-meetings-section"> -->
+<!-- START SECTION 6 HEADER -->
+<!-- <div class="section-header">
+            <div class="section-header-icon">
+              <ion-icon item-left name="flask"></ion-icon>
+            </div>
+            <div class="section-header-text"><h3>FYP Meetings</h3></div>
+          </div> -->
+<!-- END SECTION 6 HEADER -->
+
+<!-- START SECTION 6 BODY -->
+<!-- <div class="section-body">
+            <div class="section-body-header">
+              <h4 class="col-12">12 Dec, 2018 | 12:30 PM</h4>
+            </div>
+
+            <div class="section-body-content row">
+              <div class="container">
+                <div class="content-item-with-icon col-12 row">
+                  <div class="col-2 text-right">
+                    <ion-icon item-left name="person"></ion-icon>
+                  </div>
+                  <div class="col-10 item-info-text">
+                    <p ion-text>HALIMATON BITI YOUSOF</p>
+                  </div>
+                </div>
+
+                <div class="content-item-with-icon col-12 row">
+                  <div class="col-2 text-right">
+                    <ion-icon item-left name="locate"></ion-icon>
+                  </div>
+                  <div class="col-10 item-info-text">
+                    <p ion-text>NEW CAMPUS | D-07-14</p>
+                  </div>
+                </div>
+                <div class="content-item-without-icon col-12 row">
+                  <div>
+                    <p ion-text>
+                      <strong>Purpose: </strong>Final Presentation.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+<!-- END SECTION 6 BODY -->
+<!-- </div> -->
+<!-- END SECTION 6: FYP MEETING -->
+<!-- ********************************************* -->
+<!-- START SECTION 7: BUS ROUTE -->
+<!-- <div class="  section preferred-bus-route-section"> -->
+<!-- START SECTION 7 HEADER -->
+<!-- <div class="section-header">
+            <div class="section-header-icon">
+              <ion-icon item-left name="bus"></ion-icon>
+            </div>
+            <div class="section-header-text"><h3>Preferred Bus Route</h3></div>
+          </div> -->
+<!-- END SECTION 7 HEADER -->
+
+<!-- START SECTION 7 BODY -->
+<!-- <div class="section-body">
+            <div class="section-body-header">
+              <h4 class="col-12">APU - Endah Promenade</h4>
+            </div>
+
+            <div class="section-body-content row">
+              <div class="container">
+                <div class="content-item-with-icon col-12 row">
+                  <div class="col-2 text-right">
+                    <ion-icon item-left name="locate"></ion-icon>
+                  </div>
+                  <div class="col-10 item-info-text">
+                    <p ion-text>
+                      APU
+                      <ion-icon name="arrow-forward"></ion-icon>
+                      Endah Promenade
+                    </p>
+                  </div>
+                </div>
+
+                <div class="content-item-with-icon col-12 row">
+                  <div class="col-2 text-right"></div>
+                  <div class="col-10 item-info-text-not-bold">
+                    <p ion-text>12:30 PM</p>
+                  </div>
+                </div>
+
+                <div class="content-item-with-icon col-12 row">
+                  <div class="col-2 text-right">
+                    <ion-icon item-left name="locate"></ion-icon>
+                  </div>
+                  <div class="col-10 item-info-text">
+                    <p ion-text>
+                      Endah Promenade
+                      <ion-icon name="arrow-forward"></ion-icon>
+                      APU
+                    </p>
+                  </div>
+                </div>
+
+                <div class="content-item-with-icon col-12 row">
+                  <div class="col-2 text-right"></div>
+                  <div class="col-10 item-info-text-not-bold">
+                    <p ion-text>13:30 PM</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+<!-- END SECTION 7 BODY -->
+<!-- </div> -->
+<!-- END SECTION 7: BUS ROUTE -->
+<!-- ********************************************* -->
+<!-- START SECTION 8: UPCOMING EVENT -->
+<!-- <div class="  section upcoming-event-section"> -->
+<!-- START SECTION 8 HEADER -->
+<!-- <div class="section-header">
+            <div class="section-header-icon">
+              <ion-icon item-left name="bonfire"></ion-icon>
+            </div>
+            <div class="section-header-text"><h3>Upcoming Event</h3></div>
+          </div> -->
+<!-- END SECTION 3 HEADER -->
+
+<!-- START SECTION 3 BODY -->
+<!-- <div class="section-body">
+            <div class="section-body-header">
+              <h4 class="col-12">Football Competation Event</h4>
+            </div>
+
+            <div class="section-body-content row">
+              <div class="container">
+                <div class="content-item-with-icon col-12 row">
+                  <div class="col-2 text-right">
+                    <ion-icon item-left name="time"></ion-icon>
+                  </div>
+                  <div class="col-10 item-info-text">
+                    <p ion-text>24 Dec, 2018 | 07:30 PM</p>
+                  </div>
+                </div>
+
+                <div class="content-item-with-icon col-12 row">
+                  <div class="col-2 text-right">
+                    <ion-icon item-left name="locate"></ion-icon>
+                  </div>
+                  <div class="col-10 item-info-text">
+                    <p ion-text>TPM, APU New Campus</p>
+                  </div>
+                </div>
+
+                <div class="content-item-with-icon col-12 row">
+                  <div>
+                    <p ion-text>
+                      This event organized by APU Football Club members and it
+                      aims to imrpove the ...
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+<!-- END SECTION 8 BODY -->
+<!-- </div> -->
+<!-- END SECTION 8: UPCOMING EVENTS -->
