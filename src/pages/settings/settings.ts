@@ -6,6 +6,7 @@ import {
   NavParams,
   Platform,
   ToastController,
+  AlertController,
 } from 'ionic-angular';
 import {
   AppAnimationProvider,
@@ -62,7 +63,8 @@ export class SettingsPage {
     private version: VersionProvider,
     private settings: SettingsProvider,
     private ws: WsApiProvider,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    public alertCtrl: AlertController,
 
   ) {
     this.userSettings
@@ -91,18 +93,33 @@ export class SettingsPage {
   }
 
   resetByod() {
-    this.ws.get('/byod/reset').subscribe(
-      data => {
-        console.log(data);
-      },
-      err =>{
-        console.log(err);
-      },
-      () => {
-        this.toast("Your request has been sent to the helpdesk support system and it is being processed now.")
-      }
-    );
-
+    const confirm = this.alertCtrl.create({
+      title: 'BYOD Reset',
+      message: 'You are about to send a request to the helpdesk support system to reset your BYOD. Do you want to continue?',
+      buttons: [
+        {
+          text: 'No',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.ws.get('/byod/reset').subscribe(
+              data => {
+                console.log(data);
+              },
+              err => {
+                console.log(err);
+              },
+              () => {
+                this.toast("Your request has been sent to the helpdesk support system and it is being processed now.")
+              }
+            );
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
-
 }
