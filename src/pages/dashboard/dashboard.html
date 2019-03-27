@@ -330,7 +330,7 @@
                 [ngIf]="nextHoliday$ | async"
                 [ngIfElse]="loadingHoliday"
               >
-                <div class="col-12 col-md-4 section upcoming-holiday-section">
+                <div class="col-12 col-md-6 section upcoming-holiday-section">
                   <!-- START SECTION 3 HEADER -->
                   <div class="section-header">
                     <div
@@ -400,7 +400,7 @@
                 [ngIfElse]="loadingAttendance"
               >
                 <div
-                  class="col-12 col-md-8 section low-attendance-section"
+                  class="col-12 col-md-6 section low-attendance-section"
                   *ngIf="attendance.length > 0"
                 >
                   <!-- START SECTION 10 HEADER -->
@@ -476,7 +476,7 @@
                 [ngIf]="overdue$ | async"
                 [ngIfElse]="loadingFinancials"
               >
-                <div class="col-12 col-md-5 section financials-section">
+                <div class="col-12 col-md-6 section financials-section">
                   <!-- START SECTION 9 HEADER -->
                   <div class="section-header">
                     <div
@@ -618,7 +618,7 @@
                 [ngIfElse]="loadingApcard"
               >
                 <ng-template [ngIf]="transactions.length > 0">
-                  <div class="col-12 col-md-7 section low-attendance-section">
+                  <div class="col-12 col-md-12 section low-attendance-section">
                     <!-- START SECTION 11 HEADER -->
                     <div class="section-header">
                       <div
