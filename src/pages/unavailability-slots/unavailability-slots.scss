@@ -1,37 +1,18 @@
 page-unavailability-slots {
-    .item{
-        font-size: 1.3rem;
-        height: 40px;
-    }
-    
-    button[ion-button] {
-        height: 3em;
-        text-transform: capitalize;
-    }
+  .item {
+    font-size: 1.3rem;
+    height: 40px;
+  }
 
-    .repeatlabel{
-        color: gray;
-        padding-left: 10px;
-        margin-top: 25px;
-        font-size: small;
-    }
-    
-    .timelabel{
-        font-size: 95%;
-        padding-left: 10px;
-        color: gray;
-        margin-bottom: 0px;
-    }
+  button[ion-button] {
+    height: 3em;
+    text-transform: capitalize;
+  }
 
-    .durationnote{
-        color: gray;
-        padding-left: 10px;
-        font-size: 95%;
-    }
-
-    .startAndEndDateMessage{
-        font-size: 95%;
-    }
-    
-    
+  .startAndEndDateMessage {
+    font-size: 95%;
+  }
+  .repeatlabel {
+    margin: 10px 0 3px 0;
+  }
 }

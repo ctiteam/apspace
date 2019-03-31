@@ -714,9 +714,9 @@ $light_menu_colors: (
 
   // ICONSULT (STUDENTS) PAGE
   page-iconsult {
-    .slot-month{
+    .slot-month {
       color: color($light_colors, light_white_background);
-     }
+    }
     h2.staff-name {
       color: color($light_colors, ligth_grey_color);
     }
@@ -787,7 +787,8 @@ $light_menu_colors: (
   }
 
   // PAGE UPCOMING APPOINTMENT FOR STUDENTS
-  page-upcomingstd, page-upcominglec {
+  page-upcomingstd,
+  page-upcominglec {
     .cancelledbylec {
       color: color($light_colors, light_header_background);
     }
@@ -817,7 +818,9 @@ $light_menu_colors: (
   }
 
   // ICONSULT MY APPOINTMENTS PAGE (STUDENTS AND LECTURER) & UNAVAILABLE SLOTS DETAILS &
-  page-student-consul-detail, page-consuldetailpage, page-unavailabledetails {
+  page-student-consul-detail,
+  page-consuldetailpage,
+  page-unavailabledetails {
     ion-card {
       background-color: color($light_colors, light_white_background) !important;
       color: color($light_colors, light_blue_color) !important;
@@ -831,6 +834,16 @@ $light_menu_colors: (
           }
         }
       }
+    }
+  }
+
+  // ICONSULT ADD FREE SLOTS (LECTURER) & ADD UNAVAILABILITY SLOTS
+  page-addfreeslots,
+  page-unavailability-slots {
+    ion-label.repeatlabel,
+    .durationnote,
+    .startAndEndDateMessage {
+      color: color($light_colors, ligth_grey_color);
     }
   }
 
