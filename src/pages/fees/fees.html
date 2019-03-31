@@ -111,7 +111,7 @@
 
   <ion-segment [(ngModel)]="selectedSegment">
     <ion-segment-button value="Summary">Summary</ion-segment-button>
-    <ion-segment-button value="Bank Draft">Bank Draft</ion-segment-button>
+    <ion-segment-button value="Bank Draft">SU Fees</ion-segment-button>
     <ion-segment-button value="Details">Details</ion-segment-button>
   </ion-segment>
 
@@ -180,7 +180,7 @@
             </ion-list-header>
             <ion-card-content no-padding>
               <ion-item>
-                Bank Draft Amount
+                Amount Payable
                 <ion-note color="text-color" item-right>
                     {{ bankDraft.BANKDRAFT_AMOUNT | currency:'GBP' }}
                 </ion-note>
