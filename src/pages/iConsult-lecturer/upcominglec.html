@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar color="primary">
+  <ion-navbar>
     <ion-title>My Consultation Hour</ion-title>
   </ion-navbar>
 </ion-header>
@@ -15,7 +15,7 @@
 
   <ng-template let-slots [ngIf]="slots$ | async" [ngIfElse]="loadingUpComLec">
     <ng-template [ngIf]="slots && slots.length > 0" [ngIfElse]="nodata">
-      <ion-card class="card card-ios" *ngFor="let slot of slots"
+      <ion-card class="card card-ios p-0 my-3 mx-auto" *ngFor="let slot of slots"
         [ngClass]="{'UnAvailablecard':slot.status == 'Unavailable', 'bookedcard':slot.status == 'Booked' && currenttime < slot.dateandtime, 'Availablecard':slot.status == 'Available', 'closedcard':slot.status == 'Clossed', 'passedCard':slot.status == 'Booked' && currenttime > slot.dateandtime}">
         <ion-card-header *ngIf="slot.status == 'Available'">
           <ion-badge class="available">Available</ion-badge>
@@ -75,7 +75,7 @@
             {{ slot.enddate | date:'EEEE, dd MMMM' }}
           </ion-label>
 
-          <button class="btn btn-lg btn-block btn-outline-info" *ngIf="slot.status == 'Unavailable'"
+          <button class="btn btn-lg btn-block btn-outline-primary" *ngIf="slot.status == 'Unavailable'"
             style="margin-top: 10px;" (click)="openUnavailabledetailsPage(slot.unavailibilityid)">
             View Unavailability
           </button>
@@ -90,24 +90,24 @@
             {{ slot.venue }} │ {{ slot.location }}
           </ion-label>
 
-          <button class="btn btn-lg btn-block btn-outline-danger" *ngIf="slot.status == 'Available'"
+          <button class="btn btn-lg btn-block btn-outline-primary" *ngIf="slot.status == 'Available'"
             style="margin-top: 10px;"
             (click)="closeAvailableSlots(slot.availibilityid, slot.slotid, slot.date, slot.time, slot.timee, slot.datetime, slot.venue, slot.location, slot.endTime)">
             Cancel slot
           </button>
 
           <div class="row mt-3" *ngIf="slot.status == 'Booked' && currenttime < slot.dateandtime">
-            <div class="col-4"><button class="btn btn-lg btn-block btn-outline-success"
+            <div class="col-4"><button class="btn btn-lg btn-block btn-outline-primary"
                 (click)="gotoChat()">Chat</button></div>
-            <div class="col-8"><button class="btn btn-lg btn-block btn-outline-success"
+            <div class="col-8"><button class="btn btn-lg btn-block btn-outline-primary"
                 (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
                 View Appointment Details</button></div>
           </div>
 
           <div class="row mt-3" *ngIf="slot.status == 'Booked' && currenttime > slot.dateandtime">
-            <div class="col-4"><button class="btn btn-lg btn-block btn-outline-secondary"
+            <div class="col-4"><button class="btn btn-lg btn-block btn-outline-primary"
                 (click)="gotoChat()">Chat</button></div>
-            <div class="col-8"><button class="btn btn-lg btn-block btn-outline-secondary"
+            <div class="col-8"><button class="btn btn-lg btn-block btn-outline-primary"
                 (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
                 Add Remarks</button></div>
           </div>
