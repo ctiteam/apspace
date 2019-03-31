@@ -816,8 +816,8 @@ $light_menu_colors: (
     }
   }
 
-  // ICONSULT MY APPOINTMENTS PAGE (STUDENTS) & UNAVAILABLE SLOTS DETAILS
-  page-student-consul-detail, page-unavailabledetails {
+  // ICONSULT MY APPOINTMENTS PAGE (STUDENTS AND LECTURER) & UNAVAILABLE SLOTS DETAILS &
+  page-student-consul-detail, page-consuldetailpage, page-unavailabledetails {
     ion-card {
       background-color: color($light_colors, light_white_background) !important;
       color: color($light_colors, light_blue_color) !important;
