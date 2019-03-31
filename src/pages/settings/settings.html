@@ -11,47 +11,6 @@
     <div class="main-content">
       <!-- START PAGE CONTAINER -->
       <div class="container">
-        <!-- START SECTION 1: APP SETTINGS -->
-        <!-- <div class="main-section section theme-settings-section"> -->
-        <!-- START SECTION 1 HEADER -->
-        <!-- <div class="section-header">
-            <div class="section-header-icon">
-              <ion-icon item-left name="hammer"></ion-icon>
-            </div>
-            <div class="section-header-text"><h3>General</h3></div>
-          </div> -->
-        <!-- END SECTION 1 HEADER -->
-
-        <!-- START SECTION 1 BODY -->
-        <!-- <div class="section-body">
-            <div class="section-body-content row">
-              <div class="container no-padding-left">
-                <ion-item>
-                    <ion-label>Theme</ion-label>
-                    <ion-select [(ngModel)]="activeTheme" (ngModelChange)="toggleTheme()">
-                      <ion-option *ngFor="let themeOption of themeOptions" value="{{ themeOption.value }}">{{ themeOption.title }}</ion-option>
-                    </ion-select>
-                </ion-item>
-              </div>
-            </div>
-            <div class="section-body-content row">
-              <div class="container no-padding-left">
-
-                <ion-item>
-                    <ion-label>Assent Color</ion-label>
-                    <ion-select [(ngModel)]="activeColorScheme" (ngModelChange)="toggleColorScheme()">
-                      <ion-option *ngFor="let colorOption of colorSchemeOptions" value="{{ colorOption.value }}">{{ colorOption.title }}</ion-option>
-                    </ion-select>
-                </ion-item>
-
-
-              </div>
-            </div>
-          </div> -->
-        <!-- END SECTION 1 BODY -->
-        <!-- </div> -->
-        <!-- END SECTION 1: APP SETTINGS -->
-
         <div class="mt-5 row settings-section">
           <div class="px-4 py-1 settings-section-header">
             <h3>GENERAL</h3>
@@ -77,7 +36,7 @@
             </div>
             <div class="settings-section-item">
               <ion-item no-lines>
-                <ion-label>Assent Color</ion-label>
+                <ion-label>Accent Color</ion-label>
                 <ion-select
                   [(ngModel)]="activeColorScheme"
                   (ngModelChange)="toggleColorScheme()"
@@ -113,7 +72,7 @@
 
         <div class="mt-5 row settings-section">
             <div class="px-4 py-1 settings-section-header">
-              <h3>Support</h3>
+              <h3>SUPPORT</h3>
             </div>
             <div
               class="px-0 col-12 settings-section-body"
