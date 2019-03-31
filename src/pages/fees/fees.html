@@ -109,11 +109,13 @@
     </ion-card>
   </ng-template>
 
-  <ion-segment [(ngModel)]="selectedSegment">
-    <ion-segment-button value="Summary">Summary</ion-segment-button>
-    <ion-segment-button value="Bank Draft">SU Fees</ion-segment-button>
-    <ion-segment-button value="Details">Details</ion-segment-button>
-  </ion-segment>
+  <ng-template let-bankDrafts [ngIf]="bankDraft$ | async">
+      <ion-segment [(ngModel)]="selectedSegment">
+          <ion-segment-button value="Summary">Summary</ion-segment-button>
+          <ion-segment-button *ngIf="bankDrafts[0].BANKDRAFT_AMOUNT !== 0" value="Bank Draft">SU Fees</ion-segment-button>
+          <ion-segment-button value="Details">Details</ion-segment-button>
+        </ion-segment>
+  </ng-template>
 
   <ng-container [ngSwitch]='selectedSegment'>
 
