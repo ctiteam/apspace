@@ -87,15 +87,24 @@
         </div>
       </ion-item>
 
-      <ion-buttons end *ngIf="status == 'Booked' && dateString < date">
-        <button
-          ion-button
-          class="cancel btn btn-outline-danger btn-block btn-lg"
-          (click)="cancelslot()"
-        >
-          Cancel Appointment
-        </button>
-      </ion-buttons>
+      <div class="row mt-3">
+        <div class="col-6">
+          <button
+            class="btn btn-lg btn-block btn-outline-success"
+            (click)="gotoChat(details.tpnumber)"
+          >
+            Chat in Teams
+          </button>
+        </div>
+        <div class="col-6" *ngIf="status == 'Booked' && dateString < date">
+          <button
+            class="btn btn-lg btn-block btn-outline-danger"
+            (click)="cancelslot()"
+          >
+            Cancel Appointment
+          </button>
+        </div>
+      </div>
     </ion-card-content>
   </ion-card>
 
