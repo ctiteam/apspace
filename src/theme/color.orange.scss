@@ -409,6 +409,15 @@ $primary_color: #ec644b;
     }
   }
 
+  // SETTINGS PAGE
+  page-settings {
+    .settings-section-header {
+      h3 {
+        color: $primary_color;
+      }
+    }
+  }
+
   // OVERRIDE BOOTSTRAP COLORS
   .bg-success {
     background-color: $primary_color !important;

@@ -12,121 +12,145 @@
       <!-- START PAGE CONTAINER -->
       <div class="container">
         <!-- START SECTION 1: APP SETTINGS -->
-        <div class="main-section section theme-settings-section">
-          <!-- START SECTION 1 HEADER -->
-          <div class="section-header">
+        <!-- <div class="main-section section theme-settings-section"> -->
+        <!-- START SECTION 1 HEADER -->
+        <!-- <div class="section-header">
             <div class="section-header-icon">
               <ion-icon item-left name="hammer"></ion-icon>
             </div>
-            <div class="section-header-text"><h3>App Settings</h3></div>
-          </div>
-          <!-- END SECTION 1 HEADER -->
+            <div class="section-header-text"><h3>General</h3></div>
+          </div> -->
+        <!-- END SECTION 1 HEADER -->
 
-          <!-- START SECTION 1 BODY -->
-          <div class="section-body">
-            <div class="section-body-header">
-              <h4 class="col-12">Selected Theme</h4>
-            </div>
-
+        <!-- START SECTION 1 BODY -->
+        <!-- <div class="section-body">
             <div class="section-body-content row">
               <div class="container no-padding-left">
-                <ion-list radio-group [(ngModel)]="activeTheme">
-                  <ion-item *ngFor="let themeOption of themeOptions">
-                    <ion-label>{{ themeOption.title }}</ion-label>
-                    <ion-radio
-                      value="{{ themeOption.value }}"
-                      (ionSelect)="toggleTheme($event, themeOption.value)"
-                    ></ion-radio>
-                  </ion-item>
-                </ion-list>
+                <ion-item>
+                    <ion-label>Theme</ion-label>
+                    <ion-select [(ngModel)]="activeTheme" (ngModelChange)="toggleTheme()">
+                      <ion-option *ngFor="let themeOption of themeOptions" value="{{ themeOption.value }}">{{ themeOption.title }}</ion-option>
+                    </ion-select>
+                </ion-item>
               </div>
             </div>
-            <!-- HERE -->
-            <div class="section-body-header">
-              <h4 class="col-12">Selected Color Scheme</h4>
-            </div>
-
             <div class="section-body-content row">
               <div class="container no-padding-left">
-                <ion-list radio-group [(ngModel)]="activeColorScheme">
-                  <ion-item *ngFor="let colorOption of colorSchemeOptions">
-                    <ion-label>{{ colorOption.title }}</ion-label>
-                    <ion-radio
-                      value="{{ colorOption.value }}"
-                      (ionSelect)="toggleColorScheme($event, colorOption.value)"
-                    ></ion-radio>
-                  </ion-item>
-                </ion-list>
+
+                <ion-item>
+                    <ion-label>Assent Color</ion-label>
+                    <ion-select [(ngModel)]="activeColorScheme" (ngModelChange)="toggleColorScheme()">
+                      <ion-option *ngFor="let colorOption of colorSchemeOptions" value="{{ colorOption.value }}">{{ colorOption.title }}</ion-option>
+                    </ion-select>
+                </ion-item>
+
+
               </div>
             </div>
-          </div>
-          <!-- END SECTION 1 BODY -->
-        </div>
+          </div> -->
+        <!-- END SECTION 1 BODY -->
+        <!-- </div> -->
         <!-- END SECTION 1: APP SETTINGS -->
 
-        <!-- START SECTION 2: PRIVACY SETTINGS -->
-        <div class="main-section section theme-settings-section">
-          <!-- START SECTION 2 HEADER -->
-          <div class="section-header">
-            <div class="section-header-icon">
-              <ion-icon item-left name="lock"></ion-icon>
+        <div class="mt-5 row settings-section">
+          <div class="px-4 py-1 settings-section-header">
+            <h3>GENERAL</h3>
+          </div>
+          <div
+            class="px-0 col-12 settings-section-body"
+            style="background-color: #292929"
+          >
+            <div class="settings-section-item">
+              <ion-item no-lines>
+                <ion-label>Theme</ion-label>
+                <ion-select
+                  [(ngModel)]="activeTheme"
+                  (ngModelChange)="toggleTheme()"
+                >
+                  <ion-option
+                    *ngFor="let themeOption of themeOptions"
+                    value="{{ themeOption.value }}"
+                    >{{ themeOption.title }}</ion-option
+                  >
+                </ion-select>
+              </ion-item>
             </div>
-            <div class="section-header-text">
-              <h3>Security & Privacy Settings</h3>
+            <div class="settings-section-item">
+              <ion-item no-lines>
+                <ion-label>Assent Color</ion-label>
+                <ion-select
+                  [(ngModel)]="activeColorScheme"
+                  (ngModelChange)="toggleColorScheme()"
+                >
+                  <ion-option
+                    *ngFor="let colorOption of colorSchemeOptions"
+                    value="{{ colorOption.value }}"
+                    >{{ colorOption.title }}</ion-option
+                  >
+                </ion-select>
+              </ion-item>
             </div>
           </div>
-          <!-- END SECTION 2 HEADER -->
-
-          <!-- START SECTION 2 BODY -->
-          <div class="section-body">
-            <div class="section-body-header">
-              <h4 class="col-12" [navPush]="'PasswordRecoveryPage'">
-                Set Security Questions
-              </h4>
-            </div>
-
-            <div class="section-body-header">
-              <h4 class="col-12" (click)="resetByod()">
-                BYOD Reset
-              </h4>
-            </div>
-
-            <!-- <div class="section-body-header">
-              <h4 class="col-12">Reset Password</h4>
-            </div> -->
-          </div>
-          <!-- END SECTION 2 BODY -->
         </div>
-        <!-- END SECTION 2: PRIVACY SETTINGS -->
 
-        <!-- START SECTION 2: PRIVACY SETTINGS -->
-        <div class="main-section section theme-settings-section">
-          <!-- START SECTION 2 HEADER -->
-          <div class="section-header">
-            <div class="section-header-icon">
-              <ion-icon item-left name="help"></ion-icon>
-            </div>
-            <div class="section-header-text">
-              <h3>About</h3>
+        <div class="mt-5 row settings-section">
+          <div class="px-4 py-1 settings-section-header">
+            <h3>SECURITY & PRIVACY</h3>
+          </div>
+          <div
+            class="px-0 col-12 settings-section-body"
+            style="background-color: #292929"
+          >
+            <div class="settings-section-item">
+              <ion-item no-lines>
+                <h5 [navPush]="'PasswordRecoveryPage'">
+                  Set Security Questions
+                </h5>
+              </ion-item>
             </div>
           </div>
-          <!-- END SECTION 2 HEADER -->
+        </div>
 
-          <!-- START SECTION 2 BODY -->
-          <div class="section-body">
-            <div class="section-body-header">
-              <h4 class="px-5 py-2 static-data">
-                <div class="row">
-                  <div class="col-6 p-0">App Version</div>
-                  <div class="col-6 p-0 text-right">{{appVersion}}</div>
+        <div class="mt-5 row settings-section">
+            <div class="px-4 py-1 settings-section-header">
+              <h3>Support</h3>
+            </div>
+            <div
+              class="px-0 col-12 settings-section-body"
+              style="background-color: #292929"
+            >
+              <div class="settings-section-item">
+                <ion-item no-lines>
+                  <h5 (click)="resetByod()">BYOD Reset</h5>
+                </ion-item>
+              </div>
+            </div>
+          </div>
+
+        <div class="mt-5 row settings-section">
+          <div class="px-4 py-1 settings-section-header">
+            <h3>ABOUT THE APP</h3>
+          </div>
+          <div
+            class="px-0 col-12 settings-section-body"
+            style="background-color: #292929"
+          >
+            <div class="settings-section-item">
+                <div class="settings-section-item">
+                    <ion-item no-lines>
+                      <h5 [navPush]="'FeedbackPage'">Send Feedback</h5>
+                    </ion-item>
                 </div>
-              </h4>
-              <h4 class="px-5">
-
-              </h4>
+              <ion-item no-lines>
+                <h5 class="static-data">
+                  <div class="row">
+                    <div class="col-6">App Version</div>
+                    <div class="col-6 text-right">{{ appVersion }}</div>
+                  </div>
+                </h5>
+              </ion-item>
             </div>
           </div>
-          <!-- END SECTION 2 BODY -->
         </div>
         <!-- END SECTION 2: PRIVACY SETTINGS -->
       </div>

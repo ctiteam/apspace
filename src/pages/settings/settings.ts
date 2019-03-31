@@ -82,43 +82,26 @@ export class SettingsPage {
     });
   }
 
-  toggleTheme($event, value: string) {
-    this.userSettings.setActiveTheme(value);
+  toggleTheme() {
+    this.userSettings.setActiveTheme(this.activeTheme);
   }
 
-  toggleColorScheme($event, value: string) {
-    this.userSettings.setColorScheme(value);
+  toggleColorScheme() {
+    this.userSettings.setColorScheme(this.activeColorScheme);
   }
 
-  resetByod(){
-    const role = this.settings.get('role');
-    if (role & Role.Student) {
-      this.ws.get<StudentProfile>('/student/profile').subscribe(
-        res => {
-          this.byodData = {username: res.STUDENT_NUMBER, userEmail: res.STUDENT_EMAIL}
-        },
-        _ => {},
-        () => {          
-          this.sendByodResetRequest(this.byodData);
-        }
-      );
-    } else {
-      this.ws.get<StaffProfile>('/staff/profile').subscribe(
-        res => {
-          this.byodData = {username: res[0].ID, userEmail: res[0].EMAIL}
-        },
-        _ => {},
-        () => {
-          this.sendByodResetRequest(this.byodData);
-        }
-      );
-    }
-  }
-
-  sendByodResetRequest(byodData: {username: string, userEmail: string}){
-    console.log('username is : ' + byodData.username);
-    console.log('email is : ' + byodData.userEmail);
-    this.toast("Your request has been sent to the helpdesk support system. You will be notified through email.")
+  resetByod() {
+    this.ws.get('/byod/reset').subscribe(
+      data => {
+        console.log(data);
+      },
+      err =>{
+        console.log(err);
+      },
+      () => {
+        this.toast("Your request has been sent to the helpdesk support system and it is being processed now.")
+      }
+    );
 
   }
 
