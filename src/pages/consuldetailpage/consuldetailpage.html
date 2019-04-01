@@ -6,7 +6,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let details of (detail$ | async)" padding>
+  <ion-card *ngFor="let details of (detail$ | async)">
     <ion-card-content>
       <ion-item class="studentdetails">
         <ion-icon name="person" item-start></ion-icon>
@@ -88,17 +88,17 @@
       </ion-item>
 
       <div class="row mt-3">
-        <div class="col-6">
+        <div class="col-6 px-1">
           <button
-            class="btn btn-lg btn-block btn-outline-success"
+            class="btn btn-block btn-outline-success"
             (click)="gotoChat(details.tpnumber)"
           >
             Chat in Teams
           </button>
         </div>
-        <div class="col-6" *ngIf="status == 'Booked' && dateString < date">
+        <div class="col-6 px-1" *ngIf="status == 'Booked' && dateString < date">
           <button
-            class="btn btn-lg btn-block btn-outline-danger"
+            class="btn btn-block btn-outline-danger"
             (click)="cancelslot()"
           >
             Cancel Appointment
@@ -148,7 +148,7 @@
             ion-button
             block
             (click)="confirmation()"
-            class="cancel btn btn-primary btn-block btn-lg"
+            class="cancel btn btn-primary btn-block"
             [disabled]="!lecfeedback.feedback"
           >
             Submit

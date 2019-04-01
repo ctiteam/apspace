@@ -48,21 +48,24 @@
 
           <div class="row mt-3">
             <div class="col-6">
-              <button *ngIf="slot.status == 'normal'" class="btn btn-lg btn-outline-primary"
+              <button *ngIf="slot.status == 'normal'"
+                class="btn btn-outline-primary"
                 (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
                 Appointment details
               </button>
-              <button *ngIf="slot.status == 'cancelledbylec'" class="btn btn-lg btn-outline-primary"
+              <button *ngIf="slot.status == 'cancelledbylec'"
+                class="btn btn-outline-primary"
                 (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
                 View details
               </button>
-              <button *ngIf="slot.status == 'cancelledbystu'" class="btn btn-lg btn-outline-primary"
+              <button *ngIf="slot.status == 'cancelledbystu'"
+                class="btn btn-outline-primary"
                 (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
                 View details
               </button>
             </div>
             <div class="col-6">
-              <button class="btn btn-lg btn-outline-success" (click)="gotoChat(slot.lecname)">
+              <button class="btn btn-outline-success" (click)="gotoChat(slot.lecname)">
                 Chat in Teams
               </button>
             </div>

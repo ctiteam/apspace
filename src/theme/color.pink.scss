@@ -418,6 +418,21 @@ $primary_color: #f18c8e;
     }
   }
 
+  // QUALIFICATION AUTHENTICITY VERIFICATION PAGE
+  page-qualification-verification {
+    .colorful-text {
+      color: $primary_color !important;
+    }
+    .colorful-button {
+      background-color: $primary_color;
+      border-color: $primary_color !important;
+      &:hover {
+        border-color: $primary_color !important;
+        color: $primary_color !important;
+      }
+    }
+  }
+
   // OVERRIDE BOOTSTRAP COLORS
   .bg-success {
     background-color: $primary_color !important;

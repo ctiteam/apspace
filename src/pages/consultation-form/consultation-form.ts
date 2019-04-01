@@ -90,7 +90,7 @@ export class ConsultationFormPage {
 
   ionViewDidLoad() {
     this.verifyslot$ = this.UpcomingConStu.verifyduplicateslotsfun(this.verifydata);
-    this.booking.phone = this.settings.get('contactNo');
+    this.booking.phone = '';
   }
 
   // student confirmation
@@ -122,9 +122,6 @@ export class ConsultationFormPage {
                       {
                         text: 'OK',
                         handler: () => {
-                          //this.app.getRootNav().setRoot(TabsPage);
-                          //this.app.getRootNav().push(UpcomingstdPage);
-                          this.settings.set('contactNo', this.booking.phone);
                         },
                       },
                     ],

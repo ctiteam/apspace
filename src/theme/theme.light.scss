@@ -847,6 +847,20 @@ $light_menu_colors: (
     }
   }
 
+  // QUALIFICATION AUTHENTICITY VERIFICATION PAGE
+  page-qualification-verification {
+    ion-content {
+      background-color: color($light_colors, light_white_background) !important;
+    }
+    ion-item {
+      background-color: color($light_colors, light_background) !important;
+    }
+    p,
+    small {
+      color: color($light_colors, ligth_grey_color);
+    }
+  }
+
   // LOADING SPINNER COMPONENT
   loading-spinner {
     .loader {

@@ -195,7 +195,7 @@ export class MorePage {
       title: 'Others',
       items: [
         {
-          title: 'Qualification Authenticity Verification',
+          title: 'Award Verification Service',
           component: 'QualificationVerificationPage',
           size: 'xlarge',
           desc: 'blue',

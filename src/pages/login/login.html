@@ -1,6 +1,6 @@
 <ion-content>
   <div class="row d-flex justify-content-center">
-    <div class="col-sm-6 col-md-5 px-5">
+    <div class="col-12 col-sm-7 col-md-7 px-5">
       <img class="apu-logo" src="assets/img/login.png" />
       <h3 class="p-3 mt-4">
         WELCOME TO <span>APSpace</span>
@@ -8,7 +8,7 @@
       <div class="row d-flex justify-content-center">
         <div class="col-md-8 my-2">
           <form (ngSubmit)="login()">
-            <ion-item class="mt-5">
+            <ion-item class="mt-5 px-0">
               <ion-icon color="text-color" name="contact" item-left></ion-icon>
               <ion-input
                 #autofocus
@@ -18,7 +18,7 @@
                 [ngModelOptions]="{ standalone: true }"
               ></ion-input>
             </ion-item>
-            <ion-item class="my-3">
+            <ion-item class="my-3 px-0">
               <ion-icon color="text-color" name="lock" item-left></ion-icon>
               <ion-input
                 [type]="getPasswordVisibility()"
@@ -36,7 +36,7 @@
                 <ion-icon name="eye"></ion-icon>
               </button>
             </ion-item>
-            <div class="col-12 px-5 mx-3 mt-5">
+            <div class="col-12 px-5 mx-auto mt-5">
               <button
               ion-button
               block
@@ -49,8 +49,8 @@
             </button>
             </div>
           </form>
-          <h4 class="p-3 mt-5 font-weight-bold useful-links-title">Useful links:</h4>
-          <h4 class="px-4 link" [navPush]="'QualificationVerificationPage'">Qualification Authenticity Verification</h4>
+          <h4 class="p-3 mt-4 text-center font-weight-bold useful-links-title">----- OR -----</h4>
+          <h4 class="px-4 text-center link" [navPush]="'QualificationVerificationPage'">Award Verification Service</h4>
         </div>
       </div>
     </div>
