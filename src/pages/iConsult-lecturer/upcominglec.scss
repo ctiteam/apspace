@@ -81,10 +81,12 @@ page-upcominglec {
     .ListBackdrop {
         background-color: white !important;
         position: fixed !important;
-        height: 100%;
-        width: 100%;
+        height: 100vh;
+        width: 100vw;
         z-index: 1;
-        opacity: 0.8
+        opacity: 0.8;
+        top: 0;
+        left: 0;
     }
 
     .noListBackdrop {
@@ -98,8 +100,7 @@ page-upcominglec {
     ion-fab {
         ion-fab-list button[ion-fab] {
           overflow: visible;
-    
-          div.label {
+          .label {
             position: absolute;
             right: 48px;
             height: 24px;
