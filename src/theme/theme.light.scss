@@ -856,7 +856,9 @@ $light_menu_colors: (
       background-color: color($light_colors, light_background) !important;
     }
     p,
-    small {
+    small,
+    h3,
+    h4 {
       color: color($light_colors, ligth_grey_color);
     }
   }
