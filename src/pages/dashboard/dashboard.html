@@ -161,7 +161,7 @@
           </div>
           <!-- END SECTION 1: QUICK ACCESS MENU -->
           <!-- ********************************************* -->
-          <div class="col-12 sections-wrapper">
+          <div class="col-12 sections-wrapper p-0">
             <div class="row px-4">
               <!-- START SECTION 2: TODAY'S CLASSES -->
               <ng-template
@@ -170,7 +170,8 @@
                 [ngIfElse]="loadingClasses"
               >
                 <ng-template [ngIf]="classes && classes.length > 0">
-                  <div class="col-12 col-md-6 section todays-classes-section">
+                  <div class="col-12 col-md-6">
+                  <div class="section todays-classes-section">
                     <!-- START SECTION 2 HEADER -->
                     <div class="section-header">
                       <div
@@ -243,6 +244,7 @@
                     </div>
                     <!-- END SECTION 2 BODY -->
                   </div>
+                </div>
                 </ng-template>
               </ng-template>
               <ng-template #loadingClasses>
@@ -260,9 +262,9 @@
                 [ngIf]="exam$ | async | nextExams"
                 [ngIfElse]="loadingExams"
               >
+              <div class="col-12 col-md-6" *ngIf="exams && exams.length > 0">
                 <div
-                  class="col-12 col-md-6 section upcoming-exam-section"
-                  *ngIf="exams && exams.length > 0"
+                  class="section upcoming-exam-section"
                 >
                   <!-- START SECTION 4 HEADER -->
                   <div class="section-header">
@@ -314,6 +316,7 @@
                   </div>
                   <!-- END SECTION 4 BODY -->
                 </div>
+              </div>
               </ng-template>
               <ng-template #loadingExams>
                 <ion-card>
@@ -330,7 +333,8 @@
                 [ngIf]="nextHoliday$ | async"
                 [ngIfElse]="loadingHoliday"
               >
-                <div class="col-12 col-md-6 section upcoming-holiday-section">
+              <div class="col-12 col-md-6">
+                <div class="section upcoming-holiday-section">
                   <!-- START SECTION 3 HEADER -->
                   <div class="section-header">
                     <div
@@ -383,6 +387,7 @@
                   </div>
                   <!-- END SECTION 3 BODY -->
                 </div>
+              </div>
               </ng-template>
               <ng-template #loadingHoliday>
                 <ion-card>
@@ -399,8 +404,9 @@
                 [ngIf]="attendance$ | async"
                 [ngIfElse]="loadingAttendance"
               >
+              <div class="col-12 col-md-6">
                 <div
-                  class="col-12 col-md-6 section low-attendance-section"
+                  class="section low-attendance-section"
                   *ngIf="attendance.length > 0"
                 >
                   <!-- START SECTION 10 HEADER -->
@@ -460,6 +466,7 @@
                   </div>
                   <!-- END SECTION 10 BODY -->
                 </div>
+              </div>
               </ng-template>
               <ng-template #loadingAttendance>
                 <ion-card>
@@ -476,7 +483,8 @@
                 [ngIf]="overdue$ | async"
                 [ngIfElse]="loadingFinancials"
               >
-                <div class="col-12 col-md-6 section financials-section">
+              <div class="col-12 col-md-6">
+                <div class="section financials-section">
                   <!-- START SECTION 9 HEADER -->
                   <div class="section-header">
                     <div
@@ -601,6 +609,7 @@
                   </div>
                   <!-- END SECTION 9 BODY -->
                 </div>
+              </div>
               </ng-template>
               <ng-template #loadingFinancials>
                 <ion-card>
@@ -618,7 +627,8 @@
                 [ngIfElse]="loadingApcard"
               >
                 <ng-template [ngIf]="transactions.length > 0">
-                  <div class="col-12 col-md-12 section low-attendance-section">
+                  <div class="col-12 col-md-6">
+                  <div class="section low-attendance-section">
                     <!-- START SECTION 11 HEADER -->
                     <div class="section-header">
                       <div
@@ -646,6 +656,7 @@
                     </div>
                     <!-- END SECTION 11 BODY -->
                   </div>
+                </div>
                 </ng-template>
               </ng-template>
               <ng-template #loadingApcard>
@@ -661,7 +672,8 @@
               <!-- START SECTION 12: GPA -->
               <ng-template [ngIf]="!block">
                 <ng-template [ngIf]="barChartData" [ngIfElse]="loadingGPA">
-                  <div class="col-12 section low-attendance-section">
+                  <div class="col-12 col-md-6">
+                  <div class="section low-attendance-section">
                     <!-- START SECTION 12 HEADER -->
 
                     <div class="section-header">
@@ -693,6 +705,7 @@
 
                     <!-- END SECTION 12 BODY -->
                   </div>
+                </div>
                 </ng-template>
 
                 <ng-template #loadingGPA>
