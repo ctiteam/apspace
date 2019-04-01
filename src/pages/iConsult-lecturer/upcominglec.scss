@@ -1,117 +1,113 @@
 page-upcominglec {
-    .card-ios {
-        margin-bottom:10px;
-        border-radius: 2px;
-        width: calc(100% - 4px);
-        font-size: 1.4rem;
-        // background: red;
-        -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    }
+  .card-ios {
+    margin-bottom: 10px;
+    border-radius: 2px;
+    width: calc(100% - 4px);
+    font-size: 1.4rem;
+    // background: red;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
 
-    .item-ios.item-block .item-inner {
-        padding-right: 8px;
-        padding-right: 8px;
-        border-bottom: none;
-    }
+  .item-ios.item-block .item-inner {
+    padding-right: 8px;
+    padding-right: 8px;
+    border-bottom: none;
+  }
 
-    ion-badge.available{
-        background-color: #188119;
-        float:right; 
-        font-size: smaller;
-    }
+  ion-badge.available {
+    background-color: #188119;
+    float: right;
+    font-size: smaller;
+  }
 
-    ion-badge.bookedHour{
-        background-color: #d5040a !important;
-        float:right; 
-        font-size: smaller;
-    }
+  ion-badge.bookedHour {
+    background-color: #d5040a !important;
+    float: right;
+    font-size: smaller;
+  }
 
-    ion-badge.passedHour{
-        background-color: #4c985a !important;
-        float:right; 
-        font-size: smaller;
-    }
+  ion-badge.passedHour {
+    background-color: #4c985a !important;
+    float: right;
+    font-size: smaller;
+  }
 
-    ion-badge.unavailable{
-        background-color: #7f8084 !important;
-        float:right; 
-        font-size: smaller;
-    }
+  ion-badge.unavailable {
+    background-color: #7f8084 !important;
+    float: right;
+    font-size: smaller;
+  }
 
-    ion-badge.closed{
-        background-color: #222428 !important;
-        float:right; 
-        font-size: smaller;
-    }
+  ion-badge.closed {
+    background-color: #222428 !important;
+    float: right;
+    font-size: smaller;
+  }
 
-    .bookedcard {
-        border-left: 0.4rem solid #d5040a;
-    }
+  .bookedcard {
+    border-left: 0.4rem solid #d5040a;
+  }
 
-    .Availablecard {
-        border-left: 0.4rem solid #188119;
-    }
+  .Availablecard {
+    border-left: 0.4rem solid #188119;
+  }
 
-    .UnAvailablecard {
-        border-left: 0.4rem solid #7f8084;
-    }
+  .UnAvailablecard {
+    border-left: 0.4rem solid #7f8084;
+  }
 
-    .closedcard {
-       border-left: 0.4rem solid #222428;
-    }
+  .closedcard {
+    border-left: 0.4rem solid #222428;
+  }
 
-    .passedCard {
-        border-left: 0.4rem solid #4c985a;
-     }
-    
-    .line-break{
-        overflow: inherit ;
-        text-overflow: inherit ;
-        white-space: normal;
-        vertical-align: middle; 
-        text-align: center; 
-        font-size: large;
-        font-family: initial;
-        margin-top: 181px;
-        margin-left: 20px;
-        color: slategrey;
-    }
-         
-    .ListBackdrop {
-        background-color: white !important;
-        position: fixed !important;
-        height: 100vh;
-        width: 100vw;
-        z-index: 1;
-        opacity: 0.8;
-        top: 0;
-        left: 0;
-    }
+  .passedCard {
+    border-left: 0.4rem solid #4c985a;
+  }
 
-    .noListBackdrop {
-        position: fixed !important;
-        height: 100%;
-        width: 100%;
-        z-index: 1;
-        opacity: 0.8
-    }
-    
-    ion-fab {
-        ion-fab-list button[ion-fab] {
-          overflow: visible;
-          .label {
-            position: absolute;
-            right: 48px;
-            height: 24px;
-            line-height: 16px;
-            padding: 5px 8px;
-            border-radius: 3px;
-            color: black;
-        }
-      }
-    }
+  .line-break {
+    overflow: inherit;
+    text-overflow: inherit;
+    white-space: normal;
+    vertical-align: middle;
+    text-align: center;
+    font-size: large;
+    font-family: initial;
+    margin-top: 181px;
+    margin-left: 20px;
+    color: slategrey;
+  }
 
+  .ListBackdrop {
+    background-color: white !important;
+    position: fixed !important;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    opacity: 0.8;
+  }
+
+  .noListBackdrop {
+    position: fixed !important;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    opacity: 0.8;
+  }
+
+  button[ion-fab] {
+    overflow: visible;
+    position: relative;
+    contain: layout;
+
+    ion-label {
+      position: absolute;
+      top: -8px;
+      right: 40px;
+      color: black;
+      line-height: 24px;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+  }
 }
-
-
