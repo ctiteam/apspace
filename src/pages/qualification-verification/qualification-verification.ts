@@ -12,9 +12,9 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 })
 export class QualificationVerificationPage {
   graduater$: Observable<Qualification[]>;
-  searchKeyword = '';
+  searchKeyword;
   userSearched = false;
-  resultKeyWord = '';
+  resultKeyWord;
   formsURL = 'http://forms.sites.apiit.edu.my/certificate-email-form/';
 
   constructor(
@@ -26,11 +26,12 @@ export class QualificationVerificationPage {
   }
 
   ionViewDidLoad() {
+
   }
 
   searchForGraduaters(){
     this.userSearched = true;
-    this.resultKeyWord = this.searchKeyword;
+    this.resultKeyWord = this.searchKeyword || '';
     this.graduater$ = this.ws.get<Qualification[]>(`/alumni/validate?criterion=${this.searchKeyword}`, true, {auth: false});
   }
 

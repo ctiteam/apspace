@@ -60,6 +60,7 @@
           icon-end
           (click)="searchForGraduaters()"
           class="btn colorful-button btn-primary mt-4"
+          [disabled]='!searchKeyword'
         >
           Search
           <ion-icon name="search"></ion-icon>
