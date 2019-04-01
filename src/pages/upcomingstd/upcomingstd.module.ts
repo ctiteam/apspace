@@ -4,6 +4,7 @@ import { IonicErrorHandler, IonicPageModule } from 'ionic-angular';
 import { ComponentsModule } from '../../components/components.module';
 import { UpcomingConStuProvider } from '../../providers/upcoming-con-stu';
 import { UpcomingstdPage } from './upcomingstd';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,10 @@ import { UpcomingstdPage } from './upcomingstd';
     ComponentsModule,
   ], providers: [
     StatusBar,
-    { provide: ErrorHandler, useClass: IonicErrorHandler }, UpcomingConStuProvider,
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    UpcomingConStuProvider,
+    InAppBrowser
   ],
+
 })
 export class UpcomingstdPageModule { }

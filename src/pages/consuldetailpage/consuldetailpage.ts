@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { UpcomingConLecProvider, UserserviceProvider } from '../../providers';
 import { UpcominglecPage } from '../iConsult-lecturer/upcominglec';
 import { TabsPage } from '../tabs/tabs';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @IonicPage()
 @Component({
@@ -48,6 +49,7 @@ export class ConsuldetailpagePage {
     private UpcomingConLec: UpcomingConLecProvider,
     private toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
+    private iab: InAppBrowser
   ) { }
 
   ionViewDidLoad() {
@@ -179,7 +181,7 @@ export class ConsuldetailpagePage {
     }, 2000);
   }
 
- gotoChat(tpnumber: string) {
-    window.open('https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/search?q=' + tpnumber, '_system');
-    }
+  gotoChat(tpnumber: string) {
+    this.iab.create(`https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/search?q=${tpnumber}`, '_blank', 'location=true');
+  }
 }

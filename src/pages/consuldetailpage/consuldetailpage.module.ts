@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { IonicErrorHandler, IonicPageModule } from 'ionic-angular';
 import { UserserviceProvider } from '../../providers';
 import { ConsuldetailpagePage } from './consuldetailpage';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,9 @@ import { ConsuldetailpagePage } from './consuldetailpage';
   ],
   providers: [
     StatusBar,
-    { provide: ErrorHandler, useClass: IonicErrorHandler }, UserserviceProvider,
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    UserserviceProvider,
+    InAppBrowser
   ],
 })
 export class ConsuldetailpagePageModule { }
