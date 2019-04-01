@@ -28,14 +28,16 @@ export class ConsultationFormPage {
   casid = this.navParams.get('casid');
 
   verifydata = this.date + ' ' + this.time + '.00000';
-
+  loading = this.loadingCtrl.create({
+    content: 'Sending your request',
+  });
   booking = {
     availability_id: this.availId,
     date: this.date,
     time: this.time,
     con_with: '',
     reason: '',
-    phone: '',
+    phone: '23455555',
     email: '',
     note: '',
     casusername: this.casid,
@@ -45,6 +47,22 @@ export class ConsultationFormPage {
   telnumber: string;
   emialaddress: string;
   notes: string;
+
+  validation_messages = {
+    'bookwith': [
+      { type: 'required', message: 'Consultation with is required.' },
+    ],
+    'bookreason': [
+      { type: 'required', message: 'Appointment reason is required.' }
+    ],
+    'phonenumber': [
+      { type: 'pattern', message: 'Phone number is invalid.' }
+    ],
+    'stuemialaddress': [
+      { type: 'required', message: 'Email address is required.' },
+      { type: 'pattern', message: 'Email address is invalid.' },
+    ],
+  }
 
   form: FormGroup;
 
@@ -69,28 +87,12 @@ export class ConsultationFormPage {
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ]))
     });
-
-  }
-
-  validation_messages = {
-    'bookwith': [
-      { type: 'required', message: 'Consultation with is required.' },
-    ],
-    'bookreason': [
-      { type: 'required', message: 'Appointment reason is required.' }
-    ],
-    'phonenumber': [
-      { type: 'pattern', message: 'Phone number is invalid.' }
-    ],
-    'stuemialaddress': [
-      { type: 'required', message: 'Email address is required.' },
-      { type: 'pattern', message: 'Email address is invalid.' },
-    ],
+    this.booking.phone = '';
+    this.booking.note = '';
   }
 
   ionViewDidLoad() {
     this.verifyslot$ = this.UpcomingConStu.verifyduplicateslotsfun(this.verifydata);
-    this.booking.phone = '';
   }
 
   // student confirmation
@@ -106,22 +108,25 @@ export class ConsultationFormPage {
         {
           text: 'Yes',
           handler: () => {
+            if(!this.booking.phone){
+              this.booking.phone = '';
+            }
             this.UpcomingConStu.addbooking(this.booking)
-              .subscribe(result => {
-                this.conWith = '';
-                this.reason = '';
-                this.telnumber = '';
-                this.emialaddress = '';
-                this.notes = '';
-                this.presentLoading();
-              },
+              .subscribe(
+                result => {
+                this.loading.present();
+              }
+              ,
                 () => {
+                  this.loading.dismiss();
                   const innerAlert = this.alertCtrl.create({
                     message: 'This slot just booked by a student, please book another slot.',
                     buttons: [
                       {
                         text: 'OK',
                         handler: () => {
+                          this.app.getRootNav().setRoot(TabsPage);
+                          this.app.getRootNav().push(UpcomingstdPage);        
                         },
                       },
                     ],
@@ -129,6 +134,7 @@ export class ConsultationFormPage {
                   innerAlert.present();
                 },
                 () => {
+                  this.loading.dismiss();
                   this.app.getRootNav().setRoot(TabsPage);
                   this.app.getRootNav().push(UpcomingstdPage);
                   this.presentToast();
@@ -149,16 +155,6 @@ export class ConsultationFormPage {
     });
 
     toast.present();
-  }
-
-  presentLoading() {
-    const loading = this.loadingCtrl.create({
-      content: 'Sending your request',
-    });
-    loading.present();
-    setTimeout(() => {
-      loading.dismiss();
-    }, 500);
   }
 
 }
