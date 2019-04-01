@@ -4,12 +4,13 @@ import {
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
-import { SettingsProvider, UpcomingConStuProvider } from '../../providers';
+import { SettingsProvider, UpcomingConStuProvider, WsApiProvider } from '../../providers';
 import { IconsultPage } from '../iConsult-student/iconsult';
 import { TabsPage } from '../tabs/tabs';
 import { UpcomingstdPage } from '../upcomingstd/upcomingstd';
 
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { StaffProfile, StudentProfile, Role } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -75,6 +76,7 @@ export class ConsultationFormPage {
     private toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
     private settings: SettingsProvider,
+    private ws: WsApiProvider,
     private validations_form: FormBuilder,
   ) {
 
@@ -87,6 +89,24 @@ export class ConsultationFormPage {
         Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
       ]))
     });
+
+
+    const role = this.settings.get('role');
+
+    if (role & Role.Student) {
+      this.ws.get<StudentProfile>('/student/profile').subscribe(
+        res => {
+          this.emialaddress = res.STUDENT_EMAIL;
+        }
+      );
+    } else {
+      this.ws.get<StaffProfile>('/staff/profile').subscribe(
+        res => {
+          this.emialaddress =  res[0].EMAIL;
+        },
+      );
+    }
+
     this.booking.phone = '';
     this.booking.note = '';
   }
