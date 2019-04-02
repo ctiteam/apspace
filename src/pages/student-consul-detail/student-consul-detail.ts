@@ -24,6 +24,9 @@ export class StudentConsulDetailPage {
   date = this.navParams.get('date');
   timee = this.navParams.get('starttime');
 
+  loading = this.loadingCtrl.create({
+  });
+
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public pro: UpcomingConStuProvider,
@@ -87,9 +90,10 @@ export class StudentConsulDetailPage {
                 cancel_datetime: this.currentDateTime,
                 cancel_reason: data.Cancel_reason,
               };
-              this.presentLoading();
+              this.loading.present();
               this.pro.cancelbookedslot(cancelbookedslots).subscribe(
                 () => {
+                  this.loading.dismiss();
                   this.app.getRootNav().setRoot(TabsPage);
                   this.app.getRootNav().push(UpcomingstdPage);
                   this.presentToast();
@@ -111,18 +115,6 @@ export class StudentConsulDetailPage {
     });
 
     toast.present();
-  }
-
-  presentLoading() {
-    const loading = this.loadingCtrl.create({
-      content: 'Sending your request',
-    });
-
-    loading.present();
-
-    setTimeout(() => {
-      loading.dismiss();
-    }, 2000);
   }
 
 }

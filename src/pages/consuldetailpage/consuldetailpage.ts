@@ -30,6 +30,8 @@ export class ConsuldetailpagePage {
   status = this.navParams.get('status');
 
   dateString = moment().format();
+  loading = this.loadingCtrl.create({
+  });
 
   lecfeedback = {
     slotid: this.slotid,
@@ -75,8 +77,10 @@ export class ConsuldetailpagePage {
         {
           text: 'Yes',
           handler: () => {
+            this.loading.present();
             this.UpcomingConLec.addlecFeedback(this.lecfeedback).subscribe(
               () => {
+                this.loading.dismiss();
                 this.app.getRootNav().setRoot(TabsPage);
                 this.app.getRootNav().push(UpcominglecPage);
                 this.presentToast();
@@ -143,9 +147,10 @@ export class ConsuldetailpagePage {
                 cancel_datetime: this.currentDateTime,
                 cancel_reason: data.Cancel_reason,
               };
-              this.presentLoading();
+              this.loading.present();
               this.pro.cancelbookedslot(cancelbookedslots).subscribe(
                 () => {
+                  this.loading.dismiss();
                   this.app.getRootNav().setRoot(TabsPage);
                   this.app.getRootNav().push(UpcominglecPage);
                   this.presentcanceledToast();
@@ -167,18 +172,6 @@ export class ConsuldetailpagePage {
     });
 
     toast.present();
-  }
-
-  presentLoading() {
-    const loading = this.loadingCtrl.create({
-      content: 'Sending your request',
-    });
-
-    loading.present();
-
-    setTimeout(() => {
-      loading.dismiss();
-    }, 2000);
   }
 
   gotoChat(tpnumber: string) {

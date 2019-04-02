@@ -30,7 +30,6 @@ export class ConsultationFormPage {
 
   verifydata = this.date + ' ' + this.time + '.00000';
   loading = this.loadingCtrl.create({
-    content: 'Sending your request',
   });
   booking = {
     availability_id: this.availId,
@@ -131,12 +130,9 @@ export class ConsultationFormPage {
             if(!this.booking.phone){
               this.booking.phone = '';
             }
+            this.loading.present();
             this.UpcomingConStu.addbooking(this.booking)
               .subscribe(
-                result => {
-                this.loading.present();
-              }
-              ,
                 () => {
                   this.loading.dismiss();
                   const innerAlert = this.alertCtrl.create({
