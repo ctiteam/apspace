@@ -202,9 +202,10 @@
             <ion-label>Start Time</ion-label>
             <ion-icon name="ios-clock-outline" item-start small></ion-icon>
             <ion-datetime
-              displayFormat="hh:mm A"
-              pickerFormat="hh mm A"
+              displayFormat="HH:mm"
+              pickerFormat="HH mm"
               [(ngModel)]="time[i]"
+              hourValues="[08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18]"
               minuteValues="[00,30]"
               formControlName="slotsTime"
               (ionChange)="onSelectTime(i)"
