@@ -116,9 +116,6 @@ $primary_color: #ec644b;
   // FEEDBACK PAGE
   page-feedback,
   page-password-recovery {
-    ion-label.label {
-      color: $primary_color;
-    }
     .submit-button {
       background-color: $primary_color;
     }

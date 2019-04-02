@@ -413,8 +413,15 @@ $dark_menu_colors: (
     ion-item {
       .item-inner {
         border-bottom: 1px solid color($dark_colors, dark_item_background) !important;
-        background-color: #29292980 !important;
+        background-color: color($dark_colors, dark_item_background) !important;
       }
+    }
+    ion-label.label,
+    p,
+    small,
+    h3,
+    h4 {
+      color: color($dark_colors, dark_dark_grey_color);
     }
   }
 
