@@ -26,8 +26,8 @@
                 slot.status == 'cancelledbystu' ||
                 slot.status == 'cancelledbylec'
               ">
-              <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbylec'">Canceled By Lecturer</ion-badge>
-              <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbystu'">Canceled By Student</ion-badge>
+              <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbylec'">Cancelled By Lecturer</ion-badge>
+              <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbystu'">Cancelled By Student</ion-badge>
             </div>
           </div>
         </ion-card-header>
@@ -35,7 +35,7 @@
         <ion-card-content class="p-3">
           <ion-label class="my-1">
             <ion-icon padding-right name="calendar"></ion-icon>
-            {{ slot.datetime }}
+            {{ slot.date | date:'EEEE, dd MMMM y' }}
           </ion-label>
           <ion-label class="my-1">
             <ion-icon padding-right name="time"></ion-icon>

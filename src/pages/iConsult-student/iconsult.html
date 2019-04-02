@@ -30,7 +30,7 @@
             <ion-card-header>
               <div class="row">
                 <div class="col-8 text-left">
-                  <h2>{{ slot.datetime }}</h2>
+                  <h2>{{ slot.date | date:'EEEE, dd MMMM y'}}</h2>
                 </div>
                 <div class="col-4 text-right">
                   <ion-badge class="bookedHour" *ngIf="slot.status == 'Booked'">{{
