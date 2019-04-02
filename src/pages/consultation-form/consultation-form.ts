@@ -4,12 +4,13 @@ import {
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
-import { SettingsProvider, UpcomingConStuProvider } from '../../providers';
+import { SettingsProvider, UpcomingConStuProvider, WsApiProvider } from '../../providers';
 import { IconsultPage } from '../iConsult-student/iconsult';
 import { TabsPage } from '../tabs/tabs';
 import { UpcomingstdPage } from '../upcomingstd/upcomingstd';
 
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { StaffProfile, StudentProfile, Role } from '../../interfaces';
 
 @IonicPage()
 @Component({
@@ -28,14 +29,16 @@ export class ConsultationFormPage {
   casid = this.navParams.get('casid');
 
   verifydata = this.date + ' ' + this.time + '.00000';
-
+  loading = this.loadingCtrl.create({
+    content: 'Sending your request',
+  });
   booking = {
     availability_id: this.availId,
     date: this.date,
     time: this.time,
     con_with: '',
     reason: '',
-    phone: '',
+    phone: '23455555',
     email: '',
     note: '',
     casusername: this.casid,
@@ -45,32 +48,6 @@ export class ConsultationFormPage {
   telnumber: string;
   emialaddress: string;
   notes: string;
-
-  form: FormGroup;
-
-  constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    private UpcomingConStu: UpcomingConStuProvider,
-    public app: App,
-    public alertCtrl: AlertController,
-    private toastCtrl: ToastController,
-    public loadingCtrl: LoadingController,
-    private settings: SettingsProvider,
-    private validations_form: FormBuilder,
-  ) {
-
-    this.form = this.validations_form.group({
-      bookwith: new FormControl('', Validators.required),
-      bookreason: new FormControl('', Validators.required),
-      phonenumber: new FormControl('', Validators.pattern('^[0-9]*$')),
-      stuemialaddress: new FormControl('', Validators.compose([
-        Validators.required,
-        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
-      ]))
-    });
-
-  }
 
   validation_messages = {
     'bookwith': [
@@ -88,9 +65,54 @@ export class ConsultationFormPage {
     ],
   }
 
+  form: FormGroup;
+
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    private UpcomingConStu: UpcomingConStuProvider,
+    public app: App,
+    public alertCtrl: AlertController,
+    private toastCtrl: ToastController,
+    public loadingCtrl: LoadingController,
+    private settings: SettingsProvider,
+    private ws: WsApiProvider,
+    private validations_form: FormBuilder,
+  ) {
+
+    this.form = this.validations_form.group({
+      bookwith: new FormControl('', Validators.required),
+      bookreason: new FormControl('', Validators.required),
+      phonenumber: new FormControl('', Validators.pattern('^[0-9]*$')),
+      stuemialaddress: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
+      ]))
+    });
+
+
+    const role = this.settings.get('role');
+
+    if (role & Role.Student) {
+      this.ws.get<StudentProfile>('/student/profile').subscribe(
+        res => {
+          this.emialaddress = res.STUDENT_EMAIL;
+        }
+      );
+    } else {
+      this.ws.get<StaffProfile>('/staff/profile').subscribe(
+        res => {
+          this.emialaddress =  res[0].EMAIL;
+        },
+      );
+    }
+
+    this.booking.phone = '';
+    this.booking.note = '';
+  }
+
   ionViewDidLoad() {
     this.verifyslot$ = this.UpcomingConStu.verifyduplicateslotsfun(this.verifydata);
-    this.booking.phone = '';
   }
 
   // student confirmation
@@ -106,22 +128,25 @@ export class ConsultationFormPage {
         {
           text: 'Yes',
           handler: () => {
+            if(!this.booking.phone){
+              this.booking.phone = '';
+            }
             this.UpcomingConStu.addbooking(this.booking)
-              .subscribe(result => {
-                this.conWith = '';
-                this.reason = '';
-                this.telnumber = '';
-                this.emialaddress = '';
-                this.notes = '';
-                this.presentLoading();
-              },
+              .subscribe(
+                result => {
+                this.loading.present();
+              }
+              ,
                 () => {
+                  this.loading.dismiss();
                   const innerAlert = this.alertCtrl.create({
                     message: 'This slot just booked by a student, please book another slot.',
                     buttons: [
                       {
                         text: 'OK',
                         handler: () => {
+                          this.app.getRootNav().setRoot(TabsPage);
+                          this.app.getRootNav().push(UpcomingstdPage);        
                         },
                       },
                     ],
@@ -129,6 +154,7 @@ export class ConsultationFormPage {
                   innerAlert.present();
                 },
                 () => {
+                  this.loading.dismiss();
                   this.app.getRootNav().setRoot(TabsPage);
                   this.app.getRootNav().push(UpcomingstdPage);
                   this.presentToast();
@@ -149,16 +175,6 @@ export class ConsultationFormPage {
     });
 
     toast.present();
-  }
-
-  presentLoading() {
-    const loading = this.loadingCtrl.create({
-      content: 'Sending your request',
-    });
-    loading.present();
-    setTimeout(() => {
-      loading.dismiss();
-    }, 500);
   }
 
 }

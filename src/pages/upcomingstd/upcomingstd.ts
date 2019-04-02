@@ -3,6 +3,7 @@ import { AlertController, App, IonicPage, NavController, NavParams } from 'ionic
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
 import { UpcomingConStuProvider } from '../../providers/upcoming-con-stu';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @IonicPage()
 @Component({
@@ -20,6 +21,7 @@ export class UpcomingstdPage {
     public app: App,
     private UpcomingConStu: UpcomingConStuProvider,
     public alertCtrl: AlertController,
+    private iab: InAppBrowser
   ) {
   }
 
@@ -34,7 +36,7 @@ export class UpcomingstdPage {
   }
 
   gotoChat(lecname: string) {
-    window.open('https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/search?q=' + lecname, '_system');
+    this.iab.create(`https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/search?q=${lecname}`, '_blank', 'location=true');
   }
 
   doRefresh(refresher?) {
