@@ -96,23 +96,24 @@
       name="ios-alert-outline"
       class="errorAlertIcon"
       item-start
-      *ngIf="no_of_weeks > 51 || no_of_weeks < 1"
+      *ngIf="no_of_weeks > 52 || no_of_weeks < 1"
+      style="margin: 0 15px; margin-top: 5px;"
     >
     </ion-icon>
     <small
       class="sundaySelectedMessage"
-      style="margin-left: 5px;"
-      *ngIf="no_of_weeks > 51"
+      style="margin-left: -10px;"
+      *ngIf="no_of_weeks > 52"
     >
       Maximum number of weeks is 52 weeks</small
     >
     <small
       class="sundaySelectedMessage"
-      style="margin-left: 5px;"
+      style="margin-left: -10px;"
       *ngIf="no_of_weeks < 1"
       >Minimum number of weeks is 1 week</small
     >
-    <div class="pt-4 px-4 pb-0" *ngIf="no_of_weeks < 52 && no_of_weeks > 0">
+    <div class="pt-4 px-4 pb-0" *ngIf="no_of_weeks < 53 && no_of_weeks > 0">
       <small class="startAndEndDateMessage">
         *Open slots occurs every {{ this.repeatday }} starts from
       </small>
