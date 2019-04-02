@@ -110,7 +110,7 @@ export class UpcominglecPage {
 
   async closelslot() {
     const alert = await this.alertCtrl.create({
-      title: 'Close Slot',
+      title: 'Cancel Slot',
       message: 'Are you sure you want to cancel this open slot?',
       buttons: [
         {
@@ -136,7 +136,7 @@ export class UpcominglecPage {
 
   presentToast() {
     const toast = this.toastCtrl.create({
-      message: 'Available slot was closed successfully',
+      message: 'Available slot was cancelled successfully',
       duration: 3000,
       position: 'bottom',
     });

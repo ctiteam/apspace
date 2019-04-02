@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, App, IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { AlertController, App, IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { IonicSelectableComponent } from 'ionic-selectable';
 import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
@@ -48,6 +48,9 @@ export class AddfreeslotsPage {
     revision_id: '',
   };
 
+  loading = this.loadingCtrl.create({
+  });
+
   minDate: string;
   maxDate: string;
   repeatday: any;
@@ -80,6 +83,7 @@ export class AddfreeslotsPage {
     public app: App,
     public alertCtrl: AlertController,
     private toastCtrl: ToastController,
+    public loadingCtrl: LoadingController,
   ) {
 
     this.locations = [
@@ -197,13 +201,16 @@ export class AddfreeslotsPage {
               this.freeslots.date = '';
               this.freeslots.start_date = this.alldate;
             }
+            this.loading.present();
             this.slotsProvider.addfreeslots(this.freeslots).subscribe(
               () => {
+                this.loading.dismiss();
                 this.app.getRootNav().setRoot(TabsPage);
                 this.app.getRootNav().push(UpcominglecPage);
                 this.presentToast();
               },
               () => {
+                this.loading.dismiss();
                 this.duplicateSlotAlert();
               }
             );
