@@ -16,8 +16,9 @@ import * as _ from 'lodash';
 
 export class NotificationPage {
   objectKeys = Object.keys;
-  notifications = 'unread';
+  notifications = 'all';
   unreadMessages: any;
+  showSelect = 'all'
 
   notificationCategory: string = '';
   notificationTitle: string = '';
@@ -111,8 +112,8 @@ export class NotificationPage {
     return result;
   }
 
-  showHistory(){
-    this.notifications === 'all' ? this.notifications = 'unread' : this.notifications = 'all';
+  toggleHistory(){
+    this.notifications = this.showSelect;
     this.toggleFilterMenu();
   }
 
