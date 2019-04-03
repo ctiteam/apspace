@@ -38,10 +38,15 @@ export class NotificationPage {
     private platform: Platform,
     public menu: MenuController,
     public app: App,
-  ) { }
+  ) {
+    if (this.platform.is('cordova')) {
+      this.cordova = true;
+    }    
+  }
 
   ionViewDidEnter() {
     if (this.platform.is('cordova')) {
+      
       this.doRefresh();
     }
   }
