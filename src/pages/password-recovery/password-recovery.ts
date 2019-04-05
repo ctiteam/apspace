@@ -13,7 +13,7 @@ import { WsApiProvider } from '../../providers';
   templateUrl: 'password-recovery.html',
 })
 export class PasswordRecoveryPage {
-
+  showEmailNotValidMsg = false;
   qa = {} as Sqa;
   editMode = false;
   isLoading = false;
@@ -29,6 +29,15 @@ export class PasswordRecoveryPage {
 
   onEdit() {
     this.editMode = true;
+  }
+
+  onchangeEmail(){
+    let responseOfRegEx = this.qa.secondaryEmail.match(this.emailValidationRegularExp);
+    if(!responseOfRegEx){
+      this.showEmailNotValidMsg = true;
+    } else{
+      this.showEmailNotValidMsg = false;
+    }
   }
 
   getConfig() {
