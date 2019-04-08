@@ -3,17 +3,18 @@ import { Component, ViewChild } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import {
   ActionSheetButton, ActionSheetController, App, Content, IonicPage,
-  ModalController, NavController, Platform,
+  ModalController, NavController, Platform, MenuController, ViewController,
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
-import { finalize, switchMap, tap } from 'rxjs/operators';
+import { finalize, switchMap, tap, debounceTime, distinctUntilChanged, map, share } from 'rxjs/operators';
 
 import { Role, StudentProfile, Timetable } from '../../interfaces';
 import {
   SettingsProvider, TimetableProvider, WsApiProvider,
 } from '../../providers';
 import { ClassesPipe } from './classes.pipe';
+import { FormControl } from '@angular/forms';
 
 @IonicPage()
 @Component({
@@ -23,7 +24,9 @@ import { ClassesPipe } from './classes.pipe';
 export class TimetablePage {
 
   wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-
+  
+  searchControl = new FormControl();
+  searchIntake$: Observable<string[]>;
   timetable$: Observable<Timetable[]>;
   selectedWeek: Date; // week is the first day of week
   availableWeek: Date[];
@@ -48,7 +51,9 @@ export class TimetablePage {
     private tt: TimetableProvider,
     private ws: WsApiProvider,
     private settings: SettingsProvider,
+    public menu: MenuController,
     public app: App,
+    public viewCtrl: ViewController
   ) { }
 
   presentActionSheet(labels: string[], handler: (_: string) => void) {
@@ -83,6 +88,11 @@ export class TimetablePage {
     });
   }
 
+  // TOGGLE THE MENU
+  toggleFilterMenu() {
+    this.menu.toggle();
+  }
+
   /** Check and update intake on change. */
   changeIntake(intake: string) {
     if (intake !== this.intake) {
@@ -92,11 +102,11 @@ export class TimetablePage {
   }
 
   /** Display intake search modal. */
-  presentIntakeSearch() {
-    const intakeSearchModal = this.modalCtrl.create('IntakeSearchPage');
-    intakeSearchModal.onDidDismiss(data => data && this.changeIntake(data.intake));
-    intakeSearchModal.present();
-  }
+  // presentIntakeSearch() {
+  //   const intakeSearchModal = this.modalCtrl.create('IntakeSearchPage');
+  //   intakeSearchModal.onDidDismiss(data => data && this.changeIntake(data.intake));
+  //   intakeSearchModal.present();
+  // }
 
   /** Check if the day is in week. */
   dayInWeek(date: Date) {
@@ -210,5 +220,32 @@ export class TimetablePage {
         }
       }
     );
+
+
+    const intake$ = this.tt.get().pipe(
+      map(tt => Array.from(new Set((tt || []).map(t => t.INTAKE.toUpperCase()))).sort()),
+      share(),
+    );
+
+    this.searchIntake$ = this.searchControl.valueChanges.pipe(
+      debounceTime(250),
+      distinctUntilChanged(),
+      // tap(() => this.searching = true),
+      map(term => term.toUpperCase()),
+      switchMap(term => intake$.pipe(
+        // start filter on input but accept empty input too
+        map(intakes => term.length !== 0
+          ? intakes.filter(intake => intake.indexOf(term) !== -1)
+          : intakes),
+        // auto-select if there is only one intake left
+        tap(intakes => intakes.length === 1 && this.select(intakes[0])),
+      )),
+      // tap(() => this.searching = false),
+    )
+  }
+
+  select(intake: string) {
+    this.changeIntake(intake);
+    this.toggleFilterMenu();
   }
 }
