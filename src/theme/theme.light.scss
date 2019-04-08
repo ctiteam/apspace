@@ -388,9 +388,16 @@ $light_menu_colors: (
     }
     ion-item {
       .item-inner {
-        border-bottom: 1px solid #dedede !important;
-        background-color: #ffffff4d !important;
+        border-bottom: 1px solid color($light_colors, light_white_background) !important;
+        background-color: color($light_colors, light_white_background) !important;
       }
+    }
+    ion-label.label,
+    p,
+    small,
+    h3,
+    h4 {
+      color: color($light_colors, ligth_grey_color);
     }
   }
 
