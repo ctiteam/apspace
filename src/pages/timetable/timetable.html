@@ -1,18 +1,5 @@
 <ion-header>
   <ion-navbar>
-    <!-- <ion-buttons left>
-      <button ion-button outline small (click)="chooseWeek()"
-        [disabled]="availableWeek && availableWeek.length === 0"
-        class="notification-button colored-border">
-        {{ (selectedDate | date) || "Weeks" }}
-      </button>
-    </ion-buttons>
-    <ion-buttons right>
-      <button ion-button outline small (click)="presentIntakeSearch()"
-        class="notification-button colored-border">
-        {{ intake || "Intakes" }}
-      </button>
-    </ion-buttons> -->
     <ion-title>Timetable</ion-title>
     <ion-buttons end>
       <button
@@ -76,7 +63,6 @@
             <ion-item>Not Intake Found</ion-item>
           </ng-template>
         </ion-list>
-        <!-- </ion-item> -->
       </div>
     </div>
   </ion-content>

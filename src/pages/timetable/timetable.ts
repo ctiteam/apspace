@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import {
-  ActionSheetButton, ActionSheetController, App, Content, IonicPage,
+  ActionSheetController, App, Content, IonicPage,
   ModalController, NavController, Platform, MenuController, ViewController,
 } from 'ionic-angular';
 
@@ -100,13 +100,6 @@ export class TimetablePage {
       this.timetable$.subscribe();
     }
   }
-
-  /** Display intake search modal. */
-  // presentIntakeSearch() {
-  //   const intakeSearchModal = this.modalCtrl.create('IntakeSearchPage');
-  //   intakeSearchModal.onDidDismiss(data => data && this.changeIntake(data.intake));
-  //   intakeSearchModal.present();
-  // }
 
   /** Check if the day is in week. */
   dayInWeek(date: Date) {
