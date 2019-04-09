@@ -120,10 +120,19 @@ export class MorePage {
         {
           title: 'iConsult',
           component: 'UpcominglecPage',
-          size: 'large',
+          size: 'small',
           desc: 'green',
           color: 'green',
           icon: 'clipboard',
+          role: Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'Student Consent Form',
+          component: 'StudentConsentFormlPage',
+          size: 'large',
+          desc: 'orange',
+          color: 'orange',
+          icon: 'create',
           role: Role.Lecturer | Role.Admin,
         },
         {
