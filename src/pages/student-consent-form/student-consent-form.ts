@@ -11,6 +11,7 @@ import { WsApiProvider } from "../../providers";
 })
 export class StudentConsentFormlPage {
   student$: Observable<StudentConsentProfile>;
+  studentData: StudentConsentProfile;
   searchKeyword;
   userSearched = false;
 
@@ -34,5 +35,11 @@ export class StudentConsentFormlPage {
     } else {
       this.userSearched = true;
     }
+  }
+
+  openEditFormPage() {
+    this.navCtrl.push("StudentConsentFormEditPage", {
+      studentData: this.student$
+    });
   }
 }
