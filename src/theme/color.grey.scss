@@ -424,6 +424,13 @@ $primary_color: #7f8c8d;
     }
   }
 
+  // STUDENTS CONSENT FORM PAGE
+  page-student-consent-form {
+    .card-subtitle {
+      color: $primary_color;
+    }
+  }
+
   // OVERRIDE BOOTSTRAP COLORS
   .bg-success {
     background-color: $primary_color !important;

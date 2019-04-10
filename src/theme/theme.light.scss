@@ -389,7 +389,10 @@ $light_menu_colors: (
     ion-item {
       .item-inner {
         border-bottom: 1px solid color($light_colors, light_white_background) !important;
-        background-color: color($light_colors, light_white_background) !important;
+        background-color: color(
+          $light_colors,
+          light_white_background
+        ) !important;
       }
     }
     ion-label.label,
@@ -873,6 +876,34 @@ $light_menu_colors: (
     small,
     h3,
     h4 {
+      color: color($light_colors, ligth_grey_color);
+    }
+  }
+
+  // STUDENTS CONSENT FORM PAGE
+  page-student-consent-form {
+    .input-elements-wrabber {
+      background-color: color($light_colors, light_white_background);
+      border-color: color($light_colors, light_light_grey_color);
+      .input-wrapper {
+        border-color: color($light_colors, light_light_grey_color);
+        ion-input {
+          color: color($light_colors, ligth_grey_color);
+        }
+      }
+      button {
+        color: color($light_colors, light_blue_color);
+      }
+      ::placeholder {
+        color: color($light_colors, light_light_grey_color);
+        opacity: 1; /* Firefox */
+      }
+    }
+    .user-message {
+      color: color($light_colors, ligth_grey_color);
+    }
+    .card-title,
+    .card-subtitle {
       color: color($light_colors, ligth_grey_color);
     }
   }

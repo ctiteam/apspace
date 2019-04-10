@@ -22,13 +22,17 @@ export class StudentConsentFormlPage {
 
   ionViewDidLoad() {}
 
-  searchForStudent() {   
+  searchForStudent() {
     let url = "https://ztmu4mdu21.execute-api.ap-southeast-1.amazonaws.com/dev";
-    this.userSearched = true;
-    this.student$ = this.ws.get<StudentConsentProfile>(
-      `/staff/consent/student_profile/${this.searchKeyword}`,
-      true,
-      { url: url }
-    );
+    if (this.searchKeyword || this.searchKeyword !== "") {
+      this.userSearched = true;
+      this.student$ = this.ws.get<StudentConsentProfile>(
+        `/staff/consent/student_profile/${this.searchKeyword}`,
+        true,
+        { url: url }
+      );
+    } else {
+      this.userSearched = true;
+    }
   }
 }

@@ -923,6 +923,42 @@ $dark_menu_colors: (
     }
   }
 
+  // STUDENTS CONSENT FORM PAGE
+  page-student-consent-form {
+    .input-elements-wrabber {
+      background-color: color($dark_colors, dark_item_background);
+      border-color: color($dark_colors, dark_dark_grey_color);
+      .input-wrapper {
+        border-color: color($dark_colors, dark_dark_grey_color);
+        ion-input {
+          color: color($dark_colors, dark_white_color);
+        }
+      }
+      button {
+        color: color($dark_colors, dark_white_color);
+      }
+      ::placeholder {
+        color: color($dark_colors, dark_dark_grey_color);
+        opacity: 1; /* Firefox */
+      }
+    }
+    .user-message {
+      color: color($dark_colors, dark_search_background_color);
+    }
+    .card-title,
+    .card-subtitle {
+      color: color($dark_colors, dark_search_background_color);
+      &.text-muted {
+        color: color($dark_colors, dark_dark_grey_color) !important;
+      }
+    }
+    ul, ul > li {
+      background-color: color($dark_colors, dark_item_background);
+      color: color($dark_colors, dark_search_background_color);
+      border-color: color($dark_colors, dark_dark_grey_color);
+    }
+  }
+
   // LOADING SPINNER COMPONENT
   loading-spinner {
     .loader {
