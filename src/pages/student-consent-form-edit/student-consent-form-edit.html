@@ -6,297 +6,281 @@
 
 <ion-content>
   <div class="container p-0">
-    <ng-template let-student [ngIf]="student$ | async" [ngIfElse]="loading">
-      <div class="row" *ngIf="student[0]; else noResults">
-        <div class="col-12 p-5">
-          <h2 class="card-title">{{ student[0].STUDENT_NAME }}</h2>
-          <h4 class="card-subtitle my-2 text-muted">
-            {{ student[0].STUDENT_ID }} |
-            <span
-              [style.color]="
-                student[0].STUDENT_STATUS.toUpperCase() === 'COMPLETED'
-                  ? '#1297e0'
-                  : student[0].STUDENT_STATUS.toUpperCase() === 'ACTIVE'
-                  ? 'green'
-                  : student[0].STUDENT_STATUS.toUpperCase() === 'DEFER' ||
-                    student[0].STUDENT_STATUS.toUpperCase() === 'WITHDRAW' ||
-                    student[0].STUDENT_STATUS.toUpperCase() === 'DROP'
-                  ? 'orange'
-                  : student[0].STUDENT_STATUS.toUpperCase() === 'SUSPENDED'
-                  ? 'red'
-                  : ''
-              "
-              >{{ student[0].STUDENT_STATUS }}</span
-            >
-          </h4>
-
+    <div class="row">
+      <div class="col-12 p-5">
+        <h2 class="card-title">{{ studentConsentForm.STUDENT_NAME }}</h2>
+        <h4 class="card-subtitle my-2 text-muted">
+          {{ studentConsentForm.STUDENT_ID }} |
+          <span
+            [style.color]="
+              studentConsentForm.STUDENT_STATUS.toUpperCase() === 'COMPLETED'
+                ? '#1297e0'
+                : studentConsentForm.STUDENT_STATUS.toUpperCase() === 'ACTIVE'
+                ? 'green'
+                : studentConsentForm.STUDENT_STATUS.toUpperCase() === 'DEFER' ||
+                  studentConsentForm.STUDENT_STATUS.toUpperCase() ===
+                    'WITHDRAW' ||
+                  studentConsentForm.STUDENT_STATUS.toUpperCase() === 'DROP'
+                ? 'orange'
+                : studentConsentForm.STUDENT_STATUS.toUpperCase() ===
+                  'SUSPENDED'
+                ? 'red'
+                : ''
+            "
+            >{{ studentConsentForm.STUDENT_STATUS }}</span
+          >
+        </h4>
+        <form (ngSubmit)="submitForm()">
           <div class="list-of-data my-5">
             <h4 class="card-subtitle mb-2">
               Student Information:
             </h4>
-            <ul class="list-group">
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Mobile Number:</span>
-                  {{ student[0].MOBILE_TEL_NO }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Email Address(es):</span>
-                </p>
-                <p class="card-text">
-                  {{
-                    student[0].E_MAIL.replace(
-                      ";",
-                      " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "
-                    )
-                  }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Scholarship:</span>
-                  {{ student[0].SCHOLARSCHIP || "N/A" }}
-                </p>
-              </li>
-            </ul>
+
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Mobile:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.MOBILE_TEL_NO"
+                  name="MOBILE_TEL_NO"
+                ></ion-input>
+              </ion-item>
+            </div>
+
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Email:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.E_MAIL"
+                  name="E_MAIL"
+                ></ion-input>
+              </ion-item>
+            </div>
           </div>
 
           <div class="list-of-data my-5">
             <h4 class="card-subtitle mb-2">
               Parent/Guardian Information:
             </h4>
-            <ul class="list-group">
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Name:</span>
-                  {{ student[0].PARENTS_NAME || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Relationship:</span>
-                  {{ student[0].PARENTS_RELATIONSHIP || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Address:</span>
-                </p>
-                <p class="card-text">
-                  {{ student[0].PARENTS_RESIDENTIAL_ADDRESS || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">City:</span>
-                  {{ student[0].PARENTS_RESIDENTIAL_CITY || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Postcode:</span>
-                  {{ student[0].PARENTS_RESIDENTIAL_POSTCODE || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">State:</span>
-                  {{ student[0].PARENTS_RESIDENTIAL_STATE || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Country:</span>
-                  {{ student[0].PARENTS_RESIDENTIAL_COUNTRY || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Mobile Number:</span>
-                  {{ student[0].PARENTS_MOBILE_TEL || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Email Address::</span>
-                </p>
-                <p class="card-text">
-                  {{ student[0].PARENTS_EMAIL || "N/A" }}
-                </p>
-              </li>
-            </ul>
-          </div>
 
-          <div class="list-of-data my-5">
-            <h4 class="card-subtitle mb-2">
-              Alternate Person:
-            </h4>
-            <ul class="list-group">
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Name:</span>
-                  {{ student[0].GUARDIAN_NAME || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Relationship:</span>
-                  {{ student[0].GUARDIAN_RELATIONSHIP || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Address:</span>
-                </p>
-                <p class="card-text">
-                  {{ student[0].GUARDIAN_RESIDENTIAL_ADDRESS || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">City:</span>
-                  {{ student[0].GUARDIAN_RESIDENTIAL_CITY || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Postcode:</span>
-                  {{ student[0].GUARDIAN_RESIDENTIAL_POSTCODE || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">State:</span>
-                  {{ student[0].GUARDIAN_RESIDENTIAL_STATE || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Country:</span>
-                  {{ student[0].GUARDIAN_RESIDENTIAL_COUNTRY || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Mobile Number:</span>
-                  {{ student[0].GUARDIAN_MOBILE_TEL || "N/A" }}
-                </p>
-              </li>
-              <li class="list-group-item">
-                <p class="card-text">
-                  <span class="font-weight-bold">Email Address::</span>
-                </p>
-                <p class="card-text">
-                  {{ student[0].GUARDIAN_EMAIL || "N/A" }}
-                </p>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <ng-template #noResults>
-        <h3 class="user-message my-5 p-5 text-center" style="line-height: 3rem">
-          No results has been found for the student ID that you have entered
-        </h3>
-      </ng-template>
-    </ng-template>
-    <ng-template #loading>
-      <div class="row">
-        <div class="col-12 p-5 my-3">
-          <skeleton-item height="25px" width="75%"></skeleton-item>
-          <div class="row my-2">
-            <div class="col-4">
-              <skeleton-item height="20px" width="100%"></skeleton-item>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Name:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.PARENTS_NAME"
+                  name="PARENTS_NAME"
+                ></ion-input>
+              </ion-item>
             </div>
-            |
-            <div class="col-3">
-              <skeleton-item height="20px" width="100%"></skeleton-item>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label for="exampleFormControlSelect1"
+                  >Relationship:</ion-label
+                >
+                <ion-select
+                  [(ngModel)]="studentConsentForm.PARENTS_RELATIONSHIP"
+                  name="PARENTS_RELATIONSHIP"
+                >
+                  <ion-option value="Father">Father</ion-option>
+                  <ion-option value="Mother">Mother</ion-option>
+                  <ion-option value="Uncle">Uncle</ion-option>
+                  <ion-option value="Aunty">Aunty</ion-option>
+                  <ion-option value="Brother">Brother</ion-option>
+                  <ion-option value="Sister">Sister</ion-option>
+                  <ion-option value="Husband">Husband</ion-option>
+                  <ion-option value="Wife">Wife</ion-option>
+                  <ion-option value="Guardian">Guardian</ion-option>
+                  <ion-option value="Other">Other</ion-option>
+                </ion-select>
+              </ion-item>
+            </div>
+
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Address:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_ADDRESS"
+                  name="PARENTS_RESIDENTIAL_ADDRESS"
+                ></ion-input>
+              </ion-item>
+            </div>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>City:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_CITY"
+                  name="PARENTS_RESIDENTIAL_CITY"
+                ></ion-input>
+              </ion-item>
+            </div>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Postcode:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_POSTCODE"
+                  name="PARENTS_RESIDENTIAL_POSTCODE"
+                ></ion-input>
+              </ion-item>
+            </div>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>State:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_STATE"
+                  name="PARENTS_RESIDENTIAL_STATE"
+                ></ion-input>
+              </ion-item>
+            </div>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Country:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_COUNTRY"
+                  name="PARENTS_RESIDENTIAL_COUNTRY"
+                ></ion-input>
+              </ion-item>
+            </div>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Mobile:</ion-label>
+                <ion-input
+                  type="tel"
+                  [(ngModel)]="studentConsentForm.PARENTS_MOBILE_TEL"
+                  name="PARENTS_MOBILE_TEL"
+                ></ion-input>
+              </ion-item>
+            </div>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Email:</ion-label>
+                <ion-input
+                  type="email"
+                  [(ngModel)]="studentConsentForm.PARENTS_EMAIL"
+                  name="PARENTS_EMAIL"
+                ></ion-input>
+              </ion-item>
             </div>
           </div>
 
           <div class="list-of-data my-5">
             <h4 class="card-subtitle mb-2">
-              <skeleton-item height="25px" width="45%"></skeleton-item>
+              Alternate Person<small>(If any)</small>:
             </h4>
-            <ul class="list-group">
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-            </ul>
-          </div>
 
-          <div class="list-of-data my-5">
-            <h4 class="card-subtitle mb-2">
-              <skeleton-item height="25px" width="45%"></skeleton-item>
-            </h4>
-            <ul class="list-group">
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-            </ul>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Name:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.GUARDIAN_NAME"
+                  name="GUARDIAN_NAME"
+                ></ion-input>
+              </ion-item>
+            </div>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label for="exampleFormControlSelect1"
+                  >Relationship:</ion-label
+                >
+                <ion-select
+                  [(ngModel)]="studentConsentForm.GUARDIAN_RELATIONSHIP"
+                  name="GUARDIAN_RELATIONSHIP"
+                >
+                  <ion-option value="Father">Father</ion-option>
+                  <ion-option value="Mother">Mother</ion-option>
+                  <ion-option value="Uncle">Uncle</ion-option>
+                  <ion-option value="Aunty">Aunty</ion-option>
+                  <ion-option value="Brother">Brother</ion-option>
+                  <ion-option value="Sister">Sister</ion-option>
+                  <ion-option value="Husband">Husband</ion-option>
+                  <ion-option value="Wife">Wife</ion-option>
+                  <ion-option value="Guardian">Guardian</ion-option>
+                  <ion-option value="Other">Other</ion-option>
+                </ion-select>
+              </ion-item>
+            </div>
+
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Address:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_ADDRESS"
+                  name="GUARDIAN_RESIDENTIAL_ADDRESS"
+                ></ion-input>
+              </ion-item>
+            </div>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>City:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_CITY"
+                  name="GUARDIAN_RESIDENTIAL_CITY"
+                ></ion-input>
+              </ion-item>
+            </div>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Postcode:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_POSTCODE"
+                  name="GUARDIAN_RESIDENTIAL_POSTCODE"
+                ></ion-input>
+              </ion-item>
+            </div>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>State:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_STATE"
+                  name="GUARDIAN_RESIDENTIAL_STATE"
+                ></ion-input>
+              </ion-item>
+            </div>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Country:</ion-label>
+                <ion-input
+                  type="text"
+                  [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_COUNTRY"
+                  name="GUARDIAN_RESIDENTIAL_COUNTRY"
+                ></ion-input>
+              </ion-item>
+            </div>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Mobile:</ion-label>
+                <ion-input
+                  type="tel"
+                  [(ngModel)]="studentConsentForm.GUARDIAN_MOBILE_TEL"
+                  name="GUARDIAN_MOBILE_TEL"
+                ></ion-input>
+              </ion-item>
+            </div>
+            <div class="form-group">
+              <ion-item no-lines>
+                <ion-label>Email:</ion-label>
+                <ion-input
+                  type="email"
+                  [(ngModel)]="studentConsentForm.GUARDIAN_EMAIL"
+                  name="GUARDIAN_EMAIL"
+                ></ion-input>
+              </ion-item>
+            </div>
           </div>
-          <div class="list-of-data my-5">
-            <h4 class="card-subtitle mb-2">
-              <skeleton-item height="25px" width="45%"></skeleton-item>
-            </h4>
-            <ul class="list-group">
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-              <li class="list-group-item">
-                <skeleton-item height="25px" width="100%"></skeleton-item>
-              </li>
-            </ul>
-          </div>
-        </div>
+          <button class="btn btn-success" type="submit">Submit</button>
+        </form>
       </div>
-    </ng-template>
+    </div>
   </div>
 </ion-content>

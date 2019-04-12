@@ -880,8 +880,8 @@ $light_menu_colors: (
     }
   }
 
-  // STUDENTS CONSENT FORM PAGE
-  page-student-consent-form {
+  // STUDENTS CONSENT FORM VIEW & EDIT PAGES
+  page-student-consent-form, page-student-consent-form-edit {
     .input-elements-wrabber {
       background-color: color($light_colors, light_white_background);
       border-color: color($light_colors, light_light_grey_color);

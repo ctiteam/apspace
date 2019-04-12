@@ -1,5 +1,5 @@
 export interface StudentConsentProfile {
-  E_MAIL: "mohammad17@hotmail.com;mohammad17@hotmail.com", 
+  E_MAIL: string, 
   GUARDIAN_EMAIL: string, 
   GUARDIAN_MOBILE_TEL: string, 
   GUARDIAN_NAME: string, 
