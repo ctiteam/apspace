@@ -19,9 +19,18 @@ export class StudentConsentFormlPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private ws: WsApiProvider
-  ) {}
+  ) { }
 
-  ionViewDidLoad() {}
+  ionViewDidLoad() {
+
+  }
+
+  ionViewWillEnter() {
+    if (this.searchKeyword) {
+      console.log(this.searchKeyword);
+      this.searchForStudent();
+    }
+  }
 
   searchForStudent() {
     let url = "https://ztmu4mdu21.execute-api.ap-southeast-1.amazonaws.com/dev";
