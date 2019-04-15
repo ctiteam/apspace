@@ -142,7 +142,10 @@ $primary_color: #7f8c8d;
       }
     }
     button[ion-fab] {
-      background-color: #1e1d1e;
+      background-color: $primary_color;
+    }
+    span[qa-color] {
+      color: $primary_color;
     }
   }
 

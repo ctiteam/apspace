@@ -15,7 +15,6 @@ import { WsApiProvider } from '../../providers';
 export class PasswordRecoveryPage {
   showEmailNotValidMsg = false;
   qa = {} as Sqa;
-  editMode = false;
   isLoading = false;
 
   // THIS REGULAR EXPERSSION FOLLOWS THE RFC 2822 STANDARD
@@ -27,11 +26,8 @@ export class PasswordRecoveryPage {
     this.getConfig();
   }
 
-  onEdit() {
-    this.editMode = true;
-  }
-
   onchangeEmail(){
+    console.log("changing");
     let responseOfRegEx = this.qa.secondaryEmail.match(this.emailValidationRegularExp);
     if(!responseOfRegEx){
       this.showEmailNotValidMsg = true;
@@ -51,7 +47,6 @@ export class PasswordRecoveryPage {
     const body = new HttpParams({ fromObject: { ...v }}).toString();
     const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
     this.ws.post('/sqa/', { body, headers }).subscribe();
-    this.editMode = false;
   }
 
 }
