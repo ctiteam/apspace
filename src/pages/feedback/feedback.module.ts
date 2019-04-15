@@ -4,6 +4,7 @@ import { FeedbackPage } from './feedback';
 
 import { DirectivesModule } from '../../directives/directives.module';
 import { VersionProvider } from '../../providers';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { VersionProvider } from '../../providers';
   ],
   providers: [
     VersionProvider,
+    InAppBrowser
   ],
 })
 export class FeedbackPageModule { }

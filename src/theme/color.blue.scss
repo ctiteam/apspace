@@ -39,6 +39,18 @@ $primary_color: #1297e0;
   .menu-button ion-icon {
     color: $primary_color !important;
   }
+  .colorful-text {
+    color: $primary_color !important;
+  }
+  .colorful-button {
+    background-color: $primary_color;
+    border-color: $primary_color !important;
+    &:hover {
+      border-color: $primary_color !important;
+      color: $primary_color !important;
+    }
+  }
+
   // END OF GENERAL STYLES
 
   // PROFILE PAGE
@@ -114,9 +126,6 @@ $primary_color: #1297e0;
   // FEEDBACK PAGE
   page-feedback,
   page-password-recovery {
-    ion-label.label {
-      color: $primary_color;
-    }
     .submit-button {
       background-color: $primary_color;
     }
@@ -133,6 +142,9 @@ $primary_color: #1297e0;
     }
     button[ion-fab] {
       background-color: $primary_color;
+    }
+    span[qa-color] {
+      color: $primary_color;
     }
   }
 
@@ -416,18 +428,10 @@ $primary_color: #1297e0;
     }
   }
 
-  // QUALIFICATION AUTHENTICITY VERIFICATION PAGE
-  page-qualification-verification {
-    .colorful-text {
-      color: $primary_color !important;
-    }
-    .colorful-button {
-      background-color: $primary_color;
-      border-color: $primary_color !important;
-      &:hover {
-        border-color: $primary_color !important;
-        color: $primary_color !important;
-      }
+  // STUDENTS CONSENT FORM PAGE
+  page-student-consent-form {
+    .card-subtitle {
+      color: $primary_color;
     }
   }
 

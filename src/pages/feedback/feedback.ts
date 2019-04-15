@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, ToastController } from 'ionic-angular';
 
 import { FeedbackProvider, VersionProvider } from '../../providers';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @IonicPage()
 @Component({
@@ -9,7 +10,7 @@ import { FeedbackProvider, VersionProvider } from '../../providers';
   templateUrl: 'feedback.html',
 })
 export class FeedbackPage {
-
+  onlineFeedbackSystemURL = 'https://erp.apiit.edu.my/easymoo/web/en/user/feedback/feedbackusersend';
   contactNo: string;
   message: string;
   platform: string;
@@ -23,6 +24,7 @@ export class FeedbackPage {
     private feedback: FeedbackProvider,
     private toastCtrl: ToastController,
     private version: VersionProvider,
+    private iab: InAppBrowser
   ) { }
 
   submitFeedback() {
@@ -61,6 +63,10 @@ export class FeedbackPage {
   ionViewDidLoad() {
     this.platform = this.feedback.platform();
     this.appVersion = this.version.name;
+  }
+
+  openOnlineFeedbackSystem(){
+    this.iab.create(`${this.onlineFeedbackSystemURL}`, '_blank', 'location=true');
   }
 
 }

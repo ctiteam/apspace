@@ -55,19 +55,16 @@
             (ngModelChange)="onFilter()"
           ></ion-input>
         </ion-item>
-        <div class="py-4 px-2">
-          <button
-            class="btn btn-outline btn-dark btn-block btn-lg"
-            (click)="showHistory()"
+        <ion-item>
+          <ion-label>Show</ion-label>
+          <ion-select
+            [(ngModel)]="showSelect"
+            (ngModelChange)="toggleHistory()"
           >
-            <span *ngIf="notifications === 'all'">
-              Show unread only
-            </span>
-            <span *ngIf="notifications === 'unread'">
-              Show History
-            </span>
-          </button>
-        </div>
+            <ion-option selected value="all">All</ion-option>
+            <ion-option value="unread">Unread messages only</ion-option>
+          </ion-select>
+        </ion-item>
       </div>
     </div>
   </ion-content>
@@ -208,9 +205,10 @@
             </div>
           </div>
           <ng-template #noUnreadMessage>
-            <h5 class="text-center p-4 notification-desktop">You do not have any unread messages</h5>
+            <h5 class="text-center p-4 notification-desktop">
+              You do not have any unread messages
+            </h5>
           </ng-template>
-          
         </ng-template>
       </div>
     </ng-container>

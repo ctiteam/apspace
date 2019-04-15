@@ -1,83 +1,185 @@
 <ion-header>
   <ion-navbar>
-    <ion-buttons left>
-      <button ion-button outline small (click)="chooseWeek()"
-        [disabled]="availableWeek && availableWeek.length === 0"
-        class="notification-button colored-border">
-        {{ (selectedDate | date) || "Weeks" }}
+    <ion-title>Timetable</ion-title>
+    <ion-buttons end>
+      <button
+        ion-button
+        icon-only
+        clear
+        class="notification-button colored-border"
+        (click)="chooseWeek()"
+      >
+        <ion-icon name="calendar"></ion-icon>
       </button>
-    </ion-buttons>
-    <ion-buttons right>
-      <button ion-button outline small (click)="presentIntakeSearch()"
-        class="notification-button colored-border">
-        {{ intake || "Intakes" }}
+      <button
+        ion-button
+        icon-only
+        clear
+        class="notification-button colored-border"
+        (click)="toggleFilterMenu()"
+      >
+        <ion-icon name="search"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-menu [content]="content" side="right">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons end>
+        <button ion-button icon-only (click)="toggleFilterMenu()">
+          <ion-icon name="close"></ion-icon>
+        </button>
+      </ion-buttons>
+      <ion-searchbar
+        placeholder="Enter intake code"
+        [formControl]="searchControl"
+      ></ion-searchbar>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <div class="row">
+      <div class="col-12">
+        <ion-list
+          no-lines
+          class="mt-4"
+          *ngIf="(searchIntake$ | async) as intakes"
+        >
+          <ng-template [ngIf]="intakes.length > 0" [ngIfElse]="notFound">
+            <p class="text-center">
+              <span class="font-weight-bold">{{ intakes.length }}</span> Intakes
+              found:
+            </p>
+            <button
+              ion-item
+              *ngFor="let intake of intakes"
+              (click)="select(intake)"
+            >
+              {{ intake }}
+            </button>
+          </ng-template>
+          <ng-template #notFound>
+            <ion-item>Not Intake Found</ion-item>
+          </ng-template>
+        </ion-list>
+      </div>
+    </div>
+  </ion-content>
+</ion-menu>
+
+<ion-content #content>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="refresh">
-    </ion-refresher-content>
+    <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
   <div class="container p-0">
+    <div class="row mt-3" *ngIf="intake">
+      <div class="col-12 px-5 py-2">
+        <p>
+          Selected Intake:
+          <span class="font-weight-bold"> {{ intake }}</span>
+        </p>
+        <p>
+          Selected Date:
+          <span class="font-weight-bold">
+            {{ (selectedDate | date) || "N/A" }}
+          </span>
+        </p>
+      </div>
+    </div>
+    <ng-template
+      let-timetables
+      [ngIf]="timetable$ | async"
+      [ngIfElse]="timetableLoading"
+    >
+      <ion-segment
+        *ngIf="availableDate"
+        [ngModel]="selectedDate | date: 'E' | uppercase"
+        (ngModelChange)="
+          selectedDate = availableDate[availableDays.indexOf($event)]
+        "
+      >
+        <ion-segment-button
+          *ngFor="let d of wday; index as i"
+          [value]="d"
+          [style.display]="
+            availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'
+          "
+        >
+          {{ d }}
+        </ion-segment-button>
+      </ion-segment>
 
-  <ng-template let-timetables [ngIf]="timetable$ | async" [ngIfElse]="timetableLoading">
-      <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date:'E' | uppercase"
-    (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
-      <ion-segment-button *ngFor="let d of wday; index as i" [value]="d"
-        [style.display]="availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'">
-        {{ d }}
-      </ion-segment-button>
-    </ion-segment>
+      <ion-card
+        *ngFor="let t of (timetables | classes: intake | theday: selectedDate)"
+        [style.borderLeft]="'0.4rem solid ' + strToColor(t.MODID)"
+      >
+        <ion-card-header>
+          <h2>{{ t.MODID }}</h2>
+          <p class="font-weight-bold">{{ t.TIME_FROM }} - {{ t.TIME_TO }}</p>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-label no-margin>
+            <ion-icon padding-right name="locate"></ion-icon>
+            {{ t.ROOM }} │ {{ t.LOCATION }}
+          </ion-label>
+          <ion-label no-margin>
+            <a (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
+              <ion-icon padding-right name="contact"></ion-icon>
+              {{ t.NAME }}
+            </a>
+          </ion-label>
+        </ion-card-content>
+      </ion-card>
 
-    <ion-card *ngFor="let t of timetables | classes:intake | theday:selectedDate"
-    [style.borderLeft]="'0.4rem solid ' + strToColor(t.MODID)">
-    <ion-card-header>
-      <h2>{{ t.MODID }}</h2>
-      <p class="font-weight-bold">{{ t.TIME_FROM }} - {{ t.TIME_TO }}</p>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-label no-margin>
-        <ion-icon padding-right name="locate"></ion-icon>
-        {{ t.ROOM }} │ {{ t.LOCATION }}
-      </ion-label>
-      <ion-label no-margin>
-        <a (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
-          <ion-icon padding-right name="contact"></ion-icon>
-          {{ t.NAME }}
-        </a>
-      </ion-label>
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card *ngIf="!selectedDate || !intake" class="no-classes-message">
-    <ion-card-content>
-      <p *ngIf="intake; else noIntake">Hooray! No classes this week! :D</p>
-      <ng-template #noIntake>Please select an intake.</ng-template>
-    </ion-card-content>
-  </ion-card>
-
-  </ng-template>
-  <ng-template #timetableLoading>
+      <div
+        *ngIf="!selectedDate || !intake"
+        class="row mt-5 no-classes-message"
+      >
+        <div class="col-12">
+          <p class="text-center" *ngIf="intake; else noIntake">
+            Hooray! No classes this week! :D
+          </p>
+          <ng-template #noIntake>
+            <p class="normaltext text-center">
+              To check the timetable, please
+                  <a
+                    style="text-decoration: underline"
+                    class="colorful-text font-weight-bold"
+                    (click)="toggleFilterMenu()"
+                    >select an intake</a
+                  >
+                  first
+            </p>
+          </ng-template>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template #timetableLoading>
       <div class="row my-4 px-3">
-        <div class="col-3"><skeleton-item height="25px" width="100%"></skeleton-item></div>
-        <div class="col-3"><skeleton-item height="25px" width="100%"></skeleton-item></div>
-        <div class="col-3"><skeleton-item height="25px" width="100%"></skeleton-item></div>
-        <div class="col-3"><skeleton-item height="25px" width="100%"></skeleton-item></div>
+        <div class="col-3">
+          <skeleton-item height="25px" width="100%"></skeleton-item>
+        </div>
+        <div class="col-3">
+          <skeleton-item height="25px" width="100%"></skeleton-item>
+        </div>
+        <div class="col-3">
+          <skeleton-item height="25px" width="100%"></skeleton-item>
+        </div>
+        <div class="col-3">
+          <skeleton-item height="25px" width="100%"></skeleton-item>
+        </div>
       </div>
       <ion-card *ngFor="let i of numOfSkeletons">
-      <ion-card-header class="mb-4">
+        <ion-card-header class="mb-4">
           <skeleton-item height="25px" width="50%"></skeleton-item>
-          <skeleton-item height="20px" width="60%"></skeleton-item>        
-      </ion-card-header>
-      <ion-card-content>
-          <skeleton-item height="20px" width="70%"></skeleton-item>        
-          <skeleton-item height="20px" width="80%"></skeleton-item>        
-      </ion-card-content>
-    </ion-card>
-  </ng-template>
-</div>
-
+          <skeleton-item height="20px" width="60%"></skeleton-item>
+        </ion-card-header>
+        <ion-card-content>
+          <skeleton-item height="20px" width="70%"></skeleton-item>
+          <skeleton-item height="20px" width="80%"></skeleton-item>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+  </div>
 </ion-content>

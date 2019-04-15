@@ -404,11 +404,8 @@
                 [ngIf]="attendance$ | async"
                 [ngIfElse]="loadingAttendance"
               >
-              <div class="col-12 col-md-6">
-                <div
-                  class="section low-attendance-section"
-                  *ngIf="attendance.length > 0"
-                >
+              <div class="col-12 col-md-6" *ngIf="attendance.length > 0">
+                <div class="section low-attendance-section">
                   <!-- START SECTION 10 HEADER -->
                   <div class="section-header">
                     <div

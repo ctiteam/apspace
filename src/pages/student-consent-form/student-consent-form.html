@@ -1,0 +1,347 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Student Consent Form</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="container p-0">
+    <div class="row">
+      <div class="col-10 m-auto px-4 pt-4">
+        <div class="row input-elements-wrabber">
+          <div class="col-10 input-wrapper">
+            <ion-input
+              placeholder="Student ID"
+              [(ngModel)]="searchKeyword"
+            ></ion-input>
+          </div>
+          <div class="col-2 m-auto p-0 text-center">
+            <button
+              ion-button
+              icon-only
+              clear
+              (click)="searchForStudent()"
+              [disabled]="!this.searchKeyword || this.searchKeyword == ''"
+            >
+              <ion-icon name="search"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template [ngIf]="userSearched" [ngIfElse]="userDidNotSearch">
+      <ng-template let-student [ngIf]="student$ | async" [ngIfElse]="loading">
+        <div class="row" *ngIf="student[0]; else noResults">
+          <div class="col-12 p-5">
+            <h2 class="card-title">{{ student[0].STUDENT_NAME }}</h2>
+            <div class="row">
+              <div class="col-8">
+                <h4 class="card-subtitle my-2 text-muted">
+                  {{ student[0].STUDENT_ID }} |
+                  <span
+                    [style.color]="
+                      student[0].STUDENT_STATUS.toUpperCase() === 'COMPLETED'
+                        ? '#1297e0'
+                        : student[0].STUDENT_STATUS.toUpperCase() === 'ACTIVE'
+                        ? 'green'
+                        : student[0].STUDENT_STATUS.toUpperCase() === 'DEFER' ||
+                          student[0].STUDENT_STATUS.toUpperCase() ===
+                            'WITHDRAW' ||
+                          student[0].STUDENT_STATUS.toUpperCase() === 'DROP'
+                        ? 'orange'
+                        : student[0].STUDENT_STATUS.toUpperCase() ===
+                          'SUSPENDED'
+                        ? 'red'
+                        : ''
+                    "
+                    >{{ student[0].STUDENT_STATUS }}</span
+                  >
+                </h4>
+              </div>
+              <div class="col-4 text-right pr-5">
+                <a class="card-link colorful-text" (click)="openEditFormPage()">
+                  Edit
+                  <ion-icon name="create"></ion-icon>
+                </a>
+              </div>
+            </div>
+
+            <div class="list-of-data my-5">
+              <h4 class="card-subtitle mb-2">
+                Student Information:
+              </h4>
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Mobile Number:</span>
+                    {{ student[0].MOBILE_TEL_NO }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Email Address(es):</span>
+                  </p>
+                  <p class="card-text">
+                    {{
+                      student[0].E_MAIL.replace(
+                        ";",
+                        " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "
+                      )
+                    }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Scholarship:</span>
+                    {{ student[0].SCHOLARSCHIP || "N/A" }}
+                  </p>
+                </li>
+              </ul>
+            </div>
+
+            <div class="list-of-data my-5">
+              <h4 class="card-subtitle mb-2">
+                Parent/Guardian Information:
+              </h4>
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Name:</span>
+                    {{ student[0].PARENTS_NAME || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Relationship:</span>
+                    {{ student[0].PARENTS_RELATIONSHIP || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Address:</span>
+                  </p>
+                  <p class="card-text">
+                    {{ student[0].PARENTS_RESIDENTIAL_ADDRESS || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">City:</span>
+                    {{ student[0].PARENTS_RESIDENTIAL_CITY || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Postcode:</span>
+                    {{ student[0].PARENTS_RESIDENTIAL_POSTCODE || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">State:</span>
+                    {{ student[0].PARENTS_RESIDENTIAL_STATE || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Country:</span>
+                    {{ student[0].PARENTS_RESIDENTIAL_COUNTRY || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Mobile Number:</span>
+                    {{ student[0].PARENTS_MOBILE_TEL || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Email Address::</span>
+                  </p>
+                  <p class="card-text">
+                    {{ student[0].PARENTS_EMAIL || "N/A" }}
+                  </p>
+                </li>
+              </ul>
+            </div>
+
+            <div class="list-of-data my-5">
+              <h4 class="card-subtitle mb-2">
+                Alternate Person:
+              </h4>
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Name:</span>
+                    {{ student[0].GUARDIAN_NAME || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Relationship:</span>
+                    {{ student[0].GUARDIAN_RELATIONSHIP || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Address:</span>
+                  </p>
+                  <p class="card-text">
+                    {{ student[0].GUARDIAN_RESIDENTIAL_ADDRESS || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">City:</span>
+                    {{ student[0].GUARDIAN_RESIDENTIAL_CITY || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Postcode:</span>
+                    {{ student[0].GUARDIAN_RESIDENTIAL_POSTCODE || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">State:</span>
+                    {{ student[0].GUARDIAN_RESIDENTIAL_STATE || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Country:</span>
+                    {{ student[0].GUARDIAN_RESIDENTIAL_COUNTRY || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Mobile Number:</span>
+                    {{ student[0].GUARDIAN_MOBILE_TEL || "N/A" }}
+                  </p>
+                </li>
+                <li class="list-group-item">
+                  <p class="card-text">
+                    <span class="font-weight-bold">Email Address::</span>
+                  </p>
+                  <p class="card-text">
+                    {{ student[0].GUARDIAN_EMAIL || "N/A" }}
+                  </p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <ng-template #noResults>
+          <h3
+            class="user-message my-5 p-5 text-center"
+            style="line-height: 3rem"
+          >
+            No results has been found for the student ID that you have entered
+          </h3>
+        </ng-template>
+      </ng-template>
+      <ng-template #loading>
+        <div class="row">
+          <div class="col-12 p-5 my-3">
+            <skeleton-item height="25px" width="75%"></skeleton-item>
+            <div class="row my-2">
+              <div class="col-4">
+                <skeleton-item height="20px" width="100%"></skeleton-item>
+              </div>
+              |
+              <div class="col-3">
+                <skeleton-item height="20px" width="100%"></skeleton-item>
+              </div>
+            </div>
+
+            <div class="list-of-data my-5">
+              <h4 class="card-subtitle mb-2">
+                <skeleton-item height="25px" width="45%"></skeleton-item>
+              </h4>
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+              </ul>
+            </div>
+
+            <div class="list-of-data my-5">
+              <h4 class="card-subtitle mb-2">
+                <skeleton-item height="25px" width="45%"></skeleton-item>
+              </h4>
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+              </ul>
+            </div>
+            <div class="list-of-data my-5">
+              <h4 class="card-subtitle mb-2">
+                <skeleton-item height="25px" width="45%"></skeleton-item>
+              </h4>
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+                <li class="list-group-item">
+                  <skeleton-item height="25px" width="100%"></skeleton-item>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ng-template>
+    <ng-template #userDidNotSearch>
+      <h3 class="my-5 p-5 text-center user-message" style="line-height: 3rem">
+        Enter student's ID (TP Number) to view/edit their details
+      </h3>
+    </ng-template>
+  </div>
+</ion-content>
