@@ -423,6 +423,15 @@ $dark_menu_colors: (
     h4 {
       color: color($dark_colors, dark_dark_grey_color);
     }
+    span[qa-bg] {
+      background-color: color($dark_colors, dark_item_background);
+      border-color: color($dark_colors, dark_background);
+    }
+    input[qa-input-bg] {
+      background-color: #575858;
+      border-color: color($dark_colors, dark_background);
+      color: color($dark_colors, dark_item_background);
+    }
   }
 
   // HOLIDAYS PAGE

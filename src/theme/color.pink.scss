@@ -144,6 +144,9 @@ $primary_color: #f18c8e;
     button[ion-fab] {
       background-color: $primary_color;
     }
+    span[qa-color] {
+      color: $primary_color;
+    }
   }
 
   // HOLIDAYS PAGE
