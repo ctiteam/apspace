@@ -83,7 +83,7 @@ export class MorePage {
           desc: 'green',
           color: 'green',
           icon: 'paper',
-          role: Role.Student,
+          role: Role.Student ,
         },
         {
           title: 'Knowledge Base',
@@ -92,7 +92,7 @@ export class MorePage {
           desc: 'dark-orange',
           color: 'dark-orange',
           icon: 'paper',
-          role: Role.Student,
+          role: Role.Student | Role.Lecturer | Role.Admin,
         },
         {
           title: 'Forms & Application',
