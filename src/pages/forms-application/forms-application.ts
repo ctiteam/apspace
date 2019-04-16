@@ -11,7 +11,7 @@ import { CasTicketProvider } from '../../providers';
 })
 export class FormsApplicationPage {
 
-  formsApplicationUrl = 'http://forms.sites.apiit.edu.my/';
+  formsApplicationUrl = 'http://forms.sites.apiit.edu.my/home/';
 
   constructor(
     private cas: CasTicketProvider,
