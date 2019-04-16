@@ -11,8 +11,7 @@
         <h2 class="card-title">{{ studentConsentForm.STUDENT_NAME }}</h2>
         <h4 class="card-subtitle my-2 text-muted">
           {{ studentConsentForm.STUDENT_ID }} |
-          <span
-            [style.color]="
+          <span [style.color]="
               studentConsentForm.STUDENT_STATUS.toUpperCase() === 'COMPLETED'
                 ? '#1297e0'
                 : studentConsentForm.STUDENT_STATUS.toUpperCase() === 'ACTIVE'
@@ -26,11 +25,9 @@
                   'SUSPENDED'
                 ? 'red'
                 : ''
-            "
-            >{{ studentConsentForm.STUDENT_STATUS }}</span
-          >
+            ">{{ studentConsentForm.STUDENT_STATUS }}</span>
         </h4>
-        <form (ngSubmit)="submitForm()">
+        <form [formGroup]="consentForm" (ngSubmit)="submitForm()">
           <div class="list-of-data my-5">
             <h4 class="card-subtitle mb-2">
               Student Information:
@@ -39,22 +36,22 @@
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Mobile:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.MOBILE_TEL_NO"
-                  name="MOBILE_TEL_NO"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.MOBILE_TEL_NO" formControlName="MOBILE_TEL_NO">
+                </ion-input>
               </ion-item>
+              <small
+                *ngIf="studentConsentForm.GUARDIAN_MOBILE_TEL && !studentConsentForm.MOBILE_TEL_NO.match(phoneValidationRegularExp)"
+                style="color:#ff4444">
+                Mobile number can contain only <strong>numbers</strong>, <strong>spaces</strong>, <strong>/</strong>,
+                and <strong>-</strong>. Also, it <strong>MUST</strong> start with either <strong>+</strong> or
+                <strong>00</strong>
+              </small>
             </div>
 
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Email:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.E_MAIL"
-                  name="E_MAIL"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.E_MAIL" formControlName="E_MAIL"></ion-input>
               </ion-item>
             </div>
           </div>
@@ -67,32 +64,17 @@
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Name:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.PARENTS_NAME"
-                  name="PARENTS_NAME"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.PARENTS_NAME" formControlName="PARENTS_NAME">
+                </ion-input>
               </ion-item>
             </div>
             <div class="form-group">
               <ion-item no-lines>
-                <ion-label for="exampleFormControlSelect1"
-                  >Relationship:</ion-label
-                >
-                <ion-select
-                  [(ngModel)]="studentConsentForm.PARENTS_RELATIONSHIP"
-                  name="PARENTS_RELATIONSHIP"
-                >
-                  <ion-option value="Father">Father</ion-option>
-                  <ion-option value="Mother">Mother</ion-option>
-                  <ion-option value="Uncle">Uncle</ion-option>
-                  <ion-option value="Aunty">Aunty</ion-option>
-                  <ion-option value="Brother">Brother</ion-option>
-                  <ion-option value="Sister">Sister</ion-option>
-                  <ion-option value="Husband">Husband</ion-option>
-                  <ion-option value="Wife">Wife</ion-option>
-                  <ion-option value="Guardian">Guardian</ion-option>
-                  <ion-option value="Other">Other</ion-option>
+                <ion-label for="exampleFormControlSelect1">Relationship:</ion-label>
+                <ion-select [(ngModel)]="studentConsentForm.PARENTS_RELATIONSHIP"
+                  formControlName="PARENTS_RELATIONSHIP">
+                  <ion-option *ngFor="let relationship of realtionships" [value]="relationship">{{relationship}}
+                  </ion-option>
                 </ion-select>
               </ion-item>
             </div>
@@ -100,71 +82,58 @@
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Address:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_ADDRESS"
-                  name="PARENTS_RESIDENTIAL_ADDRESS"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_ADDRESS"
+                  formControlName="PARENTS_RESIDENTIAL_ADDRESS"></ion-input>
               </ion-item>
             </div>
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>City:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_CITY"
-                  name="PARENTS_RESIDENTIAL_CITY"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_CITY"
+                  formControlName="PARENTS_RESIDENTIAL_CITY"></ion-input>
               </ion-item>
             </div>
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Postcode:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_POSTCODE"
-                  name="PARENTS_RESIDENTIAL_POSTCODE"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_POSTCODE"
+                  formControlName="PARENTS_RESIDENTIAL_POSTCODE"></ion-input>
               </ion-item>
             </div>
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>State:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_STATE"
-                  name="PARENTS_RESIDENTIAL_STATE"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_STATE"
+                  formControlName="PARENTS_RESIDENTIAL_STATE"></ion-input>
               </ion-item>
             </div>
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Country:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_COUNTRY"
-                  name="PARENTS_RESIDENTIAL_COUNTRY"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_COUNTRY"
+                  formControlName="PARENTS_RESIDENTIAL_COUNTRY"></ion-input>
               </ion-item>
             </div>
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Mobile:</ion-label>
-                <ion-input
-                  type="tel"
-                  [(ngModel)]="studentConsentForm.PARENTS_MOBILE_TEL"
-                  name="PARENTS_MOBILE_TEL"
-                ></ion-input>
+                <ion-input type="tel" [(ngModel)]="studentConsentForm.PARENTS_MOBILE_TEL"
+                  formControlName="PARENTS_MOBILE_TEL"></ion-input>
               </ion-item>
+              <small
+                *ngIf="studentConsentForm.PARENTS_MOBILE_TEL && !studentConsentForm.PARENTS_MOBILE_TEL.match(phoneValidationRegularExp)"
+                style="color:#ff4444">
+                Mobile number can contain only <strong>numbers</strong>, <strong>spaces</strong>, <strong>/</strong>,
+                and <strong>-</strong>. Also, it <strong>MUST</strong> start with either <strong>+</strong> or
+                <strong>00</strong>
+              </small>
+
             </div>
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Email:</ion-label>
-                <ion-input
-                  type="email"
-                  [(ngModel)]="studentConsentForm.PARENTS_EMAIL"
-                  name="PARENTS_EMAIL"
-                ></ion-input>
+                <ion-input type="email" [(ngModel)]="studentConsentForm.PARENTS_EMAIL" formControlName="PARENTS_EMAIL">
+                </ion-input>
               </ion-item>
             </div>
           </div>
@@ -177,32 +146,17 @@
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Name:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.GUARDIAN_NAME"
-                  name="GUARDIAN_NAME"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.GUARDIAN_NAME" formControlName="GUARDIAN_NAME">
+                </ion-input>
               </ion-item>
             </div>
             <div class="form-group">
               <ion-item no-lines>
-                <ion-label for="exampleFormControlSelect1"
-                  >Relationship:</ion-label
-                >
-                <ion-select
-                  [(ngModel)]="studentConsentForm.GUARDIAN_RELATIONSHIP"
-                  name="GUARDIAN_RELATIONSHIP"
-                >
-                  <ion-option value="Father">Father</ion-option>
-                  <ion-option value="Mother">Mother</ion-option>
-                  <ion-option value="Uncle">Uncle</ion-option>
-                  <ion-option value="Aunty">Aunty</ion-option>
-                  <ion-option value="Brother">Brother</ion-option>
-                  <ion-option value="Sister">Sister</ion-option>
-                  <ion-option value="Husband">Husband</ion-option>
-                  <ion-option value="Wife">Wife</ion-option>
-                  <ion-option value="Guardian">Guardian</ion-option>
-                  <ion-option value="Other">Other</ion-option>
+                <ion-label for="exampleFormControlSelect1">Relationship:</ion-label>
+                <ion-select [(ngModel)]="studentConsentForm.GUARDIAN_RELATIONSHIP"
+                  formControlName="GUARDIAN_RELATIONSHIP">
+                  <ion-option *ngFor="let relationship of realtionships" [value]="relationship">{{relationship}}
+                  </ion-option>
                 </ion-select>
               </ion-item>
             </div>
@@ -210,75 +164,62 @@
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Address:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_ADDRESS"
-                  name="GUARDIAN_RESIDENTIAL_ADDRESS"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_ADDRESS"
+                  formControlName="GUARDIAN_RESIDENTIAL_ADDRESS"></ion-input>
               </ion-item>
             </div>
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>City:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_CITY"
-                  name="GUARDIAN_RESIDENTIAL_CITY"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_CITY"
+                  formControlName="GUARDIAN_RESIDENTIAL_CITY"></ion-input>
               </ion-item>
             </div>
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Postcode:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_POSTCODE"
-                  name="GUARDIAN_RESIDENTIAL_POSTCODE"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_POSTCODE"
+                  formControlName="GUARDIAN_RESIDENTIAL_POSTCODE"></ion-input>
               </ion-item>
             </div>
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>State:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_STATE"
-                  name="GUARDIAN_RESIDENTIAL_STATE"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_STATE"
+                  formControlName="GUARDIAN_RESIDENTIAL_STATE"></ion-input>
               </ion-item>
             </div>
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Country:</ion-label>
-                <ion-input
-                  type="text"
-                  [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_COUNTRY"
-                  name="GUARDIAN_RESIDENTIAL_COUNTRY"
-                ></ion-input>
+                <ion-input type="text" [(ngModel)]="studentConsentForm.GUARDIAN_RESIDENTIAL_COUNTRY"
+                  formControlName="GUARDIAN_RESIDENTIAL_COUNTRY"></ion-input>
               </ion-item>
             </div>
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Mobile:</ion-label>
-                <ion-input
-                  type="tel"
-                  [(ngModel)]="studentConsentForm.GUARDIAN_MOBILE_TEL"
-                  name="GUARDIAN_MOBILE_TEL"
-                ></ion-input>
+                <ion-input type="tel" [(ngModel)]="studentConsentForm.GUARDIAN_MOBILE_TEL"
+                  formControlName="GUARDIAN_MOBILE_TEL"></ion-input>
               </ion-item>
+              <small
+                *ngIf="studentConsentForm.GUARDIAN_MOBILE_TEL && !studentConsentForm.GUARDIAN_MOBILE_TEL.match(phoneValidationRegularExp)"
+                style="color:#ff4444">
+                Mobile number can contain only <strong>numbers</strong>, <strong>spaces</strong>, <strong>/</strong>,
+                and <strong>-</strong>. Also, it <strong>MUST</strong> start with either <strong>+</strong> or
+                <strong>00</strong>
+              </small>
             </div>
             <div class="form-group">
               <ion-item no-lines>
                 <ion-label>Email:</ion-label>
-                <ion-input
-                  type="email"
-                  [(ngModel)]="studentConsentForm.GUARDIAN_EMAIL"
-                  name="GUARDIAN_EMAIL"
-                ></ion-input>
+                <ion-input type="email" [(ngModel)]="studentConsentForm.GUARDIAN_EMAIL"
+                  formControlName="GUARDIAN_EMAIL"></ion-input>
               </ion-item>
             </div>
           </div>
-          <button class="btn btn-success btn-lg btn-block" type="submit">Submit</button>
+          <button class="btn btn-success btn-lg btn-block" type="submit"
+            [disabled]="consentForm.invalid">Submit</button>
         </form>
       </div>
     </div>
