@@ -6,12 +6,12 @@ import { CasTicketProvider } from '../../providers';
 
 @IonicPage()
 @Component({
-  selector: 'page-forms-application',
+  selector: 'page-kb',
   template: '',
 })
-export class FormsApplicationPage {
+export class KbPage {
 
-  formsApplicationUrl = 'http://forms.sites.apiit.edu.my/home/';
+  kbUrl = 'https://kb.sites.apiit.edu.my/';
 
   constructor(
     private cas: CasTicketProvider,
@@ -20,8 +20,8 @@ export class FormsApplicationPage {
   ) { }
 
   ionViewDidLoad() {
-    this.cas.getST(this.formsApplicationUrl)
-      .subscribe(st => this.iab.create(`${this.formsApplicationUrl}?ticket=${st}`, '_blank', 'location=true'));
+    this.cas.getST(this.kbUrl)
+      .subscribe(st => this.iab.create(`${this.kbUrl}?ticket=${st}`, '_blank', 'location=true'));
     this.navCtrl.pop();
   }
 }
