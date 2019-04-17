@@ -12,7 +12,7 @@ import { WsApiProvider } from "../../providers";
 export class StudentConsentFormlPage {
   student$: Observable<StudentConsentProfile>;
   studentData: StudentConsentProfile;
-  searchKeyword;
+  searchKeyword: string;
   userSearched = false;
 
   constructor(
@@ -37,7 +37,7 @@ export class StudentConsentFormlPage {
     if (this.searchKeyword || this.searchKeyword !== "") {
       this.userSearched = true;
       this.student$ = this.ws.get<StudentConsentProfile>(
-        `/staff/consent/student_profile/${this.searchKeyword}`,
+        `/staff/consent/student_profile/${this.searchKeyword.toUpperCase()}`,
         true,
         { url: url }
       );
