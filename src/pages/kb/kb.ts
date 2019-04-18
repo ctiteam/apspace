@@ -11,7 +11,7 @@ import { CasTicketProvider } from '../../providers';
 })
 export class KbPage {
 
-  kbUrl = 'https://kb.sites.apiit.edu.my/';
+  kbUrl = 'http://kb.sites.apiit.edu.my/home/';
 
   constructor(
     private cas: CasTicketProvider,
