@@ -97,7 +97,7 @@ export class MorePage {
         {
           title: 'Forms & Application',
           component: 'FormsApplicationPage',
-          size: 'large',
+          size: 'medium',
           desc: 'blue',
           color: 'blue',
           icon: 'clipboard',
@@ -111,6 +111,15 @@ export class MorePage {
           color: 'red',
           icon: 'card',
           role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'APLC Progress Report',
+          component: 'HomeProgressReportPage',
+          size: 'large',
+          desc: 'purple',
+          color: 'purple',
+          icon: 'card',
+          role: Role.Lecturer | Role.Admin,
         },
       ],
     },
@@ -213,7 +222,7 @@ export class MorePage {
       title: 'Others',
       items: [
         {
-          title: 'Award Verification Service',
+          title: 'Graduate Verification Service',
           component: 'QualificationVerificationPage',
           size: 'xlarge',
           desc: 'blue',
