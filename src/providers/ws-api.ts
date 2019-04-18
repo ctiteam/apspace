@@ -43,6 +43,7 @@ export class WsApiProvider {
    * @param options.responseType - override Http response type (default: "json")
    * @param options.timeout - request timeout (default: 10000)
    * @param options.url - url of web service (default: apiUrl)
+   * @param options.returnError - return error if `true` (default: `false`)
    * @return shared cached observable
    */
   get<T>(endpoint: string, refresh?: boolean, options: {
@@ -53,6 +54,7 @@ export class WsApiProvider {
     responseType?: any,
     timeout?: number,
     url?: string,
+    returnError?: boolean
   } = {}): Observable<T> {
     options = Object.assign({
       attempts: 4,
@@ -62,6 +64,7 @@ export class WsApiProvider {
       responseType: 'json',
       timeout: 20000,
       url: this.apiUrl,
+      returnError: false,
     }, options);
 
     const url = options.url + endpoint;
@@ -81,16 +84,27 @@ export class WsApiProvider {
         tap(cache => this.storage.set(endpoint, cache)),
         timeout(options.timeout),
         catchError(err => {
+          if (options.returnError) {
+            return Observable.throw(err);
+          }
           this.toastCtrl.create({ message: err.message, duration: 3000 }).present();
           return fromPromise(this.storage.get(endpoint)).pipe(
-            switchMap(v => v || obs_throw('retrying')),
+            switchMap(v => v || obs_throw("retrying")),
           );
         }),
-        retryWhen(errors => range(1, options.attempts).pipe(
-          zip(errors, i => 2 ** i + Math.random() * 8), // 2^n + random 0-8
-          mergeMap(i => timer(i * 1000)),
-        )),
-        catchError(of),
+        retryWhen(
+          errors =>
+          {
+            if(!options.returnError){
+              return range(1, options.attempts).pipe(
+                zip(errors, i => 2 ** i + Math.random() * 8), // 2^n + random 0-8
+                mergeMap(i => timer(i * 1000)),
+              )
+            }
+            return Observable.throw(errors); 
+
+          }
+        )
       )
       : fromPromise(this.storage.get(endpoint)).pipe(
         switchMap(v => v ? of(v) : this.get(endpoint, true, options)),
