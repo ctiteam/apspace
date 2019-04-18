@@ -1,0 +1,10 @@
+page-home-progress-report {
+    .button-dev-wrapper{
+        height: 200px;
+        background-color: red;
+        cursor: pointer;
+        &:nth-of-type(2){
+            background-color: green;
+        }
+    }
+}
