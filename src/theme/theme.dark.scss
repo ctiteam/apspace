@@ -1,1021 +1,965 @@
 // DARK THEME:
 $dark_colors: (
-  dark_background: #3c3d40,
-  dark_item_background: #292929,
-  dark_header_background: #1d1b1b,
-  dark_white_color: #ffffff,
-  dark_green_color: #2ecc71,
-  dark_red_color: #96564e,
-  dark_search_background_color: #c6c2c2,
-  dark_dark_grey_color: #908989
+	dark_background: #3c3d40,
+	dark_item_background: #292929,
+	dark_header_background: #1d1b1b,
+	dark_white_color: #ffffff,
+	dark_green_color: #2ecc71,
+	dark_red_color: #96564e,
+	dark_search_background_color: #c6c2c2,
+	dark_dark_grey_color: #908989
 );
 
 $dark_menu_colors: (
-  m_orange: #a26d42,
-  m_dark_orange: #a4482e,
-  m_blue: #2a5883,
-  m_green: #416956,
-  m_red: #933638,
-  m_purple: #7d4178
+	m_orange: #a26d42,
+	m_dark_orange: #a4482e,
+	m_blue: #2a5883,
+	m_green: #416956,
+	m_red: #933638,
+	m_purple: #7d4178
 );
 
 .dark-theme {
-  // TOOLBAR STYLES:
-  .toolbar-background {
-    background: color($dark_colors, dark_header_background);
-  }
-  .toolbar-title {
-    color: color($dark_colors, dark_search_background_color);
-  }
-
-  .menu-header .toolbar-background {
-    background: color($dark_colors, dark_background);
-  }
-
-  .bar-button-default-ios,
-  .bar-button-default.bar-button-ios-default,
-  .bar-button-clear-ios-default,
-  .bar-button-default-md,
-  .bar-button-clear-md-default,
-  .bar-button-md-default {
-    color: color($dark_colors, dark_search_background_color);
-  }
-
-  .toolbar-title-ios,
-  .toolbar-title-md {
-    color: color($dark_colors, dark_search_background_color);
-  }
-
-  // **********************************************************************
-  // MENU & TABS STYLES:
-  button.item {
-    color: color($dark_colors, dark_search_background_color) !important;
-    &.activeItem {
-      color: color($dark_colors, dark_search_background_color) !important;
-    }
-    .item-inner {
-      border: none;
-    }
-  }
-  .item-md,
-  .item-ios {
-    background-color: color($dark_colors, dark_item_background);
-  }
-  .profile .info h5 {
-    color: color($dark_colors, dark_search_background_color);
-  }
-  .profile .picture img {
-    border: 2px solid color($dark_colors, dark_header_background);
-  }
-  .searchbar .searchbar-input {
-    background-color: color($dark_colors, dark_item_background);
-    color: color($dark_colors, dark_search_background_color);
-  }
-
-  .searchbar .searchbar-input::placeholder {
-    color: color($dark_colors, dark_search_background_color);
-  }
-
-  .tabs .tabbar {
-    background: color($dark_colors, dark_header_background);
-  }
-
-  .tabs .tab-button,
-  .tabs .tab-button-icon {
-    color: color($dark_colors, dark_search_background_color);
-  }
-
-  .menu-section .menu-section-header {
-    color: color($dark_colors, dark_search_background_color);
-    background-color: color($dark_colors, dark_background);
-  }
-
-  .menu-item {
-    color: color($dark_colors, dark_search_background_color);
-  }
-
-  .menu-item.dark-orange {
-    background-color: color($dark_menu_colors, m_dark_orange);
-  }
-
-  .menu-item.orange {
-    background-color: color($dark_menu_colors, m_orange);
-  }
-
-  .menu-item.red {
-    background-color: color($dark_menu_colors, m_red);
-  }
-
-  .menu-item.green {
-    background-color: color($dark_menu_colors, m_green);
-  }
-
-  .menu-item.blue {
-    background-color: color($dark_menu_colors, m_blue);
-  }
-
-  .menu-item.purple {
-    background-color: color($dark_menu_colors, m_purple);
-  }
-
-  // **********************************************************************
-  // CONTENT STYLES
-  ion-content {
-    background-color: color($dark_colors, dark_background);
-  }
-  .quick-access-item {
-    color: color($dark_colors, dark_search_background_color);
-  }
-  .main-content .quick-access {
-    background-color: color($dark_colors, dark_background);
-  }
-  .main-content .section {
-    background-color: color($dark_colors, dark_item_background) !important;
-    color: color($dark_colors, dark_search_background_color) !important;
-    box-shadow: 1px 1px 1px color($dark_colors, dark_background),
-      -1px 0px 1px color($dark_colors, dark_background);
-    border-width: 5px 1px 1px 1px;
-  }
-  .main-content .section .section-header .section-header-icon {
-    background-color: color($dark_colors, dark_background);
-  }
-  .ct-series-a .ct-point,
-  .ct-series-a .ct-line,
-  .ct-series-a .ct-bar,
-  .ct-series-a .ct-slice-donut {
-    stroke: color($dark_colors, dark_green_color) !important;
-  }
-  .ct-series-b .ct-point,
-  .ct-series-b .ct-line,
-  .ct-series-b .ct-bar,
-  .ct-series-b .ct-slice-donut {
-    stroke: color($dark_colors, dark_red_color) !important;
-  }
-
-  ion-item {
-    background-color: color($dark_colors, dark_item_background);
-    color: color($dark_colors, dark_search_background_color);
-  }
-
-  .profile-info-section .profile-div img {
-    border: 2px solid color($dark_colors, dark_item_background);
-  }
-
-  .profile .info .username {
-    color: color($dark_colors, dark_search_background_color);
-  }
-
-  .notifications-section
-    .notifications-section-body
-    .notification-group
-    .notification-group-date {
-    background-color: color($dark_colors, dark_item_background);
-    box-shadow: 1px 1px 9px color($dark_colors, dark_background),
-      -1px -1px 9px color($dark_colors, dark_background);
-    color: color($dark_colors, dark_search_background_color);
-  }
-
-  .notifications-section
-    .notifications-section-body
-    .notification-group
-    .notification-group-messages
-    .notification {
-    border-bottom: 2px solid color($dark_colors, dark_item_background);
-    color: color($dark_colors, dark_search_background_color);
-  }
-
-  page-apcard {
-    .main-content {
-      .no-transactions-message {
-        color: color($dark_colors, dark_search_background_color);
-      }
-    }
-  }
-
-  .apcard-history-section
-    .apcard-history-section-body
-    .apcard-history-group
-    .apcard-history-group-title {
-    background-color: color($dark_colors, dark_header_background);
-    box-shadow: 1px 1px 9px color($dark_colors, dark_item_background),
-      -1px -1px 9px color($dark_colors, dark_item_background);
-    color: color($dark_colors, dark_search_background_color);
-    .color-pri {
-      color: color($dark_colors, dark_search_background_color);
-    }
-  }
-
-  .apcard-history-section
-    .apcard-history-section-body
-    .apcard-history-group
-    .apcard-history-group-messages {
-    background-color: color($dark_colors, dark_item_background);
-  }
-
-  .apcard-history-section
-    .apcard-history-section-body
-    .apcard-history-group
-    .apcard-history-group-messages
-    .apcard-history-record {
-    color: color($dark_colors, dark_search_background_color);
-  }
-
-  .apcard-history-section
-    .apcard-history-section-body
-    .apcard-history-group
-    .apcard-history-group-messages
-    .apcard-history-record:not(:last-child) {
-    border-bottom: 2px solid color($dark_colors, dark_item_background);
-  }
-
-  .apcard-history-section
-    .apcard-history-section-body
-    .apcard-history-group
-    .apcard-history-group-title
-    .past
-    .credit-amount {
-    color: color($dark_colors, dark_green_color);
-    border-right: 1px solid color($dark_colors, dark_search_background_color);
-  }
-
-  .apcard-history-section
-    .apcard-history-section-body
-    .apcard-history-group
-    .apcard-history-group-title
-    .past
-    .debit-amount {
-    color: color($dark_colors, dark_red_color);
-  }
-
-  .apcard-card-section .apcard-chart .ct-label {
-    color: color($dark_colors, dark_search_background_color) !important;
-  }
-
-  .apcard-card-section .apcard-chart .ct-grid {
-    stroke: color($dark_colors, dark_search_background_color) !important;
-    opacity: 0.5;
-  }
-
-  .apcard-history-section
-    .apcard-history-section-body
-    .apcard-history-group
-    .apcard-history-group-messages
-    .apcard-history-record
-    .icon-div
-    ion-icon[name="remove-circle"] {
-    color: color($dark_colors, dark_red_color);
-  }
-
-  .apcard-history-section
-    .apcard-history-section-body
-    .apcard-history-group
-    .apcard-history-group-messages
-    .apcard-history-record
-    .icon-div
-    ion-icon[name="add-circle"] {
-    color: color($dark_colors, dark_green_color);
-  }
-
-  .apcard-history-section
-    .apcard-history-section-body
-    .apcard-history-group
-    .apcard-history-group-messages
-    .apcard-history-record
-    .price-div {
-    color: color($dark_colors, dark_red_color);
-    &.add {
-      color: color($dark_colors, dark_green_color);
-    }
-  }
-
-  // APCARD PAGE
-  page-apcard {
-    .apcard-card-section .outter-circle {
-      background-color: #292929cc;
-      color: color($dark_colors, dark_search_background_color);
-    }
-    .apcard-card-section .outter-circle .inner-circle {
-      &:after {
-        background-color: color($dark_colors, dark_item_background) !important;
-      }
-    }
-  }
-
-  // STUDENTS DASHBOARD PAGE
-  page-dashboard {
-    .low-attendance-div
-      .low-attendance-details
-      .attendance-chart
-      .progress
-      strong {
-      color: color($dark_colors, dark_item_background);
-    }
-    .financials-section .section-body .progress strong {
-      color: color($dark_colors, dark_item_background);
-    }
-    .financials-section .section-body .bar-right-info {
-      color: color($dark_colors, dark_search_background_color) !important;
-    }
-  }
-
-  // STUDENTS ATTENDANCE PAGE
-  page-attendance {
-    .cover {
-      background: #1d1b1b;
-      background: -moz-linear-gradient(
-        top,
-        #1d1b1b 0%,
-        #292929 22%,
-        #474a52 44%,
-        #47484d 70%,
-        #3c3d40 100%
-      );
-      background: -webkit-gradient(
-        left top,
-        left bottom,
-        color-stop(0%, #1d1b1b),
-        color-stop(22%, #292929),
-        color-stop(44%, #474a52),
-        color-stop(70%, #47484d),
-        color-stop(100%, #3c3d40)
-      );
-      background: -webkit-linear-gradient(
-        top,
-        #1d1b1b 0%,
-        #292929 22%,
-        #474a52 44%,
-        #47484d 70%,
-        #3c3d40 100%
-      );
-      background: -o-linear-gradient(
-        top,
-        #1d1b1b 0%,
-        #292929 22%,
-        #474a52 44%,
-        #47484d 70%,
-        #3c3d40 100%
-      );
-      background: -ms-linear-gradient(
-        top,
-        #1d1b1b 0%,
-        #292929 22%,
-        #474a52 44%,
-        #47484d 70%,
-        #3c3d40 100%
-      );
-      background: linear-gradient(
-        to bottom,
-        #1d1b1b 0%,
-        #292929 22%,
-        #474a52 44%,
-        #47484d 70%,
-        #3c3d40 100%
-      );
-      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1d1b1b', endColorstr='#3c3d40', GradientType=0 );
-    }
-    .card {
-      background: color($dark_colors, dark_item_background);
-    }
-    .legend {
-      color: color($dark_colors, dark_search_background_color);
-      background: color($dark_colors, dark_item_background);
-      ion-card-header h2 {
-        color: color($dark_colors, dark_search_background_color);
-      }
-    }
-    .blur:after {
-      -webkit-box-shadow: 0px 0px 0px 2000px
-        color($dark_colors, dark_header_background);
-      box-shadow: 0px 0px 0px 2000px color($dark_colors, dark_header_background);
-    }
-    #widget-value {
-      color: color($dark_colors, dark_search_background_color);
-      text-shadow: 0 1px 2px color($dark_colors, dark_item_background);
-    }
-    #widget-content {
-      border: 1px solid color($dark_colors, dark_item_background);
-      box-shadow: 2px 2px 22px color($dark_colors, dark_search_background_color),
-        -2px -2px 22px color($dark_colors, dark_search_background_color);
-    }
-  }
-
-  // FEEDBACK PAGE & SET SECURITY QUESTIONS PAGE
-  page-feedback,
-  page-password-recovery {
-    .item-md,
-    .item-ios {
-      background-color: color($dark_colors, dark_background);
-    }
-    .item-label-stacked .text-input-md,
-    .item-label-floating .text-input-md {
-      color: color($dark_colors, dark_search_background_color);
-    }
-    ion-item {
-      .item-inner {
-        border-bottom: 1px solid color($dark_colors, dark_item_background) !important;
-        background-color: color($dark_colors, dark_item_background) !important;
-      }
-    }
-    ion-label.label,
-    p,
-    small,
-    h3,
-    h4 {
-      color: color($dark_colors, dark_dark_grey_color);
-    }
-    span[qa-bg] {
-      background-color: color($dark_colors, dark_background);
-      border-color: color($dark_colors, dark_dark_grey_color);
-      color: color($dark_colors, dark_search_background_color);      
-    }
-    ion-input[qa-input-bg] {
-      background-color: color($dark_colors, dark_item_background);
-      border-color: color($dark_colors, dark_dark_grey_color);
-      color: color($dark_colors, dark_search_background_color);
-    }
-    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-      color: color($dark_colors, dark_search_background_color);
-      opacity: .5; /* Firefox */
-    }
-  }
-
-  // HOLIDAYS PAGE
-  page-holidays {
-    ion-toolbar {
-      .toolbar-background {
-        background-color: color($dark_colors, dark_item_background);
-      }
-    }
-    .holidays-section {
-      .holiday-item {
-        color: color($dark_colors, dark_search_background_color);
-        .holiday-date {
-          color: color($dark_colors, dark_background);
-        }
-      }
-    }
-  }
-
-  // EXAM SCHEDULE PAGE
-  page-exam-schedule {
-    .card {
-      border-color: color($dark_colors, dark_item_background);
-      ion-card-header {
-        border-color: color($dark_colors, dark_item_background);
-        background-color: color($dark_colors, dark_background);
-      }
-      ion-card-content {
-        background-color: color($dark_colors, dark_item_background);
-        ion-list {
-          ion-item {
-            ion-label {
-              color: color($dark_colors, dark_search_background_color);
-            }
-            p {
-              color: color($dark_colors, dark_search_background_color);
-            }
-          }
-        }
-        .note-section p {
-          color: color($dark_colors, dark_search_background_color);
-        }
-      }
-    }
-  }
-
-  // NEWS PAGE
-  page-news {
-    ion-card {
-      box-shadow: 1px 1px 3px color($dark_colors, dark_search_background_color);
-      ion-card-content {
-        background-color: color($dark_colors, dark_item_background);
-        color: color($dark_colors, dark_search_background_color);
-      }
-    }
-  }
-
-  // NEWS MODAL
-  page-news-modal {
-    .main-content {
-      background-color: color($dark_colors, dark_item_background);
-      color: color($dark_colors, dark_search_background_color) !important;
-    }
-  }
-
-  // STAFF DIRECTRY PAGE
-  page-staff-directory {
-    .search-bar-div,
-    .functional-area-div {
-      background-color: color($dark_colors, dark_header_background);
-    }
-    .functional-area-div {
-      ion-label {
-        color: color($dark_colors, dark_search_background_color);
-      }
-      ion-select {
-        color: color($dark_colors, dark_search_background_color);
-      }
-    }
-  }
-
-  // STAFF DIRECTORY INFORMATION PAGE
-  page-staff-directory-info {
-    .cover-page {
-      background-color: color($dark_colors, dark_header_background);
-    }
-    .info-items {
-      .info-item {
-        button.btn-outline-dark {
-          &:hover {
-            color: color($dark_colors, dark_background);
-          }
-        }
-        p {
-          color: color($dark_colors, dark_search_background_color);
-        }
-        h2,
-        h3 {
-          color: color($dark_colors, dark_white_color);
-        }
-      }
-    }
-  }
-
-  // LECTURER TIMETABLE COMPONENT
-  lecturer-timetable {
-    .schedule-week {
-      border-bottom: 2px solid color($dark_colors, dark_header_background);
-      .schedule-day {
-        .schedule-day-head {
-          color: color($dark_colors, dark_background);
-        }
-        .schedule-day-body {
-          .event {
-            background-color: color($dark_colors, dark_item_background);
-            color: color($dark_colors, dark_search_background_color);
-          }
-        }
-      }
-    }
-  }
-
-  // FEES PAGE
-  page-fees {
-    ion-card {
-      background-color: color($dark_colors, dark_item_background);
-      ion-card-content {
-        ion-item {
-          background-color: color($dark_colors, dark_background) !important;
-          color: color($dark_colors, dark_search_background_color);
-          ion-note {
-            color: color($dark_colors, dark_white_color);
-          }
-        }
-      }
-    }
-  }
-
-  // RESULTS PAGE
-  page-results {
-    ion-card {
-      background-color: color($dark_colors, dark_item_background) !important;
-      ion-list {
-        ion-item {
-          &.summary {
-            ion-note {
-              color: color($dark_colors, dark_item_background);
-            }
-          }
-        }
-      }
-      ion-card-header {
-        color: color($dark_colors, dark_search_background_color);
-      }
-      ion-card-content {
-        ion-grid {
-          ion-row {
-            ion-note {
-              color: color($dark_colors, dark_white_color) !important;
-            }
-          }
-          ion-note {
-            &.special-note {
-              color: color(
-                $dark_colors,
-                dark_search_background_color
-              ) !important;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // STUDENTS TIMETABLE PAGE
-  page-timetable,
-  page-classroom-finder-modal {
-    ion-card {
-      background-color: color($dark_colors, dark_item_background) !important;
-      ion-card-header {
-        h2 {
-          color: color($dark_colors, dark_search_background_color) !important;
-        }
-      }
-      ion-card-content {
-        color: color($dark_colors, dark_search_background_color);
-      }
-    }
-    p,
-    small,
-    h3,
-    h4 {
-      color: color($dark_colors, dark_dark_grey_color);
-    }
-  }
-
-  // NOTIFICATIONS PAGE
-  page-notification {
-    .notification-desktop {
-      color: color($dark_colors, dark_search_background_color);
-    }
-
-    .message_content {
-      color: color($dark_colors, dark_search_background_color);
-    }
-
-    .row {
-      .category,
-      .badge {
-        color: color($dark_colors, dark_background);
-      }
-      .notification {
-        color: color($dark_colors, dark_search_background_color);
-        .notification-icon {
-          color: color($dark_colors, dark_search_background_color);
-        }
-        .notification-message {
-          small {
-            color: color($dark_colors, dark_search_background_color);
-          }
-        }
-        .category-badge {
-          span {
-            color: color($dark_colors, dark_background);
-          }
-        }
-        &.unread {
-          text-shadow: 0.1px 0.1px 0.1px color($dark_colors, dark_red_color);
-          .notification-icon {
-            ion-icon {
-              color: color($dark_colors, dark_red_color);
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // NOTIFICATION MODAL
-  page-notification-modal {
-    #fill {
-      background-color: color($dark_colors, dark_header_background);
-    }
-    #mail-icon {
-      color: color($dark_colors, dark_green_color);
-    }
-    .button-md {
-      background-color: color($dark_colors, dark_background);
-    }
-    h2 {
-      color: color($dark_colors, dark_search_background_color);
-      text-shadow: 0.1px 0.1px 0.1px color($dark_colors, dark_green_color),
-        -0.1px -0.1px -0.1px color($dark_colors, dark_green_color);
-    }
-    .content {
-      color: color($dark_colors, dark_search_background_color);
-    }
-    .info {
-      color: color($dark_colors, dark_white_color);
-      span {
-        color: color($dark_colors, dark_search_background_color);
-      }
-    }
-  }
-
-  // BUS TRACKING PAGE
-  page-bus-tracking {
-    .trips-card {
-      color: color($dark_colors, dark_search_background_color);
-      .trips-card-header {
-        background-color: color($dark_colors, dark_item_background);
-        color: color($dark_colors, dark_white_color) !important;
-      }
-      .trips-card-data {
-        p {
-          color: color($dark_colors, dark_search_background_color);
-          &.coming {
-            color: color($dark_colors, dark_white_color);
-          }
-        }
-      }
-    }
-    .no-trips-message {
-      h2 {
-        color: color($dark_colors, dark_search_background_color);
-      }
-    }
-  }
-
-  // OPERATION HOURS PAGE
-  page-operation-hours {
-    ion-card {
-      border: 1px solid color($dark_colors, dark_item_background) !important;
-      box-shadow: 1px 1px 1px color($dark_colors, dark_item_background),
-        -1px -1px 1px color($dark_colors, dark_item_background) !important;
-      ion-card-header {
-        color: color($dark_colors, dark_white_color) !important;
-        background-color: color($dark_colors, dark_item_background) !important;
-        border: 1px solid color($dark_colors, dark_item_background) !important;
-      }
-      ion-card-content {
-        background-color: color($dark_colors, dark_background);
-        h4 {
-          color: color($dark_colors, dark_white_color) !important;
-        }
-        h2 {
-          color: color($dark_colors, dark_white_color) !important;
-        }
-        ul li,
-        p {
-          color: color($dark_colors, dark_search_background_color) !important;
-        }
-      }
-    }
-  }
-
-  // CLASSROOM FINDER
-  page-classroom-finder {
-    ion-card.card {
-      background-color: color($dark_colors, dark_item_background) !important;
-      ion-card-content {
-        ion-card-title {
-          color: color($dark_colors, dark_white_color);
-        }
-        ion-label.header-label {
-          color: color($dark_colors, dark_white_color);
-        }
-        ion-chip {
-          cursor: pointer;
-          background-color: color($dark_colors, dark_background);
-          color: color($dark_colors, dark_white_color);
-        }
-      }
-    }
-  }
-
-  page-settings {
-    .static-data {
-      color: color($dark_colors, dark_dark_grey_color);
-    }
-  }
-
-  // ICONSULT (STUDENTS) PAGE
-  page-iconsult {
-    .slot-month {
-      color: color($dark_colors, dark_item_background);
-    }
-    h2.staff-name {
-      color: color($dark_colors, dark_white_color);
-    }
-    .staff-info-label {
-      color: color($dark_colors, dark_search_background_color);
-    }
-    ion-card {
-      background-color: color($dark_colors, dark_item_background) !important;
-      &.bookedcard {
-        color: color($dark_colors, dark_search_background_color) !important;
-        ion-card-header {
-          h2 {
-            color: color($dark_colors, dark_search_background_color) !important;
-          }
-        }
-      }
-      &.Availablecard {
-        color: color($dark_colors, dark_white_color) !important;
-        ion-card-header {
-          h2 {
-            color: color($dark_colors, dark_white_color) !important;
-          }
-        }
-      }
-      ion-card-content {
-        .btn-outline-dark {
-          &:hover {
-            color: color($dark_colors, dark_item_background) !important;
-          }
-          &:active {
-            background-color: color($dark_colors, dark_background) !important;
-          }
-        }
-      }
-    }
-    ion-badge {
-      color: color($dark_colors, dark_item_background) !important;
-    }
-    .no-consultation {
-      color: color($dark_colors, dark_search_background_color);
-    }
-  }
-
-  // ICONSULT CONSULTATION FORM PAGE
-  page-consultation-form {
-    .booking-details {
-      h2 {
-        color: color($dark_colors, dark_white_color);
-      }
-      p {
-        color: color($dark_colors, dark_search_background_color);
-      }
-    }
-    ion-label {
-      color: color($dark_colors, dark_white_color) !important;
-    }
-    .button-wrapper {
-      button.btn-dark.btn {
-        color: color($dark_colors, dark_background) !important;
-      }
-    }
-  }
-
-  // ICONSULT PAGE UPCOMING APPOINTMENT FOR STUDENTS & LECTURERS
-  page-upcomingstd,
-  page-upcominglec {
-    .cancelledbylec {
-      color: color($dark_colors, dark_header_background);
-    }
-
-    ion-card {
-      background-color: color($dark_colors, dark_item_background) !important;
-      color: color($dark_colors, dark_search_background_color) !important;
-      ion-card-header {
-        color: color($dark_colors, dark_white_color);
-        background-color: color(
-          $dark_colors,
-          dark_header_background
-        ) !important;
-      }
-      ion-card-content {
-        button {
-          border-color: color(
-            $dark_colors,
-            dark_search_background_color
-          ) !important;
-          color: color($dark_colors, dark_search_background_color) !important;
-          &:hover,
-          &:active {
-            color: color($dark_colors, dark_item_background) !important;
-            background-color: color(
-              $dark_colors,
-              dark_search_background_color
-            ) !important;
-          }
-        }
-      }
-    }
-  }
-
-  // ICONSULT MY APPOINTMENTS PAGE (STUDENTS AND LECTURER) & UNAVAILABLE SLOTS DETAILS &
-  page-student-consul-detail,
-  page-consuldetailpage,
-  page-unavailabledetails {
-    ion-card {
-      background-color: color($dark_colors, dark_item_background) !important;
-      color: color($dark_colors, dark_white_color) !important;
-      ion-card-content {
-        ion-item {
-          p {
-            color: color($dark_colors, dark_search_background_color) !important;
-          }
-          h2 {
-            color: color($dark_colors, dark_white_color) !important;
-          }
-        }
-      }
-    }
-  }
-
-  // ICONSULT ADD FREE SLOTS (LECTURER) & ADD UNAVAILABILITY SLOTS
-  page-addfreeslots,
-  page-unavailability-slots {
-    ion-label.repeatlabel,
-    .durationnote,
-    .startAndEndDateMessage {
-      color: color($dark_colors, dark_search_background_color);
-    }
-    button {
-      &.btn-outline-dark {
-        &:hover {
-          color: color($dark_colors, dark_background) !important;
-        }
-      }
-    }
-  }
-
-  // QUALIFICATION AUTHENTICITY VERIFICATION PAGE
-  page-qualification-verification {
-    ion-content {
-      background-color: color($dark_colors, dark_item_background) !important;
-    }
-    ion-item {
-      background-color: color($dark_colors, dark_background) !important;
-    }
-    p,
-    small,
-    h3,
-    h4 {
-      color: color($dark_colors, dark_dark_grey_color);
-    }
-  }
-
-  // STUDENTS CONSENT FORM VIEW & EDIT PAGES
-  page-student-consent-form, page-student-consent-form-edit {
-    .input-elements-wrabber {
-      background-color: color($dark_colors, dark_item_background);
-      border-color: color($dark_colors, dark_dark_grey_color);
-      .input-wrapper {
-        border-color: color($dark_colors, dark_dark_grey_color);
-        ion-input {
-          color: color($dark_colors, dark_white_color);
-        }
-      }
-      button {
-        color: color($dark_colors, dark_white_color);
-      }
-      ::placeholder {
-        color: color($dark_colors, dark_dark_grey_color);
-        opacity: 1; /* Firefox */
-      }
-    }
-    .user-message {
-      color: color($dark_colors, dark_search_background_color);
-    }
-    .card-title,
-    .card-subtitle {
-      color: color($dark_colors, dark_search_background_color);
-      &.text-muted {
-        color: color($dark_colors, dark_dark_grey_color) !important;
-      }
-    }
-    ul, ul > li {
-      background-color: color($dark_colors, dark_item_background);
-      color: color($dark_colors, dark_search_background_color);
-      border-color: color($dark_colors, dark_dark_grey_color);
-    }
-  }
-
-  // LOADING SPINNER COMPONENT
-  loading-spinner {
-    .loader {
-      .inner {
-        border-color: color($dark_colors, dark_search_background_color);
-      }
-    }
-  }
-
-  // OVERRIDING IONIC SEGMENTS DESIGN (ALL PAGES)
-  .segment-md .segment-button {
-    color: color($dark_colors, dark_search_background_color);
-    border-color: color($dark_colors, dark_search_background_color);
-  }
-  .segment-ios .segment-button.activated,
-  .segment-ios .segment-button.segment-activated {
-    color: color($dark_colors, dark_background);
-  }
-  .segment-ios {
-    padding: 5px 10px;
-  }
-  .segment-ios .segment-button:not(:first-of-type) {
-    border-left: 1px solid !important;
-  }
-  // END OVERRIDING IONIC SEGMENTS DESIGN (ALL PAGES)
-
-  // TEMP GENERAL STYLES FOR ION CARDS
-  ion-card {
-    &.no-classes-message {
-      background-color: color($dark_colors, dark_item_background) !important;
-      ion-card-content {
-        p {
-          color: color($dark_colors, dark_search_background_color) !important;
-        }
-      }
-    }
-  }
-
-  // OVERRIDE BOOTSTRAP COLORS:
-  .bg-danger {
-    background-color: color(
-      $dark_colors,
-      dark_search_background_color
-    ) !important;
-  }
+	// TOOLBAR STYLES:
+	.toolbar-background {
+		background: color($dark_colors, dark_header_background);
+	}
+	.toolbar-title {
+		color: color($dark_colors, dark_search_background_color);
+	}
+
+	.menu-header .toolbar-background {
+		background: color($dark_colors, dark_background);
+	}
+
+	.bar-button-default-ios,
+	.bar-button-default.bar-button-ios-default,
+	.bar-button-clear-ios-default,
+	.bar-button-default-md,
+	.bar-button-clear-md-default,
+	.bar-button-md-default {
+		color: color($dark_colors, dark_search_background_color);
+	}
+
+	.toolbar-title-ios,
+	.toolbar-title-md {
+		color: color($dark_colors, dark_search_background_color);
+	}
+
+	// **********************************************************************
+	// MENU & TABS STYLES:
+	button.item {
+		color: color($dark_colors, dark_search_background_color) !important;
+		&.activeItem {
+			color: color($dark_colors, dark_search_background_color) !important;
+		}
+		.item-inner {
+			border: none;
+		}
+	}
+	.item-md,
+	.item-ios {
+		background-color: color($dark_colors, dark_item_background);
+	}
+	.profile .info h5 {
+		color: color($dark_colors, dark_search_background_color);
+	}
+	.profile .picture img {
+		border: 2px solid color($dark_colors, dark_header_background);
+	}
+	.searchbar .searchbar-input {
+		background-color: color($dark_colors, dark_item_background);
+		color: color($dark_colors, dark_search_background_color);
+	}
+
+	.searchbar .searchbar-input::placeholder {
+		color: color($dark_colors, dark_search_background_color);
+	}
+
+	.tabs .tabbar {
+		background: color($dark_colors, dark_header_background);
+	}
+
+	.tabs .tab-button,
+	.tabs .tab-button-icon {
+		color: color($dark_colors, dark_search_background_color);
+	}
+
+	.menu-section .menu-section-header {
+		color: color($dark_colors, dark_search_background_color);
+		background-color: color($dark_colors, dark_background);
+	}
+
+	.menu-item {
+		color: color($dark_colors, dark_search_background_color);
+	}
+
+	.menu-item.dark-orange {
+		background-color: color($dark_menu_colors, m_dark_orange);
+	}
+
+	.menu-item.orange {
+		background-color: color($dark_menu_colors, m_orange);
+	}
+
+	.menu-item.red {
+		background-color: color($dark_menu_colors, m_red);
+	}
+
+	.menu-item.green {
+		background-color: color($dark_menu_colors, m_green);
+	}
+
+	.menu-item.blue {
+		background-color: color($dark_menu_colors, m_blue);
+	}
+
+	.menu-item.purple {
+		background-color: color($dark_menu_colors, m_purple);
+	}
+
+	// **********************************************************************
+	// CONTENT STYLES
+	ion-content {
+		background-color: color($dark_colors, dark_background);
+	}
+	.quick-access-item {
+		color: color($dark_colors, dark_search_background_color);
+	}
+	.main-content .quick-access {
+		background-color: color($dark_colors, dark_background);
+	}
+	.main-content .section {
+		background-color: color($dark_colors, dark_item_background) !important;
+		color: color($dark_colors, dark_search_background_color) !important;
+		box-shadow: 1px 1px 1px color($dark_colors, dark_background), -1px 0px 1px color($dark_colors, dark_background);
+		border-width: 5px 1px 1px 1px;
+	}
+	.main-content .section .section-header .section-header-icon {
+		background-color: color($dark_colors, dark_background);
+	}
+	.ct-series-a .ct-point,
+	.ct-series-a .ct-line,
+	.ct-series-a .ct-bar,
+	.ct-series-a .ct-slice-donut {
+		stroke: color($dark_colors, dark_green_color) !important;
+	}
+	.ct-series-b .ct-point,
+	.ct-series-b .ct-line,
+	.ct-series-b .ct-bar,
+	.ct-series-b .ct-slice-donut {
+		stroke: color($dark_colors, dark_red_color) !important;
+	}
+
+	ion-item {
+		background-color: color($dark_colors, dark_item_background);
+		color: color($dark_colors, dark_search_background_color);
+	}
+
+	.profile-info-section .profile-div img {
+		border: 2px solid color($dark_colors, dark_item_background);
+	}
+
+	.profile .info .username {
+		color: color($dark_colors, dark_search_background_color);
+	}
+
+	.notifications-section .notifications-section-body .notification-group .notification-group-date {
+		background-color: color($dark_colors, dark_item_background);
+		box-shadow: 1px 1px 9px color($dark_colors, dark_background), -1px -1px 9px color($dark_colors, dark_background);
+		color: color($dark_colors, dark_search_background_color);
+	}
+
+	.notifications-section .notifications-section-body .notification-group .notification-group-messages .notification {
+		border-bottom: 2px solid color($dark_colors, dark_item_background);
+		color: color($dark_colors, dark_search_background_color);
+	}
+
+	page-apcard {
+		.main-content {
+			.no-transactions-message {
+				color: color($dark_colors, dark_search_background_color);
+			}
+		}
+	}
+
+	.apcard-history-section .apcard-history-section-body .apcard-history-group .apcard-history-group-title {
+		background-color: color($dark_colors, dark_header_background);
+		box-shadow: 1px 1px 9px color($dark_colors, dark_item_background),
+			-1px -1px 9px color($dark_colors, dark_item_background);
+		color: color($dark_colors, dark_search_background_color);
+		.color-pri {
+			color: color($dark_colors, dark_search_background_color);
+		}
+	}
+
+	.apcard-history-section .apcard-history-section-body .apcard-history-group .apcard-history-group-messages {
+		background-color: color($dark_colors, dark_item_background);
+	}
+
+	.apcard-history-section
+		.apcard-history-section-body
+		.apcard-history-group
+		.apcard-history-group-messages
+		.apcard-history-record {
+		color: color($dark_colors, dark_search_background_color);
+	}
+
+	.apcard-history-section
+		.apcard-history-section-body
+		.apcard-history-group
+		.apcard-history-group-messages
+		.apcard-history-record:not(:last-child) {
+		border-bottom: 2px solid color($dark_colors, dark_item_background);
+	}
+
+	.apcard-history-section
+		.apcard-history-section-body
+		.apcard-history-group
+		.apcard-history-group-title
+		.past
+		.credit-amount {
+		color: color($dark_colors, dark_green_color);
+		border-right: 1px solid color($dark_colors, dark_search_background_color);
+	}
+
+	.apcard-history-section
+		.apcard-history-section-body
+		.apcard-history-group
+		.apcard-history-group-title
+		.past
+		.debit-amount {
+		color: color($dark_colors, dark_red_color);
+	}
+
+	.apcard-card-section .apcard-chart .ct-label {
+		color: color($dark_colors, dark_search_background_color) !important;
+	}
+
+	.apcard-card-section .apcard-chart .ct-grid {
+		stroke: color($dark_colors, dark_search_background_color) !important;
+		opacity: 0.5;
+	}
+
+	.apcard-history-section
+		.apcard-history-section-body
+		.apcard-history-group
+		.apcard-history-group-messages
+		.apcard-history-record
+		.icon-div
+		ion-icon[name="remove-circle"] {
+		color: color($dark_colors, dark_red_color);
+	}
+
+	.apcard-history-section
+		.apcard-history-section-body
+		.apcard-history-group
+		.apcard-history-group-messages
+		.apcard-history-record
+		.icon-div
+		ion-icon[name="add-circle"] {
+		color: color($dark_colors, dark_green_color);
+	}
+
+	.apcard-history-section
+		.apcard-history-section-body
+		.apcard-history-group
+		.apcard-history-group-messages
+		.apcard-history-record
+		.price-div {
+		color: color($dark_colors, dark_red_color);
+		&.add {
+			color: color($dark_colors, dark_green_color);
+		}
+	}
+
+	// APCARD PAGE
+	page-apcard {
+		.apcard-card-section .outter-circle {
+			background-color: #292929cc;
+			color: color($dark_colors, dark_search_background_color);
+		}
+		.apcard-card-section .outter-circle .inner-circle {
+			&:after {
+				background-color: color($dark_colors, dark_item_background) !important;
+			}
+		}
+	}
+
+	// STUDENTS DASHBOARD PAGE
+	page-dashboard {
+		.low-attendance-div .low-attendance-details .attendance-chart .progress strong {
+			color: color($dark_colors, dark_item_background);
+		}
+		.financials-section .section-body .progress strong {
+			color: color($dark_colors, dark_item_background);
+		}
+		.financials-section .section-body .bar-right-info {
+			color: color($dark_colors, dark_search_background_color) !important;
+		}
+	}
+
+	// STUDENTS ATTENDANCE PAGE
+	page-attendance {
+		.cover {
+			background: #1d1b1b;
+			background: -moz-linear-gradient(top, #1d1b1b 0%, #292929 22%, #474a52 44%, #47484d 70%, #3c3d40 100%);
+			background: -webkit-gradient(
+				left top,
+				left bottom,
+				color-stop(0%, #1d1b1b),
+				color-stop(22%, #292929),
+				color-stop(44%, #474a52),
+				color-stop(70%, #47484d),
+				color-stop(100%, #3c3d40)
+			);
+			background: -webkit-linear-gradient(top, #1d1b1b 0%, #292929 22%, #474a52 44%, #47484d 70%, #3c3d40 100%);
+			background: -o-linear-gradient(top, #1d1b1b 0%, #292929 22%, #474a52 44%, #47484d 70%, #3c3d40 100%);
+			background: -ms-linear-gradient(top, #1d1b1b 0%, #292929 22%, #474a52 44%, #47484d 70%, #3c3d40 100%);
+			background: linear-gradient(to bottom, #1d1b1b 0%, #292929 22%, #474a52 44%, #47484d 70%, #3c3d40 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient(
+					startColorstr='#1d1b1b',
+					endColorstr='#3c3d40',
+					GradientType=0
+				);
+		}
+		.card {
+			background: color($dark_colors, dark_item_background);
+		}
+		.legend {
+			color: color($dark_colors, dark_search_background_color);
+			background: color($dark_colors, dark_item_background);
+			ion-card-header h2 {
+				color: color($dark_colors, dark_search_background_color);
+			}
+		}
+		.blur:after {
+			-webkit-box-shadow: 0px 0px 0px 2000px color($dark_colors, dark_header_background);
+			box-shadow: 0px 0px 0px 2000px color($dark_colors, dark_header_background);
+		}
+		#widget-value {
+			color: color($dark_colors, dark_search_background_color);
+			text-shadow: 0 1px 2px color($dark_colors, dark_item_background);
+		}
+		#widget-content {
+			border: 1px solid color($dark_colors, dark_item_background);
+			box-shadow: 2px 2px 22px color($dark_colors, dark_search_background_color),
+				-2px -2px 22px color($dark_colors, dark_search_background_color);
+		}
+	}
+
+	// FEEDBACK PAGE & SET SECURITY QUESTIONS PAGE
+	page-feedback,
+	page-password-recovery {
+		.item-md,
+		.item-ios {
+			background-color: color($dark_colors, dark_background);
+		}
+		.item-label-stacked .text-input-md,
+		.item-label-floating .text-input-md {
+			color: color($dark_colors, dark_search_background_color);
+		}
+		ion-item {
+			.item-inner {
+				border-bottom: 1px solid color($dark_colors, dark_item_background) !important;
+				background-color: color($dark_colors, dark_item_background) !important;
+			}
+		}
+		ion-label.label,
+		p,
+		small,
+		h3,
+		h4 {
+			color: color($dark_colors, dark_dark_grey_color);
+		}
+		span[qa-bg] {
+			background-color: color($dark_colors, dark_background);
+			border-color: color($dark_colors, dark_dark_grey_color);
+			color: color($dark_colors, dark_search_background_color);
+		}
+		ion-input[qa-input-bg] {
+			background-color: color($dark_colors, dark_item_background);
+			border-color: color($dark_colors, dark_dark_grey_color);
+			color: color($dark_colors, dark_search_background_color);
+		}
+		::placeholder {
+			/* Chrome, Firefox, Opera, Safari 10.1+ */
+			color: color($dark_colors, dark_search_background_color);
+			opacity: .5; /* Firefox */
+		}
+	}
+
+	// HOLIDAYS PAGE
+	page-holidays {
+		ion-toolbar {
+			.toolbar-background {
+				background-color: color($dark_colors, dark_item_background);
+			}
+		}
+		.holidays-section {
+			.holiday-item {
+				color: color($dark_colors, dark_search_background_color);
+				.holiday-date {
+					color: color($dark_colors, dark_background);
+				}
+			}
+		}
+	}
+
+	// EXAM SCHEDULE PAGE
+	page-exam-schedule {
+		.card {
+			border-color: color($dark_colors, dark_item_background);
+			ion-card-header {
+				border-color: color($dark_colors, dark_item_background);
+				background-color: color($dark_colors, dark_background);
+			}
+			ion-card-content {
+				background-color: color($dark_colors, dark_item_background);
+				ion-list {
+					ion-item {
+						ion-label {
+							color: color($dark_colors, dark_search_background_color);
+						}
+						p {
+							color: color($dark_colors, dark_search_background_color);
+						}
+					}
+				}
+				.note-section p {
+					color: color($dark_colors, dark_search_background_color);
+				}
+			}
+		}
+	}
+
+	// NEWS PAGE
+	page-news {
+		ion-card {
+			box-shadow: 1px 1px 3px color($dark_colors, dark_search_background_color);
+			ion-card-content {
+				background-color: color($dark_colors, dark_item_background);
+				color: color($dark_colors, dark_search_background_color);
+			}
+		}
+	}
+
+	// NEWS MODAL
+	page-news-modal {
+		.main-content {
+			background-color: color($dark_colors, dark_item_background);
+			color: color($dark_colors, dark_search_background_color) !important;
+		}
+	}
+
+	// STAFF DIRECTRY PAGE
+	page-staff-directory {
+		.search-bar-div,
+		.functional-area-div {
+			background-color: color($dark_colors, dark_header_background);
+		}
+		.functional-area-div {
+			ion-label {
+				color: color($dark_colors, dark_search_background_color);
+			}
+			ion-select {
+				color: color($dark_colors, dark_search_background_color);
+			}
+		}
+	}
+
+	// STAFF DIRECTORY INFORMATION PAGE
+	page-staff-directory-info {
+		.cover-page {
+			background-color: color($dark_colors, dark_header_background);
+		}
+		.info-items {
+			.info-item {
+				button.btn-outline-dark {
+					&:hover {
+						color: color($dark_colors, dark_background);
+					}
+				}
+				p {
+					color: color($dark_colors, dark_search_background_color);
+				}
+				h2,
+				h3 {
+					color: color($dark_colors, dark_white_color);
+				}
+			}
+		}
+	}
+
+	// LECTURER TIMETABLE COMPONENT
+	lecturer-timetable {
+		.schedule-week {
+			border-bottom: 2px solid color($dark_colors, dark_header_background);
+			.schedule-day {
+				.schedule-day-head {
+					color: color($dark_colors, dark_background);
+				}
+				.schedule-day-body {
+					.event {
+						background-color: color($dark_colors, dark_item_background);
+						color: color($dark_colors, dark_search_background_color);
+					}
+				}
+			}
+		}
+	}
+
+	// FEES PAGE
+	page-fees {
+		ion-card {
+			background-color: color($dark_colors, dark_item_background);
+			ion-card-content {
+				ion-item {
+					background-color: color($dark_colors, dark_background) !important;
+					color: color($dark_colors, dark_search_background_color);
+					ion-note {
+						color: color($dark_colors, dark_white_color);
+					}
+				}
+			}
+		}
+	}
+
+	// RESULTS PAGE
+	page-results {
+		ion-card {
+			background-color: color($dark_colors, dark_item_background) !important;
+			ion-list {
+				ion-item {
+					&.summary {
+						ion-note {
+							color: color($dark_colors, dark_item_background);
+						}
+					}
+				}
+			}
+			ion-card-header {
+				color: color($dark_colors, dark_search_background_color);
+			}
+			ion-card-content {
+				ion-grid {
+					ion-row {
+						ion-note {
+							color: color($dark_colors, dark_white_color) !important;
+						}
+					}
+					ion-note {
+						&.special-note {
+							color: color($dark_colors, dark_search_background_color) !important;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// STUDENTS TIMETABLE PAGE
+	page-timetable,
+	page-classroom-finder-modal {
+		ion-card {
+			background-color: color($dark_colors, dark_item_background) !important;
+			ion-card-header {
+				h2 {
+					color: color($dark_colors, dark_search_background_color) !important;
+				}
+			}
+			ion-card-content {
+				color: color($dark_colors, dark_search_background_color);
+			}
+		}
+		p,
+		small,
+		h3,
+		h4 {
+			color: color($dark_colors, dark_dark_grey_color);
+		}
+	}
+
+	// NOTIFICATIONS PAGE
+	page-notification {
+		.notification-desktop {
+			color: color($dark_colors, dark_search_background_color);
+		}
+
+		.message_content {
+			color: color($dark_colors, dark_search_background_color);
+		}
+
+		.row {
+			.category,
+			.badge {
+				color: color($dark_colors, dark_background);
+			}
+			.notification {
+				color: color($dark_colors, dark_search_background_color);
+				.notification-icon {
+					color: color($dark_colors, dark_search_background_color);
+				}
+				.notification-message {
+					small {
+						color: color($dark_colors, dark_search_background_color);
+					}
+				}
+				.category-badge {
+					span {
+						color: color($dark_colors, dark_background);
+					}
+				}
+				&.unread {
+					text-shadow: 0.1px 0.1px 0.1px color($dark_colors, dark_red_color);
+					.notification-icon {
+						ion-icon {
+							color: color($dark_colors, dark_red_color);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// NOTIFICATION MODAL
+	page-notification-modal {
+		#fill {
+			background-color: color($dark_colors, dark_header_background);
+		}
+		#mail-icon {
+			color: color($dark_colors, dark_green_color);
+		}
+		.button-md {
+			background-color: color($dark_colors, dark_background);
+		}
+		h2 {
+			color: color($dark_colors, dark_search_background_color);
+			text-shadow: 0.1px 0.1px 0.1px color($dark_colors, dark_green_color),
+				-0.1px -0.1px -0.1px color($dark_colors, dark_green_color);
+		}
+		.content {
+			color: color($dark_colors, dark_search_background_color);
+		}
+		.info {
+			color: color($dark_colors, dark_white_color);
+			span {
+				color: color($dark_colors, dark_search_background_color);
+			}
+		}
+	}
+
+	// BUS TRACKING PAGE
+	page-bus-tracking {
+		.trips-card {
+			color: color($dark_colors, dark_search_background_color);
+			.trips-card-header {
+				background-color: color($dark_colors, dark_item_background);
+				color: color($dark_colors, dark_white_color) !important;
+			}
+			.trips-card-data {
+				p {
+					color: color($dark_colors, dark_search_background_color);
+					&.coming {
+						color: color($dark_colors, dark_white_color);
+					}
+				}
+			}
+		}
+		.no-trips-message {
+			h2 {
+				color: color($dark_colors, dark_search_background_color);
+			}
+		}
+	}
+
+	// OPERATION HOURS PAGE
+	page-operation-hours {
+		ion-card {
+			border: 1px solid color($dark_colors, dark_item_background) !important;
+			box-shadow: 1px 1px 1px color($dark_colors, dark_item_background),
+				-1px -1px 1px color($dark_colors, dark_item_background) !important;
+			ion-card-header {
+				color: color($dark_colors, dark_white_color) !important;
+				background-color: color($dark_colors, dark_item_background) !important;
+				border: 1px solid color($dark_colors, dark_item_background) !important;
+			}
+			ion-card-content {
+				background-color: color($dark_colors, dark_background);
+				h4 {
+					color: color($dark_colors, dark_white_color) !important;
+				}
+				h2 {
+					color: color($dark_colors, dark_white_color) !important;
+				}
+				ul li,
+				p {
+					color: color($dark_colors, dark_search_background_color) !important;
+				}
+			}
+		}
+	}
+
+	// CLASSROOM FINDER
+	page-classroom-finder {
+		ion-card.card {
+			background-color: color($dark_colors, dark_item_background) !important;
+			ion-card-content {
+				ion-card-title {
+					color: color($dark_colors, dark_white_color);
+				}
+				ion-label.header-label {
+					color: color($dark_colors, dark_white_color);
+				}
+				ion-chip {
+					cursor: pointer;
+					background-color: color($dark_colors, dark_background);
+					color: color($dark_colors, dark_white_color);
+				}
+			}
+		}
+	}
+
+	page-settings {
+		.static-data {
+			color: color($dark_colors, dark_dark_grey_color);
+		}
+	}
+
+	// ICONSULT (STUDENTS) PAGE
+	page-iconsult {
+		.slot-month {
+			color: color($dark_colors, dark_item_background);
+		}
+		h2.staff-name {
+			color: color($dark_colors, dark_white_color);
+		}
+		.staff-info-label {
+			color: color($dark_colors, dark_search_background_color);
+		}
+		ion-card {
+			background-color: color($dark_colors, dark_item_background) !important;
+			&.bookedcard {
+				color: color($dark_colors, dark_search_background_color) !important;
+				ion-card-header {
+					h2 {
+						color: color($dark_colors, dark_search_background_color) !important;
+					}
+				}
+			}
+			&.Availablecard {
+				color: color($dark_colors, dark_white_color) !important;
+				ion-card-header {
+					h2 {
+						color: color($dark_colors, dark_white_color) !important;
+					}
+				}
+			}
+			ion-card-content {
+				.btn-outline-dark {
+					&:hover {
+						color: color($dark_colors, dark_item_background) !important;
+					}
+					&:active {
+						background-color: color($dark_colors, dark_background) !important;
+					}
+				}
+			}
+		}
+		ion-badge {
+			color: color($dark_colors, dark_item_background) !important;
+		}
+		.no-consultation {
+			color: color($dark_colors, dark_search_background_color);
+		}
+	}
+
+	// ICONSULT CONSULTATION FORM PAGE
+	page-consultation-form {
+		.booking-details {
+			h2 {
+				color: color($dark_colors, dark_white_color);
+			}
+			p {
+				color: color($dark_colors, dark_search_background_color);
+			}
+		}
+		ion-label {
+			color: color($dark_colors, dark_white_color) !important;
+		}
+		.button-wrapper {
+			button.btn-dark.btn {
+				color: color($dark_colors, dark_background) !important;
+			}
+		}
+	}
+
+	// ICONSULT PAGE UPCOMING APPOINTMENT FOR STUDENTS & LECTURERS
+	page-upcomingstd,
+	page-upcominglec {
+		.cancelledbylec {
+			color: color($dark_colors, dark_header_background);
+		}
+
+		ion-card {
+			background-color: color($dark_colors, dark_item_background) !important;
+			color: color($dark_colors, dark_search_background_color) !important;
+			ion-card-header {
+				color: color($dark_colors, dark_white_color);
+				background-color: color($dark_colors, dark_header_background) !important;
+			}
+			ion-card-content {
+				button {
+					border-color: color($dark_colors, dark_search_background_color) !important;
+					color: color($dark_colors, dark_search_background_color) !important;
+					&:hover,
+					&:active {
+						color: color($dark_colors, dark_item_background) !important;
+						background-color: color($dark_colors, dark_search_background_color) !important;
+					}
+				}
+			}
+		}
+	}
+
+	// ICONSULT MY APPOINTMENTS PAGE (STUDENTS AND LECTURER) & UNAVAILABLE SLOTS DETAILS &
+	page-student-consul-detail,
+	page-consuldetailpage,
+	page-unavailabledetails {
+		ion-card {
+			background-color: color($dark_colors, dark_item_background) !important;
+			color: color($dark_colors, dark_white_color) !important;
+			ion-card-content {
+				ion-item {
+					p {
+						color: color($dark_colors, dark_search_background_color) !important;
+					}
+					h2 {
+						color: color($dark_colors, dark_white_color) !important;
+					}
+				}
+			}
+		}
+	}
+
+	// ICONSULT ADD FREE SLOTS (LECTURER) & ADD UNAVAILABILITY SLOTS
+	page-addfreeslots,
+	page-unavailability-slots {
+		ion-label.repeatlabel,
+		.durationnote,
+		.startAndEndDateMessage {
+			color: color($dark_colors, dark_search_background_color);
+		}
+		button {
+			&.btn-outline-dark {
+				&:hover {
+					color: color($dark_colors, dark_background) !important;
+				}
+			}
+		}
+	}
+
+	// QUALIFICATION AUTHENTICITY VERIFICATION PAGE
+	page-qualification-verification {
+		ion-content {
+			background-color: color($dark_colors, dark_item_background) !important;
+		}
+		ion-item {
+			background-color: color($dark_colors, dark_background) !important;
+		}
+		p,
+		small,
+		h3,
+		h4 {
+			color: color($dark_colors, dark_dark_grey_color);
+		}
+	}
+
+	// STUDENTS CONSENT FORM VIEW & EDIT PAGES
+	page-student-consent-form,
+	page-student-consent-form-edit {
+		.input-elements-wrabber {
+			background-color: color($dark_colors, dark_item_background);
+			border-color: color($dark_colors, dark_dark_grey_color);
+			.input-wrapper {
+				border-color: color($dark_colors, dark_dark_grey_color);
+				ion-input {
+					color: color($dark_colors, dark_white_color);
+				}
+			}
+			button {
+				color: color($dark_colors, dark_white_color);
+			}
+			::placeholder {
+				color: color($dark_colors, dark_dark_grey_color);
+				opacity: 1; /* Firefox */
+			}
+		}
+		.user-message {
+			color: color($dark_colors, dark_search_background_color);
+		}
+		.card-title,
+		.card-subtitle {
+			color: color($dark_colors, dark_search_background_color);
+			&.text-muted {
+				color: color($dark_colors, dark_dark_grey_color) !important;
+			}
+		}
+		ul,
+		ul > li {
+			background-color: color($dark_colors, dark_item_background);
+			color: color($dark_colors, dark_search_background_color);
+			border-color: color($dark_colors, dark_dark_grey_color);
+		}
+	}
+
+	// APLC PROGRESS REPORT HOME PAGE
+	page-home-progress-report {
+		.button-dev-wrapper {
+			color: color($dark_colors, dark_background);
+		}
+	}
+
+	// LOADING SPINNER COMPONENT
+	loading-spinner {
+		.loader {
+			.inner {
+				border-color: color($dark_colors, dark_search_background_color);
+			}
+		}
+	}
+
+	// OVERRIDING IONIC SEGMENTS DESIGN (ALL PAGES)
+	.segment-md .segment-button {
+		color: color($dark_colors, dark_search_background_color);
+		border-color: color($dark_colors, dark_search_background_color);
+	}
+	.segment-ios .segment-button.activated,
+	.segment-ios .segment-button.segment-activated {
+		color: color($dark_colors, dark_background);
+	}
+	.segment-ios {
+		padding: 5px 10px;
+	}
+	.segment-ios .segment-button:not(:first-of-type) {
+		border-left: 1px solid !important;
+	}
+	// END OVERRIDING IONIC SEGMENTS DESIGN (ALL PAGES)
+
+	// TEMP GENERAL STYLES FOR ION CARDS
+	ion-card {
+		&.no-classes-message {
+			background-color: color($dark_colors, dark_item_background) !important;
+			ion-card-content {
+				p {
+					color: color($dark_colors, dark_search_background_color) !important;
+				}
+			}
+		}
+	}
+
+	// OVERRIDE BOOTSTRAP COLORS:
+	.bg-danger {
+		background-color: color($dark_colors, dark_search_background_color) !important;
+	}
 }

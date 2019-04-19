@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { IonicPage } from "ionic-angular";
+import { IonicPage, NavController } from "ionic-angular";
 
 @IonicPage()
 @Component({
@@ -7,10 +7,10 @@ import { IonicPage } from "ionic-angular";
   templateUrl: "home-progress-report.html",
 })
 export class HomeProgressReportPage {
-  constructor() { }
+  constructor(public navCtrl: NavController) { }
   ionViewDidLoad() { }
 
-  openPage(page: string){
-    
+  openPage(page: string) {
+    this.navCtrl.push(page);
   }
 }

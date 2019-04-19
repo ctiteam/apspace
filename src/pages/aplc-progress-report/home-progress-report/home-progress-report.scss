@@ -1,10 +1,16 @@
 page-home-progress-report {
-    .button-dev-wrapper{
-        height: 200px;
-        background-color: red;
-        cursor: pointer;
-        &:nth-of-type(2){
-            background-color: green;
-        }
-    }
+	.button-dev-wrapper {
+		height: 200px;
+		cursor: pointer;
+		.menu-icon {
+			position: absolute;
+			top: 29%;
+			font-size: 7rem;
+		}
+		.menu-text {
+			position: absolute;
+			bottom: 10px;
+			left: 10px;
+		}
+	}
 }
