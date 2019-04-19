@@ -7,9 +7,7 @@ import {
 } from 'ionic-angular';
 
 import { Role } from '../../interfaces';
-import {
-  NotificationProvider, SettingsProvider,
-} from '../../providers';
+import {SettingsProvider} from '../../providers';
 
 @IonicPage()
 @Component({
