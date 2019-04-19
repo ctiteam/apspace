@@ -129,7 +129,7 @@ export class DashboardPage {
   }
 
   ionViewWillEnter() {
-    if (this.plt.is('cordova')) {
+    if (this.plt.is('cordova') && this.plt.is('ios')) {
       this.getBadge();
     }
   }
