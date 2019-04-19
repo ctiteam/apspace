@@ -32,7 +32,6 @@ export class StudentConsentFormlPage {
 
   ionViewWillEnter() {
     if (this.searchKeyword) {
-      console.log(this.searchKeyword);
       this.searchForStudent();
     }
   }
