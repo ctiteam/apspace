@@ -46,7 +46,37 @@
 
 <ion-content #content>
   <ng-template [ngIf]="!subject && !classCode">
-    <ng-template [ngIf]="!subject"><p>No subject</p></ng-template>
-    <ng-template [ngIf]="!classCode"><p>No Class Code</p></ng-template>
+    <div class="row mt-5">
+      <div class="col-12">
+        <p class="normaltext text-center">
+          To view the progress report for a class, please
+          <a style="text-decoration: underline" class="colorful-text font-weight-bold"
+            (click)="toggleFilterMenu()">select a subject</a>
+          first
+        </p>
+      </div>
+    </div>
+
   </ng-template>
+  <ng-template [ngIf]="subject && !classCode">
+    <div class="row mt-5">
+      <div class="col-12">
+        <p class="normaltext text-center">
+          To view the progress report for {{subject}}, please
+          <a style="text-decoration: underline" class="colorful-text font-weight-bold"
+            (click)="toggleFilterMenu()">select a class code</a>
+          also
+        </p>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template [ngIf]="subject && classCode">
+      <div class="row mt-5">
+        <div class="col-12">
+          <p class="normaltext text-center">
+            {{subject}} and {{classCode}} has been selected
+          </p>
+        </div>
+      </div>
+    </ng-template>
 </ion-content>
