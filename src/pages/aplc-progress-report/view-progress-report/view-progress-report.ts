@@ -1,6 +1,6 @@
 
 import { Component } from "@angular/core";
-import { IonicPage } from "ionic-angular";
+import { IonicPage, MenuController } from "ionic-angular";
 
 
 @IonicPage()
@@ -9,8 +9,22 @@ import { IonicPage } from "ionic-angular";
   templateUrl: "view-progress-report.html",
 })
 export class ViewProgressReportPage {
-  constructor() { }
+  subject: string;
+  constructor(public menu: MenuController) { }
 
   ionViewDidLoad() {
+  }
+
+  // TOGGLE THE MENU
+  toggleFilterMenu() {
+    this.menu.toggle();
+  }
+
+  onSubjectChanged(){
+
+  }
+
+  onClassCodeChanged(){
+
   }
 }
