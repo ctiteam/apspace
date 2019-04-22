@@ -84,15 +84,19 @@ export class ViewProgressReportPage {
 
   getScoreLegend(){
     this.ws.get<any[]>(`/score-legend`, true, { url: this.stagingUrl }).subscribe(
-      res => {
-        this.scoreLegends = res;
-      },
-      err => console.log(err),
-      () => {
-        console.log(this.scoreLegends);
-        
-      }
-      
+      res => this.scoreLegends = res
     );
+  }
+
+  getScoreLegendDescription(score: number){
+    if(score <= 1){
+      return this.scoreLegends['1'];
+    }
+    else if(score > 1 && score <=2){
+      return this.scoreLegends['1-2'];
+    }
+    else{
+      return this.scoreLegends['2-3'];
+    }
   }
 }
