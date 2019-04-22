@@ -24,20 +24,15 @@
       <ion-label>Subject List</ion-label>
       <ion-select [(ngModel)]="subject" (ngModelChange)="onSubjectChanged()">
         <ion-option disabled selected value="">Choose One</ion-option>
-        <ion-option value="test2">test 1</ion-option>
-        <ion-option value="test3">test 2</ion-option>
-        <!-- <ion-option *ngFor="let location of locations" [value]="location.location_name">
-              {{ location.location_nice_name }}</ion-option> -->
+        <ion-option *ngFor="let subject of subjects" [value]="subject.SUBJECT_CODE">{{subject.SUBJECT_CODE}}
+        </ion-option>
       </ion-select>
     </ion-item>
     <ion-item *ngIf="subject">
       <ion-label>Class Code</ion-label>
       <ion-select [(ngModel)]="classCode" (ngModelChange)="onClassCodeChanged()">
         <ion-option disabled selected value="">Choose One</ion-option>
-        <ion-option value="test2">test 1</ion-option>
-        <ion-option value="test3">test 2</ion-option>
-        <!-- <ion-option *ngFor="let location of locations" [value]="location.location_name">
-              {{ location.location_nice_name }}</ion-option> -->
+        <ion-option *ngFor="let class of classes" [value]="class.CLASS_CODE">{{class.CLASS_CODE}}</ion-option>
       </ion-select>
     </ion-item>
   </ion-content>
@@ -47,7 +42,7 @@
 <ion-content #content>
   <ng-template [ngIf]="!subject && !classCode">
     <div class="row mt-5">
-      <div class="col-12">
+      <div class="col-12 px-5">
         <p class="normaltext text-center">
           To view the progress report for a class, please
           <a style="text-decoration: underline" class="colorful-text font-weight-bold"
@@ -60,7 +55,7 @@
   </ng-template>
   <ng-template [ngIf]="subject && !classCode">
     <div class="row mt-5">
-      <div class="col-12">
+      <div class="col-12 px-5">
         <p class="normaltext text-center">
           To view the progress report for {{subject}}, please
           <a style="text-decoration: underline" class="colorful-text font-weight-bold"
@@ -71,12 +66,80 @@
     </div>
   </ng-template>
   <ng-template [ngIf]="subject && classCode">
-      <div class="row mt-5">
-        <div class="col-12">
-          <p class="normaltext text-center">
-            {{subject}} and {{classCode}} has been selected
-          </p>
+    <ng-template let-classDescription [ngIf]="classDescription$ | async">
+      <div class="container p-0">
+        <ng-template [ngIf]="studentsBehaviour$ | async"></ng-template>
+
+        <div class="row mt-3">
+          <div class="col-6 px-5 py-2">
+            <p>
+              Class Code:
+            </p>
+            <p class="font-weight-bold"> {{ classCode }}</p>
+            <p>
+              Lecturer Name:
+            </p>
+            <p class="font-weight-bold">
+              {{ classDescription[0].LECTURER_NAME || 'N/A' }}
+            </p>
+          </div>
+          <div class="col-6 px-5 py-2">
+            <p>
+              Start Date:
+            </p>
+            <p class="font-weight-bold">
+              {{ classDescription[0].SDATE || 'N/A' }}
+            </p>
+            <p>
+              End Date:
+            </p>
+            <p class="font-weight-bold">
+              {{ classDescription[0].EDATE || 'N/A' }}
+            </p>
+          </div>
+          <div class="col-12 px-5 py-2" *ngIf="classDescription[0].CLASS_DESCRIPTION">
+            <p>
+              Class Description:
+            </p>
+            <p class="font-weight-bold">
+              {{ classDescription[0].CLASS_DESCRIPTION }}
+            </p>
+          </div>
         </div>
       </div>
     </ng-template>
+    <ng-template let-studentBehaviors [ngIf]="studentsBehaviour$ | async">
+      <div class="row">
+        <div class="container p-0">
+          <div class="col-12 p-0">
+            <ion-list>
+              <ion-item no-lines class="my-3 px-5" *ngFor="let studentBehavior of studentBehaviors">
+                <div class="item">
+                  <small stacked>Student Name:</small>
+                  <h3 class="student-name font-weight-bold">
+                    {{ studentBehavior.STUDENT_NAME }}
+                  </h3>
+                </div>
+                <div class="item mt-3">
+                  <small>Student ID:</small>
+                  <h4>{{ studentBehavior.STUDENT_NUMBER }}</h4>
+                </div>
+                <div class="item mt-3">
+                  <small>Average Score:</small>
+                  <h4>
+                    {{ studentBehavior.AVERAGE_BEH }}
+                  </h4>
+                </div>
+                <div class="item mt-3">
+                  <small>Remarks:</small>
+                  <h4>{{ studentBehavior.REMARK }}</h4>
+                </div>
+              </ion-item>
+            </ion-list>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+  </ng-template>
 </ion-content>
