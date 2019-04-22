@@ -107,12 +107,6 @@
                 (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
                 Add Remarks</button></div>
           </div>
-
-          <button class="btn btn-lg btn-block btn-outline-secondary"
-            *ngIf="slot.status == 'Booked' && currenttime > slot.dateandtime" style="margin-top: 10px;"
-            (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
-            Add Remarks
-          </button>
         </ion-card-content>
       </ion-card>
     </ng-template>

@@ -101,6 +101,7 @@ export class UpcominglecPage {
       date: date,
       timee: timee,
       status: this.status,
+      slotid: null
     };
     this.closelslot();
   }
