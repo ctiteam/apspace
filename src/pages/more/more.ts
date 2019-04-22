@@ -113,6 +113,15 @@ export class MorePage {
           role: Role.Student | Role.Lecturer | Role.Admin,
         },
         {
+          title: 'Webmail',
+          component: 'WebmailPage',
+          size: 'small',
+          desc: 'purple',
+          color: 'purple',
+          icon: 'mail',
+          role: Role.Student
+        },
+        {
           title: 'APLC Progress Report',
           component: 'HomeProgressReportPage',
           size: 'large',
