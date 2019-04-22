@@ -98,11 +98,8 @@ export class UpcominglecPage {
   ) {
     this.canceledslots = {
       availibility_id: id,
-      slotid: slotid,
       date: date,
       timee: timee,
-      datetime: '',
-      cancelled_datetime: this.currentDateTime,
       status: this.status,
     };
     this.closelslot();

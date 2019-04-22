@@ -31,17 +31,19 @@ export class ConsultationFormPage {
   verifydata = this.date + ' ' + this.time + '.00000';
   loading = this.loadingCtrl.create({
   });
+
   booking = {
     availability_id: this.availId,
     date: this.date,
     time: this.time,
     con_with: '',
     reason: '',
-    phone: '23455555',
+    phone: '',
     email: '',
     note: '',
     casusername: this.casid,
   };
+
   conWith: string;
   reason: string;
   telnumber: string;

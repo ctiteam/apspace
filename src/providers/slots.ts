@@ -9,6 +9,8 @@ import { WsApiProvider } from './ws-api';
 @Injectable()
 export class SlotsProvider {
 
+  DevUrl = "http://127.0.0.1:5000";
+
   // add AvailabilityRules API url
   AvailabilityRulesSlotsUrl = '/iconsult/lecaddfreeslots';
 
@@ -19,7 +21,7 @@ export class SlotsProvider {
   AvailabilityRulesDetailsUrl = '/iconsult/rulesdetails';
 
   // add UnAvailabilityRules API url
-  UnvailabilityRulesSlotsUrl = '/iconsult/lec_add_UnFreeSlotsRules';
+  UnvailabilityRulesSlotsUrl = '/iconsult/lecturer_add_unavailability';
 
   // Get user name API url
   getusername = '/iconsult/getusername';
@@ -37,7 +39,8 @@ export class SlotsProvider {
    */
   getrulesDetails(id): Observable<LecGetRulesDet[]> {
         return this.ws.get<LecGetRulesDet[]>('/iconsult/rulesdetails/' + id, true, {
-    headers: {
+          url : this.DevUrl,
+          headers: {
       'Content-Type': 'application/json',
       'Authorization': 'my-auth-token',
     },
@@ -50,6 +53,7 @@ export class SlotsProvider {
   addfreeslots(freeslots): Observable<any> {
      return this.ws.post<any>(this.AvailabilityRulesSlotsUrl,  {
       body: freeslots,
+      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -63,6 +67,7 @@ export class SlotsProvider {
   addCanceledslot(canceledslots) {
     return this.ws.post<any>(this.cancelslotUrl,  {
       body: canceledslots,
+      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -76,6 +81,7 @@ export class SlotsProvider {
   addUnfreeslots(unfreeslots) {
     return this.ws.post<any>(this.UnvailabilityRulesSlotsUrl,  {
       body: unfreeslots,
+      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -85,6 +91,7 @@ export class SlotsProvider {
 
   getrooms(venue: string): Observable<GetRooms[]> {
     return this.ws.get<GetRooms[]>('/iconsult/getvenues/' + venue, true, {
+      url : this.DevUrl,
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'my-auth-token',

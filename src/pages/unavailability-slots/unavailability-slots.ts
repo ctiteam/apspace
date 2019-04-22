@@ -16,23 +16,18 @@ export class UnavailabilitySlotsPage {
 
   form: FormGroup;
   items: Array<{ text: string }> = [];
-  currentDateTime: string = moment().format();
-  rulestatus: boolean = true;
 
   unfreeslots = {
     start_time: [
 
     ],
-    unavailability_rule_id: '',
     user_id: '',
     repeat: [
 
     ],
-    rule_status: this.rulestatus,
     start_date: '',
     end_date: '',
-    delete_time: '',
-    entry_datetime: this.currentDateTime,
+    entry_datetime: '',
   };
 
   minDate: string;

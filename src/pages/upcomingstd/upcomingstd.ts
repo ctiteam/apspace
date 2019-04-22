@@ -36,7 +36,7 @@ export class UpcomingstdPage {
   }
 
   gotoChat(lecname: string) {
-    this.iab.create(`https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/search?q=${lecname}`, '_blank', 'location=true');
+    this.iab.create(`https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/search?q=?${lecname}`, '_blank', 'location=true');
   }
 
   doRefresh(refresher?) {

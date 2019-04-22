@@ -21,7 +21,7 @@ export class AddfreeslotsPage {
   hidden: boolean[] = [];
   locations: Array<{ id: string, title: string }>;
   items: Array<{ text: string }> = [];
-  currentDateTime: string = moment().format();
+  // currentDateTime: string = moment().format();
   rulestatus = true;
   term = '';
 
@@ -33,19 +33,16 @@ export class AddfreeslotsPage {
     start_time: [
 
     ],
-    availability_rule_id: '',
     user_id: '',
     repeat: [
 
     ],
     date: '',
-    location: '',
-    venue: '',
-    rule_status: this.rulestatus,
+    location_id: '',
+    rule_status: '',
     start_date: '',
     end_date: '',
-    entry_datetime: this.currentDateTime,
-    revision_id: '',
+    entry_datetime: ''
   };
 
   loading = this.loadingCtrl.create({
@@ -209,10 +206,10 @@ export class AddfreeslotsPage {
                 this.app.getRootNav().push(UpcominglecPage);
                 this.presentToast();
               },
-              () => {
-                this.loading.dismiss();
-                this.duplicateSlotAlert();
-              }
+              // () => {
+              //   this.loading.dismiss();
+              //   this.duplicateSlotAlert();
+              // }
             );
           },
         },

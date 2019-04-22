@@ -115,15 +115,17 @@
     >
     <div class="pt-4 px-4 pb-0" *ngIf="no_of_weeks < 53 && no_of_weeks > 0">
       <small class="startAndEndDateMessage">
-        *Open slots occurs every {{ this.repeatday }} starts from
+        Open slots occurs every {{ this.repeatday }} starts from
       </small>
-      <small class="startAndEndDateMessage colorful-color">
-        {{ this.alldate | date: "EEEE, dd MMM yyyy" }}
-      </small>
-      <small class="startAndEndDateMessage">until </small>
-      <small class="startAndEndDateMessage colorful-color">
-        {{ freeslots.end_date | date: "EEEE, dd MMM yyyy" }}
-      </small>
+      <div>
+        <small class="startAndEndDateMessage colorful-color">
+          {{ this.alldate | date: "EEEE, dd MMM yyyy" }}
+        </small>
+        <small class="startAndEndDateMessage">until </small>
+        <small class="startAndEndDateMessage colorful-color">
+          {{ freeslots.end_date | date: "EEEE, dd MMM yyyy" }}
+        </small>
+      </div>
     </div>
   </ion-list>
 
@@ -170,9 +172,9 @@
       ></ion-icon>
       <small class="sundaySelectedMessage">End date is required.</small>
     </div>
-    <div style="margin: 0 15px;" *ngIf="endDate !== ''">
+    <div class="pt-4 px-4 pb-0" *ngIf="endDate !== ''">
       <small class="startAndEndDateMessage"
-        >*Open slots occurs every {{ this.repeatday }} starts from
+        >Open slots occurs every {{ this.repeatday }} starts from
       </small>
     </div>
     <div style="margin: 0 15px;" *ngIf="endDate !== ''">
@@ -248,9 +250,7 @@
       <ion-icon name="ios-pin-outline" item-start small></ion-icon>
       <ion-select
         #C
-        [(ngModel)]="freeslots.location"
         (ionChange)="onchange(C.value)"
-        [ngModelOptions]="{ standalone: true }"
         interface="popover"
       >
         <ion-option
@@ -263,13 +263,13 @@
     <ion-item no-lines>
       <ion-label>Venue</ion-label>
       <ion-icon name="locate" item-start small></ion-icon>
-      <ionic-selectable
+      <ionic-selectable  
         item-content
         [items]="rooms$ | async"
         itemValueField="id"
         itemTextField="rooms"
         [canSearch]="true"
-        (onChange)="freeslots.venue = $event.value.rooms"
+        (onChange)="freeslots.location_id = $event.value.id"
       >
       </ionic-selectable>
     </ion-item>
@@ -284,8 +284,7 @@
         sundaySelected ||
         !alldate ||
         freeslots.start_time == '' ||
-        !freeslots.location ||
-        !freeslots.venue
+        !freeslots.location_id
       "
     >
       Submit
@@ -303,8 +302,7 @@
         no_of_weeks < 1 ||
         !alldate ||
         freeslots.start_time == '' ||
-        !freeslots.location ||
-        !freeslots.venue
+        !freeslots.location_id
       "
     >
       Submit
@@ -323,8 +321,7 @@
         endDate == '' ||
         !alldate ||
         freeslots.start_time == '' ||
-        !freeslots.location ||
-        !freeslots.venue
+        !freeslots.location_id
       "
     >
       Submit

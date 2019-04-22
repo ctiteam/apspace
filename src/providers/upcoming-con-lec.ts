@@ -9,7 +9,7 @@ import { WsApiProvider } from './ws-api';
 
 @Injectable()
 export class UpcomingConLecProvider {
-
+  DevUrl = "http://127.0.0.1:5000";
   // Slots API URL
   upcomingConLec = '/iconsult/freeslotslec';
 
@@ -44,7 +44,8 @@ export class UpcomingConLecProvider {
   }
 
   getUpcomingConLec(): Observable<FreeSlotsLec[]> {
-    return this.ws.get<FreeSlotsLec[]>('/iconsult/freeslotslec', true, {
+    return this.ws.get<FreeSlotsLec[]>('/iconsult/upcomingconlec', true, {
+      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -54,6 +55,7 @@ export class UpcomingConLecProvider {
 
   getDetailPage(id): Observable<ConDetail[]> {
     return this.ws.get<ConDetail[]>('/iconsult/detailpage/' + id, true, {
+      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -63,6 +65,7 @@ export class UpcomingConLecProvider {
 
   getUnavailrulesdetails(unavailibilityid): Observable<UnavailruleDet[]> {
     return this.ws.get<UnavailruleDet[]>('/iconsult/get_unavailrule_details/' + unavailibilityid, true, {
+      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -72,6 +75,7 @@ export class UpcomingConLecProvider {
 
   getallstarttimes(unavailibilityId): Observable<Starttimes[]> {
     return this.ws.get<Starttimes[]>('/iconsult/get_all_starttime/' + unavailibilityId, true, {
+      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -82,6 +86,7 @@ export class UpcomingConLecProvider {
   cancelbookedslot(cancelbookedslots) {
     return this.ws.post<any>(this.updatebookedsloturl, {
       body: cancelbookedslots,
+      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -92,6 +97,7 @@ export class UpcomingConLecProvider {
   disableunailrules(unavailibilityid, disableunavailslots) {
     return this.ws.put<any>(this.unavailabilityRulesUpdate + '/' + unavailibilityid, {
       body: disableunavailslots,
+      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -102,6 +108,7 @@ export class UpcomingConLecProvider {
   addlecFeedback(lecfeedback: { slotid: number; entry_datetime: string; feedback: string; gims_status: number; }): Observable<any> {
     return this.ws.post<any>(this.feedbackurl, {
       body: lecfeedback,
+      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -111,6 +118,7 @@ export class UpcomingConLecProvider {
 
   getfeedback(id): Observable<Feedback[]> {
     return this.ws.get<Feedback[]>('/iconsult/lecgetfeedback/' + id, true, {
+      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',

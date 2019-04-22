@@ -175,6 +175,6 @@ export class ConsuldetailpagePage {
   }
 
   gotoChat(tpnumber: string) {
-    this.iab.create(`https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/search?q=${tpnumber}`, '_blank', 'location=true');
+    this.iab.create(`https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/search?q=?${tpnumber}`, '_blank', 'location=true');
   }
 }
