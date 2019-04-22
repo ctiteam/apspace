@@ -31,4 +31,6 @@ export { StudentProfile } from './student-profile';
 export { Subcourse } from './subcourses';
 export { Timetable } from './timetable';
 export { Qualification } from './qualification';
-export { StudentConsentProfile } from './student-consent-profile'
+export { StudentConsentProfile } from './student-consent-profile';
+export { AplcClassDescription } from './aplc-class-description';
+
