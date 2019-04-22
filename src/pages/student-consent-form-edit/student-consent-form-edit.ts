@@ -20,22 +20,17 @@ export class StudentConsentFormEditPage {
   // THIS REGULAR EXPERSSION FOLLOWS THE RFC 2822 STANDARD
   emailValidationRegularExp = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
 
-  studentConsentForm = <StudentConsentProfile>{};
-  student$: Observable<StudentConsentProfile> = this.navParams.get(
+  studentConsentForm: StudentConsentProfile = this.navParams.get(
     "studentData"
   );
   constructor(public navCtrl: NavController, public navParams: NavParams, private ws: WsApiProvider, private toastCtrl: ToastController, public alertCtrl: AlertController) {
-    this.student$.subscribe(
-      data => {
-        this.studentConsentForm = data[0];
-      }
-    );
+
     this.initForm();
   }
 
   submitForm() {
     const confirm = this.alertCtrl.create({
-      title: 'Update Security Questions',
+      title: 'Update Student Details',
       message: `You are about to update the information for ${this.studentConsentForm.STUDENT_NAME}. Do you want to continue?`,
       buttons: [
         {
@@ -54,7 +49,8 @@ export class StudentConsentFormEditPage {
                 this.toast("Something went wrong and we couldn't complete your request. Please try again or contact us via the feedback page");
               },
               () => {
-                this.toast("Students information has been updated successfully.")
+                this.toast("Students information has been updated successfully.");
+                this.navCtrl.pop();
               }
             );
           }

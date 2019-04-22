@@ -27,7 +27,6 @@ export class PasswordRecoveryPage {
   }
 
   onchangeEmail() {
-    console.log("changing");
     let responseOfRegEx = this.qa.secondaryEmail.match(this.emailValidationRegularExp);
     if (!responseOfRegEx) {
       this.showEmailNotValidMsg = true;

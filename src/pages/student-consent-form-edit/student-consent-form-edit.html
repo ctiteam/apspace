@@ -34,14 +34,12 @@
             </h4>
 
             <div class="form-group">
-              <ion-item no-lines>
-                <ion-label>Mobile:</ion-label>
+              <ion-item [class.invalid_field]="consentForm.controls['MOBILE_TEL_NO'].invalid" no-lines>
+                <ion-label><span class='danger-star'>*</span>Mobile:</ion-label>
                 <ion-input type="text" [(ngModel)]="studentConsentForm.MOBILE_TEL_NO" formControlName="MOBILE_TEL_NO">
                 </ion-input>
               </ion-item>
-              <small
-                *ngIf="studentConsentForm.GUARDIAN_MOBILE_TEL && !studentConsentForm.MOBILE_TEL_NO.match(phoneValidationRegularExp)"
-                style="color:#ff4444">
+              <small *ngIf="consentForm.controls['MOBILE_TEL_NO'].invalid" style="color:#ff4444">
                 Mobile number can contain only <strong>numbers</strong>, <strong>spaces</strong>, <strong>/</strong>,
                 and <strong>-</strong>. Also, it <strong>MUST</strong> start with either <strong>+</strong> or
                 <strong>00</strong>
@@ -49,10 +47,13 @@
             </div>
 
             <div class="form-group">
-              <ion-item no-lines>
-                <ion-label>Email:</ion-label>
+              <ion-item [class.invalid_field]="consentForm.controls['E_MAIL'].invalid" no-lines>
+                <ion-label><span class='danger-star'>*</span>Email:</ion-label>
                 <ion-input type="text" [(ngModel)]="studentConsentForm.E_MAIL" formControlName="E_MAIL"></ion-input>
               </ion-item>
+              <small *ngIf="consentForm.controls['E_MAIL'].invalid" style="color:#ff4444">
+                Inavalid email address
+              </small>
             </div>
           </div>
 
@@ -62,15 +63,15 @@
             </h4>
 
             <div class="form-group">
-              <ion-item no-lines>
-                <ion-label>Name:</ion-label>
+              <ion-item [class.invalid_field]="consentForm.controls['PARENTS_NAME'].invalid" no-lines>
+                <ion-label><span class='danger-star'>*</span>Name:</ion-label>
                 <ion-input type="text" [(ngModel)]="studentConsentForm.PARENTS_NAME" formControlName="PARENTS_NAME">
                 </ion-input>
               </ion-item>
             </div>
             <div class="form-group">
-              <ion-item no-lines>
-                <ion-label for="exampleFormControlSelect1">Relationship:</ion-label>
+              <ion-item [class.invalid_field]="consentForm.controls['PARENTS_RELATIONSHIP'].invalid" no-lines>
+                <ion-label for="exampleFormControlSelect1"><span class='danger-star'>*</span>Relationship:</ion-label>
                 <ion-select [(ngModel)]="studentConsentForm.PARENTS_RELATIONSHIP"
                   formControlName="PARENTS_RELATIONSHIP">
                   <ion-option *ngFor="let relationship of realtionships" [value]="relationship">{{relationship}}
@@ -80,15 +81,15 @@
             </div>
 
             <div class="form-group">
-              <ion-item no-lines>
-                <ion-label>Address:</ion-label>
+              <ion-item [class.invalid_field]="consentForm.controls['PARENTS_RESIDENTIAL_ADDRESS'].invalid" no-lines>
+                <ion-label><span class='danger-star'>*</span>Address:</ion-label>
                 <ion-input type="text" [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_ADDRESS"
                   formControlName="PARENTS_RESIDENTIAL_ADDRESS"></ion-input>
               </ion-item>
             </div>
             <div class="form-group">
-              <ion-item no-lines>
-                <ion-label>City:</ion-label>
+              <ion-item [class.invalid_field]="consentForm.controls['PARENTS_RESIDENTIAL_CITY'].invalid" no-lines>
+                <ion-label><span class='danger-star'>*</span>City:</ion-label>
                 <ion-input type="text" [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_CITY"
                   formControlName="PARENTS_RESIDENTIAL_CITY"></ion-input>
               </ion-item>
@@ -108,21 +109,19 @@
               </ion-item>
             </div>
             <div class="form-group">
-              <ion-item no-lines>
-                <ion-label>Country:</ion-label>
+              <ion-item [class.invalid_field]="consentForm.controls['PARENTS_RESIDENTIAL_COUNTRY'].invalid" no-lines>
+                <ion-label><span class='danger-star'>*</span>Country:</ion-label>
                 <ion-input type="text" [(ngModel)]="studentConsentForm.PARENTS_RESIDENTIAL_COUNTRY"
                   formControlName="PARENTS_RESIDENTIAL_COUNTRY"></ion-input>
               </ion-item>
             </div>
             <div class="form-group">
-              <ion-item no-lines>
-                <ion-label>Mobile:</ion-label>
+              <ion-item [class.invalid_field]="consentForm.controls['PARENTS_MOBILE_TEL'].invalid" no-lines>
+                <ion-label><span class='danger-star'>*</span>Mobile:</ion-label>
                 <ion-input type="tel" [(ngModel)]="studentConsentForm.PARENTS_MOBILE_TEL"
                   formControlName="PARENTS_MOBILE_TEL"></ion-input>
               </ion-item>
-              <small
-                *ngIf="studentConsentForm.PARENTS_MOBILE_TEL && !studentConsentForm.PARENTS_MOBILE_TEL.match(phoneValidationRegularExp)"
-                style="color:#ff4444">
+              <small *ngIf="consentForm.controls['PARENTS_MOBILE_TEL'].invalid" style="color:#ff4444">
                 Mobile number can contain only <strong>numbers</strong>, <strong>spaces</strong>, <strong>/</strong>,
                 and <strong>-</strong>. Also, it <strong>MUST</strong> start with either <strong>+</strong> or
                 <strong>00</strong>
@@ -135,6 +134,9 @@
                 <ion-input type="email" [(ngModel)]="studentConsentForm.PARENTS_EMAIL" formControlName="PARENTS_EMAIL">
                 </ion-input>
               </ion-item>
+              <small *ngIf="consentForm.controls['PARENTS_EMAIL'].invalid" style="color:#ff4444">
+                Inavalid email address
+              </small>
             </div>
           </div>
 
@@ -202,9 +204,7 @@
                 <ion-input type="tel" [(ngModel)]="studentConsentForm.GUARDIAN_MOBILE_TEL"
                   formControlName="GUARDIAN_MOBILE_TEL"></ion-input>
               </ion-item>
-              <small
-                *ngIf="studentConsentForm.GUARDIAN_MOBILE_TEL && !studentConsentForm.GUARDIAN_MOBILE_TEL.match(phoneValidationRegularExp)"
-                style="color:#ff4444">
+              <small *ngIf="consentForm.controls['GUARDIAN_MOBILE_TEL'].invalid" style="color:#ff4444">
                 Mobile number can contain only <strong>numbers</strong>, <strong>spaces</strong>, <strong>/</strong>,
                 and <strong>-</strong>. Also, it <strong>MUST</strong> start with either <strong>+</strong> or
                 <strong>00</strong>
@@ -216,6 +216,15 @@
                 <ion-input type="email" [(ngModel)]="studentConsentForm.GUARDIAN_EMAIL"
                   formControlName="GUARDIAN_EMAIL"></ion-input>
               </ion-item>
+              <small *ngIf="consentForm.controls['GUARDIAN_EMAIL'].invalid" style="color:#ff4444">
+                Invalid email address
+              </small>
+            </div>
+            <div class="form-group">
+              <small *ngIf="consentForm.invalid" style="color:#ff4444">
+                Form is invalid. Please make sure that all emails and phone numbers are valid and all of the required
+                fields (fields with *) are filled.
+              </small>
             </div>
           </div>
           <button class="btn btn-success btn-lg btn-block" type="submit"
