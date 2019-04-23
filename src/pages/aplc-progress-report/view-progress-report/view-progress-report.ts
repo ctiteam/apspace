@@ -31,7 +31,7 @@ export class ViewProgressReportPage {
 
   constructor(public menu: MenuController, private ws: WsApiProvider) { }
 
-  ionViewDidLoad() {   
+  ionViewDidLoad() {
     this.getSubjects();
     this.getScoreLegend();
   }
@@ -82,20 +82,20 @@ export class ViewProgressReportPage {
     this.studentsBehaviour$ = this.ws.get<AplcStudentBehaviour[]>(`/student-behavior?class_code=${classCode}`, true, { url: this.stagingUrl });
   }
 
-  getScoreLegend(){
+  getScoreLegend() {
     this.ws.get<any[]>(`/score-legend`, true, { url: this.stagingUrl }).subscribe(
       res => this.scoreLegends = res
     );
   }
 
-  getScoreLegendDescription(score: number){
-    if(score <= 1){
+  getScoreLegendDescription(score: number) {
+    if (score <= 1) {
       return this.scoreLegends['1'];
     }
-    else if(score > 1 && score <=2){
+    else if (score > 1 && score <= 2) {
       return this.scoreLegends['1-2'];
     }
-    else{
+    else {
       return this.scoreLegends['2-3'];
     }
   }
