@@ -803,8 +803,8 @@ $light_menu_colors: (
 		}
 	}
 
-	// QUALIFICATION AUTHENTICITY VERIFICATION PAGE
-	page-qualification-verification {
+	// QUALIFICATION AUTHENTICITY VERIFICATION PAGE AND VIEW/UPDATE PROGRESS REPORT APLC
+	page-qualification-verification, page-view-progress-report{
 		ion-content {
 			background-color: color($light_colors, light_white_background) !important;
 		}

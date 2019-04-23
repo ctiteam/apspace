@@ -14,11 +14,11 @@ import { tap } from "rxjs/operators";
 })
 export class ViewProgressReportPage {
   stagingUrl = 'https://kh1rvo4ilf.execute-api.ap-southeast-1.amazonaws.com/dev/aplc';
+  objectKeys = Object.keys; // USED FOR GROUPING TRANSACTIONS PER MONTH
 
   subject: string;
   classCode: string;
 
-  scoreLegends = [{}];
   subjects: string[];
   classes: [{
     CLASS_CODE: string,
@@ -26,7 +26,9 @@ export class ViewProgressReportPage {
   }];
 
   classDescription$: Observable<AplcClassDescription[]>;
-  studentsBehaviour$: Observable<AplcStudentBehaviour[]>
+  studentsBehaviour$: Observable<AplcStudentBehaviour[]>;
+  descriptionLegend$: Observable<any>;
+  scoreLegend$: Observable<any>;
 
 
   constructor(public menu: MenuController, private ws: WsApiProvider) { }
@@ -34,6 +36,7 @@ export class ViewProgressReportPage {
   ionViewDidLoad() {
     this.getSubjects();
     this.getScoreLegend();
+    this.getDescriptionLegend();
   }
 
   // TOGGLE THE MENU
@@ -52,25 +55,13 @@ export class ViewProgressReportPage {
 
   getSubjects() {
     this.ws.get<any>(`/subjects`, true, { url: this.stagingUrl }).subscribe(
-      (res) => {
-        this.subjects = res;
-      },
-      err => console.log(err),
-      () => {
-        // console.log(this.subjects);
-      }
+      res => this.subjects = res
     );
   }
 
   getClasses(subjectCode: string) {
     this.ws.get<any>(`/classes?subject_code=${subjectCode}`, true, { url: this.stagingUrl }).subscribe(
-      (res) => {
-        this.classes = res;
-      },
-      err => console.log(err),
-      () => {
-        // console.log(this.classes);
-      }
+      res => this.classes = res
     );
   }
 
@@ -83,20 +74,23 @@ export class ViewProgressReportPage {
   }
 
   getScoreLegend() {
-    this.ws.get<any[]>(`/score-legend`, true, { url: this.stagingUrl }).subscribe(
-      res => this.scoreLegends = res
-    );
+    this.scoreLegend$ = this.ws.get<any[]>(`/score-legend`, true, { url: this.stagingUrl });
   }
 
-  getScoreLegendDescription(score: number) {
-    if (score <= 1) {
-      return this.scoreLegends['1'];
-    }
-    else if (score > 1 && score <= 2) {
-      return this.scoreLegends['1-2'];
-    }
-    else {
-      return this.scoreLegends['2-3'];
-    }
+  getDescriptionLegend() {
+    this.descriptionLegend$ = this.ws.get<any[]>(`/description-legend`, true, { url: this.stagingUrl }).pipe(tap(data => console.log(data)
+    ));
   }
+
+  // getScoreLegendDescription(score: number) {
+  //   if (score <= 1) {
+  //     return this.scoreLegends['1'];
+  //   }
+  //   else if (score > 1 && score <= 2) {
+  //     return this.scoreLegends['1-2'];
+  //   }
+  //   else {
+  //     return this.scoreLegends['2-3'];
+  //   }
+  // }
 }

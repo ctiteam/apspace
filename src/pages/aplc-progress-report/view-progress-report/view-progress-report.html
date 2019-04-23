@@ -113,44 +113,101 @@
         <div class="container p-0">
           <div class="col-12 p-0">
             <ion-list>
-              <ion-item no-lines class="my-3 px-5 d-none d-md-block">
-                <div class="row">
-                  <div class="col-12 col-md-3">Student Name</div>
-                  <div class="col-12 col-md-3">Student ID</div>
-                  <div class="col-12 col-md-3">Average Score</div>
-                  <div class="col-12 col-md-3">Score Description</div>
+              <ion-item no-lines class="my-1 px-5 d-none d-md-block">
+                <div class="row colorful-text">
+                  <div class="col-12 col-md-3 col-lg-2">Student Name</div>
+                  <div class="col-12 col-md-3 col-lg-2">Student ID</div>
+                  <div class="col-12 col-md-3 col-lg-2">Average Score</div>
+                  <div class="col-12 col-md-3 d-md-none d-lg-block">Scores</div>
+                  <div class="col-12 col-md-3">Remarks</div>
                 </div>
               </ion-item>
-              <ion-item no-lines class="my-3 px-5" *ngFor="let studentBehavior of studentBehaviors">
+              <ion-item no-lines class="my-1 px-5" *ngFor="let studentBehavior of studentBehaviors">
                 <div class="row">
-                  <div class="col-12 col-md-3 item">
+                  <div class="col-12 col-md-3 col-lg-2 item">
                     <small class="d-md-none font-weight-bold" stacked>Student Name:</small>
                     <h3 class="student-name">
                       {{ studentBehavior.STUDENT_NAME }}
                     </h3>
                   </div>
-                  <div class="col-12 col-md-3 item">
+                  <div class="col-12 col-md-3 col-lg-2 item">
                     <small class="d-md-none font-weight-bold mt-3">Student ID:</small>
                     <h4>{{ studentBehavior.STUDENT_NUMBER }}</h4>
                   </div>
-                  <div class="col-12 col-md-3 item">
+                  <div class="col-12 col-md-3 col-lg-2 item">
                     <small class="d-md-none font-weight-bold mt-3">Average Score:</small>
                     <h4>
                       {{ +studentBehavior.AVERAGE_BEH > 0 ? studentBehavior.AVERAGE_BEH : 'N/A' }}
                     </h4>
                   </div>
-                  <div class="col-12 col-md-3 item">
-                    <small class="d-md-none font-weight-bold mt-3">Score Description:</small>
-                    <h4>
-                      {{ +studentBehavior.AVERAGE_BEH > 0 ? getScoreLegendDescription(+studentBehavior.AVERAGE_BEH) : 'N/A' }}
+                  <div class="col-12 col-md-3 item d-md-none d-lg-block">
+                    <small class="d-md-none font-weight-bold mt-3">Scores:</small>
+                    <h4 *ngIf="studentBehavior.AVERAGE_BEH > 0; else nodata">
+                      COMPLETING: {{studentBehavior.COMPLETING_BEH}}<br>
+                      AVERAGE: {{studentBehavior.AVERAGE_BEH}}<br>
+                      CONCEPT: {{studentBehavior.CONCEPT_BEH}}<br>
+                      SOCIAL: {{studentBehavior.SOCIAL_BEH}}
                     </h4>
+                    <ng-template #nodata>
+                      <h4>
+                        N/A
+                      </h4>
+                    </ng-template>
                   </div>
-                  <div class="col-12 col-md-3 item" *ngIf="studentBehavior.REMARK">
+                  <div class="col-12 col-md-3 item">
                     <small class="d-md-none font-weight-bold mt-3">Remarks:</small>
-                    <h4>{{ studentBehavior.REMARK }}</h4>
+                    <h4>{{ studentBehavior.REMARK || 'N/A' }}</h4>
                   </div>
                 </div>
               </ion-item>
+
+
+              <ng-template let-scoreLegends [ngIf]="scoreLegend$ | async">
+                <div class="my-4">
+                  <ion-item no-lines class="my-1 px-5">
+                    <h4 class="font-weight-bold colorful-text">
+                      Average Score Legend:
+                    </h4>
+                    <div class="row item my-4" *ngFor="let key of objectKeys(scoreLegends)">
+                      <div class="col-2 m-auto">
+                        <p class="text-center font-weight-bold">{{key}}</p>
+                      </div>
+                      <div class="col-10">
+                        <p>{{ scoreLegends[key] }}</p>
+                      </div>
+                    </div>
+                  </ion-item>
+                </div>
+              </ng-template>
+
+
+              <ng-template let-descriptionLegends [ngIf]="descriptionLegend$ | async">
+                <div class="my-4">
+                  <ion-item no-lines class="my-1 px-5">
+                    <h4 class="font-weight-bold colorful-text">
+                      Scores Legend:
+                    </h4>
+                    <div class="row item my-4" *ngFor="let key of objectKeys(descriptionLegends)">
+                      <div class="col-12 col-md-2 m-auto">
+                        <p class="text-center font-weight-bold">{{key}}</p>
+                      </div>
+                      <div class="col-12 col-md-10">
+                        <div *ngFor="let index of objectKeys(descriptionLegends[key])">
+                          <div class="row my-4" *ngFor="let title of objectKeys(descriptionLegends[key][index])">
+                            <div class="col-12 col-md-4 m-auto">
+                              <p class="text-center">{{title}}</p>
+                            </div>
+                            <div class="col-12 col-md-8 m-auto">
+                              <p>{{descriptionLegends[key][index][title]}}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ion-item>
+
+                </div>
+              </ng-template>
             </ion-list>
           </div>
         </div>
