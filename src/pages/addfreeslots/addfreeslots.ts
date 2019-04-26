@@ -21,7 +21,6 @@ export class AddfreeslotsPage {
   hidden: boolean[] = [];
   locations: Array<{ id: string, title: string }>;
   items: Array<{ text: string }> = [];
-  // currentDateTime: string = moment().format();
   rulestatus = true;
   term = '';
 
@@ -240,9 +239,10 @@ export class AddfreeslotsPage {
     if (this.formattedSelectedDate.getDay() == 0) {
       this.sundaySelected = true;
     }
-
     this.minEndDate = moment(this.alldate).add(1, 'day').toISOString();
     this.endDate = '';
+    //when start date change then recalculate end date by number of weeks
+    this.repeatweek();
   }
 
   async duplicateSlotAlert() {

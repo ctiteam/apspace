@@ -137,6 +137,12 @@ export class ConsultationFormPage {
               .subscribe(
                 () => {
                   this.loading.dismiss();
+                  this.app.getRootNav().setRoot(TabsPage);
+                  this.app.getRootNav().push(UpcomingstdPage);
+                  this.presentToast();
+                },
+                () => {
+                  this.loading.dismiss();
                   const innerAlert = this.alertCtrl.create({
                     message: 'This slot just booked by a student, please book another slot.',
                     buttons: [
@@ -151,12 +157,6 @@ export class ConsultationFormPage {
                   });
                   innerAlert.present();
                 },
-                () => {
-                  this.loading.dismiss();
-                  this.app.getRootNav().setRoot(TabsPage);
-                  this.app.getRootNav().push(UpcomingstdPage);
-                  this.presentToast();
-                }
               );
           },
         },

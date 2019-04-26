@@ -8,7 +8,7 @@ import { WsApiProvider } from './ws-api';
 
 @Injectable()
 export class UpcomingConStuProvider {
-  DevUrl = "http://127.0.0.1:5000";
+  DevUrl = "http://127.0.0.1:5000"; 
   // Slots API URL
   upcomingConStu = '/iconsult/upcomingconstu';
 

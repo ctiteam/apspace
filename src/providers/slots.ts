@@ -9,7 +9,7 @@ import { WsApiProvider } from './ws-api';
 @Injectable()
 export class SlotsProvider {
 
-  DevUrl = "http://127.0.0.1:5000";
+  DevUrl = "http://127.0.0.1:5000"; 
 
   // add AvailabilityRules API url
   AvailabilityRulesSlotsUrl = '/iconsult/lecaddfreeslots';
