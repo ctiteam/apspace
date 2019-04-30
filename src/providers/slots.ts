@@ -9,8 +9,6 @@ import { WsApiProvider } from './ws-api';
 @Injectable()
 export class SlotsProvider {
 
-  DevUrl = "http://127.0.0.1:5000"; 
-
   // add AvailabilityRules API url
   AvailabilityRulesSlotsUrl = '/iconsult/lecaddfreeslots';
 
@@ -30,7 +28,7 @@ export class SlotsProvider {
   getroomsurl = '/iconsult/getvenues';
 
   constructor(public http: HttpClient, private cas: CasTicketProvider, private ws: WsApiProvider,
-) {
+  ) {
 
   }
 
@@ -38,22 +36,20 @@ export class SlotsProvider {
    * GET Method: get lecturer's free slots details.
    */
   getrulesDetails(id): Observable<LecGetRulesDet[]> {
-        return this.ws.get<LecGetRulesDet[]>('/iconsult/rulesdetails/' + id, true, {
-          url : this.DevUrl,
-          headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'my-auth-token',
-    },
-  });
+    return this.ws.get<LecGetRulesDet[]>('/iconsult/rulesdetails/' + id, true, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'my-auth-token',
+      },
+    });
   }
 
   /**
    * POST Method: add lecturer's free slots.
    */
   addfreeslots(freeslots): Observable<any> {
-     return this.ws.post<any>(this.AvailabilityRulesSlotsUrl,  {
+    return this.ws.post<any>(this.AvailabilityRulesSlotsUrl, {
       body: freeslots,
-      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -65,9 +61,8 @@ export class SlotsProvider {
    * POST Method: add lecturer's canceled slots.
    */
   addCanceledslot(canceledslots) {
-    return this.ws.post<any>(this.cancelslotUrl,  {
+    return this.ws.post<any>(this.cancelslotUrl, {
       body: canceledslots,
-      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -79,24 +74,22 @@ export class SlotsProvider {
    * POST Method: add lecturer's Unfree slots.
    */
   addUnfreeslots(unfreeslots) {
-    return this.ws.post<any>(this.UnvailabilityRulesSlotsUrl,  {
+    return this.ws.post<any>(this.UnvailabilityRulesSlotsUrl, {
       body: unfreeslots,
-      url : this.DevUrl,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
       },
     });
-     }
+  }
 
   getrooms(venue: string): Observable<GetRooms[]> {
     return this.ws.get<GetRooms[]>('/iconsult/getvenues/' + venue, true, {
-      url : this.DevUrl,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'my-auth-token',
-    },
-  });
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'my-auth-token',
+      },
+    });
   }
 
 }
