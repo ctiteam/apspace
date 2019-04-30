@@ -18,13 +18,11 @@ export class UnavailabledetailsPage {
   unfreeslots$: Observable<any[]>;
   starttimes$: Observable<any[]>;
 
-  currentDateTime: string = moment().format();
+  //currentDateTime: string = moment().format();
   ruleStatus: number = 0;
 
   disableunavailslots = {
     rule_status: this.ruleStatus,
-    delete_time: this.currentDateTime,
-
   };
 
   constructor(public navCtrl: NavController,

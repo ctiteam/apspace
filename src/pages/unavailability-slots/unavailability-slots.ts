@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, App, IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { AlertController, App, IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import moment from 'moment';
 import { SlotsProvider } from '../../providers';
 import { UpcominglecPage } from '../iConsult-lecturer/upcominglec';
@@ -16,23 +16,18 @@ export class UnavailabilitySlotsPage {
 
   form: FormGroup;
   items: Array<{ text: string }> = [];
-  currentDateTime: string = moment().format();
-  rulestatus: boolean = true;
 
   unfreeslots = {
     start_time: [
 
     ],
-    unavailability_rule_id: '',
     user_id: '',
     repeat: [
 
     ],
-    rule_status: this.rulestatus,
     start_date: '',
     end_date: '',
-    delete_time: '',
-    entry_datetime: this.currentDateTime,
+    entry_datetime: '',
   };
 
   minDate: string;
@@ -42,6 +37,8 @@ export class UnavailabilitySlotsPage {
   time: string[] = [];
   minEndDate: string;
   MinDate: string;
+  loading = this.loadingCtrl.create({
+  });
 
   constructor(public http: HttpClient,
     public slotsProvider: SlotsProvider,
@@ -51,6 +48,7 @@ export class UnavailabilitySlotsPage {
     private _FB: FormBuilder,
     public app: App,
     private toastCtrl: ToastController,
+    public loadingCtrl: LoadingController,
   ) {
 
     this.items.push({ text: 'Mon' });
@@ -122,8 +120,10 @@ export class UnavailabilitySlotsPage {
         {
           text: 'Yes',
           handler: () => {
+            this.loading.present();
             this.slotsProvider.addUnfreeslots(this.unfreeslots).subscribe(
               () => {
+                this.loading.dismiss();
                 this.app.getRootNav().setRoot(TabsPage);
                 this.app.getRootNav().push(UpcominglecPage);
                 this.presentToast();

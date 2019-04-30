@@ -31,11 +31,11 @@ export class UpcomingConStuProvider {
   verifyDupSlotUrl = '/iconsult/verifyduplicateslot';
 
   constructor(public http: HttpClient, private cas: CasTicketProvider, private ws: WsApiProvider,
-) {
+  ) {
   }
 
   getUpcomingConStu(): Observable<Upcomingcon[]> {
-             return this.ws.get<Upcomingcon[]>('/iconsult/upcomingconstu', true, {
+    return this.ws.get<Upcomingcon[]>('/iconsult/upcomingconstu', true, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -50,10 +50,10 @@ export class UpcomingConStuProvider {
         'Authorization': 'my-auth-token',
       },
     });
-   }
+  }
 
   getSlots(casId): Observable<FreeSlots[]> {
-    return this.ws.get<FreeSlots[]>('/iconsult/freeslots/' + casId, true, {
+    return this.ws.get<FreeSlots[]>('/iconsult/get_slots/' + casId, true, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -62,17 +62,17 @@ export class UpcomingConStuProvider {
   }
 
   addbooking(booking) {
-    return this.ws.post<any>(this.addBookingUrl,  {
+    return this.ws.post<any>(this.addBookingUrl, {
       body: booking,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
       },
     });
-    }
+  }
 
   getstaffname(casid: string): Observable<StaffName[]> {
-        return this.ws.get<StaffName[]>('/iconsult/getusername/' + casid, true, {
+    return this.ws.get<StaffName[]>('/iconsult/getusername/' + casid, true, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -84,7 +84,7 @@ export class UpcomingConStuProvider {
    * POST Method: add student cancel booked slots.
    */
   cancelbookedslot(cancelbookedslots) {
-    return this.ws.post<any>(this.updatebookedsloturl,  {
+    return this.ws.post<any>(this.updatebookedsloturl, {
       body: cancelbookedslots,
       headers: {
         'Content-Type': 'application/json',

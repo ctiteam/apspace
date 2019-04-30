@@ -44,7 +44,7 @@ export class UpcomingConLecProvider {
   }
 
   getUpcomingConLec(): Observable<FreeSlotsLec[]> {
-    return this.ws.get<FreeSlotsLec[]>('/iconsult/freeslotslec', true, {
+    return this.ws.get<FreeSlotsLec[]>('/iconsult/upcomingconlec', true, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -79,6 +79,9 @@ export class UpcomingConLecProvider {
     });
   }
 
+  /**
+   * POST Method: add lecturer cancel booked slots.
+   */
   cancelbookedslot(cancelbookedslots) {
     return this.ws.post<any>(this.updatebookedsloturl, {
       body: cancelbookedslots,

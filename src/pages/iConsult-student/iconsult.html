@@ -30,7 +30,7 @@
             <ion-card-header>
               <div class="row">
                 <div class="col-8 text-left">
-                  <h2>{{ slot.datetime }}</h2>
+                  <h2>{{ slot.date | date:'EEEE, dd MMMM y'}}</h2>
                 </div>
                 <div class="col-4 text-right">
                   <ion-badge class="bookedHour" *ngIf="slot.status == 'Booked'">{{
@@ -68,7 +68,7 @@
       <div class="row mt-5">
         <div class="mt-5 col-12">
           <h2 class="pt-5 px-4 text-center no-consultation message" *ngIf="(staffName$ | async) as staffName">
-            {{ staffName.name }}
+            {{ staffName.response}}
           </h2>
         </div>
         <div class="col-12">

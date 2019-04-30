@@ -80,10 +80,10 @@
             <ion-label>Start Time</ion-label>
             <ion-icon name="ios-clock-outline" item-start small></ion-icon>
             <ion-datetime
-              displayFormat="hh:mm A"
-              pickerFormat="hh mm"
+              displayFormat="HH:mm"
+              pickerFormat="HH:mm"
               [(ngModel)]="time[i]"
-              hourValues="[8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]"
+              hourValues="[08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18]"
               minuteValues="[00,30]"
               formControlName="slotsTime"
               (ionChange)="onSelectTime(i)"
@@ -122,7 +122,7 @@
       class="cancel btn btn-outline-dark btn-block btn-lg"
       (click)="confirmation()"
       [disabled]="
-        !unfreeslots.repeat ||
+        unfreeslots.repeat == '' ||
         !unfreeslots.start_date ||
         !unfreeslots.end_date ||
         unfreeslots.start_time == ''

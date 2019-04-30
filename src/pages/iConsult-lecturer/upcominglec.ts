@@ -35,6 +35,7 @@ export class UpcominglecPage {
     public alertCtrl: AlertController,
     public slotsProvider: SlotsProvider,
     private toastCtrl: ToastController,
+    public pro: UpcomingConLecProvider,
   ) {
     this.fabButtonOpened = false;
   }
@@ -81,6 +82,7 @@ export class UpcominglecPage {
   ) {
     this.app.getRootNav().push('ConsuldetailpagePage',
       { id, status, availibilityid, date, time, timee, datetime });
+
   }
 
   closeAvailableSlots(
@@ -96,19 +98,17 @@ export class UpcominglecPage {
   ) {
     this.canceledslots = {
       availibility_id: id,
-      slotid: slotid,
       date: date,
       timee: timee,
-      datetime: '',
-      cancelled_datetime: this.currentDateTime,
       status: this.status,
+      slotid: null
     };
     this.closelslot();
   }
 
   async closelslot() {
     const alert = await this.alertCtrl.create({
-      title: 'Close Slot',
+      title: 'Cancel Slot',
       message: 'Are you sure you want to cancel this open slot?',
       buttons: [
         {
@@ -134,7 +134,7 @@ export class UpcominglecPage {
 
   presentToast() {
     const toast = this.toastCtrl.create({
-      message: 'Available slot was closed successfully',
+      message: 'Available slot was cancelled successfully',
       duration: 3000,
       position: 'bottom',
     });

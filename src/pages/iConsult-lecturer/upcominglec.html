@@ -19,27 +19,27 @@
         [ngClass]="{'UnAvailablecard':slot.status == 'Unavailable', 'bookedcard':slot.status == 'Booked' && currenttime < slot.dateandtime, 'Availablecard':slot.status == 'Available', 'closedcard':slot.status == 'Clossed', 'passedCard':slot.status == 'Booked' && currenttime > slot.dateandtime}">
         <ion-card-header *ngIf="slot.status == 'Available'">
           <ion-badge class="available">Available</ion-badge>
-          {{ slot.datetime}}
+          {{ slot.date | date:'EEEE, dd MMMM y'}}
         </ion-card-header>
 
         <ion-card-header *ngIf="slot.status == 'Booked' && currenttime < slot.dateandtime">
           <ion-badge class="bookedHour">Booked</ion-badge>
-          {{slot.datetime}}
+          {{ slot.date | date:'EEEE, dd MMMM y'}}
         </ion-card-header>
 
         <ion-card-header *ngIf="slot.status == 'Booked' && currenttime > slot.dateandtime">
           <ion-badge class="passedHour">Passed</ion-badge>
-          {{slot.datetime}}
+          {{ slot.date | date:'EEEE, dd MMMM y'}}
         </ion-card-header>
 
         <ion-card-header *ngIf="slot.status == 'Clossed'">
-          <ion-badge class="closed">Closed</ion-badge>
-          {{slot.datetime}}
+          <ion-badge class="closed">Cancelled</ion-badge>
+          {{ slot.date | date:'EEEE, dd MMMM y'}}
         </ion-card-header>
 
         <ion-card-header *ngIf="slot.status == 'Unavailable'">
           <ion-badge class="unavailable">Unavailable</ion-badge>
-          {{ slot.startdate | date:'EEEE, dd MMMM' }}
+          {{ slot.startdate | date:'EEEE, dd MMMM y' }}
         </ion-card-header>
 
         <ion-card-content style="padding-top: 10px;">
@@ -66,13 +66,13 @@
           <ion-label no-margin *ngIf="slot.status == 'Unavailable'">
             <ion-icon padding-right name="calendar"></ion-icon>
             <b>From : </b>
-            {{ slot.startdate | date:'EEEE, dd MMMM' }}
+            {{ slot.startdate | date:'EEEE, dd MMMM y' }}
           </ion-label>
 
           <ion-label no-margin *ngIf="slot.status == 'Unavailable'">
             <ion-icon padding-right name="ios-calendar-outline"></ion-icon>
             <b>To : </b>
-            {{ slot.enddate | date:'EEEE, dd MMMM' }}
+            {{ slot.enddate | date:'EEEE, dd MMMM y' }}
           </ion-label>
 
           <button class="btn btn-lg btn-block btn-outline-primary" *ngIf="slot.status == 'Unavailable'"
@@ -107,7 +107,6 @@
                 (click)="openDetailPage(slot.slotid, slot.status, slot.availibilityid, slot.date, slot.time, slot.timee, slot.datetime)">
                 Add Remarks</button></div>
           </div>
-
         </ion-card-content>
       </ion-card>
     </ng-template>

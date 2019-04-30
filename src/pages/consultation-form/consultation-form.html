@@ -7,7 +7,7 @@
 <ion-content>
   <ion-item class="booking-details" style="margin-bottom:5px">
     <h2>{{ lecid }}</h2>
-    <p>{{date | date:'EEEE, dd MMM'}} ({{ datetime }} - {{ endTime }})
+    <p>{{date | date:'EEEE, dd MMM y'}} ({{ datetime }} - {{ endTime }})
     </p>
   </ion-item>
 
@@ -76,7 +76,7 @@
         </div>
 
         <ion-item class="my-2">
-          <ion-label stacked class="field-title required">Email Address</ion-label>
+          <ion-label stacked class="field-title">Email Address</ion-label>
           <ion-input type="text" formControlName="stuemialaddress" [(ngModel)]="emialaddress" disabled
             [(ngModel)]="booking.email">
           </ion-input>

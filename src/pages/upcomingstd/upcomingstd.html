@@ -10,15 +10,11 @@
   </ion-refresher>
   <ng-template let-slots [ngIf]="slots$ | async" [ngIfElse]="loadingUpComLec">
     <ng-template [ngIf]="slots && slots.length > 0" [ngIfElse]="nodata">
-      <ion-card
-        class="card card-ios"
-        *ngFor="let slot of slots"
-        [ngClass]="{
+      <ion-card class="card card-ios" *ngFor="let slot of slots" [ngClass]="{
           canceledcard: slot.status == 'cancelledbylec',
           availablecard: slot.status == 'normal',
           canceledcard: slot.status == 'cancelledbystu'
-        }"
-      >
+        }">
         <ion-card-header>
           <div class="row">
             <div class="col-12">
@@ -26,23 +22,12 @@
                 slot.lecname
               }}</a>
             </div>
-            <div
-              class="col-12"
-              *ngIf="
+            <div class="col-12" *ngIf="
                 slot.status == 'cancelledbystu' ||
                 slot.status == 'cancelledbylec'
-              "
-            >
-              <ion-badge
-                class="cancelledbylec"
-                *ngIf="slot.status == 'cancelledbylec'"
-                >Canceled By Lecturer</ion-badge
-              >
-              <ion-badge
-                class="cancelledbylec"
-                *ngIf="slot.status == 'cancelledbystu'"
-                >Canceled By Student</ion-badge
-              >
+              ">
+              <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbylec'">Cancelled By Lecturer</ion-badge>
+              <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbystu'">Cancelled By Student</ion-badge>
             </div>
           </div>
         </ion-card-header>
@@ -50,7 +35,7 @@
         <ion-card-content class="p-3">
           <ion-label class="my-1">
             <ion-icon padding-right name="calendar"></ion-icon>
-            {{ slot.datetime }}
+            {{ slot.date | date:'EEEE, dd MMMM y' }}
           </ion-label>
           <ion-label class="my-1">
             <ion-icon padding-right name="time"></ion-icon>

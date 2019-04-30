@@ -30,19 +30,20 @@ export class ConsultationFormPage {
 
   verifydata = this.date + ' ' + this.time + '.00000';
   loading = this.loadingCtrl.create({
-    content: 'Sending your request',
   });
+
   booking = {
     availability_id: this.availId,
     date: this.date,
     time: this.time,
     con_with: '',
     reason: '',
-    phone: '23455555',
+    phone: '',
     email: '',
     note: '',
     casusername: this.casid,
   };
+
   conWith: string;
   reason: string;
   telnumber: string;
@@ -131,12 +132,15 @@ export class ConsultationFormPage {
             if(!this.booking.phone){
               this.booking.phone = '';
             }
+            this.loading.present();
             this.UpcomingConStu.addbooking(this.booking)
               .subscribe(
-                result => {
-                this.loading.present();
-              }
-              ,
+                () => {
+                  this.loading.dismiss();
+                  this.app.getRootNav().setRoot(TabsPage);
+                  this.app.getRootNav().push(UpcomingstdPage);
+                  this.presentToast();
+                },
                 () => {
                   this.loading.dismiss();
                   const innerAlert = this.alertCtrl.create({
@@ -153,12 +157,6 @@ export class ConsultationFormPage {
                   });
                   innerAlert.present();
                 },
-                () => {
-                  this.loading.dismiss();
-                  this.app.getRootNav().setRoot(TabsPage);
-                  this.app.getRootNav().push(UpcomingstdPage);
-                  this.presentToast();
-                }
               );
           },
         },
