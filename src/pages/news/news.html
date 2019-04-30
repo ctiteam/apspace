@@ -11,12 +11,16 @@
   <div class="container p-0">
     <ng-template let-items [ngIf]="item$ | async" [ngIfElse]="loadingNews">
       <ng-template [ngIf]="items && items.length > 0" [ngIfElse]="nonews">
-        <ion-card tappable *ngFor="let item of items" (click)="openModal(item)">
-          <img [src]="item.field_news_image[0].url" />
-          <ion-card-content color="light">
-            {{ item.title[0].value }}
-          </ion-card-content>
-        </ion-card>
+        <div class="row">
+          <div class="col-12 col-md-6 col-lg-4" *ngFor="let item of items">
+            <ion-card tappable (click)="openModal(item)">
+              <img [src]="item.field_news_image[0].url" />
+              <ion-card-content color="light">
+                {{ item.title[0].value }}
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </div>
       </ng-template>
 
       <ng-template #nonews>
