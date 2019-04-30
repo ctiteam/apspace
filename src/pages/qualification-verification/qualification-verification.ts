@@ -30,10 +30,9 @@ export class QualificationVerificationPage {
   }
 
   searchForGraduaters(){
-    let stagingUrl = "https://h357omx2bd.execute-api.ap-southeast-1.amazonaws.com/staging"
     this.userSearched = true;
     this.resultKeyWord = this.searchKeyword || '';
-    this.graduater$ = this.ws.get<Qualification[]>(`/alumni/validate?criterion=${this.searchKeyword}`, true, {url: stagingUrl, auth: false});
+    this.graduater$ = this.ws.get<Qualification[]>(`/alumni/validate?criterion=${this.searchKeyword}`, true, {auth: false});
   }
 
   openForms(){
