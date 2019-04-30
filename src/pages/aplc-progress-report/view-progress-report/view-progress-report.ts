@@ -19,6 +19,11 @@ export class ViewProgressReportPage {
   subject: string;
   classCode: string;
 
+  numOfSkeletons = new Array(3);
+
+  showSubjectLoading = false;
+  showClassCodeLoading = false;
+
   subjects: string[];
   classes: [{
     CLASS_CODE: string,
@@ -51,17 +56,24 @@ export class ViewProgressReportPage {
   onClassCodeChanged() {
     this.getClassDescription(this.classCode);
     this.getStudentsBehaviour(this.classCode);
+    this.toggleFilterMenu();
   }
 
   getSubjects() {
+    this.showSubjectLoading = true;
     this.ws.get<any>(`/subjects`, true, { url: this.stagingUrl }).subscribe(
-      res => this.subjects = res
+      res => this.subjects = res,
+      _ => {},
+      () => this.showSubjectLoading = false
     );
   }
 
   getClasses(subjectCode: string) {
+    this.showClassCodeLoading = true;
     this.ws.get<any>(`/classes?subject_code=${subjectCode}`, true, { url: this.stagingUrl }).subscribe(
-      res => this.classes = res
+      res => this.classes = res,
+      _ => {},
+      () => this.showClassCodeLoading = false
     );
   }
 
@@ -81,16 +93,4 @@ export class ViewProgressReportPage {
     this.descriptionLegend$ = this.ws.get<any[]>(`/description-legend`, true, { url: this.stagingUrl }).pipe(tap(data => console.log(data)
     ));
   }
-
-  // getScoreLegendDescription(score: number) {
-  //   if (score <= 1) {
-  //     return this.scoreLegends['1'];
-  //   }
-  //   else if (score > 1 && score <= 2) {
-  //     return this.scoreLegends['1-2'];
-  //   }
-  //   else {
-  //     return this.scoreLegends['2-3'];
-  //   }
-  // }
 }

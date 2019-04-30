@@ -2,7 +2,8 @@
   <ion-navbar>
     <ion-title>View Progress Report</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only clear class="notification-button colored-border" (click)="toggleFilterMenu()">
+      <button [disabled]="showSubjectLoading" ion-button icon-only clear class="notification-button colored-border"
+        (click)="toggleFilterMenu()">
         <ion-icon name="options"></ion-icon>
       </button>
     </ion-buttons>
@@ -28,191 +29,369 @@
         </ion-option>
       </ion-select>
     </ion-item>
-    <ion-item *ngIf="subject">
+    <ion-item *ngIf="subject && !showClassCodeLoading">
       <ion-label>Class Code</ion-label>
       <ion-select [(ngModel)]="classCode" (ngModelChange)="onClassCodeChanged()">
         <ion-option disabled selected value="">Choose One</ion-option>
         <ion-option *ngFor="let class of classes" [value]="class.CLASS_CODE">{{class.CLASS_CODE}}</ion-option>
       </ion-select>
     </ion-item>
+    <ion-item *ngIf="showClassCodeLoading">
+      <ion-label>Getting the list of Classes...</ion-label>
+    </ion-item>
   </ion-content>
 </ion-menu>
 
 
 <ion-content #content>
-  <ng-template [ngIf]="!subject && !classCode">
-    <div class="row mt-5">
-      <div class="col-12 px-5">
-        <p class="normaltext text-center">
-          To view the progress report for a class, please
-          <a style="text-decoration: underline" class="colorful-text font-weight-bold"
-            (click)="toggleFilterMenu()">select a subject</a>
-          first
-        </p>
-      </div>
+  <div *ngIf="showSubjectLoading" class="row mt-5">
+    <div class="col-12 px-5">
+      <loading-spinner class="mt-5"></loading-spinner>
+      <p class="mt-5 normaltext text-center">
+        Getting the list of subjects ready...
+      </p>
     </div>
-
-  </ng-template>
-  <ng-template [ngIf]="subject && !classCode">
-    <div class="row mt-5">
-      <div class="col-12 px-5">
-        <p class="normaltext text-center">
-          To view the progress report for {{subject}}, please
-          <a style="text-decoration: underline" class="colorful-text font-weight-bold"
-            (click)="toggleFilterMenu()">select a class code</a>
-          also
-        </p>
-      </div>
-    </div>
-  </ng-template>
-  <ng-template [ngIf]="subject && classCode">
-    <ng-template let-classDescription [ngIf]="classDescription$ | async">
-      <div class="container p-0">
-        <ng-template [ngIf]="studentsBehaviour$ | async"></ng-template>
-
-        <div class="row mt-3">
-          <div class="col-6 px-5 py-2">
-            <p>
-              Class Code:
-            </p>
-            <p class="font-weight-bold"> {{ classCode }}</p>
-            <p>
-              Lecturer Name:
-            </p>
-            <p class="font-weight-bold">
-              {{ classDescription[0].LECTURER_NAME || 'N/A' }}
-            </p>
-          </div>
-          <div class="col-6 px-5 py-2">
-            <p>
-              Start Date:
-            </p>
-            <p class="font-weight-bold">
-              {{ classDescription[0].SDATE || 'N/A' }}
-            </p>
-            <p>
-              End Date:
-            </p>
-            <p class="font-weight-bold">
-              {{ classDescription[0].EDATE || 'N/A' }}
-            </p>
-          </div>
-          <div class="col-12 px-5 py-2" *ngIf="classDescription[0].CLASS_DESCRIPTION">
-            <p>
-              Class Description:
-            </p>
-            <p class="font-weight-bold">
-              {{ classDescription[0].CLASS_DESCRIPTION }}
-            </p>
-          </div>
+  </div>
+  <div *ngIf="!showSubjectLoading">
+    <ng-template [ngIf]="!subject && !classCode">
+      <div class="row mt-5">
+        <div class="col-12 px-5">
+          <p class="normaltext text-center">
+            To view the progress report for a class, please
+            <a style="text-decoration: underline" class="colorful-text font-weight-bold"
+              (click)="toggleFilterMenu()">select a subject</a>
+            first
+          </p>
         </div>
       </div>
     </ng-template>
-    <ng-template let-studentBehaviors [ngIf]="studentsBehaviour$ | async">
-      <div class="row">
+
+    <ng-template [ngIf]="subject && !classCode">
+      <div class="row mt-5">
+        <div class="col-12 px-5">
+          <p class="normaltext text-center">
+            To view the progress report for {{subject}}, please
+            <a style="text-decoration: underline" class="colorful-text font-weight-bold"
+              (click)="toggleFilterMenu()">select a class code</a>
+            also
+          </p>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template [ngIf]="subject && classCode">
+      <ng-template let-classDescription [ngIf]="classDescription$ | async" [ngIfElse]="classDescriptionLoading">
         <div class="container p-0">
-          <div class="col-12 p-0">
-            <ion-list>
-              <ion-item no-lines class="my-1 px-5 d-none d-md-block">
-                <div class="row colorful-text">
-                  <div class="col-12 col-md-3 col-lg-2">Student Name</div>
-                  <div class="col-12 col-md-3 col-lg-2">Student ID</div>
-                  <div class="col-12 col-md-3 col-lg-2">Average Score</div>
-                  <div class="col-12 col-md-3 d-md-none d-lg-block">Scores</div>
-                  <div class="col-12 col-md-3">Remarks</div>
-                </div>
-              </ion-item>
-              <ion-item no-lines class="my-1 px-5" *ngFor="let studentBehavior of studentBehaviors">
-                <div class="row">
-                  <div class="col-12 col-md-3 col-lg-2 item">
-                    <small class="d-md-none font-weight-bold" stacked>Student Name:</small>
-                    <h3 class="student-name">
-                      {{ studentBehavior.STUDENT_NAME }}
-                    </h3>
-                  </div>
-                  <div class="col-12 col-md-3 col-lg-2 item">
-                    <small class="d-md-none font-weight-bold mt-3">Student ID:</small>
-                    <h4>{{ studentBehavior.STUDENT_NUMBER }}</h4>
-                  </div>
-                  <div class="col-12 col-md-3 col-lg-2 item">
-                    <small class="d-md-none font-weight-bold mt-3">Average Score:</small>
-                    <h4>
-                      {{ +studentBehavior.AVERAGE_BEH > 0 ? studentBehavior.AVERAGE_BEH : 'N/A' }}
-                    </h4>
-                  </div>
-                  <div class="col-12 col-md-3 item d-md-none d-lg-block">
-                    <small class="d-md-none font-weight-bold mt-3">Scores:</small>
-                    <h4 *ngIf="studentBehavior.AVERAGE_BEH > 0; else nodata">
-                      COMPLETING: {{studentBehavior.COMPLETING_BEH}}<br>
-                      AVERAGE: {{studentBehavior.AVERAGE_BEH}}<br>
-                      CONCEPT: {{studentBehavior.CONCEPT_BEH}}<br>
-                      SOCIAL: {{studentBehavior.SOCIAL_BEH}}
-                    </h4>
-                    <ng-template #nodata>
-                      <h4>
-                        N/A
-                      </h4>
-                    </ng-template>
-                  </div>
-                  <div class="col-12 col-md-3 item">
-                    <small class="d-md-none font-weight-bold mt-3">Remarks:</small>
-                    <h4>{{ studentBehavior.REMARK || 'N/A' }}</h4>
-                  </div>
-                </div>
-              </ion-item>
+          <ng-template [ngIf]="studentsBehaviour$ | async"></ng-template>
 
-
-              <ng-template let-scoreLegends [ngIf]="scoreLegend$ | async">
-                <div class="my-4">
-                  <ion-item no-lines class="my-1 px-5">
-                    <h4 class="font-weight-bold colorful-text">
-                      Average Score Legend:
-                    </h4>
-                    <div class="row item my-4" *ngFor="let key of objectKeys(scoreLegends)">
-                      <div class="col-2 m-auto">
-                        <p class="text-center font-weight-bold">{{key}}</p>
-                      </div>
-                      <div class="col-10">
-                        <p>{{ scoreLegends[key] }}</p>
-                      </div>
+          <div class="row mt-3">
+            <div class="col-6 px-5 py-2">
+              <p>
+                Class Code:
+              </p>
+              <p class="font-weight-bold"> {{ classCode }}</p>
+              <p>
+                Lecturer Name:
+              </p>
+              <p class="font-weight-bold">
+                {{ classDescription[0].LECTURER_NAME || 'N/A' }}
+              </p>
+            </div>
+            <div class="col-6 px-5 py-2">
+              <p>
+                Start Date:
+              </p>
+              <p class="font-weight-bold">
+                {{ classDescription[0].SDATE || 'N/A' }}
+              </p>
+              <p>
+                End Date:
+              </p>
+              <p class="font-weight-bold">
+                {{ classDescription[0].EDATE || 'N/A' }}
+              </p>
+            </div>
+            <div class="col-12 px-5 py-2" *ngIf="classDescription[0].CLASS_DESCRIPTION">
+              <p>
+                Class Description:
+              </p>
+              <p class="font-weight-bold">
+                {{ classDescription[0].CLASS_DESCRIPTION }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #classDescriptionLoading>
+        <div class="container">
+          <div class="my-4">
+            <div class="row my-1">
+              <div class="col-3">
+                <skeleton-item height="15px" width="100%"></skeleton-item>
+              </div>
+              <div class="col-4 offset-3">
+                <skeleton-item height="15px" width="100%"></skeleton-item>
+              </div>
+            </div>
+            <div class="row my-1">
+              <div class="col-4">
+                <skeleton-item height="15px" width="100%"></skeleton-item>
+              </div>
+              <div class="col-5 offset-2">
+                <skeleton-item height="15px" width="100%"></skeleton-item>
+              </div>
+            </div>
+          </div>
+          <div class="my-4">
+            <div class="row my-1">
+              <div class="col-4">
+                <skeleton-item height="15px" width="100%"></skeleton-item>
+              </div>
+              <div class="col-5 offset-2">
+                <skeleton-item height="15px" width="100%"></skeleton-item>
+              </div>
+            </div>
+            <div class="row my-1">
+              <div class="col-5">
+                <skeleton-item height="15px" width="100%"></skeleton-item>
+              </div>
+              <div class="col-6 offset-1">
+                <skeleton-item height="15px" width="100%"></skeleton-item>
+              </div>
+            </div>
+          </div>
+          <div class="my-4">
+            <div class="row my-1">
+              <div class="col-3">
+                <skeleton-item height="15px" width="100%"></skeleton-item>
+              </div>
+              <div class="col-4 offset-3">
+                <skeleton-item height="15px" width="100%"></skeleton-item>
+              </div>
+            </div>
+            <div class="row my-1">
+              <div class="col-4">
+                <skeleton-item height="15px" width="100%"></skeleton-item>
+              </div>
+              <div class="col-5 offset-2">
+                <skeleton-item height="15px" width="100%"></skeleton-item>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template let-studentBehaviors [ngIf]="studentsBehaviour$ | async" [ngIfElse]="studentsBehaviourLoading">
+        <div class="row">
+          <div class="container p-0">
+            <div class="col-12 p-0">
+              <ion-list>
+                <ion-item no-lines class="my-1 px-5 d-none d-md-block">
+                  <div class="row colorful-text">
+                    <div class="col-12 col-md-3 col-lg-2">Student Name</div>
+                    <div class="col-12 col-md-3 col-lg-2">Student ID</div>
+                    <div class="col-12 col-md-3 col-lg-2">Average Score</div>
+                    <div class="col-12 col-md-3 d-md-none d-lg-block">Scores</div>
+                    <div class="col-12 col-md-3">Remarks</div>
+                  </div>
+                </ion-item>
+                <ion-item no-lines class="my-1 px-5" *ngFor="let studentBehavior of studentBehaviors">
+                  <div class="row">
+                    <div class="col-12 col-md-3 col-lg-2 item">
+                      <small class="d-md-none font-weight-bold" stacked>Student Name:</small>
+                      <h3 class="student-name">
+                        {{ studentBehavior.STUDENT_NAME }}
+                      </h3>
                     </div>
-                  </ion-item>
-                </div>
-              </ng-template>
+                    <div class="col-12 col-md-3 col-lg-2 item">
+                      <small class="d-md-none font-weight-bold mt-3">Student ID:</small>
+                      <h4>{{ studentBehavior.STUDENT_NUMBER }}</h4>
+                    </div>
+                    <div class="col-12 col-md-3 col-lg-2 item">
+                      <small class="d-md-none font-weight-bold mt-3">Average Score:</small>
+                      <h4>
+                        {{ +studentBehavior.AVERAGE_BEH > 0 ? studentBehavior.AVERAGE_BEH : 'N/A' }}
+                      </h4>
+                    </div>
+                    <div class="col-12 col-md-3 item d-md-none d-lg-block">
+                      <small class="d-md-none font-weight-bold mt-3">Scores:</small>
+                      <h4 *ngIf="studentBehavior.AVERAGE_BEH > 0; else nodata">
+                        COMPLETING: {{studentBehavior.COMPLETING_BEH}}<br>
+                        AVERAGE: {{studentBehavior.AVERAGE_BEH}}<br>
+                        CONCEPT: {{studentBehavior.CONCEPT_BEH}}<br>
+                        SOCIAL: {{studentBehavior.SOCIAL_BEH}}
+                      </h4>
+                      <ng-template #nodata>
+                        <h4>
+                          N/A
+                        </h4>
+                      </ng-template>
+                    </div>
+                    <div class="col-12 col-md-3 item">
+                      <small class="d-md-none font-weight-bold mt-3">Remarks:</small>
+                      <h4>{{ studentBehavior.REMARK || 'N/A' }}</h4>
+                    </div>
+                  </div>
+                </ion-item>
 
 
-              <ng-template let-descriptionLegends [ngIf]="descriptionLegend$ | async">
-                <div class="my-4">
-                  <ion-item no-lines class="my-1 px-5">
-                    <h4 class="font-weight-bold colorful-text">
-                      Scores Legend:
-                    </h4>
-                    <div class="row item my-4" *ngFor="let key of objectKeys(descriptionLegends)">
-                      <div class="col-12 col-md-2 m-auto">
-                        <p class="text-center font-weight-bold">{{key}}</p>
+                <ng-template let-scoreLegends [ngIf]="scoreLegend$ | async" [ngIfElse]="scoreLegendLoading">
+                  <div class="my-4">
+                    <ion-item no-lines class="my-1 px-5">
+                      <h4 class="font-weight-bold colorful-text">
+                        Average Score Legend:
+                      </h4>
+                      <div class="row item my-4" *ngFor="let key of objectKeys(scoreLegends)">
+                        <div class="col-2 m-auto">
+                          <p class="text-center font-weight-bold">{{key}}</p>
+                        </div>
+                        <div class="col-10">
+                          <p>{{ scoreLegends[key] }}</p>
+                        </div>
                       </div>
-                      <div class="col-12 col-md-10">
-                        <div *ngFor="let index of objectKeys(descriptionLegends[key])">
-                          <div class="row my-4" *ngFor="let title of objectKeys(descriptionLegends[key][index])">
-                            <div class="col-12 col-md-4 m-auto">
-                              <p class="text-center">{{title}}</p>
-                            </div>
-                            <div class="col-12 col-md-8 m-auto">
-                              <p>{{descriptionLegends[key][index][title]}}</p>
+                    </ion-item>
+                  </div>
+                </ng-template>
+                <ng-template #scoreLegendLoading>
+                  <ion-list>
+                    <ion-item no-lines class="my-1 px-5">
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="45%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="55%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="57%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="48%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="60%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="30%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="80%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="30%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="29%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="80%"></skeleton-item>
+                      </div>
+                    </ion-item>
+                  </ion-list>
+                </ng-template>
+
+
+                <ng-template let-descriptionLegends [ngIf]="descriptionLegend$ | async"
+                  [ngIfElse]="descriptionLegendLoading">
+                  <div class="my-4">
+                    <ion-item no-lines class="my-1 px-5">
+                      <h4 class="font-weight-bold colorful-text">
+                        Scores Legend:
+                      </h4>
+                      <div class="row item my-4" *ngFor="let key of objectKeys(descriptionLegends)">
+                        <div class="col-12 col-md-2 m-auto">
+                          <p class="text-center font-weight-bold">{{key}}</p>
+                        </div>
+                        <div class="col-12 col-md-10">
+                          <div *ngFor="let index of objectKeys(descriptionLegends[key])">
+                            <div class="row my-4" *ngFor="let title of objectKeys(descriptionLegends[key][index])">
+                              <div class="col-12 col-md-4 m-auto">
+                                <p class="text-center">{{title}}</p>
+                              </div>
+                              <div class="col-12 col-md-8 m-auto">
+                                <p>{{descriptionLegends[key][index][title]}}</p>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </ion-item>
-
-                </div>
-              </ng-template>
-            </ion-list>
+                    </ion-item>
+                  </div>
+                </ng-template>
+                <ng-template #descriptionLegendLoading>
+                  <ion-list>
+                    <ion-item no-lines class="my-1 px-5">
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="45%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="55%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="57%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="48%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="60%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="30%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="80%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="30%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="29%"></skeleton-item>
+                      </div>
+                      <div class="my-3">
+                        <skeleton-item height="17px" width="80%"></skeleton-item>
+                      </div>
+                    </ion-item>
+                  </ion-list>
+                </ng-template>
+              </ion-list>
+            </div>
           </div>
         </div>
-      </div>
+      </ng-template>
+      <ng-template #studentsBehaviourLoading>
+        <ion-list>
+          <ion-item no-lines class="my-1 px-5" *ngFor="let skeltonItem of numOfSkeletons">
+            <div class="my-3">
+              <skeleton-item height="17px" width="45%"></skeleton-item>
+            </div>
+            <div class="my-3">
+              <skeleton-item height="17px" width="55%"></skeleton-item>
+            </div>
+            <div class="my-3">
+              <skeleton-item height="17px" width="57%"></skeleton-item>
+            </div>
+            <div class="my-3">
+              <skeleton-item height="17px" width="48%"></skeleton-item>
+            </div>
+            <div class="my-3">
+              <skeleton-item height="17px" width="60%"></skeleton-item>
+            </div>
+            <div class="my-3">
+              <skeleton-item height="17px" width="30%"></skeleton-item>
+            </div>
+            <div class="my-3">
+              <skeleton-item height="17px" width="80%"></skeleton-item>
+            </div>
+            <div class="my-3">
+              <skeleton-item height="17px" width="30%"></skeleton-item>
+            </div>
+            <div class="my-3">
+              <skeleton-item height="17px" width="29%"></skeleton-item>
+            </div>
+            <div class="my-3">
+              <skeleton-item height="17px" width="80%"></skeleton-item>
+            </div>
+          </ion-item>
+        </ion-list>
+      </ng-template>
     </ng-template>
-
-  </ng-template>
+  </div>
 </ion-content>
