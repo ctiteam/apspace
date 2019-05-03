@@ -14,7 +14,7 @@ export class UpdateProgressReportPage {
   stagingUrl = 'https://kh1rvo4ilf.execute-api.ap-southeast-1.amazonaws.com/dev/aplc';
   
   objectKeys = Object.keys; // USED FOR GROUPING TRANSACTIONS PER MONTH
-  scores = ['0', '1', '2', '3'];
+  scores = [0, 1, 2, 3];
 
   // NGMODEL VARIABLES
   subjectCode: string;
