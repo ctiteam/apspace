@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { IonicPage, MenuController } from "ionic-angular";
+import { IonicPage, MenuController, ToastController, AlertController, NavController } from "ionic-angular";
 import { Observable } from "rxjs";
 import { AplcClassDescription, AplcStudentBehaviour } from "../../../interfaces";
 import { WsApiProvider } from "../../../providers";
@@ -12,9 +12,9 @@ import { WsApiProvider } from "../../../providers";
 export class UpdateProgressReportPage {
   // TEMP VARIABLES 
   stagingUrl = 'https://kh1rvo4ilf.execute-api.ap-southeast-1.amazonaws.com/dev/aplc';
-  
+
   objectKeys = Object.keys; // USED FOR GROUPING TRANSACTIONS PER MONTH
-  scores = [0, 1, 2, 3];
+  scores = [1, 2, 3];
 
   // NGMODEL VARIABLES
   subjectCode: string;
@@ -22,8 +22,9 @@ export class UpdateProgressReportPage {
   classCode: string;
   searchBy: string;
 
-  
+
   // LOADING VARIABLES
+  showLoading = false;
   showSubjectLoading = false;
   showClassCodeLoading = false;
   showCoursesLoading = false;
@@ -43,7 +44,7 @@ export class UpdateProgressReportPage {
   descriptionLegend$: Observable<any>;
   scoreLegend$: Observable<any>;
 
-  constructor(public menu: MenuController, private ws: WsApiProvider) { }
+  constructor(public navCtrl: NavController, public menu: MenuController, private ws: WsApiProvider, private toastCtrl: ToastController, public alertCtrl: AlertController) { }
 
   ionViewDidLoad() {
     this.getScoreLegend();
@@ -55,12 +56,12 @@ export class UpdateProgressReportPage {
     this.menu.toggle();
   }
 
-  onSearchByChanged(){
-    if(this.searchBy === 'subject'){
+  onSearchByChanged() {
+    if (this.searchBy === 'subject') {
       this.getSubjects();
       this.courseCode = '';
     }
-    else if(this.searchBy === 'course'){
+    else if (this.searchBy === 'course') {
       this.getCourses();
       this.subjectCode = '';
     }
@@ -81,7 +82,7 @@ export class UpdateProgressReportPage {
     this.showSubjectLoading = true;
     this.ws.get<any>(`/subjects`, true, { url: this.stagingUrl }).subscribe(
       res => this.subjects = res,
-      _ => {},
+      _ => { },
       () => this.showSubjectLoading = false
     );
   }
@@ -90,23 +91,23 @@ export class UpdateProgressReportPage {
     this.showCoursesLoading = true;
     this.ws.get<any>(`/courses`, true, { url: this.stagingUrl }).subscribe(
       res => this.courses = res,
-      _ => {},
+      _ => { },
       () => this.showCoursesLoading = false
     );
   }
 
   getClasses(getBy: string) {
     this.showClassCodeLoading = true;
-    if(getBy === 'subject'){      
+    if (getBy === 'subject') {
       this.ws.get<any>(`/classes?subject_code=${this.subjectCode}`, true, { url: this.stagingUrl }).subscribe(
         res => this.classes = res,
-        _ => {},
+        _ => { },
         () => this.showClassCodeLoading = false
       );
-    } else if(getBy === 'course'){
+    } else if (getBy === 'course') {
       this.ws.get<any>(`/classes?course_code=${this.courseCode}`, true, { url: this.stagingUrl }).subscribe(
         res => this.classes = res,
-        _ => {},
+        _ => { },
         () => this.showClassCodeLoading = false
       );
     }
@@ -127,10 +128,46 @@ export class UpdateProgressReportPage {
   getDescriptionLegend() {
     this.descriptionLegend$ = this.ws.get<any[]>(`/description-legend`, true, { url: this.stagingUrl });
   }
-  updateStudentsBehaviors(studentBehaviors: AplcStudentBehaviour[]){
-    this.ws.put('/student-behavior', {url: this.stagingUrl, body: studentBehaviors}).subscribe(
-      res => console.log(res),
-      err => console.log(err)
-    );
+  updateStudentsBehaviors(studentBehaviors: AplcStudentBehaviour[]) {
+    const confirm = this.alertCtrl.create({
+      title: 'Update Students Details',
+      message: `You are about to update students details. Do you want to continue?`,
+      buttons: [
+        {
+          text: 'No',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.showLoading = true;
+            this.ws.put('/student-behavior', { url: this.stagingUrl, body: studentBehaviors }).subscribe(
+              _ => { },
+              err => {
+                this.toast("Something went wrong and we couldn't complete your request. Please try again or contact us via the feedback page");
+              },
+              () => {
+                this.toast("Students information has been updated successfully.");
+                this.navCtrl.pop();
+                this.showLoading = false;
+              }
+            );
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
+  toast(msg: string) {
+    this.toastCtrl
+      .create({
+        message: msg,
+        duration: 7000,
+        position: "bottom",
+        showCloseButton: true
+      })
+      .present();
   }
 }

@@ -7,7 +7,10 @@ page-update-progress-report {
           height: 80px;
         }
       }
-    h4, p{
+    h4, p, h3{
         white-space: normal;
+    }
+    textarea{
+      padding: 10px !important;
     }
 }
