@@ -1,15 +1,17 @@
 export interface AplcStudentBehaviour {
-  ACADEMIC_BEH: number;
+  STUDENT_NUMBER: string;
+  IC_PASSPORT: string;
+  
   AVERAGE_BEH: number;
-  CLASS_CODE: string;
+  ACADEMIC_BEH: number;
+  SOCIAL_BEH: number;
   COMPLETING_BEH: number;
   CONCEPT_BEH: number;
+  REMARK: string;
+  
+  CLASS_CODE: string;
+  SUBJECT_CODE: string;
   DATE_UPDATED: string;
-  IC_PASSPORT: string;
   LECTURER_CODE: string;
   LECTURER_UPDATED: string;
-  REMARK: string;
-  SOCIAL_BEH: number;
-  STUDENT_NUMBER: string;
-  SUBJECT_CODE: string;
 }

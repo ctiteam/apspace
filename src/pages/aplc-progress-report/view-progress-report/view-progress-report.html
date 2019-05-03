@@ -22,7 +22,7 @@
   </ion-header>
   <ion-content>
     <ion-item>
-      <ion-label>Subject List</ion-label>
+      <ion-label>Subject Code</ion-label>
       <ion-select [(ngModel)]="subject" (ngModelChange)="onSubjectChanged()">
         <ion-option disabled selected value="">Choose One</ion-option>
         <ion-option *ngFor="let subject of subjects" [value]="subject.SUBJECT_CODE">{{subject.SUBJECT_CODE}}
@@ -37,7 +37,7 @@
       </ion-select>
     </ion-item>
     <ion-item *ngIf="showClassCodeLoading">
-      <ion-label>Getting the list of Classes...</ion-label>
+      <ion-label>Getting the list of class codes...</ion-label>
     </ion-item>
   </ion-content>
 </ion-menu>
@@ -48,7 +48,7 @@
     <div class="col-12 px-5">
       <loading-spinner class="mt-5"></loading-spinner>
       <p class="mt-5 normaltext text-center">
-        Getting the list of subjects ready...
+        Getting the list of subject codes ready...
       </p>
     </div>
   </div>
@@ -59,7 +59,7 @@
           <p class="normaltext text-center">
             To view the progress report for a class, please
             <a style="text-decoration: underline" class="colorful-text font-weight-bold"
-              (click)="toggleFilterMenu()">select a subject</a>
+              (click)="toggleFilterMenu()">select a subject code</a>
             first
           </p>
         </div>
@@ -215,7 +215,7 @@
                       <small class="d-md-none font-weight-bold mt-3">Scores:</small>
                       <h4 *ngIf="studentBehavior.AVERAGE_BEH > 0; else nodata">
                         COMPLETING: {{studentBehavior.COMPLETING_BEH}}<br>
-                        AVERAGE: {{studentBehavior.AVERAGE_BEH}}<br>
+                        Academic: {{studentBehavior.ACADEMIC_BEH}}<br>
                         CONCEPT: {{studentBehavior.CONCEPT_BEH}}<br>
                         SOCIAL: {{studentBehavior.SOCIAL_BEH}}
                       </h4>
@@ -316,40 +316,46 @@
                   </div>
                 </ng-template>
                 <ng-template #descriptionLegendLoading>
-                  <ion-list>
-                    <ion-item no-lines class="my-1 px-5">
-                      <div class="my-3">
-                        <skeleton-item height="17px" width="45%"></skeleton-item>
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-12 p-0">
+                        <ion-list>
+                          <ion-item no-lines class="my-1 px-5">
+                            <div class="my-3">
+                              <skeleton-item height="17px" width="45%"></skeleton-item>
+                            </div>
+                            <div class="my-3">
+                              <skeleton-item height="17px" width="55%"></skeleton-item>
+                            </div>
+                            <div class="my-3">
+                              <skeleton-item height="17px" width="57%"></skeleton-item>
+                            </div>
+                            <div class="my-3">
+                              <skeleton-item height="17px" width="48%"></skeleton-item>
+                            </div>
+                            <div class="my-3">
+                              <skeleton-item height="17px" width="60%"></skeleton-item>
+                            </div>
+                            <div class="my-3">
+                              <skeleton-item height="17px" width="30%"></skeleton-item>
+                            </div>
+                            <div class="my-3">
+                              <skeleton-item height="17px" width="80%"></skeleton-item>
+                            </div>
+                            <div class="my-3">
+                              <skeleton-item height="17px" width="30%"></skeleton-item>
+                            </div>
+                            <div class="my-3">
+                              <skeleton-item height="17px" width="29%"></skeleton-item>
+                            </div>
+                            <div class="my-3">
+                              <skeleton-item height="17px" width="80%"></skeleton-item>
+                            </div>
+                          </ion-item>
+                        </ion-list>
                       </div>
-                      <div class="my-3">
-                        <skeleton-item height="17px" width="55%"></skeleton-item>
-                      </div>
-                      <div class="my-3">
-                        <skeleton-item height="17px" width="57%"></skeleton-item>
-                      </div>
-                      <div class="my-3">
-                        <skeleton-item height="17px" width="48%"></skeleton-item>
-                      </div>
-                      <div class="my-3">
-                        <skeleton-item height="17px" width="60%"></skeleton-item>
-                      </div>
-                      <div class="my-3">
-                        <skeleton-item height="17px" width="30%"></skeleton-item>
-                      </div>
-                      <div class="my-3">
-                        <skeleton-item height="17px" width="80%"></skeleton-item>
-                      </div>
-                      <div class="my-3">
-                        <skeleton-item height="17px" width="30%"></skeleton-item>
-                      </div>
-                      <div class="my-3">
-                        <skeleton-item height="17px" width="29%"></skeleton-item>
-                      </div>
-                      <div class="my-3">
-                        <skeleton-item height="17px" width="80%"></skeleton-item>
-                      </div>
-                    </ion-item>
-                  </ion-list>
+                    </div>
+                  </div>
                 </ng-template>
               </ion-list>
             </div>
@@ -357,40 +363,46 @@
         </div>
       </ng-template>
       <ng-template #studentsBehaviourLoading>
-        <ion-list>
-          <ion-item no-lines class="my-1 px-5" *ngFor="let skeltonItem of numOfSkeletons">
-            <div class="my-3">
-              <skeleton-item height="17px" width="45%"></skeleton-item>
+        <div class="container">
+          <div class="row">
+            <div class="col-12 p-0">
+              <ion-list>
+                <ion-item no-lines class="my-1 px-5" *ngFor="let skeltonItem of numOfSkeletons">
+                  <div class="my-3">
+                    <skeleton-item height="17px" width="45%"></skeleton-item>
+                  </div>
+                  <div class="my-3">
+                    <skeleton-item height="17px" width="55%"></skeleton-item>
+                  </div>
+                  <div class="my-3">
+                    <skeleton-item height="17px" width="57%"></skeleton-item>
+                  </div>
+                  <div class="my-3">
+                    <skeleton-item height="17px" width="48%"></skeleton-item>
+                  </div>
+                  <div class="my-3">
+                    <skeleton-item height="17px" width="60%"></skeleton-item>
+                  </div>
+                  <div class="my-3">
+                    <skeleton-item height="17px" width="30%"></skeleton-item>
+                  </div>
+                  <div class="my-3">
+                    <skeleton-item height="17px" width="80%"></skeleton-item>
+                  </div>
+                  <div class="my-3">
+                    <skeleton-item height="17px" width="30%"></skeleton-item>
+                  </div>
+                  <div class="my-3">
+                    <skeleton-item height="17px" width="29%"></skeleton-item>
+                  </div>
+                  <div class="my-3">
+                    <skeleton-item height="17px" width="80%"></skeleton-item>
+                  </div>
+                </ion-item>
+              </ion-list>
             </div>
-            <div class="my-3">
-              <skeleton-item height="17px" width="55%"></skeleton-item>
-            </div>
-            <div class="my-3">
-              <skeleton-item height="17px" width="57%"></skeleton-item>
-            </div>
-            <div class="my-3">
-              <skeleton-item height="17px" width="48%"></skeleton-item>
-            </div>
-            <div class="my-3">
-              <skeleton-item height="17px" width="60%"></skeleton-item>
-            </div>
-            <div class="my-3">
-              <skeleton-item height="17px" width="30%"></skeleton-item>
-            </div>
-            <div class="my-3">
-              <skeleton-item height="17px" width="80%"></skeleton-item>
-            </div>
-            <div class="my-3">
-              <skeleton-item height="17px" width="30%"></skeleton-item>
-            </div>
-            <div class="my-3">
-              <skeleton-item height="17px" width="29%"></skeleton-item>
-            </div>
-            <div class="my-3">
-              <skeleton-item height="17px" width="80%"></skeleton-item>
-            </div>
-          </ion-item>
-        </ion-list>
+          </div>
+        </div>
       </ng-template>
     </ng-template>
   </div>
