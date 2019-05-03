@@ -3,7 +3,6 @@ import { IonicPage, MenuController } from "ionic-angular";
 import { Observable } from "rxjs";
 import { AplcClassDescription, AplcStudentBehaviour } from "../../../interfaces";
 import { WsApiProvider } from "../../../providers";
-import { tap } from "rxjs/operators";
 
 @IonicPage()
 @Component({
@@ -15,12 +14,14 @@ export class UpdateProgressReportPage {
   stagingUrl = 'https://kh1rvo4ilf.execute-api.ap-southeast-1.amazonaws.com/dev/aplc';
   
   objectKeys = Object.keys; // USED FOR GROUPING TRANSACTIONS PER MONTH
+  scores = ['0', '1', '2', '3'];
 
   // NGMODEL VARIABLES
   subjectCode: string;
   courseCode: string;
   classCode: string;
   searchBy: string;
+
   
   // LOADING VARIABLES
   showSubjectLoading = false;
@@ -41,7 +42,6 @@ export class UpdateProgressReportPage {
   studentsBehaviour$: Observable<AplcStudentBehaviour[]>;
   descriptionLegend$: Observable<any>;
   scoreLegend$: Observable<any>;
-
 
   constructor(public menu: MenuController, private ws: WsApiProvider) { }
 
@@ -126,5 +126,11 @@ export class UpdateProgressReportPage {
 
   getDescriptionLegend() {
     this.descriptionLegend$ = this.ws.get<any[]>(`/description-legend`, true, { url: this.stagingUrl });
+  }
+  updateStudentsBehaviors(studentBehaviors: AplcStudentBehaviour[]){
+    this.ws.put('/student-behavior', {url: this.stagingUrl, body: studentBehaviors}).subscribe(
+      res => console.log(res),
+      err => console.log(err)
+    );
   }
 }
