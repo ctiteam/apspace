@@ -26,6 +26,7 @@ import {
   Course,
   CourseDetails,
   Timetable,
+  Upcomingcon,
 } from '../../interfaces';
 import {
   AppAnimationProvider,
@@ -34,6 +35,7 @@ import {
   WsApiProvider,
   TimetableProvider,
 } from '../../providers';
+import { compareDates } from 'ionic-angular/umd/util/datetime-util';
 
 @IonicPage()
 @Component({
@@ -53,6 +55,7 @@ export class DashboardPage {
   balance$: Observable<number>;
   apcardTransaction$: Observable<Apcard[]>;
   upcomingClasse$: Observable<Timetable[]>;
+  upcomingConsultation$: Observable<Upcomingcon[]>
 
   // LOADING VARS
   numOfSkeletons = new Array(2);
@@ -140,6 +143,7 @@ export class DashboardPage {
     this.apcardTransaction$ = this.getTransactions();
     forkJoin(
       this.getProfile(),
+      this.upcomingConsultation$ = this.getUpcomingConsultations(),
       this.nextHoliday$ = this.getHolidays(Boolean(refresher)),
       this.balance$ = this.getAPCardBalance(),
       this.overdue$ = this.getOverdueFee(),
@@ -176,13 +180,25 @@ export class DashboardPage {
   }
 
   // UPCOMING CLASSES METHODS
-  getUpcomingClasses(intake: string){
-    let dateNow = new Date();    
+  getUpcomingClasses(intake: string) {
+    let dateNow = new Date();
     return this.upcomingClasse$ = this.tt.get().pipe(
       map(tt => tt.filter(t => t.INTAKE === intake)),
-      map(tt => tt.filter (t => new Date(t.DATESTAMP_ISO).getFullYear() == dateNow.getFullYear() && new Date(t.DATESTAMP_ISO).getMonth() == dateNow.getMonth() && new Date(t.DATESTAMP_ISO).getDate() == dateNow.getDate())),
+      map(tt => tt.filter(t => new Date(t.DATESTAMP_ISO).getFullYear() == dateNow.getFullYear() && new Date(t.DATESTAMP_ISO).getMonth() == dateNow.getMonth() && new Date(t.DATESTAMP_ISO).getDate() == dateNow.getDate())),
       map(tt => tt.filter(t => moment(t.TIME_TO, 'HH:mm A').toDate() >= dateNow))
     );
+  }
+
+  // UPCOMING CONSULTATION METHODS
+  getUpcomingConsultations() {
+    let dateNow = new Date();
+     return this.ws.get<Upcomingcon[]>('/iconsult/upcomingconstu', true, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'my-auth-token',
+      },
+    }).pipe(
+      map(consultations => consultations.filter(consultation => this.compareDates(new Date(consultation.date), dateNow, consultation.starttime))))
   }
 
   // UPCOMING EXAMS METHODS
@@ -193,6 +209,19 @@ export class DashboardPage {
       true,
       opt,
     );
+  }
+
+  compareDates(consultationDate: Date, dateNow: Date, consultationTime: string): boolean{
+    if(consultationDate.getFullYear() >= dateNow.getFullYear() && consultationDate.getMonth() >= dateNow.getMonth() && consultationDate.getDate() > dateNow.getDate()){
+      return true; // the consultation date is greater than the current date
+    }
+    else if(consultationDate.getFullYear() === dateNow.getFullYear() && consultationDate.getMonth() === dateNow.getMonth() && consultationDate.getDate() === dateNow.getDate()){
+      // the consultation date and the current date are the same but the consultation time has not occured
+      if(moment(consultationTime, 'HH:mm A').toDate() >= dateNow){
+        return true;
+      }
+    }
+    return false;
   }
 
   // FEES & OUTSTANDING METHODS
@@ -299,12 +328,12 @@ export class DashboardPage {
       .get<Attendance[]>(url)
       .pipe(
         map(aa => {
-          if(aa.length > 0){
+          if (aa.length > 0) {
             let totalClasses = aa.reduce((a, b) => a + b.TOTAL_CLASSES, 0);
             let totalAbsentClasses = aa.reduce((a, b) => a + b.TOTAL_ABSENT, 0);
-            let totalAttendedClasses = totalClasses - totalAbsentClasses;           
+            let totalAttendedClasses = totalClasses - totalAbsentClasses;
             return totalAttendedClasses / totalClasses
-          } else{
+          } else {
             return -1 // -1 means there is no attendance data in the selected intake 
           }
         }),
@@ -334,7 +363,7 @@ export class DashboardPage {
       .get<Apcard[]>('/apcard/', true)
       .pipe(
         map((transactions) => {
-          if(transactions.length > 0){
+          if (transactions.length > 0) {
             return (transactions[0] || ({} as Apcard)).Balance;
           }
           return -1;
@@ -343,7 +372,7 @@ export class DashboardPage {
       );
   }
 
-  getTransactions(){
+  getTransactions() {
     return this.ws.get<Apcard[]>("/apcard/").pipe(
       map(t => this.signTransactions(t)),
       tap(t => this.analyzeTransactions(t))
