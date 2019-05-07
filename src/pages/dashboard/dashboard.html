@@ -596,59 +596,62 @@
               <!-- ********************************************* -->
               <!-- START SECTION 5: CONSULTATION -->
               <ng-template let-upcomingConsultations [ngIf]="upcomingConsultation$ | async">
-                <div class="col-12 col-md-6">
-                  <div class="section consultation-appointment-section">
-                    <!-- START SECTION 5 HEADER -->
-                    <div class="section-header">
-                      <div class="section-header-icon">
-                        <ion-icon item-left name="briefcase"></ion-icon>
-                      </div>
-                      <div class="section-header-text">
-                        <h3>Consultation Appointment</h3>
-                      </div>
-                    </div>
-                    <!-- END SECTION 5 HEADER -->
-
-                    <!-- START SECTION 5 BODY -->
-                    <div class="section-body">
-                      <div class="notification" *ngFor="let upcomingConsultation of upcomingConsultations">
-                        <div class="section-body-header">
-                          <h4 class="col-12">{{upcomingConsultation.lecname}}</h4>
+                <ng-template [ngIf]="upcomingConsultations.length > 0">
+                  <div class="col-12 col-md-6">
+                    <div class="section consultation-appointment-section">
+                      <!-- START SECTION 5 HEADER -->
+                      <div class="section-header">
+                        <div class="section-header-icon">
+                          <ion-icon item-left name="briefcase"></ion-icon>
                         </div>
+                        <div class="section-header-text">
+                          <h3>Consultation Appointment</h3>
+                        </div>
+                      </div>
+                      <!-- END SECTION 5 HEADER -->
 
-                        <div class="section-body-content row">
-                          <div class="container">
-                            <div class="content-item-with-icon col-12 row">
-                              <div class="col-2 text-right">
-                                <ion-icon item-left name="time"></ion-icon>
-                              </div>
-                              <div class="col-10 item-info-text">
-                                <p ion-text>{{upcomingConsultation.date}} | {{upcomingConsultation.starttime}} - {{upcomingConsultation.endtime}}</p>
-                              </div>
-                            </div>
+                      <!-- START SECTION 5 BODY -->
+                      <div class="section-body">
+                        <div class="notification" *ngFor="let upcomingConsultation of upcomingConsultations">
+                          <div class="section-body-header">
+                            <h4 class="col-12">{{upcomingConsultation.lecname}}</h4>
+                          </div>
 
-                            <div class="content-item-with-icon col-12 row">
-                              <div class="col-2 text-right">
-                                <ion-icon item-left name="locate"></ion-icon>
+                          <div class="section-body-content row">
+                            <div class="container">
+                              <div class="content-item-with-icon col-12 row">
+                                <div class="col-2 text-right">
+                                  <ion-icon item-left name="time"></ion-icon>
+                                </div>
+                                <div class="col-10 item-info-text">
+                                  <p ion-text>{{upcomingConsultation.date}} | {{upcomingConsultation.starttime}} -
+                                    {{upcomingConsultation.endtime}}</p>
+                                </div>
                               </div>
-                              <div class="col-10 item-info-text">
-                                <p ion-text>{{upcomingConsultation.location}} | {{upcomingConsultation.venue}}</p>
+
+                              <div class="content-item-with-icon col-12 row">
+                                <div class="col-2 text-right">
+                                  <ion-icon item-left name="locate"></ion-icon>
+                                </div>
+                                <div class="col-10 item-info-text">
+                                  <p ion-text>{{upcomingConsultation.location}} | {{upcomingConsultation.venue}}</p>
+                                </div>
                               </div>
-                            </div>
-                            <div class="content-item-without-icon col-12 row">
-                              <div>
-                                <p ion-text>
-                                  
-                                </p>
+                              <div class="content-item-without-icon col-12 row">
+                                <div>
+                                  <p ion-text>
+
+                                  </p>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
+                      <!-- END SECTION 5 BODY -->
                     </div>
-                    <!-- END SECTION 5 BODY -->
                   </div>
-                </div>
+                </ng-template>
               </ng-template>
               <!-- END SECTION 5: CONSULTATION -->
               <!-- ********************************************* -->
