@@ -93,7 +93,7 @@ export class LoginPage {
             else{
               this.toast("Invalid username or password")
             }
-            return Observable.throw(err);
+            return empty();
           }),
           switchMap(tgt => this.casTicket.getST(this.casTicket.casUrl, tgt)),
           catchError(_ => this.toast("Fail to get service ticket.") || empty()),
