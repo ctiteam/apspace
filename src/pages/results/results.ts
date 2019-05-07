@@ -88,7 +88,7 @@ export class ResultsPage {
         this.block = false;
         this.course$ = this.ws.get<Course[]>('/student/courses', true).pipe(
           tap(i => this.selectedIntake = i[0].INTAKE_CODE),
-          tap(i => this.result$ = this.getResults(i[0].INTAKE_CODE)),
+          tap(i => this.result$ = this.getResults(i[0].INTAKE_CODE, true)),
           tap(i => this.intakeLabels = Array.from(new Set((i || []).map(t => t.INTAKE_CODE)))),
           finalize(() => refresher && refresher.complete())
         );
