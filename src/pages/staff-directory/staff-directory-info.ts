@@ -26,7 +26,7 @@ export class StaffDirectoryInfoPage {
   ionViewDidLoad() {
     this.imageLoaded = false;
     this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing').pipe(
-      map(ss => ss.find(s => this.params.get('id') === s.ID)),
+      map(ss => ss.find(s => this.params.get('id').toLowerCase() === s.ID.toLowerCase())),
       share(),
     );
   }
