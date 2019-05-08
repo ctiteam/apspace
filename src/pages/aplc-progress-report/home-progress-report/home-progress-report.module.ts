@@ -11,4 +11,4 @@ import { HomeProgressReportPage } from './home-progress-report';
   ],
   entryComponents: [HomeProgressReportPage],
 })
-export class ApcardPageModule { }
+export class HomeProgressReportPageModule { }

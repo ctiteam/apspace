@@ -11,4 +11,4 @@ import { UpdateProgressReportPage } from './update-progress-report';
   ],
   entryComponents: [UpdateProgressReportPage],
 })
-export class ApcardPageModule { }
+export class UpdateProgressReportPageModule { }
