@@ -5,10 +5,9 @@ import {
 } from 'ionic-angular';
 import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
-import { UpcomingConLecProvider, UserserviceProvider } from '../../providers';
+import { UpcomingConLecProvider, UserserviceProvider, LaunchExternalAppProvider } from '../../providers';
 import { UpcominglecPage } from '../iConsult-lecturer/upcominglec';
 import { TabsPage } from '../tabs/tabs';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 @IonicPage()
 @Component({
@@ -51,7 +50,7 @@ export class ConsuldetailpagePage {
     private UpcomingConLec: UpcomingConLecProvider,
     private toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
-    private iab: InAppBrowser
+    private launchExternalApp: LaunchExternalAppProvider    
   ) { }
 
   ionViewDidLoad() {
@@ -175,6 +174,12 @@ export class ConsuldetailpagePage {
   }
 
   gotoChat(tpnumber: string) {
-    this.iab.create(`https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/search?q=?${tpnumber}`, '_blank', 'location=true');
-  }
+      let androidSchemeUrl = 'com.microsoft.teams';
+      let iosSchemeUrl = 'microsoft-teams://';
+      let webUrl = `https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/search?q=?${tpnumber}`;
+      let appStoreUrl = 'https://itunes.apple.com/us/app/microsoft-teams/id1113153706?mt=8';
+      let appViewUrl = 'https://teams.microsoft.com/l/chat/0/0?users=';
+      let playStoreUrl = `https://play.google.com/store/apps/details?id=com.microsoft.teams&hl=en&referrer=utm_source%3Dgoogle%26utm_medium%3Dorganic%26utm_term%3D'com.microsoft.teams'&pcampaignid=APPU_1_NtLTXJaHKYr9vASjs6WwAg`;
+      this.launchExternalApp.launchExternalApp(iosSchemeUrl, androidSchemeUrl, appViewUrl, webUrl, playStoreUrl, appStoreUrl, `${tpnumber}@mail.apu.edu.my`);
+    }
 }

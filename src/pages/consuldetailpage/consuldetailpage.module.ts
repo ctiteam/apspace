@@ -2,7 +2,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicErrorHandler, IonicPageModule } from 'ionic-angular';
-import { UserserviceProvider } from '../../providers';
+import { UserserviceProvider, LaunchExternalAppProvider } from '../../providers';
 import { ConsuldetailpagePage } from './consuldetailpage';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 
@@ -18,7 +18,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
     StatusBar,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     UserserviceProvider,
-    InAppBrowser
+    InAppBrowser,
+    LaunchExternalAppProvider
   ],
 })
 export class ConsuldetailpagePageModule { }

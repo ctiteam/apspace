@@ -23,9 +23,10 @@ import {
   SlotsProvider, UpcomingConLecProvider, UpcomingConStuProvider,
   UserserviceProvider,
   UserSettingsProvider,
-  WsApiProvider,
+  WsApiProvider,  
 } from '../providers';
 import { MyApp } from './app.component';
+import { AppAvailability } from '@ionic-native/app-availability';
 
 @NgModule({
   declarations: [MyApp],
@@ -63,6 +64,7 @@ import { MyApp } from './app.component';
     UpcomingConStuProvider,
     AppAnimationProvider,
     UserSettingsProvider,
+    AppAvailability
   ],
   entryComponents: [MyApp],
   bootstrap: [IonicApp],
