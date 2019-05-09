@@ -28,6 +28,7 @@
     "@angular/platform-browser": "^5.2.11",
     "@angular/platform-browser-dynamic": "^5.2.11",
     "@ionic-native/action-sheet": "^4.15.0",
+    "@ionic-native/app-availability": "^4.20.0",
     "@ionic-native/badge": "^4.18.0",
     "@ionic-native/camera": "^4.15.0",
     "@ionic-native/core": "^4.15.0",
@@ -47,6 +48,7 @@
     "cordova-android": "7.1.4",
     "cordova-ios": "4.5.5",
     "cordova-plugin-actionsheet": "^2.3.3",
+    "cordova-plugin-appavailability": "0.4.2",
     "cordova-plugin-badge": "^0.8.8",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-email-composer": "^0.8.15",
@@ -87,7 +89,8 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-fcm-with-dependecy-updated": {},
       "cordova-sqlite-storage": {},
-      "cordova-plugin-badge": {}
+      "cordova-plugin-badge": {},
+      "cordova-plugin-appavailability": {}
     },
     "platforms": [
       "ios",
