@@ -23,3 +23,4 @@ export { UserSettingsProvider } from './user-settings';
 export { UserserviceProvider } from './userservice';
 export { VersionProvider } from './version';
 export { WsApiProvider } from './ws-api';
+export { LaunchExternalAppProvider } from './launch-external-app';
