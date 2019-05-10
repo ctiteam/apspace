@@ -2,7 +2,7 @@
   <ion-navbar>
     <ion-title>View Progress Report</ion-title>
     <ion-buttons end>
-      <button [disabled]="showSubjectLoading" ion-button icon-only clear class="notification-button colored-border"
+      <button [disabled]="showSubjectLoading || showNoSubjectsMessage" ion-button icon-only clear class="notification-button colored-border"
         (click)="toggleFilterMenu()">
         <ion-icon name="options"></ion-icon>
       </button>
