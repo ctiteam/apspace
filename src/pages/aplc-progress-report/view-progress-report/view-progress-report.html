@@ -53,7 +53,7 @@
     </div>
   </div>
   <div *ngIf="!showSubjectLoading">
-    <ng-template [ngIf]="!subject && !classCode">
+    <ng-template [ngIf]="!subject && !classCode && !showNoSubjectsMessage">
       <div class="row mt-5">
         <div class="col-12 px-5">
           <p class="normaltext text-center">
@@ -61,6 +61,15 @@
             <a style="text-decoration: underline" class="colorful-text font-weight-bold"
               (click)="toggleFilterMenu()">select a subject code</a>
             first
+          </p>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template [ngIf]="!subject && !classCode && showNoSubjectsMessage">
+      <div class="row mt-5">
+        <div class="col-12 px-5">
+          <p class="normaltext text-center">
+            You do not have any subjects assigned to you..
           </p>
         </div>
       </div>

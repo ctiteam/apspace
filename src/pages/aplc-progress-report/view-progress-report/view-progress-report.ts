@@ -23,6 +23,7 @@ export class ViewProgressReportPage {
 
   showSubjectLoading = false;
   showClassCodeLoading = false;
+  showNoSubjectsMessage = false;
 
   subjects: string[];
   classes: [{
@@ -64,7 +65,12 @@ export class ViewProgressReportPage {
     this.ws.get<any>(`/subjects`, true, { url: this.stagingUrl }).subscribe(
       res => this.subjects = res,
       _ => {},
-      () => this.showSubjectLoading = false
+      () => {
+        this.showSubjectLoading = false
+        if(this.subjects.length === 0){
+          this.showNoSubjectsMessage = true;
+        }
+      }
     );
   }
 
