@@ -30,6 +30,10 @@ export class UpdateProgressReportPage {
   showCoursesLoading = false;
   numOfSkeletons = new Array(3);
 
+  // EMPTY DATA VARIABLES
+  showNoCoursesMessage = false;
+  showNoSubjectsMessage = false;
+
   // LISTS
   subjects: string[];
   courses: string[];
@@ -83,7 +87,12 @@ export class UpdateProgressReportPage {
     this.ws.get<any>(`/subjects`, true, { url: this.stagingUrl }).subscribe(
       res => this.subjects = res,
       _ => { },
-      () => this.showSubjectLoading = false
+      () => {
+        if(this.subjects.length === 0){
+          this.showNoSubjectsMessage = true;
+        }
+        this.showSubjectLoading = false
+      }
     );
   }
 
@@ -92,7 +101,12 @@ export class UpdateProgressReportPage {
     this.ws.get<any>(`/courses`, true, { url: this.stagingUrl }).subscribe(
       res => this.courses = res,
       _ => { },
-      () => this.showCoursesLoading = false
+      () => {
+        if(this.courses.length === 0){
+          this.showNoCoursesMessage = true;
+        }
+        this.showCoursesLoading = false
+      }
     );
   }
 

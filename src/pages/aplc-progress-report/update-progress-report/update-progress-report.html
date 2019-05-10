@@ -29,10 +29,13 @@
       </ion-select>
     </ion-item>
     <!-- USER CHOOSE TO SEARCH BY COURSE -->
-    <ion-item no-lines *ngIf="showCoursesLoading">
+    <ion-item no-lines *ngIf="showCoursesLoading && searchBy === 'course'">
       <ion-label>Getting the list of course codes...</ion-label>
     </ion-item>
-    <ion-item no-lines *ngIf="searchBy && !showCoursesLoading && searchBy === 'course'">
+    <ion-item no-lines *ngIf="showNoCoursesMessage && searchBy === 'course'">
+      <ion-label class="p-3 text-center userMessage">There are no courses assigned to you</ion-label>
+    </ion-item>
+    <ion-item no-lines *ngIf="searchBy && !showCoursesLoading && searchBy === 'course' && !showNoCoursesMessage">
       <ion-label>Course Code</ion-label>
       <ion-select [(ngModel)]="courseCode" (ngModelChange)="getClassCodesList('course')">
         <ion-option disabled selected value="">Choose One</ion-option>
@@ -42,10 +45,13 @@
     </ion-item>
 
     <!-- USER CHOOSE TO SEARCH BY SUBJECT -->
-    <ion-item no-lines *ngIf="showSubjectLoading">
+    <ion-item no-lines *ngIf="showSubjectLoading && searchBy === 'subject'">
       <ion-label>Getting the list of subject codes...</ion-label>
     </ion-item>
-    <ion-item no-lines *ngIf="searchBy && !showSubjectLoading && searchBy === 'subject'">
+    <ion-item no-lines *ngIf="showNoSubjectsMessage && searchBy === 'subject'">
+      <ion-label class="p-3 text-center userMessage">There are no subjects assigned to you</ion-label>
+    </ion-item>
+    <ion-item no-lines *ngIf="searchBy && !showSubjectLoading && searchBy === 'subject' && !showNoSubjectsMessage">
       <ion-label>Subject Code</ion-label>
       <ion-select [(ngModel)]="subjectCode" (ngModelChange)="getClassCodesList('subject')">
         <ion-option disabled selected value="">Choose One</ion-option>
