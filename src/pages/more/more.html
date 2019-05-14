@@ -20,6 +20,7 @@
               [ngClass]="['menu-item', 'row', page.color, page.size]"
               *ngFor="let page of menu.items"
               (click)="openPage(page)"
+              style="cursor: pointer;"
             >
               <ion-icon
                 class="ion-icon align-self-center text-center"
