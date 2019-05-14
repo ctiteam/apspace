@@ -10,11 +10,7 @@
     <ion-list-header hidden></ion-list-header>
     <ion-item no-lines>
       <ion-label>On days</ion-label>
-      <ion-select
-        [(ngModel)]="repeatday"
-        multiple="true"
-        [(ngModel)]="unfreeslots.repeat"
-      >
+      <ion-select [(ngModel)]="repeatday" multiple="true" [(ngModel)]="unfreeslots.repeat">
         <ion-option *ngFor="let item of items" value="{{ item.text }}">{{
           item.text
         }}</ion-option>
@@ -27,89 +23,50 @@
     <ion-list-header hidden></ion-list-header>
     <ion-item no-lines>
       <ion-label>From</ion-label>
-      <ion-icon
-        ios="ios-calendar-outline"
-        md="md-calendar"
-        item-start
-        small
-      ></ion-icon>
-      <ion-datetime
-        displayFormat="DDDD, D MMM YYYY"
-        picker-format="DD MMM YYYY"
-        [(ngModel)]="startDate"
-        [min]="MinDate"
-        [max]="maxDate"
-        [(ngModel)]="unfreeslots.start_date"
-        [ngModelOptions]="{ standalone: true }"
-        (ionChange)="onchangedate()"
-      >
-      </ion-datetime>
+      <ion-icon ios="ios-calendar-outline" md="md-calendar" item-start small></ion-icon>
+      <!-- <ion-datetime displayFormat="DDDD, D MMM YYYY" picker-format="DD MMM YYYY" [(ngModel)]="startDate" [min]="MinDate"
+        [max]="maxDate" [(ngModel)]="unfreeslots.start_date" [ngModelOptions]="{ standalone: true }"
+        (ionChange)="onchangedate()">
+      </ion-datetime> -->
     </ion-item>
+    <ion-calendar [(ngModel)]="startDate" [(ngModel)]="unfreeslots.start_date" [options]="startDateOptions"
+      [type]="'string'" [format]="'YYYY-MM-DD'" (onChange)="onchangedate()">
+    </ion-calendar>
 
     <ion-item no-lines>
       <ion-label>To</ion-label>
-      <ion-icon
-        ios="ios-calendar-outline"
-        md="md-calendar"
-        item-start
-        small
-      ></ion-icon>
-      <ion-datetime
-        displayFormat="DDDD, D MMM YYYY"
-        picker-format="DD MMM YYYY"
-        [(ngModel)]="endDate"
-        [min]="minEndDate"
-        [max]="maxDate"
-        [(ngModel)]="unfreeslots.end_date"
-        [ngModelOptions]="{ standalone: true }"
-      >
-      </ion-datetime>
+      <ion-icon ios="ios-calendar-outline" md="md-calendar" item-start small></ion-icon>
+      <!-- <ion-datetime displayFormat="DDDD, D MMM YYYY" picker-format="DD MMM YYYY" [(ngModel)]="endDate"
+        [min]="minEndDate" [max]="maxDate" [(ngModel)]="unfreeslots.end_date" [ngModelOptions]="{ standalone: true }">
+      </ion-datetime> -->
     </ion-item>
+    <ion-calendar [(ngModel)]="endDate" [(ngModel)]="unfreeslots.end_date" [options]="endDateOptions"
+      [type]="'string'" [format]="'YYYY-MM-DD'">
+    </ion-calendar>
   </ion-list>
 
   <form [formGroup]="form">
-    <ion-label class="repeatlabel px-4 py-0">Start time <small class="durationnote">(Every slot duration is 30 minutes)</small>:</ion-label>
-    
+    <ion-label class="repeatlabel px-4 py-0">Start time <small class="durationnote">(Every slot duration is 30
+        minutes)</small>:</ion-label>
+
     <ion-list margin-bottom>
       <div formArrayName="slots" margin-bottom>
-        <section
-          [formGroupName]="i"
-          *ngFor="let slo of form.controls.slots.controls; let i = index"
-        >
+        <section [formGroupName]="i" *ngFor="let slo of form.controls.slots.controls; let i = index">
           <ion-item no-lines>
             <ion-label>Start Time</ion-label>
             <ion-icon name="ios-clock-outline" item-start small></ion-icon>
-            <ion-datetime
-              displayFormat="HH:mm"
-              pickerFormat="HH:mm"
-              [(ngModel)]="time[i]"
-              hourValues="[08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18]"
-              minuteValues="[00,30]"
-              formControlName="slotsTime"
-              (ionChange)="onSelectTime(i)"
-            ></ion-datetime>
+            <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm" [(ngModel)]="time[i]"
+              hourValues="[08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18]" minuteValues="[00,30]"
+              formControlName="slotsTime" (ionChange)="onSelectTime(i)"></ion-datetime>
           </ion-item>
-          <span
-            float-right
-            ion-button
-            icon-left
-            clear
-            *ngIf="form.controls.slots.length > 1"
+          <span float-right ion-button icon-left clear *ngIf="form.controls.slots.length > 1"
             (click)="removeInputField(i)"
-            style="text-transform: capitalize; margin-right:-10px; color: red; font-size: small;"
-          >
+            style="text-transform: capitalize; margin-right:-10px; color: red; font-size: small;">
             <ion-icon name="close"></ion-icon>Remove
           </span>
         </section>
-        <span
-          ion-button
-          float-right
-          icon-left
-          clear
-          (click)="addNewInputField()"
-          style="text-transform: capitalize; margin-right:-10px; font-size: small;"
-          class="colorful-color"
-        >
+        <span ion-button float-right icon-left clear (click)="addNewInputField()"
+          style="text-transform: capitalize; margin-right:-10px; font-size: small;" class="colorful-color">
           <ion-icon name="add"></ion-icon>Add another slot
         </span>
       </div>
@@ -117,17 +74,12 @@
   </form>
 
   <ion-buttons>
-    <button
-      ion-button
-      class="cancel btn btn-outline-dark btn-block btn-lg"
-      (click)="confirmation()"
-      [disabled]="
+    <button ion-button class="cancel btn btn-outline-dark btn-block btn-lg" (click)="confirmation()" [disabled]="
         unfreeslots.repeat == '' ||
         !unfreeslots.start_date ||
         !unfreeslots.end_date ||
         unfreeslots.start_time == ''
-      "
-    >
+      ">
       Submit
     </button>
   </ion-buttons>

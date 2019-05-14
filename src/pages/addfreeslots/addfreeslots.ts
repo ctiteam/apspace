@@ -17,7 +17,7 @@ import { CalendarComponentOptions } from 'ion2-calendar';
 })
 export class AddfreeslotsPage {
   selectedMainDate: Date;
-  
+
   todaysDate = new Date().toISOString();
   alldate = moment(this.todaysDate).add(1, 'day').format('YYYY-MM-DD');
 
@@ -29,9 +29,10 @@ export class AddfreeslotsPage {
 
   repeatUntilDateOptions: CalendarComponentOptions = {
     from: moment(this.selectedMainDate).add(1, 'day').toDate(),
+    to: moment(this.todaysDate).add(1, 'day').add(12, 'month').toDate(),
     color: 'danger'
   };
-  
+
   // TO BE USED LATER
   // dateRangeSelected: {from: string, to: string};
   // optionsRangeRange: CalendarComponentOptions = {
@@ -40,7 +41,7 @@ export class AddfreeslotsPage {
   //   pickMode: 'range',
   //   color: 'danger'
   // };
-  
+
   rooms$: Observable<any>;
   form: FormGroup;
   hidden: boolean[] = [];
@@ -252,8 +253,9 @@ export class AddfreeslotsPage {
     this.selectedMainDate = new Date(dateInMilliSeconds);
     console.log(this.selectedMainDate);
     this.repeatUntilDateOptions = {
-        from: moment(this.selectedMainDate).add(1, 'day').toDate(),
-        color: 'danger'
+      from: moment(this.selectedMainDate).add(1, 'day').toDate(),
+      to: moment(this.todaysDate).add(1, 'day').add(12, 'month').toDate(),
+      color: 'danger'
     }
     this.endDate = '';
     //when start date change then recalculate end date by number of weeks

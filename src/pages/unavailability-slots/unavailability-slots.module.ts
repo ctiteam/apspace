@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { IonicErrorHandler, IonicPageModule } from 'ionic-angular';
 import { SlotsProvider } from '../../providers/slots';
 import { UnavailabilitySlotsPage } from './unavailability-slots';
+import { CalendarModule } from 'ion2-calendar';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { UnavailabilitySlotsPage } from './unavailability-slots';
   imports: [
     IonicPageModule.forChild(UnavailabilitySlotsPage),
     HttpModule,
+    CalendarModule
   ],
   providers: [
     StatusBar,

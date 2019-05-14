@@ -6,6 +6,7 @@ import moment from 'moment';
 import { SlotsProvider } from '../../providers';
 import { UpcominglecPage } from '../iConsult-lecturer/upcominglec';
 import { TabsPage } from '../tabs/tabs';
+import { CalendarComponentOptions } from 'ion2-calendar';
 
 @IonicPage()
 @Component({
@@ -13,6 +14,17 @@ import { TabsPage } from '../tabs/tabs';
   templateUrl: 'unavailability-slots.html',
 })
 export class UnavailabilitySlotsPage {
+  todaysDate = new Date().toISOString();
+  startDate = moment(this.todaysDate).add(1, 'day').format('YYYY-MM-DD');
+  selectedStartDate: Date;
+  startDateOptions: CalendarComponentOptions = {
+    from: moment(this.todaysDate).add(1, 'day').toDate(),
+    to: moment(this.todaysDate).add(1, 'day').add(12, 'month').toDate()
+  };
+  endDateOptions: CalendarComponentOptions = {
+    from: moment(this.startDate).add(1, 'day').toDate(),
+    to: moment(this.todaysDate).add(1, 'day').add(12, 'month').toDate()
+  };
 
   form: FormGroup;
   items: Array<{ text: string }> = [];
@@ -32,7 +44,6 @@ export class UnavailabilitySlotsPage {
 
   minDate: string;
   maxDate: string;
-  startDate: string;
   endDate: string;
   time: string[] = [];
   minEndDate: string;
@@ -103,7 +114,13 @@ export class UnavailabilitySlotsPage {
   }
 
   onchangedate() {
-    this.minEndDate = moment(this.startDate).add(1, 'day').toISOString();
+    let dateInMilliSeconds = Date.parse(this.startDate);
+    this.selectedStartDate = new Date(dateInMilliSeconds);
+    this.endDateOptions = {
+      from: moment(this.selectedStartDate).add(1, 'day').toDate(),
+      to: moment(this.todaysDate).add(1, 'day').add(12, 'month').toDate(),
+      color: 'danger'
+    }
     this.endDate = '';
   }
 
