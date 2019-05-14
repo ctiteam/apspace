@@ -5,6 +5,8 @@
 </ion-header>
 
 <ion-content>
+  <div class="container p-0">
+
   <div [ngClass]="{'ListBackdrop':fabButtonOpened == true, 'noListBackdrop':fabButtonOpened == false}"
     *ngIf="fabButtonOpened==true" (click)="closeFabButton(fab)">
   </div>
@@ -142,5 +144,6 @@
       </button>
     </ion-fab-list>
   </ion-fab>
+</div>
 
 </ion-content>

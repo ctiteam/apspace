@@ -6,155 +6,139 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let details of (detail$ | async)">
-    <ion-card-content>
-      <ion-item class="studentdetails">
-        <ion-icon name="person" item-start></ion-icon>
-        <div class="py-2 mt-1">
-          <p>Student Name :</p>
-          <h2 class="my-content line-break">{{ details.studentname }}</h2>
-        </div>
-        <div class="py-2 mt-1">
-          <p>Student ID :</p>
-          <h2 class="my-content line-break">{{ details.tpnumber }}</h2>
-        </div>
+  <div class="container p-0">
+    <ion-card *ngFor="let details of (detail$ | async)">
+      <ion-card-content>
+        <ion-item class="studentdetails">
+          <ion-icon name="person" item-start></ion-icon>
+          <div class="py-2 mt-1">
+            <p>Student Name :</p>
+            <h2 class="my-content line-break">{{ details.studentname }}</h2>
+          </div>
+          <div class="py-2 mt-1">
+            <p>Student ID :</p>
+            <h2 class="my-content line-break">{{ details.tpnumber }}</h2>
+          </div>
 
-        <div class="py-2 mt-1">
-          <p *ngIf="details.stuPhone != ''">Student Phone Number :</p>
-          <a href="tel:{{ details.stuPhone }}" style="text-decoration:none;">
-            <h2 class="my-content line-break">{{ details.stuPhone }}</h2>
-          </a>
-        </div>
+          <div class="py-2 mt-1">
+            <p *ngIf="details.stuPhone != ''">Student Phone Number :</p>
+            <a href="tel:{{ details.stuPhone }}" style="text-decoration:none;">
+              <h2 class="my-content line-break">{{ details.stuPhone }}</h2>
+            </a>
+          </div>
 
-        <div class="py-2 mt-1">
-          <p>Student Email :</p>
-          <a href="mailto:{{ details.stuEmail }}" style="text-decoration:none;">
-            <h2 style="color: currentColor; margin-bottom: 7px;">
-              {{ details.stuEmail }}
-            </h2>
-          </a>
-        </div>
-      </ion-item>
+          <div class="py-2 mt-1">
+            <p>Student Email :</p>
+            <a href="mailto:{{ details.stuEmail }}" style="text-decoration:none;">
+              <h2 style="color: currentColor; margin-bottom: 7px;">
+                {{ details.stuEmail }}
+              </h2>
+            </a>
+          </div>
+        </ion-item>
 
-      <ion-item class="studentdetails">
-        <ion-icon name="time" item-start></ion-icon>
-        <div class="py-2 mt-1">
-          <p>Date :</p>
-          <b>{{ details.contime | date: "EEEE, dd MMMM y" }}</b>
-        </div>
-        <div class="py-2 mt-1">
-          <p>Time :</p>
-          <b>{{ time }} - {{ details.endtime }}</b>
-        </div>
-      </ion-item>
+        <ion-item class="studentdetails">
+          <ion-icon name="time" item-start></ion-icon>
+          <div class="py-2 mt-1">
+            <p>Date :</p>
+            <b>{{ details.contime | date: "EEEE, dd MMMM y" }}</b>
+          </div>
+          <div class="py-2 mt-1">
+            <p>Time :</p>
+            <b>{{ time }} - {{ details.endtime }}</b>
+          </div>
+        </ion-item>
 
-      <ion-item class="studentdetails">
-        <ion-icon name="pin" item-start></ion-icon>
+        <ion-item class="studentdetails">
+          <ion-icon name="pin" item-start></ion-icon>
 
-        <div class="py-2 mt-1">
-          <p>Location :</p>
-          <b>{{ details.location }}</b>
+          <div class="py-2 mt-1">
+            <p>Location :</p>
+            <b>{{ details.location }}</b>
+          </div>
+
+          <div class="py-2 mt-1">
+            <p>Venue :</p>
+            <b>{{ details.venue }}</b>
+          </div>
+        </ion-item>
+
+        <ion-item class="studentdetails">
+          <ion-icon name="person" item-start></ion-icon>
+
+          <div class="py-2 mt-1">
+            <p>Consultation With :</p>
+            <h2 class="my-content line-break">{{ details.con_with }}</h2>
+          </div>
+        </ion-item>
+
+        <ion-item class="studentdetails">
+          <ion-icon name="pricetags" item-start></ion-icon>
+          <div class="py-2 mt-1">
+            <p>Appointment reason :</p>
+            <h2 class="my-content line-break">{{ details.reason }}</h2>
+          </div>
+        </ion-item>
+
+        <ion-item class="studentdetails" *ngIf="details.note != ''">
+          <ion-icon name="paper" item-start></ion-icon>
+          <div class="py-2 mt-1">
+            <p>Appointment note :</p>
+            <h2 class="my-content line-break">{{ details.note }}</h2>
+          </div>
+        </ion-item>
+
+        <div class="row mt-3">
+          <div class="col-6 px-1">
+            <button class="btn btn-block btn-outline-success" (click)="gotoChat(details.tpnumber)">
+              Chat in Teams
+            </button>
+          </div>
+          <div class="col-6 px-1" *ngIf="status == 'Booked' && dateString < date">
+            <button class="btn btn-block btn-outline-danger" (click)="cancelslot()">
+              Cancel Appointment
+            </button>
+          </div>
         </div>
+      </ion-card-content>
+    </ion-card>
 
-        <div class="py-2 mt-1">
-          <p>Venue :</p>
-          <b>{{ details.venue }}</b>
-        </div>
-      </ion-item>
+    <ng-template let-feedback [ngIf]="feedback$ | async">
+      <ng-template [ngIf]="feedback.res == 'feedbackid'" [ngIfElse]="nofeedback">
+        <ion-card padding>
+          <ion-card-content style="margin-top: -31px;">
+            <ion-item class="studentdetails">
+              <ion-icon name="paper" item-start></ion-icon>
+              <div class="py-2 mt-1">
+                <p>Remarks :</p>
+                <h2 class="my-content line-break">{{ feedback.feedback }}</h2>
+              </div>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
 
-      <ion-item class="studentdetails">
-        <ion-icon name="person" item-start></ion-icon>
-
-        <div class="py-2 mt-1">
-          <p>Consultation With :</p>
-          <h2 class="my-content line-break">{{ details.con_with }}</h2>
-        </div>
-      </ion-item>
-
-      <ion-item class="studentdetails">
-        <ion-icon name="pricetags" item-start></ion-icon>
-        <div class="py-2 mt-1">
-          <p>Appointment reason :</p>
-          <h2 class="my-content line-break">{{ details.reason }}</h2>
-        </div>
-      </ion-item>
-
-      <ion-item class="studentdetails" *ngIf="details.note != ''">
-        <ion-icon name="paper" item-start></ion-icon>
-        <div class="py-2 mt-1">
-          <p>Appointment note :</p>
-          <h2 class="my-content line-break">{{ details.note }}</h2>
-        </div>
-      </ion-item>
-
-      <div class="row mt-3">
-        <div class="col-6 px-1">
-          <button
-            class="btn btn-block btn-outline-success"
-            (click)="gotoChat(details.tpnumber)"
-          >
-            Chat in Teams
-          </button>
-        </div>
-        <div class="col-6 px-1" *ngIf="status == 'Booked' && dateString < date">
-          <button
-            class="btn btn-block btn-outline-danger"
-            (click)="cancelslot()"
-          >
-            Cancel Appointment
-          </button>
-        </div>
-      </div>
-    </ion-card-content>
-  </ion-card>
-
-  <ng-template let-feedback [ngIf]="feedback$ | async">
-    <ng-template [ngIf]="feedback.res == 'feedbackid'" [ngIfElse]="nofeedback">
-      <ion-card padding>
-        <ion-card-content style="margin-top: -31px;">
-          <ion-item class="studentdetails">
-            <ion-icon name="paper" item-start></ion-icon>
-            <div class="py-2 mt-1">
-              <p>Remarks :</p>
-              <h2 class="my-content line-break">{{ feedback.feedback }}</h2>
-            </div>
+      <ng-template #nofeedback>
+        <ion-card *ngIf="status == 'Booked' && dateString > date">
+          <ion-item>
+            <ion-label color="primary" floating>Remarks</ion-label>
+            <ion-textarea [(ngModel)]="lecfeedback.feedback" [ngModelOptions]="{ standalone: true }">
+            </ion-textarea>
           </ion-item>
-        </ion-card-content>
-      </ion-card>
+          <ion-item>
+            <ion-label>Copy to GIMS</ion-label>
+            <ion-checkbox item-right [checked]="lecfeedback.gims_status" (ionChange)="changeTest()"
+              [(ngModel)]="lecfeedback.gims_status">
+            </ion-checkbox>
+          </ion-item>
+          <ion-buttons end>
+            <button ion-button block (click)="confirmation()" class="cancel btn btn-primary btn-block"
+              [disabled]="!lecfeedback.feedback">
+              Submit
+            </button>
+          </ion-buttons>
+        </ion-card>
+      </ng-template>
     </ng-template>
-
-    <ng-template #nofeedback>
-      <ion-card *ngIf="status == 'Booked' && dateString > date">
-        <ion-item>
-          <ion-label color="primary" floating>Remarks</ion-label>
-          <ion-textarea
-            [(ngModel)]="lecfeedback.feedback"
-            [ngModelOptions]="{ standalone: true }"
-          >
-          </ion-textarea>
-        </ion-item>
-        <ion-item>
-          <ion-label>Copy to GIMS</ion-label>
-          <ion-checkbox
-            item-right
-            [checked]="lecfeedback.gims_status"
-            (ionChange)="changeTest()"
-            [(ngModel)]="lecfeedback.gims_status"
-          >
-          </ion-checkbox>
-        </ion-item>
-        <ion-buttons end>
-          <button
-            ion-button
-            block
-            (click)="confirmation()"
-            class="cancel btn btn-primary btn-block"
-            [disabled]="!lecfeedback.feedback"
-          >
-            Submit
-          </button>
-        </ion-buttons>
-      </ion-card>
-    </ng-template>
-  </ng-template>
+  </div>
 </ion-content>
