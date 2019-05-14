@@ -6,6 +6,8 @@ import { IonicSelectableModule } from 'ionic-selectable';
 import { SlotsProvider } from '../../providers/slots';
 import { AddfreeslotsPage } from './addfreeslots';
 
+import { CalendarModule } from "ion2-calendar";
+
 @NgModule({
   declarations: [
     AddfreeslotsPage,
@@ -14,6 +16,7 @@ import { AddfreeslotsPage } from './addfreeslots';
     IonicPageModule.forChild(AddfreeslotsPage),
     HttpModule,
     IonicSelectableModule,
+    CalendarModule
   ],
   providers: [
     StatusBar,

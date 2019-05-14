@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { SlotsProvider } from '../../providers';
 import { UpcominglecPage } from '../iConsult-lecturer/upcominglec';
 import { TabsPage } from '../tabs/tabs';
+import { CalendarComponentOptions } from 'ion2-calendar';
 
 @IonicPage()
 @Component({
@@ -15,7 +16,30 @@ import { TabsPage } from '../tabs/tabs';
   templateUrl: 'addfreeslots.html',
 })
 export class AddfreeslotsPage {
+  selectedMainDate: Date;
+  
+  todaysDate = new Date().toISOString();
+  
+  mainDateOptions: CalendarComponentOptions = {
+    from: moment(this.todaysDate).add(1, 'day').toDate(),
+    to: moment(this.todaysDate).add(1, 'day').add(12, 'month').toDate(),
+    disableWeeks: [0]
+  };
 
+  repeatUntilDateOptions: CalendarComponentOptions = {
+    from: moment(this.selectedMainDate).add(1, 'day').toDate(),
+    color: 'danger'
+  };
+  
+  // TO BE USED LATER
+  // dateRangeSelected: {from: string, to: string};
+  // optionsRangeRange: CalendarComponentOptions = {
+  //   from: moment(this.todaysDate).add(1, 'day').toDate(),
+  //   to: moment(this.todaysDate).add(1, 'day').add(12, 'month').toDate(),
+  //   pickMode: 'range',
+  //   color: 'danger'
+  // };
+  
   rooms$: Observable<any>;
   form: FormGroup;
   hidden: boolean[] = [];
@@ -58,7 +82,6 @@ export class AddfreeslotsPage {
   MinDate: string;
   sundaySelected = false;
   showTimeConflictMessage = false;
-  formattedSelectedDate: any;
   repeatstartDate: string;
   repeatselected: any;
   no_of_weeks: number;
@@ -181,7 +204,7 @@ export class AddfreeslotsPage {
   async confirmation() {
     const alert = await this.alertCtrl.create({
       title: 'Confirm',
-      message: 'Are you sure you want to add this availability?',
+      message: 'Are you sure you want to add this free slot?',
       buttons: [
         {
           text: 'No',
@@ -232,17 +255,25 @@ export class AddfreeslotsPage {
   }) {
   }
 
-  onChangeOneFreeSlotDate() {
+  onChangeMainDate() {
+    console.log('date is changing');
     this.sundaySelected = false;
     let dateInMilliSeconds = Date.parse(this.alldate);
-    this.formattedSelectedDate = new Date(dateInMilliSeconds);
-    if (this.formattedSelectedDate.getDay() == 0) {
-      this.sundaySelected = true;
+    this.selectedMainDate = new Date(dateInMilliSeconds);
+    console.log(this.selectedMainDate);
+    this.repeatUntilDateOptions = {
+        from: moment(this.selectedMainDate).add(1, 'day').toDate(),
+        color: 'danger'
     }
-    this.minEndDate = moment(this.alldate).add(1, 'day').toISOString();
     this.endDate = '';
-    //when start date change then recalculate end date by number of weeks
-    this.repeatweek();
+
+    // if (this.formattedSelectedDate.getDay() == 0) {
+    //   this.sundaySelected = true;
+    // }
+    // this.minEndDate = moment(this.alldate).add(1, 'day').toISOString();
+    // this.endDate = '';
+    // //when start date change then recalculate end date by number of weeks
+    // this.repeatweek();
   }
 
   async duplicateSlotAlert() {
