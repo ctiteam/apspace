@@ -11,80 +11,93 @@
 
   <ng-template let-slots [ngIf]="slots$ | async" [ngIfElse]="loadingUpComLec">
     <ng-template [ngIf]="slots && !isEmpty(slots)" [ngIfElse]="nodata">
-      <div class="px-4 py-3">
-        <p class="staff-info-label">Staff Name:</p>
-        <h2 class="m-0 staff-name" *ngIf="(staffName$ | async) as staffName">
-          {{ staffName.name }}
-        </h2>
-      </div>
+      <div class="container p-0">
+        <div class="px-4 py-3">
+          <p class="staff-info-label">Staff Name:</p>
+          <h2 class="m-0 staff-name" *ngIf="(staffName$ | async) as staffName">
+            {{ staffName.name }}
+          </h2>
+        </div>
 
-      <div class="px-4 py-3">
-        <p class="staff-info-label m-0">Free Slots <small>(Grouped by month)</small>:</p>
+        <div class="px-4 py-3">
+          <p class="staff-info-label m-0">Free Slots <small>(Grouped by month)</small>:</p>
+        </div>
       </div>
       <div class="slotts" *ngFor="let sourceKey of objectKeys(slots)">
-          <h2 class="p-4 slot-month sticky-top">
-              {{sourceKey}}
-            </h2>
-          <ion-card class="card card-ios p-0 my-2 mx-auto" *ngFor="let slot of slots[sourceKey]"
-            [ngClass]="slot.status == 'Booked' ? 'bookedcard' : 'Availablecard'">
-            <ion-card-header>
-              <div class="row">
-                <div class="col-8 text-left">
-                  <h2>{{ slot.date | date:'EEEE, dd MMMM y'}}</h2>
-                </div>
-                <div class="col-4 text-right">
-                  <ion-badge class="bookedHour" *ngIf="slot.status == 'Booked'">{{
+        <h2 class="p-4 slot-month sticky-top">
+          <div class="container p-0">
+            {{sourceKey}}
+          </div>
+        </h2>
+        <div class="container p-0">
+          <div class="row">
+            <div class="col-12 col-md-6" *ngFor="let slot of slots[sourceKey]">
+              <ion-card class="card card-ios p-0 my-2 mx-auto"
+                [ngClass]="slot.status == 'Booked' ? 'bookedcard' : 'Availablecard'">
+                <ion-card-header>
+                  <div class="row">
+                    <div class="col-8 text-left">
+                      <h2>{{ slot.date | date:'EEEE, dd MMMM y'}}</h2>
+                    </div>
+                    <div class="col-4 text-right">
+                      <ion-badge class="bookedHour" *ngIf="slot.status == 'Booked'">{{
                     slot.status
                   }}</ion-badge>
-                  <ion-badge class="availableHour" *ngIf="slot.status == 'Available'">{{
+                      <ion-badge class="availableHour" *ngIf="slot.status == 'Available'">{{
                     slot.status
                   }}</ion-badge>
-                </div>
-              </div>
-            </ion-card-header>
-    
-            <ion-card-content class="py-3 px-4">
-              <ion-label no-margin>
-                <ion-icon padding-right name="time"></ion-icon>
-                <b>{{ slot.time }} - {{ slot.endtime }}</b>
-              </ion-label>
-              <ion-label no-margin>
-                <ion-icon padding-right name="locate"></ion-icon>
-                {{ slot.venue }} │ {{ slot.location }}
-              </ion-label>
-              <ion-label class="mt-3 mb-0" *ngIf="slot.status == 'Available'">
-                <a *ngIf="staffName$ | async as staffName"
-                  class="btn btn-lg btn-block btn-outline-dark"
-                  (click)="openBookingPage(slot.availibilityid, slot.date, slot.timee, slot.time, slot.datetime, slot.endtime, staffName.name, casId)">
-                  Book Now
-                </a>
-              </ion-label>
-            </ion-card-content>
-          </ion-card>
+                    </div>
+                  </div>
+                </ion-card-header>
+
+                <ion-card-content class="py-3 px-4">
+                  <ion-label no-margin>
+                    <ion-icon padding-right name="time"></ion-icon>
+                    <b>{{ slot.time }} - {{ slot.endtime }}</b>
+                  </ion-label>
+                  <ion-label no-margin>
+                    <ion-icon padding-right name="locate"></ion-icon>
+                    {{ slot.venue }} │ {{ slot.location }}
+                  </ion-label>
+                  <ion-label class="mt-3 mb-0" *ngIf="slot.status == 'Available'">
+                    <a *ngIf="staffName$ | async as staffName" class="btn btn-lg btn-block btn-outline-dark"
+                      (click)="openBookingPage(slot.availibilityid, slot.date, slot.timee, slot.time, slot.datetime, slot.endtime, staffName.name, casId)">
+                      Book Now
+                    </a>
+                  </ion-label>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </div>
+        </div>
       </div>
     </ng-template>
 
-    <ng-template #nodata>
-      <div class="row mt-5">
-        <div class="mt-5 col-12">
-          <h2 class="pt-5 px-4 text-center no-consultation message" *ngIf="(staffName$ | async) as staffName">
-            {{ staffName.response}}
-          </h2>
+    <div class="container p-0">
+      <ng-template #nodata>
+        <div class="row mt-5">
+          <div class="mt-5 col-12">
+            <h2 class="pt-5 px-4 text-center no-consultation message" *ngIf="(staffName$ | async) as staffName">
+              {{ staffName.response}}
+            </h2>
+          </div>
+          <div class="col-12">
+            <h2 class="pt-5 px-4 text-center no-consultation email">
+              <a href="mailto:{{ EMAIL }}">
+                {{ EMAIL }}
+              </a>
+            </h2>
+          </div>
         </div>
-        <div class="col-12">
-          <h2 class="pt-5 px-4 text-center no-consultation email">
-            <a href="mailto:{{ EMAIL }}">
-              {{ EMAIL }}
-            </a>
-          </h2>
-        </div>
-      </div>
-    </ng-template>
+      </ng-template>
+    </div>
   </ng-template>
 
   <ng-template #loadingUpComLec>
-    <ion-card *ngFor="let sk of skeletonArray">
-      <skeleton-item style="height: 160px;"> </skeleton-item>
-    </ion-card>
+    <div class="container p-0">
+      <ion-card *ngFor="let sk of skeletonArray">
+        <skeleton-item style="height: 160px;"> </skeleton-item>
+      </ion-card>
+    </div>
   </ng-template>
 </ion-content>

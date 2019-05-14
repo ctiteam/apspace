@@ -8,88 +8,89 @@
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
-  <ng-template let-slots [ngIf]="slots$ | async" [ngIfElse]="loadingUpComLec">
-    <ng-template [ngIf]="slots && slots.length > 0" [ngIfElse]="nodata">
-      <ion-card class="card card-ios" *ngFor="let slot of slots" [ngClass]="{
+  <div class="container p-0">
+    <ng-template let-slots [ngIf]="slots$ | async" [ngIfElse]="loadingUpComLec">
+      <ng-template [ngIf]="slots && slots.length > 0" [ngIfElse]="nodata">
+        <ion-card class="card card-ios" *ngFor="let slot of slots" [ngClass]="{
           canceledcard: slot.status == 'cancelledbylec',
           availablecard: slot.status == 'normal',
           canceledcard: slot.status == 'cancelledbystu'
         }">
-        <ion-card-header>
-          <div class="row">
-            <div class="col-12">
-              <a (click)="goStaffDirectoryInfoPage(slot.casid)">{{
+          <ion-card-header>
+            <div class="row">
+              <div class="col-12">
+                <a (click)="goStaffDirectoryInfoPage(slot.casid)">{{
                 slot.lecname
               }}</a>
-            </div>
-            <div class="col-12" *ngIf="
+              </div>
+              <div class="col-12" *ngIf="
                 slot.status == 'cancelledbystu' ||
                 slot.status == 'cancelledbylec'
               ">
-              <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbylec'">Cancelled By Lecturer</ion-badge>
-              <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbystu'">Cancelled By Student</ion-badge>
+                <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbylec'">Cancelled By Lecturer
+                </ion-badge>
+                <ion-badge class="cancelledbylec" *ngIf="slot.status == 'cancelledbystu'">Cancelled By Student
+                </ion-badge>
+              </div>
             </div>
-          </div>
-        </ion-card-header>
+          </ion-card-header>
 
-        <ion-card-content class="p-3">
-          <ion-label class="my-1">
-            <ion-icon padding-right name="calendar"></ion-icon>
-            {{ slot.date | date:'EEEE, dd MMMM y' }}
-          </ion-label>
-          <ion-label class="my-1">
-            <ion-icon padding-right name="time"></ion-icon>
-            <b>{{ slot.starttime }} - {{ slot.endtime }}</b>
-          </ion-label>
-          <ion-label class="my-1">
-            <ion-icon padding-right name="locate"></ion-icon>
-            {{ slot.venue }} │ {{ slot.location }}
-          </ion-label>
+          <ion-card-content class="p-3">
+            <ion-label class="my-1">
+              <ion-icon padding-right name="calendar"></ion-icon>
+              {{ slot.date | date:'EEEE, dd MMMM y' }}
+            </ion-label>
+            <ion-label class="my-1">
+              <ion-icon padding-right name="time"></ion-icon>
+              <b>{{ slot.starttime }} - {{ slot.endtime }}</b>
+            </ion-label>
+            <ion-label class="my-1">
+              <ion-icon padding-right name="locate"></ion-icon>
+              {{ slot.venue }} │ {{ slot.location }}
+            </ion-label>
 
-          <div class="row mt-3">
-            <div class="col-6">
-              <button *ngIf="slot.status == 'normal'"
-                class="btn btn-outline-primary"
-                (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
-                Appointment details
-              </button>
-              <button *ngIf="slot.status == 'cancelledbylec'"
-                class="btn btn-outline-primary"
-                (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
-                View details
-              </button>
-              <button *ngIf="slot.status == 'cancelledbystu'"
-                class="btn btn-outline-primary"
-                (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
-                View details
-              </button>
+            <div class="row mt-3">
+              <div class="col-6">
+                <button *ngIf="slot.status == 'normal'" class="btn btn-outline-primary"
+                  (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
+                  Appointment details
+                </button>
+                <button *ngIf="slot.status == 'cancelledbylec'" class="btn btn-outline-primary"
+                  (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
+                  View details
+                </button>
+                <button *ngIf="slot.status == 'cancelledbystu'" class="btn btn-outline-primary"
+                  (click)="openDetailPage(slot.slotid, slot.availibilityid, slot.poststarttime, slot.date)">
+                  View details
+                </button>
+              </div>
+              <div class="col-6">
+                <button class="btn btn-outline-success" (click)="gotoChat(slot.casid)">
+                  Chat in Teams
+                </button>
+              </div>
             </div>
-            <div class="col-6">
-              <button class="btn btn-outline-success" (click)="gotoChat(slot.casid)">
-                Chat in Teams
-              </button>
-            </div>
-          </div>
-        </ion-card-content>
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
+
+      <ng-template #nodata>
+        <ion-label class="my-content line-break">
+          There is no upcoming consultation hours
+        </ion-label>
+      </ng-template>
+    </ng-template>
+
+    <ng-template #loadingUpComLec>
+      <ion-card *ngFor="let sk of skeletonArray">
+        <skeleton-item style="height: 160px;"> </skeleton-item>
       </ion-card>
     </ng-template>
 
-    <ng-template #nodata>
-      <ion-label class="my-content line-break">
-        There is no upcoming consultation hours
-      </ion-label>
-    </ng-template>
-  </ng-template>
-
-  <ng-template #loadingUpComLec>
-    <ion-card *ngFor="let sk of skeletonArray">
-      <skeleton-item style="height: 160px;"> </skeleton-item>
-    </ion-card>
-  </ng-template>
-
-  <ion-fab right bottom>
-    <button ion-fab (click)="gotostaffDir()">
-      <ion-icon name="add"></ion-icon>
-    </button>
-  </ion-fab>
+    <ion-fab right bottom>
+      <button ion-fab (click)="gotostaffDir()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-fab>
+  </div>
 </ion-content>
