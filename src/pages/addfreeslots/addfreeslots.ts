@@ -19,7 +19,8 @@ export class AddfreeslotsPage {
   selectedMainDate: Date;
   
   todaysDate = new Date().toISOString();
-  
+  alldate = moment(this.todaysDate).add(1, 'day').format('YYYY-MM-DD');
+
   mainDateOptions: CalendarComponentOptions = {
     from: moment(this.todaysDate).add(1, 'day').toDate(),
     to: moment(this.todaysDate).add(1, 'day').add(12, 'month').toDate(),
@@ -71,21 +72,16 @@ export class AddfreeslotsPage {
   loading = this.loadingCtrl.create({
   });
 
-  minDate: string;
-  maxDate: string;
   repeatday: any;
   startDate: string;
   endDate: string;
   time: string[] = [];
   minEndDate: string;
   room: string;
-  MinDate: string;
-  sundaySelected = false;
   showTimeConflictMessage = false;
   repeatstartDate: string;
   repeatselected: any;
   no_of_weeks: number;
-  alldate: string;
   alldates: string;
   enddatebefore: string;
   enddateafter: string;
@@ -124,11 +120,7 @@ export class AddfreeslotsPage {
       ]),
     });
 
-    this.minDate = new Date().toISOString();
-    this.MinDate = moment(this.minDate).add(1, 'day').toISOString();
-    this.maxDate = moment(this.MinDate).add(12, 'month').toISOString();
     this.repeatselected = "repeatnone";
-    this.alldate = moment(this.MinDate).format('YYYY-MM-DD');
     this.no_of_weeks = 1;
   }
 
@@ -256,8 +248,6 @@ export class AddfreeslotsPage {
   }
 
   onChangeMainDate() {
-    console.log('date is changing');
-    this.sundaySelected = false;
     let dateInMilliSeconds = Date.parse(this.alldate);
     this.selectedMainDate = new Date(dateInMilliSeconds);
     console.log(this.selectedMainDate);
@@ -266,14 +256,8 @@ export class AddfreeslotsPage {
         color: 'danger'
     }
     this.endDate = '';
-
-    // if (this.formattedSelectedDate.getDay() == 0) {
-    //   this.sundaySelected = true;
-    // }
-    // this.minEndDate = moment(this.alldate).add(1, 'day').toISOString();
-    // this.endDate = '';
-    // //when start date change then recalculate end date by number of weeks
-    // this.repeatweek();
+    //when start date change then recalculate end date by number of weeks
+    this.repeatweek();
   }
 
   async duplicateSlotAlert() {
