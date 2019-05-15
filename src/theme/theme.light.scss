@@ -801,6 +801,13 @@ $light_menu_colors: (
 		.startAndEndDateMessage {
 			color: color($light_colors, ligth_grey_color);
 		}
+		button {
+			&.btn-outline-dark {
+				&:hover, &:active {
+					color: color($light_colors, light_white_background) !important;
+				}
+			}
+		}
 	}
 
 	// QUALIFICATION AUTHENTICITY VERIFICATION PAGE AND VIEW/UPDATE PROGRESS REPORT APLC

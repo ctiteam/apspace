@@ -398,8 +398,8 @@ $primary_color: #f18c8e;
 			&.btn-outline-dark {
 				border-color: $primary_color !important;
 				color: $primary_color !important;
-				&:hover {
-					background-color: $primary_color;
+				&:hover, &:active {
+					background-color: $primary_color !important;
 				}
 			}
 		}

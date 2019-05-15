@@ -852,7 +852,7 @@ $dark_menu_colors: (
 		}
 		button {
 			&.btn-outline-dark {
-				&:hover {
+				&:hover, &:active {
 					color: color($dark_colors, dark_background) !important;
 				}
 			}
