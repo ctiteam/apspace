@@ -15,17 +15,17 @@
 <ion-menu [content]="content" side="right">
   <ion-header>
     <ion-toolbar>
-      <ion-buttons end>
-        <button ion-button icon-only (click)="toggleFilterMenu()">
-          <ion-icon name="close"></ion-icon>
-        </button>
-      </ion-buttons>
-      <ion-searchbar placeholder="Enter intake code" [formControl]="searchControl"></ion-searchbar>
+      <ion-title>Filter</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content>
     <div class="row">
       <div class="col-12">
+        <div class="row">
+          <div class="col-12">
+            <ion-searchbar placeholder="Enter intake code" [formControl]="searchControl"></ion-searchbar>
+          </div>
+        </div>
         <ion-list no-lines class="mt-4" *ngIf="(searchIntake$ | async) as intakes">
           <ng-template [ngIf]="intakes.length > 0" [ngIfElse]="notFound">
             <p class="text-center">
