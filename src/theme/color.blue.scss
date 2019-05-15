@@ -448,6 +448,42 @@ $primary_color: #1297e0;
 		background-color: $primary_color;
 	}
 
+	// OVERRIDING THE ION-CALENDAR ITEM
+	ion-calendar{
+		background-color: color($dark_colors, dark_item_background);
+		ion-calendar-week{
+			.week-title.transparent {
+				color: $primary_color;
+			}
+		}
+		ion-calendar-month-picker{
+			.month-packer-item{
+				&.this-month{
+					button{
+						border-color: $primary_color !important;
+					}
+				}
+			}
+		}
+		ion-calendar-month{
+			.days-box{
+				.days{
+					.days-btn{
+						&.today{
+							p{
+								color: $primary_color;
+							}
+						}
+						&.on-selected{
+							background-color: $primary_color;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+
 	// OVERRIDE THE RADIO BUTTONS DESIGN
 	.item-radio-checked ion-label {
 		color: $primary_color !important;
@@ -461,51 +497,4 @@ $primary_color: #1297e0;
 	.radio-ios .radio-checked .radio-inner {
 		border-color: $primary_color;
 	}
-
-	// .notifications-section
-	//   .notifications-section-body
-	//   .notification-group
-	//   .notification-group-messages
-	//   .notification.unread {
-	//   color: $primary_color;
-	// }
-
-	// .nav-pills .nav-link.active,
-	// .nav-pills .show > .nav-link {
-	//   background-color: $primary_color;
-	// }
-
-	// .nav-pills .nav-link {
-	//   color: $primary_color;
-	// }
-
-	// .main-content .section .low-attendance-pills .col-12 {
-	//   border-top: 2px solid $primary_color;
-	// }
-
-	// .side-menu-item.activated {
-	//   background: $primary_color;
-	// }
-
-	// OVERRIDE THE MAIN STYLE FOR IONIC ELEMENTS
-	// .popover-md .popover-content,
-	// .popover-ios .popover-content {
-	//   ion-list {
-	//     ion-item {
-	//       ion-radio {
-	//         .radio-checked {
-	//           border-color: $primary_color;
-	//           .radio-inner {
-	//             background-color: $primary_color;
-	//           }
-	//         }
-	//       }
-	//       &.item-radio-checked {
-	//         ion-label {
-	//           color: $primary_color;
-	//         }
-	//       }
-	//     }
-	//   }
-	// }
 }

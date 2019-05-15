@@ -867,6 +867,16 @@ $light_menu_colors: (
 		}
 	}
 
+	// OVERRIDING THE ION-CALENDAR ITEM
+	ion-calendar{
+		background-color: color($light_colors, light_white_background);
+		ion-calendar-week{
+			.toolbar-background{
+				background-color: color($light_colors, light_white_background);
+			}
+		}
+	}
+
 	// OVERRIDING THE IONIC SEGMENTS DESIGN (ALL PAGES)
 	.segment-md .segment-button {
 		color: color($light_colors, ligth_grey_color);

@@ -949,6 +949,40 @@ $dark_menu_colors: (
 	}
 	// END OVERRIDING IONIC SEGMENTS DESIGN (ALL PAGES)
 
+	// OVERRIDING THE ION-CALENDAR ITEM
+	ion-calendar{
+		background-color: color($dark_colors, dark_item_background);
+		ion-calendar-week{
+			.toolbar-background{
+				background-color: color($dark_colors, dark_item_background);
+			}
+		}
+		ion-calendar-month-picker{
+			.month-packer-item{
+				button{
+					color: color($dark_colors, dark_search_background_color);
+				}
+			}
+		}
+		ion-calendar-month{
+			.days-box{
+				.days{
+					.days-btn{
+						p{
+							color: color($dark_colors, dark_search_background_color);
+						}
+						&.last-month-day{
+							p{
+								color: color($dark_colors, dark_search_background_color) !important;
+								font-weight: lighter;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	// TEMP GENERAL STYLES FOR ION CARDS
 	ion-card {
 		&.no-classes-message {

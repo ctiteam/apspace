@@ -450,6 +450,41 @@ $primary_color: #2ecc71;
 		background-color: $primary_color;
 	}
 
+	// OVERRIDING THE ION-CALENDAR ITEM
+	ion-calendar{
+		background-color: color($dark_colors, dark_item_background);
+		ion-calendar-week{
+			.week-title.transparent {
+				color: $primary_color;
+			}
+		}
+		ion-calendar-month-picker{
+			.month-packer-item{
+				&.this-month{
+					button{
+						border-color: $primary_color !important;
+					}
+				}
+			}
+		}
+		ion-calendar-month{
+			.days-box{
+				.days{
+					.days-btn{
+						&.today{
+							p{
+								color: $primary_color;
+							}
+						}
+						&.on-selected{
+							background-color: $primary_color;
+						}
+					}
+				}
+			}
+		}
+	}
+
 	// OVERRIDE THE RADIO BUTTONS DESIGN
 	.item-radio-checked ion-label {
 		color: $primary_color !important;
