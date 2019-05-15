@@ -154,6 +154,11 @@ export class DashboardPage {
     this.app.getRootNav().push(page);
   }
 
+  /** Open staff info for lecturer id. */
+  openStaffDirectoryInfo(id: string) {
+    this.app.getRootNav().push('StaffDirectoryInfoPage', { id });
+  }
+
   // HOLIDAYS METHODS
   getHolidays(refresh: boolean) {
     const now = new Date();
@@ -192,7 +197,7 @@ export class DashboardPage {
   // UPCOMING CONSULTATION METHODS
   getUpcomingConsultations() {
     let dateNow = new Date();
-     return this.ws.get<Upcomingcon[]>('/iconsult/upcomingconstu', true, {
+    return this.ws.get<Upcomingcon[]>('/iconsult/upcomingconstu', true, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'my-auth-token',
@@ -211,13 +216,15 @@ export class DashboardPage {
     );
   }
 
-  compareDates(consultationDate: Date, dateNow: Date, consultationTime: string): boolean{
-    if(consultationDate.getFullYear() >= dateNow.getFullYear() && consultationDate.getMonth() >= dateNow.getMonth() && consultationDate.getDate() > dateNow.getDate()){
+
+
+  compareDates(consultationDate: Date, dateNow: Date, consultationTime: string): boolean {
+    if (consultationDate.getFullYear() >= dateNow.getFullYear() && consultationDate.getMonth() >= dateNow.getMonth() && consultationDate.getDate() > dateNow.getDate()) {
       return true; // the consultation date is greater than the current date
     }
-    else if(consultationDate.getFullYear() === dateNow.getFullYear() && consultationDate.getMonth() === dateNow.getMonth() && consultationDate.getDate() === dateNow.getDate()){
+    else if (consultationDate.getFullYear() === dateNow.getFullYear() && consultationDate.getMonth() === dateNow.getMonth() && consultationDate.getDate() === dateNow.getDate()) {
       // the consultation date and the current date are the same but the consultation time has not occured
-      if(moment(consultationTime, 'HH:mm A').toDate() >= dateNow){
+      if (moment(consultationTime, 'HH:mm A').toDate() >= dateNow) {
         return true;
       }
     }
