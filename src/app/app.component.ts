@@ -58,13 +58,7 @@ export class MyApp {
           .getActiveTheme()
           .subscribe((val) => {
             this.selectedTheme = val;
-            if(this.selectedTheme === 'light-theme'){
-              this.statusBar.backgroundColorByHexString('#e7e7e7');
-              this.statusBar.styleDefault();
-            } else if (this.selectedTheme === 'dark-theme'){
-              this.statusBar.backgroundColorByHexString('#1d1b1b');
-              this.statusBar.styleLightContent();
-            }
+            this.userSettings.changeStatusBarColor(val);
           });
         this.userSettings
           .getColorScheme()
@@ -193,4 +187,6 @@ export class MyApp {
       })
       .present();
   }
+
+
 }
