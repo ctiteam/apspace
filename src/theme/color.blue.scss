@@ -450,7 +450,6 @@ $primary_color: #1297e0;
 
 	// OVERRIDING THE ION-CALENDAR ITEM
 	ion-calendar{
-		background-color: color($dark_colors, dark_item_background);
 		ion-calendar-week{
 			.week-title.transparent {
 				color: $primary_color;
