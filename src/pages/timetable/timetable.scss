@@ -1,5 +1,4 @@
 page-timetable {
-  // FIXME: bootstrap mess
   .card-header {
     border-bottom: none;
   }
@@ -16,13 +15,5 @@ page-timetable {
         padding-left: 4px;
       }
     }
-  }
-
-  .toolbar-ios ion-title {
-    padding: 0 12px 1px;
-  }
-
-  .toolbar-title-ios {
-    text-align: left;
   }
 }
