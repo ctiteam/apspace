@@ -225,6 +225,15 @@ export class MorePage {
           icon: 'alarm',
           role: Role.Student,
         },
+        {
+          title: 'Student Survey',
+          component: 'SubmitSurveyPage',
+          size: 'medium',
+          desc: 'green',
+          color: 'green',
+          icon: 'alarm',
+          role: Role.Student,
+        },
       ],
     },
     {
