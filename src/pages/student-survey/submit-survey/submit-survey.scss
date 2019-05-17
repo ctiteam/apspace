@@ -1,19 +1,23 @@
 page-submit-survey {
-    loading-spinner {
-        .loader {
-          top: calc(50% - 80px);
-          left: calc(50% - 40px);
-          width: 80px;
-          height: 80px;
-        }
+  loading-spinner {
+      .loader {
+        top: calc(50% - 80px);
+        left: calc(50% - 40px);
+        width: 80px;
+        height: 80px;
       }
-    h4, p, h3{
-        white-space: normal;
     }
-    textarea{
-      padding: 10px !important;
-    }
-    .userMessage{
+  .survey-section-name{
+    background-color: red;
+  }
+  h4, p, h3{
       white-space: normal;
-    }
+  }
+  textarea{
+    padding: 10px !important;
+    width: 100%;
+  }
+  .userMessage{
+    white-space: normal;
+  }
 }

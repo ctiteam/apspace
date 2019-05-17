@@ -24,7 +24,7 @@
 
     <ion-item no-lines>
       <ion-label>Intake</ion-label>
-      <ion-select [(ngModel)]="intakeCode" (ngModelChange)="onIntakeCodeChanged()">
+      <ion-select [(ngModel)]="intakeCode" (ngModelChange)="onIntakeCodeChanged()" interface="popover">
         <ion-option disabled selected value="">Choose One</ion-option>
         <ion-option *ngFor="let intake of intakes" [value]="intake.COURSE_CODE_ALIAS">{{intake.COURSE_CODE_ALIAS}}
         </ion-option>
@@ -38,7 +38,7 @@
       <ng-template [ngIf]="modules.length > 0" [ngIfElse]="noModules">
         <ion-item no-lines>
           <ion-label>Module</ion-label>
-          <ion-select [(ngModel)]="moduleCode" (ngModelChange)="onModuleCodeChanged()">
+          <ion-select [(ngModel)]="moduleCode" (ngModelChange)="onModuleCodeChanged()" interface="popover">
             <ion-option disabled selected value="">Choose One</ion-option>
             <ion-option *ngFor="let module of modules" [value]="module.SUBJECT_CODE">{{module.SUBJECT_DESCRIPTION}}
             </ion-option>
@@ -57,7 +57,7 @@
     <ng-template [ngIf]="intakeCode && moduleCode">
       <ion-item no-lines>
         <ion-label>Type</ion-label>
-        <ion-select [(ngModel)]="surveyType" (ngModelChange)="onSurveyTypeChanged()">
+        <ion-select [(ngModel)]="surveyType" (ngModelChange)="onSurveyTypeChanged()" interface="popover">
           <ion-option disabled selected value="">Choose One</ion-option>
           <ion-option *ngFor="let surveyType of surveyTypes" [value]="surveyType">{{surveyType}}
           </ion-option>
@@ -69,74 +69,115 @@
 
 
 <ion-content #content>
-  <div *ngIf="intakesAreLoading" class="row mt-5">
-    <div class="col-12 px-5">
-      <loading-spinner class="mt-5"></loading-spinner>
-      <p class="mt-5 normaltext text-center">
-        Getting the list of intakes ready...
-      </p>
-    </div>
-  </div>
-  <ng-template [ngIf]="!intakesAreLoading && !intakeCode">
-    <div class="row mt-5">
+  <div class="container p-0">
+    <div *ngIf="intakesAreLoading" class="row mt-5">
       <div class="col-12 px-5">
-        <p class="normaltext text-center">
-          To submit a student survey, please
-          <a style="text-decoration: underline" class="colorful-text font-weight-bold"
-            (click)="toggleFilterMenu()">select an intake and module</a>
-          first
+        <loading-spinner class="mt-5"></loading-spinner>
+        <p class="mt-5 normaltext text-center">
+          Getting the list of intakes ready...
         </p>
       </div>
     </div>
-  </ng-template>
-
-  <ng-template [ngIf]="intakeCode && !moduleCode">
-    <div class="row mt-5">
-      <div class="col-12 px-5">
-        <p class="normaltext text-center">
-          To submit the survey for {{intakeCode}}, please
-          <a style="text-decoration: underline" class="colorful-text font-weight-bold"
-            (click)="toggleFilterMenu()">select a module</a>
-          also
-        </p>
+    <ng-template [ngIf]="!intakesAreLoading && !intakeCode">
+      <div class="row mt-5">
+        <div class="col-12 px-5">
+          <p class="normaltext text-center">
+            To submit a student survey, please
+            <a style="text-decoration: underline" class="colorful-text font-weight-bold"
+              (click)="toggleFilterMenu()">select an intake and module</a>
+            first
+          </p>
+        </div>
       </div>
-    </div>
-  </ng-template>
+    </ng-template>
 
-  <ng-template [ngIf]="intakeCode && moduleCode && !surveyType">
-    <div class="row mt-5">
-      <div class="col-12 px-5">
-        <p class="normaltext text-center">
-          To submit the survey for {{intakeCode}} - {{moduleCode}}, please
-          <a style="text-decoration: underline" class="colorful-text font-weight-bold"
-            (click)="toggleFilterMenu()">select a survey type</a>
-          also
-        </p>
+    <ng-template [ngIf]="intakeCode && !moduleCode">
+      <div class="row mt-5">
+        <div class="col-12 px-5">
+          <p class="normaltext text-center">
+            To submit the survey for {{intakeCode}}, please
+            <a style="text-decoration: underline" class="colorful-text font-weight-bold"
+              (click)="toggleFilterMenu()">select a module</a>
+            also
+          </p>
+        </div>
       </div>
-    </div>
-  </ng-template>
+    </ng-template>
 
-  <ng-template [ngIf]="intakeCode && moduleCode && surveyType">
-    <ng-template let-surveys [ngIf]="survey$ | async" [ngIfElse]="surveysAreLoading">
-      <ng-template [ngIf]="surveys.length > 0">
-        <div class="survey-wrapper" *ngFor="let survey of surveys">
-            <h3 class="p-3 mt-2 survey-type">{{ survey | json}}</h3>
-          <div class="row">
-            <div class="col-12 survey" *ngFor="let surveySection of survey.sections">
-              <h3 class="p-3 mt-2 survey-section-name">{{ surveySection.name}}</h3>
-              <p class="p-3 mt-2 survey-type">{{ surveySection.questions | json}}</p>
+    <ng-template [ngIf]="intakeCode && moduleCode && !surveyType">
+      <div class="row mt-5">
+        <div class="col-12 px-5">
+          <p class="normaltext text-center">
+            To submit the survey for {{intakeCode}} - {{moduleCode}}, please
+            <a style="text-decoration: underline" class="colorful-text font-weight-bold"
+              (click)="toggleFilterMenu()">select a survey type</a>
+            also
+          </p>
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template [ngIf]="intakeCode && moduleCode && surveyType">
+      <ng-template let-surveys [ngIf]="survey$ | async" [ngIfElse]="surveysAreLoading">
+        <ng-template [ngIf]="surveys.length > 0">
+          <div class="survey-wrapper" *ngFor="let survey of surveys">
+            <div class="survey-sections row p-2" *ngIf="survey.sections.length > 0; else noSectionsAddedMsg">
+              <div class="col-12 survey-section" *ngFor="let surveySection of survey.sections; index as i">
+                <h3 class="p-3 mt-2 sticky-top survey-section-name">Section {{i+1}}: {{ surveySection.name }}</h3>
+                <div class="surveyQuestions"
+                  *ngIf="surveySection.questions.length > 0; else noQuestionsUnderThisSection">
+                  <div class="p-3 mt-2 survey-question"
+                    *ngFor="let surveyQuestion of surveySection.questions; index as questionIndex">
+                    <p class="px-1 my-2">
+                      {{ surveyQuestion.content }}
+                    </p>
+                    <ng-template [ngIf]="surveyQuestion.type === 'MCQ'" [ngIfElse]="showTextArea">
+                      <ion-item no-lines>
+                        <ion-label>Answer {{surveySection.questions.indexOf(surveyQuestion)}}:</ion-label>
+                        <ion-select interface="action-sheet" [(ngModel)]="response.answers[surveySection.questions.indexOf(surveyQuestion)].content">
+                          <ion-option *ngFor="let mcqAnswer of msqAnswers" [value]="mcqAnswer.id">
+                            {{mcqAnswer.content}}
+                          </ion-option>
+                        </ion-select>
+                      </ion-item>
+                    </ng-template>
+                    <ng-template #showTextArea>
+                      <textarea name="test" id="tesr" cols="30" rows="4"></textarea>
+                    </ng-template>
+                  </div>
+                </div>
+                <ng-template #noQuestionsUnderThisSection>
+                  <p class="p-3 mt-2">
+                    There are no questions added under this section.
+                  </p>
+                </ng-template>
+              </div>
+            </div>
+            <ng-template #noSectionsAddedMsg>
+              <div class="row mt-5">
+                <div class="col-12 px-5">
+                  <p class="normaltext text-center">
+                    There are no sections added to this survey yet.
+                  </p>
+                </div>
+              </div>
+            </ng-template>
+            <div class="row">
+              <div class="col-12 px-5">
+                <button class="btn btn-lg btn-success btn-block" (click)="submitSurvey(survey.id)">
+                  Submit
+                </button>
+              </div>
             </div>
           </div>
-
-        </div>
+        </ng-template>
+        <ng-template #noSurveys>
+          You do not have any surveys to be submitted for {{moduleCode}}
+        </ng-template>
       </ng-template>
-      <ng-template #noSurveys>
-        You do not have any surveys to be submitted for {{moduleCode}}
+      <ng-template #surveysAreLoading>
+        loading the surveys...
       </ng-template>
     </ng-template>
-    <ng-template #surveysAreLoading>
-      loading the surveys...
-    </ng-template>
-  </ng-template>
-
+  </div>
 </ion-content>
