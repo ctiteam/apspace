@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { IonicPage, MenuController, ToastController, AlertController, NavController } from "ionic-angular";
+import { IonicPage, MenuController, ToastController, AlertController, NavController, NavParams } from "ionic-angular";
 import { Observable } from "rxjs";
 import { WsApiProvider } from "../../../providers";
 import { tap, map } from "rxjs/operators";
@@ -14,6 +14,10 @@ export class SubmitSurveyPage {
   stagingUrl = 'https://dl4h9zf8wj.execute-api.ap-southeast-1.amazonaws.com/dev/survey';
 
   todaysDate = new Date();
+  
+  // IF USER IS COMING FROM RESULTS PAGE
+  moduleCodeFromResultsPage = this.navParams.get('moduleCode');
+  intakeCodeFromResultsPage = this.navParams.get('intakeCode');
 
   // NGMODEL VARIABLES
   intakeCode: string;
@@ -53,10 +57,21 @@ export class SubmitSurveyPage {
   // OBSERAVBLES
   survey$: Observable<any[]>;
 
-  constructor(public navCtrl: NavController, public menu: MenuController, private ws: WsApiProvider, private toastCtrl: ToastController, public alertCtrl: AlertController) { }
+  constructor(
+    public navCtrl: NavController,
+    public menu: MenuController,
+    private ws: WsApiProvider,
+    private toastCtrl: ToastController,
+    public alertCtrl: AlertController,
+    public navParams: NavParams
+    ) { }
 
   ionViewDidLoad() {
     this.getIntakes();
+    // IF USER IS COMING FROM RESULTS PAGE    
+    if(this.moduleCodeFromResultsPage){
+      this.getModules(this.intakeCodeFromResultsPage);
+    }
   }
 
   // TOGGLE THE MENU
@@ -101,21 +116,22 @@ export class SubmitSurveyPage {
       },
       () => {
         this.modulesAreLoading = false;
+        // USER COMING FROM RESULTS PAGE, AND MODULES ARE READY
+        if(this.moduleCodeFromResultsPage){
+          this.getSurvey(this.intakeCodeFromResultsPage, this.moduleCodeFromResultsPage);
+        }
       }
     );
   }
 
   getSurveys(intakeCode: string) {
-    let answers =  [];
+    let answers =  [];    
     this.survey$ = this.ws.get<any>(`/surveys?intake_code=${intakeCode}`, true, { url: this.stagingUrl })
       .pipe(
         map(surveys => surveys.filter(survey => survey.type === this.surveyType)),
         tap(surveys => {
-          // console.log(surveys[0].sections);
           for(let section of surveys[0].sections){
-          // console.log('Hi sec');   
             for (let question of section.questions){
-              // console.log('Hi ques');   
               answers.push({
                 question_id: question.id,
                 content: ''
@@ -128,8 +144,7 @@ export class SubmitSurveyPage {
             survey_id: surveys[0].id,
             answers: answers
           }
-        }),
-        tap(_ => console.log(this.response))
+        })
       );
   }
 
@@ -150,7 +165,8 @@ export class SubmitSurveyPage {
   // USED FOR NAVIGATING DIRECTLY FROM RESULTS PAGE TO THIS PAGE
   getSurvey(intakeCode: string, moduleCode: string) {
     this.getSurveys(intakeCode);
-    this.classCode = moduleCode;
+    this.intakeCode = intakeCode;
+    this.classCode = this.modules.filter(module => module.SUBJECT_CODE === moduleCode)[0].CLASS_CODE
     this.surveyType = 'End-Semester';
   }
 
@@ -183,7 +199,6 @@ export class SubmitSurveyPage {
                 this.submitting = false;
               }
             );
-            console.log();
           }
         }
       ]
