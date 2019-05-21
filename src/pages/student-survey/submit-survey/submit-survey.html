@@ -123,7 +123,7 @@
           <div class="survey-wrapper" *ngFor="let survey of surveys">
             <div class="survey-sections row p-2" *ngIf="survey.sections.length > 0; else noSectionsAddedMsg">
               <div class="col-12 survey-section" *ngFor="let surveySection of survey.sections; index as i">
-                <h3 class="p-3 mt-2 sticky-top survey-section-name">Section {{i+1}}: {{ surveySection.name }}</h3>
+                <h3 class="p-3 mt-2 sticky-top survey-section-name colorful-background">Section {{i+1}}: {{ surveySection.name }}</h3>
                 <div class="surveyQuestions"
                   *ngIf="surveySection.questions.length > 0; else noQuestionsUnderThisSection">
                   <div class="p-3 mt-2 survey-question"
