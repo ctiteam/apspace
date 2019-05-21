@@ -123,18 +123,20 @@
           <div class="survey-wrapper" *ngFor="let survey of surveys">
             <div class="survey-sections row p-2" *ngIf="survey.sections.length > 0; else noSectionsAddedMsg">
               <div class="col-12 survey-section" *ngFor="let surveySection of survey.sections; index as i">
-                <h3 class="p-3 mt-2 sticky-top survey-section-name colorful-background">Section {{i+1}}: {{ surveySection.name }}</h3>
+                <h3 class="p-3 mt-2 sticky-top survey-section-name colorful-background">Section {{i+1}}:
+                  {{ surveySection.name }}</h3>
                 <div class="surveyQuestions"
                   *ngIf="surveySection.questions.length > 0; else noQuestionsUnderThisSection">
                   <div class="p-3 mt-2 survey-question"
                     *ngFor="let surveyQuestion of surveySection.questions; index as questionIndex">
-                    <p class="px-1 my-2">
+                    <p class="h4 px-1 my-2">
                       {{ surveyQuestion.content }}
                     </p>
                     <ng-template [ngIf]="surveyQuestion.type === 'MCQ'" [ngIfElse]="showTextArea">
                       <ion-item no-lines>
                         <ion-label>Answer:</ion-label>
-                        <ion-select interface="action-sheet" [(ngModel)]="response.answers[response.answers.indexOf(getAnswerByQuestionId(surveyQuestion.id))].content">
+                        <ion-select interface="action-sheet"
+                          [(ngModel)]="response.answers[response.answers.indexOf(getAnswerByQuestionId(surveyQuestion.id))].content">
                           <ion-option *ngFor="let mcqAnswer of msqAnswers" [value]="mcqAnswer.id">
                             {{mcqAnswer.content}}
                           </ion-option>
@@ -142,7 +144,8 @@
                       </ion-item>
                     </ng-template>
                     <ng-template #showTextArea>
-                      <textarea name="test" id="tesr" cols="30" rows="4" [(ngModel)]="response.answers[response.answers.indexOf(getAnswerByQuestionId(surveyQuestion.id))].content"></textarea>
+                      <textarea name="test" id="tesr" cols="30" rows="4"
+                        [(ngModel)]="response.answers[response.answers.indexOf(getAnswerByQuestionId(surveyQuestion.id))].content"></textarea>
                     </ng-template>
                   </div>
                 </div>
@@ -151,6 +154,17 @@
                     There are no questions added under this section.
                   </p>
                 </ng-template>
+              </div>
+              <div class="row">
+                <div class="col-12 px-5">
+                  <small style="color:red" *ngIf="showFieldMissingError">One (or more) of the answers is missing. You
+                    have to answer all of the questions.</small>
+                  <button class="btn btn-lg btn-success btn-block" [disabled]="submitting"
+                    (click)="submitSurvey(survey.id)">
+                    <span *ngIf="!submitting">Submit</span>
+                    <span *ngIf="submitting">Loading ...</span>
+                  </button>
+                </div>
               </div>
             </div>
             <ng-template #noSectionsAddedMsg>
@@ -162,14 +176,6 @@
                 </div>
               </div>
             </ng-template>
-            <div class="row">
-              <div class="col-12 px-5">
-                <button class="btn btn-lg btn-success btn-block" [disabled]="submitting" (click)="submitSurvey(survey.id)">
-                  <span *ngIf="!submitting">Submit</span>
-                  <span *ngIf="submitting">Loading ...</span>
-                </button>
-              </div>
-            </div>
           </div>
         </ng-template>
         <ng-template #noSurveys>

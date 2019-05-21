@@ -25,11 +25,12 @@ export class SubmitSurveyPage {
   surveyType: string;
 
 
-  // LOADING VARIABLES
+  // LOADING & ERRORS VARIABLES
   numOfSkeletons = new Array(3);
   intakesAreLoading = false;
   modulesAreLoading = false;
   submitting = false;
+  showFieldMissingError = false;
 
   // LISTS
   intakes: any[];
@@ -187,18 +188,23 @@ export class SubmitSurveyPage {
         {
           text: 'Yes',
           handler: () => {
-            this.submitting = true;
-            this.ws.post('/response', { url: this.stagingUrl, body: this.response }).subscribe(
-              _ => { },
-              err => {
-                this.toast("Something went wrong and we couldn't complete your request. Please try again or contact us via the feedback page");
-              },
-              () => {
-                this.toast(`The survey for ${this.classCode} has been submitted successfully.`);
-                this.navCtrl.pop();
-                this.submitting = false;
-              }
-            );
+            let notAnsweredQuestions = this.response.answers.filter(answer => answer.content === '');
+            if(notAnsweredQuestions.length === 0){
+              this.submitting = true;
+              this.ws.post('/response', { url: this.stagingUrl, body: this.response }).subscribe(
+                _ => { },
+                err => {
+                  this.toast("Something went wrong and we couldn't complete your request. Please try again or contact us via the feedback page");
+                },
+                () => {
+                  this.toast(`The survey for ${this.classCode} has been submitted successfully.`);
+                  this.navCtrl.pop();
+                  this.submitting = false;
+                }
+              );
+            } else{
+              this.showFieldMissingError = true;
+            }
           }
         }
       ]
