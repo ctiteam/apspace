@@ -17,7 +17,7 @@ export class SubmitSurveyPage {
 
   // NGMODEL VARIABLES
   intakeCode: string;
-  moduleCode: string;
+  classCode: string;
   surveyType: string;
 
 
@@ -67,12 +67,12 @@ export class SubmitSurveyPage {
 
   onIntakeCodeChanged() {
     this.getModules(this.intakeCode);
-    this.moduleCode = '';
+    this.classCode = '';
     this.surveyType = '';
   }
 
-  onModuleCodeChanged() {
-    this.getSurveyTypes(this.moduleCode);
+  onClassCodeChanged() {
+    this.getSurveyTypes(this.classCode);
     this.surveyType = '';
   }
 
@@ -124,7 +124,7 @@ export class SubmitSurveyPage {
           }
           this.response = {
             intake_code: this.intakeCode,
-            class_code: this.moduleCode,
+            class_code: this.classCode,
             survey_id: surveys[0].id,
             answers: answers
           }
@@ -133,10 +133,10 @@ export class SubmitSurveyPage {
       );
   }
 
-  getSurveyTypes(moduleCode: string) {
+  getSurveyTypes(classCode: string) {
     this.surveyTypes = [];
     this.modules.filter(item => {
-      if (moduleCode === item.SUBJECT_CODE) {
+      if (classCode === item.CLASS_CODE) {
         if (!item.COURSE_APPRAISAL) {
           this.surveyTypes.push('End-Semester');
         }
@@ -150,19 +150,18 @@ export class SubmitSurveyPage {
   // USED FOR NAVIGATING DIRECTLY FROM RESULTS PAGE TO THIS PAGE
   getSurvey(intakeCode: string, moduleCode: string) {
     this.getSurveys(intakeCode);
-    this.moduleCode = moduleCode;
+    this.classCode = moduleCode;
     this.surveyType = 'End-Semester';
   }
 
-  // getQuestionIndexById(id: number){
-  //   console.log(this.response.answers.indexOf(this.response.answers.filter(answer => answer.question_id = id)[0]));
-  //   return this.response.answers.indexOf(this.response.answers.filter(answer => answer.question_id = id)[0]);
-  // }
+  getAnswerByQuestionId(id: number){
+    return this.response.answers.filter(answer => answer.question_id === id)[0];
+  }
 
-  submitSurvey(surveyId: number) {
+  submitSurvey() {
     const confirm = this.alertCtrl.create({
       title: 'Submit Survey',
-      message: `You are about to submit the survey for the module with the code ${this.moduleCode}, under the intake ${this.intakeCode}. Do you want to continue?`,
+      message: `You are about to submit the survey for the module with the code ${this.classCode}, under the intake ${this.intakeCode}. Do you want to continue?`,
       buttons: [
         {
           text: 'No',
@@ -172,19 +171,19 @@ export class SubmitSurveyPage {
         {
           text: 'Yes',
           handler: () => {
-            // this.submitting = true;
-            // this.ws.post('/response', { url: this.stagingUrl, body: studentBehaviors }).subscribe(
-            //   _ => { },
-            //   err => {
-            //     this.toast("Something went wrong and we couldn't complete your request. Please try again or contact us via the feedback page");
-            //   },
-            //   () => {
-            //     this.toast(`The survey for ${this.moduleCode} has been submitted successfully.`);
-            //     this.navCtrl.pop();
-            //     this.submitting = false;
-            //   }
-            // );
-            console.log(this.response);
+            this.submitting = true;
+            this.ws.post('/response', { url: this.stagingUrl, body: this.response }).subscribe(
+              _ => { },
+              err => {
+                this.toast("Something went wrong and we couldn't complete your request. Please try again or contact us via the feedback page");
+              },
+              () => {
+                this.toast(`The survey for ${this.classCode} has been submitted successfully.`);
+                this.navCtrl.pop();
+                this.submitting = false;
+              }
+            );
+            console.log();
           }
         }
       ]
