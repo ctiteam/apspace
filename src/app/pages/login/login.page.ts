@@ -6,8 +6,8 @@ import { Network } from '@ionic-native/network/ngx';
 import { EMPTY, Subscription } from 'rxjs';
 import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 
-import { Role } from '../interfaces';
-import { CasTicketService, WsApiService, SettingsService } from '../services';
+import { Role } from '../../interfaces';
+import { CasTicketService, WsApiService, SettingsService } from '../../services';
 
 @Component({
   selector: 'app-login',

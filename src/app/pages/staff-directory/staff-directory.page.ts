@@ -4,8 +4,8 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, finalize, map } from 'rxjs/operators';
 
-import { StaffDirectory } from '../interfaces';
-import { WsApiService } from '../services';
+import { StaffDirectory } from '../../interfaces';
+import { WsApiService } from '../../services';
 
 @Component({
   selector: 'app-staff-directory',

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
-import { FeedbackService, SettingsService, VersionService } from '../services';
+import { FeedbackService, SettingsService, VersionService } from '../../services';
 
 @Component({
   selector: 'app-feedback',

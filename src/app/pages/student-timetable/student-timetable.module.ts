@@ -9,8 +9,8 @@ import { IonicModule } from '@ionic/angular';
 import { StudentTimetablePage } from './student-timetable.page';
 import { ClassesPipe } from './classes.pipe';
 import { ThedayPipe } from './theday.pipe';
-import { SearchModalComponent } from '../components/search-modal/search-modal.component';
-import { ComponentsModule } from '../components/components.module';
+import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+import { ComponentsModule } from '../../components/components.module';
 
 const routes: Routes = [
   {

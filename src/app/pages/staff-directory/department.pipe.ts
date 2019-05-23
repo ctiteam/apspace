@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { StaffDirectory } from '../interfaces';
+import { StaffDirectory } from '../../interfaces';
 
 /**
  * Filter department for staff directory.

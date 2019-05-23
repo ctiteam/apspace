@@ -8,10 +8,10 @@ import {
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 
-import { StudentProfile, StudentTimetable } from '../interfaces';
-import { SettingsService, StudentTimetableService, WsApiService } from '../services';
+import { StudentProfile, StudentTimetable } from '../../interfaces';
+import { SettingsService, StudentTimetableService, WsApiService } from '../../services';
 import { ClassesPipe } from './classes.pipe';
-import { SearchModalComponent } from '../components/search-modal/search-modal.component';
+import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 
 @Component({
   selector: 'app-timetable',

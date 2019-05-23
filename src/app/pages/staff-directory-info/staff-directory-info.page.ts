@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 
-import { StaffDirectory } from '../interfaces';
-import { WsApiService } from '../services';
+import { StaffDirectory } from '../../interfaces';
+import { WsApiService } from '../../services';
 
 /**
  * Display staff information. Can also be used as model.

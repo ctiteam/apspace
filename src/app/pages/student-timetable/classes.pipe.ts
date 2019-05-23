@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { StudentTimetable } from '../interfaces';
+import { StudentTimetable } from '../../interfaces';
 
 /**
  * Filter all classes for timetable.

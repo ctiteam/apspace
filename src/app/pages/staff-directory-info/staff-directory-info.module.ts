@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { StaffDirectoryInfoPage } from './staff-directory-info.page';
-import { UrldecodePipe } from '../pipes/urldecode.pipe';
+import { UrldecodePipe } from '../../pipes/urldecode.pipe';
 
 const routes: Routes = [
   {

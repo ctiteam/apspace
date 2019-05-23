@@ -9,7 +9,7 @@ import { Storage } from '@ionic/storage';
 import { of } from 'rxjs';
 
 import { LoginPage } from './login.page';
-import { CasTicketService, SettingsService, WsApiService } from '../services';
+import { CasTicketService, SettingsService, WsApiService } from '../../services';
 
 describe('LoginPage', () => {
   let component: LoginPage;

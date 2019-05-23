@@ -3,12 +3,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { of } from 'rxjs';
 
-import { ActivatedRoute, ActivatedRouteStub } from '../../testing';
+import { ActivatedRoute, ActivatedRouteStub } from '../../../testing';
 
-import { StaffDirectory } from '../interfaces';
+import { StaffDirectory } from '../../interfaces';
 import { StaffDirectoryInfoPage } from './staff-directory-info.page';
-import { UrldecodePipe } from '../pipes/urldecode.pipe';
-import { WsApiService } from '../services';
+import { UrldecodePipe } from '../../pipes/urldecode.pipe';
+import { WsApiService } from '../../services';
 
 describe('StaffDirectoryInfoPage', () => {
   let activatedRoute: ActivatedRouteStub;
