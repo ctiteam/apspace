@@ -1,5 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { filter, finalize, map } from 'rxjs/operators';
