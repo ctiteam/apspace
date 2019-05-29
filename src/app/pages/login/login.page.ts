@@ -20,6 +20,12 @@ export class LoginPage implements OnInit {
   password: string;
   showPassword: boolean;
 
+  // LOGIN BUTTON ANIMATIONS ITEMS
+  userDidLogin = false;
+  loginProcessLoading = false;
+  userAuthenticated = false;
+  userUnauthenticated = false;
+
   constructor(
     private cas: CasTicketService,
     private events: Events,
@@ -46,6 +52,8 @@ export class LoginPage implements OnInit {
     if (this.plt.is('cordova') && this.network.type === 'none') {
       return this.toast('You are now offline.');
     }
+    this.userDidLogin = true;
+    this.loginProcessLoading = true;
     this.cas.getTGT(this.apkey, this.password).pipe(
       catchError(e => (this.toast(e), EMPTY)),
       switchMap(tgt => this.cas.getST(this.cas.casUrl, tgt)),
@@ -55,7 +63,21 @@ export class LoginPage implements OnInit {
       tap(role => this.cacheApi(role)),
       timeout(15000),
       tap(_ => this.events.publish('user:login')),
-    ).subscribe(_ => this.router.navigate(['/']));
+    ).subscribe(
+      _ => { },
+      _ => {
+        this.loginProcessLoading = false;
+        this.userUnauthenticated = true;
+      },
+      () => {
+        this.loginProcessLoading = false;
+        this.userAuthenticated = true;
+        setTimeout(() => {
+          // Show the success message for 700 ms after completing the request
+          this.router.navigate(['/']);
+        }, 700);
+      }
+    );
   }
 
   cacheApi(role: Role) {

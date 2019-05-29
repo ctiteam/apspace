@@ -68,6 +68,7 @@
             <ion-col class="title-text-wrapper" size="12">
               <h1><strong>APSpace,</strong></h1>
               <h2>Your digital university companion</h2>
+              <loading-spinner></loading-spinner>
             </ion-col>
           </ion-row>
           <!-- Input-fields -->
@@ -76,18 +77,32 @@
               <div input-field>
                 <!-- Input-field-apkey -->
                 <ion-item no-padding>
-                  <ion-input type="text" [placeholder]="'APKey'" [(ngModel)]="apkey" [autofocus]="true" [required]="true" name="apkey"></ion-input>
+                  <ion-input type="text" [placeholder]="'APKey'" [(ngModel)]="apkey" [autofocus]="true"
+                    [required]="true" name="apkey"></ion-input>
                 </ion-item>
                 <!-- Input-field-password -->
                 <ion-item no-padding>
-                  <ion-input padding-start type="password" [placeholder]="'Password'" [(ngModel)]="password" [required]="true" name="password"></ion-input>
+                  <ion-input padding-start type="password" [placeholder]="'Password'" [(ngModel)]="password" (keyup.enter)="onLoginClicked()"
+                    [required]="true" name="password"></ion-input>
                 </ion-item>
               </div>
               <!-- Login Button -->
               <ion-col size="12" no-padding>
                 <ion-button class="login-button" no-margin expand="block" type="submit">
-                  LOGIN
-                  <ion-icon name="log-in" slot="end" size="large"></ion-icon>
+                  <span *ngIf="!userDidLogin">LOGIN</span>
+                  <!-- LOADING -->
+                  <ion-icon *ngIf="!userDidLogin" name="log-in" slot="end" size="large"></ion-icon>
+                  <span *ngIf="userDidLogin && loginProcessLoading">
+                    <loading-spinner></loading-spinner>
+                  </span>
+                  <!-- USER ENTER VALID CREDENTIALS -->
+                  <span *ngIf="userDidLogin && userAuthenticated">
+                    <ion-icon name="happy" slot="end" size="large"></ion-icon>
+                  </span>
+                  <!-- USER ENTER INVALID CREDENTIALS -->
+                  <span *ngIf="userDidLogin && userUnauthenticated">
+                    <ion-icon name="sad" slot="end" size="large"></ion-icon>
+                  </span>
                 </ion-button>
               </ion-col>
               <!-- Useful Links -->
