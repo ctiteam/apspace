@@ -16,7 +16,7 @@ import { CasTicketService, WsApiService, SettingsService } from '../../services'
 })
 export class LoginPage implements OnInit {
 
-  username: string;
+  apkey: string;
   password: string;
   showPassword: boolean;
 
@@ -42,11 +42,11 @@ export class LoginPage implements OnInit {
     }).then(toast => toast.present());
   }
 
-  login() {
+  onLoginClicked() {
     if (this.plt.is('cordova') && this.network.type === 'none') {
       return this.toast('You are now offline.');
     }
-    this.cas.getTGT(this.username, this.password).pipe(
+    this.cas.getTGT(this.apkey, this.password).pipe(
       catchError(e => (this.toast(e), EMPTY)),
       switchMap(tgt => this.cas.getST(this.cas.casUrl, tgt)),
       catchError(_ => (this.toast('Fail to get service ticket.'), EMPTY)),

@@ -45,8 +45,6 @@
     /* Settings logo
     ===============================*/
     [logo]{
-      // height: 45px;
-      // margin-top: 64px;
       margin-bottom: 20px;
     }
 
@@ -57,23 +55,18 @@
       font-size: $settings-font-size-header;
       font-weight: $settings-font-weight-header;
       line-height: 29px;
-      font-size: 26zpx;
-    }
-    h1{
+      font-size: 26px;
+      text-align: center;
     }
     .title-text-wrapper{
-      margin-bottom: 20px;
+      margin: 15px 0 !important;
     }
-
     strong { 
       display: block;
     }
 
     /* Settings form
     ===============================*/
-    // form {
-    //   margin-top: 20%;
-    // }
     ion-input{
       padding-left: 16px !important;
     }
@@ -177,14 +170,13 @@
       /* Settings full button - Login button
       ===============================*/
       .login-button {
-        min-height: 57px;
-        border-radius: 8px;
-        margin-top: 15px;
+        min-height: 50px;
+        border-radius: 50px;
+        margin-top: 25px;
         color: $settings-text-color-button;
         font-size: $settings-font-size-button;
         font-weight: $settings-font-weight-button;
         letter-spacing: 2px;
-        background: red !important;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16) !important;
         }
   /* Responsive for tablet
@@ -193,24 +185,15 @@
     ion-grid {
       position: relative;
     }
+    .title-text-wrapper{
+      margin: 30px 0 !important;
+    }
      h1, h2 {
-       margin: 30px 0 !important;
        line-height: 40px !important;
        font-size: 37px;
+       text-align: left;
      }
     form {
       margin-top: 0 !important;
     }
   }
-  // @media (min-width: 576px) and (orientation:landscape) {
-
-  //   ion-grid {
-  //     position: relative;
-  //   }
-  //    h1, h2 {
-  //      margin-top: 50px !important;
-  //    }
-  //   form {
-  //     margin-top: 0 !important;
-  //   }
-  // }
