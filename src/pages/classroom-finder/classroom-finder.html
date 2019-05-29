@@ -29,16 +29,20 @@
           <ion-datetime
             displayFormat="h:mm A"
             pickerFormat="h mm A"
+           
             [(ngModel)]="selectedTime"
           ></ion-datetime>
+          <!-- <ion-input type="time" max="{{ selectedEndTime }}" [(ngModel)]="selectedTime"></ion-input> -->
         </ion-item>
         <ion-item>
           <ion-label><strong>End Time</strong></ion-label>
           <ion-datetime
             displayFormat="h:mm A"
             pickerFormat="h mm A"
+            
             [(ngModel)]="selectedEndTime"
           ></ion-datetime>
+          <!-- <ion-input type="time" min="{{ selectedTime }}" [(ngModel)]="selectedEndTime"></ion-input> -->
         </ion-item>
         <ion-label class="header-label h3">Type of Rooms</ion-label>
         <ion-item>
