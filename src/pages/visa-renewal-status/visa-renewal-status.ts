@@ -60,9 +60,8 @@ export class VisaRenewalStatusPage {
     this.showLoading = true;
     this.ws.get<StudentProfile>('/student/profile', true).subscribe(p => {
       if (p.EMGS_COUNTRY_CODE && p.EMGS_COUNTRY_CODE !== 'MYS') {
-        const url = 'http://mobileapp.emgs.com.my/api_v2/web/app.php/applicationstatus/';
         this.ws.get<CourseDetails>(
-          `${p.EMGS_COUNTRY_CODE}/${p.IC_PASSPORT_NO}`, true, { url, auth: false }).pipe(
+          `/visa_renewal_status/${p.EMGS_COUNTRY_CODE}/${p.IC_PASSPORT_NO}`, true, { auth: false }).pipe(
             finalize(() => refresher && refresher.complete()),
           ).subscribe(
             res => this.visaRenewal = res,
