@@ -1,6 +1,6 @@
 <ng-template let-calendar [ngIf]="calendar$ | async" [ngIfElse]="loading">
   <ng-template [ngIf]="calendar.length" [ngIfElse]="empty">
-    <div *ngFor="let week of calendar" class="schedule-week">
+    <div *ngFor="let week of calendar.reverse()" class="schedule-week">
       <div class="schedule-week-head" (click)='show(week, $event.target)'>
         {{ week.week | date }}
         <span class="right">{{ selectedWeeks.indexOf(week) !== -1 ? '_«' : '»' }}</span>
