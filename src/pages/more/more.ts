@@ -240,6 +240,15 @@ export class MorePage {
       title: 'Others',
       items: [
         {
+          title: 'Graduations',
+          component: 'QualificationVerificationPage',
+          size: 'xlarge',
+          desc: 'orange',
+          color: ' orange',
+          icon: 'school',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
           title: 'Graduate Verification Service',
           component: 'QualificationVerificationPage',
           size: 'xlarge',
