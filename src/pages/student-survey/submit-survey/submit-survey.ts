@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { IonicPage, MenuController, ToastController, AlertController, NavController } from "ionic-angular";
+import { IonicPage, MenuController, ToastController, AlertController, NavController, NavParams } from "ionic-angular";
 import { Observable } from "rxjs";
 import { WsApiProvider } from "../../../providers";
 import { tap, map } from "rxjs/operators";
@@ -14,18 +14,23 @@ export class SubmitSurveyPage {
   stagingUrl = 'https://dl4h9zf8wj.execute-api.ap-southeast-1.amazonaws.com/dev/survey';
 
   todaysDate = new Date();
+  
+  // IF USER IS COMING FROM RESULTS PAGE
+  moduleCodeFromResultsPage = this.navParams.get('moduleCode');
+  intakeCodeFromResultsPage = this.navParams.get('intakeCode');
 
   // NGMODEL VARIABLES
   intakeCode: string;
-  moduleCode: string;
+  classCode: string;
   surveyType: string;
 
 
-  // LOADING VARIABLES
+  // LOADING & ERRORS VARIABLES
   numOfSkeletons = new Array(3);
   intakesAreLoading = false;
   modulesAreLoading = false;
   submitting = false;
+  showFieldMissingError = false;
 
   // LISTS
   intakes: any[];
@@ -53,10 +58,21 @@ export class SubmitSurveyPage {
   // OBSERAVBLES
   survey$: Observable<any[]>;
 
-  constructor(public navCtrl: NavController, public menu: MenuController, private ws: WsApiProvider, private toastCtrl: ToastController, public alertCtrl: AlertController) { }
+  constructor(
+    public navCtrl: NavController,
+    public menu: MenuController,
+    private ws: WsApiProvider,
+    private toastCtrl: ToastController,
+    public alertCtrl: AlertController,
+    public navParams: NavParams
+    ) { }
 
   ionViewDidLoad() {
     this.getIntakes();
+    // IF USER IS COMING FROM RESULTS PAGE    
+    if(this.moduleCodeFromResultsPage){
+      this.getModules(this.intakeCodeFromResultsPage);
+    }
   }
 
   // TOGGLE THE MENU
@@ -67,12 +83,12 @@ export class SubmitSurveyPage {
 
   onIntakeCodeChanged() {
     this.getModules(this.intakeCode);
-    this.moduleCode = '';
+    this.classCode = '';
     this.surveyType = '';
   }
 
-  onModuleCodeChanged() {
-    this.getSurveyTypes(this.moduleCode);
+  onClassCodeChanged() {
+    this.getSurveyTypes(this.classCode);
     this.surveyType = '';
   }
 
@@ -101,21 +117,22 @@ export class SubmitSurveyPage {
       },
       () => {
         this.modulesAreLoading = false;
+        // USER COMING FROM RESULTS PAGE, AND MODULES ARE READY
+        if(this.moduleCodeFromResultsPage){
+          this.getSurvey(this.intakeCodeFromResultsPage, this.moduleCodeFromResultsPage);
+        }
       }
     );
   }
 
   getSurveys(intakeCode: string) {
-    let answers =  [];
+    let answers =  [];    
     this.survey$ = this.ws.get<any>(`/surveys?intake_code=${intakeCode}`, true, { url: this.stagingUrl })
       .pipe(
         map(surveys => surveys.filter(survey => survey.type === this.surveyType)),
         tap(surveys => {
-          // console.log(surveys[0].sections);
           for(let section of surveys[0].sections){
-          // console.log('Hi sec');   
             for (let question of section.questions){
-              // console.log('Hi ques');   
               answers.push({
                 question_id: question.id,
                 content: ''
@@ -124,19 +141,18 @@ export class SubmitSurveyPage {
           }
           this.response = {
             intake_code: this.intakeCode,
-            class_code: this.moduleCode,
+            class_code: this.classCode,
             survey_id: surveys[0].id,
             answers: answers
           }
-        }),
-        tap(_ => console.log(this.response))
+        })
       );
   }
 
-  getSurveyTypes(moduleCode: string) {
+  getSurveyTypes(classCode: string) {
     this.surveyTypes = [];
     this.modules.filter(item => {
-      if (moduleCode === item.SUBJECT_CODE) {
+      if (classCode === item.CLASS_CODE) {
         if (!item.COURSE_APPRAISAL) {
           this.surveyTypes.push('End-Semester');
         }
@@ -150,19 +166,19 @@ export class SubmitSurveyPage {
   // USED FOR NAVIGATING DIRECTLY FROM RESULTS PAGE TO THIS PAGE
   getSurvey(intakeCode: string, moduleCode: string) {
     this.getSurveys(intakeCode);
-    this.moduleCode = moduleCode;
+    this.intakeCode = intakeCode;
+    this.classCode = this.modules.filter(module => module.SUBJECT_CODE === moduleCode)[0].CLASS_CODE
     this.surveyType = 'End-Semester';
   }
 
-  // getQuestionIndexById(id: number){
-  //   console.log(this.response.answers.indexOf(this.response.answers.filter(answer => answer.question_id = id)[0]));
-  //   return this.response.answers.indexOf(this.response.answers.filter(answer => answer.question_id = id)[0]);
-  // }
+  getAnswerByQuestionId(id: number){
+    return this.response.answers.filter(answer => answer.question_id === id)[0];
+  }
 
-  submitSurvey(surveyId: number) {
+  submitSurvey() {
     const confirm = this.alertCtrl.create({
       title: 'Submit Survey',
-      message: `You are about to submit the survey for the module with the code ${this.moduleCode}, under the intake ${this.intakeCode}. Do you want to continue?`,
+      message: `You are about to submit the survey for the module with the code ${this.classCode}, under the intake ${this.intakeCode}. Do you want to continue?`,
       buttons: [
         {
           text: 'No',
@@ -172,19 +188,23 @@ export class SubmitSurveyPage {
         {
           text: 'Yes',
           handler: () => {
-            // this.submitting = true;
-            // this.ws.post('/response', { url: this.stagingUrl, body: studentBehaviors }).subscribe(
-            //   _ => { },
-            //   err => {
-            //     this.toast("Something went wrong and we couldn't complete your request. Please try again or contact us via the feedback page");
-            //   },
-            //   () => {
-            //     this.toast(`The survey for ${this.moduleCode} has been submitted successfully.`);
-            //     this.navCtrl.pop();
-            //     this.submitting = false;
-            //   }
-            // );
-            console.log(this.response);
+            let notAnsweredQuestions = this.response.answers.filter(answer => answer.content === '');
+            if(notAnsweredQuestions.length === 0){
+              this.submitting = true;
+              this.ws.post('/response', { url: this.stagingUrl, body: this.response }).subscribe(
+                _ => { },
+                err => {
+                  this.toast("Something went wrong and we couldn't complete your request. Please try again or contact us via the feedback page");
+                },
+                () => {
+                  this.toast(`The survey for ${this.classCode} has been submitted successfully.`);
+                  this.navCtrl.pop();
+                  this.submitting = false;
+                }
+              );
+            } else{
+              this.showFieldMissingError = true;
+            }
           }
         }
       ]

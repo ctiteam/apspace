@@ -195,42 +195,54 @@ export class AddfreeslotsPage {
 
   // lec confirmation
   async confirmation() {
-    const alert = await this.alertCtrl.create({
-      title: 'Confirm',
-      message: 'Are you sure you want to add this free slot?',
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel',
-        },
-        {
-          text: 'Yes',
-          handler: () => {
-            if (this.alldate != '' && this.repeatselected !== 'repeatweekly' && this.repeatselected !== 'repeatenddate') {
-              this.freeslots.start_date = '';
-              this.freeslots.date = this.alldate;
-            } else if (this.alldate != '' && this.repeatselected !== 'repeatnone') {
-              this.freeslots.date = '';
-              this.freeslots.start_date = this.alldate;
-            }
-            this.loading.present();
-            this.slotsProvider.addfreeslots(this.freeslots).subscribe(
-              () => {
-                this.loading.dismiss();
-                this.app.getRootNav().setRoot(TabsPage);
-                this.app.getRootNav().push(UpcominglecPage);
-                this.presentToast();
-              },
-              // () => {
-              //   this.loading.dismiss();
-              //   this.duplicateSlotAlert();
-              // }
-            );
+    if (this.time.indexOf(undefined) > -1) {
+      const alert = await this.alertCtrl.create({
+        message: 'Start time is required.',
+        buttons: [
+          {
+            text: 'OK',
           },
-        },
-      ],
-    });
-    await alert.present();
+        ],
+      });
+      await alert.present();
+    } else {
+      const alert = await this.alertCtrl.create({
+        title: 'Confirm',
+        message: 'Are you sure you want to add this free slot?',
+        buttons: [
+          {
+            text: 'No',
+            role: 'cancel',
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              if (this.alldate != '' && this.repeatselected !== 'repeatweekly' && this.repeatselected !== 'repeatenddate') {
+                this.freeslots.start_date = '';
+                this.freeslots.date = this.alldate;
+              } else if (this.alldate != '' && this.repeatselected !== 'repeatnone') {
+                this.freeslots.date = '';
+                this.freeslots.start_date = this.alldate;
+              }
+              this.loading.present();
+              this.slotsProvider.addfreeslots(this.freeslots).subscribe(
+                () => {
+                  this.loading.dismiss();
+                  this.app.getRootNav().setRoot(TabsPage);
+                  this.app.getRootNav().push(UpcominglecPage);
+                  this.presentToast();
+                },
+                // () => {
+                //   this.loading.dismiss();
+                //   this.duplicateSlotAlert();
+                // }
+              );
+            },
+          },
+        ],
+      });
+      await alert.present();
+    }
   }
 
   presentToast() {

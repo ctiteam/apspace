@@ -120,6 +120,9 @@
                       {{ result.INTERNAL_RESULT_RELEASE_DATE || "N/A" }}
                     </div>
                   </ion-item>
+                  <ion-item class="text-right" (click)="openSurveyPage(result.MODULE_CODE)" *ngIf="result.GRADE.toLowerCase() === 'Pending Survey'.toLowerCase()">
+                      <ion-label class="colorful-text">Do the Survey</ion-label>
+                    </ion-item>
                   <div *ngIf="result.RECOMMENDATION">
                     <ion-item>
                       <ion-label class="my-1">Recommendation</ion-label>
