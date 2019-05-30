@@ -15,4 +15,6 @@ export interface StudentProfile {
   PROVIDER_CODE: string;
   BLOCK: boolean;
   MESSAGE: string;
+  EMGS_COUNTRY_CODE: string;
+  IC_PASSPORT_NO: string;
 }
