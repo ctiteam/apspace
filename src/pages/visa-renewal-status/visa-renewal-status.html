@@ -1,0 +1,105 @@
+<ion-header no-border>
+  <ion-navbar>
+    <ion-title *ngIf="(course$ | async)">
+      Visa Renewal Status
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="container p-0">
+    <ng-template [ngIf]="!block">
+      <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
+      </ion-refresher>
+      <ng-template #loadingBarChart>
+        <ion-card>
+          <ion-item>
+            <skeleton-item height="150px" width="100%"></skeleton-item>
+          </ion-item>
+        </ion-card>
+      </ng-template>
+
+
+
+
+
+
+
+      <ng-template [ngIf]="!showLoading" [ngIfElse]="loadingVisaRenewal">
+        <div class="row">
+          <div class="offset-md-4 col-md-4 col-6 offset-3">
+            <div *ngIf="visaRenewal.status_historys" id="widget-value">{{visaRenewal.status_historys[0].complete}}%</div>
+            <!-- <round-progress [current]="visaRenewal.status_historys[0].complete" [max]="100"></round-progress> -->
+            <chart [type]="type" [data]="doughnutChartData" [options]="options"></chart>
+          </div>
+        </div>
+
+        <ion-card>
+          <ion-item class="primary-color summary">
+            <ion-note class="block-note" item-left>Travel Document Number</ion-note>
+            <ion-note class="block-note" item-right>{{ visaRenewal.applicant_traveldocno }}</ion-note>
+          </ion-item>
+          <ion-item class="primary-color summary">
+            <ion-note class="block-note" item-left>Application Number</ion-note>
+            <ion-note class="block-note" item-right>{{ visaRenewal.applicant_id }}</ion-note>
+          </ion-item>
+        </ion-card>
+        <div class="row">
+          <div class="col-12 col-md-6" *ngFor="let status of visaRenewal.status_historys">
+            <ion-card [class.failed]="status.progress_color != '098136'">
+              <ion-list>
+                <ion-item class="subj-title">
+                  {{ status.status_title }}
+                </ion-item>
+                <ion-item>
+                  <div class="item-content" style="white-space: normal;">{{ status.remark }}</div>
+                </ion-item>
+              </ion-list>
+            </ion-card>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #loadingVisaRenewal>
+        <ion-card>
+          <ion-item>
+            <ion-row>
+              <ion-col col-6>
+                <skeleton-item height="15px" width="60%"></skeleton-item>
+              </ion-col>
+              <ion-col col-6>
+                <skeleton-item height="15px" width="90%"></skeleton-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-6>
+                <skeleton-item height="15px" width="60%"></skeleton-item>
+              </ion-col>
+              <ion-col col-6>
+                <skeleton-item height="15px" width="90%"></skeleton-item>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+        </ion-card>
+        <ion-card *ngFor="let s of numOfSkeletons">
+          <ion-item>
+            <skeleton-item height="150px" width="100%"></skeleton-item>
+          </ion-item>
+        </ion-card>
+      </ng-template>
+    </ng-template>
+
+    <ng-template [ngIf]="block">
+      <ion-card style="border-color: #f04141 !important">
+        <ion-card-header style="border: none !important">
+          <ion-icon class="warning-logo" name="alert"></ion-icon>
+        </ion-card-header>
+        <ion-card-content class="content-message">
+          <ion-note class="block-note" style="color: #f04141;">
+            {{ message }}
+          </ion-note>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+  </div>
+</ion-content>

@@ -251,11 +251,20 @@ export class MorePage {
         {
           title: 'Graduate Verification Service',
           component: 'QualificationVerificationPage',
-          size: 'xlarge',
+          size: 'large',
           desc: 'blue',
           color: ' blue',
           icon: 'document',
           role: Role.Student | Role.Lecturer | Role.Admin,
+        },
+        {
+          title: 'Visa Renewal Status',
+          component: 'VisaRenewalStatusPage',
+          size: 'small',
+          desc: 'red',
+          color: ' red',
+          icon: 'md-globe',
+          role: Role.Student,
         },
         {
           title: 'Staff Directory',
