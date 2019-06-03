@@ -1,0 +1,76 @@
+fireworks {
+  canvas#firework {
+    position: absolute;
+    z-index: 2;
+    display: absolute;
+
+    &.hide-firework {
+      display: none;
+    }
+  }
+
+  div.seasonal-button-wrapper {
+    @keyframes shake {
+      1%, 9% {
+        transform: translate3d(-0.5px, 0, 0);
+      }
+      
+      2%, 8% {
+        transform: translate3d(1px, 0, 0);
+      }
+    
+      3%, 5%, 7% {
+        transform: translate3d(-2px, 0, 0);
+      }
+    
+      4%, 6% {
+        transform: translate3d(2px, 0, 0);
+      }
+    }
+
+    display: inline-block;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 1;
+    position: absolute;
+    margin-top: 4px;
+    margin-left: 55%;
+    animation: shake 8.20s infinite cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+
+    svg.seasonal-button-icon {
+      display: block;
+      margin: auto;
+      fill: #009688;
+    }
+
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      height: 100%;
+      width: 1.5px;
+      background-color: #009688;
+      top: -65%;
+      left: 30%;
+    }
+  }
+
+  .dark-theme & {
+    div.seasonal-button-wrapper {
+      svg.seasonal-button-icon {
+        fill: #00BFA5;
+      }
+
+      &::after {
+        background-color: #00BFA5;
+      }
+    }
+  }
+}
