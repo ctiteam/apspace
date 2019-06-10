@@ -62,7 +62,7 @@ export class CasTicketService {
         catchError(res => res.status === 201 && res.headers.get('Location')
           ? of(res.headers.get('Location').split('/').pop())
           : username && password
-            ? throwError(res.status === 0 ? 'Network error' : 'Invalid username or password')
+            ? throwError(JSON.stringify(res)) // CONVERT RESPONSE TO STRING TO CHECK IF CONTAINS SPECIFIC WORD (AccountPasswordMustChangeException)
             : (this.events.publish('user:logout'), EMPTY)),
         tap(tgt => this.storage.set('tgt', tgt)),
         tap(_ => this.storage.set('cred', data)),
