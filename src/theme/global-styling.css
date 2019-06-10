@@ -1,3 +1,4 @@
+/* START: UTILITIES */
 ion-button, a{
     cursor: pointer;
 }
@@ -6,3 +7,27 @@ h1, h2, h3, h4, h5, h6, p{
     padding: 0;
     margin: 0;
 }
+.d_block{
+    display: block !important;
+}
+
+.text_center{
+    text-align: center !important;
+}
+/* END: UTILITIES */
+
+
+/* START: BACKGROUND COLORS */
+.red_background{
+  --background: red !important;
+}
+
+.green_background{
+  --background: green !important;
+}
+/* END: BACKGROUND COLORS */
+
+
+/* START: TEXT COLORS */
+
+/* END: TEXT COLORS */
