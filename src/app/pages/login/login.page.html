@@ -63,12 +63,11 @@
 
       <!-- Form & Welcome Message -->
       <ion-col size="10" offset="1" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
-        <form (ngSubmit)="onLoginClicked()" #loginForm="ngForm" no-padding>
+        <form (ngSubmit)="onLoginBtnClicked()" #loginForm="ngForm" no-padding>
           <ion-row align-items-start>
             <ion-col class="title-text-wrapper" size="12">
               <h1><strong>APSpace,</strong></h1>
               <h2>Your digital university companion</h2>
-              <loading-spinner></loading-spinner>
             </ion-col>
           </ion-row>
           <!-- Input-fields -->
@@ -82,13 +81,13 @@
                 </ion-item>
                 <!-- Input-field-password -->
                 <ion-item no-padding>
-                  <ion-input padding-start type="password" [placeholder]="'Password'" [(ngModel)]="password" (keyup.enter)="onLoginClicked()"
+                  <ion-input padding-start type="password" [placeholder]="'Password'" [(ngModel)]="password" (keyup.enter)="onLoginBtnClicked()"
                     [required]="true" name="password"></ion-input>
                 </ion-item>
               </div>
               <!-- Login Button -->
               <ion-col size="12" no-padding>
-                <ion-button class="login-button" no-margin expand="block" type="submit">
+                <ion-button [class.red_background]="userDidLogin && userUnauthenticated" [class.green_background]="userDidLogin && userAuthenticated" [class.btn_center]="userDidLogin && (userUnauthenticated || loginProcessLoading || userAuthenticated) " class="login-button" no-margin [attr.expand]="!userDidLogin ? 'block' : undefined" type="submit">
                   <span *ngIf="!userDidLogin">LOGIN</span>
                   <!-- LOADING -->
                   <ion-icon *ngIf="!userDidLogin" name="log-in" slot="end" size="large"></ion-icon>
