@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: './pages/login/login.module#LoginPageModule',
-    // canActivate: [DeauthGuard]
+    canActivate: [DeauthGuard]
   },
   {
     path: 'tabs',
