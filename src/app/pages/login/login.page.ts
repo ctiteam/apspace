@@ -9,6 +9,8 @@ import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 import { Role } from '../../interfaces';
 import { CasTicketService, WsApiService } from '../../services';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
+import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
 @Component({
   selector: 'app-login',
@@ -80,18 +82,18 @@ export class LoginPage implements OnInit {
           this.loginProcessLoading = false;
           this.userUnauthenticated = true;
           setTimeout(() => {
-            // Hide the error message after 700 ms
+            // Hide the error message after 2 seconds
             this.userUnauthenticated = false;
             this.userDidLogin = false;
-          }, 900);
+          }, 2000);
         },
         () => {
           this.loginProcessLoading = false;
           this.userAuthenticated = true;
           setTimeout(() => {
-            // Show the success message for 700 ms after completing the request
+            // Show the success message for 300 ms after completing the request
             this.router.navigate(['/student-timetable']);
-          }, 900);
+          }, 300);
         }
       );
     }
@@ -100,8 +102,12 @@ export class LoginPage implements OnInit {
   showToastMessage(message: string) {
     this.toastCtrl.create({
       message,
-      duration: 3000,
-      position: 'top'
+      duration: 2000,
+      position: 'top',
+      animated: true,
+      color: 'danger',
+      enterAnimation: toastMessageEnterAnimation,
+      leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
 

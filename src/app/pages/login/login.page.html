@@ -87,7 +87,13 @@
               </div>
               <!-- Login Button -->
               <ion-col size="12" no-padding>
-                <ion-button [class.red_background]="userDidLogin && userUnauthenticated" [class.green_background]="userDidLogin && userAuthenticated" [class.btn_center]="userDidLogin && (userUnauthenticated || loginProcessLoading || userAuthenticated) " class="login-button" no-margin [attr.expand]="!userDidLogin ? 'block' : undefined" type="submit">
+                <ion-button 
+                type="submit"
+                class="login-button"
+                no-margin
+                [attr.color]="userDidLogin && userUnauthenticated ? 'danger' : userDidLogin && userAuthenticated? 'success': 'primary'"
+                [class.btn_center]="userDidLogin && (userUnauthenticated || loginProcessLoading || userAuthenticated)"
+                >
                   <span *ngIf="!userDidLogin">LOGIN</span>
                   <!-- LOADING -->
                   <ion-icon *ngIf="!userDidLogin" name="log-in" slot="end" size="large"></ion-icon>
