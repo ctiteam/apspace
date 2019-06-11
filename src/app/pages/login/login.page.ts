@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Events, Platform, ToastController, AlertController } from '@ionic/angular';
+import { Events, Platform, ToastController, AlertController, NavController } from '@ionic/angular';
 import { Network } from '@ionic-native/network/ngx';
 
 import { throwError } from 'rxjs';
@@ -34,7 +33,7 @@ export class LoginPage implements OnInit {
     private events: Events,
     private network: Network,
     private plt: Platform,
-    private router: Router,
+    private navCtrl: NavController,
     private toastCtrl: ToastController,
     private ws: WsApiService,
     public alertCtrl: AlertController,
@@ -92,7 +91,7 @@ export class LoginPage implements OnInit {
           this.userAuthenticated = true;
           setTimeout(() => {
             // Show the success message for 300 ms after completing the request
-            this.router.navigate(['/student-timetable']);
+            this.navCtrl.navigateRoot('/student-timetable');
           }, 300);
         }
       );
