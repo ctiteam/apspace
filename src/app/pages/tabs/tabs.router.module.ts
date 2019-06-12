@@ -9,12 +9,16 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
+        path: 'student-dashboard',
+        loadChildren: '../student-dashboard/student-dashboard.module#StudentDashboardPageModule'
+      },
+      {
         path: 'student-timetable',
         loadChildren: '../student-timetable/student-timetable.module#StudentTimetablePageModule'
       },
       {
         path: '',
-        redirectTo: 'student-timetable',
+        redirectTo: 'student-dashboard',
         pathMatch: 'full'
       }
     ]

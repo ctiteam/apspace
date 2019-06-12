@@ -20,6 +20,7 @@ const routes: Routes = [
     loadChildren: './pages/tabs/tabs.module#TabsPageModule',
     canActivate: [AuthGuard]
   },
+  
   {
     path: 'student-timetable',
     loadChildren: './pages/student-timetable/student-timetable.module#StudentTimetablePageModule'
