@@ -75,6 +75,7 @@ strong {
     ===============================*/
 ion-input {
   padding-left: 16px !important;
+  --background: transparent;
 }
 /* Settings input-field
       ===============================*/
@@ -93,7 +94,7 @@ ion-input {
 }
 
 ion-item {
-  background-color: transparent !important;
+  --ion-background-color:transparent;
 }
 ion-item ion-label {
   position: absolute;
