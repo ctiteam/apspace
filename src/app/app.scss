@@ -157,3 +157,34 @@ ion-select {
     user-select: text;
   }
 }
+
+// PRINT DEFAULT CONFIGRATIONS
+@media print {
+  ion-content {
+    max-width: none;
+  }
+  ion-header, .tabbar {
+    display: none !important;
+  }
+
+  body, .app-root, .split-pane, .ion-page, ion-app, ion-nav {
+    contain: none;
+  }
+  body, ion-nav {
+    overflow: initial;
+  }
+  body {
+    position: static;
+  }
+
+  .scroll-content, .ion-page.show-page, .ion-page.show-page > ion-content, .app-root, ion-tabs, ion-tab {
+    position: relative;
+    height: auto;
+    contain: none;
+    overflow: visible;
+  }
+
+  .fixed-content, .scroll-content {
+    margin-top: 0 !important;
+  }
+}
