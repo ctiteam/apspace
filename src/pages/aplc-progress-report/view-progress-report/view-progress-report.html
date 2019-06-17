@@ -223,10 +223,10 @@
                     <div class="col-12 col-md-3 item d-md-none d-lg-block">
                       <small class="d-md-none font-weight-bold mt-3">Scores:</small>
                       <h4 *ngIf="studentBehavior.AVERAGE_BEH > 0; else nodata">
-                        Completing: {{studentBehavior.COMPLETING_BEH}}<br>
-                        Academic: {{studentBehavior.ACADEMIC_BEH}}<br>
-                        Concept: {{studentBehavior.CONCEPT_BEH}}<br>
-                        Social: {{studentBehavior.SOCIAL_BEH}}
+                        Completing Assignments: {{studentBehavior.COMPLETING_BEH}}<br>
+                        Academic Behaviour: {{studentBehavior.ACADEMIC_BEH}}<br>
+                        Understanding Key Concepts: {{studentBehavior.CONCEPT_BEH}}<br>
+                        Social Behaviour: {{studentBehavior.SOCIAL_BEH}}
                       </h4>
                       <ng-template #nodata>
                         <h4>
