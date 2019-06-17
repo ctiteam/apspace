@@ -1,0 +1,86 @@
+/* 
+    THIS FILE CONTAINS ALL THE MEDIA QUERIES USED TO MAKE THE DESIGN RESPONSIVE.
+    IT IS FOLLOWING THE BOOTSTRAP MEDIA QUERIES (EXCEPT THE EXTRA SMALL ONE):
+        1. EXTRA SMALL DEVICES (old small iPhone devices) (NOT IN BOOTSTRAP)
+        2. SMALL DEVICES (landscape phones, 576px and up)
+        3. MEDIUM DEVICES (tablets, 768px and up)
+        4. LARGE DEVICES (desktops, 992px and up)
+        5. EXTRA LARGE DEVICES (large desktops, 1200px and up)
+*/
+
+/* EXTRA SMALL DEVICES - LESS THAN 576px */
+@media only screen and (max-width: 575px) {
+  .responsive-h1 {
+    font-size: 0.9rem;
+  }
+  .responsive-h2 {
+    font-size: 0.7rem;
+  }
+  .responsive-icon {
+    font-size: 1.9rem;
+  }
+  .welcome-message-wrapper {
+    padding-top: 9px;
+  }
+}
+
+/* SMALL DEVICES - 576px AND UP */
+@media only screen and (min-width: 576px) {
+  .responsive-h1 {
+    font-size: 1.1rem;
+  }
+  .responsive-h2 {
+    font-size: 0.9rem;
+  }
+  .responsive-icon {
+    font-size: 2.1rem;
+  }
+  .welcome-message-wrapper {
+    padding-top: 4px;
+  }
+}
+
+/* MEDIUM DEVICES - 768px AND UP */
+@media only screen and (min-width: 768px) {
+  .responsive-h1 {
+    font-size: 1.3rem;
+  }
+  .responsive-h2 {
+    font-size: 1.1rem;
+  }
+  .responsive-icon {
+    font-size: 2.3rem;
+  }
+  .welcome-message-wrapper {
+    padding-top: 0px;
+  }
+}
+
+/* LARGE DEVICES - 992px AND UP */
+@media only screen and (min-width: 992px) {
+  .responsive-h1 {
+    font-size: 1.5rem;
+  }
+  .responsive-h2 {
+    font-size: 1.3rem;
+  }
+  .responsive-icon {
+    font-size: 2.5rem;
+  }
+  ion-avatar.dashboard-avatar {
+    margin-top: 4px;
+  }
+}
+
+/* EXTRA LARGE DEVICES -  1200px AND UP */
+@media only screen and (min-width: 1200px) {
+  .responsive-h1 {
+    font-size: 1.5rem;
+  }
+  .responsive-h2 {
+    font-size: 1.3rem;
+  }
+  .responsive-icon {
+    font-size: 2.5rem;
+  }
+}
