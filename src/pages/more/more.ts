@@ -240,8 +240,8 @@ export class MorePage {
       title: 'Others',
       items: [
         {
-          title: 'Graduations',
-          component: 'QualificationVerificationPage',
+          title: 'Upcoming Graduations',
+          component: 'GraduationsPage',
           size: 'xlarge',
           desc: 'orange',
           color: ' orange',
