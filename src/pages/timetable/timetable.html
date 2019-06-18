@@ -65,6 +65,15 @@
           </span>
         </p>
       </div>
+      <div class="col-12 px-5 py-2">
+        <p>
+          Note:
+          <span class="font-weight-bold">
+            While there will be no classes during the mid-semester break for your intake, your intake time table will
+            continue to appear during the break.
+          </span>
+        </p>
+      </div>
     </div>
     <ng-template let-timetables [ngIf]="timetable$ | async" [ngIfElse]="timetableLoading">
       <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date: 'E' | uppercase" (ngModelChange)="
@@ -112,6 +121,7 @@
           </ng-template>
         </div>
       </div>
+
     </ng-template>
     <ng-template #timetableLoading>
       <div class="row my-4 px-3">
