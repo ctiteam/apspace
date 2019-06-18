@@ -59,7 +59,6 @@ export class ClassroomFinderPage {
     this.selectedTime = hour + ':' + minute;
     this.selectedEndTime = endHour + ':' + minute;
   }
-
   async presentLoading() {
     this.loading = await this.loadingCtrl.create({
       content: 'Searching...',
@@ -86,7 +85,6 @@ export class ClassroomFinderPage {
         // Get array of selected locations
         this.listOfClassrooms = [];
         this.listOfFreeRooms = [];
-
         let selectedTypeOfRooms = []; // Besides normal classrooms
         if (this.typeOfRooms.lab) {
           selectedTypeOfRooms = ['Lab', 'LAB', 'Studio', 'Suite'];
@@ -94,7 +92,6 @@ export class ClassroomFinderPage {
         if (this.typeOfRooms.auditorium) {
           selectedTypeOfRooms.push('Auditorium');
         }
-
         const selectedLocations = [];
         if (this.location.newCampus) {
           selectedLocations.push('NEW CAMPUS');
@@ -102,7 +99,6 @@ export class ClassroomFinderPage {
         if (this.location.apiitTpm) {
           selectedLocations.push('TPM');
         }
-
         this.timetableProv.get(true).subscribe((res => {
           this.timetableData = res;
           for (let i = 0; i < this.timetableData.length; i++) {
@@ -119,22 +115,15 @@ export class ClassroomFinderPage {
               selectedTypeOfRooms.forEach(typeOfRoom => {
                 
                 if (res[i].ROOM.indexOf(typeOfRoom) !== -1) {
-                  
-                  
                     this.listOfClassrooms.push(res[i].ROOM);
-                  
-                  
                 }
               });
             }
           }
           this.listOfClassrooms.sort();
           const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-          this.searchTimetable(days[this.selectedDay], this.selectedTime, this.selectedEndTime);
-         
-          
+          this.searchTimetable(days[this.selectedDay], this.selectedTime, this.selectedEndTime);  
             this.loading.dismiss();
-          
           // TODO: scroll to rooms
           // console.log(this.rooms);
          
@@ -162,9 +151,6 @@ export class ClassroomFinderPage {
           + ' ' + selectedTime + ':00') / 1000;
         const selectedTimeTo = Date.parse(timetable.DATESTAMP_ISO.split('-').join('/')
         + ' ' + selectedEndTime + ':00') / 1000;
-
-      
-
          if ((selectedTimeFrom <= timeFrom && timeFrom < selectedTimeTo)
           || (selectedTimeFrom <= timeTo && timeTo < selectedTimeTo)
           || (timeFrom <= selectedTimeFrom && selectedTimeTo <= timeTo)
@@ -174,9 +160,6 @@ export class ClassroomFinderPage {
               occupiedRooms.push(timetable.ROOM);
           }
         }
-      
-        
-         
       }
     });
     this.listOfFreeRooms = this.listOfClassrooms.filter(el => occupiedRooms.indexOf(el) === -1);
@@ -184,7 +167,6 @@ export class ClassroomFinderPage {
       this.presentToast('No rooms available.');
     }
   }
-
   checkIfLabClosed(timetable, selectedTimeFrom, selectedTimeTo) {
     // If Lab
     if (timetable.ROOM.toUpperCase().indexOf('LAB') !== -1) {
@@ -201,7 +183,6 @@ export class ClassroomFinderPage {
     }
     return false;
   }
-
   convertTime12to24(time12h) {
     const [time, modifier] = time12h.split(' ');
     const [hours, minutes] = time.split(':');
@@ -214,7 +195,6 @@ export class ClassroomFinderPage {
     }
     return displayedHours + ':' + minutes;
   }
-
   getTodayDate() {
     const today = new Date();
     let dd = today.getDate().toString();
