@@ -1,7 +1,8 @@
-/* START: UTILITIES */
+/* 01. UTILITIES */
+/* ********************************************************************** */
 ion-button,
 a {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 h1,
@@ -21,9 +22,29 @@ p {
 .text_center {
   text-align: center !important;
 }
-/* END: UTILITIES */
 
-/* START: BACKGROUND COLORS */
+.clearfix {
+  clear: both !important;
+}
+
+.float-left {
+  float: left !important;
+}
+
+.text-bold{
+  font-weight: 500 !important;
+}
+
+.text-bolder{
+  font-weight: 700 !important;
+}
+
+.margin-top{
+  margin-top: 16px !important;
+}
+
+/* 02. BACKGROUND COLORS */
+/* ********************************************************************** */
 .red_background {
   --background: red !important;
 }
@@ -31,18 +52,27 @@ p {
 .green_background {
   --background: green !important;
 }
-/* END: BACKGROUND COLORS */
 
-/* START: TEXT COLORS */
+/* 03. TEXT COLORS */
+/* ********************************************************************** */
 
-/* END: TEXT COLORS */
 
-/* START: OVERRIDE DEFAULT SETTINGS FOR BROWSER & FRAMEWORK */
+/* 04. OVERRIDE DEFAULT SETTINGS FOR BROWSER & FRAMEWORK */
+/* ********************************************************************** */
+
+/* REMOVE INPUT BACKGROUND FOR CHROME BROWSER */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  /* REMOVE INPUT BACKGROUND FOR CHROME BROWSER */
   -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
-/* END: OVERRIDE DEFAULT SETTINGS FOR BROWSER & FRAMEWORK */
+/* FIX OVERLAPPING ISSUE IN SWIPER */
+.swiper-wrapper {
+  margin-bottom: 15px !important;
+}
+.swiper-pagination {
+  position: fixed !important;
+  bottom: 5px !important;
+  padding-bottom: 5px !important;
+}
