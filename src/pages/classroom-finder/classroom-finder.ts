@@ -72,7 +72,7 @@ export class ClassroomFinderPage {
     });
     toast.present();
   }
-
+  
   presentRoomTimetable(room: string) {
     this.navCtrl.push('ClassroomFinderModalPage', { room });
   }
