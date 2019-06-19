@@ -2,6 +2,11 @@
   <ion-navbar>
     <ion-title>Update Progress Report</ion-title>
     <ion-buttons end>
+      <button *ngIf="(subjectCode || courseCode) && classCode" class="btn btn-success btn-lg" [disabled]="showLoading"
+        ion-button (click)="updateStudentsBehaviors(studentBehaviors)">
+        <span *ngIf="!showLoading">Submit</span>
+        <span *ngIf="showLoading">Loading ...</span>
+      </button>
       <button ion-button icon-only clear class="notification-button colored-border" (click)="toggleFilterMenu()">
         <ion-icon name="options"></ion-icon>
       </button>
@@ -290,7 +295,7 @@
                 <div class="col-12 my-4">
                   <button class="btn btn-success btn-block" [disabled]="showLoading" ion-button
                     (click)="updateStudentsBehaviors(studentBehaviors)">
-                    <span *ngIf="!showLoading">Update</span>
+                    <span *ngIf="!showLoading">Submit</span>
                     <span *ngIf="showLoading">Loading ...</span>
                   </button>
                 </div>
