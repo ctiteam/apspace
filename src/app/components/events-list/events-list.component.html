@@ -1,0 +1,30 @@
+<div class="event-calendar">
+    <div class="event-list">
+        <a class="event" *ngFor="let event of events">
+            <div class="event-container">
+                <div class="left-part-container" text-center>
+                    <span class="left-part">
+                        <span *ngIf="event.primaryDateTime">
+                            {{event.primaryDateTime}}
+                        </span>
+                        <span *ngIf="event.secondaryDateTime" class="left-part-item small">
+                            {{event.secondaryDateTime}}
+                        </span>
+                        <span *ngIf="event.quaternaryDateTime" class="left-part-item smallest">
+                            {{event.quaternaryDateTime}}
+                        </span>
+                    </span>
+                </div>
+                <div class="right-part-container">
+                    <span *ngIf="event.title" class="title">{{event.title}}</span>
+                    <span *ngIf="event.firstDescription" class="description">{{event.firstDescription}}</span>
+                    <span *ngIf="event.secondDescription" class="description">{{event.secondDescription}}</span>
+                    <span *ngIf="event.thirdDescription" class="description">{{event.thirdDescription}}</span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="spacer"></div>
+        </a>
+    </div>
+
+</div>

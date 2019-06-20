@@ -23,3 +23,4 @@ export { StudentPhoto } from './student-photo';
 export { StudentProfile } from './student-profile';
 export { Subcourse } from './subcourses';
 export { StudentTimetable } from './student-timetable';
+export { EventComponent } from './event-component';

@@ -1,0 +1,96 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+@import url(https://fonts.googleapis.com/css?family=Oswald:400,700);
+
+.event-calendar {
+  font-size: 14px;
+  font-family: Open Sans;
+  overflow: hidden;
+}
+
+.spacer {
+  border-bottom: 1px solid rgb(229, 229, 229);
+}
+
+.event-list {
+  display: block;
+  border-right: 1px solid rgb(229, 229, 229);
+}
+
+.event {
+  text-decoration: none;
+}
+.event:nth-child(3n+1) .event-container {
+  border-left-color: #15cb43;
+  /* verde */
+}
+
+.event:nth-child(3n) .event-container {
+  border-left-color: #FDD835;
+  /*amarillo*/
+}
+
+.event:nth-child(3n-1) .event-container {
+  border-left-color: #F44336;
+  /*rojo*/
+}
+.event-container {
+  color: #131313;
+  transition: all 0.2s ease;
+  background:#FAFAFA;
+  border-left: 3px solid;
+  padding-top: 10px;
+  padding-bottom: 15px;
+}
+
+.event-container:hover {
+  border-left-width: 10px;
+  background: #ECEFF1;
+}
+
+.left-part-container {
+  display: block;
+  width: 25%;
+  float: left;
+  font-family: Oswald;
+  font-weight: 700;
+  color: #343434;
+}
+
+.left-part {
+  font-size: 2.5em;
+  display: block;
+  margin-top: 6px;
+}
+.left-part .left-part-item {
+  display: block;
+  font-weight: 400;
+  text-transform: uppercase; 
+  margin-top: -.5em;
+}
+.left-part .left-part-item.small{
+  font-size: .55em;
+}
+
+.left-part .left-part-item.smallest{
+  font-size: .37em;
+}
+.right-part-container {
+  display: block;
+  width: 75%;
+  float: left;
+  padding-top: 3px;
+}
+
+.title {
+  text-transform: uppercase;
+  font-family: Oswald;
+  font-weight: 400;
+  font-size: 1.5em;
+  color: #8D6E63;
+}
+
+.description {
+  display: block;
+  font-size: 0.9em;
+}

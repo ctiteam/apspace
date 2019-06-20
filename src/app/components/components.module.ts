@@ -7,13 +7,15 @@ import { LecturerTimetableComponent } from './lecturer-timetable/lecturer-timeta
 import { SkeletonItemComponent } from './skeleton-item/skeleton-item.component';
 import { SearchModalComponent } from './search-modal/search-modal.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner';
+import { EventsListComponent } from './events-list/events-list.component';
 
 @NgModule({
   declarations: [
     LecturerTimetableComponent,
     SkeletonItemComponent,
     SearchModalComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    EventsListComponent
 
   ],
   imports: [
@@ -26,7 +28,8 @@ import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner';
     LecturerTimetableComponent,
     SkeletonItemComponent,
     SearchModalComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    EventsListComponent
   ],
   entryComponents: [
     SearchModalComponent
