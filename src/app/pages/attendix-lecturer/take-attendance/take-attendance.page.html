@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button class="back-btn" defaultHref="/attendix/classes"></ion-back-button>
+    </ion-buttons>
+    <ion-title text-center>Take Attendance</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="8">
+        <ion-card class="cols">
+          <ion-card-content>
+            <qrcode [qrdata]="otp" level="H"></qrcode>
+          </ion-card-content>
+        </ion-card>
+        <ion-button>End Session</ion-button>
+      </ion-col>
+      <ion-col size="4">
+        <ion-card class="cols">
+          <ion-card-header color="medium">
+            <ion-card-title>Student Lists</ion-card-title>
+              <ion-buttons>
+                <ion-button class="btn1" href="/attendix/addStudent">
+                  <ion-icon name="add"></ion-icon>
+                  <ion-label>Add</ion-label>
+                </ion-button>
+                <ion-button class="btn2" href="/attendix/removeStudent">
+                  <ion-icon name="remove"></ion-icon>
+                  <ion-label>Remove</ion-label>
+                </ion-button>
+              </ion-buttons>
+          </ion-card-header>
+          <ion-card-content>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
