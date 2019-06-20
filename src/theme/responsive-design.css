@@ -19,8 +19,14 @@
   .responsive-icon {
     font-size: 1.9rem;
   }
-  .welcome-message-wrapper {
-    padding-top: 9px;
+  .d-block {
+    display: block;
+  }
+  .d-inline {
+    display: inline;
+  }
+  .d-none {
+    display: none;
   }
 }
 
@@ -35,8 +41,11 @@
   .responsive-icon {
     font-size: 2.1rem;
   }
-  .welcome-message-wrapper {
-    padding-top: 4px;
+  .d-sm-block {
+    display: block;
+  }
+  .d-sm-inline {
+    display: inline;
   }
 }
 
@@ -51,8 +60,11 @@
   .responsive-icon {
     font-size: 2.3rem;
   }
-  .welcome-message-wrapper {
-    padding-top: 0px;
+  .d-md-block {
+    display: block;
+  }
+  .d-md-inline {
+    display: inline;
   }
 }
 
@@ -67,8 +79,11 @@
   .responsive-icon {
     font-size: 2.5rem;
   }
-  ion-avatar.dashboard-avatar {
-    margin-top: 4px;
+  .d-lg-block {
+    display: block;
+  }
+  .d-lg-inline {
+    display: inline;
   }
 }
 
@@ -82,5 +97,11 @@
   }
   .responsive-icon {
     font-size: 2.5rem;
+  }
+  .d-xl-block {
+    display: block;
+  }
+  .d-xl-inline {
+    display: inline;
   }
 }

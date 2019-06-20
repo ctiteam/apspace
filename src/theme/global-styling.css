@@ -15,9 +15,6 @@ p {
   padding: 0;
   margin: 0;
 }
-.d_block {
-  display: block !important;
-}
 
 .text_center {
   text-align: center !important;
