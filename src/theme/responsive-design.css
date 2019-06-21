@@ -9,7 +9,7 @@
 */
 
 /* EXTRA SMALL DEVICES - LESS THAN 576px */
-@media only screen and (max-width: 575px) {
+@media only screen and (min-width: 1px) {
   .responsive-h1 {
     font-size: 0.9rem;
   }
