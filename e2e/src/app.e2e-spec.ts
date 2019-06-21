@@ -7,8 +7,8 @@ describe('new App', () => {
     page = new AppPage();
   });
 
-  it('should be blank', () => {
+  it('should direct to login page', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toContain('The world is your oyster.');
+    expect(page.getParagraphText()).toContain('Your digital university companion');
   });
 });
