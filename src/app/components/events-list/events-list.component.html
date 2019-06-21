@@ -4,13 +4,16 @@
             <div class="event-container">
                 <div class="left-part-container" text-center>
                     <span class="left-part">
-                        <span *ngIf="event.primaryDateTime">
+                        <span class="primaryDateTime" *ngIf="event.primaryDateTime">
                             {{event.primaryDateTime}}
                         </span>
-                        <span *ngIf="event.secondaryDateTime" class="left-part-item small">
+                        <span *ngIf="eventType === 'timetable'" class="left-part-item small d-none d-md-inline">
+                            :
+                        </span>
+                        <span *ngIf="event.secondaryDateTime" class="left-part-item small d-block d-md-inline">
                             {{event.secondaryDateTime}}
                         </span>
-                        <span *ngIf="event.quaternaryDateTime" class="left-part-item smallest">
+                        <span *ngIf="event.quaternaryDateTime" class="left-part-item smallest d-block d-md-inline">
                             {{event.quaternaryDateTime}}
                         </span>
                     </span>

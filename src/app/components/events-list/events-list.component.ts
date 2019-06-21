@@ -8,6 +8,7 @@ import { EventComponent } from 'src/app/interfaces';
 })
 export class EventsListComponent implements OnInit {
   @Input() eventsInput: EventComponent[];
+  @Input() eventType: string;
   events: {}[]
 
   ngOnInit() {

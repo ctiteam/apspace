@@ -63,7 +63,6 @@
   margin-top: 6px;
 }
 .left-part .left-part-item {
-  display: block;
   font-weight: 400;
   text-transform: uppercase; 
   margin-top: -.5em;
@@ -93,4 +92,11 @@
 .description {
   display: block;
   font-size: 0.9em;
+}
+
+/* MEDIUM DEVICES - 768px AND UP */
+@media only screen and (min-width: 768px) {
+  .primaryDateTime {
+    margin-right: -7px;
+  }
 }
