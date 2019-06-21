@@ -4,6 +4,7 @@ import {
   ToastController,
 } from 'ionic-angular';
 import { TimetableProvider } from '../../providers';
+import { AlertController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -41,6 +42,7 @@ export class ClassroomFinderPage {
     private toastCtrl: ToastController,
     private timetableProv: TimetableProvider,
     public modalCtrl: ModalController,
+    public alertController: AlertController
   ) {
     let hour = this.now.getHours().toString();
     let minute = this.now.getMinutes().toString();
@@ -57,7 +59,6 @@ export class ClassroomFinderPage {
     this.selectedTime = hour + ':' + minute;
     this.selectedEndTime = endHour + ':' + minute;
   }
-
   async presentLoading() {
     this.loading = await this.loadingCtrl.create({
       content: 'Searching...',
@@ -72,7 +73,7 @@ export class ClassroomFinderPage {
     });
     toast.present();
   }
-
+  
   presentRoomTimetable(room: string) {
     this.navCtrl.push('ClassroomFinderModalPage', { room });
   }
@@ -84,7 +85,6 @@ export class ClassroomFinderPage {
         // Get array of selected locations
         this.listOfClassrooms = [];
         this.listOfFreeRooms = [];
-
         let selectedTypeOfRooms = []; // Besides normal classrooms
         if (this.typeOfRooms.lab) {
           selectedTypeOfRooms = ['Lab', 'LAB', 'Studio', 'Suite'];
@@ -92,7 +92,6 @@ export class ClassroomFinderPage {
         if (this.typeOfRooms.auditorium) {
           selectedTypeOfRooms.push('Auditorium');
         }
-
         const selectedLocations = [];
         if (this.location.newCampus) {
           selectedLocations.push('NEW CAMPUS');
@@ -100,7 +99,6 @@ export class ClassroomFinderPage {
         if (this.location.apiitTpm) {
           selectedLocations.push('TPM');
         }
-
         this.timetableProv.get(true).subscribe((res => {
           this.timetableData = res;
           for (let i = 0; i < this.timetableData.length; i++) {
@@ -115,18 +113,20 @@ export class ClassroomFinderPage {
                 this.listOfClassrooms.push(res[i].ROOM);
               }
               selectedTypeOfRooms.forEach(typeOfRoom => {
+                
                 if (res[i].ROOM.indexOf(typeOfRoom) !== -1) {
-                  this.listOfClassrooms.push(res[i].ROOM);
+                    this.listOfClassrooms.push(res[i].ROOM);
                 }
               });
             }
           }
           this.listOfClassrooms.sort();
           const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-          this.searchTimetable(days[this.selectedDay], this.selectedTime, this.selectedEndTime);
+          this.searchTimetable(days[this.selectedDay], this.selectedTime, this.selectedEndTime);  
+            this.loading.dismiss();
           // TODO: scroll to rooms
           // console.log(this.rooms);
-          this.loading.dismiss();
+         
         }));
       });
     } else {
@@ -135,6 +135,18 @@ export class ClassroomFinderPage {
   }
 
   searchTimetable(selectedDay, selectedTime, selectedEndTime) {
+<<<<<<< HEAD
+    if (selectedEndTime < selectedTime) {
+      this.presentToast('Selected end time is invalid');
+      return;
+    }
+
+=======
+    if (selectedEndTime < selectedTime ){
+      this.presentToast('Selected end time is not valid');
+      return
+    }
+>>>>>>> c6da39399a4d449101e42ce73bab1cdc283f611f
     this.listOfFreeRooms = [];
     const occupiedRooms = [];
     this.timetableData.forEach(timetable => {
@@ -147,14 +159,13 @@ export class ClassroomFinderPage {
           + ' ' + selectedTime + ':00') / 1000;
         const selectedTimeTo = Date.parse(timetable.DATESTAMP_ISO.split('-').join('/')
         + ' ' + selectedEndTime + ':00') / 1000;
-
-        if ((selectedTimeFrom <= timeFrom && timeFrom < selectedTimeTo)
+         if ((selectedTimeFrom <= timeFrom && timeFrom < selectedTimeTo)
           || (selectedTimeFrom <= timeTo && timeTo < selectedTimeTo)
           || (timeFrom <= selectedTimeFrom && selectedTimeTo <= timeTo)
           || this.checkIfLabClosed(timetable, selectedTimeFrom, selectedTimeTo)) {
           // If class is used at that time
-          if (occupiedRooms.indexOf(timetable.ROOM) === -1) {
-            occupiedRooms.push(timetable.ROOM);
+            if (occupiedRooms.indexOf(timetable.ROOM) === -1) {
+              occupiedRooms.push(timetable.ROOM);
           }
         }
       }
@@ -164,7 +175,6 @@ export class ClassroomFinderPage {
       this.presentToast('No rooms available.');
     }
   }
-
   checkIfLabClosed(timetable, selectedTimeFrom, selectedTimeTo) {
     // If Lab
     if (timetable.ROOM.toUpperCase().indexOf('LAB') !== -1) {
@@ -181,7 +191,6 @@ export class ClassroomFinderPage {
     }
     return false;
   }
-
   convertTime12to24(time12h) {
     const [time, modifier] = time12h.split(' ');
     const [hours, minutes] = time.split(':');
@@ -194,7 +203,6 @@ export class ClassroomFinderPage {
     }
     return displayedHours + ':' + minutes;
   }
-
   getTodayDate() {
     const today = new Date();
     let dd = today.getDate().toString();
