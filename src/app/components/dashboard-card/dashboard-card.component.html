@@ -1,0 +1,17 @@
+<ion-card no-margin>
+  <ion-card-header>
+    <ion-card-title [style.width]="withOptionsButton? '90%': '100%'" class="float-left card-title">
+      <h5 class="small-text">{{cardSubtitle}}</h5>
+      <h3 class="responsive-h1">{{cardTitle}}</h3>
+    </ion-card-title>
+    <div *ngIf="withOptionsButton" class="card-options-icon float-left" text-right>
+      <a (click)="showOptionsMenu($event)">
+        <ion-icon name="md-more" class="responsive-icon"></ion-icon>
+      </a>
+    </div>
+    <div class="clearfix"></div>
+  </ion-card-header>
+  <ion-card-content no-padding>
+    <ng-content></ng-content>
+  </ion-card-content>
+</ion-card>
