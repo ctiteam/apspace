@@ -8,6 +8,9 @@ import { SkeletonItemComponent } from './skeleton-item/skeleton-item.component';
 import { SearchModalComponent } from './search-modal/search-modal.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner';
 import { EventsListComponent } from './events-list/events-list.component';
+import { DashboardCardComponent } from './dashboard-card/dashboard-card.component';
+import { QuickAccessItemComponent } from './quick-access-item/quick-access-item.component';
+import { PopoverComponent } from './popover/popover.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +18,10 @@ import { EventsListComponent } from './events-list/events-list.component';
     SkeletonItemComponent,
     SearchModalComponent,
     LoadingSpinnerComponent,
-    EventsListComponent
+    EventsListComponent,
+    DashboardCardComponent,
+    QuickAccessItemComponent,
+    PopoverComponent
 
   ],
   imports: [
@@ -29,10 +35,14 @@ import { EventsListComponent } from './events-list/events-list.component';
     SkeletonItemComponent,
     SearchModalComponent,
     LoadingSpinnerComponent,
-    EventsListComponent
+    EventsListComponent,
+    DashboardCardComponent,
+    QuickAccessItemComponent,
+    PopoverComponent
   ],
   entryComponents: [
-    SearchModalComponent
+    SearchModalComponent,
+    PopoverComponent
   ]
 })
 export class ComponentsModule { }
