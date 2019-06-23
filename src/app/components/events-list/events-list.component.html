@@ -1,13 +1,16 @@
 <div class="event-calendar">
     <div class="event-list">
-        <a class="event" *ngFor="let event of events">
-            <div class="event-container">
+        <div class="event" *ngFor="let event of events">
+            <div class="event-container" padding-end [style.borderColor]="!event.pass? event.color: '#d7dee3'"
+                [style.color]="event.pass? '#d7dee3': ''">
                 <div class="left-part-container" text-center>
-                    <span class="left-part">
+                    <span class="left-part" [style.color]="!event.pass? event.color: '#d7dee3'">
                         <span class="primaryDateTime" *ngIf="event.primaryDateTime">
                             {{event.primaryDateTime}}
                         </span>
-                        <span *ngIf="eventType === 'timetable'" class="left-part-item small d-none d-md-inline">
+                        <span
+                            *ngIf="event.type === 'event-with-time-only' || event.type === 'event-with-time-and-hyperlink'"
+                            class="left-part-item small d-none d-md-inline">
                             :
                         </span>
                         <span *ngIf="event.secondaryDateTime" class="left-part-item small d-block d-md-inline">
@@ -19,15 +22,24 @@
                     </span>
                 </div>
                 <div class="right-part-container">
-                    <span *ngIf="event.title" class="title">{{event.title}}</span>
+                    <span *ngIf="event.title" class="title"
+                        [style.color]="!event.pass? event.color: '#d7dee3'">{{event.title}}</span>
                     <span *ngIf="event.firstDescription" class="description">{{event.firstDescription}}</span>
-                    <span *ngIf="event.secondDescription" class="description">{{event.secondDescription}}</span>
+                    <span *ngIf="event.secondDescription" class="description">
+                        <a [style.color]="!event.pass? event.color: '#d7dee3'"
+                            *ngIf="event.type === 'event-with-time-and-hyperlink' || event.type === 'event-with-date-and-hyperlink'; else noHyperlink">
+                            {{event.secondDescription}}
+                        </a>
+                        <ng-template #noHyperlink>
+                            {{event.secondDescription}}
+                        </ng-template>
+                    </span>
                     <span *ngIf="event.thirdDescription" class="description">{{event.thirdDescription}}</span>
                 </div>
                 <div class="clearfix"></div>
             </div>
             <div class="spacer"></div>
-        </a>
+        </div>
     </div>
 
 </div>

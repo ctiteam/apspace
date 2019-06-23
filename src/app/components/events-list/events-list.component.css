@@ -20,20 +20,6 @@
 .event {
   text-decoration: none;
 }
-.event:nth-child(3n+1) .event-container {
-  border-left-color: #15cb43;
-  /* verde */
-}
-
-.event:nth-child(3n) .event-container {
-  border-left-color: #FDD835;
-  /*amarillo*/
-}
-
-.event:nth-child(3n-1) .event-container {
-  border-left-color: #F44336;
-  /*rojo*/
-}
 .event-container {
   color: #131313;
   transition: all 0.2s ease;
@@ -85,8 +71,7 @@
   text-transform: uppercase;
   font-family: Oswald;
   font-weight: 400;
-  font-size: 1.5em;
-  color: #8D6E63;
+  font-size: 1.2em;
 }
 
 .description {
@@ -96,6 +81,9 @@
 
 /* MEDIUM DEVICES - 768px AND UP */
 @media only screen and (min-width: 768px) {
+  .left-part{
+    margin-top: 18px;
+  }
   .primaryDateTime {
     margin-right: -7px;
   }
