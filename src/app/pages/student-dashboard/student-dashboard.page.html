@@ -1,112 +1,118 @@
 <ion-content>
-  <!-- PROFILE CARD -->
-  <ion-card>
-    <ion-card-header no-padding>
-      <ion-grid>
-        <ion-row margin-bottom>
-          <ion-col>
-            <ion-avatar class="dashboard-avatar float-left">
-              <img
-                src="https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1">
-            </ion-avatar>
-            <div class="welcome-message-wrapper float-left" padding-start>
-              <ion-card-title>
-                <h3 class="responsive-h1">Good afternoon, <span>Mohamad</span></h3>
-              </ion-card-title>
-              <ion-card-subtitle>
-                <h3 class="responsive-h2">Nice to see you again.</h3>
-              </ion-card-subtitle>
-            </div>
-          </ion-col>
-        </ion-row>
-        <ion-row margin-top>
-          <ion-col>
-            <div class="icons" margin-top text-right>
-              <ion-icon class="responsive-icon" name="notifications"></ion-icon>
-              <ion-icon class="responsive-icon" name="settings" margin-start></ion-icon>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-header>
-  </ion-card>
-
-  <!-- AUTO-GENERATED NOTIFICATIONS CARD -->
-  <ion-card>
-    <ion-card-content>
-      <ion-slides [pager]="true" [options]="slideOpts">
-        <ion-slide>
-          <p>Mohamad, you have 5 classes today, 3 of them passed.</p>
-        </ion-slide>
-        <ion-slide>
-          <p>Be careful, You have two modules with low attendance</p>
-        </ion-slide>
-        <ion-slide>
-          <p>Also, your visa will expire soon :( You may need to review the immegration office</p>
-        </ion-slide>
-        <ion-slide>
-          <p>Don't forget to pay the outstanding that you have</p>
-        </ion-slide>
-      </ion-slides>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- QUICK ACCESS ITEMS CARD -->
+  <!-- MAIN GRID -->
   <ion-grid>
+    <!-- MAIN ROW -->
     <ion-row>
-      <!-- FIRST QUICK ACCESS ITEM: APCARD BALANCE -->
-      <ion-col>
-        <ion-card no-padding no-margin text-center>
-          <ion-card-header no-padding padding-top>
-            <ion-icon class="responsive-icon" name="card"></ion-icon>
-          </ion-card-header>
-          <ion-card-content>
-            <p class="resposive-text">APCard Balance</p>
-            <h3 class="responsive-h2 text-bolder margin-top" margin-top>RM500.99</h3>
-          </ion-card-content>
-        </ion-card>
+      <!-- LEFT SIDE COLUMN -->
+      <ion-col size="12" size-md="5" size-lg="4">
+        <!-- LEFT SIDE MAIN GRID -->
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <!-- PROFILE SECTION -->
+              <ion-card no-margin>
+                <ion-card-header no-padding>
+                  <ion-grid>
+                    <ion-row margin-bottom>
+                      <ion-col>
+                        <ion-avatar class="dashboard-avatar float-left">
+                          <img
+                            src="https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1">
+                        </ion-avatar>
+                        <div class="welcome-message-wrapper float-left" padding-start>
+                          <ion-card-title>
+                            <h3 class="responsive-h1">Good afternoon, <span>Mohamad</span></h3>
+                          </ion-card-title>
+                          <ion-card-subtitle>
+                            <h3 class="responsive-h2">Nice to see you again.</h3>
+                          </ion-card-subtitle>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row margin-top>
+                      <ion-col>
+                        <div class="icons" margin-top text-right>
+                          <ion-icon class="responsive-icon" name="notifications"></ion-icon>
+                          <ion-icon class="responsive-icon" name="settings" margin-start></ion-icon>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-header>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col>
+              <!-- ALERTS SECTION -->
+              <ion-card no-margin>
+                <ion-card-content>
+                  <ion-slides [pager]="true" [options]="slideOpts">
+                    <ion-slide>
+                      <p>Mohamad, you have 5 classes today, 3 of them passed.</p>
+                    </ion-slide>
+                    <ion-slide>
+                      <p>Be careful, You have two modules with low attendance</p>
+                    </ion-slide>
+                    <ion-slide>
+                      <p>Also, your visa will expire soon :( You may need to review the immegration office</p>
+                    </ion-slide>
+                    <ion-slide>
+                      <p>Don't forget to pay the outstanding that you have</p>
+                    </ion-slide>
+                  </ion-slides>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <!-- QUICK ACCESS SECTION -->
+            <ion-grid>
+              <ion-row>
+                <!-- FIRST QUICK ACCESS ITEM: APCARD BALANCE -->
+                <ion-col>
+                  <quick-access-item icon="card" titleFirstWord='APCard' titleSecondWord='Balance' value='RM500.99'></quick-access-item>
+                </ion-col>
+                <!-- SECOND QUICK ACCESS ITEM: TOTAL OVERDUE -->
+                <ion-col>
+                  <quick-access-item icon="logo-usd" titleFirstWord='Total' titleSecondWord='Overdue' value='RM5000.99'></quick-access-item>
+                </ion-col>
+                <!-- THIRD QUICK ACCESS ITEM: ATTENDANCE -->
+                <ion-col>
+                  <quick-access-item icon="alarm" titleFirstWord='Overall' titleSecondWord='Attendance' value='80%'></quick-access-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-row>
+        </ion-grid>
       </ion-col>
-      <!-- SECOND QUICK ACCESS ITEM: TOTAL OVERDUE -->
-      <ion-col>
-        <ion-card no-padding no-margin text-center>
-          <ion-card-header no-padding padding-top>
-            <ion-icon class="responsive-icon" name="logo-usd"></ion-icon>
-          </ion-card-header>
-          <ion-card-content>
-            <p class="resposive-text">Total Overdue</p>
-            <h3 class="responsive-h2 text-bolder margin-top">RM5000</h3>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-      <!-- THIRD QUICK ACCESS ITEM: ATTENDANCE -->
-      <ion-col>
-        <ion-card no-padding no-margin text-center>
-          <ion-card-header no-padding padding-top>
-            <ion-icon class="responsive-icon" name="alarm"></ion-icon>
-          </ion-card-header>
-          <ion-card-content>
-            <p class="resposive-text">Overall Attendance</p>
-            <h3 class="responsive-h2 text-bolder margin-top">80%</h3>
-          </ion-card-content>
-        </ion-card>
+
+
+
+
+      <!-- RIGHT SIDE COLUMN -->
+      <ion-col size="12" size-md="7" size-lg="8">
+        <!-- RIGHT SIDE MAIN GRID -->
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <dashboard-card
+                [withOptionsButton]="todaysScheduleWithOptionsButton"
+                [options]="todaysScheduleOptions"
+                [cardTitle]="todaysScheduleCardTitle"
+                [cardSubtitle]="todaysScheduleCardSubtitle"
+              >
+                  <events-list [eventsInput]="todaysSchedule"></events-list>
+              </dashboard-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-col>
     </ion-row>
   </ion-grid>
 
-  <ion-card>
-    <ion-item>
-      <ion-icon name="pin" slot="start"></ion-icon>
-      <ion-label>ion-item in a card, icon left, button right</ion-label>
-      <ion-button fill="outline" slot="end">View</ion-button>
-    </ion-item>
-
-    <ion-card-content>
-      This is content, without any paragraph or header tags,
-      within an ion-card-content element.
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card>
+  <!-- <ion-card>
     <ion-item href="#" class="activated">
       <ion-icon name="wifi" slot="start"></ion-icon>
       <ion-label>Card Link Item 1 .activated</ion-label>
@@ -126,5 +132,18 @@
       <ion-icon name="walk" slot="start"></ion-icon>
       <ion-label>Card Button Item 2</ion-label>
     </ion-item>
+  </ion-card> -->
+
+  <ion-card>
+    <ion-item lines="none">
+      <ion-icon name="pin" slot="start"></ion-icon>
+      <ion-label>ion-item in a card, icon left, button right</ion-label>
+      <ion-button fill="outline" slot="end">View</ion-button>
+    </ion-item>
+
+    <ion-card-content>
+      This is content, without any paragraph or header tags,
+      within an ion-card-content element.
+    </ion-card-content>
   </ion-card>
 </ion-content>

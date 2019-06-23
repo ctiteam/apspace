@@ -1,0 +1,27 @@
+/* EXTRA SMALL DEVICES - LESS THAN 576px */
+@media only screen and (max-width: 575px) {
+  .welcome-message-wrapper {
+    padding-top: 9px;
+  }
+}
+
+/* SMALL DEVICES - 576px AND UP */
+@media only screen and (min-width: 576px) {
+  .welcome-message-wrapper {
+    padding-top: 4px;
+  }
+}
+
+/* MEDIUM DEVICES - 768px AND UP */
+@media only screen and (min-width: 768px) {
+  .welcome-message-wrapper {
+    padding-top: 0px;
+  }
+}
+
+/* LARGE DEVICES - 992px AND UP */
+@media only screen and (min-width: 992px) {
+  ion-avatar.dashboard-avatar {
+    margin-top: 4px;
+  }
+}
