@@ -8,16 +8,16 @@
         5. EXTRA LARGE DEVICES (large desktops, 1200px and up)
 */
 
-/* EXTRA SMALL DEVICES - LESS THAN 576px */
+/* EXTRA SMALL DEVICES - MORE THAN 1px */
 @media only screen and (min-width: 1px) {
   .responsive-h1 {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   .responsive-h2 {
     font-size: 0.7rem;
   }
   .responsive-icon {
-    font-size: 1.9rem;
+    font-size: 1.8rem;
   }
   .d-block {
     display: block;
@@ -28,18 +28,21 @@
   .d-none {
     display: none;
   }
+  .pt-1-xs{
+    padding-top: 0.5em !important;
+  }
+  .pb-1-xs{
+    padding-bottom: 0.5em !important;
+  }
 }
 
 /* SMALL DEVICES - 576px AND UP */
 @media only screen and (min-width: 576px) {
   .responsive-h1 {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
   .responsive-h2 {
     font-size: 0.9rem;
-  }
-  .responsive-icon {
-    font-size: 2.1rem;
   }
   .d-sm-block {
     display: block;
@@ -51,15 +54,6 @@
 
 /* MEDIUM DEVICES - 768px AND UP */
 @media only screen and (min-width: 768px) {
-  .responsive-h1 {
-    font-size: 1.3rem;
-  }
-  .responsive-h2 {
-    font-size: 1.1rem;
-  }
-  .responsive-icon {
-    font-size: 2.3rem;
-  }
   .d-md-block {
     display: block;
   }
@@ -70,14 +64,8 @@
 
 /* LARGE DEVICES - 992px AND UP */
 @media only screen and (min-width: 992px) {
-  .responsive-h1 {
-    font-size: 1.5rem;
-  }
-  .responsive-h2 {
-    font-size: 1.3rem;
-  }
   .responsive-icon {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
   .d-lg-block {
     display: block;
@@ -89,15 +77,6 @@
 
 /* EXTRA LARGE DEVICES -  1200px AND UP */
 @media only screen and (min-width: 1200px) {
-  .responsive-h1 {
-    font-size: 1.5rem;
-  }
-  .responsive-h2 {
-    font-size: 1.3rem;
-  }
-  .responsive-icon {
-    font-size: 2.5rem;
-  }
   .d-xl-block {
     display: block;
   }

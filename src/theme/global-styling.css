@@ -32,6 +32,10 @@ p {
   font-weight: 500 !important;
 }
 
+.small-text{
+  font-size: .42em !important;
+}
+
 .text-bolder{
   font-weight: 700 !important;
 }
