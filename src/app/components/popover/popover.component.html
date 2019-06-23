@@ -1,0 +1,11 @@
+<ion-list no-padding no-margin>
+  <ion-list-header color="dark">
+    <ion-label class="fw700">{{title}}</ion-label>
+  </ion-list-header>
+
+  <ion-item color="light" class="text-10" *ngFor="let option of options"
+    (click)="[option.callbackFunction(), dismissPopover()]">
+    <ion-icon [name]="option.icon" color="dark"></ion-icon>
+    <ion-label>{{option.title}}</ion-label>
+  </ion-item>
+</ion-list>
