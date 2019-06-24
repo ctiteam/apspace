@@ -23,4 +23,5 @@ export { StudentPhoto } from './student-photo';
 export { StudentProfile } from './student-profile';
 export { Subcourse } from './subcourses';
 export { StudentTimetable } from './student-timetable';
-export { EventComponent } from './event-component';
+export { EventComponentConfigurations } from './event-component-configurations';
+export { DashboardCardComponentConfigurations } from './dashboard-card-componenet-configurations';
