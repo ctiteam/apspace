@@ -135,18 +135,11 @@ export class ClassroomFinderPage {
   }
 
   searchTimetable(selectedDay, selectedTime, selectedEndTime) {
-<<<<<<< HEAD
     if (selectedEndTime < selectedTime) {
       this.presentToast('Selected end time is invalid');
       return;
     }
 
-=======
-    if (selectedEndTime < selectedTime ){
-      this.presentToast('Selected end time is not valid');
-      return
-    }
->>>>>>> c6da39399a4d449101e42ce73bab1cdc283f611f
     this.listOfFreeRooms = [];
     const occupiedRooms = [];
     this.timetableData.forEach(timetable => {
