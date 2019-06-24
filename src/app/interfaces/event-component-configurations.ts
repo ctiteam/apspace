@@ -1,4 +1,4 @@
-export interface EventComponent {
+export interface EventComponentConfigurations {
     title?: string,
     color: string,
     pass: boolean,
