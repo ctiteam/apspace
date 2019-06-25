@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { PopoverComponent } from '../popover/popover.component';
+import { DashboardCardComponentConfigurations } from 'src/app/interfaces';
 
 @Component({
   selector: 'dashboard-card',
@@ -8,14 +9,7 @@ import { PopoverComponent } from '../popover/popover.component';
   styleUrls: ['./dashboard-card.component.scss']
 })
 export class DashboardCardComponent implements OnInit {
-  @Input() cardTitle: string;
-  @Input() cardSubtitle: string;
-  @Input() withOptionsButton: boolean;
-  @Input() options: {
-    title: string,
-    icon: string,
-    callbackFunction : Function
-  }[];
+  @Input() cardConfigurations: DashboardCardComponentConfigurations;
   constructor(
     public popoverCtrl: PopoverController
   ) { }
@@ -26,7 +20,7 @@ export class DashboardCardComponent implements OnInit {
   async showOptionsMenu(ev: any) {
     const popover = await this.popoverCtrl.create({
       component: PopoverComponent,
-      componentProps:{title: 'Options',options:this.options},
+      componentProps: { title: 'Options', options: this.cardConfigurations.options },
       event: ev,
       translucent: true
     });
