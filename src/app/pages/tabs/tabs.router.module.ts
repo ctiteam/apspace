@@ -20,6 +20,10 @@ const routes: Routes = [
         path: '',
         redirectTo: 'student-dashboard',
         pathMatch: 'full'
+      },
+      {
+        path: 'attendance',
+        loadChildren: '../attendance/attendance.module#AttendancePageModule'
       }
     ]
   }

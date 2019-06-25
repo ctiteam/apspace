@@ -36,7 +36,7 @@ export class TabsPage {
     },
     {
       name: 'Attendance',
-      path: '',
+      path: 'attendance',
       icon: 'alarm'
     },
     {
