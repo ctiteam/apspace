@@ -44,16 +44,6 @@ p {
   margin-top: 16px !important;
 }
 
-/* 02. BACKGROUND COLORS */
-/* ********************************************************************** */
-.red_background {
-  --background: red !important;
-}
-
-.green_background {
-  --background: green !important;
-}
-
 /* 03. TEXT COLORS */
 /* ********************************************************************** */
 
