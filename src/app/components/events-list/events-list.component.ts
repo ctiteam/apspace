@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { EventComponent } from 'src/app/interfaces';
+import { EventComponentConfigurations } from 'src/app/interfaces';
 
 @Component({
   selector: 'events-list',
@@ -7,7 +7,7 @@ import { EventComponent } from 'src/app/interfaces';
   styleUrls: ['events-list.component.css']
 })
 export class EventsListComponent implements OnInit {
-  @Input() eventsInput: EventComponent[];
+  @Input() eventsInput: EventComponentConfigurations[];
   events: {}[]
 
   ngOnInit() {
