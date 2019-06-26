@@ -9,7 +9,6 @@ export class QuickAccessItemComponent implements OnInit {
   @Input() icon: string;
   @Input() titleFirstWord: string;
   @Input() titleSecondWord: boolean;
-  @Input() value: string;
   constructor() { }
 
   ngOnInit() {

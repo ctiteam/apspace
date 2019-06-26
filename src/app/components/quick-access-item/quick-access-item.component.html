@@ -5,7 +5,9 @@
     </ion-card-header>
     <ion-card-content class="pt-1-xs">
       <p class="resposive-text">{{titleFirstWord}} <span *ngIf="titleSecondWord" class="d-block">{{titleSecondWord}}</span></p>
-      <h3 class="responsive-h2 text-bolder margin-top" margin-top>{{value}}</h3>
+      <h3 class="responsive-h2 text-bolder margin-top" margin-top>
+        <ng-content></ng-content>
+      </h3>
     </ion-card-content>
   </ion-card>
 </a>
