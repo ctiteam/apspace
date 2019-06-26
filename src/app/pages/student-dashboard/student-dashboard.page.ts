@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { EventComponentConfigurations, DashboardCardComponentConfigurations } from 'src/app/interfaces';
+import { EventComponentConfigurations, DashboardCardComponentConfigurations, Attendance, StudentProfile, Apcard } from 'src/app/interfaces';
 import * as moment from 'moment';
 import { Chart } from 'chart.js';
+import { Observable, forkJoin, of, throwError } from 'rxjs';
+import { WsApiService } from 'src/app/services';
+import { map, tap, share, finalize, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -9,18 +12,29 @@ import { Chart } from 'chart.js';
   styleUrls: ['./student-dashboard.page.scss'],
 })
 export class StudentDashboardPage implements OnInit {
-  @ViewChild('apcardChart') apcardChart: ElementRef;
-  @ViewChild('cgpaChart') cgpaChart: ElementRef;
-  @ViewChild('financialsChart') financialsChart: ElementRef;
-  @ViewChild('lowAttendanceChart') lowAttendanceChart: ElementRef;
   constructor(
+    private ws: WsApiService
   ) { }
 
   ngOnInit() {
-    this.createApcardChart();
-    this.createCgpaChart();
-    this.createFinancialsChart();
-    this.createLowAttendanceChart();
+    this.doRefresh();
+    this.createChart(this.apcardChart, this.apcardChartType, this.apcardChartOptions, this.apcardChartData);
+    this.createChart(this.cgpaChart, this.cgpaChartType, this.cgpaChartOptions, this.cgpaChartData);
+    this.createChart(this.financialsChart, this.financialsChartType, this.financialsChartOptions, this.financialsChartData);
+    this.createChart(this.lowAttendanceChart, this.lowAttendanceChartType, this.lowAttendanceChartOptions, this.lowAttendanceChartData);
+  }
+
+  doRefresh(refresher?) {
+    this.displayGreetingMessage();
+    // this.profile$ = this.ws.get<StudentProfile>('/student/profile');
+    // this.apcardTransaction$ = this.getTransactions();
+    forkJoin(
+      this.getProfile(),
+      // this.upcomingConsultation$ = this.getUpcomingConsultations(),
+      // this.nextHoliday$ = this.getHolidays(Boolean(refresher)),
+      this.balance$ = this.getAPCardBalance(),
+      // this.overdue$ = this.getOverdueFee(),
+    ).pipe(finalize(() => refresher && refresher.complete())).subscribe();
   }
 
   // ALERTS SLIDER OPTIONS
@@ -32,8 +46,119 @@ export class StudentDashboardPage implements OnInit {
     speed: 500,
   };
 
+  // ELEMENT REFs USED FOR CHARTS:
+  @ViewChild('apcardChart') apcardChart: ElementRef;
+  @ViewChild('cgpaChart') cgpaChart: ElementRef;
+  @ViewChild('financialsChart') financialsChart: ElementRef;
+  @ViewChild('lowAttendanceChart') lowAttendanceChart: ElementRef;
 
-  // Today's Schedule:
+  // CHARTS TYPES:
+  apcardChartType = 'line';
+  cgpaChartType = 'horizontalBar';
+  lowAttendanceChartType = 'horizontalBar';
+  financialsChartType = 'bar';
+
+  // CHARTS OPTIONS:
+  apcardChartOptions = [
+    {
+      legend: {
+        display: true,
+        position: 'right',
+      },
+    },
+    {
+      legend: {
+        display: false,
+      },
+      scales: {
+        xAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+              max: 4,
+            },
+          },
+        ],
+      },
+    },
+  ];
+
+  cgpaChartOptions = {
+    scales: {
+      xAxes: [{
+        ticks: {
+          min: 0,
+          max: 4
+        }
+      },
+      ],
+      yAxes: [{
+        gridLines: {
+          color: "rgba(0, 0, 0, 0)",
+        },
+        ticks: {
+          beginAtZero: true,
+          mirror: true,
+          padding: -10
+        },
+      }]
+    },
+    responsive: true,
+    legend: {
+      display: false,
+    },
+    title: {
+      display: false,
+    },
+  };
+
+  financialsChartOptions = {
+    scales: {
+      xAxes: [{ stacked: true }],
+      yAxes: [{ stacked: true }]
+    }
+  };
+
+  lowAttendanceChartOptions = {
+    scales: {
+      xAxes: [{
+        ticks: {
+          min: 0,
+          max: 80
+        }
+      },
+      ],
+      yAxes: [{
+        gridLines: {
+          color: "rgba(0, 0, 0, 0)",
+        },
+        ticks: {
+          beginAtZero: true,
+          mirror: true,
+          padding: -10
+        },
+      }]
+    },
+    responsive: true,
+    legend: {
+      display: false,
+    },
+    title: {
+      display: false,
+    },
+  };
+
+  // CREATING CHARTS METHOD:
+  createChart(elementRef: ElementRef, chartType: string, chartOptions: {}[] | {}, chartData: any) {
+    const ctx = elementRef.nativeElement.getContext('2d');
+    const chartToCreate = new Chart(ctx, {
+      type: chartType,
+      options: chartOptions,
+      data: chartData
+    });
+  }
+
+  // DASHBOARD CARDS CONFIGURATIONS:
   todaysScheduleCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: true,
     options: [
@@ -52,7 +177,6 @@ export class StudentDashboardPage implements OnInit {
     cardSubtitle: 'Next in: 1 hrs, 25 min'
   }
 
-  // Today's Schedule:
   upcomingEventsCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: true,
     options: [
@@ -71,7 +195,6 @@ export class StudentDashboardPage implements OnInit {
     cardSubtitle: 'Today: ' + moment().format("DD MMMM YYYY")
   }
 
-  // APCard Transactions:
   apcardTransactionsCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
     cardTitle: "APCard Transactions",
@@ -79,13 +202,119 @@ export class StudentDashboardPage implements OnInit {
     contentPadding: true
   }
 
-  createApcardChart() {
-    const ctx = this.apcardChart.nativeElement.getContext('2d');
-    const apcardChart = new Chart(ctx, {
-      type: this.apcardChartType,
-      options: this.apcardChartOptions,
-      data: this.apcardChartData
-    });
+  financialsCardConfigurations: DashboardCardComponentConfigurations = {
+    withOptionsButton: false,
+    cardTitle: "Financials:",
+    cardSubtitle: 'Overdue: RM5000',
+    contentPadding: true
+  }
+
+  cgpaCardConfigurations: DashboardCardComponentConfigurations = {
+    withOptionsButton: false,
+    cardTitle: "CGPA Per Intake",
+    cardSubtitle: 'Overall: 3.9',
+    contentPadding: true
+  }
+
+  lowAttendanceCardConfigurations: DashboardCardComponentConfigurations = {
+    withOptionsButton: false,
+    cardTitle: "Low Attendance:",
+    cardSubtitle: 'Overall: 80%',
+    contentPadding: true
+  }
+
+  // PROFILE
+  greetingMessage = '';
+  defaultIntake = '';
+  studentFirstName = '';
+  block: boolean = false;
+  getProfile() {
+    return this.ws.get<StudentProfile>('/student/profile').pipe(
+      tap(data => console.log(data)),
+      // tap(studentProfile => {
+      //   if (studentProfile.BLOCK === true) {
+      //     this.block = false;
+      //     this.getGPA();
+      //   } else {
+      //     this.block = true;
+      //   }
+      // }),
+      tap(studentProfile => this.studentFirstName = studentProfile.NAME.split(' ')[0]),
+      tap(studentProfile => this.defaultIntake = studentProfile.INTAKE),
+      // tap(studentProfile => this.getUpcomingClasses(studentProfile.INTAKE)),
+      tap(studentProfile => this.getAttendance(studentProfile.INTAKE)),
+      // tap(studentProfile => this.getUpcomingExam(studentProfile.INTAKE)),
+    );
+  }
+
+  displayGreetingMessage() {
+    const hoursNow = new Date().getHours();
+    if (hoursNow < 12) {
+      this.greetingMessage = 'Good morning';
+    } else if (hoursNow >= 12 && hoursNow <= 18) {
+      this.greetingMessage = 'Good afternoon';
+    } else {
+      this.greetingMessage = 'Good evening';
+    }
+  }
+
+  // ATTENDANCE
+  attendance$: Observable<Attendance[]>;
+  attendancePercent$: Observable<number>;
+  subject: string;
+  getAttendance(intake: string) {
+    const url = `/student/attendance?intake=${intake}`;
+    this.attendance$ = this.ws.get<Attendance[]>(url, true).pipe(
+      map(attendances => {
+        const currentSemester = Math.max(
+          ...attendances.map(attendance => attendance.SEMESTER),
+        );
+        return (attendances || []).filter(
+          attendance =>
+            attendance.SEMESTER === currentSemester &&
+            attendance.PERCENTAGE < 80,
+        );
+      }),
+      tap(
+        attendances =>
+          (this.subject = attendances[0] && attendances[0].SUBJECT_CODE),
+      ),
+      tap(data => console.log(data)),
+      share(),
+    );
+    this.attendancePercent$ = this.ws
+      .get<Attendance[]>(url, true, {returnError: true})
+      .pipe(
+        map(aa => {
+          if (aa.length > 0) {
+            let totalClasses = aa.reduce((a, b) => a + b.TOTAL_CLASSES, 0);
+            let totalAbsentClasses = aa.reduce((a, b) => a + b.TOTAL_ABSENT, 0);
+            let totalAttendedClasses = totalClasses - totalAbsentClasses;
+            return totalAttendedClasses / totalClasses
+          } else {
+            return -1 // -1 means there is no attendance data in the selected intake 
+          }
+        }),
+        catchError(err => {
+          return of(-1)
+        })
+      );
+  }
+
+
+  // APCARD
+  balance$: Observable<number>;
+  getAPCardBalance() {
+    return this.ws
+      .get<Apcard[]>('/apcard/', true)
+      .pipe(
+        map((transactions) => {
+          if (transactions.length > 0) {
+            return (transactions[0] || ({} as Apcard)).Balance;
+          }
+          return -1;
+        }),
+      );
   }
 
   apcardChartData = {
@@ -120,47 +349,6 @@ export class StudentDashboardPage implements OnInit {
       },
     ],
   };
-  apcardChartType = 'line';
-  apcardChartOptions = [
-    {
-      legend: {
-        display: true,
-        position: 'right',
-      },
-    },
-    {
-      legend: {
-        display: false,
-      },
-      scales: {
-        xAxes: [
-          {
-            ticks: {
-              beginAtZero: true,
-              max: 4,
-            },
-          },
-        ],
-      },
-    },
-  ]
-
-  // CGPA
-  cgpaCardConfigurations: DashboardCardComponentConfigurations = {
-    withOptionsButton: false,
-    cardTitle: "CGPA Per Intake",
-    cardSubtitle: 'Overall: 3.9',
-    contentPadding: true
-  }
-
-  createCgpaChart() {
-    const ctx = this.cgpaChart.nativeElement.getContext('2d');
-    const cgpaChart = new Chart(ctx, {
-      type: this.cgpaChartType,
-      options: this.cgpaChartOptions,
-      data: this.cgpaChartData
-    });
-  }
 
   cgpaChartData = {
     labels: [
@@ -174,53 +362,6 @@ export class StudentDashboardPage implements OnInit {
         backgroundColor: ["rgb(255,0,0,0.3)", "rgba(0,255,0,0.3)", "rgba(0,0,255,0.3)"],
       }]
   };
-  cgpaChartType = 'horizontalBar';
-
-  cgpaChartOptions = {
-    scales: {
-      xAxes: [{
-        ticks: {
-          min: 0,
-          max: 4
-        }
-      },
-      ],
-      yAxes: [{
-        gridLines: {
-          color: "rgba(0, 0, 0, 0)",
-        },
-        ticks: {
-          beginAtZero: true,
-          mirror: true,
-          padding: -10
-        },
-      }]
-    },
-    responsive: true,
-    legend: {
-      display: false,
-    },
-    title: {
-      display: false,
-    },
-  }
-
-  // FINANCIALS
-  financialsCardConfigurations: DashboardCardComponentConfigurations = {
-    withOptionsButton: false,
-    cardTitle: "Financials:",
-    cardSubtitle: 'Overdue: RM5000',
-    contentPadding: true
-  }
-
-  createFinancialsChart() {
-    const ctx = this.financialsChart.nativeElement.getContext('2d');
-    const financialsChart = new Chart(ctx, {
-      type: this.financialsChartType,
-      options: this.financialsChartOptions,
-      data: this.financialsChartData
-    });
-  }
 
   financialsChartData = {
     labels: ['Financial Status'],
@@ -242,31 +383,6 @@ export class StudentDashboardPage implements OnInit {
       }
     ]
   };
-  financialsChartType = 'bar';
-
-  financialsChartOptions = {
-    scales: {
-      xAxes: [{ stacked: true }],
-      yAxes: [{ stacked: true }]
-    }
-  }
-
-  // LOW ATTENDANCE
-  lowAttendanceCardConfigurations: DashboardCardComponentConfigurations = {
-    withOptionsButton: false,
-    cardTitle: "Low Attendance:",
-    cardSubtitle: 'Overall: 80%',
-    contentPadding: true
-  }
-
-  createLowAttendanceChart() {
-    const ctx = this.lowAttendanceChart.nativeElement.getContext('2d');
-    const lowAttendanceChart = new Chart(ctx, {
-      type: this.lowAttendanceChartType,
-      options: this.lowAttendanceChartOptions,
-      data: this.lowAttendanceChartData
-    });
-  }
 
   lowAttendanceChartData = {
     labels: [
@@ -280,36 +396,6 @@ export class StudentDashboardPage implements OnInit {
         backgroundColor: ["rgb(255,0,0,0.3)", "rgba(0,255,0,0.3)", "rgba(0,0,255,0.3)"],
       }]
   };
-  lowAttendanceChartType = 'horizontalBar';
-
-  lowAttendanceChartOptions = {
-    scales: {
-      xAxes: [{
-        ticks: {
-          min: 0,
-          max: 80
-        }
-      },
-      ],
-      yAxes: [{
-        gridLines: {
-          color: "rgba(0, 0, 0, 0)",
-        },
-        ticks: {
-          beginAtZero: true,
-          mirror: true,
-          padding: -10
-        },
-      }]
-    },
-    responsive: true,
-    legend: {
-      display: false,
-    },
-    title: {
-      display: false,
-    },
-  }
 
   testCallBack() {
     console.log('callback working');
