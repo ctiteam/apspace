@@ -37,6 +37,10 @@ const routes: Routes = [
   },
   { path: 'staff', loadChildren: './pages/staff-directory-info/staff-directory-info.module#StaffDirectoryInfoPageModule' },
   {
+    path: 'feedback',
+    loadChildren: './pages/feedback/feedback.module#FeedbackPageModule'
+  },
+  {
     path: 'attendix-lecturer',
     // canActivate: [AuthGuard],
     children: [
@@ -50,7 +54,23 @@ const routes: Routes = [
     path: 'feedback',
     loadChildren: './pages/feedback/feedback.module#FeedbackPageModule'
   },
-  { path: 'bus-tracking', loadChildren: './pages/bus-tracking/bus-tracking.module#BusTrackingPageModule' }
+  {
+    path: 'bus-tracking',
+    loadChildren: './pages/bus-tracking/bus-tracking.module#BusTrackingPageModule'
+  },
+  {
+    path: 'attendix-student',
+    // canActivate: [AuthGuard],
+    children: [
+      { path: 'qr-code', loadChildren: './pages/attendix/attendix-student/qr-code/qr-code.module#QrCodePageModule' },
+      { path: 'qr-otp', loadChildren: './pages/attendix/attendix-student/qr-otp/qr-otp.module#QrOtpPageModule' },
+      { path: 'take-picture', loadChildren: './pages/attendix/attendix-student/take-picture/take-picture.module#TakePicturePageModule' }
+    ]
+  },
+  {
+    path: 'more',
+    loadChildren: './pages/more/more.module#MorePageModule'
+  }
 ];
 
 @NgModule({
