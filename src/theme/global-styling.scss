@@ -28,25 +28,20 @@ p {
   float: left !important;
 }
 
-.text-bold{
+.text-bold {
   font-weight: 500 !important;
 }
 
-.small-text{
-  font-size: .6em !important;
-}
-
-.text-bolder{
+.text-bolder {
   font-weight: 700 !important;
 }
 
-.margin-top{
+.margin-top {
   margin-top: 16px !important;
 }
 
 /* 03. TEXT COLORS */
 /* ********************************************************************** */
-
 
 /* 04. OVERRIDE DEFAULT SETTINGS FOR BROWSER & FRAMEWORK */
 /* ********************************************************************** */
@@ -65,4 +60,16 @@ input:-webkit-autofill:active {
 .swiper-pagination {
   position: relative !important;
   bottom: 5px !important;
+}
+
+.ios {
+  .small-text {
+    font-size: 0.4em !important;
+  }
+}
+
+.md {
+  .small-text {
+    font-size: 0.6em !important;
+  }
 }
