@@ -79,32 +79,19 @@
 
                 <!-- THIRD QUICK ACCESS ITEM: ATTENDANCE -->
                 <ion-col>
-                  <quick-access-item icon="alarm" titleFirstWord='Overall' titleSecondWord='Attendance'>
-                    <span *ngIf="(attendancePercent$ | async) as attendancePercentage; else attendancePercentLoading">
-                      <span *ngIf="attendancePercentage != -1; else noAttendanceData">
-                        {{(attendancePercentage * 100 | number: "1.0-1") + "%"}}
-                      </span>
-                      <ng-template #noAttendanceData>
-                        --
-                      </ng-template>
-                    </span>
-                    <ng-template #attendancePercentLoading>
-                      loading
-                    </ng-template>
+                  <quick-access-item icon="alarm" titleFirstWord='Overall' titleSecondWord='Attendance' [observable$]='attendancePercent$' outputMode='percentage'>
                   </quick-access-item>
                 </ion-col>
 
                 <!-- FIRST QUICK ACCESS ITEM: APCARD BALANCE -->
                 <ion-col>
-                  <quick-access-item icon="card" titleFirstWord='APCard' titleSecondWord='Balance'>
-                    <span>RM500.99</span>
+                  <quick-access-item icon="card" titleFirstWord='APCard' titleSecondWord='Balance' [observable$]='balance$' outputMode='currency'>
                   </quick-access-item>
                 </ion-col>
 
                 <!-- SECOND QUICK ACCESS ITEM: TOTAL OVERDUE -->
                 <ion-col>
-                  <quick-access-item icon="logo-usd" titleFirstWord='Total' titleSecondWord='Overdue'>
-                    <span>RM5000</span>
+                  <quick-access-item icon="logo-usd" titleFirstWord='Total' titleSecondWord='Overdue' [observable$]="totalOverdue$" outputMode='currency'>
                   </quick-access-item>
                 </ion-col>
 

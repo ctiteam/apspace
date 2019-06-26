@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { EventComponentConfigurations, DashboardCardComponentConfigurations, Attendance, StudentProfile, Apcard } from 'src/app/interfaces';
+import { EventComponentConfigurations, DashboardCardComponentConfigurations, Attendance, StudentProfile, Apcard, FeesTotalSummary } from 'src/app/interfaces';
 import * as moment from 'moment';
 import { Chart } from 'chart.js';
 import { Observable, forkJoin, of, throwError } from 'rxjs';
@@ -33,7 +33,7 @@ export class StudentDashboardPage implements OnInit {
       // this.upcomingConsultation$ = this.getUpcomingConsultations(),
       // this.nextHoliday$ = this.getHolidays(Boolean(refresher)),
       this.balance$ = this.getAPCardBalance(),
-      // this.overdue$ = this.getOverdueFee(),
+      this.totalOverdue$ = this.getOverdueFee(),
     ).pipe(finalize(() => refresher && refresher.complete())).subscribe();
   }
 
@@ -260,7 +260,7 @@ export class StudentDashboardPage implements OnInit {
 
   // ATTENDANCE
   attendance$: Observable<Attendance[]>;
-  attendancePercent$: Observable<number>;
+  attendancePercent$: Observable<{ value: number }>;
   subject: string;
   getAttendance(intake: string) {
     const url = `/student/attendance?intake=${intake}`;
@@ -283,36 +283,36 @@ export class StudentDashboardPage implements OnInit {
       share(),
     );
     this.attendancePercent$ = this.ws
-      .get<Attendance[]>(url, true, {returnError: true})
+      .get<Attendance[]>(url, true, { returnError: true })
       .pipe(
         map(aa => {
           if (aa.length > 0) {
             let totalClasses = aa.reduce((a, b) => a + b.TOTAL_CLASSES, 0);
             let totalAbsentClasses = aa.reduce((a, b) => a + b.TOTAL_ABSENT, 0);
             let totalAttendedClasses = totalClasses - totalAbsentClasses;
-            return totalAttendedClasses / totalClasses
+            return { value: totalAttendedClasses / totalClasses }
           } else {
-            return -1 // -1 means there is no attendance data in the selected intake 
+            return { value: -1 } // -1 means there is no attendance data in the selected intake 
           }
         }),
         catchError(err => {
-          return of(-1)
+          return of({ value: -1 })
         })
       );
   }
 
 
   // APCARD
-  balance$: Observable<number>;
+  balance$: Observable<{ value: number }>;
   getAPCardBalance() {
     return this.ws
       .get<Apcard[]>('/apcard/', true)
       .pipe(
         map((transactions) => {
           if (transactions.length > 0) {
-            return (transactions[0] || ({} as Apcard)).Balance;
+            return { value: (transactions[0] || ({} as Apcard)).Balance };
           }
-          return -1;
+          return { value: -1 };
         }),
       );
   }
@@ -349,6 +349,44 @@ export class StudentDashboardPage implements OnInit {
       },
     ],
   };
+
+  // FEES
+  totalOverdue$: Observable<{ value: number }>;
+  getOverdueFee() {
+    return this.ws.get<FeesTotalSummary[]>(
+      '/student/summary_overall_fee',
+      true,
+      { returnError: true }
+    ).pipe(
+      map((overdueSummary) => {
+        return { value: overdueSummary[0].TOTAL_OVERDUE }
+      }),
+      tap(t => console.log(t)),
+      catchError(err => {
+        return of({ value: -1 });
+      })
+    )
+  }
+
+  // return this.ws
+  // .get<Apcard[]>('/apcard/', true)
+  // .pipe(
+  //   map((transactions) => {
+  //     if (transactions.length > 0) {
+  //       return (transactions[0] || ({} as Apcard)).Balance;
+  //     }
+  //     return -1;
+  //   }),
+  // );
+
+
+
+
+
+
+
+
+
 
   cgpaChartData = {
     labels: [
