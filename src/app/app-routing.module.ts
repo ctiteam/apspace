@@ -49,7 +49,8 @@ const routes: Routes = [
   {
     path: 'feedback',
     loadChildren: './pages/feedback/feedback.module#FeedbackPageModule'
-  }
+  },
+  { path: 'bus-tracking', loadChildren: './pages/bus-tracking/bus-tracking.module#BusTrackingPageModule' }
 ];
 
 @NgModule({
