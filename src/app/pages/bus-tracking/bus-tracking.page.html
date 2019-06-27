@@ -5,34 +5,41 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-card no-margin>
-    <ion-card-header>
-      <ion-card-title class="card-title float-left" style="width: 90%">
-        <h5 class="small-text">Next in: 1 hrs, 23 min</h5>
-        <h3 class="responsive-h1">Fortune Park</h3>
-      </ion-card-title>
-      <div class="card-options-icon float-left" style="width: 10%" text-right>
-        <a>
-          <ion-icon name="md-more" class="responsive-icon"></ion-icon>
-        </a>
-      </div>
-      <div class="clearfix"></div>
-    </ion-card-header>
-    <ion-card-content no-padding>
-      <ion-grid>
-        <ion-row>
-          <ion-col size="3">10:30AM</ion-col>
-          <ion-col size="3">10:30AM</ion-col>
-          <ion-col size="3">10:30AM</ion-col>
-          <ion-col size="3">10:30AM</ion-col>
-          <ion-col size="3">10:30AM</ion-col>
-          <ion-col size="3">10:30AM</ion-col>
-          <ion-col size="3">10:30AM</ion-col>
-          <ion-col size="3">10:30AM</ion-col>
-          <ion-col size="3">10:30AM</ion-col>
-          <ion-col size="3">10:30AM</ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
+  <ion-grid no-padding>
+    <ion-row>
+      <ion-col size-md="6" no-padding>
+
+        <ion-card no-margin>
+          <ion-card-header>
+            <ion-card-title class="card-title float-left" style="width: 90%">
+              <h5 class="small-text">Next in: 1 hrs, 23 min</h5>
+              <h3 class="responsive-h1">Fortune Park</h3>
+            </ion-card-title>
+            <div class="card-options-icon float-left" style="width: 10%" text-right>
+              <a>
+                <ion-icon name="md-more" class="responsive-icon"></ion-icon>
+              </a>
+            </div>
+            <div class="clearfix"></div>
+          </ion-card-header>
+          <ion-card-content no-padding padding-bottom padding-start padding-end>
+            <ion-grid no-padding>
+              <ion-row>
+                <ion-col size="3">10:30AM</ion-col>
+                <ion-col size="3">10:30AM</ion-col>
+                <ion-col size="3">10:30AM</ion-col>
+                <ion-col size="3">10:30AM</ion-col>
+                <ion-col size="3">10:30AM</ion-col>
+                <ion-col size="3">10:30AM</ion-col>
+                <ion-col size="3">10:30AM</ion-col>
+                <ion-col size="3">10:30AM</ion-col>
+                <ion-col size="3">10:30AM</ion-col>
+                <ion-col size="3">10:30AM</ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
