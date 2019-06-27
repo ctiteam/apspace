@@ -46,7 +46,7 @@ export class TabsPage {
     },
     {
       name: 'APCard',
-      path: '',
+      path: 'apcard',
       icon: 'card'
     },
     {

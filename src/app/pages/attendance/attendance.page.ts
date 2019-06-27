@@ -60,7 +60,7 @@ export class AttendancePage implements OnInit {
           },
         } as ActionSheetButton;
       });
-
+      
       this.actionSheetCtrl.create({
         buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }],
       }).then(

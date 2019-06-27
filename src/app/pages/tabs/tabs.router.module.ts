@@ -24,6 +24,10 @@ const routes: Routes = [
       {
         path: 'attendance',
         loadChildren: '../attendance/attendance.module#AttendancePageModule'
+      },
+      {
+        path: 'apcard',
+        loadChildren: '../apcard/apcard.module#ApcardPageModule'
       }
     ]
   }
