@@ -9,7 +9,6 @@ import { IonicModule } from '@ionic/angular';
 import { StudentDashboardPage } from './student-dashboard.page';
 import { ComponentsModule } from 'src/app/components/components.module';
 
-
 const routes: Routes = [
   {
     path: '',
@@ -31,4 +30,4 @@ const routes: Routes = [
   ],
   entryComponents: []
 })
-export class StudentDashboardPageModule {}
+export class StudentDashboardPageModule { }

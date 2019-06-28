@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'src/app/interfaces/menu-item';
 import { trigger, state, transition, keyframes, animate, style } from '@angular/animations';
@@ -26,7 +26,7 @@ import { trigger, state, transition, keyframes, animate, style } from '@angular/
   ]
 })
 
-export class TabsPage {
+export class TabsPage implements OnInit {
   selectedTab = 'student-dashboard';
   tabs: MenuItem[] = [
     {
@@ -56,13 +56,13 @@ export class TabsPage {
     }
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   tabChanged($event) {
     this.selectedTab = $event.tab;
   }
 
   ngOnInit() {
-    this.selectedTab = this.router.url.split("/").pop();
+    this.selectedTab = this.router.url.split('/').pop();
   }
 }

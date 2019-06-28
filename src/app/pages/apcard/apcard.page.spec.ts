@@ -9,16 +9,16 @@ describe('ApcardPage', () => {
   let fixture: ComponentFixture<ApcardPage>;
 
   beforeEach(async(() => {
-    const ws = jasmine.createSpyObj("WsApiService", []);
+    const ws = jasmine.createSpyObj('WsApiService', []);
 
     TestBed.configureTestingModule({
-      declarations: [ ApcardPage ],
+      declarations: [ApcardPage],
       providers: [
         { provide: WsApiService, useValue: ws }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

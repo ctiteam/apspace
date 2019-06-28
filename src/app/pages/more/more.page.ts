@@ -26,7 +26,7 @@ export class MorePage {
   openExternalPage(pageUrl: string, auth = true) {
     if (auth) {
       this.cas.getST(this.kbUrl).subscribe(st => {
-        this.iab.create(`${pageUrl}?ticket=${st}`, '_blank', 'location=true')
+        this.iab.create(`${pageUrl}?ticket=${st}`, '_blank', 'location=true');
       });
     } else {
       this.iab.create(`${pageUrl}`, '_blank', 'location=true');

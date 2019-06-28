@@ -9,10 +9,10 @@ describe('StudentTimetablePage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StudentTimetablePage ],
+      declarations: [StudentTimetablePage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

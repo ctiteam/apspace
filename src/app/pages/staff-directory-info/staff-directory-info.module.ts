@@ -24,4 +24,4 @@ const routes: Routes = [
   ],
   declarations: [StaffDirectoryInfoPage, UrldecodePipe]
 })
-export class StaffDirectoryInfoPageModule {}
+export class StaffDirectoryInfoPageModule { }

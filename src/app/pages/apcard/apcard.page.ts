@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';  
-import { Observable } from "rxjs";
-import { finalize, map, tap } from "rxjs/operators";
-import { Apcard } from "../../interfaces";
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { finalize, map, tap } from 'rxjs/operators';
+import { Apcard } from '../../interfaces';
 import { WsApiService } from 'src/app/services';
 
 @Component({
@@ -11,7 +11,7 @@ import { WsApiService } from 'src/app/services';
 })
 export class ApcardPage implements OnInit {
   transaction$: Observable<Apcard[]>;
-  filterEntry: string = "";
+  filterEntry = '';
   balance: number;
   monthly: number;
   monthlyTransactions: any;
@@ -41,15 +41,16 @@ export class ApcardPage implements OnInit {
     const a = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     this.monthlyData = transactions.reduce(
       (tt, transaction) => {
-        const c = transaction.SpendVal < 0 ? "dr" : "cr"; // classify spent type
+        const c = transaction.SpendVal < 0 ? 'dr' : 'cr'; // classify spent type
         const d = new Date(transaction.SpendDate);
-        d.getFullYear() in tt[c] || (tt[c][d.getFullYear()] = a.slice());
+        if (!d.getFullYear() in tt[c]) {
+          tt[c][d.getFullYear()] = a.slice();
+        }
         tt[c][d.getFullYear()][d.getMonth()] += Math.abs(transaction.SpendVal);
 
         return tt;
         // default array with current year
-      },
-      {
+      }, {
         dr: { [now.getFullYear()]: a.slice() },
         cr: { [now.getFullYear()]: a.slice() }
       }
@@ -59,7 +60,7 @@ export class ApcardPage implements OnInit {
       (acc: { [s: string]: Apcard[] }, transaction: Apcard) => {
         const spendDate = new Date(transaction.SpendDate);
         const key = `${spendDate.getMonth()}, ${spendDate.getFullYear()}`;
-        
+
         acc[key] = acc[key] || [];
         acc[key].push(transaction);
 
@@ -75,7 +76,7 @@ export class ApcardPage implements OnInit {
   /** Negate spend value for top ups. */
   signTransactions(transactions: Apcard[]): Apcard[] {
     transactions.forEach(transaction => {
-      if (transaction.ItemName !== "Top Up") {
+      if (transaction.ItemName !== 'Top Up') {
         transaction.SpendVal *= -1;
       }
     });
@@ -85,8 +86,8 @@ export class ApcardPage implements OnInit {
   getTransactionsYears() {
     this.transactonsYears = [];
     this.transactionsMonths = [];
-    let firstTransactionYear = Object.keys(this.monthlyData.cr)[0];
-    let currentYear = new Date().getFullYear();
+    const firstTransactionYear = Object.keys(this.monthlyData.cr)[0];
+    const currentYear = new Date().getFullYear();
     for (let year = currentYear; year >= +firstTransactionYear; year--) {
       this.transactonsYears.push(year.toString());
     }
@@ -96,16 +97,17 @@ export class ApcardPage implements OnInit {
   }
 
   isEmpty(object: {}) {
-    for (var key in object) {
-      if (object.hasOwnProperty(key))
+    for (const key in object) {
+      if (object.hasOwnProperty(key)) {
         return false;
+      }
     }
     return true;
   }
 
   doRefresh(event?) {
     this.isLoading = true;
-    this.transaction$ = this.ws.get<Apcard[]>("/apcard/", true).pipe(
+    this.transaction$ = this.ws.get<Apcard[]>('/apcard/', true).pipe(
       map(t => this.signTransactions(t)),
       tap(t => this.analyzeTransactions(t)),
       tap(t => this.getTransactionsYears()),

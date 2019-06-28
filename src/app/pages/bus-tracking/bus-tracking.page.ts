@@ -29,11 +29,11 @@ export class BusTrackingPage implements OnInit {
     ).subscribe();
   }
 
-  getLocations(refresher?){
+  getLocations(refresher?) {
     this.busService.getLocationDetails().pipe(
       map(res => res.locations),
       tap(d => console.log(d)),
-    ).subscribe()
+    ).subscribe();
   }
 
 }

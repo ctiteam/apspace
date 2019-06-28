@@ -20,7 +20,7 @@ const routes: Routes = [
     loadChildren: './pages/tabs/tabs.module#TabsPageModule',
     canActivate: [AuthGuard]
   },
-  
+
   {
     path: 'student-timetable',
     loadChildren: './pages/student-timetable/student-timetable.module#StudentTimetablePageModule'
@@ -44,8 +44,16 @@ const routes: Routes = [
     path: 'attendix-lecturer',
     // canActivate: [AuthGuard],
     children: [
-      { path: 'classes', loadChildren: './pages/attendix/attendix-lecturer/classes/classes.module#ClassesPageModule' },
-      { path: 'take-attendance', loadChildren: './pages/attendix/attendix-lecturer/take-attendance/take-attendance.module#TakeAttendancePageModule' },
+      {
+        path: 'classes',
+        loadChildren:
+          './pages/attendix/attendix-lecturer/classes/classes.module#ClassesPageModule'
+      },
+      {
+        path: 'take-attendance',
+        loadChildren:
+          './pages/attendix/attendix-lecturer/take-attendance/take-attendance.module#TakeAttendancePageModule'
+      },
       // { path: 'qr-otp', loadChildren: './pages/attendix/qr-otp/qr-otp.module#QrOtpPageModule' },
       // { path: 'take-picture', loadChildren: './pages/attendix/take-picture/take-picture.module#TakePicturePageModule' },
     ]
@@ -62,9 +70,18 @@ const routes: Routes = [
     path: 'attendix-student',
     // canActivate: [AuthGuard],
     children: [
-      { path: 'qr-code', loadChildren: './pages/attendix/attendix-student/qr-code/qr-code.module#QrCodePageModule' },
-      { path: 'qr-otp', loadChildren: './pages/attendix/attendix-student/qr-otp/qr-otp.module#QrOtpPageModule' },
-      { path: 'take-picture', loadChildren: './pages/attendix/attendix-student/take-picture/take-picture.module#TakePicturePageModule' }
+      {
+        path: 'qr-code',
+        loadChildren: './pages/attendix/attendix-student/qr-code/qr-code.module#QrCodePageModule'
+      },
+      {
+        path: 'qr-otp',
+        loadChildren: './pages/attendix/attendix-student/qr-otp/qr-otp.module#QrOtpPageModule'
+      },
+      {
+        path: 'take-picture',
+        loadChildren: './pages/attendix/attendix-student/take-picture/take-picture.module#TakePicturePageModule'
+      }
     ]
   },
   {

@@ -16,8 +16,8 @@ export class ClassesPage implements OnInit {
     this.params = this.route.snapshot.params;
   }
 
-  editClass() {}
+  editClass() { }
 
-  takeAttendance() {}
+  takeAttendance() { }
 
 }

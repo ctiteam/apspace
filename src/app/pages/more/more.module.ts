@@ -27,4 +27,4 @@ const routes: Routes = [
   ],
   declarations: [MorePage]
 })
-export class MorePageModule {}
+export class MorePageModule { }

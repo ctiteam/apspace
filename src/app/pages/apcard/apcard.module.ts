@@ -23,4 +23,4 @@ const routes: Routes = [
   ],
   declarations: [ApcardPage]
 })
-export class ApcardPageModule {}
+export class ApcardPageModule { }

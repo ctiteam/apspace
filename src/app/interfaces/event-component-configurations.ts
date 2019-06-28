@@ -1,14 +1,14 @@
 export interface EventComponentConfigurations {
-    title?: string,
-    color: string,
-    pass: boolean,
-    type: string,
-    primaryDateTime?: string,
-    secondaryDateTime?: string,
-    quaternaryDateTime?: string,
-    firstDescription?: string,
-    secondDescription?: string,
-    thirdDescription?: string
+  title?: string;
+  color: string;
+  pass: boolean;
+  type: string;
+  primaryDateTime?: string;
+  secondaryDateTime?: string;
+  quaternaryDateTime?: string;
+  firstDescription?: string;
+  secondDescription?: string;
+  thirdDescription?: string;
 }
 
 /*

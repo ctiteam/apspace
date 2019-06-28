@@ -8,7 +8,7 @@ import { EventComponentConfigurations } from 'src/app/interfaces';
 })
 export class EventsListComponent implements OnInit {
   @Input() eventsInput: EventComponentConfigurations[];
-  events: {}[]
+  events: {}[];
 
   ngOnInit() {
     this.events = this.eventsInput;

@@ -9,16 +9,16 @@ describe('AttendancePage', () => {
   let fixture: ComponentFixture<AttendancePage>;
 
   beforeEach(async(() => {
-  const ws = jasmine.createSpyObj("WsApiService", []);
+    const ws = jasmine.createSpyObj('WsApiService', []);
 
     TestBed.configureTestingModule({
-      declarations: [ AttendancePage ],
+      declarations: [AttendancePage],
       providers: [
         { provide: WsApiService, useValue: ws }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

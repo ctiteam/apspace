@@ -13,7 +13,7 @@ export class BusTrackingService {
   busTrackingUrl = 'https://api.apiit.edu.my/transix';
   url = `${this.busTrackingUrl}/locations`;
 
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient) { }
 
   /**
    * GET: Request bus trips

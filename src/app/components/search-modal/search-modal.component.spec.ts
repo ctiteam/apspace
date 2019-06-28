@@ -14,13 +14,13 @@ describe('SearchModalComponent', () => {
     modalControllerSpy = jasmine.createSpyObj('ModalController', ['dismiss']);
 
     TestBed.configureTestingModule({
-      declarations: [ SearchModalComponent ],
+      declarations: [SearchModalComponent],
       providers: [
         { provide: ModalController, useValue: modalControllerSpy },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { EventComponentConfigurations, DashboardCardComponentConfigurations, Attendance, StudentProfile, Apcard, FeesTotalSummary } from 'src/app/interfaces';
+import {
+  EventComponentConfigurations, DashboardCardComponentConfigurations,
+  Attendance, StudentProfile, Apcard, FeesTotalSummary
+} from 'src/app/interfaces';
 import * as moment from 'moment';
 import { Chart } from 'chart.js';
 import { Observable, forkJoin, of, throwError } from 'rxjs';
@@ -15,27 +18,6 @@ export class StudentDashboardPage implements OnInit {
   constructor(
     private ws: WsApiService
   ) { }
-
-  ngOnInit() {
-    this.doRefresh();
-    this.createChart(this.apcardChart, this.apcardChartType, this.apcardChartOptions, this.apcardChartData);
-    this.createChart(this.cgpaChart, this.cgpaChartType, this.cgpaChartOptions, this.cgpaChartData);
-    this.createChart(this.financialsChart, this.financialsChartType, this.financialsChartOptions, this.financialsChartData);
-    this.createChart(this.lowAttendanceChart, this.lowAttendanceChartType, this.lowAttendanceChartOptions, this.lowAttendanceChartData);
-  }
-
-  doRefresh(refresher?) {
-    this.displayGreetingMessage();
-    // this.profile$ = this.ws.get<StudentProfile>('/student/profile');
-    // this.apcardTransaction$ = this.getTransactions();
-    forkJoin(
-      this.getProfile(),
-      // this.upcomingConsultation$ = this.getUpcomingConsultations(),
-      // this.nextHoliday$ = this.getHolidays(Boolean(refresher)),
-      this.balance$ = this.getAPCardBalance(),
-      this.totalOverdue$ = this.getOverdueFee(),
-    ).pipe(finalize(() => refresher && refresher.complete())).subscribe();
-  }
 
   // ALERTS SLIDER OPTIONS
   alertSliderOptions = {
@@ -94,7 +76,7 @@ export class StudentDashboardPage implements OnInit {
       ],
       yAxes: [{
         gridLines: {
-          color: "rgba(0, 0, 0, 0)",
+          color: 'rgba(0, 0, 0, 0)',
         },
         ticks: {
           beginAtZero: true,
@@ -130,7 +112,7 @@ export class StudentDashboardPage implements OnInit {
       ],
       yAxes: [{
         gridLines: {
-          color: "rgba(0, 0, 0, 0)",
+          color: 'rgba(0, 0, 0, 0)',
         },
         ticks: {
           beginAtZero: true,
@@ -148,16 +130,6 @@ export class StudentDashboardPage implements OnInit {
     },
   };
 
-  // CREATING CHARTS METHOD:
-  createChart(elementRef: ElementRef, chartType: string, chartOptions: {}[] | {}, chartData: any) {
-    const ctx = elementRef.nativeElement.getContext('2d');
-    const chartToCreate = new Chart(ctx, {
-      type: chartType,
-      options: chartOptions,
-      data: chartData
-    });
-  }
-
   // DASHBOARD CARDS CONFIGURATIONS:
   todaysScheduleCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: true,
@@ -173,9 +145,9 @@ export class StudentDashboardPage implements OnInit {
         callbackFunction: this.testCallBack
       }
     ],
-    cardTitle: "Today's Schedule",
+    cardTitle: 'Today\'s Schedule',
     cardSubtitle: 'Next in: 1 hrs, 25 min'
-  }
+  };
 
   upcomingEventsCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: true,
@@ -191,131 +163,51 @@ export class StudentDashboardPage implements OnInit {
         callbackFunction: this.testCallBack
       }
     ],
-    cardTitle: "Upcoming Events",
-    cardSubtitle: 'Today: ' + moment().format("DD MMMM YYYY")
-  }
+    cardTitle: 'Upcoming Events',
+    cardSubtitle: 'Today: ' + moment().format('DD MMMM YYYY')
+  };
 
   apcardTransactionsCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
-    cardTitle: "APCard Transactions",
+    cardTitle: 'APCard Transactions',
     cardSubtitle: 'Balance: RM500.99',
     contentPadding: true
-  }
+  };
 
   financialsCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
-    cardTitle: "Financials:",
+    cardTitle: 'Financials:',
     cardSubtitle: 'Overdue: RM5000',
     contentPadding: true
-  }
+  };
 
   cgpaCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
-    cardTitle: "CGPA Per Intake",
+    cardTitle: 'CGPA Per Intake',
     cardSubtitle: 'Overall: 3.9',
     contentPadding: true
-  }
+  };
 
   lowAttendanceCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
-    cardTitle: "Low Attendance:",
+    cardTitle: 'Low Attendance:',
     cardSubtitle: 'Overall: 80%',
     contentPadding: true
-  }
+  };
 
   // PROFILE
   greetingMessage = '';
   defaultIntake = '';
   studentFirstName = '';
-  block: boolean = false;
-  getProfile() {
-    return this.ws.get<StudentProfile>('/student/profile').pipe(
-      tap(data => console.log(data)),
-      // tap(studentProfile => {
-      //   if (studentProfile.BLOCK === true) {
-      //     this.block = false;
-      //     this.getGPA();
-      //   } else {
-      //     this.block = true;
-      //   }
-      // }),
-      tap(studentProfile => this.studentFirstName = studentProfile.NAME.split(' ')[0]),
-      tap(studentProfile => this.defaultIntake = studentProfile.INTAKE),
-      // tap(studentProfile => this.getUpcomingClasses(studentProfile.INTAKE)),
-      tap(studentProfile => this.getAttendance(studentProfile.INTAKE)),
-      // tap(studentProfile => this.getUpcomingExam(studentProfile.INTAKE)),
-    );
-  }
-
-  displayGreetingMessage() {
-    const hoursNow = new Date().getHours();
-    if (hoursNow < 12) {
-      this.greetingMessage = 'Good morning';
-    } else if (hoursNow >= 12 && hoursNow <= 18) {
-      this.greetingMessage = 'Good afternoon';
-    } else {
-      this.greetingMessage = 'Good evening';
-    }
-  }
+  block = false;
 
   // ATTENDANCE
   attendance$: Observable<Attendance[]>;
   attendancePercent$: Observable<{ value: number }>;
   subject: string;
-  getAttendance(intake: string) {
-    const url = `/student/attendance?intake=${intake}`;
-    this.attendance$ = this.ws.get<Attendance[]>(url, true).pipe(
-      map(attendances => {
-        const currentSemester = Math.max(
-          ...attendances.map(attendance => attendance.SEMESTER),
-        );
-        return (attendances || []).filter(
-          attendance =>
-            attendance.SEMESTER === currentSemester &&
-            attendance.PERCENTAGE < 80,
-        );
-      }),
-      tap(
-        attendances =>
-          (this.subject = attendances[0] && attendances[0].SUBJECT_CODE),
-      ),
-      tap(data => console.log(data)),
-      share(),
-    );
-    this.attendancePercent$ = this.ws
-      .get<Attendance[]>(url, true, { returnError: true })
-      .pipe(
-        map(aa => {
-          if (aa.length > 0) {
-            let totalClasses = aa.reduce((a, b) => a + b.TOTAL_CLASSES, 0);
-            let totalAbsentClasses = aa.reduce((a, b) => a + b.TOTAL_ABSENT, 0);
-            let totalAttendedClasses = totalClasses - totalAbsentClasses;
-            return { value: totalAttendedClasses / totalClasses }
-          } else {
-            return { value: -1 } // -1 means there is no attendance data in the selected intake 
-          }
-        }),
-        catchError(err => {
-          return of({ value: -1 })
-        })
-      );
-  }
-
 
   // APCARD
   balance$: Observable<{ value: number }>;
-  getAPCardBalance() {
-    return this.ws
-      .get<Apcard[]>('/apcard/', true)
-      .pipe(
-        map((transactions) => {
-          if (transactions.length > 0) {
-            return { value: (transactions[0] || ({} as Apcard)).Balance };
-          }
-          return { value: -1 };
-        }),
-      );
-  }
 
   apcardChartData = {
     labels: [
@@ -352,21 +244,6 @@ export class StudentDashboardPage implements OnInit {
 
   // FEES
   totalOverdue$: Observable<{ value: number }>;
-  getOverdueFee() {
-    return this.ws.get<FeesTotalSummary[]>(
-      '/student/summary_overall_fee',
-      true,
-      { returnError: true }
-    ).pipe(
-      map((overdueSummary) => {
-        return { value: overdueSummary[0].TOTAL_OVERDUE }
-      }),
-      tap(t => console.log(t)),
-      catchError(err => {
-        return of({ value: -1 });
-      })
-    )
-  }
 
   // return this.ws
   // .get<Apcard[]>('/apcard/', true)
@@ -379,25 +256,16 @@ export class StudentDashboardPage implements OnInit {
   //   }),
   // );
 
-
-
-
-
-
-
-
-
-
   cgpaChartData = {
     labels: [
-      "UC1F1506IT",
-      "UC2F1605IT(ISS)",
-      "UC3F1706IT(ISS)"
+      'UC1F1506IT',
+      'UC2F1605IT(ISS)',
+      'UC3F1706IT(ISS)'
     ],
     datasets: [
       {
         data: [3.8, 3.3, 3.5],
-        backgroundColor: ["rgb(255,0,0,0.3)", "rgba(0,255,0,0.3)", "rgba(0,0,255,0.3)"],
+        backgroundColor: ['rgb(255,0,0,0.3)', 'rgba(0,255,0,0.3)', 'rgba(0,0,255,0.3)'],
       }]
   };
 
@@ -424,20 +292,16 @@ export class StudentDashboardPage implements OnInit {
 
   lowAttendanceChartData = {
     labels: [
-      "Introductions to Management",
-      "Computing and IT in Workplace",
-      "Designing and Developing applications on the cloud"
+      'Introductions to Management',
+      'Computing and IT in Workplace',
+      'Designing and Developing applications on the cloud'
     ],
     datasets: [
       {
         data: [65, 71, 38],
-        backgroundColor: ["rgb(255,0,0,0.3)", "rgba(0,255,0,0.3)", "rgba(0,0,255,0.3)"],
+        backgroundColor: ['rgb(255,0,0,0.3)', 'rgba(0,255,0,0.3)', 'rgba(0,0,255,0.3)'],
       }]
   };
-
-  testCallBack() {
-    console.log('callback working');
-  }
 
   // TO BE DELETED (MOCK DATA)
   todaysSchedule: EventComponentConfigurations[] = [{
@@ -537,4 +401,133 @@ export class StudentDashboardPage implements OnInit {
     pass: false
   },
   ];
+
+  ngOnInit() {
+    this.doRefresh();
+    this.createChart(this.apcardChart, this.apcardChartType, this.apcardChartOptions, this.apcardChartData);
+    this.createChart(this.cgpaChart, this.cgpaChartType, this.cgpaChartOptions, this.cgpaChartData);
+    this.createChart(this.financialsChart, this.financialsChartType, this.financialsChartOptions, this.financialsChartData);
+    this.createChart(this.lowAttendanceChart, this.lowAttendanceChartType, this.lowAttendanceChartOptions, this.lowAttendanceChartData);
+  }
+
+  doRefresh(refresher?) {
+    this.displayGreetingMessage();
+    // this.profile$ = this.ws.get<StudentProfile>('/student/profile');
+    // this.apcardTransaction$ = this.getTransactions();
+    forkJoin(
+      this.getProfile(),
+      // this.upcomingConsultation$ = this.getUpcomingConsultations(),
+      // this.nextHoliday$ = this.getHolidays(Boolean(refresher)),
+      this.balance$ = this.getAPCardBalance(),
+      this.totalOverdue$ = this.getOverdueFee(),
+    ).pipe(finalize(() => refresher && refresher.complete())).subscribe();
+  }
+
+  // CREATING CHARTS METHOD:
+  createChart(elementRef: ElementRef, chartType: string, chartOptions: {}[] | {}, chartData: any) {
+    const ctx = elementRef.nativeElement.getContext('2d');
+    const chartToCreate = new Chart(ctx, {
+      type: chartType,
+      options: chartOptions,
+      data: chartData
+    });
+  }
+  getProfile() {
+    return this.ws.get<StudentProfile>('/student/profile').pipe(
+      tap(data => console.log(data)),
+      // tap(studentProfile => {
+      //   if (studentProfile.BLOCK === true) {
+      //     this.block = false;
+      //     this.getGPA();
+      //   } else {
+      //     this.block = true;
+      //   }
+      // }),
+      tap(studentProfile => this.studentFirstName = studentProfile.NAME.split(' ')[0]),
+      tap(studentProfile => this.defaultIntake = studentProfile.INTAKE),
+      // tap(studentProfile => this.getUpcomingClasses(studentProfile.INTAKE)),
+      tap(studentProfile => this.getAttendance(studentProfile.INTAKE)),
+      // tap(studentProfile => this.getUpcomingExam(studentProfile.INTAKE)),
+    );
+  }
+
+  displayGreetingMessage() {
+    const hoursNow = new Date().getHours();
+    if (hoursNow < 12) {
+      this.greetingMessage = 'Good morning';
+    } else if (hoursNow >= 12 && hoursNow <= 18) {
+      this.greetingMessage = 'Good afternoon';
+    } else {
+      this.greetingMessage = 'Good evening';
+    }
+  }
+  getAttendance(intake: string) {
+    const url = `/student/attendance?intake=${intake}`;
+    this.attendance$ = this.ws.get<Attendance[]>(url, true).pipe(
+      map(attendances => {
+        const currentSemester = Math.max(
+          ...attendances.map(attendance => attendance.SEMESTER),
+        );
+        return (attendances || []).filter(
+          attendance =>
+            attendance.SEMESTER === currentSemester &&
+            attendance.PERCENTAGE < 80,
+        );
+      }),
+      tap(
+        attendances =>
+          (this.subject = attendances[0] && attendances[0].SUBJECT_CODE),
+      ),
+      tap(data => console.log(data)),
+      share(),
+    );
+    this.attendancePercent$ = this.ws
+      .get<Attendance[]>(url, true, { returnError: true })
+      .pipe(
+        map(aa => {
+          if (aa.length > 0) {
+            const totalClasses = aa.reduce((a, b) => a + b.TOTAL_CLASSES, 0);
+            const totalAbsentClasses = aa.reduce((a, b) => a + b.TOTAL_ABSENT, 0);
+            const totalAttendedClasses = totalClasses - totalAbsentClasses;
+            return { value: totalAttendedClasses / totalClasses };
+          } else {
+            return { value: -1 }; // -1 means there is no attendance data in the selected intake
+          }
+        }),
+        catchError(err => {
+          return of({ value: -1 });
+        })
+      );
+  }
+  getAPCardBalance() {
+    return this.ws
+      .get<Apcard[]>('/apcard/', true)
+      .pipe(
+        map((transactions) => {
+          if (transactions.length > 0) {
+            return { value: (transactions[0] || ({} as Apcard)).Balance };
+          }
+          return { value: -1 };
+        }),
+    );
+  }
+  getOverdueFee() {
+    return this.ws.get<FeesTotalSummary[]>(
+      '/student/summary_overall_fee',
+      true,
+      { returnError: true }
+    ).pipe(
+      map((overdueSummary) => {
+        return { value: overdueSummary[0].TOTAL_OVERDUE };
+      }),
+      tap(t => console.log(t)),
+      catchError(err => {
+        return of({ value: -1 });
+      })
+    );
+  }
+
+  testCallBack() {
+    console.log('callback working');
+  }
 }

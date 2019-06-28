@@ -49,20 +49,22 @@ export class LoginPage implements OnInit {
     if (!this.apkey || !this.password) {
       this.loginProcessLoading = false;
       this.userDidLogin = false;
-      this.showToastMessage("Please, fill up username and password");
-    } else{
+      this.showToastMessage('Please, fill up username and password');
+    } else {
       if (this.plt.is('cordova') && this.network.type === 'none') {
         return this.showToastMessage('You are now offline.');
       }
       this.cas.getTGT(this.apkey, this.password).pipe(
         catchError(err => {
-          if(err.includes('AccountPasswordMustChangeException')){
+          // the error format may changed anytime, should be checked as string
+          const errMsg = JSON.stringify(err);
+
+          if (errMsg.includes('AccountPasswordMustChangeException')) {
             this.showConfirmationMessage();
-            this.showToastMessage("Your password has expired!")
+            this.showToastMessage('Your password has expired!');
             return throwError('Your password has expired!');
-          }
-          else{
-            this.showToastMessage("Invalid username or password")
+          } else {
+            this.showToastMessage('Invalid username or password');
             return throwError('Invalid Username or Password');
           }
         }),
@@ -76,7 +78,7 @@ export class LoginPage implements OnInit {
         timeout(15000),
         tap(_ => this.events.publish('user:login')),
       ).subscribe(
-        _ => {},
+        _ => { },
         _ => {
           this.loginProcessLoading = false;
           this.userUnauthenticated = true;
@@ -111,9 +113,10 @@ export class LoginPage implements OnInit {
   }
 
   showConfirmationMessage() {
-    const confirm = this.alertCtrl.create({
+    this.alertCtrl.create({
       header: 'Your password has expired..',
-      message: 'You are required to change your password to be able to login to the APSpace and other applications. The following documentation provides the steps to do that.',
+      message: 'You are required to change your password to be able to login to the APSpace' +
+        'and other applications. The following documentation provides the steps to do that.',
       buttons: [
         {
           text: 'Cancel',

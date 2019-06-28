@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Events } from '@ionic/angular';
-import { Observable ,  EMPTY ,  from as fromPromise ,  of ,  throwError } from 'rxjs';
+import { Observable, EMPTY, from as fromPromise, of, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
 import { Role } from '../interfaces';
@@ -33,14 +33,14 @@ export class CasTicketService {
     public events: Events,
     private settings: SettingsService,
   ) {
-    this._isAuthenticated = storage.get('tgt').then(tgt => !!tgt);
+    this.isAuthenticated = storage.get('tgt').then(tgt => !!tgt);
   }
 
   /**
    * Check if user is authenticated against presence of tgt in storage.
    */
-  _isAuthenticated: Promise<boolean>;
-  get isAuthenticated() { return this._isAuthenticated; }
+  private isAuthenticated: Promise<boolean>;
+  get isAuthenticated() { return this.isAuthenticated; }
 
   /**
    * POST: request ticket-granting ticket from CAS and cache tgt and credentials
@@ -62,7 +62,7 @@ export class CasTicketService {
         catchError(res => res.status === 201 && res.headers.get('Location')
           ? of(res.headers.get('Location').split('/').pop())
           : username && password
-            ? throwError(JSON.stringify(res)) // CONVERT RESPONSE TO STRING TO CHECK IF CONTAINS SPECIFIC WORD (AccountPasswordMustChangeException)
+            ? throwError(res)
             : (this.events.publish('user:logout'), EMPTY)),
         tap(tgt => this.storage.set('tgt', tgt)),
         tap(_ => this.storage.set('cred', data)),

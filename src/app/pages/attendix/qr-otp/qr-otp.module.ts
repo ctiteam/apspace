@@ -23,4 +23,4 @@ const routes: Routes = [
   ],
   declarations: [QrOtpPage]
 })
-export class QrOtpPageModule {}
+export class QrOtpPageModule { }

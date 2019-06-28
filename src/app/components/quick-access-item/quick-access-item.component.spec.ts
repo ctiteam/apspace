@@ -8,9 +8,9 @@ describe('QuickAccessItemComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QuickAccessItemComponent ]
+      declarations: [QuickAccessItemComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
