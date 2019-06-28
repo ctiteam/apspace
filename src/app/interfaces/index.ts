@@ -1,7 +1,7 @@
 export { Apcard } from './apcard';
 export { Attendance } from './attendance';
 export { AttendanceLegend } from './attendance-legend';
-export { BusTrips, Trips } from './bus-trips';
+export { BusTrips, Locations, Location, Trips } from './bus-trips';
 export { ClassificationLegend } from './classfication-legend';
 export { Course } from './courses';
 export { CourseDetails } from './course-details';

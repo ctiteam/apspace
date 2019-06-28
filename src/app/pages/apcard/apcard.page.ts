@@ -43,7 +43,7 @@ export class ApcardPage implements OnInit {
       (tt, transaction) => {
         const c = transaction.SpendVal < 0 ? 'dr' : 'cr'; // classify spent type
         const d = new Date(transaction.SpendDate);
-        if (!d.getFullYear() in tt[c]) {
+        if (!(d.getFullYear() in tt[c])) {
           tt[c][d.getFullYear()] = a.slice();
         }
         tt[c][d.getFullYear()][d.getMonth()] += Math.abs(transaction.SpendVal);

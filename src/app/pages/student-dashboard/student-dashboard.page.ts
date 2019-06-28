@@ -482,7 +482,7 @@ export class StudentDashboardPage implements OnInit {
       share(),
     );
     this.attendancePercent$ = this.ws
-      .get<Attendance[]>(url, true, { returnError: true })
+      .get<Attendance[]>(url, true)
       .pipe(
         map(aa => {
           if (aa.length > 0) {
@@ -514,8 +514,7 @@ export class StudentDashboardPage implements OnInit {
   getOverdueFee() {
     return this.ws.get<FeesTotalSummary[]>(
       '/student/summary_overall_fee',
-      true,
-      { returnError: true }
+      true
     ).pipe(
       map((overdueSummary) => {
         return { value: overdueSummary[0].TOTAL_OVERDUE };

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { publishLast, refCount } from 'rxjs/operators';
 
-import { BusTrips } from '../interfaces';
+import { BusTrips, Locations } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +28,8 @@ export class BusTrackingService {
     );
   }
 
-  getLocationDetails() {
+  getLocationDetails(): Observable<Locations> {
     const url = `${this.busTrackingUrl}/locations`;
-    return this.http.get(url);
+    return this.http.get<Locations>(url);
   }
 }

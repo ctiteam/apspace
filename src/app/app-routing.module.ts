@@ -72,15 +72,15 @@ const routes: Routes = [
     children: [
       {
         path: 'qr-code',
-        loadChildren: './pages/attendix/attendix-student/qr-code/qr-code.module#QrCodePageModule'
+        loadChildren: './pages/attendix/qr-code/qr-code.module#QrCodePageModule'
       },
       {
         path: 'qr-otp',
-        loadChildren: './pages/attendix/attendix-student/qr-otp/qr-otp.module#QrOtpPageModule'
+        loadChildren: './pages/attendix/qr-otp/qr-otp.module#QrOtpPageModule'
       },
       {
         path: 'take-picture',
-        loadChildren: './pages/attendix/attendix-student/take-picture/take-picture.module#TakePicturePageModule'
+        loadChildren: './pages/attendix/take-picture/take-picture.module#TakePicturePageModule'
       }
     ]
   },
