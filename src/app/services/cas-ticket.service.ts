@@ -27,6 +27,11 @@ export class CasTicketService {
 
   readonly casUrl = 'https://cas.apiit.edu.my';
 
+  /**
+   * Check if user is authenticated against presence of tgt in storage.
+   */
+  readonly isAuthenticated: Promise<boolean>;
+
   constructor(
     public http: HttpClient,
     public storage: Storage,
@@ -35,12 +40,6 @@ export class CasTicketService {
   ) {
     this.isAuthenticated = storage.get('tgt').then(tgt => !!tgt);
   }
-
-  /**
-   * Check if user is authenticated against presence of tgt in storage.
-   */
-  private isAuthenticated: Promise<boolean>;
-  get isAuthenticated() { return this.isAuthenticated; }
 
   /**
    * POST: request ticket-granting ticket from CAS and cache tgt and credentials
