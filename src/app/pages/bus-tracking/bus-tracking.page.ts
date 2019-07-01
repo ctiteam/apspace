@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { BusTrackingService } from 'src/app/services';
+import { HttpClient } from '@angular/common/http';
+
 import { Observable } from 'rxjs';
-import { Trips } from 'src/app/interfaces';
-import { map, finalize, tap } from 'rxjs/operators';
+import { Trips, BusTrips, Locations } from 'src/app/interfaces';
+import { map, tap, publishLast, refCount } from 'rxjs/operators';
 
 @Component({
   selector: 'app-bus-tracking',
@@ -11,9 +12,11 @@ import { map, finalize, tap } from 'rxjs/operators';
 })
 export class BusTrackingPage implements OnInit {
   trip$: Observable<Trips[]>;
+  busTrackingUrl = 'https://api.apiit.edu.my/transix';
+
 
   constructor(
-    public busService: BusTrackingService,
+    public http: HttpClient
   ) { }
 
   ngOnInit() {
@@ -21,16 +24,19 @@ export class BusTrackingPage implements OnInit {
     this.getLocations();
   }
 
-  getTrips(refresher?) {
-    this.busService.getTrips(Boolean(refresher)).pipe(
-      map(res => res.trips_times),
+  getTrips() {
+    const url = `${this.busTrackingUrl}/trips`;
+    return this.http.get<BusTrips>(url).pipe(
+      publishLast(),
+      refCount(),
+      map(res => res.trips_time),
       tap(d => console.log(d)),
-      finalize(() => refresher && refresher.complete()),
     ).subscribe();
   }
 
-  getLocations(refresher?) {
-    this.busService.getLocationDetails().pipe(
+  getLocations() {
+    const url = `${this.busTrackingUrl}/locations`;
+    return this.http.get<Locations>(url).pipe(
       map(res => res.locations),
       tap(d => console.log(d)),
     ).subscribe();
