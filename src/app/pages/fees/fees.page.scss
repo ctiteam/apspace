@@ -1,0 +1,65 @@
+
+page-fees{
+    .total-summary {
+      font-weight: bold;
+    }
+  
+    .list-header-md{
+      border-top: 0;
+      border-bottom: 1px solid #dedede;
+      margin-bottom: 0;
+    }
+  
+    .card-ios {
+      border-radius: 10px;
+    }
+  
+    .card-md {
+      border-radius: 10px;
+    }
+  }
+
+
+// This section should be removed after global styling (light/dark theme) is implemented
+$primary_color: #1297e0;
+$light_colors: (
+	light_background: #f5f5f5,
+	light_header_background: #e7e7e7,
+	light_white_background: #ffffff,
+	light_blue_color: #1f222e,
+	light_green_color: #228b22,
+	light_red_color: #ff0000,
+	ligth_grey_color: #424242,
+	light_light_grey_color: #908989
+);
+
+page-fees {
+    ion-card {
+        h4 {
+            color: $primary_color;
+        }
+        ion-list-header {
+            border-color: $primary_color !important;
+
+            ion-label {
+                color: $primary_color;
+            }
+        }
+    }
+}   
+
+page-fees {
+    ion-card {
+        background-color: map-get($light_colors, light_white_background);
+        ion-card-content {
+            ion-item {
+                background-color: map-get($light_colors, light_background) !important;
+                color: map-get($light_colors, ligth_grey_color);
+                ion-note {
+                    color: map-get($light_colors, light_blue_color);
+                }
+            }
+        }
+    }
+}
+  
