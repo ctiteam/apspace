@@ -316,8 +316,6 @@ export class StudentDashboardPage implements OnInit {
 
   getNumberOfDaysForHoliday(startDate: Date, endDate: Date): string {
     const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(startDate, endDate);
-    console.log(endDate);
-    console.log(startDate);
     if (secondsDiff === 0) {
       return '1 day'
     } else {
