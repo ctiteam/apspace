@@ -17,8 +17,6 @@ const filterMap = {
 @Pipe({ name: "filter" })
 export class FilterPipe implements PipeTransform {
   transform(items: Item[] | null, visibleLabels: string[]): Item[] {
-    console.log("hi");
-
     if (visibleLabels) {
       return (items || []).filter((item: Item) =>
         visibleLabels

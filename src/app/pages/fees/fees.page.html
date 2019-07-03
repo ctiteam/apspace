@@ -1,6 +1,12 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Fees</ion-title>
+
+    <ion-buttons @buttonEnterOut slot="secondary" *ngIf="selectedSegment === 'Details'">
+      <ion-button (click)="openFilterMenu()">
+        <ion-icon slot="icon-only" name="options"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 
   <ion-toolbar *ngIf="(bankDraft$ | async) as bankDrafts; else loadingSegment">
@@ -33,7 +39,22 @@
   </ng-template>
 </ion-header>
 
-<ion-content #content>
+<ion-menu menuId="filter-menu" contentId="fee-content" side="end" type="overlay">
+  <ion-list>
+    <ion-list-header>
+      <h3>Filter Details</h3>
+    </ion-list-header>
+
+    <ion-item *ngFor="let label of labels; let label_index = index;"
+      (click)="updateChartLabelVisibility(label_index, label.visible)">
+      <ion-label>{{ label.name }}</ion-label>
+      <ion-checkbox [(ngModel)]="label.visible">
+      </ion-checkbox>
+    </ion-item>
+  </ion-list>
+</ion-menu>
+
+<ion-content id="fee-content" #content>
   <div class="ion-no-padding">
     <ion-grid>
       <ion-row class="ion-justify-content-center">
