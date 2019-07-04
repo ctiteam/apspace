@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { EventComponentConfigurations, DashboardCardComponentConfigurations, Attendance, StudentProfile, Apcard, FeesTotalSummary, Course, CourseDetails, CgpaPerIntake, StudentTimetable, ConsultationHour, StudentPhoto, Holidays, Holiday, ExamSchedule } from 'src/app/interfaces';
-import * as moment from 'moment';
-import { Observable, forkJoin, of, merge, zip } from 'rxjs';
-import { WsApiService, StudentTimetableService } from 'src/app/services';
+import { Observable, forkJoin, of, zip } from 'rxjs';
 import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray } from 'rxjs/operators';
+import { WsApiService, StudentTimetableService } from 'src/app/services';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-student-dashboard',
