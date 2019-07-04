@@ -9,12 +9,24 @@ import { DashboardCardComponentConfigurations } from 'src/app/interfaces';
   styleUrls: ['./dashboard-card.component.scss']
 })
 export class DashboardCardComponent implements OnInit {
-  @Input() cardConfigurations: DashboardCardComponentConfigurations;
+  cardConfigurations: DashboardCardComponentConfigurations;
+  @Input() withOptionsButton?: boolean;
+  @Input() options?: {}[];
+  @Input() cardTitle?: string;
+  @Input() contentPadding?: boolean;
+  @Input() cardSubtitle: string;
   constructor(
     public popoverCtrl: PopoverController
   ) { }
 
   ngOnInit() {
+    this.cardConfigurations = {
+      withOptionsButton: this.withOptionsButton,
+      options: this.options,
+      cardTitle: this.cardTitle,
+      contentPadding: this.contentPadding,
+      cardSubtitle: this.cardSubtitle
+    }
   }
 
   async showOptionsMenu(ev: any) {
