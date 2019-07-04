@@ -9,6 +9,7 @@ import { IonicModule } from '@ionic/angular';
 import { StudentDashboardPage } from './student-dashboard.page';
 import { ComponentsModule } from 'src/app/components/components.module';
 
+import { ChartModule } from 'angular2-chartjs';
 
 const routes: Routes = [
   {
@@ -24,7 +25,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ComponentsModule
+    ComponentsModule,
+    ChartModule
   ],
   declarations: [
     StudentDashboardPage
