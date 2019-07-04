@@ -10,7 +10,7 @@
         <span *ngIf="(observable$ | async) as data; else loading">
           <span *ngIf="data.value !== -1; else noData">
             <span *ngIf="outputMode==='percentage'">
-              {{ (data.value * 100 | number: "1.0-1") + "%" }}
+              {{ (data.value | number: "1.0-1") + "%" }}
             </span>
             <span *ngIf="outputMode==='currency'">
               {{ data.value | currency: "MYR":"RM" }}
