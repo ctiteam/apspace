@@ -4,7 +4,7 @@
     <!-- MAIN ROW -->
     <ion-row>
       <!-- LEFT SIDE COLUMN -->
-      <ion-col size="12" size-md="5" size-lg="4">
+      <ion-col size="12" size-lg="4">
         <!-- LEFT SIDE MAIN GRID -->
         <ion-grid>
           <!-- PROFILE SECTION -->
@@ -16,9 +16,12 @@
                     <ion-row margin-bottom>
                       <ion-col>
                         <ion-avatar class="dashboard-avatar float-left">
-                          <img
-                            src="https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1">
+                          <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo"
+                            onerror="this.src='assets/img/profile.svg'" alt="Avatar">
                         </ion-avatar>
+                        <ng-template #loadingStudentsPhoto>
+                          loading picture
+                        </ng-template>
                         <div class="welcome-message-wrapper float-left" padding-start>
                           <ion-card-title>
                             <h3 class="responsive-h1">{{greetingMessage}}, <span>{{studentFirstName | titlecase}}</span>
@@ -74,29 +77,56 @@
 
           <!-- QUICK ACCESS SECTION -->
           <ion-row>
-            <ion-grid>
+            <ion-grid no-padding>
               <ion-row>
 
-                <!-- THIRD QUICK ACCESS ITEM: ATTENDANCE -->
+                <!-- QUICK ACCESS ITEM: ATTENDANCE -->
                 <ion-col>
-                  <quick-access-item icon="alarm" titleFirstWord='Overall' titleSecondWord='Attendance' [observable$]='attendancePercent$' outputMode='percentage'>
+                  <quick-access-item icon="alarm" titleFirstWord='Overall' titleSecondWord='Attendance'
+                    [observable$]='overallAttendancePercent$' outputMode='percentage'>
                   </quick-access-item>
                 </ion-col>
 
-                <!-- FIRST QUICK ACCESS ITEM: APCARD BALANCE -->
+                <!-- QUICK ACCESS ITEM: APCARD BALANCE -->
                 <ion-col>
-                  <quick-access-item icon="card" titleFirstWord='APCard' titleSecondWord='Balance' [observable$]='balance$' outputMode='currency'>
+                  <quick-access-item icon="card" titleFirstWord='APCard' titleSecondWord='Balance'
+                    [observable$]='balance$' outputMode='currency'>
                   </quick-access-item>
                 </ion-col>
 
-                <!-- SECOND QUICK ACCESS ITEM: TOTAL OVERDUE -->
+                <!-- QUICK ACCESS ITEM: TOTAL OVERDUE -->
                 <ion-col>
-                  <quick-access-item icon="logo-usd" titleFirstWord='Total' titleSecondWord='Overdue' [observable$]="totalOverdue$" outputMode='currency'>
+                  <quick-access-item icon="logo-usd" titleFirstWord='Total' titleSecondWord='Overdue'
+                    [observable$]="totalOverdue$" outputMode='currency'>
                   </quick-access-item>
                 </ion-col>
 
               </ion-row>
             </ion-grid>
+          </ion-row>
+
+          <!-- TODAY'S SCHEDULE -->
+          <ion-row>
+            <ion-col>
+              <dashboard-card [cardTitle]='todaysScheduleCardConfigurations.cardTitle'
+                [cardSubtitle]='todaysScheduleCardConfigurations.cardSubtitle'
+                [withOptionsButton]='todaysScheduleCardConfigurations.withOptionsButton'
+                [options]='todaysScheduleCardConfigurations.options'>
+                <events-list [observable$]="todaysSchedule$"></events-list>
+              </dashboard-card>
+            </ion-col>
+          </ion-row>
+
+          <!-- UPCOMING EVENTS -->
+          <ion-row>
+            <ion-col>
+              <dashboard-card [cardTitle]='upcomingEventsCardConfigurations.cardTitle'
+                [cardSubtitle]='upcomingEventsCardConfigurations.cardSubtitle'
+                [withOptionsButton]='upcomingEventsCardConfigurations.withOptionsButton'
+                [options]='upcomingEventsCardConfigurations.options'>
+                <events-list [observable$]="upcomingEvent$"></events-list>
+              </dashboard-card>
+            </ion-col>
           </ion-row>
 
         </ion-grid>
@@ -106,59 +136,77 @@
 
 
       <!-- RIGHT SIDE COLUMN -->
-      <ion-col size="12" size-md="7" size-lg="8">
+      <ion-col size="12" size-lg="8">
         <!-- RIGHT SIDE MAIN GRID -->
         <ion-grid>
-          <!-- TODAY'S SCHEDULE -->
-          <ion-row>
-            <ion-col>
-              <dashboard-card [cardConfigurations]="todaysScheduleCardConfigurations">
-                <events-list [eventsInput]="todaysSchedule"></events-list>
-              </dashboard-card>
-            </ion-col>
-          </ion-row>
           <!-- APCard Transactions -->
           <ion-row>
-            <ion-col>
-              <dashboard-card [cardConfigurations]="apcardTransactionsCardConfigurations">
-                <canvas #apcardChart MinHeight="500"></canvas>
+            <ion-col size-xl="6" size="12" *ngIf="apcardTransaction$ | async; else loadingApcardTransactions">
+              <dashboard-card [cardTitle]='apcardTransactionsCardConfigurations.cardTitle'
+                [cardSubtitle]='currentBalance !== -1 ? "Balance: " + (currentBalance | currency: "MYR": "RM"): "Balance: --"'
+                [options]='apcardTransactionsCardConfigurations.options'
+                [contentPadding]='apcardTransactionsCardConfigurations.contentPadding'
+                [withOptionsButton]='apcardTransactionsCardConfigurations.withOptionsButton'>
+                <chart height="600" *ngIf="apcardChart.data" [type]="apcardChart.type" [data]="apcardChart.data"
+                  [options]="apcardChart.options">
+                </chart>
               </dashboard-card>
             </ion-col>
-          </ion-row>
+            <ng-template #loadingApcardTransactions>
+              loading the apcard section
+            </ng-template>
+            <!-- </ion-row> -->
 
-          <!-- CGPA -->
-          <ion-row>
-            <ion-col>
-              <dashboard-card [cardConfigurations]="cgpaCardConfigurations">
-                <canvas #cgpaChart></canvas>
+            <!-- CGPA -->
+            <!-- <ion-row> -->
+            <ion-col size-xl="6" size="12" *ngIf="cgpaPerIntake$ | async; else loadingCgpaPerIntake">
+              <dashboard-card [cardTitle]='cgpaCardConfigurations.cardTitle'
+                [cardSubtitle]='"Overall: " + (overallCgpa | number: "1.0-2")'
+                [contentPadding]='cgpaCardConfigurations.contentPadding'
+                [withOptionsButton]='cgpaCardConfigurations.withOptionsButton'>
+                <chart *ngIf="cgpaChart.data" [type]="cgpaChart.type" [data]="cgpaChart.data"
+                  [options]="cgpaChart.options">
+                </chart>
               </dashboard-card>
             </ion-col>
-          </ion-row>
+            <ng-template #loadingCgpaPerIntake>
+              loading the cgpa section
+            </ng-template>
+            <!-- </ion-row> -->
 
-          <!-- FINANCIALS -->
-          <ion-row>
-            <ion-col>
-              <dashboard-card [cardConfigurations]="financialsCardConfigurations">
-                <canvas #financialsChart></canvas>
+            <!-- FINANCIALS -->
+            <!-- <ion-row> -->
+            <ion-col size-xl="6" size="12" *ngIf="financial$ | async as financialSummary; else loadingFinancials">
+              <dashboard-card [cardTitle]='financialsCardConfigurations.cardTitle'
+                [cardSubtitle]='"Overdue: " + (financialSummary[0].TOTAL_OVERDUE | currency: "MYR": "RM")'
+                [contentPadding]='financialsCardConfigurations.contentPadding'
+                [withOptionsButton]='financialsCardConfigurations.withOptionsButton'>
+                <chart *ngIf="financialsChart.data" [type]="financialsChart.type" [data]="financialsChart.data"
+                  [options]="financialsChart.options">
+                </chart>
               </dashboard-card>
             </ion-col>
-          </ion-row>
+            <ng-template #loadingFinancials>
+              loading the financials section
+            </ng-template>
+            <!-- </ion-row> -->
 
-          <!-- LOW ATTENDANCE -->
-          <ion-row>
-            <ion-col>
-              <dashboard-card [cardConfigurations]="lowAttendanceCardConfigurations">
-                <canvas #lowAttendanceChart></canvas>
+            <!-- LOW ATTENDANCE -->
+            <!-- <ion-row> -->
+            <ion-col size-xl="6" size="12" *ngIf="modulesWithLowAttendance$ | async; else loadingAttendance">
+              <dashboard-card *ngIf="overallAttendancePercent$ | async as overallAttendancePercent"
+                [cardTitle]='lowAttendanceCardConfigurations.cardTitle'
+                [cardSubtitle]='"Overall: " + (overallAttendancePercent.value | number: "1.0-1") + "%"'
+                [contentPadding]='lowAttendanceCardConfigurations.contentPadding'
+                [withOptionsButton]='lowAttendanceCardConfigurations.withOptionsButton'>
+                <chart *ngIf="lowAttendanceChart.data" [type]="lowAttendanceChart.type" [data]="lowAttendanceChart.data"
+                  [options]="lowAttendanceChart.options">
+                </chart>
               </dashboard-card>
             </ion-col>
-          </ion-row>
-          <!-- UPCOMING EVENTS -->
-          <ion-row>
-            <ion-col>
-              <dashboard-card [cardConfigurations]="upcomingEventsCardConfigurations">
-                <events-list [eventsInput]="upcomingEvents"></events-list>
-              </dashboard-card>
-            </ion-col>
+            <ng-template #loadingAttendance>
+              loading the attendance section
+            </ng-template>
           </ion-row>
         </ion-grid>
       </ion-col>
