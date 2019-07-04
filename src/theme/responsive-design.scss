@@ -8,6 +8,8 @@
         5. EXTRA LARGE DEVICES (large desktops, 1200px and up)
 */
 
+// #373B44 DARK GRAY
+
 /* EXTRA SMALL DEVICES - MORE THAN 1px */
 @media only screen and (min-width: 1px) {
   .responsive-h1 {
@@ -28,11 +30,19 @@
   .d-none {
     display: none;
   }
-  .pt-1-xs{
+  .pt-1-xs {
     padding-top: 0.5em !important;
   }
-  .pb-1-xs{
+  .pb-1-xs {
     padding-bottom: 0.5em !important;
+  }
+  .masonry-list {
+    column-count: 1;
+  }
+  .masonry-item {
+    display: inline-block;
+    width: 100%;
+    padding: 5px;
   }
 }
 
@@ -60,6 +70,9 @@
   .d-md-inline {
     display: inline;
   }
+  .masonry-list {
+    column-count: 2;
+  }
 }
 
 /* LARGE DEVICES - 992px AND UP */
@@ -72,6 +85,9 @@
   }
   .d-lg-inline {
     display: inline;
+  }
+  .masonry-list {
+    column-count: 3;
   }
 }
 
