@@ -23,7 +23,7 @@
 .event-container {
   color: #131313;
   transition: all 0.2s ease;
-  background:#FAFAFA;
+  background: #fafafa;
   border-left: 3px solid;
   padding-top: 10px;
   padding-bottom: 15px;
@@ -31,7 +31,7 @@
 
 .event-container:hover {
   border-left-width: 10px;
-  background: #ECEFF1;
+  background: #eceff1;
 }
 
 .left-part-container {
@@ -44,21 +44,21 @@
 }
 
 .left-part {
-  font-size: 2.5em;
+  font-size: 2.1em;
   display: block;
   margin-top: 6px;
 }
 .left-part .left-part-item {
   font-weight: 400;
-  text-transform: uppercase; 
-  margin-top: -.5em;
+  text-transform: uppercase;
+  margin-top: -0.5em;
 }
-.left-part .left-part-item.small{
-  font-size: .55em;
+.left-part .left-part-item.small {
+  font-size: 0.55em;
 }
 
-.left-part .left-part-item.smallest{
-  font-size: .37em;
+.left-part .left-part-item.smallest {
+  font-size: 0.37em;
 }
 .right-part-container {
   display: block;
@@ -72,19 +72,25 @@
   font-family: Oswald;
   font-weight: 400;
   font-size: 1.2em;
+  display: block;
+  width: 70%;
+  float: left;
+}
+
+.type {
+  font-size: 10px;
+  font-weight: 700;
+  width: 30%;
+  padding: 3px;
+  text-align: center;
+  float: left;
+  border-radius: 25px;
+  a{
+    color: white;
+  }
 }
 
 .description {
   display: block;
   font-size: 0.9em;
-}
-
-/* MEDIUM DEVICES - 768px AND UP */
-@media only screen and (min-width: 768px) {
-  .left-part{
-    margin-top: 18px;
-  }
-  .primaryDateTime {
-    margin-right: -7px;
-  }
 }
