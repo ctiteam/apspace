@@ -19,13 +19,11 @@ export class FilterPipe implements PipeTransform {
   transform(items: Item[] | null, visibleLabels: string[]): Item[] {
     if (visibleLabels) {
       return (items || []).filter((item: Item) =>
-        visibleLabels
-          .map(
-            label =>
-              filterMap[label.toLowerCase()] &&
-              filterMap[label.toLowerCase()](item)
-          )
-          .some(value => value === true)
+        visibleLabels.some(
+          label =>
+            filterMap[label.toLowerCase()] &&
+            filterMap[label.toLowerCase()](item)
+        )
       );
     }
 
