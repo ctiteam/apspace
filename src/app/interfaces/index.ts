@@ -25,3 +25,5 @@ export { Subcourse } from './subcourses';
 export { StudentTimetable } from './student-timetable';
 export { EventComponentConfigurations } from './event-component-configurations';
 export { DashboardCardComponentConfigurations } from './dashboard-card-componenet-configurations';
+export { CgpaPerIntake } from './cgpa-per-intake';
+export { ConsultationHour } from './iconsult';
