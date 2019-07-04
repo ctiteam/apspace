@@ -3,5 +3,5 @@ export interface DashboardCardComponentConfigurations {
     options?: {}[],
     cardTitle?: string,
     contentPadding?: boolean,
-    cardSubtitle: string
+    cardSubtitle?: string
 }
