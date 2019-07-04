@@ -1,40 +1,42 @@
-<div class="event-calendar">
+<div class="event-calendar" *ngIf="observable$ | async as events">
     <div class="event-list">
         <div class="event" *ngFor="let event of events">
             <div class="event-container" padding-end [style.borderColor]="!event.pass? event.color: '#d7dee3'"
                 [style.color]="event.pass? '#d7dee3': ''">
                 <div class="left-part-container" text-center>
                     <span class="left-part" [style.color]="!event.pass? event.color: '#d7dee3'">
-                        <span class="primaryDateTime" *ngIf="event.primaryDateTime">
-                            {{event.primaryDateTime}}
+                        <span class="primaryDateTime" *ngIf="event.dateOrTime">
+                            {{splitTimeAndGetOnePart('first',event.dateOrTime)}}
                         </span>
-                        <span
-                            *ngIf="event.type === 'event-with-time-only' || event.type === 'event-with-time-and-hyperlink'"
-                            class="left-part-item small d-none d-md-inline">
-                            :
+                        <span *ngIf="event.dateOrTime" class="left-part-item small d-block">
+                            {{splitTimeAndGetOnePart('second',event.dateOrTime)}}
                         </span>
-                        <span *ngIf="event.secondaryDateTime" class="left-part-item small d-block d-md-inline">
-                            {{event.secondaryDateTime}}
-                        </span>
-                        <span *ngIf="event.quaternaryDateTime" class="left-part-item smallest d-block d-md-inline">
-                            {{event.quaternaryDateTime}}
+                        <span *ngIf="event.dateOrTime" class="left-part-item smallest d-block">
+                            {{splitTimeAndGetOnePart('third',event.dateOrTime)}}
                         </span>
                     </span>
                 </div>
                 <div class="right-part-container">
                     <span *ngIf="event.title" class="title"
                         [style.color]="!event.pass? event.color: '#d7dee3'">{{event.title}}</span>
+                    <span [style.backgroundColor]="!event.pass? event.color: '#d7dee3'" class="type">
+                        <a>
+                            {{event.type | titlecase}}
+                        </a>
+                    </span>
+                    <div class="clearfix"></div>
                     <span *ngIf="event.firstDescription" class="description">{{event.firstDescription}}</span>
                     <span *ngIf="event.secondDescription" class="description">
                         <a [style.color]="!event.pass? event.color: '#d7dee3'"
-                            *ngIf="event.type === 'event-with-time-and-hyperlink' || event.type === 'event-with-date-and-hyperlink'; else noHyperlink">
+                            *ngIf="event.outputFormat === 'event-with-time-and-hyperlink' || event.outputFormat === 'event-with-date-and-hyperlink'; else noHyperlink">
                             {{event.secondDescription}}
                         </a>
                         <ng-template #noHyperlink>
                             {{event.secondDescription}}
                         </ng-template>
                     </span>
-                    <span *ngIf="event.thirdDescription" class="description">{{event.thirdDescription}}</span>
+                    <span *ngIf="event.thirdDescription" text-right
+                        class="description">{{event.thirdDescription}}</span>
                 </div>
                 <div class="clearfix"></div>
             </div>

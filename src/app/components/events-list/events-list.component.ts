@@ -1,16 +1,24 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { EventComponentConfigurations } from 'src/app/interfaces';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'events-list',
   templateUrl: 'events-list.component.html',
-  styleUrls: ['events-list.component.css']
+  styleUrls: ['events-list.component.scss']
 })
 export class EventsListComponent implements OnInit {
-  @Input() eventsInput: EventComponentConfigurations[];
-  events: {}[]
+  @Input() observable$: Observable<EventComponentConfigurations[]>;
 
   ngOnInit() {
-    this.events = this.eventsInput;
   }
+  splitTimeAndGetOnePart(part: 'third' | 'second' | 'first', time: string) {
+    if (part === 'first') {
+      return time.split(' ')[0]
+    } else if (part === 'second') {
+      return time.split(' ')[1]
+    }
+    return time.split(' ')[2]
+  }
+
 }
