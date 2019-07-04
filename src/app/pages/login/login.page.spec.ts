@@ -21,8 +21,8 @@ describe('LoginPage', () => {
     getSpy = settingsService.get.and.returnValue(Promise.resolve(null));
 
     TestBed.configureTestingModule({
-      imports: [ FormsModule ],
-      declarations: [ LoginPage ],
+      imports: [FormsModule],
+      declarations: [LoginPage],
       providers: [
         { provide: CasTicketService, useValue: {} },
         { provide: WsApiService, useValue: {} },
@@ -33,7 +33,7 @@ describe('LoginPage', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

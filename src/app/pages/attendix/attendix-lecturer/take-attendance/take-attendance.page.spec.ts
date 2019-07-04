@@ -9,10 +9,10 @@ describe('TakeAttendancePage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TakeAttendancePage ],
+      declarations: [TakeAttendancePage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

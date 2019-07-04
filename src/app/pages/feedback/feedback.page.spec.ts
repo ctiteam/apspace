@@ -18,7 +18,7 @@ describe('FeedbackPage', () => {
     getSpy = settingsService.get.and.returnValue(null);
 
     TestBed.configureTestingModule({
-      declarations: [ FeedbackPage ],
+      declarations: [FeedbackPage],
       providers: [
         { provide: FeedbackService, useValue: feedbackService },
         { provide: SettingsService, useValue: settingsService },
@@ -26,7 +26,7 @@ describe('FeedbackPage', () => {
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

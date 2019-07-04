@@ -1,0 +1,394 @@
+loading-spinner {
+  .loader {
+    top: calc(50% - 80px);
+    left: calc(50% - 40px);
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.apcard-card-section {
+  margin-top: 20px;
+
+  .outer-circle {
+    padding: 28px;
+    border-radius: 7.5em;
+    overflow: hidden;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    z-index: 500;
+
+    .inner-circle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      width: 160px;
+      height: 160px;
+
+      &:before {
+        content: "";
+        position: relative;
+        display: block;
+        width: 300%;
+        height: 300%;
+        box-sizing: border-box;
+        margin-left: -100%;
+        margin-top: -100%;
+        border-radius: 240px; // ELEMENT WIDTH + 1/2 ELEMENT WIDTH
+        animation: pulse-ring 1.75s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+      }
+
+      &:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 80px; // 1/2 FROM THE ELEMENT WIDTH
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+        animation: pulse-dot 1.75s cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s
+          infinite;
+      }
+
+      .balance {
+        font-size: 2.5rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 900;
+        transform: translateX(-50%) translateY(-50%);
+      }
+    }
+  }
+
+  .ball {
+    position: absolute;
+    border-radius: 100%;
+    opacity: 0.7;
+  }
+}
+.apcard-history-section {
+  .apcard-history-section-body {
+    .apcard-history-group {
+      .apcard-history-group-title {
+        padding: 12px 10px 12px 20px;
+
+        h3,
+        h2,
+        p {
+          margin: 0 !important;
+        }
+
+        .month {
+          margin-top: 3px !important;
+        }
+
+        .total-amount {
+          font-weight: bold;
+        }
+
+        .past {
+          padding: 3px;
+          margin-top: 0px;
+
+          .credit-amount,
+          .debit-amount {
+            p {
+              padding-top: 5px;
+              font-size: 1.2rem;
+            }
+          }
+        }
+      }
+      .apcard-history-group-messages {
+        position: relative;
+        z-index: 499;
+        padding: 10px 3px;
+
+        .apcard-history-record {
+          padding: 3px;
+
+          .icon-div {
+            padding: 0px;
+            font-size: 3rem;
+            line-height: 0.7;
+            padding-left: 15px;
+          }
+          .text-div {
+            .record-title {
+              font-size: 1.2rem !important;
+              font-weight: bold;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              margin: 0 !important;
+            }
+
+            p {
+              margin: 0 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#bubbles {
+  height: 100%;
+  overflow: hidden !important;
+}
+
+.bubble {
+  width: 60px;
+  height: 60px;
+  border-radius: 200px;
+  -moz-border-radius: 200px;
+  -webkit-border-radius: 200px;
+  position: absolute;
+  text-align: center;
+  font-size: 3rem;
+}
+
+.x1 {
+  -webkit-transform: scale(0.9);
+  -moz-transform: scale(0.9);
+  transform: scale(0.9);
+  font-size: 4rem;
+  opacity: 0.2;
+  animation: moveclouds 15s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+}
+
+.x2 {
+  left: 200px;
+  font-size: 2rem;
+  -webkit-transform: scale(0.6);
+  -moz-transform: scale(0.6);
+  transform: scale(0.6);
+  opacity: 0.5;
+  animation: moveclouds 25s linear infinite,
+    sideWays 5s ease-in-out infinite alternate;
+}
+
+.x3 {
+  left: 350px;
+  -webkit-transform: scale(0.8);
+  -moz-transform: scale(0.8);
+  transform: scale(0.8);
+  opacity: 0.3;
+  animation: moveclouds 20s linear infinite,
+    sideWays 4s ease-in-out infinite alternate;
+}
+
+.x4 {
+  left: 470px;
+  -webkit-transform: scale(0.75);
+  -moz-transform: scale(0.75);
+  transform: scale(0.75);
+  opacity: 0.35;
+  animation: moveclouds 18s linear infinite,
+    sideWays 2s ease-in-out infinite alternate;
+}
+
+.x5 {
+  left: 150px;
+  -webkit-transform: scale(0.8);
+  -moz-transform: scale(0.8);
+  transform: scale(0.8);
+  opacity: 0.3;
+  animation: moveclouds 7s linear infinite,
+    sideWays 1s ease-in-out infinite alternate;
+}
+
+// ANIMATION KEY FRAMES
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.33);
+  }
+  80%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.8);
+  }
+}
+
+@keyframes moveclouds {
+  0% {
+    top: 500px;
+  }
+
+  100% {
+    top: -500px;
+  }
+}
+
+@keyframes sideWays {
+  0% {
+    margin-left: 0px;
+  }
+  100% {
+    margin-left: 50px;
+  }
+}
+
+// This section should be removed after global styling (light/dark theme) is implemented
+$light_colors: (
+  light_background: #f5f5f5,
+  light_header_background: #e7e7e7,
+  light_white_background: #ffffff,
+  light_blue_color: #1f222e,
+  light_green_color: #228b22,
+  light_red_color: #ff0000,
+  ligth_grey_color: #424242,
+  light_light_grey_color: #908989
+);
+$primary_color: #1297e0;
+
+.main-content {
+  .no-transactions-message {
+    color: map-get($light_colors, ligth_grey_color);
+  }
+}
+
+.apcard-card-section .outer-circle {
+  background-color: #ffffffe6;
+}
+.apcard-card-section .outer-circle .inner-circle {
+  &:after {
+    background-color: map-get($light_colors, light_white_background) !important;
+  }
+}
+
+.apcard-history-section
+  .apcard-history-section-body
+  .apcard-history-group
+  .apcard-history-group-title {
+  background-color: map-get($light_colors, light_header_background);
+  box-shadow: 1px 1px 9px map-get($light_colors, light_white_background),
+    -1px -1px 9px map-get($light_colors, light_white_background);
+  color: map-get($light_colors, ligth_grey_color);
+  .color-pri {
+    color: map-get($light_colors, ligth_grey_color);
+  }
+}
+
+.apcard-history-section
+  .apcard-history-section-body
+  .apcard-history-group
+  .apcard-history-group-messages {
+  background-color: map-get($light_colors, light_white_background);
+}
+
+.apcard-history-section
+  .apcard-history-section-body
+  .apcard-history-group
+  .apcard-history-group-messages
+  .apcard-history-record {
+  color: map-get($light_colors, ligth_grey_color);
+}
+
+.apcard-history-section
+  .apcard-history-section-body
+  .apcard-history-group
+  .apcard-history-group-messages
+  .apcard-history-record:not(:last-child) {
+  border-bottom: 2px solid map-get($light_colors, light_white_background);
+}
+
+.apcard-history-section
+  .apcard-history-section-body
+  .apcard-history-group
+  .apcard-history-group-title
+  .past
+  .credit-amount {
+  color: map-get($light_colors, light_green_color);
+  border-right: 1px solid map-get($light_colors, ligth_grey_color);
+}
+
+.apcard-history-section
+  .apcard-history-section-body
+  .apcard-history-group
+  .apcard-history-group-title
+  .past
+  .debit-amount {
+  color: map-get($light_colors, light_red_color);
+}
+
+.apcard-history-section
+  .apcard-history-section-body
+  .apcard-history-group
+  .apcard-history-group-messages
+  .apcard-history-record
+  .icon-div
+  ion-icon[name="remove-circle"] {
+  color: map-get($light_colors, light_red_color);
+}
+
+.apcard-history-section
+  .apcard-history-section-body
+  .apcard-history-group
+  .apcard-history-group-messages
+  .apcard-history-record
+  .icon-div
+  ion-icon[name="add-circle"] {
+  color: map-get($light_colors, light_green_color);
+}
+
+.apcard-history-section
+  .apcard-history-section-body
+  .apcard-history-group
+  .apcard-history-group-messages
+  .apcard-history-record
+  .price-div {
+  color: map-get($light_colors, light_red_color);
+  &.add {
+    color: map-get($light_colors, light_green_color);
+  }
+}
+
+.apcard-card-section .outer-circle .inner-circle {
+  color: $primary_color;
+  &:before {
+    background-color: $primary_color;
+  }
+}
+.apcard-history-section
+  .apcard-history-section-body
+  .apcard-history-group
+  .apcard-history-group-title {
+  border-left: 4px solid $primary_color;
+  .month {
+    color: $primary_color;
+  }
+}
+
+.d-inline-block, .inline-block {
+  display: inline-block !important;
+}
+
+.shadow-lg {
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+}
+
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}

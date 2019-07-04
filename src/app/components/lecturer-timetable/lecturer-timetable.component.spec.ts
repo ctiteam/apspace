@@ -9,10 +9,10 @@ describe('LecturerTimetableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LecturerTimetableComponent ],
+      declarations: [LecturerTimetableComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

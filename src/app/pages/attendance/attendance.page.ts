@@ -18,9 +18,9 @@ export class AttendancePage implements OnInit {
   course$: Observable<Course[]>;
   legend$: Observable<AttendanceLegend>;
 
-  selectedIntake: string = '';
+  selectedIntake = '';
   average: number;
-  averageColor: string = '';
+  averageColor = '';
   intakeLabels: any;
 
   isLoading: boolean;
@@ -31,7 +31,7 @@ export class AttendancePage implements OnInit {
     private plt: Platform,
     public actionSheetCtrl: ActionSheetController,
     public navCtrl: NavController,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.doRefresh();
@@ -76,7 +76,7 @@ export class AttendancePage implements OnInit {
       .pipe(
         tap(_ => this.getLegend(refresh)),
         tap(a => this.calculateAverage(a)),
-      ));
+    ));
   }
 
   getLegend(refresh: boolean) {
@@ -90,14 +90,13 @@ export class AttendancePage implements OnInit {
     if (!Array.isArray(aa)) {
       return;
     }
-    if(aa.length > 0){
-      let totalClasses = aa.reduce((a, b) => a + b.TOTAL_CLASSES, 0);
-      let totalAbsentClasses = aa.reduce((a, b) => a + b.TOTAL_ABSENT, 0);
-      let totalAttendedClasses = totalClasses - totalAbsentClasses;
-      
+    if (aa.length > 0) {
+      const totalClasses = aa.reduce((a, b) => a + b.TOTAL_CLASSES, 0);
+      const totalAbsentClasses = aa.reduce((a, b) => a + b.TOTAL_ABSENT, 0);
+      const totalAttendedClasses = totalClasses - totalAbsentClasses;
+
       this.average = (totalAttendedClasses / totalClasses);
-    }
-    else{
+    } else {
       this.average = -1;
     }
   }

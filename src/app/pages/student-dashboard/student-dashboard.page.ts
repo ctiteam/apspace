@@ -102,9 +102,9 @@ export class StudentDashboardPage implements OnInit {
         callbackFunction: this.testCallBack
       }
     ],
-    cardTitle: "Today's Schedule",
+    cardTitle: 'Today\'s Schedule',
     cardSubtitle: 'Next in: 1 hrs, 25 min'
-  }
+  };
 
   getTodaysSchdule(intake: string) {
     this.todaysSchedule$ = zip( // ZIP TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
@@ -244,9 +244,9 @@ export class StudentDashboardPage implements OnInit {
         callbackFunction: this.testCallBack
       }
     ],
-    cardTitle: "Upcoming Events",
-    cardSubtitle: 'Today: ' + moment().format("DD MMMM YYYY")
-  }
+    cardTitle: 'Upcoming Events',
+    cardSubtitle: 'Today: ' + moment().format('DD MMMM YYYY')
+  };
 
   getUpcomingEvents(intake: string) {
     const todaysDate = new Date();
@@ -552,8 +552,7 @@ financialsCardConfigurations: DashboardCardComponentConfigurations = {
 getOverdueFee(): Observable < FeesTotalSummary | any > {
   return this.ws.get<FeesTotalSummary[]>(
     '/student/summary_overall_fee',
-    true,
-    { returnError: true }
+    true
   ).pipe(
     tap((overdueSummary) => {
       // GET THE VALUE OF THE TOTAL OVERALL USED IN THE QUICK ACCESS ITEM
@@ -635,7 +634,7 @@ cgpaChart = {
 
 getCgpaPerIntakeData(): Observable < CgpaPerIntake | any > {
   return this.ws
-    .get<Course[]>('/student/courses', true, { returnError: true })
+    .get<Course[]>('/student/courses', true)
     .pipe(
       flatMap(intakes => intakes),
       concatMap(intake => {

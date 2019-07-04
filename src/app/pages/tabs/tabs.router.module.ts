@@ -24,6 +24,10 @@ const routes: Routes = [
       {
         path: 'attendance',
         loadChildren: '../attendance/attendance.module#AttendancePageModule'
+      },
+      {
+        path: 'apcard',
+        loadChildren: '../apcard/apcard.module#ApcardPageModule'
       }
     ]
   }
@@ -33,4 +37,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TabsPageRoutingModule {}
+export class TabsPageRoutingModule { }

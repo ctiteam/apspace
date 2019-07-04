@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>More</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <a (click)="openExternalPage(kbUrl)">
+        <ion-label>
+          Knowledge Base
+        </ion-label>
+      </a>
+    </ion-item>
+    <ion-item>
+      <a (click)="openExternalPage(formsApplicationUrl)">
+        <ion-label>
+          Forms Application
+        </ion-label>
+      </a>
+    </ion-item>
+    <ion-item>
+      <a (click)="openExternalPage(kohaUrl)">
+        <ion-label>
+          My Library
+        </ion-label>
+      </a>
+    </ion-item>
+    <ion-item>
+      <a (click)="openExternalPage(lmsUrl)">
+        <ion-label>
+          Moodle
+        </ion-label>
+      </a>
+    </ion-item>
+    <ion-item>
+      <a (click)="openExternalPage(webmailUrl, false)">
+        <ion-label>
+          Webmail
+        </ion-label>
+      </a>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -221,6 +221,10 @@ ion-spinner * {
 }
 // END BLUR CLASS
 
+ion-skeleton-text {
+  height: 140px;
+}
+
 // This section should be removed after global styling (light/dark theme) is implemented 
 $light_colors: (
 	light_background: #f5f5f5,

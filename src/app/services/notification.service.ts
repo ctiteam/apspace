@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FCM } from '@ionic-native/fcm/ngx';
-import { Observable ,  from as fromPromise } from 'rxjs';
+import { Observable, from as fromPromise } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { CasTicketService } from './cas-ticket.service';

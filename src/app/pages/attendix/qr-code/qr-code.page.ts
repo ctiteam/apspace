@@ -49,7 +49,7 @@ export class QrCodePage {
   }
 
   showCamera() {
-    setTimeout( () => {
+    setTimeout(() => {
       window.document.querySelectorAll('ion-content').forEach(element => {
         const element1 = element.shadowRoot.querySelector('style');
         element1.innerHTML = element1.innerHTML.replace

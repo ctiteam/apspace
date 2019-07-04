@@ -25,4 +25,4 @@ const routes: Routes = [
   declarations: [QrCodePage],
   providers: [QRScanner]
 })
-export class QrCodePageModule {}
+export class QrCodePageModule { }

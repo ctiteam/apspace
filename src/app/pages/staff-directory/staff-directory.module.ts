@@ -25,4 +25,4 @@ const routes: Routes = [
   ],
   declarations: [StaffDirectoryPage, DepartmentPipe, SearchPipe]
 })
-export class StaffDirectoryPageModule {}
+export class StaffDirectoryPageModule { }

@@ -33,4 +33,4 @@ const routes: Routes = [
   ],
   entryComponents: []
 })
-export class StudentDashboardPageModule {}
+export class StudentDashboardPageModule { }

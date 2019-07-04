@@ -19,64 +19,64 @@ describe('StaffDirectoryInfoPage', () => {
   beforeEach(async(() => {
     const mockStaffDirectory: StaffDirectory[] = [
       {
-        'CODE': 'ZUHAIRAH',
-        'DEPARTMENT': 'Academic Administration',
-        'DEPARTMENT2': '',
-        'DEPARTMENT3': '',
-        'DID': '',
-        'EMAIL': 'zuhairah@apu.edu.my',
-        'EXTENSION': '',
-        'FULLNAME': 'ZUHAIRAH BINTI KUNCH AHAMMED',
-        'ID': 'zuhairah',
-        'LOCATION': null,
-        'PHOTO': 'https://d37plr7tnxt7lb.cloudfront.net/738.jpg',
-        'RefNo': 738,
-        'TITLE': 'Assistant Manager, Academic Administration'
+        CODE: 'ZUHAIRAH',
+        DEPARTMENT: 'Academic Administration',
+        DEPARTMENT2: '',
+        DEPARTMENT3: '',
+        DID: '',
+        EMAIL: 'zuhairah@apu.edu.my',
+        EXTENSION: '',
+        FULLNAME: 'ZUHAIRAH BINTI KUNCH AHAMMED',
+        ID: 'zuhairah',
+        LOCATION: null,
+        PHOTO: 'https://d37plr7tnxt7lb.cloudfront.net/738.jpg',
+        RefNo: 738,
+        TITLE: 'Assistant Manager, Academic Administration'
       },
       {
-        'CODE': 'JULIE',
-        'DEPARTMENT': 'Student Services and Marketing',
-        'DEPARTMENT2': '',
-        'DEPARTMENT3': '',
-        'DID': '',
-        'EMAIL': 'julie@apu.edu.my',
-        'EXTENSION': '',
-        'FULLNAME': 'ZULIANA TONG BINTI ABDULLAH',
-        'ID': 'julie',
-        'LOCATION': null,
-        'PHOTO': 'https://d37plr7tnxt7lb.cloudfront.net/75.jpg',
-        'RefNo': 75,
-        'TITLE': 'Senior Manager, Student Services (Administration)'
+        CODE: 'JULIE',
+        DEPARTMENT: 'Student Services and Marketing',
+        DEPARTMENT2: '',
+        DEPARTMENT3: '',
+        DID: '',
+        EMAIL: 'julie@apu.edu.my',
+        EXTENSION: '',
+        FULLNAME: 'ZULIANA TONG BINTI ABDULLAH',
+        ID: 'julie',
+        LOCATION: null,
+        PHOTO: 'https://d37plr7tnxt7lb.cloudfront.net/75.jpg',
+        RefNo: 75,
+        TITLE: 'Senior Manager, Student Services (Administration)'
       },
       {
-        'CODE': 'ZULKIFLI',
-        'DEPARTMENT': 'Student Services and Marketing',
-        'DEPARTMENT2': '',
-        'DEPARTMENT3': '',
-        'DID': '',
-        'EMAIL': 'zulkifli@apu.edu.my',
-        'EXTENSION': '',
-        'FULLNAME': 'ZULKIFLLI BIN MOHD SHOKHIR',
-        'ID': 'zulkifli',
-        'LOCATION': null,
-        'PHOTO': 'https://d37plr7tnxt7lb.cloudfront.net/740.jpg',
-        'RefNo': 740,
-        'TITLE': 'Executive, Student Services'
+        CODE: 'ZULKIFLI',
+        DEPARTMENT: 'Student Services and Marketing',
+        DEPARTMENT2: '',
+        DEPARTMENT3: '',
+        DID: '',
+        EMAIL: 'zulkifli@apu.edu.my',
+        EXTENSION: '',
+        FULLNAME: 'ZULKIFLLI BIN MOHD SHOKHIR',
+        ID: 'zulkifli',
+        LOCATION: null,
+        PHOTO: 'https://d37plr7tnxt7lb.cloudfront.net/740.jpg',
+        RefNo: 740,
+        TITLE: 'Executive, Student Services'
       }
     ];
 
     const wsApiService = jasmine.createSpyObj('WsApiService', ['get']);
-    getSpy = wsApiService.get.and.returnValue( of(mockStaffDirectory) );
+    getSpy = wsApiService.get.and.returnValue(of(mockStaffDirectory));
 
     TestBed.configureTestingModule({
-      declarations: [ StaffDirectoryInfoPage, UrldecodePipe ],
+      declarations: [StaffDirectoryInfoPage, UrldecodePipe],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: WsApiService, useValue: wsApiService },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

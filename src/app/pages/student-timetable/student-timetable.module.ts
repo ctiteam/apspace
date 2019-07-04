@@ -34,4 +34,4 @@ const routes: Routes = [
   ],
   entryComponents: []
 })
-export class StudentTimetablePageModule {}
+export class StudentTimetablePageModule { }

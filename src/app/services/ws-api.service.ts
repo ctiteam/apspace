@@ -4,10 +4,10 @@ import { Network } from '@ionic-native/network/ngx';
 import { Storage } from '@ionic/storage';
 import { Platform, ToastController } from '@ionic/angular';
 
-import { Observable, from, of, range, throwError, timer, zip } from 'rxjs';
+import { Observable, from, iif, of, throwError } from 'rxjs';
 import {
-  catchError, map, mergeMap, publishLast, refCount, retryWhen, switchMap, tap,
-  timeout,
+  catchError, concatMap, delay, publishLast, refCount, retryWhen, switchMap,
+  tap, timeout,
 } from 'rxjs/operators';
 
 import { CasTicketService } from './cas-ticket.service';
@@ -38,7 +38,6 @@ export class WsApiService {
    * @param options.params - additional request parameters (default: {})
    * @param options.timeout - request timeout (default: 10000)
    * @param options.url - url of web service (default: apiUrl)
-   * @param options.returnError - return error if set to true (default: false)
    * @return shared cached observable
    */
   get<T>(endpoint: string, refresh?: boolean, options: {
@@ -47,7 +46,6 @@ export class WsApiService {
     params?: HttpParams | { [param: string]: string | string[]; },
     timeout?: number,
     url?: string,
-    returnError?: boolean
   } = {}): Observable<T> {
     options = Object.assign({
       attempts: 4,
@@ -55,7 +53,6 @@ export class WsApiService {
       params: {},
       timeout: 20000,
       url: this.apiUrl,
-      returnError: false,
     }, options);
 
     const url = options.url + endpoint;
@@ -73,39 +70,19 @@ export class WsApiService {
         tap(cache => this.storage.set(endpoint, cache)),
         timeout(options.timeout),
         catchError(err => {
-          if (options.returnError) {
-            return Observable.throw(err);
-          }
           this.toastCtrl.create({ message: err.message, duration: 3000, position: 'top' })
             .then(toast => toast.present());
           return from(this.storage.get(endpoint)).pipe(
             switchMap(v => v || throwError('retrying')),
           );
         }),
-        retryWhen(errors =>
-          {
-            let retries = 0;
-
-            return zip(range(1, options.attempts), errors).pipe(
-              map((i: number | any) => 2 ** i + Math.random() * 8), // 2^n + random 0-8
-              mergeMap(i => timer((2 ** i + Math.random() * 8) * 1000)),
-              map(error => {
-                if (++retries === options.attempts) {
-                  return Observable.throw(error);
-                } 
-
-                return of(error);
-              })
-            );
-          }
-        ),
-        catchError(err => {
-          if (options.returnError) {
-            return Observable.throw(err);
-          }
-
-          return of();
-        }),
+        retryWhen(errors => errors.pipe(
+          concatMap((err, n) => iif( // use concat map to keep errors in order (not parallel)
+            () => n < options.attempts,
+            of(err).pipe(delay((2 ** (n + 1) + Math.random() * 8) * 1000)), // 2^n + random 0-8
+            throwError(err), // propagate error if all retries failed
+          ))
+        )),
       )
       : from(this.storage.get(endpoint)).pipe(
         switchMap(v => v ? of(v) : this.get(endpoint, true, options)),

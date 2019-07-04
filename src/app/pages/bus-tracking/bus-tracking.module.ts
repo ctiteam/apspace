@@ -23,4 +23,4 @@ const routes: Routes = [
   ],
   declarations: [BusTrackingPage]
 })
-export class BusTrackingPageModule {}
+export class BusTrackingPageModule { }

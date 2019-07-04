@@ -20,7 +20,7 @@ const routes: Routes = [
     loadChildren: './pages/tabs/tabs.module#TabsPageModule',
     canActivate: [AuthGuard]
   },
-  
+
   {
     path: 'student-timetable',
     loadChildren: './pages/student-timetable/student-timetable.module#StudentTimetablePageModule'
@@ -37,11 +37,23 @@ const routes: Routes = [
   },
   { path: 'staff', loadChildren: './pages/staff-directory-info/staff-directory-info.module#StaffDirectoryInfoPageModule' },
   {
+    path: 'feedback',
+    loadChildren: './pages/feedback/feedback.module#FeedbackPageModule'
+  },
+  {
     path: 'attendix-lecturer',
     // canActivate: [AuthGuard],
     children: [
-      { path: 'classes', loadChildren: './pages/attendix/attendix-lecturer/classes/classes.module#ClassesPageModule' },
-      { path: 'take-attendance', loadChildren: './pages/attendix/attendix-lecturer/take-attendance/take-attendance.module#TakeAttendancePageModule' },
+      {
+        path: 'classes',
+        loadChildren:
+          './pages/attendix/attendix-lecturer/classes/classes.module#ClassesPageModule'
+      },
+      {
+        path: 'take-attendance',
+        loadChildren:
+          './pages/attendix/attendix-lecturer/take-attendance/take-attendance.module#TakeAttendancePageModule'
+      },
       // { path: 'qr-otp', loadChildren: './pages/attendix/qr-otp/qr-otp.module#QrOtpPageModule' },
       // { path: 'take-picture', loadChildren: './pages/attendix/take-picture/take-picture.module#TakePicturePageModule' },
     ]
@@ -50,7 +62,32 @@ const routes: Routes = [
     path: 'feedback',
     loadChildren: './pages/feedback/feedback.module#FeedbackPageModule'
   },
-  { path: 'bus-tracking', loadChildren: './pages/bus-tracking/bus-tracking.module#BusTrackingPageModule' }
+  {
+    path: 'bus-tracking',
+    loadChildren: './pages/bus-tracking/bus-tracking.module#BusTrackingPageModule'
+  },
+  {
+    path: 'attendix-student',
+    // canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'qr-code',
+        loadChildren: './pages/attendix/qr-code/qr-code.module#QrCodePageModule'
+      },
+      {
+        path: 'qr-otp',
+        loadChildren: './pages/attendix/qr-otp/qr-otp.module#QrOtpPageModule'
+      },
+      {
+        path: 'take-picture',
+        loadChildren: './pages/attendix/take-picture/take-picture.module#TakePicturePageModule'
+      }
+    ]
+  },
+  {
+    path: 'more',
+    loadChildren: './pages/more/more.module#MorePageModule'
+  }
 ];
 
 @NgModule({

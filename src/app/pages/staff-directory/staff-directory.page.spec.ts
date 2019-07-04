@@ -9,10 +9,10 @@ describe('StaffDirectoryPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StaffDirectoryPage ],
+      declarations: [StaffDirectoryPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
