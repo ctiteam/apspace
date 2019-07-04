@@ -87,7 +87,8 @@ const routes: Routes = [
   {
     path: 'more',
     loadChildren: './pages/more/more.module#MorePageModule'
-  }
+  },
+  { path: 'fees', loadChildren: './pages/fees/fees.module#FeesPageModule' }
 ];
 
 @NgModule({
