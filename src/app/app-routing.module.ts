@@ -63,8 +63,8 @@ const routes: Routes = [
     loadChildren: './pages/feedback/feedback.module#FeedbackPageModule'
   },
   {
-    path: 'bus-tracking',
-    loadChildren: './pages/bus-tracking/bus-tracking.module#BusTrackingPageModule'
+    path: 'bus-shuttle-services',
+    loadChildren: './pages/bus-shuttle-services/bus-shuttle-services.module#BusShuttleServicePageModule'
   },
   {
     path: 'attendix-student',

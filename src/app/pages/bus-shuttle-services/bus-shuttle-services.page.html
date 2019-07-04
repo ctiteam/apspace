@@ -1,0 +1,200 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Bus Shuttle Services</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="animated anim-scale" (click)="openMenu()">
+        <ion-icon name="options"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-menu side="end" contentId="content" menuId="bus-filter-menu" type="overlay">
+  <ion-header>
+    <ion-toolbar color="danger">
+      <ion-title>Filter</ion-title>
+      <ion-buttons slot="end">
+        <ion-button class="animated anim-rotate-360-deg" shape="round" (click)="closeMenu()">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label>
+            Locations
+          </ion-label>
+          <ion-buttons slot="end">
+            <ion-button class="swap-button animated anim-rotate-270-deg" shape="round" (click)="swapLocations()">
+              <ion-icon color="danger" name="repeat"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item-divider>
+        <ion-item>
+          <ion-label>From</ion-label>
+          <ion-select interface="popover" [(ngModel)]="filterObject.fromLocation" (ngModelChange)="onFilter()">
+            <ion-select-option value="">
+              Any
+            </ion-select-option>
+            <ion-select-option *ngFor="let location of locations" [value]="location.location_name">
+              {{ location.location_nice_name }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>To</ion-label>
+          <ion-select interface="popover" [(ngModel)]="filterObject.toLocation" (ngModelChange)="onFilter()">
+            <ion-select-option value="">
+              Any
+            </ion-select-option>
+            <ion-select-option *ngFor="let location of locations" [value]="location.location_name">
+              {{ location.location_nice_name }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-item-group>
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label>
+            Others
+          </ion-label>
+        </ion-item-divider>
+        <ion-item>
+          <ion-label>Day</ion-label>
+          <ion-select interface="popover" [(ngModel)]="filterObject.tripDay" (ngModelChange)="onFilter()">
+            <ion-select-option value="sat">Saturday</ion-select-option>
+            <ion-select-option value="sun">Sunday</ion-select-option>
+            <ion-select-option value="mon-fri">Mon-Fri</ion-select-option>
+            <ion-select-option value="fri">Friday Only</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Show</ion-label>
+          <ion-select interface="popover" [(ngModel)]="filterObject.show" (ngModelChange)="onFilter()">
+            <ion-select-option value="all">All Trips</ion-select-option>
+            <ion-select-option value="upcoming">Upcoming Trips Only</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button fill="outline" color="danger" padding expand="block" (click)="clearFilter()">
+          clear filter
+          <ion-icon slot="end" name="trash"></ion-icon>
+        </ion-button>
+      </ion-item-group>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-content id="content" padding>
+  <div *ngIf="filteredTrip$ | async as trips; else loadingTrips" no-padding>
+    <ion-grid>
+      <ion-row>
+        <ion-col>Effective from: <span class="text-bold">{{latestUpdate}}</span></ion-col>
+      </ion-row>
+    </ion-grid>
+    <div class="masonry-list" *ngIf="numberOfTrips != 0; else noTrips">
+      <div class="masonry-item" *ngFor="let trip of trips | keyvalue">
+        <ion-card no-margin margin-bottom>
+          <ion-card-header [ngStyle]="{
+            background:
+              'linear-gradient(35deg, ' +
+              getLocationColor(trip.key) + ' 0%' +
+              ',' +
+              '#E7E9BB' + ' 90%' +
+              ',' +
+              getLocationColor(trip.key) + ' 100%' +
+              ')'
+          }">
+            <!-- #232526,  -->
+            <ion-card-title class="card-title float-left">
+              <h5 style="color: white" class="small-text">Next in: 1 hrs, 23 min</h5>
+              <h3 style="color: white" class="small-margin-top responsive-h1">
+                {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }}</h3>
+            </ion-card-title>
+            <!-- <div class="card-options-icon float-left" style="width: 10%" text-right>
+              <a style="color: white">
+                <ion-icon name="md-more" class="responsive-icon"></ion-icon>
+              </a>
+            </div> -->
+            <div class="clearfix"></div>
+          </ion-card-header>
+          <ion-card-content no-padding padding-bottom padding-start padding-end>
+            <ion-list no-padding>
+              <ion-item lines="none" *ngFor="let destination of trip.value | keyvalue">
+                <ion-label>
+                  <h2 class="responsive-h2 text-bold">
+                    {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} ->
+                    {{ destination.key | uppercase }}
+                  </h2>
+                  <ion-grid no-padding>
+                    <ion-row>
+                      <ion-col style="color: #777777" *ngFor="let tripData of destination.value" size="3" size-md="4"
+                        text-center>
+                        {{tripData.trip_time}}
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+    <ng-template #noTrips>
+      <ion-row>
+        <ion-col>
+          No trips
+        </ion-col>
+      </ion-row>
+    </ng-template>
+  </div>
+  <ng-template #loadingTrips>
+    <ion-grid>
+      <ion-row>
+        <ion-skeleton-text animated style="width: 48%; line-height: 35px"></ion-skeleton-text>
+      </ion-row>
+    </ion-grid>
+    <div class="masonry-list">
+      <div class="masonry-item" *ngFor="let s of skeletonSettings.numberOfSkeltons">
+        <ion-card no-margin margin-bottom>
+          <ion-card-header>
+            <ion-card-title class="card-title">
+              <ion-skeleton-text animated style="width: 100%; line-height: 35px"></ion-skeleton-text>
+            </ion-card-title>
+            <div class="clearfix"></div>
+          </ion-card-header>
+          <ion-card-content no-padding padding-bottom padding-start padding-end>
+            <ion-list no-padding>
+              <ion-item lines="none" *ngFor="let destination of skeletonSettings.numberOfLocationsPerSource">
+                <ion-label>
+                  <ion-skeleton-text animated style="width: 45%; line-height: 25px"></ion-skeleton-text>
+                  <ion-grid no-padding>
+                    <ion-row>
+                      <ion-col *ngFor="let time of skeletonSettings.numberOfTimesPerTrip" size="3" size-md="4"
+                        text-center>
+                        <ion-skeleton-text animated style="width: 100%; line-height: 21px"></ion-skeleton-text>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <ng-template #noTrips>
+      <ion-row>
+        <ion-col>
+          No trips
+        </ion-col>
+      </ion-row>
+    </ng-template>
+  </ng-template>
+</ion-content>
+
+<!-- skeletonNumber -->

@@ -1,8 +1,8 @@
 export interface BusTrips {
-  trips_times: Trips[];
+  trips: BusTrip[];
 }
 
-export interface Trips {
+export interface BusTrip {
   id: number;
   bus_assigned: string;
   trip_from: string;
@@ -12,11 +12,11 @@ export interface Trips {
   applicable_from: string;
 }
 
-export interface Locations {
-  locations: Location[];
+export interface APULocations {
+  locations: APULocation[];
 }
 
-export interface Location {
+export interface APULocation {
   location_name: string;
   location_nice_name: string;
   location_color: string;
