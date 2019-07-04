@@ -73,3 +73,25 @@ input:-webkit-autofill:active {
     font-size: 0.6em !important;
   }
 }
+
+// ANIMATIONS
+.animated {
+  transition: all 0.5s;
+}
+.anim-rotate-270-deg {
+  &:hover {
+    transform: rotate(270deg);
+  }
+}
+
+.anim-rotate-360-deg {
+  &:hover {
+    transform: rotate(360deg);
+  }
+}
+
+.anim-scale {
+  &:hover {
+    transform: scale(1.2);
+  }
+}
