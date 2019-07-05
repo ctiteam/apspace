@@ -22,7 +22,8 @@
                         <ng-template #loadingStudentsPhoto>
                           loading picture
                         </ng-template>
-                        <div class="welcome-message-wrapper float-left" padding-start>
+                        <div class="welcome-message-wrapper float-left"
+                          *ngIf="studentFirstName$ | async as studentFirstName; else loadingProfile" padding-start>
                           <ion-card-title>
                             <h3 class="responsive-h1">{{greetingMessage}}, <span>{{studentFirstName | titlecase}}</span>
                             </h3>
@@ -31,6 +32,21 @@
                             <h3 class="responsive-h2">Nice to see you again.</h3>
                           </ion-card-subtitle>
                         </div>
+                        <ng-template #loadingProfile>
+                          <div class="welcome-message-wrapper float-left" style="width: 75%; padding-top: 0"
+                            padding-start>
+                            <ion-card-title>
+                              <h3 class="responsive-h1">
+                                <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
+                              </h3>
+                            </ion-card-title>
+                            <ion-card-subtitle>
+                              <h3 class="responsive-h2">
+                                <ion-skeleton-text animated style="width: 75%; line-height: 25px"></ion-skeleton-text>
+                              </h3>
+                            </ion-card-subtitle>
+                          </div>
+                        </ng-template>
                       </ion-col>
                     </ion-row>
                     <ion-row margin-top>

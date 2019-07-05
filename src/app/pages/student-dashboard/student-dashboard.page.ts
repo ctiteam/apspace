@@ -47,11 +47,11 @@ export class StudentDashboardPage implements OnInit {
   photo$: Observable<StudentPhoto[]>;
   greetingMessage = '';
   defaultIntake = '';
-  studentFirstName = '';
+  studentFirstName$: Observable<string>;
   block: boolean = false;
 
   getProfile() {
-    return this.ws.get<StudentProfile>('/student/profile').pipe(
+    return this.ws.get<StudentProfile>('/student/profile', true).pipe(
       tap(studentProfile => {
         if (studentProfile.BLOCK === true) {
           this.block = false;
@@ -61,7 +61,7 @@ export class StudentDashboardPage implements OnInit {
         }
       }),
       tap(studentProfile => this.defaultIntake = studentProfile.INTAKE),
-      tap(studentProfile => this.studentFirstName = studentProfile.NAME.split(' ')[0]),
+      tap(studentProfile => this.studentFirstName$ = of(studentProfile.NAME.split(' ')[0])),
       tap(studentProfile => this.getTodaysSchdule(studentProfile.INTAKE)), // INTAKE NEEDED FOR TIMETABLE
       tap(studentProfile => this.getUpcomingEvents(studentProfile.INTAKE)), // INTAKE NEEDED FOR EXAMS
       tap(studentProfile => this.getAttendance(studentProfile.INTAKE)),
@@ -541,7 +541,7 @@ financialsChart = {
 }
 financialsCardConfigurations: DashboardCardComponentConfigurations = {
   withOptionsButton: false,
-  cardTitle: "Financials:",
+  cardTitle: "Financials",
   contentPadding: true
 }
 
