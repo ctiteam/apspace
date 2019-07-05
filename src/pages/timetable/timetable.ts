@@ -35,7 +35,7 @@ export class TimetablePage {
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
   numOfSkeletons = new Array(5);
-
+  viewType: 'daily' | 'weekly';
 
   @ViewChild(Content) content: Content;
 
@@ -214,6 +214,8 @@ export class TimetablePage {
       }
     );
 
+    // viewtype
+    this.viewType = this.settings.get('viewType') || 'weekly';
 
     const intake$ = this.tt.get().pipe(
       map(tt => Array.from(new Set((tt || []).map(t => t.INTAKE.toUpperCase()))).sort()),
@@ -240,5 +242,10 @@ export class TimetablePage {
   select(intake: string) {
     this.changeIntake(intake);
     this.toggleFilterMenu();
+  }
+
+  rotateView() {
+    this.viewType = this.viewType === 'daily' ? 'weekly' : 'daily';
+    this.settings.set('viewType', this.viewType);
   }
 }
