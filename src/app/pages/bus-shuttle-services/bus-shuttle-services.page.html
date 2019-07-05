@@ -78,10 +78,12 @@
             <ion-select-option value="upcoming">Upcoming Trips Only</ion-select-option>
           </ion-select>
         </ion-item>
-        <ion-button fill="outline" color="danger" padding expand="block" (click)="clearFilter()">
-          clear filter
-          <ion-icon slot="end" name="trash"></ion-icon>
-        </ion-button>
+        <div padding>
+          <ion-button fill="outline" color="danger" expand="block" (click)="clearFilter()">
+            clear filter
+            <ion-icon slot="end" name="trash"></ion-icon>
+          </ion-button>
+        </div>
       </ion-item-group>
     </ion-list>
   </ion-content>
