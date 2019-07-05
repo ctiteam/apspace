@@ -152,6 +152,7 @@ export class StudentDashboardPage implements OnInit {
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
             color: '#27ae60',
             pass: classPass,
+            passColor: '#d7dee3',
             outputFormat: 'event-with-time-and-hyperlink',
             type: 'class',
             dateOrTime: moment(moment(timetable.TIME_FROM, 'HH:mm A').toDate()).format('hh mm A'), // EXPECTED FORMAT HH MM A
@@ -184,6 +185,7 @@ export class StudentDashboardPage implements OnInit {
             outputFormat: 'event-with-time-and-hyperlink',
             type: 'iconsult',
             pass: consultationPass,
+            passColor: '#d7dee3',
             firstDescription: upcomingConsultation.location + ' | ' + upcomingConsultation.venue,
             secondDescription: upcomingConsultation.lecname,
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
@@ -282,6 +284,7 @@ export class StudentDashboardPage implements OnInit {
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
             color: '#ff0000',
             pass: false,
+            passColor: '#d7dee3',
             outputFormat: 'event-with-date-only',
             type: 'exam',
             dateOrTime: formattedStartDate
@@ -304,6 +307,7 @@ export class StudentDashboardPage implements OnInit {
           thirdDescription: this.getNumberOfDaysForHoliday(moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(), moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()),
           color: '#273160',
           pass: false,
+          passColor: '#d7dee3',
           outputFormat: 'event-with-date-only',
           type: 'holiday',
           dateOrTime: formattedStartDate
@@ -313,17 +317,11 @@ export class StudentDashboardPage implements OnInit {
     );
   }
 
-
   getNumberOfDaysForHoliday(startDate: Date, endDate: Date): string {
     const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(startDate, endDate);
-    if (secondsDiff === 0) {
-      return '1 day'
-    } else {
       const daysDiff = Math.floor(secondsDiff / (3600 * 24));
-      return daysDiff + ' days';
-    }
+      return (daysDiff + 1) + ' days';
   }
-
 
 
 
