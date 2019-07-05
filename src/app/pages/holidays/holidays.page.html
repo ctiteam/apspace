@@ -58,6 +58,16 @@
           </ion-label>
         </ion-item-divider>
         <ion-item>
+          <ion-label>Affecting:</ion-label>
+          <ion-select interface="popover" [(ngModel)]="filterObject.affecting" (ngModelChange)="onFilter()">
+            <ion-select-option value="students">Students only</ion-select-option>
+            <ion-select-option value="staff">Staff only</ion-select-option>
+            <ion-select-option value="">
+              All
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
           <ion-label>Number of days</ion-label>
           <ion-select interface="popover" [(ngModel)]="filterObject.numberOfDays" (ngModelChange)="onFilter()">
             <ion-select-option value="">

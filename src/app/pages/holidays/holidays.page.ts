@@ -25,12 +25,14 @@ export class HolidaysPage implements OnInit {
     show: 'all' | 'upcoming',
     filterDays: string,
     filterMonths: string,
-    numberOfDays: '' | '1 days' | 'many'
+    numberOfDays: '' | '1 days' | 'many',
+    affecting: '' | 'students' | 'staff'
   } = {
       show: 'all',
       filterDays: '',
       filterMonths: '',
-      numberOfDays: ''
+      numberOfDays: '',
+      affecting: ''
     }
   constructor(
     private ws: WsApiService,
@@ -57,7 +59,8 @@ export class HolidaysPage implements OnInit {
           // FILTER HOLIDAYS BY DAY & MONTH
           return (
             moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('dddd').includes(this.filterObject.filterDays) &&
-            moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('MMMM').includes(this.filterObject.filterMonths)
+            moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('MMMM').includes(this.filterObject.filterMonths) &&
+            holiday.holiday_people_affected.includes(this.filterObject.affecting)
           );
         });
         if (this.filterObject.show == 'upcoming') {
@@ -86,8 +89,8 @@ export class HolidaysPage implements OnInit {
         holidays.forEach(holiday => {
           holidaysEventMode.push({
             title: holiday.holiday_name,
-            firstDescription: 'Until: ' + moment(moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()).format('dddd, DD MMM YYYY'), // EXPECTED FORMAT HH MM A,
-            secondDescription: holiday.holiday_description,
+            firstDescription: 'For ' + (holiday.holiday_people_affected.includes(',') ? holiday.holiday_people_affected.replace(',', ' and ') : holiday.holiday_people_affected.replace(',', ' and ') + ' only'),
+            secondDescription: 'Ends on ' + (holiday.holiday_end_date == holiday.holiday_start_date ? 'the same day' : moment(moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()).format('dddd, DD MMM YYYY')), // EXPECTED FORMAT HH MM A,
             thirdDescription: this.getNumberOfDaysForHoliday(moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(), moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()),
             color: '#27ae60',
             passColor: '#a49999',
@@ -105,7 +108,7 @@ export class HolidaysPage implements OnInit {
   getNumberOfDaysForHoliday(startDate: Date, endDate: Date): string {
     const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(startDate, endDate);
     const daysDiff = Math.floor(secondsDiff / (3600 * 24));
-    return (daysDiff + 1) + ' days';
+    return (daysDiff + 1) + ' day' + (daysDiff == 0 ? '' : 's');
   }
 
   getSecondsDifferenceBetweenTwoDates(startDate: Date, endDate: Date): number {
@@ -128,7 +131,8 @@ export class HolidaysPage implements OnInit {
       filterDays: '',
       filterMonths: '',
       numberOfDays: '',
-      show: 'all'
+      show: 'all',
+      affecting: ''
     };
     this.onFilter()
   }
