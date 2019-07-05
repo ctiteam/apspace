@@ -1,10 +1,10 @@
 <div class="event-calendar" *ngIf="observable$ | async as events">
     <div class="event-list">
         <div class="event" *ngFor="let event of events">
-            <div class="event-container" padding-end [style.borderColor]="!event.pass? event.color: '#d7dee3'"
-                [style.color]="event.pass? '#d7dee3': ''">
+            <div class="event-container" padding-end [style.borderColor]="!event.pass? event.color: event.passColor"
+                [style.color]="event.pass? event.passColor: ''">
                 <div class="left-part-container" text-center>
-                    <span class="left-part" [style.color]="!event.pass? event.color: '#d7dee3'">
+                    <span class="left-part" [style.color]="!event.pass? event.color: event.passColor">
                         <span class="primaryDateTime" *ngIf="event.dateOrTime">
                             {{splitTimeAndGetOnePart('first',event.dateOrTime)}}
                         </span>
@@ -18,8 +18,8 @@
                 </div>
                 <div class="right-part-container">
                     <span *ngIf="event.title" class="title"
-                        [style.color]="!event.pass? event.color: '#d7dee3'">{{event.title}}</span>
-                    <span [style.backgroundColor]="!event.pass? event.color: '#d7dee3'" class="type">
+                        [style.color]="!event.pass? event.color: event.passColor">{{event.title}}</span>
+                    <span [style.backgroundColor]="!event.pass? event.color: event.passColor" class="type">
                         <a>
                             {{event.type | titlecase}}
                         </a>
@@ -27,7 +27,7 @@
                     <div class="clearfix"></div>
                     <span *ngIf="event.firstDescription" class="description">{{event.firstDescription}}</span>
                     <span *ngIf="event.secondDescription" class="description">
-                        <a [style.color]="!event.pass? event.color: '#d7dee3'"
+                        <a [style.color]="!event.pass? event.color: event.passColor"
                             *ngIf="event.outputFormat === 'event-with-time-and-hyperlink' || event.outputFormat === 'event-with-date-and-hyperlink'; else noHyperlink">
                             {{event.secondDescription}}
                         </a>
