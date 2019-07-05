@@ -42,7 +42,10 @@ export class SettingsService {
    * @param key - key stored
    */
   get<K extends keyof Settings>(key: K): Settings[K] {
-    return this.data[key];
+    if(this.data){
+      return this.data[key];
+    }
+    return undefined
   }
 
   /** Clear settings. */
