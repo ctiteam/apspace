@@ -9,7 +9,10 @@ import { Observable } from 'rxjs';
 })
 export class EventsListComponent implements OnInit {
   @Input() observable$: Observable<EventComponentConfigurations[]>;
-
+  skeletonConfigurations = {
+    eventsSkeleton: new Array(8),
+    
+  }
   ngOnInit() {
   }
   splitTimeAndGetOnePart(part: 'third' | 'second' | 'first', time: string) {

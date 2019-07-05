@@ -29,7 +29,7 @@
   padding-bottom: 15px;
 }
 
-.event-container:hover {
+.event-container:not(.no-hover):hover {
   border-left-width: 10px;
   background: #eceff1;
 }

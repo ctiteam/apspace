@@ -1,5 +1,5 @@
-<div class="event-calendar" *ngIf="observable$ | async as events">
-    <div class="event-list">
+<div class="event-calendar" *ngIf="observable$ | async as events; else loading">
+    <div class="event-list" *ngIf="events.length > 0; else noEvents">
         <div class="event" *ngFor="let event of events">
             <div class="event-container" padding-end [style.borderColor]="!event.pass? event.color: event.passColor"
                 [style.color]="event.pass? event.passColor: ''">
@@ -43,5 +43,50 @@
             <div class="spacer"></div>
         </div>
     </div>
-
+    <ng-template #noEvents>
+        There are no events :(
+    </ng-template>
 </div>
+<ng-template #loading>
+    <div class="event-calendar">
+        <div class="event-list">
+            <div class="event" *ngFor="let _ of skeletonConfigurations.eventsSkeleton">
+                <div class="event-container no-hover" padding-end>
+                    <div class="left-part-container" style="padding-top: 5px;">
+                        <span class="left-part">
+                            <span class="primaryDateTime d-block" style="padding: 2px 20px">
+                                <ion-skeleton-text animated style="width: 100%; line-height: 35px"></ion-skeleton-text>
+                            </span>
+                            <span class="left-part-item small d-block" style="padding: 2px 15px">
+                                <ion-skeleton-text animated style="width: 100%; line-height: 27px"></ion-skeleton-text>
+                            </span>
+                            <span class="left-part-item smallest d-block" style="padding: 2px 20px">
+                                <ion-skeleton-text animated style="width: 100%; line-height: 17px"></ion-skeleton-text>
+                            </span>
+                        </span>
+                    </div>
+                    <div class="right-part-container">
+                        <span class="title">
+                            <ion-skeleton-text animated style="width: 90%; line-height: 31px"></ion-skeleton-text>
+                        </span>
+                        <span class="type">
+                            <ion-skeleton-text animated style="width: 100%; line-height: 20px"></ion-skeleton-text>
+                        </span>
+                        <div class="clearfix"></div>
+                        <span class="description">
+                            <ion-skeleton-text animated style="width: 70%; line-height: 18px"></ion-skeleton-text>
+                        </span>
+                        <span class="description">
+                            <ion-skeleton-text animated style="width: 90%; line-height: 18px"></ion-skeleton-text>
+                        </span>
+                        <span text-right class="description">
+                            <ion-skeleton-text animated style="width: 40%; line-height: 18px; float: right"></ion-skeleton-text>
+                        </span>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="spacer"></div>
+            </div>
+        </div>
+    </div>
+</ng-template>
