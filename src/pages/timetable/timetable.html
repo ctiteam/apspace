@@ -8,7 +8,7 @@
       <button ion-button icon-only clear class="notification-button colored-border" (click)="chooseWeek()">
         <ion-icon name="calendar"></ion-icon>
       </button>
-      <button ion-button icon-only clear class="notification-button colored-border" (click)="toggleFilterMenu()">
+      <button *ngIf="intakeSelectable" ion-button icon-only clear class="notification-button colored-border" (click)="toggleFilterMenu()">
         <ion-icon name="search"></ion-icon>
       </button>
     </ion-buttons>

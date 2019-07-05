@@ -2,8 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import {
-  ActionSheetController, App, Content, IonicPage,
-  ModalController, NavController, Platform, MenuController, ViewController,
+  ActionSheetController, App, Content, IonicPage, ModalController,
+  NavController, NavParams, Platform, MenuController, ViewController,
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -36,6 +36,7 @@ export class TimetablePage {
   intakeLabels: string[] = [];
   numOfSkeletons = new Array(5);
   viewType: 'daily' | 'weekly';
+  intakeSelectable = true;
 
   @ViewChild(Content) content: Content;
 
@@ -47,13 +48,14 @@ export class TimetablePage {
     public actionSheetCtrl: ActionSheetController,
     public modalCtrl: ModalController,
     public navCtrl: NavController,
+    public navParams: NavParams,
     public plt: Platform,
     private tt: TimetableProvider,
     private ws: WsApiProvider,
     private settings: SettingsProvider,
     public menu: MenuController,
     public app: App,
-    public viewCtrl: ViewController
+    public viewCtrl: ViewController,
   ) { }
 
   presentActionSheet(labels: string[], handler: (_: string) => void) {
@@ -99,6 +101,12 @@ export class TimetablePage {
       this.settings.set('intake', this.intake = intake);
       this.timetable$.subscribe();
     }
+  }
+
+  /** Rotate between 'daily' and 'weekly' view. */
+  rotateView() {
+    this.viewType = this.viewType === 'daily' ? 'weekly' : 'daily';
+    this.settings.set('viewType', this.viewType);
   }
 
   /** Check if the day is in week. */
@@ -186,6 +194,15 @@ export class TimetablePage {
   }
 
   ionViewDidLoad() {
+    // optional intake passed by other pages
+    const navIntake = this.navParams.get('intake');
+    if (navIntake) {
+      this.intakeSelectable = false;
+      this.intake = navIntake;
+    } else {  // direct timetable page access
+      this.intake = this.settings.get('intake');
+    }
+
     // select current day by default
     this.selectedDate = new Date();
     this.selectedDate.setHours(0, 0, 0, 0);
@@ -194,7 +211,6 @@ export class TimetablePage {
     const date = new Date();
     date.setDate(date.getDate() - date.getDay() + 1);
     this.selectedWeek = date;
-    this.intake = this.settings.get('intake');
     this.getTimetableData().subscribe(
       _ => { },
       _ => { },
@@ -244,8 +260,4 @@ export class TimetablePage {
     this.toggleFilterMenu();
   }
 
-  rotateView() {
-    this.viewType = this.viewType === 'daily' ? 'weekly' : 'daily';
-    this.settings.set('viewType', this.viewType);
-  }
 }
