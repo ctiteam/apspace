@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Holidays</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="animated anim-scale" (click)="openMenu()">
+        <ion-icon name="options"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-menu side="end" contentId="content" menuId="holiday-filter-menu" type="overlay">
+  <ion-header>
+    <ion-toolbar color="danger">
+      <ion-title>Filter</ion-title>
+      <ion-buttons slot="end">
+        <ion-button class="animated anim-rotate-360-deg" shape="round" (click)="closeMenu()">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label>
+            Filter by:
+          </ion-label>
+        </ion-item-divider>
+        <ion-item>
+          <ion-label>Day</ion-label>
+          <ion-select interface="popover" [(ngModel)]="filterObject.filterDays" (ngModelChange)="onFilter()">
+            <ion-select-option value="">
+              Any
+            </ion-select-option>
+            <ion-select-option *ngFor="let day of weekDays" [value]="day">
+              {{ day }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Month</ion-label>
+          <ion-select interface="popover" [(ngModel)]="filterObject.filterMonths" (ngModelChange)="onFilter()">
+            <ion-select-option value="">
+              Any
+            </ion-select-option>
+            <ion-select-option *ngFor="let month of months" [value]="month">
+              {{ month }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-item-group>
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label>
+            Show:
+          </ion-label>
+        </ion-item-divider>
+        <ion-item>
+          <ion-label>Number of days</ion-label>
+          <ion-select interface="popover" [(ngModel)]="filterObject.numberOfDays" (ngModelChange)="onFilter()">
+            <ion-select-option value="">
+              Any
+            </ion-select-option>
+            <ion-select-option value="1 days">One day</ion-select-option>
+            <ion-select-option value="many">More than one</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Upcoming only</ion-label>
+          <ion-select interface="popover" [(ngModel)]="filterObject.show" (ngModelChange)="onFilter()">
+            <ion-select-option value="all">No</ion-select-option>
+            <ion-select-option value="upcoming">Yes</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div padding>
+          <ion-button fill="outline" color="danger" expand="block" (click)="clearFilter()">
+            clear filter
+            <ion-icon slot="end" name="trash"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-item-group>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-content id="content" padding>
+  <ion-grid no-padding>
+    <ion-row>
+      <ion-col size="12">
+        <events-list [observable$]="filteredHoliday$"></events-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
