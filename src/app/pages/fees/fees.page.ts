@@ -1,42 +1,42 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { trigger, transition, style, animate } from "@angular/animations";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { trigger, transition, style, animate } from '@angular/animations';
 
-import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
-import { IonContent, MenuController } from "@ionic/angular";
+import { IonContent, MenuController } from '@ionic/angular';
 
-import { ChartComponent } from "angular2-chartjs";
+import { ChartComponent } from 'angular2-chartjs';
 
 import {
   FeesBankDraft,
   FeesDetails,
   FeesSummary,
   FeesTotalSummary
-} from "../../interfaces";
-import { WsApiService } from "src/app/services";
+} from '../../interfaces';
+import { WsApiService } from 'src/app/services';
 
 declare var Chart: any;
 
 @Component({
-  selector: "app-fees",
-  templateUrl: "./fees.page.html",
-  styleUrls: ["./fees.page.scss"],
+  selector: 'app-fees',
+  templateUrl: './fees.page.html',
+  styleUrls: ['./fees.page.scss'],
   animations: [
-    trigger("buttonEnterOut", [
-      transition(":enter", [
-        style({ transform: "rotate(-90deg) scale(0)" }),
-        animate("0.2s ease-out", style({ transform: "rotate(0) scale(1)" }))
+    trigger('buttonEnterOut', [
+      transition(':enter', [
+        style({ transform: 'rotate(-90deg) scale(0)' }),
+        animate('0.2s ease-out', style({ transform: 'rotate(0) scale(1)' }))
       ]),
-      transition(":leave", [
+      transition(':leave', [
         style({ opacity: 1 }),
-        animate("0.15s ease-in", style({ opacity: 0 }))
+        animate('0.15s ease-in', style({ opacity: 0 }))
       ])
     ])
   ]
 })
 export class FeesPage implements OnInit {
-  selectedSegment = "Summary";
+  selectedSegment = 'Summary';
 
   totalSummary$: Observable<FeesTotalSummary[]>;
   bankDraft$: Observable<FeesBankDraft[]>;
@@ -49,12 +49,12 @@ export class FeesPage implements OnInit {
   }[];
   visibleLabels: string[];  // Used by filter pipe to determine card items to be displayed
 
-  @ViewChild("content") content: IonContent;
-  @ViewChild("financialsChartComponent")
+  @ViewChild('content') content: IonContent;
+  @ViewChild('financialsChartComponent')
   financialsChartComponent: ChartComponent;
   financial$: Observable<FeesTotalSummary>;
   financialsChart = {
-    type: "bar",
+    type: 'bar',
     options: {
       scales: {
         xAxes: [{ stacked: true }],
@@ -73,49 +73,49 @@ export class FeesPage implements OnInit {
   ngOnInit() {
     const that = this;
 
-    this.totalSummary$ = this.ws.get("/student/summary_overall_fee", true);
-    this.summary$ = this.ws.get("/student/outstanding_fee", true);
-    this.bankDraft$ = this.ws.get("/student/bankdraft_amount", true);
-    this.detail$ = this.ws.get("/student/overall_fee", true);
+    this.totalSummary$ = this.ws.get('/student/summary_overall_fee', true);
+    this.summary$ = this.ws.get('/student/outstanding_fee', true);
+    this.bankDraft$ = this.ws.get('/student/bankdraft_amount', true);
+    this.detail$ = this.ws.get('/student/overall_fee', true);
 
     this.totalSummary$ = this.totalSummary$.pipe(
       tap(overdueSummary => {
         this.financialsChart.data = {
-          labels: ["Financial Status"],
+          labels: ['Financial Status'],
           datasets: [
             {
-              label: "Paid",
+              label: 'Paid',
               data: [+overdueSummary[0].TOTAL_PAID],
-              backgroundColor: "#00c853" // GREEN
+              backgroundColor: '#00c853' // GREEN
             },
             {
-              label: "Outstanding",
+              label: 'Outstanding',
               data: [+overdueSummary[0].TOTAL_OUTSTANDING],
-              backgroundColor: "#ffd600" // YELLOW
+              backgroundColor: '#ffd600' // YELLOW
             },
             {
-              label: "Overdue",
+              label: 'Overdue',
               data: [+overdueSummary[0].TOTAL_OVERDUE],
-              backgroundColor: "#d50000" // ORANGE
+              backgroundColor: '#d50000' // ORANGE
             },
             {
-              label: "Fine",
+              label: 'Fine',
               data: [+overdueSummary[0].FINE],
-              backgroundColor: "#c51162" // PINK
+              backgroundColor: '#c51162' // PINK
             }
           ]
         };
 
-        this.labels = this.financialsChart.data["datasets"].map(
+        this.labels = this.financialsChart.data.datasets.map(
           dataset => ({
-            "name": dataset.label,
-            "visible": true
+            name: dataset.label,
+            visible: true
           })
         );
       })
     );
 
-    this.financialsChart.options["legend"]["onClick"] = function(
+    this.financialsChart.options.legend.onClick = function(
       event,
       legendItem
     ) {
@@ -130,8 +130,8 @@ export class FeesPage implements OnInit {
     this.menuCtrl.toggle();
   }
 
-  updateChartLabelVisibility(label_index: number, visible: boolean) {
-    this.financialsChartComponent.chart.data.datasets[label_index]._meta["0"].hidden = !visible;
+  updateChartLabelVisibility(labelIndex: number, visible: boolean) {
+    this.financialsChartComponent.chart.data.datasets[labelIndex]._meta['0'].hidden = !visible;
     this.financialsChartComponent.chart.update();
     this.visibleLabels = this.getVisibleLabels();
   }
@@ -142,11 +142,11 @@ export class FeesPage implements OnInit {
 
   getVisibleLabels(): string[] {
     return this.financialsChartComponent.chart.data.datasets
-      .filter(dataset => !dataset._meta["0"].hidden)
+      .filter(dataset => !dataset._meta['0'].hidden)
       .map(dataset => dataset.label);
   }
 
   isNumber(val: any): boolean {
-    return typeof val === "number";
+    return typeof val === 'number';
   }
 }

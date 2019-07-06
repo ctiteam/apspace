@@ -64,7 +64,7 @@ const routes: Routes = [
   },
   {
     path: 'bus-shuttle-services',
-    loadChildren: './pages/bus-shuttle-services/bus-shuttle-services.module#BusShuttleServicePageModule'
+    loadChildren: './pages/bus-shuttle-services/bus-shuttle-services.module#BusShuttlePagePageModule'
   },
   {
     path: 'attendix-student',

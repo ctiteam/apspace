@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
 
 interface Item {
   AMOUNT_PAYABLE: number;
@@ -14,7 +14,7 @@ const filterMap = {
   fine: (item: Item) => item.FINE > 0
 };
 
-@Pipe({ name: "filter" })
+@Pipe({ name: 'filter' })
 export class FilterPipe implements PipeTransform {
   transform(items: Item[] | null, visibleLabels: string[]): Item[] {
     if (visibleLabels) {

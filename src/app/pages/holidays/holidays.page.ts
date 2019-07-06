@@ -18,7 +18,7 @@ export class HolidaysPage implements OnInit {
   numberOfHolidays = 1;
 
   weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+  months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   todaysDate = new Date();
   filterObject: {
@@ -33,7 +33,7 @@ export class HolidaysPage implements OnInit {
       filterMonths: '',
       numberOfDays: '',
       affecting: ''
-    }
+    };
   constructor(
     private ws: WsApiService,
     private menu: MenuController,
@@ -42,13 +42,13 @@ export class HolidaysPage implements OnInit {
   ngOnInit() {
     this.filteredHoliday$ = this.getHolidays().pipe(
       tap(_ => this.onFilter())
-    )
+    );
   }
 
   getHolidays() {
     return this.holiday$ = this.ws.get<Holidays>(`/transix/holidays`, true, { auth: false }).pipe(
-      map(res => res.holidays.filter(holiday => +holiday.holiday_start_date.split('-')[0] == this.todaysDate.getFullYear()))
-    )
+      map(res => res.holidays.filter(holiday => +holiday.holiday_start_date.split('-')[0] === this.todaysDate.getFullYear()))
+    );
   }
 
   onFilter() {
@@ -63,35 +63,49 @@ export class HolidaysPage implements OnInit {
             holiday.holiday_people_affected.includes(this.filterObject.affecting)
           );
         });
-        if (this.filterObject.show == 'upcoming') {
+        if (this.filterObject.show === 'upcoming') {
           filteredArray = filteredArray.filter(holiday => {
             // FILTER HOLIDAYS TO THE ONCE UPCOMING ONLY
-            return moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate() > this.todaysDate
+            return moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate() > this.todaysDate;
           });
         }
 
         if (this.filterObject.numberOfDays !== '') {
           filteredArray = filteredArray.filter(holiday => {
             if (this.filterObject.numberOfDays === '1 days') {
-              return this.getNumberOfDaysForHoliday(moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(), moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()) === '1 days'
+              return this.getNumberOfDaysForHoliday(
+                moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
+                moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()) === '1 days';
             } else {
-              return this.getNumberOfDaysForHoliday(moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(), moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()) !== '1 days'
+              return this.getNumberOfDaysForHoliday(
+                moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
+                moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()) !== '1 days';
             }
-          })
+          });
         }
-        if (filteredArray.length == 0) { // NO RESULTS => SHOW 'THERE ARE NO HOLIDAYS' MESSAGE
+        if (filteredArray.length === 0) { // NO RESULTS => SHOW 'THERE ARE NO HOLIDAYS' MESSAGE
           this.numberOfHolidays = 0;
         }
         return filteredArray;
       }),
       map(holidays => {
-        let holidaysEventMode: EventComponentConfigurations[] = [];
+        const holidaysEventMode: EventComponentConfigurations[] = [];
         holidays.forEach(holiday => {
           holidaysEventMode.push({
             title: holiday.holiday_name,
-            firstDescription: 'For ' + (holiday.holiday_people_affected.includes(',') ? holiday.holiday_people_affected.replace(',', ' and ') : holiday.holiday_people_affected.replace(',', ' and ') + ' only'),
-            secondDescription: 'Ends on ' + (holiday.holiday_end_date == holiday.holiday_start_date ? 'the same day' : moment(moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()).format('dddd, DD MMM YYYY')), // EXPECTED FORMAT HH MM A,
-            thirdDescription: this.getNumberOfDaysForHoliday(moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(), moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()),
+            firstDescription: 'For ' + (
+              holiday.holiday_people_affected.includes(',')
+              ? holiday.holiday_people_affected.replace(',', ' and ')
+              : holiday.holiday_people_affected.replace(',', ' and ') + ' only'),
+            secondDescription: 'Ends on ' + (
+              holiday.holiday_end_date === holiday.holiday_start_date
+              ? 'the same day'
+              : moment(moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate())
+              .format('dddd, DD MMM YYYY')
+            ), // EXPECTED FORMAT HH MM A,
+            thirdDescription: this.getNumberOfDaysForHoliday(
+              moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
+              moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()),
             color: '#27ae60',
             passColor: '#a49999',
             pass: moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate() < this.todaysDate,
@@ -108,7 +122,7 @@ export class HolidaysPage implements OnInit {
   getNumberOfDaysForHoliday(startDate: Date, endDate: Date): string {
     const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(startDate, endDate);
     const daysDiff = Math.floor(secondsDiff / (3600 * 24));
-    return (daysDiff + 1) + ' day' + (daysDiff == 0 ? '' : 's');
+    return (daysDiff + 1) + ' day' + (daysDiff === 0 ? '' : 's');
   }
 
   getSecondsDifferenceBetweenTwoDates(startDate: Date, endDate: Date): number {
@@ -134,7 +148,7 @@ export class HolidaysPage implements OnInit {
       show: 'all',
       affecting: ''
     };
-    this.onFilter()
+    this.onFilter();
   }
 
 }
