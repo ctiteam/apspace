@@ -36,7 +36,7 @@
             <ion-grid no-padding padding-top>
               <ion-row class="input-elements-wrabber">
                 <ion-col no-padding size="10" class="input-wrapper">
-                  <ion-input padding-start placeholder="Student ID" [(ngModel)]="searchKeyword"></ion-input>
+                  <ion-input padding-start placeholder="Student ID" (keyup.enter)="searchForGraduaters()" [(ngModel)]="searchKeyword"></ion-input>
                 </ion-col>
                 <ion-col size="2" no-padding>
                   <ion-button no-margin fill="clear" expand="full"
@@ -55,7 +55,7 @@
             <ng-template [ngIf]="graduaters.length > 0" [ngIfElse]="noGraduaters">
               <ion-card no-margin *ngFor="let graduater of graduaters">
                 <ion-card-header>
-                  <ion-card-title class="responsive-h1" color="success">
+                  <ion-card-title class="responsive-h1 text-bold" color="success">
                     {{ graduater.Name }}
                   </ion-card-title>
                 </ion-card-header>
@@ -64,21 +64,21 @@
                     <ion-row>
                       <ion-col size="12">
                         <small>Student ID:</small>
-                        <h4 class="student-tp">{{ graduater.StudentID }}</h4>
+                        <h4 class="text-bold">{{ graduater.StudentID }}</h4>
                       </ion-col>
                       <ion-col size="12">
                         <small>Programme:</small>
-                        <h4 class="student-programme">
+                        <h4 class="text-bold">
                           {{ graduater.Programme }}
                         </h4>
                       </ion-col>
                       <ion-col size="12">
                         <small>Year of Graduation:</small>
-                        <h4 class="student-yog">{{ graduater.yog }}</h4>
+                        <h4 class="text-bold">{{ graduater.yog }}</h4>
                       </ion-col>
                       <ion-col size="12" *ngIf="graduater.AwardAchieved">
                         <small>Award Achieved:</small>
-                        <h4 class="student-award">
+                        <h4 class="text-bold">
                           {{ graduater.AwardAchieved }}
                         </h4>
                       </ion-col>
