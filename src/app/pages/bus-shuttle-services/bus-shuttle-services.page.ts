@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { BusTrips, BusTrip, APULocation, APULocations } from 'src/app/interfaces';
 import { Observable, forkJoin } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import * as moment from 'moment';
 import { MenuController } from '@ionic/angular';
-import { SettingsService } from 'src/app/services';
+import { SettingsService, WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-bus-shuttle-services',
@@ -15,7 +14,6 @@ import { SettingsService } from 'src/app/services';
 export class BusShuttleService implements OnInit {
   trip$: Observable<BusTrip[]>;
   filteredTrip$: any;
-  busTrackingUrl = 'https://api.apiit.edu.my/transix';
   locations: APULocation[];
   dateNow = new Date();
 
@@ -42,9 +40,9 @@ export class BusShuttleService implements OnInit {
   numberOfTrips = 1;
 
   constructor(
-    public http: HttpClient,
     private menu: MenuController,
-    private settings: SettingsService
+    private settings: SettingsService,
+    private ws: WsApiService,
   ) { }
 
   ngOnInit() {
@@ -67,15 +65,13 @@ export class BusShuttleService implements OnInit {
   }
 
   getTrips() {
-    const url = `${this.busTrackingUrl}/trips/applicable`;
-    return this.trip$ = this.http.get<BusTrips>(url).pipe(
+    return this.trip$ = this.ws.get<BusTrips>(`/transix/trips/applicable`, true, { auth: false }).pipe(
       map(res => res.trips),
     );
   }
 
   getLocations() {
-    const url = `${this.busTrackingUrl}/locations`;
-    return this.http.get<APULocations>(url).pipe(
+    return this.ws.get<APULocations>(`/transix/locations`, true, { auth: false }).pipe(
       map((res: APULocations) => res.locations),
       tap(locations => this.locations = locations)
     );
