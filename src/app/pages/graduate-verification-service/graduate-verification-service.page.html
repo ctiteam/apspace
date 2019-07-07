@@ -108,7 +108,21 @@
             </ng-template>
           </ng-template>
           <ng-template #loading>
-            loading...
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>
+                  <ion-skeleton-text animated style="width: 70%; line-height: 25px;"></ion-skeleton-text>
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content padding-start padding-bottom padding-end no-padding>
+                <h4>
+                  <ion-skeleton-text animated style="width: 70%; line-height: 25px;"></ion-skeleton-text>
+                  <ion-skeleton-text animated style="width: 40%; line-height: 25px;"></ion-skeleton-text>
+                  <ion-skeleton-text animated style="width: 75%; line-height: 25px;"></ion-skeleton-text>
+                  <ion-skeleton-text animated style="width: 30%; line-height: 25px;"></ion-skeleton-text>
+                </h4>
+              </ion-card-content>
+            </ion-card>
           </ng-template>
         </ng-template>
         <ng-template #noSearchDone>
