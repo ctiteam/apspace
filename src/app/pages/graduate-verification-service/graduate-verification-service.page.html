@@ -1,0 +1,134 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Graduate Verification Service</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid no-padding>
+    <ion-row>
+      <ion-col size="12" size-md="6" size-lg="8">
+        <ion-card no-margin>
+          <ion-card-header>
+            <ion-card-subtitle class="responsive-h2">
+              Asia Pacific University of Technology & Innovation (APU)
+            </ion-card-subtitle>
+            <ion-card-title class="responsive-h1">
+              Online Graduate Verification Service
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p class="normaltext">
+              Welcome, this service can be used to verify qualifications awarded to APU
+              graduates after the year {{applieedYear}}.
+            </p>
+            <p class="text-bold" padding-vertical>
+              This online service will only verify academic qualifications where the
+              completed course has been conferred by APU’s Senate.
+            </p>
+            <p class="normaltext" padding-bottom>
+              If you cannot verify a graduate and/or suspect it may be fraudulent,
+              please submit an
+              <a style="text-decoration: underline" (click)="openForms()" class="text-bold">Online Web
+                Request</a>
+              to report and confirm the qualifications.
+            </p>
+            <ion-grid no-padding padding-top>
+              <ion-row class="input-elements-wrabber">
+                <ion-col no-padding size="10" class="input-wrapper">
+                  <ion-input padding-start placeholder="Student ID" [(ngModel)]="searchKeyword"></ion-input>
+                </ion-col>
+                <ion-col size="2" no-padding>
+                  <ion-button no-margin fill="clear" expand="full"
+                    [disabled]="!this.searchKeyword || this.searchKeyword == ''" (click)="searchForGraduaters()">
+                    <ion-icon class="responsive-icon" slot="icon-only" name="search"></ion-icon>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" size-md="6" size-lg="4">
+        <ng-template [ngIf]="userSearched" [ngIfElse]="noSearchDone">
+          <ng-template let-graduaters [ngIf]="graduater$ | async" [ngIfElse]="loading">
+            <ng-template [ngIf]="graduaters.length > 0" [ngIfElse]="noGraduaters">
+              <ion-card no-margin *ngFor="let graduater of graduaters">
+                <ion-card-header>
+                  <ion-card-title class="responsive-h1" color="success">
+                    {{ graduater.Name }}
+                  </ion-card-title>
+                </ion-card-header>
+                <ion-card-content no-padding padding-start padding-end padding-bottom>
+                  <ion-grid no-padding>
+                    <ion-row>
+                      <ion-col size="12">
+                        <small>Student ID:</small>
+                        <h4 class="student-tp">{{ graduater.StudentID }}</h4>
+                      </ion-col>
+                      <ion-col size="12">
+                        <small>Programme:</small>
+                        <h4 class="student-programme">
+                          {{ graduater.Programme }}
+                        </h4>
+                      </ion-col>
+                      <ion-col size="12">
+                        <small>Year of Graduation:</small>
+                        <h4 class="student-yog">{{ graduater.yog }}</h4>
+                      </ion-col>
+                      <ion-col size="12" *ngIf="graduater.AwardAchieved">
+                        <small>Award Achieved:</small>
+                        <h4 class="student-award">
+                          {{ graduater.AwardAchieved }}
+                        </h4>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
+            <ng-template #noGraduaters>
+              <ion-card no-margin>
+                <ion-card-header>
+                  <ion-card-title class="responsive-h1" color="danger">
+                    No Results Found for {{resultKeyWord}}!
+                  </ion-card-title>
+                </ion-card-header>
+                <ion-card-content no-padding padding-start padding-end padding-bottom>
+                  <p>
+                    Please make sure that you keyed in Graduate Full Name (<span class="text-bold">EXACTLY</span> as per
+                    Academic
+                    Transcript/Certificate) <span class="text-bold">OR</span> Student Identification Number (<span
+                      class="text-bold">EXACTLY</span> as per Academic Transcript) in the field below and thereafter
+                    click
+                    ‘Search’ button.
+                  </p>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
+          </ng-template>
+          <ng-template #loading>
+            loading...
+          </ng-template>
+        </ng-template>
+        <ng-template #noSearchDone>
+          <ion-card no-margin>
+            <ion-card-header>
+              <ion-card-subtitle class="responsive-h2">
+                To verify qualifications awarded:
+              </ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content no-padding padding-start padding-end padding-bottom>
+              <p>
+                Please key in Graduate Full Name (<span class="text-bold">EXACTLY</span> as per Academic
+                Transcript/Certificate) <span class="text-bold">OR</span> Student Identification Number (<span
+                  class="text-bold">EXACTLY</span> as per Academic Transcript) in the field below and thereafter click
+                ‘Search’ button.
+              </p>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

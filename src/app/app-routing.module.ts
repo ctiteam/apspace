@@ -89,7 +89,8 @@ const routes: Routes = [
     loadChildren: './pages/more/more.module#MorePageModule'
   },
   { path: 'fees', loadChildren: './pages/fees/fees.module#FeesPageModule' },
-  { path: 'holidays', loadChildren: './pages/holidays/holidays.module#HolidaysPageModule' }
+  { path: 'holidays', loadChildren: './pages/holidays/holidays.module#HolidaysPageModule' },
+  { path: 'graduate-verification-service', loadChildren: './pages/graduate-verification-service/graduate-verification-service.module#GraduateVerificationServicePageModule' }
 ];
 
 @NgModule({
