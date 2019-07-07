@@ -9,7 +9,6 @@ import { IonicModule } from '@ionic/angular';
 import { StudentTimetablePage } from './student-timetable.page';
 import { ClassesPipe } from './classes.pipe';
 import { ThedayPipe } from './theday.pipe';
-import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 import { ComponentsModule } from '../../components/components.module';
 
 const routes: Routes = [
@@ -25,7 +24,8 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ComponentsModule,
   ],
   declarations: [
     StudentTimetablePage,
