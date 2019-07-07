@@ -53,7 +53,18 @@ export class FeesPage implements OnInit {
   @ViewChild('financialsChartComponent')
   financialsChartComponent: ChartComponent;
   financial$: Observable<FeesTotalSummary>;
-  financialsChart = {
+  financialsChart: {
+    type: string;
+    options: any;
+    data: {
+      labels: string[];
+      datasets: {
+        label: string;
+        data: [number];
+        backgroundColor: string;
+      }[];
+    };
+  } = {
     type: 'bar',
     options: {
       scales: {
@@ -63,7 +74,7 @@ export class FeesPage implements OnInit {
       responsive: true,
       legend: {}
     },
-    data: {}
+    data: null
   };
 
   numberOfSkeletons = new Array(6);
