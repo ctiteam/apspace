@@ -24,7 +24,6 @@ export class SearchModalComponent implements AfterViewInit, OnInit {
 
   searchControl = new FormControl();
   searchItem$: Observable<string[]>;
-  searching: boolean;
 
   constructor(private modalCtrl: ModalController) { }
 
@@ -35,9 +34,7 @@ export class SearchModalComponent implements AfterViewInit, OnInit {
     // observable to process inputs when value changes
     const searchChange$ = this.searchControl.valueChanges.pipe(
       distinctUntilChanged(),
-      tap(() => this.searching = true),
       map(term => this.search(searchItems, term)),
-      tap(() => this.searching = false),
     );
 
     // continue default observable with searched result
