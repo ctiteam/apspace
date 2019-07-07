@@ -26,7 +26,7 @@ export class DashboardCardComponent implements OnInit {
       cardTitle: this.cardTitle,
       contentPadding: this.contentPadding,
       cardSubtitle: this.cardSubtitle
-    }
+    };
   }
 
   async showOptionsMenu(ev: any) {

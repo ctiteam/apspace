@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ViewChild, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IonSearchbar, ModalController } from '@ionic/angular';
-import { Observable, merge, of } from 'rxjs';
+import { Observable, concat, of } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 
 @Component({
@@ -24,7 +24,6 @@ export class SearchModalComponent implements AfterViewInit, OnInit {
 
   searchControl = new FormControl();
   searchItem$: Observable<string[]>;
-  searching: boolean;
 
   constructor(private modalCtrl: ModalController) { }
 
@@ -35,13 +34,11 @@ export class SearchModalComponent implements AfterViewInit, OnInit {
     // observable to process inputs when value changes
     const searchChange$ = this.searchControl.valueChanges.pipe(
       distinctUntilChanged(),
-      tap(() => this.searching = true),
       map(term => this.search(searchItems, term)),
-      tap(() => this.searching = false),
     );
 
     // continue default observable with searched result
-    this.searchItem$ = merge(of(this.defaultItems), searchChange$);
+    this.searchItem$ = concat(of(this.defaultItems), searchChange$);
   }
 
   ngAfterViewInit() {

@@ -5,11 +5,12 @@
 </ion-toolbar>
 
 <ion-content>
-  <div *ngIf="searching" class="spinner-container">
+  <ng-template #searching>
+    <!-- TODO: restyle spinner -->
     <ion-spinner></ion-spinner>
-  </div>
+  </ng-template>
 
-  <ion-list no-lines *ngIf="searchItem$ | async as items">
+  <ion-list no-lines *ngIf="searchItem$ | async as items; else searching">
     <ng-template [ngIf]="items.length > 0" [ngIfElse]="noItem">
       <ion-item button *ngFor="let item of items" (click)="select(item)">
         {{ item }}

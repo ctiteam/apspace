@@ -11,17 +11,17 @@ export class EventsListComponent implements OnInit {
   @Input() observable$: Observable<EventComponentConfigurations[]>;
   skeletonConfigurations = {
     eventsSkeleton: new Array(8),
-    
-  }
+
+  };
   ngOnInit() {
   }
   splitTimeAndGetOnePart(part: 'third' | 'second' | 'first', time: string) {
     if (part === 'first') {
-      return time.split(' ')[0]
+      return time.split(' ')[0];
     } else if (part === 'second') {
-      return time.split(' ')[1]
+      return time.split(' ')[1];
     }
-    return time.split(' ')[2]
+    return time.split(' ')[2];
   }
 
 }
