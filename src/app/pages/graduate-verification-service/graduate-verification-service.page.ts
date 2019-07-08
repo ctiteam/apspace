@@ -24,11 +24,11 @@ export class GraduateVerificationServicePage implements OnInit {
   ngOnInit() {
   }
 
-  openForms(){
+  openForms() {
     this.iab.create(`${this.formsURL}`, '_blank', 'location=true');
   }
 
-  searchForGraduaters(){
+  searchForGraduaters() {
     this.userSearched = true;
     this.resultKeyWord = this.searchKeyword || '';
     this.graduater$ = this.ws.get<Graduater[]>(`/alumni/validate?criterion=${this.searchKeyword}`, true, {auth: false});
