@@ -130,7 +130,7 @@
                   <div class="p-3 mt-2 survey-question"
                     *ngFor="let surveyQuestion of surveySection.questions; index as questionIndex">
                     <p class="h4 px-1 my-2">
-                      {{ surveyQuestion.content }}
+                      {{ '*' + surveyQuestion.content }}
                     </p>
                     <ng-template [ngIf]="surveyQuestion.type === 'MCQ'" [ngIfElse]="showTextArea">
                       <ion-item no-lines>
@@ -158,7 +158,7 @@
               <div class="row">
                 <div class="col-12 px-5">
                   <small style="color:red" *ngIf="showFieldMissingError">One (or more) of the answers is missing. You
-                    have to answer all of the questions.</small>
+                    have to answer all the questions with *.</small>
                   <button class="btn btn-lg btn-success btn-block" [disabled]="submitting"
                     (click)="submitSurvey(survey.id)">
                     <span *ngIf="!submitting">Submit</span>
