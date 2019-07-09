@@ -24,7 +24,7 @@ import { FormControl } from '@angular/forms';
 export class TimetablePage {
 
   wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-  
+
   searchControl = new FormControl();
   searchIntake$: Observable<string[]>;
   timetable$: Observable<Timetable[]>;
@@ -122,17 +122,21 @@ export class TimetablePage {
     this.timetable$ = this.tt.get(Boolean(refresher)).pipe(
       tap(tt => this.updateDay(tt)),
       // initialize or update intake labels only if timetable might change
-      tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)      
-      && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
+      tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)
+        && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
       finalize(() => refresher && refresher.complete()),
     );
   }
 
-  getTimetableData(){
+  getTimetableData() {
     return this.timetable$ = this.tt.get().pipe(
-      tap(tt => this.updateDay(tt)),
-      tap(tt => (this.intakeLabels.length === 0)      
-      && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
+      tap(tt => {
+        if (this.intake) {
+          this.updateDay(tt);
+        }
+      }),
+      tap(tt => (this.intakeLabels.length === 0)
+        && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
     );
   }
 
