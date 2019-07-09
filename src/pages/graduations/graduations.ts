@@ -11,7 +11,7 @@ import { CasTicketProvider } from '../../providers';
 })
 export class GraduationsPage {
 
-  graduationsUrl = 'http://graduation-diploma.sites.apiit.edu.my/';
+  graduationsUrl = 'http://graduation.sites.apiit.edu.my/';
 
   constructor(
     private cas: CasTicketProvider,
