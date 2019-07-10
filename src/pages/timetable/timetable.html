@@ -2,9 +2,9 @@
   <ion-navbar>
     <ion-title>Timetable</ion-title>
     <ion-buttons end>
-      <button *ngIf="intake" ion-button icon-only clear class="notification-button colored-border"
+      <button *ngIf="intake" ion-button outline class="notification-button colored-border"
         (click)="rotateView()">
-        {{ viewType === 'daily' ? 'D' : 'W' }}
+        {{ viewType === 'daily' ? 'Daily' : 'Weekly' }}
       </button>
       <button *ngIf="intake" ion-button icon-only clear class="notification-button colored-border"
         (click)="chooseWeek()">
