@@ -99,76 +99,90 @@
       </ng-template>
 
       <ng-template #weekly>
-        <div class="row mt-3" *ngIf="intake">
-          <div class="col-12 col-md-6 px-5 py-2">
-            <p>Selected Intake: {{ intake }}</p>
-          </div>
-          <div class="col-12 col-md-6 px-5 py-2">
-            <p>Selected Week: {{ (selectedDate | date: 'EEEE, dd MMM yyyy') || "N/A" }}</p>
-          </div>
-        </div>
-        <ion-card *ngIf="intake" class="d-none d-md-block">
-          <ion-card-content>
-            <div class="row m-0">
-              <div class="col-12 col-lg-2 col-md-3 p-0">
-                <p class="font-weight-bold">Date</p>
+        <ng-template [ngIf]="intake">
+          <ng-template [ngIf]="(timetables | classes:intake | theweek:selectedWeek).length > 0"
+            [ngIfElse]="noClassesForSelected">
+            <div class="row mt-3">
+              <div class="col-12 col-md-6 px-5 py-2">
+                <p>Selected Intake: {{ intake }}</p>
               </div>
-              <div class="col-12 col-lg-2 col-md-3 p-0">
-                <p class="font-weight-bold">Time</p>
-              </div>
-              <div class="col-12 col-lg-3 col-md-3 p-0">
-                <ion-label no-margin class="font-weight-bold">
-                  Location
-                </ion-label>
-              </div>
-              <div class="col-12 col-lg-2 col-md-3 p-0">
-                <p class="font-weight-bold">Subject/Module</p>
-              </div>
-              <div class="col-12 col-lg-3 d-md-none p-0 d-lg-block">
-                <ion-label no-margin class="font-weight-bold">
-                  <a>
-                    Lecturer
-                  </a>
-                </ion-label>
+              <div class="col-12 col-md-6 px-5 py-2">
+                <p>Selected Week: {{ (selectedWeek | date: 'dd MMM yyyy') || "N/A" }}</p>
               </div>
             </div>
-          </ion-card-content>
-        </ion-card>
-        <ion-card *ngFor="let t of timetables | classes:intake | theweek:selectedWeek"
-          [style.borderLeft]="'0.4rem solid ' + strToColor(t.DAY + t.DATESTAMP_ISO)">
-          <ion-card-content>
-            <div class="row m-0">
-              <div class="col-12 col-md-3 col-lg-2 p-0">
-                <h2>{{ t.DATESTAMP_ISO | date: 'EEE, dd MMM' }}</h2>
-              </div>
-              <div class="col-12 col-md-3 col-lg-2 p-0">
-                <p class="font-weight-bold">{{ t.TIME_FROM }} - {{ t.TIME_TO }}</p>
-              </div>
-              <div class="col-12 col-md-3 col-lg-3 p-0">
-                <ion-label no-margin>
-                  <ion-icon class="d-md-none" padding-right name="locate"></ion-icon>
-                  {{ t.ROOM }} │ {{ t.LOCATION }}
-                </ion-label>
-              </div>
-              <div class="col-12 col-lg-2 col-md-3 p-0">
-                <ion-label no-margin>
-                  <ion-icon class="d-md-none" padding-right name="book"></ion-icon>
-                  {{ t.MODID }}
-                </ion-label>
-                <h2></h2>
-              </div>
-              <div class="col-12 col-lg-3 p-0 d-md-none d-lg-block">
-                <ion-label no-margin>
-                  <a (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
-                    <ion-icon class="d-md-none" padding-right name="contact"></ion-icon>
-                    {{ t.NAME }}
-                  </a>
-                </ion-label>
-              </div>
-            </div>
+            <ion-card *ngIf="intake" class="d-none d-md-block">
+              <ion-card-content>
+                <div class="row m-0">
+                  <div class="col-12 col-lg-2 col-md-3 p-0">
+                    <p class="font-weight-bold">Date</p>
+                  </div>
+                  <div class="col-12 col-lg-2 col-md-3 p-0">
+                    <p class="font-weight-bold">Time</p>
+                  </div>
+                  <div class="col-12 col-lg-3 col-md-3 p-0">
+                    <ion-label no-margin class="font-weight-bold">
+                      Location
+                    </ion-label>
+                  </div>
+                  <div class="col-12 col-lg-2 col-md-3 p-0">
+                    <p class="font-weight-bold">Subject/Module</p>
+                  </div>
+                  <div class="col-12 col-lg-3 d-md-none p-0 d-lg-block">
+                    <ion-label no-margin class="font-weight-bold">
+                      <a>
+                        Lecturer
+                      </a>
+                    </ion-label>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+            <ion-card *ngFor="let t of timetables | classes:intake | theweek:selectedWeek"
+              [style.borderLeft]="'0.4rem solid ' + strToColor(t.DAY + t.DATESTAMP_ISO)">
+              <ion-card-content>
+                <div class="row m-0">
+                  <div class="col-12 col-md-3 col-lg-2 p-0">
+                    <h2>{{ t.DATESTAMP_ISO | date: 'EEE, dd MMM' }}</h2>
+                  </div>
+                  <div class="col-12 col-md-3 col-lg-2 p-0">
+                    <p class="font-weight-bold">{{ t.TIME_FROM }} - {{ t.TIME_TO }}</p>
+                  </div>
+                  <div class="col-12 col-md-3 col-lg-3 p-0">
+                    <ion-label no-margin>
+                      <ion-icon class="d-md-none" padding-right name="locate"></ion-icon>
+                      {{ t.ROOM }} │ {{ t.LOCATION }}
+                    </ion-label>
+                  </div>
+                  <div class="col-12 col-lg-2 col-md-3 p-0">
+                    <ion-label no-margin>
+                      <ion-icon class="d-md-none" padding-right name="book"></ion-icon>
+                      {{ t.MODID }}
+                    </ion-label>
+                    <h2></h2>
+                  </div>
+                  <div class="col-12 col-lg-3 p-0 d-md-none d-lg-block">
+                    <ion-label no-margin>
+                      <a (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
+                        <ion-icon class="d-md-none" padding-right name="contact"></ion-icon>
+                        {{ t.NAME }}
+                      </a>
+                    </ion-label>
+                  </div>
+                </div>
 
-          </ion-card-content>
-        </ion-card>
+              </ion-card-content>
+            </ion-card>
+          </ng-template>
+          <ng-template #noClassesForSelected>
+            <div class="row mt-5 no-classes-message">
+              <div class="col-12">
+                <p class="text-center">
+                  Hooray! No classes for the selected week ({{selectedWeek | date: 'dd MMM yyyy'}})! :D
+                </p>
+              </div>
+            </div>
+          </ng-template>
+        </ng-template>
       </ng-template>
 
       <div *ngIf="!selectedDate || !intake" class="row mt-5 no-classes-message">
