@@ -2,6 +2,11 @@
   <ion-navbar>
     <ion-title>Update Progress Report</ion-title>
     <ion-buttons end>
+      <button *ngIf="(subjectCode || courseCode) && classCode" class="btn btn-success btn-lg" [disabled]="showLoading"
+        ion-button (click)="updateStudentsBehaviors(studentBehaviors)">
+        <span *ngIf="!showLoading">Submit</span>
+        <span *ngIf="showLoading">Loading ...</span>
+      </button>
       <button ion-button icon-only clear class="notification-button colored-border" (click)="toggleFilterMenu()">
         <ion-icon name="options"></ion-icon>
       </button>
@@ -244,7 +249,7 @@
                     <div class="col-12 col-md-3 col-lg-4 item">
                       <small class="d-md-none font-weight-bold mt-3">Behaviour Scores:</small>
                       <ion-item no-lines>
-                        <ion-label>Completing</ion-label>
+                        <ion-label>Completing Assignments</ion-label>
                         <ion-select [(ngModel)]="studentBehavior.COMPLETING_BEH">
                           <ion-option *ngFor="let score of scores" [value]="score">
                             {{score}}
@@ -252,7 +257,7 @@
                         </ion-select>
                       </ion-item>
                       <ion-item no-lines>
-                        <ion-label>Academic</ion-label>
+                        <ion-label>Academic Behaviour</ion-label>
                         <ion-select [(ngModel)]="studentBehavior.ACADEMIC_BEH">
                           <ion-option *ngFor="let score of scores" [value]="score">
                             {{score}}
@@ -260,7 +265,7 @@
                         </ion-select>
                       </ion-item>
                       <ion-item no-lines>
-                        <ion-label>Concept</ion-label>
+                        <ion-label>Understanding Key Concepts</ion-label>
                         <ion-select [(ngModel)]="studentBehavior.CONCEPT_BEH">
                           <ion-option *ngFor="let score of scores" [value]="score">
                             {{score}}
@@ -268,7 +273,7 @@
                         </ion-select>
                       </ion-item>
                       <ion-item no-lines>
-                        <ion-label>Social</ion-label>
+                        <ion-label>Social Behaviour</ion-label>
                         <ion-select [(ngModel)]="studentBehavior.SOCIAL_BEH">
                           <ion-option *ngFor="let score of scores" [value]="score">
                             {{score}}
@@ -290,7 +295,7 @@
                 <div class="col-12 my-4">
                   <button class="btn btn-success btn-block" [disabled]="showLoading" ion-button
                     (click)="updateStudentsBehaviors(studentBehaviors)">
-                    <span *ngIf="!showLoading">Update</span>
+                    <span *ngIf="!showLoading">Submit</span>
                     <span *ngIf="showLoading">Loading ...</span>
                   </button>
                 </div>

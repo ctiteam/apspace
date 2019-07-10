@@ -1,0 +1,120 @@
+page-visa-renewal-status {
+  loading-spinner {
+    .loader {
+      width: 80px !important;
+      height: 80px !important;
+      left: calc(50% - 40px);
+      top: -10px;
+    }
+  }
+  .danger-attendance-fill {
+    fill: #c02a2e !important;
+  }
+  .danger-attendance-box-shadow {
+    box-shadow: 2px 2px 22px #c02a2e, -2px -2px 22px #c02a2e !important;
+  }
+  ion-segment {
+    display: block;
+    white-space: nowrap;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+
+    ion-segment-button.segment-button {
+      display: inline-block;
+      min-width: 135px;
+      width: auto;
+    }
+  }
+
+  .segment-md .segment-button {
+    font-size: 1.1em;
+  }
+
+  .segment-ios .segment-button {
+    font-size: 1.1em;
+  }
+
+  .subj-title {
+    font-size: small;
+    ion-card {
+      &.failed {
+        border: 1px solid #f04141;
+        .subj-title,
+        .item-content {
+          color: #f04141 !important;
+        }
+      }
+      ion-list {
+        ion-item {
+          &.subj-title {
+            font-weight: 900;
+          }
+          ion-label {
+            font-size: 90%;
+            font-weight: lighter !important;
+          }
+        }
+      }
+    }
+    .card-ios {
+      border-radius: 10px;
+    }
+    .card-md {
+      border-radius: 10px;
+    }
+    .scroll-content {
+      background-color: map-get($colors, light);
+    }
+    .content-message {
+      text-align: justify;
+    }
+    .warning-logo {
+      color: #f04141 !important;
+      display: block;
+      font-size: 5em;
+      text-align: center;
+      color: white;
+    }
+    p {
+      font-size: 4rem;
+      font-weight: lighter;
+
+    }
+  }
+#widget-value {
+  font-size: 2.6em;
+  font-weight: 600;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  position: absolute;
+  top: 41%;
+  left: 2%;
+}
+
+@media only screen and (max-width: 489px) {
+  #widget-value {
+    font-size: 2em;
+    top: 40%;
+    left: 0;
+  }
+}
+
+#widget-content {
+  width: 150px;
+  height: 150px;
+  border-radius: 200px;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden;
+}
+
+
+}

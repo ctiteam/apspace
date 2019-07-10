@@ -11,6 +11,7 @@ export interface Settings {
   tripTo: string;
   /* timetable */
   intake: string;
+  viewType: 'daily' | 'weekly';
   /* exam schedule */
   examIntake: string;
   /* contact number */

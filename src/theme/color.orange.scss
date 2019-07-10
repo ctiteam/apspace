@@ -35,6 +35,9 @@ $primary_color: #ec644b;
 	.colorful-text {
 		color: $primary_color !important;
 	}
+	.colorful-background{
+		background-color: $primary_color;
+	}
 	.colorful-button {
 		background-color: $primary_color;
 		border-color: $primary_color !important;

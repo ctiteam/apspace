@@ -5,6 +5,7 @@ import {
   ActionSheetController,
   IonicPage,
   Platform,
+  NavController,
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { finalize, tap } from 'rxjs/operators';
@@ -65,7 +66,9 @@ export class ResultsPage {
     private ws: WsApiProvider,
     public plt: Platform,
     private actionSheet: ActionSheet,
-    private actionSheetCtrl: ActionSheetController) { }
+    private actionSheetCtrl: ActionSheetController,
+    public navCtrl: NavController
+    ) { }
 
   getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
     const url = `/student/subcourses?intake=${intake}`;
@@ -183,6 +186,15 @@ export class ResultsPage {
       ],
       labels: listItems,
     };
+  }
+
+  openSurveyPage(moduleCode){
+    console.log(moduleCode);
+    console.log(this.selectedIntake);
+    this.navCtrl.push("SubmitSurveyPage", {
+      moduleCode: moduleCode,
+      intakeCode: this.selectedIntake
+    });
   }
 
   showActionSheet() {

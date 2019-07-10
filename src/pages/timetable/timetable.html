@@ -2,10 +2,16 @@
   <ion-navbar>
     <ion-title>Timetable</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only clear class="notification-button colored-border" (click)="chooseWeek()">
+      <button *ngIf="intake" ion-button outline class="notification-button colored-border"
+        (click)="rotateView()">
+        {{ viewType === 'daily' ? 'Daily' : 'Weekly' }}
+      </button>
+      <button *ngIf="intake" ion-button icon-only clear class="notification-button colored-border"
+        (click)="chooseWeek()">
         <ion-icon name="calendar"></ion-icon>
       </button>
-      <button ion-button icon-only clear class="notification-button colored-border" (click)="toggleFilterMenu()">
+      <button *ngIf="intakeSelectable" ion-button icon-only clear class="notification-button colored-border"
+        (click)="toggleFilterMenu()">
         <ion-icon name="search"></ion-icon>
       </button>
     </ion-buttons>
@@ -50,52 +56,137 @@
     <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
   <div class="container p-0">
-    <div class="row mt-3" *ngIf="intake">
-      <div class="col-12 col-md-6 px-5 py-2">
-        <p>
-          Selected Intake:
-          <span class="font-weight-bold"> {{ intake }}</span>
-        </p>
-      </div>
-      <div class="col-12 col-md-6 px-5 py-2">
-        <p>
-          Selected Date:
-          <span class="font-weight-bold">
-            {{ (selectedDate | date) || "N/A" }}
-          </span>
-        </p>
-      </div>
-    </div>
     <ng-template let-timetables [ngIf]="timetable$ | async" [ngIfElse]="timetableLoading">
-      <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date: 'E' | uppercase" (ngModelChange)="
-          selectedDate = availableDate[availableDays.indexOf($event)]
-        ">
-        <ion-segment-button *ngFor="let d of wday; index as i" [value]="d" [style.display]="
-            availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'
-          ">
-          {{ d }}
-        </ion-segment-button>
-      </ion-segment>
 
-      <ion-card *ngFor="let t of (timetables | classes: intake | theday: selectedDate)"
-        [style.borderLeft]="'0.4rem solid ' + strToColor(t.MODID)">
-        <ion-card-header>
-          <h2>{{ t.MODID }}</h2>
-          <p class="font-weight-bold">{{ t.TIME_FROM }} - {{ t.TIME_TO }}</p>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-label no-margin>
-            <ion-icon padding-right name="locate"></ion-icon>
-            {{ t.ROOM }} │ {{ t.LOCATION }}
-          </ion-label>
-          <ion-label no-margin>
-            <a (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
-              <ion-icon padding-right name="contact"></ion-icon>
-              {{ t.NAME }}
-            </a>
-          </ion-label>
-        </ion-card-content>
-      </ion-card>
+      <ng-template [ngIf]="viewType === 'daily'" [ngIfElse]="weekly">
+        <div class="row mt-3" *ngIf="intake">
+          <div class="col-12 col-md-6 px-5 py-2">
+            <p>Selected Intake: {{ intake }}</p>
+          </div>
+          <div class="col-12 col-md-6 px-5 py-2">
+            <p>Selected Day: {{ (selectedDate | date: 'EEEE, dd MMM yyyy') || "N/A" }}</p>
+          </div>
+        </div>
+        <ion-segment *ngIf="availableDate" [ngModel]="selectedDate | date: 'E' | uppercase" (ngModelChange)="
+            selectedDate = availableDate[availableDays.indexOf($event)]
+          ">
+          <ion-segment-button *ngFor="let d of wday; index as i" [value]="d" [style.display]="
+              availableDays.indexOf(d) !== -1 ? 'inline-block' : 'none'
+            ">
+            {{ d }}
+          </ion-segment-button>
+        </ion-segment>
+
+        <ion-card *ngFor="let t of (timetables | classes: intake | theday: selectedDate)"
+          [style.borderLeft]="'0.4rem solid ' + strToColor(t.MODID)">
+          <ion-card-header>
+            <h2>{{ t.MODID }}</h2>
+            <p class="font-weight-bold">{{ t.TIME_FROM }} - {{ t.TIME_TO }}</p>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-label no-margin>
+              <ion-icon padding-right name="locate"></ion-icon>
+              {{ t.ROOM }} │ {{ t.LOCATION }}
+            </ion-label>
+            <ion-label no-margin>
+              <a (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
+                <ion-icon padding-right name="contact"></ion-icon>
+                {{ t.NAME }}
+              </a>
+            </ion-label>
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
+
+      <ng-template #weekly>
+        <ng-template [ngIf]="intake">
+          <ng-template [ngIf]="(timetables | classes:intake | theweek:selectedWeek).length > 0"
+            [ngIfElse]="noClassesForSelected">
+            <div class="row">
+              <div class="d-none d-print-block col-6 offset-3 text-center">
+                <img class="rounded img-fluid" src="assets/img/login.png" alt="APU Logo">
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-12 col-md-6 px-5 py-2">
+                <p>Selected Intake: {{ intake }}</p>
+              </div>
+              <div class="col-12 col-md-6 px-5 py-2">
+                <p>Selected Week: {{ (selectedWeek | date: 'dd MMM yyyy') || "N/A" }}</p>
+              </div>
+            </div>
+            <ion-card *ngIf="intake" class="d-none d-md-block">
+              <ion-card-content>
+                <div class="row m-0">
+                  <div class="col-12 col-md-1 col-lg-2 p-0">
+                    <p class="font-weight-bold print-font md-text-smaller md-text-center">Date</p>
+                  </div>
+                  <div class="col-12 col-md-2 col-lg-2 p-0 print-pl-4 md-text-center">
+                    <p class="font-weight-bold print-font md-text-smaller">Time</p>
+                  </div>
+                  <div class="col-12 col-md-3 col-lg-3 p-0">
+                    <ion-label no-margin class="font-weight-bold print-font print-pl-4 md-text-center md-text-smaller">
+                      Location
+                    </ion-label>
+                  </div>
+                  <div class="col-12 col-md-3 col-lg-2 p-0 print-pl-4">
+                    <p class="font-weight-bold print-font md-text-smaller">Subject/Module</p>
+                  </div>
+                  <div class="col-12 col-md-3 col-lg-3 p-0">
+                    <ion-label no-margin class="font-weight-bold print-font md-text-smaller">
+                      Lecturer
+                    </ion-label>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+            <ion-card *ngFor="let t of timetables | classes:intake | theweek:selectedWeek"
+              [style.borderLeft]="'0.4rem solid ' + strToColor(t.DAY + t.DATESTAMP_ISO)">
+              <ion-card-content>
+                <div class="row m-0">
+                  <div class="col-12 col-md-1 col-lg-2 p-0 md-text-center">
+                    <h2 class="print-font md-text-smaller">{{ t.DATESTAMP_ISO | date: 'EEE, dd MMM' }}</h2>
+                  </div>
+                  <div class="col-12 col-md-2 col-lg-2 p-0 print-pl-4 md-text-center">
+                    <p class="print-font font-weight-bold md-text-smaller">{{ t.TIME_FROM }} - {{ t.TIME_TO }}
+                    </p>
+                  </div>
+                  <div class="col-12 col-md-3 col-lg-3 p-0 print-pl-4 md-text-center">
+                    <ion-label class="print-font md-text-smaller" no-margin>
+                      <ion-icon class="d-md-none" padding-right name="locate"></ion-icon>
+                      {{ t.ROOM }} │ {{t.LOCATION}}
+                    </ion-label>
+                  </div>
+                  <div class="col-12 col-md-3 col-lg-2 p-0 print-pl-4">
+                    <ion-label class="print-font md-text-smaller" no-margin>
+                      <ion-icon class="d-md-none" padding-right name="book"></ion-icon>
+                      {{ t.MODID }}
+                    </ion-label>
+                  </div>
+                  <div class="col-12  col-md-3 col-lg-3 p-0">
+                    <ion-label no-margin>
+                      <a class="print-font-smaller md-text-smaller" (click)="openStaffDirectoryInfo(t.SAMACCOUNTNAME)">
+                        <ion-icon class="d-md-none" padding-right name="contact"></ion-icon>
+                        {{ t.NAME }}
+                      </a>
+                    </ion-label>
+                  </div>
+                </div>
+
+              </ion-card-content>
+            </ion-card>
+          </ng-template>
+          <ng-template #noClassesForSelected>
+            <div class="row mt-5 no-classes-message">
+              <div class="col-12">
+                <p class="text-center">
+                  Hooray! No classes for the selected week ({{selectedWeek | date: 'dd MMM yyyy'}})! :D
+                </p>
+              </div>
+            </div>
+          </ng-template>
+        </ng-template>
+      </ng-template>
 
       <div *ngIf="!selectedDate || !intake" class="row mt-5 no-classes-message">
         <div class="col-12">
@@ -112,6 +203,7 @@
           </ng-template>
         </div>
       </div>
+
     </ng-template>
     <ng-template #timetableLoading>
       <div class="row my-4 px-3">
@@ -139,5 +231,43 @@
         </ion-card-content>
       </ion-card>
     </ng-template>
+    <div class="mt-4" *ngIf="intake">
+      <ion-card class="card-special title">
+        <ion-card-header>
+          <ion-card-title>Legend</ion-card-title>
+        </ion-card-header>
+      </ion-card>
+      <ion-card *ngFor="let legend of legends" class="card-special">
+        <ion-card-content>
+          <p><span class="font-weight-bold">{{legend.name}}</span> - {{ legend.desc }}</p>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="card-special">
+        <ion-card-header>
+          <ion-card-title>Mid Semester Break</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>While there will be no classes during the
+            mid-semester break for your
+            intake, your intake time table will
+            continue to appear during the break.</p>
+        </ion-card-content>
+      </ion-card>
+      <ion-card class="card-special">
+        <ion-card-header>
+          <ion-card-title>Important Notice</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>
+            Students are advised to consult your lecturers to check whether there will be lectures during the
+            buffer/revision week. The timetable published on the buffer/revision week will be the same as the last week
+            of the semester.
+            If your lecturer decides not to use the buffer/revision week, then you will not be required to come for
+            lectures during the buffer/revision week.
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </div>
 </ion-content>

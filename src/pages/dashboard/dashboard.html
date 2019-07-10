@@ -188,9 +188,15 @@
                             </div>
                             <div class="col-12">
                               <p>
-                                * <b>Note:</b> The list of the upcoming classes
+                                * <b>Note 1:</b> The list of the upcoming classes
                                 shown here (if any) are based on the intake
                                 <b>{{ defaultIntake }}</b>.
+                              </p>
+                            </div>
+                            <div class="col-12">
+                              <p>
+                                * <b>Note 2:</b> While there will be no classes during the mid-semester break for your
+                                intake, your intake time table will continue to appear during the break
                               </p>
                             </div>
                           </div>
@@ -614,11 +620,9 @@
                       <div class="section-body">
                         <div class="notification" *ngFor="let upcomingConsultation of upcomingConsultations">
                           <div class="section-body-header">
-                            <h4 class="col-12" (click)= 'openStaffDirectoryInfo(upcomingConsultation.casid)'>
+                            <h4 class="col-12" (click)='openStaffDirectoryInfo(upcomingConsultation.casid)'>
                               {{upcomingConsultation.lecname}}
-                              <span 
-                                *ngIf="upcomingConsultation.status !== 'normal'"
-                                class="badge badge-secondary"
+                              <span *ngIf="upcomingConsultation.status !== 'normal'" class="badge badge-secondary"
                                 style="right: auto;top: 5px; margin-left: 5px;"
                                 [ngStyle]="{'background-color':upcomingConsultation.status !== 'normal' ? 'red' : 'green' }">
                                 {{upcomingConsultation.status !== 'normal'? 'Cancelled': upcomingConsultation.status}}</span>
@@ -637,14 +641,14 @@
                               </div>
 
                               <div class="content-item-with-icon col-12 row">
-                                  <div class="col-2 text-right">
-                                    <ion-icon item-left name="time"></ion-icon>
-                                  </div>
-                                  <div class="col-10 item-info-text">
-                                    <p ion-text>{{upcomingConsultation.starttime}} -
-                                      {{upcomingConsultation.endtime}}</p>
-                                  </div>
+                                <div class="col-2 text-right">
+                                  <ion-icon item-left name="time"></ion-icon>
                                 </div>
+                                <div class="col-10 item-info-text">
+                                  <p ion-text>{{upcomingConsultation.starttime}} -
+                                    {{upcomingConsultation.endtime}}</p>
+                                </div>
+                              </div>
 
                               <div class="content-item-with-icon col-12 row">
                                 <div class="col-2 text-right">

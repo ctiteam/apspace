@@ -6,11 +6,12 @@ import { ActionSheet } from '@ionic-native/action-sheet';
 import { IntakeListingProvider, TimetableProvider } from '../../providers';
 import { ClassesPipe } from './classes.pipe';
 import { TheDayPipe } from './theday.pipe';
+import { TheWeekPipe } from './theweek.pipe';
 import { TimetablePage } from './timetable';
 import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
-  declarations: [TimetablePage, ClassesPipe, TheDayPipe],
+  declarations: [TimetablePage, ClassesPipe, TheDayPipe, TheWeekPipe],
   imports: [
     IonicPageModule.forChild(TimetablePage),
     ComponentsModule,

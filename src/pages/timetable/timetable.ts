@@ -2,8 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
 import {
-  ActionSheetController, App, Content, IonicPage,
-  ModalController, NavController, Platform, MenuController, ViewController,
+  ActionSheetController, App, Content, IonicPage, ModalController,
+  NavController, NavParams, Platform, MenuController, ViewController,
 } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
@@ -24,7 +24,58 @@ import { FormControl } from '@angular/forms';
 export class TimetablePage {
 
   wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-  
+
+  legends = [
+    {
+      name: 'L',
+      desc: 'Lecture',
+    },
+    {
+      name: 'T',
+      desc: 'Tutorial',
+    },
+    {
+      name: 'T1',
+      desc: 'Tutorial Group 1',
+    },
+    {
+      name: 'T2',
+      desc: 'Tutorial Group 2',
+    },
+    {
+      name: 'Lab',
+      desc: 'Computer Lab',
+    },
+    {
+      name: 'Lab 1',
+      desc: 'Computer Lab Group 1',
+    },
+    {
+      name: 'Lab 2',
+      desc: 'Computer Lab Group 2',
+    },
+    {
+      name: 'Lab 3',
+      desc: 'Computer Lab Group 3',
+    },
+    {
+      name: 'TPM',
+      desc: 'APIIT/APLC Campus',
+    },
+    {
+      name: 'New Campus',
+      desc: 'APU Campus',
+    },
+    {
+      name: 'B',
+      desc: 'Buffer Week',
+    },
+    {
+      name: 'R',
+      desc: 'Revision Week',
+    },
+  ];
+
   searchControl = new FormControl();
   searchIntake$: Observable<string[]>;
   timetable$: Observable<Timetable[]>;
@@ -35,7 +86,8 @@ export class TimetablePage {
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
   numOfSkeletons = new Array(5);
-
+  viewType: 'daily' | 'weekly';
+  intakeSelectable = true;
 
   @ViewChild(Content) content: Content;
 
@@ -47,13 +99,14 @@ export class TimetablePage {
     public actionSheetCtrl: ActionSheetController,
     public modalCtrl: ModalController,
     public navCtrl: NavController,
+    public navParams: NavParams,
     public plt: Platform,
     private tt: TimetableProvider,
     private ws: WsApiProvider,
     private settings: SettingsProvider,
     public menu: MenuController,
     public app: App,
-    public viewCtrl: ViewController
+    public viewCtrl: ViewController,
   ) { }
 
   presentActionSheet(labels: string[], handler: (_: string) => void) {
@@ -101,6 +154,12 @@ export class TimetablePage {
     }
   }
 
+  /** Rotate between 'daily' and 'weekly' view. */
+  rotateView() {
+    this.viewType = this.viewType === 'daily' ? 'weekly' : 'daily';
+    this.settings.set('viewType', this.viewType);
+  }
+
   /** Check if the day is in week. */
   dayInWeek(date: Date) {
     date.setDate(date.getDate() - date.getDay() + 1);
@@ -114,17 +173,21 @@ export class TimetablePage {
     this.timetable$ = this.tt.get(Boolean(refresher)).pipe(
       tap(tt => this.updateDay(tt)),
       // initialize or update intake labels only if timetable might change
-      tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)      
-      && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
+      tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)
+        && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
       finalize(() => refresher && refresher.complete()),
     );
   }
 
-  getTimetableData(){
+  getTimetableData() {
     return this.timetable$ = this.tt.get().pipe(
-      tap(tt => this.updateDay(tt)),
-      tap(tt => (this.intakeLabels.length === 0)      
-      && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
+      tap(tt => {
+        if (this.intake) {
+          this.updateDay(tt);
+        }
+      }),
+      tap(tt => (this.intakeLabels.length === 0)
+        && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
     );
   }
 
@@ -186,6 +249,15 @@ export class TimetablePage {
   }
 
   ionViewDidLoad() {
+    // optional intake passed by other pages
+    const navIntake = this.navParams.get('intake');
+    if (navIntake) {
+      this.intakeSelectable = false;
+      this.intake = navIntake;
+    } else {  // direct timetable page access
+      this.intake = this.settings.get('intake');
+    }
+
     // select current day by default
     this.selectedDate = new Date();
     this.selectedDate.setHours(0, 0, 0, 0);
@@ -194,7 +266,6 @@ export class TimetablePage {
     const date = new Date();
     date.setDate(date.getDate() - date.getDay() + 1);
     this.selectedWeek = date;
-    this.intake = this.settings.get('intake');
     this.getTimetableData().subscribe(
       _ => { },
       _ => { },
@@ -214,6 +285,8 @@ export class TimetablePage {
       }
     );
 
+    // viewtype
+    this.viewType = this.settings.get('viewType') || 'weekly';
 
     const intake$ = this.tt.get().pipe(
       map(tt => Array.from(new Set((tt || []).map(t => t.INTAKE.toUpperCase()))).sort()),
@@ -241,4 +314,5 @@ export class TimetablePage {
     this.changeIntake(intake);
     this.toggleFilterMenu();
   }
+
 }

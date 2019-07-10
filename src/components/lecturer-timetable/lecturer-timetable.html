@@ -1,6 +1,6 @@
 <ng-template let-calendar [ngIf]="calendar$ | async" [ngIfElse]="loading">
   <ng-template [ngIf]="calendar.length" [ngIfElse]="empty">
-    <div *ngFor="let week of calendar" class="schedule-week">
+    <div *ngFor="let week of calendar.reverse()" class="schedule-week">
       <div class="schedule-week-head" (click)='show(week, $event.target)'>
         {{ week.week | date }}
         <span class="right">{{ selectedWeeks.indexOf(week) !== -1 ? '_«' : '»' }}</span>
@@ -14,7 +14,12 @@
           <div class="schedule-day-body container">
               <div *ngFor="let event of day.events" class="event row">
                   <p class="name col-12">{{ event.name }}</p>
-                  <p class="small col-12 wrap-text">{{ event.intakes.join() }}</p>
+                  <p class="col-12 wrap-text">
+                    <ng-template ngFor let-intake [ngForOf]="event.intakes" let-last="last">
+                      <a (click)="timetable(intake)" class="small">{{ intake }}</a>
+                      {{ last ? '' : ', ' }}
+                    </ng-template>
+                  </p>
                   <p class="small col-12">{{ event.loc }}</p>
                   <p class="small col-12 font-weight-bold">
                     {{ event.start | date: "shortTime" }} -

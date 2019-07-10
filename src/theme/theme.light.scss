@@ -20,6 +20,11 @@ $light_menu_colors: (
 );
 
 .light-theme {
+	// GLOBAL THEME STYLES
+	.colorful-background{
+		color: color($light_colors, light_background);
+	}
+
 	// TOOLBAR STYLES:
 	.toolbar-background {
 		background: color($light_colors, light_header_background);
@@ -810,8 +815,8 @@ $light_menu_colors: (
 		}
 	}
 
-	// QUALIFICATION AUTHENTICITY VERIFICATION PAGE AND VIEW/UPDATE PROGRESS REPORT APLC
-	page-qualification-verification, page-view-progress-report, page-update-progress-report{
+	// QUALIFICATION AUTHENTICITY VERIFICATION PAGE AND VIEW/UPDATE PROGRESS REPORT APLC, STUDENTS SURVEY
+	page-qualification-verification, page-view-progress-report, page-update-progress-report, page-submit-survey{
 		ion-content {
 			background-color: color($light_colors, light_white_background) !important;
 		}

@@ -1,5 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
+import { NavController } from 'ionic-angular';
 
 import { Observable } from 'rxjs/Observable';
 import { map, tap } from 'rxjs/operators';
@@ -46,7 +47,7 @@ export class LecturerTimetableComponent implements OnInit {
   calendar$: Observable<DispCalEvent[]>;
   selectedWeeks: DispCalEvent[] = [];
 
-  constructor(private ws: WsApiProvider) { }
+  constructor(private navCtrl: NavController, private ws: WsApiProvider) { }
 
   ngOnInit() {
     // GPS counts weeks with January 1, 1980 as first Sunday (Epoch)
@@ -101,6 +102,11 @@ export class LecturerTimetableComponent implements OnInit {
     } else {
       this.selectedWeeks.splice(this.selectedWeeks.indexOf(week), 1);
     }
+  }
+
+  /** Show timetable for intake. */
+  timetable(intake: string) {
+    this.navCtrl.push('TimetablePage', { intake });
   }
 
 }
