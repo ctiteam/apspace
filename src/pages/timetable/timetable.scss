@@ -15,5 +15,46 @@ page-timetable {
         padding-left: 4px;
       }
     }
+    &.card-special {
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      &.title{
+        border-radius: 10px 10px 0 0;
+      }
+    }
   }
+  @media print {
+    .container {
+      max-width: 100%;
+    }
+    ion-content {
+      background-color: white !important;
+    }
+    .scroll-content {
+      border-top: 0px !important;
+    }
+    .print-font {
+      font-size: 1.4rem !important;
+    }
+    .print-font-smaller {
+      font-size: 1.3rem !important;
+      font-weight: normal !important;
+    }
+    .print-text-center {
+      text-align: center !important;
+    }
+    .print-pl-4 {
+      padding-left: 1.5rem !important;
+    }
+  }
+
+  // Medium devices (tablets, 768px and up)
+@media screen and (max-width: 991px) and (min-width: 768px) {
+  .md-text-smaller{
+    font-size: 1rem !important;
+  }
+  .md-text-center{
+    text-align: center !important;
+  }
+}
 }
