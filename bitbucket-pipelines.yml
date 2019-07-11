@@ -2,18 +2,11 @@ image: node:dubnium-alpine
 pipelines:
   default:
     - step:
-        name: Install
+        name: Test
         caches:
           - node
         script:
           - yarn install
-    - step:
-        name: Test
-        script:
-          - yarn global add @angular/cli
           - yarn lint
             # - yarn test --single-run --no-progress --browsers FirefoxHeadless
-    - step:
-        name: Build
-        script:
           - yarn build --aot
