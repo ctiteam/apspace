@@ -10,7 +10,7 @@ pipelines:
     - step:
         name: Test
         script:
-          - yarn global install @angular/cli
+          - yarn global add @angular/cli
           - yarn lint
             # - yarn test --single-run --no-progress --browsers FirefoxHeadless
     - step:
