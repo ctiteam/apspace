@@ -13,7 +13,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint",
+      "pre-commit": "tslint -p .",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
