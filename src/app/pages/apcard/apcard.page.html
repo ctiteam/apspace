@@ -102,9 +102,9 @@
                   <ion-item [class.credit]="0 < transaction.SpendVal" [class.deposit]="0 > transaction.SpendVal"
                     lines="none" no-padding *ngFor="let transaction of transactionsGroupedByDate[month + ', ' + year]">
                     <ion-avatar slot="start">
-                      <ion-icon class="avatar-icon" name="remove-circle" *ngIf="transaction.SpendVal < 0">
+                      <ion-icon class="transaction-icon" name="remove-circle" *ngIf="transaction.SpendVal < 0">
                       </ion-icon>
-                      <ion-icon class="avatar-icon" name="add-circle" *ngIf="0 < transaction.SpendVal"></ion-icon>
+                      <ion-icon class="transaction-icon" name="add-circle" *ngIf="0 < transaction.SpendVal"></ion-icon>
                     </ion-avatar>
                     <ion-label>
                       <h2 class="value">{{ getAbsoluteValue(transaction.SpendVal) | currency: "RM" }}</h2>
@@ -121,64 +121,6 @@
       </div>
 
 
-      <!-- <div class="apcard-history-section">
-          <div class="apcard-history-section-body">
-            <div class="perYear" >
-              <div class="perMonth" >
-                <div class="apcard-history-group" >
-                  <div class="sticky-top apcard-history-group-title">
-                    <div class="container">
-                      <h5 class="sticky-header" >
-                        
-                        <h5 class="month d-md-inline">
-                          <span class="color-pri">in</span>
-                          
-                        </h5>
-                      </h5>
-                    </div>
-                  </div>
-                  <div class="apcard-history-group-messages" >
-                    <div class="apcard-history-record">
-                      <ion-grid>
-                        <ion-row>
-                          <ion-col class="ion-text-center icon-div" size="2">
-                            <ion-icon name="remove-circle" *ngIf="transaction.SpendVal < 0"></ion-icon>
-                            <ion-icon name="add-circle" *ngIf="0 < transaction.SpendVal"></ion-icon>
-                          </ion-col>
-
-                          <ion-col class="ion-padding-start text-div" size="7">
-                            <h6 class="record-title"></h6>
-                            <p></p>
-                          </ion-col>
-
-                          <ion-col class="ion-text-center price-div" size="3">
-                            
-                          </ion-col>
-                        </ion-row>
-                      </ion-grid>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> -->
-
-
-
-      <!-- <ng-template #noBalance>
-      <div class="apcard-card-section">
-        <div class="ion-margin ion-padding ion-text-center">
-          <div class="outer-circle d-inline-block shadow-lg">
-            <div class="inner-circle ion-text-center">
-              <h2 class="balance inline-block">
-                {{ 0.00 | currency: "RM" }}
-              </h2>
-            </div>
-          </div>
-        </div>
-      </div>
-    </ng-template> -->
     </div>
     <ng-template #noTransactions>
       <ion-card>
@@ -195,85 +137,6 @@
   </div>
   <!-- LOADING TEMPLATE -->
   <ng-template #apCardBalanceLoading>
-    <div class="container">
-      <div class="apcard-card-section">
-        <div class="ion-margin ion-padding ion-text-center">
-          <div class="outer-circle d-inline-block shadow-lg">
-            <div class="inner-circle ion-text-center">
-              <h2 class="balance inline-block">
-                <loading-spinner></loading-spinner>
-              </h2>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="ion-margin-vertical ion-padding" *ngFor="let i of numOfSkeletons">
-      <ion-skeleton-text width="100%" style="height: 45px" animated></ion-skeleton-text>
 
-      <ion-grid>
-        <ion-row class="ion-padding-horizontal ion-margin-top">
-          <ion-col size="12" class="ion-margin-vertical" *ngFor="let i of numOfSkeletons">
-            <ion-grid>
-              <ion-row>
-                <ion-col size="2">
-                  <ion-skeleton-text width="100%" style="height: 25px" animated></ion-skeleton-text>
-                </ion-col>
-
-                <ion-col size="7">
-                  <ion-skeleton-text width="100%" style="height: 25px" animated></ion-skeleton-text>
-                </ion-col>
-
-                <ion-col size="3">
-                  <ion-skeleton-text width="100%" style="height: 25px" animated></ion-skeleton-text>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </div>
   </ng-template>
-
-  <div class="main" id="main">
-    <ng-template>
-      <div class="main-content">
-        <!-- <div class="container" id="bubbles">
-          <div class="apcard-card-section">
-            <div class="ion-margin ion-padding ion-text-center">
-              <div class="outer-circle d-inline-block shadow-lg">
-                <div class="inner-circle ion-text-center">
-                  <h2 class="balance d-inline-block">
-                    
-                  </h2>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="bubble x1">
-            <ion-icon name="logo-usd"></ion-icon>
-          </div>
-          <div class="bubble x2">
-            <ion-icon name="logo-euro"></ion-icon>
-          </div>
-          <div class="bubble x3">
-            <ion-icon name="logo-yen"></ion-icon>
-          </div>
-          <div class="bubble x4">
-            <ion-icon name="logo-bitcoin"></ion-icon>
-          </div>
-          <div class="bubble x5">
-            <ion-icon name="logo-usd"></ion-icon>
-          </div>
-        </div> -->
-
-
-        <!-- END SECTION 2: APCARD History -->
-
-      </div>
-      <!-- END PAGE BODY -->
-    </ng-template>
-
-  </div>
-  <!-- END MAIN -->
 </ion-content>
