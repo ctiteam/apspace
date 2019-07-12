@@ -53,17 +53,6 @@
         </ion-item>
       </ng-template>
     </ng-template>
-
-    <ng-template [ngIf]="intakeCode && classCode">
-      <ion-item no-lines>
-        <ion-label>Type</ion-label>
-        <ion-select [(ngModel)]="surveyType" (ngModelChange)="onSurveyTypeChanged()" interface="popover">
-          <ion-option disabled selected value="">Choose One</ion-option>
-          <ion-option *ngFor="let surveyType of surveyTypes" [value]="surveyType">{{surveyType}}
-          </ion-option>
-        </ion-select>
-      </ion-item>
-    </ng-template>
   </ion-content>
 </ion-menu>
 
@@ -108,10 +97,7 @@
       <div class="row mt-5">
         <div class="col-12 px-5">
           <p class="normaltext text-center">
-            To submit the survey for {{intakeCode}} - {{classCode}}, please
-            <a style="text-decoration: underline" class="colorful-text font-weight-bold"
-              (click)="toggleFilterMenu()">select a survey type</a>
-            also
+            We could not get the survey type. Please try again later or contact us via the feedback page.
           </p>
         </div>
       </div>
@@ -121,6 +107,26 @@
       <ng-template let-surveys [ngIf]="survey$ | async" [ngIfElse]="surveysAreLoading">
         <ng-template [ngIf]="surveys.length > 0">
           <div class="survey-wrapper" *ngFor="let survey of surveys">
+            <div class="row p-2">
+              <div class="col-12 col-md-6">
+                <p class="px-3">
+                  Lecturer Name:
+                  <span class="d-block d-md-inline font-weight-bold"> {{ selectedModule.LECTURER_NAME }} </span>
+                </p>
+              </div>
+              <div class="col-12 col-md-6">
+                <p class="px-3">
+                  Subject Name:
+                  <span class="d-block d-md-inline font-weight-bold"> {{ selectedModule.SUBJECT_DESCRIPTION }} </span>
+                </p>
+              </div>
+              <div class="col-12">
+                <p class="px-3">
+                  Class Code:
+                  <span class="d-block d-md-inline font-weight-bold"> {{ classCode }} </span>
+                </p>
+              </div>
+            </div>
             <div class="survey-sections row p-2" *ngIf="survey.sections.length > 0; else noSectionsAddedMsg">
               <div class="col-12 survey-section" *ngFor="let surveySection of survey.sections; index as i">
                 <h3 class="p-3 mt-2 sticky-top survey-section-name colorful-background">Section {{i+1}}:

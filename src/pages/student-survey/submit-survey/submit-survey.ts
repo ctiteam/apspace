@@ -1,20 +1,21 @@
 import { Component } from "@angular/core";
-import { IonicPage, MenuController, ToastController, AlertController, NavController, NavParams } from "ionic-angular";
+import { AlertController, IonicPage, MenuController, NavController, NavParams, ToastController } from "ionic-angular";
 import { Observable } from "rxjs";
-import { WsApiProvider } from "../../../providers";
-import { tap, map } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
+import { Role, StudentProfile } from '../../../interfaces';
+import { SettingsProvider, WsApiProvider } from "../../../providers";
 
 @IonicPage()
 @Component({
-  selector: "page-submit-survey",
-  templateUrl: "submit-survey.html",
+  selector: 'page-submit-survey',
+  templateUrl: 'submit-survey.html',
 })
 export class SubmitSurveyPage {
-  // TEMP VARIABLES 
+  // TEMP VARIABLES
   stagingUrl = 'https://dl4h9zf8wj.execute-api.ap-southeast-1.amazonaws.com/dev/survey';
 
   todaysDate = new Date();
-  
+
   // IF USER IS COMING FROM RESULTS PAGE
   moduleCodeFromResultsPage = this.navParams.get('moduleCode');
   intakeCodeFromResultsPage = this.navParams.get('intakeCode');
@@ -24,6 +25,7 @@ export class SubmitSurveyPage {
   classCode: string;
   surveyType: string;
 
+  selectedModule: any;
 
   // LOADING & ERRORS VARIABLES
   numOfSkeletons = new Array(3);
@@ -35,24 +37,23 @@ export class SubmitSurveyPage {
   // LISTS
   intakes: any[];
   modules: any;
-  surveyTypes: string[] = [];
   msqAnswers = [
     { id: '1', content: 'Strongly Disagree' },
     { id: '2', content: 'Disagree' },
     { id: '3', content: 'Neither' },
     { id: '4', content: 'Agree' },
-    { id: '5', content: 'Strongly Agree' }
-  ]
+    { id: '5', content: 'Strongly Agree' },
+  ];
   response = {
-    'class_code': '',
-    'intake_code': '',
-    'survey_id': 0,
-    'answers': [
+    class_code: '',
+    intake_code: '',
+    survey_id: 0,
+    answers: [
       {
-        'question_id': 0,
-        'content': ''
-      }
-    ]
+        question_id: 0,
+        content: '',
+      },
+    ],
   };
 
   // OBSERAVBLES
@@ -64,13 +65,27 @@ export class SubmitSurveyPage {
     private ws: WsApiProvider,
     private toastCtrl: ToastController,
     public alertCtrl: AlertController,
-    public navParams: NavParams
-    ) { }
+    public navParams: NavParams,
+    private settings: SettingsProvider,
+  ) { }
 
   ionViewDidLoad() {
     this.getIntakes();
-    // IF USER IS COMING FROM RESULTS PAGE    
-    if(this.moduleCodeFromResultsPage){
+    if (this.settings.get('role') & Role.Student) {
+      this.intakesAreLoading = true;
+      this.ws.get<StudentProfile>('/student/profile').subscribe(
+        p => {
+          this.intakeCode = p.INTAKE;
+        },
+        _ => { },
+        () => {
+          this.intakesAreLoading = false;
+          this.getModules(this.intakeCode);
+        },
+      );
+    }
+    // IF USER IS COMING FROM RESULTS PAGE
+    if (this.moduleCodeFromResultsPage) {
       this.getModules(this.intakeCodeFromResultsPage);
     }
   }
@@ -80,7 +95,6 @@ export class SubmitSurveyPage {
     this.menu.toggle();
   }
 
-
   onIntakeCodeChanged() {
     this.getModules(this.intakeCode);
     this.classCode = '';
@@ -88,13 +102,8 @@ export class SubmitSurveyPage {
   }
 
   onClassCodeChanged() {
-    this.getSurveyTypes(this.classCode);
-    this.surveyType = '';
-  }
-
-  onSurveyTypeChanged() {
-    this.getSurveys(this.intakeCode);
-    this.toggleFilterMenu();
+    this.getSurveyType(this.classCode);
+    this.getModuleByClassCode(this.classCode);
   }
 
   getIntakes() {
@@ -102,8 +111,16 @@ export class SubmitSurveyPage {
     this.ws.get<any>(`/intakes-list`, true, { url: this.stagingUrl }).subscribe(
       res => this.intakes = res,
       _ => { },
-      () => this.intakesAreLoading = false
+      () => this.intakesAreLoading = false,
     );
+  }
+
+  getModuleByClassCode(classCode: string) {
+    this.modules.forEach(module => {
+      if (module.CLASS_CODE === classCode) {
+        this.selectedModule = module;
+      }
+    });
   }
 
   getModules(intakeCode: string) {
@@ -118,47 +135,56 @@ export class SubmitSurveyPage {
       () => {
         this.modulesAreLoading = false;
         // USER COMING FROM RESULTS PAGE, AND MODULES ARE READY
-        if(this.moduleCodeFromResultsPage){
+        if (this.moduleCodeFromResultsPage) {
           this.getSurvey(this.intakeCodeFromResultsPage, this.moduleCodeFromResultsPage);
         }
-      }
+      },
     );
   }
 
   getSurveys(intakeCode: string) {
-    let answers =  [];    
+    const answers = [];
     this.survey$ = this.ws.get<any>(`/surveys?intake_code=${intakeCode}`, true, { url: this.stagingUrl })
       .pipe(
         map(surveys => surveys.filter(survey => survey.type === this.surveyType)),
         tap(surveys => {
-          for(let section of surveys[0].sections){
-            for (let question of section.questions){
+          for (const section of surveys[0].sections) {
+            for (const question of section.questions) {
               answers.push({
                 question_id: question.id,
-                content: ''
-              })
+                content: '',
+              });
             }
           }
           this.response = {
             intake_code: this.intakeCode,
             class_code: this.classCode,
             survey_id: surveys[0].id,
-            answers: answers
-          }
-        })
+            answers
+          };
+        }),
       );
   }
 
-  getSurveyTypes(classCode: string) {
-    this.surveyTypes = [];
-    this.modules.filter(item => {
-      if (classCode === item.CLASS_CODE) {
-        if (!item.COURSE_APPRAISAL) {
-          this.surveyTypes.push('End-Semester');
+  getSurveyType(classCode: string) {
+    const todaysDate = new Date();
+    this.modules.forEach(amodule => {
+      if (classCode === amodule.CLASS_CODE) {
+        if (!amodule.COURSE_APPRAISAL) {
+          if (todaysDate > new Date(amodule.END_DATE)) {
+            this.surveyType = 'End-Semester';
+          }
         }
-        if (!item.COURSE_APPRAISAL2) {
-          this.surveyTypes.push('Mid-Semester');
+        if (!amodule.COURSE_APPRAISAL2) {
+          const moduleStartDate = new Date(amodule.START_DATE);
+          const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49));
+          const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 70));
+          if (todaysDate > startDateForMid && todaysDate < endDateForMid) {
+            this.surveyType = 'Mid-Semester';
+          }
         }
+        this.getSurveys(this.intakeCode);
+        this.toggleFilterMenu();
       }
     });
   }
@@ -167,11 +193,11 @@ export class SubmitSurveyPage {
   getSurvey(intakeCode: string, moduleCode: string) {
     this.getSurveys(intakeCode);
     this.intakeCode = intakeCode;
-    this.classCode = this.modules.filter(module => module.SUBJECT_CODE === moduleCode)[0].CLASS_CODE
+    this.classCode = this.modules.filter(module => module.SUBJECT_CODE === moduleCode)[0].CLASS_CODE;
     this.surveyType = 'End-Semester';
   }
 
-  getAnswerByQuestionId(id: number){
+  getAnswerByQuestionId(id: number) {
     return this.response.answers.filter(answer => answer.question_id === id)[0];
   }
 
@@ -183,13 +209,13 @@ export class SubmitSurveyPage {
         {
           text: 'No',
           handler: () => {
-          }
+          },
         },
         {
           text: 'Yes',
           handler: () => {
-            let notAnsweredQuestions = this.response.answers.filter(answer => answer.content === '');
-            if(notAnsweredQuestions.length === 0){
+            const notAnsweredQuestions = this.response.answers.filter(answer => answer.content === '');
+            if (notAnsweredQuestions.length === 0) {
               this.submitting = true;
               this.ws.post('/response', { url: this.stagingUrl, body: this.response }).subscribe(
                 _ => { },
@@ -200,14 +226,14 @@ export class SubmitSurveyPage {
                   this.toast(`The survey for ${this.classCode} has been submitted successfully.`);
                   this.navCtrl.pop();
                   this.submitting = false;
-                }
+                },
               );
-            } else{
+            } else {
               this.showFieldMissingError = true;
             }
-          }
-        }
-      ]
+          },
+        },
+      ],
     });
     confirm.present();
   }
@@ -217,8 +243,8 @@ export class SubmitSurveyPage {
       .create({
         message: msg,
         duration: 7000,
-        position: "bottom",
-        showCloseButton: true
+        position: 'bottom',
+        showCloseButton: true,
       })
       .present();
   }
