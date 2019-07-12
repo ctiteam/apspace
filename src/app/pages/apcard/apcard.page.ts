@@ -83,6 +83,10 @@ export class ApcardPage implements OnInit {
     return transactions;
   }
 
+  getAbsoluteValue(num: number): number {
+    return Math.abs(num);
+  }
+
   getTransactionsYears() {
     this.transactonsYears = [];
     this.transactionsMonths = [];
