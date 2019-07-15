@@ -28,3 +28,4 @@ export { DashboardCardComponentConfigurations } from './dashboard-card-componene
 export { CgpaPerIntake } from './cgpa-per-intake';
 export { ConsultationHour } from './iconsult';
 export { Graduater } from './graduater';
+export { IntakeListing } from './intake-listing';

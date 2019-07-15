@@ -1,0 +1,172 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title> Exam Schedule</ion-title>
+    <ion-buttons slot="start">
+      <ion-button>
+        <ion-back-button defaultHref="#" text=""></ion-back-button>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button outline small (click)="presentIntakeSearch()">
+        <ion-icon name="search"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <p style="margin-top:40px; text-align: center"> <span>Selected intke:</span> <span padding-start>{{intake}}</span>
+  </p>
+  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
+  </ion-refresher>
+  <div class="container p-0">
+    <ng-template [ngIf]="!showNoIntakeMessage">
+      <ng-template let-exams [ngIf]="exam$ | async" [ngIfElse]="loadingExams">
+        <ng-template [ngIf]="exams.length !== 0">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" size-lg="6" *ngFor="let exam of exams">
+                <div >
+                  <ion-card>
+                    <ion-card-header>
+                      <ion-card-title class="responsive-h1">
+                        {{ exam.subjectDescription }}
+                      </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content no-padding>
+                      <ion-list>
+                        <ion-item lines="none">
+                          <ion-icon name="book"></ion-icon>
+                          <p padding-start>{{ exam.module }}</p>
+                        </ion-item>
+                        <ion-item lines="none">
+                          <ion-icon name="pin"></ion-icon>
+                          <p padding-start>{{ exam.venue }}</p>
+                        </ion-item>
+                        <ion-item lines="none">
+                          <ion-icon name="calendar"></ion-icon>
+                          <p padding-start>
+                            {{ exam.since | date: "EEE,d MMM, y" }}
+                          </p>
+                        </ion-item>
+                        <ion-item lines="none">
+                          <ion-icon name="time"></ion-icon>
+                          <p padding-start>
+                            {{ exam.since | date: "h:mm a" }}
+                          </p>
+                        </ion-item>
+                      </ion-list>
+                    </ion-card-content>
+                    <hr />
+                    <ion-footer>
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="7">
+                            <span>
+                              *Dockets Due:
+                            </span>
+                          </ion-col>
+                          <ion-col size="5">
+                            <p>{{ exam.docketsDue | date }}</p>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <div *ngIf="exam.appraisalsDue">
+                            <ion-col size="7">
+                              <span t>
+                                *Appraisals Due:
+                              </span>
+                            </ion-col>
+                            <ion-col size="5">
+                              <p>{{ exam.appraisalsDue | date }}</p>
+                            </ion-col>
+                          </div>
+                        </ion-row>
+                        <div *ngIf="exam.resultDate">
+                          <ion-row>
+                            <ion-col size="7">
+                              <span>
+                                *Result Release Date:
+                              </span>
+                            </ion-col>
+                            <ion-col size="5">
+                              <p>{{ exam.resultDate | date }}</p>
+                            </ion-col>
+                          </ion-row>
+                        </div>
+                      </ion-grid>
+                    </ion-footer>
+                  </ion-card>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ng-template>
+      </ng-template>
+    </ng-template>
+  </div>
+
+  <ng-template #loadingExams>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-lg="6" *ngFor="let s of skeletonSettings.numberOfSkeltons">
+          <div>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title class="responsive-h1">
+                  <ion-skeleton-text animated style="width: 60%; line-height: 20px"></ion-skeleton-text>
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content no-padding>
+                <ion-list>
+                  <ion-item lines="none">
+                    <ion-skeleton-text animated style="width: 20%; line-height: 20px"></ion-skeleton-text>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-skeleton-text animated style="width: 20%; line-height: 20px" padding-start></ion-skeleton-text>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-skeleton-text animated style="width: 20%; line-height: 20px" padding-start></ion-skeleton-text>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-skeleton-text animated style="width: 20%; line-height: 20px" padding-start></ion-skeleton-text>
+                  </ion-item>
+                </ion-list>
+              </ion-card-content>
+              <hr />
+              <ion-footer>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="7">
+                      <span>
+                        <ion-skeleton-text animated style="width: 20%; line-height: 20px"></ion-skeleton-text>
+                      </span>
+                    </ion-col>
+                    <ion-col size="5">
+                      <ion-skeleton-text animated style="width: 20%; line-height: 20px"></ion-skeleton-text>
+                    </ion-col>
+                  </ion-row>
+                  <div>
+                    <ion-row>
+                      <ion-col size="7">
+                        <span>
+                          <ion-skeleton-text animated style="width: 20%; line-height: 20px"></ion-skeleton-text>
+                        </span>
+                      </ion-col>
+                      <ion-col size="5">
+                        <ion-skeleton-text animated style="width: 20%; line-height: 20px"></ion-skeleton-text>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                </ion-grid>
+              </ion-footer>
+            </ion-card>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
+</ion-content>
