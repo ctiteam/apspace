@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>News</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="container p-0">
+    <ion-grid>
+      <ng-template let-items [ngIf]="item$ | async" [ngIfElse]="loadingNews">
+        <ng-template [ngIf]="items && items.length > 0" [ngIfElse]="nonews">
+          <ion-row>
+            <ion-col size="12" size-md="6" size-lg="4" *ngFor="let item of items">
+              <ion-card tappable (click)="openModal(item)">
+                <img [src]="item.field_news_image[0].url" />
+                <ion-card-content color="light">
+                  {{ item.title[0].value }}
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ng-template>
+
+        <ng-template #nonews>
+          <ion-card padding>
+            <p>No news available</p>
+          </ion-card>
+        </ng-template>
+      </ng-template>
+
+
+     
+
+    </ion-grid>
+
+    `
+  </div>
+  
+
+  <ng-template #loadingNews>
+    <div style="height: 20%;" >
+      <ion-grid>
+        
+            <ion-row>
+              <ion-col size="12" size-md="6" size-lg="4" *ngFor="let s of skeletonSettings.numberOfSkeltons" >
+                <ion-card tappable >
+                  <ion-skeleton-text animated style="width: 100%; line-height: 140px"></ion-skeleton-text>
+                  <ion-card-content color="light">
+                    <ion-skeleton-text animated style="width: 60%; line-height: 15px"></ion-skeleton-text>
+
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          
+      </ion-grid>
+    </div>
+  </ng-template>
+ 
+</ion-content>

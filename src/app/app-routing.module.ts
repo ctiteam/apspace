@@ -90,7 +90,7 @@ const routes: Routes = [
   },
   {
     path: 'fees',
-    loadChildren: './pages/fees/fees.module#FeesPageModule'
+    loadChildren: './pages/fees/fees.module#FeesPageModule' 
   },
   {
     path: 'holidays',
@@ -99,7 +99,9 @@ const routes: Routes = [
   {
     path: 'graduate-verification-service',
     loadChildren: './pages/graduate-verification-service/graduate-verification-service.module#GraduateVerificationServicePageModule'
-  }
+  },
+  { path: 'exam-schedule', loadChildren: './pages/exam-schedule/exam-schedule.module#ExamSchedulePageModule' },
+  { path: 'news', loadChildren: './pages/news/news.module#NewsPageModule' },
 ];
 
 @NgModule({
