@@ -13,7 +13,7 @@
       <ion-col size="8">
         <ion-card class="cols">
           <ion-card-content>
-            <qrcode [qrdata]="otp" level="H"></qrcode>
+            <qrcode [qrdata]="otp$ | async" level="H"></qrcode>
           </ion-card-content>
         </ion-card>
         <ion-button>End Session</ion-button>

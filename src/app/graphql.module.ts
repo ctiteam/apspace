@@ -10,9 +10,9 @@ import { AWSAppSyncClient, createAppSyncLink, AUTH_TYPE } from 'aws-appsync';
 export function createApollo(httpLink: HttpLink, storage: Storage) {
   // console.log(Credentials);
   // const cred = new Credentials('AKIAJ3QWJKJUQLKOSPHA', 'yuk+PGOKtDPKaCVWeL8x++JkxRflFi6ftI/itluT');
-  storage.set('apiKey', 'da2-3z62hziepbbg3a4vac7zz55lpe');
+  storage.set('apiKey', 'da2-25okpf6pybc5blho4fg7qxke7u');
   const link = createAppSyncLink({
-    url: 'https://xtobktzijrgftg5atydqq3bliy.appsync-api.ap-southeast-1.amazonaws.com/graphql',
+    url: 'https://wmrk2iy4ora4xlpmgaq2gan4si.appsync-api.ap-southeast-1.amazonaws.com/graphql',
     region: 'ap-southeast-1',
     auth: {
       type: AUTH_TYPE.API_KEY,

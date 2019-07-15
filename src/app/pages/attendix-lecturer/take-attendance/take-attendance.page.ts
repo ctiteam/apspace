@@ -1,34 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import { Subscription, Observable } from 'rxjs';
-import gql from 'graphql-tag';
+import { Observable, timer } from 'rxjs';
+import { map, pluck, startWith, switchMap } from 'rxjs/operators';
+import { totp } from 'otplib/otplib-browser';
 
-const initAttendance = gql`
-  mutation initAttendance {
-    initAttendance(schedule: "a") {
-      schedule
-      secret
-      markedBy
-      lecturer
-      created
-      modified
-      startTime
-      endTime
-      validUntil
-      expiredTime
-      classCode
-      classType
-      students {
-        userArn
-        attendance
-        lastModified
-        modifiedBy
-        internalIP
-        externalIP
-      }
-    }
-  }
-`;
+import { InitAttendanceMutation } from './init-attendance.mutation';
 
 @Component({
   selector: 'app-take-attendance',
@@ -37,13 +12,20 @@ const initAttendance = gql`
 })
 export class TakeAttendancePage implements OnInit {
 
-  otp: string;
+  otp$: Observable<number>;
 
-  constructor(private apollo: Apollo) { }
+  constructor(private initAttendance: InitAttendanceMutation) { }
 
   ngOnInit() {
-    this.otp = '123456';
-    this.apollo.mutate({ mutation: initAttendance }).subscribe(console.log, console.error);
+    this.otp$ = this.initAttendance.mutate({ schedule: 'a' }).pipe(
+      pluck('data', 'initAttendance', 'secret'),
+      switchMap(secret =>
+        timer(totp.timeRemaining() * 1000, totp._options.step * 1000).pipe(
+          startWith(() => totp.generate(secret)),
+          map(() => totp.generate(secret))
+        )
+      )
+    );
   }
 
 }
