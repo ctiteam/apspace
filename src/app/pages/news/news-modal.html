@@ -1,10 +1,8 @@
 <ion-header no-border>
   <ion-toolbar>
-
     <ion-title style="text-align: center">{{item.title[0].value}}</ion-title>
     <ion-buttons slot="start">
-        <ion-button outline small (click)="dismiss()" >
-            
+        <ion-button outline small (click)="dismiss()" >        
             <ion-icon name="arrow-round-back" ></ion-icon>
        </ion-button>
       </ion-buttons>
@@ -16,7 +14,7 @@
     <img class="cover" [src]="item.field_news_image[0].url" height="auto" width="100%">
   </div>
   <div >
-    <h3>{{item.title[0].value}}</h3>
-    <article [innerHTML]="sanitize(item.body[0].value)"></article>
+    <h3 pdding-strart>{{item.title[0].value}}</h3>
+    <article pdding-strart [innerHTML]="sanitize(item.body[0].value)"></article>
   </div>
 </ion-content>

@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { Observable } from 'rxjs';
 import { publishLast, refCount } from 'rxjs/operators';
-
 import { IntakeListing } from '../interfaces';
 
 @Injectable()

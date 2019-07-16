@@ -23,41 +23,28 @@
             </ion-col>
           </ion-row>
         </ng-template>
-
         <ng-template #nonews>
           <ion-card padding>
             <p>No news available</p>
           </ion-card>
         </ng-template>
       </ng-template>
-
-
-     
-
-    </ion-grid>
-
-    `
+    </ion-grid>`
   </div>
-  
-
   <ng-template #loadingNews>
     <div style="height: 20%;" >
-      <ion-grid>
-        
+      <ion-grid>       
             <ion-row>
               <ion-col size="12" size-md="6" size-lg="4" *ngFor="let s of skeletonSettings.numberOfSkeltons" >
                 <ion-card tappable >
                   <ion-skeleton-text animated style="width: 100%; line-height: 140px"></ion-skeleton-text>
                   <ion-card-content color="light">
                     <ion-skeleton-text animated style="width: 60%; line-height: 15px"></ion-skeleton-text>
-
                   </ion-card-content>
                 </ion-card>
               </ion-col>
-            </ion-row>
-          
+            </ion-row>       
       </ion-grid>
     </div>
   </ng-template>
- 
 </ion-content>

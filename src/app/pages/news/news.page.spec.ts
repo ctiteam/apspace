@@ -25,3 +25,4 @@ describe('NewsPage', () => {
     expect(component).toBeTruthy();
   });
 });
+

@@ -46,3 +46,4 @@ export class NewsPage implements OnInit {
     await modal.onDidDismiss();
   }
 }
+
