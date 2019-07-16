@@ -25,3 +25,4 @@ describe('ExamSchedulePage', () => {
     expect(component).toBeTruthy();
   });
 });
+

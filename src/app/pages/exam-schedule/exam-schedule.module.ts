@@ -9,7 +9,6 @@ import { ExamSchedulePage } from './exam-schedule.page';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 import { IntakeListingService } from 'src/app/services';
 
-
 const routes: Routes = [
   {
     path: '',

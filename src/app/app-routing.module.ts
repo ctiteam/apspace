@@ -90,7 +90,7 @@ const routes: Routes = [
   },
   {
     path: 'fees',
-    loadChildren: './pages/fees/fees.module#FeesPageModule' 
+    loadChildren: './pages/fees/fees.module#FeesPageModule'
   },
   {
     path: 'holidays',

@@ -79,7 +79,6 @@ export class ExamSchedulePage implements OnInit {
       this.doRefresh();
     }
   }
-
   ngOnInit() {
     this.il.get().subscribe(ii => {
       this.intakes = ii.map(i => i.INTAKE_CODE);
@@ -104,7 +103,6 @@ export class ExamSchedulePage implements OnInit {
       }
     }
   }
-
   doRefresh(refresher?) {
     const url = `/examination/${this.intake}`;
     const opt = { auth: false };
@@ -115,8 +113,6 @@ export class ExamSchedulePage implements OnInit {
       this.intakes = ii.map(i => i.INTAKE_CODE);
     });
   }
-
-
   async presentIntakeSearch() {
     const modal = await this.modalCtrl.create({
       component: SearchModalComponent,
@@ -128,6 +124,4 @@ export class ExamSchedulePage implements OnInit {
     const { data: { item: intake } = { item: this.intake } } = await modal.onDidDismiss();
     this.changeIntake(intake);
   }
-
-
 }

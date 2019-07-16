@@ -14,9 +14,7 @@
 
   </ion-toolbar>
 </ion-header>
-
 <ion-content>
-
   <p style="margin-top:40px; text-align: center"> <span>Selected intke:</span> <span padding-start>{{intake}}</span>
   </p>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
@@ -108,7 +106,6 @@
       </ng-template>
     </ng-template>
   </div>
-
   <ng-template #loadingExams>
     <ion-grid>
       <ion-row>
