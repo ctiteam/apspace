@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 import { Apcard } from '../../interfaces';
 import { WsApiService } from 'src/app/services';
+import { MenuController, IonRadioGroup } from '@ionic/angular';
 
 @Component({
   selector: 'app-apcard',
@@ -19,11 +20,46 @@ export class ApcardPage implements OnInit {
   transactionsGroupedByDate: any;
   transactonsYears: string[] = [];
   transactionsMonths: string[] = [];
+  months = [
+    { name: 'January', value: '0'},
+    { name: 'February', value: '1'},
+    { name: 'March', value: '2'},
+    { name: 'April', value: '3'},
+    { name: 'May', value: '4'},
+    { name: 'June', value: '5'},
+    { name: 'July', value: '6'},
+    { name: 'August', value: '7'},
+    { name: 'September', value: '8'},
+    { name: 'October', value: '9'},
+    { name: 'November', value: '10' },
+    { name: 'December', value: '11' },
+  ];
 
-  numOfSkeletons = new Array(5);
+
+  filterObject: {
+    year: string,
+    month: string,
+    show: VisibleOption
+  } = {
+      year: '',
+      month: '',
+      show: 'all'
+    };
+
+  skeletonConfig = [
+    { numOfTrans: new Array(4) },
+    { numOfTrans: new Array(1) },
+    { numOfTrans: new Array(7) },
+    { numOfTrans: new Array(2) },
+    { numOfTrans: new Array(6) }
+  ];
   isLoading: boolean;
 
-  constructor(private ws: WsApiService) { }
+
+  constructor(
+    private ws: WsApiService,
+    private menu: MenuController
+  ) { }
 
   ngOnInit() {
     this.doRefresh();
@@ -119,4 +155,23 @@ export class ApcardPage implements OnInit {
       finalize(() => (this.isLoading = false))
     );
   }
+
+  openMenu() {
+    this.menu.enable(true, 'apcard-filter-menu');
+    this.menu.open('apcard-filter-menu');
+  }
+
+  closeMenu() {
+    this.menu.close('apcard-filter-menu');
+  }
+
+  clearFilter() {
+    this.filterObject = {
+      month: '',
+      year: '',
+      show: 'all'
+    };
+    this.closeMenu();
+  }
+
 }

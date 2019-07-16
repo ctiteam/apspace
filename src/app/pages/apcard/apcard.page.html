@@ -1,10 +1,96 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>APCard</ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="animated anim-scale" (click)="openMenu()">
+        <ion-icon name="options"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-menu side="end" contentId="content" menuId="apcard-filter-menu" type="overlay">
+  <ion-header>
+    <ion-toolbar color="danger">
+      <ion-title>Filter</ion-title>
+      <ion-buttons slot="end">
+        <ion-button class="animated anim-rotate-360-deg" shape="round" (click)="closeMenu()">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label>
+            Date
+          </ion-label>
+        </ion-item-divider>
+        <ion-item>
+          <ion-label>Year</ion-label>
+          <ion-select interface="popover" [(ngModel)]="filterObject.year">
+            <ion-select-option value="">
+              Any
+            </ion-select-option>
+
+            <ion-select-option [value]="year" *ngFor="let year of transactonsYears">
+              {{ year }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Month</ion-label>
+          <ion-select interface="popover" [(ngModel)]="filterObject.month">
+            <ion-select-option value="">
+              Any
+            </ion-select-option>
+
+            <ion-select-option [value]="month.value" *ngFor="let month of months">
+              {{ month.name }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-item-group>
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label>
+            Show
+          </ion-label>
+        </ion-item-divider>
+        <ion-item>
+          <ion-list>
+            <ion-radio-group [(ngModel)]="filterObject.show">
+              <ion-item lines="none">
+                <ion-label>All</ion-label>
+                <ion-radio slot="start" value='all'></ion-radio>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-label>Credit only</ion-label>
+                <ion-radio slot="start" value="credit"></ion-radio>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-label>Debit Only</ion-label>
+                <ion-radio slot="start" value="debit"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
+          </ion-list>
+        </ion-item>
+        <div padding>
+          <ion-button fill="outline" color="danger" expand="block" (click)="clearFilter()">
+            clear filter
+            <ion-icon slot="end" name="trash"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-item-group>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+
+<ion-content id="content">
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
@@ -61,18 +147,27 @@
         </div>
       </div>
 
-      <div class="perYear" *ngFor="let year of transactonsYears">
-        <div class="perMonth" *ngFor="let month of transactionsMonths">
+      <div class="perYear" *ngFor="let year of transactonsYears | yearFilter: filterObject.year">
+        <div class="perMonth" *ngFor="let month of transactionsMonths | monthFilter: filterObject.month">
           <div class="masonry-item apcard-history-group" *ngIf="transactionsGroupedByDate[month + ', ' + year]">
             <ion-card>
               <ion-card-header>
-                <ion-card-subtitle>
+                <ion-card-subtitle *ngIf="filterObject.show !== 'credit'">
                   <h5 class="responsive-h2" *ngIf="monthlyData.dr[year]; else noDebit">
                     You spent <ion-text color="danger">RM{{ monthlyData.dr[year][month] | number: "1.0-2" }}
                     </ion-text> in
                   </h5>
                   <ng-template #noDebit>
-                    <h5 class="small-text">You did not spend money this month</h5>
+                    <h5 class="responsive-h2">You have not spend money this month</h5>
+                  </ng-template>
+                </ion-card-subtitle>
+                <ion-card-subtitle *ngIf="filterObject.show === 'credit'">
+                  <h5 class="responsive-h2" *ngIf="monthlyData.cr[year]; else noCredit">
+                    You topped up <ion-text color="success">RM{{ monthlyData.cr[year][month] | number: "1.0-2" }}
+                    </ion-text> in
+                  </h5>
+                  <ng-template #noCredit>
+                    <h5 class="responsive-h2">You have not top up money this month</h5>
                   </ng-template>
                 </ion-card-subtitle>
                 <ion-card-title>
@@ -84,7 +179,8 @@
               <ion-card-content>
                 <ion-list>
                   <ion-item [class.credit]="0 < transaction.SpendVal" [class.deposit]="0 > transaction.SpendVal"
-                    lines="none" no-padding *ngFor="let transaction of transactionsGroupedByDate[month + ', ' + year]">
+                    lines="none" no-padding
+                    *ngFor="let transaction of transactionsGroupedByDate[month + ', ' + year] | filter: filterObject.show">
                     <ion-avatar slot="start">
                       <ion-icon class="transaction-icon" name="remove-circle" *ngIf="transaction.SpendVal < 0">
                       </ion-icon>
@@ -103,8 +199,6 @@
           </div>
         </div>
       </div>
-
-
     </div>
     <ng-template #noTransactions>
       <ion-card>
@@ -121,6 +215,43 @@
   </div>
   <!-- LOADING TEMPLATE -->
   <ng-template #apCardBalanceLoading>
-
+    <div class="masonry-list">
+      <div class="masonry-item" *ngFor="let skelton of skeletonConfig">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>
+              <h5 class="responsive-h2">
+                <ion-skeleton-text animated style="width: 60%; line-height: 20px"></ion-skeleton-text>
+              </h5>
+            </ion-card-subtitle>
+            <ion-card-title>
+              <h3 class="responsive-h1">
+                <ion-skeleton-text animated style="width: 80%; line-height: 28px"></ion-skeleton-text>
+              </h3>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ion-item lines="none" no-padding *ngFor="let transactions of skelton.numOfTrans">
+                <ion-avatar slot="start">
+                  <ion-skeleton-text animated style="width: 100%; line-height: 33px"></ion-skeleton-text>
+                </ion-avatar>
+                <ion-label>
+                  <h2 class="value">
+                    <ion-skeleton-text animated style="width: 40%; line-height: 20px"></ion-skeleton-text>
+                  </h2>
+                  <h3>
+                    <ion-skeleton-text animated style="width: 55%; line-height: 20px"></ion-skeleton-text>
+                  </h3>
+                  <p>
+                    <ion-skeleton-text animated style="width: 90%; line-height: 20px"></ion-skeleton-text>
+                  </p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
   </ng-template>
 </ion-content>
