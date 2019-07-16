@@ -47,12 +47,12 @@ const routes: Routes = [
       {
         path: 'classes',
         loadChildren:
-          './pages/attendix/attendix-lecturer/classes/classes.module#ClassesPageModule'
+        './pages/attendix/attendix-lecturer/classes/classes.module#ClassesPageModule'
       },
       {
         path: 'take-attendance',
         loadChildren:
-          './pages/attendix/attendix-lecturer/take-attendance/take-attendance.module#TakeAttendancePageModule'
+        './pages/attendix/attendix-lecturer/take-attendance/take-attendance.module#TakeAttendancePageModule'
       },
       // { path: 'qr-otp', loadChildren: './pages/attendix/qr-otp/qr-otp.module#QrOtpPageModule' },
       // { path: 'take-picture', loadChildren: './pages/attendix/take-picture/take-picture.module#TakePicturePageModule' },
@@ -88,8 +88,14 @@ const routes: Routes = [
     path: 'more',
     loadChildren: './pages/more/more.module#MorePageModule'
   },
-  { path: 'fees', loadChildren: './pages/fees/fees.module#FeesPageModule' },
-  { path: 'holidays', loadChildren: './pages/holidays/holidays.module#HolidaysPageModule' },
+  {
+    path: 'fees',
+    loadChildren: './pages/fees/fees.module#FeesPageModule'
+  },
+  {
+    path: 'holidays',
+    loadChildren: './pages/holidays/holidays.module#HolidaysPageModule'
+  },
   {
     path: 'graduate-verification-service',
     loadChildren: './pages/graduate-verification-service/graduate-verification-service.module#GraduateVerificationServicePageModule'

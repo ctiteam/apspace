@@ -5,10 +5,8 @@
 </ion-header>
 
 <ion-content padding>
-  <ng-template let-staff [ngIf]="staff$ | async">
-    <div class="staff-directory-info-header">
-      <!-- TODO: add responsive image -->
-      <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/${staff.RefNo}.jpg'">
-    </div>
-  </ng-template>
+  <div *ngIf="staff$ | async as staff" class="staff-directory-info-header">
+    <!-- TODO: add responsive image -->
+    <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '.jpg'">
+  </div>
 </ion-content>

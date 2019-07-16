@@ -1,0 +1,15 @@
+image: node:dubnium-alpine
+pipelines:
+  default:
+    - step: &build-test
+        name: Build & Test
+        caches:
+          - node
+        script:
+          - yarn install
+          - yarn lint
+            # - yarn test --single-run --no-progress --browsers FirefoxHeadless
+          - yarn build --aot
+  pull-requests:
+    '**':
+      - step: *build-test
