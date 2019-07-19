@@ -17,11 +17,7 @@ export class QrScanPage {
   barcodeScannerOptions: BarcodeScannerOptions;
 
   constructor(
-    // private platform: Platform,
-    // private splashScreen: SplashScreen,
-    // private statusBar: StatusBar,
     private barcodeScanner: BarcodeScanner) {
-    // this.initializaApp();
 
     // options
     this.barcodeScannerOptions = {
@@ -41,23 +37,5 @@ export class QrScanPage {
       console.log('Error', err);
     });
   }
-
-  // initializaApp() {
-  //   this.platform.ready().then(() => {
-  //     this.statusBar.styleDefault();
-  //     this.splashScreen.hide();
-
-  //     this.encodeData = "https://www.apu.edu.my";
-  //   });
-  // }
-
-  // encodeText() {
-  //   this.barcodeScanner.encode(this.barcodeScanner.Encode.TEXT_TYPE, this.encodeData).then((encodeData) => {
-  //     console.log(this.encodeData);
-  //     this.encodeData = encodeData;
-  //   }, (err) => {
-  //     console.log('Error occured' + err);
-  //   });
-  // }
 
 }

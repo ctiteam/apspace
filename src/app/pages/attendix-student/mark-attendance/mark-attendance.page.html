@@ -1,32 +1,22 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref=""></ion-back-button>
+      <ion-back-button defaultHref="#"></ion-back-button>
     </ion-buttons>
     <ion-title text-center>Mark Attendance</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="card-background-page">
 
-<ion-card class="button" routerLink='/attendix/take-picture'>
-  <ion-card-header>
-    Using Camera
-  </ion-card-header>
+  <ion-card (click)="scanCode()">
+    <ion-icon class="icons" name="qr-scanner" class=""></ion-icon>
+    <div class="card-title">Scan Code</div>
+  </ion-card>
 
-  <ion-card-content>
-    <ion-icon name="camera" class="button-icon"></ion-icon>
-  </ion-card-content>
-</ion-card>
-
-<ion-card class="button" routerLink="/attendix/otp">
-  <ion-card-header>
-    Using One-Time-Password
-  </ion-card-header>
-
-  <ion-card-content>
-    <ion-icon name="barcode" class="button-icon"></ion-icon>
-  </ion-card-content>
-</ion-card>
+  <ion-card (click)="scanCode()">
+      <ion-icon class="icons" name="keypad" class=""></ion-icon>
+      <div class="card-title">Enter OTP</div>
+  </ion-card>
 
 </ion-content>
