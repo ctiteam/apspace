@@ -16,3 +16,4 @@ export { SettingsService } from './settings.service';
 export { StudentTimetableService } from './student-timetable.service';
 export { VersionService } from './version.service';
 export { WsApiService } from './ws-api.service';
+export { UserSettingsService } from './user-settings.service';
