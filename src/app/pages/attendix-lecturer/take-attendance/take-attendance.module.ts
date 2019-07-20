@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { QRCodeModule } from 'angularx-qrcode';
 
 import { TakeAttendancePage } from './take-attendance.page';
+import { CharsPipe } from './chars.pipe';
 
 const routes: Routes = [
   {
@@ -22,6 +23,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     QRCodeModule
   ],
-  declarations: [TakeAttendancePage]
+  declarations: [TakeAttendancePage, CharsPipe]
 })
 export class TakeAttendancePageModule { }

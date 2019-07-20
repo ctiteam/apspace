@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 @Injectable({
   providedIn: 'root'
 })
-export class InitAttendanceMutation extends Mutation {
+export class InitAttendanceGQL extends Mutation {
   document = gql`
     mutation initAttendance($schedule: String!) {
       initAttendance(schedule: $schedule) {

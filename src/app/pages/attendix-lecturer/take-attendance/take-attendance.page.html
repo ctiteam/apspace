@@ -12,19 +12,27 @@
 
 <ion-content padding>
   <ion-grid>
-    <ion-row>
+    <ion-row *ngIf="otp$ | async as otp">
       <ion-col size="8">
         <ion-card class="cols">
           <ion-card-content>
-            <qrcode [qrdata]="otp$ | async" level="H"></qrcode>
+            <qrcode *ngIf="otp" [qrdata]="otp" level="H"></qrcode>
           </ion-card-content>
         </ion-card>
       </ion-col>
       <ion-col size="4">
         <ion-card class="cols">
-          <ion-card-header color="medium">
+          <ion-card-header>
+            <ion-card *ngFor="let c of otp | chars" style="display: inline-block">
+              {{ c }}
+            </ion-card>
           </ion-card-header>
           <ion-card-content>
+            <ion-list *ngFor="let marked of lastMarked$ | async">
+              <ion-item>
+                {{ marked }}
+              </ion-item>
+            </ion-list>
           </ion-card-content>
         </ion-card>
       </ion-col>
