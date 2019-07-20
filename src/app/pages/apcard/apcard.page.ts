@@ -5,6 +5,8 @@ import { Apcard } from '../../interfaces';
 import { WsApiService } from 'src/app/services';
 import { MenuController, IonRadioGroup } from '@ionic/angular';
 
+type VisibleOption = 'all' | 'credit' | 'debit';
+
 @Component({
   selector: 'app-apcard',
   templateUrl: './apcard.page.html',
