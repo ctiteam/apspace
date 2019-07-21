@@ -14,9 +14,28 @@
     <div class="card-title">Scan Code</div>
   </ion-card>
 
-  <ion-card (click)="scanCode()">
+  <!-- <ion-card (click)="scanCode()">
       <ion-icon class="icons" name="keypad" class=""></ion-icon>
       <div class="card-title">Enter OTP</div>
+  </ion-card> -->
+
+  <ion-card>
+    <ion-card-content>
+        <ion-grid class="container">
+          <ion-row>
+            <ion-col class="rounded">
+              <ion-input type="text" name="otp" placeholder="Enter OTP Here"></ion-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-button id="rounded" type="submit" (click)="scanCode()">
+                Submit
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+    </ion-card-content>
   </ion-card>
 
 </ion-content>

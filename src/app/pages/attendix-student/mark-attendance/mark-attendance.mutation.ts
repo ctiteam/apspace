@@ -10,12 +10,7 @@ export class MarkAttendanceGQL extends Mutation {
     mutation markAttendance($schedule: String!) {
       markAttendance(schedule: $schedule otp: "123456" student: "TP100340") {
         id
-        userArn
-        attendance
-        lastModified
-        modifiedBy
-        internapIP
-        externalIP
+        schedule
       }
     }
   `;
