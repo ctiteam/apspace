@@ -1,36 +1,20 @@
-<ng-template let-calendar [ngIf]="calendar$ | async" [ngIfElse]="loading">
-  <ng-template [ngIf]="calendar.length" [ngIfElse]="empty">
-    <div *ngFor="let week of calendar" class="schedule-week">
-      <div class="schedule-week-head" (click)='show(week, $event.target)'>
-        {{ week.week | date }}
-        <span class="right">{{ selectedWeeks.indexOf(week) !== -1 ? '_«' : '»' }}</span>
-      </div>
-      <div *ngIf="selectedWeeks.indexOf(week) !== -1" [@easeInOut]>
-        <div *ngFor="let day of week.days" class="schedule-day">
-          <div class="schedule-day-head center">
-            <span>{{ day.day | date:'d' }}</span>
-            <span>{{ day.day | date:'E' }}</span>
-          </div>
-          <div class="schedule-day-body container">
-              <div *ngFor="let event of day.events" class="event row">
-                  <p class="name col-12">{{ event.name }}</p>
-                  <p class="small col-12 wrap-text">{{ event.intakes.join() }}</p>
-                  <p class="small col-12">{{ event.loc }}</p>
-                  <p class="small col-12 font-weight-bold">
-                    {{ event.start | date: "shortTime" }} -
-                    {{ event.end | date: "shortTime" }}
-                  </p>
-                  <button (click)="markAttendance()">Mark Attendance</button>
-                </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </ng-template>
-  <ng-template #empty>
-    <div class="empty-timetable"><h3 class="pt-1 pl-3">No timetable</h3></div>
-  </ng-template>
-</ng-template>
-<ng-template #loading>
-  <skeleton-item height="30px" class="schedule-week"></skeleton-item>
-</ng-template>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Classes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-label>Class code</ion-label>
+  <ion-select [(ngModel)]="selClasscode">
+    <ion-select-option *ngFor="let classcode of classcode$ | async"
+      [value]="classcode" interface="action-sheet">{{ classcode }}</ion-select-option>
+  </ion-select>
+
+  <ion-label>Date Time</ion-label>
+  <ion-input [(ngModel)]="selDatetime"></ion-input>
+
+  <ion-button (click)="markAttendance">
+    Submit
+  </ion-button>
+</ion-content>
