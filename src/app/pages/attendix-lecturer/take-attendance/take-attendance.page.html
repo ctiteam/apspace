@@ -14,14 +14,10 @@
   <ion-grid>
     <ion-row *ngIf="otp$ | async as otp">
       <ion-col size="8">
-        <ion-card class="cols">
-          <ion-card-content>
-            <qrcode *ngIf="otp" [qrdata]="otp" level="H"></qrcode>
-          </ion-card-content>
-        </ion-card>
+        <qrcode *ngIf="otp" [qrdata]="otp" level="H"></qrcode>
       </ion-col>
       <ion-col size="4">
-        <ion-card class="cols">
+        <ion-card>
           <ion-card-header>
             <ion-card *ngFor="let c of otp | chars" style="display: inline-block">
               {{ c }}
