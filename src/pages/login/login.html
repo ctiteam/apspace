@@ -10,47 +10,28 @@
           <form (ngSubmit)="login()">
             <ion-item class="mt-5 px-0">
               <ion-icon color="text-color" name="contact" item-left></ion-icon>
-              <ion-input
-                #autofocus
-                type="email"
-                placeholder='"APKey"'
-                [(ngModel)]="username"
-                [ngModelOptions]="{ standalone: true }"
-              ></ion-input>
+              <ion-input #autofocus type="email" placeholder='"APKey"' [(ngModel)]="username"
+                [ngModelOptions]="{ standalone: true }"></ion-input>
             </ion-item>
             <ion-item class="my-3 px-0">
               <ion-icon color="text-color" name="lock" item-left></ion-icon>
-              <ion-input
-                [type]="getPasswordVisibility()"
-                placeholder="Password"
-                [(ngModel)]="password"
-                [ngModelOptions]="{ standalone: true }"
-              ></ion-input>
-              <button
-                ion-button
-                item-right
-                clear
-                type="button"
-                (click)="showPasswordText = !showPasswordText"
-              >
+              <ion-input [type]="getPasswordVisibility()" placeholder="Password" [(ngModel)]="password"
+                [ngModelOptions]="{ standalone: true }"></ion-input>
+              <button ion-button item-right clear type="button" (click)="showPasswordText = !showPasswordText">
                 <ion-icon name="eye"></ion-icon>
               </button>
             </ion-item>
             <div class="col-12 px-5 mx-auto mt-5">
-              <button
-              ion-button
-              block
-              type="submit"
-              [disabled]="showLoadingSpinner"
-              color="primary"
-            >
-              <span *ngIf="!showLoadingSpinner">Log in</span>
-              <span *ngIf="showLoadingSpinner">Loading...</span>
-            </button>
+              <button ion-button block type="submit" [disabled]="showLoadingSpinner" color="primary">
+                <span *ngIf="!showLoadingSpinner">Log in</span>
+                <span *ngIf="showLoadingSpinner">Loading...</span>
+              </button>
             </div>
           </form>
           <h4 class="p-3 mt-4 text-center font-weight-bold useful-links-title">----- OR -----</h4>
-          <h4 class="px-4 text-center link" [navPush]="'QualificationVerificationPage'">Graduate Verification Service</h4>
+          <h4 class="px-4 text-center link" [navPush]="'QualificationVerificationPage'">Graduate Verification Service
+          </h4>
+          <h4 class="px-4 text-center link" [navPush]="'TimetablePage'">Intake Timetable</h4>
         </div>
       </div>
     </div>
