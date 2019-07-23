@@ -7,8 +7,8 @@ import gql from 'graphql-tag';
 })
 export class MarkAttendanceGQL extends Mutation {
   document = gql`
-    mutation markAttendance($schedule: String!) {
-      markAttendance(schedule: $schedule otp: "123456" student: "TP100340") {
+    mutation markAttendance($schedule: String! $otp: String! $student: String!) {
+      markAttendance(schedule: $schedule, otp: $otp, student: $student) {
         id
         schedule
       }
