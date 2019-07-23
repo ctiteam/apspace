@@ -8,7 +8,7 @@ import gql from 'graphql-tag';
 export class InitAttendanceGQL extends Mutation {
   document = gql`
     mutation initAttendance($schedule: String!) {
-      initAttendance(schedule: $schedule) {
+      attendance: initAttendance(schedule: $schedule) {
         secret
       }
     }
