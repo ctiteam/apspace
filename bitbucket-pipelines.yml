@@ -1,4 +1,4 @@
-image: node:dubnium-alpine
+image: node:10.16.0-alpine
 pipelines:
   default:
     - step: &build-test
