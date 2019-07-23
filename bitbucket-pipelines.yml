@@ -1,4 +1,4 @@
-image: cticti/aws-cli:node-ionic-alpine
+image: cticti/aws-cli:node-10-ionic-alpine
 
 pipelines:
   branches:
