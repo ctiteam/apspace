@@ -16,10 +16,7 @@ export function createApollo(httpLink: HttpLink, storage: Storage) {
     region: 'ap-southeast-1',
     auth: {
       type: AUTH_TYPE.API_KEY,
-      apiKey: () => {
-        console.log('get api key');
-        return storage.get('apiKey');
-      },
+      apiKey: () => storage.get('apiKey'),
       // type: AUTH_TYPE.OPENID_CONNECT,
     },
     complexObjectsCredentials: null,
