@@ -54,7 +54,7 @@
   </ion-content>
 </ion-menu>
 <ion-content #content>
-  <div style="width: 98%; margin-left: 1%;" *ngIf="!studentIsMastersOrAPLC">
+  <div class="outsiderDiv" *ngIf="!studentIsMastersOrAPLC">
     <div *ngIf="intakesAreLoading" class="row mt-5">
       <div class="col-12 px-5">
         <loading-spinner class="mt-5"></loading-spinner>
@@ -136,7 +136,7 @@
                         <ion-list radio-group
                           [(ngModel)]="response.answers[response.answers.indexOf(getAnswerByQuestionId(surveyQuestion.id))].content">
                           <div class="row">
-                            <div class="col-12" style="display: inline-flex">
+                            <div class="col-12 divCol">
                               <ion-item *ngIf="!surveyQuestion.applicable">
                                 <ion-radio value="0" item-left>
                                 </ion-radio>
@@ -160,18 +160,18 @@
                       <ng-template [ngIf]="surveyQuestion.type === 'MCQ'" [ngIfElse]="showTextArea">
                         <ion-list radio-group
                           [(ngModel)]="response.answers[response.answers.indexOf(getAnswerByQuestionId(surveyQuestion.id))].content"
-                          style="display: inline-flex; width: 100%; padding: 0%; background-color: brown; ">
+                          class="smIonList">
                           <ion-item *ngIf="!surveyQuestion.applicable">
                             <ion-label>
                               0
-                              <ion-radio value="0" item-left style="margin-left: 0%; margin-right: 1px;">
+                              <ion-radio value="0" item-left id="naRadioBtn" >
                               </ion-radio>
                             </ion-label>
                           </ion-item>
                           <ion-item *ngFor="let mcqAnswer of msqAnswers">
                             <ion-label>
                               {{mcqAnswer.id}}
-                              <ion-radio [value]="mcqAnswer.id" item-left style="margin-left: 0%; margin-right: 8px; ">
+                              <ion-radio [value]="mcqAnswer.id" id="ansRadioBtn" item-left>
                               </ion-radio>
                             </ion-label>
                           </ion-item>

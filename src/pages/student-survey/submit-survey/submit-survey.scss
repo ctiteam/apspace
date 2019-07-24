@@ -17,4 +17,24 @@ page-submit-survey {
   .userMessage{
     white-space: normal;
   }
+  .outsiderDiv {
+    width: 98%; 
+    margin-left: 1%;
+  }
+  .divCol {
+    display: inline-flex;
+  }
+  .smIonList {
+    display: inline-flex; 
+    width: 100%;
+     padding: 0%;
+  }
+  #naRadioBtn {
+    margin-left: 0%;
+    margin-right:1px;
+  }
+  #ansRadioBtn {
+    margin-left: 0%; 
+    margin-right: 8px;
+  }
 }
