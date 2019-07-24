@@ -29,12 +29,12 @@ page-submit-survey {
     width: 100%;
      padding: 0%;
   }
-  #naRadioBtn {
-    margin-left: 0%;
+  .naRadioBtn {
+    margin-left: 0% !important;
     margin-right:1px;
   }
-  #ansRadioBtn {
-    margin-left: 0%; 
-    margin-right: 8px;
+  .ansRadioBtn {
+    margin-left: 0% !important; 
+    margin-right: 8px ;
   }
 }
