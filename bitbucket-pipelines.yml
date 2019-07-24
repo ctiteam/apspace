@@ -10,6 +10,8 @@ pipelines:
           - npm i
           - ionic cordova build browser --prod
           - aws s3 sync www/ s3://apspace-production/ --acl public-read
+          - aws cloudfront create-invalidation --distribution-id E2U0MAK0TADMRA --paths "/*"
+
     staging:
     - step:
         caches:
