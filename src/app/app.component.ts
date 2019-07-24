@@ -77,11 +77,7 @@ export class MyApp {
           if (this.platform.is('cordova')) {
             this.checkNewNotification();
           }
-          if (window.location.href.split('#')[1] === '/timetable') {
-            this.navCtrl.setRoot('TimetablePage');
-          } else if (window.location.href.split('#')[1] === '/qualification-verification') {
-            this.navCtrl.setRoot('QualificationVerificationPage');
-          } else {
+          if (window.location.href.split('#')[1] !== '/timetable') {
             this.navCtrl.setRoot('LoginPage');
           }
         }
