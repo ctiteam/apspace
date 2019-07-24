@@ -1,9 +1,10 @@
-import { Component } from "@angular/core";
-import { AlertController, IonicPage, MenuController, NavController, NavParams, ToastController } from "ionic-angular";
-import { Observable } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { Component } from '@angular/core';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { AlertController, IonicPage, MenuController, NavController, NavParams, ToastController } from 'ionic-angular';
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { Role, StudentProfile } from '../../../interfaces';
-import { SettingsProvider, WsApiProvider } from "../../../providers";
+import { SettingsProvider, WsApiProvider } from '../../../providers';
 
 @IonicPage()
 @Component({
@@ -13,27 +14,24 @@ import { SettingsProvider, WsApiProvider } from "../../../providers";
 export class SubmitSurveyPage {
   // TEMP VARIABLES
   stagingUrl = 'https://dl4h9zf8wj.execute-api.ap-southeast-1.amazonaws.com/dev/survey';
-
   todaysDate = new Date();
-
   // IF USER IS COMING FROM RESULTS PAGE
   moduleCodeFromResultsPage = this.navParams.get('moduleCode');
   intakeCodeFromResultsPage = this.navParams.get('intakeCode');
-
   // NGMODEL VARIABLES
   intakeCode: string;
   classCode: string;
+  courseType: string;
+  startSwith: string;
   surveyType: string;
-
   selectedModule: any;
-
   // LOADING & ERRORS VARIABLES
   numOfSkeletons = new Array(3);
   intakesAreLoading = false;
   modulesAreLoading = false;
   submitting = false;
   showFieldMissingError = false;
-
+  studentIsMastersOrAPLC = false;
   // LISTS
   intakes: any[];
   modules: any;
@@ -55,13 +53,12 @@ export class SubmitSurveyPage {
       },
     ],
   };
-
   // OBSERAVBLES
   survey$: Observable<any[]>;
-
   constructor(
     public navCtrl: NavController,
     public menu: MenuController,
+    private iab: InAppBrowser,
     private ws: WsApiProvider,
     private toastCtrl: ToastController,
     public alertCtrl: AlertController,
@@ -70,17 +67,32 @@ export class SubmitSurveyPage {
   ) { }
 
   ionViewDidLoad() {
-    this.getIntakes();
     if (this.settings.get('role') & Role.Student) {
       this.intakesAreLoading = true;
       this.ws.get<StudentProfile>('/student/profile').subscribe(
         p => {
           this.intakeCode = p.INTAKE;
         },
-        _ => { },
+        // tslint:disable-next-line: no-empty
+        _ => {},
         () => {
-          this.intakesAreLoading = false;
-          this.getModules(this.intakeCode);
+          this.startSwith = this.intakeCode.slice(0, 3);
+          // tslint:disable-next-line: triple-equals
+          if (this.startSwith == 'UCE' || this.startSwith == 'UCP') {
+            this.studentIsMastersOrAPLC = true;
+            this.courseType = 'APLC Students';
+            this.iab.create('https://webapps.apiit.edu.my/engappraisal');
+          // tslint:disable-next-line: triple-equals
+          } else if (this.startSwith == 'UCM') {
+            this.studentIsMastersOrAPLC = true;
+            this.courseType = 'Master';
+            this.iab.create('https://webapps.apiit.edu.my/appraisal');
+          } else {
+            this.getIntakes();
+            this.courseType = 'bachelor';
+            this.intakesAreLoading = false;
+            this.getModules(this.intakeCode);
+          }
         },
       );
     }
@@ -110,6 +122,7 @@ export class SubmitSurveyPage {
     this.intakesAreLoading = true;
     this.ws.get<any>(`/intakes-list`, true, { url: this.stagingUrl }).subscribe(
       res => this.intakes = res,
+      // tslint:disable-next-line: no-empty
       _ => { },
       () => this.intakesAreLoading = false,
     );
@@ -126,6 +139,7 @@ export class SubmitSurveyPage {
   getModules(intakeCode: string) {
     this.modulesAreLoading = true;
     this.ws.get<any>(`/modules-list?intake_code=${intakeCode}`, true, { url: this.stagingUrl }).pipe(
+      // tslint:disable-next-line: max-line-length
       map(res => res.filter(item => !item.COURSE_APPRAISAL || (!item.COURSE_APPRAISAL2 && Date.parse(item.END_DATE) > Date.parse(this.todaysDate.toISOString())))),
     ).subscribe(
       res => this.modules = res,
@@ -160,7 +174,7 @@ export class SubmitSurveyPage {
             intake_code: this.intakeCode,
             class_code: this.classCode,
             survey_id: surveys[0].id,
-            answers
+            answers,
           };
         }),
       );
@@ -204,10 +218,12 @@ export class SubmitSurveyPage {
   submitSurvey() {
     const confirm = this.alertCtrl.create({
       title: 'Submit Survey',
+      // tslint:disable-next-line: max-line-length
       message: `You are about to submit the survey for the module with the code ${this.classCode}, under the intake ${this.intakeCode}. Do you want to continue?`,
       buttons: [
         {
           text: 'No',
+          // tslint:disable-next-line: no-empty
           handler: () => {
           },
         },
@@ -217,17 +233,20 @@ export class SubmitSurveyPage {
             const notAnsweredQuestions = this.response.answers.filter(answer => answer.content === '');
             if (notAnsweredQuestions.length === 0) {
               this.submitting = true;
+              console.log(this.response);
               this.ws.post('/response', { url: this.stagingUrl, body: this.response }).subscribe(
+                // tslint:disable-next-line: no-empty
                 _ => { },
-                err => {
+               err => {
+                  // tslint:disable-next-line: max-line-length
                   this.toast("Something went wrong and we couldn't complete your request. Please try again or contact us via the feedback page");
-                },
+               },
                 () => {
                   this.toast(`The survey for ${this.classCode} has been submitted successfully.`);
                   this.navCtrl.pop();
                   this.submitting = false;
-                },
-              );
+               },
+               );
             } else {
               this.showFieldMissingError = true;
             }
@@ -266,6 +285,7 @@ export class SubmitSurveyPage {
   //           this.ws.put('/student-behavior', { url: this.stagingUrl, body: studentBehaviors }).subscribe(
   //             _ => { },
   //             err => {
+  // tslint:disable-next-line: max-line-length
   //               this.toast("Something went wrong and we couldn't complete your request. Please try again or contact us via the feedback page");
   //             },
   //             () => {
