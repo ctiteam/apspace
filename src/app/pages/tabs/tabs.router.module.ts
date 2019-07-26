@@ -28,6 +28,10 @@ const routes: Routes = [
       {
         path: 'apcard',
         loadChildren: '../apcard/apcard.module#ApcardPageModule'
+      },
+      {
+        path: 'more',
+        loadChildren: '../more/more.module#MorePageModule'
       }
     ]
   }

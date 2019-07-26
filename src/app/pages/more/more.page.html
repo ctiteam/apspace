@@ -1,45 +1,37 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>More</ion-title>
+    <ion-searchbar
+      [(ngModel)]="term"
+      placeholder="Search (e.g. 'staff', 'red', ...)">
+    </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
-    <ion-item>
-      <a (click)="openExternalPage(kbUrl)">
-        <ion-label>
-          Knowledge Base
-        </ion-label>
-      </a>
-    </ion-item>
-    <ion-item>
-      <a (click)="openExternalPage(formsApplicationUrl)">
-        <ion-label>
-          Forms Application
-        </ion-label>
-      </a>
-    </ion-item>
-    <ion-item>
-      <a (click)="openExternalPage(kohaUrl)">
-        <ion-label>
-          My Library
-        </ion-label>
-      </a>
-    </ion-item>
-    <ion-item>
-      <a (click)="openExternalPage(lmsUrl)">
-        <ion-label>
-          Moodle
-        </ion-label>
-      </a>
-    </ion-item>
-    <ion-item>
-      <a (click)="openExternalPage(webmailUrl, false)">
-        <ion-label>
-          Webmail
-        </ion-label>
-      </a>
-    </ion-item>
-  </ion-list>
+  <div class="container p-0">
+    <!-- XXX: if possible do not group menu, this distort search score -->
+    <div class="menu-section" *ngFor="let menu of menuFull">
+      <!-- container to assign pages to filtered items -->
+      <ng-container *ngIf="menu.items | fuse:term as pages">
+        <!-- container to filter group without items -->
+        <ng-container *ngIf="pages.length">
+          <div class="menu-section-header">
+            <h3>{{ menu.title }}</h3>
+          </div>
+          <div class="menu-section-items">
+            <div
+              *ngFor="let page of pages"
+              [ngClass]="['menu-item', 'row', page.color, page.size]"
+              (click)="openPage(page.url)">
+              <ion-icon
+                class="ion-icon align-self-center text-center"
+                [name]="page.icon"
+                ></ion-icon>
+                <div class="menu-item-title align-self-end">{{ page.title }}</div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
 </ion-content>

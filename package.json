@@ -52,6 +52,7 @@
     "cordova-plugin-inappbrowser": "3.0.0",
     "cordova-plugin-qrscanner": "^2.6.0",
     "core-js": "^2.5.4",
+    "fuse.js": "^3.4.5",
     "karma-firefox-launcher": "^1.1.0",
     "moment": "^2.24.0",
     "rxjs": "~6.4.0",

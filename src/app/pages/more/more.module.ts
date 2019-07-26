@@ -7,6 +7,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { MorePage } from './more.page';
+import { FusePipe } from './fuse.pipe';
 
 const routes: Routes = [
   {
@@ -25,6 +26,6 @@ const routes: Routes = [
   providers: [
     InAppBrowser
   ],
-  declarations: [MorePage]
+  declarations: [MorePage, FusePipe]
 })
 export class MorePageModule { }
