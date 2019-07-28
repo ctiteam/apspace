@@ -42,7 +42,9 @@
   .masonry-item {
     display: inline-block;
     width: 100%;
-    padding: 5px;
+    &:not(.no-padding){
+      padding: 5px;
+    }
   }
 }
 
