@@ -1,10 +1,18 @@
 <div class="event-calendar" *ngIf="observable$ | async as events; else loading">
     <div class="event-list" *ngIf="events.length > 0; else noEvents">
         <div class="event" *ngFor="let event of events">
-            <div class="event-container" padding-end [style.borderColor]="!event.pass? event.color: event.passColor"
-                [style.color]="event.pass? event.passColor: ''">
+            <div class="event-container" padding-end
+                [ngClass]="{
+                    'passed-event': event.pass,
+                    'no-hover': event.pass,
+                    'class-type': event.type==='class',
+                    'exam-type': event.type==='exam',
+                    'holiday-type': event.type==='holiday',
+                    'iconsult-type': event.type==='iconsult'
+                }"                
+                >
                 <div class="left-part-container" text-center>
-                    <span class="left-part" [style.color]="!event.pass? event.color: event.passColor">
+                    <span class="left-part">
                         <span class="primaryDateTime" *ngIf="event.dateOrTime">
                             {{splitTimeAndGetOnePart('first',event.dateOrTime)}}
                         </span>
@@ -17,9 +25,8 @@
                     </span>
                 </div>
                 <div class="right-part-container">
-                    <span *ngIf="event.title" class="title"
-                        [style.color]="!event.pass? event.color: event.passColor">{{event.title}}</span>
-                    <span [style.backgroundColor]="!event.pass? event.color: event.passColor" class="type">
+                    <span *ngIf="event.title" class="title">{{event.title}}</span>
+                    <span class="type">
                         <a>
                             {{event.type | titlecase}}
                         </a>
@@ -27,7 +34,7 @@
                     <div class="clearfix"></div>
                     <span *ngIf="event.firstDescription" class="description">{{event.firstDescription}}</span>
                     <span *ngIf="event.secondDescription" class="description">
-                        <a [style.color]="!event.pass? event.color: event.passColor"
+                        <a
                             *ngIf="event.outputFormat === 'event-with-time-and-hyperlink' || event.outputFormat === 'event-with-date-and-hyperlink'; else noHyperlink">
                             {{event.secondDescription}}
                         </a>
@@ -51,14 +58,14 @@
     <div class="event-calendar">
         <div class="event-list">
             <div class="event" *ngFor="let _ of skeletonConfigurations.eventsSkeleton">
-                <div class="event-container no-hover" padding-end>
+                <div class="event-container no-hover" style="border: none" padding-end>
                     <div class="left-part-container" style="padding-top: 5px;">
                         <span class="left-part">
                             <span class="primaryDateTime d-block" style="padding: 2px 20px">
-                                <ion-skeleton-text animated style="width: 100%; line-height: 35px"></ion-skeleton-text>
+                                <ion-skeleton-text animated style="width: 100%; line-height: 25px"></ion-skeleton-text>
                             </span>
                             <span class="left-part-item small d-block" style="padding: 2px 15px">
-                                <ion-skeleton-text animated style="width: 100%; line-height: 27px"></ion-skeleton-text>
+                                <ion-skeleton-text animated style="width: 100%; line-height: 17px"></ion-skeleton-text>
                             </span>
                             <span class="left-part-item smallest d-block" style="padding: 2px 20px">
                                 <ion-skeleton-text animated style="width: 100%; line-height: 17px"></ion-skeleton-text>
@@ -67,7 +74,7 @@
                     </div>
                     <div class="right-part-container">
                         <span class="title">
-                            <ion-skeleton-text animated style="width: 90%; line-height: 31px"></ion-skeleton-text>
+                            <ion-skeleton-text animated style="width: 90%; line-height: 25px"></ion-skeleton-text>
                         </span>
                         <span class="type">
                             <ion-skeleton-text animated style="width: 100%; line-height: 20px"></ion-skeleton-text>
