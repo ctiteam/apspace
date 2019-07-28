@@ -3,13 +3,37 @@ import { BehaviorSubject } from 'rxjs';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
+import { DashboardSection } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserSettingsService {
+  activeAccentColor = 'blue-accent-color';
   private darkTheme: BehaviorSubject<boolean>;
+  private pureDarkTheme: BehaviorSubject<boolean>;
   private accentColor: BehaviorSubject<string>;
+  private dashboardSections: BehaviorSubject<string[]>;
+
+  accentColors = [
+    { name: 'red-accent-color', value: '#e54d42' },
+    { name: 'yellow-accent-color', value: '#DFA847' },
+    { name: 'blue-accent-color', value: '#3A99D9' },
+    { name: 'green-accent-color', value: '#08a14f' },
+    { name: 'red-accent-color', value: '#ec2a4d' }
+  ];
+
+  defaultDashboardSectionsSettings = [
+    'profile',
+    'dashboardAlerts',
+    'quickAccess',
+    'todaysSchedule',
+    'upcomingEvents',
+    'apcard',
+    'cgpa',
+    'lowAttendance',
+    'financials',
+  ];
 
   constructor(
     public http: HttpClient,
@@ -17,9 +41,12 @@ export class UserSettingsService {
     public statusBar: StatusBar,
   ) {
     this.darkTheme = new BehaviorSubject(false);
+    this.pureDarkTheme = new BehaviorSubject(false);
     this.accentColor = new BehaviorSubject('blue-accent-color');
+    this.dashboardSections = new BehaviorSubject(this.defaultDashboardSectionsSettings);
   }
 
+  // DARK THEME
   toggleDarkTheme(val: boolean) {
     this.storage.set('dark-theme', val);
     this.darkTheme.next(val);
@@ -29,13 +56,45 @@ export class UserSettingsService {
     return this.darkTheme.asObservable();
   }
 
+  // PURE DARK THEME
+  togglePureDarkTheme(val: boolean) {
+    this.storage.set('pure-dark-theme', val);
+    this.pureDarkTheme.next(val);
+  }
+
+  PureDarkThemeActivated() {
+    return this.pureDarkTheme.asObservable();
+  }
+
+  // ACCENT COLORS
+  getAccentColor() {
+    return this.accentColor.asObservable();
+  }
+
   setAccentColor(val: string) {
     this.storage.set('accent-color', val);
     this.accentColor.next(val);
   }
 
-  getAccentColor() {
-    return this.accentColor.asObservable();
+  getAccentColorValue() {
+    let value = '';
+    this.accentColors.forEach(accentColor => {
+      if (accentColor.name === this.accentColor.value) {
+        value = accentColor.value;
+      }
+    });
+    return value;
+  }
+
+
+  // DASHBOARD ALERTS
+  setShownDashboardSections(val: string[]) {
+    this.storage.set('dashboard-sections', val);
+    this.dashboardSections.next(val);
+  }
+
+  getShownDashboardSections() {
+    return this.dashboardSections.asObservable();
   }
 
   changeStatusBarColor(darkThemeSelected: boolean) {
@@ -54,7 +113,6 @@ export class UserSettingsService {
     // BY DEFAULT THE LIGHT THEME WILL BE APPLIED
     this.storage.get('dark-theme').then(value => {
       if (value) {
-        console.log(value);
         this.toggleDarkTheme(value);
         this.changeStatusBarColor(value);
       } else {
@@ -62,10 +120,22 @@ export class UserSettingsService {
         this.changeStatusBarColor(false);
       }
     });
+    this.storage.get('pure-dark-theme').then(value => {
+      if (value) {
+        this.togglePureDarkTheme(value);
+      } else {
+        this.togglePureDarkTheme(false);
+      }
+    });
     this.storage.get('accent-color').then(value => {
       value
         ? this.setAccentColor(value)
         : this.setAccentColor('blue-accent-color');
+    });
+    this.storage.get('dashboard-sections').then(value => {
+      value
+        ? this.setShownDashboardSections(value)
+        : this.setShownDashboardSections(this.defaultDashboardSectionsSettings);
     });
   }
 }

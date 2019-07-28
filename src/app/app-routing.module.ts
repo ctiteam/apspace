@@ -100,7 +100,7 @@ const routes: Routes = [
     path: 'graduate-verification-service',
     loadChildren: './pages/graduate-verification-service/graduate-verification-service.module#GraduateVerificationServicePageModule'
   },
-  { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule' }
+  { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule' },
 ];
 
 @NgModule({

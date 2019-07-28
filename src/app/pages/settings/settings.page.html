@@ -6,7 +6,13 @@
 
 <ion-content padding>
   <!-- Searchbar with a custom debounce -->
-  <ion-searchbar style="padding: 5px;" no-padding margin-bottom color="danger"></ion-searchbar>
+  <!-- <ion-searchbar style="padding: 5px;" no-padding margin-bottom color="danger"></ion-searchbar> -->
+  <ion-select [(ngModel)]="dashboardSections" (ionChange)="dashboardSectionsChanged()" multiple="true"
+    [hidden]="true" #dashboardSectionsSelect>
+    <ion-select-option [value]="dashboardSection.section" *ngFor="let dashboardSection of allDashboardSections">
+      {{ dashboardSection.name }}
+    </ion-select-option>
+  </ion-select>
   <div class="masonry-list">
     <div class="masonry-item">
       <ion-card no-margin margin-bottom>
@@ -77,7 +83,8 @@
               </ion-item>
               <ion-item lines="none" no-padding>
                 <ion-label>Pure Dark</ion-label>
-                <ion-toggle [(ngModel)]="pureDarkThemeEnabled" no-padding></ion-toggle>
+                <ion-toggle [(ngModel)]="pureDarkThemeEnabled" [disabled]="!darkThemeEnabled"
+                  (ngModelChange)="togglePureDarkTheme()" no-padding></ion-toggle>
               </ion-item>
               <ion-item lines="none" no-padding>
                 <ion-label>Accent Color</ion-label>
@@ -125,12 +132,6 @@
               </ion-item-divider>
               <ion-item lines="none" no-padding>
                 <ion-label>
-                  Dashboard Alerts
-                </ion-label>
-                <ion-toggle [(ngModel)]="test" no-padding></ion-toggle>
-              </ion-item>
-              <ion-item lines="none" no-padding>
-                <ion-label>
                   Quick Access Items
                 </ion-label>
               </ion-item>
@@ -140,8 +141,8 @@
                 </ion-label>
               </ion-item>
               <ion-item lines="none" no-padding>
-                <ion-label>
-                  Customize Dashboard Elements
+                <ion-label (click)="openDashboardSectionsSelectBox()">
+                  Shown Dashboard Sections
                 </ion-label>
               </ion-item>
             </ion-item-group>
