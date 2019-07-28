@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Network } from '@ionic-native/network/ngx';
 import { Storage } from '@ionic/storage';
 import { TestBed } from '@angular/core/testing';
+import { TestScheduler } from 'rxjs/testing';
 
 import { asyncData, asyncError } from '../../testing';
 import { CasTicketService } from './cas-ticket.service';
@@ -37,10 +38,16 @@ describe('WsApiService', () => {
   });
 
   xit('should return error after retries if no cache', () => {
-    storageSpy.get.and.returnValue(asyncData(null));
-    httpClientSpy.get.and.returnValue(asyncError('failed'));
+    const testScheduler = new TestScheduler((actual, expected) => {
+      expect(actual).toEqual(expected);
+    });
 
-    const service: WsApiService = TestBed.get(WsApiService);
-    expectObservable(service.get('/api')).toBe(cold('---#'));
+    testScheduler.run(({ expectObservable }) => {
+      storageSpy.get.and.returnValue(asyncData(null));
+      httpClientSpy.get.and.returnValue(asyncError('failed'));
+
+      const service: WsApiService = TestBed.get(WsApiService);
+      expectObservable(service.get('/api')).toBe('---#');
+    });
   });
 });

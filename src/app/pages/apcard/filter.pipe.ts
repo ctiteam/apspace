@@ -1,6 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Apcard } from 'src/app/interfaces';
 
+type VisibleOption = 'all' | 'credit' | 'debit';
+
 const filterMap = {
     credit: (apcard: Apcard) => apcard.ItemName === 'Top Up',
     debit: (apcard: Apcard) => apcard.ItemName !== 'Top Up'
