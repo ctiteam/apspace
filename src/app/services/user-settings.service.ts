@@ -20,7 +20,8 @@ export class UserSettingsService {
     { name: 'yellow-accent-color', value: '#DFA847' },
     { name: 'blue-accent-color', value: '#3A99D9' },
     { name: 'green-accent-color', value: '#08a14f' },
-    { name: 'red-accent-color', value: '#ec2a4d' }
+    { name: 'red-accent-color', value: '#ec2a4d' },
+    { name: 'white-accent-color', value: '#FFFFFF'}
   ];
 
   defaultDashboardSectionsSettings = [
@@ -54,6 +55,18 @@ export class UserSettingsService {
 
   darkThemeActivated() {
     return this.darkTheme.asObservable();
+  }
+
+  clearStorage() { // TO BE MOVED
+    let tgt: string;
+    this.storage.get('tgt').then((value) => {
+      tgt = value; // WE MIGHT NEED TO ADD CRED ALSO
+      this.storage.clear().then(() => {
+        console.log('all keys cleared');
+        this.storage.set('tgt', tgt);
+      });
+    }
+    );
   }
 
   // PURE DARK THEME

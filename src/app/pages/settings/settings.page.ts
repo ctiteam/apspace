@@ -84,6 +84,9 @@ export class SettingsPage implements OnInit {
 
   togglePureDarkTheme() {
     this.userSettings.togglePureDarkTheme(this.pureDarkThemeEnabled);
+    this.pureDarkThemeEnabled
+     ? this.userSettings.setAccentColor('white-accent-color')
+     : this.userSettings.setAccentColor('blue-accent-color');
   }
 
   toggleAccentColor() {

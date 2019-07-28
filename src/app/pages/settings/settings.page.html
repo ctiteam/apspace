@@ -88,7 +88,7 @@
               </ion-item>
               <ion-item lines="none" no-padding>
                 <ion-label>Accent Color</ion-label>
-                <ion-select [(ngModel)]="activeAccentColor" (ngModelChange)="toggleAccentColor()">
+                <ion-select [(ngModel)]="activeAccentColor" [disabled]="pureDarkThemeEnabled" (ngModelChange)="toggleAccentColor()">
                   <ion-select-option *ngFor="let accentColor of accentColors" [value]="accentColor.value">
                     {{accentColor.title}}
                   </ion-select-option>
