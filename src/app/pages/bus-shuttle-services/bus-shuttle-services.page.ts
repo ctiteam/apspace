@@ -55,10 +55,7 @@ export class BusShuttlePage implements OnInit {
     }
 
 
-    this.filteredTrip$ = forkJoin(
-      this.getLocations(),
-      this.getTrips(),
-    ).pipe(
+    this.filteredTrip$ = forkJoin([this.getLocations(), this.getTrips()]).pipe(
       map(res => res[1]),
       tap(_ => this.onFilter())
     );

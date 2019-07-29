@@ -9,7 +9,7 @@ import { IonSelect } from '@ionic/angular';
 })
 export class SettingsPage implements OnInit {
   test = false;
-  @ViewChild('dashboardSectionsSelect') dashboardSectionsselectBoxRef: IonSelect;
+  @ViewChild('dashboardSectionsSelect', { static: true }) dashboardSectionsselectBoxRef: IonSelect;
   activeAccentColor: string;
   darkThemeEnabled = false;
   pureDarkThemeEnabled = false;

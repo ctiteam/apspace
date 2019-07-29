@@ -11,7 +11,7 @@ import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 })
 export class SearchModalComponent implements AfterViewInit, OnInit {
 
-  @ViewChild(IonSearchbar) searchbar;
+  @ViewChild(IonSearchbar, { static: true }) searchbar;
 
   /** Items to be searched or filtered. */
   @Input() items: string[] = [];
