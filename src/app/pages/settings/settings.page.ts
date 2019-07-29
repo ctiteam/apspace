@@ -95,4 +95,8 @@ export class SettingsPage implements OnInit {
   toggleDashboardAlerts() {
     // this.userSettings.setShowDashboardAlerts(this.showDashboardAlerts);
   }
+
+  clearCache() {
+    this.userSettings.clearStorage();
+  }
 }

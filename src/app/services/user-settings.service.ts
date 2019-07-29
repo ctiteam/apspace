@@ -21,7 +21,7 @@ export class UserSettingsService {
     { name: 'blue-accent-color', value: '#3A99D9' },
     { name: 'green-accent-color', value: '#08a14f' },
     { name: 'red-accent-color', value: '#ec2a4d' },
-    { name: 'white-accent-color', value: '#FFFFFF'}
+    { name: 'white-accent-color', value: '#FFFFFF' }
   ];
 
   defaultDashboardSectionsSettings = [
@@ -57,13 +57,18 @@ export class UserSettingsService {
     return this.darkTheme.asObservable();
   }
 
-  clearStorage() { // TO BE MOVED
+  clearStorage() {
     let tgt: string;
-    this.storage.get('tgt').then((value) => {
-      tgt = value; // WE MIGHT NEED TO ADD CRED ALSO
-      this.storage.clear().then(() => {
-        console.log('all keys cleared');
-        this.storage.set('tgt', tgt);
+    let cred: string;
+    this.storage.get('cred').then((credValue) => { // KEEP CRED TO GENERATE TGT WHEN EXPIRED
+      cred = credValue;
+      this.storage.get('tgt').then((tgtValue) => { // KEEP TGT TO PREVENT BREAKING THE APP
+        tgt = tgtValue;
+        this.storage.clear().then(() => {
+          console.log('all keys cleared');
+          this.storage.set('tgt', tgt);
+          this.storage.set('cred', cred);
+        });
       });
     }
     );

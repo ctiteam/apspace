@@ -45,7 +45,9 @@
               <ion-toggle [(ngModel)]="test" no-padding></ion-toggle>
             </ion-item>
             <ion-item lines="none" no-padding>
-              <ion-label color="danger">Clear cache</ion-label>
+              <a (click)="clearCache()">
+                <ion-label color="danger">Clear cache</ion-label>
+              </a>
             </ion-item>
 
 
