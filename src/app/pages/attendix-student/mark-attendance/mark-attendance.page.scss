@@ -1,51 +1,36 @@
-// ion-card.button {
-//     height: 45%;
-//     --background: var(--ion-color-primary);
-//     --color: white;
-//     border-radius: 10px;
-//     cursor: pointer;
-//     transition: background-color .3s;
+ion-card {
+  position: relative;
+  text-align: center;
+  height: 150px;
+  cursor: pointer;
+}
 
-//     ion-card-header {
-//       text-align: center;
-//       text-transform: uppercase;
-//       font-size: 1.1em;
-//       transition: background-color .3s;
-//     }
+.icons {
+  top: 20%;
+}
 
-//     ion-card-content {
-//       transition: background-color .3s;
-//     }
+.card-title {
+  top: 36%;
+  font-size: 1.5em;
+  font-weight: bold;
+}
 
-//     .button-icon {
-//       width: 100%;
-//       height: 30vw;
-//     }
-//   }
+.otp-wrapper {
+  display: flex;
+  justify-content: center;
+}
 
-//   ion-card.button:hover {
-//     --background: var(--ion-color-primary-shade);
-//   }
-
-//   ion-card.button + ion-card.button {
-//     margin-top: 10%;
-//   }
-
-.card-background-page {
-  ion-card {
-    position: relative;
-    text-align: center;
-    height: 150px;
-    cursor: pointer;
-  }
-
-  .icons {
-    top: 20%;
-  }
-
-  .card-title {
-    top: 36%;
-    font-size: 1.5em;
-    font-weight: bold;
-  }
+.otp {
+  font-size: 8vw;
+  margin: 20px 4px;
+  max-width: 12vw;
+  padding: 12px;
+  padding-bottom: calc(12px - 5px);
+  color: #000000;
+  background-color: #eeeeee;
+  caret-color: transparent;
+  border: none;
+  border-bottom: 5px solid #bcbcbc;
+  font-family: 'Hack', 'Iconsolata', monospace;
+  text-align: center;
 }

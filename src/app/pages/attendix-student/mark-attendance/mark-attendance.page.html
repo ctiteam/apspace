@@ -7,35 +7,45 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="card-background-page">
-
-  <ion-card (click)="scanCode()">
-    <ion-icon class="icons" name="qr-scanner" class=""></ion-icon>
-    <div class="card-title">Scan Code</div>
-  </ion-card>
+<ion-content>
 
   <!-- <ion-card (click)="scanCode()">
       <ion-icon class="icons" name="keypad" class=""></ion-icon>
       <div class="card-title">Enter OTP</div>
   </ion-card> -->
 
-  <ion-card>
-    <ion-card-content>
-        <ion-grid class="container">
-          <ion-row>
-            <ion-col class="rounded">
-              <ion-input [(ngModel)]="otp" type="text" name="otp" placeholder="Enter OTP Here"></ion-input>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>
-              <ion-button id="rounded" type="submit" (click)="scanCode()">
-                Submit
-              </ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-    </ion-card-content>
+  <ion-card *ngIf="scan; else type" (click)="scanCode()">
+    <ion-icon class="icons" name="qr-scanner"></ion-icon>
+    <div class="card-title">Scan Code</div>
   </ion-card>
+
+  <ng-template #type>
+    <div class="otp-wrapper">
+      <input
+        *ngFor="let _ of numbers; i as index"
+        class="otp"
+        type="tel"
+        maxlength="1"
+        (keyup)="recordKey">
+    </div>
+    <!--
+    <ion-card-content>
+      <ion-grid class="container">
+        <ion-row>
+          <ion-col class="rounded">
+            <ion-input [(ngModel)]="otp" type="text" name="otp" placeholder="Enter OTP Here"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button id="rounded" type="submit" (click)="scanCode()">
+              Submit
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+    -->
+  </ng-template>
 
 </ion-content>

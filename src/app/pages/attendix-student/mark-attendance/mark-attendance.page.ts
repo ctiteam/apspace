@@ -10,9 +10,12 @@ import { Observable } from 'apollo-link';
 })
 export class MarkAttendancePage {
 
+  numbers = new Array(6);
+
   otp = '';
   student = 100001;
 
+  scan = false;  // scan code or type code
   qrScan$: Observable<number>;
 
   constructor(private markAttendance: MarkAttendanceGQL) { }
@@ -20,6 +23,10 @@ export class MarkAttendancePage {
   scanCode() {
     this.markAttendance.mutate({ schedule: 'a', otp: this.otp, student: `TP${this.student++}` })
       .subscribe(d => console.log(d));
+  }
+
+  recordKey(ev) {
+    console.log('record', ev);
   }
 
 }
