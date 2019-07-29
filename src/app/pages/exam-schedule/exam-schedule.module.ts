@@ -6,8 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ExamSchedulePage } from './exam-schedule.page';
-import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 import { IntakeListingService } from 'src/app/services';
+import { ComponentsModule } from '../../components/components.module';
 
 const routes: Routes = [
   {
@@ -22,13 +22,13 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ComponentsModule
   ],
   providers: [IntakeListingService],
   declarations: [
     ExamSchedulePage,
-    SearchModalComponent,
   ],
-  entryComponents: [SearchModalComponent]
+  entryComponents: []
 })
 export class ExamSchedulePageModule {}
