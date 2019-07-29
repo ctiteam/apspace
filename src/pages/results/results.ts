@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import {
   ActionSheetButton,
   ActionSheetController,
   IonicPage,
-  Platform,
   NavController,
+  Platform,
 } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { finalize, tap } from 'rxjs/operators';
@@ -67,7 +68,8 @@ export class ResultsPage {
     public plt: Platform,
     private actionSheet: ActionSheet,
     private actionSheetCtrl: ActionSheetController,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    private iab: InAppBrowser,
     ) { }
 
   getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
@@ -93,7 +95,7 @@ export class ResultsPage {
           tap(i => this.selectedIntake = i[0].INTAKE_CODE),
           tap(i => this.result$ = this.getResults(i[0].INTAKE_CODE, true)),
           tap(i => this.intakeLabels = Array.from(new Set((i || []).map(t => t.INTAKE_CODE)))),
-          finalize(() => refresher && refresher.complete())
+          finalize(() => refresher && refresher.complete()),
         );
       } else {
         this.block = true;
@@ -188,14 +190,15 @@ export class ResultsPage {
     };
   }
 
-  openSurveyPage(moduleCode){
-    console.log(moduleCode);
-    console.log(this.selectedIntake);
-    this.navCtrl.push("SubmitSurveyPage", {
-      moduleCode: moduleCode,
-      intakeCode: this.selectedIntake
-    });
-  }
+  openSurveyPage(moduleCode) {
+    // console.log(moduleCode);
+    // console.log(this.selectedIntake);
+    // this.navCtrl.push("SubmitSurveyPage", {
+    //   moduleCode: moduleCode,
+    //   intakeCode: this.selectedIntake
+    // });
+    // TEMP: SEND USER TO CURRENT SYSTEM
+    this.iab.create('https://webapps.apiit.edu.my/appraisal/index.jsp', '_blank', 'location=true');  }
 
   showActionSheet() {
     if (this.plt.is('cordova')) {
