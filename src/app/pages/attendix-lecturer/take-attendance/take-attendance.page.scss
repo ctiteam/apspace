@@ -4,3 +4,14 @@
   color: white;
   border-radius: 5px;
 }
+
+.otp {
+  display: inline-block;
+  background-color: #eeeeee;
+  font-size: 48px;
+  margin: 5px 9px;
+  padding: 12px;
+  padding-bottom: calc(12px - 5px);
+  border-bottom: 5px solid #bcbcbc;
+  font-family: 'Hack', 'Iconsolata', monospace;
+}

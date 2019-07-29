@@ -17,20 +17,14 @@
         <qrcode *ngIf="otp" [qrdata]="otp" level="H"></qrcode>
       </ion-col>
       <ion-col size="4">
-        <ion-card>
-          <ion-card-header>
-            <ion-card *ngFor="let c of otp | chars" style="display: inline-block">
-              {{ c }}
-            </ion-card>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-list *ngFor="let marked of lastMarked$ | async">
-              <ion-item>
-                {{ marked }}
-              </ion-item>
-            </ion-list>
-          </ion-card-content>
-        </ion-card>
+        <div *ngFor="let c of otp | chars" class="otp">
+          {{ c }}
+        </div>
+        <ion-list *ngFor="let marked of lastMarked$ | async">
+          <ion-item>
+            {{ marked }}
+          </ion-item>
+        </ion-list>
       </ion-col>
     </ion-row>
   </ion-grid>
