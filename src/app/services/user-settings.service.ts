@@ -65,7 +65,6 @@ export class UserSettingsService {
       this.storage.get('tgt').then((tgtValue) => { // KEEP TGT TO PREVENT BREAKING THE APP
         tgt = tgtValue;
         this.storage.clear().then(() => {
-          console.log('all keys cleared');
           this.storage.set('tgt', tgt);
           this.storage.set('cred', cred);
         });
