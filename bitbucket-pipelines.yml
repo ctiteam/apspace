@@ -1,8 +1,8 @@
-image: node:dubnium-alpine
+image: node:10.16.0-alpine
 pipelines:
   default:
-    - step:
-        name: Test
+    - step: &build-test
+        name: Build & Test
         caches:
           - node
         script:
@@ -10,3 +10,6 @@ pipelines:
           - yarn lint
             # - yarn test --single-run --no-progress --browsers FirefoxHeadless
           - yarn build --aot
+  pull-requests:
+    '**':
+      - step: *build-test

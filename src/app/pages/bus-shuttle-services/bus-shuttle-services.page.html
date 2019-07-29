@@ -11,7 +11,7 @@
 
 <ion-menu side="end" contentId="content" menuId="bus-filter-menu" type="overlay">
   <ion-header>
-    <ion-toolbar color="danger">
+    <ion-toolbar>
       <ion-title>Filter</ion-title>
       <ion-buttons slot="end">
         <ion-button class="animated anim-rotate-360-deg" shape="round" (click)="closeMenu()">
@@ -29,7 +29,7 @@
           </ion-label>
           <ion-buttons slot="end">
             <ion-button class="swap-button animated anim-rotate-270-deg" shape="round" (click)="swapLocations()">
-              <ion-icon color="danger" name="repeat"></ion-icon>
+              <ion-icon class="colored-text" name="repeat"></ion-icon>
             </ion-button>
           </ion-buttons>
         </ion-item-divider>
@@ -93,7 +93,11 @@
   <div *ngIf="filteredTrip$ | async as trips; else loadingTrips" no-padding>
     <ion-grid>
       <ion-row>
-        <ion-col>Effective from: <span class="text-bold">{{latestUpdate}}</span></ion-col>
+        <ion-col>
+          <h6 class="normal-text">
+            Effective from: <span class="text-bold">{{latestUpdate}}</span>
+          </h6>
+        </ion-col>
       </ion-row>
     </ion-grid>
     <div class="masonry-list" *ngIf="numberOfTrips != 0; else noTrips">
@@ -109,17 +113,11 @@
               getLocationColor(trip.key) + ' 100%' +
               ')'
           }">
-            <!-- #232526,  -->
             <ion-card-title class="card-title float-left">
               <h5 style="color: white" class="small-text">Next in: 1 hrs, 23 min</h5>
               <h3 style="color: white" class="small-margin-top responsive-h1">
                 {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }}</h3>
             </ion-card-title>
-            <!-- <div class="card-options-icon float-left" style="width: 10%" text-right>
-              <a style="color: white">
-                <ion-icon name="md-more" class="responsive-icon"></ion-icon>
-              </a>
-            </div> -->
             <div class="clearfix"></div>
           </ion-card-header>
           <ion-card-content no-padding padding-bottom padding-start padding-end>

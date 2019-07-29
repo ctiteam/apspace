@@ -102,6 +102,7 @@ const routes: Routes = [
   },
   { path: 'exam-schedule', loadChildren: './pages/exam-schedule/exam-schedule.module#ExamSchedulePageModule' },
   { path: 'news', loadChildren: './pages/news/news.module#NewsPageModule' },
+  { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule' },
 ];
 
 @NgModule({

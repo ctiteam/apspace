@@ -1,58 +1,3 @@
-<!-- <ion-content> -->
-<!-- <img class="apu-logo" src="assets/img/login.jpg">
-  <h1 padding>WELCOME TO <br><span>APSpace</span></h1>
-  <form (ngSubmit)="login()" #loginForm="ngForm">
-    <ion-item no-padding>
-      <ion-icon color='text-color' name="contact" item-left></ion-icon>
-      <ion-input [(ngModel)]="username" name="username" type="email"
-        placeholder='"APKey"' autofocus></ion-input>
-    </ion-item>
-    <ion-item no-padding margin-top>
-      <ion-icon color='text-color' name="lock" item-left></ion-icon>
-      <ion-input [(ngModel)]="password" name="password"
-        [type]="showPassword ? 'text' : 'password'" placeholder='Password'></ion-input>
-      <ion-button type="button" clear item-right (click)="showPassword = !showPassword">
-        <ion-icon name="eye"></ion-icon>
-      </ion-button>
-    </ion-item>
-    <ion-button type="submit" margin-top block>
-      Log in
-    </ion-button>
-  </form> -->
-<!-- <ion-grid>
-    <ion-row>
-      <ion-col size-md="6" offset-md="3">
-        <img class="apu-logo" src="assets/img/login.jpg">
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size-md="6" offset-md="3" size-lg="4" offset-lg="4">
-        <div padding>
-          <form padding (ngSubmit)="login()" #loginForm="ngForm">
-            <ion-item no-padding margin-bottom>
-              <ion-icon name="person" slot="start"></ion-icon>
-              <ion-input [(ngModel)]="username" name="username" type="email" placeholder='"APKey"' autofocus>
-              </ion-input>
-            </ion-item>
-            <ion-item no-padding margin-top margin-bottom>
-              <ion-icon slot="start" name="lock"></ion-icon>
-              <ion-input [(ngModel)]="password" name="password" [type]="showPassword ? 'text' : 'password'"
-                placeholder='Password'></ion-input>
-              <ion-button type="button" clear slot="end" (click)="showPassword = !showPassword">
-                <ion-icon name="eye"></ion-icon>
-              </ion-button>
-            </ion-item>
-            <ion-button type="submit" expand="block" margin-top>
-              Log in
-            </ion-button>
-          </form>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid> -->
-
-<!-- </ion-content> -->
-
 <ion-content>
   <ion-grid no-padding>
     <!-- Logo -->
@@ -81,19 +26,20 @@
                 </ion-item>
                 <!-- Input-field-password -->
                 <ion-item no-padding>
-                  <ion-input padding-start type="password" [placeholder]="'Password'" [(ngModel)]="password" (keyup.enter)="onLoginBtnClicked()"
-                    [required]="true" name="password"></ion-input>
+                  <ion-input padding-start [type]="showPassword ? 'text' : 'password'" [placeholder]="'Password'"
+                    [(ngModel)]="password" (keyup.enter)="onLoginBtnClicked()" [required]="true" name="password">
+                  </ion-input>
+                  <ion-button type="button" clear slot="end" (click)="showPassword = !showPassword">
+                    <ion-icon name="eye"></ion-icon>
+                  </ion-button>
+
                 </ion-item>
               </div>
               <!-- Login Button -->
               <ion-col size="12" no-padding>
-                <ion-button 
-                type="submit"
-                class="login-button"
-                no-margin
-                [attr.color]="userDidLogin && userUnauthenticated ? 'danger' : userDidLogin && userAuthenticated? 'success': 'primary'"
-                [class.btn_center]="userDidLogin && (userUnauthenticated || loginProcessLoading || userAuthenticated)"
-                >
+                <ion-button type="submit" class="login-button" no-margin
+                  [attr.color]="userDidLogin && userUnauthenticated ? 'danger' : userDidLogin && userAuthenticated? 'success': 'primary'"
+                  [class.btn_center]="userDidLogin && (userUnauthenticated || loginProcessLoading || userAuthenticated)">
                   <span *ngIf="!userDidLogin">LOGIN</span>
                   <!-- LOADING -->
                   <ion-icon *ngIf="!userDidLogin" name="log-in" slot="end" size="large"></ion-icon>

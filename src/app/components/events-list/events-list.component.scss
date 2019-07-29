@@ -9,29 +9,61 @@
 }
 
 .spacer {
-  border-bottom: 1px solid rgb(229, 229, 229);
-}
-
-.event-list {
-  display: block;
-  border-right: 1px solid rgb(229, 229, 229);
+  // border-bottom: 1px solid rgb(229, 229, 229);
 }
 
 .event {
   text-decoration: none;
 }
 .event-container {
-  color: #131313;
+  // color: #131313;
   transition: all 0.2s ease;
-  background: #fafafa;
+  // background: #fafafa;
   border-left: 3px solid;
   padding-top: 10px;
   padding-bottom: 15px;
+  &.class-type {
+    border-color: #8EAF2D;
+    .type {
+      background-color: #8EAF2D;
+    }
+    .description a{
+      color: #8EAF2D;
+    }
+  }
+  &.holiday-type {
+    border-color: #F99E4C;
+    .type {
+      background-color: #F99E4C;
+    }
+    .description a{
+      color: #F99E4C;
+    }
+  }
+  &.exam-type {
+    border-color: #EB5F59;
+    .type {
+      background-color: #EB5F59;
+    }
+    .description a{
+      color: #EB5F59
+    }
+  }
+  &.iconsult-type {
+    border-color: #54ACD2;
+    .type {
+      background-color: #54ACD2;
+    }
+    .description a{
+      color: #54ACD2;
+    }
+  }
+
 }
 
 .event-container:not(.no-hover):hover {
   border-left-width: 10px;
-  background: #eceff1;
+  // background: #eceff1;
 }
 
 .left-part-container {
@@ -85,7 +117,7 @@
   text-align: center;
   float: left;
   border-radius: 25px;
-  a{
+  a {
     color: white;
   }
 }

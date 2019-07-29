@@ -30,3 +30,4 @@ export { ConsultationHour } from './iconsult';
 export { Graduater } from './graduater';
 export { IntakeListing } from './intake-listing';
 
+export { DashboardSection } from './dashboard-section';
