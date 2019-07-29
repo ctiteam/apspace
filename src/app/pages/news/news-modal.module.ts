@@ -6,10 +6,9 @@ import { NewsModalPage } from './news-modal';
 @NgModule({
   declarations: [
     NewsModalPage,
-
   ],
   imports: [
   ],
-  entryComponents: [NewsModalPage],
+  entryComponents: [],
 })
 export class NewsModalPageModule { }

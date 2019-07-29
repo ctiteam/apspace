@@ -22,7 +22,7 @@ export class NewsPage implements OnInit {
 
     private news: NewsService,
     private modalCtrl: ModalController,
-    public  navCtrl: NavController,
+    public navCtrl: NavController,
   ) { }
 
   doRefresh(refresher?) {
@@ -34,8 +34,6 @@ export class NewsPage implements OnInit {
     this.doRefresh();
   }
   async openModal(item: News) {
-    console.log(item);
-
     const modal = await this.modalCtrl.create({
       component: NewsModalPage,
       // TODO: store search history
