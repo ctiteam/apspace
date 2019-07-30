@@ -16,7 +16,7 @@ export { MPULegend } from './mpu-legend';
 export { News } from './news';
 export { OperationHours } from './operation-hours';
 export { Role, Settings } from './settings';
-export { Sqa } from './sqa';
+export { SecurityQuestionsAndAnswers } from './security-questions-and-answers';
 export { StaffDirectory } from './staff-directory';
 export { StaffProfile } from './staff-profile';
 export { StudentPhoto } from './student-photo';

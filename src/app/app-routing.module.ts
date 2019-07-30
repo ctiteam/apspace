@@ -47,12 +47,12 @@ const routes: Routes = [
       {
         path: 'classes',
         loadChildren:
-        './pages/attendix/attendix-lecturer/classes/classes.module#ClassesPageModule'
+          './pages/attendix/attendix-lecturer/classes/classes.module#ClassesPageModule'
       },
       {
         path: 'take-attendance',
         loadChildren:
-        './pages/attendix/attendix-lecturer/take-attendance/take-attendance.module#TakeAttendancePageModule'
+          './pages/attendix/attendix-lecturer/take-attendance/take-attendance.module#TakeAttendancePageModule'
       },
       // { path: 'qr-otp', loadChildren: './pages/attendix/qr-otp/qr-otp.module#QrOtpPageModule' },
       // { path: 'take-picture', loadChildren: './pages/attendix/take-picture/take-picture.module#TakePicturePageModule' },
@@ -103,6 +103,10 @@ const routes: Routes = [
   { path: 'exam-schedule', loadChildren: './pages/exam-schedule/exam-schedule.module#ExamSchedulePageModule' },
   { path: 'news', loadChildren: './pages/news/news.module#NewsPageModule' },
   { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule' },
+  {
+    path: 'set-security-questions',
+    loadChildren: './pages/settings/set-security-questions/set-security-questions.module#SetSecurityQuestionsPageModule'
+  },
 ];
 
 @NgModule({

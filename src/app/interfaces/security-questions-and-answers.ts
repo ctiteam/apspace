@@ -1,4 +1,4 @@
-export interface Sqa {
+export interface SecurityQuestionsAndAnswers {
   attributeAnswer1: string;
   attributeAnswer2: string;
   attributeQuestion1: string;
