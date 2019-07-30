@@ -187,6 +187,41 @@ app-apcard {
     background-image: linear-gradient(to bottom, var(--sub-primary-color), var(--primary-color)) !important;
   }
 }
+app-attendance {
+  .cover {
+    background: var(--main-bg-color);
+    background: -moz-linear-gradient(top, var(--main-bg-color) 0%, var(--secondary-bg-color) 50%, var(--tertiary-bg-color) 100%);
+    background: -webkit-gradient(
+      left top,
+      left bottom,
+      color-stop(0%, var(--main-bg-color)),
+      color-stop(50%, var(--secondary-bg-color)),
+      color-stop(100%, var(--tertiary-bg-color))
+    );
+    background: -webkit-linear-gradient(top, var(--main-bg-color) 0%, var(--secondary-bg-color) 50%, var(--tertiary-bg-color) 100%);
+    background: -o-linear-gradient(top, var(--main-bg-color) 0%, var(--secondary-bg-color) 50%, var(--tertiary-bg-color) 100%);
+    background: -ms-linear-gradient(top, var(--main-bg-color) 0%, var(--secondary-bg-color) 50%, var(--tertiary-bg-color) 100%);
+    background: linear-gradient(to bottom, var(--main-bg-color) 0%, var(--secondary-bg-color) 50%, var(--tertiary-bg-color) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(
+        startColorstr='#bdbbbd',
+        endColorstr='#f5f5f5',
+        GradientType=0
+      );
+  }
+  .blur::after {
+    -webkit-box-shadow: 0px 0px 0px 2000px var(--tertiary-bg-color);
+    box-shadow: 0px 0px 0px 2000px var(--tertiary-bg-color);
+  }
+  #widget-value {
+    color: var(--main-bg-color);
+    text-shadow: 0 1px 2px var(--tertiary-txt-color);
+  }
+  #widget-content {
+    border: 1px solid var(--secondary-bg-color);
+    box-shadow: 2px 2px 22px var(--tertiary-bg-color),
+      -2px -2px 22px var(--tertiary-bg-color);
+  }
+}
 
 // COMPONENETS
 events-list {
@@ -333,15 +368,15 @@ ion-button.colored-background {
       }
     }
     // SPECIAL SETTINGS FOR IOS AND ANDROID
-    [aria-checked="true"].sc-ion-alert-ios .alert-radio-inner.sc-ion-alert-ios{
+    [aria-checked="true"].sc-ion-alert-ios .alert-radio-inner.sc-ion-alert-ios {
       // IOS RADIO ICON
-      border-color: var(--primary-color) !important; 
+      border-color: var(--primary-color) !important;
     }
-    [aria-checked="true"].sc-ion-alert-md .alert-radio-icon.sc-ion-alert-md{
+    [aria-checked="true"].sc-ion-alert-md .alert-radio-icon.sc-ion-alert-md {
       // MD RADIO ICON
-      border-color: var(--primary-color) !important; 
+      border-color: var(--primary-color) !important;
     }
-    .alert-radio-inner.sc-ion-alert-md{
+    .alert-radio-inner.sc-ion-alert-md {
       background-color: var(--primary-color) !important;
     }
   }
