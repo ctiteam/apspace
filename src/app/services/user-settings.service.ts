@@ -60,7 +60,7 @@ export class UserSettingsService {
   clearStorage() {
     let tgt: string;
     let cred: string;
-    this.storage.get('cred').then((credValue) => { // KEEP CRED TO GENERATE TGT WHEN EXPIRED
+    return this.storage.get('cred').then((credValue) => { // KEEP CRED TO GENERATE TGT WHEN EXPIRED
       cred = credValue;
       this.storage.get('tgt').then((tgtValue) => { // KEEP TGT TO PREVENT BREAKING THE APP
         tgt = tgtValue;

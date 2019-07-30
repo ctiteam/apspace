@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserSettingsService } from 'src/app/services';
-import { IonSelect, NavController } from '@ionic/angular';
+import { IonSelect, NavController, ToastController } from '@ionic/angular';
+import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
+import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
 @Component({
   selector: 'app-settings',
@@ -37,6 +39,7 @@ export class SettingsPage implements OnInit {
   constructor(
     private userSettings: UserSettingsService,
     private navCtrl: NavController,
+    private toastCtrl: ToastController,
   ) {
     this.userSettings
       .darkThemeActivated()
@@ -66,11 +69,12 @@ export class SettingsPage implements OnInit {
         });
   }
 
-  dashboardSectionsChanged() {
-    this.userSettings.setShownDashboardSections(this.dashboardSections);
-  }
 
   ngOnInit() {
+  }
+
+  dashboardSectionsChanged() {
+    this.userSettings.setShownDashboardSections(this.dashboardSections);
   }
 
   openDashboardSectionsSelectBox() {
@@ -85,22 +89,34 @@ export class SettingsPage implements OnInit {
   togglePureDarkTheme() {
     this.userSettings.togglePureDarkTheme(this.pureDarkThemeEnabled);
     this.pureDarkThemeEnabled
-     ? this.userSettings.setAccentColor('white-accent-color')
-     : this.userSettings.setAccentColor('blue-accent-color');
+      ? this.userSettings.setAccentColor('white-accent-color')
+      : this.userSettings.setAccentColor('blue-accent-color');
   }
 
   toggleAccentColor() {
     this.userSettings.setAccentColor(this.activeAccentColor);
   }
-  toggleDashboardAlerts() {
-    // this.userSettings.setShowDashboardAlerts(this.showDashboardAlerts);
-  }
 
   clearCache() {
-    this.userSettings.clearStorage();
+    this.userSettings.clearStorage().then(
+      () => this.showToastMessage('Cached has been cleared successfully')
+    );
   }
 
   navigateToPage(pageName: string) {
     this.navCtrl.navigateForward(pageName);
+  }
+
+  showToastMessage(message: string) {
+    this.toastCtrl.create({
+      message,
+      duration: 6000,
+      showCloseButton: true,
+      position: 'top',
+      animated: true,
+      color: 'success',
+      enterAnimation: toastMessageEnterAnimation,
+      leaveAnimation: toastMessageLeaveAnimation
+    }).then(toast => toast.present());
   }
 }
