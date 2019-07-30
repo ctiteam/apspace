@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-// import { AuthGuard } from './guards/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 import { DeauthGuard } from './guards/deauth.guard';
 
 const routes: Routes = [
@@ -18,7 +18,7 @@ const routes: Routes = [
   {
     path: 'tabs',
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule),
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
 
   {
@@ -27,7 +27,7 @@ const routes: Routes = [
   },
   {
     path: 'staffs',
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
