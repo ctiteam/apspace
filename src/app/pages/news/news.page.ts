@@ -13,10 +13,10 @@ import { NewsModalPage } from './news-modal';
   styleUrls: ['./news.page.scss'],
 })
 export class NewsPage implements OnInit {
-  item$: Observable<News[]>;
+  news$: Observable<News[]>;
 
   skeletonSettings = {
-    numberOfSkeltons: new Array(9),
+    numberOfSkeltons: new Array(5),
   };
   constructor(
 
@@ -26,7 +26,7 @@ export class NewsPage implements OnInit {
   ) { }
 
   doRefresh(refresher?) {
-    this.item$ = this.news.get(Boolean(refresher)).pipe(
+    this.news$ = this.news.get(Boolean(refresher)).pipe(
       finalize(() => refresher && refresher.target.complete()),
     );
   }
