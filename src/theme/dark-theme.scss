@@ -9,10 +9,10 @@
   --sub-primary-color: #d96159;
 }
 
-:root .white-accent-color {
-  --primary-color: #ffffff;
-  --sub-primary-color: #cccccc;
-}
+// :root .white-accent-color {
+//   --primary-color: #ffffff;
+//   --sub-primary-color: #cccccc;
+// }
 
 :root .green-accent-color {
   --primary-color: #08a14f;
@@ -119,7 +119,7 @@
 
 // IONIC VARIABLES IN DARK THEME
 :root .dark-theme.pure {
-  --primary-color: #ffffff;
+  --primary-color: #000000;
   --main-bg-color: #101010;
   --secondary-bg-color: #151515;
   --tertiary-bg-color: #424242;
@@ -158,6 +158,14 @@
       ion-card {
         --background: var(--tertiary-bg-color);
       }
+    }
+  }
+  ion-button.colored-background {
+    --background: var(--primary-color) !important;
+    --color: var(--tertiary-txt-color) !important;
+    &[aria-disabled="true"] {
+      --background: var(--primary-color) !important;
+      --color: var(--secondary-txt-color) !important;
     }
   }
 }
@@ -264,4 +272,10 @@ ion-toggle {
 }
 .colored-background {
   background: var(--primary-color) !important;
+}
+ion-button.colored-background {
+  --background: var(--primary-color) !important;
+  &[aria-disabled="true"] {
+    --background: var(--primary-color) !important;
+  }
 }
