@@ -49,12 +49,6 @@
   ion-card {
     --background: var(--secondary-bg-color);
   }
-  ion-item {
-    --background: var(--secondary-bg-color);
-  }
-  ion-item-divider {
-    --background: var(--secondary-bg-color);
-  }
   ion-slides {
     --bullet-background: var(--main-txt-color);
   }
@@ -81,7 +75,7 @@
 
   --main-txt-color: #ffffffd1;
   --secondary-txt-color: #999999;
-  --tertiary-txt-color: #ffffffba;
+  --tertiary-txt-color: #ffffff77;
 
   --danger-color: #ec2a4d;
   --success-color: #49b571;
@@ -91,12 +85,6 @@
     --background: var(--secondary-bg-color);
   }
   ion-card {
-    --background: var(--secondary-bg-color);
-  }
-  ion-item {
-    --background: var(--secondary-bg-color);
-  }
-  ion-item-divider {
     --background: var(--secondary-bg-color);
   }
   ion-slides {
@@ -136,12 +124,6 @@
     --background: var(--secondary-bg-color);
   }
   ion-card {
-    --background: var(--secondary-bg-color);
-  }
-  ion-item {
-    --background: var(--secondary-bg-color);
-  }
-  ion-item-divider {
     --background: var(--secondary-bg-color);
   }
   ion-slides {
@@ -186,9 +168,14 @@ ion-card {
   }
 }
 ion-item {
-  color: var(--main-txt-color);
+  --background: var(--secondary-bg-color) !important;
+  --color: var(--main-txt-color) !important;
+  --background-activated: var(--tertiary-bg-color);
 }
-
+ion-item-divider {
+  --background: var(--secondary-bg-color) !important;
+  --color: var(--tertiary-txt-color) !important;
+}
 ion-slide {
   color: var(--main-txt-color);
 }
@@ -258,7 +245,7 @@ ion-radio {
 ion-toggle {
   --background: var(--secondary-txt-color);
   --handle-background: var(--main-bg-color);
-  --background-checked: var(--main-txt-color);
+  --background-checked: var(--tertiary-bg-color);
   --handle-background-checked: var(--primary-color);
 }
 .normal-text {
@@ -280,61 +267,82 @@ ion-button.colored-background {
   }
 }
 
-// ALERT RADIO BUTTONS STYLE
-.alert-radio-group {
-  border-color: var(--secondary-bg-color) !important;
-  .alert-radio-button {
-    .alert-radio-label {
-      color: var(--main-txt-color);
-    }
-    &[aria-checked="true"] {
-      alert-radio-icon {
-        background-color: var(--primary-color) !important;
-        border-color: var(--primary-color) !important;
-        .alert-radio-inner {
-          background-color: var(--primary-color) !important;
-        }
-      }
-      .alert-radio-label {
-        color: var(--primary-color);
-      }
-    }
-    &[disabled] {
-      .alert-radio-label {
-        color: var(--tertiary-txt-color);
+// ALERT STYLES
+.alert-wrapper {
+  background: var(--main-bg-color) !important;
+  .alert-title {
+    color: var(--main-txt-color) !important;
+  }
+  // ALERT CHECKBOX STYLES
+  .alert-checkbox-group {
+    border-color: var(--secondary-bg-color) !important;
+    .alert-checkbox-button {
+      .alert-checkbox-label {
+        color: var(--main-txt-color);
       }
       &[aria-checked="true"] {
-        .alert-radio-icon {
-          background-color: var(--tertiary-txt-color) !important;
-          border-color: var(--tertiary-txt-color) !important;
+        .alert-checkbox-icon {
+          background-color: var(--primary-color) !important;
+          border-color: var(--primary-color) !important;
+        }
+      }
+      &[disabled] {
+        .alert-checkbox-label {
+          color: var(--tertiary-txt-color);
+        }
+        &[aria-checked="true"] {
+          .alert-checkbox-icon {
+            background-color: var(--tertiary-txt-color) !important;
+            border-color: var(--tertiary-txt-color) !important;
+          }
         }
       }
     }
   }
-}
-// ALERT CHECKBOX STYLES
-.alert-checkbox-group {
-  border-color: var(--secondary-bg-color) !important;
-  .alert-checkbox-button {
-    .alert-checkbox-label {
-      color: var(--main-txt-color);
-    }
-    &[aria-checked="true"] {
-      .alert-checkbox-icon {
-        background-color: var(--primary-color) !important;
-        border-color: var(--primary-color) !important;
-      }
-    }
-    &[disabled] {
-      .alert-checkbox-label {
-        color: var(--tertiary-txt-color);
+
+  // ALERT RADIO BUTTONS STYLE
+  .alert-radio-group {
+    border-color: var(--secondary-bg-color) !important;
+    .alert-radio-button {
+      .alert-radio-label {
+        color: var(--main-txt-color);
       }
       &[aria-checked="true"] {
-        .alert-checkbox-icon {
-          background-color: var(--tertiary-txt-color) !important;
-          border-color: var(--tertiary-txt-color) !important;
+        alert-radio-icon {
+          background-color: var(--primary-color) !important;
+          border-color: var(--primary-color) !important;
+          .alert-radio-inner {
+            background-color: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+          }
+        }
+        .alert-radio-label {
+          color: var(--primary-color);
         }
       }
+      &[disabled] {
+        .alert-radio-label {
+          color: var(--tertiary-txt-color);
+        }
+        &[aria-checked="true"] {
+          .alert-radio-icon {
+            background-color: var(--tertiary-txt-color) !important;
+            border-color: var(--tertiary-txt-color) !important;
+          }
+        }
+      }
+    }
+    // SPECIAL SETTINGS FOR IOS AND ANDROID
+    [aria-checked="true"].sc-ion-alert-ios .alert-radio-inner.sc-ion-alert-ios{
+      // IOS RADIO ICON
+      border-color: var(--primary-color) !important; 
+    }
+    [aria-checked="true"].sc-ion-alert-md .alert-radio-icon.sc-ion-alert-md{
+      // MD RADIO ICON
+      border-color: var(--primary-color) !important; 
+    }
+    .alert-radio-inner.sc-ion-alert-md{
+      background-color: var(--primary-color) !important;
     }
   }
 }
