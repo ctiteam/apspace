@@ -16,15 +16,15 @@ export class SettingsPage implements OnInit {
   dashboardSections;
 
   allDashboardSections = [
-    { section: 'profile', name: 'Profile' },
-    { section: 'dashboardAlerts', name: 'Alerts' },
-    { section: 'quickAccess', name: 'Quick Access' },
-    { section: 'todaysSchedule', name: 'Todays Schedule' },
-    { section: 'upcomingEvents', name: 'Upcoming Events' },
-    { section: 'apcard', name: 'APCard' },
-    { section: 'lowAttendance', name: 'Low Attendance' },
-    { section: 'financials', name: 'Financials' },
-    { section: 'cgpa', name: 'CGPA Per Intake' }
+    { section: 'profile', name: 'Profile', disabled: true },
+    { section: 'dashboardAlerts', name: 'Alerts', disabled: false },
+    { section: 'quickAccess', name: 'Quick Access', disabled: false },
+    { section: 'todaysSchedule', name: 'Todays Schedule', disabled: false },
+    { section: 'upcomingEvents', name: 'Upcoming Events', disabled: false },
+    { section: 'apcard', name: 'APCard', disabled: false },
+    { section: 'lowAttendance', name: 'Low Attendance', disabled: false },
+    { section: 'financials', name: 'Financials', disabled: false },
+    { section: 'cgpa', name: 'CGPA Per Intake', disabled: false }
   ];
   accentColors = [
     { title: 'Blue (Default)', value: 'blue-accent-color' },

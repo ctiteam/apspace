@@ -119,14 +119,14 @@
 
 // IONIC VARIABLES IN DARK THEME
 :root .dark-theme.pure {
-  --primary-color: #000000;
+  --primary-color: #b0acac;
   --main-bg-color: #101010;
   --secondary-bg-color: #151515;
   --tertiary-bg-color: #424242;
 
-  --main-txt-color: #ffffffd1;
-  --secondary-txt-color: #999999;
-  --tertiary-txt-color: #ffffffba;
+  --main-txt-color: #999999;
+  --secondary-txt-color: #5e5c5c;
+  --tertiary-txt-color: #4d4b4b;
 
   --danger-color: #ec2a4d;
   --success-color: #49b571;
@@ -277,5 +277,31 @@ ion-button.colored-background {
   --background: var(--primary-color) !important;
   &[aria-disabled="true"] {
     --background: var(--primary-color) !important;
+  }
+}
+
+.alert-checkbox-group {
+  border-color: var(--secondary-bg-color) !important;
+  .alert-checkbox-button {
+    .alert-checkbox-label {
+      color: var(--main-txt-color);
+    }
+    &[aria-checked="true"] {
+      .alert-checkbox-icon {
+        background-color: var(--primary-color) !important;
+        border-color: var(--primary-color) !important;
+      }
+    }
+    &[disabled] {
+      .alert-checkbox-label {
+        color: var(--tertiary-txt-color);
+      }
+      &[aria-checked="true"] {
+        .alert-checkbox-icon {
+          background-color: var(--tertiary-txt-color) !important;
+          border-color: var(--tertiary-txt-color) !important;
+        }
+      }
+    }
   }
 }

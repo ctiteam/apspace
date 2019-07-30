@@ -21,7 +21,7 @@ export class UserSettingsService {
     { name: 'blue-accent-color', value: '#3A99D9' },
     { name: 'green-accent-color', value: '#08a14f' },
     { name: 'red-accent-color', value: '#ec2a4d' },
-    { name: 'white-accent-color', value: '#FFFFFF' }
+    { name: 'white-accent-color', value: '#b0acac' }
   ];
 
   defaultDashboardSectionsSettings = [

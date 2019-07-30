@@ -9,7 +9,7 @@
   <!-- <ion-searchbar style="padding: 5px;" no-padding margin-bottom color="danger"></ion-searchbar> -->
   <ion-select [(ngModel)]="dashboardSections" (ionChange)="dashboardSectionsChanged()" multiple="true" [hidden]="true"
     #dashboardSectionsSelect>
-    <ion-select-option [value]="dashboardSection.section" *ngFor="let dashboardSection of allDashboardSections">
+    <ion-select-option [disabled]="dashboardSection.disabled" [value]="dashboardSection.section" *ngFor="let dashboardSection of allDashboardSections">
       {{ dashboardSection.name }}
     </ion-select-option>
   </ion-select>
