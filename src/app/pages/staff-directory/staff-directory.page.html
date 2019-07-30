@@ -30,7 +30,7 @@
         <ion-avatar slot="start">
           <!-- ionError WIP https://github.com/ionic-team/ionic/pull/17134 -->
           <ion-img [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '_64x64.jpg'"
-            (ionError)="this.src = 'assets/img/profile.svg'"></ion-img>
+            (ionError)="$event.target.src = 'assets/img/profile.svg'"></ion-img>
         </ion-avatar>
         <ion-text>
           <h2>{{ staff.FULLNAME }}</h2>

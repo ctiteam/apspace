@@ -10,11 +10,11 @@ const routes: Routes = [
     children: [
       {
         path: 'student-dashboard',
-        loadChildren: '../student-dashboard/student-dashboard.module#StudentDashboardPageModule'
+        loadChildren: () => import('../student-dashboard/student-dashboard.module').then(m => m.StudentDashboardPageModule)
       },
       {
         path: 'student-timetable',
-        loadChildren: '../student-timetable/student-timetable.module#StudentTimetablePageModule'
+        loadChildren: () => import('../student-timetable/student-timetable.module').then(m => m.StudentTimetablePageModule)
       },
       {
         path: '',
@@ -23,11 +23,11 @@ const routes: Routes = [
       },
       {
         path: 'attendance',
-        loadChildren: '../attendance/attendance.module#AttendancePageModule'
+        loadChildren: () => import('../attendance/attendance.module').then(m => m.AttendancePageModule)
       },
       {
         path: 'apcard',
-        loadChildren: '../apcard/apcard.module#ApcardPageModule'
+        loadChildren: () => import('../apcard/apcard.module').then(m => m.ApcardPageModule)
       }
     ]
   }

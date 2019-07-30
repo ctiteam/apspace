@@ -197,10 +197,12 @@ export class StudentDashboardPage implements OnInit {
     this.photo$ = this.getStudentPhoto();
     this.displayGreetingMessage();
     this.apcardTransaction$ = this.getTransactions();
-    forkJoin(
+    forkJoin([
       this.getProfile(),
-      this.financial$ = this.getOverdueFee(),
-    ).pipe(finalize(() => refresher && refresher.complete())).subscribe();
+      this.financial$ = this.getOverdueFee()
+    ]).pipe(
+      finalize(() => refresher && refresher.complete()),
+    ).subscribe();
   }
 
   navigateToPage(pageName: string) {
