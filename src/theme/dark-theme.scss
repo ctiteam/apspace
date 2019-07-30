@@ -280,6 +280,39 @@ ion-button.colored-background {
   }
 }
 
+// ALERT RADIO BUTTONS STYLE
+.alert-radio-group {
+  border-color: var(--secondary-bg-color) !important;
+  .alert-radio-button {
+    .alert-radio-label {
+      color: var(--main-txt-color);
+    }
+    &[aria-checked="true"] {
+      alert-radio-icon {
+        background-color: var(--primary-color) !important;
+        border-color: var(--primary-color) !important;
+        .alert-radio-inner {
+          background-color: var(--primary-color) !important;
+        }
+      }
+      .alert-radio-label {
+        color: var(--primary-color);
+      }
+    }
+    &[disabled] {
+      .alert-radio-label {
+        color: var(--tertiary-txt-color);
+      }
+      &[aria-checked="true"] {
+        .alert-radio-icon {
+          background-color: var(--tertiary-txt-color) !important;
+          border-color: var(--tertiary-txt-color) !important;
+        }
+      }
+    }
+  }
+}
+// ALERT CHECKBOX STYLES
 .alert-checkbox-group {
   border-color: var(--secondary-bg-color) !important;
   .alert-checkbox-button {

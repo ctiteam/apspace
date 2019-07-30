@@ -80,7 +80,6 @@ export class SettingsPage implements OnInit {
   toggleDarkTheme() {
     this.pureDarkThemeEnabled = false;
     this.userSettings.toggleDarkTheme(this.darkThemeEnabled);
-    this.togglePureDarkTheme();
   }
 
   togglePureDarkTheme() {

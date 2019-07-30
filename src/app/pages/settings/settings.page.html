@@ -80,7 +80,7 @@
               </ion-item-divider>
               <ion-item lines="none" no-padding>
                 <ion-label>Dark Theme</ion-label>
-                <ion-toggle [(ngModel)]="darkThemeEnabled" (ngModelChange)="toggleDarkTheme()" no-padding>
+                <ion-toggle [(ngModel)]="darkThemeEnabled" [disabled]="pureDarkThemeEnabled" (ngModelChange)="toggleDarkTheme()" no-padding>
                 </ion-toggle>
               </ion-item>
               <ion-item lines="none" no-padding>
