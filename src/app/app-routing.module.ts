@@ -116,12 +116,16 @@ const routes: Routes = [
     path: 'settings',
     loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule)
   },
-  { path: 'exam-schedule', loadChildren: './pages/exam-schedule/exam-schedule.module#ExamSchedulePageModule' },
-  { path: 'news', loadChildren: './pages/news/news.module#NewsPageModule' },
-  { path: 'settings', loadChildren: './pages/settings/settings.module#SettingsPageModule' },
+  {
+    path: 'exam-schedule',
+    loadChildren: () => import('./pages/exam-schedule/exam-schedule.module').then(m => m.ExamSchedulePageModule) },
+  {
+    path: 'news',
+    loadChildren: () => import('./pages/news/news.module').then(m => m.NewsPageModule) },
   {
     path: 'set-security-questions',
-    loadChildren: './pages/settings/set-security-questions/set-security-questions.module#SetSecurityQuestionsPageModule'
+    loadChildren: () =>
+    import('./pages/settings/set-security-questions/set-security-questions.module').then(m => m.SetSecurityQuestionsPageModule)
   },
 ];
 
