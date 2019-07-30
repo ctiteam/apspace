@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserSettingsService } from 'src/app/services';
-import { IonSelect } from '@ionic/angular';
+import { IonSelect, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-settings',
@@ -36,6 +36,7 @@ export class SettingsPage implements OnInit {
 
   constructor(
     private userSettings: UserSettingsService,
+    private navCtrl: NavController,
   ) {
     this.userSettings
       .darkThemeActivated()
@@ -98,5 +99,9 @@ export class SettingsPage implements OnInit {
 
   clearCache() {
     this.userSettings.clearStorage();
+  }
+
+  navigateToPage(pageName: string) {
+    this.navCtrl.navigateForward(pageName);
   }
 }
