@@ -1,20 +1,3 @@
-ion-card {
-  position: relative;
-  text-align: center;
-  height: 150px;
-  cursor: pointer;
-}
-
-.icons {
-  top: 20%;
-}
-
-.card-title {
-  top: 36%;
-  font-size: 1.5em;
-  font-weight: bold;
-}
-
 .otp-wrapper {
   display: flex;
   justify-content: center;
@@ -25,12 +8,17 @@ ion-card {
   margin: 20px 4px;
   max-width: 12vw;
   padding: 12px;
-  padding-bottom: calc(12px - 5px);
+  padding-bottom: 4px;
   color: #000000;
   background-color: #eeeeee;
   caret-color: transparent;
   border: none;
-  border-bottom: 5px solid #bcbcbc;
+  border-bottom: 8px solid #bcbcbc;
   font-family: 'Hack', 'Iconsolata', monospace;
   text-align: center;
+}
+
+.otp:focus {
+  border-bottom-color: #8d8d8d;
+  background-color: #bdbdbd;
 }
