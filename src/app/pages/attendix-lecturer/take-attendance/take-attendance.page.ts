@@ -31,7 +31,7 @@ export class TakeAttendancePage implements OnInit {
   totalPresentStudents$: Observable<number>;
   totalStudents$: Observable<number>;
 
-  statusUpdate = new Subject<{ id: string; attendance: string }>();
+  statusUpdate = new Subject<{ name: string; attendance: string }>();
 
   constructor(
     private initAttendance: InitAttendanceGQL,
@@ -87,9 +87,9 @@ export class TakeAttendancePage implements OnInit {
     // XXX: cool that it ignore manual overrides updates but I do not know how
     this.lastMarked$ = secret$.pipe(
       switchMap(secret => this.newStatus.subscribe({ schedule })),
-      pluck('data', 'newStatus', 'id'),
-      tap(id => this.statusUpdate.next({ id, attendance: 'P' })),
-      scan((acc, id) => [...acc, id].slice(-5), []),
+      pluck('data', 'newStatus', 'name'),
+      tap(name => this.statusUpdate.next({ name, attendance: 'P' })),
+      scan((acc, name) => [...acc, name].slice(-5), []),
       shareReplay(1) // keep track when enter manual mode
     );
 
@@ -111,7 +111,7 @@ export class TakeAttendancePage implements OnInit {
   mark(student: string, attendance: 'A' | 'L' | 'P') {
     // TODO: optimistic ui
     this.markAttendance.mutate({ schedule: this.schedule, student, attendance }).subscribe(
-      d => this.statusUpdate.next({ id: student, attendance }),
+      d => this.statusUpdate.next({ name: student, attendance }),
       e => console.error(e) // XXX: retry attendance$ on failure
     );
   }

@@ -9,7 +9,7 @@ export class NewStatusGQL extends Subscription {
   document = gql`
     subscription NewStatus($schedule: String!) {
       newStatus(schedule: $schedule) {
-        id
+        name
       }
     }
   `;
