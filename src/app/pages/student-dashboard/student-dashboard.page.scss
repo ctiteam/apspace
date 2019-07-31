@@ -30,6 +30,20 @@
   position: relative;
 }
 
+.notifications {
+  position: relative;
+  ion-badge {
+    --padding-start: 3px;
+    --padding-end: 3px;
+    --padding-bottom: 5px;
+    --padding-top: 3px;
+    position: absolute;
+    top: -22px;
+    right: -4px;
+    z-index: 10000;
+  }
+}
+
 .edit-overlay {
   background: #c6c6c6;
   opacity: 0.4;

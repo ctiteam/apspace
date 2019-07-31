@@ -47,14 +47,16 @@
                 <ion-col>
                   <div class="icons" margin-top text-right>
                     <a (click)="toggleReorderingMode()">
-                      <ion-icon *ngIf="editableList" color="success" class="responsive-icon colored-text" name="checkmark"></ion-icon>
+                      <ion-icon *ngIf="editableList" color="success" class="responsive-icon colored-text"
+                        name="checkmark"></ion-icon>
                       <ion-icon *ngIf="!editableList" class="responsive-icon colored-text" name="md-create"></ion-icon>
                     </a>
                     <a (click)="navigateToPage('/settings')" margin-start margin-end>
                       <ion-icon class="anim-rotate-360-deg animated responsive-icon colored-text" name="settings">
                       </ion-icon>
                     </a>
-                    <a>
+                    <a class="notifications" (click)="navigateToPage('/notifications')">
+                      <ion-badge *ngIf="numberOfUnreadMsgs > 0" color="danger">{{ numberOfUnreadMsgs }}</ion-badge>
                       <ion-icon class="responsive-icon colored-text anim-ring" name="notifications"></ion-icon>
                     </a>
                   </div>

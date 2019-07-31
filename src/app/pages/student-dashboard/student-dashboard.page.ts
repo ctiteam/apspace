@@ -7,7 +7,7 @@ import {
 } from 'src/app/interfaces';
 import { Observable, forkJoin, of, zip } from 'rxjs';
 import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray, reduce } from 'rxjs/operators';
-import { WsApiService, StudentTimetableService, UserSettingsService } from 'src/app/services';
+import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService } from 'src/app/services';
 import * as moment from 'moment';
 import { NavController } from '@ionic/angular';
 import { DragulaService } from 'ng2-dragula';
@@ -39,6 +39,7 @@ export class StudentDashboardPage implements OnInit {
   defaultIntake = '';
   studentFirstName$: Observable<string>;
   block = false;
+  numberOfUnreadMsgs: number;
 
   // TODAY'S SCHEDULE
   todaysSchedule$: Observable<EventComponentConfigurations[] | any>;
@@ -179,6 +180,7 @@ export class StudentDashboardPage implements OnInit {
     private userSettings: UserSettingsService,
     private navCtrl: NavController,
     private dragulaService: DragulaService,
+    private notificationService: NotificationService
   ) {
     this.activeAccentColor = this.userSettings.getAccentColorValue();
   }
@@ -197,12 +199,20 @@ export class StudentDashboardPage implements OnInit {
     this.photo$ = this.getStudentPhoto();
     this.displayGreetingMessage();
     this.apcardTransaction$ = this.getTransactions();
+    this.getBadge();
     forkJoin([
       this.getProfile(),
       this.financial$ = this.getOverdueFee()
     ]).pipe(
       finalize(() => refresher && refresher.complete()),
     ).subscribe();
+  }
+
+  // NOTIFICATIONS METHODS
+  getBadge() {
+    this.notificationService.getMessages().subscribe(res => {
+      this.numberOfUnreadMsgs = +res.num_of_unread_msgs;
+    });
   }
 
   navigateToPage(pageName: string) {
