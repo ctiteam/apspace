@@ -3,15 +3,17 @@
     <ion-buttons slot="start">
       <ion-back-button class="back-btn" defaultHref="/attendix/classes"></ion-back-button>
     </ion-buttons>
-    <ion-title text-center>Take Attendance</ion-title>
+    <ion-title>
+      (class code) {{ totalPresentStudents$ | async }}/{{ totalStudents$ | async }}
+    </ion-title>
     <ion-buttons slot="end">
-      <ion-button class="#" defaultHref="#">End Session</ion-button>
+      <ion-button (click)="auto = !auto">{{ auto ? 'Manual' : 'Auto' }}</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-grid>
+  <ion-grid *ngIf="auto; else override">
     <ion-row *ngIf="otp$ | async as otp">
       <ion-col size="8">
         <qrcode *ngIf="otp" [qrdata]="otp" level="H"></qrcode>
@@ -28,4 +30,19 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  <ng-template #override>
+    <ion-searchbar [(ngModel)]="term"></ion-searchbar>
+    <ion-list>
+      <ion-card
+        *ngFor="let student of students$ | async | search:term; trackBy: trackById"
+        [ngClass]="'state' + student.attendance">
+        <ion-card-header>
+          {{ student.name }} {{ student.id }}
+          <ion-button (click)="mark(student.id, 'A')">Absent</ion-button>
+          <ion-button (click)="mark(student.id, 'L')">Late</ion-button>
+          <ion-button (click)="mark(student.id, 'P')">Present</ion-button>
+        </ion-card-header>
+      </ion-card>
+    </ion-list>
+  </ng-template>
 </ion-content>

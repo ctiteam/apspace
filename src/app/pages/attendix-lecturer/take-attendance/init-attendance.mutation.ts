@@ -10,6 +10,11 @@ export class InitAttendanceGQL extends Mutation {
     mutation initAttendance($schedule: String!) {
       attendance: initAttendance(schedule: $schedule) {
         secret
+        students {
+          id
+          name
+          attendance
+        }
       }
     }
   `;

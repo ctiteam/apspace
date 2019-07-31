@@ -10,6 +10,11 @@ export class AttendanceGQL extends Query {
     query attendance($schedule: String!) {
       attendance(schedule: $schedule) {
         secret
+        students {
+          id
+          name
+          attendance
+        }
       }
     }
   `;
