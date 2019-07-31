@@ -118,14 +118,20 @@ const routes: Routes = [
   },
   {
     path: 'exam-schedule',
-    loadChildren: () => import('./pages/exam-schedule/exam-schedule.module').then(m => m.ExamSchedulePageModule) },
+    loadChildren: () => import('./pages/exam-schedule/exam-schedule.module').then(m => m.ExamSchedulePageModule)
+  },
   {
     path: 'news',
-    loadChildren: () => import('./pages/news/news.module').then(m => m.NewsPageModule) },
+    loadChildren: () => import('./pages/news/news.module').then(m => m.NewsPageModule)
+  },
   {
     path: 'set-security-questions',
     loadChildren: () =>
-    import('./pages/settings/set-security-questions/set-security-questions.module').then(m => m.SetSecurityQuestionsPageModule)
+      import('./pages/settings/set-security-questions/set-security-questions.module').then(m => m.SetSecurityQuestionsPageModule)
+  },
+  {
+    path: 'notifications',
+    loadChildren: () => import('./pages/notifications/notifications.module').then(m => m.NotificationsPageModule)
   },
 ];
 
