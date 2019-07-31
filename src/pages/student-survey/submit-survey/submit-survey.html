@@ -10,7 +10,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-menu [content]="content" side="right">
+<ion-menu [content]="content" side="right" *ngIf="!studentIsMastersOrAPLC">
   <ion-header>
     <ion-toolbar>
       <ion-buttons end>
@@ -21,7 +21,6 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-
     <ion-item no-lines>
       <ion-label>Intake</ion-label>
       <ion-select [(ngModel)]="intakeCode" (ngModelChange)="onIntakeCodeChanged()" interface="popover">
@@ -30,7 +29,6 @@
         </ion-option>
       </ion-select>
     </ion-item>
-
     <ion-item no-lines *ngIf="modulesAreLoading">
       <ion-label>Getting the list of modules...</ion-label>
     </ion-item>
@@ -55,10 +53,8 @@
     </ng-template>
   </ion-content>
 </ion-menu>
-
-
 <ion-content #content>
-  <div class="container p-0">
+  <div class="outsiderDiv" *ngIf="!studentIsMastersOrAPLC">
     <div *ngIf="intakesAreLoading" class="row mt-5">
       <div class="col-12 px-5">
         <loading-spinner class="mt-5"></loading-spinner>
@@ -79,7 +75,6 @@
         </div>
       </div>
     </ng-template>
-
     <ng-template [ngIf]="intakeCode && !classCode">
       <div class="row mt-5">
         <div class="col-12 px-5">
@@ -92,7 +87,6 @@
         </div>
       </div>
     </ng-template>
-
     <ng-template [ngIf]="intakeCode && classCode && !surveyType">
       <div class="row mt-5">
         <div class="col-12 px-5">
@@ -102,7 +96,6 @@
         </div>
       </div>
     </ng-template>
-
     <ng-template [ngIf]="intakeCode && classCode && surveyType">
       <ng-template let-surveys [ngIf]="survey$ | async" [ngIfElse]="surveysAreLoading">
         <ng-template [ngIf]="surveys.length > 0">
@@ -138,17 +131,53 @@
                     <p class="h4 px-1 my-2">
                       {{ '*' + surveyQuestion.content }}
                     </p>
-                    <ng-template [ngIf]="surveyQuestion.type === 'MCQ'" [ngIfElse]="showTextArea">
-                      <ion-item no-lines>
-                        <ion-label>Answer:</ion-label>
-                        <ion-select interface="action-sheet"
+                    <div class="d-none d-lg-block">
+                      <ng-template [ngIf]="surveyQuestion.type === 'MCQ'" [ngIfElse]="showTextArea">
+                        <ion-list radio-group
                           [(ngModel)]="response.answers[response.answers.indexOf(getAnswerByQuestionId(surveyQuestion.id))].content">
-                          <ion-option *ngFor="let mcqAnswer of msqAnswers" [value]="mcqAnswer.id">
-                            {{mcqAnswer.content}}
-                          </ion-option>
-                        </ion-select>
-                      </ion-item>
-                    </ng-template>
+                          <div class="row">
+                            <div class="col-12 divCol">
+                              <ion-item *ngIf="!surveyQuestion.applicable">
+                                <ion-radio value="0" item-left>
+                                </ion-radio>
+                                <ion-label>
+                                  N/A
+                                </ion-label>
+                              </ion-item>
+                              <ion-item *ngFor="let mcqAnswer of msqAnswers">
+                                <ion-radio [value]="mcqAnswer.id" item-left>
+                                </ion-radio>
+                                <ion-label>
+                                  {{mcqAnswer.content}}
+                                </ion-label>
+                              </ion-item>
+                            </div>
+                          </div>
+                        </ion-list>
+                      </ng-template>
+                    </div>
+                    <div class="d-lg-none .d-xl-block">
+                      <ng-template [ngIf]="surveyQuestion.type === 'MCQ'" [ngIfElse]="showTextArea">
+                        <ion-list radio-group
+                          [(ngModel)]="response.answers[response.answers.indexOf(getAnswerByQuestionId(surveyQuestion.id))].content"
+                          class="smIonList">
+                          <ion-item *ngIf="!surveyQuestion.applicable">
+                            <ion-label>
+                              0
+                              <ion-radio value="0" item-left class="naRadioBtn" >
+                              </ion-radio>
+                            </ion-label>
+                          </ion-item>
+                          <ion-item *ngFor="let mcqAnswer of msqAnswers">
+                            <ion-label>
+                              {{mcqAnswer.id}}
+                              <ion-radio [value]="mcqAnswer.id" class="ansRadioBtn" item-left>
+                              </ion-radio>
+                            </ion-label>
+                          </ion-item>
+                        </ion-list>
+                      </ng-template>
+                    </div>
                     <ng-template #showTextArea>
                       <textarea name="test" id="tesr" cols="30" rows="4"
                         [(ngModel)]="response.answers[response.answers.indexOf(getAnswerByQuestionId(surveyQuestion.id))].content"></textarea>
@@ -192,5 +221,8 @@
         loading the surveys...
       </ng-template>
     </ng-template>
+  </div>
+  <div *ngIf="studentIsMastersOrAPLC">
+    Survey will open in an external window. If not, please refresh the page.
   </div>
 </ion-content>
