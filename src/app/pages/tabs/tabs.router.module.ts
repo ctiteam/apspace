@@ -22,14 +22,6 @@ const routes: Routes = [
       },
       {
         path: 'apcard',
-<<<<<<< HEAD
-        loadChildren: '../apcard/apcard.module#ApcardPageModule'
-      },
-      {
-        path: 'more',
-        loadChildren: '../more/more.module#MorePageModule'
-      }
-=======
         loadChildren: () => import('../apcard/apcard.module').then(m => m.ApcardPageModule)
       },
       {
@@ -41,7 +33,6 @@ const routes: Routes = [
         redirectTo: 'student-dashboard',
         pathMatch: 'full'
       },
->>>>>>> origin/v4
     ]
   }
 ];
