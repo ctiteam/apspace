@@ -48,6 +48,7 @@
   }
   ion-card {
     --background: var(--secondary-bg-color);
+    --color: var(--secondary-txt-color);
   }
   ion-slides {
     --bullet-background: var(--main-txt-color);
@@ -74,7 +75,7 @@
   --tertiary-bg-color: #424242;
 
   --main-txt-color: #ffffffd1;
-  --secondary-txt-color: #999999;
+  --secondary-txt-color: #bbbbbb;
   --tertiary-txt-color: #ffffff77;
 
   --danger-color: #ec2a4d;
@@ -86,6 +87,7 @@
   }
   ion-card {
     --background: var(--secondary-bg-color);
+    --color: var(--secondary-txt-color);
   }
   ion-slides {
     --bullet-background: var(--main-txt-color);
@@ -125,6 +127,7 @@
   }
   ion-card {
     --background: var(--secondary-bg-color);
+    --color: var(--secondary-txt-color);
   }
   ion-slides {
     --bullet-background: var(--main-txt-color);
