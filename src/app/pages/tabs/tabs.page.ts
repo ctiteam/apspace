@@ -51,7 +51,7 @@ export class TabsPage implements OnInit {
     },
     {
       name: 'More',
-      path: '',
+      path: 'more',
       icon: 'more'
     }
   ];
