@@ -93,7 +93,7 @@ export class LoginPage implements OnInit {
           this.userAuthenticated = true;
           setTimeout(() => {
             // Show the success message for 300 ms after completing the request
-            this.navCtrl.navigateRoot('/student-timetable');
+            this.navCtrl.navigateRoot('/');
           }, 300);
         }
       );

@@ -12,18 +12,18 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: './pages/login/login.module#LoginPageModule',
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule),
     canActivate: [DeauthGuard]
   },
   {
     path: 'tabs',
-    loadChildren: './pages/tabs/tabs.module#TabsPageModule',
+    loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule),
     canActivate: [AuthGuard]
   },
 
   {
     path: 'student-timetable',
-    loadChildren: './pages/student-timetable/student-timetable.module#StudentTimetablePageModule'
+    loadChildren: () => import('./pages/student-timetable/student-timetable.module').then(m => m.StudentTimetablePageModule)
   },
   {
     path: 'staffs',
@@ -31,14 +31,17 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: './pages/staff-directory/staff-directory.module#StaffDirectoryPageModule'
+        loadChildren: () => import('./pages/staff-directory/staff-directory.module').then(m => m.StaffDirectoryPageModule)
       }
     ]
   },
-  { path: 'staff', loadChildren: './pages/staff-directory-info/staff-directory-info.module#StaffDirectoryInfoPageModule' },
+  {
+    path: 'staff',
+    loadChildren: () => import('./pages/staff-directory-info/staff-directory-info.module').then(m => m.StaffDirectoryInfoPageModule)
+  },
   {
     path: 'feedback',
-    loadChildren: './pages/feedback/feedback.module#FeedbackPageModule'
+    loadChildren: () => import('./pages/feedback/feedback.module').then(m => m.FeedbackPageModule)
   },
   {
     path: 'attendix-lecturer',
@@ -47,12 +50,12 @@ const routes: Routes = [
       {
         path: 'classes',
         loadChildren:
-        './pages/attendix/attendix-lecturer/classes/classes.module#ClassesPageModule'
+          () => import('./pages/attendix/attendix-lecturer/classes/classes.module').then(m => m.ClassesPageModule)
       },
       {
         path: 'take-attendance',
         loadChildren:
-        './pages/attendix/attendix-lecturer/take-attendance/take-attendance.module#TakeAttendancePageModule'
+          () => import('./pages/attendix/attendix-lecturer/take-attendance/take-attendance.module').then(m => m.TakeAttendancePageModule)
       },
       // { path: 'qr-otp', loadChildren: './pages/attendix/qr-otp/qr-otp.module#QrOtpPageModule' },
       // { path: 'take-picture', loadChildren: './pages/attendix/take-picture/take-picture.module#TakePicturePageModule' },
@@ -60,11 +63,11 @@ const routes: Routes = [
   },
   {
     path: 'feedback',
-    loadChildren: './pages/feedback/feedback.module#FeedbackPageModule'
+    loadChildren: () => import('./pages/feedback/feedback.module').then(m => m.FeedbackPageModule)
   },
   {
     path: 'bus-shuttle-services',
-    loadChildren: './pages/bus-shuttle-services/bus-shuttle-services.module#BusShuttlePagePageModule'
+    loadChildren: () => import('./pages/bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttlePagePageModule)
   },
   {
     path: 'attendix-student',
@@ -72,34 +75,64 @@ const routes: Routes = [
     children: [
       {
         path: 'qr-code',
-        loadChildren: './pages/attendix/qr-code/qr-code.module#QrCodePageModule'
+        loadChildren: () => import('./pages/attendix/qr-code/qr-code.module').then(m => m.QrCodePageModule)
       },
       {
         path: 'qr-otp',
-        loadChildren: './pages/attendix/qr-otp/qr-otp.module#QrOtpPageModule'
+        loadChildren: () => import('./pages/attendix/qr-otp/qr-otp.module').then(m => m.QrOtpPageModule)
       },
       {
         path: 'take-picture',
-        loadChildren: './pages/attendix/take-picture/take-picture.module#TakePicturePageModule'
+        loadChildren: () => import('./pages/attendix/take-picture/take-picture.module').then(m => m.TakePicturePageModule)
       }
     ]
   },
   {
     path: 'more',
-    loadChildren: './pages/more/more.module#MorePageModule'
+    loadChildren: () => import('./pages/more/more.module').then(m => m.MorePageModule)
   },
   {
     path: 'fees',
-    loadChildren: './pages/fees/fees.module#FeesPageModule'
+    loadChildren: () => import('./pages/fees/fees.module').then(m => m.FeesPageModule)
   },
   {
     path: 'holidays',
-    loadChildren: './pages/holidays/holidays.module#HolidaysPageModule'
+    loadChildren: () => import('./pages/holidays/holidays.module').then(m => m.HolidaysPageModule)
   },
   {
     path: 'graduate-verification-service',
-    loadChildren: './pages/graduate-verification-service/graduate-verification-service.module#GraduateVerificationServicePageModule'
-  }
+    loadChildren: () => import('./pages/graduate-verification-service/graduate-verification-service.module')
+      .then(m => m.GraduateVerificationServicePageModule)
+  },
+  {
+    path: 'exam-schedule',
+    loadChildren: () => import('./pages/exam-schedule/exam-schedule.module').then(m => m.ExamSchedulePageModule)
+  },
+  {
+    path: 'news',
+    loadChildren: () => import('./pages/news/news.module').then(m => m.NewsPageModule)
+  },
+  {
+    path: 'settings',
+    loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule)
+  },
+  {
+    path: 'exam-schedule',
+    loadChildren: () => import('./pages/exam-schedule/exam-schedule.module').then(m => m.ExamSchedulePageModule)
+  },
+  {
+    path: 'news',
+    loadChildren: () => import('./pages/news/news.module').then(m => m.NewsPageModule)
+  },
+  {
+    path: 'set-security-questions',
+    loadChildren: () =>
+      import('./pages/settings/set-security-questions/set-security-questions.module').then(m => m.SetSecurityQuestionsPageModule)
+  },
+  {
+    path: 'notifications',
+    loadChildren: () => import('./pages/notifications/notifications.module').then(m => m.NotificationsPageModule)
+  },
 ];
 
 @NgModule({

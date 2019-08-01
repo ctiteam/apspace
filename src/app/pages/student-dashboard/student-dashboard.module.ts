@@ -10,7 +10,7 @@ import { StudentDashboardPage } from './student-dashboard.page';
 import { ComponentsModule } from 'src/app/components/components.module';
 
 import { ChartModule } from 'angular2-chartjs';
-
+import { DragulaModule, DragulaService } from 'ng2-dragula';
 const routes: Routes = [
   {
     path: '',
@@ -26,11 +26,13 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ComponentsModule,
-    ChartModule
+    ChartModule,
+    DragulaModule
   ],
   declarations: [
     StudentDashboardPage
   ],
+  providers: [DragulaService],
   entryComponents: []
 })
 export class StudentDashboardPageModule { }

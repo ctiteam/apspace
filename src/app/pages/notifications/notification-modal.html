@@ -1,0 +1,33 @@
+<ion-header no-border>
+    <ion-toolbar>
+        <ion-title style="text-align: center">test</ion-title>
+        <ion-buttons slot="start">
+            <ion-button outline small (click)="dismiss()">
+                <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content no-padding>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title text-center>
+                <h3 class="responsive-h1">{{ message.title }}</h3>
+                <!-- <h5 class="small-text">{{ message.staff_name }}</h5> -->
+            </ion-card-title>
+        </ion-card-header>
+        <ion-card-content no-padding padding-start padding-end padding-bottom>
+            <div margin-bottom padding-top padding-bottom class="message-content">
+                <p [innerHTML]="sanitize(message.content)"></p>
+            </div>
+            <p>
+                <span class="colored-text">Sender:</span> <span class="text-bold"> {{ message.staff_name }}</span>
+            </p>
+            <p>
+                <span class="colored-text">Sent on:</span> <span class="text-bold"> {{ message.sent_on }}</span>
+            </p>
+
+        </ion-card-content>
+    </ion-card>
+</ion-content>

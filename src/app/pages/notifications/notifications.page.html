@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Notifications</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-template [ngIf]="cordova" [ngIfElse]="showNotifications">
+    <ion-card>
+      <ion-card-content>
+        This service is available for mobile app only.
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+  <ng-template #showNotifications>
+    <div class="masonry-list" margin-top *ngIf="(messages$ | async) as messages; else loading">
+      <div class="masonry-item" *ngFor="let message of messages">
+        <ion-card (click)="openModal(message)" class="notification" [class.unread]="!message.read" no-margin>
+          <ion-card-header>
+            <ion-card-title>
+              <h3 class="responsive-h1">
+                {{message.title}}
+              </h3>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content no-padding padding-start padding-end padding-bottom>
+            <p><span class="text-bold">Sender:</span> {{message.staff_name}}</p>
+            <p><span class="text-bold">Sent on:</span> {{message.sent_on}}</p>
+            <ion-badge class="small-margin-top new" style="float: left;font-weight: 300" *ngIf="!message.read">
+              New
+            </ion-badge>
+            <ion-badge class="small-margin-top" style="float: right;font-weight: 300" color="primary">
+              {{message.category}}
+            </ion-badge>
+            <div class="clearfix"></div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+    <ng-template #loading>
+      loading...
+    </ng-template>
+  </ng-template>
+</ion-content>

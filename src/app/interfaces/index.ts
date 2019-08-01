@@ -16,7 +16,7 @@ export { MPULegend } from './mpu-legend';
 export { News } from './news';
 export { OperationHours } from './operation-hours';
 export { Role, Settings } from './settings';
-export { Sqa } from './sqa';
+export { SecurityQuestionsAndAnswers } from './security-questions-and-answers';
 export { StaffDirectory } from './staff-directory';
 export { StaffProfile } from './staff-profile';
 export { StudentPhoto } from './student-photo';
@@ -28,3 +28,6 @@ export { DashboardCardComponentConfigurations } from './dashboard-card-componene
 export { CgpaPerIntake } from './cgpa-per-intake';
 export { ConsultationHour } from './iconsult';
 export { Graduater } from './graduater';
+export { IntakeListing } from './intake-listing';
+
+export { DashboardSection } from './dashboard-section';

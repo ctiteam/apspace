@@ -16,7 +16,6 @@ export class PopoverComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.options);
   }
 
   async dismissPopover() {
