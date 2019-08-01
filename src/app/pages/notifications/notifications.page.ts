@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform } from '@ionic/angular';
+import { Platform, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { NotificationService } from 'src/app/services';
-import { map, tap, finalize } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { map, tap } from 'rxjs/operators';
+import { NotificationModalPage } from './notification-modal';
 
 @Component({
   selector: 'app-notifications',
@@ -12,12 +12,12 @@ import { HttpClient } from '@angular/common/http';
 })
 export class NotificationsPage implements OnInit {
   cordova: boolean;
-  messages$: Observable<any>;
+  messages$: Observable<any>;   // TYPE TO BE CHANGED AFTER DINGDONG TEAM FINISH THE BACKEND
 
   constructor(
     private platform: Platform,
     private notificationService: NotificationService,
-    private httpClient: HttpClient
+    private modalCtrl: ModalController
   ) { }
 
   ngOnInit() {
@@ -32,6 +32,15 @@ export class NotificationsPage implements OnInit {
       map((res: {history: []}) => res.history),
       tap(t => console.log(t)),
     );
+  }
+
+  async openModal(message: any) {
+    const modal = await this.modalCtrl.create({
+      component: NotificationModalPage,
+      componentProps: { message, notFound: 'No Message Selected' },
+    });
+    await modal.present();
+    await modal.onDidDismiss();
   }
 
 }

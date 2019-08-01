@@ -15,7 +15,7 @@
   <ng-template #showNotifications>
     <div class="masonry-list" margin-top *ngIf="(messages$ | async) as messages; else loading">
       <div class="masonry-item" *ngFor="let message of messages">
-        <ion-card class="notification" [class.unread]="!message.read" no-margin margin-start margin-end>
+        <ion-card (click)="openModal(message)" class="notification" [class.unread]="!message.read" no-margin>
           <ion-card-header>
             <ion-card-title>
               <h3 class="responsive-h1">

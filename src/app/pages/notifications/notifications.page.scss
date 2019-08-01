@@ -24,7 +24,10 @@ ion-badge.new {
 }
 
 ion-card.notification ion-card-title h3{
-    color: var(--main-txt-color) !important;
+    color: var(--secondary-txt-color) !important;
+}
+ion-card.notification.unread ion-card-title h3{
+  color: var(--primary-color) !important;
 }
 
 @keyframes clipMe {

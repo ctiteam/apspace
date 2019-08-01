@@ -24,7 +24,7 @@ export class NotificationService {
    * POST: send token and service ticket on Log in and response is the history of notifications
    */
   getMessages(): Observable<any> {
-    return this.http.get('http://www.mocky.io/v2/5d41582c3100007e005392ae');
+    return this.http.get('http://www.mocky.io/v2/5d429e813200005900764124');
     // let token = '';
     // return fromPromise(this.fcm.getToken()).pipe(
     //   switchMap(
