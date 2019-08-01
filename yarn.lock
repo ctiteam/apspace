@@ -559,18 +559,18 @@
     typescript "3.4.3"
     ws "^6.1.4"
 
-"@ionic/angular@4.7.0":
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/@ionic/angular/-/angular-4.7.0.tgz#a06b6aa50c962f049dcd8c349030e0a996d057e1"
-  integrity sha512-m4lMAm1wZb+oBAg4TBaI7DImDs8FLxG+z2dbqyRh1KGRbd1SExvyDq0Rleebl/AJBwiYHfCWltye1MEffUZBfA==
+"@ionic/angular@4.7.1":
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/@ionic/angular/-/angular-4.7.1.tgz#d5de80a37641c06023e8ad6278efe43aa03a2b4a"
+  integrity sha512-DNsRSTAYT3A8NQN2wLLN6+VNVqNRqPTTJ0UAysFK9W8oX2pD4SUJfpvVJKLAHPsHbnyxQWY0EG/QlNXdLzU6jg==
   dependencies:
-    "@ionic/core" "4.7.0"
+    "@ionic/core" "4.7.1"
     tslib "^1.9.3"
 
-"@ionic/core@4.7.0":
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/@ionic/core/-/core-4.7.0.tgz#0a90d85fa659d5e1e9ee93cb2c255986c2893ada"
-  integrity sha512-lE5Hsu07tzMYrnpznj4fcQPTFF5AilLzVr9K83wfiL7GDionWWMoBfyvgDAKM0ikS+mlmtyae0ENc2qQDzGRkA==
+"@ionic/core@4.7.1":
+  version "4.7.1"
+  resolved "https://registry.yarnpkg.com/@ionic/core/-/core-4.7.1.tgz#83e72893d1e42ebfee783252b374a83fa96a00ca"
+  integrity sha512-S7VP1Exh3kt2+GWgumY11HaPv7Wr6Z+lr13AKTcznOd8L6xsvzbxgxCMLEtJ/Kjno1q3a4usK9voojwEcbhigQ==
   dependencies:
     ionicons "^4.6.2"
     tslib "^1.10.0"
