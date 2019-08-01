@@ -14,7 +14,7 @@ import { Observable } from 'apollo-link';
 export class MarkAttendancePage {
 
   numbers = new Array(6);
-  @ViewChild('otpInput') otpInput: ElementRef<HTMLInputElement>;
+  @ViewChild('otpInput', { static: false }) otpInput: ElementRef<HTMLInputElement>;
 
   otp = '';
   student = 100001;
