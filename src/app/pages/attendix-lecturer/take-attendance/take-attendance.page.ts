@@ -42,6 +42,9 @@ export class TakeAttendancePage implements OnInit {
   ) { }
 
   ngOnInit() {
+    // totp options
+    totp._options.digits = 3;
+
     const schedule = this.schedule;
 
     // get attendance state from query

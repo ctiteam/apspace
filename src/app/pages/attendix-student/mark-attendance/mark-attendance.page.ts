@@ -13,7 +13,7 @@ import { Observable } from 'apollo-link';
 })
 export class MarkAttendancePage {
 
-  numbers = new Array(6);
+  digits = new Array(3);
   @ViewChild('otpInput', { static: false }) otpInput: ElementRef<HTMLInputElement>;
 
   otp = '';
