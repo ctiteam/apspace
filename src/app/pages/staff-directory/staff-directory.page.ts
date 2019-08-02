@@ -5,6 +5,7 @@ import { filter, finalize, map } from 'rxjs/operators';
 
 import { StaffDirectory } from '../../interfaces';
 import { WsApiService } from '../../services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-staff-directory',
@@ -18,7 +19,10 @@ export class StaffDirectoryPage implements OnInit {
   staff$: Observable<StaffDirectory[]>;
   staffType$: Observable<string[]>;
 
-  constructor(private ws: WsApiService) { }
+  constructor(
+    private ws: WsApiService,
+    private router: Router
+  ) { }
 
   // @HostListener('keydown', ['$event'])
   // onkeydown(ev) {
@@ -39,6 +43,10 @@ export class StaffDirectoryPage implements OnInit {
       map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT))).sort()),
       finalize(() => refresher && refresher.complete()),
     );
+  }
+
+  openInfo(id = null) {
+    this.router.navigate(['/staff', id]);
   }
 
 }
