@@ -133,6 +133,10 @@ const routes: Routes = [
     path: 'notifications',
     loadChildren: () => import('./pages/notifications/notifications.module').then(m => m.NotificationsPageModule)
   },
+  {
+    path: 'classroom-finder',
+    loadChildren: './pages/classroom-finder/classroom-finder.module#ClassroomFinderPageModule'
+  },
 ];
 
 @NgModule({

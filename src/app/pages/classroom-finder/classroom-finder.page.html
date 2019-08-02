@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Classroom Finder</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-item>
+      <ion-label>Location</ion-label>
+      <ion-select [(ngModel)]="location" interface="popover">
+        <ion-select-option value="NEW CAMPUS">APU</ion-select-option>
+        <ion-select-option value="TPM">APIIT</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Day</ion-label>
+      <ion-select [(ngModel)]="day" interface="popover">
+        <ion-select-option *ngFor="let day of days" [value]="day">{{ day }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Start</ion-label>
+      <ion-datetime
+        [(ngModel)]="since"
+        displayFormat="HH:mm"
+        hourValues="[7,8,9,10,11,12,13,14,15,16,17,18,19,20]"
+        (ionChange)="changeSince($event.target.value)">
+      </ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>End</ion-label>
+      <ion-datetime
+        [(ngModel)]="until"
+        displayFormat="HH:mm"
+        (ionChange)="changeUntil($event.target.value)">
+      </ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>Room Types</ion-label>
+      <ion-select [(ngModel)]="types" multiple>
+        <ion-select-option value="auditorium">Auditoriums / Lecture Halls</ion-select-option>
+        <ion-select-option value="classroom">Classrooms</ion-select-option>
+        <ion-select-option value="labotary">Labs / Workshops / Studios / Suites</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-card>
+  <ion-card *ngIf="timetables$ | async | at:location | on:day | time:since:until | for:types | rooms as timetables">
+    <ion-card-header>
+      <ion-card-title>{{ timetables.length }} available rooms</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-chip *ngFor="let room of timetables; trackBy: trackByName">
+        {{ room }}
+      </ion-chip>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

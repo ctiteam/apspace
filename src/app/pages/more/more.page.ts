@@ -258,7 +258,7 @@ export class MorePage {
         },
         {
           title: 'Classroom Finder',
-          url: '',
+          url: '/classroom-finder',
           size: 'medium',
           color: 'purple',
           icon: 'search',
