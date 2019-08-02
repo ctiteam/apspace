@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 import { Observable } from 'rxjs';
 import { pluck } from 'rxjs/operators';
@@ -18,7 +19,7 @@ export class ClassesPage implements OnInit {
   selClasscode: string;
   selDatetime: string;
 
-  constructor(private ws: WsApiService) { }
+  constructor(private ws: WsApiService, public navCtrl: NavController) { }
 
   ngOnInit() {
     this.classcode$ = this.ws.get<Classcode[]>('/student/classcodes').pipe(
@@ -29,6 +30,10 @@ export class ClassesPage implements OnInit {
 
   markAttendance() {
     console.log(this.selClasscode, this.selDatetime);
+  }
+
+  openPage(page: string) {
+    this.navCtrl.navigateForward(page);
   }
 
 }

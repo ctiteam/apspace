@@ -1,20 +1,44 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>Classes</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" (click)="openPage('attendix/take-attendance')" size="large">Take Attendance</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-label>Class code</ion-label>
-  <ion-select [(ngModel)]="selClasscode">
-    <ion-select-option *ngFor="let classcode of classcode$ | async"
-      [value]="classcode" interface="action-sheet">{{ classcode }}</ion-select-option>
-  </ion-select>
+  <ion-grid>
+    <ion-row justify-content-center>
+      <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+        <div padding>
+            <ion-item>
+              <ion-label>Class Code</ion-label>
+              <ion-select [(ngModel)]="selClasscode">
+                <ion-select-option *ngFor="let classcode of classcode$ | async"
+                  [value]="classcode" interface="action-sheet">{{ classcode }}</ion-select-option>
+              </ion-select>
+            </ion-item>
 
-  <ion-label>Date Time</ion-label>
-  <ion-input [(ngModel)]="selDatetime"></ion-input>
+            <ion-item>
+              <ion-input [(ngModel)]="startDateTime" placeholder="Start Time"></ion-input>
+            </ion-item>
 
-  <ion-button (click)="markAttendance">
-    Submit
-  </ion-button>
+            <ion-item>
+              <ion-input [(ngModel)]="selDatetime" placeholder="End Time"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input [(ngModel)]="classType" placeholder="Class Type"></ion-input>
+            </ion-item>
+        </div>
+        <div padding>
+          <ion-button (click)="markAttendance" size="large" href="#" expand="block">Submit</ion-button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
