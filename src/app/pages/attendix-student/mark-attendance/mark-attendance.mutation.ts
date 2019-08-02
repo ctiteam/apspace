@@ -9,7 +9,7 @@ export class MarkAttendanceGQL extends Mutation {
   document = gql`
     mutation markAttendance($schedule: String! $otp: String! $student: String!) {
       markAttendance(schedule: $schedule otp: $otp student: $student) {
-        name
+        id
         schedule
       }
     }

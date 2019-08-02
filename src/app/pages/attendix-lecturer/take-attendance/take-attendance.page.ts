@@ -26,12 +26,12 @@ export class TakeAttendancePage implements OnInit {
   term = '';
 
   otp$: Observable<number>;
-  lastMarked$: Observable<string[]>;
+  lastMarked$: Observable<Status[]>;
   students$: Observable<Status[]>;
   totalPresentStudents$: Observable<number>;
   totalStudents$: Observable<number>;
 
-  statusUpdate = new Subject<{ name: string; attendance: string }>();
+  statusUpdate = new Subject<{ id: string; attendance: string }>();
 
   constructor(
     private initAttendance: InitAttendanceGQL,
@@ -47,6 +47,8 @@ export class TakeAttendancePage implements OnInit {
 
     const schedule = this.schedule;
 
+    let studentsById: { [student: string]: Status };
+
     // get attendance state from query
     const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
       catchError(err => this.attendance.fetch({ schedule })),
@@ -55,7 +57,8 @@ export class TakeAttendancePage implements OnInit {
         duration: 2000,
         position: 'top',
         color: 'danger'
-      }), NEVER))
+      }), NEVER)),
+      tap(query => studentsById = query.data.attendance.students.reduce((acc, s) => (acc[s.id] = s, acc), {}))
     );
 
     // keep updating attendancesState$ with new changes
@@ -90,9 +93,10 @@ export class TakeAttendancePage implements OnInit {
     // XXX: cool that it ignore manual overrides updates but I do not know how
     this.lastMarked$ = secret$.pipe(
       switchMap(secret => this.newStatus.subscribe({ schedule })),
-      pluck('data', 'newStatus', 'name'),
-      tap(name => this.statusUpdate.next({ name, attendance: 'P' })),
-      scan((acc, name) => [...acc, name].slice(-5), []),
+      pluck('data', 'newStatus', 'id'),
+      tap(id => console.log('new', id, studentsById[id])),
+      tap(id => this.statusUpdate.next({ id, attendance: 'P' })),
+      scan((acc, id) => [...acc, studentsById[id]].slice(-5), []),
       shareReplay(1) // keep track when enter manual mode
     );
 
@@ -114,7 +118,7 @@ export class TakeAttendancePage implements OnInit {
   mark(student: string, attendance: 'A' | 'L' | 'P') {
     // TODO: optimistic ui
     this.markAttendance.mutate({ schedule: this.schedule, student, attendance }).subscribe(
-      d => this.statusUpdate.next({ name: student, attendance }),
+      d => this.statusUpdate.next({ id: student, attendance }),
       e => console.error(e) // XXX: retry attendance$ on failure
     );
   }

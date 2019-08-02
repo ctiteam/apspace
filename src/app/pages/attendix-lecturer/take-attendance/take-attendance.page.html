@@ -22,9 +22,9 @@
         <div *ngFor="let c of otp | chars" class="otp">
           {{ c }}
         </div>
-        <ion-list *ngFor="let marked of lastMarked$ | async">
+        <ion-list *ngFor="let student of lastMarked$ | async">
           <ion-item>
-            {{ marked }}
+            {{ student.name }}
           </ion-item>
         </ion-list>
       </ion-col>
@@ -32,17 +32,18 @@
   </ion-grid>
   <ng-template #override>
     <ion-searchbar [(ngModel)]="term"></ion-searchbar>
-    <ion-list>
-      <ion-card
-        *ngFor="let student of students$ | async | search:term; trackBy: trackById"
-        [ngClass]="'state' + student.attendance">
-        <ion-card-header>
-          {{ student.name }} {{ student.id }}
-          <ion-button (click)="mark(student.id, 'A')">Absent</ion-button>
-          <ion-button (click)="mark(student.id, 'L')">Late</ion-button>
-          <ion-button (click)="mark(student.id, 'P')">Present</ion-button>
-        </ion-card-header>
+    <ion-virtual-scroll [items]="students$ | async | search:term" [trackBy]="trackById" approxItemHeight="48px">
+      <ion-card *virtualItem="let student">
+        <ion-item [ngClass]="'state' + student.attendance">
+          <ion-img slot="start" (ionError)="$event.target.src = 'assets/img/profile.svg'"></ion-img>
+          <ion-label>{{ student.name }} {{ student.id }}</ion-label>
+          <ng-container slot="end">
+            <ion-button (click)="mark(student.id, 'A')">Absent</ion-button>
+            <ion-button (click)="mark(student.id, 'L')">Late</ion-button>
+            <ion-button (click)="mark(student.id, 'P')">Present</ion-button>
+          </ng-container>
+        </ion-item>
       </ion-card>
-    </ion-list>
+    </ion-virtual-scroll>
   </ng-template>
 </ion-content>

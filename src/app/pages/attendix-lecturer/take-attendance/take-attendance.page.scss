@@ -16,14 +16,14 @@
   font-family: 'Hack', 'Iconsolata', monospace;
 }
 
-.stateA {
-  background-color: #e57373;
+ion-item.stateA {
+  --background: #e57373 !important;
 }
 
-.stateL {
-  background-color: #fff176;
+ion-item.stateL {
+  --background: #fff176 !important;
 }
 
-.stateP {
-  background-color: #81c784;
+ion-item.stateP {
+  --background: #81c784 !important;
 }
