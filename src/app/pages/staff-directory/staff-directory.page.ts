@@ -46,6 +46,10 @@ export class StaffDirectoryPage implements OnInit {
   }
 
   openInfo(id = null) {
+    if (id == null) {
+      return; // Shouldn't happen, but just incase.
+    }
+
     this.router.navigate(['/staff', id]);
   }
 

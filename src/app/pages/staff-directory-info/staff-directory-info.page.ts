@@ -28,9 +28,6 @@ export class StaffDirectoryInfoPage implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.params.id;
-    if (id == null || id === 0) {
-      return this.router.navigate(['staffs']);
-    }
     this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing').pipe(
       map(ss => ss.find(s => s.ID === id)),
       share(),
