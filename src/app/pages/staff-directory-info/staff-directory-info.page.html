@@ -4,9 +4,76 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <div *ngIf="staff$ | async as staff" class="staff-directory-info-header">
-    <!-- TODO: add responsive image -->
-    <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '.jpg'">
+
+    <ion-grid>
+      <ion-row>
+        <ion-col class="desktop-shrink">
+          <ion-card>
+            <ion-card-header>
+                <ion-avatar class="profile-image">
+                    <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '.jpg'" onerror="this.src='assets/img/profile.svg'">
+                </ion-avatar>
+                
+                <ion-button class="btn-restricted colored-background">Book Consultation Hour</ion-button>
+
+                <hr style="border: 2px solid var(--secondary-txt-color)"/>
+            </ion-card-header>
+
+            <ion-card-content style="padding-top: 0px">
+              <ion-text>
+                <h2><strong>Name:</strong></h2>
+                <h2>{{ staff.FULLNAME }}</h2>
+      
+                <br>
+      
+                <h2><strong>Job Title:</strong></h2>
+                <h2 [innerHTML]="staff.TITLE"></h2>
+      
+                <br>
+      
+                <h2><strong>Email:</strong></h2>
+                <h2><a href="mailto:{{staff.EMAIL}}">{{ staff.EMAIL }}</a></h2>
+
+                <br>
+
+                <div *ngIf="staff.LOCATION">
+                  <h2><strong>Office Location:</strong></h2>
+                  <h2>{{ staff.LOCATION }}</h2>
+
+                  <br>
+                </div>
+      
+                <h2><strong>Contact Number:</strong></h2>
+                <h2><a href="tel:+60389961000">+6 03-8996 1000 (Ext. {{ staff.EXTENSION }})</a></h2>
+
+                <br>
+                
+                <div *ngIf="staff.DEPARTMENT || staff.DEPARTMENT2 || staff.DEPARTMENT3">
+                  <h2><strong>Functional Area(s):</strong></h2>
+                  <h2 *ngIf="staff.DEPARTMENT" [innerHTML]="staff.DEPARTMENT"></h2>
+                  <h2 *ngIf="staff.DEPARTMENT2" [innerHTML]="staff.DEPARTMENT2"></h2>
+                  <h2 *ngIf="staff.DEPARTMENT3" [innerHTML]="staff.DEPARTMENT3"></h2>
+                </div>
+      
+              </ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col no-padding>
+            <ion-card>
+              <ion-card-header>
+                <ion-text>
+                  <h2>Timetable</h2>
+                </ion-text>
+              </ion-card-header>
+            </ion-card>
+            
+            <lecturer-timetable [id]="staff.ID"></lecturer-timetable>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
   </div>
 </ion-content>

@@ -1,0 +1,35 @@
+.profile-image {
+    margin-bottom: 15px;
+    margin-left: 58px;
+    max-width: 200px;
+    max-height: 200px;
+    width: 152px;
+    height: 138px;
+}
+
+img {
+    border-radius: 11px;
+}
+
+.btn-restricted {
+    margin-left: 20px;
+    margin-right: 30px;
+    display: block !important;
+}
+
+@media only screen and (min-width: 640px) { 
+    .profile-image {
+        margin-top: 0px;
+        margin-bottom: 15px;
+        margin-left: 44px;
+        max-width: 200px;
+        max-height: 200px;
+        width: 152px;
+        height: 138px;
+    }
+
+    .desktop-shrink {
+        max-width: 311px; 
+        height: 500px;
+    }
+}

@@ -1,66 +1,33 @@
-lecturer-timetable {
-  .center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+.controlled-card {
+  margin-top: 0px;
+  padding-bottom: 20px;
+  padding-top: 0px;
+}
+
+skeleton-item {
+  padding-bottom: 15px !important;
+}
+
+.text-bold {
+  font-weight: bold !important;
+}
+
+.marker {
+  font-weight: bold;
+}
+
+.table-top {
+  display: none;
+  visibility: hidden;
+}
+
+@media (min-width: 1000px) {
+  .marker {
+      display: none;
   }
 
-  .small {
-    font-size: small;
-  }
-
-  .right {
-    float: right;
-  }
-
-  .name {
-    font-family: sans;
-  }
-
-  .schedule-week {
-    margin-bottom: 12px;
-  }
-
-  .schedule-week-head {
-    font-size: large;
-    padding: 5px 5px 15px;  /* use padding for larger press area */
-  }
-
-  .schedule-day {
-    margin-top: 8px;
-    display: flex;
-  }
-
-  .schedule-day-head {
-    background-color: lightgray;
-    min-width: 50px;
-    height: 50px;
-    margin-right: 8px;
-    border-radius: 100%;
-    font-family: sans-serif;
-    font-weight: lighter;
-    flex-direction: column;
-  }
-
-  .schedule-day-body {
-    flex: 1;
-    min-width: 0;   /* limit width of container */
-  }
-
-  .event {
-    background-color: lightblue;
-    padding: 8px;
-    margin-bottom: 5px;
-    border-radius: 3px;
-
-    /* scroll long text but stick to box if possible */
-    overflow-x: scroll;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  skeleton-item {
-    padding-bottom: 15px !important;
+  .table-top {
+    display: block;
+    visibility: visible;
   }
 }
