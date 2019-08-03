@@ -21,22 +21,16 @@
     </ion-item>
     <ion-item>
       <ion-label>Start</ion-label>
-      <ion-datetime
-        [(ngModel)]="since"
-        displayFormat="HH:mm"
-        hourValues="[7,8,9,10,11,12,13,14,15,16,17,18,19,20]"
+      <ion-datetime [(ngModel)]="since" displayFormat="HH:mm" hourValues="[7,8,9,10,11,12,13,14,15,16,17,18,19,20]"
         (ionChange)="changeSince($event.target.value)">
       </ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>End</ion-label>
-      <ion-datetime
-        [(ngModel)]="until"
-        displayFormat="HH:mm"
-        (ionChange)="changeUntil($event.target.value)">
+      <ion-datetime [(ngModel)]="until" displayFormat="HH:mm" (ionChange)="changeUntil($event.target.value)">
       </ion-datetime>
     </ion-item>
-    <ion-item>
+    <ion-item lines="none">
       <ion-label>Room Types</ion-label>
       <ion-select [(ngModel)]="types" multiple>
         <ion-select-option value="auditorium">Auditoriums / Lecture Halls</ion-select-option>
