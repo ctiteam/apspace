@@ -33,4 +33,8 @@ export class StaffDirectoryPage implements OnInit {
     );
   }
 
+  trackById(value: StaffDirectory): string {
+    return value.CODE;
+  }
+
 }

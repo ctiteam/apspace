@@ -25,7 +25,7 @@
 
   <ng-template let-staffs [ngIf]="staff$ | async">
     <ion-virtual-scroll [items]="staffs | department:dept | search:term"
-      virtualTrackBy="trackById" approxItemHeight="68px">
+      [trackBy]="trackById" approxItemHeight="68px">
       <ion-item *virtualItem="let staff" button [routerLink]="[staff.ID]" style="padding-top: 1px">
         <ion-avatar slot="start">
           <ion-img [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '_64x64.jpg'"
