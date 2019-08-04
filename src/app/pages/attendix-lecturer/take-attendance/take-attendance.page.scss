@@ -27,3 +27,9 @@ ion-item.stateL {
 ion-item.stateP {
   --background: #81c784 !important;
 }
+
+.qrCode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
