@@ -1,217 +1,12 @@
-// THEMES' COLORS
-:root .pink-accent-color {
-  --primary-color: #ec2a4d;
-  --sub-primary-color: #e84d69;
-}
-
-:root .red-accent-color {
-  --primary-color: #e54d42;
-  --sub-primary-color: #d96159;
-}
-
-// :root .white-accent-color {
-//   --primary-color: #ffffff;
-//   --sub-primary-color: #cccccc;
-// }
-
-:root .green-accent-color {
-  --primary-color: #08a14f;
-  --sub-primary-color: #49bf80;
-}
-
-:root .blue-accent-color {
-  --primary-color: #3a99d9;
-  --sub-primary-color: #5ba3d4;
-}
-
-:root .yellow-accent-color {
-  --primary-color: #dfa847;
-  --sub-primary-color: #d9ac5d;
-}
-
-// IONIC VARIABLES IN LIGHT THEME
-:root .light-theme {
-  --main-bg-color: #fafafa;
-  --secondary-bg-color: #f5f5f5;
-  --tertiary-bg-color: #e0e0e0;
-
-  --main-txt-color: #3b3939ee;
-  --secondary-txt-color: #3b3939d1;
-  --tertiary-txt-color: #3b3939a0;
-
-  --danger-color: #ec2a4d;
-  --success-color: #49b571;
-
-  --ion-background-color: var(--main-bg-color);
-
-  ion-toolbar {
-    --background: var(--secondary-bg-color);
-  }
-
-  ion-card {
-    --background: var(--secondary-bg-color);
-    --color: var(--secondary-txt-color);
-  }
-
-  ion-slides {
-    --bullet-background: var(--main-txt-color);
-  }
-
-  ion-tab-button {
-    --color: var(--tertiary-txt-color);
-  }
-
-  ion-radio {
-    --color: var(--main-txt-color);
-  }
-
-  quick-access-item {
-    &:hover {
-      ion-card {
-        --background: var(--tertiary-bg-color);
-      }
-    }
-  }
-}
-
-// IONIC VARIABLES IN DARK THEME
-:root .dark-theme {
-  --main-bg-color: #212121;
-  --secondary-bg-color: #303030;
-  --tertiary-bg-color: #424242;
-
-  --main-txt-color: #ffffffd1;
-  --secondary-txt-color: #bbbbbb;
-  --tertiary-txt-color: #ffffff77;
-
-  --danger-color: #ec2a4d;
-  --success-color: #49b571;
-
-  --ion-background-color: var(--main-bg-color);
-
-  ion-toolbar {
-    --background: var(--secondary-bg-color);
-  }
-
-  ion-card {
-    --background: var(--secondary-bg-color);
-    --color: var(--secondary-txt-color);
-  }
-
-  ion-slides {
-    --bullet-background: var(--main-txt-color);
-  }
-
-  ion-tab-button {
-    --color: var(--tertiary-txt-color);
-  }
-
-  ion-radio {
-    --color: var(--main-txt-color);
-  }
-
-  quick-access-item {
-    &:hover {
-      ion-card {
-        --background: var(--tertiary-bg-color);
-      }
-    }
-  }
-}
-
-// IONIC VARIABLES IN DARK THEME
-:root .dark-theme.pure {
-  --primary-color: #b0acac;
-  --main-bg-color: #101010;
-  --secondary-bg-color: #151515;
-  --tertiary-bg-color: #424242;
-
-  --main-txt-color: #999999;
-  --secondary-txt-color: #5e5c5c;
-  --tertiary-txt-color: #4d4b4b;
-
-  --danger-color: #ec2a4d;
-  --success-color: #49b571;
-
-  --ion-background-color: var(--main-bg-color);
-
-  ion-toolbar {
-    --background: var(--secondary-bg-color);
-  }
-
-  ion-card {
-    --background: var(--secondary-bg-color);
-    --color: var(--secondary-txt-color);
-  }
-
-  ion-slides {
-    --bullet-background: var(--main-txt-color);
-  }
-
-  ion-tab-button {
-    --color: var(--tertiary-txt-color);
-  }
-
-  ion-radio {
-    --color: var(--main-txt-color);
-  }
-
-  quick-access-item {
-    &:hover {
-      ion-card {
-        --background: var(--tertiary-bg-color);
-      }
-    }
-  }
-
-  ion-button.colored-background {
-    --background: var(--primary-color) !important;
-    --color: var(--tertiary-txt-color) !important;
-
-    &[aria-disabled="true"] {
-      --background: var(--primary-color) !important;
-      --color: var(--secondary-txt-color) !important;
-    }
-  }
-}
-
-ion-list {
-  background: var(--secondary-bg-color) !important;
-}
-
-.main-txt-color {
-  color: var(--main-txt-color);
-}
-
-ion-toolbar {
-  color: var(--tertiary-txt-color);
-}
-
-ion-card {
-
-  ion-card-subtitle,
-  .small-text {
-    color: var(--secondary-txt-color);
-  }
-}
-
-ion-item {
-  --background: var(--secondary-bg-color) !important;
-  --color: var(--main-txt-color) !important;
-  --background-activated: var(--tertiary-bg-color);
-  --border-color: var(--tertiary-bg-color);
-}
-
-ion-item-divider {
-  --background: var(--secondary-bg-color) !important;
-  --color: var(--tertiary-txt-color) !important;
-}
-
-ion-slide {
-  color: var(--main-txt-color);
-}
-
 // PAGES
+quick-access-item {
+  &:hover {
+    ion-card {
+      --background: var(--tertiary-bg-color) !important;
+    }
+  }
+}
+
 app-apcard {
 
   .strip-top,
@@ -300,6 +95,54 @@ events-list {
   }
 }
 
+
+// IONIC COMPONENTS
+ion-list {
+  background: var(--secondary-bg-color) !important;
+}
+
+ion-toolbar {
+  --background: var(--secondary-bg-color) !important;
+  color: var(--tertiary-txt-color) !important;
+}
+
+ion-card {
+
+  ion-card-subtitle,
+  .small-text {
+    color: var(--secondary-txt-color) !important;
+  }
+}
+
+ion-item {
+  --background: var(--secondary-bg-color) !important;
+  --color: var(--main-txt-color) !important;
+  --background-activated: var(--tertiary-bg-color) !important;
+  --border-color: var(--tertiary-bg-color) !important;
+}
+
+ion-item-divider {
+  --background: var(--secondary-bg-color) !important;
+  --color: var(--tertiary-txt-color) !important;
+}
+
+ion-slide {
+  color: var(--main-txt-color) !important;
+}
+
+ion-card {
+  --background: var(--secondary-bg-color) !important;
+  --color: var(--secondary-txt-color) !important;
+}
+
+ion-slides {
+  --bullet-background: var(--main-txt-color) !important;
+}
+
+ion-tab-button {
+  --color: var(--tertiary-txt-color) !important;
+}
+
 // FOLLOWING PRIMARY COLOR
 ion-slides {
   --bullet-background-active: var(--primary-color) !important;
@@ -307,7 +150,7 @@ ion-slides {
 
 ion-card {
   ion-card-title {
-    color: var(--primary-color);
+    color: var(--primary-color) !important;
   }
 }
 
@@ -316,19 +159,20 @@ ion-tab-button {
 }
 
 ion-radio {
-  --color-checked: var(--primary-color);
+  --color-checked: var(--primary-color) !important;
+  --color: var(--main-txt-color) !important;
 }
 
 ion-toggle {
-  --background: var(--secondary-txt-color);
-  --handle-background: var(--main-bg-color);
-  --background-checked: var(--tertiary-bg-color);
-  --handle-background-checked: var(--primary-color);
+  --background: var(--secondary-txt-color) !important;
+  --handle-background: var(--main-bg-color) !important;
+  --background-checked: var(--tertiary-bg-color) !important;
+  --handle-background-checked: var(--primary-color) !important;
 }
 
 ion-chip {
-  --background: var(--tertiary-bg-color);
-  --color: var(--main-txt-color);
+  --background: var(--tertiary-bg-color) !important;
+  --color: var(--main-txt-color) !important;
 }
 
 // ion-datetime
@@ -346,30 +190,6 @@ button.picker-button {
 
 .picker-opt {
   color: var(--tertiary-txt-color);
-}
-
-.normal-text {
-  color: var(--main-txt-color) !important;
-}
-
-.colored-text {
-  color: var(--primary-color) !important;
-}
-
-.colored-border {
-  border-color: var(--primary-color) !important;
-}
-
-.colored-background {
-  background: var(--primary-color) !important;
-}
-
-ion-button.colored-background {
-  --background: var(--primary-color) !important;
-
-  &[aria-disabled="true"] {
-    --background: var(--primary-color) !important;
-  }
 }
 
 // ALERT STYLES
@@ -464,5 +284,31 @@ ion-button.colored-background {
     .alert-radio-inner.sc-ion-alert-md {
       background-color: var(--primary-color) !important;
     }
+  }
+}
+
+
+// OUR OWN LIBRARY
+.main-txt-color {
+  color: var(--main-txt-color) !important;
+}
+
+.colored-text {
+  color: var(--primary-color) !important;
+}
+
+.colored-border {
+  border-color: var(--primary-color) !important;
+}
+
+.colored-background {
+  background: var(--primary-color) !important;
+}
+
+ion-button.colored-background {
+  --background: var(--primary-color) !important;
+
+  &[aria-disabled="true"] {
+    --background: var(--primary-color) !important;
   }
 }

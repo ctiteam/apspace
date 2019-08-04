@@ -16,12 +16,12 @@ export class UserSettingsService {
   private dashboardSections: BehaviorSubject<string[]>;
 
   accentColors = [
-    { name: 'red-accent-color', value: '#e54d42' },
-    { name: 'yellow-accent-color', value: '#DFA847' },
-    { name: 'blue-accent-color', value: '#3A99D9' },
-    { name: 'green-accent-color', value: '#08a14f' },
-    { name: 'red-accent-color', value: '#ec2a4d' },
-    { name: 'white-accent-color', value: '#b0acac' }
+    { name: 'red-accent-color', value: '#e54d42', rgbaValues: '229, 77, 66' },
+    { name: 'yellow-accent-color', value: '#DFA847', rgbaValues: '223, 168, 71' },
+    { name: 'blue-accent-color', value: '#3A99D9', rgbaValues: '58, 153, 217' },
+    { name: 'green-accent-color', value: '#08a14f', rgbaValues: '8, 161, 79' },
+    { name: 'red-accent-color', value: '#ec2a4d', rgbaValues: '236, 42, 77' },
+    { name: 'white-accent-color', value: '#b0acac', rgbaValues: '176, 172, 172' }
   ];
 
   defaultDashboardSectionsSettings = [
@@ -93,11 +93,11 @@ export class UserSettingsService {
     this.accentColor.next(val);
   }
 
-  getAccentColorValue() {
+  getAccentColorRgbaValue() {
     let value = '';
     this.accentColors.forEach(accentColor => {
       if (accentColor.name === this.accentColor.value) {
-        value = accentColor.value;
+        value = accentColor.rgbaValues;
       }
     });
     return value;

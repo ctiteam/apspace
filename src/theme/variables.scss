@@ -76,3 +76,79 @@
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
 }
+
+// THEMES' COLORS
+:root .pink-accent-color {
+  --primary-color: #ec2a4d;
+  --sub-primary-color: #e84d69;
+}
+
+:root .red-accent-color {
+  --primary-color: #e54d42;
+  --sub-primary-color: #d96159;
+}
+
+:root .green-accent-color {
+  --primary-color: #08a14f;
+  --sub-primary-color: #49bf80;
+}
+
+:root .blue-accent-color {
+  --primary-color: #3a99d9;
+  --sub-primary-color: #5ba3d4;
+}
+
+:root .yellow-accent-color {
+  --primary-color: #dfa847;
+  --sub-primary-color: #d9ac5d;
+}
+
+// IONIC VARIABLES IN LIGHT THEME
+:root .light-theme {
+  --main-bg-color: #fafafa;
+  --secondary-bg-color: #f5f5f5;
+  --tertiary-bg-color: #e0e0e0;
+
+  --main-txt-color: #454343;
+  --secondary-txt-color: #5c5959;
+  --tertiary-txt-color: #696666;
+
+  --danger-color: #ec2a4d;
+  --success-color: #49b571;
+
+  --ion-background-color: var(--main-bg-color);
+}
+
+// IONIC VARIABLES IN DARK THEME
+:root .dark-theme {
+  --main-bg-color: #212121;
+  --secondary-bg-color: #303030;
+  --tertiary-bg-color: #424242;
+
+  --main-txt-color: #e8e6e6;
+  --secondary-txt-color: #bbbbbb;
+  --tertiary-txt-color: #a19d9d;
+
+  --danger-color: #ec2a4d;
+  --success-color: #49b571;
+
+  --ion-background-color: var(--main-bg-color);
+
+}
+
+// IONIC VARIABLES IN DARK THEME
+:root .dark-theme.pure {
+  --primary-color: #b0acac;
+  --main-bg-color: #101010;
+  --secondary-bg-color: #151515;
+  --tertiary-bg-color: #424242;
+
+  --main-txt-color: #999999;
+  --secondary-txt-color: #5e5c5c;
+  --tertiary-txt-color: #4d4b4b;
+
+  --danger-color: #ec2a4d;
+  --success-color: #49b571;
+
+  --ion-background-color: var(--main-bg-color);
+}
