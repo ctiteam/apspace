@@ -1,8 +1,12 @@
 // PAGES
-quick-access-item {
-  &:hover {
+app-more {
+  .menu-item {
     ion-card {
-      --background: var(--tertiary-bg-color) !important;
+      --background: var(--secondary-bg-color) !important;
+
+      ion-card-content {
+        color: var(--main-txt-color);
+      }
     }
   }
 }
@@ -51,6 +55,14 @@ app-attendance {
 }
 
 // COMPONENETS
+quick-access-item {
+  &:hover {
+    ion-card {
+      --background: var(--tertiary-bg-color) !important;
+    }
+  }
+}
+
 events-list {
   .event-container {
     background: var(--secondary-bg-color);
@@ -97,6 +109,11 @@ events-list {
 
 
 // IONIC COMPONENTS
+ion-searchbar {
+  --placeholder-color: var(--secondary-txt-color) !important;
+  --color: var(--main-txt-color) !important;
+}
+
 ion-list {
   background: var(--secondary-bg-color) !important;
 }
@@ -289,8 +306,12 @@ button.picker-button {
 
 
 // OUR OWN LIBRARY
-.main-txt-color {
+.main-text-color {
   color: var(--main-txt-color) !important;
+}
+
+.secondary-txt-color {
+  color: var(--secondary-txt-color) !important;
 }
 
 .colored-text {
