@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
@@ -23,7 +23,6 @@ export class StaffDirectoryInfoPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private ws: WsApiService,
-    private router: Router
   ) { }
 
   ngOnInit() {
