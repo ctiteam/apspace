@@ -16,8 +16,10 @@ export class ClassesPage implements OnInit {
 
   classcode$: Observable<string[]>;
 
-  selClasscode: string;
-  selDatetime: string;
+  classcode: string;
+  startTime: string;
+  endTime: string;
+  classType: string;
 
   constructor(private ws: WsApiService, public navCtrl: NavController) { }
 
@@ -29,7 +31,7 @@ export class ClassesPage implements OnInit {
   }
 
   markAttendance() {
-    console.log(this.selClasscode, this.selDatetime);
+    console.log(this.classcode, this.startTime);
   }
 
   openPage(page: string) {

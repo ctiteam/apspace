@@ -15,10 +15,10 @@
 <ion-content padding>
   <ion-grid *ngIf="auto; else override">
     <ion-row *ngIf="otp$ | async as otp">
-      <ion-col size="8">
+      <ion-col size="9" align-self-stretch>
         <qrcode *ngIf="otp" [qrdata]="otp" level="H"></qrcode>
       </ion-col>
-      <ion-col size="4">
+      <ion-col size="3" align-self-stretch>
         <div *ngFor="let c of otp | chars" class="otp">
           {{ c }}
         </div>
