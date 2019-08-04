@@ -3,7 +3,6 @@ import { BehaviorSubject } from 'rxjs';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
-import { DashboardSection } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +13,7 @@ export class UserSettingsService {
   private pureDarkTheme: BehaviorSubject<boolean>;
   private accentColor: BehaviorSubject<string>;
   private dashboardSections: BehaviorSubject<string[]>;
+  private MenuUI: BehaviorSubject<'cards' | 'list'>;
 
   accentColors = [
     { name: 'red-accent-color', value: '#e54d42', rgbaValues: '229, 77, 66' },
@@ -45,6 +45,7 @@ export class UserSettingsService {
     this.pureDarkTheme = new BehaviorSubject(false);
     this.accentColor = new BehaviorSubject('blue-accent-color');
     this.dashboardSections = new BehaviorSubject(this.defaultDashboardSectionsSettings);
+    this.MenuUI = new BehaviorSubject('list');
   }
 
   // DARK THEME
@@ -104,7 +105,7 @@ export class UserSettingsService {
   }
 
 
-  // DASHBOARD ALERTS
+  // DASHBOARD SECTIONS
   setShownDashboardSections(val: string[]) {
     this.storage.set('dashboard-sections', val);
     this.dashboardSections.next(val);
@@ -112,6 +113,16 @@ export class UserSettingsService {
 
   getShownDashboardSections() {
     return this.dashboardSections.asObservable();
+  }
+
+  // MENU UI
+  setMenuUI(val: 'cards' | 'list') {
+    this.storage.set('menu-ui', val);
+    this.MenuUI.next(val);
+  }
+
+  getMenuUI() {
+    return this.MenuUI.asObservable();
   }
 
   changeStatusBarColor(darkThemeSelected: boolean) {
@@ -125,9 +136,8 @@ export class UserSettingsService {
   }
 
   getUserSettingsFromStorage() {
-    // GETTING THE USER SETTINGS FROM STORAGE (THEME + ACCENT COLOR)
-    // IT IS CALLED ONLY HERE AND THE VALUE PASSED TO THE USER SETTINGS PROVIDER
-    // BY DEFAULT THE LIGHT THEME WILL BE APPLIED
+    // GETTING THE USER SETTINGS FROM STORAGE
+    // IT IS CALLED ONLY IN APP COMPONENT AND THE VALUE PASSED BACK TO HERE
     this.storage.get('dark-theme').then(value => {
       if (value) {
         this.toggleDarkTheme(value);
@@ -148,6 +158,11 @@ export class UserSettingsService {
       value
         ? this.setAccentColor(value)
         : this.setAccentColor('blue-accent-color');
+    });
+    this.storage.get('menu-ui').then(value => {
+      value
+        ? this.setMenuUI(value)
+        : this.setMenuUI('list');
     });
     this.storage.get('dashboard-sections').then(value => {
       value

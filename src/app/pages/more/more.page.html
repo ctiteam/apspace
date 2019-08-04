@@ -8,7 +8,7 @@
 
 <ion-content>
   <!-- LISTS UI -->
-  <div class="masonry-list" *ngIf="menuUI === 'lists'; else menuCardsUI">
+  <div class="masonry-list" *ngIf="menuUI === 'list'; else menuCardsUI">
     <ng-container *ngFor="let menu of menuFull">
       <ng-container *ngIf="menu.items | fuse:term as pages">
         <div class="masonry-item" *ngIf="pages.length">

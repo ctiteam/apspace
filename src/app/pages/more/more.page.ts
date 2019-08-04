@@ -1,19 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
-import { CasTicketService } from '../../services';
+import { CasTicketService, UserSettingsService } from '../../services';
 import { Role } from '../../interfaces';
 
-import { MenuItem, MenuGroup } from './menu.interface';
+import { MenuGroup } from './menu.interface';
 
 @Component({
   selector: 'app-more',
   templateUrl: './more.page.html',
   styleUrls: ['./more.page.scss'],
 })
-export class MorePage {
-  menuUI: 'lists' | 'cards' = 'cards';
+export class MorePage implements OnInit {
+  menuUI: 'list' | 'cards';
   term = '';
 
   /* tslint:disable:no-bitwise */
@@ -254,7 +254,16 @@ export class MorePage {
     public router: Router,
     public iab: InAppBrowser,
     private cas: CasTicketService,
+    private userSettings: UserSettingsService
   ) { }
+
+  ngOnInit() {
+    this.userSettings.getMenuUI().subscribe(
+      {
+        next: data => this.menuUI = data,
+      }
+    );
+  }
 
   /** Open page, manually check for third party pages. */
   openPage(url: string) {
