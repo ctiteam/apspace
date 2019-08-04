@@ -32,12 +32,12 @@ const routes: Routes = [
       {
         path: '',
         loadChildren: () => import('./pages/staff-directory/staff-directory.module').then(m => m.StaffDirectoryPageModule)
+      },
+      {
+        path: '',
+        loadChildren: () => import('./pages/staff-directory-info/staff-directory-info.module').then(m => m.StaffDirectoryInfoPageModule)
       }
     ]
-  },
-  {
-    path: 'staff',
-    loadChildren: () => import('./pages/staff-directory-info/staff-directory-info.module').then(m => m.StaffDirectoryInfoPageModule)
   },
   {
     path: 'feedback',

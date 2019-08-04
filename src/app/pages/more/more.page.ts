@@ -249,7 +249,7 @@ export class MorePage {
         // },
         {
           title: 'Staff Directory',
-          url: '',
+          url: '/staffs',
           size: 'medium',
           color: 'dark-orange',
           icon: 'people',
