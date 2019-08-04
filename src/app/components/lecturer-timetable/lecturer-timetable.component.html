@@ -1,94 +1,70 @@
-<ng-template let-calendar [ngIf]="calendar$ | async" [ngIfElse]="loading">
-  <ng-template [ngIf]="calendar.length" [ngIfElse]="empty">
-    <div *ngFor="let week of calendar">
-      <ion-card>
-        <ion-card-header style="padding-bottom: 0px; padding-top: 0px">
-          <div (click)='show(week, $event.target)'>
-            <ion-item tappable lines="none" no-padding>
-              <strong>WEEK</strong>: {{ week.week | date }}
-              <span slot="end">{{ selectedWeeks.indexOf(week) !== -1 ? '-' : '+' }}</span>
-            </ion-item>
-          </div>
-        </ion-card-header>
+<ng-container *ngIf="calendar$ | async as calendar; else loading">
+  <ng-container *ngIf="calendar | length; else empty">
+    <ion-card *ngFor="let week of calendar | keyvalue">
+      <ion-card-header style="padding-bottom: 0px; padding-top: 0px">
+        <ion-item tappable lines="none" no-padding (click)='show(week.key, $event.target)'>
+          <strong>Week</strong>: {{ week.key | fromWeek | date }}
+          <span slot="end">{{ selectedWeeks.includes(week.key) ? '+' : '-' }}</span>
+        </ion-item>
+      </ion-card-header>
 
-        <div *ngIf="selectedWeeks.indexOf(week) !== -1" [@easeInOut]>
-          <ion-card-content class="controlled-card">
-            
-              <ion-grid class="table-top" no-margin no-padding>
-                <ion-row no-padding>
-                  <ion-col size="12" size-sm="1">
-                    <h2 class="text-bold">
-                      Day
-                    </h2>
-                  </ion-col>
-                  <ion-col size="12" size-sm="2">
-                    <h2 class="text-bold">
-                      Time
-                    </h2>
-                  </ion-col>
-                  <ion-col size="12" size-sm="2">
-                    <h2 class="text-bold">
-                      Module
-                    </h2>
-                  </ion-col>
-                  <ion-col size="12" size-sm="3">
-                    <h2 class="text-bold">
-                      Location
-                    </h2>
-                  </ion-col>
-                  <ion-col size="12" size-sm="4">
-                    <h2 class="text-bold">
-                      Intake(s)
-                    </h2>
-                  </ion-col>
-                  
-                  <hr style="border: 2px solid var(--secondary-txt-color)" class="marker"/>
-                </ion-row>
-              </ion-grid>
+      <ion-card-content *ngIf="selectedWeeks.includes(week.key)" [@easeInOut] class="controlled-card">
+        <ion-grid class="table-top" no-margin no-padding>
+          <ion-row no-padding>
+            <ion-col size="12" size-sm="1"><h2 class="text-bold">Day</h2></ion-col>
+            <ion-col size="12" size-sm="2"><h2 class="text-bold">Time</h2></ion-col>
+            <ion-col size="12" size-sm="2"><h2 class="text-bold">Module</h2></ion-col>
+            <ion-col size="12" size-sm="3"><h2 class="text-bold">Location</h2></ion-col>
+            <ion-col size="12" size-sm="4"><h2 class="text-bold">{{ week.value.length > 1 ? 'Intakes' : 'Intake' }}</h2></ion-col>
 
-              <div *ngFor="let day of week.days">
-                <ion-grid no-padding no-margin *ngFor="let event of day.events">
-                  <ion-row>
-                    <ion-col size="12" size-sm="1">
-                      <span class="marker">Day: </span>
-                      <span>{{ day.day | date:'E' }}</span>
-                    </ion-col>
+            <hr style="border: 2px solid var(--secondary-txt-color)" class="marker"/>
+          </ion-row>
+        </ion-grid>
 
-                    <ion-col size="12" size-sm="2">
-                      <span class="marker">Time: </span>
-                      {{ event.start | date:'shortTime' }} - {{ event.end | date:'shortTime' }}
-                    </ion-col>
+        <ion-grid *ngFor="let day of week.value" no-padding no-margin>
+          <ion-row>
+            <ion-col size="12" size-sm="1">
+              <span class="marker">Day: </span>
+              {{ day.start | date:'E' }}
+            </ion-col>
 
-                    <ion-col size="12" size-sm="2">
-                      <span class="marker">Module: </span>
-                      <span>{{ event.name }}</span>
-                    </ion-col>
+            <ion-col size="12" size-sm="2">
+              <span class="marker">Time: </span>
+              {{ day.start | date:'shortTime' }} - {{ day.end | date:'shortTime' }}
+            </ion-col>
 
-                    <ion-col size="12" size-sm="3">
-                      <span class="marker">Location: </span>
-                      <span>{{ event.loc }}</span>
-                    </ion-col>
+            <ion-col size="12" size-sm="2">
+              <span class="marker">Module: </span>
+              {{ day.module }}
+            </ion-col>
 
-                    <ion-col size="12" size-sm="4">
-                      <span class="marker">Intakes: </span>
-                      <span>{{ event.intakes.join(", ") }}</span>
-                    </ion-col>
-                  </ion-row>
-                  
-                  <hr style="border: 2px solid var(--secondary-txt-color)" class="marker"/>
-                </ion-grid>
-              </div>
-          </ion-card-content>
-        </div>
-      </ion-card>
-    </div>
-  </ng-template>
+            <ion-col size="12" size-sm="3">
+              <span class="marker">Location: </span>
+              {{ day.loc }}
+            </ion-col>
+
+            <ion-col size="12" size-sm="4">
+              <span class="marker">Intakes: </span>
+              {{ day.intakes.join(", ") }}
+            </ion-col>
+
+            <!-- mobile separator -->
+            <hr style="border: 2px solid var(--secondary-txt-color)" class="marker">
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
   <ng-template #empty>
     <ion-card>
-      <ion-card-header>No timetable Available</ion-card-header>
+      <ion-card-content>No timetable available</ion-card-content>
     </ion-card>
   </ng-template>
-</ng-template>
+</ng-container>
 <ng-template #loading>
-  <skeleton-item height="30px"></skeleton-item>
+  <ion-card>
+    <ion-card-content>
+      <ion-skeleton-text animated width="100px" style="line-height: 14px"></ion-skeleton-text>
+    </ion-card-content>
+  </ion-card>
 </ng-template>

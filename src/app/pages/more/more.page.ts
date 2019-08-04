@@ -198,7 +198,7 @@ export class MorePage {
         // },
         {
           title: 'Staff Directory',
-          url: '',
+          url: 'staffs',
           img: 'assets/img/staff-directory.png',
           role: Role.Student | Role.Lecturer | Role.Admin,
           tags: ['lecturer', 'academic']

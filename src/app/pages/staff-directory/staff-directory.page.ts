@@ -5,7 +5,6 @@ import { filter, finalize, map } from 'rxjs/operators';
 
 import { StaffDirectory } from '../../interfaces';
 import { WsApiService } from '../../services';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-staff-directory',
@@ -19,18 +18,7 @@ export class StaffDirectoryPage implements OnInit {
   staff$: Observable<StaffDirectory[]>;
   staffType$: Observable<string[]>;
 
-  constructor(
-    private ws: WsApiService,
-    private router: Router
-  ) { }
-
-  // @HostListener('keydown', ['$event'])
-  // onkeydown(ev) {
-  //   if (ev.keyCode === 13) {
-  //     const activeElement = document.activeElement as HTMLElement;
-  //     activeElement && activeElement.blur && activeElement.blur();
-  //   }
-  // }
+  constructor(private ws: WsApiService) { }
 
   ngOnInit() {
     this.doRefresh();
@@ -45,8 +33,8 @@ export class StaffDirectoryPage implements OnInit {
     );
   }
 
-  openInfo(id = null) {
-    this.router.navigate(['/staff', id]);
+  trackById(value: StaffDirectory): string {
+    return value.CODE;
   }
 
 }
