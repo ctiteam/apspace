@@ -21,7 +21,7 @@
             <ion-card-content no-padding>
               <ion-list no-margin>
                 <ion-item-group>
-                  <ion-item *ngFor="let page of pages">
+                  <ion-item (click)="openPage(page.url)" *ngFor="let page of pages">
                     <ion-avatar slot="start" style="--border-radius: 0">
                       <img [src]="page.img">
                     </ion-avatar>
