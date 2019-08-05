@@ -10,7 +10,7 @@
             <ion-grid>
               <ion-row>
                 <ion-col>
-                  <ion-avatar class="dashboard-avatar float-left">
+                  <ion-avatar class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
                     <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo"
                       onerror="this.src='assets/img/profile.svg'" alt="Avatar">
                   </ion-avatar>
