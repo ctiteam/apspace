@@ -16,12 +16,7 @@
   <ion-grid *ngIf="auto; else override">
     <ion-row *ngIf="otp$ | async as otp">
       <ion-col size="9" align-self-stretch>
-        <qrcode
-        *ngIf="otp"
-        [qrdata]="otp"
-        size="520"
-        level="H"
-        class="qrCode"></qrcode>
+        <qrcode *ngIf="otp" [qrdata]="otp" size="520" level="H"></qrcode>
       </ion-col>
       <ion-col size="3" align-self-stretch>
         <div *ngFor="let c of otp | chars" class="otp">
