@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-title>{{ (staff$ | async)?.TITLE | urldecode }} Info</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -13,7 +13,7 @@
           <ion-card>
             <ion-card-header>
                 <ion-avatar class="profile-image">
-                    <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '.jpg'" onerror="this.src='assets/img/profile.svg'">
+                    <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '.jpg'" onerror="this.src='assets/img/no_img.png'">
                 </ion-avatar>
                 
                 <ion-button class="btn-restricted colored-background">Book Consultation Hour</ion-button>

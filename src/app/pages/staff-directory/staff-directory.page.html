@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-title>Staff Directory</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -29,7 +29,7 @@
       <ion-item *virtualItem="let staff" button [routerLink]="[staff.ID]" style="padding-top: 1px">
         <ion-avatar slot="start">
           <ion-img [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '_64x64.jpg'"
-            (ionError)="$event.target.src = 'assets/img/profile.svg'"></ion-img>
+            (ionError)="$event.target.src = 'assets/img/no_img.png'"></ion-img>
         </ion-avatar>
         <ion-text>
           <h2>{{ staff.FULLNAME }}</h2>
