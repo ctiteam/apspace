@@ -22,8 +22,9 @@ export class TakeAttendancePage implements OnInit {
 
   schedule = 'a';
 
-  auto = true;
+  auto = false;
   term = '';
+  type = 'A';
 
   otp$: Observable<number>;
   lastMarked$: Observable<Status[]>;

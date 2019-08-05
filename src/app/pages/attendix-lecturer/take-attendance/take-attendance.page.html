@@ -31,8 +31,23 @@
     </ion-row>
   </ion-grid>
   <ng-template #override>
-    <ion-searchbar [(ngModel)]="term"></ion-searchbar>
-    <ion-virtual-scroll [items]="students$ | async | search:term" [trackBy]="trackById" approxItemHeight="48px">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-searchbar [(ngModel)]="term"></ion-searchbar>
+        </ion-col>
+        <ion-col size="2">
+          <ion-select [(ngModel)]="type" placeholder="Attendance" interface="popover">
+            <ion-select-option value="">Any</ion-select-option>
+            <ion-select-option value="P">Present</ion-select-option>
+            <ion-select-option value="L">Late</ion-select-option>
+            <ion-select-option value="A">Absent</ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-virtual-scroll [items]="students$ | async | attendance:type | search:term"
+      [trackBy]="trackById" approxItemHeight="48px">
       <ion-card *virtualItem="let student">
         <ion-item [ngClass]="'state' + student.attendance">
           <ion-img slot="start" (ionError)="$event.target.src = 'assets/img/profile.svg'"></ion-img>
