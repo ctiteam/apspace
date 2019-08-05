@@ -38,12 +38,14 @@ export class ProfilePage implements OnInit, AfterViewInit {
   ngOnInit() {
     this.settings.ready().then(() => {
       const role = this.settings.get('role');
-      if (role && Role.Student) {
+      // tslint:disable-next-line:no-bitwise
+      if (role & Role.Student) {
         this.studentRole = true;
         this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo', true);
         this.profile$ = this.ws.get<StudentProfile>('/student/profile', true);
         this.getProfile();
-      } else if (role && (Role.Lecturer || Role.Admin)) {
+      // tslint:disable-next-line:no-bitwise
+      } else if (role & (Role.Lecturer | Role.Admin)) {
         this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile', true);
       }
       this.setUserCountry();
@@ -56,7 +58,8 @@ export class ProfilePage implements OnInit, AfterViewInit {
 
   setUserCountry() {
     const role = this.settings.get('role');
-    if (role && Role.Student) {
+    // tslint:disable-next-line:no-bitwise
+    if (role & Role.Student) {
       this.ws.get<StudentProfile>('/student/profile').pipe(
         tap(p => {
           this.countryName = p.COUNTRY;
