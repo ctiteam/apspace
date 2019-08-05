@@ -15,6 +15,7 @@ export class SettingsPage implements OnInit {
   activeAccentColor: string;
   darkThemeEnabled = false;
   pureDarkThemeEnabled = false;
+  menuUI: 'cards' | 'list' = 'list';
   dashboardSections;
 
   allDashboardSections = [
@@ -62,6 +63,12 @@ export class SettingsPage implements OnInit {
           next: value => (this.activeAccentColor = value)
         });
     this.userSettings
+      .getMenuUI()
+      .subscribe(
+        {
+          next: value => (this.menuUI = value)
+        });
+    this.userSettings
       .getShownDashboardSections()
       .subscribe(
         {
@@ -95,6 +102,10 @@ export class SettingsPage implements OnInit {
 
   toggleAccentColor() {
     this.userSettings.setAccentColor(this.activeAccentColor);
+  }
+
+  toggleMenuUI() {
+    this.userSettings.setMenuUI(this.menuUI);
   }
 
   clearCache() {

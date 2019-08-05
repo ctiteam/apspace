@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 
 import { CasTicketService } from '../services';
 
@@ -15,7 +15,12 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     if (!await this.cas.isAuthenticated()) {
-      this.router.navigate(['/login']);
+      // TODO: find full path replacement for next
+      if (next.url.toString() === 'tabs') {  // first login need not to show redirect
+        this.router.navigate(['/login']);
+      } else {
+        this.router.navigate(['/login'], { queryParams: { redirect: next.url } });
+      }
       return false;
     }
     // TODO: check authorization

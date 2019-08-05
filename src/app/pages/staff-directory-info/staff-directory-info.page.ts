@@ -13,13 +13,17 @@ import { WsApiService } from '../../services';
 @Component({
   selector: 'app-staff-directory-info',
   templateUrl: './staff-directory-info.page.html',
-  styleUrls: ['./staff-directory-info.page.scss'],
+  styleUrls: ['./staff-directory-info.page.scss']
 })
+
 export class StaffDirectoryInfoPage implements OnInit {
 
   staff$: Observable<StaffDirectory>;
 
-  constructor(private route: ActivatedRoute, private ws: WsApiService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private ws: WsApiService,
+  ) { }
 
   ngOnInit() {
     const id = this.route.snapshot.params.id;

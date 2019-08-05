@@ -182,7 +182,7 @@ export class StudentDashboardPage implements OnInit {
     private dragulaService: DragulaService,
     private notificationService: NotificationService
   ) {
-    this.activeAccentColor = this.userSettings.getAccentColorValue();
+    this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
   }
 
   ngOnInit() {
@@ -523,7 +523,7 @@ export class StudentDashboardPage implements OnInit {
                 ticks: {
                   beginAtZero: true,
                   mirror: true,
-                  fontColor: this.activeAccentColor + 'ee',
+                  fontColor: 'rgba(' + this.activeAccentColor + ', 1)',
                   fontStyle: 900,
                   padding: -10
                 },
@@ -540,11 +540,11 @@ export class StudentDashboardPage implements OnInit {
           data: {
             datasets: [
               {
-                backgroundColor: '#62626255',
-                hoverBackgroundColor: this.activeAccentColor + '33',
+                backgroundColor: 'rgba(98, 98, 98, 0.3)',
+                hoverBackgroundColor: 'rgba(' + this.activeAccentColor + ', 0.3)',
                 borderColor: '#636363',
                 borderWidth: 2,
-                hoverBorderColor: this.activeAccentColor,
+                hoverBorderColor: 'rgba(' + this.activeAccentColor + ', 1)',
                 hoverBorderWidth: 2,
                 data: [],
               },
@@ -711,7 +711,7 @@ export class StudentDashboardPage implements OnInit {
                     ticks: {
                       beginAtZero: true,
                       mirror: true,
-                      fontColor: this.activeAccentColor + 'ee',
+                      fontColor: 'rgba(' + this.activeAccentColor + ', 1)',
                       fontStyle: 900,
                       padding: -10
                     },
@@ -729,11 +729,11 @@ export class StudentDashboardPage implements OnInit {
                 labels,
                 datasets: [
                   {
-                    backgroundColor: '#62626255',
-                    hoverBackgroundColor: this.activeAccentColor + '33',
+                    backgroundColor: 'rgba(98, 98, 98, 0.3)',
+                    hoverBackgroundColor: 'rgba(' + this.activeAccentColor + ', .3)',
                     borderColor: '#636363',
                     borderWidth: 2,
-                    hoverBorderColor: this.activeAccentColor,
+                    hoverBorderColor: 'rgba(' + this.activeAccentColor + ', 1)',
                     hoverBorderWidth: 2,
                     data: gpa,
                   },

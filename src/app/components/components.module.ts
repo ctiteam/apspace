@@ -11,6 +11,8 @@ import { EventsListComponent } from './events-list/events-list.component';
 import { DashboardCardComponent } from './dashboard-card/dashboard-card.component';
 import { QuickAccessItemComponent } from './quick-access-item/quick-access-item.component';
 import { PopoverComponent } from './popover/popover.component';
+import { LengthPipe } from './lecturer-timetable/length.pipe';
+import { FromWeekPipe } from './lecturer-timetable/from-week.pipe';
 
 @NgModule({
   declarations: [
@@ -21,8 +23,9 @@ import { PopoverComponent } from './popover/popover.component';
     EventsListComponent,
     DashboardCardComponent,
     QuickAccessItemComponent,
-    PopoverComponent
-
+    PopoverComponent,
+    LengthPipe,
+    FromWeekPipe
   ],
   imports: [
     CommonModule,

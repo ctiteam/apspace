@@ -32,12 +32,12 @@ const routes: Routes = [
       {
         path: '',
         loadChildren: () => import('./pages/staff-directory/staff-directory.module').then(m => m.StaffDirectoryPageModule)
+      },
+      {
+        path: '',
+        loadChildren: () => import('./pages/staff-directory-info/staff-directory-info.module').then(m => m.StaffDirectoryInfoPageModule)
       }
     ]
-  },
-  {
-    path: 'staff',
-    loadChildren: () => import('./pages/staff-directory-info/staff-directory-info.module').then(m => m.StaffDirectoryInfoPageModule)
   },
   {
     path: 'feedback',
@@ -132,7 +132,15 @@ const routes: Routes = [
   {
     path: 'notifications',
     loadChildren: () => import('./pages/notifications/notifications.module').then(m => m.NotificationsPageModule)
-  },  { path: 'profile', loadChildren: './pages/profile/profile.module#ProfilePageModule' },
+  },
+  {
+    path: 'classroom-finder',
+    loadChildren: './pages/classroom-finder/classroom-finder.module#ClassroomFinderPageModule'
+  },
+  {
+    path: 'profile',
+    loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule)
+  },
 
 ];
 

@@ -1,12 +1,12 @@
 <a>
   <ion-card no-padding no-margin text-center>
     <ion-card-header no-padding padding-top>
-      <ion-icon class="animated main-txt-color responsive-icon" [name]="icon"></ion-icon>
+      <ion-icon class="animated main-text-color responsive-icon" [name]="icon"></ion-icon>
     </ion-card-header>
     <ion-card-content class="pt-1-xs">
-      <p class="main-txt-color resposive-text">{{titleFirstWord}} <span *ngIf="titleSecondWord"
-          class="main-txt-color d-block">{{titleSecondWord}}</span></p>
-      <h3 class="main-txt-color responsive-h2 text-bolder margin-top" margin-top>
+      <p class="main-text-color resposive-text">{{titleFirstWord}} <span *ngIf="titleSecondWord"
+          class="main-text-color d-block">{{titleSecondWord}}</span></p>
+      <h3 class="main-text-color responsive-h2 text-bolder margin-top" margin-top>
         <span *ngIf="(observable$ | async) as data; else loading">
           <span *ngIf="data.value !== -1; else noData">
             <span *ngIf="outputMode==='percentage'">

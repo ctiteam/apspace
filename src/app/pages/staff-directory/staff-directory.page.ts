@@ -20,14 +20,6 @@ export class StaffDirectoryPage implements OnInit {
 
   constructor(private ws: WsApiService) { }
 
-  // @HostListener('keydown', ['$event'])
-  // onkeydown(ev) {
-  //   if (ev.keyCode === 13) {
-  //     const activeElement = document.activeElement as HTMLElement;
-  //     activeElement && activeElement.blur && activeElement.blur();
-  //   }
-  // }
-
   ngOnInit() {
     this.doRefresh();
   }
@@ -39,6 +31,10 @@ export class StaffDirectoryPage implements OnInit {
       map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT))).sort()),
       finalize(() => refresher && refresher.complete()),
     );
+  }
+
+  trackById(value: StaffDirectory): string {
+    return value.CODE;
   }
 
 }
