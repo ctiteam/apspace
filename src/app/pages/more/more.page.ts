@@ -21,16 +21,16 @@ export class MorePage implements OnInit {
     {
       title: 'Main',
       items: [
-        // {
-        //   title: 'Profile',
-        //   url: 'profile',
-        //   img: 'assets/img/profile.png',
-        //   role: Role.Student | Role.Lecturer | Role.Admin,
-        //   tags: ['mentor']
-        // },
+        {
+          title: 'Profile',
+          url: 'profile',
+          img: 'assets/img/profile.png',
+          role: Role.Student | Role.Lecturer | Role.Admin,
+          tags: ['mentor']
+        },
         {
           title: 'Fees',
-          url: '/fees',
+          url: 'fees',
           img: 'assets/img/fees.svg',
           role: Role.Student,
           tags: []
