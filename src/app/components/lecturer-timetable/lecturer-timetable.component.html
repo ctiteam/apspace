@@ -4,11 +4,11 @@
       <ion-card-header style="padding-bottom: 0px; padding-top: 0px">
         <ion-item tappable lines="none" no-padding (click)='show(week.key, $event.target)'>
           <strong>Week</strong>: {{ week.key | fromWeek | date }}
-          <span slot="end">{{ selectedWeeks.includes(week.key) ? '+' : '-' }}</span>
+          <span slot="end">{{ selectedWeeks.includes(week.key) ? '-' : '+' }}</span>
         </ion-item>
       </ion-card-header>
 
-      <ion-card-content *ngIf="selectedWeeks.includes(week.key)" [@easeInOut] class="controlled-card">
+      <ion-card-content *ngIf="selectedWeeks.includes(week.key)" class="controlled-card">
         <ion-grid class="table-top" no-margin no-padding>
           <ion-row no-padding>
             <ion-col size="12" size-sm="1"><h2 class="text-bold">Day</h2></ion-col>
@@ -49,7 +49,7 @@
             </ion-col>
 
             <!-- mobile separator -->
-            <hr style="border: 2px solid var(--secondary-txt-color)" class="marker">
+            <hr style="border: 2px solid var(--secondary-txt-color); width: 100%" class="marker">
           </ion-row>
         </ion-grid>
       </ion-card-content>
