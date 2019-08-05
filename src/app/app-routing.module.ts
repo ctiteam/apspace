@@ -137,6 +137,11 @@ const routes: Routes = [
     path: 'classroom-finder',
     loadChildren: './pages/classroom-finder/classroom-finder.module#ClassroomFinderPageModule'
   },
+  {
+    path: 'profile',
+    loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule)
+  },
+
 ];
 
 @NgModule({
