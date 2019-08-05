@@ -3,7 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from './guards/auth.guard';
 import { DeauthGuard } from './guards/deauth.guard';
+import { Role } from './interfaces';
 
+/* tslint:disable:no-bitwise */
 const routes: Routes = [
   {
     path: '',
@@ -12,17 +14,18 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule),
-    canActivate: [DeauthGuard]
+    canActivate: [DeauthGuard],
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
   },
   {
     path: 'tabs',
-    loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule),
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
   },
 
   {
     path: 'student-timetable',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/student-timetable/student-timetable.module').then(m => m.StudentTimetablePageModule)
   },
   {
@@ -41,7 +44,13 @@ const routes: Routes = [
   },
   {
     path: 'feedback',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/feedback/feedback.module').then(m => m.FeedbackPageModule)
+  },
+  {
+    path: 'bus-shuttle-services',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttlePagePageModule)
   },
   {
     path: 'attendix-lecturer',
@@ -60,14 +69,6 @@ const routes: Routes = [
       // { path: 'qr-otp', loadChildren: './pages/attendix/qr-otp/qr-otp.module#QrOtpPageModule' },
       // { path: 'take-picture', loadChildren: './pages/attendix/take-picture/take-picture.module#TakePicturePageModule' },
     ]
-  },
-  {
-    path: 'feedback',
-    loadChildren: () => import('./pages/feedback/feedback.module').then(m => m.FeedbackPageModule)
-  },
-  {
-    path: 'bus-shuttle-services',
-    loadChildren: () => import('./pages/bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttlePagePageModule)
   },
   {
     path: 'attendix-student',
@@ -101,52 +102,55 @@ const routes: Routes = [
   },
   {
     path: 'fees',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/fees/fees.module').then(m => m.FeesPageModule)
   },
   {
     path: 'holidays',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/holidays/holidays.module').then(m => m.HolidaysPageModule)
   },
   {
     path: 'graduate-verification-service',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/graduate-verification-service/graduate-verification-service.module')
       .then(m => m.GraduateVerificationServicePageModule)
   },
   {
     path: 'exam-schedule',
+    canActivate: [AuthGuard],
+    data: { role: Role.Student },
     loadChildren: () => import('./pages/exam-schedule/exam-schedule.module').then(m => m.ExamSchedulePageModule)
   },
   {
     path: 'news',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/news/news.module').then(m => m.NewsPageModule)
   },
   {
     path: 'settings',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsPageModule)
   },
   {
-    path: 'exam-schedule',
-    loadChildren: () => import('./pages/exam-schedule/exam-schedule.module').then(m => m.ExamSchedulePageModule)
-  },
-  {
-    path: 'news',
-    loadChildren: () => import('./pages/news/news.module').then(m => m.NewsPageModule)
-  },
-  {
     path: 'set-security-questions',
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./pages/settings/set-security-questions/set-security-questions.module').then(m => m.SetSecurityQuestionsPageModule)
   },
   {
     path: 'notifications',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/notifications/notifications.module').then(m => m.NotificationsPageModule)
   },
   {
     path: 'classroom-finder',
+    canActivate: [AuthGuard],
     loadChildren: './pages/classroom-finder/classroom-finder.module#ClassroomFinderPageModule'
   },
   {
     path: 'profile',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule)
   },
 

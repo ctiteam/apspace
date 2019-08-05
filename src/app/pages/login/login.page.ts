@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Events, Platform, ToastController, AlertController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Network } from '@ionic-native/network/ngx';
@@ -17,7 +17,7 @@ import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-ani
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
 
   apkey: string;
   password: string;
@@ -42,10 +42,7 @@ export class LoginPage implements OnInit {
     public iab: InAppBrowser
   ) { }
 
-  ngOnInit() {
-  }
-
-  onLoginBtnClicked() {
+  login() {
     this.userDidLogin = true;
     this.loginProcessLoading = true;
     if (!this.apkey || !this.password) {
@@ -95,9 +92,8 @@ export class LoginPage implements OnInit {
           this.userAuthenticated = true;
           setTimeout(() => {
             // Show the success message for 300 ms after completing the request
-            const url = this.route.snapshot.queryParams.redirect || ['/'];
-            this.router.navigate(url, { replaceUrl: true });
-            // this.navCtrl.navigateRoot('/');
+            const url = this.route.snapshot.queryParams.redirect || '/';
+            this.router.navigateByUrl(url, { replaceUrl: true });
           }, 300);
         }
       );

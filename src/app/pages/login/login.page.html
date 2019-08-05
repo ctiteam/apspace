@@ -8,7 +8,7 @@
 
       <!-- Form & Welcome Message -->
       <ion-col size="10" offset="1" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
-        <form (ngSubmit)="onLoginBtnClicked()" #loginForm="ngForm" no-padding>
+        <form (ngSubmit)="login()" #loginForm="ngForm" no-padding>
           <ion-row align-items-start>
             <ion-col class="title-text-wrapper" size="12">
               <h1><strong>APSpace,</strong></h1>
@@ -21,13 +21,13 @@
               <div input-field>
                 <!-- Input-field-apkey -->
                 <ion-item no-padding>
-                  <ion-input type="text" [placeholder]="'APKey'" [(ngModel)]="apkey" [autofocus]="true"
-                    [required]="true" name="apkey"></ion-input>
+                  <ion-input type="text" [placeholder]="'APKey'" [(ngModel)]="apkey" (keyup.enter)="login()"
+                    [autofocus]="true" [required]="true" name="apkey"></ion-input>
                 </ion-item>
                 <!-- Input-field-password -->
                 <ion-item no-padding>
                   <ion-input padding-start [type]="showPassword ? 'text' : 'password'" [placeholder]="'Password'"
-                    [(ngModel)]="password" (keyup.enter)="onLoginBtnClicked()" [required]="true" name="password">
+                    [(ngModel)]="password" (keyup.enter)="login()" [required]="true" name="password">
                   </ion-input>
                   <ion-button type="button" clear slot="end" (click)="showPassword = !showPassword">
                     <ion-icon name="eye"></ion-icon>
