@@ -1,7 +1,7 @@
 <ng-container *ngIf="calendar$ | async as calendar; else loading">
   <ng-container *ngIf="calendar | length; else empty">
     <ion-card *ngFor="let week of calendar | keyvalue">
-      <ion-card-header style="padding-bottom: 0px; padding-top: 0px">
+      <ion-card-header class="card-header">
         <ion-item tappable lines="none" no-padding (click)='show(week.key, $event.target)'>
           <strong>Week</strong>: {{ week.key | fromWeek | date }}
           <span slot="end">{{ selectedWeeks.includes(week.key) ? '-' : '+' }}</span>
@@ -17,7 +17,7 @@
             <ion-col size="12" size-sm="3"><h2 class="text-bold">Location</h2></ion-col>
             <ion-col size="12" size-sm="4"><h2 class="text-bold">{{ week.value.length > 1 ? 'Intakes' : 'Intake' }}</h2></ion-col>
 
-            <hr style="border: 2px solid var(--secondary-txt-color)" class="marker"/>
+            <hr class="marker hr-custom"/>
           </ion-row>
         </ion-grid>
 
@@ -49,7 +49,7 @@
             </ion-col>
 
             <!-- mobile separator -->
-            <hr style="border: 2px solid var(--secondary-txt-color); width: 100%" class="marker">
+            <hr class="marker hr-custom">
           </ion-row>
         </ion-grid>
       </ion-card-content>

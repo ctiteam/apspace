@@ -16,3 +16,8 @@ img {
     margin-right: 30px;
     display: block !important;
 }
+
+.hr-custom {
+    border: 2px solid var(--secondary-txt-color);
+    width: 100%;
+}

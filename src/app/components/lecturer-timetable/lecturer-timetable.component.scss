@@ -21,6 +21,16 @@ skeleton-item {
   visibility: hidden;
 }
 
+.card-header {
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+
+.hr-custom {
+  border: 2px solid var(--secondary-txt-color);
+  width: 100%;
+}
+
 @media (min-width: 600px) {
   .marker {
       display: none;
