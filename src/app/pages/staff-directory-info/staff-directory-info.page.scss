@@ -9,10 +9,9 @@ img {
   border-radius: 11px;
 }
 
-.btn-restricted {
-  margin-left: 20px;
-  margin-right: 30px;
-  display: block !important;
+.chatInTeamsBtn {
+  --background: #464775;
+  --color: white;
 }
 
 .hr-custom {

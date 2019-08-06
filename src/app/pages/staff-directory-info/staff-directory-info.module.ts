@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { StaffDirectoryInfoPage } from './staff-directory-info.page';
 import { UrldecodePipe } from '../../pipes/urldecode.pipe';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { AppLauncherService } from 'src/app/services';
 
 const routes: Routes = [
   {
@@ -24,6 +25,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ComponentsModule
   ],
+  providers: [AppLauncherService],
   declarations: [StaffDirectoryInfoPage, UrldecodePipe]
 })
 export class StaffDirectoryInfoPageModule { }

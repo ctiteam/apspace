@@ -16,50 +16,59 @@
                 <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '.jpg'"
                   onerror="this.src='assets/img/no_img.png'">
               </ion-avatar>
-
-              <ion-button class="btn-restricted colored-background">Book Consultation Hour</ion-button>
-
-              <hr class="hr-custom" />
+              <hr margin-top margin-button class="hr-custom" />
             </ion-card-header>
 
             <ion-card-content style="padding-top: 0px">
-              <ion-text>
-                <h2 class="secondary-txt-color">Name:</h2>
-                <h2 class="main-text-color text-bold">{{ staff.FULLNAME }}</h2>
+              <h2 class="secondary-txt-color">Name:</h2>
+              <h2 class="main-text-color text-bold">{{ staff.FULLNAME }}</h2>
+
+              <br>
+
+              <h2 class="secondary-txt-color">Job Title:</h2>
+              <h2 class="main-text-color text-bold" [innerHTML]="staff.TITLE"></h2>
+
+              <br>
+
+              <h2 class="secondary-txt-color">Email:</h2>
+              <h2><a class="colored-text text-bold" href="mailto:{{staff.EMAIL}}">{{ staff.EMAIL }}</a></h2>
+
+              <br>
+
+              <div *ngIf="staff.LOCATION">
+                <h2 class="secondary-txt-color">Office Location:</h2>
+                <h2 class="text-bold main-text-color">{{ staff.LOCATION }}</h2>
 
                 <br>
+              </div>
 
-                <h2 class="secondary-txt-color">Job Title:</h2>
-                <h2 class="main-text-color text-bold" [innerHTML]="staff.TITLE"></h2>
+              <h2 class="secondary-txt-color">Contact Number:</h2>
+              <h2><a class="colored-text text-bold" href="tel:+60389961000">+6 03-8996 1000 (Ext.
+                  {{ staff.EXTENSION }})</a>
+              </h2>
 
+              <br>
+
+              <div *ngIf="staff.DEPARTMENT || staff.DEPARTMENT2 || staff.DEPARTMENT3">
+                <h2 class="secondary-txt-color">Functional Area(s):</h2>
+                <h2 class="text-bold main-text-color" *ngIf="staff.DEPARTMENT" [innerHTML]="staff.DEPARTMENT"></h2>
+                <h2 class="text-bold main-text-color" *ngIf="staff.DEPARTMENT2" [innerHTML]="staff.DEPARTMENT2"></h2>
+                <h2 class="text-bold main-text-color" *ngIf="staff.DEPARTMENT3" [innerHTML]="staff.DEPARTMENT3"></h2>
                 <br>
+              </div>
 
-                <h2 class="secondary-txt-color">Email:</h2>
-                <h2><a class="colored-text text-bold" href="mailto:{{staff.EMAIL}}">{{ staff.EMAIL }}</a></h2>
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    <ion-button expand="full" class="colored-background">Book Consultation Hour</ion-button>
+                  </ion-col>
+                  <ion-col>
+                    <ion-button class="chatInTeamsBtn" expand="full" (click)="chatInTeams(staff.ID)">Chat in teams</ion-button>
 
-                <br>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
 
-                <div *ngIf="staff.LOCATION">
-                  <h2 class="secondary-txt-color">Office Location:</h2>
-                  <h2 class="text-bold main-text-color">{{ staff.LOCATION }}</h2>
-
-                  <br>
-                </div>
-
-                <h2 class="secondary-txt-color">Contact Number:</h2>
-                <h2><a class="colored-text text-bold" href="tel:+60389961000">+6 03-8996 1000 (Ext. {{ staff.EXTENSION }})</a>
-                </h2>
-
-                <br>
-
-                <div *ngIf="staff.DEPARTMENT || staff.DEPARTMENT2 || staff.DEPARTMENT3">
-                  <h2 class="secondary-txt-color">Functional Area(s):</h2>
-                  <h2 class="text-bold main-text-color" *ngIf="staff.DEPARTMENT" [innerHTML]="staff.DEPARTMENT"></h2>
-                  <h2 class="text-bold main-text-color" *ngIf="staff.DEPARTMENT2" [innerHTML]="staff.DEPARTMENT2"></h2>
-                  <h2 class="text-bold main-text-color" *ngIf="staff.DEPARTMENT3" [innerHTML]="staff.DEPARTMENT3"></h2>
-                </div>
-
-              </ion-text>
             </ion-card-content>
           </ion-card>
         </ion-col>
