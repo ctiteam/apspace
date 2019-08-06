@@ -38,6 +38,7 @@ export class WsApiService {
    * @param options.params - additional request parameters (default: {})
    * @param options.timeout - request timeout (default: 10000)
    * @param options.url - url of web service (default: apiUrl)
+   * @param options.headers - http headers (default: {})
    * @return shared cached observable
    */
   get<T>(endpoint: string, refresh?: boolean, options: {
@@ -46,6 +47,7 @@ export class WsApiService {
     params?: HttpParams | { [param: string]: string | string[]; },
     timeout?: number,
     url?: string,
+    headers?: HttpHeaders
   } = {}): Observable<T> {
     options = Object.assign({
       attempts: 4,
@@ -53,12 +55,14 @@ export class WsApiService {
       params: {},
       timeout: 20000,
       url: this.apiUrl,
+      headers: {}
     }, options);
 
     const url = options.url + endpoint;
     const opt = {
       params: options.params,
       withCredentials: options.auth,
+      headers: options.headers
     };
 
     return (refresh && (!this.plt.is('cordova') || this.network.type !== 'none')
