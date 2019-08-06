@@ -12,65 +12,67 @@
         <ion-col size-xs="12" size-lg="4">
           <ion-card>
             <ion-card-header>
-                <ion-avatar class="profile-image">
-                    <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '.jpg'" onerror="this.src='assets/img/no_img.png'">
-                </ion-avatar>
-                
-                <ion-button class="btn-restricted colored-background">Book Consultation Hour</ion-button>
+              <ion-avatar class="profile-image">
+                <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '.jpg'"
+                  onerror="this.src='assets/img/no_img.png'">
+              </ion-avatar>
 
-                <hr class="hr-custom"/>
+              <ion-button class="btn-restricted colored-background">Book Consultation Hour</ion-button>
+
+              <hr class="hr-custom" />
             </ion-card-header>
 
             <ion-card-content style="padding-top: 0px">
               <ion-text>
-                <h2><strong>Name:</strong></h2>
-                <h2>{{ staff.FULLNAME }}</h2>
-      
+                <h2 class="secondary-txt-color">Name:</h2>
+                <h2 class="main-text-color text-bold">{{ staff.FULLNAME }}</h2>
+
                 <br>
-      
-                <h2><strong>Job Title:</strong></h2>
-                <h2 [innerHTML]="staff.TITLE"></h2>
-      
+
+                <h2 class="secondary-txt-color">Job Title:</h2>
+                <h2 class="main-text-color text-bold" [innerHTML]="staff.TITLE"></h2>
+
                 <br>
-      
-                <h2><strong>Email:</strong></h2>
-                <h2><a href="mailto:{{staff.EMAIL}}">{{ staff.EMAIL }}</a></h2>
+
+                <h2 class="secondary-txt-color">Email:</h2>
+                <h2><a class="colored-text text-bold" href="mailto:{{staff.EMAIL}}">{{ staff.EMAIL }}</a></h2>
 
                 <br>
 
                 <div *ngIf="staff.LOCATION">
-                  <h2><strong>Office Location:</strong></h2>
-                  <h2>{{ staff.LOCATION }}</h2>
+                  <h2 class="secondary-txt-color">Office Location:</h2>
+                  <h2 class="text-bold main-text-color">{{ staff.LOCATION }}</h2>
 
                   <br>
                 </div>
-      
-                <h2><strong>Contact Number:</strong></h2>
-                <h2><a href="tel:+60389961000">+6 03-8996 1000 (Ext. {{ staff.EXTENSION }})</a></h2>
+
+                <h2 class="secondary-txt-color">Contact Number:</h2>
+                <h2><a class="colored-text text-bold" href="tel:+60389961000">+6 03-8996 1000 (Ext. {{ staff.EXTENSION }})</a>
+                </h2>
 
                 <br>
-                
+
                 <div *ngIf="staff.DEPARTMENT || staff.DEPARTMENT2 || staff.DEPARTMENT3">
-                  <h2><strong>Functional Area(s):</strong></h2>
-                  <h2 *ngIf="staff.DEPARTMENT" [innerHTML]="staff.DEPARTMENT"></h2>
-                  <h2 *ngIf="staff.DEPARTMENT2" [innerHTML]="staff.DEPARTMENT2"></h2>
-                  <h2 *ngIf="staff.DEPARTMENT3" [innerHTML]="staff.DEPARTMENT3"></h2>
+                  <h2 class="secondary-txt-color">Functional Area(s):</h2>
+                  <h2 class="text-bold main-text-color" *ngIf="staff.DEPARTMENT" [innerHTML]="staff.DEPARTMENT"></h2>
+                  <h2 class="text-bold main-text-color" *ngIf="staff.DEPARTMENT2" [innerHTML]="staff.DEPARTMENT2"></h2>
+                  <h2 class="text-bold main-text-color" *ngIf="staff.DEPARTMENT3" [innerHTML]="staff.DEPARTMENT3"></h2>
                 </div>
-      
+
               </ion-text>
             </ion-card-content>
           </ion-card>
         </ion-col>
         <ion-col size-xs="12" size-lg="8" no-padding>
-            <ion-card>
-              <ion-card-header>
-                <ion-text>
-                  <h2 style="color: var(--secondary-txt-color)">Timetable</h2>
-                </ion-text>
-              </ion-card-header>
-            </ion-card>
-            
-            <lecturer-timetable [id]="staff.ID"></lecturer-timetable>
+          <ion-card>
+            <ion-card-header>
+              <ion-text>
+                <h2 class="colored-text">Timetable</h2>
+              </ion-text>
+            </ion-card-header>
+          </ion-card>
+
+          <lecturer-timetable [id]="staff.ID"></lecturer-timetable>
         </ion-col>
       </ion-row>
     </ion-grid>
