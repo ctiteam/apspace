@@ -14,7 +14,7 @@
     <img class="cover" [src]="item.field_news_image[0].url" height="auto" width="100%">
   </div>
   <div >
-    <h3 pdding-strart>{{item.title[0].value}}</h3>
-    <article pdding-strart [innerHTML]="sanitize(item.body[0].value)"></article>
+    <h3 class="colored-text" pdding-strart>{{item.title[0].value}}</h3>
+    <article class="main-text-color" pdding-strart [innerHTML]="sanitize(item.body[0].value)"></article>
   </div>
 </ion-content>
