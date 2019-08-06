@@ -43,7 +43,7 @@
             </ion-item>
             <!-- <ion-item lines="none" no-padding>
               <ion-label>Hide bar on scroll</ion-label>
-              <ion-toggle [(ngModel)]="test" no-padding></ion-toggle>
+              <ion-toggle [(ngModel)]="test"></ion-toggle>
             </ion-item> -->
             <ion-item lines="none" no-padding>
               <a (click)="clearCache()">
@@ -82,13 +82,13 @@
               <ion-item lines="none" no-padding>
                 <ion-label>Dark Theme</ion-label>
                 <ion-toggle [(ngModel)]="darkThemeEnabled" [disabled]="pureDarkThemeEnabled"
-                  (ngModelChange)="toggleDarkTheme()" no-padding>
+                  (ngModelChange)="toggleDarkTheme()">
                 </ion-toggle>
               </ion-item>
               <ion-item lines="none" no-padding>
                 <ion-label>Pure Dark</ion-label>
                 <ion-toggle [(ngModel)]="pureDarkThemeEnabled" [disabled]="!darkThemeEnabled"
-                  (ngModelChange)="togglePureDarkTheme()" no-padding></ion-toggle>
+                  (ngModelChange)="togglePureDarkTheme()"></ion-toggle>
               </ion-item>
               <ion-item lines="none" no-padding>
                 <ion-label>Accent Color</ion-label>
