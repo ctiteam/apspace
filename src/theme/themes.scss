@@ -302,6 +302,11 @@ button.picker-button {
       background-color: var(--primary-color) !important;
     }
   }
+  .alert-button-group{
+    .alert-button{
+      color: var(--primary-color);
+    }
+  }
 }
 
 
