@@ -7,16 +7,24 @@ ion-item {
   &.credit {
     ion-icon,
     .value {
-      color: green;
+      color: var(--success-color);
     }
   }
   &.deposit {
     ion-icon,
     .value {
-      color: red;
+      color: var(--danger-color);
     }
   }
 }
+
+.total-credit {
+  color: var(--success-color);
+}
+.total-deposit {
+  color: var(--danger-color);
+}
+
 @media only screen and (min-width: 1px) {
   .card {
     width: 95%;

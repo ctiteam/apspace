@@ -154,8 +154,8 @@
               <ion-card-header>
                 <ion-card-subtitle *ngIf="filterObject.show !== 'credit'">
                   <h5 class="responsive-h2" *ngIf="monthlyData.dr[year]; else noDebit">
-                    You spent <ion-text color="danger">RM{{ monthlyData.dr[year][month] | number: "1.0-2" }}
-                    </ion-text> in
+                    You spent <span class="total-deposit">RM{{ monthlyData.dr[year][month] | number: "1.0-2" }}
+                    </span> in
                   </h5>
                   <ng-template #noDebit>
                     <h5 class="responsive-h2">You have not spend money this month</h5>
@@ -163,8 +163,8 @@
                 </ion-card-subtitle>
                 <ion-card-subtitle *ngIf="filterObject.show === 'credit'">
                   <h5 class="responsive-h2" *ngIf="monthlyData.cr[year]; else noCredit">
-                    You topped up <ion-text color="success">RM{{ monthlyData.cr[year][month] | number: "1.0-2" }}
-                    </ion-text> in
+                    You topped up <span class="total-credit">RM{{ monthlyData.cr[year][month] | number: "1.0-2" }}
+                    </span> in
                   </h5>
                   <ng-template #noCredit>
                     <h5 class="responsive-h2">You have not top up money this month</h5>
@@ -188,8 +188,8 @@
                     </ion-avatar>
                     <ion-label>
                       <h2 class="value">{{ getAbsoluteValue(transaction.SpendVal) | currency: "RM" }}</h2>
-                      <h3>{{ transaction.SpendDate | date: "d, MMM, y" }}</h3>
-                      <p>{{ transaction.ItemName }}</p>
+                      <p class="main-text-color">{{ transaction.ItemName }}</p>
+                      <h3 class="secondary-txt-color">{{ transaction.SpendDate | date: "d, MMM, y" }}</h3>
                     </ion-label>
                   </ion-item>
 
