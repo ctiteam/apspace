@@ -12,7 +12,7 @@
                 <ion-col>
                   <ion-avatar class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
                     <img [src]="'data:image/jpg;base64,' + ((photo$ | async) || {}).base64_photo"
-                      onerror="this.src='assets/img/profile.svg'" alt="Avatar">
+                      onerror="this.src='assets/img/no_img.png'" alt="Avatar">
                   </ion-avatar>
                   <ng-template #loadingStudentsPhoto>
                     loading picture
