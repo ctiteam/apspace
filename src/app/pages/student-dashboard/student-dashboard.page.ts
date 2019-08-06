@@ -58,7 +58,7 @@ export class StudentDashboardPage implements OnInit {
       }
     ],
     cardTitle: 'Today\'s Schedule',
-    cardSubtitle: 'Next in: 1 hrs, 25 min'
+    // cardSubtitle: 'Next in: 1 hrs, 25 min'
   };
 
   // UPCOMING EVENTS
