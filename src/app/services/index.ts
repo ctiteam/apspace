@@ -17,3 +17,4 @@ export { VersionService } from './version.service';
 export { WsApiService } from './ws-api.service';
 export { IntakeListingService } from './intake-listing.service';
 export { UserSettingsService } from './user-settings.service';
+export { AppLauncherService } from './app-launcher.service';

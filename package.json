@@ -37,6 +37,7 @@
     "@capacitor/cli": "^1.0.0-beta.13",
     "@capacitor/core": "^1.0.0-beta.14",
     "@ionic-native/action-sheet": "^5.11.0",
+    "@ionic-native/app-availability": "^5.11.0",
     "@ionic-native/camera": "^5.11.0",
     "@ionic-native/core": "^5.11.0",
     "@ionic-native/device": "^5.11.0",
@@ -49,6 +50,7 @@
     "@ionic/storage": "^2.2.0",
     "angular-svg-round-progressbar": "^3.0.1",
     "angular2-chartjs": "^0.5.1",
+    "cordova-plugin-appavailability": "^0.4.2",
     "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-inappbrowser": "^3.1.0",
     "cordova-plugin-qrscanner": "^3.0.1",
@@ -96,7 +98,8 @@
     "plugins": {
       "cordova-plugin-camera": {},
       "cordova-plugin-qrscanner": {},
-      "cordova-plugin-inappbrowser": {}
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-appavailability": {}
     }
   }
 }
