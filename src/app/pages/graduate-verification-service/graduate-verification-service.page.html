@@ -29,7 +29,7 @@
             <p class="normaltext" padding-bottom>
               If you cannot verify a graduate and/or suspect it may be fraudulent,
               please submit an
-              <a style="text-decoration: underline" (click)="openForms()" class="text-bold">Online Web
+              <a style="text-decoration: underline" (click)="openForms()" class="colored-text">Online Web
                 Request</a>
               to report and confirm the qualifications.
             </p>
@@ -39,7 +39,7 @@
                   <ion-input padding-start placeholder="Student ID" (keyup.enter)="searchForGraduaters()" [(ngModel)]="searchKeyword"></ion-input>
                 </ion-col>
                 <ion-col size="2" no-padding>
-                  <ion-button no-margin fill="clear" expand="full"
+                  <ion-button class="colored-text" no-margin fill="clear" expand="full"
                     [disabled]="!this.searchKeyword || this.searchKeyword == ''" (click)="searchForGraduaters()">
                     <ion-icon class="responsive-icon" slot="icon-only" name="search"></ion-icon>
                   </ion-button>
