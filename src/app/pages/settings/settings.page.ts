@@ -20,7 +20,7 @@ export class SettingsPage implements OnInit {
 
   allDashboardSections = [
     { section: 'profile', name: 'Profile', disabled: true },
-    { section: 'dashboardAlerts', name: 'Alerts', disabled: false },
+    // { section: 'dashboardAlerts', name: 'Alerts', disabled: false },
     { section: 'quickAccess', name: 'Quick Access', disabled: false },
     { section: 'todaysSchedule', name: 'Todays Schedule', disabled: false },
     { section: 'upcomingEvents', name: 'Upcoming Events', disabled: false },
