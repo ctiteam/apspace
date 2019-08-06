@@ -1,23 +1,21 @@
 .profile-image {
-    margin-bottom: 15px !important;
-    margin: auto;
-    max-width: 200px;
-    max-height: 200px;
-    width: 152px;
-    height: 138px;
+  margin-bottom: 15px !important;
+  margin: auto;
+  width: 50%;
+  height: 100%;
 }
 
 img {
-    border-radius: 11px;
+  border-radius: 11px;
 }
 
 .btn-restricted {
-    margin-left: 20px;
-    margin-right: 30px;
-    display: block !important;
+  margin-left: 20px;
+  margin-right: 30px;
+  display: block !important;
 }
 
 .hr-custom {
-    border: 2px solid var(--secondary-txt-color);
-    width: 100%;
+  border: 2px solid var(--secondary-txt-color);
+  width: 100%;
 }
