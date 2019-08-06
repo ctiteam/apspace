@@ -73,18 +73,18 @@ events-list {
     }
 
     &.passed-event {
-      border-color: #aaaaaa !important;
+      border-color: var(--passed-event-color) !important;
       background-color: var(--secondary-bg-color) !important;
 
       .left-part,
       .title,
       .description a,
       .description {
-        color: #aaaaaa !important;
+        color: var(--passed-event-color) !important;
       }
 
       .type {
-        background-color: #aaaaaa !important;
+        background-color: var(--passed-event-color) !important;
       }
     }
 
