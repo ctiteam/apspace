@@ -219,7 +219,7 @@
                           <h3 class="trips-locations text-bolder">{{ upcomingTrip.trip_from }} <ion-icon name="arrow-dropright">
                             </ion-icon> {{upcomingTrip.trip_to}}</h3>
                           <p>
-                            <span class="trip-time" *ngIf="upcomingTrip.times[0]"> {{upcomingTrip.times[0]}}
+                            <span class="trip-time" [style.color]="upcomingTrip.trip_from_color" *ngIf="upcomingTrip.times[0]"> {{upcomingTrip.times[0]}}
                             </span>
                             <span class="trip-time" *ngIf="upcomingTrip.times[1]"> {{upcomingTrip.times[1]}}
                             </span>
