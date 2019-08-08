@@ -22,6 +22,57 @@ export class StudentTimetablePage implements OnInit {
 
   wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
+  legends = [
+    {
+      name: 'L',
+      desc: 'Lecture',
+    },
+    {
+      name: 'T',
+      desc: 'Tutorial',
+    },
+    {
+      name: 'T1',
+      desc: 'Tutorial Group 1',
+    },
+    {
+      name: 'T2',
+      desc: 'Tutorial Group 2',
+    },
+    {
+      name: 'Lab',
+      desc: 'Computer Lab',
+    },
+    {
+      name: 'Lab 1',
+      desc: 'Computer Lab Group 1',
+    },
+    {
+      name: 'Lab 2',
+      desc: 'Computer Lab Group 2',
+    },
+    {
+      name: 'Lab 3',
+      desc: 'Computer Lab Group 3',
+    },
+    {
+      name: 'TPM',
+      desc: 'APIIT/APLC Campus',
+    },
+    {
+      name: 'New Campus',
+      desc: 'APU Campus',
+    },
+    {
+      name: 'B',
+      desc: 'Buffer Week',
+    },
+    {
+      name: 'R',
+      desc: 'Revision Week',
+    },
+  ];
+
   timetable$: Observable<StudentTimetable[]>;
   selectedWeek: Date; // week is the first day of week
   availableWeek: Date[];

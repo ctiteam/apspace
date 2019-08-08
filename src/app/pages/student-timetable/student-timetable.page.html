@@ -48,6 +48,51 @@
     </ion-card-content>
   </ion-card>
 
+  <div *ngIf="intake">
+    <ion-card class="card-special">
+      <ion-card-header>
+        <ion-card-title>Legend</ion-card-title>
+      </ion-card-header>
+      
+      <ion-card-content>
+          <div *ngFor="let legend of legends" >
+            <p>
+              <b>{{ legend.name }}</b> - {{ legend.desc }}
+            </p>
+        </div>
+        </ion-card-content>
+    </ion-card>
+    
+    <ion-card class="card-special">
+      <ion-card-header>
+        <ion-card-title>Mid Year Semester</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          While there will be no classes during the
+          mid-semester break for your
+          intake, your intake time table will
+          continue to appear during the break.
+        </p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="card-special">
+      <ion-card-header>
+        <ion-card-title>Important Notice</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          Students are advised to consult your lecturers to check whether there will be lectures during the
+          buffer/revision week. The timetable published on the buffer/revision week will be the same as the last week
+          of the semester.
+          If your lecturer decides not to use the buffer/revision week, then you will not be required to come for
+          lectures during the buffer/revision week.
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
   <ion-card *ngIf="!selectedDate">
     <ion-card-content>
       <ion-text>Hooray! No classes this week! :D</ion-text>
