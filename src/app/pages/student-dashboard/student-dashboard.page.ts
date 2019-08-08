@@ -166,6 +166,7 @@ export class StudentDashboardPage implements OnInit {
 
   // TODAYS TRIPS
   upcomingTrips$: Observable<any>;
+  showSetLocationsSettings = false;
   locations: APULocation[];
   busCardConfigurations: DashboardCardComponentConfigurations = {
     cardTitle: 'Upcoming Trips',
@@ -208,21 +209,27 @@ export class StudentDashboardPage implements OnInit {
   }
 
   ngOnInit() {
-    this.enableCardReordering();
-    this.doRefresh();
-  }
-
-  doRefresh(refresher?) {
     this.userSettings.getShownDashboardSections().subscribe(
       {
         next: data => this.shownDashboardSections = data,
       }
     );
-    this.userSettings.getBusShuttleServiceSettings().pipe(tap(d => console.log(d))).subscribe(
+    this.userSettings.getBusShuttleServiceSettings().subscribe(
       {
         next: data => this.upcomingTrips$ = this.getUpcomingTrips(data.firstLocation, data.secondLocation),
       }
     );
+    this.userSettings.subscribeToCacheClear().subscribe(
+      {
+        // tslint:disable-next-line: no-trailing-whitespace
+        next: data => data ? this.doRefresh() : ''
+      }
+    );
+    this.enableCardReordering();
+    this.doRefresh();
+  }
+
+  doRefresh(refresher?) {
     this.getLocations();
     this.photo$ = this.getStudentPhoto();
     this.displayGreetingMessage();
@@ -774,8 +781,12 @@ export class StudentDashboardPage implements OnInit {
 
   // UPCOMING TRIPS FUNCTIONS
   getUpcomingTrips(firstLocation: string, secondLocation: string): any {
+    if (!firstLocation || !secondLocation) {
+      this.showSetLocationsSettings = true;
+      return of({});
+    }
+    this.showSetLocationsSettings = false;
     const dateNow = new Date();
-    console.log(firstLocation + ' ' + secondLocation);
     return this.ws.get<BusTrips>(`/transix/trips/applicable`, true, { auth: false }).pipe(
       map(res => res.trips),
       map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS

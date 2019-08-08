@@ -14,6 +14,7 @@ export class UserSettingsService {
   private accentColor: BehaviorSubject<string>;
   private dashboardSections: BehaviorSubject<string[]>;
   private MenuUI: BehaviorSubject<'cards' | 'list'>;
+  private casheCleaered: BehaviorSubject<boolean>;
   private busShuttleServiceSettings: BehaviorSubject<{ firstLocation: string, secondLocation: string, alarmBefore: string }>;
 
   accentColors = [
@@ -35,9 +36,10 @@ export class UserSettingsService {
     'cgpa',
     'lowAttendance',
     'financials',
+    'busShuttleServices'
   ];
 
-  defaultBusShuttleServicesSettings = { firstLocation: 'apu', secondLocation: 'apiit', alarmBefore: '10' };
+  defaultBusShuttleServicesSettings = { firstLocation: '', secondLocation: '', alarmBefore: '10' };
 
   constructor(
     public http: HttpClient,
@@ -50,6 +52,7 @@ export class UserSettingsService {
     this.dashboardSections = new BehaviorSubject(this.defaultDashboardSectionsSettings);
     this.MenuUI = new BehaviorSubject('list');
     this.busShuttleServiceSettings = new BehaviorSubject(this.defaultBusShuttleServicesSettings);
+    this.casheCleaered = new BehaviorSubject(false);
   }
 
   // DARK THEME
@@ -72,10 +75,16 @@ export class UserSettingsService {
         this.storage.clear().then(() => {
           this.storage.set('tgt', tgt);
           this.storage.set('cred', cred);
-        });
+        }).then(
+          _ => this.casheCleaered.next(true)
+        );
       });
     }
     );
+  }
+
+  subscribeToCacheClear() {
+    return this.casheCleaered.asObservable();
   }
 
   // BUS SHUTTLE SERVICES
