@@ -16,7 +16,7 @@
           <ion-card>
             <ion-card-header>
               <ion-card-title class="responsive-h1">
-                <ion-icon name="{{department.dept_icon}}" [style.color]="department.dept_icon_color"  item-start></ion-icon>
+                <ion-icon name="{{department.dept_icon}}" [style.color]="department.dept_icon_color" ></ion-icon>
                {{department.dept_name}} | {{customer.company_id}}
               </ion-card-title>
             </ion-card-header>
@@ -26,13 +26,13 @@
               <ion-grid class="ion-padding-start">
                 <ion-row class="ion-hide-md-down">
                   <ion-col size-xs="12" size-lg="4" >
-                    <ion-text class="boldMe">Day</ion-text>
+                    <ion-text class="text-bold ">Day</ion-text>
                   </ion-col>
                   <ion-col size-xs="12" size-lg="4" >
-                    <ion-text class="boldMe">Open time</ion-text>
+                    <ion-text class="text-bold ">Open time</ion-text>
                   </ion-col>
                   <ion-col size-xs="12" size-lg="4" >
-                    <ion-text class="boldMe">Close time</ion-text>
+                    <ion-text class="text-bold ">Close time</ion-text>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -41,7 +41,7 @@
                   <ion-grid class="ion-padding-start">
                     <ion-row>
                       <ion-col size="4">
-                        <p class="boldMe">{{ shift.key }}</p>
+                        <p class="text-bold ">{{ shift.key }}</p>
                       </ion-col>
                       <ion-col size="4">
                         <div *ngFor="let slot of shift.value">

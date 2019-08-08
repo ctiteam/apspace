@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { WsApiService } from 'src/app/services';
-import { Observable, forkJoin } from 'rxjs';
-import { QuixCustomer, CustomerDepartment } from 'src/app/interfaces/quix';
-import { MenuController } from '@ionic/angular';
-import { map, tap } from 'rxjs/operators';
 import { HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { QuixCustomer } from 'src/app/interfaces/quix';
+import { WsApiService } from 'src/app/services';
 
 
 @Component({
@@ -15,12 +14,10 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class OperationHoursPage implements OnInit {
   quixCustomers$: Observable<QuixCustomer[]>;
-  filteredQuixCustomers$: any;
 
 
   constructor(
     private ws: WsApiService,
-    private menu: MenuController,
   ) { }
 
   ngOnInit() {

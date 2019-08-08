@@ -29,5 +29,8 @@ export { CgpaPerIntake } from './cgpa-per-intake';
 export { ConsultationHour } from './iconsult';
 export { Graduater } from './graduater';
 export { IntakeListing } from './intake-listing';
-export {QuixCustomer} from './quix';
+export { QuixCustomer } from './quix';
 export { DashboardSection } from './dashboard-section';
+
+
+
