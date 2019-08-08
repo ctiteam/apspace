@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>operation-hours</ion-title>
+    <ion-buttons>
+      <ion-button slot="start">
+        <ion-back-button defaultHref="#" text=""></ion-back-button>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content id="content">
+  <div class="masonry-list" *ngIf="quixCustomers$ | async as quixCustomers">
+    <div *ngFor=" let customer of quixCustomers ">
+      <div class="masonry-item " *ngFor="let department of customer.company_departments">
+        <div>
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title class="responsive-h1">
+                <ion-icon name="{{department.dept_icon}}" [style.color]="department.dept_icon_color" ></ion-icon>
+               {{department.dept_name}} | {{customer.company_id}}
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content
+              *ngIf=" department.shifts || department.dept_email || department.dept_phone ; else noData">
+              <ion-text>Operation hours</ion-text>
+              <ion-grid class="ion-padding-start">
+                <ion-row class="ion-hide-md-down">
+                  <ion-col size-xs="12" size-lg="4" >
+                    <ion-text class="text-bold ">Day</ion-text>
+                  </ion-col>
+                  <ion-col size-xs="12" size-lg="4" >
+                    <ion-text class="text-bold ">Open time</ion-text>
+                  </ion-col>
+                  <ion-col size-xs="12" size-lg="4" >
+                    <ion-text class="text-bold ">Close time</ion-text>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+              <div *ngIf=" department.shifts; else noOperation">
+                <div *ngFor="let shift of department.shifts | keyvalue">
+                  <ion-grid class="ion-padding-start">
+                    <ion-row>
+                      <ion-col size="4">
+                        <p class="text-bold ">{{ shift.key }}</p>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div *ngFor="let slot of shift.value">
+                          <div *ngIf="slot.start_time ; else noStartTime" class="timeTxt">
+
+                            {{ slot.start_time }}
+                          </div>
+                          <ng-template #noStartTime>
+                            <ion-text>no Open time provided</ion-text>
+                          </ng-template>
+                        </div>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div *ngFor="let slot of shift.value"  class="timeTxt">
+                          {{ slot.end_time }}
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </div>
+              </div>
+              <ng-template #noOperation>
+                <h3 class="ion-padding-start ion-text-center" > No Operation hours provided</h3>
+              </ng-template>
+              <section>
+                <ion-text class="emailClass">Email:
+                  <div *ngIf="department.dept_email ; else noEmail">
+                    <a href="{{department.dept_email}}" class="ion-padding-start">{{department.dept_email}}</a>
+                  </div>
+                  <ng-template #noEmail>
+                    <h3 class="ion-padding-start ion-text-center" > No email provided</h3>
+                  </ng-template>
+                </ion-text>
+                <ion-text>Phone/General Line</ion-text>
+                <div *ngIf="department.dept_phone ; else noPhone">
+                  <div *ngFor="let phone of department.dept_phone">
+                    <a href="{{phone}}" class="ion-padding-start">{{phone}}</a>
+                  </div>
+                </div>
+                <ng-template #noPhone>
+                  <h3 class="ion-padding-start ion-text-center" > No phone provided</h3>
+                </ng-template>
+              </section>
+            </ion-card-content>
+            <ng-template #noData>
+              <ion-card-content>
+                <h2> No data provided for this department</h2>
+              </ion-card-content>
+            </ng-template>
+          </ion-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

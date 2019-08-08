@@ -153,7 +153,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule)
   },
-
+  {
+    path: 'operation-hours',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/operation-hours/operation-hours.module').then(m => m.OperationHoursPageModule)
+  },
 ];
 
 @NgModule({
