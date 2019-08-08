@@ -21,7 +21,7 @@ export class UserSettingsService {
     { name: 'blue-accent-color', value: '#3A99D9', rgbaValues: '58, 153, 217' },
     { name: 'green-accent-color', value: '#08a14f', rgbaValues: '8, 161, 79' },
     { name: 'red-accent-color', value: '#ec2a4d', rgbaValues: '236, 42, 77' },
-    { name: 'white-accent-color', value: '#b0acac', rgbaValues: '176, 172, 172' }
+    { name: 'white-accent-color', value: '#b0acac', rgbaValues: '175, 175, 175' }
   ];
 
   defaultDashboardSectionsSettings = [

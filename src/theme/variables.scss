@@ -3,7 +3,7 @@
 
 /** Ionic CSS Variables **/
 :root {
-  --ion-font-family: 'Oswald', sans-serif; //TESTING
+  --ion-font-family: "Oswald", sans-serif; //TESTING
   /** primary **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -135,19 +135,18 @@
   --passed-event-color: #7b7b7b;
 
   --ion-background-color: var(--main-bg-color);
-
 }
 
 // IONIC VARIABLES IN DARK THEME
 :root .dark-theme.pure {
-  --primary-color: #b0acac;
+  --primary-color: #afafaf;
   --main-bg-color: #101010;
   --secondary-bg-color: #151515;
   --tertiary-bg-color: #424242;
 
   --main-txt-color: #cccccc;
-  --secondary-txt-color: #5e5c5c;
-  --tertiary-txt-color: #4d4b4b;
+  --secondary-txt-color: #908f8f;
+  --tertiary-txt-color: #807e7e;
 
   --danger-color: #e54d42;
   --success-color: #49b571;
