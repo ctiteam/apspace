@@ -23,6 +23,7 @@ export class StudentDashboardPage implements OnInit {
   lowAttendanceChart: any;
   shownDashboardSections: string[];
   editableList = null;
+  busShuttleServiceSettings: any;
 
   // ALERTS SLIDER OPTIONS
   alertSliderOptions = {
@@ -217,11 +218,15 @@ export class StudentDashboardPage implements OnInit {
         next: data => this.shownDashboardSections = data,
       }
     );
+    this.userSettings.getBusShuttleServiceSettings().pipe(tap(d => console.log(d))).subscribe(
+      {
+        next: data => this.upcomingTrips$ = this.getUpcomingTrips(data.firstLocation, data.secondLocation),
+      }
+    );
     this.getLocations();
     this.photo$ = this.getStudentPhoto();
     this.displayGreetingMessage();
     this.apcardTransaction$ = this.getTransactions();
-    this.upcomingTrips$ = this.getUpcomingTrips('apiit', 'lrt');
     this.getBadge();
     forkJoin([
       this.getProfile(),
@@ -770,13 +775,14 @@ export class StudentDashboardPage implements OnInit {
   // UPCOMING TRIPS FUNCTIONS
   getUpcomingTrips(firstLocation: string, secondLocation: string): any {
     const dateNow = new Date();
+    console.log(firstLocation + ' ' + secondLocation);
     return this.ws.get<BusTrips>(`/transix/trips/applicable`, true, { auth: false }).pipe(
       map(res => res.trips),
       map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
         return trips.filter(trip => {
           return moment(trip.trip_time, 'kk:mm').toDate() >= dateNow
-            && (trip.trip_from === firstLocation || trip.trip_to === firstLocation)
-            && (trip.trip_from === secondLocation || trip.trip_to === secondLocation);
+            && ((trip.trip_from === firstLocation && trip.trip_to === secondLocation)
+              || (trip.trip_from === secondLocation && trip.trip_to === firstLocation));
         });
       }),
       map(trips => { // GET THE NEEDED DATA ONLY
@@ -799,7 +805,8 @@ export class StudentDashboardPage implements OnInit {
         return Object.keys(trips).map(
           key => trips[key]
         );
-      })
+      }),
+      tap(d => console.log(d))
     );
   }
 

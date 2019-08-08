@@ -14,6 +14,7 @@ export class UserSettingsService {
   private accentColor: BehaviorSubject<string>;
   private dashboardSections: BehaviorSubject<string[]>;
   private MenuUI: BehaviorSubject<'cards' | 'list'>;
+  private busShuttleServiceSettings: BehaviorSubject<{ firstLocation: string, secondLocation: string, alarmBefore: string }>;
 
   accentColors = [
     { name: 'red-accent-color', value: '#e54d42', rgbaValues: '229, 77, 66' },
@@ -36,6 +37,8 @@ export class UserSettingsService {
     'financials',
   ];
 
+  defaultBusShuttleServicesSettings = { firstLocation: 'apu', secondLocation: 'apiit', alarmBefore: '10' };
+
   constructor(
     public http: HttpClient,
     private storage: Storage,
@@ -46,6 +49,7 @@ export class UserSettingsService {
     this.accentColor = new BehaviorSubject('blue-accent-color');
     this.dashboardSections = new BehaviorSubject(this.defaultDashboardSectionsSettings);
     this.MenuUI = new BehaviorSubject('list');
+    this.busShuttleServiceSettings = new BehaviorSubject(this.defaultBusShuttleServicesSettings);
   }
 
   // DARK THEME
@@ -72,6 +76,16 @@ export class UserSettingsService {
       });
     }
     );
+  }
+
+  // BUS SHUTTLE SERVICES
+  setBusShuttleServicesSettings(val: { firstLocation: string, secondLocation: string, alarmBefore: string }) {
+    this.storage.set('bus-shuttle-services', val);
+    this.busShuttleServiceSettings.next(val);
+  }
+
+  getBusShuttleServiceSettings() {
+    return this.busShuttleServiceSettings.asObservable();
   }
 
   // PURE DARK THEME
@@ -168,6 +182,13 @@ export class UserSettingsService {
       value
         ? this.setShownDashboardSections(value)
         : this.setShownDashboardSections(this.defaultDashboardSectionsSettings);
+    });
+    this.storage.get('bus-shuttle-services').then(value => {
+      if (value) {
+        this.setBusShuttleServicesSettings(value);
+      } else {
+        this.setBusShuttleServicesSettings(this.defaultBusShuttleServicesSettings);
+      }
     });
   }
 }

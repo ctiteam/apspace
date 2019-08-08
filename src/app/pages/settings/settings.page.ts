@@ -1,8 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UserSettingsService } from 'src/app/services';
+import { UserSettingsService, WsApiService } from 'src/app/services';
 import { IonSelect, NavController, ToastController } from '@ionic/angular';
 import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
+import { APULocations, APULocation } from 'src/app/interfaces';
+import { map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-settings',
@@ -15,8 +18,18 @@ export class SettingsPage implements OnInit {
   activeAccentColor: string;
   darkThemeEnabled = false;
   pureDarkThemeEnabled = false;
+  // BUS
+
+  busShuttleServiceSettings = {
+    firstLocation: '',
+    secondLocation: '',
+    alarmBefore: ''
+  };
+
   menuUI: 'cards' | 'list' = 'list';
   dashboardSections;
+
+  locations$: Observable<APULocation[]>;
 
   allDashboardSections = [
     { section: 'profile', name: 'Profile', disabled: true },
@@ -42,6 +55,7 @@ export class SettingsPage implements OnInit {
     private userSettings: UserSettingsService,
     private navCtrl: NavController,
     private toastCtrl: ToastController,
+    private ws: WsApiService,
   ) {
     this.userSettings
       .darkThemeActivated()
@@ -75,11 +89,31 @@ export class SettingsPage implements OnInit {
         {
           next: value => this.dashboardSections = value
         });
+    this.userSettings
+      .getBusShuttleServiceSettings()
+      .subscribe(
+        {
+          next: value => this.busShuttleServiceSettings = value
+        });
   }
 
 
   ngOnInit() {
+    this.locations$ = this.getLocations();
   }
+
+  getLocations() {
+    return this.ws.get<APULocations>(`/transix/locations`, true, { auth: false }).pipe(
+      map((res: APULocations) => res.locations),
+    );
+  }
+
+
+  setBusShuttleServicesSettings() {
+    this.userSettings.setBusShuttleServicesSettings(this.busShuttleServiceSettings);
+  }
+
+
 
   dashboardSectionsChanged() {
     this.userSettings.setShownDashboardSections(this.dashboardSections);

@@ -173,6 +173,69 @@
         <ion-card-header>
           <ion-card-title class="card-title float-left">
             <h3 class="responsive-h1">
+              Bus Shuttle Services
+            </h3>
+            <h5 class="small-margin-top small-text" style="font-weight: 300;">
+              Configure your bus shuttle services' dashboard card
+            </h5>
+          </ion-card-title>
+          <div class="clearfix"></div>
+        </ion-card-header>
+        <ion-card-content no-padding padding-bottom padding-start padding-end>
+          <ion-list no-padding>
+            <ion-item-group *ngIf="locations$ | async as locations">
+              <ion-item-divider no-padding>
+                <ion-label>
+                  Locations
+                </ion-label>
+              </ion-item-divider>
+              <ion-item lines="none" no-padding>
+                <ion-label>First Location</ion-label>
+                <ion-select [(ngModel)]="busShuttleServiceSettings.firstLocation" (ngModelChange)="setBusShuttleServicesSettings()">
+                  <ion-select-option [value]="location.location_name" *ngFor="let location of locations">
+                    {{location.location_nice_name}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item lines="none" no-padding>
+                <ion-label>Second Location</ion-label>
+                <ion-select [(ngModel)]="busShuttleServiceSettings.secondLocation" (ngModelChange)="setBusShuttleServicesSettings()">
+                  <ion-select-option [value]="location.location_name" *ngFor="let location of locations">
+                    {{location.location_nice_name}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-item-group>
+            <ion-item-group>
+              <ion-item-divider no-padding>
+                <ion-label>
+                  Alarm <small>(For mobile app only)</small>
+                </ion-label>
+              </ion-item-divider>
+              <ion-item lines="none" no-padding>
+                <ion-label>Alarm To Be Set Before</ion-label>
+                <ion-select [(ngModel)]="busShuttleServiceSettings.alarmBefore" (ngModelChange)="setBusShuttleServicesSettings()">
+                  <ion-select-option [value]="'5'">
+                    5 mins
+                  </ion-select-option>
+                  <ion-select-option [value]="'10'">
+                    10 mins
+                  </ion-select-option>
+                  <ion-select-option [value]="'15'">
+                    15 mins
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-item-group>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div class="masonry-item">
+      <ion-card no-margin margin-bottom>
+        <ion-card-header>
+          <ion-card-title class="card-title float-left">
+            <h3 class="responsive-h1">
               Security & Privacy
             </h3>
             <h5 class="small-margin-top small-text" style="font-weight: 300;">
