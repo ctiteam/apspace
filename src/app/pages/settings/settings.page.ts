@@ -22,12 +22,13 @@ export class SettingsPage implements OnInit {
     { section: 'profile', name: 'Profile', disabled: true },
     // { section: 'dashboardAlerts', name: 'Alerts', disabled: false },
     { section: 'quickAccess', name: 'Quick Access', disabled: false },
-    { section: 'todaysSchedule', name: 'Todays Schedule', disabled: false },
+    { section: 'todaysSchedule', name: 'Today\'s Schedule', disabled: false },
     { section: 'upcomingEvents', name: 'Upcoming Events', disabled: false },
     { section: 'apcard', name: 'APCard', disabled: false },
     { section: 'lowAttendance', name: 'Low Attendance', disabled: false },
     { section: 'financials', name: 'Financials', disabled: false },
-    { section: 'cgpa', name: 'CGPA Per Intake', disabled: false }
+    { section: 'cgpa', name: 'CGPA Per Intake', disabled: false },
+    { section: 'busShuttleServices', name: 'Today\'s Trips', disabled: false }
   ];
   accentColors = [
     { title: 'Blue (Default)', value: 'blue-accent-color' },
