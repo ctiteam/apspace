@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActionSheet } from '@ionic-native/action-sheet/ngx';
@@ -29,6 +30,7 @@ export class StudentTimetablePage implements OnInit {
   availableDate: Date[];
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
+  intakeSelectable = true;
 
   intake: string;
 
@@ -41,6 +43,7 @@ export class StudentTimetablePage implements OnInit {
     private tt: StudentTimetableService,
     private ws: WsApiService,
     private settings: SettingsService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -53,7 +56,15 @@ export class StudentTimetablePage implements OnInit {
     date.setDate(date.getDate() - date.getDay());
     this.selectedWeek = date;
 
-    this.intake = this.settings.get('intake');
+    // optional intake passed by other pages
+    const intake = this.route.snapshot.params.intake;
+    if (intake) {  // indirect timetable page access
+      this.intakeSelectable = false;
+    }
+
+    // intake from params -> intake from settings -> student default intake
+    this.intake = intake || this.settings.get('intake');
+
     // default intake to student current intake
     if (this.intake === undefined) {
       this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
@@ -61,6 +72,7 @@ export class StudentTimetablePage implements OnInit {
         this.settings.set('intake', this.intake);
       });
     }
+
     this.doRefresh();
   }
 
