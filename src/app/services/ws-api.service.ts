@@ -44,18 +44,18 @@ export class WsApiService {
   get<T>(endpoint: string, refresh?: boolean, options: {
     attempts?: number,
     auth?: boolean,
+    headers?: HttpHeaders | { [header: string]: string | string[]; },
     params?: HttpParams | { [param: string]: string | string[]; },
     timeout?: number,
-    url?: string,
-    headers?: HttpHeaders
+    url?: string
   } = {}): Observable<T> {
     options = Object.assign({
       attempts: 4,
       auth: true,
+      headers: {},
       params: {},
       timeout: 20000,
-      url: this.apiUrl,
-      headers: {}
+      url: this.apiUrl
     }, options);
 
     const url = options.url + endpoint;
