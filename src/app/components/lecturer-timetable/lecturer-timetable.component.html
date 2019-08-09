@@ -45,7 +45,10 @@
 
             <ion-col size="12" size-sm="4">
               <span class="marker">Intakes: </span>
-              {{ day.intakes.join(", ") }}
+              <ng-container *ngFor="let intake of day.intakes; last as last">
+                <a [routerLink]="['/student-timetable', intake]">{{ intake }}</a>
+                <ng-container *ngIf="!last">, </ng-container>
+              </ng-container>
             </ion-col>
 
             <!-- mobile separator -->

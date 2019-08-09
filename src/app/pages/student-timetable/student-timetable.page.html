@@ -6,7 +6,7 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button color="light" outline small (click)="presentIntakeSearch()">
+      <ion-button *ngIf="intakeSelectable" color="light" outline small (click)="presentIntakeSearch()">
         {{ intake || 'Intakes' }}
       </ion-button>
     </ion-buttons>
