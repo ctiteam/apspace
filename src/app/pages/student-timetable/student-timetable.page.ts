@@ -23,6 +23,57 @@ export class StudentTimetablePage implements OnInit {
 
   wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
+  legends = [
+    {
+      name: 'L',
+      desc: 'Lecture',
+    },
+    {
+      name: 'T',
+      desc: 'Tutorial',
+    },
+    {
+      name: 'T1',
+      desc: 'Tutorial Group 1',
+    },
+    {
+      name: 'T2',
+      desc: 'Tutorial Group 2',
+    },
+    {
+      name: 'Lab',
+      desc: 'Computer Lab',
+    },
+    {
+      name: 'Lab 1',
+      desc: 'Computer Lab Group 1',
+    },
+    {
+      name: 'Lab 2',
+      desc: 'Computer Lab Group 2',
+    },
+    {
+      name: 'Lab 3',
+      desc: 'Computer Lab Group 3',
+    },
+    {
+      name: 'TPM',
+      desc: 'APIIT/APLC Campus',
+    },
+    {
+      name: 'New Campus',
+      desc: 'APU Campus',
+    },
+    {
+      name: 'B',
+      desc: 'Buffer Week',
+    },
+    {
+      name: 'R',
+      desc: 'Revision Week',
+    },
+  ];
+
   timetable$: Observable<StudentTimetable[]>;
   selectedWeek: Date; // week is the first day of week
   availableWeek: Date[];
@@ -31,6 +82,7 @@ export class StudentTimetablePage implements OnInit {
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
   intakeSelectable = true;
+  viewWeek: boolean;
 
   intake: string;
 
@@ -50,6 +102,9 @@ export class StudentTimetablePage implements OnInit {
     // select current day by default
     this.selectedDate = new Date();
     this.selectedDate.setHours(0, 0, 0, 0);
+
+    // Init Week View
+    this.viewWeek = false;
 
     // select current start of week
     const date = new Date();
@@ -104,6 +159,18 @@ export class StudentTimetablePage implements OnInit {
       if (this.selectedWeek.getDate() !== week.getDate()) {
         this.selectedWeek = week;
         this.timetable$.subscribe();
+      }
+    });
+  }
+
+  /** Choose view with presentActionSheet. */
+  chooseView() {
+    const labels = ['DAILY', 'WEEKLY'];
+    this.presentActionSheet(labels, (viewStr: string) => {
+      if (viewStr === 'DAILY') {
+        this.viewWeek = false;
+      } else {
+        this.viewWeek = true;
       }
     });
   }

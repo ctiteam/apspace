@@ -13,16 +13,16 @@ export class ClassesPipe implements PipeTransform {
   /**
    * Filter timetable by intake.
    *
-   * @param tt Array of timetable
+   * @param studentTimetable Array of timetable
    * @param intake Filter by intake if not null
    */
-  transform(tt: StudentTimetable[] | null, intake: string): StudentTimetable[] {
-    if (!Array.isArray(tt)) {
+  transform(studentTimetable: StudentTimetable[] | null, intake: string): StudentTimetable[] {
+    if (!Array.isArray(studentTimetable)) {
       return [] as StudentTimetable[];
     } else if (intake) {
-      return tt.filter(t => intake === t.INTAKE);
+      return studentTimetable.filter(t => intake === t.INTAKE);
     } else {
-      return tt;
+      return studentTimetable;
     }
   }
 
