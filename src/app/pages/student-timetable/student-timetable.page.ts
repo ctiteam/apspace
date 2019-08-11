@@ -82,6 +82,7 @@ export class StudentTimetablePage implements OnInit {
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
   intakeSelectable = true;
+  viewWeek: boolean;
 
   intake: string;
 
@@ -101,6 +102,9 @@ export class StudentTimetablePage implements OnInit {
     // select current day by default
     this.selectedDate = new Date();
     this.selectedDate.setHours(0, 0, 0, 0);
+
+    // Init Week View
+    this.viewWeek = false;
 
     // select current start of week
     const date = new Date();
@@ -155,6 +159,18 @@ export class StudentTimetablePage implements OnInit {
       if (this.selectedWeek.getDate() !== week.getDate()) {
         this.selectedWeek = week;
         this.timetable$.subscribe();
+      }
+    });
+  }
+
+  /** Choose view with presentActionSheet. */
+  chooseView() {
+    const labels = ['DAILY', 'WEEKLY'];
+    this.presentActionSheet(labels, (viewStr: string) => {
+      if (viewStr === 'DAILY') {
+        this.viewWeek = false;
+      } else {
+        this.viewWeek = true;
       }
     });
   }

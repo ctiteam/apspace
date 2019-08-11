@@ -10,6 +10,7 @@ import { StudentTimetablePage } from './student-timetable.page';
 import { ClassesPipe } from './classes.pipe';
 import { ThedayPipe } from './theday.pipe';
 import { ComponentsModule } from '../../components/components.module';
+import { TheWeekPipe } from './theweek.pipe';
 
 const routes: Routes = [
   {
@@ -35,6 +36,7 @@ const routes: Routes = [
     StudentTimetablePage,
     ClassesPipe,
     ThedayPipe,
+    TheWeekPipe
   ],
   entryComponents: []
 })
