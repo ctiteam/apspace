@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { MorePage } from './more.page';
 import { FusePipe } from './fuse.pipe';
+import { ByGroupPipe } from './by-group.pipe';
 
 const routes: Routes = [
   {
@@ -26,6 +27,6 @@ const routes: Routes = [
   providers: [
     InAppBrowser
   ],
-  declarations: [MorePage, FusePipe]
+  declarations: [MorePage, FusePipe, ByGroupPipe]
 })
 export class MorePageModule { }
