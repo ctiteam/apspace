@@ -34,3 +34,32 @@ ion-card {
     }
   }
 }
+
+.table-top {
+  display: none;
+}
+
+.hr-custom {
+  border: 2px solid var(--secondary-txt-color);
+  width: 100%;
+}
+
+.text-bold {
+  font-weight: bold !important;
+}
+
+@media (min-width: 600px) {
+  .marker {
+      display: none;
+  }
+
+  .table-top {
+    display: block;
+    visibility: visible;
+    padding-bottom: 4px !important;
+  }
+
+  .card-side {
+    border-left: none !important;
+  }
+}
