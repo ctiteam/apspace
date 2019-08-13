@@ -261,13 +261,14 @@ export class MorePage implements OnInit {
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: []
     },
-    // {
-    //   title: 'Logout',
-    //   url: 'logout',
-    //   img: 'assets/img/logout.png',
-    //   role: Role.Student | Role.Lecturer | Role.Admin,
-    //   tags: []
-    // },
+    {
+      title: 'Logout',
+      group: 'Others',
+      url: 'logout',
+      img: 'assets/img/logout.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: []
+    },
   ];
   /* tslint:enable:no-bitwise */
 

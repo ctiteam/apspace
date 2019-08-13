@@ -163,6 +163,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/operation-hours/operation-hours.module').then(m => m.OperationHoursPageModule)
   },
+  {
+    path: 'logout',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/logout/logout.module').then(m => m.LogoutPageModule)
+  },
 ];
 
 @NgModule({
