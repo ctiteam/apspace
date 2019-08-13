@@ -17,12 +17,10 @@ export class ClassesPipe implements PipeTransform {
    * @param intake Filter by intake if not null
    */
   transform(studentTimetable: StudentTimetable[] | null, intake: string): StudentTimetable[] {
-    if (!Array.isArray(studentTimetable)) {
-      return [] as StudentTimetable[];
-    } else if (intake) {
+    if (intake && Array.isArray(studentTimetable)) {
       return studentTimetable.filter(t => intake === t.INTAKE);
     } else {
-      return []; // So STAFFS cannot view the Timetable, basically blocking show all for null intake
+      return []; // No timetable for staff
     }
   }
 

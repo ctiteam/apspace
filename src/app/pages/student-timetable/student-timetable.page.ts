@@ -177,7 +177,7 @@ export class StudentTimetablePage implements OnInit {
 
   /** Check and update intake on change. */
   changeIntake(intake: string) {
-    if (intake !== this.intake) {
+    if (intake !== null && intake !== this.intake) {
       this.settings.set('intake', this.intake = intake);
       this.timetable$.subscribe();
     }
