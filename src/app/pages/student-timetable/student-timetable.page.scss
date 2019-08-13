@@ -13,8 +13,8 @@ ion-content ion-card-content ion-icon {
   padding-right: 8px;
 }
 
-ion-content ion-card-header + ion-card-content p:nth-child(odd) {
-  background-color: #eceff1;
+ion-content ion-card-header + ion-card-content div:nth-child(odd) {
+  background-color: var(--tertiary-bg-color);
 }
 
 ion-card-content {

@@ -22,7 +22,7 @@ export class ClassesPipe implements PipeTransform {
     } else if (intake) {
       return studentTimetable.filter(t => intake === t.INTAKE);
     } else {
-      return studentTimetable;
+      return []; // So STAFFS cannot view the Timetable, basically blocking show all for null intake
     }
   }
 
