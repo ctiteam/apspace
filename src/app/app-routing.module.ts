@@ -153,6 +153,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule)
   },
+  { path: 'opened-slots', loadChildren: './pages/iconsult/student/opened-slots/opened-slots.module#OpenedSlotsPageModule' },
 
 ];
 

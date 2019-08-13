@@ -1,0 +1,92 @@
+// @import url(https://fonts.googleapis.com/css?family=Open+Sans);
+// @import url(https://fonts.googleapis.com/css?family=Montserrat);
+// @import url(https://fonts.googleapis.com/css?family=Oswald:400,700);
+
+ion-avatar {
+  width: 123px;
+  height: 170px;
+  img {
+    border-radius: 11px;
+  }
+}
+
+.event-calendar {
+  font-size: 14px;
+  font-family: Open Sans;
+  overflow: hidden;
+}
+
+.event {
+  text-decoration: none;
+}
+
+.day {
+  padding: 15px;
+  font-weight: bold;
+  color: var(--main-txt-color);
+  background-color: var(--tertiary-bg-color);
+}
+
+.event-container {
+  transition: all 0.2s ease;
+  border-left: 3px solid;
+  background: var(--secondary-bg-color);
+  color: var(--main-txt-color);
+
+  &.available {
+    border-color: var(--success-color);
+    ion-button {
+      background-color: var(--success-color);
+      --background: var(--success-color);
+      --background-hover: var(--success-hover-color);
+    }
+  }
+
+  &:not(.no-hover):hover {
+    background: var(--main-bg-color);
+  }
+
+  &.booked {
+    border-color: var(--danger-color);
+    background-color: var(--secondary-bg-color);
+    .title,
+    .description {
+      color: var(--passed-event-color);
+    }
+    ion-button {
+      background-color: var(--danger-color);
+      --background: var(--danger-color);
+    }
+  }
+}
+
+.event-container:not(.no-hover):hover {
+  border-left-width: 10px;
+}
+
+.grid-padding {
+  padding-top: 3px;
+  padding-left: 7px;
+}
+
+.title {
+  text-transform: uppercase;
+  font-family: Oswald;
+  font-weight: 400;
+  font-size: 1.2em;
+  width: 100%;
+}
+
+.description {
+  font-size: 0.9em;
+  display: block;
+}
+
+// TO BE MOVED TO THE THEMES FILE
+.success-text {
+  color: var(--success-color);
+}
+.success-background {
+  background: var(--success-color);
+  --background: var(--success-color);
+}
