@@ -1,19 +1,17 @@
 import { NgModule } from '@angular/core';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { MorePage } from './more.page';
-import { FusePipe } from '../../pipes/fuse.pipe';
-import { ByGroupPipe } from './by-group.pipe';
+import { OpenedSlotsPage } from './opened-slots.page';
+import { BookSlotModalPage } from './book-slot-modal';
 
 const routes: Routes = [
   {
     path: '',
-    component: MorePage
+    component: OpenedSlotsPage
   }
 ];
 
@@ -24,9 +22,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  providers: [
-    InAppBrowser
-  ],
-  declarations: [MorePage, FusePipe, ByGroupPipe]
+  declarations: [OpenedSlotsPage, BookSlotModalPage],
+  entryComponents: [BookSlotModalPage],
 })
-export class MorePageModule { }
+export class OpenedSlotsPageModule {}

@@ -82,6 +82,11 @@
   .masonry-list {
     column-count: 2;
   }
+  .masonry-item {
+    &:not(.no-padding){
+      padding: 10px;
+    }
+  }
 }
 
 /* LARGE DEVICES - 992px AND UP */
@@ -107,5 +112,10 @@
   }
   .d-xl-inline {
     display: inline;
+  }
+  .masonry-item {
+    &:not(.no-padding){
+      padding: 16px;
+    }
   }
 }

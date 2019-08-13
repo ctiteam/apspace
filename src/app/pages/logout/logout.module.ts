@@ -1,19 +1,16 @@
 import { NgModule } from '@angular/core';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { MorePage } from './more.page';
-import { FusePipe } from '../../pipes/fuse.pipe';
-import { ByGroupPipe } from './by-group.pipe';
+import { LogoutPage } from './logout.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: MorePage
+    component: LogoutPage
   }
 ];
 
@@ -24,9 +21,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  providers: [
-    InAppBrowser
-  ],
-  declarations: [MorePage, FusePipe, ByGroupPipe]
+  declarations: [LogoutPage]
 })
-export class MorePageModule { }
+export class LogoutPageModule {}

@@ -1,0 +1,113 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>Book New Consultation Hour</ion-title>
+    <ion-buttons slot="start">
+      <ion-button outline small (click)="dismiss()">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content parallax-header padding>
+  <ion-card>
+    <form name="form" (ngSubmit)="bookingForm.form.valid && bookSlot()" #bookingForm="ngForm" novalidate>
+      <ion-card-content no-padding>
+        <ion-grid>
+          <ion-row>
+            <ion-col size-xs="12">
+
+              <ion-item-divider class="colored-border">
+                <ion-label class="form-section-label">
+                  Booking Details
+                </ion-label>
+              </ion-item-divider>
+
+              <ion-item lines="none">
+                <ion-label position="stacked">Staff Name</ion-label>
+                <ion-input class="form-input" [(ngModel)]="formModel.staffName" #staffName="ngModel" type="text"
+                  disabled="true" name="staffName">
+                </ion-input>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-label position="stacked"
+                  [ngClass]="{ 'danger-text': consultationWith.touched && consultationWith.invalid }">Consultation With
+                </ion-label>
+                <ion-select interface="popover" [(ngModel)]="formModel.consultationWith" #consultationWith="ngModel"
+                  [ngClass]="{ 'is-invalid': consultationWith.touched && consultationWith.invalid }" required
+                  type="text" name="consultationWith" class="form-input">
+                  <ion-select-option *ngFor="let consultationWithOption of consultationWithOptions" [value]="consultationWithOption">
+                    {{ consultationWithOption }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div padding-start *ngIf="consultationWith.touched && consultationWith.invalid" class="danger-text">
+                <div *ngIf="consultationWith.errors.required">This field is required</div>
+              </div>
+
+              <ion-item lines="none">
+                <ion-label position="stacked">Date</ion-label>
+                <ion-input [(ngModel)]="formModel.bookingDate" #bookingDate="ngModel" type="text" disabled="true"
+                  name="bookingDate" class="form-input">
+                </ion-input>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-label position="stacked">Time</ion-label>
+                <ion-input [(ngModel)]="formModel.bookingTime" #bookingTime="ngModel" type="text" disabled="true"
+                  name="bookingTime" class="form-input">
+                </ion-input>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-label position="stacked">Note (Optional)</ion-label>
+                <ion-textarea rows="2" [(ngModel)]="formModel.note" #note="ngModel" type="text" name="note" class="form-input">
+                </ion-textarea>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-label [ngClass]="{ 'danger-text': reason.touched && reason.invalid }" position="stacked">Reason For Appointment</ion-label>
+                <ion-textarea [(ngModel)]="formModel.reason" #reason="ngModel"
+                  [ngClass]="{ 'is-invalid': reason.touched && reason.invalid }" required name="reason"
+                  class="form-input" rows="6"></ion-textarea>
+              </ion-item>
+              <div padding-start *ngIf="reason.touched && reason.invalid" class="danger-text">
+                <div *ngIf="reason.errors.required">This field is required</div>
+              </div>
+
+              <ion-item-divider class="colored-border">
+                <ion-label class="form-section-label">
+                  Student Details
+                </ion-label>
+              </ion-item-divider>
+
+              <ion-item lines="none">
+                <ion-label position="stacked">Email Address</ion-label>
+                <ion-input [(ngModel)]="formModel.studentEmail" #studentEmail="ngModel" type="email" disabled="true"
+                  name="studentEmail" class="form-input">
+                </ion-input>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-label position="stacked">Contact Number (Optional)</ion-label>
+                <ion-input [(ngModel)]="formModel.studentContactNumber" #studentContactNumber="ngModel"
+                  [ngClass]="{ 'is-invalid': bookingForm.submitted && studentContactNumber.invalid }" type="tel"
+                  name="studentContactNumber" class="form-input">
+                </ion-input>
+              </ion-item>
+
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col padding>
+              <ion-button type="submit" [disabled]="!bookingForm.form.valid" expand="block" class="success-background">
+                Book
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </form>
+  </ion-card>
+</ion-content>
