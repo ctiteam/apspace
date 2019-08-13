@@ -5,7 +5,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Router } from '@angular/router';
 
 import { asyncData } from '../../../testing';
-import { FusePipe } from './fuse.pipe';
+import { FuseModule } from '../../shared/fuse/fuse.module';
 import { MorePage } from './more.page';
 
 describe('MorePage', () => {
@@ -20,7 +20,8 @@ describe('MorePage', () => {
     cas.getST.and.returnValue(asyncData('ticket'));
 
     TestBed.configureTestingModule({
-      declarations: [MorePage, FusePipe],
+      declarations: [MorePage],
+      imports: [FuseModule],
       providers: [
         { provide: CasTicketService, useValue: cas },
         { provide: InAppBrowser, useValue: {} },
