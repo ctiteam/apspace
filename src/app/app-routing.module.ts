@@ -146,15 +146,23 @@ const routes: Routes = [
   {
     path: 'classroom-finder',
     canActivate: [AuthGuard],
-    loadChildren: './pages/classroom-finder/classroom-finder.module#ClassroomFinderPageModule'
+    loadChildren: () => import('./pages/classroom-finder/classroom-finder.module').then(m => m.ClassroomFinderPageModule)
   },
   {
     path: 'profile',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule)
   },
-  { path: 'opened-slots', loadChildren: './pages/iconsult/student/opened-slots/opened-slots.module#OpenedSlotsPageModule' },
+  {
+    path: 'opened-slots',
+    loadChildren: () => import('./pages/iconsult/student/opened-slots/opened-slots.module').then(m => m.OpenedSlotsPageModule)
+  },
 
+  {
+    path: 'operation-hours',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/operation-hours/operation-hours.module').then(m => m.OperationHoursPageModule)
+  },
 ];
 
 @NgModule({

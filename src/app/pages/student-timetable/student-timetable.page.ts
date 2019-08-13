@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActionSheet } from '@ionic-native/action-sheet/ngx';
@@ -22,6 +23,57 @@ export class StudentTimetablePage implements OnInit {
 
   wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
+  legends = [
+    {
+      name: 'L',
+      desc: 'Lecture',
+    },
+    {
+      name: 'T',
+      desc: 'Tutorial',
+    },
+    {
+      name: 'T1',
+      desc: 'Tutorial Group 1',
+    },
+    {
+      name: 'T2',
+      desc: 'Tutorial Group 2',
+    },
+    {
+      name: 'Lab',
+      desc: 'Computer Lab',
+    },
+    {
+      name: 'Lab 1',
+      desc: 'Computer Lab Group 1',
+    },
+    {
+      name: 'Lab 2',
+      desc: 'Computer Lab Group 2',
+    },
+    {
+      name: 'Lab 3',
+      desc: 'Computer Lab Group 3',
+    },
+    {
+      name: 'TPM',
+      desc: 'APIIT/APLC Campus',
+    },
+    {
+      name: 'New Campus',
+      desc: 'APU Campus',
+    },
+    {
+      name: 'B',
+      desc: 'Buffer Week',
+    },
+    {
+      name: 'R',
+      desc: 'Revision Week',
+    },
+  ];
+
   timetable$: Observable<StudentTimetable[]>;
   selectedWeek: Date; // week is the first day of week
   availableWeek: Date[];
@@ -29,6 +81,8 @@ export class StudentTimetablePage implements OnInit {
   availableDate: Date[];
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
+  intakeSelectable = true;
+  viewWeek: boolean;
 
   intake: string;
 
@@ -41,6 +95,7 @@ export class StudentTimetablePage implements OnInit {
     private tt: StudentTimetableService,
     private ws: WsApiService,
     private settings: SettingsService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -48,12 +103,23 @@ export class StudentTimetablePage implements OnInit {
     this.selectedDate = new Date();
     this.selectedDate.setHours(0, 0, 0, 0);
 
+    // Init Week View
+    this.viewWeek = false;
+
     // select current start of week
     const date = new Date();
     date.setDate(date.getDate() - date.getDay());
     this.selectedWeek = date;
 
-    this.intake = this.settings.get('intake');
+    // optional intake passed by other pages
+    const intake = this.route.snapshot.params.intake;
+    if (intake) {  // indirect timetable page access
+      this.intakeSelectable = false;
+    }
+
+    // intake from params -> intake from settings -> student default intake
+    this.intake = intake || this.settings.get('intake');
+
     // default intake to student current intake
     if (this.intake === undefined) {
       this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
@@ -61,6 +127,7 @@ export class StudentTimetablePage implements OnInit {
         this.settings.set('intake', this.intake);
       });
     }
+
     this.doRefresh();
   }
 
@@ -92,6 +159,18 @@ export class StudentTimetablePage implements OnInit {
       if (this.selectedWeek.getDate() !== week.getDate()) {
         this.selectedWeek = week;
         this.timetable$.subscribe();
+      }
+    });
+  }
+
+  /** Choose view with presentActionSheet. */
+  chooseView() {
+    const labels = ['DAILY', 'WEEKLY'];
+    this.presentActionSheet(labels, (viewStr: string) => {
+      if (viewStr === 'DAILY') {
+        this.viewWeek = false;
+      } else {
+        this.viewWeek = true;
       }
     });
   }

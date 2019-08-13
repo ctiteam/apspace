@@ -1,5 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -22,7 +23,7 @@ import { WsApiService } from '../../services';
         animate('150ms ease-out', style({ opacity: '.7', height: '0', paddingBottom: '0' })),
       ]),
     ]),
-  ],
+  ]
 })
 export class LecturerTimetableComponent implements OnInit {
 

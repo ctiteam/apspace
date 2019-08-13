@@ -4,12 +4,22 @@ import * as Fuse from 'fuse.js';
 
 import { MenuItem } from './menu.interface';
 
+/**
+ * Better search powered by fuse.
+ */
 @Pipe({
   name: 'fuse'
 })
 export class FusePipe implements PipeTransform {
 
-  transform(menuItems: MenuItem[], term: string): any {
+  /**
+   * Menu items fuzzy search, return all if search term empty.
+   *
+   * @param menuItems - array of menu item
+   * @param term - search term
+   * @returns searched - searched items
+   */
+  transform(menuItems: MenuItem[], term: string): MenuItem[] {
     if (term !== '') {
       const options: Fuse.FuseOptions<MenuItem> = {
         keys: ['title', 'color', 'tags'],

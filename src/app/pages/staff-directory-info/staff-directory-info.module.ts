@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
+import { LecturerTimetableComponentModule } from '../../components/lecturer-timetable/lecturer-timetable.module';
 import { StaffDirectoryInfoPage } from './staff-directory-info.page';
 import { UrldecodePipe } from '../../pipes/urldecode.pipe';
 import { ComponentsModule } from 'src/app/components/components.module';
@@ -23,7 +24,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ComponentsModule
+    ComponentsModule,
+    LecturerTimetableComponentModule
   ],
   providers: [AppLauncherService],
   declarations: [StaffDirectoryInfoPage, UrldecodePipe]
