@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Observable } from 'rxjs';
+import * as Fuse from 'fuse.js';
 
 import { CasTicketService, UserSettingsService } from '../../services';
 import { Role } from '../../interfaces';
@@ -17,6 +18,10 @@ export class MorePage implements OnInit {
   view$: Observable<'list' | 'cards'>;
   term = '';
 
+  options: Fuse.FuseOptions<MenuItem> = {
+    keys: ['title', 'tags']
+  };
+
   /* tslint:disable:no-bitwise */
   menuFull: MenuItem[] = [
     {
@@ -25,7 +30,7 @@ export class MorePage implements OnInit {
       url: 'profile',
       img: 'assets/img/profile.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['mentor']
+      tags: ['mentor', 'programme leader']
     },
     {
       title: 'Fees',
@@ -33,7 +38,7 @@ export class MorePage implements OnInit {
       url: 'fees',
       img: 'assets/img/fees.svg',
       role: Role.Student,
-      tags: []
+      tags: ['payment', 'pricing']
     },
     {
       title: 'Bus Shuttle Services',
@@ -214,7 +219,7 @@ export class MorePage implements OnInit {
       url: 'staffs',
       img: 'assets/img/staff-directory.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['lecturer', 'academic']
+      tags: ['lecturer', 'academic', 'teacher']
     },
     {
       title: 'Classroom Finder',

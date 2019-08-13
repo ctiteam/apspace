@@ -7,7 +7,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { MorePage } from './more.page';
-import { FusePipe } from './fuse.pipe';
+import { FusePipe } from '../../pipes/fuse.pipe';
 import { ByGroupPipe } from './by-group.pipe';
 
 const routes: Routes = [

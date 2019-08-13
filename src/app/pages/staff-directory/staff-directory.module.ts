@@ -6,8 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { StaffDirectoryPage } from './staff-directory.page';
+import { FusePipe } from '../../pipes/fuse.pipe';
 import { DepartmentPipe } from './department.pipe';
-import { SearchPipe } from './search.pipe';
 
 const routes: Routes = [
   {
@@ -23,6 +23,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [StaffDirectoryPage, DepartmentPipe, SearchPipe]
+  declarations: [StaffDirectoryPage, FusePipe, DepartmentPipe]
 })
 export class StaffDirectoryPageModule { }
