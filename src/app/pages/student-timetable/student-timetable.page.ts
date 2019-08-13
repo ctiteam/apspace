@@ -76,7 +76,7 @@ export class StudentTimetablePage implements OnInit {
 
   timetable$: Observable<StudentTimetable[]>;
   selectedWeek: Date; // week is the first day of week
-  availableWeek: Date[];
+  availableWeek: Date[] = [];
   selectedDate: Date;
   availableDate: Date[];
   availableDays: string[]; // wday[d.getDay()] for availableDate

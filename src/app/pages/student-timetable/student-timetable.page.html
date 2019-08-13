@@ -1,10 +1,10 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-button color="light" outline small (click)="chooseView()" [disabled]="availableWeek && availableWeek.length === 0">
+      <ion-button color="light" outline small (click)="chooseView()" [disabled]="availableWeek.length === 0">
           {{ viewWeek ? 'Weekly' : 'Daily' }}
       </ion-button>
-      <ion-button color="light" outline small (click)="chooseWeek()" [disabled]="availableWeek && availableWeek.length === 0">
+      <ion-button color="light" outline small (click)="chooseWeek()" [disabled]="availableWeek.length === 0">
         {{ (selectedDate | date) || 'Weeks' }}
       </ion-button>
     </ion-buttons>
@@ -21,7 +21,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ng-template [ngIf]="!viewWeek && availableWeek && availableWeek.length > 0">
+  <ng-template [ngIf]="!viewWeek && availableWeek.length > 0">
     <ion-segment [ngModel]="selectedDate | date:'E' | uppercase"
       (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
       <ion-segment-button *ngFor="let day of availableDays" [value]="day">
