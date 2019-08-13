@@ -177,6 +177,7 @@ export class OpenedSlotsPage implements OnInit {
     };
     const modal = await this.modalCtrl.create({
       component: BookSlotModalPage,
+      cssClass: 'book-slot-modal',
       componentProps: { dataToSend, notFound: 'No news Selected' },
     });
     await modal.present();
