@@ -36,7 +36,7 @@ const routes: Routes = [
     StudentTimetablePage,
     ClassesPipe,
     ThedayPipe,
-    TheWeekPipe
+    TheWeekPipe,
   ],
   entryComponents: []
 })
