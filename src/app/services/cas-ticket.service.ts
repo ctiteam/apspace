@@ -1,8 +1,8 @@
 /* tslint:disable:no-shadowed-variable */
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
-import { Events } from '@ionic/angular';
 import { Observable, EMPTY, from as fromPromise, of, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
@@ -34,7 +34,7 @@ export class CasTicketService {
   constructor(
     public http: HttpClient,
     public storage: Storage,
-    public events: Events,
+    public router: Router,
     private settings: SettingsService,
   ) {
   }
@@ -64,7 +64,7 @@ export class CasTicketService {
           ? of(res.headers.get('Location').split('/').pop())
           : username && password
             ? throwError(res)
-            : (this.events.publish('user:logout'), EMPTY)),
+            : (this.router.navigate(['/logout']), EMPTY)),
         tap(tgt => this.storage.set('tgt', tgt)),
         tap(_ => this.storage.set('cred', data)),
       )),

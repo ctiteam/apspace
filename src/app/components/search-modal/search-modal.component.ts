@@ -1,10 +1,13 @@
-import { AfterViewInit, Component, ViewChild, Input, OnInit } from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectionStrategy, Component, ViewChild, Input, OnInit
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IonSearchbar, ModalController } from '@ionic/angular';
 import { Observable, concat, of } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-search-modal',
   templateUrl: './search-modal.component.html',
   styleUrls: ['./search-modal.component.scss'],
@@ -61,4 +64,5 @@ export class SearchModalComponent implements AfterViewInit, OnInit {
     }
     return filteredItems;
   }
+
 }

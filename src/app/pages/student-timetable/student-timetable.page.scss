@@ -13,8 +13,8 @@ ion-content ion-card-content ion-icon {
   padding-right: 8px;
 }
 
-ion-content ion-card-header + ion-card-content p:nth-child(odd) {
-  background-color: #eceff1;
+ion-content ion-card-header + ion-card-content div:nth-child(odd) {
+  background-color: var(--tertiary-bg-color);
 }
 
 ion-card-content {
@@ -42,10 +42,6 @@ ion-card {
 .hr-custom {
   border: 2px solid var(--secondary-txt-color);
   width: 100%;
-}
-
-.text-bold {
-  font-weight: bold !important;
 }
 
 @media (min-width: 600px) {

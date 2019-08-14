@@ -51,21 +51,6 @@ export class AppComponent {
           .getAccentColor()
           .subscribe(val => (this.selectedAccentColor = val));
 
-        // if (tgt) {
-        //   // check if the user is logged in
-        //   this.events.subscribe('user:logout', () => this.onLogout());
-        //   this.navCtrl.setRoot('TabsPage');
-        //   if (this.platform.is('cordova')) {
-        //     this.checkNewNotification();
-        //     this.notificationService.getMessage().subscribe();
-        //   }
-        // } else {
-        //   this.events.subscribe('user:login', () => this.onLogin());
-        //   if (this.platform.is('cordova')) {
-        //     this.checkNewNotification();
-        //   }
-        //   this.navCtrl.setRoot('LoginPage');
-        // }
         if (this.platform.is('cordova')) {
           if (this.platform.is('ios')) {
             this.statusBar.overlaysWebView(false);

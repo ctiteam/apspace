@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, finalize, map } from 'rxjs/operators';
 
+import * as Fuse from 'fuse.js';
+
 import { StaffDirectory } from '../../interfaces';
 import { WsApiService } from '../../services';
 
@@ -17,6 +19,10 @@ export class StaffDirectoryPage implements OnInit {
   dept = '';
   staff$: Observable<StaffDirectory[]>;
   staffType$: Observable<string[]>;
+
+  options: Fuse.FuseOptions<StaffDirectory> = {
+    keys: ['FULLNAME', 'CODE', 'ID', 'EMAIL', 'EXTENSION', 'TITLE']
+  };
 
   constructor(private ws: WsApiService) { }
 

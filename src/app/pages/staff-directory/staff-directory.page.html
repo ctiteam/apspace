@@ -11,7 +11,8 @@
 
   <ion-list lines="none" style="margin-bottom: 0px">
     <ion-item>
-      <ion-searchbar [(ngModel)]="term"></ion-searchbar>
+      <ion-searchbar [(ngModel)]="term" placeholder="Search (e.g. 'rasodin', 'ras', '5105', ...)">
+      </ion-searchbar>
     </ion-item>
     <ion-item *ngIf="staffType$ | async as staffTypes">
       <ion-label floating>Functional Area</ion-label>
@@ -24,7 +25,7 @@
   </ion-list>
 
   <ng-template let-staffs [ngIf]="staff$ | async">
-    <ion-virtual-scroll [items]="staffs | department:dept | search:term"
+    <ion-virtual-scroll [items]="staffs | department:dept | fuse:term:options"
       [trackBy]="trackById" approxItemHeight="68px">
       <ion-item *virtualItem="let staff" button [routerLink]="[staff.ID]" style="padding-top: 1px">
         <ion-avatar slot="start">

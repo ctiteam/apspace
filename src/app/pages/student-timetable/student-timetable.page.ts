@@ -1,6 +1,6 @@
-import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ActionSheet } from '@ionic-native/action-sheet/ngx';
 import {
   ActionSheetController, IonRefresher, ModalController, NavController, Platform,
@@ -15,6 +15,7 @@ import { ClassesPipe } from './classes.pipe';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-timetable',
   templateUrl: './student-timetable.page.html',
   styleUrls: ['./student-timetable.page.scss'],
@@ -76,19 +77,21 @@ export class StudentTimetablePage implements OnInit {
 
   timetable$: Observable<StudentTimetable[]>;
   selectedWeek: Date; // week is the first day of week
-  availableWeek: Date[];
+  availableWeek: Date[] = [];
   selectedDate: Date;
   availableDate: Date[];
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
   intakeSelectable = true;
-  viewWeek: boolean;
+  viewWeek = false; // weekly or daily display
 
+  room: string;
   intake: string;
 
   constructor(
     private actionSheet: ActionSheet,
     private actionSheetCtrl: ActionSheetController,
+    private cdr: ChangeDetectorRef,
     private modalCtrl: ModalController,
     private navCtrl: NavController,
     private plt: Platform,
@@ -103,18 +106,23 @@ export class StudentTimetablePage implements OnInit {
     this.selectedDate = new Date();
     this.selectedDate.setHours(0, 0, 0, 0);
 
-    // Init Week View
-    this.viewWeek = false;
-
     // select current start of week
     const date = new Date();
     date.setDate(date.getDate() - date.getDay());
     this.selectedWeek = date;
 
+    // optional room paramMap to filter timetables by room (separated from intake filter)
+    this.room = this.route.snapshot.paramMap.get('room');
+
     // optional intake passed by other pages
     const intake = this.route.snapshot.params.intake;
-    if (intake) {  // indirect timetable page access
+    if (intake || this.room) { // indirect timetable page access
       this.intakeSelectable = false;
+    }
+
+    // quick exit when room is specified (and do not set intake)
+    if (this.room !== null) {
+      return this.doRefresh();
     }
 
     // intake from params -> intake from settings -> student default intake
@@ -158,27 +166,17 @@ export class StudentTimetablePage implements OnInit {
       const week = this.availableWeek[labels.indexOf(weekStr)];
       if (this.selectedWeek.getDate() !== week.getDate()) {
         this.selectedWeek = week;
+        this.cdr.markForCheck();
         this.timetable$.subscribe();
-      }
-    });
-  }
-
-  /** Choose view with presentActionSheet. */
-  chooseView() {
-    const labels = ['DAILY', 'WEEKLY'];
-    this.presentActionSheet(labels, (viewStr: string) => {
-      if (viewStr === 'DAILY') {
-        this.viewWeek = false;
-      } else {
-        this.viewWeek = true;
       }
     });
   }
 
   /** Check and update intake on change. */
   changeIntake(intake: string) {
-    if (intake !== this.intake) {
+    if (intake !== null && intake !== this.intake) {
       this.settings.set('intake', this.intake = intake);
+      this.cdr.markForCheck();
       this.timetable$.subscribe();
     }
   }
@@ -234,8 +232,9 @@ export class StudentTimetablePage implements OnInit {
 
   /** Track and update week and date in the order of day, week, intake. */
   updateDay(tt: StudentTimetable[]) {
-    // filter by intake (need not to track intake)
-    tt = new ClassesPipe().transform(tt, this.intake);
+    // filter by intake and room (need not to track intake)
+    // XXX: remove this so that classes pipe is only called once
+    tt = new ClassesPipe().transform(tt, this.intake, this.room);
 
     // get week
     this.availableWeek = Array.from(new Set(tt.map(t => {

@@ -5,14 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { StaffDirectoryPage } from './staff-directory.page';
-import { DepartmentPipe } from './department.pipe';
-import { FuseModule } from '../../shared/fuse/fuse.module';
+import { LogoutPage } from './logout.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: StaffDirectoryPage
+    component: LogoutPage
   }
 ];
 
@@ -21,9 +19,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes),
-    FuseModule
+    RouterModule.forChild(routes)
   ],
-  declarations: [StaffDirectoryPage, DepartmentPipe]
+  declarations: [LogoutPage]
 })
-export class StaffDirectoryPageModule { }
+export class LogoutPageModule {}
