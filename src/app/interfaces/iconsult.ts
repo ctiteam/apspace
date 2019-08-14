@@ -29,3 +29,18 @@ export interface ConsultationSlot {
   venue: string;
 }
 
+export interface SlotDetails {
+  contime: string;
+  endTime: string;
+  location: string;
+  venue: string;
+  lecname: string;
+  con_with: string;
+  reason: string;
+  phone: string;
+  note: string;
+  datetime: number;
+  status: number;
+  LecEmail: number;
+  cancelreason: string;
+}
