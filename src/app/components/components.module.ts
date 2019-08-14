@@ -10,6 +10,7 @@ import { EventsListComponent } from './events-list/events-list.component';
 import { DashboardCardComponent } from './dashboard-card/dashboard-card.component';
 import { QuickAccessItemComponent } from './quick-access-item/quick-access-item.component';
 import { PopoverComponent } from './popover/popover.component';
+import { NoDataComponent } from './no-data/no-data.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { PopoverComponent } from './popover/popover.component';
     EventsListComponent,
     DashboardCardComponent,
     QuickAccessItemComponent,
-    PopoverComponent
+    PopoverComponent,
+    NoDataComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { PopoverComponent } from './popover/popover.component';
     EventsListComponent,
     DashboardCardComponent,
     QuickAccessItemComponent,
-    PopoverComponent
+    PopoverComponent,
+    NoDataComponent
   ],
   entryComponents: [
     SearchModalComponent,
