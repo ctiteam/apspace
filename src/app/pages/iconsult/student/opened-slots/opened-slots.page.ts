@@ -177,11 +177,10 @@ export class OpenedSlotsPage implements OnInit {
     };
     const modal = await this.modalCtrl.create({
       component: BookSlotModalPage,
-      cssClass: 'book-slot-modal',
-      componentProps: { dataToSend, notFound: 'No news Selected' },
+      cssClass: 'add-min-height',
+      componentProps: { dataToSend, notFound: 'No slot Selected' },
     });
     await modal.present();
-    // default item to current intake if model dismissed without data
     await modal.onDidDismiss();
   }
 
