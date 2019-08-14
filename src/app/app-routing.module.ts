@@ -163,6 +163,10 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/operation-hours/operation-hours.module').then(m => m.OperationHoursPageModule)
   },
+  {
+    path: 'my-appointments',
+    loadChildren: () => import('./pages/iconsult/student/my-appointments/my-appointments.module').then( m => m.MyAppointmentsPageModule)
+  },
 ];
 
 @NgModule({

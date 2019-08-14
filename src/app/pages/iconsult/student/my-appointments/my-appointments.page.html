@@ -1,0 +1,117 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>My Appointments</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ng-container *ngIf="slots$ | async as slots; else loadingSlots">
+        <ng-container *ngIf="slots.length > 0; else noConsultations">
+          <ion-col size-xs="12" size-md="6" size-xl="4" *ngFor="let slot of slots">
+            <ion-card [class.cancelled]="slot.status !== 'normal'">
+              <ion-card-header no-padding padding-top>
+                <ion-card-title>
+                  <ion-item lines="none" no-padding padding-start>
+                    <ion-label class="card-header-title main-text-color text-bolder">
+                      {{ slot.lecname }}
+                    </ion-label>
+                    <ion-badge *ngIf="slot.status !== 'normal'" class="small-margin-top" slot="end">
+                      {{ slot.status === 'cancelledbylec'
+                              ? 'Cancelled By Lecturer'
+                              : slot.status === 'cancelledbystu'
+                                ? 'Cancelled By Student'
+                                : ''
+                            }}
+                    </ion-badge>
+                  </ion-item>
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content no-padding padding-start padding-end padding-bottom>
+                <ion-item lines="none">
+                  <ion-icon class="tertiary-txt-color" name="calendar" slot="start"></ion-icon>
+                  <ion-label>
+                    <p class="tertiary-txt-color">Appointment Date:</p>
+                    <h4 class="main-txt-color">{{ slot.date | date: 'EEEE, dd MMM yyyy' }}</h4>
+                  </ion-label>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-icon class="tertiary-txt-color" name="time" slot="start"></ion-icon>
+                  <ion-label>
+                    <p class="tertiary-txt-color">Appointment Time:</p>
+                    <h4 class="main-txt-color">{{ slot.starttime }} - {{ slot.endtime }}</h4>
+                  </ion-label>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-icon class="tertiary-txt-color" name="pin" slot="start"></ion-icon>
+                  <ion-label>
+                    <p class="tertiary-txt-color">Appointment Location:</p>
+                    <h4 class="main-txt-color">{{ slot.venue }} | {{ slot.location }}</h4>
+                  </ion-label>
+                </ion-item>
+
+                <ion-grid no-padding>
+                  <ion-row>
+                    <ion-col size-xs="12" size-sm="6">
+                      <ion-button (click)="openSlotDetailsModal(slot.slotid)" class="colored-background" expand="block">
+                        View Details
+                        <ion-icon name="list-box" slot="end"></ion-icon>
+                      </ion-button>
+                    </ion-col>
+                    <ion-col size-xs="12" size-sm="6">
+                      <ion-button (click)="chatInTeams(slot.casid)" class="chat-in-teams" expand="block">
+                        Chat In Teams
+                        <ion-icon name="chatbubbles" slot="end"></ion-icon>
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ng-container>
+        <ng-template #noConsultations>
+          <ion-col size-xs="12" offset-md="3" size-md="6" offset-xl="4" size-xl="4">
+            <app-no-data [messageTitle]="'No Upcoming Appointments'" [messageContent]="'Currently, you have no upcoming appointments. If you have any acadimic related question, or concerns, you can:'" [buttonContent]="'Book a new consultation'" [buttonAction]="openStaffDirectory"></app-no-data>
+          </ion-col>
+        </ng-template>
+      </ng-container>
+      <ng-template #loadingSlots>
+        <ion-col size-xs="12" offset-md="3" size-md="6" offset-xl="4" size-xl="4" *ngFor="let _ of skeltonArray">
+          <ion-card>
+            <ion-card-header>
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="8">
+                    <ion-skeleton-text animated style="width: 100%; line-height: 30px;"></ion-skeleton-text>
+                  </ion-col>
+                  <ion-col size="3" offset="1">
+                    <ion-skeleton-text animated style="width: 100%; line-height: 30px;"></ion-skeleton-text>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-grid no-padding>
+                <ion-skeleton-text animated style="width: 100%; line-height: 30px;"></ion-skeleton-text>
+                <ion-skeleton-text animated style="width: 50%; line-height: 30px;"></ion-skeleton-text>
+                <ion-skeleton-text animated style="width: 80%; line-height: 30px;"></ion-skeleton-text>
+                <ion-skeleton-text animated style="width: 30%; line-height: 30px;"></ion-skeleton-text>
+                <ion-row>
+                  <ion-col size-xs="12" size-sm="6">
+                    <ion-skeleton-text animated style="line-height: 30px; width: 100%;"></ion-skeleton-text>
+                  </ion-col>
+                  <ion-col size-xs="12" size-sm="6">
+                    <ion-skeleton-text animated style="line-height: 30px; width: 100%;"></ion-skeleton-text>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ng-template>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
