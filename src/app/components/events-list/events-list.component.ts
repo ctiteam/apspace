@@ -10,8 +10,7 @@ import { Observable } from 'rxjs';
 export class EventsListComponent implements OnInit {
   @Input() observable$: Observable<EventComponentConfigurations[]>;
   skeletonConfigurations = {
-    eventsSkeleton: new Array(8),
-
+    eventsSkeleton: new Array(3),
   };
   ngOnInit() {
   }
