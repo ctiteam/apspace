@@ -97,7 +97,7 @@
         <ion-grid no-padding>
           <ion-row>
             <!-- QUICK ACCESS ITEM: ATTENDANCE -->
-            <ion-col *ngIf="shownDashboardSections.includes('quickAccess')">
+            <ion-col padding-start *ngIf="shownDashboardSections.includes('quickAccess')">
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
@@ -117,7 +117,7 @@
             </ion-col>
 
             <!-- QUICK ACCESS ITEM: TOTAL OVERDUE -->
-            <ion-col *ngIf="shownDashboardSections.includes('quickAccess')">
+            <ion-col padding-end *ngIf="shownDashboardSections.includes('quickAccess')">
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
