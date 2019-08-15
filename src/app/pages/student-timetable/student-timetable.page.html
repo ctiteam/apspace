@@ -1,15 +1,15 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="light" outline small (click)="viewWeek = !viewWeek" [disabled]="availableWeek!.length === 0">
+      <ion-button outline small (click)="viewWeek = !viewWeek" [disabled]="availableWeek!.length === 0">
           {{ viewWeek ? 'Weekly' : 'Daily' }}
       </ion-button>
-      <ion-button color="light" outline small (click)="chooseWeek()" [disabled]="availableWeek!.length === 0">
+      <ion-button outline small (click)="chooseWeek()" [disabled]="availableWeek!.length === 0">
         {{ (selectedDate | date) || 'Weeks' }}
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button *ngIf="intakeSelectable" color="light" outline small (click)="presentIntakeSearch()">
+      <ion-button *ngIf="intakeSelectable" outline small (click)="presentIntakeSearch()">
         {{ intake || 'Intakes' }}
       </ion-button>
     </ion-buttons>
@@ -30,7 +30,8 @@
     </ion-segment>
   </ng-template>
 
-  <ng-template let-timetables [ngIf]="timetable$ | async | classes:intake:room" [ngIfElse]="loading">
+  <!-- do not add filter pipe here as it affects loading -->
+  <ng-template let-timetables [ngIf]="timetable$ | async" [ngIfElse]="loading">
     <ng-template [ngIf]="timetables!.length" [ngIfElse]="empty">
       <ng-template [ngIf]="selectedDate">
         <ion-card no-padding>
@@ -47,7 +48,7 @@
         </ion-card>
       </ng-template>
 
-      <ion-card *ngFor="let timetable of !viewWeek ? (timetables | theday:selectedDate) : (timetables | theweek:selectedWeek); trackBy: trackByindex"
+      <ion-card *ngFor="let timetable of !viewWeek ? (timetables | classes:intake:room | theday:selectedDate) : (timetables | classes:intake:room | theweek:selectedWeek); trackBy: trackByindex"
         no-padding class="card-side"
         [style.borderLeft]="'1rem solid ' + strToColor(timetable.MODID)">
         <ion-card-content no-padding>

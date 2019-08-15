@@ -236,6 +236,41 @@
         <ion-card-header>
           <ion-card-title class="card-title float-left">
             <h3 class="responsive-h1">
+              Student Timetable
+            </h3>
+            <h5 class="small-margin-top small-text" style="font-weight: 300;">
+              Configure student timetable filters
+            </h5>
+          </ion-card-title>
+          <div class="clearfix"></div>
+        </ion-card-header>
+        <ion-card-content no-padding padding-bottom padding-start padding-end>
+          <ion-list no-padding>
+            <ion-item-group *ngIf="timetable$ | async as timetable">
+              <ion-item-divider no-padding margin-bottom>
+                <ion-label>
+                  Module blacklists <small>(hidden from timetable)</small>
+                </ion-label>
+              </ion-item-divider>
+              <ion-chip *ngFor="let module of timetable?.blacklists"
+                (click)="timetableModuleBlacklistsRemove(module)">
+                <ion-icon name="remove"></ion-icon>
+                <ion-label>{{ module }}</ion-label>
+              </ion-chip>
+              <ion-chip (click)="timetableModuleBlacklistsAdd()">
+                <ion-icon name="add"></ion-icon>
+                <ion-label>Add</ion-label>
+              </ion-chip>
+            </ion-item-group>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div class="masonry-item">
+      <ion-card no-margin margin-bottom>
+        <ion-card-header>
+          <ion-card-title class="card-title float-left">
+            <h3 class="responsive-h1">
               Security & Privacy
             </h3>
             <h5 class="small-margin-top small-text" style="font-weight: 300;">

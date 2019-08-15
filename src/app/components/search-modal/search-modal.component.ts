@@ -22,6 +22,9 @@ export class SearchModalComponent implements AfterViewInit, OnInit {
   /** Displayed items before searching. */
   @Input() defaultItems: string[] = [];
 
+  /** Placeholder shown for search bar. */
+  @Input() placeholder = 'Search';
+
   /** Message to display when no items. */
   @Input() notFound = 'Type to search';
 

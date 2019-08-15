@@ -1,7 +1,9 @@
-<ion-toolbar color="primary">
+<ion-toolbar>
   <ion-searchbar [formControl]="searchControl" showCancelButton
+    [placeholder]="placeholder"
     (ionInput)="$event.target.value = $event.target.value.toUpperCase()"
-    (ionCancel)="select(null)"></ion-searchbar>
+    (ionCancel)="select(null)">
+  </ion-searchbar>
 </ion-toolbar>
 
 <ion-content>
