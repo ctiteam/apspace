@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 
 import { FeedbackService, SettingsService, VersionService } from '../../services';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-feedback',
@@ -10,6 +11,7 @@ import { FeedbackService, SettingsService, VersionService } from '../../services
 })
 export class FeedbackPage implements OnInit {
 
+  onlineFeedbackSystemURL = 'https://erp.apiit.edu.my/easymoo/web/en/user/feedback/feedbackusersend';
   contactNo: string;
   message: string;
 
@@ -24,6 +26,7 @@ export class FeedbackPage implements OnInit {
     private settings: SettingsService,
     private toastCtrl: ToastController,
     private version: VersionService,
+    private iab: InAppBrowser
   ) { }
 
   submitFeedback() {
@@ -61,13 +64,16 @@ export class FeedbackPage implements OnInit {
 
   ngOnInit() {
     this.contactNo = this.settings.get('contactNo');
-
     this.platform = this.feedback.platform();
     this.appVersion = this.version.name;
   }
 
   onMessageFieldChange(event) {
     this.message = event.trim();
+  }
+
+  openOnlineFeedbackSystem() {
+    this.iab.create(`${this.onlineFeedbackSystemURL}`, '_blank', 'location=true');
   }
 
 }
