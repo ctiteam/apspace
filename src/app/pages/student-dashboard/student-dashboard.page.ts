@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   EventComponentConfigurations, DashboardCardComponentConfigurations,
   Attendance, StudentProfile, Apcard, FeesTotalSummary, Course, CourseDetails,
@@ -17,7 +17,7 @@ import { DragulaService } from 'ng2-dragula';
   templateUrl: './student-dashboard.page.html',
   styleUrls: ['./student-dashboard.page.scss'],
 })
-export class StudentDashboardPage implements OnInit {
+export class StudentDashboardPage implements OnInit, OnDestroy {
   // USER SETTINGS
   activeAccentColor = '';
   lowAttendanceChart: any;
@@ -227,6 +227,11 @@ export class StudentDashboardPage implements OnInit {
     );
     this.enableCardReordering();
     this.doRefresh();
+  }
+
+  ngOnDestroy() {
+    // Destroy the edit list when page is destroyed
+    this.dragulaService.destroy('editable-list-bag');
   }
 
   doRefresh(refresher?) {
