@@ -30,7 +30,7 @@ export class FeedbackPage implements OnInit {
     const feedback = {
       contactNo: this.contactNo || '',
       platform: this.platform,
-      message: this.message, // begone whitespaces!
+      message: this.message,
       appVersion: this.appVersion,
       screenSize: this.screenSize,
     };
