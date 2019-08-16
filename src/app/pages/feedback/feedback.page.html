@@ -5,7 +5,6 @@
 </ion-header>
 
 <ion-content>
-
   <ion-grid>
     <ion-row>
       <ion-col size-xs="12" size-lg="4">
@@ -58,9 +57,10 @@
           
             <ion-item no-padding>
               <ion-label stacked>Contact Number:</ion-label>
-              <ion-input type="text" [(ngModel)]="contactNo" no-padding></ion-input>
+              <ion-input type="text" [(ngModel)]="contactNo" (ngModelChange)="onPhoneNumberChange()" no-padding></ion-input>
             </ion-item>
-        
+            <small *ngIf="contactNo && !phoneNumberValid" style="color: red">Phone number is invalid. Please check the number and enter a correct phone number (Exactly 10 or 11 digits)</small>
+            
             <ion-item no-padding>
               <ion-label stacked>Screen Size</ion-label>
               <ion-input type="text" disabled [value]="screenSize"></ion-input>

@@ -11,6 +11,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 })
 export class FeedbackPage implements OnInit {
 
+  phoneNumberValidationPattern = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4,5})$/;
+  phoneNumberValid = false;
   onlineFeedbackSystemURL = 'https://erp.apiit.edu.my/easymoo/web/en/user/feedback/feedbackusersend';
   contactNo: string;
   message: string;
@@ -70,6 +72,16 @@ export class FeedbackPage implements OnInit {
 
   onMessageFieldChange(event) {
     this.message = event.trim();
+  }
+
+  onPhoneNumberChange() {
+    if (this.contactNo) {
+      if (this.contactNo.match(this.phoneNumberValidationPattern)) {
+        this.phoneNumberValid = true;
+      } else {
+        this.phoneNumberValid = false;
+      }
+    }
   }
 
   openOnlineFeedbackSystem() {
