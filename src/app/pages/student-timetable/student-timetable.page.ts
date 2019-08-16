@@ -7,7 +7,7 @@ import {
 } from '@ionic/angular';
 
 import { Observable, combineLatest } from 'rxjs';
-import { delay, finalize, map, tap, withLatestFrom } from 'rxjs/operators';
+import { finalize, map, tap, withLatestFrom } from 'rxjs/operators';
 
 import { StudentProfile, StudentTimetable } from '../../interfaces';
 import {
@@ -129,14 +129,15 @@ export class StudentTimetablePage implements OnInit {
     }
 
     // intake from params -> intake from settings -> student default intake
-    this.intake = intake || this.settings.get('intake');
+    const intakeHistory = this.settings.get('intakeHistory') || [];
+    this.intake = intake || intakeHistory[intakeHistory.length - 1];
 
     // default intake to student current intake
     if (this.intake === undefined) {
       this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
         this.intake = (p || {} as StudentProfile).INTAKE || '';
         this.cdr.markForCheck();
-        this.settings.set('intake', this.intake);
+        this.settings.set('intakeHistory', [this.intake]);
       });
     }
 
@@ -179,7 +180,11 @@ export class StudentTimetablePage implements OnInit {
   /** Check and update intake on change. */
   changeIntake(intake: string) {
     if (intake !== null && intake !== this.intake) {
-      this.settings.set('intake', this.intake = intake);
+      this.intake = intake;
+      this.settings.set('intakeHistory', this.settings.get('intakeHistory')
+        .concat(intake)
+        .filter((v, i, a) => a.lastIndexOf(v) === i)
+        .slice(-5));
       this.cdr.markForCheck();
       this.timetable$.subscribe();
     }
@@ -189,8 +194,11 @@ export class StudentTimetablePage implements OnInit {
   async presentIntakeSearch() {
     const modal = await this.modalCtrl.create({
       component: SearchModalComponent,
-      // TODO: store search history
-      componentProps: { items: this.intakeLabels, notFound: 'No intake selected' },
+      componentProps: {
+        items: this.intakeLabels,
+        defaultItems: this.settings.get('intakeHistory'),
+        notFound: 'No intake selected'
+      }
     });
     await modal.present();
     // default item to current intake if model dismissed without data
@@ -270,6 +278,8 @@ export class StudentTimetablePage implements OnInit {
     } else if (this.availableDate.length === 0) {
       this.selectedDate = undefined;
     }
+
+    this.cdr.markForCheck();
   }
 
 }

@@ -21,60 +21,62 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
-    <ion-segment [ngModel]="selectedDate | date:'E' | uppercase"
-      (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
-      <ion-segment-button *ngFor="let day of availableDays" [value]="day">
-        {{ day }}
-      </ion-segment-button>
-    </ion-segment>
-  </ng-template>
-
   <!-- do not add filter pipe here as it affects loading -->
   <ng-template let-timetables [ngIf]="timetable$ | async" [ngIfElse]="loading">
-    <ng-template [ngIf]="timetables!.length" [ngIfElse]="empty">
-      <ng-template [ngIf]="selectedDate">
-        <ion-card no-padding>
-          <ion-card-content class="table-top">
-            <ion-grid no-margin no-padding>
+    <ng-template let-timetables [ngIf]="!viewWeek ? (timetables | classes:intake:room | theday:selectedDate) : (timetables | classes:intake:room | theweek:selectedWeek)" [ngIfElse]="loading">
+      <ng-template [ngIf]="timetables!.length" [ngIfElse]="empty">
+        <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
+          <ion-segment [ngModel]="selectedDate | date:'E' | uppercase"
+            (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
+            <ion-segment-button *ngFor="let day of availableDays" [value]="day">
+              {{ day }}
+            </ion-segment-button>
+          </ion-segment>
+        </ng-template>
+
+        <ng-template [ngIf]="selectedDate">
+          <ion-card no-padding>
+            <ion-card-content class="table-top">
+              <ion-grid no-margin no-padding>
+                <ion-row>
+                  <ion-col size="12" size-sm="3"><h2>Module</h2></ion-col>
+                  <ion-col size="12" size-sm="3"><h2>Time</h2></ion-col>
+                  <ion-col size="12" size-sm="3"><h2>Location</h2></ion-col>
+                  <ion-col size="12" size-sm="3"><h2>Lecturer</h2></ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
+
+        <ion-card *ngFor="let timetable of timetables; trackBy: trackByindex"
+          no-padding class="card-side"
+          [style.borderLeft]="'1rem solid ' + strToColor(timetable.MODID)">
+          <ion-card-content no-padding>
+            <ion-grid>
               <ion-row>
-                <ion-col size="12" size-sm="3"><h2>Module</h2></ion-col>
-                <ion-col size="12" size-sm="3"><h2>Time</h2></ion-col>
-                <ion-col size="12" size-sm="3"><h2>Location</h2></ion-col>
-                <ion-col size="12" size-sm="3"><h2>Lecturer</h2></ion-col>
+                <ion-col size="12" size-sm="3">
+                  {{ timetable.MODID }}
+                </ion-col>
+                <ion-col size="12" size-sm="3">
+                  <span class="marker"><ion-icon name="time"></ion-icon></span>
+                  {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
+                </ion-col>
+                <ion-col size="12" size-sm="3">
+                  <span class="marker"><ion-icon name="locate"></ion-icon></span>
+                  {{ timetable.ROOM }} | {{ timetable.LOCATION }}
+                </ion-col>
+                <ion-col size="12" size-sm="3">
+                  <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]">
+                    <span class="marker"><ion-icon name="contact"></ion-icon></span>
+                    {{ timetable.NAME }}
+                  </a>
+                </ion-col>
               </ion-row>
             </ion-grid>
           </ion-card-content>
         </ion-card>
       </ng-template>
-
-      <ion-card *ngFor="let timetable of !viewWeek ? (timetables | classes:intake:room | theday:selectedDate) : (timetables | classes:intake:room | theweek:selectedWeek); trackBy: trackByindex"
-        no-padding class="card-side"
-        [style.borderLeft]="'1rem solid ' + strToColor(timetable.MODID)">
-        <ion-card-content no-padding>
-          <ion-grid>
-            <ion-row>
-              <ion-col size="12" size-sm="3">
-                {{ timetable.MODID }}
-              </ion-col>
-              <ion-col size="12" size-sm="3">
-                <span class="marker"><ion-icon name="time"></ion-icon></span>
-                {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
-              </ion-col>
-              <ion-col size="12" size-sm="3">
-                <span class="marker"><ion-icon name="locate"></ion-icon></span>
-                {{ timetable.ROOM }} | {{ timetable.LOCATION }}
-              </ion-col>
-              <ion-col size="12" size-sm="3">
-                <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]">
-                  <span class="marker"><ion-icon name="contact"></ion-icon></span>
-                  {{ timetable.NAME }}
-                </a>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card-content>
-      </ion-card>
     </ng-template>
 
     <ng-template #empty>

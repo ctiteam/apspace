@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonSelect, ModalController, NavController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, pluck, tap } from 'rxjs/operators';
 
-import { APULocations, APULocation } from '../../interfaces';
+import { APULocations, APULocation, StudentProfile } from '../../interfaces';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 import {
   SettingsService, StudentTimetableService, UserSettingsService, WsApiService
@@ -153,29 +153,32 @@ export class SettingsPage implements OnInit {
     this.userSettings.setMenuUI(this.menuUI);
   }
 
-  timetableModuleBlacklistsAdd() {
+  async timetableModuleBlacklistsAdd() {
     const setting = this.userSettings.timetable.value;
-    this.tt.get().subscribe(async timetables => {
-      const intake = this.settings.get('intake');
-      // ignored those that are blacklisted
-      const filtered = timetables.filter(timetable => !setting.blacklists.includes(timetable.MODID));
-      const items = [...new Set(filtered.map(timetable => timetable.MODID))];
-      const defaultItems = [...new Set(filtered
-        .filter(timetable => timetable.INTAKE === intake)
-        .map(timetable => timetable.MODID))];
-      const placeholder = 'Search all modules';
-      const notFound = 'No module selected';
-      const modal = await this.modalCtrl.create({
-        component: SearchModalComponent,
-        componentProps: { items, defaultItems, placeholder, notFound }
-      });
-      await modal.present();
-      const { data } = await modal.onDidDismiss();
-      if (data && data.item) {
-        setting.blacklists.push(data.item);
-        this.userSettings.timetable.next(setting);
-      }
+    const timetables = await this.tt.get().toPromise();
+
+    const intakeHistory = this.settings.get('intakeHistory') || [];
+    const intake = intakeHistory[intakeHistory.length - 1]
+      || await this.ws.get<StudentProfile>('/student/profile').pipe(pluck('INTAKE')).toPromise();
+
+    // ignored those that are blacklisted
+    const filtered = timetables.filter(timetable => !setting.blacklists.includes(timetable.MODID));
+    const items = [...new Set(filtered.map(timetable => timetable.MODID))];
+    const defaultItems = [...new Set(filtered
+      .filter(timetable => timetable.INTAKE === intake)
+      .map(timetable => timetable.MODID))];
+    const placeholder = 'Search all modules';
+    const notFound = 'No module selected';
+    const modal = await this.modalCtrl.create({
+      component: SearchModalComponent,
+      componentProps: { items, defaultItems, placeholder, notFound }
     });
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data && data.item) {
+      setting.blacklists.push(data.item);
+      this.userSettings.timetable.next(setting);
+    }
   }
 
   timetableModuleBlacklistsRemove(value) {
