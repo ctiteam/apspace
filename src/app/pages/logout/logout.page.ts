@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 import { SettingsService } from '../../services';
@@ -12,7 +12,7 @@ import { SettingsService } from '../../services';
 export class LogoutPage implements OnInit {
 
   constructor(
-    public router: Router,
+    public navCtrl: NavController,
     public storage: Storage,
     private settings: SettingsService
   ) { }
@@ -20,7 +20,8 @@ export class LogoutPage implements OnInit {
   ngOnInit() {
     this.settings.clear();
     this.storage.clear();
-    this.router.navigate(['/login'], { replaceUrl: true });
+    // destroy all cached/active views which angular router does not
+    this.navCtrl.navigateRoot('/login', { replaceUrl: true });
   }
 
 }
