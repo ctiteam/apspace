@@ -163,9 +163,11 @@ export class SettingsPage implements OnInit {
       const defaultItems = [...new Set(filtered
         .filter(timetable => timetable.INTAKE === intake)
         .map(timetable => timetable.MODID))];
+      const placeholder = 'Search all modules';
+      const notFound = 'No module selected';
       const modal = await this.modalCtrl.create({
         component: SearchModalComponent,
-        componentProps: { items, defaultItems, placeholder: 'Search all', notFound: 'No module selected' }
+        componentProps: { items, defaultItems, placeholder, notFound }
       });
       await modal.present();
       const { data } = await modal.onDidDismiss();

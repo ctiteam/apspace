@@ -254,11 +254,11 @@
               </ion-item-divider>
               <ion-chip *ngFor="let module of timetable?.blacklists"
                 (click)="timetableModuleBlacklistsRemove(module)">
-                <ion-icon name="remove"></ion-icon>
+                <ion-icon name="remove" color="danger"></ion-icon>
                 <ion-label>{{ module }}</ion-label>
               </ion-chip>
               <ion-chip (click)="timetableModuleBlacklistsAdd()">
-                <ion-icon name="add"></ion-icon>
+                <ion-icon name="add" color="success"></ion-icon>
                 <ion-label>Add</ion-label>
               </ion-chip>
             </ion-item-group>
