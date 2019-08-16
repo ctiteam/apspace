@@ -238,15 +238,22 @@
                   </ion-card>
                 </ng-container>
                 <ng-template #noTrips>
-                  <app-message-with-svg messageTitle="No More Trips!"
-                    messageContent="No more trips for the selected line." imageUrl="assets/img/sad.svg">
+                  <app-message-with-svg
+                    messageTitle="No More Trips!"
+                    messageContent="No more trips for the selected line."
+                    imageUrl="assets/img/sad.svg"
+                    wrapperOffset="3"
+                    wrapperSize="6">
                   </app-message-with-svg>
                 </ng-template>
               </ng-container>
               <ng-template #locationsSettings>
-                <app-message-with-svg messageTitle="Section is not configured!"
+                <app-message-with-svg
+                  messageTitle="Section is not configured!"
                   messageContent="You can configure this section from the settings page, under the bus shuttle services card."
-                  imageUrl="assets/img/config.svg">
+                  imageUrl="assets/img/config.svg"
+                  wrapperOffset="3"
+                  wrapperSize="6">
                 </app-message-with-svg>
               </ng-template>
 
