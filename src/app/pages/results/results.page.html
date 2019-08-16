@@ -1,0 +1,312 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="course$ | async">
+      {{ this.selectedIntake || "Results" }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" size="small" class="notification-button colored-border" (click)="showActionSheet()">
+        Intakes
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-no-padding">
+    <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
+    </ion-refresher>
+    <ng-template [ngIf]="!block">
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ion-col size="12" size-md="6" size-lg="4">
+            <ng-template let-results [ngIf]="result$ | async" [ngIfElse]="loadingBarChart">
+              <ng-template [ngIf]="results && results.length > 0" [ngIfElse]="nodata">
+                <chart *ngIf="data" class="mt-2" [type]="type" [data]="data" [options]="options"></chart>
+              </ng-template>
+              <ng-template #nodata> </ng-template>
+            </ng-template>
+
+            <ng-template #loadingBarChart>
+              <ion-card>
+                <ion-item>
+                  <ion-skeleton-text height="150px" width="100%"></ion-skeleton-text>
+                </ion-item>
+              </ion-card>
+            </ng-template>
+
+            <ng-template let-courseDetails [ngIf]="courseDetail$ | async" [ngIfElse]="loadingCourseDetails">
+              <ion-card>
+                <ion-list no-lines *ngFor="let detail of courseDetails; trackBy:trackByFn">
+                  <ion-item *ngIf="detail.SEMESTER" class="primary-color summary">
+                    <ion-note slot="start">Semester {{ detail.SEMESTER }}</ion-note>
+                    <ion-note slot="end">
+                      {{ detail.TOTAL_MODULES_PASSED }} passed (GPA {{ detail.GPA }})
+                    </ion-note>
+                  </ion-item>
+                </ion-list>
+              </ion-card>
+            </ng-template>
+
+
+          </ion-col>
+          <ion-col size="12" size-md="6" size-lg="8">
+
+            <ng-template #loadingCourseDetails>
+              <ion-card>
+                <ion-item>
+                  <ion-row>
+                    <ion-col col-6>
+                      <ion-skeleton-text height="15px" width="60%"></ion-skeleton-text>
+                    </ion-col>
+                    <ion-col col-6>
+                      <ion-skeleton-text height="15px" width="90%"></ion-skeleton-text>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col col-6>
+                      <ion-skeleton-text height="15px" width="60%"></ion-skeleton-text>
+                    </ion-col>
+                    <ion-col col-6>
+                      <ion-skeleton-text height="15px" width="90%"></ion-skeleton-text>
+                    </ion-col>
+                  </ion-row>
+                </ion-item>
+              </ion-card>
+            </ng-template>
+
+            <ng-template let-results [ngIf]="result$ | async" [ngIfElse]="loadingResults">
+              <ng-template [ngIf]="results && results.length > 0" [ngIfElse]="noresults">
+                <div class="row">
+                  <ion-card>
+                    <ion-card-header style="padding-bottom:0%; padding-top:0%">
+                      <ion-grid no-margin no-padding>
+                        <ion-row class="d-none d-lgg-block" style="padding-bottom:10px; padding-top:10px;">
+                          <ion-col size="12" size-lg="5">Module</ion-col>
+                          <ion-col size="12" size-lg="2">GRADE</ion-col>
+                          <ion-col size="12" size-lg="2">Grade Point</ion-col>
+                          <ion-col size="12" size-lg="3">Internal Result Release Date</ion-col>
+                        </ion-row>
+                        <ion-row class="d-none d-mdd-block">
+                          <ion-col>
+                            <p class="course-title">Course Details</p>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-card-header>
+                  </ion-card>
+                  <ion-card>
+                    <ion-card-content no-padding *ngFor="let result of results; last as last; trackBy: trackByFn">
+                      <ion-grid no-margin no-padding [class.failed]="result.RECOMMENDATION">
+                        <ion-row no-padding>
+                          <ion-col size="12" size-lg="5">
+                            <ion-item no-margin lines="none" class="primary-color summary item-details">
+                              <ion-note no-padding slot="start">
+                                <p>{{ result.MODULE_DESCRIPTION }}</p>
+
+                              </ion-note>
+                            </ion-item>
+                          </ion-col>
+                          <ion-col class="course-details-padding" size="12" size-lg="2">
+                            <ion-item lines="none" class="primary-color summary item-details">
+                              <ion-col class="course-details-padding" style="float: left" class="d-none d-mdd-block">
+                                <p>Grade</p>
+                              </ion-col>
+                              <ion-col class="d-mdd-block-right course-details-padding">
+                                <p>{{ result.GRADE || "N/A" }}</p>
+                              </ion-col>
+                            </ion-item>
+                          </ion-col>
+                          <ion-col class="course-details-padding" size="12" size-lg="2">
+                            <ion-item lines="none" class="primary-color summary item-details">
+                              <ion-col style="float: left" class="d-none d-mdd-block course-details-padding">
+                                <p>Grade Point</p>
+                              </ion-col>
+                              <ion-col class="d-mdd-block-right course-details-padding">
+                                <p>{{ result.GRADE_POINT || "N/A" }}</p>
+                              </ion-col>
+                            </ion-item>
+                          </ion-col>
+                          <ion-col class="course-details-padding" size="12" size-lg="3">
+                            <ion-item lines="none" class="primary-color summary item-details">
+                              <ion-col style="float: left" class="d-none d-mdd-block course-details-padding">
+                                <p>Internal Result Release Date</p>
+                              </ion-col>
+                              <ion-col class="d-mdd-block-right course-details-padding">
+                                <p>{{ result.INTERNAL_RESULT_RELEASE_DATE || "N/A" }}</p>
+                              </ion-col>
+                            </ion-item>
+                          </ion-col>
+                          <ion-col>
+                            <div padding-start padding-end *ngIf="result.RECOMMENDATION">
+
+                              <p class="course-alert">Recommendation:<br>{{ result.RECOMMENDATION }}</p>
+
+                            </div>
+                          </ion-col>
+
+                        </ion-row>
+                        <ion-row>
+                          <ion-col size="6" offset="3">
+                            <div *ngIf="!last" class="course-border"></div>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-card-content>
+                  </ion-card>
+
+
+
+                </div>
+              </ng-template>
+              <ng-template #noresults>
+                <ion-card>
+                  <ion-card-content>
+                    There are no results for this intake
+                  </ion-card-content>
+                </ion-card>
+              </ng-template>
+            </ng-template>
+
+            <ng-template #loadingResults>
+              <ion-card *ngFor="let s of numOfSkeletons">
+                <ion-item>
+                  <ion-skeleton-text height="150px" width="100%"></ion-skeleton-text>
+                </ion-item>
+              </ion-card>
+            </ng-template>
+
+            <ng-template let-interims [ngIf]="interimLegend$ | async" [ngIfElse]="loadingInterimLegend">
+              <ion-card>
+                <ion-card-header>
+                  <b>Marks And Grade Points</b>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-grid>
+                    <div *ngFor="let interim of interims">
+                      <ion-row class="test" *ngIf="!interim.CLASSIFICATION; else suMaster">
+                        <ion-col col-3>
+                          <div *ngIf="interim.MARK_FROM">
+                            <ion-note class="notes">{{
+                            interim.MARK_FROM + "-" + interim.MARK_TO || ""
+                          }}</ion-note>
+                          </div>
+                        </ion-col>
+                        <ion-col col-2>
+                          <ion-note class="notes">{{ interim.GRADE || "" }}</ion-note>
+                        </ion-col>
+                        <ion-col col-3>
+                          <ion-note class="notes">{{
+                          interim.GRADING_POINT || ""
+                        }}</ion-note>
+                        </ion-col>
+                        <ion-col col-4>
+                          <ion-note class="notes">{{
+                          interim.GRADE_DESCRIPTION || ""
+                        }}</ion-note>
+                        </ion-col>
+                      </ion-row>
+                      <ng-template #suMaster>
+                        <ion-row>
+                          <ion-col>{{ interim.CLASSIFICATION }}:</ion-col>
+                          <ion-col>{{ interim.GRADE }}</ion-col>
+                        </ion-row>
+                      </ng-template>
+                    </div>
+                    <ion-note class="special-note">
+                      R = Awarding of module credit by passing module referral
+                      assessments.
+                    </ion-note>
+                    <ion-note class="special-note mt-2">
+                      C = Awarding of module credit through compensation at the
+                      discretion of the Examination Board, based on the student's
+                      overall academic performance. No referral assessment is requried
+                      for module.
+                    </ion-note>
+                    <ng-template let-mpu [ngIf]="mpuLegend$ | async">
+                      <ion-note *ngIf="mpu.length > 0" class="special-note mt-2">
+                        {{ mpu[0].MPU }}
+                      </ion-note>
+                    </ng-template>
+                    <ng-template let-determination [ngIf]="determinationLegend$ | async">
+                      <ion-note *ngIf="determination.length > 0" class="special-note mt-2">
+                        {{ determination[0].DETERMINATION }}
+                      </ion-note>
+                    </ng-template>
+
+
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
+
+            <ng-template #loadingInterimLegend>
+              <ion-card>
+                <ion-item>
+                  <ion-skeleton-text height="300px" width="100%"></ion-skeleton-text>
+                </ion-item>
+              </ion-card>
+            </ng-template>
+
+            <ng-template let-classificationLegends [ngIf]="classificationLegend$ | async"
+              [ngIfElse]="loadingClassificationLegend">
+              <ng-template [ngIf]="classificationLegends.length > 0">
+                <ion-card>
+                  <ion-card-header>
+                    <b>Degree Classification</b>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <ion-grid *ngIf="classificationLegends">
+                      <ion-row *ngFor="let classification of classificationLegends">
+                        <ion-col col-8>
+                          <ion-note class="notes">
+                            {{ classification.GRADE || "" }}
+                          </ion-note>
+                        </ion-col>
+                        <ion-col col-4>
+                          <ion-note class="notes">
+                            {{ classification.CLASSIFICATION || "" }}
+                          </ion-note>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-card-content>
+                </ion-card>
+              </ng-template>
+            </ng-template>
+
+            <ng-template #loadingClassificationLegend>
+              <ion-card>
+                <ion-item>
+                  <ion-skeleton-text height="300px" width="100%"></ion-skeleton-text>
+                </ion-item>
+              </ion-card>
+            </ng-template>
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+
+    <ng-template [ngIf]="block">
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ion-col>
+            <ion-card style="border-color: #f04141 !important">
+              <ion-card-header style="border: none !important">
+                <ion-icon class="warning-logo" name="alert"></ion-icon>
+              </ion-card-header>
+              <ion-card-content class="content-message">
+                <ion-note class="block-note" style="color: #f04141;">
+                  {{ message }}
+                </ion-note>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </ng-template>
+
+  </div>
+</ion-content>

@@ -168,6 +168,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/iconsult/student/my-appointments/my-appointments.module').then(m => m.MyAppointmentsPageModule)
   },
   {
+    path: 'results',
+    canActivate: [AuthGuard],
+    loadChildren: './pages/results/results.module#ResultsPageModule'
+  },
+  {
     path: 'logout',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/logout/logout.module').then(m => m.LogoutPageModule)
