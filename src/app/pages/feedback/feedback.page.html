@@ -1,8 +1,12 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-title>Feedback</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="light" outline small (click)="submitFeedback()">
+      <ion-button 
+        color="dark" 
+        outline small 
+        (click)="submitFeedback()" 
+        [disabled]="!message">
         Send
       </ion-button>
     </ion-buttons>
@@ -11,4 +15,62 @@
 
 <ion-content padding>
 
+  <div>
+    <p class="text">
+      This Service can be used when you have any questions, concerns, or feature request related to APSpace.
+    </p>
+
+    <p class="text">
+      The feedback will be received by the <span class="bold">Centre of Technology and Innovation (CTI)</span>
+      and we will do our best to keep up the standards so you enjoy our service.
+    </p>
+
+    <p class="bold text">
+      Please note that your identity or contact information will BE REVEALED to the person receiving this Feedback. 
+    </p>
+
+    <p class="text">
+      If you have a feedback which is not related to the APSpace (ex: feedback related to buses, network, classrooms...), you can use our 
+      <a
+        style="text-decoration: underline"
+        class="colorful-text bold"
+        >Online Feedback System</a
+      >
+      to send your feedback to the person who is in charge. 
+    </p>
+  </div>
+
+  <div>
+    <ion-item>
+      <ion-label stacked>Message <span style="color: red">*</span></ion-label>
+      <ion-textarea 
+        #autofocus 
+        autosize 
+        row="1" 
+        no-padding
+        [(ngModel)]="message"
+        (ngModelChange)="onMessageFieldChange($event)"
+      ></ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Contact Number</ion-label>
+      <ion-input type="text" [(ngModel)]="contactNo"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Screen Size</ion-label>
+      <ion-input type="text" disabled [value]="screenSize"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Platform</ion-label>
+      <ion-input type="text" disabled [value]="platform"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>App Version</ion-label>
+      <ion-input type="text" disabled [value]="appVersion"></ion-input>
+    </ion-item>
+  </div>
 </ion-content>

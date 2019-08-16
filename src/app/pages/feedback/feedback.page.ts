@@ -28,9 +28,9 @@ export class FeedbackPage implements OnInit {
 
   submitFeedback() {
     const feedback = {
-      contactNo: this.contactNo,
+      contactNo: this.contactNo || '',
       platform: this.platform,
-      message: this.message,
+      message: this.message, // begone whitespaces!
       appVersion: this.appVersion,
       screenSize: this.screenSize,
     };
@@ -40,6 +40,7 @@ export class FeedbackPage implements OnInit {
       this.settings.set('contactNo', this.contactNo);
 
       this.message = '';
+      this.contactNo = '';
       this.toastCtrl.create({
         message: 'Feedback submitted!',
         position: 'top',
@@ -63,6 +64,10 @@ export class FeedbackPage implements OnInit {
 
     this.platform = this.feedback.platform();
     this.appVersion = this.version.name;
+  }
+
+  onMessageFieldChange(event) {
+    this.message = event.trim();
   }
 
 }
