@@ -14,8 +14,8 @@ export class FeedbackPage implements OnInit {
   phoneNumberValidationPattern = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4,5})$/;
   phoneNumberValid = false;
   onlineFeedbackSystemURL = 'https://erp.apiit.edu.my/easymoo/web/en/user/feedback/feedbackusersend';
-  contactNo: string;
-  message: string;
+  contactNo = '';
+  message = '';
 
   submitting = false;
 
@@ -33,7 +33,7 @@ export class FeedbackPage implements OnInit {
 
   submitFeedback() {
     const feedback = {
-      contactNo: this.contactNo || '',
+      contactNo: this.contactNo,
       platform: this.platform,
       message: this.message,
       appVersion: this.appVersion,
@@ -45,7 +45,6 @@ export class FeedbackPage implements OnInit {
       this.settings.set('contactNo', this.contactNo);
 
       this.message = '';
-      this.contactNo = '';
       this.toastCtrl.create({
         message: 'Feedback submitted!',
         position: 'top',
@@ -76,16 +75,12 @@ export class FeedbackPage implements OnInit {
 
   onPhoneNumberChange() {
     if (this.contactNo) {
-      if (this.contactNo.match(this.phoneNumberValidationPattern)) {
-        this.phoneNumberValid = true;
-      } else {
-        this.phoneNumberValid = false;
-      }
+      this.phoneNumberValid = this.contactNo.match(this.phoneNumberValidationPattern) != null ? true : false;
     }
   }
 
   openOnlineFeedbackSystem() {
-    this.iab.create(`${this.onlineFeedbackSystemURL}`, '_blank', 'location=true');
+    this.iab.create(this.onlineFeedbackSystemURL, '_blank', 'location=true');
   }
 
 }
