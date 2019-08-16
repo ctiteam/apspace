@@ -207,7 +207,7 @@
             [contentPadding]='busCardConfigurations.contentPadding'
             [withOptionsButton]='busCardConfigurations.withOptionsButton'>
             <ng-container *ngIf="(upcomingTrips$ | async) as upcomingTrips; else loadingTrips">
-            <ng-container *ngIf="!showSetLocationsSettings; else locationsSettings">
+              <ng-container *ngIf="!showSetLocationsSettings; else locationsSettings">
                 <ng-container *ngIf="upcomingTrips.length > 0; else noTrips">
                   <ion-card class="trip-card" no-margin margin-bottom *ngFor="let upcomingTrip of upcomingTrips">
                     <ion-card-content no-padding>
@@ -238,11 +238,16 @@
                   </ion-card>
                 </ng-container>
                 <ng-template #noTrips>
-                  No more available trips for the selected route
+                  <app-message-with-svg messageTitle="No More Trips!"
+                    messageContent="No more trips for the selected line." imageUrl="assets/img/sad.svg">
+                  </app-message-with-svg>
                 </ng-template>
               </ng-container>
               <ng-template #locationsSettings>
-                you need to set this section first
+                <app-message-with-svg messageTitle="Section is not configured!"
+                  messageContent="You can configure this section from the settings page, under the bus shuttle services card."
+                  imageUrl="assets/img/config.svg">
+                </app-message-with-svg>
               </ng-template>
 
             </ng-container>
