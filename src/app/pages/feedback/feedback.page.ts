@@ -74,9 +74,7 @@ export class FeedbackPage implements OnInit {
   }
 
   onPhoneNumberChange() {
-    if (this.contactNo) {
-      this.phoneNumberValid = this.contactNo.match(this.phoneNumberValidationPattern) != null ? true : false;
-    }
+    this.phoneNumberValid = this.contactNo.match(this.phoneNumberValidationPattern) !== null;
   }
 
   openOnlineFeedbackSystem() {
