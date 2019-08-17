@@ -1,360 +1,56 @@
-@media only screen and (min-width: 1px) {
-  .responsive-h1 {
-    font-size: 1rem;
-  }
-  .responsive-h2 {
-    font-size: 0.7rem;
-  }
-  .responsive-icon {
-    font-size: 1.8rem;
-  }
-  .d-block {
-    display: block !important;
-  }
-  .d-inline {
-    display: inline;
-  }
-  .d-none {
-    display: none !important;
-  }
-  .pt-1-xs {
-    padding-top: 0.5em !important;
-  }
-  .pb-1-xs {
-    padding-bottom: 0.5em !important;
-  }
-  .masonry-list {
-    column-count: 1;
-  }
-  .masonry-item {
-    display: inline-block;
-    width: 100%;
-    &:not(.no-padding){
-      padding: 5px;
+ion-card {
+  margin-top: 5px !important;
+
+  ion-card-header {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+
+    &.colored-border {
+      border-bottom: 1rem solid;
     }
   }
-}
-@media only screen and (min-width:992px) {
 
-  .d-lgg-block {
-    display: flex !important;
-
+  ion-card-content {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
   }
-}
-@media only screen and (max-width: 991px) {
 
-  .d-mdd-block {
-    display: block !important;
-  }
-  .d-mdd-block-right {
-    float: right;
-    text-align: right;
+  ion-grid {
+    .bold {
+      font-weight: bold;
+    }
   }
 
 }
 
-@media only screen and (max-width: 576px) {
-
-  .d-smm-block {
-    display: block !important;
-
-  }
-}
-loading-spinner {
-  .loader {
-    width: 80px !important;
-    height: 80px !important;
-    left: calc(50% - 40px);
-    top: -10px;
-  }
+.table-top {
+  display: none;
 }
 
-ion-segment {
-  display: block;
-  white-space: nowrap;
-  overflow: auto;
+.special-border {
+  display: none;
+}
 
-  &::-webkit-scrollbar {
-    width: 0;
-    height: 0;
+@media (min-width: 600px) { // Bigger screen
+  .marker {
+      display: none;
+  }
+
+  .special-border {
+    display: inline-block;
+    border-bottom: none;
+  }
+  
+  .special-card-header {
     display: none;
   }
+  
 
-  ion-segment-button.segment-button {
-    display: inline-block;
-    min-width: 135px;
-    width: auto;
+  .table-top {
+    display: block;
+    visibility: visible;
+    padding-bottom: 4px !important;
   }
-}
-
-.segment-md .segment-button {
-  font-size: 1.1em;
-}
-
-.segment-ios .segment-button {
-  font-size: 1.1em;
-}
-
-.subj-title {
-  font-size: small;
-  font-weight: 500;
-}
-
-.progress-inner {
-  height: 8px;
-}
-
-.progress-outer[_ngcontent-c0] {
-  width: 100px;
-  margin: 10px 2%;
-  padding: 3px;
-  text-align: center;
-  background-color: var(--ion-color-medium);
-  border: 1px solid #dcdcdc;
-  color: var(--ion-color-success);
-  border-radius: 20px;
-}
-
-.progress-bar {
-  position: relative;
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-  border-top-left-radius: 1px;
-  border-bottom-left-radius: 1px;
-  padding: 1.5px;
-}
-
-.cover {
-  padding-top: 10px;
-  height: 200px;
-  width: 100%;
-  margin-bottom: -7px;
-  overflow: hidden;
-}
-
-.circle-progress {
-  display: block;
-  margin: auto;
-}
-
-.current {
-  position: absolute;
-  color: var(--ion-color-light);
-  font-weight: 100;
-  line-height: 1;
-  top: 90px;
-  bottom: auto;
-  left: 50%;
-  transform: translateY(-50%) translateX(-50%);
-  font-size: 3em;
-}
-
-.item-header {
-  font-size: small;
-  font-weight: 500;
-}
-
-ion-spinner * {
-  width: 28px;
-  height: 28px;
-  stroke: #444;
-  fill: #222;
-}
-
-// UPPER PART - TOTAL OVERALL ATTENDANCE (ANIMATIONS)
-#widget-value {
-  font-size: 2em;
-  font-weight: 600;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  position: absolute;
-  top: 69px;
-}
-
-#widget-content {
-  width: 150px;
-  height: 150px;
-  border-radius: 200px;
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  overflow: hidden;
-}
-
-// START WAVES' STYLES
-.fill {
-  animation-name: fillAction;
-  animation-timing-function: cubic-bezier(0.2, 0.6, 0.8, 0.4);
-  animation-duration: 2s;
-  animation-fill-mode: forwards;
-}
-#waveShape {
-  animation-name: waveAction;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-  animation-duration: 1.7s;
-  width: 100%;
-  height: 100%;
-}
-@-webkit-keyframes fillAction {
-  0% {
-    transform: translate(0, 90px);
-  }
-  100% {
-    transform: translate(0, 0px);
-  }
-}
-
-@-moz-keyframes fillAction {
-  0% {
-    transform: translate(0, 90px);
-  }
-  100% {
-    transform: translate(0, 0px);
-  }
-}
-
-@keyframes fillAction {
-  0% {
-    transform: translate(0, 90px);
-  }
-  100% {
-    transform: translate(0, 0px);
-  }
-}
-
-@-webkit-keyframes waveAction {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(-120px, 0);
-  }
-}
-
-@-moz-keyframes waveAction {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(-120px, 0);
-  }
-}
-
-@keyframes waveAction {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(-120px, 0);
-  }
-}
-// END WAVES' STYLES
-
-// START BLUR CLASS
-.blur {
-  overflow: hidden;
-  position: absolute;
-  height: 200px;
-  top: 0;
-  left: 0px;
-  right: -50px;
-  bottom: -50px;
-  width: 100%;
-  opacity: 0.9;
-}
-
-.blur:after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 20px;
-  border-radius: 100%;
-  width: 150px;
-  height: 150px;
-  transform: translateX(-50%);
-}
-// END BLUR CLASS
-
-ion-skeleton-text {
-  height: 140px;
-}
-
-
-
-ion-item {
-  &.subj-title {
-    font-weight: 900;
-  }
-  ion-label {
-    font-size: 90%;
-    font-weight: lighter !important;
-  }
-}
-
-.item-content {
-  font-size: 1.5em;
-  font-weight: lighter !important;
-}
-
-.card-ios {
-  border-radius: 10px;
-}
-
-.card-md {
-  border-radius: 10px;
-}
-
-.scroll-content {
-  background-color: #f04141;
-}
-
-.content-message {
-  text-align: justify;
-}
-
-.warning-logo {
-  color: #f04141 !important;
-  display: block;
-  font-size: 5em;
-  text-align: center;
-  color: white;
-}
-
-.course-line {
-  width: 100%;
-  padding-left: 15%;
-  padding-right: 15%;
-}
-
-.course-alert {
-  color: #f04141 !important;
-  font-style: italic;
-  font-size: 0.90em;
-}
-
-.course-title {
-  font-size: 1.2em;
-  margin: 0%;
-}
-
-.item-details {
-  --min-height: 1rem;
-}
-
-.course-details-padding {
-  padding-bottom: 0%;
-  padding-top: 0%;
-}
-
-.course-border {
-  background-color:  #666;
-  width: 100%;
-  height: 1px;
-}
-
-ion-col ion-item ion-col p {
-  color: #666;
 }
