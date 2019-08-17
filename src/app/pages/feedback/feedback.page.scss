@@ -1,0 +1,45 @@
+ion-card {
+    ion-item {
+        margin-top: 10px;
+    }
+    
+    .bold {
+        font-weight: bold;
+    }
+    
+    .text {
+        margin-top: 20px;
+    }
+    
+    p, h5, ion-label {
+        color: var(--secondary-text-color) !important;
+    }
+
+
+    ion-card-content {
+        padding: 10px !important;
+        padding-top: 0px !important;
+
+        ion-grid {
+            padding: 10px !important;
+        }
+    }
+
+    ion-card-header {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+        border-bottom: 2px solid;
+    }
+
+    ion-footer {
+        padding: 10px;
+    }
+
+    a {
+        text-decoration: underline;
+    }
+
+    ion-input, ion-textarea {
+        padding-left: 5px !important;
+    }
+}
