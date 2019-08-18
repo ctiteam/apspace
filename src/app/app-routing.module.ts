@@ -158,6 +158,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/operation-hours/operation-hours.module').then(m => m.OperationHoursPageModule)
   },
+  {
+    path: 'submit-survey',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/student-survey/submit-survey/submit-survey.module').then(m => m.SubmitSurveyPageModule)
+  },
 ];
 
 @NgModule({
