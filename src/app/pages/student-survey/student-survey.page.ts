@@ -12,7 +12,7 @@ import { SettingsService, WsApiService } from 'src/app/services';
   templateUrl: './student-survey.page.html',
   styleUrls: ['./student-survey.page.scss'],
 })
-export class SubmitSurveyPage implements OnInit {
+export class StudentSurveyPage implements OnInit {
   // TEMP VARIABLES
   stagingUrl = 'https://dl4h9zf8wj.execute-api.ap-southeast-1.amazonaws.com/dev/survey';
   todaysDate = new Date();
