@@ -27,7 +27,7 @@ export class NotificationsPage implements OnInit {
     this.doRefresh();
   }
 
-  doRefresh(refresher?) {
+  doRefresh() {
     this.messages$ = this.notificationService.getMessages().pipe(
       map((res: {history: []}) => res.history),
       tap(t => console.log(t)),

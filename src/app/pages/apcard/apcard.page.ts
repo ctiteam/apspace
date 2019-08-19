@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 import { Apcard } from '../../interfaces';
 import { WsApiService } from 'src/app/services';
-import { MenuController, IonRadioGroup } from '@ionic/angular';
+import { MenuController } from '@ionic/angular';
 
 type VisibleOption = 'all' | 'credit' | 'debit';
 
@@ -152,7 +152,7 @@ export class ApcardPage implements OnInit {
     this.transaction$ = this.ws.get<Apcard[]>('/apcard/', true).pipe(
       map(t => this.signTransactions(t)),
       tap(t => this.analyzeTransactions(t)),
-      tap(t => this.getTransactionsYears()),
+      tap(() => this.getTransactionsYears()),
       finalize(() => event && event.target.complete()),
       finalize(() => (this.isLoading = false))
     );

@@ -1,6 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';

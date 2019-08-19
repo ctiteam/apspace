@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Holidays, EventComponentConfigurations, Holiday } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { Observable } from 'rxjs';
-import { map, tap, filter } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import * as moment from 'moment';
 import { MenuController } from '@ionic/angular';
 

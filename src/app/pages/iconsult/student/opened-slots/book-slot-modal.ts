@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
 import { ConsultationSlot, StaffDirectory, SlotDuplicated } from 'src/app/interfaces';
 import { Storage } from '@ionic/storage';
@@ -102,7 +102,7 @@ export class BookSlotModalPage implements OnInit {
               },
             }).subscribe(
               {
-                next: res => {
+                next: () => {
                   // SHOW USER SUCCESS MESSAGE
                 },
                 error: err => {

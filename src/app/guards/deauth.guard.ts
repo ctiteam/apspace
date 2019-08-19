@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 
 import { CasTicketService } from '../services';
 
@@ -13,7 +13,7 @@ export class DeauthGuard implements CanActivate {
 
   constructor(private cas: CasTicketService, private router: Router) { }
 
-  async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+  async canActivate(): Promise<boolean> {
     if (await this.cas.isAuthenticated()) {
       this.router.navigate(['/']);
       return false;

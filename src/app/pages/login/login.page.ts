@@ -67,10 +67,10 @@ export class LoginPage {
           }
         }),
         switchMap(tgt => this.cas.getST(this.cas.casUrl, tgt).pipe(
-          catchError(e => (this.showToastMessage('Fail to get service ticket.'), throwError('Fail to get service ticket')))
+          catchError(() => (this.showToastMessage('Fail to get service ticket.'), throwError('Fail to get service ticket')))
         )),
         switchMap(st => this.cas.validate(st).pipe(
-          catchError(e => (this.showToastMessage('You are not authorized to use APSpace'), throwError('unauthorized')))
+          catchError(() => (this.showToastMessage('You are not authorized to use APSpace'), throwError('unauthorized')))
         )),
         tap(role => this.cacheApi(role)),
         timeout(15000),
