@@ -35,7 +35,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   };
 
   // PROFILE
-  photo$: Observable<StudentPhoto[]>;
+  photo$: Observable<StudentPhoto>;
   greetingMessage = '';
   defaultIntake = '';
   studentFirstName$: Observable<string>;
@@ -236,7 +236,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
 
   doRefresh(refresher?) {
     this.getLocations();
-    this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo');
+    this.photo$ = this.ws.get<StudentPhoto>('/student/photo');
     this.displayGreetingMessage();
     this.apcardTransaction$ = this.getTransactions();
     this.getBadge();
