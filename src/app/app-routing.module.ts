@@ -185,6 +185,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/logout/logout.module').then(m => m.LogoutPageModule)
   },
   { path: 'add-free-slot', loadChildren: './pages/iconsult/staff/add-free-slot/add-free-slot.module#AddFreeSlotPageModule' },
+  {
+    path: 'add-unavailability',
+    loadChildren: './pages/iconsult/staff/add-unavailability/add-unavailability.module#AddUnavailabilityPageModule'
+  },
 ];
 
 @NgModule({
