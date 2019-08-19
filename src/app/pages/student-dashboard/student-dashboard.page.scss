@@ -1,35 +1,43 @@
-/* EXTRA SMALL DEVICES - LESS THAN 576px */
-@media only screen and (max-width: 575px) {
-  .welcome-message-wrapper {
-    padding-top: 9px;
-  }
-}
-
-/* SMALL DEVICES - 576px AND UP */
-@media only screen and (min-width: 576px) {
-  .welcome-message-wrapper {
-    padding-top: 4px;
-  }
-}
-
-/* MEDIUM DEVICES - 768px AND UP */
-@media only screen and (min-width: 768px) {
-  .welcome-message-wrapper {
-    padding-top: 0px;
-  }
-}
-
-/* LARGE DEVICES - 992px AND UP */
-@media only screen and (min-width: 992px) {
-  ion-avatar.dashboard-avatar {
-    margin-top: 4px;
-  }
-}
-
 .masonry-item {
   position: relative;
 }
 
+// TRIPS
+ion-card.trip-card {
+  box-shadow: none;
+  border-radius: 0;
+  --background: var(--tertiary-bg-color) !important;
+  .full-background {
+    width: 100%;
+    height: 100%;
+  }
+  .trips-locations{
+    color: var(--main-txt-color);
+  }
+  .trip-time {
+    &:nth-child(1) {
+      font-size: 1.6em;
+      font-weight: 700;
+    }
+    &:nth-child(2) {
+      font-size: 1.3em;
+      font-weight: 500;
+      color: var(--secondary-txt-color);
+    }
+    &:nth-child(3) {
+      font-size: 1em;
+      font-weight: 500;
+      color: var(--tertiary-txt-color);
+    }
+    &:nth-child(4) {
+      font-size: 0.8em;
+      font-weight: 300;
+      color: var(--tertiary-txt-color);
+    }
+  }
+}
+
+// NOTIFICATIONS
 .notifications {
   position: relative;
   ion-badge {
@@ -44,6 +52,7 @@
   }
 }
 
+// EDIT MODE (DASHBOARD CARDS CUSTOMIZATIONS)
 .edit-overlay {
   background: #c6c6c6;
   opacity: 0.4;
@@ -61,7 +70,28 @@
     top: 5px;
   }
 }
-
 .hide {
   display: none;
+}
+
+// RESPONSIVE FOR THIS PAGE ONLY
+@media only screen and (max-width: 575px) {
+  .welcome-message-wrapper {
+    padding-top: 9px;
+  }
+}
+@media only screen and (min-width: 576px) {
+  .welcome-message-wrapper {
+    padding-top: 4px;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .welcome-message-wrapper {
+    padding-top: 0px;
+  }
+}
+@media only screen and (min-width: 992px) {
+  ion-avatar.dashboard-avatar {
+    margin-top: 4px;
+  }
 }

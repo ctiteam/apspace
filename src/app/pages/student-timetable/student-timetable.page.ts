@@ -1,19 +1,23 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ActionSheet } from '@ionic-native/action-sheet/ngx';
 import {
   ActionSheetController, IonRefresher, ModalController, NavController, Platform,
 } from '@ionic/angular';
 
-import { Observable } from 'rxjs';
-import { finalize, tap } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { finalize, map, tap, withLatestFrom } from 'rxjs/operators';
 
 import { StudentProfile, StudentTimetable } from '../../interfaces';
-import { SettingsService, StudentTimetableService, WsApiService } from '../../services';
+import {
+  SettingsService, StudentTimetableService, UserSettingsService, WsApiService
+} from '../../services';
 import { ClassesPipe } from './classes.pipe';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-timetable',
   templateUrl: './student-timetable.page.html',
   styleUrls: ['./student-timetable.page.scss'],
@@ -22,25 +26,82 @@ export class StudentTimetablePage implements OnInit {
 
   wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
+  legends = [
+    {
+      name: 'L',
+      desc: 'Lecture',
+    },
+    {
+      name: 'T',
+      desc: 'Tutorial',
+    },
+    {
+      name: 'T1',
+      desc: 'Tutorial Group 1',
+    },
+    {
+      name: 'T2',
+      desc: 'Tutorial Group 2',
+    },
+    {
+      name: 'Lab',
+      desc: 'Computer Lab',
+    },
+    {
+      name: 'Lab 1',
+      desc: 'Computer Lab Group 1',
+    },
+    {
+      name: 'Lab 2',
+      desc: 'Computer Lab Group 2',
+    },
+    {
+      name: 'Lab 3',
+      desc: 'Computer Lab Group 3',
+    },
+    {
+      name: 'TPM',
+      desc: 'APIIT/APLC Campus',
+    },
+    {
+      name: 'New Campus',
+      desc: 'APU Campus',
+    },
+    {
+      name: 'B',
+      desc: 'Buffer Week',
+    },
+    {
+      name: 'R',
+      desc: 'Revision Week',
+    },
+  ];
+
   timetable$: Observable<StudentTimetable[]>;
   selectedWeek: Date; // week is the first day of week
-  availableWeek: Date[];
+  availableWeek: Date[] = [];
   selectedDate: Date;
   availableDate: Date[];
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
+  intakeSelectable = true;
+  viewWeek = false; // weekly or daily display
 
+  room: string;
   intake: string;
 
   constructor(
     private actionSheet: ActionSheet,
     private actionSheetCtrl: ActionSheetController,
+    private cdr: ChangeDetectorRef,
     private modalCtrl: ModalController,
     private navCtrl: NavController,
     private plt: Platform,
-    private tt: StudentTimetableService,
-    private ws: WsApiService,
+    private route: ActivatedRoute,
     private settings: SettingsService,
+    private tt: StudentTimetableService,
+    private userSettings: UserSettingsService,
+    private ws: WsApiService,
   ) { }
 
   ngOnInit() {
@@ -53,14 +114,33 @@ export class StudentTimetablePage implements OnInit {
     date.setDate(date.getDate() - date.getDay());
     this.selectedWeek = date;
 
-    this.intake = this.settings.get('intake');
+    // optional room paramMap to filter timetables by room (separated from intake filter)
+    this.room = this.route.snapshot.paramMap.get('room');
+
+    // optional intake passed by other pages
+    const intake = this.route.snapshot.params.intake;
+    if (intake || this.room) { // indirect timetable page access
+      this.intakeSelectable = false;
+    }
+
+    // quick exit when room is specified (and do not set intake)
+    if (this.room !== null) {
+      return this.doRefresh();
+    }
+
+    // intake from params -> intake from settings -> student default intake
+    const intakeHistory = this.settings.get('intakeHistory') || [];
+    this.intake = intake || intakeHistory[intakeHistory.length - 1];
+
     // default intake to student current intake
     if (this.intake === undefined) {
       this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
         this.intake = (p || {} as StudentProfile).INTAKE || '';
-        this.settings.set('intake', this.intake);
+        this.cdr.markForCheck();
+        this.settings.set('intakeHistory', [this.intake]);
       });
     }
+
     this.doRefresh();
   }
 
@@ -91,6 +171,7 @@ export class StudentTimetablePage implements OnInit {
       const week = this.availableWeek[labels.indexOf(weekStr)];
       if (this.selectedWeek.getDate() !== week.getDate()) {
         this.selectedWeek = week;
+        this.cdr.markForCheck();
         this.timetable$.subscribe();
       }
     });
@@ -98,8 +179,13 @@ export class StudentTimetablePage implements OnInit {
 
   /** Check and update intake on change. */
   changeIntake(intake: string) {
-    if (intake !== this.intake) {
-      this.settings.set('intake', this.intake = intake);
+    if (intake !== null && intake !== this.intake) {
+      this.intake = intake;
+      this.settings.set('intakeHistory', this.settings.get('intakeHistory')
+        .concat(intake)
+        .filter((v, i, a) => a.lastIndexOf(v) === i)
+        .slice(-5));
+      this.cdr.markForCheck();
       this.timetable$.subscribe();
     }
   }
@@ -108,8 +194,11 @@ export class StudentTimetablePage implements OnInit {
   async presentIntakeSearch() {
     const modal = await this.modalCtrl.create({
       component: SearchModalComponent,
-      // TODO: store search history
-      componentProps: { items: this.intakeLabels, notFound: 'No Intake Selected' },
+      componentProps: {
+        items: this.intakeLabels,
+        defaultItems: this.settings.get('intakeHistory'),
+        notFound: 'No intake selected'
+      }
     });
     await modal.present();
     // default item to current intake if model dismissed without data
@@ -127,12 +216,15 @@ export class StudentTimetablePage implements OnInit {
 
   /** Refresh timetable, forcefully if refresher is passed. */
   doRefresh(refresher?: IonRefresher) {
-    this.timetable$ = this.tt.get(Boolean(refresher)).pipe(
+    const timetable$ = this.tt.get(Boolean(refresher)).pipe(
+      finalize(() => refresher && refresher.complete())
+    );
+    this.timetable$ = combineLatest([timetable$, this.userSettings.timetable.asObservable()]).pipe(
+      map(([tt, { blacklists }]) => blacklists ? tt.filter(t => !blacklists.includes(t.MODID)) : tt),
       tap(tt => this.updateDay(tt)),
       // initialize or update intake labels only if timetable might change
       tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)
         && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
-      finalize(() => refresher && refresher.complete()),
     );
   }
 
@@ -155,8 +247,9 @@ export class StudentTimetablePage implements OnInit {
 
   /** Track and update week and date in the order of day, week, intake. */
   updateDay(tt: StudentTimetable[]) {
-    // filter by intake (need not to track intake)
-    tt = new ClassesPipe().transform(tt, this.intake);
+    // filter by intake and room (need not to track intake)
+    // XXX: remove this so that classes pipe is only called once
+    tt = new ClassesPipe().transform(tt, this.intake, this.room);
 
     // get week
     this.availableWeek = Array.from(new Set(tt.map(t => {
@@ -185,6 +278,8 @@ export class StudentTimetablePage implements OnInit {
     } else if (this.availableDate.length === 0) {
       this.selectedDate = undefined;
     }
+
+    this.cdr.markForCheck();
   }
 
 }

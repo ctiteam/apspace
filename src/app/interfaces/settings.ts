@@ -11,7 +11,7 @@ export interface Settings {
   tripFrom: string;
   tripTo: string;
   /* timetable */
-  intake: string;
+  intakeHistory: string[];
   /* exam schedule */
   examIntake: string;
   /* contact number */

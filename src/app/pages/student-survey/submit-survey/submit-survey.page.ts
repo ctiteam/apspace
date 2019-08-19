@@ -17,8 +17,8 @@ export class SubmitSurveyPage implements OnInit {
   stagingUrl = 'https://dl4h9zf8wj.execute-api.ap-southeast-1.amazonaws.com/dev/survey';
   todaysDate = new Date();
   // IF USER IS COMING FROM RESULTS PAGE
-  //moduleCodeFromResultsPage = this.navParams.get('moduleCode');
-  //intakeCodeFromResultsPage = this.navParams.get('intakeCode');
+  // moduleCodeFromResultsPage = this.navParams.get('moduleCode');
+  // intakeCodeFromResultsPage = this.navParams.get('intakeCode');
   // NGMODEL VARIABLES
   intakeCode: string;
   classCode: string;
@@ -70,6 +70,7 @@ export class SubmitSurveyPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    // tslint:disable-next-line: no-bitwise
     if (this.settings.get('role') & Role.Student) {
       this.intakesAreLoading = true;
       this.ws.get<StudentProfile>('/student/profile').subscribe(
@@ -102,7 +103,7 @@ export class SubmitSurveyPage implements OnInit {
     // IF USER IS COMING FROM RESULTS PAGE
    // if (this.moduleCodeFromResultsPage) {
   //    this.getModules(this.intakeCodeFromResultsPage);
-    //}
+    // }
   }
 
   // TOGGLE THE MENU
@@ -242,7 +243,7 @@ export class SubmitSurveyPage implements OnInit {
                 _ => { },
                err => {
                   // tslint:disable-next-line: max-line-length
-                  this.toast("Something went wrong and we couldn't complete your request. Please try again or contact us via the feedback page");
+                  this.toast(' Something went wrong and we could not complete your request. Please try again or contact us via the feedback page');
                },
                 () => {
                   this.toast(`The survey for ${this.classCode} has been submitted successfully.`);
@@ -271,7 +272,6 @@ export class SubmitSurveyPage implements OnInit {
     toast.present();
   }
   segmentChanged(ev: any) {
-    console.log('Segment changed', ev);
   }
 
 }

@@ -1,0 +1,192 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="course$ | async">
+      {{ this.selectedIntake || "Results" }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" size="small" class="notification-button colored-border" (click)="showActionSheet()">
+        Intakes
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event.target)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ng-template [ngIf]="block">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-xs="12" size-lg="3">
+          <ng-template [ngIf]="result$ | async" [ngIfElse]="loading">
+            <ng-template [ngIf]="(result$ | async) && (result$ | async)?.length > 0" [ngIfElse]="nodata">
+              <chart *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
+            </ng-template>
+          </ng-template>
+          <ng-template [ngIf]="courseDetail$ | async" [ngIfElse]="loading">
+            <ion-card *ngFor="let detail of (courseDetail$ | async); trackBy:trackByFn" style="margin-bottom: 5px !important;">
+              <div *ngIf="detail.SEMESTER">
+                <ion-card-header class="colored-border">
+                  <ion-card-title>Semester {{ detail.SEMESTER }}</ion-card-title>
+                  <ion-card-subtitle>{{ detail.TOTAL_MODULES_PASSED }} passed (GPA {{ detail.GPA }})</ion-card-subtitle>
+                </ion-card-header>
+              </div>
+            </ion-card>
+          </ng-template>
+        </ion-col>
+
+        <ion-col size-xs="12" size-lg="9">
+          <ng-template [ngIf]="result$ | async" [ngIfElse]="loading">
+            <ng-template [ngIf]="(result$ | async) && (result$ | async)?.length > 0" [ngIfElse]="nodata">
+              <ion-card no-padding  class="table-top">
+                <ion-card-content>
+                  <ion-grid>
+                    <ion-row>
+                      <ion-col size="12" size-sm="3"><h2 class="bold">Module</h2></ion-col>
+                      <ion-col size="12" size-sm="3"><h2 class="bold">Grade</h2></ion-col>
+                      <ion-col size="12" size-sm="3"><h2 class="bold">Grade Point</h2></ion-col>
+                      <ion-col size="12" size-sm="3"><h2 class="bold">Internal Result Release Date</h2></ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+
+              <ion-card no-padding *ngFor="let result of (result$ | async); last as last; trackBy: trackByFn">
+                <ion-card-header class="special-card-header colored-border" style="border-bottom: 2px solid var(--primary-color) !important">
+                  <h4>{{ result.MODULE_DESCRIPTION }}</h4>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-grid>
+                    <ion-row>
+                      <ion-col size="12" size-sm="3" class="bold special-border colored-border">
+                        {{ result.MODULE_DESCRIPTION }}
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <span class="marker">Grade: </span>
+                        {{ result.GRADE || "N/A" }}
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <span class="marker">Grade Point: </span>
+                        {{ result.GRADE_POINT || "N/A" }}
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <span class="marker">Internal Result: </span>
+                        {{ result.INTERNAL_RESULT_RELEASE_DATE || "N/A" }}
+                      </ion-col>
+
+                      <ion-col *ngIf="result.RECOMMENDATION">
+                        <span class="bold">Recommendation:</span> <br>
+                        <span style="color: red">{{ result.RECOMMENDATION }}</span>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
+
+            <ng-template [ngIf]="interimLegend$ | async" [ngIfElse]="loading">
+              <ion-card>
+                <ion-card-header class="colored-border" style="border-bottom: 2px solid">
+                  <ion-card-title>Marks and Grades</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-grid>
+                    <div *ngFor="let interim of (interimLegend$ | async)">
+                      <ion-row no-padding *ngIf="!interim.CLASSIFICATION; else suMaster">
+                        <ion-col>
+                          <div *ngIf="interim.MARK_FROM">
+                            {{ interim.MARK_FROM + "-" + interim.MARK_TO || "" }}
+                          </div>
+                        </ion-col>
+                        <ion-col>
+                          <div>
+                            {{ interim.GRADE || "" }}
+                          </div>
+                        </ion-col>
+                        <ion-col>
+                          <div>
+                            {{ interim.GRADING_POINT || "" }}
+                          </div>
+                        </ion-col>
+                        <ion-col>
+                          <div>
+                            {{ interim.GRADE_DESCRIPTION || "" }}
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                      <ng-template #suMaster>
+                        <ion-row>
+                          <ion-col>{{ interim.CLASSIFICATION }}:</ion-col>
+                          <ion-col>{{ interim.GRADE }}</ion-col>
+                        </ion-row>
+                      </ng-template>
+                    </div>
+                  </ion-grid>
+
+                  <div style="padding: 5px !important">
+                    <h2>
+                      <span class="bold">R</span> = Awarding of module credit by passing module referral
+                      assessments.
+                    </h2>
+                    <h2>
+                      <span class="bold">C</span> = Awarding of module credit through compensation at the
+                      discretion of the Examination Board, based on the student's
+                      overall academic performance. No referral assessment is requried
+                      for module.
+                    </h2>
+
+                    <ng-template [ngIf]="(mpuLegend$ | async)" let-mpu>
+                        <h2 *ngIf="mpu.length > 0">
+                          {{ mpu[0].MPU }}
+                        </h2>
+                    </ng-template>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
+          </ng-template>
+
+          <ng-template [ngIf]="(classificationLegend$ | async)">
+            <div *ngIf="(classificationLegend$ | async)?.length > 0">
+              <ion-card>
+                <ion-card-header class="colored-border" style="border-bottom: 2px solid">
+                  <ion-card-title>Degree Classification</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-grid *ngIf="(classificationLegend$ | async)">
+                    <ion-row *ngFor="let classification of (classificationLegend$ | async)">
+                      <ion-col>
+                        {{ classification.GRADE || "" }}
+                      </ion-col>
+                      <ion-col>
+                        {{ classification.CLASSIFICATION || "" }}
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ng-template>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
+
+  <ng-template #loading>
+    <ion-card no-padding>
+      <ion-card-content no-padding>
+        <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+
+  <ng-template #nodata>
+    <ion-card>
+      <ion-card-header>
+        <h4>Aww! Looks like there is no Result for this Intake.</h4>
+      </ion-card-header>
+    </ion-card>
+  </ng-template>
+</ion-content>

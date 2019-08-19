@@ -114,8 +114,8 @@
               ')'
           }">
             <ion-card-title class="card-title float-left">
-              <h5 style="color: white" class="small-text">Next in: 1 hrs, 23 min</h5>
-              <h3 style="color: white" class="small-margin-top responsive-h1">
+              <!-- <h5 class="main-text-color small-text">Next in: 1 hrs, 23 min</h5> -->
+              <h3 class="small-margin-top location-title responsive-h1">
                 {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }}</h3>
             </ion-card-title>
             <div class="clearfix"></div>
@@ -124,13 +124,13 @@
             <ion-list no-padding>
               <ion-item lines="none" *ngFor="let destination of trip.value | keyvalue">
                 <ion-label>
-                  <h2 class="responsive-h2 text-bold">
+                  <h2 class="responsive-h2 text-bold main-text-color">
                     {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} ->
                     {{ destination.key | uppercase }}
                   </h2>
                   <ion-grid no-padding>
                     <ion-row>
-                      <ion-col style="color: #777777" *ngFor="let tripData of destination.value" size="3" size-md="4"
+                      <ion-col class="secondary-txt-color" *ngFor="let tripData of destination.value" size="3" size-md="4"
                         text-center>
                         {{tripData.trip_time}}
                       </ion-col>

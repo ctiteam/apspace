@@ -7,57 +7,54 @@
 
 <ion-content>
   <!-- LISTS UI -->
-  <div class="masonry-list" *ngIf="menuUI === 'list'; else menuCardsUI">
-    <ng-container *ngFor="let menu of menuFull">
-      <ng-container *ngIf="menu.items | fuse:term as pages">
-        <div class="masonry-item" *ngIf="pages.length">
-          <ion-card no-margin>
-            <ion-card-header>
-              <ion-card-title>
-                <h3>{{ menu.title }}</h3>
-              </ion-card-title>
-            </ion-card-header>
-            <ion-card-content no-padding>
-              <ion-list no-margin>
-                <ion-item-group>
-                  <ion-item (click)="openPage(page.url)" *ngFor="let page of pages" class="cursor-pointer">
-                    <ion-avatar slot="start">
-                      <img [src]="page.img">
-                    </ion-avatar>
-                    <ion-label>
-                      <h2>{{ page.title }}</h2>
-                      <p class="secondary-txt-color">Some description about the item here and here..</p>
-                    </ion-label>
-                  </ion-item>
-                </ion-item-group>
-              </ion-list>
-            </ion-card-content>
-          </ion-card>
-        </div>
-      </ng-container>
-    </ng-container>
+  <div *ngIf="(view$ | async) === 'list'; else menuCardsUI" class="masonry-list">
+    <div *ngFor="let group of menuFull | fuse:term:options | byGroup | keyvalue:noop"
+      class="masonry-item">
+      <ion-card no-margin>
+        <ion-card-header>
+          <ion-card-title>
+            <h3>{{ group.key }}</h3>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content no-padding>
+          <ion-list no-margin>
+            <ion-item-group>
+              <ion-item *ngFor="let item of group.value"
+                (click)="openPage(item.url)" class="cursor-pointer">
+                <ion-avatar slot="start">
+                  <img [src]="item.img">
+                </ion-avatar>
+                <ion-label>
+                  <h2>{{ item.title }}</h2>
+                  <p class="secondary-txt-color">Some description about the item here and here..</p>
+                </ion-label>
+              </ion-item>
+            </ion-item-group>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </div>
   </div>
 
   <!-- CARDS UI -->
   <ng-template #menuCardsUI>
-    <ion-grid *ngFor="let menu of menuFull">
-      <ion-row *ngIf="menu.items | fuse:term as pages">
-        <ng-container *ngIf="pages.length">
-          <ion-col size="12" margin-top margin-bottom>
-            <h5 class="colored-text" text-center>{{ menu.title }}</h5>
-          </ion-col>
-          <ion-col class="menu-item" text-center size-xs="6" size-md="4" size-lg="3" *ngFor="let page of pages">
-            <ion-card no-margin (click)="openPage(page.url)" class="cursor-pointer">
-              <ion-card-content>
-                <div class="wrapper">
-                  <img [src]="page.img">
-                  <p class="page-title">{{page.title}}</p>
-                  <p class="secondary-txt-color">Some description about the item here and here..</p>
-                </div>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        </ng-container>
+    <ion-grid>
+      <ion-row *ngFor="let group of menuFull | fuse:term:options | byGroup | keyvalue:noop">
+        <ion-col size="12" margin-top margin-bottom>
+          <h5 class="colored-text" text-center>{{ group.key }}</h5>
+        </ion-col>
+        <ion-col *ngFor="let item of group.value" class="menu-item"
+          text-center size-xs="6" size-md="4" size-lg="3">
+          <ion-card no-margin (click)="openPage(item.url)" class="cursor-pointer">
+            <ion-card-content>
+              <div class="wrapper">
+                <img [src]="item.img">
+                <p class="page-title">{{ item.title }}</p>
+                <p class="secondary-txt-color">Some description about the item here and here..</p>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
       </ion-row>
     </ion-grid>
   </ng-template>

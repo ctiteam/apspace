@@ -12,7 +12,6 @@ app-more {
 }
 
 app-apcard {
-
   .strip-top,
   .strip-bottom {
     background-image: linear-gradient(to bottom, var(--sub-primary-color), var(--primary-color)) !important;
@@ -22,16 +21,43 @@ app-apcard {
 app-attendance {
   .cover {
     background: var(--main-bg-color);
-    background: -moz-linear-gradient(top, var(--main-bg-color) 0%, var(--secondary-bg-color) 50%, var(--tertiary-bg-color) 100%);
-    background: -webkit-gradient(left top,
-        left bottom,
-        color-stop(0%, var(--main-bg-color)),
-        color-stop(50%, var(--secondary-bg-color)),
-        color-stop(100%, var(--tertiary-bg-color)));
-    background: -webkit-linear-gradient(top, var(--main-bg-color) 0%, var(--secondary-bg-color) 50%, var(--tertiary-bg-color) 100%);
-    background: -o-linear-gradient(top, var(--main-bg-color) 0%, var(--secondary-bg-color) 50%, var(--tertiary-bg-color) 100%);
-    background: -ms-linear-gradient(top, var(--main-bg-color) 0%, var(--secondary-bg-color) 50%, var(--tertiary-bg-color) 100%);
-    background: linear-gradient(to bottom, var(--main-bg-color) 0%, var(--secondary-bg-color) 50%, var(--tertiary-bg-color) 100%);
+    background: -moz-linear-gradient(
+      top,
+      var(--main-bg-color) 0%,
+      var(--secondary-bg-color) 50%,
+      var(--tertiary-bg-color) 100%
+    );
+    background: -webkit-gradient(
+      left top,
+      left bottom,
+      color-stop(0%, var(--main-bg-color)),
+      color-stop(50%, var(--secondary-bg-color)),
+      color-stop(100%, var(--tertiary-bg-color))
+    );
+    background: -webkit-linear-gradient(
+      top,
+      var(--main-bg-color) 0%,
+      var(--secondary-bg-color) 50%,
+      var(--tertiary-bg-color) 100%
+    );
+    background: -o-linear-gradient(
+      top,
+      var(--main-bg-color) 0%,
+      var(--secondary-bg-color) 50%,
+      var(--tertiary-bg-color) 100%
+    );
+    background: -ms-linear-gradient(
+      top,
+      var(--main-bg-color) 0%,
+      var(--secondary-bg-color) 50%,
+      var(--tertiary-bg-color) 100%
+    );
+    background: linear-gradient(
+      to bottom,
+      var(--main-bg-color) 0%,
+      var(--secondary-bg-color) 50%,
+      var(--tertiary-bg-color) 100%
+    );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bdbbbd',
         endColorstr='#f5f5f5',
         GradientType=0);
@@ -49,8 +75,7 @@ app-attendance {
 
   #widget-content {
     border: 1px solid var(--secondary-bg-color);
-    box-shadow: 2px 2px 22px var(--tertiary-bg-color),
-      -2px -2px 22px var(--tertiary-bg-color);
+    box-shadow: 2px 2px 22px var(--tertiary-bg-color), -2px -2px 22px var(--tertiary-bg-color);
   }
 }
 
@@ -107,7 +132,6 @@ events-list {
   }
 }
 
-
 // IONIC COMPONENTS
 ion-searchbar {
   --placeholder-color: var(--secondary-txt-color) !important;
@@ -124,7 +148,6 @@ ion-toolbar {
 }
 
 ion-card {
-
   ion-card-subtitle,
   .small-text {
     color: var(--secondary-txt-color) !important;
@@ -302,13 +325,12 @@ button.picker-button {
       background-color: var(--primary-color) !important;
     }
   }
-  .alert-button-group{
-    .alert-button{
+  .alert-button-group {
+    .alert-button {
       color: var(--primary-color);
     }
   }
 }
-
 
 // OUR OWN LIBRARY
 .main-text-color {
@@ -317,6 +339,14 @@ button.picker-button {
 
 .secondary-txt-color {
   color: var(--secondary-txt-color) !important;
+}
+
+.tertiary-txt-color {
+  color: var(--tertiary-txt-color) !important;
+}
+
+.danger-text{
+  color: var(--danger-color) !important;
 }
 
 .colored-text {
@@ -331,10 +361,18 @@ button.picker-button {
   background: var(--primary-color) !important;
 }
 
-ion-button.colored-background {
-  --background: var(--primary-color) !important;
-
-  &[aria-disabled="true"] {
+ion-button {
+  &.colored-background {
     --background: var(--primary-color) !important;
+    --background-hover: var(--sub-primary-color);
+    // &[aria-disabled="true"] {
+    //   --background: var(--primary-color) !important;
+    // }
+  }
+
+  &.chat-in-teams {
+    --background: #464775;
+    background: #464775;
+    --background-hover: #5f60a3;
   }
 }

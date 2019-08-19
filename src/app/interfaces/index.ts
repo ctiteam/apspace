@@ -31,6 +31,4 @@ export { Graduater } from './graduater';
 export { IntakeListing } from './intake-listing';
 export { QuixCustomer } from './quix';
 export { DashboardSection } from './dashboard-section';
-
-
-
+export { ConsultationSlot, SlotDetails } from './iconsult';

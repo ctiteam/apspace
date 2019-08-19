@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { StaffDirectoryPage } from './staff-directory.page';
 import { DepartmentPipe } from './department.pipe';
-import { SearchPipe } from './search.pipe';
+import { FuseModule } from '../../shared/fuse/fuse.module';
 
 const routes: Routes = [
   {
@@ -21,8 +21,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    FuseModule
   ],
-  declarations: [StaffDirectoryPage, DepartmentPipe, SearchPipe]
+  declarations: [StaffDirectoryPage, DepartmentPipe]
 })
 export class StaffDirectoryPageModule { }

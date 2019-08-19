@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,9 @@ export class UserSettingsService {
   private accentColor: BehaviorSubject<string>;
   private dashboardSections: BehaviorSubject<string[]>;
   private MenuUI: BehaviorSubject<'cards' | 'list'>;
+  private casheCleaered: BehaviorSubject<boolean>;
+  private busShuttleServiceSettings: BehaviorSubject<{ firstLocation: string, secondLocation: string, alarmBefore: string }>;
+  timetable: BehaviorSubject<{ blacklists: string[] }>;
 
   accentColors = [
     { name: 'red-accent-color', value: '#e54d42', rgbaValues: '229, 77, 66' },
@@ -21,7 +24,7 @@ export class UserSettingsService {
     { name: 'blue-accent-color', value: '#3A99D9', rgbaValues: '58, 153, 217' },
     { name: 'green-accent-color', value: '#08a14f', rgbaValues: '8, 161, 79' },
     { name: 'red-accent-color', value: '#ec2a4d', rgbaValues: '236, 42, 77' },
-    { name: 'white-accent-color', value: '#b0acac', rgbaValues: '176, 172, 172' }
+    { name: 'white-accent-color', value: '#b0acac', rgbaValues: '175, 175, 175' }
   ];
 
   defaultDashboardSectionsSettings = [
@@ -34,7 +37,10 @@ export class UserSettingsService {
     'cgpa',
     'lowAttendance',
     'financials',
+    'busShuttleServices'
   ];
+
+  defaultBusShuttleServicesSettings = { firstLocation: '', secondLocation: '', alarmBefore: '10' };
 
   constructor(
     public http: HttpClient,
@@ -46,6 +52,9 @@ export class UserSettingsService {
     this.accentColor = new BehaviorSubject('blue-accent-color');
     this.dashboardSections = new BehaviorSubject(this.defaultDashboardSectionsSettings);
     this.MenuUI = new BehaviorSubject('list');
+    this.busShuttleServiceSettings = new BehaviorSubject(this.defaultBusShuttleServicesSettings);
+    this.casheCleaered = new BehaviorSubject(false);
+    this.timetable = new BehaviorSubject({ blacklists: [] });
   }
 
   // DARK THEME
@@ -68,10 +77,26 @@ export class UserSettingsService {
         this.storage.clear().then(() => {
           this.storage.set('tgt', tgt);
           this.storage.set('cred', cred);
-        });
+        }).then(
+          _ => this.casheCleaered.next(true)
+        );
       });
     }
     );
+  }
+
+  subscribeToCacheClear() {
+    return this.casheCleaered.asObservable();
+  }
+
+  // BUS SHUTTLE SERVICES
+  setBusShuttleServicesSettings(val: { firstLocation: string, secondLocation: string, alarmBefore: string }) {
+    this.storage.set('bus-shuttle-services', val);
+    this.busShuttleServiceSettings.next(val);
+  }
+
+  getBusShuttleServiceSettings() {
+    return this.busShuttleServiceSettings.asObservable();
   }
 
   // PURE DARK THEME
@@ -169,5 +194,19 @@ export class UserSettingsService {
         ? this.setShownDashboardSections(value)
         : this.setShownDashboardSections(this.defaultDashboardSectionsSettings);
     });
+    this.storage.get('bus-shuttle-services').then(value => {
+      if (value) {
+        this.setBusShuttleServicesSettings(value);
+      } else {
+        this.setBusShuttleServicesSettings(this.defaultBusShuttleServicesSettings);
+      }
+    });
+    this.storage.get('timetable').then((value: { blacklists: [] }) => {
+      if (this.timetable.value !== value) {
+        this.timetable.next(value || { blacklists: [] });
+      }
+      this.timetable.subscribe(newValue => this.storage.set('timetable', newValue));
+    });
   }
+
 }

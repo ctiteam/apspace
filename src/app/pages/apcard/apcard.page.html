@@ -151,7 +151,7 @@
         <div class="perMonth" *ngFor="let month of transactionsMonths | monthFilter: filterObject.month">
           <div class="masonry-item apcard-history-group" *ngIf="transactionsGroupedByDate[month + ', ' + year]">
             <ion-card>
-              <ion-card-header>
+              <ion-card-header no-padding padding-start padding-end padding-top>
                 <ion-card-subtitle *ngIf="filterObject.show !== 'credit'">
                   <h5 class="responsive-h2" *ngIf="monthlyData.dr[year]; else noDebit">
                     You spent <span class="total-deposit">RM{{ monthlyData.dr[year][month] | number: "1.0-2" }}
@@ -176,7 +176,7 @@
                   </h3>
                 </ion-card-title>
               </ion-card-header>
-              <ion-card-content>
+              <ion-card-content no-padding padding-start padding-end>
                 <ion-list>
                   <ion-item [class.credit]="0 < transaction.SpendVal" [class.deposit]="0 > transaction.SpendVal"
                     lines="none" no-padding

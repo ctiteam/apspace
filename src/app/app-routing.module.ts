@@ -146,13 +146,18 @@ const routes: Routes = [
   {
     path: 'classroom-finder',
     canActivate: [AuthGuard],
-    loadChildren: './pages/classroom-finder/classroom-finder.module#ClassroomFinderPageModule'
+    loadChildren: () => import('./pages/classroom-finder/classroom-finder.module').then(m => m.ClassroomFinderPageModule)
   },
   {
     path: 'profile',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule)
   },
+  {
+    path: 'opened-slots',
+    loadChildren: () => import('./pages/iconsult/student/opened-slots/opened-slots.module').then(m => m.OpenedSlotsPageModule)
+  },
+
   {
     path: 'operation-hours',
     canActivate: [AuthGuard],
@@ -162,6 +167,20 @@ const routes: Routes = [
     path: 'submit-survey',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/student-survey/submit-survey/submit-survey.module').then(m => m.SubmitSurveyPageModule)
+  },
+  {
+    path: 'my-appointments',
+    loadChildren: () => import('./pages/iconsult/student/my-appointments/my-appointments.module').then(m => m.MyAppointmentsPageModule)
+  },
+  {
+    path: 'results',
+    canActivate: [AuthGuard],
+    loadChildren: './pages/results/results.module#ResultsPageModule'
+  },
+  {
+    path: 'logout',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/logout/logout.module').then(m => m.LogoutPageModule)
   },
 ];
 

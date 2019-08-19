@@ -10,6 +10,10 @@ export interface BusTrip {
   trip_day: string;
   trip_time: string;
   applicable_from: string;
+  applicable_to: string;
+  trip_from_display_name: string;
+  trip_to_display_name: string;
+  trips_override: number;
 }
 
 export interface APULocations {

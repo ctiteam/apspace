@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Events, Platform, ToastController, AlertController } from '@ionic/angular';
+import { Platform, ToastController, AlertController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Network } from '@ionic-native/network/ngx';
 
@@ -31,7 +31,6 @@ export class LoginPage {
 
   constructor(
     private cas: CasTicketService,
-    private events: Events,
     private network: Network,
     private plt: Platform,
     private router: Router,
@@ -75,7 +74,6 @@ export class LoginPage {
         )),
         tap(role => this.cacheApi(role)),
         timeout(15000),
-        tap(_ => this.events.publish('user:login')),
       ).subscribe(
         _ => { },
         _ => {

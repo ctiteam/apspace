@@ -3,7 +3,7 @@ import {
   EventComponentConfigurations, DashboardCardComponentConfigurations,
   Attendance, StudentProfile, Apcard, FeesTotalSummary, Course, CourseDetails,
   CgpaPerIntake, StudentTimetable, ConsultationHour, StudentPhoto, Holidays,
-  Holiday, ExamSchedule
+  Holiday, ExamSchedule, BusTrips, BusTrip, APULocations, APULocation
 } from 'src/app/interfaces';
 import { Observable, forkJoin, of, zip } from 'rxjs';
 import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray, reduce } from 'rxjs/operators';
@@ -23,6 +23,7 @@ export class StudentDashboardPage implements OnInit {
   lowAttendanceChart: any;
   shownDashboardSections: string[];
   editableList = null;
+  busShuttleServiceSettings: any;
 
   // ALERTS SLIDER OPTIONS
   alertSliderOptions = {
@@ -58,7 +59,7 @@ export class StudentDashboardPage implements OnInit {
       }
     ],
     cardTitle: 'Today\'s Schedule',
-    cardSubtitle: 'Next in: 1 hrs, 25 min'
+    // cardSubtitle: 'Next in: 1 hrs, 25 min'
   };
 
   // UPCOMING EVENTS
@@ -163,6 +164,28 @@ export class StudentDashboardPage implements OnInit {
     contentPadding: true
   };
 
+  // TODAYS TRIPS
+  upcomingTrips$: Observable<any>;
+  showSetLocationsSettings = false;
+  locations: APULocation[];
+  busCardConfigurations: DashboardCardComponentConfigurations = {
+    cardTitle: 'Upcoming Trips',
+    contentPadding: false,
+    withOptionsButton: true,
+    options: [
+      {
+        title: 'set alarm before 15 minutes of next schdule',
+        icon: 'alarm',
+        callbackFunction: this.testCallBack
+      },
+      {
+        title: 'delete',
+        icon: 'trash',
+        callbackFunction: this.testCallBack
+      }
+    ],
+  };
+
   // CGPA
   cgpaChart: any;
   cgpaPerIntake$: Observable<CgpaPerIntake>;
@@ -186,16 +209,28 @@ export class StudentDashboardPage implements OnInit {
   }
 
   ngOnInit() {
-    this.enableCardReordering();
-    this.doRefresh();
-  }
-
-  doRefresh(refresher?) {
     this.userSettings.getShownDashboardSections().subscribe(
       {
         next: data => this.shownDashboardSections = data,
       }
     );
+    this.userSettings.getBusShuttleServiceSettings().subscribe(
+      {
+        next: data => this.upcomingTrips$ = this.getUpcomingTrips(data.firstLocation, data.secondLocation),
+      }
+    );
+    this.userSettings.subscribeToCacheClear().subscribe(
+      {
+        // tslint:disable-next-line: no-trailing-whitespace
+        next: data => data ? this.doRefresh() : ''
+      }
+    );
+    this.enableCardReordering();
+    this.doRefresh();
+  }
+
+  doRefresh(refresher?) {
+    this.getLocations();
     this.photo$ = this.getStudentPhoto();
     this.displayGreetingMessage();
     this.apcardTransaction$ = this.getTransactions();
@@ -208,17 +243,15 @@ export class StudentDashboardPage implements OnInit {
     ).subscribe();
   }
 
-  // NOTIFICATIONS METHODS
+  // NOTIFICATIONS FUNCTIONS
   getBadge() {
     this.notificationService.getMessages().subscribe(res => {
       this.numberOfUnreadMsgs = +res.num_of_unread_msgs;
     });
   }
 
-  navigateToPage(pageName: string) {
-    this.navCtrl.navigateForward(pageName);
-  }
 
+  // DRAG AND DROP FUNCTIONS (DASHBOARD CUSTOMIZATION)
   toggleReorderingMode() {
     this.editableList === 'editable-list' ? this.editableList = null : this.editableList = 'editable-list';
     // PREVENT SCROLLING ON MOBILE PHONES WHEN MOVING CARDS
@@ -237,6 +270,7 @@ export class StudentDashboardPage implements OnInit {
     });
   }
 
+  // PROFILE AND GREETING MESSAGE FUNCTIONS
   getProfile() {
     return this.ws.get<StudentProfile>('/student/profile', true).pipe(
       tap(studentProfile => {
@@ -271,6 +305,7 @@ export class StudentDashboardPage implements OnInit {
     }
   }
 
+  // TODAYS SCHEDULE FUNCTIONS
   getTodaysSchdule(intake: string) {
     this.todaysSchedule$ = zip( // ZIP TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
       this.getUpcomingClasses(intake),
@@ -387,18 +422,8 @@ export class StudentDashboardPage implements OnInit {
     return true;
   }
 
-  getSecondsDifferenceBetweenTwoDates(startDate: Date, endDate: Date): number {
-    // PARAMETERS MUST BE STRING. FORMAT IS ('HH:mm A')
-    // RETURN TYPE IS STRING. FORMAT: 'HH hrs mm min'
-    return (endDate.getTime() - startDate.getTime()) / 1000;
-  }
 
-  secondsToHrsAndMins(seconds: number): string {
-    const hours = Math.floor(seconds / 3600);
-    const mins = Math.floor(seconds % 3600 / 60);
-    return hours + ' hrs ' + mins + ' min';
-  }
-
+  // UPCOMING EVENTS FUNCTIONS
   getUpcomingEvents(intake: string) {
     const todaysDate = new Date();
     this.upcomingEvent$ = zip(
@@ -474,6 +499,7 @@ export class StudentDashboardPage implements OnInit {
     return (daysDiff + 1) + ' days';
   }
 
+  // ATTENDANCE FUNCTIONS
   getAttendance(intake: string) {
     const url = `/student/attendance?intake=${intake}`;
     this.modulesWithLowAttendance$ = this.ws.get<Attendance[]>(url, true).pipe(
@@ -562,6 +588,7 @@ export class StudentDashboardPage implements OnInit {
     );
   }
 
+  // APCARD FUNCTIONS
   getTransactions() {
     return this.ws.get<Apcard[]>('/apcard/', true).pipe(
       map(transactions => this.signTransactions(transactions)),
@@ -618,6 +645,7 @@ export class StudentDashboardPage implements OnInit {
     return transactions;
   }
 
+  // FINANCIALS FUNCTIONS
   getOverdueFee(): Observable<FeesTotalSummary | any> {
     return this.ws.get<FeesTotalSummary[]>(
       '/student/summary_overall_fee',
@@ -656,6 +684,7 @@ export class StudentDashboardPage implements OnInit {
     );
   }
 
+  // CGPA FUNCTIONS
   getCgpaPerIntakeData(): Observable<CgpaPerIntake | any> {
     return this.ws
       .get<Course[]>('/student/courses', true)
@@ -748,6 +777,80 @@ export class StudentDashboardPage implements OnInit {
         }
         )
       );
+  }
+
+  // UPCOMING TRIPS FUNCTIONS
+  getUpcomingTrips(firstLocation: string, secondLocation: string): any {
+    if (!firstLocation || !secondLocation) {
+      this.showSetLocationsSettings = true;
+      return of({});
+    }
+    this.showSetLocationsSettings = false;
+    const dateNow = new Date();
+    return this.ws.get<BusTrips>(`/transix/trips/applicable`, true, { auth: false }).pipe(
+      map(res => res.trips),
+      map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
+        return trips.filter(trip => {
+          return moment(trip.trip_time, 'kk:mm').toDate() >= dateNow
+            && ((trip.trip_from === firstLocation && trip.trip_to === secondLocation)
+              || (trip.trip_from === secondLocation && trip.trip_to === firstLocation));
+        });
+      }),
+      map(trips => { // GET THE NEEDED DATA ONLY
+        return trips.reduce(
+          (prev, curr) => {
+            prev[curr.trip_from + curr.trip_to] = prev[curr.trip_from + curr.trip_to] || {
+              trip_from: curr.trip_from_display_name,
+              trip_from_color: this.getLocationColor(curr.trip_from),
+              trip_to: curr.trip_to_display_name,
+              trip_to_color: this.getLocationColor(curr.trip_to),
+              times: []
+            };
+            prev[curr.trip_from + curr.trip_to].times.push(curr.trip_time);
+            return prev;
+          },
+          {}
+        );
+      }),
+      map(trips => { // CONVERT OBJECT TO ARRAY
+        return Object.keys(trips).map(
+          key => trips[key]
+        );
+      }),
+      tap(d => console.log(d))
+    );
+  }
+
+  getLocations() {
+    this.ws.get<APULocations>(`/transix/locations`, true, { auth: false }).pipe(
+      map((res: APULocations) => res.locations),
+      tap(locations => this.locations = locations)
+    ).subscribe();
+  }
+
+  getLocationColor(locationName: string) {
+    for (const location of this.locations) {
+      if (location.location_name === locationName) {
+        return location.location_color;
+      }
+    }
+  }
+
+  // GENERAL FUNCTIONS
+  getSecondsDifferenceBetweenTwoDates(startDate: Date, endDate: Date): number {
+    // PARAMETERS MUST BE STRING. FORMAT IS ('HH:mm A')
+    // RETURN TYPE IS STRING. FORMAT: 'HH hrs mm min'
+    return (endDate.getTime() - startDate.getTime()) / 1000;
+  }
+
+  secondsToHrsAndMins(seconds: number): string {
+    const hours = Math.floor(seconds / 3600);
+    const mins = Math.floor(seconds % 3600 / 60);
+    return hours + ' hrs ' + mins + ' min';
+  }
+
+  navigateToPage(pageName: string) {
+    this.navCtrl.navigateForward(pageName);
   }
 
   testCallBack() {

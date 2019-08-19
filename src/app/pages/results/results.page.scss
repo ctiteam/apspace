@@ -1,0 +1,56 @@
+ion-card {
+  margin-top: 5px !important;
+
+  ion-card-header {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+
+    &.colored-border {
+      border-bottom: 1rem solid;
+    }
+  }
+
+  ion-card-content {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  ion-grid {
+    .bold {
+      font-weight: bold;
+    }
+  }
+
+}
+
+.table-top {
+  display: none;
+}
+
+.special-border {
+  display: none;
+}
+
+@media (min-width: 600px) { // Bigger screen
+  .marker {
+      display: none;
+  }
+
+  .special-border {
+    display: inline-block;
+    border-bottom: none;
+  }
+  
+  .special-card-header {
+    display: none;
+  }
+  
+
+  .table-top {
+    display: block;
+    visibility: visible;
+    padding-bottom: 4px !important;
+  }
+}

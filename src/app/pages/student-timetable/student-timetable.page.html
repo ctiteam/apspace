@@ -1,12 +1,15 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="light" outline small (click)="chooseWeek()" [disabled]="availableWeek && availableWeek.length === 0">
+      <ion-button outline small (click)="viewWeek = !viewWeek" [disabled]="availableWeek!.length === 0">
+          {{ viewWeek ? 'Weekly' : 'Daily' }}
+      </ion-button>
+      <ion-button outline small (click)="chooseWeek()" [disabled]="availableWeek!.length === 0">
         {{ (selectedDate | date) || 'Weeks' }}
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button color="light" outline small (click)="presentIntakeSearch()">
+      <ion-button *ngIf="intakeSelectable" outline small (click)="presentIntakeSearch()">
         {{ intake || 'Intakes' }}
       </ion-button>
     </ion-buttons>
@@ -18,39 +21,134 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-segment [ngModel]="selectedDate | date:'E' | uppercase"
-    (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
-    <ion-segment-button *ngFor="let day of availableDays" [value]="day">
-      {{ day }}
-    </ion-segment-button>
-  </ion-segment>
+  <!-- do not add filter pipe here as it affects loading -->
+  <ng-template let-timetables [ngIf]="timetable$ | async" [ngIfElse]="loading">
+    <ng-template let-timetables [ngIf]="!viewWeek ? (timetables | classes:intake:room | theday:selectedDate) : (timetables | classes:intake:room | theweek:selectedWeek)" [ngIfElse]="loading">
+      <ng-template [ngIf]="timetables!.length" [ngIfElse]="empty">
+        <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
+          <ion-segment [ngModel]="selectedDate | date:'E' | uppercase"
+            (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
+            <ion-segment-button *ngFor="let day of availableDays" [value]="day">
+              {{ day }}
+            </ion-segment-button>
+          </ion-segment>
+        </ng-template>
 
-  <ion-card *ngFor="let timetable of timetable$ | async | classes:intake | theday:selectedDate; trackBy: trackByIndex"
-    [style.borderLeft]="'1rem solid ' + strToColor(timetable.MODID)">
-    <ion-card-header>
-      <h4 no-margin-bottom>{{ timetable.MODID }}</h4>
-    </ion-card-header>
-    <ion-card-content>
-      <p>
-        <ion-icon name="time"></ion-icon>
-        <b>{{ timetable.TIME_FROM }}</b> - <b>{{ timetable.TIME_TO }}</b>
-      </p>
-      <p>
-        <ion-icon name="locate"></ion-icon>
-        <span>{{ timetable.ROOM }} │ {{ timetable.LOCATION }}</span>
-      </p>
-      <p>
-        <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]">
-          <ion-icon name="contact"></ion-icon>
-          <span>{{ timetable.NAME }}</span>
-        </a>
-      </p>
-    </ion-card-content>
-  </ion-card>
+        <ng-template [ngIf]="selectedDate">
+          <ion-card no-padding>
+            <ion-card-content class="table-top">
+              <ion-grid no-margin no-padding>
+                <ion-row>
+                  <ion-col size="12" size-sm="3"><h2>Module</h2></ion-col>
+                  <ion-col size="12" size-sm="3"><h2>Time</h2></ion-col>
+                  <ion-col size="12" size-sm="3"><h2>Location</h2></ion-col>
+                  <ion-col size="12" size-sm="3"><h2>Lecturer</h2></ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
 
-  <ion-card *ngIf="!selectedDate">
-    <ion-card-content>
-      <ion-text>Hooray! No classes this week! :D</ion-text>
-    </ion-card-content>
-  </ion-card>
+        <ion-card *ngFor="let timetable of timetables; trackBy: trackByindex"
+          no-padding class="card-side"
+          [style.borderLeft]="'1rem solid ' + strToColor(timetable.MODID)">
+          <ion-card-content no-padding>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12" size-sm="3">
+                  {{ timetable.MODID }}
+                </ion-col>
+                <ion-col size="12" size-sm="3">
+                  <span class="marker"><ion-icon name="time"></ion-icon></span>
+                  {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
+                </ion-col>
+                <ion-col size="12" size-sm="3">
+                  <span class="marker"><ion-icon name="locate"></ion-icon></span>
+                  {{ timetable.ROOM }} | {{ timetable.LOCATION }}
+                </ion-col>
+                <ion-col size="12" size-sm="3">
+                  <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]">
+                    <span class="marker"><ion-icon name="contact"></ion-icon></span>
+                    {{ timetable.NAME }}
+                  </a>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
+    </ng-template>
+
+    <ng-template #empty>
+      <ion-card>
+        <ion-card-content>
+          <ng-container *ngIf="intake; else byroom">Hooray! No classes this week! :D</ng-container>
+          <ng-template #byroom>Oops, room not found! ¯\_(ツ)_/¯</ng-template>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+
+    <!-- trivial message but must be displayed -->
+    <ion-card class="card-special">
+      <ion-card-header>
+        <ion-card-title>Legend</ion-card-title>
+      </ion-card-header>
+      <ion-card-content *ngFor="let legend of legends" >
+        <b>{{ legend.name }}</b> - {{ legend.desc }}
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="card-special">
+      <ion-card-header>
+        <ion-card-title>Mid Year Semester</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        While there will be no classes during the mid-semester break for your
+        intake, your intake time table will continue to appear during the
+        break.
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="card-special">
+      <ion-card-header>
+        <ion-card-title>Important Notice</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          Students are advised to consult your lecturers to check whether there
+          will be lectures during the buffer/revision week.
+        </p>
+        <p>
+          The timetable published on the buffer/revision week will be the
+          same as the last week of the semester.
+        </p>
+        <p>
+          If your lecturer decides not to use the buffer/revision week, then
+          you will not be required to come for lectures during the
+          buffer/revision week.
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+
+  <ng-template #loading>
+    <ion-card no-padding>
+      <ion-card-content no-padding>
+        <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+    <ion-card no-padding>
+      <ion-card-content no-padding>
+        <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+    <ion-card no-padding>
+      <ion-card-content no-padding>
+        <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+    <ion-card no-padding>
+      <ion-card-content no-padding>
+        <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
 </ion-content>

@@ -3,7 +3,7 @@
 
 /** Ionic CSS Variables **/
 :root {
-  --ion-font-family: 'Oswald', sans-serif; //TESTING
+  --ion-font-family: "Oswald", sans-serif; //TESTING
   /** primary **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -111,10 +111,12 @@
 
   --main-txt-color: #454343;
   --secondary-txt-color: #5c5959;
-  --tertiary-txt-color: #696666;
+  --tertiary-txt-color: #8a8888;
 
   --danger-color: #e54d42;
+  --danger-hover-color: #b02d23;
   --success-color: #49b571;
+  --success-hover-color: #2d8c50;
   --passed-event-color: #7b7b7b;
 
   --ion-background-color: var(--main-bg-color);
@@ -127,30 +129,33 @@
   --tertiary-bg-color: #424242;
 
   --main-txt-color: #e8e6e6;
-  --secondary-txt-color: #bbbbbb;
+  --secondary-txt-color: #9e9e9e;
   --tertiary-txt-color: #a19d9d;
 
   --danger-color: #e54d42;
+  --danger-hover-color: #b02d23;
   --success-color: #49b571;
+  --success-hover-color: #2d8c50;
   --passed-event-color: #7b7b7b;
 
   --ion-background-color: var(--main-bg-color);
-
 }
 
 // IONIC VARIABLES IN DARK THEME
 :root .dark-theme.pure {
-  --primary-color: #b0acac;
+  --primary-color: #afafaf;
   --main-bg-color: #101010;
   --secondary-bg-color: #151515;
   --tertiary-bg-color: #424242;
 
   --main-txt-color: #cccccc;
-  --secondary-txt-color: #5e5c5c;
-  --tertiary-txt-color: #4d4b4b;
+  --secondary-txt-color: #908f8f;
+  --tertiary-txt-color: #807e7e;
 
   --danger-color: #e54d42;
+  --danger-hover-color: #b02d23;
   --success-color: #49b571;
+  --success-hover-color: #2d8c50;
   --passed-event-color: #7b7b7b;
 
   --ion-background-color: var(--main-bg-color);

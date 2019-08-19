@@ -82,6 +82,13 @@ input:-webkit-autofill:active {
   }
 }
 
+// iConsult Modal Height
+.add-min-height{
+  .modal-wrapper{
+    min-height: 85%;
+  }
+}
+
 // ANIMATIONS
 .animated {
   transition: all 0.5s;
