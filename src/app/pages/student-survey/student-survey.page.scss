@@ -1,0 +1,76 @@
+    textarea{
+      padding: 10px !important;
+      width: 100%;
+    }
+    .userMessage{
+      white-space: normal;
+    }
+    .noSurveyMasg{
+      margin-top: 20px;
+    }
+  
+    .smIonList {
+      display: inline-flex; 
+      width: 100%;
+       padding: 0%;
+    }
+    .naRadioBtn {
+      margin-left: 0% !important;
+      margin-right:5px;
+    }
+    .ansRadioBtn {
+      margin-left: 0% !important; 
+      margin-right: 10px ;
+      
+    } 
+    .surveyQuestion{
+      font-weight:bold;
+      font-size: 16px;
+    }
+    .listContent{
+      font-size: 15px;
+    }
+
+    @media only screen and (min-width: 1px) {
+        
+        .d-block {
+          display: block;
+          width: 100%;
+        }
+        .btnSub{
+           height: 30px;  background-color: royalblue;
+           width: 100%;
+         }
+         .rdBtn{
+           width: 100%;
+         }
+      }
+    @media only screen and (min-width: 992px) {
+
+       
+        .d-lg-inline {
+          display: inline-block !important;
+          width: 100%;
+        }
+      
+       .btnSub{
+         height: 30px;  background-color: royalblue;
+         width: 100%;
+       }
+       .rdBtn{
+        width: 20%;
+      }
+
+      .rdBtn-with-na{
+        width: 17% !important;
+      }
+
+      .na{
+        width: 15% !important;
+      }
+        
+      }
+      
+
+  
+  
