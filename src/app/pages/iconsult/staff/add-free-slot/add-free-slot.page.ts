@@ -103,7 +103,7 @@ export class AddFreeSlotPage implements OnInit {
     return this.addFreeSlotForm.controls;
   }
 
-  get timeFormData() {
+  get timeFormData(): FormArray {
     return this.addFreeSlotForm.get('time') as FormArray;
   }
 

@@ -18,7 +18,7 @@ import { SettingsService, WsApiService, UserSettingsService } from '../../servic
 })
 export class ProfilePage implements OnInit, AfterViewInit, OnDestroy {
   chart: am4maps.MapChart;
-  photo$: Observable<StudentPhoto[]>;
+  photo$: Observable<StudentPhoto>;
   profile$: Observable<StudentProfile>;
   staffProfile$: Observable<StaffProfile[]>;
   visa$: Observable<any>;
@@ -49,7 +49,7 @@ export class ProfilePage implements OnInit, AfterViewInit, OnDestroy {
       // tslint:disable-next-line:no-bitwise
       if (role & Role.Student) {
         this.studentRole = true;
-        this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo', true);
+        this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
         this.profile$ = this.ws.get<StudentProfile>('/student/profile', true);
         this.getProfile();
       // tslint:disable-next-line:no-bitwise
