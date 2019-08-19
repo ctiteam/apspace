@@ -164,9 +164,9 @@ const routes: Routes = [
     loadChildren: () => import('./pages/operation-hours/operation-hours.module').then(m => m.OperationHoursPageModule)
   },
   {
-    path: 'submit-survey',
+    path: 'student-survey',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./pages/student-survey/submit-survey/submit-survey.module').then(m => m.SubmitSurveyPageModule)
+    loadChildren: () => import('./pages/student-survey/student-survey.module').then(m => m.SubmitSurveyPageModule)
   },
   {
     path: 'my-appointments',
