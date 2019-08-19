@@ -147,7 +147,7 @@ export class AddFreeSlotPage implements OnInit {
       header: 'Adding new slots',
       subHeader: 'Are you sure you want to add new slots with the following details:',
       message: `<p><strong>Slot Date: </strong> ${this.addFreeSlotForm.value.startDate}</p>
-                <p *ngIf="addFreeSlotForm.value.endDate"><strong>Slot End Date: </strong> ${this.addFreeSlotForm.value.endDate || 'N/A'}</p>
+                <p><strong>Slot End Date: </strong> ${this.addFreeSlotForm.value.endDate || 'N/A'}</p>
                 <p><strong>Slot Time: </strong> ${body.start_time.toString()}</p>
                 <p><strong>Slot Location: </strong> ${this.addFreeSlotForm.value.location}</p>
                 <p><strong>Slot Venue: </strong> ${this.addFreeSlotForm.value.venue.rooms} </p>`,
@@ -273,6 +273,7 @@ export class AddFreeSlotPage implements OnInit {
     }
   }
 
+  // Checking for duplication in slots time and remove it when the user enters the data
   timeChanged(index: number) {
     const control = this.formFields.time as FormArray;
     this.formFields.time.value.map(
