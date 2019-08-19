@@ -4,7 +4,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Observable } from 'rxjs';
 import * as Fuse from 'fuse.js';
 
-import { CasTicketService, UserSettingsService } from '../../services';
+import { CasTicketService, SettingsService, UserSettingsService } from '../../services';
 import { Role } from '../../interfaces';
 
 import { MenuItem } from './menu.interface';
@@ -21,6 +21,8 @@ export class MorePage implements OnInit {
   options: Fuse.FuseOptions<MenuItem> = {
     keys: ['title', 'tags']
   };
+
+  menuFiltered = [] as MenuItem[];
 
   /* tslint:disable:no-bitwise */
   menuFull: MenuItem[] = [
@@ -276,11 +278,16 @@ export class MorePage implements OnInit {
     public router: Router,
     public iab: InAppBrowser,
     private cas: CasTicketService,
+    private settings: SettingsService,
     private userSettings: UserSettingsService
   ) { }
 
   ngOnInit() {
     this.view$ = this.userSettings.getMenuUI();
+
+    const role = this.settings.get('role');
+    // tslint:disable-next-line:no-bitwise
+    this.menuFiltered = this.menuFull.filter(menu => menu.role & role);
   }
 
   /** Open page, manually check for third party pages. */
@@ -301,7 +308,7 @@ export class MorePage implements OnInit {
   }
 
   /** No sorting for KeyValuePipe. */
-  noop(a: MenuItem, b: MenuItem): number {
+  noop(): number {
     return 0;
   }
 

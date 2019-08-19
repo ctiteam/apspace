@@ -8,7 +8,7 @@
 <ion-content>
   <!-- LISTS UI -->
   <div *ngIf="(view$ | async) === 'list'; else menuCardsUI" class="masonry-list">
-    <div *ngFor="let group of menuFull | fuse:term:options | byGroup | keyvalue:noop"
+    <div *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop"
       class="masonry-item">
       <ion-card no-margin>
         <ion-card-header>
@@ -39,7 +39,7 @@
   <!-- CARDS UI -->
   <ng-template #menuCardsUI>
     <ion-grid>
-      <ion-row *ngFor="let group of menuFull | fuse:term:options | byGroup | keyvalue:noop">
+      <ion-row *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop">
         <ion-col size="12" margin-top margin-bottom>
           <h5 class="colored-text" text-center>{{ group.key }}</h5>
         </ion-col>
