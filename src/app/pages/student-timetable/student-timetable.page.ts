@@ -6,11 +6,13 @@ import {
   ActionSheetController, IonRefresher, ModalController, NavController, Platform,
 } from '@ionic/angular';
 
-import { Observable } from 'rxjs';
-import { finalize, tap } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { finalize, map, tap, withLatestFrom } from 'rxjs/operators';
 
 import { StudentProfile, StudentTimetable } from '../../interfaces';
-import { SettingsService, StudentTimetableService, WsApiService } from '../../services';
+import {
+  SettingsService, StudentTimetableService, UserSettingsService, WsApiService
+} from '../../services';
 import { ClassesPipe } from './classes.pipe';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 
@@ -95,10 +97,11 @@ export class StudentTimetablePage implements OnInit {
     private modalCtrl: ModalController,
     private navCtrl: NavController,
     private plt: Platform,
-    private tt: StudentTimetableService,
-    private ws: WsApiService,
+    private route: ActivatedRoute,
     private settings: SettingsService,
-    private route: ActivatedRoute
+    private tt: StudentTimetableService,
+    private userSettings: UserSettingsService,
+    private ws: WsApiService,
   ) { }
 
   ngOnInit() {
@@ -126,13 +129,15 @@ export class StudentTimetablePage implements OnInit {
     }
 
     // intake from params -> intake from settings -> student default intake
-    this.intake = intake || this.settings.get('intake');
+    const intakeHistory = this.settings.get('intakeHistory') || [];
+    this.intake = intake || intakeHistory[intakeHistory.length - 1];
 
     // default intake to student current intake
     if (this.intake === undefined) {
       this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
         this.intake = (p || {} as StudentProfile).INTAKE || '';
-        this.settings.set('intake', this.intake);
+        this.cdr.markForCheck();
+        this.settings.set('intakeHistory', [this.intake]);
       });
     }
 
@@ -175,7 +180,11 @@ export class StudentTimetablePage implements OnInit {
   /** Check and update intake on change. */
   changeIntake(intake: string) {
     if (intake !== null && intake !== this.intake) {
-      this.settings.set('intake', this.intake = intake);
+      this.intake = intake;
+      this.settings.set('intakeHistory', this.settings.get('intakeHistory')
+        .concat(intake)
+        .filter((v, i, a) => a.lastIndexOf(v) === i)
+        .slice(-5));
       this.cdr.markForCheck();
       this.timetable$.subscribe();
     }
@@ -185,8 +194,11 @@ export class StudentTimetablePage implements OnInit {
   async presentIntakeSearch() {
     const modal = await this.modalCtrl.create({
       component: SearchModalComponent,
-      // TODO: store search history
-      componentProps: { items: this.intakeLabels, notFound: 'No Intake Selected' },
+      componentProps: {
+        items: this.intakeLabels,
+        defaultItems: this.settings.get('intakeHistory'),
+        notFound: 'No intake selected'
+      }
     });
     await modal.present();
     // default item to current intake if model dismissed without data
@@ -204,12 +216,15 @@ export class StudentTimetablePage implements OnInit {
 
   /** Refresh timetable, forcefully if refresher is passed. */
   doRefresh(refresher?: IonRefresher) {
-    this.timetable$ = this.tt.get(Boolean(refresher)).pipe(
+    const timetable$ = this.tt.get(Boolean(refresher)).pipe(
+      finalize(() => refresher && refresher.complete())
+    );
+    this.timetable$ = combineLatest([timetable$, this.userSettings.timetable.asObservable()]).pipe(
+      map(([tt, { blacklists }]) => blacklists ? tt.filter(t => !blacklists.includes(t.MODID)) : tt),
       tap(tt => this.updateDay(tt)),
       // initialize or update intake labels only if timetable might change
       tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)
         && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
-      finalize(() => refresher && refresher.complete()),
     );
   }
 
@@ -263,6 +278,8 @@ export class StudentTimetablePage implements OnInit {
     } else if (this.availableDate.length === 0) {
       this.selectedDate = undefined;
     }
+
+    this.cdr.markForCheck();
   }
 
 }

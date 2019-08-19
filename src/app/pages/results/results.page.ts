@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActionSheetButton } from '@ionic/core';
-import { ActionSheetController, Platform } from '@ionic/angular';
+import { ActionSheetController, Platform, IonRefresher } from '@ionic/angular';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet/ngx';
 
 import { Observable } from 'rxjs';
@@ -49,11 +49,9 @@ export class ResultsPage implements OnInit {
     },
   };
 
-  numOfSkeletons = new Array(4);
-
   constructor(
     private ws: WsApiService,
-    public plt: Platform,
+    private platform: Platform,
     private actionSheet: ActionSheet,
     private actionSheetCtrl: ActionSheetController
   ) { }
@@ -62,8 +60,25 @@ export class ResultsPage implements OnInit {
     this.doRefresh();
   }
 
+  doRefresh(refresher?: IonRefresher) {
+    this.ws.get<StudentProfile>('/student/profile', true).subscribe(p => {
+      if (p.BLOCK) {
+        this.block = true;
+        this.course$ = this.ws.get<Course[]>('/student/courses', true).pipe(
+          tap(i => this.selectedIntake = i[0].INTAKE_CODE),
+          tap(i => this.result$ = this.getResults(i[0].INTAKE_CODE)),
+          tap(i => this.intakeLabels = Array.from(new Set((i || []).map(t => t.INTAKE_CODE)))),
+          finalize(() => refresher && refresher.complete())
+        );
+      } else {
+        this.block = false;
+        this.message = p.MESSAGE;
+      }
+    });
+  }
+
   showActionSheet() {
-    if (this.plt.is('cordova')) {
+    if (this.platform.is('cordova')) {
       const options: ActionSheetOptions = {
         buttonLabels: this.intakeLabels,
         addCancelButtonWithLabel: 'Cancel',
@@ -100,27 +115,6 @@ export class ResultsPage implements OnInit {
       tap(_ => this.getDeterminationLegend(intake, refresh)),
       tap(_ => this.getClassificatinLegend(intake, refresh)),
     ));
-  }
-
-  ionViewDidLoad() {
-    this.doRefresh();
-  }
-
-  doRefresh(refresher?) {
-    this.ws.get<StudentProfile>('/student/profile', true).subscribe(p => {
-      if (p.BLOCK === true) {
-        this.block = false;
-        this.course$ = this.ws.get<Course[]>('/student/courses', true).pipe(
-          tap(i => this.selectedIntake = i[0].INTAKE_CODE),
-          tap(i => this.result$ = this.getResults(i[0].INTAKE_CODE)),
-          tap(i => this.intakeLabels = Array.from(new Set((i || []).map(t => t.INTAKE_CODE)))),
-          finalize(() => refresher && refresher.complete())
-        );
-      } else {
-        this.block = true;
-        this.message = p.MESSAGE;
-      }
-    });
   }
 
   getCourseDetails(intake: string, refresh: boolean): Observable<CourseDetails> {
@@ -171,7 +165,7 @@ export class ResultsPage implements OnInit {
     this.showBarChart(grades, count);
   }
 
-  showBarChart(listItems, listCount) {
+  showBarChart(listItems: string[], listCount: number[]) {
     const randomColor = [
       'rgba(255, 99, 132, 0.7)',
       'rgba(54, 162, 235, 0.7)',
@@ -209,7 +203,7 @@ export class ResultsPage implements OnInit {
     };
   }
 
-  trackByFn(index) {
+  trackByFn(index: number) {
     return index;
   }
 

@@ -1,11 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UserSettingsService, WsApiService } from 'src/app/services';
-import { IonSelect, NavController, ToastController } from '@ionic/angular';
-import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
-import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
-import { APULocations, APULocation } from 'src/app/interfaces';
-import { map, tap } from 'rxjs/operators';
+import { IonSelect, ModalController, NavController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
+import { map, pluck, tap } from 'rxjs/operators';
+
+import { APULocations, APULocation, StudentProfile } from '../../interfaces';
+import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+import {
+  SettingsService, StudentTimetableService, UserSettingsService, WsApiService
+} from '../../services';
+import { toastMessageEnterAnimation } from '../../animations/toast-message-animation/enter';
+import { toastMessageLeaveAnimation } from '../../animations/toast-message-animation/leave';
 
 @Component({
   selector: 'app-settings',
@@ -30,6 +34,7 @@ export class SettingsPage implements OnInit {
   dashboardSections;
 
   locations$: Observable<APULocation[]>;
+  timetable$: Observable<{ blacklists: string[] }>;
 
   allDashboardSections = [
     { section: 'profile', name: 'Profile', disabled: true },
@@ -41,7 +46,8 @@ export class SettingsPage implements OnInit {
     { section: 'lowAttendance', name: 'Low Attendance', disabled: false },
     { section: 'financials', name: 'Financials', disabled: false },
     { section: 'cgpa', name: 'CGPA Per Intake', disabled: false },
-    { section: 'busShuttleServices', name: 'Today\'s Trips', disabled: false }
+    { section: 'busShuttleServices', name: 'Today\'s Trips', disabled: false },
+    { section: 'timetable', name: 'Timetable', disabled: false }
   ];
   accentColors = [
     { title: 'Blue (Default)', value: 'blue-accent-color' },
@@ -52,9 +58,12 @@ export class SettingsPage implements OnInit {
   ];
 
   constructor(
-    private userSettings: UserSettingsService,
+    private modalCtrl: ModalController,
     private navCtrl: NavController,
+    private settings: SettingsService,
     private toastCtrl: ToastController,
+    private tt: StudentTimetableService,
+    private userSettings: UserSettingsService,
     private ws: WsApiService,
   ) {
     this.userSettings
@@ -95,6 +104,7 @@ export class SettingsPage implements OnInit {
         {
           next: value => this.busShuttleServiceSettings = value
         });
+    this.timetable$ = this.userSettings.timetable.asObservable();
   }
 
 
@@ -143,6 +153,40 @@ export class SettingsPage implements OnInit {
     this.userSettings.setMenuUI(this.menuUI);
   }
 
+  async timetableModuleBlacklistsAdd() {
+    const setting = this.userSettings.timetable.value;
+    const timetables = await this.tt.get().toPromise();
+
+    const intakeHistory = this.settings.get('intakeHistory') || [];
+    const intake = intakeHistory[intakeHistory.length - 1]
+      || await this.ws.get<StudentProfile>('/student/profile').pipe(pluck('INTAKE')).toPromise();
+
+    // ignored those that are blacklisted
+    const filtered = timetables.filter(timetable => !setting.blacklists.includes(timetable.MODID));
+    const items = [...new Set(filtered.map(timetable => timetable.MODID))];
+    const defaultItems = [...new Set(filtered
+      .filter(timetable => timetable.INTAKE === intake)
+      .map(timetable => timetable.MODID))];
+    const placeholder = 'Search all modules';
+    const notFound = 'No module selected';
+    const modal = await this.modalCtrl.create({
+      component: SearchModalComponent,
+      componentProps: { items, defaultItems, placeholder, notFound }
+    });
+    await modal.present();
+    const { data } = await modal.onDidDismiss();
+    if (data && data.item) {
+      setting.blacklists.push(data.item);
+      this.userSettings.timetable.next(setting);
+    }
+  }
+
+  timetableModuleBlacklistsRemove(value) {
+    const setting = this.userSettings.timetable.value;
+    setting.blacklists.splice(value, 1);
+    this.userSettings.timetable.next(setting);
+  }
+
   clearCache() {
     this.userSettings.clearStorage().then(
       () => this.showToastMessage('Cached has been cleared successfully')
@@ -165,4 +209,5 @@ export class SettingsPage implements OnInit {
       leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
+
 }

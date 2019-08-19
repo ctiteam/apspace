@@ -1,14 +1,94 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-title>Feedback</ion-title>
-    <ion-buttons slot="end">
-      <ion-button color="light" outline small (click)="submitFeedback()">
-        Send
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size-xs="12" size-lg="4">
+        <ion-card no-padding no-margin>
+          <ion-card-header class="colored-border">
+            <ion-card-title>Important Notice</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <h5 class="text">
+              This Service can be used when you have any questions, concerns, or feature request related to APSpace.
+            </h5>
+        
+            <h5 class="text">
+              The feedback will be received by the <span class="bold">Centre of Technology and Innovation (CTI)</span>
+              and we will do our best to keep up the standards so you enjoy our service.
+            </h5>
+        
+            <h5 class="bold text">
+              Please note that your identity or contact information will BE REVEALED to the person receiving this Feedback. 
+            </h5>
+        
+            <h5 class="text">
+              If you have a feedback which is not related to the APSpace (ex: feedback related to buses, network, classrooms...), you can use our 
+              <a
+                class="colorful-text bold"
+                (click)="openOnlineFeedbackSystem()"
+                >Online Feedback System</a
+              >
+              to send your feedback to the person who is in charge. 
+            </h5>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
 
+      <ion-col size-xs="12" size-lg="8">
+        <ion-card no-padding no-margin>
+          <ion-card-content>
+            <ion-item no-padding>
+              <ion-label position="floating">Message: <span style="color: red">*</span></ion-label>
+              <ion-textarea 
+                autofocus="true" 
+                autosize 
+                rows="2" 
+                no-padding
+                [(ngModel)]="message"
+                (ngModelChange)="onMessageFieldChange($event)"
+                required="true"
+              ></ion-textarea>
+            </ion-item>
+          
+            <ion-item no-padding>
+              <ion-label stacked>Contact Number:</ion-label>
+              <ion-input type="text" [(ngModel)]="contactNo" (ngModelChange)="onPhoneNumberChange()" no-padding></ion-input>
+            </ion-item>
+            <small *ngIf="contactNo && !phoneNumberValid" style="color: red">Phone number is invalid. Please check the number and enter a correct phone number (Exactly 10 or 11 digits)</small>
+            
+            <ion-item no-padding>
+              <ion-label stacked>Screen Size</ion-label>
+              <ion-input type="text" disabled [value]="screenSize"></ion-input>
+            </ion-item>
+        
+            <ion-item no-padding>
+              <ion-label stacked>Platform</ion-label>
+              <ion-input type="text" disabled [value]="platform"></ion-input>
+            </ion-item>
+        
+            <ion-item no-padding lines="none">
+              <ion-label stacked>App Version</ion-label>
+              <ion-input type="text" disabled [value]="appVersion"></ion-input>
+            </ion-item>
+          </ion-card-content>
+
+          <ion-footer>
+            <ion-button 
+              expand="full"
+              class="colored-background"
+              outline small 
+              (click)="submitFeedback()" 
+              [disabled]="!message">
+              Submit
+            </ion-button>
+          </ion-footer>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>  
 </ion-content>

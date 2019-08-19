@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,7 @@ export class UserSettingsService {
   private MenuUI: BehaviorSubject<'cards' | 'list'>;
   private casheCleaered: BehaviorSubject<boolean>;
   private busShuttleServiceSettings: BehaviorSubject<{ firstLocation: string, secondLocation: string, alarmBefore: string }>;
+  timetable: BehaviorSubject<{ blacklists: string[] }>;
 
   accentColors = [
     { name: 'red-accent-color', value: '#e54d42', rgbaValues: '229, 77, 66' },
@@ -53,6 +54,7 @@ export class UserSettingsService {
     this.MenuUI = new BehaviorSubject('list');
     this.busShuttleServiceSettings = new BehaviorSubject(this.defaultBusShuttleServicesSettings);
     this.casheCleaered = new BehaviorSubject(false);
+    this.timetable = new BehaviorSubject({ blacklists: [] });
   }
 
   // DARK THEME
@@ -199,5 +201,12 @@ export class UserSettingsService {
         this.setBusShuttleServicesSettings(this.defaultBusShuttleServicesSettings);
       }
     });
+    this.storage.get('timetable').then((value: { blacklists: [] }) => {
+      if (this.timetable.value !== value) {
+        this.timetable.next(value || { blacklists: [] });
+      }
+      this.timetable.subscribe(newValue => this.storage.set('timetable', newValue));
+    });
   }
+
 }
