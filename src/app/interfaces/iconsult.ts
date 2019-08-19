@@ -44,3 +44,12 @@ export interface SlotDetails {
   LecEmail: number;
   cancelreason: string;
 }
+
+export interface Venue {
+  id: number;
+  rooms: string;
+}
+
+export interface SlotDuplicated {
+  res: string;
+}
