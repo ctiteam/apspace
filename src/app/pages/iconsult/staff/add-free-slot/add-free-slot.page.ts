@@ -100,6 +100,10 @@ export class AddFreeSlotPage implements OnInit {
     return this.addFreeSlotForm.controls;
   }
 
+  get timeFormData() {
+    return this.addFreeSlotForm.get('time') as FormArray;
+  }
+
   submit() {
     this.submitted = true;
     // stop here if form is invalid

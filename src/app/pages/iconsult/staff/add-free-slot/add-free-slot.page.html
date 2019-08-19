@@ -118,7 +118,7 @@
               <ion-list margin-bottom>
                 <div formArrayName="time" margin-bottom>
                   <section [formGroupName]="i"
-                    *ngFor="let _ of addFreeSlotForm.get('time').controls; let i = index">
+                    *ngFor="let _ of timeFormData.controls; let i = index">
                     <ion-item lines="none">
                       <ion-label position="stacked" [ngClass]="{ 'danger-text': (this.addFreeSlotForm.get('time').controls[i].touched && this.addFreeSlotForm.get('time').controls[i].status === 'INVALID')
                       ||
@@ -133,14 +133,14 @@
                         formControlName="slotsTime"></ion-datetime>
                     </ion-item>
                     <span padding-end padding-start float-right (click)="removeTimeSlot(i)"
-                      *ngIf="addFreeSlotForm.get('time').controls.length > 1" class="danger-text cursor-pointer">
+                      *ngIf="timeFormData.controls.length > 1" class="danger-text cursor-pointer">
                       <ion-icon name="close"></ion-icon>Remove Slot {{i+1}}
                     </span>
                     <div class="clearfix"></div>
                     <div padding-start *ngIf="
-                      (this.addFreeSlotForm.get('time').controls[i].touched && this.addFreeSlotForm.get('time').controls[i].status === 'INVALID')
+                      (timeFormData.controls[i].touched && timeFormData.controls[i].status === 'INVALID')
                       ||
-                      (submitted && this.addFreeSlotForm.get('time').controls[i].status === 'INVALID')"
+                      (submitted && timeFormData.controls[i].status === 'INVALID')"
                       class="danger-text">
                       ** Time (Slot {{i+1}}) field cannot be empty
                     </div>
