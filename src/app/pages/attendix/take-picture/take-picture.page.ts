@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 @Component({
   selector: 'app-take-picture',
@@ -8,7 +7,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 })
 export class TakePicturePage {
 
-  constructor(private camera: Camera) { }
+  constructor() { }
 
   // const options: CameraOptions = {
   //   quality: 100,

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonSelect, ModalController, NavController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { map, pluck, tap } from 'rxjs/operators';
+import { map, pluck } from 'rxjs/operators';
 
 import { APULocations, APULocation, StudentProfile } from '../../interfaces';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';

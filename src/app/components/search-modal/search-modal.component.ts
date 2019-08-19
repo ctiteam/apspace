@@ -4,7 +4,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { IonSearchbar, ModalController } from '@ionic/angular';
 import { Observable, concat, of } from 'rxjs';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

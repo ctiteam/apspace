@@ -10,8 +10,6 @@ export function toastMessageLeaveAnimation(AnimationC: Animation, baseEl: HTMLEl
   const wrapperAnimation = new AnimationC();
   const wrapperEl = baseEl.querySelector('.toast-wrapper');
   wrapperAnimation.addElement(wrapperEl);
-  const wrapperElRect = wrapperEl.getBoundingClientRect();
-
   wrapperAnimation
     .fromTo('transform', 'scaleX(1) scaleY(1)', 'scaleX(0.1) scaleY(0.1)')
     .fromTo('opacity', 1, 0);

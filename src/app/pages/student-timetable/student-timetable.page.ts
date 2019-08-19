@@ -2,12 +2,10 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ActionSheet } from '@ionic-native/action-sheet/ngx';
-import {
-  ActionSheetController, IonRefresher, ModalController, NavController, Platform,
-} from '@ionic/angular';
+import { ActionSheetController, IonRefresher, ModalController, Platform } from '@ionic/angular';
 
 import { Observable, combineLatest } from 'rxjs';
-import { finalize, map, tap, withLatestFrom } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 
 import { StudentProfile, StudentTimetable } from '../../interfaces';
 import {
@@ -95,7 +93,6 @@ export class StudentTimetablePage implements OnInit {
     private actionSheetCtrl: ActionSheetController,
     private cdr: ChangeDetectorRef,
     private modalCtrl: ModalController,
-    private navCtrl: NavController,
     private plt: Platform,
     private route: ActivatedRoute,
     private settings: SettingsService,
@@ -241,7 +238,7 @@ export class StudentTimetablePage implements OnInit {
   }
 
   /** Track timetable objects. */
-  trackByIndex(index: number, item: StudentTimetable): number {
+  trackByIndex(index: number): number {
     return index;
   }
 

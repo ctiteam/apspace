@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StaffDirectory, ConsultationSlot } from 'src/app/interfaces';
-import { ActivatedRoute } from 'src/testing';
+// import { ActivatedRoute } from '@angular/router';
 import { MenuController, ModalController } from '@ionic/angular';
 import { WsApiService } from 'src/app/services';
 import { map, tap } from 'rxjs/operators';
@@ -28,7 +28,7 @@ export class OpenedSlotsPage implements OnInit {
     day: ''
   };
   constructor(
-    private route: ActivatedRoute,
+    // private route: ActivatedRoute,
     private ws: WsApiService,
     private menu: MenuController,
     private modalCtrl: ModalController,

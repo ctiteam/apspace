@@ -1,12 +1,17 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({
-  name: 'urldecode'
-})
+/**
+ * Plain simple urldecode to replace `&amp;`.
+ */
+@Pipe({ name: 'urldecode' })
 export class UrldecodePipe implements PipeTransform {
-
-  transform(value: any, args?: any): any {
-    return null;
+  /**
+   * Replace `&amp;` with `&`.
+   *
+   * @param str - text to be replaced
+   * @return replacedText
+   */
+  transform(str: string | null): string {
+    return str && str.replace('&amp;', '&');
   }
-
 }

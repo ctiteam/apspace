@@ -1,41 +1,42 @@
-/// Global Styling STARTS HERE
-// This section should be removed after global styling (light/dark theme) is implemented
-$primary_color: #1297e0;
-$light_colors: (
-  light_background: #f5f5f5,
-  light_header_background: #e7e7e7,
-  light_white_background: #ffffff,
-  light_blue_color: #1f222e,
-  light_green_color: #228b22,
-  light_red_color: #ff0000,
-  ligth_grey_color: #424242,
-  light_light_grey_color: #908989
+$card-colors: (
+  "green": var(--success-color),
+  "yellow": #dfa847,
+  "pink": #ec2a4d,
+  "red": var(--danger-color)
 );
+
+h3, h4 {
+  color: var(--primary-color);
+}
+
+ion-segment-button {
+  color: var(--secondary-txt-color) !important;
+}
+
+ion-col, ion-row {
+  padding: 0 0 0 0 !important;
+}
+
 ion-card {
-  h4 {
-    color: $primary_color;
-  }
   ion-list-header {
-    border-color: $primary_color !important;
+    border-color: var(--primary-color) !important;
 
     ion-label {
-      color: $primary_color;
+      color: var(--primary-color);
     }
   }
 }
 ion-card {
-  background-color: map-get($light_colors, light_white_background);
   ion-card-content {
     ion-item {
-      background-color: map-get($light_colors, light_background) !important;
-      color: map-get($light_colors, ligth_grey_color);
+      color: var(--secondary-txt-color);
       ion-note {
-        color: map-get($light_colors, light_blue_color);
+        color: var(--main-txt-color);
       }
     }
   }
+
 }
-// Global Stylings END HERE
 
 .bold {
   font-weight: bold;
@@ -44,10 +45,10 @@ ion-card {
 ion-card {
   border-radius: 4px;
 
-  @mixin total-summary-card($card-color-name, $card-color) {
-    border-bottom: 8px solid $card-color;
+    @mixin total-summary-card($card-color-name, $card-color) {
+      border-bottom: 8px solid $card-color;
   
-    ion-card-header {
+      ion-card-header {
       ion-card-title,
       ion-card-subtitle {
         color: $card-color;
@@ -58,18 +59,11 @@ ion-card {
       color: $card-color;
 
       ion-label, ion-note {
-        color: $card-color;
+        color: var(--secondary-txt-color);
       }
     }
   }
-  
-  $card-colors: (
-    "green": #1b5e20,
-    "yellow": #827717,
-    "pink": #c51162,
-    "red": #d50000
-  );
-  
+   
   @each $color-name, $color-value in $card-colors {
     &.#{$color-name}-total-summary-card {
       @include total-summary-card($color-name, $color-value);
@@ -93,8 +87,4 @@ div.sticky-segment-div {
   position: sticky;
   top: 0;
   z-index: 1000;
-
-  ion-col {
-    background-color: white;
-  }
 }

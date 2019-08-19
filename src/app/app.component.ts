@@ -34,7 +34,7 @@ export class AppComponent {
     this.platform
       .ready()
       .then(() => Promise.all([this.settings.ready(), this.storage.get('tgt')]))
-      .then(([, tgt]) => {
+      .then(() => {
         this.userSettings.getUserSettingsFromStorage();
         this.userSettings
           .darkThemeActivated()

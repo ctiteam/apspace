@@ -79,7 +79,7 @@ export class FeesPage implements OnInit {
 
   numberOfSkeletons = new Array(6);
 
-  constructor(public menuCtrl: MenuController, private ws: WsApiService) {}
+  constructor(private menuCtrl: MenuController, private ws: WsApiService) {}
 
   ngOnInit() {
     const that = this;
@@ -97,22 +97,22 @@ export class FeesPage implements OnInit {
             {
               label: 'Paid',
               data: [+overdueSummary[0].TOTAL_PAID],
-              backgroundColor: '#00c853' // GREEN
+              backgroundColor: '#49b571' // Green
             },
             {
               label: 'Outstanding',
               data: [+overdueSummary[0].TOTAL_OUTSTANDING],
-              backgroundColor: '#ffd600' // YELLOW
+              backgroundColor: '#dfa847' // Yellow
             },
             {
               label: 'Overdue',
               data: [+overdueSummary[0].TOTAL_OVERDUE],
-              backgroundColor: '#d50000' // ORANGE
+              backgroundColor: '#e54d42' // Red
             },
             {
               label: 'Fine',
               data: [+overdueSummary[0].FINE],
-              backgroundColor: '#c51162' // PINK
+              backgroundColor: '#ec2a4d' // Pink
             }
           ]
         };
