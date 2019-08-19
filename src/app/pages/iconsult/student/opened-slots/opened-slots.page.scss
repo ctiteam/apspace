@@ -81,12 +81,3 @@ ion-avatar {
   font-size: 0.9em;
   display: block;
 }
-
-// TO BE MOVED TO THE THEMES FILE
-.success-text {
-  color: var(--success-color);
-}
-.success-background {
-  background: var(--success-color);
-  --background: var(--success-color);
-}
