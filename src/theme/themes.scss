@@ -345,12 +345,16 @@ button.picker-button {
   color: var(--tertiary-txt-color) !important;
 }
 
-.danger-text{
+.danger-text {
   color: var(--danger-color) !important;
 }
 
 .colored-text {
   color: var(--primary-color) !important;
+}
+
+.success-text {
+  color: var(--success-color);
 }
 
 .colored-border {
@@ -368,6 +372,12 @@ ion-button {
     // &[aria-disabled="true"] {
     //   --background: var(--primary-color) !important;
     // }
+  }
+
+  &.success-background {
+    background: var(--success-color);
+    --background: var(--success-color);
+    --background-hover: var(--success-hover-color);
   }
 
   &.chat-in-teams {
