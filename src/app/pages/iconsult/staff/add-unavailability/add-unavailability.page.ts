@@ -85,7 +85,7 @@ export class AddUnavailabilityPage implements OnInit {
     return this.addUnavailabilityForm.controls;
   }
 
-  get timeFormData() {
+  get timeFormData(): FormArray {
     return this.addUnavailabilityForm.get('time') as FormArray;
   }
 
