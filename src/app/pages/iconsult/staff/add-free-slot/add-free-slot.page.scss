@@ -17,6 +17,9 @@ ion-item {
   border: 1px solid var(--tertiary-bg-color);
   min-height: 40px;
 }
+ion-radio-group{
+  width: 100% !important;
+}
 ion-select.form-input {
   padding: 8px 10px 9px 10px !important;
 }

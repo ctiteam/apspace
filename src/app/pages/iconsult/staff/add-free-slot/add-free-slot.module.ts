@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { AddFreeSlotPage } from './add-free-slot.page';
 import { CalendarModule } from 'ion2-calendar';
 import { IonicSelectableModule } from 'ionic-selectable';
+import { ComponentsModule } from 'src/app/components/components.module';
 const routes: Routes = [
   {
     path: '',
@@ -23,7 +24,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     CalendarModule,
-    IonicSelectableModule
+    IonicSelectableModule,
+    ComponentsModule
   ],
   declarations: [AddFreeSlotPage]
 })

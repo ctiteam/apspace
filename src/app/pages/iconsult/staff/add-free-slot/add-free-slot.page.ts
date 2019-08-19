@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  CalendarModal,
-  CalendarModalOptions,
-  DayConfig,
-  CalendarResult,
-  CalendarComponentOptions
-} from 'ion2-calendar';
-import { ModalController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { ToastController, AlertController, LoadingController } from '@ionic/angular';
+import { Observable } from 'rxjs';
+
 import { WsApiService } from 'src/app/services';
 import { Venue } from 'src/app/interfaces';
-import { Observable } from 'rxjs';
-import * as moment from 'moment';
+import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
+import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
+import { CalendarComponentOptions } from 'ion2-calendar';
 
-import { FormBuilder, FormGroup, Validators, ValidatorFn, ValidationErrors, FormArray } from '@angular/forms';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-free-slot',
@@ -23,6 +21,7 @@ export class AddFreeSlotPage implements OnInit {
   venues$: Observable<Venue[]>;
   addFreeSlotForm: FormGroup;
   submitted = false;
+  loading: HTMLIonLoadingElement;
 
   todaysDate = new Date().toISOString();
 
@@ -61,7 +60,11 @@ export class AddFreeSlotPage implements OnInit {
 
   constructor(
     private ws: WsApiService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private toastCtrl: ToastController,
+    private alertCtrl: AlertController,
+    private loadingController: LoadingController
   ) { }
 
   ngOnInit() {
@@ -140,13 +143,69 @@ export class AddFreeSlotPage implements OnInit {
       body.end_date = this.addFreeSlotForm.value.endDate;
       body.repeat = this.addFreeSlotForm.value.repeatOn;
     }
-    console.log(body);
-    this.ws.post<any>('/iconsult/lecaddfreeslots', { body }).subscribe(
-      {
-        next: res => console.log(res),
-        error: err => console.log(err)
-      }
-    );
+    this.alertCtrl.create({
+      header: 'Adding new slots',
+      subHeader: 'Are you sure you want to add new slots with the following details:',
+      message: `<p><strong>Slot Date: </strong> ${this.addFreeSlotForm.value.startDate}</p>
+                <p *ngIf="addFreeSlotForm.value.endDate"><strong>Slot End Date: </strong> ${this.addFreeSlotForm.value.endDate || 'N/A'}</p>
+                <p><strong>Slot Time: </strong> ${body.start_time.toString()}</p>
+                <p><strong>Slot Location: </strong> ${this.addFreeSlotForm.value.location}</p>
+                <p><strong>Slot Venue: </strong> ${this.addFreeSlotForm.value.venue.rooms} </p>`,
+      buttons: [
+        {
+          text: 'No',
+          handler: () => { }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.presentLoading();
+            this.ws.post<any>('/iconsult/lecaddfreeslots', { body }).subscribe(
+              {
+                next: res => {
+                  this.showToastMessage('Slot(s) added successfully!', 'success');
+                },
+                error: err => this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger'),
+                complete: () => {
+                  // To be changed to the main page for staff
+                  this.dismissLoading();
+
+                  this.router.navigateByUrl('tabs/more').then(
+                    // Hide the loading
+                  );
+                }
+              }
+            );
+          }
+        }
+      ]
+    }).then(confirm => confirm.present());
+  }
+
+  showToastMessage(message: string, color: 'danger' | 'success') {
+    this.toastCtrl.create({
+      message,
+      duration: 5000,
+      position: 'top',
+      color,
+      showCloseButton: true,
+      animated: true,
+      enterAnimation: toastMessageEnterAnimation,
+      leaveAnimation: toastMessageLeaveAnimation
+    }).then(toast => toast.present());
+  }
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
   }
 
   typeChanged(event) {
