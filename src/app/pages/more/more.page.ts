@@ -127,14 +127,14 @@ export class MorePage implements OnInit {
     //   role: Role.Lecturer | Role.Admin,
     //   tags: []
     // },
-    // {
-    //   title: 'iConsult',
-    //   group: 'Course Related',
-    //   url: '',
-    //   img: 'assets/img/iconsult.png',
-    //   role: Role.Student,
-    //   tags: []
-    // },
+    {
+      title: 'iConsult',
+      group: 'Course Related',
+      url: 'my-appointments',
+      img: 'assets/img/iconsult.png',
+      role: Role.Student,
+      tags: []
+    },
     {
       title: 'Timetable',
       group: 'Course Related',

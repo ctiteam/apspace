@@ -165,6 +165,8 @@ const routes: Routes = [
   },
   {
     path: 'my-appointments',
+    canActivate: [AuthGuard],
+    data: { role: Role.Student },
     loadChildren: () => import('./pages/iconsult/student/my-appointments/my-appointments.module').then(m => m.MyAppointmentsPageModule)
   },
   {
@@ -177,6 +179,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/logout/logout.module').then(m => m.LogoutPageModule)
   },
+  { path: 'add-free-slot', loadChildren: './pages/iconsult/staff/add-free-slot/add-free-slot.module#AddFreeSlotPageModule' },
 ];
 
 @NgModule({
