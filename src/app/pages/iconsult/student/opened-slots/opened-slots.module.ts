@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { OpenedSlotsPage } from './opened-slots.page';
 import { BookSlotModalPage } from './book-slot-modal';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 const routes: Routes = [
   {
@@ -20,7 +21,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ComponentsModule
   ],
   declarations: [OpenedSlotsPage, BookSlotModalPage],
   entryComponents: [BookSlotModalPage],
