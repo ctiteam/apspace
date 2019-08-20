@@ -361,28 +361,27 @@ button.picker-button {
   border-color: var(--primary-color) !important;
 }
 
-.colored-background {
-  background: var(--primary-color) !important;
-}
-
 ion-button {
   &.colored-background {
     --background: var(--primary-color) !important;
     --background-hover: var(--sub-primary-color);
-    // &[aria-disabled="true"] {
-    //   --background: var(--primary-color) !important;
-    // }
   }
 
   &.success-background {
-    background: var(--success-color);
     --background: var(--success-color);
     --background-hover: var(--success-hover-color);
   }
 
   &.chat-in-teams {
     --background: #464775;
-    background: #464775;
     --background-hover: #5f60a3;
+  }
+}
+
+ion-fab-button {
+  &.colored-background {
+    --background: var(--primary-color) !important;
+    --background-activated: var(--primary-color) !important;
+    --background-hover: var(--sub-primary-color);
   }
 }

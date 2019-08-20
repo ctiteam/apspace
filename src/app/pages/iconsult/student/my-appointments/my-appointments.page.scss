@@ -25,14 +25,12 @@ ion-card.passed {
   }
   ion-button.colored-background {
     --background: var(--passed-event-color) !important;
-    background: var(--passed-event-color) !important;
     --background-hover: var(--passed-event-color);
   }
 }
 
 ion-button.danger-background {
   --background: var(--danger-color) !important;
-  background: var(--danger-color) !important;
   --background-hover: var(--danger-hover-color);
 }
 // TO BE USED IN STAFF PAGE
