@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 import { Apcard } from '../../interfaces';
 import { WsApiService } from 'src/app/services';
-import { MenuController, IonRadioGroup, Platform, NavController } from '@ionic/angular';
+import { MenuController, IonRadioGroup, Platform, NavController   } from '@ionic/angular';
 import { Router } from '@angular/router';
 
 type VisibleOption = 'all' | 'credit' | 'debit';
@@ -26,16 +26,16 @@ export class ApcardPage implements OnInit {
   transactonsYears: string[] = [];
   transactionsMonths: string[] = [];
   months = [
-    { name: 'January', value: '0' },
-    { name: 'February', value: '1' },
-    { name: 'March', value: '2' },
-    { name: 'April', value: '3' },
-    { name: 'May', value: '4' },
-    { name: 'June', value: '5' },
-    { name: 'July', value: '6' },
-    { name: 'August', value: '7' },
-    { name: 'September', value: '8' },
-    { name: 'October', value: '9' },
+    { name: 'January', value: '0'},
+    { name: 'February', value: '1'},
+    { name: 'March', value: '2'},
+    { name: 'April', value: '3'},
+    { name: 'May', value: '4'},
+    { name: 'June', value: '5'},
+    { name: 'July', value: '6'},
+    { name: 'August', value: '7'},
+    { name: 'September', value: '8'},
+    { name: 'October', value: '9'},
     { name: 'November', value: '10' },
     { name: 'December', value: '11' },
   ];
@@ -181,10 +181,10 @@ export class ApcardPage implements OnInit {
   }
 
   comingFromTabs() {
-    if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
+    if ( this.router.url.split('/')[1].split('/')[0] === 'tabs') {
       return true;
-    }
-    return false;
   }
+    return false;
+   }
 
 }

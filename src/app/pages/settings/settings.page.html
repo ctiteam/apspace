@@ -2,10 +2,10 @@
   <ion-toolbar>
     <ion-title>Settings</ion-title>
     <ion-buttons slot="start">
-      <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
-        <ion-icon name="arrow-round-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+        <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
+          <ion-icon name="arrow-round-back"></ion-icon>
+          </ion-button>
+        </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -196,8 +196,7 @@
               </ion-item-divider>
               <ion-item lines="none" no-padding>
                 <ion-label>First Location</ion-label>
-                <ion-select [(ngModel)]="busShuttleServiceSettings.firstLocation"
-                  (ngModelChange)="setBusShuttleServicesSettings()">
+                <ion-select [(ngModel)]="busShuttleServiceSettings.firstLocation" (ngModelChange)="setBusShuttleServicesSettings()">
                   <ion-select-option [value]="location.location_name" *ngFor="let location of locations">
                     {{location.location_nice_name}}
                   </ion-select-option>
@@ -205,8 +204,7 @@
               </ion-item>
               <ion-item lines="none" no-padding>
                 <ion-label>Second Location</ion-label>
-                <ion-select [(ngModel)]="busShuttleServiceSettings.secondLocation"
-                  (ngModelChange)="setBusShuttleServicesSettings()">
+                <ion-select [(ngModel)]="busShuttleServiceSettings.secondLocation" (ngModelChange)="setBusShuttleServicesSettings()">
                   <ion-select-option [value]="location.location_name" *ngFor="let location of locations">
                     {{location.location_nice_name}}
                   </ion-select-option>
@@ -221,8 +219,7 @@
               </ion-item-divider>
               <ion-item lines="none" no-padding>
                 <ion-label>Alarm To Be Set Before</ion-label>
-                <ion-select [(ngModel)]="busShuttleServiceSettings.alarmBefore"
-                  (ngModelChange)="setBusShuttleServicesSettings()">
+                <ion-select [(ngModel)]="busShuttleServiceSettings.alarmBefore" (ngModelChange)="setBusShuttleServicesSettings()">
                   <ion-select-option [value]="'5'">
                     5 mins
                   </ion-select-option>
@@ -260,7 +257,8 @@
                   Module blacklists <small>(hidden from timetable)</small>
                 </ion-label>
               </ion-item-divider>
-              <ion-chip *ngFor="let module of timetable?.blacklists" (click)="timetableModuleBlacklistsRemove(module)">
+              <ion-chip *ngFor="let module of timetable?.blacklists"
+                (click)="timetableModuleBlacklistsRemove(module)">
                 <ion-icon name="remove" color="danger"></ion-icon>
                 <ion-label>{{ module }}</ion-label>
               </ion-chip>

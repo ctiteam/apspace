@@ -2,10 +2,10 @@
   <ion-toolbar>
     <ion-title>Classroom Finder</ion-title>
     <ion-buttons slot="start">
-      <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
-        <ion-icon name="arrow-round-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+        <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
+          <ion-icon name="arrow-round-back"></ion-icon>
+          </ion-button>
+        </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -50,8 +50,7 @@
       <ion-card-title>{{ timetables.length }} available rooms</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-chip *ngFor="let room of timetables; trackBy: trackByName"
-        [routerLink]="['/student-timetable', { room: room }]">
+      <ion-chip *ngFor="let room of timetables; trackBy: trackByName" [routerLink]="['/student-timetable', { room: room }]">
         {{ room }}
       </ion-chip>
     </ion-card-content>

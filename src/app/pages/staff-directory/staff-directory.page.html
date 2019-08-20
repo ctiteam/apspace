@@ -2,10 +2,10 @@
   <ion-toolbar>
     <ion-title>Staff Directory</ion-title>
     <ion-buttons slot="start">
-      <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
-        <ion-icon name="arrow-round-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+        <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
+          <ion-icon name="arrow-round-back"></ion-icon>
+          </ion-button>
+        </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -23,15 +23,15 @@
       <ion-label floating>Functional Area</ion-label>
       <ion-select [(ngModel)]="dept" interface="popover">
         <ion-select-option selected></ion-select-option>
-        <ion-select-option *ngFor="let type of staffTypes" [innerHTML]="type.toUpperCase()" [value]="type">
-        </ion-select-option>
+        <ion-select-option *ngFor="let type of staffTypes"
+          [innerHTML]="type.toUpperCase()" [value]="type"></ion-select-option>
       </ion-select>
     </ion-item>
   </ion-list>
 
   <ng-template let-staffs [ngIf]="staff$ | async">
-    <ion-virtual-scroll [items]="staffs | department:dept | fuse:term:options" [trackBy]="trackById"
-      approxItemHeight="68px">
+    <ion-virtual-scroll [items]="staffs | department:dept | fuse:term:options"
+      [trackBy]="trackById" approxItemHeight="68px">
       <ion-item *virtualItem="let staff" button [routerLink]="[staff.ID]" style="padding-top: 1px">
         <ion-avatar slot="start">
           <ion-img [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '_64x64.jpg'"

@@ -1,12 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ (staff$ | async)?.TITLE | urldecode }} Info</ion-title>
+    <ion-title>{{ (staff$ | async)?.TITLE | urldecode }} Info</ion-title>   
     <ion-buttons slot="start">
-      <ion-button expand="block" routerLink="/staffs" routerDirection="root">
-        <ion-icon name="arrow-round-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
+        <ion-button expand="block" routerLink="/staffs" routerDirection="root">
+          <ion-icon name="arrow-round-back"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+  
   </ion-toolbar>
 </ion-header>
 
@@ -69,8 +69,7 @@
                     <ion-button expand="full" class="colored-background">Book Consultation Hour</ion-button>
                   </ion-col>
                   <ion-col>
-                    <ion-button class="chat-in-teams" expand="full" (click)="chatInTeams(staff.ID)">Chat in teams
-                    </ion-button>
+                    <ion-button class="chat-in-teams" expand="full" (click)="chatInTeams(staff.ID)">Chat in teams</ion-button>
 
                   </ion-col>
                 </ion-row>
