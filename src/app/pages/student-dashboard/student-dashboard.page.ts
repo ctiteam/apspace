@@ -231,7 +231,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // Destroy the edit list when page is destroyed
-    this.dragulaService.destroy('editable-list-bag');
+    this.dragulaService.destroy('editable-list');
   }
 
   doRefresh(refresher?) {
