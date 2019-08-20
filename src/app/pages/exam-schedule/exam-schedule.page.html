@@ -26,7 +26,7 @@
               <ion-col size="12" size-lg="6" *ngFor="let exam of exams">
                 <div >
                   <ion-card>
-                    <ion-card-header>
+                    <ion-card-header class="colored-border">
                       <ion-card-title class="responsive-h1">
                         {{ exam.subjectDescription }}
                       </ion-card-title>
@@ -44,7 +44,7 @@
                         <ion-item lines="none">
                           <ion-icon name="calendar"></ion-icon>
                           <p padding-start>
-                            {{ exam.since | date: "EEE,d MMM, y" }}
+                            {{ exam.since | date: "EEE, d MMM, y" }}
                           </p>
                         </ion-item>
                         <ion-item lines="none">
@@ -55,7 +55,6 @@
                         </ion-item>
                       </ion-list>
                     </ion-card-content>
-                    <hr />
                     <ion-footer>
                       <ion-grid>
                         <ion-row>
