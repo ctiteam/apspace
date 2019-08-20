@@ -1,8 +1,12 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>submit-survey</ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="intakeCode"
   (ngModelChange)="onIntakeCodeChanged()">
   <ion-segment-button *ngFor="let intake of intakes" [value]="intake.COURSE_CODE_ALIAS">
