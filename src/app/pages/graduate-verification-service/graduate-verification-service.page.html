@@ -1,6 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Graduate Verification Service</ion-title>
+    <ion-buttons slot="start">
+      <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -36,7 +41,8 @@
             <ion-grid no-padding padding-top>
               <ion-row class="input-elements-wrabber">
                 <ion-col no-padding size="10" class="input-wrapper">
-                  <ion-input padding-start placeholder="Student ID" (keyup.enter)="searchForGraduaters()" [(ngModel)]="searchKeyword"></ion-input>
+                  <ion-input padding-start placeholder="Student ID" (keyup.enter)="searchForGraduaters()"
+                    [(ngModel)]="searchKeyword"></ion-input>
                 </ion-col>
                 <ion-col size="2" no-padding>
                   <ion-button class="colored-text" no-margin fill="clear" expand="full"

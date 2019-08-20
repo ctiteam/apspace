@@ -3,14 +3,17 @@ import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 import { Apcard } from '../../interfaces';
 import { WsApiService } from 'src/app/services';
-import { MenuController } from '@ionic/angular';
+import { MenuController, IonRadioGroup, Platform, NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 type VisibleOption = 'all' | 'credit' | 'debit';
 
 @Component({
+
   selector: 'app-apcard',
   templateUrl: './apcard.page.html',
   styleUrls: ['./apcard.page.scss'],
+
 })
 export class ApcardPage implements OnInit {
   transaction$: Observable<Apcard[]>;
@@ -23,16 +26,16 @@ export class ApcardPage implements OnInit {
   transactonsYears: string[] = [];
   transactionsMonths: string[] = [];
   months = [
-    { name: 'January', value: '0'},
-    { name: 'February', value: '1'},
-    { name: 'March', value: '2'},
-    { name: 'April', value: '3'},
-    { name: 'May', value: '4'},
-    { name: 'June', value: '5'},
-    { name: 'July', value: '6'},
-    { name: 'August', value: '7'},
-    { name: 'September', value: '8'},
-    { name: 'October', value: '9'},
+    { name: 'January', value: '0' },
+    { name: 'February', value: '1' },
+    { name: 'March', value: '2' },
+    { name: 'April', value: '3' },
+    { name: 'May', value: '4' },
+    { name: 'June', value: '5' },
+    { name: 'July', value: '6' },
+    { name: 'August', value: '7' },
+    { name: 'September', value: '8' },
+    { name: 'October', value: '9' },
     { name: 'November', value: '10' },
     { name: 'December', value: '11' },
   ];
@@ -60,7 +63,8 @@ export class ApcardPage implements OnInit {
 
   constructor(
     private ws: WsApiService,
-    private menu: MenuController
+    private menu: MenuController,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -152,7 +156,7 @@ export class ApcardPage implements OnInit {
     this.transaction$ = this.ws.get<Apcard[]>('/apcard/', true).pipe(
       map(t => this.signTransactions(t)),
       tap(t => this.analyzeTransactions(t)),
-      tap(() => this.getTransactionsYears()),
+      tap(t => this.getTransactionsYears()),
       finalize(() => event && event.target.complete()),
       finalize(() => (this.isLoading = false))
     );
@@ -174,6 +178,13 @@ export class ApcardPage implements OnInit {
       show: 'all'
     };
     this.closeMenu();
+  }
+
+  comingFromTabs() {
+    if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
+      return true;
+    }
+    return false;
   }
 
 }

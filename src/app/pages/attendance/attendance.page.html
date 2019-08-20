@@ -3,7 +3,11 @@
     <ion-title *ngIf="course$ | async">
       {{ this.selectedIntake || "Attendance" }}
     </ion-title>
-
+    <ion-buttons slot="start" [hidden]='comingFromTabs() ? true : false'>
+      <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-buttons slot="end">
       <ion-button fill="outline" size="small" class="notification-button colored-border" (click)="showActionSheet()">
         Intakes

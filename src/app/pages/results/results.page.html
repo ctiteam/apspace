@@ -3,6 +3,11 @@
     <ion-title *ngIf="course$ | async">
       {{ this.selectedIntake || "Results" }}
     </ion-title>
+    <ion-buttons slot="start">
+      <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-buttons slot="end">
       <ion-button fill="outline" size="small" class="notification-button colored-border" (click)="showActionSheet()">
         Intakes
@@ -26,7 +31,8 @@
             </ng-template>
           </ng-template>
           <ng-template [ngIf]="courseDetail$ | async" [ngIfElse]="loading">
-            <ion-card *ngFor="let detail of (courseDetail$ | async); trackBy:trackByFn" style="margin-bottom: 5px !important;">
+            <ion-card *ngFor="let detail of (courseDetail$ | async); trackBy:trackByFn"
+              style="margin-bottom: 5px !important;">
               <div *ngIf="detail.SEMESTER">
                 <ion-card-header class="colored-border">
                   <ion-card-title>Semester {{ detail.SEMESTER }}</ion-card-title>
@@ -40,21 +46,30 @@
         <ion-col size-xs="12" size-lg="9">
           <ng-template [ngIf]="result$ | async" [ngIfElse]="loading">
             <ng-template [ngIf]="(result$ | async) && (result$ | async)?.length > 0" [ngIfElse]="nodata">
-              <ion-card no-padding  class="table-top">
+              <ion-card no-padding class="table-top">
                 <ion-card-content>
                   <ion-grid>
                     <ion-row>
-                      <ion-col size="12" size-sm="3"><h2 class="bold">Module</h2></ion-col>
-                      <ion-col size="12" size-sm="3"><h2 class="bold">Grade</h2></ion-col>
-                      <ion-col size="12" size-sm="3"><h2 class="bold">Grade Point</h2></ion-col>
-                      <ion-col size="12" size-sm="3"><h2 class="bold">Internal Result Release Date</h2></ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2 class="bold">Module</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2 class="bold">Grade</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2 class="bold">Grade Point</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2 class="bold">Internal Result Release Date</h2>
+                      </ion-col>
                     </ion-row>
                   </ion-grid>
                 </ion-card-content>
               </ion-card>
 
               <ion-card no-padding *ngFor="let result of (result$ | async); last as last; trackBy: trackByFn">
-                <ion-card-header class="special-card-header colored-border" style="border-bottom: 2px solid var(--primary-color) !important">
+                <ion-card-header class="special-card-header colored-border"
+                  style="border-bottom: 2px solid var(--primary-color) !important">
                   <h4>{{ result.MODULE_DESCRIPTION }}</h4>
                 </ion-card-header>
                 <ion-card-content>
@@ -138,9 +153,9 @@
                     </h2>
 
                     <ng-template [ngIf]="(mpuLegend$ | async)" let-mpu>
-                        <h2 *ngIf="mpu.length > 0">
-                          {{ mpu[0].MPU }}
-                        </h2>
+                      <h2 *ngIf="mpu.length > 0">
+                        {{ mpu[0].MPU }}
+                      </h2>
                     </ng-template>
                   </div>
                 </ion-card-content>
