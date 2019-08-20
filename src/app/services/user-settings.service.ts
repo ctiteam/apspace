@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

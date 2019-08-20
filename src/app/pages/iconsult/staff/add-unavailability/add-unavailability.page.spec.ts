@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NoDataComponent } from './no-data.component';
+import { AddUnavailabilityPage } from './add-unavailability.page';
 
-describe('NoDataComponent', () => {
-  let component: NoDataComponent;
-  let fixture: ComponentFixture<NoDataComponent>;
+describe('AddUnavailabilityPage', () => {
+  let component: AddUnavailabilityPage;
+  let fixture: ComponentFixture<AddUnavailabilityPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NoDataComponent ],
+      declarations: [ AddUnavailabilityPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NoDataComponent);
+    fixture = TestBed.createComponent(AddUnavailabilityPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

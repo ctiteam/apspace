@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MenuItem } from 'src/app/interfaces/menu-item';
-import { trigger, state, transition, keyframes, animate, style } from '@angular/animations';
+import { trigger, transition, keyframes, animate, style } from '@angular/animations';
 
 @Component({
   selector: 'app-tabs',

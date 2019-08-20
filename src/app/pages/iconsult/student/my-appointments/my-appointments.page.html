@@ -9,7 +9,7 @@
     <ion-row>
       <ng-container *ngIf="slots$ | async as slots; else loadingSlots">
         <ng-container *ngIf="slots.length > 0; else noConsultations">
-          <ion-col size-xs="12" size-md="6" size-xl="4" *ngFor="let slot of slots">
+          <ion-col size-xs="12" size-md="6" size-lg="4" *ngFor="let slot of slots">
             <ion-card [class.cancelled]="slot.status !== 'normal'">
               <ion-card-header no-padding padding-top>
                 <ion-card-title>
@@ -72,13 +72,20 @@
           </ion-col>
         </ng-container>
         <ng-template #noConsultations>
-          <ion-col size-xs="12" offset-md="3" size-md="6" offset-xl="4" size-xl="4">
-            <app-no-data [messageTitle]="'No Upcoming Appointments'" [messageContent]="'Currently, you have no upcoming appointments. If you have any acadimic related question, or concerns, you can:'" [buttonContent]="'Book a new consultation'" [buttonAction]="openStaffDirectory"></app-no-data>
+          <ion-col margin-top size-xs="12" offset-md="3" size-md="6" offset-xl="4" size-xl="4">
+            <app-message-with-svg
+            messageTitle='No Upcoming Appointments'
+            imageUrl='assets/img/empty.svg'
+            wrapperMarginTop="50px"
+            wrapperOffset="2"
+            wrapperSize="8"
+            messageContent="Currently, you have no upcoming appointments. If you have any acadimic related question, or concerns, you can book new one by clicking on the (+)"
+            ></app-message-with-svg>
           </ion-col>
         </ng-template>
       </ng-container>
       <ng-template #loadingSlots>
-        <ion-col size-xs="12" offset-md="3" size-md="6" offset-xl="4" size-xl="4" *ngFor="let _ of skeltonArray">
+        <ion-col size-xs="12" size-md="6" size-lg="4" *ngFor="let _ of skeltonArray">
           <ion-card>
             <ion-card-header>
               <ion-grid>
@@ -115,3 +122,19 @@
   </ion-grid>
 
 </ion-content>
+<ion-footer>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openStaffDirectory()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <!-- TO BE USED IN STAFF PAGE -->
+    <!-- <ion-fab-list side="top">
+      <ion-fab-button data-desc="Description 1">
+        <ion-icon name="contact"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button data-desc="Description 2">
+        <ion-icon name="person-add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list> -->
+  </ion-fab>
+</ion-footer>

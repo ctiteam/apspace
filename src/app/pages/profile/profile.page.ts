@@ -1,12 +1,15 @@
 import { Component, OnInit, NgZone, AfterViewInit, OnDestroy, } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
+
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
-import { SettingsService, WsApiService, UserSettingsService } from '../../services';
+
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4maps from '@amcharts/amcharts4/maps';
 import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
+
+import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
+import { SettingsService, WsApiService, UserSettingsService } from '../../services';
 
 @Component({
   selector: 'app-profile',
@@ -15,7 +18,7 @@ import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
 })
 export class ProfilePage implements OnInit, AfterViewInit, OnDestroy {
   chart: am4maps.MapChart;
-  photo$: Observable<StudentPhoto[]>;
+  photo$: Observable<StudentPhoto>;
   profile$: Observable<StudentProfile>;
   staffProfile$: Observable<StaffProfile[]>;
   visa$: Observable<any>;
@@ -33,7 +36,7 @@ export class ProfilePage implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private ws: WsApiService,
     private settings: SettingsService,
-    private navCtrl: NavController,
+    private router: Router,
     private zone: NgZone,
     private userSettings: UserSettingsService,
   ) {
@@ -46,7 +49,7 @@ export class ProfilePage implements OnInit, AfterViewInit, OnDestroy {
       // tslint:disable-next-line:no-bitwise
       if (role & Role.Student) {
         this.studentRole = true;
-        this.photo$ = this.ws.get<StudentPhoto[]>('/student/photo', true);
+        this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
         this.profile$ = this.ws.get<StudentProfile>('/student/profile', true);
         this.getProfile();
       // tslint:disable-next-line:no-bitwise
@@ -83,7 +86,7 @@ export class ProfilePage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openStaffDirectoryInfo(id: string) {
-    this.navCtrl.navigateRoot('/student-timetable');
+    this.router.navigate(['/staffs', id]);
   }
 
   getProfile() {
@@ -113,7 +116,6 @@ export class ProfilePage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getCountryData(countryName: string, type: string) {
-    console.log(countryName + ' ' + type);
     return this.contriesList.filter(
       country => {
         if (type === 'nationality') {
@@ -166,7 +168,7 @@ export class ProfilePage implements OnInit, AfterViewInit, OnDestroy {
         const activeState = polygonTemplate.states.create('active');
         activeState.properties.fill = am4core.color('rgba(' + this.activeAccentColor + ', 1)');
 
-        chart.events.on('ready', (ev) => {
+        chart.events.on('ready', () => {
           const countryName = polygonSeries.getPolygonById(this.getCountryData(this.countryName, this.countryType)[0].alpha2Code);
           countryName.isActive = true;
 

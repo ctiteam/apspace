@@ -1,4 +1,4 @@
-import { Injectable, Host } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 

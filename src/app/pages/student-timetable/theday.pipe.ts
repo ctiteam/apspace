@@ -19,7 +19,7 @@ export class ThedayPipe implements PipeTransform {
   transform(studentTimetable: StudentTimetable[], date: Date | undefined): StudentTimetable[] {
     if (date !== undefined) {
       const dayOfWeek = date.getDate();
-      return studentTimetable.filter(t => new Date(t.DATESTAMP_ISO).getDate() === date.getDate());
+      return studentTimetable.filter(t => new Date(t.DATESTAMP_ISO).getDate() === dayOfWeek);
     } else {
       return [];
     }

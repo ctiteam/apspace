@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController, AlertController } from '@ionic/angular';
-import { ConsultationSlot, StaffDirectory } from 'src/app/interfaces';
+import { ConsultationSlot, StaffDirectory, SlotDuplicated } from 'src/app/interfaces';
 import { Storage } from '@ionic/storage';
 import { WsApiService } from 'src/app/services';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'page-book-slot-modal',
@@ -10,6 +11,7 @@ import { WsApiService } from 'src/app/services';
   styleUrls: ['book-slot-modal.scss']
 })
 export class BookSlotModalPage implements OnInit {
+  verifyslot$: Observable<SlotDuplicated>;
   dataToSend: { slotData: ConsultationSlot, staffData: StaffDirectory }; // DATA COMING FROM THE PAGE
   studentEmail: string;
   formModel: {
@@ -46,6 +48,8 @@ export class BookSlotModalPage implements OnInit {
   ) {
   }
   ngOnInit() {
+    const dataToVerify = this.dataToSend.slotData.datetimeforsorting + '.00000';
+    this.verifyslot$ =  this.ws.get<SlotDuplicated>(`/iconsult/verifyduplicateslot/${dataToVerify}`, true);
     this.formModel = {
       staffName: this.dataToSend.staffData.FULLNAME,
       consultationWith: '',
@@ -98,7 +102,7 @@ export class BookSlotModalPage implements OnInit {
               },
             }).subscribe(
               {
-                next: res => {
+                next: () => {
                   // SHOW USER SUCCESS MESSAGE
                 },
                 error: err => {

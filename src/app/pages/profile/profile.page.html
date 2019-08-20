@@ -21,7 +21,7 @@
               <div class="img-wrapper" margin-top margin-bottom>
                 <ion-img class="profile-photo" [src]="
                                         'data:image/jpg;base64,' +
-                                        ((photo$ | async) || {}).base64_photo
+                                        (photo$ | async)?.base64_photo
                                         " (ionError)="$event.target.src = 'assets/img/no_img.png'">
                 </ion-img>
               </div>

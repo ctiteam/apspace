@@ -1,0 +1,42 @@
+.form-section-label {
+  font-size: 1.3em !important;
+  color: var(--primary-color) !important;
+}
+ion-item {
+  // HIDE EFFECTS FOR ION ITEM
+  --background-hover: var(--secondary-bg-color) !important;
+  --background-focused: var(--secondary-bg-color) !important;
+  --background-activated: var(--secondary-bg-color) !important;
+}
+
+.form-input {
+  border-radius: 7px;
+  background: var(--main-bg-color);
+  padding: 3px 10px !important;
+  margin-top: 10px;
+  border: 1px solid var(--tertiary-bg-color);
+  min-height: 40px;
+}
+ion-radio-group{
+  width: 100% !important;
+}
+ion-select.form-input {
+  padding: 8px 10px 9px 10px !important;
+}
+ion-datetime.form-input {
+  min-height: 32px !important;
+  padding: 6px 4px 0px 10px !important;
+}
+ionic-selectable.form-input {
+  padding: 8px 10px 9px 10px !important
+}
+.danger-text,
+.item-has-focus.danger-text {
+  color: var(--danger-color) !important;
+}
+.is-invalid {
+  border-color: var(--danger-color);
+}
+.success-text {
+  color: var(--success-color);
+}

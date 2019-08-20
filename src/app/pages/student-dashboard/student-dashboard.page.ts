@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   EventComponentConfigurations, DashboardCardComponentConfigurations,
   Attendance, StudentProfile, Apcard, FeesTotalSummary, Course, CourseDetails,
@@ -17,7 +17,7 @@ import { DragulaService } from 'ng2-dragula';
   templateUrl: './student-dashboard.page.html',
   styleUrls: ['./student-dashboard.page.scss'],
 })
-export class StudentDashboardPage implements OnInit {
+export class StudentDashboardPage implements OnInit, OnDestroy {
   // USER SETTINGS
   activeAccentColor = '';
   lowAttendanceChart: any;
@@ -35,7 +35,7 @@ export class StudentDashboardPage implements OnInit {
   };
 
   // PROFILE
-  photo$: Observable<StudentPhoto[]>;
+  photo$: Observable<StudentPhoto>;
   greetingMessage = '';
   defaultIntake = '';
   studentFirstName$: Observable<string>;
@@ -229,9 +229,14 @@ export class StudentDashboardPage implements OnInit {
     this.doRefresh();
   }
 
+  ngOnDestroy() {
+    // Destroy the edit list when page is destroyed
+    this.dragulaService.destroy('editable-list-bag');
+  }
+
   doRefresh(refresher?) {
     this.getLocations();
-    this.photo$ = this.getStudentPhoto();
+    this.photo$ = this.ws.get<StudentPhoto>('/student/photo');
     this.displayGreetingMessage();
     this.apcardTransaction$ = this.getTransactions();
     this.getBadge();
@@ -288,10 +293,6 @@ export class StudentDashboardPage implements OnInit {
       tap(studentProfile => this.getAttendance(studentProfile.INTAKE)),
       // tap(studentProfile => this.getUpcomingExam(studentProfile.INTAKE)),
     );
-  }
-
-  getStudentPhoto() {
-    return this.ws.get<StudentPhoto[]>('/student/photo');
   }
 
   displayGreetingMessage() {

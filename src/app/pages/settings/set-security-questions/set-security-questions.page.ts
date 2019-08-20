@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WsApiService } from 'src/app/services';
 import { ToastController, AlertController } from '@ionic/angular';
 import { SecurityQuestionsAndAnswers } from 'src/app/interfaces';
@@ -6,7 +6,6 @@ import { finalize } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
 import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
-import { NgForm } from '@angular/forms';
 
 // THIS REGULAR EXPERSSION FOLLOWS THE RFC 2822 STANDARD
 // tslint:disable-next-line: max-line-length

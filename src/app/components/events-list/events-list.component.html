@@ -51,7 +51,14 @@
         </div>
     </div>
     <ng-template #noEvents>
-        There are no events :(
+        <app-message-with-svg
+        imageUrl="assets/img/empty.svg"
+        messageTitle="The list is empty!"
+        wrapperSize="6"
+        wrapperOffset="3"
+        messageContent="Either no items to show for today, or the list has finished">
+
+        </app-message-with-svg>
     </ng-template>
 </div>
 <ng-template #loading>

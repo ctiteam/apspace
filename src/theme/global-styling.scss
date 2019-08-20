@@ -44,7 +44,7 @@ p {
   margin-top: 5px;
 }
 
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer !important;
 }
 
@@ -83,8 +83,8 @@ input:-webkit-autofill:active {
 }
 
 // iConsult Modal Height
-.add-min-height{
-  .modal-wrapper{
+.add-min-height {
+  .modal-wrapper {
     min-height: 85%;
   }
 }
@@ -113,7 +113,7 @@ input:-webkit-autofill:active {
 }
 
 .anim-ring {
-  &:hover{
+  &:hover {
     animation: ring 4s ease-in-out 1;
   }
 }
@@ -220,4 +220,37 @@ input:-webkit-autofill:active {
   opacity: 0.2;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
   filter: alpha(opacity=20);
+}
+
+// Styling ion-calendar
+.month-packer-item {
+  button {
+    color: var(--main-txt-color) !important;
+  }
+  &.this-month {
+    button {
+      border-color: var(--primary-color) !important;
+      color: var(--primary-color) !important;
+    }
+  }
+}
+
+.days-btn {
+  p {
+    color: var(--main-txt-color) !important;
+  }
+  &[disabled] p {
+    color: var(--passed-event-color) !important;
+  }
+
+  &.today p {
+    color: var(--sub-primary-color) !important;
+  }
+
+  &.on-selected {
+    background: var(--primary-color) !important;
+    p {
+      color: var(--main-txt-color) !important;
+    }
+  }
 }

@@ -1,0 +1,13 @@
+<ion-grid>
+  <ion-row>
+    <ion-col [style.marginTop]="wrapperMarginTop" [attr.offset]="wrapperOffset" [attr.size]="wrapperSize">
+      <ion-img [src]="imageUrl"></ion-img>
+    </ion-col>
+    <ion-col size="10" offset="1" margin-top>
+      <h3 text-center class="secondary-txt-color text-bolder">{{ messageTitle }}</h3>
+      <p class="secondary-txt-color" margin-top text-center>
+        {{ messageContent }}
+      </p>
+    </ion-col>
+  </ion-row>
+</ion-grid>

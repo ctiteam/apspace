@@ -1,6 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Fees</ion-title>
+<<<<<<< HEAD
     <ion-buttons slot="start">
         <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
           <ion-icon name="arrow-round-back"></ion-icon>
@@ -8,24 +9,24 @@
         </ion-buttons>
     <ion-buttons @buttonEnterOut slot="secondary" *ngIf="selectedSegment === 'Details'">
       <ion-button (click)="openFilterMenu()">
+=======
+
+    <ion-buttons @buttonEnterOut slot="secondary" *ngIf="selectedSegment === 'Details'" slot="end">
+      <ion-button (click)="openFilterMenu()"> 
+>>>>>>> 976b82774ef2f432dd3d7ef09dfab7b0e00c2ca9
         <ion-icon slot="icon-only" name="options"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 
   <ion-toolbar *ngIf="(bankDraft$ | async) as bankDrafts; else loadingSegment">
-    <ion-grid>
-      <ion-row class="ion-justify-content-center">
-        <ion-col class="ion-padding-horizontal" size="12" size-md="6" size-lg="4">
-          <ion-segment [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
-            <ion-segment-button value="Summary">Summary</ion-segment-button>
-            <ion-segment-button *ngIf="bankDrafts[0].BANKDRAFT_AMOUNT !== 0" value="Bank Draft">SU Fees
-            </ion-segment-button>
-            <ion-segment-button value="Details">Details</ion-segment-button>
-          </ion-segment>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+    <ion-segment [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
+      <ion-segment-button value="Summary">Summary</ion-segment-button>
+      <ion-segment-button *ngIf="bankDrafts[0].BANKDRAFT_AMOUNT !== 0" value="Bank Draft">
+        SU Fees
+      </ion-segment-button>
+      <ion-segment-button value="Details">Details</ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 
   <ng-template #loadingSegment>

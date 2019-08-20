@@ -1,0 +1,130 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>Add Unavailability Slots</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content parallax-header>
+  <ion-grid no-padding>
+    <ion-row>
+      <ion-col no-padding size-xs="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3">
+
+        <ion-card>
+          <form [formGroup]="addUnavailabilityForm" (ngSubmit)="submit()">
+            <ion-card-content no-padding>
+
+              <ion-item-divider class="colored-border">
+                <ion-label class="form-section-label">
+                  Start & End Dates
+                </ion-label>
+              </ion-item-divider>
+
+              <ion-item lines="none">
+                <ion-label position="stacked" [ngClass]="{ 'danger-text': (addUnavailabilityForm.get('startDate').hasError('required') && addUnavailabilityForm.get('startDate').touched) ||
+                  submitted && addUnavailabilityForm.get('startDate').hasError('required') }">
+                  Start Date
+                </ion-label>
+                <ion-calendar class="form-input" formControlName="startDate" [options]="startDateOptions"
+                  (change)="mainDateChanged($event)" [type]="'string'" [format]="'YYYY-MM-DD'" [ngClass]="{ 'is-invalid': (addUnavailabilityForm.get('startDate').hasError('required') && addUnavailabilityForm.get('startDate').touched) ||
+                    submitted && addUnavailabilityForm.get('startDate').hasError('required') }">
+                </ion-calendar>
+              </ion-item>
+              <div padding-start *ngIf="
+                (addUnavailabilityForm.get('startDate').hasError('required') && addUnavailabilityForm.get('startDate').touched) ||
+                submitted && addUnavailabilityForm.get('startDate').hasError('required')" class="danger-text">
+                ** Start date field cannot be empty
+              </div>
+
+
+              <div>
+                <ion-item lines="none">
+                  <ion-label position="stacked" [ngClass]="{ 'danger-text': (addUnavailabilityForm.get('endDate').hasError('required') && addUnavailabilityForm.get('endDate').touched) ||
+                    submitted && addUnavailabilityForm.get('endDate').hasError('required') }">
+                    End Date</ion-label>
+                  <ion-calendar class="form-input" formControlName="endDate" [options]="endDateOptions"
+                    [type]="'string'" [format]="'YYYY-MM-DD'" [ngClass]="{ 'is-invalid': (addUnavailabilityForm.get('endDate').hasError('required') && addUnavailabilityForm.get('endDate').touched) ||
+                      submitted && addUnavailabilityForm.get('endDate').hasError('required') }">
+                  </ion-calendar>
+                </ion-item>
+                <div padding-start *ngIf="
+                  (addUnavailabilityForm.get('endDate').hasError('required') && addUnavailabilityForm.get('endDate').touched) ||
+                  submitted && addUnavailabilityForm.get('endDate').hasError('required')" class="danger-text">
+                  ** End date field cannot be empty
+                </div>
+              </div>
+
+
+              <ion-item-divider class="colored-border">
+                <ion-label class="form-section-label">
+                  Slot(s) Time & Days
+                </ion-label>
+              </ion-item-divider>
+
+
+              <div>
+                <ion-item lines="none">
+                  <ion-label position="stacked" [ngClass]="{ 'danger-text': (addUnavailabilityForm.get('repeatOn').hasError('required') && addUnavailabilityForm.get('repeatOn').touched) ||
+                        submitted && addUnavailabilityForm.get('repeatOn').hasError('required') }">
+                    Repeat Days</ion-label>
+                  <ion-select placeholder="Click to select" formControlName="repeatOn" [ngClass]="{ 'is-invalid': (addUnavailabilityForm.get('repeatOn').hasError('required') && addUnavailabilityForm.get('repeatOn').touched) ||
+                          submitted && addUnavailabilityForm.get('repeatOn').hasError('required') }" multiple="true"
+                    class="form-input">
+                    <ion-select-option *ngFor="let day of weekDaysOptions" [value]="day.value">
+                      {{ day.name }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <div padding-start *ngIf="
+                      (addUnavailabilityForm.get('repeatOn').hasError('required') && addUnavailabilityForm.get('repeatOn').touched) ||
+                      submitted && addUnavailabilityForm.get('repeatOn').hasError('required')" class="danger-text">
+                  ** Repeat days field cannot be empty
+                </div>
+              </div>
+
+              <ion-list margin-bottom>
+                <div formArrayName="time" margin-bottom>
+                  <section [formGroupName]="i" *ngFor="let _ of timeFormData.controls; let i = index">
+                    <ion-item lines="none">
+                      <ion-label position="stacked" [ngClass]="{ 'danger-text': (timeFormData.controls[i].touched && timeFormData.controls[i].status === 'INVALID')
+                        ||
+                        (submitted && timeFormData.controls[i].status === 'INVALID') }">Time
+                        (Slot
+                        {{i+1}})</ion-label>
+                      <ion-datetime placeholder="Click to select" displayFormat="HH:mm" pickerFormat="HH mm"
+                        hourValues="[08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18]" minuteValues="[00,30]"
+                        (ionChange)="timeChanged(i)" class="form-input" [ngClass]="{ 'is-invalid': (timeFormData.controls[i].touched && timeFormData.controls[i].status === 'INVALID')
+                          ||
+                          (submitted && timeFormData.controls[i].status === 'INVALID') }"
+                        formControlName="slotsTime"></ion-datetime>
+                    </ion-item>
+                    <span padding-end padding-start float-right (click)="removeTimeSlot(i)"
+                      *ngIf="timeFormData.controls.length > 1" class="danger-text cursor-pointer">
+                      <ion-icon name="close"></ion-icon>Remove Slot {{i+1}}
+                    </span>
+                    <div class="clearfix"></div>
+                    <div padding-start *ngIf="
+                        (timeFormData.controls[i].touched && timeFormData.controls[i].status === 'INVALID')
+                        ||
+                        (submitted && timeFormData.controls[i].status === 'INVALID')" class="danger-text">
+                      ** Time (Slot {{i+1}}) field cannot be empty
+                    </div>
+                  </section>
+                  <span padding-top padding-start padding-end (click)="addNewTimeSlot()"
+                    class="success-text cursor-pointer">
+                    Add another slot<ion-icon name="add"></ion-icon>
+                  </span>
+                </div>
+              </ion-list>
+
+              <div padding>
+                <ion-button type="submit" expand="block" class="success-background">
+                  Submit
+                </ion-button>
+              </div>
+            </ion-card-content>
+          </form>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
