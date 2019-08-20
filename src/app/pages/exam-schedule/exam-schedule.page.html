@@ -13,8 +13,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <p style="margin-top:40px; text-align: center"> <span>Selected intke:</span> <span padding-start>{{intake}}</span>
-  </p>
+  <h2 padding-top text-center>Selected intake: {{ intake }}</h2>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
