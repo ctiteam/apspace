@@ -1,5 +1,10 @@
 <ion-header>
   <ion-toolbar>
+      <ion-buttons slot="start"  [hidden]='comingFromTabs() ? true : false'>
+          <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
+            <ion-icon name="arrow-round-back"></ion-icon>
+            </ion-button>
+          </ion-buttons>
     <ion-buttons slot="start">
       <ion-button outline small (click)="viewWeek = !viewWeek" [disabled]="availableWeek!.length === 0">
           {{ viewWeek ? 'Weekly' : 'Daily' }}
