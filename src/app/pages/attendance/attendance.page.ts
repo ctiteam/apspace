@@ -78,7 +78,7 @@ export class AttendancePage implements OnInit {
       .pipe(
         tap(_ => this.getLegend(refresh)),
         tap(a => this.calculateAverage(a)),
-    ));
+      ));
   }
 
   getLegend(refresh: boolean) {

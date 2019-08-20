@@ -2,10 +2,10 @@
   <ion-toolbar>
     <ion-title>Feedback</ion-title>
     <ion-buttons slot="start">
-        <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
-          <ion-icon name="arrow-round-back"></ion-icon>
-          </ion-button>
-        </ion-buttons>
+      <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -21,24 +21,22 @@
             <h5 class="text">
               This Service can be used when you have any questions, concerns, or feature request related to APSpace.
             </h5>
-        
+
             <h5 class="text">
               The feedback will be received by the <span class="bold">Centre of Technology and Innovation (CTI)</span>
               and we will do our best to keep up the standards so you enjoy our service.
             </h5>
-        
+
             <h5 class="bold text">
-              Please note that your identity or contact information will BE REVEALED to the person receiving this Feedback. 
+              Please note that your identity or contact information will BE REVEALED to the person receiving this
+              Feedback.
             </h5>
-        
+
             <h5 class="text">
-              If you have a feedback which is not related to the APSpace (ex: feedback related to buses, network, classrooms...), you can use our 
-              <a
-                class="colorful-text bold"
-                (click)="openOnlineFeedbackSystem()"
-                >Online Feedback System</a
-              >
-              to send your feedback to the person who is in charge. 
+              If you have a feedback which is not related to the APSpace (ex: feedback related to buses, network,
+              classrooms...), you can use our
+              <a class="colorful-text bold" (click)="openOnlineFeedbackSystem()">Online Feedback System</a>
+              to send your feedback to the person who is in charge.
             </h5>
           </ion-card-content>
         </ion-card>
@@ -49,33 +47,28 @@
           <ion-card-content>
             <ion-item no-padding>
               <ion-label position="floating">Message: <span style="color: red">*</span></ion-label>
-              <ion-textarea 
-                autofocus="true" 
-                autosize 
-                rows="2" 
-                no-padding
-                [(ngModel)]="message"
-                (ngModelChange)="onMessageFieldChange($event)"
-                required="true"
-              ></ion-textarea>
+              <ion-textarea autofocus="true" autosize rows="2" no-padding [(ngModel)]="message"
+                (ngModelChange)="onMessageFieldChange($event)" required="true"></ion-textarea>
             </ion-item>
-          
+
             <ion-item no-padding>
               <ion-label stacked>Contact Number:</ion-label>
-              <ion-input type="text" [(ngModel)]="contactNo" (ngModelChange)="onPhoneNumberChange()" no-padding></ion-input>
+              <ion-input type="text" [(ngModel)]="contactNo" (ngModelChange)="onPhoneNumberChange()" no-padding>
+              </ion-input>
             </ion-item>
-            <small *ngIf="contactNo && !phoneNumberValid" style="color: red">Phone number is invalid. Please check the number and enter a correct phone number (Exactly 10 or 11 digits)</small>
-            
+            <small *ngIf="contactNo && !phoneNumberValid" style="color: red">Phone number is invalid. Please check the
+              number and enter a correct phone number (Exactly 10 or 11 digits)</small>
+
             <ion-item no-padding>
               <ion-label stacked>Screen Size</ion-label>
               <ion-input type="text" disabled [value]="screenSize"></ion-input>
             </ion-item>
-        
+
             <ion-item no-padding>
               <ion-label stacked>Platform</ion-label>
               <ion-input type="text" disabled [value]="platform"></ion-input>
             </ion-item>
-        
+
             <ion-item no-padding lines="none">
               <ion-label stacked>App Version</ion-label>
               <ion-input type="text" disabled [value]="appVersion"></ion-input>
@@ -83,11 +76,7 @@
           </ion-card-content>
 
           <ion-footer>
-            <ion-button 
-              expand="full"
-              class="colored-background"
-              outline small 
-              (click)="submitFeedback()" 
+            <ion-button expand="full" class="colored-background" outline small (click)="submitFeedback()"
               [disabled]="!message">
               Submit
             </ion-button>
@@ -95,5 +84,5 @@
         </ion-card>
       </ion-col>
     </ion-row>
-  </ion-grid>  
+  </ion-grid>
 </ion-content>

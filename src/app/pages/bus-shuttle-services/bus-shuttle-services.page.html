@@ -2,10 +2,10 @@
   <ion-toolbar>
     <ion-title>Bus Shuttle Services</ion-title>
     <ion-buttons slot="start">
-        <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
-          <ion-icon name="arrow-round-back"></ion-icon>
-          </ion-button>
-        </ion-buttons>
+      <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-buttons slot="end">
       <ion-button class="animated anim-scale" (click)="openMenu()">
         <ion-icon name="options"></ion-icon>
@@ -135,8 +135,8 @@
                   </h2>
                   <ion-grid no-padding>
                     <ion-row>
-                      <ion-col class="secondary-txt-color" *ngFor="let tripData of destination.value" size="3" size-md="4"
-                        text-center>
+                      <ion-col class="secondary-txt-color" *ngFor="let tripData of destination.value" size="3"
+                        size-md="4" text-center>
                         {{tripData.trip_time}}
                       </ion-col>
                     </ion-row>
