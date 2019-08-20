@@ -13,11 +13,24 @@ ion-card.cancelled {
   ion-badge {
     background: var(--danger-color);
   }
-  ion-button.colored-background {
-    --background: var(--danger-color) !important;
-    background: var(--danger-color) !important;
-    --background-hover: var(--danger-hover-color);
+}
+
+ion-card.passed {
+  box-shadow: 0 3px 1px -2px var(--passed-event-color), 0 2px 2px 0 var(--passed-event-color), 0 1px 5px 0 var(--passed-event-color);
+  ion-badge {
+    background: var(--passed-event-color);
   }
+  ion-button.colored-background {
+    --background: var(--passed-event-color) !important;
+    background: var(--passed-event-color) !important;
+    --background-hover: var(--passed-event-color);
+  }
+}
+
+ion-button.danger-background {
+  --background: var(--danger-color) !important;
+  background: var(--danger-color) !important;
+  --background-hover: var(--danger-hover-color);
 }
 // TO BE USED IN STAFF PAGE
 // ion-fab-button[data-desc] {

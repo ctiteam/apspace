@@ -10,7 +10,8 @@
       <ng-container *ngIf="slots$ | async as slots; else loadingSlots">
         <ng-container *ngIf="slots.length > 0; else noConsultations">
           <ion-col size-xs="12" size-md="6" size-lg="4" *ngFor="let slot of slots">
-            <ion-card [class.cancelled]="slot.status !== 'normal'">
+            <ion-card
+              [ngClass]="{cancelled: slot.status !== 'normal' && slot.status !== 'Passed', passed: slot.status === 'Passed'}">
               <ion-card-header no-padding padding-top>
                 <ion-card-title>
                   <ion-item lines="none" no-padding padding-start>
@@ -22,7 +23,9 @@
                               ? 'Cancelled By Lecturer'
                               : slot.status === 'cancelledbystu'
                                 ? 'Cancelled By Student'
-                                : ''
+                                : slot.status === 'Passed'
+                                  ? 'Passed'
+                                  : ''
                             }}
                     </ion-badge>
                   </ion-item>
@@ -65,6 +68,13 @@
                         <ion-icon name="chatbubbles" slot="end"></ion-icon>
                       </ion-button>
                     </ion-col>
+                    <ion-col size-xs="12">
+                      <ion-button *ngIf="slot.status === 'normal'" (click)="cancelBooking(slot)"
+                        class="danger-background" expand="block">
+                        Cancel Booking
+                        <ion-icon name="close" slot="end"></ion-icon>
+                      </ion-button>
+                    </ion-col>
                   </ion-row>
                 </ion-grid>
               </ion-card-content>
@@ -73,14 +83,10 @@
         </ng-container>
         <ng-template #noConsultations>
           <ion-col margin-top size-xs="12" offset-md="3" size-md="6" offset-xl="4" size-xl="4">
-            <app-message-with-svg
-            messageTitle='No Upcoming Appointments'
-            imageUrl='assets/img/empty.svg'
-            wrapperMarginTop="50px"
-            wrapperOffset="2"
-            wrapperSize="8"
-            messageContent="Currently, you have no upcoming appointments. If you have any acadimic related question, or concerns, you can book new one by clicking on the (+)"
-            ></app-message-with-svg>
+            <app-message-with-svg messageTitle='No Upcoming Appointments' imageUrl='assets/img/empty.svg'
+              wrapperMarginTop="50px" wrapperOffset="2" wrapperSize="8"
+              messageContent="Currently, you have no upcoming appointments. If you have any acadimic related question, or concerns, you can book a new one by clicking on the (+)">
+            </app-message-with-svg>
           </ion-col>
         </ng-template>
       </ng-container>
