@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ActionSheet } from '@ionic-native/action-sheet/ngx';
 import { ActionSheetController, IonRefresher, ModalController, Platform } from '@ionic/angular';
 
@@ -99,7 +99,6 @@ export class StudentTimetablePage implements OnInit {
     private tt: StudentTimetableService,
     private userSettings: UserSettingsService,
     private ws: WsApiService,
-    private router: Router
   ) { }
 
   ngOnInit() {
@@ -278,12 +277,6 @@ export class StudentTimetablePage implements OnInit {
     }
 
     this.cdr.markForCheck();
-  }
-  comingFromTabs() {
-    if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
-      return true;
-    }
-    return false;
   }
 
 }

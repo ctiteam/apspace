@@ -1,12 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ (staff$ | async)?.TITLE | urldecode }} Info</ion-title>   
-    <ion-buttons slot="start">
-        <ion-button expand="block" routerLink="/staffs" routerDirection="root">
-          <ion-icon name="arrow-round-back"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-  
+    <ion-title>{{ (staff$ | async)?.TITLE | urldecode }} Info</ion-title>
   </ion-toolbar>
 </ion-header>
 

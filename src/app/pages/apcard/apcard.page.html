@@ -1,11 +1,6 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>APCard</ion-title>
-    <ion-buttons slot="start"  [hidden]='comingFromTabs() ? true : false'>
-        <ion-button expand="block" routerLink="/tabs/more" routerDirection="root">
-          <ion-icon name="arrow-round-back"></ion-icon>
-          </ion-button>
-        </ion-buttons>
     <ion-buttons slot="end">
       <ion-button class="animated anim-scale" (click)="openMenu()">
         <ion-icon name="options"></ion-icon>

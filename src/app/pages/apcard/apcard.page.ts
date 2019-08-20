@@ -3,17 +3,14 @@ import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 import { Apcard } from '../../interfaces';
 import { WsApiService } from 'src/app/services';
-import { MenuController, IonRadioGroup, Platform, NavController   } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { MenuController, IonRadioGroup } from '@ionic/angular';
 
 type VisibleOption = 'all' | 'credit' | 'debit';
 
 @Component({
-
   selector: 'app-apcard',
   templateUrl: './apcard.page.html',
   styleUrls: ['./apcard.page.scss'],
-
 })
 export class ApcardPage implements OnInit {
   transaction$: Observable<Apcard[]>;
@@ -63,8 +60,7 @@ export class ApcardPage implements OnInit {
 
   constructor(
     private ws: WsApiService,
-    private menu: MenuController,
-    private router: Router
+    private menu: MenuController
   ) { }
 
   ngOnInit() {
@@ -179,12 +175,5 @@ export class ApcardPage implements OnInit {
     };
     this.closeMenu();
   }
-
-  comingFromTabs() {
-    if ( this.router.url.split('/')[1].split('/')[0] === 'tabs') {
-      return true;
-  }
-    return false;
-   }
 
 }
