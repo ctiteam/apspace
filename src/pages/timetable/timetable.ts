@@ -250,63 +250,68 @@ export class TimetablePage {
 
   ionViewDidLoad() {
     // optional intake passed by other pages
-    const navIntake = this.navParams.get('intake');
-    if (navIntake) {
-      this.intakeSelectable = false;
-      this.intake = navIntake;
-    } else {  // direct timetable page access
-      this.intake = this.settings.get('intake');
-    }
-
-    // select current day by default
-    this.selectedDate = new Date();
-    this.selectedDate.setHours(0, 0, 0, 0);
-
-    // select current start of week
-    const date = new Date();
-    date.setDate(date.getDate() - date.getDay() + 1);
-    this.selectedWeek = date;
-    this.getTimetableData().subscribe(
-      _ => { },
-      _ => { },
-      () => {
-        // default intake to student current intake
-        if (this.intake === undefined && this.settings.get('role') & Role.Student) {
-          this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
-            for (let intake of this.intakeLabels) {
-              if (intake === (p || {} as StudentProfile).INTAKE) {
-                this.intake = (p || {} as StudentProfile).INTAKE || '';
-                this.settings.set('intake', this.intake);
-                this.doRefresh();
-              }
-            }
-          });
+    this.settings.ready().then(
+      _ => {
+        if (this.navParams.get('intake')) {
+          const navIntake = this.navParams.get('intake');
+          this.intakeSelectable = false;
+          this.intake = navIntake;
+        } else {  // direct timetable page access
+          this.intake = this.settings.get('intake') || '';
         }
+
+        // select current day by default
+        this.selectedDate = new Date();
+        this.selectedDate.setHours(0, 0, 0, 0);
+
+        // select current start of week
+        const date = new Date();
+        date.setDate(date.getDate() - date.getDay() + 1);
+        this.selectedWeek = date;
+        this.getTimetableData().subscribe(
+          _ => { },
+          _ => { },
+          () => {
+            // default intake to student current intake
+            if (this.intake === undefined && this.settings.get('role') & Role.Student) {
+              this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+                for (let intake of this.intakeLabels) {
+                  if (intake === (p || {} as StudentProfile).INTAKE) {
+                    this.intake = (p || {} as StudentProfile).INTAKE || '';
+                    this.settings.set('intake', this.intake);
+                    this.doRefresh();
+                  }
+                }
+              });
+            }
+          },
+        );
+        // viewtype
+        if (this.settings && this.settings.get('viewType')) {
+          this.viewType = this.settings.get('viewType');
+        } else {
+          this.viewType = 'weekly';
+        }
+        const intake$ = this.tt.get().pipe(
+          map(tt => Array.from(new Set((tt || []).map(t => t.INTAKE.toUpperCase()))).sort()),
+          share(),
+        );
+        this.searchIntake$ = this.searchControl.valueChanges.pipe(
+          debounceTime(250),
+          distinctUntilChanged(),
+          // tap(() => this.searching = true),
+          map(term => term.toUpperCase()),
+          switchMap(term => intake$.pipe(
+            // start filter on input but accept empty input too
+            map(intakes => term.length !== 0
+              ? intakes.filter(intake => intake.indexOf(term) !== -1)
+              : intakes),
+            // auto-select if there is only one intake left
+            tap(intakes => intakes.length === 1 && this.select(intakes[0])),
+          )),
+          // tap(() => this.searching = false),
+        )
       }
-    );
-
-    // viewtype
-    this.viewType = this.settings.get('viewType') || 'weekly';
-
-    const intake$ = this.tt.get().pipe(
-      map(tt => Array.from(new Set((tt || []).map(t => t.INTAKE.toUpperCase()))).sort()),
-      share(),
-    );
-
-    this.searchIntake$ = this.searchControl.valueChanges.pipe(
-      debounceTime(250),
-      distinctUntilChanged(),
-      // tap(() => this.searching = true),
-      map(term => term.toUpperCase()),
-      switchMap(term => intake$.pipe(
-        // start filter on input but accept empty input too
-        map(intakes => term.length !== 0
-          ? intakes.filter(intake => intake.indexOf(term) !== -1)
-          : intakes),
-        // auto-select if there is only one intake left
-        tap(intakes => intakes.length === 1 && this.select(intakes[0])),
-      )),
-      // tap(() => this.searching = false),
     )
   }
 
