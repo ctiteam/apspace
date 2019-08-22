@@ -185,13 +185,14 @@ export class MorePage implements OnInit {
       role: Role.Student,
       tags: []
     },
-    // {
-    //   title: 'Student Survey',
-    //   group: 'Course Related',
-    //   url: '',
-    //   role: Role.Student,
-    //   tags: []
-    // },
+    {
+      title: 'Student Survey',
+      group: 'Course Related',
+      url: 'student-survey',
+      img: 'assets/img/student-survey.png',
+      role: Role.Student,
+      tags: []
+    },
     // {
     //   title: 'Upcoming Graduations',
     //  group: 'Others',
