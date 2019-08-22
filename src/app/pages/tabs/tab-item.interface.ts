@@ -1,4 +1,4 @@
-export interface MenuItem {
+export interface TabItem {
   name: string;
   icon: string;
   path: string;

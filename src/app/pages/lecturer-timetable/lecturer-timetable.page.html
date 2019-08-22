@@ -1,0 +1,9 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>lecturer-timetable</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <lecturer-timetable [id]="(staffProfiles$ | async)[0].id"></lecturer-timetable>
+</ion-content>

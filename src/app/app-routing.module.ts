@@ -189,6 +189,10 @@ const routes: Routes = [
     path: 'add-unavailability',
     loadChildren: './pages/iconsult/staff/add-unavailability/add-unavailability.module#AddUnavailabilityPageModule'
   },
+  {
+    path: 'lecturer-timetable',
+    loadChildren: () => import('./pages/lecturer-timetable/lecturer-timetable.module').then(m => m.LecturerTimetablePageModule)
+  },
 ];
 
 @NgModule({

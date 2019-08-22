@@ -1,4 +1,4 @@
-<ion-tabs (ionTabsDidChange)="tabChanged($event)">
+<ion-tabs (ionTabsDidChange)="selectedTab = $event.tab">
   <ion-tab-bar slot="bottom">
     <ion-tab-button *ngFor="let tab of tabs" [tab]="tab.path">
       <ion-label>{{ tab.name }}</ion-label>
