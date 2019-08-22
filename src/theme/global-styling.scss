@@ -223,34 +223,110 @@ input:-webkit-autofill:active {
 }
 
 // Styling ion-calendar
-.month-packer-item {
-  button {
-    color: var(--main-txt-color) !important;
-  }
-  &.this-month {
+ion-calendar {
+  background-color: var(--secondary-bg-color) !important;
+  padding: 0 !important;
+  .month-packer-item {
     button {
-      border-color: var(--primary-color) !important;
-      color: var(--primary-color) !important;
+      color: var(--main-txt-color) !important;
+    }
+    &.this-month {
+      button {
+        border-color: var(--primary-color) !important;
+        color: var(--primary-color) !important;
+      }
     }
   }
-}
 
-.days-btn {
-  p {
-    color: var(--main-txt-color) !important;
-  }
-  &[disabled] p {
-    color: var(--passed-event-color) !important;
-  }
-
-  &.today p {
-    color: var(--sub-primary-color) !important;
-  }
-
-  &.on-selected {
-    background: var(--primary-color) !important;
+  .days-btn {
     p {
       color: var(--main-txt-color) !important;
+    }
+    &[disabled] p {
+      color: var(--passed-event-color) !important;
+    }
+
+    &.today p {
+      color: var(--sub-primary-color) !important;
+    }
+
+    &.on-selected {
+      background: var(--primary-color) !important;
+      p {
+        color: var(--main-txt-color) !important;
+      }
+    }
+
+    &.available {
+      background: var(--success-color) !important;
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--success-color) !important;
+        p {
+          color: var(--success-color) !important;
+        }
+      }
+    }
+
+    &.booked {
+      background: var(--danger-color) !important;
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--danger-color) !important;
+        p {
+          color: var(--danger-color) !important;
+        }
+      }
+    }
+
+    &.unavailable {
+      background: var(--main-txt-color) !important;
+      p {
+        color: var(--main-bg-color) !important;
+      }
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--main-txt-color) !important;
+        p {
+          color: var(--main-txt-color) !important;
+        }
+      }
+    }
+
+    &.clossed small {
+      background: var(--passed-event-color) !important;
+      color: var(--passed-event-color) !important;
+      width: 24%;
+      border-radius: 13px;
+      height: 23%;
+      margin-left: 2%;
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--passed-event-color) !important;
+      }
+    }
+
+    &.partially-booked {
+      background: #dfa847 !important;
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid #dfa847 !important;
+        p {
+          color: #dfa847 !important;
+        }
+      }
+    }
+  }
+
+  &.filter-date-picker {
+    .days-btn.today p {
+      color: var(--passed-event-color) !important;
+    }
+    .days-btn.on-selected {
+      background-color: transparent !important;
+      // p{
+      //   color: var(--passed-event-color) !important;
+      // }
     }
   }
 }
