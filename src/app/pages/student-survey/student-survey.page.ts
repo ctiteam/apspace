@@ -4,7 +4,6 @@ import { AlertController, MenuController, NavController, ToastController } from 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Role, StudentProfile } from 'src/app/interfaces';
-import { ActivatedRoute } from '@angular/router';
 import { SettingsService, WsApiService } from 'src/app/services';
 
 @Component({
@@ -26,13 +25,13 @@ export class StudentSurveyPage implements OnInit {
   startSwith: string;
   surveyType: string;
   selectedModule: any;
+
   // LOADING & ERRORS VARIABLES
   numOfSkeletons = new Array(3);
-  intakesAreLoading = false;
-  modulesAreLoading = false;
+
   submitting = false;
   showFieldMissingError = false;
-  studentIsMastersOrAPLC = false;
+  englishIntake = false;
   // LISTS
   intakes: any[];
   modules: any;
@@ -63,7 +62,6 @@ export class StudentSurveyPage implements OnInit {
   constructor(
     public navCtrl: NavController,
     public menu: MenuController,
-    private route: ActivatedRoute,
     private ws: WsApiService,
     private toastCtrl: ToastController,
     public alertCtrl: AlertController,
@@ -76,10 +74,8 @@ export class StudentSurveyPage implements OnInit {
   }
 
   onInitData() {
-
     // tslint:disable-next-line: no-bitwise
     if (this.settings.get('role') & Role.Student) {
-      this.intakesAreLoading = true;
       this.ws.get<StudentProfile>('/student/profile').subscribe(
         p => {
           this.intakeCode = p.INTAKE;
@@ -87,19 +83,8 @@ export class StudentSurveyPage implements OnInit {
         // tslint:disable-next-line: no-empty
         _ => { },
         () => {
-          this.startSwith = this.intakeCode.slice(0, 3);
-          // tslint:disable-next-line: triple-equals
-          if (this.startSwith == 'UCE' || this.startSwith == 'UCP') {
-            this.studentIsMastersOrAPLC = true;
-            this.courseType = 'APLC Students';
-            this.iab.create('https://webapps.apiit.edu.my/engappraisal');
-          } else {
-            this.COURSE_CODE$ = this.getIntakes();
-            this.courseType = 'bachelor';
-            this.intakesAreLoading = false;
-
-            this.COURSE_MODULES$ = this.getModules(this.intakeCode);
-          }
+          this.COURSE_CODE$ = this.getIntakes();
+          this.onIntakeCodeChanged();
         },
       );
     }
@@ -109,16 +94,31 @@ export class StudentSurveyPage implements OnInit {
     // }
   }
 
+  openOldSystem() {
+    this.iab.create('https://webapps.apiit.edu.my/engappraisal');
+  }
+
   onIntakeCodeChanged() {
-    this.COURSE_MODULES$ = this.getModules(this.intakeCode);
-    this.classCode = '';
-    this.surveyType = '';
+    this.startSwith = this.intakeCode.slice(0, 3);
+    // tslint:disable-next-line: triple-equals
+    if (this.startSwith == 'UCE' || this.startSwith == 'UCP') {
+      this.englishIntake = true;
+      this.courseType = 'APLC Students';
+      this.openOldSystem();
+    } else {
+      this.englishIntake = false;
+      this.courseType = 'bachelor';
+      this.COURSE_MODULES$ = this.getModules(this.intakeCode);
+      this.classCode = '';
+      this.surveyType = '';
+    }
 
   }
 
   onClassCodeChanged() {
     this.getSurveyType(this.classCode);
     this.getModuleByClassCode(this.classCode);
+    this.showFieldMissingError = false;
   }
 
   getIntakes() {
@@ -141,7 +141,7 @@ export class StudentSurveyPage implements OnInit {
     return this.ws.get<any>(`/modules-list?intake_code=${intakeCode}`, true, { url: this.stagingUrl }).pipe(
       map(res => res.filter
         (item => !item.COURSE_APPRAISAL || (!item.COURSE_APPRAISAL2 && Date.parse(item.END_DATE) >
-        Date.parse(this.todaysDate.toISOString())))),
+          Date.parse(this.todaysDate.toISOString())))),
       tap(res => this.modules = res),
       tap()
     );
@@ -222,7 +222,6 @@ export class StudentSurveyPage implements OnInit {
           text: 'Yes',
           handler: () => {
             const notAnsweredQuestions = this.response.answers.filter(answer => answer.content === '');
-            console.log(this.response);
             if (notAnsweredQuestions.length === 0) {
               this.submitting = true;
 

@@ -1,88 +1,82 @@
-    textarea{
-      padding: 10px !important;
-      width: 100%;
-    }
-    .userMessage{
-      white-space: normal;
-    }
-    .noSurveyMasg{
-      margin-top: 20px;
-    }
-  
-    .smIonList {
-      display: inline-flex; 
-      width: 100%;
-       padding: 0%;
-    }
+ion-segment-button {
+  --color-checked: var(--primary-color);
+  --color: var(--tertiary-txt-color);
+}
+.form-input {
+  border-radius: 7px;
+  background: var(--main-bg-color);
+  padding: 3px 10px !important;
+  margin-top: 10px;
+  border: 1px solid var(--tertiary-bg-color);
+}
+.userMessage {
+  white-space: normal;
+}
+.noSurveyMasg {
+  margin-top: 20px;
+}
 
-    .ansRadioBtn {
-      margin-left: 0% !important; 
-      margin-right: 5px ;
-      width: 13px; height: 13px;
-      
-    } 
-    .surveyQuestion{
-      font-weight:bold;
-      font-size: 16px;
-    }
-    .listContent{
-      font-size: 15px;
-    }
-    .rdBtnContent{
-      font-size: 14px;
-    }
+.smIonList {
+  display: inline-flex;
+  width: 100%;
+  padding: 0%;
+}
 
-    @media only screen and (min-width: 1px) {
-        
-        .d-block {
-          display: block;
-          width: 100%;
-        }
-        .btnSub{
-           height: 30px;  background-color: royalblue;
-           width: 100%;
-         }
-         .rdBtn{
-           width: 100%;
-         }
-      }
-    @media only screen and (min-width: 992px) {
+.ansRadioBtn {
+  margin-left: 0% !important;
+  margin-right: 5px;
+  width: 13px;
+  height: 13px;
+}
+.surveyQuestion {
+  font-weight: bold;
+  font-size: 16px;
+}
+.listContent {
+  font-size: 15px;
+}
+.rdBtnContent {
+  font-size: 14px;
+}
 
-       
-        .d-lg-inline {
-          display: inline-block !important;
-          width: 100%;
-        }
-      
-       .btnSub{
-         height: 30px;  background-color: royalblue;
-         width: 100%;
-       }
-       .rdBtn{
-        width: 20%;
-      }
+@media only screen and (min-width: 1px) {
+  .d-block {
+    display: block;
+    width: 100%;
+  }
+  .rdBtn {
+    width: 100%;
+  }
+}
+@media only screen and (min-width: 992px) {
+  .d-lg-inline {
+    display: inline-block !important;
+    width: 100%;
+  }
+  .rdBtn {
+    width: 20%;
+  }
 
-      .rdBtn-with-na:nth-of-type(2){ //dis
-        width: 21% !important;
-      }
-      .rdBtn-with-na:nth-child(3){ //dis
-        width: 17% !important;
-      }
-      .rdBtn-with-na:nth-child(4){ // neiu
-        width: 15% !important;
-      }
-      .rdBtn-with-na:nth-child(5){ // agre
-        width: 14% !important;
-      }
-      .rdBtn-with-na:nth-of-type(6){
-        width: 21% !important;
-      }
-      .na{
-        width: 12% !important;
-      }
-        
-      }
-      
-
-  
-  
+  .rdBtn-with-na:nth-of-type(2) {
+    //dis
+    width: 21% !important;
+  }
+  .rdBtn-with-na:nth-child(3) {
+    //dis
+    width: 17% !important;
+  }
+  .rdBtn-with-na:nth-child(4) {
+    // neiu
+    width: 15% !important;
+  }
+  .rdBtn-with-na:nth-child(5) {
+    // agre
+    width: 14% !important;
+  }
+  .rdBtn-with-na:nth-of-type(6) {
+    width: 21% !important;
+  }
+  .na {
+    width: 12% !important;
+  }
+}
