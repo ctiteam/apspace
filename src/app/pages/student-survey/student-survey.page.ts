@@ -56,6 +56,8 @@ export class StudentSurveyPage implements OnInit {
   };
   // OBSERAVBLES
   survey$: Observable<any[]>;
+  COURSE_CODE$: Observable<any[]>;
+  COURSE_MODULES$: Observable<any[]>;
   navParams: any;
 
   constructor(
@@ -72,47 +74,51 @@ export class StudentSurveyPage implements OnInit {
   ngOnInit() {
     this.onInitData();
   }
+
   onInitData() {
-      // tslint:disable-next-line: no-bitwise
-      if (this.settings.get('role') & Role.Student) {
-        this.intakesAreLoading = true;
-        this.ws.get<StudentProfile>('/student/profile').subscribe(
-          p => {
-            this.intakeCode = p.INTAKE;
-          },
-          // tslint:disable-next-line: no-empty
-          _ => { },
-          () => {
-            this.startSwith = this.intakeCode.slice(0, 3);
+
+    // tslint:disable-next-line: no-bitwise
+    if (this.settings.get('role') & Role.Student) {
+      this.intakesAreLoading = true;
+      this.ws.get<StudentProfile>('/student/profile').subscribe(
+        p => {
+          this.intakeCode = p.INTAKE;
+        },
+        // tslint:disable-next-line: no-empty
+        _ => { },
+        () => {
+          this.startSwith = this.intakeCode.slice(0, 3);
+          // tslint:disable-next-line: triple-equals
+          if (this.startSwith == 'UCE' || this.startSwith == 'UCP') {
+            this.studentIsMastersOrAPLC = true;
+            this.courseType = 'APLC Students';
+            this.iab.create('https://webapps.apiit.edu.my/engappraisal');
             // tslint:disable-next-line: triple-equals
-            if (this.startSwith == 'UCE' || this.startSwith == 'UCP') {
-              this.studentIsMastersOrAPLC = true;
-              this.courseType = 'APLC Students';
-              this.iab.create('https://webapps.apiit.edu.my/engappraisal');
-              // tslint:disable-next-line: triple-equals
-            } else if (this.startSwith == 'UCM') {
-              this.studentIsMastersOrAPLC = true;
-              this.courseType = 'Master';
-              this.iab.create('https://webapps.apiit.edu.my/appraisal');
-            } else {
-              this.getIntakes();
-              this.courseType = 'bachelor';
-              this.intakesAreLoading = false;
-              this.getModules(this.intakeCode);
-            }
-          },
-        );
-      }
-      // IF USER IS COMING FROM RESULTS PAGE
-      // if (this.moduleCodeFromResultsPage) {
-      //    this.getModules(this.intakeCodeFromResultsPage);
-      // }
+          } else if (this.startSwith == 'UCM') {
+            this.studentIsMastersOrAPLC = true;
+            this.courseType = 'Master';
+            this.iab.create('https://webapps.apiit.edu.my/appraisal');
+          } else {
+            this.COURSE_CODE$ = this.getIntakes();
+            this.courseType = 'bachelor';
+            this.intakesAreLoading = false;
+
+            this.COURSE_MODULES$ = this.getModules(this.intakeCode);
+          }
+        },
+      );
+    }
+    // IF USER IS COMING FROM RESULTS PAGE
+    // if (this.moduleCodeFromResultsPage) {
+    //    this.getModules(this.intakeCodeFromResultsPage);
+    // }
   }
 
   onIntakeCodeChanged() {
-    this.getModules(this.intakeCode);
+    this.COURSE_MODULES$ = this.getModules(this.intakeCode);
     this.classCode = '';
     this.surveyType = '';
+
   }
 
   onClassCodeChanged() {
@@ -121,13 +127,11 @@ export class StudentSurveyPage implements OnInit {
   }
 
   getIntakes() {
-    this.intakesAreLoading = true;
-    this.ws.get<any>(`/intakes-list`, true, { url: this.stagingUrl }).subscribe(
-      res => this.intakes = res,
-      // tslint:disable-next-line: no-empty
-      _ => { },
-      () => this.intakesAreLoading = false,
+
+    return this.ws.get<any>(`/intakes-list`, true, { url: this.stagingUrl }).pipe(
+      tap()
     );
+
   }
 
   getModuleByClassCode(classCode: string) {
@@ -139,22 +143,12 @@ export class StudentSurveyPage implements OnInit {
   }
 
   getModules(intakeCode: string) {
-    this.modulesAreLoading = true;
-    this.ws.get<any>(`/modules-list?intake_code=${intakeCode}`, true, { url: this.stagingUrl }).pipe(
-      // tslint:disable-next-line: max-line-length
-      map(res => res.filter(item => !item.COURSE_APPRAISAL || (!item.COURSE_APPRAISAL2 && Date.parse(item.END_DATE) > Date.parse(this.todaysDate.toISOString())))),
-    ).subscribe(
-      res => this.modules = res,
-      _ => {
-        this.modulesAreLoading = false;
-      },
-      () => {
-        this.modulesAreLoading = false;
-        // USER COMING FROM RESULTS PAGE, AND MODULES ARE READY
-        // if (this.moduleCodeFromResultsPage) {
-        // this.getSurvey(this.intakeCodeFromResultsPage, this.moduleCodeFromResultsPage);
-        // }
-      },
+    return this.ws.get<any>(`/modules-list?intake_code=${intakeCode}`, true, { url: this.stagingUrl }).pipe(
+      map(res => res.filter
+        (item => !item.COURSE_APPRAISAL || (!item.COURSE_APPRAISAL2 && Date.parse(item.END_DATE) > 
+        Date.parse(this.todaysDate.toISOString())))),
+      tap(res => this.modules = res),
+      tap()
     );
   }
 
@@ -219,8 +213,9 @@ export class StudentSurveyPage implements OnInit {
   async submitSurvey() {
     const confirm = await this.alertCtrl.create({
       header: 'Submit Survey',
-      // tslint:disable-next-line: max-line-length
-      message: `You are about to submit the survey for the module with the code ${this.classCode}, under the intake ${this.intakeCode}. Do you want to continue?`,
+
+      message: `You are about to submit the survey for the module with the code ${this.classCode},
+       under the intake ${this.intakeCode}. Do you want to continue?`,
       buttons: [
         {
           text: 'No',
@@ -237,18 +232,19 @@ export class StudentSurveyPage implements OnInit {
               this.submitting = true;
 
               this.ws.post('/response', { url: this.stagingUrl, body: this.response }).subscribe(
-                // tslint:disable-next-line: no-empty
-                _ => { },
-                err => {
-                  // tslint:disable-next-line: max-line-length
-                  this.toast(' Something went wrong and we could not complete your request. Please try again or contact us via the feedback page');
-                },
-                () => {
-                  this.toast(`The survey for ${this.classCode} has been submitted successfully.`);
-                  this.submitting = false;
-                  this.classCode = '';
-                  this.onInitData();
-                },
+                {
+                  error: err => {
+                    this.toast(
+                      `Something went wrong and we could not complete your request. Please try again or contact us via the feedback page`,
+                      'danger');
+                  },
+                  complete: () => {
+                    this.toast(`The survey for ${this.classCode} has been submitted successfully.`, 'success');
+                    this.submitting = false;
+                    this.classCode = '';
+                    this.onInitData();
+                  }
+                }
               );
             } else {
               this.showFieldMissingError = true;
@@ -260,16 +256,15 @@ export class StudentSurveyPage implements OnInit {
     await confirm.present();
   }
 
-  async toast(msg: string) {
+  async toast(msg: string, color: string) {
     const toast = await this.toastCtrl
       .create({
         message: msg,
         duration: 7000,
+        color,
         position: 'bottom',
         showCloseButton: true,
       });
     toast.present();
-  }
-  segmentChanged(ev: any) {
   }
 }
