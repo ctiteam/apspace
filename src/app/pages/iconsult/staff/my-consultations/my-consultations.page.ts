@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+
+import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
+import * as moment from 'moment';
+
 import { WsApiService } from 'src/app/services';
 import { LecturerConsultation } from 'src/app/interfaces';
-import { map, tap } from 'rxjs/operators';
-
-import * as moment from 'moment';
-import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
-import { ModalController } from '@ionic/angular';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 
 
@@ -19,21 +20,21 @@ export class MyConsultationsPage implements OnInit {
   slots$: Observable<{}>;
   todaysDate = this.iconsultFormatDate(new Date());
 
-  summaryDetails = {
-    totalOpenedSlots: 0, // -1 to show the loading until it is not -1
+  summaryDetails = { // Group of summary data used inside the summary modal
+    totalOpenedSlots: 0,
     totalAvailableSlots: 0,
-    totalClosedSlots: 0,
     totalUnavailalbeSlots: 0,
     totalBookedSlots: 0,
   };
 
-  skeltonArray = new Array(4);
+  skeltonArray = new Array(4); // loading
 
-  daysConfigrations: DayConfig[] = [];
-  dateToFilter = this.todaysDate;
+  dateToFilter = this.todaysDate; // ngmodel var
+
+  daysConfigrations: DayConfig[] = []; // ion-calendar plugin
   options: CalendarComponentOptions = {
     from: new Date(),
-    to: null,
+    to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
     daysConfig: this.daysConfigrations
   };
 
@@ -42,15 +43,14 @@ export class MyConsultationsPage implements OnInit {
     private modalCtrl: ModalController
   ) { }
 
-  iconsultFormatDate(date: Date) {
+  iconsultFormatDate(date: Date) { // Format used in iConsult date
     return moment(date).format('YYYY-MM-DD');
   }
 
-  async showSummary() {
+  async showSummary() { // summary modal
     const modal = await this.modalCtrl.create({
       component: ConsultationsSummaryModalPage,
-      cssClass: 'add-min-height',
-      componentProps: { summaryDetails: this.summaryDetails , notFound: 'No slot Selected' },
+      componentProps: { summaryDetails: this.summaryDetails },
     });
     await modal.present();
     await modal.onDidDismiss();
@@ -62,13 +62,11 @@ export class MyConsultationsPage implements OnInit {
 
   getData() { // to be changed with refresher
     this.slots$ = this.ws.get<LecturerConsultation[]>('/iconsult/upcomingconlec', true).pipe(
+      map(slots => slots.filter(slot => slot.status !== 'Clossed')), // filter closed slots
       map(
-        slots => slots.reduce((r, a) => {
+        slots => slots.reduce((r, a) => { // Grouping the slots daily and get the summary data
           if (a.status === 'Unavailable') {
             this.summaryDetails.totalUnavailalbeSlots++;
-          }
-          if (a.status === 'Clossed') {
-            this.summaryDetails.totalClosedSlots++;
           }
           if (a.status === 'Booked') {
             this.summaryDetails.totalBookedSlots++;
@@ -79,21 +77,20 @@ export class MyConsultationsPage implements OnInit {
           if (a.status === 'Available') {
             this.summaryDetails.totalAvailableSlots++;
           }
-          const consultationsDate = a.dateandtime.split(' ')[0]; // Grouping the slots
+          const consultationsDate = a.dateandtime.split(' ')[0];
           r[consultationsDate] = r[consultationsDate] || {};
           r[consultationsDate].items = r[consultationsDate].items || [];
           r[consultationsDate].items.push(a);
           return r;
         }, {})
       ),
-      tap(dates => {
+      tap(dates => { // add css classes for slot type
         Object.keys(dates).forEach(
           date => {
             const items = dates[date].items;
             const numberOfAvailableAndBookedSlots = items.filter(item => item.status === 'Available' || item.status === 'Booked').length;
             const numberOfBookedSlots = items.filter(item => item.status === 'Booked').length;
-            const hasClosedSlot = items.some(item => item.status === 'Clossed');
-            let cssClass = numberOfAvailableAndBookedSlots === numberOfBookedSlots && numberOfBookedSlots > 0
+            const cssClass = numberOfAvailableAndBookedSlots === numberOfBookedSlots && numberOfBookedSlots > 0
               ? `booked`
               : numberOfBookedSlots > 0
                 ? `partially-booked`
@@ -101,7 +98,6 @@ export class MyConsultationsPage implements OnInit {
                   ? `available`
                   : 'unavailable';
 
-            cssClass += hasClosedSlot ? ' clossed' : '';
             this.daysConfigrations.push({
               date: moment(date, 'YYYY-MM-DD').toDate(),
               subTitle: '.',

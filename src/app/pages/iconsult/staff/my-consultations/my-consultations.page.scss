@@ -33,20 +33,6 @@ ion-card.passed {
   }
 }
 
-ion-card.closed {
-  .card-header-title {
-    color: var(--main-txt-color) !important;
-  }
-  box-shadow: 0 3px 1px -2px var(--main-txt-color), 0 2px 2px 0 var(--main-txt-color), 0 1px 5px 0 var(--main-txt-color);
-  ion-badge {
-    background: var(--main-txt-color);
-    color: var(--main-bg-color);
-  }
-  ion-button.colored-background {
-    --background: var(--passed-event-color) !important;
-    --background-hover: var(--passed-event-color);
-  }
-}
 ion-card.unavailable {
   .card-header-title {
     color: var(--passed-event-color) !important;
@@ -84,37 +70,31 @@ ion-fab-button[data-desc]::after {
   box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
 }
 
-ion-col{
-  ion-badge{
+ion-col {
+  ion-badge {
     min-width: 24px;
     border-radius: 19px;
   }
-  &.available{
-    ion-badge{
+  &.available {
+    ion-badge {
       --background: var(--success-color);
       --color: var(--success-color);
     }
   }
-  &.p-booked{
-    ion-badge{
+  &.p-booked {
+    ion-badge {
       --background: #dfa847;
       --color: #dfa847;
     }
   }
-  &.booked{
-    ion-badge{
+  &.booked {
+    ion-badge {
       --background: var(--danger-color);
       --color: var(--danger-color);
     }
   }
-  &.closed{
-    ion-badge{
-      --background: var(--passed-event-color);
-      --color: var(--passed-event-color);
-    }
-  }
-  &.unavailable{
-    ion-badge{
+  &.unavailable {
+    ion-badge {
       --background: var(--main-txt-color);
       --color: var(--main-txt-color);
     }
@@ -150,19 +130,6 @@ ion-col{
     ion-button {
       --background: var(--success-color);
       --background-hover: var(--success-hover-color);
-    }
-  }
-
-  &.closed {
-    border-color: var(--secondary-bg-color);
-    .title,
-    .description {
-      color: var(--passed-event-color);
-    }
-    ion-button {
-      --background: var(--passed-event-color);
-      --background-hover: var(--passed-event-color);
-      --color: var(--main-txt-color);
     }
   }
 

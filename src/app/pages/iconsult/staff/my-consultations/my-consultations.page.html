@@ -4,19 +4,6 @@
     <ion-buttons slot="end">
       <ion-button class="colored-border colored-text" fill="outline" (click)="showSummary()">
         Summary
-        <!-- <ion-card>
-    <ion-card-header>
-      <ion-card-title>
-        Slots Opened: {{totalOpenedSlots}}
-      </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>Slots Available: {{totalAvailableSlots}}</p>
-      <p>Slots Cancelled: {{totalClosedSlots}}</p>
-      <p>Slots Unavailable: {{totalUnavailalbeSlots}}</p>
-      <p>Slots Booked: {{totalBookedSlots}}</p>
-    </ion-card-content>
-  </ion-card> -->
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -45,14 +32,11 @@
                   <ion-col class="p-booked" text-center size="6">
                     <ion-badge>.</ion-badge> Partially Booked
                   </ion-col>
-                  <ion-col class="booked" text-center size="4">
+                  <ion-col class="booked" text-center size="6">
                     <ion-badge>.</ion-badge> Booked
                   </ion-col>
-                  <ion-col class="unavailable" text-center size="4">
+                  <ion-col class="unavailable" text-center size="6">
                     <ion-badge>.</ion-badge> Unavailable
-                  </ion-col>
-                  <ion-col class="closed" text-center size="4">
-                    <ion-badge>.</ion-badge> Closed
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -77,7 +61,6 @@
                   <div class="event-container" [ngClass]="{
                                     'booked': slot.status === 'Booked',
                                     'available': slot.status === 'Available',
-                                    'closed': slot.status === 'Clossed',
                                     'no-hover': slot.status === 'Clossed',
                                     unavailable: slot.status === 'Unavailable'
                                 }">
@@ -99,7 +82,7 @@
                             </ion-button>
                             <ion-button class="cursor-pointer" expand="block" [disabled]="slot.status === 'Clossed'"
                               *ngIf="slot.status !== 'Available'">
-                              {{ slot.status === 'Clossed' ? 'Closed' : 'View Details'}}
+                              View Details
                             </ion-button>
                           </ng-container>
                         </ion-col>
