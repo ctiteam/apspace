@@ -63,7 +63,7 @@ export class MorePage implements OnInit {
       group: 'Main',
       url: 'news',
       img: 'assets/img/news.png',
-      role: Role.Student ,
+      role: Role.Student,
       tags: []
     },
     {
@@ -174,6 +174,14 @@ export class MorePage implements OnInit {
       group: 'Course Related',
       url: 'https://lms2.apiit.edu.my/login/index.php',
       img: 'assets/img/moodle.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    {
+      title: 'Course Schedule',
+      group: 'Course Related',
+      url: 'http://kb.sites.apiit.edu.my/knowledge-base/course-schedule/',
+      img: 'assets/img/course-schedule.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: []
     },
@@ -295,8 +303,8 @@ export class MorePage implements OnInit {
   openPage(url: string) {
     // external pages does not use relative or absolute link
     if (url.startsWith('http://') || url.startsWith('https://')) {
-      // manually exclude office365 that does not need service ticket
-      if (url.startsWith('https://outlook.office.com')) {
+      // manually exclude office365, and course schedule that do not need service ticket
+      if (url.startsWith('https://outlook.office.com') || url === 'http://kb.sites.apiit.edu.my/knowledge-base/course-schedule/') {
         this.iab.create(url, '_blank', 'location=true');
       } else {
         this.cas.getST(url).subscribe(st => {
