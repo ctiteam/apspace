@@ -93,11 +93,6 @@ export class StudentSurveyPage implements OnInit {
             this.studentIsMastersOrAPLC = true;
             this.courseType = 'APLC Students';
             this.iab.create('https://webapps.apiit.edu.my/engappraisal');
-            // tslint:disable-next-line: triple-equals
-          } else if (this.startSwith == 'UCM') {
-            this.studentIsMastersOrAPLC = true;
-            this.courseType = 'Master';
-            this.iab.create('https://webapps.apiit.edu.my/appraisal');
           } else {
             this.COURSE_CODE$ = this.getIntakes();
             this.courseType = 'bachelor';
@@ -145,7 +140,7 @@ export class StudentSurveyPage implements OnInit {
   getModules(intakeCode: string) {
     return this.ws.get<any>(`/modules-list?intake_code=${intakeCode}`, true, { url: this.stagingUrl }).pipe(
       map(res => res.filter
-        (item => !item.COURSE_APPRAISAL || (!item.COURSE_APPRAISAL2 && Date.parse(item.END_DATE) > 
+        (item => !item.COURSE_APPRAISAL || (!item.COURSE_APPRAISAL2 && Date.parse(item.END_DATE) >
         Date.parse(this.todaysDate.toISOString())))),
       tap(res => this.modules = res),
       tap()
