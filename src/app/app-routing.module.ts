@@ -50,7 +50,7 @@ const routes: Routes = [
   {
     path: 'bus-shuttle-services',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./pages/bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttlePagePageModule)
+    loadChildren: () => import('./pages/bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttleServicesPageModule)
   },
   {
     path: 'attendix-lecturer',

@@ -11,7 +11,7 @@ import { SettingsService, WsApiService } from 'src/app/services';
   templateUrl: './bus-shuttle-services.page.html',
   styleUrls: ['./bus-shuttle-services.page.scss'],
 })
-export class BusShuttlePage implements OnInit {
+export class BusShuttleServicesPage implements OnInit {
   trip$: Observable<BusTrip[]>;
   filteredTrip$: any;
   locations: APULocation[];
