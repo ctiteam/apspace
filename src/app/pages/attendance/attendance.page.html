@@ -3,7 +3,9 @@
     <ion-title *ngIf="course$ | async">
       {{ this.selectedIntake || "Attendance" }}
     </ion-title>
-
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-buttons slot="end">
       <ion-button fill="outline" size="small" class="notification-button colored-border" (click)="showActionSheet()">
         Intakes

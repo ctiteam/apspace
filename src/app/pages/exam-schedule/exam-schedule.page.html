@@ -2,9 +2,7 @@
   <ion-toolbar>
     <ion-title> Exam Schedule</ion-title>
     <ion-buttons slot="start">
-      <ion-button>
-        <ion-back-button defaultHref="#" text=""></ion-back-button>
-      </ion-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button outline small (click)="presentIntakeSearch()">
@@ -15,8 +13,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <p style="margin-top:40px; text-align: center"> <span>Selected intke:</span> <span padding-start>{{intake}}</span>
-  </p>
+  <h2 padding-top text-center>Selected intake: {{ intake }}</h2>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
@@ -29,7 +26,7 @@
               <ion-col size="12" size-lg="6" *ngFor="let exam of exams">
                 <div >
                   <ion-card>
-                    <ion-card-header>
+                    <ion-card-header class="colored-border">
                       <ion-card-title class="responsive-h1">
                         {{ exam.subjectDescription }}
                       </ion-card-title>
@@ -47,7 +44,7 @@
                         <ion-item lines="none">
                           <ion-icon name="calendar"></ion-icon>
                           <p padding-start>
-                            {{ exam.since | date: "EEE,d MMM, y" }}
+                            {{ exam.since | date: "EEE, d MMM, y" }}
                           </p>
                         </ion-item>
                         <ion-item lines="none">
@@ -58,7 +55,6 @@
                         </ion-item>
                       </ion-list>
                     </ion-card-content>
-                    <hr />
                     <ion-footer>
                       <ion-grid>
                         <ion-row>

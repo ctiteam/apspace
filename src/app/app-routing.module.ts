@@ -50,7 +50,7 @@ const routes: Routes = [
   {
     path: 'bus-shuttle-services',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./pages/bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttlePagePageModule)
+    loadChildren: () => import('./pages/bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttleServicesPageModule)
   },
   {
     path: 'attendix-lecturer',
@@ -190,6 +190,10 @@ const routes: Routes = [
     loadChildren: './pages/iconsult/staff/add-unavailability/add-unavailability.module#AddUnavailabilityPageModule'
   },
   { path: 'my-consultations', loadChildren: './pages/iconsult/staff/my-consultations/my-consultations.module#MyConsultationsPageModule' },
+  {
+    path: 'lecturer-timetable',
+    loadChildren: () => import('./pages/lecturer-timetable/lecturer-timetable.module').then(m => m.LecturerTimetablePageModule)
+  },
 ];
 
 @NgModule({
