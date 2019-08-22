@@ -14,13 +14,11 @@
       width: 100%;
        padding: 0%;
     }
-    .naRadioBtn {
-      margin-left: 0% !important;
-      margin-right:5px;
-    }
+
     .ansRadioBtn {
       margin-left: 0% !important; 
-      margin-right: 10px ;
+      margin-right: 5px ;
+      width: 13px; height: 13px;
       
     } 
     .surveyQuestion{
@@ -29,6 +27,9 @@
     }
     .listContent{
       font-size: 15px;
+    }
+    .rdBtnContent{
+      font-size: 14px;
     }
 
     @media only screen and (min-width: 1px) {
@@ -61,12 +62,23 @@
         width: 20%;
       }
 
-      .rdBtn-with-na{
+      .rdBtn-with-na:nth-of-type(2){ //dis
+        width: 21% !important;
+      }
+      .rdBtn-with-na:nth-child(3){ //dis
         width: 17% !important;
       }
-
-      .na{
+      .rdBtn-with-na:nth-child(4){ // neiu
         width: 15% !important;
+      }
+      .rdBtn-with-na:nth-child(5){ // agre
+        width: 14% !important;
+      }
+      .rdBtn-with-na:nth-of-type(6){
+        width: 21% !important;
+      }
+      .na{
+        width: 12% !important;
       }
         
       }
