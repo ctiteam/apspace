@@ -189,6 +189,7 @@ const routes: Routes = [
     path: 'add-unavailability',
     loadChildren: './pages/iconsult/staff/add-unavailability/add-unavailability.module#AddUnavailabilityPageModule'
   },
+  { path: 'my-consultations', loadChildren: './pages/iconsult/staff/my-consultations/my-consultations.module#MyConsultationsPageModule' },
 ];
 
 @NgModule({

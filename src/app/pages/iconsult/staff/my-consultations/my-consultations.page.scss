@@ -1,0 +1,211 @@
+ion-card-content.card-content-md {
+  padding-left: 16px;
+}
+.card-header-title {
+  font-size: 1.2rem;
+}
+
+ion-label {
+  white-space: normal !important;
+}
+ion-card.booked {
+  .card-header-title {
+    color: var(--danger-color) !important;
+  }
+  box-shadow: 0 3px 1px -2px var(--danger-color), 0 2px 2px 0 var(--danger-color), 0 1px 5px 0 var(--danger-color);
+  ion-badge {
+    background: var(--danger-color);
+  }
+}
+
+ion-card.passed {
+  .card-header-title {
+    color: var(--primary-color) !important;
+  }
+  box-shadow: 0 3px 1px -2px var(--primary-color), 0 2px 2px 0 var(--primary-color), 0 1px 5px 0 var(--primary-color);
+  ion-badge {
+    background: var(--primary-color);
+    color: var(--main-bg-color);
+  }
+  ion-button.colored-background {
+    --background: var(--primary-color) !important;
+    --background-hover: var(--primary-color);
+  }
+}
+
+ion-card.closed {
+  .card-header-title {
+    color: var(--main-txt-color) !important;
+  }
+  box-shadow: 0 3px 1px -2px var(--main-txt-color), 0 2px 2px 0 var(--main-txt-color), 0 1px 5px 0 var(--main-txt-color);
+  ion-badge {
+    background: var(--main-txt-color);
+    color: var(--main-bg-color);
+  }
+  ion-button.colored-background {
+    --background: var(--passed-event-color) !important;
+    --background-hover: var(--passed-event-color);
+  }
+}
+ion-card.unavailable {
+  .card-header-title {
+    color: var(--passed-event-color) !important;
+  }
+  box-shadow: 0 3px 1px -2px var(--passed-event-color), 0 2px 2px 0 var(--passed-event-color),
+    0 1px 5px 0 var(--passed-event-color);
+  ion-badge {
+    background: var(--passed-event-color);
+  }
+  ion-button.colored-background {
+    --background: var(--passed-event-color) !important;
+    --background-hover: var(--passed-event-color);
+  }
+}
+
+ion-button.danger-background {
+  --background: var(--danger-color) !important;
+  --background-hover: var(--danger-hover-color);
+}
+
+ion-fab-button[data-desc] {
+  position: relative;
+}
+
+ion-fab-button[data-desc]::after {
+  position: absolute;
+  content: attr(data-desc);
+  z-index: 1;
+  right: 47px;
+  bottom: 6px;
+  background-color: var(--secondary-bg-color);
+  padding: 3px 8px 5px 8px;
+  border-radius: 19px;
+  color: var(--secondary-txt-color);
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+}
+
+ion-col{
+  ion-badge{
+    min-width: 24px;
+    border-radius: 19px;
+  }
+  &.available{
+    ion-badge{
+      --background: var(--success-color);
+      --color: var(--success-color);
+    }
+  }
+  &.p-booked{
+    ion-badge{
+      --background: #dfa847;
+      --color: #dfa847;
+    }
+  }
+  &.booked{
+    ion-badge{
+      --background: var(--danger-color);
+      --color: var(--danger-color);
+    }
+  }
+  &.closed{
+    ion-badge{
+      --background: var(--passed-event-color);
+      --color: var(--passed-event-color);
+    }
+  }
+  &.unavailable{
+    ion-badge{
+      --background: var(--main-txt-color);
+      --color: var(--main-txt-color);
+    }
+  }
+}
+
+// To modify and clean
+.event-calendar {
+  font-size: 14px;
+  font-family: Open Sans;
+  overflow: hidden;
+}
+
+.event {
+  text-decoration: none;
+}
+
+.day {
+  padding: 15px;
+  font-weight: bold;
+  color: var(--main-txt-color);
+  background-color: var(--tertiary-bg-color);
+}
+
+.event-container {
+  transition: all 0.2s ease;
+  border-left: 3px solid;
+  background: var(--secondary-bg-color);
+  color: var(--main-txt-color);
+
+  &.available {
+    border-color: var(--success-color);
+    ion-button {
+      --background: var(--success-color);
+      --background-hover: var(--success-hover-color);
+    }
+  }
+
+  &.closed {
+    border-color: var(--secondary-bg-color);
+    .title,
+    .description {
+      color: var(--passed-event-color);
+    }
+    ion-button {
+      --background: var(--passed-event-color);
+      --background-hover: var(--passed-event-color);
+      --color: var(--main-txt-color);
+    }
+  }
+
+  &:not(.no-hover):hover {
+    background: var(--main-bg-color);
+  }
+
+  &.booked {
+    border-color: var(--danger-color);
+    ion-button {
+      --background: var(--danger-color);
+      --background-hover: var(--danger-hover-color);
+    }
+  }
+
+  &.unavailable {
+    border-color: var(--main-txt-color);
+    ion-button {
+      --background: var(--main-txt-color);
+      --background-hover: var(--secondary-txt-color);
+      --color: var(--main-bg-color);
+    }
+  }
+}
+
+.event-container:not(.no-hover):hover {
+  border-left-width: 10px;
+}
+
+.grid-padding {
+  padding-top: 3px;
+  padding-left: 7px;
+}
+
+.title {
+  text-transform: uppercase;
+  font-family: Oswald;
+  font-weight: 400;
+  font-size: 1.2em;
+  width: 100%;
+}
+
+.description {
+  font-size: 0.9em;
+  display: block;
+}
