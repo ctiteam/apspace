@@ -12,33 +12,45 @@
 <ion-content parallax-header padding>
   <ion-card no-margin margin-bottom>
     <ion-card-header>
+      <ion-card-title>
+        <h4 class="responsive-h1">
+          <span class="text-bolder">{{summaryDetails.totalOpenedSlots}}</span> Slots Opened
+        </h4>
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content no-padding>
-      <chart height="600" [type]="chartData.type" [data]="chartData.data"
-        [options]="chartData.options">
+      <chart height="600" [type]="chartData.type" [data]="chartData.data" [options]="chartData.options">
       </chart>
       <ion-item>
+      </ion-item>
+      <ion-item>
         <ion-label>
-          <p class="tertiary-txt-color">Total Opened Slots:</p>
-          <h4 class="main-text-color">{{ summaryDetails.totalOpenedSlots }}</h4>
+          <p class="tertiary-txt-color">
+            Total Available Slots:
+            <span class="text-bolder main-text-color">
+              {{ summaryDetails.totalAvailableSlots }}
+            </span>
+          </p>
         </ion-label>
       </ion-item>
       <ion-item>
         <ion-label>
-          <p class="tertiary-txt-color">Total Available Slots:</p>
-          <h4 class="main-text-color">{{ summaryDetails.totalAvailableSlots }}</h4>
+          <p class="tertiary-txt-color">
+            Total Booked Slots:
+            <span class="text-bolder main-text-color">
+              {{ summaryDetails.totalBookedSlots }}
+            </span>
+          </p>
         </ion-label>
       </ion-item>
       <ion-item>
         <ion-label>
-          <p class="tertiary-txt-color">Total Booked Slots:</p>
-          <h4 class="main-text-color">{{ summaryDetails.totalBookedSlots }}</h4>
-        </ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-label>
-          <p class="tertiary-txt-color">Total Unavailable Slots:</p>
-          <h4 class="main-text-color">{{ summaryDetails.totalUnavailalbeSlots }}</h4>
+          <p class="tertiary-txt-color">
+            Unavailability:
+            <span class="text-bolder main-text-color">
+              {{ summaryDetails.totalUnavailalbeSlots }}
+            </span>
+          </p>
         </ion-label>
       </ion-item>
     </ion-card-content>

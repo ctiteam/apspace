@@ -20,7 +20,6 @@ export class ConsultationsSummaryModalPage implements OnInit {
       labels: [
         'Available',
         'Booked',
-        'Opened',
         'Unavailable'
       ],
       datasets: []
@@ -36,12 +35,9 @@ export class ConsultationsSummaryModalPage implements OnInit {
         data: [
           +this.summaryDetails.totalBookedSlots,
           +this.summaryDetails.totalAvailableSlots,
-          +this.summaryDetails.totalOpenedSlots,
           +this.summaryDetails.totalUnavailalbeSlots
         ],
-        backgroundColor: [
-          '#e54d42', '#49b571', '#3a99d9', '#a1a1a1'
-        ]
+        backgroundColor: ['#e54d42', '#49b571', '#a1a1a1']
       }
     );
   }
