@@ -376,6 +376,9 @@ ion-button {
     --background: #464775;
     --background-hover: #5f60a3;
   }
+  &.colored-border{
+    --border-color: var(--primary-color) !important;
+  }
 }
 
 ion-fab-button {
