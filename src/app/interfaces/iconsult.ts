@@ -14,6 +14,20 @@ export interface ConsultationHour {
   status: string;
 }
 
+export interface LecturerConsultation {
+  availibilityid: number;
+  date: string;
+  dateandtime: string;
+  datetime: string;
+  endTime: string;
+  location: string;
+  status: string;
+  time: string;
+  timee: string;
+  userid: number;
+  venue: string;
+}
+
 export interface ConsultationSlot {
   availibilityid: number;
   date: string;
