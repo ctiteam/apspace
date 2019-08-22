@@ -19,13 +19,13 @@
   </ng-container>
   <ng-template #loadingIntakes>
     <ion-segment>
-      <ion-segment-button>
+      <ion-segment-button *ngFor="let _ of numOfSkeletons">
         <ion-skeleton-text animated style="width: 100%; line-height: 50px"></ion-skeleton-text>
       </ion-segment-button>
     </ion-segment>
   </ng-template>
 
-  <ion-grid *ngIf="(COURSE_MODULES$ | async) as intakeModules; else loadingModules">
+  <ion-grid *ngIf="(COURSE_MODULES$ | async) as intakeModules; else loadingContent">
     <ion-row *ngIf="intakeModules.length > 0; else noSurveys">
       <!-- Left Side -->
       <ion-col size-xs="12" size-md="4">
@@ -51,16 +51,9 @@
                 </ion-item>
               </ion-card-content>
             </ion-card>
-
           </ng-container>
         </ng-container>
-        <ng-template #loadingModules>
-          <div>
-            <ion-skeleton-text animated style="width: 100%; line-height: 50px"></ion-skeleton-text>
-          </div>
-        </ng-template>
       </ion-col>
-
 
       <ion-col size-xs="12" size-md="8">
         <!-- User selected intake but did not choose module yet -->
@@ -81,7 +74,7 @@
         </ng-template>
 
         <ng-template [ngIf]="intakeCode && classCode && surveyType">
-          <ng-template let-surveys [ngIf]="survey$ | async">
+          <ng-container *ngIf="(survey$ | async) as surveys; else loadingsurvey">
             <div class="survey-wrapper" *ngFor="let survey of surveys">
               <div>
                 <ion-card class="w-lg w">
@@ -214,6 +207,22 @@
                 </ion-grid>
               </ng-template>
             </div>
+          </ng-container>
+          <ng-template #loadingsurvey>
+            <ion-card *ngFor="let _ of numOfSkeletons">
+              <ion-item>
+                <ion-skeleton-text animated style="line-height: 30px; width: 100%"></ion-skeleton-text>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-skeleton-text animated style="width: 35%; line-height: 25px;"></ion-skeleton-text>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-skeleton-text animated style="width: 55%; line-height: 25px;"></ion-skeleton-text>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-skeleton-text animated style="width: 75%; line-height: 25px;"></ion-skeleton-text>
+              </ion-item>
+            </ion-card>
           </ng-template>
         </ng-template>
       </ion-col>
@@ -241,4 +250,16 @@
       </ng-template>
     </ng-template>
   </ion-grid>
+  <ng-template #loadingContent>
+    <ion-grid>
+      <ion-row>
+        <ion-col size-xs="12" size-md="4">
+          <ion-skeleton-text animated style="line-height: 200px; width: 100%"></ion-skeleton-text>
+        </ion-col>
+        <ion-col size-xs="12" size-md="8">
+          <ion-skeleton-text animated style="line-height: 300px; width: 100%"></ion-skeleton-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
 </ion-content>
