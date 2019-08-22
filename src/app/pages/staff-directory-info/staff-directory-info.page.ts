@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
@@ -22,6 +22,7 @@ export class StaffDirectoryInfoPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private ws: WsApiService,
     private appLauncherService: AppLauncherService
   ) { }
@@ -50,6 +51,13 @@ export class StaffDirectoryInfoPage implements OnInit {
       playStoreUrl,
       appStoreUrl,
       `${lecturerCasId}@staffemail.apu.edu.my`);
+  }
+
+  navigateToIconsult(staffId: string) {
+    const navigationExtras: NavigationExtras = {
+      state: {staffId}
+    };
+    this.router.navigate(['opened-slots'], navigationExtras);
   }
 
 }

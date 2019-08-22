@@ -6,6 +6,8 @@ import { MenuController, ModalController } from '@ionic/angular';
 import { WsApiService } from 'src/app/services';
 import { map, tap } from 'rxjs/operators';
 import { BookSlotModalPage } from './book-slot-modal';
+import { ActivatedRoute } from 'src/testing';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-opened-slots',
@@ -28,17 +30,20 @@ export class OpenedSlotsPage implements OnInit {
     day: ''
   };
   constructor(
-    // private route: ActivatedRoute,
+    private route: ActivatedRoute,
+    private router: Router,
     private ws: WsApiService,
     private menu: MenuController,
     private modalCtrl: ModalController,
   ) { }
 
   ngOnInit() {
-    // this.staffCasId = this.route.snapshot.params.id;
-    // this.staffCasId = 'abdallah';
-    this.staffCasId = 'mohamad.alghayeb';
-    this.staff$ = this.getStaffProfile();
+    this.route.queryParams.subscribe(params => {
+      if (this.router.getCurrentNavigation().extras.state) {
+        this.staffCasId = this.router.getCurrentNavigation().extras.state.staffId;
+        this.staff$ = this.getStaffProfile();
+      }
+    });
 
     this.filteredSlots$ = this.getSlots().pipe(
       tap(_ => this.groupSlots())
@@ -55,7 +60,7 @@ export class OpenedSlotsPage implements OnInit {
     return this.ws.get<StaffDirectory[]>('/staff/listing').pipe(
       map(listOfStaff => listOfStaff.find(staff => staff.ID === this.staffCasId)),
       tap(staff => this.staff = staff),
-      );
+    );
   }
 
   getSlots() {
