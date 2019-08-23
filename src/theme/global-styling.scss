@@ -322,11 +322,11 @@ ion-calendar {
     .days-btn.today p {
       color: var(--passed-event-color) !important;
     }
+    .days-btn.today.colored p{
+      color: var(--main-txt-color) !important;
+    }
     .days-btn.on-selected {
       background-color: transparent !important;
-      // p{
-      //   color: var(--passed-event-color) !important;
-      // }
     }
   }
 }
