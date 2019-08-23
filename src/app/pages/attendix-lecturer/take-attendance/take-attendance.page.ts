@@ -22,7 +22,7 @@ export class TakeAttendancePage implements OnInit {
 
   schedule = 'a';
 
-  auto = false;
+  auto = true;
   term = '';
   type = 'A';
 
@@ -50,9 +50,9 @@ export class TakeAttendancePage implements OnInit {
 
     let studentsById: { [student: string]: Status };
 
-    // get attendance state from query
+    // get attendance state from query and use manual mode if attendance initialized
     const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
-      catchError(err => this.attendance.fetch({ schedule })),
+      catchError(err => (this.auto = true, this.attendance.fetch({ schedule }))),
       catchError(err => (this.toastCtrl.create({
         message: 'Failed to take attendance.',
         duration: 2000,
