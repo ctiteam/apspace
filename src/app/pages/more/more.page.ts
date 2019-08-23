@@ -114,14 +114,14 @@ export class MorePage implements OnInit {
       role: Role.Student,
       tags: []
     },
-    // {
-    //   title: 'iConsult',
-    //   group: 'Course Related',
-    //   img: 'assets/img/iconsult.png',
-    //   url: '',
-    //   role: Role.Lecturer | Role.Admin,
-    //   tags: []
-    // },
+    {
+      title: 'iConsult',
+      group: 'Course Related',
+      img: 'assets/img/iconsult.png',
+      url: 'my-consultations',
+      role: Role.Lecturer | Role.Admin,
+      tags: []
+    },
     // {
     //   title: 'Student Consent Form',
     //   group: 'Course Related',
