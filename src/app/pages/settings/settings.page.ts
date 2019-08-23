@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSelect, ModalController, NavController, ToastController } from '@ionic/angular';
+import { IonSelect, ModalController, NavController, ToastController, AlertController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
@@ -65,6 +65,7 @@ export class SettingsPage implements OnInit {
     private tt: StudentTimetableService,
     private userSettings: UserSettingsService,
     private ws: WsApiService,
+    private alertCtrl: AlertController,
   ) {
     this.userSettings
       .darkThemeActivated()
@@ -208,6 +209,40 @@ export class SettingsPage implements OnInit {
       enterAnimation: toastMessageEnterAnimation,
       leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
+  }
+
+  async resetByod() {
+    const confirm = await this.alertCtrl.create({
+      header: 'BYOD Reset',
+      message: 'You are about to send a request to the helpdesk support system to reset your BYOD. Do you want to continue?',
+      buttons: [
+        {
+          text: 'No',
+          handler: () => {
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.ws.get('/byod/reset').subscribe(
+              data => {
+              },
+              err => {
+                console.error(err);
+              },
+              async () => {
+                const toast = await this.toastCtrl.create({
+                  message: 'Your request has been sent to the helpdesk support system and it is being processed now.',
+                  duration: 2000
+                });
+                await toast.present();
+              }
+            );
+          }
+        }
+      ]
+    });
+    await confirm.present();
   }
 
 }
