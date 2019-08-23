@@ -37,7 +37,7 @@ export class ConsultationsSummaryModalPage implements OnInit {
           +this.summaryDetails.totalBookedSlots,
           +this.summaryDetails.totalUnavailalbeSlots
         ],
-        backgroundColor: ['#e54d42', '#49b571', '#a1a1a1']
+        backgroundColor: ['#49b571', '#e54d42', '#a1a1a1']
       }
     );
   }
