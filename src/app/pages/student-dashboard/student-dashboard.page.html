@@ -46,18 +46,21 @@
               <ion-row>
                 <ion-col>
                   <div class="icons" margin-top text-right>
-                    <a (click)="toggleReorderingMode()">
+                    <a (click)="toggleReorderingMode()" margin-end>
                       <ion-icon *ngIf="editableList" color="success" class="responsive-icon colored-text"
                         name="checkmark"></ion-icon>
                       <ion-icon *ngIf="!editableList" class="responsive-icon colored-text" name="md-create"></ion-icon>
                     </a>
-                    <a (click)="navigateToPage('/settings')" margin-start margin-end>
+                    <a (click)="navigateToPage('/settings')" margin-end>
                       <ion-icon class="anim-rotate-360-deg animated responsive-icon colored-text" name="settings">
                       </ion-icon>
                     </a>
-                    <a class="notifications" (click)="navigateToPage('/notifications')">
+                    <a class="notifications" (click)="navigateToPage('/notifications')" margin-end>
                       <ion-badge *ngIf="numberOfUnreadMsgs > 0" color="danger">{{ numberOfUnreadMsgs }}</ion-badge>
                       <ion-icon class="responsive-icon colored-text anim-ring" name="notifications"></ion-icon>
+                    </a>
+                    <a class="notifications" (click)="navigateToPage('/logout')">
+                      <ion-icon class="responsive-icon danger-text anim-ring" name="log-out"></ion-icon>
                     </a>
                   </div>
                 </ion-col>
@@ -238,22 +241,16 @@
                   </ion-card>
                 </ng-container>
                 <ng-template #noTrips>
-                  <app-message-with-svg
-                    messageTitle="No More Trips!"
-                    messageContent="No more trips for the selected line."
-                    imageUrl="assets/img/sad.svg"
-                    wrapperOffset="3"
-                    wrapperSize="6">
+                  <app-message-with-svg messageTitle="No More Trips!"
+                    messageContent="No more trips for the selected line." imageUrl="assets/img/sad.svg"
+                    wrapperOffset="3" wrapperSize="6">
                   </app-message-with-svg>
                 </ng-template>
               </ng-container>
               <ng-template #locationsSettings>
-                <app-message-with-svg
-                  messageTitle="Section is not configured!"
+                <app-message-with-svg messageTitle="Section is not configured!"
                   messageContent="You can configure this section from the settings page, under the bus shuttle services card."
-                  imageUrl="assets/img/config.svg"
-                  wrapperOffset="3"
-                  wrapperSize="6">
+                  imageUrl="assets/img/config.svg" wrapperOffset="3" wrapperSize="6">
                 </app-message-with-svg>
               </ng-template>
 
