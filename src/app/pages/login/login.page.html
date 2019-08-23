@@ -3,7 +3,7 @@
     <!-- Logo -->
     <ion-row header align-items-start align-items-stretch>
       <ion-col size="10" offset="1" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
-        <img logo src="assets/img/login.jpg" />
+        <ion-img src="assets/img/login.png"></ion-img>
       </ion-col>
 
       <!-- Form & Welcome Message -->
@@ -27,7 +27,8 @@
                 <!-- Input-field-password -->
                 <ion-item no-padding>
                   <ion-input padding-start [type]="showPassword ? 'text' : 'password'" [placeholder]="'Password'"
-                    [(ngModel)]="password" clear-on-edit="false" (keyup.enter)="login()" [required]="true" name="password">
+                    [(ngModel)]="password" clear-on-edit="false" (keyup.enter)="login()" [required]="true"
+                    name="password">
                   </ion-input>
                   <ion-button type="button" clear slot="end" (click)="showPassword = !showPassword">
                     <ion-icon name="eye"></ion-icon>
