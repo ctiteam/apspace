@@ -58,6 +58,7 @@ ion-fab-button[data-desc] {
 }
 
 ion-fab-button[data-desc]::after {
+  cursor: pointer;
   position: absolute;
   content: attr(data-desc);
   z-index: 1;

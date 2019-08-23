@@ -106,7 +106,7 @@ export class AddUnavailabilityPage implements OnInit {
     };
 
     this.alertCtrl.create({
-      header: 'Adding new slots',
+      header: 'Adding new slot(s)',
       subHeader: 'Are you sure you want to mark all of the slots between the following two dates as unavailable:',
       message: `<p><strong>Start Date: </strong> ${this.addUnavailabilityForm.value.startDate}</p>
                 <p><strong>End Date: </strong> ${this.addUnavailabilityForm.value.endDate || 'N/A'}</p>
@@ -128,9 +128,8 @@ export class AddUnavailabilityPage implements OnInit {
                 },
                 error: err => this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger'),
                 complete: () => {
-                  // To be changed to the main page for staff
                   this.dismissLoading();
-                  this.router.navigateByUrl('tabs/more').then(
+                  this.router.navigateByUrl('my-consultations').then(
                   );
                 }
               }

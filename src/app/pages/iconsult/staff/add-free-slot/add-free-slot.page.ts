@@ -144,8 +144,8 @@ export class AddFreeSlotPage implements OnInit {
       body.repeat = this.addFreeSlotForm.value.repeatOn;
     }
     this.alertCtrl.create({
-      header: 'Adding new slots',
-      subHeader: 'Are you sure you want to add new slots with the following details:',
+      header: 'Adding new slot(s)',
+      subHeader: 'Are you sure you want to add new slot(s) with the following details:',
       message: `<p><strong>Slot Date: </strong> ${this.addFreeSlotForm.value.startDate}</p>
                 <p><strong>Slot End Date: </strong> ${this.addFreeSlotForm.value.endDate || 'N/A'}</p>
                 <p><strong>Slot Time: </strong> ${body.start_time.toString()}</p>
@@ -167,11 +167,8 @@ export class AddFreeSlotPage implements OnInit {
                 },
                 error: err => this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger'),
                 complete: () => {
-                  // To be changed to the main page for staff
                   this.dismissLoading();
-
-                  this.router.navigateByUrl('tabs/more').then(
-                    // Hide the loading
+                  this.router.navigateByUrl('my-consultations').then(
                   );
                 }
               }
