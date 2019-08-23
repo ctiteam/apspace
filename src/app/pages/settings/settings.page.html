@@ -8,8 +8,7 @@
 </ion-header>
 
 <ion-content padding>
-  <!-- Searchbar with a custom debounce -->
-  <!-- <ion-searchbar style="padding: 5px;" no-padding margin-bottom color="danger"></ion-searchbar> -->
+  <!-- ion-select hidden behind the shown dashboard sections item  -->
   <ion-select [(ngModel)]="dashboardSections" (ionChange)="dashboardSectionsChanged()" multiple="true" [hidden]="true"
     #dashboardSectionsSelect>
     <ion-select-option [disabled]="dashboardSection.disabled" [value]="dashboardSection.section"
@@ -17,8 +16,9 @@
       {{ dashboardSection.name }}
     </ion-select-option>
   </ion-select>
+
   <div class="masonry-list">
-    <div class="masonry-item">
+    <!-- <div class="masonry-item">
       <ion-card no-margin margin-bottom>
         <ion-card-header>
           <ion-card-title class="card-title float-left">
@@ -44,21 +44,14 @@
                 </ion-select-option>
               </ion-select>
             </ion-item>
-            <!-- <ion-item lines="none" no-padding>
+            <ion-item lines="none" no-padding>
               <ion-label>Hide bar on scroll</ion-label>
               <ion-toggle [(ngModel)]="test"></ion-toggle>
-            </ion-item> -->
-            <ion-item lines="none" no-padding>
-              <a (click)="clearCache()">
-                <ion-label color="danger">Clear cache</ion-label>
-              </a>
             </ion-item>
-
-
           </ion-list>
         </ion-card-content>
       </ion-card>
-    </div>
+    </div> -->
 
     <div class="masonry-item">
       <ion-card no-margin margin-bottom>
@@ -114,11 +107,6 @@
                   Quick Access Items
                 </ion-label>
               </ion-item> -->
-              <ion-item lines="none" no-padding>
-                <ion-label>
-                  Bus Shuttle Service Card
-                </ion-label>
-              </ion-item>
               <a (click)="openDashboardSectionsSelectBox()">
                 <ion-item lines="none" no-padding>
                   <ion-label>
@@ -133,17 +121,6 @@
                   Others
                 </ion-label>
               </ion-item-divider>
-              <ion-item lines="none" no-padding>
-                <ion-label>Default Intake</ion-label>
-                <ion-select [(ngModel)]="test">
-                  <ion-select-option [value]="true">
-                    UC3F1706IT(ISS)
-                  </ion-select-option>
-                  <ion-select-option [value]="false">
-                    UC2F1607IT(ISS)
-                  </ion-select-option>
-                </ion-select>
-              </ion-item>
               <ion-item lines="none" no-padding>
                 <ion-label>Menu UI</ion-label>
                 <ion-select [(ngModel)]="menuUI" (ngModelChange)="toggleMenuUI()">
@@ -165,6 +142,11 @@
                     Daily
                   </ion-select-option>
                 </ion-select>
+              </ion-item>
+              <ion-item lines="none" no-padding>
+                <a (click)="clearCache()">
+                  <ion-label color="danger">Clear cache</ion-label>
+                </a>
               </ion-item>
             </ion-item-group>
           </ion-list>
@@ -194,7 +176,8 @@
               </ion-item-divider>
               <ion-item lines="none" no-padding>
                 <ion-label>First Location</ion-label>
-                <ion-select [(ngModel)]="busShuttleServiceSettings.firstLocation" (ngModelChange)="setBusShuttleServicesSettings()">
+                <ion-select [(ngModel)]="busShuttleServiceSettings.firstLocation"
+                  (ngModelChange)="setBusShuttleServicesSettings()">
                   <ion-select-option [value]="location.location_name" *ngFor="let location of locations">
                     {{location.location_nice_name}}
                   </ion-select-option>
@@ -202,14 +185,15 @@
               </ion-item>
               <ion-item lines="none" no-padding>
                 <ion-label>Second Location</ion-label>
-                <ion-select [(ngModel)]="busShuttleServiceSettings.secondLocation" (ngModelChange)="setBusShuttleServicesSettings()">
+                <ion-select [(ngModel)]="busShuttleServiceSettings.secondLocation"
+                  (ngModelChange)="setBusShuttleServicesSettings()">
                   <ion-select-option [value]="location.location_name" *ngFor="let location of locations">
                     {{location.location_nice_name}}
                   </ion-select-option>
                 </ion-select>
               </ion-item>
             </ion-item-group>
-            <ion-item-group>
+            <!-- <ion-item-group>
               <ion-item-divider no-padding>
                 <ion-label>
                   Alarm <small>(For mobile app only)</small>
@@ -229,7 +213,7 @@
                   </ion-select-option>
                 </ion-select>
               </ion-item>
-            </ion-item-group>
+            </ion-item-group> -->
           </ion-list>
         </ion-card-content>
       </ion-card>
@@ -252,11 +236,13 @@
             <ion-item-group *ngIf="timetable$ | async as timetable">
               <ion-item-divider no-padding margin-bottom>
                 <ion-label>
-                  Module blacklists <small>(hidden from timetable)</small>
+                  List of hidden modules
                 </ion-label>
               </ion-item-divider>
-              <ion-chip *ngFor="let module of timetable?.blacklists"
-                (click)="timetableModuleBlacklistsRemove(module)">
+              <ion-chip *ngIf="timetable?.blacklists.length === 0">
+                <ion-label>No modules added</ion-label>
+              </ion-chip>
+              <ion-chip *ngFor="let module of timetable?.blacklists" (click)="timetableModuleBlacklistsRemove(module)">
                 <ion-icon name="remove" color="danger"></ion-icon>
                 <ion-label>{{ module }}</ion-label>
               </ion-chip>
