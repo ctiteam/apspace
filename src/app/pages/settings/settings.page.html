@@ -201,7 +201,8 @@
               </ion-item-divider>
               <ion-item lines="none" no-padding>
                 <ion-label>Alarm To Be Set Before</ion-label>
-                <ion-select [(ngModel)]="busShuttleServiceSettings.alarmBefore" (ngModelChange)="setBusShuttleServicesSettings()">
+                <ion-select [(ngModel)]="busShuttleServiceSettings.alarmBefore"
+                  (ngModelChange)="setBusShuttleServicesSettings()">
                   <ion-select-option [value]="'5'">
                     5 mins
                   </ion-select-option>
@@ -239,9 +240,6 @@
                   List of hidden modules
                 </ion-label>
               </ion-item-divider>
-              <ion-chip *ngIf="timetable?.blacklists.length === 0">
-                <ion-label>No modules added</ion-label>
-              </ion-chip>
               <ion-chip *ngFor="let module of timetable?.blacklists" (click)="timetableModuleBlacklistsRemove(module)">
                 <ion-icon name="remove" color="danger"></ion-icon>
                 <ion-label>{{ module }}</ion-label>
@@ -275,9 +273,11 @@
                 <ion-label>Set Security Questions</ion-label>
               </ion-item>
             </a>
-            <ion-item lines="none" no-padding>
-              <ion-label>BYOD Reset</ion-label>
-            </ion-item>
+            <a (click)="resetByod()">
+              <ion-item lines="none" no-padding>
+                <ion-label>BYOD Reset</ion-label>
+              </ion-item>
+            </a>
           </ion-list>
         </ion-card-content>
       </ion-card>
