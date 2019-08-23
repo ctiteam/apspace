@@ -33,8 +33,8 @@ export class ConsultationsSummaryModalPage implements OnInit {
     this.chartData.data.datasets.push( // Pushing the data to the chart
       {
         data: [
-          +this.summaryDetails.totalBookedSlots,
           +this.summaryDetails.totalAvailableSlots,
+          +this.summaryDetails.totalBookedSlots,
           +this.summaryDetails.totalUnavailalbeSlots
         ],
         backgroundColor: ['#e54d42', '#49b571', '#a1a1a1']
