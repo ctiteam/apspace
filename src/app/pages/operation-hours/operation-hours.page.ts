@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { QuixCustomer } from 'src/app/interfaces/quix';
 import { WsApiService } from 'src/app/services';
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -21,14 +22,19 @@ export class OperationHoursPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getCompany();
+    this.doRefresh();
   }
-  getCompany() {
+
+  doRefresh(event?) {
     const header = new HttpHeaders({ 'X-Filename': 'quix-customers' });
     return this.quixCustomers$ = this.ws.get<QuixCustomer[]>('/quix/get/file', true, {
       headers: header,
       auth: false
-    });
+    }
+
+    ).pipe(
+      finalize(() => event && event.target.complete()),
+    );
   }
 }
 
