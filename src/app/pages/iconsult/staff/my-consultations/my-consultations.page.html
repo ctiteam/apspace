@@ -9,8 +9,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="(slots$ | async) as dates">
-  <ion-grid>
+<ion-content>
+  <ion-grid *ngIf="(slots$ | async) as dates; else loadingContent">
     <ion-row>
       <ion-col size="12" size-md="5">
         <ion-card>
@@ -77,8 +77,8 @@
                         </ion-col>
                         <ion-col size="3" size-lg="2">
                           <ng-container>
-                            <ion-button class="cursor-pointer" expand="block" *ngIf="slot.status === 'Available'">
-                              Close Slot
+                            <ion-button class="cursor-pointer" expand="block" (click)="cancelAvailableSlot(slot)" *ngIf="slot.status === 'Available'">
+                              Cancel Slot
                             </ion-button>
                             <ion-button class="cursor-pointer" expand="block" [disabled]="slot.status === 'Clossed'"
                               *ngIf="slot.status !== 'Available'">
@@ -129,8 +129,22 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-
+  <ng-template #loadingContent>
+    <ion-grid>
+      <ion-row>
+        <ion-col size-xs="12" size-md="5">
+          <ion-skeleton-text animated style="width: 100%; line-height: 300px;"></ion-skeleton-text>
+        </ion-col>
+        <ion-col size-xs="12" size-md="7">
+          <ion-item *ngFor="let _ of skeletonItemsNumber">
+            <ion-skeleton-text animated style="width: 100%; line-height: 50px;"></ion-skeleton-text>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
 </ion-content>
+
 <ion-footer>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button class="colored-background">

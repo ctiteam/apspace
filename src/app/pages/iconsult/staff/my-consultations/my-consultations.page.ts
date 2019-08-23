@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -9,6 +9,8 @@ import * as moment from 'moment';
 import { WsApiService } from 'src/app/services';
 import { LecturerConsultation } from 'src/app/interfaces';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
+import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
+import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
 
 @Component({
@@ -19,12 +21,13 @@ import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 export class MyConsultationsPage implements OnInit {
   slots$: Observable<{}>;
   todaysDate = this.iconsultFormatDate(new Date());
-
-  summaryDetails = { // Group of summary data used inside the summary modal
-    totalOpenedSlots: 0,
-    totalAvailableSlots: 0,
-    totalUnavailalbeSlots: 0,
-    totalBookedSlots: 0,
+  skeletonItemsNumber = new Array(4);
+  loading: HTMLIonLoadingElement;
+  summaryDetails: { // Group of summary data used inside the summary modal
+    totalOpenedSlots: number,
+    totalAvailableSlots: number,
+    totalUnavailalbeSlots: number,
+    totalBookedSlots: number,
   };
 
   skeltonArray = new Array(4); // loading
@@ -40,7 +43,10 @@ export class MyConsultationsPage implements OnInit {
 
   constructor(
     private ws: WsApiService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private alertController: AlertController,
+    private loadingController: LoadingController,
+    private toastCtrl: ToastController
   ) { }
 
   iconsultFormatDate(date: Date) { // Format used in iConsult date
@@ -60,7 +66,95 @@ export class MyConsultationsPage implements OnInit {
     this.getData();
   }
 
+  async cancelAvailableSlot(slot: LecturerConsultation) {
+    console.log(slot);
+    const alert = await this.alertController.create({
+      header: 'Cancelling an opened slot',
+      message: `You are about to cancel the slot opened on ${slot.dateandtime.split(' ')[0]} at ${slot.dateandtime.split(' ')[1]}`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => { }
+        }, {
+          text: 'Submit',
+          handler: () => {
+            this.presentLoading();
+            const cancellationBody = {
+              availibility_id: slot.availibilityid,
+              date: slot.date,
+              timee: slot.timee,
+              status: 1, // always 1
+              slotid: null // always null
+            };
+            this.sendCancelSlotRequest(cancellationBody).subscribe(
+              {
+                next: res => {
+                  this.daysConfigrations = [];
+                  this.showToastMessage('Slot has been cancelled successfully!', 'success');
+                },
+                error: err => {
+                  this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
+                },
+                complete: () => {
+                  this.dismissLoading();
+                  this.getData();
+                }
+              }
+            );
+
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  showToastMessage(message: string, color: 'danger' | 'success') {
+    this.toastCtrl.create({
+      message,
+      duration: 6000,
+      position: 'top',
+      color,
+      showCloseButton: true,
+      animated: true,
+      enterAnimation: toastMessageEnterAnimation,
+      leaveAnimation: toastMessageLeaveAnimation
+    }).then(toast => toast.present());
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
+  }
+
+  sendCancelSlotRequest(cancelledSlotDetails: any) {
+    return this.ws.post<any>('/iconsult/lecCancelfreeslot', {
+      body: cancelledSlotDetails,
+    });
+  }
+
   getData() { // to be changed with refresher
+    this.summaryDetails = { // Used here to calculate the number again after refresh
+      totalOpenedSlots: 0,
+      totalAvailableSlots: 0,
+      totalUnavailalbeSlots: 0,
+      totalBookedSlots: 0,
+    };
+    this.options = {
+      from: new Date(),
+      to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
+      daysConfig: this.daysConfigrations
+    };
     this.slots$ = this.ws.get<LecturerConsultation[]>('/iconsult/upcomingconlec', true).pipe(
       map(slots => slots.filter(slot => slot.status !== 'Clossed')), // filter closed slots
       map(
@@ -101,7 +195,7 @@ export class MyConsultationsPage implements OnInit {
             this.daysConfigrations.push({
               date: moment(date, 'YYYY-MM-DD').toDate(),
               subTitle: '.',
-              cssClass,
+              cssClass: cssClass + ' colored',
               disable: false
             });
           }
