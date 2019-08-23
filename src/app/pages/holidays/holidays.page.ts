@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Holidays, EventComponentConfigurations, Holiday } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, finalize } from 'rxjs/operators';
 import * as moment from 'moment';
 import { MenuController } from '@ionic/angular';
 
@@ -40,14 +40,20 @@ export class HolidaysPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.filteredHoliday$ = this.getHolidays().pipe(
-      tap(_ => this.onFilter())
-    );
+    this.doRefresh();
   }
 
   getHolidays() {
     return this.holiday$ = this.ws.get<Holidays>(`/transix/holidays`, true, { auth: false }).pipe(
       map(res => res.holidays.filter(holiday => +holiday.holiday_start_date.split('-')[0] === this.todaysDate.getFullYear()))
+    );
+  }
+
+  doRefresh(event?) {
+    console.log('Begin async operation');
+    this.filteredHoliday$ = this.getHolidays().pipe(
+      tap(_ => this.onFilter()),
+      finalize(() => event && event.target.complete()),
     );
   }
 

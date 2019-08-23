@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, finalize } from 'rxjs/operators';
 
 import { IonContent, MenuController } from '@ionic/angular';
 
@@ -65,23 +65,32 @@ export class FeesPage implements OnInit {
       }[];
     };
   } = {
-    type: 'bar',
-    options: {
-      scales: {
-        xAxes: [{ stacked: true }],
-        yAxes: [{ stacked: true }]
+      type: 'bar',
+      options: {
+        scales: {
+          xAxes: [{ stacked: true }],
+          yAxes: [{ stacked: true }]
+        },
+        responsive: true,
+        legend: {}
       },
-      responsive: true,
-      legend: {}
-    },
-    data: null
-  };
+      data: null
+    };
 
   numberOfSkeletons = new Array(6);
 
-  constructor(private menuCtrl: MenuController, private ws: WsApiService) {}
+  constructor(private menuCtrl: MenuController, private ws: WsApiService) { }
 
   ngOnInit() {
+    this.doRefresh();
+  }
+
+  openFilterMenu() {
+    this.menuCtrl.toggle();
+  }
+
+  doRefresh(event?) {
+    console.log('Begin async operation');
     const that = this;
 
     this.totalSummary$ = this.ws.get('/student/summary_overall_fee', true);
@@ -123,7 +132,10 @@ export class FeesPage implements OnInit {
             visible: true
           })
         );
-      })
+      }),
+      finalize(() => event && event.target.complete()),
+
+
     );
 
     this.financialsChart.options.legend.onClick = function(
@@ -135,11 +147,9 @@ export class FeesPage implements OnInit {
       that.labels[legendItem.datasetIndex].visible = legendItem.hidden;
       that.visibleLabels = that.getVisibleLabels();
     };
+
   }
 
-  openFilterMenu() {
-    this.menuCtrl.toggle();
-  }
 
   updateChartLabelVisibility(labelIndex: number, visible: boolean) {
     this.financialsChartComponent.chart.data.datasets[labelIndex]._meta['0'].hidden = !visible;

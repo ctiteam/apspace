@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Platform, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { NotificationService } from 'src/app/services';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, finalize } from 'rxjs/operators';
 import { NotificationModalPage } from './notification-modal';
 
 @Component({
@@ -27,10 +27,11 @@ export class NotificationsPage implements OnInit {
     this.doRefresh();
   }
 
-  doRefresh() {
+  doRefresh(event?) {
     this.messages$ = this.notificationService.getMessages().pipe(
       map((res: {history: []}) => res.history),
       tap(t => console.log(t)),
+      finalize(() => event && event.target.complete()),
     );
   }
 

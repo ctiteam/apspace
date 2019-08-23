@@ -93,6 +93,10 @@
 </ion-menu>
 
 <ion-content id="content" padding>
+  <!-- refresher -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div *ngIf="filteredTrip$ | async as trips; else loadingTrips" no-padding>
     <ion-grid>
       <ion-row>
@@ -133,8 +137,8 @@
                   </h2>
                   <ion-grid no-padding>
                     <ion-row>
-                      <ion-col class="secondary-txt-color" *ngFor="let tripData of destination.value" size="3" size-md="4"
-                        text-center>
+                      <ion-col class="secondary-txt-color" *ngFor="let tripData of destination.value" size="3"
+                        size-md="4" text-center>
                         {{tripData.trip_time}}
                       </ion-col>
                     </ion-row>

@@ -52,6 +52,10 @@
 </ion-menu>
 
 <ion-content id="fee-content" #content>
+  <!-- refresher -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div class="ion-no-padding">
     <ion-grid>
       <ion-row class="ion-justify-content-center">
