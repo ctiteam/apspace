@@ -63,7 +63,7 @@ export class MorePage implements OnInit {
       group: 'Main',
       url: 'news',
       img: 'assets/img/news.png',
-      role: Role.Student,
+      role: Role.Student | Role.Lecturer | Role.Admin,
       tags: []
     },
     {
@@ -146,6 +146,14 @@ export class MorePage implements OnInit {
       tags: []
     },
     {
+      title: 'Student Timetable',
+      group: 'Course Related',
+      url: 'student-timetable',
+      img: 'assets/img/timetable.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    {
       title: 'Exam Schedule',
       group: 'Course Related',
       url: 'exam-schedule',
@@ -159,14 +167,6 @@ export class MorePage implements OnInit {
       url: 'http://opac.apiit.edu.my/cgi-bin/koha/opac-user.pl',
       img: 'assets/img/my-library.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'Student Timetable',
-      group: 'Course Related',
-      url: 'student-timetable',
-      img: 'assets/img/timetable.png',
-      role: Role.Lecturer | Role.Admin,
       tags: []
     },
     {
