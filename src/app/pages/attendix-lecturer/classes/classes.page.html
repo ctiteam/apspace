@@ -11,6 +11,18 @@
   <ion-grid>
     <ion-row justify-content-center>
       <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+        <ion-item lines="none">
+          <ion-buttons slot="end">
+            <ion-button>
+              <ion-checkbox></ion-checkbox>
+              <ion-label>Active</ion-label>
+            </ion-button>
+            <ion-button>
+              <ion-checkbox></ion-checkbox>
+              <ion-label>Replacement</ion-label>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
         <div padding>
             <ion-item>
               <ion-label>Class Code</ion-label>
@@ -28,12 +40,14 @@
               <ion-input [(ngModel)]="endTime" placeholder="End Time"></ion-input>
             </ion-item>
 
-            <ion-item>
-              <ion-input [(ngModel)]="classType" placeholder="Class Type"></ion-input>
-            </ion-item>
+          <ion-item>
+            <ion-input [(ngModel)]="classType" placeholder="Class Type"></ion-input>
+          </ion-item>
         </div>
         <div padding>
-          <ion-button (click)="markAttendance" size="large" href="#" expand="block">Submit</ion-button>
+          <ion-button [routerLink]="['/attendix/take-attendance']" size="large" expand="block">
+            Take Attendance
+          </ion-button>
         </div>
       </ion-col>
     </ion-row>

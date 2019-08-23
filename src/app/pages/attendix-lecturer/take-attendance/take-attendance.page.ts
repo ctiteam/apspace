@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { Observable, Subject, merge, timer, NEVER } from 'rxjs';
@@ -40,12 +41,13 @@ export class TakeAttendancePage implements OnInit {
     private newStatus: NewStatusGQL,
     private markAttendance: MarkAttendanceGQL,
     public toastCtrl: ToastController,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
     // totp options
     totp._options.digits = 3;
-
+    this.schedule = this.route.snapshot.params.schedule;
     const schedule = this.schedule;
 
     let studentsById: { [student: string]: Status };

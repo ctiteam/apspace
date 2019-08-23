@@ -14,6 +14,10 @@ const routes: Routes = [
   {
     path: '',
     component: TakeAttendancePage
+  },
+  {
+    path: ':schedule',
+    component: TakeAttendancePage
   }
 ];
 
