@@ -240,14 +240,14 @@ export class MorePage implements OnInit {
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: []
     },
-    // {
-    //   title: 'Operation Hours',
-    //   group: 'Others',
-    //   url: '',
-    //   img: 'assets/img/operation-hours.png',
-    //   role: Role.Student | Role.Lecturer | Role.Admin,
-    //   tags: []
-    // },
+    {
+      title: 'Operation Hours',
+      group: 'Others',
+      url: 'operation-hours',
+      img: 'assets/img/operation-hours.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: []
+    },
     {
       title: 'Notification',
       group: 'Others',
