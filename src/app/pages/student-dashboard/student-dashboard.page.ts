@@ -45,19 +45,19 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   // TODAY'S SCHEDULE
   todaysSchedule$: Observable<EventComponentConfigurations[] | any>;
   todaysScheduleCardConfigurations: DashboardCardComponentConfigurations = {
-    withOptionsButton: true,
-    options: [
-      {
-        title: 'set alarm before 15 minutes of next schdule',
-        icon: 'alarm',
-        callbackFunction: this.testCallBack
-      },
-      {
-        title: 'delete',
-        icon: 'trash',
-        callbackFunction: this.testCallBack
-      }
-    ],
+    withOptionsButton: false,
+    // options: [
+    //   {
+    //     title: 'set alarm before 15 minutes of next schdule',
+    //     icon: 'alarm',
+    //     callbackFunction: this.testCallBack
+    //   },
+    //   {
+    //     title: 'delete',
+    //     icon: 'trash',
+    //     callbackFunction: this.testCallBack
+    //   }
+    // ],
     cardTitle: 'Today\'s Schedule',
     // cardSubtitle: 'Next in: 1 hrs, 25 min'
   };
@@ -65,19 +65,19 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   // UPCOMING EVENTS
   upcomingEvent$: Observable<EventComponentConfigurations[]> | any;
   upcomingEventsCardConfigurations: DashboardCardComponentConfigurations = {
-    withOptionsButton: true,
-    options: [
-      {
-        title: 'set alarm before 15 minutes of next schdule',
-        icon: 'alarm',
-        callbackFunction: this.testCallBack
-      },
-      {
-        title: 'delete',
-        icon: 'trash',
-        callbackFunction: this.testCallBack
-      }
-    ],
+    withOptionsButton: false,
+    // options: [
+    //   {
+    //     title: 'set alarm before 15 minutes of next schdule',
+    //     icon: 'alarm',
+    //     callbackFunction: this.testCallBack
+    //   },
+    //   {
+    //     title: 'delete',
+    //     icon: 'trash',
+    //     callbackFunction: this.testCallBack
+    //   }
+    // ],
     cardTitle: 'Upcoming Events',
     cardSubtitle: 'Today: ' + moment().format('DD MMMM YYYY')
   };
@@ -171,19 +171,19 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   busCardConfigurations: DashboardCardComponentConfigurations = {
     cardTitle: 'Upcoming Trips',
     contentPadding: false,
-    withOptionsButton: true,
-    options: [
-      {
-        title: 'set alarm before 15 minutes of next schdule',
-        icon: 'alarm',
-        callbackFunction: this.testCallBack
-      },
-      {
-        title: 'delete',
-        icon: 'trash',
-        callbackFunction: this.testCallBack
-      }
-    ],
+    withOptionsButton: false,
+    // options: [
+    //   {
+    //     title: 'set alarm before 15 minutes of next schdule',
+    //     icon: 'alarm',
+    //     callbackFunction: this.testCallBack
+    //   },
+    //   {
+    //     title: 'delete',
+    //     icon: 'trash',
+    //     callbackFunction: this.testCallBack
+    //   }
+    // ],
   };
 
   // CGPA
