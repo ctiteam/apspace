@@ -36,11 +36,11 @@ export class StudentSurveyPage implements OnInit {
   intakes: any[];
   modules: any;
   msqAnswers = [
-    { id: '1', content: 'Strongly Disagree' },
-    { id: '2', content: 'Disagree' },
-    { id: '3', content: 'Neither' },
-    { id: '4', content: 'Agree' },
     { id: '5', content: 'Strongly Agree' },
+    { id: '4', content: 'Agree' },
+    { id: '3', content: 'Neither' },
+    { id: '2', content: 'Disagree' },
+    { id: '1', content: 'Strongly Disagree' },
   ];
   response = {
     class_code: '',
@@ -188,6 +188,7 @@ export class StudentSurveyPage implements OnInit {
             this.surveyType = 'Mid-Semester';
           }
         }
+        console.log(this.surveyType);
         this.getSurveys(this.intakeCode);
       }
     });

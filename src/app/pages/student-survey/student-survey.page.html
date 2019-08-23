@@ -141,14 +141,6 @@
                                 <ion-list class="listContent">
                                   <ion-radio-group
                                     [(ngModel)]="response.answers[response.answers.indexOf(getAnswerByQuestionId(surveyQuestion.id))].content">
-                                    <ion-item lines="none" *ngIf="!surveyQuestion.applicable"
-                                      class="d-block d-lg-inline na">
-                                      <ion-radio class="ansRadioBtn" value="0">
-                                      </ion-radio>
-                                      <ion-label style="font-size: 14px;">
-                                        N/A
-                                      </ion-label>
-                                    </ion-item>
                                     <ion-item lines="none" class="d-block d-lg-inline rdBtn"
                                       [class.rdBtn-with-na]="!surveyQuestion.applicable"
                                       *ngFor="let mcqAnswer of msqAnswers">
@@ -156,6 +148,14 @@
                                       </ion-radio>
                                       <ion-label class="rdBtnContent">
                                         {{mcqAnswer.content}}
+                                      </ion-label>
+                                    </ion-item>
+                                    <ion-item lines="none" *ngIf="!surveyQuestion.applicable"
+                                      class="d-block d-lg-inline na">
+                                      <ion-radio class="ansRadioBtn" value="0">
+                                      </ion-radio>
+                                      <ion-label style="font-size: 14px;">
+                                        N/A
                                       </ion-label>
                                     </ion-item>
                                   </ion-radio-group>
