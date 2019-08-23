@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSelect, ModalController, NavController, ToastController,AlertController } from '@ionic/angular';
+import { IonSelect, ModalController, NavController, ToastController, AlertController, LoadingController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
@@ -10,7 +10,6 @@ import {
 } from '../../services';
 import { toastMessageEnterAnimation } from '../../animations/toast-message-animation/enter';
 import { toastMessageLeaveAnimation } from '../../animations/toast-message-animation/leave';
-import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-settings',
@@ -23,6 +22,7 @@ export class SettingsPage implements OnInit {
   activeAccentColor: string;
   darkThemeEnabled = false;
   pureDarkThemeEnabled = false;
+  loading: HTMLIonLoadingElement;
   // BUS
 
   busShuttleServiceSettings = {
@@ -67,6 +67,7 @@ export class SettingsPage implements OnInit {
     private userSettings: UserSettingsService,
     private ws: WsApiService,
     private alertCtrl: AlertController,
+    private loadingController: LoadingController,
   ) {
     this.userSettings
       .darkThemeActivated()
@@ -211,6 +212,19 @@ export class SettingsPage implements OnInit {
       leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
+  }
 
   async resetByod() {
     const confirm = await this.alertCtrl.create({
@@ -225,6 +239,7 @@ export class SettingsPage implements OnInit {
         {
           text: 'Yes',
           handler: () => {
+            this.presentLoading();
             this.ws.get('/byod/reset').subscribe(
               data => {
                 console.log(data);
@@ -233,7 +248,8 @@ export class SettingsPage implements OnInit {
                 console.log(err);
               },
               async () => {
-                const toast =  await this.toastCtrl.create({
+                this.dismissLoading();
+                const toast = await this.toastCtrl.create({
                   message: 'Your request has been sent to the helpdesk support system and it is being processed now.',
                   duration: 2000
                 });
