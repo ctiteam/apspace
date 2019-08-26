@@ -81,15 +81,15 @@
           </ion-select>
         </ion-item>
         <ion-item>
-          <ion-label>Upcoming only</ion-label>
+          <ion-label>Show</ion-label>
           <ion-select interface="popover" [(ngModel)]="filterObject.show" (ngModelChange)="onFilter()">
-            <ion-select-option value="all">No</ion-select-option>
-            <ion-select-option value="upcoming">Yes</ion-select-option>
+            <ion-select-option value="all">All Holidays</ion-select-option>
+            <ion-select-option value="upcoming">Upcoming Holidays Only</ion-select-option>
           </ion-select>
         </ion-item>
         <div padding>
           <ion-button fill="outline" color="danger" expand="block" (click)="clearFilter()">
-            clear filter
+            Clear Filters
             <ion-icon slot="end" name="trash"></ion-icon>
           </ion-button>
         </div>
@@ -98,14 +98,14 @@
   </ion-content>
 </ion-menu>
 
-<ion-content id="content" padding>
+<ion-content id="content">
   <!-- refresher -->
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-grid no-padding>
-    <ion-row>
-      <ion-col size="12">
+    <ion-row no-padding>
+      <ion-col no-padding size="12" size-md="8" offset-md="2" size-lg="6" offset-md="3">
         <events-list [observable$]="filteredHoliday$"></events-list>
       </ion-col>
     </ion-row>
