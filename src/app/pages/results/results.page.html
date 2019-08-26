@@ -7,7 +7,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button fill="outline" size="small" class="notification-button colored-border" (click)="showActionSheet()">
+      <ion-button fill="outline" size="small" class="colored-text notification-button colored-border" (click)="showActionSheet()">
         Intakes
       </ion-button>
     </ion-buttons>
@@ -19,7 +19,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ng-template [ngIf]="block">
+  <ng-template [ngIf]="block" [ngIfElse]="accountIsBlocked">
     <ion-grid>
       <ion-row>
         <ion-col size-xs="12" size-lg="3">
@@ -29,7 +29,8 @@
             </ng-template>
           </ng-template>
           <ng-template [ngIf]="courseDetail$ | async" [ngIfElse]="loading">
-            <ion-card *ngFor="let detail of (courseDetail$ | async); trackBy:trackByFn" style="margin-bottom: 5px !important;">
+            <ion-card *ngFor="let detail of (courseDetail$ | async); trackBy:trackByFn"
+              style="margin-bottom: 5px !important;">
               <div *ngIf="detail.SEMESTER">
                 <ion-card-header class="colored-border">
                   <ion-card-title>Semester {{ detail.SEMESTER }}</ion-card-title>
@@ -43,21 +44,30 @@
         <ion-col size-xs="12" size-lg="9">
           <ng-template [ngIf]="result$ | async" [ngIfElse]="loading">
             <ng-template [ngIf]="(result$ | async) && (result$ | async)?.length > 0" [ngIfElse]="nodata">
-              <ion-card no-padding  class="table-top">
+              <ion-card no-padding class="table-top">
                 <ion-card-content>
                   <ion-grid>
                     <ion-row>
-                      <ion-col size="12" size-sm="3"><h2 class="bold">Module</h2></ion-col>
-                      <ion-col size="12" size-sm="3"><h2 class="bold">Grade</h2></ion-col>
-                      <ion-col size="12" size-sm="3"><h2 class="bold">Grade Point</h2></ion-col>
-                      <ion-col size="12" size-sm="3"><h2 class="bold">Internal Result Release Date</h2></ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2 class="bold">Module</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2 class="bold">Grade</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2 class="bold">Grade Point</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2 class="bold">Internal Result Release Date</h2>
+                      </ion-col>
                     </ion-row>
                   </ion-grid>
                 </ion-card-content>
               </ion-card>
 
               <ion-card no-padding *ngFor="let result of (result$ | async); last as last; trackBy: trackByFn">
-                <ion-card-header class="special-card-header colored-border" style="border-bottom: 2px solid var(--primary-color) !important">
+                <ion-card-header class="special-card-header colored-border"
+                  style="border-bottom: 2px solid var(--primary-color) !important">
                   <h4>{{ result.MODULE_DESCRIPTION }}</h4>
                 </ion-card-header>
                 <ion-card-content>
@@ -81,7 +91,7 @@
 
                       <ion-col *ngIf="result.RECOMMENDATION">
                         <span class="bold">Recommendation:</span> <br>
-                        <span style="color: red">{{ result.RECOMMENDATION }}</span>
+                        <span class="danger-text">{{ result.RECOMMENDATION }}</span>
                       </ion-col>
                     </ion-row>
                   </ion-grid>
@@ -141,9 +151,9 @@
                     </h2>
 
                     <ng-template [ngIf]="(mpuLegend$ | async)" let-mpu>
-                        <h2 *ngIf="mpu.length > 0">
-                          {{ mpu[0].MPU }}
-                        </h2>
+                      <h2 *ngIf="mpu.length > 0">
+                        {{ mpu[0].MPU }}
+                      </h2>
                     </ng-template>
                   </div>
                 </ion-card-content>
@@ -172,6 +182,26 @@
               </ion-card>
             </div>
           </ng-template>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
+  <ng-template #accountIsBlocked>
+    <ion-grid>
+      <ion-row>
+        <ion-col size-xs="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3">
+          <ion-card class="account-disabled">
+            <ion-card-header>
+              <ion-card-title>
+                <h4 class="responsive-h1 danger-text">
+                  Your account has been disabled
+                </h4>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content padding>
+              <pre>{{ message }}</pre>
+            </ion-card-content>
+          </ion-card>
         </ion-col>
       </ion-row>
     </ion-grid>
