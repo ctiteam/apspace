@@ -25,19 +25,19 @@
             <ion-card-content
               *ngIf=" department.shifts || department.dept_email || department.dept_phone ; else noData">
               <ion-text>Operation hours</ion-text>
-              <ion-grid class="ion-padding-start">
-                <ion-row class="ion-hide-md-down">
-                  <ion-col size-xs="12" size-lg="4">
-                    <ion-text class="text-bold ">Day</ion-text>
-                  </ion-col>
-                  <ion-col size-xs="12" size-lg="4">
-                    <ion-text class="text-bold ">Open time</ion-text>
-                  </ion-col>
-                  <ion-col size-xs="12" size-lg="4">
-                    <ion-text class="text-bold ">Close time</ion-text>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
+                  <ion-grid class="ion-padding-start " >
+                      <ion-row class="hiddenData">
+                        <ion-col size-xs="12" size-lg="4">
+                          <ion-text class="text-bold ">Day</ion-text>
+                        </ion-col>
+                        <ion-col size-xs="12" size-lg="4">
+                          <ion-text class="text-bold ">Open time</ion-text>
+                        </ion-col>
+                        <ion-col size-xs="12" size-lg="4">
+                          <ion-text class="text-bold ">Close time</ion-text>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
               <div *ngIf=" department.shifts; else noOperation">
                 <div *ngFor="let shift of department.shifts | keyvalue">
                   <ion-grid class="ion-padding-start">
