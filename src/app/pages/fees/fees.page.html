@@ -157,7 +157,7 @@
                               <h3>Due Date</h3>
                             </ion-label>
                             <ion-note color="text-color" slot="end">
-                              {{ summary.PAYMENT_DUE_DATE || 'N/A' }}
+                              {{ summary.PAYMENT_DUE_DATE || 'N/A' | date: "EEE, d MMM y"  }}
                             </ion-note>
                           </ion-item>
                           <ion-item lines="none">
@@ -245,19 +245,19 @@
                           <ion-item lines="none">
                             Due Date
                             <ion-note color="text-color" slot="end">
-                              {{ bankDraft.BANKDRAFT_DUE_DATE }}
+                              {{ bankDraft.BANKDRAFT_DUE_DATE | date: "EEE, d MMM y"  }}
                             </ion-note>
                           </ion-item>
                           <ion-item lines="none">
                             Date Collected
                             <ion-note color="text-color" slot="end">
-                              {{ bankDraft.DATE_COLLECTED }}
+                              {{ bankDraft.DATE_COLLECTED | date: "EEE, d MMM y"  }}
                             </ion-note>
                           </ion-item>
                           <ion-item lines="none">
                             Registration Date
                             <ion-note color="text-color" slot="end">
-                              {{ bankDraft.REGISTRATION_DATE }}
+                              {{ bankDraft.REGISTRATION_DATE | date: "EEE, d MMM y"  }}
                             </ion-note>
                           </ion-item>
                           <ion-item lines="none">
@@ -316,7 +316,7 @@
                           <ion-item lines="none">
                             <h3>Due Date</h3>
                             <ion-note color="text-color" slot="end">
-                              {{ detail.DUE_DATE }}
+                              {{ detail.DUE_DATE | date: "EEE, d MMM y" }}
                             </ion-note>
                           </ion-item>
                           <ion-item lines="none">

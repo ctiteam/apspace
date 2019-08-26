@@ -76,7 +76,7 @@
                       </ion-col>
                       <ion-col size="12" size-sm="3">
                         <span class="marker">Internal Result: </span>
-                        {{ result.INTERNAL_RESULT_RELEASE_DATE || "N/A" }}
+                        {{ result.INTERNAL_RESULT_RELEASE_DATE || "N/A" | date: "EEE, d MMM y"  }}
                       </ion-col>
 
                       <ion-col *ngIf="result.RECOMMENDATION">

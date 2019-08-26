@@ -44,7 +44,7 @@
                         <ion-item lines="none">
                           <ion-icon name="calendar"></ion-icon>
                           <p padding-start>
-                            {{ exam.since | date: "EEE, d MMM, y" }}
+                            {{ exam.since | date: "EEE, d MMM y" }}
                           </p>
                         </ion-item>
                         <ion-item lines="none">
@@ -64,7 +64,7 @@
                             </span>
                           </ion-col>
                           <ion-col size="5">
-                            <p>{{ exam.docketsDue | date }}</p>
+                            <p>{{ exam.docketsDue | date: "EEE, d MMM y"  }}</p>
                           </ion-col>
                         </ion-row>
                         <ion-row>
@@ -87,7 +87,7 @@
                               </span>
                             </ion-col>
                             <ion-col size="5">
-                              <p>{{ exam.resultDate | date }}</p>
+                              <p>{{ exam.resultDate | date: "EEE, d MMM y" }}</p>
                             </ion-col>
                           </ion-row>
                         </div>
