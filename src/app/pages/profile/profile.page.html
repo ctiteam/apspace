@@ -151,10 +151,15 @@
           </ion-card>
         </ng-template>
         <ng-template #loadingPicture>
-          loading the staff image...
+          <div margin-top>
+            <ion-skeleton-text animated style="width: 122px; line-height: 150px;margin: auto"></ion-skeleton-text>
+          </div>
         </ng-template>
         <ng-template #loadingProfile>
-          Loading the profile
+          <ion-item lines="none" *ngFor="let s of skeltons">
+            <ion-skeleton-text animated [style.width]="s + '%'" style="line-height: 30px; margin:auto;">
+            </ion-skeleton-text>
+          </ion-item>
         </ng-template>
 
       </ion-col>
