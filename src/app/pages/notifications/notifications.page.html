@@ -12,7 +12,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ng-template [ngIf]="cordova" [ngIfElse]="showNotifications">
+  <ng-template [ngIf]="!cordova" [ngIfElse]="showNotifications">
     <ion-card>
       <ion-card-content>
         This service is available for mobile app only.
