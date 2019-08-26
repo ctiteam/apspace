@@ -99,6 +99,10 @@
 </ion-menu>
 
 <ion-content id="content" padding>
+  <!-- refresher -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-grid no-padding>
     <ion-row>
       <ion-col size="12">

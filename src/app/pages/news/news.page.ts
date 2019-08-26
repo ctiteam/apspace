@@ -25,6 +25,7 @@ export class NewsPage implements OnInit {
     public navCtrl: NavController,
   ) { }
 
+
   doRefresh(refresher?) {
     this.news$ = this.news.get(Boolean(refresher)).pipe(
       finalize(() => refresher && refresher.target.complete()),

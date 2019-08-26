@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BusTrips, BusTrip, APULocation, APULocations } from 'src/app/interfaces';
 import { Observable, forkJoin } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, finalize } from 'rxjs/operators';
 import * as moment from 'moment';
 import { MenuController } from '@ionic/angular';
 import { SettingsService, WsApiService } from 'src/app/services';
@@ -53,17 +53,22 @@ export class BusShuttleServicesPage implements OnInit {
     if (this.settings.get('tripTo')) {
       this.filterObject.toLocation = this.settings.get('tripTo');
     }
+    this.doRefresh();
 
-
-    this.filteredTrip$ = forkJoin([this.getLocations(), this.getTrips()]).pipe(
-      map(res => res[1]),
-      tap(_ => this.onFilter())
-    );
   }
 
   getTrips() {
     return this.trip$ = this.ws.get<BusTrips>(`/transix/trips/applicable`, true, { auth: false }).pipe(
       map(res => res.trips),
+    );
+  }
+
+  doRefresh(event?) {
+    console.log('Begin async operation');
+    this.filteredTrip$ = forkJoin([this.getLocations(), this.getTrips()]).pipe(
+      map(res => res[1]),
+      tap(_ => this.onFilter()),
+      finalize(() => event && event.target.complete()),
     );
   }
 
@@ -185,5 +190,22 @@ export class BusShuttleServicesPage implements OnInit {
         return location.location_color;
       }
     }
+  }
+  ionRefresh(event) {
+    console.log('Pull Event Triggered!');
+    setTimeout(() => {
+      console.log('Async operation has ended');
+
+      // complete()  signify that the refreshing has completed and to close the refresher
+      event.target.complete();
+    }, 2000);
+  }
+  ionPull(event) {
+    // Emitted while the user is pulling down the content and exposing the refresher.
+    console.log('ionPull Event Triggered!');
+  }
+  ionStart(event) {
+    // Emitted when the user begins to start pulling down.
+    console.log('ionStart Event Triggered!');
   }
 }

@@ -11,6 +11,7 @@
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  
   <div class="masonry-list">
     <ng-template let-news [ngIf]="news$ | async" [ngIfElse]="loadingNews">
       <ng-template [ngIf]="news && news.length > 0" [ngIfElse]="nonews">

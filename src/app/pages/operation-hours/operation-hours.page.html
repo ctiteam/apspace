@@ -7,6 +7,10 @@
   </ion-toolbar>
 </ion-header>
 <ion-content id="content">
+  <!-- refresher -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div class="masonry-list" *ngIf="quixCustomers$ | async as quixCustomers">
     <div *ngFor=" let customer of quixCustomers ">
       <div class="masonry-item " *ngFor="let department of customer.company_departments">
@@ -14,8 +18,8 @@
           <ion-card>
             <ion-card-header>
               <ion-card-title class="responsive-h1">
-                <ion-icon name="{{department.dept_icon}}" [style.color]="department.dept_icon_color" ></ion-icon>
-               {{department.dept_name}} | {{customer.company_id}}
+                <ion-icon name="{{department.dept_icon}}" [style.color]="department.dept_icon_color"></ion-icon>
+                {{department.dept_name}} | {{customer.company_id}}
               </ion-card-title>
             </ion-card-header>
             <ion-card-content
@@ -23,13 +27,13 @@
               <ion-text>Operation hours</ion-text>
               <ion-grid class="ion-padding-start">
                 <ion-row class="ion-hide-md-down">
-                  <ion-col size-xs="12" size-lg="4" >
+                  <ion-col size-xs="12" size-lg="4">
                     <ion-text class="text-bold ">Day</ion-text>
                   </ion-col>
-                  <ion-col size-xs="12" size-lg="4" >
+                  <ion-col size-xs="12" size-lg="4">
                     <ion-text class="text-bold ">Open time</ion-text>
                   </ion-col>
-                  <ion-col size-xs="12" size-lg="4" >
+                  <ion-col size-xs="12" size-lg="4">
                     <ion-text class="text-bold ">Close time</ion-text>
                   </ion-col>
                 </ion-row>
@@ -53,7 +57,7 @@
                         </div>
                       </ion-col>
                       <ion-col size="4">
-                        <div *ngFor="let slot of shift.value"  class="timeTxt">
+                        <div *ngFor="let slot of shift.value" class="timeTxt">
                           {{ slot.end_time }}
                         </div>
                       </ion-col>
@@ -62,7 +66,7 @@
                 </div>
               </div>
               <ng-template #noOperation>
-                <h3 class="ion-padding-start ion-text-center" > No Operation hours provided</h3>
+                <h3 class="ion-padding-start ion-text-center"> No Operation hours provided</h3>
               </ng-template>
               <section>
                 <ion-text class="emailClass">Email:
@@ -70,7 +74,7 @@
                     <a href="{{department.dept_email}}" class="ion-padding-start">{{department.dept_email}}</a>
                   </div>
                   <ng-template #noEmail>
-                    <h3 class="ion-padding-start ion-text-center" > No email provided</h3>
+                    <h3 class="ion-padding-start ion-text-center"> No email provided</h3>
                   </ng-template>
                 </ion-text>
                 <ion-text>Phone/General Line</ion-text>
@@ -80,7 +84,7 @@
                   </div>
                 </div>
                 <ng-template #noPhone>
-                  <h3 class="ion-padding-start ion-text-center" > No phone provided</h3>
+                  <h3 class="ion-padding-start ion-text-center"> No phone provided</h3>
                 </ng-template>
               </section>
             </ion-card-content>
