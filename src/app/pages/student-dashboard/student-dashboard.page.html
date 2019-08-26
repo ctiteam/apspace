@@ -182,20 +182,39 @@
 
       <!-- CGPA -->
       <div *ngIf="shownDashboardSections.includes('cgpa')">
-        <div class="masonry-item" *ngIf="cgpaPerIntake$ | async; else loadingCgpaPerIntake">
-          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-            <ion-icon name="move" class="handle"></ion-icon>
+        <div class="masonry-item" *ngIf="!block; else accountDisabled">
+          <div *ngIf="cgpaPerIntake$ | async; else loadingCgpaPerIntake">
+            <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+              <ion-icon name="move" class="handle"></ion-icon>
+            </div>
+            <dashboard-card [cardTitle]='cgpaCardConfigurations.cardTitle'
+              [cardSubtitle]='"Overall: " + (overallCgpa | number: "1.0-2")'
+              [contentPadding]='cgpaCardConfigurations.contentPadding'
+              [withOptionsButton]='cgpaCardConfigurations.withOptionsButton'>
+              <chart *ngIf="cgpaChart.data" [type]="cgpaChart.type" [data]="cgpaChart.data"
+                [options]="cgpaChart.options">
+              </chart>
+            </dashboard-card>
           </div>
-          <dashboard-card [cardTitle]='cgpaCardConfigurations.cardTitle'
-            [cardSubtitle]='"Overall: " + (overallCgpa | number: "1.0-2")'
-            [contentPadding]='cgpaCardConfigurations.contentPadding'
-            [withOptionsButton]='cgpaCardConfigurations.withOptionsButton'>
-            <chart *ngIf="cgpaChart.data" [type]="cgpaChart.type" [data]="cgpaChart.data" [options]="cgpaChart.options">
-            </chart>
-          </dashboard-card>
+          <ng-template #loadingCgpaPerIntake>
+            loading the cgpa section
+          </ng-template>
         </div>
-        <ng-template #loadingCgpaPerIntake>
-          loading the cgpa section
+        <ng-template #accountDisabled>
+          <div class="masonry-item">
+            <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+              <ion-icon name="move" class="handle"></ion-icon>
+            </div>
+            <dashboard-card [cardTitle]='cgpaCardConfigurations.cardTitle'
+              [cardSubtitle]='"Overall: " + (overallCgpa | number: "1.0-2")'
+              [contentPadding]='cgpaCardConfigurations.contentPadding'
+              [withOptionsButton]='cgpaCardConfigurations.withOptionsButton'>
+              <app-message-with-svg messageTitle="Your account has been disabled!"
+                messageContent="To read more, you can visit the results page"
+                imageUrl="assets/img/block.svg" wrapperOffset="3" wrapperSize="6">
+              </app-message-with-svg>
+            </dashboard-card>
+          </div>
         </ng-template>
       </div>
 
