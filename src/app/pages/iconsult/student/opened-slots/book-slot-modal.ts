@@ -92,7 +92,7 @@ export class BookSlotModalPage implements OnInit {
               body: {
                 availability_id: this.dataToSend.slotData.availibilityid,
                 date: this.dataToSend.slotData.date,
-                time: this.dataToSend.slotData.time,
+                time: this.dataToSend.slotData.timee,
                 casusername: this.dataToSend.staffData.ID,
                 con_with: this.formModel.consultationWith,
                 reason: this.formModel.reason,
