@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
+import { Network } from '@ionic-native/network/ngx';
 
-import { Observable, of } from 'rxjs';
-import { publishLast, refCount, switchMap } from 'rxjs/operators';
+import { Observable, from, of } from 'rxjs';
+import { publishLast, refCount, switchMap, tap } from 'rxjs/operators';
 
 import { StudentTimetable } from '../interfaces';
 
@@ -13,7 +15,11 @@ export class StudentTimetableService {
 
   readonly timetableUrl = 'https://s3-ap-southeast-1.amazonaws.com/open-ws/weektimetable';
 
-  constructor(public http: HttpClient) { }
+  constructor(
+    public http: HttpClient,
+    public network: Network,
+    public storage: Storage,
+  ) { }
 
   /**
    * GET: Request timetable.
@@ -33,10 +39,15 @@ export class StudentTimetableService {
    * @param refresh force refresh (default: false)
    */
   private request(refresh?: boolean): Observable<StudentTimetable[]> {
-    const options = refresh ? { headers: { 'x-refresh': '' } } : {};
-    return this.http.get<StudentTimetable[]>(this.timetableUrl, options).pipe(
-      switchMap(tt => !refresh && this.outdated(tt) ? this.request(true) : of(tt)),
-    );
+    if (this.network.type !== 'none') {
+      const options = refresh ? { headers: { 'x-refresh': '' } } : {};
+      return this.http.get<StudentTimetable[]>(this.timetableUrl, options).pipe(
+        switchMap(tt => !refresh && this.outdated(tt) ? this.request(true) : of(tt)),
+        tap(tt => refresh && this.storage.set('timetable-cache', tt)),
+      );
+    } else {
+      return from(this.storage.get('timetable-cache'));
+    }
   }
 
   /**

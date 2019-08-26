@@ -21,6 +21,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   ) { }
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    await this.settings.ready();
+
     // authentication
     if (!await this.cas.isAuthenticated()) {
       if (route.url.toString() === 'tabs') {  // first login need not to show redirect

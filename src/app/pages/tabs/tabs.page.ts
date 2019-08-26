@@ -122,7 +122,7 @@ export class TabsPage implements OnInit {
         }
       ];
     } else {
-      console.error('Not a valid role');
+      console.error('Invalid role');
     }
     // tslint:enable:no-bitwise
   }
