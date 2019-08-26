@@ -74,9 +74,9 @@
   <!-- END LOADING -->
 
   <ng-template let-attendances [ngIf]="attendance$ | async" [ngIfElse]="loadAttendance">
-    <ion-grid>
+    <ion-grid no-padding>
       <ion-row>
-        <ion-col size="12" size-md="6" *ngFor="let a of attendances">
+        <ion-col no-padding size="12" size-md="6" *ngFor="let a of attendances">
           <ion-card margin-bottom>
             <ion-item color="light-shade" class="subj-title" lines="none">
               {{ a.MODULE_ATTENDANCE }}
