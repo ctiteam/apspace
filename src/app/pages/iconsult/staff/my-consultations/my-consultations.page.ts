@@ -9,8 +9,8 @@ import * as moment from 'moment';
 import { WsApiService } from 'src/app/services';
 import { LecturerConsultation } from 'src/app/interfaces';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
-import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
-import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
+// import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
+// import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
 
 @Component({
@@ -118,8 +118,8 @@ export class MyConsultationsPage implements OnInit {
       color,
       showCloseButton: true,
       animated: true,
-      enterAnimation: toastMessageEnterAnimation,
-      leaveAnimation: toastMessageLeaveAnimation
+      // enterAnimation: toastMessageEnterAnimation,
+      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
 

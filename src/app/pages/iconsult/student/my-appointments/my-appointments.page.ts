@@ -7,8 +7,8 @@ import { map } from 'rxjs/operators';
 import { WsApiService, AppLauncherService } from 'src/app/services';
 import { ConsultationHour, SlotDetails } from 'src/app/interfaces';
 
-import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
-import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
+// import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
+// import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 import { SlotDetailsModalPage } from './slot-details-modal';
 
 import * as moment from 'moment';
@@ -101,8 +101,8 @@ export class MyAppointmentsPage implements OnInit {
       color,
       showCloseButton: true,
       animated: true,
-      enterAnimation: toastMessageEnterAnimation,
-      leaveAnimation: toastMessageLeaveAnimation
+      // enterAnimation: toastMessageEnterAnimation,
+      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
 

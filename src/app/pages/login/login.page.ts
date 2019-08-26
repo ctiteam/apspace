@@ -9,8 +9,8 @@ import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 import { Role } from '../../interfaces';
 import { CasTicketService, WsApiService } from '../../services';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
-import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
+// import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
+// import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
 @Component({
   selector: 'app-login',
@@ -105,8 +105,8 @@ export class LoginPage {
       position: 'top',
       animated: true,
       color: 'danger',
-      enterAnimation: toastMessageEnterAnimation,
-      leaveAnimation: toastMessageLeaveAnimation
+      // enterAnimation: toastMessageEnterAnimation,
+      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
 

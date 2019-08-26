@@ -8,8 +8,8 @@ import { SearchModalComponent } from '../../components/search-modal/search-modal
 import {
   SettingsService, StudentTimetableService, UserSettingsService, WsApiService
 } from '../../services';
-import { toastMessageEnterAnimation } from '../../animations/toast-message-animation/enter';
-import { toastMessageLeaveAnimation } from '../../animations/toast-message-animation/leave';
+// import { toastMessageEnterAnimation } from '../../animations/toast-message-animation/enter';
+// import { toastMessageLeaveAnimation } from '../../animations/toast-message-animation/leave';
 
 @Component({
   selector: 'app-settings',
@@ -206,8 +206,8 @@ export class SettingsPage implements OnInit {
       position: 'top',
       animated: true,
       color: 'success',
-      enterAnimation: toastMessageEnterAnimation,
-      leaveAnimation: toastMessageLeaveAnimation
+      // enterAnimation: toastMessageEnterAnimation,
+      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
 

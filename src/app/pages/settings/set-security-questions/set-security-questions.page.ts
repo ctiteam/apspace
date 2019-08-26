@@ -4,8 +4,8 @@ import { ToastController, AlertController } from '@ionic/angular';
 import { SecurityQuestionsAndAnswers } from 'src/app/interfaces';
 import { finalize } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
-import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
-import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
+// import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
+// import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
 // THIS REGULAR EXPERSSION FOLLOWS THE RFC 2822 STANDARD
 // tslint:disable-next-line: max-line-length
@@ -84,8 +84,8 @@ export class SetSecurityQuestionsPage implements OnInit {
       position: 'top',
       animated: true,
       color: colorToShow,
-      enterAnimation: toastMessageEnterAnimation,
-      leaveAnimation: toastMessageLeaveAnimation
+      // enterAnimation: toastMessageEnterAnimation,
+      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
 

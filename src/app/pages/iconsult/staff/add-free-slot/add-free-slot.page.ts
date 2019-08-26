@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
 
 import { WsApiService } from 'src/app/services';
 import { Venue } from 'src/app/interfaces';
-import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
-import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
+// import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
+// import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 import { CalendarComponentOptions } from 'ion2-calendar';
 
 import * as moment from 'moment';
@@ -187,8 +187,8 @@ export class AddFreeSlotPage implements OnInit {
       color,
       showCloseButton: true,
       animated: true,
-      enterAnimation: toastMessageEnterAnimation,
-      leaveAnimation: toastMessageLeaveAnimation
+      // enterAnimation: toastMessageEnterAnimation,
+      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
   async presentLoading() {
