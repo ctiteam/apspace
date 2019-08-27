@@ -53,42 +53,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttleServicesPageModule)
   },
   {
-    path: 'attendix-lecturer',
-    // canActivate: [AuthGuard],
-    children: [
-      {
-        path: 'classes',
-        loadChildren:
-          () => import('./pages/attendix/attendix-lecturer/classes/classes.module').then(m => m.ClassesPageModule)
-      },
-      {
-        path: 'take-attendance',
-        loadChildren:
-          () => import('./pages/attendix/attendix-lecturer/take-attendance/take-attendance.module').then(m => m.TakeAttendancePageModule)
-      },
-      // { path: 'qr-otp', loadChildren: './pages/attendix/qr-otp/qr-otp.module#QrOtpPageModule' },
-      // { path: 'take-picture', loadChildren: './pages/attendix/take-picture/take-picture.module#TakePicturePageModule' },
-    ]
-  },
-  {
-    path: 'attendix-student',
-    // canActivate: [AuthGuard],
-    children: [
-      {
-        path: 'qr-code',
-        loadChildren: () => import('./pages/attendix/qr-code/qr-code.module').then(m => m.QrCodePageModule)
-      },
-      {
-        path: 'qr-otp',
-        loadChildren: () => import('./pages/attendix/qr-otp/qr-otp.module').then(m => m.QrOtpPageModule)
-      },
-      {
-        path: 'take-picture',
-        loadChildren: () => import('./pages/attendix/take-picture/take-picture.module').then(m => m.TakePicturePageModule)
-      }
-    ]
-  },
-  {
     path: 'more',
     loadChildren: () => import('./pages/more/more.module').then(m => m.MorePageModule)
   },
