@@ -31,4 +31,4 @@ export { Graduater } from './graduater';
 export { IntakeListing } from './intake-listing';
 export { QuixCustomer } from './quix';
 export { DashboardSection } from './dashboard-section';
-export { ConsultationSlot, SlotDetails, Venue, SlotDuplicated, LecturerConsultation } from './iconsult';
+export { ConsultationSlot, SlotDetails, Venue, SlotDuplicated, LecturerConsultation, LecturerSlotDetails } from './iconsult';

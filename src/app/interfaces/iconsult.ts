@@ -26,6 +26,23 @@ export interface LecturerConsultation {
   timee: string;
   userid: number;
   venue: string;
+  slotid: number[];
+}
+
+export interface LecturerSlotDetails {
+  con_with: string;
+  contime: string;
+  endtime: string;
+  feedbackid: string | null;
+  location: string;
+  note: string;
+  reason: string;
+  slotid: number;
+  stuEmail: string;
+  stuPhone: string;
+  studentname: string;
+  tpnumber: string;
+  venue: string;
 }
 
 export interface ConsultationSlot {
