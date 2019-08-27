@@ -11,18 +11,6 @@ import { WsApiService } from '../../services';
   selector: 'lecturer-timetable',
   templateUrl: 'lecturer-timetable.component.html',
   styleUrls: ['lecturer-timetable.component.scss'],
-  animations: [
-    trigger('easeInOut', [
-      transition('void => *', [
-        style({ opacity: '.1', height: '0' }),
-        animate('250ms ease-in', style({ opacity: '1', height: '*' })),
-      ]),
-      transition('* => void', [
-        style({ opacity: '1', height: '*' }),
-        animate('150ms ease-out', style({ opacity: '.7', height: '0', paddingBottom: '0' })),
-      ]),
-    ]),
-  ]
 })
 export class LecturerTimetableComponent implements OnInit {
 
