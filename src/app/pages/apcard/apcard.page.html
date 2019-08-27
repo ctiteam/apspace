@@ -153,7 +153,7 @@
       <div class="perYear" *ngFor="let year of transactonsYears | yearFilter: filterObject.year">
         <div class="perMonth" *ngFor="let month of transactionsMonths | monthFilter: filterObject.month">
           <div class="masonry-item apcard-history-group" *ngIf="transactionsGroupedByDate[month + ', ' + year]">
-            <ion-card>
+            <ion-card no-margin>
               <ion-card-header no-padding padding-start padding-end padding-top>
                 <ion-card-subtitle *ngIf="filterObject.show !== 'credit'">
                   <h5 class="responsive-h2" *ngIf="monthlyData.dr[year]; else noDebit">
