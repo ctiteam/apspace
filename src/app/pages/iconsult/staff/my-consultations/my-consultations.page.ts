@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import { WsApiService } from 'src/app/services';
 import { LecturerConsultation } from 'src/app/interfaces';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
+import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
@@ -62,12 +63,22 @@ export class MyConsultationsPage implements OnInit {
     await modal.onDidDismiss();
   }
 
+  async openSlotDetailsModal(slotId: string, startTime: string, endTime: string) {
+    const dataToSend = {slotId, startTime, endTime};
+    const modal = await this.modalCtrl.create({
+      component: LecturerSlotDetailsModalPage,
+      cssClass: 'add-min-height',
+      componentProps: { dataToSend, notFound: 'No slot Selected' },
+    });
+    await modal.present();
+    await modal.onDidDismiss();
+  }
+
   ngOnInit() {
     this.getData();
   }
 
   async cancelAvailableSlot(slot: LecturerConsultation) {
-    console.log(slot);
     const alert = await this.alertController.create({
       header: 'Cancelling an opened slot',
       message: `You are about to cancel the slot opened on ${slot.dateandtime.split(' ')[0]} at ${slot.dateandtime.split(' ')[1]}`,

@@ -42,6 +42,7 @@ export class MyAppointmentsPage implements OnInit {
   getData() { // To be changed with the refresher later
     this.slots$ = this.getSlots();
   }
+
   getSlots() {
     return this.ws.get<ConsultationHour[]>('/iconsult/upcomingconstu', true).pipe(
       map(slots => { // Check if slot is passed and modify its status to passed
@@ -52,12 +53,6 @@ export class MyAppointmentsPage implements OnInit {
           return slot;
         });
       })
-    );
-  }
-
-  getSlotDetails(slotId: string) {
-    this.slotDetails$ = this.ws.get<SlotDetails>(`/iconsult/detailpageconstu/${slotId}`, true).pipe(
-      map(response => response[0]),
     );
   }
 

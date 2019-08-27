@@ -10,14 +10,14 @@
 </ion-header>
 
 <ion-content parallax-header padding>
-  <!-- <ng-container *ngIf="slotDetails$ | async as slotDetails; else loadingSlots">
+  <ng-container *ngIf="slotDetails$ | async as slotDetails; else loadingSlots">
     <ion-card no-margin margin-bottom>
       <ion-card-content no-padding>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="person" slot="start"></ion-icon>
           <ion-label >
-            <p class="tertiary-txt-color">Staff Name:</p>
-            <h4 class="main-text-color">{{ slotDetails.lecname }}</h4>
+            <p class="tertiary-txt-color">Student Name - ID:</p>
+            <h4 class="main-text-color">{{ slotDetails.studentname }} - {{slotDetails.tpnumber}}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
@@ -30,22 +30,29 @@
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="mail" slot="start"></ion-icon>
           <ion-label >
-            <p class="tertiary-txt-color">Staff Email:</p>
-            <h4 class="main-text-color">{{ slotDetails.LecEmail }}</h4>
+            <p class="tertiary-txt-color">Student Email:</p>
+            <h4 class="main-text-color">{{ slotDetails.stuEmail }}</h4>
           </ion-label>
         </ion-item>
+        <ion-item *ngIf="slotDetails.stuPhone">
+            <ion-icon class="tertiary-txt-color" name="mail" slot="start"></ion-icon>
+            <ion-label >
+              <p class="tertiary-txt-color">Student Phone Number:</p>
+              <h4 class="main-text-color">{{ slotDetails.stuPhone }}</h4>
+            </ion-label>
+          </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="time" slot="start"></ion-icon>
           <ion-label >
             <p class="tertiary-txt-color">Appointment Date:</p>
-            <h4 class="main-text-color">{{ slotDetails.datetime }}</h4>
+            <h4 class="main-text-color">{{ slotDetails.contime | date: 'EEEE, dd MMM yyyy' }}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="time" slot="start"></ion-icon>
           <ion-label >
             <p class="tertiary-txt-color">Appointment Time:</p>
-            <h4 class="main-text-color">{{ slotDetails.contime }} - {{ slotDetails.endTime }}</h4>
+            <h4 class="main-text-color">{{ dataToSend.startTime }} - {{ dataToSend.endTime }}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
@@ -58,22 +65,15 @@
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="help-circle" slot="start"></ion-icon>
           <ion-label >
-            <p class="tertiary-txt-color">Appointment Reason</p>
+            <p class="tertiary-txt-color">Appointment Reason:</p>
             <h4 class="main-text-color">{{ slotDetails.reason }}</h4>
           </ion-label>
         </ion-item>
         <ion-item *ngIf="slotDetails.note">
           <ion-icon class="tertiary-txt-color" name="bookmark" slot="start"></ion-icon>
           <ion-label >
-            <p class="tertiary-txt-color">Note</p>
+            <p class="tertiary-txt-color">Additional Note:</p>
             <h4 class="main-text-color">{{ slotDetails.note }}</h4>
-          </ion-label>
-        </ion-item>
-        <ion-item *ngIf="slotDetails.cancelreason">
-          <ion-icon class="danger-text" name="close-circle" slot="start"></ion-icon>
-          <ion-label >
-            <p class="danger-text">Cancellation Reason</p>
-            <h4 class="main-text-color">{{ slotDetails.cancelreason }}</h4>
           </ion-label>
         </ion-item>
       </ion-card-content>
@@ -105,5 +105,5 @@
         </ion-item>
       </ion-card-content>
     </ion-card>
-  </ng-template> -->
+  </ng-template>
 </ion-content>

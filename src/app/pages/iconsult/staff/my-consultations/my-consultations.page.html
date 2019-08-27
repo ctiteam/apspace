@@ -81,7 +81,7 @@
                               Cancel Slot
                             </ion-button>
                             <ion-button class="cursor-pointer" expand="block" [disabled]="slot.status === 'Clossed'"
-                              *ngIf="slot.status !== 'Available'">
+                              *ngIf="slot.status !== 'Available'" (click)="openSlotDetailsModal(slot.slotid[0], slot.time, slot.endTime)">
                               View Details
                             </ion-button>
                           </ng-container>
