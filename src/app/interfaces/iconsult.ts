@@ -45,6 +45,15 @@ export interface LecturerSlotDetails {
   venue: string;
 }
 
+export interface UnavailabilityDetails {
+  end_date: string;
+  repeat: string;
+  start_date: string;
+  start_time: string;
+  unavailability_id: number;
+  unavailibilityid: number;
+}
+
 export interface ConsultationSlot {
   availibilityid: number;
   date: string;
