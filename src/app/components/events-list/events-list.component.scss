@@ -1,6 +1,5 @@
 .event-calendar {
   font-size: 14px;
-  font-family: Open Sans;
   overflow: hidden;
 }
 
@@ -66,7 +65,6 @@
   display: block;
   width: 25%;
   float: left;
-  font-family: Oswald;
   font-weight: 700;
   color: #343434;
 }
@@ -96,9 +94,7 @@
 }
 
 .title {
-  text-transform: uppercase;
-  font-family: Oswald;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 1.2em;
   display: block;
   width: 70%;
