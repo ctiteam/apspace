@@ -495,7 +495,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   getNumberOfDaysForHoliday(startDate: Date, endDate: Date): string {
     const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(startDate, endDate);
     const daysDiff = Math.floor(secondsDiff / (3600 * 24));
-    return (daysDiff + 1) + ' days';
+    return (daysDiff + 1) + ' day' + (daysDiff === 0 ? '' : 's');
   }
 
   // ATTENDANCE FUNCTIONS
@@ -845,14 +845,10 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   secondsToHrsAndMins(seconds: number): string {
     const hours = Math.floor(seconds / 3600);
     const mins = Math.floor(seconds % 3600 / 60);
-    return hours + ' hrs ' + mins + ' min';
+    return hours + ' hr' + (hours > 1 ? 's' : '') + ' ' + mins + ' min' + (mins > 1 ? 's' : '');
   }
 
   navigateToPage(pageName: string) {
     this.navCtrl.navigateForward(pageName);
-  }
-
-  testCallBack() {
-    console.log('callback working');
   }
 }
