@@ -10,6 +10,7 @@ import { WsApiService } from 'src/app/services';
 import { LecturerConsultation } from 'src/app/interfaces';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
+import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
@@ -64,7 +65,7 @@ export class MyConsultationsPage implements OnInit {
   }
 
   async openSlotDetailsModal(slotId: string, startTime: string, endTime: string) {
-    const dataToSend = {slotId, startTime, endTime};
+    const dataToSend = { slotId, startTime, endTime };
     const modal = await this.modalCtrl.create({
       component: LecturerSlotDetailsModalPage,
       cssClass: 'add-min-height',
@@ -73,6 +74,17 @@ export class MyConsultationsPage implements OnInit {
     await modal.present();
     await modal.onDidDismiss();
   }
+
+  async openUnavailableSlotDetails(unavailibilityid: string) {
+    const modal = await this.modalCtrl.create({
+      component: UnavailabilityDetailsModalPage,
+      cssClass: 'add-min-height',
+      componentProps: { unavailibilityid, notFound: 'No slot Selected' },
+    });
+    await modal.present();
+    await modal.onDidDismiss();
+  }
+
 
   ngOnInit() {
     this.getData();

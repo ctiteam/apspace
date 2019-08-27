@@ -35,14 +35,14 @@
           </ion-label>
         </ion-item>
         <ion-item *ngIf="slotDetails.stuPhone">
-            <ion-icon class="tertiary-txt-color" name="mail" slot="start"></ion-icon>
+            <ion-icon class="tertiary-txt-color" name="call" slot="start"></ion-icon>
             <ion-label >
               <p class="tertiary-txt-color">Student Phone Number:</p>
               <h4 class="main-text-color">{{ slotDetails.stuPhone }}</h4>
             </ion-label>
           </ion-item>
         <ion-item>
-          <ion-icon class="tertiary-txt-color" name="time" slot="start"></ion-icon>
+          <ion-icon class="tertiary-txt-color" name="calendar" slot="start"></ion-icon>
           <ion-label >
             <p class="tertiary-txt-color">Appointment Date:</p>
             <h4 class="main-text-color">{{ slotDetails.contime | date: 'EEEE, dd MMM yyyy' }}</h4>

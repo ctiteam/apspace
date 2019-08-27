@@ -1,0 +1,79 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>Unavailability Details</ion-title>
+    <ion-buttons slot="start">
+      <ion-button outline small (click)="dismiss()">
+        <ion-icon class="tertiary-txt-color" name="arrow-round-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content parallax-header padding>
+  <ng-container *ngIf="slotDetails$ | async as slotDetails; else loadingSlots">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          Unavailable Slot
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content no-padding>
+        <ion-item>
+          <ion-icon class="tertiary-txt-color" name="calendar" slot="start"></ion-icon>
+          <ion-label>
+            <p class="tertiary-txt-color">Start Date:</p>
+            <h4 class="main-text-color">{{ slotDetails[0].start_date }}</h4>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon class="tertiary-txt-color" name="calendar" slot="start"></ion-icon>
+          <ion-label>
+            <p class="tertiary-txt-color">End Date:</p>
+            <h4 class="main-text-color">{{ slotDetails[0].end_date }}</h4>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon class="tertiary-txt-color" name="repeat" slot="start"></ion-icon>
+          <ion-label>
+            <p class="tertiary-txt-color">Repeat On:</p>
+            <h4 class="main-text-color">{{ slotDetails[0].repeat.split(',').join(', ') }}</h4>
+          </ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon class="tertiary-txt-color" name="time" slot="start"></ion-icon>
+          <ion-label>
+            <p class="tertiary-txt-color">Time(s):</p>
+            <h4 class="main-text-color" *ngFor="let slotDetail of slotDetails">{{ slotDetail.start_time }}</h4>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+  <ng-template #loadingSlots>
+    <ion-card no-margin margin-bottom>
+      <ion-card-content no-padding>
+        <ion-item>
+          <ion-skeleton-text animated style="line-height: 30px; width:100%"></ion-skeleton-text>
+        </ion-item>
+        <ion-item>
+          <ion-skeleton-text animated style="line-height: 30px; width:80%"></ion-skeleton-text>
+        </ion-item>
+        <ion-item>
+          <ion-skeleton-text animated style="line-height: 30px; width:90%"></ion-skeleton-text>
+        </ion-item>
+        <ion-item>
+          <ion-skeleton-text animated style="line-height: 30px; width:60%"></ion-skeleton-text>
+        </ion-item>
+        <ion-item>
+          <ion-skeleton-text animated style="line-height: 30px; width:45%"></ion-skeleton-text>
+        </ion-item>
+        <ion-item>
+          <ion-skeleton-text animated style="line-height: 30px; width:100%"></ion-skeleton-text>
+        </ion-item>
+        <ion-item>
+          <ion-skeleton-text animated style="line-height: 30px; width:30%"></ion-skeleton-text>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+</ion-content>
