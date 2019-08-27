@@ -56,6 +56,39 @@ const routes: Routes = [
     loadChildren: () => import('./pages/bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttleServicesPageModule)
   },
   {
+    path: 'attendix',
+    // canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'classes',
+        loadChildren:
+          () => import('./pages/attendix-lecturer/classes/classes.module').then(m => m.ClassesPageModule)
+      },
+      {
+        path: 'mark-attendance',
+        loadChildren:
+          () => import('./pages/attendix-lecturer/mark-attendance/mark-attendance.module').then(m => m.MarkAttendancePageModule)
+      },
+      {
+        path: 'update-attendance',
+        loadChildren:
+          () => import('./pages/attendix-student/update-attendance/update-attendance.module').then(m => m.UpdateAttendancePageModule)
+      }
+      // {
+      //   path: 'qr-scan',
+      //   loadChildren: './pages/attendix-student/qr-scan/qr-scan.module#QrScanPageModule'
+      // },
+      // {
+      //   path: 'otp',
+      //   loadChildren: './pages/attendix-student/otp/otp.module#OtpPageModule'
+      // },
+      // {
+      //   path: 'take-picture',
+      //   loadChildren: './pages/attendix-student/take-picture/take-picture.module#TakePicturePageModule'
+      // }
+    ]
+  },
+  {
     path: 'more',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/more/more.module').then(m => m.MorePageModule)

@@ -2,16 +2,16 @@ import {
   ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, ViewChild
 } from '@angular/core';
 
-import { MarkAttendanceGQL } from './mark-attendance.mutation';
+import { UpdateAttendanceGQL } from './update-attendance.mutation';
 import { Observable } from 'apollo-link';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-mark-attendance',
-  templateUrl: './mark-attendance.page.html',
-  styleUrls: ['./mark-attendance.page.scss'],
+  selector: 'app-update-attendance',
+  templateUrl: './update-attendance.page.html',
+  styleUrls: ['./update-attendance.page.scss'],
 })
-export class MarkAttendancePage {
+export class UpdateAttendancePage {
 
   digits = new Array(3);
   @ViewChild('otpInput', { static: false }) otpInput: ElementRef<HTMLInputElement>;
@@ -24,11 +24,11 @@ export class MarkAttendancePage {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private markAttendance: MarkAttendanceGQL,
+    private updateAttendance: UpdateAttendanceGQL,
   ) { }
 
   scanCode() {
-    this.markAttendance.mutate({ schedule: 'a', otp: this.otp, student: `TP${this.student++}` })
+    this.updateAttendance.mutate({ schedule: 'a', otp: this.otp, student: `TP${this.student++}` })
       .subscribe(d => console.log(d));
   }
 
@@ -47,7 +47,7 @@ export class MarkAttendancePage {
         this.otp = prev.value + this.otp;
       }
 
-      this.markAttendance.mutate({
+      this.updateAttendance.mutate({
         schedule: 'a',
         otp: this.otp,
         student: `TP${this.student++}`

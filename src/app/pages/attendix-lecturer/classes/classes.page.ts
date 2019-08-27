@@ -28,7 +28,7 @@ export class ClassesPage implements OnInit {
     );
   }
 
-  markAttendance() {
+  updateAttendance() {
     console.log(this.classcode, this.startTime);
   }
 }

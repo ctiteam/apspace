@@ -15,11 +15,11 @@ import { Status } from './status.interface';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-take-attendance',
-  templateUrl: './take-attendance.page.html',
-  styleUrls: ['./take-attendance.page.scss'],
+  selector: 'app-mark-attendance',
+  templateUrl: './mark-attendance.page.html',
+  styleUrls: ['./mark-attendance.page.scss'],
 })
-export class TakeAttendancePage implements OnInit {
+export class MarkAttendancePage implements OnInit {
 
   schedule = 'a';
 
@@ -56,7 +56,7 @@ export class TakeAttendancePage implements OnInit {
     const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
       catchError(err => (this.auto = true, this.attendance.fetch({ schedule }))),
       catchError(err => (this.toastCtrl.create({
-        message: 'Failed to take attendance.',
+        message: 'Failed to mark attendance.',
         duration: 2000,
         position: 'top',
         color: 'danger'
