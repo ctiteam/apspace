@@ -326,8 +326,6 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   }
 
   getUpcomingClasses(intake: string): Observable<EventComponentConfigurations[]> {
-    // TESTING
-    intake = 'APU3F1901PE';
     const dateNow = new Date();
     return this.studentTimetableService.get().pipe(
 
