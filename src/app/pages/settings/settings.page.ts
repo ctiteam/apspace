@@ -46,8 +46,7 @@ export class SettingsPage implements OnInit {
     { section: 'lowAttendance', name: 'Low Attendance', disabled: false },
     { section: 'financials', name: 'Financials', disabled: false },
     { section: 'cgpa', name: 'CGPA Per Intake', disabled: false },
-    { section: 'busShuttleServices', name: 'Today\'s Trips', disabled: false },
-    { section: 'timetable', name: 'Timetable', disabled: false }
+    { section: 'busShuttleServices', name: 'Today\'s Trips', disabled: false }
   ];
   accentColors = [
     { title: 'Blue (Default)', value: 'blue-accent-color' },
