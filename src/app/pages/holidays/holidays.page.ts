@@ -151,7 +151,7 @@ export class HolidaysPage implements OnInit {
       filterDays: '',
       filterMonths: '',
       numberOfDays: '',
-      show: 'all',
+      show: 'upcoming',
       affecting: ''
     };
     this.onFilter();
