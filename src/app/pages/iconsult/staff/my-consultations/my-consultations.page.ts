@@ -64,15 +64,23 @@ export class MyConsultationsPage implements OnInit {
     await modal.onDidDismiss();
   }
 
-  async openSlotDetailsModal(slotId: string, startTime: string, endTime: string, dateAndTime: string) {
-    const dataToSend = { slotId, startTime, endTime, dateAndTime };
+  async openSlotDetailsModal(
+    slotId: string, startTime: string, endTime: string, dateAndTime: string, availibilityId: number, date: string, timee: string) {
+    const dataToSend = { slotId, startTime, endTime, dateAndTime, availibilityId, date, timee };
     const modal = await this.modalCtrl.create({
       component: LecturerSlotDetailsModalPage,
       cssClass: 'add-min-height',
       componentProps: { dataToSend, notFound: 'No slot Selected' },
     });
     await modal.present();
-    await modal.onDidDismiss();
+    await modal.onDidDismiss().then(
+      data => {
+        if (data.data === 'booked') {
+          this.daysConfigrations = [];
+          this.getData();
+        }
+      }
+    );
   }
 
   async openUnavailableSlotDetails(unavailibilityid: string) {

@@ -13,7 +13,7 @@
   <ion-card *ngIf="showRemarks" class="danger-border" no-margin margin-bottom>
     <ion-card-content>
       <h6 class="colored-text">
-        This booking has passed. You can add remarks now by scrolling to the end of this page.
+        This booking has passed. You can add remarks (If you did not add) now by scrolling to the end of this page.
       </h6>
     </ion-card-content>
   </ion-card>
@@ -83,6 +83,8 @@
             <h4 class="main-text-color">{{ slotDetails.note }}</h4>
           </ion-label>
         </ion-item>
+        <ion-button margin expand="block" class="danger-background" (click)="cancelBooking(slotDetails)">Cancel Booking
+        </ion-button>
       </ion-card-content>
     </ion-card>
 
@@ -108,7 +110,8 @@
           <ion-button margin-start margin-end expand="block" (click)="addRemarks()">Add Remarks</ion-button>
         </ng-container>
         <ng-template #showHistory>
-          <h6 class="tertiary-txt-color" padding-top padding-start padding-end>You have added remarks for this booking and the remarks are as follow:</h6>
+          <h6 class="tertiary-txt-color" padding-top padding-start padding-end>You have added remarks for this booking
+            and the remarks are as follow:</h6>
           <p class="main-text-color" padding-start padding-end>{{remarks.feedback}}</p>
         </ng-template>
       </ion-card-content>

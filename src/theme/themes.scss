@@ -379,6 +379,10 @@ ion-button {
   &.colored-border{
     --border-color: var(--primary-color) !important;
   }
+  &.danger-background {
+    --background: var(--danger-color) !important;
+    --background-hover: var(--danger-hover-color);
+  }
 }
 
 ion-fab-button {

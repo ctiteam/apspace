@@ -79,6 +79,69 @@ export class LecturerSlotDetailsModalPage implements OnInit {
     }).then(confirm => confirm.present());
   }
 
+  async cancelBooking(slot: LecturerSlotDetails) {
+    const alert = await this.alertCtrl.create({
+      header: `Canelling Appointment with ${slot.studentname} on ${this.dataToSend.date}`,
+      message: 'Please provide us with the cancellation reason:',
+      inputs: [
+        {
+          name: 'cancellationReason',
+          type: 'text',
+          placeholder: 'Enter The Cancellation Reason',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => { }
+        }, {
+          text: 'Submit',
+          handler: (data) => {
+            if (!data.cancellationReason) {
+              this.showToastMessage('Cancellation Reason is Required !!', 'danger');
+            } else {
+              this.presentLoading();
+              const cancellationDate = moment().format(); // To get the date format required by backend
+              const cancellationBody = {
+                availibility_id: this.dataToSend.availibilityId,
+                cancel_datetime: cancellationDate,
+                cancel_reason: data.cancellationReason, // Input field
+                cancelled_datetime: cancellationDate,
+                date: this.dataToSend.date,
+                slotid: slot.slotid,
+                status: 1, // always 1 from backend
+                timee: this.dataToSend.timee
+              };
+              console.log(cancellationBody);
+              this.sendCancelBookingRequest(cancellationBody).subscribe(
+                {
+                  next: res => {
+                    this.showToastMessage('Booking has been cancelled successfully!', 'success');
+                  },
+                  error: err => {
+                    this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
+                  },
+                  complete: () => {
+                    this.dismissLoading();
+                    this.modalCtrl.dismiss('booked');
+                  }
+                }
+              );
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  sendCancelBookingRequest(cancelledSlotDetails: any) {
+    return this.ws.post<any>('/iconsult/lecCancelbookedslot', {
+      body: cancelledSlotDetails,
+    });
+  }
+
   showToastMessage(message: string, color: 'danger' | 'success') {
     this.toastCtrl.create({
       message,
