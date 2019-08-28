@@ -14,9 +14,6 @@
                     <img [src]="'data:image/jpg;base64,' +(photo$ | async)?.base64_photo"
                       onerror="this.src='assets/img/no_img.png'" alt="Avatar">
                   </ion-avatar>
-                  <ng-template #loadingStudentsPhoto>
-                    loading picture
-                  </ng-template>
                   <div class="welcome-message-wrapper float-left"
                     *ngIf="studentFirstName$ | async as studentFirstName; else loadingProfile" padding-start>
                     <ion-card-title>
@@ -176,7 +173,21 @@
           </dashboard-card>
         </div>
         <ng-template #loadingAttendance>
-          loading the attendance section
+          <ion-card>
+            <ion-card-header>
+              <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+            </ion-card-content>
+          </ion-card>
         </ng-template>
       </div>
 
@@ -236,7 +247,21 @@
 
             </ng-container>
             <ng-template #loadingTrips>
-              loading the trips section
+              <ion-card>
+                <ion-card-header>
+                  <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+                  </ion-skeleton-text>
+                  <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+                  </ion-skeleton-text>
+                  <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+                  </ion-skeleton-text>
+                  <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+                  </ion-skeleton-text>
+                </ion-card-content>
+              </ion-card>
             </ng-template>
           </dashboard-card>
         </div>
@@ -259,7 +284,21 @@
           </dashboard-card>
         </div>
         <ng-template #loadingApcardTransactions>
-          loading the apcard section
+          <ion-card>
+            <ion-card-header>
+              <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+            </ion-card-content>
+          </ion-card>
         </ng-template>
       </div>
 
@@ -280,7 +319,21 @@
             </dashboard-card>
           </div>
           <ng-template #loadingCgpaPerIntake>
-            loading the cgpa section
+            <ion-card>
+              <ion-card-header>
+                <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+                </ion-skeleton-text>
+                <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+                </ion-skeleton-text>
+                <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+                </ion-skeleton-text>
+                <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+                </ion-skeleton-text>
+              </ion-card-content>
+            </ion-card>
           </ng-template>
         </div>
         <ng-template #accountDisabled>
@@ -293,8 +346,8 @@
               [contentPadding]='cgpaCardConfigurations.contentPadding'
               [withOptionsButton]='cgpaCardConfigurations.withOptionsButton'>
               <app-message-with-svg messageTitle="Your account has been disabled!"
-                messageContent="To read more about the reasons of this message, you can go to the results page and read the full message" imageUrl="assets/img/block.svg"
-                wrapperOffset="3" wrapperSize="6">
+                messageContent="To read more about the reasons of this message, you can go to the results page and read the full message"
+                imageUrl="assets/img/block.svg" wrapperOffset="3" wrapperSize="6">
               </app-message-with-svg>
             </dashboard-card>
           </div>
@@ -317,7 +370,21 @@
           </dashboard-card>
         </div>
         <ng-template #loadingFinancials>
-          loading the financials section
+          <ion-card>
+            <ion-card-header>
+              <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+            </ion-card-content>
+          </ion-card>
         </ng-template>
       </div>
 
