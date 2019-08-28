@@ -93,3 +93,9 @@ export interface Venue {
 export interface SlotDuplicated {
   res: string;
 }
+
+export interface LecturerRemarks {
+  slotid: number;
+  feedback: number;
+  res: string;
+}
