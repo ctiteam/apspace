@@ -106,7 +106,23 @@
   <ion-grid no-padding>
     <ion-row no-padding>
       <ion-col no-padding size="12" size-md="8" offset-md="2" size-lg="6" offset-md="3">
-        <events-list [observable$]="filteredHoliday$"></events-list>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <h5 class="responsive-h1">
+                {{filterObject.show === 'upcoming' ? 'Upcoming ' : ''}}
+                Holidays For 
+                {{todaysDate.getFullYear()}}
+              </h5>
+              <h6 class="small-text small-margin-top">
+                {{filterObject.affecting !== '' ? 'Filtered ' : ''}}for {{filterObject.affecting === '' ? ('staff and students') : (filterObject.affecting + ' only')}}
+              </h6>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content no-padding>
+            <events-list [observable$]="filteredHoliday$"></events-list>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
