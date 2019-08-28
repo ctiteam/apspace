@@ -12,8 +12,9 @@
 <ion-content parallax-header padding>
   <ng-template let-verification [ngIf]='verifyslot$ | async'>
     <ng-template [ngIf]="verification.res == 'Duplicated'" [ngIfElse]='noduplicate'>
-      <app-message-with-svg imageUrl="assets/img/time-conf.svg" messageTitle="Avoiding Clashes" wrapperMarginTop="50px" wrapperSize="8" wrapperOffset="2"
-      messageContent="You cannot book this slot ({{dataToSend.slotData.datetimeforsorting}}) because you have another consultation hour booked with the same/another staff at this time.">
+      <app-message-with-svg imageUrl="assets/img/time-conf.svg" messageTitle="Avoiding Clashes" wrapperMarginTop="50px"
+        wrapperSize="8" wrapperOffset="2"
+        messageContent="You cannot book this slot ({{dataToSend.slotData.datetimeforsorting}}) because you have another consultation hour booked with the same/another staff at this time.">
       </app-message-with-svg>
     </ng-template>
 
@@ -71,13 +72,6 @@
                   </ion-item>
 
                   <ion-item lines="none">
-                    <ion-label position="stacked">Note (Optional)</ion-label>
-                    <ion-textarea rows="2" [(ngModel)]="formModel.note" #note="ngModel" type="text" name="note"
-                      class="form-input">
-                    </ion-textarea>
-                  </ion-item>
-
-                  <ion-item lines="none">
                     <ion-label [ngClass]="{ 'danger-text': reason.touched && reason.invalid }" position="stacked">Reason
                       For Appointment</ion-label>
                     <ion-textarea [(ngModel)]="formModel.reason" #reason="ngModel"
@@ -87,6 +81,13 @@
                   <div padding-start *ngIf="reason.touched && reason.invalid" class="danger-text">
                     <div *ngIf="reason.errors.required">This field is required</div>
                   </div>
+
+                  <ion-item lines="none">
+                    <ion-label position="stacked">Additional Note (Optional)</ion-label>
+                    <ion-textarea rows="2" [(ngModel)]="formModel.note" #note="ngModel" type="text" name="note"
+                      class="form-input">
+                    </ion-textarea>
+                  </ion-item>
 
                   <ion-item-divider class="colored-border">
                     <ion-label class="form-section-label">
@@ -103,11 +104,16 @@
 
                   <ion-item lines="none">
                     <ion-label position="stacked">Contact Number (Optional)</ion-label>
-                    <ion-input [(ngModel)]="formModel.studentContactNumber" #studentContactNumber="ngModel"
+                    <ion-input pattern="\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4,5})$"
+                      [(ngModel)]="formModel.studentContactNumber" #studentContactNumber="ngModel"
                       [ngClass]="{ 'is-invalid': bookingForm.submitted && studentContactNumber.invalid }" type="tel"
                       name="studentContactNumber" class="form-input">
                     </ion-input>
                   </ion-item>
+                  <div padding-start *ngIf="studentContactNumber.touched && studentContactNumber.invalid"
+                    class="danger-text">
+                    <div>Phone number must contain 10 (or 11) digits only</div>
+                  </div>
 
                 </ion-col>
               </ion-row>
@@ -124,5 +130,5 @@
         </form>
       </ion-card>
     </ng-template>
-    </ng-template>
+  </ng-template>
 </ion-content>
