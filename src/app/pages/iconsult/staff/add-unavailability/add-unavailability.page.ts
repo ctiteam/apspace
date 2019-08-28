@@ -4,7 +4,7 @@ import { CalendarComponentOptions } from 'ion2-calendar';
 
 import * as moment from 'moment';
 import { WsApiService } from 'src/app/services';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { ToastController, AlertController, LoadingController } from '@ionic/angular';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
@@ -129,8 +129,10 @@ export class AddUnavailabilityPage implements OnInit {
                 error: err => this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger'),
                 complete: () => {
                   this.dismissLoading();
-                  this.router.navigateByUrl('my-consultations').then(
-                  );
+                  const navigationExtras: NavigationExtras = {
+                    state: { reload: true }
+                  };
+                  this.router.navigateByUrl('my-consultations', navigationExtras);
                 }
               }
             );

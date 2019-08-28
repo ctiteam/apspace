@@ -11,6 +11,8 @@ import { LecturerConsultation } from 'src/app/interfaces';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
 import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
+import { ActivatedRoute } from 'src/testing';
+import { Router } from '@angular/router';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
@@ -48,7 +50,10 @@ export class MyConsultationsPage implements OnInit {
     private modalCtrl: ModalController,
     private alertController: AlertController,
     private loadingController: LoadingController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private route: ActivatedRoute,
+    private router: Router,
+
   ) { }
 
   iconsultFormatDate(date: Date) { // Format used in iConsult date
@@ -95,6 +100,11 @@ export class MyConsultationsPage implements OnInit {
 
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.reload) {
+        this.getData();
+      }
+    });
     this.getData();
   }
 

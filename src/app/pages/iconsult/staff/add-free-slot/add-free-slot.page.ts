@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ToastController, AlertController, LoadingController } from '@ionic/angular';
 import { Observable } from 'rxjs';
@@ -168,8 +168,10 @@ export class AddFreeSlotPage implements OnInit {
                 error: err => this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger'),
                 complete: () => {
                   this.dismissLoading();
-                  this.router.navigateByUrl('my-consultations').then(
-                  );
+                  const navigationExtras: NavigationExtras = {
+                    state: {reload: true}
+                  };
+                  this.router.navigateByUrl('my-consultations', navigationExtras);
                 }
               }
             );
