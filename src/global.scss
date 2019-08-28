@@ -15,27 +15,29 @@
 
 @import './theme/themes';
 
-// Main Font /Ubuntu/ (Light 300, Normal: 400, Medim: 500, Bold: 700)
+// @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700&display=swap');
+
+// Main Font /Source Sans Pro/ (Light 300, Normal: 400, Medim: 500, Bold: 700)
 @font-face {
-  font-family: 'Ubuntu';
-  src: url('assets/fonts/ubuntu/Ubuntu-Light.ttf') format('truetype');
+  font-family: 'Source Sans Pro';
+  src: url('assets/fonts/source-sans-pro/SourceSansPro-Light.ttf') format('truetype');
   font-weight: 300;
 }
 @font-face {
-  font-family: 'Ubuntu';
-  src: url('assets/fonts/ubuntu/Ubuntu-Regular.ttf') format('truetype');
+  font-family: 'Source Sans Pro';
+  src: url('assets/fonts/source-sans-pro/SourceSansPro-Regular.ttf') format('truetype');
   font-weight: normal;
 }
 
 @font-face {
-  font-family: 'Ubuntu';
-  src: url('assets/fonts/ubuntu/Ubuntu-Medium.ttf') format('truetype');
+  font-family: 'Source Sans Pro';
+  src: url('assets/fonts/source-sans-pro/SourceSansPro-Black.ttf') format('truetype');
   font-weight: 500;
 }
 
 @font-face {
-  font-family: 'Ubuntu';
-  src: url('assets/fonts/ubuntu/Ubuntu-Bold.ttf') format('truetype');
+  font-family: 'Source Sans Pro';
+  src: url('assets/fonts/source-sans-pro/SourceSansPro-Bold.ttf') format('truetype');
   font-weight: 700;
 }
 
