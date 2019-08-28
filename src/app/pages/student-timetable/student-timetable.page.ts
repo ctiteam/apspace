@@ -7,7 +7,7 @@ import { ActionSheetController, IonRefresher, ModalController, Platform } from '
 import { Observable, combineLatest } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
-import { StudentProfile, StudentTimetable } from '../../interfaces';
+import { StudentProfile, StudentTimetable, Role } from '../../interfaces';
 import {
   SettingsService, StudentTimetableService, UserSettingsService, WsApiService
 } from '../../services';
@@ -91,7 +91,7 @@ export class StudentTimetablePage implements OnInit {
   constructor(
     private actionSheet: ActionSheet,
     private actionSheetCtrl: ActionSheetController,
-    private cdr: ChangeDetectorRef,
+    private changeDetectorRef: ChangeDetectorRef,
     private modalCtrl: ModalController,
     private plt: Platform,
     private route: ActivatedRoute,
@@ -131,12 +131,16 @@ export class StudentTimetablePage implements OnInit {
 
     // default intake to student current intake
     if (this.intake === undefined) {
-      this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
-        this.intake = (p || {} as StudentProfile).INTAKE || '';
-        this.cdr.markForCheck();
-        this.settings.set('intakeHistory', [this.intake]);
-      });
+      // tslint:disable-next-line: no-bitwise
+      if (this.settings.get('role') & Role.Student) {
+        this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+          this.intake = (p || {} as StudentProfile).INTAKE || '';
+          this.changeDetectorRef.markForCheck();
+          this.settings.set('intakeHistory', [this.intake]);
+        });
+      }
     }
+
 
     this.doRefresh();
   }
@@ -168,7 +172,7 @@ export class StudentTimetablePage implements OnInit {
       const week = this.availableWeek[labels.indexOf(weekStr)];
       if (this.selectedWeek.getDate() !== week.getDate()) {
         this.selectedWeek = week;
-        this.cdr.markForCheck();
+        this.changeDetectorRef.markForCheck();
         this.timetable$.subscribe();
       }
     });
@@ -178,11 +182,14 @@ export class StudentTimetablePage implements OnInit {
   changeIntake(intake: string) {
     if (intake !== null && intake !== this.intake) {
       this.intake = intake;
-      this.settings.set('intakeHistory', this.settings.get('intakeHistory')
-        .concat(intake)
-        .filter((v, i, a) => a.lastIndexOf(v) === i)
-        .slice(-5));
-      this.cdr.markForCheck();
+      // tslint:disable-next-line: no-bitwise
+      if (this.settings.get('role') & Role.Student) {
+        this.settings.set('intakeHistory', this.settings.get('intakeHistory')
+          .concat(intake)
+          .filter((v, i, a) => a.lastIndexOf(v) === i)
+          .slice(-5));
+      }
+      this.changeDetectorRef.markForCheck();
       this.timetable$.subscribe();
     }
   }
@@ -276,7 +283,7 @@ export class StudentTimetablePage implements OnInit {
       this.selectedDate = undefined;
     }
 
-    this.cdr.markForCheck();
+    this.changeDetectorRef.markForCheck();
   }
 
 }
