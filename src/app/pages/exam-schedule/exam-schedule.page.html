@@ -57,7 +57,7 @@
                     </ion-card-content>
                     <ion-footer>
                       <ion-grid>
-                        <ion-row>
+                        <ion-row *ngIf="exam.docketsDue">
                           <ion-col size="7">
                             <span>
                               *Dockets Due:
