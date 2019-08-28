@@ -64,8 +64,8 @@ export class MyConsultationsPage implements OnInit {
     await modal.onDidDismiss();
   }
 
-  async openSlotDetailsModal(slotId: string, startTime: string, endTime: string) {
-    const dataToSend = { slotId, startTime, endTime };
+  async openSlotDetailsModal(slotId: string, startTime: string, endTime: string, dateAndTime: string) {
+    const dataToSend = { slotId, startTime, endTime, dateAndTime };
     const modal = await this.modalCtrl.create({
       component: LecturerSlotDetailsModalPage,
       cssClass: 'add-min-height',
