@@ -29,6 +29,7 @@ export class OpenedSlotsPage implements OnInit {
     monthYear: '',
     day: ''
   };
+  skeletons = ['80%', '30%', '50%', '10%', '70%'];
   constructor(
     private route: ActivatedRoute,
     private router: Router,
