@@ -13,7 +13,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <h2 padding-top text-center>Selected intake: {{ intake }}</h2>
+  <h5 class="secondary-txt-color" text-center padding no-padding-bottom>Selected intake: {{ intake }}</h5>
   <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
@@ -21,15 +21,18 @@
     <ng-template [ngIf]="!showNoIntakeMessage">
       <ng-template let-exams [ngIf]="exam$ | async" [ngIfElse]="loadingExams">
         <ng-template [ngIf]="exams.length !== 0">
-          <ion-grid>
+          <ion-grid no-padding padding-start padding-end>
             <ion-row>
               <ion-col size="12" size-lg="6" *ngFor="let exam of exams">
-                <div >
-                  <ion-card>
+                <div>
+                  <ion-card no-margin>
                     <ion-card-header class="colored-border">
                       <ion-card-title class="responsive-h1">
                         {{ exam.subjectDescription }}
                       </ion-card-title>
+                      <ion-card-subtitle>
+                        On {{ exam.since | date: "EEEE, dd MMM y" }}
+                      </ion-card-subtitle>
                     </ion-card-header>
                     <ion-card-content no-padding>
                       <ion-list>
@@ -42,15 +45,10 @@
                           <p padding-start>{{ exam.venue }}</p>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-icon name="calendar"></ion-icon>
-                          <p padding-start>
-                            {{ exam.since | date: "EEE, d MMM, y" }}
-                          </p>
-                        </ion-item>
-                        <ion-item lines="none">
                           <ion-icon name="time"></ion-icon>
                           <p padding-start>
-                            {{ exam.since | date: "h:mm a" }}
+                            {{ exam.since | date: "h:mm a" }} -
+                            {{ exam.until | date: "h:mm a" }}
                           </p>
                         </ion-item>
                       </ion-list>
@@ -63,34 +61,30 @@
                               *Dockets Due:
                             </span>
                           </ion-col>
-                          <ion-col size="5">
-                            <p>{{ exam.docketsDue | date }}</p>
+                          <ion-col size="5" text-right>
+                            <p>{{ exam.docketsDue | date: "EEE, dd MMM y" }}</p>
                           </ion-col>
                         </ion-row>
-                        <ion-row>
-                          <div *ngIf="exam.appraisalsDue">
-                            <ion-col size="7">
-                              <span t>
-                                *Appraisals Due:
-                              </span>
-                            </ion-col>
-                            <ion-col size="5">
-                              <p>{{ exam.appraisalsDue | date }}</p>
-                            </ion-col>
-                          </div>
+                        <ion-row *ngIf="exam.appraisalsDue">
+                          <ion-col size="7">
+                            <span t>
+                              *Appraisals Due:
+                            </span>
+                          </ion-col>
+                          <ion-col size="5" text-right>
+                            <p>{{ exam.appraisalsDue | date: "EEE, dd MMM y" }}</p>
+                          </ion-col>
                         </ion-row>
-                        <div *ngIf="exam.resultDate">
-                          <ion-row>
-                            <ion-col size="7">
-                              <span>
-                                *Result Release Date:
-                              </span>
-                            </ion-col>
-                            <ion-col size="5">
-                              <p>{{ exam.resultDate | date }}</p>
-                            </ion-col>
-                          </ion-row>
-                        </div>
+                        <ion-row *ngIf="exam.resultDate">
+                          <ion-col size="7">
+                            <span>
+                              *Result Release Date:
+                            </span>
+                          </ion-col>
+                          <ion-col size="5" text-right>
+                            <p>{{ exam.resultDate | date: "EEE, dd MMM y" }}</p>
+                          </ion-col>
+                        </ion-row>
                       </ion-grid>
                     </ion-footer>
                   </ion-card>

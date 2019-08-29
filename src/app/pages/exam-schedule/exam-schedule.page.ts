@@ -52,7 +52,7 @@ export class ExamSchedulePage implements OnInit {
       if (this.settings.get('role') & Role.Student) {
 
         /* tslint:enable:no-bitwise */
-        this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+        this.ws.get<StudentProfile>('/student/profile', true).subscribe(p => {
           this.intake = p.INTAKE;
         },
           (_) => { },
@@ -66,7 +66,7 @@ export class ExamSchedulePage implements OnInit {
   doRefresh(refresher?) {
     const url = `/examination/${this.intake}`;
     const opt = { auth: false };
-    this.exam$ = this.ws.get<ExamSchedule[]>(url, refresher, opt).pipe(
+    this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt).pipe(
       finalize(() => (refresher && refresher.target.complete())),
     );
     this.il.get(Boolean(refresher)).subscribe(ii => {

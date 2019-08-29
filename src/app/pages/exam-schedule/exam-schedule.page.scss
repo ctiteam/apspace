@@ -1,20 +1,16 @@
-h2 {
-    color: var(--secondary-txt-color);
-}
-
 ion-card {
-    ion-card-header {
-        border-bottom: 2px solid;
+  ion-card-header {
+    border-bottom: 2px solid;
+  }
+
+  ion-icon {
+    color: var(--secondary-txt-color);
+  }
+
+  ion-footer {
+    p {
+      color: var(--secondary-txt-color);
+      font-weight: bold;
     }
-    
-    ion-icon {
-        color: var(--secondary-txt-color);
-    }
-    
-    ion-footer{
-        p {
-            color: var(--secondary-txt-color);
-            font-weight: bold;
-        }
-    }
+  }
 }
