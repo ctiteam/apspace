@@ -31,7 +31,6 @@
           </ng-template>
           <ng-template [ngIf]="courseDetail$ | async" [ngIfElse]="loading">
             <ion-card no-margin margin-top>
-              <!-- <div *ngIf="detail.SEMESTER"> -->
               <ion-card-header class="colored-border">
                 <ion-card-title>
                   GPA Per Semester
@@ -47,7 +46,6 @@
                   </ion-item>
                 </ng-container>
               </ion-card-content>
-              <!-- </div> -->
             </ion-card>
           </ng-template>
         </ion-col>
