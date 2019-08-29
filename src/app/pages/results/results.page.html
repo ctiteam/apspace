@@ -7,7 +7,8 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-buttons *ngIf="block" slot="end">
-      <ion-button fill="outline" size="small" class="colored-text notification-button colored-border" (click)="showActionSheet()">
+      <ion-button fill="outline" size="small" class="colored-text notification-button colored-border"
+        (click)="showActionSheet()">
         Intakes
       </ion-button>
     </ion-buttons>
@@ -25,18 +26,28 @@
         <ion-col size-xs="12" size-lg="3">
           <ng-template [ngIf]="result$ | async" [ngIfElse]="loading">
             <ng-template [ngIf]="(result$ | async) && (result$ | async)?.length > 0" [ngIfElse]="nodata">
-              <chart *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
+              <chart margin-top *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
             </ng-template>
           </ng-template>
           <ng-template [ngIf]="courseDetail$ | async" [ngIfElse]="loading">
-            <ion-card *ngFor="let detail of (courseDetail$ | async); trackBy:trackByFn"
-              style="margin-bottom: 5px !important;">
-              <div *ngIf="detail.SEMESTER">
-                <ion-card-header class="colored-border">
-                  <ion-card-title>Semester {{ detail.SEMESTER }}</ion-card-title>
-                  <ion-card-subtitle>{{ detail.TOTAL_MODULES_PASSED }} passed (GPA {{ detail.GPA }})</ion-card-subtitle>
-                </ion-card-header>
-              </div>
+            <ion-card no-margin margin-top>
+              <!-- <div *ngIf="detail.SEMESTER"> -->
+              <ion-card-header class="colored-border">
+                <ion-card-title>
+                  GPA Per Semester
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ng-container *ngFor="let detail of (courseDetail$ | async); trackBy:trackByFn">
+                  <ion-item lines="none" *ngIf="detail.SEMESTER">
+                    <ion-label>
+                      <h4 class="text-bold">Semester {{ detail.SEMESTER }}</h4>
+                      <p>GPA {{ detail.GPA }} ({{ detail.TOTAL_MODULES_PASSED }} modules passed)</p>
+                    </ion-label>
+                  </ion-item>
+                </ng-container>
+              </ion-card-content>
+              <!-- </div> -->
             </ion-card>
           </ng-template>
         </ion-col>
@@ -44,7 +55,7 @@
         <ion-col size-xs="12" size-lg="9">
           <ng-template [ngIf]="result$ | async" [ngIfElse]="loading">
             <ng-template [ngIf]="(result$ | async) && (result$ | async)?.length > 0" [ngIfElse]="nodata">
-              <ion-card no-padding class="table-top">
+              <ion-card no-padding no-margin margin-top margin-bottom class="table-top">
                 <ion-card-content>
                   <ion-grid>
                     <ion-row>
@@ -65,7 +76,8 @@
                 </ion-card-content>
               </ion-card>
 
-              <ion-card no-padding *ngFor="let result of (result$ | async); last as last; trackBy: trackByFn">
+              <ion-card no-margin margin-top margin-bottom no-padding
+                *ngFor="let result of (result$ | async); last as last; trackBy: trackByFn">
                 <ion-card-header class="special-card-header colored-border"
                   style="border-bottom: 2px solid var(--primary-color) !important">
                   <h4>{{ result.MODULE_DESCRIPTION }}</h4>
@@ -100,7 +112,7 @@
             </ng-template>
 
             <ng-template [ngIf]="interimLegend$ | async" [ngIfElse]="loading">
-              <ion-card>
+              <ion-card no-margin margin-top margin-bottom>
                 <ion-card-header class="colored-border" style="border-bottom: 2px solid">
                   <ion-card-title>Marks and Grades</ion-card-title>
                 </ion-card-header>
@@ -163,7 +175,7 @@
 
           <ng-template [ngIf]="(classificationLegend$ | async)">
             <div *ngIf="(classificationLegend$ | async)?.length > 0">
-              <ion-card>
+              <ion-card no-margin margin-top margin-bottom>
                 <ion-card-header class="colored-border" style="border-bottom: 2px solid">
                   <ion-card-title>Degree Classification</ion-card-title>
                 </ion-card-header>

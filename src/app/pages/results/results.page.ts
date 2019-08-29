@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActionSheetButton } from '@ionic/core';
 import { ActionSheetController, Platform, IonRefresher } from '@ionic/angular';
-import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet/ngx';
 
 import { Observable } from 'rxjs';
 import { tap, finalize } from 'rxjs/operators';
@@ -52,7 +51,6 @@ export class ResultsPage implements OnInit {
   constructor(
     private ws: WsApiService,
     private platform: Platform,
-    private actionSheet: ActionSheet,
     private actionSheetCtrl: ActionSheetController
   ) { }
 
@@ -78,32 +76,19 @@ export class ResultsPage implements OnInit {
   }
 
   showActionSheet() {
-    if (this.platform.is('cordova')) {
-      const options: ActionSheetOptions = {
-        buttonLabels: this.intakeLabels,
-        addCancelButtonWithLabel: 'Cancel',
-      };
-      this.actionSheet.show(options).then((buttonIndex: number) => {
-        if (buttonIndex <= this.intakeLabels.length) {
-          this.selectedIntake = this.intakeLabels[buttonIndex - 1] || '';
+    const intakesButton = this.intakeLabels.map(intake => {
+      return {
+        text: intake, handler: () => {
+          this.selectedIntake = intake;
           this.result$ = this.getResults(this.selectedIntake);
-        }
-      });
-    } else {
-      const intakesButton = this.intakeLabels.map(intake => {
-        return {
-          text: intake, handler: () => {
-            this.selectedIntake = intake;
-            this.result$ = this.getResults(this.selectedIntake);
-          },
-        } as ActionSheetButton;
-      });
-      this.actionSheetCtrl.create({
-        buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }],
-      }).then(
-        actionSheet => actionSheet.present()
-      );
-    }
+        },
+      } as ActionSheetButton;
+    });
+    this.actionSheetCtrl.create({
+      buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }],
+    }).then(
+      actionSheet => actionSheet.present()
+    );
   }
 
   getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
