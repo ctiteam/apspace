@@ -435,7 +435,6 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   }
 
   getupcomingExams(intake: string, todaysDate: Date): Observable<EventComponentConfigurations[]> {
-    intake = 'APU1F1904MMT';
     const opt = { auth: false };
     return this.ws.get<ExamSchedule[]>(
       `/examination/${intake}`,
