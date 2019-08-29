@@ -57,16 +57,16 @@
                 <ion-card-content>
                   <ion-grid>
                     <ion-row>
-                      <ion-col size="12" size-sm="3">
+                      <ion-col size="12" size-sm="3" size-md="5">
                         <h2 class="bold">Module</h2>
                       </ion-col>
-                      <ion-col size="12" size-sm="3">
+                      <ion-col size="12" size-sm="3" size-md="2" text-center>
                         <h2 class="bold">Grade</h2>
                       </ion-col>
-                      <ion-col size="12" size-sm="3">
+                      <ion-col size="12" size-sm="3" size-md="2" text-center>
                         <h2 class="bold">Grade Point</h2>
                       </ion-col>
-                      <ion-col size="12" size-sm="3">
+                      <ion-col size="12" size-sm="3" size-md="3" text-center>
                         <h2 class="bold">Internal Result Release Date</h2>
                       </ion-col>
                     </ion-row>
@@ -83,18 +83,18 @@
                 <ion-card-content>
                   <ion-grid>
                     <ion-row>
-                      <ion-col size="12" size-sm="3" class="bold special-border colored-border">
+                      <ion-col size="12" size-sm="3" size-md="5" class="bold special-border colored-border">
                         {{ result.MODULE_DESCRIPTION }}
                       </ion-col>
-                      <ion-col size="12" size-sm="3">
+                      <ion-col size="12" size-sm="3" size-md="2" text-center>
                         <span class="marker">Grade: </span>
                         {{ result.GRADE || "N/A" }}
                       </ion-col>
-                      <ion-col size="12" size-sm="3">
+                      <ion-col size="12" size-sm="3" size-md="2" text-center>
                         <span class="marker">Grade Point: </span>
                         {{ result.GRADE_POINT || "N/A" }}
                       </ion-col>
-                      <ion-col size="12" size-sm="3">
+                      <ion-col size="12" size-sm="3" size-md="3" text-center>
                         <span class="marker">Internal Result: </span>
                         {{ result.INTERNAL_RESULT_RELEASE_DATE || "N/A" }}
                       </ion-col>
