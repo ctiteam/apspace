@@ -1,20 +1,18 @@
 <ion-header no-border>
   <ion-toolbar>
-    <ion-title style="text-align: center">{{item.title[0].value}}</ion-title>
-    <ion-buttons slot="start">
+    <ion-title>{{item.title[0].value}}</ion-title>
+    <ion-buttons slot="end">
         <ion-button outline small (click)="dismiss()" >        
-            <ion-icon name="arrow-round-back" ></ion-icon>
+            <ion-icon name="close" ></ion-icon>
        </ion-button>
       </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content parallax-header padding>
-  <div class="header-image">
-    <img class="cover" [src]="item.field_news_image[0].url" height="auto" width="100%">
-  </div>
-  <div >
-    <h3 class="colored-text" pdding-strart>{{item.title[0].value}}</h3>
+<ion-content parallax-header>
+  <ion-img *ngIf="item.field_news_image[0].url" [src]="item.field_news_image[0].url"></ion-img>
+  <div padding>
+    <h3 class="colored-text" margin-top margin-bottom>{{item.title[0].value}}</h3>
     <article class="main-text-color" pdding-strart [innerHTML]="sanitize(item.body[0].value)"></article>
   </div>
 </ion-content>
