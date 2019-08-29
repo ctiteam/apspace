@@ -1,8 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ActionSheet } from '@ionic-native/action-sheet/ngx';
-import { ActionSheetController, IonRefresher, ModalController, Platform } from '@ionic/angular';
+import { ActionSheetController, IonRefresher, ModalController } from '@ionic/angular';
 
 import { Observable, combineLatest } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
@@ -89,11 +88,9 @@ export class StudentTimetablePage implements OnInit {
   intake: string;
 
   constructor(
-    private actionSheet: ActionSheet,
     private actionSheetCtrl: ActionSheetController,
     private changeDetectorRef: ChangeDetectorRef,
     private modalCtrl: ModalController,
-    private plt: Platform,
     private route: ActivatedRoute,
     private settings: SettingsService,
     private tt: StudentTimetableService,
@@ -146,22 +143,11 @@ export class StudentTimetablePage implements OnInit {
   }
 
   presentActionSheet(labels: string[], handler: (_: string) => void) {
-    if (this.plt.is('cordova') && !this.plt.is('ios')) {
-      const options = {
-        buttonLabels: labels,
-        addCancelButtonWithLabel: 'Cancel',
-      };
-      this.actionSheet.show(options).then((buttonIndex: number) => {
-        if (buttonIndex <= labels.length) {
-          handler.call(this, labels[buttonIndex - 1]);
-        }
-      });
-    } else {
-      const buttons = labels.map(text => ({ text, handler: () => handler.call(this, text) }));
-      this.actionSheetCtrl.create({
-        buttons: [...buttons, { text: 'Cancel', role: 'cancel' }],
-      }).then(actionSheet => actionSheet.present());
-    }
+
+    const buttons = labels.map(text => ({ text, handler: () => handler.call(this, text) }));
+    this.actionSheetCtrl.create({
+      buttons: [...buttons, { text: 'Cancel', role: 'cancel' }],
+    }).then(actionSheet => actionSheet.present());
   }
 
   /** Choose week with presentActionSheet. */
