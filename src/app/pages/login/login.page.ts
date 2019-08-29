@@ -47,7 +47,7 @@ export class LoginPage {
     if (!this.apkey || !this.password) {
       this.loginProcessLoading = false;
       this.userDidLogin = false;
-      this.showToastMessage('Please, fill up username and password');
+      this.showToastMessage('Please fill up username and password');
     } else {
       if (this.plt.is('cordova') && this.network.type === 'none') {
         return this.showToastMessage('You are now offline.');

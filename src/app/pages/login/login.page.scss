@@ -30,6 +30,13 @@ $settings-text-label-color: #ff0000;
   ===============================*/
 ion-content {
   position: relative;
+  --background: #fafafa !important; // always light theme
+}
+ion-item { // always light theme
+  --background: #f5f5f5 !important;
+  --color: #454343 !important;
+  --background-activated: #e0e0e0 !important;
+  --border-color: #e0e0e0 !important;
 }
 
 .btn_center {
@@ -93,7 +100,7 @@ ion-input {
 }
 
 ion-item {
-  --ion-background-color:transparent;
+  --ion-background-color: transparent;
 }
 ion-item ion-label {
   position: absolute;
