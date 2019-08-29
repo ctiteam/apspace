@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {  ActionSheetOptions } from '@ionic-native/action-sheet';
-import { ActionSheetController,  Platform, ModalController } from '@ionic/angular';
+import { Platform, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { ExamSchedule, Role , StudentProfile } from '../../interfaces';
+import { ExamSchedule, Role, StudentProfile } from '../../interfaces';
 import { IntakeListingService, WsApiService, SettingsService } from '../../services';
 import { ActionSheet } from '@ionic-native/action-sheet/ngx';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
@@ -26,50 +25,11 @@ export class ExamSchedulePage implements OnInit {
   constructor(
     public plt: Platform,
     public actionSheet: ActionSheet,
-    public actionSheetCtrl: ActionSheetController,
     private modalCtrl: ModalController,
     private il: IntakeListingService,
     private ws: WsApiService,
     private settings: SettingsService,
   ) { }
-
-
-  async presentActionSheet() {
-    if (this.plt.is('cordova') && !this.plt.is('ios')) {
-      const options: ActionSheetOptions = {
-        buttonLabels: this.intakes,
-        addCancelButtonWithLabel: 'Cancel',
-      };
-      this.actionSheet.show(options).then((buttonIndex: number) => {
-        if (buttonIndex <= 1 + this.intakes.length) {
-          this.intake = this.intakes[buttonIndex - 1] || '';
-          if (this.intake !== '') {
-            this.showNoIntakeMessage = false;
-            this.settings.set('examIntake', this.intake);
-            this.doRefresh();
-          } else {
-            this.showNoIntakeMessage = true;
-          }
-        }
-      });
-    } else {
-      const intakesButton = this.intakes.map(intake => ({
-        text: intake,
-        handler: () => {
-          this.intake = intake;
-          this.settings.set('examIntake', this.intake);
-          this.showNoIntakeMessage = false;
-          this.doRefresh();
-        },
-      }));
-      const actionSheet = await this.actionSheetCtrl.create({
-        buttons: [
-          ...intakesButton, { text: 'Cancel', role: 'cancel' },
-        ],
-      });
-      await actionSheet.present();
-    }
-  }
 
   /** Check and update intake on change. */
   changeIntake(intake: string) {
@@ -91,12 +51,12 @@ export class ExamSchedulePage implements OnInit {
       /* tslint:disable:no-bitwise */
       if (this.settings.get('role') & Role.Student) {
 
-/* tslint:enable:no-bitwise */
+        /* tslint:enable:no-bitwise */
         this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
           this.intake = p.INTAKE;
         },
-        (_) => {},
-        () => this.doRefresh()
+          (_) => { },
+          () => this.doRefresh()
         );
       } else {
         this.showNoIntakeMessage = true;
