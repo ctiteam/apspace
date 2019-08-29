@@ -16,7 +16,7 @@
     <ng-template let-news [ngIf]="news$ | async" [ngIfElse]="loadingNews">
       <ng-template [ngIf]="news && news.length > 0" [ngIfElse]="nonews">
         <div class="masonry-item" *ngFor="let item of news">
-          <ion-card tappable (click)="openModal(item)">
+          <ion-card no-margin tappable (click)="openModal(item)">
             <img [src]="item.field_news_image[0].url" />
             <ion-card-content color="light">
               {{ item.title[0].value }}
