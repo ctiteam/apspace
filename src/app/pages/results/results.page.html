@@ -6,7 +6,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-buttons slot="end">
+    <ion-buttons *ngIf="block" slot="end">
       <ion-button fill="outline" size="small" class="colored-text notification-button colored-border" (click)="showActionSheet()">
         Intakes
       </ion-button>
