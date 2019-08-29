@@ -48,3 +48,9 @@
   font-weight: normal;
   font-style: normal;
 }
+
+// Fix padding for phones with notch screen
+body{
+  margin-top: constant(safe-area-inset-top);
+  margin-top: env(safe-area-inset-top);
+}
