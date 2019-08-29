@@ -125,7 +125,7 @@ export class LoginPage {
         {
           text: 'Open The documentation',
           handler: () => {
-            this.iab.create('http://kb.sites.apiit.edu.my/question/apkey-troubleshooting/', '_blank', 'location=true');
+            this.iab.create('http://kb.sites.apiit.edu.my/question/apkey-troubleshooting/', '_system', 'location=true');
           }
         }
       ]

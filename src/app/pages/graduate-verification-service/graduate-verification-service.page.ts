@@ -25,7 +25,7 @@ export class GraduateVerificationServicePage implements OnInit {
   }
 
   openForms() {
-    this.iab.create(`${this.formsURL}`, '_blank', 'location=true');
+    this.iab.create(`${this.formsURL}`, '_system', 'location=true');
   }
 
   searchForGraduaters() {

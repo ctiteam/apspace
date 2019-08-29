@@ -78,7 +78,7 @@ export class FeedbackPage implements OnInit {
   }
 
   openOnlineFeedbackSystem() {
-    this.iab.create(this.onlineFeedbackSystemURL, '_blank', 'location=true');
+    this.iab.create(this.onlineFeedbackSystemURL, '_system', 'location=true');
   }
 
 }
