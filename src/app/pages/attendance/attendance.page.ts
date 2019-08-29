@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { WsApiService } from 'src/app/services';
-import { ActionSheetOptions } from '@ionic-native/action-sheet/ngx';
 import { Platform, ActionSheetController, NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { Attendance, Course, AttendanceLegend } from 'src/app/interfaces';
