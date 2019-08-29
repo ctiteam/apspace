@@ -392,3 +392,9 @@ ion-fab-button {
     --background-hover: var(--sub-primary-color);
   }
 }
+
+ion-alert{
+  .alert-sub-title, .alert-message{
+    color: var(--secondary-txt-color) !important;
+  }
+}
