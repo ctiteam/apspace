@@ -30,7 +30,7 @@ export class ResultsPage implements OnInit {
   data: any;
   selectedIntake: string;
   intakeLabels: any;
-  block = false;
+  block = true;
   message: string;
 
   options = {
