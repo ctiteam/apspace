@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WsApiService } from 'src/app/services';
-import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet/ngx';
+import { ActionSheetOptions } from '@ionic-native/action-sheet/ngx';
 import { Platform, ActionSheetController, NavController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { Attendance, Course, AttendanceLegend } from 'src/app/interfaces';
@@ -27,7 +27,6 @@ export class AttendancePage implements OnInit {
 
   constructor(
     private ws: WsApiService,
-    private actionSheet: ActionSheet,
     private plt: Platform,
     public actionSheetCtrl: ActionSheetController,
     public navCtrl: NavController,
@@ -38,35 +37,23 @@ export class AttendancePage implements OnInit {
   }
 
   showActionSheet() {
-    if (this.plt.is('cordova')) {
-      const options: ActionSheetOptions = {
-        buttonLabels: this.intakeLabels,
-        addCancelButtonWithLabel: 'Cancel',
-      };
 
-      this.actionSheet.show(options).then((buttonIndex: number) => {
-        if (buttonIndex <= 1 + this.intakeLabels.length) {
-          this.selectedIntake = this.intakeLabels[buttonIndex - 1] || '';
+    const intakesButton = this.intakeLabels.map(intake => {
+      return {
+        text: intake,
+        handler: () => {
+          this.selectedIntake = intake;
           this.attendance$ = this.getAttendance(this.selectedIntake);
-        }
-      });
-    } else {
-      const intakesButton = this.intakeLabels.map(intake => {
-        return {
-          text: intake,
-          handler: () => {
-            this.selectedIntake = intake;
-            this.attendance$ = this.getAttendance(this.selectedIntake);
-          },
-        } as ActionSheetButton;
-      });
+        },
+      } as ActionSheetButton;
+    });
 
-      this.actionSheetCtrl.create({
-        buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }],
-      }).then(
-        actionSheet => actionSheet.present()
-      );
-    }
+    this.actionSheetCtrl.create({
+      buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }],
+    }).then(
+      actionSheet => actionSheet.present()
+    );
+
   }
 
   getAttendance(intake: string, refresh?: boolean): Observable<Attendance[]> {
@@ -76,7 +63,7 @@ export class AttendancePage implements OnInit {
       .pipe(
         tap(_ => this.getLegend(refresh)),
         tap(a => this.calculateAverage(a)),
-    ));
+      ));
   }
 
   getLegend(refresh: boolean) {
