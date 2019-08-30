@@ -64,13 +64,7 @@ export class LecturerTimetableComponent implements OnInit {
   }
 
   reverseObject(obj: object): object {
-    const object = {};
-    const reverse = Object.keys(obj).reverse();
-    reverse.map((i) => {
-      object[i] = obj[i];
-    });
-
-    return object;
+    return Object.keys(obj).reverse().reduce((acc, v) => (acc[v] = obj[v], acc), {});
   }
 
   /** Display schedule. */
