@@ -16,10 +16,10 @@
       <div class="masonry-item " *ngFor="let department of customer.company_departments">
         <div>
           <ion-card>
-            <ion-card-header>
+            <ion-card-header class="colored-border">
               <ion-card-title class="responsive-h1">
                 <ion-icon name="{{department.dept_icon}}" [style.color]="department.dept_icon_color"></ion-icon>
-                {{department.dept_name}} | {{customer.company_id}}
+                {{ department.dept_name.charAt(0).toUpperCase() + department.dept_name.slice(1) }} | {{customer.company_id}}
               </ion-card-title>
             </ion-card-header>
             <ion-card-content
@@ -48,7 +48,6 @@
                       <ion-col size="4">
                         <div *ngFor="let slot of shift.value">
                           <div *ngIf="slot.start_time ; else noStartTime" class="timeTxt">
-
                             {{ slot.start_time }}
                           </div>
                           <ng-template #noStartTime>
@@ -71,7 +70,7 @@
               <section>
                 <ion-text class="emailClass">Email:
                   <div *ngIf="department.dept_email ; else noEmail">
-                    <a href="{{department.dept_email}}" class="ion-padding-start">{{department.dept_email}}</a>
+                    <a href="mailto:{{ department.dept_email }}" class="ion-padding-start">{{department.dept_email}}</a>
                   </div>
                   <ng-template #noEmail>
                     <h3 class="ion-padding-start ion-text-center"> No email provided</h3>
@@ -80,7 +79,7 @@
                 <ion-text>Phone/General Line</ion-text>
                 <div *ngIf="department.dept_phone ; else noPhone">
                   <div *ngFor="let phone of department.dept_phone">
-                    <a href="{{phone}}" class="ion-padding-start">{{phone}}</a>
+                    <a href="tel:{{phone}}" class="ion-padding-start">{{phone}}</a>
                   </div>
                 </div>
                 <ng-template #noPhone>
