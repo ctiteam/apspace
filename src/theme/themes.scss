@@ -376,7 +376,7 @@ ion-button {
     --background: #464775;
     --background-hover: #5f60a3;
   }
-  &.colored-border{
+  &.colored-border {
     --border-color: var(--primary-color) !important;
   }
   &.danger-background {
@@ -393,8 +393,21 @@ ion-fab-button {
   }
 }
 
-ion-alert{
-  .alert-sub-title, .alert-message{
+ion-alert {
+  .alert-sub-title,
+  .alert-message {
     color: var(--secondary-txt-color) !important;
+  }
+}
+
+ion-action-sheet {
+  // Android & iOS items color
+  .action-sheet-button.sc-ion-action-sheet-md,
+  .action-sheet-button.sc-ion-action-sheet-ios {
+    color: var(--main-txt-color);
+  }
+  // iOS actionsheet background
+  .action-sheet-group.sc-ion-action-sheet-ios {
+    --background: var(--main-bg-color) !important;
   }
 }
