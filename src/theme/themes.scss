@@ -411,3 +411,20 @@ ion-action-sheet {
     --background: var(--main-bg-color) !important;
   }
 }
+
+ion-segment {
+  ion-segment-button {
+    &.md {
+      --color-checked: var(--primary-color);
+      --color: var(--tertiary-txt-color);
+    }
+
+    &.ios {
+      --background-checked: var(--primary-color);
+      --color-checked: #FFFFFF;;
+      --color: var(--tertiary-txt-color);
+      --border-color: var(--tertiary-txt-color);
+      --border-color-checked: var(--primary-color);
+    }
+  }
+}

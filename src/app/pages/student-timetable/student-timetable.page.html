@@ -29,7 +29,7 @@
       [ngIfElse]="loading">
       <ng-template [ngIf]="timetables!.length" [ngIfElse]="empty">
         <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
-          <ion-segment [ngModel]="selectedDate | date:'E' | uppercase"
+          <ion-segment padding [ngModel]="selectedDate | date:'E' | uppercase"
             (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
             <ion-segment-button *ngFor="let day of availableDays" [value]="day">
               {{ day }}
@@ -38,11 +38,11 @@
         </ng-template>
 
         <ng-template [ngIf]="selectedDate">
-          <ion-card no-padding>
-            <ion-card-content class="table-top">
+          <ion-card class="table-top" no-padding>
+            <ion-card-content no-padding>
               <ion-grid no-margin no-padding>
                 <ion-row>
-                  <ion-col size="12" size-sm="3">
+                  <ion-col padding-start size="12" size-sm="3">
                     <h2>Module</h2>
                   </ion-col>
                   <ion-col size="12" size-sm="3">

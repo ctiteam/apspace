@@ -7,32 +7,6 @@ loading-spinner {
   }
 }
 
-ion-segment {
-  display: block;
-  white-space: nowrap;
-  overflow: auto;
-
-  &::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    display: none;
-  }
-
-  ion-segment-button.segment-button {
-    display: inline-block;
-    min-width: 135px;
-    width: auto;
-  }
-}
-
-.segment-md .segment-button {
-  font-size: 1.1em;
-}
-
-.segment-ios .segment-button {
-  font-size: 1.1em;
-}
-
 .subj-title {
   font-size: small;
   font-weight: 500;

@@ -12,7 +12,7 @@
   </ion-toolbar>
 
   <ion-toolbar *ngIf="(bankDraft$ | async) as bankDrafts; else loadingSegment">
-    <ion-segment [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
+    <ion-segment padding [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
       <ion-segment-button value="Summary">Summary</ion-segment-button>
       <ion-segment-button *ngIf="bankDrafts[0].BANKDRAFT_AMOUNT !== 0" value="Bank Draft">
         SU Fees

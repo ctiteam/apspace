@@ -5,10 +5,6 @@ ion-card {
     padding-right: 8px;
   }
   
-  ion-card-content {
-    padding-top: 2px;
-  } 
-  
   ion-card-content a {
     text-decoration: none;
   }
@@ -26,10 +22,6 @@ ion-card {
       border-radius: 10px 10px 0 0;
     }
   }
-}
-
-ion-segment-button {
-  color: var(--secondary-txt-color);
 }
 
 .table-top {
