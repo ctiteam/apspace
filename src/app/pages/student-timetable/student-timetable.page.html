@@ -6,7 +6,7 @@
         {{ viewWeek ? 'Weekly' : 'Daily' }}
       </ion-button>
       <ion-button outline small (click)="chooseWeek()" [disabled]="availableWeek!.length === 0">
-        {{ (selectedDate | date) || 'Weeks' }}
+        {{ dateFromAvailableWeek || 'Weeks' }}
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">

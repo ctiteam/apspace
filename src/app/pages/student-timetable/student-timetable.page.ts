@@ -77,6 +77,7 @@ export class StudentTimetablePage implements OnInit {
   timetable$: Observable<StudentTimetable[]>;
   selectedWeek: Date; // week is the first day of week
   availableWeek: Date[] = [];
+  dateFromAvailableWeek: string[]; // used to get the date (transformed) from the availableDate var in HTML.
   selectedDate: Date;
   availableDate: Date[];
   availableDays: string[]; // wday[d.getDay()] for availableDate
@@ -243,10 +244,15 @@ export class StudentTimetablePage implements OnInit {
 
     // get week
     this.availableWeek = Array.from(new Set(tt.map(t => {
+      // tslint:disable-next-line: no-shadowed-variable
       const date = new Date(t.DATESTAMP_ISO);
       date.setDate(date.getDate() - date.getDay());
       return date.valueOf();
     }))).sort().map(d => new Date(d));
+
+    // get shorter date from week (pipe)
+    const date = new DatePipe('en');
+    this.dateFromAvailableWeek = this.availableWeek.map(d => date.transform(d));
 
     // prevent further processing if no week available
     if (this.availableWeek.length === 0) {
