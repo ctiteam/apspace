@@ -421,10 +421,19 @@ ion-segment {
 
     &.ios {
       --background-checked: var(--primary-color);
-      --color-checked: #FFFFFF;;
+      --color-checked: #ffffff;
       --color: var(--tertiary-txt-color);
       --border-color: var(--tertiary-txt-color);
       --border-color-checked: var(--primary-color);
     }
   }
+}
+
+// iOS toolbar buttons
+.sc-ion-buttons-ios-hion-toolbar:not(.ion-color).sc-ion-buttons-ios-s .button-clear,
+ion-toolbar:not(.ion-color) .sc-ion-buttons-ios-h.sc-ion-buttons-ios-s .button-clear {
+  --color: var(--secondary-txt-color);
+  --color-activated: var(--secondary-txt-color);
+  --color-hover: var(--secondary-txt-color);
+  --color-focused: var(--secondary-txt-color);
 }
