@@ -19,7 +19,7 @@
             <ion-card-header class="colored-border">
               <ion-card-title class="responsive-h1">
                 <ion-icon name="{{department.dept_icon}}" [style.color]="department.dept_icon_color"></ion-icon>
-                {{ department.dept_name.charAt(0).toUpperCase() + department.dept_name.slice(1) }} | {{customer.company_id}}
+                {{customer.company_id}} │ {{ department.dept_name.charAt(0).toUpperCase() + department.dept_name.slice(1) }}
               </ion-card-title>
             </ion-card-header>
             <ion-card-content
@@ -47,7 +47,7 @@
                       <ion-col size="4">
                         <div *ngFor="let slot of shift.value">
                           <div *ngIf="slot.start_time ; else noStartTime" class="timeTxt">
-                            {{ slot.start_time }}
+                            {{ (slot.start_time | time) }}
                           </div>
                           <ng-template #noStartTime>
                             <ion-text>no Open time provided</ion-text>
@@ -56,7 +56,7 @@
                       </ion-col>
                       <ion-col size="4">
                         <div *ngFor="let slot of shift.value" class="timeTxt">
-                          {{ slot.end_time }}
+                          {{ (slot.end_time | time) }}
                         </div>
                       </ion-col>
                     </ion-row>
