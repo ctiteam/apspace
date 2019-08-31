@@ -54,10 +54,7 @@ export class StaffDirectoryInfoPage implements OnInit {
   }
 
   navigateToIconsult(staffId: string) {
-    const navigationExtras: NavigationExtras = {
-      state: {staffId}
-    };
-    this.router.navigate(['opened-slots'], navigationExtras);
+    this.router.navigate(['staffs', staffId, 'consultations']);
   }
 
 }

@@ -39,6 +39,10 @@ const routes: Routes = [
       {
         path: '',
         loadChildren: () => import('./pages/staff-directory-info/staff-directory-info.module').then(m => m.StaffDirectoryInfoPageModule)
+      },
+      {
+        path: ':id/consultations',
+        loadChildren: () => import('./pages/iconsult/student/opened-slots/opened-slots.module').then(m => m.OpenedSlotsPageModule)
       }
     ]
   },
@@ -115,10 +119,6 @@ const routes: Routes = [
     path: 'profile',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule)
-  },
-  {
-    path: 'opened-slots',
-    loadChildren: () => import('./pages/iconsult/student/opened-slots/opened-slots.module').then(m => m.OpenedSlotsPageModule)
   },
 
   {
