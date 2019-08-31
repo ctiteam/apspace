@@ -118,7 +118,7 @@ export class MorePage implements OnInit {
       title: 'iConsult',
       group: 'Course Related',
       img: 'assets/img/iconsult.png',
-      url: 'my-consultations',
+      url: 'iconsult/my-consultations',
       role: Role.Lecturer | Role.Admin,
       tags: []
     },
@@ -132,7 +132,7 @@ export class MorePage implements OnInit {
     {
       title: 'iConsult',
       group: 'Course Related',
-      url: 'my-appointments',
+      url: 'iconsult/my-appointments',
       img: 'assets/img/iconsult.png',
       role: Role.Student,
       tags: []

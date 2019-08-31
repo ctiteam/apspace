@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { DeauthGuard } from './guards/deauth.guard';
 import { Role } from './interfaces';
+import { RoleGuard } from './guards/role.guard';
 
 /* tslint:disable:no-bitwise */
 const routes: Routes = [
@@ -132,30 +133,50 @@ const routes: Routes = [
     loadChildren: () => import('./pages/student-survey/student-survey.module').then(m => m.SubmitSurveyPageModule)
   },
   {
-    path: 'my-appointments',
-    canActivate: [AuthGuard],
-    data: { role: Role.Student },
-    loadChildren: () => import('./pages/iconsult/student/my-appointments/my-appointments.module').then(m => m.MyAppointmentsPageModule)
-  },
-  {
     path: 'results',
     canActivate: [AuthGuard],
     loadChildren: './pages/results/results.module#ResultsPageModule'
+  },
+  {
+    path: 'lecturer-timetable',
+    loadChildren: () => import('./pages/lecturer-timetable/lecturer-timetable.module').then(m => m.LecturerTimetablePageModule)
   },
   {
     path: 'logout',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/logout/logout.module').then(m => m.LogoutPageModule)
   },
-  { path: 'add-free-slot', loadChildren: './pages/iconsult/staff/add-free-slot/add-free-slot.module#AddFreeSlotPageModule' },
+
+  // iConsult Routes
   {
-    path: 'add-unavailability',
-    loadChildren: './pages/iconsult/staff/add-unavailability/add-unavailability.module#AddUnavailabilityPageModule'
-  },
-  { path: 'my-consultations', loadChildren: './pages/iconsult/staff/my-consultations/my-consultations.module#MyConsultationsPageModule' },
-  {
-    path: 'lecturer-timetable',
-    loadChildren: () => import('./pages/lecturer-timetable/lecturer-timetable.module').then(m => m.LecturerTimetablePageModule)
+    path: 'iconsult',
+    children: [
+      {
+        path: 'add-free-slot',
+        canActivate: [RoleGuard],
+        data: { role: Role.Admin },
+        loadChildren: () => import('./pages/iconsult/staff/add-free-slot/add-free-slot.module').then(m => m.AddFreeSlotPageModule)
+      },
+      {
+        path: 'add-unavailability',
+        canActivate: [RoleGuard],
+        data: { role: Role.Admin },
+        // tslint:disable-next-line: max-line-length
+        loadChildren: () => import('./pages/iconsult/staff/add-unavailability/add-unavailability.module').then(m => m.AddUnavailabilityPageModule)
+      },
+      {
+        path: 'my-consultations',
+        canActivate: [RoleGuard],
+        data: { role: Role.Admin },
+        loadChildren: () => import('./pages/iconsult/staff/my-consultations/my-consultations.module').then(m => m.MyConsultationsPageModule)
+      },
+      {
+        path: 'my-appointments',
+        canActivate: [AuthGuard, RoleGuard],
+        data: { role: Role.Student },
+        loadChildren: () => import('./pages/iconsult/student/my-appointments/my-appointments.module').then(m => m.MyAppointmentsPageModule)
+      },
+    ]
   },
 ];
 
