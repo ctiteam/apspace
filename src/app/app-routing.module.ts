@@ -83,7 +83,6 @@ const routes: Routes = [
   {
     path: 'exam-schedule',
     canActivate: [AuthGuard],
-    data: { role: Role.Student },
     loadChildren: () => import('./pages/exam-schedule/exam-schedule.module').then(m => m.ExamSchedulePageModule)
   },
   {
