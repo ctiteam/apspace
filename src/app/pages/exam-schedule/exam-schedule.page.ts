@@ -82,6 +82,8 @@ export class ExamSchedulePage implements OnInit {
     await modal.present();
     // default item to current intake if model dismissed without data
     const { data: { item: intake } = { item: this.intake } } = await modal.onDidDismiss();
-    this.changeIntake(intake);
+    if (intake) {
+      this.changeIntake(intake);
+    }
   }
 }
