@@ -39,10 +39,9 @@ export class OpenedSlotsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.staffCasId = params.id;
-      this.staff$ = this.getStaffProfile();
-    });
+    this.staffCasId = this.route.snapshot.params.id;
+    this.staff$ = this.getStaffProfile();
+
     this.getData();
   }
 

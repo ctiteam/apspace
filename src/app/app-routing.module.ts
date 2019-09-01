@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { DeauthGuard } from './guards/deauth.guard';
 import { Role } from './interfaces';
-import { RoleGuard } from './guards/role.guard';
 
 /* tslint:disable:no-bitwise */
 const routes: Routes = [
@@ -153,26 +152,26 @@ const routes: Routes = [
     children: [
       {
         path: 'add-free-slot',
-        canActivate: [RoleGuard],
+        canActivate: [AuthGuard],
         data: { role: Role.Admin },
         loadChildren: () => import('./pages/iconsult/staff/add-free-slot/add-free-slot.module').then(m => m.AddFreeSlotPageModule)
       },
       {
         path: 'add-unavailability',
-        canActivate: [RoleGuard],
+        canActivate: [AuthGuard],
         data: { role: Role.Admin },
         // tslint:disable-next-line: max-line-length
         loadChildren: () => import('./pages/iconsult/staff/add-unavailability/add-unavailability.module').then(m => m.AddUnavailabilityPageModule)
       },
       {
         path: 'my-consultations',
-        canActivate: [RoleGuard],
+        canActivate: [AuthGuard],
         data: { role: Role.Admin },
         loadChildren: () => import('./pages/iconsult/staff/my-consultations/my-consultations.module').then(m => m.MyConsultationsPageModule)
       },
       {
         path: 'my-appointments',
-        canActivate: [AuthGuard, RoleGuard],
+        canActivate: [AuthGuard],
         data: { role: Role.Student },
         loadChildren: () => import('./pages/iconsult/student/my-appointments/my-appointments.module').then(m => m.MyAppointmentsPageModule)
       },
