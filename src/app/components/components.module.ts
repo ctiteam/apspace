@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
-import { SkeletonItemComponent } from './skeleton-item/skeleton-item.component';
 import { SearchModalComponent } from './search-modal/search-modal.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner';
 import { EventsListComponent } from './events-list/events-list.component';
@@ -14,7 +13,6 @@ import { MessageWithSvgComponent } from './message-with-svg/message-with-svg.com
 
 @NgModule({
   declarations: [
-    SkeletonItemComponent,
     SearchModalComponent,
     LoadingSpinnerComponent,
     EventsListComponent,
@@ -30,7 +28,6 @@ import { MessageWithSvgComponent } from './message-with-svg/message-with-svg.com
     IonicModule
   ],
   exports: [
-    SkeletonItemComponent,
     SearchModalComponent,
     LoadingSpinnerComponent,
     EventsListComponent,
