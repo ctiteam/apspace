@@ -68,7 +68,7 @@
                     <ng-template [ngIf]='visa[0].VISA_EXPIRY_DATE' [ngIfElse]='noVisa'>
                       <h4>Student Pass Expiry Date</h4>
                       <p>
-                        {{ visa[0].VISA_EXPIRY_DATE | date: 'dd-LLL-yyyy' }}
+                        {{ visa[0].VISA_EXPIRY_DATE | date: "EEE, d MMM y"  }}
                       </p>
                     </ng-template>
                     <ng-template #noVisa>
