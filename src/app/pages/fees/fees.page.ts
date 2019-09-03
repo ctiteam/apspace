@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 import { Observable } from 'rxjs';
-import { tap, finalize } from 'rxjs/operators';
+import { tap, finalize, map } from 'rxjs/operators';
 
 import { IonContent, MenuController } from '@ionic/angular';
 
@@ -94,9 +94,13 @@ export class FeesPage implements OnInit {
     const that = this;
 
     this.totalSummary$ = this.ws.get('/student/summary_overall_fee', true);
-    this.summary$ = this.ws.get('/student/outstanding_fee', true);
+    this.summary$ = this.ws.get<FeesSummary[]>('/student/outstanding_fee', true).pipe(
+      tap(summuries => summuries.map(summury => summury.PAYMENT_DUE_DATE = summury.PAYMENT_DUE_DATE.replace(/-/g, ' ')))
+    );
     this.bankDraft$ = this.ws.get('/student/bankdraft_amount', true);
-    this.detail$ = this.ws.get('/student/overall_fee', true);
+    this.detail$ = this.ws.get<FeesDetails[]>('/student/overall_fee', true).pipe(
+      tap(details => details.map(detail => detail.DUE_DATE = detail.DUE_DATE.replace(/-/g, ' ')))
+    );
 
     this.totalSummary$ = this.totalSummary$.pipe(
       tap(overdueSummary => {
@@ -138,7 +142,7 @@ export class FeesPage implements OnInit {
 
     );
 
-    this.financialsChart.options.legend.onClick = function(
+    this.financialsChart.options.legend.onClick = function (
       // tslint:disable-next-line: no-shadowed-variable
       event,
       legendItem
