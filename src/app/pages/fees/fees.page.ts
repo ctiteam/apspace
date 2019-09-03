@@ -142,7 +142,7 @@ export class FeesPage implements OnInit {
 
     );
 
-    this.financialsChart.options.legend.onClick = function (
+    this.financialsChart.options.legend.onClick = function(
       // tslint:disable-next-line: no-shadowed-variable
       event,
       legendItem
