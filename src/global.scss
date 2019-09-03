@@ -54,3 +54,52 @@ body{
   margin-top: constant(safe-area-inset-top);
   margin-top: env(safe-area-inset-top);
 }
+
+// To be removed after solving the ShadowDOM issue Outside the print query: always hide the element with the class show-on-print
+.show-on-print{
+  // Hide elements that need to be shown on print only
+  display: none;
+}
+
+// Default print settings (Fix print issue in ionic) // To be moved to a seperate file
+@media print {
+  ion-header, ion-tab-bar{
+    // hide header and tabs on print
+    display: none;
+  }
+
+  html,
+  body,
+  app-root,
+  ion-app,
+  ion-router-outlet,
+  app-tabs,
+  ion-tabs,
+  .tabs-inner,
+  app-timetable,
+  ion-content {
+    position: relative !important;
+    height: auto !important;
+    min-height: 0 !important;
+    contain: none !important;
+    max-height: none !important;
+    display: block !important;
+  }
+
+  .hide-on-print{
+    display: none;
+  }
+  .show-on-print{
+    display: block;
+  }
+
+  /*
+  The (main.scroll-y.inner-scroll) element needs to take a relative position style
+  
+  - However, the ShadowDom elements cannot be modified.
+  - The only way to modify them is by using css 4 variables.
+  - Ionic did not add variable for position.
+  - The issue will be resolved when Ionic adds a variable for the position to be used
+  - Currently, we will create a sperate div outside the ion-content to be displayed     for print, untill the issue is fixed.
+  */
+}
