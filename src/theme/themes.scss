@@ -376,8 +376,12 @@ ion-button {
     --background: #464775;
     --background-hover: #5f60a3;
   }
-  &.colored-border{
+  &.colored-border {
     --border-color: var(--primary-color) !important;
+  }
+  &.danger-background {
+    --background: var(--danger-color) !important;
+    --background-hover: var(--danger-hover-color);
   }
 }
 
@@ -387,4 +391,49 @@ ion-fab-button {
     --background-activated: var(--primary-color) !important;
     --background-hover: var(--sub-primary-color);
   }
+}
+
+ion-alert {
+  .alert-sub-title,
+  .alert-message {
+    color: var(--secondary-txt-color) !important;
+  }
+}
+
+ion-action-sheet {
+  // Android & iOS items color
+  .action-sheet-button.sc-ion-action-sheet-md,
+  .action-sheet-button.sc-ion-action-sheet-ios {
+    color: var(--main-txt-color);
+  }
+  // iOS actionsheet background
+  .action-sheet-group.sc-ion-action-sheet-ios {
+    --background: var(--main-bg-color) !important;
+  }
+}
+
+ion-segment {
+  ion-segment-button {
+    &.md {
+      --color-checked: var(--primary-color);
+      --color: var(--tertiary-txt-color);
+    }
+
+    &.ios {
+      --background-checked: var(--primary-color);
+      --color-checked: #ffffff;
+      --color: var(--tertiary-txt-color);
+      --border-color: var(--tertiary-txt-color);
+      --border-color-checked: var(--primary-color);
+    }
+  }
+}
+
+// iOS toolbar buttons
+.sc-ion-buttons-ios-hion-toolbar:not(.ion-color).sc-ion-buttons-ios-s .button-clear,
+ion-toolbar:not(.ion-color) .sc-ion-buttons-ios-h.sc-ion-buttons-ios-s .button-clear {
+  --color: var(--secondary-txt-color);
+  --color-activated: var(--secondary-txt-color);
+  --color-hover: var(--secondary-txt-color);
+  --color-focused: var(--secondary-txt-color);
 }

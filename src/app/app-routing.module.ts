@@ -39,6 +39,10 @@ const routes: Routes = [
       {
         path: '',
         loadChildren: () => import('./pages/staff-directory-info/staff-directory-info.module').then(m => m.StaffDirectoryInfoPageModule)
+      },
+      {
+        path: ':id/consultations',
+        loadChildren: () => import('./pages/iconsult/student/opened-slots/opened-slots.module').then(m => m.OpenedSlotsPageModule)
       }
     ]
   },
@@ -51,42 +55,6 @@ const routes: Routes = [
     path: 'bus-shuttle-services',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttleServicesPageModule)
-  },
-  {
-    path: 'attendix-lecturer',
-    // canActivate: [AuthGuard],
-    children: [
-      {
-        path: 'classes',
-        loadChildren:
-          () => import('./pages/attendix/attendix-lecturer/classes/classes.module').then(m => m.ClassesPageModule)
-      },
-      {
-        path: 'take-attendance',
-        loadChildren:
-          () => import('./pages/attendix/attendix-lecturer/take-attendance/take-attendance.module').then(m => m.TakeAttendancePageModule)
-      },
-      // { path: 'qr-otp', loadChildren: './pages/attendix/qr-otp/qr-otp.module#QrOtpPageModule' },
-      // { path: 'take-picture', loadChildren: './pages/attendix/take-picture/take-picture.module#TakePicturePageModule' },
-    ]
-  },
-  {
-    path: 'attendix-student',
-    // canActivate: [AuthGuard],
-    children: [
-      {
-        path: 'qr-code',
-        loadChildren: () => import('./pages/attendix/qr-code/qr-code.module').then(m => m.QrCodePageModule)
-      },
-      {
-        path: 'qr-otp',
-        loadChildren: () => import('./pages/attendix/qr-otp/qr-otp.module').then(m => m.QrOtpPageModule)
-      },
-      {
-        path: 'take-picture',
-        loadChildren: () => import('./pages/attendix/take-picture/take-picture.module').then(m => m.TakePicturePageModule)
-      }
-    ]
   },
   {
     path: 'more',
@@ -119,7 +87,6 @@ const routes: Routes = [
   {
     path: 'exam-schedule',
     canActivate: [AuthGuard],
-    data: { role: Role.Student },
     loadChildren: () => import('./pages/exam-schedule/exam-schedule.module').then(m => m.ExamSchedulePageModule)
   },
   {
@@ -153,10 +120,6 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfilePageModule)
   },
-  {
-    path: 'opened-slots',
-    loadChildren: () => import('./pages/iconsult/student/opened-slots/opened-slots.module').then(m => m.OpenedSlotsPageModule)
-  },
 
   {
     path: 'operation-hours',
@@ -169,30 +132,50 @@ const routes: Routes = [
     loadChildren: () => import('./pages/student-survey/student-survey.module').then(m => m.SubmitSurveyPageModule)
   },
   {
-    path: 'my-appointments',
-    canActivate: [AuthGuard],
-    data: { role: Role.Student },
-    loadChildren: () => import('./pages/iconsult/student/my-appointments/my-appointments.module').then(m => m.MyAppointmentsPageModule)
-  },
-  {
     path: 'results',
     canActivate: [AuthGuard],
     loadChildren: './pages/results/results.module#ResultsPageModule'
+  },
+  {
+    path: 'lecturer-timetable',
+    loadChildren: () => import('./pages/lecturer-timetable/lecturer-timetable.module').then(m => m.LecturerTimetablePageModule)
   },
   {
     path: 'logout',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/logout/logout.module').then(m => m.LogoutPageModule)
   },
-  { path: 'add-free-slot', loadChildren: './pages/iconsult/staff/add-free-slot/add-free-slot.module#AddFreeSlotPageModule' },
+
+  // iConsult Routes
   {
-    path: 'add-unavailability',
-    loadChildren: './pages/iconsult/staff/add-unavailability/add-unavailability.module#AddUnavailabilityPageModule'
-  },
-  { path: 'my-consultations', loadChildren: './pages/iconsult/staff/my-consultations/my-consultations.module#MyConsultationsPageModule' },
-  {
-    path: 'lecturer-timetable',
-    loadChildren: () => import('./pages/lecturer-timetable/lecturer-timetable.module').then(m => m.LecturerTimetablePageModule)
+    path: 'iconsult',
+    children: [
+      {
+        path: 'add-free-slot',
+        canActivate: [AuthGuard],
+        data: { role: Role.Admin },
+        loadChildren: () => import('./pages/iconsult/staff/add-free-slot/add-free-slot.module').then(m => m.AddFreeSlotPageModule)
+      },
+      {
+        path: 'add-unavailability',
+        canActivate: [AuthGuard],
+        data: { role: Role.Admin },
+        // tslint:disable-next-line: max-line-length
+        loadChildren: () => import('./pages/iconsult/staff/add-unavailability/add-unavailability.module').then(m => m.AddUnavailabilityPageModule)
+      },
+      {
+        path: 'my-consultations',
+        canActivate: [AuthGuard],
+        data: { role: Role.Admin },
+        loadChildren: () => import('./pages/iconsult/staff/my-consultations/my-consultations.module').then(m => m.MyConsultationsPageModule)
+      },
+      {
+        path: 'my-appointments',
+        canActivate: [AuthGuard],
+        data: { role: Role.Student },
+        loadChildren: () => import('./pages/iconsult/student/my-appointments/my-appointments.module').then(m => m.MyAppointmentsPageModule)
+      },
+    ]
   },
 ];
 

@@ -9,8 +9,12 @@ import * as moment from 'moment';
 import { WsApiService } from 'src/app/services';
 import { LecturerConsultation } from 'src/app/interfaces';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
-import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
-import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
+import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
+import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
+import { ActivatedRoute } from 'src/testing';
+import { Router } from '@angular/router';
+// import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
+// import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
 
 @Component({
@@ -46,7 +50,10 @@ export class MyConsultationsPage implements OnInit {
     private modalCtrl: ModalController,
     private alertController: AlertController,
     private loadingController: LoadingController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private route: ActivatedRoute,
+    private router: Router,
+
   ) { }
 
   iconsultFormatDate(date: Date) { // Format used in iConsult date
@@ -62,12 +69,46 @@ export class MyConsultationsPage implements OnInit {
     await modal.onDidDismiss();
   }
 
+  async openSlotDetailsModal(
+    slotId: string, startTime: string, endTime: string, dateAndTime: string, availibilityId: number, date: string, timee: string) {
+    const dataToSend = { slotId, startTime, endTime, dateAndTime, availibilityId, date, timee };
+    const modal = await this.modalCtrl.create({
+      component: LecturerSlotDetailsModalPage,
+      cssClass: 'add-min-height',
+      componentProps: { dataToSend, notFound: 'No slot Selected' },
+    });
+    await modal.present();
+    await modal.onDidDismiss().then(
+      data => {
+        if (data.data === 'booked') {
+          this.daysConfigrations = [];
+          this.getData();
+        }
+      }
+    );
+  }
+
+  async openUnavailableSlotDetails(unavailibilityid: string) {
+    const modal = await this.modalCtrl.create({
+      component: UnavailabilityDetailsModalPage,
+      cssClass: 'add-min-height',
+      componentProps: { unavailibilityid, notFound: 'No slot Selected' },
+    });
+    await modal.present();
+    await modal.onDidDismiss();
+  }
+
+
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.reload) {
+        this.getData();
+      }
+    });
     this.getData();
   }
 
   async cancelAvailableSlot(slot: LecturerConsultation) {
-    console.log(slot);
     const alert = await this.alertController.create({
       header: 'Cancelling an opened slot',
       message: `You are about to cancel the slot opened on ${slot.dateandtime.split(' ')[0]} at ${slot.dateandtime.split(' ')[1]}`,
@@ -118,8 +159,8 @@ export class MyConsultationsPage implements OnInit {
       color,
       showCloseButton: true,
       animated: true,
-      enterAnimation: toastMessageEnterAnimation,
-      leaveAnimation: toastMessageLeaveAnimation
+      // enterAnimation: toastMessageEnterAnimation,
+      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
 

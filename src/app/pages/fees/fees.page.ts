@@ -95,7 +95,7 @@ export class FeesPage implements OnInit {
 
     this.totalSummary$ = this.ws.get('/student/summary_overall_fee', true);
     this.summary$ = this.ws.get<FeesSummary[]>('/student/outstanding_fee', true).pipe(
-      tap(summury => summury.map( summury => summury.PAYMENT_DUE_DATE = summury.PAYMENT_DUE_DATE.replace('-', ' ').replace('-', ' ')))
+      tap(summuries => summuries.map( summury => summury.PAYMENT_DUE_DATE = summury.PAYMENT_DUE_DATE.replace(/-/g, ' ')))
     );
     this.bankDraft$ = this.ws.get('/student/bankdraft_amount', true);
     this.detail$ = this.ws.get<FeesDetails[]>('/student/overall_fee', true).pipe(

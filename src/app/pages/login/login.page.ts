@@ -9,8 +9,8 @@ import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 import { Role } from '../../interfaces';
 import { CasTicketService, WsApiService } from '../../services';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
-import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
+// import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
+// import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
 @Component({
   selector: 'app-login',
@@ -47,7 +47,7 @@ export class LoginPage {
     if (!this.apkey || !this.password) {
       this.loginProcessLoading = false;
       this.userDidLogin = false;
-      this.showToastMessage('Please, fill up username and password');
+      this.showToastMessage('Please fill up username and password');
     } else {
       if (this.plt.is('cordova') && this.network.type === 'none') {
         return this.showToastMessage('You are now offline.');
@@ -105,8 +105,8 @@ export class LoginPage {
       position: 'top',
       animated: true,
       color: 'danger',
-      enterAnimation: toastMessageEnterAnimation,
-      leaveAnimation: toastMessageLeaveAnimation
+      // enterAnimation: toastMessageEnterAnimation,
+      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
 
@@ -125,7 +125,7 @@ export class LoginPage {
         {
           text: 'Open The documentation',
           handler: () => {
-            this.iab.create('http://kb.sites.apiit.edu.my/question/apkey-troubleshooting/', '_blank', 'location=true');
+            this.iab.create('http://kb.sites.apiit.edu.my/question/apkey-troubleshooting/', '_system', 'location=true');
           }
         }
       ]

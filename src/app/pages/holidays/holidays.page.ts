@@ -28,7 +28,7 @@ export class HolidaysPage implements OnInit {
     numberOfDays: '' | '1 days' | 'many',
     affecting: '' | 'students' | 'staff'
   } = {
-      show: 'all',
+      show: 'upcoming',
       filterDays: '',
       filterMonths: '',
       numberOfDays: '',
@@ -81,11 +81,11 @@ export class HolidaysPage implements OnInit {
             if (this.filterObject.numberOfDays === '1 days') {
               return this.getNumberOfDaysForHoliday(
                 moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
-                moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()) === '1 days';
+                moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()) === '1 day';
             } else {
               return this.getNumberOfDaysForHoliday(
                 moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
-                moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()) !== '1 days';
+                moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()) !== '1 day';
             }
           });
         }
@@ -151,7 +151,7 @@ export class HolidaysPage implements OnInit {
       filterDays: '',
       filterMonths: '',
       numberOfDays: '',
-      show: 'all',
+      show: 'upcoming',
       affecting: ''
     };
     this.onFilter();

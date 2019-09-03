@@ -1,7 +1,3 @@
-// @import url(https://fonts.googleapis.com/css?family=Open+Sans);
-// @import url(https://fonts.googleapis.com/css?family=Montserrat);
-// @import url(https://fonts.googleapis.com/css?family=Oswald:400,700);
-
 ion-avatar {
   width: 123px;
   height: 170px;
@@ -12,7 +8,6 @@ ion-avatar {
 
 .event-calendar {
   font-size: 14px;
-  font-family: Open Sans;
   overflow: hidden;
 }
 
@@ -70,9 +65,7 @@ ion-avatar {
 }
 
 .title {
-  text-transform: uppercase;
-  font-family: Oswald;
-  font-weight: 400;
+  font-weight: 600;
   font-size: 1.2em;
   width: 100%;
 }

@@ -11,7 +11,7 @@ import { WsApiService } from 'src/app/services';
   styleUrls: ['./graduate-verification-service.page.scss'],
 })
 export class GraduateVerificationServicePage implements OnInit {
-  applieedYear = new Date().getFullYear() - 4;
+  applieedYear = '2015';
   formsURL = 'http://forms.sites.apiit.edu.my/certificate-email-form/';
   graduater$: Observable<Graduater[]>;
   searchKeyword;
@@ -25,7 +25,7 @@ export class GraduateVerificationServicePage implements OnInit {
   }
 
   openForms() {
-    this.iab.create(`${this.formsURL}`, '_blank', 'location=true');
+    this.iab.create(`${this.formsURL}`, '_system', 'location=true');
   }
 
   searchForGraduaters() {

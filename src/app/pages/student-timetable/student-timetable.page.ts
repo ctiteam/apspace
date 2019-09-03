@@ -1,13 +1,12 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ActionSheet } from '@ionic-native/action-sheet/ngx';
-import { ActionSheetController, IonRefresher, ModalController, Platform } from '@ionic/angular';
+import { ActionSheetController, IonRefresher, ModalController } from '@ionic/angular';
 
 import { Observable, combineLatest } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
-import { StudentProfile, StudentTimetable } from '../../interfaces';
+import { StudentProfile, StudentTimetable, Role } from '../../interfaces';
 import {
   SettingsService, StudentTimetableService, UserSettingsService, WsApiService
 } from '../../services';
@@ -89,11 +88,9 @@ export class StudentTimetablePage implements OnInit {
   intake: string;
 
   constructor(
-    private actionSheet: ActionSheet,
     private actionSheetCtrl: ActionSheetController,
-    private cdr: ChangeDetectorRef,
+    private changeDetectorRef: ChangeDetectorRef,
     private modalCtrl: ModalController,
-    private plt: Platform,
     private route: ActivatedRoute,
     private settings: SettingsService,
     private tt: StudentTimetableService,
@@ -131,33 +128,26 @@ export class StudentTimetablePage implements OnInit {
 
     // default intake to student current intake
     if (this.intake === undefined) {
-      this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
-        this.intake = (p || {} as StudentProfile).INTAKE || '';
-        this.cdr.markForCheck();
-        this.settings.set('intakeHistory', [this.intake]);
-      });
+      // tslint:disable-next-line: no-bitwise
+      if (this.settings.get('role') & Role.Student) {
+        this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+          this.intake = (p || {} as StudentProfile).INTAKE || '';
+          this.changeDetectorRef.markForCheck();
+          this.settings.set('intakeHistory', [this.intake]);
+        });
+      }
     }
+
 
     this.doRefresh();
   }
 
   presentActionSheet(labels: string[], handler: (_: string) => void) {
-    if (this.plt.is('cordova') && !this.plt.is('ios')) {
-      const options = {
-        buttonLabels: labels,
-        addCancelButtonWithLabel: 'Cancel',
-      };
-      this.actionSheet.show(options).then((buttonIndex: number) => {
-        if (buttonIndex <= labels.length) {
-          handler.call(this, labels[buttonIndex - 1]);
-        }
-      });
-    } else {
-      const buttons = labels.map(text => ({ text, handler: () => handler.call(this, text) }));
-      this.actionSheetCtrl.create({
-        buttons: [...buttons, { text: 'Cancel', role: 'cancel' }],
-      }).then(actionSheet => actionSheet.present());
-    }
+
+    const buttons = labels.map(text => ({ text, handler: () => handler.call(this, text) }));
+    this.actionSheetCtrl.create({
+      buttons: [...buttons, { text: 'Cancel', role: 'cancel' }],
+    }).then(actionSheet => actionSheet.present());
   }
 
   /** Choose week with presentActionSheet. */
@@ -168,7 +158,7 @@ export class StudentTimetablePage implements OnInit {
       const week = this.availableWeek[labels.indexOf(weekStr)];
       if (this.selectedWeek.getDate() !== week.getDate()) {
         this.selectedWeek = week;
-        this.cdr.markForCheck();
+        this.changeDetectorRef.markForCheck();
         this.timetable$.subscribe();
       }
     });
@@ -178,11 +168,14 @@ export class StudentTimetablePage implements OnInit {
   changeIntake(intake: string) {
     if (intake !== null && intake !== this.intake) {
       this.intake = intake;
-      this.settings.set('intakeHistory', this.settings.get('intakeHistory')
-        .concat(intake)
-        .filter((v, i, a) => a.lastIndexOf(v) === i)
-        .slice(-5));
-      this.cdr.markForCheck();
+      // tslint:disable-next-line: no-bitwise
+      if (this.settings.get('role') & Role.Student) {
+        this.settings.set('intakeHistory', this.settings.get('intakeHistory')
+          .concat(intake)
+          .filter((v, i, a) => a.lastIndexOf(v) === i)
+          .slice(-5));
+      }
+      this.changeDetectorRef.markForCheck();
       this.timetable$.subscribe();
     }
   }
@@ -276,7 +269,7 @@ export class StudentTimetablePage implements OnInit {
       this.selectedDate = undefined;
     }
 
-    this.cdr.markForCheck();
+    this.changeDetectorRef.markForCheck();
   }
 
 }

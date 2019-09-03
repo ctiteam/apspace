@@ -118,7 +118,7 @@ export class MorePage implements OnInit {
       title: 'iConsult',
       group: 'Course Related',
       img: 'assets/img/iconsult.png',
-      url: 'my-consultations',
+      url: 'iconsult/my-consultations',
       role: Role.Lecturer | Role.Admin,
       tags: []
     },
@@ -132,7 +132,7 @@ export class MorePage implements OnInit {
     {
       title: 'iConsult',
       group: 'Course Related',
-      url: 'my-appointments',
+      url: 'iconsult/my-appointments',
       img: 'assets/img/iconsult.png',
       role: Role.Student,
       tags: []
@@ -305,10 +305,10 @@ export class MorePage implements OnInit {
     if (url.startsWith('http://') || url.startsWith('https://')) {
       // manually exclude office365, and course schedule that do not need service ticket
       if (url.startsWith('https://outlook.office.com') || url === 'http://kb.sites.apiit.edu.my/knowledge-base/course-schedule/') {
-        this.iab.create(url, '_blank', 'location=true');
+        this.iab.create(url, '_system', 'location=true');
       } else {
         this.cas.getST(url).subscribe(st => {
-          this.iab.create(`${url}?ticket=${st}`, '_blank', 'location=true');
+          this.iab.create(`${url}?ticket=${st}`, '_system', 'location=true');
         });
       }
     } else {

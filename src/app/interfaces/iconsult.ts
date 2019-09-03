@@ -26,6 +26,32 @@ export interface LecturerConsultation {
   timee: string;
   userid: number;
   venue: string;
+  slotid: number[];
+}
+
+export interface LecturerSlotDetails {
+  con_with: string;
+  contime: string;
+  endtime: string;
+  feedbackid: string | null;
+  location: string;
+  note: string;
+  reason: string;
+  slotid: number;
+  stuEmail: string;
+  stuPhone: string;
+  studentname: string;
+  tpnumber: string;
+  venue: string;
+}
+
+export interface UnavailabilityDetails {
+  end_date: string;
+  repeat: string;
+  start_date: string;
+  start_time: string;
+  unavailability_id: number;
+  unavailibilityid: number;
 }
 
 export interface ConsultationSlot {
@@ -65,5 +91,11 @@ export interface Venue {
 }
 
 export interface SlotDuplicated {
+  res: string;
+}
+
+export interface LecturerRemarks {
+  slotid: number;
+  feedback: number;
   res: string;
 }

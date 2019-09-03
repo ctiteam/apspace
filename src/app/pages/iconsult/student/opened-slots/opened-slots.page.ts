@@ -29,6 +29,7 @@ export class OpenedSlotsPage implements OnInit {
     monthYear: '',
     day: ''
   };
+  skeletons = ['80%', '30%', '50%', '10%', '70%'];
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -38,13 +39,13 @@ export class OpenedSlotsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      if (this.router.getCurrentNavigation().extras.state) {
-        this.staffCasId = this.router.getCurrentNavigation().extras.state.staffId;
-        this.staff$ = this.getStaffProfile();
-      }
-    });
+    this.staffCasId = this.route.snapshot.params.id;
+    this.staff$ = this.getStaffProfile();
 
+    this.getData();
+  }
+
+  getData() { // To be changed with refresher
     this.filteredSlots$ = this.getSlots().pipe(
       tap(_ => this.groupSlots())
     );
@@ -186,17 +187,13 @@ export class OpenedSlotsPage implements OnInit {
       componentProps: { dataToSend, notFound: 'No slot Selected' },
     });
     await modal.present();
-    await modal.onDidDismiss();
+    await modal.onDidDismiss().then(
+      data => {
+        if (data.data === 'booked') {
+          this.getData();
+        }
+      }
+    );
   }
 
-  // TO CHECK: IF CLOSING THE CARDS IS NEEDED
-  // selectedMonths: string[] = [];
-  // show(monthYear: string, el: HTMLElement) {
-  //   if (!this.selectedMonths.includes(monthYear)) {
-  //     this.selectedMonths.push(monthYear);
-  //     setTimeout(() => el.parentElement.scrollIntoView({ behavior: 'smooth' }), 100);
-  //   } else {
-  //     this.selectedMonths.splice(this.selectedMonths.indexOf(monthYear), 1);
-  //   }
-  // }
 }

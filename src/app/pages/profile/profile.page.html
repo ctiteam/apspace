@@ -8,13 +8,14 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid no-padding>
-    <ion-row justify-content-center>
-      <ion-col size-md="6" size-lg="5" size-xs="12">
-
+  <ion-grid margin-top no-padding>
+    <ion-row>
+      <ion-col margin-top size-xs="12" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
+        <!-- STUDENT PROFILE -->
         <ng-template [ngIf]="studentRole" [ngIfElse]="userIsStaff">
           <ion-card no-margin no-padding text-center>
-            <!-- STUDENT IMAGE AND ITS LOADING -->
+
+            <!-- STUDENT IMAGE -->
             <ng-template [ngIf]="photo$ | async" [ngIfElse]="loadingPicture">
               <div class="img-wrapper" margin-top margin-bottom>
                 <ion-img class="profile-photo" [src]="
@@ -24,6 +25,8 @@
                 </ion-img>
               </div>
             </ng-template>
+
+            <!-- STUDENT PROFILE INFO -->
             <ng-template let-profile [ngIf]="profile$ | async" [ngIfElse]="loadingProfile">
               <ion-card-header>
                 <ion-card-title>
@@ -34,11 +37,11 @@
                 </ion-card-subtitle>
               </ion-card-header>
               <ion-card-content>
-                <div class="info-div">
+                <div class="ion-margin-top">
                   <h4>Programme</h4>
                   <p>{{ profile.PROGRAMME }}</p>
                 </div>
-                <div class="col-12 text-center info-div">
+                <div class="col-12 text-center ion-margin-top">
                   <ng-template [ngIf]="profile.MENTOR_SAMACCOUNTNAME" [ngIfElse]="mentorLost">
                     <h4>Mentor Name</h4>
                     <p (click)="openStaffDirectoryInfo(profile.MENTOR_SAMACCOUNTNAME)"
@@ -49,7 +52,7 @@
                     <p>{{ profile.MENTOR_NAME }}</p>
                   </ng-template>
                 </div>
-                <div class="col-12 text-center info-div">
+                <div class="col-12 text-center ion-margin-top">
                   <ng-template [ngIf]="profile.PL_SAMACCOUNTNAME" [ngIfElse]="plLost">
                     <h4>Programme Leader</h4>
                     <p (click)="openStaffDirectoryInfo(profile.PL_SAMACCOUNTNAME)" class="colored-text cursor-pointer">
@@ -60,7 +63,7 @@
                     <p>{{ profile.PL_NAME }}</p>
                   </ng-template>
                 </div>
-                <div class="col-12 text-center info-div" *ngIf='!local'>
+                <div class="col-12 text-center ion-margin-top" *ngIf='!local'>
                   <ng-template let-visa [ngIf]='visa$ | async'>
                     <ng-template [ngIf]='visa[0].VISA_EXPIRY_DATE' [ngIfElse]='noVisa'>
                       <h4>Student Pass Expiry Date</h4>
@@ -78,27 +81,24 @@
                     </ng-template>
                   </ng-template>
                 </div>
-
-                <div class="col-12 text-center info-div">
+                <div class="col-12 text-center ion-margin-top">
                   <h4>Country</h4>
                   <p>{{ profile.COUNTRY }}</p>
                 </div>
-
               </ion-card-content>
-
             </ng-template>
-            <div id="map"></div>
           </ion-card>
         </ng-template>
 
-
+        <!-- STAFF PROFILE -->
         <ng-template #userIsStaff>
           <ion-card no-margin no-padding text-center>
-            <!-- STAFF IMAGE AND ITS LOADING -->
+            <!-- STAFF IMAGE -->
             <ng-template [ngIf]="staffProfile$ | async" [ngIfElse]="loadingPicture">
               <ion-img margin-top class="profile-photo" [src]="(staffProfile$ | async)[0]?.PHOTO"
                 (ionError)="$event.target.src = 'assets/img/no_img.png'"> </ion-img>
             </ng-template>
+            <!-- STAFF PROFILE INFO -->
             <ng-template let-staffProfile [ngIf]="staffProfile$ | async" [ngIfElse]="loadingProfile">
               <ion-card-header>
                 <ion-card-title>
@@ -111,35 +111,35 @@
                 </ion-card-subtitle>
               </ion-card-header>
               <ion-card-content>
-                <div class="col-12 text-center info-div">
+                <div class="col-12 text-center ion-margin-top">
                   <h4>ID</h4>
                   <p>{{ staffProfile[0].ID }}</p>
                 </div>
-                <div class="col-12 text-center info-div">
+                <div class="col-12 text-center ion-margin-top">
                   <h4>Current Job Type</h4>
                   <p>{{ staffProfile[0].CURRENT_JOB_TYPE }}</p>
                 </div>
 
-                <div class="col-12 text-center info-div">
+                <div class="col-12 text-center ion-margin-top">
                   <h4>Department</h4>
                   <p>{{ staffProfile[0].DEPARTMENT }}</p>
                 </div>
 
                 <ng-template [ngIf]="staffProfile[0].DEPARTMENT1">
-                  <div class="col-12 text-center info-div">
+                  <div class="col-12 text-center ion-margin-top">
                     <h4>Department 1</h4>
                     <p>{{ staffProfile[0].DEPARTMENT1 }}</p>
                   </div>
                 </ng-template>
 
                 <ng-template [ngIf]="staffProfile[0].DEPARTMENT2">
-                  <div class="col-12 text-center info-div">
+                  <div class="col-12 text-center ion-margin-top">
                     <h4>Department 2</h4>
                     <p>{{ staffProfile[0].DEPARTMENT2 }}</p>
                   </div>
                 </ng-template>
 
-                <div class="col-12 text-center info-div">
+                <div class="col-12 text-center ion-margin-top">
                   <h4>Nationality</h4>
                   <p>{{ staffProfile[0].NATIONALITY }}</p>
                 </div>
@@ -151,10 +151,15 @@
           </ion-card>
         </ng-template>
         <ng-template #loadingPicture>
-          loading the staff image...
+          <div margin-top>
+            <ion-skeleton-text animated style="width: 122px; line-height: 150px;margin: auto"></ion-skeleton-text>
+          </div>
         </ng-template>
         <ng-template #loadingProfile>
-          Loading the profile
+          <ion-item lines="none" *ngFor="let s of skeltons">
+            <ion-skeleton-text animated [style.width]="s + '%'" style="line-height: 30px; margin:auto;">
+            </ion-skeleton-text>
+          </ion-item>
         </ng-template>
 
       </ion-col>

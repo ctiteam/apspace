@@ -7,8 +7,8 @@ import { map } from 'rxjs/operators';
 import { WsApiService, AppLauncherService } from 'src/app/services';
 import { ConsultationHour, SlotDetails } from 'src/app/interfaces';
 
-import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
-import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
+// import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
+// import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 import { SlotDetailsModalPage } from './slot-details-modal';
 
 import * as moment from 'moment';
@@ -42,6 +42,7 @@ export class MyAppointmentsPage implements OnInit {
   getData() { // To be changed with the refresher later
     this.slots$ = this.getSlots();
   }
+
   getSlots() {
     return this.ws.get<ConsultationHour[]>('/iconsult/upcomingconstu', true).pipe(
       map(slots => { // Check if slot is passed and modify its status to passed
@@ -52,12 +53,6 @@ export class MyAppointmentsPage implements OnInit {
           return slot;
         });
       })
-    );
-  }
-
-  getSlotDetails(slotId: string) {
-    this.slotDetails$ = this.ws.get<SlotDetails>(`/iconsult/detailpageconstu/${slotId}`, true).pipe(
-      map(response => response[0]),
     );
   }
 
@@ -101,8 +96,8 @@ export class MyAppointmentsPage implements OnInit {
       color,
       showCloseButton: true,
       animated: true,
-      enterAnimation: toastMessageEnterAnimation,
-      leaveAnimation: toastMessageLeaveAnimation
+      // enterAnimation: toastMessageEnterAnimation,
+      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
 

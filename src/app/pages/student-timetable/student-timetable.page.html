@@ -3,10 +3,10 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
       <ion-button outline small (click)="viewWeek = !viewWeek" [disabled]="availableWeek!.length === 0">
-          {{ viewWeek ? 'Weekly' : 'Daily' }}
+        {{ viewWeek ? 'Weekly' : 'Daily' }}
       </ion-button>
       <ion-button outline small (click)="chooseWeek()" [disabled]="availableWeek!.length === 0">
-        {{ (selectedDate | date) || 'Weeks' }}
+        {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
@@ -24,10 +24,12 @@
 
   <!-- do not add filter pipe here as it affects loading -->
   <ng-template let-timetables [ngIf]="timetable$ | async" [ngIfElse]="loading">
-    <ng-template let-timetables [ngIf]="!viewWeek ? (timetables | classes:intake:room | theday:selectedDate) : (timetables | classes:intake:room | theweek:selectedWeek)" [ngIfElse]="loading">
+    <ng-template let-timetables
+      [ngIf]="!viewWeek ? (timetables | classes:intake:room | theday:selectedDate) : (timetables | classes:intake:room | theweek:selectedWeek)"
+      [ngIfElse]="loading">
       <ng-template [ngIf]="timetables!.length" [ngIfElse]="empty">
         <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
-          <ion-segment [ngModel]="selectedDate | date:'E' | uppercase"
+          <ion-segment padding [ngModel]="selectedDate | date:'E' | uppercase"
             (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
             <ion-segment-button *ngFor="let day of availableDays" [value]="day">
               {{ day }}
@@ -36,22 +38,29 @@
         </ng-template>
 
         <ng-template [ngIf]="selectedDate">
-          <ion-card no-padding>
-            <ion-card-content class="table-top">
+          <ion-card class="table-top" no-padding>
+            <ion-card-content no-padding>
               <ion-grid no-margin no-padding>
                 <ion-row>
-                  <ion-col size="12" size-sm="3"><h2>Module</h2></ion-col>
-                  <ion-col size="12" size-sm="3"><h2>Time</h2></ion-col>
-                  <ion-col size="12" size-sm="3"><h2>Location</h2></ion-col>
-                  <ion-col size="12" size-sm="3"><h2>Lecturer</h2></ion-col>
+                  <ion-col padding-start size="12" size-sm="3">
+                    <h2>Module</h2>
+                  </ion-col>
+                  <ion-col size="12" size-sm="3">
+                    <h2>Time</h2>
+                  </ion-col>
+                  <ion-col size="12" size-sm="3">
+                    <h2>Location</h2>
+                  </ion-col>
+                  <ion-col size="12" size-sm="3">
+                    <h2>Lecturer</h2>
+                  </ion-col>
                 </ion-row>
               </ion-grid>
             </ion-card-content>
           </ion-card>
         </ng-template>
 
-        <ion-card *ngFor="let timetable of timetables; trackBy: trackByIndex"
-          no-padding class="card-side"
+        <ion-card *ngFor="let timetable of timetables; trackBy: trackByIndex" no-padding class="card-side"
           [style.borderLeft]="'1rem solid ' + strToColor(timetable.MODID)">
           <ion-card-content no-padding>
             <ion-grid>
@@ -60,16 +69,22 @@
                   {{ timetable.MODID }}
                 </ion-col>
                 <ion-col size="12" size-sm="3">
-                  <span class="marker"><ion-icon name="time"></ion-icon></span>
+                  <span class="marker">
+                    <ion-icon name="time"></ion-icon>
+                  </span>
                   {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
                 </ion-col>
                 <ion-col size="12" size-sm="3">
-                  <span class="marker"><ion-icon name="locate"></ion-icon></span>
+                  <span class="marker">
+                    <ion-icon name="locate"></ion-icon>
+                  </span>
                   {{ timetable.ROOM }} | {{ timetable.LOCATION }}
                 </ion-col>
                 <ion-col size="12" size-sm="3">
                   <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]">
-                    <span class="marker"><ion-icon name="contact"></ion-icon></span>
+                    <span class="marker">
+                      <ion-icon name="contact"></ion-icon>
+                    </span>
                     {{ timetable.NAME }}
                   </a>
                 </ion-col>
@@ -83,8 +98,16 @@
     <ng-template #empty>
       <ion-card>
         <ion-card-content>
-          <ng-container *ngIf="intake; else byroom">Hooray! No classes this week! :D</ng-container>
-          <ng-template #byroom>Oops, room not found! ¯\_(ツ)_/¯</ng-template>
+          <ng-container *ngIf="intake; else byroom">
+            <app-message-with-svg imageUrl="assets/img/happy.svg" messageContent="There are no classes for the selected intake on the selected week!"
+              messageTitle="Hooray! No classes this week." wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+            </app-message-with-svg>
+          </ng-container>
+          <ng-template #byroom>
+            <app-message-with-svg imageUrl="assets/img/no-consultations.svg" messageContent="We couldn't find any timetable for the selected room."
+              messageTitle="No timetable found for the selected room!" wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+            </app-message-with-svg>
+          </ng-template>
         </ion-card-content>
       </ion-card>
     </ng-template>

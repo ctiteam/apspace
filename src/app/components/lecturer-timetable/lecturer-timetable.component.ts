@@ -11,18 +11,6 @@ import { WsApiService } from '../../services';
   selector: 'lecturer-timetable',
   templateUrl: 'lecturer-timetable.component.html',
   styleUrls: ['lecturer-timetable.component.scss'],
-  animations: [
-    trigger('easeInOut', [
-      transition('void => *', [
-        style({ opacity: '.1', height: '0' }),
-        animate('250ms ease-in', style({ opacity: '1', height: '*' })),
-      ]),
-      transition('* => void', [
-        style({ opacity: '1', height: '*' }),
-        animate('150ms ease-out', style({ opacity: '.7', height: '0', paddingBottom: '0' })),
-      ]),
-    ]),
-  ]
 })
 export class LecturerTimetableComponent implements OnInit {
 
@@ -48,6 +36,10 @@ export class LecturerTimetableComponent implements OnInit {
     const lastDateOfWeekZero = 315993600000;
     const secondsPerWeek = 604800000;  // 7 * 24 * 60 * 60 * 1000
 
+    // Current Week
+    const date = new Date();
+    const currentWeek = Math.floor((date.getTime() - lastDateOfWeekZero - 1) / secondsPerWeek);
+
     const endpoint = '/lecturer-timetable/v2/' + this.id;
     this.calendar$ = this.ws.get<LecturerTimetable[]>(endpoint, true, { auth: false }).pipe(
       map(timetables => timetables.reduce((acc, d) => {
@@ -67,8 +59,12 @@ export class LecturerTimetableComponent implements OnInit {
 
         return acc;
       }, {})),
-      tap(w => this.selectedWeeks.push(Object.keys(w)[0])),
+      tap(w => this.selectedWeeks.push(Object.keys(this.reverseObject(w))[Object.keys(w).indexOf(`${currentWeek}`)]))
     );
+  }
+
+  reverseObject(obj: object): object {
+    return Object.keys(obj).reverse().reduce((acc, v) => (acc[v] = obj[v], acc), {});
   }
 
   /** Display schedule. */

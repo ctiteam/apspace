@@ -18,6 +18,15 @@ export class ProfilePage implements OnInit {
   staffProfile$: Observable<StaffProfile[]>;
   visa$: Observable<any>;
 
+  skeltons = [
+    80,
+    30,
+    100,
+    45,
+    60,
+    76
+  ];
+
   local = false;
   studentRole = false;
   countryName: string;

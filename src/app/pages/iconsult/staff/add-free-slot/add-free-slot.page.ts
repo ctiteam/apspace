@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ToastController, AlertController, LoadingController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
 import { WsApiService } from 'src/app/services';
 import { Venue } from 'src/app/interfaces';
-import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
-import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
+// import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
+// import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 import { CalendarComponentOptions } from 'ion2-calendar';
 
 import * as moment from 'moment';
@@ -168,8 +168,10 @@ export class AddFreeSlotPage implements OnInit {
                 error: err => this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger'),
                 complete: () => {
                   this.dismissLoading();
-                  this.router.navigateByUrl('my-consultations').then(
-                  );
+                  const navigationExtras: NavigationExtras = {
+                    state: {reload: true}
+                  };
+                  this.router.navigateByUrl('my-consultations', navigationExtras);
                 }
               }
             );
@@ -187,8 +189,8 @@ export class AddFreeSlotPage implements OnInit {
       color,
       showCloseButton: true,
       animated: true,
-      enterAnimation: toastMessageEnterAnimation,
-      leaveAnimation: toastMessageLeaveAnimation
+      // enterAnimation: toastMessageEnterAnimation,
+      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
   async presentLoading() {

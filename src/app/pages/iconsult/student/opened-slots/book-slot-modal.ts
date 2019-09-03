@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, AlertController } from '@ionic/angular';
+import { ModalController, AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { ConsultationSlot, StaffDirectory, SlotDuplicated } from 'src/app/interfaces';
 import { Storage } from '@ionic/storage';
 import { WsApiService } from 'src/app/services';
@@ -14,6 +14,8 @@ export class BookSlotModalPage implements OnInit {
   verifyslot$: Observable<SlotDuplicated>;
   dataToSend: { slotData: ConsultationSlot, staffData: StaffDirectory }; // DATA COMING FROM THE PAGE
   studentEmail: string;
+  loading: HTMLIonLoadingElement;
+
   formModel: {
     staffName: string;
     consultationWith: string;
@@ -44,12 +46,14 @@ export class BookSlotModalPage implements OnInit {
     private modalCtrl: ModalController,
     private storage: Storage,
     private ws: WsApiService,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    private loadingController: LoadingController,
+    private toastCtrl: ToastController
   ) {
   }
   ngOnInit() {
     const dataToVerify = this.dataToSend.slotData.datetimeforsorting + '.00000';
-    this.verifyslot$ =  this.ws.get<SlotDuplicated>(`/iconsult/verifyduplicateslot/${dataToVerify}`, true);
+    this.verifyslot$ = this.ws.get<SlotDuplicated>(`/iconsult/verifyduplicateslot/${dataToVerify}`, true);
     this.formModel = {
       staffName: this.dataToSend.staffData.FULLNAME,
       consultationWith: '',
@@ -88,11 +92,12 @@ export class BookSlotModalPage implements OnInit {
           text: 'Yes',
           handler: () => {
             // START THE LOADING
+            this.presentLoading();
             this.ws.post<any>('/iconsult/addbooking', {
               body: {
                 availability_id: this.dataToSend.slotData.availibilityid,
                 date: this.dataToSend.slotData.date,
-                time: this.dataToSend.slotData.time,
+                time: this.dataToSend.slotData.timee,
                 casusername: this.dataToSend.staffData.ID,
                 con_with: this.formModel.consultationWith,
                 reason: this.formModel.reason,
@@ -101,18 +106,17 @@ export class BookSlotModalPage implements OnInit {
                 email: this.studentEmail // TO PREVENT CHANGING THE EMAIL FROM THE UI
               },
             }).subscribe(
+
               {
-                next: () => {
-                  // SHOW USER SUCCESS MESSAGE
+                next: _ => {
+                  this.showToastMessage('Slot has been booked successfully!', 'success');
                 },
-                error: err => {
-                  // SHOW USER ERROR MESSAGE
-                  console.log(err);
+                error: _ => {
+                  this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
                 },
                 complete: () => {
-                  // HIDE THE LOADING
-                  // TRIGGER NEW EVENT TO SHOW REFRESH THE LIST OF CONSULTATIONS
-                  this.modalCtrl.dismiss();
+                  this.dismissLoading();
+                  this.modalCtrl.dismiss('booked');
                 }
               }
             );
@@ -120,5 +124,32 @@ export class BookSlotModalPage implements OnInit {
         }
       ]
     }).then(confirm => confirm.present());
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
+  }
+
+  showToastMessage(message: string, color: 'danger' | 'success') {
+    this.toastCtrl.create({
+      message,
+      duration: 6000,
+      position: 'top',
+      color,
+      showCloseButton: true,
+      animated: true,
+      // enterAnimation: toastMessageEnterAnimation,
+      // leaveAnimation: toastMessageLeaveAnimation
+    }).then(toast => toast.present());
   }
 }

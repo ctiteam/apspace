@@ -1,12 +1,11 @@
 ion-card {
-  margin-top: 5px !important;
 
   ion-card-header {
     padding-top: 10px !important;
     padding-bottom: 10px !important;
 
     &.colored-border {
-      border-bottom: 1rem solid;
+      border-bottom: 0.6rem solid;
     }
   }
 
@@ -21,6 +20,14 @@ ion-card {
     .bold {
       font-weight: bold;
     }
+  }
+
+  pre{
+    white-space: pre-wrap;
+  }
+
+  &.account-disabled{
+    box-shadow: 0 3px 1px -2px var(--danger-color), 0 2px 2px 0 var(--danger-color), 0 1px 5px 0 var(--danger-color);
   }
 
 }

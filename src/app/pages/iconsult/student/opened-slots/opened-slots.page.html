@@ -29,10 +29,10 @@
       <!-- MONTHS FILTER -->
       <ion-radio-group [(ngModel)]="filterObject.monthYear" (ngModelChange)="onFilter(); prepareDayFilterData()"
         *ngIf="(slotsUsedForMonthFilterSection$ | async) as allSlotsGroupedByYear; else loadingMonthsFilter">
-        <ion-list-header>
-          <ion-label>Month</ion-label>
-        </ion-list-header>
-        <ng-container *ngIf="(allSlotsGroupedByYear | keyvalue)?.length > 0; else noMonthsFilterData">
+        <ng-container *ngIf="(allSlotsGroupedByYear | keyvalue)?.length > 0">
+          <ion-list-header>
+            <ion-label>Month</ion-label>
+          </ion-list-header>
           <ng-container *ngFor="let slotsForOneYear of allSlotsGroupedByYear | keyvalue">
             <ion-item *ngFor="let slotsForOneMonth of slotsForOneYear.value | keyvalue">
               <ion-label>
@@ -45,9 +45,6 @@
             </ion-item>
           </ng-container>
         </ng-container>
-        <ng-template #noMonthsFilterData>
-          no months
-        </ng-template>
       </ion-radio-group>
       <ng-template #loadingMonthsFilter>
         loading the months filter
@@ -84,7 +81,7 @@
     </ion-list>
     <div padding>
       <ion-button fill="clear" color="danger" expand="block" (click)="clearFilter();">
-        Clear filter
+        Clear Filters
       </ion-button>
     </div>
   </ion-content>
@@ -140,11 +137,28 @@
             </ion-grid>
             <p (click)="openMenu()" padding-start margin-bottom class="small-margin-top colored-text cursor-pointer"
               style="text-decoration: underline;">
-              Looking for s slot opened in a specific date?
+              Looking for a slot opened in a specific date?
             </p>
           </ng-container>
           <ng-template #loadingUserData>
-            loading user data
+            <ion-grid>
+              <ion-row>
+                <ion-col size="auto" margin-end margin-top>
+                  <ion-skeleton-text animated style="width: 123px; line-height: 170px"></ion-skeleton-text>
+                </ion-col>
+                <ion-col>
+                  <ion-card-header no-padding padding-top>
+                    <ion-card-title>
+                      <ion-skeleton-text animated style="width: 70%; line-height: 30px"></ion-skeleton-text>
+                    </ion-card-title>
+                    <ion-card-subtitle>
+                      <ion-skeleton-text *ngFor="let skeleton of skeletons" [style.width]="skeleton" animated
+                        style="line-height: 30px"></ion-skeleton-text>
+                    </ion-card-subtitle>
+                  </ion-card-header>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
           </ng-template>
         </ion-card>
       </ion-col>
@@ -198,22 +212,32 @@
                         <div class="spacer"></div>
                       </div>
                     </div>
-                    <ng-template #noEvents>
-                      There are no events :(
-                    </ng-template>
                   </div>
                 </ion-card-content>
               </ion-card>
             </ng-container>
           </ng-container>
+          <ng-template #noSlots>
+            <ion-card>
+              <ion-card-content>
+                <app-message-with-svg imageUrl="assets/img/no-consultations.svg"
+                  messageTitle="No Consultations has been Added by the Staff!" wrapperSize="6" wrapperOffset="3"
+                  messageContent="This staff has not added any consultations. You can contact him/her via Email"
+                  wrapperMarginTop="20px">
+                </app-message-with-svg>
+              </ion-card-content>
+            </ion-card>
+          </ng-template>
         </ng-container>
-        <ng-template #noSlots>
-          <div>No data added</div>
-        </ng-template>
         <ng-template #loadingSlots>
           <ion-card>
+            <ion-card-header>
+              <ion-skeleton-text animated style="width:70%;line-height: 30px;"></ion-skeleton-text>
+            </ion-card-header>
             <ion-card-content>
-              Loading the user slots
+              <ion-item *ngFor="let skeleton of skeletons">
+                <ion-skeleton-text animated [style.width]="skeleton" style="line-height: 30px;"></ion-skeleton-text>
+              </ion-item>
             </ion-card-content>
           </ion-card>
         </ng-template>

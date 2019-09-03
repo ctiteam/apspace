@@ -12,7 +12,7 @@
   </ion-toolbar>
 
   <ion-toolbar *ngIf="(bankDraft$ | async) as bankDrafts; else loadingSegment">
-    <ion-segment [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
+    <ion-segment padding [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
       <ion-segment-button value="Summary">Summary</ion-segment-button>
       <ion-segment-button *ngIf="bankDrafts[0].BANKDRAFT_AMOUNT !== 0" value="Bank Draft">
         SU Fees
@@ -157,7 +157,7 @@
                               <h3>Due Date</h3>
                             </ion-label>
                             <ion-note color="text-color" slot="end">
-                              {{ summary.PAYMENT_DUE_DATE || 'N/A' | date: "EEE, d MMM y"  }}
+                              {{ summary.PAYMENT_DUE_DATE | date: "EEE, d MMM y" || 'N/A'   }}
                             </ion-note>
                           </ion-item>
                           <ion-item lines="none">

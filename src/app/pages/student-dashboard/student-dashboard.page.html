@@ -14,9 +14,6 @@
                     <img [src]="'data:image/jpg;base64,' +(photo$ | async)?.base64_photo"
                       onerror="this.src='assets/img/no_img.png'" alt="Avatar">
                   </ion-avatar>
-                  <ng-template #loadingStudentsPhoto>
-                    loading picture
-                  </ng-template>
                   <div class="welcome-message-wrapper float-left"
                     *ngIf="studentFirstName$ | async as studentFirstName; else loadingProfile" padding-start>
                     <ion-card-title>
@@ -159,46 +156,40 @@
         </dashboard-card>
       </div>
 
-      <!-- APCard Transactions -->
-      <div *ngIf="shownDashboardSections.includes('apcard')">
-        <div class="masonry-item" *ngIf="apcardTransaction$ | async; else loadingApcardTransactions">
+      <!-- LOW ATTENDANCE -->
+      <div *ngIf="shownDashboardSections.includes('lowAttendance')">
+        <div class="masonry-item" *ngIf="modulesWithLowAttendance$ | async; else loadingAttendance">
           <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
             <ion-icon name="move" class="handle"></ion-icon>
           </div>
-          <dashboard-card [cardTitle]='apcardTransactionsCardConfigurations.cardTitle'
-            [cardSubtitle]='currentBalance !== -1 ? "Balance: " + (currentBalance | currency: "MYR": "RM"): "Balance: --"'
-            [options]='apcardTransactionsCardConfigurations.options'
-            [contentPadding]='apcardTransactionsCardConfigurations.contentPadding'
-            [withOptionsButton]='apcardTransactionsCardConfigurations.withOptionsButton'>
-            <chart height="600" *ngIf="apcardChart.data" [type]="apcardChart.type" [data]="apcardChart.data"
-              [options]="apcardChart.options">
+          <dashboard-card *ngIf="overallAttendancePercent$ | async as overallAttendancePercent"
+            [cardTitle]='lowAttendanceCardConfigurations.cardTitle'
+            [cardSubtitle]='"Overall: " + (overallAttendancePercent.value | number: "1.0-1") + "%"'
+            [contentPadding]='lowAttendanceCardConfigurations.contentPadding'
+            [withOptionsButton]='lowAttendanceCardConfigurations.withOptionsButton'>
+            <chart *ngIf="lowAttendanceChart.data" [type]="lowAttendanceChart.type" [data]="lowAttendanceChart.data"
+              [options]="lowAttendanceChart.options">
             </chart>
           </dashboard-card>
         </div>
-        <ng-template #loadingApcardTransactions>
-          loading the apcard section
+        <ng-template #loadingAttendance>
+          <ion-card>
+            <ion-card-header>
+              <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+            </ion-card-content>
+          </ion-card>
         </ng-template>
       </div>
-
-      <!-- CGPA -->
-      <div *ngIf="shownDashboardSections.includes('cgpa')">
-        <div class="masonry-item" *ngIf="cgpaPerIntake$ | async; else loadingCgpaPerIntake">
-          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-            <ion-icon name="move" class="handle"></ion-icon>
-          </div>
-          <dashboard-card [cardTitle]='cgpaCardConfigurations.cardTitle'
-            [cardSubtitle]='"Overall: " + (overallCgpa | number: "1.0-2")'
-            [contentPadding]='cgpaCardConfigurations.contentPadding'
-            [withOptionsButton]='cgpaCardConfigurations.withOptionsButton'>
-            <chart *ngIf="cgpaChart.data" [type]="cgpaChart.type" [data]="cgpaChart.data" [options]="cgpaChart.options">
-            </chart>
-          </dashboard-card>
-        </div>
-        <ng-template #loadingCgpaPerIntake>
-          loading the cgpa section
-        </ng-template>
-      </div>
-
 
       <!-- BUS SHUTTLE SERVICES -->
       <div *ngIf="shownDashboardSections.includes('busShuttleServices')">
@@ -224,8 +215,7 @@
                                 name="arrow-dropright">
                               </ion-icon> {{upcomingTrip.trip_to}}</h3>
                             <p>
-                              <span class="trip-time" [style.color]="upcomingTrip.trip_from_color"
-                                *ngIf="upcomingTrip.times[0]"> {{upcomingTrip.times[0]}}
+                              <span class="trip-time" *ngIf="upcomingTrip.times[0]"> {{upcomingTrip.times[0]}}
                               </span>
                               <span class="trip-time" *ngIf="upcomingTrip.times[1]"> {{upcomingTrip.times[1]}}
                               </span>
@@ -252,17 +242,118 @@
                   messageContent="You can configure this section from the settings page, under the bus shuttle services card."
                   imageUrl="assets/img/config.svg" wrapperOffset="3" wrapperSize="6">
                 </app-message-with-svg>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="10" offset="1">
+                      <ion-button routerLink="/settings" routerDirection="forward" class="colored-background"
+                        expand="block">
+                        Open Settings
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
               </ng-template>
-
             </ng-container>
             <ng-template #loadingTrips>
-              loading the trips section
+              <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+              </ion-skeleton-text>
             </ng-template>
           </dashboard-card>
         </div>
-
       </div>
 
+      <!-- APCard Transactions -->
+      <div *ngIf="shownDashboardSections.includes('apcard')">
+        <div class="masonry-item" *ngIf="apcardTransaction$ | async; else loadingApcardTransactions">
+          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+            <ion-icon name="move" class="handle"></ion-icon>
+          </div>
+          <dashboard-card [cardTitle]='apcardTransactionsCardConfigurations.cardTitle'
+            [cardSubtitle]='currentBalance !== -1 ? "Balance: " + (currentBalance | currency: "MYR": "RM"): "Balance: --"'
+            [options]='apcardTransactionsCardConfigurations.options'
+            [contentPadding]='apcardTransactionsCardConfigurations.contentPadding'
+            [withOptionsButton]='apcardTransactionsCardConfigurations.withOptionsButton'>
+            <chart height="600" *ngIf="apcardChart.data" [type]="apcardChart.type" [data]="apcardChart.data"
+              [options]="apcardChart.options">
+            </chart>
+          </dashboard-card>
+        </div>
+        <ng-template #loadingApcardTransactions>
+          <ion-card>
+            <ion-card-header>
+              <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
+      </div>
+
+      <!-- CGPA -->
+      <div *ngIf="shownDashboardSections.includes('cgpa')">
+        <div class="masonry-item" *ngIf="!block; else accountDisabled">
+          <div *ngIf="cgpaPerIntake$ | async; else loadingCgpaPerIntake">
+            <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+              <ion-icon name="move" class="handle"></ion-icon>
+            </div>
+            <dashboard-card [cardTitle]='cgpaCardConfigurations.cardTitle'
+              [cardSubtitle]='"Overall: " + (overallCgpa | number: "1.0-2")'
+              [contentPadding]='cgpaCardConfigurations.contentPadding'
+              [withOptionsButton]='cgpaCardConfigurations.withOptionsButton'>
+              <chart *ngIf="cgpaChart.data" [type]="cgpaChart.type" [data]="cgpaChart.data"
+                [options]="cgpaChart.options">
+              </chart>
+            </dashboard-card>
+          </div>
+          <ng-template #loadingCgpaPerIntake>
+            <ion-card>
+              <ion-card-header>
+                <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+                </ion-skeleton-text>
+                <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+                </ion-skeleton-text>
+                <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+                </ion-skeleton-text>
+                <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+                </ion-skeleton-text>
+              </ion-card-content>
+            </ion-card>
+          </ng-template>
+        </div>
+        <ng-template #accountDisabled>
+          <div class="masonry-item">
+            <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+              <ion-icon name="move" class="handle"></ion-icon>
+            </div>
+            <dashboard-card [cardTitle]='cgpaCardConfigurations.cardTitle'
+              [cardSubtitle]='"Overall: " + (overallCgpa | number: "1.0-2")'
+              [contentPadding]='cgpaCardConfigurations.contentPadding'
+              [withOptionsButton]='cgpaCardConfigurations.withOptionsButton'>
+              <app-message-with-svg messageTitle="Your account has been disabled!"
+                messageContent="To read more about the reasons of this message, you can go to the results page and read the full message"
+                imageUrl="assets/img/block.svg" wrapperOffset="3" wrapperSize="6">
+              </app-message-with-svg>
+            </dashboard-card>
+          </div>
+        </ng-template>
+      </div>
 
       <!-- FINANCIALS -->
       <div *ngIf="shownDashboardSections.includes('financials')">
@@ -280,30 +371,24 @@
           </dashboard-card>
         </div>
         <ng-template #loadingFinancials>
-          loading the financials section
+          <ion-card>
+            <ion-card-header>
+              <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+            </ion-card-content>
+          </ion-card>
         </ng-template>
       </div>
 
-      <!-- LOW ATTENDANCE -->
-      <div *ngIf="shownDashboardSections.includes('lowAttendance')">
-        <div class="masonry-item" *ngIf="modulesWithLowAttendance$ | async; else loadingAttendance">
-          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-            <ion-icon name="move" class="handle"></ion-icon>
-          </div>
-          <dashboard-card *ngIf="overallAttendancePercent$ | async as overallAttendancePercent"
-            [cardTitle]='lowAttendanceCardConfigurations.cardTitle'
-            [cardSubtitle]='"Overall: " + (overallAttendancePercent.value | number: "1.0-1") + "%"'
-            [contentPadding]='lowAttendanceCardConfigurations.contentPadding'
-            [withOptionsButton]='lowAttendanceCardConfigurations.withOptionsButton'>
-            <chart *ngIf="lowAttendanceChart.data" [type]="lowAttendanceChart.type" [data]="lowAttendanceChart.data"
-              [options]="lowAttendanceChart.options">
-            </chart>
-          </dashboard-card>
-        </div>
-        <ng-template #loadingAttendance>
-          loading the attendance section
-        </ng-template>
-      </div>
     </div>
   </div>
 

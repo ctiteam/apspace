@@ -15,7 +15,42 @@
 
 @import './theme/themes';
 
-@import url('https://fonts.googleapis.com/css?family=Nunito&display=swap');
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
-@import url(https://fonts.googleapis.com/css?family=Montserrat);
-@import url(https://fonts.googleapis.com/css?family=Oswald:400,700);
+// @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700&display=swap');
+
+// Main Font /Source Sans Pro/ (Light 300, Normal: 400, Medim: 500, Bold: 700)
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('assets/fonts/source-sans-pro/SourceSansPro-Light.ttf') format('truetype');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('assets/fonts/source-sans-pro/SourceSansPro-Regular.ttf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('assets/fonts/source-sans-pro/SourceSansPro-Black.ttf') format('truetype');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('assets/fonts/source-sans-pro/SourceSansPro-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+// Used in APCard page (bank card)
+@font-face {
+  font-family: 'cc font';
+  src: url('assets/fonts/cc-font.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// Fix padding for phones with notch screen
+body{
+  margin-top: constant(safe-area-inset-top);
+  margin-top: env(safe-area-inset-top);
+}

@@ -8,8 +8,8 @@ import { SearchModalComponent } from '../../components/search-modal/search-modal
 import {
   SettingsService, StudentTimetableService, UserSettingsService, WsApiService
 } from '../../services';
-import { toastMessageEnterAnimation } from '../../animations/toast-message-animation/enter';
-import { toastMessageLeaveAnimation } from '../../animations/toast-message-animation/leave';
+// import { toastMessageEnterAnimation } from '../../animations/toast-message-animation/enter';
+// import { toastMessageLeaveAnimation } from '../../animations/toast-message-animation/leave';
 
 @Component({
   selector: 'app-settings',
@@ -46,8 +46,7 @@ export class SettingsPage implements OnInit {
     { section: 'lowAttendance', name: 'Low Attendance', disabled: false },
     { section: 'financials', name: 'Financials', disabled: false },
     { section: 'cgpa', name: 'CGPA Per Intake', disabled: false },
-    { section: 'busShuttleServices', name: 'Today\'s Trips', disabled: false },
-    { section: 'timetable', name: 'Timetable', disabled: false }
+    { section: 'busShuttleServices', name: 'Today\'s Trips', disabled: false }
   ];
   accentColors = [
     { title: 'Blue (Default)', value: 'blue-accent-color' },
@@ -206,8 +205,8 @@ export class SettingsPage implements OnInit {
       position: 'top',
       animated: true,
       color: 'success',
-      enterAnimation: toastMessageEnterAnimation,
-      leaveAnimation: toastMessageLeaveAnimation
+      // enterAnimation: toastMessageEnterAnimation,
+      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
 

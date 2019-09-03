@@ -12,6 +12,7 @@ import { FilterSlotsPipe } from './filter-slots.pipe';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
 import { ChartModule } from 'angular2-chartjs';
+import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
 
 const routes: Routes = [
   {
@@ -30,8 +31,14 @@ const routes: Routes = [
     ChartModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [MyConsultationsPage, FilterSlotsPipe, ConsultationsSummaryModalPage, LecturerSlotDetailsModalPage],
-  entryComponents: [ConsultationsSummaryModalPage, LecturerSlotDetailsModalPage],
+  declarations: [
+    MyConsultationsPage,
+    FilterSlotsPipe,
+    ConsultationsSummaryModalPage,
+    LecturerSlotDetailsModalPage,
+    UnavailabilityDetailsModalPage
+  ],
+  entryComponents: [ConsultationsSummaryModalPage, LecturerSlotDetailsModalPage, UnavailabilityDetailsModalPage],
 
 })
 export class MyConsultationsPageModule {}
