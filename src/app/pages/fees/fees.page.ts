@@ -95,11 +95,11 @@ export class FeesPage implements OnInit {
 
     this.totalSummary$ = this.ws.get('/student/summary_overall_fee', true);
     this.summary$ = this.ws.get<FeesSummary[]>('/student/outstanding_fee', true).pipe(
-      tap(summuries => summuries.map( summury => summury.PAYMENT_DUE_DATE = summury.PAYMENT_DUE_DATE.replace(/-/g, ' ')))
+      tap(summuries => summuries.map(summury => summury.PAYMENT_DUE_DATE = summury.PAYMENT_DUE_DATE.replace(/-/g, ' ')))
     );
     this.bankDraft$ = this.ws.get('/student/bankdraft_amount', true);
     this.detail$ = this.ws.get<FeesDetails[]>('/student/overall_fee', true).pipe(
-      tap(details => details.map(detail => detail.DUE_DATE = detail.DUE_DATE.replace('-', ' ').replace('-', ' ')))
+      tap(details => details.map(detail => detail.DUE_DATE = detail.DUE_DATE.replace(/-/g, ' ')))
     );
 
     this.totalSummary$ = this.totalSummary$.pipe(
@@ -142,7 +142,7 @@ export class FeesPage implements OnInit {
 
     );
 
-    this.financialsChart.options.legend.onClick = function(
+    this.financialsChart.options.legend.onClick = function (
       // tslint:disable-next-line: no-shadowed-variable
       event,
       legendItem
