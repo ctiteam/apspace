@@ -120,8 +120,10 @@
             <ion-card-header class="colored-border">
               <ion-card-title>Legend</ion-card-title>
             </ion-card-header>
-            <ion-card-content *ngFor="let legend of legends">
-              <b>{{ legend.name }}</b> - {{ legend.desc }}
+            <ion-card-content>
+              <p *ngFor="let legend of legends">
+                <b>{{ legend.name }}</b> - {{ legend.desc }}
+              </p>
             </ion-card-content>
           </ion-card>
         </ion-col>
