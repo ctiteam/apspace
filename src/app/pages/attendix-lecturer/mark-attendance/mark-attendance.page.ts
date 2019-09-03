@@ -1,14 +1,16 @@
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { Observable, Subject, merge, timer, NEVER } from 'rxjs';
+import { Observable, Subject, timer, NEVER } from 'rxjs';
 import {
-  catchError, first, map, pluck, scan, shareReplay, startWith, switchMap, tap
+  catchError, finalize, first, map, pluck, scan, shareReplay, startWith,
+  switchMap, tap
 } from 'rxjs/operators';
 import { totp } from 'otplib/otplib-browser';
 
 import { AttendanceGQL } from './attendance.query';
-import { InitAttendanceGQL } from './init-attendance.mutation';
+import { CasTicketService } from '../../../services';
+import { InitAttendanceGQL, InitAttendanceMutation } from '../../../../generated/graphql';
 import { MarkAttendanceGQL } from './mark-attendance.mutation';
 import { NewStatusGQL } from './new-status.subscription';
 import { Status } from './status.interface';
@@ -36,49 +38,51 @@ export class MarkAttendancePage implements OnInit {
   statusUpdate = new Subject<{ id: string; attendance: string }>();
 
   constructor(
-    private initAttendance: InitAttendanceGQL,
     private attendance: AttendanceGQL,
-    private newStatus: NewStatusGQL,
+    private cas: CasTicketService,
+    private initAttendance: InitAttendanceGQL,
     private markAttendance: MarkAttendanceGQL,
-    public toastCtrl: ToastController,
-    private route: ActivatedRoute
+    private newStatus: NewStatusGQL,
+    private route: ActivatedRoute,
+    public toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
     // totp options
     totp._options.digits = 3;
-    this.schedule = this.route.snapshot.params.schedule;
-    const schedule = this.schedule;
 
+    const schedule = this.schedule = this.route.snapshot.params.schedule;
     let studentsById: { [student: string]: Status };
 
     // get attendance state from query and use manual mode if attendance initialized
-    const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
-      catchError(err => (this.auto = true, this.attendance.fetch({ schedule }))),
+    const attendancesState$ = this.cas.getST().pipe(
+      switchMap(ticket => this.initAttendance.mutate({ ticket, schedule }).pipe(
+        // catchError(err => (this.auto = true, this.attendance.fetch({ ticket, schedule }))),
+      )),
       catchError(err => (this.toastCtrl.create({
         message: 'Failed to mark attendance.',
         duration: 2000,
         position: 'top',
         color: 'danger'
       }), NEVER)),
-      tap(query => studentsById = query.data.attendance.students.reduce((acc, s) => (acc[s.id] = s, acc), {}))
+      pluck('data'),
+      finalize(() => 'initAttendance ended'),
+      tap(query => studentsById = query.attendance.students.reduce((acc, s) => (acc[s.id] = s, acc), {}))
     );
 
     // keep updating attendancesState$ with new changes
-    const attendances$ = merge(attendancesState$, this.statusUpdate.asObservable()).pipe(
-      scan((state, action) => {
-        const student = state.data.attendance.students.find(s => s.id === action.id);
+    const attendances$ = attendancesState$.pipe(
+      switchMap(state => this.statusUpdate.asObservable().pipe(startWith(state))),
+      scan((state: InitAttendanceMutation, action: { id: string; attendance: string; }) => {
+        const student = state.attendance.students.find(s => s.id === action.id);
         student.attendance = action.attendance;
         return state;
       }),
-      // XXX: repeat when dynamodb record is deleted (expiredTime not accurate)
-      // takeUntil(this.updateError)
-      // repeat(),
       shareReplay(1) // keep track while switching mode
     );
 
     const secret$ = attendances$.pipe(
-      pluck('data', 'attendance', 'secret'),
+      pluck('attendance', 'secret'),
       shareReplay(1) // used shareReplay for observable subscriptions time gap
     );
 
@@ -104,7 +108,7 @@ export class MarkAttendancePage implements OnInit {
     );
 
     this.students$ = attendances$.pipe(
-      pluck('data', 'attendance', 'students'),
+      pluck('attendance', 'students'),
       shareReplay(1)
     );
 

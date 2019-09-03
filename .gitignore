@@ -48,3 +48,4 @@ dist/
 node_modules/
 aws-exports.js
 awsconfiguration.json
+graphql.schema.json

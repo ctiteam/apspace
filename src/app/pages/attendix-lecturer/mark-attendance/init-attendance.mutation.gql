@@ -1,0 +1,10 @@
+mutation initAttendance($ticket: String! $schedule: String!) {
+  attendance: initAttendance(ticket: $ticket schedule: $schedule) {
+    secret
+    students {
+      id
+      name
+      attendance
+    }
+  }
+}

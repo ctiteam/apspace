@@ -1,0 +1,57 @@
+type Attendance {
+  schedule: String!
+  secret: String!
+  markedBy: String!
+  lecturer: String!
+  created: String!
+  modified: String
+  startTime: String!
+  endTime: String!
+  validUntil: String!
+  classCode: String!
+  classType: String
+  students: [Status!]!
+}
+
+type Status {
+  id: String!
+  name: String!
+  userArn: String!
+  attendance: String!
+  lastModified: String!
+  modifiedBy: String!
+  internalIP: String!
+  externalIP: String!
+  schedule: String!  # duplicated for subscription filter
+}
+
+type Query {
+  attendance(schedule: String!): Attendance
+}
+
+type Mutation {
+  initAttendance(ticket: String! schedule: String!): Attendance!
+
+  markAttendance(
+    ticket: String!
+    schedule: String!
+    student: String!
+    attendance: String!
+  ): Status!
+
+  updateAttendance(
+    ticket: String!
+    otp: String!
+  ): Status!
+}
+
+type Subscription {
+  newStatus(schedule: String!): Status
+  @aws_subscribe(mutations: ["markAttendance", "updateAttendance"])
+}
+
+type schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
