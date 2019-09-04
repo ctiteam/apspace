@@ -82,7 +82,7 @@ export class StudentTimetablePage implements OnInit {
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
   intakeSelectable = true;
-  viewWeek = false; // weekly or daily display
+  viewWeek: boolean; // weekly or daily display
 
   room: string;
   intake: string;
@@ -126,6 +126,9 @@ export class StudentTimetablePage implements OnInit {
     const intakeHistory = this.settings.get('intakeHistory') || [];
     this.intake = intake || intakeHistory[intakeHistory.length - 1];
 
+    // default to daily view
+    this.viewWeek = !!this.settings.get('viewWeek');
+
     // default intake to student current intake
     if (this.intake === undefined) {
       // tslint:disable-next-line: no-bitwise
@@ -143,11 +146,15 @@ export class StudentTimetablePage implements OnInit {
   }
 
   presentActionSheet(labels: string[], handler: (_: string) => void) {
-
     const buttons = labels.map(text => ({ text, handler: () => handler.call(this, text) }));
     this.actionSheetCtrl.create({
       buttons: [...buttons, { text: 'Cancel', role: 'cancel' }],
     }).then(actionSheet => actionSheet.present());
+  }
+
+  /** Switch between daily and weekly view and save. */
+  rotateView() {
+    this.settings.set('viewWeek', this.viewWeek = !this.viewWeek);
   }
 
   /** Choose week with presentActionSheet. */

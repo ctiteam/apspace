@@ -12,6 +12,7 @@ export interface Settings {
   tripTo: string;
   /* timetable */
   intakeHistory: string[];
+  viewWeek: boolean;
   /* exam schedule */
   examIntake: string;
   /* contact number */

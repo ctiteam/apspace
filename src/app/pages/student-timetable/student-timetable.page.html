@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
-      <ion-button outline small (click)="viewWeek = !viewWeek" [disabled]="availableWeek!.length === 0">
+      <ion-button outline small (click)="rotateView()" [disabled]="availableWeek!.length === 0">
         {{ viewWeek ? 'Weekly' : 'Daily' }}
       </ion-button>
       <ion-button outline small (click)="chooseWeek()" [disabled]="availableWeek!.length === 0">
