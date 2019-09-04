@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Observable } from 'rxjs';
 import * as Fuse from 'fuse.js';
@@ -8,6 +7,7 @@ import { CasTicketService, SettingsService, UserSettingsService } from '../../se
 import { Role } from '../../interfaces';
 
 import { MenuItem } from './menu.interface';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-more',
@@ -284,7 +284,7 @@ export class MorePage implements OnInit {
   /* tslint:enable:no-bitwise */
 
   constructor(
-    public router: Router,
+    public navCtrl: NavController,
     public iab: InAppBrowser,
     private cas: CasTicketService,
     private settings: SettingsService,
@@ -312,7 +312,7 @@ export class MorePage implements OnInit {
         });
       }
     } else {
-      this.router.navigate([url]);
+      this.navCtrl.navigateForward([url]);
     }
   }
 
