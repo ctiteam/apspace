@@ -11,7 +11,7 @@ import { Settings } from '../interfaces';
 })
 export class SettingsService {
 
-  data: Settings;
+  data = {} as Settings;
 
   private readyPromise: Promise<void>;
 
@@ -30,7 +30,7 @@ export class SettingsService {
    * @param key - key stored
    * @param value - value to be set
    */
-  set(key: keyof Settings, value: any): void {
+  set<K extends keyof Settings>(key: K, value: Settings[K]): void {
     if (this.data[key] === value) { return; }
     this.data[key] = value;
     this.storage.set('settings', this.data);
@@ -41,7 +41,8 @@ export class SettingsService {
    *
    * @param key - key stored
    */
-  get<K extends keyof Settings>(key: K): Settings[K] {
+  get<K extends keyof Settings>(key: K): Settings[K] | undefined {
+    console.assert(Object.entries(this.data).length === 0, 'settings not ready');
     return this.data[key];
   }
 
