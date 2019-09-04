@@ -101,7 +101,7 @@
   <div *ngIf="transaction$ | async as transactions; else apCardBalanceLoading">
     <div class="masonry-list" *ngIf="!isEmpty(monthlyData.cr); else noTransactions">
 
-      <div class="masonry-item">
+      <div class="masonry-item" margin-bottom>
         <div class="card" padding-top padding-bottom>
           <div class="front">
             <div class="strip-bottom"></div>
