@@ -261,12 +261,14 @@ export class StudentTimetablePage implements OnInit {
     this.availableDays = this.availableDate.map(d => this.wday[d.getDay()]);
 
     // set default day
-    if (!this.selectedDate || !this.availableDate.some(d => d.getDay() === this.selectedDate.getDay())) {
-      this.selectedDate = this.availableDate[0];
+    if (this.availableDate.length === 0) {
+      this.selectedDate = undefined;
+    } else if (!this.selectedDate || !this.availableDate.find(d => d.getDay() === this.selectedDate.getDay())) {
+      const date = new Date();
+      const today = this.availableDate.find(d => d.getDate() === date.getDate());
+      this.selectedDate = today || this.availableDate[0];
     } else if (!this.availableDate.some(d => d.getDate() === this.selectedDate.getDate())) {
       this.selectedDate = this.availableDate.find(d => d.getDay() === this.selectedDate.getDay());
-    } else if (this.availableDate.length === 0) {
-      this.selectedDate = undefined;
     }
 
     this.changeDetectorRef.markForCheck();
