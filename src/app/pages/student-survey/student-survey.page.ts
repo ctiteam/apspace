@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { AlertController, MenuController, NavController, ToastController } from '@ionic/angular';
+import { AlertController, MenuController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Role, StudentProfile } from 'src/app/interfaces';
@@ -60,7 +60,6 @@ export class StudentSurveyPage implements OnInit {
   navParams: any;
 
   constructor(
-    public navCtrl: NavController,
     public menu: MenuController,
     private ws: WsApiService,
     private toastCtrl: ToastController,

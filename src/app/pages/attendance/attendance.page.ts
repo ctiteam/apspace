@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WsApiService } from 'src/app/services';
-import { Platform, ActionSheetController, NavController } from '@ionic/angular';
+import { Platform, ActionSheetController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { Attendance, Course, AttendanceLegend } from 'src/app/interfaces';
 import { tap, finalize } from 'rxjs/operators';
@@ -28,7 +28,6 @@ export class AttendancePage implements OnInit {
     private ws: WsApiService,
     private plt: Platform,
     public actionSheetCtrl: ActionSheetController,
-    public navCtrl: NavController,
   ) { }
 
   ngOnInit() {

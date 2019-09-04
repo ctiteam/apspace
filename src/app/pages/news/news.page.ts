@@ -5,7 +5,6 @@ import { finalize } from 'rxjs/operators';
 import { News } from '../../interfaces';
 import { NewsService } from '../../services';
 import { ModalController } from '@ionic/angular';
-import { NavController } from '@ionic/angular';
 import { NewsModalPage } from './news-modal';
 @Component({
   selector: 'app-news',
@@ -22,7 +21,6 @@ export class NewsPage implements OnInit {
 
     private news: NewsService,
     private modalCtrl: ModalController,
-    public navCtrl: NavController,
   ) { }
 
 
