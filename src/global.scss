@@ -50,20 +50,21 @@
 }
 
 // Fix padding for phones with notch screen
-body{
-  margin-top: constant(safe-area-inset-top);
+ion-app {
   margin-top: env(safe-area-inset-top);
+  margin-bottom: env(safe-area-inset-bottom);
 }
 
 // To be removed after solving the ShadowDOM issue Outside the print query: always hide the element with the class show-on-print
-.show-on-print{
+.show-on-print {
   // Hide elements that need to be shown on print only
   display: none;
 }
 
 // Default print settings (Fix print issue in ionic) // To be moved to a seperate file
 @media print {
-  ion-header, ion-tab-bar{
+  ion-header,
+  ion-tab-bar {
     // hide header and tabs on print
     display: none;
   }
@@ -86,10 +87,10 @@ body{
     display: block !important;
   }
 
-  .hide-on-print{
+  .hide-on-print {
     display: none;
   }
-  .show-on-print{
+  .show-on-print {
     display: block;
   }
 
