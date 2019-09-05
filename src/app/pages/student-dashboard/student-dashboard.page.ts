@@ -657,7 +657,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
       tap((overdueSummary) => {
         // Basically checking the Student's financial data to identify if there's any outstanding
         // tslint:disable-next-line: max-line-length
-        if (overdueSummary[0].FINE !== 0 && overdueSummary[0].TOTAL_OUTSTANDING !== overdueSummary[0].TOTAL_PAYABLE && overdueSummary[0].TOTAL_OUTSTANDING !== 0) {
+        if (overdueSummary[0].FINE !== 0 || overdueSummary[0].TOTAL_PAID !== overdueSummary[0].TOTAL_PAYABLE || overdueSummary[0].TOTAL_OUTSTANDING !== 0 || overdueSummary[0].TOTAL_OVERDUE !== 0) {
           this.hasOutstanding = true;
         } else {
           this.hasOutstanding = false;
