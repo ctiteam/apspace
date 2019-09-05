@@ -1,0 +1,22 @@
+.mid-text {
+  color: #dfa847;
+}
+
+.data-item {
+  ion-grid {
+    min-height: 70px;
+  }
+}
+
+.students-list-card {
+    ion-item.data-item {
+      --background: var(--main-bg-color) !important;
+      &:hover {
+        --background: var(--tertiary-bg-color) !important;
+      }
+    }
+}
+
+.with-border-bottom:not(:last-child){
+    border-bottom: 1px solid var(--secondary-txt-color);
+}

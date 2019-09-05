@@ -36,18 +36,30 @@
   .pb-1-xs {
     padding-bottom: 0.5em !important;
   }
+  .mt-1-xs {
+    margin-top: 0.5em !important;
+  }
+  .mb-1-xs {
+    margin-bottom: 0.5em !important;
+  }
+  .mt-2-xs {
+    margin-top: 1em !important;
+  }
+  .mb-2-xs {
+    margin-bottom: 1em !important;
+  }
   .masonry-list {
     column-count: 1;
   }
   .masonry-item {
     display: inline-block;
     width: 100%;
-    &:not(.no-padding){
+    &:not(.no-padding) {
       padding: 5px;
     }
   }
 
-  ion-badge{
+  ion-badge {
     --padding-start: 5px;
     --padding-end: 5px;
     --padding-bottom: 7px;
@@ -79,13 +91,19 @@
   .d-md-inline {
     display: inline;
   }
+  .d-md-none {
+    display: none;
+  }
   .masonry-list {
     column-count: 2;
   }
   .masonry-item {
-    &:not(.no-padding){
+    &:not(.no-padding) {
       padding: 10px;
     }
+  }
+  .m-0-md{
+    margin: 0 !important;
   }
 }
 
@@ -114,7 +132,7 @@
     display: inline;
   }
   .masonry-item {
-    &:not(.no-padding){
+    &:not(.no-padding) {
       padding: 16px;
     }
   }
