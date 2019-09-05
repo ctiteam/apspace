@@ -1,27 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { MenuController } from '@ionic/angular';
+import { Component } from '@angular/core';
+import { CasTicketService } from 'src/app/services';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-aplc-progress-report',
   templateUrl: './aplc-progress-report.page.html',
   styleUrls: ['./aplc-progress-report.page.scss'],
 })
-export class AplcProgressReportPage implements OnInit {
-
+export class AplcProgressReportPage {
   constructor(
-    // private menu: MenuController
+    private cas: CasTicketService,
+    private iab: InAppBrowser,
   ) { }
 
-  ngOnInit() {
+  openAdminReports() {
+    const jasperUrl = 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check';
+    this.cas.getST(jasperUrl).subscribe(st => {
+      this.iab.create(`${jasperUrl}?ticket=${st}`, '_system', 'location=true');
+    });
   }
-
-  // openSideMenu() {
-  //   this.menu.enable(true, 'aplc-side-menu');
-  //   this.menu.open('aplc-side-menu');
-  // }
-
-  // closeSideMenu() {
-  //   this.menu.close('aplc-side-menu');
-  // }
 
 }
