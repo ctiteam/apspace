@@ -146,6 +146,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
 
   // FINANCIALS
   totalOverdue$: Observable<{ value: number }>;
+  hasOutstanding: boolean;
   financial$: Observable<FeesTotalSummary>;
   financialsChart = {
     type: 'bar',
@@ -652,6 +653,15 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
       tap((overdueSummary) => {
         // GET THE VALUE OF THE TOTAL OVERALL USED IN THE QUICK ACCESS ITEM
         this.totalOverdue$ = of({ value: overdueSummary[0].TOTAL_OVERDUE });
+      }),
+      tap((overdueSummary) => {
+        // Basically checking the Student's financial data to identify if there's any outstanding
+        // tslint:disable-next-line: max-line-length
+        if (overdueSummary[0].FINE !== 0 && overdueSummary[0].TOTAL_OUTSTANDING !== overdueSummary[0].TOTAL_PAYABLE && overdueSummary[0].TOTAL_OUTSTANDING !== 0) {
+          this.hasOutstanding = true;
+        } else {
+          this.hasOutstanding = false;
+        }
       }),
       tap(overdueSummary => {
         this.financialsChart.data = {
