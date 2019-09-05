@@ -162,15 +162,17 @@
           <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
             <ion-icon name="move" class="handle"></ion-icon>
           </div>
-          <dashboard-card *ngIf="overallAttendancePercent$ | async as overallAttendancePercent"
-            [cardTitle]='lowAttendanceCardConfigurations.cardTitle'
-            [cardSubtitle]='"Overall: " + (overallAttendancePercent.value | number: "1.0-1") + "%"'
-            [contentPadding]='lowAttendanceCardConfigurations.contentPadding'
-            [withOptionsButton]='lowAttendanceCardConfigurations.withOptionsButton'>
-            <chart *ngIf="lowAttendanceChart.data" [type]="lowAttendanceChart.type" [data]="lowAttendanceChart.data"
-              [options]="lowAttendanceChart.options">
-            </chart>
-          </dashboard-card>
+          <div *ngIf="(modulesWithLowAttendance$ | async)?.length > 0; else notLowAttendance">
+            <dashboard-card *ngIf="(overallAttendancePercent$ | async) as overallAttendancePercent"
+              [cardTitle]='lowAttendanceCardConfigurations.cardTitle'
+              [cardSubtitle]='"Overall: " + (overallAttendancePercent.value | number: "1.0-1") + "%"'
+              [contentPadding]='lowAttendanceCardConfigurations.contentPadding'
+              [withOptionsButton]='lowAttendanceCardConfigurations.withOptionsButton'>
+              <chart *ngIf="lowAttendanceChart.data" [type]="lowAttendanceChart.type" [data]="lowAttendanceChart.data"
+                [options]="lowAttendanceChart.options">
+              </chart>
+            </dashboard-card>
+          </div>
         </div>
         <ng-template #loadingAttendance>
           <ion-card>
@@ -188,6 +190,23 @@
               </ion-skeleton-text>
             </ion-card-content>
           </ion-card>
+        </ng-template>
+
+        <ng-template #notLowAttendance>
+          <dashboard-card *ngIf="(overallAttendancePercent$ | async) as overallAttendancePercent"
+            [cardTitle]='lowAttendanceCardConfigurations.cardTitle'
+            [cardSubtitle]='"Overall: " + (overallAttendancePercent.value | number: "1.0-1") + "%"'
+            [contentPadding]='lowAttendanceCardConfigurations.contentPadding'
+            [withOptionsButton]='lowAttendanceCardConfigurations.withOptionsButton'>
+            <app-message-with-svg
+            messageTitle="Yay!"
+            messageContent="Your attendance is above 80%"
+            imageUrl="assets/img/happy.svg"
+            wrapperOffset="3"
+            wrapperSize="6"
+          >
+          </app-message-with-svg>
+        </dashboard-card>
         </ng-template>
       </div>
 
@@ -357,18 +376,21 @@
 
       <!-- FINANCIALS -->
       <div *ngIf="shownDashboardSections.includes('financials')">
-        <div class="masonry-item" *ngIf="financial$ | async as financialSummary; else loadingFinancials">
+        <div class="masonry-item" *ngIf="(financial$ | async) as financialSummary; else loadingFinancials">
           <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
             <ion-icon name="move" class="handle"></ion-icon>
           </div>
-          <dashboard-card [cardTitle]='financialsCardConfigurations.cardTitle'
-            [cardSubtitle]='"Overdue: " + (financialSummary[0].TOTAL_OVERDUE | currency: "MYR": "RM")'
-            [contentPadding]='financialsCardConfigurations.contentPadding'
-            [withOptionsButton]='financialsCardConfigurations.withOptionsButton'>
-            <chart *ngIf="financialsChart.data" [type]="financialsChart.type" [data]="financialsChart.data"
-              [options]="financialsChart.options">
-            </chart>
-          </dashboard-card>
+          <div 
+            *ngIf="hasOutstanding; else noOutstanding">
+            <dashboard-card [cardTitle]='financialsCardConfigurations.cardTitle'
+              [cardSubtitle]='"Overdue: " + (financialSummary[0].TOTAL_OVERDUE | currency: "MYR": "RM")'
+              [contentPadding]='financialsCardConfigurations.contentPadding'
+              [withOptionsButton]='financialsCardConfigurations.withOptionsButton'>
+              <chart *ngIf="financialsChart.data" [type]="financialsChart.type" [data]="financialsChart.data"
+                [options]="financialsChart.options">
+              </chart>
+            </dashboard-card>
+          </div>
         </div>
         <ng-template #loadingFinancials>
           <ion-card>
@@ -386,6 +408,19 @@
               </ion-skeleton-text>
             </ion-card-content>
           </ion-card>
+        </ng-template>
+
+        <ng-template #noOutstanding>
+          <dashboard-card 
+            [cardTitle]='financialsCardConfigurations.cardTitle'
+            [contentPadding]='financialsCardConfigurations.contentPadding'
+            [withOptionsButton]='financialsCardConfigurations.withOptionsButton'>
+            <app-message-with-svg 
+              messageTitle="Yay!"
+              messageContent="You have no outstanding payments to be done"
+              imageUrl="assets/img/happy.svg" wrapperOffset="3" wrapperSize="6">
+            </app-message-with-svg>
+          </dashboard-card>
         </ng-template>
       </div>
 
