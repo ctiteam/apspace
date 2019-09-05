@@ -177,6 +177,10 @@ const routes: Routes = [
       },
     ]
   },
+  {
+    path: 'aplc-progress-report',
+    loadChildren: './pages/aplc-progress-report/aplc-progress-report.module#AplcProgressReportPageModule'
+  }
 ];
 
 @NgModule({
