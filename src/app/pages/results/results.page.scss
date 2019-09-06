@@ -60,4 +60,18 @@ ion-card {
     visibility: visible;
     padding-bottom: 4px !important;
   }
+  .profile-photo {
+    max-height: 150px;
+    max-width: 122px;
+  }
+  
+  ion-img {
+    height: 100%;
+    border-radius: 15px;
+    margin: auto;
+  }
+  .boldMe{
+    font-weight: bold
+  }
+  
 }

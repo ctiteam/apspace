@@ -20,10 +20,91 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+
+
   <ng-template [ngIf]="block" [ngIfElse]="accountIsBlocked">
+
+
+
+
+
     <ion-grid>
       <ion-row>
         <ion-col size-xs="12" size-lg="3">
+
+          <ion-card *ngIf="studentProfile$ | async as profile; else loadingProfile">
+            <ng-template [ngIf]="photo$ | async" [ngIfElse]="loadingPicture">
+              <div class="img-wrapper" margin-top margin-bottom>
+                <ion-img class="profile-photo" [src]="
+                                              'data:image/jpg;base64,' +
+                                              (photo$ | async)?.base64_photo
+                                              " (ionError)="$event.target.src = 'assets/img/no_img.png'">
+                </ion-img>
+              </div>
+            </ng-template>
+            <ng-template #loadingPicture>
+
+            </ng-template>
+            <ion-card-header>
+              <ion-card-title>
+
+              </ion-card-title>
+              <ion-card-subtitle>
+
+              </ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <div>
+                <ion-text class="boldMe" padding-start>
+                  Student Number:
+                </ion-text>
+                <ion-text > 
+                  {{ profile.STUDENT_NUMBER }}
+                </ion-text>
+              </div>
+              <div>
+                <ion-text class="boldMe" padding-start>
+                  Name:
+                </ion-text>
+                <ion-text >
+                  {{ profile.NAME }}
+                </ion-text>
+              </div>
+              <div>
+                <ng-template [ngIf]="profile.PL_SAMACCOUNTNAME" [ngIfElse]="plLost">
+                  <ion-text padding-start class="boldMe"><b>Programme Leader:</b>
+                    
+                    </ion-text>
+                    <ion-text class="colored-text">  
+                    {{ profile.PL_NAME }}
+                    </ion-text> 
+                     
+
+                </ng-template>
+                <ng-template #plLost>
+
+                </ng-template>
+              </div>
+
+                  <ion-item>
+                      <ion-buttons *ngIf="block" class="ion-text-center">
+                          <ion-button fill="outline" size="small" class="colored-text notification-button colored-border"
+                            (click)="showActionSheet()">
+                            Intakes
+                          </ion-button>
+                        </ion-buttons>
+                  </ion-item>
+               
+
+            </ion-card-content>
+          </ion-card>
+          <ng-template #loadingProfile>
+
+          </ng-template>
+
+
+
+
           <ng-template [ngIf]="result$ | async" [ngIfElse]="loading">
             <ng-template [ngIf]="(result$ | async) && (result$ | async)?.length > 0" [ngIfElse]="nodata">
               <chart margin-top *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
@@ -98,6 +179,7 @@
                         <span class="marker">Internal Result: </span>
                         {{ result.INTERNAL_RESULT_RELEASE_DATE | date: "EEE, d MMM y" || "N/A"   }}
                       </ion-col>
+                   
 
                       <ion-col *ngIf="result.RECOMMENDATION">
                         <span class="bold">Recommendation:</span> <br>

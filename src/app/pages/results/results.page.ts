@@ -8,7 +8,7 @@ import { tap, finalize } from 'rxjs/operators';
 import { WsApiService } from '../../services';
 import {
   ClassificationLegend, Course, CourseDetails, DeterminationLegend,
-  InterimLegend, MPULegend, StudentProfile, Subcourse
+  InterimLegend, MPULegend, StudentProfile, Subcourse, StudentPhoto
 } from '../../interfaces';
 
 @Component({
@@ -24,6 +24,8 @@ export class ResultsPage implements OnInit {
   mpuLegend$: Observable<MPULegend[]>;
   determinationLegend$: Observable<DeterminationLegend[]>;
   classificationLegend$: Observable<ClassificationLegend[]>;
+  studentProfile$: Observable<StudentProfile>;
+  photo$: Observable<StudentPhoto>;
 
   type = 'bar';
   data: any;
@@ -73,6 +75,14 @@ export class ResultsPage implements OnInit {
         this.message = p.MESSAGE;
       }
     });
+    
+    this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
+    this.studentProfile$ = this.getStudentInfo();
+    
+  }
+
+  getStudentInfo() {
+    return this.ws.get<StudentProfile>('/student/profile', true);
   }
 
   showActionSheet() {
