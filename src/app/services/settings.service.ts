@@ -42,7 +42,7 @@ export class SettingsService {
    * @param key - key stored
    */
   get<K extends keyof Settings>(key: K): Settings[K] | undefined {
-    console.assert(Object.entries(this.data).length === 0, 'settings not ready');
+    console.assert(Object.entries(this.data).length !== 0, 'settings not ready');
     return this.data[key];
   }
 
