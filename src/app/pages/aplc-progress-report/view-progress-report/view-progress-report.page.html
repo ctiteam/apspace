@@ -196,7 +196,29 @@
       </ion-card>
     </ng-container>
     <ng-template #studentsBehaviourLoading>
-      loading students
+      <ion-card class="students-list-card">
+        <ion-card-content>
+          <ion-grid>
+            <ion-row *ngFor="let _ of skeletons">
+              <ion-col size="2">
+                <ion-skeleton-text animated style="width: 100%; line-height: 20px;"></ion-skeleton-text>
+              </ion-col>
+              <ion-col size="2">
+                <ion-skeleton-text animated style="width: 100%; line-height: 20px;"></ion-skeleton-text>
+              </ion-col>
+              <ion-col size="2">
+                <ion-skeleton-text animated style="width: 100%; line-height: 20px;"></ion-skeleton-text>
+              </ion-col>
+              <ion-col size="2">
+                <ion-skeleton-text animated style="width: 100%; line-height: 20px;"></ion-skeleton-text>
+              </ion-col>
+              <ion-col size="4">
+                <ion-skeleton-text animated style="width: 100%; line-height: 20px;"></ion-skeleton-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
     </ng-template>
 
     <ng-container *ngIf="scoreLegend$ | async as scoreLegends; else scoreLegendLoading">
@@ -222,7 +244,23 @@
 
     </ng-container>
     <ng-template #scoreLegendLoading>
-      loading legends....
+      <ion-card class="students-list-card">
+        <ion-card-content>
+          <ion-grid>
+            <ion-row *ngFor="let _ of skeletons">
+              <ion-col size="2" style="margin:auto">
+                <ion-skeleton-text animated style="width: 100%; line-height: 20px;"></ion-skeleton-text>
+              </ion-col>
+              <ion-col size="2" style="margin:auto">
+                <ion-skeleton-text animated style="width: 100%; line-height: 20px;"></ion-skeleton-text>
+              </ion-col>
+              <ion-col size="8" style="margin:auto">
+                <ion-skeleton-text animated style="width: 100%; line-height: 80px;"></ion-skeleton-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
     </ng-template>
 
     <ng-container *ngIf="descriptionLegend$ | async as descriptionLegends; else descriptionLegendLoading">

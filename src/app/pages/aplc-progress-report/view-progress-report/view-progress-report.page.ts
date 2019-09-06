@@ -18,7 +18,7 @@ export class ViewProgressReportPage implements OnInit {
   classDescription$: Observable<any>;
   studentsBehaviour$: Observable<any>;
 
-
+  skeletons = new Array(6);
   subjectCode: string;
   classCode: string;
 
