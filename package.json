@@ -69,7 +69,7 @@
     "cordova-plugin-network-information": "^2.0.2",
     "core-js": "^2.5.4",
     "fuse.js": "^3.4.5",
-    "graphql": "^14.5.3",
+    "graphql": "0.11",
     "graphql-tag": "^2.10.1",
     "ion2-calendar": "^3.0.0-rc.0",
     "ionic-selectable": "^4.4.1",
