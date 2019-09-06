@@ -21,7 +21,6 @@ export class ViewProgressReportPage implements OnInit {
 
   subjectCode: string;
   classCode: string;
-  showClassCodeLoading: false;
 
   constructor(
     private ws: WsApiService,
