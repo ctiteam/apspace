@@ -3,7 +3,7 @@ import { ActionSheetButton } from '@ionic/core';
 import { ActionSheetController, Platform, IonRefresher } from '@ionic/angular';
 
 import { Observable } from 'rxjs';
-import { tap, finalize } from 'rxjs/operators';
+import { tap, finalize, map, reduce, groupBy } from 'rxjs/operators';
 
 import { WsApiService } from '../../services';
 import {
@@ -24,7 +24,7 @@ export class ResultsPage implements OnInit {
   mpuLegend$: Observable<MPULegend[]>;
   determinationLegend$: Observable<DeterminationLegend[]>;
   classificationLegend$: Observable<ClassificationLegend[]>;
-  studentProfile$: Observable<StudentProfile>;
+  studentProfile: StudentProfile;
   photo$: Observable<StudentPhoto>;
 
   type = 'bar';
@@ -61,7 +61,9 @@ export class ResultsPage implements OnInit {
   }
 
   doRefresh(refresher?: IonRefresher) {
+    this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
     this.ws.get<StudentProfile>('/student/profile', true).subscribe(p => {
+      this.studentProfile = p;
       if (p.BLOCK) {
         this.block = true;
         this.course$ = this.ws.get<Course[]>('/student/courses', true).pipe(
@@ -75,15 +77,8 @@ export class ResultsPage implements OnInit {
         this.message = p.MESSAGE;
       }
     });
-    
-    this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
-    this.studentProfile$ = this.getStudentInfo();
-    
   }
 
-  getStudentInfo() {
-    return this.ws.get<StudentProfile>('/student/profile', true);
-  }
 
   showActionSheet() {
     const intakesButton = this.intakeLabels.map(intake => {
@@ -109,7 +104,9 @@ export class ResultsPage implements OnInit {
       tap(_ => this.getMpuLegend(intake, refresh)),
       tap(_ => this.getDeterminationLegend(intake, refresh)),
       tap(_ => this.getClassificatinLegend(intake, refresh)),
-    ));
+
+    )
+    );
   }
 
   getCourseDetails(intake: string, refresh: boolean): Observable<CourseDetails> {

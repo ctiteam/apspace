@@ -19,21 +19,12 @@
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event.target)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-
-
-
   <ng-template [ngIf]="block" [ngIfElse]="accountIsBlocked">
-
-
-
-
-
     <ion-grid>
       <ion-row>
         <ion-col size-xs="12" size-lg="3">
-
-          <ion-card *ngIf="studentProfile$ | async as profile; else loadingProfile">
-            <ng-template [ngIf]="photo$ | async" [ngIfElse]="loadingPicture">
+          <ion-card *ngIf="studentProfile; else loadingProfile">
+            <ng-template [ngIf]="photo$ | async">
               <div class="img-wrapper" margin-top margin-bottom>
                 <ion-img class="profile-photo" [src]="
                                               'data:image/jpg;base64,' +
@@ -42,69 +33,48 @@
                 </ion-img>
               </div>
             </ng-template>
-            <ng-template #loadingPicture>
-
-            </ng-template>
-            <ion-card-header>
-              <ion-card-title>
-
-              </ion-card-title>
-              <ion-card-subtitle>
-
-              </ion-card-subtitle>
-            </ion-card-header>
             <ion-card-content>
-              <div>
-                <ion-text class="boldMe" padding-start>
+              <p>
+                <span class="text-bold" padding-start>
                   Student Number:
-                </ion-text>
-                <ion-text > 
-                  {{ profile.STUDENT_NUMBER }}
-                </ion-text>
-              </div>
-              <div>
-                <ion-text class="boldMe" padding-start>
+                </span>
+
+                {{ studentProfile.STUDENT_NUMBER }}
+
+              </p>
+              <p>
+                <span class="text-bold" padding-start>
                   Name:
+                </span>
+                <ion-text>
+                  {{ studentProfile.NAME }}
                 </ion-text>
-                <ion-text >
-                  {{ profile.NAME }}
+              </p>
+              <p>
+                <span class="text-bold" padding-start>Programme Leader:
+
+                </span>
+                <ion-text class="colored-text">
+                  {{ studentProfile.PL_NAME }}
                 </ion-text>
-              </div>
-              <div>
-                <ng-template [ngIf]="profile.PL_SAMACCOUNTNAME" [ngIfElse]="plLost">
-                  <ion-text padding-start class="boldMe"><b>Programme Leader:</b>
-                    
-                    </ion-text>
-                    <ion-text class="colored-text">  
-                    {{ profile.PL_NAME }}
-                    </ion-text> 
-                     
-
-                </ng-template>
-                <ng-template #plLost>
-
-                </ng-template>
-              </div>
-
-                  <ion-item>
-                      <ion-buttons *ngIf="block" class="ion-text-center">
-                          <ion-button fill="outline" size="small" class="colored-text notification-button colored-border"
-                            (click)="showActionSheet()">
-                            Intakes
-                          </ion-button>
-                        </ion-buttons>
-                  </ion-item>
-               
-
+              </p>
+              <ion-item>
+                <ion-buttons>
+                  <ion-button fill="outline" size="small" class="colored-text notification-button colored-border"
+                    (click)="showActionSheet()">
+                    Intakes
+                  </ion-button>
+                </ion-buttons>
+              </ion-item>
             </ion-card-content>
           </ion-card>
           <ng-template #loadingProfile>
-
+            <ion-card no-padding>
+              <ion-card-content no-padding>
+                <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
+              </ion-card-content>
+            </ion-card>
           </ng-template>
-
-
-
-
           <ng-template [ngIf]="result$ | async" [ngIfElse]="loading">
             <ng-template [ngIf]="(result$ | async) && (result$ | async)?.length > 0" [ngIfElse]="nodata">
               <chart margin-top *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
@@ -130,7 +100,6 @@
             </ion-card>
           </ng-template>
         </ion-col>
-
         <ion-col size-xs="12" size-lg="9">
           <ng-template [ngIf]="result$ | async" [ngIfElse]="loading">
             <ng-template [ngIf]="(result$ | async) && (result$ | async)?.length > 0" [ngIfElse]="nodata">
@@ -139,22 +108,21 @@
                   <ion-grid>
                     <ion-row>
                       <ion-col size="12" size-sm="3" size-md="5">
-                        <h2 class="bold">Module</h2>
+                        <h2 class="text-bold">Module</h2>
                       </ion-col>
                       <ion-col size="12" size-sm="3" size-md="2" text-center>
-                        <h2 class="bold">Grade</h2>
+                        <h2 class="text-bold">Grade</h2>
                       </ion-col>
                       <ion-col size="12" size-sm="3" size-md="2" text-center>
-                        <h2 class="bold">Grade Point</h2>
+                        <h2 class="text-bold">Grade Point</h2>
                       </ion-col>
                       <ion-col size="12" size-sm="3" size-md="3" text-center>
-                        <h2 class="bold">Internal Result Release Date</h2>
+                        <h2 class="text-bold">Internal Result Release Date</h2>
                       </ion-col>
                     </ion-row>
                   </ion-grid>
                 </ion-card-content>
               </ion-card>
-
               <ion-card no-margin margin-top margin-bottom no-padding
                 *ngFor="let result of (result$ | async); last as last; trackBy: trackByFn">
                 <ion-card-header class="special-card-header colored-border"
@@ -164,7 +132,7 @@
                 <ion-card-content>
                   <ion-grid>
                     <ion-row>
-                      <ion-col size="12" size-sm="3" size-md="5" class="bold special-border colored-border">
+                      <ion-col size="12" size-sm="3" size-md="5" class="text-bold special-border colored-border">
                         {{ result.MODULE_DESCRIPTION }}
                       </ion-col>
                       <ion-col size="12" size-sm="3" size-md="2" text-center>
@@ -179,10 +147,8 @@
                         <span class="marker">Internal Result: </span>
                         {{ result.INTERNAL_RESULT_RELEASE_DATE | date: "EEE, d MMM y" || "N/A"   }}
                       </ion-col>
-                   
-
                       <ion-col *ngIf="result.RECOMMENDATION">
-                        <span class="bold">Recommendation:</span> <br>
+                        <span class="text-bold">Recommendation:</span> <br>
                         <span class="danger-text">{{ result.RECOMMENDATION }}</span>
                       </ion-col>
                     </ion-row>
@@ -229,19 +195,17 @@
                       </ng-template>
                     </div>
                   </ion-grid>
-
                   <div style="padding: 5px !important">
                     <h2>
-                      <span class="bold">R</span> = Awarding of module credit by passing module referral
+                      <span class="text-bold">R</span> = Awarding of module credit by passing module referral
                       assessments.
                     </h2>
                     <h2>
-                      <span class="bold">C</span> = Awarding of module credit through compensation at the
+                      <span class="text-bold">C</span> = Awarding of module credit through compensation at the
                       discretion of the Examination Board, based on the student's
                       overall academic performance. No referral assessment is requried
                       for module.
                     </h2>
-
                     <ng-template [ngIf]="(mpuLegend$ | async)" let-mpu>
                       <h2 *ngIf="mpu.length > 0">
                         {{ mpu[0].MPU }}
