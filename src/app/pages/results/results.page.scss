@@ -15,13 +15,6 @@ ion-card {
     padding-left: 8px !important;
     padding-right: 8px !important;
   }
-
-  ion-grid {
-    .bold {
-      font-weight: bold;
-    }
-  }
-
   pre{
     white-space: pre-wrap;
   }
@@ -59,5 +52,15 @@ ion-card {
     display: block;
     visibility: visible;
     padding-bottom: 4px !important;
+  }
+  .profile-photo {
+    max-height: 150px;
+    max-width: 122px;
+  }
+  
+  ion-img {
+    height: 100%;
+    border-radius: 15px;
+    margin: auto;
   }
 }
