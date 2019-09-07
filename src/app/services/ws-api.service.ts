@@ -145,4 +145,44 @@ export class WsApiService {
     );
   }
 
+  put<T>(endpoint: string, options: {
+    body?: any | null,
+    headers?: HttpHeaders | { [header: string]: string | string[]; },
+    params?: HttpParams | { [param: string]: string | string[]; },
+    timeout?: number,
+    url?: string,
+  } = {}): Observable<T> {
+    options = Object.assign({
+      body: null,
+      headers: {},
+      params: {},
+      timeout: 10000,
+      url: this.apiUrl,
+    }, options);
+
+    const url = options.url + endpoint;
+    const opt = {
+      headers: options.headers,
+      params: options.params,
+      withCredentials: true,
+    };
+
+    if (this.plt.is('cordova') && this.network.type === 'none') {
+      this.toastCtrl.create({
+        message: 'You are now offline.',
+        duration: 3000,
+        position: 'top',
+      }).then(toast => toast.present());
+      return throwError('offline');
+    }
+
+    return this.cas.getST(url.split('?').shift()).pipe(
+      switchMap(ticket => this.http.put<T>(url, options.body,
+        { ...opt, params: { ...opt.params, ticket } })),
+      timeout(options.timeout),
+      publishLast(),
+      refCount(),
+    );
+  }
+
 }
