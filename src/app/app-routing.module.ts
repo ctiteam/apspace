@@ -180,7 +180,7 @@ const routes: Routes = [
   {
     path: 'aplc-progress-report',
     canActivate: [AuthGuard],
-    data: [{ role: Role.Admin }, {role: Role.Lecturer}],
+    data: { role: Role.Admin | Role.Lecturer},
     loadChildren: './pages/aplc-progress-report/aplc-progress-report.module#AplcProgressReportPageModule'
   }
 ];
