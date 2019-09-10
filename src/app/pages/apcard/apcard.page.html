@@ -117,22 +117,17 @@
               </div>
               <div class="card-number"></div>
               <div class="end">
-                <span class="end-text">
-                  Last Transaction:
-                </span>
-                <span class="end-date">
-                  {{transactions[0].SpendDate | date: 'dd/MMM'}}
+                <label>LAST TRANSACTION: </label>
+                <span class="end-date">{{ transactions[0].SpendDate | date: 'dd/MMM' }}
                 </span>
               </div>
-              <div class="card-holder">Card Holder:
-                <span style="font-size: 14px;color: white;">
-                  {{ transactions[0].SNO }}
-                </span>
+              <div class="card-holder">
+                <label>CARD HOLDER: </label>
+                <span>{{ transactions[0].SNO }}</span>
               </div>
-              <div class="card-holder">Balance:
-                <span style="font-size: 14px;color: white;">
-                  {{ ' ' + (balance | currency: "RM") }}
-                </span>
+              <div class="card-holder">
+                <label>BALANCE: </label>
+                <span>{{ balance | currency:"RM" }}</span>
               </div>
             </div>
           </div>
