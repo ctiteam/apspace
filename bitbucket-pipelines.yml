@@ -1,15 +1,20 @@
-image: node:10.16.0-alpine
+image: cticti/aws-cli:node-ionic-alpine
+
 pipelines:
-  default:
-    - step: &build-test
-        name: Build & Test
+  branches:
+    production:
+    - step:
         caches:
           - node
         script:
-          - yarn install
-          - yarn lint
-            # - yarn test --single-run --no-progress --browsers FirefoxHeadless
-          - yarn build --aot
-  pull-requests:
-    '**':
-      - step: *build-test
+          - npm i
+          - ionic cordova build browser --prod
+          - aws s3 sync www/ s3://apspace-production/ --acl public-read
+    v4-staging:
+    - step:
+        caches:
+          - node
+        script:
+          - npm i
+          - ionic cordova build browser --prod
+          - aws s3 sync www/ s3://apspace-staging/ --acl public-read
