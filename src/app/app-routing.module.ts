@@ -25,7 +25,6 @@ const routes: Routes = [
 
   {
     path: 'student-timetable',
-    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/student-timetable/student-timetable.module').then(m => m.StudentTimetablePageModule)
   },
   {
@@ -80,7 +79,6 @@ const routes: Routes = [
   },
   {
     path: 'graduate-verification-service',
-    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/graduate-verification-service/graduate-verification-service.module')
       .then(m => m.GraduateVerificationServicePageModule)
   },
