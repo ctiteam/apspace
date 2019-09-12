@@ -114,8 +114,6 @@ export class SettingsPage implements OnInit {
     // tslint:disable-next-line: no-bitwise
     if (this.settings.get('role') & Role.Student) {
       this.userRole = true;
-    } else {
-
     }
     this.locations$ = this.getLocations();
   }
