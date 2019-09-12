@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Profile</ion-title>
-    <ion-buttons slot="start">
+    <ion-buttons slot="start" [hidden]='comingFromTabs() ? true : false'>
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>

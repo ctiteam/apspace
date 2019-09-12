@@ -12,6 +12,7 @@ import {
 } from '../../services';
 import { ClassesPipe } from './classes.pipe';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -96,6 +97,7 @@ export class StudentTimetablePage implements OnInit {
     private tt: StudentTimetableService,
     private userSettings: UserSettingsService,
     private ws: WsApiService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -279,5 +281,17 @@ export class StudentTimetablePage implements OnInit {
 
     this.changeDetectorRef.markForCheck();
   }
+  comingFromTabs() {
+
+    if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
+
+      return true;
+
+    }
+
+    return false;
+
+  }
+
 
 }

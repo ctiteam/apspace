@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Attendance, Course, AttendanceLegend } from 'src/app/interfaces';
 import { tap, finalize } from 'rxjs/operators';
 import { ActionSheetButton } from '@ionic/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-attendance',
@@ -28,6 +29,7 @@ export class AttendancePage implements OnInit {
     private ws: WsApiService,
     private plt: Platform,
     public actionSheetCtrl: ActionSheetController,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -98,5 +100,16 @@ export class AttendancePage implements OnInit {
       ),
       finalize(() => event && event.target.complete())
     );
+  }
+  comingFromTabs() {
+
+    if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
+
+      return true;
+
+    }
+
+    return false;
+
   }
 }

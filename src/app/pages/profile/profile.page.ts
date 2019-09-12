@@ -88,4 +88,15 @@ export class ProfilePage implements OnInit {
   getVisaStatus() {
     return this.ws.get<any>('/student/visa_status');
   }
+  comingFromTabs() {
+
+    if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
+
+      return true;
+
+    }
+
+    return false;
+
+  }
 }
