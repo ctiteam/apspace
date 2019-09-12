@@ -15,7 +15,7 @@ ion-card {
     padding-left: 8px !important;
     padding-right: 8px !important;
   }
-  pre{
+  pre {
     white-space: pre-wrap;
   }
 
@@ -31,6 +31,12 @@ ion-card {
 
 .special-border {
   display: none;
+}
+
+.img-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 110px;
 }
 
 @media (min-width: 600px) { // Bigger screen

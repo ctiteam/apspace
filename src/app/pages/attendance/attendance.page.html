@@ -1,14 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-title *ngIf="course$ | async">
-      {{ this.selectedIntake || "Attendance" }}
+      Attendance
     </ion-title>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button fill="outline" size="small" class="colored-text colored-border" (click)="showActionSheet()">
-        Intakes
+        {{ selectedIntake }}
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

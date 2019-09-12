@@ -141,7 +141,6 @@ export class StudentTimetablePage implements OnInit {
       }
     }
 
-
     this.doRefresh();
   }
 

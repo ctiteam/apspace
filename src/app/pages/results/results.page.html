@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title *ngIf="course$ | async">
-      {{ this.selectedIntake || "Results" }}
+      Results
     </ion-title>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
@@ -9,7 +9,7 @@
     <ion-buttons *ngIf="block" slot="end">
       <ion-button fill="outline" size="small" class="colored-text notification-button colored-border"
         (click)="showActionSheet()">
-        Intakes
+        {{ selectedIntake }}
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -59,14 +59,6 @@
                   {{ studentProfile.PL_NAME }}
                 </ion-text>
               </p>
-              <ion-item>
-                <ion-buttons>
-                  <ion-button fill="outline" size="small" class="colored-text notification-button colored-border"
-                    (click)="showActionSheet()">
-                    Intakes
-                  </ion-button>
-                </ion-buttons>
-              </ion-item>
             </ion-card-content>
           </ion-card>
           <ng-template #loadingProfile>
