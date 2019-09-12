@@ -4,6 +4,7 @@ import { finalize, map, tap } from 'rxjs/operators';
 import { Apcard } from '../../interfaces';
 import { WsApiService } from 'src/app/services';
 import { MenuController, IonRadioGroup } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 type VisibleOption = 'all' | 'credit' | 'debit';
 
@@ -60,7 +61,8 @@ export class ApcardPage implements OnInit {
 
   constructor(
     private ws: WsApiService,
-    private menu: MenuController
+    private menu: MenuController,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -174,6 +176,17 @@ export class ApcardPage implements OnInit {
       show: 'all'
     };
     this.closeMenu();
+  }
+  comingFromTabs() {
+
+    if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
+
+      return true;
+
+    }
+
+    return false;
+
   }
 
 }
