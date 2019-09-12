@@ -26,9 +26,9 @@
         <div padding>
             <ion-item>
               <ion-label>Class Code</ion-label>
-              <ion-select [(ngModel)]="classcode">
-                <ion-select-option *ngFor="let classcode of classcode$ | async"
-                  [value]="classcode" interface="action-sheet">{{ classcode }}</ion-select-option>
+              <ion-select [(ngModel)]="classcode" interface="popover">
+                <ion-select-option *ngFor="let classcode of classcodes$ | async"
+                  [value]="classcode">{{ classcode }}</ion-select-option>
               </ion-select>
             </ion-item>
 
