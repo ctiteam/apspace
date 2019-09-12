@@ -6,7 +6,7 @@
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button fill="outline" size="small" (click)="presentIntakeSearch()" class="colored-text colored-border">
-        {{ intake }}
+        {{ intake || 'Intakes' }}
       </ion-button>
     </ion-buttons>
 
@@ -93,14 +93,10 @@
         </ion-grid>
       </ng-template>
       <ng-template #noExams>
-          <app-message-with-svg
-          imageUrl="assets/img/empty.svg"
-          messageTitle="No Exam Schedule For The Selected Intake!"
-          wrapperSize="6"
-          wrapperMarginTop="30px"
-          wrapperOffset="3"
+        <app-message-with-svg imageUrl="assets/img/empty.svg" messageTitle="No Exam Schedule For The Selected Intake!"
+          wrapperSize="6" wrapperMarginTop="30px" wrapperOffset="3"
           messageContent="The exam schedule for the selected intake has not been published yet">
-          </app-message-with-svg> 
+        </app-message-with-svg>
       </ng-template>
     </ng-template>
     <!-- Loading -->
@@ -170,14 +166,10 @@
   </ng-template>
   <!-- No Intake Selected -->
   <ng-template #noIntakeSelected>
-      <app-message-with-svg
-      imageUrl="assets/img/config.svg"
-      messageTitle="No Intake Has Been Selected!"
-      wrapperSize="6"
-      wrapperMarginTop="50px"
-      wrapperOffset="3"
+    <app-message-with-svg imageUrl="assets/img/config.svg" messageTitle="No Intake Has Been Selected!" wrapperSize="6"
+      wrapperMarginTop="50px" wrapperOffset="3"
       messageContent="Please select an intake first to view its exam schedule.">
-      </app-message-with-svg>  
+    </app-message-with-svg>
   </ng-template>
 
 </ion-content>
