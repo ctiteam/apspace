@@ -3,7 +3,7 @@ import { IonSelect, ModalController, NavController, ToastController, AlertContro
 import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
-import { APULocations, APULocation, StudentProfile } from '../../interfaces';
+import { APULocations, APULocation, StudentProfile, Role } from '../../interfaces';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 import {
   SettingsService, StudentTimetableService, UserSettingsService, WsApiService
@@ -17,6 +17,7 @@ import {
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
+  userRole = false;
   test = false;
   @ViewChild('dashboardSectionsSelect', { static: true }) dashboardSectionsselectBoxRef: IonSelect;
   activeAccentColor: string;
@@ -109,6 +110,13 @@ export class SettingsPage implements OnInit {
 
 
   ngOnInit() {
+    const role = this.settings.get('role');
+    // tslint:disable-next-line: no-bitwise
+    if (this.settings.get('role') & Role.Student) {
+      this.userRole = true;
+    } else {
+
+    }
     this.locations$ = this.getLocations();
   }
 

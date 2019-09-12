@@ -107,7 +107,7 @@
                   Quick Access Items
                 </ion-label>
               </ion-item> -->
-              <a (click)="openDashboardSectionsSelectBox()">
+              <a (click)="openDashboardSectionsSelectBox()" *ngIf="userRole"> 
                 <ion-item lines="none" no-padding>
                   <ion-label>
                     Shown Dashboard Sections
@@ -153,7 +153,7 @@
         </ion-card-content>
       </ion-card>
     </div>
-    <div class="masonry-item">
+    <div class="masonry-item" *ngIf="userRole">
       <ion-card no-margin margin-bottom>
         <ion-card-header>
           <ion-card-title class="card-title float-left">
@@ -219,8 +219,8 @@
         </ion-card-content>
       </ion-card>
     </div>
-    <div class="masonry-item">
-      <ion-card no-margin margin-bottom>
+    <div class="masonry-item" *ngIf="userRole">
+      <ion-card no-margin margin-bottom >
         <ion-card-header>
           <ion-card-title class="card-title float-left">
             <h3 class="responsive-h1">
