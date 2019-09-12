@@ -292,6 +292,6 @@ export class StudentTimetablePage implements OnInit {
     return false;
 
   }
-  
+
 
 }
