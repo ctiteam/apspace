@@ -59,12 +59,8 @@ export class LecturerTimetableComponent implements OnInit {
 
         return acc;
       }, {})),
-      tap(w => this.selectedWeeks.push(Object.keys(this.reverseObject(w))[Object.keys(w).indexOf(`${currentWeek}`)]))
+      tap(w => this.selectedWeeks.push(`${currentWeek}`))
     );
-  }
-
-  reverseObject(obj: object): object {
-    return Object.keys(obj).reverse().reduce((acc, v) => (acc[v] = obj[v], acc), {});
   }
 
   /** Display schedule. */
