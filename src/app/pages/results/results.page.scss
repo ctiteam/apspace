@@ -63,4 +63,15 @@ ion-card {
     border-radius: 15px;
     margin: auto;
   }
+
+}
+  .sem{
+    background-color: var(--primary-color);
+    color: hsla(0,0%,100%,.84);
+    display: inline-table;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 15px;
+    padding-left: 15px;
+    width: 100%;
 }

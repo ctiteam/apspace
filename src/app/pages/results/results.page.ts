@@ -18,7 +18,7 @@ import {
 })
 export class ResultsPage implements OnInit {
   course$: Observable<Course[]>;
-  result$: Observable<Subcourse>;
+  results$: Observable<any>;
   courseDetail$: Observable<CourseDetails>;
   interimLegend$: Observable<InterimLegend[]>;
   mpuLegend$: Observable<MPULegend[]>;
@@ -68,7 +68,11 @@ export class ResultsPage implements OnInit {
         this.block = true;
         this.course$ = this.ws.get<Course[]>('/student/courses', true).pipe(
           tap(i => this.selectedIntake = i[0].INTAKE_CODE),
-          tap(i => this.result$ = this.getResults(i[0].INTAKE_CODE)),
+          tap(i => this.results$ = this.getResults(i[0].INTAKE_CODE)),
+          tap(i => this.getCourseDetails(i[0].INTAKE_CODE, true)),
+          tap(i => this.getMpuLegend(i[0].INTAKE_CODE, true)),
+          tap(i => this.getDeterminationLegend(i[0].INTAKE_CODE, true)),
+          tap(i => this.getClassificatinLegend(i[0].INTAKE_CODE, true)),
           tap(i => this.intakeLabels = Array.from(new Set((i || []).map(t => t.INTAKE_CODE)))),
           finalize(() => refresher && refresher.complete())
         );
@@ -85,7 +89,7 @@ export class ResultsPage implements OnInit {
       return {
         text: intake, handler: () => {
           this.selectedIntake = intake;
-          this.result$ = this.getResults(this.selectedIntake);
+          this.results$ = this.getResults(this.selectedIntake);
         },
       } as ActionSheetButton;
     });
@@ -98,16 +102,26 @@ export class ResultsPage implements OnInit {
 
   getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
     const url = `/student/subcourses?intake=${intake}`;
-    return (this.result$ = this.ws.get<Subcourse>(url, refresh).pipe(
-      tap(r => this.getInterimLegend(intake, r, refresh)),
-      tap(_ => this.getCourseDetails(intake, refresh)),
-      tap(_ => this.getMpuLegend(intake, refresh)),
-      tap(_ => this.getDeterminationLegend(intake, refresh)),
-      tap(_ => this.getClassificatinLegend(intake, refresh)),
-
-    )
+    return this.results$ = this.ws.get<Subcourse>(url, refresh).pipe(
+      tap(results => this.getInterimLegend(intake, results, true)),
+      map(r => this.sortResult(r)),
+      tap(r => console.log(r))
     );
   }
+
+  sortResult(results: any) {
+    const resultBySemester = results
+      .reduce((previous: any, current: any) => {
+        if (!previous[current.SEMESTER]) {
+          previous[current.SEMESTER] = [current];
+        } else {
+          previous[current.SEMESTER].push(current);
+        }
+        return previous;
+      }, {});
+    return Object.keys(resultBySemester).map(semester => ({ semester, value: resultBySemester[semester] }));
+  }
+
 
   getCourseDetails(intake: string, refresh: boolean): Observable<CourseDetails> {
     const url = `/student/sub_and_course_details?intake=${intake}`;
@@ -151,7 +165,6 @@ export class ResultsPage implements OnInit {
       .filter(g => g.length <= 2)
       .sort((a, b) => gradeList.indexOf(a) - gradeList.indexOf(b))
       .map(k => ({ grade: k, count: gradeCounter[k] }));
-
     const grades = studentResults.map(r => r.grade);
     const count = studentResults.map(r => r.count);
     this.showBarChart(grades, count);
