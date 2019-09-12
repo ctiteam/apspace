@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/"></ion-back-button>
       <ion-button size="small" fill="outline" (click)="rotateView()" [disabled]="availableWeek!.length === 0" class="colored-text colored-border">
         {{ viewWeek ? 'Weekly' : 'Daily' }}
       </ion-button>
