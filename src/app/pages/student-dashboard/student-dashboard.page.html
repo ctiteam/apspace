@@ -1,4 +1,8 @@
 <ion-content>
+  <ion-refresher slot="fixed" pullMax="400" pullMin="60 " (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <!-- MAIN GRID -->
   <div>
     <!-- MAIN ROW -->
@@ -198,15 +202,11 @@
             [cardSubtitle]='"Overall: " + (overallAttendancePercent.value | number: "1.0-1") + "%"'
             [contentPadding]='lowAttendanceCardConfigurations.contentPadding'
             [withOptionsButton]='lowAttendanceCardConfigurations.withOptionsButton'>
-            <app-message-with-svg
-            messageTitle="Your Attendance is Above 80% in all Modules!" 
-            messageContent="Great Job. You are attending the classes regularly."
-            imageUrl="assets/img/happy.svg"
-            wrapperOffset="3"
-            wrapperSize="6"
-          >
-          </app-message-with-svg>
-        </dashboard-card>
+            <app-message-with-svg messageTitle="Your Attendance is Above 80% in all Modules!"
+              messageContent="Great Job. You are attending the classes regularly." imageUrl="assets/img/happy.svg"
+              wrapperOffset="3" wrapperSize="6">
+            </app-message-with-svg>
+          </dashboard-card>
         </ng-template>
       </div>
 
@@ -380,8 +380,7 @@
           <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
             <ion-icon name="move" class="handle"></ion-icon>
           </div>
-          <div 
-            *ngIf="hasOutstanding; else noOutstanding">
+          <div *ngIf="hasOutstanding; else noOutstanding">
             <dashboard-card [cardTitle]='financialsCardConfigurations.cardTitle'
               [cardSubtitle]='"Overdue: " + (financialSummary[0].TOTAL_OVERDUE | currency: "MYR": "RM")'
               [contentPadding]='financialsCardConfigurations.contentPadding'
@@ -411,14 +410,12 @@
         </ng-template>
 
         <ng-template #noOutstanding>
-          <dashboard-card 
-            [cardTitle]='financialsCardConfigurations.cardTitle'
+          <dashboard-card [cardTitle]='financialsCardConfigurations.cardTitle'
             [contentPadding]='financialsCardConfigurations.contentPadding'
             [withOptionsButton]='financialsCardConfigurations.withOptionsButton'>
-            <app-message-with-svg 
-              messageTitle="No Outstanding Payements need to be done!"
-              messageContent="You have cleared all of your outstanding payments."
-              imageUrl="assets/img/money.svg" wrapperOffset="3" wrapperSize="6">
+            <app-message-with-svg messageTitle="No Outstanding Payements need to be done!"
+              messageContent="You have cleared all of your outstanding payments." imageUrl="assets/img/money.svg"
+              wrapperOffset="3" wrapperSize="6">
             </app-message-with-svg>
           </dashboard-card>
         </ng-template>
