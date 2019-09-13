@@ -46,18 +46,18 @@ export class AttendancePage implements OnInit {
             new Set((c || []).map(t => t.INTAKE_CODE)),
           )),
       ),
+      tap(_ => this.getLegend(refresher)),
       finalize(() => refresher && refresher.target.complete())
     );
   }
 
   showActionSheet() {
-
     const intakesButton = this.intakeLabels.map(intake => {
       return {
         text: intake,
         handler: () => {
           this.selectedIntake = intake;
-          this.attendance$ = this.getAttendance(this.selectedIntake);
+          this.attendance$ = this.getAttendance(this.selectedIntake, true);
         },
       } as ActionSheetButton;
     });
@@ -75,7 +75,6 @@ export class AttendancePage implements OnInit {
     return (this.attendance$ = this.ws
       .get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh)
       .pipe(
-        tap(_ => this.getLegend(refresh)),
         tap(a => this.calculateAverage(a)),
       ));
   }
