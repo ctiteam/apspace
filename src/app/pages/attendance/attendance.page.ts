@@ -36,6 +36,20 @@ export class AttendancePage implements OnInit {
     this.doRefresh();
   }
 
+  doRefresh(refresher?) {
+    this.course$ = this.ws.get<Course[]>('/student/courses', refresher).pipe(
+      tap(c => (this.selectedIntake = c[0].INTAKE_CODE)),
+      tap(_ => this.attendance$ = this.getAttendance(this.selectedIntake, refresher)),
+      tap(
+        c =>
+          (this.intakeLabels = Array.from(
+            new Set((c || []).map(t => t.INTAKE_CODE)),
+          )),
+      ),
+      finalize(() => refresher && refresher.target.complete())
+    );
+  }
+
   showActionSheet() {
 
     const intakesButton = this.intakeLabels.map(intake => {
@@ -88,28 +102,10 @@ export class AttendancePage implements OnInit {
     }
   }
 
-  doRefresh(event?) {
-    this.course$ = this.ws.get<Course[]>('/student/courses', true).pipe(
-      tap(c => (this.selectedIntake = c[0].INTAKE_CODE)),
-      tap(_ => this.attendance$ = this.getAttendance(this.selectedIntake, true)),
-      tap(
-        c =>
-          (this.intakeLabels = Array.from(
-            new Set((c || []).map(t => t.INTAKE_CODE)),
-          )),
-      ),
-      finalize(() => event && event.target.complete())
-    );
-  }
   comingFromTabs() {
-
     if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
-
       return true;
-
     }
-
     return false;
-
   }
 }
