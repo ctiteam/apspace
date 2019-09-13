@@ -13,14 +13,10 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ng-template [ngIf]="!cordova" [ngIfElse]="showNotifications">
-    <ion-card>
-      <ion-card-content>
-        <app-message-with-svg messageTitle="Currently this service is only available for the mobile app users"
-          messageContent="You can download the mobile app from Google Play Store/App Store by searching for 'APSpace'" imageUrl="assets/img/mobile.svg"
-          wrapperOffset="3" wrapperSize="6" wrapperMarginTop="20px">
-        </app-message-with-svg>
-      </ion-card-content>
-    </ion-card>
+    <app-message-with-svg messageTitle="Currently this service is only available for the mobile app users"
+      messageContent="You can download the mobile app from Google Play Store/App Store by searching for 'APSpace'"
+      imageUrl="assets/img/mobile.svg" wrapperOffset="3" wrapperSize="6" wrapperMarginTop="20px">
+    </app-message-with-svg>
   </ng-template>
   <ng-template #showNotifications>
     <div class="masonry-list" margin-top *ngIf="(messages$ | async) as messages; else loading">
