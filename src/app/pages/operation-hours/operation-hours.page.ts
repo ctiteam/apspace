@@ -25,15 +25,14 @@ export class OperationHoursPage implements OnInit {
     this.doRefresh();
   }
 
-  doRefresh(event?) {
+  doRefresh(refresher?) {
     const header = new HttpHeaders({ 'X-Filename': 'quix-customers' });
-    return this.quixCustomers$ = this.ws.get<QuixCustomer[]>('/quix/get/file', true, {
+    return this.quixCustomers$ = this.ws.get<QuixCustomer[]>('/quix/get/file', refresher, {
       headers: header,
       auth: false
     }
-
     ).pipe(
-      finalize(() => event && event.target.complete()),
+      finalize(() => refresher && refresher.target.complete()),
     );
   }
 }
