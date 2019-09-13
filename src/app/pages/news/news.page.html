@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+  <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   
