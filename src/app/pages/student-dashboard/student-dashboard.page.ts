@@ -244,7 +244,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   doRefresh(refresher?) {
     this.getLocations(refresher);
     this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation);
-    this.photo$ = this.ws.get<StudentPhoto>('/student/photo', refresher);
+    this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
     this.displayGreetingMessage();
     this.apcardTransaction$ = this.getTransactions(refresher);
     // this.getBadge();
