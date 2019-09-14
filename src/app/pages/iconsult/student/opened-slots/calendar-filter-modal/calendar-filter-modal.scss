@@ -1,0 +1,24 @@
+ion-col {
+  ion-badge {
+    min-width: 24px;
+    border-radius: 19px;
+  }
+  &.available {
+    ion-badge {
+      --background: var(--success-color);
+      --color: var(--success-color);
+    }
+  }
+  &.p-booked {
+    ion-badge {
+      --background: #dfa847;
+      --color: #dfa847;
+    }
+  }
+  &.booked {
+    ion-badge {
+      --background: var(--danger-color);
+      --color: var(--danger-color);
+    }
+  }
+}
