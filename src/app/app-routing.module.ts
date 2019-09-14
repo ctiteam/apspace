@@ -185,7 +185,15 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { role: Role.Admin | Role.Lecturer},
     loadChildren: './pages/aplc-progress-report/aplc-progress-report.module#AplcProgressReportPageModule'
-  }
+  },
+  {
+    path: 'lecturer-dashboard',
+    // tslint:disable-next-line: max-line-length
+    canActivate: [AuthGuard],
+    data: { role: Role.Lecturer },
+    loadChildren: () => import('./pages/lecturer-dashboard/lecturer-dashboard.module').then(m => m.LecturerDashboardPageModule)
+   }
+
 ];
 
 @NgModule({
