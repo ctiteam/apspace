@@ -14,7 +14,7 @@
 
   <ion-list lines="none" style="margin-bottom: 0px">
     <ion-item>
-      <ion-searchbar [(ngModel)]="term" placeholder="Search (e.g. 'rasodin', 'ras', '5105', ...)">
+      <ion-searchbar [(ngModel)]="term" placeholder="Staff name, job title, extension number..">
       </ion-searchbar>
     </ion-item>
     <ion-item *ngIf="staffType$ | async as staffTypes">
