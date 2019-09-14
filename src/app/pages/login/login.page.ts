@@ -118,9 +118,7 @@ export class LoginPage {
       buttons: [
         {
           text: 'Cancel',
-          handler: () => {
-            console.log('Disagree clicked');
-          }
+          handler: () => {}
         },
         {
           text: 'Open The documentation',

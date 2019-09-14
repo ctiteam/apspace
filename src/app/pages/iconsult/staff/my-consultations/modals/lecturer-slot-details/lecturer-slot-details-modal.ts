@@ -59,7 +59,6 @@ export class LecturerSlotDetailsModalPage implements OnInit {
         {
           text: 'Yes',
           handler: () => {
-            console.log(body);
             this.presentLoading();
             this.ws.post<any>('/iconsult/lecaddfeedback', { body }).subscribe(
               {
@@ -113,7 +112,6 @@ export class LecturerSlotDetailsModalPage implements OnInit {
                 status: 1, // always 1 from backend
                 timee: this.dataToSend.timee
               };
-              console.log(cancellationBody);
               this.sendCancelBookingRequest(cancellationBody).subscribe(
                 {
                   next: res => {

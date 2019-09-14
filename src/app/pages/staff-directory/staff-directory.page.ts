@@ -35,7 +35,6 @@ export class StaffDirectoryPage implements OnInit {
     this.staffType$ = this.staff$.pipe(
       filter(ss => ss instanceof Array),
       map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT))).sort()),
-      tap(d => console.log('done')),
       finalize(() => refresher && refresher.target.complete()),
     );
   }

@@ -3,10 +3,10 @@ import {
   EventComponentConfigurations, DashboardCardComponentConfigurations,
   Attendance, StudentProfile, Apcard, FeesTotalSummary, Course, CourseDetails,
   CgpaPerIntake, StudentTimetable, ConsultationHour, StudentPhoto, Holidays,
-  Holiday, ExamSchedule, BusTrips, BusTrip, APULocations, APULocation
+  Holiday, ExamSchedule, BusTrips, APULocations, APULocation
 } from 'src/app/interfaces';
 import { Observable, forkJoin, of, zip } from 'rxjs';
-import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray, reduce } from 'rxjs/operators';
+import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray } from 'rxjs/operators';
 import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService } from 'src/app/services';
 import * as moment from 'moment';
 import { NavController } from '@ionic/angular';
@@ -830,8 +830,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
         return Object.keys(trips).map(
           key => trips[key]
         );
-      }),
-      tap(d => console.log(d))
+      })
     );
   }
 
