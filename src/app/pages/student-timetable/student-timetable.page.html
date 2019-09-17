@@ -1,41 +1,15 @@
 <ion-header>
   <ion-toolbar>
-<<<<<<< HEAD
-    <ion-buttons slot="start" [hidden]='comingFromTabs() ? true : false'>
-      <ion-back-button defaultHref="/"></ion-back-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-        <ion-button size="small" fill="outline" 
-        class="colored-text colored-border"> 
-                
-    <ion-item>
-        <ion-label>View</ion-label>
-        <ion-select [(ngModel)]="viewWeek" interface="action-sheet">
-          <ion-select-option [value]="true">Weekly</ion-select-option>
-          <ion-select-option [value]="false">Daily</ion-select-option>
-        </ion-select>
-      </ion-item>
-=======
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" [hidden]='comingFromTabs() ? true : false'></ion-back-button>
-      <ion-button size="small" fill="outline" (click)="rotateView()" [disabled]="availableWeek!.length === 0" class="colored-text colored-border">
-        {{ viewWeek ? 'Weekly' : 'Daily' }}
-      </ion-button>
-      <ion-button size="small" fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0" class="colored-text colored-border">
-        {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
->>>>>>> 4bcebd07a3ddb801b0a7fd42baa3fd94a535306c
-      </ion-button>
     </ion-buttons>
-  
-
-
-
-
-
     <ion-buttons slot="end">
-      <!-- <ion-button size="small" fill="outline" (click)="rotateView()" [disabled]="availableWeek!.length === 0" class="colored-text colored-border">
-            {{ viewWeek ? 'Weekly' : 'Daily' }}
-          </ion-button> -->
+      <ion-list no-lines>
+        <ion-item lines="none">
+          <ion-label>Weekly View</ion-label>
+          <ion-toggle [(ngModel)]="viewWeek"></ion-toggle>
+        </ion-item>
+      </ion-list>
       <ion-button size="small" fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
         class="colored-text colored-border">
         {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
