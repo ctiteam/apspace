@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActionSheetButton } from '@ionic/core';
-import { ActionSheetController, Platform, IonRefresher } from '@ionic/angular';
+import { ActionSheetController, Platform } from '@ionic/angular';
 
 import { Observable } from 'rxjs';
-import { tap, finalize, map, reduce, groupBy } from 'rxjs/operators';
+import { tap, finalize, map } from 'rxjs/operators';
 
 import { WsApiService } from '../../services';
 import {
