@@ -49,7 +49,6 @@
               </ion-segment-button>
             </ion-segment>
           </ng-template>
-
           <ng-template [ngIf]="selectedDate">
             <ion-card class="table-top" no-padding>
               <ion-card-content no-padding>
@@ -74,7 +73,6 @@
                       </ion-col>
                     </ion-row>
                   </div>
-
                   <ng-template #viewDaily>
                     <ion-row>
                       <ion-col padding-start size="12" size-sm="3">
@@ -91,7 +89,6 @@
                       </ion-col>
                     </ion-row>
                   </ng-template>
-
                 </ion-grid>
               </ion-card-content>
             </ion-card>
@@ -101,7 +98,6 @@
             [style.borderLeft]="'1rem solid ' + strToColor(timetable.MODID)">
             <ion-card-content no-padding>
               <ion-grid>
-
                 <div *ngIf="viewWeek; else viewDaily">
                   <ion-row>
                     <ion-col size="12" size-sm="2">
@@ -163,7 +159,6 @@
                     </ion-col>
                   </ion-row>
                 </ng-template>
-
               </ion-grid>
             </ion-card-content>
           </ion-card>
