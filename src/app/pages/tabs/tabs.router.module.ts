@@ -37,8 +37,8 @@ const routes: Routes = [
       {
         canActivate: [AuthGuard],
         data: { role: Role.Lecturer },
-        path: 'bus-shuttle-services',
-        loadChildren: () => import('../bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttleServicesPageModule)
+        path: 'lecturer-dashboard',
+        loadChildren: () => import('../lecturer-dashboard/lecturer-dashboard.module').then(m => m.LecturerDashboardPageModule)
       },
       {
         canActivate: [AuthGuard],
