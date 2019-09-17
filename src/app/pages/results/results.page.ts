@@ -18,7 +18,7 @@ import {
 })
 export class ResultsPage implements OnInit {
   course$: Observable<Course[]>;
-  results$: Observable<any>;
+  results$: Observable<{ semester: string; value: Subcourse[] }[]>;
   courseDetail$: Observable<CourseDetails>;
   interimLegend$: Observable<InterimLegend[]>;
   mpuLegend$: Observable<MPULegend[]>;
@@ -100,11 +100,11 @@ export class ResultsPage implements OnInit {
     );
   }
 
-  getResults(intake: string, refresh: boolean = false): Observable<Subcourse> {
+  getResults(intake: string, refresh: boolean = false): Observable<{ semester: string; value: Subcourse[] }[]> {
     const url = `/student/subcourses?intake=${intake}`;
     return this.results$ = this.ws.get<Subcourse>(url, refresh).pipe(
       tap(results => this.getInterimLegend(intake, results, true)),
-      tap(r => this.sortResult(r))
+      map(r => this.sortResult(r))
     );
   }
 
