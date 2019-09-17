@@ -1,4 +1,8 @@
 <ion-content>
+  <ion-refresher *ngIf="!editableList" slot="fixed" pullMax="400" pullMin="60 " (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <!-- MAIN GRID -->
   <div>
     <!-- MAIN ROW -->
@@ -10,12 +14,11 @@
             <ion-grid>
               <ion-row>
                 <ion-col>
-                  <ion-avatar class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
-                    <img [src]="(photo$ | async)?.PHOTO"
-                      onerror="this.src='assets/img/no_img.png'" alt="Avatar">
+                  <ion-avatar *ngIf="staffProfile$ | async as staffProfile" class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
+                    <img [src]="staffProfile[0].PHOTO" onerror="this.src='assets/img/no_img.png'" alt="Avatar">
                   </ion-avatar>
-                  <div class="welcome-message-wrapper float-left"
-                    *ngIf="staffFirstName; else loadingProfile" padding-start>
+                  <div class="welcome-message-wrapper float-left" *ngIf="staffFirstName; else loadingProfile"
+                    padding-start>
                     <ion-card-title>
                       <h3 class="responsive-h1">{{greetingMessage}}, <span>{{staffFirstName | titlecase}}</span>
                       </h3>
@@ -67,67 +70,6 @@
         </ion-card>
       </div>
 
-      <!-- ALERTS SECTION -->
-      <!-- <div class="masonry-item" style="position: relative;" *ngIf="shownDashboardSections.includes('dashboardAlerts')">
-        <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-          <ion-icon name="move" class="handle"></ion-icon>
-        </div>
-        <ion-card no-margin>
-          <ion-card-content>
-            <ion-slides [pager]="true" [options]="alertSliderOptions">
-              <ion-slide>
-                <p>Mohamad, you have 5 classes today, 3 of them passed.</p>
-              </ion-slide>
-              <ion-slide>
-                <p>Be careful, You have two modules with low attendance</p>
-              </ion-slide>
-              <ion-slide>
-                <p>Also, your visa will expire soon :( You may need to review the immegration office</p>
-              </ion-slide>
-              <ion-slide>
-                <p>Don't forget to pay the outstanding that you have</p>
-              </ion-slide>
-            </ion-slides>
-          </ion-card-content>
-        </ion-card>
-      </div> -->
-
-      <!-- QUICK ACCESS SECTION -->
-      <div class="masonry-item no-padding">
-        <ion-grid no-padding>
-          <ion-row>
-            <!-- QUICK ACCESS ITEM: ATTENDANCE -->
-            <ion-col padding-start *ngIf="shownDashboardSections.includes('quickAccess')">
-              <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-                <ion-icon name="move" class="handle"></ion-icon>
-              </div>
-              <quick-access-item icon="alarm" titleFirstWord='Overall' titleSecondWord='Attendance'>
-              </quick-access-item>
-            </ion-col>
-
-            <!-- QUICK ACCESS ITEM: APCARD BALANCE -->
-            <ion-col *ngIf="shownDashboardSections.includes('quickAccess')">
-              <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-                <ion-icon name="move" class="handle"></ion-icon>
-              </div>
-              <quick-access-item icon="card" titleFirstWord='APCard' titleSecondWord='Balance' 
-                [observable$]='balance$' outputMode='currency'>
-              </quick-access-item>
-            </ion-col>
-
-            <!-- QUICK ACCESS ITEM: TOTAL OVERDUE -->
-            <ion-col padding-end *ngIf="shownDashboardSections.includes('quickAccess')">
-              <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-                <ion-icon name="move" class="handle"></ion-icon>
-              </div>
-              <quick-access-item icon="logo-usd" titleFirstWord='Total' titleSecondWord='Overdue'>
-              </quick-access-item>
-            </ion-col>
-
-          </ion-row>
-        </ion-grid>
-      </div>
-
       <!-- TODAY'S SCHEDULE -->
       <div class="masonry-item" *ngIf="shownDashboardSections.includes('todaysSchedule')">
         <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
@@ -139,6 +81,131 @@
           [options]='todaysScheduleCardConfigurations.options'>
           <events-list [observable$]="todaysSchedule$"></events-list>
         </dashboard-card>
+      </div>
+
+      <!-- UPCOMING EVENTS -->
+      <div class="masonry-item" *ngIf="shownDashboardSections.includes('upcomingEvents')">
+        <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+          <ion-icon name="move" class="handle"></ion-icon>
+        </div>
+        <dashboard-card style="width: 100%;" [cardTitle]='upcomingEventsCardConfigurations.cardTitle'
+          [cardSubtitle]='upcomingEventsCardConfigurations.cardSubtitle'
+          [withOptionsButton]='upcomingEventsCardConfigurations.withOptionsButton'
+          [options]='upcomingEventsCardConfigurations.options'>
+          <events-list [observable$]="upcomingEvent$"></events-list>
+        </dashboard-card>
+      </div>
+
+      <!-- BUS SHUTTLE SERVICES -->
+      <div *ngIf="shownDashboardSections.includes('busShuttleServices')">
+        <div class="masonry-item">
+          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+            <ion-icon name="move" class="handle"></ion-icon>
+          </div>
+          <dashboard-card [cardTitle]='busCardConfigurations.cardTitle'
+            [contentPadding]='busCardConfigurations.contentPadding'
+            [withOptionsButton]='busCardConfigurations.withOptionsButton'>
+            <ng-container *ngIf="(upcomingTrips$ | async) as upcomingTrips; else loadingTrips">
+              <ng-container *ngIf="!showSetLocationsSettings; else locationsSettings">
+                <ng-container *ngIf="upcomingTrips.length > 0; else noTrips">
+                  <ion-card class="trip-card" no-margin margin-bottom *ngFor="let upcomingTrip of upcomingTrips">
+                    <ion-card-content no-padding>
+                      <ion-grid no-padding>
+                        <ion-row>
+                          <ion-col no-padding size="1">
+                            <div class="full-background" [style.background]="upcomingTrip.trip_from_color"></div>
+                          </ion-col>
+                          <ion-col size="11" padding>
+                            <h3 class="trips-locations text-bolder">{{ upcomingTrip.trip_from }} <ion-icon
+                                name="arrow-dropright">
+                              </ion-icon> {{upcomingTrip.trip_to}}</h3>
+                            <p>
+                              <span class="trip-time" *ngIf="upcomingTrip.times[0]"> {{upcomingTrip.times[0]}}
+                              </span>
+                              <span class="trip-time" *ngIf="upcomingTrip.times[1]"> {{upcomingTrip.times[1]}}
+                              </span>
+                              <span class="trip-time" *ngIf="upcomingTrip.times[2]"> {{upcomingTrip.times[2]}}
+                              </span>
+                              <span class="trip-time" *ngIf="upcomingTrip.times[3]">
+                                {{upcomingTrip.times[3]}} </span>
+                            </p>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-card-content>
+                  </ion-card>
+                </ng-container>
+                <ng-template #noTrips>
+                  <app-message-with-svg messageTitle="No More Trips!"
+                    messageContent="No more trips for the selected line." imageUrl="assets/img/sad.svg"
+                    wrapperOffset="3" wrapperSize="6">
+                  </app-message-with-svg>
+                </ng-template>
+              </ng-container>
+              <ng-template #locationsSettings>
+                <app-message-with-svg messageTitle="Section is not configured!"
+                  messageContent="You can configure this section from the settings page, under the bus shuttle services card."
+                  imageUrl="assets/img/config.svg" wrapperOffset="3" wrapperSize="6">
+                </app-message-with-svg>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="10" offset="1">
+                      <ion-button routerLink="/settings" routerDirection="forward" class="colored-background"
+                        expand="block">
+                        Open Settings
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ng-template>
+            </ng-container>
+            <ng-template #loadingTrips>
+              <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+            </ng-template>
+          </dashboard-card>
+        </div>
+      </div>
+
+      <!-- APCard Transactions -->
+      <div *ngIf="shownDashboardSections.includes('apcard')">
+        <div class="masonry-item" *ngIf="apcardTransaction$ | async; else loadingApcardTransactions">
+          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+            <ion-icon name="move" class="handle"></ion-icon>
+          </div>
+          <dashboard-card [cardTitle]='apcardTransactionsCardConfigurations.cardTitle'
+            [cardSubtitle]='currentBalance !== -1 ? "Balance: " + (currentBalance | currency: "MYR": "RM"): "Balance: --"'
+            [options]='apcardTransactionsCardConfigurations.options'
+            [contentPadding]='apcardTransactionsCardConfigurations.contentPadding'
+            [withOptionsButton]='apcardTransactionsCardConfigurations.withOptionsButton'>
+            <chart height="600" *ngIf="apcardChart.data" [type]="apcardChart.type" [data]="apcardChart.data"
+              [options]="apcardChart.options">
+            </chart>
+          </dashboard-card>
+        </div>
+        <ng-template #loadingApcardTransactions>
+          <ion-card>
+            <ion-card-header>
+              <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+              </ion-skeleton-text>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
       </div>
 
     </div>

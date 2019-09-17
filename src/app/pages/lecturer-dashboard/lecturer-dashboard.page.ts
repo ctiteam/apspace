@@ -1,10 +1,23 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
-  EventComponentConfigurations, DashboardCardComponentConfigurations, Apcard, StudentPhoto, StaffProfile, LecturerTimetable
+  EventComponentConfigurations,
+  DashboardCardComponentConfigurations,
+  Apcard,
+  StudentPhoto,
+  StaffProfile,
+  LecturerTimetable,
+  APULocation,
+  BusTrips,
+  APULocations,
+  Holidays,
+  Holiday,
+  ConsultationHour,
+  LecturerConsultation
 } from 'src/app/interfaces';
+
 import { Observable, of, zip } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService } from 'src/app/services';
+import { WsApiService, UserSettingsService, NotificationService } from 'src/app/services';
 import * as moment from 'moment';
 import { NavController } from '@ionic/angular';
 import { DragulaService } from 'ng2-dragula';
@@ -19,7 +32,10 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
   activeAccentColor = '';
   shownDashboardSections: string[];
   editableList = null;
-
+  busShuttleServiceSettings: any;
+  secondLocation: string;
+  firstLocation: string;
+  staffProfile$: Observable<StaffProfile>;
   // ALERTS SLIDER OPTIONS
   alertSliderOptions = {
     autoplay: {
@@ -30,7 +46,7 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
   };
 
   // PROFILE
-  photo$: Observable<StudentPhoto>;
+  // photo$: Observable<StudentPhoto>;
   greetingMessage = '';
   staffFirstName: string;
   numberOfUnreadMsgs: number;
@@ -53,6 +69,28 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
     // ],
     cardTitle: 'Today\'s Schedule',
     // cardSubtitle: 'Next in: 1 hrs, 25 min'
+  };
+
+  // TODAYS TRIPS
+  upcomingTrips$: Observable<any>;
+  showSetLocationsSettings = false;
+  locations: APULocation[];
+  busCardConfigurations: DashboardCardComponentConfigurations = {
+    cardTitle: 'Upcoming Trips',
+    contentPadding: false,
+    withOptionsButton: false,
+    // options: [
+    //   {
+    //     title: 'set alarm before 15 minutes of next schdule',
+    //     icon: 'alarm',
+    //     callbackFunction: this.testCallBack
+    //   },
+    //   {
+    //     title: 'delete',
+    //     icon: 'trash',
+    //     callbackFunction: this.testCallBack
+    //   }
+    // ],
   };
 
   // UPCOMING EVENTS
@@ -144,6 +182,15 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
         next: data => this.shownDashboardSections = data,
       }
     );
+    this.userSettings.getBusShuttleServiceSettings().subscribe(
+      {
+        next: data => {
+          this.firstLocation = data.firstLocation;
+          this.secondLocation = data.secondLocation;
+          this.upcomingTrips$ = this.getUpcomingTrips(data.firstLocation, data.secondLocation, true);
+        },
+      }
+    );
     this.userSettings.subscribeToCacheClear().subscribe(
       {
         // tslint:disable-next-line: no-trailing-whitespace
@@ -161,12 +208,13 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
   }
 
   doRefresh(refresher?) {
-    this.photo$ = this.ws.get<StudentPhoto>('/staff/photo', true);
     this.displayGreetingMessage();
-    this.apcardTransaction$ = this.getTransactions();
+    this.getLocations(refresher);
+    this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation, refresher);
+    this.getUpcomingEvents(refresher);
+    this.apcardTransaction$ = this.getTransactions(refresher);
     this.getBadge();
-    this.getProfile().subscribe();
-    this.getTransactions().subscribe();
+    this.getProfile(refresher).subscribe();
   }
 
   // NOTIFICATIONS FUNCTIONS
@@ -196,10 +244,11 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
   }
 
   // PROFILE AND GREETING MESSAGE FUNCTIONS
-  getProfile() {
-    return this.ws.get<StaffProfile>('/staff/profile', true).pipe(
+  getProfile(refresher: boolean) {
+    return this.staffProfile$ = this.ws.get<StaffProfile>('/staff/profile', refresher).pipe(
+      tap(p => console.log(p)),
       tap(staffProfile => this.staffFirstName = staffProfile[0].FULLNAME.split(' ')[0]),
-      tap(staffProfile => this.getTodaysSchdule(staffProfile.ID))
+      tap(staffProfile => this.getTodaysSchdule(staffProfile[0].ID, refresher))
     );
   }
 
@@ -215,26 +264,29 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
   }
 
   // TODAYS SCHEDULE FUNCTIONS
-  getTodaysSchdule(staffId: string) {
-    this.todaysSchedule$ = this.getUpcomingClasses(staffId)
-      .pipe(
-        map(eventsList => {  // SORT THE EVENTS LIST BY TIME
-          return eventsList.sort((eventA, eventB) => {
-            return moment(eventA.dateOrTime, 'HH:mm A').toDate() > moment(eventB.dateOrTime, 'HH:mm A').toDate()
-              ? 1
-              : moment(eventA.dateOrTime, 'HH:mm A').toDate() < moment(eventB.dateOrTime, 'HH:mm A').toDate()
-                ? -1
-                : 0;
-          });
-        })
-      );
+  getTodaysSchdule(staffId: string, refresher) {
+    this.todaysSchedule$ = zip( // ZIP TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
+      this.getUpcomingClasses(staffId, refresher),
+      this.getUpcomingConsultations(refresher)
+    ).pipe(
+      map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
+      map(eventsList => {  // SORT THE EVENTS LIST BY TIME
+        return eventsList.sort((eventA, eventB) => {
+          return moment(eventA.dateOrTime, 'HH:mm A').toDate() > moment(eventB.dateOrTime, 'HH:mm A').toDate()
+            ? 1
+            : moment(eventA.dateOrTime, 'HH:mm A').toDate() < moment(eventB.dateOrTime, 'HH:mm A').toDate()
+              ? -1
+              : 0;
+        });
+      })
+    );
   }
 
-  getUpcomingClasses(staffId: string): Observable<EventComponentConfigurations[]> {
+  getUpcomingClasses(staffId: string, refresher: boolean): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
-    const endpoint = '/lecturer-timetable/v2/' + 'anrazali'; // For testing
-    // const endpoint = '/lecturer-timetable/v2/' + staffId; // For testing
-    return this.ws.get<LecturerTimetable[]>(endpoint, true, { auth: false }).pipe(
+    // const endpoint = '/lecturer-timetable/v2/' + 'anrazali'; // For testing
+    const endpoint = '/lecturer-timetable/v2/' + staffId;
+    return this.ws.get<LecturerTimetable[]>(endpoint, refresher, { auth: false }).pipe(
       // GET TODAYS CLASSES ONLY
       map(timetable => timetable.filter(tt => this.eventIsToday(new Date(tt.time), dateNow))),
 
@@ -268,72 +320,78 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
     );
   }
 
-  eventIsToday(eventDate: Date, todaysDate: Date) {
-    return eventDate.getFullYear() === todaysDate.getFullYear()
-      && eventDate.getMonth() === todaysDate.getMonth()
-      && eventDate.getDate() === todaysDate.getDate();
-  }
-
-  eventIsComing(eventDate: Date, todaysDate: Date) {
-    eventDate.setHours(todaysDate.getHours()); // MAKE THE EVENT TIME EQUAL TO TODAYS TIME TO COMPARE ONLY DATES
-    eventDate.setMinutes(todaysDate.getMinutes());
-    eventDate.setSeconds(todaysDate.getSeconds());
-    eventDate.setMilliseconds(todaysDate.getMilliseconds());
-    return eventDate > todaysDate;
-  }
-
-  eventPass(eventTime: string, todaysDate: Date) {
-    if (moment(eventTime, 'HH:mm A').toDate() >= todaysDate) {
-      return false;
-    }
-    return true;
-  }
-
-  // getUpcomingHoliday(date: Date): Observable<EventComponentConfigurations[]> {
-  //   return this.ws.get<Holidays>('/transix/holidays/filtered/students', true).pipe(
-  //     map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
-  //     map(holiday => {
-  //       const examsListEventMode: EventComponentConfigurations[] = [];
-  //       const formattedStartDate = moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('DD MMM YYYY');
-  //       examsListEventMode.push({
-  //         title: holiday.holiday_name,
-  //         firstDescription: 'Until: ' + holiday.holiday_end_date,
-  //         thirdDescription: this.getNumberOfDaysForHoliday(
-  //           moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
-  //           moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()),
-  //         color: '#273160',
-  //         pass: false,
-  //         passColor: '#d7dee3',
-  //         outputFormat: 'event-with-date-only',
-  //         type: 'holiday',
-  //         dateOrTime: formattedStartDate
-  //       });
-  //       return examsListEventMode;
-  //     })
-  //   );
-  // }
-
-  // getNumberOfDaysForHoliday(startDate: Date, endDate: Date): string {
-  //   const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(startDate, endDate);
-  //   const daysDiff = Math.floor(secondsDiff / (3600 * 24));
-  //   return (daysDiff + 1) + ' day' + (daysDiff === 0 ? '' : 's');
-  // }
-
-  // APCARD FUNCTIONS
-  getTransactions() {
-    return this.ws.get<Apcard[]>('/apcard/', true).pipe(
-      map(transactions => this.signTransactions(transactions)),
-      tap(transactions => this.analyzeTransactions(transactions)),
-      tap(transactions => this.getCurrentApcardBalance(transactions))
+  getUpcomingConsultations(refresher): Observable<EventComponentConfigurations[]> {
+    const dateNow = new Date();
+    const consultationsEventMode: EventComponentConfigurations[] = [];
+    return this.ws.get<LecturerConsultation[]>('/iconsult/upcomingconlec', refresher).pipe(
+      map(consultations =>
+        consultations.filter(
+          consultation => this.eventIsToday(new Date(consultation.date), dateNow) && consultation.status === 'Booked'
+        )
+      ),
+      map(upcomingConsultations => {
+        upcomingConsultations.forEach(upcomingConsultation => {
+          let consultationPass = false;
+          if (this.eventPass(upcomingConsultation.time, dateNow)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
+            consultationPass = true;
+          }
+          const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
+            moment(upcomingConsultation.time, 'HH:mm A').toDate(),
+            moment(upcomingConsultation.endTime, 'HH:mm A').toDate());
+          consultationsEventMode.push({
+            title: 'Consultation Hour',
+            color: '#d35400',
+            outputFormat: 'event-with-time-and-hyperlink',
+            type: 'iconsult',
+            pass: consultationPass,
+            passColor: '#d7dee3',
+            firstDescription: upcomingConsultation.location + ' | ' + upcomingConsultation.venue,
+            // secondDescription: upcomingConsultation.lecname,
+            thirdDescription: this.secondsToHrsAndMins(secondsDiff),
+            dateOrTime: moment(moment(upcomingConsultation.time, 'HH:mm A').toDate()).format('hh mm A'),
+          });
+        });
+        return consultationsEventMode;
+      })
     );
   }
 
-  getCurrentApcardBalance(transactions) {
-    if (transactions.length > 0) {
-      this.balance$ = of({ value: transactions[0].Balance });
-    } else {
-      this.balance$ = of({ value: -1 });
-    }
+  // UPCOMING EVENTS FUNCTIONS
+  getUpcomingEvents(refresher: boolean) {
+    const todaysDate = new Date();
+    this.upcomingEvent$ = this.getUpcomingHoliday(todaysDate, refresher);
+  }
+
+  getUpcomingHoliday(date: Date, refresher): Observable<EventComponentConfigurations[]> {
+    return this.ws.get<Holidays>('/transix/holidays/filtered/staff', refresher).pipe(
+      map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
+      map(holiday => {
+        const examsListEventMode: EventComponentConfigurations[] = [];
+        const formattedStartDate = moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('DD MMM YYYY');
+        examsListEventMode.push({
+          title: holiday.holiday_name,
+          firstDescription: 'Until: ' + holiday.holiday_end_date,
+          thirdDescription: this.getNumberOfDaysForHoliday(
+            moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
+            moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()),
+          color: '#273160',
+          pass: false,
+          passColor: '#d7dee3',
+          outputFormat: 'event-with-date-only',
+          type: 'holiday',
+          dateOrTime: formattedStartDate
+        });
+        return examsListEventMode;
+      })
+    );
+  }
+
+  // APCARD FUNCTIONS
+  getTransactions(refresher: boolean) {
+    return this.ws.get<Apcard[]>('/apcard/', refresher).pipe(
+      map(transactions => this.signTransactions(transactions)),
+      tap(transactions => this.analyzeTransactions(transactions))
+    );
   }
 
   analyzeTransactions(transactions: Apcard[]) {
@@ -377,61 +435,60 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
   }
 
   // UPCOMING TRIPS FUNCTIONS
-  // getUpcomingTrips(firstLocation: string, secondLocation: string): any {
-  //   if (!firstLocation || !secondLocation) {
-  //     this.showSetLocationsSettings = true;
-  //     return of({});
-  //   }
-  //   this.showSetLocationsSettings = false;
-  //   const dateNow = new Date();
-  //   return this.ws.get<BusTrips>(`/transix/trips/applicable`, true, { auth: false }).pipe(
-  //     map(res => res.trips),
-  //     map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
-  //       return trips.filter(trip => {
-  //         return moment(trip.trip_time, 'kk:mm').toDate() >= dateNow
-  //           && ((trip.trip_from === firstLocation && trip.trip_to === secondLocation)
-  //             || (trip.trip_from === secondLocation && trip.trip_to === firstLocation));
-  //       });
-  //     }),
-  //     map(trips => { // GET THE NEEDED DATA ONLY
-  //       return trips.reduce(
-  //         (prev, curr) => {
-  //           prev[curr.trip_from + curr.trip_to] = prev[curr.trip_from + curr.trip_to] || {
-  //             trip_from: curr.trip_from_display_name,
-  //             trip_from_color: this.getLocationColor(curr.trip_from),
-  //             trip_to: curr.trip_to_display_name,
-  //             trip_to_color: this.getLocationColor(curr.trip_to),
-  //             times: []
-  //           };
-  //           prev[curr.trip_from + curr.trip_to].times.push(curr.trip_time);
-  //           return prev;
-  //         },
-  //         {}
-  //       );
-  //     }),
-  //     map(trips => { // CONVERT OBJECT TO ARRAY
-  //       return Object.keys(trips).map(
-  //         key => trips[key]
-  //       );
-  //     }),
-  //     tap(d => console.log(d))
-  //   );
-  // }
+  getUpcomingTrips(firstLocation: string, secondLocation: string, refresher: boolean): any {
+    if (!firstLocation || !secondLocation) {
+      this.showSetLocationsSettings = true;
+      return of({});
+    }
+    this.showSetLocationsSettings = false;
+    const dateNow = new Date();
+    return this.ws.get<BusTrips>(`/transix/trips/applicable`, refresher, { auth: false }).pipe(
+      map(res => res.trips),
+      map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
+        return trips.filter(trip => {
+          return moment(trip.trip_time, 'kk:mm').toDate() >= dateNow
+            && ((trip.trip_from === firstLocation && trip.trip_to === secondLocation)
+              || (trip.trip_from === secondLocation && trip.trip_to === firstLocation));
+        });
+      }),
+      map(trips => { // GET THE NEEDED DATA ONLY
+        return trips.reduce(
+          (prev, curr) => {
+            prev[curr.trip_from + curr.trip_to] = prev[curr.trip_from + curr.trip_to] || {
+              trip_from: curr.trip_from_display_name,
+              trip_from_color: this.getLocationColor(curr.trip_from),
+              trip_to: curr.trip_to_display_name,
+              trip_to_color: this.getLocationColor(curr.trip_to),
+              times: []
+            };
+            prev[curr.trip_from + curr.trip_to].times.push(curr.trip_time);
+            return prev;
+          },
+          {}
+        );
+      }),
+      map(trips => { // CONVERT OBJECT TO ARRAY
+        return Object.keys(trips).map(
+          key => trips[key]
+        );
+      }),
+    );
+  }
 
-  // getLocations() {
-  //   this.ws.get<APULocations>(`/transix/locations`, true, { auth: false }).pipe(
-  //     map((res: APULocations) => res.locations),
-  //     tap(locations => this.locations = locations)
-  //   ).subscribe();
-  // }
+  getLocations(refresher: boolean) {
+    this.ws.get<APULocations>(`/transix/locations`, refresher, { auth: false }).pipe(
+      map((res: APULocations) => res.locations),
+      tap(locations => this.locations = locations)
+    ).subscribe();
+  }
 
-  // getLocationColor(locationName: string) {
-  //   for (const location of this.locations) {
-  //     if (location.location_name === locationName) {
-  //       return location.location_color;
-  //     }
-  //   }
-  // }
+  getLocationColor(locationName: string) {
+    for (const location of this.locations) {
+      if (location.location_name === locationName) {
+        return location.location_color;
+      }
+    }
+  }
 
   // GENERAL FUNCTIONS
   getSecondsDifferenceBetweenTwoDates(startDate: Date, endDate: Date): number {
@@ -448,5 +505,32 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
 
   navigateToPage(pageName: string) {
     this.navCtrl.navigateForward(pageName);
+  }
+
+  getNumberOfDaysForHoliday(startDate: Date, endDate: Date): string {
+    const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(startDate, endDate);
+    const daysDiff = Math.floor(secondsDiff / (3600 * 24));
+    return (daysDiff + 1) + ' day' + (daysDiff === 0 ? '' : 's');
+  }
+
+  eventIsToday(eventDate: Date, todaysDate: Date) {
+    return eventDate.getFullYear() === todaysDate.getFullYear()
+      && eventDate.getMonth() === todaysDate.getMonth()
+      && eventDate.getDate() === todaysDate.getDate();
+  }
+
+  eventIsComing(eventDate: Date, todaysDate: Date) {
+    eventDate.setHours(todaysDate.getHours()); // MAKE THE EVENT TIME EQUAL TO TODAYS TIME TO COMPARE ONLY DATES
+    eventDate.setMinutes(todaysDate.getMinutes());
+    eventDate.setSeconds(todaysDate.getSeconds());
+    eventDate.setMilliseconds(todaysDate.getMilliseconds());
+    return eventDate > todaysDate;
+  }
+
+  eventPass(eventTime: string, todaysDate: Date) {
+    if (moment(eventTime, 'HH:mm A').toDate() >= todaysDate) {
+      return false;
+    }
+    return true;
   }
 }
