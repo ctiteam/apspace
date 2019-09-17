@@ -428,7 +428,8 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
   signTransactions(transactions: Apcard[]): Apcard[] {
     transactions.forEach(transaction => {
       if (transaction.ItemName !== 'Top Up') {
-        transaction.SpendVal *= -1;
+        // always make it negative (mutates cached value)
+        transaction.SpendVal = -Math.abs(transaction.SpendVal);
       }
     });
     return transactions;
