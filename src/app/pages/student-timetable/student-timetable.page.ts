@@ -84,6 +84,7 @@ export class StudentTimetablePage implements OnInit {
   intakeLabels: string[] = [];
   intakeSelectable = true;
   viewWeek: boolean; // weekly or daily display
+  show2ndToolbar = false;
 
   room: string;
   intake: string;
@@ -291,11 +292,7 @@ export class StudentTimetablePage implements OnInit {
   }
 
   view_hideToolbar() {
-    if (document.getElementById('secondToolbar').style.display === 'block') {
-      document.getElementById('secondToolbar').style.display = 'none';
-    } else {
-      document.getElementById('secondToolbar').style.display = 'block';
-    }
+    this.show2ndToolbar = !this.show2ndToolbar;
   }
 
 

@@ -14,7 +14,7 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <ion-toolbar id="secondToolbar" style="display: none">
+  <ion-toolbar *ngIf="show2ndToolbar">
     <ion-buttons slot="start">
       <ion-button size="small" fill="outline" [class.colored-text]="viewWeek" [class.colored-border]="viewWeek">
         <ion-label>Weekly View</ion-label>
