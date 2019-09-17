@@ -187,7 +187,6 @@ export class StudentSurveyPage implements OnInit {
             this.surveyType = 'Mid-Semester';
           }
         }
-        console.log(this.surveyType);
         this.getSurveys(this.intakeCode);
       }
     });

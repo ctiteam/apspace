@@ -1,0 +1,147 @@
+<ion-content>
+  <!-- MAIN GRID -->
+  <div>
+    <!-- MAIN ROW -->
+    <div class="masonry-list" [dragula]="editableList">
+      <!-- PROFILE SECTION -->
+      <div class="masonry-item no-drag">
+        <ion-card no-margin>
+          <ion-card-header no-padding>
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-avatar class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
+                    <img [src]="(photo$ | async)?.PHOTO"
+                      onerror="this.src='assets/img/no_img.png'" alt="Avatar">
+                  </ion-avatar>
+                  <div class="welcome-message-wrapper float-left"
+                    *ngIf="staffFirstName; else loadingProfile" padding-start>
+                    <ion-card-title>
+                      <h3 class="responsive-h1">{{greetingMessage}}, <span>{{staffFirstName | titlecase}}</span>
+                      </h3>
+                    </ion-card-title>
+                    <ion-card-subtitle>
+                      <h3 class="responsive-h2">Nice to see you again.</h3>
+                    </ion-card-subtitle>
+                  </div>
+                  <ng-template #loadingProfile>
+                    <div class="welcome-message-wrapper float-left" style="width: 75%; padding-top: 0" padding-start>
+                      <ion-card-title>
+                        <h3 class="responsive-h1">
+                          <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
+                        </h3>
+                      </ion-card-title>
+                      <ion-card-subtitle>
+                        <h3 class="responsive-h2">
+                          <ion-skeleton-text animated style="width: 75%; line-height: 25px"></ion-skeleton-text>
+                        </h3>
+                      </ion-card-subtitle>
+                    </div>
+                  </ng-template>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <div class="icons" margin-top text-right>
+                    <a (click)="toggleReorderingMode()" margin-end>
+                      <ion-icon *ngIf="editableList" color="success" class="responsive-icon colored-text"
+                        name="checkmark"></ion-icon>
+                      <ion-icon *ngIf="!editableList" class="responsive-icon colored-text" name="md-create"></ion-icon>
+                    </a>
+                    <a (click)="navigateToPage('/settings')" margin-end>
+                      <ion-icon class="anim-rotate-360-deg animated responsive-icon colored-text" name="settings">
+                      </ion-icon>
+                    </a>
+                    <a class="notifications" (click)="navigateToPage('/notifications')" margin-end>
+                      <ion-badge *ngIf="numberOfUnreadMsgs > 0" color="danger">{{ numberOfUnreadMsgs }}</ion-badge>
+                      <ion-icon class="responsive-icon colored-text anim-ring" name="notifications"></ion-icon>
+                    </a>
+                    <a class="notifications" (click)="navigateToPage('/logout')">
+                      <ion-icon class="responsive-icon danger-text anim-ring" name="log-out"></ion-icon>
+                    </a>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-header>
+        </ion-card>
+      </div>
+
+      <!-- ALERTS SECTION -->
+      <!-- <div class="masonry-item" style="position: relative;" *ngIf="shownDashboardSections.includes('dashboardAlerts')">
+        <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+          <ion-icon name="move" class="handle"></ion-icon>
+        </div>
+        <ion-card no-margin>
+          <ion-card-content>
+            <ion-slides [pager]="true" [options]="alertSliderOptions">
+              <ion-slide>
+                <p>Mohamad, you have 5 classes today, 3 of them passed.</p>
+              </ion-slide>
+              <ion-slide>
+                <p>Be careful, You have two modules with low attendance</p>
+              </ion-slide>
+              <ion-slide>
+                <p>Also, your visa will expire soon :( You may need to review the immegration office</p>
+              </ion-slide>
+              <ion-slide>
+                <p>Don't forget to pay the outstanding that you have</p>
+              </ion-slide>
+            </ion-slides>
+          </ion-card-content>
+        </ion-card>
+      </div> -->
+
+      <!-- QUICK ACCESS SECTION -->
+      <div class="masonry-item no-padding">
+        <ion-grid no-padding>
+          <ion-row>
+            <!-- QUICK ACCESS ITEM: ATTENDANCE -->
+            <ion-col padding-start *ngIf="shownDashboardSections.includes('quickAccess')">
+              <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+                <ion-icon name="move" class="handle"></ion-icon>
+              </div>
+              <quick-access-item icon="alarm" titleFirstWord='Overall' titleSecondWord='Attendance'>
+              </quick-access-item>
+            </ion-col>
+
+            <!-- QUICK ACCESS ITEM: APCARD BALANCE -->
+            <ion-col *ngIf="shownDashboardSections.includes('quickAccess')">
+              <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+                <ion-icon name="move" class="handle"></ion-icon>
+              </div>
+              <quick-access-item icon="card" titleFirstWord='APCard' titleSecondWord='Balance' 
+                [observable$]='balance$' outputMode='currency'>
+              </quick-access-item>
+            </ion-col>
+
+            <!-- QUICK ACCESS ITEM: TOTAL OVERDUE -->
+            <ion-col padding-end *ngIf="shownDashboardSections.includes('quickAccess')">
+              <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+                <ion-icon name="move" class="handle"></ion-icon>
+              </div>
+              <quick-access-item icon="logo-usd" titleFirstWord='Total' titleSecondWord='Overdue'>
+              </quick-access-item>
+            </ion-col>
+
+          </ion-row>
+        </ion-grid>
+      </div>
+
+      <!-- TODAY'S SCHEDULE -->
+      <div class="masonry-item" *ngIf="shownDashboardSections.includes('todaysSchedule')">
+        <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+          <ion-icon name="move" class="handle"></ion-icon>
+        </div>
+        <dashboard-card [cardTitle]='todaysScheduleCardConfigurations.cardTitle'
+          [cardSubtitle]='todaysScheduleCardConfigurations.cardSubtitle'
+          [withOptionsButton]='todaysScheduleCardConfigurations.withOptionsButton'
+          [options]='todaysScheduleCardConfigurations.options'>
+          <events-list [observable$]="todaysSchedule$"></events-list>
+        </dashboard-card>
+      </div>
+
+    </div>
+  </div>
+
+</ion-content>

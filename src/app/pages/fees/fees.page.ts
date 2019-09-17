@@ -89,16 +89,15 @@ export class FeesPage implements OnInit {
     this.menuCtrl.toggle();
   }
 
-  doRefresh(event?) {
-    console.log('Begin async operation');
+  doRefresh(refresher?) {
     const that = this;
 
-    this.totalSummary$ = this.ws.get('/student/summary_overall_fee', true);
-    this.summary$ = this.ws.get<FeesSummary[]>('/student/outstanding_fee', true).pipe(
+    this.totalSummary$ = this.ws.get('/student/summary_overall_fee', refresher);
+    this.summary$ = this.ws.get<FeesSummary[]>('/student/outstanding_fee', refresher).pipe(
       tap(summuries => summuries.map(summury => summury.PAYMENT_DUE_DATE = summury.PAYMENT_DUE_DATE.replace(/-/g, ' ')))
     );
-    this.bankDraft$ = this.ws.get('/student/bankdraft_amount', true);
-    this.detail$ = this.ws.get<FeesDetails[]>('/student/overall_fee', true).pipe(
+    this.bankDraft$ = this.ws.get('/student/bankdraft_amount', refresher);
+    this.detail$ = this.ws.get<FeesDetails[]>('/student/overall_fee', refresher).pipe(
       tap(details => details.map(detail => detail.DUE_DATE = detail.DUE_DATE.replace(/-/g, ' ')))
     );
 
@@ -137,7 +136,7 @@ export class FeesPage implements OnInit {
           })
         );
       }),
-      finalize(() => event && event.target.complete()),
+      finalize(() => refresher && refresher.target.complete()),
 
 
     );

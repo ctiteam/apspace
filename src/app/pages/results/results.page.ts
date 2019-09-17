@@ -104,8 +104,7 @@ export class ResultsPage implements OnInit {
     const url = `/student/subcourses?intake=${intake}`;
     return this.results$ = this.ws.get<Subcourse>(url, refresh).pipe(
       tap(results => this.getInterimLegend(intake, results, true)),
-      map(r => this.sortResult(r)),
-      tap(r => console.log(r))
+      tap(r => this.sortResult(r))
     );
   }
 

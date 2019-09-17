@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { filter, finalize, map } from 'rxjs/operators';
+import { filter, finalize, map, tap } from 'rxjs/operators';
 
 import * as Fuse from 'fuse.js';
 
@@ -35,7 +35,7 @@ export class StaffDirectoryPage implements OnInit {
     this.staffType$ = this.staff$.pipe(
       filter(ss => ss instanceof Array),
       map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT))).sort()),
-      finalize(() => refresher && refresher.complete()),
+      finalize(() => refresher && refresher.target.complete()),
     );
   }
 

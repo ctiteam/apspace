@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
     <ion-title>My Consultations</ion-title>
     <ion-buttons slot="end">
       <ion-button class="colored-border colored-text" fill="outline" (click)="showSummary()">
@@ -77,11 +80,13 @@
                         </ion-col>
                         <ion-col size-xs="5" size-sm="4">
                           <ng-container>
-                            <ion-button class="cursor-pointer" expand="block" (click)="cancelAvailableSlot(slot)" *ngIf="slot.status === 'Available'">
+                            <ion-button class="cursor-pointer" expand="block" (click)="cancelAvailableSlot(slot)"
+                              *ngIf="slot.status === 'Available'">
                               Cancel Slot
                             </ion-button>
                             <ion-button class="cursor-pointer" expand="block" [disabled]="slot.status === 'Clossed'"
-                              *ngIf="slot.status !== 'Available'" (click)="openSlotDetailsModal(slot.slotid, slot.time, slot.endTime, slot.dateandtime, slot.availibilityid, slot.date, slot.timee)">
+                              *ngIf="slot.status !== 'Available'"
+                              (click)="openSlotDetailsModal(slot.slotid, slot.time, slot.endTime, slot.dateandtime, slot.availibilityid, slot.date, slot.timee)">
                               View Details
                             </ion-button>
                           </ng-container>
@@ -100,7 +105,8 @@
                           </ion-col>
                           <ion-col size-xs="5" size-sm="4">
                             <ng-container>
-                              <ion-button class="cursor-pointer" expand="block" (click)="openUnavailableSlotDetails(slot.unavailibilityid)">
+                              <ion-button class="cursor-pointer" expand="block"
+                                (click)="openUnavailableSlotDetails(slot.unavailibilityid)">
                                 View Details
                               </ion-button>
                             </ng-container>
@@ -151,10 +157,10 @@
       <ion-icon name="create"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button routerLink="/add-unavailability" data-desc="Add Unavailability">
+      <ion-fab-button routerLink="/iconsult/add-unavailability" data-desc="Add Unavailability">
         <ion-icon class="colored-text" name="remove"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button routerLink="/add-free-slot" routerDirection="forward" data-desc="Add Free Slot">
+      <ion-fab-button routerLink="/iconsult/add-free-slot" routerDirection="forward" data-desc="Add Free Slot">
         <ion-icon class="colored-text" name="add"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>

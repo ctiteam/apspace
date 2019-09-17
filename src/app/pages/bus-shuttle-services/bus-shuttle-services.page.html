@@ -99,7 +99,7 @@
   </ion-refresher>
   <div *ngIf="filteredTrip$ | async as trips; else loadingTrips" no-padding>
     <ion-grid>
-      <ion-row>
+      <ion-row *ngIf="numberOfTrips !== 0">
         <ion-col>
           <h6 class="main-text-color">
             Effective from: <span class="text-bold">{{latestUpdate}}</span>
@@ -107,7 +107,7 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <div class="masonry-list" *ngIf="numberOfTrips != 0; else noTrips">
+    <div class="masonry-list" *ngIf="numberOfTrips !== 0; else noTrips">
       <div class="masonry-item" *ngFor="let trip of trips | keyvalue">
         <ion-card no-margin margin-bottom>
           <ion-card-header [ngStyle]="{
@@ -123,7 +123,7 @@
             <ion-card-title class="card-title float-left">
               <!-- <h5 class="main-text-color small-text">Next in: 1 hrs, 23 min</h5> -->
               <h3 class="small-margin-top location-title responsive-h1">
-                {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }}</h3>
+                {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} <small *ngIf="trip.key === 'mosque'">(Friday Only)</small></h3>
             </ion-card-title>
             <div class="clearfix"></div>
           </ion-card-header>
@@ -134,6 +134,7 @@
                   <h2 class="responsive-h2 text-bold main-text-color">
                     {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} ->
                     {{ destination.key | uppercase }}
+                    <small *ngIf="destination.key === 'mosque'">(Friday Only)</small>
                   </h2>
                   <ion-grid no-padding>
                     <ion-row>
@@ -153,7 +154,10 @@
     <ng-template #noTrips>
       <ion-row>
         <ion-col>
-          No trips
+          <app-message-with-svg messageTitle="No {{filterObject.show === 'upcoming' ? 'Upcoming': ''}} Trips To Show!"
+            messageContent="{{filterObject.show === 'upcoming' ? 'Bus trips has finished for today. Try showing all the trips by changing the show filter to all trips instead of upcoming only.': 'No trips schedule has been added for today!'}}" imageUrl="assets/img/empty.svg"
+            wrapperOffset="4" wrapperSize="4" wrapperMarginTop="50px">
+          </app-message-with-svg>
         </ion-col>
       </ion-row>
     </ng-template>
@@ -194,13 +198,6 @@
       </div>
     </div>
 
-    <ng-template #noTrips>
-      <ion-row>
-        <ion-col>
-          No trips
-        </ion-col>
-      </ion-row>
-    </ng-template>
   </ng-template>
 </ion-content>
 

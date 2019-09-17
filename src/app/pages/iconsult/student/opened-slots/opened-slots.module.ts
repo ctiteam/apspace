@@ -8,6 +8,9 @@ import { IonicModule } from '@ionic/angular';
 import { OpenedSlotsPage } from './opened-slots.page';
 import { BookSlotModalPage } from './book-slot-modal';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { CalendarModule } from 'ion2-calendar';
+import { FilterSlotsByDayPipe } from './filter-slots-by-day.pipe';
+import { CalendarFilterModalPage } from './calendar-filter-modal/calendar-filter-modal';
 
 const routes: Routes = [
   {
@@ -18,13 +21,14 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    CalendarModule,
     CommonModule,
+    ComponentsModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ComponentsModule
   ],
-  declarations: [OpenedSlotsPage, BookSlotModalPage],
-  entryComponents: [BookSlotModalPage],
+  declarations: [OpenedSlotsPage, BookSlotModalPage, CalendarFilterModalPage, FilterSlotsByDayPipe],
+  entryComponents: [BookSlotModalPage, CalendarFilterModalPage],
 })
 export class OpenedSlotsPageModule {}

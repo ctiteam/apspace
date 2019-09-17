@@ -61,6 +61,8 @@ const routes: Routes = [
   },
   {
     path: 'attendance',
+    canActivate: [AuthGuard],
+    data: { role: Role.Student },
     loadChildren: () => import('./pages/attendance/attendance.module').then(m => m.AttendancePageModule)
   },
   {
@@ -70,6 +72,7 @@ const routes: Routes = [
   {
     path: 'fees',
     canActivate: [AuthGuard],
+    data: { role: Role.Student },
     loadChildren: () => import('./pages/fees/fees.module').then(m => m.FeesPageModule)
   },
   {
@@ -127,11 +130,13 @@ const routes: Routes = [
   {
     path: 'student-survey',
     canActivate: [AuthGuard],
+    data: { role: Role.Student },
     loadChildren: () => import('./pages/student-survey/student-survey.module').then(m => m.SubmitSurveyPageModule)
   },
   {
     path: 'results',
     canActivate: [AuthGuard],
+    data: { role: Role.Student },
     loadChildren: './pages/results/results.module#ResultsPageModule'
   },
   {
@@ -151,20 +156,20 @@ const routes: Routes = [
       {
         path: 'add-free-slot',
         canActivate: [AuthGuard],
-        data: { role: Role.Admin },
+        data: { role: Role.Admin | Role.Lecturer },
         loadChildren: () => import('./pages/iconsult/staff/add-free-slot/add-free-slot.module').then(m => m.AddFreeSlotPageModule)
       },
       {
         path: 'add-unavailability',
         canActivate: [AuthGuard],
-        data: { role: Role.Admin },
+        data: { role: Role.Admin | Role.Lecturer },
         // tslint:disable-next-line: max-line-length
         loadChildren: () => import('./pages/iconsult/staff/add-unavailability/add-unavailability.module').then(m => m.AddUnavailabilityPageModule)
       },
       {
         path: 'my-consultations',
         canActivate: [AuthGuard],
-        data: { role: Role.Admin },
+        data: { role: Role.Admin | Role.Lecturer },
         loadChildren: () => import('./pages/iconsult/staff/my-consultations/my-consultations.module').then(m => m.MyConsultationsPageModule)
       },
       {
@@ -180,7 +185,15 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { role: Role.Admin | Role.Lecturer},
     loadChildren: './pages/aplc-progress-report/aplc-progress-report.module#AplcProgressReportPageModule'
-  }
+  },
+  {
+    path: 'lecturer-dashboard',
+    // tslint:disable-next-line: max-line-length
+    canActivate: [AuthGuard],
+    data: { role: Role.Lecturer },
+    loadChildren: () => import('./pages/lecturer-dashboard/lecturer-dashboard.module').then(m => m.LecturerDashboardPageModule)
+   }
+
 ];
 
 @NgModule({

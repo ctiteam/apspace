@@ -3,10 +3,10 @@ import {
   EventComponentConfigurations, DashboardCardComponentConfigurations,
   Attendance, StudentProfile, Apcard, FeesTotalSummary, Course, CourseDetails,
   CgpaPerIntake, StudentTimetable, ConsultationHour, StudentPhoto, Holidays,
-  Holiday, ExamSchedule, BusTrips, BusTrip, APULocations, APULocation
+  Holiday, ExamSchedule, BusTrips, APULocations, APULocation
 } from 'src/app/interfaces';
 import { Observable, forkJoin, of, zip } from 'rxjs';
-import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray, reduce } from 'rxjs/operators';
+import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray } from 'rxjs/operators';
 import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService } from 'src/app/services';
 import * as moment from 'moment';
 import { NavController } from '@ionic/angular';
@@ -24,6 +24,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   shownDashboardSections: string[];
   editableList = null;
   busShuttleServiceSettings: any;
+  secondLocation: string;
+  firstLocation: string;
 
   // ALERTS SLIDER OPTIONS
   alertSliderOptions = {
@@ -217,7 +219,11 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
     );
     this.userSettings.getBusShuttleServiceSettings().subscribe(
       {
-        next: data => this.upcomingTrips$ = this.getUpcomingTrips(data.firstLocation, data.secondLocation),
+        next: data => {
+          this.firstLocation = data.firstLocation;
+          this.secondLocation = data.secondLocation;
+          this.upcomingTrips$ = this.getUpcomingTrips(data.firstLocation, data.secondLocation);
+        },
       }
     );
     this.userSettings.subscribeToCacheClear().subscribe(
@@ -236,25 +242,26 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   }
 
   doRefresh(refresher?) {
-    this.getLocations();
+    this.getLocations(refresher);
+    this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation);
     this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
     this.displayGreetingMessage();
-    this.apcardTransaction$ = this.getTransactions();
-    this.getBadge();
+    this.apcardTransaction$ = this.getTransactions(refresher);
+    // this.getBadge();
     forkJoin([
-      this.getProfile(),
-      this.financial$ = this.getOverdueFee()
+      this.getProfile(refresher),
+      this.financial$ = this.getOverdueFee(refresher)
     ]).pipe(
-      finalize(() => refresher && refresher.complete()),
+      finalize(() => refresher && refresher.target.complete()),
     ).subscribe();
   }
 
   // NOTIFICATIONS FUNCTIONS
-  getBadge() {
-    this.notificationService.getMessages().subscribe(res => {
-      this.numberOfUnreadMsgs = +res.num_of_unread_msgs;
-    });
-  }
+  // getBadge() {
+  //   this.notificationService.getMessages().subscribe(res => {
+  //     this.numberOfUnreadMsgs = +res.num_of_unread_msgs;
+  //   });
+  // }
 
 
   // DRAG AND DROP FUNCTIONS (DASHBOARD CUSTOMIZATION)
@@ -277,21 +284,21 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   }
 
   // PROFILE AND GREETING MESSAGE FUNCTIONS
-  getProfile() {
-    return this.ws.get<StudentProfile>('/student/profile', true).pipe(
+  getProfile(refresher: boolean) {
+    return this.ws.get<StudentProfile>('/student/profile', refresher).pipe(
       tap(studentProfile => {
         if (studentProfile.BLOCK === true) {
           this.block = false;
-          this.cgpaPerIntake$ = this.getCgpaPerIntakeData();
+          this.cgpaPerIntake$ = this.getCgpaPerIntakeData(refresher);
         } else {
           this.block = true;
         }
       }),
       tap(studentProfile => this.defaultIntake = studentProfile.INTAKE),
       tap(studentProfile => this.studentFirstName$ = of(studentProfile.NAME.split(' ')[0])),
-      tap(studentProfile => this.getTodaysSchdule(studentProfile.INTAKE)), // INTAKE NEEDED FOR TIMETABLE
-      tap(studentProfile => this.getUpcomingEvents(studentProfile.INTAKE)), // INTAKE NEEDED FOR EXAMS
-      tap(studentProfile => this.getAttendance(studentProfile.INTAKE)),
+      tap(studentProfile => this.getTodaysSchdule(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR TIMETABLE
+      tap(studentProfile => this.getUpcomingEvents(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR EXAMS
+      tap(studentProfile => this.getAttendance(studentProfile.INTAKE, refresher)),
       // tap(studentProfile => this.getUpcomingExam(studentProfile.INTAKE)),
     );
   }
@@ -308,10 +315,10 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   }
 
   // TODAYS SCHEDULE FUNCTIONS
-  getTodaysSchdule(intake: string) {
+  getTodaysSchdule(intake: string, refresher: boolean) {
     this.todaysSchedule$ = zip( // ZIP TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
-      this.getUpcomingClasses(intake),
-      this.getUpcomingConsultations()
+      this.getUpcomingClasses(intake, refresher),
+      this.getUpcomingConsultations(refresher)
     ).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
@@ -326,9 +333,9 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
     );
   }
 
-  getUpcomingClasses(intake: string): Observable<EventComponentConfigurations[]> {
+  getUpcomingClasses(intake: string, refresher): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
-    return this.studentTimetableService.get().pipe(
+    return this.studentTimetableService.get(refresher).pipe(
 
       // FILTER THE LIST OF TIMETABLES TO GET THE TIMETABLE FOR THE SELECTED INTAKE ONLY
       map(timetables => timetables.filter(timetable => timetable.INTAKE === intake)),
@@ -365,10 +372,10 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
     );
   }
 
-  getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
+  getUpcomingConsultations(refresher): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
     const consultationsEventMode: EventComponentConfigurations[] = [];
-    return this.ws.get<ConsultationHour[]>('/iconsult/upcomingconstu', true).pipe(
+    return this.ws.get<ConsultationHour[]>('/iconsult/upcomingconstu', refresher).pipe(
       map(consultations =>
         consultations.filter(
           consultation => this.eventIsToday(new Date(consultation.date), dateNow)
@@ -424,22 +431,21 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
 
 
   // UPCOMING EVENTS FUNCTIONS
-  getUpcomingEvents(intake: string) {
+  getUpcomingEvents(intake: string, refresher: boolean) {
     const todaysDate = new Date();
     this.upcomingEvent$ = zip(
-      this.getupcomingExams(intake, todaysDate),
-      this.getUpcomingHoliday(todaysDate)
+      this.getupcomingExams(intake, todaysDate, refresher),
+      this.getUpcomingHoliday(todaysDate, refresher)
     ).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
     );
-    // this.upcomingEvent$ = this.getUpcomingHoliday(todaysDate);
   }
 
-  getupcomingExams(intake: string, todaysDate: Date): Observable<EventComponentConfigurations[]> {
+  getupcomingExams(intake: string, todaysDate: Date, refresher: boolean): Observable<EventComponentConfigurations[]> {
     const opt = { auth: false };
     return this.ws.get<ExamSchedule[]>(
       `/examination/${intake}`,
-      true,
+      refresher,
       opt,
     ).pipe(
       map(examsList => {
@@ -468,8 +474,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
     );
   }
 
-  getUpcomingHoliday(date: Date): Observable<EventComponentConfigurations[]> {
-    return this.ws.get<Holidays>('/transix/holidays/filtered/students', true).pipe(
+  getUpcomingHoliday(date: Date, refresher: boolean): Observable<EventComponentConfigurations[]> {
+    return this.ws.get<Holidays>('/transix/holidays/filtered/students', refresher).pipe(
       map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
       map(holiday => {
         const examsListEventMode: EventComponentConfigurations[] = [];
@@ -499,9 +505,9 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   }
 
   // ATTENDANCE FUNCTIONS
-  getAttendance(intake: string) {
+  getAttendance(intake: string, refresher: boolean) {
     const url = `/student/attendance?intake=${intake}`;
-    this.modulesWithLowAttendance$ = this.ws.get<Attendance[]>(url, true).pipe(
+    this.modulesWithLowAttendance$ = this.ws.get<Attendance[]>(url, refresher).pipe(
       tap(attendanceData => {
         // GETTING THE OVERALL ATTENDANCE VALUE FOR QUICK ACCESS ITEM
         if (attendanceData.length > 0) {
@@ -588,8 +594,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   }
 
   // APCARD FUNCTIONS
-  getTransactions() {
-    return this.ws.get<Apcard[]>('/apcard/', true).pipe(
+  getTransactions(refresher) {
+    return this.ws.get<Apcard[]>('/apcard/', refresher).pipe(
       map(transactions => this.signTransactions(transactions)),
       tap(transactions => this.analyzeTransactions(transactions)),
       tap(transactions => this.getCurrentApcardBalance(transactions))
@@ -645,10 +651,10 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   }
 
   // FINANCIALS FUNCTIONS
-  getOverdueFee(): Observable<FeesTotalSummary | any> {
+  getOverdueFee(refresher: boolean): Observable<FeesTotalSummary | any> {
     return this.ws.get<FeesTotalSummary[]>(
       '/student/summary_overall_fee',
-      true
+      refresher
     ).pipe(
       tap((overdueSummary) => {
         // GET THE VALUE OF THE TOTAL OVERALL USED IN THE QUICK ACCESS ITEM
@@ -693,16 +699,16 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   }
 
   // CGPA FUNCTIONS
-  getCgpaPerIntakeData(): Observable<CgpaPerIntake | any> {
+  getCgpaPerIntakeData(refresher: boolean): Observable<CgpaPerIntake | any> {
     return this.ws
-      .get<Course[]>('/student/courses', true)
+      .get<Course[]>('/student/courses', refresher)
       .pipe(
         flatMap(intakes => intakes),
         concatMap(intake => {
           const url = `/student/sub_and_course_details?intake=${
             intake.INTAKE_CODE
             }`;
-          return this.ws.get<CourseDetails>(url, true).pipe(
+          return this.ws.get<CourseDetails>(url, refresher).pipe(
             map(intakeDetails =>
               Object.assign({
                 intakeDate: intake.INTAKE_NUMBER,
@@ -824,13 +830,12 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
         return Object.keys(trips).map(
           key => trips[key]
         );
-      }),
-      tap(d => console.log(d))
+      })
     );
   }
 
-  getLocations() {
-    this.ws.get<APULocations>(`/transix/locations`, true, { auth: false }).pipe(
+  getLocations(refresher: boolean) {
+    this.ws.get<APULocations>(`/transix/locations`, refresher, { auth: false }).pipe(
       map((res: APULocations) => res.locations),
       tap(locations => this.locations = locations)
     ).subscribe();

@@ -100,7 +100,7 @@
 
 <ion-content id="content">
   <!-- refresher -->
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+  <ion-refresher slot="fixed" pullMax="400" pullMin="60 "(ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-grid no-padding>
