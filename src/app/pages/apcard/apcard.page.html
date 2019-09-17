@@ -4,94 +4,8 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button class="animated anim-scale" (click)="openMenu()">
-        <ion-icon name="options"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-
   </ion-toolbar>
 </ion-header>
-
-<ion-menu side="end" contentId="content" menuId="apcard-filter-menu" type="overlay">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Filter</ion-title>
-      <ion-buttons slot="end">
-        <ion-button class="animated anim-rotate-360-deg" shape="round" (click)="closeMenu()">
-          <ion-icon name="close"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list>
-      <ion-item-group>
-        <ion-item-divider>
-          <ion-label>
-            Date
-          </ion-label>
-        </ion-item-divider>
-        <ion-item>
-          <ion-label>Year</ion-label>
-          <ion-select interface="popover" [(ngModel)]="filterObject.year">
-            <ion-select-option value="">
-              Any
-            </ion-select-option>
-
-            <ion-select-option [value]="year" *ngFor="let year of transactonsYears">
-              {{ year }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-label>Month</ion-label>
-          <ion-select interface="popover" [(ngModel)]="filterObject.month">
-            <ion-select-option value="">
-              Any
-            </ion-select-option>
-
-            <ion-select-option [value]="month.value" *ngFor="let month of months">
-              {{ month.name }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-item-group>
-      <ion-item-group>
-        <ion-item-divider>
-          <ion-label>
-            Show
-          </ion-label>
-        </ion-item-divider>
-        <ion-item>
-          <ion-list>
-            <ion-radio-group [(ngModel)]="filterObject.show">
-              <ion-item lines="none">
-                <ion-label>All</ion-label>
-                <ion-radio slot="start" value='all'></ion-radio>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-label>Credit only</ion-label>
-                <ion-radio slot="start" value="credit"></ion-radio>
-              </ion-item>
-              <ion-item lines="none">
-                <ion-label>Debit Only</ion-label>
-                <ion-radio slot="start" value="debit"></ion-radio>
-              </ion-item>
-            </ion-radio-group>
-          </ion-list>
-        </ion-item>
-        <div padding>
-          <ion-button fill="outline" color="danger" expand="block" (click)="clearFilter()">
-            Clear Filters
-            <ion-icon slot="end" name="trash"></ion-icon>
-          </ion-button>
-        </div>
-      </ion-item-group>
-    </ion-list>
-  </ion-content>
-</ion-menu>
-
 
 <ion-content id="content">
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
@@ -134,29 +48,11 @@
         </div>
       </div>
 
-      <div class="perYear" *ngFor="let year of transactonsYears | yearFilter: filterObject.year">
-        <div class="perMonth" *ngFor="let month of transactionsMonths | monthFilter: filterObject.month">
+      <div class="perYear" *ngFor="let year of transactonsYears">
+        <div class="perMonth" *ngFor="let month of transactionsMonths">
           <div class="masonry-item apcard-history-group" *ngIf="transactionsGroupedByDate[month + ', ' + year]">
             <ion-card no-margin>
               <ion-card-header no-padding padding-start padding-end padding-top>
-                <ion-card-subtitle *ngIf="filterObject.show !== 'credit'">
-                  <h5 class="responsive-h2" *ngIf="monthlyData.dr[year]; else noDebit">
-                    You spent <span class="total-deposit">RM{{ monthlyData.dr[year][month] | number: "1.0-2" }}
-                    </span> in
-                  </h5>
-                  <ng-template #noDebit>
-                    <h5 class="responsive-h2">You have not spend money this month</h5>
-                  </ng-template>
-                </ion-card-subtitle>
-                <ion-card-subtitle *ngIf="filterObject.show === 'credit'">
-                  <h5 class="responsive-h2" *ngIf="monthlyData.cr[year]; else noCredit">
-                    You topped up <span class="total-credit">RM{{ monthlyData.cr[year][month] | number: "1.0-2" }}
-                    </span> in
-                  </h5>
-                  <ng-template #noCredit>
-                    <h5 class="responsive-h2">You have not top up money this month</h5>
-                  </ng-template>
-                </ion-card-subtitle>
                 <ion-card-title>
                   <h3 class="responsive-h1">
                     {{ +month + 1 + "/" + "1" + "/" + year | date: "MMMM, yyyy" }}
@@ -167,7 +63,7 @@
                 <ion-list>
                   <ion-item [class.credit]="0 < transaction.SpendVal" [class.deposit]="0 > transaction.SpendVal"
                     lines="none" no-padding
-                    *ngFor="let transaction of transactionsGroupedByDate[month + ', ' + year] | filter: filterObject.show">
+                    *ngFor="let transaction of transactionsGroupedByDate[month + ', ' + year]">
                     <ion-avatar slot="start">
                       <ion-icon class="transaction-icon" name="remove-circle" *ngIf="transaction.SpendVal < 0">
                       </ion-icon>
@@ -179,7 +75,6 @@
                       <h3 class="secondary-txt-color">{{ transaction.SpendDate | date: "EEE, d MMM y" }}</h3>
                     </ion-label>
                   </ion-item>
-
                 </ion-list>
               </ion-card-content>
             </ion-card>

@@ -7,7 +7,6 @@ import { IonicModule } from '@ionic/angular';
 import { ApcardPage } from './apcard.page';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { FormsModule } from '@angular/forms';
-import { FilterPipe, MonthFilter, YearFilter } from './filter.pipe';
 
 const routes: Routes = [
   {
@@ -24,11 +23,6 @@ const routes: Routes = [
     ComponentsModule,
     FormsModule
   ],
-  declarations: [
-    ApcardPage,
-    FilterPipe,
-    MonthFilter,
-    YearFilter,
-  ]
+  declarations: [ApcardPage]
 })
 export class ApcardPageModule { }
