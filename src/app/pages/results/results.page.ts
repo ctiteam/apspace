@@ -60,21 +60,21 @@ export class ResultsPage implements OnInit {
     this.doRefresh();
   }
 
-  doRefresh(refresher?: IonRefresher) {
-    this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
-    this.ws.get<StudentProfile>('/student/profile', true).subscribe(p => {
+  doRefresh(refresher?: any) {
+    this.photo$ = this.ws.get<StudentPhoto>('/student/photo', refresher);
+    this.ws.get<StudentProfile>('/student/profile', refresher).subscribe(p => {
       this.studentProfile = p;
       if (p.BLOCK) {
         this.block = true;
-        this.course$ = this.ws.get<Course[]>('/student/courses', true).pipe(
+        this.course$ = this.ws.get<Course[]>('/student/courses', refresher).pipe(
           tap(i => this.selectedIntake = i[0].INTAKE_CODE),
-          tap(i => this.results$ = this.getResults(i[0].INTAKE_CODE)),
-          tap(i => this.getCourseDetails(i[0].INTAKE_CODE, true)),
-          tap(i => this.getMpuLegend(i[0].INTAKE_CODE, true)),
-          tap(i => this.getDeterminationLegend(i[0].INTAKE_CODE, true)),
-          tap(i => this.getClassificatinLegend(i[0].INTAKE_CODE, true)),
+          tap(i => this.results$ = this.getResults(i[0].INTAKE_CODE, refresher)),
+          tap(i => this.getCourseDetails(i[0].INTAKE_CODE, refresher)),
+          tap(i => this.getMpuLegend(i[0].INTAKE_CODE, refresher)),
+          tap(i => this.getDeterminationLegend(i[0].INTAKE_CODE, refresher)),
+          tap(i => this.getClassificatinLegend(i[0].INTAKE_CODE, refresher)),
           tap(i => this.intakeLabels = Array.from(new Set((i || []).map(t => t.INTAKE_CODE)))),
-          finalize(() => refresher && refresher.complete())
+          finalize(() => refresher && refresher.target.complete())
         );
       } else {
         this.block = false;
@@ -89,7 +89,8 @@ export class ResultsPage implements OnInit {
       return {
         text: intake, handler: () => {
           this.selectedIntake = intake;
-          this.results$ = this.getResults(this.selectedIntake);
+          this.results$ = this.getResults(this.selectedIntake, true);
+          this.getCourseDetails(this.selectedIntake, true);
         },
       } as ActionSheetButton;
     });
@@ -103,7 +104,7 @@ export class ResultsPage implements OnInit {
   getResults(intake: string, refresh: boolean = false): Observable<{ semester: string; value: Subcourse[] }[]> {
     const url = `/student/subcourses?intake=${intake}`;
     return this.results$ = this.ws.get<Subcourse>(url, refresh).pipe(
-      tap(results => this.getInterimLegend(intake, results, true)),
+      tap(results => this.getInterimLegend(intake, results, refresh)),
       map(r => this.sortResult(r))
     );
   }
