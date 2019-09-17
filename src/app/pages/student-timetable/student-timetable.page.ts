@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ActionSheetController, IonRefresher, ModalController } from '@ionic/angular';
+import { ActionSheetController, IonRefresher, ModalController, Platform } from '@ionic/angular';
 
 import { Observable, combineLatest } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
@@ -98,6 +98,7 @@ export class StudentTimetablePage implements OnInit {
     private userSettings: UserSettingsService,
     private ws: WsApiService,
     private router: Router,
+    public platform: Platform
   ) { }
 
   ngOnInit() {
@@ -284,13 +285,17 @@ export class StudentTimetablePage implements OnInit {
   comingFromTabs() {
 
     if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
-
       return true;
-
     }
-
     return false;
+  }
 
+  view_hideToolbar() {
+    if (document.getElementById('secondToolbar').style.display === 'block') {
+      document.getElementById('secondToolbar').style.display = 'none';
+    } else {
+      document.getElementById('secondToolbar').style.display = 'block';
+    }
   }
 
 

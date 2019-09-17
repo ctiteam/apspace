@@ -4,19 +4,27 @@
       <ion-back-button defaultHref="/" [hidden]='comingFromTabs() ? true : false'></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-list no-lines>
-        <ion-item lines="none">
-          <ion-label>Weekly View</ion-label>
-          <ion-toggle [(ngModel)]="viewWeek"></ion-toggle>
-        </ion-item>
-      </ion-list>
-      <ion-button size="small" fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
-        class="colored-text colored-border">
-        {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
-      </ion-button>
       <ion-button *ngIf="intakeSelectable" fill="outline" size="small" (click)="presentIntakeSearch()"
         class="colored-text colored-border">
         {{ intake || 'Intakes' }}
+      </ion-button>
+      <ion-button fill="outline" size="small" (click)="view_hideToolbar()" class="colored-text colored-border">
+        View
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar id="secondToolbar" style="display: none">
+    <ion-buttons slot="start">
+      <ion-button size="small" fill="outline" [class.colored-text]="viewWeek" [class.colored-border]="viewWeek">
+        <ion-label>Weekly View</ion-label>
+        <ion-toggle [(ngModel)]="viewWeek"></ion-toggle>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button size="small" fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
+        class="colored-text colored-border">
+        {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
