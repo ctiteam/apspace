@@ -183,7 +183,7 @@ const routes: Routes = [
   {
     path: 'aplc-progress-report',
     canActivate: [AuthGuard],
-    data: { role: Role.Admin | Role.Lecturer},
+    data: { role: Role.Admin | Role.Lecturer },
     loadChildren: './pages/aplc-progress-report/aplc-progress-report.module#AplcProgressReportPageModule'
   },
   {
@@ -192,7 +192,14 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { role: Role.Lecturer },
     loadChildren: () => import('./pages/lecturer-dashboard/lecturer-dashboard.module').then(m => m.LecturerDashboardPageModule)
-   }
+  },
+
+  {
+    path: 'change-password-staff',
+    canActivate: [AuthGuard],
+    data: { role: Role.Admin | Role.Lecturer },
+    loadChildren: () => import('./pages/settings/change-password-staff/change-password-staff.module').then(m => m.ChangePasswordStaffPageModule)
+  }
 
 ];
 
