@@ -2,15 +2,36 @@
   <ion-toolbar>
     <ion-buttons slot="start" [hidden]='comingFromTabs() ? true : false'>
       <ion-back-button defaultHref="/"></ion-back-button>
-      <ion-button size="small" fill="outline" (click)="rotateView()" [disabled]="availableWeek!.length === 0" class="colored-text colored-border">
-        {{ viewWeek ? 'Weekly' : 'Daily' }}
-      </ion-button>
-      <ion-button size="small" fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0" class="colored-text colored-border">
-        {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
-      </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button *ngIf="intakeSelectable" fill="outline" size="small" (click)="presentIntakeSearch()" class="colored-text colored-border">
+        <ion-button size="small" fill="outline" 
+        class="colored-text colored-border"> 
+                
+    <ion-item>
+        <ion-label>View</ion-label>
+        <ion-select [(ngModel)]="viewWeek" interface="action-sheet">
+          <ion-select-option [value]="true">Weekly</ion-select-option>
+          <ion-select-option [value]="false">Daily</ion-select-option>
+        </ion-select>
+      </ion-item>
+      </ion-button>
+    </ion-buttons>
+  
+
+
+
+
+
+    <ion-buttons slot="end">
+      <!-- <ion-button size="small" fill="outline" (click)="rotateView()" [disabled]="availableWeek!.length === 0" class="colored-text colored-border">
+            {{ viewWeek ? 'Weekly' : 'Daily' }}
+          </ion-button> -->
+      <ion-button size="small" fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
+        class="colored-text colored-border">
+        {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
+      </ion-button>
+      <ion-button *ngIf="intakeSelectable" fill="outline" size="small" (click)="presentIntakeSearch()"
+        class="colored-text colored-border">
         {{ intake || 'Intakes' }}
       </ion-button>
     </ion-buttons>
@@ -78,7 +99,7 @@
                       </ion-col>
                     </ion-row>
                   </ng-template>
-                  
+
                 </ion-grid>
               </ion-card-content>
             </ion-card>
