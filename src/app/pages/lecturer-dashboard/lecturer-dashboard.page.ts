@@ -16,7 +16,7 @@ import {
 } from 'src/app/interfaces';
 
 import { Observable, of, zip } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, finalize } from 'rxjs/operators';
 import { WsApiService, UserSettingsService, NotificationService } from 'src/app/services';
 import * as moment from 'moment';
 import { NavController } from '@ionic/angular';
@@ -214,7 +214,9 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
     this.getUpcomingEvents(refresher);
     this.apcardTransaction$ = this.getTransactions(refresher);
     this.getBadge();
-    this.getProfile(refresher).subscribe();
+    this.getProfile(refresher).pipe(
+      finalize(() => refresher && refresher.target.complete()),
+    ).subscribe();
   }
 
   // NOTIFICATIONS FUNCTIONS
