@@ -57,10 +57,11 @@ const routes: Routes = [
   },
   {
     path: 'attendix',
-    // canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
     children: [
       {
         path: 'classes',
+        data: { role: Role.Lecturer | Role.Admin },
         loadChildren:
           () => import('./pages/attendix-lecturer/classes/classes.module').then(m => m.ClassesPageModule)
       },
