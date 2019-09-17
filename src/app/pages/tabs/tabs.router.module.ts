@@ -36,7 +36,8 @@ const routes: Routes = [
       },
       {
         canActivate: [AuthGuard],
-        data: { role: Role.Lecturer },
+        // tslint:disable-next-line: no-bitwise
+        data: { role: Role.Lecturer | Role.Admin },
         path: 'lecturer-dashboard',
         loadChildren: () => import('../lecturer-dashboard/lecturer-dashboard.module').then(m => m.LecturerDashboardPageModule)
       },
