@@ -199,7 +199,7 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
   getProfile() {
     return this.ws.get<StaffProfile>('/staff/profile', true).pipe(
       tap(staffProfile => this.staffFirstName = staffProfile[0].FULLNAME.split(' ')[0]),
-      tap(staffProfile => this.getTodaysSchdule(staffProfile.REFNO))
+      tap(staffProfile => this.getTodaysSchdule(staffProfile.ID))
     );
   }
 
@@ -215,24 +215,25 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
   }
 
   // TODAYS SCHEDULE FUNCTIONS
-  getTodaysSchdule(ID: number) {
-    this.todaysSchedule$ = this.getUpcomingClasses(ID)
-    .pipe(
-      map(eventsList => {  // SORT THE EVENTS LIST BY TIME
-        return eventsList.sort((eventA, eventB) => {
-          return moment(eventA.dateOrTime, 'HH:mm A').toDate() > moment(eventB.dateOrTime, 'HH:mm A').toDate()
-            ? 1
-            : moment(eventA.dateOrTime, 'HH:mm A').toDate() < moment(eventB.dateOrTime, 'HH:mm A').toDate()
-              ? -1
-              : 0;
-        });
-      })
-    );
+  getTodaysSchdule(staffId: string) {
+    this.todaysSchedule$ = this.getUpcomingClasses(staffId)
+      .pipe(
+        map(eventsList => {  // SORT THE EVENTS LIST BY TIME
+          return eventsList.sort((eventA, eventB) => {
+            return moment(eventA.dateOrTime, 'HH:mm A').toDate() > moment(eventB.dateOrTime, 'HH:mm A').toDate()
+              ? 1
+              : moment(eventA.dateOrTime, 'HH:mm A').toDate() < moment(eventB.dateOrTime, 'HH:mm A').toDate()
+                ? -1
+                : 0;
+          });
+        })
+      );
   }
 
-  getUpcomingClasses(ID: number): Observable<EventComponentConfigurations[]> {
+  getUpcomingClasses(staffId: string): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
-    const endpoint = '/lecturer-timetable/v2/' + 'anrazali';
+    const endpoint = '/lecturer-timetable/v2/' + 'anrazali'; // For testing
+    // const endpoint = '/lecturer-timetable/v2/' + staffId; // For testing
     return this.ws.get<LecturerTimetable[]>(endpoint, true, { auth: false }).pipe(
       // GET TODAYS CLASSES ONLY
       map(timetable => timetable.filter(tt => this.eventIsToday(new Date(tt.time), dateNow))),
