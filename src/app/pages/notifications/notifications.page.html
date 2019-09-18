@@ -12,39 +12,32 @@
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ng-template [ngIf]="!cordova" [ngIfElse]="showNotifications">
-    <app-message-with-svg messageTitle="Currently this service is only available for the mobile app users"
-      messageContent="You can download the mobile app from Google Play Store/App Store by searching for 'APSpace'"
-      imageUrl="assets/img/mobile.svg" wrapperOffset="3" wrapperSize="6" wrapperMarginTop="20px">
-    </app-message-with-svg>
-  </ng-template>
-  <ng-template #showNotifications>
-    <div class="masonry-list" margin-top *ngIf="(messages$ | async) as messages; else loading">
-      <div class="masonry-item" *ngFor="let message of messages">
-        <ion-card (click)="openModal(message)" class="notification" [class.unread]="!message.read" no-margin>
-          <ion-card-header>
-            <ion-card-title>
-              <h3 class="responsive-h1">
-                {{message.title}}
-              </h3>
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content no-padding padding-start padding-end padding-bottom>
-            <p><span class="text-bold">Sender:</span> {{message.staff_name}}</p>
-            <p><span class="text-bold">Sent on:</span> {{message.sent_on}}</p>
-            <ion-badge class="small-margin-top new" style="float: left;font-weight: 300" *ngIf="!message.read">
-              New
-            </ion-badge>
-            <ion-badge class="small-margin-top" style="float: right;font-weight: 300" color="primary">
-              {{message.category}}
-            </ion-badge>
-            <div class="clearfix"></div>
-          </ion-card-content>
-        </ion-card>
-      </div>
+  <div class="masonry-list" margin-top *ngIf="(messages$ | async) as messages; else loading">
+    <div class="masonry-item" *ngFor="let message of messages">
+      <ion-card (click)="openModal(message)" class="notification" [class.unread]="!message.read" no-margin>
+        <ion-card-header>
+          <ion-card-title>
+            <h3 class="responsive-h1">
+              {{message.title}}
+            </h3>
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content no-padding padding-start padding-end padding-bottom>
+          <p><span class="text-bold">Sender:</span> {{message.staff_name}}</p>
+          <p><span class="text-bold">Sent on:</span> {{message.sent_on | date: 'EEEE, dd MMMM y'}}</p>
+          <p><span class="text-bold">Sent at:</span> {{message.sent_on | date: 'hh:mm aaa'}}</p>
+          <ion-badge class="small-margin-top new" style="float: left;font-weight: 300" *ngIf="!message.read">
+            New
+          </ion-badge>
+          <ion-badge class="small-margin-top" style="float: right;font-weight: 300" color="primary">
+            {{message.category}}
+          </ion-badge>
+          <div class="clearfix"></div>
+        </ion-card-content>
+      </ion-card>
     </div>
-    <ng-template #loading>
-      loading...
-    </ng-template>
+  </div>
+  <ng-template #loading>
+    loading...
   </ng-template>
 </ion-content>
