@@ -15,6 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AppAvailability } from '@ionic-native/app-availability/ngx';
 
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],

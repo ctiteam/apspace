@@ -273,6 +273,11 @@
                 <ion-label>Set Security Questions</ion-label>
               </ion-item>
             </a>
+            <a *ngIf="!userRole" (click)="navigateToPage('change-password-staff')">
+              <ion-item lines="none" no-padding>
+                <ion-label>Change Your Password</ion-label>
+              </ion-item>
+            </a>
             <a (click)="resetByod()">
               <ion-item lines="none" no-padding>
                 <ion-label>BYOD Reset</ion-label>
