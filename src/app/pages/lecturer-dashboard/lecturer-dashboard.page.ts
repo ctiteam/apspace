@@ -365,7 +365,7 @@ export class LecturerDashboardPage implements OnInit, OnDestroy {
   }
 
   getUpcomingHoliday(date: Date, refresher): Observable<EventComponentConfigurations[]> {
-    return this.ws.get<Holidays>('/transix/holidays/filtered/staff', refresher).pipe(
+    return this.ws.get<Holidays>('/transix/holidays/filtered/staff', refresher, {auth: false}).pipe(
       map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
       map(holiday => {
         const examsListEventMode: EventComponentConfigurations[] = [];

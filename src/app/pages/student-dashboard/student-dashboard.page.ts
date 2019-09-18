@@ -475,7 +475,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   }
 
   getUpcomingHoliday(date: Date, refresher: boolean): Observable<EventComponentConfigurations[]> {
-    return this.ws.get<Holidays>('/transix/holidays/filtered/students', refresher).pipe(
+    return this.ws.get<Holidays>('/transix/holidays/filtered/students', refresher, {auth: false}).pipe(
       map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
       map(holiday => {
         const examsListEventMode: EventComponentConfigurations[] = [];
