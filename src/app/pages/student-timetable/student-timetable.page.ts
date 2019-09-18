@@ -116,7 +116,7 @@ export class StudentTimetablePage implements OnInit {
 
     // optional intake passed by other pages
     const intake = this.route.snapshot.params.intake;
-    if (intake || this.room) { // indirect timetable page access
+    if (this.room) { // indirect timetable page access
       this.intakeSelectable = false;
     }
 
