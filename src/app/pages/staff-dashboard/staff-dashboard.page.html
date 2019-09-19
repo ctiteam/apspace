@@ -14,7 +14,8 @@
             <ion-grid>
               <ion-row>
                 <ion-col>
-                  <ion-avatar *ngIf="staffProfile$ | async as staffProfile" class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
+                  <ion-avatar *ngIf="staffProfile$ | async as staffProfile"
+                    class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
                     <img [src]="staffProfile[0].PHOTO" onerror="this.src='assets/img/no_img.png'" alt="Avatar">
                   </ion-avatar>
                   <div class="welcome-message-wrapper float-left" *ngIf="staffFirstName; else loadingProfile"
@@ -71,7 +72,7 @@
       </div>
 
       <!-- TODAY'S SCHEDULE -->
-      <div class="masonry-item" *ngIf="shownDashboardSections.includes('todaysSchedule')">
+      <div class="masonry-item">
         <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
           <ion-icon name="move" class="handle"></ion-icon>
         </div>
@@ -84,7 +85,7 @@
       </div>
 
       <!-- UPCOMING EVENTS -->
-      <div class="masonry-item" *ngIf="shownDashboardSections.includes('upcomingEvents')">
+      <div class="masonry-item">
         <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
           <ion-icon name="move" class="handle"></ion-icon>
         </div>
@@ -96,8 +97,242 @@
         </dashboard-card>
       </div>
 
+      <!-- QUICK ACCESS SECTION -->
+      <div class="masonry-item no-padding">
+        <ion-grid no-padding>
+          <ion-row>
+            <!-- QUICK ACCESS ITEM: ATTENDANCE -->
+            <ion-col padding-start>
+              <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+                <ion-icon name="move" class="handle"></ion-icon>
+              </div>
+              <quick-access-item icon="car" titleFirstWord='Leave' titleSecondWord='Balance' [observable$]='test1$'
+                outputMode='others'>
+              </quick-access-item>
+            </ion-col>
+
+            <!-- QUICK ACCESS ITEM: APCARD BALANCE -->
+            <ion-col>
+              <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+                <ion-icon name="move" class="handle"></ion-icon>
+              </div>
+              <quick-access-item icon="filing" titleFirstWord='Leave' titleSecondWord='History' [observable$]='test1$'
+                outputMode='others'>
+              </quick-access-item>
+            </ion-col>
+
+            <!-- QUICK ACCESS ITEM: TOTAL OVERDUE -->
+            <ion-col padding-end>
+              <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+                <ion-icon name="move" class="handle"></ion-icon>
+              </div>
+              <quick-access-item icon="timer" titleFirstWord='Pending' titleSecondWord='Leave' [observable$]="test2$"
+                outputMode='others'>
+              </quick-access-item>
+            </ion-col>
+
+          </ion-row>
+        </ion-grid>
+      </div>
+
+      <!-- EASY ACCESS SECTION -->
+      <div class="masonry-item no-padding">
+        <ion-grid no-padding>
+          <ion-row>
+            <ion-col size="12" padding-start>
+              <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+                <ion-icon name="move" class="handle"></ion-icon>
+              </div>
+              <ion-button style="--background: #305F72" expand="block">Apply For Leave</ion-button>
+            </ion-col>
+
+
+            <ion-col size="6" padding-start>
+              <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+                <ion-icon name="move" class="handle"></ion-icon>
+              </div>
+              <ion-button style="--background: #510A32" expand="block">Send Feedback</ion-button>
+            </ion-col>
+
+            <ion-col size="6" padding-start>
+              <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+                <ion-icon name="move" class="handle"></ion-icon>
+              </div>
+              <ion-button style="--background: #568EA6" expand="block">Book a Car</ion-button>
+            </ion-col>
+
+            <ion-col size="12" padding-start>
+              <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+                <ion-icon name="move" class="handle"></ion-icon>
+              </div>
+              <ion-button style="--background: #Fa8C8E" expand="block">Open Helpdesk Request</ion-button>
+            </ion-col>
+
+          </ion-row>
+        </ion-grid>
+      </div>
+
+
+      <!-- INSPIRATIONAL QUOTES -->
+      <div class="masonry-item">
+        <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+          <ion-icon name="move" class="handle"></ion-icon>
+        </div>
+        <dashboard-card style="width: 100%;" [cardTitle]='inspirationalQuotesCardConfigurations.cardTitle'
+          [cardSubtitle]='inspirationalQuotesCardConfigurations.cardSubtitle'
+          [withOptionsButton]='inspirationalQuotesCardConfigurations.withOptionsButton'
+          [options]='inspirationalQuotesCardConfigurations.options'>
+          <ion-grid class="ion-no-padding ion-margin-bottom">
+            <ion-row>
+              <ion-col padding-start>
+                <p style="font-style: italic" class="ion-padding">"Do not worry if you have built your castles in the
+                  air. They are where
+                  they should be. Now put the
+                  foundations under them"</p>
+                <h4 class="text-bold">Henry David Thoreau</h4>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </dashboard-card>
+      </div>
+
+      <!-- Personal Development -->
+      <div class="masonry-item">
+        <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+          <ion-icon name="move" class="handle"></ion-icon>
+        </div>
+        <dashboard-card style="width: 100%;" [cardTitle]='personalDevelopmentCardConfigurations.cardTitle'
+          [cardSubtitle]='personalDevelopmentCardConfigurations.cardSubtitle'
+          [withOptionsButton]='personalDevelopmentCardConfigurations.withOptionsButton'
+          [options]='personalDevelopmentCardConfigurations.options'>
+          <div class="test">
+            <ion-segment scrollable>
+              <ion-segment-button checked layout="icon-start">
+                <ion-label>Courses</ion-label>
+                <ion-icon name="videocam"></ion-icon>
+              </ion-segment-button>
+              <ion-segment-button layout="icon-start">
+                <ion-label>Skill Development</ion-label>
+                <ion-icon name="battery-charging"></ion-icon>
+              </ion-segment-button>
+              <ion-segment-button layout="icon-start">
+                <ion-label>Weekly Digest</ion-label>
+                <ion-icon name="calculator"></ion-icon>
+              </ion-segment-button>
+            </ion-segment>
+          </div>
+          <ion-list>
+            <ion-item>
+              <ion-avatar slot="start">
+                <img src="assets/img/innovation.png">
+              </ion-avatar>
+              <ion-label>
+                <h2>Innovation in the Workplace</h2>
+                <h3>Stephen Hunts</h3>
+                <p>Bwginner - Mar 5, 2019 11h 41m</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-avatar slot="start">
+                <img src="assets/img/social_eng.png">
+              </ion-avatar>
+              <ion-label>
+                <h2>Social Enginnering</h2>
+                <h3>Stephen Hunts</h3>
+                <p>Bwginner - Jun 5, 2019 03h 41m</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-avatar slot="start">
+                <img src="assets/img/business_analysis.png">
+              </ion-avatar>
+              <ion-label>
+                <h2>Business Analysis</h2>
+                <h3>Stephen Hunts</h3>
+                <p>Advance - Nov 5, 2019 07h 41m</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+
+        </dashboard-card>
+      </div>
+
+      <!-- Away Today -->
+      <div class="masonry-item">
+        <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+          <ion-icon name="move" class="handle"></ion-icon>
+        </div>
+        <dashboard-card style="width: 100%;" [cardTitle]='awayTodayCardConfigurations.cardTitle'
+          [cardSubtitle]='awayTodayCardConfigurations.cardSubtitle'
+          [withOptionsButton]='awayTodayCardConfigurations.withOptionsButton'
+          [options]='awayTodayCardConfigurations.options'>
+          <ion-list>
+            <ion-item>
+              <ion-avatar slot="start">
+                <img src="assets/img/835.jpg">
+              </ion-avatar>
+              <ion-label>
+                <h2>M. Reza Ganji</h2>
+                <h3 class="text-bold">Annual Leave</h3>
+                <p><span class="text-bold">Email:</span> reza.ganji@staffemail.apu.edu.my</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-avatar slot="start">
+                <img src="assets/img/111.jpeg">
+              </ion-avatar>
+              <ion-label>
+                <h2>Mohamad Al Ghayeb</h2>
+                <h3 class="text-bold">Medical Leave</h3>
+                <p><span class="text-bold">Email:</span> mohamad.alghayeb@staffemail.apu.edu.my</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </dashboard-card>
+      </div>
+
+      <!-- Survey Satisfaction -->
+      <div>
+        <div class="masonry-item" *ngIf="apcardTransaction$ | async; else loadingApcardTransactions">
+          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+            <ion-icon name="move" class="handle"></ion-icon>
+          </div>
+          <dashboard-card [cardTitle]='surveySatCardConfigurations.cardTitle'
+            [options]='surveySatCardConfigurations.options'
+            [contentPadding]='surveySatCardConfigurations.contentPadding'
+            [withOptionsButton]='surveySatCardConfigurations.withOptionsButton'>
+            <chart class="ion-margin-bottom" height="600" [type]="surveySatisfactionChartDatat.type"
+              [data]="surveySatisfactionChartDatat.data" [options]="surveySatisfactionChartDatat.options">
+            </chart>
+          </dashboard-card>
+        </div>
+      </div>
+
+
+      <!-- Weekly Time Report -->
+      <div>
+        <div class="masonry-item" *ngIf="apcardTransaction$ | async; else loadingApcardTransactions">
+          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+            <ion-icon name="move" class="handle"></ion-icon>
+          </div>
+          <dashboard-card [cardTitle]='weeklyTimeReportCardConfigurations.cardTitle'
+            [options]='weeklyTimeReportCardConfigurations.options'
+            [contentPadding]='weeklyTimeReportCardConfigurations.contentPadding'
+            [withOptionsButton]='weeklyTimeReportCardConfigurations.withOptionsButton'>
+            <chart class="ion-margin-bottom" height="600" [type]="weeklyTimeReportChartDatat.type"
+              [data]="weeklyTimeReportChartDatat.data" [options]="weeklyTimeReportChartDatat.options">
+            </chart>
+          </dashboard-card>
+        </div>
+      </div>
+
+
+
       <!-- BUS SHUTTLE SERVICES -->
-      <div *ngIf="shownDashboardSections.includes('busShuttleServices')">
+      <div>
         <div class="masonry-item">
           <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
             <ion-icon name="move" class="handle"></ion-icon>
@@ -174,7 +409,7 @@
       </div>
 
       <!-- APCard Transactions -->
-      <div *ngIf="shownDashboardSections.includes('apcard')">
+      <div>
         <div class="masonry-item" *ngIf="apcardTransaction$ | async; else loadingApcardTransactions">
           <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
             <ion-icon name="move" class="handle"></ion-icon>

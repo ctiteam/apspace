@@ -3,7 +3,6 @@ import {
   EventComponentConfigurations,
   DashboardCardComponentConfigurations,
   Apcard,
-  StudentPhoto,
   StaffProfile,
   LecturerTimetable,
   APULocation,
@@ -11,7 +10,6 @@ import {
   APULocations,
   Holidays,
   Holiday,
-  ConsultationHour,
   LecturerConsultation
 } from 'src/app/interfaces';
 
@@ -54,19 +52,19 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
   // TODAY'S SCHEDULE
   todaysSchedule$: Observable<EventComponentConfigurations[] | any>;
   todaysScheduleCardConfigurations: DashboardCardComponentConfigurations = {
-    withOptionsButton: false,
-    // options: [
-    //   {
-    //     title: 'set alarm before 15 minutes of next schdule',
-    //     icon: 'alarm',
-    //     callbackFunction: this.testCallBack
-    //   },
-    //   {
-    //     title: 'delete',
-    //     icon: 'trash',
-    //     callbackFunction: this.testCallBack
-    //   }
-    // ],
+    withOptionsButton: true,
+    options: [
+      {
+        title: 'Set Reminder',
+        icon: 'alarm',
+        // callbackFunction: this.testCallBack
+      },
+      {
+        title: 'Change View',
+        icon: 'trash',
+        // callbackFunction: this.testCallBack
+      }
+    ],
     cardTitle: 'Today\'s Schedule',
     // cardSubtitle: 'Next in: 1 hrs, 25 min'
   };
@@ -113,6 +111,193 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
     cardSubtitle: 'Today: ' + moment().format('DD MMMM YYYY')
   };
 
+  // START STATIC
+
+  // HR WIDGET
+  test1$ = of({ value: 5 });
+  test2$ = of({ value: 1 });
+
+  hrWidgetCardConfigurations: DashboardCardComponentConfigurations = {
+    withOptionsButton: false,
+    // options: [
+    //   {
+    //     title: 'Apply Leave',
+    //     icon: 'alarm',
+    //     // callbackFunction: this.testCallBack
+    //   },
+    //   {
+    //     title: 'Leave History',
+    //     icon: 'trash',
+    //     // callbackFunction: this.testCallBack
+    //   }
+    // ],
+    cardTitle: 'HR Widget'
+  };
+
+  // Inspirational Quotes
+  inspirationalQuotesCardConfigurations: DashboardCardComponentConfigurations = {
+    withOptionsButton: false,
+    // options: [
+    //   {
+    //     title: 'Apply Leave',
+    //     icon: 'alarm',
+    //     // callbackFunction: this.testCallBack
+    //   },
+    //   {
+    //     title: 'Leave History',
+    //     icon: 'trash',
+    //     // callbackFunction: this.testCallBack
+    //   }
+    // ],
+    cardTitle: 'Inspirational Quotes',
+    cardSubtitle: 'Get inspired by today\'s'
+  };
+
+  // Inspirational Quotes
+  personalDevelopmentCardConfigurations: DashboardCardComponentConfigurations = {
+    withOptionsButton: false,
+    // options: [
+    //   {
+    //     title: 'Apply Leave',
+    //     icon: 'alarm',
+    //     // callbackFunction: this.testCallBack
+    //   },
+    //   {
+    //     title: 'Leave History',
+    //     icon: 'trash',
+    //     // callbackFunction: this.testCallBack
+    //   }
+    // ],
+    cardTitle: 'Personal Development',
+  };
+
+  // Inspirational Quotes
+  awayTodayCardConfigurations: DashboardCardComponentConfigurations = {
+    withOptionsButton: false,
+    // options: [
+    //   {
+    //     title: 'Apply Leave',
+    //     icon: 'alarm',
+    //     // callbackFunction: this.testCallBack
+    //   },
+    //   {
+    //     title: 'Leave History',
+    //     icon: 'trash',
+    //     // callbackFunction: this.testCallBack
+    //   }
+    // ],
+    cardTitle: 'Away Today',
+    cardSubtitle: 'In My Cluster'
+  };
+
+  surveySatCardConfigurations: DashboardCardComponentConfigurations = {
+    withOptionsButton: false,
+    // options: [
+    //   {
+    //     title: 'Apply Leave',
+    //     icon: 'alarm',
+    //     // callbackFunction: this.testCallBack
+    //   },
+    //   {
+    //     title: 'Leave History',
+    //     icon: 'trash',
+    //     // callbackFunction: this.testCallBack
+    //   }
+    // ],
+    cardTitle: 'Survey Satisfaction'
+  };
+
+  surveySatisfactionChartDatat = {
+    type: 'pie',
+    options: {
+      responsive: true,
+      title: {
+        display: true,
+        position: 'top',
+        fontSize: 18,
+        fontColor: '#111'
+      },
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: {
+          fontColor: '#333',
+          fontSize: 16
+        }
+      }
+    },
+    data: {
+      labels: ['Satisfying', 'Not Satisfying'],
+      datasets: [
+        {
+          data: [80, 20],
+          backgroundColor: [
+            '#2E8B57',
+            '#DC143C'
+          ],
+          borderColor: [
+            '#1D7A46',
+            '#CB252B'
+          ],
+          borderWidth: [1, 1]
+        }
+      ]
+    }
+  };
+
+  weeklyTimeReportCardConfigurations: DashboardCardComponentConfigurations = {
+    withOptionsButton: false,
+    // options: [
+    //   {
+    //     title: 'Apply Leave',
+    //     icon: 'alarm',
+    //     // callbackFunction: this.testCallBack
+    //   },
+    //   {
+    //     title: 'Leave History',
+    //     icon: 'trash',
+    //     // callbackFunction: this.testCallBack
+    //   }
+    // ],
+    cardTitle: 'Weekly Time Report'
+  };
+
+  weeklyTimeReportChartDatat = {
+    type: 'radar',
+    options: {
+      responsive: true,
+      title: {
+        display: true,
+        position: 'top',
+        fontSize: 18,
+        fontColor: '#111'
+      },
+      legend: {
+        display: false,
+        position: 'bottom',
+        labels: {
+          fontColor: '#333',
+          fontSize: 16
+        }
+      },
+      scale: {
+        ticks: {
+           min: 0,
+           max: 100
+        }
+    }
+    },
+    data: {
+      labels: ['Personal Development', 'Free', 'On Leave', 'Consultation', 'Class'],
+      datasets: [
+        {
+          backgroundColor: 'rgba(200,0,0,0.3)',
+          data: [40, 10, 10, 10, 30]
+        }
+      ]
+    }
+  };
+  // END STATIC
 
   // APCARD
   balance$: Observable<{ value: number }>;
@@ -177,11 +362,6 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userSettings.getShownDashboardSections().subscribe(
-      {
-        next: data => this.shownDashboardSections = data,
-      }
-    );
     this.userSettings.getBusShuttleServiceSettings().subscribe(
       {
         next: data => {
@@ -365,7 +545,7 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
   }
 
   getUpcomingHoliday(date: Date, refresher): Observable<EventComponentConfigurations[]> {
-    return this.ws.get<Holidays>('/transix/holidays/filtered/staff', refresher, {auth: false}).pipe(
+    return this.ws.get<Holidays>('/transix/holidays/filtered/staff', refresher, { auth: false }).pipe(
       map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
       map(holiday => {
         const examsListEventMode: EventComponentConfigurations[] = [];
