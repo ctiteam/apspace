@@ -65,36 +65,18 @@ export class AppComponent {
       // }
 
       this.platform.backButton.subscribe(async () => {
-        // get all possible intents
 
-        const getActionSheet = await this.actionSheetCtrl.getTop();
-        const getPopover = await this.popoverCtrl.getTop();
-        const getModal = await this.modalCtrl.getTop();
-        const getMenu = await this.menuCtrl.getOpen();
+        if (this.menuCtrl.getOpen()) {
+          this.menuCtrl.close();
+          return;
+        }
 
-        try {
-          if (getActionSheet) {
-            getActionSheet.dismiss();
-          }
-        } catch (error) { }
+        const active = this.actionSheetCtrl.getTop() || this.popoverCtrl.getTop() || this.modalCtrl.getTop();
 
-        try {
-          if (getPopover) {
-            getPopover.dismiss();
-          }
-        } catch (error) { }
-
-        try {
-          if (getModal) {
-            getModal.dismiss();
-          }
-        } catch (error) { }
-
-        try {
-          if (getMenu) {
-            getMenu.close();
-          }
-        } catch (error) { }
+        if (active) {
+          (await active).dismiss();
+          return;
+        }
 
         if (this.router.url.startsWith('/tabs')) {
           const timePressed = new Date().getTime();
@@ -106,8 +88,9 @@ export class AppComponent {
             this.lastTimeBackPress = timePressed;
           }
         } else {
-          this.navCtrl.back();
+          this.navCtrl.pop();
         }
+
       });
     }
   }
