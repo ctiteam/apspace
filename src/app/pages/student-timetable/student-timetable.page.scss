@@ -4,7 +4,7 @@ ion-card {
     padding-left: 4px;
     padding-right: 8px;
   }
-  
+
   ion-card-content a {
     text-decoration: none;
   }
@@ -35,7 +35,7 @@ ion-card {
 
 @media (min-width: 600px) {
   .marker {
-      display: none;
+    display: none;
   }
 
   .table-top {
@@ -48,18 +48,43 @@ ion-card {
     border-left: none !important;
   }
 }
-.printIntake{
-  display:none;
-}
-.selectedweek{
-  display:none;
-}
-.printLogo{
+.printIntake {
   display: none;
 }
+.selectedweek {
+  display: none;
+}
+.printLogo {
+  display: none;
+}
+.flex-on-print-hide-on-screen {
+  display: none;
+}
+.hide-on-print-flex-on-screen {
+  display: flex;
+}
 @media print {
+  .print-less-width {
+    margin-left: -20px;
+    margin-right: 20px;
+  }
+  .print-no-margin {
+    margin: 0 !important;
+  }
+  .print-negative-margin {
+    margin-left: -10px !important;
+  }
+  .flex-on-print-hide-on-screen {
+    display: flex;
+  }
+  .hide-on-print-flex-on-screen {
+    display: none;
+  }
   .container {
     max-width: 100%;
+  }
+  .center-print {
+    text-align: center;
   }
   ion-content {
     background-color: white !important;
@@ -80,24 +105,20 @@ ion-card {
   .print-pl-4 {
     padding-left: 1.5rem !important;
   }
-  .time{
-    font-weight: bold;
-  }
-  .printColor{
+  .printColor {
     color: black;
   }
-  .printIntake{
-    display:inline;
+  .printIntake {
+    display: inline;
   }
-  .selectedweek{
-    display:inline;
+  .selectedweek {
+    display: inline;
   }
-  .legend{
+  .legend {
     flex: 0px !important;
     max-width: none !important;
   }
-  .printLogo{
+  .printLogo {
     display: block;
   }
 }
-

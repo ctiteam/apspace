@@ -75,20 +75,23 @@
                   <div *ngIf="viewWeek; else viewDaily">
                     <ion-row>
 
-                      <ion-col padding-start size="12" size-sm="2" size-lg="2">
-                        <h2 class="text-bold print-font md-text-center">Module</h2>
+                      <ion-col class="hide-on-print-flex-on-screen" size="12" size-sm="2">
+                        <h2 class="print-no-margin text-bold print-font md-text-center">Module</h2>
                       </ion-col>
-                      <ion-col size="12" size-sm="2" size-lg="2">
-                        <h2 class="text-bold print-font md-text-center">Date</h2>
+                      <ion-col size="12" size-sm="2">
+                        <h2 class="print-no-margin text-bold print-font md-text-center">Date</h2>
                       </ion-col>
-                      <ion-col size="12" size-sm="2" size-lg="3">
-                        <h2 class="text-bold print-font md-text-center">Time</h2>
+                      <ion-col size="12" size-sm="2" >
+                        <h2 class="print-less-width print-no-margin text-bold print-font md-text-center">Time</h2>
                       </ion-col>
-                      <ion-col size="12" size-sm="2" size-lg="2">
-                        <h2 class="text-bold print-font md-text-center">Location</h2>
+                      <ion-col class="flex-on-print-hide-on-screen" size="12" size-sm="2">
+                        <h2 class="print-no-margin text-bold print-font md-text-center">Module</h2>
                       </ion-col>
-                      <ion-col size="12" size-sm="2" size-lg="3">
-                        <h2 class="text-bold print-font md-text-center">Lecturer</h2>
+                      <ion-col size="12" size-sm="3">
+                        <h2 class="print-no-margin text-bold print-font md-text-center">Location</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2 class="print-no-margin text-bold print-font md-text-center">Lecturer</h2>
                       </ion-col>
                     </ion-row>
                   </div>
@@ -119,31 +122,33 @@
               <ion-grid>
                 <div *ngIf="viewWeek; else viewDaily">
                   <ion-row>
-                    <ion-col size="12" size-sm="2" size-lg="2" class=" print-font md-text-center">
+                    <ion-col size="12" size-sm="2" class="hide-on-print-flex-on-screen ion-no-padding print-font md-text-center">
                       {{ timetable.MODID }}
                     </ion-col>
-                    <ion-col size="12" size-sm="2" size-lg="2" class=" print-font md-text-center">
+                    <ion-col size="12" size-sm="2" class="ion-no-padding print-font md-text-center">
                       <span class="marker">
                         <ion-icon name="calendar"></ion-icon>
                       </span>
                       {{ timetable.DATESTAMP_ISO | date: "EEE, d MMM " }}
                     </ion-col>
-                    <ion-col size="12" size-sm="2" size-lg="3">
+                    <ion-col size="12" size-sm="2" class="print-less-width ion-no-padding print-font  md-text-center ">
                       <span class="marker">
                         <ion-icon name="time"></ion-icon>
                       </span>
-                      <span class=" time  print-font  md-text-center ">
-                        {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
-                      </span>
+                      {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
                     </ion-col>
-                    <ion-col size="12" size-sm="2" size-lg="2" class=" print-font md-text-center">
+                    <ion-col size="12" size-sm="2" class="flex-on-print-hide-on-screen ion-no-padding print-font md-text-center">
+                      {{ timetable.MODID }}
+                    </ion-col>
+                    <ion-col size="12" size-sm="3" class="ion-no-padding print-font md-text-center">
                       <span class="marker">
                         <ion-icon name="locate"></ion-icon>
                       </span>
                       {{ timetable.ROOM }} | {{ timetable.LOCATION }}
                     </ion-col>
-                    <ion-col size="12" size-sm="2" size-lg="3">
-                      <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]" class="colored-text printColor print-font md-text-center">
+                    <ion-col size="12" size-sm="3" class="ion-no-padding">
+                      <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]"
+                        class="colored-text printColor print-font md-text-center">
                         <span class="marker">
                           <ion-icon name="contact"></ion-icon>
                         </span>
