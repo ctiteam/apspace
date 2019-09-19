@@ -22,10 +22,9 @@ export class NotificationService {
   ) { }
 
   /**
-   * POST: send token and service ticket on Log in and response is the history of notifications
+   * GET: send token and service ticket on Log in and response is the history of notifications
    */
   getMessages(): Observable<any> {
-    // return this.http.get('http://www.mocky.io/v2/5d429e813200005900764124');
     let token = '';
     console.log('get messages');
     if (this.platform.is('cordova')) {
@@ -46,7 +45,7 @@ export class NotificationService {
               service_ticket: st,
             };
             const url = `${this.APIUrl}/client/login?ticket=${body.service_ticket}&token=${body.device_token}`;
-            return this.http.post(url, {});
+            return this.http.get(url);
           },
         ),
       );
@@ -60,7 +59,7 @@ export class NotificationService {
         switchMap(st => {
           console.log(st);
           const url = `${this.APIUrl}/client/login?ticket=${st}`;
-          return this.http.post(url, {});
+          return this.http.get(url);
         })
       );
     }
