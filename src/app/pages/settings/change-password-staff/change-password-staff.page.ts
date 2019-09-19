@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { AlertController } from '@ionic/angular';
-import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 
 import { PasswordValidator } from '../../../validators/password.validator';
 import { ChangePasswordService } from '../../../services/change-password.service';
@@ -46,21 +45,18 @@ export class ChangePasswordStaffPage implements OnInit {
   getUser() {
     this.changePasswordService.getUser()
       .subscribe(
-        data => (
-          this.userDetails = data['attributes']['sAMAccountName'],
-          console.log(data['attributes'])
+        (data: { attributes: { sAMAccountName: string } }) => (
+          this.userDetails = data.attributes.sAMAccountName
         )
       );
   }
 
 
   changePassword() {
-    console.log(this.changePasswordForm.value);
     this.changePasswordService
       .changePassword(
         this.changePasswordForm.value).subscribe(
-          res => {
-            console.log(res['result']);
+          (res: { result: string }) => {
             const alert = this.alertController.create({
               header: 'Success!',
               subHeader: 'Your Password has been changed! ',
@@ -78,10 +74,8 @@ export class ChangePasswordStaffPage implements OnInit {
                 ]
 
             });
-            alert.then(alert => alert.present());
+            alert.then(param => param.present());
           },
-
-
         );
   }
 
