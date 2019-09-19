@@ -198,7 +198,15 @@ const routes: Routes = [
     path: 'change-password-staff',
     canActivate: [AuthGuard],
     data: { role: Role.Admin | Role.Lecturer },
-    loadChildren: () => import('./pages/settings/change-password-staff/change-password-staff.module').then(m => m.ChangePasswordStaffPageModule)
+    loadChildren: () =>
+    import('./pages/settings/change-password-staff/change-password-staff.module').then(m => m.ChangePasswordStaffPageModule)
+  },
+  {
+    path: 'change-password-student',
+    canActivate: [AuthGuard],
+    data: { role: Role.Student },
+    loadChildren: () =>
+      import('./pages/settings/change-password-student/change-password-student.module').then(m => m.ChangePasswordStudentPageModule)
   }
 
 ];
