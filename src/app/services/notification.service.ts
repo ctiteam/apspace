@@ -12,7 +12,7 @@ import { Platform } from '@ionic/angular';
 export class NotificationService {
 
   serviceUrl = 'http://sns-admin.s3-website-ap-southeast-1.amazonaws.com/';
-  APIUrl = 'https://21amuch04b.execute-api.ap-southeast-1.amazonaws.com/dev/dingdong';
+  APIUrl = 'https://6kosvxkwuh.execute-api.ap-southeast-1.amazonaws.com/dev/dingdong';
 
   constructor(
     public http: HttpClient,
