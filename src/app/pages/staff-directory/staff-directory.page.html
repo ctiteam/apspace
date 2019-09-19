@@ -2,19 +2,19 @@
   <ion-toolbar>
     <ion-title>Staff Directory</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+  <ion-refresher pullMax="400" pullMin="60" slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
   <ion-list lines="none" style="margin-bottom: 0px">
     <ion-item>
-      <ion-searchbar [(ngModel)]="term" placeholder="Search (e.g. 'rasodin', 'ras', '5105', ...)">
+      <ion-searchbar [(ngModel)]="term" placeholder="Staff name, job title, extension number..">
       </ion-searchbar>
     </ion-item>
     <ion-item *ngIf="staffType$ | async as staffTypes">

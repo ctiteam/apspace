@@ -14,6 +14,8 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AppAvailability } from '@ionic-native/app-availability/ngx';
+import { FCM } from '@ionic-native/fcm/ngx';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,10 +26,11 @@ import { AppAvailability } from '@ionic-native/app-availability/ngx';
     HttpClientModule,
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
-    AppRoutingModule,
+    AppRoutingModule
   ],
   providers: [
     ActionSheet,
+    FCM,
     InAppBrowser,
     AppAvailability,
     Network,

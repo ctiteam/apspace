@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>Feedback</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -43,43 +43,45 @@
 
       <ion-col size-xs="12" size-lg="8">
         <ion-card no-padding no-margin>
-          <ion-card-content>
-            <ion-item no-padding>
-              <ion-label position="floating">Message: <span class="danger-text">*</span></ion-label>
-              <ion-textarea autofocus="true" autosize rows="2" no-padding [(ngModel)]="message"
+          <ion-card-header class="colored-border">
+            <ion-card-title>Your Feedback</ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-no-padding">
+            <ion-item lines="none">
+              <ion-label position="stacked">Message:</ion-label>
+              <ion-textarea class="form-input" autofocus="true" autosize rows="4" [(ngModel)]="message"
                 (ngModelChange)="onMessageFieldChange($event)" required="true"></ion-textarea>
             </ion-item>
 
-            <ion-item no-padding>
-              <ion-label stacked>Contact Number:</ion-label>
-              <ion-input type="text" [(ngModel)]="contactNo" (ngModelChange)="onPhoneNumberChange()" no-padding>
+            <ion-item lines="none">
+              <ion-label position="stacked">Contact Number: <small>(Optional)</small></ion-label>
+              <ion-input class="form-input" type="text" [(ngModel)]="contactNo" (ngModelChange)="onPhoneNumberChange()">
               </ion-input>
             </ion-item>
-            <small *ngIf="contactNo && !phoneNumberValid" style="color: red">Phone number is invalid. Please check the
-              number and enter a correct phone number (Exactly 10 or 11 digits)</small>
-
-            <ion-item no-padding>
-              <ion-label stacked>Screen Size</ion-label>
-              <ion-input type="text" disabled [value]="screenSize"></ion-input>
+            <small *ngIf="contactNo && !phoneNumberValid" class="danger-text">Phone number is invalid. Please check the
+              number and enter a correct phone number (Exactly 10 or 11 digits)
+            </small>
+            <ion-item lines="none">
+              <ion-label position="stacked">App Version</ion-label>
+              <ion-input class="form-input" type="text" disabled [value]="appVersion"></ion-input>
+            </ion-item>
+            <ion-item lines="none">
+              <ion-label position="stacked">Screen Size</ion-label>
+              <ion-input class="form-input" type="text" disabled [value]="screenSize"></ion-input>
             </ion-item>
 
-            <ion-item no-padding>
-              <ion-label stacked>Platform</ion-label>
-              <ion-input type="text" disabled [value]="platform"></ion-input>
+            <ion-item lines="none">
+              <ion-label position="stacked">Platform</ion-label>
+              <ion-textarea rows="4" class="form-input" type="text" disabled [value]="platform"></ion-textarea>
             </ion-item>
 
-            <ion-item no-padding lines="none">
-              <ion-label stacked>App Version</ion-label>
-              <ion-input type="text" disabled [value]="appVersion"></ion-input>
-            </ion-item>
+            <div class="ion-padding">
+              <ion-button expand="full" class="colored-background" (click)="submitFeedback()"
+                [disabled]="!message || (!phoneNumberValid && contactNo !== '')">
+                Submit
+              </ion-button>
+            </div>
           </ion-card-content>
-
-          <ion-footer>
-            <ion-button expand="full" class="colored-background" outline small (click)="submitFeedback()"
-              [disabled]="!message">
-              Submit
-            </ion-button>
-          </ion-footer>
         </ion-card>
       </ion-col>
     </ion-row>

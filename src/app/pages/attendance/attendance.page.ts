@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Attendance, Course, AttendanceLegend } from 'src/app/interfaces';
 import { tap, finalize } from 'rxjs/operators';
 import { ActionSheetButton } from '@ionic/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-attendance',
@@ -28,20 +29,35 @@ export class AttendancePage implements OnInit {
     private ws: WsApiService,
     private plt: Platform,
     public actionSheetCtrl: ActionSheetController,
+    private router: Router,
   ) { }
 
   ngOnInit() {
     this.doRefresh();
   }
 
-  showActionSheet() {
+  doRefresh(refresher?) {
+    this.course$ = this.ws.get<Course[]>('/student/courses', refresher).pipe(
+      tap(c => (this.selectedIntake = c[0].INTAKE_CODE)),
+      tap(_ => this.attendance$ = this.getAttendance(this.selectedIntake, refresher)),
+      tap(
+        c =>
+          (this.intakeLabels = Array.from(
+            new Set((c || []).map(t => t.INTAKE_CODE)),
+          )),
+      ),
+      tap(_ => this.getLegend(refresher)),
+      finalize(() => refresher && refresher.target.complete())
+    );
+  }
 
+  showActionSheet() {
     const intakesButton = this.intakeLabels.map(intake => {
       return {
         text: intake,
         handler: () => {
           this.selectedIntake = intake;
-          this.attendance$ = this.getAttendance(this.selectedIntake);
+          this.attendance$ = this.getAttendance(this.selectedIntake, true);
         },
       } as ActionSheetButton;
     });
@@ -59,7 +75,6 @@ export class AttendancePage implements OnInit {
     return (this.attendance$ = this.ws
       .get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh)
       .pipe(
-        tap(_ => this.getLegend(refresh)),
         tap(a => this.calculateAverage(a)),
       ));
   }
@@ -86,17 +101,10 @@ export class AttendancePage implements OnInit {
     }
   }
 
-  doRefresh(event?) {
-    this.course$ = this.ws.get<Course[]>('/student/courses', true).pipe(
-      tap(c => (this.selectedIntake = c[0].INTAKE_CODE)),
-      tap(_ => this.attendance$ = this.getAttendance(this.selectedIntake, true)),
-      tap(
-        c =>
-          (this.intakeLabels = Array.from(
-            new Set((c || []).map(t => t.INTAKE_CODE)),
-          )),
-      ),
-      finalize(() => event && event.target.complete())
-    );
+  comingFromTabs() {
+    if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
+      return true;
+    }
+    return false;
   }
 }

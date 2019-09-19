@@ -34,3 +34,5 @@ $RECYCLE.BIN/
 Thumbs.db
 UserInterfaceState.xcuserstate
 package-lock.json
+google-services.json
+GoogleService-Info.plist

@@ -122,13 +122,6 @@ export class MorePage implements OnInit {
       role: Role.Lecturer | Role.Admin,
       tags: []
     },
-    // {
-    //   title: 'Student Consent Form',
-    //   group: 'Course Related',
-    //   url: '',
-    //   role: Role.Lecturer | Role.Admin,
-    //   tags: []
-    // },
     {
       title: 'iConsult',
       group: 'Course Related',
@@ -201,14 +194,6 @@ export class MorePage implements OnInit {
       role: Role.Student,
       tags: []
     },
-    // {
-    //   title: 'Upcoming Graduations',
-    //  group: 'Others',
-    //   url: '',
-    //   img: 'assets/img/upcoming-graduations.png',
-    //   role: Role.Student | Role.Lecturer | Role.Admin,
-    //   tags: []
-    // },
     {
       title: 'Graduate Verification Service',
       group: 'Others',
@@ -217,13 +202,6 @@ export class MorePage implements OnInit {
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: []
     },
-    // {
-    //   title: 'Visa Renewal Status',
-    //   group: 'Others',
-    //   url: '',
-    //   role: Role.Student,
-    //   tags: []
-    // },
     {
       title: 'Staff Directory',
       group: 'Others',

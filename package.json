@@ -39,7 +39,7 @@
     "@ionic-native/camera": "^5.11.0",
     "@ionic-native/core": "^5.11.0",
     "@ionic-native/device": "^5.11.0",
-    "@ionic-native/fcm": "^5.11.0",
+    "@ionic-native/fcm": "^5.14.0",
     "@ionic-native/in-app-browser": "^5.11.0",
     "@ionic-native/network": "^5.11.0",
     "@ionic-native/qr-scanner": "^5.11.0",
@@ -51,6 +51,7 @@
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-appavailability": "^0.4.2",
     "cordova-plugin-camera": "^4.1.0",
+    "cordova-plugin-fcm-with-dependecy-updated": "^3.2.0",
     "cordova-plugin-inappbrowser": "^3.1.0",
     "cordova-plugin-qrscanner": "^3.0.1",
     "core-js": "^2.5.4",
@@ -101,7 +102,8 @@
       "cordova-plugin-camera": {},
       "cordova-plugin-qrscanner": {},
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-appavailability": {}
+      "cordova-plugin-appavailability": {},
+      "cordova-plugin-fcm-with-dependecy-updated": {}
     }
   }
 }

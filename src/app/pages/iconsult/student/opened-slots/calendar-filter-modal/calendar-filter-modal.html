@@ -1,0 +1,44 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>Choose a date</ion-title>
+    <ion-buttons slot="end">
+      <ion-button outline small (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content parallax-header padding>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        <h3 class="responsive-h1">
+          Calendar Filter
+        </h3>
+        <h3 class="small-text small-margin-top">Choose a day to see the list of consultations opened on it
+        </h3>
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item no-padding>
+        <ion-grid>
+          <ion-row>
+            <ion-col class="available" text-center size="6">
+              <ion-badge>.</ion-badge> Available
+            </ion-col>
+            <ion-col class="p-booked" text-center size="6">
+              <ion-badge>.</ion-badge> Partially Booked
+            </ion-col>
+            <ion-col class="booked" text-center size="12" text-center>
+              <ion-badge>.</ion-badge> Booked
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      <ion-calendar class="filter-date-picker" [(ngModel)]="dateToFilter" (change)="dateChosen()" [options]="options" [type]="'string'"
+        [format]="'YYYY-MM-DD'">
+      </ion-calendar>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

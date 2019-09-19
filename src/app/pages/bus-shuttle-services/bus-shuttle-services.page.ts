@@ -5,6 +5,7 @@ import { map, tap, finalize } from 'rxjs/operators';
 import * as moment from 'moment';
 import { MenuController } from '@ionic/angular';
 import { SettingsService, WsApiService } from 'src/app/services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bus-shuttle-services',
@@ -43,6 +44,7 @@ export class BusShuttleServicesPage implements OnInit {
     private menu: MenuController,
     private settings: SettingsService,
     private ws: WsApiService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -207,5 +209,16 @@ export class BusShuttleServicesPage implements OnInit {
   ionStart(event) {
     // Emitted when the user begins to start pulling down.
     console.log('ionStart Event Triggered!');
+  }
+  comingFromTabs() {
+
+    if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
+
+      return true;
+
+    }
+
+    return false;
+
   }
 }

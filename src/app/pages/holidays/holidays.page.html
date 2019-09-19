@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>Holidays</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button class="animated anim-scale" (click)="openMenu()">
@@ -100,7 +100,7 @@
 
 <ion-content id="content">
   <!-- refresher -->
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+  <ion-refresher slot="fixed" pullMax="400" pullMin="60 "(ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-grid no-padding>

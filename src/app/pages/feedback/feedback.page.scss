@@ -15,24 +15,15 @@ ion-card {
         color: var(--secondary-text-color) !important;
     }
 
-
-    ion-card-content {
+    ion-grid {
         padding: 10px !important;
-        padding-top: 0px !important;
-
-        ion-grid {
-            padding: 10px !important;
-        }
     }
+    
 
     ion-card-header {
         padding-top: 10px !important;
         padding-bottom: 10px !important;
         border-bottom: 2px solid;
-    }
-
-    ion-footer {
-        padding: 10px;
     }
 
     a {
@@ -43,3 +34,12 @@ ion-card {
         padding-left: 5px !important;
     }
 }
+
+.form-input {
+    border-radius: 7px;
+    background: var(--main-bg-color);
+    padding: 3px 10px !important;
+    margin-top: 10px;
+    border: 1px solid var(--tertiary-bg-color);
+    min-height: 40px;
+  }

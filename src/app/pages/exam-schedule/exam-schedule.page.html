@@ -2,11 +2,11 @@
   <ion-toolbar>
     <ion-title> Exam Schedule</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button outline small (click)="presentIntakeSearch()">
-        <ion-icon name="search"></ion-icon>
+      <ion-button fill="outline" size="small" (click)="presentIntakeSearch()" class="colored-text colored-border">
+        {{ intake || 'Intakes' }}
       </ion-button>
     </ion-buttons>
 
@@ -57,7 +57,7 @@
                       <ion-row *ngIf="exam.docketsDue">
                         <ion-col size="7">
                           <span>
-                            *Dockets Due:
+                            *Dockets Issuance (Week Of):
                           </span>
                         </ion-col>
                         <ion-col size="5" text-right>
@@ -77,7 +77,7 @@
                       <ion-row *ngIf="exam.resultDate">
                         <ion-col size="7">
                           <span>
-                            *Result Release Date:
+                            *Expected Result Release Date:
                           </span>
                         </ion-col>
                         <ion-col size="5" text-right>
@@ -93,14 +93,10 @@
         </ion-grid>
       </ng-template>
       <ng-template #noExams>
-          <app-message-with-svg
-          imageUrl="assets/img/empty.svg"
-          messageTitle="No Exam Schedule For The Selected Intake!"
-          wrapperSize="6"
-          wrapperMarginTop="30px"
-          wrapperOffset="3"
+        <app-message-with-svg imageUrl="assets/img/empty.svg" messageTitle="No Exam Schedule For The Selected Intake!"
+          wrapperSize="6" wrapperMarginTop="30px" wrapperOffset="3"
           messageContent="The exam schedule for the selected intake has not been published yet">
-          </app-message-with-svg> 
+        </app-message-with-svg>
       </ng-template>
     </ng-template>
     <!-- Loading -->
@@ -170,14 +166,10 @@
   </ng-template>
   <!-- No Intake Selected -->
   <ng-template #noIntakeSelected>
-      <app-message-with-svg
-      imageUrl="assets/img/config.svg"
-      messageTitle="No Intake Has Been Selected!"
-      wrapperSize="6"
-      wrapperMarginTop="50px"
-      wrapperOffset="3"
+    <app-message-with-svg imageUrl="assets/img/config.svg" messageTitle="No Intake Has Been Selected!" wrapperSize="6"
+      wrapperMarginTop="50px" wrapperOffset="3"
       messageContent="Please select an intake first to view its exam schedule.">
-      </app-message-with-svg>  
+    </app-message-with-svg>
   </ng-template>
 
 </ion-content>

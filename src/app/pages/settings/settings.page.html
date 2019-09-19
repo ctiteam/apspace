@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>Settings</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -107,7 +107,7 @@
                   Quick Access Items
                 </ion-label>
               </ion-item> -->
-              <a (click)="openDashboardSectionsSelectBox()">
+              <a (click)="openDashboardSectionsSelectBox()" *ngIf="userRole">
                 <ion-item lines="none" no-padding>
                   <ion-label>
                     Shown Dashboard Sections
@@ -219,7 +219,7 @@
         </ion-card-content>
       </ion-card>
     </div>
-    <div class="masonry-item">
+    <div class="masonry-item" *ngIf="userRole">
       <ion-card no-margin margin-bottom>
         <ion-card-header>
           <ion-card-title class="card-title float-left">
@@ -271,6 +271,16 @@
             <a (click)="navigateToPage('set-security-questions')">
               <ion-item lines="none" no-padding>
                 <ion-label>Set Security Questions</ion-label>
+              </ion-item>
+            </a>
+            <a *ngIf="!userRole" (click)="navigateToPage('change-password-staff')">
+              <ion-item lines="none" no-padding>
+                <ion-label>Change Your Password</ion-label>
+              </ion-item>
+            </a>
+            <a *ngIf="userRole" (click)="navigateToPage('change-password-student')">
+              <ion-item lines="none" no-padding>
+                <ion-label>Change Your Password</ion-label>
               </ion-item>
             </a>
             <a (click)="resetByod()">

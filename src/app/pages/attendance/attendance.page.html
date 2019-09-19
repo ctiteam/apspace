@@ -1,21 +1,21 @@
 <ion-header>
   <ion-toolbar>
     <ion-title *ngIf="course$ | async">
-      {{ this.selectedIntake || "Attendance" }}
+      Attendance
     </ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+    <ion-buttons slot="start" [hidden]='comingFromTabs() ? true : false'>
+      <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button fill="outline" size="small" class="colored-text colored-border" (click)="showActionSheet()">
-        Intakes
+        {{ selectedIntake }}
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+  <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
   </ion-refresher>
   <!-- START COVER -->

@@ -43,17 +43,16 @@ export class HolidaysPage implements OnInit {
     this.doRefresh();
   }
 
-  getHolidays() {
-    return this.holiday$ = this.ws.get<Holidays>(`/transix/holidays`, true, { auth: false }).pipe(
+  getHolidays(refresher: boolean) {
+    return this.holiday$ = this.ws.get<Holidays>(`/transix/holidays`, refresher, { auth: false }).pipe(
       map(res => res.holidays.filter(holiday => +holiday.holiday_start_date.split('-')[0] === this.todaysDate.getFullYear()))
     );
   }
 
-  doRefresh(event?) {
-    console.log('Begin async operation');
-    this.filteredHoliday$ = this.getHolidays().pipe(
+  doRefresh(refresher?) {
+    this.filteredHoliday$ = this.getHolidays(refresher).pipe(
       tap(_ => this.onFilter()),
-      finalize(() => event && event.target.complete()),
+      finalize(() => refresher && refresher.target.complete()),
     );
   }
 
@@ -101,13 +100,13 @@ export class HolidaysPage implements OnInit {
             title: holiday.holiday_name,
             firstDescription: 'For ' + (
               holiday.holiday_people_affected.includes(',')
-              ? holiday.holiday_people_affected.replace(',', ' and ')
-              : holiday.holiday_people_affected.replace(',', ' and ') + ' only'),
+                ? holiday.holiday_people_affected.replace(',', ' and ')
+                : holiday.holiday_people_affected.replace(',', ' and ') + ' only'),
             secondDescription: 'Ends on ' + (
               holiday.holiday_end_date === holiday.holiday_start_date
-              ? 'the same day'
-              : moment(moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate())
-              .format('dddd, DD MMM YYYY')
+                ? 'the same day'
+                : moment(moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate())
+                  .format('dddd, DD MMM YYYY')
             ), // EXPECTED FORMAT HH MM A,
             thirdDescription: this.getNumberOfDaysForHoliday(
               moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),

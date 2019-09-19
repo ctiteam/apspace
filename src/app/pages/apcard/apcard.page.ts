@@ -1,11 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 import { Apcard } from '../../interfaces';
 import { WsApiService } from 'src/app/services';
-import { MenuController, IonRadioGroup } from '@ionic/angular';
-
-type VisibleOption = 'all' | 'credit' | 'debit';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-apcard',
@@ -22,31 +20,6 @@ export class ApcardPage implements OnInit {
   transactionsGroupedByDate: any;
   transactonsYears: string[] = [];
   transactionsMonths: string[] = [];
-  months = [
-    { name: 'January', value: '0'},
-    { name: 'February', value: '1'},
-    { name: 'March', value: '2'},
-    { name: 'April', value: '3'},
-    { name: 'May', value: '4'},
-    { name: 'June', value: '5'},
-    { name: 'July', value: '6'},
-    { name: 'August', value: '7'},
-    { name: 'September', value: '8'},
-    { name: 'October', value: '9'},
-    { name: 'November', value: '10' },
-    { name: 'December', value: '11' },
-  ];
-
-
-  filterObject: {
-    year: string,
-    month: string,
-    show: VisibleOption
-  } = {
-      year: '',
-      month: '',
-      show: 'all'
-    };
 
   skeletonConfig = [
     { numOfTrans: new Array(4) },
@@ -60,7 +33,7 @@ export class ApcardPage implements OnInit {
 
   constructor(
     private ws: WsApiService,
-    private menu: MenuController
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -89,9 +62,9 @@ export class ApcardPage implements OnInit {
         return tt;
         // default array with current year
       }, {
-        dr: { [now.getFullYear()]: a.slice() },
-        cr: { [now.getFullYear()]: a.slice() }
-      }
+      dr: { [now.getFullYear()]: a.slice() },
+      cr: { [now.getFullYear()]: a.slice() }
+    }
     );
 
     this.transactionsGroupedByDate = transactions.reduce(
@@ -115,7 +88,8 @@ export class ApcardPage implements OnInit {
   signTransactions(transactions: Apcard[]): Apcard[] {
     transactions.forEach(transaction => {
       if (transaction.ItemName !== 'Top Up') {
-        transaction.SpendVal *= -1;
+        // always make it negative (mutates cached value)
+        transaction.SpendVal = -Math.abs(transaction.SpendVal);
       }
     });
     return transactions;
@@ -147,33 +121,22 @@ export class ApcardPage implements OnInit {
     return true;
   }
 
-  doRefresh(event?) {
+  doRefresh(refresher?) {
     this.isLoading = true;
-    this.transaction$ = this.ws.get<Apcard[]>('/apcard/', true).pipe(
+    this.transaction$ = this.ws.get<Apcard[]>('/apcard/', refresher).pipe(
       map(t => this.signTransactions(t)),
       tap(t => this.analyzeTransactions(t)),
       tap(t => this.getTransactionsYears()),
-      finalize(() => event && event.target.complete()),
+      finalize(() => refresher && refresher.target.complete()),
       finalize(() => (this.isLoading = false))
     );
   }
 
-  openMenu() {
-    this.menu.enable(true, 'apcard-filter-menu');
-    this.menu.open('apcard-filter-menu');
-  }
-
-  closeMenu() {
-    this.menu.close('apcard-filter-menu');
-  }
-
-  clearFilter() {
-    this.filterObject = {
-      month: '',
-      year: '',
-      show: 'all'
-    };
-    this.closeMenu();
+  comingFromTabs() {
+    if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
+      return true;
+    }
+    return false;
   }
 
 }

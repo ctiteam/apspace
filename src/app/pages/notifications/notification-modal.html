@@ -14,7 +14,6 @@
         <ion-card-header>
             <ion-card-title text-center>
                 <h3 class="responsive-h1">{{ message.title }}</h3>
-                <!-- <h5 class="small-text">{{ message.staff_name }}</h5> -->
             </ion-card-title>
         </ion-card-header>
         <ion-card-content no-padding padding-start padding-end padding-bottom>
@@ -25,7 +24,11 @@
                 <span class="colored-text">Sender:</span> <span class="text-bold"> {{ message.staff_name }}</span>
             </p>
             <p>
-                <span class="colored-text">Sent on:</span> <span class="text-bold"> {{ message.sent_on }}</span>
+                <span class="colored-text">Sent on:</span> <span class="text-bold"> {{message.sent_on | date: 'EEEE, dd MMMM y'}}</span>
+            </p>
+
+            <p>
+                <span class="colored-text">Sent at:</span> <span class="text-bold"> {{ message.sent_on | date : 'hh:mm aaa' }}</span>
             </p>
 
         </ion-card-content>

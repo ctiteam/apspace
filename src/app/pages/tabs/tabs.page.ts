@@ -43,7 +43,7 @@ export class TabsPage implements OnInit {
       if (this.settings.get('role') & Role.Student) {
         this.router.navigate(['tabs', 'student-dashboard'], { replaceUrl: true });
       } else {
-        this.router.navigate(['tabs', 'profile'], { replaceUrl: true });
+        this.router.navigate(['tabs', 'staff-dashboard'], { replaceUrl: true });
       }
     }
 
@@ -83,14 +83,14 @@ export class TabsPage implements OnInit {
           icon: 'calendar'
         },
         {
-          name: 'Bus Shuttle Services',
-          path: 'bus-shuttle-services',
-          icon: 'bus'
-        },
-        {
           name: 'Profile',
           path: 'profile',
           icon: 'person'
+        },
+        {
+          name: 'Dashboard',
+          path: 'staff-dashboard',
+          icon: 'pulse'
         },
         {
           name: 'APCard',
@@ -109,6 +109,11 @@ export class TabsPage implements OnInit {
           name: 'Profile',
           path: 'profile',
           icon: 'person'
+        },
+        {
+          name: 'Dashboard',
+          path: 'staff-dashboard',
+          icon: 'pulse'
         },
         {
           name: 'APCard',

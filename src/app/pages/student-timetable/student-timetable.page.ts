@@ -12,6 +12,7 @@ import {
 } from '../../services';
 import { ClassesPipe } from './classes.pipe';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -83,6 +84,7 @@ export class StudentTimetablePage implements OnInit {
   intakeLabels: string[] = [];
   intakeSelectable = true;
   viewWeek: boolean; // weekly or daily display
+  show2ndToolbar = false;
 
   room: string;
   intake: string;
@@ -96,6 +98,7 @@ export class StudentTimetablePage implements OnInit {
     private tt: StudentTimetableService,
     private userSettings: UserSettingsService,
     private ws: WsApiService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -113,7 +116,7 @@ export class StudentTimetablePage implements OnInit {
 
     // optional intake passed by other pages
     const intake = this.route.snapshot.params.intake;
-    if (intake || this.room) { // indirect timetable page access
+    if (this.room) { // indirect timetable page access
       this.intakeSelectable = false;
     }
 
@@ -140,7 +143,6 @@ export class StudentTimetablePage implements OnInit {
         });
       }
     }
-
 
     this.doRefresh();
   }
@@ -280,5 +282,17 @@ export class StudentTimetablePage implements OnInit {
 
     this.changeDetectorRef.markForCheck();
   }
+  comingFromTabs() {
+
+    if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
+      return true;
+    }
+    return false;
+  }
+
+  view_hideToolbar() {
+    this.show2ndToolbar = !this.show2ndToolbar;
+  }
+
 
 }

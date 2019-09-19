@@ -36,9 +36,10 @@ const routes: Routes = [
       },
       {
         canActivate: [AuthGuard],
-        data: { role: Role.Lecturer },
-        path: 'bus-shuttle-services',
-        loadChildren: () => import('../bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttleServicesPageModule)
+        // tslint:disable-next-line: no-bitwise
+        data: { role: Role.Lecturer | Role.Admin },
+        path: 'staff-dashboard',
+        loadChildren: () => import('../staff-dashboard/staff-dashboard.module').then(m => m.StaffDashboardPageModule)
       },
       {
         canActivate: [AuthGuard],

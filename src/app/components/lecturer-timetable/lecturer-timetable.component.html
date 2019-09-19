@@ -1,6 +1,6 @@
 <ng-container *ngIf="(calendar$ | async) as calendar; else loading">
   <ng-container *ngIf="(calendar | length); else empty">
-    <ion-card *ngFor="let week of (calendar | keyvalue)?.reverse()">
+    <ion-card *ngFor="let week of (calendar | keyvalue)">
       <ion-card-header class="card-header">
         <ion-item tappable lines="none" no-padding (click)='show(week.key, $event.target)'>
           <strong>Week</strong>: {{ week.key | fromWeek | date }}
@@ -67,7 +67,7 @@
 <ng-template #loading>
   <ion-card>
     <ion-card-content>
-      <ion-skeleton-text animated width="100px" style="line-height: 14px"></ion-skeleton-text>
+      <ion-skeleton-text animated width="100%" style="line-height: 100px"></ion-skeleton-text>
     </ion-card-content>
   </ion-card>
 </ng-template>

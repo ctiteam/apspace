@@ -10,18 +10,18 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
   styleUrls: ['./feedback.page.scss'],
 })
 export class FeedbackPage implements OnInit {
-
   phoneNumberValidationPattern = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4,5})$/;
   phoneNumberValid = false;
+
   onlineFeedbackSystemURL = 'https://erp.apiit.edu.my/easymoo/web/en/user/feedback/feedbackusersend';
+
   contactNo = '';
   message = '';
-
-  submitting = false;
-
-  readonly screenSize = screen.width + 'x' + screen.height;
   platform: string;
   appVersion: string;
+
+  submitting = false;
+  readonly screenSize = screen.width + 'x' + screen.height;
 
   constructor(
     private feedback: FeedbackService,
@@ -33,7 +33,7 @@ export class FeedbackPage implements OnInit {
 
   submitFeedback() {
     const feedback = {
-      contactNo: this.contactNo,
+      contactNo: this.contactNo || '',
       platform: this.platform,
       message: this.message,
       appVersion: this.appVersion,
@@ -42,13 +42,14 @@ export class FeedbackPage implements OnInit {
 
     this.submitting = true;
     this.feedback.sendFeedback(feedback).subscribe(_ => {
-      this.settings.set('contactNo', this.contactNo);
-
       this.message = '';
       this.toastCtrl.create({
-        message: 'Feedback submitted!',
+        // tslint:disable-next-line: max-line-length
+        message: '<span style="font-weight: bold;">Feedback submitted! </span> The team will get back to you as soon as possbile. Thank you for your feedback',
         position: 'top',
-        duration: 3000,
+        color: 'success',
+        duration: 5000,
+        showCloseButton: true,
       }).then(toast => toast.present());
       this.submitting = false;
     }, err => {
@@ -56,7 +57,8 @@ export class FeedbackPage implements OnInit {
         message: err.message,
         cssClass: 'danger',
         position: 'top',
-        duration: 3000,
+        duration: 5000,
+        showCloseButton: true,
       }).then(toast => toast.present());
       // finally not invoked as error does not complete
       this.submitting = false;
@@ -64,7 +66,6 @@ export class FeedbackPage implements OnInit {
   }
 
   ngOnInit() {
-    this.contactNo = this.settings.get('contactNo');
     this.platform = this.feedback.platform();
     this.appVersion = this.version.name;
   }

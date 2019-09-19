@@ -1,17 +1,30 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-      <ion-button outline small (click)="rotateView()" [disabled]="availableWeek!.length === 0">
-        {{ viewWeek ? 'Weekly' : 'Daily' }}
+      <ion-back-button defaultHref="/" [hidden]='comingFromTabs() ? true : false'></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="intakeSelectable" fill="outline" size="small" (click)="presentIntakeSearch()"
+        class="colored-text colored-border">
+        {{ intake || 'Intakes' }}
       </ion-button>
-      <ion-button outline small (click)="chooseWeek()" [disabled]="availableWeek!.length === 0">
-        {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
+      <ion-button fill="outline" size="small" (click)="view_hideToolbar()" class="colored-text colored-border">
+        View
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-toolbar *ngIf="show2ndToolbar">
+    <ion-buttons slot="start">
+      <ion-button size="small" fill="outline" [class.colored-text]="viewWeek" [class.colored-border]="viewWeek">
+        <ion-label>Weekly View</ion-label>
+        <ion-toggle [(ngModel)]="viewWeek"></ion-toggle>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button *ngIf="intakeSelectable" outline small (click)="presentIntakeSearch()">
-        {{ intake || 'Intakes' }}
+      <ion-button size="small" fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
+        class="colored-text colored-border">
+        {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -36,25 +49,68 @@
               </ion-segment-button>
             </ion-segment>
           </ng-template>
-
           <ng-template [ngIf]="selectedDate">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="6" offset="3" class="text-center">
+                  <img class="rounded img-fluid printLogo" src="assets/img/login.png" alt="APU Logo">
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="6">
+                  <span class="printIntake">
+                    Selected Intake : {{ intake || 'Intakes' }}
+                  </span>
+                </ion-col>
+                <ion-col size="4" offset="2" class="selectedweek">
+                  Selected Week : {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
             <ion-card class="table-top" no-padding>
               <ion-card-content no-padding>
                 <ion-grid no-margin no-padding>
-                  <ion-row>
-                    <ion-col padding-start size="12" size-sm="3">
-                      <h2>Module</h2>
-                    </ion-col>
-                    <ion-col size="12" size-sm="3">
-                      <h2>Time</h2>
-                    </ion-col>
-                    <ion-col size="12" size-sm="3">
-                      <h2>Location</h2>
-                    </ion-col>
-                    <ion-col size="12" size-sm="3">
-                      <h2>Lecturer</h2>
-                    </ion-col>
-                  </ion-row>
+
+                  <div *ngIf="viewWeek; else viewDaily">
+                    <ion-row>
+
+                      <ion-col class="hide-on-print-flex-on-screen" size="12" size-sm="2">
+                        <h2 class="print-no-margin text-bold print-font md-text-center">Module</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="2">
+                        <h2 class="print-no-margin text-bold print-font md-text-center">Date</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="2" >
+                        <h2 class="print-less-width print-no-margin text-bold print-font md-text-center">Time</h2>
+                      </ion-col>
+                      <ion-col class="flex-on-print-hide-on-screen" size="12" size-sm="2">
+                        <h2 class="print-no-margin text-bold print-font md-text-center">Module</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2 class="print-no-margin text-bold print-font md-text-center">Location</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2 class="print-no-margin text-bold print-font md-text-center">Lecturer</h2>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                  <ng-template #viewDaily>
+                    <ion-row>
+                      <ion-col padding-start size="12" size-sm="3">
+                        <h2>Module</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2 class="time">Time</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2>Location</h2>
+                      </ion-col>
+                      <ion-col size="12" size-sm="3">
+                        <h2>Lecturer</h2>
+                      </ion-col>
+                    </ion-row>
+                  </ng-template>
                 </ion-grid>
               </ion-card-content>
             </ion-card>
@@ -64,31 +120,71 @@
             [style.borderLeft]="'1rem solid ' + strToColor(timetable.MODID)">
             <ion-card-content no-padding>
               <ion-grid>
-                <ion-row>
-                  <ion-col size="12" size-sm="3">
-                    {{ timetable.MODID }}
-                  </ion-col>
-                  <ion-col size="12" size-sm="3">
-                    <span class="marker">
-                      <ion-icon name="time"></ion-icon>
-                    </span>
-                    {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
-                  </ion-col>
-                  <ion-col size="12" size-sm="3">
-                    <span class="marker">
-                      <ion-icon name="locate"></ion-icon>
-                    </span>
-                    {{ timetable.ROOM }} | {{ timetable.LOCATION }}
-                  </ion-col>
-                  <ion-col size="12" size-sm="3">
-                    <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]">
+                <div *ngIf="viewWeek; else viewDaily">
+                  <ion-row>
+                    <ion-col size="12" size-sm="2" class="hide-on-print-flex-on-screen ion-no-padding print-font md-text-center">
+                      {{ timetable.MODID }}
+                    </ion-col>
+                    <ion-col size="12" size-sm="2" class="ion-no-padding print-font md-text-center">
                       <span class="marker">
-                        <ion-icon name="contact"></ion-icon>
+                        <ion-icon name="calendar"></ion-icon>
                       </span>
-                      {{ timetable.NAME }}
-                    </a>
-                  </ion-col>
-                </ion-row>
+                      {{ timetable.DATESTAMP_ISO | date: "EEE, d MMM " }}
+                    </ion-col>
+                    <ion-col size="12" size-sm="2" class="print-less-width ion-no-padding print-font  md-text-center ">
+                      <span class="marker">
+                        <ion-icon name="time"></ion-icon>
+                      </span>
+                      {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
+                    </ion-col>
+                    <ion-col size="12" size-sm="2" class="flex-on-print-hide-on-screen ion-no-padding print-font md-text-center">
+                      {{ timetable.MODID }}
+                    </ion-col>
+                    <ion-col size="12" size-sm="3" class="ion-no-padding print-font md-text-center">
+                      <span class="marker">
+                        <ion-icon name="locate"></ion-icon>
+                      </span>
+                      {{ timetable.ROOM }} | {{ timetable.LOCATION }}
+                    </ion-col>
+                    <ion-col size="12" size-sm="3" class="ion-no-padding">
+                      <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]"
+                        class="colored-text printColor print-font md-text-center">
+                        <span class="marker">
+                          <ion-icon name="contact"></ion-icon>
+                        </span>
+                        {{ timetable.NAME }}
+                      </a>
+                    </ion-col>
+                  </ion-row>
+                </div>
+
+                <ng-template #viewDaily>
+                  <ion-row>
+                    <ion-col size="12" size-sm="3">
+                      {{ timetable.MODID }}
+                    </ion-col>
+                    <ion-col size="12" size-sm="3">
+                      <span class="marker">
+                        <ion-icon name="time"></ion-icon>
+                      </span>
+                      {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
+                    </ion-col>
+                    <ion-col size="12" size-sm="3">
+                      <span class="marker">
+                        <ion-icon name="locate"></ion-icon>
+                      </span>
+                      {{ timetable.ROOM }} | {{ timetable.LOCATION }}
+                    </ion-col>
+                    <ion-col size="12" size-sm="3">
+                      <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]" class="colored-text">
+                        <span class="marker">
+                          <ion-icon name="contact"></ion-icon>
+                        </span>
+                        {{ timetable.NAME }}
+                      </a>
+                    </ion-col>
+                  </ion-row>
+                </ng-template>
               </ion-grid>
             </ion-card-content>
           </ion-card>
@@ -117,7 +213,7 @@
 
       <!-- trivial message but must be displayed -->
       <ion-grid no-padding>
-        <ion-row>
+        <ion-row class="legend">
           <ion-col size="12" size-sm="12" size-lg="6" no-padding>
             <ion-card class="card-special">
               <ion-card-header class="colored-border">

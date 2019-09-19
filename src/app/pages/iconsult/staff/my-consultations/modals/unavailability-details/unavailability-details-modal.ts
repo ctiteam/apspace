@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
 
 import { WsApiService } from 'src/app/services';
 import { UnavailabilityDetails } from 'src/app/interfaces';
@@ -19,9 +18,7 @@ export class UnavailabilityDetailsModalPage implements OnInit {
   constructor(private modalCtrl: ModalController, private ws: WsApiService) { }
 
   ngOnInit() {
-    this.slotDetails$ = this.ws.get<UnavailabilityDetails[]>(`/iconsult/get_unavailrule_details/${this.unavailibilityid}`, true).pipe(
-      tap(r => console.log(r))
-    );
+    this.slotDetails$ = this.ws.get<UnavailabilityDetails[]>(`/iconsult/get_unavailrule_details/${this.unavailibilityid}`, true);
   }
 
   dismiss() {

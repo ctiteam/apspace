@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { NotificationService } from 'src/app/services';
-import { map, tap, finalize } from 'rxjs/operators';
+import { map, finalize, tap } from 'rxjs/operators';
 import { NotificationModalPage } from './notification-modal';
 
 @Component({
@@ -11,27 +11,22 @@ import { NotificationModalPage } from './notification-modal';
   styleUrls: ['./notifications.page.scss'],
 })
 export class NotificationsPage implements OnInit {
-  cordova: boolean;
   messages$: Observable<any>;   // TYPE TO BE CHANGED AFTER DINGDONG TEAM FINISH THE BACKEND
 
   constructor(
-    private platform: Platform,
     private notificationService: NotificationService,
     private modalCtrl: ModalController
   ) { }
 
   ngOnInit() {
-    if (this.platform.is('cordova')) {
-      this.cordova = true;
-    }
     this.doRefresh();
   }
 
-  doRefresh(event?) {
+  doRefresh(refresher?) {
     this.messages$ = this.notificationService.getMessages().pipe(
-      map((res: {history: []}) => res.history),
-      tap(t => console.log(t)),
-      finalize(() => event && event.target.complete()),
+      map((res: { history: [] }) => res.history),
+      tap(test => console.log(test)),
+      finalize(() => refresher && refresher.target.complete()),
     );
   }
 

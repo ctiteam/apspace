@@ -1,5 +1,8 @@
 ion-card {
-
+  .summary-header{
+    margin-top: 16px;
+    font-size: 1.1rem;
+  }
   ion-card-header {
     padding-top: 10px !important;
     padding-bottom: 10px !important;
@@ -15,7 +18,7 @@ ion-card {
     padding-left: 8px !important;
     padding-right: 8px !important;
   }
-  pre{
+  pre {
     white-space: pre-wrap;
   }
 
@@ -31,6 +34,12 @@ ion-card {
 
 .special-border {
   display: none;
+}
+
+.img-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 110px;
 }
 
 @media (min-width: 600px) { // Bigger screen
@@ -63,4 +72,15 @@ ion-card {
     border-radius: 15px;
     margin: auto;
   }
+
+}
+  .sem{
+    background-color: var(--primary-color);
+    color: hsla(0,0%,100%,.84);
+    display: inline-table;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 15px;
+    padding-left: 15px;
+    width: 100%;
 }
