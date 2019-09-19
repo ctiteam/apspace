@@ -23,11 +23,11 @@ import { NavController } from '@ionic/angular';
 import { DragulaService } from 'ng2-dragula';
 
 @Component({
-  selector: 'app-lecturer-dashboard',
-  templateUrl: './lecturer-dashboard.page.html',
-  styleUrls: ['./lecturer-dashboard.page.scss'],
+  selector: 'app-staff-dashboard',
+  templateUrl: './staff-dashboard.page.html',
+  styleUrls: ['./staff-dashboard.page.scss'],
 })
-export class LecturerDashboardPage implements OnInit, OnDestroy {
+export class StaffDashboardPage implements OnInit, OnDestroy {
   // USER SETTINGS
   activeAccentColor = '';
   shownDashboardSections: string[];

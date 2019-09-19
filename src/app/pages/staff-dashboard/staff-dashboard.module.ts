@@ -9,12 +9,12 @@ import { ComponentsModule } from 'src/app/components/components.module';
 
 import { ChartModule } from 'angular2-chartjs';
 import { DragulaModule, DragulaService } from 'ng2-dragula';
-import { LecturerDashboardPage } from './lecturer-dashboard.page';
+import { StaffDashboardPage } from './staff-dashboard.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: LecturerDashboardPage
+    component: StaffDashboardPage
   }
 ];
 
@@ -30,9 +30,9 @@ const routes: Routes = [
     DragulaModule
   ],
   declarations: [
-    LecturerDashboardPage
+    StaffDashboardPage
   ],
   providers: [DragulaService],
   entryComponents: []
 })
-export class LecturerDashboardPageModule { }
+export class StaffDashboardPageModule { }
