@@ -11,7 +11,7 @@ export class QuickAccessItemComponent {
   @Input() titleFirstWord: string;
   @Input() titleSecondWord: boolean;
   @Input() observable$: Observable<any>;
-  @Input() outputMode: 'currency' | 'percentage' | 'others';
+  @Input() outputMode: 'currency' | 'percentage';
 
   constructor() { }
 

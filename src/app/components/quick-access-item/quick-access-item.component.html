@@ -15,9 +15,6 @@
             <span *ngIf="outputMode==='currency'">
               {{ data.value | currency: "MYR":"RM" }}
             </span>
-            <span *ngIf="outputMode==='others'">
-                {{ data.value }}
-              </span>
           </span>
           <ng-template #noData>
             --
