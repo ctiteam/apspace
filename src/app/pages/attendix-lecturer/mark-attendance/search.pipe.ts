@@ -1,16 +1,18 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Status } from './status.interface';
+
+import { Status } from '../../../../generated/graphql';
 
 @Pipe({
   name: 'search'
 })
 export class SearchPipe implements PipeTransform {
 
-  transform(students: Status[], term: string): any {
+  transform(students: Partial<Status>[], term: string): Partial<Status>[] {
     if (term) {
+      const upperTerm = term.toUpperCase();
       return students.filter(student =>
-        student.name.toLowerCase().includes(term.toLowerCase())
-        || student.id.includes(term.toUpperCase())
+        student.name.toUpperCase().includes(upperTerm)
+        || student.id.includes(upperTerm)
       );
     } else {
       return students;

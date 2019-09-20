@@ -16,7 +16,7 @@ export type Scalars = {
 
 export type Attendance = {
    __typename?: 'Attendance',
-  schedule: Scalars['String'],
+  schedule: Schedule,
   secret: Scalars['String'],
   markedBy: Scalars['String'],
   lecturer: Scalars['String'],
@@ -25,7 +25,6 @@ export type Attendance = {
   startTime: Scalars['String'],
   endTime: Scalars['String'],
   validUntil: Scalars['String'],
-  expiredTime: Scalars['Int'],
   classCode: Scalars['String'],
   classType?: Maybe<Scalars['String']>,
   students: Array<Status>,
@@ -40,21 +39,18 @@ export type Mutation = {
 
 
 export type MutationInitAttendanceArgs = {
-  ticket: Scalars['String'],
-  schedule: Scalars['String']
+  schedule: ScheduleInput
 };
 
 
 export type MutationMarkAttendanceArgs = {
-  ticket: Scalars['String'],
-  schedule: Scalars['String'],
+  schedule: ScheduleInput,
   student: Scalars['String'],
   attendance: Scalars['String']
 };
 
 
 export type MutationUpdateAttendanceArgs = {
-  ticket: Scalars['String'],
   otp: Scalars['String']
 };
 
@@ -65,7 +61,24 @@ export type Query = {
 
 
 export type QueryAttendanceArgs = {
-  schedule: Scalars['String']
+  schedule: ScheduleInput
+};
+
+export type Schedule = {
+   __typename?: 'Schedule',
+  classcode: Scalars['String'],
+  date: Scalars['String'],
+  startTime: Scalars['String'],
+  endTime: Scalars['String'],
+  classType: Scalars['String'],
+};
+
+export type ScheduleInput = {
+  classcode: Scalars['String'],
+  date: Scalars['String'],
+  startTime: Scalars['String'],
+  endTime: Scalars['String'],
+  classType: Scalars['String'],
 };
 
 export type Schema = {
@@ -85,7 +98,7 @@ export type Status = {
   modifiedBy: Scalars['String'],
   internalIP: Scalars['String'],
   externalIP: Scalars['String'],
-  schedule: Scalars['String'],
+  schedule: Schedule,
 };
 
 export type Subscription = {
@@ -95,11 +108,27 @@ export type Subscription = {
 
 
 export type SubscriptionNewStatusArgs = {
-  schedule: Scalars['String']
+  schedule: ScheduleInput
 };
+export type AttendanceQueryVariables = {
+  schedule: ScheduleInput
+};
+
+
+export type AttendanceQuery = (
+  { __typename?: 'Query' }
+  & { attendance: Maybe<(
+    { __typename?: 'Attendance' }
+    & Pick<Attendance, 'secret'>
+    & { students: Array<(
+      { __typename?: 'Status' }
+      & Pick<Status, 'id' | 'name' | 'attendance'>
+    )> }
+  )> }
+);
+
 export type InitAttendanceMutationVariables = {
-  ticket: Scalars['String'],
-  schedule: Scalars['String']
+  schedule: ScheduleInput
 };
 
 
@@ -115,9 +144,78 @@ export type InitAttendanceMutation = (
   ) }
 );
 
+export type MarkAttendanceMutationVariables = {
+  schedule: ScheduleInput,
+  student: Scalars['String'],
+  attendance: Scalars['String']
+};
+
+
+export type MarkAttendanceMutation = (
+  { __typename?: 'Mutation' }
+  & { markAttendance: (
+    { __typename?: 'Status' }
+    & Pick<Status, 'id'>
+    & { schedule: (
+      { __typename?: 'Schedule' }
+      & Pick<Schedule, 'classcode' | 'date' | 'startTime' | 'endTime' | 'classType'>
+    ) }
+  ) }
+);
+
+export type NewStatusSubscriptionVariables = {
+  schedule: ScheduleInput
+};
+
+
+export type NewStatusSubscription = (
+  { __typename?: 'Subscription' }
+  & { newStatus: Maybe<(
+    { __typename?: 'Status' }
+    & Pick<Status, 'id'>
+  )> }
+);
+
+export type UpdateAttendanceMutationVariables = {
+  otp: Scalars['String']
+};
+
+
+export type UpdateAttendanceMutation = (
+  { __typename?: 'Mutation' }
+  & { updateAttendance: (
+    { __typename?: 'Status' }
+    & Pick<Status, 'id'>
+    & { schedule: (
+      { __typename?: 'Schedule' }
+      & Pick<Schedule, 'classcode' | 'date' | 'startTime' | 'endTime' | 'classType'>
+    ) }
+  ) }
+);
+
+export const AttendanceDocument = gql`
+    query attendance($schedule: ScheduleInput!) {
+  attendance(schedule: $schedule) {
+    secret
+    students {
+      id
+      name
+      attendance
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class AttendanceGQL extends Apollo.Query<AttendanceQuery, AttendanceQueryVariables> {
+    document = AttendanceDocument;
+
+  }
 export const InitAttendanceDocument = gql`
-    mutation initAttendance($ticket: String!, $schedule: String!) {
-  attendance: initAttendance(ticket: $ticket, schedule: $schedule) {
+    mutation initAttendance($schedule: ScheduleInput!) {
+  attendance: initAttendance(schedule: $schedule) {
     secret
     students {
       id
@@ -133,5 +231,64 @@ export const InitAttendanceDocument = gql`
   })
   export class InitAttendanceGQL extends Apollo.Mutation<InitAttendanceMutation, InitAttendanceMutationVariables> {
     document = InitAttendanceDocument;
+
+  }
+export const MarkAttendanceDocument = gql`
+    mutation markAttendance($schedule: ScheduleInput!, $student: String!, $attendance: String!) {
+  markAttendance(schedule: $schedule, student: $student, attendance: $attendance) {
+    id
+    schedule {
+      classcode
+      date
+      startTime
+      endTime
+      classType
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class MarkAttendanceGQL extends Apollo.Mutation<MarkAttendanceMutation, MarkAttendanceMutationVariables> {
+    document = MarkAttendanceDocument;
+
+  }
+export const NewStatusDocument = gql`
+    subscription NewStatus($schedule: ScheduleInput!) {
+  newStatus(schedule: $schedule) {
+    id
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class NewStatusGQL extends Apollo.Subscription<NewStatusSubscription, NewStatusSubscriptionVariables> {
+    document = NewStatusDocument;
+
+  }
+export const UpdateAttendanceDocument = gql`
+    mutation updateAttendance($otp: String!) {
+  updateAttendance(otp: $otp) {
+    id
+    schedule {
+      classcode
+      date
+      startTime
+      endTime
+      classType
+    }
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateAttendanceGQL extends Apollo.Mutation<UpdateAttendanceMutation, UpdateAttendanceMutationVariables> {
+    document = UpdateAttendanceDocument;
 
   }

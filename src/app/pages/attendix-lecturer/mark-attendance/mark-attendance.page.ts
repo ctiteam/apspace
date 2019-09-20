@@ -8,12 +8,11 @@ import {
 } from 'rxjs/operators';
 import { totp } from 'otplib/otplib-browser';
 
-import { AttendanceGQL } from './attendance.query';
-import { CasTicketService } from '../../../services';
-import { InitAttendanceGQL, InitAttendanceMutation } from '../../../../generated/graphql';
-import { MarkAttendanceGQL } from './mark-attendance.mutation';
-import { NewStatusGQL } from './new-status.subscription';
-import { Status } from './status.interface';
+import {
+  AttendanceGQL, InitAttendanceGQL, NewStatusSubscription,
+  InitAttendanceMutation, MarkAttendanceGQL, NewStatusGQL, ScheduleInput,
+  Status
+} from '../../../../generated/graphql';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,15 +22,15 @@ import { Status } from './status.interface';
 })
 export class MarkAttendancePage implements OnInit {
 
-  schedule = 'a';
+  schedule: ScheduleInput;
 
   auto = true;
   term = '';
   type = 'A';
 
   otp$: Observable<number>;
-  lastMarked$: Observable<Status[]>;
-  students$: Observable<Status[]>;
+  lastMarked$: Observable<Pick<NewStatusSubscription, 'newStatus'>[]>;
+  students$: Observable<Partial<Status>[]>;
   totalPresentStudents$: Observable<number>;
   totalStudents$: Observable<number>;
 
@@ -39,7 +38,6 @@ export class MarkAttendancePage implements OnInit {
 
   constructor(
     private attendance: AttendanceGQL,
-    private cas: CasTicketService,
     private initAttendance: InitAttendanceGQL,
     private markAttendance: MarkAttendanceGQL,
     private newStatus: NewStatusGQL,
@@ -51,15 +49,19 @@ export class MarkAttendancePage implements OnInit {
     // totp options
     totp._options.digits = 3;
 
-    const schedule = this.schedule = this.route.snapshot.params.schedule;
-    let studentsById: { [student: string]: Status };
+    const schedule = this.schedule = {
+      classcode: this.route.snapshot.paramMap.get('classcode'),
+      date: this.route.snapshot.paramMap.get('date'),
+      startTime: this.route.snapshot.paramMap.get('startTime'),
+      endTime: this.route.snapshot.paramMap.get('endTime'),
+      classType: this.route.snapshot.paramMap.get('classType')
+    };
+    let studentsNameById: { [student: string]: string };
 
     // get attendance state from query and use manual mode if attendance initialized
-    const attendancesState$ = this.cas.getST().pipe(
-      switchMap(ticket => this.initAttendance.mutate({ ticket, schedule }).pipe(
-        // catchError(err => (this.auto = true, this.attendance.fetch({ ticket, schedule }))),
-      )),
-      catchError(err => (this.toastCtrl.create({
+    const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
+      catchError(() => (this.auto = true, this.attendance.fetch({ schedule }))),
+      catchError(() => (this.toastCtrl.create({
         message: 'Failed to mark attendance.',
         duration: 2000,
         position: 'top',
@@ -67,7 +69,9 @@ export class MarkAttendancePage implements OnInit {
       }), NEVER)),
       pluck('data'),
       finalize(() => 'initAttendance ended'),
-      tap(query => studentsById = query.attendance.students.reduce((acc, s) => (acc[s.id] = s, acc), {}))
+      tap((query: InitAttendanceMutation) => {
+        studentsNameById = query.attendance.students.reduce((acc, s) => (acc[s.id] = s, acc), {});
+      })
     );
 
     // keep updating attendancesState$ with new changes
@@ -98,12 +102,11 @@ export class MarkAttendancePage implements OnInit {
 
     // take last 5 values updated by students (ignore manual override updates)
     // XXX: cool that it ignore manual overrides updates but I do not know how
-    this.lastMarked$ = secret$.pipe(
-      switchMap(secret => this.newStatus.subscribe({ schedule })),
+    this.lastMarked$ = this.newStatus.subscribe({ schedule }).pipe(
       pluck('data', 'newStatus', 'id'),
-      tap(id => console.log('new', id, studentsById[id])),
-      tap(id => this.statusUpdate.next({ id, attendance: 'P' })),
-      scan((acc, id) => [...acc, studentsById[id]].slice(-5), []),
+      // tap(id => console.log('new', id, studentsById[id])),
+      // tap(id => this.statusUpdate.next({ id, attendance: 'P' })),
+      scan((acc, id) => [...acc, studentsNameById[id]].slice(-5), []),
       shareReplay(1) // keep track when enter manual mode
     );
 
@@ -122,7 +125,7 @@ export class MarkAttendancePage implements OnInit {
     );
   }
 
-  mark(student: string, attendance: 'A' | 'L' | 'P') {
+  mark(student: string, attendance: string) {
     // TODO: optimistic ui
     this.markAttendance.mutate({ schedule: this.schedule, student, attendance }).subscribe(
       d => this.statusUpdate.next({ id: student, attendance }),
@@ -130,7 +133,7 @@ export class MarkAttendancePage implements OnInit {
     );
   }
 
-  trackById(index: number, item: Status) {
+  trackById(index: number, item: Pick<Status, 'id'>) {
     return item.id;
   }
 

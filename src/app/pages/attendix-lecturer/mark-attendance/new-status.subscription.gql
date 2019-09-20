@@ -1,0 +1,5 @@
+subscription NewStatus($schedule: ScheduleInput!) {
+  newStatus(schedule: $schedule) {
+    id
+  }
+}

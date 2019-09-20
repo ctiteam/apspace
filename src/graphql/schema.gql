@@ -1,5 +1,13 @@
+input ScheduleInput {
+  classcode: String!
+  date: String!
+  startTime: String!
+  endTime: String!
+  classType: String!
+}
+
 type Attendance {
-  schedule: String!
+  schedule: Schedule!
   secret: String!
   markedBy: String!
   lecturer: String!
@@ -13,6 +21,14 @@ type Attendance {
   students: [Status!]!
 }
 
+type Schedule {
+  classcode: String!
+  date: String!
+  startTime: String!
+  endTime: String!
+  classType: String!
+}
+
 type Status {
   id: String!
   name: String!
@@ -22,31 +38,32 @@ type Status {
   modifiedBy: String!
   internalIP: String!
   externalIP: String!
-  schedule: String!  # duplicated for subscription filter
+  schedule: Schedule!  # duplicated for subscription filter
 }
 
 type Query {
-  attendance(schedule: String!): Attendance
+  attendance(schedule: ScheduleInput!): Attendance
 }
 
+# Mutation requires additional "ticket" header containing service ticket with
+# service "https://api.apiit.edu.my/classcodes"
+
 type Mutation {
-  initAttendance(ticket: String! schedule: String!): Attendance!
+  initAttendance(schedule: ScheduleInput!): Attendance!
 
   markAttendance(
-    ticket: String!
-    schedule: String!
+    schedule: ScheduleInput!
     student: String!
     attendance: String!
   ): Status!
 
   updateAttendance(
-    ticket: String!
     otp: String!
   ): Status!
 }
 
 type Subscription {
-  newStatus(schedule: String!): Status
+  newStatus(schedule: ScheduleInput!): Status
   @aws_subscribe(mutations: ["markAttendance", "updateAttendance"])
 }
 

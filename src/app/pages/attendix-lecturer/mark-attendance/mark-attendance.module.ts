@@ -12,7 +12,7 @@ import { AttendancePipe } from './attendance.pipe';
 
 const routes: Routes = [
   {
-    path: ':schedule',
+    path: '',
     component: MarkAttendancePage
   }
 ];

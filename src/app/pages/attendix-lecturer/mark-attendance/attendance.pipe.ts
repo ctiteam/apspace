@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { Status } from './status.interface';
+import { Status } from '../../../../generated/graphql';
 
 /**
  * Filter type of attendance.
@@ -17,7 +17,7 @@ export class AttendancePipe implements PipeTransform {
    * @param attendance - matched attendance
    * @return students - filtered students
    */
-  transform(students: Status[] | null, attendance: string): Status[] {
+  transform(students: Partial<Status>[] | null, attendance: string): Partial<Status>[] {
     if (students === null) {
       return [];
     } else if (attendance) {

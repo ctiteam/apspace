@@ -2,7 +2,7 @@ import {
   ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, ViewChild
 } from '@angular/core';
 
-import { UpdateAttendanceGQL } from './update-attendance.mutation';
+import { UpdateAttendanceGQL } from '../../../../generated/graphql';
 import { Observable } from 'apollo-link';
 
 @Component({
@@ -28,7 +28,7 @@ export class UpdateAttendancePage {
   ) { }
 
   scanCode() {
-    this.updateAttendance.mutate({ schedule: 'a', otp: this.otp, student: `TP${this.student++}` })
+    this.updateAttendance.mutate({ otp: this.otp })
       .subscribe(d => console.log(d));
   }
 
@@ -47,11 +47,7 @@ export class UpdateAttendancePage {
         this.otp = prev.value + this.otp;
       }
 
-      this.updateAttendance.mutate({
-        schedule: 'a',
-        otp: this.otp,
-        student: `TP${this.student++}`
-      }).subscribe(d => {
+      this.updateAttendance.mutate({ otp: this.otp }).subscribe(d => {
         console.log(d);
         // clear value
         el.value = '';
