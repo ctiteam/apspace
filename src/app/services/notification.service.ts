@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Observable, from, of } from 'rxjs';
@@ -26,12 +26,11 @@ export class NotificationService {
    */
   getMessages(): Observable<any> {
     let token = '';
-    console.log('get messages');
+    const headers = new HttpHeaders().set('version', 'v2');
     if (this.platform.is('cordova')) {
       return from(
         this.fcm.getToken()
       ).pipe(
-        tap(t => console.log(t)),
         switchMap(
           responseToken => {
             token = responseToken;
@@ -44,22 +43,19 @@ export class NotificationService {
               device_token: token,
               service_ticket: st,
             };
-            const url = `${this.APIUrl}/client/login?ticket=${body.service_ticket}&token=${body.device_token}`;
-            return this.http.get(url);
+            const url = `${this.APIUrl}/client/login?ticket=${body.service_ticket}&device_token=${body.device_token}`;
+            return this.http.get(url, { headers });
           },
         ),
       );
     } else {
-      console.log(1);
-      return from(of(1)).pipe(
+      return from(of(1)).pipe( // waiting for dingdong team to finalize the backend APIs
         switchMap(_ => {
-          console.log(2);
           return this.cas.getST(this.serviceUrl);
         }),
         switchMap(st => {
-          console.log(st);
           const url = `${this.APIUrl}/client/login?ticket=${st}`;
-          return this.http.get(url);
+          return this.http.get(url, { headers });
         })
       );
     }
