@@ -6,7 +6,7 @@
   <!-- MAIN GRID -->
   <div>
     <!-- MAIN ROW -->
-    <div class="masonry-list" [dragula]="editableList">
+    <div class="masonry-list" [dragula]="editableList" (dragulaModelChange)="test($event)" [(dragulaModel)]="testDragula">
       <!-- PROFILE SECTION -->
       <div class="masonry-item no-drag">
         <ion-card no-margin>

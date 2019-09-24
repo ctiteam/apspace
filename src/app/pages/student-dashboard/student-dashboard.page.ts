@@ -5,7 +5,7 @@ import {
   CgpaPerIntake, StudentTimetable, ConsultationHour, StudentPhoto, Holidays,
   Holiday, ExamSchedule, BusTrips, APULocations, APULocation
 } from 'src/app/interfaces';
-import { Observable, forkJoin, of, zip } from 'rxjs';
+import { Observable, forkJoin, of, zip, Subscription } from 'rxjs';
 import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray } from 'rxjs/operators';
 import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService } from 'src/app/services';
 import * as moment from 'moment';
@@ -210,6 +210,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   ) {
     this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
   }
+  subs = new Subscription();
 
   ngOnInit() {
     this.userSettings.getShownDashboardSections().subscribe(
@@ -234,6 +235,22 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
     );
     this.enableCardReordering();
     this.doRefresh();
+
+    // some events have lots of properties, just pick the ones you need
+    this.subs.add(this.dragulaService.dropModel('editable-list')
+      // WHOA
+      // .subscribe(({ name, el, target, source, sibling, sourceModel, targetModel, item }) => {
+      .subscribe(({ el, target, source, item, sourceModel, targetModel, sourceIndex, targetIndex }) => {
+        // console.log('el: ', el);
+        // console.log('target: ', target);
+        // console.log('source: ', source);
+        // console.log('item: ', item);
+        // console.log('sourceModel: ', sourceModel);
+        // console.log('targetModel: ', targetModel);
+        // console.log('sourceIndex: ', sourceIndex);
+        // console.log('targetIndex: ', targetIndex);
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -263,7 +280,41 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   //   });
   // }
 
+  // tslint:disable-next-line: member-ordering
+  testDragula = [
+    'profile',
+    'quick access',
+    'todays schedule',
+    'upcoming events',
+    'low attendance',
+    'upcoming trips',
+    'apcard',
+    'cgpa',
+    'money',
+  ];
+  test(event) {
+    // var iterator = event.keys();
 
+    // for (let key of iterator) {
+    //   console.log(key); // expected output: 0 1 2
+    // }
+    console.log(event);
+  }
+
+  shuffleArray() {
+    console.log('shuffling');
+    this.testDragula = [
+      'profile',
+      'quick access',
+      'cgpa',
+      'upcoming events',
+      'money',
+      'low attendance',
+      'todays schedule',
+      'apcard',
+      'upcoming trips',
+    ];
+  }
   // DRAG AND DROP FUNCTIONS (DASHBOARD CUSTOMIZATION)
   toggleReorderingMode() {
     this.editableList === 'editable-list' ? this.editableList = null : this.editableList = 'editable-list';
@@ -475,7 +526,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   }
 
   getUpcomingHoliday(date: Date, refresher: boolean): Observable<EventComponentConfigurations[]> {
-    return this.ws.get<Holidays>('/transix/holidays/filtered/students', refresher, {auth: false}).pipe(
+    return this.ws.get<Holidays>('/transix/holidays/filtered/students', refresher, { auth: false }).pipe(
       map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
       map(holiday => {
         const examsListEventMode: EventComponentConfigurations[] = [];
