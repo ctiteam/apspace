@@ -66,18 +66,6 @@ export class AppComponent {
 
       this.platform.backButton.subscribe(async () => {
 
-        if (this.menuCtrl.getOpen()) {
-          this.menuCtrl.close();
-          return;
-        }
-
-        const active = this.actionSheetCtrl.getTop() || this.popoverCtrl.getTop() || this.modalCtrl.getTop();
-
-        if (active) {
-          (await active).dismiss();
-          return;
-        }
-
         if (this.router.url.startsWith('/tabs')) {
           const timePressed = new Date().getTime();
           if ((timePressed - this.lastTimeBackPress) < this.timePeriodToExit) {
@@ -89,6 +77,18 @@ export class AppComponent {
           }
         } else {
           this.navCtrl.pop();
+        }
+
+        if (this.menuCtrl.getOpen()) {
+          this.menuCtrl.close();
+          return;
+        }
+
+        const active = this.actionSheetCtrl.getTop() || this.popoverCtrl.getTop() || this.modalCtrl.getTop();
+
+        if (active) {
+          (await active).dismiss();
+          return;
         }
 
       });
