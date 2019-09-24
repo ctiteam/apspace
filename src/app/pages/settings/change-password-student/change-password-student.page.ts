@@ -16,6 +16,11 @@ export class ChangePasswordStudentPage implements OnInit {
   stuedentDetails;
   changePasswordStudentForm: FormGroup;
   showDetails: boolean;
+  newPassword = '';
+  length = false;
+  upperCase = false;
+  special = false;
+
 
 
   constructor(
@@ -25,39 +30,23 @@ export class ChangePasswordStudentPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getStudent();
     this.changePasswordStudentForm = new FormGroup({
 
-      new_password: new FormControl('', [
+      newPassword: new FormControl('', [
         Validators.required,
-        Validators.minLength(8),
-        Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%~()_{}-]).{8,}')
       ]),
       confirm_password: new FormControl('', [
         Validators.required,
-        Validators.minLength(8),
-        Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%~()_{}-]).{8,}')
       ]),
     }
       , { validators: PasswordValidator }
     );
   }
-  getStudent() {
-    this.changePasswordService.getStudent()
-      .subscribe(
-        (data: { attributes: {sAMAccountName: string} }) => (
-          this.stuedentDetails = data.attributes.sAMAccountName,
-          console.log(data.attributes)
-        )
-      );
-  }
-
-
   changePasswordStudeent() {
     this.changePasswordService
       .changePasswordStudent(
         this.changePasswordStudentForm.value).subscribe(
-          (res: {result: string}) => {
+          (res: { result: string }) => {
             console.log(res.result);
             const alert = this.alertController.create({
               header: 'Success!',
@@ -78,9 +67,25 @@ export class ChangePasswordStudentPage implements OnInit {
             });
             alert.then(param => param.present());
           },
-
-
         );
   }
-
+  checkValidation() {
+    const regexp = /^(?=.*?[A-Z])/;
+    const special = /(?=.*?[#?!@$%~()_{}-])/;
+    if (regexp.test(this.newPassword)) {
+      this.upperCase = true;
+    } else {
+      this.upperCase = false;
+    }
+    if (this.newPassword.length < 8) {
+      this.length = false;
+    } else {
+      this.length = true;
+    }
+    if (special.test(this.newPassword)) {
+       this.special = true;
+    } else {
+      this.special = false;
+    }
+  }
 }

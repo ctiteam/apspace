@@ -16,6 +16,10 @@ export class ChangePasswordStaffPage implements OnInit {
   userDetails;
   changePasswordForm: FormGroup;
   showDetails: boolean;
+  newPpassword = '';
+  length = false;
+  upperCase = false;
+  special = false;
 
 
   constructor(
@@ -25,33 +29,17 @@ export class ChangePasswordStaffPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getUser();
     this.changePasswordForm = new FormGroup({
-
-      new_password: new FormControl('', [
+      newPpassword: new FormControl('', [
         Validators.required,
-        Validators.minLength(8),
-        Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%~()_{}-]).{8,}')
       ]),
       confirm_password: new FormControl('', [
         Validators.required,
-        Validators.minLength(8),
-        Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%~()_{}-]).{8,}')
       ]),
     }
       , { validators: PasswordValidator }
     );
   }
-  getUser() {
-    this.changePasswordService.getUser()
-      .subscribe(
-        (data: { attributes: { sAMAccountName: string } }) => (
-          this.userDetails = data.attributes.sAMAccountName
-        )
-      );
-  }
-
-
   changePassword() {
     this.changePasswordService
       .changePassword(
@@ -79,4 +67,24 @@ export class ChangePasswordStaffPage implements OnInit {
         );
   }
 
+  checkValidation() {
+    const regexp = /^(?=.*?[A-Z])/;
+    const special = /(?=.*?[#?!@$%~()_{}-])/;
+    if (regexp.test(this.newPpassword)) {
+      this.upperCase = true;
+    } else {
+      this.upperCase = false;
+    }
+    if (this.newPpassword.length < 8) {
+      this.length = false;
+    } else {
+      this.length = true;
+    }
+    if (special.test(this.newPpassword)) {
+      this.special = true;
+
+    } else {
+      this.special = false;
+    }
+  }
 }
