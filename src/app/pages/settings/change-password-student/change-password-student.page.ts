@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 
 import { ChangePasswordService } from '../../../services';
 import { PasswordValidator } from '../../../validators/password.validator';
@@ -12,80 +12,92 @@ import { PasswordValidator } from '../../../validators/password.validator';
   styleUrls: ['./change-password-student.page.scss'],
 })
 export class ChangePasswordStudentPage implements OnInit {
+  loading: HTMLIonLoadingElement;
 
-  stuedentDetails;
   changePasswordStudentForm: FormGroup;
-  showDetails: boolean;
   newPassword = '';
-  length = false;
-  upperCase = false;
-  special = false;
-
-
+  passwordLengthMatch = false;
+  hasUpperCase = false;
+  hasSpeacialCharacter = false;
 
   constructor(
     private changePasswordService: ChangePasswordService,
     private alertController: AlertController,
-    private router: Router
+    private router: Router,
+    private loadingController: LoadingController
   ) { }
 
   ngOnInit() {
     this.changePasswordStudentForm = new FormGroup({
-
-      newPassword: new FormControl('', [
-        Validators.required,
-      ]),
-      confirm_password: new FormControl('', [
-        Validators.required,
-      ]),
-    }
-      , { validators: PasswordValidator }
+      new_password: new FormControl('', [Validators.required]),
+      confirm_password: new FormControl('', [Validators.required]),
+    }, { validators: PasswordValidator }
     );
   }
-  changePasswordStudeent() {
-    this.changePasswordService
-      .changePasswordStudent(
-        this.changePasswordStudentForm.value).subscribe(
-          (res: { result: string }) => {
-            console.log(res.result);
-            const alert = this.alertController.create({
-              header: 'Success!',
-              subHeader: 'Your Password has been changed! ',
-              message: '<ion-icon name="checkmark-circle"></ion-icon>',
-              animated: true,
-              buttons:
-                [
-                  {
-                    text: 'OK',
-                    cssClass: 'secondary',
-                    handler: () => {
-                      this.router.navigate(['/logout']);
-                    }
-                  }
-                ]
 
-            });
-            alert.then(param => param.present());
-          },
-        );
+  changePasswordStudeent() {
+    this.presentLoading();
+    this.changePasswordService.changePasswordStudent(this.changePasswordStudentForm.value)
+      .subscribe(
+        (res: { result: string }) => {
+          this.dismissLoading();
+          const alert = this.alertController.create({
+            header: 'Your Password has been Changed successfully! ',
+            message: 'You will be automatically logged-out of the application for security purposes. Please log-in again..',
+            animated: true,
+            buttons:
+              [
+                {
+                  text: 'OK',
+                  cssClass: 'secondary',
+                  handler: () => {
+                    this.router.navigate(['/logout']);
+                  }
+                }
+              ]
+
+          });
+          alert.then(param => param.present());
+        },
+
+        (error) => {
+          this.dismissLoading();
+          console.log(error);
+        }
+      );
   }
+
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
+  }
+
   checkValidation() {
-    const regexp = /^(?=.*?[A-Z])/;
-    const special = /(?=.*?[#?!@$%~()_{}-])/;
-    if (regexp.test(this.newPassword)) {
-      this.upperCase = true;
+    const upperCaseRegExp = /^(?=.*?[A-Z])/;
+    const specialCharacterRegExp = /(?=.*?[#?!@$%~()_{}-])/;
+    if (upperCaseRegExp.test(this.newPassword)) {
+      this.hasUpperCase = true;
     } else {
-      this.upperCase = false;
+      this.hasUpperCase = false;
     }
     if (this.newPassword.length < 8) {
-      this.length = false;
+      this.passwordLengthMatch = false;
     } else {
-      this.length = true;
+      this.passwordLengthMatch = true;
     }
-    if (special.test(this.newPassword)) {
-       this.special = true;
+    if (specialCharacterRegExp.test(this.newPassword)) {
+      this.hasSpeacialCharacter = true;
     } else {
-      this.special = false;
+      this.hasSpeacialCharacter = false;
     }
   }
 }
