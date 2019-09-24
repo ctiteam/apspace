@@ -61,8 +61,8 @@ export class ChangePasswordStudentPage implements OnInit {
         },
 
         (error) => {
-          this.dismissLoading();
-          console.log(error);
+         this.dismissLoading();
+         console.log(error);
         }
       );
   }
