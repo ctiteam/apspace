@@ -18,7 +18,6 @@ npm-debug.log*
 .sass-cache/
 .tmp/
 .versions/
-android/
 coverage/
 www/
 dist/
