@@ -1,27 +1,46 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
+import { NavController, IonSelect } from '@ionic/angular';
+import { Observable, forkJoin, of, zip } from 'rxjs';
+import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray } from 'rxjs/operators';
+
+import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService } from 'src/app/services';
 import {
   EventComponentConfigurations, DashboardCardComponentConfigurations,
   Attendance, StudentProfile, Apcard, FeesTotalSummary, Course, CourseDetails,
   CgpaPerIntake, StudentTimetable, ConsultationHour, StudentPhoto, Holidays,
   Holiday, ExamSchedule, BusTrips, APULocations, APULocation
 } from 'src/app/interfaces';
-import { Observable, forkJoin, of, zip, Subscription } from 'rxjs';
-import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray } from 'rxjs/operators';
-import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService } from 'src/app/services';
-import * as moment from 'moment';
-import { NavController } from '@ionic/angular';
-import { DragulaService } from 'ng2-dragula';
 
+import * as moment from 'moment';
+import { DragulaService } from 'ng2-dragula';
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.page.html',
   styleUrls: ['./student-dashboard.page.scss'],
 })
-export class StudentDashboardPage implements OnInit, OnDestroy {
+export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // USER SETTINGS
+  @ViewChild('dragulaContainer', { static: true }) container: ElementRef; // access the dragula container
+  @ViewChild('dashboardSectionsSelectBox', { static: true }) dashboardSectionsselectBoxRef: IonSelect; // hidden selectbox
+  dashboardSectionsSelectBoxModel; // select box dashboard sections value
+  allDashboardSections = [ // alldashboardSections will not be modified and it will be used in the select box
+    'quickAccess',
+    'todaysSchedule',
+    'upcomingEvents',
+    'lowAttendance',
+    'upcomingTrips',
+    'apcard',
+    'cgpa',
+    'financials',
+  ];
+
+  // dragulaModelArray will be modified whenever there is a change to the order of the dashboard sections
+  dragulaModelArray = this.allDashboardSections;
+  // shownDashboardSections get the data from local storage and hide/show elements based on that
+  shownDashboardSections: string[];
+
   activeAccentColor = '';
   lowAttendanceChart: any;
-  shownDashboardSections: string[];
   editableList = null;
   busShuttleServiceSettings: any;
   secondLocation: string;
@@ -206,11 +225,18 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
     private userSettings: UserSettingsService,
     private navCtrl: NavController,
     private dragulaService: DragulaService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private renderer: Renderer2
   ) {
+    // Create the dragula group (drag and drop)
+    this.dragulaService.createGroup('editable-list', {
+      moves: (el, container, handle) => {
+        return handle.classList.contains('handle');
+      }
+    });
+    // getting the main accent color to color the chart.js (Temp until removing chart.js)
     this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
   }
-  subs = new Subscription();
 
   ngOnInit() {
     this.userSettings.getShownDashboardSections().subscribe(
@@ -233,24 +259,14 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
         next: data => data ? this.doRefresh() : ''
       }
     );
-    this.enableCardReordering();
     this.doRefresh();
+  }
 
-    // some events have lots of properties, just pick the ones you need
-    this.subs.add(this.dragulaService.dropModel('editable-list')
-      // WHOA
-      // .subscribe(({ name, el, target, source, sibling, sourceModel, targetModel, item }) => {
-      .subscribe(({ el, target, source, item, sourceModel, targetModel, sourceIndex, targetIndex }) => {
-        // console.log('el: ', el);
-        // console.log('target: ', target);
-        // console.log('source: ', source);
-        // console.log('item: ', item);
-        // console.log('sourceModel: ', sourceModel);
-        // console.log('targetModel: ', targetModel);
-        // console.log('sourceIndex: ', sourceIndex);
-        // console.log('targetIndex: ', targetIndex);
-      })
-    );
+  ngAfterViewInit() {
+    this.dragulaModelArray = this.shownDashboardSections; // set the dragula modal array to the same value coming from local storage
+    this.shownDashboardSections.forEach(dragElementId => { // render the elements into the view based on the order in local storage
+      this.renderer.appendChild(this.container.nativeElement, document.getElementById(dragElementId));
+    });
   }
 
   ngOnDestroy() {
@@ -280,44 +296,15 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   //   });
   // }
 
-  // tslint:disable-next-line: member-ordering
-  testDragula = [
-    'profile',
-    'quick access',
-    'todays schedule',
-    'upcoming events',
-    'low attendance',
-    'upcoming trips',
-    'apcard',
-    'cgpa',
-    'money',
-  ];
-  test(event) {
-    // var iterator = event.keys();
-
-    // for (let key of iterator) {
-    //   console.log(key); // expected output: 0 1 2
-    // }
-    console.log(event);
-  }
-
-  shuffleArray() {
-    console.log('shuffling');
-    this.testDragula = [
-      'profile',
-      'quick access',
-      'cgpa',
-      'upcoming events',
-      'money',
-      'low attendance',
-      'todays schedule',
-      'apcard',
-      'upcoming trips',
-    ];
-  }
   // DRAG AND DROP FUNCTIONS (DASHBOARD CUSTOMIZATION)
-  toggleReorderingMode() {
-    this.editableList === 'editable-list' ? this.editableList = null : this.editableList = 'editable-list';
+  toggleReorderingMode() { // enable/disable edit mode
+    if (this.editableList === 'editable-list') {
+      this.editableList = null;
+      this.saveArrayOrderInLocalStorage();
+    } else {
+      this.editableList = 'editable-list';
+    }
+
     // PREVENT SCROLLING ON MOBILE PHONES WHEN MOVING CARDS
     const handles = document.querySelectorAll('.handle');
     /* handle scroll */
@@ -326,13 +313,36 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
     });
   }
 
-  enableCardReordering() {
-    this.dragulaService.createGroup('editable-list', {
-      moves: (el, container, handle) => {
-        return handle.classList.contains('handle');
-      }
+  removeSectionFromDashboard(sectionName: string) {
+    const index = this.shownDashboardSections.indexOf(sectionName);
+    if (index > -1) {
+      this.shownDashboardSections.splice(index, 1);
+    }
+  }
+
+  openDashboardSectionsSelectBox() {
+    this.dashboardSectionsselectBoxRef.open();
+  }
+
+  dashboardSectionsChanged(event) {
+    event.detail.value.forEach(section => {
+      this.shownDashboardSections.splice(0, 0, section);
     });
   }
+
+  saveArrayOrderInLocalStorage() {
+    // Store data in local storage
+    const itemsToStore = [];
+    this.dragulaModelArray.forEach(arrayEl => {
+      this.shownDashboardSections.forEach(shownDashboardSection => {
+        if (arrayEl === shownDashboardSection) {
+          itemsToStore.push(arrayEl);
+        }
+      });
+    });
+    this.userSettings.setShownDashboardSections(itemsToStore);
+  }
+
 
   // PROFILE AND GREETING MESSAGE FUNCTIONS
   getProfile(refresher: boolean) {

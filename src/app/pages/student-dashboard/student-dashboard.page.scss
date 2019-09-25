@@ -67,8 +67,15 @@ ion-card.trip-card {
     cursor: move;
     font-size: 40px;
     position: absolute;
-    right: 5px;
-    top: 5px;
+    right: 15px;
+    &:not(.remove){
+      bottom: 15px;
+    }
+    &.remove{
+      cursor: pointer;
+      top: 10px;
+      color: var(--danger-color)
+    }
   }
 }
 .hide {
