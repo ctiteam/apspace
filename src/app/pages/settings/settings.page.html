@@ -8,14 +8,6 @@
 </ion-header>
 
 <ion-content padding>
-  <!-- ion-select hidden behind the shown dashboard sections item  -->
-  <ion-select [(ngModel)]="dashboardSections" (ionChange)="dashboardSectionsChanged()" multiple="true" [hidden]="true"
-    #dashboardSectionsSelect>
-    <ion-select-option [disabled]="dashboardSection.disabled" [value]="dashboardSection.section"
-      *ngFor="let dashboardSection of allDashboardSections">
-      {{ dashboardSection.name }}
-    </ion-select-option>
-  </ion-select>
 
   <div class="masonry-list">
     <!-- <div class="masonry-item">
@@ -95,25 +87,6 @@
                   </ion-select-option>
                 </ion-select>
               </ion-item>
-            </ion-item-group>
-            <ion-item-group>
-              <ion-item-divider no-padding>
-                <ion-label>
-                  Dashboard
-                </ion-label>
-              </ion-item-divider>
-              <!-- <ion-item lines="none" no-padding>
-                <ion-label>
-                  Quick Access Items
-                </ion-label>
-              </ion-item> -->
-              <a (click)="openDashboardSectionsSelectBox()" *ngIf="userRole">
-                <ion-item lines="none" no-padding>
-                  <ion-label>
-                    Shown Dashboard Sections
-                  </ion-label>
-                </ion-item>
-              </a>
             </ion-item-group>
             <ion-item-group>
               <ion-item-divider no-padding>

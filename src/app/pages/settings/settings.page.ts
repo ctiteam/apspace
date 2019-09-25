@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonSelect, ModalController, NavController, ToastController, AlertController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
+import { ModalController, NavController, ToastController, AlertController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
@@ -19,12 +19,9 @@ import {
 export class SettingsPage implements OnInit {
   userRole = false;
   test = false;
-  @ViewChild('dashboardSectionsSelect', { static: true }) dashboardSectionsselectBoxRef: IonSelect;
   activeAccentColor: string;
   darkThemeEnabled = false;
   pureDarkThemeEnabled = false;
-  // BUS
-
   busShuttleServiceSettings = {
     firstLocation: '',
     secondLocation: '',
@@ -32,23 +29,10 @@ export class SettingsPage implements OnInit {
   };
 
   menuUI: 'cards' | 'list' = 'list';
-  dashboardSections;
 
   locations$: Observable<APULocation[]>;
   timetable$: Observable<{ blacklists: string[] }>;
 
-  allDashboardSections = [
-    { section: 'profile', name: 'Profile', disabled: true },
-    // { section: 'dashboardAlerts', name: 'Alerts', disabled: false },
-    { section: 'quickAccess', name: 'Quick Access', disabled: false },
-    { section: 'todaysSchedule', name: 'Today\'s Schedule', disabled: false },
-    { section: 'upcomingEvents', name: 'Upcoming Events', disabled: false },
-    { section: 'apcard', name: 'APCard', disabled: false },
-    { section: 'lowAttendance', name: 'Low Attendance', disabled: false },
-    { section: 'financials', name: 'Financials', disabled: false },
-    { section: 'cgpa', name: 'CGPA Per Intake', disabled: false },
-    { section: 'busShuttleServices', name: 'Today\'s Trips', disabled: false }
-  ];
   accentColors = [
     { title: 'Blue (Default)', value: 'blue-accent-color' },
     { title: 'Green', value: 'green-accent-color' },
@@ -94,12 +78,6 @@ export class SettingsPage implements OnInit {
           next: value => (this.menuUI = value)
         });
     this.userSettings
-      .getShownDashboardSections()
-      .subscribe(
-        {
-          next: value => this.dashboardSections = value
-        });
-    this.userSettings
       .getBusShuttleServiceSettings()
       .subscribe(
         {
@@ -127,16 +105,6 @@ export class SettingsPage implements OnInit {
 
   setBusShuttleServicesSettings() {
     this.userSettings.setBusShuttleServicesSettings(this.busShuttleServiceSettings);
-  }
-
-
-
-  dashboardSectionsChanged() {
-    this.userSettings.setShownDashboardSections(this.dashboardSections);
-  }
-
-  openDashboardSectionsSelectBox() {
-    this.dashboardSectionsselectBoxRef.open();
   }
 
   toggleDarkTheme() {
