@@ -28,16 +28,14 @@ export class UserSettingsService {
   ];
 
   defaultDashboardSectionsSettings = [
-    'profile',
-    'dashboardAlerts',
     'quickAccess',
     'todaysSchedule',
     'upcomingEvents',
+    'lowAttendance',
+    'upcomingTrips',
     'apcard',
     'cgpa',
-    'lowAttendance',
     'financials',
-    'busShuttleServices'
   ];
 
   defaultBusShuttleServicesSettings = { firstLocation: '', secondLocation: '', alarmBefore: '10' };
