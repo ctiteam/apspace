@@ -46,15 +46,6 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   secondLocation: string;
   firstLocation: string;
 
-  // ALERTS SLIDER OPTIONS
-  alertSliderOptions = {
-    autoplay: {
-      delay: 2500,
-      disableOnInteraction: false,
-    },
-    speed: 500,
-  };
-
   // PROFILE
   photo$: Observable<StudentPhoto>;
   greetingMessage = '';
@@ -67,38 +58,13 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   todaysSchedule$: Observable<EventComponentConfigurations[] | any>;
   todaysScheduleCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
-    // options: [
-    //   {
-    //     title: 'set alarm before 15 minutes of next schdule',
-    //     icon: 'alarm',
-    //     callbackFunction: this.testCallBack
-    //   },
-    //   {
-    //     title: 'delete',
-    //     icon: 'trash',
-    //     callbackFunction: this.testCallBack
-    //   }
-    // ],
     cardTitle: 'Today\'s Schedule',
-    // cardSubtitle: 'Next in: 1 hrs, 25 min'
   };
 
   // UPCOMING EVENTS
   upcomingEvent$: Observable<EventComponentConfigurations[]> | any;
   upcomingEventsCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
-    // options: [
-    //   {
-    //     title: 'set alarm before 15 minutes of next schdule',
-    //     icon: 'alarm',
-    //     callbackFunction: this.testCallBack
-    //   },
-    //   {
-    //     title: 'delete',
-    //     icon: 'trash',
-    //     callbackFunction: this.testCallBack
-    //   }
-    // ],
     cardTitle: 'Upcoming Events',
     cardSubtitle: 'Today: ' + moment().format('DD MMMM YYYY')
   };
@@ -194,18 +160,6 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     cardTitle: 'Upcoming Trips',
     contentPadding: false,
     withOptionsButton: false,
-    // options: [
-    //   {
-    //     title: 'set alarm before 15 minutes of next schdule',
-    //     icon: 'alarm',
-    //     callbackFunction: this.testCallBack
-    //   },
-    //   {
-    //     title: 'delete',
-    //     icon: 'trash',
-    //     callbackFunction: this.testCallBack
-    //   }
-    // ],
   };
 
   // CGPA
