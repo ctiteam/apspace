@@ -48,7 +48,7 @@
                 <div class="icons" margin-top text-right>
                   <a (click)="toggleReorderingMode()" margin-end>
                     <ion-icon *ngIf="editableList" color="success" class="responsive-icon colored-text"
-                      name="checkmark"></ion-icon>
+                      name="save"></ion-icon>
                     <ion-icon *ngIf="!editableList" class="responsive-icon colored-text" name="md-create"></ion-icon>
                   </a>
                   <a (click)="navigateToPage('/settings')" margin-end>
@@ -76,12 +76,16 @@
         Card</ion-button>
     </div>
     <!-- ion-select hidden behind the shown dashboard sections item  -->
-    <ion-select [(ngModel)]="dashboardSectionsSelectBoxModel" (ionChange)="dashboardSectionsChanged($event)" multiple="true"
-      [hidden]="true" #dashboardSectionsSelectBox>
-      <ion-select-option [disabled]="dashboardSection | disabled : dragulaModelArray" [value]="dashboardSection" *ngFor="let dashboardSection of allDashboardSections">
-        {{ dashboardSection }}
-      </ion-select-option>
-    </ion-select>
+    <ion-item [hidden]="true">
+      <ion-label>Choose Section(s):</ion-label>
+      <ion-select [(ngModel)]="dashboardSectionsSelectBoxModel" (ionChange)="dashboardSectionsChanged($event)"
+        multiple="true" okText="Add" [hidden]="true" #dashboardSectionsSelectBox>
+        <ion-select-option [disabled]="dashboardSection | disabled : dragulaModelArray" [value]="dashboardSection"
+          *ngFor="let dashboardSection of allDashboardSections">
+          {{ dashboardSection }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
 
 
     <!-- DRAGULA LIST OF ITEMS -->
