@@ -28,10 +28,7 @@
                 </ion-text>
                 <ion-text class="display ion-padding-bottom">
                   <span class="text-bold">Application Number:</span> {{ visaDetails.applicant_id }}
-                </ion-text>
-                <!-- <ion-text class="display ion-padding-bottom">
-                        <span class="text-bold"> Application Type:</span> {{ visaDetails.applicant_id }}
-                      </ion-text> -->
+                </ion-text>->
                 <ion-text class="display">
                   <span class="text-bold"> Application Status:</span>
                   {{ visaDetails.status_historys[0].status_title }}
@@ -40,7 +37,7 @@
                   [style.background]="
                       '#' + visaDetails.status_historys[0].progress_color
                     ">
-                  <p text-center style="color: white">{{visaDetails.status_historys[0].complete}}%</p>
+                  <p class="ion-text-center" style="color: white">{{visaDetails.status_historys[0].complete}}%</p>
                 </div>
               </ion-card-content>
             </ion-card>
