@@ -13,9 +13,9 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ng-container *ngIf="(messages$ | async) as messages; else loading">
-    <div class="masonry-list" margin-top *ngIf="messages.length > 0; else noNotifications">
+    <div class="masonry-list ion-margin-top" *ngIf="messages.length > 0; else noNotifications">
       <div class="masonry-item" *ngFor="let message of messages">
-        <ion-card (click)="openModal(message)" class="notification" [class.unread]="!message.read" no-margin>
+        <ion-card (click)="openModal(message)" class="notification ion-no-margin" [class.unread]="!message.read">
           <ion-card-header>
             <ion-card-title>
               <h3 class="responsive-h1">
@@ -23,7 +23,7 @@
               </h3>
             </ion-card-title>
           </ion-card-header>
-          <ion-card-content no-padding padding-start padding-end padding-bottom>
+          <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end ion-padding-bottom">
             <p><span class="text-bold">Sender:</span> {{message.staff_name}}</p>
             <p><span class="text-bold">Sent on:</span> {{message.sent_on | date: 'EEEE, dd MMMM y'}}</p>
             <p><span class="text-bold">Sent at:</span> {{message.sent_on | date: 'hh:mm aaa'}}</p>
@@ -46,9 +46,9 @@
     </ng-template>
   </ng-container>
   <ng-template #loading>
-    <div class="masonry-list" margin-top>
+    <div class="masonry-list ion-margin-top">
       <div class="masonry-item" *ngFor="let _ of skeletons">
-        <ion-card class="notification" no-margin>
+        <ion-card class="notification ion-no-margin">
           <ion-card-header>
             <ion-card-title>
               <h3 class="responsive-h1">
@@ -56,10 +56,16 @@
               </h3>
             </ion-card-title>
           </ion-card-header>
-          <ion-card-content no-padding padding-start padding-end padding-bottom>
-            <p><ion-skeleton-text animated style="width: 90%; height: 15px;"></ion-skeleton-text></p>
-            <p><ion-skeleton-text animated style="width: 35%; height: 15px;"></ion-skeleton-text></p>
-            <p><ion-skeleton-text animated style="width: 70%; height: 15px;"></ion-skeleton-text></p>
+          <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end ion-padding-bottom">
+            <p>
+              <ion-skeleton-text animated style="width: 90%; height: 15px;"></ion-skeleton-text>
+            </p>
+            <p>
+              <ion-skeleton-text animated style="width: 35%; height: 15px;"></ion-skeleton-text>
+            </p>
+            <p>
+              <ion-skeleton-text animated style="width: 70%; height: 15px;"></ion-skeleton-text>
+            </p>
             <p class="small-margin-top new" style="float: left;font-weight: 300">
               <ion-skeleton-text animated style="width: 60px; height: 15px;"></ion-skeleton-text>
             </p>

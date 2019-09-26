@@ -41,7 +41,7 @@
                   <h4>Programme</h4>
                   <p>{{ profile.PROGRAMME }}</p>
                 </div>
-                <div class="col-12 text-center ion-margin-top">
+                <div class="ion-margin-top">
                   <ng-template [ngIf]="profile.MENTOR_SAMACCOUNTNAME" [ngIfElse]="mentorLost">
                     <h4>Mentor Name</h4>
                     <p (click)="openStaffDirectoryInfo(profile.MENTOR_SAMACCOUNTNAME)"
@@ -52,7 +52,7 @@
                     <p>{{ profile.MENTOR_NAME }}</p>
                   </ng-template>
                 </div>
-                <div class="col-12 text-center ion-margin-top">
+                <div class="ion-margin-top">
                   <ng-template [ngIf]="profile.PL_SAMACCOUNTNAME" [ngIfElse]="plLost">
                     <h4>Programme Leader</h4>
                     <p (click)="openStaffDirectoryInfo(profile.PL_SAMACCOUNTNAME)" class="colored-text cursor-pointer">
@@ -63,7 +63,7 @@
                     <p>{{ profile.PL_NAME }}</p>
                   </ng-template>
                 </div>
-                <div class="col-12 text-center ion-margin-top" *ngIf='!local'>
+                <div class="ion-margin-top" *ngIf='!local'>
                   <ng-template let-visa [ngIf]='visa$ | async'>
                     <ng-template [ngIf]='visa[0].VISA_EXPIRY_DATE' [ngIfElse]='noVisa'>
                       <h4>Student Pass Expiry Date</h4>
@@ -81,7 +81,7 @@
                     </ng-template>
                   </ng-template>
                 </div>
-                <div class="col-12 text-center ion-margin-top">
+                <div class="ion-margin-top">
                   <h4>Country</h4>
                   <p>{{ profile.COUNTRY }}</p>
                 </div>
@@ -111,34 +111,34 @@
                 </ion-card-subtitle>
               </ion-card-header>
               <ion-card-content>
-                <div class="col-12 text-center ion-margin-top">
+                <div class="ion-margin-top">
                   <h4>ID</h4>
                   <p>{{ staffProfile[0].ID }}</p>
                 </div>
-                <div class="col-12 text-center ion-margin-top">
+                <div class="ion-margin-top">
                   <h4>Current Job Type</h4>
                   <p>{{ staffProfile[0].CURRENT_JOB_TYPE }}</p>
                 </div>
-                <div class="col-12 text-center ion-margin-top">
+                <div class="ion-margin-top">
                   <h4>Department</h4>
                   <p>{{ staffProfile[0].DEPARTMENT }}</p>
                 </div>
 
                 <ng-template [ngIf]="staffProfile[0].DEPARTMENT1">
-                  <div class="col-12 text-center ion-margin-top">
+                  <div class="ion-margin-top">
                     <h4>Department 1</h4>
                     <p>{{ staffProfile[0].DEPARTMENT1 }}</p>
                   </div>
                 </ng-template>
 
                 <ng-template [ngIf]="staffProfile[0].DEPARTMENT2">
-                  <div class="col-12 text-center ion-margin-top">
+                  <div class="ion-margin-top">
                     <h4>Department 2</h4>
                     <p>{{ staffProfile[0].DEPARTMENT2 }}</p>
                   </div>
                 </ng-template>
 
-                <div class="col-12 text-center ion-margin-top">
+                <div class="ion-margin-top">
                   <h4>Nationality</h4>
                   <p>{{ staffProfile[0].NATIONALITY }}</p>
                 </div>
