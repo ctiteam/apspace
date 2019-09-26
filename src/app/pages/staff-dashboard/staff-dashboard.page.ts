@@ -362,7 +362,7 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
   }
 
   getUpcomingHoliday(date: Date, refresher): Observable<EventComponentConfigurations[]> {
-    return this.ws.get<Holidays>('/transix/holidays/filtered/staff', refresher, {auth: false}).pipe(
+    return this.ws.get<Holidays>('/transix/holidays/filtered/staff', refresher, { auth: false }).pipe(
       map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
       map(holiday => {
         const examsListEventMode: EventComponentConfigurations[] = [];
@@ -447,6 +447,7 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
       map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
         return trips.filter(trip => {
           return moment(trip.trip_time, 'kk:mm').toDate() >= dateNow
+            && trip.trip_day === this.getTodayDay(dateNow)
             && ((trip.trip_from === firstLocation && trip.trip_to === secondLocation)
               || (trip.trip_from === secondLocation && trip.trip_to === firstLocation));
         });
@@ -532,5 +533,17 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
       return false;
     }
     return true;
+  }
+
+  // GET DAY SHORT NAME (LIKE 'SAT' FOR SATURDAY)
+  getTodayDay(date: Date) {
+    const dayRank = date.getDay();
+    if (dayRank === 0) {
+      return 'sun';
+    } else if (dayRank > 0 && dayRank <= 5) {
+      return 'mon-fri';
+    } else {
+      return 'sat';
+    }
   }
 }
