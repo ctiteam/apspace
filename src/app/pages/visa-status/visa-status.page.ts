@@ -2,11 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Chart } from 'chart.js';
 
 import { StudentProfile, VisaDetails, CountryData } from '../../interfaces';
 
-import { SettingsService, WsApiService } from '../../services';
+import { WsApiService } from '../../services';
 
 @Component({
   selector: 'app-visa-status',
@@ -30,15 +29,12 @@ export class VisaStatusPage implements OnInit {
   // skeleton
   skeletons = new Array(5);
 
-
   constructor(
-    private ws: WsApiService,
-    private settings: SettingsService,
+    private ws: WsApiService
   ) { }
 
   ngOnInit() {
     this.getProfile();
-
   }
 
   getProfile() {
@@ -51,30 +47,25 @@ export class VisaStatusPage implements OnInit {
         } else {
           this.local = false;
           this.getAlpha3Code();
-
         }
       }),
     ).subscribe();
-
   }
 
   getAlpha3Code() {
+    // alpha 3 code example: Libya => LBY
     this.ws.get<CountryData[]>(`/name/${this.countryName}?fields=name;alpha3Code`, false, {
       url: 'https://restcountries.eu/rest/v2',
       auth: false,
     }).pipe(
       tap(res => this.alpha3Code = res[0].alpha3Code),
       tap(_ => this.getVisa()),
-
     ).subscribe();
-
   }
 
   getVisa() {
-
     this.visa$ = this.ws.get<VisaDetails>(`/student/visa_renewal_status/${this.alpha3Code}/${this.passportNumber}`, false, {
       auth: false,
-      // tslint:disable-next-line: semicolon
     });
   }
 
@@ -82,5 +73,3 @@ export class VisaStatusPage implements OnInit {
     this.historyStatus = !this.historyStatus;
   }
 }
-
-
