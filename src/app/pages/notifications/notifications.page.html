@@ -46,6 +46,30 @@
     </ng-template>
   </ng-container>
   <ng-template #loading>
-    loading...
+    <div class="masonry-list" margin-top>
+      <div class="masonry-item" *ngFor="let _ of skeletons">
+        <ion-card class="notification" no-margin>
+          <ion-card-header>
+            <ion-card-title>
+              <h3 class="responsive-h1">
+                <ion-skeleton-text animated style="width: 70%; line-height: 25px;"></ion-skeleton-text>
+              </h3>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content no-padding padding-start padding-end padding-bottom>
+            <p><ion-skeleton-text animated style="width: 90%; height: 15px;"></ion-skeleton-text></p>
+            <p><ion-skeleton-text animated style="width: 35%; height: 15px;"></ion-skeleton-text></p>
+            <p><ion-skeleton-text animated style="width: 70%; height: 15px;"></ion-skeleton-text></p>
+            <p class="small-margin-top new" style="float: left;font-weight: 300">
+              <ion-skeleton-text animated style="width: 60px; height: 15px;"></ion-skeleton-text>
+            </p>
+            <p class="small-margin-top" style="float: right;font-weight: 300" color="primary">
+              <ion-skeleton-text animated style="width: 40px; height: 15px;"></ion-skeleton-text>
+            </p>
+            <div class="clearfix"></div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
   </ng-template>
 </ion-content>

@@ -12,7 +12,7 @@ import { NotificationModalPage } from './notification-modal';
 })
 export class NotificationsPage implements OnInit {
   messages$: Observable<any>;   // TYPE TO BE CHANGED AFTER DINGDONG TEAM FINISH THE BACKEND
-
+  skeletons = new Array(3);
   constructor(
     private notificationService: NotificationService,
     private modalCtrl: ModalController
