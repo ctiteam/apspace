@@ -1,0 +1,61 @@
+.display {
+    display: block;
+}
+.greenSquare {
+    height: 10px;
+    width: 100%;
+    background-color: green;
+ 
+  }
+  .yellowSquare {
+    height: 10px;
+    width: 100%;
+    background-color: yellow;
+ 
+  }
+  .redSquare {
+    height: 10px;
+    width: 100%;
+    background-color: red;
+ 
+  }
+  ion-text {
+    font-size: 14px;
+    font-weight: 400;
+  }
+  .titleBorder{
+    border-bottom: 2px solid var(--primary-color) !important;
+  }
+
+.hide-card-show-table {
+  display: none;
+}
+
+@media (min-width: 576px)  {
+  .hide-card-show-table {
+    display: block;
+  }
+}
+  
+@media (min-width: 576px)  {
+  .show-card-hide-table {
+    display: none;
+  }
+  }
+  a {
+    position: absolute;
+    right: .5em;
+    top: 50%;
+    margin-top: -8px;
+  }
+  .progress-bar {
+    position: relative;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+    padding: 1.5px;
+  }
+  .set-margin-auto {
+    margin: auto;
+  }

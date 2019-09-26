@@ -1,0 +1,234 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Visa Status</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="!local; else isLocal">
+    <ng-container *ngIf="(visa$ | async) as visaDetails; else loading">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="5">
+            <ion-card class="ion-no-margin ion-margin-bottom">
+              <ion-card-header class="colored-border titleBorder">
+                <ion-card-title class="responsive-h1">
+                  Summary
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-text class="display ion-padding-bottom ion-padding-top">
+                  <span class="text-bold">Full Name:</span> {{ visaDetails.applicant_fullname }}
+                </ion-text>
+                <ion-text class="display ion-padding-bottom">
+                  <span class="text-bold">Travel Document Number:</span> {{ visaDetails.applicant_traveldocno }}
+                </ion-text>
+                <ion-text class="display ion-padding-bottom">
+                  <span class="text-bold">Application Number:</span> {{ visaDetails.applicant_id }}
+                </ion-text>
+                <!-- <ion-text class="display ion-padding-bottom">
+                        <span class="text-bold"> Application Type:</span> {{ visaDetails.applicant_id }}
+                      </ion-text> -->
+                <ion-text class="display">
+                  <span class="text-bold"> Application Status:</span>
+                  {{ visaDetails.status_historys[0].status_title }}
+                </ion-text>
+                <div class="progress-bar ion-margin-top" [style.width]="visaDetails.status_historys[0].complete + '%'"
+                  [style.background]="
+                      '#' + visaDetails.status_historys[0].progress_color
+                    ">
+                  <p text-center style="color: white">{{visaDetails.status_historys[0].complete}}%</p>
+                </div>
+              </ion-card-content>
+            </ion-card>
+            <ion-card class="ion-no-margin">
+              <ion-card-header class="colored-border titleBorder">
+                <ion-card-title class="responsive-h1">
+                  Color Info
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="1" class="set-margin-auto">
+                      <div class="greenSquare"></div>
+                    </ion-col>
+                    <ion-col size="11">
+                      <p>Your application is progressing accordingly.</p>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="1" class="set-margin-auto">
+                      <div class="yellowSquare"></div>
+                    </ion-col>
+                    <ion-col size="11">
+                      <p>Your application is pending additional documents or correction by your institution.</p>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="1" class="set-margin-auto">
+                      <div class="redSquare"></div>
+                    </ion-col>
+                    <ion-col size="11">
+                      <p>Your application has been rejected at the current stage. Please contact your institution
+                        for
+                        advice.</p>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col size="12" size-md="7">
+            <ion-card class="ion-no-margin">
+              <ion-card-header class="colored-border titleBorder" (click)="showHide()">
+                <ion-card-title class="responsive-h1">
+                  Application Progress History
+                </ion-card-title>
+                <a>
+                  <ion-icon name="arrow-dropdown"></ion-icon>
+                </a>
+              </ion-card-header>
+              <ion-card-content *ngIf="historyStatus">
+                <ion-grid class="hide-card-show-table">
+                  <ion-row class="ion-padding-top ">
+                    <ion-col padding-start size="12" size-sm="4">
+                      <h2 class="text-bold">Date</h2>
+                    </ion-col>
+                    <ion-col size="12" size-sm="4">
+                      <h2 class="text-bold">Status</h2>
+                    </ion-col>
+                    <ion-col size="12" size-sm="4" padding-start>
+                      <h2 class="text-bold">Remark</h2>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+                <ion-card *ngFor="let status of visaDetails.status_historys">
+                  <ion-card-content>
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col size="12" size-sm="4" class="set-margin-auto">
+                          <p class="text-bold show-card-hide-table ion-padding-rignt"> Date:</p>
+                          {{ status.created_at }}
+                        </ion-col>
+                        <ion-col size="12" size-sm="4" class="set-margin-auto">
+                          <p class="text-bold show-card-hide-table ion-padding-rignt"> Status:</p>
+                          {{ status.status_title }}
+                        </ion-col>
+                        <ion-col size="12" size-sm="4" class="set-margin-auto">
+                          <p class="text-bold show-card-hide-table ion-padding-rignt"> Remark:</p>
+                          {{ status.remark }}
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-card-content>
+                </ion-card>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+
+    <ng-template #loading>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="5">
+            <!-- loading for Summary section-->
+            <ion-card class="ion-no-margin ion-margin-bottom">
+              <ion-card-header>
+                <ion-card-title>
+                  <ion-skeleton-text animated width="30%" style="line-height: 20px"></ion-skeleton-text>
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-text class="display ion-padding-bottom ion-padding-top">
+                  <ion-skeleton-text animated width="70%" style="line-height: 20px"></ion-skeleton-text>
+                </ion-text>
+                <ion-text class="display ion-padding-bottom">
+                  <ion-skeleton-text animated width="50%" style="line-height: 20px"></ion-skeleton-text>
+                </ion-text>
+                <ion-text class="display ion-padding-bottom">
+                  <ion-skeleton-text animated width="50%" style="line-height: 20px"></ion-skeleton-text>
+                </ion-text>
+                <ion-text class="display">
+                  <ion-skeleton-text animated width="40%" style="line-height: 20px"></ion-skeleton-text>
+                </ion-text>
+                <div class="progress-bar ion-margin-top">
+                  <ion-skeleton-text animated width="100%" style="line-height: 30px"></ion-skeleton-text>
+                </div>
+              </ion-card-content>
+            </ion-card>
+            <!-- loading for Color Info section-->
+            <ion-card class="ion-no-margin">
+              <ion-card-header>
+                <ion-card-title class="responsive-h1">
+                  <ion-skeleton-text animated width="30%" style="line-height: 20px"></ion-skeleton-text>
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-skeleton-text class="ion-margin-top" animated width="60%" style="line-height: 20px">
+                </ion-skeleton-text>
+                <ion-skeleton-text animated width="50%" style="line-height: 20px"></ion-skeleton-text>
+                <ion-skeleton-text animated width="70%" style="line-height: 20px"></ion-skeleton-text>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <!-- loading for Status History section-->
+          <ion-col size="12" size-md="7">
+            <ion-card class="ion-no-margin">
+              <ion-card-header>
+                <ion-card-title>
+                  <ion-skeleton-text animated width="30%" style="line-height: 20px"></ion-skeleton-text>
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-card *ngFor="let s of skeletons">
+                  <ion-card-content>
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col size="12" size-sm="4" class="set-margin-auto">
+                          <ion-skeleton-text animated width="20%" style="line-height: 20px"></ion-skeleton-text>
+                        </ion-col>
+                        <ion-col size="12" size-sm="4" class="set-margin-auto">
+                          <ion-skeleton-text animated width="30%" style="line-height: 20px"></ion-skeleton-text>
+                        </ion-col>
+                        <ion-col size="12" size-sm="4" class="set-margin-auto">
+                          <ion-skeleton-text animated width="70%" style="line-height: 20px"></ion-skeleton-text>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-card-content>
+                </ion-card>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+  </div>
+
+  <ng-template #isLocal>
+    <ion-grid>
+      <ion-row>
+        <ion-col size-xs="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>
+                <h4 class="responsive-h1 danger-text">
+                  This page is not for local students
+                </h4>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content padding>
+              <p>There is no Visa application for this account</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
+</ion-content>

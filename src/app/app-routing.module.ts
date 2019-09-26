@@ -198,7 +198,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () =>
       import('./pages/settings/change-password/change-password.module').then(m => m.ChangePasswordPageModule)
-  }
+  },
+  { path: 'visa-status', loadChildren: './pages/visa-status/visa-status.module#VisaStatusPageModule' }
 
 ];
 
