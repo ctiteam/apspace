@@ -10,14 +10,14 @@
   <div *ngIf="(view$ | async) === 'list'; else menuCardsUI" class="masonry-list">
     <div *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop"
       class="masonry-item">
-      <ion-card no-margin>
+      <ion-card class="ion-no-margin">
         <ion-card-header>
           <ion-card-title>
             <h3>{{ group.key }}</h3>
           </ion-card-title>
         </ion-card-header>
-        <ion-card-content no-padding>
-          <ion-list no-margin>
+        <ion-card-content class="ion-no-padding">
+          <ion-list class="ion-no-margin">
             <ion-item-group>
               <ion-item *ngFor="let item of group.value"
                 (click)="openPage(item.url)" class="cursor-pointer">
@@ -40,12 +40,12 @@
   <ng-template #menuCardsUI>
     <ion-grid>
       <ion-row *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop">
-        <ion-col size="12" margin-top margin-bottom>
-          <h5 class="colored-text" text-center>{{ group.key }}</h5>
+        <ion-col size="12" class="ion-margin-top ion-margin-bottom">
+          <h5 class="colored-text ion-text-center" >{{ group.key }}</h5>
         </ion-col>
-        <ion-col *ngFor="let item of group.value" class="menu-item"
-          text-center size-xs="6" size-md="4" size-lg="3">
-          <ion-card no-margin (click)="openPage(item.url)" class="cursor-pointer">
+        <ion-col *ngFor="let item of group.value" class="menu-item ion-text-center"
+          size-xs="6" size-md="4" size-lg="3">
+          <ion-card (click)="openPage(item.url)" class="ion-no-margin cursor-pointer">
             <ion-card-content>
               <div class="wrapper">
                 <img [src]="item.img">

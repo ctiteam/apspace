@@ -14,7 +14,7 @@
 
 <ion-content id="content">
   <!-- MAIN GRID -->
-  <ion-grid no-padding>
+  <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-col size="12" size-md="6" size-lg="5">
         <ion-card>
@@ -30,7 +30,7 @@
                 </ion-col>
                 <!-- USER DATA -->
                 <ion-col size="12" class="ion-text-center">
-                  <ion-card-header no-padding padding-top>
+                  <ion-card-header class="ion-no-padding ion-padding-top">
                     <ion-card-title>
                       <h5 class="responsive-h1">{{staff.FULLNAME}}</h5>
                       <h5 class="responsive-h2 secondary-text-color">{{staff.TITLE}}</h5>
@@ -61,11 +61,11 @@
           <ng-template #loadingUserData>
             <ion-grid>
               <ion-row>
-                <ion-col size="auto" margin-end margin-top>
+                <ion-col size="auto" class="ion-margin-end ion-margin-top">
                   <ion-skeleton-text animated style="width: 123px; line-height: 170px"></ion-skeleton-text>
                 </ion-col>
                 <ion-col>
-                  <ion-card-header no-padding padding-top>
+                  <ion-card-header class="ion-no-padding ion-padding-top">
                     <ion-card-title>
                       <ion-skeleton-text animated style="width: 70%; line-height: 30px"></ion-skeleton-text>
                     </ion-card-title>
@@ -88,7 +88,8 @@
             </ion-card-header>
             <ion-card-content>
               <p class="small-margin-top">
-                You have filtered the data to show only the slots opened on <span class="text-bold">{{dateToFilter | date : 'EEEE, dd MMMM y'}}</span>
+                You have filtered the data to show only the slots opened on <span
+                  class="text-bold">{{dateToFilter | date : 'EEEE, dd MMMM y'}}</span>
               </p>
               <p class="small-margin-top danger-text text-bold cursor-pointer" style="text-decoration: underline;"
                 (click)="dateToFilter = ''">
@@ -104,13 +105,13 @@
           <ng-container *ngIf="(allSlotsGroupedByMonthYear | keyvalue)?.length > 0; else noSlots">
             <ng-container *ngFor="let slotsForMonthYear of allSlotsGroupedByMonthYear | keyvalue">
               <ion-card>
-                <ion-card-header padding-start class="cursor-pointer">
+                <ion-card-header class="ion-padding-start cursor-pointer">
                   <ion-card-title>
                     <h5 style="display: inline-block" class="responsive-h1 main-text-color">
                       {{ slotsForMonthYear.key | date: 'MMMM y' }} </h5>
                   </ion-card-title>
                 </ion-card-header>
-                <ion-card-content no-padding>
+                <ion-card-content class="ion-no-padding">
                   <div class="event-calendar">
                     <div class="event-list"
                       *ngFor="let slotsGroupedbyDay of slotsForMonthYear.value | filterSlotsByDay: dateToFilter | keyvalue">

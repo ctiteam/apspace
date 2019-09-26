@@ -7,11 +7,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-grid no-padding>
+<ion-content class="ion-padding">
+  <ion-grid class="ion-no-padding">
     <ion-row>
       <ion-col size="12" size-md="6" size-lg="8">
-        <ion-card no-margin>
+        <ion-card class="ion-no-margin">
           <ion-card-header>
             <ion-card-subtitle class="responsive-h2">
               Asia Pacific University of Technology & Innovation (APU)
@@ -25,24 +25,24 @@
               Welcome, this service can be used to verify qualifications awarded to APU
               graduates after the year {{applieedYear}}.
             </p>
-            <p class="text-bold" padding-vertical>
+            <p class="text-bold ion-padding-vertical">
               This online service will only verify academic qualifications where the
               completed course has been conferred by APU’s Senate.
             </p>
-            <p class="normaltext" padding-bottom>
+            <p class="normaltext ion-padding-bottom">
               If you cannot verify a graduate and/or suspect it may be fraudulent,
               please submit an
               <a style="text-decoration: underline" (click)="openForms()" class="colored-text">Online Web
                 Request</a>
               to report and confirm the qualifications.
             </p>
-            <ion-grid no-padding padding-top>
+            <ion-grid class="ion-no-padding ion-padding-top">
               <ion-row class="input-elements-wrabber">
-                <ion-col no-padding size="10" class="input-wrapper">
-                  <ion-input padding-start placeholder="Student ID" (keyup.enter)="searchForGraduaters()" [(ngModel)]="searchKeyword"></ion-input>
+                <ion-col size="10" class="ion-no-padding input-wrapper">
+                  <ion-input class="ion-padding-start" placeholder="Student ID" (keyup.enter)="searchForGraduaters()" [(ngModel)]="searchKeyword"></ion-input>
                 </ion-col>
-                <ion-col size="2" no-padding>
-                  <ion-button class="colored-text" no-margin fill="clear" expand="full"
+                <ion-col size="2" class="ion-no-padding">
+                  <ion-button class="colored-text ion-no-margin" fill="clear" expand="full"
                     [disabled]="!this.searchKeyword || this.searchKeyword == ''" (click)="searchForGraduaters()">
                     <ion-icon class="responsive-icon" slot="icon-only" name="search"></ion-icon>
                   </ion-button>
@@ -56,14 +56,14 @@
         <ng-template [ngIf]="userSearched" [ngIfElse]="noSearchDone">
           <ng-template let-graduaters [ngIf]="graduater$ | async" [ngIfElse]="loading">
             <ng-template [ngIf]="graduaters.length > 0" [ngIfElse]="noGraduaters">
-              <ion-card no-margin *ngFor="let graduater of graduaters">
+              <ion-card class="ion-no-margin" *ngFor="let graduater of graduaters">
                 <ion-card-header>
                   <ion-card-title class="responsive-h1 text-bold" color="success">
                     {{ graduater.Name }}
                   </ion-card-title>
                 </ion-card-header>
-                <ion-card-content no-padding padding-start padding-end padding-bottom>
-                  <ion-grid no-padding>
+                <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end ion-padding-bottom">
+                  <ion-grid class="ion-no-padding">
                     <ion-row>
                       <ion-col size="12">
                         <small>Student ID:</small>
@@ -97,7 +97,7 @@
                     No Results Found for {{resultKeyWord}}!
                   </ion-card-title>
                 </ion-card-header>
-                <ion-card-content no-padding padding-start padding-end padding-bottom>
+                <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end ion-padding-bottom">
                   <p>
                     Please make sure that you keyed in Graduate Full Name (<span class="text-bold">EXACTLY</span> as per
                     Academic
@@ -117,7 +117,7 @@
                   <ion-skeleton-text animated style="width: 70%; line-height: 25px;"></ion-skeleton-text>
                 </ion-card-title>
               </ion-card-header>
-              <ion-card-content padding-start padding-bottom padding-end no-padding>
+              <ion-card-content class="ion-padding-start ion-padding-bottom ion-padding-end ion-no-padding">
                 <h4>
                   <ion-skeleton-text animated style="width: 70%; line-height: 25px;"></ion-skeleton-text>
                   <ion-skeleton-text animated style="width: 40%; line-height: 25px;"></ion-skeleton-text>
@@ -129,13 +129,13 @@
           </ng-template>
         </ng-template>
         <ng-template #noSearchDone>
-          <ion-card no-margin>
+          <ion-card class="ion-no-margin">
             <ion-card-header>
               <ion-card-subtitle class="responsive-h2">
                 To verify qualifications awarded:
               </ion-card-subtitle>
             </ion-card-header>
-            <ion-card-content no-padding padding-start padding-end padding-bottom>
+            <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end ion-padding-bottom">
               <p>
                 Please key in Graduate Full Name (<span class="text-bold">EXACTLY</span> as per Academic
                 Transcript/Certificate) <span class="text-bold">OR</span> Student Identification Number (<span

@@ -1,17 +1,17 @@
-<ion-card no-margin>
+<ion-card class="ion-no-margin">
   <ion-card-header>
     <ion-card-title [style.width]="cardConfigurations.withOptionsButton? '90%': '100%'" class="float-left card-title">
       <h5 class="small-text" *ngIf="cardConfigurations.cardSubtitle">{{cardConfigurations.cardSubtitle}}</h5>
       <h3 class="responsive-h1">{{cardConfigurations.cardTitle}}</h3>
     </ion-card-title>
-    <div *ngIf="cardConfigurations.withOptionsButton" class="card-options-icon float-left" text-right>
+    <div *ngIf="cardConfigurations.withOptionsButton" class="card-options-icon float-left ion-text-right">
       <a (click)="showOptionsMenu($event)">
         <ion-icon class="responsive-icon colored-text" name="md-more"></ion-icon>
       </a>
     </div>
     <div class="clearfix"></div>
   </ion-card-header>
-  <ion-card-content no-padding [class.ion-padding-bottom]="cardConfigurations.contentPadding" [class.ion-padding-end]="cardConfigurations.contentPadding" [class.ion-padding-start]="cardConfigurations.contentPadding">
+  <ion-card-content class="ion-no-padding" [class.ion-padding-bottom]="cardConfigurations.contentPadding" [class.ion-padding-end]="cardConfigurations.contentPadding" [class.ion-padding-start]="cardConfigurations.contentPadding">
     <ng-content></ng-content>
   </ion-card-content>
 </ion-card>

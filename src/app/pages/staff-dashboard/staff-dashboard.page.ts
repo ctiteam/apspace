@@ -246,7 +246,6 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
   // PROFILE AND GREETING MESSAGE FUNCTIONS
   getProfile(refresher: boolean) {
     return this.staffProfile$ = this.ws.get<StaffProfile>('/staff/profile', refresher).pipe(
-      tap(p => console.log(p)),
       tap(staffProfile => this.staffFirstName = staffProfile[0].FULLNAME.split(' ')[0]),
       tap(staffProfile => this.getTodaysSchdule(staffProfile[0].ID, refresher))
     );

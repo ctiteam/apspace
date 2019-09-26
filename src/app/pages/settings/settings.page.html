@@ -7,12 +7,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-
+<ion-content class="ion-padding">
   <div class="masonry-list">
-
     <div class="masonry-item">
-      <ion-card no-margin margin-bottom>
+      <ion-card class="ion-no-margin ion-margin-bottom">
         <ion-card-header>
           <ion-card-title class="card-title float-left">
             <h3 class="responsive-h1">
@@ -25,26 +23,26 @@
           </ion-card-title>
           <div class="clearfix"></div>
         </ion-card-header>
-        <ion-card-content no-padding padding-bottom padding-start padding-end>
-          <ion-list no-padding>
+        <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
+          <ion-list class="ion-no-padding">
             <ion-item-group>
-              <ion-item-divider no-padding>
+              <ion-item-divider class="ion-no-padding">
                 <ion-label>
                   Theming
                 </ion-label>
               </ion-item-divider>
-              <ion-item lines="none" no-padding>
+              <ion-item lines="none" class="ion-no-padding">
                 <ion-label>Dark Theme</ion-label>
                 <ion-toggle [(ngModel)]="darkThemeEnabled" [disabled]="pureDarkThemeEnabled"
                   (ngModelChange)="toggleDarkTheme()">
                 </ion-toggle>
               </ion-item>
-              <ion-item lines="none" no-padding>
+              <ion-item lines="none" class="ion-no-padding">
                 <ion-label>Pure Dark</ion-label>
                 <ion-toggle [(ngModel)]="pureDarkThemeEnabled" [disabled]="!darkThemeEnabled"
                   (ngModelChange)="togglePureDarkTheme()"></ion-toggle>
               </ion-item>
-              <ion-item lines="none" no-padding>
+              <ion-item lines="none" class="ion-no-padding">
                 <ion-label>Accent Color</ion-label>
                 <ion-select [(ngModel)]="activeAccentColor" [disabled]="pureDarkThemeEnabled"
                   (ngModelChange)="toggleAccentColor()">
@@ -55,12 +53,12 @@
               </ion-item>
             </ion-item-group>
             <ion-item-group>
-              <ion-item-divider no-padding>
+              <ion-item-divider class="ion-no-padding">
                 <ion-label>
                   Others
                 </ion-label>
               </ion-item-divider>
-              <ion-item lines="none" no-padding>
+              <ion-item lines="none" class="ion-no-padding">
                 <ion-label>Menu UI</ion-label>
                 <ion-select [(ngModel)]="menuUI" (ngModelChange)="toggleMenuUI()">
                   <ion-select-option [value]="'cards'">
@@ -71,7 +69,7 @@
                   </ion-select-option>
                 </ion-select>
               </ion-item>
-              <ion-item lines="none" no-padding>
+              <ion-item lines="none" class="ion-no-padding">
                 <ion-label>Timetable UI</ion-label>
                 <ion-select [(ngModel)]="test">
                   <ion-select-option [value]="true">
@@ -82,7 +80,7 @@
                   </ion-select-option>
                 </ion-select>
               </ion-item>
-              <ion-item lines="none" no-padding>
+              <ion-item lines="none" class="ion-no-padding">
                 <a (click)="clearCache()">
                   <ion-label color="danger">Clear cache</ion-label>
                 </a>
@@ -93,7 +91,7 @@
       </ion-card>
     </div>
     <div class="masonry-item">
-      <ion-card no-margin margin-bottom>
+      <ion-card class="ion-no-margin ion-margin-bottom">
         <ion-card-header>
           <ion-card-title class="card-title float-left">
             <h3 class="responsive-h1">
@@ -105,15 +103,15 @@
           </ion-card-title>
           <div class="clearfix"></div>
         </ion-card-header>
-        <ion-card-content no-padding padding-bottom padding-start padding-end>
-          <ion-list no-padding>
+        <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
+          <ion-list class="ion-no-padding">
             <ion-item-group *ngIf="locations$ | async as locations">
-              <ion-item-divider no-padding>
+              <ion-item-divider class="ion-no-padding">
                 <ion-label>
                   Locations
                 </ion-label>
               </ion-item-divider>
-              <ion-item lines="none" no-padding>
+              <ion-item lines="none" class="ion-no-padding">
                 <ion-label>First Location</ion-label>
                 <ion-select [(ngModel)]="busShuttleServiceSettings.firstLocation"
                   (ngModelChange)="setBusShuttleServicesSettings()">
@@ -122,7 +120,7 @@
                   </ion-select-option>
                 </ion-select>
               </ion-item>
-              <ion-item lines="none" no-padding>
+              <ion-item lines="none" class="ion-no-padding">
                 <ion-label>Second Location</ion-label>
                 <ion-select [(ngModel)]="busShuttleServiceSettings.secondLocation"
                   (ngModelChange)="setBusShuttleServicesSettings()">
@@ -137,7 +135,7 @@
       </ion-card>
     </div>
     <div class="masonry-item" *ngIf="userRole">
-      <ion-card no-margin margin-bottom>
+      <ion-card class="ion-no-margin ion-margin-bottom">
         <ion-card-header>
           <ion-card-title class="card-title float-left">
             <h3 class="responsive-h1">
@@ -149,10 +147,10 @@
           </ion-card-title>
           <div class="clearfix"></div>
         </ion-card-header>
-        <ion-card-content no-padding padding-bottom padding-start padding-end>
-          <ion-list no-padding>
+        <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
+          <ion-list class="ion-no-padding">
             <ion-item-group *ngIf="timetable$ | async as timetable">
-              <ion-item-divider no-padding margin-bottom>
+              <ion-item-divider class="ion-no-padding ion-margin-bottom">
                 <ion-label>
                   List of hidden modules
                 </ion-label>
@@ -171,7 +169,7 @@
       </ion-card>
     </div>
     <div class="masonry-item">
-      <ion-card no-margin margin-bottom>
+      <ion-card class="ion-no-margin ion-margin-bottom">
         <ion-card-header>
           <ion-card-title class="card-title float-left">
             <h3 class="responsive-h1">
@@ -183,20 +181,20 @@
           </ion-card-title>
           <div class="clearfix"></div>
         </ion-card-header>
-        <ion-card-content no-padding padding-bottom padding-start padding-end>
-          <ion-list no-padding>
+        <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
+          <ion-list class="ion-no-padding">
             <a (click)="navigateToPage('set-security-questions')">
-              <ion-item lines="none" no-padding>
+              <ion-item lines="none" class="ion-no-padding">
                 <ion-label>Set Security Questions</ion-label>
               </ion-item>
             </a>
             <a (click)="navigateToPage('change-password')">
-              <ion-item lines="none" no-padding>
+              <ion-item lines="none" class="ion-no-padding">
                 <ion-label>Change Password</ion-label>
               </ion-item>
             </a>
             <a (click)="resetByod()">
-              <ion-item lines="none" no-padding>
+              <ion-item lines="none" class="ion-no-padding">
                 <ion-label>BYOD Reset</ion-label>
               </ion-item>
             </a>

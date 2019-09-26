@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -16,16 +16,16 @@
     <ng-template let-news [ngIf]="news$ | async" [ngIfElse]="loadingNews">
       <ng-template [ngIf]="news && news.length > 0" [ngIfElse]="nonews">
         <div class="masonry-item" *ngFor="let item of news">
-          <ion-card no-margin tappable (click)="openModal(item)">
+          <ion-card class="ion-no-margin" tappable (click)="openModal(item)">
             <img [src]="item.field_news_image[0].url" />
-            <ion-card-content color="light">
+            <ion-card-content>
               {{ item.title[0].value }}
             </ion-card-content>
           </ion-card>
         </div>
       </ng-template>
       <ng-template #nonews>
-        <ion-card padding>
+        <ion-card class="ion-padding">
           <ion-card-content>
             <p>No news available</p>
           </ion-card-content>
@@ -35,8 +35,8 @@
     <ng-template #loadingNews>
       <div class="masonry-item" *ngFor="let s of skeletonSettings.numberOfSkeltons">
         <ion-card tappable>
-          <ion-skeleton-text no-margin animated style="width: 100%; line-height: 200px"></ion-skeleton-text>
-          <ion-card-content color="light">
+          <ion-skeleton-text class="ion-no-margin" animated style="width: 100%; line-height: 200px"></ion-skeleton-text>
+          <ion-card-content>
             <ion-skeleton-text animated style="width: 60%; line-height: 15px"></ion-skeleton-text>
           </ion-card-content>
         </ion-card>

@@ -2,17 +2,17 @@
   <ion-toolbar>
     <ion-title>{{item.title[0].value}}</ion-title>
     <ion-buttons slot="end">
-        <ion-button outline small (click)="dismiss()" >        
-            <ion-icon name="close" ></ion-icon>
-       </ion-button>
-      </ion-buttons>
+      <ion-button outline small (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content parallax-header>
   <ion-img *ngIf="item.field_news_image[0].url" [src]="item.field_news_image[0].url"></ion-img>
-  <div padding>
-    <h3 class="colored-text" margin-top margin-bottom>{{item.title[0].value}}</h3>
-    <article class="main-text-color" pdding-strart [innerHTML]="sanitize(item.body[0].value)"></article>
+  <div class="ion-padding">
+    <h3 class="colored-text ion-margin-top ion-margin-bottom">{{item.title[0].value}}</h3>
+    <article class="main-text-color ion-pdding-strart" [innerHTML]="sanitize(item.body[0].value)"></article>
   </div>
 </ion-content>

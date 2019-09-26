@@ -8,13 +8,13 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid no-padding>
-    <ion-row justify-content-center>
-      <ion-col no-padding size-md="6" size-lg="5" size-xs="12">
+  <ion-grid class="ion-no-padding">
+    <ion-row class="ion-justify-content-center">
+      <ion-col class="ion-no-padding" size-md="6" size-lg="5" size-xs="12">
 
         <ng-template [ngIf]="!isLoading" [ngIfElse]="loadingForm">
-          <ion-card no-margin>
-            <ion-card-header text-center>
+          <ion-card class="ion-no-margin">
+            <ion-card-header class="ion-text-center">
               <ion-card-title>
                 Security Questions Form
               </ion-card-title>
@@ -22,28 +22,28 @@
             <ion-card-content>
               <form #qaForm="ngForm" (ngSubmit)="setConfig(qa);">
                 <div>
-                  <ion-item margin-bottom>
+                  <ion-item class="ion-margin-bottom">
                     <ion-label position="floating">First Question <ion-text color="danger"> * </ion-text>
                     </ion-label>
                     <ion-input type="text" [(ngModel)]="qa.attributeQuestion1" name="attributeQuestion1" required
                       #q1="ngModel"></ion-input>
                   </ion-item>
 
-                  <ion-item margin-bottom>
+                  <ion-item class="ion-margin-bottom">
                     <ion-label position="floating">First Answer <ion-text color="danger"> * </ion-text>
                     </ion-label>
                     <ion-input type="text" [(ngModel)]="qa.attributeAnswer1" name="attributeAnswer1" required
                       #a1="ngModel"></ion-input>
                   </ion-item>
 
-                  <ion-item margin-bottom>
+                  <ion-item class="ion-margin-bottom">
                     <ion-label position="floating">Second Question <ion-text color="danger"> * </ion-text>
                     </ion-label>
                     <ion-input type="text" [(ngModel)]="qa.attributeQuestion2" name="attributeQuestion2" required
                       #q2="ngModel"></ion-input>
                   </ion-item>
 
-                  <ion-item margin-bottom>
+                  <ion-item class="ion-margin-bottom">
                     <ion-label position="floating">Second Answer <ion-text color="danger"> * </ion-text>
                     </ion-label>
                     <ion-input type="text" [(ngModel)]="qa.attributeAnswer2" name="attributeAnswer2" required
@@ -56,46 +56,40 @@
                     <ion-input type="text" [(ngModel)]="qa.secondaryEmail" name="secondaryEmail" required #e="ngModel"
                       (ionChange)="onEmailChanging()"></ion-input>
                   </ion-item>
-                  <ion-text padding-start color="danger"><small *ngIf="showEmailNotValidMsg">Invalid Email Address</small></ion-text>
+                  <ion-text class="ion-padding-start" color="danger"><small *ngIf="showEmailNotValidMsg">Invalid Email
+                      Address</small></ion-text>
                 </div>
-                <div padding margin-top>
-                  <ion-button class="colored-background" type="submit" [disabled]="qaForm.invalid || qaForm.pristine || showEmailNotValidMsg"
-                    size="large" expand="block">Update</ion-button>
+                <div class="ion-padding ion-margin-top">
+                  <ion-button class="colored-background" type="submit"
+                    [disabled]="qaForm.invalid || qaForm.pristine || showEmailNotValidMsg" size="large" expand="block">
+                    Update</ion-button>
                 </div>
               </form>
             </ion-card-content>
           </ion-card>
         </ng-template>
-        
+
         <ng-template #loadingForm>
-          <ion-card no-margin>
+          <ion-card class="ion-no-margin">
             <ion-card-content>
               <div>
                 <ion-item>
                   <ion-skeleton-text animated style="width: 70%; line-height: 37px;"></ion-skeleton-text>
                 </ion-item>
-
                 <ion-item>
                   <ion-skeleton-text animated style="width: 49%; line-height: 37px;"></ion-skeleton-text>
-
                 </ion-item>
-
                 <ion-item>
                   <ion-skeleton-text animated style="width: 90%; line-height: 37px;"></ion-skeleton-text>
-
                 </ion-item>
-
                 <ion-item>
                   <ion-skeleton-text animated style="width: 80%; line-height: 37px;"></ion-skeleton-text>
-
                 </ion-item>
-
                 <ion-item>
                   <ion-skeleton-text animated style="width: 60%; line-height: 37px;"></ion-skeleton-text>
-
                 </ion-item>
               </div>
-              <div padding>
+              <div class="ion-padding">
                 <ion-skeleton-text animated style="width: 100%; line-height: 45px;"></ion-skeleton-text>
               </div>
             </ion-card-content>

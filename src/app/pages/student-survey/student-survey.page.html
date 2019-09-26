@@ -11,7 +11,7 @@
 <ion-content>
   <!-- Segmants -->
   <ng-container *ngIf="(COURSE_CODE$ | async) as intakeCourseCode; else loadingIntakes">
-    <ion-segment padding [(ngModel)]="intakeCode" (ngModelChange)="onIntakeCodeChanged()" scrollable>
+    <ion-segment class="ion-padding" [(ngModel)]="intakeCode" (ngModelChange)="onIntakeCodeChanged()" scrollable>
       <ion-segment-button *ngFor="let intake of intakeCourseCode" [value]="intake.COURSE_CODE_ALIAS">
         <ion-label>{{intake.COURSE_CODE_ALIAS}}</ion-label>
       </ion-segment-button>
@@ -112,7 +112,7 @@
                               Class Code:
                             </b>
                           </ion-text>
-                          <ion-text padiing-start>
+                          <ion-text class="ion-padiing-start">
                             {{ classCode }}
                           </ion-text>
                         </ion-col>
@@ -131,7 +131,7 @@
                       </ion-card-header>
                       <ion-card-content>
                         <div *ngIf="surveySection.questions.length > 0; else noQuestionsUnderThisSection">
-                          <div margin-top class="survey-question"
+                          <div class="ion-margin-top survey-question"
                             *ngFor="let surveyQuestion of surveySection.questions; index as questionIndex">
                             <p class="surveyQuestion main-text-color">
                               {{ '*' + surveyQuestion.content }}
@@ -188,7 +188,7 @@
                   </div>
                 </div>
               </div>
-              <div padding>
+              <div class="ion-padding">
                 <ion-button [disabled]="submitting" (click)="submitSurvey()" expand="block" class="success-background">
                   <span *ngIf="!submitting">Submit</span>
                   <span *ngIf="submitting">Loading ...</span>
@@ -239,10 +239,10 @@
       <!-- Temp solutions for APLC Students -->
       <ng-template #aplcStudent>
         <ion-col size-xs="12">
-          <h5 class="secondary-txt-color" margin-top text-center>
+          <h5 class="secondary-txt-color ion-margin-top ion-text-center">
             You will be automatically redirected to the survey system related to APLC Students.
           </h5>
-          <p class="secondary-txt-color" margin-top text-center>
+          <p class="secondary-txt-color ion-margin-top ion-text-center">
             If you are not redirected, you can click
             <a class="colored-txt" style="text-decoration: underline" (click)="openOldSystem()">here</a>
           </p>

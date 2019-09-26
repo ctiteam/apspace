@@ -9,8 +9,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content parallax-header padding>
-  <ion-card *ngIf="showRemarks" class="danger-border" no-margin margin-bottom>
+<ion-content parallax-header class="ion-padding">
+  <ion-card *ngIf="showRemarks" class="danger-border ion-no-margin ion-margin-bottom">
     <ion-card-content>
       <h6 class="colored-text">
         This booking has passed. You can add remarks (If you did not add) now by scrolling to the end of this page.
@@ -18,8 +18,8 @@
     </ion-card-content>
   </ion-card>
   <ng-container *ngIf="slotDetails$ | async as slotDetails; else loadingSlots">
-    <ion-card no-margin margin-bottom>
-      <ion-card-content no-padding>
+    <ion-card class="ion-no-margin ion-margin-bottom">
+      <ion-card-content class="ion-no-padding">
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="person" slot="start"></ion-icon>
           <ion-label>
@@ -83,20 +83,21 @@
             <h4 class="main-text-color">{{ slotDetails.note }}</h4>
           </ion-label>
         </ion-item>
-        <ion-button margin expand="block" class="danger-background" (click)="cancelBooking(slotDetails)">Cancel Booking
+        <ion-button expand="block" class="danger-background ion-margin" (click)="cancelBooking(slotDetails)">Cancel
+          Booking
         </ion-button>
       </ion-card-content>
     </ion-card>
 
-    <ion-card no-margin margin-bottom *ngIf="showRemarks">
-      <ion-card-header no-padding padding-top padding-start padding-end>
+    <ion-card class="ion-no-margin ion-margin-bottom" *ngIf="showRemarks">
+      <ion-card-header class="ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
         <ion-card-title>
           <h4 class="responsive-h1">
             Remarks
           </h4>
         </ion-card-title>
       </ion-card-header>
-      <ion-card-content class="no-padding-left" no-padding padding-bottom
+      <ion-card-content class="no-padding-left ion-no-padding ion-padding-bottom"
         *ngIf="(lecturerRemarks$ | async) as remarks; else loadingRemarks">
         <ng-container *ngIf="remarks.res !== 'feedbackid'; else showHistory">
           <ion-item lines="none">
@@ -107,12 +108,14 @@
             <ion-checkbox [(ngModel)]="copyToGIMS" slot="start"></ion-checkbox>
             <ion-label>Copy to GIMS</ion-label>
           </ion-item>
-          <ion-button margin-start margin-end expand="block" (click)="addRemarks()">Add Remarks</ion-button>
+          <ion-button class="ion-margin-start ion-margin-end" expand="block" (click)="addRemarks()">Add Remarks
+          </ion-button>
         </ng-container>
         <ng-template #showHistory>
-          <h6 class="tertiary-txt-color" padding-top padding-start padding-end>You have added remarks for this booking
+          <h6 class="tertiary-txt-color ion-padding-top ion-padding-start ion-padding-end">You have added remarks for
+            this booking
             and the remarks are as follow:</h6>
-          <p class="main-text-color" padding-start padding-end>{{remarks.feedback}}</p>
+          <p class="main-text-color ion-padding-start ion-padding-end">{{remarks.feedback}}</p>
         </ng-template>
       </ion-card-content>
       <ng-template #loadingRemarks>
@@ -128,8 +131,8 @@
 
   </ng-container>
   <ng-template #loadingSlots>
-    <ion-card no-margin margin-bottom>
-      <ion-card-content no-padding>
+    <ion-card class="ion-no-margin ion-margin-bottom">
+      <ion-card-content class="ion-no-padding">
         <ion-item>
           <ion-skeleton-text animated style="line-height: 30px; width:100%"></ion-skeleton-text>
         </ion-item>
