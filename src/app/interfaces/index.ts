@@ -41,3 +41,6 @@ export {
     UnavailabilityDetails,
     LecturerRemarks
 } from './iconsult';
+
+export { VisaDetails } from './visa-status';
+export { CountryData } from './country-data';
