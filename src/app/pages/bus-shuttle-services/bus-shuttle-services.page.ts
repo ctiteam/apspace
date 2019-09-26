@@ -79,7 +79,7 @@ export class BusShuttleServicesPage implements OnInit {
     );
   }
 
-  onFilter(refresher: boolean) {
+  onFilter(refresher = false) {
     if (refresher) { // clear the filter data if user refresh the page
       this.filterObject = {
         fromLocation: '',
@@ -157,7 +157,7 @@ export class BusShuttleServicesPage implements OnInit {
     const temp = this.filterObject.toLocation;
     this.filterObject.toLocation = this.filterObject.fromLocation;
     this.filterObject.fromLocation = temp;
-    this.onFilter(false);
+    this.onFilter();
   }
 
   clearFilter() {
@@ -167,7 +167,7 @@ export class BusShuttleServicesPage implements OnInit {
       tripDay: this.getTodayDay(this.dateNow),
       show: 'upcoming'
     };
-    this.onFilter(false);
+    this.onFilter();
   }
 
   // GET DAY SHORT NAME (LIKE 'SAT' FOR SATURDAY)
