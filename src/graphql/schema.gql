@@ -32,10 +32,9 @@ type Schedule {
 type Status {
   id: String!
   name: String!
-  userArn: String!
   attendance: String!
-  lastModified: String!
-  modifiedBy: String!
+  lastModified: String
+  modifiedBy: String
   internalIP: String!
   externalIP: String!
   schedule: Schedule!  # duplicated for subscription filter
