@@ -57,6 +57,7 @@ const routes: Routes = [
   },
   {
     path: 'more',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/more/more.module').then(m => m.MorePageModule)
   },
   {
@@ -67,6 +68,7 @@ const routes: Routes = [
   },
   {
     path: 'apcard',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/apcard/apcard.module').then(m => m.ApcardPageModule)
   },
   {
@@ -103,8 +105,8 @@ const routes: Routes = [
   {
     path: 'set-security-questions',
     canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./pages/settings/set-security-questions/set-security-questions.module').then(m => m.SetSecurityQuestionsPageModule)
+    loadChildren: () => import('./pages/settings/set-security-questions/set-security-questions.module')
+      .then(m => m.SetSecurityQuestionsPageModule)
   },
   {
     path: 'notifications',
@@ -137,10 +139,11 @@ const routes: Routes = [
     path: 'results',
     canActivate: [AuthGuard],
     data: { role: Role.Student },
-    loadChildren: './pages/results/results.module#ResultsPageModule'
+    loadChildren: () => import('./pages/results/results.module').then(m => m.ResultsPageModule)
   },
   {
     path: 'lecturer-timetable',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/lecturer-timetable/lecturer-timetable.module').then(m => m.LecturerTimetablePageModule)
   },
   {
@@ -152,6 +155,7 @@ const routes: Routes = [
   // iConsult Routes
   {
     path: 'iconsult',
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'add-free-slot',
@@ -163,8 +167,8 @@ const routes: Routes = [
         path: 'add-unavailability',
         canActivate: [AuthGuard],
         data: { role: Role.Admin | Role.Lecturer },
-        // tslint:disable-next-line: max-line-length
-        loadChildren: () => import('./pages/iconsult/staff/add-unavailability/add-unavailability.module').then(m => m.AddUnavailabilityPageModule)
+        loadChildren: () => import('./pages/iconsult/staff/add-unavailability/add-unavailability.module')
+          .then(m => m.AddUnavailabilityPageModule)
       },
       {
         path: 'my-consultations',
@@ -188,7 +192,6 @@ const routes: Routes = [
   },
   {
     path: 'staff-dashboard',
-    // tslint:disable-next-line: max-line-length
     canActivate: [AuthGuard],
     data: { role: Role.Lecturer },
     loadChildren: () => import('./pages/staff-dashboard/staff-dashboard.module').then(m => m.StaffDashboardPageModule)
@@ -196,10 +199,13 @@ const routes: Routes = [
   {
     path: 'change-password',
     canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./pages/settings/change-password/change-password.module').then(m => m.ChangePasswordPageModule)
+    loadChildren: () => import('./pages/settings/change-password/change-password.module')
+      .then(m => m.ChangePasswordPageModule)
   },
-  { path: 'visa-status', loadChildren: './pages/visa-status/visa-status.module#VisaStatusPageModule' }
+  {
+    path: 'visa-status',
+    loadChildren: () => import('./pages/visa-status/visa-status.module').then(m => m.VisaStatusPageModule)
+  }
 
 ];
 
