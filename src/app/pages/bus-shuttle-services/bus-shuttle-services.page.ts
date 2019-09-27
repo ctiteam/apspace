@@ -55,33 +55,39 @@ export class BusShuttleServicesPage implements OnInit {
     if (this.settings.get('tripTo')) {
       this.filterObject.toLocation = this.settings.get('tripTo');
     }
-    this.doRefresh();
-
+    this.doRefresh(false);
   }
 
-  getTrips() {
-    return this.trip$ = this.ws.get<BusTrips>(`/transix/trips/applicable`, true, { auth: false }).pipe(
+  doRefresh(refresher) {
+    this.filteredTrip$ = forkJoin([this.getLocations(refresher), this.getTrips(refresher)]).pipe(
+      map(res => res[1]),
+      tap(_ => this.onFilter(refresher)),
+      finalize(() => refresher && refresher.target.complete()),
+    );
+  }
+
+  getTrips(refresher: boolean) {
+    return this.trip$ = this.ws.get<BusTrips>(`/transix/trips/applicable`, refresher, { auth: false }).pipe(
       map(res => res.trips),
     );
   }
 
-  doRefresh(event?) {
-    console.log('Begin async operation');
-    this.filteredTrip$ = forkJoin([this.getLocations(), this.getTrips()]).pipe(
-      map(res => res[1]),
-      tap(_ => this.onFilter()),
-      finalize(() => event && event.target.complete()),
-    );
-  }
-
-  getLocations() {
-    return this.ws.get<APULocations>(`/transix/locations`, true, { auth: false }).pipe(
+  getLocations(refresher: boolean) {
+    return this.ws.get<APULocations>(`/transix/locations`, refresher, { auth: false }).pipe(
       map((res: APULocations) => res.locations),
       tap(locations => this.locations = locations)
     );
   }
 
-  onFilter() {
+  onFilter(refresher: boolean) {
+    if (refresher) { // clear the filter data if user refresh the page
+      this.filterObject = {
+        fromLocation: '',
+        toLocation: '',
+        tripDay: this.getTodayDay(this.dateNow),
+        show: 'upcoming'
+      };
+    }
     this.filteredTrip$ = this.trip$.pipe(
       map(trips => {
         this.numberOfTrips = 1; // HIDE 'THERE ARE NO TRIPS' MESSAGE
@@ -151,17 +157,17 @@ export class BusShuttleServicesPage implements OnInit {
     const temp = this.filterObject.toLocation;
     this.filterObject.toLocation = this.filterObject.fromLocation;
     this.filterObject.fromLocation = temp;
-    this.onFilter();
+    this.onFilter(false);
   }
 
   clearFilter() {
     this.filterObject = {
       fromLocation: '',
       toLocation: '',
-      tripDay: 'mon-fri',
+      tripDay: this.getTodayDay(this.dateNow),
       show: 'upcoming'
     };
-    this.onFilter();
+    this.onFilter(false);
   }
 
   // GET DAY SHORT NAME (LIKE 'SAT' FOR SATURDAY)
@@ -193,32 +199,11 @@ export class BusShuttleServicesPage implements OnInit {
       }
     }
   }
-  ionRefresh(event) {
-    console.log('Pull Event Triggered!');
-    setTimeout(() => {
-      console.log('Async operation has ended');
 
-      // complete()  signify that the refreshing has completed and to close the refresher
-      event.target.complete();
-    }, 2000);
-  }
-  ionPull(event) {
-    // Emitted while the user is pulling down the content and exposing the refresher.
-    console.log('ionPull Event Triggered!');
-  }
-  ionStart(event) {
-    // Emitted when the user begins to start pulling down.
-    console.log('ionStart Event Triggered!');
-  }
   comingFromTabs() {
-
     if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
-
       return true;
-
     }
-
     return false;
-
   }
 }
