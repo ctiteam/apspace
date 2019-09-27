@@ -217,7 +217,6 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dragulaModelArray = this.shownDashboardSections; // set the dragula modal array to the same value coming from local storage
     this.shownDashboardSections.forEach(dragElementId => { // render the elements into the view based on the order in local storage
       this.renderer.appendChild(this.container.nativeElement, document.getElementById(dragElementId));
     });
@@ -257,6 +256,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       this.saveArrayOrderInLocalStorage();
     } else {
       this.editableList = 'editable-list';
+      this.dragulaModelArray = this.shownDashboardSections; // set the dragula modal array to the same value coming from local storage
     }
 
     // PREVENT SCROLLING ON MOBILE PHONES WHEN MOVING CARDS

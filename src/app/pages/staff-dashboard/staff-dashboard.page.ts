@@ -178,9 +178,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.dragulaModelArray = this.shownDashboardSections; // set the dragula modal array to the same value coming from local storage
     this.shownDashboardSections.forEach(dragElementId => { // render the elements into the view based on the order in local storage
-      console.log(dragElementId);
       this.renderer.appendChild(this.container.nativeElement, document.getElementById(dragElementId));
     });
   }
@@ -216,6 +214,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       this.saveArrayOrderInLocalStorage();
     } else {
       this.editableList = 'editable-list';
+      this.dragulaModelArray = this.shownDashboardSections; // set the dragula modal array to the same value coming from local storage
     }    // PREVENT SCROLLING ON MOBILE PHONES WHEN MOVING CARDS
     const handles = document.querySelectorAll('.handle');
     /* handle scroll */
