@@ -822,6 +822,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
         return trips.filter(trip => {
           return moment(trip.trip_time, 'kk:mm').toDate() >= dateNow
+            && trip.trip_day === this.getTodayDay(dateNow)
             && ((trip.trip_from === firstLocation && trip.trip_to === secondLocation)
               || (trip.trip_from === secondLocation && trip.trip_to === firstLocation));
         });
@@ -880,5 +881,17 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   navigateToPage(pageName: string) {
     this.navCtrl.navigateForward(pageName);
+  }
+
+  // GET DAY SHORT NAME (LIKE 'SAT' FOR SATURDAY)
+  getTodayDay(date: Date) {
+    const dayRank = date.getDay();
+    if (dayRank === 0) {
+      return 'sun';
+    } else if (dayRank > 0 && dayRank <= 5) {
+      return 'mon-fri';
+    } else {
+      return 'sat';
+    }
   }
 }
