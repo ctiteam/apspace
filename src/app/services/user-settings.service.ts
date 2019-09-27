@@ -27,7 +27,11 @@ export class UserSettingsService {
     { name: 'white-accent-color', value: '#b0acac', rgbaValues: '175, 175, 175' }
   ];
 
-  defaultDashboardSectionsSettings = [
+  // Default dasbhoard sections (will be added when the application loads /app.componenet/)
+  defaultDashboardSectionsSettings = [];
+
+  // Default dasbhoard sections for students (will be added to the local storage when student login)
+  defaultStudentsDashboardSectionsSettings = [
     'quickAccess',
     'todaysSchedule',
     'upcomingEvents',
@@ -36,6 +40,14 @@ export class UserSettingsService {
     'apcard',
     'cgpa',
     'financials',
+  ];
+
+  // Default dasbhoard sections for staff (will be added to the local storage when staff login)
+  defaultStaffDashboardSectionsSettings = [
+    'todaysSchedule',
+    'upcomingEvents',
+    'upcomingTrips',
+    'apcard',
   ];
 
   defaultBusShuttleServicesSettings = { firstLocation: '', secondLocation: '', alarmBefore: '10' };
@@ -131,6 +143,18 @@ export class UserSettingsService {
     });
     return value;
   }
+
+  setDefaultDashboardSections(userType: 'students' | 'staff') {
+    let value = [];
+    if (userType === 'staff') {
+      value = this.defaultStaffDashboardSectionsSettings;
+    } else {
+      value = this.defaultStudentsDashboardSectionsSettings;
+    }
+    this.storage.set('dashboard-sections', value);
+    this.dashboardSections.next(value);
+  }
+
 
 
   // DASHBOARD SECTIONS

@@ -7,7 +7,7 @@ import { throwError } from 'rxjs';
 import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 
 import { Role } from '../../interfaces';
-import { CasTicketService, WsApiService } from '../../services';
+import { CasTicketService, WsApiService, SettingsService, UserSettingsService } from '../../services';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
@@ -38,7 +38,9 @@ export class LoginPage {
     private toastCtrl: ToastController,
     private ws: WsApiService,
     public alertCtrl: AlertController,
-    public iab: InAppBrowser
+    public iab: InAppBrowser,
+    private settings: SettingsService,
+    private userSettings: UserSettingsService
   ) { }
 
   login() {
@@ -88,6 +90,17 @@ export class LoginPage {
         () => {
           this.loginProcessLoading = false;
           this.userAuthenticated = true;
+          // GET USER ROLE HERE AND CHECK PUSH THE SETTINGS BASED ON THAT
+          this.settings.ready().then(() => {
+            const role = this.settings.get('role');
+            // tslint:disable-next-line:no-bitwise
+            if (role & Role.Student) {
+              this.userSettings.setDefaultDashboardSections('students');
+              // tslint:disable-next-line:no-bitwise
+            } else if (role & (Role.Lecturer | Role.Admin)) {
+              this.userSettings.setDefaultDashboardSections('staff');
+            }
+          });
           setTimeout(() => {
             // Show the success message for 300 ms after completing the request
             const url = this.route.snapshot.queryParams.redirect || '/';
@@ -118,7 +131,7 @@ export class LoginPage {
       buttons: [
         {
           text: 'Cancel',
-          handler: () => {}
+          handler: () => { }
         },
         {
           text: 'Open The documentation',
