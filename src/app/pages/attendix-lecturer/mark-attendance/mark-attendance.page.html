@@ -39,9 +39,9 @@
         <ion-col size="2">
           <ion-select [(ngModel)]="type" placeholder="Attendance" interface="popover">
             <ion-select-option value="">Any</ion-select-option>
-            <ion-select-option value="P">Present</ion-select-option>
+            <ion-select-option value="Y">Present</ion-select-option>
             <ion-select-option value="L">Late</ion-select-option>
-            <ion-select-option value="A">Absent</ion-select-option>
+            <ion-select-option value="N">Absent</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
@@ -53,9 +53,9 @@
           <ion-img slot="start" (ionError)="$event.target.src = 'assets/img/profile.svg'"></ion-img>
           <ion-label>{{ student.name }} {{ student.id }}</ion-label>
           <ng-container slot="end">
-            <ion-button (click)="mark(student.id, 'A')">Absent</ion-button>
+            <ion-button (click)="mark(student.id, 'N')">Absent</ion-button>
             <ion-button (click)="mark(student.id, 'L')">Late</ion-button>
-            <ion-button (click)="mark(student.id, 'P')">Present</ion-button>
+            <ion-button (click)="mark(student.id, 'Y')">Present</ion-button>
           </ng-container>
         </ion-item>
       </ion-card>
