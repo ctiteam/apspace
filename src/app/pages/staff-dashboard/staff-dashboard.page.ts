@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, Renderer2, AfterViewInit } from '@angular/core';
 import {
   EventComponentConfigurations,
   DashboardCardComponentConfigurations,
@@ -17,7 +17,7 @@ import { Observable, of, zip } from 'rxjs';
 import { map, tap, finalize } from 'rxjs/operators';
 import { WsApiService, UserSettingsService, NotificationService } from 'src/app/services';
 import * as moment from 'moment';
-import { NavController } from '@ionic/angular';
+import { NavController, IonSelect } from '@ionic/angular';
 import { DragulaService } from 'ng2-dragula';
 
 @Component({
@@ -25,10 +25,24 @@ import { DragulaService } from 'ng2-dragula';
   templateUrl: './staff-dashboard.page.html',
   styleUrls: ['./staff-dashboard.page.scss'],
 })
-export class StaffDashboardPage implements OnInit, OnDestroy {
+export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   // USER SETTINGS
-  activeAccentColor = '';
+  @ViewChild('dragulaContainer', { static: true }) container: ElementRef; // access the dragula container
+  @ViewChild('dashboardSectionsSelectBox', { static: true }) dashboardSectionsselectBoxRef: IonSelect; // hidden selectbox
+  dashboardSectionsSelectBoxModel; // select box dashboard sections value
+  allDashboardSections = [ // alldashboardSections will not be modified and it will be used in the select box
+    'todaysSchedule',
+    'upcomingEvents',
+    'upcomingTrips',
+    'apcard',
+  ];
+
+  // dragulaModelArray will be modified whenever there is a change to the order of the dashboard sections
+  dragulaModelArray = this.allDashboardSections;
+  // shownDashboardSections get the data from local storage and hide/show elements based on that
   shownDashboardSections: string[];
+
+  activeAccentColor = '';
   editableList = null;
   busShuttleServiceSettings: any;
   secondLocation: string;
@@ -44,7 +58,6 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
   };
 
   // PROFILE
-  // photo$: Observable<StudentPhoto>;
   greetingMessage = '';
   staffFirstName: string;
   numberOfUnreadMsgs: number;
@@ -53,20 +66,7 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
   todaysSchedule$: Observable<EventComponentConfigurations[] | any>;
   todaysScheduleCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
-    // options: [
-    //   {
-    //     title: 'set alarm before 15 minutes of next schdule',
-    //     icon: 'alarm',
-    //     callbackFunction: this.testCallBack
-    //   },
-    //   {
-    //     title: 'delete',
-    //     icon: 'trash',
-    //     callbackFunction: this.testCallBack
-    //   }
-    // ],
     cardTitle: 'Today\'s Schedule',
-    // cardSubtitle: 'Next in: 1 hrs, 25 min'
   };
 
   // TODAYS TRIPS
@@ -77,36 +77,12 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
     cardTitle: 'Upcoming Trips',
     contentPadding: false,
     withOptionsButton: false,
-    // options: [
-    //   {
-    //     title: 'set alarm before 15 minutes of next schdule',
-    //     icon: 'alarm',
-    //     callbackFunction: this.testCallBack
-    //   },
-    //   {
-    //     title: 'delete',
-    //     icon: 'trash',
-    //     callbackFunction: this.testCallBack
-    //   }
-    // ],
   };
 
   // UPCOMING EVENTS
   upcomingEvent$: Observable<EventComponentConfigurations[]> | any;
   upcomingEventsCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
-    // options: [
-    //   {
-    //     title: 'set alarm before 15 minutes of next schdule',
-    //     icon: 'alarm',
-    //     callbackFunction: this.testCallBack
-    //   },
-    //   {
-    //     title: 'delete',
-    //     icon: 'trash',
-    //     callbackFunction: this.testCallBack
-    //   }
-    // ],
     cardTitle: 'Upcoming Events',
     cardSubtitle: 'Today: ' + moment().format('DD MMMM YYYY')
   };
@@ -169,7 +145,8 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
     private userSettings: UserSettingsService,
     private navCtrl: NavController,
     private dragulaService: DragulaService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private renderer: Renderer2
   ) {
     this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
   }
@@ -200,6 +177,14 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
     this.doRefresh();
   }
 
+  ngAfterViewInit() {
+    this.dragulaModelArray = this.shownDashboardSections; // set the dragula modal array to the same value coming from local storage
+    this.shownDashboardSections.forEach(dragElementId => { // render the elements into the view based on the order in local storage
+      console.log(dragElementId);
+      this.renderer.appendChild(this.container.nativeElement, document.getElementById(dragElementId));
+    });
+  }
+
   ngOnDestroy() {
     // Destroy the edit list when page is destroyed
     this.dragulaService.destroy('editable-list');
@@ -226,8 +211,12 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
 
   // DRAG AND DROP FUNCTIONS (DASHBOARD CUSTOMIZATION)
   toggleReorderingMode() {
-    this.editableList === 'editable-list' ? this.editableList = null : this.editableList = 'editable-list';
-    // PREVENT SCROLLING ON MOBILE PHONES WHEN MOVING CARDS
+    if (this.editableList === 'editable-list') {
+      this.editableList = null;
+      this.saveArrayOrderInLocalStorage();
+    } else {
+      this.editableList = 'editable-list';
+    }    // PREVENT SCROLLING ON MOBILE PHONES WHEN MOVING CARDS
     const handles = document.querySelectorAll('.handle');
     /* handle scroll */
     handles.forEach(element => {
@@ -241,6 +230,36 @@ export class StaffDashboardPage implements OnInit, OnDestroy {
         return handle.classList.contains('handle');
       }
     });
+  }
+
+  openDashboardSectionsSelectBox() {
+    this.dashboardSectionsselectBoxRef.open();
+  }
+
+  dashboardSectionsChanged(event) {
+    event.detail.value.forEach(section => {
+      this.shownDashboardSections.splice(0, 0, section);
+    });
+  }
+
+  removeSectionFromDashboard(sectionName: string) {
+    const index = this.shownDashboardSections.indexOf(sectionName);
+    if (index > -1) {
+      this.shownDashboardSections.splice(index, 1);
+    }
+  }
+
+  saveArrayOrderInLocalStorage() {
+    // Store data in local storage
+    const itemsToStore = [];
+    this.dragulaModelArray.forEach(arrayEl => {
+      this.shownDashboardSections.forEach(shownDashboardSection => {
+        if (arrayEl === shownDashboardSection) {
+          itemsToStore.push(arrayEl);
+        }
+      });
+    });
+    this.userSettings.setShownDashboardSections(itemsToStore);
   }
 
   // PROFILE AND GREETING MESSAGE FUNCTIONS

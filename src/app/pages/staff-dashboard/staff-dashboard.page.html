@@ -3,79 +3,100 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- MAIN GRID -->
-  <div>
-    <!-- MAIN ROW -->
-    <div class="masonry-list" [dragula]="editableList">
-      <!-- PROFILE SECTION -->
-      <div class="masonry-item no-drag">
-        <ion-card class="ion-no-margin">
-          <ion-card-header class="ion-no-padding">
-            <ion-grid>
-              <ion-row>
-                <ion-col>
-                  <ion-avatar *ngIf="staffProfile$ | async as staffProfile"
-                    class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
-                    <img [src]="staffProfile[0].PHOTO" onerror="this.src='assets/img/no_img.png'" alt="Avatar">
-                  </ion-avatar>
-                  <div class="welcome-message-wrapper ion-padding-start float-left"
-                    *ngIf="staffFirstName; else loadingProfile">
+  <!-- MAIN GRID CLASS -->
+  <div class="masonry-list">
+
+    <!-- PROFILE SECTION (Not included in the drag and drop list) -->
+    <div id="profile" class="masonry-item no-drag">
+      <ion-card class="ion-no-margin">
+        <ion-card-header class="ion-no-padding">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-avatar *ngIf="staffProfile$ | async as staffProfile"
+                  class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
+                  <img [src]="staffProfile[0].PHOTO" onerror="this.src='assets/img/no_img.png'" alt="Avatar">
+                </ion-avatar>
+                <div class="welcome-message-wrapper ion-padding-start float-left"
+                  *ngIf="staffFirstName; else loadingProfile">
+                  <ion-card-title>
+                    <h3 class="responsive-h1">{{greetingMessage}}, <span>{{staffFirstName | titlecase}}</span>
+                    </h3>
+                  </ion-card-title>
+                  <ion-card-subtitle>
+                    <h3 class="responsive-h2">Nice to see you again.</h3>
+                  </ion-card-subtitle>
+                </div>
+                <ng-template #loadingProfile>
+                  <div class="welcome-message-wrapper ion-padding-start float-left" style="width: 75%; padding-top: 0">
                     <ion-card-title>
-                      <h3 class="responsive-h1">{{greetingMessage}}, <span>{{staffFirstName | titlecase}}</span>
+                      <h3 class="responsive-h1">
+                        <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
                       </h3>
                     </ion-card-title>
                     <ion-card-subtitle>
-                      <h3 class="responsive-h2">Nice to see you again.</h3>
+                      <h3 class="responsive-h2">
+                        <ion-skeleton-text animated style="width: 75%; line-height: 25px"></ion-skeleton-text>
+                      </h3>
                     </ion-card-subtitle>
                   </div>
-                  <ng-template #loadingProfile>
-                    <div class="welcome-message-wrapper ion-padding-start float-left"
-                      style="width: 75%; padding-top: 0">
-                      <ion-card-title>
-                        <h3 class="responsive-h1">
-                          <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
-                        </h3>
-                      </ion-card-title>
-                      <ion-card-subtitle>
-                        <h3 class="responsive-h2">
-                          <ion-skeleton-text animated style="width: 75%; line-height: 25px"></ion-skeleton-text>
-                        </h3>
-                      </ion-card-subtitle>
-                    </div>
-                  </ng-template>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col>
-                  <div class="icons ion-margin-top ion-text-right">
-                    <a (click)="toggleReorderingMode()" class="ion-margin-end">
-                      <ion-icon *ngIf="editableList" color="success" class="responsive-icon colored-text"
-                        name="checkmark"></ion-icon>
-                      <ion-icon *ngIf="!editableList" class="responsive-icon colored-text" name="md-create"></ion-icon>
-                    </a>
-                    <a (click)="navigateToPage('/settings')" class="ion-margin-end">
-                      <ion-icon class="anim-rotate-360-deg animated responsive-icon colored-text" name="settings">
-                      </ion-icon>
-                    </a>
-                    <a class="notifications ion-margin-end" (click)="navigateToPage('/notifications')">
-                      <ion-badge *ngIf="numberOfUnreadMsgs > 0" color="danger">{{ numberOfUnreadMsgs }}</ion-badge>
-                      <ion-icon class="responsive-icon colored-text anim-ring" name="notifications"></ion-icon>
-                    </a>
-                    <a class="notifications" (click)="navigateToPage('/logout')">
-                      <ion-icon class="responsive-icon danger-text anim-ring" name="log-out"></ion-icon>
-                    </a>
-                  </div>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-card-header>
-        </ion-card>
-      </div>
+                </ng-template>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <div class="icons ion-margin-top ion-text-right">
+                  <a (click)="toggleReorderingMode()" class="ion-margin-end">
+                    <ion-icon *ngIf="editableList" color="success" class="responsive-icon colored-text" name="save">
+                    </ion-icon>
+                    <ion-icon *ngIf="!editableList" class="responsive-icon colored-text" name="md-create"></ion-icon>
+                  </a>
+                  <a (click)="navigateToPage('/settings')" class="ion-margin-end">
+                    <ion-icon class="anim-rotate-360-deg animated responsive-icon colored-text" name="settings">
+                    </ion-icon>
+                  </a>
+                  <a class="notifications ion-margin-end" (click)="navigateToPage('/notifications')">
+                    <ion-badge *ngIf="numberOfUnreadMsgs > 0" color="danger">{{ numberOfUnreadMsgs }}</ion-badge>
+                    <ion-icon class="responsive-icon colored-text anim-ring" name="notifications"></ion-icon>
+                  </a>
+                  <a class="notifications" (click)="navigateToPage('/logout')">
+                    <ion-icon class="responsive-icon danger-text anim-ring" name="log-out"></ion-icon>
+                  </a>
+                </div>
+              </ion-col>
+            </ion-row>
+            <!-- Add new section button -->
+            <ion-row *ngIf="editableList">
+              <ion-col>
+                <ion-button class="colored-background" expand="block" (click)="openDashboardSectionsSelectBox()">Add
+                  Dashboard
+                  Card</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-header>
+      </ion-card>
+    </div>
+
+    <!-- ion-select hidden behind the shown dashboard sections item  -->
+    <ion-item [hidden]="true">
+      <ion-label>Choose Section(s):</ion-label>
+      <ion-select [(ngModel)]="dashboardSectionsSelectBoxModel" (ionChange)="dashboardSectionsChanged($event)"
+        multiple="true" okText="Add" [hidden]="true" #dashboardSectionsSelectBox>
+        <ion-select-option [disabled]="dashboardSection | disabled : dragulaModelArray" [value]="dashboardSection"
+          *ngFor="let dashboardSection of allDashboardSections">
+          {{ dashboardSection }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <div #dragulaContainer [dragula]="editableList" [(dragulaModel)]="dragulaModelArray">
 
       <!-- TODAY'S SCHEDULE -->
-      <div class="masonry-item" *ngIf="shownDashboardSections.includes('todaysSchedule')">
+      <div id="todaysSchedule" class="masonry-item" *ngIf="shownDashboardSections.includes('todaysSchedule')">
         <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
           <ion-icon name="move" class="handle"></ion-icon>
+          <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('todaysSchedule')"></ion-icon>
         </div>
         <dashboard-card [cardTitle]='todaysScheduleCardConfigurations.cardTitle'
           [cardSubtitle]='todaysScheduleCardConfigurations.cardSubtitle'
@@ -86,9 +107,10 @@
       </div>
 
       <!-- UPCOMING EVENTS -->
-      <div class="masonry-item" *ngIf="shownDashboardSections.includes('upcomingEvents')">
+      <div id="upcomingEvents" class="masonry-item" *ngIf="shownDashboardSections.includes('upcomingEvents')">
         <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
           <ion-icon name="move" class="handle"></ion-icon>
+          <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('upcomingEvents')"></ion-icon>
         </div>
         <dashboard-card style="width: 100%;" [cardTitle]='upcomingEventsCardConfigurations.cardTitle'
           [cardSubtitle]='upcomingEventsCardConfigurations.cardSubtitle'
@@ -99,10 +121,11 @@
       </div>
 
       <!-- BUS SHUTTLE SERVICES -->
-      <div *ngIf="shownDashboardSections.includes('upcomingTrips')">
+      <div id="upcomingTrips" *ngIf="shownDashboardSections.includes('upcomingTrips')">
         <div class="masonry-item">
           <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
             <ion-icon name="move" class="handle"></ion-icon>
+            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('upcomingTrips')"></ion-icon>
           </div>
           <dashboard-card [cardTitle]='busCardConfigurations.cardTitle'
             [contentPadding]='busCardConfigurations.contentPadding'
@@ -181,10 +204,11 @@
       </div>
 
       <!-- APCard Transactions -->
-      <div *ngIf="shownDashboardSections.includes('apcard')">
+      <div id="apcard" *ngIf="shownDashboardSections.includes('apcard')">
         <div class="masonry-item" *ngIf="apcardTransaction$ | async; else loadingApcardTransactions">
           <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
             <ion-icon name="move" class="handle"></ion-icon>
+            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('apcard')"></ion-icon>
           </div>
           <dashboard-card [cardTitle]='apcardTransactionsCardConfigurations.cardTitle'
             [cardSubtitle]='currentBalance !== -1 ? "Balance: " + (currentBalance | currency: "MYR": "RM"): "Balance: --"'

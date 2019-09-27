@@ -55,7 +55,7 @@ ion-card.trip-card {
 
 // EDIT MODE (DASHBOARD CARDS CUSTOMIZATIONS)
 .edit-overlay {
-  background: #c6c6c6;
+  background: #756f6f;
   opacity: 0.4;
   top: 5px;
   left: 5px;
@@ -67,10 +67,18 @@ ion-card.trip-card {
     cursor: move;
     font-size: 40px;
     position: absolute;
-    right: 5px;
-    top: 5px;
+    right: 15px;
+    &:not(.remove){
+      bottom: 15px;
+    }
+    &.remove{
+      cursor: pointer;
+      top: 10px;
+      color: var(--danger-color)
+    }
   }
 }
+
 .hide {
   display: none;
 }
