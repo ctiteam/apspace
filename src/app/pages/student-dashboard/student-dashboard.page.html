@@ -65,15 +65,16 @@
                 </div>
               </ion-col>
             </ion-row>
+            <ion-row *ngIf="editableList">
+              <ion-col>
+                <ion-button class="colored-background" expand="block" (click)="openDashboardSectionsSelectBox()">Add
+                  Dashboard
+                  Card</ion-button>
+              </ion-col>
+            </ion-row>
           </ion-grid>
         </ion-card-header>
       </ion-card>
-    </div>
-
-    <!-- Add new section button -->
-    <div class="masonry-item" *ngIf="editableList">
-      <ion-button class="colored-background" expand="block" (click)="openDashboardSectionsSelectBox()">Add Dashboard
-        Card</ion-button>
     </div>
     <!-- ion-select hidden behind the shown dashboard sections item  -->
     <ion-item [hidden]="true">
@@ -100,8 +101,8 @@
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
-              <quick-access-item icon="alarm" titleFirstWord='Overall' titleSecondWord='Attendance'
-                [observable$]='overallAttendancePercent$' outputMode='percentage'>
+              <quick-access-item *ngIf="modulesWithLowAttendance$ | async" icon="alarm" titleFirstWord='Overall'
+                titleSecondWord='Attendance' [observable$]='overallAttendancePercent$' outputMode='percentage'>
               </quick-access-item>
             </ion-col>
 
@@ -110,8 +111,8 @@
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
-              <quick-access-item icon="card" titleFirstWord='APCard' titleSecondWord='Balance' [observable$]='balance$'
-                outputMode='currency'>
+              <quick-access-item *ngIf="apcardTransaction$ | async" icon="card" titleFirstWord='APCard'
+                titleSecondWord='Balance' [observable$]='balance$' outputMode='currency'>
               </quick-access-item>
             </ion-col>
 
@@ -278,13 +279,17 @@
               </ng-template>
             </ng-container>
             <ng-template #loadingTrips>
-              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 50%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 50%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 90%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 90%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 30%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 30%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 70%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 70%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
             </ng-template>
           </dashboard-card>
