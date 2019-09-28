@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { VisaStatusPage } from './visa-status.page';
 import { ChartModule } from 'angular2-chartjs';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    ComponentsModule,
     FormsModule,
     IonicModule,
     ChartModule,

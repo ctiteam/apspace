@@ -26,6 +26,7 @@ export class VisaStatusPage implements OnInit {
   countryName: string;
   passportNumber: string;
   alpha3Code = '';
+  listOfCountries: CountryData[];
   // skeleton
   skeletons = new Array(5);
 
@@ -35,6 +36,17 @@ export class VisaStatusPage implements OnInit {
 
   ngOnInit() {
     this.getProfile();
+    this.getListOfCountries(); // get the list of countries when the page loads and add the data to ion-select
+  }
+
+  getListOfCountries() {
+    this.ws.get<CountryData[]>(`/all/?fields=name;alpha3Code`, false, {
+      url: 'https://restcountries.eu/rest/v2',
+      auth: false,
+    }).pipe(
+      tap(res => this.listOfCountries = res),
+      tap(res => console.log(res))
+    ).subscribe();
   }
 
   getProfile() {
@@ -46,8 +58,8 @@ export class VisaStatusPage implements OnInit {
           this.local = true;
         } else {
           this.local = false;
-          this.getAlpha3Code();
         }
+        this.getAlpha3Code();
       }),
     ).subscribe();
   }
@@ -66,10 +78,14 @@ export class VisaStatusPage implements OnInit {
   getVisa() {
     this.visa$ = this.ws.get<VisaDetails>(`/student/visa_renewal_status/${this.alpha3Code}/${this.passportNumber}`, false, {
       auth: false,
-    });
+    }).pipe(tap(r => console.log(r)));
   }
 
-  showHide() {
+  toggleHistoryCard() {
     this.historyStatus = !this.historyStatus;
+  }
+
+  trackAnotherApplication() {
+    this.local = false;
   }
 }
