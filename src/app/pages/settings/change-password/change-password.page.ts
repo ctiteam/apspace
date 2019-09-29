@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 import { ChangePasswordService, SettingsService } from '../../../services';
 import { PasswordValidator } from '../../../validators/password.validator';
@@ -22,10 +22,10 @@ export class ChangePasswordPage implements OnInit {
   hasSpeacialCharacter = false;
 
   constructor(
-    private changePasswordService: ChangePasswordService,
-    private alertController: AlertController,
     private router: Router,
+    private toastCtrl: ToastController,
     private loadingController: LoadingController,
+    private changePasswordService: ChangePasswordService,
     private settings: SettingsService,
   ) { }
 
@@ -45,23 +45,8 @@ export class ChangePasswordPage implements OnInit {
         .subscribe(
           (res: { result: string }) => {
             this.dismissLoading();
-            const alert = this.alertController.create({
-              header: 'Your Password has been Changed successfully! ',
-              message: 'You will be automatically logged-out of the application for security purposes. Please log-in again..',
-              animated: true,
-              buttons:
-                [
-                  {
-                    text: 'OK',
-                    cssClass: 'secondary',
-                    handler: () => {
-                      this.router.navigate(['/logout']);
-                    }
-                  }
-                ]
-
-            });
-            alert.then(param => param.present());
+            this.presentToast('Your passowrd has been changed. Please log in again');
+            this.router.navigate(['/logout']);
           },
 
           (error) => {
@@ -74,23 +59,8 @@ export class ChangePasswordPage implements OnInit {
         .subscribe(
           (res: { result: string }) => {
             this.dismissLoading();
-            const alert = this.alertController.create({
-              header: 'Your Password has been Changed successfully! ',
-              message: 'You will be automatically logged-out of the application for security purposes. Please log-in again..',
-              animated: true,
-              buttons:
-                [
-                  {
-                    text: 'OK',
-                    cssClass: 'secondary',
-                    handler: () => {
-                      this.router.navigate(['/logout']);
-                    }
-                  }
-                ]
-
-            });
-            alert.then(param => param.present());
+            this.presentToast('Your passowrd has been changed. Please log in again');
+            this.router.navigate(['/logout']);
           },
 
           (error) => {
@@ -98,9 +68,7 @@ export class ChangePasswordPage implements OnInit {
             console.log(error);
           }
         );
-
     }
-
   }
 
   async presentLoading() {
@@ -115,6 +83,18 @@ export class ChangePasswordPage implements OnInit {
 
   async dismissLoading() {
     return await this.loading.dismiss();
+  }
+
+  async presentToast(msg: string) {
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      color: 'success',
+      showCloseButton: true,
+      duration: 4000,
+      position: 'top'
+    });
+
+    toast.present();
   }
 
   checkValidation() {
