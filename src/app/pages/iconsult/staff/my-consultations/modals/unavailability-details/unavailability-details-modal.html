@@ -46,6 +46,9 @@
             <h4 class="main-text-color" *ngFor="let slotDetail of slotDetails">{{ slotDetail.start_time }}</h4>
           </ion-label>
         </ion-item>
+        <ion-button expand="block" class="danger-background ion-margin" (click)="disableUnavialbility()">
+          Disable
+        </ion-button>
       </ion-card-content>
     </ion-card>
   </ng-container>
