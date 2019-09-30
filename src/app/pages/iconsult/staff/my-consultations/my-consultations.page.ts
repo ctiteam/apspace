@@ -95,13 +95,21 @@ export class MyConsultationsPage implements OnInit {
       componentProps: { unavailibilityid, notFound: 'No slot Selected' },
     });
     await modal.present();
-    await modal.onDidDismiss();
+    await modal.onDidDismiss().then(
+      data => {
+        if (data.data === 'booked') {
+          this.daysConfigrations = [];
+          this.getData();
+        }
+      }
+    );
   }
 
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.reload) {
+        this.daysConfigrations = [];
         this.getData();
       }
     });
