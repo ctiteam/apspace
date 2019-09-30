@@ -17,4 +17,7 @@ export interface Settings {
   examIntake: string;
   /* contact number */
   contactNo: string;
+  /* default location (for staff only) */
+  defaultCampus: string;
+  defaultVenue: string;
 }

@@ -106,11 +106,6 @@
         <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
           <ion-list class="ion-no-padding">
             <ion-item-group *ngIf="locations$ | async as locations">
-              <ion-item-divider class="ion-no-padding">
-                <ion-label>
-                  Locations
-                </ion-label>
-              </ion-item-divider>
               <ion-item lines="none" class="ion-no-padding">
                 <ion-label>First Location</ion-label>
                 <ion-select [(ngModel)]="busShuttleServiceSettings.firstLocation"
@@ -126,6 +121,44 @@
                   (ngModelChange)="setBusShuttleServicesSettings()">
                   <ion-select-option [value]="location.location_name" *ngFor="let location of locations">
                     {{location.location_nice_name}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-item-group>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <div class="masonry-item" *ngIf="!userRole">
+      <ion-card class="ion-no-margin ion-margin-bottom">
+        <ion-card-header>
+          <ion-card-title class="card-title float-left">
+            <h3 class="responsive-h1">
+              iConsult Default Location
+            </h3>
+            <h5 class="small-margin-top small-text" style="font-weight: 300;">
+              Set a default location for the consultation hours that you will open in the future
+            </h5>
+          </ion-card-title>
+          <div class="clearfix"></div>
+        </ion-card-header>
+        <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
+          <ion-list class="ion-no-padding">
+            <ion-item-group>
+              <ion-item lines="none" class="ion-no-padding">
+                <ion-label>Campus</ion-label>
+                <ion-select [(ngModel)]="defaultCampus" (ngModelChange)="updateDefaultLocation('campus')">
+                  <ion-select-option *ngFor="let location of locationOptions" [value]="location">
+                    {{ location }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item lines="none" class="ion-no-padding">
+                <ion-label>Venue</ion-label>
+                <ion-select interface="popover" *ngIf="venues$ | async as venues" [disabled]="!defaultCampus" [(ngModel)]="defaultVenue"
+                  (ngModelChange)="updateDefaultLocation('venue')">
+                  <ion-select-option *ngFor="let venue of venues" [value]="venue.id">
+                    {{ venue.rooms }}
                   </ion-select-option>
                 </ion-select>
               </ion-item>

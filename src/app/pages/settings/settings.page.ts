@@ -3,7 +3,7 @@ import { ModalController, NavController, ToastController, AlertController } from
 import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
-import { APULocations, APULocation, StudentProfile, Role } from '../../interfaces';
+import { APULocations, APULocation, StudentProfile, Role, Venue } from '../../interfaces';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 import {
   SettingsService, StudentTimetableService, UserSettingsService, WsApiService
@@ -20,6 +20,8 @@ export class SettingsPage implements OnInit {
   userRole = false;
   test = false;
   activeAccentColor: string;
+  defaultCampus = '';
+  defaultVenue = '';
   darkThemeEnabled = false;
   pureDarkThemeEnabled = false;
   busShuttleServiceSettings = {
@@ -28,17 +30,21 @@ export class SettingsPage implements OnInit {
     alarmBefore: ''
   };
 
-  menuUI: 'cards' | 'list' = 'list';
-
   locations$: Observable<APULocation[]>;
   timetable$: Observable<{ blacklists: string[] }>;
+  venues$: Observable<Venue[]>;
 
+  menuUI: 'cards' | 'list' = 'list';
   accentColors = [
     { title: 'Blue (Default)', value: 'blue-accent-color' },
     { title: 'Green', value: 'green-accent-color' },
     { title: 'Red', value: 'red-accent-color' },
     { title: 'Pink', value: 'pink-accent-color' },
     { title: 'Yellow', value: 'yellow-accent-color' }
+  ];
+  locationOptions = [
+    'New Campus',
+    'TPM',
   ];
 
   constructor(
@@ -94,12 +100,20 @@ export class SettingsPage implements OnInit {
       this.userRole = true;
     }
     this.locations$ = this.getLocations();
+    this.getDefaultLocation();
+    if (this.defaultCampus) {
+      this.getVenues();
+    }
   }
 
   getLocations() {
     return this.ws.get<APULocations>(`/transix/locations`, true, { auth: false }).pipe(
       map((res: APULocations) => res.locations),
     );
+  }
+
+  getVenues() {
+    this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${this.defaultCampus}`, true);
   }
 
 
@@ -125,6 +139,22 @@ export class SettingsPage implements OnInit {
 
   toggleMenuUI() {
     this.userSettings.setMenuUI(this.menuUI);
+  }
+
+  updateDefaultLocation(locationType: 'venue' | 'campus') { // for staff only (set iconsult default location)
+    if (locationType === 'venue') {
+      this.settings.set('defaultVenue', this.defaultVenue);
+    } else {
+      this.getVenues(); // get the venues for the new selected campus
+      this.defaultVenue = ''; // set default venue to '' because campus has been changed
+      this.settings.set('defaultVenue', this.defaultVenue);
+      this.settings.set('defaultCampus', this.defaultCampus);
+    }
+  }
+
+  getDefaultLocation() { // for staff only (get iconsult default location)
+    this.defaultCampus = this.settings.get('defaultCampus');
+    this.defaultVenue = this.settings.get('defaultVenue');
   }
 
   async timetableModuleBlacklistsAdd() {
