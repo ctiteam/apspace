@@ -126,13 +126,16 @@ export class AddUnavailabilityPage implements OnInit {
                 next: res => {
                   this.showToastMessage('Slot(s) has been marked as unavailable successfully!', 'success');
                 },
-                error: err => this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger'),
+                error: err => {
+                  this.dismissLoading();
+                  this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
+                },
                 complete: () => {
                   this.dismissLoading();
                   const navigationExtras: NavigationExtras = {
                     state: { reload: true }
                   };
-                  this.router.navigateByUrl('my-consultations', navigationExtras);
+                  this.router.navigateByUrl('iconsult/my-consultations', navigationExtras);
                 }
               }
             );
