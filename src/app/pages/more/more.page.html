@@ -8,8 +8,7 @@
 <ion-content>
   <!-- LISTS UI -->
   <div *ngIf="(view$ | async) === 'list'; else menuCardsUI" class="masonry-list">
-    <div *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop"
-      class="masonry-item">
+    <div *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop" class="masonry-item">
       <ion-card class="ion-no-margin">
         <ion-card-header>
           <ion-card-title>
@@ -19,14 +18,12 @@
         <ion-card-content class="ion-no-padding">
           <ion-list class="ion-no-margin">
             <ion-item-group>
-              <ion-item *ngFor="let item of group.value"
-                (click)="openPage(item.url)" class="cursor-pointer">
+              <ion-item *ngFor="let item of group.value" (click)="openPage(item.url)" class="cursor-pointer">
                 <ion-avatar slot="start">
                   <img [src]="item.img">
                 </ion-avatar>
                 <ion-label>
                   <h2>{{ item.title }}</h2>
-                  <p class="secondary-txt-color">Some description about the item here and here..</p>
                 </ion-label>
               </ion-item>
             </ion-item-group>
@@ -41,16 +38,14 @@
     <ion-grid>
       <ion-row *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop">
         <ion-col size="12" class="ion-margin-top ion-margin-bottom">
-          <h5 class="colored-text ion-text-center" >{{ group.key }}</h5>
+          <h5 class="colored-text ion-text-center">{{ group.key }}</h5>
         </ion-col>
-        <ion-col *ngFor="let item of group.value" class="menu-item ion-text-center"
-          size-xs="6" size-md="4" size-lg="3">
+        <ion-col *ngFor="let item of group.value" class="menu-item ion-text-center" size-xs="6" size-md="4" size-lg="3">
           <ion-card (click)="openPage(item.url)" class="ion-no-margin cursor-pointer">
             <ion-card-content>
               <div class="wrapper">
                 <img [src]="item.img">
                 <p class="page-title">{{ item.title }}</p>
-                <p class="secondary-txt-color">Some description about the item here and here..</p>
               </div>
             </ion-card-content>
           </ion-card>
