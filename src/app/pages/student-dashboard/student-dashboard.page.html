@@ -47,8 +47,6 @@
               <ion-col>
                 <div class="icons ion-margin-top ion-text-right">
                   <a (click)="toggleReorderingMode()" class="ion-margin-end">
-                    <ion-icon *ngIf="editableList" color="success" class="responsive-icon colored-text" name="save">
-                    </ion-icon>
                     <ion-icon *ngIf="!editableList" class="responsive-icon colored-text" name="md-create"></ion-icon>
                   </a>
                   <a (click)="navigateToPage('/settings')" class="ion-margin-end">
@@ -71,6 +69,12 @@
                   Dashboard
                   Card</ion-button>
               </ion-col>
+              <ion-col>
+                <ion-button *ngIf="editableList" class="success-background" expand="block" (click)="toggleReorderingMode()">
+                  Done Editing
+                </ion-button>
+              </ion-col>
+
             </ion-row>
           </ion-grid>
         </ion-card-header>
