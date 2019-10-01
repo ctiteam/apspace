@@ -87,7 +87,7 @@ export class NotificationService {
             return this.http.post(url, body, { headers: this.headers });
           },
         ),
-      );
+      ).subscribe();
     }
   }
 
