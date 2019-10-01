@@ -13,6 +13,7 @@ import { NotificationModalPage } from './notification-modal';
 export class NotificationsPage implements OnInit {
   messages$: Observable<any>;   // TYPE TO BE CHANGED AFTER DINGDONG TEAM FINISH THE BACKEND
   skeletons = new Array(3);
+  openedMessages = [];
   constructor(
     private notificationService: NotificationService,
     private modalCtrl: ModalController
@@ -34,6 +35,8 @@ export class NotificationsPage implements OnInit {
       component: NotificationModalPage,
       componentProps: { message, notFound: 'No Message Selected' },
     });
+    this.openedMessages.push(message.message_id);
+    this.notificationService.sendRead(message.message_id).subscribe();
     await modal.present();
     await modal.onDidDismiss();
   }

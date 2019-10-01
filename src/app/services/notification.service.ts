@@ -12,8 +12,9 @@ import { Platform } from '@ionic/angular';
 export class NotificationService {
 
   serviceUrl = 'http://sns-admin.s3-website-ap-southeast-1.amazonaws.com/';
-  APIUrl = 'https://6kosvxkwuh.execute-api.ap-southeast-1.amazonaws.com/dev/dingdong';
-
+  APIUrl = 'https://api.apiit.edu.my/dingdong';
+  apiVersion = 'v2';
+  headers = new HttpHeaders().set('version', 'v2');
   constructor(
     public http: HttpClient,
     public cas: CasTicketService,
@@ -26,7 +27,6 @@ export class NotificationService {
    */
   getMessages(): Observable<any> {
     let token = '';
-    const headers = new HttpHeaders().set('version', 'v2');
     if (this.platform.is('cordova')) {
       return from(
         this.fcm.getToken()
@@ -44,7 +44,7 @@ export class NotificationService {
               service_ticket: st,
             };
             const url = `${this.APIUrl}/client/login?ticket=${body.service_ticket}&device_token=${body.device_token}`;
-            return this.http.get(url, { headers });
+            return this.http.get(url, { headers: this.headers });
           },
         ),
       );
@@ -55,7 +55,7 @@ export class NotificationService {
         }),
         switchMap(st => {
           const url = `${this.APIUrl}/client/login?ticket=${st}`;
-          return this.http.get(url, { headers });
+          return this.http.get(url, { headers: this.headers });
         })
       );
     }
@@ -66,15 +66,29 @@ export class NotificationService {
    *
    * @param id - user id
    */
-  sendTokenOnLogout(id: string) {
-    this.fcm.getToken().then(d => {
-      const body = {
-        client_id: id,
-        device_token: d,
-      };
-      const url = `${this.APIUrl}/client/logout`;
-      this.http.post(url, body).subscribe();
-    });
+  sendTokenOnLogout() {
+    let token = '';
+    if (this.platform.is('cordova')) {
+      return from(
+        this.fcm.getToken()
+      ).pipe(
+        switchMap(
+          responseToken => {
+            token = responseToken;
+            return this.cas.getST(this.serviceUrl);
+          },
+        ),
+        switchMap(
+          st => {
+            const body = {
+              device_token: token,
+            };
+            const url = `${this.APIUrl}/client/logout?ticket=${st}`;
+            return this.http.post(url, body, { headers: this.headers });
+          },
+        ),
+      );
+    }
   }
 
   /**
@@ -86,11 +100,10 @@ export class NotificationService {
     return this.cas.getST(this.serviceUrl).pipe(
       switchMap(st => {
         const body = {
-          message_id: messageID,
-          service_ticket: st,
+          message_id: messageID
         };
-        const url = `${this.APIUrl}/client/read`;
-        return this.http.post(url, body);
+        const url = `${this.APIUrl}/client/read?ticket=${st}`;
+        return this.http.post(url, body, { headers: this.headers });
       }),
     );
   }

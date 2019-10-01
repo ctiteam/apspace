@@ -14,8 +14,8 @@
   </ion-refresher>
   <ng-container *ngIf="(messages$ | async) as messages; else loading">
     <div class="masonry-list ion-margin-top" *ngIf="messages.length > 0; else noNotifications">
-      <div class="masonry-item" *ngFor="let message of messages">
-        <ion-card (click)="openModal(message)" class="notification ion-no-margin" [class.unread]="!message.read">
+      <div class="masonry-item" *ngFor="let message of messages.reverse()">
+        <ion-card (click)="openModal(message)" class="notification ion-no-margin" [class.unread]="(!message.read && openedMessages.indexOf(message.message_id) === -1)">
           <ion-card-header>
             <ion-card-title>
               <h3 class="responsive-h1">
@@ -27,7 +27,7 @@
             <p><span class="text-bold">Sender:</span> {{message.staff_name}}</p>
             <p><span class="text-bold">Sent on:</span> {{message.sent_on | date: 'EEEE, dd MMMM y'}}</p>
             <p><span class="text-bold">Sent at:</span> {{message.sent_on | date: 'hh:mm aaa'}}</p>
-            <ion-badge class="small-margin-top new" style="float: left;font-weight: 300" *ngIf="!message.read">
+            <ion-badge class="small-margin-top new" style="float: left;font-weight: 300" *ngIf="(!message.read && openedMessages.indexOf(message.message_id) === -1)">
               New
             </ion-badge>
             <ion-badge class="small-margin-top" style="float: right;font-weight: 300" color="primary">
