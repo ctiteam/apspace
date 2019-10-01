@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { NotificationsPage } from './notifications.page';
 import { NotificationModalPage } from './notification-modal';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { ReversePipe } from './reverse.pipe';
 
 const routes: Routes = [
   {
@@ -24,7 +25,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [NotificationsPage, NotificationModalPage],
+  declarations: [NotificationsPage, NotificationModalPage, ReversePipe],
   entryComponents: [NotificationModalPage],
 
 })

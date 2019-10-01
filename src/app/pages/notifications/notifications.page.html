@@ -14,7 +14,7 @@
   </ion-refresher>
   <ng-container *ngIf="(messages$ | async) as messages; else loading">
     <div class="masonry-list ion-margin-top" *ngIf="messages.length > 0; else noNotifications">
-      <div class="masonry-item" *ngFor="let message of messages.reverse()">
+      <div class="masonry-item" *ngFor="let message of messages | reverse">
         <ion-card (click)="openModal(message)" class="notification ion-no-margin" [class.unread]="(!message.read && openedMessages.indexOf(message.message_id) === -1)">
           <ion-card-header>
             <ion-card-title>
