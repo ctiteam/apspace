@@ -81,18 +81,25 @@ export class UserSettingsService {
     let tgt: string;
     let cred: string;
     let settings: {};
+    let dashboardItems = [];
     return this.storage.get('cred').then((credValue) => { // KEEP CRED TO GENERATE TGT WHEN EXPIRED
       cred = credValue;
       this.storage.get('tgt').then((tgtValue) => { // KEEP TGT TO PREVENT BREAKING THE APP
         tgt = tgtValue;
         this.storage.get('settings').then((settingsValue) => {
           settings = settingsValue;
-          this.storage.clear().then(() => {
-            this.storage.set('tgt', tgt);
-            this.storage.set('cred', cred);
-            this.storage.set('settings', settings);
-          }).then(
-            _ => this.casheCleaered.next(true)
+          this.storage.get('dashboard-sections').then(
+            dashboardSections => {
+              dashboardItems = dashboardSections;
+              this.storage.clear().then(() => {
+                this.storage.set('tgt', tgt);
+                this.storage.set('cred', cred);
+                this.storage.set('settings', settings);
+                this.storage.set('dashboard-sections', dashboardItems);
+              }).then(
+                _ => this.casheCleaered.next(true)
+              );
+            }
           );
         });
       });
