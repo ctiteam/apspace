@@ -9,13 +9,13 @@ import { createAppSyncLink, AUTH_TYPE } from 'aws-appsync';
 import { CasTicketService } from './services';
 
 export function createApollo(httpLink: HttpLink, cas: CasTicketService) {
-  const url = 'https://wmrk2iy4ora4xlpmgaq2gan4si.appsync-api.ap-southeast-1.amazonaws.com/graphql';
+  const url = 'https://umpvznhwzbcgznypfo3ihn2k24.appsync-api.ap-southeast-1.amazonaws.com/graphql';
   const link = createAppSyncLink({
     url,
     region: 'ap-southeast-1',
     auth: {
       type: AUTH_TYPE.API_KEY,
-      apiKey: 'da2-25okpf6pybc5blho4fg7qxke7u'
+      apiKey: 'da2-5y25wsxr6fby7fkxuyw2yd24si'
     },
     complexObjectsCredentials: null,
     // use "ticket" header for custom authentication
