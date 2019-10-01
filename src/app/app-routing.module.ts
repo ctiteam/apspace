@@ -188,7 +188,7 @@ const routes: Routes = [
     path: 'aplc-progress-report',
     canActivate: [AuthGuard],
     data: { role: Role.Admin | Role.Lecturer },
-    loadChildren: './pages/aplc-progress-report/aplc-progress-report.module#AplcProgressReportPageModule'
+    loadChildren: () => import('./pages/aplc-progress-report/aplc-progress-report.module').then(m => m.AplcProgressReportPageModule)
   },
   {
     path: 'staff-dashboard',
@@ -204,6 +204,8 @@ const routes: Routes = [
   },
   {
     path: 'visa-status',
+    canActivate: [AuthGuard],
+    data: { role: Role.Admin | Role.Student },
     loadChildren: () => import('./pages/visa-status/visa-status.module').then(m => m.VisaStatusPageModule)
   }
 
