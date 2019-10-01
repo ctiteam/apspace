@@ -1,10 +1,10 @@
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { Observable, Subject, timer, NEVER } from 'rxjs';
+import { Observable, Subject, of, timer, NEVER } from 'rxjs';
 import {
   catchError, finalize, first, map, pluck, scan, shareReplay, startWith,
-  switchMap, tap
+  switchMap, tap,
 } from 'rxjs/operators';
 import { totp } from 'otplib/otplib-browser';
 
@@ -60,7 +60,9 @@ export class MarkAttendancePage implements OnInit {
 
     // get attendance state from query and use manual mode if attendance initialized
     const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
-      catchError(() => (this.auto = true, this.attendance.fetch({ schedule }))),
+      switchMap(query => query.attendance === null
+        ? (this.auto = true, this.attendance.fetch({ schedule }))
+        : of(query)),
       catchError(() => (this.toastCtrl.create({
         message: 'Failed to mark attendance.',
         duration: 2000,

@@ -6,8 +6,6 @@ import { map } from 'rxjs/operators';
 import { StudentTimetableService, WsApiService } from 'src/app/services';
 import { Classcode, StudentTimetable, StaffProfile } from '../../../interfaces';
 
-import { classcodes as classcodesMock } from './classcodes.mock';
-
 @Component({
   selector: 'app-classes',
   templateUrl: './classes.page.html',
@@ -51,7 +49,7 @@ export class ClassesPage implements OnInit {
       })] as [StaffProfile[], StudentTimetable[]]),
       map(([profile, timetables]) => timetables.filter(timetable => profile[0].ID === timetable.SAMACCOUNTNAME)),
     );
-    const classcodes$ = of(classcodesMock);
+    const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes');
 
     forkJoin([timetables$, classcodes$]).subscribe(([timetables, classcodes]) => {
       // left join on classcodes
