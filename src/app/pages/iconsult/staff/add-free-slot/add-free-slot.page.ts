@@ -111,6 +111,29 @@ export class AddFreeSlotPage implements OnInit {
     return this.addFreeSlotForm.get('time') as FormArray;
   }
 
+  showDefaultLocationWarningAlert(newCampus: string, newVenue: string) {
+    console.log(newCampus, newVenue);
+    this.alertCtrl.create({
+      header: 'Updating Your Default Location?',
+      subHeader:
+      // tslint:disable-next-line: max-line-length
+      'We noticed that you have entered a new location for your consultation hour. Do you want to use the new location as your default iConsult location?',
+      buttons: [
+        {
+          text: 'No',
+          handler: () => { }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.settings.set('defaultCampus', newCampus);
+            this.settings.set('defaultVenue', newVenue);
+          }
+        }
+      ]
+    }).then(confirm => confirm.present());
+  }
+
   submit() {
     this.submitted = true;
     // stop here if form is invalid
@@ -174,6 +197,9 @@ export class AddFreeSlotPage implements OnInit {
                   this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
                 },
                 complete: () => {
+                  if (this.addFreeSlotForm.value.venue !== this.settings.get('defaultVenue')) {
+                    this.showDefaultLocationWarningAlert(this.addFreeSlotForm.value.location, this.addFreeSlotForm.value.venue);
+                  }
                   this.dismissLoading();
                   const navigationExtras: NavigationExtras = {
                     state: { reload: true }
