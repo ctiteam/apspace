@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ToastController, AlertController, LoadingController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
-import { WsApiService } from 'src/app/services';
+import { WsApiService, SettingsService } from 'src/app/services';
 import { Venue } from 'src/app/interfaces';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
@@ -64,18 +64,22 @@ export class AddFreeSlotPage implements OnInit {
     private router: Router,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private settings: SettingsService
   ) { }
 
   ngOnInit() {
+    if (this.settings.get('defaultCampus')) {
+      this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${this.settings.get('defaultCampus')}`, true);
+    }
     this.addFreeSlotForm = this.formBuilder.group({
       slotType: [this.consultationTypeOptions[0].value, Validators.required], // alwayes required
       startDate: [moment(this.todaysDate).add(1, 'day').format('YYYY-MM-DD'), Validators.required], // always required
       repeatOn: [[]],
       noOfWeeks: [null],
       endDate: [''],
-      location: ['', Validators.required], // always required
-      venue: ['', Validators.required], // alwayes required
+      location: [this.settings.get('defaultCampus') || '', Validators.required], // always required
+      venue: [this.settings.get('defaultVenue') || '', Validators.required], // alwayes required
       time: this.formBuilder.array([
         this.initTimeSlots(),
       ]),
@@ -117,7 +121,7 @@ export class AddFreeSlotPage implements OnInit {
       date: '',
       end_date: '',
       entry_datetime: '', // always empty from backend
-      location_id: this.addFreeSlotForm.value.venue.id,
+      location_id: this.addFreeSlotForm.value.venue,
       repeat: [],
       rule_status: '', // always empty from backend
       start_date: '',
@@ -150,7 +154,7 @@ export class AddFreeSlotPage implements OnInit {
                 <p><strong>Slot End Date: </strong> ${this.addFreeSlotForm.value.endDate || 'N/A'}</p>
                 <p><strong>Slot Time: </strong> ${body.start_time.toString()}</p>
                 <p><strong>Slot Location: </strong> ${this.addFreeSlotForm.value.location}</p>
-                <p><strong>Slot Venue: </strong> ${this.addFreeSlotForm.value.venue.rooms} </p>`,
+                <p><strong>Slot Venue: </strong> ${this.addFreeSlotForm.value.venue} </p>`,
       buttons: [
         {
           text: 'No',
@@ -172,7 +176,7 @@ export class AddFreeSlotPage implements OnInit {
                 complete: () => {
                   this.dismissLoading();
                   const navigationExtras: NavigationExtras = {
-                    state: {reload: true}
+                    state: { reload: true }
                   };
                   this.router.navigateByUrl('iconsult/my-consultations', navigationExtras);
                 }

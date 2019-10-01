@@ -191,22 +191,13 @@
                       <ion-label position="stacked" [ngClass]="{ 'danger-text': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
                       submitted && addFreeSlotForm.get('venue').hasError('required') }">Venue
                       </ion-label>
-                      <ionic-selectable searchPlaceholder="Enter Venue Name" placeholder="Click to select"
-                        class="form-input" formControlName="venue" [ngClass]="{ 'is-invalid': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
-                        submitted && addFreeSlotForm.get('venue').hasError('required') }" [items]="venues$ | async"
-                        itemValueField="id" itemTextField="rooms" [canSearch]="true">
-                        <!-- Template to render the not found message -->
-                        <ng-template ionicSelectableSearchFailTemplate>
-                          <app-message-with-svg imageUrl="assets/img/empty.svg"
-                            messageContent="Please select a location first" messageTitle="No Location Selected!"
-                            wrapperSize="6" wrapperOffset="3" wrapperMarginTop="50px">
-                          </app-message-with-svg>
-                        </ng-template>
-                        <!-- Template to render the title -->
-                        <ng-template ionicSelectableTitleTemplate>
-                          <!-- Empty => No title -->
-                        </ng-template>
-                      </ionic-selectable>
+                      <ion-select placeholder="Click to select" interface="popover" *ngIf="venues$ | async as venues"
+                      formControlName="venue" [ngClass]="{ 'is-invalid': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
+                      submitted && addFreeSlotForm.get('venue').hasError('required') }" class="form-input">
+                      <ion-select-option *ngFor="let venue of venues" [value]="venue.id">
+                        {{ venue.rooms }}
+                      </ion-select-option>
+                    </ion-select>
                     </ion-item>
                     <div *ngIf="
                         (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
