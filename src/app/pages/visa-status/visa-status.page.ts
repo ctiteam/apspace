@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { StudentProfile, VisaDetails, CountryData } from '../../interfaces';
+import { StudentProfile, VisaDetails, CountryData, Role } from '../../interfaces';
 
-import { WsApiService } from '../../services';
+import { WsApiService, SettingsService } from '../../services';
 
 @Component({
   selector: 'app-visa-status',
@@ -27,15 +27,21 @@ export class VisaStatusPage implements OnInit {
   passportNumber: string;
   alpha3Code = '';
   listOfCountries: CountryData[];
+  sendRequest = false;
   // skeleton
   skeletons = new Array(5);
 
   constructor(
-    private ws: WsApiService
+    private ws: WsApiService,
+    private settings: SettingsService
   ) { }
 
   ngOnInit() {
-    this.getProfile();
+    // tslint:disable-next-line: no-bitwise
+    if (this.settings.get('role') & Role.Student) {
+      this.sendRequest = true;
+      this.getProfile();
+    }
     this.getListOfCountries(); // get the list of countries when the page loads and add the data to ion-select
   }
 
@@ -76,6 +82,7 @@ export class VisaStatusPage implements OnInit {
   }
 
   getVisa() {
+    this.sendRequest = true;
     this.visa$ = this.ws.get<VisaDetails>(`/student/visa_renewal_status/${this.alpha3Code}/${this.passportNumber}`, false, {
       auth: false,
     }).pipe(tap(r => console.log(r)));
