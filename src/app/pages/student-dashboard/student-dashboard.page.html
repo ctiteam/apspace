@@ -169,6 +169,7 @@
             <dashboard-card *ngIf="(overallAttendancePercent$ | async) as overallAttendancePercent"
               [cardTitle]='lowAttendanceCardConfigurations.cardTitle'
               [cardSubtitle]='"Overall: " + (overallAttendancePercent.value | number: "1.0-1") + "%"'
+              [cardSubtitleColor]="overallAttendancePercent.value >= 80 ? '' : '#e54d42'"
               [contentPadding]='lowAttendanceCardConfigurations.contentPadding'
               [withOptionsButton]='lowAttendanceCardConfigurations.withOptionsButton'>
               <chart *ngIf="lowAttendanceChart.data" [type]="lowAttendanceChart.type" [data]="lowAttendanceChart.data"
@@ -404,6 +405,7 @@
             <dashboard-card [cardTitle]='financialsCardConfigurations.cardTitle'
               [cardSubtitle]='"Overdue: " + (financialSummary[0].TOTAL_OVERDUE | currency: "MYR": "RM")'
               [contentPadding]='financialsCardConfigurations.contentPadding'
+              [cardSubtitleColor]="financialSummary[0].TOTAL_OVERDUE > 0 ? '#e54d42' : ''"
               [withOptionsButton]='financialsCardConfigurations.withOptionsButton'>
               <chart *ngIf="financialsChart.data" [type]="financialsChart.type" [data]="financialsChart.data"
                 [options]="financialsChart.options">

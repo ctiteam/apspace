@@ -1,7 +1,7 @@
 <ion-card class="ion-no-margin">
   <ion-card-header>
     <ion-card-title [style.width]="cardConfigurations.withOptionsButton? '90%': '100%'" class="float-left card-title">
-      <h5 class="small-text" *ngIf="cardConfigurations.cardSubtitle">{{cardConfigurations.cardSubtitle}}</h5>
+      <h5 class="small-text" [style.color]="cardSubtitleColor" *ngIf="cardConfigurations.cardSubtitle">{{cardConfigurations.cardSubtitle}}</h5>
       <h3 class="responsive-h1">{{cardConfigurations.cardTitle}}</h3>
     </ion-card-title>
     <div *ngIf="cardConfigurations.withOptionsButton" class="card-options-icon float-left ion-text-right">
