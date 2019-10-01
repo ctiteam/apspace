@@ -71,7 +71,7 @@ const routes: Routes = [
           () => import('./pages/attendix-lecturer/mark-attendance/mark-attendance.module').then(m => m.MarkAttendancePageModule)
       },
       {
-        path: 'update-attendance',
+        path: 'update',
         loadChildren:
           () => import('./pages/attendix-student/update-attendance/update-attendance.module').then(m => m.UpdateAttendancePageModule)
       }
