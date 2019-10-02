@@ -26,8 +26,8 @@
       <svg width="200%" height="100%" viewBox="0 0 240 140" version="1.1">
         <defs>
           <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
-            <stop stop-color="#4B96E2" offset="0%"></stop>
-            <stop stop-color="#235496" offset="50%"></stop>
+            <stop [attr.stop-color]="average > 0.8 ? '#08a14f': '#e54d42'" offset="0%"></stop>
+            <stop [attr.stop-color]="average > 0.8 ? '#08a14f': '#e54d42'" offset="50%"></stop>
           </linearGradient>
         </defs>
         <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -35,7 +35,7 @@
             <g id="wave-copy" transform="translate(0.000000, 1.000000)">
               <path
                 d="M0,140 L0,2.59259259 C0,2.6670255 28.08,-4.12156133 66,3.88888889 C83.6331044,8.10263543 102,6.61060503 120,2.59259259 L120,140 L0,140 Z M120,140 L120,2.59259259 C120,2.6670255 148.08,-4.12156133 186,3.88888889 C203.633104,8.10263543 222,6.61060503 240,2.59259259 L240,140 L120,140 Z"
-                id="waveShape" [class.danger-attendance-fill]="0.8 > average"></path>
+                id="waveShape"></path>
             </g>
           </g>
         </g>
@@ -48,11 +48,7 @@
     <!-- END BLUR LAYER (OVERLAY) -->
 
     <!-- START CIRCLE -->
-<<<<<<< HEAD
     <div class="circle ion-text-center" id="widget-content"></div>
-=======
-    <div class="circle ion-text-center" id="widget-content" [class.danger-attendance-box-shadow]="0.8 > average"></div>
->>>>>>> fix(attendix): add links
     <!-- END CIRCLE -->
 
     <!-- START TEXT -->
@@ -63,7 +59,7 @@
 
   <!-- IF THERE IS NO DATA RETURNED FROM API -->
   <div class="cover" *ngIf="average == -1">
-    <div id="widget-value" style="font-size: 1.6em">
+    <div id="widget-value">
       No attendance data for the selected intake
     </div>
   </div>
@@ -72,24 +68,17 @@
   <!-- SHOWING LOADING WHEN ATTENDANCE VALUE IS -2 (INITIAL VALUE) -->
   <div class="cover" *ngIf="average == -2">
     <div class="blur"></div>
-    <div id="widget-value" style="font-size: 1.6em">
+    <div id="widget-value">
       <loading-spinner></loading-spinner>
     </div>
   </div>
   <!-- END LOADING -->
 
   <ng-template let-attendances [ngIf]="attendance$ | async" [ngIfElse]="loadAttendance">
-<<<<<<< HEAD
     <ion-grid class="ion-no-padding">
       <ion-row>
         <ion-col class="ion-no-padding" size="12" size-md="6" *ngFor="let a of attendances">
           <ion-card class="ion-margin-bottom">
-=======
-    <ion-grid>
-      <ion-row>
-        <ion-col size="12" size-md="6" *ngFor="let a of attendances">
-          <ion-card margin-bottom>
->>>>>>> fix(attendix): add links
             <ion-item color="light-shade" class="subj-title" lines="none">
               {{ a.MODULE_ATTENDANCE }}
             </ion-item>
