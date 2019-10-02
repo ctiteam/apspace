@@ -15,6 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AppAvailability } from '@ionic-native/app-availability/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
+import { Device } from '@ionic-native/device/ngx';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { FCM } from '@ionic-native/fcm/ngx';
     InAppBrowser,
     AppAvailability,
     Network,
+    Device,
     StatusBar,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
