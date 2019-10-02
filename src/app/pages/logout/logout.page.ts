@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
-import { SettingsService, NotificationService } from '../../services';
+import { SettingsService, NotificationService, DataCollectorService } from '../../services';
 
 @Component({
   selector: 'app-logout',
@@ -15,13 +15,18 @@ export class LogoutPage implements OnInit {
     public navCtrl: NavController,
     public storage: Storage,
     private settings: SettingsService,
-    private notification: NotificationService
+    private notification: NotificationService,
+    private dc: DataCollectorService,
+    private platform: Platform
   ) { }
 
   ngOnInit() {
     this.settings.clear();
     this.storage.clear();
-    this.notification.sendTokenOnLogout(); // works only on phones
+    if (this.platform.is('cordova')) {
+      this.notification.sendTokenOnLogout(); // works only on phones
+      this.dc.logout().subscribe();
+    }
     // destroy all cached/active views which angular router does not
     this.navCtrl.navigateRoot('/login', { replaceUrl: true });
   }

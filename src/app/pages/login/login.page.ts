@@ -7,7 +7,14 @@ import { throwError } from 'rxjs';
 import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 
 import { Role } from '../../interfaces';
-import { CasTicketService, WsApiService, SettingsService, UserSettingsService, NotificationService } from '../../services';
+import {
+  CasTicketService,
+  WsApiService,
+  SettingsService,
+  UserSettingsService,
+  NotificationService,
+  DataCollectorService
+} from '../../services';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
@@ -41,7 +48,8 @@ export class LoginPage {
     public iab: InAppBrowser,
     private settings: SettingsService,
     private userSettings: UserSettingsService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dc: DataCollectorService
   ) { }
 
   login() {
@@ -91,6 +99,7 @@ export class LoginPage {
         () => {
           if (this.plt.is('cordova')) {
             this.notificationService.checkNewNotification(); // check for new messages when the user logs-in to the system
+            this.dc.login().subscribe();
           }
           this.loginProcessLoading = false;
           this.userAuthenticated = true;
