@@ -233,7 +233,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
     this.displayGreetingMessage();
     this.apcardTransaction$ = this.getTransactions(refresher);
-    // this.getBadge();
+    this.getBadge();
     forkJoin([
       this.getProfile(refresher),
       this.financial$ = this.getOverdueFee(refresher)
@@ -243,11 +243,11 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // NOTIFICATIONS FUNCTIONS
-  // getBadge() {
-  //   this.notificationService.getMessages().subscribe(res => {
-  //     this.numberOfUnreadMsgs = +res.num_of_unread_msgs;
-  //   });
-  // }
+  getBadge() {
+    this.notificationService.getMessages().subscribe(res => {
+      this.numberOfUnreadMsgs = +res.num_of_unread_messages;
+    });
+  }
 
   // DRAG AND DROP FUNCTIONS (DASHBOARD CUSTOMIZATION)
   toggleReorderingMode() { // enable/disable edit mode
