@@ -24,7 +24,7 @@ export class LogoutPage implements OnInit {
     this.settings.clear();
     this.storage.clear();
     if (this.platform.is('cordova')) {
-      this.notification.sendTokenOnLogout(); // works only on phones
+      this.notification.sendTokenOnLogout().subscribe(); // works only on phones
       this.dc.logout().subscribe();
     }
     // destroy all cached/active views which angular router does not
