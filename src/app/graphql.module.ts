@@ -23,7 +23,7 @@ export function createApollo(httpLink: HttpLink, cas: CasTicketService) {
       setContext(async (request, previousContext: Record<string, any>) => ({
         headers: {
           ...previousContext.headers,
-          ticket: await cas.getST('https://api.apiit.edu.my/classcodes').toPromise()
+          ticket: await cas.getST('https://api.apiit.edu.my/attendix').toPromise()
         }
       })),
       httpLink.create({ uri: url })
