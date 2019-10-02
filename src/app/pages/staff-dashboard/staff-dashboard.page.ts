@@ -203,7 +203,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   // NOTIFICATIONS FUNCTIONS
   getBadge() {
     this.notificationService.getMessages().subscribe(res => {
-      this.numberOfUnreadMsgs = +res.num_of_unread_msgs;
+      this.numberOfUnreadMsgs = +res.num_of_unread_messages;
     });
   }
 
