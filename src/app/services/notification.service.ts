@@ -107,4 +107,22 @@ export class NotificationService {
       }),
     );
   }
+
+/**
+ * Check if there is a new notification while the app is in the background/foreground
+ *
+ *
+ */
+  checkNewNotification() {
+    this.fcm.onNotification().subscribe(data => {
+      console.log(data);
+      if (data.wasTapped) { // Notification received in background
+        console.log('Received in background');
+        // this.router.navigate([data.landing_page, data.price]);
+      } else { // Notification received in foreground
+        console.log('Received in foreground');
+        // this.router.navigate([data.landing_page, data.price]);
+      }
+    });
+  }
 }

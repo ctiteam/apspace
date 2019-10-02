@@ -7,7 +7,7 @@ import { throwError } from 'rxjs';
 import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 
 import { Role } from '../../interfaces';
-import { CasTicketService, WsApiService, SettingsService, UserSettingsService } from '../../services';
+import { CasTicketService, WsApiService, SettingsService, UserSettingsService, NotificationService } from '../../services';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
@@ -40,7 +40,8 @@ export class LoginPage {
     public alertCtrl: AlertController,
     public iab: InAppBrowser,
     private settings: SettingsService,
-    private userSettings: UserSettingsService
+    private userSettings: UserSettingsService,
+    private notificationService: NotificationService
   ) { }
 
   login() {
@@ -88,6 +89,9 @@ export class LoginPage {
           }, 2000);
         },
         () => {
+          if (this.plt.is('cordova')) {
+            this.notificationService.checkNewNotification(); // check for new messages when the user logs-in to the system
+          }
           this.loginProcessLoading = false;
           this.userAuthenticated = true;
           // GET USER ROLE HERE AND CHECK PUSH THE SETTINGS BASED ON THAT
