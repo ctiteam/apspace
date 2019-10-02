@@ -70,7 +70,8 @@
                   Card</ion-button>
               </ion-col>
               <ion-col>
-                <ion-button *ngIf="editableList" class="success-background" expand="block" (click)="toggleReorderingMode()">
+                <ion-button *ngIf="editableList" class="success-background" expand="block"
+                  (click)="toggleReorderingMode()">
                   Done Editing
                 </ion-button>
               </ion-col>
@@ -105,9 +106,24 @@
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
-              <quick-access-item *ngIf="modulesWithLowAttendance$ | async" icon="alarm" titleFirstWord='Overall'
-                titleSecondWord='Attendance' [observable$]='overallAttendancePercent$' outputMode='percentage'>
+              <quick-access-item *ngIf="modulesWithLowAttendance$ | async; else loadingWholeAttendance" icon="alarm"
+                titleFirstWord='Overall' titleSecondWord='Attendance' [observable$]='overallAttendancePercent$'
+                outputMode='percentage'>
               </quick-access-item>
+              <ng-template #loadingWholeAttendance>
+                <ion-card class="ion-no-padding ion-no-margin ion-text-center">
+                  <ion-card-header class="ion-no-padding ion-padding-top">
+                    <loading-spinner></loading-spinner>
+                  </ion-card-header>
+                  <ion-card-content class="pt-1-xs">
+                    <ion-skeleton-text style="line-height: 13px; width: 50%; margin: 10px auto"></ion-skeleton-text>
+                    <ion-skeleton-text style="line-height: 15px; width: 70%; margin: auto"></ion-skeleton-text>
+                    <h3 class="main-text-color responsive-h2 text-bolder ion-margin-top" style="margin-top: 5px;">
+                      <loading-spinner style="margin-top: 20px;"></loading-spinner>
+                    </h3>
+                  </ion-card-content>
+                </ion-card>
+              </ng-template>
             </ion-col>
 
             <!-- QUICK ACCESS ITEM: APCARD BALANCE -->
@@ -115,9 +131,23 @@
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
-              <quick-access-item *ngIf="apcardTransaction$ | async" icon="card" titleFirstWord='APCard'
-                titleSecondWord='Balance' [observable$]='balance$' outputMode='currency'>
+              <quick-access-item *ngIf="apcardTransaction$ | async; else loadingWholeApcard" icon="card"
+                titleFirstWord='APCard' titleSecondWord='Balance' [observable$]='balance$' outputMode='currency'>
               </quick-access-item>
+              <ng-template #loadingWholeApcard>
+                <ion-card class="ion-no-padding ion-no-margin ion-text-center">
+                  <ion-card-header class="ion-no-padding ion-padding-top">
+                    <loading-spinner></loading-spinner>
+                  </ion-card-header>
+                  <ion-card-content class="pt-1-xs">
+                    <ion-skeleton-text style="line-height: 13px; width: 50%; margin: 10px auto"></ion-skeleton-text>
+                    <ion-skeleton-text style="line-height: 15px; width: 70%; margin: auto"></ion-skeleton-text>
+                    <h3 class="main-text-color responsive-h2 text-bolder ion-margin-top" style="margin-top: 5px;">
+                      <loading-spinner style="margin-top: 20px;"></loading-spinner>
+                    </h3>
+                  </ion-card-content>
+                </ion-card>
+              </ng-template>
             </ion-col>
 
             <!-- QUICK ACCESS ITEM: TOTAL OVERDUE -->
@@ -125,9 +155,23 @@
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
-              <quick-access-item icon="logo-usd" titleFirstWord='Total' titleSecondWord='Overdue'
-                [observable$]="totalOverdue$" outputMode='currency'>
+              <quick-access-item *ngIf="financial$ | async; else loadingWholeFinancial" icon="logo-usd"
+                titleFirstWord='Total' titleSecondWord='Overdue' [observable$]="totalOverdue$" outputMode='currency'>
               </quick-access-item>
+              <ng-template #loadingWholeFinancial>
+                <ion-card class="ion-no-padding ion-no-margin ion-text-center">
+                  <ion-card-header class="ion-no-padding ion-padding-top">
+                    <loading-spinner></loading-spinner>
+                  </ion-card-header>
+                  <ion-card-content class="pt-1-xs">
+                    <ion-skeleton-text style="line-height: 13px; width: 50%; margin: 10px auto"></ion-skeleton-text>
+                    <ion-skeleton-text style="line-height: 15px; width: 70%; margin: auto"></ion-skeleton-text>
+                    <h3 class="main-text-color responsive-h2 text-bolder ion-margin-top" style="margin-top: 5px;">
+                      <loading-spinner style="margin-top: 20px;"></loading-spinner>
+                    </h3>
+                  </ion-card-content>
+                </ion-card>
+              </ng-template>
             </ion-col>
 
           </ion-row>
