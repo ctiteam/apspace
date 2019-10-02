@@ -1,9 +1,10 @@
 import {
   ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, ViewChild
 } from '@angular/core';
+import { ToastController } from '@ionic/angular';
+import { Observable } from 'rxjs';
 
 import { UpdateAttendanceGQL } from '../../../../generated/graphql';
-import { Observable } from 'apollo-link';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,11 +26,12 @@ export class UpdateAttendancePage {
   constructor(
     private cdr: ChangeDetectorRef,
     private updateAttendance: UpdateAttendanceGQL,
+    public toastCtrl: ToastController
   ) { }
 
   scanCode() {
     this.updateAttendance.mutate({ otp: this.otp })
-      .subscribe(d => console.log(d));
+      .subscribe(d => console.log(d), err => this.handleError(err));
   }
 
   onKey(ev: KeyboardEvent): boolean {
@@ -49,16 +51,10 @@ export class UpdateAttendancePage {
 
       this.updateAttendance.mutate({ otp: this.otp }).subscribe(d => {
         console.log(d);
-        // clear value
-        el.value = '';
-        for (let prev = el; prev != null; prev = prev.previousElementSibling as HTMLInputElement) {
-          prev.value = '';
-          prev.focus();
-        }
-        this.otp = '';
-      }, e => {
-        console.error(e);
-        // TODO: handle error
+        this.clear(el);
+      }, err => {
+        this.handleError(err);
+        this.clear(el);
       });
 
     }
@@ -66,6 +62,28 @@ export class UpdateAttendancePage {
     return false;
   }
 
+  /** Handle error. */
+  handleError(err: Error) {
+    this.toastCtrl.create({
+      message: 'Failed to update attendance. ' + err.message,
+      duration: 2000,
+      position: 'top',
+      color: 'danger'
+    }).then(toast => toast.present());
+    console.error(err);
+  }
+
+  /** Clear otp value. */
+  clear(el: HTMLInputElement) {
+    el.value = '';
+    for (let prev = el; prev != null; prev = prev.previousElementSibling as HTMLInputElement) {
+      prev.value = '';
+      prev.focus();
+    }
+    this.otp = '';
+  }
+
+  /** Swap mode between auto scan and manual input. */
   swapMode(ev: MouseEvent) {
     this.scan = !this.scan;
     this.cdr.detectChanges();

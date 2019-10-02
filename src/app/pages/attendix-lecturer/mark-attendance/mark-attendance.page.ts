@@ -60,15 +60,13 @@ export class MarkAttendancePage implements OnInit {
 
     // get attendance state from query and use manual mode if attendance initialized
     const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
-      switchMap(query => query.attendance === null
-        ? (this.auto = true, this.attendance.fetch({ schedule }))
-        : of(query)),
-      catchError(() => (this.toastCtrl.create({
+      catchError(() => (this.auto = true, this.attendance.fetch({ schedule }))),
+      catchError(err => (this.toastCtrl.create({
         message: 'Failed to mark attendance.',
         duration: 2000,
         position: 'top',
         color: 'danger'
-      }), NEVER)),
+      }).then(toast => toast.present()), console.error(err), NEVER)),
       pluck('data'),
       finalize(() => 'initAttendance ended'),
       tap((query: InitAttendanceMutation) => {
