@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Observable, from, of } from 'rxjs';
@@ -12,8 +12,9 @@ import { Platform } from '@ionic/angular';
 export class NotificationService {
 
   serviceUrl = 'http://sns-admin.s3-website-ap-southeast-1.amazonaws.com/';
-  APIUrl = 'https://6kosvxkwuh.execute-api.ap-southeast-1.amazonaws.com/dev/dingdong';
-
+  APIUrl = 'https://api.apiit.edu.my/dingdong';
+  apiVersion = 'v2';
+  headers = new HttpHeaders().set('version', 'v2');
   constructor(
     public http: HttpClient,
     public cas: CasTicketService,
@@ -26,12 +27,10 @@ export class NotificationService {
    */
   getMessages(): Observable<any> {
     let token = '';
-    console.log('get messages');
     if (this.platform.is('cordova')) {
       return from(
         this.fcm.getToken()
       ).pipe(
-        tap(t => console.log(t)),
         switchMap(
           responseToken => {
             token = responseToken;
@@ -44,22 +43,19 @@ export class NotificationService {
               device_token: token,
               service_ticket: st,
             };
-            const url = `${this.APIUrl}/client/login?ticket=${body.service_ticket}&token=${body.device_token}`;
-            return this.http.get(url);
+            const url = `${this.APIUrl}/client/login?ticket=${body.service_ticket}&device_token=${body.device_token}`;
+            return this.http.get(url, { headers: this.headers });
           },
         ),
       );
     } else {
-      console.log(1);
-      return from(of(1)).pipe(
+      return from(of(1)).pipe( // waiting for dingdong team to finalize the backend APIs
         switchMap(_ => {
-          console.log(2);
           return this.cas.getST(this.serviceUrl);
         }),
         switchMap(st => {
-          console.log(st);
           const url = `${this.APIUrl}/client/login?ticket=${st}`;
-          return this.http.get(url);
+          return this.http.get(url, { headers: this.headers });
         })
       );
     }
@@ -70,15 +66,29 @@ export class NotificationService {
    *
    * @param id - user id
    */
-  sendTokenOnLogout(id: string) {
-    this.fcm.getToken().then(d => {
-      const body = {
-        client_id: id,
-        device_token: d,
-      };
-      const url = `${this.APIUrl}/client/logout`;
-      this.http.post(url, body).subscribe();
-    });
+  sendTokenOnLogout() {
+    let token = '';
+    if (this.platform.is('cordova')) {
+      return from(
+        this.fcm.getToken()
+      ).pipe(
+        switchMap(
+          responseToken => {
+            token = responseToken;
+            return this.cas.getST(this.serviceUrl);
+          },
+        ),
+        switchMap(
+          st => {
+            const body = {
+              device_token: token,
+            };
+            const url = `${this.APIUrl}/client/logout?ticket=${st}`;
+            return this.http.post(url, body, { headers: this.headers });
+          },
+        ),
+      );
+    }
   }
 
   /**
@@ -90,12 +100,29 @@ export class NotificationService {
     return this.cas.getST(this.serviceUrl).pipe(
       switchMap(st => {
         const body = {
-          message_id: messageID,
-          service_ticket: st,
+          message_id: messageID
         };
-        const url = `${this.APIUrl}/client/read`;
-        return this.http.post(url, body);
+        const url = `${this.APIUrl}/client/read?ticket=${st}`;
+        return this.http.post(url, body, { headers: this.headers });
       }),
     );
+  }
+
+/**
+ * Check if there is a new notification while the app is in the background/foreground
+ *
+ *
+ */
+  checkNewNotification() {
+    this.fcm.onNotification().subscribe(data => {
+      console.log(data);
+      if (data.wasTapped) { // Notification received in background
+        console.log('Received in background');
+        // this.router.navigate([data.landing_page, data.price]);
+      } else { // Notification received in foreground
+        console.log('Received in foreground');
+        // this.router.navigate([data.landing_page, data.price]);
+      }
+    });
   }
 }

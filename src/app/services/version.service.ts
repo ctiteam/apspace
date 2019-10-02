@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class VersionService {
 
-  readonly version = '1.0.1';
+  readonly version = '2.0.0';
 
   /** Application version name. */
   get name(): string {

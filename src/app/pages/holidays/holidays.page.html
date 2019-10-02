@@ -87,7 +87,7 @@
             <ion-select-option value="upcoming">Upcoming Holidays Only</ion-select-option>
           </ion-select>
         </ion-item>
-        <div padding>
+        <div class="ion-padding">
           <ion-button fill="outline" color="danger" expand="block" (click)="clearFilter()">
             Clear Filters
             <ion-icon slot="end" name="trash"></ion-icon>
@@ -103,9 +103,9 @@
   <ion-refresher slot="fixed" pullMax="400" pullMin="60 "(ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-grid no-padding>
-    <ion-row no-padding>
-      <ion-col no-padding size="12" size-md="8" offset-md="2" size-lg="6" offset-md="3">
+  <ion-grid class="ion-no-padding">
+    <ion-row class="ion-no-padding">
+      <ion-col class="ion-no-padding" size="12" size-md="8" offset-md="2" size-lg="6" offset-md="3">
         <ion-card>
           <ion-card-header>
             <ion-card-title>
@@ -119,7 +119,7 @@
               </h6>
             </ion-card-title>
           </ion-card-header>
-          <ion-card-content no-padding>
+          <ion-card-content class="ion-no-padding">
             <events-list [observable$]="filteredHoliday$"></events-list>
           </ion-card-content>
         </ion-card>

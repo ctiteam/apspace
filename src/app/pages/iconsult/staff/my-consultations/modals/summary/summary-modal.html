@@ -9,8 +9,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content parallax-header padding>
-  <ion-card no-margin margin-bottom>
+<ion-content parallax-header class="ion-padding">
+  <ion-card class="ion-no-margin ion-margin-bottom">
     <ion-card-header>
       <ion-card-title>
         <h4 class="responsive-h1">
@@ -18,7 +18,7 @@
         </h4>
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content no-padding>
+    <ion-card-content class="ion-no-padding">
       <chart height="600" [type]="chartData.type" [data]="chartData.data" [options]="chartData.options">
       </chart>
       <ion-item>

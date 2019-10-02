@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content parallax-header padding>
+<ion-content parallax-header class="ion-padding">
   <ng-template let-verification [ngIf]='verifyslot$ | async'>
     <ng-template [ngIf]="verification.res == 'Duplicated'" [ngIfElse]='noduplicate'>
       <app-message-with-svg imageUrl="assets/img/time-conf.svg" messageTitle="Avoiding Clashes" wrapperMarginTop="50px"
@@ -21,7 +21,7 @@
     <ng-template #noduplicate>
       <ion-card>
         <form name="form" (ngSubmit)="bookingForm.form.valid && bookSlot()" #bookingForm="ngForm" novalidate>
-          <ion-card-content no-padding>
+          <ion-card-content class="ion-no-padding">
             <ion-grid>
               <ion-row>
                 <ion-col size-xs="12">
@@ -53,7 +53,7 @@
                       </ion-select-option>
                     </ion-select>
                   </ion-item>
-                  <div padding-start *ngIf="consultationWith.touched && consultationWith.invalid" class="danger-text">
+                  <div *ngIf="consultationWith.touched && consultationWith.invalid" class="danger-text ion-padding-start">
                     <div *ngIf="consultationWith.errors.required">This field is required</div>
                   </div>
 
@@ -78,7 +78,7 @@
                       [ngClass]="{ 'is-invalid': reason.touched && reason.invalid }" required name="reason"
                       class="form-input" rows="6"></ion-textarea>
                   </ion-item>
-                  <div padding-start *ngIf="reason.touched && reason.invalid" class="danger-text">
+                  <div *ngIf="reason.touched && reason.invalid" class="ion-padding-start danger-text">
                     <div *ngIf="reason.errors.required">This field is required</div>
                   </div>
 
@@ -110,15 +110,15 @@
                       name="studentContactNumber" class="form-input">
                     </ion-input>
                   </ion-item>
-                  <div padding-start *ngIf="studentContactNumber.touched && studentContactNumber.invalid"
-                    class="danger-text">
+                  <div *ngIf="studentContactNumber.touched && studentContactNumber.invalid"
+                    class="ion-padding-start danger-text">
                     <div>Phone number must contain 10 (or 11) digits only</div>
                   </div>
 
                 </ion-col>
               </ion-row>
               <ion-row>
-                <ion-col padding>
+                <ion-col class="ion-padding">
                   <ion-button type="submit" [disabled]="!bookingForm.form.valid" expand="block"
                     class="success-background">
                     Book

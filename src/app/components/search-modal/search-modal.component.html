@@ -12,7 +12,7 @@
     <ion-spinner></ion-spinner>
   </ng-template>
 
-  <ion-list no-lines *ngIf="searchItem$ | async as items; else searching">
+  <ion-list lines="none" *ngIf="searchItem$ | async as items; else searching">
     <ng-template [ngIf]="items.length > 0" [ngIfElse]="noItem">
       <ion-item button *ngFor="let item of items" (click)="select(item)">
         {{ item }}

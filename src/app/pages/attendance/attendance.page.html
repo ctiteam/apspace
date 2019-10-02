@@ -47,7 +47,7 @@
     <!-- END BLUR LAYER (OVERLAY) -->
 
     <!-- START CIRCLE -->
-    <div class="circle" text-center id="widget-content"></div>
+    <div class="circle ion-text-center" id="widget-content"></div>
     <!-- END CIRCLE -->
 
     <!-- START TEXT -->
@@ -74,10 +74,10 @@
   <!-- END LOADING -->
 
   <ng-template let-attendances [ngIf]="attendance$ | async" [ngIfElse]="loadAttendance">
-    <ion-grid no-padding>
+    <ion-grid class="ion-no-padding">
       <ion-row>
-        <ion-col no-padding size="12" size-md="6" *ngFor="let a of attendances">
-          <ion-card margin-bottom>
+        <ion-col class="ion-no-padding" size="12" size-md="6" *ngFor="let a of attendances">
+          <ion-card class="ion-margin-bottom">
             <ion-item color="light-shade" class="subj-title" lines="none">
               {{ a.MODULE_ATTENDANCE }}
             </ion-item>
@@ -169,7 +169,7 @@
     </ion-card>
   </ng-template>
 
-  <div class="container p-0" *ngIf="legend$ | async as legend; else loadLegend">
+  <div *ngIf="legend$ | async as legend; else loadLegend">
     <ion-card class="legend">
       <ion-card-header>
         <h2>Legend</h2>

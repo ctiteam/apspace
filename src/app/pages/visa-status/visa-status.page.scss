@@ -1,0 +1,78 @@
+.form-input {
+  border-radius: 7px;
+  background: var(--main-bg-color);
+  padding: 3px 10px !important;
+  margin-top: 10px;
+  border: 1px solid var(--tertiary-bg-color);
+  min-height: 40px;
+}
+ion-select.form-input {
+  padding: 8px 10px 9px 10px !important;
+}
+
+.display {
+  display: block;
+}
+
+.progress-bar{
+  border-radius: 30px !important;
+}
+
+.greenSquare {
+  height: 10px;
+  width: 100%;
+  background-color: var(--success-color);
+}
+
+.yellowSquare {
+  height: 10px;
+  width: 100%;
+  background-color: #dfa847;
+}
+
+.redSquare {
+  height: 10px;
+  width: 100%;
+  background-color: var(--danger-color);
+}
+
+ion-text {
+  font-size: 14px;
+  font-weight: 400;
+}
+.titleBorder {
+  border-bottom: 2px solid var(--primary-color) !important;
+}
+
+.hide-card-show-table {
+  display: none;
+}
+
+@media (min-width: 576px) {
+  .hide-card-show-table {
+    display: block;
+  }
+}
+
+@media (min-width: 576px) {
+  .show-card-hide-table {
+    display: none;
+  }
+}
+a {
+  position: absolute;
+  right: 0.5em;
+  top: 50%;
+  margin-top: -8px;
+}
+.progress-bar {
+  position: relative;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-top-left-radius: 1px;
+  border-bottom-left-radius: 1px;
+  padding: 1.5px;
+}
+.set-margin-auto {
+  margin: auto;
+}

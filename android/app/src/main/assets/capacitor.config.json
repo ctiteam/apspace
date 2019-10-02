@@ -1,7 +1,0 @@
-{
-  "appId": "my.edu.apiit.apspace",
-  "appName": "APSpace",
-  "bundledWebRuntime": false,
-  "linuxAndroidStudioPath": "/opt/android-studio/bin/studio.sh",
-  "webDir": "www"
-}

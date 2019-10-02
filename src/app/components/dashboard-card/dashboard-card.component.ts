@@ -15,6 +15,7 @@ export class DashboardCardComponent implements OnInit {
   @Input() cardTitle?: string;
   @Input() contentPadding?: boolean;
   @Input() cardSubtitle: string;
+  @Input() cardSubtitleColor ? = '';
   constructor(
     public popoverCtrl: PopoverController
   ) { }

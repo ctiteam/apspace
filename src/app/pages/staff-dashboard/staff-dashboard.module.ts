@@ -10,6 +10,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { ChartModule } from 'angular2-chartjs';
 import { DragulaModule, DragulaService } from 'ng2-dragula';
 import { StaffDashboardPage } from './staff-dashboard.page';
+import { DisabledPipe } from './disabled.pipe';
 
 const routes: Routes = [
   {
@@ -30,7 +31,8 @@ const routes: Routes = [
     DragulaModule
   ],
   declarations: [
-    StaffDashboardPage
+    StaffDashboardPage,
+    DisabledPipe
   ],
   providers: [DragulaService],
   entryComponents: []

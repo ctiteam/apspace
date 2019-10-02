@@ -12,32 +12,70 @@
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="masonry-list" margin-top *ngIf="(messages$ | async) as messages; else loading">
-    <div class="masonry-item" *ngFor="let message of messages">
-      <ion-card (click)="openModal(message)" class="notification" [class.unread]="!message.read" no-margin>
-        <ion-card-header>
-          <ion-card-title>
-            <h3 class="responsive-h1">
-              {{message.title}}
-            </h3>
-          </ion-card-title>
-        </ion-card-header>
-        <ion-card-content no-padding padding-start padding-end padding-bottom>
-          <p><span class="text-bold">Sender:</span> {{message.staff_name}}</p>
-          <p><span class="text-bold">Sent on:</span> {{message.sent_on | date: 'EEEE, dd MMMM y'}}</p>
-          <p><span class="text-bold">Sent at:</span> {{message.sent_on | date: 'hh:mm aaa'}}</p>
-          <ion-badge class="small-margin-top new" style="float: left;font-weight: 300" *ngIf="!message.read">
-            New
-          </ion-badge>
-          <ion-badge class="small-margin-top" style="float: right;font-weight: 300" color="primary">
-            {{message.category}}
-          </ion-badge>
-          <div class="clearfix"></div>
-        </ion-card-content>
-      </ion-card>
+  <ng-container *ngIf="(messages$ | async) as messages; else loading">
+    <div class="masonry-list ion-margin-top" *ngIf="messages.length > 0; else noNotifications">
+      <div class="masonry-item" *ngFor="let message of messages | reverse">
+        <ion-card (click)="openModal(message)" class="notification ion-no-margin" [class.unread]="(!message.read && openedMessages.indexOf(message.message_id) === -1)">
+          <ion-card-header>
+            <ion-card-title>
+              <h3 class="responsive-h1">
+                {{message.title}}
+              </h3>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end ion-padding-bottom">
+            <p><span class="text-bold">Sender:</span> {{message.staff_name}}</p>
+            <p><span class="text-bold">Sent on:</span> {{message.sent_on | date: 'EEEE, dd MMMM y'}}</p>
+            <p><span class="text-bold">Sent at:</span> {{message.sent_on | date: 'hh:mm aaa'}}</p>
+            <ion-badge class="small-margin-top new" style="float: left;font-weight: 300" *ngIf="(!message.read && openedMessages.indexOf(message.message_id) === -1)">
+              New
+            </ion-badge>
+            <ion-badge class="small-margin-top" style="float: right;font-weight: 300" color="primary">
+              {{message.category}}
+            </ion-badge>
+            <div class="clearfix"></div>
+          </ion-card-content>
+        </ion-card>
+      </div>
     </div>
-  </div>
+    <ng-template #noNotifications>
+      <app-message-with-svg messageTitle="No Messages To Show!"
+        messageContent="The list of messages is empty. Stay connected to us to receive the latest news and notifications"
+        imageUrl="assets/img/empty.svg" wrapperOffset="4" wrapperSize="4" wrapperMarginTop="50px">
+      </app-message-with-svg>
+    </ng-template>
+  </ng-container>
   <ng-template #loading>
-    loading...
+    <div class="masonry-list ion-margin-top">
+      <div class="masonry-item" *ngFor="let _ of skeletons">
+        <ion-card class="notification ion-no-margin">
+          <ion-card-header>
+            <ion-card-title>
+              <h3 class="responsive-h1">
+                <ion-skeleton-text animated style="width: 70%; line-height: 25px;"></ion-skeleton-text>
+              </h3>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end ion-padding-bottom">
+            <p>
+              <ion-skeleton-text animated style="width: 90%; height: 15px;"></ion-skeleton-text>
+            </p>
+            <p>
+              <ion-skeleton-text animated style="width: 35%; height: 15px;"></ion-skeleton-text>
+            </p>
+            <p>
+              <ion-skeleton-text animated style="width: 70%; height: 15px;"></ion-skeleton-text>
+            </p>
+            <p class="small-margin-top new" style="float: left;font-weight: 300">
+              <ion-skeleton-text animated style="width: 60px; height: 15px;"></ion-skeleton-text>
+            </p>
+            <p class="small-margin-top" style="float: right;font-weight: 300" color="primary">
+              <ion-skeleton-text animated style="width: 40px; height: 15px;"></ion-skeleton-text>
+            </p>
+            <div class="clearfix"></div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
   </ng-template>
 </ion-content>

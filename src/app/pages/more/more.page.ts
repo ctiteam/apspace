@@ -203,6 +203,14 @@ export class MorePage implements OnInit {
       tags: []
     },
     {
+      title: 'Track Student Visa Status',
+      group: 'Others',
+      url: 'visa-status',
+      img: 'assets/img/visa-status.png',
+      role: Role.Admin,
+      tags: []
+    },
+    {
       title: 'Staff Directory',
       group: 'Others',
       url: 'staffs',

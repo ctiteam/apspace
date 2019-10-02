@@ -32,11 +32,26 @@ ion-card {
   border: 2px solid var(--secondary-txt-color);
   width: 100%;
 }
+.hide-on-print-table-flex-on-card {
+  display: flex;
+}
 
-@media (min-width: 600px) {
+.flex-on-print-table-hide-on-card {
+  display: none;
+}
+
+@media (min-width: 576px) {
   .marker {
     display: none;
   }
+  .hide-on-print-table-flex-on-card {
+    display: none;
+  }
+
+  .flex-on-print-table-hide-on-card {
+    display: flex;
+  }
+
 
   .table-top {
     display: block;
@@ -51,19 +66,17 @@ ion-card {
 .printIntake {
   display: none;
 }
-.selectedweek {
+.printSelectedweek {
   display: none;
 }
 .printLogo {
   display: none;
 }
-.flex-on-print-hide-on-screen {
-  display: none;
-}
-.hide-on-print-flex-on-screen {
-  display: flex;
-}
+
 @media print {
+  .segment-button-checked {
+    border-bottom: 2.5px solid var(--primary-color);
+  }
   .print-less-width {
     margin-left: -20px;
     margin-right: 20px;
@@ -74,10 +87,11 @@ ion-card {
   .print-negative-margin {
     margin-left: -10px !important;
   }
-  .flex-on-print-hide-on-screen {
+  .flex-on-print-table-hide-on-card {
     display: flex;
   }
-  .hide-on-print-flex-on-screen {
+
+  .hide-on-print-table-flex-on-card {
     display: none;
   }
   .container {
@@ -89,9 +103,7 @@ ion-card {
   ion-content {
     background-color: white !important;
   }
-  .scroll-content {
-    border-top: 0px !important;
-  }
+ 
   .print-font {
     font-size: 0.7rem !important;
   }
@@ -111,14 +123,14 @@ ion-card {
   .printIntake {
     display: inline;
   }
-  .selectedweek {
+  .printSelectedweek {
     display: inline;
-  }
-  .legend {
-    flex: 0px !important;
-    max-width: none !important;
   }
   .printLogo {
     display: block;
+  }
+   // override colored-text class
+   .colored-text {
+    color: black !important;
   }
 }

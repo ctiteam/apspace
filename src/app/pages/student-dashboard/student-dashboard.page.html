@@ -3,111 +3,127 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- MAIN GRID -->
-  <div>
-    <!-- MAIN ROW -->
-    <div class="masonry-list" [dragula]="editableList">
-      <!-- PROFILE SECTION -->
-      <div class="masonry-item no-drag">
-        <ion-card no-margin>
-          <ion-card-header no-padding>
-            <ion-grid>
-              <ion-row>
-                <ion-col>
-                  <ion-avatar class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
-                    <img [src]="'data:image/jpg;base64,' +(photo$ | async)?.base64_photo"
-                      onerror="this.src='assets/img/no_img.png'" alt="Avatar">
-                  </ion-avatar>
-                  <div class="welcome-message-wrapper float-left"
-                    *ngIf="studentFirstName$ | async as studentFirstName; else loadingProfile" padding-start>
+  <!-- MAIN GRID CLASS -->
+  <div class="masonry-list">
+
+    <!-- PROFILE SECTION (Not included in the drag and drop list) -->
+    <div id="profile" class="masonry-item no-drag">
+      <ion-card class="ion-no-margin">
+        <ion-card-header class="ion-no-padding">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-avatar class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
+                  <img [src]="'data:image/jpg;base64,' +(photo$ | async)?.base64_photo"
+                    onerror="this.src='assets/img/no_img.png'" alt="Avatar">
+                </ion-avatar>
+                <div class="welcome-message-wrapper ion-padding-start float-left"
+                  *ngIf="studentFirstName$ | async as studentFirstName; else loadingProfile">
+                  <ion-card-title>
+                    <h3 class="responsive-h1">{{greetingMessage}}, <span>{{studentFirstName | titlecase}}</span>
+                    </h3>
+                  </ion-card-title>
+                  <ion-card-subtitle>
+                    <h3 class="responsive-h2">Nice to see you again.</h3>
+                  </ion-card-subtitle>
+                </div>
+                <ng-template #loadingProfile>
+                  <div class="welcome-message-wrapper ion-padding-start float-left" style="width: 75%; padding-top: 0">
                     <ion-card-title>
-                      <h3 class="responsive-h1">{{greetingMessage}}, <span>{{studentFirstName | titlecase}}</span>
+                      <h3 class="responsive-h1">
+                        <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
                       </h3>
                     </ion-card-title>
                     <ion-card-subtitle>
-                      <h3 class="responsive-h2">Nice to see you again.</h3>
+                      <h3 class="responsive-h2">
+                        <ion-skeleton-text animated style="width: 75%; line-height: 25px"></ion-skeleton-text>
+                      </h3>
                     </ion-card-subtitle>
                   </div>
-                  <ng-template #loadingProfile>
-                    <div class="welcome-message-wrapper float-left" style="width: 75%; padding-top: 0" padding-start>
-                      <ion-card-title>
-                        <h3 class="responsive-h1">
-                          <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
-                        </h3>
-                      </ion-card-title>
-                      <ion-card-subtitle>
-                        <h3 class="responsive-h2">
-                          <ion-skeleton-text animated style="width: 75%; line-height: 25px"></ion-skeleton-text>
-                        </h3>
-                      </ion-card-subtitle>
-                    </div>
-                  </ng-template>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col>
-                  <div class="icons" margin-top text-right>
-                    <a (click)="toggleReorderingMode()" margin-end>
-                      <ion-icon *ngIf="editableList" color="success" class="responsive-icon colored-text"
-                        name="checkmark"></ion-icon>
-                      <ion-icon *ngIf="!editableList" class="responsive-icon colored-text" name="md-create"></ion-icon>
-                    </a>
-                    <a (click)="navigateToPage('/settings')" margin-end>
-                      <ion-icon class="anim-rotate-360-deg animated responsive-icon colored-text" name="settings">
-                      </ion-icon>
-                    </a>
-                    <a class="notifications" (click)="navigateToPage('/notifications')" margin-end>
-                      <ion-badge *ngIf="numberOfUnreadMsgs > 0" color="danger">{{ numberOfUnreadMsgs }}</ion-badge>
-                      <ion-icon class="responsive-icon colored-text anim-ring" name="notifications"></ion-icon>
-                    </a>
-                    <a class="notifications" (click)="navigateToPage('/logout')">
-                      <ion-icon class="responsive-icon danger-text anim-ring" name="log-out"></ion-icon>
-                    </a>
-                  </div>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-card-header>
-        </ion-card>
-      </div>
+                </ng-template>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <div class="icons ion-margin-top ion-text-right">
+                  <a (click)="toggleReorderingMode()" class="ion-margin-end">
+                    <ion-icon *ngIf="!editableList" class="responsive-icon colored-text" name="md-create"></ion-icon>
+                  </a>
+                  <a (click)="navigateToPage('/settings')" class="ion-margin-end">
+                    <ion-icon class="anim-rotate-360-deg animated responsive-icon colored-text" name="settings">
+                    </ion-icon>
+                  </a>
+                  <a class="notifications ion-margin-end" (click)="navigateToPage('/notifications')">
+                    <ion-badge *ngIf="numberOfUnreadMsgs > 0" color="danger">{{ numberOfUnreadMsgs }}</ion-badge>
+                    <ion-icon class="responsive-icon colored-text anim-ring" name="notifications"></ion-icon>
+                  </a>
+                  <a class="notifications" (click)="navigateToPage('/logout')">
+                    <ion-icon class="responsive-icon danger-text anim-ring" name="log-out"></ion-icon>
+                  </a>
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="editableList">
+              <ion-col>
+                <ion-button class="colored-background" expand="block" (click)="openDashboardSectionsSelectBox()">Add
+                  Dashboard
+                  Card</ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button *ngIf="editableList" class="success-background" expand="block"
+                  (click)="toggleReorderingMode()">
+                  Done Editing
+                </ion-button>
+              </ion-col>
 
-      <!-- ALERTS SECTION -->
-      <!-- <div class="masonry-item" style="position: relative;" *ngIf="shownDashboardSections.includes('dashboardAlerts')">
-        <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-          <ion-icon name="move" class="handle"></ion-icon>
-        </div>
-        <ion-card no-margin>
-          <ion-card-content>
-            <ion-slides [pager]="true" [options]="alertSliderOptions">
-              <ion-slide>
-                <p>Mohamad, you have 5 classes today, 3 of them passed.</p>
-              </ion-slide>
-              <ion-slide>
-                <p>Be careful, You have two modules with low attendance</p>
-              </ion-slide>
-              <ion-slide>
-                <p>Also, your visa will expire soon :( You may need to review the immegration office</p>
-              </ion-slide>
-              <ion-slide>
-                <p>Don't forget to pay the outstanding that you have</p>
-              </ion-slide>
-            </ion-slides>
-          </ion-card-content>
-        </ion-card>
-      </div> -->
+            </ion-row>
+          </ion-grid>
+        </ion-card-header>
+      </ion-card>
+    </div>
+    <!-- ion-select hidden behind the shown dashboard sections item  -->
+    <ion-item [hidden]="true">
+      <ion-label>Choose Section(s):</ion-label>
+      <ion-select [(ngModel)]="dashboardSectionsSelectBoxModel" (ionChange)="dashboardSectionsChanged($event)"
+        multiple="true" okText="Add" [hidden]="true" #dashboardSectionsSelectBox>
+        <ion-select-option [disabled]="dashboardSection | disabled : dragulaModelArray" [value]="dashboardSection"
+          *ngFor="let dashboardSection of allDashboardSections">
+          {{ dashboardSection }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+
+    <!-- DRAGULA LIST OF ITEMS -->
+    <div #dragulaContainer [dragula]="editableList" [(dragulaModel)]="dragulaModelArray">
 
       <!-- QUICK ACCESS SECTION -->
-      <div class="masonry-item no-padding">
-        <ion-grid no-padding>
+      <div id="quickAccess" class="masonry-item no-padding">
+        <ion-grid class="ion-no-padding">
           <ion-row>
             <!-- QUICK ACCESS ITEM: ATTENDANCE -->
-            <ion-col padding-start *ngIf="shownDashboardSections.includes('quickAccess')">
+            <ion-col class="ion-padding-start" *ngIf="shownDashboardSections.includes('quickAccess')">
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
-              <quick-access-item icon="alarm" titleFirstWord='Overall' titleSecondWord='Attendance'
-                [observable$]='overallAttendancePercent$' outputMode='percentage'>
+              <quick-access-item *ngIf="modulesWithLowAttendance$ | async; else loadingWholeAttendance" icon="alarm"
+                titleFirstWord='Overall' titleSecondWord='Attendance' [observable$]='overallAttendancePercent$'
+                outputMode='percentage'>
               </quick-access-item>
+              <ng-template #loadingWholeAttendance>
+                <ion-card class="ion-no-padding ion-no-margin ion-text-center">
+                  <ion-card-header class="ion-no-padding ion-padding-top">
+                    <loading-spinner></loading-spinner>
+                  </ion-card-header>
+                  <ion-card-content class="pt-1-xs">
+                    <ion-skeleton-text style="line-height: 13px; width: 50%; margin: 10px auto"></ion-skeleton-text>
+                    <ion-skeleton-text style="line-height: 15px; width: 70%; margin: auto"></ion-skeleton-text>
+                    <h3 class="main-text-color responsive-h2 text-bolder ion-margin-top" style="margin-top: 5px;">
+                      <loading-spinner style="margin-top: 20px;"></loading-spinner>
+                    </h3>
+                  </ion-card-content>
+                </ion-card>
+              </ng-template>
             </ion-col>
 
             <!-- QUICK ACCESS ITEM: APCARD BALANCE -->
@@ -115,19 +131,47 @@
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
-              <quick-access-item icon="card" titleFirstWord='APCard' titleSecondWord='Balance' [observable$]='balance$'
-                outputMode='currency'>
+              <quick-access-item *ngIf="apcardTransaction$ | async; else loadingWholeApcard" icon="card"
+                titleFirstWord='APCard' titleSecondWord='Balance' [observable$]='balance$' outputMode='currency'>
               </quick-access-item>
+              <ng-template #loadingWholeApcard>
+                <ion-card class="ion-no-padding ion-no-margin ion-text-center">
+                  <ion-card-header class="ion-no-padding ion-padding-top">
+                    <loading-spinner></loading-spinner>
+                  </ion-card-header>
+                  <ion-card-content class="pt-1-xs">
+                    <ion-skeleton-text style="line-height: 13px; width: 50%; margin: 10px auto"></ion-skeleton-text>
+                    <ion-skeleton-text style="line-height: 15px; width: 70%; margin: auto"></ion-skeleton-text>
+                    <h3 class="main-text-color responsive-h2 text-bolder ion-margin-top" style="margin-top: 5px;">
+                      <loading-spinner style="margin-top: 20px;"></loading-spinner>
+                    </h3>
+                  </ion-card-content>
+                </ion-card>
+              </ng-template>
             </ion-col>
 
             <!-- QUICK ACCESS ITEM: TOTAL OVERDUE -->
-            <ion-col padding-end *ngIf="shownDashboardSections.includes('quickAccess')">
+            <ion-col class="ion-padding-end" *ngIf="shownDashboardSections.includes('quickAccess')">
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
-              <quick-access-item icon="logo-usd" titleFirstWord='Total' titleSecondWord='Overdue'
-                [observable$]="totalOverdue$" outputMode='currency'>
+              <quick-access-item *ngIf="financial$ | async; else loadingWholeFinancial" icon="logo-usd"
+                titleFirstWord='Total' titleSecondWord='Overdue' [observable$]="totalOverdue$" outputMode='currency'>
               </quick-access-item>
+              <ng-template #loadingWholeFinancial>
+                <ion-card class="ion-no-padding ion-no-margin ion-text-center">
+                  <ion-card-header class="ion-no-padding ion-padding-top">
+                    <loading-spinner></loading-spinner>
+                  </ion-card-header>
+                  <ion-card-content class="pt-1-xs">
+                    <ion-skeleton-text style="line-height: 13px; width: 50%; margin: 10px auto"></ion-skeleton-text>
+                    <ion-skeleton-text style="line-height: 15px; width: 70%; margin: auto"></ion-skeleton-text>
+                    <h3 class="main-text-color responsive-h2 text-bolder ion-margin-top" style="margin-top: 5px;">
+                      <loading-spinner style="margin-top: 20px;"></loading-spinner>
+                    </h3>
+                  </ion-card-content>
+                </ion-card>
+              </ng-template>
             </ion-col>
 
           </ion-row>
@@ -135,9 +179,10 @@
       </div>
 
       <!-- TODAY'S SCHEDULE -->
-      <div class="masonry-item" *ngIf="shownDashboardSections.includes('todaysSchedule')">
+      <div id="todaysSchedule" class="masonry-item" *ngIf="shownDashboardSections.includes('todaysSchedule')">
         <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
           <ion-icon name="move" class="handle"></ion-icon>
+          <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('todaysSchedule')"></ion-icon>
         </div>
         <dashboard-card [cardTitle]='todaysScheduleCardConfigurations.cardTitle'
           [cardSubtitle]='todaysScheduleCardConfigurations.cardSubtitle'
@@ -148,9 +193,10 @@
       </div>
 
       <!-- UPCOMING EVENTS -->
-      <div class="masonry-item" *ngIf="shownDashboardSections.includes('upcomingEvents')">
+      <div id="upcomingEvents" class="masonry-item" *ngIf="shownDashboardSections.includes('upcomingEvents')">
         <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
           <ion-icon name="move" class="handle"></ion-icon>
+          <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('upcomingEvents')"></ion-icon>
         </div>
         <dashboard-card style="width: 100%;" [cardTitle]='upcomingEventsCardConfigurations.cardTitle'
           [cardSubtitle]='upcomingEventsCardConfigurations.cardSubtitle'
@@ -161,15 +207,17 @@
       </div>
 
       <!-- LOW ATTENDANCE -->
-      <div *ngIf="shownDashboardSections.includes('lowAttendance')">
+      <div id="lowAttendance" *ngIf="shownDashboardSections.includes('lowAttendance')">
         <div class="masonry-item" *ngIf="modulesWithLowAttendance$ | async; else loadingAttendance">
           <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
             <ion-icon name="move" class="handle"></ion-icon>
+            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('lowAttendance')"></ion-icon>
           </div>
           <div *ngIf="(modulesWithLowAttendance$ | async)?.length > 0; else notLowAttendance">
             <dashboard-card *ngIf="(overallAttendancePercent$ | async) as overallAttendancePercent"
               [cardTitle]='lowAttendanceCardConfigurations.cardTitle'
               [cardSubtitle]='"Overall: " + (overallAttendancePercent.value | number: "1.0-1") + "%"'
+              [cardSubtitleColor]="overallAttendancePercent.value >= 80 ? '' : '#e54d42'"
               [contentPadding]='lowAttendanceCardConfigurations.contentPadding'
               [withOptionsButton]='lowAttendanceCardConfigurations.withOptionsButton'>
               <chart *ngIf="lowAttendanceChart.data" [type]="lowAttendanceChart.type" [data]="lowAttendanceChart.data"
@@ -184,13 +232,17 @@
               <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
             </ion-card-header>
             <ion-card-content>
-              <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 50%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 90%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 30%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 70%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
             </ion-card-content>
           </ion-card>
@@ -211,10 +263,11 @@
       </div>
 
       <!-- BUS SHUTTLE SERVICES -->
-      <div *ngIf="shownDashboardSections.includes('busShuttleServices')">
+      <div id="upcomingTrips" *ngIf="shownDashboardSections.includes('upcomingTrips')">
         <div class="masonry-item">
           <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
             <ion-icon name="move" class="handle"></ion-icon>
+            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('upcomingTrips')"></ion-icon>
           </div>
           <dashboard-card [cardTitle]='busCardConfigurations.cardTitle'
             [contentPadding]='busCardConfigurations.contentPadding'
@@ -222,14 +275,15 @@
             <ng-container *ngIf="(upcomingTrips$ | async) as upcomingTrips; else loadingTrips">
               <ng-container *ngIf="!showSetLocationsSettings; else locationsSettings">
                 <ng-container *ngIf="upcomingTrips.length > 0; else noTrips">
-                  <ion-card class="trip-card" no-margin margin-bottom *ngFor="let upcomingTrip of upcomingTrips">
-                    <ion-card-content no-padding>
-                      <ion-grid no-padding>
+                  <ion-card class="trip-card ion-no-margin ion-margin-bottom"
+                    *ngFor="let upcomingTrip of upcomingTrips">
+                    <ion-card-content class="ion-no-padding">
+                      <ion-grid class="ion-no-padding">
                         <ion-row>
-                          <ion-col no-padding size="1">
+                          <ion-col class="ion-no-padding" size="1">
                             <div class="full-background" [style.background]="upcomingTrip.trip_from_color"></div>
                           </ion-col>
-                          <ion-col size="11" padding>
+                          <ion-col size="11" class="ion-padding">
                             <h3 class="trips-locations text-bolder">{{ upcomingTrip.trip_from }} <ion-icon
                                 name="arrow-dropright">
                               </ion-icon> {{upcomingTrip.trip_to}}</h3>
@@ -274,13 +328,17 @@
               </ng-template>
             </ng-container>
             <ng-template #loadingTrips>
-              <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 50%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 90%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 30%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 70%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
             </ng-template>
           </dashboard-card>
@@ -288,10 +346,11 @@
       </div>
 
       <!-- APCard Transactions -->
-      <div *ngIf="shownDashboardSections.includes('apcard')">
+      <div id="apcard" *ngIf="shownDashboardSections.includes('apcard')">
         <div class="masonry-item" *ngIf="apcardTransaction$ | async; else loadingApcardTransactions">
           <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
             <ion-icon name="move" class="handle"></ion-icon>
+            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('apcard')"></ion-icon>
           </div>
           <dashboard-card [cardTitle]='apcardTransactionsCardConfigurations.cardTitle'
             [cardSubtitle]='currentBalance !== -1 ? "Balance: " + (currentBalance | currency: "MYR": "RM"): "Balance: --"'
@@ -309,13 +368,17 @@
               <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
             </ion-card-header>
             <ion-card-content>
-              <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 50%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 90%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 30%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 70%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
             </ion-card-content>
           </ion-card>
@@ -323,11 +386,12 @@
       </div>
 
       <!-- CGPA -->
-      <div *ngIf="shownDashboardSections.includes('cgpa')">
+      <div id="cgpa" *ngIf="shownDashboardSections.includes('cgpa')">
         <div class="masonry-item" *ngIf="!block; else accountDisabled">
           <div *ngIf="cgpaPerIntake$ | async; else loadingCgpaPerIntake">
             <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
               <ion-icon name="move" class="handle"></ion-icon>
+              <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('cgpa')"></ion-icon>
             </div>
             <dashboard-card [cardTitle]='cgpaCardConfigurations.cardTitle'
               [cardSubtitle]='"Overall: " + (overallCgpa | number: "1.0-2")'
@@ -344,13 +408,17 @@
                 <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
               </ion-card-header>
               <ion-card-content>
-                <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+                <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 50%; line-height: 30px;"
+                  animated>
                 </ion-skeleton-text>
-                <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+                <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 90%; line-height: 30px;"
+                  animated>
                 </ion-skeleton-text>
-                <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+                <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 30%; line-height: 30px;"
+                  animated>
                 </ion-skeleton-text>
-                <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+                <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 70%; line-height: 30px;"
+                  animated>
                 </ion-skeleton-text>
               </ion-card-content>
             </ion-card>
@@ -375,15 +443,17 @@
       </div>
 
       <!-- FINANCIALS -->
-      <div *ngIf="shownDashboardSections.includes('financials')">
+      <div id="financials" *ngIf="shownDashboardSections.includes('financials')">
         <div class="masonry-item" *ngIf="(financial$ | async) as financialSummary; else loadingFinancials">
           <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
             <ion-icon name="move" class="handle"></ion-icon>
+            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('financials')"></ion-icon>
           </div>
           <div *ngIf="hasOutstanding; else noOutstanding">
             <dashboard-card [cardTitle]='financialsCardConfigurations.cardTitle'
               [cardSubtitle]='"Overdue: " + (financialSummary[0].TOTAL_OVERDUE | currency: "MYR": "RM")'
               [contentPadding]='financialsCardConfigurations.contentPadding'
+              [cardSubtitleColor]="financialSummary[0].TOTAL_OVERDUE > 0 ? '#e54d42' : ''"
               [withOptionsButton]='financialsCardConfigurations.withOptionsButton'>
               <chart *ngIf="financialsChart.data" [type]="financialsChart.type" [data]="financialsChart.data"
                 [options]="financialsChart.options">
@@ -397,13 +467,17 @@
               <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
             </ion-card-header>
             <ion-card-content>
-              <ion-skeleton-text margin-top margin-bottom style="width: 50%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 50%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text margin-top margin-bottom style="width: 90%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 90%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text margin-top margin-bottom style="width: 30%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 30%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
-              <ion-skeleton-text margin-top margin-bottom style="width: 70%; line-height: 30px;" animated>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 70%; line-height: 30px;"
+                animated>
               </ion-skeleton-text>
             </ion-card-content>
           </ion-card>
@@ -414,7 +488,7 @@
             [contentPadding]='financialsCardConfigurations.contentPadding'
             [withOptionsButton]='financialsCardConfigurations.withOptionsButton'>
             <app-message-with-svg messageTitle="No Outstanding Payements need to be done!"
-              messageContent="You have cleared all of your outstanding payments." imageUrl="assets/img/money.svg"
+              messageContent="You have cleared all of your outstanding payments." imageUrl="assets/img/happy.svg"
               wrapperOffset="3" wrapperSize="6">
             </app-message-with-svg>
           </dashboard-card>

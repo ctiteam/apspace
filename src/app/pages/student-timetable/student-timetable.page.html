@@ -42,8 +42,8 @@
         [ngIfElse]="loading">
         <ng-template [ngIf]="timetables!.length" [ngIfElse]="empty">
           <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
-            <ion-segment padding [ngModel]="selectedDate | date:'E' | uppercase"
-              (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]">
+            <ion-segment class="ion-padding" [ngModel]="selectedDate | date:'E' | uppercase"
+              (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]" scrollable>
               <ion-segment-button *ngFor="let day of availableDays" [value]="day">
                 {{ day }}
               </ion-segment-button>
@@ -53,39 +53,39 @@
             <ion-grid>
               <ion-row>
                 <ion-col size="6" offset="3" class="text-center">
-                  <img class="rounded img-fluid printLogo" src="assets/img/login.png" alt="APU Logo">
+                  <img class="printLogo" src="assets/img/login.png" alt="APU Logo">
                 </ion-col>
               </ion-row>
               <ion-row>
                 <ion-col size="6">
                   <span class="printIntake">
-                    Selected Intake : {{ intake || 'Intakes' }}
+                    <span class="text-bold">Selected Intake :</span> {{ intake || 'Intakes' }}
                   </span>
                 </ion-col>
-                <ion-col size="4" offset="2" class="selectedweek">
-                  Selected Week : {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
+                <ion-col size="4" offset="2" class="printSelectedweek">
+                  <span class="text-bold">Selected Week :</span>
+                  {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
                 </ion-col>
               </ion-row>
             </ion-grid>
 
-            <ion-card class="table-top" no-padding>
-              <ion-card-content no-padding>
-                <ion-grid no-margin no-padding>
+            <ion-card class="table-top ion-no-padding">
+              <ion-card-content class="ion-no-padding">
+                <ion-grid class="ion-no-margin ion-no-padding">
 
                   <div *ngIf="viewWeek; else viewDaily">
                     <ion-row>
-
-                      <ion-col class="hide-on-print-flex-on-screen" size="12" size-sm="2">
-                        <h2 class="print-no-margin text-bold print-font md-text-center">Module</h2>
+                      <ion-col class="hide-on-print-table-flex-on-card" size="12" size-sm="2">
+                        <h2 class="print-no-margin text-bold print-font md-text-center ">Module</h2>
                       </ion-col>
                       <ion-col size="12" size-sm="2">
                         <h2 class="print-no-margin text-bold print-font md-text-center">Date</h2>
                       </ion-col>
-                      <ion-col size="12" size-sm="2" >
+                      <ion-col size="12" size-sm="2">
                         <h2 class="print-less-width print-no-margin text-bold print-font md-text-center">Time</h2>
                       </ion-col>
-                      <ion-col class="flex-on-print-hide-on-screen" size="12" size-sm="2">
-                        <h2 class="print-no-margin text-bold print-font md-text-center">Module</h2>
+                      <ion-col class="flex-on-print-table-hide-on-card" size="12" size-sm="2">
+                        <h2 class="print-no-margin text-bold print-font md-text-center ">Module</h2>
                       </ion-col>
                       <ion-col size="12" size-sm="3">
                         <h2 class="print-no-margin text-bold print-font md-text-center">Location</h2>
@@ -97,16 +97,16 @@
                   </div>
                   <ng-template #viewDaily>
                     <ion-row>
-                      <ion-col padding-start size="12" size-sm="3">
+                      <ion-col class="ion-padding-start" size="12" size-sm="3">
                         <h2>Module</h2>
                       </ion-col>
-                      <ion-col size="12" size-sm="3">
+                      <ion-col size="12" size-sm="2" class="print-less-width">
                         <h2 class="time">Time</h2>
                       </ion-col>
-                      <ion-col size="12" size-sm="3">
+                      <ion-col size="12" size-sm="3" class="ion-padding-start">
                         <h2>Location</h2>
                       </ion-col>
-                      <ion-col size="12" size-sm="3">
+                      <ion-col size="12" size-sm="4">
                         <h2>Lecturer</h2>
                       </ion-col>
                     </ion-row>
@@ -116,13 +116,14 @@
             </ion-card>
           </ng-template>
 
-          <ion-card *ngFor="let timetable of timetables; trackBy: trackByIndex" no-padding class="card-side"
+          <ion-card *ngFor="let timetable of timetables; trackBy: trackByIndex" class="ion-no-padding card-side"
             [style.borderLeft]="'1rem solid ' + strToColor(timetable.MODID)">
-            <ion-card-content no-padding>
+            <ion-card-content class="ion-no-padding">
               <ion-grid>
                 <div *ngIf="viewWeek; else viewDaily">
                   <ion-row>
-                    <ion-col size="12" size-sm="2" class="hide-on-print-flex-on-screen ion-no-padding print-font md-text-center">
+                    <ion-col size="12" size-sm="2"
+                      class="hide-on-print-table-flex-on-card ion-no-padding print-font md-text-center">
                       {{ timetable.MODID }}
                     </ion-col>
                     <ion-col size="12" size-sm="2" class="ion-no-padding print-font md-text-center">
@@ -131,13 +132,14 @@
                       </span>
                       {{ timetable.DATESTAMP_ISO | date: "EEE, d MMM " }}
                     </ion-col>
-                    <ion-col size="12" size-sm="2" class="print-less-width ion-no-padding print-font  md-text-center ">
+                    <ion-col size="12" size-sm="2" class="print-less-width ion-no-padding print-font md-text-center">
                       <span class="marker">
                         <ion-icon name="time"></ion-icon>
                       </span>
                       {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
                     </ion-col>
-                    <ion-col size="12" size-sm="2" class="flex-on-print-hide-on-screen ion-no-padding print-font md-text-center">
+                    <ion-col size="12" size-sm="2"
+                      class="flex-on-print-table-hide-on-card ion-no-padding print-font md-text-center">
                       {{ timetable.MODID }}
                     </ion-col>
                     <ion-col size="12" size-sm="3" class="ion-no-padding print-font md-text-center">
@@ -160,22 +162,22 @@
 
                 <ng-template #viewDaily>
                   <ion-row>
-                    <ion-col size="12" size-sm="3">
+                    <ion-col size="12" size-sm="3" class="print-font ion-no-padding">
                       {{ timetable.MODID }}
                     </ion-col>
-                    <ion-col size="12" size-sm="3">
+                    <ion-col size="12" size-sm="2" class="print-font ion-no-padding print-less-width">
                       <span class="marker">
                         <ion-icon name="time"></ion-icon>
                       </span>
                       {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
                     </ion-col>
-                    <ion-col size="12" size-sm="3">
+                    <ion-col size="12" size-sm="3" class="print-font ion-no-padding ion-padding-start">
                       <span class="marker">
                         <ion-icon name="locate"></ion-icon>
                       </span>
                       {{ timetable.ROOM }} | {{ timetable.LOCATION }}
                     </ion-col>
-                    <ion-col size="12" size-sm="3">
+                    <ion-col size="12" size-sm="4" class="print-font ion-no-padding">
                       <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]" class="colored-text">
                         <span class="marker">
                           <ion-icon name="contact"></ion-icon>
@@ -212,9 +214,9 @@
       </ng-template>
 
       <!-- trivial message but must be displayed -->
-      <ion-grid no-padding>
+      <ion-grid class="ion-no-padding">
         <ion-row class="legend">
-          <ion-col size="12" size-sm="12" size-lg="6" no-padding>
+          <ion-col size="12" size-sm="12" size-lg="6" class="ion-no-padding">
             <ion-card class="card-special">
               <ion-card-header class="colored-border">
                 <ion-card-title>Legend</ion-card-title>
@@ -226,7 +228,7 @@
               </ion-card-content>
             </ion-card>
           </ion-col>
-          <ion-col size="12" size-sm="12" size-lg="6" no-padding>
+          <ion-col size="12" size-sm="12" size-lg="6" class="ion-no-padding">
             <ion-card class="card-special">
               <ion-card-header class="colored-border">
                 <ion-card-title>Mid Year Semester</ion-card-title>
@@ -263,23 +265,23 @@
     </ng-template>
 
     <ng-template #loading>
-      <ion-card no-padding>
-        <ion-card-content no-padding>
+      <ion-card class="ion-no-padding">
+        <ion-card-content class="ion-no-padding">
           <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
         </ion-card-content>
       </ion-card>
-      <ion-card no-padding>
-        <ion-card-content no-padding>
+      <ion-card class="ion-no-padding">
+        <ion-card-content class="ion-no-padding">
           <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
         </ion-card-content>
       </ion-card>
-      <ion-card no-padding>
-        <ion-card-content no-padding>
+      <ion-card class="ion-no-padding">
+        <ion-card-content class="ion-no-padding">
           <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
         </ion-card-content>
       </ion-card>
-      <ion-card no-padding>
-        <ion-card-content no-padding>
+      <ion-card class="ion-no-padding">
+        <ion-card-content class="ion-no-padding">
           <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
         </ion-card-content>
       </ion-card>

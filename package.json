@@ -1,6 +1,6 @@
 {
   "name": "apspace",
-  "version": "1.2.3",
+  "version": "2.0.0",
   "author": "CTI Team <cti@apiit.edu.my>",
   "homepage": "https://apspace.apu.edu.my/",
   "scripts": {
@@ -34,26 +34,23 @@
     "@capacitor/android": "^1.2.0",
     "@capacitor/cli": "^1.2.0",
     "@capacitor/core": "^1.2.0",
-    "@ionic-native/action-sheet": "^5.11.0",
-    "@ionic-native/app-availability": "^5.11.0",
-    "@ionic-native/camera": "^5.11.0",
-    "@ionic-native/core": "^5.11.0",
-    "@ionic-native/device": "^5.11.0",
+    "@ionic-native/action-sheet": "^5.14.0",
+    "@ionic-native/app-availability": "^5.14.0",
+    "@ionic-native/core": "^5.14.0",
+    "@ionic-native/device": "^5.14.0",
     "@ionic-native/fcm": "^5.14.0",
-    "@ionic-native/in-app-browser": "^5.11.0",
-    "@ionic-native/network": "^5.11.0",
-    "@ionic-native/qr-scanner": "^5.11.0",
-    "@ionic-native/status-bar": "^5.11.0",
-    "@ionic/angular": "^4.9.0",
+    "@ionic-native/in-app-browser": "^5.14.0",
+    "@ionic-native/network": "^5.14.0",
+    "@ionic-native/status-bar": "^5.14.0",
+    "@ionic/angular": "^4.10.0",
     "@ionic/storage": "^2.2.0",
     "angular-svg-round-progressbar": "^3.0.1",
     "angular2-chartjs": "^0.5.1",
+    "cordova-android": "^8.1.0",
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-appavailability": "^0.4.2",
-    "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-fcm-with-dependecy-updated": "^3.2.0",
     "cordova-plugin-inappbrowser": "^3.1.0",
-    "cordova-plugin-qrscanner": "^3.0.1",
     "core-js": "^2.5.4",
     "fuse.js": "^3.4.5",
     "ion2-calendar": "^3.0.0-rc.0",
@@ -94,16 +91,29 @@
     "stylelint": "~9.9.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.12.1",
-    "typescript": "~3.5.3"
+    "typescript": "~3.5.3",
+    "cordova-plugin-whitelist": "1.3.3",
+    "cordova-plugin-statusbar": "2.4.2",
+    "cordova-plugin-device": "2.0.2",
+    "cordova-plugin-splashscreen": "5.0.2",
+    "cordova-plugin-ionic-webview": "^2.0.0",
+    "cordova-plugin-ionic-keyboard": "^2.0.5"
   },
   "description": "An Ionic project",
   "cordova": {
     "plugins": {
-      "cordova-plugin-camera": {},
-      "cordova-plugin-qrscanner": {},
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-appavailability": {},
-      "cordova-plugin-fcm-with-dependecy-updated": {}
-    }
+      "cordova-plugin-fcm-with-dependecy-updated": {},
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-ionic-keyboard": {}
+    },
+    "platforms": [
+      "android"
+    ]
   }
 }

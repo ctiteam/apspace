@@ -12,32 +12,32 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div class="masonry-list" *ngIf="quixCustomers$ | async as quixCustomers">
-    <div *ngFor=" let customer of quixCustomers ">
-      <div class="masonry-item " *ngFor="let department of customer.company_departments">
+    <div *ngFor="let customer of quixCustomers ">
+      <div class="masonry-item" *ngFor="let department of customer.company_departments">
         <div>
           <ion-card>
             <ion-card-header class="colored-border">
               <ion-card-title class="responsive-h1">
                 <ion-icon name="{{department.dept_icon}}" [style.color]="department.dept_icon_color"></ion-icon>
-                {{customer.company_id}} │ {{ department.dept_name.charAt(0).toUpperCase() + department.dept_name.slice(1) }}
+                {{customer.company_id}} │
+                {{ department.dept_name.charAt(0).toUpperCase() + department.dept_name.slice(1) }}
               </ion-card-title>
             </ion-card-header>
-            <ion-card-content
-              *ngIf=" department.shifts || department.dept_email || department.dept_phone ; else noData">
+            <ion-card-content *ngIf="department.shifts || department.dept_email || department.dept_phone ; else noData">
               <ion-grid class="ion-padding-start">
                 <ion-row class="hiddenData">
                   <ion-col size-xs="12" size-lg="4">
-                    <ion-text class="text-bold ">Day</ion-text>
+                    <ion-text class="text-bold">Day</ion-text>
                   </ion-col>
                   <ion-col size-xs="12" size-lg="4">
                     <ion-text class="text-bold ">Open time</ion-text>
                   </ion-col>
                   <ion-col size-xs="12" size-lg="4">
-                    <ion-text class="text-bold ">Close time</ion-text>
+                    <ion-text class="text-bold">Close time</ion-text>
                   </ion-col>
                 </ion-row>
               </ion-grid>
-              <div *ngIf=" department.shifts; else noOperation">
+              <div *ngIf="department.shifts; else noOperation">
                 <div *ngFor="let shift of department.shifts | keyvalue">
                   <ion-grid class="ion-padding-start">
                     <ion-row>

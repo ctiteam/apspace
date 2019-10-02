@@ -18,6 +18,7 @@ npm-debug.log*
 .sass-cache/
 .tmp/
 .versions/
+android/
 coverage/
 www/
 dist/
@@ -36,3 +37,4 @@ UserInterfaceState.xcuserstate
 package-lock.json
 google-services.json
 GoogleService-Info.plist
+apspace-release.keystore

@@ -1,7 +1,7 @@
 <div class="event-calendar" *ngIf="observable$ | async as events; else loading">
     <div class="event-list" *ngIf="events.length > 0; else noEvents">
         <div class="event" *ngFor="let event of events">
-            <div class="event-container" padding-end
+            <div class="event-container ion-padding-end"
                 [ngClass]="{
                     'passed-event': event.pass,
                     'no-hover': event.pass,
@@ -11,7 +11,7 @@
                     'iconsult-type': event.type==='iconsult'
                 }"                
                 >
-                <div class="left-part-container" text-center>
+                <div class="left-part-container ion-text-center">
                     <span class="left-part">
                         <span class="primaryDateTime" *ngIf="event.dateOrTime">
                             {{splitTimeAndGetOnePart('first',event.dateOrTime)}}
@@ -42,8 +42,8 @@
                             {{event.secondDescription}}
                         </ng-template>
                     </span>
-                    <span *ngIf="event.thirdDescription" text-right
-                        class="description">{{event.thirdDescription}}</span>
+                    <span *ngIf="event.thirdDescription"
+                        class="description ion-text-right">{{event.thirdDescription}}</span>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -57,7 +57,6 @@
         wrapperSize="6"
         wrapperOffset="3"
         messageContent="Either no items to show for today, or the list has finished">
-
         </app-message-with-svg>
     </ng-template>
 </div>
@@ -65,7 +64,7 @@
     <div class="event-calendar">
         <div class="event-list">
             <div class="event" *ngFor="let _ of skeletonConfigurations.eventsSkeleton">
-                <div class="event-container no-hover" style="border: none" padding-end>
+                <div class="event-container no-hover ion-padding-end" style="border: none">
                     <div class="left-part-container" style="padding-top: 5px;">
                         <span class="left-part">
                             <span class="primaryDateTime d-block" style="padding: 2px 20px">
@@ -93,7 +92,7 @@
                         <span class="description">
                             <ion-skeleton-text animated style="width: 90%; line-height: 18px"></ion-skeleton-text>
                         </span>
-                        <span text-right class="description">
+                        <span class="ion-text-right description">
                             <ion-skeleton-text animated style="width: 40%; line-height: 18px; float: right"></ion-skeleton-text>
                         </span>
                     </div>

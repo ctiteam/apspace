@@ -15,8 +15,8 @@
   <div *ngIf="transaction$ | async as transactions; else apCardBalanceLoading">
     <div class="masonry-list" *ngIf="!isEmpty(monthlyData.cr); else noTransactions">
 
-      <div class="masonry-item" margin-bottom>
-        <div class="card" padding-top padding-bottom>
+      <div class="masonry-item ion-margin-bottom">
+        <div class="card ion-padding-top ion-padding-bottom">
           <div class="front">
             <div class="strip-bottom"></div>
             <div class="strip-top"></div>
@@ -51,18 +51,18 @@
       <div class="perYear" *ngFor="let year of transactonsYears">
         <div class="perMonth" *ngFor="let month of transactionsMonths">
           <div class="masonry-item apcard-history-group" *ngIf="transactionsGroupedByDate[month + ', ' + year]">
-            <ion-card no-margin>
-              <ion-card-header no-padding padding-start padding-end padding-top>
+            <ion-card class="ion-no-margin">
+              <ion-card-header class="ion-no-padding ion-padding-start ion-padding-end ion-padding-top">
                 <ion-card-title>
                   <h3 class="responsive-h1">
                     {{ +month + 1 + "/" + "1" + "/" + year | date: "MMMM, yyyy" }}
                   </h3>
                 </ion-card-title>
               </ion-card-header>
-              <ion-card-content no-padding padding-start padding-end>
+              <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end">
                 <ion-list>
                   <ion-item [class.credit]="0 < transaction.SpendVal" [class.deposit]="0 > transaction.SpendVal"
-                    lines="none" no-padding
+                    lines="none" class="ion-no-padding"
                     *ngFor="let transaction of transactionsGroupedByDate[month + ', ' + year]">
                     <ion-avatar slot="start">
                       <ion-icon class="transaction-icon" name="remove-circle" *ngIf="transaction.SpendVal < 0">
@@ -113,7 +113,7 @@
           </ion-card-header>
           <ion-card-content>
             <ion-list>
-              <ion-item lines="none" no-padding *ngFor="let transactions of skelton.numOfTrans">
+              <ion-item lines="none" class="ion-no-padding" *ngFor="let transactions of skelton.numOfTrans">
                 <ion-avatar slot="start">
                   <ion-skeleton-text animated style="width: 100%; line-height: 33px"></ion-skeleton-text>
                 </ion-avatar>

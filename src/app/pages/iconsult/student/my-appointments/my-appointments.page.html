@@ -15,9 +15,9 @@
           <ion-col size-xs="12" size-md="6" size-lg="4" *ngFor="let slot of slots">
             <ion-card
               [ngClass]="{cancelled: slot.status !== 'normal' && slot.status !== 'Passed', passed: slot.status === 'Passed'}">
-              <ion-card-header no-padding padding-top>
+              <ion-card-header class="ion-no-padding ion-padding-top">
                 <ion-card-title>
-                  <ion-item lines="none" no-padding padding-start>
+                  <ion-item lines="none" class="ion-no-padding ion-padding-start">
                     <ion-label class="card-header-title main-text-color text-bolder">
                       {{ slot.lecname }}
                     </ion-label>
@@ -34,7 +34,7 @@
                   </ion-item>
                 </ion-card-title>
               </ion-card-header>
-              <ion-card-content no-padding padding-start padding-end padding-bottom>
+              <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end ion-padding-bottom">
                 <ion-item lines="none">
                   <ion-icon class="tertiary-txt-color" name="calendar" slot="start"></ion-icon>
                   <ion-label>
@@ -57,7 +57,7 @@
                   </ion-label>
                 </ion-item>
 
-                <ion-grid no-padding>
+                <ion-grid class="ion-no-padding">
                   <ion-row>
                     <ion-col size-xs="12" size-sm="6">
                       <ion-button (click)="openSlotDetailsModal(slot.slotid)" class="colored-background" expand="block">
@@ -85,7 +85,7 @@
           </ion-col>
         </ng-container>
         <ng-template #noConsultations>
-          <ion-col margin-top size-xs="12" offset-md="3" size-md="6" offset-xl="4" size-xl="4">
+          <ion-col class="ion-margin-top" size-xs="12" offset-md="3" size-md="6" offset-xl="4" size-xl="4">
             <app-message-with-svg messageTitle='No Upcoming Appointments' imageUrl='assets/img/empty.svg'
               wrapperMarginTop="50px" wrapperOffset="2" wrapperSize="8"
               messageContent="Currently, you have no upcoming appointments. If you have any acadimic related question, or concerns, you can book a new one by clicking on the (+)">
@@ -109,7 +109,7 @@
               </ion-grid>
             </ion-card-header>
             <ion-card-content>
-              <ion-grid no-padding>
+              <ion-grid class="ion-no-padding">
                 <ion-skeleton-text animated style="width: 100%; line-height: 30px;"></ion-skeleton-text>
                 <ion-skeleton-text animated style="width: 50%; line-height: 30px;"></ion-skeleton-text>
                 <ion-skeleton-text animated style="width: 80%; line-height: 30px;"></ion-skeleton-text>

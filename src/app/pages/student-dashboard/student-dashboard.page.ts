@@ -1,40 +1,50 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
+import { NavController, IonSelect } from '@ionic/angular';
+import { Observable, forkJoin, of, zip } from 'rxjs';
+import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray } from 'rxjs/operators';
+
+import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService } from 'src/app/services';
 import {
   EventComponentConfigurations, DashboardCardComponentConfigurations,
   Attendance, StudentProfile, Apcard, FeesTotalSummary, Course, CourseDetails,
   CgpaPerIntake, StudentTimetable, ConsultationHour, StudentPhoto, Holidays,
   Holiday, ExamSchedule, BusTrips, APULocations, APULocation
 } from 'src/app/interfaces';
-import { Observable, forkJoin, of, zip } from 'rxjs';
-import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray } from 'rxjs/operators';
-import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService } from 'src/app/services';
-import * as moment from 'moment';
-import { NavController } from '@ionic/angular';
-import { DragulaService } from 'ng2-dragula';
 
+import * as moment from 'moment';
+import { DragulaService } from 'ng2-dragula';
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.page.html',
   styleUrls: ['./student-dashboard.page.scss'],
 })
-export class StudentDashboardPage implements OnInit, OnDestroy {
+export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // USER SETTINGS
+  @ViewChild('dragulaContainer', { static: true }) container: ElementRef; // access the dragula container
+  @ViewChild('dashboardSectionsSelectBox', { static: true }) dashboardSectionsselectBoxRef: IonSelect; // hidden selectbox
+  dashboardSectionsSelectBoxModel; // select box dashboard sections value
+  allDashboardSections = [ // alldashboardSections will not be modified and it will be used in the select box
+    'quickAccess',
+    'todaysSchedule',
+    'upcomingEvents',
+    'lowAttendance',
+    'upcomingTrips',
+    'apcard',
+    'cgpa',
+    'financials',
+  ];
+
+  // dragulaModelArray will be modified whenever there is a change to the order of the dashboard sections
+  dragulaModelArray = this.allDashboardSections;
+  // shownDashboardSections get the data from local storage and hide/show elements based on that
+  shownDashboardSections: string[];
+
   activeAccentColor = '';
   lowAttendanceChart: any;
-  shownDashboardSections: string[];
   editableList = null;
   busShuttleServiceSettings: any;
   secondLocation: string;
   firstLocation: string;
-
-  // ALERTS SLIDER OPTIONS
-  alertSliderOptions = {
-    autoplay: {
-      delay: 2500,
-      disableOnInteraction: false,
-    },
-    speed: 500,
-  };
 
   // PROFILE
   photo$: Observable<StudentPhoto>;
@@ -48,38 +58,13 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   todaysSchedule$: Observable<EventComponentConfigurations[] | any>;
   todaysScheduleCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
-    // options: [
-    //   {
-    //     title: 'set alarm before 15 minutes of next schdule',
-    //     icon: 'alarm',
-    //     callbackFunction: this.testCallBack
-    //   },
-    //   {
-    //     title: 'delete',
-    //     icon: 'trash',
-    //     callbackFunction: this.testCallBack
-    //   }
-    // ],
     cardTitle: 'Today\'s Schedule',
-    // cardSubtitle: 'Next in: 1 hrs, 25 min'
   };
 
   // UPCOMING EVENTS
   upcomingEvent$: Observable<EventComponentConfigurations[]> | any;
   upcomingEventsCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
-    // options: [
-    //   {
-    //     title: 'set alarm before 15 minutes of next schdule',
-    //     icon: 'alarm',
-    //     callbackFunction: this.testCallBack
-    //   },
-    //   {
-    //     title: 'delete',
-    //     icon: 'trash',
-    //     callbackFunction: this.testCallBack
-    //   }
-    // ],
     cardTitle: 'Upcoming Events',
     cardSubtitle: 'Today: ' + moment().format('DD MMMM YYYY')
   };
@@ -175,18 +160,6 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
     cardTitle: 'Upcoming Trips',
     contentPadding: false,
     withOptionsButton: false,
-    // options: [
-    //   {
-    //     title: 'set alarm before 15 minutes of next schdule',
-    //     icon: 'alarm',
-    //     callbackFunction: this.testCallBack
-    //   },
-    //   {
-    //     title: 'delete',
-    //     icon: 'trash',
-    //     callbackFunction: this.testCallBack
-    //   }
-    // ],
   };
 
   // CGPA
@@ -206,8 +179,16 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
     private userSettings: UserSettingsService,
     private navCtrl: NavController,
     private dragulaService: DragulaService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private renderer: Renderer2
   ) {
+    // Create the dragula group (drag and drop)
+    this.dragulaService.createGroup('editable-list', {
+      moves: (el, container, handle) => {
+        return handle.classList.contains('handle');
+      }
+    });
+    // getting the main accent color to color the chart.js (Temp until removing chart.js)
     this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
   }
 
@@ -232,8 +213,13 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
         next: data => data ? this.doRefresh() : ''
       }
     );
-    this.enableCardReordering();
     this.doRefresh();
+  }
+
+  ngAfterViewInit() {
+    this.shownDashboardSections.forEach(dragElementId => { // render the elements into the view based on the order in local storage
+      this.renderer.appendChild(this.container.nativeElement, document.getElementById(dragElementId));
+    });
   }
 
   ngOnDestroy() {
@@ -247,7 +233,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
     this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
     this.displayGreetingMessage();
     this.apcardTransaction$ = this.getTransactions(refresher);
-    // this.getBadge();
+    this.getBadge();
     forkJoin([
       this.getProfile(refresher),
       this.financial$ = this.getOverdueFee(refresher)
@@ -257,16 +243,22 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   }
 
   // NOTIFICATIONS FUNCTIONS
-  // getBadge() {
-  //   this.notificationService.getMessages().subscribe(res => {
-  //     this.numberOfUnreadMsgs = +res.num_of_unread_msgs;
-  //   });
-  // }
-
+  getBadge() {
+    this.notificationService.getMessages().subscribe(res => {
+      this.numberOfUnreadMsgs = +res.num_of_unread_messages;
+    });
+  }
 
   // DRAG AND DROP FUNCTIONS (DASHBOARD CUSTOMIZATION)
-  toggleReorderingMode() {
-    this.editableList === 'editable-list' ? this.editableList = null : this.editableList = 'editable-list';
+  toggleReorderingMode() { // enable/disable edit mode
+    if (this.editableList === 'editable-list') {
+      this.editableList = null;
+      this.saveArrayOrderInLocalStorage();
+    } else {
+      this.editableList = 'editable-list';
+      this.dragulaModelArray = this.shownDashboardSections; // set the dragula modal array to the same value coming from local storage
+    }
+
     // PREVENT SCROLLING ON MOBILE PHONES WHEN MOVING CARDS
     const handles = document.querySelectorAll('.handle');
     /* handle scroll */
@@ -275,13 +267,36 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
     });
   }
 
-  enableCardReordering() {
-    this.dragulaService.createGroup('editable-list', {
-      moves: (el, container, handle) => {
-        return handle.classList.contains('handle');
-      }
+  removeSectionFromDashboard(sectionName: string) {
+    const index = this.shownDashboardSections.indexOf(sectionName);
+    if (index > -1) {
+      this.shownDashboardSections.splice(index, 1);
+    }
+  }
+
+  openDashboardSectionsSelectBox() {
+    this.dashboardSectionsselectBoxRef.open();
+  }
+
+  dashboardSectionsChanged(event) {
+    event.detail.value.forEach(section => {
+      this.shownDashboardSections.splice(0, 0, section);
     });
   }
+
+  saveArrayOrderInLocalStorage() {
+    // Store data in local storage
+    const itemsToStore = [];
+    this.dragulaModelArray.forEach(arrayEl => {
+      this.shownDashboardSections.forEach(shownDashboardSection => {
+        if (arrayEl === shownDashboardSection) {
+          itemsToStore.push(arrayEl);
+        }
+      });
+    });
+    this.userSettings.setShownDashboardSections(itemsToStore);
+  }
+
 
   // PROFILE AND GREETING MESSAGE FUNCTIONS
   getProfile(refresher: boolean) {
@@ -475,7 +490,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   }
 
   getUpcomingHoliday(date: Date, refresher: boolean): Observable<EventComponentConfigurations[]> {
-    return this.ws.get<Holidays>('/transix/holidays/filtered/students', refresher, {auth: false}).pipe(
+    return this.ws.get<Holidays>('/transix/holidays/filtered/students', refresher, { auth: false }).pipe(
       map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
       map(holiday => {
         const examsListEventMode: EventComponentConfigurations[] = [];
@@ -807,6 +822,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
       map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
         return trips.filter(trip => {
           return moment(trip.trip_time, 'kk:mm').toDate() >= dateNow
+            && trip.trip_day === this.getTodayDay(dateNow)
             && ((trip.trip_from === firstLocation && trip.trip_to === secondLocation)
               || (trip.trip_from === secondLocation && trip.trip_to === firstLocation));
         });
@@ -865,5 +881,17 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
 
   navigateToPage(pageName: string) {
     this.navCtrl.navigateForward(pageName);
+  }
+
+  // GET DAY SHORT NAME (LIKE 'SAT' FOR SATURDAY)
+  getTodayDay(date: Date) {
+    const dayRank = date.getDay();
+    if (dayRank === 0) {
+      return 'sun';
+    } else if (dayRank > 0 && dayRank <= 5) {
+      return 'mon-fri';
+    } else {
+      return 'sat';
+    }
   }
 }

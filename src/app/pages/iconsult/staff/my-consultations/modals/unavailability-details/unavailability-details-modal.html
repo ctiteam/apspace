@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content parallax-header padding>
+<ion-content parallax-header class="ion-padding">
   <ng-container *ngIf="slotDetails$ | async as slotDetails; else loadingSlots">
     <ion-card>
       <ion-card-header>
@@ -17,7 +17,7 @@
           Unavailable Slot
         </ion-card-title>
       </ion-card-header>
-      <ion-card-content no-padding>
+      <ion-card-content class="ion-no-padding">
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="calendar" slot="start"></ion-icon>
           <ion-label>
@@ -46,12 +46,15 @@
             <h4 class="main-text-color" *ngFor="let slotDetail of slotDetails">{{ slotDetail.start_time }}</h4>
           </ion-label>
         </ion-item>
+        <ion-button expand="block" class="danger-background ion-margin" (click)="disableUnavialbility()">
+          Disable
+        </ion-button>
       </ion-card-content>
     </ion-card>
   </ng-container>
   <ng-template #loadingSlots>
-    <ion-card no-margin margin-bottom>
-      <ion-card-content no-padding>
+    <ion-card class="ion-no-margin ion-margin-bottom">
+      <ion-card-content class="ion-no-padding">
         <ion-item>
           <ion-skeleton-text animated style="line-height: 30px; width:100%"></ion-skeleton-text>
         </ion-item>

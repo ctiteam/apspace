@@ -25,7 +25,7 @@
         <!-- Profile & Chart -->
         <ion-col size-xs="12" size-lg="4">
           <ng-container *ngIf="courseDetail$ | async as courseDetail; else loadingCourseDetail">
-            <ion-card no-margin margin-top *ngIf="courseDetail.length > 0; else noCourseDetail">
+            <ion-card class="ion-no-margin ion-margin-top" *ngIf="courseDetail.length > 0; else noCourseDetail">
               <ion-card-header class="colored-border">
                 <ion-card-title>
                   Summary
@@ -47,7 +47,7 @@
                   <h4 class="summary-header colored-text ion-padding-start text-bold">
                     Results Summary Chart
                   </h4>
-                  <chart margin-top *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
+                  <chart class="ion-margin-top" *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
                 </ng-container>
               </ion-card-content>
             </ion-card>
@@ -66,20 +66,20 @@
 
           <ng-container *ngFor="let semesterResult of results">
             <div class="sem" color="primary">Semester {{semesterResult.semester}}</div>
-            <ion-card no-padding no-margin margin-top margin-bottom class="table-top">
+            <ion-card class="table-top ion-no-padding ion-no-margin ion-margin-top ion-margin-bottom">
               <ion-card-content>
                 <ion-grid>
                   <ion-row>
                     <ion-col size="12" size-sm="3" size-md="5">
                       <h2 class="text-bold">Module</h2>
                     </ion-col>
-                    <ion-col size="12" size-sm="3" size-md="2" text-center>
+                    <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
                       <h2 class="text-bold">Result</h2>
                     </ion-col>
-                    <ion-col size="12" size-sm="3" size-md="2" text-center>
+                    <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
                       <h2 class="text-bold">Grade Point</h2>
                     </ion-col>
-                    <ion-col size="12" size-sm="3" size-md="3" text-center>
+                    <ion-col size="12" size-sm="3" size-md="3" class="ion-text-center">
                       <h2 class="text-bold">Internal Result Release Date</h2>
                     </ion-col>
                   </ion-row>
@@ -87,7 +87,7 @@
               </ion-card-content>
             </ion-card>
 
-            <ion-card no-margin margin-top margin-bottom no-padding
+            <ion-card class="ion-no-margin ion-margin-top ion-margin-bottom ion-no-padding"
               *ngFor="let result of semesterResult.value; last as last; trackBy: trackByFn">
               <ion-card-header class="special-card-header colored-border"
                 style="border-bottom: 2px solid var(--primary-color) !important">
@@ -99,15 +99,15 @@
                     <ion-col size="12" size-sm="3" size-md="5" class="text-bold special-border colored-border">
                       {{ result.MODULE_DESCRIPTION }}
                     </ion-col>
-                    <ion-col size="12" size-sm="3" size-md="2" text-center>
+                    <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
                       <span class="marker">Grade: </span>
                       {{ result.GRADE || "N/A" }}
                     </ion-col>
-                    <ion-col size="12" size-sm="3" size-md="2" text-center>
+                    <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
                       <span class="marker">Grade Point: </span>
                       {{ result.GRADE_POINT || "N/A" }}
                     </ion-col>
-                    <ion-col size="12" size-sm="3" size-md="3" text-center>
+                    <ion-col size="12" size-sm="3" size-md="3" class="ion-text-center">
                       <span class="marker">Internal Result: </span>
                       <!-- internal results release date sometimes comes as a null, and sometimes comes as a 'N/A' and sometimes comes as a date -->
                       {{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A'  }}
@@ -123,14 +123,14 @@
           </ng-container>
 
           <ng-container *ngIf="interimLegend$ | async as interimLegend; else loadingInterimLegend">
-            <ion-card no-margin margin-top margin-bottom>
+            <ion-card class="ion-no-margin ion-margin-top ion-margin-bottom">
               <ion-card-header class="colored-border" style="border-bottom: 2px solid">
                 <ion-card-title>Marks and Grades</ion-card-title>
               </ion-card-header>
               <ion-card-content>
                 <ion-grid>
                   <div *ngFor="let interim of interimLegend">
-                    <ion-row no-padding *ngIf="!interim.CLASSIFICATION; else suMaster">
+                    <ion-row class="ion-no-padding" *ngIf="!interim.CLASSIFICATION; else suMaster">
                       <ion-col>
                         <div *ngIf="interim.MARK_FROM">
                           {{ interim.MARK_FROM + "-" + interim.MARK_TO || "" }}
@@ -187,7 +187,7 @@
           <ng-container
             *ngIf="(classificationLegend$ | async) as classificationLegend; else loadingClassificationLegend">
             <div *ngIf="classificationLegend.length > 0">
-              <ion-card no-margin margin-top margin-bottom>
+              <ion-card class="ion-no-margin ion-margin-top ion-margin-bottom">
                 <ion-card-header class="colored-border" style="border-bottom: 2px solid">
                   <ion-card-title>Degree Classification</ion-card-title>
                 </ion-card-header>
@@ -213,13 +213,13 @@
         <ion-grid>
           <ion-row>
             <ion-col size-xs="12" size-lg="3">
-              <ion-card no-padding>
-                <ion-card-content no-padding>
+              <ion-card class="ion-no-padding">
+                <ion-card-content class="ion-no-padding">
                   <ion-skeleton-text animated style="width: 100%; line-height: 200px"></ion-skeleton-text>
                 </ion-card-content>
               </ion-card>
-              <ion-card no-padding>
-                <ion-card-content no-padding>
+              <ion-card class="ion-no-padding">
+                <ion-card-content class="ion-no-padding">
                   <ion-skeleton-text animated style="width: 100%; line-height: 400px"></ion-skeleton-text>
                 </ion-card-content>
               </ion-card>
@@ -227,11 +227,8 @@
             <ion-col size-xs="12" size-lg="9">
               <ion-skeleton-text animated style="width: 100%; line-height: 600px"></ion-skeleton-text>
             </ion-col>
-
-
           </ion-row>
         </ion-grid>
-
       </ng-template>
     </ion-grid>
   </ng-template>
@@ -247,7 +244,7 @@
                 </h4>
               </ion-card-title>
             </ion-card-header>
-            <ion-card-content padding>
+            <ion-card-content class="ion-padding">
               <pre>{{ message }}</pre>
             </ion-card-content>
           </ion-card>

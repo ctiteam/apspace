@@ -1,17 +1,17 @@
 <ion-content>
-  <ion-grid no-padding>
+  <ion-grid class="ion-no-padding">
     <!-- Logo -->
-    <ion-row header align-items-start align-items-stretch>
+    <ion-row header class="ion-align-items-start ion-align-items-stretch">
       <ion-col size="10" offset="1" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
         <ion-img src="assets/img/login.png"></ion-img>
       </ion-col>
 
       <!-- Form & Welcome Message -->
       <ion-col size="10" offset="1" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
-        <form (ngSubmit)="login()" #loginForm="ngForm" no-padding>
-          <ion-row align-items-start>
+        <form (ngSubmit)="login()" #loginForm="ngForm" class="ion-no-padding">
+          <ion-row class="ion-align-items-start">
             <ion-col class="title-text-wrapper" size="12">
-              <h1><strong>APSpace,</strong></h1>
+              <h1><strong>APSpace</strong></h1>
               <h2>Your digital university companion</h2>
             </ion-col>
           </ion-row>
@@ -20,15 +20,15 @@
             <ion-col size="12">
               <div input-field>
                 <!-- Input-field-apkey -->
-                <ion-item no-padding>
+                <ion-item class="ion-no-padding">
                   <ion-input type="text" [placeholder]="'APKey'" [(ngModel)]="apkey" (keyup.enter)="login()"
                     [autofocus]="true" [required]="true" name="apkey"></ion-input>
                 </ion-item>
                 <!-- Input-field-password -->
-                <ion-item no-padding>
-                  <ion-input padding-start [type]="showPassword ? 'text' : 'password'" [placeholder]="'Password'"
-                    [(ngModel)]="password" clear-on-edit="false" (keyup.enter)="login()" [required]="true"
-                    name="password">
+                <ion-item class="ion-no-padding">
+                  <ion-input class="ion-padding-start" [type]="showPassword ? 'text' : 'password'"
+                    [placeholder]="'Password'" [(ngModel)]="password" clear-on-edit="false" (keyup.enter)="login()"
+                    [required]="true" name="password">
                   </ion-input>
                   <ion-button type="button" clear slot="end" (click)="showPassword = !showPassword">
                     <ion-icon name="eye"></ion-icon>
@@ -37,8 +37,8 @@
                 </ion-item>
               </div>
               <!-- Login Button -->
-              <ion-col size="12" no-padding>
-                <ion-button type="submit" class="login-button" no-margin
+              <ion-col size="12" class="ion-no-padding">
+                <ion-button type="submit" class="login-button ion-no-margin"
                   [attr.color]="userDidLogin && userUnauthenticated ? 'danger' : userDidLogin && userAuthenticated? 'success': 'primary'"
                   [class.btn_center]="userDidLogin && (userUnauthenticated || loginProcessLoading || userAuthenticated)">
                   <span *ngIf="!userDidLogin">LOGIN</span>
@@ -58,15 +58,18 @@
                 </ion-button>
               </ion-col>
               <!-- Useful Links -->
-              <div description text-center>
+              <div description class="ion-text-center">
                 <ion-row>
                   <!-- Reset Your Password Button -->
-                  <ion-col size="12" no-padding margin-vertical>
-                    <p no-margin no-padding>Check The Timetable? <a routerLink="/student-timetable" routerDirection="forward">Students Timetable</a> </p>
+                  <ion-col size="12" class="ion-no-padding ion-margin-vertical">
+                    <p class="ion-no-margin ion-no-padding">Check The Timetable? <a routerLink="/student-timetable"
+                        routerDirection="forward">Students Timetable</a> </p>
                   </ion-col>
                   <!-- Graduate Verification Service Button -->
-                  <ion-col size="12" no-padding no-margin>
-                    <p no-margin no-padding>Verify academic qualification? <a routerLink="/graduate-verification-service" routerDirection="forward">Graduate Verification Service</a> </p>
+                  <ion-col size="12" class="ion-no-padding ion-no-margin">
+                    <p class="ion-no-margin ion-no-padding">Verify Academic Qualification? <a
+                        routerLink="/graduate-verification-service" routerDirection="forward">Graduate Verification
+                        Service</a> </p>
                   </ion-col>
                 </ion-row>
               </div>

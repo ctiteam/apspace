@@ -9,69 +9,69 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content parallax-header padding>
+<ion-content parallax-header class="ion-padding">
   <ng-container *ngIf="slotDetails$ | async as slotDetails; else loadingSlots">
-    <ion-card no-margin margin-bottom>
-      <ion-card-content no-padding>
+    <ion-card class="ion-no-margin ion-margin-bottom">
+      <ion-card-content class="ion-no-padding">
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="person" slot="start"></ion-icon>
-          <ion-label >
+          <ion-label>
             <p class="tertiary-txt-color">Staff Name:</p>
             <h4 class="main-text-color">{{ slotDetails.lecname }}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="briefcase" slot="start"></ion-icon>
-          <ion-label >
+          <ion-label>
             <p class="tertiary-txt-color">Consultation With:</p>
             <h4 class="main-text-color">{{ slotDetails.con_with }}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="mail" slot="start"></ion-icon>
-          <ion-label >
+          <ion-label>
             <p class="tertiary-txt-color">Staff Email:</p>
             <h4 class="main-text-color">{{ slotDetails.LecEmail }}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="time" slot="start"></ion-icon>
-          <ion-label >
+          <ion-label>
             <p class="tertiary-txt-color">Appointment Date:</p>
             <h4 class="main-text-color">{{ slotDetails.datetime }}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="time" slot="start"></ion-icon>
-          <ion-label >
+          <ion-label>
             <p class="tertiary-txt-color">Appointment Time:</p>
             <h4 class="main-text-color">{{ slotDetails.contime }} - {{ slotDetails.endTime }}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="pin" slot="start"></ion-icon>
-          <ion-label >
+          <ion-label>
             <p class="tertiary-txt-color">Appointment Location:</p>
             <h4 class="main-text-color">{{ slotDetails.venue }} | {{ slotDetails.location }}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="help-circle" slot="start"></ion-icon>
-          <ion-label >
+          <ion-label>
             <p class="tertiary-txt-color">Appointment Reason</p>
             <h4 class="main-text-color">{{ slotDetails.reason }}</h4>
           </ion-label>
         </ion-item>
         <ion-item *ngIf="slotDetails.note">
           <ion-icon class="tertiary-txt-color" name="bookmark" slot="start"></ion-icon>
-          <ion-label >
+          <ion-label>
             <p class="tertiary-txt-color">Note</p>
             <h4 class="main-text-color">{{ slotDetails.note }}</h4>
           </ion-label>
         </ion-item>
         <ion-item *ngIf="slotDetails.cancelreason">
           <ion-icon class="danger-text" name="close-circle" slot="start"></ion-icon>
-          <ion-label >
+          <ion-label>
             <p class="danger-text">Cancellation Reason</p>
             <h4 class="main-text-color">{{ slotDetails.cancelreason }}</h4>
           </ion-label>
@@ -80,8 +80,8 @@
     </ion-card>
   </ng-container>
   <ng-template #loadingSlots>
-    <ion-card no-margin margin-bottom>
-      <ion-card-content no-padding>
+    <ion-card class="ion-no-margin ion-margin-bottom">
+      <ion-card-content class="ion-no-padding">
         <ion-item>
           <ion-skeleton-text animated style="line-height: 30px; width:100%"></ion-skeleton-text>
         </ion-item>

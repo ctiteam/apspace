@@ -4,7 +4,7 @@ import { Platform, ToastController, NavController, ModalController, MenuControll
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Storage } from '@ionic/storage';
 
-import { UserSettingsService } from './services';
+import { UserSettingsService, NotificationService } from './services';
 import { Router } from '@angular/router';
 
 @Component({
@@ -32,7 +32,8 @@ export class AppComponent {
     private modalCtrl: ModalController,
     private actionSheetCtrl: ActionSheetController,
     private menuCtrl: MenuController,
-    private popoverCtrl: PopoverController
+    private popoverCtrl: PopoverController,
+    private notificationService: NotificationService
   ) {
     this.userSettings.getUserSettingsFromStorage();
     this.userSettings
@@ -51,6 +52,7 @@ export class AppComponent {
       .subscribe(val => (this.selectedAccentColor = val));
 
     if (this.platform.is('cordova')) {
+      this.notificationService.checkNewNotification();
       if (this.platform.is('ios')) {
         this.statusBar.overlaysWebView(false);
       }
@@ -66,18 +68,6 @@ export class AppComponent {
 
       this.platform.backButton.subscribe(async () => {
 
-        if (this.menuCtrl.getOpen()) {
-          this.menuCtrl.close();
-          return;
-        }
-
-        const active = this.actionSheetCtrl.getTop() || this.popoverCtrl.getTop() || this.modalCtrl.getTop();
-
-        if (active) {
-          (await active).dismiss();
-          return;
-        }
-
         if (this.router.url.startsWith('/tabs')) {
           const timePressed = new Date().getTime();
           if ((timePressed - this.lastTimeBackPress) < this.timePeriodToExit) {
@@ -89,6 +79,18 @@ export class AppComponent {
           }
         } else {
           this.navCtrl.pop();
+        }
+
+        if (this.menuCtrl.getOpen()) {
+          this.menuCtrl.close();
+          return;
+        }
+
+        const active = this.actionSheetCtrl.getTop() || this.popoverCtrl.getTop() || this.modalCtrl.getTop();
+
+        if (active) {
+          (await active).dismiss();
+          return;
         }
 
       });

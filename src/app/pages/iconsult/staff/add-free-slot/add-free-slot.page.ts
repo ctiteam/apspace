@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ToastController, AlertController, LoadingController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
-import { WsApiService } from 'src/app/services';
+import { WsApiService, SettingsService } from 'src/app/services';
 import { Venue } from 'src/app/interfaces';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
@@ -64,18 +64,22 @@ export class AddFreeSlotPage implements OnInit {
     private router: Router,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private settings: SettingsService
   ) { }
 
   ngOnInit() {
+    if (this.settings.get('defaultCampus')) {
+      this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${this.settings.get('defaultCampus')}`, true);
+    }
     this.addFreeSlotForm = this.formBuilder.group({
       slotType: [this.consultationTypeOptions[0].value, Validators.required], // alwayes required
       startDate: [moment(this.todaysDate).add(1, 'day').format('YYYY-MM-DD'), Validators.required], // always required
       repeatOn: [[]],
       noOfWeeks: [null],
       endDate: [''],
-      location: ['', Validators.required], // always required
-      venue: ['', Validators.required], // alwayes required
+      location: [this.settings.get('defaultCampus') || '', Validators.required], // always required
+      venue: [this.settings.get('defaultVenue') || '', Validators.required], // alwayes required
       time: this.formBuilder.array([
         this.initTimeSlots(),
       ]),
@@ -107,6 +111,29 @@ export class AddFreeSlotPage implements OnInit {
     return this.addFreeSlotForm.get('time') as FormArray;
   }
 
+  showDefaultLocationWarningAlert(newCampus: string, newVenue: string) {
+    console.log(newCampus, newVenue);
+    this.alertCtrl.create({
+      header: 'Updating Your Default Location?',
+      subHeader:
+      // tslint:disable-next-line: max-line-length
+      'We noticed that you have entered a new location for your consultation hour. Do you want to use the new location as your default iConsult location?',
+      buttons: [
+        {
+          text: 'No',
+          handler: () => { }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.settings.set('defaultCampus', newCampus);
+            this.settings.set('defaultVenue', newVenue);
+          }
+        }
+      ]
+    }).then(confirm => confirm.present());
+  }
+
   submit() {
     this.submitted = true;
     // stop here if form is invalid
@@ -117,7 +144,7 @@ export class AddFreeSlotPage implements OnInit {
       date: '',
       end_date: '',
       entry_datetime: '', // always empty from backend
-      location_id: this.addFreeSlotForm.value.venue.id,
+      location_id: this.addFreeSlotForm.value.venue,
       repeat: [],
       rule_status: '', // always empty from backend
       start_date: '',
@@ -150,7 +177,7 @@ export class AddFreeSlotPage implements OnInit {
                 <p><strong>Slot End Date: </strong> ${this.addFreeSlotForm.value.endDate || 'N/A'}</p>
                 <p><strong>Slot Time: </strong> ${body.start_time.toString()}</p>
                 <p><strong>Slot Location: </strong> ${this.addFreeSlotForm.value.location}</p>
-                <p><strong>Slot Venue: </strong> ${this.addFreeSlotForm.value.venue.rooms} </p>`,
+                <p><strong>Slot Venue: </strong> ${this.addFreeSlotForm.value.venue} </p>`,
       buttons: [
         {
           text: 'No',
@@ -165,13 +192,19 @@ export class AddFreeSlotPage implements OnInit {
                 next: res => {
                   this.showToastMessage('Slot(s) added successfully!', 'success');
                 },
-                error: err => this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger'),
+                error: err => {
+                  this.dismissLoading();
+                  this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
+                },
                 complete: () => {
+                  if (this.addFreeSlotForm.value.venue !== this.settings.get('defaultVenue')) {
+                    this.showDefaultLocationWarningAlert(this.addFreeSlotForm.value.location, this.addFreeSlotForm.value.venue);
+                  }
                   this.dismissLoading();
                   const navigationExtras: NavigationExtras = {
-                    state: {reload: true}
+                    state: { reload: true }
                   };
-                  this.router.navigateByUrl('my-consultations', navigationExtras);
+                  this.router.navigateByUrl('iconsult/my-consultations', navigationExtras);
                 }
               }
             );

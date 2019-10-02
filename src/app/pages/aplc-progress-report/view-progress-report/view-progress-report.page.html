@@ -73,10 +73,10 @@
             <h5 class="responsive-h1">Progress Report Data</h5>
           </ion-card-title>
         </ion-card-header>
-        <ion-card-content no-padding>
+        <ion-card-content class="ion-no-padding">
           <ng-container *ngIf="classDescription$ | async as classDescription; else classDescriptionIsLoading">
             <ion-grid>
-              <ion-row padding-start>
+              <ion-row class="ion-padding-start">
                 <ion-col size="12" size-md="6">
                   <P>Class Code:</P>
                   <h6 class="text-bold main-text-color">{{ classCode }}</h6>
@@ -142,7 +142,7 @@
           <ion-grid>
             <ion-row>
               <ion-col>
-                <ion-list no-padding>
+                <ion-list class="ion-no-padding">
                   <ion-item lines="none" class="data-item d-none d-md-block main-text-color text-bolder">
                     <ion-grid>
                       <ion-row>
@@ -232,7 +232,7 @@
           <ion-grid>
             <ion-row *ngFor="let scoreLegend of scoreLegends | keyvalue">
               <ion-col size="2" style="margin: auto">
-                <p text-center class="text-bold">{{scoreLegend.key}}</p>
+                <p class="ion-text-center text-bold">{{scoreLegend.key}}</p>
               </ion-col>
               <ion-col size="10">
                 <p>{{ scoreLegend.value }}</p>
@@ -277,7 +277,7 @@
             <ion-row class="with-border-bottom" *ngFor="let descriptionLegend of descriptionLegends | keyvalue">
               <!-- <p>{{descriptionLegend | json }}</p> -->
               <ion-col style="margin: auto" size="12" size-md="2">
-                <p text-center class="text-bold">{{descriptionLegend.key}}</p>
+                <p class="ion-text-center text-bold">{{descriptionLegend.key}}</p>
               </ion-col>
               <ion-col size="12" size-md="10">
                 <ng-container *ngFor="let description of descriptionLegend.value">
@@ -285,7 +285,7 @@
                     <ion-grid>
                       <ion-row>
                         <ion-col style="margin: auto" size="12" size-md="4">
-                          <p text-center style="text-decoration: underline">{{d.key}}</p>
+                          <p class="ion-text-center" style="text-decoration: underline">{{d.key}}</p>
                         </ion-col>
                         <ion-col size="12" size-md="8">
                           <p>{{d.value}}</p>
