@@ -16,16 +16,19 @@
   font-family: 'Hack', 'Iconsolata', monospace;
 }
 
-ion-item.stateA {
+ion-item.stateN {
   --background: #e57373 !important;
+  --border-color: #e57373 !important;
 }
 
 ion-item.stateL {
   --background: #fff176 !important;
+  --border-color: #fff176 !important;
 }
 
-ion-item.stateP {
+ion-item.stateY {
   --background: #81c784 !important;
+  --border-color: #81c784 !important;
 }
 
 qrcode {

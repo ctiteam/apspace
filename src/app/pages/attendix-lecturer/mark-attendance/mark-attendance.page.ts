@@ -26,7 +26,7 @@ export class MarkAttendancePage implements OnInit {
 
   auto = true;
   term = '';
-  type = 'A';
+  type: 'Y' | 'L' | 'N' | 'R' = 'N';
 
   otp$: Observable<number>;
   lastMarked$: Observable<Pick<NewStatusSubscription, 'newStatus'>[]>;
