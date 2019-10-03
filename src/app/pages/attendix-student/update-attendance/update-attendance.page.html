@@ -1,7 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title *ngIf="scan" text-center>Scan Code</ion-title>
-    <ion-title *ngIf="!scan" text-center>Enter Digits</ion-title>
+    <ion-title class="ion-text-center">
+      {{ scan ? 'Scan Code' : 'Enter Digits' }}
+    </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="swapMode($event)">{{ scan ? 'Type' : 'Scan' }}</ion-button>
     </ion-buttons>
@@ -28,13 +29,9 @@
         <ion-col offset="1" size="10">
           <div class="otp-wrapper">
             <input
-            *ngFor="let _ of digits; i as index"
-            #otpInput
-            autofocus
-            class="otp"
-            type="tel"
-            maxlength="1"
-            (keypress)="onKey($event)">
+              #otpInput *ngFor="let _ of digits; i as index"
+              autofocus class="otp" type="tel" maxlength="1"
+              (keypress)="onKey($event)">
           </div>
         </ion-col>
       </ng-template>

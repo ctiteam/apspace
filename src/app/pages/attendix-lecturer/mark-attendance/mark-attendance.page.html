@@ -4,7 +4,7 @@
       <ion-back-button class="back-btn" defaultHref="/attendix/classes"></ion-back-button>
     </ion-buttons>
     <ion-title>
-      (class code) {{ totalPresentStudents$ | async }}/{{ totalStudents$ | async }}
+      {{ schedule!.classcode }} {{ totalPresentStudents$ | async }}/{{ totalStudents$ | async }}
     </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="auto = !auto">{{ auto ? 'Manual' : 'Auto' }}</ion-button>
@@ -12,13 +12,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-grid *ngIf="auto; else override">
     <ion-row *ngIf="otp$ | async as otp">
-      <ion-col size="9" align-self-stretch>
+      <ion-col size="9">
         <qrcode *ngIf="otp" [qrdata]="otp" size="520" level="H"></qrcode>
       </ion-col>
-      <ion-col size="3" align-self-stretch>
+      <ion-col size="3">
         <div *ngFor="let c of otp | chars" class="otp">
           {{ c }}
         </div>

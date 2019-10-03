@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title text-center>Classes</ion-title>
+    <ion-title class="ion-text-center">Classes</ion-title>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
@@ -9,9 +9,9 @@
 
 <ion-content>
   <ion-grid>
-    <ion-row justify-content-center>
-      <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
-        <ion-item lines="none">
+    <ion-row class="ion-justify-content-center">
+      <ion-col class="ion-align-self-center" size-md="6" size-lg="5" size-xs="12">
+        <ion-item lines="none" class="transparent">
           <ion-buttons slot="end">
             <ion-button>
               <ion-checkbox></ion-checkbox>
@@ -23,7 +23,7 @@
             </ion-button>
           </ion-buttons>
         </ion-item>
-        <div padding>
+        <div class="ion-padding">
           <ion-item>
             <ion-label>Class Code</ion-label>
             <ion-select [(ngModel)]="classcode" (ngModelChange)="changeClasscode($event)"
@@ -69,7 +69,7 @@
             </ion-select>
           </ion-item>
         </div>
-        <div padding>
+        <div class="ion-padding">
           <ion-button [routerLink]="['/attendix/mark-attendance', { classcode: classcode, date: date, startTime: startTime, endTime: endTime, classType: classType }]"
             [disabled]="!classcode || !date || !startTime || !endTime || !classType" size="large" expand="block">
             Mark Attendance
