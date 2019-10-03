@@ -6,6 +6,11 @@ a {
   text-decoration: none !important;
 }
 
+ion-back-button,
+ion-title {
+  --color: var(--primary-color) !important;
+}
+
 h1,
 h2,
 h3,
@@ -323,7 +328,7 @@ ion-calendar {
     .days-btn.today p {
       color: var(--passed-event-color) !important;
     }
-    .days-btn.today.colored p{
+    .days-btn.today.colored p {
       color: var(--main-txt-color) !important;
     }
     .days-btn.on-selected {
