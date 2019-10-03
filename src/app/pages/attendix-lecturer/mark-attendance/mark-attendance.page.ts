@@ -6,7 +6,7 @@ import {
   catchError, finalize, first, map, pluck, scan, shareReplay, startWith,
   switchMap, tap,
 } from 'rxjs/operators';
-import { totp } from 'otplib/otplib-browser';
+import { authenticator } from 'otplib/otplib-browser';
 
 import {
   AttendanceGQL, InitAttendanceGQL, NewStatusSubscription,
@@ -47,7 +47,7 @@ export class MarkAttendancePage implements OnInit {
 
   ngOnInit() {
     // totp options
-    totp._options.digits = 3;
+    authenticator.options = { digits: 3 };
 
     const schedule = this.schedule = {
       classcode: this.route.snapshot.paramMap.get('classcode'),
@@ -93,9 +93,9 @@ export class MarkAttendancePage implements OnInit {
     // only regenerate otp when needed
     this.otp$ = secret$.pipe(
       switchMap(secret =>
-        timer(totp.timeRemaining() * 1000, totp._options.step * 1000).pipe(
-          startWith(() => totp.generate(secret)),
-          map(() => totp.generate(secret))
+        timer(authenticator.timeRemaining() * 1000, authenticator.options.step * 1000).pipe(
+          startWith(() => authenticator.generate(secret)),
+          map(() => authenticator.generate(secret))
         )
       )
     );
