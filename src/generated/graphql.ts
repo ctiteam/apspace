@@ -97,17 +97,31 @@ export type Status = {
   modifiedBy?: Maybe<Scalars['String']>,
   internalIP: Scalars['String'],
   externalIP: Scalars['String'],
-  schedule: Schedule,
+  classcode: Scalars['String'],
+  date: Scalars['String'],
+  startTime: Scalars['String'],
+  endTime: Scalars['String'],
+  classType: Scalars['String'],
 };
 
 export type Subscription = {
    __typename?: 'Subscription',
   newStatus?: Maybe<Status>,
+  newStatusRaw?: Maybe<Status>,
 };
 
 
 export type SubscriptionNewStatusArgs = {
-  schedule: ScheduleInput
+  classcode: Scalars['String'],
+  date: Scalars['String'],
+  startTime: Scalars['String'],
+  endTime: Scalars['String'],
+  classType: Scalars['String']
+};
+
+
+export type SubscriptionNewStatusRawArgs = {
+  schedule?: Maybe<ScheduleInput>
 };
 export type AttendanceQueryVariables = {
   schedule: ScheduleInput
@@ -154,16 +168,16 @@ export type MarkAttendanceMutation = (
   { __typename?: 'Mutation' }
   & { markAttendance: (
     { __typename?: 'Status' }
-    & Pick<Status, 'id'>
-    & { schedule: (
-      { __typename?: 'Schedule' }
-      & Pick<Schedule, 'classcode' | 'date' | 'startTime' | 'endTime' | 'classType'>
-    ) }
+    & Pick<Status, 'id' | 'classcode' | 'date' | 'startTime' | 'endTime' | 'classType'>
   ) }
 );
 
 export type NewStatusSubscriptionVariables = {
-  schedule: ScheduleInput
+  classcode: Scalars['String'],
+  date: Scalars['String'],
+  startTime: Scalars['String'],
+  endTime: Scalars['String'],
+  classType: Scalars['String']
 };
 
 
@@ -184,11 +198,7 @@ export type UpdateAttendanceMutation = (
   { __typename?: 'Mutation' }
   & { updateAttendance: (
     { __typename?: 'Status' }
-    & Pick<Status, 'id'>
-    & { schedule: (
-      { __typename?: 'Schedule' }
-      & Pick<Schedule, 'classcode' | 'date' | 'startTime' | 'endTime' | 'classType'>
-    ) }
+    & Pick<Status, 'id' | 'classcode' | 'date' | 'startTime' | 'endTime' | 'classType'>
   ) }
 );
 
@@ -236,13 +246,11 @@ export const MarkAttendanceDocument = gql`
     mutation markAttendance($schedule: ScheduleInput!, $student: String!, $attendance: String!) {
   markAttendance(schedule: $schedule, student: $student, attendance: $attendance) {
     id
-    schedule {
-      classcode
-      date
-      startTime
-      endTime
-      classType
-    }
+    classcode
+    date
+    startTime
+    endTime
+    classType
   }
 }
     `;
@@ -255,8 +263,8 @@ export const MarkAttendanceDocument = gql`
 
   }
 export const NewStatusDocument = gql`
-    subscription NewStatus($schedule: ScheduleInput!) {
-  newStatus(schedule: $schedule) {
+    subscription NewStatus($classcode: String!, $date: String!, $startTime: String!, $endTime: String!, $classType: String!) {
+  newStatus(classcode: $classcode, date: $date, startTime: $startTime, endTime: $endTime, classType: $classType) {
     id
   }
 }
@@ -273,13 +281,11 @@ export const UpdateAttendanceDocument = gql`
     mutation updateAttendance($otp: String!) {
   updateAttendance(otp: $otp) {
     id
-    schedule {
-      classcode
-      date
-      startTime
-      endTime
-      classType
-    }
+    classcode
+    date
+    startTime
+    endTime
+    classType
   }
 }
     `;

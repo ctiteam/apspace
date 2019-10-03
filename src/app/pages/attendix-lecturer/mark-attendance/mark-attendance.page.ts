@@ -61,12 +61,7 @@ export class MarkAttendancePage implements OnInit {
     // get attendance state from query and use manual mode if attendance initialized
     const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
       catchError(() => (this.auto = true, this.attendance.fetch({ schedule }))),
-      catchError(err => (this.toastCtrl.create({
-        message: 'Failed to mark attendance.',
-        duration: 2000,
-        position: 'top',
-        color: 'danger'
-      }).then(toast => toast.present()), console.error(err), NEVER)),
+      catchError(err => (this.toast(err.message), console.error(err), NEVER)),
       pluck('data'),
       finalize(() => 'initAttendance ended'),
       tap((query: InitAttendanceMutation) => {
@@ -102,9 +97,10 @@ export class MarkAttendancePage implements OnInit {
 
     // take last 5 values updated by students (ignore manual override updates)
     // XXX: cool that it ignore manual overrides updates but I do not know how
-    this.lastMarked$ = this.newStatus.subscribe({ schedule }).pipe(
+    console.log('schedule', schedule);
+    this.lastMarked$ = this.newStatus.subscribe({ ...schedule }).pipe(
       pluck('data', 'newStatus', 'id'),
-      // tap(id => console.log('new', id, studentsById[id])),
+      tap(id => console.log('new', id, studentsNameById[id])),
       // tap(id => this.statusUpdate.next({ id, attendance: 'P' })),
       scan((acc, id) => [...acc, studentsNameById[id]].slice(-5), []),
       shareReplay(1) // keep track when enter manual mode
@@ -125,12 +121,33 @@ export class MarkAttendancePage implements OnInit {
     );
   }
 
+  /** Mark student attendance. */
   mark(student: string, attendance: string) {
-    // TODO: optimistic ui
-    this.markAttendance.mutate({ schedule: this.schedule, student, attendance }).subscribe(
-      d => this.statusUpdate.next({ id: student, attendance }),
+    // TODO: optimistic ui does not work yet
+    const options = {
+      optimisticResponse: {
+        __typename: 'Mutation' as 'Mutation',
+        markAttendance: {
+          __typename: 'Status' as 'Status',
+          id: student,
+          ...this.schedule
+        }
+      }
+    };
+    this.markAttendance.mutate({ schedule: this.schedule, student, attendance }, options).subscribe(
+      () => this.statusUpdate.next({ id: student, attendance }),
       e => console.error(e) // XXX: retry attendance$ on failure
     );
+  }
+
+  /** Helper function to toast error message. */
+  toast(message: string) {
+    this.toastCtrl.create({
+      message: 'Failed to mark attendance: ' + message,
+      duration: 2000,
+      position: 'top',
+      color: 'danger'
+    }).then(toast => toast.present());
   }
 
   trackById(index: number, item: Pick<Status, 'id'>) {

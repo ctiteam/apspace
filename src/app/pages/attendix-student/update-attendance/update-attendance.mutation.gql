@@ -1,12 +1,11 @@
 mutation updateAttendance($otp: String!) {
   updateAttendance(otp: $otp) {
     id
-    schedule {
-      classcode
-      date
-      startTime
-      endTime
-      classType
-    }
+    # Schedule
+    classcode
+    date
+    startTime
+    endTime
+    classType
   }
 }

@@ -1,10 +1,10 @@
-    query attendance($schedule: ScheduleInput!) {
-      attendance(schedule: $schedule) {
-        secret
-        students {
-          id
-          name
-          attendance
-        }
-      }
+query attendance($schedule: ScheduleInput!) {
+  attendance(schedule: $schedule) {
+    secret
+    students {
+      id
+      name
+      attendance
     }
+  }
+}

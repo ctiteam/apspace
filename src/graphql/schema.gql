@@ -37,7 +37,12 @@ type Status {
   modifiedBy: String
   internalIP: String!
   externalIP: String!
-  schedule: Schedule!  # duplicated for subscription filter
+  # Schedule not able to be filtered by subscription
+  classcode: String!
+  date: String!
+  startTime: String!
+  endTime: String!
+  classType: String!
 }
 
 type Query {
@@ -62,7 +67,13 @@ type Mutation {
 }
 
 type Subscription {
-  newStatus(schedule: ScheduleInput!): Status
+  newStatus(
+    classcode: String!
+    date: String!
+    startTime: String!
+    endTime: String!
+    classType: String!
+  ): Status
   @aws_subscribe(mutations: ["markAttendance", "updateAttendance"])
 }
 

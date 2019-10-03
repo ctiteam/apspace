@@ -1,5 +1,17 @@
-subscription NewStatus($schedule: ScheduleInput!) {
-  newStatus(schedule: $schedule) {
+subscription NewStatus(
+  $classcode: String!
+  $date: String!
+  $startTime: String!
+  $endTime: String!
+  $classType: String!
+) {
+  newStatus(
+    classcode: $classcode
+    date: $date
+    startTime: $startTime
+    endTime: $endTime
+    classType: $classType
+  ) {
     id
   }
 }
