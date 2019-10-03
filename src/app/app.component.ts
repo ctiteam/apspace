@@ -78,19 +78,19 @@ export class AppComponent {
             this.lastTimeBackPress = timePressed;
           }
         } else {
-          this.navCtrl.pop();
-        }
+          if (this.menuCtrl.getOpen()) {
+            this.menuCtrl.close();
+            return;
+          }
 
-        if (this.menuCtrl.getOpen()) {
-          this.menuCtrl.close();
-          return;
-        }
+          const active = this.actionSheetCtrl.getTop() || this.popoverCtrl.getTop() || this.modalCtrl.getTop();
 
-        const active = this.actionSheetCtrl.getTop() || this.popoverCtrl.getTop() || this.modalCtrl.getTop();
-
-        if (active) {
-          (await active).dismiss();
-          return;
+          if (active) {
+            (await active).dismiss();
+            return;
+          } else {
+            this.navCtrl.pop();
+          }
         }
 
       });
