@@ -100,7 +100,7 @@ export class MarkAttendancePage implements OnInit {
     this.lastMarked$ = this.newStatus.subscribe(schedule).pipe(
       pluck('data', 'newStatus', 'id'),
       tap(id => console.log('new', id, studentsNameById[id])),
-      // tap(id => this.statusUpdate.next({ id, attendance: 'P' })),
+      tap(id => this.statusUpdate.next({ id, attendance: 'Y' })),
       scan((acc, id) => acc.includes(studentsNameById[id])
         ? acc : [...acc, studentsNameById[id]].slice(-5), []),
       shareReplay(1) // keep track when enter manual mode
