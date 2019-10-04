@@ -55,7 +55,8 @@
   </ion-refresher>
 
   <ng-container *ngIf="(messages$ | async) as messages; else loading">
-    <div class="masonry-list ion-margin-top" *ngIf="(messages.history | unreadMessagesOnly: filterObject.upcoming | notificationCategory: filterObject.categories).length > 0; else noNotifications">
+    <div class="masonry-list ion-margin-top"
+      *ngIf="(messages.history | unreadMessagesOnly: filterObject.upcoming | notificationCategory: filterObject.categories).length > 0; else noNotifications">
       <div class="masonry-item"
         *ngFor="let message of messages.history | unreadMessagesOnly: filterObject.upcoming | notificationCategory: filterObject.categories">
         <ion-card (click)="openModal(message)" class="notification ion-no-margin"
@@ -71,11 +72,12 @@
             <p><span class="text-bold">Sender:</span> {{message.staff_name}}</p>
             <p><span class="text-bold">Sent on:</span> {{message.sent_on | date: 'EEEE, dd MMMM y'}}</p>
             <p><span class="text-bold">Sent at:</span> {{message.sent_on | date: 'hh:mm aaa'}}</p>
-            <ion-badge class="small-margin-top new" style="float: left;font-weight: 300"
+            <ion-badge class="small-margin-top new" style="float: left;"
               *ngIf="(!message.read && openedMessages.indexOf(message.message_id) === -1)">
               New
             </ion-badge>
-            <ion-badge class="small-margin-top" style="float: right;font-weight: 300" color="primary">
+            <ion-badge class="small-margin-top category"
+              [attr.style]="sanitizer.bypassSecurityTrustStyle('--background: ' + getCategoryColor(message.category))">
               {{message.category}}
             </ion-badge>
             <div class="clearfix"></div>
@@ -84,7 +86,8 @@
       </div>
     </div>
     <ng-template #noNotifications>
-      <app-message-with-svg messageTitle="No {{filterObject.upcoming ? 'Unread' : ''}} Messages To Show{{filterObject.categories.length > 0 ? ' with the category/categories (' + filterObject.categories.toString() + ')' : ''}}!"
+      <app-message-with-svg
+        messageTitle="No {{filterObject.upcoming ? 'Unread' : ''}} Messages To Show{{filterObject.categories.length > 0 ? ' with the category/categories (' + filterObject.categories.toString() + ')' : ''}}!"
         messageContent="The list of {{filterObject.upcoming ? 'unread' : ''}} messages is empty. Stay connected to us to receive the latest news and notifications."
         imageUrl="assets/img/empty.svg" wrapperOffset="4" wrapperSize="4" wrapperMarginTop="50px">
       </app-message-with-svg>

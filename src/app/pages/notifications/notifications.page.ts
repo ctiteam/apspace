@@ -5,6 +5,7 @@ import { NotificationService } from 'src/app/services';
 import { finalize, tap } from 'rxjs/operators';
 import { NotificationModalPage } from './notification-modal';
 import { NotificationHistory } from 'src/app/interfaces';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-notifications',
@@ -13,8 +14,8 @@ import { NotificationHistory } from 'src/app/interfaces';
 })
 export class NotificationsPage implements OnInit {
   messages$: Observable<NotificationHistory>;
-  categories$: any;
   categories = [];
+  allCategories = {};
   skeletons = new Array(3);
   openedMessages = [];
   filterObject = {
@@ -25,7 +26,8 @@ export class NotificationsPage implements OnInit {
   constructor(
     private notificationService: NotificationService,
     private modalCtrl: ModalController,
-    private menu: MenuController
+    private menu: MenuController,
+    public sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -34,10 +36,6 @@ export class NotificationsPage implements OnInit {
 
   doRefresh(refresher?) {
     this.categories = [];
-    // this.categories$ = this.notificationService.getCategories().pipe(
-    // map(res => res['categories']),
-    // tap(categories => this.categories = categories),
-    // map(categories => {
     this.messages$ = this.notificationService.getMessages().pipe(
       tap(res => res.history.forEach((history) => {
         if (this.categories.indexOf(history.category) <= -1) {
@@ -48,8 +46,9 @@ export class NotificationsPage implements OnInit {
       finalize(() => refresher && refresher.target.complete()),
     );
 
-    // }),
-    // ).subscribe();
+    this.notificationService.getCategories().pipe(
+      tap((categoriesRes: { categories: [] }) => this.allCategories = categoriesRes.categories)
+    ).subscribe();
   }
 
   openMenu() {
@@ -59,6 +58,17 @@ export class NotificationsPage implements OnInit {
 
   closeMenu() {
     this.menu.close('notifications-filter-menu');
+  }
+
+  getCategoryColor(categoryName: string) {
+    let color = '';
+    Object.keys(this.allCategories).forEach(key => {
+      if (key === categoryName) {
+        color = `linear-gradient(90deg, ${this.allCategories[key].first_colour} 0%, ${this.allCategories[key].second_colour} 100%)`;
+      }
+    });
+
+    return color ? color : '#3880ff'; // defaul color
   }
 
   async openModal(message: any) {
