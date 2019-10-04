@@ -95,14 +95,14 @@ export class MarkAttendancePage implements OnInit {
       )
     );
 
-    // take last 5 values updated by students (ignore manual override updates)
-    // XXX: cool that it ignore manual overrides updates but I do not know how
+    // take last 5 values updated and ignore duplicates
     console.log('schedule', schedule);
-    this.lastMarked$ = this.newStatus.subscribe({ ...schedule }).pipe(
+    this.lastMarked$ = this.newStatus.subscribe(schedule).pipe(
       pluck('data', 'newStatus', 'id'),
       tap(id => console.log('new', id, studentsNameById[id])),
       // tap(id => this.statusUpdate.next({ id, attendance: 'P' })),
-      scan((acc, id) => [...acc, studentsNameById[id]].slice(-5), []),
+      scan((acc, id) => acc.includes(studentsNameById[id])
+        ? acc : [...acc, studentsNameById[id]].slice(-5), []),
       shareReplay(1) // keep track when enter manual mode
     );
 
