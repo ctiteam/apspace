@@ -50,6 +50,12 @@ export class UpdateAttendancePage {
       }
 
       this.updateAttendance.mutate({ otp: this.otp }).subscribe(d => {
+        this.toastCtrl.create({
+          message: 'Attendance updated',
+          duration: 2000,
+          position: 'top',
+          color: 'success'
+        }).then(toast => toast.present());
         console.log(d);
         this.clear(el);
       }, err => {
