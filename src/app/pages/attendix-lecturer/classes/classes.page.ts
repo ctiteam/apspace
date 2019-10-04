@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { forkJoin, of } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { StudentTimetableService, WsApiService } from 'src/app/services';
@@ -25,7 +25,7 @@ export class ClassesPage implements OnInit {
 
   /* selected */
   classcode: string;
-  date = '1970-01-01';
+  date: string;  // 2019-01-01
   startTime: string;
   endTime: string;
   classType: string;
@@ -34,7 +34,6 @@ export class ClassesPage implements OnInit {
 
   ngOnInit() {
     const d = new Date();
-    // d.setDate(d.getDate() - 1); // XXX: temporary
     this.date = this.isoDate(d);
 
     const timetables$ = forkJoin([this.ws.get<StaffProfile[]>('/staff/profile'), this.tt.get()]).pipe(
@@ -55,13 +54,19 @@ export class ClassesPage implements OnInit {
       // left join on classcodes
       this.schedules = timetables.map(timetable => ({
         ...classcodes.find(classcode => {
-          const len = classcode.SUBJECT_CODE.length + 2;
-          return classcode.CLASS_CODE.slice(0, len) === timetable.MODID.slice(0, len);
+          // Classcode BM006-3-2-CRI-L-UC2F1805CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
+          // Take only BM006-3-2-CRI-L
+          const len = classcode.SUBJECT_CODE.length;
+          // Take only UC2F1805 and CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
+          const [intake, codes] = classcode.CLASS_CODE.slice(len + 1).match(/-?(.*\d{4})(.*)/).slice(1);
+          return classcode.CLASS_CODE.slice(0, len + 2) === timetable.MODID.slice(0, len + 2)
+            && timetable.INTAKE.startsWith(intake)
+            && codes.split('-').includes(timetable.INTAKE.slice(intake.length));
         }),
         ...timetable
       }));
       this.guessWork(this.schedules);
-      console.log(this.schedules.filter(schedule => schedule.CLASS_CODE));
+      console.log('filtered', this.schedules.filter(schedule => schedule.CLASS_CODE));
     });
   }
 
@@ -69,12 +74,11 @@ export class ClassesPage implements OnInit {
   guessWork(schedules: (StudentTimetable & Classcode)[]) {
     const d = new Date();
     const date = this.isoDate(d);
-    // const nowMins = (d.getHours() + 1) * 60 + d.getMinutes();
-    const nowMins = 900; // XXX: test
+    const nowMins = (d.getHours() + 1) * 60 + d.getMinutes();
 
     const guessSchedules = schedules.filter(schedule => {
       return schedule.DATESTAMP_ISO === date
-        && schedule.LECTID === 'NJA' // XXX: test
+        // && schedule.LECTID === 'CYN' // XXX: test
         && this.between(schedule.TIME_FROM, schedule.TIME_TO, nowMins);
     });
 
