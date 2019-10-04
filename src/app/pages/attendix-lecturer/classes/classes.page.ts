@@ -64,7 +64,8 @@ export class ClassesPage implements OnInit {
             && codes.split('-').includes(timetable.INTAKE.slice(intake.length));
         }),
         ...timetable
-      }));
+      })).sort((a, b) => a.CLASS_CODE && b.CLASS_CODE && a.CLASS_CODE.localeCompare(b.CLASS_CODE));
+      // XXX: remove unmatching timetable?
       this.guessWork(this.schedules);
       console.log('filtered', this.schedules.filter(schedule => schedule.CLASS_CODE));
     });
