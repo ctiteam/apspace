@@ -19,7 +19,6 @@ export class ChangePasswordPage implements OnInit {
   isStudent = false;
   username = '';
   changePasswordForm: FormGroup;
-  newPassword = '';
   currentPassword = '';
   passwordLengthMatch = false;
   hasUpperCase = false;
@@ -174,20 +173,21 @@ export class ChangePasswordPage implements OnInit {
     }).then(confirm => confirm.present());
   }
 
-  checkValidation() {
+  checkValidation(event) {
+    const newPassword = event.detail.value;
     const upperCaseRegExp = /^(?=.*?[A-Z])/;
     const specialCharacterRegExp = /(?=.*?[#?!@$%~()_{}-])/;
-    if (upperCaseRegExp.test(this.newPassword)) {
+    if (upperCaseRegExp.test(newPassword)) {
       this.hasUpperCase = true;
     } else {
       this.hasUpperCase = false;
     }
-    if (this.newPassword.length < 8) {
+    if (newPassword.length < 8) {
       this.passwordLengthMatch = false;
     } else {
       this.passwordLengthMatch = true;
     }
-    if (specialCharacterRegExp.test(this.newPassword)) {
+    if (specialCharacterRegExp.test(newPassword)) {
       this.hasSpeacialCharacter = true;
     } else {
       this.hasSpeacialCharacter = false;
