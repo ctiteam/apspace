@@ -112,7 +112,7 @@ export class MarkAttendancePage implements OnInit {
     );
 
     this.totalPresentStudents$ = this.students$.pipe(
-      map(students => students.filter(student => student.attendance === 'P').length)
+      map(students => students.filter(student => student.attendance === 'Y').length)
     );
 
     this.totalStudents$ = this.students$.pipe(
