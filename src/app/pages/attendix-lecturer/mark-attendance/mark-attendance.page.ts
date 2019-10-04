@@ -26,7 +26,7 @@ export class MarkAttendancePage implements OnInit {
 
   auto = true;
   term = '';
-  type: 'Y' | 'L' | 'N' | 'R' = 'N';
+  type: 'Y' | 'L' | 'N' | 'R' | '' = 'N';
 
   otp$: Observable<number>;
   lastMarked$: Observable<Pick<NewStatusSubscription, 'newStatus'>[]>;
@@ -60,7 +60,7 @@ export class MarkAttendancePage implements OnInit {
 
     // get attendance state from query and use manual mode if attendance initialized
     const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
-      catchError(() => (this.auto = true, this.attendance.fetch({ schedule }))),
+      catchError(() => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }))),
       catchError(err => (this.toast(err.message), console.error(err), NEVER)),
       pluck('data'),
       finalize(() => 'initAttendance ended'),
