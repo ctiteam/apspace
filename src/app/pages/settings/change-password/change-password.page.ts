@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, ToastController, AlertController } from '@ionic/angular';
 
-import { ChangePasswordService, SettingsService } from '../../../services';
+import { ChangePasswordService, SettingsService, WsApiService, CasTicketService } from '../../../services';
 import { PasswordValidator } from '../../../validators/password.validator';
-import { Role } from 'src/app/interfaces';
+import { Role, StudentProfile, StaffProfile } from 'src/app/interfaces';
+import { Storage } from '@ionic/storage';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'change-password',
@@ -14,9 +16,11 @@ import { Role } from 'src/app/interfaces';
 })
 export class ChangePasswordPage implements OnInit {
   loading: HTMLIonLoadingElement;
-
+  isStudent = false;
+  username = '';
   changePasswordForm: FormGroup;
   newPassword = '';
+  currentPassword = '';
   passwordLengthMatch = false;
   hasUpperCase = false;
   hasSpeacialCharacter = false;
@@ -27,9 +31,14 @@ export class ChangePasswordPage implements OnInit {
     private loadingController: LoadingController,
     private changePasswordService: ChangePasswordService,
     private settings: SettingsService,
+    private storage: Storage,
+    private ws: WsApiService,
+    private cas: CasTicketService,
+    private alertCtrl: AlertController
   ) { }
 
   ngOnInit() {
+    this.getUserUsername(); // username is needed to validate the current password with cas
     this.changePasswordForm = new FormGroup({
       new_password: new FormControl('', [Validators.required]),
       confirm_password: new FormControl('', [Validators.required]),
@@ -37,38 +46,55 @@ export class ChangePasswordPage implements OnInit {
     );
   }
 
+  getUserUsername() {
+    // tslint:disable-next-line: no-bitwise
+    if (this.settings.get('role') & Role.Student) { // get student profile either from local storage or from api
+      this.storage.get('/student/profile').then(
+        studentProfileLocalStorage => {
+          if (studentProfileLocalStorage) { // username is stored in storage
+            this.username = studentProfileLocalStorage.STUDENT_NUMBER;
+          } else { // username is not stored in storage
+            this.ws.get<StudentProfile>('/student/profile').pipe( // it is called only if the username does not exists in local storage
+              tap(studentProfile => {
+                this.username = studentProfile.STUDENT_NUMBER;
+              }),
+            ).subscribe();
+          }
+        }
+      );
+      this.isStudent = true;
+    } else { // get staff profile either from local storage or from api
+      this.storage.get('/staff/profile').then(
+        staffProfileLocalStorage => {
+          if (staffProfileLocalStorage) { // if username is stored in storage
+            this.username = staffProfileLocalStorage[0].CODE;
+          } else { // username is not stored in storage
+            this.ws.get<StaffProfile>('/staff/profile').pipe( // it is called only if the username does not exists in local storage
+              tap(staffProfile => {
+                this.username = staffProfile[0].CODE;
+              }),
+            ).subscribe();
+          }
+        }
+      );
+      this.isStudent = false;
+    }
+  }
+
   changePassword() {
     this.presentLoading();
-    // tslint:disable-next-line: no-bitwise
-    if (this.settings.get('role') & Role.Student) {
-      this.changePasswordService.changePasswordStudent(this.changePasswordForm.value)
-        .subscribe(
-          (res: { result: string }) => {
-            this.dismissLoading();
-            this.presentToast('Your passowrd has been changed. Please log in again');
-            this.router.navigate(['/logout']);
-          },
-
-          (error) => {
-            this.dismissLoading();
-            console.log(error);
-          }
-        );
-    } else {
-      this.changePasswordService.changePassword(this.changePasswordForm.value)
-        .subscribe(
-          (res: { result: string }) => {
-            this.dismissLoading();
-            this.presentToast('Your passowrd has been changed. Please log in again');
-            this.router.navigate(['/logout']);
-          },
-
-          (error) => {
-            this.dismissLoading();
-            console.log(error);
-          }
-        );
-    }
+    this.cas.getTGT(this.username, this.currentPassword).subscribe( // get tgt to check if current password is correct
+      {
+        next: _ => {
+          this.dismissLoading();
+          this.presentAlert();
+        },
+        error: _ => { // tgt is invalid => current password is incorrect
+          this.dismissLoading();
+          this.presentToast('The current password you have entered is incorrect', 'danger');
+        }
+      }
+    );
   }
 
   async presentLoading() {
@@ -85,16 +111,67 @@ export class ChangePasswordPage implements OnInit {
     return await this.loading.dismiss();
   }
 
-  async presentToast(msg: string) {
+  async presentToast(msg: string, color: string) {
     const toast = await this.toastCtrl.create({
       message: msg,
-      color: 'success',
+      color,
       showCloseButton: true,
-      duration: 4000,
+      duration: 9000,
       position: 'top'
     });
 
     toast.present();
+  }
+
+  presentAlert() {
+    this.alertCtrl.create({
+      header: 'Warning!',
+      subHeader: 'You are about to update your APKey Password',
+      // tslint:disable-next-line: max-line-length
+      message: 'After clicking "Ok", you will be automatically logged out from the application for security reasons. Also, we advise you to log out and log in again to all other applications that require APKey authentication',
+      buttons: [
+        {
+          text: 'No',
+          handler: () => { }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.presentLoading();
+            if (this.isStudent) { // user is student => calling the change password api for student
+              this.changePasswordService.changePasswordStudent(this.changePasswordForm.value)
+                .subscribe({
+
+                  next: _ => {
+                    this.presentToast('Your passowrd has been changed. Please log in again', 'success');
+                    this.router.navigate(['/logout']);
+                  },
+                  error: _ => {
+                    this.dismissLoading();
+                    // tslint:disable-next-line: max-line-length
+                    this.presentToast('Something went wrong from our side. Please try again or contact us via the feedback page', 'danger');
+                  },
+                  complete: () => this.dismissLoading()
+                });
+            } else { // user is staff => calling the change password api for staff
+              this.changePasswordService.changePassword(this.changePasswordForm.value)
+                .subscribe({
+                  next: _ => {
+                    this.presentToast('Your passowrd has been changed. Please log in again', 'success');
+                    this.router.navigate(['/logout']);
+                  },
+                  error: _ => {
+                    this.dismissLoading();
+                    // tslint:disable-next-line: max-line-length
+                    this.presentToast('Something went wrong from our side. Please try again or contact us via the feedback page', 'danger');
+                  },
+                  complete: () => this.dismissLoading()
+                });
+            }
+          }
+        }
+      ]
+    }).then(confirm => confirm.present());
   }
 
   checkValidation() {
