@@ -5,6 +5,7 @@ import { Observable, from, of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { CasTicketService } from './cas-ticket.service';
 import { Platform } from '@ionic/angular';
+import { NotificationHistory } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class NotificationService {
   /**
    * GET: send token and service ticket on Log in and response is the history of notifications
    */
-  getMessages(): Observable<any> {
+  getMessages(): Observable<NotificationHistory> {
     let token = '';
     if (this.platform.is('cordova')) {
       return from(
@@ -44,7 +45,7 @@ export class NotificationService {
               service_ticket: st,
             };
             const url = `${this.APIUrl}/client/login?ticket=${body.service_ticket}&device_token=${body.device_token}`;
-            return this.http.get(url, { headers: this.headers });
+            return this.http.get<NotificationHistory>(url, { headers: this.headers });
           },
         ),
       );
@@ -55,7 +56,7 @@ export class NotificationService {
         }),
         switchMap(st => {
           const url = `${this.APIUrl}/client/login?ticket=${st}`;
-          return this.http.get(url, { headers: this.headers });
+          return this.http.get<NotificationHistory>(url, { headers: this.headers });
         })
       );
     }
@@ -108,11 +109,11 @@ export class NotificationService {
     );
   }
 
-/**
- * Check if there is a new notification while the app is in the background/foreground
- *
- *
- */
+  /**
+   * Check if there is a new notification while the app is in the background/foreground
+   *
+   *
+   */
   checkNewNotification() {
     this.fcm.onNotification().subscribe(data => {
       console.log(data);
@@ -124,5 +125,15 @@ export class NotificationService {
         // this.router.navigate([data.landing_page, data.price]);
       }
     });
+  }
+
+/**
+ * Get the list of categories
+ *
+ *
+ */
+  getCategories() {
+    const url = `${this.APIUrl}/client/categories`;
+    return this.http.get(url, {headers: this.headers});
   }
 }

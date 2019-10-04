@@ -6,6 +6,8 @@ import { Storage } from '@ionic/storage';
 
 import { UserSettingsService, NotificationService } from './services';
 import { Router } from '@angular/router';
+import { FCM } from '@ionic-native/fcm/ngx';
+import { NotificationModalPage } from './pages/notifications/notification-modal';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +35,8 @@ export class AppComponent {
     private actionSheetCtrl: ActionSheetController,
     private menuCtrl: MenuController,
     private popoverCtrl: PopoverController,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private fcm: FCM,
   ) {
     this.userSettings.getUserSettingsFromStorage();
     this.userSettings
@@ -52,19 +55,12 @@ export class AppComponent {
       .subscribe(val => (this.selectedAccentColor = val));
 
     if (this.platform.is('cordova')) {
-      this.notificationService.checkNewNotification();
+
+      this.runCodeOnReceivingNotification();
+
       if (this.platform.is('ios')) {
         this.statusBar.overlaysWebView(false);
       }
-      // if (this.network.type === 'none') {
-      //   this.toastCtrl
-      //     .create({
-      //       message: 'You are now offline.',
-      //       duration: 3000,
-      //       position: 'top',
-      //     })
-      //     .present();
-      // }
 
       this.platform.backButton.subscribe(async () => {
 
@@ -103,7 +99,51 @@ export class AppComponent {
       duration: 3000,
       position: 'top'
     });
-
     toast.present();
+  }
+
+  runCodeOnReceivingNotification() {
+    this.fcm.onNotification().subscribe(data => {
+      console.log('notification data: ', data);
+      if (data.wasTapped) { // Notification received in background
+        this.openNotificationModal(data);
+      } else { // Notification received in foreground
+        this.presentToastWithOptions(data);
+      }
+    });
+  }
+
+  async presentToastWithOptions(data: any) {
+    // need to check with dingdong team about response type
+    const toast = await this.toastCtrl.create({
+      header: 'New Message',
+      message: data.title,
+      position: 'top',
+      color: 'primary',
+      buttons: [
+        {
+          icon: 'open',
+          handler: () => {
+            this.openNotificationModal(data);
+          }
+        }, {
+          icon: 'close',
+          role: 'cancel',
+          handler: () => { }
+        }
+      ]
+    });
+    toast.present();
+  }
+
+  async openNotificationModal(message: any) {
+    // need to check with dingdong team about response type
+    const modal = await this.modalCtrl.create({
+      component: NotificationModalPage,
+      componentProps: { message, notFound: 'No Message Selected' },
+    });
+    this.notificationService.sendRead(message.message_id).subscribe();
+    await modal.present();
+    await modal.onDidDismiss();
   }
 }

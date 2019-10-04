@@ -16,11 +16,12 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AppAvailability } from '@ionic-native/app-availability/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Device } from '@ionic-native/device/ngx';
+import { NotificationModalPage } from './pages/notifications/notification-modal';
 
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [AppComponent, NotificationModalPage], // notificationPageModal is needed here because it is called in app.component.ts
+  entryComponents: [NotificationModalPage],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
