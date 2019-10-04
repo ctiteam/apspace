@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform, ToastController, AlertController } from '@ionic/angular';
+import { Platform, ToastController, AlertController, ModalController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Network } from '@ionic-native/network/ngx';
 
@@ -16,6 +16,8 @@ import {
   DataCollectorService
 } from '../../services';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { FCM } from '@ionic-native/fcm/ngx';
+import { NotificationModalPage } from '../notifications/notification-modal';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
@@ -37,19 +39,21 @@ export class LoginPage {
   userUnauthenticated = false;
 
   constructor(
+    public alertCtrl: AlertController,
     private cas: CasTicketService,
+    private dc: DataCollectorService,
+    private fcm: FCM,
+    public iab: InAppBrowser,
+    private modalCtrl: ModalController,
     private network: Network,
+    private notificationService: NotificationService,
     private plt: Platform,
     private router: Router,
     private route: ActivatedRoute,
-    private toastCtrl: ToastController,
-    private ws: WsApiService,
-    public alertCtrl: AlertController,
-    public iab: InAppBrowser,
     private settings: SettingsService,
+    private toastCtrl: ToastController,
     private userSettings: UserSettingsService,
-    private notificationService: NotificationService,
-    private dc: DataCollectorService
+    private ws: WsApiService
   ) { }
 
   login() {
@@ -98,7 +102,7 @@ export class LoginPage {
         },
         () => {
           if (this.plt.is('cordova')) {
-            this.notificationService.checkNewNotification(); // check for new messages when the user logs-in to the system
+            this.runCodeOnReceivingNotification(); // it is called here and in app.component (more details in the app component.ts file)
             this.dc.login().subscribe();
           }
           this.loginProcessLoading = false;
@@ -136,6 +140,18 @@ export class LoginPage {
     }).then(toast => toast.present());
   }
 
+  // this will fail when the user opens the app for the first time and login because it will run before login
+  runCodeOnReceivingNotification() {
+    this.fcm.onNotification().subscribe(data => {
+      console.log('notification data: ', data);
+      if (data.wasTapped) { // Notification received in background
+        this.openNotificationModal(data);
+      } else { // Notification received in foreground
+        this.presentToastWithOptions(data);
+      }
+    });
+  }
+
   showConfirmationMessage() {
     this.alertCtrl.create({
       header: 'Your password has expired..',
@@ -154,6 +170,40 @@ export class LoginPage {
         }
       ]
     }).then(confirm => confirm.present());
+  }
+
+  async openNotificationModal(message: any) {
+    // need to check with dingdong team about response type
+    const modal = await this.modalCtrl.create({
+      component: NotificationModalPage,
+      componentProps: { message, notFound: 'No Message Selected' },
+    });
+    this.notificationService.sendRead(message.message_id).subscribe();
+    await modal.present();
+    await modal.onDidDismiss();
+  }
+
+  async presentToastWithOptions(data: any) {
+    // need to check with dingdong team about response type
+    const toast = await this.toastCtrl.create({
+      header: 'New Message',
+      message: data.title,
+      position: 'top',
+      color: 'primary',
+      buttons: [
+        {
+          icon: 'open',
+          handler: () => {
+            this.openNotificationModal(data);
+          }
+        }, {
+          icon: 'close',
+          role: 'cancel',
+          handler: () => { }
+        }
+      ]
+    });
+    toast.present();
   }
 
   cacheApi(role: Role) {

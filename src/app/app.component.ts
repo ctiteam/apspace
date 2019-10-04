@@ -102,6 +102,8 @@ export class AppComponent {
     toast.present();
   }
 
+  // this will fail when the user opens the app for the first time and login because it will run before login
+  // => we need to call it here and in login page as well
   runCodeOnReceivingNotification() {
     this.fcm.onNotification().subscribe(data => {
       console.log('notification data: ', data);
