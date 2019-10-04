@@ -240,6 +240,14 @@ button.picker-button {
     color: var(--main-txt-color) !important;
   }
 
+  .alert-input-group{
+    .alert-input-wrapper{
+      input{
+        color: var(--main-txt-color) !important;
+      }
+    }
+  }
+
   // ALERT CHECKBOX STYLES
   .alert-checkbox-group {
     border-color: var(--secondary-bg-color) !important;

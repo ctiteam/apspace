@@ -129,12 +129,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/operation-hours/operation-hours.module').then(m => m.OperationHoursPageModule)
   },
-  {
-    path: 'student-survey',
-    canActivate: [AuthGuard],
-    data: { role: Role.Student },
-    loadChildren: () => import('./pages/student-survey/student-survey.module').then(m => m.SubmitSurveyPageModule)
-  },
+  // {
+  //   path: 'student-survey',
+  //   canActivate: [AuthGuard],
+  //   data: { role: Role.Student },
+  //   loadChildren: () => import('./pages/student-survey/student-survey.module').then(m => m.SubmitSurveyPageModule)
+  // },
   {
     path: 'results',
     canActivate: [AuthGuard],
@@ -184,12 +184,12 @@ const routes: Routes = [
       },
     ]
   },
-  {
-    path: 'aplc-progress-report',
-    canActivate: [AuthGuard],
-    data: { role: Role.Admin | Role.Lecturer },
-    loadChildren: () => import('./pages/aplc-progress-report/aplc-progress-report.module').then(m => m.AplcProgressReportPageModule)
-  },
+  // {
+  //   path: 'aplc-progress-report',
+  //   canActivate: [AuthGuard],
+  //   data: { role: Role.Admin | Role.Lecturer },
+  //   loadChildren: () => import('./pages/aplc-progress-report/aplc-progress-report.module').then(m => m.AplcProgressReportPageModule)
+  // },
   {
     path: 'staff-dashboard',
     canActivate: [AuthGuard],

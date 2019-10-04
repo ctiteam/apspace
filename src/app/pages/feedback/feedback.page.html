@@ -58,9 +58,12 @@
               <ion-input class="form-input" type="text" [(ngModel)]="contactNo" (ngModelChange)="onPhoneNumberChange()">
               </ion-input>
             </ion-item>
-            <small *ngIf="contactNo && !phoneNumberValid" class="danger-text">Phone number is invalid. Please check the
-              number and enter a correct phone number (Exactly 10 or 11 digits)
-            </small>
+            <div class="ion-padding-start ion-padding-end">
+              <small *ngIf="contactNo && !phoneNumberValid" class="danger-text">Phone
+                number is invalid. Please check the
+                number and enter a correct phone number (Exactly 10 or 11 digits)
+              </small>
+            </div>
             <ion-item lines="none">
               <ion-label position="stacked">App Version</ion-label>
               <ion-input class="form-input" type="text" disabled [value]="appVersion"></ion-input>

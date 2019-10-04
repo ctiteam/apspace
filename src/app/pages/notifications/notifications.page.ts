@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, MenuController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { NotificationService } from 'src/app/services';
-import { map, finalize, tap } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 import { NotificationModalPage } from './notification-modal';
+import { NotificationHistory } from 'src/app/interfaces';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-notifications',
@@ -11,12 +13,21 @@ import { NotificationModalPage } from './notification-modal';
   styleUrls: ['./notifications.page.scss'],
 })
 export class NotificationsPage implements OnInit {
-  messages$: Observable<any>;   // TYPE TO BE CHANGED AFTER DINGDONG TEAM FINISH THE BACKEND
+  messages$: Observable<NotificationHistory>;
+  categories = [];
+  allCategories = {};
   skeletons = new Array(3);
   openedMessages = [];
+  filterObject = {
+    categories: [],
+    upcoming: false
+  };
+
   constructor(
     private notificationService: NotificationService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private menu: MenuController,
+    public sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -24,10 +35,40 @@ export class NotificationsPage implements OnInit {
   }
 
   doRefresh(refresher?) {
+    this.categories = [];
     this.messages$ = this.notificationService.getMessages().pipe(
-      map((res: { history: [] }) => res.history),
+      tap(res => res.history.forEach((history) => {
+        if (this.categories.indexOf(history.category) <= -1) {
+          this.categories.push(history.category);
+          this.filterObject.categories.push(history.category);
+        }
+      })),
       finalize(() => refresher && refresher.target.complete()),
     );
+
+    this.notificationService.getCategories().pipe(
+      tap((categoriesRes: { categories: [] }) => this.allCategories = categoriesRes.categories)
+    ).subscribe();
+  }
+
+  openMenu() {
+    this.menu.enable(true, 'notifications-filter-menu');
+    this.menu.open('notifications-filter-menu');
+  }
+
+  closeMenu() {
+    this.menu.close('notifications-filter-menu');
+  }
+
+  getCategoryColor(categoryName: string) {
+    let color = '';
+    Object.keys(this.allCategories).forEach(key => {
+      if (key === categoryName) {
+        color = `linear-gradient(90deg, ${this.allCategories[key].first_colour} 0%, ${this.allCategories[key].second_colour} 100%)`;
+      }
+    });
+
+    return color ? color : '#3880ff'; // defaul color
   }
 
   async openModal(message: any) {

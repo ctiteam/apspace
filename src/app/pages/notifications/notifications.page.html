@@ -4,18 +4,63 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button class="animated anim-scale" (click)="openMenu()">
+        <ion-icon name="options"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+
+<ion-menu side="end" contentId="content" menuId="notifications-filter-menu" type="overlay">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Filter</ion-title>
+      <ion-buttons slot="end">
+        <ion-button class="animated anim-rotate-360-deg" shape="round" (click)="closeMenu()">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item>
+        <ion-label>Show Unread Only</ion-label>
+        <ion-toggle [(ngModel)]="filterObject.upcoming"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label>Category</ion-label>
+        <ion-select multiple="true" [(ngModel)]="filterObject.categories">
+          <ion-select-option selected="true" *ngFor="let category of categories" [value]="category">
+            {{ category }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <div class="ion-padding">
+        <!-- <ion-button fill="outline" color="danger" expand="block" (click)="clearFilter()">
+          Clear Filters
+          <ion-icon slot="end" name="trash"></ion-icon>
+        </ion-button> -->
+      </div>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-content id="content">
   <!-- refresher -->
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
   <ng-container *ngIf="(messages$ | async) as messages; else loading">
-    <div class="masonry-list ion-margin-top" *ngIf="messages.length > 0; else noNotifications">
-      <div class="masonry-item" *ngFor="let message of messages | reverse">
-        <ion-card (click)="openModal(message)" class="notification ion-no-margin" [class.unread]="(!message.read && openedMessages.indexOf(message.message_id) === -1)">
+    <div class="masonry-list ion-margin-top"
+      *ngIf="(messages.history | unreadMessagesOnly: filterObject.upcoming | notificationCategory: filterObject.categories).length > 0; else noNotifications">
+      <div class="masonry-item"
+        *ngFor="let message of messages.history | unreadMessagesOnly: filterObject.upcoming | notificationCategory: filterObject.categories">
+        <ion-card (click)="openModal(message)" class="notification ion-no-margin"
+          [class.unread]="(!message.read && openedMessages.indexOf(message.message_id) === -1)">
           <ion-card-header>
             <ion-card-title>
               <h3 class="responsive-h1">
@@ -27,10 +72,12 @@
             <p><span class="text-bold">Sender:</span> {{message.staff_name}}</p>
             <p><span class="text-bold">Sent on:</span> {{message.sent_on | date: 'EEEE, dd MMMM y'}}</p>
             <p><span class="text-bold">Sent at:</span> {{message.sent_on | date: 'hh:mm aaa'}}</p>
-            <ion-badge class="small-margin-top new" style="float: left;font-weight: 300" *ngIf="(!message.read && openedMessages.indexOf(message.message_id) === -1)">
+            <ion-badge class="small-margin-top new" style="float: left;"
+              *ngIf="(!message.read && openedMessages.indexOf(message.message_id) === -1)">
               New
             </ion-badge>
-            <ion-badge class="small-margin-top" style="float: right;font-weight: 300" color="primary">
+            <ion-badge class="small-margin-top category"
+              [attr.style]="sanitizer.bypassSecurityTrustStyle('--background: ' + getCategoryColor(message.category))">
               {{message.category}}
             </ion-badge>
             <div class="clearfix"></div>
@@ -39,8 +86,9 @@
       </div>
     </div>
     <ng-template #noNotifications>
-      <app-message-with-svg messageTitle="No Messages To Show!"
-        messageContent="The list of messages is empty. Stay connected to us to receive the latest news and notifications"
+      <app-message-with-svg
+        messageTitle="No {{filterObject.upcoming ? 'Unread' : ''}} Messages To Show{{filterObject.categories.length > 0 ? ' with the category/categories (' + filterObject.categories.toString() + ')' : ''}}!"
+        messageContent="The list of {{filterObject.upcoming ? 'unread' : ''}} messages is empty. Stay connected to us to receive the latest news and notifications."
         imageUrl="assets/img/empty.svg" wrapperOffset="4" wrapperSize="4" wrapperMarginTop="50px">
       </app-message-with-svg>
     </ng-template>

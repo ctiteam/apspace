@@ -6,9 +6,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { NotificationsPage } from './notifications.page';
-import { NotificationModalPage } from './notification-modal';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { ReversePipe } from './reverse.pipe';
+import { UnreadMessagesOnlyPipe } from './unread-messages-only.pipe';
+import { NotificationCategoryPipe } from './notification-category.pipe';
 
 const routes: Routes = [
   {
@@ -25,8 +25,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [NotificationsPage, NotificationModalPage, ReversePipe],
-  entryComponents: [NotificationModalPage],
-
+  declarations: [NotificationsPage, UnreadMessagesOnlyPipe, NotificationCategoryPipe],
 })
-export class NotificationsPageModule {}
+export class NotificationsPageModule { }

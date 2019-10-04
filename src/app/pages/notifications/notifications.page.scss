@@ -19,14 +19,20 @@
   }
 }
 
-ion-badge.new {
-  --background: var(--primary-color) !important;
+ion-badge {
+  --color: #ffffff;
+  &.category {
+    float: right;
+  }
+  &.new {
+    --background: var(--primary-color) !important;
+  }
 }
 
-ion-card.notification ion-card-title h3{
-    color: var(--secondary-txt-color) !important;
+ion-card.notification ion-card-title h3 {
+  color: var(--secondary-txt-color) !important;
 }
-ion-card.notification.unread ion-card-title h3{
+ion-card.notification.unread ion-card-title h3 {
   color: var(--primary-color) !important;
 }
 

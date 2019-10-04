@@ -98,14 +98,14 @@ export class MorePage implements OnInit {
       role: Role.Student,
       tags: []
     },
-    {
-      title: 'APLC Progress Report',
-      group: 'Main',
-      url: 'aplc-progress-report',
-      img: 'assets/img/aplc-progress-report.png',
-      role: Role.Lecturer | Role.Admin,
-      tags: []
-    },
+    // {
+    //   title: 'APLC Progress Report',
+    //   group: 'Main',
+    //   url: 'aplc-progress-report',
+    //   img: 'assets/img/aplc-progress-report.png',
+    //   role: Role.Lecturer | Role.Admin,
+    //   tags: []
+    // },
     {
       title: 'Results',
       group: 'Course Related',
@@ -186,14 +186,14 @@ export class MorePage implements OnInit {
       role: Role.Student,
       tags: []
     },
-    {
-      title: 'Student Survey',
-      group: 'Course Related',
-      url: 'student-survey',
-      img: 'assets/img/student-survey.png',
-      role: Role.Student,
-      tags: []
-    },
+    // {
+    //   title: 'Student Survey',
+    //   group: 'Course Related',
+    //   url: 'student-survey',
+    //   img: 'assets/img/student-survey.png',
+    //   role: Role.Student,
+    //   tags: []
+    // },
     {
       title: 'Graduate Verification Service',
       group: 'Others',

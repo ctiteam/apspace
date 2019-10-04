@@ -44,3 +44,5 @@ export {
 
 export { VisaDetails } from './visa-status';
 export { CountryData } from './country-data';
+
+export { NotificationHistory, NotificationBody } from './notification-history';

@@ -39,7 +39,7 @@
                   <ion-item lines="none" *ngIf="detail.SEMESTER">
                     <ion-label>
                       <h4 class="text-bold">Semester {{ detail.SEMESTER }}</h4>
-                      <p>GPA {{ detail.GPA }} ({{ detail.TOTAL_MODULES_PASSED }} modules passed)</p>
+                      <p class="secondary-txt-color">GPA {{ detail.GPA }} ({{ detail.TOTAL_MODULES_PASSED }} modules passed)</p>
                     </ion-label>
                   </ion-item>
                 </ng-container>
@@ -52,7 +52,16 @@
               </ion-card-content>
             </ion-card>
             <ng-template #noCourseDetail>
-              No course details to show
+              <ion-card class="ion-no-margin ion-margin-top">
+                <ion-card-header class="colored-border">
+                  <ion-card-title>
+                    Summary
+                  </ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <p class="ion-padding">Course details is not available for the selected intake.</p>
+                </ion-card-content>
+              </ion-card>
             </ng-template>
           </ng-container>
           <ng-template #loadingCourseDetail>
