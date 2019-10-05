@@ -1,0 +1,33 @@
+<ion-content>
+  <ion-grid>
+    <ion-row [style.marginTop]="forceUpdate ? '80px' : '50px'">
+      <ion-col size-xs="10" offset-xs="1" size-md="4" offset-md="4">
+        <ion-img [src]="forceUpdate ? 'assets/img/update.svg' : 'assets/img/maintenance.svg'"></ion-img>
+      </ion-col>
+      <ion-col size="10" offset="1" class="ion-margin-top">
+        <h3 class="ion-text-center colored-text text-bolder">
+          {{forceUpdate ? 'Update Required' : 'System Under Maintenance'}}
+        </h3>
+        <h5 class="ion-text-center secondary-txt-color text-bolder">
+          {{ forceUpdate ? 'APSpace needs an update!' : 'We will be back soon' }}</h5>
+        <p style="margin-top:40px" class="secondary-txt-color ion-text-center" *ngIf="forceUpdate; else maintenanceMode">
+          Your version of APSpace is no longer supported. You will need to update it to continue using APSpace
+        </p>
+        <ng-template #maintenanceMode>
+          <p style="margin-top:40px" class="secondary-txt-color ion-text-center">
+            Sorry for the inconvenience but we are performing some maintenance at the moment. If you need to you can
+            always <a class="colored-text" href="mailto:cti@apiit.edu.my">contact us</a>, otherwise we&rsquo;ll be back
+            online shortly!
+          </p>
+        </ng-template>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="forceUpdate" style="margin-top:50px">
+      <ion-col size="10" offset="1">
+        <ion-button expand="block" class="colored-background" (click)="openStore()">
+          Update
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

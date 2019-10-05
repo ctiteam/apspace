@@ -207,6 +207,10 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { role: Role.Admin | Role.Student },
     loadChildren: () => import('./pages/visa-status/visa-status.module').then(m => m.VisaStatusPageModule)
+  },
+  {
+    path: 'maintenance-and-update',
+    loadChildren: () => import('./pages/maintenance-and-update/maintenance-and-update.module').then(m => m.MaintenanceAndUpdatePageModule)
   }
 
 ];
