@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Platform, ToastController } from '@ionic/angular';
+import { Platform, ToastController, NavController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { VersionValidator } from '../interfaces';
-import { NavigationExtras, Router, ActivatedRoute } from '@angular/router';
+import { NavigationExtras } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
@@ -14,9 +14,9 @@ export class VersionService {
   constructor(
     private plt: Platform,
     private http: HttpClient,
-    private router: Router,
     private toastCtrl: ToastController,
-    private iab: InAppBrowser
+    private iab: InAppBrowser,
+    private navCtrl: NavController
   ) { }
 
   readonly version = '2.0.0';
@@ -56,7 +56,7 @@ export class VersionService {
             navigationExtras = {
               state: { forceUpdate: false }
             };
-            this.router.navigate(['/maintenance-and-update'], navigationExtras);
+            this.navCtrl.navigateRoot(['/maintenance-and-update'], navigationExtras);
             return;
           } else { // maintenance mode is off
             navigationExtras = {
@@ -65,7 +65,7 @@ export class VersionService {
             if (currentAppPlatform === 'Android') { // platform is android
               if (res.android.minimum > currentAppVersion) { // force update
                 navigationExtras.state.storeUrl = res.android.url;
-                this.router.navigate(['/maintenance-and-update'], navigationExtras);
+                this.navCtrl.navigateRoot(['/maintenance-and-update'], navigationExtras);
                 return;
               } else if (res.android.latest > currentAppVersion) { // optional update
                 this.presentUpdateToast('A new update for APSpace is available', res.android.url);
@@ -73,7 +73,7 @@ export class VersionService {
             } else if (currentAppPlatform === 'iOS') { // platform is ios
               if (res.ios.minimum > currentAppVersion) { // force update
                 navigationExtras.state.storeUrl = res.ios.url;
-                this.router.navigate(['/maintenance-and-update'], navigationExtras);
+                this.navCtrl.navigateRoot(['/maintenance-and-update'], navigationExtras);
                 return;
               } else if (res.ios.latest > currentAppVersion) { // optional update
                 this.presentUpdateToast('Updating the app ensures that you get the latest features', res.ios.url);
