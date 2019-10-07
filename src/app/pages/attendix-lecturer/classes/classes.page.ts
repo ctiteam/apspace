@@ -75,7 +75,7 @@ export class ClassesPage implements OnInit {
   guessWork(schedules: (StudentTimetable & Classcode)[]) {
     const d = new Date();
     const date = this.isoDate(d);
-    const nowMins = (d.getHours() + 1) * 60 + d.getMinutes();
+    const nowMins = d.getHours() * 60 + d.getMinutes();
 
     const guessSchedules = schedules.filter(schedule => {
       return schedule.DATESTAMP_ISO === date
