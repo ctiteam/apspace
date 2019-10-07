@@ -6,13 +6,16 @@ $font-family: Consolas, Courier, monospace;
 }
 
 ion-item {
+  border-left: 5px solid;
   &.credit {
+    border-color: var(--success-color);
     ion-icon,
     .value {
       color: var(--success-color);
     }
   }
   &.deposit {
+    border-color: var(--danger-color);
     ion-icon,
     .value {
       color: var(--danger-color);
@@ -25,6 +28,11 @@ ion-item {
 }
 .total-deposit {
   color: var(--danger-color);
+}
+
+ion-item-divider.colored-background{
+  --background: var(--primary-color) !important;
+  --color: #FFFFFF !important;
 }
 
 @media only screen and (min-width: 1px) {
