@@ -48,7 +48,7 @@ export class AppComponent {
       }
 
       this.platform.backButton.subscribe(async () => { // back button clicked
-        if (this.router.url.startsWith('/tabs')) {
+        if (this.router.url.startsWith('/tabs') || this.router.url.startsWith('/maintenance-and-update')) {
           const timePressed = new Date().getTime();
           if ((timePressed - this.lastTimeBackPress) < this.timePeriodToExit) {
             // tslint:disable-next-line: no-string-literal
