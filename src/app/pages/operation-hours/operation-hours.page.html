@@ -38,14 +38,14 @@
                 </ion-row>
               </ion-grid>
               <div *ngIf="department.shifts; else noOperation">
-                <div *ngFor="let shift of department.shifts | keyvalue">
+                <div>
                   <ion-grid class="ion-padding-start">
-                    <ion-row>
+                    <ion-row *ngIf="department.shifts['Sat'].length > 0">
                       <ion-col size="4">
-                        <p class="text-bold ">{{ shift.key }}</p>
+                        <p class="text-bold ">Saturday</p>
                       </ion-col>
                       <ion-col size="4">
-                        <div *ngFor="let slot of shift.value">
+                        <div *ngFor="let slot of department.shifts['Sat']">
                           <div *ngIf="slot.start_time ; else noStartTime" class="timeTxt">
                             {{ (slot.start_time | time) }}
                           </div>
@@ -55,11 +55,54 @@
                         </div>
                       </ion-col>
                       <ion-col size="4">
-                        <div *ngFor="let slot of shift.value" class="timeTxt">
+                        <div *ngFor="let slot of department.shifts['Sat']" class="timeTxt">
                           {{ (slot.end_time | time) }}
                         </div>
                       </ion-col>
                     </ion-row>
+
+                    <ion-row *ngIf="department.shifts['Mon-Thu'].length > 0">
+                      <ion-col size="4">
+                        <p class="text-bold ">Monday-Thursday</p>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div *ngFor="let slot of department.shifts['Mon-Thu']">
+                          <div *ngIf="slot.start_time ; else noStartTime" class="timeTxt">
+                            {{ (slot.start_time | time) }}
+                          </div>
+                          <ng-template #noStartTime>
+                            <ion-text>no Open time provided</ion-text>
+                          </ng-template>
+                        </div>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div *ngFor="let slot of department.shifts['Mon-Thu']" class="timeTxt">
+                          {{ (slot.end_time | time) }}
+                        </div>
+                      </ion-col>
+                    </ion-row>
+
+                    <ion-row *ngIf="department.shifts['Fri'].length > 0">
+                      <ion-col size="4">
+                        <p class="text-bold ">Friday</p>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div *ngFor="let slot of department.shifts['Fri']">
+                          <div *ngIf="slot.start_time ; else noStartTime" class="timeTxt">
+                            {{ (slot.start_time | time) }}
+                          </div>
+                          <ng-template #noStartTime>
+                            <ion-text>no Open time provided</ion-text>
+                          </ng-template>
+                        </div>
+                      </ion-col>
+                      <ion-col size="4">
+                        <div *ngFor="let slot of department.shifts['Fri']" class="timeTxt">
+                          {{ (slot.end_time | time) }}
+                        </div>
+                      </ion-col>
+                    </ion-row>
+
                   </ion-grid>
                 </div>
               </div>
@@ -67,13 +110,10 @@
                 <h3 class="ion-padding-start ion-text-center"> No Operation hours provided</h3>
               </ng-template>
               <section>
-                <ion-text class="emailClass">Email:
-                  <div *ngIf="department.dept_email ; else noEmail">
+                <ion-text *ngIf="department.dept_email" class="emailClass">Email:
+                  <div>
                     <a href="mailto:{{ department.dept_email }}" class="ion-padding-start">{{department.dept_email}}</a>
                   </div>
-                  <ng-template #noEmail>
-                    <h3 class="ion-padding-start ion-text-center"> No email provided</h3>
-                  </ng-template>
                 </ion-text>
                 <ion-text>Phone/General Line</ion-text>
                 <div *ngIf="department.dept_phone ; else noPhone">
