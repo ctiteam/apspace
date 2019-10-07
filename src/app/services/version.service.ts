@@ -46,7 +46,7 @@ export class VersionService {
   }
 
   checkForUpdate() {
-    return this.http.get<VersionValidator>('https://apspacemandatoryupdate.s3-ap-southeast-1.amazonaws.com/apspace_mandatory_update.json')
+    return this.http.get<VersionValidator>('https://d370klgwtx3ftb.cloudfront.net/apspace_mandatory_update.json')
       .pipe(
         tap(res => {
           let navigationExtras: NavigationExtras;
