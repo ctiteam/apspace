@@ -22,7 +22,6 @@
 // Fix padding for phones with notch screen
 ion-app {
   margin-top: env(safe-area-inset-top);
-  margin-bottom: env(safe-area-inset-bottom);
 }
 
 // To be removed after solving the ShadowDOM issue Outside the print query: always hide the element with the class show-on-print
