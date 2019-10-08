@@ -240,9 +240,9 @@ button.picker-button {
     color: var(--main-txt-color) !important;
   }
 
-  .alert-input-group{
-    .alert-input-wrapper{
-      input{
+  .alert-input-group {
+    .alert-input-wrapper {
+      input {
         color: var(--main-txt-color) !important;
       }
     }
@@ -357,7 +357,7 @@ button.picker-button {
   color: var(--danger-color) !important;
 }
 
-.warning-text{
+.warning-text {
   color: #dfa847 !important;
 }
 
@@ -448,4 +448,21 @@ ion-toolbar:not(.ion-color) .sc-ion-buttons-ios-h.sc-ion-buttons-ios-s .button-c
   --color-activated: var(--secondary-txt-color);
   --color-hover: var(--secondary-txt-color);
   --color-focused: var(--secondary-txt-color);
+}
+
+// PURE BUTTONS
+.pure {
+  ion-button {
+    &.colored-background {
+      --background: var(--tertiary-bg-color) !important;
+      --background-hover: var(--tertiary-bg-color);
+    }
+  }
+  ion-fab-button {
+    &.colored-background {
+      --background: var(--tertiary-bg-color) !important;
+      --background-activated: var(--tertiary-bg-color) !important;
+      --background-hover: var(--tertiary-bg-color);
+    }
+  }
 }
