@@ -26,7 +26,7 @@
         <div class="ion-padding">
           <ion-item>
             <ion-label>Class Code</ion-label>
-            <ion-select #classcodeInput [ngModel]="classcode" (click)="chooseClasscode($event)">
+            <ion-select #classcodeInput [ngModel]="classcode" (click)="chooseClasscode()">
               <ion-select-option *ngFor="let classcode of classcodes"
                 [value]="classcode">{{ classcode }}</ion-select-option>
             </ion-select>
