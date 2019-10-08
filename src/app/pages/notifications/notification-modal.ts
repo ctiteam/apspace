@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NavParams, ModalController } from '@ionic/angular';
 
@@ -7,8 +7,9 @@ import { NavParams, ModalController } from '@ionic/angular';
     templateUrl: 'notification-modal.html',
     styleUrls: ['notification-modal.scss']
 })
-export class NotificationModalPage implements OnInit {
+export class NotificationModalPage {
     message: any;
+
     constructor(
         private sanitizer: DomSanitizer,
         public params: NavParams,
@@ -16,11 +17,11 @@ export class NotificationModalPage implements OnInit {
     ) {
         this.message = this.params.get('message');
     }
+
     sanitize(value: string): SafeHtml {
         return this.sanitizer.bypassSecurityTrustHtml(value);
     }
-    ngOnInit() {
-    }
+
     dismiss() {
         this.modalCtrl.dismiss();
     }

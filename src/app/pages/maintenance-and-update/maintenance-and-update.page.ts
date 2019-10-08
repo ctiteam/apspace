@@ -18,6 +18,7 @@ export class MaintenanceAndUpdatePage implements OnInit {
     private router: Router,
     private iab: InAppBrowser
   ) { }
+
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {

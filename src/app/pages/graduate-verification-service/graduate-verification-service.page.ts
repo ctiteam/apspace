@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Observable } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { WsApiService } from 'src/app/services';
   templateUrl: './graduate-verification-service.page.html',
   styleUrls: ['./graduate-verification-service.page.scss'],
 })
-export class GraduateVerificationServicePage implements OnInit {
+export class GraduateVerificationServicePage {
   applieedYear = '2015';
   formsURL = 'http://forms.sites.apiit.edu.my/certificate-email-form/';
   graduater$: Observable<Graduater[]>;
@@ -18,11 +18,7 @@ export class GraduateVerificationServicePage implements OnInit {
   userSearched = false;
   resultKeyWord;
 
-
   constructor(private iab: InAppBrowser, private ws: WsApiService) { }
-
-  ngOnInit() {
-  }
 
   openForms() {
     this.iab.create(`${this.formsURL}`, '_system', 'location=true');

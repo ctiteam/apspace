@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavParams, PopoverController } from '@ionic/angular';
 
 @Component({
@@ -6,7 +6,7 @@ import { NavParams, PopoverController } from '@ionic/angular';
   templateUrl: './popover.component.html',
   styleUrls: ['./popover.component.scss']
 })
-export class PopoverComponent implements OnInit {
+export class PopoverComponent {
   options = this.navParams.get('options');
   title = this.navParams.get('title');
 
@@ -14,9 +14,6 @@ export class PopoverComponent implements OnInit {
     public navParams: NavParams,
     private popoverController: PopoverController
   ) { }
-
-  ngOnInit() {
-  }
 
   async dismissPopover() {
     await this.popoverController.dismiss();
