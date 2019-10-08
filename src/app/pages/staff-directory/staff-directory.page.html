@@ -27,7 +27,7 @@
     </ion-item>
   </ion-list>
 
-  <ng-template let-staffs [ngIf]="staff$ | async">
+  <ng-template let-staffs [ngIf]="staff$ | async" [ngIfElse]="loadingStaffs">
     <ion-virtual-scroll [items]="staffs | department:dept | fuse:term:options" [trackBy]="trackById"
       approxItemHeight="68px">
       <ion-item *virtualItem="let staff" button [routerLink]="[staff.ID]" style="padding-top: 1px">
@@ -41,5 +41,20 @@
         </ion-text>
       </ion-item>
     </ion-virtual-scroll>
+  </ng-template>
+  <ng-template #loadingStaffs>
+    <ion-item *ngFor="let _ of skeletons" style="padding-top: 1px">
+      <ion-avatar slot="start">
+        <ion-skeleton-text animated style="line-height: 25px; width: 100%;"></ion-skeleton-text>
+      </ion-avatar>
+      <ion-label>
+        <h2>
+          <ion-skeleton-text animated style="line-height: 20px; width: 70%;"></ion-skeleton-text>
+        </h2>
+        <p>
+          <ion-skeleton-text animated style="line-height: 15px; width: 40%;"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
   </ng-template>
 </ion-content>
