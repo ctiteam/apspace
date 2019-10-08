@@ -17,7 +17,7 @@ import { AppAvailability } from '@ionic-native/app-availability/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { NotificationModalPage } from './pages/notifications/notification-modal';
-
+import { Animation } from '@ionic/core';
 
 @NgModule({
   declarations: [AppComponent, NotificationModalPage], // notificationPageModal is needed here because it is called in app.component.ts
@@ -26,7 +26,12 @@ import { NotificationModalPage } from './pages/notifications/notification-modal'
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot(
+      {
+        backButtonText: '',
+        navAnimation: (AnimationC: Animation): Promise<Animation> => Promise.resolve(new AnimationC())
+      }
+    ),
     IonicStorageModule.forRoot(),
     AppRoutingModule
   ],
