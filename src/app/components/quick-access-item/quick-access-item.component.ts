@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'quick-access-item',
@@ -12,7 +13,11 @@ export class QuickAccessItemComponent {
   @Input() titleSecondWord: boolean;
   @Input() observable$: Observable<any>;
   @Input() outputMode: 'currency' | 'percentage';
+  @Input() pageName: string;
 
-  constructor() { }
+  constructor(private navCtrl: NavController) { }
 
+  openPage(pageName: string) {
+    this.navCtrl.navigateForward(pageName);
+  }
 }
