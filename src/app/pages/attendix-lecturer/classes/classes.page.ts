@@ -1,19 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { IonSelect, ModalController } from '@ionic/angular';
 
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { StudentTimetableService, WsApiService } from 'src/app/services';
 import { Classcode, StudentTimetable, StaffProfile } from '../../../interfaces';
+import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
+import { StudentTimetableService, WsApiService } from '../../../services';
 
 @Component({
   selector: 'app-classes',
   templateUrl: './classes.page.html',
   styleUrls: ['./classes.page.scss']
 })
-export class ClassesPage implements OnInit {
+export class ClassesPage implements AfterViewInit, OnInit {
 
   /* computed */
+  classcodes: string[];
   schedules: (StudentTimetable & Classcode)[];
   schedulesByClasscode: (StudentTimetable & Classcode)[];
   schedulesByClasscodeDate: (StudentTimetable & Classcode)[];
@@ -30,7 +33,13 @@ export class ClassesPage implements OnInit {
   endTime: string;
   classType: string;
 
-  constructor(private tt: StudentTimetableService, private ws: WsApiService) { }
+  @ViewChild('classcodeInput', { static: true }) classcodeInput: IonSelect;
+
+  constructor(
+    private tt: StudentTimetableService,
+    private ws: WsApiService,
+    public modalCtrl: ModalController,
+  ) { }
 
   ngOnInit() {
     const d = new Date();
@@ -64,11 +73,20 @@ export class ClassesPage implements OnInit {
             && codes.split('-').includes(timetable.INTAKE.slice(intake.length));
         }),
         ...timetable
-      })).sort((a, b) => a.CLASS_CODE && b.CLASS_CODE && a.CLASS_CODE.localeCompare(b.CLASS_CODE));
+      }));
       // XXX: remove unmatching timetable?
       this.guessWork(this.schedules);
-      console.log('filtered', this.schedules.filter(schedule => schedule.CLASS_CODE));
+      this.classcodes = [...new Set(this.schedules.map(schedule => schedule.CLASS_CODE).filter(Boolean))].sort();
+      console.log('filtered', this.schedules, this.classcodes);
     });
+  }
+
+  ngAfterViewInit() {
+    // prevent ion-select click bubbling
+    (this.classcodeInput as any).el.addEventListener('click', ev => {
+      ev.stopPropagation();
+      this.chooseClasscode();
+    }, true);
   }
 
   /** Guess the current classcode based on timetable. */
@@ -100,6 +118,24 @@ export class ClassesPage implements OnInit {
     const startMins = ((start.slice(-2) === 'PM' ? 12 : 0) + +start.slice(0, 2) % 12) * 60 + +start.slice(3, 5);
     const endMins = ((end.slice(-2) === 'PM' ? 12 : 0) + +end.slice(0, 2) % 12) * 60 + +end.slice(3, 5);
     return startMins <= nowMins && nowMins <= endMins;
+  }
+
+  /** Display search modal to choose classcode. */
+  async chooseClasscode() {
+    const modal = await this.modalCtrl.create({
+      component: SearchModalComponent,
+      componentProps: {
+        items: this.classcodes,
+        defaultItems: this.classcodes,
+        notFound: 'No classcode selected'
+      }
+    });
+    await modal.present();
+    const { data: { item: classcode } = { item: this.classcode } } = await modal.onDidDismiss();
+    if (classcode !== null && classcode !== this.classcode) {
+      console.log('changed classcode');
+      this.changeClasscode(this.classcode = classcode);
+    }
   }
 
   /** Change classcode, auto select class type. */

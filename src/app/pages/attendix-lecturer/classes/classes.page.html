@@ -26,10 +26,9 @@
         <div class="ion-padding">
           <ion-item>
             <ion-label>Class Code</ion-label>
-            <ion-select [(ngModel)]="classcode" (ngModelChange)="changeClasscode($event)"
-              interface="popover">
-              <ion-select-option *ngFor="let schedule of schedules"
-                [value]="schedule.CLASS_CODE">{{ schedule.CLASS_CODE }}</ion-select-option>
+            <ion-select #classcodeInput [ngModel]="classcode" (click)="chooseClasscode($event)">
+              <ion-select-option *ngFor="let classcode of classcodes"
+                [value]="classcode">{{ classcode }}</ion-select-option>
             </ion-select>
           </ion-item>
 
