@@ -30,9 +30,10 @@ ion-item {
   color: var(--danger-color);
 }
 
-ion-item-divider.colored-background{
-  --background: var(--primary-color) !important;
-  --color: #FFFFFF !important;
+ion-item-divider.colored-background {
+  --background: var(--tertiary-bg-color) !important;
+  --color: var(--secondary-txt-color) !important;
+  font-weight: bold;
 }
 
 @media only screen and (min-width: 1px) {
@@ -355,12 +356,19 @@ ion-item-divider.colored-background{
     width: 81%;
   }
 }
-@media only screen and (min-width: 1790px) {
+@media only screen and (min-width: 1600px) {
   .card {
     width: 71%;
-    height: 263px;
   }
-  .card-number {
-    margin: 67px 13px 25px;
+}
+@media only screen and (min-width: 1931px) {
+  .card {
+    width: 60%;
+  }
+}
+
+@media only screen and (min-width: 2415px) {
+  .card {
+    width: 50%;
   }
 }
