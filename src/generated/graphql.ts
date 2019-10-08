@@ -107,7 +107,6 @@ export type Status = {
 export type Subscription = {
    __typename?: 'Subscription',
   newStatus?: Maybe<Status>,
-  newStatusRaw?: Maybe<Status>,
 };
 
 
@@ -117,11 +116,6 @@ export type SubscriptionNewStatusArgs = {
   startTime: Scalars['String'],
   endTime: Scalars['String'],
   classType: Scalars['String']
-};
-
-
-export type SubscriptionNewStatusRawArgs = {
-  schedule?: Maybe<ScheduleInput>
 };
 export type AttendanceQueryVariables = {
   schedule: ScheduleInput
@@ -168,7 +162,7 @@ export type MarkAttendanceMutation = (
   { __typename?: 'Mutation' }
   & { markAttendance: (
     { __typename?: 'Status' }
-    & Pick<Status, 'id' | 'classcode' | 'date' | 'startTime' | 'endTime' | 'classType'>
+    & Pick<Status, 'id' | 'attendance' | 'classcode' | 'date' | 'startTime' | 'endTime' | 'classType'>
   ) }
 );
 
@@ -185,7 +179,7 @@ export type NewStatusSubscription = (
   { __typename?: 'Subscription' }
   & { newStatus: Maybe<(
     { __typename?: 'Status' }
-    & Pick<Status, 'id'>
+    & Pick<Status, 'id' | 'attendance'>
   )> }
 );
 
@@ -198,7 +192,7 @@ export type UpdateAttendanceMutation = (
   { __typename?: 'Mutation' }
   & { updateAttendance: (
     { __typename?: 'Status' }
-    & Pick<Status, 'id' | 'classcode' | 'date' | 'startTime' | 'endTime' | 'classType'>
+    & Pick<Status, 'id' | 'attendance' | 'classcode' | 'date' | 'startTime' | 'endTime' | 'classType'>
   ) }
 );
 
@@ -246,6 +240,7 @@ export const MarkAttendanceDocument = gql`
     mutation markAttendance($schedule: ScheduleInput!, $student: String!, $attendance: String!) {
   markAttendance(schedule: $schedule, student: $student, attendance: $attendance) {
     id
+    attendance
     classcode
     date
     startTime
@@ -266,6 +261,7 @@ export const NewStatusDocument = gql`
     subscription NewStatus($classcode: String!, $date: String!, $startTime: String!, $endTime: String!, $classType: String!) {
   newStatus(classcode: $classcode, date: $date, startTime: $startTime, endTime: $endTime, classType: $classType) {
     id
+    attendance
   }
 }
     `;
@@ -281,6 +277,7 @@ export const UpdateAttendanceDocument = gql`
     mutation updateAttendance($otp: String!) {
   updateAttendance(otp: $otp) {
     id
+    attendance
     classcode
     date
     startTime

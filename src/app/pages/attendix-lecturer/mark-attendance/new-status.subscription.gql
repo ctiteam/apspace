@@ -13,5 +13,6 @@ subscription NewStatus(
     classType: $classType
   ) {
     id
+    attendance
   }
 }

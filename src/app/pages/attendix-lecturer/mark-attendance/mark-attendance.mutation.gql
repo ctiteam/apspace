@@ -1,6 +1,7 @@
 mutation markAttendance($schedule: ScheduleInput! $student: String! $attendance: String!) {
   markAttendance(schedule: $schedule student: $student attendance: $attendance) {
     id
+    attendance
     # Schedule
     classcode
     date

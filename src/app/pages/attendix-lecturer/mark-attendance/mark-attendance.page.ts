@@ -98,10 +98,10 @@ export class MarkAttendancePage implements OnInit {
     // take last 5 values updated and ignore duplicates
     console.log('schedule', schedule);
     this.lastMarked$ = this.newStatus.subscribe(schedule).pipe(
-      pluck('data', 'newStatus', 'id'),
-      tap(id => console.log('new', id, studentsNameById[id])),
-      tap(id => this.statusUpdate.next({ id, attendance: 'Y' })),
-      scan((acc, id) => acc.includes(studentsNameById[id])
+      pluck('data', 'newStatus'),
+      tap(({ id }) => console.log('new', id, studentsNameById[id])),
+      tap(({ id, attendance }) => this.statusUpdate.next({ id, attendance })),
+      scan((acc, { id }) => acc.includes(studentsNameById[id])
         ? acc : [...acc, studentsNameById[id]].slice(-5), []),
       shareReplay(1) // keep track when enter manual mode
     );
@@ -130,12 +130,13 @@ export class MarkAttendancePage implements OnInit {
         markAttendance: {
           __typename: 'Status' as 'Status',
           id: student,
+          attendance,
           ...this.schedule
         }
       }
     };
     this.markAttendance.mutate({ schedule: this.schedule, student, attendance }, options).subscribe(
-      () => this.statusUpdate.next({ id: student, attendance }),
+      () => {},
       e => console.error(e) // XXX: retry attendance$ on failure
     );
   }

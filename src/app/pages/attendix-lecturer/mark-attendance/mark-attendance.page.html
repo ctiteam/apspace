@@ -31,6 +31,8 @@
     </ion-row>
   </ion-grid>
   <ng-template #override>
+    <!-- just subscribe for the side effects -->
+    <ng-template [ngIf]="lastMarked$ | async"></ng-template>
     <ion-grid>
       <ion-row>
         <ion-col>
