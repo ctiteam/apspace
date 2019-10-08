@@ -107,8 +107,8 @@ export class ClassesPage implements AfterViewInit, OnInit {
     }
     const currentSchedule = guessSchedules[0];
 
-    this.changeClasscode(this.classcode = currentSchedule.CLASS_CODE);
-    this.changeDate(this.date = date);
+    this.changeClasscode(this.classcode = currentSchedule.CLASS_CODE, false);
+    this.changeDate(this.date = date, false);
     this.changeStartTime(this.startTime = currentSchedule.TIME_FROM);
     console.log('currentSchedule', currentSchedule);
   }
@@ -139,10 +139,10 @@ export class ClassesPage implements AfterViewInit, OnInit {
   }
 
   /** Change classcode, auto select class type. */
-  changeClasscode(classcode: string) {
+  changeClasscode(classcode: string, propagate = true) {
     this.schedulesByClasscode = this.schedules.filter(schedule => schedule.CLASS_CODE === classcode);
-    this.date = '';
     this.dates = [...new Set(this.schedulesByClasscode.map(schedule => schedule.DATESTAMP_ISO))];
+    this.date = '';
 
     const matchSchedule = this.schedules.find(schedule => schedule.CLASS_CODE === classcode);
     if (matchSchedule.SUBJECT_CODE) {
@@ -157,13 +157,23 @@ export class ClassesPage implements AfterViewInit, OnInit {
     } else {
       console.error('schedule subject code not found', matchSchedule);
     }
+
+    if (propagate && this.dates.length === 1) {
+      this.changeDate(this.date = this.dates[0]);
+    }
   }
 
   /** Change date. */
-  changeDate(date: string) {
+  changeDate(date: string, propagate = true) {
     this.schedulesByClasscodeDate = this.schedulesByClasscode.filter(schedule => schedule.DATESTAMP_ISO === date);
     this.startTimes = [...new Set(this.schedulesByClasscode.map(schedule => schedule.TIME_FROM))];
     this.endTimes = [...new Set(this.schedulesByClasscode.map(schedule => schedule.TIME_TO))];
+    this.startTime = '';
+    this.endTime = '';
+
+    if (propagate && this.startTimes.length === 1) {
+      this.changeStartTime(this.startTime = this.startTimes[0]);
+    }
   }
 
   /** Change start time, find matching end time. */
