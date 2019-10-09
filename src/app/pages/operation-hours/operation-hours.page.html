@@ -10,22 +10,16 @@
 <ion-content id="content" #content>
   <!-- refresher -->
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
 
   <ng-container *ngIf="quixCompanies$ | async as quixCompanies; else loadingTheFile">
     <ng-container *ngIf="quixCompanies.length > 0; else noData">
-
       <ion-segment class="ion-padding" [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
         <ion-segment-button *ngFor="let company of quixCompanies" [value]="company.company_id">{{company.company_id}}
         </ion-segment-button>
       </ion-segment>
-
-
-
-
       <ng-container [ngSwitch]='selectedSegment'>
-
         <ng-container *ngFor="let company of quixCompanies | filterByCompany : selectedSegment">
           <ion-grid>
             <ion-row>
@@ -53,7 +47,6 @@
                   <ion-card-content>
                     <ng-container *ngIf="department.shifts; else noOperations">
                       <ion-grid>
-
                         <ion-row *ngIf="((department.shifts['Mon-Thu'].length === department.shifts['Fri'].length) 
                               && department.shifts['Mon-Thu'].length > 0
                               && (department.shifts['Mon-Thu'][0].start_time === department.shifts['Fri'][0].start_time)  
@@ -76,13 +69,6 @@
                               </span>
                             </div>
                           </ion-col>
-                          <!-- <ion-col size-xs="6" size-md="4">
-                            <div *ngFor="let slot of department.shifts['Mon-Thu']">
-                              <div *ngIf="slot.end_time" class="timeTxt">
-                                {{ (slot.end_time | time) }}
-                              </div>
-                            </div>
-                          </ion-col> -->
                         </ion-row>
                         <ng-template #showSeperate>
                           <ion-row *ngIf="department.shifts['Mon-Thu'].length > 0">
@@ -100,13 +86,6 @@
                                 </span>
                               </div>
                             </ion-col>
-                            <!-- <ion-col size-xs="6" size-md="4">
-                              <div *ngFor="let slot of department.shifts['Mon-Thu']">
-                                <div *ngIf="slot.end_time" class="timeTxt">
-                                  {{ (slot.end_time | time) }}
-                                </div>
-                              </div>
-                            </ion-col> -->
                           </ion-row>
                           <ion-row *ngIf="department.shifts['Fri'].length > 0">
                             <ion-col size-xs="12" size-md="4">
@@ -123,18 +102,8 @@
                                 </span>
                               </div>
                             </ion-col>
-                            <!-- <ion-col size-xs="6" size-md="4">
-                              <div *ngFor="let slot of department.shifts['Fri']">
-                                <div *ngIf="slot.end_time" class="timeTxt">
-                                  {{ (slot.end_time | time) }}
-                                </div>
-                              </div>
-                            </ion-col> -->
                           </ion-row>
                         </ng-template>
-
-
-
                         <ion-row *ngIf="department.shifts['Sat'].length > 0">
                           <ion-col size-xs="12" size-md="4">
                             <p class="ion-text-center colored-text">Saturday</p>
@@ -150,13 +119,6 @@
                               </span>
                             </div>
                           </ion-col>
-                          <!-- <ion-col size-xs="6" size-md="4">
-                            <div *ngFor="let slot of department.shifts['Sat']">
-                              <div *ngIf="slot.end_time" class="timeTxt">
-                                {{ (slot.end_time | time) }}
-                              </div>
-                            </div>
-                          </ion-col> -->
                         </ion-row>
                       </ion-grid>
                     </ng-container>
@@ -175,154 +137,17 @@
                     </ion-grid>
                   </ion-footer>
                 </ion-card>
-
               </ion-col>
             </ion-row>
           </ion-grid>
-
         </ng-container>
-
       </ng-container>
-
-
-
-
-
     </ng-container>
     <ng-template #noData>
       no data
     </ng-template>
   </ng-container>
-
   <ng-template #loadingTheFile>
     loading the file
   </ng-template>
-
-
-  <!-- <div class="masonry-list" *ngIf="quixCustomers$ | async as quixCustomers">
-    <div *ngFor="let customer of quixCustomers ">
-      <div class="masonry-item" *ngFor="let department of customer.company_departments">
-        <div>
-          <ion-card>
-            <ion-card-header class="colored-border">
-              <ion-card-title class="responsive-h1">
-                <ion-icon name="{{department.dept_icon}}" [style.color]="department.dept_icon_color"></ion-icon>
-                {{customer.company_id}} │
-                {{ department.dept_name.charAt(0).toUpperCase() + department.dept_name.slice(1) }}
-              </ion-card-title>
-            </ion-card-header>
-            <ion-card-content *ngIf="department.shifts || department.dept_email || department.dept_phone ; else noData">
-              <ion-grid class="ion-padding-start">
-                <ion-row class="hiddenData">
-                  <ion-col size-xs="12" size-lg="4">
-                    <ion-text class="text-bold">Day</ion-text>
-                  </ion-col>
-                  <ion-col size-xs="12" size-lg="4">
-                    <ion-text class="text-bold ">Open time</ion-text>
-                  </ion-col>
-                  <ion-col size-xs="12" size-lg="4">
-                    <ion-text class="text-bold">Close time</ion-text>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-              <div *ngIf="department.shifts; else noOperation">
-                <div>
-                  <ion-grid class="ion-padding-start">
-
-                    <ion-row *ngIf="department.shifts['Mon-Thu'].length > 0">
-                      <ion-col size-xs="12" size-md="4">
-                        <p class="text-bold ">Monday-Thursday</p>
-                      </ion-col>
-                      <ion-col size-xs="6" size-md="4">
-                        <div *ngFor="let slot of department.shifts['Mon-Thu']">
-                          <div *ngIf="slot.start_time" class="timeTxt">
-                            {{ (slot.start_time | time) }}
-                          </div>
-                        </div>
-                      </ion-col>
-                      <ion-col size-xs="6" size-md="4">
-                        <div *ngFor="let slot of department.shifts['Mon-Thu']">
-                          <div *ngIf="slot.end_time" class="timeTxt">
-                            {{ (slot.end_time | time) }}
-                          </div>
-                        </div>
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row *ngIf="department.shifts['Fri'].length > 0">
-                      <ion-col size-xs="12" size-md="4">
-                        <p class="text-bold ">Friday</p>
-                      </ion-col>
-                      <ion-col size-xs="6" size-md="4">
-                        Start Time
-                        <div *ngFor="let slot of department.shifts['Fri']">
-                          <div *ngIf="slot.start_time" class="timeTxt">
-                            {{ (slot.start_time | time) }}
-                          </div>
-                        </div>
-                      </ion-col>
-                      <ion-col size-xs="6" size-md="4">
-                        End Time
-                        <div *ngFor="let slot of department.shifts['Fri']">
-                          <div *ngIf="slot.end_time" class="timeTxt">
-                            {{ (slot.end_time | time) }}
-                          </div>
-                        </div>
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row *ngIf="department.shifts['Sat'].length > 0">
-                      <ion-col size-xs="12" size-md="4">
-                        <p class="text-bold ">Saturday</p>
-                      </ion-col>
-                      <ion-col size-xs="6" size-md="4">
-                        <div *ngFor="let slot of department.shifts['Sat']">
-                          <div *ngIf="slot.start_time" class="timeTxt">
-                            {{ (slot.start_time | time) }}
-                          </div>
-                        </div>
-                      </ion-col>
-                      <ion-col size-xs="6" size-md="4">
-                        <div *ngFor="let slot of department.shifts['Sat']">
-                          <div *ngIf="slot.end_time" class="timeTxt">
-                            {{ (slot.end_time | time) }}
-                          </div>
-                        </div>
-                      </ion-col>
-                    </ion-row>
-
-                  </ion-grid>
-                </div>
-              </div>
-              <ng-template #noOperation>
-                <h3 class="ion-padding-start ion-text-center"> No Operation hours provided</h3>
-              </ng-template>
-              <section>
-                <ion-text *ngIf="department.dept_email" class="emailClass">Email:
-                  <div>
-                    <a href="mailto:{{ department.dept_email }}" class="ion-padding-start">{{department.dept_email}}</a>
-                  </div>
-                </ion-text>
-                <ion-text>Phone/General Line</ion-text>
-                <div *ngIf="department.dept_phone ; else noPhone">
-                  <div *ngFor="let phone of department.dept_phone">
-                    <a href="tel:{{phone}}" class="ion-padding-start">{{phone}}</a>
-                  </div>
-                </div>
-                <ng-template #noPhone>
-                  <h3 class="ion-padding-start ion-text-center"> No phone provided</h3>
-                </ng-template>
-              </section>
-            </ion-card-content>
-            <ng-template #noData>
-              <ion-card-content>
-                <h2> No data provided for this department</h2>
-              </ion-card-content>
-            </ng-template>
-          </ion-card>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
 </ion-content>

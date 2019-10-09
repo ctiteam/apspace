@@ -1,6 +1,6 @@
 <ion-content>
   <ion-refresher *ngIf="!editableList" slot="fixed" pullMax="400" pullMin="60 " (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
 
   <!-- MAIN GRID CLASS -->

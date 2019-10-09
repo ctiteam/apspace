@@ -336,3 +336,23 @@ ion-calendar {
     }
   }
 }
+
+ion-refresher-content {
+  padding-bottom: 400px;
+  background-color: var(--main-bg-color);
+  color: red;
+
+  .refresher-pulling {
+    margin-top: 50px;
+    ion-icon {
+      color: var(--main-txt-color);
+    }
+  }
+
+  .refresher-refreshing {
+    margin-top: 70px;
+    ion-spinner {
+      color: var(--main-txt-color);
+    }
+  }
+}

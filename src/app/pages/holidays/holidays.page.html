@@ -100,8 +100,8 @@
 
 <ion-content id="content">
   <!-- refresher -->
-  <ion-refresher slot="fixed" pullMax="400" pullMin="60 "(ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+  <ion-refresher slot="fixed" pullMax="400" pullMin="60 " (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
   <ion-grid class="ion-no-padding">
     <ion-row class="ion-no-padding">
@@ -111,11 +111,12 @@
             <ion-card-title>
               <h5 class="responsive-h1">
                 {{filterObject.show === 'upcoming' ? 'Upcoming ' : ''}}
-                Holidays For 
+                Holidays For
                 {{todaysDate.getFullYear()}}
               </h5>
               <h6 class="small-text small-margin-top">
-                {{filterObject.affecting !== '' ? 'Filtered ' : ''}}for {{filterObject.affecting === '' ? ('staff and students') : (filterObject.affecting + ' only')}}
+                {{filterObject.affecting !== '' ? 'Filtered ' : ''}}for
+                {{filterObject.affecting === '' ? ('staff and students') : (filterObject.affecting + ' only')}}
               </h6>
             </ion-card-title>
           </ion-card-header>

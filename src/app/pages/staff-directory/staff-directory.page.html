@@ -9,7 +9,7 @@
 
 <ion-content>
   <ion-refresher pullMax="400" pullMin="60" slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
 
   <ion-list lines="none" style="margin-bottom: 0px">

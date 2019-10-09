@@ -9,14 +9,15 @@
 
 <ion-content id="content">
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
 
   <ng-container *ngIf="transaction$ | async as transactions; else apCardBalanceLoading">
     <ng-container *ngIf="transactions.length > 0 else noTransactions">
       <ion-grid class="ion-no-padding">
         <ion-row class="ion-margin-bottom">
-          <ion-col class="ion-no-padding ion-padding-top ion-padding-bottom" size-xs="12" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
+          <ion-col class="ion-no-padding ion-padding-top ion-padding-bottom" size-xs="12" size-md="6" offset-md="3"
+            size-lg="4" offset-lg="4">
             <div class="card ion-padding-top ion-padding-bottom">
               <div class="front">
                 <div class="strip-bottom"></div>
@@ -50,7 +51,8 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col class="ion-no-padding ion-padding-top ion-padding-bottom" size-xs="12" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
+          <ion-col class="ion-no-padding ion-padding-top ion-padding-bottom" size-xs="12" size-md="6" offset-md="3"
+            size-lg="4" offset-lg="4">
             <ion-virtual-scroll [items]="transactions" approxItemHeight="92px" approxHeaderHeight="46" approx
               [headerFn]="seperatebyMonth">
               <ion-item-divider class="colored-background" *virtualHeader="let header">
@@ -63,7 +65,8 @@
                 <ion-avatar slot="start">
                   <ion-icon class="transaction-icon" name="remove-circle-outline" *ngIf="transaction.SpendVal < 0">
                   </ion-icon>
-                  <ion-icon class="transaction-icon" name="add-circle-outline" *ngIf="0 < transaction.SpendVal"></ion-icon>
+                  <ion-icon class="transaction-icon" name="add-circle-outline" *ngIf="0 < transaction.SpendVal">
+                  </ion-icon>
                 </ion-avatar>
                 <ion-label>
                   <h2 class="value">{{ getAbsoluteValue(transaction.SpendVal) | currency: "RM" }}</h2>

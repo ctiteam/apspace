@@ -93,7 +93,7 @@
 
 <ion-content id="content" class="ion-padding">
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
   <div *ngIf="filteredTrip$ | async as trips; else loadingTrips" class="ion-no-padding">
     <ion-grid>
