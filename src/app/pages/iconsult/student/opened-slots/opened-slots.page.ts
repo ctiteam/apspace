@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { StaffDirectory, ConsultationSlot } from 'src/app/interfaces';
 import { ModalController } from '@ionic/angular';
 import { WsApiService } from 'src/app/services';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, finalize } from 'rxjs/operators';
 import { BookSlotModalPage } from './book-slot-modal';
 import { ActivatedRoute } from 'src/testing';
 import { DayConfig, CalendarComponentOptions } from 'ion2-calendar';
@@ -44,10 +44,10 @@ export class OpenedSlotsPage implements OnInit {
   ngOnInit() {
     this.staffCasId = this.route.snapshot.params.id;
     this.staff$ = this.getStaffProfile();
-    this.getData();
+    this.doRefresh();
   }
 
-  getData() { // to be changed with refresher
+  doRefresh(refresher?) { // to be changed with refresher
     this.options = {
       from: new Date(),
       to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
@@ -55,7 +55,7 @@ export class OpenedSlotsPage implements OnInit {
     };
     let totalAvailableSlots = 0;
     let totalOpenedSlots = 0;
-    this.slots$ = this.ws.get<ConsultationSlot[]>('/iconsult/get_slots/' + this.staffCasId, true).pipe(
+    this.slots$ = this.ws.get<ConsultationSlot[]>('/iconsult/get_slots/' + this.staffCasId, refresher).pipe(
       map(
         slots => slots.reduce((r, a) => { // Grouping the slots daily
           const consultationsYearMonth = a.date.split('-')[0] + '-' + a.date.split('-')[1];
@@ -95,10 +95,10 @@ export class OpenedSlotsPage implements OnInit {
               }
             );
           }
-
         );
         return dates;
       }),
+      finalize(() => refresher && refresher.target.complete()),
     );
   }
 
@@ -125,7 +125,7 @@ export class OpenedSlotsPage implements OnInit {
         if (data.data === 'booked') {
           this.dateToFilter = ''; // remove the filter
           this.daysConfigrations = []; // empty days configurations used in the calendar modal and then in get slots re-set it again
-          this.getData();
+          this.doRefresh(true);
         }
       }
     );
