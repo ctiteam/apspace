@@ -39,14 +39,11 @@
 <ion-menu menuId="filter-menu" contentId="fee-content" side="end" type="overlay">
   <ion-header>
     <ion-toolbar>
-      <ion-title>Filter</ion-title>
+      <ion-title>Filter Details</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content>
     <ion-list>
-      <ion-list-header>
-        <h3>Filter Details</h3>
-      </ion-list-header>
       <ion-item *ngFor="let label of labels; let label_index = index;"
         (click)="updateChartLabelVisibility(label_index, label.visible)">
         <ion-label>{{ label.name }}</ion-label>
