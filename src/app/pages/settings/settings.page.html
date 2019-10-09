@@ -171,9 +171,7 @@
           <ion-list class="ion-no-padding">
             <ion-item-group *ngIf="timetable$ | async as timetable">
               <ion-item-divider class="ion-no-padding ion-margin-bottom">
-                <ion-label>
-                  List of hidden modules
-                </ion-label>
+                <ion-label>Hidden Modules</ion-label>
               </ion-item-divider>
               <ion-chip *ngFor="let module of timetable?.blacklists" (click)="timetableModuleBlacklistsRemove(module)">
                 <ion-icon name="remove" color="danger"></ion-icon>
