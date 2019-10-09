@@ -83,7 +83,7 @@
             <h4 class="main-text-color">{{ slotDetails.note }}</h4>
           </ion-label>
         </ion-item>
-        <ion-button expand="block" class="danger-background ion-margin" (click)="cancelBooking(slotDetails)">Cancel
+        <ion-button *ngIf="!showRemarks" expand="block" class="danger-background ion-margin" (click)="cancelBooking(slotDetails)">Cancel
           Booking
         </ion-button>
       </ion-card-content>
