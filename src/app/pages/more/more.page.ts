@@ -27,20 +27,12 @@ export class MorePage implements OnInit {
   /* tslint:disable:no-bitwise */
   menuFull: MenuItem[] = [
     {
-      title: 'Profile',
+      title: 'APCard',
       group: 'Main',
-      url: 'profile',
-      img: 'assets/img/profile.png',
+      url: 'apcard',
+      img: 'assets/img/apcard.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['mentor', 'programme leader']
-    },
-    {
-      title: 'Fees',
-      group: 'Main',
-      url: 'fees',
-      img: 'assets/img/fees.svg',
-      role: Role.Student,
-      tags: ['payment', 'pricing']
+      tags: ['transactions', 'money', 'card', 'credit', 'expenses']
     },
     {
       title: 'Bus Shuttle Services',
@@ -48,31 +40,7 @@ export class MorePage implements OnInit {
       url: 'bus-shuttle-services',
       img: 'assets/img/bus-shuttle-services.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'Holidays',
-      group: 'Main',
-      url: 'holidays',
-      img: 'assets/img/holidays.svg',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'News',
-      group: 'Main',
-      url: 'news',
-      img: 'assets/img/news.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'Knowledge Base',
-      group: 'Main',
-      url: 'http://kb.sites.apiit.edu.my/home/',
-      img: 'assets/img/kb.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
+      tags: ['bus', 'trips', 'schedule']
     },
     {
       title: 'Forms & Application',
@@ -80,15 +48,39 @@ export class MorePage implements OnInit {
       url: 'http://forms.sites.apiit.edu.my/home/',
       img: 'assets/img/forms-and-applications.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
+      tags: ['purchase', 'incident', 'maintenance', 'order', 'exit', 'event']
     },
     {
-      title: 'APCard',
+      title: 'Holidays',
       group: 'Main',
-      url: 'apcard',
-      img: 'assets/img/apcard.png',
+      url: 'holidays',
+      img: 'assets/img/holidays.svg',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
+      tags: ['vacation', 'break']
+    },
+    {
+      title: 'Knowledge Base',
+      group: 'Main',
+      url: 'http://kb.sites.apiit.edu.my/home/',
+      img: 'assets/img/kb.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['articles', 'Q&A', 'FAQ', 'questions', 'answers', 'how to']
+    },
+    {
+      title: 'News',
+      group: 'Main',
+      url: 'news',
+      img: 'assets/img/news.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['events']
+    },
+    {
+      title: 'Profile',
+      group: 'Main',
+      url: 'profile',
+      img: 'assets/img/profile.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['mentor', 'programme leader', 'visa']
     },
     {
       title: 'Webmail',
@@ -96,7 +88,7 @@ export class MorePage implements OnInit {
       img: 'assets/img/webmail.png',
       url: 'https://outlook.office.com/owa/?realm=mail.apu.edu.my',
       role: Role.Student,
-      tags: []
+      tags: ['mail', 'email']
     },
     // {
     //   title: 'APLC Progress Report',
@@ -107,67 +99,11 @@ export class MorePage implements OnInit {
     //   tags: []
     // },
     {
-      title: 'Results',
+      title: 'Attendance',
       group: 'Course Related',
-      url: 'results',
-      img: 'assets/img/results.png',
+      url: 'attendance',
+      img: 'assets/img/attendance.png',
       role: Role.Student,
-      tags: []
-    },
-    {
-      title: 'iConsult',
-      group: 'Course Related',
-      img: 'assets/img/iconsult.png',
-      url: 'iconsult/my-consultations',
-      role: Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'iConsult',
-      group: 'Course Related',
-      url: 'iconsult/my-appointments',
-      img: 'assets/img/iconsult.png',
-      role: Role.Student,
-      tags: []
-    },
-    {
-      title: 'Timetable',
-      group: 'Course Related',
-      url: 'student-timetable',
-      img: 'assets/img/timetable.png',
-      role: Role.Student,
-      tags: []
-    },
-    {
-      title: 'Student Timetable',
-      group: 'Course Related',
-      url: 'student-timetable',
-      img: 'assets/img/timetable.png',
-      role: Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'Exam Schedule',
-      group: 'Course Related',
-      url: 'exam-schedule',
-      img: 'assets/img/exam-schedule.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'My Library',
-      group: 'Course Related',
-      url: 'http://opac.apiit.edu.my/cgi-bin/koha/opac-user.pl',
-      img: 'assets/img/my-library.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'Moodle (Course Material)',
-      group: 'Course Related',
-      url: 'https://lms2.apiit.edu.my/login/index.php',
-      img: 'assets/img/moodle.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
       tags: []
     },
     {
@@ -179,12 +115,76 @@ export class MorePage implements OnInit {
       tags: []
     },
     {
-      title: 'Attendance',
+      title: 'Exam Schedule',
       group: 'Course Related',
-      url: 'attendance',
-      img: 'assets/img/attendance.png',
-      role: Role.Student,
+      url: 'exam-schedule',
+      img: 'assets/img/exam-schedule.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
       tags: []
+    },
+    {
+      title: 'Fees',
+      group: 'Course Related',
+      url: 'fees',
+      img: 'assets/img/fees.svg',
+      role: Role.Student,
+      tags: ['payment', 'pricing', 'money', 'outstanding', 'overdue']
+    },
+    {
+      title: 'iConsult',
+      group: 'Course Related',
+      img: 'assets/img/iconsult.png',
+      url: 'iconsult/my-consultations',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['consultation', 'slot']
+    },
+    {
+      title: 'iConsult',
+      group: 'Course Related',
+      url: 'iconsult/my-appointments',
+      img: 'assets/img/iconsult.png',
+      role: Role.Student,
+      tags: ['consultation', 'booking']
+    },
+    {
+      title: 'Moodle (Course Material)',
+      group: 'Course Related',
+      url: 'https://lms2.apiit.edu.my/login/index.php',
+      img: 'assets/img/moodle.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['material', 'modules', 'lecturer note', 'assignment']
+    },
+    {
+      title: 'My Library',
+      group: 'Course Related',
+      url: 'http://opac.apiit.edu.my/cgi-bin/koha/opac-user.pl',
+      img: 'assets/img/my-library.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['book']
+    },
+    {
+      title: 'Results',
+      group: 'Course Related',
+      url: 'results',
+      img: 'assets/img/results.png',
+      role: Role.Student,
+      tags: ['marks']
+    },
+    {
+      title: 'Timetable',
+      group: 'Course Related',
+      url: 'student-timetable',
+      img: 'assets/img/timetable.png',
+      role: Role.Student,
+      tags: ['class', 'schedule', 'break']
+    },
+    {
+      title: 'Student Timetable',
+      group: 'Course Related',
+      url: 'student-timetable',
+      img: 'assets/img/timetable.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['class', 'schedule']
     },
     // {
     //   title: 'Student Survey',
@@ -195,6 +195,14 @@ export class MorePage implements OnInit {
     //   tags: []
     // },
     {
+      title: 'Classroom Finder',
+      group: 'Others',
+      url: 'classroom-finder',
+      img: 'assets/img/classroom-finder.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['empty', 'class', 'lab', 'auditorium', 'workshop', 'room']
+    },
+    {
       title: 'Graduate Verification Service',
       group: 'Others',
       url: 'graduate-verification-service',
@@ -203,12 +211,12 @@ export class MorePage implements OnInit {
       tags: []
     },
     {
-      title: 'Track Student Visa Status',
+      title: 'Operation Hours',
       group: 'Others',
-      url: 'visa-status',
-      img: 'assets/img/visa-status.png',
-      role: Role.Admin,
-      tags: []
+      url: 'operation-hours',
+      img: 'assets/img/operation-hours.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['opening hours', 'time', 'working hours']
     },
     {
       title: 'Staff Directory',
@@ -219,40 +227,32 @@ export class MorePage implements OnInit {
       tags: ['lecturer', 'academic', 'teacher']
     },
     {
-      title: 'Classroom Finder',
+      title: 'Track Student Visa Status',
       group: 'Others',
-      url: 'classroom-finder',
-      img: 'assets/img/classroom-finder.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'Operation Hours',
-      group: 'Others',
-      url: 'operation-hours',
-      img: 'assets/img/operation-hours.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'Notification',
-      group: 'Others',
-      url: 'notifications',
-      img: 'assets/img/notifications.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
+      url: 'visa-status',
+      img: 'assets/img/visa-status.png',
+      role: Role.Admin,
+      tags: ['visa']
     },
     {
       title: 'Feedback',
-      group: 'Others',
+      group: 'App Related',
       url: 'feedback',
       img: 'assets/img/feedback.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: []
     },
     {
+      title: 'Notification',
+      group: 'App Related',
+      url: 'notifications',
+      img: 'assets/img/notifications.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['messages']
+    },
+    {
       title: 'Settings',
-      group: 'Others',
+      group: 'App Related',
       url: 'settings',
       img: 'assets/img/settings.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
@@ -260,11 +260,11 @@ export class MorePage implements OnInit {
     },
     {
       title: 'Logout',
-      group: 'Others',
+      group: 'App Related',
       url: 'logout',
       img: 'assets/img/logout.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
+      tags: ['exit', 'log out', 'log-out']
     },
   ];
   /* tslint:enable:no-bitwise */
