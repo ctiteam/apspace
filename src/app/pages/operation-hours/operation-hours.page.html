@@ -123,7 +123,7 @@
                       </ion-grid>
                     </ng-container>
                     <ng-template #noOperations>
-                      No oiperations for this
+                      <p class="main-text-color ion-text-center">No operation hours added for this department</p>
                     </ng-template>
                   </ion-card-content>
                   <ion-footer class="ion-padding" *ngIf="department.dept_phone.length > 0">
@@ -144,10 +144,82 @@
       </ng-container>
     </ng-container>
     <ng-template #noData>
-      no data
+      <app-message-with-svg messageTitle="No Data To Show!"
+        messageContent="There are no operation hours configured by the system admin yet."
+        imageUrl="assets/img/empty.svg" wrapperOffset="4" wrapperSize="4" wrapperMarginTop="50px">
+      </app-message-with-svg>
     </ng-template>
   </ng-container>
   <ng-template #loadingTheFile>
-    loading the file
+    <ion-grid>
+      <ion-row>
+        <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4">
+          <ion-card *ngFor="let _ of skeletons">
+            <ion-card-header>
+              <ion-card-title>
+                <h4 class="text-bold ion-text-capitalize">
+                  <ion-skeleton-text animated style="width: 60%; line-height: 20px;"></ion-skeleton-text>
+                </h4>
+                <h4>
+                  <ion-skeleton-text animated style="width: 90%; line-height: 15px;"></ion-skeleton-text>
+                </h4>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-grid>
+                <ion-row>
+                  <ion-col size-xs="12" size-md="4">
+                    <p class="ion-text-center colored-text">
+                      <ion-skeleton-text animated style="width: 50%; line-height: 15px;"></ion-skeleton-text>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xs="12" size-md="8">
+                    <div class="ion-text-center">
+                      <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size-xs="12" size-md="4">
+                    <p class="ion-text-center colored-text">
+                      <ion-skeleton-text animated style="width: 50%; line-height: 15px;"></ion-skeleton-text>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xs="12" size-md="8">
+                    <div class="ion-text-center">
+                      <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size-xs="12" size-md="4">
+                    <p class="ion-text-center colored-text">
+                      <ion-skeleton-text animated style="width: 50%; line-height: 15px;"></ion-skeleton-text>
+                    </p>
+                  </ion-col>
+                  <ion-col size-xs="12" size-md="8">
+                    <div class="ion-text-center">
+                      <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+            <ion-footer class="ion-padding">
+              <h6>
+                <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
+              </h6>
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="6">
+                    <ion-skeleton-text animated style="width: 100%; line-height: 15px;"></ion-skeleton-text>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-footer>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ng-template>
 </ion-content>

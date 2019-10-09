@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { OperationHoursPage } from './operation-hours.page';
 import { TimePipe } from './time.pipe';
 import { FilterByCompanyPipe } from './filter-by-company.pipe';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    ComponentsModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes)

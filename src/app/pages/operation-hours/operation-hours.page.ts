@@ -16,7 +16,7 @@ import * as moment from 'moment';
 })
 export class OperationHoursPage implements OnInit {
   @ViewChild('content', { static: true }) content: IonContent;
-
+  skeletons = new Array(4);
   quixCompanies$: Observable<QuixCustomer[]>;
   selectedSegment: 'APU' | 'APIIT' = 'APU';
 
