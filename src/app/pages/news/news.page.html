@@ -11,14 +11,14 @@
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  
+
   <div class="masonry-list">
     <ng-template let-news [ngIf]="news$ | async" [ngIfElse]="loadingNews">
       <ng-template [ngIf]="news && news.length > 0" [ngIfElse]="nonews">
         <div class="masonry-item" *ngFor="let item of news">
           <ion-card class="ion-no-margin" tappable (click)="openModal(item)">
-            <img [src]="item.field_news_image[0].url" />
-            <ion-card-content>
+            <img *ngIf="item.field_news_image.length > 0" [src]="item.field_news_image[0].url" />
+            <ion-card-content *ngIf="item.title.length > 0">
               {{ item.title[0].value }}
             </ion-card-content>
           </ion-card>
