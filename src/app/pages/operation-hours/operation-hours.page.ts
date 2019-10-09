@@ -4,9 +4,9 @@ import { Observable } from 'rxjs';
 
 import { QuixCustomer } from 'src/app/interfaces/quix';
 import { WsApiService } from 'src/app/services';
-import { finalize } from 'rxjs/operators';
+import { finalize, tap, map } from 'rxjs/operators';
 import { IonContent } from '@ionic/angular';
-
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-operation-hours',
@@ -35,6 +35,7 @@ export class OperationHoursPage implements OnInit {
       auth: false
     }
     ).pipe(
+      tap(res => res[0].lastModified = moment(res[0].lastModified).add(8, 'hours').format('dddd, Do MMMM YYYY')),
       finalize(() => refresher && refresher.target.complete()),
     );
   }
