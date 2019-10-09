@@ -37,18 +37,24 @@
 </ion-header>
 
 <ion-menu menuId="filter-menu" contentId="fee-content" side="end" type="overlay">
-  <ion-list>
-    <ion-list-header>
-      <h3>Filter Details</h3>
-    </ion-list-header>
-
-    <ion-item *ngFor="let label of labels; let label_index = index;"
-      (click)="updateChartLabelVisibility(label_index, label.visible)">
-      <ion-label>{{ label.name }}</ion-label>
-      <ion-checkbox [(ngModel)]="label.visible">
-      </ion-checkbox>
-    </ion-item>
-  </ion-list>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Filter</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-list-header>
+        <h3>Filter Details</h3>
+      </ion-list-header>
+      <ion-item *ngFor="let label of labels; let label_index = index;"
+        (click)="updateChartLabelVisibility(label_index, label.visible)">
+        <ion-label>{{ label.name }}</ion-label>
+        <ion-checkbox [(ngModel)]="label.visible">
+        </ion-checkbox>
+      </ion-item>
+    </ion-list>
+  </ion-content>
 </ion-menu>
 
 <ion-content id="fee-content" #content>
