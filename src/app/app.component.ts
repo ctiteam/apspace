@@ -4,7 +4,7 @@ import { Platform, ToastController, NavController, ModalController, MenuControll
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Storage } from '@ionic/storage';
 
-import { UserSettingsService, NotificationService } from './services';
+import { UserSettingsService, NotificationService, VersionService } from './services';
 import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { NotificationModalPage } from './pages/notifications/notification-modal';
@@ -37,34 +37,18 @@ export class AppComponent {
     private popoverCtrl: PopoverController,
     private notificationService: NotificationService,
     private fcm: FCM,
+    private versionService: VersionService
   ) {
-    this.userSettings.getUserSettingsFromStorage();
-    this.userSettings
-      .darkThemeActivated()
-      .subscribe((val) => {
-        this.darkThemeActivated = val;
-        this.userSettings.changeStatusBarColor(val);
-      });
-    this.userSettings
-      .PureDarkThemeActivated()
-      .subscribe((val) => {
-        this.pureDarkThemeActivated = val;
-      });
-    this.userSettings
-      .getAccentColor()
-      .subscribe(val => (this.selectedAccentColor = val));
-
+    this.getUserSettings();
+    this.versionService.checkForUpdate().subscribe();
     if (this.platform.is('cordova')) {
-
-      this.runCodeOnReceivingNotification();
-
+      this.runCodeOnReceivingNotification(); // notifications
       if (this.platform.is('ios')) {
-        this.statusBar.overlaysWebView(false);
+        this.statusBar.overlaysWebView(false); // status bar for ios
       }
 
-      this.platform.backButton.subscribe(async () => {
-
-        if (this.router.url.startsWith('/tabs')) {
+      this.platform.backButton.subscribe(async () => { // back button clicked
+        if (this.router.url.startsWith('/tabs') || this.router.url.startsWith('/maintenance-and-update')) {
           const timePressed = new Date().getTime();
           if ((timePressed - this.lastTimeBackPress) < this.timePeriodToExit) {
             // tslint:disable-next-line: no-string-literal
@@ -80,7 +64,6 @@ export class AppComponent {
           }
 
           const active = this.actionSheetCtrl.getTop() || this.popoverCtrl.getTop() || this.modalCtrl.getTop();
-
           if (active) {
             (await active).dismiss();
             return;
@@ -88,7 +71,6 @@ export class AppComponent {
             this.navCtrl.pop();
           }
         }
-
       });
     }
   }
@@ -106,16 +88,15 @@ export class AppComponent {
   // => we need to call it here and in login page as well
   runCodeOnReceivingNotification() {
     this.fcm.onNotification().subscribe(data => {
-      console.log('notification data: ', data);
       if (data.wasTapped) { // Notification received in background
         this.openNotificationModal(data);
       } else { // Notification received in foreground
-        this.presentToastWithOptions(data);
+        this.showNotificationAsToast(data);
       }
     });
   }
 
-  async presentToastWithOptions(data: any) {
+  async showNotificationAsToast(data: any) {
     // need to check with dingdong team about response type
     const toast = await this.toastCtrl.create({
       header: 'New Message',
@@ -148,4 +129,23 @@ export class AppComponent {
     await modal.present();
     await modal.onDidDismiss();
   }
+
+  getUserSettings() {
+    this.userSettings.getUserSettingsFromStorage();
+    this.userSettings
+      .darkThemeActivated()
+      .subscribe((val) => {
+        this.darkThemeActivated = val;
+        this.userSettings.changeStatusBarColor(val);
+      });
+    this.userSettings
+      .PureDarkThemeActivated()
+      .subscribe((val) => {
+        this.pureDarkThemeActivated = val;
+      });
+    this.userSettings
+      .getAccentColor()
+      .subscribe(val => (this.selectedAccentColor = val));
+  }
+
 }

@@ -13,6 +13,9 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" pullMax="400" pullMin="60 " (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
+  </ion-refresher>
   <ion-grid *ngIf="(slots$ | async) as dates; else loadingContent">
     <ion-row>
       <ion-col size="12" size-md="5">
@@ -157,11 +160,13 @@
       <ion-icon name="create"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button routerLink="/iconsult/add-unavailability" data-desc="Add Unavailability">
-        <ion-icon class="colored-text" name="remove"></ion-icon>
+      <ion-fab-button class="colored-background" routerLink="/iconsult/add-unavailability"
+        data-desc="Add Unavailability">
+        <ion-icon name="remove"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button routerLink="/iconsult/add-free-slot" routerDirection="forward" data-desc="Add Free Slot">
-        <ion-icon class="colored-text" name="add"></ion-icon>
+      <ion-fab-button class="colored-background" routerLink="/iconsult/add-free-slot" routerDirection="forward"
+        data-desc="Add Free Slot">
+        <ion-icon name="add"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>

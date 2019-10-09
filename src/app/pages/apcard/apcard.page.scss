@@ -6,13 +6,16 @@ $font-family: Consolas, Courier, monospace;
 }
 
 ion-item {
+  border-left: 5px solid;
   &.credit {
+    border-color: var(--success-color);
     ion-icon,
     .value {
       color: var(--success-color);
     }
   }
   &.deposit {
+    border-color: var(--danger-color);
     ion-icon,
     .value {
       color: var(--danger-color);
@@ -25,6 +28,12 @@ ion-item {
 }
 .total-deposit {
   color: var(--danger-color);
+}
+
+ion-item-divider.colored-background {
+  --background: var(--tertiary-bg-color) !important;
+  --color: var(--secondary-txt-color) !important;
+  font-weight: bold;
 }
 
 @media only screen and (min-width: 1px) {
@@ -137,17 +146,17 @@ ion-item {
     font-size: 17px;
   }
   .end {
-    margin-left: 10px;
+    margin-left: 13px;
     font-family: $font-family;
     label {
-      font-size: 14px;
+      font-size: 13px;
     }
     span {
       font-size: 16px;
     }
   }
   .card-holder {
-    margin: calc(1% + 10px) 13px;
+    margin: calc(1% + 5px) 13px;
     font-family: $font-family;
     label {
       font-size: 13px;
@@ -202,7 +211,7 @@ ion-item {
     }
   }
   .card-number {
-    margin: 38px 13px 10px;
+    margin: 43px 13px 10px;
     font-size: 23px;
   }
   .end {
@@ -347,12 +356,19 @@ ion-item {
     width: 81%;
   }
 }
-@media only screen and (min-width: 1790px) {
+@media only screen and (min-width: 1600px) {
   .card {
     width: 71%;
-    height: 263px;
   }
-  .card-number {
-    margin: 67px 13px 25px;
+}
+@media only screen and (min-width: 1931px) {
+  .card {
+    width: 60%;
+  }
+}
+
+@media only screen and (min-width: 2415px) {
+  .card {
+    width: 50%;
   }
 }

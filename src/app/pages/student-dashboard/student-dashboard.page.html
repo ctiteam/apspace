@@ -1,6 +1,6 @@
 <ion-content>
   <ion-refresher *ngIf="!editableList" slot="fixed" pullMax="400" pullMin="60 " (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
 
   <!-- MAIN GRID CLASS -->
@@ -106,7 +106,8 @@
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
-              <quick-access-item *ngIf="modulesWithLowAttendance$ | async; else loadingWholeAttendance" icon="alarm"
+              <quick-access-item pageName="attendance"
+                *ngIf="modulesWithLowAttendance$ | async; else loadingWholeAttendance" icon="alarm"
                 titleFirstWord='Overall' titleSecondWord='Attendance' [observable$]='overallAttendancePercent$'
                 outputMode='percentage'>
               </quick-access-item>
@@ -131,8 +132,9 @@
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
-              <quick-access-item *ngIf="apcardTransaction$ | async; else loadingWholeApcard" icon="card"
-                titleFirstWord='APCard' titleSecondWord='Balance' [observable$]='balance$' outputMode='currency'>
+              <quick-access-item pageName="apcard" *ngIf="apcardTransaction$ | async; else loadingWholeApcard"
+                icon="card" titleFirstWord='APCard' titleSecondWord='Balance' [observable$]='balance$'
+                outputMode='currency'>
               </quick-access-item>
               <ng-template #loadingWholeApcard>
                 <ion-card class="ion-no-padding ion-no-margin ion-text-center">
@@ -155,7 +157,7 @@
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
-              <quick-access-item *ngIf="financial$ | async; else loadingWholeFinancial" icon="logo-usd"
+              <quick-access-item pageName="fees" *ngIf="financial$ | async; else loadingWholeFinancial" icon="logo-usd"
                 titleFirstWord='Total' titleSecondWord='Overdue' [observable$]="totalOverdue$" outputMode='currency'>
               </quick-access-item>
               <ng-template #loadingWholeFinancial>

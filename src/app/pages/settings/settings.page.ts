@@ -193,7 +193,7 @@ export class SettingsPage implements OnInit {
 
   clearCache() {
     this.userSettings.clearStorage().then(
-      () => this.showToastMessage('Cached has been cleared successfully')
+      () => this.showToastMessage('Cached has been cleared successfully. Please restart the APSpace to ensure cache is cleared.')
     );
   }
 

@@ -36,6 +36,7 @@ export class NotificationsPage implements OnInit {
 
   doRefresh(refresher?) {
     this.categories = [];
+    this.filterObject.categories = [];
     this.messages$ = this.notificationService.getMessages().pipe(
       tap(res => res.history.forEach((history) => {
         if (this.categories.indexOf(history.category) <= -1) {

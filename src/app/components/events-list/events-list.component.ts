@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { EventComponentConfigurations } from 'src/app/interfaces';
 import { Observable } from 'rxjs';
 
@@ -7,13 +7,12 @@ import { Observable } from 'rxjs';
   templateUrl: 'events-list.component.html',
   styleUrls: ['events-list.component.scss']
 })
-export class EventsListComponent implements OnInit {
+export class EventsListComponent {
   @Input() observable$: Observable<EventComponentConfigurations[]>;
   skeletonConfigurations = {
     eventsSkeleton: new Array(3),
   };
-  ngOnInit() {
-  }
+
   splitTimeAndGetOnePart(part: 'third' | 'second' | 'first', time: string) {
     if (part === 'first') {
       return time.split(' ')[0];

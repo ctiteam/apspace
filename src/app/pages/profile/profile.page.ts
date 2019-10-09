@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
@@ -30,7 +30,6 @@ export class ProfilePage implements OnInit {
   local = false;
   studentRole = false;
   countryName: string;
-  countryType: string;
   constructor(
     private ws: WsApiService,
     private settings: SettingsService,
@@ -66,7 +65,6 @@ export class ProfilePage implements OnInit {
       this.ws.get<StudentProfile>('/student/profile').pipe(
         tap(p => {
           this.countryName = p.COUNTRY;
-          this.countryType = 'country';
           if (p.COUNTRY === 'Malaysia') {
             this.local = true;
           } else {
@@ -79,7 +77,6 @@ export class ProfilePage implements OnInit {
       this.ws.get<StaffProfile[]>('/staff/profile').pipe(
         tap(p => {
           this.countryName = p[0].NATIONALITY;
-          this.countryType = 'nationality';
         }),
       ).subscribe();
     }
@@ -88,14 +85,11 @@ export class ProfilePage implements OnInit {
   getVisaStatus() {
     return this.ws.get<any>('/student/visa_status');
   }
+
   comingFromTabs() {
-
     if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
-
       return true;
-
     }
-
     return false;
 
   }

@@ -32,7 +32,7 @@
 
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event.target)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
   <ng-template #page_content>
     <!-- do not add filter pipe here as it affects loading -->

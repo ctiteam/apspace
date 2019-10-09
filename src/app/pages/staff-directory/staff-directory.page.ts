@@ -19,7 +19,7 @@ export class StaffDirectoryPage implements OnInit {
   dept = '';
   staff$: Observable<StaffDirectory[]>;
   staffType$: Observable<string[]>;
-
+  skeletons = new Array(6);
   options: Fuse.FuseOptions<StaffDirectory> = {
     keys: ['FULLNAME', 'CODE', 'ID', 'EMAIL', 'EXTENSION', 'TITLE']
   };

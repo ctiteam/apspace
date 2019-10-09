@@ -1,99 +1,92 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>APCard</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+    <ion-buttons slot="start" [hidden]='comingFromTabs() ? true : false'>
+      <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content id="content">
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
 
-  <div *ngIf="transaction$ | async as transactions; else apCardBalanceLoading">
-    <div class="masonry-list" *ngIf="!isEmpty(monthlyData.cr); else noTransactions">
-
-      <div class="masonry-item ion-margin-bottom">
-        <div class="card ion-padding-top ion-padding-bottom">
-          <div class="front">
-            <div class="strip-bottom"></div>
-            <div class="strip-top"></div>
-            <div class="card-details">
-              <div class="investor">APCard</div>
-              <div class="chip">
-                <div class="chip-line"></div>
-                <div class="chip-line"></div>
-                <div class="chip-line"></div>
-                <div class="chip-line"></div>
-                <div class="chip-main"></div>
-              </div>
-              <div class="card-number"></div>
-              <div class="end">
-                <label>LAST TRANSACTION: </label>
-                <span class="end-date">{{ transactions[0].SpendDate | date: 'dd/MMM' }}
-                </span>
-              </div>
-              <div class="card-holder">
-                <label>CARD HOLDER: </label>
-                <span>{{ transactions[0].SNO }}</span>
-              </div>
-              <div class="card-holder">
-                <label>BALANCE: </label>
-                <span>{{ balance | currency:"RM" }}</span>
+  <ng-container *ngIf="transaction$ | async as transactions; else apCardBalanceLoading">
+    <ng-container *ngIf="transactions.length > 0 else noTransactions">
+      <ion-grid class="ion-no-padding">
+        <ion-row class="ion-margin-bottom">
+          <ion-col class="ion-no-padding ion-padding-top ion-padding-bottom" size-xs="12" size-md="6" offset-md="3"
+            size-lg="4" offset-lg="4">
+            <div class="card ion-padding-top ion-padding-bottom">
+              <div class="front">
+                <div class="strip-bottom"></div>
+                <div class="strip-top"></div>
+                <div class="card-details">
+                  <div class="investor">APCard</div>
+                  <div class="chip">
+                    <div class="chip-line"></div>
+                    <div class="chip-line"></div>
+                    <div class="chip-line"></div>
+                    <div class="chip-line"></div>
+                    <div class="chip-main"></div>
+                  </div>
+                  <div class="card-number"></div>
+                  <div class="end">
+                    <label>LAST TRANSACTION: </label>
+                    <span class="end-date">{{ transactions[0].SpendDate | date: 'dd/MMM' }}
+                    </span>
+                  </div>
+                  <div class="card-holder">
+                    <label>CARD HOLDER: </label>
+                    <span>{{ transactions[0].SNO }}</span>
+                  </div>
+                  <div class="card-holder">
+                    <label>BALANCE: </label>
+                    <span>{{ transactions[0].Balance | currency:"RM" }}</span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-no-padding ion-padding-top ion-padding-bottom" size-xs="12" size-md="6" offset-md="3"
+            size-lg="4" offset-lg="4">
+            <ion-virtual-scroll [items]="transactions" approxItemHeight="92px" approxHeaderHeight="46" approx
+              [headerFn]="seperatebyMonth">
+              <ion-item-divider class="colored-background" *virtualHeader="let header">
+                <ion-label>
+                  {{ header }}
+                </ion-label>
+              </ion-item-divider>
+              <ion-item [class.credit]="0 < transaction.SpendVal" [class.deposit]="0 > transaction.SpendVal"
+                *virtualItem="let transaction">
+                <ion-avatar slot="start">
+                  <ion-icon class="transaction-icon" name="remove-circle-outline" *ngIf="transaction.SpendVal < 0">
+                  </ion-icon>
+                  <ion-icon class="transaction-icon" name="add-circle-outline" *ngIf="0 < transaction.SpendVal">
+                  </ion-icon>
+                </ion-avatar>
+                <ion-label>
+                  <h2 class="value">{{ getAbsoluteValue(transaction.SpendVal) | currency: "RM" }}</h2>
+                  <p class="main-text-color">{{ transaction.ItemName }}</p>
+                  <h3 class="secondary-txt-color">{{ transaction.SpendDate | date: "EEE, d MMM y" }}</h3>
+                </ion-label>
+              </ion-item>
+            </ion-virtual-scroll>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
 
-      <div class="perYear" *ngFor="let year of transactonsYears">
-        <div class="perMonth" *ngFor="let month of transactionsMonths">
-          <div class="masonry-item apcard-history-group" *ngIf="transactionsGroupedByDate[month + ', ' + year]">
-            <ion-card class="ion-no-margin">
-              <ion-card-header class="ion-no-padding ion-padding-start ion-padding-end ion-padding-top">
-                <ion-card-title>
-                  <h3 class="responsive-h1">
-                    {{ +month + 1 + "/" + "1" + "/" + year | date: "MMMM, yyyy" }}
-                  </h3>
-                </ion-card-title>
-              </ion-card-header>
-              <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end">
-                <ion-list>
-                  <ion-item [class.credit]="0 < transaction.SpendVal" [class.deposit]="0 > transaction.SpendVal"
-                    lines="none" class="ion-no-padding"
-                    *ngFor="let transaction of transactionsGroupedByDate[month + ', ' + year]">
-                    <ion-avatar slot="start">
-                      <ion-icon class="transaction-icon" name="remove-circle" *ngIf="transaction.SpendVal < 0">
-                      </ion-icon>
-                      <ion-icon class="transaction-icon" name="add-circle" *ngIf="0 < transaction.SpendVal"></ion-icon>
-                    </ion-avatar>
-                    <ion-label>
-                      <h2 class="value">{{ getAbsoluteValue(transaction.SpendVal) | currency: "RM" }}</h2>
-                      <p class="main-text-color">{{ transaction.ItemName }}</p>
-                      <h3 class="secondary-txt-color">{{ transaction.SpendDate | date: "EEE, d MMM y" }}</h3>
-                    </ion-label>
-                  </ion-item>
-                </ion-list>
-              </ion-card-content>
-            </ion-card>
-          </div>
-        </div>
-      </div>
-    </div>
+    </ng-container>
     <ng-template #noTransactions>
-        <app-message-with-svg
-        messageTitle="No Data To Show!" 
+      <app-message-with-svg messageTitle="No Data To Show!"
         messageContent="Your APCard is not activated, or you have not made any transactions using your APCard yet."
-        imageUrl="assets/img/card_not_activated.svg"
-        wrapperOffset="4"
-        wrapperSize="4"
-        wrapperMarginTop="50px"
-      >
+        imageUrl="assets/img/card_not_activated.svg" wrapperOffset="4" wrapperSize="4" wrapperMarginTop="50px">
       </app-message-with-svg>
     </ng-template>
-  </div>
+  </ng-container>
   <!-- LOADING TEMPLATE -->
   <ng-template #apCardBalanceLoading>
     <div class="masonry-list">

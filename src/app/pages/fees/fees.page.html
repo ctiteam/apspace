@@ -27,7 +27,7 @@
         <ion-row class="ion-justify-content-center">
           <ion-col class="ion-padding-horizontal" size="12" size-md="6" size-lg="4">
             <ion-item lines="none">
-              <ion-skeleton-text width="100%" style="height: 48px;" animated></ion-skeleton-text>
+              <ion-skeleton-text width="100%" style="height: 38px;" animated></ion-skeleton-text>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -37,24 +37,27 @@
 </ion-header>
 
 <ion-menu menuId="filter-menu" contentId="fee-content" side="end" type="overlay">
-  <ion-list>
-    <ion-list-header>
-      <h3>Filter Details</h3>
-    </ion-list-header>
-
-    <ion-item *ngFor="let label of labels; let label_index = index;"
-      (click)="updateChartLabelVisibility(label_index, label.visible)">
-      <ion-label>{{ label.name }}</ion-label>
-      <ion-checkbox [(ngModel)]="label.visible">
-      </ion-checkbox>
-    </ion-item>
-  </ion-list>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Filter Details</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-item *ngFor="let label of labels; let label_index = index;"
+        (click)="updateChartLabelVisibility(label_index, label.visible)">
+        <ion-label>{{ label.name }}</ion-label>
+        <ion-checkbox [(ngModel)]="label.visible">
+        </ion-checkbox>
+      </ion-item>
+    </ion-list>
+  </ion-content>
 </ion-menu>
 
 <ion-content id="fee-content" #content>
   <!-- refresher -->
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
   <div class="ion-no-padding">
     <ion-grid>

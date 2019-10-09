@@ -17,7 +17,7 @@
 
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
   <ng-template [ngIf]="block" [ngIfElse]="accountIsBlocked">
     <ion-grid>
@@ -39,7 +39,8 @@
                   <ion-item lines="none" *ngIf="detail.SEMESTER">
                     <ion-label>
                       <h4 class="text-bold">Semester {{ detail.SEMESTER }}</h4>
-                      <p class="secondary-txt-color">GPA {{ detail.GPA }} ({{ detail.TOTAL_MODULES_PASSED }} modules passed)</p>
+                      <p class="secondary-txt-color">GPA {{ detail.GPA }} ({{ detail.TOTAL_MODULES_PASSED }} modules
+                        passed)</p>
                     </ion-label>
                   </ion-item>
                 </ng-container>

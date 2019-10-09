@@ -5,26 +5,22 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { OperationHoursPage } from './operation-hours.page';
-import { TimePipe } from './time.pipe';
-import { FilterByCompanyPipe } from './filter-by-company.pipe';
-import { ComponentsModule } from 'src/app/components/components.module';
+import { MaintenanceAndUpdatePage } from './maintenance-and-update.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: OperationHoursPage
+    component: MaintenanceAndUpdatePage
   }
 ];
 
 @NgModule({
   imports: [
     CommonModule,
-    ComponentsModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [OperationHoursPage, TimePipe, FilterByCompanyPipe]
+  declarations: [MaintenanceAndUpdatePage]
 })
-export class OperationHoursPageModule {}
+export class MaintenanceAndUpdatePageModule {}

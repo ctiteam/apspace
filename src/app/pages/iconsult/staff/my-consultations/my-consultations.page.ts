@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, AlertController, LoadingController, ToastController } from '@ionic/angular';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
@@ -82,7 +82,7 @@ export class MyConsultationsPage implements OnInit {
       data => {
         if (data.data === 'booked') {
           this.daysConfigrations = [];
-          this.getData();
+          this.doRefresh(true);
         }
       }
     );
@@ -99,7 +99,7 @@ export class MyConsultationsPage implements OnInit {
       data => {
         if (data.data === 'booked') {
           this.daysConfigrations = [];
-          this.getData();
+          this.doRefresh(true);
         }
       }
     );
@@ -110,10 +110,10 @@ export class MyConsultationsPage implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.reload) {
         this.daysConfigrations = [];
-        this.getData();
+        this.doRefresh(true);
       }
     });
-    this.getData();
+    this.doRefresh();
   }
 
   async cancelAvailableSlot(slot: LecturerConsultation) {
@@ -147,7 +147,7 @@ export class MyConsultationsPage implements OnInit {
                 },
                 complete: () => {
                   this.dismissLoading();
-                  this.getData();
+                  this.doRefresh(true);
                 }
               }
             );
@@ -192,7 +192,8 @@ export class MyConsultationsPage implements OnInit {
     });
   }
 
-  getData() { // to be changed with refresher
+
+  doRefresh(refresher?) { // to be changed with refresher
     this.summaryDetails = { // Used here to calculate the number again after refresh
       totalOpenedSlots: 0,
       totalAvailableSlots: 0,
@@ -204,7 +205,7 @@ export class MyConsultationsPage implements OnInit {
       to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
       daysConfig: this.daysConfigrations
     };
-    this.slots$ = this.ws.get<LecturerConsultation[]>('/iconsult/upcomingconlec', true).pipe(
+    this.slots$ = this.ws.get<LecturerConsultation[]>('/iconsult/upcomingconlec', refresher).pipe(
       map(slots => slots.filter(slot => slot.status !== 'Clossed')), // filter closed slots
       map(
         slots => slots.reduce((r, a) => { // Grouping the slots daily and get the summary data
@@ -250,7 +251,8 @@ export class MyConsultationsPage implements OnInit {
           }
         );
         return dates;
-      })
+      }),
+      finalize(() => refresher && refresher.target.complete()),
     );
   }
 }

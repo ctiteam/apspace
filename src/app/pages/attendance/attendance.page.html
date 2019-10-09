@@ -16,7 +16,7 @@
 
 <ion-content>
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
   <!-- START COVER -->
   <div class="cover" *ngIf="average >= 0">

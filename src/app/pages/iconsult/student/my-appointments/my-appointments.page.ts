@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController, AlertController, ToastController, LoadingController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, finalize } from 'rxjs/operators';
 
 import { WsApiService, AppLauncherService } from 'src/app/services';
 import { ConsultationHour, SlotDetails } from 'src/app/interfaces';
@@ -36,15 +36,11 @@ export class MyAppointmentsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getData();
+    this.doRefresh();
   }
 
-  getData() { // To be changed with the refresher later
-    this.slots$ = this.getSlots();
-  }
-
-  getSlots() {
-    return this.ws.get<ConsultationHour[]>('/iconsult/upcomingconstu', true).pipe(
+  doRefresh(refresher?) {
+    this.slots$ = this.ws.get<ConsultationHour[]>('/iconsult/upcomingconstu', refresher).pipe(
       map(slots => { // Check if slot is passed and modify its status to passed
         return slots.map(slot => {
           if (slot.status === 'normal' && moment(slot.datetimeforsorting, 'YYYY-MM-DD kk:mm:ss').toDate() < new Date()) {
@@ -52,7 +48,8 @@ export class MyAppointmentsPage implements OnInit {
           }
           return slot;
         });
-      })
+      }),
+      finalize(() => refresher && refresher.target.complete()),
     );
   }
 
@@ -145,7 +142,7 @@ export class MyAppointmentsPage implements OnInit {
                   },
                   complete: () => {
                     this.dismissLoading();
-                    this.getData();
+                    this.doRefresh(true);
                   }
                 }
               );

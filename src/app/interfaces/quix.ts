@@ -3,6 +3,7 @@ export interface QuixCustomer {
     company_id: string;
     company_name: string;
     customer_type: string;
+    lastModified: string;
 }
 export interface CustomerDepartment {
     dept_email: string;

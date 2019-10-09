@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title> Exam Schedule</ion-title>
+    <ion-title class="ion-text-left">Exam Schedule</ion-title>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
@@ -13,8 +13,8 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-refresher pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="refresh"> </ion-refresher-content>
+  <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
   <ng-template [ngIf]="!showNoIntakeMessage" [ngIfElse]="noIntakeSelected">
     <h5 class="secondary-txt-color ion-text-center ion-padding">Selected intake: {{ intake }}</h5>

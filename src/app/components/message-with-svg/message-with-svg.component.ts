@@ -1,11 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-message-with-svg',
   templateUrl: './message-with-svg.component.html',
   styleUrls: ['./message-with-svg.component.scss'],
 })
-export class MessageWithSvgComponent implements OnInit {
+export class MessageWithSvgComponent {
   @Input() messageTitle: string;
   @Input() messageContent?: string;
   @Input() imageUrl?: string;
@@ -14,7 +14,5 @@ export class MessageWithSvgComponent implements OnInit {
   @Input() wrapperSize: string;
 
   constructor() { }
-
-  ngOnInit() {}
 
 }
