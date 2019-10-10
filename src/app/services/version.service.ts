@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Platform, ToastController, NavController } from '@ionic/angular';
-import { HttpClient } from '@angular/common/http';
 import { VersionValidator } from '../interfaces';
 import { NavigationExtras } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { WsApiService } from './ws-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class VersionService {
   // TODO: refactor the service to be used for getting all application data (version, platform, screen size...)
   constructor(
     private plt: Platform,
-    private http: HttpClient,
+    private ws: WsApiService,
     private toastCtrl: ToastController,
     private iab: InAppBrowser,
     private navCtrl: NavController
@@ -41,12 +41,14 @@ export class VersionService {
     } else {
       platform = this.plt.platforms().toString();
     }
-
     return platform;
   }
 
   checkForUpdate() {
-    return this.http.get<VersionValidator>('https://d370klgwtx3ftb.cloudfront.net/apspace_mandatory_update.json')
+    return this.ws.get<VersionValidator>('/apspace_mandatory_update.json', true, {
+      url: 'https://d370klgwtx3ftb.cloudfront.net',
+      auth: false
+    })
       .pipe(
         tap(res => {
           let navigationExtras: NavigationExtras;

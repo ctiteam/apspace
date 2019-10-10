@@ -40,7 +40,7 @@ export class ExamSchedulePage implements OnInit {
     }
   }
   ngOnInit() {
-    this.il.get().subscribe(ii => {
+    this.il.get(true).subscribe(ii => {
       this.intakes = ii.map(i => i.INTAKE_CODE);
     });
     const intake = this.settings.get('examIntake');
