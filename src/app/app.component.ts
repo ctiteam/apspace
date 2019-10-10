@@ -8,6 +8,7 @@ import { UserSettingsService, NotificationService, VersionService } from './serv
 import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { NotificationModalPage } from './pages/notifications/notification-modal';
+import { Network } from '@ionic-native/network/ngx';
 
 @Component({
   selector: 'app-root',
@@ -37,11 +38,15 @@ export class AppComponent {
     private popoverCtrl: PopoverController,
     private notificationService: NotificationService,
     private fcm: FCM,
-    private versionService: VersionService
+    private versionService: VersionService,
+    private network: Network
   ) {
     this.getUserSettings();
     this.versionService.checkForUpdate().subscribe();
     if (this.platform.is('cordova')) {
+      if (this.network.type === 'none') {
+        this.presentToast('You are now offline, Data stored in the cache will be accessable only.', 6000);
+      }
       this.runCodeOnReceivingNotification(); // notifications
       if (this.platform.is('ios')) {
         this.statusBar.overlaysWebView(false); // status bar for ios
@@ -54,7 +59,7 @@ export class AppComponent {
             // tslint:disable-next-line: no-string-literal
             navigator['app'].exitApp();
           } else {
-            this.presentToast('Press again to exit App');
+            this.presentToast('Press again to exit App', 3000);
             this.lastTimeBackPress = timePressed;
           }
         } else {
@@ -75,10 +80,10 @@ export class AppComponent {
     }
   }
 
-  async presentToast(msg: string) {
+  async presentToast(msg: string, duration: number) {
     const toast = await this.toastCtrl.create({
       message: msg,
-      duration: 3000,
+      duration,
       position: 'top'
     });
     toast.present();
