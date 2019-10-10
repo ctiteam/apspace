@@ -112,7 +112,6 @@ export class AddFreeSlotPage implements OnInit {
   }
 
   showDefaultLocationWarningAlert(newCampus: string, newVenue: string) {
-    console.log(newCampus, newVenue);
     this.alertCtrl.create({
       header: 'Updating Your Default Location?',
       subHeader:

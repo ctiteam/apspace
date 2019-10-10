@@ -65,7 +65,6 @@ export class ApcardPage implements OnInit {
     this.isLoading = true;
     this.transaction$ = this.ws.get<Apcard[]>('/apcard/', refresher).pipe(
       map(transactions => this.signTransactions(transactions)),
-      tap(transactions => console.log(transactions)),
       finalize(() => refresher && refresher.target.complete()),
       finalize(() => (this.isLoading = false))
     );

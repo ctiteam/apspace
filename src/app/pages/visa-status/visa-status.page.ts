@@ -51,7 +51,6 @@ export class VisaStatusPage implements OnInit {
       auth: false,
     }).pipe(
       tap(res => this.listOfCountries = res),
-      tap(res => console.log(res))
     ).subscribe();
   }
 
