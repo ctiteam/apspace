@@ -19,7 +19,7 @@ export class VersionService {
     private navCtrl: NavController
   ) { }
 
-  readonly version = '2.0.2';
+  readonly version = '2.0.3';
 
   /** Application version name. */
   get name(): string {
