@@ -143,7 +143,6 @@ export class LoginPage {
   // this will fail when the user opens the app for the first time and login because it will run before login
   runCodeOnReceivingNotification() {
     this.fcm.onNotification().subscribe(data => {
-      console.log('notification data: ', data);
       if (data.wasTapped) { // Notification received in background
         this.openNotificationModal(data);
       } else { // Notification received in foreground
