@@ -393,7 +393,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     return this.ws.get<ConsultationHour[]>('/iconsult/upcomingconstu', refresher).pipe(
       map(consultations =>
         consultations.filter(
-          consultation => this.eventIsToday(new Date(consultation.date), dateNow)
+          consultation => this.eventIsToday(new Date(consultation.date), dateNow)  && consultation.status === 'normal'
         )
       ),
       map(upcomingConsultations => {
