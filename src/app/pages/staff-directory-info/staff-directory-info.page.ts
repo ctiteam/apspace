@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
@@ -19,6 +19,7 @@ import { WsApiService, AppLauncherService } from '../../services';
 export class StaffDirectoryInfoPage implements OnInit {
 
   staff$: Observable<StaffDirectory>;
+  staffExists = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,7 +31,11 @@ export class StaffDirectoryInfoPage implements OnInit {
   ngOnInit() {
     const id = this.route.snapshot.params.id;
     this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing').pipe(
-      map(ss => ss.find(s => s.ID === id)),
+      map(ss => {
+          const staffRecord = ss.find(s => s.ID === id);
+          staffRecord ? this.staffExists = true : this.staffExists = false;
+          return staffRecord;
+        }),
       share(),
     );
   }
