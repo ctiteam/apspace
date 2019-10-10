@@ -1,0 +1,45 @@
+<ion-content>
+  <ion-grid class="full-height">
+    <ion-row class="full-height">
+      <ion-col class="margin-auto" size-xs="12" size-md="10" offset-md="1">
+        <ion-card>
+          <ion-card-content>
+            <ion-grid class="ion-margin-top ion-margin-bottom">
+              <ion-row>
+                <ion-col size-xs="12" size-md="7">
+                  <ion-img src="assets/img/not-found.svg"></ion-img>
+                </ion-col>
+                <ion-col class="margin-auto" size-xs="12" size-md="5">
+                  <h2 class="ion-text-center main-text-color text-bold">
+                    Page not found!
+                  </h2>
+                  <p class="ion-text-center secondary-txt-color">
+                    Uh oh, we can't seem to find the page you're looking for. Try going back to the home page or contact
+                    us by clicking on the 'send feedback' button.
+                  </p>
+                  <ion-grid>
+                    <ion-row>
+                      <ion-col size="8" offset="2">
+                        <ion-button expand="block" class="colored-background" routerLink="/">
+                          <ion-icon name="arrow-back" slot="start"></ion-icon>
+                          Go Home
+                        </ion-button>
+                      </ion-col>
+                      <ion-col size="8" offset="2">
+                        <ion-button expand="block" class="colored-background" routerLink="/feedback">
+                          <ion-icon name="headset" slot="start"></ion-icon>
+                          Send Feedback
+                        </ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
