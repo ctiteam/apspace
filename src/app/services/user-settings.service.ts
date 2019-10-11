@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
+import { Platform } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -53,9 +53,9 @@ export class UserSettingsService {
   defaultBusShuttleServicesSettings = { firstLocation: '', secondLocation: '', alarmBefore: '10' };
 
   constructor(
-    public http: HttpClient,
     private storage: Storage,
     public statusBar: StatusBar,
+    private platform: Platform
   ) {
     this.darkTheme = new BehaviorSubject(false);
     this.pureDarkTheme = new BehaviorSubject(false);
@@ -185,12 +185,14 @@ export class UserSettingsService {
   }
 
   changeStatusBarColor(darkThemeSelected: boolean) {
-    if (darkThemeSelected === false) {
-      this.statusBar.backgroundColorByHexString('#e7e7e7');
-      this.statusBar.styleDefault();
-    } else {
-      this.statusBar.backgroundColorByHexString('#1d1b1b');
-      this.statusBar.styleLightContent();
+    if (this.platform.is('cordova')) {
+      if (darkThemeSelected === false) {
+        this.statusBar.backgroundColorByHexString('#e7e7e7');
+        this.statusBar.styleBlackTranslucent();
+      } else {
+        this.statusBar.backgroundColorByHexString('#1d1b1b');
+        this.statusBar.styleLightContent();
+      }
     }
   }
 

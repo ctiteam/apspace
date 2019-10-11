@@ -47,6 +47,7 @@
     "angular-svg-round-progressbar": "^3.0.1",
     "angular2-chartjs": "^0.5.1",
     "cordova-android": "^8.1.0",
+    "cordova-browser": "^6.0.0",
     "cordova-ios": "5.0.1",
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-appavailability": "^0.4.2",
@@ -118,7 +119,8 @@
     },
     "platforms": [
       "android",
-      "ios"
+      "ios",
+      "browser"
     ]
   }
 }
