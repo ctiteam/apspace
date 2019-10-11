@@ -7,6 +7,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { WsApiService } from './ws-api.service';
 import { Network } from '@ionic-native/network/ngx';
 import { from } from 'rxjs';
+import { Storage } from '@ionic/storage';
 
 @Injectable({
   providedIn: 'root'
