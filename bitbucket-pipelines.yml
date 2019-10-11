@@ -8,6 +8,7 @@ pipelines:
           - node
         script:
           - npm i
+          - ionic cordova platform add browser
           - ionic cordova build browser --prod
           - aws s3 sync www/ s3://apspace-production/ --acl public-read
     v4-staging:
@@ -16,5 +17,6 @@ pipelines:
           - node
         script:
           - npm i
+          - ionic cordova platform add browser
           - ionic cordova build browser --prod
           - aws s3 sync www/ s3://apspace-staging/ --acl public-read
