@@ -37,6 +37,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     // authorization
     // tslint:disable-next-line:no-bitwise
     if (route.data.role && !(route.data.role & this.settings.get('role'))) {
+      this.router.navigate(['/unauthorized']);
       return false;
     }
 
