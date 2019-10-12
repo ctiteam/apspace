@@ -433,7 +433,7 @@ ion-segment {
 
     &.ios {
       --background-checked: var(--primary-color);
-      --color-checked: #ffffff;
+      --color-checked: var(--main-bg-color);
       --color: var(--tertiary-txt-color);
       --border-color: var(--tertiary-txt-color);
       --border-color-checked: var(--primary-color);
