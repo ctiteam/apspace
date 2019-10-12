@@ -48,9 +48,9 @@ export class AppComponent {
         this.presentToast('You are now offline, only data stored in the cache will be accessable.', 6000);
       }
       this.runCodeOnReceivingNotification(); // notifications
-      if (this.platform.is('ios')) {
-        this.statusBar.overlaysWebView(false); // status bar for ios
-      }
+      // if (this.platform.is('ios')) {
+      //   this.statusBar.overlaysWebView(false); // status bar for ios
+      // }
 
       this.platform.backButton.subscribe(async () => { // back button clicked
         if (this.router.url.startsWith('/tabs') || this.router.url.startsWith('/maintenance-and-update')) {

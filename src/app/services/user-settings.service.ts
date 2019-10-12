@@ -188,7 +188,7 @@ export class UserSettingsService {
     if (this.platform.is('cordova')) {
       if (darkThemeSelected === false) {
         this.statusBar.backgroundColorByHexString('#e7e7e7');
-        this.statusBar.styleBlackTranslucent();
+        this.statusBar.styleDefault();
       } else {
         this.statusBar.backgroundColorByHexString('#1d1b1b');
         this.statusBar.styleLightContent();
