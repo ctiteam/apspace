@@ -45,7 +45,7 @@ export class AppComponent {
     this.versionService.checkForUpdate().subscribe();
     if (this.platform.is('cordova')) {
       if (this.network.type === 'none') {
-        this.presentToast('You are now offline, Data stored in the cache will be accessable only.', 6000);
+        this.presentToast('You are now offline, only data stored in the cache will be accessable.', 6000);
       }
       this.runCodeOnReceivingNotification(); // notifications
       if (this.platform.is('ios')) {

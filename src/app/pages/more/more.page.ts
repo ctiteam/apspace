@@ -7,7 +7,8 @@ import { CasTicketService, SettingsService, UserSettingsService } from '../../se
 import { Role } from '../../interfaces';
 
 import { MenuItem } from './menu.interface';
-import { NavController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
+import { Network } from '@ionic-native/network/ngx';
 
 @Component({
   selector: 'app-more',
@@ -274,7 +275,9 @@ export class MorePage implements OnInit {
     public iab: InAppBrowser,
     private cas: CasTicketService,
     private settings: SettingsService,
-    private userSettings: UserSettingsService
+    private userSettings: UserSettingsService,
+    private network: Network,
+    private toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
@@ -293,9 +296,14 @@ export class MorePage implements OnInit {
       if (url.startsWith('https://outlook.office.com') || url === 'http://kb.sites.apiit.edu.my/knowledge-base/course-schedule/') {
         this.iab.create(url, '_system', 'location=true');
       } else {
-        this.cas.getST(url).subscribe(st => {
-          this.iab.create(`${url}?ticket=${st}`, '_system', 'location=true');
-        });
+        if (this.network.type !== 'none') {
+          this.cas.getST(url).subscribe(st => {
+            this.iab.create(`${url}?ticket=${st}`, '_system', 'location=true');
+          });
+        } else {
+          this.presentToast('External links cannot be opened in offline mode. Please ensure you have a network connection and try again');
+        }
+
       }
     } else {
       this.navCtrl.navigateForward([url]);
@@ -305,6 +313,17 @@ export class MorePage implements OnInit {
   /** No sorting for KeyValuePipe. */
   noop(): number {
     return 0;
+  }
+
+  async presentToast(msg: string) {
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      color: 'danger',
+      duration: 6000,
+      showCloseButton: true,
+      position: 'top'
+    });
+    toast.present();
   }
 
 }
