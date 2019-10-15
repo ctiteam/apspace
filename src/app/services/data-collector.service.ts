@@ -5,6 +5,7 @@ import { Device } from '@ionic-native/device/ngx';
 import { Observable } from 'rxjs';
 
 import { WsApiService } from './ws-api.service';
+import { VersionService } from './version.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class DataCollectorService {
     public http: HttpClient,
     public device: Device,
     private ws: WsApiService,
+    private version: VersionService
   ) { }
 
   /**
@@ -27,6 +29,7 @@ export class DataCollectorService {
         model: this.device.model,
         os: this.device.version,
         uuid: this.device.uuid,
+        app_version: this.version.name,
         wifi: 't',
       },
     });
