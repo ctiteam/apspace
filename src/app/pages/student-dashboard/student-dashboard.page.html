@@ -225,6 +225,7 @@
               <chart *ngIf="lowAttendanceChart.data" [type]="lowAttendanceChart.type" [data]="lowAttendanceChart.data"
                 [options]="lowAttendanceChart.options">
               </chart>
+              <small><span class="danger-text">*Note:</span> Only modules with low attendance will be shown here. For more details, check the attendance page.</small>
             </dashboard-card>
           </div>
         </div>
@@ -313,7 +314,7 @@
                 </ng-template>
               </ng-container>
               <ng-template #locationsSettings>
-                <app-message-with-svg messageTitle="Section is not configured!"
+                <app-message-with-svg messageTitle="Choose Locations to view the upcoming trips from/to those locations!"
                   messageContent="You can configure this section from the settings page, under the bus shuttle services card."
                   imageUrl="assets/img/config.svg" wrapperOffset="3" wrapperSize="6">
                 </app-message-with-svg>

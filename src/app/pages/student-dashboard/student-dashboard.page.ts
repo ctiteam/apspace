@@ -75,7 +75,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   subject: string;
   lowAttendanceCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
-    cardTitle: 'Low Attendance',
+    cardTitle: 'Attendance Summary',
     contentPadding: true
   };
 
