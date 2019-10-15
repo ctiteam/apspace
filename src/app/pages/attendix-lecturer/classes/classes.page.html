@@ -62,7 +62,7 @@
           <ion-item>
             <ion-label>Class Type</ion-label>
             <ion-select [(ngModel)]="classType"
-              interface="popover" [disabled]="!classcode || classType" placeholder="Class Type">
+              interface="popover" [disabled]="!startTime || classType" placeholder="Class Type">
               <ion-select-option *ngFor="let t of classTypes"
                 [value]="t">{{ t }}</ion-select-option>
             </ion-select>

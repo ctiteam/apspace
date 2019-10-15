@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button class="back-btn" defaultHref="/attendix/classes"></ion-back-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>
       {{ schedule!.classcode }} {{ totalPresentStudents$ | async }}/{{ totalStudents$ | async }}
@@ -48,19 +48,21 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <ion-virtual-scroll [items]="students$ | async | attendance:type | search:term"
-      [trackBy]="trackById" approxItemHeight="48px">
-      <ion-card *virtualItem="let student">
-        <ion-item [ngClass]="'state' + student.attendance">
-          <ion-img slot="start" (ionError)="$event.target.src = 'assets/img/profile.svg'"></ion-img>
-          <ion-label>{{ student.name }} {{ student.id }}</ion-label>
-          <ng-container slot="end">
-            <ion-button (click)="mark(student.id, 'N')">Absent</ion-button>
-            <ion-button (click)="mark(student.id, 'L')">Late</ion-button>
-            <ion-button (click)="mark(student.id, 'Y')">Present</ion-button>
-          </ng-container>
-        </ion-item>
-      </ion-card>
-    </ion-virtual-scroll>
+    <div class="ion-padding-bottom">
+      <ion-virtual-scroll [items]="students$ | async | attendance:type | search:term"
+        [trackBy]="trackById" approxItemHeight="48px">
+        <ion-card *virtualItem="let student">
+          <ion-item [ngClass]="'state' + student.attendance">
+            <ion-img slot="start" (ionError)="$event.target.src = 'assets/img/profile.svg'"></ion-img>
+            <ion-label>{{ student.name }} {{ student.id }}</ion-label>
+            <ng-container slot="end">
+              <ion-button (click)="mark(student.id, 'N')">Absent</ion-button>
+              <ion-button (click)="mark(student.id, 'L')">Late</ion-button>
+              <ion-button (click)="mark(student.id, 'Y')">Present</ion-button>
+            </ng-container>
+          </ion-item>
+        </ion-card>
+      </ion-virtual-scroll>
+    </div>
   </ng-template>
 </ion-content>

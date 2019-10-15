@@ -8,6 +8,10 @@ import { Classcode, StudentTimetable, StaffProfile } from '../../../interfaces';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
 import { StudentTimetableService, WsApiService } from '../../../services';
 
+type Schedule = Pick<Classcode, 'CLASS_CODE'>
+  & Pick<StudentTimetable, 'DATESTAMP_ISO' | 'TIME_FROM' | 'TIME_TO'>
+  & { TYPE: string; };
+
 @Component({
   selector: 'app-classes',
   templateUrl: './classes.page.html',
@@ -17,9 +21,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
 
   /* computed */
   classcodes: string[];
-  schedules: (StudentTimetable & Classcode)[];
-  schedulesByClasscode: (StudentTimetable & Classcode)[];
-  schedulesByClasscodeDate: (StudentTimetable & Classcode)[];
+  schedules: Schedule[];
+  schedulesByClasscode: Schedule[];
+  schedulesByClasscodeDate: Schedule[];
 
   dates: string[];
   startTimes: string[];
@@ -61,21 +65,45 @@ export class ClassesPage implements AfterViewInit, OnInit {
 
     forkJoin([timetables$, classcodes$]).subscribe(([timetables, classcodes]) => {
       // left join on classcodes
-      this.schedules = timetables.map(timetable => ({
+      const joined = timetables.map(timetable => ({
         ...classcodes.find(classcode => {
           // Classcode BM006-3-2-CRI-L-UC2F1805CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
           // Take only BM006-3-2-CRI-L
           const len = classcode.SUBJECT_CODE.length;
           // Take only UC2F1805 and CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
           const [intake, codes] = classcode.CLASS_CODE.slice(len + 1).match(/-?(.*\d{4})(.*)/).slice(1);
-          return classcode.CLASS_CODE.slice(0, len + 2) === timetable.MODID.slice(0, len + 2)
-            && timetable.INTAKE.startsWith(intake)
-            && codes.split('-').includes(timetable.INTAKE.slice(intake.length));
+          return classcode.CLASS_CODE.slice(0, len + 2) === timetable.MODID.slice(0, len + 2);
+            // && timetable.INTAKE.startsWith(intake) // TODO: testing
+            // && codes.split('-').includes(timetable.INTAKE.slice(intake.length));
         }),
         ...timetable
       }));
-      // XXX: remove unmatching timetable?
-      this.guessWork(this.schedules);
+      this.guessWork(joined);
+      // append existing timetable after guess work
+      this.schedules = joined.map(data => {
+        let guessClassType: string | null;
+        if (data.SUBJECT_CODE) {
+          const len = data.SUBJECT_CODE.length;
+          if (data.CLASS_CODE[len + 1] === 'T') {
+            guessClassType = 'Tutorial';
+          } else if (data.CLASS_CODE[len + 2] === 'A') {
+            guessClassType = 'Lab';
+          } else if (data.CLASS_CODE[len + 1] === 'L') {
+            guessClassType = 'Lecture';
+          }
+        }
+        return {
+          CLASS_CODE: data.CLASS_CODE,
+          DATESTAMP_ISO: data.DATESTAMP_ISO,
+          TIME_FROM: data.TIME_FROM,
+          TIME_TO: data.TIME_TO,
+          TYPE: guessClassType,
+        };
+      });
+      const mapped = classcodes.map(({ CLASS_CODE, CLASSES }) =>
+        CLASSES.map(({ DATE, TIME_FROM, TIME_TO, TYPE }) =>
+          ({ DATESTAMP_ISO: DATE, TIME_FROM, TIME_TO, CLASS_CODE, TYPE })));
+      this.schedules = this.schedules.concat.apply([], mapped);
       this.classcodes = [...new Set(this.schedules.map(schedule => schedule.CLASS_CODE).filter(Boolean))].sort();
       console.log('filtered', this.schedules, this.classcodes);
     });
@@ -90,7 +118,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
   }
 
   /** Guess the current classcode based on timetable. */
-  guessWork(schedules: (StudentTimetable & Classcode)[]) {
+  guessWork(schedules: (Classcode & StudentTimetable)[]) {
     const d = new Date();
     const date = this.isoDate(d);
     const nowMins = d.getHours() * 60 + d.getMinutes();
@@ -141,22 +169,8 @@ export class ClassesPage implements AfterViewInit, OnInit {
   /** Change classcode, auto select class type. */
   changeClasscode(classcode: string, propagate = true) {
     this.schedulesByClasscode = this.schedules.filter(schedule => schedule.CLASS_CODE === classcode);
-    this.dates = [...new Set(this.schedulesByClasscode.map(schedule => schedule.DATESTAMP_ISO))];
+    this.dates = [...new Set(this.schedulesByClasscode.map(schedule => schedule.DATESTAMP_ISO))].sort();
     this.date = '';
-
-    const matchSchedule = this.schedules.find(schedule => schedule.CLASS_CODE === classcode);
-    if (matchSchedule.SUBJECT_CODE) {
-      const len = matchSchedule.SUBJECT_CODE.length;
-      if (classcode[len + 1] === 'T') {
-        this.classType = 'Tutorial';
-      } else if (classcode[len + 2] === 'A') {
-        this.classType = 'Lab';
-      } else if (classcode[len + 1] === 'L') {
-        this.classType = 'Lecture';
-      }
-    } else {
-      console.error('schedule subject code not found', matchSchedule);
-    }
 
     if (propagate && this.dates.length === 1) {
       this.changeDate(this.date = this.dates[0]);
@@ -166,8 +180,8 @@ export class ClassesPage implements AfterViewInit, OnInit {
   /** Change date. */
   changeDate(date: string, propagate = true) {
     this.schedulesByClasscodeDate = this.schedulesByClasscode.filter(schedule => schedule.DATESTAMP_ISO === date);
-    this.startTimes = [...new Set(this.schedulesByClasscode.map(schedule => schedule.TIME_FROM))];
-    this.endTimes = [...new Set(this.schedulesByClasscode.map(schedule => schedule.TIME_TO))];
+    this.startTimes = [...new Set(this.schedulesByClasscode.map(schedule => schedule.TIME_FROM))].sort();
+    this.endTimes = [...new Set(this.schedulesByClasscode.map(schedule => schedule.TIME_TO))].sort();
     this.startTime = '';
     this.endTime = '';
 
@@ -178,7 +192,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
 
   /** Change start time, find matching end time. */
   changeStartTime(startTime: string) {
-    this.endTime = this.schedulesByClasscodeDate.find(schedule => schedule.TIME_FROM === startTime).TIME_TO;
+    const schedule = this.schedulesByClasscodeDate.find(s => s.TIME_FROM === startTime);
+    this.endTime = schedule.TIME_TO;
+    this.classType = schedule.TYPE;
   }
 
   /** Helper function to get ISO 8601 Date from Date. */
