@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
 import { NavController, IonSelect } from '@ionic/angular';
-import { Observable, forkJoin, of, zip } from 'rxjs';
+import { Observable, combineLatest, forkJoin, of, zip } from 'rxjs';
 import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray } from 'rxjs/operators';
 
 import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService } from 'src/app/services';
@@ -331,7 +331,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   // TODAYS SCHEDULE FUNCTIONS
   getTodaysSchdule(intake: string, refresher: boolean) {
-    this.todaysSchedule$ = zip( // ZIP TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
+    // MERGE TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
+    this.todaysSchedule$ = combineLatest(
       this.getUpcomingClasses(intake, refresher),
       this.getUpcomingConsultations(refresher)
     ).pipe(
@@ -350,7 +351,15 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   getUpcomingClasses(intake: string, refresher): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
-    return this.studentTimetableService.get(refresher).pipe(
+    return combineLatest([
+      this.studentTimetableService.get(refresher),
+      this.userSettings.timetable.asObservable()
+    ]).pipe(
+
+      // FILTER BLACKLISTED TIMETABLE
+      map(([timetables, { blacklists }]) => blacklists
+        ? timetables.filter(timetable => !blacklists.includes(timetable.MODID))
+        : timetables),
 
       // FILTER THE LIST OF TIMETABLES TO GET THE TIMETABLE FOR THE SELECTED INTAKE ONLY
       map(timetables => timetables.filter(timetable => timetable.INTAKE === intake)),
