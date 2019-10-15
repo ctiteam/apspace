@@ -332,10 +332,10 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // TODAYS SCHEDULE FUNCTIONS
   getTodaysSchdule(intake: string, refresher: boolean) {
     // MERGE TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
-    this.todaysSchedule$ = combineLatest(
+    this.todaysSchedule$ = combineLatest([
       this.getUpcomingClasses(intake, refresher),
       this.getUpcomingConsultations(refresher)
-    ).pipe(
+    ]).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
         return eventsList.sort((eventA, eventB) => {
@@ -402,7 +402,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     return this.ws.get<ConsultationHour[]>('/iconsult/upcomingconstu', refresher).pipe(
       map(consultations =>
         consultations.filter(
-          consultation => this.eventIsToday(new Date(consultation.date), dateNow)  && consultation.status === 'normal'
+          consultation => this.eventIsToday(new Date(consultation.date), dateNow) && consultation.status === 'normal'
         )
       ),
       map(upcomingConsultations => {
