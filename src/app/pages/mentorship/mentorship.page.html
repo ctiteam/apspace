@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Mentorship</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <div class="list">
+      <ion-searchbar [(ngModel)]="search" showCancelButton="true"
+        placeholder="Search (e.g. 'Student Name, ID', 'Intake', 'Programme', ...)" animated></ion-searchbar>
+
+      <ion-list class="list">
+        <ng-container *ngIf="(students$ | async) as students; else loadingStudents">
+          <ng-container *ngFor="let student of (students | search:search)">
+            <ion-item tappable [routerLink]="['/', 'mentorship', student.STUDENT_NUMBER, student.INTAKE_CODE, 'view']">
+              <ion-avatar slot="start">
+                <img src="https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png">
+              </ion-avatar>
+
+              <ion-label>
+                <h5 class="name"> {{ student.NAME }} </h5>
+                <h3> {{ student.STUDENT_NUMBER }} | {{ student.INTAKE_CODE }} </h3>
+                <h3> {{ student.PROGRAMME }} </h3>
+              </ion-label>
+
+              <ion-buttons>
+                <ion-icon slot="end" name="arrow-forward"></ion-icon>
+              </ion-buttons>
+            </ion-item>
+          </ng-container>
+        </ng-container>
+      </ion-list>
+
+      <!-- Loading -->
+      <ng-template #loadingStudents>
+        <ion-item class="list" *ngFor="let _ of loadingSkeletons">
+          <ion-avatar slot="start">
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-avatar>
+
+          <ion-label>
+            <h5>
+              <ion-skeleton-text animated style="width: 60%; line-height: 20px;"></ion-skeleton-text>
+            </h5>
+            <h5>
+              <ion-skeleton-text animated style="width: 50%; line-height: 15px;"></ion-skeleton-text>
+            </h5>
+            <h3>
+              <ion-skeleton-text animated style="width: 30%; line-height: 15px;"></ion-skeleton-text>
+            </h3>
+          </ion-label>
+        </ion-item>
+      </ng-template>
+    </div>
+</ion-content>

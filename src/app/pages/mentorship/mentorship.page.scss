@@ -1,0 +1,43 @@
+.name {
+    font-weight: bold;
+}
+
+ion-item {
+    --inner-padding-end: 0px;
+    --padding-start:0px;
+    --padding-top:10px;
+    --padding-bottom:10px;
+}
+
+.margin-auto{
+    margin: auto;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.table-item:nth-child(even) {
+    --background: var(--tertiary-bg-color) !important;
+}
+
+.table-item:hover {
+    --background: #E0E0E0 !important;
+}
+
+@media only screen and (min-width: 577px) {
+    .list {
+        padding: 10px 30px;
+    }
+}
+
+// Small Screen (Mobile)
+@media only screen and (max-width: 576px) {
+    ion-icon[name=arrow-forward] {
+        display: none;
+    }
+    
+    .list {
+        padding: 5px 10px;
+    }
+}
