@@ -18,7 +18,6 @@ export class UpdateAttendancePage {
   digits = new Array(3);
   @ViewChild('otpInput', { static: false }) otpInput: ElementRef<HTMLInputElement>;
 
-  otp = '';
   student = 100001;
 
   scan = false;  // scan code or type code
@@ -43,34 +42,36 @@ export class UpdateAttendancePage {
   }
 
   onKey(ev: KeyboardEvent): boolean {
-    // ignore non-digits
-    if (ev.key < '0' || ev.key > '9') {
-      return false;
-    }
     const el = ev.target as HTMLInputElement;
-    el.value = ev.key;
-    if (el.nextSibling) {
-      (el.nextSibling as HTMLInputElement).focus();
-    } else {
-      this.otp = '';
-      for (let prev = el; prev != null; prev = prev.previousElementSibling as HTMLInputElement) {
-        this.otp = prev.value + this.otp;
+    if ('0' <= ev.key && ev.key <= '9') {
+      el.value = ev.key;
+      if (el.nextSibling) {
+        (el.nextSibling as HTMLInputElement).focus();
+      } else {
+        let otp = '';
+        for (let prev = el; prev != null; prev = prev.previousElementSibling as HTMLInputElement) {
+          otp = prev.value + otp;
+        }
+
+        this.updateAttendance.mutate({ otp }).subscribe(d => {
+          this.toastCtrl.create({
+            message: 'Attendance updated',
+            duration: 2000,
+            position: 'top',
+            color: 'success'
+          }).then(toast => toast.present());
+          console.log(d);
+          this.clear(el);
+        }, err => {
+          this.handleError(err);
+          this.clear(el);
+        });
+
       }
-
-      this.updateAttendance.mutate({ otp: this.otp }).subscribe(d => {
-        this.toastCtrl.create({
-          message: 'Attendance updated',
-          duration: 2000,
-          position: 'top',
-          color: 'success'
-        }).then(toast => toast.present());
-        console.log(d);
-        this.clear(el);
-      }, err => {
-        this.handleError(err);
-        this.clear(el);
-      });
-
+    } else if (ev.key === 'Backspace') {
+      const prev = el.previousSibling as HTMLInputElement;
+      prev.value = '';
+      prev.focus();
     }
     // prevent change to value
     return false;
@@ -94,7 +95,6 @@ export class UpdateAttendancePage {
       prev.value = '';
       prev.focus();
     }
-    this.otp = '';
   }
 
   /** Swap mode between auto scan and manual input. */
