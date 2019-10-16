@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActionSheetButton } from '@ionic/core';
-import { ActionSheetController, Platform, NavController } from '@ionic/angular';
+import { ActionSheetController } from '@ionic/angular';
 
 import { Observable } from 'rxjs';
 import { tap, finalize, map } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import {
   ClassificationLegend, Course, CourseDetails, DeterminationLegend,
   InterimLegend, MPULegend, StudentProfile, Subcourse, StudentPhoto
 } from '../../interfaces';
-import { NavigationExtras } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-results',
@@ -53,9 +53,9 @@ export class ResultsPage implements OnInit {
 
   constructor(
     private ws: WsApiService,
-    private platform: Platform,
     private actionSheetCtrl: ActionSheetController,
-    private navCtrl: NavController
+    // private navCtrl: NavController,
+    private iab: InAppBrowser
   ) { }
 
   ngOnInit() {
@@ -125,13 +125,13 @@ export class ResultsPage implements OnInit {
   }
 
   openSurveyPage(moduleCode: string) {
-    const navigationExtras: NavigationExtras = {
-      state: { moduleCode: 'CT108-3-2-IOS-L-UC2F1808MBT-SE', intakeCode: 'UC2F1808IT(MBT)' }
-    };
-    this.navCtrl.navigateForward(['/student-survey'], navigationExtras);
+    // const navigationExtras: NavigationExtras = {
+    //   state: { moduleCode: 'CT108-3-2-IOS-L-UC2F1808MBT-SE', intakeCode: 'UC2F1808IT(MBT)' }
+    // };
+    // this.navCtrl.navigateForward(['/student-survey'], navigationExtras);
 
     // TEMP: SEND USER TO CURRENT SYSTEM
-    // this.iab.create('https://webapps.apiit.edu.my/appraisal/index.jsp', '_blank', 'location=true');
+    this.iab.create('https://webapps.apiit.edu.my/appraisal/index.jsp', '_blank', 'location=true');
   }
 
 
