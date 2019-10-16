@@ -42,7 +42,7 @@
         [ngIfElse]="loading">
         <ng-template [ngIf]="timetables!.length" [ngIfElse]="empty">
           <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
-            <ion-segment class="ion-padding" [ngModel]="selectedDate | date:'E' | uppercase"
+            <ion-segment class="sticky-segment" [ngModel]="selectedDate | date:'E' | uppercase"
               (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]" scrollable>
               <ion-segment-button *ngFor="let day of availableDays" [value]="day">
                 {{ day }}
@@ -50,10 +50,10 @@
             </ion-segment>
           </ng-template>
           <ng-template [ngIf]="selectedDate">
-            <ion-grid>
+            <ion-grid class="printLogoWrapper">
               <ion-row>
                 <ion-col size="6" offset="3" class="text-center">
-                  <img class="printLogo" src="assets/img/login.png" alt="APU Logo">
+                  <img src="assets/img/login.png" alt="APU Logo">
                 </ion-col>
               </ion-row>
               <ion-row>
