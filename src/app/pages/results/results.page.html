@@ -111,11 +111,25 @@
                     </ion-col>
                     <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
                       <span class="marker">Grade: </span>
-                      {{ result.GRADE || "N/A" }}
+                      <ng-container
+                        *ngIf="result.GRADE.toLowerCase() !== 'Pending Survey'.toLowerCase(); else resultsPendingSurvey">
+                        {{ result.GRADE || "N/A" }}
+                      </ng-container>
+                      <ng-template #resultsPendingSurvey>
+                        <a (click)="openSurveyPage(result.MODULE_CODE)" class="colored-text" style="text-decoration: underline;">Pending
+                          Survey</a>
+                      </ng-template>
                     </ion-col>
                     <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
                       <span class="marker">Grade Point: </span>
-                      {{ result.GRADE_POINT || "N/A" }}
+                      <ng-container
+                        *ngIf="result.GRADE_POINT.toLowerCase() !== 'Pending Survey'.toLowerCase(); else resultsPendingSurvey">
+                        {{ result.GRADE_POINT || "N/A" }}
+                      </ng-container>
+                      <ng-template #resultsPendingSurvey>
+                        <a (click)="openSurveyPage(result.MODULE_CODE)" class="colored-text" style="text-decoration: underline;">Pending
+                          Survey</a>
+                      </ng-template>
                     </ion-col>
                     <ion-col size="12" size-sm="3" size-md="3" class="ion-text-center">
                       <span class="marker">Internal Result: </span>

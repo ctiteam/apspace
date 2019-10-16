@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Role, StudentProfile } from 'src/app/interfaces';
 import { SettingsService, WsApiService } from 'src/app/services';
+import { ActivatedRoute } from 'src/testing';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-submit-survey',
@@ -15,14 +17,14 @@ export class StudentSurveyPage implements OnInit {
   // TEMP VARIABLES
   stagingUrl = 'https://dl4h9zf8wj.execute-api.ap-southeast-1.amazonaws.com/dev/survey';
   todaysDate = new Date();
+
   // IF USER IS COMING FROM RESULTS PAGE
-  // moduleCodeFromResultsPage = this.navParams.get('moduleCode');
-  // intakeCodeFromResultsPage = this.navParams.get('intakeCode');
+  userComingFromResultsPage = false;
+
   // NGMODEL VARIABLES
   intakeCode: string;
   classCode: string;
   courseType: string;
-  startSwith: string;
   surveyType: string;
   selectedModule: any;
 
@@ -31,7 +33,7 @@ export class StudentSurveyPage implements OnInit {
 
   submitting = false;
   showFieldMissingError = false;
-  englishIntake = false;
+
   // LISTS
   intakes: any[];
   modules: any;
@@ -66,52 +68,65 @@ export class StudentSurveyPage implements OnInit {
     public alertCtrl: AlertController,
     private settings: SettingsService,
     private iab: InAppBrowser,
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.moduleCode) {
+
+        this.userComingFromResultsPage = true;
+        this.classCode = this.router.getCurrentNavigation().extras.state.moduleCode;
+        this.intakeCode = this.router.getCurrentNavigation().extras.state.intakeCode;
+      }
+    });
     this.onInitData();
   }
 
   onInitData() {
-    // tslint:disable-next-line: no-bitwise
-    if (this.settings.get('role') & Role.Student) {
-      this.ws.get<StudentProfile>('/student/profile').subscribe(
-        p => {
-          this.intakeCode = p.INTAKE;
-        },
-        // tslint:disable-next-line: no-empty
-        _ => { },
-        () => {
-          this.COURSE_CODE$ = this.getIntakes();
-          this.onIntakeCodeChanged();
-        },
+    if (!this.userComingFromResultsPage) {
+      // tslint:disable-next-line: no-bitwise
+      if (this.settings.get('role') & Role.Student) {
+        this.ws.get<StudentProfile>('/student/profile').subscribe(
+          p => {
+            this.intakeCode = p.INTAKE;
+          },
+          // tslint:disable-next-line: no-empty
+          _ => { },
+          () => {
+            this.COURSE_CODE$ = this.getIntakes();
+            this.onIntakeCodeChanged();
+          },
+        );
+      }
+    } else { // user coming from results page
+      this.COURSE_CODE$ = this.getIntakes(); // get all of the intakes
+      this.COURSE_MODULES$ = this.getModules(this.intakeCode).pipe( // get all of the modules
+        tap(_ => {
+          this.getModuleByClassCode(this.classCode); // get the details of the selected module
+          this.surveyType = 'End-Semester'; // The only survey that will block results page is the end-semester survey
+        }),
+        tap(_ => this.getSurveys(this.intakeCode)) // get the survey for the intake (survey is for intake, not for module)
       );
     }
-    // IF USER IS COMING FROM RESULTS PAGE
-    // if (this.moduleCodeFromResultsPage) {
-    //    this.getModules(this.intakeCodeFromResultsPage);
-    // }
-  }
-
-  openOldSystem() {
-    this.iab.create('https://webapps.apiit.edu.my/engappraisal');
   }
 
   onIntakeCodeChanged() {
-    this.startSwith = this.intakeCode.slice(0, 3);
+    let intakeStartsWith = '';
+    intakeStartsWith = this.intakeCode.slice(0, 3);
     // tslint:disable-next-line: triple-equals
-    if (this.startSwith == 'UCE' || this.startSwith == 'UCP') {
-      this.englishIntake = true;
+    if (intakeStartsWith == 'UCE' || intakeStartsWith == 'UCP') {
       this.courseType = 'APLC Students';
-      this.openOldSystem();
+    } else if (intakeStartsWith === 'UCM') {
+      this.courseType = 'masters';
     } else {
-      this.englishIntake = false;
       this.courseType = 'bachelor';
-      this.COURSE_MODULES$ = this.getModules(this.intakeCode);
-      this.classCode = '';
-      this.surveyType = '';
     }
-
+    console.log(this.courseType);
+    this.COURSE_MODULES$ = this.getModules(this.intakeCode);
+    this.classCode = '';
+    this.surveyType = '';
   }
 
   onClassCodeChanged() {
@@ -121,11 +136,9 @@ export class StudentSurveyPage implements OnInit {
   }
 
   getIntakes() {
-
     return this.ws.get<any>(`/intakes-list`, true, { url: this.stagingUrl }).pipe(
       tap()
     );
-
   }
 
   getModuleByClassCode(classCode: string) {
@@ -142,7 +155,8 @@ export class StudentSurveyPage implements OnInit {
         (item => !item.COURSE_APPRAISAL || (!item.COURSE_APPRAISAL2 && Date.parse(item.END_DATE) >
           Date.parse(this.todaysDate.toISOString())))),
       tap(res => this.modules = res),
-      tap()
+      tap(res => {
+      })
     );
   }
 
@@ -174,30 +188,26 @@ export class StudentSurveyPage implements OnInit {
     const todaysDate = new Date();
     this.modules.forEach(amodule => {
       if (classCode === amodule.CLASS_CODE) {
-        if (!amodule.COURSE_APPRAISAL) {
-          if (todaysDate > new Date(amodule.END_DATE)) {
+        if (!amodule.COURSE_APPRAISAL) { // student did not do end semester appraisal
+          if (todaysDate > new Date(amodule.END_DATE)) { // appraisal should only appear when student finish the module
             this.surveyType = 'End-Semester';
           }
         }
-        if (!amodule.COURSE_APPRAISAL2) {
-          const moduleStartDate = new Date(amodule.START_DATE);
-          const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49));
-          const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 70));
-          if (todaysDate > startDateForMid && todaysDate < endDateForMid) {
-            this.surveyType = 'Mid-Semester';
+        if (!amodule.COURSE_APPRAISAL2) { // student did not do mid-semester appraisal
+          if (this.courseType === 'bachelor') { // bachelor students
+            const moduleStartDate = new Date(amodule.START_DATE); // module start date
+            const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49)); // week 7 of the module
+            const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 70)); // week 10 of the module
+            if (todaysDate > startDateForMid && todaysDate < endDateForMid) {
+              this.surveyType = 'Mid-Semester';
+            }
+          } else if (this.courseType === 'masters') {
+            // do the masters logic here
           }
         }
         this.getSurveys(this.intakeCode);
       }
     });
-  }
-
-  // USED FOR NAVIGATING DIRECTLY FROM RESULTS PAGE TO THIS PAGE
-  getSurvey(intakeCode: string, moduleCode: string) {
-    this.getSurveys(intakeCode);
-    this.intakeCode = intakeCode;
-    this.classCode = this.modules.filter(module => module.SUBJECT_CODE === moduleCode)[0].CLASS_CODE;
-    this.surveyType = 'End-Semester';
   }
 
   getAnswerByQuestionId(id: number) {
