@@ -33,14 +33,14 @@ export class UpdateAttendancePage {
   scanCode() {
     this.barcodeScanner.scan({ formats: 'QR_CODE', orientation: 'portrait' }).then(barcodeData => {
       if (!barcodeData.cancelled && barcodeData.format === 'QR_CODE') {
-        this.updateAttendance.mutate({ otp: barcodeData.text })
-          .subscribe(d => console.log(d), err => this.handleError(err));
+        this.sendOtp(barcodeData.text);
       }
     }).catch(err => {
       console.error(err);
     });
   }
 
+  /** Handle keydown event. */
   onKey(ev: KeyboardEvent): boolean {
     const el = ev.target as HTMLInputElement;
     if ('0' <= ev.key && ev.key <= '9') {
@@ -52,21 +52,7 @@ export class UpdateAttendancePage {
         for (let prev = el; prev != null; prev = prev.previousElementSibling as HTMLInputElement) {
           otp = prev.value + otp;
         }
-
-        this.updateAttendance.mutate({ otp }).subscribe(d => {
-          this.toastCtrl.create({
-            message: 'Attendance updated',
-            duration: 2000,
-            position: 'top',
-            color: 'success'
-          }).then(toast => toast.present());
-          console.log(d);
-          this.clear(el);
-        }, err => {
-          this.handleError(err);
-          this.clear(el);
-        });
-
+        this.sendOtp(otp).then(() => this.clear(el));
       }
     } else if (ev.key === 'Backspace') {
       const prev = el.previousSibling as HTMLInputElement;
@@ -75,6 +61,25 @@ export class UpdateAttendancePage {
     }
     // prevent change to value
     return false;
+  }
+
+  /** Send OTP. */
+  sendOtp(otp: string): Promise<boolean> {
+    return new Promise(res => {
+      this.updateAttendance.mutate({ otp }).subscribe(d => {
+        this.toastCtrl.create({
+          message: 'Attendance updated',
+          duration: 2000,
+          position: 'top',
+          color: 'success'
+        }).then(toast => toast.present());
+        console.log(d);
+        res(true);
+      }, err => {
+        this.handleError(err);
+        res(true);
+      });
+    });
   }
 
   /** Handle error. */
