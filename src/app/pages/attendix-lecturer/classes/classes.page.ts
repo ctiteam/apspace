@@ -180,8 +180,8 @@ export class ClassesPage implements AfterViewInit, OnInit {
   /** Change date. */
   changeDate(date: string, propagate = true) {
     this.schedulesByClasscodeDate = this.schedulesByClasscode.filter(schedule => schedule.DATESTAMP_ISO === date);
-    this.startTimes = [...new Set(this.schedulesByClasscode.map(schedule => schedule.TIME_FROM))].sort();
-    this.endTimes = [...new Set(this.schedulesByClasscode.map(schedule => schedule.TIME_TO))].sort();
+    this.startTimes = [...new Set(this.schedulesByClasscodeDate.map(schedule => schedule.TIME_FROM))].sort();
+    this.endTimes = [...new Set(this.schedulesByClasscodeDate.map(schedule => schedule.TIME_TO))].sort();
     this.startTime = '';
     this.endTime = '';
 
