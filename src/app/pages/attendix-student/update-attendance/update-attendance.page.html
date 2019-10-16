@@ -17,15 +17,7 @@
   <ion-grid>
     <ion-row>
       <ion-col size="10" offset="1" *ngIf="scan; else type">
-        <ion-card>
-          <ion-card-content>
-            <ion-buttons (click)="scanCode()">
-              <ion-button>
-                <ion-icon class="icons" name="qr-scanner"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-card-content>
-        </ion-card>
+        <ion-button (click)="scanCode()">Scan</ion-button>
       </ion-col>
 
       <ng-template #type>

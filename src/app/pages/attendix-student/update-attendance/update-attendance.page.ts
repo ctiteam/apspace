@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, ViewChild
 } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { Observable } from 'rxjs';
 
 import { UpdateAttendanceGQL } from '../../../../generated/graphql';
@@ -26,12 +27,19 @@ export class UpdateAttendancePage {
   constructor(
     private cdr: ChangeDetectorRef,
     private updateAttendance: UpdateAttendanceGQL,
+    public barcodeScanner: BarcodeScanner,
     public toastCtrl: ToastController
   ) { }
 
   scanCode() {
-    this.updateAttendance.mutate({ otp: this.otp })
-      .subscribe(d => console.log(d), err => this.handleError(err));
+    this.barcodeScanner.scan({ formats: 'QR_CODE', orientation: 'portrait' }).then(barcodeData => {
+      if (!barcodeData.cancelled && barcodeData.format === 'QR_CODE') {
+        this.updateAttendance.mutate({ otp: barcodeData.text })
+          .subscribe(d => console.log(d), err => this.handleError(err));
+      }
+    }).catch(err => {
+      console.error(err);
+    });
   }
 
   onKey(ev: KeyboardEvent): boolean {
