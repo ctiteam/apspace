@@ -1,7 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { Observable, Subject, of, timer, NEVER } from 'rxjs';
+import { Observable, Subject, timer, NEVER } from 'rxjs';
 import {
   catchError, finalize, first, map, pluck, scan, shareReplay, startWith,
   switchMap, tap,
