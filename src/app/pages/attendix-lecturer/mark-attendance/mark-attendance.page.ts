@@ -102,7 +102,7 @@ export class MarkAttendancePage implements OnInit {
       tap(({ id }) => console.log('new', id, studentsNameById[id])),
       tap(({ id, attendance }) => this.statusUpdate.next({ id, attendance })),
       scan((acc, { id }) => acc.includes(studentsNameById[id])
-        ? acc : [...acc, studentsNameById[id]].slice(-5), []),
+        ? acc : [...acc, studentsNameById[id]].slice(-10), []),
       shareReplay(1) // keep track when enter manual mode
     );
 
