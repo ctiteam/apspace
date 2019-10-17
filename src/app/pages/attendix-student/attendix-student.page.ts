@@ -69,7 +69,7 @@ export class AttendixStudentPage {
       this.updateAttendance.mutate({ otp }).subscribe(d => {
         this.toastCtrl.create({
           message: 'Attendance updated',
-          duration: 2000,
+          duration: 9000,
           position: 'top',
           color: 'success'
         }).then(toast => toast.present());
@@ -86,7 +86,7 @@ export class AttendixStudentPage {
   handleError(err: Error) {
     this.toastCtrl.create({
       message: 'Failed to update attendance. ' + err.message,
-      duration: 2000,
+      duration: 9000,
       position: 'top',
       color: 'danger'
     }).then(toast => toast.present());
