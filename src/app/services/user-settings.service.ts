@@ -40,6 +40,7 @@ export class UserSettingsService {
     'apcard',
     'cgpa',
     'financials',
+    'news',
   ];
 
   // Default dasbhoard sections for staff (will be added to the local storage when staff login)
@@ -48,6 +49,7 @@ export class UserSettingsService {
     'upcomingEvents',
     'upcomingTrips',
     'apcard',
+    'news',
   ];
 
   defaultBusShuttleServicesSettings = { firstLocation: '', secondLocation: '', alarmBefore: '10' };

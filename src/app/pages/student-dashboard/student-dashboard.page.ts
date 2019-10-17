@@ -1,18 +1,19 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
-import { NavController, IonSelect } from '@ionic/angular';
+import { NavController, IonSelect, ModalController } from '@ionic/angular';
 import { Observable, combineLatest, forkJoin, of, zip } from 'rxjs';
 import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray } from 'rxjs/operators';
 
-import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService } from 'src/app/services';
+import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService, NewsService } from 'src/app/services';
 import {
   EventComponentConfigurations, DashboardCardComponentConfigurations,
   Attendance, StudentProfile, Apcard, FeesTotalSummary, Course, CourseDetails,
   CgpaPerIntake, StudentTimetable, ConsultationHour, StudentPhoto, Holidays,
-  Holiday, ExamSchedule, BusTrips, APULocations, APULocation
+  Holiday, ExamSchedule, BusTrips, APULocations, APULocation, News
 } from 'src/app/interfaces';
 
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
+import { NewsModalPage } from '../news/news-modal';
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.page.html',
@@ -32,6 +33,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     'apcard',
     'cgpa',
     'financials',
+    'news',
   ];
 
   // dragulaModelArray will be modified whenever there is a change to the order of the dashboard sections
@@ -162,6 +164,19 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     withOptionsButton: false,
   };
 
+  // NEWS
+  news$: Observable<News[]>;
+  newsCardConfigurations: DashboardCardComponentConfigurations = {
+    cardTitle: 'Latest News',
+    contentPadding: false,
+    withOptionsButton: false
+  };
+  slideOpts = {
+    initialSlide: 1,
+    speed: 400
+  };
+  newsIndexToShow = 0; // open the first news section by default
+
   // CGPA
   cgpaChart: any;
   cgpaPerIntake$: Observable<CgpaPerIntake>;
@@ -180,7 +195,9 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     private navCtrl: NavController,
     private dragulaService: DragulaService,
     private notificationService: NotificationService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private news: NewsService,
+    private modalCtrl: ModalController
   ) {
     // Create the dragula group (drag and drop)
     this.dragulaService.createGroup('editable-list', {
@@ -229,6 +246,10 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   doRefresh(refresher?) {
     this.getLocations(refresher);
+    this.news$ = this.news.get(Boolean(refresher)).pipe(
+      map(res => res.slice(0, 4)),
+      finalize(() => refresher && refresher.target.complete()),
+    );
     this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation);
     this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
     this.displayGreetingMessage();
@@ -327,6 +348,20 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.greetingMessage = 'Good evening';
     }
+  }
+
+  // NEWS
+  showMore(itemIndex: number) {
+    this.newsIndexToShow = itemIndex;
+  }
+
+  async openNewsModal(item: News) {
+    const modal = await this.modalCtrl.create({
+      component: NewsModalPage,
+      componentProps: { item, notFound: 'No news Selected' },
+    });
+    await modal.present();
+    await modal.onDidDismiss();
   }
 
   // TODAYS SCHEDULE FUNCTIONS

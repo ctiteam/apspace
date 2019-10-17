@@ -85,6 +85,24 @@ ion-card.trip-card {
   display: none;
 }
 
+.news-wrapper {
+  margin-bottom: 4px;
+  margin-top: 4px;
+  ion-avatar {
+    --border-radius: 0;
+  }
+  .button-wrapper {
+    border-bottom: 1px solid var(--tertiary-txt-color);
+    ion-button {
+      float: right;
+      --background: transparent !important;
+    }
+  }
+  ion-item{
+    --border-color: var(--tertiary-txt-color) !important;
+  }
+}
+
 // RESPONSIVE FOR THIS PAGE ONLY
 @media only screen and (max-width: 575px) {
   .welcome-message-wrapper {
