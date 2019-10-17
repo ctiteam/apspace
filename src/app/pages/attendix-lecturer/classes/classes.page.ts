@@ -78,8 +78,8 @@ export class ClassesPage implements AfterViewInit, OnInit {
         }),
         ...timetable
       }));
-      this.guessWork(joined);
-      // append existing timetable after guess work
+
+      // lay out base schedules for guessing
       this.schedules = joined.map(data => {
         let guessClassType: string | null;
         if (data.SUBJECT_CODE) {
@@ -100,6 +100,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
           TYPE: guessClassType,
         };
       });
+      this.guessWork(joined);
+
+      // append existing timetable after guess work
       const mapped = classcodes.map(({ CLASS_CODE, CLASSES }) =>
         CLASSES.map(({ DATE, TIME_FROM, TIME_TO, TYPE }) =>
           ({ DATESTAMP_ISO: DATE, TIME_FROM, TIME_TO, CLASS_CODE, TYPE })));

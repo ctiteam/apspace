@@ -75,7 +75,7 @@ const routes: Routes = [
         path: 'update',
         data: { role: Role.Student },
         loadChildren:
-          () => import('./pages/attendix-student/update-attendance/update-attendance.module').then(m => m.UpdateAttendancePageModule)
+          () => import('./pages/attendix-student/attendix-student.module').then(m => m.AttendixStudentPageModule)
       }
     ]
   },

@@ -5,15 +5,15 @@ import { ToastController } from '@ionic/angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { Observable } from 'rxjs';
 
-import { UpdateAttendanceGQL } from '../../../../generated/graphql';
+import { UpdateAttendanceGQL } from '../../../generated/graphql';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: 'app-update-attendance',
-  templateUrl: './update-attendance.page.html',
-  styleUrls: ['./update-attendance.page.scss'],
+  selector: 'app-attendix-student',
+  templateUrl: './attendix-student.page.html',
+  styleUrls: ['./attendix-student.page.scss'],
 })
-export class UpdateAttendancePage {
+export class AttendixStudentPage {
 
   digits = new Array(3);
   @ViewChild('otpInput', { static: false }) otpInput: ElementRef<HTMLInputElement>;

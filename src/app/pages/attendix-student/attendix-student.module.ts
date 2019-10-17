@@ -6,12 +6,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
-import { UpdateAttendancePage } from './update-attendance.page';
+import { AttendixStudentPage } from './attendix-student.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: UpdateAttendancePage
+    component: AttendixStudentPage
   }
 ];
 
@@ -23,6 +23,6 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   providers: [BarcodeScanner],
-  declarations: [UpdateAttendancePage]
+  declarations: [AttendixStudentPage]
 })
-export class UpdateAttendancePageModule {}
+export class AttendixStudentPageModule {}
