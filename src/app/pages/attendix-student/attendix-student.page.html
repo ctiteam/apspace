@@ -7,7 +7,7 @@
       {{ scan ? 'Scan Code' : 'Enter Digits' }}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="swapMode($event)">{{ scan ? 'Type' : 'Scan' }}</ion-button>
+      <ion-button fill="outline" (click)="scanCode()" class="colored-text colored-border">Scan</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
