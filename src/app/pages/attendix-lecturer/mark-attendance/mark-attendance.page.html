@@ -22,8 +22,8 @@
         <div *ngFor="let c of otp | chars" class="otp">
           {{ c }}
         </div>
-        <ion-list *ngFor="let student of lastMarked$ | async">
-          <ion-item>
+        <ion-list lines="none">
+          <ion-item *ngFor="let student of lastMarked$ | async">
             {{ student.name }}
           </ion-item>
         </ion-list>
