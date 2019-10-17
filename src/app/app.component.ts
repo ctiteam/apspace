@@ -84,7 +84,9 @@ export class AppComponent {
     const toast = await this.toastCtrl.create({
       message: msg,
       duration,
-      position: 'top'
+      color: 'medium',
+      position: 'top',
+      showCloseButton: true
     });
     toast.present();
   }
