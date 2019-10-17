@@ -10,15 +10,17 @@ import {
   APULocations,
   Holidays,
   Holiday,
-  LecturerConsultation
+  LecturerConsultation,
+  News
 } from 'src/app/interfaces';
 
 import { Observable, of, zip } from 'rxjs';
 import { map, tap, finalize } from 'rxjs/operators';
-import { WsApiService, UserSettingsService, NotificationService } from 'src/app/services';
+import { WsApiService, UserSettingsService, NotificationService, NewsService } from 'src/app/services';
 import * as moment from 'moment';
-import { NavController, IonSelect } from '@ionic/angular';
+import { NavController, IonSelect, ModalController } from '@ionic/angular';
 import { DragulaService } from 'ng2-dragula';
+import { NewsModalPage } from '../news/news-modal';
 
 @Component({
   selector: 'app-staff-dashboard',
@@ -33,6 +35,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   allDashboardSections = [ // alldashboardSections will not be modified and it will be used in the select box
     'todaysSchedule',
     'upcomingEvents',
+    'news',
     'upcomingTrips',
     'apcard',
   ];
@@ -68,6 +71,19 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     withOptionsButton: false,
     cardTitle: 'Today\'s Schedule',
   };
+
+  // NEWS
+  news$: Observable<News[]>;
+  newsCardConfigurations: DashboardCardComponentConfigurations = {
+    cardTitle: 'Latest News',
+    contentPadding: false,
+    withOptionsButton: false
+  };
+  slideOpts = {
+    initialSlide: 1,
+    speed: 400
+  };
+  newsIndexToShow = 0; // open the first news section by default
 
   // TODAYS TRIPS
   upcomingTrips$: Observable<any>;
@@ -146,7 +162,9 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     private navCtrl: NavController,
     private dragulaService: DragulaService,
     private notificationService: NotificationService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private news: NewsService,
+    private modalCtrl: ModalController
   ) {
     this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
   }
@@ -191,6 +209,10 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   doRefresh(refresher?) {
     this.displayGreetingMessage();
     this.getLocations(refresher);
+    this.news$ = this.news.get(Boolean(refresher)).pipe(
+      map(res => res.slice(0, 4)),
+      finalize(() => refresher && refresher.target.complete()),
+    );
     this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation, refresher);
     this.getUpcomingEvents(refresher);
     this.apcardTransaction$ = this.getTransactions(refresher);
@@ -371,6 +393,20 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
         return consultationsEventMode;
       })
     );
+  }
+
+  // NEWS
+  showMore(itemIndex: number) {
+    this.newsIndexToShow = itemIndex;
+  }
+
+  async openNewsModal(item: News) {
+    const modal = await this.modalCtrl.create({
+      component: NewsModalPage,
+      componentProps: { item, notFound: 'No news Selected' },
+    });
+    await modal.present();
+    await modal.onDidDismiss();
   }
 
   // UPCOMING EVENTS FUNCTIONS
