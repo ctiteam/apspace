@@ -67,30 +67,26 @@ export class AttendixStudentPage {
   sendOtp(otp: string): Promise<boolean> {
     return new Promise(res => {
       this.updateAttendance.mutate({ otp }).subscribe(d => {
-        this.toastCtrl.create({
-          message: 'Attendance updated',
-          duration: 9000,
-          position: 'top',
-          color: 'success'
-        }).then(toast => toast.present());
+        this.toast('Attendance updated', 'success');
         console.log(d);
         res(true);
       }, err => {
-        this.handleError(err);
+        this.toast('Failed to update attendance. ' + err.message, 'danger');
+        console.error(err);
         res(true);
       });
     });
   }
 
-  /** Handle error. */
-  handleError(err: Error) {
+  /** Toast helper. */
+  toast(message: string, color: string) {
     this.toastCtrl.create({
-      message: 'Failed to update attendance. ' + err.message,
+      message,
       duration: 9000,
       position: 'top',
-      color: 'danger'
+      color,
+      showCloseButton: true
     }).then(toast => toast.present());
-    console.error(err);
   }
 
   /** Clear otp value. */
@@ -99,15 +95,6 @@ export class AttendixStudentPage {
     for (let prev = el; prev != null; prev = prev.previousElementSibling as HTMLInputElement) {
       prev.value = '';
       prev.focus();
-    }
-  }
-
-  /** Swap mode between auto scan and manual input. */
-  swapMode(ev: MouseEvent) {
-    this.scan = !this.scan;
-    this.cdr.detectChanges();
-    if (this.otpInput) {
-      this.otpInput.nativeElement.focus();
     }
   }
 
