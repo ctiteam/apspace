@@ -198,11 +198,26 @@ export class StudentSurveyPage implements OnInit {
             const moduleStartDate = new Date(amodule.START_DATE); // module start date
             const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49)); // week 7 of the module
             const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 70)); // week 10 of the module
-            if (todaysDate > startDateForMid && todaysDate < endDateForMid) {
+            if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 10 is not included
               this.surveyType = 'Mid-Semester';
             }
-          } else if (this.courseType === 'masters') {
-            // do the masters logic here
+          } else if (this.courseType === 'masters') { // masters students
+            const moduleStartDate = new Date(amodule.START_DATE); // module start date
+            if (amodule.STUDY_MODE === 'FullTime') { // full time student
+              // tslint:disable-next-line: max-line-length
+              const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 28)); // week 4 of the module
+              const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49)); // week 7 of the module
+              if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 7 is not included
+                this.surveyType = 'Mid-Semester';
+              }
+            } else {
+              // tslint:disable-next-line: max-line-length
+              const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 21)); // week 3 of the module
+              const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 42)); // week 6 of the module
+              if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 6 is not included
+                this.surveyType = 'Mid-Semester';
+              }
+            }
           }
         }
         this.getSurveys(this.intakeCode);
