@@ -1,3 +1,7 @@
 .transparent {
   --background: transparent !important;
 }
+
+ion-select.in-item {
+  max-width: 80%;
+}
