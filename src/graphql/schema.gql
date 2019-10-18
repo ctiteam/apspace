@@ -9,15 +9,6 @@ input ScheduleInput {
 type Attendance {
   schedule: Schedule!
   secret: String!
-  markedBy: String!
-  lecturer: String!
-  created: String!
-  modified: String
-  startTime: String!
-  endTime: String!
-  validUntil: String!
-  classCode: String!
-  classType: String
   students: [Status!]!
 }
 
@@ -33,10 +24,6 @@ type Status {
   id: String!
   name: String!
   attendance: String!
-  lastModified: String
-  modifiedBy: String
-  internalIP: String!
-  externalIP: String!
   # Schedule not able to be filtered by subscription
   classcode: String!
   date: String!

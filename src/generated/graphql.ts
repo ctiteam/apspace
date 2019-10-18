@@ -18,15 +18,6 @@ export type Attendance = {
    __typename?: 'Attendance',
   schedule: Schedule,
   secret: Scalars['String'],
-  markedBy: Scalars['String'],
-  lecturer: Scalars['String'],
-  created: Scalars['String'],
-  modified?: Maybe<Scalars['String']>,
-  startTime: Scalars['String'],
-  endTime: Scalars['String'],
-  validUntil: Scalars['String'],
-  classCode: Scalars['String'],
-  classType?: Maybe<Scalars['String']>,
   students: Array<Status>,
 };
 
@@ -93,10 +84,6 @@ export type Status = {
   id: Scalars['String'],
   name: Scalars['String'],
   attendance: Scalars['String'],
-  lastModified?: Maybe<Scalars['String']>,
-  modifiedBy?: Maybe<Scalars['String']>,
-  internalIP: Scalars['String'],
-  externalIP: Scalars['String'],
   classcode: Scalars['String'],
   date: Scalars['String'],
   startTime: Scalars['String'],
@@ -214,7 +201,7 @@ export const AttendanceDocument = gql`
   })
   export class AttendanceGQL extends Apollo.Query<AttendanceQuery, AttendanceQueryVariables> {
     document = AttendanceDocument;
-
+    
   }
 export const InitAttendanceDocument = gql`
     mutation initAttendance($schedule: ScheduleInput!) {
@@ -234,7 +221,7 @@ export const InitAttendanceDocument = gql`
   })
   export class InitAttendanceGQL extends Apollo.Mutation<InitAttendanceMutation, InitAttendanceMutationVariables> {
     document = InitAttendanceDocument;
-
+    
   }
 export const MarkAttendanceDocument = gql`
     mutation markAttendance($schedule: ScheduleInput!, $student: String!, $attendance: String!) {
@@ -255,7 +242,7 @@ export const MarkAttendanceDocument = gql`
   })
   export class MarkAttendanceGQL extends Apollo.Mutation<MarkAttendanceMutation, MarkAttendanceMutationVariables> {
     document = MarkAttendanceDocument;
-
+    
   }
 export const NewStatusDocument = gql`
     subscription NewStatus($classcode: String!, $date: String!, $startTime: String!, $endTime: String!, $classType: String!) {
@@ -271,7 +258,7 @@ export const NewStatusDocument = gql`
   })
   export class NewStatusGQL extends Apollo.Subscription<NewStatusSubscription, NewStatusSubscriptionVariables> {
     document = NewStatusDocument;
-
+    
   }
 export const UpdateAttendanceDocument = gql`
     mutation updateAttendance($otp: String!) {
@@ -292,5 +279,5 @@ export const UpdateAttendanceDocument = gql`
   })
   export class UpdateAttendanceGQL extends Apollo.Mutation<UpdateAttendanceMutation, UpdateAttendanceMutationVariables> {
     document = UpdateAttendanceDocument;
-
+    
   }

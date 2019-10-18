@@ -99,7 +99,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
           ({ DATESTAMP_ISO: DATE, TIME_FROM, TIME_TO, CLASS_CODE, TYPE })));
       this.schedules = this.schedules.concat.apply([], mapped);
       this.classcodes = [...new Set(this.schedules.map(schedule => schedule.CLASS_CODE).filter(Boolean))].sort();
-      console.info('filtered', this.schedules, this.classcodes);
+      console.log('filtered', this.schedules, this.classcodes);
     });
   }
 
@@ -131,7 +131,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     this.changeClasscode(this.classcode = currentSchedule.CLASS_CODE, false);
     this.changeDate(this.date = date, false);
     this.changeStartTime(this.startTime = currentSchedule.TIME_FROM);
-    console.info('currentSchedule', currentSchedule);
+    console.log('currentSchedule', currentSchedule);
   }
 
   /** Parse time into minutes of day in 12:59 PM format. */
