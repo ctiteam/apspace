@@ -86,7 +86,7 @@ export class AttendixStudentPage implements OnInit {
         console.log(d);
         res(true);
       }, err => {
-        this.toast('Failed to update attendance. ' + err.message, 'danger');
+        this.toast('Failed to update attendance. ' + err.message.replace('GraphQL error: ', ''), 'danger');
         console.error(err);
         res(true);
       });
