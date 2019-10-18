@@ -61,7 +61,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
       })] as [StaffProfile[], StudentTimetable[]]),
       map(([profile, timetables]) => timetables.filter(timetable => profile[0].ID === timetable.SAMACCOUNTNAME)),
     );
-    const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes');
+    const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes', true);
 
     forkJoin([timetables$, classcodes$]).subscribe(([timetables, classcodes]) => {
       // left join on classcodes
@@ -144,11 +144,14 @@ export class ClassesPage implements AfterViewInit, OnInit {
     console.log('currentSchedule', currentSchedule);
   }
 
+  /** Parse time into minutes of day in 12:59 PM format. */
+  parseTime(time: string): number {
+    return ((time.slice(-2) === 'PM' ? 12 : 0) + +time.slice(0, 2) % 12) * 60 + +time.slice(3, 5);
+  }
+
   /** Identify if time is between start and end time in 12:59 PM format. */
   between(start: string, end: string, nowMins: number): boolean {
-    const startMins = ((start.slice(-2) === 'PM' ? 12 : 0) + +start.slice(0, 2) % 12) * 60 + +start.slice(3, 5);
-    const endMins = ((end.slice(-2) === 'PM' ? 12 : 0) + +end.slice(0, 2) % 12) * 60 + +end.slice(3, 5);
-    return startMins <= nowMins && nowMins <= endMins;
+    return this.parseTime(start) <= nowMins && nowMins <= this.parseTime(end);
   }
 
   /** Display search modal to choose classcode. */
