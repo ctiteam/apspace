@@ -13,7 +13,8 @@
       <ion-col class="ion-align-self-center" size-md="6" size-lg="5" size-xs="12">
         <ion-item>
           <ion-label>Class Code</ion-label>
-          <ion-select #classcodeInput [ngModel]="classcode" (click)="chooseClasscode()">
+          <ion-select #classcodeInput [ngModel]="classcode" (click)="chooseClasscode()"
+            placeholder="Class Code">
             <ion-select-option *ngFor="let classcode of classcodes"
               [value]="classcode">{{ classcode }}</ion-select-option>
           </ion-select>
@@ -22,7 +23,7 @@
         <ion-item>
           <ion-label>Date</ion-label>
           <ion-select [(ngModel)]="date" (ngModelChange)="changeDate($event)"
-            interface="popover" [disabled]="!classcode">
+            interface="popover" [disabled]="!classcode" placeholder="Date">
             <ion-select-option *ngFor="let d of dates"
               [value]="d">{{ d }}</ion-select-option>
           </ion-select>
