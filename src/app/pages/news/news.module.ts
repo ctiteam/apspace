@@ -20,8 +20,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [NewsPage, NewsModalPage],
-  entryComponents: [NewsModalPage],
+  declarations: [NewsPage],
+  entryComponents: [],
 })
 
 export class NewsPageModule {}

@@ -17,13 +17,15 @@ import { AppAvailability } from '@ionic-native/app-availability/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { NotificationModalPage } from './pages/notifications/notification-modal';
+import { NewsModalPage } from './pages/news/news-modal';
 // import { Animation } from '@ionic/core';
 
 // export function disableNavAnimation(AnimationC: Animation): Promise<Animation> { return Promise.resolve(new AnimationC()); }
 
 @NgModule({
-  declarations: [AppComponent, NotificationModalPage], // notificationPageModal is needed here because it is called in app.component.ts
-  entryComponents: [NotificationModalPage],
+  // notificationPageModal is needed here because it is called in app.component.ts, NewsModal is called in dashboards also
+  declarations: [AppComponent, NotificationModalPage, NewsModalPage],
+  entryComponents: [NotificationModalPage, NewsModalPage],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

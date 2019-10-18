@@ -33,10 +33,9 @@ const routes: Routes = [
   ],
   declarations: [
     StudentDashboardPage,
-    NewsModalPage,
     DisabledPipe
   ],
   providers: [DragulaService],
-  entryComponents: [NewsModalPage]
+  entryComponents: []
 })
 export class StudentDashboardPageModule { }

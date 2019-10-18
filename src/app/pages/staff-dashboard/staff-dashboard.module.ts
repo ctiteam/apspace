@@ -34,9 +34,8 @@ const routes: Routes = [
   declarations: [
     StaffDashboardPage,
     DisabledPipe,
-    NewsModalPage
   ],
   providers: [DragulaService],
-  entryComponents: [NewsModalPage]
+  entryComponents: []
 })
 export class StaffDashboardPageModule { }
