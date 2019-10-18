@@ -48,18 +48,12 @@ export class ClassesPage implements AfterViewInit, OnInit {
   ngOnInit() {
     const d = new Date();
     this.date = this.isoDate(d);
+    const nowMins = d.getHours() * 60 + d.getMinutes();
 
     const timetables$ = forkJoin([this.ws.get<StaffProfile[]>('/staff/profile'), this.tt.get()]).pipe(
-      map(([profile, timetables]) => [profile, timetables.map(timetable => { // XXX: temporary modify dates
-        if (['ALF', 'ANK', 'BPM', 'CRR', 'CYN', 'FTK', 'GDP', 'HLH', 'JPK',
-          'KID', 'LGR', 'LKK', 'LKS', 'LSK', 'MNB', 'MNZ', 'MPJ', 'MUB', 'NFH',
-          'NJA', 'PRE', 'SLM', 'SSR', 'SVC', 'SVK', 'SVM', 'TKK', 'TTS', 'VNW',
-          'ZAB'].some(key => key === timetable.LECTID)) {
-          timetable.SAMACCOUNTNAME = 'Appsteststaff1';
-        }
-        return timetable;
-      })] as [StaffProfile[], StudentTimetable[]]),
-      map(([profile, timetables]) => timetables.filter(timetable => profile[0].ID === timetable.SAMACCOUNTNAME)),
+      map(([profile, timetables]) => timetables.filter(timetable =>
+        profile[0].ID === timetable.SAMACCOUNTNAME
+        && this.parseTime(timetable.TIME_FROM) <= nowMins)),
     );
     const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes', true);
 
@@ -70,11 +64,8 @@ export class ClassesPage implements AfterViewInit, OnInit {
           // Classcode BM006-3-2-CRI-L-UC2F1805CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
           // Take only BM006-3-2-CRI-L
           const len = classcode.SUBJECT_CODE.length;
-          // Take only UC2F1805 and CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
-          const [intake, codes] = classcode.CLASS_CODE.slice(len + 1).match(/-?(.*\d{4})(.*)/).slice(1);
-          return classcode.CLASS_CODE.slice(0, len + 2) === timetable.MODID.slice(0, len + 2);
-            // && timetable.INTAKE.startsWith(intake) // TODO: testing
-            // && codes.split('-').includes(timetable.INTAKE.slice(intake.length));
+          return classcode.CLASS_CODE.slice(0, len + 2) === timetable.MODID.slice(0, len + 2)
+            && classcode.COURSE_CODE_ALIAS === timetable.INTAKE;
         }),
         ...timetable
       }));
@@ -100,7 +91,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
           TYPE: guessClassType,
         };
       });
-      this.guessWork(joined);
+      this.guessWork(joined, nowMins);
 
       // append existing timetable after guess work
       const mapped = classcodes.map(({ CLASS_CODE, CLASSES }) =>
@@ -108,32 +99,31 @@ export class ClassesPage implements AfterViewInit, OnInit {
           ({ DATESTAMP_ISO: DATE, TIME_FROM, TIME_TO, CLASS_CODE, TYPE })));
       this.schedules = this.schedules.concat.apply([], mapped);
       this.classcodes = [...new Set(this.schedules.map(schedule => schedule.CLASS_CODE).filter(Boolean))].sort();
-      console.log('filtered', this.schedules, this.classcodes);
+      console.info('filtered', this.schedules, this.classcodes);
     });
   }
 
   ngAfterViewInit() {
     // prevent ion-select click bubbling
-    (this.classcodeInput as any).el.addEventListener('click', ev => {
+    (this.classcodeInput as any).el.addEventListener('click', (ev: MouseEvent) => {
       ev.stopPropagation();
       this.chooseClasscode();
     }, true);
   }
 
   /** Guess the current classcode based on timetable. */
-  guessWork(schedules: (Classcode & StudentTimetable)[]) {
+  guessWork(schedules: (Classcode & StudentTimetable)[], nowMins: number) {
     const d = new Date();
     const date = this.isoDate(d);
-    const nowMins = d.getHours() * 60 + d.getMinutes();
 
     const guessSchedules = schedules.filter(schedule => {
       return schedule.DATESTAMP_ISO === date
-        // && schedule.LECTID === 'CYN' // XXX: test
+        && schedule.CLASS_CODE // CLASS_CODE may not be matched
         && this.between(schedule.TIME_FROM, schedule.TIME_TO, nowMins);
     });
 
     if (new Set(guessSchedules.map(schedule => schedule.MODID)).size !== 1) {
-      console.error('fail to auto complete', guessSchedules);
+      console.warn('fail to auto complete', guessSchedules);
       return;
     }
     const currentSchedule = guessSchedules[0];
@@ -141,7 +131,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     this.changeClasscode(this.classcode = currentSchedule.CLASS_CODE, false);
     this.changeDate(this.date = date, false);
     this.changeStartTime(this.startTime = currentSchedule.TIME_FROM);
-    console.log('currentSchedule', currentSchedule);
+    console.info('currentSchedule', currentSchedule);
   }
 
   /** Parse time into minutes of day in 12:59 PM format. */
@@ -167,7 +157,6 @@ export class ClassesPage implements AfterViewInit, OnInit {
     await modal.present();
     const { data: { item: classcode } = { item: this.classcode } } = await modal.onDidDismiss();
     if (classcode !== null && classcode !== this.classcode) {
-      console.log('changed classcode');
       this.changeClasscode(this.classcode = classcode);
     }
   }
