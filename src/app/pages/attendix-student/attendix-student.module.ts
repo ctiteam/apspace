@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { QRScanner } from '@ionic-native/qr-scanner/ngx';
 
 import { AttendixStudentPage } from './attendix-student.page';
 
@@ -22,7 +23,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  providers: [BarcodeScanner],
+  providers: [BarcodeScanner, QRScanner],
   declarations: [AttendixStudentPage]
 })
 export class AttendixStudentPageModule {}

@@ -4,33 +4,27 @@
       <ion-back-button defaultHref="/tabs/attendance"></ion-back-button>
     </ion-buttons>
     <ion-title class="ion-text-center">
-      {{ scan ? 'Scan Code' : 'Enter Digits' }}
+      Enter Digits
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button fill="outline" (click)="scanCode()" class="colored-text colored-border">Scan</ion-button>
+      <ion-button *ngIf="status?.authorized" fill="outline" (click)="scanCode()" class="colored-text colored-border">
+        Scan
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content [class.show-qr-scanner]="isOpen">
   <ion-grid>
     <ion-row>
-      <ion-col size="10" offset="1" *ngIf="scan; else type">
-        <ion-button (click)="scanCode()">Scan</ion-button>
+      <ion-col offset="1" size="10">
+        <div class="otp-wrapper">
+          <input
+            #otpInput *ngFor="let _ of digits; i as index"
+            autofocus class="otp" type="tel" maxlength="1"
+            (keydown)="onKey($event)">
+        </div>
       </ion-col>
-
-      <ng-template #type>
-        <ion-col offset="1" size="10">
-          <div class="otp-wrapper">
-            <input
-              #otpInput *ngFor="let _ of digits; i as index"
-              autofocus class="otp" type="tel" maxlength="1"
-              (keydown)="onKey($event)">
-          </div>
-        </ion-col>
-      </ng-template>
     </ion-row>
   </ion-grid>
-
 </ion-content>

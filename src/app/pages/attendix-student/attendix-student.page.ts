@@ -1,43 +1,58 @@
 import {
-  ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, ViewChild
+  ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild
 } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { Observable } from 'rxjs';
 
 import { UpdateAttendanceGQL } from '../../../generated/graphql';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-attendix-student',
   templateUrl: './attendix-student.page.html',
   styleUrls: ['./attendix-student.page.scss'],
 })
-export class AttendixStudentPage {
+export class AttendixStudentPage implements OnInit {
 
   digits = new Array(3);
   @ViewChild('otpInput', { static: false }) otpInput: ElementRef<HTMLInputElement>;
 
-  student = 100001;
+  isOpen = false;
 
-  scan = false;  // scan code or type code
+  status: QRScannerStatus;  // scan availability
   qrScan$: Observable<number>;
 
   constructor(
-    private cdr: ChangeDetectorRef,
     private updateAttendance: UpdateAttendanceGQL,
     public barcodeScanner: BarcodeScanner,
+    public qrScanner: QRScanner,
     public toastCtrl: ToastController
   ) { }
 
+  ngOnInit() {
+    this.qrScanner.prepare()
+      .then(status => { this.status = status; console.log(status); })
+      .catch(err => console.warn('QRScanner', err));
+  }
+
   scanCode() {
-    this.barcodeScanner.scan({ formats: 'QR_CODE', orientation: 'portrait' }).then(barcodeData => {
-      if (!barcodeData.cancelled && barcodeData.format === 'QR_CODE') {
-        this.sendOtp(barcodeData.text);
-      }
-    }).catch(err => {
-      console.error(err);
-    });
+    if (this.status.authorized) {
+      console.log('scan');
+      const scanSub = this.qrScanner.scan().subscribe((text: string) => {
+        console.log('Scanned', text);
+        this.sendOtp(text);
+        this.qrScanner.hide();
+        scanSub.unsubscribe();
+      });
+    } else if (this.status.denied) {
+      // camera permission was permanently denied
+      // you must use QRScanner.openSettings() method to guide the user to the settings page
+      // then they can grant the permission from there
+    } else {
+      // permission was denied, but not permanently. You can ask for permission again at a later time.
+    }
   }
 
   /** Handle keydown event. */
