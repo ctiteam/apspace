@@ -108,7 +108,11 @@ export class StudentTimetablePage implements OnInit {
 
     // select current start of week
     const date = new Date();
-    date.setDate(date.getDate() - date.getDay());
+    if (date.getDay() !== 6) { // 6 is saturday
+      date.setDate(date.getDate() - date.getDay());
+    } else {
+      date.setDate(date.getDate() + 1);  // include saturdays with the new week
+    }
     this.selectedWeek = date;
 
     // optional room paramMap to filter timetables by room (separated from intake filter)
