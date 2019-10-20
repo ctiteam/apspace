@@ -3,6 +3,10 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/" [hidden]='comingFromTabs() ? true : false'></ion-back-button>
     </ion-buttons>
+    <ion-title>
+      <ng-container *ngIf="intake; else roomTitle">{{intake}}</ng-container>
+      <ng-template #roomTitle>{{room}}</ng-template>
+    </ion-title>
     <ion-buttons slot="end">
       <ion-button *ngIf="intakeSelectable" fill="outline" size="small" (click)="presentIntakeSearch()"
         class="colored-text colored-border">
@@ -196,18 +200,26 @@
       <ng-template #empty>
         <ion-card>
           <ion-card-content>
-            <ng-container *ngIf="intake; else byroom">
+            <ng-container *ngIf="intake; else noIntakeSelected">
               <app-message-with-svg imageUrl="assets/img/happy.svg"
-                messageContent="There are no classes for the selected intake on the selected week!"
-                messageTitle="Hooray! No classes this week." wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+                messageTitle="Hooray! No classes for {{intake}} on the week that starts on {{selectedWeek | date: 'EEEE, dd MM yyy'}}"
+                wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
               </app-message-with-svg>
             </ng-container>
-            <ng-template #byroom>
-              <app-message-with-svg imageUrl="assets/img/no-consultations.svg"
-                messageContent="We couldn't find any timetable for the selected room."
-                messageTitle="No timetable found for the selected room!" wrapperSize="4" wrapperOffset="4"
-                wrapperMarginTop="20px">
-              </app-message-with-svg>
+            <ng-template #noIntakeSelected>
+              <ng-container *ngIf="room; else emptyIntake">
+                <app-message-with-svg imageUrl="assets/img/no-consultations.svg"
+                  messageContent="The room selected does not exist or its timetable is not available"
+                  messageTitle="Room Timetable is not Available!" wrapperSize="4" wrapperOffset="4"
+                  wrapperMarginTop="20px">
+                </app-message-with-svg>
+              </ng-container>
+              <ng-template #emptyIntake>
+                <app-message-with-svg imageUrl="assets/img/no-consultations.svg"
+                  messageContent="Please choose an intake from the intakes button on the top right of the page"
+                  messageTitle="No intake selected!" wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+                </app-message-with-svg>
+              </ng-template>
             </ng-template>
           </ion-card-content>
         </ion-card>
