@@ -56,7 +56,7 @@
         <ion-card *virtualItem="let student">
           <ion-item [ngClass]="'state' + student.attendance">
             <ion-img slot="start" (ionError)="$event.target.src = 'assets/img/profile.svg'"></ion-img>
-            <ion-label>{{ student.name }} {{ student.id }}</ion-label>
+            <ion-label>{{ student.id }} {{ student.name }}</ion-label>
             <ng-container slot="end">
               <ion-button [disabled]="student.attendance === 'Y'" class="stateY" (click)="mark(student.id, 'Y')">Present</ion-button>
               <ion-button [disabled]="student.attendance === 'L'" class="stateL" (click)="mark(student.id, 'L')">Late</ion-button>
