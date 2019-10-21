@@ -37,6 +37,12 @@
   --border-color: #81c784 !important;
 }
 
+ion-list,
+ion-item {
+  background: transparent !important;
+  --background: transparent !important;
+}
+
 qrcode {
   display: flex;
   align-items: center;
