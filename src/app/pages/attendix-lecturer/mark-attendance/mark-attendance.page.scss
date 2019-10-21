@@ -43,6 +43,12 @@ ion-item {
   --background: transparent !important;
 }
 
+ion-img {
+  width: 48px;
+  height: 48px;
+  margin-right: 8px;
+}
+
 qrcode {
   display: flex;
   align-items: center;

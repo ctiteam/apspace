@@ -37,10 +37,10 @@
     <ng-template [ngIf]="lastMarked$ | async"></ng-template>
     <ion-grid>
       <ion-row>
-        <ion-col>
+        <ion-col size="9" sizeMd="10">
           <ion-searchbar [(ngModel)]="term"></ion-searchbar>
         </ion-col>
-        <ion-col size="2">
+        <ion-col size="3" sizeMd="2">
           <ion-select [(ngModel)]="type" placeholder="Attendance" interface="popover">
             <ion-select-option value="">Any</ion-select-option>
             <ion-select-option value="Y">Present</ion-select-option>
@@ -55,7 +55,8 @@
         [trackBy]="trackById" approxItemHeight="48px">
         <ion-card *virtualItem="let student">
           <ion-item [ngClass]="'state' + student.attendance">
-            <ion-img slot="start" (ionError)="$event.target.src = 'assets/img/profile.svg'"></ion-img>
+            <ion-img slot="start" src="error"
+              (ionError)="$event.target.src = 'assets/img/profile.png'"></ion-img>
             <ion-label>{{ student.id }} {{ student.name }}</ion-label>
             <ng-container slot="end">
               <ion-button [disabled]="student.attendance === 'Y'" class="stateY" (click)="mark(student.id, 'Y')">Present</ion-button>
