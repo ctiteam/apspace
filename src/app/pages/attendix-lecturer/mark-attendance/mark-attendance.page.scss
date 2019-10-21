@@ -16,18 +16,24 @@
   font-family: 'Hack', 'Iconsolata', monospace;
 }
 
-ion-item.stateN {
+.stateN {
+  --color: #000000;
   --background: #e57373 !important;
+  --background-hover: #af4448 !important;
   --border-color: #e57373 !important;
 }
 
-ion-item.stateL {
+.stateL {
+  --color: #000000;
   --background: #fff176 !important;
+  --background-hover: #cabf45 !important;
   --border-color: #fff176 !important;
 }
 
-ion-item.stateY {
+.stateY {
+  --color: #000000;
   --background: #81c784 !important;
+  --background-hover: #519657 !important;
   --border-color: #81c784 !important;
 }
 
