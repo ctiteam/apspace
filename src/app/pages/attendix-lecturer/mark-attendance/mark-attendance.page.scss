@@ -16,25 +16,32 @@
   font-family: 'Hack', 'Iconsolata', monospace;
 }
 
+.stateR {
+  --color: #000000;
+  --background: #e0e0e0 !important;
+  --border-color: #e0e0e0 !important;
+  --background-color: #aeaeae !important;
+}
+
 .stateN {
   --color: #000000;
   --background: #e57373 !important;
-  --background-hover: #af4448 !important;
   --border-color: #e57373 !important;
+  --background-hover: #af4448 !important;
 }
 
 .stateL {
   --color: #000000;
   --background: #fff176 !important;
-  --background-hover: #cabf45 !important;
   --border-color: #fff176 !important;
+  --background-hover: #cabf45 !important;
 }
 
 .stateY {
   --color: #000000;
   --background: #81c784 !important;
-  --background-hover: #519657 !important;
   --border-color: #81c784 !important;
+  --background-hover: #519657 !important;
 }
 
 ion-list,

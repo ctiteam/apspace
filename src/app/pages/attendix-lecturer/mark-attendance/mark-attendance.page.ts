@@ -34,7 +34,7 @@ export class MarkAttendancePage implements OnInit {
   totalPresentStudents$: Observable<number>;
   totalStudents$: Observable<number>;
 
-  statusUpdate = new Subject<{ id: string; attendance: string }>();
+  statusUpdate = new Subject<{ id: string; attendance: string; absentReason: string | null; }>();
 
   constructor(
     private attendance: AttendanceGQL,
@@ -72,9 +72,10 @@ export class MarkAttendancePage implements OnInit {
     // keep updating attendancesState$ with new changes
     const attendances$ = attendancesState$.pipe(
       switchMap(state => this.statusUpdate.asObservable().pipe(startWith(state))),
-      scan((state: InitAttendanceMutation, action: { id: string; attendance: string; }) => {
+      scan((state: InitAttendanceMutation, action: { id: string; attendance: string; absentReason: string; }) => {
         const student = state.attendance.students.find(s => s.id === action.id);
         student.attendance = action.attendance;
+        student.absentReason = action.absentReason;
         return state;
       }),
       shareReplay(1) // keep track while switching mode
@@ -95,12 +96,12 @@ export class MarkAttendancePage implements OnInit {
       )
     );
 
-    // take last 5 values updated and ignore duplicates
+    // take last 10 values updated and ignore duplicates
     console.log('schedule', schedule);
     this.lastMarked$ = this.newStatus.subscribe(schedule).pipe(
       pluck('data', 'newStatus'),
       tap(({ id }) => console.log('new', id, studentsNameById[id])),
-      tap(({ id, attendance }) => this.statusUpdate.next({ id, attendance })),
+      tap(({ id, attendance, absentReason }) => this.statusUpdate.next({ id, attendance, absentReason })),
       scan((acc, { id }) => acc.includes(studentsNameById[id])
         ? acc : [...acc, studentsNameById[id]].slice(-10), []),
       shareReplay(1) // keep track when enter manual mode
@@ -122,7 +123,18 @@ export class MarkAttendancePage implements OnInit {
   }
 
   /** Mark student attendance. */
-  mark(student: string, attendance: string) {
+  mark(student: string, attendance: string, absentEvent?: KeyboardEvent) {
+    const el = absentEvent && absentEvent.target as HTMLInputElement;
+    if (el) {
+      el.blur();
+    }
+    const absentReason = el && el.value || null;
+
+    // fallback to absent if reason is left empty
+    if (attendance === 'R' && absentReason === null) {
+      attendance = 'N';
+    }
+
     // TODO: optimistic ui does not work yet
     const options = {
       optimisticResponse: {
@@ -131,11 +143,13 @@ export class MarkAttendancePage implements OnInit {
           __typename: 'Status' as 'Status',
           id: student,
           attendance,
+          absentReason,
           ...this.schedule
         }
       }
     };
-    this.markAttendance.mutate({ schedule: this.schedule, student, attendance }, options).subscribe(
+    const schedule = this.schedule;
+    this.markAttendance.mutate({ schedule, student, attendance, absentReason }, options).subscribe(
       () => {},
       e => console.error(e) // XXX: retry attendance$ on failure
     );

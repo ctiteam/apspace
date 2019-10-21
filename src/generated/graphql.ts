@@ -37,7 +37,8 @@ export type MutationInitAttendanceArgs = {
 export type MutationMarkAttendanceArgs = {
   schedule: ScheduleInput,
   student: Scalars['String'],
-  attendance: Scalars['String']
+  attendance: Scalars['String'],
+  absentReason?: Maybe<Scalars['String']>
 };
 
 
@@ -84,6 +85,7 @@ export type Status = {
   id: Scalars['String'],
   name: Scalars['String'],
   attendance: Scalars['String'],
+  absentReason?: Maybe<Scalars['String']>,
   classcode: Scalars['String'],
   date: Scalars['String'],
   startTime: Scalars['String'],
@@ -116,7 +118,7 @@ export type AttendanceQuery = (
     & Pick<Attendance, 'secret'>
     & { students: Array<(
       { __typename?: 'Status' }
-      & Pick<Status, 'id' | 'name' | 'attendance'>
+      & Pick<Status, 'id' | 'name' | 'attendance' | 'absentReason'>
     )> }
   )> }
 );
@@ -133,7 +135,7 @@ export type InitAttendanceMutation = (
     & Pick<Attendance, 'secret'>
     & { students: Array<(
       { __typename?: 'Status' }
-      & Pick<Status, 'id' | 'name' | 'attendance'>
+      & Pick<Status, 'id' | 'name' | 'attendance' | 'absentReason'>
     )> }
   ) }
 );
@@ -141,7 +143,8 @@ export type InitAttendanceMutation = (
 export type MarkAttendanceMutationVariables = {
   schedule: ScheduleInput,
   student: Scalars['String'],
-  attendance: Scalars['String']
+  attendance: Scalars['String'],
+  absentReason?: Maybe<Scalars['String']>
 };
 
 
@@ -149,7 +152,7 @@ export type MarkAttendanceMutation = (
   { __typename?: 'Mutation' }
   & { markAttendance: (
     { __typename?: 'Status' }
-    & Pick<Status, 'id' | 'attendance' | 'classcode' | 'date' | 'startTime' | 'endTime' | 'classType'>
+    & Pick<Status, 'id' | 'attendance' | 'absentReason' | 'classcode' | 'date' | 'startTime' | 'endTime' | 'classType'>
   ) }
 );
 
@@ -166,7 +169,7 @@ export type NewStatusSubscription = (
   { __typename?: 'Subscription' }
   & { newStatus: Maybe<(
     { __typename?: 'Status' }
-    & Pick<Status, 'id' | 'attendance'>
+    & Pick<Status, 'id' | 'attendance' | 'absentReason'>
   )> }
 );
 
@@ -191,6 +194,7 @@ export const AttendanceDocument = gql`
       id
       name
       attendance
+      absentReason
     }
   }
 }
@@ -211,6 +215,7 @@ export const InitAttendanceDocument = gql`
       id
       name
       attendance
+      absentReason
     }
   }
 }
@@ -224,10 +229,11 @@ export const InitAttendanceDocument = gql`
     
   }
 export const MarkAttendanceDocument = gql`
-    mutation markAttendance($schedule: ScheduleInput!, $student: String!, $attendance: String!) {
-  markAttendance(schedule: $schedule, student: $student, attendance: $attendance) {
+    mutation markAttendance($schedule: ScheduleInput!, $student: String!, $attendance: String!, $absentReason: String) {
+  markAttendance(schedule: $schedule, student: $student, attendance: $attendance, absentReason: $absentReason) {
     id
     attendance
+    absentReason
     classcode
     date
     startTime
@@ -249,6 +255,7 @@ export const NewStatusDocument = gql`
   newStatus(classcode: $classcode, date: $date, startTime: $startTime, endTime: $endTime, classType: $classType) {
     id
     attendance
+    absentReason
   }
 }
     `;

@@ -24,6 +24,7 @@ type Status {
   id: String!
   name: String!
   attendance: String!
+  absentReason: String
   # Schedule not able to be filtered by subscription
   classcode: String!
   date: String!
@@ -46,6 +47,7 @@ type Mutation {
     schedule: ScheduleInput!
     student: String!
     attendance: String!
+    absentReason: String
   ): Status!
 
   updateAttendance(

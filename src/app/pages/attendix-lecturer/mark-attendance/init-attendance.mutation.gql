@@ -5,6 +5,7 @@ mutation initAttendance($schedule: ScheduleInput!) {
       id
       name
       attendance
+      absentReason
     }
   }
 }

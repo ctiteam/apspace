@@ -46,6 +46,7 @@
             <ion-select-option value="Y">Present</ion-select-option>
             <ion-select-option value="L">Late</ion-select-option>
             <ion-select-option value="N">Absent</ion-select-option>
+            <ion-select-option value="R">Absent with reason</ion-select-option>
           </ion-select>
         </ion-col>
       </ion-row>
@@ -59,6 +60,10 @@
               (ionError)="$event.target.src = 'assets/img/profile.png'"></ion-img>
             <ion-label>{{ student.id }} {{ student.name }}</ion-label>
             <ng-container slot="end">
+              <ion-item *ngIf="student.attendance === 'N' || student.attendance === 'R'">
+                <ion-input [value]="student.absentReason" placeholder="Absent with reason"
+                  (change)="mark(student.id, 'R', $event)"></ion-input>
+              </ion-item>
               <ion-button [disabled]="student.attendance === 'Y'" class="stateY" (click)="mark(student.id, 'Y')">Present</ion-button>
               <ion-button [disabled]="student.attendance === 'L'" class="stateL" (click)="mark(student.id, 'L')">Late</ion-button>
               <ion-button [disabled]="student.attendance === 'N'" class="stateN" (click)="mark(student.id, 'N')">Absent</ion-button>

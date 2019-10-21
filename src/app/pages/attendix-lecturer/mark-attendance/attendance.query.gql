@@ -5,6 +5,7 @@ query attendance($schedule: ScheduleInput!) {
       id
       name
       attendance
+      absentReason
     }
   }
 }
