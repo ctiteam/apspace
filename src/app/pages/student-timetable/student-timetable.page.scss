@@ -33,14 +33,22 @@ ion-segment-button {
   min-width: 50px !important;
 }
 
-.sticky-segment {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 100 !important;
-  --background: var(--main-bg-color);
+.segment-scrollable {
+  overflow-x: auto !important;
+  justify-content: center;
+}
+
+ion-segment.week-segment {
+  margin-bottom: 30px;
+  background: var(--tertiary-bg-color);
+  --background: var(--tertiary-bg-color);
   ion-segment-button {
-    --background-checked: var(--main-bg-color);
+    --background-checked: var(--secondary-bg-color);
   }
+}
+
+.table-item:nth-child(odd) {
+  --background: var(--main-bg-color) !important;
 }
 
 .table-top {
