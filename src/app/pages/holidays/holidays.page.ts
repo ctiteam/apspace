@@ -28,7 +28,7 @@ export class HolidaysPage implements OnInit {
     numberOfDays: '' | '1 days' | 'many',
     affecting: '' | 'students' | 'staff'
   } = {
-      show: 'upcoming',
+      show: 'all',
       filterDays: '',
       filterMonths: '',
       numberOfDays: '',
@@ -150,7 +150,7 @@ export class HolidaysPage implements OnInit {
       filterDays: '',
       filterMonths: '',
       numberOfDays: '',
-      show: 'upcoming',
+      show: 'all',
       affecting: ''
     };
     this.onFilter();
