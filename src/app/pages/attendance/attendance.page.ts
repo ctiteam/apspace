@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WsApiService } from 'src/app/services';
-import { Platform, ActionSheetController } from '@ionic/angular';
+import { ActionSheetController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { Attendance, Course, AttendanceLegend } from 'src/app/interfaces';
 import { tap, finalize } from 'rxjs/operators';
@@ -27,7 +27,6 @@ export class AttendancePage implements OnInit {
 
   constructor(
     private ws: WsApiService,
-    private plt: Platform,
     public actionSheetCtrl: ActionSheetController,
     private router: Router,
   ) { }

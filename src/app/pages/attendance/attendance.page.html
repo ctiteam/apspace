@@ -58,11 +58,13 @@
   <!-- END COVER -->
 
   <!-- IF THERE IS NO DATA RETURNED FROM API -->
-  <div class="cover" *ngIf="average == -1">
-    <div id="widget-value">
-      No attendance data for the selected intake
-    </div>
-  </div>
+  <ng-container *ngIf="average == -1">
+    <app-message-with-svg imageUrl='/assets/img/no-consultations.svg'
+      messageTitle='No Attendance Data for {{selectedIntake}}'
+      messageContent='Either the intake just started or your lecturers did not upload your attendance for any of your modules'
+      wrapperMarginTop="20px" wrapperOffset="3" wrapperSize="6">
+    </app-message-with-svg>
+  </ng-container>
   <!-- END THERE IS NO DATA -->
 
   <!-- SHOWING LOADING WHEN ATTENDANCE VALUE IS -2 (INITIAL VALUE) -->
