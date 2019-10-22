@@ -43,12 +43,12 @@
     </ion-item>
   </ion-card>
 
-  <ion-card *ngIf="timetables$ | async | at:location | on:day | time:since:until | for:types | rooms as timetables">
+  <ion-card *ngIf="timetables$ | async | at:location | for:types | on:day:since:until as rooms">
     <ion-card-header>
-      <ion-card-title>{{ timetables.length }} available rooms</ion-card-title>
+      <ion-card-title>{{ rooms.length }} available rooms</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-chip *ngFor="let room of timetables; trackBy: trackByName" [routerLink]="['/student-timetable', { room: room }]">
+      <ion-chip *ngFor="let room of rooms; trackBy: trackByName" [routerLink]="['/student-timetable', { room: room }]">
         {{ room }}
       </ion-chip>
     </ion-card-content>
