@@ -393,9 +393,8 @@
                 </ion-col>
               </ion-row>
               <ng-template #noNews>
-                <app-message-with-svg messageTitle="List of news is empty!"
-                  messageContent="There are no news to show." imageUrl="assets/img/empty.svg" wrapperOffset="3"
-                  wrapperSize="6">
+                <app-message-with-svg messageTitle="List of news is empty!" messageContent="There are no news to show."
+                  imageUrl="assets/img/empty.svg" wrapperOffset="3" wrapperSize="6">
                 </app-message-with-svg>
               </ng-template>
             </ion-grid>
@@ -419,6 +418,56 @@
                         <ion-skeleton-text style="width: 100%; line-height: 30px;" animated></ion-skeleton-text>
                         <div class="button-wrapper">
                         </div>
+                      </div>
+                    </ion-list>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ng-template>
+          </dashboard-card>
+        </div>
+      </div>
+
+      <!-- Notice Board SECTION -->
+      <div id="noticeBoard" *ngIf="shownDashboardSections.includes('noticeBoard')">
+        <div class="masonry-item">
+          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+            <ion-icon name="move" class="handle"></ion-icon>
+            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('noticeBoard')"></ion-icon>
+          </div>
+          <dashboard-card [cardTitle]='noticeBoardCardConfigurations.cardTitle'
+            [contentPadding]='noticeBoardCardConfigurations.contentPadding'
+            [withOptionsButton]='noticeBoardCardConfigurations.withOptionsButton'>
+            <ion-grid class="ion-no-padding" *ngIf="noticeBoardItems$ | async as noticeBoardItems; else loadingSlideshow">
+              <ion-row *ngIf="noticeBoardItems.length > 0; else noSlides">
+                <ion-col class="ion-no-padding" size="12">
+                  <ion-slides #slides pager="true" [options]="noticeBoardSliderOpts">
+                    <ion-slide *ngFor="let noticeBoardItem of noticeBoardItems">
+                      <ion-card class="ion-no-margin">
+                        <ion-card-content class="ion-no-padding">
+                          <div [innerHTML]="noticeBoardItem.field_image_link[0].value">
+                          </div>
+                        </ion-card-content>
+                      </ion-card>
+                    </ion-slide>
+                  </ion-slides>
+                  <div class="swiper-button-next" (click)="nextSlide()"></div>
+                  <div class="swiper-button-prev" (click)="prevSlide()"></div>
+                </ion-col>
+              </ion-row>
+              <ng-template #noSlides>
+                <app-message-with-svg messageTitle="No Images Added to The Board!" messageContent="There are no notices to show."
+                  imageUrl="assets/img/empty.svg" wrapperOffset="3" wrapperSize="6">
+                </app-message-with-svg>
+              </ng-template>
+            </ion-grid>
+            <ng-template #loadingSlideshow>
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-list style="margin-top: 2px;">
+                      <div class="news-wrapper">
+                        <ion-skeleton-text style="width: 100%; line-height: 200px;" animated></ion-skeleton-text>
                       </div>
                     </ion-list>
                   </ion-col>
