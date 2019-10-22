@@ -1,0 +1,22 @@
+mutation markAttendance(
+  $schedule: ScheduleInput!
+  $student: String! $attendance: String!
+  $absentReason: String
+) {
+  markAttendance(
+    schedule: $schedule
+    student: $student
+    attendance: $attendance
+    absentReason: $absentReason
+  ) {
+    id
+    attendance
+    absentReason
+    # Schedule
+    classcode
+    date
+    startTime
+    endTime
+    classType
+  }
+}

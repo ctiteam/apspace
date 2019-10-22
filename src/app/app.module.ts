@@ -6,21 +6,24 @@ import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage';
+
 import { ActionSheet } from '@ionic-native/action-sheet/ngx';
+import { AppAvailability } from '@ionic-native/app-availability/ngx';
+import { Device } from '@ionic-native/device/ngx';
+import { FCM } from '@ionic-native/fcm/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { AppAvailability } from '@ionic-native/app-availability/ngx';
-import { FCM } from '@ionic-native/fcm/ngx';
-import { Device } from '@ionic-native/device/ngx';
 import { NotificationModalPage } from './pages/notifications/notification-modal';
 import { NewsModalPage } from './pages/news/news-modal';
 // import { Animation } from '@ionic/core';
 
 // export function disableNavAnimation(AnimationC: Animation): Promise<Animation> { return Promise.resolve(new AnimationC()); }
+
+import { GraphQLModule } from './graphql.module';
 
 @NgModule({
   // notificationPageModal is needed here because it is called in app.component.ts, NewsModal is called in dashboards also
@@ -37,7 +40,8 @@ import { NewsModalPage } from './pages/news/news-modal';
       }
     ),
     IonicStorageModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
+    GraphQLModule,
   ],
   providers: [
     ActionSheet,

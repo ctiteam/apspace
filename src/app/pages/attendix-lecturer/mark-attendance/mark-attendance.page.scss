@@ -1,0 +1,63 @@
+.back-btn:hover {
+  padding: 4px 8px;
+  background-color: rgba(4, 54, 95, 0.925);
+  color: white;
+  border-radius: 5px;
+}
+
+.otp {
+  display: inline-block;
+  background-color: #eeeeee;
+  font-size: 48px;
+  margin: 5px 9px;
+  padding: 12px;
+  padding-bottom: calc(12px - 5px);
+  border-bottom: 5px solid #bcbcbc;
+  font-family: 'Hack', 'Iconsolata', monospace;
+}
+
+.stateR {
+  --color: #000000;
+  --background: #e0e0e0 !important;
+  --border-color: #e0e0e0 !important;
+  --background-color: #aeaeae !important;
+}
+
+.stateN {
+  --color: #000000;
+  --background: #e57373 !important;
+  --border-color: #e57373 !important;
+  --background-hover: #af4448 !important;
+}
+
+.stateL {
+  --color: #000000;
+  --background: #fff176 !important;
+  --border-color: #fff176 !important;
+  --background-hover: #cabf45 !important;
+}
+
+.stateY {
+  --color: #000000;
+  --background: #81c784 !important;
+  --border-color: #81c784 !important;
+  --background-hover: #519657 !important;
+}
+
+ion-list,
+ion-item {
+  background: transparent !important;
+  --background: transparent !important;
+}
+
+ion-img {
+  width: 48px;
+  height: 48px;
+  margin-right: 8px;
+}
+
+qrcode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -56,6 +56,30 @@ const routes: Routes = [
     loadChildren: () => import('./pages/bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttleServicesPageModule)
   },
   {
+    path: 'attendix',
+    canActivateChild: [AuthGuard],
+    children: [
+      {
+        path: 'classes',
+        data: { role: Role.Lecturer | Role.Admin },
+        loadChildren:
+          () => import('./pages/attendix-lecturer/classes/classes.module').then(m => m.ClassesPageModule)
+      },
+      {
+        path: 'mark-attendance',
+        data: { role: Role.Lecturer | Role.Admin },
+        loadChildren:
+          () => import('./pages/attendix-lecturer/mark-attendance/mark-attendance.module').then(m => m.MarkAttendancePageModule)
+      },
+      {
+        path: 'update',
+        data: { role: Role.Student },
+        loadChildren:
+          () => import('./pages/attendix-student/attendix-student.module').then(m => m.AttendixStudentPageModule)
+      }
+    ]
+  },
+  {
     path: 'more',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/more/more.module').then(m => m.MorePageModule)

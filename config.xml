@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="my.edu.apiit.apspace" version="2.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="my.edu.apiit.apspace" version="2.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>APSpace</name>
     <description>The Asia Pacific University APP provides convenient access to important information and to most of our services in your hand.</description>
     <author email="cti@apiit.edu.my" href="https://cti.my/">CTI @ APIIT</author>
@@ -21,6 +21,9 @@
     <preference name="SplashScreenDelay" value="0" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application">
+            <application android:usesCleartextTraffic="true" />
+        </edit-config>
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
         <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
@@ -95,4 +98,8 @@
     <plugin name="cordova-plugin-splashscreen" spec="5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="^2.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
+    <plugin name="cordova-plugin-qrscanner" spec="^3.0.1" />
+    <engine name="android" spec="^8.1.0" />
+    <engine name="ios" spec="5.0.1" />
+    <engine name="browser" spec="^6.0.0" />
 </widget>
