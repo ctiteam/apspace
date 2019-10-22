@@ -7,14 +7,14 @@
       Enter Digits
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="isCordova" (click)="scanCode()" [disabled]="isOpen" color="primary">
-        <ion-icon slot="icon-only" name="qr-scanner"></ion-icon>
+      <ion-button *ngIf="isCordova" (click)="swapMode()" color="primary">
+        <ion-icon slot="icon-only" [name]="scan ? 'code' : 'qr-scanner'"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [class.show-qr-scanner]="isOpen">
+<ion-content [class.show-qr-scanner]="scan">
   <ion-grid>
     <ion-row>
       <ion-col offset="1" size="10">

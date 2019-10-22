@@ -19,7 +19,7 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
   @ViewChild('otpInput', { static: false }) otpInput: ElementRef<HTMLInputElement>;
 
   isCordova: boolean;
-  isOpen = false;
+  scan = false;
 
   status: QRScannerStatus;  // scan availability
   qrScan$: Observable<number>;
@@ -36,47 +36,40 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isCordova = this.plt.is('cordova');
+    if (this.isCordova) {
+      this.swapMode();
+    }
   }
 
   ngOnDestroy() {
-    this.isOpen = false;
-    this.scanSub.unsubscribe();
-    this.qrScanner.destroy();
+    // stop scan mode
+    if (this.isCordova && this.scan) {
+      this.swapMode();
+    }
   }
 
-  scanCode() {
-    this.qrScanner.prepare().then(status => {
-      console.assert(status.authorized);
-      this.scanSub = this.qrScanner.scan().subscribe((text: string) => {
-        this.sendOtp(text);
-        this.isOpen = false;
-        this.scanSub.unsubscribe();
-        this.qrScanner.destroy();
+  /** Swap mode between auto scan and manual input. */
+  swapMode() {
+    this.scan = !this.scan;
+    if (this.scan) {
+      this.qrScanner.prepare().then(status => {
+        console.assert(status.authorized);
+        // scanning only takes the first valid code
+        this.scanSub = this.qrScanner.scan()
+          .subscribe((text: string) => this.sendOtp(text));
+        this.qrScanner.show();
+      }).catch(err => {
+        this.scan = false;
+        if (err.name === 'CAMERA_ACCESS_DENIED') {
+          this.requestPerm();
+        } else {
+          console.error('Unknown error', err.name);
+        }
       });
-      this.isOpen = true;
-      this.qrScanner.show();
-    }).catch(err => {
-      if (err.name === 'CAMERA_ACCESS_DENIED') {
-        this.alertCtrl.create({
-          header: 'Permission denied',
-          message: 'Please provide access to camera.',
-          buttons: [
-            {
-              text: 'Cancel',
-              role: 'cancel',
-              cssClass: 'secondary',
-              handler: () => {}
-            },
-            {
-              text: 'Okay',
-              handler: () => this.qrScanner.openSettings()
-            }
-          ]
-        }).then(alert => alert.present());
-      } else {
-        console.error('Unknown error', err.name);
-      }
-    });
+    } else {
+      this.scanSub.unsubscribe();
+      this.qrScanner.destroy();
+    }
   }
 
   /** Handle keydown event. */
@@ -117,6 +110,15 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
     });
   }
 
+  /** Clear otp value. */
+  clear(el: HTMLInputElement) {
+    el.value = '';
+    for (let prev = el; prev != null; prev = prev.previousElementSibling as HTMLInputElement) {
+      prev.value = '';
+      prev.focus();
+    }
+  }
+
   /** Toast helper. */
   toast(message: string, color: string) {
     this.toastCtrl.create({
@@ -128,13 +130,24 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
     }).then(toast => toast.present());
   }
 
-  /** Clear otp value. */
-  clear(el: HTMLInputElement) {
-    el.value = '';
-    for (let prev = el; prev != null; prev = prev.previousElementSibling as HTMLInputElement) {
-      prev.value = '';
-      prev.focus();
-    }
+  /** Request for permission. */
+  requestPerm() {
+    this.alertCtrl.create({
+      header: 'Permission denied',
+      message: 'Please provide access to camera.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        },
+        {
+          text: 'Okay',
+          handler: () => this.qrScanner.openSettings()
+        }
+      ]
+    }).then(alert => alert.present());
   }
 
 }
