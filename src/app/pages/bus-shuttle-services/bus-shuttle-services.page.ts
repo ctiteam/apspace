@@ -17,7 +17,7 @@ export class BusShuttleServicesPage implements OnInit {
   filteredTrip$: any;
   locations: APULocation[];
   dateNow = new Date();
-
+  timeNow = '';
   latestUpdate = '';
 
   filterObject: {
@@ -28,7 +28,7 @@ export class BusShuttleServicesPage implements OnInit {
   } = {
       toLocation: '',
       fromLocation: '',
-      show: 'upcoming',
+      show: 'all',
       tripDay: this.getTodayDay(this.dateNow)
     };
 
@@ -59,6 +59,7 @@ export class BusShuttleServicesPage implements OnInit {
   }
 
   doRefresh(refresher) {
+    this.timeNow = moment(this.dateNow).format('kk:mm'); // update current time when user refresh
     this.filteredTrip$ = forkJoin([this.getLocations(refresher), this.getTrips(refresher)]).pipe(
       map(res => res[1]),
       tap(_ => this.onFilter(refresher)),
@@ -85,7 +86,7 @@ export class BusShuttleServicesPage implements OnInit {
         fromLocation: '',
         toLocation: '',
         tripDay: this.getTodayDay(this.dateNow),
-        show: 'upcoming'
+        show: 'all'
       };
     }
     this.filteredTrip$ = this.trip$.pipe(

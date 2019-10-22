@@ -136,8 +136,8 @@
                   </h2>
                   <ion-grid class="ion-no-padding">
                     <ion-row>
-                      <ion-col class="ion-text-center secondary-txt-color" *ngFor="let tripData of destination.value"
-                        size="3" size-md="4">
+                      <ion-col [class.passed]="timeNow >= tripData.trip_time" class="ion-text-center colored-text"
+                        *ngFor="let tripData of destination.value" size="3" size-md="4">
                         {{tripData.trip_time}}
                       </ion-col>
                     </ion-row>
