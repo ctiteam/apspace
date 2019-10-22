@@ -1,58 +1,82 @@
 import {
-  ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild
+  Component, ElementRef, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { UpdateAttendanceGQL } from '../../../generated/graphql';
 
 @Component({
-  // changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-attendix-student',
   templateUrl: './attendix-student.page.html',
   styleUrls: ['./attendix-student.page.scss'],
 })
-export class AttendixStudentPage implements OnInit {
+export class AttendixStudentPage implements OnInit, OnDestroy {
 
   digits = new Array(3);
   @ViewChild('otpInput', { static: false }) otpInput: ElementRef<HTMLInputElement>;
 
+  isCordova: boolean;
   isOpen = false;
 
   status: QRScannerStatus;  // scan availability
   qrScan$: Observable<number>;
+  scanSub: Subscription;
 
   constructor(
     private updateAttendance: UpdateAttendanceGQL,
+    public alertCtrl: AlertController,
     public barcodeScanner: BarcodeScanner,
+    public plt: Platform,
     public qrScanner: QRScanner,
     public toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
-    this.qrScanner.prepare()
-      .then(status => { this.status = status; console.log(status); })
-      .catch(err => console.warn('QRScanner', err));
+    this.isCordova = this.plt.is('cordova');
+  }
+
+  ngOnDestroy() {
+    this.isOpen = false;
+    this.scanSub.unsubscribe();
+    this.qrScanner.destroy();
   }
 
   scanCode() {
-    if (this.status.authorized) {
-      console.log('scan');
-      const scanSub = this.qrScanner.scan().subscribe((text: string) => {
-        console.log('Scanned', text);
+    this.qrScanner.prepare().then(status => {
+      console.assert(status.authorized);
+      this.scanSub = this.qrScanner.scan().subscribe((text: string) => {
         this.sendOtp(text);
-        this.qrScanner.hide();
-        scanSub.unsubscribe();
+        this.isOpen = false;
+        this.scanSub.unsubscribe();
+        this.qrScanner.destroy();
       });
-    } else if (this.status.denied) {
-      // camera permission was permanently denied
-      // you must use QRScanner.openSettings() method to guide the user to the settings page
-      // then they can grant the permission from there
-    } else {
-      // permission was denied, but not permanently. You can ask for permission again at a later time.
-    }
+      this.isOpen = true;
+      this.qrScanner.show();
+    }).catch(err => {
+      if (err.name === 'CAMERA_ACCESS_DENIED') {
+        this.alertCtrl.create({
+          header: 'Permission denied',
+          message: 'Please provide access to camera.',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              cssClass: 'secondary',
+              handler: () => {}
+            },
+            {
+              text: 'Okay',
+              handler: () => this.qrScanner.openSettings()
+            }
+          ]
+        }).then(alert => alert.present());
+      } else {
+        console.error('Unknown error', err.name);
+      }
+    });
   }
 
   /** Handle keydown event. */

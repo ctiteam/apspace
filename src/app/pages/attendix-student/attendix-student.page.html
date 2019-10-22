@@ -7,8 +7,8 @@
       Enter Digits
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="status?.authorized" fill="outline" (click)="scanCode()" class="colored-text colored-border">
-        Scan
+      <ion-button *ngIf="isCordova" (click)="scanCode()" [disabled]="isOpen" color="primary">
+        <ion-icon slot="icon-only" name="qr-scanner"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
