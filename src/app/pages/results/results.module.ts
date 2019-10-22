@@ -8,6 +8,7 @@ import { ChartModule } from 'angular2-chartjs';
 import { SemPipe } from './sem.pipe';
 
 import { ResultsPage } from './results.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 const routes: Routes = [
   {
@@ -19,6 +20,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    ComponentsModule,
     FormsModule,
     IonicModule,
     ChartModule,
