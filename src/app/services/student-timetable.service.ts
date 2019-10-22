@@ -58,7 +58,8 @@ export class StudentTimetableService {
   private outdated(tt: StudentTimetable[]): boolean {
     const date = new Date(); // first day of week (Sunday)
     date.setDate(date.getDate() - date.getDay());
-    return tt.some(t => new Date(t.DATESTAMP_ISO) < date);
+    const dates = Array.from(new Set(tt.map(t => t.DATESTAMP_ISO)));
+    return dates.some(d => new Date(d) < date);
   }
 
 }
