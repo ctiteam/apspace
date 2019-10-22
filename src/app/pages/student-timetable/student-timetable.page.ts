@@ -88,6 +88,7 @@ export class StudentTimetablePage implements OnInit {
 
   room: string;
   intake: string;
+  freeTime: boolean;
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
@@ -122,6 +123,7 @@ export class StudentTimetablePage implements OnInit {
     const intake = this.route.snapshot.params.intake;
     if (this.room) { // indirect timetable page access
       this.intakeSelectable = false;
+      this.freeTime = true;
     }
 
     // quick exit when room is specified (and do not set intake)

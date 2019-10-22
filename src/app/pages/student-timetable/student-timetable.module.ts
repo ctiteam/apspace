@@ -11,6 +11,7 @@ import { ClassesPipe } from './classes.pipe';
 import { ThedayPipe } from './theday.pipe';
 import { ComponentsModule } from '../../components/components.module';
 import { TheWeekPipe } from './theweek.pipe';
+import { GenPipe } from './gen.pipe';
 
 const routes: Routes = [
   {
@@ -37,6 +38,7 @@ const routes: Routes = [
     ClassesPipe,
     ThedayPipe,
     TheWeekPipe,
+    GenPipe,
   ],
   entryComponents: []
 })

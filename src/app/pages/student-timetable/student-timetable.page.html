@@ -45,7 +45,7 @@
     <!-- do not add filter pipe here as it affects loading -->
     <ng-template let-timetables [ngIf]="timetable$ | async" [ngIfElse]="loading">
       <ng-template let-timetables
-        [ngIf]="!viewWeek ? (timetables | classes:intake:room | theday:selectedDate) : (timetables | classes:intake:room | theweek:selectedWeek)"
+        [ngIf]="!viewWeek ? (timetables | classes:intake:room | theday:selectedDate | gen:freeTime) : (timetables | classes:intake:room | theweek:selectedWeek | gen:freeTime)"
         [ngIfElse]="loading">
         <ng-template [ngIf]="timetables!.length" [ngIfElse]="empty">
           <ion-grid>
