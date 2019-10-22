@@ -191,6 +191,10 @@
           [withOptionsButton]='todaysScheduleCardConfigurations.withOptionsButton'
           [options]='todaysScheduleCardConfigurations.options'>
           <events-list [observable$]="todaysSchedule$"></events-list>
+          <div class="ion-padding">
+            <p><span class="danger-text">Note:</span> The upcoming classes in this section belong to your default intake
+              which is: <span class="text-bold">{{defaultIntake}}</span></p>
+          </div>
         </dashboard-card>
       </div>
 
@@ -218,7 +222,7 @@
           <div *ngIf="(modulesWithLowAttendance$ | async)?.length > 0; else notLowAttendance">
             <dashboard-card *ngIf="(overallAttendancePercent$ | async) as overallAttendancePercent"
               [cardTitle]='lowAttendanceCardConfigurations.cardTitle'
-              [cardSubtitle]='"Overall: " + (overallAttendancePercent.value | number: "1.0-1") + "%"'
+              [cardSubtitle]='"Overall: " + (overallAttendancePercent.value != "-1" ? ((overallAttendancePercent.value | number: "1.0-1") + "%") : "--")'
               [cardSubtitleColor]="overallAttendancePercent.value >= 80 ? '' : '#e54d42'"
               [contentPadding]='lowAttendanceCardConfigurations.contentPadding'
               [withOptionsButton]='lowAttendanceCardConfigurations.withOptionsButton'>
@@ -255,10 +259,10 @@
         <ng-template #notLowAttendance>
           <dashboard-card *ngIf="(overallAttendancePercent$ | async) as overallAttendancePercent"
             [cardTitle]='lowAttendanceCardConfigurations.cardTitle'
-            [cardSubtitle]='"Overall: " + (overallAttendancePercent.value | number: "1.0-1") + "%"'
+            [cardSubtitle]='"Overall: " + (overallAttendancePercent.value != "-1" ? ((overallAttendancePercent.value | number: "1.0-1") + "%") : "--")'
             [contentPadding]='lowAttendanceCardConfigurations.contentPadding'
             [withOptionsButton]='lowAttendanceCardConfigurations.withOptionsButton'>
-            <app-message-with-svg messageTitle="Your Attendance is Above 80% in all Modules!"
+            <app-message-with-svg messageTitle="Your Attendance is Above 80% in all {{defaultIntake}} Modules!"
               messageContent="Great Job. You are attending the classes regularly." imageUrl="assets/img/happy.svg"
               wrapperOffset="3" wrapperSize="6">
             </app-message-with-svg>
@@ -438,7 +442,8 @@
           <dashboard-card [cardTitle]='noticeBoardCardConfigurations.cardTitle'
             [contentPadding]='noticeBoardCardConfigurations.contentPadding'
             [withOptionsButton]='noticeBoardCardConfigurations.withOptionsButton'>
-            <ion-grid class="ion-no-padding" *ngIf="noticeBoardItems$ | async as noticeBoardItems; else loadingSlideshow">
+            <ion-grid class="ion-no-padding"
+              *ngIf="noticeBoardItems$ | async as noticeBoardItems; else loadingSlideshow">
               <ion-row *ngIf="noticeBoardItems.length > 0; else noSlides">
                 <ion-col class="ion-no-padding" size="12">
                   <ion-slides #slides pager="true" [options]="noticeBoardSliderOpts">
@@ -456,8 +461,9 @@
                 </ion-col>
               </ion-row>
               <ng-template #noSlides>
-                <app-message-with-svg messageTitle="No Images Added to The Board!" messageContent="There are no notices to show."
-                  imageUrl="assets/img/empty.svg" wrapperOffset="3" wrapperSize="6">
+                <app-message-with-svg messageTitle="No Images Added to The Board!"
+                  messageContent="There are no notices to show." imageUrl="assets/img/empty.svg" wrapperOffset="3"
+                  wrapperSize="6">
                 </app-message-with-svg>
               </ng-template>
             </ion-grid>
