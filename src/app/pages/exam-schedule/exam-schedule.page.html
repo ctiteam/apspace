@@ -17,9 +17,9 @@
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
   <ng-template [ngIf]="!showNoIntakeMessage" [ngIfElse]="noIntakeSelected">
-    <h5 class="secondary-txt-color ion-text-center ion-padding">Selected intake: {{ intake }}</h5>
     <ng-template let-exams [ngIf]="exam$ | async" [ngIfElse]="loadingExams">
       <ng-template [ngIf]="exams.length !== 0" [ngIfElse]="noExams">
+        <h5 class="secondary-txt-color ion-text-center ion-padding">Selected intake: {{ intake }}</h5>
         <ion-grid class="ion-no-padding ion-padding-start ion-padding-end">
           <ion-row>
             <ion-col size="12" size-lg="6" *ngFor="let exam of exams">
@@ -93,7 +93,7 @@
         </ion-grid>
       </ng-template>
       <ng-template #noExams>
-        <app-message-with-svg imageUrl="assets/img/empty.svg" messageTitle="No Exam Schedule For The Selected Intake!"
+        <app-message-with-svg imageUrl="assets/img/empty.svg" messageTitle="No Exam Schedule For {{intake}}!"
           wrapperSize="6" wrapperMarginTop="30px" wrapperOffset="3"
           messageContent="The exam schedule for the selected intake has not been published yet">
         </app-message-with-svg>
