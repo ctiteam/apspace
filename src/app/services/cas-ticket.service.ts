@@ -86,7 +86,9 @@ export class CasTicketService {
     };
     return (tgt ? of(tgt) : fromPromise(this.storage.get('tgt'))).pipe(
       switchMap(tgt => this.http.post(`${this.casUrl}/cas/v1/tickets/${tgt}`, null, options)),
-      catchError(_ => this.getTGT().pipe(switchMap(tgt => this.getST(serviceUrl, tgt)))),
+      catchError(err => err.status !== 0
+        ? this.getTGT().pipe(switchMap(tgt => this.getST(serviceUrl, tgt)))
+        : throwError(new Error('No network'))),
     );
   }
 

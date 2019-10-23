@@ -69,7 +69,9 @@ export class WsApiService {
       ? (!options.auth // always get ticket if auth is true
         ? this.http.get<T>(url, opt)
         : this.cas.getST(url.split('?').shift()).pipe( // remove service url params
-          switchMap(ticket => this.http.get<T>(url, { ...opt, params: { ...opt.params, ticket } })))
+          switchMap(ticket => this.http.get<T>(url, { ...opt, params: { ...opt.params, ticket } })),
+          catchError(() => this.storage.get(endpoint)), // no network
+        )
       ).pipe(
         tap(cache => this.storage.set(endpoint, cache)),
         timeout(options.timeout),
