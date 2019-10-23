@@ -1,26 +1,20 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, Renderer2, AfterViewInit } from '@angular/core';
 import {
-  EventComponentConfigurations,
-  DashboardCardComponentConfigurations,
-  Apcard,
-  StaffProfile,
-  LecturerTimetable,
-  APULocation,
-  BusTrips,
-  APULocations,
-  Holidays,
-  Holiday,
-  LecturerConsultation,
-  News
-} from 'src/app/interfaces';
+  Component, OnInit, OnDestroy, ElementRef, ViewChild, Renderer2, AfterViewInit
+} from '@angular/core';
+import { NavController, IonSelect, ModalController, IonSlides } from '@ionic/angular';
 
 import { Observable, of, zip } from 'rxjs';
-import { map, tap, finalize } from 'rxjs/operators';
-import { WsApiService, UserSettingsService, NotificationService, NewsService } from 'src/app/services';
-import * as moment from 'moment';
-import { NavController, IonSelect, ModalController, IonSlides } from '@ionic/angular';
+import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { DragulaService } from 'ng2-dragula';
+import * as moment from 'moment';
+
+import { WsApiService, UserSettingsService, NotificationService, NewsService } from '../../services';
 import { NewsModalPage } from '../news/news-modal';
+import {
+  APULocation, APULocations, Apcard, BusTrips,
+  DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday,
+  Holidays, LecturerConsultation, LecturerTimetable, News, StaffProfile
+} from 'src/app/interfaces';
 
 @Component({
   selector: 'app-staff-dashboard',
@@ -182,6 +176,9 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     }
   };
 
+  // HOLIDAYS
+  holidays$: Observable<Holiday[]>;
+
   // TODAYS TRIPS
   upcomingTrips$: Observable<any>;
   showSetLocationsSettings = false;
@@ -193,7 +190,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   };
 
   // UPCOMING EVENTS
-  upcomingEvent$: Observable<EventComponentConfigurations[]> | any;
+  upcomingEvent$: Observable<EventComponentConfigurations[]>;
   upcomingEventsCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
     cardTitle: 'Upcoming Events',
@@ -272,6 +269,9 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
         next: data => this.shownDashboardSections = data,
       }
     );
+
+    this.holidays$ = this.getHolidays(false);
+
     this.userSettings.getBusShuttleServiceSettings().subscribe(
       {
         next: data => {
@@ -306,6 +306,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   doRefresh(refresher?) {
     this.displayGreetingMessage();
     this.getLocations(refresher);
+    this.holidays$ = this.getHolidays(true);
     this.news$ = this.news.get(Boolean(refresher)).pipe(
       map(res => res.slice(0, 4)),
       finalize(() => refresher && refresher.target.complete()),
@@ -315,7 +316,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       finalize(() => refresher && refresher.target.complete()),
     );
     this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation, refresher);
-    this.getUpcomingEvents(refresher);
+    this.getUpcomingEvents();
     this.apcardTransaction$ = this.getTransactions(true); // no-cache for apcard transactions
     this.getBadge();
     this.getProfile(refresher).pipe(
@@ -328,6 +329,22 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     this.notificationService.getMessages().subscribe(res => {
       this.numberOfUnreadMsgs = +res.num_of_unread_messages;
     });
+  }
+
+  // GET DETAILS FOR HOLIDAYS
+  // holidays$ REQUIRED FOR $upcomingTrips
+  getHolidays(refresher: boolean): Observable<Holiday[]> {
+    return this.ws.get<Holidays>('/transix/holidays/filtered/staff', refresher, { auth: false }).pipe(
+      map(res => res.holidays),
+      // AUTO REFRESH IF HOLIDAY NOT FOUND
+      switchMap(holidays => {
+        const date = new Date();
+        return refresher || holidays.find(h => date < new Date(h.holiday_start_date))
+          ? of(holidays)
+          : this.getHolidays(true);
+      }),
+      shareReplay(1),
+    );
   }
 
   // DRAG AND DROP FUNCTIONS (DASHBOARD CUSTOMIZATION)
@@ -423,12 +440,25 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getUpcomingClasses(staffId: string, refresher: boolean): Observable<EventComponentConfigurations[]> {
-    const dateNow = new Date();
+    const d = new Date();
+    const date = `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`;
     // const endpoint = '/lecturer-timetable/v2/' + 'anrazali'; // For testing
     const endpoint = '/lecturer-timetable/v2/' + staffId;
-    return this.ws.get<LecturerTimetable[]>(endpoint, refresher, { auth: false }).pipe(
+    return this.ws.get<LecturerTimetable[]>(endpoint, false, { auth: false }).pipe(
       // GET TODAYS CLASSES ONLY
-      map(timetable => timetable.filter(tt => this.eventIsToday(new Date(tt.time), dateNow))),
+      map(timetable => timetable.filter(tt => this.eventIsToday(new Date(tt.time), d))),
+
+      // REFRESH LECTURER TIMETABLE ONLY IF NO CLASSES IN LECTURER TIMETABLE AND NOT A HOLIDAY
+      switchMap(timetables => timetables.length !== 0
+        ? of(timetables)
+        : this.holidays$.pipe(
+          // XXX: ONLY START DAY IS BEING MATCHED
+          switchMap(holidays => holidays.find(holiday => date === holiday.holiday_start_date)
+            ? of(timetables)
+            : this.ws.get<LecturerTimetable[]>(endpoint, true, { auth: false })
+          ),
+        )
+      ),
 
       // CONVERT TIMETABLE OBJECT TO THE OBJECT EXPECTED IN THE EVENT COMPONENT
       map((timetables: LecturerTimetable[]) => {
@@ -436,7 +466,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
         timetables.forEach((timetable: LecturerTimetable) => {
           let classPass = false;
-          if (this.eventPass(timetable.time, dateNow)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
+          if (this.eventPass(timetable.time, d)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
             classPass = true;
           }
 
@@ -520,15 +550,16 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // UPCOMING EVENTS FUNCTIONS
-  getUpcomingEvents(refresher: boolean) {
+  getUpcomingEvents() {
     const todaysDate = new Date();
-    this.upcomingEvent$ = this.getUpcomingHoliday(todaysDate, refresher);
+    this.upcomingEvent$ = this.getUpcomingHoliday(todaysDate);
   }
 
-  getUpcomingHoliday(date: Date, refresher): Observable<EventComponentConfigurations[]> {
-    return this.ws.get<Holidays>('/transix/holidays/filtered/staff', refresher, { auth: false }).pipe(
-      map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
-      map(holiday => {
+  getUpcomingHoliday(date: Date): Observable<EventComponentConfigurations[]> {
+    return this.holidays$.pipe(
+      map(holidays => {
+        const holiday = holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday;
+
         const examsListEventMode: EventComponentConfigurations[] = [];
         const formattedStartDate = moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('DD MMM YYYY');
         examsListEventMode.push({
