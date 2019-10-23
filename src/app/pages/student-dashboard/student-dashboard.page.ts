@@ -764,7 +764,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   // APCARD FUNCTIONS
   getTransactions(refresher) {
-    return this.ws.get<Apcard[]>('/apcard/', refresher).pipe(
+    return this.ws.get<Apcard[]>('/apcard/', true).pipe(
       map(transactions => this.signTransactions(transactions)),
       tap(transactions => this.analyzeTransactions(transactions)),
       tap(transactions => this.getCurrentApcardBalance(transactions))
