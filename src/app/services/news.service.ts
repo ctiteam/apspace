@@ -14,7 +14,7 @@ import { News } from '../interfaces';
 export class NewsService {
   // this service needs to be refactored and changed to webspace items service
   newsUrl = 'https://api.apiit.edu.my/webspace/news';  // json output
-  slideshowUrl = 'https://webspace.apiit.edu.my/slideshow';  // json output
+  slideshowUrl = 'https://api.apiit.edu.my/webspace/slideshow';  // json output
 
   constructor(public http: HttpClient, private network: Network, private storage: Storage) { }
 
