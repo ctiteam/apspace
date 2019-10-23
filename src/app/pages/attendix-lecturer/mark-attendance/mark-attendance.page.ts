@@ -165,7 +165,7 @@ export class MarkAttendancePage implements OnInit {
     }).then(toast => toast.present());
   }
 
-  trackById(index: number, item: Pick<Status, 'id'>) {
+  trackById(_index: number, item: Pick<Status, 'id'>) {
     return item.id;
   }
 

@@ -114,10 +114,10 @@ export class LecturerSlotDetailsModalPage implements OnInit {
               };
               this.sendCancelBookingRequest(cancellationBody).subscribe(
                 {
-                  next: res => {
+                  next: () => {
                     this.showToastMessage('Booking has been cancelled successfully!', 'success');
                   },
-                  error: err => {
+                  error: () => {
                     this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
                   },
                   complete: () => {

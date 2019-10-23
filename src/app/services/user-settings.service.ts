@@ -13,7 +13,7 @@ export class UserSettingsService {
   private pureDarkTheme: BehaviorSubject<boolean>;
   private accentColor: BehaviorSubject<string>;
   private dashboardSections: BehaviorSubject<string[]>;
-  private MenuUI: BehaviorSubject<'cards' | 'list'>;
+  private menuUI: BehaviorSubject<'cards' | 'list'>;
   private casheCleaered: BehaviorSubject<boolean>;
   private busShuttleServiceSettings: BehaviorSubject<{ firstLocation: string, secondLocation: string, alarmBefore: string }>;
   timetable: BehaviorSubject<{ blacklists: string[] }>;
@@ -65,7 +65,7 @@ export class UserSettingsService {
     this.pureDarkTheme = new BehaviorSubject(false);
     this.accentColor = new BehaviorSubject('blue-accent-color');
     this.dashboardSections = new BehaviorSubject(this.defaultDashboardSectionsSettings);
-    this.MenuUI = new BehaviorSubject('list');
+    this.menuUI = new BehaviorSubject('list');
     this.busShuttleServiceSettings = new BehaviorSubject(this.defaultBusShuttleServicesSettings);
     this.casheCleaered = new BehaviorSubject(false);
     this.timetable = new BehaviorSubject({ blacklists: [] });
@@ -181,11 +181,11 @@ export class UserSettingsService {
   // MENU UI
   setMenuUI(val: 'cards' | 'list') {
     this.storage.set('menu-ui', val);
-    this.MenuUI.next(val);
+    this.menuUI.next(val);
   }
 
   getMenuUI() {
-    return this.MenuUI.asObservable();
+    return this.menuUI.asObservable();
   }
 
   changeStatusBarColor(darkThemeSelected: boolean) {

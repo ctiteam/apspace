@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 import { Observable } from 'rxjs';
-import { tap, finalize, map } from 'rxjs/operators';
+import { tap, finalize } from 'rxjs/operators';
 
 import { IonContent, MenuController } from '@ionic/angular';
 

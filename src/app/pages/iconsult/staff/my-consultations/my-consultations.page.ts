@@ -107,7 +107,7 @@ export class MyConsultationsPage implements OnInit {
 
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(() => {
       if (this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.reload) {
         this.daysConfigrations = [];
         this.doRefresh(true);
@@ -138,11 +138,11 @@ export class MyConsultationsPage implements OnInit {
             };
             this.sendCancelSlotRequest(cancellationBody).subscribe(
               {
-                next: res => {
+                next: () => {
                   this.daysConfigrations = [];
                   this.showToastMessage('Slot has been cancelled successfully!', 'success');
                 },
-                error: err => {
+                error: () => {
                   this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
                 },
                 complete: () => {

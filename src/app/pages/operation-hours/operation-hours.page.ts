@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { QuixCustomer } from 'src/app/interfaces/quix';
 import { WsApiService } from 'src/app/services';
-import { finalize, tap, map } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 import { IonContent } from '@ionic/angular';
 import * as moment from 'moment';
 

@@ -124,7 +124,7 @@ export class ResultsPage implements OnInit {
     return Object.keys(resultBySemester).map(semester => ({ semester, value: resultBySemester[semester] }));
   }
 
-  openSurveyPage(moduleCode: string) {
+  openSurveyPage(_moduleCode: string) {
     // const navigationExtras: NavigationExtras = {
     //   state: { moduleCode: 'CT108-3-2-IOS-L-UC2F1808MBT-SE', intakeCode: 'UC2F1808IT(MBT)' }
     // };

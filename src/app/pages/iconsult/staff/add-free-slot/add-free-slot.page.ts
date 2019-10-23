@@ -186,27 +186,25 @@ export class AddFreeSlotPage implements OnInit {
           text: 'Yes',
           handler: () => {
             this.presentLoading();
-            this.ws.post<any>('/iconsult/lecaddfreeslots', { body }).subscribe(
-              {
-                next: res => {
-                  this.showToastMessage('Slot(s) added successfully!', 'success');
-                },
-                error: err => {
-                  this.dismissLoading();
-                  this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
-                },
-                complete: () => {
-                  if (this.addFreeSlotForm.value.venue !== this.settings.get('defaultVenue')) {
-                    this.showDefaultLocationWarningAlert(this.addFreeSlotForm.value.location, this.addFreeSlotForm.value.venue);
-                  }
-                  this.dismissLoading();
-                  const navigationExtras: NavigationExtras = {
-                    state: { reload: true }
-                  };
-                  this.router.navigateByUrl('iconsult/my-consultations', navigationExtras);
+            this.ws.post<any>('/iconsult/lecaddfreeslots', { body }).subscribe({
+              next: () => {
+                this.showToastMessage('Slot(s) added successfully!', 'success');
+              },
+              error: () => {
+                this.dismissLoading();
+                this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
+              },
+              complete: () => {
+                if (this.addFreeSlotForm.value.venue !== this.settings.get('defaultVenue')) {
+                  this.showDefaultLocationWarningAlert(this.addFreeSlotForm.value.location, this.addFreeSlotForm.value.venue);
                 }
+                this.dismissLoading();
+                const navigationExtras: NavigationExtras = {
+                  state: { reload: true }
+                };
+                this.router.navigateByUrl('iconsult/my-consultations', navigationExtras);
               }
-            );
+            });
           }
         }
       ]

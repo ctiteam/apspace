@@ -20,7 +20,7 @@ export class MaintenanceAndUpdatePage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(() => {
       if (this.router.getCurrentNavigation().extras.state) {
         if (this.router.getCurrentNavigation().extras.state.storeUrl) {
           this.storeUrl = this.router.getCurrentNavigation().extras.state.storeUrl;

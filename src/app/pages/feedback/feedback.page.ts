@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController, LoadingController } from '@ionic/angular';
 
-import { FeedbackService, SettingsService, VersionService } from '../../services';
+import { FeedbackService, VersionService } from '../../services';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
@@ -26,7 +26,6 @@ export class FeedbackPage implements OnInit {
 
   constructor(
     private feedback: FeedbackService,
-    private settings: SettingsService,
     private toastCtrl: ToastController,
     private version: VersionService,
     private iab: InAppBrowser,

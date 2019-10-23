@@ -1,4 +1,3 @@
-import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
@@ -59,7 +58,7 @@ export class LecturerTimetableComponent implements OnInit {
 
         return acc;
       }, {})),
-      tap(w => this.selectedWeeks.push(`${currentWeek}`))
+      tap(() => this.selectedWeeks.push(`${currentWeek}`))
     );
   }
 

@@ -11,7 +11,6 @@ import { ChartModule } from 'angular2-chartjs';
 import { DragulaModule, DragulaService } from 'ng2-dragula';
 import { StaffDashboardPage } from './staff-dashboard.page';
 import { DisabledPipe } from './disabled.pipe';
-import { NewsModalPage } from '../news/news-modal';
 
 const routes: Routes = [
   {

@@ -108,7 +108,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       setTranslate() {
         const swiper = this;
         const {
-          width: swiperWidth, height: swiperHeight, slides, $wrapperEl, slidesSizesGrid, $
+          width: swiperWidth, height: swiperHeight, slides, $wrapperEl, slidesSizesGrid
         } = swiper;
         const params = swiper.params.coverflowEffect;
         const isHorizontal = swiper.isHorizontal();
@@ -365,7 +365,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   enableCardReordering() {
     this.dragulaService.createGroup('editable-list', {
-      moves: (el, container, handle) => {
+      moves: (_el, _container, handle) => {
         return handle.classList.contains('handle');
       }
     });
@@ -405,7 +405,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   getProfile(refresher: boolean) {
     return this.staffProfile$ = this.ws.get<StaffProfile>('/staff/profile', refresher).pipe(
       tap(staffProfile => this.staffFirstName = staffProfile[0].FULLNAME.split(' ')[0]),
-      tap(staffProfile => this.getTodaysSchdule(staffProfile[0].ID, refresher))
+      tap(staffProfile => this.getTodaysSchdule(staffProfile[0].ID))
     );
   }
 
@@ -421,9 +421,9 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // TODAYS SCHEDULE FUNCTIONS
-  getTodaysSchdule(staffId: string, refresher) {
+  getTodaysSchdule(staffId: string) {
     this.todaysSchedule$ = zip( // ZIP TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
-      this.getUpcomingClasses(staffId, refresher),
+      this.getUpcomingClasses(staffId),
       this.getUpcomingConsultations(true) // no-cache for upcoming consultations
     ).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
@@ -439,7 +439,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  getUpcomingClasses(staffId: string, refresher: boolean): Observable<EventComponentConfigurations[]> {
+  getUpcomingClasses(staffId: string): Observable<EventComponentConfigurations[]> {
     const d = new Date();
     const date = `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`;
     // const endpoint = '/lecturer-timetable/v2/' + 'anrazali'; // For testing

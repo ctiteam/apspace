@@ -20,7 +20,7 @@ export function createApollo(httpLink: HttpLink, cas: CasTicketService) {
     complexObjectsCredentials: null,
     // use "ticket" header for custom authentication
     resultsFetcherLink: ApolloLink.from([
-      setContext(async (request, previousContext: Record<string, any>) => ({
+      setContext(async (_request, previousContext: Record<string, any>) => ({
         headers: {
           ...previousContext.headers,
           ticket: await cas.getST('https://api.apiit.edu.my/attendix').toPromise()

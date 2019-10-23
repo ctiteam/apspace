@@ -4,9 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Network } from '@ionic-native/network/ngx';
-import { Storage } from '@ionic/storage';
 
-import { of } from 'rxjs';
 
 import { LoginPage } from './login.page';
 import { CasTicketService, SettingsService, WsApiService } from '../../services';

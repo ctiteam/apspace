@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-// tslint:disable-next-line: max-line-length
-import { Platform, ToastController, NavController, ModalController, MenuController, ActionSheetController, PopoverController } from '@ionic/angular';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import {
+  Platform, ToastController, NavController, ModalController, MenuController,
+  ActionSheetController, PopoverController
+} from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 import { UserSettingsService, NotificationService, VersionService } from './services';
@@ -26,7 +27,6 @@ export class AppComponent {
 
   constructor(
     private platform: Platform,
-    private statusBar: StatusBar,
     public storage: Storage,
     private userSettings: UserSettingsService,
     private toastCtrl: ToastController,

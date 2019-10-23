@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { filter, finalize, map, tap } from 'rxjs/operators';
+import { filter, finalize, map } from 'rxjs/operators';
 
 import * as Fuse from 'fuse.js';
 

@@ -94,7 +94,6 @@ export class SettingsPage implements OnInit {
 
 
   ngOnInit() {
-    const role = this.settings.get('role');
     // tslint:disable-next-line: no-bitwise
     if (this.settings.get('role') & Role.Student) {
       this.userRole = true;
@@ -228,11 +227,8 @@ export class SettingsPage implements OnInit {
           text: 'Yes',
           handler: () => {
             this.ws.get('/byod/reset').subscribe(
-              data => {
-              },
-              err => {
-                console.error(err);
-              },
+              () => {},
+              err => console.error(err),
               async () => {
                 const toast = await this.toastCtrl.create({
                   message: 'Your request has been sent to the helpdesk support system and it is being processed now.',

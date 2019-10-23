@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Router } from '@angular/router';
 import { AlertController, MenuController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Role, StudentProfile } from 'src/app/interfaces';
 import { SettingsService, WsApiService } from 'src/app/services';
 import { ActivatedRoute } from 'src/testing';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-submit-survey',
@@ -67,13 +66,12 @@ export class StudentSurveyPage implements OnInit {
     private toastCtrl: ToastController,
     public alertCtrl: AlertController,
     private settings: SettingsService,
-    private iab: InAppBrowser,
     private route: ActivatedRoute,
     private router: Router
   ) { }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(() => {
       if (this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.moduleCode) {
 
         this.userComingFromResultsPage = true;
@@ -154,9 +152,7 @@ export class StudentSurveyPage implements OnInit {
       map(res => res.filter
         (item => !item.COURSE_APPRAISAL || (!item.COURSE_APPRAISAL2 && Date.parse(item.END_DATE) >
           Date.parse(this.todaysDate.toISOString())))),
-      tap(res => this.modules = res),
-      tap(res => {
-      })
+      tap(res => this.modules = res)
     );
   }
 
@@ -249,21 +245,19 @@ export class StudentSurveyPage implements OnInit {
             if (notAnsweredQuestions.length === 0) {
               this.submitting = true;
 
-              this.ws.post('/response', { url: this.stagingUrl, body: this.response }).subscribe(
-                {
-                  error: err => {
-                    this.toast(
-                      `Something went wrong and we could not complete your request. Please try again or contact us via the feedback page`,
-                      'danger');
-                  },
-                  complete: () => {
-                    this.toast(`The survey for ${this.classCode} has been submitted successfully.`, 'success');
-                    this.submitting = false;
-                    this.classCode = '';
-                    this.onInitData();
-                  }
+              this.ws.post('/response', { url: this.stagingUrl, body: this.response }).subscribe({
+                error: () => {
+                  this.toast(
+                    `Something went wrong and we could not complete your request. Please try again or contact us via the feedback page`,
+                    'danger');
+                },
+                complete: () => {
+                  this.toast(`The survey for ${this.classCode} has been submitted successfully.`, 'success');
+                  this.submitting = false;
+                  this.classCode = '';
+                  this.onInitData();
                 }
-              );
+              });
             } else {
               this.showFieldMissingError = true;
             }

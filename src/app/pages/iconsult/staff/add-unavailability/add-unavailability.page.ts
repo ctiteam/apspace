@@ -123,10 +123,10 @@ export class AddUnavailabilityPage implements OnInit {
             this.presentLoading();
             this.ws.post<any>('/iconsult/lecturer_add_unavailability', { body }).subscribe(
               {
-                next: res => {
+                next: () => {
                   this.showToastMessage('Slot(s) has been marked as unavailable successfully!', 'success');
                 },
-                error: err => {
+                error: () => {
                   this.dismissLoading();
                   this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
                 },

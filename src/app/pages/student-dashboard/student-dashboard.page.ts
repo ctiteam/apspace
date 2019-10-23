@@ -206,7 +206,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       setTranslate() {
         const swiper = this;
         const {
-          width: swiperWidth, height: swiperHeight, slides, $wrapperEl, slidesSizesGrid, $
+          width: swiperWidth, height: swiperHeight, slides, $wrapperEl, slidesSizesGrid
         } = swiper;
         const params = swiper.params.coverflowEffect;
         const isHorizontal = swiper.isHorizontal();
@@ -298,7 +298,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   ) {
     // Create the dragula group (drag and drop)
     this.dragulaService.createGroup('editable-list', {
-      moves: (el, container, handle) => {
+      moves: (_el, _container, handle) => {
         return handle.classList.contains('handle');
       }
     });
