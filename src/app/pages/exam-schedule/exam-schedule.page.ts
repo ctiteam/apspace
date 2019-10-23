@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ActionSheet } from '@ionic-native/action-sheet/ngx';
+import { Component } from '@angular/core';
 import { ModalController, Platform } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -12,7 +11,7 @@ import { IntakeListingService, SettingsService, WsApiService } from '../../servi
   templateUrl: './exam-schedule.page.html',
   styleUrls: ['./exam-schedule.page.scss'],
 })
-export class ExamSchedulePage implements OnInit {
+export class ExamSchedulePage {
   exam$: Observable<ExamSchedule[]>;
 
   intake: string;
@@ -24,7 +23,6 @@ export class ExamSchedulePage implements OnInit {
   };
   constructor(
     public plt: Platform,
-    public actionSheet: ActionSheet,
     private modalCtrl: ModalController,
     private il: IntakeListingService,
     private ws: WsApiService,
@@ -39,10 +37,7 @@ export class ExamSchedulePage implements OnInit {
       this.doRefresh();
     }
   }
-  ngOnInit() {
-    this.il.get(true).subscribe(ii => {
-      this.intakes = ii.map(i => i.INTAKE_CODE);
-    });
+  ionViewDidEnter() { // using oninit is casing some issues in naviagting to this page; the data loaded is huge (intake listing)
     const intake = this.settings.get('examIntake');
     if (intake !== undefined) { // intake might be ''
       this.intake = intake;
@@ -66,7 +61,7 @@ export class ExamSchedulePage implements OnInit {
   doRefresh(refresher?) {
     const url = `/examination/${this.intake}`;
     const opt = { auth: false };
-    this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt).pipe(
+    this.exam$ = this.ws.get<ExamSchedule[]>(url, refresher, opt).pipe(
       finalize(() => (refresher && refresher.target.complete())),
     );
     this.il.get(Boolean(refresher)).subscribe(ii => {
