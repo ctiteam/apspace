@@ -352,13 +352,13 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       finalize(() => refresher && refresher.target.complete()),
     );
     this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation);
-    this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
+    this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);  // no-cache for student photo
     this.displayGreetingMessage();
-    this.apcardTransaction$ = this.getTransactions(refresher);
+    this.apcardTransaction$ = this.getTransactions(true); // no-cache for APCard transactions
     this.getBadge();
     forkJoin([
       this.getProfile(refresher),
-      this.financial$ = this.getOverdueFee(refresher)
+      this.financial$ = this.getOverdueFee(true)
     ]).pipe(
       finalize(() => refresher && refresher.target.complete()),
     ).subscribe();
@@ -426,7 +426,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       tap(studentProfile => {
         if (studentProfile.BLOCK === true) {
           this.block = false;
-          this.cgpaPerIntake$ = this.getCgpaPerIntakeData(refresher);
+          this.cgpaPerIntake$ = this.getCgpaPerIntakeData(true); // no-cache for results
         } else {
           this.block = true;
         }
@@ -435,7 +435,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       tap(studentProfile => this.studentFirstName$ = of(studentProfile.NAME.split(' ')[0])),
       tap(studentProfile => this.getTodaysSchdule(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR TIMETABLE
       tap(studentProfile => this.getUpcomingEvents(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR EXAMS
-      tap(studentProfile => this.getAttendance(studentProfile.INTAKE, refresher)),
+      tap(studentProfile => this.getAttendance(studentProfile.INTAKE, true)), // no-cache for attendance
       // tap(studentProfile => this.getUpcomingExam(studentProfile.INTAKE)),
     );
   }
@@ -470,7 +470,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     // MERGE TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
     this.todaysSchedule$ = combineLatest([
       this.getUpcomingClasses(intake, refresher),
-      this.getUpcomingConsultations(refresher)
+      this.getUpcomingConsultations(true) // no-cache for upcoming consultations (students)
     ]).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
@@ -603,7 +603,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   getUpcomingEvents(intake: string, refresher: boolean) {
     const todaysDate = new Date();
     this.upcomingEvent$ = zip(
-      this.getupcomingExams(intake, todaysDate, refresher),
+      this.getupcomingExams(intake, todaysDate, true),
       this.getUpcomingHoliday(todaysDate, refresher)
     ).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
@@ -764,7 +764,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   // APCARD FUNCTIONS
   getTransactions(refresher) {
-    return this.ws.get<Apcard[]>('/apcard/', true).pipe(
+    return this.ws.get<Apcard[]>('/apcard/', refresher).pipe(
       map(transactions => this.signTransactions(transactions)),
       tap(transactions => this.analyzeTransactions(transactions)),
       tap(transactions => this.getCurrentApcardBalance(transactions))

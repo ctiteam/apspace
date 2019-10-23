@@ -316,7 +316,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     );
     this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation, refresher);
     this.getUpcomingEvents(refresher);
-    this.apcardTransaction$ = this.getTransactions(refresher);
+    this.apcardTransaction$ = this.getTransactions(true); // no-cache for apcard transactions
     this.getBadge();
     this.getProfile(refresher).pipe(
       finalize(() => refresher && refresher.target.complete()),
@@ -407,7 +407,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   getTodaysSchdule(staffId: string, refresher) {
     this.todaysSchedule$ = zip( // ZIP TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
       this.getUpcomingClasses(staffId, refresher),
-      this.getUpcomingConsultations(refresher)
+      this.getUpcomingConsultations(true) // no-cache for upcoming consultations
     ).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
