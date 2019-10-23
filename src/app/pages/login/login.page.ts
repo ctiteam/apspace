@@ -75,17 +75,17 @@ export class LoginPage {
           if (errMsg.includes('AccountPasswordMustChangeException')) {
             this.showConfirmationMessage();
             this.showToastMessage('Your password has expired!');
-            return throwError('Your password has expired!');
+            return throwError(new Error('Your password has expired!'));
           } else {
             this.showToastMessage('Invalid username or password');
-            return throwError('Invalid Username or Password');
+            return throwError(new Error('Invalid Username or Password'));
           }
         }),
         switchMap(tgt => this.cas.getST(this.cas.casUrl, tgt).pipe(
-          catchError(() => (this.showToastMessage('Fail to get service ticket.'), throwError('Fail to get service ticket')))
+          catchError(() => (this.showToastMessage('Fail to get service ticket.'), throwError(new Error('Fail to get service ticket'))))
         )),
         switchMap(st => this.cas.validate(st).pipe(
-          catchError(() => (this.showToastMessage('You are not authorized to use APSpace'), throwError('unauthorized')))
+          catchError(() => (this.showToastMessage('You are not authorized to use APSpace'), throwError(new Error('unauthorized'))))
         )),
         tap(role => this.cacheApi(role)),
         timeout(15000),

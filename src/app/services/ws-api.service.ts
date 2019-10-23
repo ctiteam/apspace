@@ -79,7 +79,7 @@ export class WsApiService {
           this.toastCtrl.create({ message: err.message, duration: 3000, position: 'top' })
             .then(toast => toast.present());
           return from(this.storage.get(endpoint)).pipe(
-            switchMap(v => v || throwError('retrying')),
+            switchMap(v => v || throwError(new Error('retrying'))),
           );
         }),
         retryWhen(errors => errors.pipe(
@@ -135,7 +135,7 @@ export class WsApiService {
         duration: 3000,
         position: 'top',
       }).then(toast => toast.present());
-      return throwError('offline');
+      return throwError(new Error('offline'));
     }
 
     return this.cas.getST(url.split('?').shift()).pipe(
@@ -175,7 +175,7 @@ export class WsApiService {
         duration: 3000,
         position: 'top',
       }).then(toast => toast.present());
-      return throwError('offline');
+      return throwError(new Error('offline'));
     }
 
     return this.cas.getST(url.split('?').shift()).pipe(

@@ -140,7 +140,7 @@ export class CasTicketService {
         /* tslint:enable:no-bitwise */
         if (!role) {
           this.storage.clear();
-          return throwError('Group not supported');
+          return throwError(new Error('Group not supported'));
         }
 
         this.settings.set('role', role);
