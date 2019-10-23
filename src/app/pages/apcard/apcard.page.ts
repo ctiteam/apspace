@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
-import { Apcard } from '../../interfaces';
-import { WsApiService } from 'src/app/services';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
+import { WsApiService } from 'src/app/services';
+import { Apcard } from '../../interfaces';
 @Component({
   selector: 'app-apcard',
   templateUrl: './apcard.page.html',

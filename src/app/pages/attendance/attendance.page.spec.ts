@@ -1,8 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AttendancePage } from './attendance.page';
 import { WsApiService } from 'src/app/services';
+import { AttendancePage } from './attendance.page';
 
 describe('AttendancePage', () => {
   let component: AttendancePage;

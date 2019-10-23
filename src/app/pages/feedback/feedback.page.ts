@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastController, LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 
-import { FeedbackService, VersionService } from '../../services';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { FeedbackService, VersionService } from '../../services';
 
 @Component({
   selector: 'app-feedback',

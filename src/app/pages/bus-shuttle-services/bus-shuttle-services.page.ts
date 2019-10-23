@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { BusTrips, BusTrip, APULocation, APULocations } from 'src/app/interfaces';
-import { Observable, forkJoin } from 'rxjs';
-import { map, tap, finalize } from 'rxjs/operators';
-import * as moment from 'moment';
-import { MenuController } from '@ionic/angular';
-import { SettingsService, WsApiService } from 'src/app/services';
 import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
+import * as moment from 'moment';
+import { forkJoin, Observable } from 'rxjs';
+import { finalize, map, tap } from 'rxjs/operators';
+import { APULocation, APULocations, BusTrip, BusTrips } from 'src/app/interfaces';
+import { SettingsService, WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-bus-shuttle-services',

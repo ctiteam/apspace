@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
-import { SettingsService, NotificationService, DataCollectorService } from '../../services';
+import { DataCollectorService, NotificationService, SettingsService } from '../../services';
 
 @Component({
   selector: 'app-logout',

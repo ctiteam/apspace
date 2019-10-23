@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import {
-  Platform, ToastController, NavController, ModalController, MenuController,
-  ActionSheetController, PopoverController
+  ActionSheetController, MenuController, ModalController, NavController, Platform,
+  PopoverController, ToastController
 } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
-import { UserSettingsService, NotificationService, VersionService } from './services';
 import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
-import { NotificationModalPage } from './pages/notifications/notification-modal';
 import { Network } from '@ionic-native/network/ngx';
+import { NotificationModalPage } from './pages/notifications/notification-modal';
+import { NotificationService, UserSettingsService, VersionService } from './services';
 
 @Component({
   selector: 'app-root',

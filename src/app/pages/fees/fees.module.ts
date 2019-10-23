@@ -1,15 +1,15 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { FeesPage } from './fees.page';
-import { ComponentsModule } from 'src/app/components/components.module';
-import { ReversePipe } from './reverse.pipe';
 import { ChartModule } from 'angular2-chartjs';
+import { ComponentsModule } from 'src/app/components/components.module';
+import { FeesPage } from './fees.page';
 import { FilterPipe } from './filter.pipe';
+import { ReversePipe } from './reverse.pipe';
 
 const routes: Routes = [
   {

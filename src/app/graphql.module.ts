@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
-import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
-import { ApolloLink } from 'apollo-link';
+import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
+import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloLink } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
-import { createAppSyncLink, AUTH_TYPE } from 'aws-appsync';
+import { AUTH_TYPE, createAppSyncLink } from 'aws-appsync';
 
 import { CasTicketService } from './services';
 

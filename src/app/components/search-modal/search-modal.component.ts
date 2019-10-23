@@ -1,9 +1,9 @@
 import {
-  AfterViewInit, ChangeDetectionStrategy, Component, ViewChild, Input, OnInit
+  AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, ViewChild
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IonSearchbar, ModalController } from '@ionic/angular';
-import { Observable, concat, of } from 'rxjs';
+import { concat, Observable, of } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 
 @Component({

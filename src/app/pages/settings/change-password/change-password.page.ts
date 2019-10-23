@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController, ToastController, AlertController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 
-import { ChangePasswordService, SettingsService, WsApiService, CasTicketService } from '../../../services';
-import { PasswordValidator } from '../../../validators/password.validator';
-import { Role, StudentProfile, StaffProfile } from 'src/app/interfaces';
 import { Storage } from '@ionic/storage';
 import { tap } from 'rxjs/operators';
+import { Role, StaffProfile, StudentProfile } from 'src/app/interfaces';
+import { CasTicketService, ChangePasswordService, SettingsService, WsApiService } from '../../../services';
+import { PasswordValidator } from '../../../validators/password.validator';
 
 @Component({
   selector: 'change-password',

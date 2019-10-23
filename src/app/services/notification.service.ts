@@ -1,13 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FCM } from '@ionic-native/fcm/ngx';
-import { Observable, from, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
-import { CasTicketService } from './cas-ticket.service';
-import { Platform } from '@ionic/angular';
-import { NotificationHistory } from '../interfaces';
 import { Network } from '@ionic-native/network/ngx';
+import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { from, Observable, of } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+import { NotificationHistory } from '../interfaces';
+import { CasTicketService } from './cas-ticket.service';
 
 @Injectable({
   providedIn: 'root'

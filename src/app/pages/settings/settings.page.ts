@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavController, ToastController, AlertController } from '@ionic/angular';
+import { AlertController, ModalController, NavController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
-import { APULocations, APULocation, StudentProfile, Role, Venue } from '../../interfaces';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+import { APULocation, APULocations, Role, StudentProfile, Venue } from '../../interfaces';
 import {
   SettingsService, StudentTimetableService, UserSettingsService, WsApiService
 } from '../../services';

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { WsApiService } from 'src/app/services';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-update-progress-report',

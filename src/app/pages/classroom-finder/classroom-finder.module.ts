@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ClassroomFinderPage } from './classroom-finder.page';
 import { AtPipe } from './at.pipe';
+import { ClassroomFinderPage } from './classroom-finder.page';
 import { ForPipe } from './for.pipe';
 import { OnPipe } from './on.pipe';
 

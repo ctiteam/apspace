@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { StaffDirectoryPage } from './staff-directory.page';
-import { DepartmentPipe } from './department.pipe';
 import { FuseModule } from '../../shared/fuse/fuse.module';
+import { DepartmentPipe } from './department.pipe';
+import { StaffDirectoryPage } from './staff-directory.page';
 
 const routes: Routes = [
   {

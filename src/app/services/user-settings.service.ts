@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
-import { Platform } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'

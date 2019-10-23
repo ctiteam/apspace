@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ActionSheetButton } from '@ionic/core';
 import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetButton } from '@ionic/core';
 
 import { Observable } from 'rxjs';
-import { tap, finalize, map } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 
-import { WsApiService } from '../../services';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import {
   ClassificationLegend, Course, CourseDetails, DeterminationLegend,
-  InterimLegend, MPULegend, StudentProfile, Subcourse, StudentPhoto
+  InterimLegend, MPULegend, StudentPhoto, StudentProfile, Subcourse
 } from '../../interfaces';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { WsApiService } from '../../services';
 
 @Component({
   selector: 'app-results',

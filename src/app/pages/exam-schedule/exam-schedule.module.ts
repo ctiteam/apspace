@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ExamSchedulePage } from './exam-schedule.page';
 import { IntakeListingService } from 'src/app/services';
 import { ComponentsModule } from '../../components/components.module';
+import { ExamSchedulePage } from './exam-schedule.page';
 
 const routes: Routes = [
   {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from 'src/testing';
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { ActivatedRoute } from 'src/testing';
 
 @Component({
   selector: 'app-maintenance-and-update',

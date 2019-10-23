@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController, AlertController, ToastController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { map, finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
-import { WsApiService, AppLauncherService } from 'src/app/services';
 import { ConsultationHour, SlotDetails } from 'src/app/interfaces';
+import { AppLauncherService, WsApiService } from 'src/app/services';
 
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';

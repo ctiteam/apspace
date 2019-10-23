@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
+import { ModalController } from '@ionic/angular';
 import { News } from '../../interfaces';
 import { NewsService } from '../../services';
-import { ModalController } from '@ionic/angular';
 import { NewsModalPage } from './news-modal';
 @Component({
   selector: 'app-news',

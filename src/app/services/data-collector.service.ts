@@ -4,8 +4,8 @@ import { Device } from '@ionic-native/device/ngx';
 
 import { Observable } from 'rxjs';
 
-import { WsApiService } from './ws-api.service';
 import { VersionService } from './version.service';
+import { WsApiService } from './ws-api.service';
 
 @Injectable({
   providedIn: 'root'

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
+import { TestBed } from '@angular/core/testing';
 import { Network } from '@ionic-native/network/ngx';
 import { Storage } from '@ionic/storage';
-import { TestBed } from '@angular/core/testing';
 import { TestScheduler } from 'rxjs/testing';
 
 import { asyncData, asyncError } from '../../testing';

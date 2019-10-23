@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { QuixCustomer } from 'src/app/interfaces/quix';
-import { WsApiService } from 'src/app/services';
-import { finalize, tap } from 'rxjs/operators';
 import { IonContent } from '@ionic/angular';
 import * as moment from 'moment';
+import { finalize, tap } from 'rxjs/operators';
+import { QuixCustomer } from 'src/app/interfaces/quix';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-operation-hours',

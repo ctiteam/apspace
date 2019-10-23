@@ -1,18 +1,18 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController, IonRefresher, ModalController } from '@ionic/angular';
 
-import { Observable, combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
-import { StudentProfile, StudentTimetable, Role } from '../../interfaces';
+import { Router } from '@angular/router';
+import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+import { Role, StudentProfile, StudentTimetable } from '../../interfaces';
 import {
   SettingsService, StudentTimetableService, UserSettingsService, WsApiService
 } from '../../services';
 import { ClassesPipe } from './classes.pipe';
-import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
-import { Router } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

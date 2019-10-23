@@ -1,8 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { CasTicketService } from '../../services';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Router } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { CasTicketService } from '../../services';
 
 import { asyncData } from '../../../testing';
 import { FuseModule } from '../../shared/fuse/fuse.module';

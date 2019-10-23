@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
 import { NavController } from '@ionic/angular';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'quick-access-item',

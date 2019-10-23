@@ -1,20 +1,20 @@
 import {
-  Component, OnInit, OnDestroy, ElementRef, ViewChild, Renderer2, AfterViewInit
+  AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild
 } from '@angular/core';
-import { NavController, IonSelect, ModalController, IonSlides } from '@ionic/angular';
+import { IonSelect, IonSlides, ModalController, NavController } from '@ionic/angular';
 
+import * as moment from 'moment';
+import { DragulaService } from 'ng2-dragula';
 import { Observable, of, zip } from 'rxjs';
 import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
-import { DragulaService } from 'ng2-dragula';
-import * as moment from 'moment';
 
-import { WsApiService, UserSettingsService, NotificationService, NewsService } from '../../services';
-import { NewsModalPage } from '../news/news-modal';
 import {
-  APULocation, APULocations, Apcard, BusTrips,
+  Apcard, APULocation, APULocations, BusTrips,
   DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday,
   Holidays, LecturerConsultation, LecturerTimetable, News, StaffProfile
 } from 'src/app/interfaces';
+import { NewsService, NotificationService, UserSettingsService, WsApiService } from '../../services';
+import { NewsModalPage } from '../news/news-modal';
 
 @Component({
   selector: 'app-staff-dashboard',

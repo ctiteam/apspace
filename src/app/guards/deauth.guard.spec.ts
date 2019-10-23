@@ -1,8 +1,8 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
-import { DeauthGuard } from './deauth.guard';
 import { CasTicketService } from '../services';
+import { DeauthGuard } from './deauth.guard';
 
 describe('DeauthGuard', () => {
   beforeEach(() => {

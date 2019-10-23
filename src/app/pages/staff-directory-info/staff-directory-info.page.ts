@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 
 import { StaffDirectory } from '../../interfaces';
-import { WsApiService, AppLauncherService } from '../../services';
+import { AppLauncherService, WsApiService } from '../../services';
 
 /**
  * Display staff information. Can also be used as model.

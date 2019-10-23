@@ -1,16 +1,16 @@
-import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ToastController } from '@ionic/angular';
-import { Observable, Subject, timer, NEVER } from 'rxjs';
+import { authenticator } from 'otplib/otplib-browser';
+import { NEVER, Observable, Subject, timer } from 'rxjs';
 import {
   catchError, finalize, first, map, pluck, scan, shareReplay, startWith,
   switchMap, tap,
 } from 'rxjs/operators';
-import { authenticator } from 'otplib/otplib-browser';
 
 import {
-  AttendanceGQL, InitAttendanceGQL, NewStatusSubscription,
-  InitAttendanceMutation, MarkAttendanceGQL, NewStatusGQL, ScheduleInput,
+  AttendanceGQL, InitAttendanceGQL, InitAttendanceMutation,
+  MarkAttendanceGQL, NewStatusGQL, NewStatusSubscription, ScheduleInput,
   Status
 } from '../../../../generated/graphql';
 

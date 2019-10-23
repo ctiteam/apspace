@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { WsApiService } from 'src/app/services';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-view-progress-report',

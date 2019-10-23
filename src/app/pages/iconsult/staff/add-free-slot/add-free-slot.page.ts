@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationExtras } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { ToastController, AlertController, LoadingController } from '@ionic/angular';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NavigationExtras, Router } from '@angular/router';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
-import { WsApiService, SettingsService } from 'src/app/services';
-import { Venue } from 'src/app/interfaces';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 import { CalendarComponentOptions } from 'ion2-calendar';
+import { Venue } from 'src/app/interfaces';
+import { SettingsService, WsApiService } from 'src/app/services';
 
 import * as moment from 'moment';
 

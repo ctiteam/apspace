@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network/ngx';
+import { Storage } from '@ionic/storage';
 
-import { Observable, from, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { publishLast, refCount, switchMap, tap } from 'rxjs/operators';
 
 import { StudentTimetable } from '../interfaces';

@@ -1,14 +1,14 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
-import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { IonicModule } from '@ionic/angular';
 import { ChartModule } from 'angular2-chartjs';
 import { SemPipe } from './sem.pipe';
 
-import { ResultsPage } from './results.page';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { ResultsPage } from './results.page';
 
 const routes: Routes = [
   {

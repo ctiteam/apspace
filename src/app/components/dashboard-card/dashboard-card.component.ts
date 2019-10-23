@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
-import { PopoverComponent } from '../popover/popover.component';
 import { DashboardCardComponentConfigurations } from 'src/app/interfaces';
+import { PopoverComponent } from '../popover/popover.component';
 
 @Component({
   selector: 'dashboard-card',

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, AlertController, ToastController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { LecturerRemarks, LecturerSlotDetails } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
-import { LecturerSlotDetails, LecturerRemarks } from 'src/app/interfaces';
 
 import * as moment from 'moment';
 @Component({

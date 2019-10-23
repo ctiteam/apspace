@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
-import { NavController, IonSelect, ModalController, IonSlides } from '@ionic/angular';
-import { Observable, combineLatest, forkJoin, of, zip } from 'rxjs';
-import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray } from 'rxjs/operators';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { IonSelect, IonSlides, ModalController, NavController } from '@ionic/angular';
+import { combineLatest, forkJoin, Observable, of, zip } from 'rxjs';
+import { catchError, concatMap, finalize, flatMap, map, share, tap, toArray } from 'rxjs/operators';
 
-import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService, NewsService } from 'src/app/services';
 import {
-  EventComponentConfigurations, DashboardCardComponentConfigurations,
-  Attendance, StudentProfile, Apcard, FeesTotalSummary, Course, CourseDetails,
-  CgpaPerIntake, StudentTimetable, ConsultationHour, StudentPhoto, Holidays,
-  Holiday, ExamSchedule, BusTrips, APULocations, APULocation, News
+  Apcard, APULocation,
+  APULocations, Attendance, BusTrips, CgpaPerIntake, ConsultationHour, Course,
+  CourseDetails, DashboardCardComponentConfigurations, EventComponentConfigurations, ExamSchedule, FeesTotalSummary,
+  Holiday, Holidays, News, StudentPhoto, StudentProfile, StudentTimetable
 } from 'src/app/interfaces';
+import { NewsService, NotificationService, StudentTimetableService, UserSettingsService, WsApiService } from 'src/app/services';
 
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';

@@ -4,8 +4,8 @@ import { IonSelect, ModalController } from '@ionic/angular';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Classcode, StudentTimetable, StaffProfile } from '../../../interfaces';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
+import { Classcode, StaffProfile, StudentTimetable } from '../../../interfaces';
 import { StudentTimetableService, WsApiService } from '../../../services';
 
 type Schedule = Pick<Classcode, 'CLASS_CODE'>

@@ -1,12 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, from } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { publishLast, refCount, tap } from 'rxjs/operators';
 
-import { News } from '../interfaces';
 import { Network } from '@ionic-native/network/ngx';
 import { Storage } from '@ionic/storage';
+import { News } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'

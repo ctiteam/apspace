@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { Observable } from 'rxjs';
 import * as Fuse from 'fuse.js';
+import { Observable } from 'rxjs';
 
-import { CasTicketService, SettingsService, UserSettingsService } from '../../services';
 import { Role } from '../../interfaces';
+import { CasTicketService, SettingsService, UserSettingsService } from '../../services';
 
-import { MenuItem } from './menu.interface';
-import { NavController, ToastController } from '@ionic/angular';
 import { Network } from '@ionic-native/network/ngx';
+import { NavController, ToastController } from '@ionic/angular';
+import { MenuItem } from './menu.interface';
 
 @Component({
   selector: 'app-more',

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, AlertController, LoadingController, ToastController } from '@ionic/angular';
-import { ConsultationSlot, StaffDirectory, SlotDuplicated } from 'src/app/interfaces';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { WsApiService } from 'src/app/services';
 import { Observable } from 'rxjs';
+import { ConsultationSlot, SlotDuplicated, StaffDirectory } from 'src/app/interfaces';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'page-book-slot-modal',

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Holidays, EventComponentConfigurations, Holiday } from 'src/app/interfaces';
-import { WsApiService } from 'src/app/services';
-import { Observable } from 'rxjs';
-import { map, tap, finalize } from 'rxjs/operators';
-import * as moment from 'moment';
 import { MenuController } from '@ionic/angular';
+import * as moment from 'moment';
+import { Observable } from 'rxjs';
+import { finalize, map, tap } from 'rxjs/operators';
+import { EventComponentConfigurations, Holiday, Holidays } from 'src/app/interfaces';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-holidays',

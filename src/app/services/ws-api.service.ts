@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Network } from '@ionic-native/network/ngx';
-import { Storage } from '@ionic/storage';
 import { Platform, ToastController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 
-import { Observable, from, iif, of, throwError } from 'rxjs';
+import { from, iif, Observable, of, throwError } from 'rxjs';
 import {
   catchError, concatMap, delay, publishLast, refCount, retryWhen, switchMap,
   tap, timeout,

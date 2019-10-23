@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { CasTicketService } from 'src/app/services';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { ToastController } from '@ionic/angular';
+import { CasTicketService } from 'src/app/services';
 
 @Component({
   selector: 'app-aplc-progress-report',

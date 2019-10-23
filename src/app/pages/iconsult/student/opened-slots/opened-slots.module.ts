@@ -1,16 +1,16 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { OpenedSlotsPage } from './opened-slots.page';
-import { BookSlotModalPage } from './book-slot-modal';
-import { ComponentsModule } from 'src/app/components/components.module';
 import { CalendarModule } from 'ion2-calendar';
-import { FilterSlotsByDayPipe } from './filter-slots-by-day.pipe';
+import { ComponentsModule } from 'src/app/components/components.module';
+import { BookSlotModalPage } from './book-slot-modal';
 import { CalendarFilterModalPage } from './calendar-filter-modal/calendar-filter-modal';
+import { FilterSlotsByDayPipe } from './filter-slots-by-day.pipe';
+import { OpenedSlotsPage } from './opened-slots.page';
 
 const routes: Routes = [
   {

@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { StudentProfile, VisaDetails, CountryData, Role } from '../../interfaces';
+import { CountryData, Role, StudentProfile, VisaDetails } from '../../interfaces';
 
-import { WsApiService, SettingsService } from '../../services';
+import { SettingsService, WsApiService } from '../../services';
 
 @Component({
   selector: 'app-visa-status',

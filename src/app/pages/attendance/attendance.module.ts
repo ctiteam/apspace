@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
 import { RoundProgressModule } from 'angular-svg-round-progressbar';
 
-import { AttendancePage } from './attendance.page';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { AttendancePage } from './attendance.page';
 
 const routes: Routes = [
   {

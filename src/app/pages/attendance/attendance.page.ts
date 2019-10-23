@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { WsApiService } from 'src/app/services';
-import { ActionSheetController } from '@ionic/angular';
-import { Observable } from 'rxjs';
-import { Attendance, Course, AttendanceLegend } from 'src/app/interfaces';
-import { tap, finalize } from 'rxjs/operators';
-import { ActionSheetButton } from '@ionic/core';
 import { Router } from '@angular/router';
+import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetButton } from '@ionic/core';
+import { Observable } from 'rxjs';
+import { finalize, tap } from 'rxjs/operators';
+import { Attendance, AttendanceLegend, Course } from 'src/app/interfaces';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-attendance',

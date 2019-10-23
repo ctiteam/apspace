@@ -1,22 +1,22 @@
 import { Component } from '@angular/core';
-import { Platform, ToastController, AlertController, ModalController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Network } from '@ionic-native/network/ngx';
+import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 
 import { throwError } from 'rxjs';
 import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 
+import { FCM } from '@ionic-native/fcm/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Role } from '../../interfaces';
 import {
   CasTicketService,
-  WsApiService,
+  DataCollectorService,
+  NotificationService,
   SettingsService,
   UserSettingsService,
-  NotificationService,
-  DataCollectorService
+  WsApiService
 } from '../../services';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { FCM } from '@ionic-native/fcm/ngx';
 import { NotificationModalPage } from '../notifications/notification-modal';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';

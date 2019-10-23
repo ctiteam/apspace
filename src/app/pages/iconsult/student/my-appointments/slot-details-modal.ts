@@ -3,8 +3,8 @@ import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { WsApiService } from 'src/app/services';
 import { SlotDetails } from 'src/app/interfaces';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'page-slot-details-modal',

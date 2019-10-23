@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform, ModalController } from '@ionic/angular';
+import { ActionSheet } from '@ionic-native/action-sheet/ngx';
+import { ModalController, Platform } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { ExamSchedule, Role, StudentProfile } from '../../interfaces';
-import { IntakeListingService, WsApiService, SettingsService } from '../../services';
-import { ActionSheet } from '@ionic-native/action-sheet/ngx';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+import { ExamSchedule, Role, StudentProfile } from '../../interfaces';
+import { IntakeListingService, SettingsService, WsApiService } from '../../services';
 
 @Component({
   selector: 'app-exam-schedule',

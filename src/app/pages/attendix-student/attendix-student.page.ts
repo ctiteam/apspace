@@ -1,9 +1,9 @@
 import {
   Component, ElementRef, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
-import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
+import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 
 import { UpdateAttendanceGQL } from '../../../generated/graphql';

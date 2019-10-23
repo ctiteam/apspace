@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { WsApiService } from 'src/app/services';
-import { ToastController, AlertController } from '@ionic/angular';
-import { SecurityQuestionsAndAnswers } from 'src/app/interfaces';
-import { finalize } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { AlertController, ToastController } from '@ionic/angular';
+import { finalize } from 'rxjs/operators';
+import { SecurityQuestionsAndAnswers } from 'src/app/interfaces';
+import { WsApiService } from 'src/app/services';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 

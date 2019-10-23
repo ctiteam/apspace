@@ -1,18 +1,18 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { MyConsultationsPage } from './my-consultations.page';
-import { ComponentsModule } from 'src/app/components/components.module';
-import { CalendarModule } from 'ion2-calendar';
-import { FilterSlotsPipe } from './filter-slots.pipe';
-import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
-import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
 import { ChartModule } from 'angular2-chartjs';
+import { CalendarModule } from 'ion2-calendar';
+import { ComponentsModule } from 'src/app/components/components.module';
+import { FilterSlotsPipe } from './filter-slots.pipe';
+import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
+import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
+import { MyConsultationsPage } from './my-consultations.page';
 
 const routes: Routes = [
   {
