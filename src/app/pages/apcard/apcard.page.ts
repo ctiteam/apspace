@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
@@ -10,8 +10,9 @@ import { Apcard } from '../../interfaces';
   templateUrl: './apcard.page.html',
   styleUrls: ['./apcard.page.scss'],
 })
-export class ApcardPage {
+export class ApcardPage implements OnInit {
   transaction$: Observable<Apcard[]>;
+  indecitor = false;
 
   skeletonConfig = [
     { numOfTrans: new Array(4) },
@@ -28,15 +29,20 @@ export class ApcardPage {
     private router: Router,
   ) { }
 
+  ngOnInit() {
+    this.indecitor = true;
+  }
+
   ionViewDidEnter() {
     /*
-      * viewDidEnter is used instead of onInit because we need to read the data from cache all the time.
-      * onInit will not run when user navigates between the tabs.
-      * We are updating the apcard data when user opens the app (dashboard page), moving to apcard page after
-        that will not get the latest data from local storage
-      * Also, the apcard response is very huge, which is causing issues on ios if we use oninit
+      * The page's response is very huge, which is causing issues on ios if we use oninit
+      * the indecitor is used to define if the page should call the dorefresh of not
+      * If we do not use the indecitor, the page in the tabs (tabs/apcard) will be reloading every time we enter the tab
     */
-    this.doRefresh();
+    if (this.indecitor) {
+      this.doRefresh();
+      this.indecitor = false;
+    }
   }
   /** Generating header value (virtual scroll) */
   seperatebyMonth(record: Apcard, recordIndex: number, records: Apcard[]) {

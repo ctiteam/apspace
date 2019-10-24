@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
@@ -12,12 +12,12 @@ import { SettingsService, WsApiService } from '../../services';
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage {
+export class ProfilePage implements OnInit {
   photo$: Observable<StudentPhoto>;
   profile$: Observable<StudentProfile>;
   staffProfile$: Observable<StaffProfile[]>;
   visa$: Observable<any>;
-
+  indecitor = false;
   skeltons = [
     80,
     30,
@@ -37,21 +37,33 @@ export class ProfilePage {
   ) {
   }
 
+  ngOnInit() {
+    this.indecitor = true;
+  }
+
   ionViewDidEnter() {
-    this.settings.ready().then(() => {
-      const role = this.settings.get('role');
-      // tslint:disable-next-line:no-bitwise
-      if (role & Role.Student) {
-        this.studentRole = true;
-        this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
-        this.profile$ = this.ws.get<StudentProfile>('/student/profile', true);
-        this.getProfile();
+    /*
+    * The page's response is very huge, which is causing issues on ios if we use oninit
+    * the indecitor is used to define if the page should call the dorefresh of not
+    * If we do not use the indecitor, the page in the tabs (tabs/attendance) will be reloading every time we enter the tab
+    */
+    if (this.indecitor) {
+      this.settings.ready().then(() => {
+        const role = this.settings.get('role');
         // tslint:disable-next-line:no-bitwise
-      } else if (role & (Role.Lecturer | Role.Admin)) {
-        this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile', true);
-      }
-      this.getProfile();
-    });
+        if (role & Role.Student) {
+          this.studentRole = true;
+          this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
+          this.profile$ = this.ws.get<StudentProfile>('/student/profile', true);
+          this.getProfile();
+          // tslint:disable-next-line:no-bitwise
+        } else if (role & (Role.Lecturer | Role.Admin)) {
+          this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile', true);
+        }
+        this.getProfile();
+      });
+      this.indecitor = false;
+    }
   }
 
   openStaffDirectoryInfo(id: string) {

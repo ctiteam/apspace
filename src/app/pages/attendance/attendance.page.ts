@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
@@ -12,8 +12,8 @@ import { WsApiService } from 'src/app/services';
   templateUrl: './attendance.page.html',
   styleUrls: ['./attendance.page.scss'],
 })
-export class AttendancePage {
-
+export class AttendancePage implements OnInit {
+  indecitor = false;
   attendance$: Observable<Attendance[]>;
   course$: Observable<Course[]>;
   legend$: Observable<AttendanceLegend>;
@@ -31,8 +31,20 @@ export class AttendancePage {
     private router: Router,
   ) { }
 
+  ngOnInit() {
+    this.indecitor = true;
+  }
+
   ionViewDidEnter() {
-    this.doRefresh();
+    /*
+    * The page's response is very huge, which is causing issues on ios if we use oninit
+    * the indecitor is used to define if the page should call the dorefresh of not
+    * If we do not use the indecitor, the page in the tabs (tabs/attendance) will be reloading every time we enter the tab
+    */
+    if (this.indecitor) {
+      this.doRefresh();
+      this.indecitor = false;
+    }
   }
 
   doRefresh(refresher?) {
