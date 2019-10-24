@@ -7,11 +7,15 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button fill="outline" size="small" class="colored-text colored-border" [routerLink]="['/attendix/update']">Sign</ion-button>
       <ion-button fill="outline" size="small" class="colored-text colored-border" (click)="showActionSheet()">
         {{ selectedIntake }}
       </ion-button>
     </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button fill="outline" size="small" class="colored-text colored-border" [routerLink]="['/attendix/update']">Sign</ion-button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
