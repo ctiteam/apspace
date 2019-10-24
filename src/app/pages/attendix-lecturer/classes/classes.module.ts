@@ -7,7 +7,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { ClassesPage } from './classes.page';
 
-import { ComponentsModule } from 'src/app/components/components.module';
+import { ComponentsModule } from '../../../components/components.module';
+import { GraphQLModule } from '../../../graphql.module';
 
 const routes: Routes = [
   {
@@ -22,6 +23,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     ComponentsModule,
+    GraphQLModule,
     RouterModule.forChild(routes)
   ],
   declarations: [ClassesPage]

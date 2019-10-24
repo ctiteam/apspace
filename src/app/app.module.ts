@@ -23,8 +23,6 @@ import { NotificationModalPage } from './pages/notifications/notification-modal'
 
 // export function disableNavAnimation(AnimationC: Animation): Promise<Animation> { return Promise.resolve(new AnimationC()); }
 
-import { GraphQLModule } from './graphql.module';
-
 @NgModule({
   // notificationPageModal is needed here because it is called in app.component.ts, NewsModal is called in dashboards also
   declarations: [AppComponent, NotificationModalPage, NewsModalPage],
@@ -41,7 +39,6 @@ import { GraphQLModule } from './graphql.module';
     ),
     IonicStorageModule.forRoot(),
     AppRoutingModule,
-    GraphQLModule,
   ],
   providers: [
     ActionSheet,

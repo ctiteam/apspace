@@ -7,6 +7,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { QRScanner } from '@ionic-native/qr-scanner/ngx';
 import { IonicModule } from '@ionic/angular';
 
+import { GraphQLModule } from '../../graphql.module';
 import { AttendixStudentPage } from './attendix-student.page';
 
 const routes: Routes = [
@@ -21,6 +22,7 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    GraphQLModule,
     RouterModule.forChild(routes)
   ],
   providers: [BarcodeScanner, QRScanner],
