@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
@@ -12,7 +12,7 @@ import { WsApiService } from 'src/app/services';
   templateUrl: './attendance.page.html',
   styleUrls: ['./attendance.page.scss'],
 })
-export class AttendancePage implements OnInit {
+export class AttendancePage {
 
   attendance$: Observable<Attendance[]>;
   course$: Observable<Course[]>;
@@ -31,7 +31,7 @@ export class AttendancePage implements OnInit {
     private router: Router,
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.doRefresh();
   }
 
