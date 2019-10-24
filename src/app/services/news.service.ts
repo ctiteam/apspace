@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { from, Observable } from 'rxjs';
@@ -26,8 +26,7 @@ export class NewsService {
   get(refresh?: boolean): Observable<News[]> {
     if (this.network.type !== 'none') {
       if (refresh) { // get from backend
-        const header = new HttpHeaders({ 'x-refresh': '' });
-        return this.http.get<News[]>(this.newsUrl, { headers: header }).pipe(
+        return this.http.get<News[]>(this.newsUrl).pipe(
           tap(news => refresh && this.storage.set('news-cache', news)),
           publishLast(), refCount());
       } else { // get from local storage
@@ -46,8 +45,7 @@ export class NewsService {
   getSlideshow(refresh?: boolean): Observable<any[]> {
     if (this.network.type !== 'none') {
       if (refresh) {
-        const header = new HttpHeaders({ 'x-refresh': '' });
-        return this.http.get<any[]>(this.slideshowUrl, { headers: header }).pipe(
+        return this.http.get<any[]>(this.slideshowUrl).pipe(
           tap(slideshowItems => refresh && this.storage.set('slideshow-cache', slideshowItems)),
           publishLast(), refCount());
       } else {
