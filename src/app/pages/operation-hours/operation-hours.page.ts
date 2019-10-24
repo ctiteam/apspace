@@ -3,8 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { IonContent } from '@ionic/angular';
-import * as moment from 'moment';
-import { finalize, tap } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import { QuixCustomer } from 'src/app/interfaces/quix';
 import { WsApiService } from 'src/app/services';
 
@@ -35,7 +34,6 @@ export class OperationHoursPage {
       auth: false
     }
     ).pipe(
-      tap(res => res[0].lastModified = moment(res[0].lastModified).add(8, 'hours').format('dddd, Do MMMM YYYY')),
       finalize(() => refresher && refresher.target.complete()),
     );
   }
