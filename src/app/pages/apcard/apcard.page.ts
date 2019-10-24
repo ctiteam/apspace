@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
@@ -10,7 +10,7 @@ import { Apcard } from '../../interfaces';
   templateUrl: './apcard.page.html',
   styleUrls: ['./apcard.page.scss'],
 })
-export class ApcardPage implements OnInit {
+export class ApcardPage {
   transaction$: Observable<Apcard[]>;
 
   skeletonConfig = [
@@ -28,8 +28,14 @@ export class ApcardPage implements OnInit {
     private router: Router,
   ) { }
 
-
-  ngOnInit() {
+  ionViewDidEnter() {
+    /*
+      * viewDidEnter is used instead of onInit because we need to read the data from cache all the time.
+      * onInit will not run when user navigates between the tabs.
+      * We are updating the apcard data when user opens the app (dashboard page), moving to apcard page after
+        that will not get the latest data from local storage
+      * Also, the apcard response is very huge, which is causing issues on ios if we use oninit
+    */
     this.doRefresh();
   }
   /** Generating header value (virtual scroll) */
