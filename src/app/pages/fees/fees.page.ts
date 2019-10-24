@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
@@ -35,7 +35,7 @@ declare var Chart: any;
     ])
   ]
 })
-export class FeesPage implements OnInit {
+export class FeesPage {
   selectedSegment = 'Summary';
 
   totalSummary$: Observable<FeesTotalSummary[]>;
@@ -81,7 +81,7 @@ export class FeesPage implements OnInit {
 
   constructor(private menuCtrl: MenuController, private ws: WsApiService) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.doRefresh();
   }
 

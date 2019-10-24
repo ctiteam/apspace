@@ -1,5 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { IonContent } from '@ionic/angular';
@@ -14,7 +14,7 @@ import { WsApiService } from 'src/app/services';
   styleUrls: ['./operation-hours.page.scss'],
 
 })
-export class OperationHoursPage implements OnInit {
+export class OperationHoursPage {
   @ViewChild('content', { static: true }) content: IonContent;
   skeletons = new Array(4);
   quixCompanies$: Observable<QuixCustomer[]>;
@@ -24,7 +24,7 @@ export class OperationHoursPage implements OnInit {
     private ws: WsApiService,
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.doRefresh();
   }
 

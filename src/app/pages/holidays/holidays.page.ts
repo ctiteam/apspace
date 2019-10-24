@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
@@ -11,7 +11,7 @@ import { WsApiService } from 'src/app/services';
   templateUrl: './holidays.page.html',
   styleUrls: ['./holidays.page.scss'],
 })
-export class HolidaysPage implements OnInit {
+export class HolidaysPage {
   holiday$: Observable<Holiday[]>;
   filteredHoliday$: Observable<Holiday[] | EventComponentConfigurations[]>;
 
@@ -39,7 +39,7 @@ export class HolidaysPage implements OnInit {
     private menu: MenuController,
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.doRefresh();
   }
 

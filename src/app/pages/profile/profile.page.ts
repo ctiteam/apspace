@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
@@ -12,7 +12,7 @@ import { SettingsService, WsApiService } from '../../services';
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage implements OnInit {
+export class ProfilePage {
   photo$: Observable<StudentPhoto>;
   profile$: Observable<StudentProfile>;
   staffProfile$: Observable<StaffProfile[]>;
@@ -37,7 +37,7 @@ export class ProfilePage implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.settings.ready().then(() => {
       const role = this.settings.get('role');
       // tslint:disable-next-line:no-bitwise

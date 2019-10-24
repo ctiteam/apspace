@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
@@ -11,7 +11,7 @@ import { NewsModalPage } from './news-modal';
   templateUrl: './news.page.html',
   styleUrls: ['./news.page.scss'],
 })
-export class NewsPage implements OnInit {
+export class NewsPage {
   news$: Observable<News[]>;
 
   skeletonSettings = {
@@ -29,7 +29,8 @@ export class NewsPage implements OnInit {
       finalize(() => refresher && refresher.target.complete()),
     );
   }
-  ngOnInit() {
+
+  ionViewDidEnter() {
     this.doRefresh();
   }
   async openModal(item: News) {

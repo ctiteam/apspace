@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActionSheetController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 
@@ -17,7 +17,7 @@ import { WsApiService } from '../../services';
   templateUrl: './results.page.html',
   styleUrls: ['./results.page.scss'],
 })
-export class ResultsPage implements OnInit {
+export class ResultsPage {
   course$: Observable<Course[]>;
   results$: Observable<{ semester: string; value: Subcourse[] }[]>;
   courseDetail$: Observable<CourseDetails>;
@@ -58,7 +58,7 @@ export class ResultsPage implements OnInit {
     private iab: InAppBrowser
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.doRefresh();
   }
 

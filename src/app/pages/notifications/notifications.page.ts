@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MenuController, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
@@ -12,7 +12,7 @@ import { NotificationModalPage } from './notification-modal';
   templateUrl: './notifications.page.html',
   styleUrls: ['./notifications.page.scss'],
 })
-export class NotificationsPage implements OnInit {
+export class NotificationsPage {
   messages$: Observable<NotificationHistory>;
   categories = [];
   allCategories = {};
@@ -30,7 +30,7 @@ export class NotificationsPage implements OnInit {
     public sanitizer: DomSanitizer
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.doRefresh();
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
@@ -22,7 +22,7 @@ import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/
   templateUrl: './my-consultations.page.html',
   styleUrls: ['./my-consultations.page.scss'],
 })
-export class MyConsultationsPage implements OnInit {
+export class MyConsultationsPage {
   slots$: Observable<{}>;
   todaysDate = this.iconsultFormatDate(new Date());
   skeletonItemsNumber = new Array(4);
@@ -106,7 +106,7 @@ export class MyConsultationsPage implements OnInit {
   }
 
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.route.queryParams.subscribe(() => {
       if (this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.reload) {
         this.daysConfigrations = [];

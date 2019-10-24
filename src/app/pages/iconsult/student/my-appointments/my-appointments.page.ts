@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
@@ -18,7 +18,7 @@ import * as moment from 'moment';
   templateUrl: './my-appointments.page.html',
   styleUrls: ['./my-appointments.page.scss'],
 })
-export class MyAppointmentsPage implements OnInit {
+export class MyAppointmentsPage {
   slots$: Observable<ConsultationHour[]>;
   slotDetails$: Observable<SlotDetails>;
   loading: HTMLIonLoadingElement;
@@ -35,7 +35,7 @@ export class MyAppointmentsPage implements OnInit {
     private ws: WsApiService
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.doRefresh();
   }
 

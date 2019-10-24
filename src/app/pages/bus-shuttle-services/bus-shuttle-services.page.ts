@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import * as moment from 'moment';
@@ -12,7 +12,7 @@ import { SettingsService, WsApiService } from 'src/app/services';
   templateUrl: './bus-shuttle-services.page.html',
   styleUrls: ['./bus-shuttle-services.page.scss'],
 })
-export class BusShuttleServicesPage implements OnInit {
+export class BusShuttleServicesPage {
   trip$: Observable<BusTrip[]>;
   filteredTrip$: any;
   locations: APULocation[];
@@ -47,7 +47,7 @@ export class BusShuttleServicesPage implements OnInit {
     private router: Router,
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     // GETTING FILTER SETTINGS FROM STORAGE:
     if (this.settings.get('tripFrom')) {
       this.filterObject.fromLocation = this.settings.get('tripFrom');
