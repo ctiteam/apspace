@@ -236,6 +236,14 @@ export class MorePage implements OnInit {
       tags: ['visa']
     },
     {
+      title: 'Upcoming Graduation',
+      group: 'Others',
+      url: 'https://graduation.sites.apiit.edu.my/',
+      img: 'assets/img/upcoming-graduations.png',
+      role: Role.Student,
+      tags: ['graduation', 'cermony']
+    },
+    {
       title: 'Feedback',
       group: 'App Related',
       url: 'feedback',
@@ -293,7 +301,9 @@ export class MorePage implements OnInit {
     // external pages does not use relative or absolute link
     if (url.startsWith('http://') || url.startsWith('https://')) {
       // manually exclude office365, and course schedule that do not need service ticket
-      if (url.startsWith('https://outlook.office.com') || url === 'http://kb.sites.apiit.edu.my/knowledge-base/course-schedule/') {
+      if (url.startsWith('https://outlook.office.com')
+        || url === 'http://kb.sites.apiit.edu.my/knowledge-base/course-schedule/'
+        || url === 'https://graduation.sites.apiit.edu.my/') {
         this.iab.create(url, '_system', 'location=true');
       } else {
         if (this.network.type !== 'none') {
