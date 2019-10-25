@@ -15,7 +15,7 @@ export function createApollo(httpLink: HttpLink, cas: CasTicketService) {
     region: 'ap-southeast-1',
     auth: {
       type: AUTH_TYPE.API_KEY,
-      apiKey: 'da2-5y25wsxr6fby7fkxuyw2yd24si'
+      apiKey: 'da2-wcekbykt3jek3lyvgbiwg4ojfm'
     },
     complexObjectsCredentials: null,
     // use "ticket" header for custom authentication
