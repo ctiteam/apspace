@@ -15,11 +15,9 @@ do_bump() {
 
   sed -i "s/\(widget.*version=\"\)$prev\(\"\)/\1$vers\2/" config.xml
   sed -i "s/\(\"version\":\s*\"\)$prev\(\"\)/\1$vers\2/" package.json
-  sed -i "s/\(version = '\)$prev'/\1$vers'/" src/providers/version.ts
-  sed -i "0,/version/ s/\(\"version\":\s*\"\)$prev\"/\1$vers\"/" \
-    package-lock.json
+  sed -i "s/\(version = '\)$prev'/\1$vers'/" src/app/services/version.service.ts
 
-  git add config.xml package.json package-lock.json src/providers/version.ts
+  git add config.xml package.json src/app/services/version.service.ts
 
   git commit -m "chore: bump version to $vers"
   git push
