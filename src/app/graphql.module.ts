@@ -9,7 +9,7 @@ import { AUTH_TYPE, createAppSyncLink } from 'aws-appsync';
 import { CasTicketService } from './services';
 
 export function createApollo(httpLink: HttpLink, cas: CasTicketService) {
-  const url = 'https://umpvznhwzbcgznypfo3ihn2k24.appsync-api.ap-southeast-1.amazonaws.com/graphql';
+  const url = 'https://attendix.apiit.edu.my/graphql';
   const link = createAppSyncLink({
     url,
     region: 'ap-southeast-1',
