@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { Observable } from 'rxjs';
-import { finalize, tap } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 import { Attendance, AttendanceLegend, Course } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 
@@ -14,7 +14,7 @@ import { WsApiService } from 'src/app/services';
 })
 export class AttendancePage implements OnInit {
   indecitor = false;
-  attendance$: Observable<Attendance[]>;
+  attendance$: Observable<any[]>;
   course$: Observable<Course[]>;
   legend$: Observable<AttendanceLegend>;
 
@@ -81,13 +81,27 @@ export class AttendancePage implements OnInit {
 
   }
 
-  getAttendance(intake: string, refresh?: boolean): Observable<Attendance[]> {
+  getAttendance(intake: string, refresh?: boolean): Observable<any[]> {
     this.average = -2;
     return (this.attendance$ = this.ws
       .get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh)
       .pipe(
         tap(a => this.calculateAverage(a)),
+        map(res => this.groupAttendanceBySemester(res)),
       ));
+  }
+
+  groupAttendanceBySemester(attendance: any) {
+    const attendancePerSemester = attendance
+      .reduce((previous: any, current: any) => {
+        if (!previous[current.SEMESTER]) {
+          previous[current.SEMESTER] = [current];
+        } else {
+          previous[current.SEMESTER].push(current);
+        }
+        return previous;
+      }, {});
+    return Object.keys(attendancePerSemester).map(semester => ({ semester, value: attendancePerSemester[semester] }));
   }
 
   getLegend(refresh: boolean) {
