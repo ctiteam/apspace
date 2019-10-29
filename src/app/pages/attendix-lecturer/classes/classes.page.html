@@ -14,7 +14,7 @@
         <ion-item>
           <ion-label>Class Code</ion-label>
           <ion-select #classcodeInput [ngModel]="classcode" (click)="chooseClasscode()"
-            placeholder="Class Code">
+            [disabled]="!classcodes" placeholder="Class Code">
             <ion-select-option *ngFor="let classcode of classcodes"
               [value]="classcode">{{ classcode }}</ion-select-option>
           </ion-select>
