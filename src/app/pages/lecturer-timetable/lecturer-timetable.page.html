@@ -2,8 +2,8 @@
   <ion-toolbar>
     <ion-title>Lecturer Timetable</ion-title>
     <ion-buttons slot="end">
-      <ion-button fill="outline" size="small" [routerLink]="['/attendix/classes']"
-        class="colored-text colored-border">
+      <ion-button *ngIf="attendixFeature" fill="outline" size="small"
+        [routerLink]="['/attendix/classes']" class="colored-text colored-border">
         Mark Attendance
       </ion-button>
     </ion-buttons>
