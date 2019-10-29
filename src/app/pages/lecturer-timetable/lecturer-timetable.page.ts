@@ -5,8 +5,8 @@ import { map, publishLast, refCount } from 'rxjs/operators';
 import { StaffProfile } from '../../interfaces';
 import { WsApiService } from '../../services';
 
-const chosenOnes = ['appsteststaff1', 'abbhirami', 'haslina.hashim',
-  'muhammad.danish', 'sireesha.prathi', 'suresh.saminathan'];
+const chosenOnes = ['appsteststaff1', 'abbhirami', 'abubakar_s',
+  'haslina.hashim', 'muhammad.danish', 'sireesha.prathi', 'suresh.saminathan'];
 
 @Component({
   selector: 'app-lecturer-timetable',
