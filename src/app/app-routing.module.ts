@@ -241,10 +241,10 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/unauthorized/unauthorized.module').then(m => m.UnauthorizedPageModule)
   },
-  {
-    path: 'filing-report',
-    loadChildren: () => import('./pages/filing-report/filing-report.module').then(m => m.FilingReportPageModule)
-  },
+  // {
+  //   path: 'filing-report',
+  //   loadChildren: () => import('./pages/filing-report/filing-report.module').then(m => m.FilingReportPageModule)
+  // },
   { // this path must always be at the end of the routes array
     path: '**',
     canActivate: [AuthGuard],

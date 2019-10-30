@@ -244,14 +244,6 @@ export class MorePage implements OnInit {
       tags: []
     },
     {
-      title: 'File A Report',
-      group: 'App Related',
-      url: 'filing-report',
-      img: 'assets/img/feedback.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
       title: 'Notification',
       group: 'App Related',
       url: 'notifications',
