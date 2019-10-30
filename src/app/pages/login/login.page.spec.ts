@@ -44,8 +44,8 @@ describe('LoginPage', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should retrieve tgt', () => {
-  //   // TODO: add click
-  //   expect(getSpy).toHaveBeenCalledWith(['tgt']);
-  // });
+  it('should retrieve tgt', () => {
+    // TODO: add click
+    expect(getSpy).toHaveBeenCalledWith(['tgt']);
+  });
 });

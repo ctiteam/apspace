@@ -90,5 +90,6 @@ describe('StaffDirectoryInfoPage', () => {
     activatedRoute.setParamMap({ id: 1 });
 
     expect(component).toBeTruthy();
+    expect(getSpy).toHaveBeenCalled();
   });
 });

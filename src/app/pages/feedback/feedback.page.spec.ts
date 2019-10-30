@@ -37,6 +37,8 @@ describe('FeedbackPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+
+    expect(platformSpy).toHaveBeenCalled();
   });
 
   it('should retrieve mobile number', () => {
