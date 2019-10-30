@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetController, NavController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { NavigationExtras } from '@angular/router';
 import {
   ClassificationLegend, Course, CourseDetails, DeterminationLegend,
   InterimLegend, MPULegend, StudentPhoto, StudentProfile, Subcourse
@@ -54,8 +54,7 @@ export class ResultsPage {
   constructor(
     private ws: WsApiService,
     private actionSheetCtrl: ActionSheetController,
-    // private navCtrl: NavController,
-    private iab: InAppBrowser
+    private navCtrl: NavController
   ) { }
 
   ionViewDidEnter() {
@@ -129,13 +128,10 @@ export class ResultsPage {
   }
 
   openSurveyPage(_moduleCode: string) {
-    // const navigationExtras: NavigationExtras = {
-    //   state: { moduleCode: 'CT108-3-2-IOS-L-UC2F1808MBT-SE', intakeCode: 'UC2F1808IT(MBT)' }
-    // };
-    // this.navCtrl.navigateForward(['/student-survey'], navigationExtras);
-
-    // TEMP: SEND USER TO CURRENT SYSTEM
-    this.iab.create('https://webapps.apiit.edu.my/appraisal/index.jsp', '_blank', 'location=true');
+    const navigationExtras: NavigationExtras = {
+      state: { moduleCode: 'CT108-3-2-IOS-L-UC2F1808MBT-SE', intakeCode: 'UC2F1808IT(MBT)' }
+    };
+    this.navCtrl.navigateForward(['/student-survey'], navigationExtras);
   }
 
 

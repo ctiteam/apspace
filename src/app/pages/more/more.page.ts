@@ -187,14 +187,6 @@ export class MorePage implements OnInit {
       role: Role.Lecturer | Role.Admin,
       tags: ['class', 'schedule']
     },
-    // {
-    //   title: 'Student Survey',
-    //   group: 'Course Related',
-    //   url: 'student-survey',
-    //   img: 'assets/img/student-survey.png',
-    //   role: Role.Student,
-    //   tags: []
-    // },
     {
       title: 'Classroom Finder',
       group: 'Others',
@@ -247,6 +239,14 @@ export class MorePage implements OnInit {
       title: 'Feedback',
       group: 'App Related',
       url: 'feedback',
+      img: 'assets/img/feedback.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    {
+      title: 'File A Report',
+      group: 'App Related',
+      url: 'filing-report',
       img: 'assets/img/feedback.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: []

@@ -70,6 +70,16 @@
             <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
             <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
           </ng-template>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="10" offset="1">
+                <ion-button class="ion-margin-top success-background" expand="block" size="large" [routerLink]="['/student-survey']">
+                  Survey
+                  <ion-icon slot="end" name="paper"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </ion-col>
 
         <!-- Results -->
@@ -130,7 +140,7 @@
                         </ng-container>
                         <ng-template #resultsPendingSurvey>
                           <a (click)="openSurveyPage(result.MODULE_CODE)" class="colored-text"
-                            style="text-decoration: underline;">Pending
+                            style="text-decoration: underline !important;">Pending
                             Survey</a>
                         </ng-template>
                       </ion-col>

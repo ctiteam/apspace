@@ -153,12 +153,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/operation-hours/operation-hours.module').then(m => m.OperationHoursPageModule)
   },
-  // {
-  //   path: 'student-survey',
-  //   canActivate: [AuthGuard],
-  //   data: { role: Role.Student },
-  //   loadChildren: () => import('./pages/student-survey/student-survey.module').then(m => m.SubmitSurveyPageModule)
-  // },
+  {
+    path: 'student-survey',
+    canActivate: [AuthGuard],
+    data: { role: Role.Student },
+    loadChildren: () => import('./pages/student-survey/student-survey.module').then(m => m.SubmitSurveyPageModule)
+  },
   {
     path: 'results',
     canActivate: [AuthGuard],
@@ -241,12 +241,15 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/unauthorized/unauthorized.module').then(m => m.UnauthorizedPageModule)
   },
+  {
+    path: 'filing-report',
+    loadChildren: () => import('./pages/filing-report/filing-report.module').then(m => m.FilingReportPageModule)
+  },
   { // this path must always be at the end of the routes array
     path: '**',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundPageModule)
   }
-
 ];
 
 @NgModule({
