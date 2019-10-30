@@ -164,6 +164,14 @@ export class MorePage implements OnInit {
       tags: ['book']
     },
     {
+      title: 'My Reports Panel',
+      group: 'Course Related',
+      url: 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check',
+      img: 'assets/img/reports.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['report', 'admin', 'jasper']
+    },
+    {
       title: 'Results',
       group: 'Course Related',
       url: 'results',
