@@ -38,6 +38,7 @@
     "@ionic-native/action-sheet": "^5.15.0",
     "@ionic-native/app-availability": "^5.15.0",
     "@ionic-native/barcode-scanner": "^5.15.0",
+    "@ionic-native/camera": "^5.15.1",
     "@ionic-native/core": "^5.15.0",
     "@ionic-native/device": "^5.15.0",
     "@ionic-native/fcm": "^5.15.0",
@@ -63,6 +64,7 @@
     "cordova-ios": "5.0.1",
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-appavailability": "^0.4.2",
+    "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-fcm-with-dependecy-updated": "^3.2.0",
     "cordova-plugin-inappbrowser": "^3.1.0",
     "cordova-plugin-network-information": "^2.0.2",
@@ -79,6 +81,7 @@
     "otplib": "^11.0.1",
     "rxjs": "~6.5.2",
     "source-sans-pro": "^3.6.0",
+    "tesseract.js": "^2.0.0-beta.2",
     "tslib": "^1.9.0",
     "zone.js": "~0.9.1"
   },
@@ -103,6 +106,7 @@
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~10.12.0",
+    "@types/tesseract.js": "0.0.2",
     "codelyzer": "^5.0.1",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-ionic-keyboard": "^2.0.5",
@@ -139,7 +143,10 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-network-information": {},
-      "cordova-plugin-qrscanner": {}
+      "cordova-plugin-qrscanner": {},
+      "cordova-plugin-camera": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      }
     },
     "platforms": [
       "android",
