@@ -68,13 +68,15 @@ export class BusShuttleServicesPage {
   }
 
   getTrips(refresher: boolean) {
-    return this.trip$ = this.ws.get<BusTrips>(`/transix/trips/applicable`, refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.trip$ = this.ws.get<BusTrips>(`/transix/trips/applicable`, { auth: false, caching }).pipe(
       map(res => res.trips),
     );
   }
 
   getLocations(refresher: boolean) {
-    return this.ws.get<APULocations>(`/transix/locations`, refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.ws.get<APULocations>(`/transix/locations`, { auth: false, caching }).pipe(
       map((res: APULocations) => res.locations),
       tap(locations => this.locations = locations)
     );

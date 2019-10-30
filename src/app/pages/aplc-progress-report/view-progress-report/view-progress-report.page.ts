@@ -31,20 +31,20 @@ export class ViewProgressReportPage implements OnInit {
   }
 
   initData() { // changed with refresher
-    this.subjects$ = this.ws.get<any>(`/subjects`, true, { url: this.stagingUrl });
-    this.scoreLegend$ = this.ws.get<any[]>(`/score-legend`, false, { url: this.stagingUrl });
-    this.descriptionLegend$ = this.ws.get<any[]>(`/description-legend`, false, { url: this.stagingUrl });
+    this.subjects$ = this.ws.get<any>(`/subjects`, { url: this.stagingUrl });
+    this.scoreLegend$ = this.ws.get<any[]>(`/score-legend`, { url: this.stagingUrl, caching: 'cache-only' });
+    this.descriptionLegend$ = this.ws.get<any[]>(`/description-legend`, { url: this.stagingUrl, caching: 'cache-only' });
   }
 
   onSubjectCodeChange() {
-    this.classes$ = this.ws.get<any>(`/classes?subject_code=${this.subjectCode}`, true, { url: this.stagingUrl }).pipe(
+    this.classes$ = this.ws.get<any>(`/classes?subject_code=${this.subjectCode}`, { url: this.stagingUrl }).pipe(
       tap(_ => this.classCode = '')
     );
   }
 
   onClassCodeChange() {
-    this.classDescription$ = this.ws.get<any>(`/class-description?class_code=${this.classCode}`, true, { url: this.stagingUrl });
-    this.studentsBehaviour$ = this.ws.get<any>(`/student-behavior?class_code=${this.classCode}`, true, { url: this.stagingUrl });
+    this.classDescription$ = this.ws.get<any>(`/class-description?class_code=${this.classCode}`, { url: this.stagingUrl });
+    this.studentsBehaviour$ = this.ws.get<any>(`/student-behavior?class_code=${this.classCode}`, { url: this.stagingUrl });
   }
 
 }

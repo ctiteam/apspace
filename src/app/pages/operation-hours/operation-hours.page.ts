@@ -1,4 +1,3 @@
-import { HttpHeaders } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -28,10 +27,12 @@ export class OperationHoursPage {
   }
 
   doRefresh(refresher?) {
-    const header = new HttpHeaders({ 'X-Filename': 'quix-customers' });
-    return this.quixCompanies$ = this.ws.get<QuixCustomer[]>('/quix/get/file', refresher, {
-      headers: header,
-      auth: false
+    const headers = { 'X-Filename': 'quix-customers' };
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.quixCompanies$ = this.ws.get<QuixCustomer[]>('/quix/get/file', {
+      auth: false,
+      caching,
+      headers
     }
     ).pipe(
       finalize(() => refresher && refresher.target.complete()),

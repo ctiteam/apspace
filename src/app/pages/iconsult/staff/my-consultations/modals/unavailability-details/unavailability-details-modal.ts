@@ -25,7 +25,7 @@ export class UnavailabilityDetailsModalPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.slotDetails$ = this.ws.get<UnavailabilityDetails[]>(`/iconsult/get_unavailrule_details/${this.unavailibilityid}`, true);
+    this.slotDetails$ = this.ws.get<UnavailabilityDetails[]>(`/iconsult/get_unavailrule_details/${this.unavailibilityid}`);
   }
 
 

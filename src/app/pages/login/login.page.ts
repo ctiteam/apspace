@@ -210,7 +210,7 @@ export class LoginPage {
     const caches = role & Role.Student
       ? ['/student/profile', '/student/courses', '/staff/listing']
       : ['/staff/profile', '/staff/listing'];
-    caches.forEach(endpoint => this.ws.get(endpoint, true).subscribe());
+    caches.forEach(endpoint => this.ws.get(endpoint).subscribe());
   }
 
 }

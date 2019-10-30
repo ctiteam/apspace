@@ -50,12 +50,12 @@ export class ClassesPage implements AfterViewInit, OnInit {
     this.date = this.isoDate(d);
     const nowMins = d.getHours() * 60 + d.getMinutes();
 
-    const timetables$ = forkJoin([this.ws.get<StaffProfile[]>('/staff/profile'), this.tt.get()]).pipe(
+    const timetables$ = forkJoin([this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }), this.tt.get()]).pipe(
       map(([profile, timetables]) => timetables.filter(timetable =>
         profile[0].ID === timetable.SAMACCOUNTNAME
         && this.parseTime(timetable.TIME_FROM) <= nowMins)),
     );
-    const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes', true);
+    const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes');
 
     forkJoin([timetables$, classcodes$]).subscribe(([timetables, classcodes]) => {
       // left join on classcodes

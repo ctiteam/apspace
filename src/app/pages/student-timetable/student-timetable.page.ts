@@ -142,7 +142,7 @@ export class StudentTimetablePage implements OnInit {
     if (this.intake === undefined) {
       // tslint:disable-next-line: no-bitwise
       if (this.settings.get('role') & Role.Student) {
-        this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+        this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).subscribe(p => {
           this.intake = (p || {} as StudentProfile).INTAKE || '';
           this.changeDetectorRef.markForCheck();
           this.settings.set('intakeHistory', [this.intake]);

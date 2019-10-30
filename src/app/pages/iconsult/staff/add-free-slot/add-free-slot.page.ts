@@ -70,7 +70,7 @@ export class AddFreeSlotPage implements OnInit {
 
   ngOnInit() {
     if (this.settings.get('defaultCampus')) {
-      this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${this.settings.get('defaultCampus')}`, true);
+      this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${this.settings.get('defaultCampus')}`);
     }
     this.addFreeSlotForm = this.formBuilder.group({
       slotType: [this.consultationTypeOptions[0].value, Validators.required], // alwayes required
@@ -286,7 +286,7 @@ export class AddFreeSlotPage implements OnInit {
     // When the user changes the location, get the list of venues again
     this.formFields.venue.setValue('');
     // this.venueFieldDisabled = true;
-    this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${event.detail.value}`, true);
+    this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${event.detail.value}`);
   }
 
   mainDateChanged(event) {

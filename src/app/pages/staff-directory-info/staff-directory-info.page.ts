@@ -30,7 +30,7 @@ export class StaffDirectoryInfoPage implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.params.id;
-    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing').pipe(
+    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
       map(ss => {
           const staffRecord = ss.find(s => s.ID === id);
           staffRecord ? this.staffExists = true : this.staffExists = false;

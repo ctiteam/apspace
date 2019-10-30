@@ -53,12 +53,12 @@ export class ProfilePage implements OnInit {
         // tslint:disable-next-line:no-bitwise
         if (role & Role.Student) {
           this.studentRole = true;
-          this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
-          this.profile$ = this.ws.get<StudentProfile>('/student/profile', true);
+          this.photo$ = this.ws.get<StudentPhoto>('/student/photo');
+          this.profile$ = this.ws.get<StudentProfile>('/student/profile');
           this.getProfile();
           // tslint:disable-next-line:no-bitwise
         } else if (role & (Role.Lecturer | Role.Admin)) {
-          this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile', true);
+          this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
         }
         this.getProfile();
       });
@@ -74,7 +74,7 @@ export class ProfilePage implements OnInit {
     const role = this.settings.get('role');
     // tslint:disable-next-line:no-bitwise
     if (role & Role.Student) {
-      this.ws.get<StudentProfile>('/student/profile').pipe(
+      this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).pipe(
         tap(p => {
           this.countryName = p.COUNTRY;
           if (p.COUNTRY === 'Malaysia') {
@@ -86,7 +86,7 @@ export class ProfilePage implements OnInit {
         }),
       ).subscribe();
     } else {
-      this.ws.get<StaffProfile[]>('/staff/profile').pipe(
+      this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }).pipe(
         tap(p => {
           this.countryName = p[0].NATIONALITY;
         }),
@@ -95,7 +95,7 @@ export class ProfilePage implements OnInit {
   }
 
   getVisaStatus() {
-    return this.ws.get<any>('/student/visa_status');
+    return this.ws.get<any>('/student/visa_status', { caching: 'cache-only' });
   }
 
   comingFromTabs() {

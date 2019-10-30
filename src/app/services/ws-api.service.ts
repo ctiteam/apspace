@@ -31,21 +31,24 @@ export class WsApiService {
   /**
    * GET: Request WS API with cache and error handling.
    *
+   * Caching strategies inspired by https://serviceworke.rs/caching-strategies.html
+   *
    * @param endpoint - <apiUrl><endpoint> for service, used for caching
-   * @param refresh - force refresh (default: false)
    * @param options.attempts - number of retries (default: 4)
    * @param options.auth - authentication required (default: true)
    * @param options.params - additional request parameters (default: {})
+   * @param options.caching - caching strategies (default: true)
    * @param options.timeout - request timeout (default: 10000)
    * @param options.url - url of web service (default: apiUrl)
    * @param options.headers - http headers (default: {})
    * @return shared cached observable
    */
-  get<T>(endpoint: string, refresh?: boolean, options: {
+  get<T>(endpoint: string, options: {
     attempts?: number,
     auth?: boolean,
     headers?: HttpHeaders | { [header: string]: string | string[]; },
     params?: HttpParams | { [param: string]: string | string[]; },
+    caching?: 'network-or-cache' | 'cache-only',
     timeout?: number,
     url?: string
   } = {}): Observable<T> {
@@ -54,6 +57,7 @@ export class WsApiService {
       auth: true,
       headers: {},
       params: {},
+      caching: 'network-or-cache',
       timeout: 20000,
       url: this.apiUrl
     }, options);
@@ -65,7 +69,8 @@ export class WsApiService {
       headers: options.headers
     };
 
-    return (refresh && (!this.plt.is('cordova') || this.network.type !== 'none')
+    return (options.caching === 'network-or-cache'
+      && (!this.plt.is('cordova') || this.network.type !== 'none')
       ? (!options.auth // always get ticket if auth is true
         ? this.http.get<T>(url, opt)
         : this.cas.getST(url.split('?').shift()).pipe( // remove service url params
@@ -91,7 +96,7 @@ export class WsApiService {
         )),
       )
       : from(this.storage.get(endpoint)).pipe(
-        switchMap(v => v ? of(v) : this.get(endpoint, true, options)),
+        switchMap(v => v ? of(v) : this.get(endpoint, { ...options, caching: 'network-or-cache' })),
       )
     ).pipe(publishLast(), refCount());
   }

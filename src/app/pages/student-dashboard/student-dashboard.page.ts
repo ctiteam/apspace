@@ -352,7 +352,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       finalize(() => refresher && refresher.target.complete()),
     );
     this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation);
-    this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);  // no-cache for student photo
+    this.photo$ = this.ws.get<StudentPhoto>('/student/photo');  // no-cache for student photo
     this.displayGreetingMessage();
     this.apcardTransaction$ = this.getTransactions(true); // no-cache for APCard transactions
     this.getBadge();
@@ -422,7 +422,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   // PROFILE AND GREETING MESSAGE FUNCTIONS
   getProfile(refresher: boolean) {
-    return this.ws.get<StudentProfile>('/student/profile', refresher).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.ws.get<StudentProfile>('/student/profile', { caching }).pipe(
       tap(studentProfile => {
         if (studentProfile.BLOCK === true) {
           this.block = false;
@@ -611,11 +612,10 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getupcomingExams(intake: string, todaysDate: Date, refresher: boolean): Observable<EventComponentConfigurations[]> {
-    const opt = { auth: false };
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
     return this.ws.get<ExamSchedule[]>(
       `/examination/${intake}`,
-      refresher,
-      opt,
+      { auth: false, caching },
     ).pipe(
       map(examsList => {
         return examsList.filter(exam => this.eventIsComing(new Date(exam.since), todaysDate));
@@ -644,7 +644,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getUpcomingHoliday(date: Date, refresher: boolean): Observable<EventComponentConfigurations[]> {
-    return this.ws.get<Holidays>('/transix/holidays/filtered/students', refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.ws.get<Holidays>('/transix/holidays/filtered/students', { auth: false, caching }).pipe(
       map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
       map(holiday => {
         const examsListEventMode: EventComponentConfigurations[] = [];
@@ -676,7 +677,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // ATTENDANCE FUNCTIONS
   getAttendance(intake: string, refresher: boolean) {
     const url = `/student/attendance?intake=${intake}`;
-    this.modulesWithLowAttendance$ = this.ws.get<Attendance[]>(url, refresher).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    this.modulesWithLowAttendance$ = this.ws.get<Attendance[]>(url, { caching }).pipe(
       tap(attendanceData => {
         // GETTING THE OVERALL ATTENDANCE VALUE FOR QUICK ACCESS ITEM
         if (attendanceData.length > 0) {
@@ -822,9 +824,10 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   // FINANCIALS FUNCTIONS
   getOverdueFee(refresher: boolean): Observable<FeesTotalSummary | any> {
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
     return this.ws.get<FeesTotalSummary[]>(
       '/student/summary_overall_fee',
-      refresher
+      { caching }
     ).pipe(
       tap((overdueSummary) => {
         // GET THE VALUE OF THE TOTAL OVERALL USED IN THE QUICK ACCESS ITEM
@@ -870,15 +873,16 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   // CGPA FUNCTIONS
   getCgpaPerIntakeData(refresher: boolean): Observable<CgpaPerIntake | any> {
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
     return this.ws
-      .get<Course[]>('/student/courses', refresher)
+      .get<Course[]>('/student/courses', { caching })
       .pipe(
         flatMap(intakes => intakes),
         concatMap(intake => {
           const url = `/student/sub_and_course_details?intake=${
             intake.INTAKE_CODE
             }`;
-          return this.ws.get<CourseDetails>(url, refresher).pipe(
+          return this.ws.get<CourseDetails>(url, { caching }).pipe(
             map(intakeDetails =>
               Object.assign({
                 intakeDate: intake.INTAKE_NUMBER,
@@ -971,7 +975,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     }
     this.showSetLocationsSettings = false;
     const dateNow = new Date();
-    return this.ws.get<BusTrips>(`/transix/trips/applicable`, true, { auth: false }).pipe(
+    return this.ws.get<BusTrips>(`/transix/trips/applicable`, { auth: false }).pipe(
       map(res => res.trips),
       map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
         return trips.filter(trip => {
@@ -1006,7 +1010,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getLocations(refresher: boolean) {
-    this.ws.get<APULocations>(`/transix/locations`, refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    this.ws.get<APULocations>(`/transix/locations`, { auth: false, caching }).pipe(
       map((res: APULocations) => res.locations),
       tap(locations => this.locations = locations)
     ).subscribe();

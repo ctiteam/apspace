@@ -35,7 +35,7 @@ export class SetSecurityQuestionsPage implements OnInit {
 
   getConfig() {
     this.isLoading = true;
-    this.ws.get<SecurityQuestionsAndAnswers>('/sqa/', true)
+    this.ws.get<SecurityQuestionsAndAnswers>('/sqa/')
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(qa => this.qa = qa);
   }
