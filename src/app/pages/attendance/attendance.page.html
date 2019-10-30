@@ -132,7 +132,7 @@
                         </ion-row>
                       </ion-grid>
                     </ion-item>
-                    <ion-list *ngFor="let semester of attendances.reverse()" class="ion-no-padding">
+                    <ion-list *ngFor="let semester of attendances | reverse" class="ion-no-padding">
                       <ion-item-divider class="colored-divider">
                         <ion-label class="ion-text-center text-bold">
                           Semester {{semester.semester}}

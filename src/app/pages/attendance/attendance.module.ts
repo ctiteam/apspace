@@ -8,6 +8,7 @@ import { RoundProgressModule } from 'angular-svg-round-progressbar';
 
 import { ComponentsModule } from 'src/app/components/components.module';
 import { AttendancePage } from './attendance.page';
+import { ReversePipe } from './reverse.pipe';
 
 const routes: Routes = [
   {
@@ -24,6 +25,6 @@ const routes: Routes = [
     RoundProgressModule,
     ComponentsModule,
   ],
-  declarations: [AttendancePage]
+  declarations: [AttendancePage, ReversePipe]
 })
 export class AttendancePageModule { }
