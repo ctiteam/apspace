@@ -4,7 +4,7 @@ import { Network } from '@ionic-native/network/ngx';
 import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
-import { from, iif, Observable, of, throwError } from 'rxjs';
+import { concat, from, iif, NEVER, Observable, of, throwError } from 'rxjs';
 import {
   catchError, concatMap, delay, publishLast, refCount, retryWhen, switchMap,
   tap, timeout,
@@ -41,14 +41,14 @@ export class WsApiService {
    * @param options.timeout - request timeout (default: 10000)
    * @param options.url - url of web service (default: apiUrl)
    * @param options.headers - http headers (default: {})
-   * @return shared cached observable
+   * @return data observable
    */
   get<T>(endpoint: string, options: {
     attempts?: number,
     auth?: boolean,
     headers?: HttpHeaders | { [header: string]: string | string[]; },
     params?: HttpParams | { [param: string]: string | string[]; },
-    caching?: 'network-or-cache' | 'cache-only',
+    caching?: 'network-or-cache' | 'cache-only' | 'cache-update-refresh',
     timeout?: number,
     url?: string
   } = {}): Observable<T> {
@@ -69,9 +69,11 @@ export class WsApiService {
       headers: options.headers
     };
 
-    return (options.caching === 'network-or-cache'
-      && (!this.plt.is('cordova') || this.network.type !== 'none')
-      ? (!options.auth // always get ticket if auth is true
+    return options.caching !== 'cache-only' && (!this.plt.is('cordova') || this.network.type !== 'none')
+    ? concat(
+      // XXX: should it race for network?
+      options.caching === 'cache-update-refresh' ? from(this.storage.get(endpoint)) : NEVER,
+      (!options.auth // always get ticket if auth is true
         ? this.http.get<T>(url, opt)
         : this.cas.getST(url.split('?').shift()).pipe( // remove service url params
           switchMap(ticket => this.http.get<T>(url, { ...opt, params: { ...opt.params, ticket } })),
@@ -95,10 +97,10 @@ export class WsApiService {
           ))
         )),
       )
-      : from(this.storage.get(endpoint)).pipe(
-        switchMap(v => v ? of(v) : this.get(endpoint, { ...options, caching: 'network-or-cache' })),
-      )
-    ).pipe(publishLast(), refCount());
+    )
+    : from(this.storage.get(endpoint)).pipe(
+      switchMap(v => v ? of(v) : this.get(endpoint, { ...options, caching: 'network-or-cache' })),
+    );
   }
 
   /**
@@ -110,7 +112,7 @@ export class WsApiService {
    * @param options.params - additional request parameters (default: {})
    * @param options.timeout - request timeout (default: 10000)
    * @param options.url - url of web service (default: apiUrl)
-   * @return shared cached observable
+   * @return data observable
    */
   post<T>(endpoint: string, options: {
     body?: any | null,
@@ -187,8 +189,6 @@ export class WsApiService {
       switchMap(ticket => this.http.put<T>(url, options.body,
         { ...opt, params: { ...opt.params, ticket } })),
       timeout(options.timeout),
-      publishLast(),
-      refCount(),
     );
   }
 
