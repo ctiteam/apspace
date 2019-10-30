@@ -20,7 +20,7 @@ export class LecturerTimetablePage implements OnInit {
   constructor(private ws: WsApiService) { }
 
   ngOnInit() {
-    this.staffProfiles$ = this.ws.get<StaffProfile[]>('/staff/profile').pipe(
+    this.staffProfiles$ = this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }).pipe(
       publishLast(),
       refCount(),
     );

@@ -27,7 +27,7 @@ export class GraduateVerificationServicePage {
   searchForGraduaters() {
     this.userSearched = true;
     this.resultKeyWord = this.searchKeyword || '';
-    this.graduater$ = this.ws.get<Graduater[]>(`/alumni/validate?criterion=${this.searchKeyword}`, true, {auth: false});
+    this.graduater$ = this.ws.get<Graduater[]>(`/alumni/validate?criterion=${this.searchKeyword}`, {auth: false});
   }
 
 }

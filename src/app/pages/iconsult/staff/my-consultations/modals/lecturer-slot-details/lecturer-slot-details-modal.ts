@@ -35,10 +35,10 @@ export class LecturerSlotDetailsModalPage implements OnInit {
     if (moment(this.dataToSend.dateAndTime, '').toDate() <= this.dateNow) {
       this.showRemarks = true;
     }
-    this.slotDetails$ = this.ws.get<LecturerSlotDetails[]>(`/iconsult/detailpage/${this.dataToSend.slotId}`, true).pipe(
+    this.slotDetails$ = this.ws.get<LecturerSlotDetails[]>(`/iconsult/detailpage/${this.dataToSend.slotId}`).pipe(
       map(response => response[0]),
     );
-    this.lecturerRemarks$ = this.ws.get<LecturerRemarks[]>(`/iconsult/lecgetfeedback/${this.dataToSend.slotId}`, true);
+    this.lecturerRemarks$ = this.ws.get<LecturerRemarks[]>(`/iconsult/lecgetfeedback/${this.dataToSend.slotId}`);
   }
 
   addRemarks() {

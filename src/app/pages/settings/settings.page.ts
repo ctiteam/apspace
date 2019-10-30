@@ -106,13 +106,13 @@ export class SettingsPage implements OnInit {
   }
 
   getLocations() {
-    return this.ws.get<APULocations>(`/transix/locations`, true, { auth: false }).pipe(
+    return this.ws.get<APULocations>(`/transix/locations`, { auth: false }).pipe(
       map((res: APULocations) => res.locations),
     );
   }
 
   getVenues() {
-    this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${this.defaultCampus}`, true);
+    this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${this.defaultCampus}`);
   }
 
 
@@ -162,7 +162,7 @@ export class SettingsPage implements OnInit {
 
     const intakeHistory = this.settings.get('intakeHistory') || [];
     const intake = intakeHistory[intakeHistory.length - 1]
-      || await this.ws.get<StudentProfile>('/student/profile').pipe(pluck('INTAKE')).toPromise();
+      || await this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).pipe(pluck('INTAKE')).toPromise();
 
     // ignored those that are blacklisted
     const filtered = timetables.filter(timetable => !setting.blacklists.includes(timetable.MODID));

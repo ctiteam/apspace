@@ -51,11 +51,10 @@ export class VersionService {
 
   checkForUpdate() {
     if (this.network.type !== 'none') {
-      return this.ws.get<VersionValidator>('/apspace_mandatory_update.json', true, {
+      return this.ws.get<VersionValidator>('/apspace_mandatory_update.json', {
         url: 'https://d370klgwtx3ftb.cloudfront.net',
         auth: false
-      })
-        .pipe(
+      }).pipe(
           tap(updateStatus => this.storage.set('updateStatus-cache', updateStatus)),
           tap(res => {
             let navigationExtras: NavigationExtras;

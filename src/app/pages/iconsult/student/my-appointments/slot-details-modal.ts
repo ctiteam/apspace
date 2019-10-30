@@ -18,7 +18,7 @@ export class SlotDetailsModalPage implements OnInit {
   constructor(private modalCtrl: ModalController, private ws: WsApiService) { }
 
   ngOnInit() {
-    this.slotDetails$ = this.ws.get<SlotDetails>(`/iconsult/detailpageconstu/${this.slotId}`, true).pipe(
+    this.slotDetails$ = this.ws.get<SlotDetails>(`/iconsult/detailpageconstu/${this.slotId}`).pipe(
       map(response => response[0]),
     );
   }

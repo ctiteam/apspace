@@ -53,7 +53,7 @@ export class BookSlotModalPage implements OnInit {
   }
   ngOnInit() {
     const dataToVerify = this.dataToSend.slotData.datetimeforsorting + '.00000';
-    this.verifyslot$ = this.ws.get<SlotDuplicated>(`/iconsult/verifyduplicateslot/${dataToVerify}`, true);
+    this.verifyslot$ = this.ws.get<SlotDuplicated>(`/iconsult/verifyduplicateslot/${dataToVerify}`);
     this.formModel = {
       staffName: this.dataToSend.staffData.FULLNAME,
       consultationWith: '',

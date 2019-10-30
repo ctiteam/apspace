@@ -53,7 +53,8 @@ export class ChangePasswordPage implements OnInit {
           if (studentProfileLocalStorage) { // username is stored in storage
             this.username = studentProfileLocalStorage.STUDENT_NUMBER;
           } else { // username is not stored in storage
-            this.ws.get<StudentProfile>('/student/profile').pipe( // it is called only if the username does not exists in local storage
+            // it is called only if the username does not exists in local storage
+            this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).pipe(
               tap(studentProfile => {
                 this.username = studentProfile.STUDENT_NUMBER;
               }),
@@ -68,7 +69,8 @@ export class ChangePasswordPage implements OnInit {
           if (staffProfileLocalStorage) { // if username is stored in storage
             this.username = staffProfileLocalStorage[0].CODE;
           } else { // username is not stored in storage
-            this.ws.get<StaffProfile>('/staff/profile').pipe( // it is called only if the username does not exists in local storage
+            // it is called only if the username does not exists in local storage
+            this.ws.get<StaffProfile>('/staff/profile', { caching: 'cache-only' }).pipe(
               tap(staffProfile => {
                 this.username = staffProfile[0].CODE;
               }),

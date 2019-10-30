@@ -334,7 +334,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   // GET DETAILS FOR HOLIDAYS
   // holidays$ REQUIRED FOR $upcomingTrips
   getHolidays(refresher: boolean): Observable<Holiday[]> {
-    return this.ws.get<Holidays>('/transix/holidays/filtered/staff', refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.ws.get<Holidays>('/transix/holidays/filtered/staff', { auth: false, caching }).pipe(
       map(res => res.holidays),
       // AUTO REFRESH IF HOLIDAY NOT FOUND
       switchMap(holidays => {
@@ -403,7 +404,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   // PROFILE AND GREETING MESSAGE FUNCTIONS
   getProfile(refresher: boolean) {
-    return this.staffProfile$ = this.ws.get<StaffProfile>('/staff/profile', refresher).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.staffProfile$ = this.ws.get<StaffProfile>('/staff/profile', { caching }).pipe(
       tap(staffProfile => this.staffFirstName = staffProfile[0].FULLNAME.split(' ')[0]),
       tap(staffProfile => this.getTodaysSchdule(staffProfile[0].ID))
     );
@@ -444,7 +446,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     const date = `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`;
     // const endpoint = '/lecturer-timetable/v2/' + 'anrazali'; // For testing
     const endpoint = '/lecturer-timetable/v2/' + staffId;
-    return this.ws.get<LecturerTimetable[]>(endpoint, false, { auth: false }).pipe(
+    return this.ws.get<LecturerTimetable[]>(endpoint, { auth: false, caching: 'cache-only' }).pipe(
       // GET TODAYS CLASSES ONLY
       map(timetable => timetable.filter(tt => this.eventIsToday(new Date(tt.time), d))),
 
@@ -455,7 +457,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
           // XXX: ONLY START DAY IS BEING MATCHED
           switchMap(holidays => holidays.find(holiday => date === holiday.holiday_start_date)
             ? of(timetables)
-            : this.ws.get<LecturerTimetable[]>(endpoint, true, { auth: false })
+            : this.ws.get<LecturerTimetable[]>(endpoint, { auth: false, caching: 'network-or-cache' })
           ),
         )
       ),
@@ -582,7 +584,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   // APCARD FUNCTIONS
   getTransactions(refresher: boolean) {
-    return this.ws.get<Apcard[]>('/apcard/', refresher).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.ws.get<Apcard[]>('/apcard/', { caching }).pipe(
       map(transactions => this.signTransactions(transactions)),
       tap(transactions => this.analyzeTransactions(transactions))
     );
@@ -637,7 +640,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     }
     this.showSetLocationsSettings = false;
     const dateNow = new Date();
-    return this.ws.get<BusTrips>(`/transix/trips/applicable`, refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.ws.get<BusTrips>(`/transix/trips/applicable`, { auth: false, caching }).pipe(
       map(res => res.trips),
       map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
         return trips.filter(trip => {
@@ -672,7 +676,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getLocations(refresher: boolean) {
-    this.ws.get<APULocations>(`/transix/locations`, refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    this.ws.get<APULocations>(`/transix/locations`, { auth: false, caching }).pipe(
       map((res: APULocations) => res.locations),
       tap(locations => this.locations = locations)
     ).subscribe();

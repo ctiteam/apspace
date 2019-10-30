@@ -46,16 +46,17 @@ export class VisaStatusPage implements OnInit {
   }
 
   getListOfCountries() {
-    this.ws.get<CountryData[]>(`/all/?fields=name;alpha3Code`, false, {
+    this.ws.get<CountryData[]>(`/all/?fields=name;alpha3Code`, {
       url: 'https://restcountries.eu/rest/v2',
       auth: false,
+      caching: 'cache-only',
     }).pipe(
       tap(res => this.listOfCountries = res),
     ).subscribe();
   }
 
   getProfile() {
-    this.ws.get<StudentProfile>('/student/profile').pipe(
+    this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).pipe(
       tap(p => {
         this.countryName = p.COUNTRY;
         this.passportNumber = p.IC_PASSPORT_NO;
@@ -71,9 +72,10 @@ export class VisaStatusPage implements OnInit {
 
   getAlpha3Code() {
     // alpha 3 code example: Libya => LBY
-    this.ws.get<CountryData[]>(`/name/${this.countryName}?fields=name;alpha3Code`, false, {
+    this.ws.get<CountryData[]>(`/name/${this.countryName}?fields=name;alpha3Code`, {
       url: 'https://restcountries.eu/rest/v2',
       auth: false,
+      caching: 'cache-only',
     }).pipe(
       tap(res => this.alpha3Code = res[0].alpha3Code),
       tap(_ => this.getVisa()),
@@ -82,8 +84,9 @@ export class VisaStatusPage implements OnInit {
 
   getVisa() {
     this.sendRequest = true;
-    this.visa$ = this.ws.get<VisaDetails>(`/student/visa_renewal_status/${this.alpha3Code}/${this.passportNumber}`, false, {
+    this.visa$ = this.ws.get<VisaDetails>(`/student/visa_renewal_status/${this.alpha3Code}/${this.passportNumber}`, {
       auth: false,
+      caching: 'cache-only',
     }).pipe(tap(r => console.log(r)));
   }
 

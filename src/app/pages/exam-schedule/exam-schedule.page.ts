@@ -47,7 +47,7 @@ export class ExamSchedulePage {
       if (this.settings.get('role') & Role.Student) {
 
         /* tslint:enable:no-bitwise */
-        this.ws.get<StudentProfile>('/student/profile', true).subscribe(p => {
+        this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
           this.intake = p.INTAKE;
         },
           (_) => { },
@@ -60,8 +60,8 @@ export class ExamSchedulePage {
   }
   doRefresh(refresher?) {
     const url = `/examination/${this.intake}`;
-    const opt = { auth: false };
-    this.exam$ = this.ws.get<ExamSchedule[]>(url, refresher, opt).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    this.exam$ = this.ws.get<ExamSchedule[]>(url, { auth: false, caching }).pipe(
       finalize(() => (refresher && refresher.target.complete())),
     );
     this.il.get(Boolean(refresher)).subscribe(ii => {

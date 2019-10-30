@@ -40,7 +40,7 @@ export class LecturerTimetableComponent implements OnInit {
     const currentWeek = Math.floor((date.getTime() - lastDateOfWeekZero - 1) / secondsPerWeek);
 
     const endpoint = '/lecturer-timetable/v2/' + this.id;
-    this.calendar$ = this.ws.get<LecturerTimetable[]>(endpoint, true, { auth: false }).pipe(
+    this.calendar$ = this.ws.get<LecturerTimetable[]>(endpoint, { auth: false }).pipe(
       map(timetables => timetables.reduce((acc, d) => {
         const time = new Date(d.time);
 

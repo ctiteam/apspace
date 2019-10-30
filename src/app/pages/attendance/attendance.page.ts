@@ -48,7 +48,8 @@ export class AttendancePage implements OnInit {
   }
 
   doRefresh(refresher?) {
-    this.course$ = this.ws.get<Course[]>('/student/courses', refresher).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    this.course$ = this.ws.get<Course[]>('/student/courses', { caching }).pipe(
       tap(c => (this.selectedIntake = c[0].INTAKE_CODE)),
       tap(_ => this.attendance$ = this.getAttendance(this.selectedIntake, refresher)),
       tap(
@@ -83,12 +84,12 @@ export class AttendancePage implements OnInit {
 
   getAttendance(intake: string, refresh?: boolean): Observable<any[]> {
     this.average = -2;
-    return (this.attendance$ = this.ws
-      .get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh)
-      .pipe(
-        tap(a => this.calculateAverage(a)),
-        map(res => this.groupAttendanceBySemester(res)),
-      ));
+    const url = `/student/attendance?intake=${intake}`;
+    const caching = refresh ? 'network-or-cache' : 'cache-only';
+    return (this.attendance$ = this.ws.get<Attendance[]>(url, { caching }).pipe(
+      tap(a => this.calculateAverage(a)),
+      map(res => this.groupAttendanceBySemester(res)),
+    ));
   }
 
   groupAttendanceBySemester(attendance: any) {
@@ -105,10 +106,8 @@ export class AttendancePage implements OnInit {
   }
 
   getLegend(refresh: boolean) {
-    this.legend$ = this.ws.get<AttendanceLegend>(
-      '/student/attendance_legend',
-      refresh,
-    );
+    const caching = refresh ? 'network-or-cache' : 'cache-only';
+    this.legend$ = this.ws.get<AttendanceLegend>('/student/attendance_legend', { caching });
   }
 
   calculateAverage(aa: Attendance[] | null) {

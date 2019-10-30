@@ -86,7 +86,7 @@ export class StudentSurveyPage implements OnInit {
     if (!this.userComingFromResultsPage) {
       // tslint:disable-next-line: no-bitwise
       if (this.settings.get('role') & Role.Student) {
-        this.ws.get<StudentProfile>('/student/profile').subscribe(
+        this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).subscribe(
           p => {
             this.intakeCode = p.INTAKE;
           },
@@ -134,7 +134,7 @@ export class StudentSurveyPage implements OnInit {
   }
 
   getIntakes() {
-    return this.ws.get<any>(`/intakes-list`, true, { url: this.stagingUrl }).pipe(
+    return this.ws.get<any>(`/intakes-list`, { url: this.stagingUrl }).pipe(
       tap()
     );
   }
@@ -148,7 +148,7 @@ export class StudentSurveyPage implements OnInit {
   }
 
   getModules(intakeCode: string) {
-    return this.ws.get<any>(`/modules-list?intake_code=${intakeCode}`, true, { url: this.stagingUrl }).pipe(
+    return this.ws.get<any>(`/modules-list?intake_code=${intakeCode}`, { url: this.stagingUrl }).pipe(
       map(res => res.filter
         (item => !item.COURSE_APPRAISAL || (!item.COURSE_APPRAISAL2 && Date.parse(item.END_DATE) >
           Date.parse(this.todaysDate.toISOString())))),
@@ -158,7 +158,7 @@ export class StudentSurveyPage implements OnInit {
 
   getSurveys(intakeCode: string) {
     const answers = [];
-    this.survey$ = this.ws.get<any>(`/surveys?intake_code=${intakeCode}`, true, { url: this.stagingUrl })
+    this.survey$ = this.ws.get<any>(`/surveys?intake_code=${intakeCode}`, { url: this.stagingUrl })
       .pipe(
         map(surveys => surveys.filter(survey => survey.type === this.surveyType)),
         tap(surveys => {

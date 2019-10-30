@@ -63,18 +63,19 @@ export class ResultsPage {
   }
 
   doRefresh(refresher?: any) {
-    this.photo$ = this.ws.get<StudentPhoto>('/student/photo', refresher);
-    this.ws.get<StudentProfile>('/student/profile', refresher).subscribe(p => {
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    this.photo$ = this.ws.get<StudentPhoto>('/student/photo', { caching });
+    this.ws.get<StudentProfile>('/student/profile', { caching }).subscribe(p => {
       this.studentProfile = p;
       if (p.BLOCK) {
         this.block = true;
-        this.course$ = this.ws.get<Course[]>('/student/courses', refresher).pipe(
+        this.course$ = this.ws.get<Course[]>('/student/courses', { caching }).pipe(
           tap(i => this.selectedIntake = i[0].INTAKE_CODE),
-          tap(i => this.results$ = this.getResults(i[0].INTAKE_CODE, refresher)),
-          tap(i => this.getCourseDetails(i[0].INTAKE_CODE, refresher)),
-          tap(i => this.getMpuLegend(i[0].INTAKE_CODE, refresher)),
-          tap(i => this.getDeterminationLegend(i[0].INTAKE_CODE, refresher)),
-          tap(i => this.getClassificatinLegend(i[0].INTAKE_CODE, refresher)),
+          tap(i => this.results$ = this.getResults(i[0].INTAKE_CODE, { caching })),
+          tap(i => this.getCourseDetails(i[0].INTAKE_CODE, { caching })),
+          tap(i => this.getMpuLegend(i[0].INTAKE_CODE, { caching })),
+          tap(i => this.getDeterminationLegend(i[0].INTAKE_CODE, { caching })),
+          tap(i => this.getClassificatinLegend(i[0].INTAKE_CODE, { caching })),
           tap(i => this.intakeLabels = Array.from(new Set((i || []).map(t => t.INTAKE_CODE)))),
           finalize(() => refresher && refresher.target.complete())
         );
@@ -91,8 +92,8 @@ export class ResultsPage {
       return {
         text: intake, handler: () => {
           this.selectedIntake = intake;
-          this.results$ = this.getResults(this.selectedIntake, true);
-          this.getCourseDetails(this.selectedIntake, true);
+          this.results$ = this.getResults(this.selectedIntake, { caching: 'network-or-cache' });
+          this.getCourseDetails(this.selectedIntake, { caching: 'network-or-cache' });
         },
       } as ActionSheetButton;
     });
@@ -103,10 +104,13 @@ export class ResultsPage {
     );
   }
 
-  getResults(intake: string, refresh: boolean = false): Observable<{ semester: string; value: Subcourse[] }[]> {
+  getResults(
+    intake: string,
+    options: { caching: 'network-or-cache' | 'cache-only' }
+  ): Observable<{ semester: string; value: Subcourse[] }[]> {
     const url = `/student/subcourses?intake=${intake}`;
-    return this.results$ = this.ws.get<Subcourse>(url, refresh).pipe(
-      tap(results => this.getInterimLegend(intake, results, refresh)),
+    return this.results$ = this.ws.get<Subcourse>(url, options).pipe(
+      tap(results => this.getInterimLegend(intake, results, options)),
       map(r => this.sortResult(r))
     );
   }
@@ -135,14 +139,14 @@ export class ResultsPage {
   }
 
 
-  getCourseDetails(intake: string, refresh: boolean): Observable<CourseDetails> {
+  getCourseDetails(intake: string, options: { caching: 'network-or-cache' | 'cache-only' }): Observable<CourseDetails> {
     const url = `/student/sub_and_course_details?intake=${intake}`;
-    return this.courseDetail$ = this.ws.get<CourseDetails>(url, refresh);
+    return this.courseDetail$ = this.ws.get<CourseDetails>(url, options);
   }
 
-  getInterimLegend(intake: string, results: any, refresh: boolean) {
+  getInterimLegend(intake: string, results: any, options: { caching: 'network-or-cache' | 'cache-only' }) {
     const url = `/student/interim_legend?intake=${intake}`;
-    this.interimLegend$ = this.ws.get<InterimLegend[]>(url, refresh).pipe(
+    this.interimLegend$ = this.ws.get<InterimLegend[]>(url, options).pipe(
       tap(res => {
         const gradeList = Array.from(new Set((res || []).map(grade => grade.GRADE)));
         this.sortGrades(results, gradeList);
@@ -150,19 +154,19 @@ export class ResultsPage {
     );
   }
 
-  getMpuLegend(intake: string, refresh: boolean) {
+  getMpuLegend(intake: string, options: { caching: 'network-or-cache' | 'cache-only' }) {
     const url = `/student/mpu_legend?intake=${intake}`;
-    this.mpuLegend$ = this.ws.get<MPULegend[]>(url, refresh);
+    this.mpuLegend$ = this.ws.get<MPULegend[]>(url, options);
   }
 
-  getDeterminationLegend(intake: string, refresh: boolean) {
+  getDeterminationLegend(intake: string, options: { caching: 'network-or-cache' | 'cache-only' }) {
     const url = `/student/determination_legend?intake=${intake}`;
-    this.determinationLegend$ = this.ws.get<DeterminationLegend[]>(url, refresh);
+    this.determinationLegend$ = this.ws.get<DeterminationLegend[]>(url, options);
   }
 
-  getClassificatinLegend(intake: string, refresh: boolean) {
+  getClassificatinLegend(intake: string, options: { caching: 'network-or-cache' | 'cache-only' }) {
     const url = `/student/classification_legend?intake=${intake}`;
-    this.classificationLegend$ = this.ws.get<ClassificationLegend[]>(url, refresh);
+    this.classificationLegend$ = this.ws.get<ClassificationLegend[]>(url, options);
   }
 
   sortGrades(results: any, gradeList: any) {
