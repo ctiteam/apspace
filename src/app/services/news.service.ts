@@ -23,7 +23,7 @@ export class NewsService {
    *
    * @param refresh - force refresh (default: false)
    */
-  get(refresh?: boolean): Observable<News[]> {
+  get(refresh: boolean = true): Observable<News[]> {
     if (this.network.type !== 'none') {
       if (refresh) { // get from backend
         return this.http.get<News[]>(this.newsUrl).pipe(
