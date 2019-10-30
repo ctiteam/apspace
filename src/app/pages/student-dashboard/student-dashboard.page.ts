@@ -893,6 +893,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
           );
         }),
         toArray(),
+        tap(_ => this.overallCgpa = 0),
         tap(
           d => {
             const data = Array.from(
