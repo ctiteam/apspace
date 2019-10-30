@@ -20,4 +20,6 @@ export interface Settings {
   /* default location (for staff only) */
   defaultCampus: string;
   defaultVenue: string;
+  /* attendix */
+  scan: boolean;
 }

@@ -7,6 +7,7 @@ import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 
 import { UpdateAttendanceGQL } from '../../../generated/graphql';
+import { SettingsService } from '../../services';
 
 @Component({
   selector: 'app-attendix-student',
@@ -27,6 +28,7 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
 
   constructor(
     private updateAttendance: UpdateAttendanceGQL,
+    private settings: SettingsService,
     public alertCtrl: AlertController,
     public barcodeScanner: BarcodeScanner,
     public plt: Platform,
@@ -36,7 +38,8 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isCordova = this.plt.is('cordova');
-    if (this.isCordova) {
+    // first run and if scan is selected
+    if (this.isCordova && this.settings.get('scan') !== false) {
       this.swapMode();
     }
   }
@@ -50,7 +53,7 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
 
   /** Swap mode between auto scan and manual input. */
   swapMode() {
-    this.scan = !this.scan;
+    this.settings.set('scan', this.scan = !this.scan);
     if (this.scan) {
       this.qrScanner.prepare().then(status => {
         console.assert(status.authorized);
