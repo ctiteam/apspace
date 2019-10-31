@@ -108,7 +108,8 @@ export class MyConsultationsPage {
 
   ionViewDidEnter() {
     this.route.queryParams.subscribe(() => {
-      if (this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.reload) {
+      // tslint:disable-next-line: max-line-length
+      if (this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.reload) {
         this.daysConfigrations = [];
         this.doRefresh(true);
       }
