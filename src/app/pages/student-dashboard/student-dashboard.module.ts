@@ -12,6 +12,7 @@ import { StudentDashboardPage } from './student-dashboard.page';
 import { ChartModule } from 'angular2-chartjs';
 import { DragulaModule, DragulaService } from 'ng2-dragula';
 import { DisabledPipe } from './disabled.pipe';
+import { SectionNamePipe } from './section-name.pipe';
 const routes: Routes = [
   {
     path: '',
@@ -32,7 +33,8 @@ const routes: Routes = [
   ],
   declarations: [
     StudentDashboardPage,
-    DisabledPipe
+    DisabledPipe,
+    SectionNamePipe
   ],
   providers: [DragulaService],
   entryComponents: []

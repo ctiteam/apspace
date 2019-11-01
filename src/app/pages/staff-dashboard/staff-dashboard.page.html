@@ -89,7 +89,7 @@
         multiple="true" okText="Add" [hidden]="true" #dashboardSectionsSelectBox>
         <ion-select-option [disabled]="dashboardSection | disabled : dragulaModelArray" [value]="dashboardSection"
           *ngFor="let dashboardSection of allDashboardSections">
-          {{ dashboardSection }}
+          {{ dashboardSection | sectionName }}
         </ion-select-option>
       </ion-select>
     </ion-item>
