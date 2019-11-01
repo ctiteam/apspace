@@ -42,7 +42,7 @@ export class NewsService {
    *
    * @param refresh - force refresh (default: false)
    */
-  getSlideshow(refresh?: boolean): Observable<any[]> {
+  getSlideshow(refresh: boolean = true): Observable<any[]> {
     if (this.network.type !== 'none') {
       if (refresh) {
         return this.http.get<any[]>(this.slideshowUrl).pipe(

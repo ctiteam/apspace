@@ -33,6 +33,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     'news',
     'upcomingTrips',
     'apcard',
+    'noticeBoard'
   ];
 
   // dragulaModelArray will be modified whenever there is a change to the order of the dashboard sections
