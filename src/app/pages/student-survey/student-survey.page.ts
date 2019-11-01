@@ -14,8 +14,8 @@ import { ActivatedRoute } from 'src/testing';
 })
 export class StudentSurveyPage implements OnInit {
   // TEMP VARIABLES
-  stagingUrl = 'https://dl4h9zf8wj.execute-api.ap-southeast-1.amazonaws.com/dev/survey';
   todaysDate = new Date();
+  lecturerName = '';
 
   // IF USER IS COMING FROM RESULTS PAGE
   userComingFromResultsPage = false;
@@ -134,21 +134,26 @@ export class StudentSurveyPage implements OnInit {
   }
 
   getIntakes() {
-    return this.ws.get<any>(`/intakes-list`, { url: this.stagingUrl }).pipe(
+    return this.ws.get<any>(`/survey/intakes-list`).pipe(
       tap()
     );
   }
-
   getModuleByClassCode(classCode: string) {
     this.modules.forEach(module => {
       if (module.CLASS_CODE === classCode) {
         this.selectedModule = module;
+        this.ws.get(`/staff/listing?staff_username=${module.SAMACCOUNTNAME}`).subscribe(
+          {
+            next: (res: any) => this.lecturerName = res[0].FULLNAME
+          }
+        );
+
       }
     });
   }
 
   getModules(intakeCode: string) {
-    return this.ws.get<any>(`/modules-list?intake_code=${intakeCode}`, { url: this.stagingUrl }).pipe(
+    return this.ws.get<any>(`/survey/modules-list?intake_code=${intakeCode}`).pipe(
       map(res => res.filter
         (item => !item.COURSE_APPRAISAL || (!item.COURSE_APPRAISAL2 && Date.parse(item.END_DATE) >
           Date.parse(this.todaysDate.toISOString())))),
@@ -158,7 +163,7 @@ export class StudentSurveyPage implements OnInit {
 
   getSurveys(intakeCode: string) {
     const answers = [];
-    this.survey$ = this.ws.get<any>(`/surveys?intake_code=${intakeCode}`, { url: this.stagingUrl })
+    this.survey$ = this.ws.get<any>(`/survey/surveys?intake_code=${intakeCode}`)
       .pipe(
         map(surveys => surveys.filter(survey => survey.type === this.surveyType)),
         tap(surveys => {
@@ -245,7 +250,7 @@ export class StudentSurveyPage implements OnInit {
             if (notAnsweredQuestions.length === 0) {
               this.submitting = true;
 
-              this.ws.post('/response', { url: this.stagingUrl, body: this.response }).subscribe({
+              this.ws.post('/survey/response', { body: this.response }).subscribe({
                 error: () => {
                   this.toast(
                     `Something went wrong and we could not complete your request. Please try again or contact us via the feedback page`,
@@ -275,7 +280,7 @@ export class StudentSurveyPage implements OnInit {
         message: msg,
         duration: 7000,
         color,
-        position: 'bottom',
+        position: 'top',
         showCloseButton: true,
       });
     toast.present();
