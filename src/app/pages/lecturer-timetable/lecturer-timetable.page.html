@@ -1,9 +1,12 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Lecturer Timetable</ion-title>
+    <ion-buttons slot="start" [hidden]='comingFromTabs()'>
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button *ngIf="attendixFeature" fill="outline" size="small"
-        [routerLink]="['/attendix/classes']" class="colored-text colored-border">
+      <ion-button *ngIf="showAttendixFeature" fill="outline" size="small" [routerLink]="['/attendix/classes']"
+        class="colored-text colored-border">
         Mark Attendance
       </ion-button>
     </ion-buttons>

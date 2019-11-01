@@ -172,6 +172,14 @@ export class MorePage implements OnInit {
       tags: ['report', 'admin', 'jasper']
     },
     {
+      title: 'My Timetable',
+      group: 'Course Related',
+      url: 'lecturer-timetable',
+      img: 'assets/img/timetable.png',
+      role: Role.Lecturer,
+      tags: ['class', 'schedule']
+    },
+    {
       title: 'Results',
       group: 'Course Related',
       url: 'results',
