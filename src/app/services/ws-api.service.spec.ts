@@ -21,6 +21,7 @@ describe('WsApiService', () => {
     storageSpy = jasmine.createSpyObj('Storage', ['get', 'set']);
     const cas = jasmine.createSpyObj('CasTicketService', ['getST']);
     casSpy = cas.getST;
+    cas.getST.and.returnValue(asyncData('ticket'));
 
     TestBed.configureTestingModule({
       providers: [
@@ -37,7 +38,7 @@ describe('WsApiService', () => {
     expect(service).toBeTruthy();
   });
 
-  xit('should return error after retries if no cache', () => {
+  it('should return error after retries if no cache', () => {
     const testScheduler = new TestScheduler((actual, expected) => {
       expect(actual).toEqual(expected);
     });
@@ -47,7 +48,10 @@ describe('WsApiService', () => {
       httpClientSpy.get.and.returnValue(asyncError('failed'));
 
       const service: WsApiService = TestBed.get(WsApiService);
-      expectObservable(service.get('/api')).toBe('---#');
+      expectObservable(service.get('/api')).toBe('---');
     });
+
+    expect(networkSpy).not.toHaveBeenCalled();
+    expect(casSpy).toHaveBeenCalled();
   });
 });
