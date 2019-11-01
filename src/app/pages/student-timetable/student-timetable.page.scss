@@ -47,9 +47,6 @@ ion-segment.week-segment {
   margin-bottom: 30px;
   background: var(--tertiary-bg-color);
   --background: var(--tertiary-bg-color);
-  ion-segment-button {
-    --background-checked: var(--secondary-bg-color);
-  }
 }
 
 .table-item:nth-child(odd) {
