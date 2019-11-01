@@ -19,7 +19,6 @@ export class NewsModalPage {
 
   sanitize(value: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(value);
-
   }
 
   ionViewWillEnter() {

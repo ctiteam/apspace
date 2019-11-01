@@ -59,7 +59,7 @@
       *ngIf="(messages.history | unreadMessagesOnly: filterObject.upcoming | notificationCategory: filterObject.categories).length > 0; else noNotifications">
       <div class="masonry-item"
         *ngFor="let message of messages.history | unreadMessagesOnly: filterObject.upcoming | notificationCategory: filterObject.categories">
-        <ion-card (click)="openModal(message)" class="notification ion-no-margin"
+        <ion-card (click)="openModal(message)" class="notification ion-no-margin cursor-pointer"
           [class.unread]="(!message.read && openedMessages.indexOf(message.message_id) === -1)">
           <ion-card-header>
             <ion-card-title>
