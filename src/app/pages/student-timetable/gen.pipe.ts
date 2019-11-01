@@ -97,7 +97,7 @@ export class GenPipe implements PipeTransform {
       LOCATION: timetable.LOCATION,
       ROOM: timetable.ROOM,
       LECTID: '',
-      NAME: 'PUBLIC',
+      NAME: '',
       SAMACCOUNTNAME: '',
       DATESTAMP: timetable.DATESTAMP,
       DATESTAMP_ISO: timetable.DATESTAMP_ISO,

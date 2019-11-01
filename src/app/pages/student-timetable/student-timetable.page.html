@@ -130,7 +130,8 @@
                       </ion-item>
                     </ng-template>
                     <ion-item class="table-item" [style.borderLeft]="'0.7rem solid ' + strToColor(timetable.MODID)"
-                      *ngFor="let timetable of timetables; trackBy: trackByIndex">
+                      *ngFor="let timetable of timetables; trackBy: trackByIndex"
+                      [class.freeTime]='timetable.MODID === "FREE"'>
                       <ion-grid>
                         <ng-container *ngIf="viewWeek; else viewDaily">
                           <ion-row class="table-data">
@@ -161,7 +162,7 @@
                               </span>
                               {{ timetable.ROOM }} | {{ timetable.LOCATION }}
                             </ion-col>
-                            <ion-col size="12" size-sm="3" class="ion-no-padding">
+                            <ion-col size="12" size-sm="3" class="ion-no-padding" *ngIf="timetable.NAME">
                               <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]"
                                 class="printColor print-font md-text-center">
                                 <span class="marker main-text-color">
@@ -192,7 +193,7 @@
                               </span>
                               {{ timetable.ROOM }} | {{ timetable.LOCATION }}
                             </ion-col>
-                            <ion-col size="12" size-sm="4" class="print-font ion-no-padding">
+                            <ion-col size="12" size-sm="4" class="print-font ion-no-padding" *ngIf="timetable.NAME">
                               <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]">
                                 <span class="marker main-text-color">
                                   <ion-icon name="contact"></ion-icon>

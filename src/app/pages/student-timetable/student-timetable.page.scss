@@ -9,6 +9,11 @@ ion-card {
     text-decoration: none;
   }
 
+  .freeTime{
+    --background: var(--success-color) !important;
+    --color: #FFFFFF !important;
+  }
+
   ion-card-header {
     border-bottom: 2px solid;
     padding: 9px 12px 9px 12px;
