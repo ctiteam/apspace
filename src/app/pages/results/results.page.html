@@ -73,7 +73,8 @@
           <ion-grid>
             <ion-row>
               <ion-col size="10" offset="1">
-                <ion-button class="ion-margin-top success-background" expand="block" size="large" [routerLink]="['/student-survey']">
+                <ion-button class="ion-margin-top success-background" expand="block" size="large"
+                  [routerLink]="['/student-survey']">
                   Survey
                   <ion-icon slot="end" name="paper"></ion-icon>
                 </ion-button>
@@ -283,6 +284,13 @@
   <ng-template #accountIsBlocked>
     <ion-grid>
       <ion-row>
+        <ion-col size="10" offset="1">
+          <ion-button class="ion-margin-top success-background" expand="block" size="large"
+            [routerLink]="['/student-survey']">
+            Survey
+            <ion-icon slot="end" name="paper"></ion-icon>
+          </ion-button>
+        </ion-col>
         <ion-col size-xs="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3">
           <ion-card class="account-disabled">
             <ion-card-header>
