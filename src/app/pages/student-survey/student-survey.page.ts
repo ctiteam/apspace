@@ -121,13 +121,13 @@ export class StudentSurveyPage implements OnInit {
     } else {
       this.courseType = 'bachelor';
     }
-    console.log(this.courseType);
     this.COURSE_MODULES$ = this.getModules(this.intakeCode);
     this.classCode = '';
     this.surveyType = '';
   }
 
   onClassCodeChanged() {
+    this.lecturerName = '';
     this.getSurveyType(this.classCode);
     this.getModuleByClassCode(this.classCode);
     this.showFieldMissingError = false;
@@ -144,7 +144,11 @@ export class StudentSurveyPage implements OnInit {
         this.selectedModule = module;
         this.ws.get(`/staff/listing?staff_username=${module.SAMACCOUNTNAME}`).subscribe(
           {
-            next: (res: any) => this.lecturerName = res[0].FULLNAME
+            next: (res: any) => {
+              if (res.length > 0) {
+                this.lecturerName = res[0].FULLNAME;
+              }
+            }
           }
         );
 
