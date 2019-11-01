@@ -111,6 +111,7 @@ export class StudentSurveyPage implements OnInit {
   }
 
   onIntakeCodeChanged() {
+    this.userComingFromResultsPage = false;
     let intakeStartsWith = '';
     intakeStartsWith = this.intakeCode.slice(0, 3);
     // tslint:disable-next-line: triple-equals
@@ -127,6 +128,7 @@ export class StudentSurveyPage implements OnInit {
   }
 
   onClassCodeChanged() {
+    this.userComingFromResultsPage = false;
     this.lecturerName = '';
     this.getSurveyType(this.classCode);
     this.getModuleByClassCode(this.classCode);
@@ -139,21 +141,41 @@ export class StudentSurveyPage implements OnInit {
     );
   }
   getModuleByClassCode(classCode: string) {
-    this.modules.forEach(module => {
-      if (module.CLASS_CODE === classCode) {
-        this.selectedModule = module;
-        this.ws.get(`/staff/listing?staff_username=${module.SAMACCOUNTNAME}`).subscribe(
-          {
-            next: (res: any) => {
-              if (res.length > 0) {
-                this.lecturerName = res[0].FULLNAME;
+    if (!this.userComingFromResultsPage) {
+      this.modules.forEach(module => {
+        if (module.CLASS_CODE === classCode) {
+          this.selectedModule = module;
+          this.ws.get(`/staff/listing?staff_username=${module.SAMACCOUNTNAME}`).subscribe(
+            {
+              next: (res: any) => {
+                if (res.length > 0) {
+                  this.lecturerName = res[0].FULLNAME;
+                }
               }
             }
-          }
-        );
+          );
 
-      }
-    });
+        }
+      });
+    } else {
+      this.modules.forEach(module => {
+        if (module.SUBJECT_CODE === classCode) {
+          this.selectedModule = module;
+          this.classCode = module.CLASS_CODE;
+          this.ws.get(`/staff/listing?staff_username=${module.SAMACCOUNTNAME}`).subscribe(
+            {
+              next: (res: any) => {
+                if (res.length > 0) {
+                  this.lecturerName = res[0].FULLNAME;
+                }
+              }
+            }
+          );
+
+        }
+      });
+    }
+
   }
 
   getModules(intakeCode: string) {

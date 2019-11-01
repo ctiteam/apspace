@@ -127,9 +127,9 @@ export class ResultsPage {
     return Object.keys(resultBySemester).map(semester => ({ semester, value: resultBySemester[semester] }));
   }
 
-  openSurveyPage(_moduleCode: string) {
+  openSurveyPage(moduleCode: string) {
     const navigationExtras: NavigationExtras = {
-      state: { moduleCode: 'CT108-3-2-IOS-L-UC2F1808MBT-SE', intakeCode: 'UC2F1808IT(MBT)' }
+      state: { moduleCode, intakeCode: this.selectedIntake }
     };
     this.navCtrl.navigateForward(['/student-survey'], navigationExtras);
   }
