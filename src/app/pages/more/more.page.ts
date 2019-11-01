@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { Observable } from 'rxjs';
 import * as Fuse from 'fuse.js';
+import { Observable } from 'rxjs';
 
-import { CasTicketService, SettingsService, UserSettingsService } from '../../services';
 import { Role } from '../../interfaces';
+import { CasTicketService, SettingsService, UserSettingsService } from '../../services';
 
+import { Network } from '@ionic-native/network/ngx';
+import { NavController, ToastController } from '@ionic/angular';
 import { MenuItem } from './menu.interface';
-import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-more',
@@ -163,6 +164,22 @@ export class MorePage implements OnInit {
       tags: ['book']
     },
     {
+      title: 'My Reports Panel',
+      group: 'Course Related',
+      url: 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check',
+      img: 'assets/img/reports.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['report', 'admin', 'jasper']
+    },
+    {
+      title: 'My Timetable',
+      group: 'Course Related',
+      url: 'lecturer-timetable',
+      img: 'assets/img/timetable.png',
+      role: Role.Lecturer,
+      tags: ['class', 'schedule']
+    },
+    {
       title: 'Results',
       group: 'Course Related',
       url: 'results',
@@ -186,14 +203,6 @@ export class MorePage implements OnInit {
       role: Role.Lecturer | Role.Admin,
       tags: ['class', 'schedule']
     },
-    // {
-    //   title: 'Student Survey',
-    //   group: 'Course Related',
-    //   url: 'student-survey',
-    //   img: 'assets/img/student-survey.png',
-    //   role: Role.Student,
-    //   tags: []
-    // },
     {
       title: 'Classroom Finder',
       group: 'Others',
@@ -235,6 +244,14 @@ export class MorePage implements OnInit {
       tags: ['visa']
     },
     {
+      title: 'Upcoming Graduation',
+      group: 'Others',
+      url: 'https://graduation.sites.apiit.edu.my/',
+      img: 'assets/img/upcoming-graduations.png',
+      role: Role.Student,
+      tags: ['graduation', 'cermony']
+    },
+    {
       title: 'Feedback',
       group: 'App Related',
       url: 'feedback',
@@ -274,7 +291,9 @@ export class MorePage implements OnInit {
     public iab: InAppBrowser,
     private cas: CasTicketService,
     private settings: SettingsService,
-    private userSettings: UserSettingsService
+    private userSettings: UserSettingsService,
+    private network: Network,
+    private toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
@@ -290,12 +309,19 @@ export class MorePage implements OnInit {
     // external pages does not use relative or absolute link
     if (url.startsWith('http://') || url.startsWith('https://')) {
       // manually exclude office365, and course schedule that do not need service ticket
-      if (url.startsWith('https://outlook.office.com') || url === 'http://kb.sites.apiit.edu.my/knowledge-base/course-schedule/') {
+      if (url.startsWith('https://outlook.office.com')
+        || url === 'http://kb.sites.apiit.edu.my/knowledge-base/course-schedule/'
+        || url === 'https://graduation.sites.apiit.edu.my/') {
         this.iab.create(url, '_system', 'location=true');
       } else {
-        this.cas.getST(url).subscribe(st => {
-          this.iab.create(`${url}?ticket=${st}`, '_system', 'location=true');
-        });
+        if (this.network.type !== 'none') {
+          this.cas.getST(url).subscribe(st => {
+            this.iab.create(`${url}?ticket=${st}`, '_system', 'location=true');
+          });
+        } else {
+          this.presentToast('External links cannot be opened in offline mode. Please ensure you have a network connection and try again');
+        }
+
       }
     } else {
       this.navCtrl.navigateForward([url]);
@@ -305,6 +331,17 @@ export class MorePage implements OnInit {
   /** No sorting for KeyValuePipe. */
   noop(): number {
     return 0;
+  }
+
+  async presentToast(msg: string) {
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      color: 'danger',
+      duration: 6000,
+      showCloseButton: true,
+      position: 'top'
+    });
+    toast.present();
   }
 
 }

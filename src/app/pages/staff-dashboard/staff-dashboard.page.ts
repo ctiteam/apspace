@@ -1,24 +1,20 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, Renderer2, AfterViewInit } from '@angular/core';
 import {
-  EventComponentConfigurations,
-  DashboardCardComponentConfigurations,
-  Apcard,
-  StaffProfile,
-  LecturerTimetable,
-  APULocation,
-  BusTrips,
-  APULocations,
-  Holidays,
-  Holiday,
-  LecturerConsultation
-} from 'src/app/interfaces';
+  AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild
+} from '@angular/core';
+import { IonSelect, IonSlides, ModalController, NavController } from '@ionic/angular';
 
-import { Observable, of, zip } from 'rxjs';
-import { map, tap, finalize } from 'rxjs/operators';
-import { WsApiService, UserSettingsService, NotificationService } from 'src/app/services';
 import * as moment from 'moment';
-import { NavController, IonSelect } from '@ionic/angular';
 import { DragulaService } from 'ng2-dragula';
+import { Observable, of, zip } from 'rxjs';
+import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+
+import {
+  Apcard, APULocation, APULocations, BusTrips,
+  DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday,
+  Holidays, LecturerConsultation, LecturerTimetable, News, StaffProfile
+} from 'src/app/interfaces';
+import { NewsService, NotificationService, UserSettingsService, WsApiService } from '../../services';
+import { NewsModalPage } from '../news/news-modal';
 
 @Component({
   selector: 'app-staff-dashboard',
@@ -27,14 +23,17 @@ import { DragulaService } from 'ng2-dragula';
 })
 export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   // USER SETTINGS
+  @ViewChild('slides', { static: false }) slides: IonSlides;
   @ViewChild('dragulaContainer', { static: true }) container: ElementRef; // access the dragula container
   @ViewChild('dashboardSectionsSelectBox', { static: true }) dashboardSectionsselectBoxRef: IonSelect; // hidden selectbox
   dashboardSectionsSelectBoxModel; // select box dashboard sections value
   allDashboardSections = [ // alldashboardSections will not be modified and it will be used in the select box
     'todaysSchedule',
     'upcomingEvents',
+    'news',
     'upcomingTrips',
     'apcard',
+    'noticeBoard'
   ];
 
   // dragulaModelArray will be modified whenever there is a change to the order of the dashboard sections
@@ -69,6 +68,118 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     cardTitle: 'Today\'s Schedule',
   };
 
+  // NEWS
+  news$: Observable<News[]>;
+  newsCardConfigurations: DashboardCardComponentConfigurations = {
+    cardTitle: 'Latest News',
+    contentPadding: false,
+    withOptionsButton: false
+  };
+  newsIndexToShow = 0; // open the first news section by default
+
+  noticeBoardCardConfigurations: DashboardCardComponentConfigurations = {
+    cardTitle: 'Notice Board',
+    contentPadding: false,
+    withOptionsButton: false
+  };
+  noticeBoardItems$: Observable<any[]>;
+  noticeBoardSliderOpts = {
+    initialSlide: 0,
+    speed: 400,
+    slidesPerView: 1.4,
+    centeredContent: true,
+    spaceBetween: 15,
+    coverflowEffect: {
+      rotate: 50,
+      stretch: 0,
+      depth: 100,
+      modifier: 1,
+      slideShadows: true,
+    },
+    on: { // coverflow animation
+      beforeInit() {
+        const swiper = this;
+
+        swiper.classNames.push(`${swiper.params.containerModifierClass}coverflow`);
+        swiper.classNames.push(`${swiper.params.containerModifierClass}3d`);
+
+        swiper.params.watchSlidesProgress = true;
+        swiper.originalParams.watchSlidesProgress = true;
+      },
+      setTranslate() {
+        const swiper = this;
+        const {
+          width: swiperWidth, height: swiperHeight, slides, $wrapperEl, slidesSizesGrid
+        } = swiper;
+        const params = swiper.params.coverflowEffect;
+        const isHorizontal = swiper.isHorizontal();
+        const transform$$1 = swiper.translate;
+        const center = isHorizontal ? -transform$$1 + (swiperWidth / 2) : -transform$$1 + (swiperHeight / 2);
+        const rotate = isHorizontal ? params.rotate : -params.rotate;
+        const translate = params.depth;
+        // Each slide offset from center
+        for (let i = 0, length = slides.length; i < length; i += 1) {
+          const $slideEl = slides.eq(i);
+          const slideSize = slidesSizesGrid[i];
+          const slideOffset = $slideEl[0].swiperSlideOffset;
+          const offsetMultiplier = ((center - slideOffset - (slideSize / 2)) / slideSize) * params.modifier;
+
+          let rotateY = isHorizontal ? rotate * offsetMultiplier : 0;
+          let rotateX = isHorizontal ? 0 : rotate * offsetMultiplier;
+          // var rotateZ = 0
+          let translateZ = -translate * Math.abs(offsetMultiplier);
+
+          let translateY = isHorizontal ? 0 : params.stretch * (offsetMultiplier);
+          let translateX = isHorizontal ? params.stretch * (offsetMultiplier) : 0;
+
+          // Fix for ultra small values
+          if (Math.abs(translateX) < 0.001) { translateX = 0; }
+          if (Math.abs(translateY) < 0.001) { translateY = 0; }
+          if (Math.abs(translateZ) < 0.001) { translateZ = 0; }
+          if (Math.abs(rotateY) < 0.001) { rotateY = 0; }
+          if (Math.abs(rotateX) < 0.001) { rotateX = 0; }
+
+          // tslint:disable-next-line: max-line-length
+          const slideTransform = `translate3d(${translateX}px,${translateY}px,${translateZ}px)  rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+          $slideEl.transform(slideTransform);
+          $slideEl[0].style.zIndex = -Math.abs(Math.round(offsetMultiplier)) + 1;
+          if (params.slideShadows) {
+            // Set shadows
+            let $shadowBeforeEl = isHorizontal ? $slideEl.find('.swiper-slide-shadow-left') : $slideEl.find('.swiper-slide-shadow-top');
+            let $shadowAfterEl = isHorizontal ? $slideEl.find('.swiper-slide-shadow-right') : $slideEl.find('.swiper-slide-shadow-bottom');
+            if ($shadowBeforeEl.length === 0) {
+              $shadowBeforeEl = swiper.$(`<div class="swiper-slide-shadow-${isHorizontal ? 'left' : 'top'}"></div>`);
+              $slideEl.append($shadowBeforeEl);
+            }
+            if ($shadowAfterEl.length === 0) {
+              $shadowAfterEl = swiper.$(`<div class="swiper-slide-shadow-${isHorizontal ? 'right' : 'bottom'}"></div>`);
+              $slideEl.append($shadowAfterEl);
+            }
+            if ($shadowBeforeEl.length) { $shadowBeforeEl[0].style.opacity = offsetMultiplier > 0 ? offsetMultiplier : 0; }
+            if ($shadowAfterEl.length) { $shadowAfterEl[0].style.opacity = (-offsetMultiplier) > 0 ? -offsetMultiplier : 0; }
+          }
+        }
+
+        // Set correct perspective for IE10
+        if (swiper.support.pointerEvents || swiper.support.prefixedPointerEvents) {
+          const ws = $wrapperEl[0].style;
+          ws.perspectiveOrigin = `${center}px 50%`;
+        }
+      },
+      setTransition(duration) {
+        const swiper = this;
+        swiper.slides
+          .transition(duration)
+          .find('.swiper-slide-shadow-top, .swiper-slide-shadow-right, .swiper-slide-shadow-bottom, .swiper-slide-shadow-left')
+          .transition(duration);
+      }
+    }
+  };
+
+  // HOLIDAYS
+  holidays$: Observable<Holiday[]>;
+
   // TODAYS TRIPS
   upcomingTrips$: Observable<any>;
   showSetLocationsSettings = false;
@@ -80,7 +191,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   };
 
   // UPCOMING EVENTS
-  upcomingEvent$: Observable<EventComponentConfigurations[]> | any;
+  upcomingEvent$: Observable<EventComponentConfigurations[]>;
   upcomingEventsCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
     cardTitle: 'Upcoming Events',
@@ -146,7 +257,9 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     private navCtrl: NavController,
     private dragulaService: DragulaService,
     private notificationService: NotificationService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private news: NewsService,
+    private modalCtrl: ModalController
   ) {
     this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
   }
@@ -157,6 +270,9 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
         next: data => this.shownDashboardSections = data,
       }
     );
+
+    this.holidays$ = this.getHolidays(false);
+
     this.userSettings.getBusShuttleServiceSettings().subscribe(
       {
         next: data => {
@@ -191,9 +307,14 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   doRefresh(refresher?) {
     this.displayGreetingMessage();
     this.getLocations(refresher);
+    this.holidays$ = this.getHolidays(true);
+    this.news$ = this.news.get(refresher).pipe(
+      map(res => res.slice(0, 4))
+    );
+    this.noticeBoardItems$ = this.news.getSlideshow(refresher);
     this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation, refresher);
-    this.getUpcomingEvents(refresher);
-    this.apcardTransaction$ = this.getTransactions(refresher);
+    this.getUpcomingEvents();
+    this.apcardTransaction$ = this.getTransactions(true); // no-cache for apcard transactions
     this.getBadge();
     this.getProfile(refresher).pipe(
       finalize(() => refresher && refresher.target.complete()),
@@ -205,6 +326,23 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     this.notificationService.getMessages().subscribe(res => {
       this.numberOfUnreadMsgs = +res.num_of_unread_messages;
     });
+  }
+
+  // GET DETAILS FOR HOLIDAYS
+  // holidays$ REQUIRED FOR $upcomingTrips
+  getHolidays(refresher: boolean): Observable<Holiday[]> {
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.ws.get<Holidays>('/transix/holidays/filtered/staff', { auth: false, caching }).pipe(
+      map(res => res.holidays),
+      // AUTO REFRESH IF HOLIDAY NOT FOUND
+      switchMap(holidays => {
+        const date = new Date();
+        return refresher || holidays.find(h => date < new Date(h.holiday_start_date))
+          ? of(holidays)
+          : this.getHolidays(true);
+      }),
+      shareReplay(1),
+    );
   }
 
   // DRAG AND DROP FUNCTIONS (DASHBOARD CUSTOMIZATION)
@@ -225,7 +363,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   enableCardReordering() {
     this.dragulaService.createGroup('editable-list', {
-      moves: (el, container, handle) => {
+      moves: (_el, _container, handle) => {
         return handle.classList.contains('handle');
       }
     });
@@ -263,9 +401,10 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   // PROFILE AND GREETING MESSAGE FUNCTIONS
   getProfile(refresher: boolean) {
-    return this.staffProfile$ = this.ws.get<StaffProfile>('/staff/profile', refresher).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.staffProfile$ = this.ws.get<StaffProfile>('/staff/profile', { caching }).pipe(
       tap(staffProfile => this.staffFirstName = staffProfile[0].FULLNAME.split(' ')[0]),
-      tap(staffProfile => this.getTodaysSchdule(staffProfile[0].ID, refresher))
+      tap(staffProfile => this.getTodaysSchdule(staffProfile[0].ID))
     );
   }
 
@@ -281,10 +420,10 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // TODAYS SCHEDULE FUNCTIONS
-  getTodaysSchdule(staffId: string, refresher) {
+  getTodaysSchdule(staffId: string) {
     this.todaysSchedule$ = zip( // ZIP TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
-      this.getUpcomingClasses(staffId, refresher),
-      this.getUpcomingConsultations(refresher)
+      this.getUpcomingClasses(staffId),
+      this.getUpcomingConsultations(true) // no-cache for upcoming consultations
     ).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
@@ -299,13 +438,26 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  getUpcomingClasses(staffId: string, refresher: boolean): Observable<EventComponentConfigurations[]> {
-    const dateNow = new Date();
+  getUpcomingClasses(staffId: string): Observable<EventComponentConfigurations[]> {
+    const d = new Date();
+    const date = `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`;
     // const endpoint = '/lecturer-timetable/v2/' + 'anrazali'; // For testing
     const endpoint = '/lecturer-timetable/v2/' + staffId;
-    return this.ws.get<LecturerTimetable[]>(endpoint, refresher, { auth: false }).pipe(
+    return this.ws.get<LecturerTimetable[]>(endpoint, { auth: false, caching: 'cache-only' }).pipe(
       // GET TODAYS CLASSES ONLY
-      map(timetable => timetable.filter(tt => this.eventIsToday(new Date(tt.time), dateNow))),
+      map(timetable => timetable.filter(tt => this.eventIsToday(new Date(tt.time), d))),
+
+      // REFRESH LECTURER TIMETABLE ONLY IF NO CLASSES IN LECTURER TIMETABLE AND NOT A HOLIDAY
+      switchMap(timetables => timetables.length !== 0
+        ? of(timetables)
+        : this.holidays$.pipe(
+          // XXX: ONLY START DAY IS BEING MATCHED
+          switchMap(holidays => holidays.find(holiday => date === holiday.holiday_start_date)
+            ? of(timetables)
+            : this.ws.get<LecturerTimetable[]>(endpoint, { auth: false, caching: 'network-or-cache' })
+          ),
+        )
+      ),
 
       // CONVERT TIMETABLE OBJECT TO THE OBJECT EXPECTED IN THE EVENT COMPONENT
       map((timetables: LecturerTimetable[]) => {
@@ -313,7 +465,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
         timetables.forEach((timetable: LecturerTimetable) => {
           let classPass = false;
-          if (this.eventPass(timetable.time, dateNow)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
+          if (this.eventPass(timetable.time, d)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
             classPass = true;
           }
 
@@ -373,16 +525,40 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  // UPCOMING EVENTS FUNCTIONS
-  getUpcomingEvents(refresher: boolean) {
-    const todaysDate = new Date();
-    this.upcomingEvent$ = this.getUpcomingHoliday(todaysDate, refresher);
+  // NEWS
+  showMore(itemIndex: number) {
+    this.newsIndexToShow = itemIndex;
   }
 
-  getUpcomingHoliday(date: Date, refresher): Observable<EventComponentConfigurations[]> {
-    return this.ws.get<Holidays>('/transix/holidays/filtered/staff', refresher, { auth: false }).pipe(
-      map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
-      map(holiday => {
+  async openNewsModal(item: News) {
+    const modal = await this.modalCtrl.create({
+      component: NewsModalPage,
+      componentProps: { item, notFound: 'No news Selected' },
+    });
+    await modal.present();
+    await modal.onDidDismiss();
+  }
+
+  // SLIDER
+  prevSlide() {
+    this.slides.slidePrev();
+  }
+
+  nextSlide() {
+    this.slides.slideNext();
+  }
+
+  // UPCOMING EVENTS FUNCTIONS
+  getUpcomingEvents() {
+    const todaysDate = new Date();
+    this.upcomingEvent$ = this.getUpcomingHoliday(todaysDate);
+  }
+
+  getUpcomingHoliday(date: Date): Observable<EventComponentConfigurations[]> {
+    return this.holidays$.pipe(
+      map(holidays => {
+        const holiday = holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday;
+
         const examsListEventMode: EventComponentConfigurations[] = [];
         const formattedStartDate = moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('DD MMM YYYY');
         examsListEventMode.push({
@@ -405,7 +581,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   // APCARD FUNCTIONS
   getTransactions(refresher: boolean) {
-    return this.ws.get<Apcard[]>('/apcard/', refresher).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.ws.get<Apcard[]>('/apcard/', { caching }).pipe(
       map(transactions => this.signTransactions(transactions)),
       tap(transactions => this.analyzeTransactions(transactions))
     );
@@ -460,7 +637,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     }
     this.showSetLocationsSettings = false;
     const dateNow = new Date();
-    return this.ws.get<BusTrips>(`/transix/trips/applicable`, refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.ws.get<BusTrips>(`/transix/trips/applicable`, { auth: false, caching }).pipe(
       map(res => res.trips),
       map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
         return trips.filter(trip => {
@@ -495,7 +673,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getLocations(refresher: boolean) {
-    this.ws.get<APULocations>(`/transix/locations`, refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    this.ws.get<APULocations>(`/transix/locations`, { auth: false, caching }).pipe(
       map((res: APULocations) => res.locations),
       tap(locations => this.locations = locations)
     ).subscribe();

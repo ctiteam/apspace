@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController, MenuController } from '@ionic/angular';
-import { Observable } from 'rxjs';
-import { NotificationService } from 'src/app/services';
-import { finalize, tap } from 'rxjs/operators';
-import { NotificationModalPage } from './notification-modal';
-import { NotificationHistory } from 'src/app/interfaces';
+import { Component } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MenuController, ModalController } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { finalize, tap } from 'rxjs/operators';
+import { NotificationHistory } from 'src/app/interfaces';
+import { NotificationService } from 'src/app/services';
+import { NotificationModalPage } from './notification-modal';
 
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.page.html',
   styleUrls: ['./notifications.page.scss'],
 })
-export class NotificationsPage implements OnInit {
+export class NotificationsPage {
   messages$: Observable<NotificationHistory>;
   categories = [];
   allCategories = {};
@@ -30,7 +30,7 @@ export class NotificationsPage implements OnInit {
     public sanitizer: DomSanitizer
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.doRefresh();
   }
 

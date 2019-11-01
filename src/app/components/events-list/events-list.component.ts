@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { EventComponentConfigurations } from 'src/app/interfaces';
 import { Observable } from 'rxjs';
+import { EventComponentConfigurations } from 'src/app/interfaces';
 
 @Component({
   selector: 'events-list',

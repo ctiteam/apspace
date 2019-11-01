@@ -1,0 +1,12 @@
+mutation updateAttendance($otp: String!) {
+  updateAttendance(otp: $otp) {
+    id
+    attendance
+    # Schedule
+    classcode
+    date
+    startTime
+    endTime
+    classType
+  }
+}

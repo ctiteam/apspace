@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, AlertController, ToastController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { LecturerRemarks, LecturerSlotDetails } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
-import { LecturerSlotDetails, LecturerRemarks } from 'src/app/interfaces';
 
 import * as moment from 'moment';
 @Component({
@@ -35,10 +35,10 @@ export class LecturerSlotDetailsModalPage implements OnInit {
     if (moment(this.dataToSend.dateAndTime, '').toDate() <= this.dateNow) {
       this.showRemarks = true;
     }
-    this.slotDetails$ = this.ws.get<LecturerSlotDetails[]>(`/iconsult/detailpage/${this.dataToSend.slotId}`, true).pipe(
+    this.slotDetails$ = this.ws.get<LecturerSlotDetails[]>(`/iconsult/detailpage/${this.dataToSend.slotId}`).pipe(
       map(response => response[0]),
     );
-    this.lecturerRemarks$ = this.ws.get<LecturerRemarks[]>(`/iconsult/lecgetfeedback/${this.dataToSend.slotId}`, true);
+    this.lecturerRemarks$ = this.ws.get<LecturerRemarks[]>(`/iconsult/lecgetfeedback/${this.dataToSend.slotId}`);
   }
 
   addRemarks() {
@@ -114,10 +114,10 @@ export class LecturerSlotDetailsModalPage implements OnInit {
               };
               this.sendCancelBookingRequest(cancellationBody).subscribe(
                 {
-                  next: res => {
+                  next: () => {
                     this.showToastMessage('Booking has been cancelled successfully!', 'success');
                   },
-                  error: err => {
+                  error: () => {
                     this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
                   },
                   complete: () => {

@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
-import { Observable, EMPTY, from as fromPromise, of, throwError } from 'rxjs';
+import { EMPTY, from as fromPromise, Observable, of, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
 import { Role } from '../interfaces';
@@ -86,7 +86,9 @@ export class CasTicketService {
     };
     return (tgt ? of(tgt) : fromPromise(this.storage.get('tgt'))).pipe(
       switchMap(tgt => this.http.post(`${this.casUrl}/cas/v1/tickets/${tgt}`, null, options)),
-      catchError(_ => this.getTGT().pipe(switchMap(tgt => this.getST(serviceUrl, tgt)))),
+      catchError(err => err.status !== 0
+        ? this.getTGT().pipe(switchMap(tgt => this.getST(serviceUrl, tgt)))
+        : throwError(new Error('No network'))),
     );
   }
 
@@ -138,7 +140,7 @@ export class CasTicketService {
         /* tslint:enable:no-bitwise */
         if (!role) {
           this.storage.clear();
-          return throwError('Group not supported');
+          return throwError(new Error('Group not supported'));
         }
 
         this.settings.set('role', role);

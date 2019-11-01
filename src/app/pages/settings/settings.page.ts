@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavController, ToastController, AlertController } from '@ionic/angular';
+import { AlertController, ModalController, NavController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
-import { APULocations, APULocation, StudentProfile, Role, Venue } from '../../interfaces';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+import { APULocation, APULocations, Role, StudentProfile, Venue } from '../../interfaces';
 import {
   SettingsService, StudentTimetableService, UserSettingsService, WsApiService
 } from '../../services';
@@ -94,7 +94,6 @@ export class SettingsPage implements OnInit {
 
 
   ngOnInit() {
-    const role = this.settings.get('role');
     // tslint:disable-next-line: no-bitwise
     if (this.settings.get('role') & Role.Student) {
       this.userRole = true;
@@ -107,13 +106,13 @@ export class SettingsPage implements OnInit {
   }
 
   getLocations() {
-    return this.ws.get<APULocations>(`/transix/locations`, true, { auth: false }).pipe(
+    return this.ws.get<APULocations>(`/transix/locations`, { auth: false }).pipe(
       map((res: APULocations) => res.locations),
     );
   }
 
   getVenues() {
-    this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${this.defaultCampus}`, true);
+    this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${this.defaultCampus}`);
   }
 
 
@@ -163,7 +162,7 @@ export class SettingsPage implements OnInit {
 
     const intakeHistory = this.settings.get('intakeHistory') || [];
     const intake = intakeHistory[intakeHistory.length - 1]
-      || await this.ws.get<StudentProfile>('/student/profile').pipe(pluck('INTAKE')).toPromise();
+      || await this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).pipe(pluck('INTAKE')).toPromise();
 
     // ignored those that are blacklisted
     const filtered = timetables.filter(timetable => !setting.blacklists.includes(timetable.MODID));
@@ -228,11 +227,8 @@ export class SettingsPage implements OnInit {
           text: 'Yes',
           handler: () => {
             this.ws.get('/byod/reset').subscribe(
-              data => {
-              },
-              err => {
-                console.error(err);
-              },
+              () => {},
+              err => console.error(err),
               async () => {
                 const toast = await this.toastCtrl.create({
                   message: 'Your request has been sent to the helpdesk support system and it is being processed now.',

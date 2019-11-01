@@ -1,18 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { Platform, ModalController } from '@ionic/angular';
+import { Component } from '@angular/core';
+import { ModalController, Platform } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { ExamSchedule, Role, StudentProfile } from '../../interfaces';
-import { IntakeListingService, WsApiService, SettingsService } from '../../services';
-import { ActionSheet } from '@ionic-native/action-sheet/ngx';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+import { ExamSchedule, Role, StudentProfile } from '../../interfaces';
+import { IntakeListingService, SettingsService, WsApiService } from '../../services';
 
 @Component({
   selector: 'app-exam-schedule',
   templateUrl: './exam-schedule.page.html',
   styleUrls: ['./exam-schedule.page.scss'],
 })
-export class ExamSchedulePage implements OnInit {
+export class ExamSchedulePage {
   exam$: Observable<ExamSchedule[]>;
 
   intake: string;
@@ -24,7 +23,6 @@ export class ExamSchedulePage implements OnInit {
   };
   constructor(
     public plt: Platform,
-    public actionSheet: ActionSheet,
     private modalCtrl: ModalController,
     private il: IntakeListingService,
     private ws: WsApiService,
@@ -39,10 +37,7 @@ export class ExamSchedulePage implements OnInit {
       this.doRefresh();
     }
   }
-  ngOnInit() {
-    this.il.get(true).subscribe(ii => {
-      this.intakes = ii.map(i => i.INTAKE_CODE);
-    });
+  ionViewDidEnter() { // using oninit is casing some issues in naviagting to this page; the data loaded is huge (intake listing)
     const intake = this.settings.get('examIntake');
     if (intake !== undefined) { // intake might be ''
       this.intake = intake;
@@ -52,26 +47,36 @@ export class ExamSchedulePage implements OnInit {
       if (this.settings.get('role') & Role.Student) {
 
         /* tslint:enable:no-bitwise */
-        this.ws.get<StudentProfile>('/student/profile', true).subscribe(p => {
+        this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
           this.intake = p.INTAKE;
         },
           (_) => { },
           () => this.doRefresh()
         );
       } else {
+        this.doRefresh();
         this.showNoIntakeMessage = true;
       }
     }
   }
   doRefresh(refresher?) {
     const url = `/examination/${this.intake}`;
-    const opt = { auth: false };
-    this.exam$ = this.ws.get<ExamSchedule[]>(url, true, opt).pipe(
-      finalize(() => (refresher && refresher.target.complete())),
-    );
-    this.il.get(Boolean(refresher)).subscribe(ii => {
-      this.intakes = ii.map(i => i.INTAKE_CODE);
-    });
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    if (this.intake) {
+      this.exam$ = this.ws.get<ExamSchedule[]>(url, { auth: false, caching }).pipe(
+        finalize(() => (refresher && refresher.target.complete())),
+      );
+      this.il.get(refresher).subscribe(ii => {
+        this.intakes = ii.map(i => i.INTAKE_CODE);
+      });
+    } else {
+      this.il.get(refresher).pipe(
+        finalize(() => (refresher && refresher.target.complete()))
+      ).subscribe(ii => {
+        this.intakes = ii.map(i => i.INTAKE_CODE);
+      });
+    }
+
   }
   async presentIntakeSearch() {
     const modal = await this.modalCtrl.create({

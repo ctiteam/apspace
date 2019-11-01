@@ -9,6 +9,11 @@ ion-card {
     text-decoration: none;
   }
 
+  .freeTime{
+    --background: var(--success-color) !important;
+    --color: #FFFFFF !important;
+  }
+
   ion-card-header {
     border-bottom: 2px solid;
     padding: 9px 12px 9px 12px;
@@ -22,6 +27,30 @@ ion-card {
       border-radius: 10px 10px 0 0;
     }
   }
+}
+
+ion-segment-button {
+  // Fit all week days without scrolling
+  --padding-end: 0 !important;
+  --padding-start: 0 !important;
+  --margin-start: 0 !important;
+  --margin-end: 100 !important;
+  min-width: 50px !important;
+}
+
+.segment-scrollable {
+  overflow-x: auto !important;
+  justify-content: center;
+}
+
+ion-segment.week-segment {
+  margin-bottom: 30px;
+  background: var(--tertiary-bg-color);
+  --background: var(--tertiary-bg-color);
+}
+
+.table-item:nth-child(odd) {
+  --background: var(--main-bg-color) !important;
 }
 
 .table-top {
@@ -52,7 +81,6 @@ ion-card {
     display: flex;
   }
 
-
   .table-top {
     display: block;
     visibility: visible;
@@ -69,7 +97,7 @@ ion-card {
 .printSelectedweek {
   display: none;
 }
-.printLogo {
+.printLogoWrapper {
   display: none;
 }
 
@@ -103,7 +131,7 @@ ion-card {
   ion-content {
     background-color: white !important;
   }
- 
+
   .print-font {
     font-size: 0.7rem !important;
   }
@@ -126,11 +154,11 @@ ion-card {
   .printSelectedweek {
     display: inline;
   }
-  .printLogo {
+  .printLogoWrapper {
     display: block;
   }
-   // override colored-text class
-   .colored-text {
+  // override colored-text class
+  .colored-text {
     color: black !important;
   }
 }

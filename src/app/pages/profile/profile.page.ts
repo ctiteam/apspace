@@ -17,7 +17,7 @@ export class ProfilePage implements OnInit {
   profile$: Observable<StudentProfile>;
   staffProfile$: Observable<StaffProfile[]>;
   visa$: Observable<any>;
-
+  indecitor = false;
   skeltons = [
     80,
     30,
@@ -38,20 +38,32 @@ export class ProfilePage implements OnInit {
   }
 
   ngOnInit() {
-    this.settings.ready().then(() => {
-      const role = this.settings.get('role');
-      // tslint:disable-next-line:no-bitwise
-      if (role & Role.Student) {
-        this.studentRole = true;
-        this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
-        this.profile$ = this.ws.get<StudentProfile>('/student/profile', true);
-        this.getProfile();
+    this.indecitor = true;
+  }
+
+  ionViewDidEnter() {
+    /*
+    * The page's response is very huge, which is causing issues on ios if we use oninit
+    * the indecitor is used to define if the page should call the dorefresh of not
+    * If we do not use the indecitor, the page in the tabs (tabs/attendance) will be reloading every time we enter the tab
+    */
+    if (this.indecitor) {
+      this.settings.ready().then(() => {
+        const role = this.settings.get('role');
         // tslint:disable-next-line:no-bitwise
-      } else if (role & (Role.Lecturer | Role.Admin)) {
-        this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile', true);
-      }
-      this.getProfile();
-    });
+        if (role & Role.Student) {
+          this.studentRole = true;
+          this.photo$ = this.ws.get<StudentPhoto>('/student/photo');
+          this.profile$ = this.ws.get<StudentProfile>('/student/profile');
+          this.getProfile();
+          // tslint:disable-next-line:no-bitwise
+        } else if (role & (Role.Lecturer | Role.Admin)) {
+          this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
+        }
+        this.getProfile();
+      });
+      this.indecitor = false;
+    }
   }
 
   openStaffDirectoryInfo(id: string) {
@@ -62,7 +74,7 @@ export class ProfilePage implements OnInit {
     const role = this.settings.get('role');
     // tslint:disable-next-line:no-bitwise
     if (role & Role.Student) {
-      this.ws.get<StudentProfile>('/student/profile').pipe(
+      this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).pipe(
         tap(p => {
           this.countryName = p.COUNTRY;
           if (p.COUNTRY === 'Malaysia') {
@@ -74,7 +86,7 @@ export class ProfilePage implements OnInit {
         }),
       ).subscribe();
     } else {
-      this.ws.get<StaffProfile[]>('/staff/profile').pipe(
+      this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }).pipe(
         tap(p => {
           this.countryName = p[0].NATIONALITY;
         }),
@@ -83,7 +95,7 @@ export class ProfilePage implements OnInit {
   }
 
   getVisaStatus() {
-    return this.ws.get<any>('/student/visa_status');
+    return this.ws.get<any>('/student/visa_status', { caching: 'cache-only' });
   }
 
   comingFromTabs() {

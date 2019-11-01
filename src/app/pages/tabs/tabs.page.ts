@@ -1,9 +1,9 @@
+import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { animate, keyframes, style, transition, trigger } from '@angular/animations';
 
-import { SettingsService } from '../../services';
 import { Role } from '../../interfaces';
+import { SettingsService } from '../../services';
 import { TabItem } from './tab-item.interface';
 
 @Component({

@@ -1,20 +1,20 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Component, ViewChild } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { tap, finalize, map } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 
 import { IonContent, MenuController } from '@ionic/angular';
 
 import { ChartComponent } from 'angular2-chartjs';
 
+import { WsApiService } from 'src/app/services';
 import {
   FeesBankDraft,
   FeesDetails,
   FeesSummary,
   FeesTotalSummary
 } from '../../interfaces';
-import { WsApiService } from 'src/app/services';
 
 declare var Chart: any;
 
@@ -35,7 +35,7 @@ declare var Chart: any;
     ])
   ]
 })
-export class FeesPage implements OnInit {
+export class FeesPage {
   selectedSegment = 'Summary';
 
   totalSummary$: Observable<FeesTotalSummary[]>;
@@ -81,7 +81,7 @@ export class FeesPage implements OnInit {
 
   constructor(private menuCtrl: MenuController, private ws: WsApiService) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.doRefresh();
   }
 

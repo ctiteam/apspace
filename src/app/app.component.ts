@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-// tslint:disable-next-line: max-line-length
-import { Platform, ToastController, NavController, ModalController, MenuController, ActionSheetController, PopoverController } from '@ionic/angular';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import {
+  ActionSheetController, MenuController, ModalController, NavController, Platform,
+  PopoverController, ToastController
+} from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
-import { UserSettingsService, NotificationService, VersionService } from './services';
 import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
-import { NotificationModalPage } from './pages/notifications/notification-modal';
 import { Network } from '@ionic-native/network/ngx';
+import { NotificationModalPage } from './pages/notifications/notification-modal';
+import { NotificationService, UserSettingsService, VersionService } from './services';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,6 @@ export class AppComponent {
 
   constructor(
     private platform: Platform,
-    private statusBar: StatusBar,
     public storage: Storage,
     private userSettings: UserSettingsService,
     private toastCtrl: ToastController,
@@ -45,12 +45,12 @@ export class AppComponent {
     this.versionService.checkForUpdate().subscribe();
     if (this.platform.is('cordova')) {
       if (this.network.type === 'none') {
-        this.presentToast('You are now offline, Data stored in the cache will be accessable only.', 6000);
+        this.presentToast('You are now offline, only data stored in the cache will be accessable.', 6000);
       }
       this.runCodeOnReceivingNotification(); // notifications
-      if (this.platform.is('ios')) {
-        this.statusBar.overlaysWebView(false); // status bar for ios
-      }
+      // if (this.platform.is('ios')) {
+      //   this.statusBar.overlaysWebView(false); // status bar for ios
+      // }
 
       this.platform.backButton.subscribe(async () => { // back button clicked
         if (this.router.url.startsWith('/tabs') || this.router.url.startsWith('/maintenance-and-update')) {
@@ -84,7 +84,9 @@ export class AppComponent {
     const toast = await this.toastCtrl.create({
       message: msg,
       duration,
-      position: 'top'
+      color: 'medium',
+      position: 'top',
+      showCloseButton: true
     });
     toast.present();
   }

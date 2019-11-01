@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationExtras } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { ToastController, AlertController, LoadingController } from '@ionic/angular';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NavigationExtras, Router } from '@angular/router';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
-import { WsApiService, SettingsService } from 'src/app/services';
-import { Venue } from 'src/app/interfaces';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 import { CalendarComponentOptions } from 'ion2-calendar';
+import { Venue } from 'src/app/interfaces';
+import { SettingsService, WsApiService } from 'src/app/services';
 
 import * as moment from 'moment';
 
@@ -70,7 +70,7 @@ export class AddFreeSlotPage implements OnInit {
 
   ngOnInit() {
     if (this.settings.get('defaultCampus')) {
-      this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${this.settings.get('defaultCampus')}`, true);
+      this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${this.settings.get('defaultCampus')}`);
     }
     this.addFreeSlotForm = this.formBuilder.group({
       slotType: [this.consultationTypeOptions[0].value, Validators.required], // alwayes required
@@ -186,27 +186,25 @@ export class AddFreeSlotPage implements OnInit {
           text: 'Yes',
           handler: () => {
             this.presentLoading();
-            this.ws.post<any>('/iconsult/lecaddfreeslots', { body }).subscribe(
-              {
-                next: res => {
-                  this.showToastMessage('Slot(s) added successfully!', 'success');
-                },
-                error: err => {
-                  this.dismissLoading();
-                  this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
-                },
-                complete: () => {
-                  if (this.addFreeSlotForm.value.venue !== this.settings.get('defaultVenue')) {
-                    this.showDefaultLocationWarningAlert(this.addFreeSlotForm.value.location, this.addFreeSlotForm.value.venue);
-                  }
-                  this.dismissLoading();
-                  const navigationExtras: NavigationExtras = {
-                    state: { reload: true }
-                  };
-                  this.router.navigateByUrl('iconsult/my-consultations', navigationExtras);
+            this.ws.post<any>('/iconsult/lecaddfreeslots', { body }).subscribe({
+              next: () => {
+                this.showToastMessage('Slot(s) added successfully!', 'success');
+              },
+              error: () => {
+                this.dismissLoading();
+                this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
+              },
+              complete: () => {
+                if (this.addFreeSlotForm.value.venue !== this.settings.get('defaultVenue')) {
+                  this.showDefaultLocationWarningAlert(this.addFreeSlotForm.value.location, this.addFreeSlotForm.value.venue);
                 }
+                this.dismissLoading();
+                const navigationExtras: NavigationExtras = {
+                  state: { reload: true }
+                };
+                this.router.navigateByUrl('iconsult/my-consultations', navigationExtras);
               }
-            );
+            });
           }
         }
       ]
@@ -288,7 +286,7 @@ export class AddFreeSlotPage implements OnInit {
     // When the user changes the location, get the list of venues again
     this.formFields.venue.setValue('');
     // this.venueFieldDisabled = true;
-    this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${event.detail.value}`, true);
+    this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${event.detail.value}`);
   }
 
   mainDateChanged(event) {

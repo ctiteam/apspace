@@ -86,14 +86,14 @@
                   <ion-card-content>
                     <ion-grid>
                       <ion-row>
-                        <ion-col size="12">
+                        <ion-col size="12" *ngIf="lecturerName">
                           <ion-text>
                             <b>
                               Lecturer Name:
                             </b>
                           </ion-text>
                           <ion-text>
-                            {{ selectedModule.LECTURER_NAME }}
+                            {{ lecturerName }}
                           </ion-text>
                         </ion-col>
                         <ion-col size="12">
@@ -228,26 +228,12 @@
       </ion-col>
     </ion-row>
     <ng-template #noSurveys>
-      <ng-container *ngIf="!englishIntake; else aplcStudent">
-        <ion-col size-xs="12">
-          <app-message-with-svg wrapperMarginTop="20px" wrapperOffset="4" wrapperSize="4"
-            imageUrl="assets/img/happy.svg" messageTitle="All Surveys Are Completed !!"
-            messageContent="You have completed all of the surveys for the selectd intake ({{intakeCode}}).">
-          </app-message-with-svg>
-        </ion-col>
-      </ng-container>
-      <!-- Temp solutions for APLC Students -->
-      <ng-template #aplcStudent>
-        <ion-col size-xs="12">
-          <h5 class="secondary-txt-color ion-margin-top ion-text-center">
-            You will be automatically redirected to the survey system related to APLC Students.
-          </h5>
-          <p class="secondary-txt-color ion-margin-top ion-text-center">
-            If you are not redirected, you can click
-            <a class="colored-txt" style="text-decoration: underline" (click)="openOldSystem()">here</a>
-          </p>
-        </ion-col>
-      </ng-template>
+      <ion-col size-xs="12">
+        <app-message-with-svg wrapperMarginTop="20px" wrapperOffset="4" wrapperSize="4" imageUrl="assets/img/happy.svg"
+          messageTitle="No Surveys Need to be Completed at the Current Time!"
+          messageContent="Either you have completed all of the surveys for the selectd intake /{{intakeCode}}/, or the surveys are not out yet.">
+        </app-message-with-svg>
+      </ion-col>
     </ng-template>
   </ion-grid>
   <ng-template #loadingContent>

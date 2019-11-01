@@ -81,13 +81,13 @@
                             {{slot.location}} | {{slot.venue}}
                           </span>
                         </ion-col>
-                        <ion-col size-xs="5" size-sm="4">
+                        <ion-col size-xs="5" size-sm="4" class="margin-auto">
                           <ng-container>
-                            <ion-button class="cursor-pointer" expand="block" (click)="cancelAvailableSlot(slot)"
+                            <ion-button class="cursor-pointer" size="small" expand="block" (click)="cancelAvailableSlot(slot)"
                               *ngIf="slot.status === 'Available'">
                               Cancel Slot
                             </ion-button>
-                            <ion-button class="cursor-pointer" expand="block" [disabled]="slot.status === 'Clossed'"
+                            <ion-button class="cursor-pointer" size="small" expand="block" [disabled]="slot.status === 'Clossed'"
                               *ngIf="slot.status !== 'Available'"
                               (click)="openSlotDetailsModal(slot.slotid, slot.time, slot.endTime, slot.dateandtime, slot.availibilityid, slot.date, slot.timee)">
                               View Details
@@ -106,9 +106,9 @@
                               {{slot.startdate | date}} - {{slot.enddate | date}}
                             </span>
                           </ion-col>
-                          <ion-col size-xs="5" size-sm="4">
+                          <ion-col size-xs="5" size-sm="4" class="margin-auto">
                             <ng-container>
-                              <ion-button class="cursor-pointer" expand="block"
+                              <ion-button size="small" class="cursor-pointer" expand="block"
                                 (click)="openUnavailableSlotDetails(slot.unavailibilityid)">
                                 View Details
                               </ion-button>

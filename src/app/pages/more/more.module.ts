@@ -1,14 +1,14 @@
-import { NgModule } from '@angular/core';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 import { IonicModule } from '@ionic/angular';
 
-import { MorePage } from './more.page';
-import { ByGroupPipe } from './by-group.pipe';
 import { FuseModule } from '../../shared/fuse/fuse.module';
+import { ByGroupPipe } from './by-group.pipe';
+import { MorePage } from './more.page';
 
 const routes: Routes = [
   {

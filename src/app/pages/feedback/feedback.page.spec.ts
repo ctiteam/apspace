@@ -1,8 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FeedbackPage } from './feedback.page';
 import { FeedbackService, SettingsService, VersionService } from '../../services';
+import { FeedbackPage } from './feedback.page';
 
 describe('FeedbackPage', () => {
   let component: FeedbackPage;
@@ -37,6 +37,8 @@ describe('FeedbackPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+
+    expect(platformSpy).toHaveBeenCalled();
   });
 
   it('should retrieve mobile number', () => {

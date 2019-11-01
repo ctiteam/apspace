@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, ToastController, LoadingController, AlertController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 
-import { WsApiService } from 'src/app/services';
 import { UnavailabilityDetails } from 'src/app/interfaces';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'page-unavailability-details-modal',
@@ -25,7 +25,7 @@ export class UnavailabilityDetailsModalPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.slotDetails$ = this.ws.get<UnavailabilityDetails[]>(`/iconsult/get_unavailrule_details/${this.unavailibilityid}`, true);
+    this.slotDetails$ = this.ws.get<UnavailabilityDetails[]>(`/iconsult/get_unavailrule_details/${this.unavailibilityid}`);
   }
 
 

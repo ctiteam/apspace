@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { NavParams, ModalController } from '@ionic/angular';
+import { ModalController, NavParams } from '@ionic/angular';
 import { News } from '../../interfaces';
 @Component({
   selector: 'page-news-modal',
@@ -19,7 +19,6 @@ export class NewsModalPage {
 
   sanitize(value: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(value);
-
   }
 
   ionViewWillEnter() {

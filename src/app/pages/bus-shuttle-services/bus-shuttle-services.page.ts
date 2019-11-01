@@ -1,23 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { BusTrips, BusTrip, APULocation, APULocations } from 'src/app/interfaces';
-import { Observable, forkJoin } from 'rxjs';
-import { map, tap, finalize } from 'rxjs/operators';
-import * as moment from 'moment';
-import { MenuController } from '@ionic/angular';
-import { SettingsService, WsApiService } from 'src/app/services';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { MenuController } from '@ionic/angular';
+import * as moment from 'moment';
+import { forkJoin, Observable } from 'rxjs';
+import { finalize, map, tap } from 'rxjs/operators';
+import { APULocation, APULocations, BusTrip, BusTrips } from 'src/app/interfaces';
+import { SettingsService, WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-bus-shuttle-services',
   templateUrl: './bus-shuttle-services.page.html',
   styleUrls: ['./bus-shuttle-services.page.scss'],
 })
-export class BusShuttleServicesPage implements OnInit {
+export class BusShuttleServicesPage {
   trip$: Observable<BusTrip[]>;
   filteredTrip$: any;
   locations: APULocation[];
   dateNow = new Date();
-
+  timeNow = '';
   latestUpdate = '';
 
   filterObject: {
@@ -28,7 +28,7 @@ export class BusShuttleServicesPage implements OnInit {
   } = {
       toLocation: '',
       fromLocation: '',
-      show: 'upcoming',
+      show: 'all',
       tripDay: this.getTodayDay(this.dateNow)
     };
 
@@ -47,7 +47,7 @@ export class BusShuttleServicesPage implements OnInit {
     private router: Router,
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     // GETTING FILTER SETTINGS FROM STORAGE:
     if (this.settings.get('tripFrom')) {
       this.filterObject.fromLocation = this.settings.get('tripFrom');
@@ -59,6 +59,7 @@ export class BusShuttleServicesPage implements OnInit {
   }
 
   doRefresh(refresher) {
+    this.timeNow = moment(this.dateNow).format('kk:mm'); // update current time when user refresh
     this.filteredTrip$ = forkJoin([this.getLocations(refresher), this.getTrips(refresher)]).pipe(
       map(res => res[1]),
       tap(_ => this.onFilter(refresher)),
@@ -67,13 +68,15 @@ export class BusShuttleServicesPage implements OnInit {
   }
 
   getTrips(refresher: boolean) {
-    return this.trip$ = this.ws.get<BusTrips>(`/transix/trips/applicable`, refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.trip$ = this.ws.get<BusTrips>(`/transix/trips/applicable`, { auth: false, caching }).pipe(
       map(res => res.trips),
     );
   }
 
   getLocations(refresher: boolean) {
-    return this.ws.get<APULocations>(`/transix/locations`, refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.ws.get<APULocations>(`/transix/locations`, { auth: false, caching }).pipe(
       map((res: APULocations) => res.locations),
       tap(locations => this.locations = locations)
     );
@@ -85,7 +88,7 @@ export class BusShuttleServicesPage implements OnInit {
         fromLocation: '',
         toLocation: '',
         tripDay: this.getTodayDay(this.dateNow),
-        show: 'upcoming'
+        show: 'all'
       };
     }
     this.filteredTrip$ = this.trip$.pipe(

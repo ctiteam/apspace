@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController, AlertController, ToastController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { map, finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
-import { WsApiService, AppLauncherService } from 'src/app/services';
 import { ConsultationHour, SlotDetails } from 'src/app/interfaces';
+import { AppLauncherService, WsApiService } from 'src/app/services';
 
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
@@ -18,7 +18,7 @@ import * as moment from 'moment';
   templateUrl: './my-appointments.page.html',
   styleUrls: ['./my-appointments.page.scss'],
 })
-export class MyAppointmentsPage implements OnInit {
+export class MyAppointmentsPage {
   slots$: Observable<ConsultationHour[]>;
   slotDetails$: Observable<SlotDetails>;
   loading: HTMLIonLoadingElement;
@@ -35,7 +35,7 @@ export class MyAppointmentsPage implements OnInit {
     private ws: WsApiService
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.doRefresh();
   }
 
@@ -134,10 +134,10 @@ export class MyAppointmentsPage implements OnInit {
               };
               this.sendCancelBookingRequest(cancellationBody).subscribe(
                 {
-                  next: res => {
+                  next: () => {
                     this.showToastMessage('Booking has been cancelled successfully!', 'success');
                   },
-                  error: err => {
+                  error: () => {
                     this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
                   },
                   complete: () => {

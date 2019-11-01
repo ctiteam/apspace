@@ -1,8 +1,8 @@
-import { TestBed, async, inject } from '@angular/core/testing';
+import { inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
-import { AuthGuard } from './auth.guard';
 import { CasTicketService } from '../services';
+import { AuthGuard } from './auth.guard';
 
 describe('AuthGuard', () => {
   beforeEach(() => {

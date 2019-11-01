@@ -1,29 +1,34 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
 import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage';
+
 import { ActionSheet } from '@ionic-native/action-sheet/ngx';
+import { AppAvailability } from '@ionic-native/app-availability/ngx';
+import { Device } from '@ionic-native/device/ngx';
+import { FCM } from '@ionic-native/fcm/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { AppAvailability } from '@ionic-native/app-availability/ngx';
-import { FCM } from '@ionic-native/fcm/ngx';
-import { Device } from '@ionic-native/device/ngx';
+import { AppComponent } from './app.component';
+import { NewsModalPage } from './pages/news/news-modal';
 import { NotificationModalPage } from './pages/notifications/notification-modal';
-import { Animation } from '@ionic/core';
+// import { Animation } from '@ionic/core';
 
-export function disableNavAnimation(AnimationC: Animation): Promise<Animation> { return Promise.resolve(new AnimationC()); }
+// export function disableNavAnimation(AnimationC: Animation): Promise<Animation> { return Promise.resolve(new AnimationC()); }
+
+import { GraphQLModule } from './graphql.module';
 
 @NgModule({
-  declarations: [AppComponent, NotificationModalPage], // notificationPageModal is needed here because it is called in app.component.ts
-  entryComponents: [NotificationModalPage],
+  // notificationPageModal is needed here because it is called in app.component.ts, NewsModal is called in dashboards also
+  declarations: [AppComponent, NotificationModalPage, NewsModalPage],
+  entryComponents: [NotificationModalPage, NewsModalPage],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -31,11 +36,12 @@ export function disableNavAnimation(AnimationC: Animation): Promise<Animation> {
     IonicModule.forRoot(
       {
         backButtonText: '',
-        navAnimation: disableNavAnimation
+        // navAnimation: disableNavAnimation
       }
     ),
     IonicStorageModule.forRoot(),
-    AppRoutingModule
+    AppRoutingModule,
+    GraphQLModule,
   ],
   providers: [
     ActionSheet,

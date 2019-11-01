@@ -1,13 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FCM } from '@ionic-native/fcm/ngx';
-import { Observable, from, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
-import { CasTicketService } from './cas-ticket.service';
-import { Platform } from '@ionic/angular';
-import { NotificationHistory } from '../interfaces';
 import { Network } from '@ionic-native/network/ngx';
+import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { from, Observable, of } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+import { NotificationHistory } from '../interfaces';
+import { CasTicketService } from './cas-ticket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ import { Storage } from '@ionic/storage';
 export class NotificationService {
 
   serviceUrl = 'http://sns-admin.s3-website-ap-southeast-1.amazonaws.com/';
-  APIUrl = 'https://api.apiit.edu.my/dingdong';
+  apiUrl = 'https://api.apiit.edu.my/dingdong';
   apiVersion = 'v2';
   headers = new HttpHeaders().set('version', 'v2');
   constructor(
@@ -49,7 +49,7 @@ export class NotificationService {
                 device_token: token,
                 service_ticket: st,
               };
-              const url = `${this.APIUrl}/client/login?ticket=${body.service_ticket}&device_token=${body.device_token}`;
+              const url = `${this.apiUrl}/client/login?ticket=${body.service_ticket}&device_token=${body.device_token}`;
               return this.http.get<NotificationHistory>(url, { headers: this.headers }).pipe(
                 tap(notifications => this.storage.set('notifications-cache', notifications)),
               );
@@ -62,7 +62,7 @@ export class NotificationService {
             return this.cas.getST(this.serviceUrl);
           }),
           switchMap(st => {
-            const url = `${this.APIUrl}/client/login?ticket=${st}`;
+            const url = `${this.apiUrl}/client/login?ticket=${st}`;
             return this.http.get<NotificationHistory>(url, { headers: this.headers }).pipe(
               tap(notifications => this.storage.set('notifications-cache', notifications)),
             );
@@ -96,7 +96,7 @@ export class NotificationService {
             const body = {
               device_token: token,
             };
-            const url = `${this.APIUrl}/client/logout?ticket=${st}`;
+            const url = `${this.apiUrl}/client/logout?ticket=${st}`;
             return this.http.post(url, body, { headers: this.headers });
           },
         ),
@@ -116,7 +116,7 @@ export class NotificationService {
           const body = {
             message_id: messageID
           };
-          const url = `${this.APIUrl}/client/read?ticket=${st}`;
+          const url = `${this.apiUrl}/client/read?ticket=${st}`;
           return this.http.post(url, body, { headers: this.headers });
         }),
       );
@@ -132,7 +132,7 @@ export class NotificationService {
    */
   getCategories() {
     if (this.network.type !== 'none') {
-      const url = `${this.APIUrl}/client/categories`;
+      const url = `${this.apiUrl}/client/categories`;
       return this.http.get(url, { headers: this.headers }).pipe(
         tap(categories => this.storage.set('dingdong-categories-cache', categories)),
       );

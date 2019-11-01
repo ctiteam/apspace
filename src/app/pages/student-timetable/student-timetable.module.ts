@@ -1,15 +1,16 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { StudentTimetablePage } from './student-timetable.page';
-import { ClassesPipe } from './classes.pipe';
-import { ThedayPipe } from './theday.pipe';
 import { ComponentsModule } from '../../components/components.module';
+import { ClassesPipe } from './classes.pipe';
+import { GenPipe } from './gen.pipe';
+import { StudentTimetablePage } from './student-timetable.page';
+import { ThedayPipe } from './theday.pipe';
 import { TheWeekPipe } from './theweek.pipe';
 
 const routes: Routes = [
@@ -37,6 +38,7 @@ const routes: Routes = [
     ClassesPipe,
     ThedayPipe,
     TheWeekPipe,
+    GenPipe,
   ],
   entryComponents: []
 })

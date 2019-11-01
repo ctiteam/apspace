@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 
-import { FeedbackService, SettingsService, VersionService } from '../../services';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { FeedbackService, VersionService } from '../../services';
 
 @Component({
   selector: 'app-feedback',
@@ -22,13 +22,14 @@ export class FeedbackPage implements OnInit {
 
   submitting = false;
   readonly screenSize = screen.width + 'x' + screen.height;
+  loading: HTMLIonLoadingElement;
 
   constructor(
     private feedback: FeedbackService,
-    private settings: SettingsService,
     private toastCtrl: ToastController,
     private version: VersionService,
-    private iab: InAppBrowser
+    private iab: InAppBrowser,
+    private loadingController: LoadingController
   ) { }
 
   submitFeedback() {
@@ -39,7 +40,7 @@ export class FeedbackPage implements OnInit {
       appVersion: this.appVersion,
       screenSize: this.screenSize,
     };
-
+    this.presentLoading();
     this.submitting = true;
     this.feedback.sendFeedback(feedback).subscribe(_ => {
       this.message = '';
@@ -52,6 +53,7 @@ export class FeedbackPage implements OnInit {
         showCloseButton: true,
       }).then(toast => toast.present());
       this.submitting = false;
+      this.dismissLoading();
     }, err => {
       this.toastCtrl.create({
         message: err.message,
@@ -61,6 +63,7 @@ export class FeedbackPage implements OnInit {
         showCloseButton: true,
       }).then(toast => toast.present());
       // finally not invoked as error does not complete
+      this.dismissLoading();
       this.submitting = false;
     });
   }
@@ -80,6 +83,20 @@ export class FeedbackPage implements OnInit {
 
   openOnlineFeedbackSystem() {
     this.iab.create(this.onlineFeedbackSystemURL, '_system', 'location=true');
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingController.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
   }
 
 }

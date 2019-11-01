@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/attendance"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">
+      Enter Digits
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="isCordova" (click)="swapMode()" color="primary">
+        <ion-icon slot="icon-only" [name]="scan ? 'code' : 'qr-scanner'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [class.show-qr-scanner]="scan">
+  <ion-grid>
+    <ion-row>
+      <ion-col offset="1" size="10">
+        <div class="otp-wrapper">
+          <input
+            #otpInput *ngFor="let _ of digits; i as index"
+            autofocus class="otp" type="tel" maxlength="1"
+            (keydown)="onKey($event)">
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

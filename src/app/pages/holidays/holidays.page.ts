@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { Holidays, EventComponentConfigurations, Holiday } from 'src/app/interfaces';
-import { WsApiService } from 'src/app/services';
-import { Observable } from 'rxjs';
-import { map, tap, finalize } from 'rxjs/operators';
-import * as moment from 'moment';
+import { Component } from '@angular/core';
 import { MenuController } from '@ionic/angular';
+import * as moment from 'moment';
+import { Observable } from 'rxjs';
+import { finalize, map, tap } from 'rxjs/operators';
+import { EventComponentConfigurations, Holiday, Holidays } from 'src/app/interfaces';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-holidays',
   templateUrl: './holidays.page.html',
   styleUrls: ['./holidays.page.scss'],
 })
-export class HolidaysPage implements OnInit {
+export class HolidaysPage {
   holiday$: Observable<Holiday[]>;
   filteredHoliday$: Observable<Holiday[] | EventComponentConfigurations[]>;
 
@@ -28,7 +28,7 @@ export class HolidaysPage implements OnInit {
     numberOfDays: '' | '1 days' | 'many',
     affecting: '' | 'students' | 'staff'
   } = {
-      show: 'upcoming',
+      show: 'all',
       filterDays: '',
       filterMonths: '',
       numberOfDays: '',
@@ -39,12 +39,13 @@ export class HolidaysPage implements OnInit {
     private menu: MenuController,
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.doRefresh();
   }
 
   getHolidays(refresher: boolean) {
-    return this.holiday$ = this.ws.get<Holidays>(`/transix/holidays`, refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.holiday$ = this.ws.get<Holidays>(`/transix/holidays`, { auth: false, caching }).pipe(
       map(res => res.holidays.filter(holiday => +holiday.holiday_start_date.split('-')[0] === this.todaysDate.getFullYear()))
     );
   }
@@ -150,7 +151,7 @@ export class HolidaysPage implements OnInit {
       filterDays: '',
       filterMonths: '',
       numberOfDays: '',
-      show: 'upcoming',
+      show: 'all',
       affecting: ''
     };
     this.onFilter();

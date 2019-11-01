@@ -1,8 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ApcardPage } from './apcard.page';
 import { WsApiService } from 'src/app/services';
+import { ApcardPage } from './apcard.page';
 
 describe('ApcardPage', () => {
   let component: ApcardPage;

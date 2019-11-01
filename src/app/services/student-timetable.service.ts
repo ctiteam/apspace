@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network/ngx';
+import { Storage } from '@ionic/storage';
 
-import { Observable, from, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { publishLast, refCount, switchMap, tap } from 'rxjs/operators';
 
 import { StudentTimetable } from '../interfaces';
@@ -58,7 +58,8 @@ export class StudentTimetableService {
   private outdated(tt: StudentTimetable[]): boolean {
     const date = new Date(); // first day of week (Sunday)
     date.setDate(date.getDate() - date.getDay());
-    return tt.some(t => new Date(t.DATESTAMP_ISO) < date);
+    const dates = Array.from(new Set(tt.map(t => t.DATESTAMP_ISO)));
+    return dates.some(d => new Date(d) < date);
   }
 
 }

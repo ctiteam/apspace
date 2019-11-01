@@ -1,12 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
+import { Component, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { IonContent } from '@ionic/angular';
+import { finalize } from 'rxjs/operators';
 import { QuixCustomer } from 'src/app/interfaces/quix';
 import { WsApiService } from 'src/app/services';
-import { finalize, tap, map } from 'rxjs/operators';
-import { IonContent } from '@ionic/angular';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-operation-hours',
@@ -14,7 +12,7 @@ import * as moment from 'moment';
   styleUrls: ['./operation-hours.page.scss'],
 
 })
-export class OperationHoursPage implements OnInit {
+export class OperationHoursPage {
   @ViewChild('content', { static: true }) content: IonContent;
   skeletons = new Array(4);
   quixCompanies$: Observable<QuixCustomer[]>;
@@ -24,18 +22,19 @@ export class OperationHoursPage implements OnInit {
     private ws: WsApiService,
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.doRefresh();
   }
 
   doRefresh(refresher?) {
-    const header = new HttpHeaders({ 'X-Filename': 'quix-customers' });
-    return this.quixCompanies$ = this.ws.get<QuixCustomer[]>('/quix/get/file', refresher, {
-      headers: header,
-      auth: false
+    const headers = { 'X-Filename': 'quix-customers' };
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.quixCompanies$ = this.ws.get<QuixCustomer[]>('/quix/get/file', {
+      auth: false,
+      caching,
+      headers
     }
     ).pipe(
-      tap(res => res[0].lastModified = moment(res[0].lastModified).add(8, 'hours').format('dddd, Do MMMM YYYY')),
       finalize(() => refresher && refresher.target.complete()),
     );
   }

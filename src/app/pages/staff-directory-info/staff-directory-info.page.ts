@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 
 import { StaffDirectory } from '../../interfaces';
-import { WsApiService, AppLauncherService } from '../../services';
+import { AppLauncherService, WsApiService } from '../../services';
 
 /**
  * Display staff information. Can also be used as model.
@@ -30,7 +30,7 @@ export class StaffDirectoryInfoPage implements OnInit {
 
   ngOnInit() {
     const id = this.route.snapshot.params.id;
-    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing').pipe(
+    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
       map(ss => {
           const staffRecord = ss.find(s => s.ID === id);
           staffRecord ? this.staffExists = true : this.staffExists = false;

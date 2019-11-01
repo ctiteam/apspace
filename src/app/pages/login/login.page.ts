@@ -1,22 +1,22 @@
 import { Component } from '@angular/core';
-import { Platform, ToastController, AlertController, ModalController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Network } from '@ionic-native/network/ngx';
+import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
 
 import { throwError } from 'rxjs';
 import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 
+import { FCM } from '@ionic-native/fcm/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Role } from '../../interfaces';
 import {
   CasTicketService,
-  WsApiService,
+  DataCollectorService,
+  NotificationService,
   SettingsService,
   UserSettingsService,
-  NotificationService,
-  DataCollectorService
+  WsApiService
 } from '../../services';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { FCM } from '@ionic-native/fcm/ngx';
 import { NotificationModalPage } from '../notifications/notification-modal';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
@@ -75,17 +75,17 @@ export class LoginPage {
           if (errMsg.includes('AccountPasswordMustChangeException')) {
             this.showConfirmationMessage();
             this.showToastMessage('Your password has expired!');
-            return throwError('Your password has expired!');
+            return throwError(new Error('Your password has expired!'));
           } else {
             this.showToastMessage('Invalid username or password');
-            return throwError('Invalid Username or Password');
+            return throwError(new Error('Invalid Username or Password'));
           }
         }),
         switchMap(tgt => this.cas.getST(this.cas.casUrl, tgt).pipe(
-          catchError(() => (this.showToastMessage('Fail to get service ticket.'), throwError('Fail to get service ticket')))
+          catchError(() => (this.showToastMessage('Fail to get service ticket.'), throwError(new Error('Fail to get service ticket'))))
         )),
         switchMap(st => this.cas.validate(st).pipe(
-          catchError(() => (this.showToastMessage('You are not authorized to use APSpace'), throwError('unauthorized')))
+          catchError(() => (this.showToastMessage('You are not authorized to use APSpace'), throwError(new Error('unauthorized'))))
         )),
         tap(role => this.cacheApi(role)),
         timeout(15000),
@@ -210,7 +210,7 @@ export class LoginPage {
     const caches = role & Role.Student
       ? ['/student/profile', '/student/courses', '/staff/listing']
       : ['/staff/profile', '/staff/listing'];
-    caches.forEach(endpoint => this.ws.get(endpoint, true).subscribe());
+    caches.forEach(endpoint => this.ws.get(endpoint).subscribe());
   }
 
 }

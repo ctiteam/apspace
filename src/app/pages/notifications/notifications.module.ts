@@ -1,14 +1,14 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { NotificationsPage } from './notifications.page';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { UnreadMessagesOnlyPipe } from './unread-messages-only.pipe';
 import { NotificationCategoryPipe } from './notification-category.pipe';
+import { NotificationsPage } from './notifications.page';
+import { UnreadMessagesOnlyPipe } from './unread-messages-only.pipe';
 
 const routes: Routes = [
   {

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { filter, finalize, map, tap } from 'rxjs/operators';
+import { filter, finalize, map } from 'rxjs/operators';
 
 import * as Fuse from 'fuse.js';
 
@@ -13,7 +13,7 @@ import { WsApiService } from '../../services';
   templateUrl: './staff-directory.page.html',
   styleUrls: ['./staff-directory.page.scss'],
 })
-export class StaffDirectoryPage implements OnInit {
+export class StaffDirectoryPage {
 
   term = '';
   dept = '';
@@ -26,12 +26,13 @@ export class StaffDirectoryPage implements OnInit {
 
   constructor(private ws: WsApiService) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.doRefresh();
   }
 
   doRefresh(refresher?) {
-    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', Boolean(refresher));
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching });
     this.staffType$ = this.staff$.pipe(
       filter(ss => ss instanceof Array),
       map(ss => Array.from(new Set(ss.map(s => s.DEPARTMENT))).sort()),

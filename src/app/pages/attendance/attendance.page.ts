@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { WsApiService } from 'src/app/services';
-import { Platform, ActionSheetController } from '@ionic/angular';
-import { Observable } from 'rxjs';
-import { Attendance, Course, AttendanceLegend } from 'src/app/interfaces';
-import { tap, finalize } from 'rxjs/operators';
-import { ActionSheetButton } from '@ionic/core';
 import { Router } from '@angular/router';
+import { ActionSheetController } from '@ionic/angular';
+import { ActionSheetButton } from '@ionic/core';
+import { Observable } from 'rxjs';
+import { finalize, map, tap } from 'rxjs/operators';
+import { Attendance, AttendanceLegend, Course } from 'src/app/interfaces';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-attendance',
@@ -13,8 +13,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./attendance.page.scss'],
 })
 export class AttendancePage implements OnInit {
-
-  attendance$: Observable<Attendance[]>;
+  indecitor = false;
+  attendance$: Observable<any[]>;
   course$: Observable<Course[]>;
   legend$: Observable<AttendanceLegend>;
 
@@ -27,17 +27,29 @@ export class AttendancePage implements OnInit {
 
   constructor(
     private ws: WsApiService,
-    private plt: Platform,
     public actionSheetCtrl: ActionSheetController,
     private router: Router,
   ) { }
 
   ngOnInit() {
-    this.doRefresh();
+    this.indecitor = true;
+  }
+
+  ionViewDidEnter() {
+    /*
+    * The page's response is very huge, which is causing issues on ios if we use oninit
+    * the indecitor is used to define if the page should call the dorefresh of not
+    * If we do not use the indecitor, the page in the tabs (tabs/attendance) will be reloading every time we enter the tab
+    */
+    if (this.indecitor) {
+      this.doRefresh();
+      this.indecitor = false;
+    }
   }
 
   doRefresh(refresher?) {
-    this.course$ = this.ws.get<Course[]>('/student/courses', refresher).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    this.course$ = this.ws.get<Course[]>('/student/courses', { caching }).pipe(
       tap(c => (this.selectedIntake = c[0].INTAKE_CODE)),
       tap(_ => this.attendance$ = this.getAttendance(this.selectedIntake, refresher)),
       tap(
@@ -70,20 +82,32 @@ export class AttendancePage implements OnInit {
 
   }
 
-  getAttendance(intake: string, refresh?: boolean): Observable<Attendance[]> {
+  getAttendance(intake: string, refresh?: boolean): Observable<any[]> {
     this.average = -2;
-    return (this.attendance$ = this.ws
-      .get<Attendance[]>(`/student/attendance?intake=${intake}`, refresh)
-      .pipe(
-        tap(a => this.calculateAverage(a)),
-      ));
+    const url = `/student/attendance?intake=${intake}`;
+    const caching = refresh ? 'network-or-cache' : 'cache-only';
+    return (this.attendance$ = this.ws.get<Attendance[]>(url, { caching }).pipe(
+      tap(a => this.calculateAverage(a)),
+      map(res => this.groupAttendanceBySemester(res)),
+    ));
+  }
+
+  groupAttendanceBySemester(attendance: any) {
+    const attendancePerSemester = attendance
+      .reduce((previous: any, current: any) => {
+        if (!previous[current.SEMESTER]) {
+          previous[current.SEMESTER] = [current];
+        } else {
+          previous[current.SEMESTER].push(current);
+        }
+        return previous;
+      }, {});
+    return Object.keys(attendancePerSemester).map(semester => ({ semester, value: attendancePerSemester[semester] }));
   }
 
   getLegend(refresh: boolean) {
-    this.legend$ = this.ws.get<AttendanceLegend>(
-      '/student/attendance_legend',
-      refresh,
-    );
+    const caching = refresh ? 'network-or-cache' : 'cache-only';
+    this.legend$ = this.ws.get<AttendanceLegend>('/student/attendance_legend', { caching });
   }
 
   calculateAverage(aa: Attendance[] | null) {

@@ -1,4 +1,3 @@
-import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
@@ -41,7 +40,7 @@ export class LecturerTimetableComponent implements OnInit {
     const currentWeek = Math.floor((date.getTime() - lastDateOfWeekZero - 1) / secondsPerWeek);
 
     const endpoint = '/lecturer-timetable/v2/' + this.id;
-    this.calendar$ = this.ws.get<LecturerTimetable[]>(endpoint, true, { auth: false }).pipe(
+    this.calendar$ = this.ws.get<LecturerTimetable[]>(endpoint, { auth: false }).pipe(
       map(timetables => timetables.reduce((acc, d) => {
         const time = new Date(d.time);
 
@@ -59,7 +58,7 @@ export class LecturerTimetableComponent implements OnInit {
 
         return acc;
       }, {})),
-      tap(w => this.selectedWeeks.push(`${currentWeek}`))
+      tap(() => this.selectedWeeks.push(`${currentWeek}`))
     );
   }
 

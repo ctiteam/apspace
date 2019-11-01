@@ -1,18 +1,19 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
-import { NavController, IonSelect } from '@ionic/angular';
-import { Observable, forkJoin, of, zip } from 'rxjs';
-import { map, tap, share, finalize, catchError, flatMap, concatMap, toArray } from 'rxjs/operators';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { IonSelect, IonSlides, ModalController, NavController } from '@ionic/angular';
+import { combineLatest, forkJoin, Observable, of, zip } from 'rxjs';
+import { catchError, concatMap, finalize, flatMap, map, share, tap, toArray } from 'rxjs/operators';
 
-import { WsApiService, StudentTimetableService, UserSettingsService, NotificationService } from 'src/app/services';
 import {
-  EventComponentConfigurations, DashboardCardComponentConfigurations,
-  Attendance, StudentProfile, Apcard, FeesTotalSummary, Course, CourseDetails,
-  CgpaPerIntake, StudentTimetable, ConsultationHour, StudentPhoto, Holidays,
-  Holiday, ExamSchedule, BusTrips, APULocations, APULocation
+  Apcard, APULocation,
+  APULocations, Attendance, BusTrips, CgpaPerIntake, ConsultationHour, Course,
+  CourseDetails, DashboardCardComponentConfigurations, EventComponentConfigurations, ExamSchedule, FeesTotalSummary,
+  Holiday, Holidays, News, StudentPhoto, StudentProfile, StudentTimetable
 } from 'src/app/interfaces';
+import { NewsService, NotificationService, StudentTimetableService, UserSettingsService, WsApiService } from 'src/app/services';
 
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
+import { NewsModalPage } from '../news/news-modal';
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.page.html',
@@ -22,6 +23,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // USER SETTINGS
   @ViewChild('dragulaContainer', { static: true }) container: ElementRef; // access the dragula container
   @ViewChild('dashboardSectionsSelectBox', { static: true }) dashboardSectionsselectBoxRef: IonSelect; // hidden selectbox
+  @ViewChild('slides', { static: false }) slides: IonSlides;
   dashboardSectionsSelectBoxModel; // select box dashboard sections value
   allDashboardSections = [ // alldashboardSections will not be modified and it will be used in the select box
     'quickAccess',
@@ -32,6 +34,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     'apcard',
     'cgpa',
     'financials',
+    'news',
+    'noticeBoard'
   ];
 
   // dragulaModelArray will be modified whenever there is a change to the order of the dashboard sections
@@ -75,7 +79,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   subject: string;
   lowAttendanceCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
-    cardTitle: 'Low Attendance',
+    cardTitle: 'Attendance Summary',
     contentPadding: true
   };
 
@@ -162,6 +166,114 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     withOptionsButton: false,
   };
 
+  // NEWS
+  news$: Observable<News[]>;
+  newsCardConfigurations: DashboardCardComponentConfigurations = {
+    cardTitle: 'Latest News',
+    contentPadding: false,
+    withOptionsButton: false
+  };
+  newsIndexToShow = 0; // open the first news section by default
+  noticeBoardCardConfigurations: DashboardCardComponentConfigurations = {
+    cardTitle: 'Notice Board',
+    contentPadding: false,
+    withOptionsButton: false
+  };
+  noticeBoardItems$: Observable<any[]>;
+  noticeBoardSliderOpts = {
+    initialSlide: 0,
+    speed: 400,
+    slidesPerView: 1.4,
+    centeredContent: true,
+    spaceBetween: 15,
+    coverflowEffect: {
+      rotate: 50,
+      stretch: 0,
+      depth: 100,
+      modifier: 1,
+      slideShadows: true,
+    },
+    on: { // coverflow animation
+      beforeInit() {
+        const swiper = this;
+
+        swiper.classNames.push(`${swiper.params.containerModifierClass}coverflow`);
+        swiper.classNames.push(`${swiper.params.containerModifierClass}3d`);
+
+        swiper.params.watchSlidesProgress = true;
+        swiper.originalParams.watchSlidesProgress = true;
+      },
+      setTranslate() {
+        const swiper = this;
+        const {
+          width: swiperWidth, height: swiperHeight, slides, $wrapperEl, slidesSizesGrid
+        } = swiper;
+        const params = swiper.params.coverflowEffect;
+        const isHorizontal = swiper.isHorizontal();
+        const transform$$1 = swiper.translate;
+        const center = isHorizontal ? -transform$$1 + (swiperWidth / 2) : -transform$$1 + (swiperHeight / 2);
+        const rotate = isHorizontal ? params.rotate : -params.rotate;
+        const translate = params.depth;
+        // Each slide offset from center
+        for (let i = 0, length = slides.length; i < length; i += 1) {
+          const $slideEl = slides.eq(i);
+          const slideSize = slidesSizesGrid[i];
+          const slideOffset = $slideEl[0].swiperSlideOffset;
+          const offsetMultiplier = ((center - slideOffset - (slideSize / 2)) / slideSize) * params.modifier;
+
+          let rotateY = isHorizontal ? rotate * offsetMultiplier : 0;
+          let rotateX = isHorizontal ? 0 : rotate * offsetMultiplier;
+          // var rotateZ = 0
+          let translateZ = -translate * Math.abs(offsetMultiplier);
+
+          let translateY = isHorizontal ? 0 : params.stretch * (offsetMultiplier);
+          let translateX = isHorizontal ? params.stretch * (offsetMultiplier) : 0;
+
+          // Fix for ultra small values
+          if (Math.abs(translateX) < 0.001) { translateX = 0; }
+          if (Math.abs(translateY) < 0.001) { translateY = 0; }
+          if (Math.abs(translateZ) < 0.001) { translateZ = 0; }
+          if (Math.abs(rotateY) < 0.001) { rotateY = 0; }
+          if (Math.abs(rotateX) < 0.001) { rotateX = 0; }
+
+          // tslint:disable-next-line: max-line-length
+          const slideTransform = `translate3d(${translateX}px,${translateY}px,${translateZ}px)  rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+          $slideEl.transform(slideTransform);
+          $slideEl[0].style.zIndex = -Math.abs(Math.round(offsetMultiplier)) + 1;
+          if (params.slideShadows) {
+            // Set shadows
+            let $shadowBeforeEl = isHorizontal ? $slideEl.find('.swiper-slide-shadow-left') : $slideEl.find('.swiper-slide-shadow-top');
+            let $shadowAfterEl = isHorizontal ? $slideEl.find('.swiper-slide-shadow-right') : $slideEl.find('.swiper-slide-shadow-bottom');
+            if ($shadowBeforeEl.length === 0) {
+              $shadowBeforeEl = swiper.$(`<div class="swiper-slide-shadow-${isHorizontal ? 'left' : 'top'}"></div>`);
+              $slideEl.append($shadowBeforeEl);
+            }
+            if ($shadowAfterEl.length === 0) {
+              $shadowAfterEl = swiper.$(`<div class="swiper-slide-shadow-${isHorizontal ? 'right' : 'bottom'}"></div>`);
+              $slideEl.append($shadowAfterEl);
+            }
+            if ($shadowBeforeEl.length) { $shadowBeforeEl[0].style.opacity = offsetMultiplier > 0 ? offsetMultiplier : 0; }
+            if ($shadowAfterEl.length) { $shadowAfterEl[0].style.opacity = (-offsetMultiplier) > 0 ? -offsetMultiplier : 0; }
+          }
+        }
+
+        // Set correct perspective for IE10
+        if (swiper.support.pointerEvents || swiper.support.prefixedPointerEvents) {
+          const ws = $wrapperEl[0].style;
+          ws.perspectiveOrigin = `${center}px 50%`;
+        }
+      },
+      setTransition(duration) {
+        const swiper = this;
+        swiper.slides
+          .transition(duration)
+          .find('.swiper-slide-shadow-top, .swiper-slide-shadow-right, .swiper-slide-shadow-bottom, .swiper-slide-shadow-left')
+          .transition(duration);
+      }
+    }
+  };
+
   // CGPA
   cgpaChart: any;
   cgpaPerIntake$: Observable<CgpaPerIntake>;
@@ -180,11 +292,13 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     private navCtrl: NavController,
     private dragulaService: DragulaService,
     private notificationService: NotificationService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private news: NewsService,
+    private modalCtrl: ModalController
   ) {
     // Create the dragula group (drag and drop)
     this.dragulaService.createGroup('editable-list', {
-      moves: (el, container, handle) => {
+      moves: (_el, _container, handle) => {
         return handle.classList.contains('handle');
       }
     });
@@ -229,14 +343,18 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   doRefresh(refresher?) {
     this.getLocations(refresher);
+    this.news$ = this.news.get(refresher).pipe(
+      map(res => res.slice(0, 4))
+    );
+    this.noticeBoardItems$ = this.news.getSlideshow(refresher);
     this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation);
-    this.photo$ = this.ws.get<StudentPhoto>('/student/photo', true);
+    this.photo$ = this.ws.get<StudentPhoto>('/student/photo');  // no-cache for student photo
     this.displayGreetingMessage();
-    this.apcardTransaction$ = this.getTransactions(refresher);
+    this.apcardTransaction$ = this.getTransactions(true); // no-cache for APCard transactions
     this.getBadge();
     forkJoin([
       this.getProfile(refresher),
-      this.financial$ = this.getOverdueFee(refresher)
+      this.financial$ = this.getOverdueFee(true)
     ]).pipe(
       finalize(() => refresher && refresher.target.complete()),
     ).subscribe();
@@ -300,11 +418,12 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   // PROFILE AND GREETING MESSAGE FUNCTIONS
   getProfile(refresher: boolean) {
-    return this.ws.get<StudentProfile>('/student/profile', refresher).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.ws.get<StudentProfile>('/student/profile', { caching }).pipe(
       tap(studentProfile => {
         if (studentProfile.BLOCK === true) {
           this.block = false;
-          this.cgpaPerIntake$ = this.getCgpaPerIntakeData(refresher);
+          this.cgpaPerIntake$ = this.getCgpaPerIntakeData(true); // no-cache for results
         } else {
           this.block = true;
         }
@@ -313,7 +432,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       tap(studentProfile => this.studentFirstName$ = of(studentProfile.NAME.split(' ')[0])),
       tap(studentProfile => this.getTodaysSchdule(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR TIMETABLE
       tap(studentProfile => this.getUpcomingEvents(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR EXAMS
-      tap(studentProfile => this.getAttendance(studentProfile.INTAKE, refresher)),
+      tap(studentProfile => this.getAttendance(studentProfile.INTAKE, true)), // no-cache for attendance
       // tap(studentProfile => this.getUpcomingExam(studentProfile.INTAKE)),
     );
   }
@@ -329,12 +448,27 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  // NEWS
+  showMore(itemIndex: number) {
+    this.newsIndexToShow = itemIndex;
+  }
+
+  async openNewsModal(item: News) {
+    const modal = await this.modalCtrl.create({
+      component: NewsModalPage,
+      componentProps: { item, notFound: 'No news Selected' },
+    });
+    await modal.present();
+    await modal.onDidDismiss();
+  }
+
   // TODAYS SCHEDULE FUNCTIONS
   getTodaysSchdule(intake: string, refresher: boolean) {
-    this.todaysSchedule$ = zip( // ZIP TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
+    // MERGE TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
+    this.todaysSchedule$ = combineLatest([
       this.getUpcomingClasses(intake, refresher),
-      this.getUpcomingConsultations(refresher)
-    ).pipe(
+      this.getUpcomingConsultations(true) // no-cache for upcoming consultations (students)
+    ]).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
         return eventsList.sort((eventA, eventB) => {
@@ -348,9 +482,26 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
+  // SLIDER
+  prevSlide() {
+    this.slides.slidePrev();
+  }
+
+  nextSlide() {
+    this.slides.slideNext();
+  }
+
   getUpcomingClasses(intake: string, refresher): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
-    return this.studentTimetableService.get(refresher).pipe(
+    return combineLatest([
+      this.studentTimetableService.get(refresher),
+      this.userSettings.timetable.asObservable()
+    ]).pipe(
+
+      // FILTER BLACKLISTED TIMETABLE
+      map(([timetables, { blacklists }]) => blacklists
+        ? timetables.filter(timetable => !blacklists.includes(timetable.MODID))
+        : timetables),
 
       // FILTER THE LIST OF TIMETABLES TO GET THE TIMETABLE FOR THE SELECTED INTAKE ONLY
       map(timetables => timetables.filter(timetable => timetable.INTAKE === intake)),
@@ -393,7 +544,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     return this.ws.get<ConsultationHour[]>('/iconsult/upcomingconstu', refresher).pipe(
       map(consultations =>
         consultations.filter(
-          consultation => this.eventIsToday(new Date(consultation.date), dateNow)  && consultation.status === 'normal'
+          consultation => this.eventIsToday(new Date(consultation.date), dateNow) && consultation.status === 'normal'
         )
       ),
       map(upcomingConsultations => {
@@ -449,7 +600,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   getUpcomingEvents(intake: string, refresher: boolean) {
     const todaysDate = new Date();
     this.upcomingEvent$ = zip(
-      this.getupcomingExams(intake, todaysDate, refresher),
+      this.getupcomingExams(intake, todaysDate, true),
       this.getUpcomingHoliday(todaysDate, refresher)
     ).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
@@ -457,11 +608,10 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getupcomingExams(intake: string, todaysDate: Date, refresher: boolean): Observable<EventComponentConfigurations[]> {
-    const opt = { auth: false };
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
     return this.ws.get<ExamSchedule[]>(
       `/examination/${intake}`,
-      refresher,
-      opt,
+      { auth: false, caching },
     ).pipe(
       map(examsList => {
         return examsList.filter(exam => this.eventIsComing(new Date(exam.since), todaysDate));
@@ -490,7 +640,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getUpcomingHoliday(date: Date, refresher: boolean): Observable<EventComponentConfigurations[]> {
-    return this.ws.get<Holidays>('/transix/holidays/filtered/students', refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    return this.ws.get<Holidays>('/transix/holidays/filtered/students', { auth: false, caching }).pipe(
       map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
       map(holiday => {
         const examsListEventMode: EventComponentConfigurations[] = [];
@@ -522,7 +673,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // ATTENDANCE FUNCTIONS
   getAttendance(intake: string, refresher: boolean) {
     const url = `/student/attendance?intake=${intake}`;
-    this.modulesWithLowAttendance$ = this.ws.get<Attendance[]>(url, refresher).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    this.modulesWithLowAttendance$ = this.ws.get<Attendance[]>(url, { caching }).pipe(
       tap(attendanceData => {
         // GETTING THE OVERALL ATTENDANCE VALUE FOR QUICK ACCESS ITEM
         if (attendanceData.length > 0) {
@@ -668,9 +820,10 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   // FINANCIALS FUNCTIONS
   getOverdueFee(refresher: boolean): Observable<FeesTotalSummary | any> {
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
     return this.ws.get<FeesTotalSummary[]>(
       '/student/summary_overall_fee',
-      refresher
+      { caching }
     ).pipe(
       tap((overdueSummary) => {
         // GET THE VALUE OF THE TOTAL OVERALL USED IN THE QUICK ACCESS ITEM
@@ -716,15 +869,16 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   // CGPA FUNCTIONS
   getCgpaPerIntakeData(refresher: boolean): Observable<CgpaPerIntake | any> {
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
     return this.ws
-      .get<Course[]>('/student/courses', refresher)
+      .get<Course[]>('/student/courses', { caching })
       .pipe(
         flatMap(intakes => intakes),
         concatMap(intake => {
           const url = `/student/sub_and_course_details?intake=${
             intake.INTAKE_CODE
             }`;
-          return this.ws.get<CourseDetails>(url, refresher).pipe(
+          return this.ws.get<CourseDetails>(url, { caching }).pipe(
             map(intakeDetails =>
               Object.assign({
                 intakeDate: intake.INTAKE_NUMBER,
@@ -735,6 +889,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
           );
         }),
         toArray(),
+        tap(_ => this.overallCgpa = 0),
         tap(
           d => {
             const data = Array.from(
@@ -817,7 +972,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     }
     this.showSetLocationsSettings = false;
     const dateNow = new Date();
-    return this.ws.get<BusTrips>(`/transix/trips/applicable`, true, { auth: false }).pipe(
+    return this.ws.get<BusTrips>(`/transix/trips/applicable`, { auth: false }).pipe(
       map(res => res.trips),
       map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
         return trips.filter(trip => {
@@ -852,7 +1007,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getLocations(refresher: boolean) {
-    this.ws.get<APULocations>(`/transix/locations`, refresher, { auth: false }).pipe(
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+    this.ws.get<APULocations>(`/transix/locations`, { auth: false, caching }).pipe(
       map((res: APULocations) => res.locations),
       tap(locations => this.locations = locations)
     ).subscribe();

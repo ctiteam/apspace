@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from 'src/testing';
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { ActivatedRoute } from 'src/testing';
 
 @Component({
   selector: 'app-maintenance-and-update',
@@ -20,7 +20,7 @@ export class MaintenanceAndUpdatePage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(() => {
       if (this.router.getCurrentNavigation().extras.state) {
         if (this.router.getCurrentNavigation().extras.state.storeUrl) {
           this.storeUrl = this.router.getCurrentNavigation().extras.state.storeUrl;

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CalendarComponentOptions } from 'ion2-calendar';
 
+import { NavigationExtras, Router } from '@angular/router';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import * as moment from 'moment';
 import { WsApiService } from 'src/app/services';
-import { Router, NavigationExtras } from '@angular/router';
-import { ToastController, AlertController, LoadingController } from '@ionic/angular';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
@@ -123,10 +123,10 @@ export class AddUnavailabilityPage implements OnInit {
             this.presentLoading();
             this.ws.post<any>('/iconsult/lecturer_add_unavailability', { body }).subscribe(
               {
-                next: res => {
+                next: () => {
                   this.showToastMessage('Slot(s) has been marked as unavailable successfully!', 'success');
                 },
-                error: err => {
+                error: () => {
                   this.dismissLoading();
                   this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
                 },

@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController, AlertController, LoadingController, ToastController } from '@ionic/angular';
-import { map, tap, finalize } from 'rxjs/operators';
+import { Component } from '@angular/core';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
+import { finalize, map, tap } from 'rxjs/operators';
 
 import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
 import * as moment from 'moment';
 
-import { WsApiService } from 'src/app/services';
-import { LecturerConsultation } from 'src/app/interfaces';
-import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
-import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
-import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
-import { ActivatedRoute } from 'src/testing';
 import { Router } from '@angular/router';
+import { LecturerConsultation } from 'src/app/interfaces';
+import { WsApiService } from 'src/app/services';
+import { ActivatedRoute } from 'src/testing';
+import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
+import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
+import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
@@ -22,7 +22,7 @@ import { Router } from '@angular/router';
   templateUrl: './my-consultations.page.html',
   styleUrls: ['./my-consultations.page.scss'],
 })
-export class MyConsultationsPage implements OnInit {
+export class MyConsultationsPage {
   slots$: Observable<{}>;
   todaysDate = this.iconsultFormatDate(new Date());
   skeletonItemsNumber = new Array(4);
@@ -106,9 +106,10 @@ export class MyConsultationsPage implements OnInit {
   }
 
 
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      if (this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.reload) {
+  ionViewDidEnter() {
+    this.route.queryParams.subscribe(() => {
+      // tslint:disable-next-line: max-line-length
+      if (this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.reload) {
         this.daysConfigrations = [];
         this.doRefresh(true);
       }
@@ -138,11 +139,11 @@ export class MyConsultationsPage implements OnInit {
             };
             this.sendCancelSlotRequest(cancellationBody).subscribe(
               {
-                next: res => {
+                next: () => {
                   this.daysConfigrations = [];
                   this.showToastMessage('Slot has been cancelled successfully!', 'success');
                 },
-                error: err => {
+                error: () => {
                   this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
                 },
                 complete: () => {

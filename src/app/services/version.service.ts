@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Platform, ToastController, NavController } from '@ionic/angular';
-import { VersionValidator } from '../interfaces';
 import { NavigationExtras } from '@angular/router';
-import { tap } from 'rxjs/operators';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { WsApiService } from './ws-api.service';
 import { Network } from '@ionic-native/network/ngx';
-import { from } from 'rxjs';
+import { NavController, Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { from } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { VersionValidator } from '../interfaces';
+import { WsApiService } from './ws-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -51,11 +51,10 @@ export class VersionService {
 
   checkForUpdate() {
     if (this.network.type !== 'none') {
-      return this.ws.get<VersionValidator>('/apspace_mandatory_update.json', true, {
+      return this.ws.get<VersionValidator>('/apspace_mandatory_update.json', {
         url: 'https://d370klgwtx3ftb.cloudfront.net',
         auth: false
-      })
-        .pipe(
+      }).pipe(
           tap(updateStatus => this.storage.set('updateStatus-cache', updateStatus)),
           tap(res => {
             let navigationExtras: NavigationExtras;

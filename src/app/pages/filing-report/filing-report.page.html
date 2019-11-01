@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Filing a Report</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="10" offset-md="1" size-lg="8" offset-lg="2" size-xl="6" offset-xl="3">
+        <ion-card>
+          <ion-card-content>
+            <p class="ion-padding main-text-color">You are about to file a report. Please read the policy before filing
+              a report. The updated version of the policy is available <span style="text-decoration: underline;"
+                class="colored-text text-bold">here</span>.
+            </p>
+            <ion-item lines="none">
+              <ion-checkbox slot="start" [(ngModel)]="readPolicyCheckbox"></ion-checkbox>
+              <ion-label>I have read the policy</ion-label>
+            </ion-item>
+
+            <ion-item lines="none" class="ion-margin-top no-background-color">
+              <ion-input required="true" [(ngModel)]="studentId" placeholder="Student ID" type="text"
+                class="form-input">
+              </ion-input>
+            </ion-item>
+            <ion-item lines="none" class="ion-margin-top no-background-color">
+              <ion-select required="true" [(ngModel)]="selectedCategory" class="form-input">
+                <ion-select-option *ngFor="let category of categories" [value]="category">
+                  {{ category }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item lines="none" class="ion-margin-top no-background-color">
+              <ion-textarea placeholder="Description" class="form-input" autosize rows="4" [(ngModel)]="description"
+                required="true"></ion-textarea>
+            </ion-item>
+            <div class="ion-padding-start ion-padding-end ion-margin-top">
+              <ion-button class="success-background" expand="block"
+                [disabled]="!readPolicyCheckbox || !studentId || !description || !selectedCategory"> Submit
+                <ion-icon slot="end" name="checkmark"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+</ion-content>

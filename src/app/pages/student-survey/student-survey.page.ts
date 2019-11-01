@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Router } from '@angular/router';
 import { AlertController, MenuController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Role, StudentProfile } from 'src/app/interfaces';
 import { SettingsService, WsApiService } from 'src/app/services';
+import { ActivatedRoute } from 'src/testing';
 
 @Component({
   selector: 'app-submit-survey',
@@ -13,16 +14,16 @@ import { SettingsService, WsApiService } from 'src/app/services';
 })
 export class StudentSurveyPage implements OnInit {
   // TEMP VARIABLES
-  stagingUrl = 'https://dl4h9zf8wj.execute-api.ap-southeast-1.amazonaws.com/dev/survey';
   todaysDate = new Date();
+  lecturerName = '';
+
   // IF USER IS COMING FROM RESULTS PAGE
-  // moduleCodeFromResultsPage = this.navParams.get('moduleCode');
-  // intakeCodeFromResultsPage = this.navParams.get('intakeCode');
+  userComingFromResultsPage = false;
+
   // NGMODEL VARIABLES
   intakeCode: string;
   classCode: string;
   courseType: string;
-  startSwith: string;
   surveyType: string;
   selectedModule: any;
 
@@ -31,7 +32,7 @@ export class StudentSurveyPage implements OnInit {
 
   submitting = false;
   showFieldMissingError = false;
-  englishIntake = false;
+
   // LISTS
   intakes: any[];
   modules: any;
@@ -65,90 +66,108 @@ export class StudentSurveyPage implements OnInit {
     private toastCtrl: ToastController,
     public alertCtrl: AlertController,
     private settings: SettingsService,
-    private iab: InAppBrowser,
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(() => {
+      if (this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.moduleCode) {
+
+        this.userComingFromResultsPage = true;
+        this.classCode = this.router.getCurrentNavigation().extras.state.moduleCode;
+        this.intakeCode = this.router.getCurrentNavigation().extras.state.intakeCode;
+      }
+    });
     this.onInitData();
   }
 
   onInitData() {
-    // tslint:disable-next-line: no-bitwise
-    if (this.settings.get('role') & Role.Student) {
-      this.ws.get<StudentProfile>('/student/profile').subscribe(
-        p => {
-          this.intakeCode = p.INTAKE;
-        },
-        // tslint:disable-next-line: no-empty
-        _ => { },
-        () => {
-          this.COURSE_CODE$ = this.getIntakes();
-          this.onIntakeCodeChanged();
-        },
+    if (!this.userComingFromResultsPage) {
+      // tslint:disable-next-line: no-bitwise
+      if (this.settings.get('role') & Role.Student) {
+        this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).subscribe(
+          p => {
+            this.intakeCode = p.INTAKE;
+          },
+          // tslint:disable-next-line: no-empty
+          _ => { },
+          () => {
+            this.COURSE_CODE$ = this.getIntakes();
+            this.onIntakeCodeChanged();
+          },
+        );
+      }
+    } else { // user coming from results page
+      this.COURSE_CODE$ = this.getIntakes(); // get all of the intakes
+      this.COURSE_MODULES$ = this.getModules(this.intakeCode).pipe( // get all of the modules
+        tap(_ => {
+          this.getModuleByClassCode(this.classCode); // get the details of the selected module
+          this.surveyType = 'End-Semester'; // The only survey that will block results page is the end-semester survey
+        }),
+        tap(_ => this.getSurveys(this.intakeCode)) // get the survey for the intake (survey is for intake, not for module)
       );
     }
-    // IF USER IS COMING FROM RESULTS PAGE
-    // if (this.moduleCodeFromResultsPage) {
-    //    this.getModules(this.intakeCodeFromResultsPage);
-    // }
-  }
-
-  openOldSystem() {
-    this.iab.create('https://webapps.apiit.edu.my/engappraisal');
   }
 
   onIntakeCodeChanged() {
-    this.startSwith = this.intakeCode.slice(0, 3);
+    let intakeStartsWith = '';
+    intakeStartsWith = this.intakeCode.slice(0, 3);
     // tslint:disable-next-line: triple-equals
-    if (this.startSwith == 'UCE' || this.startSwith == 'UCP') {
-      this.englishIntake = true;
+    if (intakeStartsWith == 'UCE' || intakeStartsWith == 'UCP') {
       this.courseType = 'APLC Students';
-      this.openOldSystem();
+    } else if (intakeStartsWith === 'UCM') {
+      this.courseType = 'masters';
     } else {
-      this.englishIntake = false;
       this.courseType = 'bachelor';
-      this.COURSE_MODULES$ = this.getModules(this.intakeCode);
-      this.classCode = '';
-      this.surveyType = '';
     }
-
+    this.COURSE_MODULES$ = this.getModules(this.intakeCode);
+    this.classCode = '';
+    this.surveyType = '';
   }
 
   onClassCodeChanged() {
+    this.lecturerName = '';
     this.getSurveyType(this.classCode);
     this.getModuleByClassCode(this.classCode);
     this.showFieldMissingError = false;
   }
 
   getIntakes() {
-
-    return this.ws.get<any>(`/intakes-list`, true, { url: this.stagingUrl }).pipe(
+    return this.ws.get<any>(`/survey/intakes-list`).pipe(
       tap()
     );
-
   }
-
   getModuleByClassCode(classCode: string) {
     this.modules.forEach(module => {
       if (module.CLASS_CODE === classCode) {
         this.selectedModule = module;
+        this.ws.get(`/staff/listing?staff_username=${module.SAMACCOUNTNAME}`).subscribe(
+          {
+            next: (res: any) => {
+              if (res.length > 0) {
+                this.lecturerName = res[0].FULLNAME;
+              }
+            }
+          }
+        );
+
       }
     });
   }
 
   getModules(intakeCode: string) {
-    return this.ws.get<any>(`/modules-list?intake_code=${intakeCode}`, true, { url: this.stagingUrl }).pipe(
+    return this.ws.get<any>(`/survey/modules-list?intake_code=${intakeCode}`).pipe(
       map(res => res.filter
         (item => !item.COURSE_APPRAISAL || (!item.COURSE_APPRAISAL2 && Date.parse(item.END_DATE) >
           Date.parse(this.todaysDate.toISOString())))),
-      tap(res => this.modules = res),
-      tap()
+      tap(res => this.modules = res)
     );
   }
 
   getSurveys(intakeCode: string) {
     const answers = [];
-    this.survey$ = this.ws.get<any>(`/surveys?intake_code=${intakeCode}`, true, { url: this.stagingUrl })
+    this.survey$ = this.ws.get<any>(`/survey/surveys?intake_code=${intakeCode}`)
       .pipe(
         map(surveys => surveys.filter(survey => survey.type === this.surveyType)),
         tap(surveys => {
@@ -174,30 +193,41 @@ export class StudentSurveyPage implements OnInit {
     const todaysDate = new Date();
     this.modules.forEach(amodule => {
       if (classCode === amodule.CLASS_CODE) {
-        if (!amodule.COURSE_APPRAISAL) {
-          if (todaysDate > new Date(amodule.END_DATE)) {
+        if (!amodule.COURSE_APPRAISAL) { // student did not do end semester appraisal
+          if (todaysDate > new Date(amodule.END_DATE)) { // appraisal should only appear when student finish the module
             this.surveyType = 'End-Semester';
           }
         }
-        if (!amodule.COURSE_APPRAISAL2) {
-          const moduleStartDate = new Date(amodule.START_DATE);
-          const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49));
-          const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 70));
-          if (todaysDate > startDateForMid && todaysDate < endDateForMid) {
-            this.surveyType = 'Mid-Semester';
+        if (!amodule.COURSE_APPRAISAL2) { // student did not do mid-semester appraisal
+          if (this.courseType === 'bachelor') { // bachelor students
+            const moduleStartDate = new Date(amodule.START_DATE); // module start date
+            const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49)); // week 7 of the module
+            const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 70)); // week 10 of the module
+            if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 10 is not included
+              this.surveyType = 'Mid-Semester';
+            }
+          } else if (this.courseType === 'masters') { // masters students
+            const moduleStartDate = new Date(amodule.START_DATE); // module start date
+            if (amodule.STUDY_MODE === 'FullTime') { // full time student
+              // tslint:disable-next-line: max-line-length
+              const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 28)); // week 4 of the module
+              const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49)); // week 7 of the module
+              if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 7 is not included
+                this.surveyType = 'Mid-Semester';
+              }
+            } else {
+              // tslint:disable-next-line: max-line-length
+              const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 21)); // week 3 of the module
+              const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 42)); // week 6 of the module
+              if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 6 is not included
+                this.surveyType = 'Mid-Semester';
+              }
+            }
           }
         }
         this.getSurveys(this.intakeCode);
       }
     });
-  }
-
-  // USED FOR NAVIGATING DIRECTLY FROM RESULTS PAGE TO THIS PAGE
-  getSurvey(intakeCode: string, moduleCode: string) {
-    this.getSurveys(intakeCode);
-    this.intakeCode = intakeCode;
-    this.classCode = this.modules.filter(module => module.SUBJECT_CODE === moduleCode)[0].CLASS_CODE;
-    this.surveyType = 'End-Semester';
   }
 
   getAnswerByQuestionId(id: number) {
@@ -224,21 +254,20 @@ export class StudentSurveyPage implements OnInit {
             if (notAnsweredQuestions.length === 0) {
               this.submitting = true;
 
-              this.ws.post('/response', { url: this.stagingUrl, body: this.response }).subscribe(
-                {
-                  error: err => {
-                    this.toast(
-                      `Something went wrong and we could not complete your request. Please try again or contact us via the feedback page`,
-                      'danger');
-                  },
-                  complete: () => {
-                    this.toast(`The survey for ${this.classCode} has been submitted successfully.`, 'success');
-                    this.submitting = false;
-                    this.classCode = '';
-                    this.onInitData();
-                  }
+              this.ws.post('/survey/response', { body: this.response }).subscribe({
+                error: () => {
+                  this.toast(
+                    `Something went wrong and we could not complete your request. Please try again or contact us via the feedback page`,
+                    'danger');
+                  this.submitting = false;
+                },
+                complete: () => {
+                  this.toast(`The survey for ${this.classCode} has been submitted successfully.`, 'success');
+                  this.submitting = false;
+                  this.classCode = '';
+                  this.onInitData();
                 }
-              );
+              });
             } else {
               this.showFieldMissingError = true;
             }
@@ -255,7 +284,7 @@ export class StudentSurveyPage implements OnInit {
         message: msg,
         duration: 7000,
         color,
-        position: 'bottom',
+        position: 'top',
         showCloseButton: true,
       });
     toast.present();

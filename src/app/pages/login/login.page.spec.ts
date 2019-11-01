@@ -1,15 +1,13 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Network } from '@ionic-native/network/ngx';
-import { Storage } from '@ionic/storage';
 
-import { of } from 'rxjs';
 
-import { LoginPage } from './login.page';
 import { CasTicketService, SettingsService, WsApiService } from '../../services';
+import { LoginPage } from './login.page';
 
 describe('LoginPage', () => {
   let component: LoginPage;
@@ -46,8 +44,8 @@ describe('LoginPage', () => {
     expect(component).toBeTruthy();
   });
 
-  // it('should retrieve tgt', () => {
-  //   // TODO: add click
-  //   expect(getSpy).toHaveBeenCalledWith(['tgt']);
-  // });
+  it('should retrieve tgt', () => {
+    // TODO: add click
+    expect(getSpy).toHaveBeenCalledWith(['tgt']);
+  });
 });

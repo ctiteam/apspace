@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, from } from 'rxjs';
-import { publishLast, refCount, tap } from 'rxjs/operators';
-import { IntakeListing } from '../interfaces';
 import { Network } from '@ionic-native/network/ngx';
 import { Storage } from '@ionic/storage';
+import { from, Observable } from 'rxjs';
+import { publishLast, refCount, tap } from 'rxjs/operators';
+import { IntakeListing } from '../interfaces';
 
 @Injectable()
 export class IntakeListingService {

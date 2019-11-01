@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
-import { Platform } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class UserSettingsService {
   private pureDarkTheme: BehaviorSubject<boolean>;
   private accentColor: BehaviorSubject<string>;
   private dashboardSections: BehaviorSubject<string[]>;
-  private MenuUI: BehaviorSubject<'cards' | 'list'>;
+  private menuUI: BehaviorSubject<'cards' | 'list'>;
   private casheCleaered: BehaviorSubject<boolean>;
   private busShuttleServiceSettings: BehaviorSubject<{ firstLocation: string, secondLocation: string, alarmBefore: string }>;
   timetable: BehaviorSubject<{ blacklists: string[] }>;
@@ -40,6 +40,8 @@ export class UserSettingsService {
     'apcard',
     'cgpa',
     'financials',
+    'news',
+    'noticeBoard'
   ];
 
   // Default dasbhoard sections for staff (will be added to the local storage when staff login)
@@ -48,6 +50,8 @@ export class UserSettingsService {
     'upcomingEvents',
     'upcomingTrips',
     'apcard',
+    'news',
+    'noticeBoard'
   ];
 
   defaultBusShuttleServicesSettings = { firstLocation: '', secondLocation: '', alarmBefore: '10' };
@@ -61,7 +65,7 @@ export class UserSettingsService {
     this.pureDarkTheme = new BehaviorSubject(false);
     this.accentColor = new BehaviorSubject('blue-accent-color');
     this.dashboardSections = new BehaviorSubject(this.defaultDashboardSectionsSettings);
-    this.MenuUI = new BehaviorSubject('list');
+    this.menuUI = new BehaviorSubject('list');
     this.busShuttleServiceSettings = new BehaviorSubject(this.defaultBusShuttleServicesSettings);
     this.casheCleaered = new BehaviorSubject(false);
     this.timetable = new BehaviorSubject({ blacklists: [] });
@@ -177,18 +181,18 @@ export class UserSettingsService {
   // MENU UI
   setMenuUI(val: 'cards' | 'list') {
     this.storage.set('menu-ui', val);
-    this.MenuUI.next(val);
+    this.menuUI.next(val);
   }
 
   getMenuUI() {
-    return this.MenuUI.asObservable();
+    return this.menuUI.asObservable();
   }
 
   changeStatusBarColor(darkThemeSelected: boolean) {
     if (this.platform.is('cordova')) {
       if (darkThemeSelected === false) {
         this.statusBar.backgroundColorByHexString('#e7e7e7');
-        this.statusBar.styleBlackTranslucent();
+        this.statusBar.styleDefault();
       } else {
         this.statusBar.backgroundColorByHexString('#1d1b1b');
         this.statusBar.styleLightContent();

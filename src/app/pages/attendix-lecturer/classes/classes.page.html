@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Classes</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/lecturer-timetable"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col class="ion-align-self-center" size-md="6" size-lg="5" size-xs="12">
+        <ion-item>
+          <ion-label>Class Code</ion-label>
+          <ion-select #classcodeInput [ngModel]="classcode" (click)="chooseClasscode()"
+            [disabled]="!classcodes" placeholder="Class Code">
+            <ion-select-option *ngFor="let classcode of classcodes"
+              [value]="classcode">{{ classcode }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Date</ion-label>
+          <ion-select [(ngModel)]="date" (ngModelChange)="changeDate($event)"
+            interface="popover" [disabled]="!classcode" placeholder="Date">
+            <ion-select-option *ngFor="let d of dates"
+              [value]="d">{{ d }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Start Time</ion-label>
+          <ion-select [(ngModel)]="startTime" (ngModelChange)="changeStartTime($event)"
+            interface="popover" [disabled]="!classcode || !date" placeholder="Start Time">
+            <ion-select-option *ngFor="let t of startTimes"
+              [value]="t">{{ t }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>End Time</ion-label>
+          <ion-select [(ngModel)]="endTime"
+            interface="popover" disabled="true" placeholder="End Time">
+            <ion-select-option *ngFor="let t of endTimes"
+              [value]="t">{{ t }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Class Type</ion-label>
+          <ion-select [(ngModel)]="classType"
+            interface="popover" [disabled]="!startTime || classType" placeholder="Class Type">
+            <ion-select-option *ngFor="let t of classTypes"
+              [value]="t">{{ t }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-button [routerLink]="['/attendix/mark-attendance', { classcode: classcode, date: date, startTime: startTime, endTime: endTime, classType: classType }]"
+          [disabled]="!classcode || !date || !startTime || !endTime || !classType" size="large" expand="block">
+          Mark / Edit Attendance
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

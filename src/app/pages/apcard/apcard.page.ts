@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { finalize, map, tap } from 'rxjs/operators';
-import { Apcard } from '../../interfaces';
-import { WsApiService } from 'src/app/services';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
+import { WsApiService } from 'src/app/services';
+import { Apcard } from '../../interfaces';
 @Component({
   selector: 'app-apcard',
   templateUrl: './apcard.page.html',
@@ -12,6 +12,7 @@ import * as moment from 'moment';
 })
 export class ApcardPage implements OnInit {
   transaction$: Observable<Apcard[]>;
+  indecitor = false;
 
   skeletonConfig = [
     { numOfTrans: new Array(4) },
@@ -28,9 +29,20 @@ export class ApcardPage implements OnInit {
     private router: Router,
   ) { }
 
-
   ngOnInit() {
-    this.doRefresh();
+    this.indecitor = true;
+  }
+
+  ionViewDidEnter() {
+    /*
+      * The page's response is very huge, which is causing issues on ios if we use oninit
+      * the indecitor is used to define if the page should call the dorefresh of not
+      * If we do not use the indecitor, the page in the tabs (tabs/apcard) will be reloading every time we enter the tab
+    */
+    if (this.indecitor) {
+      this.doRefresh();
+      this.indecitor = false;
+    }
   }
   /** Generating header value (virtual scroll) */
   seperatebyMonth(record: Apcard, recordIndex: number, records: Apcard[]) {

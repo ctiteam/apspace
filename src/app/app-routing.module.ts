@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from './guards/auth.guard';
 import { DeauthGuard } from './guards/deauth.guard';
@@ -54,6 +54,30 @@ const routes: Routes = [
     path: 'bus-shuttle-services',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/bus-shuttle-services/bus-shuttle-services.module').then(m => m.BusShuttleServicesPageModule)
+  },
+  {
+    path: 'attendix',
+    canActivateChild: [AuthGuard],
+    children: [
+      {
+        path: 'classes',
+        data: { role: Role.Lecturer | Role.Admin },
+        loadChildren:
+          () => import('./pages/attendix-lecturer/classes/classes.module').then(m => m.ClassesPageModule)
+      },
+      {
+        path: 'mark-attendance',
+        data: { role: Role.Lecturer | Role.Admin },
+        loadChildren:
+          () => import('./pages/attendix-lecturer/mark-attendance/mark-attendance.module').then(m => m.MarkAttendancePageModule)
+      },
+      {
+        path: 'update',
+        data: { role: Role.Student },
+        loadChildren:
+          () => import('./pages/attendix-student/attendix-student.module').then(m => m.AttendixStudentPageModule)
+      }
+    ]
   },
   {
     path: 'more',
@@ -129,12 +153,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/operation-hours/operation-hours.module').then(m => m.OperationHoursPageModule)
   },
-  // {
-  //   path: 'student-survey',
-  //   canActivate: [AuthGuard],
-  //   data: { role: Role.Student },
-  //   loadChildren: () => import('./pages/student-survey/student-survey.module').then(m => m.SubmitSurveyPageModule)
-  // },
+  {
+    path: 'student-survey',
+    canActivate: [AuthGuard],
+    data: { role: Role.Student },
+    loadChildren: () => import('./pages/student-survey/student-survey.module').then(m => m.SubmitSurveyPageModule)
+  },
   {
     path: 'results',
     canActivate: [AuthGuard],
@@ -217,12 +241,15 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/unauthorized/unauthorized.module').then(m => m.UnauthorizedPageModule)
   },
+  // {
+  //   path: 'filing-report',
+  //   loadChildren: () => import('./pages/filing-report/filing-report.module').then(m => m.FilingReportPageModule)
+  // },
   { // this path must always be at the end of the routes array
     path: '**',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundPageModule)
   }
-
 ];
 
 @NgModule({

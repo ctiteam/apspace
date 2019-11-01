@@ -1,18 +1,18 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectorRef, ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController, IonRefresher, ModalController } from '@ionic/angular';
 
-import { Observable, combineLatest } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
-import { StudentProfile, StudentTimetable, Role } from '../../interfaces';
+import { Router } from '@angular/router';
+import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+import { Role, StudentProfile, StudentTimetable } from '../../interfaces';
 import {
   SettingsService, StudentTimetableService, UserSettingsService, WsApiService
 } from '../../services';
 import { ClassesPipe } from './classes.pipe';
-import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
-import { Router } from '@angular/router';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -88,6 +88,7 @@ export class StudentTimetablePage implements OnInit {
 
   room: string;
   intake: string;
+  freeTime: boolean;
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
@@ -108,7 +109,11 @@ export class StudentTimetablePage implements OnInit {
 
     // select current start of week
     const date = new Date();
-    date.setDate(date.getDate() - date.getDay());
+    if (date.getDay() !== 6) { // 6 is saturday
+      date.setDate(date.getDate() - date.getDay());
+    } else {
+      date.setDate(date.getDate() + 1);  // include saturdays with the new week
+    }
     this.selectedWeek = date;
 
     // optional room paramMap to filter timetables by room (separated from intake filter)
@@ -118,6 +123,7 @@ export class StudentTimetablePage implements OnInit {
     const intake = this.route.snapshot.params.intake;
     if (this.room) { // indirect timetable page access
       this.intakeSelectable = false;
+      this.freeTime = true;
     }
 
     // quick exit when room is specified (and do not set intake)
@@ -136,7 +142,7 @@ export class StudentTimetablePage implements OnInit {
     if (this.intake === undefined) {
       // tslint:disable-next-line: no-bitwise
       if (this.settings.get('role') & Role.Student) {
-        this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+        this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).subscribe(p => {
           this.intake = (p || {} as StudentProfile).INTAKE || '';
           this.changeDetectorRef.markForCheck();
           this.settings.set('intakeHistory', [this.intake]);

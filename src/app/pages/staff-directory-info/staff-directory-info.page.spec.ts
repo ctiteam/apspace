@@ -6,9 +6,9 @@ import { of } from 'rxjs';
 import { ActivatedRoute, ActivatedRouteStub } from '../../../testing';
 
 import { StaffDirectory } from '../../interfaces';
-import { StaffDirectoryInfoPage } from './staff-directory-info.page';
 import { UrldecodePipe } from '../../pipes/urldecode.pipe';
 import { WsApiService } from '../../services';
+import { StaffDirectoryInfoPage } from './staff-directory-info.page';
 
 describe('StaffDirectoryInfoPage', () => {
   let activatedRoute: ActivatedRouteStub;
@@ -90,5 +90,6 @@ describe('StaffDirectoryInfoPage', () => {
     activatedRoute.setParamMap({ id: 1 });
 
     expect(component).toBeTruthy();
+    expect(getSpy).toHaveBeenCalled();
   });
 });
