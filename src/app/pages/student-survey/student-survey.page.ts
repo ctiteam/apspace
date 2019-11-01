@@ -250,6 +250,7 @@ export class StudentSurveyPage implements OnInit {
                   this.toast(
                     `Something went wrong and we could not complete your request. Please try again or contact us via the feedback page`,
                     'danger');
+                  this.submitting = false;
                 },
                 complete: () => {
                   this.toast(`The survey for ${this.classCode} has been submitted successfully.`, 'success');
