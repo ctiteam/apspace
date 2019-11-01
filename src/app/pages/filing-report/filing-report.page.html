@@ -19,18 +19,6 @@
               <ion-label>I have read the policy</ion-label>
             </ion-item>
 
-            <div class="ion-padding-start ion-padding-end ion-margin-bottom">
-              <ion-button (click)="getPicture()" class="colored-background" expand="block"
-                [disabled]="!readPolicyCheckbox" *ngIf="platform.is('cordova')">
-                Capture Student Card
-                <ion-icon slot="end" name="camera"></ion-icon>
-              </ion-button>
-            </div>
-
-            <div class="img-wrapper" *ngIf="selectedImage">
-              <img [src]="selectedImage">
-            </div>
-
             <ion-item lines="none" class="ion-margin-top no-background-color">
               <ion-input required="true" [(ngModel)]="studentId" placeholder="Student ID" type="text"
                 class="form-input">
