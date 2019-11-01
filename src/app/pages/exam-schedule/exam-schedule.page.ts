@@ -54,6 +54,7 @@ export class ExamSchedulePage {
           () => this.doRefresh()
         );
       } else {
+        this.doRefresh();
         this.showNoIntakeMessage = true;
       }
     }
@@ -61,12 +62,21 @@ export class ExamSchedulePage {
   doRefresh(refresher?) {
     const url = `/examination/${this.intake}`;
     const caching = refresher ? 'network-or-cache' : 'cache-only';
-    this.exam$ = this.ws.get<ExamSchedule[]>(url, { auth: false, caching }).pipe(
-      finalize(() => (refresher && refresher.target.complete())),
-    );
-    this.il.get(Boolean(refresher)).subscribe(ii => {
-      this.intakes = ii.map(i => i.INTAKE_CODE);
-    });
+    if (this.intake) {
+      this.exam$ = this.ws.get<ExamSchedule[]>(url, { auth: false, caching }).pipe(
+        finalize(() => (refresher && refresher.target.complete())),
+      );
+      this.il.get(refresher).subscribe(ii => {
+        this.intakes = ii.map(i => i.INTAKE_CODE);
+      });
+    } else {
+      this.il.get(refresher).pipe(
+        finalize(() => (refresher && refresher.target.complete()))
+      ).subscribe(ii => {
+        this.intakes = ii.map(i => i.INTAKE_CODE);
+      });
+    }
+
   }
   async presentIntakeSearch() {
     const modal = await this.modalCtrl.create({
