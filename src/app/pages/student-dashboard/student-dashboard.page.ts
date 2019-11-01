@@ -344,12 +344,9 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   doRefresh(refresher?) {
     this.getLocations(refresher);
     this.news$ = this.news.get(refresher).pipe(
-      map(res => res.slice(0, 4)),
-      finalize(() => refresher && refresher.target.complete()),
+      map(res => res.slice(0, 4))
     );
-    this.noticeBoardItems$ = this.news.getSlideshow(refresher).pipe(
-      finalize(() => refresher && refresher.target.complete()),
-    );
+    this.noticeBoardItems$ = this.news.getSlideshow(refresher);
     this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation);
     this.photo$ = this.ws.get<StudentPhoto>('/student/photo');  // no-cache for student photo
     this.displayGreetingMessage();

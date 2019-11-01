@@ -309,12 +309,9 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     this.getLocations(refresher);
     this.holidays$ = this.getHolidays(true);
     this.news$ = this.news.get(refresher).pipe(
-      map(res => res.slice(0, 4)),
-      finalize(() => refresher && refresher.target.complete()),
+      map(res => res.slice(0, 4))
     );
-    this.noticeBoardItems$ = this.news.getSlideshow(refresher).pipe(
-      finalize(() => refresher && refresher.target.complete()),
-    );
+    this.noticeBoardItems$ = this.news.getSlideshow(refresher);
     this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation, refresher);
     this.getUpcomingEvents();
     this.apcardTransaction$ = this.getTransactions(true); // no-cache for apcard transactions
