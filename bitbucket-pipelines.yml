@@ -2,7 +2,7 @@ image: cticti/aws-cli:node-ionic-alpine
 
 pipelines:
   branches:
-    production:
+    v4-production:
     - step:
         caches:
           - node
