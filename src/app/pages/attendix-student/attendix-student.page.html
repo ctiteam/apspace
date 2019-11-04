@@ -4,7 +4,7 @@
       <ion-back-button defaultHref="/tabs/attendance"></ion-back-button>
     </ion-buttons>
     <ion-title class="ion-text-center">
-      Enter Digits
+      {{ scan ? 'Scan QR Code' : 'Enter Digits' }}
     </ion-title>
     <ion-buttons slot="end">
       <ion-button *ngIf="isCordova" (click)="swapMode()" color="primary">
