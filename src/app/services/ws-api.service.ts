@@ -155,11 +155,12 @@ export class WsApiService {
       : this.cas.getST(url.split('?').shift()).pipe( // remove service url params
         switchMap(ticket => this.http.get<T>(url, { ...opt, params: { ...opt.params, ticket } })),
         catchError(() => this.storage.get(endpoint)), // no network
-      )).pipe(
-        timeout(options.timeout),
-        publishLast(),
-        refCount(),
-      );
+      )
+    ).pipe(
+      timeout(options.timeout),
+      publishLast(),
+      refCount(),
+    );
   }
 
   put<T>(endpoint: string, options: {
