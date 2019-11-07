@@ -624,7 +624,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
           examsListEventMode.push({
             title: exam.subjectDescription,
             firstDescription: exam.venue,
-            secondDescription: moment(new Date(exam.since)).format('HH:mm A'),
+            secondDescription: moment(new Date(exam.since)).format('hh:mm A'),
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
             color: '#ff0000',
             pass: false,
