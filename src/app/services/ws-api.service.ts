@@ -113,6 +113,7 @@ export class WsApiService {
    * @param options.headers - http headers (default: {})
    * @param options.params - additional request parameters (default: {})
    * @param options.timeout - request timeout (default: 10000)
+   * @param options.auth - authentication required (default: true)
    * @param options.url - url of web service (default: apiUrl)
    * @return data observable
    */
@@ -121,6 +122,7 @@ export class WsApiService {
     headers?: HttpHeaders | { [header: string]: string | string[]; },
     params?: HttpParams | { [param: string]: string | string[]; },
     timeout?: number,
+    auth?: boolean,
     url?: string,
   } = {}): Observable<T> {
     options = Object.assign({
@@ -128,6 +130,7 @@ export class WsApiService {
       headers: {},
       params: {},
       timeout: 10000,
+      auth: true,
       url: this.apiUrl,
     }, options);
 
@@ -147,13 +150,16 @@ export class WsApiService {
       return throwError(new Error('offline'));
     }
 
-    return this.cas.getST(url.split('?').shift()).pipe(
-      switchMap(ticket => this.http.post<T>(url, options.body,
-        { ...opt, params: { ...opt.params, ticket } })),
-      timeout(options.timeout),
-      publishLast(),
-      refCount(),
-    );
+    return (!options.auth // always get ticket if auth is true
+      ? this.http.post<T>(url, opt)
+      : this.cas.getST(url.split('?').shift()).pipe( // remove service url params
+        switchMap(ticket => this.http.get<T>(url, { ...opt, params: { ...opt.params, ticket } })),
+        catchError(() => this.storage.get(endpoint)), // no network
+      )).pipe(
+        timeout(options.timeout),
+        publishLast(),
+        refCount(),
+      );
   }
 
   put<T>(endpoint: string, options: {
