@@ -9,39 +9,159 @@
     <ion-row>
       <ion-col size="12" size-md="10" offset-md="1" size-lg="8" offset-lg="2" size-xl="6" offset-xl="3">
         <ion-card>
-          <ion-card-content>
-            <p class="ion-padding main-text-color">You are about to file a report. Please read the policy before filing
-              a report. The updated version of the policy is available <span style="text-decoration: underline;"
-                class="colored-text text-bold">here</span>.
-            </p>
-            <ion-item lines="none">
-              <ion-checkbox slot="start" [(ngModel)]="readPolicyCheckbox"></ion-checkbox>
-              <ion-label>I have read the policy</ion-label>
-            </ion-item>
-
-            <ion-item lines="none" class="ion-margin-top no-background-color">
-              <ion-input required="true" [(ngModel)]="studentId" placeholder="Student ID" type="text"
-                class="form-input">
-              </ion-input>
-            </ion-item>
-            <ion-item lines="none" class="ion-margin-top no-background-color">
-              <ion-select required="true" [(ngModel)]="selectedCategory" class="form-input">
-                <ion-select-option *ngFor="let category of categories" [value]="category">
-                  {{ category }}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-            <ion-item lines="none" class="ion-margin-top no-background-color">
-              <ion-textarea placeholder="Description" class="form-input" autosize rows="4" [(ngModel)]="description"
-                required="true"></ion-textarea>
-            </ion-item>
-            <div class="ion-padding-start ion-padding-end ion-margin-top">
-              <ion-button class="success-background" expand="block"
-                [disabled]="!readPolicyCheckbox || !studentId || !description || !selectedCategory"> Submit
-                <ion-icon slot="end" name="checkmark"></ion-icon>
-              </ion-button>
+          <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
+            <div class="container-fluid">
+              <br /><br />
+              <ul class="list-unstyled multi-steps">
+                <li *ngFor="let _ of totalSteps; let i = index" [class.is-active]="i===currentStepNumber"></li>
+              </ul>
             </div>
+            <ion-grid class="ion-no-padding" *ngIf="currentStepNumber === 0">
+              <ion-row>
+                <ion-col class="ion-text-center ion-margin-top">
+                  <p>Step 1</p>
+                  <h4 class="text-bold">Enter Student ID</h4>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12">
+                  <ion-input class="form-input" [(ngModel)]="studentId" (keyup.enter)="nextStep()"></ion-input>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <ion-grid class="ion-no-padding" *ngIf="currentStepNumber === 1">
+              <ion-row>
+                <ion-col class="ion-text-center ion-margin-top">
+                  <p>Step 2</p>
+                  <h4 class="text-bold">Review Records</h4>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12">
+                  <ion-list>
+                    <p>Student Name:</p>
+                    <h2 class="text-bold main-text-color">Mohamad Al Ghayeb | TP037354</h2>
+                    <p style="margin-top: 16px; margin-bottom: 0;">Recent Records:</p>
+                    <ion-item>
+                      <ion-label>
+                        <h2 class="text-bold main-text-color">Ripped/Torn jeans</h2>
+                        <h3>Mon, 12 Oct 2019</h3>
+                        <p>At Student Services Office</p>
+                      </ion-label>
+                    </ion-item>
+
+                    <ion-item>
+                      <ion-label>
+                        <h2 class="text-bold main-text-color">Short pants</h2>
+                        <h3>Tue, 07 Sep 2019</h3>
+                        <p>At Classrooms</p>
+                      </ion-label>
+                    </ion-item>
+
+                    <ion-item>
+                      <ion-label>
+                        <h2 class="text-bold main-text-color">No Student ID Card</h2>
+                        <h3>Fri, 01 Sep 2019</h3>
+                        <p>At Libraries</p>
+                      </ion-label>
+                    </ion-item>
+
+                  </ion-list>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+            <ion-grid class="ion-no-padding" *ngIf="currentStepNumber === 2">
+              <ion-row>
+                <ion-col class="ion-text-center ion-margin-top">
+                  <p>Step 3</p>
+                  <h4 class="text-bold">Fill Up The Form</h4>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12">
+                  <ion-item interface="popover" lines="none" class="ion-margin-top no-background-color">
+                    <ion-label position="floating">Day</ion-label>
+                    <ion-select required="true" [(ngModel)]="selectedDay" class="form-input">
+                      <ion-select-option *ngFor="let day of days" [value]="day.value">
+                        {{ day.title }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+
+                  <ion-item lines="none" class="ion-margin-top no-background-color">
+                    <ion-label position="floating">Location</ion-label>
+                    <ion-select interface="popover" required="true" [(ngModel)]="selectedLocation" class="form-input">
+                      <ion-select-option *ngFor="let location of locations" [value]="location">
+                        {{ location }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+
+                  <ion-item lines="none" class="ion-margin-top no-background-color">
+                    <ion-label position="floating">Category</ion-label>
+                    <ion-select interface="popover" required="true" [(ngModel)]="selectedMainCategory"
+                      class="form-input">
+                      <ion-select-option *ngFor="let mainCategory of mainCategories" [value]="mainCategory">
+                        {{ mainCategory }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+
+                  <ion-item lines="none" class="ion-margin-top no-background-color">
+                    <ion-label position="floating">Subcategory</ion-label>
+                    <ion-select interface="popover" required="true" [(ngModel)]="selectedSubCategory"
+                      class="form-input">
+                      <ion-select-option *ngFor="let subCategory of subCategories" [value]="subCategory.value">
+                        {{ subCategory.title }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+
+                  <ion-item lines="none" class="ion-margin-top no-background-color">
+                    <ion-label position="stacked">Description</ion-label>
+                    <ion-textarea class="form-input" autosize rows="4" [(ngModel)]="description" required="true">
+                    </ion-textarea>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-grid>
+              <ion-row>
+                <ion-col *ngIf="currentStepNumber === 1 || currentStepNumber === 2" size="4">
+                  <div class="ion-margin-top">
+                    <ion-button class="danger-background ion-text-left" expand="block" (click)="cancel()">
+                      <ion-icon name="ios-arrow-back" slot="start"></ion-icon>
+                      <span>Cancel</span>
+                    </ion-button>
+                  </div>
+                </ion-col>
+                <ion-col [attr.offset]="currentStepNumber === 1 || currentStepNumber === 2 ? 4 : 8" size="4">
+                  <div class="ion-margin-top">
+                    <ng-container *ngIf="currentStepNumber !== 2; else submit">
+                      <ion-button color="primary" class="ion-text-right" expand="block" (click)="nextStep()">
+                        <span>Next</span>
+                        <ion-icon name="ios-arrow-forward" slot="end"></ion-icon>
+                      </ion-button>
+                    </ng-container>
+                    <ng-template #submit>
+                      <ion-button class="success-background" expand="block" (click)="submitReport()">
+                        <span>Submit</span>
+                        <ion-icon slot="end" name="checkmark"></ion-icon>
+                      </ion-button>
+                    </ng-template>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
           </ion-card-content>
+          <ion-footer>
+            <p class="ion-padding main-text-color">**The Dress Code Policy Available <span
+                style="text-decoration: underline;" class="colored-text text-bold">here</span>
+            </p>
+          </ion-footer>
         </ion-card>
       </ion-col>
     </ion-row>

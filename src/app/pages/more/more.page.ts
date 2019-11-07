@@ -212,6 +212,14 @@ export class MorePage implements OnInit {
       tags: ['empty', 'class', 'lab', 'auditorium', 'workshop', 'room']
     },
     {
+      title: 'Filing a Report',
+      group: 'Others',
+      url: 'filing-report',
+      img: 'assets/img/filing-report.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['Report', 'attire', 'formal']
+    },
+    {
       title: 'Graduate Verification Service',
       group: 'Others',
       url: 'graduate-verification-service',

@@ -23,3 +23,89 @@ ion-select.form-input {
   overflow: hidden;
   margin: auto;
 }
+.input-elements-wrabber {
+  border-radius: 7px;
+  border: 1.4px solid var(--tertiary-bg-color);
+  .input-wrapper {
+    border-right: 2px solid var(--tertiary-bg-color);
+    ion-input {
+      --background: var(--main-bg-color);
+      border-radius: 7px 0 0 7px;
+      padding: 3px 10px !important;
+    }
+  }
+  ion-button {
+    min-height: 47px;
+  }
+}
+
+%remain-steps {
+  &:before {
+    content: counter(stepNum);
+    font-family: inherit;
+    font-weight: 700;
+  }
+  &:after {
+    background-color: var(--tertiary-bg-color);
+  }
+}
+.multi-steps {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  padding: 0;
+  > li {
+    counter-increment: stepNum;
+    text-align: center;
+    display: table-cell;
+    position: relative;
+    color: var(--primary-color);
+    &:before {
+      content: "\2713";
+      display: block;
+      margin: 0 auto 4px;
+      background-color: var(--main-bg-color);
+      width: 36px;
+      height: 36px;
+      line-height: 32px;
+      text-align: center;
+      font-weight: bold;
+      border: {
+        width: 2px;
+        style: solid;
+        color: var(--primary-color);
+        radius: 50%;
+      }
+    }
+    &:after {
+      content: "";
+      height: 2px;
+      width: 100%;
+      background-color: var(--primary-color);
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      z-index: -1;
+    }
+    &:last-child {
+      &:after {
+        display: none;
+      }
+    }
+    &.is-active {
+      @extend %remain-steps;
+      &:before {
+        background-color: var(--main-bg-color);
+        border-color: var(--primary-color);
+      }
+      ~ li {
+        color: #808080;
+        @extend %remain-steps;
+        &:before {
+          background-color: var(--tertiary-bg-color);
+          border-color: var(--tertiary-bg-color);
+        }
+      }
+    }
+  }
+}
