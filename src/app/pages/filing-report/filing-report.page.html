@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
     <ion-title>Filing a Report</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -25,7 +28,7 @@
               </ion-row>
               <ion-row>
                 <ion-col size="12">
-                  <ion-input class="form-input" [(ngModel)]="studentId" (keyup.enter)="nextStep()"></ion-input>
+                  <ion-input class="form-input" [(ngModel)]="studentId"></ion-input>
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -120,7 +123,7 @@
                   </ion-item>
 
                   <ion-item lines="none" class="ion-margin-top no-background-color">
-                    <ion-label position="stacked">Description</ion-label>
+                    <ion-label position="stacked">Description<span> (Optionl)</span></ion-label>
                     <ion-textarea class="form-input" autosize rows="4" [(ngModel)]="description" required="true">
                     </ion-textarea>
                   </ion-item>
@@ -140,7 +143,7 @@
                 <ion-col [attr.offset]="currentStepNumber === 1 || currentStepNumber === 2 ? 4 : 8" size="4">
                   <div class="ion-margin-top">
                     <ng-container *ngIf="currentStepNumber !== 2; else submit">
-                      <ion-button color="primary" class="ion-text-right" expand="block" (click)="nextStep()">
+                      <ion-button color="primary" class="ion-text-right" expand="block" (click)="nextStep()" [disabled]="currentStepNumber === 0 && studentId.length < 3">
                         <span>Next</span>
                         <ion-icon name="ios-arrow-forward" slot="end"></ion-icon>
                       </ion-button>
