@@ -33,20 +33,17 @@ export class VersionService {
 
   /** Platform name */
   get platform(): string {
-    let platform: string;
-
     if (this.plt.platforms().find(ele => ele === 'core')) {
-      platform = 'browser';
+      return 'browser';
     } else if (this.plt.platforms().find(ele => ele === 'android')) {
-      platform = 'Android';
+      return 'Android';
     } else if (this.plt.platforms().find(ele => ele === 'ios')) {
-      platform = 'iOS';
+      return 'iOS';
     } else if (this.plt.platforms().find(ele => ele === 'windows')) {
-      platform = 'Window Mobile';
+      return 'Window Mobile';
     } else {
-      platform = this.plt.platforms().toString();
+      return this.plt.platforms().toString();
     }
-    return platform;
   }
 
   checkForUpdate() {
