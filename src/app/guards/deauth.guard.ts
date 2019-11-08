@@ -14,7 +14,7 @@ export class DeauthGuard implements CanActivate {
   constructor(private cas: CasTicketService, private router: Router) { }
 
   async canActivate(): Promise<boolean | UrlTree> {
-    if (await this.cas.isAuthenticated()) {
+    if (await this.cas.isAuthenticated) {
       return this.router.createUrlTree(['/']);
     }
     return true;

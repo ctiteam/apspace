@@ -30,6 +30,7 @@ export class CasTicketService {
   /**
    * Check if user is authenticated against presence of tgt in storage.
    */
+  readonly isAuthenticated: Promise<boolean>;
 
   constructor(
     public http: HttpClient,
@@ -37,10 +38,7 @@ export class CasTicketService {
     public router: Router,
     private settings: SettingsService,
   ) {
-  }
-
-  isAuthenticated(): Promise<boolean> {
-    return this.storage.get('tgt').then(tgt => !!tgt);
+    this.isAuthenticated = storage.get('tgt').then(tgt => !!tgt);
   }
 
   /**
