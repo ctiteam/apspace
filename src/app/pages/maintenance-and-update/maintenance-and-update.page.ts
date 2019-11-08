@@ -11,7 +11,6 @@ export class MaintenanceAndUpdatePage implements OnInit {
   forceUpdate = false;
   storeUrl = '';
 
-  // TODO: Prevent navigating to this page by using the URL
   constructor(
     private router: Router,
     private iab: InAppBrowser
