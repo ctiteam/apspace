@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router,
+  RouterStateSnapshot, UrlTree
+} from '@angular/router';
 
 import { CasTicketService, SettingsService } from '../services';
 
@@ -20,31 +23,27 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     private router: Router,
   ) { }
 
-  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<UrlTree | boolean> {
     await this.settings.ready();
 
     // authentication
     if (!await this.cas.isAuthenticated()) {
       // does not need to redirect on first login and for logout page
-      if (route.url.toString() === 'tabs' || route.url.toString() === 'logout') {
-        this.router.navigate(['/login']);
-      } else {
-        this.router.navigate(['/login'], { queryParams: { redirect: state.url } });
-      }
-      return false;
+      return route.url.toString() === 'tabs' || route.url.toString() === 'logout'
+        ? this.router.createUrlTree(['/login'])
+        : this.router.createUrlTree(['/login'], { queryParams: { redirect: state.url }});
     }
 
     // authorization
     // tslint:disable-next-line:no-bitwise
     if (route.data.role && !(route.data.role & this.settings.get('role'))) {
-      this.router.navigate(['/unauthorized']);
-      return false;
+      return this.router.createUrlTree(['/unauthorized']);
     }
 
     return true;
   }
 
-  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+  canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<UrlTree | boolean> {
     return this.canActivate(route, state);
   }
 
