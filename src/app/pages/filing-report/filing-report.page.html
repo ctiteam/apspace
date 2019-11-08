@@ -87,8 +87,8 @@
                   <ion-item interface="popover" lines="none" class="ion-margin-top no-background-color">
                     <ion-label position="floating">Day</ion-label>
                     <ion-select required="true" [(ngModel)]="selectedDay" class="form-input">
-                      <ion-select-option *ngFor="let day of days" [value]="day.value">
-                        {{ day.title }}
+                      <ion-select-option *ngFor="let day of days" [value]="day">
+                        {{ day }}
                       </ion-select-option>
                     </ion-select>
                   </ion-item>
@@ -116,9 +116,13 @@
                     <ion-label position="floating">Subcategory</ion-label>
                     <ion-select interface="popover" required="true" [(ngModel)]="selectedSubCategory"
                       class="form-input">
-                      <ion-select-option *ngFor="let subCategory of subCategories" [value]="subCategory.value">
-                        {{ subCategory.title }}
-                      </ion-select-option>
+                      <ng-container *ngFor="let subCategory of subCategories">
+                        <ion-select-option
+                          *ngIf="(selectedDay === days[1] && subCategory.show === 'always') || selectedDay === days[0]"
+                          [value]="subCategory.title">
+                          {{ subCategory.title }}
+                        </ion-select-option>
+                      </ng-container>
                     </ion-select>
                   </ion-item>
 
@@ -143,7 +147,8 @@
                 <ion-col [attr.offset]="currentStepNumber === 1 || currentStepNumber === 2 ? 4 : 8" size="4">
                   <div class="ion-margin-top">
                     <ng-container *ngIf="currentStepNumber !== 2; else submit">
-                      <ion-button color="primary" class="ion-text-right" expand="block" (click)="nextStep()" [disabled]="currentStepNumber === 0 && studentId.length < 3">
+                      <ion-button color="primary" class="ion-text-right" expand="block" (click)="nextStep()"
+                        [disabled]="currentStepNumber === 0 && studentId.length < 3">
                         <span>Next</span>
                         <ion-icon name="ios-arrow-forward" slot="end"></ion-icon>
                       </ion-button>

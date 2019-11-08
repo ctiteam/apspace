@@ -17,17 +17,17 @@ export class FilingReportPage implements OnInit {
     'Behaviour',
   ];
   subCategories = [
-    { title: 'Sandals (Male), Slippers, Flip-Flops, Slip-ons', value: 0 },
-    { title: 'Short pants', value: 1 },
-    { title: 'Revealing Blouses (Bare-back, Off-shoulder, Crop-top, Deep-V, Spaghetti Strap)', value: 2 },
-    { title: 'Jogging pants, Cargo pants, Yoga pants, Gym tights/Leotards, Sports tights', value: 3 },
-    { title: 'Piercing except for ears/nose', value: 4 },
-    { title: 'Ripped/Torn jeans', value: 5 },
-    { title: 'Round neck T-shirts', value: 6 },
-    { title: 'Caps, Hats, Non-customary Headgears', value: 7 },
-    { title: 'Jeans/Pants with Denim Material (Monday-Thursday)', value: 8 },
-    { title: 'Collared  & Activity T-shirts (Monday-Thursday)', value: 9 },
-    { title: 'No Student ID Card', value: 10 }
+    { title: 'Jogging pants, Cargo pants, Yoga pants, Gym tights/Leotards, Sports tights', show: 'always' },
+    { title: 'No Student ID Card', show: 'always' },
+    { title: 'Jeans/Pants with Denim Material', show: 'Monday-Thursday' },
+    { title: 'Collared  & Activity T-shirts', show: 'Monday-Thursday' },
+    { title: 'Sandals (Male), Slippers, Flip-Flops, Slip-ons', show: 'always' },
+    { title: 'Short pants', show: 'always' },
+    { title: 'Revealing Blouses (Bare-back, Off-shoulder, Crop-top, Deep-V, Spaghetti Strap)', show: 'always' },
+    { title: 'Piercing except for ears/nose', show: 'always' },
+    { title: 'Ripped/Torn jeans', show: 'always' },
+    { title: 'Round neck T-shirts', show: 'always' },
+    { title: 'Caps, Hats, Non-customary Headgears', show: 'always' },
   ];
   locations = [
     'Academic Offices',
@@ -45,15 +45,12 @@ export class FilingReportPage implements OnInit {
     'Student Services Office',
   ];
 
-  days = [
-    { title: 'Monday-Thursday', value: 'mon-thu' },
-    { title: 'Friday', value: 'fri' }
-  ];
+  days = ['Monday-Thursday', 'Friday'];
   studentId = 'TP';
   description = '';
   selectedMainCategory = this.mainCategories[0];
-  selectedSubCategory = this.subCategories[0].value;
-  selectedDay = new Date().getDay() !== 5 ? this.days[0].value : this.days[1].value;
+  selectedSubCategory = this.subCategories[0].title;
+  selectedDay = new Date().getDay() !== 5 ? this.days[0] : this.days[1];
   selectedLocation = this.locations[0];
   totalSteps = new Array(3);
   currentStepNumber = 0;
@@ -94,6 +91,9 @@ export class FilingReportPage implements OnInit {
 
   nextStep() {
     this.currentStepNumber++;
+    if (this.currentStepNumber === 1 && this.studentId === 'TP037354') {
+      console.log('yes');
+    }
   }
 
   cancel() {
