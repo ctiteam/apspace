@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { ActivatedRoute } from 'src/testing';
 
 @Component({
   selector: 'app-maintenance-and-update',
@@ -14,22 +13,19 @@ export class MaintenanceAndUpdatePage implements OnInit {
 
   // TODO: Prevent navigating to this page by using the URL
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private iab: InAppBrowser
   ) { }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(() => {
-      if (this.router.getCurrentNavigation().extras.state) {
-        if (this.router.getCurrentNavigation().extras.state.storeUrl) {
-          this.storeUrl = this.router.getCurrentNavigation().extras.state.storeUrl;
-        }
-        if (this.router.getCurrentNavigation().extras.state.forceUpdate) {
-          this.forceUpdate = this.router.getCurrentNavigation().extras.state.forceUpdate;
-        }
+    if (this.router.getCurrentNavigation().extras.state) {
+      if (this.router.getCurrentNavigation().extras.state.storeUrl) {
+        this.storeUrl = this.router.getCurrentNavigation().extras.state.storeUrl;
       }
-    });
+      if (this.router.getCurrentNavigation().extras.state.forceUpdate) {
+        this.forceUpdate = this.router.getCurrentNavigation().extras.state.forceUpdate;
+      }
+    }
   }
 
   openStore() {
