@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     await this.settings.ready();
 
     // authentication
-    if (!await this.cas.isAuthenticated) {
+    if (!await this.cas.isAuthenticated()) {
       // does not need to redirect on first login and for logout page
       return route.url.toString() === 'tabs' || route.url.toString() === 'logout'
         ? this.router.createUrlTree(['/login'])
