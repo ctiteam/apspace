@@ -108,7 +108,7 @@ export class ResultsPage {
     options: { caching: 'network-or-cache' | 'cache-only' }
   ): Observable<{ semester: string; value: Subcourse[] }[]> {
     const url = `/student/subcourses?intake=${intake}`;
-    return this.results$ = this.ws.get<Subcourse>(url, options).pipe(
+    return this.results$ = this.ws.get<Subcourse>(url).pipe(
       tap(results => this.getInterimLegend(intake, results, options)),
       map(r => this.sortResult(r))
     );
