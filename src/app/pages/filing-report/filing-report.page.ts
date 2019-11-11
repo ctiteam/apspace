@@ -54,6 +54,7 @@ export class FilingReportPage implements OnInit {
   selectedLocation = this.locations[0];
   totalSteps = new Array(3);
   currentStepNumber = 0;
+  show: 'records' | 'no records' | 'empty' | '';
   constructor(
     private loadingController: LoadingController,
     public platform: Platform,
@@ -90,10 +91,17 @@ export class FilingReportPage implements OnInit {
   }
 
   nextStep() {
+    this.show = '';
     this.currentStepNumber++;
+    // for Demo. It will be removed after the backend created
     if (this.currentStepNumber === 1 && this.studentId === 'TP037354') {
-      console.log('yes');
+      this.show = 'records';
+    } else if (this.currentStepNumber === 1 && this.studentId === 'TP047417') {
+      this.show = 'no records';
+    } else if (this.currentStepNumber === 1) {
+      this.show = 'empty';
     }
+    console.log(this.show);
   }
 
   cancel() {

@@ -39,6 +39,10 @@ ion-select.form-input {
   }
 }
 
+.small-margin-bottom{
+  margin-bottom: 7px;
+}
+
 %remain-steps {
   &:before {
     content: counter(stepNum);

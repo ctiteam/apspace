@@ -37,40 +37,77 @@
               <ion-row>
                 <ion-col class="ion-text-center ion-margin-top">
                   <p>Step 2</p>
-                  <h4 class="text-bold">Review Records</h4>
+                  <h4 class="text-bold">Records History:</h4>
                 </ion-col>
               </ion-row>
               <ion-row>
                 <ion-col size="12">
-                  <ion-list>
+                  <ion-list *ngIf="show === 'records'">
                     <p>Student Name:</p>
                     <h2 class="text-bold main-text-color">Mohamad Al Ghayeb | TP037354</h2>
                     <p style="margin-top: 16px; margin-bottom: 0;">Recent Records:</p>
                     <ion-item>
                       <ion-label>
-                        <h2 class="text-bold main-text-color">Ripped/Torn jeans</h2>
-                        <h3>Mon, 12 Oct 2019</h3>
-                        <p>At Student Services Office</p>
+                        <h2 class="text-bold main-text-color small-margin-bottom">Ripped/Torn jeans</h2>
+                        <p>
+                          <ion-icon name="calendar"></ion-icon>
+                          Mon, 12 Oct 2019
+                        </p>
+                        <p>
+                          <ion-icon name="pin"></ion-icon>
+                          Student Services Office
+                        </p>
+                        <p>
+                          <ion-icon name="person"></ion-icon>
+                          Dr. XYZ
+                        </p>
                       </ion-label>
                     </ion-item>
 
                     <ion-item>
                       <ion-label>
-                        <h2 class="text-bold main-text-color">Short pants</h2>
-                        <h3>Tue, 07 Sep 2019</h3>
-                        <p>At Classrooms</p>
+                        <h2 class="text-bold main-text-color small-margin-bottom">Short pants</h2>
+                        <p>
+                          <ion-icon name="calendar"></ion-icon>
+                          Tue, 10 Oct 2019
+                        </p>
+                        <p>
+                          <ion-icon name="pin"></ion-icon>
+                          Classrooms
+                        </p>
+                        <p>
+                          <ion-icon name="person"></ion-icon>
+                          Mohamad Reza Ganji
+                        </p>
                       </ion-label>
                     </ion-item>
 
                     <ion-item>
                       <ion-label>
-                        <h2 class="text-bold main-text-color">No Student ID Card</h2>
-                        <h3>Fri, 01 Sep 2019</h3>
-                        <p>At Libraries</p>
+                        <h2 class="text-bold main-text-color small-margin-bottom">No Student ID Card</h2>
+                        <p>
+                          <ion-icon name="calendar"></ion-icon>
+                          Sat, 02 Sep 2019
+                        </p>
+                        <p>
+                          <ion-icon name="pin"></ion-icon>
+                          Libraries
+                        </p>
+                        <p>
+                          <ion-icon name="person"></ion-icon>
+                          Ahemd Sahar
+                        </p>
                       </ion-label>
                     </ion-item>
-
                   </ion-list>
+
+                  <ng-container *ngIf="show === 'no records'">
+                    <h2 class="text-bold success-text ion-text-center">No previous records has been recorded against
+                      this student.</h2>
+                  </ng-container>
+                  <ng-container *ngIf="show === 'empty'">
+                    <h2 class="text-bold danger-text ion-text-center">Student ID does not exists.</h2>
+                  </ng-container>
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -148,7 +185,7 @@
                   <div class="ion-margin-top">
                     <ng-container *ngIf="currentStepNumber !== 2; else submit">
                       <ion-button color="primary" class="ion-text-right" expand="block" (click)="nextStep()"
-                        [disabled]="currentStepNumber === 0 && studentId.length < 3">
+                        [disabled]="(currentStepNumber === 0 && studentId.length < 3) || (currentStepNumber === 1 && show === 'empty')">
                         <span>Next</span>
                         <ion-icon name="ios-arrow-forward" slot="end"></ion-icon>
                       </ion-button>
