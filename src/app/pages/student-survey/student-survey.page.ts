@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, MenuController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+
 import { Role, StudentProfile } from 'src/app/interfaces';
 import { SettingsService, WsApiService } from 'src/app/services';
-import { ActivatedRoute } from 'src/testing';
 
 @Component({
   selector: 'app-submit-survey',

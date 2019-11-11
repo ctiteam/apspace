@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
-import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  AlertController, LoadingController, ModalController, ToastController
+} from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
 import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
 import * as moment from 'moment';
 
-import { Router } from '@angular/router';
 import { LecturerConsultation } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
-import { ActivatedRoute } from 'src/testing';
 import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
