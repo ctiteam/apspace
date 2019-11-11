@@ -47,6 +47,7 @@
     "@ionic-native/status-bar": "^5.15.0",
     "@ionic/angular": "^4.11.2",
     "@ionic/storage": "^2.2.0",
+    "@webcomponents/webcomponentsjs": "^2.3.0",
     "angular-svg-round-progressbar": "^3.0.1",
     "angular2-chartjs": "^0.5.1",
     "angularx-qrcode": "^1.6.4",
