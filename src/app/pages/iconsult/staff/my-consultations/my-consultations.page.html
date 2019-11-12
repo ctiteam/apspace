@@ -71,7 +71,7 @@
                                     unavailable: slot.status === 'Unavailable'
                                 }">
                     <ion-grid class="grid-padding">
-                      <ion-row *ngIf="slot.status !== 'Unavailable'; else unavailableSlot">
+                      <ion-row *ngIf="slot.status !== 'Unavailable'">
                         <ion-col size-xs="7" size-sm="8">
                           <span class="title">
                             {{slot.time}} - {{slot.endTime}}
@@ -83,19 +83,19 @@
                         </ion-col>
                         <ion-col size-xs="5" size-sm="4" class="margin-auto">
                           <ng-container>
-                            <ion-button class="cursor-pointer" size="small" expand="block" (click)="cancelAvailableSlot(slot)"
-                              *ngIf="slot.status === 'Available'">
+                            <ion-button class="cursor-pointer" size="small" expand="block"
+                              (click)="cancelAvailableSlot(slot)" *ngIf="slot.status === 'Available'">
                               Cancel Slot
                             </ion-button>
-                            <ion-button class="cursor-pointer" size="small" expand="block" [disabled]="slot.status === 'Clossed'"
-                              *ngIf="slot.status !== 'Available'"
+                            <ion-button class="cursor-pointer" size="small" expand="block"
+                              [disabled]="slot.status === 'Clossed'" *ngIf="slot.status !== 'Available'"
                               (click)="openSlotDetailsModal(slot.slotid, slot.time, slot.endTime, slot.dateandtime, slot.availibilityid, slot.date, slot.timee)">
                               View Details
                             </ion-button>
                           </ng-container>
                         </ion-col>
                       </ion-row>
-                      <ng-template #unavailableSlot>
+                      <!-- <ng-template #unavailableSlot>
                         <ion-row>
                           <ion-col size-xs="7" size-sm="8">
                             <span class="title">
@@ -115,7 +115,7 @@
                             </ng-container>
                           </ion-col>
                         </ion-row>
-                      </ng-template>
+                      </ng-template> -->
                     </ion-grid>
                   </div>
                   <div class="spacer"></div>
