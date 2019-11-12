@@ -247,6 +247,7 @@ const routes: Routes = [
     data: { role: Role.Admin | Role.Lecturer },
     loadChildren: () => import('./pages/filing-report/filing-report.module').then(m => m.FilingReportPageModule)
   },
+  { path: 'igraduate', loadChildren: './pages/igraduate/igraduate.module#IgraduatePageModule' },
   { // this path must always be at the end of the routes array
     path: '**',
     canActivate: [AuthGuard],
