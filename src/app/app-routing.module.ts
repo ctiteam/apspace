@@ -241,13 +241,18 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/unauthorized/unauthorized.module').then(m => m.UnauthorizedPageModule)
   },
-  {
-    path: 'filing-report',
-    canActivate: [AuthGuard],
-    data: { role: Role.Admin | Role.Lecturer },
-    loadChildren: () => import('./pages/filing-report/filing-report.module').then(m => m.FilingReportPageModule)
-  },
-  { path: 'igraduate', loadChildren: './pages/igraduate/igraduate.module#IgraduatePageModule' },
+  // {
+  //   path: 'filing-report',
+  //   canActivate: [AuthGuard],
+  //   data: { role: Role.Admin | Role.Lecturer },
+  //   loadChildren: () => import('./pages/filing-report/filing-report.module').then(m => m.FilingReportPageModule)
+  // },
+  // {
+  //   path: 'igraduate',
+  //   canActivate: [AuthGuard],
+  //   data: { role: Role.Admin },
+  //   loadChildren: () => import('./pages/igraduate/igraduate.module').then(m => m.IgraduatePageModule)
+  // },
   { // this path must always be at the end of the routes array
     path: '**',
     canActivate: [AuthGuard],
