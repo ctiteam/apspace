@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
 import { Observable } from 'rxjs';
 
 import { StudentTimetable } from '../../interfaces';
 import { StudentTimetableService } from '../../services';
+import { classroomTypes } from './types';
 
 @Component({
   selector: 'app-classroom-finder',
@@ -16,7 +16,8 @@ export class ClassroomFinderPage implements OnInit {
   day: string;
   since: string;
   until: string;
-  types = ['auditorium', 'classroom', 'labotary'];  // match with for.pipe
+  types = classroomTypes.map(t => t.key);
+  classroomTypes = classroomTypes;
 
   days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
