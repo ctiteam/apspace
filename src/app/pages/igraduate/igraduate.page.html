@@ -7,12 +7,405 @@
   </ion-toolbar>
   <ion-toolbar>
     <ion-segment class="ion-padding" [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
-      <ion-segment-button value="studentsList">Summary</ion-segment-button>
-      <ion-segment-button value="report">Details</ion-segment-button>
+      <ion-segment-button value="studentsList">Students List</ion-segment-button>
+      <ion-segment-button value="exceptions">Exceptions</ion-segment-button>
+      <ion-segment-button value="report">Report</ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ng-container [ngSwitch]='selectedSegment'>
+    <ng-container *ngSwitchCase="'studentsList'">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col>
+            <ion-searchbar placeholder="Student ID"></ion-searchbar>
+          </ion-col>
+          <ion-col class="ion-no-padding" size="12" size-md="12">
+            <ion-card class="table-background">
+              <ion-card-content class="ion-no-padding">
+                <ion-item class="h-mobile-d-desktop table-item">
+                  <ion-grid class="ion-no-margin ion-no-padding">
+                    <ion-row>
+                      <ion-col size="12" size-md="2">
+                        <h2 class="text-bold">TP No.</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="4">
+                        <h2 class="text-bold">Student Name</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="1">
+                        <h2 class="text-bold">1<sup>st</sup> Attempt</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="1">
+                        <h2 class="text-bold">2<sup>nd</sup> Attempt</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="1">
+                        <h2 class="text-bold">Reset</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="1">
+                        <h2 class="text-bold">Reset Date</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="1">
+                        <h2 class="text-bold">Collection</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="1">
+                        <h2 class="text-bold">Size</h2>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+                <ion-list class="ion-no-padding">
+                  <ion-item class="table-item">
+                    <ion-grid>
+                      <ion-row class="table-data">
+                        <ion-col size="12" size-md="2" class="text-bold special-border colored-border">
+                          TP037354
+                        </ion-col>
+                        <ion-col size="12" size-md="4">
+                          <!-- <span class="marker">Grade: </span> -->
+                          Mohamad Al Ghayeb
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Grade Point: </span> -->
+                          14 Jan
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          08 Aug
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          Yes
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          06 Nov
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          06 Nov
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          XXXL
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                  <ion-item class="table-item">
+                    <ion-grid>
+                      <ion-row class="table-data">
+                        <ion-col size="12" size-md="2" class="text-bold special-border colored-border">
+                          TP037354
+                        </ion-col>
+                        <ion-col size="12" size-md="4">
+                          <!-- <span class="marker">Grade: </span> -->
+                          Mohamad Al Ghayeb
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Grade Point: </span> -->
+                          14 Jan
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          08 Aug
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          Yes
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          06 Nov
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          06 Nov
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          XXXL
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                  <ion-item class="table-item">
+                    <ion-grid>
+                      <ion-row class="table-data">
+                        <ion-col size="12" size-md="2" class="text-bold special-border colored-border">
+                          TP047417
+                        </ion-col>
+                        <ion-col size="12" size-md="4">
+                          <!-- <span class="marker">Grade: </span> -->
+                          Abduallah Yahya Abdullah Al Ruqaishi
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Grade Point: </span> -->
+                          14 Jan
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          08 Aug
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          Yes
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          06 Nov
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          06 Nov
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          XXXL
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                </ion-list>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
 
+
+    <ng-container *ngSwitchCase="'exceptions'">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col>
+            <ion-item lines="none">
+              <ion-input class="form-input" type="text" placeholder="Student ID" [(ngModel)]="studentIDException">
+                <!-- <ion-buttons slot="end"> -->
+                <!-- </ion-buttons> -->
+                <ion-button class="success-border success-text" style="position: absolute;right: 5px;" expand="block"
+                  fill="outline" slot="end">add</ion-button>
+              </ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col class="ion-no-padding" size="12" size-md="12">
+            <ion-card class="table-background">
+              <ion-card-content class="ion-no-padding">
+                <ion-item class="h-mobile-d-desktop table-item">
+                  <ion-grid class="ion-no-margin ion-no-padding">
+                    <ion-row>
+                      <ion-col size="12" size-md="3">
+                        <h2 class="text-bold">TP No.</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="9">
+                        <h2 class="text-bold">Creation Date</h2>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+                <ion-list class="ion-no-padding">
+                  <ion-item class="table-item">
+                    <ion-grid>
+                      <ion-row class="table-data">
+                        <ion-col size="12" size-md="3" class="text-bold special-border colored-border">
+                          TP037354
+                        </ion-col>
+                        <ion-col size="12" size-md="9">
+                          <!-- <span class="marker">Grade: </span> -->
+                          Mon, 09 Oct 2017 18:00:46
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                  <ion-item class="table-item">
+                    <ion-grid>
+                      <ion-row class="table-data">
+                        <ion-col size="12" size-md="3" class="text-bold special-border colored-border">
+                          TP047417
+                        </ion-col>
+                        <ion-col size="12" size-md="9">
+                          <!-- <span class="marker">Grade: </span> -->
+                          Thu, 28 Nov 2013 04:00:46
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                  <ion-item class="table-item">
+                    <ion-grid>
+                      <ion-row class="table-data">
+                        <ion-col size="12" size-md="3" class="text-bold special-border colored-border">
+                          TP043213
+                        </ion-col>
+                        <ion-col size="12" size-md="9">
+                          <!-- <span class="marker">Grade: </span> -->
+                          Fri, 10 Jan 2011 01:05:46
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                </ion-list>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </ng-container>
+    <ng-container *ngSwitchCase="'report'">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col class="ion-no-padding" size="12" size-md="12">
+            <ion-card class="table-background">
+              <ion-card-content class="ion-no-padding">
+                <ion-item class="h-mobile-d-desktop table-item">
+                  <ion-grid class="ion-no-margin ion-no-padding">
+                    <ion-row>
+                      <ion-col size="12" size-md="5">
+                        <h2 class="text-bold">Date</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="1">
+                        <h2 class="text-bold">XS</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="1">
+                        <h2 class="text-bold">S</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="1">
+                        <h2 class="text-bold">M</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="1">
+                        <h2 class="text-bold">L</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="1">
+                        <h2 class="text-bold">XL</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="1">
+                        <h2 class="text-bold">XXL</h2>
+                      </ion-col>
+                      <ion-col size="12" size-md="1">
+                        <h2 class="text-bold">XXXL</h2>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+                <ion-list class="ion-no-padding">
+                  <ion-item class="table-item">
+                    <ion-grid>
+                      <ion-row class="table-data">
+                        <ion-col size="12" size-md="5" class="text-bold special-border colored-border">
+                          2019-11-05
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Grade: </span> -->
+                          1
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Grade Point: </span> -->
+                          999
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          8
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          2
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          -
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          -
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          1
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                  <ion-item class="table-item">
+                    <ion-grid>
+                      <ion-row class="table-data">
+                        <ion-col size="12" size-md="5" class="text-bold special-border colored-border">
+                          2019-11-05
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Grade: </span> -->
+                          1
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Grade Point: </span> -->
+                          999
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          8
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          2
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          -
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          -
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          1
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                  <ion-item class="table-item">
+                    <ion-grid>
+                      <ion-row class="table-data">
+                        <ion-col size="12" size-md="5" class="text-bold special-border colored-border">
+                          2019-11-05
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Grade: </span> -->
+                          1
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Grade Point: </span> -->
+                          999
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          8
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          2
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          -
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          -
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <!-- <span class="marker">Internal Result: </span> -->
+                          1
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                </ion-list>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+  </ng-container>
 </ion-content>

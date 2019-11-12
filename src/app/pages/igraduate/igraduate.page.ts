@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./igraduate.page.scss'],
 })
 export class IgraduatePage implements OnInit {
-  selectedSegment: 'studentsList' | 'report' = 'studentsList';
+  selectedSegment: 'studentsList' | 'exceptions' | 'report' = 'exceptions';
+  studentIDException = '';
   constructor() { }
 
   ngOnInit() {
