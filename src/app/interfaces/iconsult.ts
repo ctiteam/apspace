@@ -15,18 +15,13 @@ export interface ConsultationHour {
 }
 
 export interface LecturerConsultation {
-  availibilityid: number;
-  date: string;
-  dateandtime: string;
-  datetime: string;
-  endTime: string;
-  location: string;
+  end_time: string;
+  id: number;
+  room_code: string;
+  slot_id: number;
+  start_time: string;
   status: string;
-  time: string;
-  timee: string;
-  userid: number;
   venue: string;
-  slotid: number[];
 }
 
 export interface LecturerSlotDetails {
@@ -87,7 +82,8 @@ export interface SlotDetails {
 
 export interface Venue {
   id: number;
-  rooms: string;
+  room_code: string;
+  venue: string;
 }
 
 export interface SlotDuplicated {
