@@ -195,7 +195,7 @@
                       formControlName="venue" [ngClass]="{ 'is-invalid': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
                       submitted && addFreeSlotForm.get('venue').hasError('required') }" class="form-input">
                       <ion-select-option *ngFor="let venue of venues" [value]="venue.id">
-                        {{ venue.rooms }}
+                        {{ venue.room_code }}
                       </ion-select-option>
                     </ion-select>
                     </ion-item>
