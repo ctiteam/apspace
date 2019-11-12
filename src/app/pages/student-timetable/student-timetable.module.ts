@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
+import { RouterLinkDirectiveStub } from 'src/testing';
 import { ComponentsModule } from '../../components/components.module';
 import { ClassesPipe } from './classes.pipe';
 import { GenPipe } from './gen.pipe';
@@ -39,6 +40,7 @@ const routes: Routes = [
     ThedayPipe,
     TheWeekPipe,
     GenPipe,
+    RouterLinkDirectiveStub
   ],
   entryComponents: []
 })
