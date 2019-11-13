@@ -211,14 +211,6 @@ export class MorePage implements OnInit {
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['empty', 'class', 'lab', 'auditorium', 'workshop', 'room']
     },
-    // {
-    //   title: 'Filing a Report',
-    //   group: 'Others',
-    //   url: 'filing-report',
-    //   img: 'assets/img/filing-report.png',
-    //   role: Role.Lecturer | Role.Admin,
-    //   tags: ['Report', 'attire', 'formal']
-    // },
     {
       title: 'Graduate Verification Service',
       group: 'Others',
@@ -243,6 +235,15 @@ export class MorePage implements OnInit {
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['lecturer', 'academic', 'teacher']
     },
+    // {
+    // TODO: Change the icon
+    //   title: 'Student Professionalism',
+    //   group: 'Others',
+    //   url: 'student-professionalism',
+    //   img: 'assets/img/filing-report.png',
+    //   role: Role.Lecturer | Role.Admin,
+    //   tags: ['Report', 'attire', 'formal']
+    // },
     {
       title: 'Track Student Visa Status',
       group: 'Others',
