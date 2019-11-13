@@ -40,7 +40,7 @@ const routes: Routes = [
     ThedayPipe,
     TheWeekPipe,
     GenPipe,
-    RouterLinkDirectiveStub
+    RouterLinkDirectiveStub  // TODO: remove this if possible temporary fix
   ],
   entryComponents: []
 })
