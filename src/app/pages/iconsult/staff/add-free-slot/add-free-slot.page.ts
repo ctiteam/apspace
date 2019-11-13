@@ -77,9 +77,10 @@ export class AddFreeSlotPage implements OnInit {
     private alertCtrl: AlertController,
     private loadingController: LoadingController,
     private settings: SettingsService
-  ) {}
+  ) { }
 
   ngOnInit() {
+    console.log(this.repeatUntilDateOptions);
     if (this.settings.get('defaultCampus')) {
       this.venues$ = this.ws.get<Venue[]>(
         `/iconsult/locations?venue=${this.settings.get('defaultCampus')}`,
@@ -97,7 +98,7 @@ export class AddFreeSlotPage implements OnInit {
         Validators.required
       ], // always required
       repeatOn: [[]],
-      noOfWeeks: [null],
+      noOfWeeks: [0],
       endDate: [''],
       location: [this.settings.get('defaultCampus') || '', Validators.required], // always required
       venue: [this.settings.get('defaultVenue') || '', Validators.required], // alwayes required
@@ -142,7 +143,7 @@ export class AddFreeSlotPage implements OnInit {
         buttons: [
           {
             text: 'No',
-            handler: () => {}
+            handler: () => { }
           },
           {
             text: 'Yes',
@@ -162,19 +163,50 @@ export class AddFreeSlotPage implements OnInit {
     if (this.addFreeSlotForm.invalid) {
       return;
     }
-    const body = [
-      {
-        location_id: this.addFreeSlotForm.value.venue,
-        datetime:
-          this.addFreeSlotForm.value.startDate +
-          ' ' +
-          this.addFreeSlotForm.value.time.map(el =>
-            moment(el.slotsTime).format('HH:mm:00')
-          )
-      }
-    ];
 
-    console.log(body);
+    // Get slot algorithmn starts here
+    const body = [];
+    let startDate = this.addFreeSlotForm.value.startDate;
+
+    if (this.addFreeSlotForm.value.slotType === this.consultationTypeOptions[0].value) {
+      this.addFreeSlotForm.value.time.forEach(time => {
+        const timeSlot = {
+          location_id: this.addFreeSlotForm.value.venue,
+          datetime: startDate + ' ' + moment(time.slotsTime).format('kk:mm:00')
+        };
+
+        body.push(timeSlot);
+      });
+    } else {
+      let endDate = this.addFreeSlotForm.value.endDate;
+
+      if (this.addFreeSlotForm.value.noOfWeeks > 0) {
+        endDate = moment(this.addFreeSlotForm.value.startDate, 'YYYY-MM-DD')
+          .add((+this.addFreeSlotForm.value.noOfWeeks * 7), 'days')
+          .format('YYYY-MM-DD');
+        console.log(endDate);
+      }
+
+      while (startDate < endDate) {
+        const dayName = moment(startDate).format('ddd');
+        if (this.addFreeSlotForm.value.repeatOn.includes(dayName)) {
+          this.addFreeSlotForm.value.time.forEach(time => {
+            const timeSlot = {
+              location_id: this.addFreeSlotForm.value.venue,
+              datetime: startDate + ' ' + moment(time.slotsTime).format('kk:mm:00')
+            };
+
+            body.push(timeSlot);
+          });
+        }
+
+        const nextDate = moment(startDate).add(1, 'd').format('YYYY-MM-DD');
+        startDate = nextDate;
+      }
+    }
+
+    console.log(body); // TO BE REMOVED
+    // Get slot algorithmn ends here
 
     // Temp solution until the backend change the methods
     // Only adding the needed data from the form
@@ -199,15 +231,15 @@ export class AddFreeSlotPage implements OnInit {
         header: 'Adding new slot(s)',
         subHeader:
           'Are you sure you want to add new slot(s) with the following details:',
-        // message: `<p><strong>Slot Date: </strong> ${this.addFreeSlotForm.value.startDate}</p>
-        //           <p><strong>Slot End Date: </strong> ${this.addFreeSlotForm.value.endDate || 'N/A'}</p>
-        //           <p><strong>Slot Time: </strong> ${body.datetime.toString()}</p>
-        //           <p><strong>Slot Location: </strong> ${this.addFreeSlotForm.value.location}</p>
-        //           <p><strong>Slot Venue: </strong> ${this.addFreeSlotForm.value.venue} </p>`,
+        message: `<p><strong>Slot Date: </strong> ${this.addFreeSlotForm.value.startDate}</p>
+                  <p><strong>Slot End Date: </strong> ${this.addFreeSlotForm.value.endDate || 'N/A'}</p>
+                  <p><strong>Slot Time: </strong> ${this.addFreeSlotForm.value.time.map(time => moment(time.slotsTime).format('kk:mm'))}</p>
+                  <p><strong>Slot Location: </strong> ${this.addFreeSlotForm.value.location}</p>
+                  <p><strong>Slot Venue: </strong> ${this.addFreeSlotForm.value.venue} </p>`,
         buttons: [
           {
             text: 'No',
-            handler: () => {}
+            handler: () => { }
           },
           {
             text: 'Yes',
@@ -334,7 +366,6 @@ export class AddFreeSlotPage implements OnInit {
 
   locationChanged(event) {
     // When the user changes the location, get the list of venues again
-    console.log(event);
     this.formFields.venue.setValue('');
     // this.venueFieldDisabled = true;
     this.venues$ = this.ws.get<Venue[]>(
@@ -372,7 +403,6 @@ export class AddFreeSlotPage implements OnInit {
   // Checking for duplication in slots time and remove it when the user enters the data
   timeChanged(index: number) {
     const control = this.formFields.time as FormArray;
-    console.log('timechanged ', index, control);
     this.formFields.time.value
       .map(el => moment(el.slotsTime).format('kk:mm'))
       .filter((v, i) => {
