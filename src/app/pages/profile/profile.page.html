@@ -108,13 +108,11 @@
         <!-- STAFF PROFILE -->
         <ng-template #userIsStaff>
           <ion-card class="ion-no-margin ion-no-padding ion-text-center">
-            <!-- STAFF IMAGE -->
-            <ng-template [ngIf]="staffProfile$ | async" [ngIfElse]="loadingPicture">
-              <ion-img class="ion-margin-top profile-photo" [src]="(staffProfile$ | async)[0]?.PHOTO"
+            <ng-container *ngIf="staffProfile$ | async as staffProfile; else loadingProfile">
+              <!-- STAFF IMAGE -->
+              <ion-img class="ion-margin-top profile-photo" [src]="staffProfile[0]?.PHOTO"
                 (ionError)="$event.target.src = 'assets/img/no_img.png'"> </ion-img>
-            </ng-template>
-            <!-- STAFF PROFILE INFO -->
-            <ng-template let-staffProfile [ngIf]="staffProfile$ | async" [ngIfElse]="loadingProfile">
+              <!-- STAFF PROFILE INFO -->
               <ion-card-header>
                 <ion-card-title>
                   <h3 class="responsive-h1">
@@ -158,7 +156,7 @@
                   <p>{{ staffProfile[0].NATIONALITY }}</p>
                 </div>
               </ion-card-content>
-            </ng-template>
+            </ng-container>
           </ion-card>
         </ng-template>
         <ng-template #loadingPicture>
