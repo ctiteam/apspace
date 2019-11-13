@@ -124,11 +124,11 @@ export class MyConsultationsPage {
       message: `You are about to cancel the slot opened on ${slot.dateandtime.split(' ')[0]} at ${slot.dateandtime.split(' ')[1]}`,
       buttons: [
         {
-          text: 'Cancel',
+          text: 'Dismiss',
           role: 'cancel',
           handler: () => { }
         }, {
-          text: 'Submit',
+          text: 'Cancel Slot',
           handler: () => {
             this.presentLoading();
             const cancellationBody = {
