@@ -20,154 +20,90 @@
       <ion-grid class="ion-no-padding">
         <ion-row>
           <ion-col>
-            <ion-searchbar placeholder="Student ID"></ion-searchbar>
+            <ion-searchbar placeholder="Student ID" [(ngModel)]="idToSearch"></ion-searchbar>
           </ion-col>
           <ion-col class="ion-no-padding" size="12" size-md="12">
             <ion-card class="table-background">
               <ion-card-content class="ion-no-padding">
-                <ion-item class="h-mobile-d-desktop table-item">
-                  <ion-grid class="ion-no-margin ion-no-padding">
-                    <ion-row>
-                      <ion-col size="12" size-md="2">
-                        <h2 class="text-bold">TP No.</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="4">
-                        <h2 class="text-bold">Student Name</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="1">
-                        <h2 class="text-bold">1<sup>st</sup> Attempt</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="1">
-                        <h2 class="text-bold">2<sup>nd</sup> Attempt</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="1">
-                        <h2 class="text-bold">Reset</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="1">
-                        <h2 class="text-bold">Reset Date</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="1">
-                        <h2 class="text-bold">Collection</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="1">
-                        <h2 class="text-bold">Size</h2>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
-                </ion-item>
-                <ion-list class="ion-no-padding">
-                  <ion-item class="table-item">
-                    <ion-grid>
-                      <ion-row class="table-data">
-                        <ion-col size="12" size-md="2" class="text-bold special-border colored-border">
-                          TP037354
+                <ng-container *ngIf="studentsList$ | async as students; else loadingStudentsList">
+                  <ion-item class="h-mobile-d-desktop table-item">
+                    <ion-grid class="ion-no-margin ion-no-padding">
+                      <ion-row>
+                        <ion-col size="12" size-md="2">
+                          <h2 class="text-bold">TP No.</h2>
                         </ion-col>
                         <ion-col size="12" size-md="4">
-                          <!-- <span class="marker">Grade: </span> -->
-                          Mohamad Al Ghayeb
+                          <h2 class="text-bold">Student Name</h2>
                         </ion-col>
                         <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Grade Point: </span> -->
-                          14 Jan
+                          <h2 class="text-bold">1<sup>st</sup> Attempt</h2>
                         </ion-col>
                         <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          08 Aug
+                          <h2 class="text-bold">2<sup>nd</sup> Attempt</h2>
                         </ion-col>
                         <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          Yes
+                          <h2 class="text-bold">Reset</h2>
                         </ion-col>
                         <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          06 Nov
+                          <h2 class="text-bold">Reset Date</h2>
                         </ion-col>
                         <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          06 Nov
+                          <h2 class="text-bold">Collection</h2>
                         </ion-col>
                         <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          XXXL
+                          <h2 class="text-bold">Size</h2>
                         </ion-col>
                       </ion-row>
                     </ion-grid>
                   </ion-item>
-                  <ion-item class="table-item">
-                    <ion-grid>
-                      <ion-row class="table-data">
-                        <ion-col size="12" size-md="2" class="text-bold special-border colored-border">
-                          TP037354
-                        </ion-col>
-                        <ion-col size="12" size-md="4">
-                          <!-- <span class="marker">Grade: </span> -->
-                          Mohamad Al Ghayeb
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Grade Point: </span> -->
-                          14 Jan
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          08 Aug
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          Yes
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          06 Nov
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          06 Nov
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          XXXL
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-item>
-                  <ion-item class="table-item">
-                    <ion-grid>
-                      <ion-row class="table-data">
-                        <ion-col size="12" size-md="2" class="text-bold special-border colored-border">
-                          TP047417
-                        </ion-col>
-                        <ion-col size="12" size-md="4">
-                          <!-- <span class="marker">Grade: </span> -->
-                          Abduallah Yahya Abdullah Al Ruqaishi
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Grade Point: </span> -->
-                          14 Jan
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          08 Aug
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          Yes
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          06 Nov
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          06 Nov
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          XXXL
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-item>
-                </ion-list>
+                  <ng-container *ngIf="students.length > 0; else noStudents">
+                    <ion-list class="ion-no-padding">
+                      <ion-item detail button class="table-item" *ngFor="let student of students | filter: idToSearch"
+                        (click)="openStudentDetailModal(student.id)">
+                        <ion-grid>
+                          <ion-row class="table-data">
+                            <ion-col size="12" size-md="2" class="text-bold special-border colored-border">
+                              {{ student.id }}
+                            </ion-col>
+                            <ion-col size="12" size-md="4">
+                              <!-- <span class="marker">Grade: </span> -->
+                              {{ student.student_name }}
+                            </ion-col>
+                            <ion-col size="12" size-md="1">
+                              <!-- <span class="marker">Grade Point: </span> -->
+                              {{ (student.first_attempt_date | date : 'EEE, dd MMM yyyy') || 'N/A' }}
+                            </ion-col>
+                            <ion-col size="12" size-md="1">
+                              <!-- <span class="marker">Internal Result: </span> -->
+                              {{ (student.second_attempt_date| date : 'EEE, dd MMM yyyy') || 'N/A' }}
+                            </ion-col>
+                            <ion-col size="12" size-md="1">
+                              <!-- <span class="marker">Internal Result: </span> -->
+                              {{ student.reset || 'N/A' }}
+                            </ion-col>
+                            <ion-col size="12" size-md="1">
+                              {{ (student.reset_date| date : 'EEE, dd MMM yyyy') || 'N/A' }}
+                            </ion-col>
+                            <ion-col size="12" size-md="1">
+                              <!-- <span class="marker">Internal Result: </span> -->
+                              {{ (student.collection_date | date : 'EEE, dd MMM yyyy') || 'N/A' }}
+                            </ion-col>
+                            <ion-col size="12" size-md="1">
+                              <!-- <span class="marker">Internal Result: </span> -->
+                              {{ student.tshirt_size || 'N/A' }}
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-item>
+                    </ion-list>
+                  </ng-container>
+                  <ng-template #noStudents>
+                    No Students
+                  </ng-template>
+                </ng-container>
+                <ng-template #loadingStudentsList>
+                  loading
+                </ng-template>
               </ion-card-content>
             </ion-card>
           </ion-col>
@@ -192,59 +128,43 @@
           <ion-col class="ion-no-padding" size="12" size-md="12">
             <ion-card class="table-background">
               <ion-card-content class="ion-no-padding">
-                <ion-item class="h-mobile-d-desktop table-item">
-                  <ion-grid class="ion-no-margin ion-no-padding">
-                    <ion-row>
-                      <ion-col size="12" size-md="3">
-                        <h2 class="text-bold">TP No.</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="9">
-                        <h2 class="text-bold">Creation Date</h2>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
-                </ion-item>
-                <ion-list class="ion-no-padding">
-                  <ion-item class="table-item">
-                    <ion-grid>
-                      <ion-row class="table-data">
-                        <ion-col size="12" size-md="3" class="text-bold special-border colored-border">
-                          TP037354
+                <ng-container *ngIf="exceptionsList$ | async as exceptions; else loadingExceptions">
+                  <ion-item class="h-mobile-d-desktop table-item">
+                    <ion-grid class="ion-no-margin ion-no-padding">
+                      <ion-row>
+                        <ion-col size="12" size-md="3">
+                          <h2 class="text-bold">TP No.</h2>
                         </ion-col>
                         <ion-col size="12" size-md="9">
-                          <!-- <span class="marker">Grade: </span> -->
-                          Mon, 09 Oct 2017 18:00:46
+                          <h2 class="text-bold">Creation Date</h2>
                         </ion-col>
                       </ion-row>
                     </ion-grid>
                   </ion-item>
-                  <ion-item class="table-item">
-                    <ion-grid>
-                      <ion-row class="table-data">
-                        <ion-col size="12" size-md="3" class="text-bold special-border colored-border">
-                          TP047417
-                        </ion-col>
-                        <ion-col size="12" size-md="9">
-                          <!-- <span class="marker">Grade: </span> -->
-                          Thu, 28 Nov 2013 04:00:46
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-item>
-                  <ion-item class="table-item">
-                    <ion-grid>
-                      <ion-row class="table-data">
-                        <ion-col size="12" size-md="3" class="text-bold special-border colored-border">
-                          TP043213
-                        </ion-col>
-                        <ion-col size="12" size-md="9">
-                          <!-- <span class="marker">Grade: </span> -->
-                          Fri, 10 Jan 2011 01:05:46
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-item>
-                </ion-list>
+                  <ng-container *ngIf="exceptions.length > 0; else emptyExceptions">
+                    <ion-list class="ion-no-padding">
+                      <ion-item class="table-item" *ngFor="let exception of exceptions">
+                        <ion-grid>
+                          <ion-row class="table-data">
+                            <ion-col size="12" size-md="3" class="text-bold special-border colored-border">
+                              TP037354
+                            </ion-col>
+                            <ion-col size="12" size-md="9">
+                              <!-- <span class="marker">Grade: </span> -->
+                              Mon, 09 Oct 2017 18:00:46
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-item>
+                    </ion-list>
+                  </ng-container>
+                  <ng-template #emptyExceptions>
+                    Empty
+                  </ng-template>
+                </ng-container>
+                <ng-template #loadingExceptions>
+                  Loading ...
+                </ng-template>
               </ion-card-content>
             </ion-card>
           </ion-col>

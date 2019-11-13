@@ -8,3 +8,8 @@
 .success-border{
     --border-color: var(--success-color)
 }
+.table-item {
+  &:nth-child(even) {
+    --background: var(--main-bg-color) !important;
+  }
+}

@@ -5,7 +5,9 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
+import { FilterPipe } from './filter.pipe';
 import { IgraduatePage } from './igraduate.page';
+import { StudentDetailsModalPage } from './student-details-modal';
 
 const routes: Routes = [
   {
@@ -21,6 +23,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [IgraduatePage]
+  declarations: [IgraduatePage, FilterPipe, StudentDetailsModalPage],
+  entryComponents: [StudentDetailsModalPage]
 })
 export class IgraduatePageModule {}

@@ -1,0 +1,112 @@
+<ion-header no-border>
+  <ion-toolbar mode="md">
+    <ion-title>{{ studentId }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content parallax-header>
+  <ng-container *ngIf="studentDetails$ | async as studentDetails; else loading">
+    <div class="ion-padding">
+      <ion-item>
+        <ion-label>
+          <p>
+            Full Name:
+          </p>
+          <h5 class="text-bold">
+            {{ studentDetails[0].student_name || 'N/A'  }}
+          </h5>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p>
+            TP Number:
+          </p>
+          <h5 class="text-bold">
+            {{ studentDetails[0].id || 'N/A'  }}
+          </h5>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p>
+            1<sup>st</sup> Attempt:
+          </p>
+          <h5 class="text-bold">
+            {{ studentDetails[0].first_attempt_date || 'N/A'  }}
+          </h5>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p>
+            2<sup>nd</sup> Attempt:
+          </p>
+          <h5 class="text-bold">
+            {{ studentDetails[0].second_attempt_date || 'N/A'  }}
+          </h5>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p>
+            Reset Times:
+          </p>
+          <h5 class="text-bold">
+            {{ studentDetails[0].reset || 'N/A' }}
+          </h5>
+        </ion-label>
+      </ion-item>
+      <ion-list>
+        <ion-radio-group [(ngModel)]="studentDetails[0].tshirt_size">
+          <ion-list-header>
+            Size
+          </ion-list-header>
+
+          <ion-item>
+            <ion-label>XS</ion-label>
+            <ion-radio value="XS"></ion-radio>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>S</ion-label>
+            <ion-radio value="S"></ion-radio>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>M</ion-label>
+            <ion-radio value="M"></ion-radio>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>L</ion-label>
+            <ion-radio value="L"></ion-radio>
+          </ion-item>
+
+          <ion-item>
+            <ion-label>XL</ion-label>
+            <ion-radio value="XL"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>XXL</ion-label>
+            <ion-radio value="XXL"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label>XXXL</ion-label>
+            <ion-radio value="XXXL"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+      <ion-button color="primary">Update</ion-button>
+      <ion-button color="danger">Reset</ion-button>
+    </div>
+  </ng-container>
+  <ng-template #loading>
+    loading ...
+  </ng-template>
+</ion-content>
