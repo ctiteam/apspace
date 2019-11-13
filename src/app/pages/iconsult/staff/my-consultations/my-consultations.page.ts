@@ -100,7 +100,7 @@ export class MyConsultationsPage {
       data => {
         if (data.data === 'booked') {
           this.daysConfigrations = [];
-          this.doRefresh(true);
+          this.doRefresh();
         }
       }
     );
@@ -112,7 +112,7 @@ export class MyConsultationsPage {
       // tslint:disable-next-line: max-line-length
       if (this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.reload) {
         this.daysConfigrations = [];
-        this.doRefresh(true);
+        this.doRefresh();
       }
     });
     this.doRefresh();
@@ -149,7 +149,7 @@ export class MyConsultationsPage {
                 },
                 complete: () => {
                   this.dismissLoading();
-                  this.doRefresh(true);
+                  this.doRefresh();
                 }
               }
             );
@@ -207,7 +207,7 @@ export class MyConsultationsPage {
       to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
       daysConfig: this.daysConfigrations
     };
-    this.slots$ = this.ws.get<LecturerConsultation[]>('/iconsult/upcomingconlec', refresher).pipe(
+    this.slots$ = this.ws.get<LecturerConsultation[]>('/iconsult/upcomingconlec').pipe(
       map(slots => slots.filter(slot => slot.status !== 'Clossed')), // filter closed slots
       map(
         slots => slots.reduce((r, a) => { // Grouping the slots daily and get the summary data
