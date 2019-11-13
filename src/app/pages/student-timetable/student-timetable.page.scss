@@ -15,7 +15,6 @@ ion-card {
   }
 
   ion-card-header {
-    border-bottom: 2px solid;
     padding: 9px 12px 9px 12px;
     margin-bottom: 10px;
   }
@@ -57,10 +56,6 @@ ion-segment.week-segment {
   display: none;
 }
 
-.hr-custom {
-  border: 2px solid var(--secondary-txt-color);
-  width: 100%;
-}
 .hide-on-print-table-flex-on-card {
   display: flex;
 }
