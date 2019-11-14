@@ -140,7 +140,7 @@
                   <ion-list class="ion-no-padding ion-padding-bottom" style="margin-top: 2px;">
                     <div class="news-wrapper" *ngFor="let newsItem of news; let i = index">
                       <ion-item button *ngIf="newsItem" (click)="showMore(i)">
-                        <ion-avatar slot="start" *ngIf="newsItem.field_news_image[0].url"
+                        <ion-avatar slot="start" *ngIf="newsItem.field_news_image[0]"
                           [style.display]="newsIndexToShow === i ? 'none' : 'block'">
                           <img [src]="newsItem.field_news_image[0].url" alt="news image">
                         </ion-avatar>
@@ -152,7 +152,7 @@
                         </ion-label>
                       </ion-item>
                       <div class="button-wrapper" [style.display]="newsIndexToShow !== i ? 'none' : 'block'">
-                        <img *ngIf="newsItem.field_news_image[0].url" [src]="newsItem.field_news_image[0].url">
+                        <img *ngIf="newsItem.field_news_image[0]" [src]="newsItem.field_news_image[0].url">
                         <ion-button fill="claer" size="small" class="colored-text" (click)="openNewsModal(newsItem)">
                           Read More</ion-button>
                         <div class="clearfix"></div>
