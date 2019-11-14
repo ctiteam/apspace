@@ -1,18 +1,11 @@
-import {
-  AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { IonSelect, IonSlides, ModalController, NavController } from '@ionic/angular';
-
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
 import { Observable, of, zip } from 'rxjs';
 import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
-
-import {
-  Apcard, APULocation, APULocations, BusTrips,
-  DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday,
-  Holidays, LecturerConsultation, LecturerTimetable, News, StaffProfile
-} from 'src/app/interfaces';
+// tslint:disable-next-line: max-line-length
+import { Apcard, APULocation, APULocations, BusTrips, DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday, Holidays, LecturerConsultation, LecturerTimetable, News, StaffProfile } from 'src/app/interfaces';
 import { NewsService, NotificationService, UserSettingsService, WsApiService } from '../../services';
 import { NewsModalPage } from '../news/news-modal';
 
@@ -423,7 +416,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   getTodaysSchdule(staffId: string) {
     this.todaysSchedule$ = zip( // ZIP TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
       this.getUpcomingClasses(staffId),
-      this.getUpcomingConsultations(true) // no-cache for upcoming consultations
+      this.getUpcomingConsultations() // no-cache for upcoming consultations
     ).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
@@ -489,24 +482,28 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  getUpcomingConsultations(refresher): Observable<EventComponentConfigurations[]> {
+  getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
     const consultationsEventMode: EventComponentConfigurations[] = [];
-    return this.ws.get<LecturerConsultation[]>('/iconsult/upcomingconlec', refresher).pipe(
+    return this.ws.get<LecturerConsultation[]>('/iconsult/slots?lecturer_sam_account_name=we.yuan',
+      { url: 'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev' }
+    ).pipe(
       map(consultations =>
         consultations.filter(
-          consultation => this.eventIsToday(new Date(consultation.date), dateNow) && consultation.status === 'Booked'
+          consultation => this.eventIsToday(new Date(moment(consultation.start_time).format('YYYY-MM-DD')), dateNow)
+          && consultation.status === 'Booked'
         )
       ),
       map(upcomingConsultations => {
         upcomingConsultations.forEach(upcomingConsultation => {
           let consultationPass = false;
-          if (this.eventPass(upcomingConsultation.time, dateNow)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
+          if (this.eventPass(moment(upcomingConsultation.start_time).format('HH:mm A'), dateNow)) {
+            // CHANGE CLASS STATUS TO PASS IF IT PASS
             consultationPass = true;
           }
           const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
-            moment(upcomingConsultation.time, 'HH:mm A').toDate(),
-            moment(upcomingConsultation.endTime, 'HH:mm A').toDate());
+            moment(upcomingConsultation.start_time, 'HH:mm A').toDate(),
+            moment(upcomingConsultation.end_time, 'HH:mm A').toDate());
           consultationsEventMode.push({
             title: 'Consultation Hour',
             color: '#d35400',
@@ -514,10 +511,10 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
             type: 'iconsult',
             pass: consultationPass,
             passColor: '#d7dee3',
-            firstDescription: upcomingConsultation.location + ' | ' + upcomingConsultation.venue,
+            firstDescription: upcomingConsultation.room_code + ' | ' + upcomingConsultation.venue,
             // secondDescription: upcomingConsultation.lecname,
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
-            dateOrTime: moment(moment(upcomingConsultation.time, 'HH:mm A').toDate()).format('hh mm A'),
+            dateOrTime: moment(moment(upcomingConsultation.start_time, 'HH:mm A').toDate()).format('hh mm A'),
           });
         });
         return consultationsEventMode;
