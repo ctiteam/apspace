@@ -156,18 +156,8 @@
 
 <ion-footer>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button class="colored-background">
-      <ion-icon name="create"></ion-icon>
+    <ion-fab-button class="colored-background" routerLink="/iconsult/add-free-slot" routerDirection="forward">
+      <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button class="colored-background" routerLink="/iconsult/add-unavailability"
-        data-desc="Add Unavailability">
-        <ion-icon name="remove"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button class="colored-background" routerLink="/iconsult/add-free-slot" routerDirection="forward"
-        data-desc="Add Free Slot">
-        <ion-icon name="add"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
   </ion-fab>
 </ion-footer>
