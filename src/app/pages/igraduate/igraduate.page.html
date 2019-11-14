@@ -6,10 +6,9 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar>
-    <ion-segment class="ion-padding" [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
+    <ion-segment class="ion-padding" [(ngModel)]="selectedSegment">
       <ion-segment-button value="studentsList">Students List</ion-segment-button>
       <ion-segment-button value="exceptions">Exceptions</ion-segment-button>
-      <ion-segment-button value="report">Report</ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
@@ -62,34 +61,35 @@
                         (click)="openStudentDetailModal(student.id)">
                         <ion-grid>
                           <ion-row class="table-data">
-                            <ion-col size="12" size-md="2" class="text-bold special-border colored-border">
+                            <ion-col size="12" size-md="2" class="margin-auto text-bold special-border colored-border">
                               {{ student.id }}
                             </ion-col>
-                            <ion-col size="12" size-md="4">
-                              <!-- <span class="marker">Grade: </span> -->
+                            <ion-col size="12" size-md="4" class="margin-auto">
+                              <span class="h-desktop-d-mobile">name: </span>
                               {{ student.student_name }}
                             </ion-col>
-                            <ion-col size="12" size-md="1">
-                              <!-- <span class="marker">Grade Point: </span> -->
+                            <ion-col size="12" size-md="1" class="margin-auto">
+                              <span class="h-desktop-d-mobile">1<sup>st</sup>Attempt:</span>
                               {{ (student.first_attempt_date | date : 'EEE, dd MMM yyyy') || 'N/A' }}
                             </ion-col>
-                            <ion-col size="12" size-md="1">
-                              <!-- <span class="marker">Internal Result: </span> -->
+                            <ion-col size="12" size-md="1" class="margin-auto">
+                              <span class="h-desktop-d-mobile">2<sup>nd</sup>Attempt:</span>
                               {{ (student.second_attempt_date| date : 'EEE, dd MMM yyyy') || 'N/A' }}
                             </ion-col>
-                            <ion-col size="12" size-md="1">
-                              <!-- <span class="marker">Internal Result: </span> -->
+                            <ion-col size="12" size-md="1" class="margin-auto">
+                              <span class="h-desktop-d-mobile">Reset:</span>
                               {{ student.reset || 'N/A' }}
                             </ion-col>
-                            <ion-col size="12" size-md="1">
+                            <ion-col size="12" size-md="1" class="margin-auto">
+                              <span class="h-desktop-d-mobile">Reset Date:</span>
                               {{ (student.reset_date| date : 'EEE, dd MMM yyyy') || 'N/A' }}
                             </ion-col>
-                            <ion-col size="12" size-md="1">
-                              <!-- <span class="marker">Internal Result: </span> -->
+                            <ion-col size="12" size-md="1" class="margin-auto">
+                              <span class="h-desktop-d-mobile">Collection:</span>
                               {{ (student.collection_date | date : 'EEE, dd MMM yyyy') || 'N/A' }}
                             </ion-col>
-                            <ion-col size="12" size-md="1">
-                              <!-- <span class="marker">Internal Result: </span> -->
+                            <ion-col size="12" size-md="1" class="margin-auto">
+                              <span class="h-desktop-d-mobile">Size:</span>
                               {{ student.tshirt_size || 'N/A' }}
                             </ion-col>
                           </ion-row>
@@ -102,7 +102,23 @@
                   </ng-template>
                 </ng-container>
                 <ng-template #loadingStudentsList>
-                  loading
+                  <ion-list>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:100%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:40%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:70%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:90%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:20%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                  </ion-list>
                 </ng-template>
               </ion-card-content>
             </ion-card>
@@ -117,11 +133,10 @@
         <ion-row>
           <ion-col>
             <ion-item lines="none">
-              <ion-input class="form-input" type="text" placeholder="Student ID" [(ngModel)]="studentIDException">
-                <!-- <ion-buttons slot="end"> -->
-                <!-- </ion-buttons> -->
+              <ion-input class="form-input" type="text" placeholder="Student ID" (keyup.enter)="addException()"
+                [(ngModel)]="studentIDException">
                 <ion-button class="success-border success-text" style="position: absolute;right: 5px;" expand="block"
-                  fill="outline" slot="end">add</ion-button>
+                  fill="outline" slot="end" (click)="addException()">add</ion-button>
               </ion-input>
             </ion-item>
           </ion-col>
@@ -132,11 +147,14 @@
                   <ion-item class="h-mobile-d-desktop table-item">
                     <ion-grid class="ion-no-margin ion-no-padding">
                       <ion-row>
-                        <ion-col size="12" size-md="3">
+                        <ion-col size="12" size-md="4">
                           <h2 class="text-bold">TP No.</h2>
                         </ion-col>
-                        <ion-col size="12" size-md="9">
+                        <ion-col size="12" size-md="4">
                           <h2 class="text-bold">Creation Date</h2>
+                        </ion-col>
+                        <ion-col size="12" size-md="4">
+                          <h2 class="text-bold">Creation Time</h2>
                         </ion-col>
                       </ion-row>
                     </ion-grid>
@@ -146,12 +164,16 @@
                       <ion-item class="table-item" *ngFor="let exception of exceptions">
                         <ion-grid>
                           <ion-row class="table-data">
-                            <ion-col size="12" size-md="3" class="text-bold special-border colored-border">
-                              TP037354
+                            <ion-col size="12" size-md="4" class="text-bold special-border colored-border">
+                              {{ exception.student_id }}
                             </ion-col>
-                            <ion-col size="12" size-md="9">
-                              <!-- <span class="marker">Grade: </span> -->
-                              Mon, 09 Oct 2017 18:00:46
+                            <ion-col size="12" size-md="4">
+                              <span class="h-desktop-d-mobile">Creation Date:</span>
+                              {{ (exception.creation_date | date: 'EEE, dd MMM yyyy') || 'N/A' }}
+                            </ion-col>
+                            <ion-col size="12" size-md="4">
+                              <span class="h-desktop-d-mobile">Creation Time:</span>
+                              {{ (exception.creation_date | date: 'HH:mm a') || 'N/A' }}
                             </ion-col>
                           </ion-row>
                         </ion-grid>
@@ -163,169 +185,30 @@
                   </ng-template>
                 </ng-container>
                 <ng-template #loadingExceptions>
-                  Loading ...
+                  <ion-list>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:100%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:40%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:70%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:90%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:20%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                  </ion-list>
                 </ng-template>
               </ion-card-content>
             </ion-card>
           </ion-col>
         </ion-row>
       </ion-grid>
+    </ng-container>
 
-    </ng-container>
-    <ng-container *ngSwitchCase="'report'">
-      <ion-grid class="ion-no-padding">
-        <ion-row>
-          <ion-col class="ion-no-padding" size="12" size-md="12">
-            <ion-card class="table-background">
-              <ion-card-content class="ion-no-padding">
-                <ion-item class="h-mobile-d-desktop table-item">
-                  <ion-grid class="ion-no-margin ion-no-padding">
-                    <ion-row>
-                      <ion-col size="12" size-md="5">
-                        <h2 class="text-bold">Date</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="1">
-                        <h2 class="text-bold">XS</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="1">
-                        <h2 class="text-bold">S</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="1">
-                        <h2 class="text-bold">M</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="1">
-                        <h2 class="text-bold">L</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="1">
-                        <h2 class="text-bold">XL</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="1">
-                        <h2 class="text-bold">XXL</h2>
-                      </ion-col>
-                      <ion-col size="12" size-md="1">
-                        <h2 class="text-bold">XXXL</h2>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
-                </ion-item>
-                <ion-list class="ion-no-padding">
-                  <ion-item class="table-item">
-                    <ion-grid>
-                      <ion-row class="table-data">
-                        <ion-col size="12" size-md="5" class="text-bold special-border colored-border">
-                          2019-11-05
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Grade: </span> -->
-                          1
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Grade Point: </span> -->
-                          999
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          8
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          2
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          -
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          -
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          1
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-item>
-                  <ion-item class="table-item">
-                    <ion-grid>
-                      <ion-row class="table-data">
-                        <ion-col size="12" size-md="5" class="text-bold special-border colored-border">
-                          2019-11-05
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Grade: </span> -->
-                          1
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Grade Point: </span> -->
-                          999
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          8
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          2
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          -
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          -
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          1
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-item>
-                  <ion-item class="table-item">
-                    <ion-grid>
-                      <ion-row class="table-data">
-                        <ion-col size="12" size-md="5" class="text-bold special-border colored-border">
-                          2019-11-05
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Grade: </span> -->
-                          1
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Grade Point: </span> -->
-                          999
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          8
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          2
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          -
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          -
-                        </ion-col>
-                        <ion-col size="12" size-md="1">
-                          <!-- <span class="marker">Internal Result: </span> -->
-                          1
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-item>
-                </ion-list>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ng-container>
   </ng-container>
 </ion-content>

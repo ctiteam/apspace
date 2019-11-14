@@ -247,13 +247,13 @@ const routes: Routes = [
   //   data: { role: Role.Admin | Role.Lecturer },
   //   loadChildren: () => import('./pages/filing-report/filing-report.module').then(m => m.FilingReportPageModule)
   // },
-  // {
+  {
   //   // only available via URL. No Menu item created for this
-  //   path: 'igraduate',
-  //   canActivate: [AuthGuard],
-  //   data: { role: Role.Admin | Role.Lecturer },
-  //   loadChildren: () => import('./pages/igraduate/igraduate.module').then(m => m.IgraduatePageModule)
-  // },
+    path: 'igraduate',
+    canActivate: [AuthGuard],
+    data: { role: Role.Admin | Role.Lecturer },
+    loadChildren: () => import('./pages/igraduate/igraduate.module').then(m => m.IgraduatePageModule)
+  },
   { // this path must always be at the end of the routes array
     path: '**',
     canActivate: [AuthGuard],

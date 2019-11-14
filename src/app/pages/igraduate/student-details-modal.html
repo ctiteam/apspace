@@ -38,7 +38,7 @@
             1<sup>st</sup> Attempt:
           </p>
           <h5 class="text-bold">
-            {{ studentDetails[0].first_attempt_date || 'N/A'  }}
+            {{ (studentDetails[0].first_attempt_date | date: 'EEE, dd MMM yyyy @ HH:mm a') || 'N/A'  }}
           </h5>
         </ion-label>
       </ion-item>
@@ -48,7 +48,7 @@
             2<sup>nd</sup> Attempt:
           </p>
           <h5 class="text-bold">
-            {{ studentDetails[0].second_attempt_date || 'N/A'  }}
+            {{ (studentDetails[0].second_attempt_date| date: 'EEE, dd MMM yyyy @ HH:mm a') || 'N/A'  }}
           </h5>
         </ion-label>
       </ion-item>
@@ -63,50 +63,44 @@
         </ion-label>
       </ion-item>
       <ion-list>
-        <ion-radio-group [(ngModel)]="studentDetails[0].tshirt_size">
-          <ion-list-header>
-            Size
-          </ion-list-header>
-
-          <ion-item>
-            <ion-label>XS</ion-label>
-            <ion-radio value="XS"></ion-radio>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>S</ion-label>
-            <ion-radio value="S"></ion-radio>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>M</ion-label>
-            <ion-radio value="M"></ion-radio>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>L</ion-label>
-            <ion-radio value="L"></ion-radio>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>XL</ion-label>
-            <ion-radio value="XL"></ion-radio>
-          </ion-item>
-          <ion-item>
-            <ion-label>XXL</ion-label>
-            <ion-radio value="XXL"></ion-radio>
-          </ion-item>
-          <ion-item>
-            <ion-label>XXXL</ion-label>
-            <ion-radio value="XXXL"></ion-radio>
-          </ion-item>
-        </ion-radio-group>
+        <ion-item lines="none">
+          <ion-label>
+            <p>
+              Size:
+            </p>
+          </ion-label>
+        </ion-item>
+        <p class="ion-padding-start ion-padding-end ion-padding-bottom">
+          <ion-chip (click)="studentDetails[0].tshirt_size = size" [outline]="studentDetails[0].tshirt_size !== size"
+            [color]="studentDetails[0].tshirt_size !== size ? 'danger' : 'success'" *ngFor="let size of sizes">
+            <ion-label>{{size}}</ion-label>
+          </ion-chip>
+        </p>
       </ion-list>
-      <ion-button color="primary">Update</ion-button>
-      <ion-button color="danger">Reset</ion-button>
+      <div class="ion-margin-top">
+        <ion-button color="primary" (click)="updateSize(studentDetails[0].tshirt_size)">Update</ion-button>
+        <ion-button color="danger" [disabled]="!studentDetails[0].second_attempt_date" (click)="reset()">Reset
+        </ion-button>
+      </div>
     </div>
   </ng-container>
   <ng-template #loading>
-    loading ...
+    <ion-list>
+      <ion-item>
+        <ion-skeleton-text animated style="width:100%; line-height: 25px;"></ion-skeleton-text>
+      </ion-item>
+      <ion-item>
+        <ion-skeleton-text animated style="width:40%; line-height: 25px;"></ion-skeleton-text>
+      </ion-item>
+      <ion-item>
+        <ion-skeleton-text animated style="width:70%; line-height: 25px;"></ion-skeleton-text>
+      </ion-item>
+      <ion-item>
+        <ion-skeleton-text animated style="width:90%; line-height: 25px;"></ion-skeleton-text>
+      </ion-item>
+      <ion-item>
+        <ion-skeleton-text animated style="width:20%; line-height: 25px;"></ion-skeleton-text>
+      </ion-item>
+    </ion-list>
   </ng-template>
 </ion-content>
