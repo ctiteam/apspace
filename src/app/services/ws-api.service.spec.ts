@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';

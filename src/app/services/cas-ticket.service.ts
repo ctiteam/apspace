@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
-import { EMPTY, from as fromPromise, Observable, of, throwError } from 'rxjs';
+import { EMPTY, Observable, from as fromPromise, of, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
 import { Role } from '../interfaces';

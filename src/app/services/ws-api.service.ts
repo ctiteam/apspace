@@ -4,7 +4,7 @@ import { Network } from '@ionic-native/network/ngx';
 import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
-import { concat, from, iif, Observable, of, throwError } from 'rxjs';
+import { Observable, concat, from, iif, of, throwError } from 'rxjs';
 import {
   catchError, concatMap, delay, publishLast, refCount, retryWhen, switchMap,
   tap, timeout,
