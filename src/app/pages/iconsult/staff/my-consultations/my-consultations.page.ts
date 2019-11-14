@@ -123,6 +123,7 @@ export class MyConsultationsPage {
   async cancelAvailableSlot(slot: LecturerConsultation) {
     const startDate = this.datePipe.transform(slot.start_time, 'yyyy-MM-dd');
     const startTime = this.datePipe.transform(slot.start_time, 'hh:mm');
+    const slotsId = [{slot_id: slot.slot_id}];
     const alert = await this.alertController.create({
       header: 'Cancelling an opened slot',
       message: `You are about to cancel the slot opened on ${startDate} at ${startTime}`,
@@ -135,23 +136,8 @@ export class MyConsultationsPage {
           text: 'Cancel Slot',
           handler: () => {
             this.presentLoading();
-            const cancellationBody = [
-              {
-                next: () => {
-                  this.daysConfigrations = [];
-                  this.showToastMessage('Slot has been cancelled successfully!', 'success');
-                },
-                error: () => {
-                  this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
-                },
-                complete: () => {
-                  this.dismissLoading();
-                  this.doRefresh();
-                }
-              }
-            ];
 
-            this.sendCancelSlotRequest(cancellationBody).subscribe({
+            this.sendCancelSlotRequest(slotsId).subscribe({
               next: () => {
                 this.daysConfigrations = [];
                 this.showToastMessage(
@@ -206,10 +192,10 @@ export class MyConsultationsPage {
     return await this.loading.dismiss();
   }
 
-  sendCancelSlotRequest(cancelledSlotDetails: any) {
+  sendCancelSlotRequest(slotsId: any) {
     return this.ws.put<any>('/iconsult/slot/cancel?', {
       url: 'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev',
-      body: cancelledSlotDetails
+      body: slotsId
     });
   }
 
@@ -260,7 +246,6 @@ export class MyConsultationsPage {
               r[consultationsDate].items = r[consultationsDate].items || [];
               r[consultationsDate].items.push(a);
             }
-            console.log(r);
             return r;
           }, {})
         ),
