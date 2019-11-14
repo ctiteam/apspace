@@ -37,7 +37,6 @@
     "@capacitor/core": "^1.2.0",
     "@ionic-native/action-sheet": "^5.15.0",
     "@ionic-native/app-availability": "^5.15.0",
-    "@ionic-native/barcode-scanner": "^5.15.0",
     "@ionic-native/core": "^5.15.0",
     "@ionic-native/device": "^5.15.0",
     "@ionic-native/fcm": "^5.15.0",

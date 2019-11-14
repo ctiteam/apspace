@@ -1,7 +1,6 @@
 import {
   Component, ElementRef, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
-import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
@@ -30,7 +29,6 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
     private updateAttendance: UpdateAttendanceGQL,
     private settings: SettingsService,
     public alertCtrl: AlertController,
-    public barcodeScanner: BarcodeScanner,
     public plt: Platform,
     public qrScanner: QRScanner,
     public toastCtrl: ToastController
