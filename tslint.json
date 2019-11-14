@@ -20,8 +20,9 @@
       "page",
       "kebab-case"
     ],
+    "contextual-lifecycle": true,
     "deprecation": {
-      "severity": "warn"
+      "severity": "warning"
     },
     "directive-class-suffix": true,
     "directive-selector": [
@@ -52,6 +53,7 @@
         ]
       }
     ],
+    "no-conflicting-lifecycle": true,
     "no-consecutive-blank-lines": false,
     "no-console": [
       true,
@@ -70,8 +72,10 @@
     "no-input-rename": true,
     "no-inputs-metadata-property": true,
     "no-non-null-assertion": true,
+    "no-output-native": true,
     "no-output-on-prefix": true,
     "no-output-rename": true,
+    "no-outputs-metadata-property": true,
     "no-redundant-jsdoc": true,
     "no-switch-case-fall-through": true,
     "no-use-before-declare": true,
@@ -87,6 +91,8 @@
       true,
       "single"
     ],
+    "template-banana-in-box": true,
+    "template-no-negated-async": true,
     "trailing-comma": false,
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
