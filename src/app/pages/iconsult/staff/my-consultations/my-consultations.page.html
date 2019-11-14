@@ -32,17 +32,14 @@
             <ion-item class="ion-no-padding">
               <ion-grid>
                 <ion-row>
-                  <ion-col class="available ion-text-center" size="6">
+                  <ion-col class="available ion-text-center">
                     <ion-badge>.</ion-badge> Available
                   </ion-col>
-                  <ion-col class="p-booked ion-text-center" size="6">
+                  <ion-col class="p-booked ion-text-center">
                     <ion-badge>.</ion-badge> Partially Booked
                   </ion-col>
-                  <ion-col class="booked ion-text-center" size="6">
+                  <ion-col class="booked ion-text-center">
                     <ion-badge>.</ion-badge> Booked
-                  </ion-col>
-                  <ion-col class="unavailable ion-text-center" size="6">
-                    <ion-badge>.</ion-badge> Unavailable
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -67,18 +64,17 @@
                   <div class="event-container" [ngClass]="{
                                     'booked': slot.status === 'Booked',
                                     'available': slot.status === 'Available',
-                                    'no-hover': slot.status === 'Clossed',
-                                    unavailable: slot.status === 'Unavailable'
+                                    'no-hover': slot.status === 'Clossed'
                                 }">
                     <ion-grid class="grid-padding">
-                      <ion-row *ngIf="slot.status !== 'Unavailable'">
+                      <ion-row *ngIf="slot.status !== 'Cancelled' && slot.status !== 'Cancelled by lecturer'">
                         <ion-col size-xs="7" size-sm="8">
                           <span class="title">
-                            {{slot.time}} - {{slot.endTime}}
+                            {{slot.start_time | date: "HH:mm"}} - {{slot.end_time | date: "HH:mm"}}
                           </span>
                           <span class="description small-margin-top">
                             <ion-icon name="pin"></ion-icon>
-                            {{slot.location}} | {{slot.venue}}
+                            {{slot.room_code}} | {{slot.venue}}
                           </span>
                         </ion-col>
                         <ion-col size-xs="5" size-sm="4" class="margin-auto">
