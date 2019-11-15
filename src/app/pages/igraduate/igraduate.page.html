@@ -98,7 +98,17 @@
                     </ion-list>
                   </ng-container>
                   <ng-template #noStudents>
-                    No Students
+                    <ion-list class="ion-no-padding">
+                      <ion-item class="table-item">
+                        <ion-grid>
+                          <ion-row class="table-data">
+                            <ion-col size="12" class="text-bold special-border danger-text">
+                              No Students in the list
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-item>
+                    </ion-list>
                   </ng-template>
                 </ng-container>
                 <ng-template #loadingStudentsList>
@@ -181,7 +191,17 @@
                     </ion-list>
                   </ng-container>
                   <ng-template #emptyExceptions>
-                    Empty
+                    <ion-list class="ion-no-padding">
+                      <ion-item class="table-item">
+                        <ion-grid>
+                          <ion-row class="table-data">
+                            <ion-col size="12" class="text-bold special-border danger-text">
+                              No Students in the list
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-item>
+                    </ion-list>
                   </ng-template>
                 </ng-container>
                 <ng-template #loadingExceptions>
