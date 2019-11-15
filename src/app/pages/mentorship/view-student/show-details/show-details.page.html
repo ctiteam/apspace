@@ -20,8 +20,8 @@
     <div *ngSwitchCase="'attendance'">
       <ion-card>
         <ion-card-content class="ion-no-padding">
-          <div *ngIf="(attendance$ | async); else loadingAttendance">
-            <div *ngIf="(attendance$ | async).length > 0; else emptyAttendance">
+          <div *ngIf="(attendance$ | async) as attendances; else loadingAttendance">
+            <div *ngIf="attendances.length > 0; else emptyAttendance">
               <ion-item lines="none" class="ion-no-padding table-top">
                 <ion-grid class="ion-no-padding">
                   <ion-row>
@@ -112,8 +112,8 @@
       <ion-card>
         <ion-card-content>
 
-          <div *ngIf="(result$ | async); else loadingResults">
-            <div *ngIf="(result$ | async).length > 0; else emptyResult">
+          <div *ngIf="(result$ | async) as results; else loadingResults">
+            <div *ngIf="results.length > 0; else emptyResult">
               <ion-item lines="none" class="ion-no-padding table-top">
                 <ion-grid>
                   <ion-row>

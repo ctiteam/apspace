@@ -15,7 +15,6 @@ import { ShowDetailsPage } from './show-details/show-details.page';
 })
 export class ViewStudentPage implements OnInit {
 
-  // Global var for TP & Intake
   tp: string;
   intake: string;
 
@@ -24,7 +23,7 @@ export class ViewStudentPage implements OnInit {
   selectedIntake$: Observable<Intake[]>;
 
   courseDetail$: Observable<CourseDetail[]>;
-  subCourse$: Observable<any>;
+  subCourse$: Observable<{ index: string; value: any; }[]>;
 
   constructor(
     private mentorship: MentorshipService,
@@ -43,16 +42,8 @@ export class ViewStudentPage implements OnInit {
   }
 
   sortResult(results: any) {
-    const dataBySemester = results
-      .reduce((previous: any, current: any) => {
-        if (!previous[current.SEMESTER]) {
-          previous[current.SEMESTER] = [current];
-        } else {
-          previous[current.SEMESTER].push(current);
-        }
-        return previous;
-      }, {});
-
+    // tslint:disable-next-line: max-line-length
+    const dataBySemester = results.reduce((acc: any, result: any) => (acc[result.SEMESTER] = (acc[result.SEMESTER] || []).concat(result), acc), {});
     return Object.keys(dataBySemester).map(index => ({ index, value: dataBySemester[index] }));
   }
 
