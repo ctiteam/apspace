@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar mode="md">
     <ion-title>Classroom Finder</ion-title>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
@@ -36,9 +36,9 @@
     <ion-item lines="none">
       <ion-label>Room Types</ion-label>
       <ion-select [(ngModel)]="types" multiple>
-        <ion-select-option value="auditorium">Auditoriums / Lecture Halls</ion-select-option>
-        <ion-select-option value="classroom">Classrooms</ion-select-option>
-        <ion-select-option value="labotary">Labs / Workshops / Studios / Suites</ion-select-option>
+        <ion-select-option *ngFor="let type of classroomTypes" [value]="type.key">
+          {{ type.name }}
+        </ion-select-option>
       </ion-select>
     </ion-item>
   </ion-card>

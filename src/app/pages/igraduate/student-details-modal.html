@@ -1,0 +1,106 @@
+<ion-header no-border>
+  <ion-toolbar mode="md">
+    <ion-title>{{ studentId }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content parallax-header>
+  <ng-container *ngIf="studentDetails$ | async as studentDetails; else loading">
+    <div class="ion-padding">
+      <ion-item>
+        <ion-label>
+          <p>
+            Full Name:
+          </p>
+          <h5 class="text-bold">
+            {{ studentDetails[0].student_name || 'N/A'  }}
+          </h5>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p>
+            TP Number:
+          </p>
+          <h5 class="text-bold">
+            {{ studentDetails[0].id || 'N/A'  }}
+          </h5>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p>
+            1<sup>st</sup> Attempt:
+          </p>
+          <h5 class="text-bold">
+            {{ (studentDetails[0].first_attempt_date | date: 'EEE, dd MMM yyyy @ HH:mm a') || 'N/A'  }}
+          </h5>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p>
+            2<sup>nd</sup> Attempt:
+          </p>
+          <h5 class="text-bold">
+            {{ (studentDetails[0].second_attempt_date| date: 'EEE, dd MMM yyyy @ HH:mm a') || 'N/A'  }}
+          </h5>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p>
+            Reset Times:
+          </p>
+          <h5 class="text-bold">
+            {{ studentDetails[0].reset || 'N/A' }}
+          </h5>
+        </ion-label>
+      </ion-item>
+      <ion-list>
+        <ion-item lines="none">
+          <ion-label>
+            <p>
+              Size:
+            </p>
+          </ion-label>
+        </ion-item>
+        <p class="ion-padding-start ion-padding-end ion-padding-bottom">
+          <ion-chip (click)="studentDetails[0].tshirt_size = size" [outline]="studentDetails[0].tshirt_size !== size"
+            [color]="studentDetails[0].tshirt_size !== size ? 'danger' : 'success'" *ngFor="let size of sizes">
+            <ion-label>{{size}}</ion-label>
+          </ion-chip>
+        </p>
+      </ion-list>
+      <div class="ion-margin-top">
+        <ion-button color="primary" (click)="updateSize(studentDetails[0].tshirt_size)">Update</ion-button>
+        <ion-button color="danger" [disabled]="!studentDetails[0].second_attempt_date" (click)="reset()">Reset
+        </ion-button>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #loading>
+    <ion-list>
+      <ion-item>
+        <ion-skeleton-text animated style="width:100%; line-height: 25px;"></ion-skeleton-text>
+      </ion-item>
+      <ion-item>
+        <ion-skeleton-text animated style="width:40%; line-height: 25px;"></ion-skeleton-text>
+      </ion-item>
+      <ion-item>
+        <ion-skeleton-text animated style="width:70%; line-height: 25px;"></ion-skeleton-text>
+      </ion-item>
+      <ion-item>
+        <ion-skeleton-text animated style="width:90%; line-height: 25px;"></ion-skeleton-text>
+      </ion-item>
+      <ion-item>
+        <ion-skeleton-text animated style="width:20%; line-height: 25px;"></ion-skeleton-text>
+      </ion-item>
+    </ion-list>
+  </ng-template>
+</ion-content>

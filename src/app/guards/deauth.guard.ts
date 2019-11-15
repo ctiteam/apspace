@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, Router, UrlTree } from '@angular/router';
 
 import { CasTicketService } from '../services';
 
@@ -13,10 +13,9 @@ export class DeauthGuard implements CanActivate {
 
   constructor(private cas: CasTicketService, private router: Router) { }
 
-  async canActivate(): Promise<boolean> {
+  async canActivate(): Promise<boolean | UrlTree> {
     if (await this.cas.isAuthenticated()) {
-      this.router.navigate(['/']);
-      return false;
+      return this.router.createUrlTree(['/']);
     }
     return true;
   }

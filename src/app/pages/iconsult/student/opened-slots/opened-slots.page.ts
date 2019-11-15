@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
-import { ConsultationSlot, StaffDirectory } from 'src/app/interfaces';
-import { WsApiService } from 'src/app/services';
-import { ActivatedRoute } from 'src/testing';
-import { BookSlotModalPage } from './book-slot-modal';
 
 import * as moment from 'moment';
+import { ConsultationSlot, StaffDirectory } from 'src/app/interfaces';
+import { WsApiService } from 'src/app/services';
+import { BookSlotModalPage } from './book-slot-modal';
 import { CalendarFilterModalPage } from './calendar-filter-modal/calendar-filter-modal';
+
 @Component({
   selector: 'app-opened-slots',
   templateUrl: './opened-slots.page.html',

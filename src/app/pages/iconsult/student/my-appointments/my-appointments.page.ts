@@ -111,11 +111,11 @@ export class MyAppointmentsPage {
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: 'Dismiss',
           role: 'cancel',
           handler: () => { }
         }, {
-          text: 'Submit',
+          text: 'Cancel Slot',
           handler: (data) => {
             if (!data.cancellationReason) {
               this.showToastMessage('Cancellation Reason is Required !!', 'danger');

@@ -1,27 +1,44 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed, async } from '@angular/core/testing';
+import { NEVER } from 'rxjs';
 
+import { RouterLinkDirectiveStub } from '../../../testing';
+import { WsApiService } from '../../services';
+import { FromWeekPipe } from './from-week.pipe';
 import { LecturerTimetableComponent } from './lecturer-timetable.component';
+import { LengthPipe } from './length.pipe';
+import { ReversePipe } from './reverse.pipe';
 
 describe('LecturerTimetableComponent', () => {
-  let component: LecturerTimetableComponent;
-  let fixture: ComponentFixture<LecturerTimetableComponent>;
+  let getSpy: jasmine.Spy;
 
   beforeEach(async(() => {
+    const ws = jasmine.createSpyObj('WsApiService', ['get']);
+    getSpy = ws.get;
     TestBed.configureTestingModule({
-      declarations: [LecturerTimetableComponent],
+      declarations: [
+        FromWeekPipe,
+        LecturerTimetableComponent,
+        LengthPipe,
+        ReversePipe,
+        RouterLinkDirectiveStub,
+      ],
+      providers: [
+        { provide: WsApiService, useValue: ws },
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(LecturerTimetableComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
   it('should create', () => {
+    getSpy.and.returnValue(NEVER);
+
+    const fixture = TestBed.createComponent(LecturerTimetableComponent);
+    const component = fixture.componentInstance;
+    component.id = '1';
+    fixture.detectChanges();
+
     expect(component).toBeTruthy();
+    expect(getSpy).toHaveBeenCalledTimes(1);
   });
 });

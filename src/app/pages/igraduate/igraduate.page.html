@@ -1,0 +1,234 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>iGraduate</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment class="ion-padding" [(ngModel)]="selectedSegment">
+      <ion-segment-button value="studentsList">Students List</ion-segment-button>
+      <ion-segment-button value="exceptions">Exceptions</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ng-container [ngSwitch]='selectedSegment'>
+    <ng-container *ngSwitchCase="'studentsList'">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col>
+            <ion-searchbar placeholder="Student ID" [(ngModel)]="idToSearch"></ion-searchbar>
+          </ion-col>
+          <ion-col class="ion-no-padding" size="12" size-md="12">
+            <ion-card class="table-background">
+              <ion-card-content class="ion-no-padding">
+                <ng-container *ngIf="studentsList$ | async as students; else loadingStudentsList">
+                  <ion-item class="h-mobile-d-desktop table-item">
+                    <ion-grid class="ion-no-margin ion-no-padding">
+                      <ion-row>
+                        <ion-col size="12" size-md="2">
+                          <h2 class="text-bold">TP No.</h2>
+                        </ion-col>
+                        <ion-col size="12" size-md="4">
+                          <h2 class="text-bold">Student Name</h2>
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <h2 class="text-bold">1<sup>st</sup> Attempt</h2>
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <h2 class="text-bold">2<sup>nd</sup> Attempt</h2>
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <h2 class="text-bold">Reset</h2>
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <h2 class="text-bold">Reset Date</h2>
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <h2 class="text-bold">Collection</h2>
+                        </ion-col>
+                        <ion-col size="12" size-md="1">
+                          <h2 class="text-bold">Size</h2>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                  <ng-container *ngIf="students.length > 0; else noStudents">
+                    <ion-list class="ion-no-padding">
+                      <ion-item detail button class="table-item" *ngFor="let student of students | filter: idToSearch"
+                        (click)="openStudentDetailModal(student.id)">
+                        <ion-grid>
+                          <ion-row class="table-data">
+                            <ion-col size="12" size-md="2" class="margin-auto text-bold special-border colored-border">
+                              {{ student.id }}
+                            </ion-col>
+                            <ion-col size="12" size-md="4" class="margin-auto">
+                              <span class="h-desktop-d-mobile">name: </span>
+                              {{ student.student_name }}
+                            </ion-col>
+                            <ion-col size="12" size-md="1" class="margin-auto">
+                              <span class="h-desktop-d-mobile">1<sup>st</sup>Attempt:</span>
+                              {{ (student.first_attempt_date | date : 'EEE, dd MMM yyyy') || 'N/A' }}
+                            </ion-col>
+                            <ion-col size="12" size-md="1" class="margin-auto">
+                              <span class="h-desktop-d-mobile">2<sup>nd</sup>Attempt:</span>
+                              {{ (student.second_attempt_date| date : 'EEE, dd MMM yyyy') || 'N/A' }}
+                            </ion-col>
+                            <ion-col size="12" size-md="1" class="margin-auto">
+                              <span class="h-desktop-d-mobile">Reset:</span>
+                              {{ student.reset || 'N/A' }}
+                            </ion-col>
+                            <ion-col size="12" size-md="1" class="margin-auto">
+                              <span class="h-desktop-d-mobile">Reset Date:</span>
+                              {{ (student.reset_date| date : 'EEE, dd MMM yyyy') || 'N/A' }}
+                            </ion-col>
+                            <ion-col size="12" size-md="1" class="margin-auto">
+                              <span class="h-desktop-d-mobile">Collection:</span>
+                              {{ (student.collection_date | date : 'EEE, dd MMM yyyy') || 'N/A' }}
+                            </ion-col>
+                            <ion-col size="12" size-md="1" class="margin-auto">
+                              <span class="h-desktop-d-mobile">Size:</span>
+                              {{ student.tshirt_size || 'N/A' }}
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-item>
+                    </ion-list>
+                  </ng-container>
+                  <ng-template #noStudents>
+                    <ion-list class="ion-no-padding">
+                      <ion-item class="table-item">
+                        <ion-grid>
+                          <ion-row class="table-data">
+                            <ion-col size="12" class="text-bold special-border danger-text">
+                              No Students in the list
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-item>
+                    </ion-list>
+                  </ng-template>
+                </ng-container>
+                <ng-template #loadingStudentsList>
+                  <ion-list>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:100%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:40%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:70%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:90%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:20%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                  </ion-list>
+                </ng-template>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+
+
+    <ng-container *ngSwitchCase="'exceptions'">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col>
+            <ion-item lines="none">
+              <ion-input class="form-input" type="text" placeholder="Student ID" (keyup.enter)="addException()"
+                [(ngModel)]="studentIDException">
+                <ion-button class="success-border success-text" style="position: absolute;right: 5px;" expand="block"
+                  fill="outline" slot="end" (click)="addException()">add</ion-button>
+              </ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col class="ion-no-padding" size="12" size-md="12">
+            <ion-card class="table-background">
+              <ion-card-content class="ion-no-padding">
+                <ng-container *ngIf="exceptionsList$ | async as exceptions; else loadingExceptions">
+                  <ion-item class="h-mobile-d-desktop table-item">
+                    <ion-grid class="ion-no-margin ion-no-padding">
+                      <ion-row>
+                        <ion-col size="12" size-md="4">
+                          <h2 class="text-bold">TP No.</h2>
+                        </ion-col>
+                        <ion-col size="12" size-md="4">
+                          <h2 class="text-bold">Creation Date</h2>
+                        </ion-col>
+                        <ion-col size="12" size-md="4">
+                          <h2 class="text-bold">Creation Time</h2>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                  <ng-container *ngIf="exceptions.length > 0; else emptyExceptions">
+                    <ion-list class="ion-no-padding">
+                      <ion-item class="table-item" *ngFor="let exception of exceptions">
+                        <ion-grid>
+                          <ion-row class="table-data">
+                            <ion-col size="12" size-md="4" class="text-bold special-border colored-border">
+                              {{ exception.student_id }}
+                            </ion-col>
+                            <ion-col size="12" size-md="4">
+                              <span class="h-desktop-d-mobile">Creation Date:</span>
+                              {{ (exception.creation_date | date: 'EEE, dd MMM yyyy') || 'N/A' }}
+                            </ion-col>
+                            <ion-col size="12" size-md="4">
+                              <span class="h-desktop-d-mobile">Creation Time:</span>
+                              {{ (exception.creation_date | date: 'HH:mm a') || 'N/A' }}
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-item>
+                    </ion-list>
+                  </ng-container>
+                  <ng-template #emptyExceptions>
+                    <ion-list class="ion-no-padding">
+                      <ion-item class="table-item">
+                        <ion-grid>
+                          <ion-row class="table-data">
+                            <ion-col size="12" class="text-bold special-border danger-text">
+                              No Students in the list
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-item>
+                    </ion-list>
+                  </ng-template>
+                </ng-container>
+                <ng-template #loadingExceptions>
+                  <ion-list>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:100%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:40%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:70%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:90%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width:20%; line-height: 25px;"></ion-skeleton-text>
+                    </ion-item>
+                  </ion-list>
+                </ng-template>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+
+  </ng-container>
+</ion-content>

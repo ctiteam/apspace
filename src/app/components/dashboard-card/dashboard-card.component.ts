@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { DashboardCardComponentConfigurations } from 'src/app/interfaces';
-import { PopoverComponent } from '../popover/popover.component';
 
 @Component({
   selector: 'dashboard-card',
@@ -30,13 +29,4 @@ export class DashboardCardComponent implements OnInit {
     };
   }
 
-  async showOptionsMenu(ev: any) {
-    const popover = await this.popoverCtrl.create({
-      component: PopoverComponent,
-      componentProps: { title: 'Options', options: this.cardConfigurations.options },
-      event: ev,
-      translucent: true
-    });
-    return await popover.present();
-  }
 }

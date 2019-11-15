@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
-import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  AlertController, LoadingController, ModalController, ToastController
+} from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
 import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
 import * as moment from 'moment';
 
-import { Router } from '@angular/router';
 import { LecturerConsultation } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
-import { ActivatedRoute } from 'src/testing';
 import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
@@ -99,7 +100,7 @@ export class MyConsultationsPage {
       data => {
         if (data.data === 'booked') {
           this.daysConfigrations = [];
-          this.doRefresh(true);
+          this.doRefresh();
         }
       }
     );
@@ -111,7 +112,7 @@ export class MyConsultationsPage {
       // tslint:disable-next-line: max-line-length
       if (this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.reload) {
         this.daysConfigrations = [];
-        this.doRefresh(true);
+        this.doRefresh();
       }
     });
     this.doRefresh();
@@ -123,11 +124,11 @@ export class MyConsultationsPage {
       message: `You are about to cancel the slot opened on ${slot.dateandtime.split(' ')[0]} at ${slot.dateandtime.split(' ')[1]}`,
       buttons: [
         {
-          text: 'Cancel',
+          text: 'Dismiss',
           role: 'cancel',
           handler: () => { }
         }, {
-          text: 'Submit',
+          text: 'Cancel Slot',
           handler: () => {
             this.presentLoading();
             const cancellationBody = {
@@ -148,7 +149,7 @@ export class MyConsultationsPage {
                 },
                 complete: () => {
                   this.dismissLoading();
-                  this.doRefresh(true);
+                  this.doRefresh();
                 }
               }
             );
@@ -206,7 +207,7 @@ export class MyConsultationsPage {
       to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
       daysConfig: this.daysConfigrations
     };
-    this.slots$ = this.ws.get<LecturerConsultation[]>('/iconsult/upcomingconlec', refresher).pipe(
+    this.slots$ = this.ws.get<LecturerConsultation[]>('/iconsult/upcomingconlec').pipe(
       map(slots => slots.filter(slot => slot.status !== 'Clossed')), // filter closed slots
       map(
         slots => slots.reduce((r, a) => { // Grouping the slots daily and get the summary data

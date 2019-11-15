@@ -145,6 +145,7 @@ ion-list {
 ion-toolbar {
   --background: var(--secondary-bg-color) !important;
   color: var(--tertiary-txt-color) !important;
+  --border-width: 0 !important;
 }
 
 ion-card {

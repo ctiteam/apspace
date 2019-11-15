@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IonSearchbar, ModalController } from '@ionic/angular';
-import { concat, Observable, of } from 'rxjs';
+import { Observable, concat, of } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 
 @Component({

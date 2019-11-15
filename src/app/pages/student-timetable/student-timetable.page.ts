@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { ActivatedRoute } from '@angular/router';
 import { ActionSheetController, IonRefresher, ModalController } from '@ionic/angular';
 
-import { combineLatest, Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
 import { Router } from '@angular/router';

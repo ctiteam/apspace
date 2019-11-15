@@ -1,10 +1,11 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AppAvailability } from '@ionic-native/app-availability/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { of } from 'rxjs';
 
-import { ActivatedRoute, ActivatedRouteStub } from '../../../testing';
-
+import { ActivatedRouteStub } from '../../../testing';
 import { StaffDirectory } from '../../interfaces';
 import { UrldecodePipe } from '../../pipes/urldecode.pipe';
 import { WsApiService } from '../../services';
@@ -15,6 +16,7 @@ describe('StaffDirectoryInfoPage', () => {
   let component: StaffDirectoryInfoPage;
   let fixture: ComponentFixture<StaffDirectoryInfoPage>;
   let getSpy: jasmine.Spy;
+  let routerSpy: jasmine.Spy;
 
   beforeEach(async(() => {
     const mockStaffDirectory: StaffDirectory[] = [
@@ -65,29 +67,30 @@ describe('StaffDirectoryInfoPage', () => {
       }
     ];
 
-    const wsApiService = jasmine.createSpyObj('WsApiService', ['get']);
-    getSpy = wsApiService.get.and.returnValue(of(mockStaffDirectory));
+    const ws = jasmine.createSpyObj('WsApiService', ['get']);
+    getSpy = ws.get.and.returnValue(of(mockStaffDirectory));
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    activatedRoute = new ActivatedRouteStub();
 
     TestBed.configureTestingModule({
       declarations: [StaffDirectoryInfoPage, UrldecodePipe],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
-        { provide: WsApiService, useValue: wsApiService },
+        { provide: AppAvailability, useValue: {} },
+        { provide: Router, useValue: routerSpy },
+        { provide: WsApiService, useValue: ws },
+        { provide: InAppBrowser, useValue: {} },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
-  beforeEach(() => {
-    activatedRoute = new ActivatedRouteStub();
+  it('should create', () => {
+    activatedRoute.setParams({ id: 1 });
+
     fixture = TestBed.createComponent(StaffDirectoryInfoPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    activatedRoute.setParamMap({ id: 1 });
 
     expect(component).toBeTruthy();
     expect(getSpy).toHaveBeenCalled();

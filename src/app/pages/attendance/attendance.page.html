@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar mode="md">
     <ion-title *ngIf="course$ | async">
       Attendance
     </ion-title>
@@ -195,39 +195,6 @@
                     </ion-list>
                   </ion-card-content>
                 </ion-card>
-                <!-- <ion-card class="ion-margin-bottom">
-                  <ion-item color="light-shade" class="subj-title" lines="none">
-                    {{ a.MODULE_ATTENDANCE }}
-                  </ion-item>
-                  <div class="progress-bar" [style.width]="a.PERCENTAGE + '%'" [style.background]="
-                      a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100
-                        ? '#0dbd53'
-                        : '#f04141'
-                    "></div>
-                  <ion-item class="transparent" lines="none">
-                    Classes
-                    <div item-content slot="end">
-                      {{
-                        a.TOTAL_CLASSES -
-                          a.TOTAL_ABSENT +
-                          "/" +
-                          a.TOTAL_CLASSES +
-                          " (" +
-                          a.PERCENTAGE +
-                          "%)"
-                      }}
-                    </div>
-                  </ion-item>
-                  <ion-item class="transparent" lines="none">
-                    Exam Eligibility
-                    <div item-content [style.font-weight]="'bold'" [style.color]="
-                        a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'
-                      " slot="end">
-                      {{ a.EXAM_ELIGIBILITY }}
-                    </div>
-                  </ion-item>
-                </ion-card> -->
-
               </ion-col>
             </ion-row>
           </ion-grid>

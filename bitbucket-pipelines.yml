@@ -1,17 +1,33 @@
-image: cticti/aws-cli:node-ionic-alpine
+image: node:10.16.0-alpine
 
 pipelines:
+  default:
+    - step: &build-test
+        name: Build & Test
+        caches:
+          - node
+        script:
+          - yarn install
+          - yarn lint
+            # - yarn test --single-run --no-progress --browsers FirefoxHeadless
+          - yarn build --aot
+  pull-requests:
+    '**':
+      - step: *build-test
   branches:
     v4-production:
     - step:
+        image: cticti/aws-cli:node-ionic-alpine
         caches:
           - node
         script:
           - npm i
           - ionic build --prod
           - aws s3 sync www/ s3://apspace-production/ --acl public-read
+          - aws cloudfront create-invalidation --distribution-id E2U0MAK0TADMRA --paths "/*"
     v4-staging:
     - step:
+        image: cticti/aws-cli:node-ionic-alpine
         caches:
           - node
         script:

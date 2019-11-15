@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { StudentTimetable } from '../../interfaces';
+import { classroomTypes } from './types';
 
 /**
  * Filter timetable based on room.
@@ -10,11 +11,7 @@ import { StudentTimetable } from '../../interfaces';
 })
 export class ForPipe implements PipeTransform {
 
-  typeMap = {
-    auditorium: ['Auditorium'],
-    classroom: ['A-', 'B-', 'C-', 'D-', 'E-', 'L3'],
-    labotory: ['LAB', 'Lab', 'Workshop', 'Studio', 'Suite']
-  };
+  static readonly typeMap = classroomTypes.reduce((acc, { key, value }) => (acc[key] = value, acc), {});
 
   /**
    * Filter timetable based on type of room.
@@ -24,10 +21,10 @@ export class ForPipe implements PipeTransform {
    * @return rooms - filtered timetables
    */
   transform(timetables: StudentTimetable[], types: string[]): StudentTimetable[] {
-    if (types.length === Object.keys(this.typeMap).length) {
+    if (types.length === Object.keys(ForPipe.typeMap).length) {
       return timetables;
     } else {
-      const fullTypes = [].concat.apply([], types.map(t => this.typeMap[t]));
+      const fullTypes = [].concat(...types.map(t => ForPipe.typeMap[t]));
       return timetables.filter(timetable => fullTypes.some(t => timetable.ROOM.includes(t)));
     }
   }

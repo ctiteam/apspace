@@ -9,7 +9,7 @@ import { Observable, of, zip } from 'rxjs';
 import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 
 import {
-  Apcard, APULocation, APULocations, BusTrips,
+  APULocation, APULocations, Apcard, BusTrips,
   DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday,
   Holidays, LecturerConsultation, LecturerTimetable, News, StaffProfile
 } from 'src/app/interfaces';

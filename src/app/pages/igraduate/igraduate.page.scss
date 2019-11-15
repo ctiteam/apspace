@@ -1,0 +1,39 @@
+.form-input {
+  border-radius: 7px;
+  background: var(--main-bg-color);
+  padding: 3px 10px !important;
+  margin-top: 10px;
+  border: 1px solid var(--tertiary-bg-color);
+}
+.success-border {
+  --border-color: var(--success-color);
+}
+.table-item {
+  &:nth-child(even) {
+    --background: var(--main-bg-color) !important;
+  }
+}
+
+.margin-auto {
+  margin: auto;
+}
+.h-mobile-d-desktop {
+  display: none;
+}
+.h-desktop-d-mobile {
+  display: block;
+}
+//
+@media (min-width: 576px) {
+  // large screens => table settings
+  .h-mobile-d-desktop {
+    display: block;
+    visibility: visible;
+  }
+  .h-desktop-d-mobile {
+    display: none;
+  }
+  .summary-col {
+    margin-top: 10px !important;
+  }
+}

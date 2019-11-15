@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { IonSelect, IonSlides, ModalController, NavController } from '@ionic/angular';
-import { combineLatest, forkJoin, Observable, of, zip } from 'rxjs';
+import { Observable, combineLatest, forkJoin, of, zip } from 'rxjs';
 import { catchError, concatMap, finalize, flatMap, map, share, tap, toArray } from 'rxjs/operators';
 
 import {
-  Apcard, APULocation,
-  APULocations, Attendance, BusTrips, CgpaPerIntake, ConsultationHour, Course,
+  APULocation, APULocations,
+  Apcard, Attendance, BusTrips, CgpaPerIntake, ConsultationHour, Course,
   CourseDetails, DashboardCardComponentConfigurations, EventComponentConfigurations, ExamSchedule, FeesTotalSummary,
   Holiday, Holidays, News, StudentPhoto, StudentProfile, StudentTimetable
 } from 'src/app/interfaces';
@@ -624,7 +624,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
           examsListEventMode.push({
             title: exam.subjectDescription,
             firstDescription: exam.venue,
-            secondDescription: moment(new Date(exam.since)).format('HH:mm A'),
+            secondDescription: moment(new Date(exam.since)).format('hh:mm A'),
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
             color: '#ff0000',
             pass: false,

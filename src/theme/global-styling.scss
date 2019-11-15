@@ -200,7 +200,7 @@ input:-webkit-autofill:active {
   }
 }
 
-// TEMP
+// Dragula
 .gu-mirror {
   position: fixed !important;
   margin: 0 !important;
@@ -226,6 +226,15 @@ input:-webkit-autofill:active {
   opacity: 0.2;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
   filter: alpha(opacity=20);
+}
+
+// Popover width & white space
+.popover-content {
+  --width: 70% !important;
+  .item.sc-ion-label-md-h,
+  .item .sc-ion-label-md-h {
+    white-space: pre-line;
+  }
 }
 
 // Styling ion-calendar

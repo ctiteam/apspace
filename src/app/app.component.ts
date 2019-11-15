@@ -3,7 +3,6 @@ import {
   ActionSheetController, MenuController, ModalController, NavController, Platform,
   PopoverController, ToastController
 } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
 
 import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
@@ -27,7 +26,6 @@ export class AppComponent {
 
   constructor(
     private platform: Platform,
-    public storage: Storage,
     private userSettings: UserSettingsService,
     private toastCtrl: ToastController,
     private router: Router,
