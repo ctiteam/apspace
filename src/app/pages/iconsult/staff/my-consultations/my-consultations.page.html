@@ -13,6 +13,16 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  <ion-toolbar *ngIf="onSelect">
+    <ion-buttons slot="end">
+      <ion-button class="colored-border colored-text" fill="outline" (click)="toggleSelectSlotOptions()">
+        <span *ngIf="!onRange; else range">Range</span>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ng-template #range>
+    Checkbox
+  </ng-template>
 </ion-header>
 
 <ion-content>
@@ -162,7 +172,7 @@
 
 <ion-footer>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button class="colored-background" routerLink="/iconsult/add-free-slot" routerDirection="forward">
+    <ion-fab-button [disabled]="onSelect" class="colored-background" routerLink="/iconsult/add-free-slot" routerDirection="forward">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>

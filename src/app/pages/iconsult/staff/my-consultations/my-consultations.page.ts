@@ -47,7 +47,8 @@ export class MyConsultationsPage {
     daysConfig: this.daysConfigrations
   };
 
-  onSelect = false;
+  onSelect = false; // enable or disable select more than one slot to cancel.
+  onRange = false; // enable or disable select date range to perform bulk delete.
   slotsToBeCancelled: LecturerConsultation[] = [];
 
   constructor(
@@ -124,6 +125,14 @@ export class MyConsultationsPage {
       }
     });
     this.doRefresh();
+  }
+
+  toggleCancelSlot() {
+    this.onSelect = !this.onSelect;
+  }
+
+  toggleSelectSlotOptions() {
+    this.onRange = !this.onRange;
   }
 
   getSelectedSlot(slot) {
@@ -232,14 +241,6 @@ export class MyConsultationsPage {
 
   async dismissLoading() {
     return await this.loading.dismiss();
-  }
-
-  toggleCancelSlot() {
-    this.onSelect = !this.onSelect;
-
-    if (!this.onSelect) {
-      this.slotsToBeCancelled = [];
-    }
   }
 
   sendCancelSlotRequest(slotsId: any) {
