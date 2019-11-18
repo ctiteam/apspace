@@ -14,10 +14,6 @@ export class MentorshipPage {
   search = '';
   students$: Observable<Mentorship[]>;
 
-  options: Fuse.FuseOptions<Mentorship> = {
-    keys: ['INTAKE_CODE', 'NAME', 'PROGRAMME', 'STUDENT_NUMBER']
-  };
-
   constructor(
     private mentorship: MentorshipService
   ) { }
