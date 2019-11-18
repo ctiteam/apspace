@@ -1,24 +1,26 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ChartComponent } from 'angular2-chartjs';
 
-import { WsApiService } from 'src/app/services';
+import { WsApiService } from '../../services';
 import { FeesPage } from './fees.page';
+import { FilterPipe } from './filter.pipe';
+import { ReversePipe } from './reverse.pipe';
 
 describe('FeesPage', () => {
   let component: FeesPage;
   let fixture: ComponentFixture<FeesPage>;
 
   beforeEach(async(() => {
-    const ws = jasmine.createSpyObj('WsApiService', []);
+    const ws = jasmine.createSpyObj('WsApiService', ['get']);
 
     TestBed.configureTestingModule({
-      declarations: [ FeesPage ],
+      declarations: [FeesPage, ChartComponent, FilterPipe, ReversePipe],
       providers: [
         { provide: WsApiService, useValue: ws }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
