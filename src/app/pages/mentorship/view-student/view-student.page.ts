@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { ShowDetailsPage } from './show-details/show-details.page';
   templateUrl: './view-student.page.html',
   styleUrls: ['./view-student.page.scss'],
 })
-export class ViewStudentPage implements OnInit {
+export class ViewStudentPage {
 
   tp: string;
   intake: string;
@@ -31,7 +31,7 @@ export class ViewStudentPage implements OnInit {
     private modalCtrl: ModalController
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.tp = this.route.snapshot.params.tp;
     this.intake = this.route.snapshot.params.intake;
 

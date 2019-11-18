@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Mentorship } from 'src/app/interfaces/mentorship';
 import { MentorshipService } from 'src/app/services/mentorship.service';
@@ -8,7 +8,7 @@ import { MentorshipService } from 'src/app/services/mentorship.service';
   templateUrl: './mentorship.page.html',
   styleUrls: ['./mentorship.page.scss'],
 })
-export class MentorshipPage implements OnInit {
+export class MentorshipPage {
 
   loadingSkeletons = Array(4);
   search = '';
@@ -22,7 +22,7 @@ export class MentorshipPage implements OnInit {
     private mentorship: MentorshipService
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.students$ = this.mentorship.getStudents();
   }
 

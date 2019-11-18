@@ -1,101 +1,101 @@
 ion-card {
-    padding: 10px;
-    padding-bottom: 0px;
-
-    ion-card-header {
-        padding: 5px 5px 5px 5px;
-        border-bottom: 2px solid var(--secondary-txt-color);
-    }
-
-    ion-card-content {
-        padding: 5px;
-    }
+	padding: 10px;
+	padding-bottom: 0px;
+	
+	ion-card-header {
+		padding: 5px 5px 5px 5px;
+		border-bottom: 2px solid var(--secondary-txt-color);
+	}
+	
+	ion-card-content {
+		padding: 5px;
+	}
 }
 
 .avatar {
-    margin: auto;
-    width: 138px;
-    height: 116px;
+	margin: auto;
+	width: 138px;
+	height: 116px;
 }
 
 .indent {
-    margin-left: 10px;
+	margin-left: 10px;
 }
 
 h2 {
-    margin-top: 5px;
-    color: var(--secondary-txt-color);
+	margin-top: 5px;
+	color: var(--secondary-txt-color);
 }
 
 .bold {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .sideline {
-    border-left: 2px solid var(--secondary-txt-color);
+	border-left: 2px solid var(--secondary-txt-color);
 }
 
 
 ion-item {
-    --inner-padding-end: 0px;
-    --padding-start:0px;
-    --padding-top:10px;
-    --padding-bottom:10px;
+	--inner-padding-end: 0px;
+	--padding-start:0px;
+	--padding-top:10px;
+	--padding-bottom:10px;
 }
 
 .red {
-    color: red !important;
+	color: red !important;
 }
 
 .margin-auto{
-    margin: auto;
+	margin: auto;
 }
 
 .table-item:nth-child(even) {
-    --background: var(--tertiary-bg-color) !important;
+	--background: var(--tertiary-bg-color) !important;
 }
 
 .table-item:hover {
-    --background: #E0E0E0 !important;
+	--background: #E0E0E0 !important;
 }
 
 @media only screen and (min-width: 577px) {
-    .controlled-layout {
-        margin: 20px 50px;
-    }
-
-    .marker {
-        display: none;
-    }
+	.controlled-layout {
+		margin: 20px 50px;
+	}
+	
+	.marker {
+		display: none;
+	}
 }
 
 // Small Screen (Mobile)
 @media only screen and (max-width: 576px) {
-    .avatar {
-        width: 115px;
-        height: 99px;
-        margin: auto;
-        margin-bottom: 15px;
-    }
-
-    .indent {
-        margin-left: 0px;
-    }
-
-    .sideline {
-        border-left: none;
-        // border-top: 2px solid var(--secondary-txt-color);
-    }
-
-    .center-txt {
-        text-align: center;
-    }
-
-    .table-top {
-        display: none !important;
-    }
-
-    .marker {
-        font-weight: bold;
-    }
+	.avatar {
+		width: 115px;
+		height: 99px;
+		margin: auto;
+		margin-bottom: 15px;
+	}
+	
+	.indent {
+		margin-left: 0px;
+	}
+	
+	.sideline {
+		border-left: none;
+		// border-top: 2px solid var(--secondary-txt-color);
+	}
+	
+	.center-txt {
+		text-align: center;
+	}
+	
+	.table-top {
+		display: none !important;
+	}
+	
+	.marker {
+		font-weight: bold;
+	}
 }

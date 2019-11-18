@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { Attendance, Result } from 'src/app/interfaces/mentorship';
@@ -9,7 +9,7 @@ import { MentorshipService } from 'src/app/services/mentorship.service';
   templateUrl: './show-details.page.html',
   styleUrls: ['./show-details.page.scss'],
 })
-export class ShowDetailsPage implements OnInit {
+export class ShowDetailsPage {
 
   @Input() intake: string;
   @Input() module: string;
@@ -24,7 +24,7 @@ export class ShowDetailsPage implements OnInit {
     private modalCtrl: ModalController
   ) { }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.attendance$ = this.mentorship.getAttendance(this.tp, this.module, this.intake);
     this.result$ = this.mentorship.getSubcourseAssessment(this.tp, this.module);
   }
