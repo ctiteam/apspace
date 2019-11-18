@@ -80,7 +80,6 @@ export class AddFreeSlotPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.repeatUntilDateOptions);
     if (this.settings.get('defaultCampus')) {
       this.venues$ = this.ws.get<Venue[]>(
         `/iconsult/locations?venue=${this.settings.get('defaultCampus')}`,
@@ -184,7 +183,6 @@ export class AddFreeSlotPage implements OnInit {
         endDate = moment(this.addFreeSlotForm.value.startDate, 'YYYY-MM-DD')
           .add((+this.addFreeSlotForm.value.noOfWeeks * 7), 'days')
           .format('YYYY-MM-DD');
-        console.log(endDate);
       }
 
       while (startDate < endDate) {
