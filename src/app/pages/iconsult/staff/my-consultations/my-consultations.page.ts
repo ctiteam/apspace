@@ -17,6 +17,8 @@ import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
+// GET SLOT ID FOR CANCEL SLOT PURPOSE
+
 @Component({
   selector: 'app-my-consultations',
   templateUrl: './my-consultations.page.html',
@@ -36,7 +38,7 @@ export class MyConsultationsPage {
 
   skeltonArray = new Array(4); // loading
 
-  dateToFilter = this.todaysDate; // ngmodel var
+  dateToFilter; // ngmodel var
 
   daysConfigrations: DayConfig[] = []; // ion-calendar plugin
   options: CalendarComponentOptions = {
@@ -44,6 +46,9 @@ export class MyConsultationsPage {
     to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
     daysConfig: this.daysConfigrations
   };
+
+  onSelect = false;
+  slotsToBeCancelled: LecturerConsultation[] = [];
 
   constructor(
     private ws: WsApiService,
@@ -55,6 +60,7 @@ export class MyConsultationsPage {
     private router: Router,
     private datePipe: DatePipe
   ) {}
+
 
   async showSummary() {
     // summary modal
@@ -120,47 +126,83 @@ export class MyConsultationsPage {
     this.doRefresh();
   }
 
-  async cancelAvailableSlot(slot: LecturerConsultation) {
-    const startDate = this.datePipe.transform(slot.start_time, 'yyyy-MM-dd');
-    const startTime = this.datePipe.transform(slot.start_time, 'hh:mm');
-    const slotsId = [{slot_id: slot.slot_id}];
-    const alert = await this.alertController.create({
-      header: 'Cancelling an opened slot',
-      message: `You are about to cancel the slot opened on ${startDate} at ${startTime}`,
-      buttons: [
-        {
-          text: 'Dismiss',
-          role: 'cancel',
-          handler: () => { }
-        }, {
-          text: 'Cancel Slot',
-          handler: () => {
-            this.presentLoading();
-
-            this.sendCancelSlotRequest(slotsId).subscribe({
-              next: () => {
-                this.daysConfigrations = [];
-                this.showToastMessage(
-                  'Slot has been cancelled successfully!',
-                  'success'
-                );
-              },
-              error: () => {
-                this.showToastMessage(
-                  'Something went wrong! please try again or contact us via the feedback page',
-                  'danger'
-                );
-              },
-              complete: () => {
-                this.dismissLoading();
-                this.doRefresh();
-              }
-            });
-          }
+  getSelectedSlot(slot) {
+    if (!(this.slotsToBeCancelled.find(slotTBC => slotTBC.slot_id === slot.slot_id))) {
+      this.slotsToBeCancelled.push(slot);
+    } else {
+      this.slotsToBeCancelled.forEach((slotTBC, index, slotsToBeCancelled) => {
+        if (slotTBC.slot_id === slot.slot_id) {
+          slotsToBeCancelled.splice(index, 1);
         }
-      ]
+      });
+    }
+  }
+
+  async cancelAvailableSlot() {
+    const filteredTimes = [] as { date: string; times: string[]; }[];
+
+    this.slotsToBeCancelled.forEach(slotTBC => {
+      const startDate = this.datePipe.transform(slotTBC.start_time, 'yyyy-MM-dd');
+      const startTime = this.datePipe.transform(slotTBC.start_time, 'HH:mm');
+
+      if (!(filteredTimes.find(filteredTime => filteredTime.date === startDate))) {
+        filteredTimes.push({date: startDate, times: [startTime]});
+      } else {
+        filteredTimes.forEach(filteredTime => {
+          if (filteredTime.date === startDate) {
+            filteredTime.times.push(startTime);
+          }
+        });
+      }
     });
-    await alert.present();
+
+    const cancelTimeDetails = filteredTimes.map(filteredTime => {
+      const timeList = filteredTime.times.join(', ');
+      return `<p><strong>${filteredTime.date}: </strong>${timeList}</p>`;
+    }).join('');
+
+    if (this.slotsToBeCancelled) {
+      const alert = await this.alertController.create({
+        header: 'Cancelling an opened slot',
+        subHeader: 'You are about to cancel these selected slots:',
+        message: cancelTimeDetails,
+        buttons: [
+          {
+            text: 'Dismiss',
+            role: 'cancel',
+            handler: () => { }
+          }, {
+            text: 'Cancel Slot',
+            handler: () => {
+              this.presentLoading();
+              this.sendCancelSlotRequest(this.slotsToBeCancelled).subscribe({
+                next: () => {
+                  this.daysConfigrations = [];
+                  this.slotsToBeCancelled = [];
+                  this.dateToFilter = undefined;
+                  this.onSelect = false;
+                  this.showToastMessage(
+                    'Slot has been cancelled successfully!',
+                    'success'
+                  );
+                },
+                error: () => {
+                  this.showToastMessage(
+                    'Something went wrong! please try again or contact us via the feedback page',
+                    'danger'
+                  );
+                },
+                complete: () => {
+                  this.dismissLoading();
+                  this.doRefresh();
+                }
+              });
+            }
+          }
+        ]
+      });
+      await alert.present();
+    }
   }
 
   showToastMessage(message: string, color: 'danger' | 'success') {
@@ -190,6 +232,14 @@ export class MyConsultationsPage {
 
   async dismissLoading() {
     return await this.loading.dismiss();
+  }
+
+  toggleCancelSlot() {
+    this.onSelect = !this.onSelect;
+
+    if (!this.onSelect) {
+      this.slotsToBeCancelled = [];
+    }
   }
 
   sendCancelSlotRequest(slotsId: any) {
@@ -277,6 +327,16 @@ export class MyConsultationsPage {
               disable: false
             });
           });
+
+          const getTodayConsultationsDate = this.datePipe.transform(
+            new Date(),
+            'yyyy-MM-dd'
+          );
+
+          if (dates[getTodayConsultationsDate] !== undefined) {
+            this.dateToFilter = this.todaysDate;
+          }
+
           return dates;
         }),
         finalize(() => refresher && refresher.target.complete())
