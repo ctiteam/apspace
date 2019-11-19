@@ -56,8 +56,13 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
       this.qrScanner.prepare().then(status => {
         console.assert(status.authorized);
         // scanning only takes the first valid code
-        this.scanSub = this.qrScanner.scan()
-          .subscribe((text: string) => this.sendOtp(text));
+        this.scanSub = this.qrScanner.scan().subscribe((text: string) => {
+          if (text.length === this.digits.length) {
+            this.sendOtp(text);
+          } else {
+            this.toast(`Invalid OTP (should be ${this.digits.length} digits)`, 'danger');
+          }
+        });
         this.qrScanner.show();
       }).catch(err => {
         this.scan = false;
@@ -98,6 +103,7 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
 
   /** Send OTP. */
   sendOtp(otp: string): Promise<boolean> {
+    console.assert(otp.length === this.digits.length);
     return new Promise(res => {
       this.updateAttendance.mutate({ otp }).subscribe(d => {
         this.toast('Attendance updated', 'success');
