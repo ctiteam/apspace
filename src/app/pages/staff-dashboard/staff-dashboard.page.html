@@ -110,6 +110,41 @@
         </dashboard-card>
       </div>
 
+
+      <!-- INSPIRATIONAL QUOTES -->
+      <div class="masonry-item">
+        <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+          <ion-icon name="move" class="handle"></ion-icon>
+        </div>
+        <dashboard-card style="width: 100%;" [cardTitle]='inspirationalQuotesCardConfigurations.cardTitle'
+          [cardSubtitle]='inspirationalQuotesCardConfigurations.cardSubtitle'
+          [withOptionsButton]='inspirationalQuotesCardConfigurations.withOptionsButton'
+          [options]='inspirationalQuotesCardConfigurations.options'>
+          <div class="ion-margin-bottom ion-padding-start ion-padding-end">
+            <ng-container *ngIf="quote$ | async as quote; else loadingQuotes">
+              <p *ngIf="quote.QUOTE" style="font-style: italic">
+                {{ quote.QUOTE }}
+              </p>
+              <h4 *ngIf="quote.AUTHOR" class="text-bold ion-text-right">
+                {{ quote.AUTHOR }}
+              </h4>
+            </ng-container>
+            <ng-template #loadingQuotes>
+              <p>
+                <ion-skeleton-text style="width: 100%; line-height: 20px;" animated></ion-skeleton-text>
+                <ion-skeleton-text style="width: 100%; line-height: 20px;" animated></ion-skeleton-text>
+                <ion-skeleton-text style="width: 60%; line-height: 20px;" animated></ion-skeleton-text>
+              </p>
+              <h4 class="ion-text-right">
+                <ion-skeleton-text class="ion-float-right" style="width: 30%; line-height: 25px;" animated>
+                </ion-skeleton-text>
+                <div class="clearfix"></div>
+              </h4>
+            </ng-template>
+          </div>
+        </dashboard-card>
+      </div>
+
       <!-- UPCOMING EVENTS -->
       <div id="upcomingEvents" class="masonry-item" *ngIf="shownDashboardSections.includes('upcomingEvents')">
         <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
