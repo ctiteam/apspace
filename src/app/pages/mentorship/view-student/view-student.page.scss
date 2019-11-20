@@ -14,12 +14,8 @@ ion-card {
 
 .avatar {
   margin: auto;
-  width: 138px;
-  height: 116px;
-}
-
-.indent {
-  margin-left: 10px;
+  width: 128px;
+  height: 128px;
 }
 
 h2 {
@@ -35,6 +31,9 @@ h2 {
   border-left: 2px solid var(--secondary-txt-color);
 }
 
+.text-center {
+  text-align: center;
+}
 
 ion-item {
   --inner-padding-end: 0px;
@@ -47,7 +46,7 @@ ion-item {
   color: red !important;
 }
 
-.margin-auto{
+.margin-auto {
   margin: auto;
 }
 
@@ -76,10 +75,6 @@ ion-item {
     height: 99px;
     margin: auto;
     margin-bottom: 15px;
-  }
-  
-  .indent {
-    margin-left: 0px;
   }
   
   .sideline {

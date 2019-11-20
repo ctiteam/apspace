@@ -52,7 +52,7 @@
                 </ion-grid>
               </ion-item>
 
-              <ion-item lines="none" class="table-item" *ngFor="let attendance of (attendance$ | async)" [ngClass]="
+              <ion-item lines="none" class="table-item" *ngFor="let attendance of attendances" [ngClass]="
                 {
                   'danger-text': attendance.ATTENDANCE_STATUS === 'N',
                   'warning-text': attendance.ATTENDANCE_STATUS === 'R'
@@ -148,7 +148,7 @@
                 </ion-grid>
               </ion-item>
 
-              <ion-item lines="none" *ngFor="let result of (result$ | async)" class="table-item">
+              <ion-item lines="none" *ngFor="let result of results" class="table-item">
                 <ion-grid class="ion-no-padding">
                   <ion-row>
                     <ion-col class="margin-auto" size-lg="6" size="12">

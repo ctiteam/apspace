@@ -16,25 +16,41 @@
       <ion-col size-xs="12" size-lg="4">
         <ion-card *ngIf="(profile$ | async) as profile; else loadingStudentProfile">
           <ion-card-content>
-            <ion-grid class="ion-no-margin ion-no-padding">
-              <ion-row>
-                <ion-col size="12" size-lg="5" class="ion-no-padding">
-                  <img src="https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png" class="avatar">
-                </ion-col>
-                <ion-col size="12" size-lg="7" class="ion-no-padding sideline">
-                  <div class="indent">
-                    <h2 class="center-txt bold">{{ profile[0].NAME }}</h2>
-                    <h2 class="center-txt">{{ profile[0].STUDENT_NUMBER }} | {{ profile[0].INTAKE_CODE }}</h2>
-                    
-                    <h2 class="center-txt bold">Programme</h2>
-                    <h2 class="center-txt">{{ profile[0].PROGRAMME }}</h2>
+            <ion-avatar class="avatar">
+              <img src="https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png">
+            </ion-avatar>
+            
+            <div class="text-center" style="margin-top: 20px !important;">
+              <h2 class="center-txt bold">{{ profile[0].NAME }}</h2>
+              <h2 class="center-txt">{{ profile[0].STUDENT_NUMBER }} | {{ profile[0].INTAKE_CODE }}</h2>
 
-                    <h2 class="center-txt"><a
-                        href="mailto:{{ profile[0].E_MAIL_STUDENT }}">{{ profile[0].E_MAIL_STUDENT }}</a></h2>
-                  </div>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
+              <h2 class="center-txt bold">Programme</h2>
+              <h2 class="center-txt">{{ profile[0].PROGRAMME }}</h2>
+
+              <h2 class="center-txt bold">Programme Leader</h2>
+              <h2 class="center-txt">{{ profile[0].PL_NAME }}</h2>
+
+              <h2 class="center-txt bold">Academic Mentor</h2>
+              <h2 class="center-txt">{{ profile[0].MENTOR_NAME }}</h2>
+
+              <h2 class="center-txt bold">Student Status</h2>
+              <h2 class="center-txt">{{ profile[0].STUDENT_STATUS }}</h2>
+
+              <h2 class="center-txt bold">Intake Status</h2>
+              <h2 class="center-txt">{{ profile[0].INTAKE_STATUS }}</h2>
+
+              <h2 class="center-txt bold">Intake Date</h2>
+              <h2 class="center-txt">{{ profile[0].INTAKE_START_DATE | date:'EEE, dd MMM' }} -
+                {{ profile[0].INTAKE_END_DATE | date:'EEE, dd MMM' }}</h2>
+
+              <h2 class="center-txt bold">Email</h2>
+              <h2 class="center-txt"><a href="mailto:{{ profile[0].E_MAIL }}">{{ profile[0].E_MAIL }}</a></h2>
+
+              <h2 class="center-txt bold">Student Email</h2>
+              <h2 class="center-txt">
+                <a href="mailto:{{ profile[0].E_MAIL_STUDENT }}">{{ profile[0].E_MAIL_STUDENT }}</a>
+              </h2>
+            </div>
           </ion-card-content>
 
           <ion-footer>
@@ -53,23 +69,14 @@
         <ng-template #loadingStudentProfile>
           <ion-card>
             <ion-card-content>
-              <ion-grid class="ion-no-margin ion-no-padding">
-                <ion-row>
-                  <ion-col size="12" size-lg="4" class="ion-no-padding">
-                    <ion-avatar class="avatar">
-                      <ion-skeleton-text animated></ion-skeleton-text>
-                    </ion-avatar>
-                  </ion-col>
-                  <ion-col size="12" size-lg="8">
-                    <div class="indent">
-                      <ion-skeleton-text animated style="width: 80%; line-height: 20px;"></ion-skeleton-text>
-                      <ion-skeleton-text animated style="width: 40%; line-height: 20px;"></ion-skeleton-text>
-                      <ion-skeleton-text animated style="width: 90%; line-height: 20px;"></ion-skeleton-text>
-                      <ion-skeleton-text animated style="width: 55%; line-height: 20px;"></ion-skeleton-text>
-                    </div>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
+              <ion-avatar class="avatar">
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-avatar>
+              <div class="text-center" style="margin-top: 20px !important;">
+                <div *ngFor="let _ of profileSkeleton">
+                  <ion-skeleton-text animated style="line-height: 20px;"></ion-skeleton-text>
+                </div>
+              </div>
             </ion-card-content>
           </ion-card>
         </ng-template>

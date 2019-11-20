@@ -24,6 +24,7 @@ export class ViewStudentPage {
 
   courseDetail$: Observable<CourseDetail[]>;
   subCourse$: Observable<{ index: string; value: any; }[]>;
+  profileSkeleton = new Array(4);
 
   constructor(
     private mentorship: MentorshipService,
