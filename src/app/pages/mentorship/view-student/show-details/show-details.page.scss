@@ -2,7 +2,7 @@
   font-weight: bold;
 }
 
-.warning-text{
+.warning-text {
   --color: #dfa847;
 }
 
@@ -13,12 +13,12 @@
 ion-card {
   padding: 5px;
   padding-bottom: 0px;
-  
+
   ion-card-header {
     padding: 5px 5px 5px 5px;
     border-bottom: 2px solid var(--secondary-txt-color);
   }
-  
+
   ion-card-content {
     padding: 5px;
   }
@@ -26,9 +26,9 @@ ion-card {
 
 ion-item {
   --inner-padding-end: 0px;
-  --padding-start:0px;
-  --padding-top:10px;
-  --padding-bottom:10px;
+  --padding-start: 0px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
 }
 
 .table-item:nth-child(even) {
@@ -45,13 +45,12 @@ ion-item {
   }
 }
 
-
 // Small Screen (Mobile)
 @media only screen and (max-width: 576px) {
   .marker {
     font-weight: bold;
   }
-  
+
   .table-top {
     display: none !important;
   }
