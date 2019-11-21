@@ -11,7 +11,7 @@ pipelines:
           - yarn install
           - yarn lint
           - yarn test --configuration=ci
-          - yarn e2e --configuration=ci
+            # - yarn e2e --configuration=ci
           - yarn build --configuration=ci
   pull-requests:
     '**':
