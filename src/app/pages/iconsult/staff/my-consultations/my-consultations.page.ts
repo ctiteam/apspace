@@ -9,7 +9,7 @@ import { finalize, map, tap } from 'rxjs/operators';
 
 import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
 
-import { LecturerConsultation } from 'src/app/interfaces';
+import { ConsultationSlot } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
@@ -55,7 +55,7 @@ export class MyConsultationsPage {
   };
   onSelect = false; // enable or disable select more than one slot to cancel.
   onRange = false; // enable or disable select date range to perform bulk delete.
-  slotsToBeCancelled: LecturerConsultation[] = [];
+  slotsToBeCancelled: ConsultationSlot[] = [];
 
   constructor(
     private ws: WsApiService,
@@ -78,7 +78,7 @@ export class MyConsultationsPage {
     await modal.onDidDismiss();
   }
 
-  async openSlotDetailsModal(slot: LecturerConsultation) {
+  async openSlotDetailsModal(slot: ConsultationSlot) {
     const modal = await this.modalCtrl.create({
       component: LecturerSlotDetailsModalPage,
       cssClass: 'add-min-height',
@@ -129,7 +129,7 @@ export class MyConsultationsPage {
     this.onRange = !this.onRange;
   }
 
-  getSelectedSlot(slot: LecturerConsultation) {
+  getSelectedSlot(slot: ConsultationSlot) {
     if (!(this.slotsToBeCancelled.find(slotTBC => slotTBC.slot_id === slot.slot_id))) {
       this.slotsToBeCancelled.push(slot);
     } else {
@@ -281,7 +281,7 @@ export class MyConsultationsPage {
     };
 
     this.slots$ = this.ws
-      .get<LecturerConsultation[]>(
+      .get<ConsultationSlot[]>(
         '/iconsult/slots?',
         {
           url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'

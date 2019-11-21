@@ -37,7 +37,6 @@ export {
     SlotDetails,
     Venue,
     SlotDuplicated,
-    LecturerConsultation,
     LecturerSlotDetails,
     UnavailabilityDetails,
     LecturerRemarks

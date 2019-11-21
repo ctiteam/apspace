@@ -5,7 +5,7 @@ import { DragulaService } from 'ng2-dragula';
 import { Observable, of, zip } from 'rxjs';
 import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 // tslint:disable-next-line: max-line-length
-import { Apcard, APULocation, APULocations, BusTrips, DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday, Holidays, LecturerConsultation, LecturerTimetable, News, StaffProfile } from 'src/app/interfaces';
+import { Apcard, APULocation, APULocations, BusTrips, ConsultationSlot, DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday, Holidays, LecturerTimetable, News, StaffProfile } from 'src/app/interfaces';
 import { NewsService, NotificationService, UserSettingsService, WsApiService } from '../../services';
 import { NewsModalPage } from '../news/news-modal';
 
@@ -485,7 +485,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
     const consultationsEventMode: EventComponentConfigurations[] = [];
-    return this.ws.get<LecturerConsultation[]>('/iconsult/slots?',
+    return this.ws.get<ConsultationSlot[]>('/iconsult/slots?',
       { url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging' }
     ).pipe(
       map(consultations =>

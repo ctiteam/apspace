@@ -14,7 +14,7 @@ export interface ConsultationHour {
   status: string;
 }
 
-export interface LecturerConsultation {
+export interface ConsultationSlot {
   end_time: string;
   id: number;
   room_code: string;
@@ -49,20 +49,20 @@ export interface UnavailabilityDetails {
   unavailibilityid: number;
 }
 
-export interface ConsultationSlot {
-  availibilityid: number;
-  date: string;
-  datee: string;
-  datetime: string;
-  datetimeforsorting: string;
-  endtime: string;
-  location: string;
-  status: string;
-  time: string;
-  time_between_insertiondays: number;
-  timee: string;
-  venue: string;
-}
+// export interface ConsultationSlot {
+//   availibilityid: number;
+//   date: string;
+//   datee: string;
+//   datetime: string;
+//   datetimeforsorting: string;
+//   endtime: string;
+//   location: string;
+//   status: string;
+//   time: string;
+//   time_between_insertiondays: number;
+//   timee: string;
+//   venue: string;
+// }
 
 export interface SlotDetails {
   contime: string;
