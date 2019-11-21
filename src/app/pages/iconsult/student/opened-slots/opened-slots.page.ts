@@ -39,7 +39,7 @@ export class OpenedSlotsPage {
   constructor(
     private route: ActivatedRoute,
     private ws: WsApiService,
-    private modalCtrl: ModalController,
+    private modalCtrl: ModalController
   ) { }
 
   ionViewWillEnter() {
@@ -56,17 +56,23 @@ export class OpenedSlotsPage {
     };
     let totalAvailableSlots = 0;
     let totalOpenedSlots = 0;
-    this.slots$ = this.ws.get<ConsultationSlot[]>('/iconsult/get_slots/' + this.staffCasId, refresher).pipe(
+    this.slots$ = this.ws.get<ConsultationSlot[]>('/iconsult/slots?lecturer_sam_account_name=' + this.staffCasId, {
+      url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'
+    }).pipe(
+      tap(response => console.log(response)),
       map(
         slots => slots.reduce((r, a) => { // Grouping the slots daily
-          const consultationsYearMonth = a.date.split('-')[0] + '-' + a.date.split('-')[1];
+          const startDate = moment(a.start_time).format('YYYY-MM-DD');
+          const consultationsYearMonth = startDate.split('-')[0] + '-' + startDate.split('-')[1];
           this.totalOpenedSlots = ++totalOpenedSlots; // get the total number of opened slots
           this.totalAvailableSlots = a.status === 'Available' ? ++totalAvailableSlots : totalAvailableSlots;
-          const consultationsDay = a.date;
+          const consultationsDay = startDate;
           r[consultationsYearMonth] = r[consultationsYearMonth] || {};
           r[consultationsYearMonth][consultationsDay] = r[consultationsYearMonth][consultationsDay] || {};
           r[consultationsYearMonth][consultationsDay].items = r[consultationsYearMonth][consultationsDay].items || [];
           r[consultationsYearMonth][consultationsDay].items.push(a);
+
+          console.log('filtered r ', r);
           return r;
         }, {})
       ),
@@ -85,7 +91,7 @@ export class OpenedSlotsPage {
                     ? `partially-booked`
                     : numberOfBookedSlots === 0 && numberOfAvailableAndBookedSlots !== 0
                       ? `available`
-                      : 'unavailable';
+                      : null;
 
                 this.daysConfigrations.push({
                   date: moment(day, 'YYYY-MM-DD').toDate(),
@@ -97,6 +103,8 @@ export class OpenedSlotsPage {
             );
           }
         );
+
+        console.log('filtered dates ', dates);
         return dates;
       }),
       finalize(() => refresher && refresher.target.complete()),

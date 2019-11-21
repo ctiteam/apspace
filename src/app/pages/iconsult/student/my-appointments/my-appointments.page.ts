@@ -40,7 +40,9 @@ export class MyAppointmentsPage {
   }
 
   doRefresh(refresher?) {
-    this.slots$ = this.ws.get<ConsultationHour[]>('/iconsult/upcomingconstu', refresher).pipe(
+    this.slots$ = this.ws.get<ConsultationHour[]>('/iconsult/bookings?', {
+      url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'
+    }).pipe(
       map(slots => { // Check if slot is passed and modify its status to passed
         return slots.map(slot => {
           if (slot.status === 'normal' && moment(slot.datetimeforsorting, 'YYYY-MM-DD kk:mm:ss').toDate() < new Date()) {
@@ -142,7 +144,7 @@ export class MyAppointmentsPage {
                   },
                   complete: () => {
                     this.dismissLoading();
-                    this.doRefresh(true);
+                    this.doRefresh();
                   }
                 }
               );
@@ -169,7 +171,8 @@ export class MyAppointmentsPage {
   }
 
   sendCancelBookingRequest(cancelledSlotDetails: any) {
-    return this.ws.post<any>('/iconsult/lecCancelbookedslot', {
+    return this.ws.post<any>('/iconsult/booking/cancel?', {
+      url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging',
       body: cancelledSlotDetails,
     });
   }
