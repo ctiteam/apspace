@@ -8,7 +8,8 @@ import { asyncData, asyncError } from '../../testing';
 import { CasTicketService } from './cas-ticket.service';
 import { WsApiService } from './ws-api.service';
 
-describe('WsApiService', () => {
+fdescribe('WsApiService', () => {
+  let service: WsApiService;
   let httpClientSpy: { get: jasmine.Spy };
   let networkSpy: { type: jasmine.Spy };
   let storageSpy: { get: jasmine.Spy, set: jasmine.Spy };
@@ -31,10 +32,10 @@ describe('WsApiService', () => {
         { provide: Storage, useValue: storageSpy },
       ]
     });
+    service = TestBed.get(WsApiService);
   });
 
   it('should be created', () => {
-    const service: WsApiService = TestBed.get(WsApiService);
     expect(service).toBeTruthy();
   });
 
@@ -42,9 +43,8 @@ describe('WsApiService', () => {
     const expectedData = 'hello world';
     httpClientSpy.get.and.returnValue(asyncData(expectedData));
 
-    platformSpy.is.and.returnValue('core');
+    platformSpy.is.and.callFake(plt => plt === 'core');
     casSpy.getST.and.returnValue(asyncData('ticket'));
-    const service: WsApiService = TestBed.get(WsApiService);
 
     service.get('/api').subscribe(
       data => expect(data).toEqual(expectedData, 'expected data'),
@@ -62,8 +62,6 @@ describe('WsApiService', () => {
 
   it('should return null on 500 after retries if not cached', fakeAsync(() => {
     const endpoint = '/api';
-
-    const service: WsApiService = TestBed.get(WsApiService);
 
     platformSpy.is.and.returnValue('core');
     storageSpy.get.and.returnValue(asyncData(null));
@@ -92,8 +90,7 @@ describe('WsApiService', () => {
   it('#caching network-or-cache', fakeAsync(() => {
     const endpoint = '/api';
 
-    const service: WsApiService = TestBed.get(WsApiService);
-
+    platformSpy.is.and.callFake(plt => plt === 'cordova');
     casSpy.getST.and.returnValue(asyncData('ticket'));
     const expected = [1, 2];
     storageSpy.get.and.returnValue(Promise.resolve(expected[0]));
@@ -113,5 +110,24 @@ describe('WsApiService', () => {
     expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
     expect(networkSpy.type).not.toHaveBeenCalled();
     expect(storageSpy.get).toHaveBeenCalledWith(endpoint);
+  }));
+
+  it('should always request on browser', fakeAsync(() => {
+    const endpoint = '/api';
+
+    platformSpy.is.and.callFake(plt => plt === 'desktop');
+    casSpy.getST.and.returnValue(asyncData('ticket'));
+    storageSpy.get.and.returnValue(Promise.resolve('fail'));
+    httpClientSpy.get.and.returnValue(asyncData('success'));
+
+    service.get(endpoint, { caching: 'cache-only' }).subscribe(
+      data => expect(data).toEqual('success'),
+      fail,
+    );
+
+    expect(casSpy.getST).toHaveBeenCalledTimes(1);
+    tick(); // tick required for switchMap
+    expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
+    expect(storageSpy.get).not.toHaveBeenCalled();
   }));
 });

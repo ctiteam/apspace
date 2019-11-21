@@ -29,7 +29,7 @@ export class WsApiService {
   ) { }
 
   /**
-   * GET: Request WS API with cache and error handling.
+   * GET: Request WS API with cache (mobile only) and error handling.
    *
    * Caching strategies inspired by https://serviceworke.rs/caching-strategies.html
    *
@@ -94,7 +94,9 @@ export class WsApiService {
       )),
     );
 
-    if (options.caching !== 'cache-only' && (!this.plt.is('cordova') || this.network.type !== 'none')) {
+    if (!this.plt.is('cordova') && !this.plt.is('capacitor')) { // disable caching on browser
+      return request$;
+    } else if (options.caching !== 'cache-only' && this.network.type !== 'none') {
       return options.caching === 'cache-update-refresh'
         ? concat(from(this.storage.get(endpoint)), request$)
         : request$;
