@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { QRCodeComponent } from 'angularx-qrcode';
 import {
@@ -20,7 +20,7 @@ describe('MarkAttendancePage', () => {
   let apollo: ApolloTestingController;
   let activatedRoute: ActivatedRouteStub;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     activatedRoute = new ActivatedRouteStub();
 
     TestBed.configureTestingModule({
@@ -37,9 +37,7 @@ describe('MarkAttendancePage', () => {
       imports: [ApolloTestingModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     apollo = TestBed.get(ApolloTestingController);
     activatedRoute.setParams({
       classcode: 'classcode',
