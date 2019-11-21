@@ -37,11 +37,10 @@ describe('MarkAttendancePage', () => {
       imports: [ApolloTestingModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
-
-    apollo = TestBed.get(ApolloTestingController);
   }));
 
   beforeEach(() => {
+    apollo = TestBed.get(ApolloTestingController);
     activatedRoute.setParams({
       classcode: 'classcode',
       date: '2019-01-01',
