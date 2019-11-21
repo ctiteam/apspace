@@ -47,6 +47,12 @@ export class MyConsultationsPage {
     daysConfig: this.daysConfigrations
   };
 
+
+
+  dateRange: { from: string; to: string; };
+  optionsRange: CalendarComponentOptions = {
+    pickMode: 'range'
+  };
   onSelect = false; // enable or disable select more than one slot to cancel.
   onRange = false; // enable or disable select date range to perform bulk delete.
   slotsToBeCancelled: LecturerConsultation[] = [];
@@ -61,7 +67,6 @@ export class MyConsultationsPage {
     private router: Router,
     private datePipe: DatePipe
   ) {}
-
 
   async showSummary() {
     // summary modal
@@ -97,21 +102,6 @@ export class MyConsultationsPage {
     );
   }
 
-  // async openUnavailableSlotDetails(unavailibilityid: string) {
-  //   const modal = await this.modalCtrl.create({
-  //     component: UnavailabilityDetailsModalPage,
-  //     cssClass: "add-min-height",
-  //     componentProps: { unavailibilityid, notFound: "No slot Selected" }
-  //   });
-  //   await modal.present();
-  //   await modal.onDidDismiss().then(data => {
-  //     if (data.data === "booked") {
-  //       this.daysConfigrations = [];
-  //       this.doRefresh();
-  //     }
-  //   });
-  // }
-
   ionViewDidEnter() {
     this.route.queryParams.subscribe(() => {
       // tslint:disable-next-line: max-line-length
@@ -129,13 +119,17 @@ export class MyConsultationsPage {
 
   toggleCancelSlot() {
     this.onSelect = !this.onSelect;
+
+    if (this.onRange === true) {
+      this.onRange = false;
+    }
   }
 
-  toggleSelectSlotOptions() {
+  toggleCancelSlotOptions() {
     this.onRange = !this.onRange;
   }
 
-  getSelectedSlot(slot) {
+  getSelectedSlot(slot: LecturerConsultation) {
     if (!(this.slotsToBeCancelled.find(slotTBC => slotTBC.slot_id === slot.slot_id))) {
       this.slotsToBeCancelled.push(slot);
     } else {
@@ -145,6 +139,28 @@ export class MyConsultationsPage {
         }
       });
     }
+  }
+
+  getSelectedRangeSlot(dates) {
+    this.slotsToBeCancelled = [];
+    const startDate = new Date(this.dateRange.from);
+    const endDate = new Date(this.dateRange.to);
+
+    const datesKeys = Object.keys(dates).map(date => new Date(date));
+    const filteredDates = datesKeys.filter(date => startDate <= date && date <= endDate);
+
+    filteredDates.forEach(filteredDate => {
+      const currentDateString = this.datePipe.transform(filteredDate, 'yyyy-MM-dd');
+      dates[currentDateString].items.forEach(item => this.slotsToBeCancelled.push(item));
+    });
+  }
+
+  resetSelectedSlots(dates) {
+    if (!this.onRange) {
+      const datesKeys = Object.keys(dates);
+      datesKeys.forEach(datesKey => dates[datesKey].items.forEach(item => delete item.isChecked));
+    }
+    this.slotsToBeCancelled = [];
   }
 
   async cancelAvailableSlot() {
@@ -190,6 +206,7 @@ export class MyConsultationsPage {
                   this.slotsToBeCancelled = [];
                   this.dateToFilter = undefined;
                   this.onSelect = false;
+                  this.onRange = false;
                   this.showToastMessage(
                     'Slot has been cancelled successfully!',
                     'success'
@@ -245,7 +262,7 @@ export class MyConsultationsPage {
 
   sendCancelSlotRequest(slotsId: any) {
     return this.ws.put<any>('/iconsult/slot/cancel?', {
-      url: 'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev',
+      url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging',
       body: slotsId
     });
   }
@@ -265,9 +282,9 @@ export class MyConsultationsPage {
 
     this.slots$ = this.ws
       .get<LecturerConsultation[]>(
-        '/iconsult/slots?lecturer_sam_account_name=we.yuan',
+        '/iconsult/slots?',
         {
-          url: 'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev'
+          url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'
         }
       )
       .pipe(
@@ -337,7 +354,6 @@ export class MyConsultationsPage {
           if (dates[getTodayConsultationsDate] !== undefined) {
             this.dateToFilter = this.todaysDate;
           }
-
           return dates;
         }),
         finalize(() => refresher && refresher.target.complete())
