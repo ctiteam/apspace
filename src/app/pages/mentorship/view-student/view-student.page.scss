@@ -58,10 +58,6 @@ ion-item {
   --background: var(--tertiary-bg-color) !important;
 }
 
-.table-item:hover {
-  --background: #E0E0E0 !important;
-}
-
 @media only screen and (min-width: 577px) {
   .controlled-layout {
     margin: 20px 50px;

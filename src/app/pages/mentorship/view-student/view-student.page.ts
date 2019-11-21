@@ -16,7 +16,7 @@ import { ShowDetailsPage } from './show-details/show-details.page';
 export class ViewStudentPage {
 
   tp: string;
-  intake: string;
+  selectedIntake: string;
 
   profile$: Observable<StudentProfile>;
   intake$: Observable<Intake[]>;
@@ -34,12 +34,12 @@ export class ViewStudentPage {
 
   ionViewDidEnter() {
     this.tp = this.route.snapshot.params.tp;
-    this.intake = this.route.snapshot.params.intake;
+    this.selectedIntake = this.route.snapshot.params.intake;
 
     this.profile$ = this.mentorship.getStudentProfile(this.tp);
     this.intake$ = this.mentorship.getIntakes(this.tp);
 
-    this.onTap(this.intake);
+    this.onTap(this.selectedIntake);
   }
 
   sortResult(results: any) {
@@ -49,7 +49,7 @@ export class ViewStudentPage {
   }
 
   onTap(intake: string) {
-    this.intake = intake;
+    this.selectedIntake = intake;
     this.courseDetail$ = this.mentorship.getStudentCourse(this.tp, intake);
     this.selectedIntake$ = this.intake$.pipe(map(items => items.filter(item => item.INTAKE_CODE === intake)));
     this.subCourse$ = this.mentorship.getSubcourse(this.tp, intake).pipe(map(r => this.sortResult(r)));
@@ -64,7 +64,7 @@ export class ViewStudentPage {
       component: ShowDetailsPage,
       cssClass: 'add-min-height-width',
       componentProps: {
-        intake: this.intake,
+        intake: this.selectedIntake,
         module: moduleCode,
         tp: this.tp
       }

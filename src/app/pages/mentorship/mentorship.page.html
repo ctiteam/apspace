@@ -13,9 +13,9 @@
     <ion-searchbar [(ngModel)]="search" showCancelButton="true"
       placeholder="Search (e.g. 'Student Name, ID', 'Intake', 'Programme', ...)" animated></ion-searchbar>
 
-    <ion-list class="list" *ngIf="(students$ | async) as students; else loadingStudents">
+    <ion-list class="list ion-padding" *ngIf="(students$ | async) as students; else loadingStudents">
       <ng-container *ngFor="let student of (students | search:search)">
-        <ion-item tappable [routerLink]="['/', 'mentorship', student.STUDENT_NUMBER, student.INTAKE_CODE, 'view']">
+        <ion-item button details [routerLink]="['/', 'mentorship', student.STUDENT_NUMBER, student.INTAKE_CODE, 'view']">
           <ion-avatar slot="start">
             <img src="https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png">
           </ion-avatar>
@@ -26,16 +26,16 @@
             <h3> {{ student.PROGRAMME }} </h3>
           </ion-label>
 
-          <ion-buttons>
+          <!-- <ion-buttons>
             <ion-icon slot="end" name="arrow-forward"></ion-icon>
-          </ion-buttons>
+          </ion-buttons> -->
         </ion-item>
       </ng-container>
     </ion-list>
 
     <!-- Loading -->
     <ng-template #loadingStudents>
-      <ion-item class="list" *ngFor="let _ of loadingSkeletons">
+      <ion-item style="padding: 10px 20px;" *ngFor="let _ of loadingSkeletons">
         <ion-avatar slot="start">
           <ion-skeleton-text animated></ion-skeleton-text>
         </ion-avatar>

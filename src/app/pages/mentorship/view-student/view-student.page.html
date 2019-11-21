@@ -55,10 +55,10 @@
 
           <ion-footer>
             <ion-grid>
-              <ion-row>
+              <ion-row justify-content-center>
                 <div *ngIf="(intake$ | async) as intakes">
                   <ion-col size="auto" *ngFor="let intake of intakes">
-                    <ion-button (click)="onTap(intake.INTAKE_CODE)"> {{ intake.INTAKE_CODE }} </ion-button>
+                    <ion-button [fill]="selectedIntake === intake.INTAKE_CODE ? 'solid' : 'outline'" (click)="onTap(intake.INTAKE_CODE)"> {{ intake.INTAKE_CODE }} </ion-button>
                   </ion-col>
                 </div>
               </ion-row>
@@ -196,7 +196,7 @@
                     </ion-grid>
                   </ion-item>
 
-                  <ion-item lines="none" *ngFor="let value of (semester.value)" class="table-item">
+                  <ion-item lines="none" *ngFor="let value of (semester.value)" class="table-item" button details>
                     <ion-grid class="ion-no-padding">
                       <ion-row>
                         <ion-col class="margin-auto colored-text" size-lg="3" size="12">
