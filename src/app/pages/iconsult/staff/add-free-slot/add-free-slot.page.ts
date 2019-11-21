@@ -84,7 +84,7 @@ export class AddFreeSlotPage implements OnInit {
       this.venues$ = this.ws.get<Venue[]>(
         `/iconsult/locations?venue=${this.settings.get('defaultCampus')}`,
         {
-          url: 'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev'
+          url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'
         }
       );
     }
@@ -247,7 +247,7 @@ export class AddFreeSlotPage implements OnInit {
                 .post<any>('/iconsult/slot?', {
                   body,
                   url:
-                    'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev'
+                    'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'
                 })
                 .subscribe({
                   next: () => {
@@ -369,7 +369,7 @@ export class AddFreeSlotPage implements OnInit {
     this.venues$ = this.ws.get<Venue[]>(
       `/iconsult/locations?venue=${event.detail.value}`,
       {
-        url: 'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev'
+        url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'
       }
     );
   }
