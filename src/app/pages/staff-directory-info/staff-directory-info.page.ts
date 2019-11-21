@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 
-import { StaffDirectory } from '../../interfaces';
-import { AppLauncherService, WsApiService } from '../../services';
+import { Role, StaffDirectory } from '../../interfaces';
+import { AppLauncherService, SettingsService, WsApiService } from '../../services';
 
 /**
  * Display staff information. Can also be used as model.
@@ -20,16 +20,19 @@ export class StaffDirectoryInfoPage implements OnInit {
 
   staff$: Observable<StaffDirectory>;
   staffExists = true;
+  isStudent = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private ws: WsApiService,
-    private appLauncherService: AppLauncherService
-  ) { }
+    private appLauncherService: AppLauncherService,
+    private settings: SettingsService
+  ) {}
 
   ngOnInit() {
     const id = this.route.snapshot.params.id;
+    const role = this.settings.get('role');
     this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
       map(ss => {
           const staffRecord = ss.find(s => s.ID === id);
@@ -38,6 +41,11 @@ export class StaffDirectoryInfoPage implements OnInit {
         }),
       share(),
     );
+
+    // tslint:disable-next-line: no-bitwise
+    if (role & Role.Student) {
+      this.isStudent = true;
+    }
   }
 
   chatInTeams(lecturerCasId: string) {
