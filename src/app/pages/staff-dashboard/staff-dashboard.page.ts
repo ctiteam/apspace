@@ -485,8 +485,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
     const consultationsEventMode: EventComponentConfigurations[] = [];
-    return this.ws.get<LecturerConsultation[]>('/iconsult/slots?lecturer_sam_account_name=we.yuan',
-      { url: 'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev' }
+    return this.ws.get<LecturerConsultation[]>('/iconsult/slots?',
+      { url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging' }
     ).pipe(
       map(consultations =>
         consultations.filter(
