@@ -5,7 +5,7 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-toolbar>
+  <ion-toolbar *ngIf="!userUnauthorized">
     <ion-segment class="ion-padding" [(ngModel)]="selectedSegment">
       <ion-segment-button value="studentsList">Students List</ion-segment-button>
       <ion-segment-button value="exceptions">Exceptions</ion-segment-button>
@@ -18,13 +18,13 @@
     <ng-container *ngSwitchCase="'studentsList'">
       <ion-grid class="ion-no-padding">
         <ion-row>
-          <ion-col>
+          <ion-col *ngIf="!userUnauthorized">
             <ion-searchbar placeholder="Student ID" [(ngModel)]="idToSearch"></ion-searchbar>
           </ion-col>
           <ion-col class="ion-no-padding" size="12" size-md="12">
             <ion-card class="table-background">
               <ion-card-content class="ion-no-padding">
-                <ng-container *ngIf="studentsList$ | async as students; else loadingStudentsList">
+                <ng-container *ngIf="studentsList$ | async as students; else loadingStudentsListOrError">
                   <ion-item class="h-mobile-d-desktop table-item">
                     <ion-grid class="ion-no-margin ion-no-padding">
                       <ion-row>
@@ -111,24 +111,32 @@
                     </ion-list>
                   </ng-template>
                 </ng-container>
-                <ng-template #loadingStudentsList>
-                  <ion-list>
-                    <ion-item>
-                      <ion-skeleton-text animated style="width:100%; line-height: 25px;"></ion-skeleton-text>
-                    </ion-item>
-                    <ion-item>
-                      <ion-skeleton-text animated style="width:40%; line-height: 25px;"></ion-skeleton-text>
-                    </ion-item>
-                    <ion-item>
-                      <ion-skeleton-text animated style="width:70%; line-height: 25px;"></ion-skeleton-text>
-                    </ion-item>
-                    <ion-item>
-                      <ion-skeleton-text animated style="width:90%; line-height: 25px;"></ion-skeleton-text>
-                    </ion-item>
-                    <ion-item>
-                      <ion-skeleton-text animated style="width:20%; line-height: 25px;"></ion-skeleton-text>
-                    </ion-item>
-                  </ion-list>
+                <ng-template #loadingStudentsListOrError>
+                  <ng-container *ngIf="userUnauthorized; else loadingList">
+                    <app-message-with-svg messageTitle="This is a restricted space!"
+                      messageContent="Unfortunately, you don't have the permissions required to access this page"
+                      imageUrl="assets/img/block.svg" wrapperOffset="3" wrapperSize="6">
+                    </app-message-with-svg>
+                  </ng-container>
+                  <ng-template #loadingList>
+                    <ion-list>
+                      <ion-item>
+                        <ion-skeleton-text animated style="width:100%; line-height: 25px;"></ion-skeleton-text>
+                      </ion-item>
+                      <ion-item>
+                        <ion-skeleton-text animated style="width:40%; line-height: 25px;"></ion-skeleton-text>
+                      </ion-item>
+                      <ion-item>
+                        <ion-skeleton-text animated style="width:70%; line-height: 25px;"></ion-skeleton-text>
+                      </ion-item>
+                      <ion-item>
+                        <ion-skeleton-text animated style="width:90%; line-height: 25px;"></ion-skeleton-text>
+                      </ion-item>
+                      <ion-item>
+                        <ion-skeleton-text animated style="width:20%; line-height: 25px;"></ion-skeleton-text>
+                      </ion-item>
+                    </ion-list>
+                  </ng-template>
                 </ng-template>
               </ion-card-content>
             </ion-card>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { WsApiService } from 'src/app/services';
 import { StudentDetailsModalPage } from './student-details-modal';
 
@@ -16,6 +17,7 @@ export class IgraduatePage implements OnInit {
   studentIDException = '';
   studentsList$: Observable<any>;
   exceptionsList$: Observable<any>;
+  userUnauthorized = false;
   constructor(
     private ws: WsApiService,
     private modalCtrl: ModalController,
@@ -29,7 +31,14 @@ export class IgraduatePage implements OnInit {
   }
 
   doRefresh() {
-    this.studentsList$ = this.ws.get<any>('/igraduate/student_list');
+    this.studentsList$ = this.ws.get<any>('/igraduate/student_list').pipe(
+      catchError(err => {
+        if (err.status === 401) {
+          this.userUnauthorized = true;
+        }
+        return err;
+      })
+    );
     this.exceptionsList$ = this.ws.get<any>(`/igraduate/exception`);
   }
 
