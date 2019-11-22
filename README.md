@@ -35,7 +35,7 @@ Run `ng e2e` to execute end-to-end tests via [Protractor][protractor].
 
 Contributing
 ------------
-- Fix `ng lint` errors during commit (included in pre-commit hooks)
+- Fix `ng lint` errors before commit (included in pre-commit hooks)
 - [Conventional commit messages](https://github.com/conventional-changelog/conventional-changelog/blob/a5505865ff3dd710cf757f50530e73ef0ca641da/conventions/angular.md)
 - [Issues / Features](https://github.com/cticti/apspace/issues)
 - Bump the version with `bin/bump`
