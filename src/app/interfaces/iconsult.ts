@@ -1,17 +1,19 @@
 export interface ConsultationHour {
-  datetime: string;
-  date: string;
-  starttime: string;
-  poststarttime: string;
-  datetimeforsorting: string;
-  endtime: string;
-  location: string;
-  venue: string;
-  lecname: string;
-  availibilityid: number;
-  slotid: number;
-  casid: number;
+  id: number;
+  additional_note: string;
+  booking_datetime: string;
+  consultation_with: string;
+  reason: string;
+  remark: string;
   status: string;
+  student_sam_account_name: string;
+  slot_id: number;
+  slot_start_time: string;
+  slot_end_time: string;
+  slot_lecturer_sam_account_name: string;
+  slot_room_code: string;
+  slot_venue: string;
+  synced_to_gims: string;
 }
 
 export interface ConsultationSlot {
