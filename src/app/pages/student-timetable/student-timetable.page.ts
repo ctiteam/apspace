@@ -1,19 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController, IonRefresher, ModalController } from '@ionic/angular';
-
+import * as moment from 'moment';
 import { Observable, combineLatest } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
-
-import { Router } from '@angular/router';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 import { Role, StudentProfile, StudentTimetable } from '../../interfaces';
-import {
-  SettingsService, StudentTimetableService, UserSettingsService, WsApiService
-} from '../../services';
+import { SettingsService, StudentTimetableService, UserSettingsService, WsApiService } from '../../services';
 import { ClassesPipe } from './classes.pipe';
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-timetable',
@@ -22,6 +18,7 @@ import { ClassesPipe } from './classes.pipe';
 })
 export class StudentTimetablePage implements OnInit {
 
+  printUrl = 'https://api.apiit.edu.my/timetable-print/index.php';
   wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
   legends = [
@@ -100,6 +97,7 @@ export class StudentTimetablePage implements OnInit {
     private userSettings: UserSettingsService,
     private ws: WsApiService,
     private router: Router,
+    private iab: InAppBrowser
   ) { }
 
   ngOnInit() {
@@ -300,5 +298,13 @@ export class StudentTimetablePage implements OnInit {
     this.show2ndToolbar = !this.show2ndToolbar;
   }
 
+  sendToPrint() {
+    const week = moment(this.selectedWeek).add(1, 'day').format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
+    // For student timetable:
+    // printUrl?Week=2019-11-18&Intake=APTDF1805DSM(VFX)&print_request=print_tt
+    // For lecturer timetable:
+    // printUrl?LectID=ARW&Submit=Submit&Week=2019-11-18&print_request=print
+    this.iab.create(`${this.printUrl}?Week=${week}&Intake=${this.intake}&print_request=print_tt`, '_system', 'location=true');
+  }
 
 }
