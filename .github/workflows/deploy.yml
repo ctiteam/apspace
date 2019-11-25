@@ -5,6 +5,8 @@ on: [deployment]
 jobs:
   deployment:
 
+    runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v1
 
