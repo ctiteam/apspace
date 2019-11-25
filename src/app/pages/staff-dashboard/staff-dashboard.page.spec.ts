@@ -57,6 +57,6 @@ describe('StaffDashboardPage', () => {
     fixture.detectChanges();
 
     expect(component).toBeTruthy();
-    expect(wsSpy.get).toHaveBeenCalledTimes(5);
+    expect(wsSpy.get).toHaveBeenCalledTimes(6);
   });
 });
