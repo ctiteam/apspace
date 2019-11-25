@@ -1,5 +1,6 @@
 production:
   environment: production
+  required_context: [ci, deliverybot/promoted]
   production_environment: true
 
 staging:
