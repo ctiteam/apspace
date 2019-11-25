@@ -78,8 +78,7 @@ describe('WsApiService', () => {
     );
   }));
 
-  // XXX: re-add after upgrading to firefox esr 68
-  xit('should return null on 500 after retries if not cached', fakeAsync(() => {
+  it('should return null on 500 after retries if not cached', fakeAsync(() => {
     const endpoint = '/api';
 
     platformSpy.is.and.callFake(plt => plt === 'cordova');

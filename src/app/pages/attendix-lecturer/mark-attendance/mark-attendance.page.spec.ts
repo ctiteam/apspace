@@ -14,9 +14,7 @@ import { CharsPipe } from './chars.pipe';
 import { MarkAttendancePage } from './mark-attendance.page';
 import { SearchPipe } from './search.pipe';
 
-// skipped probably failing in firefox esr 60.0
-// XXX: try reenable for firefox esr 68.0 when out in alpine stable
-xdescribe('MarkAttendancePage', () => {
+describe('MarkAttendancePage', () => {
   let component: MarkAttendancePage;
   let fixture: ComponentFixture<MarkAttendancePage>;
   let apollo: ApolloTestingController;
