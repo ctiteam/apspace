@@ -1,6 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { ModalController } from '@ionic/angular';
+import { NEVER } from 'rxjs';
 
 import { WsApiService } from '../../services';
 import { FilterPipe } from './filter.pipe';
@@ -26,6 +27,7 @@ describe('IgraduatePage', () => {
   }));
 
   beforeEach(() => {
+    wsSpy.get.and.returnValue(NEVER);
     fixture = TestBed.createComponent(IgraduatePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
