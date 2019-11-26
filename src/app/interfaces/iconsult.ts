@@ -20,27 +20,28 @@ export interface ConsultationSlot {
   end_time: string;
   id: number;
   room_code: string;
+  booking_detail?: ConsultationHour;
   slot_id: number;
   start_time: string;
   status: string;
   venue: string;
 }
 
-export interface LecturerSlotDetails {
-  con_with: string;
-  contime: string;
-  endtime: string;
-  feedbackid: string | null;
-  location: string;
-  note: string;
-  reason: string;
-  slotid: number;
-  stuEmail: string;
-  stuPhone: string;
-  studentname: string;
-  tpnumber: string;
-  venue: string;
-}
+// export interface LecturerSlotDetails {
+//   con_with: string;
+//   contime: string;
+//   endtime: string;
+//   feedbackid: string | null;
+//   location: string;
+//   note: string;
+//   reason: string;
+//   slotid: number;
+//   stuEmail: string;
+//   stuPhone: string;
+//   studentname: string;
+//   tpnumber: string;
+//   venue: string;
+// }
 
 export interface UnavailabilityDetails {
   end_date: string;
