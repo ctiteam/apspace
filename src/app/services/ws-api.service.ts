@@ -75,7 +75,6 @@ export class WsApiService {
         switchMap(ticket => this.http.get<T>(url, { ...opt, params: { ...opt.params, ticket } })),
       )
     ).pipe(
-      tap(() => console.log('pre-retrying')),
       tap(cache => this.storage.set(endpoint, cache)),
       timeout(options.timeout),
       catchError(err => {
@@ -89,7 +88,6 @@ export class WsApiService {
         );
       }),
       retryWhen(errors => errors.pipe(
-        tap(() => console.log('retrying')),
         concatMap((err, n) => iif( // use concat map to keep errors in order (not parallel)
           () => !(400 <= err.status && err.status < 500) && n < options.attempts, // skip 4xx
           of(err).pipe(delay((2 ** (n + 1) + Math.random() * 8) * 1000)), // 2^n + random 0-8
