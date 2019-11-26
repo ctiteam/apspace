@@ -15,6 +15,8 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar *ngIf="onSelect">
+    <span *ngIf="!onRange; else rangeMessage"><p class="ion-margin-start">Select more than one slot to cancel</p></span>
+    <ng-template #rangeMessage><p class="ion-margin-start">Select start and end date to cancel</p></ng-template>
     <ion-buttons slot="end">
       <ion-button [disabled]="this.slotsToBeCancelled.length > 0" class="colored-border colored-text" fill="outline"
         (click)="toggleCancelSlotOptions()">
@@ -102,13 +104,15 @@
                             {{slot.room_code}} | {{slot.venue}}
                           </span>
                         </ion-col>
-                        <ion-col size-xs="5" size-sm="4" class="margin-auto">
+                        <ion-col size-xs="1" size-sm="2" class="margin-auto">
                           <ng-container>
-                            <ion-button class="cursor-pointer" size="small" expand="block"
-                              *ngIf="slot.status !== 'Available'"
-                              (click)="openSlotDetailsModal(slot)">
-                              View Details
-                            </ion-button>
+                            <ion-buttons>
+                              <ion-button class="cursor-pointer" size="small" expand="block"
+                                *ngIf="slot.status !== 'Available'"
+                                (click)="openSlotDetailsModal(slot)">
+                                <ion-icon color="danger" slot="icon-only" name="information-circle-outline"></ion-icon>
+                              </ion-button>
+                            </ion-buttons>
                           </ng-container>
                         </ion-col>
                       </ion-row>
