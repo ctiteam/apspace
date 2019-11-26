@@ -68,9 +68,10 @@
           </ion-card>
         </ng-template>
         <ng-template [ngIf]="intakeCode && classCode && !surveyType">
-          <p class="normaltext text-center">
-            We could not get the survey type. Please try again later or contact us via the feedback page.
-          </p>
+          <app-message-with-svg wrapperMarginTop="20px" wrapperOffset="4" wrapperSize="4"
+            imageUrl="assets/img/empty.svg" messageTitle="Not Due Yet!"
+            messageContent="There are no surveys to display at the current time for the selected module">
+          </app-message-with-svg>
         </ng-template>
 
         <ng-template [ngIf]="intakeCode && classCode && surveyType">
