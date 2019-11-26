@@ -7,9 +7,9 @@ import { IonicModule } from '@ionic/angular';
 
 import { ChartModule } from 'angular2-chartjs';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { SharedPipesModule } from '../../shared/shared-pipes.module';
 import { FeesPage } from './fees.page';
 import { FilterPipe } from './filter.pipe';
-import { ReversePipe } from './reverse.pipe';
 
 const routes: Routes = [
   {
@@ -26,7 +26,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ChartModule,
     ComponentsModule,
+    SharedPipesModule
   ],
-  declarations: [FeesPage, ReversePipe, FilterPipe]
+  declarations: [FeesPage, FilterPipe]
 })
 export class FeesPageModule {}
