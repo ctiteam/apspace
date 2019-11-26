@@ -3,9 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, MenuController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-
-import { Role, StudentProfile } from 'src/app/interfaces';
-import { SettingsService, WsApiService } from 'src/app/services';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-submit-survey',
@@ -26,6 +24,7 @@ export class StudentSurveyPage implements OnInit {
   courseType: string;
   surveyType: string;
   selectedModule: any;
+  selectedIntake: any;
 
   // LOADING & ERRORS VARIABLES
   numOfSkeletons = new Array(3);
@@ -65,7 +64,6 @@ export class StudentSurveyPage implements OnInit {
     private ws: WsApiService,
     private toastCtrl: ToastController,
     public alertCtrl: AlertController,
-    private settings: SettingsService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -84,20 +82,16 @@ export class StudentSurveyPage implements OnInit {
 
   onInitData() {
     if (!this.userComingFromResultsPage) {
-      // tslint:disable-next-line: no-bitwise
-      if (this.settings.get('role') & Role.Student) {
-        this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).subscribe(
-          p => {
-            this.intakeCode = p.INTAKE;
-          },
-          // tslint:disable-next-line: no-empty
-          _ => { },
-          () => {
-            this.COURSE_CODE$ = this.getIntakes();
-            this.onIntakeCodeChanged();
-          },
-        );
-      }
+      this.COURSE_CODE$ = this.getIntakes().pipe( // get all intakes
+        tap(intakes => {
+          if (intakes.length > 0) {
+            const latestIntake = intakes[intakes.length - 1]; // select latest intake by default
+            this.selectedIntake = latestIntake;
+          }
+        }),
+        tap(_ => this.onIntakeCodeChanged()) // call intake changed
+      );
+
     } else { // user coming from results page
       this.COURSE_CODE$ = this.getIntakes(); // get all of the intakes
       this.COURSE_MODULES$ = this.getModules(this.intakeCode).pipe( // get all of the modules
@@ -112,19 +106,12 @@ export class StudentSurveyPage implements OnInit {
 
   onIntakeCodeChanged() {
     this.userComingFromResultsPage = false;
-    let intakeStartsWith = '';
-    intakeStartsWith = this.intakeCode.slice(0, 3);
-    // tslint:disable-next-line: triple-equals
-    if (intakeStartsWith == 'UCE' || intakeStartsWith == 'UCP') {
-      this.courseType = 'APLC Students';
-    } else if (intakeStartsWith === 'UCM') {
-      this.courseType = 'masters';
-    } else {
-      this.courseType = 'bachelor';
-    }
+    this.courseType = this.selectedIntake.TYPE_OF_COURSE;
+    this.intakeCode = this.selectedIntake.COURSE_CODE_ALIAS;
+
     this.COURSE_MODULES$ = this.getModules(this.intakeCode);
-    this.classCode = '';
-    this.surveyType = '';
+    this.classCode = ''; // empty class code
+    this.surveyType = ''; // empty survey type
   }
 
   onClassCodeChanged() {
@@ -221,14 +208,14 @@ export class StudentSurveyPage implements OnInit {
           }
         }
         if (!amodule.COURSE_APPRAISAL2) { // student did not do mid-semester appraisal
-          if (this.courseType === 'bachelor') { // bachelor students
+          if (this.courseType.includes('Level')) { // bachelor students
             const moduleStartDate = new Date(amodule.START_DATE); // module start date
             const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49)); // week 7 of the module
             const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 70)); // week 10 of the module
             if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 10 is not included
               this.surveyType = 'Mid-Semester';
             }
-          } else if (this.courseType === 'masters') { // masters students
+          } else if (this.courseType.includes('Master')) { // masters students
             const moduleStartDate = new Date(amodule.START_DATE); // module start date
             if (amodule.STUDY_MODE === 'FullTime') { // full time student
               // tslint:disable-next-line: max-line-length
