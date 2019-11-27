@@ -25,6 +25,7 @@ import { RequestCache, RequestCacheWithMapStorage } from './services';
 
 // export function disableNavAnimation(AnimationC: Animation): Promise<Animation> { return Promise.resolve(new AnimationC()); }
 
+import { Badge } from '@ionic-native/badge/ngx';
 import { GraphQLModule } from './graphql.module';
 
 @NgModule({
@@ -47,6 +48,7 @@ import { GraphQLModule } from './graphql.module';
   ],
   providers: [
     ActionSheet,
+    Badge,
     FCM,
     InAppBrowser,
     AppAvailability,
