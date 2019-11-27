@@ -17,75 +17,75 @@
       </h6>
     </ion-card-content>
   </ion-card>
-  <ng-container *ngIf="slotDetails$ | async as slotDetails; else loadingSlots">
+  <ng-container *ngIf="slot; else loadingSlots">
     <ion-card class="ion-no-margin ion-margin-bottom">
       <ion-card-content class="ion-no-padding">
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="person" slot="start"></ion-icon>
           <ion-label>
             <p class="tertiary-txt-color">Student Name - ID:</p>
-            <h4 class="main-text-color">{{ slotDetails.studentname }} - {{slotDetails.tpnumber}}</h4>
+            <h4 class="main-text-color">{{ slot.booking_detail.student_sam_account_name }} - {{slot.booking_detail.student_sam_account_name}}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="briefcase" slot="start"></ion-icon>
           <ion-label>
             <p class="tertiary-txt-color">Consultation With:</p>
-            <h4 class="main-text-color">{{ slotDetails.con_with }}</h4>
+            <h4 class="main-text-color">{{ slot.booking_detail.consultation_with }}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="mail" slot="start"></ion-icon>
           <ion-label>
             <p class="tertiary-txt-color">Student Email:</p>
-            <h4 class="main-text-color">{{ slotDetails.stuEmail }}</h4>
+            <h4 class="main-text-color">{{ slot.booking_detail.student_sam_account_name }}</h4>
           </ion-label>
         </ion-item>
-        <ion-item *ngIf="slotDetails.stuPhone">
+        <!-- <ion-item *ngIf="slotDetails.stuPhone">
           <ion-icon class="tertiary-txt-color" name="call" slot="start"></ion-icon>
           <ion-label>
             <p class="tertiary-txt-color">Student Phone Number:</p>
             <h4 class="main-text-color">{{ slotDetails.stuPhone }}</h4>
           </ion-label>
-        </ion-item>
+        </ion-item> -->
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="calendar" slot="start"></ion-icon>
           <ion-label>
             <p class="tertiary-txt-color">Appointment Date:</p>
-            <h4 class="main-text-color">{{ slotDetails.contime | date: 'EEEE, dd MMM yyyy' }}</h4>
+            <h4 class="main-text-color">{{ slot.start_time | date: 'EEEE, dd MMM yyyy' : 'Z'}}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="time" slot="start"></ion-icon>
           <ion-label>
             <p class="tertiary-txt-color">Appointment Time:</p>
-            <h4 class="main-text-color">{{ dataToSend.startTime }} - {{ dataToSend.endTime }}</h4>
+            <h4 class="main-text-color">{{ slot.start_time | date: 'HH:mm' : 'Z' }} - {{ slot.end_time | date: 'HH:mm' : 'Z' }}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="pin" slot="start"></ion-icon>
           <ion-label>
             <p class="tertiary-txt-color">Appointment Location:</p>
-            <h4 class="main-text-color">{{ slotDetails.venue }} | {{ slotDetails.location }}</h4>
+            <h4 class="main-text-color">{{ slot.venue }} | {{ slot.room_code }}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="help-circle" slot="start"></ion-icon>
           <ion-label>
             <p class="tertiary-txt-color">Appointment Reason:</p>
-            <h4 class="main-text-color">{{ slotDetails.reason }}</h4>
+            <h4 class="main-text-color">{{ slot.booking_detail.reason }}</h4>
           </ion-label>
         </ion-item>
-        <ion-item *ngIf="slotDetails.note">
+        <ion-item *ngIf="slot.booking_detail.additional_note">
           <ion-icon class="tertiary-txt-color" name="bookmark" slot="start"></ion-icon>
           <ion-label>
             <p class="tertiary-txt-color">Additional Note:</p>
-            <h4 class="main-text-color">{{ slotDetails.note }}</h4>
+            <h4 class="main-text-color">{{ slot.booking_detail.additional_note }}</h4>
           </ion-label>
         </ion-item>
-        <ion-button *ngIf="!showRemarks" expand="block" class="danger-background ion-margin" (click)="cancelBooking(slotDetails)">Cancel
+        <!-- <ion-button *ngIf="!showRemarks" expand="block" class="danger-background ion-margin" (click)="cancelBooking(slotDetails)">Cancel
           Booking
-        </ion-button>
+        </ion-button> -->
       </ion-card-content>
     </ion-card>
 
@@ -97,9 +97,8 @@
           </h4>
         </ion-card-title>
       </ion-card-header>
-      <ion-card-content class="no-padding-left ion-no-padding ion-padding-bottom"
-        *ngIf="(lecturerRemarks$ | async) as remarks; else loadingRemarks">
-        <ng-container *ngIf="remarks.res !== 'feedbackid'; else showHistory">
+      <ion-card-content class="no-padding-left ion-no-padding ion-padding-bottom">
+        <ng-container *ngIf="!slot.booking_detail.remark; else showHistory">
           <ion-item lines="none">
             <ion-textarea placeholder="Add your remarks here" [(ngModel)]="remarksText" class="form-input" rows="4">
             </ion-textarea>
@@ -115,17 +114,17 @@
           <h6 class="tertiary-txt-color ion-padding-top ion-padding-start ion-padding-end">You have added remarks for
             this booking
             and the remarks are as follow:</h6>
-          <p class="main-text-color ion-padding-start ion-padding-end">{{remarks.feedback}}</p>
+          <p class="main-text-color ion-padding-start ion-padding-end">{{slot.booking_detail.remark}}</p>
         </ng-template>
       </ion-card-content>
-      <ng-template #loadingRemarks>
+      <!-- <ng-template #loadingRemarks>
         <ion-item>
           <ion-skeleton-text animated style="line-height: 30px; width:80%"></ion-skeleton-text>
         </ion-item>
         <ion-item>
           <ion-skeleton-text animated style="line-height: 30px; width:45%"></ion-skeleton-text>
         </ion-item>
-      </ng-template>
+      </ng-template> -->
     </ion-card>
 
 

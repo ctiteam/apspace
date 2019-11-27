@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
-import { LecturerRemarks, LecturerSlotDetails } from 'src/app/interfaces';
+import { ConsultationHour, ConsultationSlot } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 
 import * as moment from 'moment';
@@ -14,13 +13,13 @@ import * as moment from 'moment';
 })
 // This page has not been migrated yet. It is added to fix the pipeline error
 export class LecturerSlotDetailsModalPage implements OnInit {
-  dataToSend;
+  url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
+  slot: ConsultationSlot;
   dateNow = new Date();
   showRemarks = false;
   remarksText = '';
   copyToGIMS = false;
-  slotDetails$: Observable<LecturerSlotDetails>;
-  lecturerRemarks$: Observable<LecturerRemarks[]>;
+  bookingDetails$: Observable<ConsultationHour>;
   loading: HTMLIonLoadingElement;
 
   constructor(
@@ -31,22 +30,19 @@ export class LecturerSlotDetailsModalPage implements OnInit {
     private loadingController: LoadingController
   ) { }
 
-  ngOnInit() {
-    if (moment(this.dataToSend.dateAndTime, '').toDate() <= this.dateNow) {
+  ngOnInit() { // MIGHT NEED TO INSTALL TIMEZONE IN MOMENT JS
+    if (moment(this.slot.start_time).toDate() <= this.dateNow) {
       this.showRemarks = true;
     }
-    this.slotDetails$ = this.ws.get<LecturerSlotDetails[]>(`/iconsult/detailpage/${this.dataToSend.slotId}`).pipe(
-      map(response => response[0]),
-    );
-    this.lecturerRemarks$ = this.ws.get<LecturerRemarks[]>(`/iconsult/lecgetfeedback/${this.dataToSend.slotId}`);
+
+    console.log(this.slot);
   }
 
   addRemarks() {
     const body = {
-      slotid: this.dataToSend.slotId,
-      entry_datetime: moment().format(),
-      feedback: this.remarksText,
-      gims_status: this.copyToGIMS ? 1 : 0
+      booking_id: this.slot.booking_detail.id,
+      remark: this.remarksText,
+      synced_to_gims: this.copyToGIMS ? 1 : 0
     };
     this.alertCtrl.create({
       header: 'Adding Remarks!',
@@ -60,7 +56,12 @@ export class LecturerSlotDetailsModalPage implements OnInit {
           text: 'Yes',
           handler: () => {
             this.presentLoading();
-            this.ws.post<any>('/iconsult/lecaddfeedback', { body }).subscribe(
+
+            console.log('url ' + this.url, 'body ' + body);
+            this.ws.put<any>('/iconsult/remark?', {
+              url: this.url,
+              body
+            }).subscribe(
               {
                 next: _ => {
                   this.showToastMessage('Remarks Added Successfully!', 'success');
@@ -68,7 +69,7 @@ export class LecturerSlotDetailsModalPage implements OnInit {
                 error: _ => this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger'),
                 complete: () => {
                   this.dismissLoading();
-                  this.modalCtrl.dismiss();
+                  this.modalCtrl.dismiss('SUCCESS');
                 }
               }
             );
@@ -78,67 +79,70 @@ export class LecturerSlotDetailsModalPage implements OnInit {
     }).then(confirm => confirm.present());
   }
 
-  async cancelBooking(slot: LecturerSlotDetails) {
-    const alert = await this.alertCtrl.create({
-      header: `Canelling Appointment with ${slot.studentname} on ${this.dataToSend.date}`,
-      message: 'Please provide us with the cancellation reason:',
-      inputs: [
-        {
-          name: 'cancellationReason',
-          type: 'text',
-          placeholder: 'Enter The Cancellation Reason',
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => { }
-        }, {
-          text: 'Submit',
-          handler: (data) => {
-            if (!data.cancellationReason) {
-              this.showToastMessage('Cancellation Reason is Required !!', 'danger');
-            } else {
-              this.presentLoading();
-              const cancellationDate = moment().format(); // To get the date format required by backend
-              const cancellationBody = {
-                availibility_id: this.dataToSend.availibilityId,
-                cancel_datetime: cancellationDate,
-                cancel_reason: data.cancellationReason, // Input field
-                cancelled_datetime: cancellationDate,
-                date: this.dataToSend.date,
-                slotid: slot.slotid,
-                status: 1, // always 1 from backend
-                timee: this.dataToSend.timee
-              };
-              this.sendCancelBookingRequest(cancellationBody).subscribe(
-                {
-                  next: () => {
-                    this.showToastMessage('Booking has been cancelled successfully!', 'success');
-                  },
-                  error: () => {
-                    this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
-                  },
-                  complete: () => {
-                    this.dismissLoading();
-                    this.modalCtrl.dismiss('booked');
-                  }
-                }
-              );
-            }
-          }
-        }
-      ]
-    });
-    await alert.present();
-  }
+  // async cancelBooking(slot: LecturerSlotDetails) {
+  //   const date = moment(this.dataToSend.start_time).format('YYYY-MM-DD');
+  //   const alert = await this.alertCtrl.create({
+  //     header: `Canelling Appointment with ${slot.studentname} on ${date}`,
+  //     message: 'Please provide us with the cancellation reason:',
+  //     inputs: [
+  //       {
+  //         name: 'cancellationReason',
+  //         type: 'text',
+  //         placeholder: 'Enter The Cancellation Reason',
+  //       },
+  //     ],
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel',
+  //         handler: () => { }
+  //       }, {
+  //         text: 'Submit',
+  //         handler: (data) => {
+  //           if (!data.cancellationReason) {
+  //             this.showToastMessage('Cancellation Reason is Required !!', 'danger');
+  //           } else {
+  //             this.presentLoading();
+  //             const cancellationDate = moment().format(); // To get the date format required by backend
+  //             const cancellationBody = {
 
-  sendCancelBookingRequest(cancelledSlotDetails: any) {
-    return this.ws.post<any>('/iconsult/lecCancelbookedslot', {
-      body: cancelledSlotDetails,
-    });
-  }
+  //               // availibility_id: this.dataToSend.,
+  //               // cancel_datetime: cancellationDate,
+  //               // cancel_reason: data.cancellationReason, // Input field
+  //               // cancelled_datetime: cancellationDate,
+  //               // date: this.dataToSend.date,
+  //               // slotid: slot.slotid,
+  //               // status: 1, // always 1 from backend
+  //               // timee: this.dataToSend.timee
+  //             };
+  //             this.sendCancelBookingRequest(cancellationBody).subscribe(
+  //               {
+  //                 next: () => {
+  //                   this.showToastMessage('Booking has been cancelled successfully!', 'success');
+  //                 },
+  //                 error: () => {
+  //                   this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
+  //                 },
+  //                 complete: () => {
+  //                   this.dismissLoading();
+  //                   this.modalCtrl.dismiss('booked');
+  //                 }
+  //               }
+  //             );
+  //           }
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   await alert.present();
+  // }
+
+  // sendCancelBookingRequest(cancelBookingDetials: any) {
+  //   return this.ws.post<any>('/iconsult/booking/cancel?', {
+  //     url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging',
+  //     body: cancelBookingDetials,
+  //   });
+  // }
 
   showToastMessage(message: string, color: 'danger' | 'success') {
     this.toastCtrl.create({

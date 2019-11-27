@@ -85,20 +85,12 @@ export class MyConsultationsPage {
     });
     await modal.present();
     await modal.onDidDismiss().then(data => {
-      if (data.data === 'booked') {
+      console.log('dismiss data ', data.data);
+      if (data.data === 'SUCCESS') {
         this.daysConfigrations = [];
         this.doRefresh();
       }
     });
-    await modal.present();
-    await modal.onDidDismiss().then(
-      data => {
-        if (data.data === 'booked') {
-          this.daysConfigrations = [];
-          this.doRefresh();
-        }
-      }
-    );
   }
 
   ionViewDidEnter() {
