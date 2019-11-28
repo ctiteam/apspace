@@ -12,7 +12,7 @@ export interface Settings {
   tripTo: string;
   /* timetable */
   intakeHistory: string[];
-  viewWeek: boolean;
+  viewWeek: boolean; // shared with lecturer
   /* exam schedule */
   examIntake: string;
   /* contact number */

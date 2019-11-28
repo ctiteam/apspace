@@ -5,8 +5,11 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { LecturerTimetableComponentModule } from '../../components/lecturer-timetable/lecturer-timetable.module';
+import { ComponentsModule } from '../../components/components.module';
+import { EndtimePipe } from './endtime.pipe';
 import { LecturerTimetablePage } from './lecturer-timetable.page';
+import { ThedayPipe } from './theday.pipe';
+import { TheweekPipe } from './theweek.pipe';
 
 const routes: Routes = [
   {
@@ -21,8 +24,13 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    LecturerTimetableComponentModule
+    ComponentsModule,
   ],
-  declarations: [LecturerTimetablePage]
+  declarations: [
+    LecturerTimetablePage,
+    ThedayPipe,
+    TheweekPipe,
+    EndtimePipe,
+  ]
 })
 export class LecturerTimetablePageModule {}
