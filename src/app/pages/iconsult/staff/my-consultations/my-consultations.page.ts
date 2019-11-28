@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   AlertController, LoadingController, ModalController, ToastController
 } from '@ionic/angular';
-import { forkJoin, Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
 import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
