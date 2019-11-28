@@ -3,9 +3,9 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { ChartComponent } from 'angular2-chartjs';
 
 import { WsApiService } from '../../services';
+import { ReversePipe } from '../../shared/reverse/reverse.pipe';
 import { FeesPage } from './fees.page';
 import { FilterPipe } from './filter.pipe';
-import { ReversePipe } from './reverse.pipe';
 
 describe('FeesPage', () => {
   let component: FeesPage;
