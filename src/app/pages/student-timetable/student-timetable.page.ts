@@ -89,7 +89,7 @@ export class StudentTimetablePage implements OnInit {
 
   room: string;
   intake: string;
-  freeTime: boolean;
+  freeTime = false;
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
