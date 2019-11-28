@@ -131,7 +131,7 @@
                         </ion-grid>
                       </ion-item>
                     </ng-template>
-                    <ion-item class="table-item" [style.borderLeft]="'0.7rem solid ' + strToColor(timetable.MODID)"
+                    <ion-item class="table-item" [style.borderLeft]="'0.7rem solid ' + (timetable.MODID | strToColor)"
                       *ngFor="let timetable of timetables; trackBy: trackByIndex"
                       [class.freeTime]='timetable.MODID === "FREE"'>
                       <ion-grid>
