@@ -63,7 +63,9 @@
                             Week: <span class="text-bold">{{selectedWeek | date : 'dd MMM yyy'}}</span>
                           </h5>
                         </ion-label>
-
+                        <ion-button fill="outline" slot="end" class="print-button colored-border" (click)="sendToPrint()">
+                          <ion-icon slot="icon-only" name="print" class="colored-text"></ion-icon>
+                        </ion-button>
                       </ion-item>
                     </ion-card-title>
                   </ion-card-header>

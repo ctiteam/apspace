@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Device } from '@ionic-native/device/ngx';
 
@@ -13,7 +12,6 @@ import { WsApiService } from './ws-api.service';
 export class DataCollectorService {
 
   constructor(
-    public http: HttpClient,
     public device: Device,
     private ws: WsApiService,
     private version: VersionService

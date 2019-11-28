@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { FuseModule } from '../../shared/fuse/fuse.module';
+import { SharedPipesModule } from '../../shared/shared-pipes.module';
 import { DepartmentPipe } from './department.pipe';
 import { StaffDirectoryPage } from './staff-directory.page';
 
@@ -22,7 +22,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    FuseModule
+    SharedPipesModule
   ],
   declarations: [StaffDirectoryPage, DepartmentPipe]
 })

@@ -11,9 +11,12 @@ export class TheWeekPipe implements PipeTransform {
    * @param date - filter week if exists
    */
 
-  transform(studentTimetable: StudentTimetable[], date: Date): StudentTimetable[] {
-    const nextDate = new Date(date.getTime());  // do not modify date
+  transform(studentTimetable: StudentTimetable[], prevDate: Date): StudentTimetable[] {
+    const nextDate = new Date(prevDate.getTime());  // do not modify prevDate
     nextDate.setDate(nextDate.getDate() + 7);
-    return studentTimetable.filter(t => new Date(t.DATESTAMP_ISO) < nextDate);
+    return studentTimetable.filter(t => {
+      const date = new Date(t.DATESTAMP_ISO);
+      return prevDate <= date && date < nextDate;
+    });
   }
 }

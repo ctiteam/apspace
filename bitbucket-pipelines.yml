@@ -1,4 +1,4 @@
-image: node:10.16.0-alpine
+image: node:erbium-alpine
 
 pipelines:
   default:
@@ -7,15 +7,17 @@ pipelines:
         caches:
           - node
         script:
+          - apk add firefox-esr
           - yarn install
           - yarn lint
-            # - yarn test --single-run --no-progress --browsers FirefoxHeadless
-          - yarn build --aot
+          - yarn test --configuration=ci
+            # - yarn e2e --configuration=ci
+          - yarn build --configuration=ci
   pull-requests:
     '**':
       - step: *build-test
   branches:
-    production:
+    v4-production:
     - step:
         image: cticti/aws-cli:node-ionic-alpine
         caches:
@@ -24,6 +26,7 @@ pipelines:
           - npm i
           - ionic build --prod
           - aws s3 sync www/ s3://apspace-production/ --acl public-read
+          - aws cloudfront create-invalidation --distribution-id E2U0MAK0TADMRA --paths "/*"
     v4-staging:
     - step:
         image: cticti/aws-cli:node-ionic-alpine

@@ -60,6 +60,14 @@ export class MorePage implements OnInit {
       tags: ['vacation', 'break']
     },
     {
+      title: 'Human Resource',
+      group: 'Main',
+      url: 'hr',
+      img: 'assets/img/hr.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['leave', 'break', 'mc']
+    },
+    {
       title: 'Knowledge Base',
       group: 'Main',
       url: 'http://kb.sites.apiit.edu.my/home/',

@@ -5,7 +5,7 @@ import { DragulaService } from 'ng2-dragula';
 import { Observable, of, zip } from 'rxjs';
 import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 // tslint:disable-next-line: max-line-length
-import { Apcard, APULocation, APULocations, BusTrips, ConsultationSlot, DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday, Holidays, LecturerTimetable, News, StaffProfile } from 'src/app/interfaces';
+import { APULocation, APULocations, Apcard, BusTrips, ConsultationSlot, DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday, Holidays, LecturerTimetable, News, StaffProfile, Quote } from 'src/app/interfaces';
 import { NewsService, NotificationService, UserSettingsService, WsApiService } from '../../services';
 import { NewsModalPage } from '../news/news-modal';
 
@@ -69,7 +69,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     withOptionsButton: false
   };
   newsIndexToShow = 0; // open the first news section by default
-
+  quote$: Observable<Quote>;
   noticeBoardCardConfigurations: DashboardCardComponentConfigurations = {
     cardTitle: 'Notice Board',
     contentPadding: false,
@@ -182,6 +182,13 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     contentPadding: false,
     withOptionsButton: false,
   };
+
+  inspirationalQuotesCardConfigurations: DashboardCardComponentConfigurations = {
+    withOptionsButton: false,
+    cardTitle: 'Inspirational Quotes',
+    cardSubtitle: 'Get inspired by today\'s'
+  };
+
 
   // UPCOMING EVENTS
   upcomingEvent$: Observable<EventComponentConfigurations[]>;
@@ -300,6 +307,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   doRefresh(refresher?) {
     this.displayGreetingMessage();
     this.getLocations(refresher);
+    this.quote$ = this.ws.get<Quote>('/apspacequote', { auth: false });
     this.holidays$ = this.getHolidays(true);
     this.news$ = this.news.get(refresher).pipe(
       map(res => res.slice(0, 4))

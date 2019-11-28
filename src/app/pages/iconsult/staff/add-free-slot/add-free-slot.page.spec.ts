@@ -1,9 +1,9 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 
 import { AddFreeSlotPage } from './add-free-slot.page';
 
-describe('AddFreeSlotPage', () => {
+xdescribe('AddFreeSlotPage', () => {
   let component: AddFreeSlotPage;
   let fixture: ComponentFixture<AddFreeSlotPage>;
 

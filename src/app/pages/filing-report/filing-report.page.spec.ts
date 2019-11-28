@@ -1,6 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 
+import { WsApiService } from '../../services';
 import { FilingReportPage } from './filing-report.page';
 
 describe('FilingReportPage', () => {
@@ -9,7 +10,10 @@ describe('FilingReportPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FilingReportPage ],
+      declarations: [FilingReportPage],
+      providers: [
+        { provide: WsApiService, useValue: {} },
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();

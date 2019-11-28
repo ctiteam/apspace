@@ -4,7 +4,7 @@ import { Network } from '@ionic-native/network/ngx';
 import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
-import { concat, from, iif, Observable, of, throwError } from 'rxjs';
+import { Observable, concat, from, iif, of, throwError } from 'rxjs';
 import {
   catchError, concatMap, delay, publishLast, refCount, retryWhen, switchMap,
   tap, timeout,
@@ -29,7 +29,7 @@ export class WsApiService {
   ) { }
 
   /**
-   * GET: Request WS API with cache and error handling.
+   * GET: Request WS API with cache (mobile only) and error handling.
    *
    * Caching strategies inspired by https://serviceworke.rs/caching-strategies.html
    *
@@ -73,28 +73,32 @@ export class WsApiService {
       ? this.http.get<T>(url, opt)
       : this.cas.getST(url.split('?').shift()).pipe( // remove service url params
         switchMap(ticket => this.http.get<T>(url, { ...opt, params: { ...opt.params, ticket } })),
-        catchError(() => this.storage.get(endpoint)), // no network
       )
     ).pipe(
       tap(cache => this.storage.set(endpoint, cache)),
       timeout(options.timeout),
       catchError(err => {
+        if (400 <= err.status && err.status < 500) {
+          return throwError(err);
+        }
         this.toastCtrl.create({ message: err.message, duration: 3000, position: 'top' })
           .then(toast => toast.present());
         return from(this.storage.get(endpoint)).pipe(
-          switchMap(v => v ? of(v as T) : throwError(new Error('retrying'))),
+          switchMap(v => v ? of(v as T) : throwError(err)),
         );
       }),
       retryWhen(errors => errors.pipe(
         concatMap((err, n) => iif( // use concat map to keep errors in order (not parallel)
-          () => n < options.attempts,
+          () => !(400 <= err.status && err.status < 500) && n < options.attempts, // skip 4xx
           of(err).pipe(delay((2 ** (n + 1) + Math.random() * 8) * 1000)), // 2^n + random 0-8
           throwError(err), // propagate error if all retries failed
         ))
       )),
     );
 
-    if (options.caching !== 'cache-only' && (!this.plt.is('cordova') || this.network.type !== 'none')) {
+    if (!this.plt.is('cordova') && !this.plt.is('capacitor')) { // disable caching on browser
+      return request$;
+    } else if (options.caching !== 'cache-only' && this.network.type !== 'none') {
       return options.caching === 'cache-update-refresh'
         ? concat(from(this.storage.get(endpoint)), request$)
         : request$;

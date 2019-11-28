@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
+import { ComponentsModule } from 'src/app/components/components.module';
 import { FilterPipe } from './filter.pipe';
 import { IgraduatePage } from './igraduate.page';
 import { StudentDetailsModalPage } from './student-details-modal';
@@ -19,6 +20,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    ComponentsModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes)

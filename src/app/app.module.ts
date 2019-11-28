@@ -17,12 +17,15 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { httpInterceptorProviders } from './http-interceptors';
 import { NewsModalPage } from './pages/news/news-modal';
 import { NotificationModalPage } from './pages/notifications/notification-modal';
+import { RequestCache, RequestCacheWithMapStorage } from './services';
 // import { Animation } from '@ionic/core';
 
 // export function disableNavAnimation(AnimationC: Animation): Promise<Animation> { return Promise.resolve(new AnimationC()); }
 
+import { Badge } from '@ionic-native/badge/ngx';
 import { GraphQLModule } from './graphql.module';
 
 @NgModule({
@@ -45,13 +48,16 @@ import { GraphQLModule } from './graphql.module';
   ],
   providers: [
     ActionSheet,
+    Badge,
     FCM,
     InAppBrowser,
     AppAvailability,
     Network,
     Device,
     StatusBar,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: RequestCache, useClass: RequestCacheWithMapStorage },
+    httpInterceptorProviders,
   ],
   bootstrap: [AppComponent]
 })

@@ -1,7 +1,10 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 
+import { WsApiService } from '../../services';
+import { FilterByCompanyPipe } from './filter-by-company.pipe';
 import { OperationHoursPage } from './operation-hours.page';
+import { TimePipe } from './time.pipe';
 
 describe('OperationHoursPage', () => {
   let component: OperationHoursPage;
@@ -9,10 +12,12 @@ describe('OperationHoursPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OperationHoursPage ],
+      declarations: [OperationHoursPage, TimePipe, FilterByCompanyPipe],
+      providers: [
+        { provide: WsApiService, useValue: {} },
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

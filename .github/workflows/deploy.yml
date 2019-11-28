@@ -1,0 +1,37 @@
+name: Deploy
+
+on: [deployment]
+
+jobs:
+  deployment:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Deployment pending
+      uses: deliverybot/deployment-status@master
+      with:
+        state: pending
+        token: ${{ github.token }}
+
+    - name: Deploy ${{ github.event.deployment.environment }}
+      run: |
+        echo task - ${{ github.event.deployment.task }}
+        echo environment - ${{ github.event.deployment.task }}
+        echo payload - ${{ github.event.deployment.payload }}
+
+    - name: Deployment success
+      if: success()
+      uses: deliverybot/deployment-status@master
+      with:
+        state: success
+        token: ${{ github.token }}
+
+    - name: Deployment failure
+      if: failure()
+      uses: deliverybot/deployment-status@master
+      with:
+        state: failure
+        token: ${{ github.token }}

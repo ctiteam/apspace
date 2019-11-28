@@ -1,10 +1,7 @@
-/* HttpClient modifier (ordered) */
 export {
   RequestCache, RequestCacheWithMap, RequestCacheWithStorage,
   RequestCacheWithMapStorage,
-} from './request-cache/request-cache.service';
-export { httpInterceptorServices } from './http-interceptors';
-/* User providers */
+} from './request-cache.service';
 export { CasTicketService } from './cas-ticket.service';
 export { ChangePasswordService } from './change-password.service';
 export { DataCollectorService } from './data-collector.service';

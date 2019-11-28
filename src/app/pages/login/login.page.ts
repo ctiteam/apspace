@@ -213,4 +213,8 @@ export class LoginPage {
     caches.forEach(endpoint => this.ws.get(endpoint).subscribe());
   }
 
+  openApkeyTroubleshooting() {
+    this.iab.create('http://kb.sites.apiit.edu.my/question/apkey-troubleshooting/', '_system', 'location=true');
+  }
+
 }

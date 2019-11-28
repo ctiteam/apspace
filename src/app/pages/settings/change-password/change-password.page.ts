@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 
-import { Storage } from '@ionic/storage';
 import { tap } from 'rxjs/operators';
 import { Role, StaffProfile, StudentProfile } from 'src/app/interfaces';
 import { CasTicketService, ChangePasswordService, SettingsService, WsApiService } from '../../../services';
@@ -30,13 +29,14 @@ export class ChangePasswordPage implements OnInit {
     private loadingController: LoadingController,
     private changePasswordService: ChangePasswordService,
     private settings: SettingsService,
-    private storage: Storage,
     private ws: WsApiService,
     private cas: CasTicketService,
     private alertCtrl: AlertController
   ) { }
 
   ngOnInit() {
+    // tslint:disable-next-line: no-bitwise
+    this.isStudent = Boolean(this.settings.get('role') & Role.Student);
     this.getUserUsername(); // username is needed to validate the current password with cas
     this.changePasswordForm = new FormGroup({
       new_password: new FormControl('', [Validators.required]),
@@ -46,39 +46,16 @@ export class ChangePasswordPage implements OnInit {
   }
 
   getUserUsername() {
-    // tslint:disable-next-line: no-bitwise
-    if (this.settings.get('role') & Role.Student) { // get student profile either from local storage or from api
-      this.storage.get('/student/profile').then(
-        studentProfileLocalStorage => {
-          if (studentProfileLocalStorage) { // username is stored in storage
-            this.username = studentProfileLocalStorage.STUDENT_NUMBER;
-          } else { // username is not stored in storage
-            // it is called only if the username does not exists in local storage
-            this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).pipe(
-              tap(studentProfile => {
-                this.username = studentProfile.STUDENT_NUMBER;
-              }),
-            ).subscribe();
-          }
-        }
-      );
-      this.isStudent = true;
-    } else { // get staff profile either from local storage or from api
-      this.storage.get('/staff/profile').then(
-        staffProfileLocalStorage => {
-          if (staffProfileLocalStorage) { // if username is stored in storage
-            this.username = staffProfileLocalStorage[0].CODE;
-          } else { // username is not stored in storage
-            // it is called only if the username does not exists in local storage
-            this.ws.get<StaffProfile>('/staff/profile', { caching: 'cache-only' }).pipe(
-              tap(staffProfile => {
-                this.username = staffProfile[0].CODE;
-              }),
-            ).subscribe();
-          }
-        }
-      );
-      this.isStudent = false;
+    if (this.isStudent) {
+      this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).pipe(
+        tap(studentProfile => this.username = studentProfile.STUDENT_NUMBER),
+      ).subscribe();
+    } else {
+      this.ws.get<StaffProfile>('/staff/profile', { caching: 'cache-only' }).pipe(
+        tap(staffProfile => {
+          this.username = staffProfile[0].CODE;
+        }),
+      ).subscribe();
     }
   }
 

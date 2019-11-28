@@ -1,5 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 import { FeedbackService, SettingsService, VersionService } from '../../services';
 import { FeedbackPage } from './feedback.page';
@@ -7,7 +8,6 @@ import { FeedbackPage } from './feedback.page';
 describe('FeedbackPage', () => {
   let component: FeedbackPage;
   let fixture: ComponentFixture<FeedbackPage>;
-  let getSpy: jasmine.Spy;
   let platformSpy: jasmine.Spy;
 
   beforeEach(async(() => {
@@ -15,18 +15,17 @@ describe('FeedbackPage', () => {
     platformSpy = feedbackService.platform.and.returnValue('Mozilla');
 
     const settingsService = jasmine.createSpyObj('SettingsService', ['get']);
-    getSpy = settingsService.get.and.returnValue(null);
 
     TestBed.configureTestingModule({
       declarations: [FeedbackPage],
       providers: [
         { provide: FeedbackService, useValue: feedbackService },
+        { provide: InAppBrowser, useValue: {} },
         { provide: SettingsService, useValue: settingsService },
-        VersionService,
+        { provide: VersionService, useValue: {} },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -39,9 +38,5 @@ describe('FeedbackPage', () => {
     expect(component).toBeTruthy();
 
     expect(platformSpy).toHaveBeenCalled();
-  });
-
-  it('should retrieve mobile number', () => {
-    expect(getSpy).toHaveBeenCalledWith('contactNo');
   });
 });

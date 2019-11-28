@@ -5,6 +5,8 @@ interface Item {
   TOTAL_COLLECTED: number;
   OUTSTANDING: number;
   FINE: number;
+  ITEM_DESCRIPTION: string;
+  DUE_DATE: string;
 }
 
 const filterMap = {
