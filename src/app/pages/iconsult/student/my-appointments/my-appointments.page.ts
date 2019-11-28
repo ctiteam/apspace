@@ -19,6 +19,7 @@ import * as moment from 'moment';
   styleUrls: ['./my-appointments.page.scss'],
 })
 export class MyAppointmentsPage {
+  url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
   bookings$: Observable<any[]>;
   slotDetails$: Observable<SlotDetails>;
   loading: HTMLIonLoadingElement;
@@ -45,7 +46,6 @@ export class MyAppointmentsPage {
     const bookings$: Observable<ConsultationHour[]> = this.ws.get<ConsultationHour[]>('/iconsult/bookings?', {
       url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'
     }).pipe(
-      tap(response => console.log('tap response ', response)),
       map(bookingList => { // Check if slot is passed and modify its status to passed
         return bookingList.map(bookings => {
           if (bookings.status === 'normal' && moment(bookings.booking_datetime, 'YYYY-MM-DD kk:mm:ss').toDate() < new Date()) {
@@ -199,9 +199,8 @@ export class MyAppointmentsPage {
   }
 
   sendCancelBookingRequest(cancelledBookingSlotDetails: any) {
-    console.log(cancelledBookingSlotDetails);
     return this.ws.put<any>('/iconsult/booking/cancel?', {
-      url: 'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev',
+      url: this.url,
       body: cancelledBookingSlotDetails,
     });
   }

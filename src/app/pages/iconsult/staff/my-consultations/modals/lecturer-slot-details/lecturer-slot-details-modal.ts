@@ -35,7 +35,6 @@ export class LecturerSlotDetailsModalPage implements OnInit {
       this.showRemarks = true;
     }
 
-    console.log(this.slot);
   }
 
   addRemarks() {
@@ -57,7 +56,6 @@ export class LecturerSlotDetailsModalPage implements OnInit {
           handler: () => {
             this.presentLoading();
 
-            console.log('url ' + this.url, 'body ' + body);
             this.ws.put<any>('/iconsult/remark?', {
               url: this.url,
               body

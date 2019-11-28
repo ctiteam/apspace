@@ -13,6 +13,7 @@ import { WsApiService } from 'src/app/services';
   providers: [DatePipe]
 })
 export class BookSlotModalPage implements OnInit {
+  url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
   verifyslot$: Observable<SlotDuplicated>;
   dataToSend: { slotData: ConsultationSlot, staffData: StaffDirectory }; // DATA COMING FROM THE PAGE
   loading: HTMLIonLoadingElement;
@@ -100,7 +101,7 @@ export class BookSlotModalPage implements OnInit {
             // START THE LOADING
             this.presentLoading();
             this.ws.post<any>('/iconsult/booking?', {
-              url: 'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev',
+              url: this.url,
               body: this.formModel,
             }).subscribe(
 
