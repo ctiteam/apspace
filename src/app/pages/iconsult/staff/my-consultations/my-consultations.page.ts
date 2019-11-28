@@ -87,7 +87,6 @@ export class MyConsultationsPage {
     });
     await modal.present();
     await modal.onDidDismiss().then(data => {
-      console.log('dismiss data ', data.data);
       if (data.data === 'SUCCESS') {
         this.daysConfigrations = [];
         this.doRefresh();
@@ -415,7 +414,6 @@ export class MyConsultationsPage {
         url: this.url
       })
     ]).pipe(
-      tap(response => console.log(response)),
       map(([slots, bookings]) =>
         slots.reduce((r, a) => {
           // Grouping the slots daily and get the summary data
@@ -453,7 +451,6 @@ export class MyConsultationsPage {
         }, {})
       ),
       tap(dates => {
-        console.log(dates);
         // add css classes for slot type
         Object.keys(dates).forEach(date => {
           const items = dates[date].items;

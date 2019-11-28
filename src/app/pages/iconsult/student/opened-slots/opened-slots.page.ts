@@ -5,12 +5,12 @@ import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
+import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { ConsultationSlot, StaffDirectory } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { BookSlotModalPage } from './book-slot-modal';
 import { CalendarFilterModalPage } from './calendar-filter-modal/calendar-filter-modal';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-opened-slots',
@@ -62,7 +62,6 @@ export class OpenedSlotsPage {
     this.slots$ = this.ws.get<ConsultationSlot[]>('/iconsult/slots?lecturer_sam_account_name=' + this.staffCasId, {
       url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'
     }).pipe(
-      tap(response => console.log(response)),
       map(
         slots => slots.reduce((r, a) => { // Grouping the slots daily
           const startDate = this.datePipe.transform(a.start_time, 'yyyy-MM-dd', '+0000');

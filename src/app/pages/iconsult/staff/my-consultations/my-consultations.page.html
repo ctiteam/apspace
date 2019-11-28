@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>My Consultations</ion-title>
     <ion-buttons slot="end">
-      <ion-button [disabled]="this.slotsToBeCancelled.length > 0" *ngIf="dateToFilter"
+      <ion-button [disabled]="this.slotsToBeCancelled.length > 0"
         class="colored-border colored-text" fill="outline" (click)="toggleCancelSlot()">
         <ion-icon [name]="onSelect? 'close' : 'checkbox-outline'"></ion-icon>
       </ion-button>
@@ -97,7 +97,7 @@
                         </ion-col>
                         <ion-col size-xs="7" size-sm="8">
                           <span class="title">
-                            {{slot.start_time | date: "HH:mm" : "Z"}} - {{slot.end_time | date: "HH:mm" : "Z"}}
+                            {{slot.start_time | date: "HH:mm" : "+0000"}} - {{slot.end_time | date: "HH:mm" : "+0000"}}
                           </span>
                           <span class="description small-margin-top">
                             <ion-icon name="pin"></ion-icon>
@@ -110,7 +110,7 @@
                               <ion-button class="cursor-pointer" size="small" expand="block"
                                 *ngIf="slot.status !== 'Available'"
                                 (click)="openSlotDetailsModal(slot)">
-                                <ion-icon color="danger" slot="icon-only" name="information-circle-outline"></ion-icon>
+                                <ion-icon slot="icon-only" name="list-box"></ion-icon>
                               </ion-button>
                             </ion-buttons>
                           </ng-container>
@@ -170,7 +170,7 @@
                       <ion-row *ngIf="slot.status !== 'Cancelled' && slot.status !== 'Cancelled by lecturer'">
                         <ion-col size-xs="7" size-sm="8">
                           <span class="title">
-                            {{slot.start_time | date: "HH:mm"}} - {{slot.end_time | date: "HH:mm"}}
+                            {{slot.start_time | date: "HH:mm" : "+0000"}} - {{slot.end_time | date: "HH:mm" : "+0000"}}
                           </span>
                           <span class="description small-margin-top">
                             <ion-icon name="pin"></ion-icon>

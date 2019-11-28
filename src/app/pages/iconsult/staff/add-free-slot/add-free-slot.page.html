@@ -191,10 +191,10 @@
                       <ion-label position="stacked" [ngClass]="{ 'danger-text': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
                       submitted && addFreeSlotForm.get('venue').hasError('required') }">Venue
                       </ion-label>
-                      <ion-select placeholder="Click to select" interface="alert" [disabled]="!(venues$)"
+                      <ion-select placeholder="Click to select" interface="alert" *ngIf="venues$ | async as venues"
                       formControlName="venue" [ngClass]="{ 'is-invalid': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
                       submitted && addFreeSlotForm.get('venue').hasError('required') }" class="form-input">
-                      <ion-select-option *ngFor="let venue of venues$ | async as venues" [value]="venue">
+                      <ion-select-option *ngFor="let venue of venues" [value]="venue.id">
                         {{ venue.room_code }}
                       </ion-select-option>
                     </ion-select>

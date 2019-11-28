@@ -89,6 +89,7 @@ export class AddFreeSlotPage implements OnInit {
         }
       );
     }
+
     this.addFreeSlotForm = this.formBuilder.group({
       slotType: [this.consultationTypeOptions[0].value, Validators.required], // alwayes required
       startDate: [
@@ -171,8 +172,8 @@ export class AddFreeSlotPage implements OnInit {
     if (this.addFreeSlotForm.value.slotType === this.consultationTypeOptions[0].value) {
       this.addFreeSlotForm.value.time.forEach(time => {
         const timeSlot = {
-          location_id: this.addFreeSlotForm.value.venue.id,
-          datetime: startDate + 'T' + moment(time.slotsTime).format('kk:mm:00Z')
+          location_id: this.addFreeSlotForm.value.venue,
+          datetime: startDate + ' ' + moment(time.slotsTime).format('kk:mm:00')
         };
 
         body.push(timeSlot);
@@ -182,7 +183,7 @@ export class AddFreeSlotPage implements OnInit {
 
       if (this.addFreeSlotForm.value.noOfWeeks > 0) {
         endDate = moment(this.addFreeSlotForm.value.startDate, 'YYYY-MM-DD')
-          .add((+this.addFreeSlotForm.value.noOfWeeks * 7), 'days')
+          .add((+this.addFreeSlotForm.value.noOfWeeks * 7) - 1, 'days')
           .format('YYYY-MM-DD');
       }
 
@@ -191,8 +192,8 @@ export class AddFreeSlotPage implements OnInit {
         if (this.addFreeSlotForm.value.repeatOn.includes(dayName)) {
           this.addFreeSlotForm.value.time.forEach(time => {
             const timeSlot = {
-              location_id: this.addFreeSlotForm.value.venue.id,
-              datetime: startDate + 'T' + moment(time.slotsTime).format('kk:mm:00Z')
+              location_id: this.addFreeSlotForm.value.venue,
+              datetime: startDate + ' ' + moment(time.slotsTime).format('kk:mm:00')
               // 2019-11-27T17:00:00Z
             };
 
@@ -214,7 +215,7 @@ export class AddFreeSlotPage implements OnInit {
                   <p><strong>Slot End Date: </strong> ${this.addFreeSlotForm.value.endDate || 'N/A'}</p>
                   <p><strong>Slot Time: </strong> ${this.addFreeSlotForm.value.time.map(time => moment(time.slotsTime).format('kk:mm'))}</p>
                   <p><strong>Slot Location: </strong> ${this.addFreeSlotForm.value.location}</p>
-                  <p><strong>Slot Venue: </strong> ${this.addFreeSlotForm.value.venue.room_code} </p>`,
+                  <p><strong>Slot Venue: </strong> ${this.addFreeSlotForm.value.venue} </p>`,
         buttons: [
           {
             text: 'No',
