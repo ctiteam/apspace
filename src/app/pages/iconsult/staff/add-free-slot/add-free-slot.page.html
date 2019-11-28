@@ -194,7 +194,7 @@
                       <ion-select placeholder="Click to select" interface="alert" [disabled]="!(venues$)"
                       formControlName="venue" [ngClass]="{ 'is-invalid': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
                       submitted && addFreeSlotForm.get('venue').hasError('required') }" class="form-input">
-                      <ion-select-option *ngFor="let venue of venues$ | async as venues" [value]="venue.id">
+                      <ion-select-option *ngFor="let venue of venues$ | async as venues" [value]="venue">
                         {{ venue.room_code }}
                       </ion-select-option>
                     </ion-select>

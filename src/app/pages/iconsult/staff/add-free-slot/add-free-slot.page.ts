@@ -22,6 +22,7 @@ import * as moment from 'moment';
   styleUrls: ['./add-free-slot.page.scss']
 })
 export class AddFreeSlotPage implements OnInit {
+  url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
   venues$: Observable<Venue[]>;
   addFreeSlotForm: FormGroup;
   submitted = false;
@@ -84,7 +85,7 @@ export class AddFreeSlotPage implements OnInit {
       this.venues$ = this.ws.get<Venue[]>(
         `/iconsult/locations?venue=${this.settings.get('defaultCampus')}`,
         {
-          url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'
+          url: this.url
         }
       );
     }
@@ -170,7 +171,7 @@ export class AddFreeSlotPage implements OnInit {
     if (this.addFreeSlotForm.value.slotType === this.consultationTypeOptions[0].value) {
       this.addFreeSlotForm.value.time.forEach(time => {
         const timeSlot = {
-          location_id: this.addFreeSlotForm.value.venue,
+          location_id: this.addFreeSlotForm.value.venue.id,
           datetime: startDate + 'T' + moment(time.slotsTime).format('kk:mm:00Z')
         };
 
@@ -190,7 +191,7 @@ export class AddFreeSlotPage implements OnInit {
         if (this.addFreeSlotForm.value.repeatOn.includes(dayName)) {
           this.addFreeSlotForm.value.time.forEach(time => {
             const timeSlot = {
-              location_id: this.addFreeSlotForm.value.venue,
+              location_id: this.addFreeSlotForm.value.venue.id,
               datetime: startDate + 'T' + moment(time.slotsTime).format('kk:mm:00Z')
               // 2019-11-27T17:00:00Z
             };
@@ -204,27 +205,6 @@ export class AddFreeSlotPage implements OnInit {
       }
     }
 
-    console.log(body); // TO BE REMOVED
-    // Get slot algorithmn ends here
-
-    // Temp solution until the backend change the methods
-    // Only adding the needed data from the form
-    // if (this.addFreeSlotForm.value.slotType === this.consultationTypeOptions[0].value) {
-    //   // Single Slot
-    //   body.date = this.addFreeSlotForm.value.startDate;
-    // } else if (this.addFreeSlotForm.value.slotType === this.consultationTypeOptions[1].value) {
-    //   // Repeat weekly
-    //   body.start_date = this.addFreeSlotForm.value.startDate;
-    //   body.end_date = moment(this.addFreeSlotForm.value.startDate, 'YYYY-MM-DD')
-    //     .add((+this.addFreeSlotForm.value.noOfWeeks * 7) - 1, 'days')
-    //     .format('YYYY-MM-DD');
-    //   body.repeat = this.addFreeSlotForm.value.repeatOn;
-    // } else if (this.addFreeSlotForm.value.slotType === this.consultationTypeOptions[2].value) {
-    //   // Repeat Until a specific Date
-    //   body.start_date = this.addFreeSlotForm.value.startDate;
-    //   body.end_date = this.addFreeSlotForm.value.endDate;
-    //   body.repeat = this.addFreeSlotForm.value.repeatOn;
-    // }
     this.alertCtrl
       .create({
         header: 'Adding new slot(s)',
@@ -234,7 +214,7 @@ export class AddFreeSlotPage implements OnInit {
                   <p><strong>Slot End Date: </strong> ${this.addFreeSlotForm.value.endDate || 'N/A'}</p>
                   <p><strong>Slot Time: </strong> ${this.addFreeSlotForm.value.time.map(time => moment(time.slotsTime).format('kk:mm'))}</p>
                   <p><strong>Slot Location: </strong> ${this.addFreeSlotForm.value.location}</p>
-                  <p><strong>Slot Venue: </strong> ${this.addFreeSlotForm.value.venue} </p>`,
+                  <p><strong>Slot Venue: </strong> ${this.addFreeSlotForm.value.venue.room_code} </p>`,
         buttons: [
           {
             text: 'No',
@@ -247,8 +227,7 @@ export class AddFreeSlotPage implements OnInit {
               this.ws
                 .post<any>('/iconsult/slot?', {
                   body,
-                  url:
-                    'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev'
+                  url: this.url
                 })
                 .subscribe({
                   next: () => {
@@ -370,7 +349,7 @@ export class AddFreeSlotPage implements OnInit {
     this.venues$ = this.ws.get<Venue[]>(
       `/iconsult/locations?venue=${event.detail.value}`,
       {
-        url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'
+        url: this.url
       }
     );
   }
