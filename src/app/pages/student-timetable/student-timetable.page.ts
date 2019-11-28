@@ -6,10 +6,12 @@ import { ActionSheetController, IonRefresher, ModalController } from '@ionic/ang
 import * as moment from 'moment';
 import { Observable, combineLatest } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
+
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 import { Role, StudentProfile, StudentTimetable } from '../../interfaces';
 import { SettingsService, StudentTimetableService, UserSettingsService, WsApiService } from '../../services';
 import { ClassesPipe } from './classes.pipe';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-timetable',
