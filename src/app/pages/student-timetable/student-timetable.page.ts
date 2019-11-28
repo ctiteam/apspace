@@ -72,6 +72,8 @@ export class StudentTimetablePage implements OnInit {
     },
   ];
 
+  comingFromTabs = this.router.url.split('/')[1].split('/')[0] === 'tabs';
+
   timetable$: Observable<StudentTimetable[]>;
   selectedWeek: Date; // week is the first day of week
   availableWeek: Date[] = [];
@@ -273,13 +275,6 @@ export class StudentTimetablePage implements OnInit {
     }
 
     this.changeDetectorRef.markForCheck();
-  }
-  comingFromTabs() {
-
-    if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
-      return true;
-    }
-    return false;
   }
 
   view_hideToolbar() {
