@@ -94,14 +94,14 @@ export class StudentTimetablePage implements OnInit {
   constructor(
     private actionSheetCtrl: ActionSheetController,
     private changeDetectorRef: ChangeDetectorRef,
+    private iab: InAppBrowser,
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
+    private router: Router,
     private settings: SettingsService,
     private tt: StudentTimetableService,
     private userSettings: UserSettingsService,
     private ws: WsApiService,
-    private router: Router,
-    private iab: InAppBrowser
   ) { }
 
   ngOnInit() {
