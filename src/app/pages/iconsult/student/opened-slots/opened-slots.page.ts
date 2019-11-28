@@ -10,11 +10,13 @@ import { ConsultationSlot, StaffDirectory } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { BookSlotModalPage } from './book-slot-modal';
 import { CalendarFilterModalPage } from './calendar-filter-modal/calendar-filter-modal';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-opened-slots',
   templateUrl: './opened-slots.page.html',
   styleUrls: ['./opened-slots.page.scss'],
+  providers: [DatePipe]
 })
 export class OpenedSlotsPage {
   staffCasId: string; // NEED TO BE GLOBAL TO USE IT IN MANY FUNCTIONS
@@ -39,7 +41,8 @@ export class OpenedSlotsPage {
   constructor(
     private route: ActivatedRoute,
     private ws: WsApiService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private datePipe: DatePipe
   ) { }
 
   ionViewWillEnter() {
@@ -62,7 +65,7 @@ export class OpenedSlotsPage {
       tap(response => console.log(response)),
       map(
         slots => slots.reduce((r, a) => { // Grouping the slots daily
-          const startDate = moment(a.start_time).format('YYYY-MM-DD');
+          const startDate = this.datePipe.transform(a.start_time, 'yyyy-MM-dd', '+0000');
           const consultationsYearMonth = startDate.split('-')[0] + '-' + startDate.split('-')[1];
           this.totalOpenedSlots = ++totalOpenedSlots; // get the total number of opened slots
           this.totalAvailableSlots = a.status === 'Available' ? ++totalAvailableSlots : totalAvailableSlots;
@@ -72,11 +75,11 @@ export class OpenedSlotsPage {
           r[consultationsYearMonth][consultationsDay].items = r[consultationsYearMonth][consultationsDay].items || [];
           r[consultationsYearMonth][consultationsDay].items.push(a);
 
-          console.log('filtered r ', r);
           return r;
         }, {})
       ),
       tap(dates => { // add css classes for slot type (used in the calendar modal)
+        // console.log(dates);
         Object.keys(dates).forEach(
           monthYear => {
             Object.keys(dates[monthYear]).forEach(
@@ -104,7 +107,7 @@ export class OpenedSlotsPage {
           }
         );
 
-        console.log('filtered dates ', dates);
+        // console.log('filtered dates ', dates);
         return dates;
       }),
       finalize(() => refresher && refresher.target.complete()),

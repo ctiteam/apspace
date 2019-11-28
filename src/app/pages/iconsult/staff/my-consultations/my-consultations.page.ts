@@ -39,7 +39,9 @@ export class MyConsultationsPage {
 
   skeltonArray = new Array(4); // loading
 
-  dateToFilter; // ngmodel var
+  dateToFilter = this.todaysDate; // ngmodel var
+
+  // testTime = '2019-12-02T18:00:00+08:00';
 
   daysConfigrations: DayConfig[] = []; // ion-calendar plugin
   options: CalendarComponentOptions = {
@@ -141,7 +143,7 @@ export class MyConsultationsPage {
     const filteredDates = datesKeys.filter(date => startDate <= date && date <= endDate);
 
     filteredDates.forEach(filteredDate => {
-      const currentDateString = this.datePipe.transform(filteredDate, 'yyyy-MM-dd');
+      const currentDateString = this.datePipe.transform(filteredDate, 'yyyy-MM-dd', '+0000');
       dates[currentDateString].items.forEach(item => this.slotsToBeCancelled.push(item));
     });
   }
@@ -158,8 +160,8 @@ export class MyConsultationsPage {
     const filteredTimes = [] as { date: string; times: string[]; }[];
 
     slotsToBeCancelled.forEach(slotTBC => {
-      const startDate = this.datePipe.transform(slotTBC.start_time, 'yyyy-MM-dd');
-      const startTime = this.datePipe.transform(slotTBC.start_time, 'HH:mm', 'Z');
+      const startDate = this.datePipe.transform(slotTBC.start_time, 'yyyy-MM-dd', '+0000');
+      const startTime = this.datePipe.transform(slotTBC.start_time, 'HH:mm', '+0000');
 
       if (!(filteredTimes.find(filteredTime => filteredTime.date === startDate))) {
         filteredTimes.push({ date: startDate, times: [startTime] });
@@ -440,7 +442,8 @@ export class MyConsultationsPage {
 
             const consultationsDate = this.datePipe.transform(
               a.start_time,
-              'yyyy-MM-dd'
+              'yyyy-MM-dd',
+              '+0000'
             );
             r[consultationsDate] = r[consultationsDate] || {};
             r[consultationsDate].items = r[consultationsDate].items || [];
@@ -479,14 +482,15 @@ export class MyConsultationsPage {
           });
         });
 
-        const getTodayConsultationsDate = this.datePipe.transform(
-          new Date(),
-          'yyyy-MM-dd'
-        );
+        // const getTodayConsultationsDate = this.datePipe.transform(
+        //   new Date(),
+        //   'yyyy-MM-dd',
+        //   '+0000'
+        // );
 
-        if (dates[getTodayConsultationsDate] !== undefined) {
-          this.dateToFilter = this.todaysDate;
-        }
+        // if (dates[getTodayConsultationsDate] !== undefined) {
+        //   this.dateToFilter = this.todaysDate;
+        // }
 
         return dates;
       }),

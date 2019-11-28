@@ -72,9 +72,9 @@ export class BookSlotModalPage implements OnInit {
 
     this.slotSchedule = {
       start_date: this.datePipe.transform(this.dataToSend.slotData.start_time, 'yyyy-MM-dd'),
-      time: this.datePipe.transform(this.dataToSend.slotData.start_time, 'HH:mm', 'Z') +
+      time: this.datePipe.transform(this.dataToSend.slotData.start_time, 'HH:mm', '+0000') +
             ' - ' +
-            this.datePipe.transform(this.dataToSend.slotData.end_time, 'HH:mm', 'Z')
+            this.datePipe.transform(this.dataToSend.slotData.end_time, 'HH:mm', '+0000')
     };
   }
 
