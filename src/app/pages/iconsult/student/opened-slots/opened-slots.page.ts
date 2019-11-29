@@ -19,6 +19,7 @@ import { CalendarFilterModalPage } from './calendar-filter-modal/calendar-filter
   providers: [DatePipe]
 })
 export class OpenedSlotsPage {
+  url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
   staffCasId: string; // NEED TO BE GLOBAL TO USE IT IN MANY FUNCTIONS
   staff$: Observable<StaffDirectory>;
   staff: StaffDirectory;
@@ -60,7 +61,7 @@ export class OpenedSlotsPage {
     let totalAvailableSlots = 0;
     let totalOpenedSlots = 0;
     this.slots$ = this.ws.get<ConsultationSlot[]>('/iconsult/slots?lecturer_sam_account_name=' + this.staffCasId, {
-      url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'
+      url: this.url
     }).pipe(
       map(
         slots => slots.reduce((r, a) => { // Grouping the slots daily

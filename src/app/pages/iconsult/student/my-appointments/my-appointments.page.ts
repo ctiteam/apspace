@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable, forkJoin } from 'rxjs';
-import { finalize, map, tap } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import { ConsultationHour, SlotDetails, StaffDirectory } from 'src/app/interfaces';
 import { AppLauncherService, WsApiService } from 'src/app/services';
@@ -44,7 +44,7 @@ export class MyAppointmentsPage {
 
   doRefresh(refresher?) {
     const bookings$: Observable<ConsultationHour[]> = this.ws.get<ConsultationHour[]>('/iconsult/bookings?', {
-      url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'
+      url: this.url
     }).pipe(
       map(bookingList => { // Check if slot is passed and modify its status to passed
         return bookingList.map(bookings => {

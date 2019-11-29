@@ -199,7 +199,7 @@ export class MyConsultationsPage {
                     ${cancelAvailableSlotDetails}`,
           buttons: [
             {
-              text: 'Nein',
+              text: 'No',
               role: 'cancel',
               handler: () => { }
             }, {

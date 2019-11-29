@@ -105,8 +105,6 @@ export class AddFreeSlotPage implements OnInit {
       venue: [this.settings.get('defaultVenue') || '', Validators.required], // alwayes required
       time: this.formBuilder.array([this.initTimeSlots()])
     });
-
-    this.addFreeSlotForm.valueChanges.subscribe(value => console.log(value));
   }
 
   initTimeSlots(): FormGroup {
