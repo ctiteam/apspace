@@ -39,8 +39,7 @@
 
 <ng-template #intakes let-timetable>
   <ng-container *ngFor="let intake of timetable.intakes; last as last">
-    <a [routerLink]="['/student-timetable', intake]"
-      class="md-text-center">{{ intake }}</a>
+    <a [routerLink]="['/student-timetable', intake]" class="md-text-center">{{ intake }}</a>
     <ng-container *ngIf="!last">, </ng-container>
   </ng-container>
 </ng-template>
@@ -127,29 +126,33 @@
                       </ion-grid>
                     </ion-item>
                   </ng-template>
-                  <ion-item class="table-item"
-                    *ngFor="let timetable of timetables; trackBy: trackByIndex"
+                  <ion-item class="table-item" *ngFor="let timetable of timetables; trackBy: trackByIndex"
                     [class.freeTime]='timetable.MODID === "FREE"'>
                     <ion-grid>
                       <ng-container *ngIf="viewWeek; else viewDaily">
                         <ion-row class="table-data">
-                          <ion-col size="12" size-sm="2"
-                            class="text-bold ion-no-padding md-text-center">
+                          <ion-col size="12" size-sm="2" class="text-bold ion-no-padding md-text-center">
                             {{ timetable.module }}
                           </ion-col>
                           <ion-col size="12" size-sm="1" class="ion-no-padding md-text-center">
-                            <span class="marker"><ion-icon name="calendar"></ion-icon></span>
+                            <span class="marker">
+                              <ion-icon name="calendar"></ion-icon>
+                            </span>
                             {{ timetable.time | date:'EEE, d MMM' }}
                           </ion-col>
                           <ion-col size="12" size-sm="2" class="ion-no-padding md-text-center">
-                            <span class="marker"><ion-icon name="time"></ion-icon></span>
+                            <span class="marker">
+                              <ion-icon name="time"></ion-icon>
+                            </span>
                             {{ timetable.time | date:'shortTime' }} - {{ timetable | endtime | date:'shortTime' }}
                           </ion-col>
                           <ion-col size="12" size-sm="2" class="ion-no-padding md-text-center">
                             {{ timetable.module }}
                           </ion-col>
                           <ion-col size="12" size-sm="2" class="ion-no-padding md-text-center">
-                            <span class="marker"><ion-icon name="locate"></ion-icon></span>
+                            <span class="marker">
+                              <ion-icon name="locate"></ion-icon>
+                            </span>
                             {{ timetable.room }} | {{ timetable.location }}
                           </ion-col>
                           <ion-col size="12" size-sm="3" class="ion-no-padding">
@@ -164,11 +167,15 @@
                             {{ timetable.module }}
                           </ion-col>
                           <ion-col size="12" size-sm="2" class="ion-no-padding">
-                            <span class="marker"><ion-icon name="time"></ion-icon></span>
+                            <span class="marker">
+                              <ion-icon name="time"></ion-icon>
+                            </span>
                             {{ timetable.time | date:'shortTime' }} - {{ timetable | endtime | date:'shortTime' }}
                           </ion-col>
                           <ion-col size="12" size-sm="3" class="ion-no-padding">
-                            <span class="marker"><ion-icon name="locate"></ion-icon></span>
+                            <span class="marker">
+                              <ion-icon name="locate"></ion-icon>
+                            </span>
                             {{ timetable.room }} | {{ timetable.location }}
                           </ion-col>
                           <ion-col size="12" size-sm="4" class="ion-no-padding">
@@ -183,34 +190,15 @@
             </ion-col>
           </ion-row>
         </ion-grid>
-
       </ng-template>
     </ng-template>
-
     <ng-template #empty>
       <ion-card>
         <ion-card-content>
-          <ng-container *ngIf="intake; else noIntakeSelected">
-            <app-message-with-svg imageUrl="assets/img/happy.svg"
-              messageTitle="Hooray! No classes for {{intake}} on the week that starts on {{selectedWeek | date:'EEEE, dd MM yyy'}}"
-              wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
-            </app-message-with-svg>
-          </ng-container>
-          <ng-template #noIntakeSelected>
-            <ng-container *ngIf="room; else emptyIntake">
-              <app-message-with-svg imageUrl="assets/img/no-consultations.svg"
-                messageContent="The room selected does not exist or its timetable is not available"
-                messageTitle="Room Timetable is not Available!" wrapperSize="4" wrapperOffset="4"
-                wrapperMarginTop="20px">
-              </app-message-with-svg>
-            </ng-container>
-            <ng-template #emptyIntake>
-              <app-message-with-svg imageUrl="assets/img/config.svg"
-                messageContent="Please choose an intake from the intakes button on the top right of the page"
-                messageTitle="No intake selected!" wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
-              </app-message-with-svg>
-            </ng-template>
-          </ng-template>
+          <app-message-with-svg imageUrl="assets/img/happy.svg"
+            messageTitle="Hooray! No classes for {{intake}} on the week that starts on {{selectedWeek | date:'EEEE, dd MM yyy'}}"
+            wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+          </app-message-with-svg>
         </ion-card-content>
       </ion-card>
     </ng-template>
