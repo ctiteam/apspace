@@ -16,6 +16,8 @@ import {
   FeesTotalSummary
 } from '../../interfaces';
 
+import * as moment from 'moment';
+
 declare var Chart: any;
 
 @Component({
@@ -95,11 +97,11 @@ export class FeesPage {
     this.totalSummary$ = this.ws.get('/student/summary_overall_fee', refresher);
     this.summary$ = this.ws.get<FeesSummary[]>('/student/outstanding_fee', refresher).pipe(
       tap(summuries => summuries
-        .map(summury => summury.PAYMENT_DUE_DATE ?  summury.PAYMENT_DUE_DATE = summury.PAYMENT_DUE_DATE.replace(/-/g, ' ') : ''))
+        .map(summury => summury.PAYMENT_DUE_DATE ? summury.PAYMENT_DUE_DATE = summury.PAYMENT_DUE_DATE.replace(/-/g, ' ') : ''))
     );
     this.bankDraft$ = this.ws.get('/student/bankdraft_amount', refresher);
     this.detail$ = this.ws.get<FeesDetails[]>('/student/overall_fee', refresher).pipe(
-      tap(details => details.map(detail => detail.DUE_DATE = detail.DUE_DATE.replace(/-/g, ' ')))
+      tap(details => details.map(detail => detail.DUE_DATE = moment(detail.DUE_DATE, 'DD-MMM-YY').toString()))
     );
 
     this.totalSummary$ = this.totalSummary$.pipe(
@@ -142,11 +144,7 @@ export class FeesPage {
 
     );
 
-    this.financialsChart.options.legend.onClick = function(
-      // tslint:disable-next-line: no-shadowed-variable
-      event,
-      legendItem
-    ) {
+    this.financialsChart.options.legend.onClick = function(event, legendItem) {
       Chart.defaults.global.legend.onClick.call(this, event, legendItem);
 
       that.labels[legendItem.datasetIndex].visible = legendItem.hidden;
