@@ -143,16 +143,20 @@ export class StudentTimetablePage implements OnInit {
     // default intake to student current intake
     if (this.intake === undefined) {
       // tslint:disable-next-line: no-bitwise
-      if (this.settings.get('role') & Role.Student) {
+      if (this.settings.get('role') & Role.Student) { // intake is not defined & user role is student
         this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).subscribe(p => {
           this.intake = (p || {} as StudentProfile).INTAKE || '';
           this.changeDetectorRef.markForCheck();
           this.settings.set('intakeHistory', [this.intake]);
+          this.doRefresh();
         });
+      } else {
+        // intake is not defined & user role is staff or lecturers
+        this.doRefresh();
       }
+    } else { // intake is defined
+      this.doRefresh();
     }
-
-    this.doRefresh();
   }
 
   presentActionSheet(labels: string[], handler: (_: string) => void) {
