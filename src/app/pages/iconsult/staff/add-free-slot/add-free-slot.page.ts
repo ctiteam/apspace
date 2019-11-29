@@ -15,6 +15,7 @@ import { Venue } from 'src/app/interfaces';
 import { SettingsService, WsApiService } from 'src/app/services';
 
 import * as moment from 'moment';
+import { AddFreeSlotValidator } from './add-free-slot.validator';
 
 @Component({
   selector: 'app-add-free-slot',
@@ -109,7 +110,7 @@ export class AddFreeSlotPage implements OnInit {
 
   initTimeSlots(): FormGroup {
     return this.formBuilder.group({
-      slotsTime: ['', Validators.required] // alwayes required
+      slotsTime: ['', [Validators.required, AddFreeSlotValidator.checkDuplicateTime]] // alwayes required
     });
   }
 
@@ -378,23 +379,24 @@ export class AddFreeSlotPage implements OnInit {
   }
 
   // Checking for duplication in slots time and remove it when the user enters the data
-  timeChanged(index: number) {
-    const control = this.formFields.time as FormArray;
-    this.formFields.time.value
-      .map(el => moment(el.slotsTime).format('kk:mm'))
-      .filter((v, i) => {
-        if (
-          this.formFields.time.value
-            .map(el => moment(el.slotsTime).format('kk:mm'))
-            .indexOf(v) !== i
-        ) {
-          control.removeAt(index);
-        }
-        return (
-          this.formFields.time.value
-            .map(el => moment(el.slotsTime).format('kk:mm'))
-            .indexOf(v) === i
-        );
-      });
-  }
+  // timeChanged(index: number) {
+  //   const control = this.formFields.time as FormArray;
+  //   this.formFields.time.value
+  //     .map(el => moment(el.slotsTime).format('kk:mm'))
+  //     .filter((v, i) => {
+  //       if (
+  //         this.formFields.time.value
+  //           .map(el => moment(el.slotsTime).format('kk:mm'))
+  //           .indexOf(v) !== i
+  //       ) {
+  //         console.log(v);
+  //         control.removeAt(index);
+  //       }
+  //       return (
+  //         this.formFields.time.value
+  //           .map(el => moment(el.slotsTime).format('kk:mm'))
+  //           .indexOf(v) === i
+  //       );
+  //     });
+  // }
 }

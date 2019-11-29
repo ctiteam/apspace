@@ -126,14 +126,14 @@
 
               <ion-list class="ion-margin-bottom">
                 <div formArrayName="time" class="ion-margin-bottom">
-                  <section [formGroupName]="i" *ngFor="let _ of timeFormData.controls; let i = index">
+                  <section [formGroupName]="i" *ngFor="let _ of timeFormData['controls']; let i = index">
                     <ion-item lines="none">
                       <ion-label position="stacked"
                         [ngClass]="{ 'danger-text': (timeFormData.controls[i].touched && timeFormData.controls[i].status === 'INVALID') || (submitted && timeFormData.controls[i].status === 'INVALID') }">
                         Time (Slot {{i+1}})</ion-label>
                       <ion-datetime placeholder="Click to select" displayFormat="HH:mm" pickerFormat="HH mm"
                         hourValues="[08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18]" minuteValues="[00,30]"
-                        (ionChange)="timeChanged(i)" class="form-input"
+                        class="form-input"
                         [ngClass]="{ 'is-invalid': (timeFormData.controls[i].touched && timeFormData.controls[i].status === 'INVALID') || (submitted && timeFormData.controls[i].status === 'INVALID') }"
                         formControlName="slotsTime"></ion-datetime>
                     </ion-item>
@@ -147,7 +147,7 @@
                       ||
                       (submitted && timeFormData.controls[i].status === 'INVALID')"
                       class="danger-text ion-padding-start">
-                      ** Time (Slot {{i+1}}) field cannot be empty
+                      ** Time (Slot {{i+1}}) field cannot be empty or duplicated time is not allowed
                     </div>
                   </section>
                   <span (click)="addNewTimeSlot()"
