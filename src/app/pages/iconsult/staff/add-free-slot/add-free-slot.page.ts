@@ -171,7 +171,7 @@ export class AddFreeSlotPage implements OnInit {
       this.addFreeSlotForm.value.time.forEach(time => {
         const timeSlot = {
           location_id: this.addFreeSlotForm.value.venue,
-          datetime: startDate + ' ' + moment(time.slotsTime).format('kk:mm:00')
+          datetime: startDate + 'T' + moment(time.slotsTime).format('kk:mm:00Z')
         };
 
         body.push(timeSlot);
@@ -191,7 +191,8 @@ export class AddFreeSlotPage implements OnInit {
           this.addFreeSlotForm.value.time.forEach(time => {
             const timeSlot = {
               location_id: this.addFreeSlotForm.value.venue,
-              datetime: startDate + ' ' + moment(time.slotsTime).format('kk:mm:00')
+              datetime: startDate + 'T' + moment(time.slotsTime).format('kk:mm:00Z')
+              // 2019-11-27T17:00:00Z
             };
 
             body.push(timeSlot);
@@ -247,7 +248,7 @@ export class AddFreeSlotPage implements OnInit {
                 .post<any>('/iconsult/slot?', {
                   body,
                   url:
-                    'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'
+                    'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev'
                 })
                 .subscribe({
                   next: () => {
