@@ -158,10 +158,10 @@ export class MyAppointmentsPage {
               this.showToastMessage('Cancellation Reason is Required !!', 'danger');
             } else {
               this.presentLoading();
-              const cancellationBody = {
+              const cancellationBody = [{
                 booking_id: booking.id,
                 remark: data.cancellationReason
-              };
+              }];
               this.sendCancelBookingRequest(cancellationBody).subscribe(
                 {
                   next: () => {
