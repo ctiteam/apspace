@@ -26,6 +26,7 @@ import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
   providers: [DatePipe]
 })
 export class MyConsultationsPage {
+  url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
   slots$: Observable<{}>;
   todaysDate = new Date();
   skeletonItemsNumber = new Array(4);
@@ -166,7 +167,7 @@ export class MyConsultationsPage {
 
     slotsToBeCancelled.forEach(slotTBC => {
       const startDate = this.datePipe.transform(slotTBC.start_time, 'yyyy-MM-dd');
-      const startTime = this.datePipe.transform(slotTBC.start_time, 'HH:mm');
+      const startTime = this.datePipe.transform(slotTBC.start_time, 'HH:mm', 'Z');
 
       if (!(filteredTimes.find(filteredTime => filteredTime.date === startDate))) {
         filteredTimes.push({ date: startDate, times: [startTime] });
@@ -192,112 +193,163 @@ export class MyConsultationsPage {
 
       if (bookedSlots.length > 0) {
         const cancelBookedSlotDetails = this.createAlertMessage(bookedSlots);
+
+        let cancelAvailableSlotDetails;
+        notBookedSlots.length > 0
+        ? cancelAvailableSlotDetails = `<ion-icon name="checkbox-outline"></ion-icon>${this.createAlertMessage(notBookedSlots)}`
+        : cancelAvailableSlotDetails = '';
+
         const alertBooked = await this.alertController.create({
           header: 'Warning',
-          subHeader: 'You have booked slots that you\'re about to cancel:',
-          message: cancelBookedSlotDetails,
-          inputs: [
-            {
-              name: 'cancellationReason',
-              type: 'text',
-              placeholder: 'Enter The Cancellation Reason',
-            },
-          ],
+          subHeader: 'You have booked slots that you\'re about to cancel. Do you want to continue? :',
+          message: `<ion-icon name="calendar"></ion-icon>${cancelBookedSlotDetails}<br />
+                    ${cancelAvailableSlotDetails}`,
           buttons: [
             {
-              text: 'Cancel',
+              text: 'Nein',
               role: 'cancel',
               handler: () => { }
             }, {
-              text: 'Submit',
-              handler: (data) => {
-                if (!data.cancellationReason) {
-                  this.showToastMessage('Cancellation Reason is Required !!', 'danger');
-                } else {
-                  this.presentLoading();
-
-                  const cancellationBody = bookedSlots.reduce((previous, current) => {
-                    previous.push({
-                      booking_id: current.booking_detail.id,
-                      remark: data.cancellationReason
-                    });
-
-                    return previous;
-                  }, []);
-
-                  this.sendCancelBookingRequest(cancellationBody).subscribe(
+              text: 'Yes',
+              handler: () => {
+                this.alertController.create({
+                  header: 'Cancelling Appointment',
+                  subHeader: 'Please provide us with the cancellation reason:',
+                  inputs: [
                     {
-                      next: () => {
-                        this.showToastMessage('Booking has been cancelled successfully!', 'success');
-                      },
-                      error: () => {
-                        this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
-                      },
-                      complete: () => {
-                        this.dismissLoading();
+                      name: 'cancellationReason',
+                      type: 'text',
+                      placeholder: 'Enter The Cancellation Reason',
+                    },
+                  ],
+                  buttons: [
+                    {
+                      text: 'Cancel',
+                      role: 'cancel',
+                      handler: () => { }
+                    },
+                    {
+                      text: 'Submit',
+                      handler: (data) => {
+                        if (!data.cancellationReason) {
+                          this.showToastMessage('Cancellation Reason is Required !!', 'danger');
+                        } else {
+                          this.presentLoading();
+
+                          const listApiToForkJoin = [];
+
+                          const cancellationBookedBody = bookedSlots.reduce((previous, current) => {
+                            previous.push({
+                              booking_id: current.booking_detail.id,
+                              remark: data.cancellationReason
+                            });
+
+                            return previous;
+                          }, []);
+
+                          listApiToForkJoin.push(this.sendCancelBookingRequest(cancellationBookedBody));
+
+                          if (notBookedSlots.length > 0) {
+                            const cancellationAvailableBody = notBookedSlots.reduce((previous, current) => {
+                              previous.push({
+                                slot_id: current.slot_id
+                              });
+
+                              return previous;
+                            }, []);
+
+                            listApiToForkJoin.push(this.sendCancelSlotRequest(cancellationAvailableBody));
+                          }
+
+                          forkJoin(listApiToForkJoin).subscribe(
+                            {
+                              next: () => {
+                                this.daysConfigrations = [];
+                                this.slotsToBeCancelled = [];
+                                this.dateToFilter = undefined;
+                                this.onSelect = false;
+                                this.onRange = false;
+                                this.showToastMessage(
+                                  'Slot has been cancelled successfully!',
+                                  'success'
+                                );
+                              },
+                              error: () => {
+                                this.showToastMessage(
+                                  'Something went wrong! please try again or contact us via the feedback page',
+                                  'danger'
+                                );
+                              },
+                              complete: () => {
+                                this.dismissLoading();
+                                this.doRefresh();
+                              }
+                            }
+                          );
+                        }
                       }
                     }
-                  );
-                }
+                  ]
+                }).then(alertCancelBooked => alertCancelBooked.present());
               }
             }
           ]
         });
         await alertBooked.present();
-      }
+      } else {
+        const cancelTimeDetails = this.createAlertMessage(notBookedSlots);
 
-      const cancelTimeDetails = this.createAlertMessage(notBookedSlots);
+        const alert = await this.alertController.create({
+          header: 'Cancelling an opened slot',
+          subHeader: 'You are about to cancel these selected slots:',
+          message: cancelTimeDetails,
+          buttons: [
+            {
+              text: 'Dismiss',
+              role: 'cancel',
+              handler: () => { }
+            }, {
+              text: 'Cancel Slot',
+              handler: () => {
+                this.presentLoading();
 
-      const alert = await this.alertController.create({
-        header: 'Cancelling an opened slot',
-        subHeader: 'You are about to cancel these selected slots:',
-        message: cancelTimeDetails,
-        buttons: [
-          {
-            text: 'Dismiss',
-            role: 'cancel',
-            handler: () => { }
-          }, {
-            text: 'Cancel Slot',
-            handler: () => {
-              this.presentLoading();
+                const cancellationBody = notBookedSlots.reduce((previous, current) => {
+                  previous.push({
+                    slot_id: current.slot_id
+                  });
 
-              const cancellationBody = notBookedSlots.reduce((previous, current) => {
-                previous.push({
-                  slot_id: current.slot_id
+                  return previous;
+                }, []);
+
+                this.sendCancelSlotRequest(cancellationBody).subscribe({
+                  next: () => {
+                    this.daysConfigrations = [];
+                    this.slotsToBeCancelled = [];
+                    this.dateToFilter = undefined;
+                    this.onSelect = false;
+                    this.onRange = false;
+                    this.showToastMessage(
+                      'Slot has been cancelled successfully!',
+                      'success'
+                    );
+                  },
+                  error: () => {
+                    this.showToastMessage(
+                      'Something went wrong! please try again or contact us via the feedback page',
+                      'danger'
+                    );
+                  },
+                  complete: () => {
+                    this.dismissLoading();
+                    this.doRefresh();
+                  }
                 });
-
-                return previous;
-              }, []);
-
-              this.sendCancelSlotRequest(cancellationBody).subscribe({
-                next: () => {
-                  this.daysConfigrations = [];
-                  this.slotsToBeCancelled = [];
-                  this.dateToFilter = undefined;
-                  this.onSelect = false;
-                  this.onRange = false;
-                  this.showToastMessage(
-                    'Slot has been cancelled successfully!',
-                    'success'
-                  );
-                },
-                error: () => {
-                  this.showToastMessage(
-                    'Something went wrong! please try again or contact us via the feedback page',
-                    'danger'
-                  );
-                },
-                complete: () => {
-                  this.dismissLoading();
-                  this.doRefresh();
-                }
-              });
+              }
             }
-          }
-        ]
-      });
-      await alert.present();
+          ]
+        });
+        await alert.present();
+      }
     }
   }
 
@@ -331,15 +383,15 @@ export class MyConsultationsPage {
   }
 
   sendCancelBookingRequest(cancelBookingDetails: any) {
-    return this.ws.post<any>('/iconsult/booking/cancel?', {
-      url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging',
+    return this.ws.put<any>('/iconsult/booking/cancel?', {
+      url: this.url,
       body: cancelBookingDetails,
     });
   }
 
   sendCancelSlotRequest(slotsId: any) {
     return this.ws.put<any>('/iconsult/slot/cancel?', {
-      url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging',
+      url: this.url,
       body: slotsId
     });
   }
@@ -362,13 +414,14 @@ export class MyConsultationsPage {
     this.slots$ = forkJoin([
       this.ws.get<ConsultationSlot[]>('/iconsult/slots?',
         {
-          url: 'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev'
+          url: this.url
         }
       ),
       this.ws.get<ConsultationHour[]>('/iconsult/bookings?', {
-        url: 'https://x8w3m20p69.execute-api.ap-southeast-1.amazonaws.com/dev'
+        url: this.url
       })
     ]).pipe(
+      tap(response => console.log(response)),
       map(([slots, bookings]) =>
         slots.reduce((r, a) => {
           // Grouping the slots daily and get the summary data
@@ -393,7 +446,6 @@ export class MyConsultationsPage {
               a.booking_detail = getBooking[0];
             }
 
-            console.log(a);
             const consultationsDate = this.datePipe.transform(
               a.start_time,
               'yyyy-MM-dd'
