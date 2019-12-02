@@ -143,10 +143,10 @@ ion-col {
 
   &.booked {
     border-color: var(--danger-color);
-    // ion-button {
-    //   --background: var(--danger-color);
-    //   --background-hover: var(--danger-hover-color);
-    // }
+    ion-button {
+      --background: var(--danger-color);
+      --background-hover: var(--danger-hover-color);
+    }
   }
 
   &.unavailable {

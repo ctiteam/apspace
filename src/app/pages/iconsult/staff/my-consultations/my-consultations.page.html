@@ -104,15 +104,13 @@
                             {{slot.room_code}} | {{slot.venue}}
                           </span>
                         </ion-col>
-                        <ion-col size-xs="1" size-sm="2" class="margin-auto">
+                        <ion-col size-xs="5" size-sm="4" class="margin-auto" *ngIf="!onSelect">
                           <ng-container>
-                            <ion-buttons>
-                              <ion-button class="cursor-pointer" size="small" expand="block"
-                                *ngIf="slot.status !== 'Available'"
-                                (click)="openSlotDetailsModal(slot)">
-                                <ion-icon slot="icon-only" name="list-box"></ion-icon>
-                              </ion-button>
-                            </ion-buttons>
+                            <ion-button class="cursor-pointer" size="small" expand="block"
+                              *ngIf="slot.status !== 'Available'"
+                              (click)="openSlotDetailsModal(slot)">
+                              View Details
+                            </ion-button>
                           </ng-container>
                         </ion-col>
                       </ion-row>
