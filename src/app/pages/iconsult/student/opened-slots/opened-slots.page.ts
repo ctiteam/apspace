@@ -52,7 +52,7 @@ export class OpenedSlotsPage {
     this.doRefresh();
   }
 
-  doRefresh(refresher?) { // to be changed with refresher
+  doRefresh(refresher?) {
     this.options = {
       from: new Date(),
       to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
@@ -137,7 +137,7 @@ export class OpenedSlotsPage {
         if (data.data === 'booked') {
           this.dateToFilter = ''; // remove the filter
           this.daysConfigrations = []; // empty days configurations used in the calendar modal and then in get slots re-set it again
-          this.doRefresh(true);
+          this.doRefresh();
         }
       }
     );
