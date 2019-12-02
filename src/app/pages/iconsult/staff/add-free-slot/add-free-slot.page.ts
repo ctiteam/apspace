@@ -172,7 +172,7 @@ export class AddFreeSlotPage implements OnInit {
       this.addFreeSlotForm.value.time.forEach(time => {
         const timeSlot = {
           location_id: this.addFreeSlotForm.value.venue,
-          datetime: startDate + ' ' + moment(time.slotsTime).format('kk:mm:00')
+          datetime: startDate + 'T' + moment(time.slotsTime).format('HH:mm:00+0800')
         };
 
         body.push(timeSlot);
@@ -192,7 +192,7 @@ export class AddFreeSlotPage implements OnInit {
           this.addFreeSlotForm.value.time.forEach(time => {
             const timeSlot = {
               location_id: this.addFreeSlotForm.value.venue,
-              datetime: startDate + ' ' + moment(time.slotsTime).format('kk:mm:00')
+              datetime: startDate + 'T' + moment(time.slotsTime).format('HH:mm:00+0800')
               // 2019-11-27T17:00:00Z
             };
 
@@ -205,6 +205,7 @@ export class AddFreeSlotPage implements OnInit {
       }
     }
 
+    console.log(body);
     this.alertCtrl
       .create({
         header: 'Adding new slot(s)',

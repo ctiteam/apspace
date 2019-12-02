@@ -142,7 +142,7 @@ export class MyConsultationsPage {
     const filteredDates = datesKeys.filter(date => startDate <= date && date <= endDate);
 
     filteredDates.forEach(filteredDate => {
-      const currentDateString = this.datePipe.transform(filteredDate, 'yyyy-MM-dd', '+0000');
+      const currentDateString = this.datePipe.transform(filteredDate, 'yyyy-MM-dd', '+0800');
       dates[currentDateString].items.forEach(item => this.slotsToBeCancelled.push(item));
     });
   }
@@ -159,8 +159,8 @@ export class MyConsultationsPage {
     const filteredTimes = [] as { date: string; times: string[]; }[];
 
     slotsToBeCancelled.forEach(slotTBC => {
-      const startDate = this.datePipe.transform(slotTBC.start_time, 'yyyy-MM-dd', '+0000');
-      const startTime = this.datePipe.transform(slotTBC.start_time, 'HH:mm', '+0000');
+      const startDate = this.datePipe.transform(slotTBC.start_time, 'yyyy-MM-dd', '+0800');
+      const startTime = this.datePipe.transform(slotTBC.start_time, 'HH:mm', '+0800');
 
       if (!(filteredTimes.find(filteredTime => filteredTime.date === startDate))) {
         filteredTimes.push({ date: startDate, times: [startTime] });
@@ -441,7 +441,7 @@ export class MyConsultationsPage {
             const consultationsDate = this.datePipe.transform(
               a.start_time,
               'yyyy-MM-dd',
-              '+0000'
+              '+0800'
             );
             r[consultationsDate] = r[consultationsDate] || {};
             r[consultationsDate].items = r[consultationsDate].items || [];
@@ -482,7 +482,7 @@ export class MyConsultationsPage {
         // const getTodayConsultationsDate = this.datePipe.transform(
         //   new Date(),
         //   'yyyy-MM-dd',
-        //   '+0000'
+        //   '+0800'
         // );
 
         // if (dates[getTodayConsultationsDate] !== undefined) {

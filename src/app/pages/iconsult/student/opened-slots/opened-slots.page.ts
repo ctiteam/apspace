@@ -65,7 +65,7 @@ export class OpenedSlotsPage {
     }).pipe(
       map(
         slots => slots.reduce((r, a) => { // Grouping the slots daily
-          const startDate = this.datePipe.transform(a.start_time, 'yyyy-MM-dd', '+0000');
+          const startDate = this.datePipe.transform(a.start_time, 'yyyy-MM-dd', '+0800');
           const consultationsYearMonth = startDate.split('-')[0] + '-' + startDate.split('-')[1];
           this.totalOpenedSlots = ++totalOpenedSlots; // get the total number of opened slots
           this.totalAvailableSlots = a.status === 'Available' ? ++totalAvailableSlots : totalAvailableSlots;

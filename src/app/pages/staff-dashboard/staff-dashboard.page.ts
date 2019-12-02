@@ -251,6 +251,14 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     }
   };
 
+  testDate = [
+    'Thu, 15 Aug 2019 08:00:00 GMT+0800',
+    'Thu, 15 Aug 2019 08:00:00 GMT+0800',
+    'Thu, 15 Aug 2019 08:00:00 GMT+0800',
+    'Thu, 15 Aug 2019 08:00:00 GMT+0800',
+    'Thu, 15 Aug 2019 08:00:00 GMT+0800'
+  ];
+
   constructor(
     private ws: WsApiService,
     private userSettings: UserSettingsService,
@@ -259,7 +267,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     private notificationService: NotificationService,
     private renderer: Renderer2,
     private news: NewsService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
   ) {
     this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
   }
@@ -498,20 +506,20 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     ).pipe(
       map(consultations =>
         consultations.filter(
-          consultation => this.eventIsToday(new Date(moment(consultation.start_time).format('YYYY-MM-DD')), dateNow)
-          && consultation.status === 'Booked'
+          consultation => this.eventIsToday(new Date(moment(consultation.start_time).utcOffset('+0800').format()), dateNow)
+            && consultation.status === 'Booked'
         )
       ),
       map(upcomingConsultations => {
         upcomingConsultations.forEach(upcomingConsultation => {
           let consultationPass = false;
-          if (this.eventPass(moment(upcomingConsultation.start_time).format('HH:mm A'), dateNow)) {
+          if (this.eventPass(moment(upcomingConsultation.start_time).utcOffset('+0800').format('hh:mm A'), dateNow)) {
             // CHANGE CLASS STATUS TO PASS IF IT PASS
             consultationPass = true;
           }
           const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
-            moment(upcomingConsultation.start_time, 'HH:mm A').toDate(),
-            moment(upcomingConsultation.end_time, 'HH:mm A').toDate());
+            moment(moment(upcomingConsultation.start_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate(),
+            moment(moment(upcomingConsultation.end_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate());
           consultationsEventMode.push({
             title: 'Consultation Hour',
             color: '#d35400',
@@ -522,7 +530,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
             firstDescription: upcomingConsultation.room_code + ' | ' + upcomingConsultation.venue,
             // secondDescription: upcomingConsultation.lecname,
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
-            dateOrTime: moment(moment(upcomingConsultation.start_time, 'HH:mm A').toDate()).format('hh mm A'),
+            dateOrTime: moment(upcomingConsultation.start_time).utcOffset('+0800').format('hh:mm A'),
           });
         });
         return consultationsEventMode;

@@ -294,7 +294,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     private notificationService: NotificationService,
     private renderer: Renderer2,
     private news: NewsService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
   ) {
     // Create the dragula group (drag and drop)
     this.dragulaService.createGroup('editable-list', {
@@ -547,7 +547,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     ]).pipe(
       map(([consultations, staffList]) => {
         const filteredConsultations = consultations.filter(
-          consultation => this.eventIsToday(moment(consultation.slot_start_time).toDate(), dateNow) && consultation.status === 'normal'
+          consultation => this.eventIsToday(new Date(moment(consultation.slot_start_time).utcOffset('+0800').format()), dateNow)
+                          && consultation.status === 'Booked'
         );
 
         const staffUsernames = new Set(filteredConsultations.map(consultation =>
@@ -573,12 +574,13 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
         listOfBookingWithStaffDetail.forEach(upcomingConsultation => {
           let consultationPass = false;
-          if (this.eventPass(upcomingConsultation.slot_start_time, dateNow)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
+          if (this.eventPass(moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh:mm A'), dateNow)) {
+            // CHANGE CLASS STATUS TO PASS IF IT PASS
             consultationPass = true;
           }
           const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
-            moment(upcomingConsultation.slot_start_time).toDate(),
-            moment(upcomingConsultation.slot_end_time).toDate());
+            moment(moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate(),
+            moment(moment(upcomingConsultation.slot_end_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate());
           consultationsEventMode.push({
             title: 'Consultation Hour',
             color: '#d35400',
@@ -589,7 +591,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
             firstDescription: upcomingConsultation.slot_room_code + ' | ' + upcomingConsultation.slot_venue,
             secondDescription: upcomingConsultation.staff_detail.FULLNAME,
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
-            dateOrTime: moment(moment(upcomingConsultation.slot_start_time).toDate()).format('hh mm A'),
+            dateOrTime: moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh:mm A'),
           });
         });
 
