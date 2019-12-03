@@ -37,8 +37,7 @@ export {
     SlotDetails,
     Venue,
     SlotDuplicated,
-    LecturerConsultation,
-    LecturerSlotDetails,
+    // LecturerSlotDetails,
     UnavailabilityDetails,
     LecturerRemarks
 } from './iconsult';

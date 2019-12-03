@@ -7,7 +7,7 @@ import {
   APULocation, APULocations,
   Apcard, Attendance, BusTrips, CgpaPerIntake, ConsultationHour, Course,
   CourseDetails, DashboardCardComponentConfigurations, EventComponentConfigurations, ExamSchedule, FeesTotalSummary,
-  Holiday, Holidays, News, StudentPhoto, StudentProfile, StudentTimetable
+  Holiday, Holidays, News, StaffDirectory, StudentPhoto, StudentProfile, StudentTimetable
 } from 'src/app/interfaces';
 import { NewsService, NotificationService, StudentTimetableService, UserSettingsService, WsApiService } from 'src/app/services';
 
@@ -294,7 +294,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     private notificationService: NotificationService,
     private renderer: Renderer2,
     private news: NewsService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
   ) {
     // Create the dragula group (drag and drop)
     this.dragulaService.createGroup('editable-list', {
@@ -467,7 +467,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     // MERGE TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
     this.todaysSchedule$ = combineLatest([
       this.getUpcomingClasses(intake, refresher),
-      this.getUpcomingConsultations(true) // no-cache for upcoming consultations (students)
+      this.getUpcomingConsultations() // no-cache for upcoming consultations (students)
     ]).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
@@ -538,24 +538,49 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
-  getUpcomingConsultations(refresher): Observable<EventComponentConfigurations[]> {
+  getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
     const consultationsEventMode: EventComponentConfigurations[] = [];
-    return this.ws.get<ConsultationHour[]>('/iconsult/upcomingconstu', refresher).pipe(
-      map(consultations =>
-        consultations.filter(
-          consultation => this.eventIsToday(new Date(consultation.date), dateNow) && consultation.status === 'normal'
-        )
-      ),
-      map(upcomingConsultations => {
-        upcomingConsultations.forEach(upcomingConsultation => {
+    return forkJoin([this.ws.get<ConsultationHour[]>('/iconsult/bookings?', {
+      url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'}),
+      this.ws.get<StaffDirectory[]>('/staff/listing')
+    ]).pipe(
+      map(([consultations, staffList]) => {
+        const filteredConsultations = consultations.filter(
+          consultation => this.eventIsToday(new Date(moment(consultation.slot_start_time).utcOffset('+0800').format()), dateNow)
+                          && consultation.status === 'Booked'
+        );
+
+        const staffUsernames = new Set(filteredConsultations.map(consultation =>
+          consultation.slot_lecturer_sam_account_name.toLowerCase()));
+        const staffKeyMap = staffList
+            .filter(staff => staffUsernames.has(staff.ID.toLowerCase()))
+            .reduce(
+              (previous, current) => {
+                previous[current.ID] = current;
+
+                return previous;
+              },
+              {}
+            );
+        const listOfBookingWithStaffDetail = filteredConsultations.map(
+            consultation => ({
+              ...consultation,
+              ...{
+                staff_detail: staffKeyMap[consultation.slot_lecturer_sam_account_name]
+              }
+            })
+          );
+
+        listOfBookingWithStaffDetail.forEach(upcomingConsultation => {
           let consultationPass = false;
-          if (this.eventPass(upcomingConsultation.starttime, dateNow)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
+          if (this.eventPass(moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh:mm A'), dateNow)) {
+            // CHANGE CLASS STATUS TO PASS IF IT PASS
             consultationPass = true;
           }
           const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
-            moment(upcomingConsultation.starttime, 'HH:mm A').toDate(),
-            moment(upcomingConsultation.endtime, 'HH:mm A').toDate());
+            moment(moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate(),
+            moment(moment(upcomingConsultation.slot_end_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate());
           consultationsEventMode.push({
             title: 'Consultation Hour',
             color: '#d35400',
@@ -563,14 +588,16 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
             type: 'iconsult',
             pass: consultationPass,
             passColor: '#d7dee3',
-            firstDescription: upcomingConsultation.location + ' | ' + upcomingConsultation.venue,
-            secondDescription: upcomingConsultation.lecname,
+            firstDescription: upcomingConsultation.slot_room_code + ' | ' + upcomingConsultation.slot_venue,
+            secondDescription: upcomingConsultation.staff_detail.FULLNAME,
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
-            dateOrTime: moment(moment(upcomingConsultation.starttime, 'HH:mm A').toDate()).format('hh mm A'),
+            dateOrTime: moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh:mm A'),
           });
         });
+
         return consultationsEventMode;
-      })
+      }
+      )
     );
   }
 

@@ -1,18 +1,11 @@
-import {
-  AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { IonSelect, IonSlides, ModalController, NavController } from '@ionic/angular';
-
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
 import { Observable, of, zip } from 'rxjs';
 import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
-
-import {
-  APULocation, APULocations, Apcard, BusTrips,
-  DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday,
-  Holidays, LecturerConsultation, LecturerTimetable, News, Quote, StaffProfile
-} from 'src/app/interfaces';
+// tslint:disable-next-line: max-line-length
+import { APULocation, APULocations, Apcard, BusTrips, ConsultationSlot, DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday, Holidays, LecturerTimetable, News, Quote, StaffProfile } from 'src/app/interfaces';
 import { NewsService, NotificationService, UserSettingsService, WsApiService } from '../../services';
 import { NewsModalPage } from '../news/news-modal';
 
@@ -259,6 +252,14 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     }
   };
 
+  testDate = [
+    'Thu, 15 Aug 2019 08:00:00 GMT+0800',
+    'Thu, 15 Aug 2019 08:00:00 GMT+0800',
+    'Thu, 15 Aug 2019 08:00:00 GMT+0800',
+    'Thu, 15 Aug 2019 08:00:00 GMT+0800',
+    'Thu, 15 Aug 2019 08:00:00 GMT+0800'
+  ];
+
   constructor(
     private ws: WsApiService,
     private userSettings: UserSettingsService,
@@ -267,7 +268,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     private notificationService: NotificationService,
     private renderer: Renderer2,
     private news: NewsService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
   ) {
     this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
   }
@@ -432,7 +433,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   getTodaysSchdule(staffId: string) {
     this.todaysSchedule$ = zip( // ZIP TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
       this.getUpcomingClasses(staffId),
-      this.getUpcomingConsultations(true) // no-cache for upcoming consultations
+      this.getUpcomingConsultations() // no-cache for upcoming consultations
     ).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
@@ -498,24 +499,28 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  getUpcomingConsultations(refresher): Observable<EventComponentConfigurations[]> {
+  getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
     const consultationsEventMode: EventComponentConfigurations[] = [];
-    return this.ws.get<LecturerConsultation[]>('/iconsult/upcomingconlec', refresher).pipe(
+    return this.ws.get<ConsultationSlot[]>('/iconsult/slots?',
+      { url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging' }
+    ).pipe(
       map(consultations =>
         consultations.filter(
-          consultation => this.eventIsToday(new Date(consultation.date), dateNow) && consultation.status === 'Booked'
+          consultation => this.eventIsToday(new Date(moment(consultation.start_time).utcOffset('+0800').format()), dateNow)
+            && consultation.status === 'Booked'
         )
       ),
       map(upcomingConsultations => {
         upcomingConsultations.forEach(upcomingConsultation => {
           let consultationPass = false;
-          if (this.eventPass(upcomingConsultation.time, dateNow)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
+          if (this.eventPass(moment(upcomingConsultation.start_time).utcOffset('+0800').format('hh:mm A'), dateNow)) {
+            // CHANGE CLASS STATUS TO PASS IF IT PASS
             consultationPass = true;
           }
           const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
-            moment(upcomingConsultation.time, 'HH:mm A').toDate(),
-            moment(upcomingConsultation.endTime, 'HH:mm A').toDate());
+            moment(moment(upcomingConsultation.start_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate(),
+            moment(moment(upcomingConsultation.end_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate());
           consultationsEventMode.push({
             title: 'Consultation Hour',
             color: '#d35400',
@@ -523,10 +528,10 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
             type: 'iconsult',
             pass: consultationPass,
             passColor: '#d7dee3',
-            firstDescription: upcomingConsultation.location + ' | ' + upcomingConsultation.venue,
+            firstDescription: upcomingConsultation.room_code + ' | ' + upcomingConsultation.venue,
             // secondDescription: upcomingConsultation.lecname,
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
-            dateOrTime: moment(moment(upcomingConsultation.time, 'HH:mm A').toDate()).format('hh mm A'),
+            dateOrTime: moment(upcomingConsultation.start_time).utcOffset('+0800').format('hh:mm A'),
           });
         });
         return consultationsEventMode;

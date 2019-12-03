@@ -10,15 +10,15 @@
 </ion-header>
 
 <ion-content parallax-header class="ion-padding">
-  <ng-template let-verification [ngIf]='verifyslot$ | async'>
-    <ng-template [ngIf]="verification.res == 'Duplicated'" [ngIfElse]='noduplicate'>
+  <!-- <ng-template let-verification [ngIf]='verifyslot$ | async'> -->
+    <!-- <ng-template [ngIf]="verification.res == 'Duplicated'" [ngIfElse]='noduplicate'>
       <app-message-with-svg imageUrl="assets/img/time-conf.svg" messageTitle="Avoiding Clashes" wrapperMarginTop="50px"
         wrapperSize="8" wrapperOffset="2"
         messageContent="You cannot book this slot ({{dataToSend.slotData.datetimeforsorting}}) because you have another consultation hour booked with the same/another staff at this time.">
       </app-message-with-svg>
-    </ng-template>
+    </ng-template> -->
 
-    <ng-template #noduplicate>
+    <!-- <ng-template #noduplicate> -->
       <ion-card>
         <form name="form" (ngSubmit)="bookingForm.form.valid && bookSlot()" #bookingForm="ngForm" novalidate>
           <ion-card-content class="ion-no-padding">
@@ -34,7 +34,7 @@
 
                   <ion-item lines="none">
                     <ion-label position="stacked">Staff Name</ion-label>
-                    <ion-input class="form-input" [(ngModel)]="formModel.staffName" #staffName="ngModel" type="text"
+                    <ion-input class="form-input" [(ngModel)]="dataToSend.staffData.FULLNAME" #staffName="ngModel" type="text"
                       disabled="true" name="staffName">
                     </ion-input>
                   </ion-item>
@@ -44,7 +44,7 @@
                       [ngClass]="{ 'danger-text': consultationWith.touched && consultationWith.invalid }">Consultation
                       With
                     </ion-label>
-                    <ion-select interface="popover" [(ngModel)]="formModel.consultationWith" #consultationWith="ngModel"
+                    <ion-select interface="popover" [(ngModel)]="formModel.consultation_with" #consultationWith="ngModel"
                       [ngClass]="{ 'is-invalid': consultationWith.touched && consultationWith.invalid }" required
                       type="text" name="consultationWith" class="form-input">
                       <ion-select-option *ngFor="let consultationWithOption of consultationWithOptions"
@@ -54,19 +54,19 @@
                     </ion-select>
                   </ion-item>
                   <div *ngIf="consultationWith.touched && consultationWith.invalid" class="danger-text ion-padding-start">
-                    <div *ngIf="consultationWith.errors.required">This field is required</div>
+                    <div *ngIf="consultationWith?.errors.required">This field is required</div>
                   </div>
 
                   <ion-item lines="none">
                     <ion-label position="stacked">Date</ion-label>
-                    <ion-input [(ngModel)]="formModel.bookingDate" #bookingDate="ngModel" type="text" disabled="true"
+                    <ion-input [(ngModel)]="slotSchedule.start_date" #bookingDate="ngModel" type="text" disabled="true"
                       name="bookingDate" class="form-input">
                     </ion-input>
                   </ion-item>
 
                   <ion-item lines="none">
                     <ion-label position="stacked">Time</ion-label>
-                    <ion-input [(ngModel)]="formModel.bookingTime" #bookingTime="ngModel" type="text" disabled="true"
+                    <ion-input [(ngModel)]="slotSchedule.time" #bookingTime="ngModel" type="text" disabled="true"
                       name="bookingTime" class="form-input">
                     </ion-input>
                   </ion-item>
@@ -79,12 +79,12 @@
                       class="form-input" rows="6"></ion-textarea>
                   </ion-item>
                   <div *ngIf="reason.touched && reason.invalid" class="ion-padding-start danger-text">
-                    <div *ngIf="reason.errors.required">This field is required</div>
+                    <div *ngIf="reason?.errors.required">This field is required</div>
                   </div>
 
                   <ion-item lines="none">
                     <ion-label position="stacked">Additional Note (Optional)</ion-label>
-                    <ion-textarea rows="2" [(ngModel)]="formModel.note" #note="ngModel" type="text" name="note"
+                    <ion-textarea rows="2" [(ngModel)]="formModel.additional_note" #note="ngModel" type="text" name="note"
                       class="form-input">
                     </ion-textarea>
                   </ion-item>
@@ -97,12 +97,11 @@
 
                   <ion-item lines="none">
                     <ion-label position="stacked">Email Address</ion-label>
-                    <ion-input [(ngModel)]="formModel.studentEmail" #studentEmail="ngModel" type="email" disabled="true"
-                      name="studentEmail" class="form-input">
+                    <ion-input [(ngModel)]="studentEmail" #email="ngModel" name="email" type="email" disabled="true" class="form-input">
                     </ion-input>
                   </ion-item>
 
-                  <ion-item lines="none">
+                  <!-- <ion-item lines="none">
                     <ion-label position="stacked">Contact Number (Optional)</ion-label>
                     <ion-input pattern="\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4,5})$"
                       [(ngModel)]="formModel.studentContactNumber" #studentContactNumber="ngModel"
@@ -113,7 +112,7 @@
                   <div *ngIf="studentContactNumber.touched && studentContactNumber.invalid"
                     class="ion-padding-start danger-text">
                     <div>Phone number must contain 10 (or 11) digits only</div>
-                  </div>
+                  </div> -->
 
                 </ion-col>
               </ion-row>
@@ -129,6 +128,6 @@
           </ion-card-content>
         </form>
       </ion-card>
-    </ng-template>
-  </ng-template>
+    <!-- </ng-template> -->
+  <!-- </ng-template> -->
 </ion-content>
