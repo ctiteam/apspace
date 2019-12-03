@@ -48,7 +48,7 @@ export class MyAppointmentsPage {
     }).pipe(
       map(bookingList => { // Check if slot is passed and modify its status to passed
         return bookingList.map(bookings => {
-          if (bookings.status === 'normal' && moment(bookings.booking_datetime, 'YYYY-MM-DD kk:mm:ss').toDate() < new Date()) {
+          if (bookings.status === 'Booked' && new Date(moment(bookings.slot_start_time).utcOffset('+0800').format()) < new Date()) {
             bookings.status = 'Passed';
           }
           return bookings;
