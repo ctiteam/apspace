@@ -79,7 +79,6 @@ export class OpenedSlotsPage {
         }, {})
       ),
       tap(dates => { // add css classes for slot type (used in the calendar modal)
-        // console.log(dates);
         Object.keys(dates).forEach(
           monthYear => {
             Object.keys(dates[monthYear]).forEach(
@@ -107,7 +106,6 @@ export class OpenedSlotsPage {
           }
         );
 
-        // console.log('filtered dates ', dates);
         return dates;
       }),
       finalize(() => refresher && refresher.target.complete()),
