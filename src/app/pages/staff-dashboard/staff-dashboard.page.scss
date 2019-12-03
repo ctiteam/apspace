@@ -56,6 +56,13 @@ ion-card.trip-card {
     z-index: 10000;
   }
 }
+.inner-card {
+  overflow: inherit !important;
+  box-shadow: none !important;
+}
+.floating-icon {
+  font-size: 28px;
+}
 
 // EDIT MODE (DASHBOARD CARDS CUSTOMIZATIONS)
 .edit-overlay {

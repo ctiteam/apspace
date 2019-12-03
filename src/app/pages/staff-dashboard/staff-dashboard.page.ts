@@ -28,6 +28,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('dashboardSectionsSelectBox', { static: true }) dashboardSectionsselectBoxRef: IonSelect; // hidden selectbox
   dashboardSectionsSelectBoxModel; // select box dashboard sections value
   allDashboardSections = [ // alldashboardSections will not be modified and it will be used in the select box
+    'inspirationalQuote',
     'todaysSchedule',
     'upcomingEvents',
     'news',
