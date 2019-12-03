@@ -1,12 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController, IonRefresher } from '@ionic/angular';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { finalize, switchMap, tap } from 'rxjs/operators';
-
-import { Router } from '@angular/router';
 import { LecturerTimetable, StaffProfile } from '../../interfaces';
 import { SettingsService, WsApiService } from '../../services';
+
 
 const chosenOnes = ['appsteststaff1', 'abbhirami', 'abubakar_s',
   'haslina.hashim', 'muhammad.danish', 'sireesha.prathi', 'suresh.saminathan'];
@@ -18,6 +20,8 @@ const chosenOnes = ['appsteststaff1', 'abbhirami', 'abubakar_s',
   styleUrls: ['./lecturer-timetable.page.scss'],
 })
 export class LecturerTimetablePage implements OnInit {
+
+  printUrl = 'https://api.apiit.edu.my/timetable-print/index.php';
 
   wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
@@ -38,10 +42,12 @@ export class LecturerTimetablePage implements OnInit {
   intake: string;
 
   lecturerName: string;
+  lecturerCode: string;
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
     private changeDetectorRef: ChangeDetectorRef,
+    private iab: InAppBrowser,
     private router: Router,
     private settings: SettingsService,
     private ws: WsApiService,
@@ -104,9 +110,12 @@ export class LecturerTimetablePage implements OnInit {
   /** Refresh timetable, forcefully if refresher is passed. */
   doRefresh(refresher?: IonRefresher) {
     this.timetable$ = this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }).pipe(
-      tap(profile => this.lecturerName = profile[0].FULLNAME),
+      tap(profile => {
+        this.lecturerName = profile[0].FULLNAME;
+        this.lecturerCode = profile[0].CODE;
+      }),
       tap(profile => this.showAttendixFeature = chosenOnes.includes(profile[0].ID)),
-      switchMap(([{ID}]) => this.ws.get<LecturerTimetable[]>(`/lecturer-timetable/v2/${ID}`, { auth: false })),
+      switchMap(([{ ID }]) => this.ws.get<LecturerTimetable[]>(`/lecturer-timetable/v2/${ID}`, { auth: false })),
       tap(tt => this.updateDay(tt)),
       finalize(() => refresher && refresher.complete()),
     );
@@ -154,6 +163,12 @@ export class LecturerTimetablePage implements OnInit {
 
   toggleToolbar() {
     this.show2ndToolbar = !this.show2ndToolbar;
+  }
+
+  sendToPrint() {
+    const week = moment(this.selectedWeek).add(1, 'day').format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
+    // tslint:disable-next-line: max-line-length
+    this.iab.create(`${this.printUrl}?LectID=${this.lecturerCode}&Submit=Submit&Week=${week}&print_request=print`, '_system', 'location=true');
   }
 
 }
