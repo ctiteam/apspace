@@ -56,9 +56,25 @@ ion-segment.week-segment {
   display: none;
 }
 
+.hide-on-print-table-flex-on-card {
+  display: flex;
+}
+
+.flex-on-print-table-hide-on-card {
+  display: none;
+}
+
 @media (min-width: 576px) {
   .marker {
     display: none;
+  }
+
+  .hide-on-print-table-flex-on-card {
+    display: none;
+  }
+
+  .flex-on-print-table-hide-on-card {
+    display: flex;
   }
 
   .table-top {

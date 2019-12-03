@@ -46,6 +46,7 @@ export class UserSettingsService {
 
   // Default dasbhoard sections for staff (will be added to the local storage when staff login)
   defaultStaffDashboardSectionsSettings = [
+    'inspirationalQuote',
     'todaysSchedule',
     'upcomingEvents',
     'upcomingTrips',

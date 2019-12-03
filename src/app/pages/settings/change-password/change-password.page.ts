@@ -21,6 +21,8 @@ export class ChangePasswordPage implements OnInit {
   currentPassword = '';
   passwordLengthMatch = false;
   hasUpperCase = false;
+  hasLowerCase = false;
+  hasDigit = false;
   hasSpeacialCharacter = false;
 
   constructor(
@@ -154,12 +156,24 @@ export class ChangePasswordPage implements OnInit {
 
   checkValidation(event) {
     const newPassword = event.detail.value;
-    const upperCaseRegExp = /^(?=.*?[A-Z])/;
+    const upperCaseRegExp = /^(?=.*[A-Z])/;
+    const lowerCaseRegExp = /^(?=.*[a-z])/;
+    const digitRegExp = /^(?=.*\d)/;
     const specialCharacterRegExp = /(?=.*?[#?!@$%~()_{}-])/;
     if (upperCaseRegExp.test(newPassword)) {
       this.hasUpperCase = true;
     } else {
       this.hasUpperCase = false;
+    }
+    if (digitRegExp.test(newPassword)) {
+      this.hasDigit = true;
+    } else {
+      this.hasDigit = false;
+    }
+    if (lowerCaseRegExp.test(newPassword)) {
+      this.hasLowerCase = true;
+    } else {
+      this.hasLowerCase = false;
     }
     if (newPassword.length < 8) {
       this.passwordLengthMatch = false;

@@ -14,7 +14,8 @@ export class SectionNamePipe implements PipeTransform {
       upcomingTrips = 'Upcoming Trips',
       apcard = 'APCard Transactions',
       news = 'Latest News',
-      noticeBoard = 'Notice Board'
+      noticeBoard = 'Notice Board',
+      inspirationalQuote = 'Inspirational Quote'
   }
     return sectionNames[dashboardSectionID];
   }

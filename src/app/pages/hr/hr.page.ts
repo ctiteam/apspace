@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { LeaveBalance } from 'src/app/interfaces';
+import { LeaveBalance, PendingApproval } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 
 @Component({
@@ -12,8 +12,9 @@ import { WsApiService } from 'src/app/services';
 export class HrPage implements OnInit {
   leaves$: Observable<LeaveBalance[]>;
   history$: any;
+  leaveInCluster$: any;
+  pendingApproval$: Observable<PendingApproval[]>;
   skeletons = new Array(4);
-  devUrl = 'https://ztmu4mdu21.execute-api.ap-southeast-1.amazonaws.com/dev';
   summaryChart = {
     type: 'bar',
     options: {
@@ -42,7 +43,7 @@ export class HrPage implements OnInit {
   constructor(private ws: WsApiService) { }
 
   ngOnInit() {
-    this.leaves$ = this.ws.get<LeaveBalance[]>('/staff/leave_balance', { url: this.devUrl }).pipe(
+    this.leaves$ = this.ws.get<LeaveBalance[]>('/staff/leave_balance').pipe(
       tap(leaves => {
         const labels = [];
         const datasets = [
@@ -82,7 +83,9 @@ export class HrPage implements OnInit {
         };
       })
     );
-    this.history$ = this.ws.get('/staff/leave_status', { url: this.devUrl });
+    this.history$ = this.ws.get('/staff/leave_status');
+    this.leaveInCluster$ = this.ws.get('/staff/leave_in_cluster');
+    this.pendingApproval$ = this.ws.get<PendingApproval[]>('/staff/pending_approval');
   }
 
   /** Convert string to color with djb2 hash function. */
