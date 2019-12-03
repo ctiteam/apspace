@@ -33,3 +33,11 @@ export interface LeaveBalance {
     LEAVE_ACRONYM: string; // not coming from API
     LEAVE_TYPE_COLOR: string; // not coming from API
 }
+
+export interface PendingApproval {
+    FULLNAME: string;
+    ID: string;
+    LEAVEDATE: string;
+    LEAVETYPE: string;
+    STATUS: string;
+}

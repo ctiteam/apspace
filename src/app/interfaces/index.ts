@@ -47,4 +47,4 @@ export { CountryData } from './country-data';
 export { NotificationHistory, NotificationBody } from './notification-history';
 export { VersionValidator } from './version-validator';
 export { Quote } from './quote';
-export { LeaveHistory, LeaveBalance } from './hr';
+export { LeaveHistory, LeaveBalance, PendingApproval } from './hr';
