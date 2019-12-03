@@ -84,7 +84,12 @@ export class BookSlotModalPage implements OnInit {
   }
 
   bookSlot() {
-    console.log('formModel ', this.formModel);
+    // Verification just in case if the button disabled is removed
+    if (this.formModel.consultation_with === '' && this.formModel.reason === '') {
+      this.showToastMessage('You cannot submit while having a blank field', 'danger');
+      return;
+    }
+
     this.alertCtrl.create({
       header: 'Confirm Booking',
       subHeader: 'Are you sure you want to book the following consultation hour?',

@@ -34,7 +34,6 @@ export class LecturerSlotDetailsModalPage implements OnInit {
     if (moment(this.slot.start_time).toDate() <= this.dateNow) {
       this.showRemarks = true;
     }
-
   }
 
   addRemarks() {
@@ -43,6 +42,12 @@ export class LecturerSlotDetailsModalPage implements OnInit {
       remark: this.remarksText,
       synced_to_gims: this.copyToGIMS ? 1 : 0
     };
+
+    if (body.remark === '') {
+      this.showToastMessage('You cannot submit while having a blank field', 'danger');
+      return;
+    }
+
     this.alertCtrl.create({
       header: 'Adding Remarks!',
       message: `Are you sure you want to add remarks to this booking?`,

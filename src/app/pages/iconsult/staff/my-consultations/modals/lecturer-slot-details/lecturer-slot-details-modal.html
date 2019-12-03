@@ -24,7 +24,8 @@
           <ion-icon class="tertiary-txt-color" name="person" slot="start"></ion-icon>
           <ion-label>
             <p class="tertiary-txt-color">Student Name - ID:</p>
-            <h4 class="main-text-color">{{slot.booking_detail.student_sam_account_name}}</h4>
+            <h4 class="main-text-color">
+              {{slot.booking_detail.student_name + '-' + slot.booking_detail.student_sam_account_name}}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
@@ -38,7 +39,7 @@
           <ion-icon class="tertiary-txt-color" name="mail" slot="start"></ion-icon>
           <ion-label>
             <p class="tertiary-txt-color">Student Email:</p>
-            <h4 class="main-text-color"></h4>
+            <h4 class="main-text-color">{{ slot.booking_detail.student_sam_account_name + '@mail.apu.edu.my'}}</h4>
           </ion-label>
         </ion-item>
         <!-- <ion-item *ngIf="slotDetails.stuPhone">
@@ -59,7 +60,8 @@
           <ion-icon class="tertiary-txt-color" name="time" slot="start"></ion-icon>
           <ion-label>
             <p class="tertiary-txt-color">Appointment Time:</p>
-            <h4 class="main-text-color">{{ slot.start_time | date: 'HH:mm' : '+0800' }} - {{ slot.end_time | date: 'HH:mm' : '+0800' }}</h4>
+            <h4 class="main-text-color">{{ slot.start_time | date: 'HH:mm' : '+0800' }} -
+              {{ slot.end_time | date: 'HH:mm' : '+0800' }}</h4>
           </ion-label>
         </ion-item>
         <ion-item>
@@ -97,24 +99,24 @@
           </h4>
         </ion-card-title>
       </ion-card-header>
-      <ion-card-content class="no-padding-left ion-no-padding ion-padding-bottom">
+      <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end">
         <ng-container *ngIf="!slot.booking_detail.remark; else showHistory">
-          <ion-item lines="none">
-            <ion-textarea placeholder="Add your remarks here" [(ngModel)]="remarksText" class="form-input" rows="4">
-            </ion-textarea>
-          </ion-item>
-          <ion-item lines="none">
+          <ion-textarea placeholder="Add your remarks here" [(ngModel)]="remarksText" class="form-input" rows="4">
+          </ion-textarea>
+          <!-- <ion-item lines="none" class="ion-no-padding">
             <ion-checkbox [(ngModel)]="copyToGIMS" slot="start"></ion-checkbox>
             <ion-label>Copy to GIMS</ion-label>
-          </ion-item>
-          <ion-button class="ion-margin-start ion-margin-end" expand="block" (click)="addRemarks()">Add Remarks
+          </ion-item> -->
+          <!--temporary margin vertical-->
+          <ion-button class="ion-margin-vertical" expand="block" (click)="addRemarks()">Add Remarks
           </ion-button>
         </ng-container>
+
         <ng-template #showHistory>
-          <h6 class="tertiary-txt-color ion-padding-top ion-padding-start ion-padding-end">You have added remarks for
+          <h6 class="tertiary-txt-color">You have added remarks for
             this booking
             and the remarks are as follow:</h6>
-          <p class="main-text-color ion-padding-start ion-padding-end">{{slot.booking_detail.remark}}</p>
+          <p class="main-text-color ion-padding-vertical">{{slot.booking_detail.remark}}</p>
         </ng-template>
       </ion-card-content>
       <!-- <ng-template #loadingRemarks>

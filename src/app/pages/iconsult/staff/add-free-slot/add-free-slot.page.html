@@ -163,9 +163,9 @@
                 </ion-label>
               </ion-item-divider>
 
-              <ion-grid>
-                <ion-row>
-                  <ion-col size-xs="12" size-md="5">
+              <ion-grid class="ion-no-padding">
+                <ion-row class="ion-no-padding">
+                  <ion-col class="ion-no-padding" size-xs="12" size-md="5">
                     <ion-item lines="none">
                       <ion-label position="stacked" [ngClass]="{ 'danger-text': (addFreeSlotForm.get('location').hasError('required') && addFreeSlotForm.get('location').touched) ||
                       submitted && addFreeSlotForm.get('location').hasError('required') }">
@@ -186,12 +186,12 @@
                       ** Location field cannot be empty
                     </div>
                   </ion-col>
-                  <ion-col size-xs="12" size-md="7">
-                    <ion-item lines="none">
+                  <ion-col class="ion-no-padding" size-xs="12" size-md="7" *ngIf="!addFreeSlotForm.get('location').hasError('required')">
+                    <ion-item lines="none" *ngIf="venues$ | async as venues; else loadingVenues">
                       <ion-label position="stacked" [ngClass]="{ 'danger-text': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
                       submitted && addFreeSlotForm.get('venue').hasError('required') }">Venue
                       </ion-label>
-                      <ion-select placeholder="Click to select" interface="alert" *ngIf="venues$ | async as venues"
+                      <ion-select placeholder="Click to select" interface="alert"
                       formControlName="venue" [ngClass]="{ 'is-invalid': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
                       submitted && addFreeSlotForm.get('venue').hasError('required') }" class="form-input">
                       <ion-select-option *ngFor="let venue of venues" [value]="venue.id">
@@ -199,6 +199,11 @@
                       </ion-select-option>
                     </ion-select>
                     </ion-item>
+                    <ng-template #loadingVenues>
+                      <ion-item lines="none">
+                        <ion-skeleton-text animated class="ion-padding-vertical ion-margin-top"></ion-skeleton-text>
+                      </ion-item>
+                    </ng-template>
                     <div *ngIf="
                         (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
                         submitted && addFreeSlotForm.get('venue').hasError('required')"

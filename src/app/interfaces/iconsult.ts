@@ -6,6 +6,7 @@ export interface ConsultationHour {
   reason: string;
   remark: string;
   status: string;
+  student_name: string;
   student_sam_account_name: string;
   slot_id: number;
   slot_start_time: string;

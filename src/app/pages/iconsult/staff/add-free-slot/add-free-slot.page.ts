@@ -161,13 +161,15 @@ export class AddFreeSlotPage implements OnInit {
     this.submitted = true;
     // stop here if form is invalid
     if (this.addFreeSlotForm.invalid) {
+      this.showToastMessage('You cannot submit while having an empty field.', 'danger');
       return;
     }
 
-    // Get slot algorithmn starts here
+    // Add slots algorithmn starts here
     const body = [];
     let startDate = this.addFreeSlotForm.value.startDate;
 
+    // if else: single adding slot, else multiple adding slot.
     if (this.addFreeSlotForm.value.slotType === this.consultationTypeOptions[0].value) {
       this.addFreeSlotForm.value.time.forEach(time => {
         const timeSlot = {
@@ -205,7 +207,6 @@ export class AddFreeSlotPage implements OnInit {
       }
     }
 
-    console.log(body);
     this.alertCtrl
       .create({
         header: 'Adding new slot(s)',
