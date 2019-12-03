@@ -57,6 +57,7 @@ export class MyAppointmentsPage {
       finalize(() => refresher && refresher.target.complete())
     );
 
+    // get staff details to combine with bookings
     this.bookings$ = forkJoin([
       bookings$,
       this.ws.get<StaffDirectory[]>('/staff/listing')

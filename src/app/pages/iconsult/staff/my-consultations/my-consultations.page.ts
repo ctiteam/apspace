@@ -41,8 +41,6 @@ export class MyConsultationsPage {
 
   dateToFilter = this.todaysDate; // ngmodel var
 
-  // testTime = '2019-12-02T18:00:00+08:00';
-
   daysConfigrations: DayConfig[] = []; // ion-calendar plugin
   options: CalendarComponentOptions = {
     from: new Date(),
@@ -50,12 +48,13 @@ export class MyConsultationsPage {
     daysConfig: this.daysConfigrations
   };
 
+  // for select multiple slots to cancel
   dateRange: { from: string; to: string; };
   optionsRange: CalendarComponentOptions = {
     pickMode: 'range'
   };
   onSelect = false; // enable or disable select more than one slot to cancel.
-  onRange = false; // enable or disable select date range to perform bulk delete.
+  onRange = false; // enable or disable select date range to perform bulk cancel.
   slotsToBeCancelled: ConsultationSlot[] = [];
 
   constructor(
@@ -109,6 +108,7 @@ export class MyConsultationsPage {
     this.doRefresh();
   }
 
+  // cancel slots functions starts here
   toggleCancelSlot() {
     this.onSelect = !this.onSelect;
 
@@ -345,6 +345,7 @@ export class MyConsultationsPage {
       }
     }
   }
+  // cancel slots functions ends here
 
   showToastMessage(message: string, color: 'danger' | 'success') {
     this.toastCtrl

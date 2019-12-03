@@ -34,7 +34,6 @@ export class LecturerSlotDetailsModalPage implements OnInit {
     if (moment(this.slot.start_time).toDate() <= this.dateNow) {
       this.showRemarks = true;
     }
-
   }
 
   addRemarks() {
