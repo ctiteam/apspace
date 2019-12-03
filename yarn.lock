@@ -1279,6 +1279,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/badge@^5.17.1":
+  version "5.17.1"
+  resolved "https://registry.yarnpkg.com/@ionic-native/badge/-/badge-5.17.1.tgz#320b9d22208730773e7aac876697f74d7bdec333"
+  integrity sha512-v0iA4uIda9dPI5+bUj5dawEOX4Lsa6Z5t5kYBThzYTfmLInd8x7tZppYgpSNDJmFLSbX4beph5NEgRscJznXiA==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/core@^5.15.0":
   version "5.15.1"
   resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-5.15.1.tgz#0b91f63b8c83e92b30b0a1e5119dc216cd79daa3"
@@ -3783,6 +3790,11 @@ cordova-plugin-appavailability@^0.4.2:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/cordova-plugin-appavailability/-/cordova-plugin-appavailability-0.4.2.tgz#a017aaf0f8827ee599dc778b6245dcc1350bcba8"
   integrity sha1-oBeq8PiCfuWZ3HeLYkXcwTULy6g=
+
+cordova-plugin-badge@^0.8.8:
+  version "0.8.8"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-badge/-/cordova-plugin-badge-0.8.8.tgz#0924018699b48f92dd3b33615452737582144c96"
+  integrity sha512-RhIBtd5xhD/iLnxjt35jvOae28oNW/wtMZBOmQR3Rf0y4wirvA1bpAZEhBoFqL+rZGhsd6ddOdQXdex1T0DRyQ==
 
 cordova-plugin-device@2.0.2:
   version "2.0.2"

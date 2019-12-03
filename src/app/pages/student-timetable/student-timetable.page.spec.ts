@@ -11,6 +11,7 @@ import {
 } from '../../services';
 import { ClassesPipe } from './classes.pipe';
 import { GenPipe } from './gen.pipe';
+import { StrToColorPipe } from './str-to-color.pipe';
 import { StudentTimetablePage } from './student-timetable.page';
 import { ThedayPipe } from './theday.pipe';
 import { TheWeekPipe } from './theweek.pipe';
@@ -36,6 +37,7 @@ describe('StudentTimetablePage', () => {
         StudentTimetablePage,
         TheWeekPipe,
         ThedayPipe,
+        StrToColorPipe,
       ],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },

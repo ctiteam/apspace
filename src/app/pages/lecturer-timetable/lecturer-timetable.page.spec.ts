@@ -3,22 +3,35 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { NEVER } from 'rxjs';
 
-import { WsApiService } from '../../services';
+import { RouterLinkDirectiveStub } from '../../../testing';
+import { SettingsService, WsApiService } from '../../services';
+import { EndtimePipe } from './endtime.pipe';
 import { LecturerTimetablePage } from './lecturer-timetable.page';
+import { ThedayPipe } from './theday.pipe';
+import { TheweekPipe } from './theweek.pipe';
 
 describe('LecturerTimetablePage', () => {
   let component: LecturerTimetablePage;
   let fixture: ComponentFixture<LecturerTimetablePage>;
+  let settingsSpy: jasmine.SpyObj<SettingsService>;
   let wsSpy: jasmine.SpyObj<WsApiService>;
 
   beforeEach(async(() => {
+    settingsSpy = jasmine.createSpyObj('SettingsService', ['get']);
     wsSpy = jasmine.createSpyObj('WsApiService', ['get']);
 
     TestBed.configureTestingModule({
-      declarations: [LecturerTimetablePage],
+      declarations: [
+        RouterLinkDirectiveStub,
+        LecturerTimetablePage,
+        ThedayPipe,
+        TheweekPipe,
+        EndtimePipe,
+      ],
       providers: [
-        { provide: WsApiService, useValue: wsSpy },
         { provide: Router, useValue: { url: '/' } },
+        { provide: SettingsService, useValue: settingsSpy },
+        { provide: WsApiService, useValue: wsSpy },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();

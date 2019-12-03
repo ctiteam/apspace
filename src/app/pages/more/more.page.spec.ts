@@ -6,7 +6,7 @@ import { NavController } from '@ionic/angular';
 
 import { asyncData } from '../../../testing';
 import { CasTicketService, SettingsService, UserSettingsService } from '../../services';
-import { FuseModule } from '../../shared/fuse/fuse.module';
+import { FusePipe } from '../../shared/fuse/fuse.pipe';
 import { ByGroupPipe } from './by-group.pipe';
 import { MorePage } from './more.page';
 
@@ -26,8 +26,7 @@ describe('MorePage', () => {
     settingsServiceSpy = jasmine.createSpyObj('SettingsService', ['get']);
 
     TestBed.configureTestingModule({
-      declarations: [MorePage, ByGroupPipe],
-      imports: [FuseModule],
+      declarations: [MorePage, ByGroupPipe, FusePipe],
       providers: [
         { provide: CasTicketService, useValue: cas },
         { provide: InAppBrowser, useValue: {} },

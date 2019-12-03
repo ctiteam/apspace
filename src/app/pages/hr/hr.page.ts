@@ -68,8 +68,8 @@ export class HrPage implements OnInit {
           const acronym = matches.join('').slice(0, 2); // Join letters together and take first two only. Example: AL
           if (!labels.includes(acronym)) { // TEMP UNTIL THE BACKEND IS FIXED
             labels.push(acronym);
-            datasets[0].data.push(+leave.TAKEN + 10); // adding data for testing
-            datasets[1].data.push(+leave.PENDING + 20); // adding data for testing
+            datasets[0].data.push(+leave.TAKEN); // adding data for testing
+            datasets[1].data.push(+leave.PENDING); // adding data for testing
             datasets[2].data.push(+leave.AVAILABLE); // adding data for testing
           }
           leave.LEAVE_ACRONYM = acronym; // add the acronym to the list

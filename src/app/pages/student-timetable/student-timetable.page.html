@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar mode="md">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/" [hidden]='comingFromTabs()'></ion-back-button>
+      <ion-back-button defaultHref="/" [hidden]="comingFromTabs"></ion-back-button>
     </ion-buttons>
     <ion-title>
       Timetable
@@ -26,7 +26,7 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="viewWeek = !viewWeek" size="small" fill="outline" [class.colored-text]="viewWeek"
+      <ion-button (click)="rotateView()" size="small" fill="outline" [class.colored-text]="viewWeek"
         [class.colored-border]="viewWeek">
         <ion-label>Weekly</ion-label>
         <ion-toggle style="padding-left: 0; padding-right: 0;" [checked]="viewWeek"></ion-toggle>
@@ -41,13 +41,12 @@
   </ion-refresher>
 
 
-  <ng-template #page_content>
     <!-- do not add filter pipe here as it affects loading -->
-    <ng-template let-timetables [ngIf]="timetable$ | async" [ngIfElse]="loading">
+  <ng-container *ngIf="(timetable$ | async) as timetables; else loading">
       <ng-template let-timetables
         [ngIf]="!viewWeek ? (timetables | classes:intake:room | theday:selectedDate | gen:freeTime) : (timetables | classes:intake:room | theweek:selectedWeek | gen:freeTime)"
         [ngIfElse]="loading">
-        <ng-template [ngIf]="timetables!.length" [ngIfElse]="empty">
+      <ng-container *ngIf="timetables!.length; else empty">
           <ion-grid>
             <ion-row>
               <ion-col>
@@ -79,36 +78,29 @@
                       </ion-segment>
                     </ng-template>
                     <ng-template [ngIf]="selectedDate">
-                      <ion-grid class="printLogoWrapper">
-                        <ion-row>
-                          <ion-col size="6" offset="3" class="text-center">
-                            <img src="assets/img/login.png" alt="APU Logo">
-                          </ion-col>
-                        </ion-row>
-                      </ion-grid>
 
                       <ion-item class="table-top" [style.borderLeft]="'0.7rem solid transparent'">
                         <ion-grid class="ion-no-margin ion-no-padding">
                           <ng-container *ngIf="viewWeek; else viewDaily">
                             <ion-row>
                               <ion-col class="hide-on-print-table-flex-on-card ion-no-padding" size="12" size-sm="2">
-                                <h2 class="print-no-margin text-bold print-font md-text-center ">Module</h2>
+                                <h2 class="text-bold md-text-center ">Module</h2>
                               </ion-col>
                               <ion-col size="12" size-sm="2" class="ion-no-padding">
-                                <h2 class="print-no-margin text-bold print-font md-text-center">Date</h2>
+                              <h2 class="text-bold md-text-center">Date</h2>
                               </ion-col>
                               <ion-col size="12" size-sm="2" class="ion-no-padding">
-                                <h2 class="print-less-width print-no-margin text-bold print-font md-text-center">Time
+                              <h2 class="text-bold md-text-center">Time
                                 </h2>
                               </ion-col>
                               <ion-col class="flex-on-print-table-hide-on-card ion-no-padding" size="12" size-sm="2">
-                                <h2 class="print-no-margin text-bold print-font md-text-center ">Module</h2>
+                                  <h2 class="text-bold md-text-center ">Module</h2>
                               </ion-col>
                               <ion-col size="12" size-sm="3" class="ion-no-padding">
-                                <h2 class="print-no-margin text-bold print-font md-text-center">Location</h2>
+                              <h2 class="text-bold md-text-center">Location</h2>
                               </ion-col>
                               <ion-col size="12" size-sm="3" class="ion-no-padding">
-                                <h2 class="print-no-margin text-bold print-font md-text-center">Lecturer</h2>
+                              <h2 class="text-bold md-text-center">Lecturer</h2>
                               </ion-col>
                             </ion-row>
                           </ng-container>
@@ -117,7 +109,7 @@
                               <ion-col class="ion-no-padding" size="12" size-sm="3">
                                 <h2 class="text-bold">Module</h2>
                               </ion-col>
-                              <ion-col size="12" size-sm="2" class="print-less-width ion-no-padding">
+                            <ion-col size="12" size-sm="2" class="ion-no-padding">
                                 <h2 class="time text-bold">Time</h2>
                               </ion-col>
                               <ion-col size="12" size-sm="3" class="ion-no-padding">
@@ -131,34 +123,34 @@
                         </ion-grid>
                       </ion-item>
                     </ng-template>
-                    <ion-item class="table-item" [style.borderLeft]="'0.7rem solid ' + strToColor(timetable.MODID)"
+                    <ion-item class="table-item" [style.borderLeft]="'0.7rem solid ' + (timetable.MODID | strToColor)"
                       *ngFor="let timetable of timetables; trackBy: trackByIndex"
                       [class.freeTime]='timetable.MODID === "FREE"'>
                       <ion-grid>
                         <ng-container *ngIf="viewWeek; else viewDaily">
                           <ion-row class="table-data">
                             <ion-col size="12" size-sm="2"
-                              class="text-bold hide-on-print-table-flex-on-card ion-no-padding print-font md-text-center">
+                              class="text-bold hide-on-print-table-flex-on-card ion-no-padding md-text-center">
                               {{ timetable.MODID }}
                             </ion-col>
-                            <ion-col size="12" size-sm="2" class="ion-no-padding print-font md-text-center">
+                          <ion-col size="12" size-sm="2" class="ion-no-padding md-text-center">
                               <span class="marker">
                                 <ion-icon name="calendar"></ion-icon>
                               </span>
                               {{ timetable.DATESTAMP_ISO | date: "EEE, d MMM " }}
                             </ion-col>
                             <ion-col size="12" size-sm="2"
-                              class="print-less-width ion-no-padding print-font md-text-center">
+                            class="ion-no-padding md-text-center">
                               <span class="marker">
                                 <ion-icon name="time"></ion-icon>
                               </span>
                               {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
                             </ion-col>
                             <ion-col size="12" size-sm="2"
-                              class="flex-on-print-table-hide-on-card ion-no-padding print-font md-text-center">
-                              {{ timetable.MODID }}
-                            </ion-col>
-                            <ion-col size="12" size-sm="3" class="ion-no-padding print-font md-text-center">
+                            class="flex-on-print-table-hide-on-card ion-no-padding md-text-center">
+                            {{ timetable.MODID }}
+                          </ion-col>
+                          <ion-col size="12" size-sm="3" class="ion-no-padding md-text-center">
                               <span class="marker">
                                 <ion-icon name="locate"></ion-icon>
                               </span>
@@ -166,7 +158,7 @@
                             </ion-col>
                             <ion-col size="12" size-sm="3" class="ion-no-padding" *ngIf="timetable.NAME">
                               <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]"
-                                class="printColor print-font md-text-center">
+                              class="md-text-center">
                                 <span class="marker main-text-color">
                                   <ion-icon name="contact"></ion-icon>
                                 </span>
@@ -180,22 +172,22 @@
 
                         <ng-template #viewDaily>
                           <ion-row>
-                            <ion-col size="12" size-sm="3" class="text-bold print-font ion-no-padding">
+                          <ion-col size="12" size-sm="3" class="text-bold ion-no-padding">
                               {{ timetable.MODID }}
                             </ion-col>
-                            <ion-col size="12" size-sm="2" class="print-font ion-no-padding print-less-width">
+                          <ion-col size="12" size-sm="2" class="ion-no-padding">
                               <span class="marker">
                                 <ion-icon name="time"></ion-icon>
                               </span>
                               {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
                             </ion-col>
-                            <ion-col size="12" size-sm="3" class="print-font ion-no-padding">
+                          <ion-col size="12" size-sm="3" class="ion-no-padding">
                               <span class="marker">
                                 <ion-icon name="locate"></ion-icon>
                               </span>
                               {{ timetable.ROOM }} | {{ timetable.LOCATION }}
                             </ion-col>
-                            <ion-col size="12" size-sm="4" class="print-font ion-no-padding" *ngIf="timetable.NAME">
+                          <ion-col size="12" size-sm="4" class="ion-no-padding" *ngIf="timetable.NAME">
                               <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]">
                                 <span class="marker main-text-color">
                                   <ion-icon name="contact"></ion-icon>
@@ -219,7 +211,7 @@
             </ion-row>
           </ion-grid>
 
-        </ng-template>
+      </ng-container>
       </ng-template>
 
       <ng-template #empty>
@@ -299,7 +291,7 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-    </ng-template>
+  </ng-container>
 
     <ng-template #loading>
       <ion-card class="ion-no-padding">
@@ -323,14 +315,6 @@
         </ion-card-content>
       </ion-card>
     </ng-template>
-  </ng-template>
-
-  <div class="hide-on-print">
-    <ng-container *ngTemplateOutlet="page_content"></ng-container>
-  </div>
 
 </ion-content>
 
-<div class="show-on-print">
-  <ng-container *ngTemplateOutlet="page_content"></ng-container>
-</div>
