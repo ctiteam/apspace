@@ -182,20 +182,20 @@ export class MyConsultationsPage {
   async cancelAvailableSlot() {
     if (this.slotsToBeCancelled) {
       const bookedSlots = this.slotsToBeCancelled.filter(slotToBeCancelled => slotToBeCancelled.booking_detail);
-      const notBookedSlots = this.slotsToBeCancelled.filter(slotToBeCancelled => !slotToBeCancelled.booking_detail);
+      const availableSlots = this.slotsToBeCancelled.filter(slotToBeCancelled => !slotToBeCancelled.booking_detail);
 
       if (bookedSlots.length > 0) {
         const cancelBookedSlotDetails = this.createAlertMessage(bookedSlots);
 
         let cancelAvailableSlotDetails;
-        notBookedSlots.length > 0
-        ? cancelAvailableSlotDetails = `<ion-icon name="checkbox-outline"></ion-icon>${this.createAlertMessage(notBookedSlots)}`
+        availableSlots.length > 0
+        ? cancelAvailableSlotDetails = `<br /><ion-icon name="checkbox-outline"></ion-icon>${this.createAlertMessage(availableSlots)}`
         : cancelAvailableSlotDetails = '';
 
         const alertBooked = await this.alertController.create({
           header: 'Warning',
           subHeader: 'You have booked slots that you\'re about to cancel. Do you want to continue? :',
-          message: `<ion-icon name="calendar"></ion-icon>${cancelBookedSlotDetails}<br />
+          message: `<ion-icon name="calendar"></ion-icon>${cancelBookedSlotDetails}
                     ${cancelAvailableSlotDetails}`,
           buttons: [
             {
@@ -242,8 +242,8 @@ export class MyConsultationsPage {
 
                           listApiToForkJoin.push(this.sendCancelBookingRequest(cancellationBookedBody));
 
-                          if (notBookedSlots.length > 0) {
-                            const cancellationAvailableBody = notBookedSlots.reduce((previous, current) => {
+                          if (availableSlots.length > 0) {
+                            const cancellationAvailableBody = availableSlots.reduce((previous, current) => {
                               previous.push({
                                 slot_id: current.slot_id
                               });
@@ -257,11 +257,7 @@ export class MyConsultationsPage {
                           forkJoin(listApiToForkJoin).subscribe(
                             {
                               next: () => {
-                                this.daysConfigrations = [];
-                                this.slotsToBeCancelled = [];
-                                this.dateToFilter = undefined;
-                                this.onSelect = false;
-                                this.onRange = false;
+                                this.resetPage();
                                 this.showToastMessage(
                                   'Slot has been cancelled successfully!',
                                   'success'
@@ -290,7 +286,7 @@ export class MyConsultationsPage {
         });
         await alertBooked.present();
       } else {
-        const cancelTimeDetails = this.createAlertMessage(notBookedSlots);
+        const cancelTimeDetails = this.createAlertMessage(availableSlots);
 
         const alert = await this.alertController.create({
           header: 'Cancelling an opened slot',
@@ -306,7 +302,7 @@ export class MyConsultationsPage {
               handler: () => {
                 this.presentLoading();
 
-                const cancellationBody = notBookedSlots.reduce((previous, current) => {
+                const cancellationBody = availableSlots.reduce((previous, current) => {
                   previous.push({
                     slot_id: current.slot_id
                   });
@@ -316,11 +312,7 @@ export class MyConsultationsPage {
 
                 this.sendCancelSlotRequest(cancellationBody).subscribe({
                   next: () => {
-                    this.daysConfigrations = [];
-                    this.slotsToBeCancelled = [];
-                    this.dateToFilter = undefined;
-                    this.onSelect = false;
-                    this.onRange = false;
+                    this.resetPage();
                     this.showToastMessage(
                       'Slot has been cancelled successfully!',
                       'success'
@@ -344,6 +336,14 @@ export class MyConsultationsPage {
         await alert.present();
       }
     }
+  }
+
+  resetPage() {
+    this.daysConfigrations = [];
+    this.slotsToBeCancelled = [];
+    this.dateToFilter = undefined;
+    this.onSelect = false;
+    this.onRange = false;
   }
   // cancel slots functions ends here
 
