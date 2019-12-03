@@ -161,6 +161,7 @@ export class AddFreeSlotPage implements OnInit {
     this.submitted = true;
     // stop here if form is invalid
     if (this.addFreeSlotForm.invalid) {
+      this.showToastMessage('You cannot submit while having an empty field.', 'danger');
       return;
     }
 
