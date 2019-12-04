@@ -8,7 +8,6 @@ export class SortByDatePipe implements PipeTransform {
 
   transform(history: LeaveHistory[]): LeaveHistory[] {
     if (history.length > 1) {
-      console.log('tyo');
       return this.sortByKey(history, 'LEAVE_DATE');
     }
     return null;
