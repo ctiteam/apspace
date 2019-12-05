@@ -27,9 +27,15 @@ skeleton-item {
   .week-title {
     display: inline;
     text-decoration: underline;
-    &:hover{
+    &:hover {
       font-weight: bold;
-      color: var(--sub-primary-color);
+      color: var(--sub-primary-color) !important;
+    }
+  }
+  .icon-hover {
+    &:hover {
+      font-weight: bold;
+      color: var(--sub-primary-color) !important;
     }
   }
 }

@@ -8,9 +8,9 @@
               <span class="text-bold">Week</span>: {{ week.key | fromWeek | date }}
             </h2>
           </ion-label>
-          <ion-icon slot="end" class="cursor-pointer colored-text" name="print"
+          <ion-icon slot="end" class="cursor-pointer colored-text icon-hover" name="print"
             (click)='sendToPrint(week.key)'></ion-icon>
-          <ion-icon slot="end" class="cursor-pointer colored-text"
+          <ion-icon slot="end" class="cursor-pointer colored-text icon-hover"
             [name]=" selectedWeeks.includes(week.key) ? 'ios-arrow-up' : 'ios-arrow-down'"
             (click)='show(week.key, $event.target)'></ion-icon>
         </ion-item>
@@ -64,7 +64,7 @@
             <ion-col size="12" size-sm="3">
               <span class="marker">Intakes: </span>
               <ng-container *ngFor="let intake of day.intakes; last as last">
-                <a [routerLink]="['/student-timetable', intake]">{{ intake }}</a>
+                <a class="colored-text" [routerLink]="['/student-timetable', intake]">{{ intake }}</a>
                 <ng-container *ngIf="!last">, </ng-container>
               </ng-container>
             </ion-col>
