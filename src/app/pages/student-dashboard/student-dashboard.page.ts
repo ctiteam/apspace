@@ -541,8 +541,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
     const consultationsEventMode: EventComponentConfigurations[] = [];
-    return forkJoin([this.ws.get<ConsultationHour[]>('/iconsult/bookings?', {
-      url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging'}),
+    return forkJoin([this.ws.get<ConsultationHour[]>('/iconsult/bookings?'),
       this.ws.get<StaffDirectory[]>('/staff/listing')
     ]).pipe(
       map(([consultations, staffList]) => {
