@@ -169,6 +169,7 @@ export class MyAppointmentsPage {
                     this.showToastMessage('Booking has been cancelled successfully!', 'success');
                   },
                   error: (err) => {
+                    this.dismissLoading();
                     this.showToastMessage(err.status + ': ' + err.error.error, 'danger');
                   },
                   complete: () => {
