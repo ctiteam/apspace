@@ -9,6 +9,7 @@ import { finalize, map, tap } from 'rxjs/operators';
 
 import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
 
+import * as moment from 'moment';
 import { ConsultationHour, ConsultationSlot } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
@@ -51,7 +52,15 @@ export class MyConsultationsPage {
   // for select multiple slots to cancel
   dateRange: { from: string; to: string; };
   optionsRange: CalendarComponentOptions = {
-    pickMode: 'range'
+    pickMode: 'range',
+    from: moment(this.todaysDate)
+      .add(1, 'day')
+      .toDate(),
+    to: moment(this.todaysDate)
+      .add(1, 'day')
+      .add(12, 'month')
+      .toDate(),
+    disableWeeks: [0]
   };
   onSelect = false; // enable or disable select more than one slot to cancel.
   onRange = false; // enable or disable select date range to perform bulk cancel.
@@ -264,6 +273,7 @@ export class MyConsultationsPage {
                                 );
                               },
                               error: (err) => {
+                                this.dismissLoading();
                                 this.showToastMessage(
                                   err.status + ': ' + err.error.error,
                                   'danger'
@@ -319,6 +329,7 @@ export class MyConsultationsPage {
                     );
                   },
                   error: (err) => {
+                    this.dismissLoading();
                     this.showToastMessage(
                       err.status + ': ' + err.error.error,
                       'danger'
