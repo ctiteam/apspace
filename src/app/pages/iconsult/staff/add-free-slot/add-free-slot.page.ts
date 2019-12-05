@@ -238,10 +238,10 @@ export class AddFreeSlotPage implements OnInit {
                       'success'
                     );
                   },
-                  error: () => {
+                  error: (err) => {
                     this.dismissLoading();
                     this.showToastMessage(
-                      'Something went wrong! please try again or contact us via the feedback page',
+                      err.status + ': ' + err.error.error,
                       'danger'
                     );
                   },

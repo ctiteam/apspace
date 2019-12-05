@@ -263,9 +263,9 @@ export class MyConsultationsPage {
                                   'success'
                                 );
                               },
-                              error: () => {
+                              error: (err) => {
                                 this.showToastMessage(
-                                  'Something went wrong! please try again or contact us via the feedback page',
+                                  err.status + ': ' + err.error.error,
                                   'danger'
                                 );
                               },
@@ -318,9 +318,9 @@ export class MyConsultationsPage {
                       'success'
                     );
                   },
-                  error: () => {
+                  error: (err) => {
                     this.showToastMessage(
-                      'Something went wrong! please try again or contact us via the feedback page',
+                      err.status + ': ' + err.error.error,
                       'danger'
                     );
                   },

@@ -168,8 +168,8 @@ export class MyAppointmentsPage {
                   next: () => {
                     this.showToastMessage('Booking has been cancelled successfully!', 'success');
                   },
-                  error: () => {
-                    this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
+                  error: (err) => {
+                    this.showToastMessage(err.status + ': ' + err.error.error, 'danger');
                   },
                   complete: () => {
                     this.dismissLoading();
