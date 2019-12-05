@@ -15,7 +15,7 @@ export class HrPage implements OnInit {
   leaveInCluster$: any;
   pendingApproval$: Observable<PendingApproval[]>;
   skeletons = new Array(4);
-  staffsOnLeave: OnLeaveOnMyCluster[] = []; // IDs of all staff on leave
+  staffsOnLeave = []; // IDs of all staff on leave
   // summaryChart = {
   //   type: 'bar',
   //   options: {
@@ -105,29 +105,28 @@ export class HrPage implements OnInit {
   getHistory() {
     return this.ws.get('/staff/leave_status').pipe(
       map((res: []) => {
-        const results = res.sort((a: any, b: any) => +(moment(a.LEAVE_DATE).toDate() < moment(b.LEAVE_DATE).toDate()))
-          .reduce((previous: any, current: any) => {
-            if (!previous[moment(current.LEAVE_DATE).format('MMMM YYYY')]) {
-              previous[moment(current.LEAVE_DATE).format('MMMM YYYY')] = [current];
-            } else {
-              previous[moment(current.LEAVE_DATE).format('MMMM YYYY')].push(current);
-            }
-            return previous;
-          }, {});
+        const results = this.sortArrayOfDateKey(res, 'LEAVE_DATE', 'desc').reduce((previous: any, current: any) => {
+          if (!previous[moment(current.LEAVE_DATE).format('MMMM YYYY')]) {
+            previous[moment(current.LEAVE_DATE).format('MMMM YYYY')] = [current];
+          } else {
+            previous[moment(current.LEAVE_DATE).format('MMMM YYYY')].push(current);
+          }
+          return previous;
+        }, {});
         return Object.keys(results).map(date => ({ date, value: results[date] }));
-      }),
-      tap(res => console.log(res))
+      })
     );
   }
 
   getPendingMyApproval() {
     return this.ws.get<PendingApproval[]>('/staff/pending_approval').pipe(
-      map(res => res.sort((a, b) => +(a.LEAVEDATE < b.LEAVEDATE)))
+      map((res: []) => this.sortArrayOfDateKey(res, 'LEAVEDATE', 'asc'))
     );
   }
 
   getOnLeaveInMyCluster() {
     return this.ws.get<OnLeaveOnMyCluster[]>('/staff/leave_in_cluster').pipe(
+      map(res => []),
       tap(res => {
         if (res.length > 0) {
           res.forEach(staffOnLeave => {
@@ -147,7 +146,7 @@ export class HrPage implements OnInit {
             }
           }
         );
-        return this.staffsOnLeave.sort((a, b) => +(a.LEAVEDATE < b.LEAVEDATE));
+        return this.sortArrayOfDateKey(this.staffsOnLeave, 'LEAVEDATE', 'asc');
       },
       ),
       map(res => {
@@ -162,6 +161,19 @@ export class HrPage implements OnInit {
           }, {});
         return Object.keys(results).map(date => ({ date, value: results[date] }));
       })
+    );
+  }
+
+  sortArrayOfDateKey(array: any[], key: string, sortType: 'asc' | 'desc') {
+    return array.sort((a: any, b: any) => {
+      if (moment(a[key]).toDate() > moment(b[key]).toDate()) {
+        return sortType === 'asc' ? 1 : -1;
+      }
+      if (moment(a[key]).toDate() < moment(b[key]).toDate()) {
+        return sortType === 'asc' ? -1 : 1;
+      }
+      return 0;
+    }
     );
   }
 }
