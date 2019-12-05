@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { OnLeaveOnMyCluster, PendingApproval, StaffDirectory } from 'src/app/interfaces';
@@ -84,8 +85,49 @@ export class HrPage implements OnInit {
     //     };
     //   })
     // );
-    this.history$ = this.ws.get('/staff/leave_status');
-    this.leaveInCluster$ = this.ws.get<OnLeaveOnMyCluster[]>('/staff/leave_in_cluster').pipe(
+    this.history$ = this.getHistory();
+    this.leaveInCluster$ = this.getOnLeaveInMyCluster();
+    this.pendingApproval$ = this.getPendingMyApproval();
+  }
+
+  /** Convert string to color with djb2 hash function. */
+  strToColor(str: string): string {
+    let hash = 5381;
+    /* tslint:disable:no-bitwise */
+    for (let i = 0; i < str.length; i++) {
+      hash = ((hash << 5) + hash) + str.charCodeAt(i); /* hash * 33 + c */
+    }
+    return '#' + [16, 8, 0].map(i => ('0' + (hash >> i & 0xFF).toString(16))
+      .substr(-2)).join('');
+    /* tslint:enable:no-bitwise */
+  }
+
+  getHistory() {
+    return this.ws.get('/staff/leave_status').pipe(
+      map((res: []) => {
+        const results = res.sort((a: any, b: any) => +(moment(a.LEAVE_DATE).toDate() < moment(b.LEAVE_DATE).toDate()))
+          .reduce((previous: any, current: any) => {
+            if (!previous[moment(current.LEAVE_DATE).format('MMMM YYYY')]) {
+              previous[moment(current.LEAVE_DATE).format('MMMM YYYY')] = [current];
+            } else {
+              previous[moment(current.LEAVE_DATE).format('MMMM YYYY')].push(current);
+            }
+            return previous;
+          }, {});
+        return Object.keys(results).map(date => ({ date, value: results[date] }));
+      }),
+      tap(res => console.log(res))
+    );
+  }
+
+  getPendingMyApproval() {
+    return this.ws.get<PendingApproval[]>('/staff/pending_approval').pipe(
+      map(res => res.sort((a, b) => +(a.LEAVEDATE < b.LEAVEDATE)))
+    );
+  }
+
+  getOnLeaveInMyCluster() {
+    return this.ws.get<OnLeaveOnMyCluster[]>('/staff/leave_in_cluster').pipe(
       tap(res => {
         if (res.length > 0) {
           res.forEach(staffOnLeave => {
@@ -121,18 +163,5 @@ export class HrPage implements OnInit {
         return Object.keys(results).map(date => ({ date, value: results[date] }));
       })
     );
-    this.pendingApproval$ = this.ws.get<PendingApproval[]>('/staff/pending_approval');
-  }
-
-  /** Convert string to color with djb2 hash function. */
-  strToColor(str: string): string {
-    let hash = 5381;
-    /* tslint:disable:no-bitwise */
-    for (let i = 0; i < str.length; i++) {
-      hash = ((hash << 5) + hash) + str.charCodeAt(i); /* hash * 33 + c */
-    }
-    return '#' + [16, 8, 0].map(i => ('0' + (hash >> i & 0xFF).toString(16))
-      .substr(-2)).join('');
-    /* tslint:enable:no-bitwise */
   }
 }

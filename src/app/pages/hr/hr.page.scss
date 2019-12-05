@@ -1,26 +1,32 @@
-ion-card {
+ion-item {
   &.approved {
-    border-left: 0.75em solid var(--success-color);
-    ion-card-title {
-      .responsive-h1 {
-        color: var(--success-color) !important;
-      }
+    border-left: 0.3em solid var(--success-color);
+    .responsive-h1 {
+      color: var(--success-color) !important;
+    }
+
+    ion-badge {
+      --background: var(--success-color);
     }
   }
   &.pending {
-    border-left: 0.75em solid #dfa847;
-    ion-card-title {
-      .responsive-h1 {
-        color: #dfa847 !important;
-      }
+    border-left: 0.3em solid #dfa847;
+
+    .responsive-h1 {
+      color: #dfa847 !important;
+    }
+
+    ion-badge {
+      --background: #dfa847;
     }
   }
   &.cancelled {
-    border-left: 0.75em solid var(--danger-color);
-    ion-card-title {
-      .responsive-h1 {
-        color: var(--danger-color) !important;
-      }
+    border-left: 0.3em solid var(--danger-color);
+    .responsive-h1 {
+      color: var(--danger-color) !important;
+    }
+    ion-badge {
+      --background: var(--danger-color);
     }
   }
 }
@@ -85,7 +91,7 @@ h2.acronym {
 .white-background {
   --background: white !important;
 }
-.on-leave-list {
+ion-list {
   ion-item:last-child {
     --border-width: 0 0 0 0 !important;
     --border-color: transparent !important;

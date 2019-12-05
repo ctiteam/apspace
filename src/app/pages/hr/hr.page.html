@@ -103,7 +103,9 @@
             </ion-list>
           </ion-card-content>
           <ng-template #loadingStaffOnLeave>
-            loading the api
+            <ion-item *ngFor="let _ of skeletons">
+              <ion-skeleton-text animated style="line-height: 35px; width: 100%;"></ion-skeleton-text>
+            </ion-item>
           </ng-template>
         </ion-card>
 
@@ -121,7 +123,8 @@
                     {{ pendingApproval.LEAVETYPE }}
                   </p>
                   <p>
-                    <ion-icon class="text-bold" name="calendar"></ion-icon> {{pendingApproval.LEAVEDATE}}
+                    <ion-icon class="text-bold" name="calendar"></ion-icon>
+                    {{pendingApproval.LEAVEDATE | date: 'EEE, dd MMM yyy'}}
                   </p>
                 </ion-label>
                 <ion-badge color="danger">{{pendingApproval.STATUS}}</ion-badge>
@@ -138,8 +141,8 @@
 
       </ion-col>
       <ion-col size="12" size-md="8" class="ion-no-padding">
-        <ion-card class="no-box-shadow transparent-background">
-          <ion-card-header class="ion-no-padding ion-padding-bottom">
+        <ion-card>
+          <ion-card-header>
             <ion-card-title class="fixed-ui-title">Leave History</ion-card-title>
           </ion-card-header>
           <ion-card-content class="ion-no-padding transparent-background">
@@ -147,80 +150,38 @@
               <ion-row>
                 <ion-col class="ion-no-padding" size="12">
 
-                  <ng-container *ngIf="history$ | async as history; else loadingHistory">
-                    <ng-container *ngFor="let historyItem of history | sortByDate">
-                      <ion-card [ngClass]="{
-                                  'approved': historyItem.STATUS === 'Approved',
-                                  'pending': historyItem.STATUS === 'PENDING',
-                                  'cancelled': historyItem.STATUS === ' Cancelled'
-                              }">
-                        <ion-card-header>
+                  <ng-container *ngIf="history$ | async as historyList; else loadingHistory">
+                    <ion-list *ngFor="let historyGroupedByMonth of historyList" class="ion-no-padding">
+                      <ion-list-header class="colored-header ion-no-padding">
+                        <h5 class="ion-padding-start ion-padding-end">
+                          {{historyGroupedByMonth.date}}
+                        </h5>
+                      </ion-list-header>
+                      <ng-container *ngFor="let historyItem of historyGroupedByMonth.value">
+                        <ion-item [ngClass]="{
+                          'approved': historyItem.STATUS === 'Approved',
+                          'pending': historyItem.STATUS === 'PENDING',
+                          'cancelled': !(historyItem.STATUS === 'Approved' || historyItem.STATUS === 'PENDING')
+                      }">
+                          <ion-label>
+                            <h4 class="text-bold responsive-h1">{{historyItem.LEAVE_TYPE}}</h4>
+                            <p *ngIf="historyItem.LEAVE_DATE">
+                              {{historyItem.LEAVE_DATE | date : 'EEE, dd MMM yyy'}}
+                            </p>
+                            <p *ngIf="historyItem.RESPONSE_DATE">
+                              *Response Date: {{historyItem.RESPONSE_DATE | date : 'EEE, dd MMM yyy'}}
+                            </p>
+                          </ion-label>
+                          <ion-badge slot="end">{{historyItem.STATUS}}</ion-badge>
+                        </ion-item>
+                      </ng-container>
 
-                          <ion-card-title>
-                            <h4 class="responsive-h1">{{historyItem.LEAVE_TYPE}}</h4>
-                            <h4 class="responsive-h2 main-text-color">
-                              {{historyItem.LEAVE_DATE | date : 'EEE, dd MMM yyy'}}</h4>
-                          </ion-card-title>
-                          <!-- <ion-badge class="ion-float-right" >{{historyItem.STATUS}}</ion-badge> -->
-                        </ion-card-header>
-                        <ion-card-content *ngIf="historyItem.STATUS !== 'PENDING'">
-                          <ion-item *ngIf="historyItem.ACTION_BY">
-                            <ion-label>
-                              <p>Action By:</p>
-                              <h3 class="text-bold">{{historyItem.ACTION_BY}}</h3>
-                            </ion-label>
-                          </ion-item>
-                          <ion-item lines="none" *ngIf="historyItem.RESPONSE_DATE">
-                            <ion-label>
-                              <p>Response Date:</p>
-                              <h3 class="text-bold">{{historyItem.RESPONSE_DATE}}</h3>
-                            </ion-label>
-                          </ion-item>
-                        </ion-card-content>
-                      </ion-card>
-                    </ng-container>
+                    </ion-list>
                   </ng-container>
                   <ng-template #loadingHistory>
-                    <ion-card *ngFor="let _ of skeletons">
-                      <ion-card-header>
-                        <ion-card-title>
-                          <h4 class="responsive-h1">
-                            <ion-skeleton-text animated style="line-height: 20px; width: 55%;">
-                            </ion-skeleton-text>
-                          </h4>
-                          <h4 class="responsive-h2 main-text-color">
-                            <ion-skeleton-text animated style="line-height: 20px; width: 45%;">
-                            </ion-skeleton-text>
-                          </h4>
-                        </ion-card-title>
-                      </ion-card-header>
-                      <ion-card-content>
-                        <ion-item>
-                          <ion-label>
-                            <p>
-                              <ion-skeleton-text animated style="line-height: 20px; width: 25%;">
-                              </ion-skeleton-text>
-                            </p>
-                            <h3 class="text-bold">
-                              <ion-skeleton-text animated style="line-height: 20px; width: 65%;">
-                              </ion-skeleton-text>
-                            </h3>
-                          </ion-label>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-label>
-                            <p>
-                              <ion-skeleton-text animated style="line-height: 20px; width: 30%;">
-                              </ion-skeleton-text>
-                            </p>
-                            <h3 class="text-bold">
-                              <ion-skeleton-text animated style="line-height: 20px; width: 75%;">
-                              </ion-skeleton-text>
-                            </h3>
-                          </ion-label>
-                        </ion-item>
-                      </ion-card-content>
-                    </ion-card>
+                    <ion-item *ngFor="let _ of skeletons">
+                      <ion-skeleton-text animated style="line-height: 35px; width: 100%;"></ion-skeleton-text>
+                    </ion-item>
                   </ng-template>
                 </ion-col>
               </ion-row>
