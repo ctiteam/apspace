@@ -18,14 +18,7 @@ export class ProfilePage implements OnInit {
   staffProfile$: Observable<StaffProfile[]>;
   visa$: Observable<any>;
   indecitor = false;
-  skeltons = [
-    80,
-    30,
-    100,
-    45,
-    60,
-    76
-  ];
+  skeltons = [80, 30, 100, 45, 60, 76];
 
   local = false;
   studentRole = false;
@@ -54,13 +47,21 @@ export class ProfilePage implements OnInit {
         if (role & Role.Student) {
           this.studentRole = true;
           this.photo$ = this.ws.get<StudentPhoto>('/student/photo');
-          this.profile$ = this.ws.get<StudentProfile>('/student/profile');
-          this.getProfile();
+          this.profile$ = this.ws.get<StudentProfile>('/student/profile').pipe(
+            tap(p => {
+              this.countryName = p.COUNTRY;
+              if (p.COUNTRY === 'Malaysia') {
+                this.local = true;
+              } else {
+                this.local = false;
+                this.visa$ = this.getVisaStatus();
+              }
+            }),
+          );
           // tslint:disable-next-line:no-bitwise
         } else if (role & (Role.Lecturer | Role.Admin)) {
           this.staffProfile$ = this.ws.get<StaffProfile[]>('/staff/profile');
         }
-        this.getProfile();
       });
       this.indecitor = false;
     }
@@ -68,30 +69,6 @@ export class ProfilePage implements OnInit {
 
   openStaffDirectoryInfo(id: string) {
     this.router.navigate(['/staffs', id]);
-  }
-
-  getProfile() {
-    const role = this.settings.get('role');
-    // tslint:disable-next-line:no-bitwise
-    if (role & Role.Student) {
-      this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).pipe(
-        tap(p => {
-          this.countryName = p.COUNTRY;
-          if (p.COUNTRY === 'Malaysia') {
-            this.local = true;
-          } else {
-            this.local = false;
-            this.visa$ = this.getVisaStatus();
-          }
-        }),
-      ).subscribe();
-    } else {
-      this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }).pipe(
-        tap(p => {
-          this.countryName = p[0].NATIONALITY;
-        }),
-      ).subscribe();
-    }
   }
 
   getVisaStatus() {

@@ -158,9 +158,13 @@ export class WsApiService {
       ? this.http.post<T>(url, options.body, opt)
       : this.cas.getST(url.split('?').shift()).pipe( // remove service url params
         switchMap(ticket => this.http.post<T>(url, options.body, { ...opt, params: { ...opt.params, ticket } })),
-        catchError(() => this.storage.get(endpoint)), // no network
       )
     ).pipe(
+      catchError(err => {
+        if (400 <= err.status && err.status < 500) {
+          return throwError(err);
+        }
+      }),
       timeout(options.timeout),
       publishLast(),
       refCount(),
@@ -169,7 +173,9 @@ export class WsApiService {
 
   put<T>(endpoint: string, options: {
     body?: any | null,
-    headers?: HttpHeaders | { [header: string]: string | string[]; },
+    headers?: HttpHeaders | {
+      [header: string]: string | string[];
+    },
     params?: HttpParams | { [param: string]: string | string[]; },
     timeout?: number,
     url?: string,
@@ -201,6 +207,12 @@ export class WsApiService {
     return this.cas.getST(url.split('?').shift()).pipe(
       switchMap(ticket => this.http.put<T>(url, options.body,
         { ...opt, params: { ...opt.params, ticket } })),
+    ).pipe(
+      catchError(err => {
+        if (400 <= err.status && err.status < 500) {
+          return throwError(err);
+        }
+      }),
       timeout(options.timeout),
     );
   }
