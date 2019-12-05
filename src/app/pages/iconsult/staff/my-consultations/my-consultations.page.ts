@@ -17,7 +17,6 @@ import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 // import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
-
 // GET SLOT ID FOR CANCEL SLOT PURPOSE
 
 @Component({
@@ -190,6 +189,21 @@ export class MyConsultationsPage {
 
   async cancelAvailableSlot() {
     if (this.slotsToBeCancelled) {
+
+      let isPassed = false;
+      this.slotsToBeCancelled.forEach(slotToBeCancelled => {
+        if (new Date(this.datePipe.transform(slotToBeCancelled.start_time, 'medium', '+0800'))
+        <= moment(new Date()).add(24, 'hours').toDate()) {
+          isPassed = true;
+          return;
+        }
+      });
+
+      if (isPassed) {
+        this.showToastMessage('Cannot cancel passed slots.', 'danger');
+        return;
+      }
+
       const bookedSlots = this.slotsToBeCancelled.filter(slotToBeCancelled => slotToBeCancelled.booking_detail);
       const availableSlots = this.slotsToBeCancelled.filter(slotToBeCancelled => !slotToBeCancelled.booking_detail);
 
