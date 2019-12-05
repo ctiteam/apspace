@@ -10,8 +10,8 @@
 <ion-content>
   <ion-grid class="ion-no-padding">
     <ion-row>
-      <ng-container *ngIf="leaves$ | async as leaves; else loadingLeaves">
-        <ion-col size="12" size-md="4">
+      <ion-col size="12" size-md="4">
+        <!-- <ng-container *ngIf="leaves$ | async as leaves; else loadingLeaves">
           <ion-card class="ion-margin-top">
             <ion-card-header>
               <ion-card-title class="fixed-ui-title">Summary</ion-card-title>
@@ -33,7 +33,6 @@
                     <ion-slides #slides [options]="highestRatedSliderOpts">
                       <ion-slide class="with-padding-bottom" *ngFor="let leave of leaves">
                         <ion-card class="ion-no-margin with-min-width white-background">
-                          <!-- <img class="card-img" alt="slide 1" src="assets/temp/slider5.jpg" /> -->
                           <ion-card-header>
                             <ion-card-title>
                               <h6 class="ion-text-center main-text-color text-bold">{{ leave.LEAVE_TYPE }}</h6>
@@ -61,181 +60,180 @@
               </ion-grid>
             </ion-card-content>
           </ion-card>
+        </ng-container>
+        <ng-template #loadingLeaves>
+          <ion-card style="width:100%">
+            <ion-skeleton-text animated style="line-height: 200px; width: 100%;"></ion-skeleton-text>
+          </ion-card>
+          <ion-grid>
+            <ion-row>
+              <ion-col offset="1" size="5">
+                <ion-skeleton-text animated style="line-height: 200px; width: 100%;"></ion-skeleton-text>
+              </ion-col>
+              <ion-col offset="1" size="5">
+                <ion-skeleton-text animated style="line-height: 200px; width: 100%;"></ion-skeleton-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ng-template> -->
+        <ion-card class="ion-margin-top">
+          <ion-card-header>
+            <ion-card-title class="fixed-ui-title">Away This Week</ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-no-padding"
+            *ngIf="leaveInCluster$ | async as staffsOnLeaveList; else loadingStaffOnLeave">
+            <ion-list class="on-leave-list" *ngFor="let staffOnLeaveGroupedByDate of staffsOnLeaveList">
+              <ion-list-header class="colored-header ion-no-padding">
+                <h5 class="ion-padding-start ion-padding-end">
+                  {{staffOnLeaveGroupedByDate.date | date: 'EEE, dd MMM yyy'}}
+                </h5>
+              </ion-list-header>
+              <ion-item *ngFor="let staffOnLeave of staffOnLeaveGroupedByDate.value">
+                <ion-avatar slot="start">
+                  <img [src]="staffOnLeave.PHOTO">
+                </ion-avatar>
+                <ion-label>
+                  <h2>{{staffOnLeave.FULLNAME}}</h2>
+                  <h3 class="text-bold">{{staffOnLeave.LEAVEDATE | date: 'EEE, dd MMM yyy'}}</h3>
+                  <p><span class="text-bold">Email: </span> <a class="colored-text text-bold"
+                      href="mailto:{{staffOnLeave.EMAIL}}">{{staffOnLeave.EMAIL}}</a></p>
+                </ion-label>
+              </ion-item>
 
-          <ion-card class="ion-margin-top">
-            <ion-card-header>
-              <ion-card-title class="fixed-ui-title">Away This Week</ion-card-title>
-            </ion-card-header>
-            <ion-card-content class="ion-no-padding"
-              *ngIf="leaveInCluster$ | async as staffsOnLeaveList; else loadingStaffOnLeave">
-              <ion-list class="on-leave-list" *ngFor="let staffOnLeaveGroupedByDate of staffsOnLeaveList">
-                <ion-list-header class="colored-header ion-no-padding">
-                  <h5 class="ion-padding-start ion-padding-end">
-                    {{staffOnLeaveGroupedByDate.date | date: 'EEE, dd MMM yyy'}}
-                  </h5>
-                </ion-list-header>
-                <ion-item *ngFor="let staffOnLeave of staffOnLeaveGroupedByDate.value">
-                  <ion-avatar slot="start">
-                    <img [src]="staffOnLeave.PHOTO">
-                  </ion-avatar>
-                  <ion-label>
-                    <h2>{{staffOnLeave.FULLNAME}}</h2>
-                    <h3 class="text-bold">{{staffOnLeave.LEAVEDATE | date: 'EEE, dd MMM yyy'}}</h3>
-                    <p><span class="text-bold">Email: </span> <a class="colored-text text-bold"
-                        href="mailto:{{staffOnLeave.EMAIL}}">{{staffOnLeave.EMAIL}}</a></p>
-                  </ion-label>
-                </ion-item>
+            </ion-list>
+          </ion-card-content>
+          <ng-template #loadingStaffOnLeave>
+            loading the api
+          </ng-template>
+        </ion-card>
 
-              </ion-list>
-            </ion-card-content>
-            <ng-template #loadingStaffOnLeave>
-              loading the api
+        <ion-card class="ion-margin-top">
+          <ion-card-header>
+            <ion-card-title class="fixed-ui-title">Pending My Approval</ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-no-padding" *ngIf="pendingApproval$ | async as pendingApprovals">
+            <ion-list class="ion-no-padding" *ngIf="pendingApprovals.length > 0; else noPending">
+              <ion-item *ngFor="let pendingApproval of pendingApprovals">
+                <ion-label>
+                  <h2 class="text-bold">{{ pendingApproval.FULLNAME }}</h2>
+                  <p>
+                    <ion-icon class="text-bold" name="pricetags"></ion-icon>
+                    {{ pendingApproval.LEAVETYPE }}
+                  </p>
+                  <p>
+                    <ion-icon class="text-bold" name="calendar"></ion-icon> {{pendingApproval.LEAVEDATE}}
+                  </p>
+                </ion-label>
+                <ion-badge color="danger">{{pendingApproval.STATUS}}</ion-badge>
+              </ion-item>
+            </ion-list>
+            <ng-template #noPending>
+              <app-message-with-svg messageTitle="No Leaves with Pending Status!"
+                messageContent="There are no leaves pending your approval." imageUrl="assets/img/happy.svg"
+                wrapperOffset="3" wrapperSize="6">
+              </app-message-with-svg>
             </ng-template>
-          </ion-card>
+          </ion-card-content>
+        </ion-card>
 
-          <ion-card class="ion-margin-top">
-            <ion-card-header>
-              <ion-card-title class="fixed-ui-title">Pending My Approval</ion-card-title>
-            </ion-card-header>
-            <ion-card-content class="ion-no-padding" *ngIf="pendingApproval$ | async as pendingApprovals">
-              <ion-list class="ion-no-padding" *ngIf="pendingApprovals.length > 0; else noPending">
-                <ion-item *ngFor="let pendingApproval of pendingApprovals">
-                  <ion-label>
-                    <h2 class="text-bold">{{ pendingApproval.FULLNAME }}</h2>
-                    <p>
-                      <ion-icon class="text-bold" name="pricetags"></ion-icon>
-                      {{ pendingApproval.LEAVETYPE }}
-                    </p>
-                    <p>
-                      <ion-icon class="text-bold" name="calendar"></ion-icon> {{pendingApproval.LEAVEDATE}}
-                    </p>
-                  </ion-label>
-                  <ion-badge color="danger">{{pendingApproval.STATUS}}</ion-badge>
-                </ion-item>
-              </ion-list>
-              <ng-template #noPending>
-                <app-message-with-svg messageTitle="No Leaves with Pending Status!"
-                  messageContent="There are no leaves pending your approval." imageUrl="assets/img/happy.svg"
-                  wrapperOffset="3" wrapperSize="6">
-                </app-message-with-svg>
-              </ng-template>
-            </ion-card-content>
-          </ion-card>
+      </ion-col>
+      <ion-col size="12" size-md="8" class="ion-no-padding">
+        <ion-card class="no-box-shadow transparent-background">
+          <ion-card-header class="ion-no-padding ion-padding-bottom">
+            <ion-card-title class="fixed-ui-title">Leave History</ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-no-padding transparent-background">
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col class="ion-no-padding" size="12">
 
-        </ion-col>
-        <ion-col size="12" size-md="8" class="ion-no-padding">
-          <ion-card class="no-box-shadow transparent-background">
-            <ion-card-header class="ion-no-padding ion-padding-bottom">
-              <ion-card-title class="fixed-ui-title">Leave History</ion-card-title>
-            </ion-card-header>
-            <ion-card-content class="ion-no-padding transparent-background">
-              <ion-grid class="ion-no-padding">
-                <ion-row *ngIf="leaves.length > 0; else noLeaves">
-                  <ion-col class="ion-no-padding" size="12">
-
-                    <ng-container *ngIf="history$ | async as history; else loadingHistory">
-                      <ng-container *ngFor="let historyItem of history | sortByDate">
-                        <ion-card [ngClass]="{
+                  <ng-container *ngIf="history$ | async as history; else loadingHistory">
+                    <ng-container *ngFor="let historyItem of history | sortByDate">
+                      <ion-card [ngClass]="{
                                   'approved': historyItem.STATUS === 'Approved',
                                   'pending': historyItem.STATUS === 'PENDING',
                                   'cancelled': historyItem.STATUS === ' Cancelled'
                               }">
-                          <ion-card-header>
-
-                            <ion-card-title>
-                              <h4 class="responsive-h1">{{historyItem.LEAVE_TYPE}}</h4>
-                              <h4 class="responsive-h2 main-text-color">
-                                {{historyItem.LEAVE_DATE | date : 'EEE, dd MMM yyy'}}</h4>
-                            </ion-card-title>
-                            <!-- <ion-badge class="ion-float-right" >{{historyItem.STATUS}}</ion-badge> -->
-                          </ion-card-header>
-                          <ion-card-content *ngIf="historyItem.STATUS !== 'PENDING'">
-                            <ion-item *ngIf="historyItem.ACTION_BY">
-                              <ion-label>
-                                <p>Action By:</p>
-                                <h3 class="text-bold">{{historyItem.ACTION_BY}}</h3>
-                              </ion-label>
-                            </ion-item>
-                            <ion-item lines="none" *ngIf="historyItem.RESPONSE_DATE">
-                              <ion-label>
-                                <p>Response Date:</p>
-                                <h3 class="text-bold">{{historyItem.RESPONSE_DATE}}</h3>
-                              </ion-label>
-                            </ion-item>
-                          </ion-card-content>
-                        </ion-card>
-                      </ng-container>
-                    </ng-container>
-                    <ng-template #loadingHistory>
-                      <ion-card *ngFor="let _ of skeletons">
                         <ion-card-header>
+
                           <ion-card-title>
-                            <h4 class="responsive-h1">
-                              <ion-skeleton-text animated style="line-height: 20px; width: 55%;">
-                              </ion-skeleton-text>
-                            </h4>
+                            <h4 class="responsive-h1">{{historyItem.LEAVE_TYPE}}</h4>
                             <h4 class="responsive-h2 main-text-color">
-                              <ion-skeleton-text animated style="line-height: 20px; width: 45%;">
-                              </ion-skeleton-text>
-                            </h4>
+                              {{historyItem.LEAVE_DATE | date : 'EEE, dd MMM yyy'}}</h4>
                           </ion-card-title>
+                          <!-- <ion-badge class="ion-float-right" >{{historyItem.STATUS}}</ion-badge> -->
                         </ion-card-header>
-                        <ion-card-content>
-                          <ion-item>
+                        <ion-card-content *ngIf="historyItem.STATUS !== 'PENDING'">
+                          <ion-item *ngIf="historyItem.ACTION_BY">
                             <ion-label>
-                              <p>
-                                <ion-skeleton-text animated style="line-height: 20px; width: 25%;">
-                                </ion-skeleton-text>
-                              </p>
-                              <h3 class="text-bold">
-                                <ion-skeleton-text animated style="line-height: 20px; width: 65%;">
-                                </ion-skeleton-text>
-                              </h3>
+                              <p>Action By:</p>
+                              <h3 class="text-bold">{{historyItem.ACTION_BY}}</h3>
                             </ion-label>
                           </ion-item>
-                          <ion-item lines="none">
+                          <ion-item lines="none" *ngIf="historyItem.RESPONSE_DATE">
                             <ion-label>
-                              <p>
-                                <ion-skeleton-text animated style="line-height: 20px; width: 30%;">
-                                </ion-skeleton-text>
-                              </p>
-                              <h3 class="text-bold">
-                                <ion-skeleton-text animated style="line-height: 20px; width: 75%;">
-                                </ion-skeleton-text>
-                              </h3>
+                              <p>Response Date:</p>
+                              <h3 class="text-bold">{{historyItem.RESPONSE_DATE}}</h3>
                             </ion-label>
                           </ion-item>
                         </ion-card-content>
                       </ion-card>
-                    </ng-template>
-                  </ion-col>
-                </ion-row>
-                <ng-template #noLeaves>
-                  <app-message-with-svg messageTitle="No leaves To Show!"
-                    messageContent="There are no leaves to display for this account." imageUrl="assets/img/empty.svg"
-                    wrapperOffset="3" wrapperSize="6">
-                  </app-message-with-svg>
-                </ng-template>
-              </ion-grid>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ng-container>
-      <ng-template #loadingLeaves>
-        <ion-card style="width:100%">
-          <ion-skeleton-text animated style="line-height: 200px; width: 100%;"></ion-skeleton-text>
+                    </ng-container>
+                  </ng-container>
+                  <ng-template #loadingHistory>
+                    <ion-card *ngFor="let _ of skeletons">
+                      <ion-card-header>
+                        <ion-card-title>
+                          <h4 class="responsive-h1">
+                            <ion-skeleton-text animated style="line-height: 20px; width: 55%;">
+                            </ion-skeleton-text>
+                          </h4>
+                          <h4 class="responsive-h2 main-text-color">
+                            <ion-skeleton-text animated style="line-height: 20px; width: 45%;">
+                            </ion-skeleton-text>
+                          </h4>
+                        </ion-card-title>
+                      </ion-card-header>
+                      <ion-card-content>
+                        <ion-item>
+                          <ion-label>
+                            <p>
+                              <ion-skeleton-text animated style="line-height: 20px; width: 25%;">
+                              </ion-skeleton-text>
+                            </p>
+                            <h3 class="text-bold">
+                              <ion-skeleton-text animated style="line-height: 20px; width: 65%;">
+                              </ion-skeleton-text>
+                            </h3>
+                          </ion-label>
+                        </ion-item>
+                        <ion-item lines="none">
+                          <ion-label>
+                            <p>
+                              <ion-skeleton-text animated style="line-height: 20px; width: 30%;">
+                              </ion-skeleton-text>
+                            </p>
+                            <h3 class="text-bold">
+                              <ion-skeleton-text animated style="line-height: 20px; width: 75%;">
+                              </ion-skeleton-text>
+                            </h3>
+                          </ion-label>
+                        </ion-item>
+                      </ion-card-content>
+                    </ion-card>
+                  </ng-template>
+                </ion-col>
+              </ion-row>
+              <ng-template #noLeaves>
+                <app-message-with-svg messageTitle="No leaves To Show!"
+                  messageContent="There are no leaves to display for this account." imageUrl="assets/img/empty.svg"
+                  wrapperOffset="3" wrapperSize="6">
+                </app-message-with-svg>
+              </ng-template>
+            </ion-grid>
+          </ion-card-content>
         </ion-card>
-        <ion-grid>
-          <ion-row>
-            <ion-col offset="1" size="5">
-              <ion-skeleton-text animated style="line-height: 200px; width: 100%;"></ion-skeleton-text>
-            </ion-col>
-            <ion-col offset="1" size="5">
-              <ion-skeleton-text animated style="line-height: 200px; width: 100%;"></ion-skeleton-text>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ng-template>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

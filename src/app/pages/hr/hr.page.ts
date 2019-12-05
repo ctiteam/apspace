@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { LeaveBalance, OnLeaveOnMyCluster, PendingApproval, StaffDirectory } from 'src/app/interfaces';
+import { OnLeaveOnMyCluster, PendingApproval, StaffDirectory } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 @Component({
   selector: 'app-hr',
@@ -9,80 +9,81 @@ import { WsApiService } from 'src/app/services';
   styleUrls: ['./hr.page.scss'],
 })
 export class HrPage implements OnInit {
-  leaves$: Observable<LeaveBalance[]>;
+  // leaves$: Observable<LeaveBalance[]>;
   history$: any;
   leaveInCluster$: any;
   pendingApproval$: Observable<PendingApproval[]>;
   skeletons = new Array(4);
   staffsOnLeave: OnLeaveOnMyCluster[] = []; // IDs of all staff on leave
-  summaryChart = {
-    type: 'bar',
-    options: {
-      legend: {
-        position: 'right', // place legend on the right side of chart
-        display: false
-      },
-      scales: {
-        xAxes: [{
-          stacked: true
-        }],
-        yAxes: [{
-          stacked: true
-        }]
-      }
-    },
-    data: {}
-  };
-  highestRatedSliderOpts = {
-    initialSlide: 0,
-    speed: 400,
-    slidesPerView: 2.3,
-    centeredContent: true,
-    spaceBetween: 8
-  };
+  // summaryChart = {
+  //   type: 'bar',
+  //   options: {
+  //     legend: {
+  //       position: 'right', // place legend on the right side of chart
+  //       display: false
+  //     },
+  //     scales: {
+  //       xAxes: [{
+  //         stacked: true
+  //       }],
+  //       yAxes: [{
+  //         stacked: true
+  //       }]
+  //     }
+  //   },
+  //   data: {}
+  // };
+  // highestRatedSliderOpts = {
+  //   initialSlide: 0,
+  //   speed: 400,
+  //   slidesPerView: 2.3,
+  //   centeredContent: true,
+  //   spaceBetween: 8
+  // };
   constructor(private ws: WsApiService) { }
 
   ngOnInit() {
-    this.leaves$ = this.ws.get<LeaveBalance[]>('/staff/leave_balance').pipe(
-      tap(leaves => {
-        const labels = [];
-        const datasets = [
-          {
-            label: ['Taken'],
-            data: [],
-            backgroundColor: '#EBCCD1'
-          },
-          {
-            label: ['Pending'],
-            data: [],
-            backgroundColor: '#FAEBCC'
-          },
-          {
-            label: ['Available'],
-            data: [],
-            backgroundColor: '#D6E9C6'
+    // commented until the backend is fixed
+    // this.leaves$ = this.ws.get<LeaveBalance[]>('/staff/leave_balance').pipe(
+    //   tap(leaves => {
+    //     const labels = [];
+    //     const datasets = [
+    //       {
+    //         label: ['Taken'],
+    //         data: [],
+    //         backgroundColor: '#EBCCD1'
+    //       },
+    //       {
+    //         label: ['Pending'],
+    //         data: [],
+    //         backgroundColor: '#FAEBCC'
+    //       },
+    //       {
+    //         label: ['Available'],
+    //         data: [],
+    //         backgroundColor: '#D6E9C6'
 
-          }
-        ];
-        leaves.forEach(leave => {
-          const matches = leave.LEAVE_TYPE.match(/\b(\w)/g); // Get first letter from each word. Example: ['A', 'L'] for Annual Leave
-          const acronym = matches.join('').slice(0, 2); // Join letters together and take first two only. Example: AL
-          if (!labels.includes(acronym)) { // TEMP UNTIL THE BACKEND IS FIXED
-            labels.push(acronym);
-            datasets[0].data.push(+leave.TAKEN); // adding data for testing
-            datasets[1].data.push(+leave.PENDING); // adding data for testing
-            datasets[2].data.push(+leave.AVAILABLE); // adding data for testing
-          }
-          leave.LEAVE_ACRONYM = acronym; // add the acronym to the list
-          leave.LEAVE_TYPE_COLOR = this.strToColor(leave.LEAVE_TYPE); // add color to the list
-        });
+    //       }
+    //     ];
+    //     leaves.forEach(leave => {
+    //       const matches = leave.LEAVE_TYPE.match(/\b(\w)/g); // Get first letter from each word. Example: ['A', 'L'] for Annual Leave
+    //       const acronym = matches.join('').slice(0, 2); // Join letters together and take first two only. Example: AL
+    //       if (!labels.includes(acronym)) { // TEMP UNTIL THE BACKEND IS FIXED
+    //         labels.push(acronym);
+    //         datasets[0].data.push(+leave.TAKEN); // adding data for testing
+    //         datasets[1].data.push(+leave.PENDING); // adding data for testing
+    //         datasets[2].data.push(+leave.AVAILABLE); // adding data for testing
+    //       }
+    //       leave.LEAVE_ACRONYM = acronym; // add the acronym to the list
+    //       leave.LEAVE_TYPE_COLOR = this.strToColor(leave.LEAVE_TYPE); // add color to the list
+    //     });
 
-        this.summaryChart.data = {
-          labels,
-          datasets
-        };
-      })
-    );
+    //     this.summaryChart.data = {
+    //       labels,
+    //       datasets
+    //     };
+    //   })
+    // );
     this.history$ = this.ws.get('/staff/leave_status');
     this.leaveInCluster$ = this.ws.get<OnLeaveOnMyCluster[]>('/staff/leave_in_cluster').pipe(
       tap(res => {
