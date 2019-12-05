@@ -5,9 +5,9 @@
     </ion-buttons>
     <ion-title>My Consultations</ion-title>
     <ion-buttons slot="end">
-      <ion-button [disabled]="this.slotsToBeCancelled.length > 0"
+      <ion-button color="danger" [disabled]="this.slotsToBeCancelled.length > 0"
         class="colored-border colored-text" fill="outline" (click)="toggleCancelSlot()">
-        <ion-icon [name]="onSelect? 'close' : 'checkbox-outline'"></ion-icon>
+        <ion-icon [name]="onSelect? 'close' : 'trash'"></ion-icon>
       </ion-button>
       <ion-button class="colored-border colored-text" fill="outline" (click)="showSummary()">
         Summary
