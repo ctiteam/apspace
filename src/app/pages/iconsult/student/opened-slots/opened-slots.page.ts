@@ -60,9 +60,7 @@ export class OpenedSlotsPage {
     };
     let totalAvailableSlots = 0;
     let totalOpenedSlots = 0;
-    this.slots$ = this.ws.get<ConsultationSlot[]>('/iconsult/slots?lecturer_sam_account_name=' + this.staffCasId, {
-      url: this.url
-    }).pipe(
+    this.slots$ = this.ws.get<ConsultationSlot[]>('/iconsult/slots?lecturer_sam_account_name=' + this.staffCasId).pipe(
       map(
         slots => slots.reduce((r, a) => { // Grouping the slots daily
           const startDate = this.datePipe.transform(a.start_time, 'yyyy-MM-dd', '+0800');

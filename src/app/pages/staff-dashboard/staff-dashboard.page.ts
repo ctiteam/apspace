@@ -502,9 +502,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
     const consultationsEventMode: EventComponentConfigurations[] = [];
-    return this.ws.get<ConsultationSlot[]>('/iconsult/slots?',
-      { url: 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging' }
-    ).pipe(
+    return this.ws.get<ConsultationSlot[]>('/iconsult/slots?').pipe(
       map(consultations =>
         consultations.filter(
           consultation => this.eventIsToday(new Date(moment(consultation.start_time).utcOffset('+0800').format()), dateNow)

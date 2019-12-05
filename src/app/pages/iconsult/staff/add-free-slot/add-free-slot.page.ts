@@ -84,10 +84,7 @@ export class AddFreeSlotPage implements OnInit {
   ngOnInit() {
     if (this.settings.get('defaultCampus')) {
       this.venues$ = this.ws.get<Venue[]>(
-        `/iconsult/locations?venue=${this.settings.get('defaultCampus')}`,
-        {
-          url: this.url
-        }
+        `/iconsult/locations?venue=${this.settings.get('defaultCampus')}`
       );
     }
 
@@ -228,8 +225,7 @@ export class AddFreeSlotPage implements OnInit {
               this.presentLoading();
               this.ws
                 .post<any>('/iconsult/slot?', {
-                  body,
-                  url: this.url
+                  body
                 })
                 .subscribe({
                   next: () => {
@@ -349,10 +345,7 @@ export class AddFreeSlotPage implements OnInit {
     this.formFields.venue.setValue('');
     // this.venueFieldDisabled = true;
     this.venues$ = this.ws.get<Venue[]>(
-      `/iconsult/locations?venue=${event.detail.value}`,
-      {
-        url: this.url
-      }
+      `/iconsult/locations?venue=${event.detail.value}`
     );
   }
 
