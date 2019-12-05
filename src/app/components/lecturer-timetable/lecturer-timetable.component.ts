@@ -3,9 +3,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import * as moment from 'moment';
 import { LecturerTimetable } from '../../interfaces';
 import { WsApiService } from '../../services';
-
 @Component({
   selector: 'lecturer-timetable',
   templateUrl: 'lecturer-timetable.component.html',
@@ -13,8 +14,10 @@ import { WsApiService } from '../../services';
 })
 export class LecturerTimetableComponent implements OnInit {
 
-  @Input() id: string;
+  printUrl = 'https://api.apiit.edu.my/timetable-print/index.php';
 
+  @Input() id: string;
+  @Input() code: string;
   calendar$: Observable<{
     [week: number]: Array<{
       name: string,
@@ -27,7 +30,7 @@ export class LecturerTimetableComponent implements OnInit {
   }>;
   selectedWeeks: string[] = [];
 
-  constructor(private ws: WsApiService) { }
+  constructor(private ws: WsApiService, private iab: InAppBrowser) { }
 
   ngOnInit() {
     // GPS counts weeks with January 1, 1980 as first Sunday (Epoch)
@@ -70,6 +73,17 @@ export class LecturerTimetableComponent implements OnInit {
     } else {
       this.selectedWeeks.splice(this.selectedWeeks.indexOf(week), 1);
     }
+  }
+
+  sendToPrint(week: string) {
+    const lastDateOfWeekZero = 315993600000;
+    const secondsPerWeek = 604800000;  // 7 * 24 * 60 * 60 * 1000
+    const secondsPerDay = 86400000;  // 24 * 60 * 60 * 1000
+    const weekDateMomentObj = moment(+week * secondsPerWeek + lastDateOfWeekZero + secondsPerDay);
+    // tslint:disable-next-line: max-line-length
+    const formattedWeek = weekDateMomentObj.add(1, 'day').format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
+    // tslint:disable-next-line: max-line-length
+    this.iab.create(`${this.printUrl}?LectID=${this.code}&Submit=Submit&Week=${formattedWeek}&print_request=print`, '_system', 'location=true');
   }
 
 }
