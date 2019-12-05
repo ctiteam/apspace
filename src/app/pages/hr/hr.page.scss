@@ -82,6 +82,18 @@ h2.acronym {
   }
 }
 
-.white-background{
+.white-background {
   --background: white !important;
+}
+.on-leave-list {
+  ion-item:last-child {
+    --border-width: 0 0 0 0 !important;
+    --border-color: transparent !important;
+  }
+  .colored-header {
+    --background: var(--tertiary-bg-color);
+    h5 {
+      font-weight: bold;
+    }
+  }
 }

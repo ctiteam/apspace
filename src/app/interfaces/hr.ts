@@ -41,3 +41,12 @@ export interface PendingApproval {
     LEAVETYPE: string;
     STATUS: string;
 }
+
+export interface OnLeaveOnMyCluster {
+    CODE: string;
+    FULLNAME: string;
+    ID: string;
+    LEAVEDATE: string;
+    PHOTO: string; // not from the api
+    EMAIL: string; // not from the api
+}

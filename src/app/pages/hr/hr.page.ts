@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { LeaveBalance, PendingApproval } from 'src/app/interfaces';
+import { map, tap } from 'rxjs/operators';
+import { LeaveBalance, OnLeaveOnMyCluster, PendingApproval, StaffDirectory } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
-
 @Component({
   selector: 'app-hr',
   templateUrl: './hr.page.html',
@@ -15,6 +14,7 @@ export class HrPage implements OnInit {
   leaveInCluster$: any;
   pendingApproval$: Observable<PendingApproval[]>;
   skeletons = new Array(4);
+  staffsOnLeave: OnLeaveOnMyCluster[] = []; // IDs of all staff on leave
   summaryChart = {
     type: 'bar',
     options: {
@@ -84,7 +84,42 @@ export class HrPage implements OnInit {
       })
     );
     this.history$ = this.ws.get('/staff/leave_status');
-    this.leaveInCluster$ = this.ws.get('/staff/leave_in_cluster');
+    this.leaveInCluster$ = this.ws.get<OnLeaveOnMyCluster[]>('/staff/leave_in_cluster').pipe(
+      tap(res => {
+        if (res.length > 0) {
+          res.forEach(staffOnLeave => {
+            this.staffsOnLeave.push(staffOnLeave);
+          });
+        }
+      }),
+      map(_ => {
+        this.ws.get<StaffDirectory[]>(`/staff/listing`, { caching: 'cache-only' }).subscribe(
+          {
+            next: (staffDirResponse: StaffDirectory[]) => {
+              this.staffsOnLeave.forEach(staffOnLeave => {
+                const searchResult = staffDirResponse.filter(staff => staff.ID === staffOnLeave.ID)[0];
+                staffOnLeave.PHOTO = searchResult.PHOTO;
+                staffOnLeave.EMAIL = searchResult.EMAIL;
+              });
+            }
+          }
+        );
+        return this.staffsOnLeave.sort((a, b) => +(a.LEAVEDATE < b.LEAVEDATE));
+      },
+      ),
+      map(res => {
+        const results = res
+          .reduce((previous: any, current: any) => {
+            if (!previous[current.LEAVEDATE]) {
+              previous[current.LEAVEDATE] = [current];
+            } else {
+              previous[current.LEAVEDATE].push(current);
+            }
+            return previous;
+          }, {});
+        return Object.keys(results).map(date => ({ date, value: results[date] }));
+      })
+    );
     this.pendingApproval$ = this.ws.get<PendingApproval[]>('/staff/pending_approval');
   }
 
