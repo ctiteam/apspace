@@ -126,7 +126,6 @@ export class HrPage implements OnInit {
 
   getOnLeaveInMyCluster() {
     return this.ws.get<OnLeaveOnMyCluster[]>('/staff/leave_in_cluster').pipe(
-      map(res => []),
       tap(res => {
         if (res.length > 0) {
           res.forEach(staffOnLeave => {

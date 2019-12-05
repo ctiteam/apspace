@@ -82,25 +82,32 @@
           </ion-card-header>
           <ion-card-content class="ion-no-padding"
             *ngIf="leaveInCluster$ | async as staffsOnLeaveList; else loadingStaffOnLeave">
-            <ion-list class="on-leave-list" *ngFor="let staffOnLeaveGroupedByDate of staffsOnLeaveList">
-              <ion-list-header class="colored-header ion-no-padding">
-                <h5 class="ion-padding-start ion-padding-end">
-                  {{staffOnLeaveGroupedByDate.date | date: 'EEE, dd MMM yyy'}}
-                </h5>
-              </ion-list-header>
-              <ion-item *ngFor="let staffOnLeave of staffOnLeaveGroupedByDate.value">
-                <ion-avatar slot="start">
-                  <img [src]="staffOnLeave.PHOTO">
-                </ion-avatar>
-                <ion-label>
-                  <h2>{{staffOnLeave.FULLNAME}}</h2>
-                  <h3 class="text-bold">{{staffOnLeave.LEAVEDATE | date: 'EEE, dd MMM yyy'}}</h3>
-                  <p><span class="text-bold">Email: </span> <a class="colored-text text-bold"
-                      href="mailto:{{staffOnLeave.EMAIL}}">{{staffOnLeave.EMAIL}}</a></p>
-                </ion-label>
-              </ion-item>
-
-            </ion-list>
+            <ng-container *ngIf="staffsOnLeaveList.length > 0; else noStaffOnLeave">
+              <ion-list class="on-leave-list" *ngFor="let staffOnLeaveGroupedByDate of staffsOnLeaveList">
+                <ion-list-header class="colored-header ion-no-padding">
+                  <h5 class="ion-padding-start ion-padding-end">
+                    {{staffOnLeaveGroupedByDate.date | date: 'EEE, dd MMM yyy'}}
+                  </h5>
+                </ion-list-header>
+                <ion-item *ngFor="let staffOnLeave of staffOnLeaveGroupedByDate.value">
+                  <ion-avatar slot="start">
+                    <img [src]="staffOnLeave.PHOTO">
+                  </ion-avatar>
+                  <ion-label>
+                    <h2>{{staffOnLeave.FULLNAME}}</h2>
+                    <h3 class="text-bold">{{staffOnLeave.LEAVEDATE | date: 'EEE, dd MMM yyy'}}</h3>
+                    <p><span class="text-bold">Email: </span> <a class="colored-text text-bold"
+                        href="mailto:{{staffOnLeave.EMAIL}}">{{staffOnLeave.EMAIL}}</a></p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ng-container>
+            <ng-template #noStaffOnLeave>
+              <app-message-with-svg messageTitle="No One is On Leave In Your Cluster!"
+                messageContent="Yaay! All of your colleagues in your cluster are in office this week"
+                imageUrl="assets/img/happy.svg" wrapperOffset="3" wrapperSize="6">
+              </app-message-with-svg>
+            </ng-template>
           </ion-card-content>
           <ng-template #loadingStaffOnLeave>
             <ion-item *ngFor="let _ of skeletons">
@@ -113,28 +120,35 @@
           <ion-card-header>
             <ion-card-title class="fixed-ui-title">Pending My Approval</ion-card-title>
           </ion-card-header>
-          <ion-card-content class="ion-no-padding" *ngIf="pendingApproval$ | async as pendingApprovals">
-            <ion-list class="ion-no-padding" *ngIf="pendingApprovals.length > 0; else noPending">
-              <ion-item *ngFor="let pendingApproval of pendingApprovals">
-                <ion-label>
-                  <h2 class="text-bold">{{ pendingApproval.FULLNAME }}</h2>
-                  <p>
-                    <ion-icon class="text-bold" name="pricetags"></ion-icon>
-                    {{ pendingApproval.LEAVETYPE }}
-                  </p>
-                  <p>
-                    <ion-icon class="text-bold" name="calendar"></ion-icon>
-                    {{pendingApproval.LEAVEDATE | date: 'EEE, dd MMM yyy'}}
-                  </p>
-                </ion-label>
-                <ion-badge color="danger">{{pendingApproval.STATUS}}</ion-badge>
+          <ion-card-content class="ion-no-padding">
+            <ng-container *ngIf="pendingApproval$ | async as pendingApprovals; else loadingPendingApproval">
+              <ion-list class="ion-no-padding" *ngIf="pendingApprovals.length > 0; else noPending">
+                <ion-item *ngFor="let pendingApproval of pendingApprovals">
+                  <ion-label>
+                    <h2 class="text-bold">{{ pendingApproval.FULLNAME }}</h2>
+                    <p>
+                      <ion-icon class="text-bold" name="pricetags"></ion-icon>
+                      {{ pendingApproval.LEAVETYPE }}
+                    </p>
+                    <p>
+                      <ion-icon class="text-bold" name="calendar"></ion-icon>
+                      {{pendingApproval.LEAVEDATE | date: 'EEE, dd MMM yyy'}}
+                    </p>
+                  </ion-label>
+                  <ion-badge color="danger">{{pendingApproval.STATUS}}</ion-badge>
+                </ion-item>
+              </ion-list>
+              <ng-template #noPending>
+                <app-message-with-svg messageTitle="No Leaves with Pending Status!"
+                  messageContent="There are no leaves pending your approval." imageUrl="assets/img/config.svg"
+                  wrapperOffset="3" wrapperSize="6">
+                </app-message-with-svg>
+              </ng-template>
+            </ng-container>
+            <ng-template #loadingPendingApproval>
+              <ion-item *ngFor="let _ of skeletons">
+                <ion-skeleton-text animated style="line-height: 35px; width: 100%;"></ion-skeleton-text>
               </ion-item>
-            </ion-list>
-            <ng-template #noPending>
-              <app-message-with-svg messageTitle="No Leaves with Pending Status!"
-                messageContent="There are no leaves pending your approval." imageUrl="assets/img/happy.svg"
-                wrapperOffset="3" wrapperSize="6">
-              </app-message-with-svg>
             </ng-template>
           </ion-card-content>
         </ion-card>
