@@ -115,6 +115,7 @@ export class BookSlotModalPage implements OnInit {
                   this.showToastMessage('Slot has been booked successfully!', 'success');
                 },
                 error: (err) => {
+                  this.dismissLoading();
                   this.showToastMessage(err.status + ': ' + err.error.error, 'danger');
                 },
                 complete: () => {
