@@ -1,17 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController, IonRefresher, ModalController } from '@ionic/angular';
-
+import * as moment from 'moment';
 import { Observable, combineLatest } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
-import { Router } from '@angular/router';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 import { Role, StudentProfile, StudentTimetable } from '../../interfaces';
-import {
-  SettingsService, StudentTimetableService, UserSettingsService, WsApiService
-} from '../../services';
+import { SettingsService, StudentTimetableService, UserSettingsService, WsApiService } from '../../services';
 import { ClassesPipe } from './classes.pipe';
 
 @Component({
@@ -22,6 +20,7 @@ import { ClassesPipe } from './classes.pipe';
 })
 export class StudentTimetablePage implements OnInit {
 
+  printUrl = 'https://api.apiit.edu.my/timetable-print/index.php';
   wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
   legends = [
@@ -75,6 +74,8 @@ export class StudentTimetablePage implements OnInit {
     },
   ];
 
+  comingFromTabs = this.router.url.split('/')[1].split('/')[0] === 'tabs';
+
   timetable$: Observable<StudentTimetable[]>;
   selectedWeek: Date; // week is the first day of week
   availableWeek: Date[] = [];
@@ -88,18 +89,19 @@ export class StudentTimetablePage implements OnInit {
 
   room: string;
   intake: string;
-  freeTime: boolean;
+  freeTime = false;
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
     private changeDetectorRef: ChangeDetectorRef,
+    private iab: InAppBrowser,
     private modalCtrl: ModalController,
     private route: ActivatedRoute,
+    private router: Router,
     private settings: SettingsService,
     private tt: StudentTimetableService,
     private userSettings: UserSettingsService,
     private ws: WsApiService,
-    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -141,16 +143,20 @@ export class StudentTimetablePage implements OnInit {
     // default intake to student current intake
     if (this.intake === undefined) {
       // tslint:disable-next-line: no-bitwise
-      if (this.settings.get('role') & Role.Student) {
+      if (this.settings.get('role') & Role.Student) { // intake is not defined & user role is student
         this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).subscribe(p => {
           this.intake = (p || {} as StudentProfile).INTAKE || '';
           this.changeDetectorRef.markForCheck();
           this.settings.set('intakeHistory', [this.intake]);
+          this.doRefresh();
         });
+      } else {
+        // intake is not defined & user role is staff or lecturers
+        this.doRefresh();
       }
+    } else { // intake is defined
+      this.doRefresh();
     }
-
-    this.doRefresh();
   }
 
   presentActionSheet(labels: string[], handler: (_: string) => void) {
@@ -233,18 +239,6 @@ export class StudentTimetablePage implements OnInit {
     );
   }
 
-  /** Convert string to color with djb2 hash function. */
-  strToColor(str: string): string {
-    let hash = 5381;
-    /* tslint:disable:no-bitwise */
-    for (let i = 0; i < str.length; i++) {
-      hash = ((hash << 5) + hash) + str.charCodeAt(i); /* hash * 33 + c */
-    }
-    return '#' + [16, 8, 0].map(i => ('0' + (hash >> i & 0xFF).toString(16))
-      .substr(-2)).join('');
-    /* tslint:enable:no-bitwise */
-  }
-
   /** Track timetable objects. */
   trackByIndex(index: number): number {
     return index;
@@ -288,17 +282,18 @@ export class StudentTimetablePage implements OnInit {
 
     this.changeDetectorRef.markForCheck();
   }
-  comingFromTabs() {
-
-    if (this.router.url.split('/')[1].split('/')[0] === 'tabs') {
-      return true;
-    }
-    return false;
-  }
 
   view_hideToolbar() {
     this.show2ndToolbar = !this.show2ndToolbar;
   }
 
+  sendToPrint() {
+    const week = moment(this.selectedWeek).add(1, 'day').format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
+    // For student timetable:
+    // printUrl?Week=2019-11-18&Intake=APTDF1805DSM(VFX)&print_request=print_tt
+    // For lecturer timetable:
+    // printUrl?LectID=ARW&Submit=Submit&Week=2019-11-18&print_request=print
+    this.iab.create(`${this.printUrl}?Week=${week}&Intake=${this.intake}&print_request=print_tt`, '_system', 'location=true');
+  }
 
 }

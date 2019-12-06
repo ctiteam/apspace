@@ -142,7 +142,7 @@
               </ion-item>
               <ion-item class="ion-no-padding">
                 <ion-label>Venue</ion-label>
-                <ion-select interface="popover" *ngIf="venues$ | async as venues" [disabled]="!defaultCampus"
+                <ion-select interface="alert" *ngIf="venues$ | async as venues" [disabled]="!defaultCampus"
                   [(ngModel)]="defaultVenue" (ngModelChange)="updateDefaultLocation('venue')">
                   <ion-select-option *ngFor="let venue of venues" [value]="venue.id">
                     {{ venue.rooms }}

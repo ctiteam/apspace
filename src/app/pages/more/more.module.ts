@@ -6,7 +6,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 import { IonicModule } from '@ionic/angular';
 
-import { FuseModule } from '../../shared/fuse/fuse.module';
+import { SharedPipesModule } from '../../shared/shared-pipes.module';
 import { ByGroupPipe } from './by-group.pipe';
 import { MorePage } from './more.page';
 
@@ -23,7 +23,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    FuseModule
+    SharedPipesModule
   ],
   providers: [
     InAppBrowser

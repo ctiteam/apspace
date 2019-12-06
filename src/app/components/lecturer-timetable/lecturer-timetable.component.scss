@@ -24,6 +24,20 @@ skeleton-item {
 .card-header {
   padding-bottom: 0px;
   padding-top: 0px;
+  .week-title {
+    display: inline;
+    text-decoration: underline;
+    &:hover {
+      font-weight: bold;
+      color: var(--sub-primary-color) !important;
+    }
+  }
+  .icon-hover {
+    &:hover {
+      font-weight: bold;
+      color: var(--sub-primary-color) !important;
+    }
+  }
 }
 
 .hr-custom {
@@ -33,7 +47,7 @@ skeleton-item {
 
 @media (min-width: 600px) {
   .marker {
-      display: none;
+    display: none;
   }
 
   .table-top {

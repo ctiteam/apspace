@@ -49,9 +49,10 @@
               </div>
               <ion-grid>
                 <ion-row>
-                  <ion-col>
+                  <ion-col *ngIf="isStudent">
                     <ion-button expand="full" class="colored-background" (click)="navigateToIconsult(staff.ID)">Book
-                      Consultation Hour</ion-button>
+                      Consultation Hour
+                    </ion-button>
                   </ion-col>
                   <ion-col>
                     <ion-button class="chat-in-teams" expand="full" (click)="chatInTeams(staff.ID)">Chat In Teams
@@ -70,7 +71,7 @@
               </ion-text>
             </ion-card-header>
           </ion-card>
-          <lecturer-timetable [id]="staff.ID"></lecturer-timetable>
+          <lecturer-timetable [id]="staff.ID" [code]="staff.CODE"></lecturer-timetable>
         </ion-col>
       </ion-row>
     </ion-grid>

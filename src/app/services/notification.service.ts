@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Badge } from '@ionic-native/badge/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
@@ -8,7 +9,6 @@ import { Observable, from, of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { NotificationHistory } from '../interfaces';
 import { CasTicketService } from './cas-ticket.service';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +24,8 @@ export class NotificationService {
     public fcm: FCM,
     private platform: Platform,
     private network: Network,
-    private storage: Storage
+    private storage: Storage,
+    private badge: Badge
   ) { }
 
   /**
@@ -117,7 +118,9 @@ export class NotificationService {
             message_id: messageID
           };
           const url = `${this.apiUrl}/client/read?ticket=${st}`;
-          return this.http.post(url, body, { headers: this.headers });
+          return this.http.post(url, body, { headers: this.headers }).pipe(
+            tap(_ => { this.badge.decrease(1); console.log('done'); })
+          );
         }),
       );
     } else {

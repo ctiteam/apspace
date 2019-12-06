@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -8,23 +9,26 @@ import { WsApiService } from 'src/app/services';
 @Component({
   selector: 'page-book-slot-modal',
   templateUrl: 'book-slot-modal.html',
-  styleUrls: ['book-slot-modal.scss']
+  styleUrls: ['book-slot-modal.scss'],
+  providers: [DatePipe]
 })
 export class BookSlotModalPage implements OnInit {
+  url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
   verifyslot$: Observable<SlotDuplicated>;
   dataToSend: { slotData: ConsultationSlot, staffData: StaffDirectory }; // DATA COMING FROM THE PAGE
-  studentEmail: string;
   loading: HTMLIonLoadingElement;
+  studentEmail: string;
 
   formModel: {
-    staffName: string;
-    consultationWith: string;
-    bookingDate: string,
-    bookingTime: string,
-    note: string;
-    reason: string;
-    studentEmail: string;
-    studentContactNumber: string;
+    slot_id: number,
+    consultation_with: string,
+    additional_note: string,
+    reason: string
+  };
+
+  slotSchedule: {
+    start_date: string,
+    time: string
   };
 
   consultationWithOptions = [
@@ -41,35 +45,38 @@ export class BookSlotModalPage implements OnInit {
     'Manager Student Relations',
   ];
 
-
   constructor(
     private modalCtrl: ModalController,
     private storage: Storage,
     private ws: WsApiService,
     public alertCtrl: AlertController,
     private loadingController: LoadingController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private datePipe: DatePipe
   ) {
   }
   ngOnInit() {
-    const dataToVerify = this.dataToSend.slotData.datetimeforsorting + '.00000';
-    this.verifyslot$ = this.ws.get<SlotDuplicated>(`/iconsult/verifyduplicateslot/${dataToVerify}`);
-    this.formModel = {
-      staffName: this.dataToSend.staffData.FULLNAME,
-      consultationWith: '',
-      bookingDate: this.dataToSend.slotData.datetime,
-      bookingTime: this.dataToSend.slotData.time + ' - ' + this.dataToSend.slotData.endtime,
-      note: '',
-      reason: '',
-      studentEmail: '',
-      studentContactNumber: '',
-    };
+    // const dataToVerify = this.dataToSend.slotData.datetimeforsorting + '.00000';
+    // this.verifyslot$ = this.ws.get<SlotDuplicated>(`/iconsult/verifyduplicateslot/${dataToVerify}`);
     this.storage.get('/student/profile').then(
       studentProfile => {
-        this.studentEmail = studentProfile.STUDENT_EMAIL; // STORE THE EMAIL TO SEND IT WITH THE REQUEST
-        this.formModel.studentEmail = studentProfile.STUDENT_EMAIL;
+        this.studentEmail = studentProfile.STUDENT_EMAIL;
       }
     );
+
+    this.formModel = {
+      slot_id: this.dataToSend.slotData.slot_id,
+      consultation_with: '',
+      additional_note: '',
+      reason: ''
+    };
+
+    this.slotSchedule = {
+      start_date: this.datePipe.transform(this.dataToSend.slotData.start_time, 'yyyy-MM-dd', '+0800'),
+      time: this.datePipe.transform(this.dataToSend.slotData.start_time, 'HH:mm', '+0800') +
+            ' - ' +
+            this.datePipe.transform(this.dataToSend.slotData.end_time, 'HH:mm', '+0800')
+    };
   }
 
   dismiss() {
@@ -77,12 +84,17 @@ export class BookSlotModalPage implements OnInit {
   }
 
   bookSlot() {
+    // Verification just in case if the button disabled is removed
+    if (this.formModel.consultation_with === '' && this.formModel.reason === '') {
+      this.showToastMessage('You cannot submit while having a blank field', 'danger');
+      return;
+    }
 
     this.alertCtrl.create({
       header: 'Confirm Booking',
       subHeader: 'Are you sure you want to book the following consultation hour?',
       message: `Consultation hour with ${this.dataToSend.staffData.FULLNAME}
-       on ${this.dataToSend.slotData.date} at ${this.dataToSend.slotData.time}`,
+       on ${this.slotSchedule.start_date} at ${this.slotSchedule.time}`,
       buttons: [
         {
           text: 'No',
@@ -93,26 +105,17 @@ export class BookSlotModalPage implements OnInit {
           handler: () => {
             // START THE LOADING
             this.presentLoading();
-            this.ws.post<any>('/iconsult/addbooking', {
-              body: {
-                availability_id: this.dataToSend.slotData.availibilityid,
-                date: this.dataToSend.slotData.date,
-                time: this.dataToSend.slotData.timee,
-                casusername: this.dataToSend.staffData.ID,
-                con_with: this.formModel.consultationWith,
-                reason: this.formModel.reason,
-                phone: this.formModel.studentContactNumber,
-                note: this.formModel.note,
-                email: this.studentEmail // TO PREVENT CHANGING THE EMAIL FROM THE UI
-              },
+            this.ws.post<any>('/iconsult/booking?', {
+              body: this.formModel,
             }).subscribe(
 
               {
                 next: _ => {
                   this.showToastMessage('Slot has been booked successfully!', 'success');
                 },
-                error: _ => {
-                  this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
+                error: (err) => {
+                  this.dismissLoading();
+                  this.showToastMessage(err.status + ': ' + err.error.error, 'danger');
                 },
                 complete: () => {
                   this.dismissLoading();

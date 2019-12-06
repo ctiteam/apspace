@@ -62,9 +62,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
       const joined = timetables.map(timetable => ({
         ...classcodes.find(classcode => {
           // Classcode BM006-3-2-CRI-L-UC2F1805CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
-          // Take only BM006-3-2-CRI-L
+          // Take only BM006-3-2-CRI-L- (+3 extra characters for L, T1, T2)
           const len = classcode.SUBJECT_CODE.length;
-          return classcode.CLASS_CODE.slice(0, len + 2) === timetable.MODID.slice(0, len + 2)
+          return classcode.CLASS_CODE.slice(0, len + 3) === timetable.MODID.slice(0, len + 3)
             && classcode.COURSE_CODE_ALIAS === timetable.INTAKE;
         }),
         ...timetable

@@ -3,9 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, MenuController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-
-import { Role, StudentProfile } from 'src/app/interfaces';
-import { SettingsService, WsApiService } from 'src/app/services';
+import { SurveyIntake, SurveyModule } from 'src/app/interfaces';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-submit-survey',
@@ -25,7 +24,8 @@ export class StudentSurveyPage implements OnInit {
   classCode: string;
   courseType: string;
   surveyType: string;
-  selectedModule: any;
+  selectedModule: SurveyModule;
+  selectedIntake: SurveyIntake;
 
   // LOADING & ERRORS VARIABLES
   numOfSkeletons = new Array(3);
@@ -56,8 +56,8 @@ export class StudentSurveyPage implements OnInit {
   };
   // OBSERAVBLES
   survey$: Observable<any[]>;
-  COURSE_CODE$: Observable<any[]>;
-  COURSE_MODULES$: Observable<any[]>;
+  COURSE_CODE$: Observable<SurveyIntake[]>;
+  COURSE_MODULES$: Observable<SurveyModule[]>;
   navParams: any;
 
   constructor(
@@ -65,7 +65,6 @@ export class StudentSurveyPage implements OnInit {
     private ws: WsApiService,
     private toastCtrl: ToastController,
     public alertCtrl: AlertController,
-    private settings: SettingsService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
@@ -84,20 +83,16 @@ export class StudentSurveyPage implements OnInit {
 
   onInitData() {
     if (!this.userComingFromResultsPage) {
-      // tslint:disable-next-line: no-bitwise
-      if (this.settings.get('role') & Role.Student) {
-        this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).subscribe(
-          p => {
-            this.intakeCode = p.INTAKE;
-          },
-          // tslint:disable-next-line: no-empty
-          _ => { },
-          () => {
-            this.COURSE_CODE$ = this.getIntakes();
-            this.onIntakeCodeChanged();
-          },
-        );
-      }
+      this.COURSE_CODE$ = this.getIntakes().pipe( // get all intakes
+        tap(intakes => {
+          if (intakes.length > 0) {
+            const latestIntake = intakes[intakes.length - 1]; // select latest intake by default
+            this.selectedIntake = latestIntake;
+          }
+        }),
+        tap(_ => this.onIntakeCodeChanged()) // call intake changed
+      );
+
     } else { // user coming from results page
       this.COURSE_CODE$ = this.getIntakes(); // get all of the intakes
       this.COURSE_MODULES$ = this.getModules(this.intakeCode).pipe( // get all of the modules
@@ -112,19 +107,13 @@ export class StudentSurveyPage implements OnInit {
 
   onIntakeCodeChanged() {
     this.userComingFromResultsPage = false;
-    let intakeStartsWith = '';
-    intakeStartsWith = this.intakeCode.slice(0, 3);
-    // tslint:disable-next-line: triple-equals
-    if (intakeStartsWith == 'UCE' || intakeStartsWith == 'UCP') {
-      this.courseType = 'APLC Students';
-    } else if (intakeStartsWith === 'UCM') {
-      this.courseType = 'masters';
-    } else {
-      this.courseType = 'bachelor';
-    }
+    this.courseType = this.selectedIntake.TYPE_OF_COURSE;
+    this.intakeCode = this.selectedIntake.COURSE_CODE_ALIAS;
+
     this.COURSE_MODULES$ = this.getModules(this.intakeCode);
-    this.classCode = '';
-    this.surveyType = '';
+    this.classCode = ''; // empty class code
+    this.surveyType = ''; // empty survey type
+
   }
 
   onClassCodeChanged() {
@@ -136,9 +125,8 @@ export class StudentSurveyPage implements OnInit {
   }
 
   getIntakes() {
-    return this.ws.get<any>(`/survey/intakes-list`).pipe(
-      tap()
-    );
+    // tslint:disable-next-line: max-line-length
+    return this.ws.get<SurveyIntake[]>(`/survey/intakes-list`);
   }
   getModuleByClassCode(classCode: string) {
     if (!this.userComingFromResultsPage) {
@@ -179,11 +167,29 @@ export class StudentSurveyPage implements OnInit {
   }
 
   getModules(intakeCode: string) {
-    return this.ws.get<any>(`/survey/modules-list?intake_code=${intakeCode}`).pipe(
+    // tslint:disable-next-line: max-line-length
+    return this.ws.get<SurveyModule[]>(`/survey/modules-list?intake_code=${intakeCode}`).pipe(
       map(res => res.filter
-        (item => !item.COURSE_APPRAISAL || (!item.COURSE_APPRAISAL2 && Date.parse(item.END_DATE) >
-          Date.parse(this.todaysDate.toISOString())))),
-      tap(res => this.modules = res)
+        (item =>
+          !item.COURSE_APPRAISAL // user did not do end semester
+          ||
+          (
+            !item.COURSE_APPRAISAL2 // user did not do mid-semester
+            && Date.parse(item.END_DATE) > Date.parse(this.todaysDate.toISOString()) // todays date is less than end date of the module
+          )
+        )
+      ),
+      tap(res => this.modules = res),
+      tap(res => {
+        if (
+          res.length === 0 // If user did all of the end semester surverys in the selected intake
+          && !this.selectedIntake.PROGRAM_APPRAISAL // User did not do program survey and
+          && Date.parse(this.selectedIntake.PROGRAM_APPRAISAL_DATE) < Date.parse(this.todaysDate.toISOString()) // Time for program survey
+        ) {
+          this.surveyType = 'Programme Evaluation';
+          this.getSurveys(this.intakeCode);
+        }
+      })
     );
   }
 
@@ -221,14 +227,14 @@ export class StudentSurveyPage implements OnInit {
           }
         }
         if (!amodule.COURSE_APPRAISAL2) { // student did not do mid-semester appraisal
-          if (this.courseType === 'bachelor') { // bachelor students
+          if (this.courseType.includes('Level')) { // bachelor students
             const moduleStartDate = new Date(amodule.START_DATE); // module start date
             const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49)); // week 7 of the module
             const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 70)); // week 10 of the module
             if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 10 is not included
               this.surveyType = 'Mid-Semester';
             }
-          } else if (this.courseType === 'masters') { // masters students
+          } else if (this.courseType.includes('Master')) { // masters students
             const moduleStartDate = new Date(amodule.START_DATE); // module start date
             if (amodule.STUDY_MODE === 'FullTime') { // full time student
               // tslint:disable-next-line: max-line-length
@@ -257,11 +263,19 @@ export class StudentSurveyPage implements OnInit {
   }
 
   async submitSurvey() {
+    let message = '';
+    let endpoint = '';
+    if (this.surveyType === 'Programme Evaluation') {
+      message = `You are about to submit the programme survey for the intake ${this.intakeCode}. Do you want to continue?`;
+      endpoint = '/survey/programme_response';
+    } else {
+      message = `You are about to submit the survey for the module with the code ${this.classCode},
+      under the intake ${this.intakeCode}. Do you want to continue?`;
+      endpoint = '/survey/response';
+    }
     const confirm = await this.alertCtrl.create({
       header: 'Submit Survey',
-
-      message: `You are about to submit the survey for the module with the code ${this.classCode},
-       under the intake ${this.intakeCode}. Do you want to continue?`,
+      message,
       buttons: [
         {
           text: 'No',
@@ -275,16 +289,20 @@ export class StudentSurveyPage implements OnInit {
             const notAnsweredQuestions = this.response.answers.filter(answer => answer.content === '');
             if (notAnsweredQuestions.length === 0) {
               this.submitting = true;
-
-              this.ws.post('/survey/response', { body: this.response }).subscribe({
-                error: () => {
-                  this.toast(
-                    `Something went wrong and we could not complete your request. Please try again or contact us via the feedback page`,
-                    'danger');
+              this.ws.post(endpoint, { body: this.response }).subscribe({
+                error: (err) => {
+                  if (err.status === 400) {
+                    this.toast(
+                      `Please make sure you answer all the questions`,
+                      'danger');
+                  } else {
+                    // tslint:disable-next-line: max-line-length
+                    this.toast(`Something went wrong and we could not complete your request. Please try again or contact us via the feedback page`, 'danger');
+                  }
                   this.submitting = false;
                 },
                 complete: () => {
-                  this.toast(`The survey for ${this.classCode} has been submitted successfully.`, 'success');
+                  this.toast(`The survey has been submitted successfully.`, 'success');
                   this.submitting = false;
                   this.classCode = '';
                   this.onInitData();
@@ -298,6 +316,7 @@ export class StudentSurveyPage implements OnInit {
       ],
     });
     await confirm.present();
+
   }
 
   async toast(msg: string, color: string) {

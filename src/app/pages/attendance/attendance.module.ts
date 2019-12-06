@@ -7,8 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { RoundProgressModule } from 'angular-svg-round-progressbar';
 
 import { ComponentsModule } from 'src/app/components/components.module';
+import { SharedPipesModule } from '../../shared/shared-pipes.module';
 import { AttendancePage } from './attendance.page';
-import { ReversePipe } from './reverse.pipe';
 
 const routes: Routes = [
   {
@@ -24,7 +24,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     RoundProgressModule,
     ComponentsModule,
+    SharedPipesModule
   ],
-  declarations: [AttendancePage, ReversePipe]
+  declarations: [AttendancePage]
 })
 export class AttendancePageModule { }

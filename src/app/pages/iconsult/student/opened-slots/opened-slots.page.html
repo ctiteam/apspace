@@ -129,11 +129,11 @@
                             <ion-row>
                               <ion-col size="9" size-lg="10">
                                 <span class="title">
-                                  {{slot.value.time}} - {{slot.value.endtime}}
+                                  {{slot.value.start_time | date: "HH:mm" : '+0800'}} - {{slot.value.end_time | date: "HH:mm" : '+0800'}}
                                 </span>
                                 <span class="description small-margin-top">
                                   <ion-icon name="pin"></ion-icon>
-                                  {{slot.value.location}} | {{slot.value.venue}}
+                                  {{slot.value.room_code}} | {{slot.value.venue}}
                                 </span>
                               </ion-col>
                               <ion-col size="3" size-lg="2">

@@ -9,9 +9,9 @@ ion-card {
     text-decoration: none;
   }
 
-  .freeTime{
+  .freeTime {
     --background: var(--success-color) !important;
-    --color: #FFFFFF !important;
+    --color: #ffffff !important;
   }
 
   ion-card-header {
@@ -26,6 +26,14 @@ ion-card {
       border-radius: 10px 10px 0 0;
     }
   }
+}
+
+.print-button {
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --padding-top: 15px;
+  --padding-bottom: 15px;
+  margin-top: 0;
 }
 
 ion-segment-button {
@@ -84,76 +92,5 @@ ion-segment.week-segment {
 
   .card-side {
     border-left: none !important;
-  }
-}
-.printIntake {
-  display: none;
-}
-.printSelectedweek {
-  display: none;
-}
-.printLogoWrapper {
-  display: none;
-}
-
-@media print {
-  .segment-button-checked {
-    border-bottom: 2.5px solid var(--primary-color);
-  }
-  .print-less-width {
-    margin-left: -20px;
-    margin-right: 20px;
-  }
-  .print-no-margin {
-    margin: 0 !important;
-  }
-  .print-negative-margin {
-    margin-left: -10px !important;
-  }
-  .flex-on-print-table-hide-on-card {
-    display: flex;
-  }
-
-  .hide-on-print-table-flex-on-card {
-    display: none;
-  }
-  .container {
-    max-width: 100%;
-  }
-  .center-print {
-    text-align: center;
-  }
-  ion-content {
-    background-color: white !important;
-  }
-
-  .print-font {
-    font-size: 0.7rem !important;
-  }
-  .print-font-smaller {
-    font-size: 0.6rem !important;
-    font-weight: normal !important;
-  }
-  .print-text-center {
-    text-align: center !important;
-  }
-  .print-pl-4 {
-    padding-left: 1.5rem !important;
-  }
-  .printColor {
-    color: black;
-  }
-  .printIntake {
-    display: inline;
-  }
-  .printSelectedweek {
-    display: inline;
-  }
-  .printLogoWrapper {
-    display: block;
-  }
-  // override colored-text class
-  .colored-text {
-    color: black !important;
   }
 }

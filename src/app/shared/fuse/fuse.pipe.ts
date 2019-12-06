@@ -18,7 +18,7 @@ export class FusePipe implements PipeTransform {
    * @param options - fuse options
    * @returns searched - searched items
    */
-  transform<T>(items: T[], term: string, options: Fuse.FuseOptions<T>): T[] {
+  transform<T>(items: T[], term: string, options: Fuse.FuseOptions<T>): any {
     if (term !== '') {
       const fuse = new Fuse(items, options);
       return fuse.search(term);

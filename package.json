@@ -1,6 +1,6 @@
 {
   "name": "apspace",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "author": "CTI Team <cti@apiit.edu.my>",
   "homepage": "https://apspace.apu.edu.my/",
   "scripts": {
@@ -37,6 +37,7 @@
     "@capacitor/core": "^1.2.0",
     "@ionic-native/action-sheet": "^5.15.0",
     "@ionic-native/app-availability": "^5.15.0",
+    "@ionic-native/badge": "^5.17.1",
     "@ionic-native/core": "^5.15.0",
     "@ionic-native/device": "^5.15.0",
     "@ionic-native/fcm": "^5.15.0",
@@ -62,6 +63,7 @@
     "cordova-ios": "5.0.1",
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-appavailability": "^0.4.2",
+    "cordova-plugin-badge": "^0.8.8",
     "cordova-plugin-fcm-with-dependecy-updated": "^3.2.0",
     "cordova-plugin-inappbrowser": "^3.1.0",
     "cordova-plugin-network-information": "^2.0.2",
@@ -139,7 +141,8 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-network-information": {},
-      "cordova-plugin-qrscanner": {}
+      "cordova-plugin-qrscanner": {},
+      "cordova-plugin-badge": {}
     },
     "platforms": [
       "android",

@@ -46,6 +46,7 @@ export class UserSettingsService {
 
   // Default dasbhoard sections for staff (will be added to the local storage when staff login)
   defaultStaffDashboardSectionsSettings = [
+    'inspirationalQuote',
     'todaysSchedule',
     'upcomingEvents',
     'upcomingTrips',
@@ -242,7 +243,7 @@ export class UserSettingsService {
       }
     });
     this.storage.get('timetable').then((value: { blacklists: [] }) => {
-      if (this.timetable.value !== value) {
+      if (value && value.blacklists.length > 0) {
         this.timetable.next(value || { blacklists: [] });
       }
       this.timetable.subscribe(newValue => this.storage.set('timetable', newValue));

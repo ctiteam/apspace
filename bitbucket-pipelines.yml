@@ -1,4 +1,4 @@
-image: node:10.16.0-alpine
+image: node:erbium-alpine
 
 pipelines:
   default:
@@ -7,10 +7,12 @@ pipelines:
         caches:
           - node
         script:
+          - apk add firefox-esr
           - yarn install
           - yarn lint
-            # - yarn test --single-run --no-progress --browsers FirefoxHeadless
-          - yarn build --aot
+          - yarn test --configuration=ci
+            # - yarn e2e --configuration=ci
+          - yarn build --configuration=ci
   pull-requests:
     '**':
       - step: *build-test

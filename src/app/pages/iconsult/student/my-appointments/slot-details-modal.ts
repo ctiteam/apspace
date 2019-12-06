@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
-import { SlotDetails } from 'src/app/interfaces';
-import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'page-slot-details-modal',
@@ -12,15 +7,11 @@ import { WsApiService } from 'src/app/services';
   styleUrls: ['slot-details-modal.scss']
 })
 export class SlotDetailsModalPage implements OnInit {
-  slotId;
-  slotDetails$: Observable<SlotDetails>;
+  booking;
 
-  constructor(private modalCtrl: ModalController, private ws: WsApiService) { }
+  constructor(private modalCtrl: ModalController) { }
 
   ngOnInit() {
-    this.slotDetails$ = this.ws.get<SlotDetails>(`/iconsult/detailpageconstu/${this.slotId}`).pipe(
-      map(response => response[0]),
-    );
   }
 
   dismiss() {

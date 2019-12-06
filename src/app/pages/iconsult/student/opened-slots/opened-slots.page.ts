@@ -5,6 +5,7 @@ import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
+import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { ConsultationSlot, StaffDirectory } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
@@ -15,8 +16,10 @@ import { CalendarFilterModalPage } from './calendar-filter-modal/calendar-filter
   selector: 'app-opened-slots',
   templateUrl: './opened-slots.page.html',
   styleUrls: ['./opened-slots.page.scss'],
+  providers: [DatePipe]
 })
 export class OpenedSlotsPage {
+  url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
   staffCasId: string; // NEED TO BE GLOBAL TO USE IT IN MANY FUNCTIONS
   staff$: Observable<StaffDirectory>;
   staff: StaffDirectory;
@@ -40,6 +43,7 @@ export class OpenedSlotsPage {
     private route: ActivatedRoute,
     private ws: WsApiService,
     private modalCtrl: ModalController,
+    private datePipe: DatePipe
   ) { }
 
   ionViewWillEnter() {
@@ -48,7 +52,7 @@ export class OpenedSlotsPage {
     this.doRefresh();
   }
 
-  doRefresh(refresher?) { // to be changed with refresher
+  doRefresh(refresher?) {
     this.options = {
       from: new Date(),
       to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
@@ -56,17 +60,19 @@ export class OpenedSlotsPage {
     };
     let totalAvailableSlots = 0;
     let totalOpenedSlots = 0;
-    this.slots$ = this.ws.get<ConsultationSlot[]>('/iconsult/get_slots/' + this.staffCasId, refresher).pipe(
+    this.slots$ = this.ws.get<ConsultationSlot[]>('/iconsult/slots?lecturer_sam_account_name=' + this.staffCasId).pipe(
       map(
         slots => slots.reduce((r, a) => { // Grouping the slots daily
-          const consultationsYearMonth = a.date.split('-')[0] + '-' + a.date.split('-')[1];
+          const startDate = this.datePipe.transform(a.start_time, 'yyyy-MM-dd', '+0800');
+          const consultationsYearMonth = startDate.split('-')[0] + '-' + startDate.split('-')[1];
           this.totalOpenedSlots = ++totalOpenedSlots; // get the total number of opened slots
           this.totalAvailableSlots = a.status === 'Available' ? ++totalAvailableSlots : totalAvailableSlots;
-          const consultationsDay = a.date;
+          const consultationsDay = startDate;
           r[consultationsYearMonth] = r[consultationsYearMonth] || {};
           r[consultationsYearMonth][consultationsDay] = r[consultationsYearMonth][consultationsDay] || {};
           r[consultationsYearMonth][consultationsDay].items = r[consultationsYearMonth][consultationsDay].items || [];
           r[consultationsYearMonth][consultationsDay].items.push(a);
+
           return r;
         }, {})
       ),
@@ -85,7 +91,7 @@ export class OpenedSlotsPage {
                     ? `partially-booked`
                     : numberOfBookedSlots === 0 && numberOfAvailableAndBookedSlots !== 0
                       ? `available`
-                      : 'unavailable';
+                      : null;
 
                 this.daysConfigrations.push({
                   date: moment(day, 'YYYY-MM-DD').toDate(),
@@ -97,6 +103,7 @@ export class OpenedSlotsPage {
             );
           }
         );
+
         return dates;
       }),
       finalize(() => refresher && refresher.target.complete()),
@@ -126,7 +133,7 @@ export class OpenedSlotsPage {
         if (data.data === 'booked') {
           this.dateToFilter = ''; // remove the filter
           this.daysConfigrations = []; // empty days configurations used in the calendar modal and then in get slots re-set it again
-          this.doRefresh(true);
+          this.doRefresh();
         }
       }
     );

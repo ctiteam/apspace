@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { ConsultationHour, SlotDetails } from 'src/app/interfaces';
+import { ConsultationHour, SlotDetails, StaffDirectory } from 'src/app/interfaces';
 import { AppLauncherService, WsApiService } from 'src/app/services';
 
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
@@ -19,9 +19,11 @@ import * as moment from 'moment';
   styleUrls: ['./my-appointments.page.scss'],
 })
 export class MyAppointmentsPage {
-  slots$: Observable<ConsultationHour[]>;
+  url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
+  bookings$: Observable<any[]>;
   slotDetails$: Observable<SlotDetails>;
   loading: HTMLIonLoadingElement;
+  staff: StaffDirectory;
 
   skeltonArray = new Array(4);
 
@@ -33,23 +35,56 @@ export class MyAppointmentsPage {
     private router: Router,
     private toastCtrl: ToastController,
     private ws: WsApiService
-  ) { }
+  ) {
+  }
 
   ionViewDidEnter() {
     this.doRefresh();
   }
 
   doRefresh(refresher?) {
-    this.slots$ = this.ws.get<ConsultationHour[]>('/iconsult/upcomingconstu', refresher).pipe(
-      map(slots => { // Check if slot is passed and modify its status to passed
-        return slots.map(slot => {
-          if (slot.status === 'normal' && moment(slot.datetimeforsorting, 'YYYY-MM-DD kk:mm:ss').toDate() < new Date()) {
-            slot.status = 'Passed';
+    const bookings$: Observable<ConsultationHour[]> = this.ws.get<ConsultationHour[]>('/iconsult/bookings?').pipe(
+      map(bookingList => { // Check if slot is passed and modify its status to passed
+        return bookingList.map(bookings => {
+          if (bookings.status === 'Booked' && new Date(moment(bookings.slot_start_time).utcOffset('+0800').format()) < new Date()) {
+            bookings.status = 'Passed';
           }
-          return slot;
+          return bookings;
         });
       }),
-      finalize(() => refresher && refresher.target.complete()),
+      finalize(() => refresher && refresher.target.complete())
+    );
+
+    // get staff details to combine with bookings
+    this.bookings$ = forkJoin([
+      bookings$,
+      this.ws.get<StaffDirectory[]>('/staff/listing')
+    ]).pipe(
+      map(
+        ([bookings, staffList]) => {
+          const staffUsernames = new Set(bookings.map(booking => booking.slot_lecturer_sam_account_name.toLowerCase()));
+          const staffKeyMap = staffList
+            .filter(staff => staffUsernames.has(staff.ID.toLowerCase()))
+            .reduce(
+              (previous, current) => {
+                previous[current.ID] = current;
+
+                return previous;
+              },
+              {}
+            );
+          const listOfBookingWithStaffDetail = bookings.map(
+            booking => ({
+              ...booking,
+              ...{
+                staff_detail: staffKeyMap[booking.slot_lecturer_sam_account_name]
+              }
+            })
+          );
+
+          return listOfBookingWithStaffDetail;
+        }
+      )
     );
   }
 
@@ -75,11 +110,11 @@ export class MyAppointmentsPage {
     this.router.navigateByUrl('staffs', { replaceUrl: false });
   }
 
-  async openSlotDetailsModal(slotId: string) {
+  async openSlotDetailsModal(booking) {
     const modal = await this.modalCtrl.create({
       component: SlotDetailsModalPage,
       cssClass: 'add-min-height',
-      componentProps: { slotId, notFound: 'No slot Selected' },
+      componentProps: { booking, notFound: 'No booking slot Selected' },
     });
     await modal.present();
     await modal.onDidDismiss();
@@ -98,9 +133,10 @@ export class MyAppointmentsPage {
     }).then(toast => toast.present());
   }
 
-  async cancelBooking(slot: ConsultationHour) {
+  async cancelBooking(booking) {
+    const startDate = moment(booking.slot_start_time).format('YYYY-MM-DD');
     const alert = await this.alertController.create({
-      header: `Canelling Appointment with ${slot.lecname} on ${slot.date}`,
+      header: `Cancelling Appointment with ${booking.staff_detail.FULLNAME} on ${startDate}`,
       message: 'Please provide us with the cancellation reason:',
       inputs: [
         {
@@ -115,34 +151,28 @@ export class MyAppointmentsPage {
           role: 'cancel',
           handler: () => { }
         }, {
-          text: 'Cancel Slot',
+          text: 'Cancel Booking Slot',
           handler: (data) => {
             if (!data.cancellationReason) {
               this.showToastMessage('Cancellation Reason is Required !!', 'danger');
             } else {
               this.presentLoading();
-              const cancellationDate = moment().format(); // To get the date format required by backend
-              const cancellationBody = {
-                availibility_id: slot.availibilityid,
-                cancel_datetime: cancellationDate,
-                cancel_reason: data.cancellationReason, // Input field
-                cancelled_datetime: cancellationDate,
-                date: slot.date,
-                slotid: slot.slotid,
-                status: 0, // always 0 from backend
-                timee: slot.datetimeforsorting.split(' ')[1]
-              };
+              const cancellationBody = [{
+                booking_id: booking.id,
+                remark: data.cancellationReason
+              }];
               this.sendCancelBookingRequest(cancellationBody).subscribe(
                 {
                   next: () => {
                     this.showToastMessage('Booking has been cancelled successfully!', 'success');
                   },
-                  error: () => {
-                    this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
+                  error: (err) => {
+                    this.dismissLoading();
+                    this.showToastMessage(err.status + ': ' + err.error.error, 'danger');
                   },
                   complete: () => {
                     this.dismissLoading();
-                    this.doRefresh(true);
+                    this.doRefresh();
                   }
                 }
               );
@@ -168,10 +198,9 @@ export class MyAppointmentsPage {
     return await this.loading.dismiss();
   }
 
-  sendCancelBookingRequest(cancelledSlotDetails: any) {
-    return this.ws.post<any>('/iconsult/lecCancelbookedslot', {
-      body: cancelledSlotDetails,
+  sendCancelBookingRequest(cancelledBookingSlotDetails: any) {
+    return this.ws.put<any>('/iconsult/booking/cancel?', {
+      body: cancelledBookingSlotDetails,
     });
   }
-
 }

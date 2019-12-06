@@ -1,38 +1,40 @@
+import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   AlertController, LoadingController, ModalController, ToastController
 } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
 import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
-import * as moment from 'moment';
 
-import { LecturerConsultation } from 'src/app/interfaces';
+import * as moment from 'moment';
+import { ConsultationHour, ConsultationSlot } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
-import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
+// import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
-
+// GET SLOT ID FOR CANCEL SLOT PURPOSE
 
 @Component({
   selector: 'app-my-consultations',
   templateUrl: './my-consultations.page.html',
   styleUrls: ['./my-consultations.page.scss'],
+  providers: [DatePipe]
 })
 export class MyConsultationsPage {
+  url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
   slots$: Observable<{}>;
-  todaysDate = this.iconsultFormatDate(new Date());
+  todaysDate = new Date();
   skeletonItemsNumber = new Array(4);
   loading: HTMLIonLoadingElement;
-  summaryDetails: { // Group of summary data used inside the summary modal
-    totalOpenedSlots: number,
-    totalAvailableSlots: number,
-    totalUnavailalbeSlots: number,
-    totalBookedSlots: number,
+  summaryDetails: {
+    // Group of summary data used inside the summary modal
+    totalAvailableSlots: number;
+    totalBookedSlots: number;
   };
 
   skeltonArray = new Array(4); // loading
@@ -46,6 +48,23 @@ export class MyConsultationsPage {
     daysConfig: this.daysConfigrations
   };
 
+  // for select multiple slots to cancel
+  dateRange: { from: string; to: string; };
+  optionsRange: CalendarComponentOptions = {
+    pickMode: 'range',
+    from: moment(this.todaysDate)
+      .add(1, 'day')
+      .toDate(),
+    to: moment(this.todaysDate)
+      .add(1, 'day')
+      .add(12, 'month')
+      .toDate(),
+    disableWeeks: [0]
+  };
+  onSelect = false; // enable or disable select more than one slot to cancel.
+  onRange = false; // enable or disable select date range to perform bulk cancel.
+  slotsToBeCancelled: ConsultationSlot[] = [];
+
   constructor(
     private ws: WsApiService,
     private modalCtrl: ModalController,
@@ -54,63 +73,42 @@ export class MyConsultationsPage {
     private toastCtrl: ToastController,
     private route: ActivatedRoute,
     private router: Router,
-
+    private datePipe: DatePipe
   ) { }
 
-  iconsultFormatDate(date: Date) { // Format used in iConsult date
-    return moment(date).format('YYYY-MM-DD');
-  }
-
-  async showSummary() { // summary modal
+  async showSummary() {
+    // summary modal
     const modal = await this.modalCtrl.create({
       component: ConsultationsSummaryModalPage,
-      componentProps: { summaryDetails: this.summaryDetails },
+      componentProps: { summaryDetails: this.summaryDetails }
     });
     await modal.present();
     await modal.onDidDismiss();
   }
 
-  async openSlotDetailsModal(
-    slotId: string, startTime: string, endTime: string, dateAndTime: string, availibilityId: number, date: string, timee: string) {
-    const dataToSend = { slotId, startTime, endTime, dateAndTime, availibilityId, date, timee };
+  async openSlotDetailsModal(slot: ConsultationSlot) {
     const modal = await this.modalCtrl.create({
       component: LecturerSlotDetailsModalPage,
       cssClass: 'add-min-height',
-      componentProps: { dataToSend, notFound: 'No slot Selected' },
+      componentProps: { slot, notFound: 'No slot Selected' }
     });
     await modal.present();
-    await modal.onDidDismiss().then(
-      data => {
-        if (data.data === 'booked') {
-          this.daysConfigrations = [];
-          this.doRefresh(true);
-        }
+    await modal.onDidDismiss().then(data => {
+      if (data.data === 'SUCCESS') {
+        this.daysConfigrations = [];
+        this.doRefresh();
       }
-    );
-  }
-
-  async openUnavailableSlotDetails(unavailibilityid: string) {
-    const modal = await this.modalCtrl.create({
-      component: UnavailabilityDetailsModalPage,
-      cssClass: 'add-min-height',
-      componentProps: { unavailibilityid, notFound: 'No slot Selected' },
     });
-    await modal.present();
-    await modal.onDidDismiss().then(
-      data => {
-        if (data.data === 'booked') {
-          this.daysConfigrations = [];
-          this.doRefresh();
-        }
-      }
-    );
   }
-
 
   ionViewDidEnter() {
     this.route.queryParams.subscribe(() => {
       // tslint:disable-next-line: max-line-length
-      if (this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras.state && this.router.getCurrentNavigation().extras.state.reload) {
+      if (
+        this.router.getCurrentNavigation() &&
+        this.router.getCurrentNavigation().extras.state &&
+        this.router.getCurrentNavigation().extras.state.reload
+      ) {
         this.daysConfigrations = [];
         this.doRefresh();
       }
@@ -118,60 +116,275 @@ export class MyConsultationsPage {
     this.doRefresh();
   }
 
-  async cancelAvailableSlot(slot: LecturerConsultation) {
-    const alert = await this.alertController.create({
-      header: 'Cancelling an opened slot',
-      message: `You are about to cancel the slot opened on ${slot.dateandtime.split(' ')[0]} at ${slot.dateandtime.split(' ')[1]}`,
-      buttons: [
-        {
-          text: 'Dismiss',
-          role: 'cancel',
-          handler: () => { }
-        }, {
-          text: 'Cancel Slot',
-          handler: () => {
-            this.presentLoading();
-            const cancellationBody = {
-              availibility_id: slot.availibilityid,
-              date: slot.date,
-              timee: slot.timee,
-              status: 1, // always 1
-              slotid: null // always null
-            };
-            this.sendCancelSlotRequest(cancellationBody).subscribe(
-              {
-                next: () => {
-                  this.daysConfigrations = [];
-                  this.showToastMessage('Slot has been cancelled successfully!', 'success');
-                },
-                error: () => {
-                  this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
-                },
-                complete: () => {
-                  this.dismissLoading();
-                  this.doRefresh();
-                }
-              }
-            );
+  // cancel slots functions starts here
+  toggleCancelSlot() {
+    this.onSelect = !this.onSelect;
 
-          }
-        }
-      ]
-    });
-    await alert.present();
+    if (this.onRange === true) {
+      this.onRange = false;
+    }
   }
 
+  toggleCancelSlotOptions() {
+    this.onRange = !this.onRange;
+  }
+
+  getSelectedSlot(slot: ConsultationSlot) {
+    if (!(this.slotsToBeCancelled.find(slotTBC => slotTBC.slot_id === slot.slot_id))) {
+      this.slotsToBeCancelled.push(slot);
+    } else {
+      this.slotsToBeCancelled.forEach((slotTBC, index, slotsToBeCancelled) => {
+        if (slotTBC.slot_id === slot.slot_id) {
+          slotsToBeCancelled.splice(index, 1);
+        }
+      });
+    }
+  }
+
+  getSelectedRangeSlot(dates) {
+    this.slotsToBeCancelled = [];
+    const startDate = new Date(this.dateRange.from);
+    const endDate = new Date(this.dateRange.to);
+
+    const datesKeys = Object.keys(dates).map(date => new Date(date));
+    const filteredDates = datesKeys.filter(date => startDate <= date && date <= endDate);
+
+    filteredDates.forEach(filteredDate => {
+      const currentDateString = this.datePipe.transform(filteredDate, 'yyyy-MM-dd', '+0800');
+      dates[currentDateString].items.forEach(item => this.slotsToBeCancelled.push(item));
+    });
+  }
+
+  resetSelectedSlots(dates) {
+    if (!this.onRange) {
+      const datesKeys = Object.keys(dates);
+      datesKeys.forEach(datesKey => dates[datesKey].items.forEach(item => delete item.isChecked));
+    }
+    this.slotsToBeCancelled = [];
+  }
+
+  createAlertMessage(slotsToBeCancelled) {
+    const filteredTimes = [] as { date: string; times: string[]; }[];
+
+    slotsToBeCancelled.forEach(slotTBC => {
+      const startDate = this.datePipe.transform(slotTBC.start_time, 'yyyy-MM-dd', '+0800');
+      const startTime = this.datePipe.transform(slotTBC.start_time, 'HH:mm', '+0800');
+
+      if (!(filteredTimes.find(filteredTime => filteredTime.date === startDate))) {
+        filteredTimes.push({ date: startDate, times: [startTime] });
+      } else {
+        filteredTimes.forEach(filteredTime => {
+          if (filteredTime.date === startDate) {
+            filteredTime.times.push(startTime);
+          }
+        });
+      }
+    });
+
+    return filteredTimes.map(filteredTime => {
+      const timeList = filteredTime.times.join(', ');
+      return `<p><strong>${filteredTime.date}: </strong>${timeList}</p>`;
+    }).join('');
+  }
+
+  async cancelAvailableSlot() {
+    if (this.slotsToBeCancelled) {
+
+      let isPassed = false;
+      this.slotsToBeCancelled.forEach(slotToBeCancelled => {
+        if (new Date(this.datePipe.transform(slotToBeCancelled.start_time, 'medium', '+0800'))
+        <= moment(new Date()).add(24, 'hours').toDate()) {
+          isPassed = true;
+          return;
+        }
+      });
+
+      if (isPassed) {
+        this.showToastMessage('Cannot cancel passed slots.', 'danger');
+        return;
+      }
+
+      const bookedSlots = this.slotsToBeCancelled.filter(slotToBeCancelled => slotToBeCancelled.booking_detail);
+      const availableSlots = this.slotsToBeCancelled.filter(slotToBeCancelled => !slotToBeCancelled.booking_detail);
+
+      if (bookedSlots.length > 0) {
+        const cancelBookedSlotDetails = this.createAlertMessage(bookedSlots);
+
+        let cancelAvailableSlotDetails;
+        availableSlots.length > 0
+        ? cancelAvailableSlotDetails = `<br /><ion-icon name="checkbox-outline"></ion-icon>${this.createAlertMessage(availableSlots)}`
+        : cancelAvailableSlotDetails = '';
+
+        const alertBooked = await this.alertController.create({
+          header: 'Warning',
+          subHeader: 'You have booked slots that you\'re about to cancel. Do you want to continue? :',
+          message: `<ion-icon name="calendar"></ion-icon>${cancelBookedSlotDetails}
+                    ${cancelAvailableSlotDetails}`,
+          buttons: [
+            {
+              text: 'No',
+              role: 'cancel',
+              handler: () => { }
+            }, {
+              text: 'Yes',
+              handler: () => {
+                this.alertController.create({
+                  header: 'Cancelling Appointment',
+                  subHeader: 'Please provide us with the cancellation reason:',
+                  inputs: [
+                    {
+                      name: 'cancellationReason',
+                      type: 'text',
+                      placeholder: 'Enter The Cancellation Reason',
+                    },
+                  ],
+                  buttons: [
+                    {
+                      text: 'Cancel',
+                      role: 'cancel',
+                      handler: () => { }
+                    },
+                    {
+                      text: 'Submit',
+                      handler: (data) => {
+                        if (!data.cancellationReason) {
+                          this.showToastMessage('Cancellation Reason is Required !!', 'danger');
+                        } else {
+                          this.presentLoading();
+
+                          const listApiToForkJoin = [];
+
+                          const cancellationBookedBody = bookedSlots.reduce((previous, current) => {
+                            previous.push({
+                              booking_id: current.booking_detail.id,
+                              remark: data.cancellationReason
+                            });
+
+                            return previous;
+                          }, []);
+
+                          listApiToForkJoin.push(this.sendCancelBookingRequest(cancellationBookedBody));
+
+                          if (availableSlots.length > 0) {
+                            const cancellationAvailableBody = availableSlots.reduce((previous, current) => {
+                              previous.push({
+                                slot_id: current.slot_id
+                              });
+
+                              return previous;
+                            }, []);
+
+                            listApiToForkJoin.push(this.sendCancelSlotRequest(cancellationAvailableBody));
+                          }
+
+                          forkJoin(listApiToForkJoin).subscribe(
+                            {
+                              next: () => {
+                                this.resetPage();
+                                this.showToastMessage(
+                                  'Slot has been cancelled successfully!',
+                                  'success'
+                                );
+                              },
+                              error: (err) => {
+                                this.dismissLoading();
+                                this.showToastMessage(
+                                  err.status + ': ' + err.error.error,
+                                  'danger'
+                                );
+                              },
+                              complete: () => {
+                                this.dismissLoading();
+                                this.doRefresh();
+                              }
+                            }
+                          );
+                        }
+                      }
+                    }
+                  ]
+                }).then(alertCancelBooked => alertCancelBooked.present());
+              }
+            }
+          ]
+        });
+        await alertBooked.present();
+      } else {
+        const cancelTimeDetails = this.createAlertMessage(availableSlots);
+
+        const alert = await this.alertController.create({
+          header: 'Cancelling an opened slot',
+          subHeader: 'You are about to cancel these selected slots:',
+          message: cancelTimeDetails,
+          buttons: [
+            {
+              text: 'Dismiss',
+              role: 'cancel',
+              handler: () => { }
+            }, {
+              text: 'Cancel Slot',
+              handler: () => {
+                this.presentLoading();
+
+                const cancellationBody = availableSlots.reduce((previous, current) => {
+                  previous.push({
+                    slot_id: current.slot_id
+                  });
+
+                  return previous;
+                }, []);
+
+                this.sendCancelSlotRequest(cancellationBody).subscribe({
+                  next: () => {
+                    this.resetPage();
+                    this.showToastMessage(
+                      'Slot has been cancelled successfully!',
+                      'success'
+                    );
+                  },
+                  error: (err) => {
+                    this.dismissLoading();
+                    this.showToastMessage(
+                      err.status + ': ' + err.error.error,
+                      'danger'
+                    );
+                  },
+                  complete: () => {
+                    this.dismissLoading();
+                    this.doRefresh();
+                  }
+                });
+              }
+            }
+          ]
+        });
+        await alert.present();
+      }
+    }
+  }
+
+  resetPage() {
+    this.daysConfigrations = [];
+    this.slotsToBeCancelled = [];
+    this.dateToFilter = undefined;
+    this.onSelect = false;
+    this.onRange = false;
+  }
+  // cancel slots functions ends here
+
   showToastMessage(message: string, color: 'danger' | 'success') {
-    this.toastCtrl.create({
-      message,
-      duration: 6000,
-      position: 'top',
-      color,
-      showCloseButton: true,
-      animated: true,
-      // enterAnimation: toastMessageEnterAnimation,
-      // leaveAnimation: toastMessageLeaveAnimation
-    }).then(toast => toast.present());
+    this.toastCtrl
+      .create({
+        message,
+        duration: 6000,
+        position: 'top',
+        color,
+        showCloseButton: true,
+        animated: true
+        // enterAnimation: toastMessageEnterAnimation,
+        // leaveAnimation: toastMessageLeaveAnimation
+      })
+      .then(toast => toast.present());
   }
 
   async presentLoading() {
@@ -179,7 +392,7 @@ export class MyConsultationsPage {
       spinner: 'dots',
       duration: 5000,
       message: 'Please wait...',
-      translucent: true,
+      translucent: true
     });
     return await this.loading.present();
   }
@@ -188,73 +401,116 @@ export class MyConsultationsPage {
     return await this.loading.dismiss();
   }
 
-  sendCancelSlotRequest(cancelledSlotDetails: any) {
-    return this.ws.post<any>('/iconsult/lecCancelfreeslot', {
-      body: cancelledSlotDetails,
+  sendCancelBookingRequest(cancelBookingDetails: any) {
+    return this.ws.put<any>('/iconsult/booking/cancel?', {
+      body: cancelBookingDetails,
     });
   }
 
+  sendCancelSlotRequest(slotsId: any) {
+    return this.ws.put<any>('/iconsult/slot/cancel?', {
+      body: slotsId
+    });
+  }
 
-  doRefresh(refresher?) { // to be changed with refresher
-    this.summaryDetails = { // Used here to calculate the number again after refresh
-      totalOpenedSlots: 0,
+  doRefresh(refresher?) {
+    // to be changed with refresher
+    this.summaryDetails = {
+      // Used here to calculate the number again after refresh
       totalAvailableSlots: 0,
-      totalUnavailalbeSlots: 0,
-      totalBookedSlots: 0,
+      totalBookedSlots: 0
     };
     this.options = {
       from: new Date(),
       to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
       daysConfig: this.daysConfigrations
     };
-    this.slots$ = this.ws.get<LecturerConsultation[]>('/iconsult/upcomingconlec').pipe(
-      map(slots => slots.filter(slot => slot.status !== 'Clossed')), // filter closed slots
-      map(
-        slots => slots.reduce((r, a) => { // Grouping the slots daily and get the summary data
-          if (a.status === 'Unavailable') {
-            this.summaryDetails.totalUnavailalbeSlots++;
+
+
+    // FORK JOIN WITH BOOKINGS AND SLOTS
+    this.slots$ = forkJoin([
+      this.ws.get<ConsultationSlot[]>('/iconsult/slots?'
+      ),
+      this.ws.get<ConsultationHour[]>('/iconsult/bookings?')
+    ]).pipe(
+      map(([slots, bookings]) =>
+        slots.reduce((r, a) => {
+          // Grouping the slots daily and get the summary data
+
+          if (
+            a.status !== 'Cancelled' &&
+            a.status !== 'Cancelled by lecturer'
+          ) {
+            if (a.status === 'Booked') {
+              this.summaryDetails.totalBookedSlots++;
+            }
+            if (
+              a.status === 'Available' ||
+              a.status === 'Cancelled by student'
+            ) {
+              this.summaryDetails.totalAvailableSlots++;
+            }
+
+            const getBooking = bookings.filter(data => data.status === 'Booked' && a.slot_id === data.slot_id);
+
+            if (getBooking.length > 0) {
+              a.booking_detail = getBooking[0];
+            }
+
+            const consultationsDate = this.datePipe.transform(
+              a.start_time,
+              'yyyy-MM-dd',
+              '+0800'
+            );
+            r[consultationsDate] = r[consultationsDate] || {};
+            r[consultationsDate].items = r[consultationsDate].items || [];
+            r[consultationsDate].items.push(a);
           }
-          if (a.status === 'Booked') {
-            this.summaryDetails.totalBookedSlots++;
-          }
-          if (a.status !== 'Unavailable') {
-            this.summaryDetails.totalOpenedSlots++;
-          }
-          if (a.status === 'Available') {
-            this.summaryDetails.totalAvailableSlots++;
-          }
-          const consultationsDate = a.dateandtime.split(' ')[0];
-          r[consultationsDate] = r[consultationsDate] || {};
-          r[consultationsDate].items = r[consultationsDate].items || [];
-          r[consultationsDate].items.push(a);
           return r;
         }, {})
       ),
-      tap(dates => { // add css classes for slot type
-        Object.keys(dates).forEach(
-          date => {
-            const items = dates[date].items;
-            const numberOfAvailableAndBookedSlots = items.filter(item => item.status === 'Available' || item.status === 'Booked').length;
-            const numberOfBookedSlots = items.filter(item => item.status === 'Booked').length;
-            const cssClass = numberOfAvailableAndBookedSlots === numberOfBookedSlots && numberOfBookedSlots > 0
+      tap(dates => {
+        // add css classes for slot type
+        Object.keys(dates).forEach(date => {
+          const items = dates[date].items;
+          const numberOfAvailableAndBookedSlots = items.filter(
+            item => item.status === 'Available' || item.status === 'Booked'
+          ).length;
+          const numberOfBookedSlots = items.filter(
+            item => item.status === 'Booked'
+          ).length;
+          const cssClass =
+            numberOfAvailableAndBookedSlots === numberOfBookedSlots &&
+              numberOfBookedSlots > 0
               ? `booked`
               : numberOfBookedSlots > 0
                 ? `partially-booked`
-                : numberOfBookedSlots === 0 && numberOfAvailableAndBookedSlots !== 0
+                : numberOfBookedSlots === 0 &&
+                  numberOfAvailableAndBookedSlots !== 0
                   ? `available`
-                  : 'unavailable';
+                  : null;
 
-            this.daysConfigrations.push({
-              date: moment(date, 'YYYY-MM-DD').toDate(),
-              subTitle: '.',
-              cssClass: cssClass + ' colored',
-              disable: false
-            });
-          }
-        );
+          this.daysConfigrations.push({
+            date: new Date(date),
+            subTitle: '.',
+            cssClass: cssClass + ' colored',
+            disable: false
+          });
+        });
+
+        // const getTodayConsultationsDate = this.datePipe.transform(
+        //   new Date(),
+        //   'yyyy-MM-dd',
+        //   '+0800'
+        // );
+
+        // if (dates[getTodayConsultationsDate] !== undefined) {
+        //   this.dateToFilter = this.todaysDate;
+        // }
+
         return dates;
       }),
-      finalize(() => refresher && refresher.target.complete()),
+      finalize(() => refresher && refresher.target.complete())
     );
   }
 }

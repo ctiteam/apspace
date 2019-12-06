@@ -1,6 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ModalController } from '@ionic/angular';
 
+import { IntakeListingService, SettingsService, WsApiService } from '../../services';
 import { ExamSchedulePage } from './exam-schedule.page';
 
 describe('ExamSchedulePage', () => {
@@ -9,7 +11,13 @@ describe('ExamSchedulePage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExamSchedulePage ],
+      declarations: [ExamSchedulePage],
+      providers: [
+        { provide: IntakeListingService, useValue: {} },
+        { provide: ModalController, useValue: {} },
+        { provide: SettingsService, useValue: {} },
+        { provide: WsApiService, useValue: {} },
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
@@ -25,4 +33,3 @@ describe('ExamSchedulePage', () => {
     expect(component).toBeTruthy();
   });
 });
-

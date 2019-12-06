@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { NEVER } from 'rxjs';
 
 import { WsApiService } from 'src/app/services';
+import { ReversePipe } from '../../shared/reverse/reverse.pipe';
 import { AttendancePage } from './attendance.page';
-import { ReversePipe } from './reverse.pipe';
 
 describe('AttendancePage', () => {
   let component: AttendancePage;

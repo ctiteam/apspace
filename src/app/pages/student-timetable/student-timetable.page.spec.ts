@@ -1,6 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ModalController } from '@ionic/angular';
 import { BehaviorSubject, NEVER } from 'rxjs';
 
@@ -10,6 +11,7 @@ import {
 } from '../../services';
 import { ClassesPipe } from './classes.pipe';
 import { GenPipe } from './gen.pipe';
+import { StrToColorPipe } from './str-to-color.pipe';
 import { StudentTimetablePage } from './student-timetable.page';
 import { ThedayPipe } from './theday.pipe';
 import { TheWeekPipe } from './theweek.pipe';
@@ -35,9 +37,11 @@ describe('StudentTimetablePage', () => {
         StudentTimetablePage,
         TheWeekPipe,
         ThedayPipe,
+        StrToColorPipe,
       ],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: InAppBrowser, useValue: {} },
         { provide: ModalController, useValue: {} },
         { provide: Router, useValue: { url: '/' } },
         { provide: SettingsService, useValue: settingsSpy },

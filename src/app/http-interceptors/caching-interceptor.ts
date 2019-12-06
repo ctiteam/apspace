@@ -6,7 +6,7 @@ import { Platform } from '@ionic/angular';
 import { Observable, of } from 'rxjs';
 import { catchError, startWith, switchMap, tap } from 'rxjs/operators';
 
-import { RequestCache } from '../request-cache/request-cache.service';
+import { RequestCache } from '../services/request-cache.service';
 
 /**
  * Inject caching request header.
