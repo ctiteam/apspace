@@ -112,7 +112,7 @@ export class SettingsPage implements OnInit {
   }
 
   getVenues() {
-    this.venues$ = this.ws.get<Venue[]>(`/iconsult/getvenues/${this.defaultCampus}`);
+    this.venues$ = this.ws.get<Venue[]>(`/iconsult/locations?venue=${this.defaultCampus}`);
   }
 
 
