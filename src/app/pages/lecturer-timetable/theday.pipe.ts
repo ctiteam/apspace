@@ -18,8 +18,12 @@ export class ThedayPipe implements PipeTransform {
    */
   transform(studentTimetable: LecturerTimetable[], date: Date | undefined): LecturerTimetable[] {
     if (date !== undefined) {
-      const dayOfWeek = date.getDate();
-      return studentTimetable.filter(t => new Date(t.time).getDate() === dayOfWeek);
+      const month = date.getMonth();
+      const dayOfMonth = date.getDate();
+      return studentTimetable.filter(t => {
+        const d = new Date(t.time);
+        return d.getMonth() === month && d.getDate() === dayOfMonth;
+      });
     } else {
       return [];
     }
