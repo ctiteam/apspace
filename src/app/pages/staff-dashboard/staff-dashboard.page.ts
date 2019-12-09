@@ -456,7 +456,6 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     return this.ws.get<LecturerTimetable[]>(endpoint, { auth: false, caching: 'cache-only' }).pipe(
       // GET TODAYS CLASSES ONLY
       map(timetable => timetable.filter(tt => this.eventIsToday(new Date(tt.time), d))),
-
       // REFRESH LECTURER TIMETABLE ONLY IF NO CLASSES IN LECTURER TIMETABLE AND NOT A HOLIDAY
       switchMap(timetables => timetables.length !== 0
         ? of(timetables)
@@ -464,11 +463,12 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
           // XXX: ONLY START DAY IS BEING MATCHED
           switchMap(holidays => holidays.find(holiday => date === holiday.holiday_start_date)
             ? of(timetables)
-            : this.ws.get<LecturerTimetable[]>(endpoint, { auth: false, caching: 'network-or-cache' })
+            : this.ws.get<LecturerTimetable[]>(endpoint, { auth: false, caching: 'network-or-cache' }).pipe(
+              map(timetable => timetable.filter(tt => this.eventIsToday(new Date(tt.time), d))),
+            )
           ),
         )
       ),
-
       // CONVERT TIMETABLE OBJECT TO THE OBJECT EXPECTED IN THE EVENT COMPONENT
       map((timetables: LecturerTimetable[]) => {
         const timetableEventMode: EventComponentConfigurations[] = [];
