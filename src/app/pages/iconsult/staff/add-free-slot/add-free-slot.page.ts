@@ -15,7 +15,7 @@ import { Venue } from 'src/app/interfaces';
 import { SettingsService, WsApiService } from 'src/app/services';
 
 import * as moment from 'moment';
-import { map, shareReplay, tap } from 'rxjs/operators';
+import { shareReplay } from 'rxjs/operators';
 import { AddFreeSlotValidator } from './add-free-slot.validator';
 
 @Component({
