@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { IonSelect, ModalController } from '@ionic/angular';
 
 import { forkJoin } from 'rxjs';
@@ -19,6 +20,8 @@ type Schedule = Pick<Classcode, 'CLASS_CODE'>
 })
 export class ClassesPage implements AfterViewInit, OnInit {
 
+  auto = true; // manual mode to record mismatched data
+
   /* computed */
   classcodes: string[];
   schedules: Schedule[];
@@ -37,11 +40,36 @@ export class ClassesPage implements AfterViewInit, OnInit {
   endTime: string;
   classType: string;
 
-  @ViewChild('classcodeInput', { static: true }) classcodeInput: IonSelect;
+  /* manual */
+  manualClasscodes: string[];
+  manualDates: string[];
+  manualStartTimes = [
+    '08:00 AM', '08:15 AM', '08:30 AM', '08:45 AM', '09:00 AM', '09:15 AM',
+    '09:30 AM', '09:45 AM', '10:00 AM', '10:15 AM', '10:30 AM', '10:45 AM',
+    '11:00 AM', '11:15 AM', '11:30 AM', '11:45 AM', '12:00 PM', '12:15 PM',
+    '12:30 PM', '12:45 PM', '01:00 PM', '01:15 PM', '01:30 PM', '01:45 PM',
+    '02:00 PM', '02:15 PM', '02:30 PM', '02:45 PM', '03:00 PM', '03:15 PM',
+    '03:30 PM', '03:45 PM', '04:00 PM', '04:15 PM', '04:30 PM', '04:45 PM',
+    '05:00 PM', '05:15 PM', '05:30 PM', '05:45 PM', '06:00 PM', '06:15 PM',
+    '06:30 PM', '06:45 PM', '07:00 PM', '07:15 PM', '07:30 PM', '07:45 PM',
+    '08:00 PM', '08:15 PM', '08:30 PM', '08:45 PM', '09:00 PM', '09:15 PM',
+    '09:30 PM', '09:45 PM', '10:00 PM', '10:15 PM', '10:30 PM', '10:45 PM',
+    '10:00 PM', '11:15 PM', '11:30 PM', '11:45 PM', '11:00 PM', '11:15 PM',
+    '11:30 PM', '11:45 PM'];
+  manualEndTimes: string[];
+
+  manualClasscode: string;
+  manualDate: string;
+  manualStartTime: string;
+  manualEndTime: string;
+  manualClassType: string;
+
+  @ViewChild('classcodeInput', { static: false }) classcodeInput: IonSelect;
 
   constructor(
     private tt: StudentTimetableService,
     private ws: WsApiService,
+    private router: Router,
     public modalCtrl: ModalController,
   ) { }
 
@@ -100,6 +128,11 @@ export class ClassesPage implements AfterViewInit, OnInit {
       this.schedules = this.schedules.concat.apply([], mapped);
       this.classcodes = [...new Set(this.schedules.map(schedule => schedule.CLASS_CODE).filter(Boolean))].sort();
       console.log('filtered', this.schedules, this.classcodes);
+
+      // manual classcodes
+      this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
+      this.manualDates = [...Array(30).keys()]
+        .map(n => new Date(new Date().setDate(new Date().getDate() - n)).toISOString().slice(0, 10));
     });
   }
 
@@ -149,15 +182,19 @@ export class ClassesPage implements AfterViewInit, OnInit {
     const modal = await this.modalCtrl.create({
       component: SearchModalComponent,
       componentProps: {
-        items: this.classcodes,
-        defaultItems: this.classcodes,
+        items: this.auto ? this.classcodes : this.manualClasscodes,
+        defaultItems: this.auto ? this.classcodes : this.manualClasscodes,
         notFound: 'No classcode selected'
       }
     });
     await modal.present();
     const { data: { item: classcode } = { item: this.classcode } } = await modal.onDidDismiss();
-    if (classcode !== null && classcode !== this.classcode) {
-      this.changeClasscode(this.classcode = classcode);
+    if (this.auto) {
+      if (classcode !== null && classcode !== this.classcode) {
+        this.changeClasscode(this.classcode = classcode);
+      }
+    } else {
+      this.manualClasscode = classcode;
     }
   }
 
@@ -185,11 +222,59 @@ export class ClassesPage implements AfterViewInit, OnInit {
     }
   }
 
+  /** Swap auto and manual mode. */
+  swapMode() {
+    this.auto = !this.auto;
+    (this.classcodeInput as any).el.addEventListener('click', (ev: MouseEvent) => {
+      ev.stopPropagation();
+      this.chooseClasscode();
+    }, true);
+  }
+
   /** Change start time, find matching end time. */
   changeStartTime(startTime: string) {
-    const schedule = this.schedulesByClasscodeDate.find(s => s.TIME_FROM === startTime);
-    this.endTime = schedule.TIME_TO;
-    this.classType = schedule.TYPE;
+    if (this.auto) {
+      const schedule = this.schedulesByClasscodeDate.find(s => s.TIME_FROM === startTime);
+      this.endTime = schedule.TIME_TO;
+      this.classType = schedule.TYPE;
+    } else {
+      this.manualEndTimes = this.manualStartTimes.slice(this.manualStartTimes.indexOf(startTime) + 1);
+    }
+  }
+
+  /** Mark attendance, send feedback if necessary. */
+  mark() {
+    if (!this.auto) {
+      const body = {
+        classcodes: this.classcodes,
+        schedules: this.schedules,
+        schedulesByClasscode: this.schedulesByClasscode,
+        schedulesByClasscodeDate: this.schedulesByClasscodeDate,
+
+        dates: this.dates,
+        startTimes: this.startTimes,
+        endTimes: this.endTimes,
+
+        manualClasscodes: this.manualClasscodes,
+        manualDates: this.manualDates,
+        manualStartTimes: this.manualStartTimes,
+        manualEndTimes: this.manualEndTimes,
+
+        manualClasscode: this.manualClasscode,
+        manualDate: this.manualDate,
+        manualStartTime: this.manualStartTime,
+        manualEndTime: this.manualEndTime,
+        manualClassType: this.manualClassType,
+      };
+      this.ws.post('/attendix/selection', { body }).subscribe();
+    }
+    this.router.navigate(['/attendix/mark-attendance', {
+      classcode: this.auto ? this.classcode : this.manualClasscode,
+      date: this.auto ? this.date : this.manualDate,
+      startTime: this.auto ? this.startTime : this.manualStartTime,
+      endTime: this.auto ? this.endTime : this.manualEndTime,
+      classType: this.auto ? this.classType : this.manualClassType,
+    }]);
   }
 
   /** Helper function to get ISO 8601 Date from Date. */

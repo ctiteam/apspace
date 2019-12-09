@@ -36,36 +36,40 @@ export class WsApiService {
    * @param endpoint - <apiUrl><endpoint> for service, used for caching
    * @param options.attempts - number of retries (default: 4)
    * @param options.auth - authentication required (default: true)
-   * @param options.params - additional request parameters (default: {})
    * @param options.caching - caching strategies (default: true)
+   * @param options.headers - http headers (default: {})
+   * @param options.params - additional request parameters (default: {})
    * @param options.timeout - request timeout (default: 10000)
    * @param options.url - url of web service (default: apiUrl)
-   * @param options.headers - http headers (default: {})
+   * @param options.withCredentials - request sent with cookies (default: false)
    * @return data observable
    */
   get<T>(endpoint: string, options: {
     attempts?: number,
     auth?: boolean,
+    caching?: 'network-or-cache' | 'cache-only' | 'cache-update-refresh',
     headers?: HttpHeaders | { [header: string]: string | string[]; },
     params?: HttpParams | { [param: string]: string | string[]; },
-    caching?: 'network-or-cache' | 'cache-only' | 'cache-update-refresh',
     timeout?: number,
-    url?: string
+    url?: string,
+    withCredentials?: boolean
   } = {}): Observable<T> {
-    options = Object.assign({
+    options = {
       attempts: 4,
       auth: true,
+      caching: 'network-or-cache',
       headers: {},
       params: {},
-      caching: 'network-or-cache',
       timeout: 20000,
-      url: this.apiUrl
-    }, options);
+      url: this.apiUrl,
+      withCredentials: false,
+      ...options
+    };
 
     const url = options.url + endpoint;
     const opt = {
       params: options.params,
-      withCredentials: options.auth,
+      withCredentials: options.withCredentials,
       headers: options.headers
     };
 
@@ -113,36 +117,40 @@ export class WsApiService {
    * POST: Simple request WS API.
    *
    * @param endpoint - <apiUrl><endpoint> for service, used for caching
+   * @param options.auth - authentication required (default: true)
    * @param options.body - request body (default: null)
    * @param options.headers - http headers (default: {})
    * @param options.params - additional request parameters (default: {})
    * @param options.timeout - request timeout (default: 10000)
-   * @param options.auth - authentication required (default: true)
    * @param options.url - url of web service (default: apiUrl)
+   * @param options.withCredentials - request sent with cookies (default: false)
    * @return data observable
    */
   post<T>(endpoint: string, options: {
+    auth?: boolean,
     body?: any | null,
     headers?: HttpHeaders | { [header: string]: string | string[]; },
     params?: HttpParams | { [param: string]: string | string[]; },
     timeout?: number,
-    auth?: boolean,
+    withCredentials?: boolean,
     url?: string,
   } = {}): Observable<T> {
-    options = Object.assign({
+    options = {
+      auth: true,
       body: null,
       headers: {},
       params: {},
       timeout: 10000,
-      auth: true,
       url: this.apiUrl,
-    }, options);
+      withCredentials: false,
+      ...options
+    };
 
     const url = options.url + endpoint;
     const opt = {
       headers: options.headers,
       params: options.params,
-      withCredentials: true,
+      withCredentials: options.withCredentials,
     };
 
     if (this.plt.is('cordova') && this.network.type === 'none') {
@@ -171,28 +179,42 @@ export class WsApiService {
     );
   }
 
+  /**
+   * PUT: Simple request WS API.
+   *
+   * @param endpoint - <apiUrl><endpoint> for service, used for caching
+   * @param options.auth - authentication required (default: true)
+   * @param options.body - request body (default: null)
+   * @param options.headers - http headers (default: {})
+   * @param options.params - additional request parameters (default: {})
+   * @param options.timeout - request timeout (default: 10000)
+   * @param options.url - url of web service (default: apiUrl)
+   * @param options.withCredentials - request sent with cookies (default: false)
+   * @return data observable
+   */
   put<T>(endpoint: string, options: {
     body?: any | null,
-    headers?: HttpHeaders | {
-      [header: string]: string | string[];
-    },
+    headers?: HttpHeaders | { [header: string]: string | string[]; },
     params?: HttpParams | { [param: string]: string | string[]; },
     timeout?: number,
     url?: string,
+    withCredentials?: boolean,
   } = {}): Observable<T> {
-    options = Object.assign({
+    options = {
       body: null,
       headers: {},
       params: {},
       timeout: 10000,
       url: this.apiUrl,
-    }, options);
+      withCredentials: false,
+      ...options
+    };
 
     const url = options.url + endpoint;
     const opt = {
       headers: options.headers,
       params: options.params,
-      withCredentials: true,
+      withCredentials: options.withCredentials,
     };
 
     if (this.plt.is('cordova') && this.network.type === 'none') {

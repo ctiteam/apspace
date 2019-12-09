@@ -3,11 +3,12 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/attendix/classes"></ion-back-button>
     </ion-buttons>
-    <ion-title>
+    <ion-title class="ion-text-center">
       {{ schedule!.classcode }} {{ totalPresentStudents$ | async }}/{{ totalStudents$ | async }}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button fill="outline" size="small" class="colored-text colored-border" (click)="auto = !auto">
+      <ion-button fill="outline" size="small" class="colored-text colored-border"
+        (click)="auto = !auto">
         {{ auto ? 'Manual' : 'Auto' }}
       </ion-button>
     </ion-buttons>

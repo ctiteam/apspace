@@ -72,6 +72,7 @@ xdescribe('MarkAttendancePage', () => {
     apollo.expectNone(AttendanceDocument);
 
     expect(component).toBeTruthy();
+    expect(component.auto).toEqual(true);
   });
 
   xit('should request init attendance and attendance', () => {
@@ -88,5 +89,6 @@ xdescribe('MarkAttendancePage', () => {
     });
 
     expect(component).toBeTruthy();
+    expect(component.auto).toEqual(false);
   });
 });
