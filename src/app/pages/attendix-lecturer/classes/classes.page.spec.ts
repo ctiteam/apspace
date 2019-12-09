@@ -1,5 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { IonSelect, ModalController } from '@ionic/angular';
 import { NEVER } from 'rxjs';
 
@@ -20,6 +21,7 @@ describe('ClassesPage', () => {
       declarations: [ClassesPage, IonSelect],
       providers: [
         { provide: ModalController, useValue: {} },
+        { provide: Router, useValue: {} },
         { provide: StudentTimetableService, useValue: ttSpy },
         { provide: WsApiService, useValue: wsSpy },
       ],
