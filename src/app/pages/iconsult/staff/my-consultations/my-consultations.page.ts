@@ -212,13 +212,13 @@ export class MyConsultationsPage {
 
         let cancelAvailableSlotDetails;
         availableSlots.length > 0
-        ? cancelAvailableSlotDetails = `<br /><ion-icon name="checkbox-outline"></ion-icon>${this.createAlertMessage(availableSlots)}`
+        ? cancelAvailableSlotDetails = `<br /><p><b>Available Slots</b></p>${this.createAlertMessage(availableSlots)}`
         : cancelAvailableSlotDetails = '';
 
         const alertBooked = await this.alertController.create({
           header: 'Warning',
           subHeader: 'You have booked slots that you\'re about to cancel. Do you want to continue? :',
-          message: `<ion-icon name="calendar"></ion-icon>${cancelBookedSlotDetails}
+          message: `<p><b>Booked Slots</b></p>${cancelBookedSlotDetails}
                     ${cancelAvailableSlotDetails}`,
           buttons: [
             {
