@@ -21,6 +21,10 @@ jobs:
         echo task - ${{ github.event.deployment.task }}
         echo environment - ${{ github.event.deployment.task }}
         echo payload - ${{ github.event.deployment.payload }}
+        yarn install
+        ng build --prod
+        aws s3 sync www/ s3://apspace-production/ --acl public-read
+        aws cloudfront create-invalidation --distribution-id E2U0MAK0TADMRA --paths "/*"
 
     - name: Deployment success
       if: success()
