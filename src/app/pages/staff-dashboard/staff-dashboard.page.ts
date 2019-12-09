@@ -475,7 +475,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
         timetables.forEach((timetable: LecturerTimetable) => {
           let classPass = false;
-          if (this.eventPass(timetable.time, d)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
+          if (this.eventPass(moment(timetable.time).format('HH:mm A'), d)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
             classPass = true;
           }
 
