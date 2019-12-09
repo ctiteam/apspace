@@ -101,9 +101,10 @@ export class AddFreeSlotPage implements OnInit {
       noOfWeeks: [0],
       endDate: [''],
       location: [this.settings.get('defaultCampus') || '', Validators.required], // always required
-      venue: [this.settings.get('defaultVenue') || '', Validators.required], // alwayes required
+      venue: [this.settings.get('defaultVenue') || {}, Validators.required], // alwayes required
       time: this.formBuilder.array([this.initTimeSlots()])
     });
+
   }
 
   initTimeSlots(): FormGroup {
@@ -205,76 +206,72 @@ export class AddFreeSlotPage implements OnInit {
       }
     }
 
-    let getVenue;
-
-    this.venues$.pipe(
-      map(venues => venues.filter(venue => venue.id === this.addFreeSlotForm.value.venue)),
-      tap(response => getVenue = response[0])
-    ).subscribe();
-
-    // <p><strong>Slot End Date: </strong> ${this.addFreeSlotForm.value.endDate || 'N/A'}</p> *temporary remove from alert
-    this.alertCtrl
-      .create({
-        header: 'Adding new slot(s)',
-        subHeader:
-          'Are you sure you want to add new slot(s) with the following details:',
-        message: `<p><strong>Slot Date: </strong> ${this.addFreeSlotForm.value.startDate}</p>
-
-                  <p><strong>Slot Time: </strong> ${this.addFreeSlotForm.value.time.map(time => moment(time.slotsTime).format('kk:mm'))}</p>
-                  <p><strong>Slot Location: </strong> ${this.addFreeSlotForm.value.location}</p>
-                  <p><strong>Slot Venue: </strong> ${getVenue.room_code} </p>`,
-        buttons: [
-          {
-            text: 'No',
-            handler: () => { }
-          },
-          {
-            text: 'Yes',
-            handler: () => {
-              this.presentLoading();
-              this.ws
-                .post<any>('/iconsult/slot?', {
-                  body
-                })
-                .subscribe({
-                  next: () => {
-                    this.showToastMessage(
-                      'Slot(s) added successfully!',
-                      'success'
-                    );
-                  },
-                  error: (err) => {
-                    this.dismissLoading();
-                    this.showToastMessage(
-                      err.status + ': ' + err.error.error,
-                      'danger'
-                    );
-                  },
-                  complete: () => {
-                    if (
-                      this.addFreeSlotForm.value.venue !==
-                      this.settings.get('defaultVenue')
-                    ) {
-                      this.showDefaultLocationWarningAlert(
-                        this.addFreeSlotForm.value.location,
-                        this.addFreeSlotForm.value.venue
+    this.venues$.subscribe(venues => {
+      const venue = venues.find(v => v.id === this.addFreeSlotForm.value.venue);
+      this.alertCtrl
+        .create({
+          header: 'Adding new slot(s)',
+          subHeader:
+            'Are you sure you want to add new slot(s) with the following details:',
+          message: `<p><strong>Slot Date: </strong> ${this.addFreeSlotForm.value.startDate}</p>
+                    <p><strong>Slot Time: </strong>
+                    ${this.addFreeSlotForm.value.time.map(time => moment(time.slotsTime).format('kk:mm'))}</p>
+                    <p><strong>Slot Location: </strong> ${this.addFreeSlotForm.value.location}</p>
+                    <p><strong>Slot Venue: </strong> ${venue.room_code} </p>`,
+          buttons: [
+            {
+              text: 'No',
+              handler: () => { }
+            },
+            {
+              text: 'Yes',
+              handler: () => {
+                this.presentLoading();
+                this.ws
+                  .post<any>('/iconsult/slot?', {
+                    body
+                  })
+                  .subscribe({
+                    next: () => {
+                      this.showToastMessage(
+                        'Slot(s) added successfully!',
+                        'success'
+                      );
+                    },
+                    error: (err) => {
+                      this.dismissLoading();
+                      this.showToastMessage(
+                        err.status + ': ' + err.error.error,
+                        'danger'
+                      );
+                    },
+                    complete: () => {
+                      if (
+                        this.addFreeSlotForm.value.venue !==
+                        this.settings.get('defaultVenue')
+                      ) {
+                        this.showDefaultLocationWarningAlert(
+                          this.addFreeSlotForm.value.location,
+                          this.addFreeSlotForm.value.venue
+                        );
+                      }
+                      this.dismissLoading();
+                      const navigationExtras: NavigationExtras = {
+                        state: { reload: true }
+                      };
+                      this.router.navigateByUrl(
+                        'iconsult/my-consultations',
+                        navigationExtras
                       );
                     }
-                    this.dismissLoading();
-                    const navigationExtras: NavigationExtras = {
-                      state: { reload: true }
-                    };
-                    this.router.navigateByUrl(
-                      'iconsult/my-consultations',
-                      navigationExtras
-                    );
-                  }
-                });
+                  });
+              }
             }
-          }
-        ]
-      })
-      .then(confirm => confirm.present());
+          ]
+        })
+        .then(confirm => confirm.present());
+    });
+
   }
 
   showToastMessage(message: string, color: 'danger' | 'success') {
