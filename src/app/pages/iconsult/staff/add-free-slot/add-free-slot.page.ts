@@ -15,6 +15,7 @@ import { Venue } from 'src/app/interfaces';
 import { SettingsService, WsApiService } from 'src/app/services';
 
 import * as moment from 'moment';
+import { map, shareReplay, tap } from 'rxjs/operators';
 import { AddFreeSlotValidator } from './add-free-slot.validator';
 
 @Component({
@@ -85,7 +86,7 @@ export class AddFreeSlotPage implements OnInit {
     if (this.settings.get('defaultCampus')) {
       this.venues$ = this.ws.get<Venue[]>(
         `/iconsult/locations?venue=${this.settings.get('defaultCampus')}`
-      );
+      ).pipe(shareReplay(1));
     }
 
     this.addFreeSlotForm = this.formBuilder.group({
@@ -204,16 +205,24 @@ export class AddFreeSlotPage implements OnInit {
       }
     }
 
+    let getVenue;
+
+    this.venues$.pipe(
+      map(venues => venues.filter(venue => venue.id === this.addFreeSlotForm.value.venue)),
+      tap(response => getVenue = response[0])
+    ).subscribe();
+
+    // <p><strong>Slot End Date: </strong> ${this.addFreeSlotForm.value.endDate || 'N/A'}</p> *temporary remove from alert
     this.alertCtrl
       .create({
         header: 'Adding new slot(s)',
         subHeader:
           'Are you sure you want to add new slot(s) with the following details:',
         message: `<p><strong>Slot Date: </strong> ${this.addFreeSlotForm.value.startDate}</p>
-                  <p><strong>Slot End Date: </strong> ${this.addFreeSlotForm.value.endDate || 'N/A'}</p>
+
                   <p><strong>Slot Time: </strong> ${this.addFreeSlotForm.value.time.map(time => moment(time.slotsTime).format('kk:mm'))}</p>
                   <p><strong>Slot Location: </strong> ${this.addFreeSlotForm.value.location}</p>
-                  <p><strong>Slot Venue: </strong> ${this.addFreeSlotForm.value.venue} </p>`,
+                  <p><strong>Slot Venue: </strong> ${getVenue.room_code} </p>`,
         buttons: [
           {
             text: 'No',
