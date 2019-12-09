@@ -114,9 +114,10 @@
       <!-- INSPIRATIONAL QUOTES -->
       <div id="inspirationalQuote" class="masonry-item" *ngIf="shownDashboardSections.includes('inspirationalQuote')">
         <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+          <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('inspirationalQuote')"></ion-icon>
           <ion-icon name="move" class="handle"></ion-icon>
         </div>
-        <ion-card>
+        <ion-card class="ion-no-margin">
           <ion-card-header>
             <ion-card-title>
               Inspirational Quote
