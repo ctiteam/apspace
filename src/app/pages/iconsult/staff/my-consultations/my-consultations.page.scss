@@ -178,3 +178,7 @@ ion-col {
   font-size: 0.9em;
   display: block;
 }
+
+::ng-deep .dark-theme ion-checkbox, .dark-theme.pure ion-checkbox {
+  --border-color: var(--ion-color-medium);
+}
