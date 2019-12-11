@@ -58,7 +58,8 @@
               <ion-row justify-content-center>
                 <div *ngIf="(intake$ | async) as intakes">
                   <ion-col size="auto" *ngFor="let intake of intakes">
-                    <ion-button [fill]="selectedIntake === intake.INTAKE_CODE ? 'solid' : 'outline'" (click)="onTap(intake.INTAKE_CODE)"> {{ intake.INTAKE_CODE }} </ion-button>
+                    <ion-button [fill]="selectedIntake === intake.INTAKE_CODE ? 'solid' : 'outline'"
+                      (click)="onTap(intake.INTAKE_CODE)"> {{ intake.INTAKE_CODE }} </ion-button>
                   </ion-col>
                 </div>
               </ion-row>
@@ -155,84 +156,117 @@
       </ion-col>
 
       <ion-col size-xs="12" size-lg="8">
+        <ion-searchbar [(ngModel)]="search" placeholder="Search (e.g. 'Module', 'Result', 'Credit Hours', ...)"
+          showCancelButton="focus" animated>
+        </ion-searchbar>
+
+        <ion-item lines="none" class="filter-item">
+          <ion-chip *ngFor="let filter of shownFilters;" (click)="removeFilter(filter)">
+            <ion-icon name="search" color="primary"></ion-icon>
+            <ion-label>{{ filter }}</ion-label>
+            <ion-icon name="close"></ion-icon>
+          </ion-chip>
+
+          <ion-chip outline item-content>
+            <ion-icon name="add" color="danger"></ion-icon>
+            <ion-label>Add Filter</ion-label>
+            <ion-select
+                [(ngModel)]="shownFilters" 
+                multiple="true" 
+                cancelText="Dismiss" 
+                selectedText=" "
+                #filterSelect>
+                <ion-select-option *ngFor="let filter of allFilters">
+                  {{ filter }}
+                </ion-select-option>
+              </ion-select>
+            </ion-chip>
+        </ion-item>
+
         <div *ngIf="(subCourse$ | async) as subCourses; else loadingSemester">
           <div *ngIf="subCourses.length > 0; else noData">
             <div *ngFor="let semester of (subCourses | reverse)">
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>
-                    <h4 class="responsive-h1">Semester {{ semester.index }}</h4>
-                  </ion-card-title>
-                </ion-card-header>
+              <div *ngIf="(semester.value | search:search | filter:shownFilters).length > 0">
+                <ion-card>
+                  <ion-card-header>
+                    <ion-card-title>
+                      <h4 class="responsive-h1">Semester {{ semester.index }}</h4>
+                    </ion-card-title>
+                  </ion-card-header>
 
-                <ion-card-content>
-                  <ion-item lines="none" class="ion-no-padding table-top">
-                    <ion-grid class="ion-no-padding">
-                      <ion-row>
-                        <ion-col class="bold" size="3">
-                          Module
-                        </ion-col>
+                  <ion-card-content>
+                    <ion-item lines="none" class="ion-no-padding table-top">
+                      <ion-grid class="ion-no-padding">
+                        <ion-row>
+                          <ion-col class="bold" size="3">
+                            Module
+                          </ion-col>
 
-                        <ion-col class="bold" size="2">
-                          Total Class
-                        </ion-col>
+                          <ion-col class="bold" size="2">
+                            Total Class
+                          </ion-col>
 
-                        <ion-col class="bold" size="2">
-                          Attend Percent
-                        </ion-col>
+                          <ion-col class="bold" size="2">
+                            Attend Percent
+                          </ion-col>
 
-                        <ion-col class="bold" size="2">
-                          Credit Hours
-                        </ion-col>
+                          <ion-col class="bold" size="2">
+                            Credit Hours
+                          </ion-col>
 
-                        <ion-col class="bold" size="1">
-                          Result
-                        </ion-col>
+                          <ion-col class="bold" size="1">
+                            Result
+                          </ion-col>
 
-                        <ion-col class="bold" size="2">
-                          Grade Point
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-item>
+                          <ion-col class="bold" size="2">
+                            Grade Point
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-item>
 
-                  <ion-item lines="none" *ngFor="let value of (semester.value)" class="table-item" button details>
-                    <ion-grid class="ion-no-padding">
-                      <ion-row>
-                        <ion-col class="margin-auto colored-text" size-lg="3" size="12">
-                          <a (click)="showDetails(value.MODULE_CODE)">{{ value.MODULE_CODE }}</a>
-                        </ion-col>
+                    <ion-item 
+                      lines="none" 
+                      *ngFor="let value of (semester.value | search:search | filter:shownFilters)" class="table-item"
+                      button 
+                      details>
+                      <ion-grid class="ion-no-padding">
+                        <ion-row>
+                          <ion-col class="margin-auto colored-text" size-lg="3" size="12">
+                            <a (click)="showDetails(value.MODULE_CODE)">{{ value.MODULE_CODE }}</a>
+                          </ion-col>
 
-                        <ion-col class="margin-auto" size-lg="2" size="12">
-                          <span class="marker">Total Class:</span>
-                          {{ value.TOTAL_CLASS || "N/A" }}
-                        </ion-col>
+                          <ion-col class="margin-auto" size-lg="2" size="12">
+                            <span class="marker">Total Class:</span>
+                            {{ value.TOTAL_CLASS || "N/A" }}
+                          </ion-col>
 
-                        <ion-col class="margin-auto" size-lg="2" size="12">
-                          <span class="marker">Attend Percent:</span>
-                          <span
-                            [class]="value.TOTAL_ATTEND_PERCENT < 80 ? 'red' : ''">{{ value.TOTAL_ATTEND_PERCENT + "%" || "N/A" }}</span>
-                        </ion-col>
+                          <ion-col class="margin-auto" size-lg="2" size="12">
+                            <span class="marker">Attend Percent:</span>
+                            <span
+                              [class]="value.TOTAL_ATTEND_PERCENT < 80 ? 'red' : ''">{{ value.TOTAL_ATTEND_PERCENT + "%" || "N/A" }}</span>
+                          </ion-col>
 
-                        <ion-col class="margin-auto" size-lg="2" size="12">
-                          <span class="marker">Credit Hours:</span>
-                          {{ value.CREDIT_HOURS || "N/A" }}
-                        </ion-col>
+                          <ion-col class="margin-auto" size-lg="2" size="12">
+                            <span class="marker">Credit Hours:</span>
+                            {{ value.CREDIT_HOURS || "N/A" }}
+                          </ion-col>
 
-                        <ion-col class="margin-auto" size-lg="1" size="12">
-                          <span class="marker">Result:</span>
-                          {{ value.RESULT || "N/A" }}
-                        </ion-col>
+                          <ion-col class="margin-auto" size-lg="1" size="12">
+                            <span class="marker">Result:</span>
+                            {{ value.RESULT || "N/A" }}
+                          </ion-col>
 
-                        <ion-col class="margin-auto" size-lg="2" size="12">
-                          <span class="marker">Grade Point:</span>
-                          {{ value.GRADE_POINT || "N/A" }}
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-item>
-                </ion-card-content>
-              </ion-card>
+                          <ion-col class="margin-auto" size-lg="2" size="12">
+                            <span class="marker">Grade Point:</span>
+                            {{ value.GRADE_POINT || "N/A" }}
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-item>
+                  </ion-card-content>
+                </ion-card>
+              </div>
             </div>
           </div>
         </div>

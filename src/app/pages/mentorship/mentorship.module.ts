@@ -5,7 +5,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { MentorshipPage } from './mentorship.page';
-import { SearchPipe } from './search.pipe';
+import { FilterPipe } from './pipes/filter.pipe';
+import { SearchPipe } from './pipes/search.pipe';
 
 const routes: Routes = [
   {
@@ -27,6 +28,6 @@ const routes: Routes = [
     ComponentsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [MentorshipPage, SearchPipe]
+  declarations: [MentorshipPage, SearchPipe, FilterPipe]
 })
 export class MentorshipPageModule {}

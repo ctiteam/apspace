@@ -18,8 +18,8 @@ export class MentorshipService {
     return this.ws.get<Mentorship[]>('/student_list', { url: this.apiUrl });
   }
 
-  getStudentPhoto(tp: string): Observable<any> {
-    return this.ws.get<any>(`/student/photo?id=${tp}`, { url: this.apiUrl });
+  getStudentPhoto(): Observable<any> {
+    return this.ws.get<any>('https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png');
   }
 
   getStudentProfile(tp: string): Observable<StudentProfile> {

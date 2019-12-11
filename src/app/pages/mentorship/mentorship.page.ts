@@ -11,8 +11,9 @@ import { MentorshipService } from 'src/app/services/mentorship.service';
 export class MentorshipPage {
 
   loadingSkeletons = Array(4);
-  search = '';
   students$: Observable<Mentorship[]>;
+  search = '';
+  filter = '';
 
   constructor(
     private mentorship: MentorshipService
