@@ -167,7 +167,7 @@
             <ion-icon name="close"></ion-icon>
           </ion-chip>
 
-          <ion-chip outline item-content>
+          <ion-chip outline>
             <ion-icon name="add" color="danger"></ion-icon>
             <ion-label>Add Filter</ion-label>
             <ion-select
@@ -176,7 +176,7 @@
                 cancelText="Dismiss" 
                 selectedText=" "
                 #filterSelect>
-                <ion-select-option *ngFor="let filter of allFilters">
+                <ion-select-option *ngFor="let filter of allFilters" [value]=filter>
                   {{ filter }}
                 </ion-select-option>
               </ion-select>
