@@ -26,7 +26,7 @@ export class ViewStudentPage {
   subCourse$: Observable<{ index: string; value: any }[]>;
   profileSkeleton = new Array(4);
 
-  allFilters = ['low-attendance'];
+  allFilters = ['low-attendance', 'passed'];
 
   shownFilters: string[];
 
@@ -42,7 +42,10 @@ export class ViewStudentPage {
     this.profile$ = this.mentorship.getStudentProfile(this.tp);
     this.intake$ = this.mentorship.getIntakes(this.tp);
     this.onTap(this.selectedIntake);
+    this.runModifierForSelect();
+  }
 
+  runModifierForSelect() {
     // Remove the stupid select-icon, select-text
     const ionSelects = document.querySelectorAll('ion-select');
     ionSelects.forEach((select) => {

@@ -2,7 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Subcourse } from 'src/app/interfaces/mentorship';
 
 const filterMap = {
-  'low-attendance': (item: Subcourse) => item.TOTAL_ATTEND_PERCENT < 80
+  'low-attendance': (item: Subcourse) => item.TOTAL_ATTEND_PERCENT < 80,
+  // tslint:disable-next-line: object-literal-key-quotes
+  'passed': (item: Subcourse) => item.GRADE_POINT > '2.0'
 };
 
 @Pipe({

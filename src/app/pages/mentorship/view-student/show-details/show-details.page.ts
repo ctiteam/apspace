@@ -17,7 +17,7 @@ export class ShowDetailsPage {
 
   attendance$: Observable<Attendance[]>;
   result$: Observable<Result[]>;
-  selectedSegment = 'attendance';
+  selectedSegment = 'result';
 
   constructor(
     private mentorship: MentorshipService,

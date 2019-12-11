@@ -207,7 +207,7 @@
                           </ion-col>
 
                           <ion-col class="bold" size="2">
-                            Attend Percent
+                            Attendance (%)
                           </ion-col>
 
                           <ion-col class="bold" size="2">
@@ -244,7 +244,7 @@
                           <ion-col class="margin-auto" size-lg="2" size="12">
                             <span class="marker">Attend Percent:</span>
                             <span
-                              [class]="value.TOTAL_ATTEND_PERCENT < 80 ? 'red' : ''">{{ value.TOTAL_ATTEND_PERCENT + "%" || "N/A" }}</span>
+                              [class]="value.TOTAL_ATTEND_PERCENT < 80 ? 'red' : ''">{{ value.TOTAL_ATTEND_PERCENT || "N/A" }}</span>
                           </ion-col>
 
                           <ion-col class="margin-auto" size-lg="2" size="12">
