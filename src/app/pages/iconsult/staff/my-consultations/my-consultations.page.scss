@@ -137,9 +137,9 @@ ion-col {
     }
   }
 
-  &:not(.no-hover):hover {
-    background: var(--main-bg-color);
-  }
+  // &:not(.no-hover):hover {
+  //   background: var(--main-bg-color);
+  // }
 
   &.booked {
     border-color: var(--danger-color);
@@ -159,9 +159,9 @@ ion-col {
   }
 }
 
-.event-container:not(.no-hover):hover {
-  border-left-width: 10px;
-}
+// .event-container:not(.no-hover):hover {
+//   border-left-width: 10px;
+// }
 
 .grid-padding {
   padding-top: 3px;
@@ -181,4 +181,11 @@ ion-col {
 
 ::ng-deep .dark-theme ion-checkbox, .dark-theme.pure ion-checkbox {
   --border-color: var(--ion-color-medium);
+}
+
+.skeleton-content-center {
+  display: flex;
+  flex-direction: auto;
+  justify-content: center;
+  align-items: flex-end;
 }
