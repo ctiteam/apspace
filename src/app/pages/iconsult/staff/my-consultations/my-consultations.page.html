@@ -161,7 +161,7 @@
             </ion-card-header>
             <ion-card-content>
               <div class="event-calendar">
-                <div class="event" *ngFor="let slot of slotsToBeCancelled;">
+                <div class="event" *ngFor="let slot of slotsToBeCancelled; let i = index;">
                   <div class="event-container" [ngClass]="{
                                         'booked': slot.status === 'Booked',
                                         'available': slot.status === 'Available',
@@ -177,6 +177,13 @@
                             <ion-icon name="pin"></ion-icon>
                             {{slot.room_code}} | {{slot.venue}}
                           </span>
+                        </ion-col>
+                        <ion-col class="ion-text-end">
+                          <ion-buttons class="close-button-align">
+                            <ion-button (click)="removeRangeSelectedSlot(i)">
+                              <ion-icon color="medium" slot="icon-only" name="close"></ion-icon>
+                            </ion-button>
+                          </ion-buttons>
                         </ion-col>
                       </ion-row>
                     </ion-grid>

@@ -163,6 +163,10 @@ export class MyConsultationsPage {
     this.slotsToBeCancelled = [];
   }
 
+  removeRangeSelectedSlot(i) {
+    this.slotsToBeCancelled.splice(i, 1);
+  }
+
   createAlertMessage(slotsToBeCancelled) {
     const filteredTimes = [] as { date: string; times: string[]; }[];
 

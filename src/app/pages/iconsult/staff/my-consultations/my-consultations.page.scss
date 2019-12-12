@@ -189,3 +189,11 @@ ion-col {
   justify-content: center;
   align-items: flex-end;
 }
+
+ion-buttons.close-button-align {
+  display: inline-block;
+
+  ion-button {
+    --background: transparent !important;
+  }
+}
