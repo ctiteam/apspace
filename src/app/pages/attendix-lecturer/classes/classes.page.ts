@@ -158,7 +158,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
 
     if (new Set(guessSchedules.map(schedule => schedule.MODID)).size !== 1) {
       this.toastCtrl.create({
-        message: "Fail to auto complete, suggested to switch to 'Manual' mode",
+        message: 'Fail to auto complete, suggested to switch to \'Manual\' mode',
         duration: 2000,
         position: 'top',
         showCloseButton: true,
