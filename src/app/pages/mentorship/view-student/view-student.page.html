@@ -55,11 +55,14 @@
 
           <ion-footer>
             <ion-grid>
-              <ion-row justify-content-center>
+              <ion-row class="ion-justify-content-center">
                 <div *ngIf="(intake$ | async) as intakes">
                   <ion-col size="auto" *ngFor="let intake of intakes">
-                    <ion-button [fill]="selectedIntake === intake.INTAKE_CODE ? 'solid' : 'outline'"
-                      (click)="onTap(intake.INTAKE_CODE)"> {{ intake.INTAKE_CODE }} </ion-button>
+                    <ion-button 
+                      [fill]="selectedIntake === intake.INTAKE_CODE ? 'solid' : 'outline'"
+                      (click)="onTap(intake.INTAKE_CODE)"> 
+                      {{ intake.INTAKE_CODE }} 
+                    </ion-button>
                   </ion-col>
                 </div>
               </ion-row>
@@ -82,8 +85,8 @@
           </ion-card>
         </ng-template>
 
-        <div *ngIf="(courseDetail$ | async) as courseDetail; else loadingCourseDetail;">
-          <div *ngIf="courseDetail.length > 0">
+        <ng-container *ngIf="(courseDetail$ | async) as courseDetail; else loadingCourseDetail;">
+          <ng-container *ngIf="courseDetail.length > 0">
             <ion-card>
               <ion-card-header class="ion-no-margin">
                 <ion-card-title>
@@ -143,8 +146,8 @@
                 </ion-grid>
               </ion-card-content>
             </ion-card>
-          </div>
-        </div>
+          </ng-container>
+        </ng-container>
 
         <ng-template #loadingCourseDetail>
           <ion-card class="ion-no-padding">
@@ -156,9 +159,7 @@
       </ion-col>
 
       <ion-col size-xs="12" size-lg="8">
-        <ion-searchbar [(ngModel)]="search" placeholder="Search (e.g. 'Module', 'Result', 'Credit Hours', ...)"
-          showCancelButton="focus" animated>
-        </ion-searchbar>
+        <ion-searchbar [(ngModel)]="search" placeholder="Search (e.g. 'Module', 'Result', 'Credit Hours', ...)" animated></ion-searchbar>
 
         <ion-item lines="none" class="filter-item">
           <ion-chip *ngFor="let filter of shownFilters;" (click)="removeFilter(filter)">
@@ -174,8 +175,7 @@
                 [(ngModel)]="shownFilters" 
                 multiple="true" 
                 cancelText="Dismiss" 
-                selectedText=" "
-                #filterSelect>
+                selectedText=" ">
                 <ion-select-option *ngFor="let filter of allFilters" [value]=filter>
                   {{ filter }}
                 </ion-select-option>
@@ -183,15 +183,38 @@
             </ion-chip>
         </ion-item>
 
-        <div *ngIf="(subCourse$ | async) as subCourses; else loadingSemester">
-          <div *ngIf="subCourses.length > 0; else noData">
-            <div *ngFor="let semester of (subCourses | reverse)">
-              <div *ngIf="(semester.value | search:search | filter:shownFilters).length > 0">
+        <ng-container *ngIf="(subCourse$ | async) as subCourses; else loadingSemester">
+          <ng-container *ngIf="subCourses.length > 0; else noData">
+            <ng-container *ngFor="let semester of subCourses | reverse">
+              <ng-container *ngIf="(semester.value | search:search | filter:shownFilters).length > 0">
                 <ion-card>
                   <ion-card-header>
                     <ion-card-title>
                       <h4 class="responsive-h1">Semester {{ semester.index }}</h4>
                     </ion-card-title>
+
+                    <ion-grid class="ion-no-padding">
+                      <ion-row>
+                        <ion-col size-lg="6" size="12">
+                          <span class="bold">Total Modules Passed</span>
+                          <span class="ion-float-right right-notch">{{ semester.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</span>
+                        </ion-col>
+                        <ion-col size-lg="6" size="12">
+                          <span class="bold">Total Credit hours</span>
+                          <span class="ion-float-right right-notch">{{ semester.summary[0]?.TOTAL_CREDIT_HOURS || 'N/A' }}</span>
+                        </ion-col>
+
+                        <ion-col size-lg="6" size="12">
+                          <span class="bold">Credits transferred</span>
+                          <span class="ion-float-right right-notch">{{ semester.summary[0]?.CREDIT_TRANSFERRED || 'N/A' }}</span>
+                        </ion-col>
+
+                        <ion-col size-lg="6" size="12">
+                          <span class="bold">GPA</span>
+                          <span class="ion-float-right right-notch">{{ semester.summary[0]?.GPA || 'N/A' }}</span>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
                   </ion-card-header>
 
                   <ion-card-content>
@@ -266,10 +289,10 @@
                     </ion-item>
                   </ion-card-content>
                 </ion-card>
-              </div>
-            </div>
-          </div>
-        </div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
         <ng-template #loadingSemester>
           <ion-card class="ion-no-padding">
             <ion-card-content class="ion-no-padding">

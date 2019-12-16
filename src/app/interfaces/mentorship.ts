@@ -68,3 +68,13 @@ export interface Result {
     STUDENT_NUMBER: string;
     SUBJECT_CODE: string;
 }
+
+export interface SemesterSummary {
+    CREDIT_TRANSFERRED: number;
+    GPA: number;
+    IMMIGRATION_GPA: number;
+    SEMESTER: number;
+    SEMESTER_ATTENDANCE: number;
+    TOTAL_CREDIT_HOURS: number;
+    TOTAL_MODULES_PASSED: number;
+}

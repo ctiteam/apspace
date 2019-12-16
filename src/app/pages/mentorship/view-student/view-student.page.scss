@@ -51,7 +51,6 @@ ion-item {
   margin-top: 20px !important;
 }
 
-
 .red {
   color: red !important;
 }
@@ -68,6 +67,10 @@ ion-item {
   padding-left: 8px;
   padding-right: 8px;
   --padding-start: 10px;
+}
+
+.right-notch {
+  padding-right: 10px;
 }
 
 @media only screen and (min-width: 577px) {
