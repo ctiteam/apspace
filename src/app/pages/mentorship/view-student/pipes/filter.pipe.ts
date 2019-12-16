@@ -4,7 +4,9 @@ import { Subcourse } from 'src/app/interfaces/mentorship';
 const filterMap = {
   'low-attendance': (item: Subcourse) => item.TOTAL_ATTEND_PERCENT < 80,
   // tslint:disable-next-line: object-literal-key-quotes
-  'passed': (item: Subcourse) => item.GRADE_POINT > '2.0'
+  'failed': (item: Subcourse) => item.GRADE_POINT < '2.00',
+  'full-attendance': (item: Subcourse) => item.TOTAL_ATTEND_PERCENT === 100,
+  'full-cgpa': (item: Subcourse) => item.GRADE_POINT === '4.00'
 };
 
 @Pipe({

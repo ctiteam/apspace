@@ -12,6 +12,10 @@ export class SearchPipe implements PipeTransform {
     } else {
       return results.filter(
         r => r.MODULE_CODE.toLowerCase().includes(search.toLowerCase())
+            || r.CREDIT_HOURS.toLowerCase().includes(search.toLowerCase())
+            || r.MODULE_NAME.toLowerCase().includes(search.toLowerCase())
+            || r.TOTAL_CLASS.toString().toLowerCase().includes(search.toLowerCase())
+            || r.TOTAL_ATTEND_PERCENT.toString().includes(search.toLowerCase())
       );
     }
   }

@@ -26,7 +26,7 @@ export class ViewStudentPage {
   subCourse$: Observable<{ index: string; value: any }[]>;
   profileSkeleton = new Array(4);
 
-  allFilters = ['low-attendance', 'passed'];
+  allFilters = ['low-attendance', 'full-attendance', 'failed', 'full-cgpa'];
 
   shownFilters: string[];
 
