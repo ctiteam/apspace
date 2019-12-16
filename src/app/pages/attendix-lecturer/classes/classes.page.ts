@@ -243,7 +243,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
   }
 
   /** Mark attendance, send feedback if necessary. */
-  mark() {
+  async mark() {
     if (!this.auto) {
       const body = {
         classcodes: this.classcodes,
@@ -266,7 +266,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
         manualEndTime: this.manualEndTime,
         manualClassType: this.manualClassType,
       };
-      this.ws.post('/attendix/selection', { body }).subscribe();
+      await this.ws.post('/attendix/selection', { body }).toPromise();
     }
     this.router.navigate(['/attendix/mark-attendance', {
       classcode: this.auto ? this.classcode : this.manualClasscode,
