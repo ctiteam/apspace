@@ -62,7 +62,8 @@ export class LecturerSlotDetailsModalPage implements OnInit {
             this.presentLoading();
 
             this.ws.put<any>('/iconsult/remark?', {
-              body
+              body,
+              url: this.url
             }).subscribe(
               {
                 next: _ => {

@@ -17,6 +17,7 @@ import {
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
+  iconsultStagingUrl = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
   userRole = false;
   test = false;
   activeAccentColor: string;
@@ -112,7 +113,7 @@ export class SettingsPage implements OnInit {
   }
 
   getVenues() {
-    this.venues$ = this.ws.get<Venue[]>(`/iconsult/locations?venue=${this.defaultCampus}`);
+    this.venues$ = this.ws.get<Venue[]>(`/iconsult/locations?venue=${this.defaultCampus}`, {url: this.iconsultStagingUrl});
   }
 
 

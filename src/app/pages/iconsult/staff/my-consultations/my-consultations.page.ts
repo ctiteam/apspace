@@ -404,12 +404,14 @@ export class MyConsultationsPage {
   sendCancelBookingRequest(cancelBookingDetails: any) {
     return this.ws.put<any>('/iconsult/booking/cancel?', {
       body: cancelBookingDetails,
+      url: this.url
     });
   }
 
   sendCancelSlotRequest(slotsId: any) {
     return this.ws.put<any>('/iconsult/slot/cancel?', {
-      body: slotsId
+      body: slotsId,
+      url: this.url
     });
   }
 
@@ -429,9 +431,10 @@ export class MyConsultationsPage {
 
     // FORK JOIN WITH BOOKINGS AND SLOTS
     this.slots$ = forkJoin([
-      this.ws.get<ConsultationSlot[]>('/iconsult/slots?'
+      this.ws.get<ConsultationSlot[]>('/iconsult/slots?',
+      {url: this.url}
       ),
-      this.ws.get<ConsultationHour[]>('/iconsult/bookings?')
+      this.ws.get<ConsultationHour[]>('/iconsult/bookings?', {url: this.url})
     ]).pipe(
       map(([slots, bookings]) =>
         slots.reduce((r, a) => {

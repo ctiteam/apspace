@@ -21,6 +21,7 @@ import { NewsModalPage } from '../news/news-modal';
 })
 export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // USER SETTINGS
+  iconsultStagingUrl = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
   @ViewChild('dragulaContainer', { static: true }) container: ElementRef; // access the dragula container
   @ViewChild('dashboardSectionsSelectBox', { static: true }) dashboardSectionsselectBoxRef: IonSelect; // hidden selectbox
   @ViewChild('slides', { static: false }) slides: IonSlides;
@@ -541,7 +542,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
     const consultationsEventMode: EventComponentConfigurations[] = [];
-    return forkJoin([this.ws.get<ConsultationHour[]>('/iconsult/bookings?'),
+    return forkJoin([this.ws.get<ConsultationHour[]>('/iconsult/bookings?', {url: this.iconsultStagingUrl}),
       this.ws.get<StaffDirectory[]>('/staff/listing')
     ]).pipe(
       map(([consultations, staffList]) => {

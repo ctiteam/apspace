@@ -107,6 +107,7 @@ export class BookSlotModalPage implements OnInit {
             this.presentLoading();
             this.ws.post<any>('/iconsult/booking?', {
               body: this.formModel,
+              url: this.url
             }).subscribe(
 
               {

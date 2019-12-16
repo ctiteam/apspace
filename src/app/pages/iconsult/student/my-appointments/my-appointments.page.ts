@@ -43,7 +43,7 @@ export class MyAppointmentsPage {
   }
 
   doRefresh(refresher?) {
-    const bookings$: Observable<ConsultationHour[]> = this.ws.get<ConsultationHour[]>('/iconsult/bookings?').pipe(
+    const bookings$: Observable<ConsultationHour[]> = this.ws.get<ConsultationHour[]>('/iconsult/bookings?', {url: this.url}).pipe(
       map(bookingList => { // Check if slot is passed and modify its status to passed
         return bookingList.map(bookings => {
           if (bookings.status === 'Booked' && new Date(moment(bookings.slot_start_time).utcOffset('+0800').format()) < new Date()) {
@@ -201,6 +201,7 @@ export class MyAppointmentsPage {
   sendCancelBookingRequest(cancelledBookingSlotDetails: any) {
     return this.ws.put<any>('/iconsult/booking/cancel?', {
       body: cancelledBookingSlotDetails,
+      url: this.url
     });
   }
 }
