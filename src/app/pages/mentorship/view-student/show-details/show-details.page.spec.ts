@@ -1,6 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { ModalController } from '@ionic/angular';
 
+import { MentorshipService } from 'src/app/services/mentorship.service';
 import { ShowDetailsPage } from './show-details.page';
 
 describe('ShowDetailsPage', () => {
@@ -9,7 +11,11 @@ describe('ShowDetailsPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ShowDetailsPage ],
+      declarations: [ShowDetailsPage],
+      providers: [
+        { provide: MentorshipService, useValue: {} },
+        { provide: ModalController, useValue: {} },
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
