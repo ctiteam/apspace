@@ -17,7 +17,7 @@ pipelines:
     '**':
       - step: *build-test
   branches:
-    v4-production:
+    production:
     - step:
         image: cticti/aws-cli:node-ionic-alpine
         caches:
@@ -27,7 +27,7 @@ pipelines:
           - ionic build --prod
           - aws s3 sync www/ s3://apspace-production/ --acl public-read
           - aws cloudfront create-invalidation --distribution-id E2U0MAK0TADMRA --paths "/*"
-    v4-staging:
+    staging:
     - step:
         image: cticti/aws-cli:node-ionic-alpine
         caches:
