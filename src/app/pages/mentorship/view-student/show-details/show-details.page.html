@@ -20,8 +20,8 @@
     <div *ngSwitchCase="'attendance'">
       <ion-card>
         <ion-card-content class="ion-no-padding">
-          <div *ngIf="(attendance$ | async) as attendances; else loadingAttendance">
-            <div *ngIf="attendances.length > 0; else emptyAttendance">
+          <ng-container *ngIf="(attendance$ | async) as attendances; else loadingAttendance">
+            <ng-container *ngIf="attendances.length > 0; else emptyAttendance">
               <ion-item lines="none" class="ion-no-padding table-top">
                 <ion-grid class="ion-no-padding">
                   <ion-row>
@@ -91,8 +91,8 @@
                   </ion-row>
                 </ion-grid>
               </ion-item>
-            </div>
-          </div>
+            </ng-container>
+          </ng-container>
 
           <ng-template #loadingAttendance>
             <ion-skeleton-text animated style="line-height: 200px;"></ion-skeleton-text>
@@ -112,8 +112,8 @@
       <ion-card>
         <ion-card-content>
 
-          <div *ngIf="(result$ | async) as results; else loadingResults">
-            <div *ngIf="results.length > 0; else emptyResult">
+          <ng-container *ngIf="(result$ | async) as results; else loadingResults">
+            <ng-container *ngIf="results.length > 0; else emptyResult">
               <ion-item lines="none" class="ion-no-padding table-top">
                 <ion-grid>
                   <ion-row>
@@ -187,8 +187,8 @@
                   </ion-row>
                 </ion-grid>
               </ion-item>
-            </div>
-          </div>
+            </ng-container>
+          </ng-container>
 
           <ng-template #loadingResults>
             <ion-skeleton-text animated style="line-height: 200px;"></ion-skeleton-text>
