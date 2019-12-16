@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonSelect, ModalController } from '@ionic/angular';
+import { IonSelect, ModalController, ToastController } from '@ionic/angular';
 
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -71,6 +71,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     private ws: WsApiService,
     private router: Router,
     public modalCtrl: ModalController,
+    public toastCtrl: ToastController,
   ) { }
 
   ngOnInit() {
@@ -156,6 +157,12 @@ export class ClassesPage implements AfterViewInit, OnInit {
     });
 
     if (new Set(guessSchedules.map(schedule => schedule.MODID)).size !== 1) {
+      this.toastCtrl.create({
+        message: "Fail to auto complete, suggested to switch to 'Manual' mode",
+        duration: 2000,
+        position: 'top',
+        showCloseButton: true,
+      }).then(toast => toast.present());
       console.warn('fail to auto complete', guessSchedules);
       return;
     }
