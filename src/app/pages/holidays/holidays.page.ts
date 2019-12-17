@@ -116,7 +116,7 @@ export class HolidaysPage {
             passColor: '#a49999',
             pass: moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate() < this.todaysDate,
             outputFormat: 'event-with-date-only',
-            type: 'holiday',
+            type: holiday.holiday_start_date.split('-')[0],
             dateOrTime: moment(moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate()).format('DD MMM (ddd)'), // EXPECTED FORMAT HH MM A
           });
         });
