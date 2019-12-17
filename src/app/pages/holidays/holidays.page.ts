@@ -46,7 +46,7 @@ export class HolidaysPage {
   getHolidays(refresher: boolean) {
     const caching = refresher ? 'network-or-cache' : 'cache-only';
     return this.holiday$ = this.ws.get<Holidays>(`/transix/holidays`, { auth: false, caching }).pipe(
-      map(res => res.holidays.filter(holiday => +holiday.holiday_start_date.split('-')[0] === this.todaysDate.getFullYear()))
+      map(res => res.holidays.filter(holiday => +holiday.holiday_start_date.split('-')[0] >= this.todaysDate.getFullYear())),
     );
   }
 
