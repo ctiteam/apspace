@@ -203,11 +203,11 @@
                   </ion-col>
                   <ion-col class="ion-no-padding" size-xs="12" size-md="7"
                     *ngIf="!addFreeSlotForm.get('location').hasError('required')">
-                    <ion-item lines="none" *ngIf="venues$ | async as venues; else loadingVenues">
+                    <ion-item lines="none">
                       <ion-label position="stacked" [ngClass]="{ 'danger-text': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
                       submitted && addFreeSlotForm.get('venue').hasError('required') }">Venue
                       </ion-label>
-                      <ion-select placeholder="Click to select" interface="alert" formControlName="venue" [ngClass]="{ 'is-invalid': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
+                      <ion-select *ngIf="venues$ | async as venues; else loadingVenues" placeholder="Click to select" interface="alert" formControlName="venue" [ngClass]="{ 'is-invalid': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
                       submitted && addFreeSlotForm.get('venue').hasError('required') }" class="form-input">
                         <ion-select-option *ngFor="let venue of venues" [value]="venue.id">
                           {{ venue.room_code }}
@@ -215,9 +215,7 @@
                       </ion-select>
                     </ion-item>
                     <ng-template #loadingVenues>
-                      <ion-item lines="none">
-                        <ion-skeleton-text animated class="ion-padding-vertical ion-margin-top"></ion-skeleton-text>
-                      </ion-item>
+                        <ion-skeleton-text animated class="ion-padding-vertical"></ion-skeleton-text>
                     </ng-template>
                     <div *ngIf="
                         (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
