@@ -58,7 +58,7 @@
     "apollo-client": "^2.6.4",
     "apollo-link": "^1.2.13",
     "apollo-link-http": "^1.5.16",
-    "aws-appsync": "^3.0.2",
+    "aws-appsync": "^2.0.2",
     "cordova-android": "^8.1.0",
     "cordova-browser": "^6.0.0",
     "cordova-ios": "^5.1.1",
