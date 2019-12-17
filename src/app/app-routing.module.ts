@@ -260,12 +260,12 @@ const routes: Routes = [
     data: { role: Role.Admin | Role.Lecturer },
     loadChildren: () => import('./pages/hr/hr.module').then(m => m.HrPageModule)
   },
-  {
-    path: 'mentorship',
-    canActivate: [AuthGuard],
-    data: { role: Role.Admin | Role.Lecturer },
-    loadChildren: './pages/mentorship/mentorship.module#MentorshipPageModule'
-  },
+  // {
+  //   path: 'mentorship',
+  //   canActivate: [AuthGuard],
+  //   data: { role: Role.Admin | Role.Lecturer },
+  //   loadChildren: './pages/mentorship/mentorship.module#MentorshipPageModule'
+  // },
   { // this path must always be at the end of the routes array
     path: '**',
     canActivate: [AuthGuard],
