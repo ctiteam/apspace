@@ -44,6 +44,11 @@
   --background-hover: #519657 !important;
 }
 
+ion-label {
+  --color: #000000 !important;
+  min-width: 15ex; /* force occupy some space on mobile */
+}
+
 ion-list,
 ion-item {
   background: transparent !important;

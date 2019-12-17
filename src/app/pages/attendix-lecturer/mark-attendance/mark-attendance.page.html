@@ -56,9 +56,11 @@
       <ion-virtual-scroll [items]="students$ | async | attendance:type | search:term"
         [trackBy]="trackById" approxItemHeight="48px">
         <ion-card *virtualItem="let student">
-          <ion-item [ngClass]="'state' + student.attendance">
+          <ion-item [ngClass]="'state' + student.attendance" lines="none">
+            <!-- XXX profile image API not ready
             <ion-img slot="start" src="error"
               (ionError)="$event.target.src = 'assets/img/profile.png'"></ion-img>
+            -->
             <ion-label>{{ student.id }} {{ student.name }}</ion-label>
             <ng-container slot="end">
               <ion-item *ngIf="student.attendance === 'N' || student.attendance === 'R'">

@@ -2579,10 +2579,10 @@ aws-appsync-subscription-link@^2.0.1:
     debug "2.6.9"
     url "^0.11.0"
 
-aws-appsync@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/aws-appsync/-/aws-appsync-3.0.2.tgz#7d97f37fffa61c11787961d0b6b83894e5018f3f"
-  integrity sha512-gGifzZ8EcEnxdyo4n+d0BTsTL8m0MWaV9xT3YUv+ni1czt3Hgw2gpD+LUEvVhF1w2F2Af7nlrR1LQHMZFb4dIQ==
+aws-appsync@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/aws-appsync/-/aws-appsync-2.0.2.tgz#967902946c90a137a6b4aa8fbdc1a333701f7b81"
+  integrity sha512-SHz+/B8N1bPZK4XrprwtZnJrovUA4edw8SU6YGLjvBeLZc3gwo20kvUNqpRk6ntjNabfnQ4zgzd2vr2+0mXo6g==
   dependencies:
     "@redux-offline/redux-offline" "2.5.2-native.0"
     apollo-cache-inmemory "1.3.12"

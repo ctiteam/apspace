@@ -46,6 +46,7 @@ amplify/backend/awscloudformation
 build/
 dist/
 node_modules/
+.gradle/
 aws-exports.js
 awsconfiguration.json
 graphql.schema.json

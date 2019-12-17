@@ -46,7 +46,7 @@ export class HolidaysPage {
   getHolidays(refresher: boolean) {
     const caching = refresher ? 'network-or-cache' : 'cache-only';
     return this.holiday$ = this.ws.get<Holidays>(`/transix/holidays`, { auth: false, caching }).pipe(
-      map(res => res.holidays.filter(holiday => +holiday.holiday_start_date.split('-')[0] === this.todaysDate.getFullYear()))
+      map(res => res.holidays.filter(holiday => +holiday.holiday_start_date.split('-')[0] >= this.todaysDate.getFullYear())),
     );
   }
 
@@ -116,7 +116,7 @@ export class HolidaysPage {
             passColor: '#a49999',
             pass: moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate() < this.todaysDate,
             outputFormat: 'event-with-date-only',
-            type: 'holiday',
+            type: holiday.holiday_start_date.split('-')[0],
             dateOrTime: moment(moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate()).format('DD MMM (ddd)'), // EXPECTED FORMAT HH MM A
           });
         });
