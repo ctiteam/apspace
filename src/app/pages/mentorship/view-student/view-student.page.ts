@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { StudentProfile } from 'src/app/interfaces';
+import { StudentPhoto, StudentProfile } from 'src/app/interfaces';
 import { CourseDetail, Intake } from 'src/app/interfaces/mentorship';
 import { MentorshipService } from 'src/app/services/mentorship.service';
 import { ShowDetailsPage } from './show-details/show-details.page';
@@ -19,6 +19,7 @@ export class ViewStudentPage {
   search: '';
 
   profile$: Observable<StudentProfile>;
+  profileImg$: Observable<StudentPhoto>;
   intake$: Observable<Intake[]>;
   selectedIntake$: Observable<Intake[]>;
 
@@ -43,6 +44,7 @@ export class ViewStudentPage {
     this.intake$ = this.mentorship.getIntakes(this.tp);
     this.onTap(this.selectedIntake);
     this.runModifierForSelect();
+    this.profileImg$ = this.mentorship.getStudentPhoto(this.tp);
   }
 
   runModifierForSelect() {

@@ -27,20 +27,33 @@
 
     <ion-list class="ion-padding" *ngIf="(students$ | async) as students; else loadingStudents"
       style="padding-top: 0px !important;">
-      <ng-container *ngFor="let student of (students | search:search | filter:filter)">
-        <ion-item button details
-          [routerLink]="['/', 'mentorship', student.STUDENT_NUMBER, student.INTAKE_CODE, 'view']">
-          <ion-avatar slot="start">
-            <img src="https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png">
-          </ion-avatar>
+      <ng-container *ngIf="students.length > 0; else noData">
+        <ng-container *ngFor="let student of (students | search:search | filter:filter)">
+          <ion-item button details
+            [routerLink]="['/', 'mentorship', student.STUDENT_NUMBER, student.INTAKE_CODE, 'view']">
+            <ion-avatar slot="start">
+              <img src="https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png">
+            </ion-avatar>
 
-          <ion-label>
-            <h5 class="name"> {{ student.NAME }} </h5>
-            <h3> {{ student.STUDENT_NUMBER }} | {{ student.INTAKE_CODE }} </h3>
-            <h3> {{ student.PROGRAMME }} </h3>
-          </ion-label>
-        </ion-item>
+            <ion-label>
+              <h5 class="name"> {{ student.NAME }} </h5>
+              <h3> {{ student.STUDENT_NUMBER }} | {{ student.INTAKE_CODE }} </h3>
+              <h3> {{ student.PROGRAMME }} </h3>
+            </ion-label>
+          </ion-item>
+        </ng-container>
       </ng-container>
+
+      <ng-template #noData>
+        <ion-card>
+          <ion-card-content>
+            <app-message-with-svg messageTitle="No students found!"
+              messageContent="looks like our magical elves has no data to show" imageUrl="assets/img/empty.svg"
+              wrapperOffset="3" wrapperSize="6">
+            </app-message-with-svg>
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
     </ion-list>
 
     <!-- Loading -->

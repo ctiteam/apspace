@@ -17,7 +17,11 @@
         <ion-card *ngIf="(profile$ | async) as profile; else loadingStudentProfile">
           <ion-card-content>
             <ion-avatar class="avatar">
-              <img src="https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png">
+              <ion-img [src]="
+                              'data:image/jpg;base64,' +
+                              (profileImg$ | async)?.base64_photo
+                              " (ionError)="$event.target.src = 'assets/img/no_img.png'">
+              </ion-img>
             </ion-avatar>
 
             <div class="text-center top-spacing">
@@ -185,40 +189,41 @@
           <ng-container *ngIf="subCourses.length > 0; else noData">
             <ng-container *ngFor="let semester of subCourses | reverse">
               <!-- start -->
-              <ng-container *ngIf="(semester.value | search:search | filter:shownFilters).length > 0; else noData">
-                <ion-card>
-                  <ion-card-header>
-                    <ion-card-title>
-                      <h4 class="responsive-h1">Semester {{ semester.index }}</h4>
-                    </ion-card-title>
+              <ion-card>
+                <ion-card-header>
+                  <ion-card-title>
+                    <h4 class="responsive-h1">Semester {{ semester.index }}</h4>
+                  </ion-card-title>
 
-                    <ion-grid class="ion-no-padding">
-                      <ion-row>
-                        <ion-col size-lg="6" size="12">
-                          <span class="bold">Total Modules Passed</span>
-                          <span
-                            class="ion-float-right right-notch">{{ semester.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</span>
-                        </ion-col>
-                        <ion-col size-lg="6" size="12">
-                          <span class="bold">Total Credit hours</span>
-                          <span
-                            class="ion-float-right right-notch">{{ semester.summary[0]?.TOTAL_CREDIT_HOURS || 'N/A' }}</span>
-                        </ion-col>
+                  <ion-grid class="ion-no-padding">
+                    <ion-row>
+                      <ion-col size-lg="6" size="12">
+                        <span class="bold">Total Modules Passed</span>
+                        <span
+                          class="ion-float-right right-notch">{{ semester.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</span>
+                      </ion-col>
+                      <ion-col size-lg="6" size="12">
+                        <span class="bold">Total Credit hours</span>
+                        <span
+                          class="ion-float-right right-notch">{{ semester.summary[0]?.TOTAL_CREDIT_HOURS || 'N/A' }}</span>
+                      </ion-col>
 
-                        <ion-col size-lg="6" size="12">
-                          <span class="bold">Credits transferred</span>
-                          <span
-                            class="ion-float-right right-notch">{{ semester.summary[0]?.CREDIT_TRANSFERRED || 'N/A' }}</span>
-                        </ion-col>
+                      <ion-col size-lg="6" size="12">
+                        <span class="bold">Credits transferred</span>
+                        <span
+                          class="ion-float-right right-notch">{{ semester.summary[0]?.CREDIT_TRANSFERRED || 'N/A' }}</span>
+                      </ion-col>
 
-                        <ion-col size-lg="6" size="12">
-                          <span class="bold">GPA</span>
-                          <span class="ion-float-right right-notch">{{ semester.summary[0]?.GPA || 'N/A' }}</span>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-card-header>
+                      <ion-col size-lg="6" size="12">
+                        <span class="bold">GPA</span>
+                        <span class="ion-float-right right-notch">{{ semester.summary[0]?.GPA || 'N/A' }}</span>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-header>
 
+                <ng-container
+                  *ngIf="(semester.value | search:search | filter:shownFilters).length > 0; else noModuleFound">
                   <ion-card-content>
                     <ion-item lines="none" class="ion-no-padding table-top">
                       <ion-grid class="ion-no-padding">
@@ -287,8 +292,8 @@
                       </ion-grid>
                     </ion-item>
                   </ion-card-content>
-                </ion-card>
-              </ng-container>
+                </ng-container>
+              </ion-card>
               <!-- end -->
 
             </ng-container>
@@ -305,12 +310,18 @@
         <ng-template #noData>
           <ion-card>
             <ion-card-content>
-              <app-message-with-svg messageTitle="No report found!"
+              <app-message-with-svg messageTitle="Oops"
                 messageContent="looks like our magical elves has no data to show" imageUrl="assets/img/empty.svg"
                 wrapperOffset="3" wrapperSize="6">
               </app-message-with-svg>
             </ion-card-content>
           </ion-card>
+        </ng-template>
+
+        <ng-template #noModuleFound>
+          <app-message-with-svg messageTitle="No modules found" messageContent="No modules found for {{ search }}"
+            wrapperOffset="3" wrapperSize="6">
+          </app-message-with-svg>
         </ng-template>
       </ion-col>
     </ion-row>
