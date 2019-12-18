@@ -10,9 +10,7 @@ export class FilterPipe implements PipeTransform {
       return results;
     } else {
       return results.filter(
-        r => r.NAME.toUpperCase().includes(filter.toUpperCase())
-            || r.PROGRAMME.toUpperCase().includes(filter.toUpperCase())
-            || r.STUDENT_NUMBER.toUpperCase().includes(filter.toUpperCase())
+        r => r.RELATIONTYPE.toLowerCase().includes(filter.toLowerCase())
       );
     }
   }

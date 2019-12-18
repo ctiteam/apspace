@@ -4,6 +4,7 @@ export interface Mentorship {
     NAME: string;
     PROGRAMME: string;
     STUDENT_NUMBER: string;
+    RELATIONTYPE: string;
 }
 
 export interface Intake {
