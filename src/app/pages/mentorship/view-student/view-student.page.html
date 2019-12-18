@@ -58,10 +58,9 @@
               <ion-row class="ion-justify-content-center">
                 <div *ngIf="(intake$ | async) as intakes">
                   <ion-col size="auto" *ngFor="let intake of intakes">
-                    <ion-button 
-                      [fill]="selectedIntake === intake.INTAKE_CODE ? 'solid' : 'outline'"
-                      (click)="onTap(intake.INTAKE_CODE)"> 
-                      {{ intake.INTAKE_CODE }} 
+                    <ion-button [fill]="selectedIntake === intake.INTAKE_CODE ? 'solid' : 'outline'"
+                      (click)="onTap(intake.INTAKE_CODE)">
+                      {{ intake.INTAKE_CODE }}
                     </ion-button>
                   </ion-col>
                 </div>
@@ -159,7 +158,10 @@
       </ion-col>
 
       <ion-col size-xs="12" size-lg="8">
-        <ion-searchbar [(ngModel)]="search" placeholder="Search (e.g. 'Module', 'Result', 'Credit Hours', ...)" animated></ion-searchbar>
+        <div class="ion-padding-start ion-padding-end">
+          <ion-searchbar [(ngModel)]="search" placeholder="Search (e.g. 'Module', 'Result', 'Credit Hours', ...)">
+          </ion-searchbar>
+        </div>
 
         <ion-item lines="none" class="filter-item">
           <ion-chip *ngFor="let filter of shownFilters;" (click)="removeFilter(filter)">
@@ -171,22 +173,19 @@
           <ion-chip outline>
             <ion-icon name="add" color="danger"></ion-icon>
             <ion-label>Add Filter</ion-label>
-            <ion-select
-                [(ngModel)]="shownFilters" 
-                multiple="true" 
-                cancelText="Dismiss" 
-                selectedText=" ">
-                <ion-select-option *ngFor="let filter of allFilters" [value]=filter>
-                  {{ filter }}
-                </ion-select-option>
-              </ion-select>
-            </ion-chip>
+            <ion-select [(ngModel)]="shownFilters" multiple="true" cancelText="Dismiss" selectedText=" ">
+              <ion-select-option *ngFor="let filter of allFilters" [value]=filter>
+                {{ filter }}
+              </ion-select-option>
+            </ion-select>
+          </ion-chip>
         </ion-item>
 
         <ng-container *ngIf="(subCourse$ | async) as subCourses; else loadingSemester">
           <ng-container *ngIf="subCourses.length > 0; else noData">
             <ng-container *ngFor="let semester of subCourses | reverse">
-              <ng-container *ngIf="(semester.value | search:search | filter:shownFilters).length > 0">
+              <!-- start -->
+              <ng-container *ngIf="(semester.value | search:search | filter:shownFilters).length > 0; else noData">
                 <ion-card>
                   <ion-card-header>
                     <ion-card-title>
@@ -197,16 +196,19 @@
                       <ion-row>
                         <ion-col size-lg="6" size="12">
                           <span class="bold">Total Modules Passed</span>
-                          <span class="ion-float-right right-notch">{{ semester.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</span>
+                          <span
+                            class="ion-float-right right-notch">{{ semester.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</span>
                         </ion-col>
                         <ion-col size-lg="6" size="12">
                           <span class="bold">Total Credit hours</span>
-                          <span class="ion-float-right right-notch">{{ semester.summary[0]?.TOTAL_CREDIT_HOURS || 'N/A' }}</span>
+                          <span
+                            class="ion-float-right right-notch">{{ semester.summary[0]?.TOTAL_CREDIT_HOURS || 'N/A' }}</span>
                         </ion-col>
 
                         <ion-col size-lg="6" size="12">
                           <span class="bold">Credits transferred</span>
-                          <span class="ion-float-right right-notch">{{ semester.summary[0]?.CREDIT_TRANSFERRED || 'N/A' }}</span>
+                          <span
+                            class="ion-float-right right-notch">{{ semester.summary[0]?.CREDIT_TRANSFERRED || 'N/A' }}</span>
                         </ion-col>
 
                         <ion-col size-lg="6" size="12">
@@ -248,11 +250,8 @@
                       </ion-grid>
                     </ion-item>
 
-                    <ion-item 
-                      lines="none" 
-                      *ngFor="let value of (semester.value | search:search | filter:shownFilters)" class="table-item"
-                      button 
-                      details>
+                    <ion-item lines="none" *ngFor="let value of (semester.value | search:search | filter:shownFilters)"
+                      class="table-item" button details>
                       <ion-grid class="ion-no-padding">
                         <ion-row>
                           <ion-col class="margin-auto colored-text" size-lg="3" size="12">
@@ -290,6 +289,8 @@
                   </ion-card-content>
                 </ion-card>
               </ng-container>
+              <!-- end -->
+
             </ng-container>
           </ng-container>
         </ng-container>
