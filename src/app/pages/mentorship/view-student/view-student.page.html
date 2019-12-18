@@ -316,7 +316,7 @@
 
         <ng-template #noModuleFound>
           <app-message-with-svg messageTitle="No modules found"
-            messageContent="No modules found for {{ search + ' in this semester' || 'this semester' }}"
+            messageContent="No modules found for {{ search || 'this semester' }}"
             wrapperOffset="3" wrapperSize="6">
           </app-message-with-svg>
         </ng-template>

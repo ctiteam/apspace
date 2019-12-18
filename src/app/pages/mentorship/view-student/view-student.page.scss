@@ -39,10 +39,6 @@ ion-item {
   font-weight: bold;
 }
 
-.sideline {
-  border-left: 2px solid var(--secondary-txt-color);
-}
-
 .text-center {
   text-align: center;
 }
@@ -73,6 +69,11 @@ ion-item {
   padding-right: 10px;
 }
 
+.sideline {
+  padding-left: 20px !important;
+}
+
+// Screen bigger than Mobile
 @media only screen and (min-width: 577px) {
   .controlled-layout {
     margin: 20px 50px;
@@ -83,7 +84,7 @@ ion-item {
   }
 
   .sideline {
-    padding-left: 20px !important;
+    border-left: none;
   }
 }
 
@@ -98,6 +99,7 @@ ion-item {
   
   .sideline {
     border-left: none;
+    padding-left: 0px !important;
   }
   
   .center-txt {
