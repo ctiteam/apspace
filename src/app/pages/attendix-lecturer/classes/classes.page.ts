@@ -283,6 +283,12 @@ export class ClassesPage implements AfterViewInit, OnInit {
         startTimes: this.startTimes,
         endTimes: this.endTimes,
 
+        classcode: this.classcode,
+        date: this.date,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        classType: this.classType,
+
         manualClasscodes: this.manualClasscodes,
         manualDates: this.manualDates,
         manualStartTimes: this.manualStartTimes,
@@ -293,6 +299,8 @@ export class ClassesPage implements AfterViewInit, OnInit {
         manualStartTime: this.manualStartTime,
         manualEndTime: this.manualEndTime,
         manualClassType: this.manualClassType,
+
+        now: new Date,
       };
       await this.ws.post('/attendix/selection', { body }).toPromise();
     }
