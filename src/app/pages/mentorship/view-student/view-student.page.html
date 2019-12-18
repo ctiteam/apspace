@@ -162,10 +162,7 @@
       </ion-col>
 
       <ion-col size-xs="12" size-lg="8">
-        <div class="ion-padding-start ion-padding-end">
-          <ion-searchbar [(ngModel)]="search" placeholder="Search (e.g. 'Module', 'Result', 'Credit Hours', ...)">
-          </ion-searchbar>
-        </div>
+        <ion-searchbar [(ngModel)]="search" placeholder="Search (e.g. 'Module', 'Result', 'Credit Hours', ...)"></ion-searchbar>
 
         <ion-item lines="none" class="filter-item">
           <ion-chip *ngFor="let filter of shownFilters;" (click)="removeFilter(filter)">
@@ -319,7 +316,7 @@
         </ng-template>
 
         <ng-template #noModuleFound>
-          <app-message-with-svg messageTitle="No modules found" messageContent="No modules found for {{ search }}"
+          <app-message-with-svg messageTitle="No modules found" messageContent="No modules found for {{ search + ' in this semester' || 'this semester' }}"
             wrapperOffset="3" wrapperSize="6">
           </app-message-with-svg>
         </ng-template>
