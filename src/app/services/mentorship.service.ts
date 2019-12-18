@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { StudentProfile } from '../interfaces';
+import { StudentPhoto, StudentProfile } from '../interfaces';
 import { Attendance, CourseDetail, Intake, Mentorship, Result, SemesterSummary, Subcourse } from '../interfaces/mentorship';
 import { WsApiService } from './ws-api.service';
 @Injectable({
@@ -18,8 +18,8 @@ export class MentorshipService {
     return this.ws.get<Mentorship[]>('/student_list', { url: this.apiUrl });
   }
 
-  getStudentPhoto(): Observable<any> {
-    return this.ws.get<any>('https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png');
+  getStudentPhoto(tp: string): Observable<StudentPhoto> {
+    return this.ws.get<any>(`/photo?id=${tp}`, { url: this.apiUrl });
   }
 
   getStudentProfile(tp: string): Observable<StudentProfile> {
