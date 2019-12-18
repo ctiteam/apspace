@@ -163,6 +163,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
         position: 'top',
         showCloseButton: true,
       }).then(toast => toast.present());
+      this.auto = false;
       console.warn('fail to auto complete', guessSchedules);
       return;
     }
