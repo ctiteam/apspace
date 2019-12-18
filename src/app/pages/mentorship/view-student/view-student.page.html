@@ -118,31 +118,29 @@
 
                     <ion-col size-lg="6" class="sideline" size-sm="12" size="12">
                       <ng-container *ngFor="let course of courseDetail">
-                        <div class="indent">
-                          <h2 class="bold">Average Grade</h2>
-                          <h3>{{ course.AVERAGE_GRADE || "N/A" }}</h3>
+                        <h2 class="bold">Average Grade</h2>
+                        <h3>{{ course.AVERAGE_GRADE || "N/A" }}</h3>
 
-                          <h2 class="bold">Average Marks</h2>
-                          <h3>{{ course.AVERAGE_MARKS || "N/A" }}</h3>
+                        <h2 class="bold">Average Marks</h2>
+                        <h3>{{ course.AVERAGE_MARKS || "N/A" }}</h3>
 
-                          <h2 class="bold">Moderated Grades</h2>
-                          <h3>{{ course.MODERATED_GRADES || "N/A" }}</h3>
+                        <h2 class="bold">Moderated Grades</h2>
+                        <h3>{{ course.MODERATED_GRADES || "N/A" }}</h3>
 
-                          <h2 class="bold">Moderated Marks</h2>
-                          <h3>{{ course.MODERATED_MARKS || "N/A" }}</h3>
+                        <h2 class="bold">Moderated Marks</h2>
+                        <h3>{{ course.MODERATED_MARKS || "N/A" }}</h3>
 
-                          <h2 class="bold">Overall Marks</h2>
-                          <h3>{{ course.OVERALL_MARKS || "N/A" }}</h3>
+                        <h2 class="bold">Overall Marks</h2>
+                        <h3>{{ course.OVERALL_MARKS || "N/A" }}</h3>
 
-                          <h2 class="bold">Previous Course Overall</h2>
-                          <h3>{{ course.PREVIOUS_COURSE_OVERALL || "N/A" }}</h3>
+                        <h2 class="bold">Previous Course Overall</h2>
+                        <h3>{{ course.PREVIOUS_COURSE_OVERALL || "N/A" }}</h3>
 
-                          <h2 class="bold">Publish Results</h2>
-                          <h3>{{ course.PUBLISH_RESULTS || "N/A" }}</h3>
+                        <h2 class="bold">Publish Results</h2>
+                        <h3>{{ course.PUBLISH_RESULTS || "N/A" }}</h3>
 
-                          <h2 class="bold">Remarks</h2>
-                          <h3>{{ course.REMARKS || "N/A" }}</h3>
-                        </div>
+                        <h2 class="bold">Remarks</h2>
+                        <h3>{{ course.REMARKS || "N/A" }}</h3>
                       </ng-container>
                     </ion-col>
                   </ion-row>
@@ -162,7 +160,8 @@
       </ion-col>
 
       <ion-col size-xs="12" size-lg="8">
-        <ion-searchbar [(ngModel)]="search" placeholder="Search (e.g. 'Module', 'Result', 'Credit Hours', ...)"></ion-searchbar>
+        <ion-searchbar [(ngModel)]="search" placeholder="Search (e.g. 'Module', 'Result', 'Credit Hours', ...)">
+        </ion-searchbar>
 
         <ion-item lines="none" class="filter-item">
           <ion-chip *ngFor="let filter of shownFilters;" (click)="removeFilter(filter)">
@@ -316,7 +315,8 @@
         </ng-template>
 
         <ng-template #noModuleFound>
-          <app-message-with-svg messageTitle="No modules found" messageContent="No modules found for {{ search + ' in this semester' || 'this semester' }}"
+          <app-message-with-svg messageTitle="No modules found"
+            messageContent="No modules found for {{ search + ' in this semester' || 'this semester' }}"
             wrapperOffset="3" wrapperSize="6">
           </app-message-with-svg>
         </ng-template>
