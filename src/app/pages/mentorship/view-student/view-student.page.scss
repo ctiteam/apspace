@@ -81,6 +81,10 @@ ion-item {
   .marker {
     display: none;
   }
+
+  .sideline {
+    padding-left: 20px !important;
+  }
 }
 
 // Small Screen (Mobile)
@@ -94,7 +98,6 @@ ion-item {
   
   .sideline {
     border-left: none;
-    // border-top: 2px solid var(--secondary-txt-color);
   }
   
   .center-txt {
