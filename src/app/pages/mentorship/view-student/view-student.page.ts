@@ -42,9 +42,9 @@ export class ViewStudentPage {
     this.selectedIntake = this.route.snapshot.params.intake;
     this.profile$ = this.mentorship.getStudentProfile(this.tp);
     this.intake$ = this.mentorship.getIntakes(this.tp);
+    this.profileImg$ = this.mentorship.getStudentPhoto(this.tp);
     this.onTap(this.selectedIntake);
     this.runModifierForSelect();
-    this.profileImg$ = this.mentorship.getStudentPhoto(this.tp);
   }
 
   runModifierForSelect() {

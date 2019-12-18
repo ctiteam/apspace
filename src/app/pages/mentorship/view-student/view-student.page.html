@@ -14,7 +14,7 @@
   <ion-grid>
     <ion-row>
       <ion-col size-xs="12" size-lg="4">
-        <ion-card *ngIf="(profile$ | async) as profile; else loadingStudentProfile">
+        <ion-card *ngIf="(profile$ | async) as profile; else loadingStudentProfile" class="ion-no-padding">
           <ion-card-content>
             <ion-avatar class="avatar">
               <ion-img [src]="
@@ -57,10 +57,10 @@
             </div>
           </ion-card-content>
 
-          <ion-footer>
+          <ion-footer class="ion-no-margin">
             <ion-grid>
               <ion-row class="ion-justify-content-center">
-                <div *ngIf="(intake$ | async) as intakes">
+                <div *ngIf="(intake$ | async) as intakes; else loadingIntakes">
                   <ion-col size="auto" *ngFor="let intake of intakes">
                     <ion-button [fill]="selectedIntake === intake.INTAKE_CODE ? 'solid' : 'outline'"
                       (click)="onTap(intake.INTAKE_CODE)">
@@ -68,13 +68,19 @@
                     </ion-button>
                   </ion-col>
                 </div>
+
+                <ng-template #loadingIntakes>
+                  <ion-col size="12" class="ion-no-margin ion-no-padding">
+                    <ion-skeleton-text style="line-height: 30px !important;" animated></ion-skeleton-text>
+                  </ion-col>
+                </ng-template>
               </ion-row>
             </ion-grid>
           </ion-footer>
         </ion-card>
 
         <ng-template #loadingStudentProfile>
-          <ion-card>
+          <ion-card class="ion-no-padding">
             <ion-card-content>
               <ion-avatar class="avatar">
                 <ion-skeleton-text animated></ion-skeleton-text>
@@ -90,7 +96,7 @@
 
         <ng-container *ngIf="(courseDetail$ | async) as courseDetail; else loadingCourseDetail;">
           <ng-container *ngIf="courseDetail.length > 0">
-            <ion-card>
+            <ion-card class="ion-no-padding">
               <ion-card-header class="ion-no-margin">
                 <ion-card-title>
                   <h4 class="responsive-h1">Course Details</h4>
@@ -185,7 +191,7 @@
           <ng-container *ngIf="subCourses.length > 0; else noData">
             <ng-container *ngFor="let semester of subCourses | reverse">
               <!-- start -->
-              <ion-card>
+              <ion-card class="ion-no-padding">
                 <ion-card-header>
                   <ion-card-title>
                     <h4 class="responsive-h1">Semester {{ semester.index }}</h4>
@@ -224,8 +230,12 @@
                     <ion-item lines="none" class="ion-no-padding table-top">
                       <ion-grid class="ion-no-padding">
                         <ion-row>
-                          <ion-col class="bold" size="3">
+                          <ion-col class="bold" size="2">
                             Module
+                          </ion-col>
+
+                          <ion-col class="bold" size="3">
+                            Module Name
                           </ion-col>
 
                           <ion-col class="bold" size="2">
@@ -236,7 +246,7 @@
                             Attendance (%)
                           </ion-col>
 
-                          <ion-col class="bold" size="2">
+                          <ion-col class="bold" size="1">
                             Credit Hours
                           </ion-col>
 
@@ -244,7 +254,7 @@
                             Result
                           </ion-col>
 
-                          <ion-col class="bold" size="2">
+                          <ion-col class="bold" size="1">
                             Grade Point
                           </ion-col>
                         </ion-row>
@@ -255,8 +265,13 @@
                       class="table-item" button details>
                       <ion-grid class="ion-no-padding">
                         <ion-row>
-                          <ion-col class="margin-auto colored-text" size-lg="3" size="12">
+                          <ion-col class="margin-auto colored-text" size-lg="2" size="12">
                             <a (click)="showDetails(value.MODULE_CODE)">{{ value.MODULE_CODE }}</a>
+                          </ion-col>
+
+                          <ion-col class="margin-auto" size-lg="3" size="12">
+                            <span class="marker">Module Name:</span>
+                            {{ value.MODULE_NAME || "N/A" }}
                           </ion-col>
 
                           <ion-col class="margin-auto" size-lg="2" size="12">
@@ -265,12 +280,12 @@
                           </ion-col>
 
                           <ion-col class="margin-auto" size-lg="2" size="12">
-                            <span class="marker">Attend Percent:</span>
+                            <span class="marker">Attend Percent: </span>
                             <span
                               [class]="value.TOTAL_ATTEND_PERCENT < 80 ? 'red' : ''">{{ value.TOTAL_ATTEND_PERCENT || "N/A" }}</span>
                           </ion-col>
 
-                          <ion-col class="margin-auto" size-lg="2" size="12">
+                          <ion-col class="margin-auto" size-lg="1" size="12">
                             <span class="marker">Credit Hours:</span>
                             {{ value.CREDIT_HOURS || "N/A" }}
                           </ion-col>
@@ -280,7 +295,7 @@
                             {{ value.RESULT || "N/A" }}
                           </ion-col>
 
-                          <ion-col class="margin-auto" size-lg="2" size="12">
+                          <ion-col class="margin-auto" size-lg="1" size="12">
                             <span class="marker">Grade Point:</span>
                             {{ value.GRADE_POINT || "N/A" }}
                           </ion-col>
@@ -304,7 +319,7 @@
         </ng-template>
 
         <ng-template #noData>
-          <ion-card>
+          <ion-card class="ion-no-padding">
             <ion-card-content>
               <app-message-with-svg messageTitle="Oops"
                 messageContent="looks like our magical elves has no data to show" imageUrl="assets/img/empty.svg"
@@ -316,8 +331,7 @@
 
         <ng-template #noModuleFound>
           <app-message-with-svg messageTitle="No modules found"
-            messageContent="No modules found for {{ search || 'this semester' }}"
-            wrapperOffset="3" wrapperSize="6">
+            messageContent="No modules found for {{ search || 'this semester' }}" wrapperOffset="3" wrapperSize="6">
           </app-message-with-svg>
         </ng-template>
       </ion-col>
