@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 import { MentorshipService } from 'src/app/services/mentorship.service';
+import { ReversePipe } from '../../../shared/reverse/reverse.pipe';
 import { FilterPipe } from './pipes/filter.pipe';
-import { ReversePipe } from './pipes/reverse.pipe';
 import { SearchPipe } from './pipes/search.pipe';
 import { ViewStudentPage } from './view-student.page';
 
