@@ -8,7 +8,8 @@ import { of } from 'rxjs';
 import { ActivatedRouteStub } from '../../../testing';
 import { StaffDirectory } from '../../interfaces';
 import { UrldecodePipe } from '../../pipes/urldecode.pipe';
-import { WsApiService } from '../../services';
+import { SettingsService, WsApiService } from '../../services';
+import { ByIdPipe } from './by-id.pipe';
 import { StaffDirectoryInfoPage } from './staff-directory-info.page';
 
 describe('StaffDirectoryInfoPage', () => {
@@ -17,6 +18,7 @@ describe('StaffDirectoryInfoPage', () => {
   let fixture: ComponentFixture<StaffDirectoryInfoPage>;
   let getSpy: jasmine.Spy;
   let routerSpy: jasmine.Spy;
+  let settings: { get: jasmine.Spy };
 
   beforeEach(async(() => {
     const mockStaffDirectory: StaffDirectory[] = [
@@ -66,20 +68,21 @@ describe('StaffDirectoryInfoPage', () => {
         TITLE: 'Executive, Student Services'
       }
     ];
-
+    settings = jasmine.createSpyObj('SettingsService', ['get']);
     const ws = jasmine.createSpyObj('WsApiService', ['get']);
     getSpy = ws.get.and.returnValue(of(mockStaffDirectory));
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     activatedRoute = new ActivatedRouteStub();
 
     TestBed.configureTestingModule({
-      declarations: [StaffDirectoryInfoPage, UrldecodePipe],
+      declarations: [StaffDirectoryInfoPage, UrldecodePipe, ByIdPipe],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
         { provide: AppAvailability, useValue: {} },
         { provide: Router, useValue: routerSpy },
         { provide: WsApiService, useValue: ws },
         { provide: InAppBrowser, useValue: {} },
+        { provide: SettingsService, useValue: settings },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
