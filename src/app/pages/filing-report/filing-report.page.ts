@@ -1,4 +1,3 @@
-import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, Platform, ToastController } from '@ionic/angular';
 import { WsApiService } from 'src/app/services';
@@ -69,7 +68,7 @@ export class FilingReportPage implements OnInit {
     this.loading = await this.loadingController.create({
       spinner: 'dots',
       duration: 90000,
-      message: 'Analyzing the picture...',
+      message: 'Submitting the report...',
       translucent: true,
     });
     return await this.loading.present();
@@ -96,8 +95,6 @@ export class FilingReportPage implements OnInit {
     // for Demo. It will be removed after the backend created
     if (this.currentStepNumber === 1 && this.studentId === 'TP037354') {
       this.show = 'records';
-    } else if (this.currentStepNumber === 1 && this.studentId === 'TP047417') {
-      this.show = 'no records';
     } else if (this.currentStepNumber === 1) {
       this.show = 'empty';
     }
@@ -123,37 +120,26 @@ export class FilingReportPage implements OnInit {
           text: 'Yes',
           handler: () => {
             // START THE LOADING
+            if (this.selectedMainCategory === this.mainCategories[1]) {
+              this.selectedSubCategory = ''; // subcategory is not needed when submitting anything for behaviour
+            }
             this.presentLoading();
             const body = {
-              form_id: 157,
-              1: 'TP037354',
-              2: 'some description',
-              4: 'Classrooms',
-              5: 'Friday',
-              6: 'Jeans'
+              student_id: this.studentId,
+              description: this.description,
+              location: this.selectedLocation,
+              day: this.selectedDay,
+              category: this.selectedMainCategory,
+              subcategory: this.selectedSubCategory
             };
-            const headers = new HttpHeaders();
-            headers.append('Content-Type', 'application/json');
-            headers.append('Authorization', 'Basic ' + btoa('gravityformsapi:uee9DPh7r8Q9r20qG5fokRxl'));
-            this.ws.post<any>('/entries', {
-              body,
-              headers,
-              url: this.stagingUrl
+            this.ws.post('/dresscode/submit', {
+              url: 'https://4gkrvp7hcl.execute-api.ap-southeast-1.amazonaws.com/dev',
+              body
             }).subscribe(
               {
-                next: res => {
-                  console.log(res);
-                  this.showToastMessage('Student behaviors has been updated successfully!', 'success');
-                },
-                error: err => {
-                  console.log(err);
-                  this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
-                  this.cancel(); // reset the form
-                },
-                complete: () => {
-                  this.dismissLoading();
-                  this.cancel(); // reset the form
-                }
+                next: res => { console.log('success: ', res); },
+                error: err => { console.log('error: ', err); this.dismissLoading(); },
+                complete: () => { console.log('done: '); this.dismissLoading(); },
               }
             );
             // this.showToastMessage('Report has been submitted successfully!', 'success');

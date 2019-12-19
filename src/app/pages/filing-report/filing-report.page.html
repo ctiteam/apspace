@@ -150,7 +150,8 @@
                     </ion-select>
                   </ion-item>
 
-                  <ion-item lines="none" class="ion-margin-top no-background-color">
+                  <ion-item lines="none" class="ion-margin-top no-background-color"
+                    *ngIf="this.selectedMainCategory === mainCategories[0]">
                     <ion-label position="floating">Subcategory</ion-label>
                     <ion-select interface="popover" required="true" [(ngModel)]="selectedSubCategory"
                       class="form-input">
