@@ -8,8 +8,8 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="staff$ | async as staff; else loadingProfileOrNotFound" class="staff-directory-info-header">
-    <ion-grid>
+  <div *ngIf="staffs$ | async as staffs; else loading" class="staff-directory-info-header">
+    <ion-grid *ngIf="staffs | byId:id as staff; else notFound">
       <ion-row>
         <ion-col size-xs="12" size-lg="4">
           <ion-card>
@@ -75,69 +75,67 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  </div>
-  <ng-template #loadingProfileOrNotFound>
-    <ng-container *ngIf="staffExists; else recordNotFound">
-      <ion-grid>
-        <ion-row>
-          <ion-col size-xs="12" size-lg="4">
-            <ion-card>
-              <ion-card-header>
-                <ion-avatar class="profile-image" style="--border-radius: 0;">
-                  <ion-skeleton-text animated style="line-height: 240px;width: 200px;margin: auto;"></ion-skeleton-text>
-                </ion-avatar>
-                <hr class="ion-margin-top ion-margin-button hr-custom" />
-              </ion-card-header>
-              <ion-card-content style="padding-top: 0px">
-                <h2 class="secondary-txt-color">
-                  <ion-skeleton-text animated style="line-height: 25px; width: 40%;"></ion-skeleton-text>
-                </h2>
-                <h2 class="main-text-color">
-                  <ion-skeleton-text animated style="line-height: 20px; width: 70%;"></ion-skeleton-text>
-                </h2>
-                <br>
-                <h2 class="secondary-txt-color">
-                  <ion-skeleton-text animated style="line-height: 25px; width: 60%;"></ion-skeleton-text>
-                </h2>
-                <h2 class="main-text-color text-bold">
-                  <ion-skeleton-text animated style="line-height: 20px; width: 40%;"></ion-skeleton-text>
-                </h2>
-                <br>
-                <h2 class="secondary-txt-color">
-                  <ion-skeleton-text animated style="line-height: 25px; width: 70%;"></ion-skeleton-text>
-                </h2>
-                <h2>
-                  <ion-skeleton-text animated style="line-height: 20px; width: 40%;"></ion-skeleton-text>
-                </h2>
-                <br>
-                <h2 class="secondary-txt-color">
-                  <ion-skeleton-text animated style="line-height: 25px; width: 20%;"></ion-skeleton-text>
-                </h2>
-                <h2>
-                  <ion-skeleton-text animated style="line-height: 25px; width: 40%;"></ion-skeleton-text>
-                </h2>
-                <br>
-                <ion-grid>
-                  <ion-row>
-                    <ion-col>
-                      <ion-skeleton-text animated style="line-height: 40px; width: 90%;"></ion-skeleton-text>
-                    </ion-col>
-                    <ion-col>
-                      <ion-skeleton-text animated style="line-height: 40px; width: 90%;"></ion-skeleton-text>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ng-container>
-    <ng-template #recordNotFound>
+    <ng-template #notFound>
       <app-message-with-svg messageTitle="No Data To Show!"
         messageContent="The staff ID you have entered/chosen does not match with any staff profile"
         imageUrl="assets/img/empty.svg" wrapperOffset="4" wrapperSize="4" wrapperMarginTop="50px">
       </app-message-with-svg>
     </ng-template>
+  </div>
+  <ng-template #loading>
+    <ion-grid>
+      <ion-row>
+        <ion-col size-xs="12" size-lg="4">
+          <ion-card>
+            <ion-card-header>
+              <ion-avatar class="profile-image" style="--border-radius: 0;">
+                <ion-skeleton-text animated style="line-height: 240px;width: 200px;margin: auto;"></ion-skeleton-text>
+              </ion-avatar>
+              <hr class="ion-margin-top ion-margin-button hr-custom" />
+            </ion-card-header>
+            <ion-card-content style="padding-top: 0px">
+              <h2 class="secondary-txt-color">
+                <ion-skeleton-text animated style="line-height: 25px; width: 40%;"></ion-skeleton-text>
+              </h2>
+              <h2 class="main-text-color">
+                <ion-skeleton-text animated style="line-height: 20px; width: 70%;"></ion-skeleton-text>
+              </h2>
+              <br>
+              <h2 class="secondary-txt-color">
+                <ion-skeleton-text animated style="line-height: 25px; width: 60%;"></ion-skeleton-text>
+              </h2>
+              <h2 class="main-text-color text-bold">
+                <ion-skeleton-text animated style="line-height: 20px; width: 40%;"></ion-skeleton-text>
+              </h2>
+              <br>
+              <h2 class="secondary-txt-color">
+                <ion-skeleton-text animated style="line-height: 25px; width: 70%;"></ion-skeleton-text>
+              </h2>
+              <h2>
+                <ion-skeleton-text animated style="line-height: 20px; width: 40%;"></ion-skeleton-text>
+              </h2>
+              <br>
+              <h2 class="secondary-txt-color">
+                <ion-skeleton-text animated style="line-height: 25px; width: 20%;"></ion-skeleton-text>
+              </h2>
+              <h2>
+                <ion-skeleton-text animated style="line-height: 25px; width: 40%;"></ion-skeleton-text>
+              </h2>
+              <br>
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    <ion-skeleton-text animated style="line-height: 40px; width: 90%;"></ion-skeleton-text>
+                  </ion-col>
+                  <ion-col>
+                    <ion-skeleton-text animated style="line-height: 40px; width: 90%;"></ion-skeleton-text>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ng-template>
 </ion-content>

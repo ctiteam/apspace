@@ -119,7 +119,7 @@ export class NotificationService {
           };
           const url = `${this.apiUrl}/client/read?ticket=${st}`;
           return this.http.post(url, body, { headers: this.headers }).pipe(
-            tap(_ => { this.badge.decrease(1); console.log('done'); })
+            tap(_ => this.badge.decrease(1))
           );
         }),
       );

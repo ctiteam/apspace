@@ -253,7 +253,7 @@ export class StudentTimetablePage implements OnInit {
     // get week
     this.availableWeek = Array.from(new Set(tt.map(t => {
       const date = new Date(t.DATESTAMP_ISO);
-      date.setDate(date.getDate() - date.getDay());
+      date.setDate((date.getDate() - date.getDay()) + 1);
       return date.valueOf();
     }))).sort().map(d => new Date(d));
 
