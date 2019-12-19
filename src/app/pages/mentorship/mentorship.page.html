@@ -19,8 +19,8 @@
         <ion-label>Filter</ion-label>
         <ion-select [(ngModel)]="filter" interface="popover">
           <ion-select-option selected></ion-select-option>
-          <ion-select-option value="pl">PL</ion-select-option>
-          <ion-select-option value="mentor">Mentor</ion-select-option>
+          <ion-select-option value="mentor">PL</ion-select-option>
+          <ion-select-option value="pl / mentor">PL / Mentor</ion-select-option>
         </ion-select>
       </ion-item>
     </ion-list>
@@ -32,8 +32,12 @@
           <ng-container *ngFor="let student of (students | search:search | filter:filter)">
             <ion-item button details
               [routerLink]="['/', 'mentorship', student.STUDENT_NUMBER, student.INTAKE_CODE, 'view']">
-              <ion-avatar slot="start">
-                <img src="https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png">
+              <ion-avatar slot="start" class="ion-no-padding ion-no-margin">
+                <ion-img [src]="
+                              'data:image/jpg;base64,' +
+                              student.STUDENT_PHOTO
+                              " (ionError)="$event.target.src = 'assets/img/no_img.png'">
+              </ion-img>
               </ion-avatar>
 
               <ion-label>
@@ -47,13 +51,9 @@
       </ng-container>
 
       <ng-template #noData>
-        <ion-card>
-          <ion-card-content>
-            <app-message-with-svg messageTitle="No student found!"
-              messageContent="looks like our magical elves has no data to show" wrapperOffset="3" wrapperSize="6">
-            </app-message-with-svg>
-          </ion-card-content>
-        </ion-card>
+        <app-message-with-svg messageTitle="No student found!"
+          messageContent="looks like our magical elves has no data to show" wrapperOffset="3" wrapperSize="6">
+        </app-message-with-svg>
       </ng-template>
     </ion-list>
 

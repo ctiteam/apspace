@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Attendance, Result } from 'src/app/interfaces/mentorship';
+import { MentorshipAttendance, MentorshipResult } from 'src/app/interfaces/mentorship';
 import { MentorshipService } from 'src/app/services/mentorship.service';
 
 @Component({
@@ -16,8 +16,8 @@ export class ShowDetailsPage {
   @Input() module: string;
   @Input() tp: string;
 
-  attendance$: Observable<Attendance[]>;
-  result$: Observable<Result[]>;
+  attendance$: Observable<MentorshipAttendance[]>;
+  result$: Observable<MentorshipResult[]>;
   selectedSegment = 'result';
 
   constructor(

@@ -19,7 +19,7 @@
             <ion-avatar class="avatar">
               <ion-img [src]="
                               'data:image/jpg;base64,' +
-                              (profileImg$ | async)?.base64_photo
+                              profile[0].STUDENT_PHOTO
                               " (ionError)="$event.target.src = 'assets/img/no_img.png'">
               </ion-img>
             </ion-avatar>

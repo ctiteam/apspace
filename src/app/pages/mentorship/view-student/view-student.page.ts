@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { StudentPhoto, StudentProfile } from 'src/app/interfaces';
-import { CourseDetail, Intake } from 'src/app/interfaces/mentorship';
+import { StudentProfile } from 'src/app/interfaces';
+import { MentorshipCourseDetail, MentorshipIntake } from 'src/app/interfaces/mentorship';
 import { MentorshipService } from 'src/app/services/mentorship.service';
 import { ShowDetailsPage } from './show-details/show-details.page';
 
@@ -19,11 +19,10 @@ export class ViewStudentPage {
   search: '';
 
   profile$: Observable<StudentProfile>;
-  profileImg$: Observable<StudentPhoto>;
-  intake$: Observable<Intake[]>;
-  selectedIntake$: Observable<Intake[]>;
+  intake$: Observable<MentorshipIntake[]>;
+  selectedIntake$: Observable<MentorshipIntake[]>;
 
-  courseDetail$: Observable<CourseDetail[]>;
+  courseDetail$: Observable<MentorshipCourseDetail[]>;
   subCourse$: Observable<{ index: string; value: any }[]>;
   profileSkeleton = new Array(4);
 
@@ -42,7 +41,6 @@ export class ViewStudentPage {
     this.selectedIntake = this.route.snapshot.params.intake;
     this.profile$ = this.mentorship.getStudentProfile(this.tp);
     this.intake$ = this.mentorship.getIntakes(this.tp);
-    this.profileImg$ = this.mentorship.getStudentPhoto(this.tp);
     this.onTap(this.selectedIntake);
     this.runModifierForSelect();
   }
