@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { map, share } from 'rxjs/operators';
+import { share } from 'rxjs/operators';
 
 import { Role, StaffDirectory } from '../../interfaces';
 import { AppLauncherService, SettingsService, WsApiService } from '../../services';
@@ -18,9 +18,9 @@ import { AppLauncherService, SettingsService, WsApiService } from '../../service
 
 export class StaffDirectoryInfoPage implements OnInit {
 
-  staff$: Observable<StaffDirectory>;
-  staffExists = true;
+  staffs$: Observable<StaffDirectory[]>;
   isStudent = false;
+  id: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,17 +31,11 @@ export class StaffDirectoryInfoPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    const id = this.route.snapshot.params.id;
+    this.id = this.route.snapshot.params.id;
     const role = this.settings.get('role');
-    this.staff$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
-      map(ss => {
-          const staffRecord = ss.find(s => s.ID === id);
-          staffRecord ? this.staffExists = true : this.staffExists = false;
-          return staffRecord;
-        }),
+    this.staffs$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
       share(),
     );
-
     // tslint:disable-next-line: no-bitwise
     if (role & Role.Student) {
       this.isStudent = true;
