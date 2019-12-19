@@ -229,7 +229,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
   /** Change classcode, auto select class type. */
   changeClasscode(classcode: string, propagate = true) {
     this.schedulesByClasscode = this.schedules.filter(schedule => schedule.CLASS_CODE === classcode);
-    this.dates = [...new Set(this.schedulesByClasscode.map(schedule => schedule.DATESTAMP_ISO))].sort();
+    this.dates = [...new Set(this.schedulesByClasscode.map(schedule => schedule.DATESTAMP_ISO))].sort().reverse();
     this.date = '';
 
     if (propagate && this.dates.length === 1) {
@@ -300,7 +300,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
         manualEndTime: this.manualEndTime,
         manualClassType: this.manualClassType,
 
-        now: new Date,
+        now: new Date(),
       };
       await this.ws.post('/attendix/selection', { body }).toPromise();
     }
