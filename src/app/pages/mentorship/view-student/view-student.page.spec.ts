@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 import { MentorshipService } from 'src/app/services/mentorship.service';
-import { ReversePipe } from '../../../shared/reverse/reverse.pipe';
+import { SharedPipesModule } from 'src/app/shared/shared-pipes.module';
 import { FilterPipe } from './pipes/filter.pipe';
 import { SearchPipe } from './pipes/search.pipe';
 import { ViewStudentPage } from './view-student.page';
@@ -15,7 +15,8 @@ describe('ViewStudentPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ViewStudentPage, ReversePipe, FilterPipe, SearchPipe ],
+      imports: [SharedPipesModule],
+      declarations: [ ViewStudentPage, FilterPipe, SearchPipe ],
       providers: [
         { provide: MentorshipService, useValue: {} },
         { provide: ActivatedRoute, useValue: {} },
