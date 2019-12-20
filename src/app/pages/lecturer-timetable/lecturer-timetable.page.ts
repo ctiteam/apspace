@@ -64,11 +64,7 @@ export class LecturerTimetablePage implements OnInit {
 
     // select current start of week
     const date = new Date();
-    if (date.getDay() !== 6) { // 6 is saturday
-      date.setDate(date.getDate() - date.getDay());
-    } else {
-      date.setDate(date.getDate() + 1);  // include saturdays with the new week
-    }
+    date.setDate(date.getDate() - date.getDay() + 1); // monday
     this.selectedWeek = date;
 
     // default to daily view
@@ -105,7 +101,7 @@ export class LecturerTimetablePage implements OnInit {
 
   /** Check if the day is in week. */
   dayInWeek(date: Date) {
-    date.setDate(date.getDate() - date.getDay());
+    date.setDate(date.getDate() - date.getDay() + 1); // monday
     return date.getFullYear() === this.selectedWeek.getFullYear()
       && date.getMonth() === this.selectedWeek.getMonth()
       && date.getDate() === this.selectedWeek.getDate();
@@ -135,7 +131,7 @@ export class LecturerTimetablePage implements OnInit {
     // get week
     this.availableWeek = Array.from(new Set(tt.map(t => {
       const date = new Date(t.time.slice(0, 10));
-      date.setDate(date.getDate() - date.getDay());
+      date.setDate(date.getDate() - date.getDay() + 1); // monday
       return date.valueOf();
     }))).sort().map(d => new Date(d));
 
