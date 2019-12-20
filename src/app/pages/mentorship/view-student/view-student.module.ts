@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { ReversePipe } from '../../../shared/reverse/reverse.pipe';
+import { SharedPipesModule } from 'src/app/shared/shared-pipes.module';
 import { FilterPipe } from './pipes/filter.pipe';
 import { SearchPipe } from './pipes/search.pipe';
 import { ShowDetailsPage } from './show-details/show-details.page';
@@ -23,9 +23,10 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     ComponentsModule,
+    SharedPipesModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ViewStudentPage, ShowDetailsPage, ReversePipe, FilterPipe, SearchPipe],
+  declarations: [ViewStudentPage, ShowDetailsPage, FilterPipe, SearchPipe],
   entryComponents: [ShowDetailsPage]
 })
 export class ViewStudentPageModule {}
