@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonSelect, ModalController, ToastController } from '@ionic/angular';
+import { IonSelect, LoadingController, ModalController, ToastController } from '@ionic/angular';
 
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -90,6 +90,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     private tt: StudentTimetableService,
     private ws: WsApiService,
     private router: Router,
+    public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
   ) { }
@@ -98,6 +99,14 @@ export class ClassesPage implements AfterViewInit, OnInit {
     const d = new Date();
     this.date = this.isoDate(d);
     const nowMins = d.getHours() * 60 + d.getMinutes();
+
+    const loadingCtrl = this.loadingCtrl.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+    });
+    loadingCtrl.then(loading => loading.present());
 
     const timetables$ = forkJoin([this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }), this.tt.get()]).pipe(
       map(([profile, timetables]) => timetables.filter(timetable =>
@@ -148,6 +157,8 @@ export class ClassesPage implements AfterViewInit, OnInit {
           ({ DATESTAMP_ISO: DATE, TIME_FROM, TIME_TO, CLASS_CODE, TYPE })));
       this.schedules = this.schedules.concat.apply([], mapped);
       this.classcodes = [...new Set(this.schedules.map(schedule => schedule.CLASS_CODE).filter(Boolean))].sort();
+
+      loadingCtrl.then(loading => loading.dismiss());
       console.log('filtered', this.schedules, this.classcodes);
 
       // manual classcodes
