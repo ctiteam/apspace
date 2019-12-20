@@ -5,7 +5,6 @@ export interface MentorshipStudentList {
     PROGRAMME: string;
     STUDENT_NUMBER: string;
     RELATIONTYPE: string;
-    STUDENT_PHOTO: string;
 }
 
 export interface MentorshipIntake {
