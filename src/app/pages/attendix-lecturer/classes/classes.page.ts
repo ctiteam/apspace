@@ -120,9 +120,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
       const joined = timetables.map(timetable => ({
         ...classcodes.find(classcode => {
           // Classcode BM006-3-2-CRI-L-UC2F1805CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
-          // Take only BM006-3-2-CRI-L- (+3 extra characters for L, T1, T2)
+          // Take only BM006-3-2-CRI-L- (+3 extra characters with '-' pad for L, T1, T2)
           const len = classcode.SUBJECT_CODE.length;
-          return classcode.CLASS_CODE.slice(0, len + 3) === timetable.MODID.slice(0, len + 3)
+          return classcode.CLASS_CODE.slice(0, len + 3) === (timetable.MODID + '-').slice(0, len + 3)
             && classcode.COURSE_CODE_ALIAS === timetable.INTAKE;
         }),
         ...timetable
@@ -159,7 +159,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
       this.classcodes = [...new Set(this.schedules.map(schedule => schedule.CLASS_CODE).filter(Boolean))].sort();
 
       loadingCtrl.then(loading => loading.dismiss());
-      console.log('filtered', this.schedules, this.classcodes);
+      // console.log('filtered', this.schedules, this.classcodes);
 
       // manual classcodes
       this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
@@ -203,7 +203,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     this.changeClasscode(this.classcode = currentSchedule.CLASS_CODE, false);
     this.changeDate(this.date = date, false);
     this.changeStartTime(this.startTime = currentSchedule.TIME_FROM);
-    console.log('currentSchedule', currentSchedule);
+    // console.log('currentSchedule', currentSchedule);
   }
 
   /** Parse time into minutes of day in 12:59 PM format. */
