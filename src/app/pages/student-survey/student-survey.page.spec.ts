@@ -29,14 +29,12 @@ describe('StudentSurveyPage', () => {
     }).compileComponents();
   }));
 
-  beforeEach(() => {
+  it('should create', () => {
+    wsSpy.get.and.returnValue(NEVER);
+
     fixture = TestBed.createComponent(StudentSurveyPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    wsSpy.get.and.returnValue(NEVER);
 
     const router = TestBed.get(Router);
     spyOn(router, 'getCurrentNavigation').and.returnValue({
