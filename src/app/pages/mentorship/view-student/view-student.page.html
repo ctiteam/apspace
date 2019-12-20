@@ -29,30 +29,30 @@
               <h2 class="center-txt">{{ profile[0].STUDENT_NUMBER }} | {{ profile[0].INTAKE_CODE }}</h2>
 
               <h2 class="center-txt bold">Programme</h2>
-              <h2 class="center-txt">{{ profile[0].PROGRAMME }}</h2>
+              <h2 class="center-txt">{{ profile[0].PROGRAMME || "N/A" }}</h2>
 
               <h2 class="center-txt bold">Programme Leader</h2>
-              <h2 class="center-txt">{{ profile[0].PL_NAME }}</h2>
+              <h2 class="center-txt">{{ profile[0].PL_NAME || "N/A" }}</h2>
 
               <h2 class="center-txt bold">Academic Mentor</h2>
-              <h2 class="center-txt">{{ profile[0].MENTOR_NAME }}</h2>
+              <h2 class="center-txt">{{ profile[0].MENTOR_NAME || "N/A" }}</h2>
 
               <h2 class="center-txt bold">Student Status</h2>
-              <h2 class="center-txt">{{ profile[0].STUDENT_STATUS }}</h2>
+              <h2 class="center-txt">{{ profile[0].STUDENT_STATUS || "N/A" }}</h2>
 
               <h2 class="center-txt bold">Intake Status</h2>
-              <h2 class="center-txt">{{ profile[0].INTAKE_STATUS }}</h2>
+              <h2 class="center-txt">{{ profile[0].INTAKE_STATUS || "N/A" }}</h2>
 
               <h2 class="center-txt bold">Intake Date</h2>
               <h2 class="center-txt">{{ profile[0].INTAKE_START_DATE | date:'EEE, dd MMM' }} -
                 {{ profile[0].INTAKE_END_DATE | date:'EEE, dd MMM' }}</h2>
 
               <h2 class="center-txt bold">Email</h2>
-              <h2 class="center-txt"><a href="mailto:{{ profile[0].E_MAIL }}">{{ profile[0].E_MAIL }}</a></h2>
+              <h2 class="center-txt"><a href="mailto:{{ profile[0].E_MAIL }}">{{ profile[0].E_MAIL || "N/A" }}</a></h2>
 
               <h2 class="center-txt bold">Student Email</h2>
               <h2 class="center-txt">
-                <a href="mailto:{{ profile[0].E_MAIL_STUDENT }}">{{ profile[0].E_MAIL_STUDENT }}</a>
+                <a href="mailto:{{ profile[0].E_MAIL_STUDENT }}">{{ profile[0].E_MAIL_STUDENT || "N/A" }}</a>
               </h2>
             </div>
           </ion-card-content>
