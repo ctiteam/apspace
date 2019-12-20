@@ -2,6 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed, async } from '@angular/core/testing';
 import { NEVER } from 'rxjs';
 
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { RouterLinkDirectiveStub } from '../../../testing';
 import { WsApiService } from '../../services';
 import { FromWeekPipe } from './from-week.pipe';
@@ -25,6 +26,7 @@ describe('LecturerTimetableComponent', () => {
       ],
       providers: [
         { provide: WsApiService, useValue: ws },
+        { provide: InAppBrowser, useValue: {} },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
