@@ -168,6 +168,7 @@ const routes: Routes = [
   {
     path: 'lecturer-timetable',
     canActivate: [AuthGuard],
+    data: { role: Role.Lecturer },
     loadChildren: () => import('./pages/lecturer-timetable/lecturer-timetable.module').then(m => m.LecturerTimetablePageModule)
   },
   {
