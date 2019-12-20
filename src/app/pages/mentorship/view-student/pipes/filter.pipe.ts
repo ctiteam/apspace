@@ -1,10 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Subcourse } from 'src/app/interfaces/mentorship';
+import { MentorshipSubcourse } from 'src/app/interfaces/mentorship';
 
 const filterMap = {
-  'low-attendance': (item: Subcourse) => item.TOTAL_ATTEND_PERCENT < 80,
+  'low-attendance': (item: MentorshipSubcourse) => item.TOTAL_ATTEND_PERCENT < 80,
   // tslint:disable-next-line: object-literal-key-quotes
-  'passed': (item: Subcourse) => item.GRADE_POINT > '2.0'
+  'failed': (item: MentorshipSubcourse) => +item.GRADE_POINT < 2.00 && item.GRADE_POINT !== null,
+  'full-attendance': (item: MentorshipSubcourse) => item.TOTAL_ATTEND_PERCENT === 100,
+  'full-cgpa': (item: MentorshipSubcourse) => +item.GRADE_POINT === 4.00
 };
 
 @Pipe({
@@ -12,13 +14,12 @@ const filterMap = {
 })
 export class FilterPipe implements PipeTransform {
 
-  transform(result: Subcourse[] | null, shownFilters: string[]): Subcourse[] {
+  transform(result: MentorshipSubcourse[] | null, shownFilters: string[]): MentorshipSubcourse[] {
     if (shownFilters && shownFilters.length > 0) {
-      return (result || []).filter((item: Subcourse) => {
-        return shownFilters.some(
+      return (result || []).filter((item: MentorshipSubcourse) => {
+        return shownFilters.every(
           label =>
-            filterMap[label.toLowerCase().trim()] &&
-            filterMap[label.toLowerCase().trim()](item)
+            filterMap[label] && filterMap[label](item)
         );
       });
     }

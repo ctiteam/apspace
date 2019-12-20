@@ -26,7 +26,7 @@ describe('LecturerTimetableComponent', () => {
       ],
       providers: [
         { provide: WsApiService, useValue: ws },
-        { provide: InAppBrowser, useValue: {} },
+        { provide: InAppBrowser, useValue: {} }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();

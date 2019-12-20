@@ -1,5 +1,6 @@
 ion-card {
-  padding: 10px;
+  margin: 10px !important;
+  padding: 10px !important;
   padding-bottom: 0px;
   
   ion-card-header {
@@ -39,10 +40,6 @@ ion-item {
   font-weight: bold;
 }
 
-.sideline {
-  border-left: 2px solid var(--secondary-txt-color);
-}
-
 .text-center {
   text-align: center;
 }
@@ -50,7 +47,6 @@ ion-item {
 .top-spacing {
   margin-top: 20px !important;
 }
-
 
 .red {
   color: red !important;
@@ -70,6 +66,15 @@ ion-item {
   --padding-start: 10px;
 }
 
+.right-notch {
+  padding-right: 10px;
+}
+
+.sideline {
+  padding-left: 20px !important;
+}
+
+// Screen bigger than Mobile
 @media only screen and (min-width: 577px) {
   .controlled-layout {
     margin: 20px 50px;
@@ -77,6 +82,10 @@ ion-item {
   
   .marker {
     display: none;
+  }
+
+  .sideline {
+    border-left: none;
   }
 }
 
@@ -91,7 +100,7 @@ ion-item {
   
   .sideline {
     border-left: none;
-    // border-top: 2px solid var(--secondary-txt-color);
+    padding-left: 0px !important;
   }
   
   .center-txt {
