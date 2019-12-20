@@ -98,7 +98,6 @@ export class FilingReportPage implements OnInit {
     } else if (this.currentStepNumber === 1) {
       this.show = 'empty';
     }
-    console.log(this.show);
   }
 
   cancel() {
@@ -130,16 +129,22 @@ export class FilingReportPage implements OnInit {
               location: this.selectedLocation,
               day: this.selectedDay,
               category: this.selectedMainCategory,
-              subcategory: this.selectedSubCategory
+              sub_category: this.selectedSubCategory
             };
             this.ws.post('/dresscode/submit', {
               url: 'https://4gkrvp7hcl.execute-api.ap-southeast-1.amazonaws.com/dev',
               body
             }).subscribe(
               {
-                next: res => { console.log('success: ', res); },
-                error: err => { console.log('error: ', err); this.dismissLoading(); },
-                complete: () => { console.log('done: '); this.dismissLoading(); },
+                error: err => {
+                  this.showToastMessage(err.error.error, 'danger');
+                  this.dismissLoading();
+                },
+                complete: () => {
+                  this.showToastMessage('Report Submitted Successfully!', 'success');
+                  this.emptyForm();
+                  this.dismissLoading();
+                },
               }
             );
             // this.showToastMessage('Report has been submitted successfully!', 'success');
@@ -148,5 +153,15 @@ export class FilingReportPage implements OnInit {
         }
       ]
     }).then(confirm => confirm.present());
+  }
+
+  emptyForm() {
+    this.selectedMainCategory = this.mainCategories[0];
+    this.selectedSubCategory = this.subCategories[0].title;
+    this.selectedDay = new Date().getDay() !== 5 ? this.days[0] : this.days[1];
+    this.selectedLocation = this.locations[0];
+    this.studentId = 'TP';
+    this.description = '';
+    this.currentStepNumber = 0; // navigate back to step 1
   }
 }
