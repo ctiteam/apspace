@@ -141,12 +141,13 @@ export class StudentTimetablePage implements OnInit {
       // tslint:disable-next-line: no-bitwise
       if (this.settings.get('role') & Role.Student) { // intake is not defined & user role is student
         this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).subscribe(p => {
-          this.intake = (p || {} as StudentProfile).INTAKE || '';
+          this.intake = p.INTAKE;
           this.changeDetectorRef.markForCheck();
           this.settings.set('intakeHistory', [this.intake]);
           this.doRefresh();
         });
       } else {
+        this.settings.set('intakeHistory', []);
         // intake is not defined & user role is staff or lecturers
         this.doRefresh();
       }
@@ -185,13 +186,10 @@ export class StudentTimetablePage implements OnInit {
   changeIntake(intake: string) {
     if (intake !== null && intake !== this.intake) {
       this.intake = intake;
-      // tslint:disable-next-line: no-bitwise
-      if (this.settings.get('role') & Role.Student) {
-        this.settings.set('intakeHistory', this.settings.get('intakeHistory')
-          .concat(intake)
-          .filter((v, i, a) => a.lastIndexOf(v) === i)
-          .slice(-5));
-      }
+      this.settings.set('intakeHistory', this.settings.get('intakeHistory')
+        .concat(intake)
+        .filter((v, i, a) => a.lastIndexOf(v) === i)
+        .slice(-5));
       this.changeDetectorRef.markForCheck();
       this.timetable$.subscribe();
     }
