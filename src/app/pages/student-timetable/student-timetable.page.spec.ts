@@ -31,7 +31,7 @@ function settingsFake<K extends keyof Settings>(data: Settings): (key: K) => Set
   };
 }
 
-fdescribe('StudentTimetablePage', () => {
+describe('StudentTimetablePage', () => {
   let activatedRoute: ActivatedRouteStub;
   let component: StudentTimetablePage;
   let fixture: ComponentFixture<StudentTimetablePage>;
