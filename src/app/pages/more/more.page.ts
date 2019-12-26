@@ -76,7 +76,7 @@ export class MorePage implements OnInit {
       tags: ['articles', 'Q&A', 'FAQ', 'questions', 'answers', 'how to']
     },
     {
-      title: 'News',
+      title: 'News Feed',
       group: 'Main',
       url: 'news',
       img: 'assets/img/news.png',
