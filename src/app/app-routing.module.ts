@@ -243,7 +243,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/unauthorized/unauthorized.module').then(m => m.UnauthorizedPageModule)
   },
   {
-    path: 'student-professionalism',
+    path: 'beapu',
     canActivate: [AuthGuard],
     // data: { role: Role.Admin | Role.Lecturer },
     loadChildren: () => import('./pages/filing-report/filing-report.module').then(m => m.FilingReportPageModule)

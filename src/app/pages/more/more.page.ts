@@ -243,15 +243,15 @@ export class MorePage implements OnInit {
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['lecturer', 'academic', 'teacher']
     },
-    // {
+    {
     // TODO: Change the icon
-    //   title: 'Student Professionalism',
-    //   group: 'Others',
-    //   url: 'student-professionalism',
-    //   img: 'assets/img/filing-report.png',
-    //   role: Role.Lecturer | Role.Admin,
-    //   tags: ['Report', 'attire', 'formal']
-    // },
+      title: 'BeAPU',
+      group: 'Others',
+      url: 'beapu',
+      img: 'assets/img/filing-report.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['report', 'attire', 'formal']
+    },
     {
       title: 'Track Student Visa Status',
       group: 'Others',
