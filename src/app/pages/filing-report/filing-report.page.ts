@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, Platform, ToastController } from '@ionic/angular';
+import { Observable, of } from 'rxjs';
 import { WsApiService } from 'src/app/services';
 
 @Component({
@@ -8,6 +9,7 @@ import { WsApiService } from 'src/app/services';
   styleUrls: ['./filing-report.page.scss'],
 })
 export class FilingReportPage implements OnInit {
+  studentPhoto$: Observable<any[]>; // to be changed
   readPolicyCheckbox = false;
   loading: HTMLIonLoadingElement;
   stagingUrl = 'http://forms.sites-staging.apiit.edu.my/wp-json/gf/v2';
@@ -93,17 +95,27 @@ export class FilingReportPage implements OnInit {
     this.show = '';
     this.currentStepNumber++;
     // for Demo. It will be removed after the backend created
-    if (this.currentStepNumber === 1 && this.studentId === 'TP037354') {
+    if (this.currentStepNumber === 1 && (this.studentId === 'TP037354' || this.studentId === 'TP055641')) {
       this.show = 'records';
     } else if (this.currentStepNumber === 1) {
       this.show = 'empty';
     }
   }
 
+  showImage(studentID: string) {
+    this.studentPhoto$ = this.ws.post<any[]>('/student/image', {
+      url: 'https://u1cd2ltoq6.execute-api.ap-southeast-1.amazonaws.com/dev',
+      body: {
+        id: [studentID]
+      }
+    });
+  }
+
   cancel() {
     this.studentId = 'TP';
     this.currentStepNumber = 0;
     this.description = '';
+    this.studentPhoto$ = of(); // empty the image observable
   }
 
   submitReport() {
