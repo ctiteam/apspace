@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ModalController, NavParams } from '@ionic/angular';
 import { News } from '../../interfaces';
@@ -18,7 +18,8 @@ export class NewsModalPage {
   }
 
   sanitize(value: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(value);
+    // const href = value.match(/href="([^"]*)/)[1];
+    return this.sanitizer.sanitize(SecurityContext.HTML, value);
   }
 
   ionViewWillEnter() {
