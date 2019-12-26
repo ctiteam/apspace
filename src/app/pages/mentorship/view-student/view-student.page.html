@@ -157,9 +157,19 @@
         </ng-container>
 
         <ng-template #loadingCourseDetail>
-          <ion-card class="ion-no-padding">
-            <ion-card-content class="ion-no-padding">
-              <ion-skeleton-text animated style="line-height: 200px;"></ion-skeleton-text>
+          <ion-card class="ion-no-padding ion-no-margin">
+            <ion-card-content class="ion-no-padding ion-no-margin">
+              <ion-grid class="ion-no-padding">
+                <ion-row class="ion-no-padding">
+                  <ion-col size-sm="12" size="12">
+                    <ion-skeleton-text animated style="line-height: 20px;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="line-height: 20px;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="line-height: 20px;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="line-height: 20px;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="line-height: 20px;"></ion-skeleton-text>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
             </ion-card-content>
           </ion-card>
         </ng-template>
@@ -190,7 +200,6 @@
         <ng-container *ngIf="(subCourse$ | async) as subCourses; else loadingSemester">
           <ng-container *ngIf="subCourses.length > 0; else noData">
             <ng-container *ngFor="let semester of subCourses | reverse">
-              <!-- start -->
               <ion-card class="ion-no-padding">
                 <ion-card-header>
                   <ion-card-title>
@@ -305,13 +314,12 @@
                   </ion-card-content>
                 </ng-container>
               </ion-card>
-              <!-- end -->
-
             </ng-container>
           </ng-container>
         </ng-container>
+
         <ng-template #loadingSemester>
-          <ion-card class="ion-no-padding">
+          <ion-card class="ion-no-padding ion-no-margin">
             <ion-card-content class="ion-no-padding">
               <ion-skeleton-text animated style="line-height: 200px;"></ion-skeleton-text>
             </ion-card-content>
