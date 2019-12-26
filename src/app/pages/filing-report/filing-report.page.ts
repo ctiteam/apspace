@@ -132,7 +132,6 @@ export class FilingReportPage implements OnInit {
               sub_category: this.selectedSubCategory
             };
             this.ws.post('/dresscode/submit', {
-              url: 'https://4gkrvp7hcl.execute-api.ap-southeast-1.amazonaws.com/dev',
               body
             }).subscribe(
               {
