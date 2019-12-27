@@ -19,12 +19,27 @@ export type Attendance = {
   schedule: Schedule,
   secret: Scalars['String'],
   students: Array<Status>,
+  log?: Maybe<Log>,
+};
+
+export type Log = {
+   __typename?: 'Log',
+  lectureUpdate?: Maybe<Scalars['String']>,
+  otherInfo?: Maybe<Scalars['String']>,
+  nextLecturePlan?: Maybe<Scalars['String']>,
+};
+
+export type LogInput = {
+  lectureUpdate?: Maybe<Scalars['String']>,
+  otherInfo?: Maybe<Scalars['String']>,
+  nextLecturePlan?: Maybe<Scalars['String']>,
 };
 
 export type Mutation = {
    __typename?: 'Mutation',
   initAttendance: Attendance,
   markAttendance: Status,
+  saveLectureLog?: Maybe<Scalars['Boolean']>,
   updateAttendance: Status,
 };
 
@@ -39,6 +54,12 @@ export type MutationMarkAttendanceArgs = {
   student: Scalars['String'],
   attendance: Scalars['String'],
   absentReason?: Maybe<Scalars['String']>
+};
+
+
+export type MutationSaveLectureLogArgs = {
+  schedule: ScheduleInput,
+  log: LogInput
 };
 
 
@@ -106,6 +127,7 @@ export type SubscriptionNewStatusArgs = {
   endTime: Scalars['String'],
   classType: Scalars['String']
 };
+
 export type AttendanceQueryVariables = {
   schedule: ScheduleInput
 };
@@ -119,6 +141,9 @@ export type AttendanceQuery = (
     & { students: Array<(
       { __typename?: 'Status' }
       & Pick<Status, 'id' | 'name' | 'attendance' | 'absentReason'>
+    )>, log: Maybe<(
+      { __typename?: 'Log' }
+      & Pick<Log, 'lectureUpdate' | 'otherInfo' | 'nextLecturePlan'>
     )> }
   )> }
 );
@@ -173,6 +198,17 @@ export type NewStatusSubscription = (
   )> }
 );
 
+export type SaveLectureLogMutationVariables = {
+  schedule: ScheduleInput,
+  log: LogInput
+};
+
+
+export type SaveLectureLogMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'saveLectureLog'>
+);
+
 export type UpdateAttendanceMutationVariables = {
   otp: Scalars['String']
 };
@@ -186,6 +222,7 @@ export type UpdateAttendanceMutation = (
   ) }
 );
 
+
 export const AttendanceDocument = gql`
     query attendance($schedule: ScheduleInput!) {
   attendance(schedule: $schedule) {
@@ -195,6 +232,11 @@ export const AttendanceDocument = gql`
       name
       attendance
       absentReason
+    }
+    log {
+      lectureUpdate
+      otherInfo
+      nextLecturePlan
     }
   }
 }
@@ -265,6 +307,19 @@ export const NewStatusDocument = gql`
   })
   export class NewStatusGQL extends Apollo.Subscription<NewStatusSubscription, NewStatusSubscriptionVariables> {
     document = NewStatusDocument;
+    
+  }
+export const SaveLectureLogDocument = gql`
+    mutation saveLectureLog($schedule: ScheduleInput!, $log: LogInput!) {
+  saveLectureLog(schedule: $schedule, log: $log)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class SaveLectureLogGQL extends Apollo.Mutation<SaveLectureLogMutation, SaveLectureLogMutationVariables> {
+    document = SaveLectureLogDocument;
     
   }
 export const UpdateAttendanceDocument = gql`
