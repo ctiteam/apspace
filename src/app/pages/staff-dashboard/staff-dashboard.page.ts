@@ -497,7 +497,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
             firstDescription: upcomingConsultation.room_code + ' | ' + upcomingConsultation.venue,
             // secondDescription: upcomingConsultation.lecname,
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
-            dateOrTime: moment(upcomingConsultation.start_time).utcOffset('+0800').format('hh:mm A'),
+            dateOrTime: moment(upcomingConsultation.start_time).utcOffset('+0800').format('hh mm A'),
           });
         });
         return consultationsEventMode;

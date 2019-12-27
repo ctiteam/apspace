@@ -558,7 +558,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
             firstDescription: upcomingConsultation.slot_room_code + ' | ' + upcomingConsultation.slot_venue,
             secondDescription: upcomingConsultation.staff_detail.FULLNAME,
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
-            dateOrTime: moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh:mm A'),
+            dateOrTime: moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh mm A'),
           });
         });
 
