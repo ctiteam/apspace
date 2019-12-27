@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, Platform, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { WsApiService } from 'src/app/services';
 
 @Component({
@@ -10,6 +11,7 @@ import { WsApiService } from 'src/app/services';
 })
 export class FilingReportPage implements OnInit {
   studentDetails$: Observable<any[]>; // to be changed
+  studentRecords$: Observable<any>; // to be changed
   readPolicyCheckbox = false;
   loading: HTMLIonLoadingElement;
   stagingUrl = 'http://forms.sites-staging.apiit.edu.my/wp-json/gf/v2';
@@ -95,7 +97,7 @@ export class FilingReportPage implements OnInit {
     this.show = '';
     this.currentStepNumber++;
     // for Demo. It will be removed after the backend created
-    if (this.currentStepNumber === 1 && (this.studentId === 'TP037354' || this.studentId === 'TP055641')) {
+    if (this.currentStepNumber === 1 && (this.studentId === 'TP037354' || this.studentId === 'TP055641' || this.studentId === 'TP037836')) {
       this.show = 'records';
 
       this.studentDetails$ = this.ws.post<any[]>('/student/image', {
@@ -104,6 +106,10 @@ export class FilingReportPage implements OnInit {
           id: [this.studentId]
         }
       });
+
+      this.studentRecords$ = this.ws.get(`/dresscode/history?student_id=${this.studentId}`).pipe(
+        tap(res => console.log(res))
+      );
     } else if (this.currentStepNumber === 1) {
       this.show = 'empty';
     }
