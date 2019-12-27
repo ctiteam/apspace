@@ -1,21 +1,21 @@
 image: node:erbium-alpine
 
 pipelines:
-  default:
-    - step: &build-test
-        name: Build & Test
-        caches:
-          - node
-        script:
-          - apk add firefox-esr
-          - yarn install
-          - yarn lint
-          - yarn test --configuration=ci
-            # - yarn e2e --configuration=ci
-          - yarn build --configuration=ci
-  pull-requests:
-    '**':
-      - step: *build-test
+  # default:
+  #   - step: &build-test
+  #       name: Build & Test
+  #       caches:
+  #         - node
+  #       script:
+  #         - apk add firefox-esr
+  #         - yarn install
+  #         - yarn lint
+  #         - yarn test --configuration=ci
+  #           # - yarn e2e --configuration=ci
+  #         - yarn build --configuration=ci
+  # pull-requests:
+  #   '**':
+  #     - step: *build-test
   branches:
     production:
     - step:
