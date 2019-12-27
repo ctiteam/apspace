@@ -4,8 +4,8 @@
       <ion-card-header class="card-header">
         <ion-item lines="none" class="ion-no-padding">
           <ion-label>
-            <h2 class="cursor-pointer week-title colored-text" (click)='show(week.key, $event.target)'>
-              <span class="text-bold">Week</span>: {{ week.key | fromWeek | date }}
+            <h2 class="cursor-pointer colored-text" (click)='show(week.key, $event.target)'>
+              <span class="text-bold">Week</span>: <span class="week-title ">{{ week.key | fromWeek | date }}</span>
             </h2>
           </ion-label>
           <ion-icon slot="end" class="cursor-pointer colored-text icon-hover" name="print"
