@@ -18,7 +18,6 @@ export class NewsPage {
   noticeBoardItems$: Observable<any[]>;
   noticeBoardSliderOpts = {
     autoplay: true,
-    // speed: 1000,
     on: {
       beforeInit() {
         const swiper = this;

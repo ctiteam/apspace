@@ -19,10 +19,10 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ComponentsModule
+    ComponentsModule,
   ],
   declarations: [NewsPage],
-  entryComponents: [],
+  entryComponents: []
 })
 
 export class NewsPageModule {}

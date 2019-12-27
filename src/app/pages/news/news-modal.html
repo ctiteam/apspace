@@ -13,6 +13,6 @@
   <ion-img *ngIf="item.field_news_image.length > 0" [src]="item.field_news_image[0].url"></ion-img>
   <div class="ion-padding">
     <h3 *ngIf="item.title.length > 0" class="colored-text ion-margin-top ion-margin-bottom">{{item.title[0].value}}</h3>
-    <article  *ngIf="item.body.length > 0" class="main-text-color ion-padding-start" [innerHTML]="sanitize(item.body[0].value)"></article>
+    <article  *ngIf="item.body.length > 0" class="main-text-color ion-padding-start" [innerHTML]="item.body[0].value | safe: 'sanitizeHtml'"></article>
   </div>
 </ion-content>

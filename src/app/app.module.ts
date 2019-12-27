@@ -18,7 +18,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { httpInterceptorProviders } from './http-interceptors';
-import { NewsModalPage } from './pages/news/news-modal';
 import { NotificationModalPage } from './pages/notifications/notification-modal';
 import { RequestCache, RequestCacheWithMapStorage } from './services';
 // import { Animation } from '@ionic/core';
@@ -27,11 +26,12 @@ import { RequestCache, RequestCacheWithMapStorage } from './services';
 
 import { Badge } from '@ionic-native/badge/ngx';
 import { GraphQLModule } from './graphql.module';
+import { NewsModalPageModule } from './pages/news/news-modal.module';
 
 @NgModule({
   // notificationPageModal is needed here because it is called in app.component.ts, NewsModal is called in dashboards also
-  declarations: [AppComponent, NotificationModalPage, NewsModalPage],
-  entryComponents: [NotificationModalPage, NewsModalPage],
+  declarations: [AppComponent, NotificationModalPage],
+  entryComponents: [NotificationModalPage],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -45,6 +45,7 @@ import { GraphQLModule } from './graphql.module';
     IonicStorageModule.forRoot(),
     AppRoutingModule,
     GraphQLModule,
+    NewsModalPageModule
   ],
   providers: [
     ActionSheet,
