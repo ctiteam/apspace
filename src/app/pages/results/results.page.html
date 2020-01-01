@@ -26,25 +26,7 @@
         <ion-col size-xs="12" size-lg="4">
           <ng-container *ngIf="courseDetail$ | async as courseDetail; else loadingCourseDetail">
             <ion-card class="ion-no-margin ion-margin-top" *ngIf="courseDetail.length > 1; else noCourseDetail">
-              <!-- more than one -->
-              <ion-card-header class="colored-border">
-                <ion-card-title>
-                  Summary
-                </ion-card-title>
-              </ion-card-header>
               <ion-card-content>
-                <h4 class="summary-header colored-text ion-padding-start text-bold">
-                  GPA Per Semester
-                </h4>
-                <ng-container *ngFor="let detail of courseDetail; trackBy:trackByFn">
-                  <ion-item lines="none" *ngIf="detail.SEMESTER">
-                    <ion-label>
-                      <h4 class="text-bold">Semester {{ detail.SEMESTER }}</h4>
-                      <p class="secondary-txt-color">GPA {{ detail.GPA }} ({{ detail.TOTAL_MODULES_PASSED }} modules
-                        passed)</p>
-                    </ion-label>
-                  </ion-item>
-                </ng-container>
                 <ng-container>
                   <h4 class="summary-header colored-text ion-padding-start text-bold">
                     Results Summary Chart
@@ -85,80 +67,106 @@
 
         <!-- Results -->
         <ion-col size-xs="12" size-lg="8">
-
           <ng-container *ngIf="results.length > 0; else noResultsYet">
-            <ng-container *ngFor="let semesterResult of results">
-              <div class="sem" color="primary">Semester {{semesterResult.semester}}</div>
-              <ion-card class="table-top ion-no-padding ion-no-margin ion-margin-top ion-margin-bottom">
-                <ion-card-content>
-                  <ion-grid>
-                    <ion-row>
-                      <ion-col size="12" size-sm="3" size-md="5">
-                        <h2 class="text-bold">Module</h2>
-                      </ion-col>
-                      <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
-                        <h2 class="text-bold">Result</h2>
-                      </ion-col>
-                      <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
-                        <h2 class="text-bold">Grade Point</h2>
-                      </ion-col>
-                      <ion-col size="12" size-sm="3" size-md="3" class="ion-text-center">
-                        <h2 class="text-bold">Internal Result Release Date</h2>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
-                </ion-card-content>
-              </ion-card>
-              <ion-card class="ion-no-margin ion-margin-top ion-margin-bottom ion-no-padding"
-                *ngFor="let result of semesterResult.value; last as last; trackBy: trackByFn">
-                <ion-card-header class="special-card-header colored-border"
-                  style="border-bottom: 2px solid var(--primary-color) !important">
-                  <h4>{{ result.MODULE_DESCRIPTION }}</h4>
-                </ion-card-header>
-                <ion-card-content>
-                  <ion-grid>
-                    <ion-row>
-                      <ion-col size="12" size-sm="3" size-md="5" class="text-bold special-border colored-border">
-                        {{ result.MODULE_DESCRIPTION }}
-                      </ion-col>
-                      <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
-                        <span class="marker">Grade: </span>
-                        <ng-container
-                          *ngIf="result.GRADE.toLowerCase() !== 'Pending Survey'.toLowerCase(); else resultsPendingSurvey">
-                          {{ result.GRADE || "N/A" }}
-                        </ng-container>
-                        <ng-template #resultsPendingSurvey>
-                          <a (click)="openSurveyPage(result.MODULE_CODE)" class="colored-text"
-                            style="text-decoration: underline;">Pending
-                            Survey</a>
-                        </ng-template>
-                      </ion-col>
-                      <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
-                        <span class="marker">Grade Point: </span>
-                        <ng-container
-                          *ngIf="result.GRADE_POINT.toLowerCase() !== 'Pending Survey'.toLowerCase(); else resultsPendingSurvey">
-                          {{ result.GRADE_POINT || "N/A" }}
-                        </ng-container>
-                        <ng-template #resultsPendingSurvey>
-                          <a (click)="openSurveyPage(result.MODULE_CODE)" class="colored-text"
-                            style="text-decoration: underline !important;">Pending
-                            Survey</a>
-                        </ng-template>
-                      </ion-col>
-                      <ion-col size="12" size-sm="3" size-md="3" class="ion-text-center">
-                        <span class="marker">Internal Result: </span>
-                        <!-- internal results release date sometimes comes as a null, and sometimes comes as a 'N/A' and sometimes comes as a date -->
-                        {{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A'  }}
-                      </ion-col>
-                      <ion-col *ngIf="result.RECOMMENDATION">
-                        <span class="text-bold">Recommendation:</span> <br>
-                        <span class="danger-text">{{ result.RECOMMENDATION }}</span>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
-                </ion-card-content>
-              </ion-card>
-            </ng-container>
+            <ion-card *ngFor="let semesterResult of results"
+              class="ion-no-padding ion-no-margin ion-margin-top ion-margin-bottom ion-padding-bottom">
+              <ion-card-header class="sem" color="primary">
+                <ion-card-title style="color: var(--txt-color) !important;">Semester {{ semesterResult.semester }}</ion-card-title>
+
+                <ion-grid class="ion-no-padding">
+                  <ion-row>
+                    <ion-col size-lg="6" size="12">
+                      <span class="bold">Total Modules Passed</span>
+                      <span
+                        class="ion-float-right right-notch">{{ semesterResult.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</span>
+                    </ion-col>
+                    <ion-col size-lg="6" size="12">
+                      <span class="bold">Total Credit hours</span>
+                      <span
+                        class="ion-float-right right-notch">{{ semesterResult.summary[0]?.TOTAL_CREDIT_HOURS || 'N/A' }}</span>
+                    </ion-col>
+
+                    <ion-col size-lg="6" size="12">
+                      <span class="bold">Credits transferred</span>
+                      <span
+                        class="ion-float-right right-notch">{{ semesterResult.summary[0]?.CREDIT_TRANSFERRED || 'N/A' }}</span>
+                    </ion-col>
+
+                    <ion-col size-lg="6" size="12">
+                      <span class="bold">GPA</span>
+                      <span class="ion-float-right right-notch">{{ semesterResult.summary[0]?.GPA || 'N/A' }}</span>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-header>
+
+              <ion-card-content>
+                <ion-grid class="table-top">
+                  <ion-row>
+                    <ion-col size="12" size-sm="3" size-md="5">
+                      <h2 class="text-bold">Module</h2>
+                    </ion-col>
+
+                    <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
+                      <h2 class="text-bold">Result</h2>
+                    </ion-col>
+
+                    <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
+                      <h2 class="text-bold">Grade Point</h2>
+                    </ion-col>
+
+                    <ion-col size="12" size-sm="3" size-md="3" class="ion-text-center">
+                      <h2 class="text-bold">Internal Result Release Date</h2>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+
+                <ng-container *ngFor="let result of semesterResult.value; last as last; trackBy: trackByFn">
+                  <ion-item lines="none" class="table-item">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col size="12" size-sm="3" size-md="5" class="text-bold colored-border description ion-text-center">
+                          {{ result.MODULE_DESCRIPTION }}
+                        </ion-col>
+                        <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
+                          <span class="marker">Grade: </span>
+                          <ng-container
+                            *ngIf="result.GRADE.toLowerCase() !== 'Pending Survey'.toLowerCase(); else resultsPendingSurvey">
+                            {{ result.GRADE || "N/A" }}
+                          </ng-container>
+                          <ng-template #resultsPendingSurvey>
+                            <a (click)="openSurveyPage(result.MODULE_CODE)" class="colored-text"
+                              style="text-decoration: underline;">Pending
+                              Survey</a>
+                          </ng-template>
+                        </ion-col>
+                        <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
+                          <span class="marker">Grade Point: </span>
+                          <ng-container
+                            *ngIf="result.GRADE_POINT.toLowerCase() !== 'Pending Survey'.toLowerCase(); else resultsPendingSurvey">
+                            {{ result.GRADE_POINT || "N/A" }}
+                          </ng-container>
+                          <ng-template #resultsPendingSurvey>
+                            <a (click)="openSurveyPage(result.MODULE_CODE)" class="colored-text"
+                              style="text-decoration: underline !important;">Pending
+                              Survey</a>
+                          </ng-template>
+                        </ion-col>
+                        <ion-col size="12" size-sm="3" size-md="3" class="ion-text-center">
+                          <span class="marker">Internal Result: </span>
+
+                          {{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A'  }}
+                        </ion-col>
+                        <ion-col *ngIf="result.RECOMMENDATION">
+                          <span class="text-bold">Recommendation:</span> <br>
+                          <span class="danger-text">{{ result.RECOMMENDATION }}</span>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                </ng-container>
+              </ion-card-content>
+            </ion-card>
           </ng-container>
           <ng-template #noResultsYet>
             <ion-card class="ion-no-margin ion-margin-top ion-margin-bottom ion-no-padding">
