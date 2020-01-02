@@ -70,37 +70,39 @@
           <ng-container *ngIf="results.length > 0; else noResultsYet">
             <ion-card *ngFor="let semesterResult of results"
               class="ion-no-padding ion-no-margin ion-margin-top ion-margin-bottom ion-padding-bottom">
-              <ion-card-header class="sem" color="primary">
-                <ion-card-title style="color: var(--txt-color) !important;">Semester {{ semesterResult.semester }}</ion-card-title>
-
-                <ion-grid class="ion-no-padding">
-                  <ion-row>
-                    <ion-col size-lg="6" size="12">
-                      <span class="bold">Total Modules Passed</span>
-                      <span
-                        class="ion-float-right right-notch">{{ semesterResult.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</span>
-                    </ion-col>
-                    <ion-col size-lg="6" size="12">
-                      <span class="bold">Total Credit hours</span>
-                      <span
-                        class="ion-float-right right-notch">{{ semesterResult.summary[0]?.TOTAL_CREDIT_HOURS || 'N/A' }}</span>
-                    </ion-col>
-
-                    <ion-col size-lg="6" size="12">
-                      <span class="bold">Credits transferred</span>
-                      <span
-                        class="ion-float-right right-notch">{{ semesterResult.summary[0]?.CREDIT_TRANSFERRED || 'N/A' }}</span>
-                    </ion-col>
-
-                    <ion-col size-lg="6" size="12">
-                      <span class="bold">GPA</span>
-                      <span class="ion-float-right right-notch">{{ semesterResult.summary[0]?.GPA || 'N/A' }}</span>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
+              <ion-card-header class="sem">
+                <ion-card-title>Semester {{ semesterResult.semester }}</ion-card-title>
               </ion-card-header>
 
               <ion-card-content>
+                <div style="border-bottom: 2px solid var(--secondary-txt-color);">
+                  <ion-grid class="ion-no-padding">
+                    <ion-row>
+                      <ion-col size-lg="6" size="12">
+                        <span class="text-bold">Total Modules Passed</span>
+                        <span
+                          class="ion-float-right right-notch">{{ semesterResult.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</span>
+                      </ion-col>
+                      <ion-col size-lg="6" size="12">
+                        <span class="text-bold">Total Credit hours</span>
+                        <span
+                          class="ion-float-right right-notch">{{ semesterResult.summary[0]?.TOTAL_CREDIT_HOURS || 'N/A' }}</span>
+                      </ion-col>
+
+                      <ion-col size-lg="6" size="12">
+                        <span class="text-bold">Credits transferred</span>
+                        <span
+                          class="ion-float-right right-notch">{{ semesterResult.summary[0]?.CREDIT_TRANSFERRED || 'N/A' }}</span>
+                      </ion-col>
+
+                      <ion-col size-lg="6" size="12">
+                        <span class="text-bold">GPA</span>
+                        <span class="ion-float-right right-notch">{{ semesterResult.summary[0]?.GPA || 'N/A' }}</span>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </div>
+
                 <ion-grid class="table-top">
                   <ion-row>
                     <ion-col size="12" size-sm="3" size-md="5">
@@ -125,7 +127,8 @@
                   <ion-item lines="none" class="table-item">
                     <ion-grid>
                       <ion-row>
-                        <ion-col size="12" size-sm="3" size-md="5" class="text-bold colored-border description ion-text-center">
+                        <ion-col size="12" size-sm="3" size-md="5"
+                          class="text-bold colored-border description ion-text-center">
                           {{ result.MODULE_DESCRIPTION }}
                         </ion-col>
                         <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
