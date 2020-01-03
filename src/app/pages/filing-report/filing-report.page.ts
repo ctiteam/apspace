@@ -10,9 +10,10 @@ import { WsApiService } from 'src/app/services';
   styleUrls: ['./filing-report.page.scss'],
 })
 export class FilingReportPage implements OnInit {
-  studentDetails$: Observable<any[]>; // to be changed
+  studentDetails$: Observable<any>; // to be changed
   studentRecords$: Observable<any>; // to be changed
-  readPolicyCheckbox = false;
+  disableNextButton = false;
+  skeletons = new Array(3);
   loading: HTMLIonLoadingElement;
   stagingUrl = 'http://forms.sites-staging.apiit.edu.my/wp-json/gf/v2';
   mainCategories = [
@@ -57,7 +58,6 @@ export class FilingReportPage implements OnInit {
   selectedLocation = this.locations[0];
   totalSteps = new Array(3);
   currentStepNumber = 0;
-  show: 'records' | 'no records' | 'empty' | '';
   constructor(
     private loadingController: LoadingController,
     public platform: Platform,
@@ -94,28 +94,31 @@ export class FilingReportPage implements OnInit {
   }
 
   nextStep() {
-    this.show = '';
     this.currentStepNumber++;
     // for Demo. It will be removed after the backend created
-    if (this.currentStepNumber === 1 && (this.studentId === 'TP037354' || this.studentId === 'TP055641' || this.studentId === 'TP037836')) {
-      this.show = 'records';
-
+    if (this.currentStepNumber === 1) {
       this.studentDetails$ = this.ws.post<any[]>('/student/image', {
         url: 'https://u1cd2ltoq6.execute-api.ap-southeast-1.amazonaws.com/dev',
         body: {
           id: [this.studentId]
         }
-      });
-
+      }).pipe(
+        tap(studentDetails => {
+          if (studentDetails.length === 0) {
+            this.disableNextButton = true;
+          } else {
+            this.disableNextButton = false;
+          }
+        })
+      );
       this.studentRecords$ = this.ws.get(`/dresscode/history?student_id=${this.studentId}`).pipe(
         tap(res => console.log(res))
       );
-    } else if (this.currentStepNumber === 1) {
-      this.show = 'empty';
     }
   }
 
   cancel() {
+    console.log('canceled');
     this.studentId = 'TP';
     this.currentStepNumber = 0;
     this.description = '';
