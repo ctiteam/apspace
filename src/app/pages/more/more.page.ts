@@ -325,9 +325,9 @@ export class MorePage implements OnInit {
   openPage(url: string) {
     // external pages does not use relative or absolute link
     if (url.startsWith('http://') || url.startsWith('https://')) {
-      // manually exclude office365, and course schedule that do not need service ticket
+      // Manually exclude sites that do not need service ticket
       if (url.startsWith('https://outlook.office.com')
-        || url === 'http://kb.sites.apiit.edu.my/knowledge-base/course-schedule/'
+        || url.startsWith('http://kb.sites.apiit.edu.my')
         || url === 'https://graduation.sites.apiit.edu.my/') {
         this.iab.create(url, '_system', 'location=true');
       } else {
