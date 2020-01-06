@@ -8,6 +8,9 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="getVisa($event)">
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
+  </ion-refresher>
   <ng-container *ngIf="!local; else isLocal">
     <ion-card>
       <ion-card-content class="ion-no-padding">
