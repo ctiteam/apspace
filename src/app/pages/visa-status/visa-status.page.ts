@@ -85,6 +85,8 @@ export class VisaStatusPage implements OnInit {
   }
 
   getVisa(refresher?) {
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+
     if (!(this.alpha3Code && this.passportNumber)) {
       this.toastCtrl.create({
         message: 'You cannot search or refresh while having a blank field.',
@@ -103,7 +105,7 @@ export class VisaStatusPage implements OnInit {
     this.sendRequest = true;
     this.visa$ = this.ws.get<VisaDetails>(`/student/visa_renewal_status/${this.alpha3Code}/${this.passportNumber}`, {
       auth: false,
-      caching: 'cache-only',
+      caching,
     }).pipe(
       tap(r => console.log(r)),
       finalize(() => refresher && refresher.target.complete())
