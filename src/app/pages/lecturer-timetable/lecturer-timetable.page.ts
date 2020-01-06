@@ -145,7 +145,7 @@ export class LecturerTimetablePage implements OnInit {
     this.availableDate = Array.from(new Set(tt
       .filter(t => this.dayInWeek(new Date(t.time)))
       .map(t => t.time.slice(0, 10)))).map(d => new Date(d));
-    this.availableDays = this.availableDate.map(d => this.wday[d.getDay()]);
+    this.availableDays = this.availableDate.map(d => this.wday[(d.getDay() + 6) % 7]); // monday
 
     // set default day
     if (this.availableDate.length === 0) {
