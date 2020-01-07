@@ -65,6 +65,7 @@ export class LecturerTimetablePage implements OnInit {
     // select current start of week
     const date = new Date();
     date.setDate(date.getDate() - date.getDay() + 1); // monday
+    date.setHours(0, 0, 0, 0);
     this.selectedWeek = date;
 
     // default to daily view
