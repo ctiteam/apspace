@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AlertController, LoadingController, Platform, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -63,7 +64,8 @@ export class FilingReportPage implements OnInit {
     public platform: Platform,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
-    private ws: WsApiService
+    private ws: WsApiService,
+    private iab: InAppBrowser
   ) { }
 
   ngOnInit() { }
@@ -180,5 +182,10 @@ export class FilingReportPage implements OnInit {
     this.studentId = 'TP';
     this.description = '';
     this.currentStepNumber = 0; // navigate back to step 1
+  }
+
+  openStudentHandbook() {
+    const studentHandbookUrl = 'https://cdn.webspace.apiit.edu.my/public/2019-12/APU%20Student%20Handbook%20vDec2019_0.pdf';
+    this.iab.create(`${studentHandbookUrl}`, '_system', 'location=true');
   }
 }
