@@ -63,8 +63,8 @@ export class AppComponent {
           if (!this.router.url.startsWith('/feedback') && !this.isOpen) { // No point for it work on the Feedback Page
             this.isOpen = true; // Prevent double alert to be opened
             const alert = await this.alertCtrl.create({
-              header: 'APSpace Feedback',
-              message: 'Please provide your feedback',
+              header: 'Report a problem',
+              subHeader: 'Your feedback helps us to improve APSpace',
               inputs: [
                 {
                   name: 'message',
