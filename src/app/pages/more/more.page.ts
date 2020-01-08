@@ -220,6 +220,14 @@ export class MorePage implements OnInit {
       tags: ['class', 'schedule']
     },
     {
+      title: 'BeAPU',
+      group: 'Others',
+      url: 'beapu',
+      img: 'assets/img/beapu.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['report', 'attire', 'formal']
+    },
+    {
       title: 'Classroom Finder',
       group: 'Others',
       url: 'classroom-finder',
@@ -250,15 +258,6 @@ export class MorePage implements OnInit {
       img: 'assets/img/staff-directory.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['lecturer', 'academic', 'teacher']
-    },
-    {
-    // TODO: Change the icon
-      title: 'BeAPU',
-      group: 'Others',
-      url: 'beapu',
-      img: 'assets/img/beapu.png',
-      role: Role.Lecturer | Role.Admin,
-      tags: ['report', 'attire', 'formal']
     },
     {
       title: 'Track Student Visa Status',
