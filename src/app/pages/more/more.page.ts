@@ -248,7 +248,7 @@ export class MorePage implements OnInit {
       title: 'BeAPU',
       group: 'Others',
       url: 'beapu',
-      img: 'assets/img/filing-report.png',
+      img: 'assets/img/beapu.png',
       role: Role.Lecturer | Role.Admin,
       tags: ['report', 'attire', 'formal']
     },
