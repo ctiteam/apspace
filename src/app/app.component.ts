@@ -39,13 +39,13 @@ export class AppComponent {
     private actionSheetCtrl: ActionSheetController,
     private menuCtrl: MenuController,
     private popoverCtrl: PopoverController,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
     private notificationService: NotificationService,
     private fcm: FCM,
     private versionService: VersionService,
     private network: Network,
-    private shake: Shake,
-    private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController
+    private shake: Shake
   ) {
     this.getUserSettings();
     this.versionService.checkForUpdate().subscribe();
