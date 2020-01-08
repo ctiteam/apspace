@@ -13,7 +13,7 @@ import { SettingsService, WsApiService } from '../../services';
 const chosenOnes = [
   'appsteststaff1', 'abbhirami', 'abubakar_s',
   'haslina.hashim', 'muhammad.danish', 'sireesha.prathi', 'suresh.saminathan',
-  'zailan', 'qusay', 'dr.behrang', 'meisam', 'debbie.liew', 'dr.mahmood.bathaee',
+  'zailan', 'qusay', 'behrang', 'meisam', 'debbie.liew', 'dr.mahmood.bathaee',
   'bawani', 'eizal.afiq',
 ];
 
