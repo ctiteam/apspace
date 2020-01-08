@@ -45,6 +45,7 @@
     "@ionic-native/in-app-browser": "^5.15.0",
     "@ionic-native/network": "^5.15.0",
     "@ionic-native/qr-scanner": "^5.15.0",
+    "@ionic-native/shake": "^5.19.1",
     "@ionic-native/status-bar": "^5.15.0",
     "@ionic/angular": "^4.11.2",
     "@ionic/storage": "^2.2.0",
@@ -65,10 +66,12 @@
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-appavailability": "^0.4.2",
     "cordova-plugin-badge": "^0.8.8",
+    "cordova-plugin-device-motion": "^2.0.1",
     "cordova-plugin-fcm-with-dependecy-updated": "^4.1.1",
     "cordova-plugin-inappbrowser": "^3.1.0",
     "cordova-plugin-network-information": "^2.0.2",
     "cordova-plugin-qrscanner": "^3.0.1",
+    "cordova-plugin-shake": "^0.7.0",
     "core-js": "^2.5.4",
     "fuse.js": "^3.4.5",
     "graphql": "^0.11",
@@ -141,7 +144,8 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-network-information": {},
       "cordova-plugin-qrscanner": {},
-      "cordova-plugin-badge": {}
+      "cordova-plugin-badge": {},
+      "cordova-plugin-shake": {}
     },
     "platforms": [
       "android",

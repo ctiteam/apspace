@@ -25,6 +25,7 @@ import { RequestCache, RequestCacheWithMapStorage } from './services';
 // export function disableNavAnimation(AnimationC: Animation): Promise<Animation> { return Promise.resolve(new AnimationC()); }
 
 import { Badge } from '@ionic-native/badge/ngx';
+import { Shake } from '@ionic-native/shake/ngx';
 import { GraphQLModule } from './graphql.module';
 import { NewsModalPageModule } from './pages/news/news-modal.module';
 
@@ -55,6 +56,7 @@ import { NewsModalPageModule } from './pages/news/news-modal.module';
     AppAvailability,
     Network,
     Device,
+    Shake,
     StatusBar,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: RequestCache, useClass: RequestCacheWithMapStorage },
