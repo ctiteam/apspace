@@ -76,6 +76,14 @@ export class MorePage implements OnInit {
       tags: ['articles', 'Q&A', 'FAQ', 'questions', 'answers', 'how to']
     },
     {
+      title: 'Mentorship',
+      group: 'Main',
+      url: 'mentorship',
+      img: 'assets/img/mentorship.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['mentor', 'mentee', 'performance', 'attendance', 'results', 'my students']
+    },
+    {
       title: 'News Feed',
       group: 'Main',
       url: 'news',
