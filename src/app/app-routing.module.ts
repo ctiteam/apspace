@@ -168,6 +168,7 @@ const routes: Routes = [
   {
     path: 'lecturer-timetable',
     canActivate: [AuthGuard],
+    data: { role: Role.Lecturer },
     loadChildren: () => import('./pages/lecturer-timetable/lecturer-timetable.module').then(m => m.LecturerTimetablePageModule)
   },
   {
@@ -241,12 +242,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/unauthorized/unauthorized.module').then(m => m.UnauthorizedPageModule)
   },
-  // {
-  //   path: 'student-professionalism',
-  //   canActivate: [AuthGuard],
-  //   // data: { role: Role.Admin | Role.Lecturer },
-  //   loadChildren: () => import('./pages/filing-report/filing-report.module').then(m => m.FilingReportPageModule)
-  // },
+  {
+    path: 'beapu',
+    canActivate: [AuthGuard],
+    // data: { role: Role.Admin | Role.Lecturer },
+    loadChildren: () => import('./pages/filing-report/filing-report.module').then(m => m.FilingReportPageModule)
+  },
   {
     // only available via URL. No Menu item created for this
     path: 'igraduate',
@@ -260,12 +261,12 @@ const routes: Routes = [
     data: { role: Role.Admin | Role.Lecturer },
     loadChildren: () => import('./pages/hr/hr.module').then(m => m.HrPageModule)
   },
-  // {
-  //   path: 'mentorship',
-  //   canActivate: [AuthGuard],
-  //   data: { role: Role.Admin | Role.Lecturer },
-  //   loadChildren: './pages/mentorship/mentorship.module#MentorshipPageModule'
-  // },
+  {
+    path: 'mentorship',
+    canActivate: [AuthGuard],
+    data: { role: Role.Admin | Role.Lecturer },
+    loadChildren: './pages/mentorship/mentorship.module#MentorshipPageModule'
+  },
   { // this path must always be at the end of the routes array
     path: '**',
     canActivate: [AuthGuard],

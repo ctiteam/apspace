@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonSelect, ModalController, ToastController } from '@ionic/angular';
+import { IonSelect, LoadingController, ModalController, ToastController } from '@ionic/angular';
 
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -90,6 +90,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     private tt: StudentTimetableService,
     private ws: WsApiService,
     private router: Router,
+    public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
   ) { }
@@ -98,6 +99,14 @@ export class ClassesPage implements AfterViewInit, OnInit {
     const d = new Date();
     this.date = this.isoDate(d);
     const nowMins = d.getHours() * 60 + d.getMinutes();
+
+    const loadingCtrl = this.loadingCtrl.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+    });
+    loadingCtrl.then(loading => loading.present());
 
     const timetables$ = forkJoin([this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }), this.tt.get()]).pipe(
       map(([profile, timetables]) => timetables.filter(timetable =>
@@ -111,9 +120,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
       const joined = timetables.map(timetable => ({
         ...classcodes.find(classcode => {
           // Classcode BM006-3-2-CRI-L-UC2F1805CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
-          // Take only BM006-3-2-CRI-L- (+3 extra characters for L, T1, T2)
+          // Take only BM006-3-2-CRI-L- (+3 extra characters with '-' pad for L, T1, T2)
           const len = classcode.SUBJECT_CODE.length;
-          return classcode.CLASS_CODE.slice(0, len + 3) === timetable.MODID.slice(0, len + 3)
+          return classcode.CLASS_CODE.slice(0, len + 3) === (timetable.MODID + '-').slice(0, len + 3)
             && classcode.COURSE_CODE_ALIAS === timetable.INTAKE;
         }),
         ...timetable
@@ -148,7 +157,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
           ({ DATESTAMP_ISO: DATE, TIME_FROM, TIME_TO, CLASS_CODE, TYPE })));
       this.schedules = this.schedules.concat.apply([], mapped);
       this.classcodes = [...new Set(this.schedules.map(schedule => schedule.CLASS_CODE).filter(Boolean))].sort();
-      console.log('filtered', this.schedules, this.classcodes);
+
+      loadingCtrl.then(loading => loading.dismiss());
+      // console.log('filtered', this.schedules, this.classcodes);
 
       // manual classcodes
       this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
@@ -192,7 +203,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     this.changeClasscode(this.classcode = currentSchedule.CLASS_CODE, false);
     this.changeDate(this.date = date, false);
     this.changeStartTime(this.startTime = currentSchedule.TIME_FROM);
-    console.log('currentSchedule', currentSchedule);
+    // console.log('currentSchedule', currentSchedule);
   }
 
   /** Parse time into minutes of day in 12:59 PM format. */

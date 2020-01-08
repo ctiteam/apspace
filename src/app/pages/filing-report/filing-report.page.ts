@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AlertController, LoadingController, Platform, ToastController } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { WsApiService } from 'src/app/services';
 
 @Component({
@@ -8,7 +11,10 @@ import { WsApiService } from 'src/app/services';
   styleUrls: ['./filing-report.page.scss'],
 })
 export class FilingReportPage implements OnInit {
-  readPolicyCheckbox = false;
+  studentDetails$: Observable<any>; // to be changed
+  studentRecords$: Observable<any>; // to be changed
+  disableNextButton = false;
+  skeletons = new Array(3);
   loading: HTMLIonLoadingElement;
   stagingUrl = 'http://forms.sites-staging.apiit.edu.my/wp-json/gf/v2';
   mainCategories = [
@@ -53,13 +59,13 @@ export class FilingReportPage implements OnInit {
   selectedLocation = this.locations[0];
   totalSteps = new Array(3);
   currentStepNumber = 0;
-  show: 'records' | 'no records' | 'empty' | '';
   constructor(
     private loadingController: LoadingController,
     public platform: Platform,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
-    private ws: WsApiService
+    private ws: WsApiService,
+    private iab: InAppBrowser
   ) { }
 
   ngOnInit() { }
@@ -90,18 +96,31 @@ export class FilingReportPage implements OnInit {
   }
 
   nextStep() {
-    this.show = '';
     this.currentStepNumber++;
     // for Demo. It will be removed after the backend created
-    if (this.currentStepNumber === 1 && this.studentId === 'TP037354') {
-      this.show = 'records';
-    } else if (this.currentStepNumber === 1) {
-      this.show = 'empty';
+    if (this.currentStepNumber === 1) {
+      this.studentDetails$ = this.ws.post<any[]>('/student/image', {
+        url: 'https://u1cd2ltoq6.execute-api.ap-southeast-1.amazonaws.com/dev',
+        body: {
+          id: [this.studentId]
+        }
+      }).pipe(
+        tap(studentDetails => {
+          if (studentDetails.length === 0) {
+            this.disableNextButton = true;
+          } else {
+            this.disableNextButton = false;
+          }
+        })
+      );
+      this.studentRecords$ = this.ws.get(`/dresscode/history?student_id=${this.studentId}`).pipe(
+        tap(res => console.log(res))
+      );
     }
-    console.log(this.show);
   }
 
   cancel() {
+    console.log('canceled');
     this.studentId = 'TP';
     this.currentStepNumber = 0;
     this.description = '';
@@ -130,16 +149,21 @@ export class FilingReportPage implements OnInit {
               location: this.selectedLocation,
               day: this.selectedDay,
               category: this.selectedMainCategory,
-              subcategory: this.selectedSubCategory
+              sub_category: this.selectedSubCategory
             };
             this.ws.post('/dresscode/submit', {
-              url: 'https://4gkrvp7hcl.execute-api.ap-southeast-1.amazonaws.com/dev',
               body
             }).subscribe(
               {
-                next: res => { console.log('success: ', res); },
-                error: err => { console.log('error: ', err); this.dismissLoading(); },
-                complete: () => { console.log('done: '); this.dismissLoading(); },
+                error: err => {
+                  this.showToastMessage(err.error.error, 'danger');
+                  this.dismissLoading();
+                },
+                complete: () => {
+                  this.showToastMessage('Report Submitted Successfully!', 'success');
+                  this.emptyForm();
+                  this.dismissLoading();
+                },
               }
             );
             // this.showToastMessage('Report has been submitted successfully!', 'success');
@@ -148,5 +172,20 @@ export class FilingReportPage implements OnInit {
         }
       ]
     }).then(confirm => confirm.present());
+  }
+
+  emptyForm() {
+    this.selectedMainCategory = this.mainCategories[0];
+    this.selectedSubCategory = this.subCategories[0].title;
+    this.selectedDay = new Date().getDay() !== 5 ? this.days[0] : this.days[1];
+    this.selectedLocation = this.locations[0];
+    this.studentId = 'TP';
+    this.description = '';
+    this.currentStepNumber = 0; // navigate back to step 1
+  }
+
+  openStudentHandbook() {
+    const studentHandbookUrl = 'https://cdn.webspace.apiit.edu.my/public/2019-12/APU%20Student%20Handbook%20vDec2019_0.pdf';
+    this.iab.create(`${studentHandbookUrl}`, '_system', 'location=true');
   }
 }

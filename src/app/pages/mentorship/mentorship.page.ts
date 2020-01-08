@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Mentorship } from 'src/app/interfaces/mentorship';
+import { MentorshipStudentList } from 'src/app/interfaces/mentorship';
 import { MentorshipService } from 'src/app/services/mentorship.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { MentorshipService } from 'src/app/services/mentorship.service';
 export class MentorshipPage {
 
   loadingSkeletons = Array(4);
-  students$: Observable<Mentorship[]>;
+  students$: Observable<MentorshipStudentList[]>;
   search = '';
   filter = '';
 

@@ -44,7 +44,7 @@
   --background-hover: #519657 !important;
 }
 
-ion-label {
+ion-card > ion-item > ion-label {
   --color: #000000 !important;
   min-width: 15ex; /* force occupy some space on mobile */
 }

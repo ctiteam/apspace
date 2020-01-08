@@ -20,8 +20,8 @@
     <div *ngSwitchCase="'attendance'">
       <ion-card>
         <ion-card-content class="ion-no-padding">
-          <div *ngIf="(attendance$ | async) as attendances; else loadingAttendance">
-            <div *ngIf="attendances.length > 0; else emptyAttendance">
+          <ng-container *ngIf="(attendance$ | async) as attendances; else loadingAttendance">
+            <ng-container *ngIf="attendances.length > 0; else emptyAttendance">
               <ion-item lines="none" class="ion-no-padding table-top">
                 <ion-grid class="ion-no-padding">
                   <ion-row>
@@ -62,7 +62,7 @@
                   <ion-row>
                     <ion-col class="margin-auto" size-lg="1" size="12">
                       <span class="marker">Date:</span>
-                      {{ attendance.CLASS_DATE | date: "d MMM y" }}
+                      {{ attendance.CLASS_DATE | date: "EEE, d MMM y" }}
                     </ion-col>
 
                     <ion-col class="margin-auto" size-lg="2" size="12">
@@ -91,16 +91,16 @@
                   </ion-row>
                 </ion-grid>
               </ion-item>
-            </div>
-          </div>
+            </ng-container>
+          </ng-container>
 
           <ng-template #loadingAttendance>
             <ion-skeleton-text animated style="line-height: 200px;"></ion-skeleton-text>
           </ng-template>
 
           <ng-template #emptyAttendance>
-            <app-message-with-svg messageTitle="No Attendance found!"
-              messageContent="Looks like there's no Data to be shown here." imageUrl="assets/img/empty.svg"
+            <app-message-with-svg messageTitle="No attendance found!"
+              messageContent="Looks like there's no data to be shown here." imageUrl="assets/img/empty.svg"
               wrapperOffset="3" wrapperSize="6">
             </app-message-with-svg>
           </ng-template>
@@ -112,8 +112,8 @@
       <ion-card>
         <ion-card-content>
 
-          <div *ngIf="(result$ | async) as results; else loadingResults">
-            <div *ngIf="results.length > 0; else emptyResult">
+          <ng-container *ngIf="(result$ | async) as results; else loadingResults">
+            <ng-container *ngIf="results.length > 0; else emptyResult">
               <ion-item lines="none" class="ion-no-padding table-top">
                 <ion-grid>
                   <ion-row>
@@ -157,7 +157,7 @@
 
                     <ion-col class="margin auto" size-lg="1" size="12">
                       <span class="marker">Exam Date:</span>
-                      {{ result.EXAM_DATE | date: "d MMM y" }}
+                      {{ result.EXAM_DATE | date: "EEE, d MMM y" }}
                     </ion-col>
 
                     <ion-col class="margin auto" size-lg="1" size="12">
@@ -187,16 +187,16 @@
                   </ion-row>
                 </ion-grid>
               </ion-item>
-            </div>
-          </div>
+            </ng-container>
+          </ng-container>
 
           <ng-template #loadingResults>
             <ion-skeleton-text animated style="line-height: 200px;"></ion-skeleton-text>
           </ng-template>
 
           <ng-template #emptyResult>
-            <app-message-with-svg messageTitle="No Result found!"
-              messageContent="Looks like there's no Data to be shown here." imageUrl="assets/img/empty.svg"
+            <app-message-with-svg messageTitle="No result found!"
+              messageContent="Looks like there's no data to be shown here." imageUrl="assets/img/empty.svg"
               wrapperOffset="3" wrapperSize="6">
             </app-message-with-svg>
           </ng-template>

@@ -9,9 +9,9 @@ import {
 } from 'rxjs/operators';
 
 import {
-  AttendanceGQL, InitAttendanceGQL, InitAttendanceMutation,
-  MarkAttendanceGQL, NewStatusGQL, NewStatusSubscription, ScheduleInput,
-  Status
+  AttendanceGQL, AttendanceQuery, InitAttendanceGQL, InitAttendanceMutation,
+  MarkAttendanceGQL, NewStatusGQL, NewStatusSubscription, SaveLectureLogGQL,
+  ScheduleInput, Status
 } from '../../../../generated/graphql';
 
 @Component({
@@ -28,6 +28,8 @@ export class MarkAttendancePage implements OnInit {
   term = '';
   type: 'Y' | 'L' | 'N' | 'R' | '' = 'N';
 
+  lectureUpdate = '';
+
   otp$: Observable<number>;
   lastMarked$: Observable<Pick<NewStatusSubscription, 'newStatus'>[]>;
   students$: Observable<Partial<Status>[]>;
@@ -42,6 +44,7 @@ export class MarkAttendancePage implements OnInit {
     private markAttendance: MarkAttendanceGQL,
     private newStatus: NewStatusGQL,
     private route: ActivatedRoute,
+    private saveLectureLog: SaveLectureLogGQL,
     public toastCtrl: ToastController
   ) { }
 
@@ -64,9 +67,14 @@ export class MarkAttendancePage implements OnInit {
       catchError(err => (this.toast(err.message.replace('GraphQL error: ', '')), console.error(err), NEVER)),
       pluck('data'),
       finalize(() => 'initAttendance ended'),
-      tap((query: InitAttendanceMutation) => {
+      tap((query: AttendanceQuery | InitAttendanceMutation) => {
         studentsNameById = query.attendance.students.reduce((acc, s) => (acc[s.id] = s, acc), {});
-      })
+      }),
+      tap((query: AttendanceQuery) => {
+        if (query.attendance.log) {
+          this.lectureUpdate = query.attendance.log.lectureUpdate;
+        }
+      }),
     );
 
     // keep updating attendancesState$ with new changes
@@ -152,6 +160,15 @@ export class MarkAttendancePage implements OnInit {
     this.markAttendance.mutate({ schedule, student, attendance, absentReason }, options).subscribe(
       () => {},
       e => console.error(e) // XXX: retry attendance$ on failure
+    );
+  }
+
+  /** Save lecture update notes. */
+  save(lectureUpdate: string) {
+    const schedule = this.schedule;
+    this.saveLectureLog.mutate({ schedule, log: { lectureUpdate } }).subscribe(
+      () => {},
+      e => console.error(e)
     );
   }
 

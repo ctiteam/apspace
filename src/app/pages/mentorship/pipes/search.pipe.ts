@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Mentorship } from 'src/app/interfaces/mentorship';
+import { MentorshipStudentList } from 'src/app/interfaces/mentorship';
 
 @Pipe({
   name: 'search'
 })
 export class SearchPipe implements PipeTransform {
 
-  transform(results: Mentorship[], term: string): Mentorship[] {
+  transform(results: MentorshipStudentList[], term: string): MentorshipStudentList[] {
     if (term) {
       const searchTerm = term.toUpperCase();
       return results.filter(student =>

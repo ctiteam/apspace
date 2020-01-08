@@ -76,7 +76,15 @@ export class MorePage implements OnInit {
       tags: ['articles', 'Q&A', 'FAQ', 'questions', 'answers', 'how to']
     },
     {
-      title: 'News',
+      title: 'Mentorship',
+      group: 'Main',
+      url: 'mentorship',
+      img: 'assets/img/mentorship.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['mentor', 'mentee', 'performance', 'attendance', 'results', 'my students']
+    },
+    {
+      title: 'News Feed',
       group: 'Main',
       url: 'news',
       img: 'assets/img/news.png',
@@ -212,6 +220,14 @@ export class MorePage implements OnInit {
       tags: ['class', 'schedule']
     },
     {
+      title: 'BeAPU',
+      group: 'Others',
+      url: 'beapu',
+      img: 'assets/img/beapu.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['report', 'attire', 'formal']
+    },
+    {
       title: 'Classroom Finder',
       group: 'Others',
       url: 'classroom-finder',
@@ -243,15 +259,6 @@ export class MorePage implements OnInit {
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['lecturer', 'academic', 'teacher']
     },
-    // {
-    // TODO: Change the icon
-    //   title: 'Student Professionalism',
-    //   group: 'Others',
-    //   url: 'student-professionalism',
-    //   img: 'assets/img/filing-report.png',
-    //   role: Role.Lecturer | Role.Admin,
-    //   tags: ['Report', 'attire', 'formal']
-    // },
     {
       title: 'Track Student Visa Status',
       group: 'Others',
@@ -325,9 +332,9 @@ export class MorePage implements OnInit {
   openPage(url: string) {
     // external pages does not use relative or absolute link
     if (url.startsWith('http://') || url.startsWith('https://')) {
-      // manually exclude office365, and course schedule that do not need service ticket
+      // Manually exclude sites that do not need service ticket
       if (url.startsWith('https://outlook.office.com')
-        || url === 'http://kb.sites.apiit.edu.my/knowledge-base/course-schedule/'
+        || url.startsWith('http://kb.sites.apiit.edu.my')
         || url === 'https://graduation.sites.apiit.edu.my/') {
         this.iab.create(url, '_system', 'location=true');
       } else {

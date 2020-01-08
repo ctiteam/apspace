@@ -7,5 +7,10 @@ query attendance($schedule: ScheduleInput!) {
       attendance
       absentReason
     }
+    log {
+      lectureUpdate
+      otherInfo
+      nextLecturePlan
+    }
   }
 }

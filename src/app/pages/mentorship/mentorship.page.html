@@ -7,59 +7,60 @@
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content>
   <div class="list">
-    <ion-list lines="none" style="margin-bottom: 0px;">
+    <ion-list lines="none">
       <ion-item>
         <ion-searchbar [(ngModel)]="search" placeholder="Search (e.g. 'Student Name, ID', 'Intake', 'Programme', ...)"
-          showCancelButton="focus" animated>
+          showCancelButton="focus" cancelButtonIcon="search" style="--cancel-button-color: var(--primary-color)">
         </ion-searchbar>
       </ion-item>
+    </ion-list>
+
+    <ion-list lines="none">
       <ion-item>
         <ion-label>Filter</ion-label>
         <ion-select [(ngModel)]="filter" interface="popover">
           <ion-select-option selected></ion-select-option>
-          <ion-select-option value="pl">PL</ion-select-option>
-          <ion-select-option value="mentor">Mentor</ion-select-option>
+          <ion-select-option value="mentor">PL</ion-select-option>
+          <ion-select-option value="pl / mentor">PL / Mentor</ion-select-option>
         </ion-select>
       </ion-item>
     </ion-list>
 
-    <ion-list class="ion-padding" *ngIf="(students$ | async) as students; else loadingStudents"
-      style="padding-top: 0px !important;">
-      <ng-container *ngFor="let student of (students | search:search | filter:filter)">
-        <ion-item button details
-          [routerLink]="['/', 'mentorship', student.STUDENT_NUMBER, student.INTAKE_CODE, 'view']">
-          <ion-avatar slot="start">
-            <img src="https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png">
-          </ion-avatar>
-
-          <ion-label>
-            <h5 class="name"> {{ student.NAME }} </h5>
-            <h3> {{ student.STUDENT_NUMBER }} | {{ student.INTAKE_CODE }} </h3>
-            <h3> {{ student.PROGRAMME }} </h3>
-          </ion-label>
-        </ion-item>
+    <ng-template let-students [ngIf]="(students$ | async)" [ngIfElse]="loadingStudents" approxItemHeight="68px">
+      <ng-container *ngIf="(students | search:search | filter:filter).length > 0; else noData">
+        <ion-virtual-scroll [items]="students | search:search | filter:filter">
+          <ion-item button details *virtualItem="let student"
+            [routerLink]="['/', 'mentorship', student.STUDENT_NUMBER, student.INTAKE_CODE, 'view']">
+            <ion-label>
+              <h5 class="name"> {{ student.NAME }} </h5>
+              <h3> {{ student.STUDENT_NUMBER }} | {{ student.INTAKE_CODE }} </h3>
+              <h3> {{ student.PROGRAMME }} </h3>
+            </ion-label>
+          </ion-item>
+        </ion-virtual-scroll>
       </ng-container>
-    </ion-list>
+
+      <ng-template #noData>
+        <app-message-with-svg messageTitle="No student found!"
+          messageContent="looks like our magical elves has no data to show" wrapperOffset="3" wrapperSize="6">
+        </app-message-with-svg>
+      </ng-template>
+    </ng-template>
 
     <!-- Loading -->
     <ng-template #loadingStudents>
-      <ion-item style="padding: 10px 20px;" *ngFor="let _ of loadingSkeletons">
-        <ion-avatar slot="start">
-          <ion-skeleton-text animated></ion-skeleton-text>
-        </ion-avatar>
-
+      <ion-item *ngFor="let _ of loadingSkeletons">
         <ion-label>
           <h5>
-            <ion-skeleton-text animated style="width: 60%; line-height: 20px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 70%; line-height: 20px;"></ion-skeleton-text>
           </h5>
           <h5>
-            <ion-skeleton-text animated style="width: 50%; line-height: 15px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 60%; line-height: 15px;"></ion-skeleton-text>
           </h5>
           <h3>
-            <ion-skeleton-text animated style="width: 30%; line-height: 15px;"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 40%; line-height: 15px;"></ion-skeleton-text>
           </h3>
         </ion-label>
       </ion-item>

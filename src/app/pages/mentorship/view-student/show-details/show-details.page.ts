@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { Attendance, Result } from 'src/app/interfaces/mentorship';
+import { tap } from 'rxjs/operators';
+import { MentorshipAttendance, MentorshipResult } from 'src/app/interfaces/mentorship';
 import { MentorshipService } from 'src/app/services/mentorship.service';
 
 @Component({
@@ -15,8 +16,8 @@ export class ShowDetailsPage {
   @Input() module: string;
   @Input() tp: string;
 
-  attendance$: Observable<Attendance[]>;
-  result$: Observable<Result[]>;
+  attendance$: Observable<MentorshipAttendance[]>;
+  result$: Observable<MentorshipResult[]>;
   selectedSegment = 'result';
 
   constructor(
@@ -25,8 +26,13 @@ export class ShowDetailsPage {
   ) { }
 
   ionViewDidEnter() {
-    this.attendance$ = this.mentorship.getAttendance(this.tp, this.module, this.intake);
-    this.result$ = this.mentorship.getSubcourseAssessment(this.tp, this.module);
+    this.attendance$ = this.mentorship.getAttendance(this.tp, this.module, this.intake).pipe(
+      tap(r => r.sort((a, b) => new Date(b.CLASS_DATE).getTime() - new Date(a.CLASS_DATE).getTime()))
+    );
+
+    this.result$ = this.mentorship.getSubcourseAssessment(this.tp, this.intake, this.module).pipe(
+      tap(r => r.sort((a, b) => new Date(b.EXAM_DATE).getTime() - new Date(a.EXAM_DATE).getTime()))
+    );
   }
 
   segmentChanged(value: string) {

@@ -1,12 +1,13 @@
-export interface Mentorship {
+export interface MentorshipStudentList {
     INTAKE_CODE: string;
     NTAKE_END_DATE: string;
     NAME: string;
     PROGRAMME: string;
     STUDENT_NUMBER: string;
+    RELATIONTYPE: string;
 }
 
-export interface Intake {
+export interface MentorshipIntake {
     COURSE_DESCRIPTION: string;
     INTAKE_CODE: string;
     OVERALL_CLASSIFICATION: string;
@@ -14,7 +15,7 @@ export interface Intake {
     STUDY_MODE: string;
 }
 
-export interface CourseDetail {
+export interface MentorshipCourseDetail {
     AVERAGE_GRADE: string;
     AVERAGE_MARKS: number;
     MODERATED_GRADES: number;
@@ -26,7 +27,7 @@ export interface CourseDetail {
     STUDENT_NUMBER: string;
 }
 
-export interface Subcourse {
+export interface MentorshipSubcourse {
     CREDIT_HOURS: string;
     GRADE_POINT: string;
     INTAKE_CODE: string;
@@ -39,7 +40,7 @@ export interface Subcourse {
     TOTAL_CLASS: number;
 }
 
-export interface Attendance {
+export interface MentorshipAttendance {
     ABSENT_REASON: string;
     ATTENDANCE_STATUS: string;
     CLASS_CODE: string;
@@ -55,7 +56,7 @@ export interface Attendance {
     TIME_TO: string;
 }
 
-export interface Result {
+export interface MentorshipResult {
     ACTUAL_MARKS: number;
     ASSESMENT_CODE: string;
     ASSESMENT_TYPE: string;
@@ -67,4 +68,14 @@ export interface Result {
     MARKS: number;
     STUDENT_NUMBER: string;
     SUBJECT_CODE: string;
+}
+
+export interface MentorshipSemesterSummary {
+    CREDIT_TRANSFERRED: number;
+    GPA: number;
+    IMMIGRATION_GPA: number;
+    SEMESTER: number;
+    SEMESTER_ATTENDANCE: number;
+    TOTAL_CREDIT_HOURS: number;
+    TOTAL_MODULES_PASSED: number;
 }

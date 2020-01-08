@@ -13,7 +13,7 @@ import { SettingsService, WsApiService } from '../../services';
 const chosenOnes = [
   'appsteststaff1', 'abbhirami', 'abubakar_s',
   'haslina.hashim', 'muhammad.danish', 'sireesha.prathi', 'suresh.saminathan',
-  'zailan', 'qusay', 'dr.behrang', 'meisam', 'debbie.liew', 'dr.mahmood.bathaee',
+  'zailan', 'qusay', 'behrang', 'meisam', 'debbie.liew', 'dr.mahmood.bathaee',
   'bawani', 'eizal.afiq',
 ];
 
@@ -27,7 +27,7 @@ export class LecturerTimetablePage implements OnInit {
 
   printUrl = 'https://api.apiit.edu.my/timetable-print/index.php';
 
-  wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  wday = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
   timetable$: Observable<LecturerTimetable[]>;
   selectedWeek: Date; // week is the first day of week
@@ -64,11 +64,8 @@ export class LecturerTimetablePage implements OnInit {
 
     // select current start of week
     const date = new Date();
-    if (date.getDay() !== 6) { // 6 is saturday
-      date.setDate(date.getDate() - date.getDay());
-    } else {
-      date.setDate(date.getDate() + 1);  // include saturdays with the new week
-    }
+    date.setDate(date.getDate() - date.getDay() + 1); // monday
+    date.setHours(0, 0, 0, 0);
     this.selectedWeek = date;
 
     // default to daily view
@@ -105,7 +102,7 @@ export class LecturerTimetablePage implements OnInit {
 
   /** Check if the day is in week. */
   dayInWeek(date: Date) {
-    date.setDate(date.getDate() - date.getDay());
+    date.setDate(date.getDate() - date.getDay() + 1); // monday
     return date.getFullYear() === this.selectedWeek.getFullYear()
       && date.getMonth() === this.selectedWeek.getMonth()
       && date.getDate() === this.selectedWeek.getDate();
@@ -135,7 +132,7 @@ export class LecturerTimetablePage implements OnInit {
     // get week
     this.availableWeek = Array.from(new Set(tt.map(t => {
       const date = new Date(t.time.slice(0, 10));
-      date.setDate(date.getDate() - date.getDay());
+      date.setDate(date.getDate() - date.getDay() + 1); // monday
       return date.valueOf();
     }))).sort().map(d => new Date(d));
 
@@ -149,7 +146,7 @@ export class LecturerTimetablePage implements OnInit {
     this.availableDate = Array.from(new Set(tt
       .filter(t => this.dayInWeek(new Date(t.time)))
       .map(t => t.time.slice(0, 10)))).map(d => new Date(d));
-    this.availableDays = this.availableDate.map(d => this.wday[d.getDay()]);
+    this.availableDays = this.availableDate.map(d => this.wday[(d.getDay() + 6) % 7]); // monday
 
     // set default day
     if (this.availableDate.length === 0) {

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { StudentProfile } from 'src/app/interfaces';
-import { CourseDetail, Intake } from 'src/app/interfaces/mentorship';
+import { MentorshipCourseDetail, MentorshipIntake } from 'src/app/interfaces/mentorship';
 import { MentorshipService } from 'src/app/services/mentorship.service';
 import { ShowDetailsPage } from './show-details/show-details.page';
 
@@ -19,14 +19,14 @@ export class ViewStudentPage {
   search: '';
 
   profile$: Observable<StudentProfile>;
-  intake$: Observable<Intake[]>;
-  selectedIntake$: Observable<Intake[]>;
+  intake$: Observable<MentorshipIntake[]>;
+  selectedIntake$: Observable<MentorshipIntake[]>;
 
-  courseDetail$: Observable<CourseDetail[]>;
+  courseDetail$: Observable<MentorshipCourseDetail[]>;
   subCourse$: Observable<{ index: string; value: any }[]>;
   profileSkeleton = new Array(4);
 
-  allFilters = ['low-attendance', 'passed'];
+  allFilters = ['low-attendance', 'full-attendance', 'failed', 'full-cgpa'];
 
   shownFilters: string[];
 
@@ -63,7 +63,7 @@ export class ViewStudentPage {
     this.shownFilters = this.shownFilters.filter(item => item !== value);
   }
 
-  sortResult(results: any) {
+  sortResult(results: any, courseSummary: any) {
     // tslint:disable-next-line: max-line-length
     const dataBySemester = results.reduce(
       (acc: any, result: any) => (
@@ -72,9 +72,19 @@ export class ViewStudentPage {
       ),
       {}
     );
+
+    const summaryBySemester = courseSummary.reduce(
+      (acc: any, result: any) => (
+        (acc[result.SEMESTER] = (acc[result.SEMESTER] || []).concat(result)),
+        acc
+      ),
+      {}
+    );
+
     return Object.keys(dataBySemester).map(index => ({
       index,
-      value: dataBySemester[index]
+      value: dataBySemester[index] || [],
+      summary: summaryBySemester[index] || []
     }));
   }
 
@@ -84,9 +94,13 @@ export class ViewStudentPage {
     this.selectedIntake$ = this.intake$.pipe(
       map(items => items.filter(item => item.INTAKE_CODE === intake))
     );
-    this.subCourse$ = this.mentorship
-      .getSubcourse(this.tp, intake)
-      .pipe(map(r => this.sortResult(r)));
+
+    this.subCourse$ = forkJoin([
+      this.mentorship.getSubcourse(this.tp, intake),
+      this.mentorship.getSemesterSummary(this.tp, intake),
+    ]).pipe(
+      map(([subcourse, details]) => this.sortResult(subcourse, details))
+    );
   }
 
   showDetails(module: string) {

@@ -14,10 +14,14 @@
   <ion-grid>
     <ion-row>
       <ion-col size-xs="12" size-lg="4">
-        <ion-card *ngIf="(profile$ | async) as profile; else loadingStudentProfile">
+        <ion-card *ngIf="(profile$ | async) as profile; else loadingStudentProfile" class="ion-no-padding">
           <ion-card-content>
             <ion-avatar class="avatar">
-              <img src="https://www.stickpng.com/assets/images/585e4bf3cb11b227491c339a.png">
+              <ion-img [src]="
+                              'data:image/jpg;base64,' +
+                              profile[0].STUDENT_PHOTO
+                              " (ionError)="$event.target.src = 'assets/img/no_img.png'">
+              </ion-img>
             </ion-avatar>
 
             <div class="text-center top-spacing">
@@ -25,50 +29,58 @@
               <h2 class="center-txt">{{ profile[0].STUDENT_NUMBER }} | {{ profile[0].INTAKE_CODE }}</h2>
 
               <h2 class="center-txt bold">Programme</h2>
-              <h2 class="center-txt">{{ profile[0].PROGRAMME }}</h2>
+              <h2 class="center-txt">{{ profile[0].PROGRAMME || "N/A" }}</h2>
 
               <h2 class="center-txt bold">Programme Leader</h2>
-              <h2 class="center-txt">{{ profile[0].PL_NAME }}</h2>
+              <h2 class="center-txt">{{ profile[0].PL_NAME || "N/A" }}</h2>
 
               <h2 class="center-txt bold">Academic Mentor</h2>
-              <h2 class="center-txt">{{ profile[0].MENTOR_NAME }}</h2>
+              <h2 class="center-txt">{{ profile[0].MENTOR_NAME || "N/A" }}</h2>
 
               <h2 class="center-txt bold">Student Status</h2>
-              <h2 class="center-txt">{{ profile[0].STUDENT_STATUS }}</h2>
+              <h2 class="center-txt">{{ profile[0].STUDENT_STATUS || "N/A" }}</h2>
 
               <h2 class="center-txt bold">Intake Status</h2>
-              <h2 class="center-txt">{{ profile[0].INTAKE_STATUS }}</h2>
+              <h2 class="center-txt">{{ profile[0].INTAKE_STATUS || "N/A" }}</h2>
 
               <h2 class="center-txt bold">Intake Date</h2>
               <h2 class="center-txt">{{ profile[0].INTAKE_START_DATE | date:'EEE, dd MMM' }} -
                 {{ profile[0].INTAKE_END_DATE | date:'EEE, dd MMM' }}</h2>
 
               <h2 class="center-txt bold">Email</h2>
-              <h2 class="center-txt"><a href="mailto:{{ profile[0].E_MAIL }}">{{ profile[0].E_MAIL }}</a></h2>
+              <h2 class="center-txt"><a href="mailto:{{ profile[0].E_MAIL }}">{{ profile[0].E_MAIL || "N/A" }}</a></h2>
 
               <h2 class="center-txt bold">Student Email</h2>
               <h2 class="center-txt">
-                <a href="mailto:{{ profile[0].E_MAIL_STUDENT }}">{{ profile[0].E_MAIL_STUDENT }}</a>
+                <a href="mailto:{{ profile[0].E_MAIL_STUDENT }}">{{ profile[0].E_MAIL_STUDENT || "N/A" }}</a>
               </h2>
             </div>
           </ion-card-content>
 
-          <ion-footer>
+          <ion-footer class="ion-no-margin">
             <ion-grid>
-              <ion-row justify-content-center>
-                <div *ngIf="(intake$ | async) as intakes">
+              <ion-row class="ion-justify-content-center">
+                <div *ngIf="(intake$ | async) as intakes; else loadingIntakes">
                   <ion-col size="auto" *ngFor="let intake of intakes">
                     <ion-button [fill]="selectedIntake === intake.INTAKE_CODE ? 'solid' : 'outline'"
-                      (click)="onTap(intake.INTAKE_CODE)"> {{ intake.INTAKE_CODE }} </ion-button>
+                      (click)="onTap(intake.INTAKE_CODE)">
+                      {{ intake.INTAKE_CODE }}
+                    </ion-button>
                   </ion-col>
                 </div>
+
+                <ng-template #loadingIntakes>
+                  <ion-col size="12" class="ion-no-margin ion-no-padding">
+                    <ion-skeleton-text style="line-height: 30px !important;" animated></ion-skeleton-text>
+                  </ion-col>
+                </ng-template>
               </ion-row>
             </ion-grid>
           </ion-footer>
         </ion-card>
 
         <ng-template #loadingStudentProfile>
-          <ion-card>
+          <ion-card class="ion-no-padding">
             <ion-card-content>
               <ion-avatar class="avatar">
                 <ion-skeleton-text animated></ion-skeleton-text>
@@ -82,9 +94,9 @@
           </ion-card>
         </ng-template>
 
-        <div *ngIf="(courseDetail$ | async) as courseDetail; else loadingCourseDetail;">
-          <div *ngIf="courseDetail.length > 0">
-            <ion-card>
+        <ng-container *ngIf="(courseDetail$ | async) as courseDetail; else loadingCourseDetail;">
+          <ng-container *ngIf="courseDetail.length > 0">
+            <ion-card class="ion-no-padding">
               <ion-card-header class="ion-no-margin">
                 <ion-card-title>
                   <h4 class="responsive-h1">Course Details</h4>
@@ -112,52 +124,59 @@
 
                     <ion-col size-lg="6" class="sideline" size-sm="12" size="12">
                       <ng-container *ngFor="let course of courseDetail">
-                        <div class="indent">
-                          <h2 class="bold">Average Grade</h2>
-                          <h3>{{ course.AVERAGE_GRADE || "N/A" }}</h3>
+                        <h2 class="bold">Average Grade</h2>
+                        <h3>{{ course.AVERAGE_GRADE || "N/A" }}</h3>
 
-                          <h2 class="bold">Average Marks</h2>
-                          <h3>{{ course.AVERAGE_MARKS || "N/A" }}</h3>
+                        <h2 class="bold">Average Marks</h2>
+                        <h3>{{ course.AVERAGE_MARKS || "N/A" }}</h3>
 
-                          <h2 class="bold">Moderated Grades</h2>
-                          <h3>{{ course.MODERATED_GRADES || "N/A" }}</h3>
+                        <h2 class="bold">Moderated Grades</h2>
+                        <h3>{{ course.MODERATED_GRADES || "N/A" }}</h3>
 
-                          <h2 class="bold">Moderated Marks</h2>
-                          <h3>{{ course.MODERATED_MARKS || "N/A" }}</h3>
+                        <h2 class="bold">Moderated Marks</h2>
+                        <h3>{{ course.MODERATED_MARKS || "N/A" }}</h3>
 
-                          <h2 class="bold">Overall Marks</h2>
-                          <h3>{{ course.OVERALL_MARKS || "N/A" }}</h3>
+                        <h2 class="bold">Overall Marks</h2>
+                        <h3>{{ course.OVERALL_MARKS || "N/A" }}</h3>
 
-                          <h2 class="bold">Previous Course Overall</h2>
-                          <h3>{{ course.PREVIOUS_COURSE_OVERALL || "N/A" }}</h3>
+                        <h2 class="bold">Previous Course Overall</h2>
+                        <h3>{{ course.PREVIOUS_COURSE_OVERALL || "N/A" }}</h3>
 
-                          <h2 class="bold">Publish Results</h2>
-                          <h3>{{ course.PUBLISH_RESULTS || "N/A" }}</h3>
+                        <h2 class="bold">Publish Results</h2>
+                        <h3>{{ course.PUBLISH_RESULTS || "N/A" }}</h3>
 
-                          <h2 class="bold">Remarks</h2>
-                          <h3>{{ course.REMARKS || "N/A" }}</h3>
-                        </div>
+                        <h2 class="bold">Remarks</h2>
+                        <h3>{{ course.REMARKS || "N/A" }}</h3>
                       </ng-container>
                     </ion-col>
                   </ion-row>
                 </ion-grid>
               </ion-card-content>
             </ion-card>
-          </div>
-        </div>
+          </ng-container>
+        </ng-container>
 
         <ng-template #loadingCourseDetail>
-          <ion-card class="ion-no-padding">
-            <ion-card-content class="ion-no-padding">
-              <ion-skeleton-text animated style="line-height: 200px;"></ion-skeleton-text>
+          <ion-card class="ion-no-padding ion-no-margin">
+            <ion-card-content class="ion-no-padding ion-no-margin">
+              <ion-grid class="ion-no-padding">
+                <ion-row class="ion-no-padding">
+                  <ion-col size-sm="12" size="12">
+                    <ion-skeleton-text animated style="line-height: 20px;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="line-height: 20px;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="line-height: 20px;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="line-height: 20px;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="line-height: 20px;"></ion-skeleton-text>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
             </ion-card-content>
           </ion-card>
         </ng-template>
       </ion-col>
 
       <ion-col size-xs="12" size-lg="8">
-        <ion-searchbar [(ngModel)]="search" placeholder="Search (e.g. 'Module', 'Result', 'Credit Hours', ...)"
-          showCancelButton="focus" animated>
+        <ion-searchbar [(ngModel)]="search" placeholder="Search (e.g. 'Module', 'Result', 'Credit Hours', ...)">
         </ion-searchbar>
 
         <ion-item lines="none" class="filter-item">
@@ -170,36 +189,62 @@
           <ion-chip outline>
             <ion-icon name="add" color="danger"></ion-icon>
             <ion-label>Add Filter</ion-label>
-            <ion-select
-                [(ngModel)]="shownFilters" 
-                multiple="true" 
-                cancelText="Dismiss" 
-                selectedText=" "
-                #filterSelect>
-                <ion-select-option *ngFor="let filter of allFilters" [value]=filter>
-                  {{ filter }}
-                </ion-select-option>
-              </ion-select>
-            </ion-chip>
+            <ion-select [(ngModel)]="shownFilters" multiple="true" cancelText="Dismiss" selectedText=" ">
+              <ion-select-option *ngFor="let filter of allFilters" [value]=filter>
+                {{ filter }}
+              </ion-select-option>
+            </ion-select>
+          </ion-chip>
         </ion-item>
 
-        <div *ngIf="(subCourse$ | async) as subCourses; else loadingSemester">
-          <div *ngIf="subCourses.length > 0; else noData">
-            <div *ngFor="let semester of (subCourses | reverse)">
-              <div *ngIf="(semester.value | search:search | filter:shownFilters).length > 0">
-                <ion-card>
-                  <ion-card-header>
-                    <ion-card-title>
-                      <h4 class="responsive-h1">Semester {{ semester.index }}</h4>
-                    </ion-card-title>
-                  </ion-card-header>
+        <ng-container *ngIf="(subCourse$ | async) as subCourses; else loadingSemester">
+          <ng-container *ngIf="subCourses.length > 0; else noData">
+            <ng-container *ngFor="let semester of subCourses | reverse">
+              <ion-card class="ion-no-padding">
+                <ion-card-header>
+                  <ion-card-title>
+                    <h4 class="responsive-h1">Semester {{ semester.index }}</h4>
+                  </ion-card-title>
 
+                  <ion-grid class="ion-no-padding">
+                    <ion-row>
+                      <ion-col size-lg="6" size="12">
+                        <span class="bold">Total Modules Passed</span>
+                        <span
+                          class="ion-float-right right-notch">{{ semester.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</span>
+                      </ion-col>
+                      <ion-col size-lg="6" size="12">
+                        <span class="bold">Total Credit hours</span>
+                        <span
+                          class="ion-float-right right-notch">{{ semester.summary[0]?.TOTAL_CREDIT_HOURS || 'N/A' }}</span>
+                      </ion-col>
+
+                      <ion-col size-lg="6" size="12">
+                        <span class="bold">Credits transferred</span>
+                        <span
+                          class="ion-float-right right-notch">{{ semester.summary[0]?.CREDIT_TRANSFERRED || 'N/A' }}</span>
+                      </ion-col>
+
+                      <ion-col size-lg="6" size="12">
+                        <span class="bold">GPA</span>
+                        <span class="ion-float-right right-notch">{{ semester.summary[0]?.GPA || 'N/A' }}</span>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-header>
+
+                <ng-container
+                  *ngIf="(semester.value | search:search | filter:shownFilters).length > 0; else noModuleFound">
                   <ion-card-content>
                     <ion-item lines="none" class="ion-no-padding table-top">
                       <ion-grid class="ion-no-padding">
                         <ion-row>
-                          <ion-col class="bold" size="3">
+                          <ion-col class="bold" size="2">
                             Module
+                          </ion-col>
+
+                          <ion-col class="bold" size="3">
+                            Module Name
                           </ion-col>
 
                           <ion-col class="bold" size="2">
@@ -210,7 +255,7 @@
                             Attendance (%)
                           </ion-col>
 
-                          <ion-col class="bold" size="2">
+                          <ion-col class="bold" size="1">
                             Credit Hours
                           </ion-col>
 
@@ -218,22 +263,24 @@
                             Result
                           </ion-col>
 
-                          <ion-col class="bold" size="2">
+                          <ion-col class="bold" size="1">
                             Grade Point
                           </ion-col>
                         </ion-row>
                       </ion-grid>
                     </ion-item>
 
-                    <ion-item 
-                      lines="none" 
-                      *ngFor="let value of (semester.value | search:search | filter:shownFilters)" class="table-item"
-                      button 
-                      details>
+                    <ion-item lines="none" *ngFor="let value of (semester.value | search:search | filter:shownFilters)"
+                      class="table-item" button details>
                       <ion-grid class="ion-no-padding">
                         <ion-row>
-                          <ion-col class="margin-auto colored-text" size-lg="3" size="12">
+                          <ion-col class="margin-auto colored-text" size-lg="2" size="12">
                             <a (click)="showDetails(value.MODULE_CODE)">{{ value.MODULE_CODE }}</a>
+                          </ion-col>
+
+                          <ion-col class="margin-auto" size-lg="3" size="12">
+                            <span class="marker">Module Name:</span>
+                            {{ value.MODULE_NAME || "N/A" }}
                           </ion-col>
 
                           <ion-col class="margin-auto" size-lg="2" size="12">
@@ -242,12 +289,12 @@
                           </ion-col>
 
                           <ion-col class="margin-auto" size-lg="2" size="12">
-                            <span class="marker">Attend Percent:</span>
+                            <span class="marker">Attend Percent: </span>
                             <span
                               [class]="value.TOTAL_ATTEND_PERCENT < 80 ? 'red' : ''">{{ value.TOTAL_ATTEND_PERCENT || "N/A" }}</span>
                           </ion-col>
 
-                          <ion-col class="margin-auto" size-lg="2" size="12">
+                          <ion-col class="margin-auto" size-lg="1" size="12">
                             <span class="marker">Credit Hours:</span>
                             {{ value.CREDIT_HOURS || "N/A" }}
                           </ion-col>
@@ -257,7 +304,7 @@
                             {{ value.RESULT || "N/A" }}
                           </ion-col>
 
-                          <ion-col class="margin-auto" size-lg="2" size="12">
+                          <ion-col class="margin-auto" size-lg="1" size="12">
                             <span class="marker">Grade Point:</span>
                             {{ value.GRADE_POINT || "N/A" }}
                           </ion-col>
@@ -265,13 +312,14 @@
                       </ion-grid>
                     </ion-item>
                   </ion-card-content>
-                </ion-card>
-              </div>
-            </div>
-          </div>
-        </div>
+                </ng-container>
+              </ion-card>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+
         <ng-template #loadingSemester>
-          <ion-card class="ion-no-padding">
+          <ion-card class="ion-no-padding ion-no-margin">
             <ion-card-content class="ion-no-padding">
               <ion-skeleton-text animated style="line-height: 200px;"></ion-skeleton-text>
             </ion-card-content>
@@ -279,14 +327,20 @@
         </ng-template>
 
         <ng-template #noData>
-          <ion-card>
+          <ion-card class="ion-no-padding">
             <ion-card-content>
-              <app-message-with-svg messageTitle="No report found!"
+              <app-message-with-svg messageTitle="Oops"
                 messageContent="looks like our magical elves has no data to show" imageUrl="assets/img/empty.svg"
                 wrapperOffset="3" wrapperSize="6">
               </app-message-with-svg>
             </ion-card-content>
           </ion-card>
+        </ng-template>
+
+        <ng-template #noModuleFound>
+          <app-message-with-svg messageTitle="No modules found"
+            messageContent="No modules found for {{ search || 'this semester' }}" wrapperOffset="3" wrapperSize="6">
+          </app-message-with-svg>
         </ng-template>
       </ion-col>
     </ion-row>

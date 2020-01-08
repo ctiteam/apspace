@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActionSheetController, NavController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
 import { NavigationExtras } from '@angular/router';
@@ -19,7 +19,7 @@ import { WsApiService } from '../../services';
 })
 export class ResultsPage {
   course$: Observable<Course[]>;
-  results$: Observable<{ semester: string; value: Subcourse[] }[]>;
+  results$: Observable<{ semester: string; value: Subcourse[]; }[]>;
   courseDetail$: Observable<CourseDetails>;
   interimLegend$: Observable<InterimLegend[]>;
   mpuLegend$: Observable<MPULegend[]>;
@@ -108,13 +108,17 @@ export class ResultsPage {
     options: { caching: 'network-or-cache' | 'cache-only' }
   ): Observable<{ semester: string; value: Subcourse[] }[]> {
     const url = `/student/subcourses?intake=${intake}`;
-    return this.results$ = this.ws.get<Subcourse>(url).pipe(
-      tap(results => this.getInterimLegend(intake, results, options)),
-      map(r => this.sortResult(r))
+
+    return this.results$ = forkJoin([
+      this.ws.get<Subcourse>(url),
+      this.getCourseDetails(intake, { caching: 'network-or-cache' })
+    ]).pipe(
+      tap(([results]) => this.getInterimLegend(intake, results, options)),
+      map(([results, details]) => this.sortResult(results, details))
     );
   }
 
-  sortResult(results: any) {
+  sortResult(results: any, courseSummary: any) {
     const resultBySemester = results
       .reduce((previous: any, current: any) => {
         if (!previous[current.SEMESTER]) {
@@ -124,7 +128,20 @@ export class ResultsPage {
         }
         return previous;
       }, {});
-    return Object.keys(resultBySemester).map(semester => ({ semester, value: resultBySemester[semester] }));
+
+    const summaryBySemester = courseSummary.reduce(
+      (acc: any, result: any) => (
+        (acc[result.SEMESTER] = (acc[result.SEMESTER] || []).concat(result)),
+        acc
+      ),
+      {}
+    );
+
+    return Object.keys(resultBySemester).map(semester => ({
+      semester,
+      value: resultBySemester[semester] || [],
+      summary: summaryBySemester[semester] || []
+    }));
   }
 
   openSurveyPage(moduleCode: string) {

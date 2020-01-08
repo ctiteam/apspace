@@ -1,7 +1,10 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 
+import { MentorshipService } from 'src/app/services/mentorship.service';
 import { MentorshipPage } from './mentorship.page';
+import { FilterPipe } from './pipes/filter.pipe';
+import { SearchPipe } from './pipes/search.pipe';
 
 describe('MentorshipPage', () => {
   let component: MentorshipPage;
@@ -9,7 +12,10 @@ describe('MentorshipPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MentorshipPage ],
+      declarations: [MentorshipPage, FilterPipe, SearchPipe],
+      providers: [
+        { provide: MentorshipService, useValue: {} }
+      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();

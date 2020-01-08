@@ -24,6 +24,7 @@ skeleton-item {
 .card-header {
   padding-bottom: 0px;
   padding-top: 0px;
+
   .week-title {
     display: inline;
     text-decoration: underline;
@@ -32,6 +33,7 @@ skeleton-item {
       color: var(--sub-primary-color) !important;
     }
   }
+  
   .icon-hover {
     &:hover {
       font-weight: bold;
