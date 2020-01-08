@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import {
-  ActionSheetController, MenuController, ModalController, NavController, Platform,
-  PopoverController, ToastController
-} from '@ionic/angular';
-
 import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Network } from '@ionic-native/network/ngx';
+import { Shake } from '@ionic-native/shake/ngx';
+import {
+  ActionSheetController, AlertController, LoadingController, MenuController, ModalController, NavController,
+  Platform, PopoverController, ToastController
+} from '@ionic/angular';
 import { NotificationModalPage } from './pages/notifications/notification-modal';
-import { NotificationService, UserSettingsService, VersionService } from './services';
+import { FeedbackService, NotificationService, UserSettingsService, VersionService } from './services';
 
 @Component({
   selector: 'app-root',
@@ -24,9 +24,14 @@ export class AppComponent {
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
 
+  // Shake Feature vars
+  loading: HTMLIonLoadingElement;
+  isOpen = false;
+
   constructor(
     private platform: Platform,
     private userSettings: UserSettingsService,
+    private feedback: FeedbackService,
     private toastCtrl: ToastController,
     private router: Router,
     private navCtrl: NavController,
@@ -37,7 +42,10 @@ export class AppComponent {
     private notificationService: NotificationService,
     private fcm: FCM,
     private versionService: VersionService,
-    private network: Network
+    private network: Network,
+    private shake: Shake,
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController
   ) {
     this.getUserSettings();
     this.versionService.checkForUpdate().subscribe();
@@ -49,6 +57,99 @@ export class AppComponent {
       // if (this.platform.is('ios')) {
       //   this.statusBar.overlaysWebView(false); // status bar for ios
       // }
+
+      platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
+        this.shake.startWatch(40).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
+          if (!this.router.url.startsWith('/feedback') && !this.isOpen) { // No point for it work on the Feedback Page
+            this.isOpen = true; // Prevent double alert to be opened
+            const alert = await this.alertCtrl.create({
+              header: 'APSpace Feedback',
+              message: 'Please provide your feedback',
+              inputs: [
+                {
+                  name: 'message',
+                  type: 'text',
+                  placeholder: 'Message',
+                },
+                {
+                  name: 'contactNo',
+                  type: 'text',
+                  placeholder: 'Contact Number (Optional)'
+                }
+              ],
+              buttons: [
+                {
+                  text: 'Dismiss',
+                  role: 'cancel',
+                  handler: () => {
+                    this.isOpen = false;
+                  }
+                }, {
+                  text: 'Submit',
+                  handler: async (data) => {
+                    if (!data.message) {
+                      this.isOpen = false;
+                      return this.toastCtrl.create({
+                        // tslint:disable-next-line: max-line-length
+                        message: 'Please make sure the Message field is filled up.',
+                        position: 'top',
+                        color: 'danger',
+                        duration: 5000,
+                        showCloseButton: true,
+                      }).then(toast => toast.present());
+                    }
+
+                    // tslint:disable-next-line: no-shadowed-variable
+                    const feedback = {
+                      contactNo: data.contactNo || '',
+                      platform: this.feedback.platform(),
+                      message: data.message,
+                      appVersion: this.versionService.version,
+                      screenSize: screen.width + 'x' + screen.height,
+                    };
+
+                    this.presentLoading();
+                    this.feedback.sendFeedback(feedback).subscribe(
+                      {
+                        next: () => {
+                          data.message = '';
+                          this.toastCtrl.create({
+                            // tslint:disable-next-line: max-line-length
+                            message: '<span style="font-weight: bold;">Feedback submitted! </span> The team will get back to you as soon as possbile via Email. Thank you for your feedback',
+                            position: 'top',
+                            color: 'success',
+                            duration: 5000,
+                            showCloseButton: true,
+                          }).then(toast => toast.present());
+
+                          this.isOpen = false;
+                          this.dismissLoading();
+                        },
+                        error: (err) => {
+                          this.isOpen = false;
+                          this.toastCtrl.create({
+                            message: err.message,
+                            cssClass: 'danger',
+                            position: 'top',
+                            duration: 5000,
+                            showCloseButton: true,
+                          }).then(toast => toast.present());
+                        },
+                        complete: () => {
+                          this.isOpen = false;
+                          this.dismissLoading();
+                        }
+                      }
+                    );
+                  }
+                }
+              ]
+            });
+
+            alert.present();
+          }
+        });
+      });
 
       this.platform.backButton.subscribe(async () => { // back button clicked
         if (this.router.url.startsWith('/tabs') || this.router.url.startsWith('/maintenance-and-update')) {
@@ -87,6 +188,20 @@ export class AppComponent {
       showCloseButton: true
     });
     toast.present();
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
   }
 
   // this will fail when the user opens the app for the first time and login because it will run before login
