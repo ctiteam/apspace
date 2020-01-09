@@ -18,8 +18,7 @@
 <ion-content>
   <ng-template [ngIf]="auto" [ngIfElse]="override">
     <ion-grid>
-      <!--<ion-row *ngIf="(otp$ | async || '123') as otp">-->
-      <ion-row *ngIf="'123' as otp">
+      <ion-row *ngIf="otp$ | async as otp">
         <ion-col size="12" sizeSm="9">
           <qrcode *ngIf="otp" [qrdata]="otp" width="600"
             errorCorrectionLevel="H"></qrcode>
