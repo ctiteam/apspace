@@ -8,7 +8,7 @@ import {
   Platform, PopoverController, ToastController
 } from '@ionic/angular';
 import { NotificationModalPage } from './pages/notifications/notification-modal';
-import { FeedbackService, NotificationService, UserSettingsService, VersionService } from './services';
+import { FeedbackService, NotificationService, SettingsService, UserSettingsService, VersionService } from './services';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +31,7 @@ export class AppComponent {
   constructor(
     private platform: Platform,
     private userSettings: UserSettingsService,
+    private settings: SettingsService,
     private feedback: FeedbackService,
     private toastCtrl: ToastController,
     private router: Router,
@@ -60,6 +61,17 @@ export class AppComponent {
 
       platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
         this.shake.startWatch(40).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
+          if (!this.settings.get('role')) {
+            return this.toastCtrl.create({
+              // tslint:disable-next-line: max-line-length
+              message: 'You have to be logged in to send a Feedback!',
+              position: 'top',
+              color: 'danger',
+              duration: 5000,
+              showCloseButton: true,
+            }).then(toast => toast.present());
+          }
+
           if (!this.router.url.startsWith('/feedback') && !this.isOpen) { // No point for it to work on the Feedback Page
             this.isOpen = true; // Prevent double alert to be opened
             const alert = await this.alertCtrl.create({
