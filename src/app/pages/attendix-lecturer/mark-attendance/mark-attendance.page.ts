@@ -172,7 +172,7 @@ export class MarkAttendancePage implements OnInit {
     const schedule = this.schedule;
     this.saveLectureLog.mutate({ schedule, log: { lectureUpdate } }).subscribe(
       () => this.toast('Lecture update saved', 'success'),
-      e => { this.toast('Lecture update failed', 'failure'); console.error(e); }
+      e => { this.toast('Lecture update failed: ' + e, 'failure'); console.error(e); }
     );
   }
 
