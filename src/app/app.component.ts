@@ -62,14 +62,7 @@ export class AppComponent {
       platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
         this.shake.startWatch(40).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
           if (!this.settings.get('role')) {
-            return this.toastCtrl.create({
-              // tslint:disable-next-line: max-line-length
-              message: 'You have to be logged in to send a Feedback!',
-              position: 'top',
-              color: 'danger',
-              duration: 5000,
-              showCloseButton: true,
-            }).then(toast => toast.present());
+            return; // Do nothing if they aren't logged in
           }
 
           if (!this.router.url.startsWith('/feedback') && !this.isOpen) { // No point for it to work on the Feedback Page
