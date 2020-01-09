@@ -64,7 +64,11 @@ export class MarkAttendancePage implements OnInit {
     // get attendance state from query and use manual mode if attendance initialized
     const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
       catchError(() => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }))),
-      catchError(err => (this.toast(err.message.replace('GraphQL error: ', '')), console.error(err), NEVER)),
+      catchError(err => {
+        this.toast('Failed to mark attendance: ' + err.message.replace('GraphQL error: ', ''), 'danger');
+        console.error(err);
+        return NEVER;
+      }),
       pluck('data'),
       finalize(() => 'initAttendance ended'),
       tap((query: AttendanceQuery | InitAttendanceMutation) => {
@@ -167,18 +171,18 @@ export class MarkAttendancePage implements OnInit {
   save(lectureUpdate: string) {
     const schedule = this.schedule;
     this.saveLectureLog.mutate({ schedule, log: { lectureUpdate } }).subscribe(
-      () => {},
-      e => console.error(e)
+      () => this.toast('Lecture update saved', 'success'),
+      e => { this.toast('Lecture update failed: ' + e, 'failure'); console.error(e); }
     );
   }
 
   /** Helper function to toast error message. */
-  toast(message: string) {
+  toast(message: string, color: string) {
     this.toastCtrl.create({
-      message: 'Failed to mark attendance: ' + message,
+      message,
       duration: 2000,
       position: 'top',
-      color: 'danger'
+      color
     }).then(toast => toast.present());
   }
 

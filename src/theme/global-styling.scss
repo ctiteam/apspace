@@ -372,3 +372,8 @@ ion-refresher-content {
     }
   }
 }
+
+/** --color not set in ion-select */
+ion-select {
+  color: var(--main-txt-color);
+}
