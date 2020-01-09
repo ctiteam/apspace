@@ -21,7 +21,8 @@
       <!--<ion-row *ngIf="(otp$ | async || '123') as otp">-->
       <ion-row *ngIf="'123' as otp">
         <ion-col size="12" sizeSm="9">
-          <qrcode *ngIf="otp" [qrdata]="otp" size="520" level="H"></qrcode>
+          <qrcode *ngIf="otp" [qrdata]="otp" width="600"
+            errorCorrectionLevel="H"></qrcode>
         </ion-col>
         <ion-col size="10" offset="1" sizeSm="3" offsetSm="0">
           <div *ngFor="let c of otp | chars" class="otp">
