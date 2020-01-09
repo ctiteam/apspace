@@ -31,7 +31,7 @@
           <ion-item>
             <ion-label color="medium" position="floating">Lecture Update</ion-label>
             <ion-textarea [(ngModel)]="lectureUpdate"
-              (ionChange)="save(lectureUpdate)" debounce="5000"></ion-textarea>
+              (ionChange)="save(lectureUpdate)" debounce="2000"></ion-textarea>
           </ion-item>
           <ion-list lines="none">
             <ion-item *ngFor="let student of lastMarked$ | async">
