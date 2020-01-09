@@ -60,7 +60,7 @@ export class AppComponent {
 
       platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
         this.shake.startWatch(40).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
-          if (!this.router.url.startsWith('/feedback') && !this.isOpen) { // No point for it work on the Feedback Page
+          if (!this.router.url.startsWith('/feedback') && !this.isOpen) { // No point for it to work on the Feedback Page
             this.isOpen = true; // Prevent double alert to be opened
             const alert = await this.alertCtrl.create({
               header: 'Report a problem',
