@@ -79,7 +79,7 @@ describe('StudentTimetablePage', () => {
         role: Role.Student,
         viewWeek: false,
       } as Settings));
-      const intake = 'UC3F1906CS(DA)';
+      const intake = 'UCFF0000CTI';
       wsSpy.get.and.returnValue(asyncData({
         STUDENT_NUMBER: '',
         EMGS_COUNTRY_CODE: '',
@@ -114,6 +114,88 @@ describe('StudentTimetablePage', () => {
       expect(settingsSpy.set).toHaveBeenCalledTimes(1);
       expect(settingsSpy.set).toHaveBeenCalledWith('intakeHistory', [intake]);
       expect(component.intake).toEqual(intake);
+      expect(studentTimetableSpy.get).toHaveBeenCalledTimes(1);
+    }));
+
+    it('should display classes', fakeAsync(() => {
+      activatedRoute.setParams({});
+      const monday = new Date();
+      monday.setHours(0, 0, 0, 0);
+      monday.setDate(monday.getDate() - (monday.getDay() + 6) % 7);
+      const intake = 'UC3F1906CS(DA)';
+      // one timetable every day
+      const timetables = [...Array(7).keys()].map(n => {
+        const d = new Date(new Date(monday).setDate(monday.getDate() + n));
+        return {
+          INTAKE: intake,
+          MODID: 'CT100-0-0-XXXX-L',
+          DAY: '',
+          LOCATION: 'APU',
+          ROOM: 'ROOM',
+          LECTID: 'PRO',
+          NAME: 'Professor',
+          SAMACCOUNTNAME: 'professor',
+          DATESTAMP: '',
+          DATESTAMP_ISO: `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`,
+          TIME_FROM: '08:30 AM',
+          TIME_TO: '10:30 PM',
+        };
+      });
+      studentTimetableSpy.get.and.returnValue(asyncData(timetables));
+      settingsSpy.get.and.callFake(settingsFake({
+        intakeHistory: null,
+        role: Role.Student,
+        viewWeek: false,
+      } as Settings));
+      wsSpy.get.and.returnValue(asyncData({
+        STUDENT_NUMBER: '',
+        EMGS_COUNTRY_CODE: '',
+        STUDENT_EMAIL: '',
+        DATE: '',
+        COUNTRY: '',
+        NAME: '',
+        INTAKE: intake,
+        PROGRAMME: '',
+        MENTOR_SAMACCOUNTNAME: '',
+        PL_SAMACCOUNTNAME: '',
+        STUDENT_STATUS: '',
+        IC_PASSPORT_NO: '',
+        INTAKE_STATUS: '',
+        PHOTO_NO: null,
+        PL_NAME: '',
+        MENTOR_NAME: '',
+        PROVIDER_CODE: '',
+        BLOCK: true,
+        MESSAGE: '',
+      }));
+
+      fixture = TestBed.createComponent(StudentTimetablePage);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+
+      expect(component).toBeTruthy();
+      expect(wsSpy.get).toHaveBeenCalledTimes(1);
+      expect(wsSpy.get).toHaveBeenCalledWith('/student/profile', { caching: 'cache-only' });
+
+      tick(); // ws subscribe profile
+      expect(settingsSpy.set).toHaveBeenCalledTimes(1);
+      expect(settingsSpy.set).toHaveBeenCalledWith('intakeHistory', [intake]);
+      expect(component.intake).toEqual(intake);
+      expect(studentTimetableSpy.get).toHaveBeenCalledTimes(1);
+      expect(studentTimetableSpy.get).toHaveBeenCalledWith(false);
+      fixture.detectChanges(); // now render intake
+
+      tick(); // subscribe student timetable
+      expect(component.availableWeek.length).toEqual(1);
+      expect(component.availableWeek[0].getTime()).toEqual(Date.parse(timetables[0].DATESTAMP_ISO));
+      // console.log(timetables);
+      // console.log(component.selectedWeek, component.availableWeek);
+      // TODO fix selectedWeek in code not here
+      // expect(component.selectedWeek.getTime()).toEqual(Date.parse(timetables[0].DATESTAMP_ISO));
+      expect(component.availableDate.length).toEqual(7);
+      expect(component.availableDays.length).toEqual(7);
+      // TODO availableDays order
+      // TODO selectedDate
     }));
   });
 
