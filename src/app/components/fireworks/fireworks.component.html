@@ -1,10 +1,6 @@
 <div class="wrapper" [ngStyle]="settingWrapper" [ngClass]="{'hide-fireworks': hideFireworks}">
-  <ion-buttons class="terminate">
-    <ion-button (click)="terminateFireworks()">
-      <ion-icon name="close"></ion-icon>
-    </ion-button>
-  </ion-buttons>
-
+  <ion-icon class="terminate" name="close" (click)="terminateFireworks()"></ion-icon>
+  
   <div class="lantern-container">
     <img class="header-image" [src]=fireworksSettings.headerImage alt="lantern">
   </div>

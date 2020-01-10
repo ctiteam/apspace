@@ -66,13 +66,16 @@ img.launch {
     cursor: pointer;
 }
 
-ion-buttons.terminate {
+
+ion-icon.terminate {
     position: absolute;
     z-index: 3;
-    top: 2%;
-
-    ion-icon {
-        font-size: 50px;
-        color: white;
-    }
+    top: 120px;
+    background: #E60C15;
+    border-radius: 100%;
+    font-size: 36px;
+    margin: 6px;
+    color: rgb(243, 187, 189);
+    cursor: pointer;
 }
+

@@ -28,8 +28,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     },
     launchImageStyle: {
       launchImage: 'assets/img/lantern.png',
-      top: '2%',
-      left: '86%',
+      top: '64px',
+      left: '22px',
       width: '30px'
     },
     headerImage: 'assets/img/6325321.png',
