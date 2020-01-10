@@ -24,8 +24,11 @@ class Particle {
   constructor(
     x = 0,
     y = 0,
+    // tslint:disable-next-line: no-bitwise
     red = ~~(Math.random() * 255),
+    // tslint:disable-next-line: no-bitwise
     green = ~~(Math.random() * 255),
+    // tslint:disable-next-line: no-bitwise
     blue = ~~(Math.random() * 255),
     speed,
     FIREWORK_LIFESPAN,
@@ -217,8 +220,11 @@ export class FireworksComponent implements AfterViewInit {
     const speed = (Math.random() * 2) + this.BASE_PARTICLE_SPEED;
     let maxSpeed = speed;
 
+    // tslint:disable-next-line: no-bitwise
     let red = ~~(Math.random() * 255);
+    // tslint:disable-next-line: no-bitwise
     let green = ~~(Math.random() * 255);
+    // tslint:disable-next-line: no-bitwise
     let blue = ~~(Math.random() * 255);
 
     // use brighter colours
