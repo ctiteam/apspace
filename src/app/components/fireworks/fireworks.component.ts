@@ -260,7 +260,7 @@ export class FireworksComponent implements AfterViewInit {
     this.canvas.height = window.innerHeight;
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize', [''])
   onResize() {
     this.updateCanvasSize();
   }
