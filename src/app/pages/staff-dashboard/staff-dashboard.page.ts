@@ -17,24 +17,24 @@ import { NewsModalPage } from '../news/news-modal';
 })
 export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   // Setting fireworks animation
-  fireworksSettings: FireworksSettings = {
-    message: '新年快乐',
-    subMessage: 'Happy Chinese New Year',
-    fontStyle: {
-      color: 'lemonchiffon',
-      textShadow: '0 0 10px orange, 0 0 10px darkorange',
-      fontFamily: `'Ma Shan Zheng', cursive`,
-      fontSize: '300%'
-    },
-    launchImageStyle: {
-      launchImage: 'assets/img/lantern.png',
-      top: '0',
-      left: '60%',
-      width: '30px'
-    },
-    headerImage: 'assets/img/6325321.png',
-    backgroundColor: '#192D46'
-  };
+  // fireworksSettings: FireworksSettings = {
+  //   message: '新年快乐',
+  //   subMessage: 'Happy Chinese New Year',
+  //   fontStyle: {
+  //     color: 'lemonchiffon',
+  //     textShadow: '0 0 10px orange, 0 0 10px darkorange',
+  //     fontFamily: `'Ma Shan Zheng', cursive`,
+  //     fontSize: '300%'
+  //   },
+  //   launchImageStyle: {
+  //     launchImage: 'assets/img/lantern.png',
+  //     top: '0',
+  //     left: '60%',
+  //     width: '30px'
+  //   },
+  //   headerImage: 'assets/img/6325321.png',
+  //   backgroundColor: '#192D46'
+  // };
 
   // USER SETTINGS
   @ViewChild('slides', { static: false }) slides: IonSlides;
