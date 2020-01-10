@@ -1,0 +1,29 @@
+<div class="wrapper" [ngStyle]="settingWrapper" [ngClass]="{'hide-fireworks': hideFireworks}">
+  <ion-buttons class="terminate">
+    <ion-button (click)="terminateFireworks()">
+      <ion-icon name="close"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+
+  <div class="lantern-container">
+    <img class="header-image" [src]=fireworksSettings.headerImage alt="lantern">
+  </div>
+
+  <div class="text">
+    <h1 [ngStyle]="settingFontStyle">{{fireworksSettings.message}}</h1>
+    <h1 [ngStyle]="settingFontStyle">{{fireworksSettings.subMessage}}</h1>
+  </div>
+
+  <canvas id="fireworks" #fireworks></canvas>
+</div>
+
+<img 
+[src]=fireworksSettings.launchImageStyle.launchImage 
+*ngIf="hideFireworks" 
+class="launch" 
+[ngStyle]="settingLaunchImage" 
+(click)="launchFireworks()">
+
+<div *ngIf="hideFireworks">
+  <ng-content></ng-content>
+</div>
