@@ -181,33 +181,7 @@ const routes: Routes = [
   {
     path: 'iconsult',
     canActivate: [AuthGuard],
-    children: [
-      {
-        path: 'add-free-slot',
-        canActivate: [AuthGuard],
-        data: { role: Role.Admin | Role.Lecturer },
-        loadChildren: () => import('./pages/iconsult/staff/add-free-slot/add-free-slot.module').then(m => m.AddFreeSlotPageModule)
-      },
-      {
-        path: 'add-unavailability',
-        canActivate: [AuthGuard],
-        data: { role: Role.Admin | Role.Lecturer },
-        loadChildren: () => import('./pages/iconsult/staff/add-unavailability/add-unavailability.module')
-          .then(m => m.AddUnavailabilityPageModule)
-      },
-      {
-        path: 'my-consultations',
-        canActivate: [AuthGuard],
-        data: { role: Role.Admin | Role.Lecturer },
-        loadChildren: () => import('./pages/iconsult/staff/my-consultations/my-consultations.module').then(m => m.MyConsultationsPageModule)
-      },
-      {
-        path: 'my-appointments',
-        canActivate: [AuthGuard],
-        data: { role: Role.Student },
-        loadChildren: () => import('./pages/iconsult/student/my-appointments/my-appointments.module').then(m => m.MyAppointmentsPageModule)
-      },
-    ]
+    loadChildren: () => import('./pages/iconsult/iconsult.module').then(m => m.IconsultModule)
   },
   // {
   //   path: 'aplc-progress-report',
