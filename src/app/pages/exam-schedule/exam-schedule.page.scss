@@ -14,3 +14,10 @@ ion-card {
     }
   }
 }
+
+ion-button {
+  &.danger-border {
+    --border-color: var(--danger-color);
+    --color: var(--danger-color);
+  }
+}
