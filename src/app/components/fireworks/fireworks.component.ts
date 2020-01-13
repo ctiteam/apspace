@@ -160,6 +160,8 @@ export class FireworksComponent implements AfterViewInit {
   settingLaunchImage;
   settingFontStyle;
 
+  timeoutHandler;
+
   constructor() {}
 
   ngAfterViewInit() {
@@ -266,10 +268,16 @@ export class FireworksComponent implements AfterViewInit {
   }
 
   terminateFireworksWithTimer() {
-    window.setTimeout(() => {
+    this.timeoutHandler = window.setTimeout(() => {
       cancelAnimationFrame(this.requestId);
       this.hideFireworks = true;
     }, 5000);
+  }
+
+  terminateFireworks() {
+    window.clearTimeout(this.timeoutHandler);
+    cancelAnimationFrame(this.requestId);
+    this.hideFireworks = true;
   }
 }
 
