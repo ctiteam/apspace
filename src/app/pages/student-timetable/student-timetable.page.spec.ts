@@ -37,12 +37,14 @@ describe('StudentTimetablePage', () => {
   let activatedRoute: ActivatedRouteStub;
   let component: StudentTimetablePage;
   let fixture: ComponentFixture<StudentTimetablePage>;
+  let iabSpy: jasmine.SpyObj<InAppBrowser>;
   let settingsSpy: jasmine.SpyObj<SettingsService>;
   let studentTimetableSpy: jasmine.SpyObj<StudentTimetableService>;
   let wsSpy: jasmine.SpyObj<WsApiService>;
 
   beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
+    iabSpy = jasmine.createSpyObj('InAppBrowser', ['create']);
     settingsSpy = jasmine.createSpyObj('SettingsService', ['get', 'set']);
     studentTimetableSpy = jasmine.createSpyObj('StudentTimetableService', ['get']);
     wsSpy = jasmine.createSpyObj('WsApiService', ['get']);
@@ -68,7 +70,7 @@ describe('StudentTimetablePage', () => {
       ],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRoute },
-        { provide: InAppBrowser, useValue: {} },
+        { provide: InAppBrowser, useValue: iabSpy },
         { provide: ModalController, useValue: {} },
         { provide: Router, useValue: { url: '/' } },
         { provide: SettingsService, useValue: settingsSpy },
@@ -239,4 +241,88 @@ describe('StudentTimetablePage', () => {
       expect(settingsSpy.set).toHaveBeenCalledWith('intakeHistory', []);
     });
   });
+
+  it('should send to print', fakeAsync(() => {
+    activatedRoute.setParams({});
+    const monday = new Date();
+    monday.setHours(0, 0, 0, 0);
+    monday.setDate(monday.getDate() - (monday.getDay() + 6) % 7);
+    const intake = 'UC3F1906CS(DA)';
+    // one timetable every day
+    const timetables = [...Array(7).keys()].map(n => {
+      const d = new Date(new Date(monday).setDate(monday.getDate() + n));
+      return {
+        INTAKE: intake,
+        MODID: 'CT100-0-0-XXXX-L',
+        DAY: '',
+        LOCATION: 'APU',
+        ROOM: 'ROOM',
+        LECTID: 'PRO',
+        NAME: `Professor ${n}`,
+        SAMACCOUNTNAME: 'professor',
+        DATESTAMP: '',
+        DATESTAMP_ISO: `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`,
+        TIME_FROM: '08:30 AM',
+        TIME_TO: '10:30 PM',
+      };
+    });
+    studentTimetableSpy.get.and.returnValue(asyncData(timetables));
+    settingsSpy.get.and.callFake(settingsFake({
+      intakeHistory: null,
+      role: Role.Student,
+      viewWeek: false,
+    } as Settings));
+    wsSpy.get.and.returnValue(asyncData({
+      STUDENT_NUMBER: '',
+      EMGS_COUNTRY_CODE: '',
+      STUDENT_EMAIL: '',
+      DATE: '',
+      COUNTRY: '',
+      NAME: '',
+      INTAKE: intake,
+      PROGRAMME: '',
+      MENTOR_SAMACCOUNTNAME: '',
+      PL_SAMACCOUNTNAME: '',
+      STUDENT_STATUS: '',
+      IC_PASSPORT_NO: '',
+      INTAKE_STATUS: '',
+      PHOTO_NO: null,
+      PL_NAME: '',
+      MENTOR_NAME: '',
+      PROVIDER_CODE: '',
+      BLOCK: true,
+      MESSAGE: '',
+    }));
+
+    fixture = TestBed.createComponent(StudentTimetablePage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component).toBeTruthy();
+    expect(wsSpy.get).toHaveBeenCalledTimes(1);
+    expect(wsSpy.get).toHaveBeenCalledWith('/student/profile', { caching: 'cache-only' });
+
+    tick(); // ws subscribe profile
+    fixture.detectChanges(); // render intake
+    expect(settingsSpy.set).toHaveBeenCalledTimes(1);
+    expect(settingsSpy.set).toHaveBeenCalledWith('intakeHistory', [intake]);
+    expect(component.intake).toEqual(intake);
+    expect(studentTimetableSpy.get).toHaveBeenCalledTimes(1);
+    expect(studentTimetableSpy.get).toHaveBeenCalledWith(false);
+
+    tick(); // subscribe student timetable
+    fixture.detectChanges(); // render days
+    expect(component.availableWeek.length).toEqual(1);
+    expect(component.availableWeek[0].getTime()).toEqual(new Date(timetables[0].DATESTAMP_ISO).setHours(0, 0, 0, 0));
+    expect(component.selectedWeek.getTime()).toEqual(new Date(timetables[0].DATESTAMP_ISO).setHours(0, 0, 0, 0));
+    expect(component.availableDate.length).toEqual(7);
+    expect(component.availableDays).toEqual(['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']);
+    expect(component.selectedDate.getTime()).toEqual(new Date(component.availableDate[0]).setHours(0, 0, 0, 0));
+
+    const sendToPrintDe = fixture.debugElement.query(By.css('ion-button.print-button'));
+    sendToPrintDe.triggerEventHandler('click', { button: 0 });
+    expect(iabSpy.create).toHaveBeenCalledTimes(1);
+    expect(iabSpy.create).toHaveBeenCalledWith(`${component.printUrl}?Week=${timetables[0].DATESTAMP_ISO}&Intake=${intake}&print_request=print_tt`,
+      '_system', 'location=true');
+  }));
 });

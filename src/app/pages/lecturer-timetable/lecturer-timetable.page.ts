@@ -168,7 +168,7 @@ export class LecturerTimetablePage implements OnInit {
   }
 
   sendToPrint() {
-    const week = moment(this.selectedWeek).add(1, 'day').format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
+    const week = moment(this.selectedWeek).format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
     // tslint:disable-next-line: max-line-length
     this.iab.create(`${this.printUrl}?LectID=${this.lecturerCode}&Submit=Submit&Week=${week}&print_request=print`, '_system', 'location=true');
   }

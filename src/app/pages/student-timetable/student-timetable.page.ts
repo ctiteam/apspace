@@ -284,7 +284,7 @@ export class StudentTimetablePage implements OnInit {
   }
 
   sendToPrint() {
-    const week = moment(this.selectedWeek).add(1, 'day').format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
+    const week = moment(this.selectedWeek).format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
     // For student timetable:
     // printUrl?Week=2019-11-18&Intake=APTDF1805DSM(VFX)&print_request=print_tt
     // For lecturer timetable:
