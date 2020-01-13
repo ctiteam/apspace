@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input, ViewChild} from '@angular/core';
 import { FireworksSettings } from 'src/app/interfaces/fireworks-settings';
 
 class Particle {
@@ -247,14 +247,6 @@ export class FireworksComponent implements AfterViewInit {
     }
   }
 
-  temporaryDisableAutoFireworks() {
-    this.disableAutoFireworks = true;
-    clearTimeout(this.resetDisable);
-    this.resetDisable = setTimeout(() => {
-      this.disableAutoFireworks = false;
-    }, 5000);
-  }
-
   updateCanvasSize() {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
@@ -265,27 +257,19 @@ export class FireworksComponent implements AfterViewInit {
     this.updateCanvasSize();
   }
 
-  @HostListener('document:click', ['$event'])
-  onClick(event) {
-    this.createFirework(event.clientX, event.clientY);
-    this.temporaryDisableAutoFireworks();
-  }
-
-  @HostListener('document:touchstart', ['$event'])
-  onTouchStart(event) {
-    this.createFirework(event.clientX, event.clientY);
-    this.temporaryDisableAutoFireworks();
-  }
-
   launchFireworks() {
     this.updateCanvasSize();
     this.loop();
     this.hideFireworks = false;
+
+    this.terminateFireworksWithTimer();
   }
 
-  terminateFireworks() {
-    cancelAnimationFrame(this.requestId);
-    this.hideFireworks = true;
+  terminateFireworksWithTimer() {
+    window.setTimeout(() => {
+      cancelAnimationFrame(this.requestId);
+      this.hideFireworks = true;
+    }, 5000);
   }
 }
 
