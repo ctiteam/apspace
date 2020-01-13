@@ -279,10 +279,6 @@ export class StudentTimetablePage implements OnInit {
     this.changeDetectorRef.markForCheck();
   }
 
-  view_hideToolbar() {
-    this.show2ndToolbar = !this.show2ndToolbar;
-  }
-
   sendToPrint() {
     const week = moment(this.selectedWeek).format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
     // For student timetable:

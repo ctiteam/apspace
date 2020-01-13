@@ -9,7 +9,7 @@
         class="colored-text colored-border">
         Mark Attendance
       </ion-button>
-      <ion-button fill="icon" size="small" (click)="toggleToolbar()" class="colored-text">
+      <ion-button fill="icon" size="small" (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
         <ng-template [ngIf]="show2ndToolbar" [ngIfElse]="collapse">
           <ion-icon md="ios-arrow-up" name="arrow-up"></ion-icon>
         </ng-template>
