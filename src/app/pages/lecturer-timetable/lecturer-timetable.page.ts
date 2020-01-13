@@ -102,7 +102,7 @@ export class LecturerTimetablePage implements OnInit {
 
   /** Check if the day is in week. */
   dayInWeek(date: Date) {
-    date.setDate(date.getDate() - date.getDay() + 1); // monday
+    date.setDate(date.getDate() - (date.getDay() + 6) % 7); // monday
     return date.getFullYear() === this.selectedWeek.getFullYear()
       && date.getMonth() === this.selectedWeek.getMonth()
       && date.getDate() === this.selectedWeek.getDate();
@@ -132,7 +132,8 @@ export class LecturerTimetablePage implements OnInit {
     // get week
     this.availableWeek = Array.from(new Set(tt.map(t => {
       const date = new Date(t.time.slice(0, 10));
-      date.setDate(date.getDate() - date.getDay() + 1); // monday
+      date.setHours(0, 0, 0, 0);
+      date.setDate(date.getDate() - (date.getDay() + 6) % 7); // monday
       return date.valueOf();
     }))).sort().map(d => new Date(d));
 
@@ -162,12 +163,8 @@ export class LecturerTimetablePage implements OnInit {
     this.changeDetectorRef.markForCheck();
   }
 
-  toggleToolbar() {
-    this.show2ndToolbar = !this.show2ndToolbar;
-  }
-
   sendToPrint() {
-    const week = moment(this.selectedWeek).add(1, 'day').format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
+    const week = moment(this.selectedWeek).format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
     // tslint:disable-next-line: max-line-length
     this.iab.create(`${this.printUrl}?LectID=${this.lecturerCode}&Submit=Submit&Week=${week}&print_request=print`, '_system', 'location=true');
   }

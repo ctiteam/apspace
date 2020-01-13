@@ -111,7 +111,7 @@ export class StudentTimetablePage implements OnInit {
 
     // select current start of week
     const date = new Date();
-    date.setDate(date.getDate() - date.getDay() + 1);
+    date.setDate(date.getDate() - (date.getDay() + 6) % 7);
     date.setHours(0, 0, 0, 0);
     this.selectedWeek = date;
 
@@ -214,7 +214,7 @@ export class StudentTimetablePage implements OnInit {
 
   /** Check if the day is in week. */
   dayInWeek(date: Date) {
-    date.setDate(date.getDate() - date.getDay() + 1); // monday
+    date.setDate(date.getDate() - (date.getDay() + 6) % 7); // monday
     return date.getFullYear() === this.selectedWeek.getFullYear()
       && date.getMonth() === this.selectedWeek.getMonth()
       && date.getDate() === this.selectedWeek.getDate();
@@ -248,7 +248,8 @@ export class StudentTimetablePage implements OnInit {
     // get week
     this.availableWeek = Array.from(new Set(tt.map(t => {
       const date = new Date(t.DATESTAMP_ISO);
-      date.setDate(date.getDate() - date.getDay() + 1); // monday
+      date.setHours(0, 0, 0, 0);
+      date.setDate(date.getDate() - (date.getDay() + 6) % 7); // monday
       return date.valueOf();
     }))).sort().map(d => new Date(d));
 
@@ -278,12 +279,8 @@ export class StudentTimetablePage implements OnInit {
     this.changeDetectorRef.markForCheck();
   }
 
-  view_hideToolbar() {
-    this.show2ndToolbar = !this.show2ndToolbar;
-  }
-
   sendToPrint() {
-    const week = moment(this.selectedWeek).add(1, 'day').format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
+    const week = moment(this.selectedWeek).format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
     // For student timetable:
     // printUrl?Week=2019-11-18&Intake=APTDF1805DSM(VFX)&print_request=print_tt
     // For lecturer timetable:
