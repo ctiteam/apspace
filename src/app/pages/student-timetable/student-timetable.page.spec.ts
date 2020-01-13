@@ -2,9 +2,11 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {
   ComponentFixture, TestBed, async, fakeAsync, tick
 } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { ModalController } from '@ionic/angular';
+import { IonSegment, IonSegmentButton, ModalController, RadioValueAccessor, SelectValueAccessor, TextValueAccessor } from '@ionic/angular';
 import { BehaviorSubject, NEVER } from 'rxjs';
 
 import {
@@ -47,7 +49,15 @@ describe('StudentTimetablePage', () => {
     const userSettingsServiceStub = { timetable: new BehaviorSubject({ blacklists: [] }) };
 
     TestBed.configureTestingModule({
+      imports: [FormsModule],
       declarations: [
+        // ionic
+        IonSegment,
+        IonSegmentButton,
+        RadioValueAccessor,
+        SelectValueAccessor,
+        TextValueAccessor,
+
         ClassesPipe,
         GenPipe,
         RouterLinkDirectiveStub,
@@ -133,7 +143,7 @@ describe('StudentTimetablePage', () => {
           LOCATION: 'APU',
           ROOM: 'ROOM',
           LECTID: 'PRO',
-          NAME: 'Professor',
+          NAME: `Professor ${n}`,
           SAMACCOUNTNAME: 'professor',
           DATESTAMP: '',
           DATESTAMP_ISO: `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`,
@@ -178,24 +188,34 @@ describe('StudentTimetablePage', () => {
       expect(wsSpy.get).toHaveBeenCalledWith('/student/profile', { caching: 'cache-only' });
 
       tick(); // ws subscribe profile
+      fixture.detectChanges(); // render intake
       expect(settingsSpy.set).toHaveBeenCalledTimes(1);
       expect(settingsSpy.set).toHaveBeenCalledWith('intakeHistory', [intake]);
       expect(component.intake).toEqual(intake);
       expect(studentTimetableSpy.get).toHaveBeenCalledTimes(1);
       expect(studentTimetableSpy.get).toHaveBeenCalledWith(false);
-      fixture.detectChanges(); // now render intake
 
       tick(); // subscribe student timetable
+      fixture.detectChanges(); // render days
       expect(component.availableWeek.length).toEqual(1);
-      expect(component.availableWeek[0].getTime()).toEqual(Date.parse(timetables[0].DATESTAMP_ISO));
-      // console.log(timetables);
-      // console.log(component.selectedWeek, component.availableWeek);
-      // TODO fix selectedWeek in code not here
-      // expect(component.selectedWeek.getTime()).toEqual(Date.parse(timetables[0].DATESTAMP_ISO));
+      expect(component.availableWeek[0].getTime()).toEqual(new Date(timetables[0].DATESTAMP_ISO).setHours(0, 0, 0, 0));
+      expect(component.selectedWeek.getTime()).toEqual(new Date(timetables[0].DATESTAMP_ISO).setHours(0, 0, 0, 0));
       expect(component.availableDate.length).toEqual(7);
-      expect(component.availableDays.length).toEqual(7);
-      // TODO availableDays order
-      // TODO selectedDate
+      expect(component.availableDays).toEqual(['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']);
+      expect(component.selectedDate.getTime()).toEqual(new Date(component.availableDate[0]).setHours(0, 0, 0, 0));
+
+      // clicks each day
+      const weekDe = fixture.debugElement.query(By.css('ion-segment'));
+      weekDe.children[0].triggerEventHandler('click', { button: 0 });
+      fixture.checkNoChanges(); // no changes to click on the same day
+      expect(fixture.nativeElement.querySelector('ion-grid').textContent).toContain('Professor 0');
+      weekDe.children[1].triggerEventHandler('click', { button: 0 });
+      // TODO: detect change event
+      // console.log(weekDe);
+      // tick();
+      // fixture.detectChanges();
+      // expect(component.selectedDate.getTime()).toEqual(new Date(component.availableDate[1]).setHours(0, 0, 0, 0));
+      // expect(fixture.nativeElement.querySelector('ion-grid').textContent).toContain('Professor 1');
     }));
   });
 
