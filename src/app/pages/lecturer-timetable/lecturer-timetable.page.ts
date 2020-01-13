@@ -132,6 +132,7 @@ export class LecturerTimetablePage implements OnInit {
     // get week
     this.availableWeek = Array.from(new Set(tt.map(t => {
       const date = new Date(t.time.slice(0, 10));
+      date.setHours(0, 0, 0, 0);
       date.setDate(date.getDate() - (date.getDay() + 6) % 7); // monday
       return date.valueOf();
     }))).sort().map(d => new Date(d));
