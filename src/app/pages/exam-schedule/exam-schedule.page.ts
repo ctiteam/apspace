@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { ModalController, Platform } from '@ionic/angular';
+import { IonContent, ModalController, Platform } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
-import { ExamSchedule, Role, StudentProfile } from '../../interfaces';
+import { ExamResit, ExamSchedule, Role, StudentProfile } from '../../interfaces';
 import { IntakeListingService, SettingsService, WsApiService } from '../../services';
 
 @Component({
@@ -13,8 +13,13 @@ import { IntakeListingService, SettingsService, WsApiService } from '../../servi
   styleUrls: ['./exam-schedule.page.scss'],
 })
 export class ExamSchedulePage {
-  exam$: Observable<ExamSchedule[]>;
+  @ViewChild('content', { static: true }) content: IonContent;
 
+  exam$: Observable<ExamSchedule[]>;
+  examResits$: Observable<ExamResit[]>;
+  examResitModules = [];
+  resitModule = '';
+  selectedSegment: 'exam-schedule' | 'exam-resit' = 'exam-schedule';
   intake: string;
   intakes: string[];
   selectedIntake: string;
@@ -68,6 +73,17 @@ export class ExamSchedulePage {
       this.exam$ = this.ws.get<ExamSchedule[]>(url, { auth: false, caching }).pipe(
         finalize(() => (refresher && refresher.target.complete())),
       );
+      this.examResits$ = this.ws.get(`/examresit/date/${this.intake}`, {auth: false}).pipe(
+        tap((listOfModules: ExamResit[]) => {
+          this.examResitModules = [];
+          this.resitModule = '';
+          listOfModules.forEach(el => {
+            if (!this.examResitModules.includes(el.SUBJECT_DESCRIPTION)) {
+              this.examResitModules.push(el.SUBJECT_DESCRIPTION);
+            }
+          });
+        })
+      );
       this.il.get(refresher).subscribe(ii => {
         this.intakes = ii.map(i => i.INTAKE_CODE);
       });
@@ -96,5 +112,9 @@ export class ExamSchedulePage {
 
   openGuidlines() {
     this.iab.create('https://kb.sites.apiit.edu.my/knowledge-base/examination-guidelines/', '_system', 'location=true');
+  }
+
+  segmentValueChanged() {
+    this.content.scrollToTop();
   }
 }

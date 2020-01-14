@@ -7,7 +7,7 @@ export { ClassificationLegend } from './classfication-legend';
 export { Course } from './courses';
 export { CourseDetails } from './course-details';
 export { DeterminationLegend } from './determination-legend';
-export { ExamSchedule } from './exam-schedule';
+export { ExamResit, ExamSchedule } from './exam-schedule';
 export { Feedback } from './feedback';
 export { FeesBankDraft, FeesDetails, FeesSummary, FeesTotalSummary } from './fees';
 export { Holidays, Holiday } from './holiday';
