@@ -65,94 +65,100 @@ export class AppComponent {
             return; // Do nothing if they aren't logged in
           }
 
-          if (!this.router.url.startsWith('/feedback') && !this.isOpen) { // No point for it to work on the Feedback Page
-            this.isOpen = true; // Prevent double alert to be opened
-            const alert = await this.alertCtrl.create({
-              header: 'Report a problem',
-              subHeader: 'Your feedback helps us to improve APSpace',
-              inputs: [
-                {
-                  name: 'message',
-                  type: 'text',
-                  placeholder: 'Message',
-                },
-                {
-                  name: 'contactNo',
-                  type: 'text',
-                  placeholder: 'Contact Number (Optional)'
-                }
-              ],
-              buttons: [
-                {
-                  text: 'Dismiss',
-                  role: 'cancel',
-                  handler: () => {
-                    this.isOpen = false;
-                  }
-                }, {
-                  text: 'Submit',
-                  handler: async (data) => {
-                    if (!data.message) {
-                      this.isOpen = false;
-                      return this.toastCtrl.create({
-                        // tslint:disable-next-line: max-line-length
-                        message: 'Please make sure the Message field is filled up.',
-                        position: 'top',
-                        color: 'danger',
-                        duration: 5000,
-                        showCloseButton: true,
-                      }).then(toast => toast.present());
-                    }
-
-                    // tslint:disable-next-line: no-shadowed-variable
-                    const feedback = {
-                      contactNo: data.contactNo || '',
-                      platform: this.feedback.platform(),
-                      message: data.message,
-                      appVersion: this.versionService.version,
-                      screenSize: screen.width + 'x' + screen.height,
-                    };
-
-                    this.presentLoading();
-                    this.feedback.sendFeedback(feedback).subscribe(
-                      {
-                        next: () => {
-                          data.message = '';
-                          this.toastCtrl.create({
-                            // tslint:disable-next-line: max-line-length
-                            message: '<span style="font-weight: bold;">Feedback submitted! </span> The team will get back to you as soon as possbile via Email. Thank you for your feedback',
-                            position: 'top',
-                            color: 'success',
-                            duration: 5000,
-                            showCloseButton: true,
-                          }).then(toast => toast.present());
-
-                          this.isOpen = false;
-                          this.dismissLoading();
-                        },
-                        error: (err) => {
-                          this.isOpen = false;
-                          this.toastCtrl.create({
-                            message: err.message,
-                            cssClass: 'danger',
-                            position: 'top',
-                            duration: 5000,
-                            showCloseButton: true,
-                          }).then(toast => toast.present());
-                        },
-                        complete: () => {
-                          this.isOpen = false;
-                          this.dismissLoading();
-                        }
-                      }
-                    );
-                  }
-                }
-              ]
-            });
-
-            alert.present();
+          if (this.router.url.startsWith('/feedback')) {
+            return;
           }
+
+          if (this.isOpen) {
+            return;
+          }
+
+          this.isOpen = true; // Prevent double alert to be opened
+          const alert = await this.alertCtrl.create({
+            header: 'Report a problem',
+            subHeader: 'Your feedback helps us to improve APSpace',
+            inputs: [
+              {
+                name: 'message',
+                type: 'text',
+                placeholder: 'Message',
+              },
+              {
+                name: 'contactNo',
+                type: 'text',
+                placeholder: 'Contact Number (Optional)'
+              }
+            ],
+            buttons: [
+              {
+                text: 'Dismiss',
+                role: 'cancel',
+                handler: () => {
+                  this.isOpen = false;
+                }
+              }, {
+                text: 'Submit',
+                handler: async (data) => {
+                  if (!data.message) {
+                    this.isOpen = false;
+                    return this.toastCtrl.create({
+                      // tslint:disable-next-line: max-line-length
+                      message: 'Please make sure the Message field is filled up.',
+                      position: 'top',
+                      color: 'danger',
+                      duration: 5000,
+                      showCloseButton: true,
+                    }).then(toast => toast.present());
+                  }
+
+                  // tslint:disable-next-line: no-shadowed-variable
+                  const feedback = {
+                    contactNo: data.contactNo || '',
+                    platform: this.feedback.platform(),
+                    message: data.message,
+                    appVersion: this.versionService.version,
+                    screenSize: screen.width + 'x' + screen.height,
+                  };
+
+                  this.presentLoading();
+                  this.feedback.sendFeedback(feedback).subscribe(
+                    {
+                      next: () => {
+                        data.message = '';
+                        this.toastCtrl.create({
+                          // tslint:disable-next-line: max-line-length
+                          message: '<span style="font-weight: bold;">Feedback submitted! </span> The team will get back to you as soon as possbile via Email. Thank you for your feedback',
+                          position: 'top',
+                          color: 'success',
+                          duration: 5000,
+                          showCloseButton: true,
+                        }).then(toast => toast.present());
+
+                        this.isOpen = false;
+                        this.dismissLoading();
+                      },
+                      error: (err) => {
+                        this.isOpen = false;
+                        this.toastCtrl.create({
+                          message: err.message,
+                          cssClass: 'danger',
+                          position: 'top',
+                          duration: 5000,
+                          showCloseButton: true,
+                        }).then(toast => toast.present());
+                      },
+                      complete: () => {
+                        this.isOpen = false;
+                        this.dismissLoading();
+                      }
+                    }
+                  );
+                }
+              }
+            ]
+          });
+
+          alert.present();
         });
       });
 
