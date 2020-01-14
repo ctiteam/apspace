@@ -8,7 +8,7 @@ import {
   Platform, PopoverController, ToastController
 } from '@ionic/angular';
 import { NotificationModalPage } from './pages/notifications/notification-modal';
-import { FeedbackService, NotificationService, SettingsService, UserSettingsService, VersionService } from './services';
+import { CasTicketService, FeedbackService, NotificationService, UserSettingsService, VersionService } from './services';
 
 @Component({
   selector: 'app-root',
@@ -30,23 +30,23 @@ export class AppComponent {
 
   constructor(
     private platform: Platform,
-    private userSettings: UserSettingsService,
-    private settings: SettingsService,
-    private feedback: FeedbackService,
-    private toastCtrl: ToastController,
     private router: Router,
+    private fcm: FCM,
+    private network: Network,
+    private shake: Shake,
+    private cas: CasTicketService,
+    private userSettings: UserSettingsService,
+    private feedback: FeedbackService,
+    private notificationService: NotificationService,
+    private versionService: VersionService,
+    private toastCtrl: ToastController,
     private navCtrl: NavController,
     private modalCtrl: ModalController,
     private actionSheetCtrl: ActionSheetController,
     private menuCtrl: MenuController,
     private popoverCtrl: PopoverController,
     private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController,
-    private notificationService: NotificationService,
-    private fcm: FCM,
-    private versionService: VersionService,
-    private network: Network,
-    private shake: Shake
+    private loadingCtrl: LoadingController
   ) {
     this.getUserSettings();
     this.versionService.checkForUpdate().subscribe();
@@ -61,7 +61,7 @@ export class AppComponent {
 
       platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
         this.shake.startWatch(40).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
-          if (!this.settings.get('role')) {
+          if (!await this.cas.isAuthenticated()) {
             return; // Do nothing if they aren't logged in
           }
 
