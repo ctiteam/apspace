@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { MenuController, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
@@ -27,7 +26,6 @@ export class NotificationsPage {
     private notificationService: NotificationService,
     private modalCtrl: ModalController,
     private menu: MenuController,
-    public sanitizer: DomSanitizer
   ) { }
 
   ionViewDidEnter() {
