@@ -194,17 +194,17 @@ export class MyConsultationsPage {
   async cancelAvailableSlot() {
     if (this.slotsToBeCancelled) {
 
-      let isPassed = false;
+      let isWithin24Hrs = false;
       this.slotsToBeCancelled.forEach(slotToBeCancelled => {
         if (new Date(this.datePipe.transform(slotToBeCancelled.start_time, 'medium', '+0800'))
         <= moment(new Date()).add(24, 'hours').toDate()) {
-          isPassed = true;
+          isWithin24Hrs = true;
           return;
         }
       });
 
-      if (isPassed) {
-        this.showToastMessage('Cannot cancel passed slots.', 'danger');
+      if (isWithin24Hrs) {
+        this.showToastMessage('Cannot cancel slots that is within 24 hours.', 'danger');
         return;
       }
 
