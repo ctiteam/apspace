@@ -10,8 +10,6 @@ import { WsApiService } from 'src/app/services';
   styleUrls: ['./update-progress-report.page.scss'],
 })
 export class UpdateProgressReportPage implements OnInit {
-  stagingUrl = 'https://kh1rvo4ilf.execute-api.ap-southeast-1.amazonaws.com/dev/aplc';
-
   subjects$: Observable<any>; // to create interface
   classes$: Observable<any>; // to create interface
   scoreLegend$: Observable<any>; // to create interface
@@ -40,19 +38,19 @@ export class UpdateProgressReportPage implements OnInit {
   }
 
   initData() { // changed with refresher
-    this.subjects$ = this.ws.get<any>(`/subjects`, { url: this.stagingUrl });
-    this.scoreLegend$ = this.ws.get<any[]>(`/score-legend`, { url: this.stagingUrl, caching: 'cache-only' });
-    this.descriptionLegend$ = this.ws.get<any[]>(`/description-legend`, { url: this.stagingUrl, caching: 'cache-only' });
+    this.subjects$ = this.ws.get<any>(`/subjects`);
+    this.scoreLegend$ = this.ws.get<any[]>(`/score-legend`, { caching: 'cache-only' });
+    this.descriptionLegend$ = this.ws.get<any[]>(`/description-legend`, { caching: 'cache-only' });
   }
 
   onToggleChanged() {
     if (this.searchByCourseCode) {
-      this.courses$ = this.ws.get<any>(`/courses`, { url: this.stagingUrl }).pipe(
+      this.courses$ = this.ws.get<any>(`/courses`).pipe(
         tap(_ => this.classCode = ''),
         tap(_ => this.subjectCode = '')
       );
     } else {
-      this.subjects$ = this.ws.get<any>(`/subjects`, { url: this.stagingUrl }).pipe(
+      this.subjects$ = this.ws.get<any>(`/subjects`).pipe(
         tap(_ => this.classCode = ''),
         tap(_ => this.courseCode = '')
       );
@@ -60,22 +58,22 @@ export class UpdateProgressReportPage implements OnInit {
   }
 
   getClassesBySubjectCode() {
-    this.classes$ = this.ws.get<any>(`/classes?subject_code=${this.subjectCode}`, { url: this.stagingUrl }).pipe(
+    this.classes$ = this.ws.get<any>(`/classes?subject_code=${this.subjectCode}`).pipe(
       tap(_ => this.classCode = ''),
       tap(_ => this.courseCode = '')
     );
   }
 
   getClassesByCourseCode() {
-    this.classes$ = this.ws.get<any>(`/classes?course_code=${this.courseCode}`, { url: this.stagingUrl }).pipe(
+    this.classes$ = this.ws.get<any>(`/classes?course_code=${this.courseCode}`).pipe(
       tap(_ => this.classCode = ''),
       tap(_ => this.subjectCode = '')
     );
   }
 
   onClassCodeChange() {
-    this.classDescription$ = this.ws.get<any>(`/class-description?class_code=${this.classCode}`, { url: this.stagingUrl });
-    this.studentsBehaviour$ = this.ws.get<any>(`/student-behavior?class_code=${this.classCode}`, { url: this.stagingUrl });
+    this.classDescription$ = this.ws.get<any>(`/class-description?class_code=${this.classCode}`);
+    this.studentsBehaviour$ = this.ws.get<any>(`/student-behavior?class_code=${this.classCode}`);
   }
 
 
@@ -94,8 +92,7 @@ export class UpdateProgressReportPage implements OnInit {
             // START THE LOADING
             this.presentLoading();
             this.ws.put<any>('/student-behavior', {
-              body: studentBehaviors,
-              url: this.stagingUrl
+              body: studentBehaviors
             }).subscribe(
               {
                 next: _ => {
