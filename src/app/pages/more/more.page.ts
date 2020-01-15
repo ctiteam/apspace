@@ -107,14 +107,14 @@ export class MorePage implements OnInit {
       role: Role.Student,
       tags: ['mail', 'email']
     },
-    // {
-    //   title: 'APLC Progress Report',
-    //   group: 'Main',
-    //   url: 'aplc-progress-report',
-    //   img: 'assets/img/aplc-progress-report.png',
-    //   role: Role.Lecturer | Role.Admin,
-    //   tags: []
-    // },
+    {
+      title: 'APLC Progress Report',
+      group: 'Main',
+      url: 'aplc-progress-report',
+      img: 'assets/img/aplc-progress-report.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: []
+    },
     {
       title: 'Attendance',
       group: 'Course Related',
