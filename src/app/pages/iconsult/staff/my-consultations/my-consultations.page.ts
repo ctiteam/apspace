@@ -117,6 +117,14 @@ export class MyConsultationsPage {
   }
 
   // cancel slots functions starts here
+  isPassedOrWithin24Hrs(slot) { // for checkbox cancel slot: hide the checkbox if the slots is passed or within 24 hours
+    if (new Date(this.datePipe.transform(slot.start_time, 'medium', '+0800'))
+      <= moment(new Date()).add(24, 'hours').toDate()) {
+        return false;
+      }
+    return true;
+  }
+
   toggleCancelSlot() {
     this.onSelect = !this.onSelect;
 
@@ -151,7 +159,13 @@ export class MyConsultationsPage {
 
     filteredDates.forEach(filteredDate => {
       const currentDateString = this.datePipe.transform(filteredDate, 'yyyy-MM-dd', '+0800');
-      dates[currentDateString].items.forEach(item => this.slotsToBeCancelled.push(item));
+      dates[currentDateString].items.forEach(item => {
+        // only push the slots that is not a passed or within 24 hours slots.
+        if (!(new Date(this.datePipe.transform(item.start_time, 'medium', '+0800'))
+          <= moment(new Date()).add(24, 'hours').toDate())) {
+            this.slotsToBeCancelled.push(item);
+          }
+      });
     });
   }
 
@@ -204,7 +218,7 @@ export class MyConsultationsPage {
       });
 
       if (isWithin24Hrs) {
-        this.showToastMessage('Cannot cancel slots that is within 24 hours.', 'danger');
+        this.showToastMessage('Cannot cancel passed or within 24 hours slots.', 'danger');
         return;
       }
 
