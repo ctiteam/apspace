@@ -8,7 +8,6 @@ export class ValidateCheckboxPipe implements PipeTransform {
   constructor(private datePipe: DatePipe) {}
 
   transform(slot: ConsultationSlot) {
-    console.log(slot);
     return new Date(this.datePipe.transform(slot.start_time, 'medium', '+0800'))
       > moment(new Date()).add(24, 'hours').toDate();
   }
