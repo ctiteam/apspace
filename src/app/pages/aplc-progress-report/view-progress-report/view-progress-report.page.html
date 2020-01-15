@@ -140,7 +140,7 @@
             </ion-card>
           </ng-template>
           <ion-grid>
-            <ion-row>
+            <ion-row *ngIf="studentBehaviors.length > 0; else emptyList">
               <ion-col>
                 <ion-list class="ion-no-padding">
                   <ion-item lines="none" class="data-item d-none d-md-block main-text-color text-bolder">
@@ -191,6 +191,18 @@
                 </ion-list>
               </ion-col>
             </ion-row>
+            <ng-template #emptyList>
+              <ion-row>
+                <ion-col size="12">
+                  <div class="ion-text-center ion-margin-bottom ion-margin-top">
+                    <h3 class="danger-text text-bold">No Data To Show!</h3>
+                    <h6 class="secondary-txt-color">
+                      There is no students added under the class code {{classCode}}
+                    </h6>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ng-template>
           </ion-grid>
         </ion-card-content>
       </ion-card>
