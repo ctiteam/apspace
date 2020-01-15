@@ -41,11 +41,11 @@ export class MyConsultationsPage {
 
   dateToFilter = this.todaysDate; // ngmodel var
 
-  daysConfigrations: DayConfig[] = []; // ion-calendar plugin
+  daysConfigurations: DayConfig[] = []; // ion-calendar plugin
   options: CalendarComponentOptions = {
     from: new Date(),
     to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
-    daysConfig: this.daysConfigrations
+    daysConfig: this.daysConfigurations
   };
 
   // for select multiple slots to cancel
@@ -95,7 +95,7 @@ export class MyConsultationsPage {
     await modal.present();
     await modal.onDidDismiss().then(data => {
       if (data.data === 'SUCCESS') {
-        this.daysConfigrations = [];
+        this.daysConfigurations = [];
         this.doRefresh();
       }
     });
@@ -109,7 +109,7 @@ export class MyConsultationsPage {
         this.router.getCurrentNavigation().extras.state &&
         this.router.getCurrentNavigation().extras.state.reload
       ) {
-        this.daysConfigrations = [];
+        this.daysConfigurations = [];
         this.doRefresh();
       }
     });
@@ -368,7 +368,7 @@ export class MyConsultationsPage {
   }
 
   resetPage() {
-    this.daysConfigrations = [];
+    this.daysConfigurations = [];
     this.slotsToBeCancelled = [];
     this.dateToFilter = undefined;
     this.onSelect = false;
@@ -427,7 +427,7 @@ export class MyConsultationsPage {
     this.options = {
       from: new Date(),
       to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
-      daysConfig: this.daysConfigrations
+      daysConfig: this.daysConfigurations
     };
 
 
@@ -494,7 +494,7 @@ export class MyConsultationsPage {
                   ? `available`
                   : null;
 
-          this.daysConfigrations.push({
+          this.daysConfigurations.push({
             date: new Date(date),
             subTitle: '.',
             cssClass: cssClass + ' colored',
