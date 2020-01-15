@@ -38,19 +38,19 @@ export class UpdateProgressReportPage implements OnInit {
   }
 
   initData() { // changed with refresher
-    this.subjects$ = this.ws.get<any>(`/subjects`);
-    this.scoreLegend$ = this.ws.get<any[]>(`/score-legend`, { caching: 'cache-only' });
-    this.descriptionLegend$ = this.ws.get<any[]>(`/description-legend`, { caching: 'cache-only' });
+    this.subjects$ = this.ws.get<any>(`/aplc/subjects`);
+    this.scoreLegend$ = this.ws.get<any[]>(`/aplc/score-legend`, { caching: 'cache-only' });
+    this.descriptionLegend$ = this.ws.get<any[]>(`/aplc/description-legend`, { caching: 'cache-only' });
   }
 
   onToggleChanged() {
     if (this.searchByCourseCode) {
-      this.courses$ = this.ws.get<any>(`/courses`).pipe(
+      this.courses$ = this.ws.get<any>(`/aplc/courses`).pipe(
         tap(_ => this.classCode = ''),
         tap(_ => this.subjectCode = '')
       );
     } else {
-      this.subjects$ = this.ws.get<any>(`/subjects`).pipe(
+      this.subjects$ = this.ws.get<any>(`/aplc/subjects`).pipe(
         tap(_ => this.classCode = ''),
         tap(_ => this.courseCode = '')
       );
@@ -58,22 +58,22 @@ export class UpdateProgressReportPage implements OnInit {
   }
 
   getClassesBySubjectCode() {
-    this.classes$ = this.ws.get<any>(`/classes?subject_code=${this.subjectCode}`).pipe(
+    this.classes$ = this.ws.get<any>(`/aplc/classes?subject_code=${this.subjectCode}`).pipe(
       tap(_ => this.classCode = ''),
       tap(_ => this.courseCode = '')
     );
   }
 
   getClassesByCourseCode() {
-    this.classes$ = this.ws.get<any>(`/classes?course_code=${this.courseCode}`).pipe(
+    this.classes$ = this.ws.get<any>(`/aplc/classes?course_code=${this.courseCode}`).pipe(
       tap(_ => this.classCode = ''),
       tap(_ => this.subjectCode = '')
     );
   }
 
   onClassCodeChange() {
-    this.classDescription$ = this.ws.get<any>(`/class-description?class_code=${this.classCode}`);
-    this.studentsBehaviour$ = this.ws.get<any>(`/student-behavior?class_code=${this.classCode}`);
+    this.classDescription$ = this.ws.get<any>(`/aplc/class-description?class_code=${this.classCode}`);
+    this.studentsBehaviour$ = this.ws.get<any>(`/aplc/student-behavior?class_code=${this.classCode}`);
   }
 
 
@@ -91,7 +91,7 @@ export class UpdateProgressReportPage implements OnInit {
           handler: () => {
             // START THE LOADING
             this.presentLoading();
-            this.ws.put<any>('/student-behavior', {
+            this.ws.put<any>('/aplc/student-behavior', {
               body: studentBehaviors
             }).subscribe(
               {

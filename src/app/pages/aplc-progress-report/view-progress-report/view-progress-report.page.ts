@@ -33,20 +33,20 @@ export class ViewProgressReportPage implements OnInit {
   }
 
   initData() { // changed with refresher
-    this.subjects$ = this.ws.get<any>(`/subjects`);
-    this.scoreLegend$ = this.ws.get<any[]>(`/score-legend`, { caching: 'cache-only' });
-    this.descriptionLegend$ = this.ws.get<any[]>(`/description-legend`, { caching: 'cache-only' });
+    this.subjects$ = this.ws.get<any>(`/aplc/subjects`);
+    this.scoreLegend$ = this.ws.get<any[]>(`/aplc/score-legend`, { caching: 'cache-only' });
+    this.descriptionLegend$ = this.ws.get<any[]>(`/aplc/description-legend`, { caching: 'cache-only' });
   }
 
   onSubjectCodeChange() {
-    this.classes$ = this.ws.get<any>(`/classes?subject_code=${this.subjectCode}`).pipe(
+    this.classes$ = this.ws.get<any>(`/aplc/classes?subject_code=${this.subjectCode}`).pipe(
       tap(_ => this.classCode = '')
     );
   }
 
   onClassCodeChange() {
-    this.classDescription$ = this.ws.get<any>(`/class-description?class_code=${this.classCode}`);
-    this.studentsBehaviour$ = this.ws.get<any>(`/student-behavior?class_code=${this.classCode}`);
+    this.classDescription$ = this.ws.get<any>(`/aplc/class-description?class_code=${this.classCode}`);
+    this.studentsBehaviour$ = this.ws.get<any>(`/aplc/student-behavior?class_code=${this.classCode}`);
   }
 
 }
