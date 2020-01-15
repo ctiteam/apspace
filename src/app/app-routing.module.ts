@@ -183,12 +183,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/iconsult/iconsult.module').then(m => m.IconsultModule)
   },
-  // {
-  //   path: 'aplc-progress-report',
-  //   canActivate: [AuthGuard],
-  //   data: { role: Role.Admin | Role.Lecturer },
-  //   loadChildren: () => import('./pages/aplc-progress-report/aplc-progress-report.module').then(m => m.AplcProgressReportPageModule)
-  // },
+  {
+    path: 'aplc-progress-report',
+    canActivate: [AuthGuard],
+    data: { role: Role.Admin | Role.Lecturer },
+    loadChildren: () => import('./pages/aplc-progress-report/aplc-progress-report.module').then(m => m.AplcProgressReportPageModule)
+  },
   {
     path: 'staff-dashboard',
     canActivate: [AuthGuard],
