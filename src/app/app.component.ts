@@ -115,7 +115,7 @@ export class AppComponent {
                   const feedback = {
                     contactNo: data.contactNo || '',
                     platform: this.feedback.platform(),
-                    message: data.message,
+                    message: data.message + '\n' + `Url: ${this.router.url}`,
                     appVersion: this.versionService.version,
                     screenSize: screen.width + 'x' + screen.height,
                   };
