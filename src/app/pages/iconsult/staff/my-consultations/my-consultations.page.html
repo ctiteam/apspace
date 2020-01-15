@@ -95,7 +95,7 @@
                                 }">
                     <ion-grid class="grid-padding">
                       <ion-row *ngIf="slot.status !== 'Cancelled' && slot.status !== 'Cancelled by lecturer'">
-                        <ion-col size-xs="2" size-xl="1" *ngIf="onSelect && isPassedOrWithin24Hrs(slot)">
+                        <ion-col size-xs="2" size-xl="1" *ngIf="onSelect && (slot | validateCheckbox)">
                         <ion-checkbox (ngModelChange)="getSelectedSlot(slot)" [(ngModel)]="slot.isChecked">
                           </ion-checkbox>
                         </ion-col>

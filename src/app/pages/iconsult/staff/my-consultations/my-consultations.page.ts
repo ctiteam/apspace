@@ -117,13 +117,6 @@ export class MyConsultationsPage {
   }
 
   // cancel slots functions starts here
-  isPassedOrWithin24Hrs(slot) { // for checkbox cancel slot: hide the checkbox if the slots is passed or within 24 hours
-    if (new Date(this.datePipe.transform(slot.start_time, 'medium', '+0800'))
-      <= moment(new Date()).add(24, 'hours').toDate()) {
-        return false;
-      }
-    return true;
-  }
 
   toggleCancelSlot() {
     this.onSelect = !this.onSelect;
