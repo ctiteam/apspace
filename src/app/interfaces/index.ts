@@ -1,5 +1,5 @@
 export { Apcard } from './apcard';
-export { APLCClassDescription, APLCStudentBehaviour, APLCStudentBehaviourPDF } from './aplc';
+export { APLCClass, APLCClassDescription, APLCStudentBehaviour, APLCSubject } from './aplc';
 export { Attendance } from './attendance';
 export { AttendanceLegend } from './attendance-legend';
 export { BusTrips, APULocations, APULocation, BusTrip } from './bus-shuttle-services';

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { APLCClass, APLCClassDescription, APLCStudentBehaviour, APLCSubject } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { APLCClassDescription, APLCStudentBehaviour, APLCStudentBehaviourPDF } from 'src/app/interfaces';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -16,11 +16,11 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export class ViewProgressReportPage implements OnInit {
   pdfObj = null; // used to generate report
   classDescription: APLCClassDescription[] = [];
-  pdfStudentsList: any;
-  subjects$: Observable<any>; // to create interface
-  classes$: Observable<any>; // to create interface
-  scoreLegend$: Observable<any>; // to create interface
-  descriptionLegend$: Observable<any>; // to create interface
+  pdfStudentsList: any; // array of arrays (format required by the library)
+  subjects$: Observable<APLCSubject[]>;
+  classes$: Observable<APLCClass[]>;
+  scoreLegend$: Observable<any>; // keys are dynamic
+  descriptionLegend$: Observable<any>; // keys are dynamic
   classDescription$: Observable<APLCClassDescription[]>;
   studentsBehaviour$: Observable<APLCStudentBehaviour[]>;
 
@@ -40,13 +40,13 @@ export class ViewProgressReportPage implements OnInit {
   }
 
   initData() { // changed with refresher
-    this.subjects$ = this.ws.get<any>(`/aplc/subjects`);
+    this.subjects$ = this.ws.get<APLCSubject[]>(`/aplc/subjects`);
     this.scoreLegend$ = this.ws.get<any[]>(`/aplc/score-legend`, { caching: 'cache-only' });
     this.descriptionLegend$ = this.ws.get<any[]>(`/aplc/description-legend`, { caching: 'cache-only' });
   }
 
   onSubjectCodeChange() {
-    this.classes$ = this.ws.get<any>(`/aplc/classes?subject_code=${this.subjectCode}`).pipe(
+    this.classes$ = this.ws.get<APLCClass[]>(`/aplc/classes?subject_code=${this.subjectCode}`).pipe(
       tap(_ => this.classCode = '')
     );
   }

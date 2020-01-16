@@ -22,9 +22,11 @@ export interface APLCStudentBehaviour {
     SUBJECT_CODE: string;
 }
 
-export interface APLCStudentBehaviourPDF {
-    STUDENT_NAME: string;
-    STUDENT_NUMBER: string;
-    REMARK: string;
-    AVERAGE_BEH: number;
+export interface APLCSubject {
+    SUBJECT_CODE: string;
+}
+
+export interface APLCClass {
+    CLASS_CODE: string;
+    LECTURER_NAME: string;
 }

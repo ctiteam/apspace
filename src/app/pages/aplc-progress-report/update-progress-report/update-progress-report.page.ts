@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { APLCClass, APLCClassDescription, APLCStudentBehaviour, APLCSubject } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 
 @Component({
@@ -10,13 +11,13 @@ import { WsApiService } from 'src/app/services';
   styleUrls: ['./update-progress-report.page.scss'],
 })
 export class UpdateProgressReportPage implements OnInit {
-  subjects$: Observable<any>; // to create interface
-  classes$: Observable<any>; // to create interface
-  scoreLegend$: Observable<any>; // to create interface
-  descriptionLegend$: Observable<any>; // to create interface
-  classDescription$: Observable<any>;
-  studentsBehaviour$: Observable<any>;
-  courses$: Observable<any>;
+  subjects$: Observable<APLCSubject[]>;
+  classes$: Observable<APLCClass[]>;
+  scoreLegend$: Observable<any>; // Keys are dynamic
+  descriptionLegend$: Observable<any>; // Keys are dynamic
+  classDescription$: Observable<APLCClassDescription[]>;
+  studentsBehaviour$: Observable<APLCStudentBehaviour[]>;
+  courses$: Observable<any>; // response returns 500  > to be modified later
 
   loading: HTMLIonLoadingElement;
   skeletons = new Array(6);
