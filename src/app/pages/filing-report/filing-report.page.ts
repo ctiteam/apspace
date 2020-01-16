@@ -14,6 +14,7 @@ export class FilingReportPage implements OnInit {
   studentDetails$: Observable<any>; // to be changed
   studentRecords$: Observable<any>; // to be changed
   disableNextButton = false;
+  studentName = '';
   skeletons = new Array(3);
   loading: HTMLIonLoadingElement;
   stagingUrl = 'http://forms.sites-staging.apiit.edu.my/wp-json/gf/v2';
@@ -109,18 +110,16 @@ export class FilingReportPage implements OnInit {
           if (studentDetails.length === 0) {
             this.disableNextButton = true;
           } else {
+            this.studentName = studentDetails[0].name;
             this.disableNextButton = false;
           }
         })
       );
-      this.studentRecords$ = this.ws.get(`/dresscode/history?student_id=${this.studentId}`).pipe(
-        tap(res => console.log(res))
-      );
+      this.studentRecords$ = this.ws.get(`/dresscode/history?student_id=${this.studentId}`);
     }
   }
 
   cancel() {
-    console.log('canceled');
     this.studentId = 'TP';
     this.currentStepNumber = 0;
     this.description = '';
@@ -149,7 +148,8 @@ export class FilingReportPage implements OnInit {
               location: this.selectedLocation,
               day: this.selectedDay,
               category: this.selectedMainCategory,
-              sub_category: this.selectedSubCategory
+              sub_category: this.selectedSubCategory,
+              student_name: this.studentName
             };
             this.ws.post('/dresscode/submit', {
               body
