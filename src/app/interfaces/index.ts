@@ -11,6 +11,7 @@ export { DeterminationLegend } from './determination-legend';
 export { ExamResit, ExamSchedule } from './exam-schedule';
 export { Feedback } from './feedback';
 export { FeesBankDraft, FeesDetails, FeesSummary, FeesTotalSummary } from './fees';
+export { BeAPUStudentDetails } from './filing-report';
 export { Holidays, Holiday } from './holiday';
 export { InterimLegend } from './interim-legend';
 export { LecturerTimetable } from './lecturer-timetable';
