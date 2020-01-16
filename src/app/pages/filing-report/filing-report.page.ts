@@ -3,6 +3,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AlertController, LoadingController, Platform, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { BeAPUStudentDetails } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 
 @Component({
@@ -10,14 +11,14 @@ import { WsApiService } from 'src/app/services';
   templateUrl: './filing-report.page.html',
   styleUrls: ['./filing-report.page.scss'],
 })
+
 export class FilingReportPage implements OnInit {
-  studentDetails$: Observable<any>; // to be changed
-  studentRecords$: Observable<any>; // to be changed
+  studentDetails$: Observable<BeAPUStudentDetails[]>;
+  studentRecords$: Observable<any>; // records are too long & complicated and keys are numbers
   disableNextButton = false;
   studentName = '';
   skeletons = new Array(3);
   loading: HTMLIonLoadingElement;
-  stagingUrl = 'http://forms.sites-staging.apiit.edu.my/wp-json/gf/v2';
   mainCategories = [
     'Attire',
     'Behaviour',
@@ -100,7 +101,7 @@ export class FilingReportPage implements OnInit {
     this.currentStepNumber++;
     // for Demo. It will be removed after the backend created
     if (this.currentStepNumber === 1) {
-      this.studentDetails$ = this.ws.post<any[]>('/student/image', {
+      this.studentDetails$ = this.ws.post<BeAPUStudentDetails[]>('/student/image', {
         url: 'https://u1cd2ltoq6.execute-api.ap-southeast-1.amazonaws.com/dev',
         body: {
           id: [this.studentId]
