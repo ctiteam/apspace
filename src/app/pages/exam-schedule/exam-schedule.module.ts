@@ -8,7 +8,6 @@ import { IonicModule } from '@ionic/angular';
 import { IntakeListingService } from 'src/app/services';
 import { ComponentsModule } from '../../components/components.module';
 import { ExamSchedulePage } from './exam-schedule.page';
-import { ModuleFilterPipe } from './module-filter.pipe';
 
 const routes: Routes = [
   {
@@ -28,8 +27,7 @@ const routes: Routes = [
   ],
   providers: [IntakeListingService],
   declarations: [
-    ExamSchedulePage,
-    ModuleFilterPipe,
+    ExamSchedulePage
   ],
   entryComponents: []
 })
