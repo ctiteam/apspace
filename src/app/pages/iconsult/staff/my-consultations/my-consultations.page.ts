@@ -28,7 +28,7 @@ import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 export class MyConsultationsPage {
   url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
   slots$: Observable<{}>;
-  todaysDate = new Date();
+  todaysDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
   skeletonItemsNumber = new Array(4);
   loading: HTMLIonLoadingElement;
   summaryDetails: {
@@ -370,7 +370,8 @@ export class MyConsultationsPage {
   resetPage() {
     this.daysConfigurations = [];
     this.slotsToBeCancelled = [];
-    this.dateToFilter = undefined;
+    this.todaysDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.dateToFilter = this.todaysDate;
     this.onSelect = false;
     this.onRange = false;
   }
