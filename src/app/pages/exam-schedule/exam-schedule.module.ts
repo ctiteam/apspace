@@ -27,7 +27,7 @@ const routes: Routes = [
   ],
   providers: [IntakeListingService],
   declarations: [
-    ExamSchedulePage,
+    ExamSchedulePage
   ],
   entryComponents: []
 })

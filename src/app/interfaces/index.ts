@@ -1,4 +1,5 @@
 export { Apcard } from './apcard';
+export { APLCClass, APLCClassDescription, APLCStudentBehaviour, APLCSubject } from './aplc';
 export { Attendance } from './attendance';
 export { AttendanceLegend } from './attendance-legend';
 export { BusTrips, APULocations, APULocation, BusTrip } from './bus-shuttle-services';
@@ -10,6 +11,7 @@ export { DeterminationLegend } from './determination-legend';
 export { ExamSchedule } from './exam-schedule';
 export { Feedback } from './feedback';
 export { FeesBankDraft, FeesDetails, FeesSummary, FeesTotalSummary } from './fees';
+export { BeAPUStudentDetails } from './filing-report';
 export { Holidays, Holiday } from './holiday';
 export { InterimLegend } from './interim-legend';
 export { LecturerTimetable } from './lecturer-timetable';

@@ -13,6 +13,7 @@ import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lec
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
 import { MyConsultationsPage } from './my-consultations.page';
+import { ValidateCheckboxPipe } from './validate-checkbox.pipe';
 
 const routes: Routes = [
   {
@@ -34,6 +35,7 @@ const routes: Routes = [
   declarations: [
     MyConsultationsPage,
     FilterSlotsPipe,
+    ValidateCheckboxPipe,
     ConsultationsSummaryModalPage,
     LecturerSlotDetailsModalPage,
     UnavailabilityDetailsModalPage

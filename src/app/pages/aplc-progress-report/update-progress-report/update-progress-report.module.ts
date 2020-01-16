@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
+import { ComponentsModule } from 'src/app/components/components.module';
 import { UpdateProgressReportPage } from './update-progress-report.page';
 
 const routes: Routes = [
@@ -17,6 +18,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    ComponentsModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes)

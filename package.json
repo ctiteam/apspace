@@ -82,6 +82,7 @@
     "moment": "^2.24.0",
     "ng2-dragula": "^2.1.1",
     "otplib": "^11.0.1",
+    "pdfmake": "^0.1.63",
     "rxjs": "~6.5.2",
     "source-sans-pro": "^3.6.0",
     "tslib": "^1.10.0",

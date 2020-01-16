@@ -28,7 +28,7 @@ import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 export class MyConsultationsPage {
   url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
   slots$: Observable<{}>;
-  todaysDate = new Date();
+  todaysDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
   skeletonItemsNumber = new Array(4);
   loading: HTMLIonLoadingElement;
   summaryDetails: {
@@ -41,11 +41,11 @@ export class MyConsultationsPage {
 
   dateToFilter = this.todaysDate; // ngmodel var
 
-  daysConfigrations: DayConfig[] = []; // ion-calendar plugin
+  daysConfigurations: DayConfig[] = []; // ion-calendar plugin
   options: CalendarComponentOptions = {
     from: new Date(),
     to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
-    daysConfig: this.daysConfigrations
+    daysConfig: this.daysConfigurations
   };
 
   // for select multiple slots to cancel
@@ -95,7 +95,7 @@ export class MyConsultationsPage {
     await modal.present();
     await modal.onDidDismiss().then(data => {
       if (data.data === 'SUCCESS') {
-        this.daysConfigrations = [];
+        this.daysConfigurations = [];
         this.doRefresh();
       }
     });
@@ -109,7 +109,7 @@ export class MyConsultationsPage {
         this.router.getCurrentNavigation().extras.state &&
         this.router.getCurrentNavigation().extras.state.reload
       ) {
-        this.daysConfigrations = [];
+        this.daysConfigurations = [];
         this.doRefresh();
       }
     });
@@ -117,6 +117,7 @@ export class MyConsultationsPage {
   }
 
   // cancel slots functions starts here
+
   toggleCancelSlot() {
     this.onSelect = !this.onSelect;
 
@@ -151,7 +152,13 @@ export class MyConsultationsPage {
 
     filteredDates.forEach(filteredDate => {
       const currentDateString = this.datePipe.transform(filteredDate, 'yyyy-MM-dd', '+0800');
-      dates[currentDateString].items.forEach(item => this.slotsToBeCancelled.push(item));
+      dates[currentDateString].items.forEach(item => {
+        // only push the slots that is not a passed or within 24 hours slots.
+        if (!(new Date(this.datePipe.transform(item.start_time, 'medium', '+0800'))
+          <= moment(new Date()).add(24, 'hours').toDate())) {
+            this.slotsToBeCancelled.push(item);
+          }
+      });
     });
   }
 
@@ -194,17 +201,17 @@ export class MyConsultationsPage {
   async cancelAvailableSlot() {
     if (this.slotsToBeCancelled) {
 
-      let isPassed = false;
+      let isWithin24Hrs = false;
       this.slotsToBeCancelled.forEach(slotToBeCancelled => {
         if (new Date(this.datePipe.transform(slotToBeCancelled.start_time, 'medium', '+0800'))
         <= moment(new Date()).add(24, 'hours').toDate()) {
-          isPassed = true;
+          isWithin24Hrs = true;
           return;
         }
       });
 
-      if (isPassed) {
-        this.showToastMessage('Cannot cancel passed slots.', 'danger');
+      if (isWithin24Hrs) {
+        this.showToastMessage('Cannot cancel passed or within 24 hours slots.', 'danger');
         return;
       }
 
@@ -368,9 +375,10 @@ export class MyConsultationsPage {
   }
 
   resetPage() {
-    this.daysConfigrations = [];
+    this.daysConfigurations = [];
     this.slotsToBeCancelled = [];
-    this.dateToFilter = undefined;
+    this.todaysDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.dateToFilter = this.todaysDate;
     this.onSelect = false;
     this.onRange = false;
   }
@@ -427,7 +435,7 @@ export class MyConsultationsPage {
     this.options = {
       from: new Date(),
       to: null, // null to disable all calendar button. Days configurations will enable only dates with slots
-      daysConfig: this.daysConfigrations
+      daysConfig: this.daysConfigurations
     };
 
 
@@ -494,7 +502,7 @@ export class MyConsultationsPage {
                   ? `available`
                   : null;
 
-          this.daysConfigrations.push({
+          this.daysConfigurations.push({
             date: new Date(date),
             subTitle: '.',
             cssClass: cssClass + ' colored',

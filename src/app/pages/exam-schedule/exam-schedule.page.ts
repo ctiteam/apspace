@@ -13,8 +13,8 @@ import { IntakeListingService, SettingsService, WsApiService } from '../../servi
   styleUrls: ['./exam-schedule.page.scss'],
 })
 export class ExamSchedulePage {
-  exam$: Observable<ExamSchedule[]>;
 
+  exam$: Observable<ExamSchedule[]>;
   intake: string;
   intakes: string[];
   selectedIntake: string;
