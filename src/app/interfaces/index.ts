@@ -8,7 +8,7 @@ export { ClassificationLegend } from './classfication-legend';
 export { Course } from './courses';
 export { CourseDetails } from './course-details';
 export { DeterminationLegend } from './determination-legend';
-export { ExamResit, ExamSchedule } from './exam-schedule';
+export { ExamSchedule } from './exam-schedule';
 export { Feedback } from './feedback';
 export { FeesBankDraft, FeesDetails, FeesSummary, FeesTotalSummary } from './fees';
 export { BeAPUStudentDetails } from './filing-report';
