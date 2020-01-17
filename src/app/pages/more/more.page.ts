@@ -633,7 +633,7 @@ export class MorePage implements OnInit {
   }
 
   /** Open page, manually check for third party pages. */
-  openPage(url: string, attachTicket: boolean) {
+  openPage(url: string, attachTicket = false) {
     // external pages does not use relative or absolute link
     if (url.startsWith('http://') || url.startsWith('https://')) {
       // Manually exclude sites that do not need service ticket
