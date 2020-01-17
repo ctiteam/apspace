@@ -6,7 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { IonSegment, IonSegmentButton, ModalController, RadioValueAccessor, SelectValueAccessor, TextValueAccessor } from '@ionic/angular';
+import {
+  IonSegment, IonSegmentButton, ModalController, RadioValueAccessor,
+  SelectValueAccessor, TextValueAccessor
+} from '@ionic/angular';
 import { BehaviorSubject, NEVER } from 'rxjs';
 
 import {
@@ -129,30 +132,32 @@ describe('StudentTimetablePage', () => {
       expect(studentTimetableSpy.get).toHaveBeenCalledTimes(1);
     }));
 
-    it('should display classes', fakeAsync(() => {
+    const dates = ['2020-01-13', '2020-01-14', '2020-01-15', '2020-01-16', '2020-01-17',
+      '2020-01-18', '2020-01-19'];
+    dates.forEach((date, n) => it(`should display classes (default ${date})`, fakeAsync(() => {
+      jasmine.clock().mockDate(new Date(date));
       activatedRoute.setParams({});
-      const monday = new Date();
-      monday.setHours(0, 0, 0, 0);
-      monday.setDate(monday.getDate() - (monday.getDay() + 6) % 7);
       const intake = 'UC3F1906CS(DA)';
-      // one timetable every day
-      const timetables = [...Array(7).keys()].map(n => {
-        const d = new Date(new Date(monday).setDate(monday.getDate() + n));
-        return {
-          INTAKE: intake,
-          MODID: 'CT100-0-0-XXXX-L',
-          DAY: '',
-          LOCATION: 'APU',
-          ROOM: 'ROOM',
-          LECTID: 'PRO',
-          NAME: `Professor ${n}`,
-          SAMACCOUNTNAME: 'professor',
-          DATESTAMP: '',
-          DATESTAMP_ISO: `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`,
-          TIME_FROM: '08:30 AM',
-          TIME_TO: '10:30 PM',
-        };
+      // helper function to generate timetable
+      const newTimetable = (d: string, i: number) => ({
+        INTAKE: intake,
+        MODID: 'CT100-0-0-XXXX-L',
+        DAY: '',
+        LOCATION: 'APU',
+        ROOM: 'ROOM',
+        LECTID: 'PRO',
+        NAME: `Professor ${i}`,
+        SAMACCOUNTNAME: 'professor',
+        DATESTAMP: '',
+        DATESTAMP_ISO: d,
+        TIME_FROM: '08:30 AM',
+        TIME_TO: '10:30 PM',
       });
+      // one timetable every day
+      const timetables = dates.map(newTimetable);
+      // add extra day after
+      timetables.push(newTimetable('2020-01-20', 7));
+
       studentTimetableSpy.get.and.returnValue(asyncData(timetables));
       settingsSpy.get.and.callFake(settingsFake({
         intakeHistory: null,
@@ -189,6 +194,7 @@ describe('StudentTimetablePage', () => {
       expect(wsSpy.get).toHaveBeenCalledTimes(1);
       expect(wsSpy.get).toHaveBeenCalledWith('/student/profile', { caching: 'cache-only' });
 
+      // check history
       tick(); // ws subscribe profile
       fixture.detectChanges(); // render intake
       expect(settingsSpy.set).toHaveBeenCalledTimes(1);
@@ -197,28 +203,34 @@ describe('StudentTimetablePage', () => {
       expect(studentTimetableSpy.get).toHaveBeenCalledTimes(1);
       expect(studentTimetableSpy.get).toHaveBeenCalledWith(false);
 
+      // check weeks and days, mainly updateDay function
       tick(); // subscribe student timetable
       fixture.detectChanges(); // render days
-      expect(component.availableWeek.length).toEqual(1);
-      expect(component.availableWeek[0].getTime()).toEqual(new Date(timetables[0].DATESTAMP_ISO).setHours(0, 0, 0, 0));
-      expect(component.selectedWeek.getTime()).toEqual(new Date(timetables[0].DATESTAMP_ISO).setHours(0, 0, 0, 0));
+      expect(component.availableWeek.length).toEqual(2);
+      expect(component.availableWeek[0].getTime()).toEqual(new Date(dates[0]).setHours(0, 0, 0, 0));
+      expect(component.availableWeek[1].getTime()).toEqual(new Date('2020-01-20').setHours(0, 0, 0, 0));
+      expect(component.selectedWeek.getTime()).toEqual(new Date(dates[0]).setHours(0, 0, 0, 0));
       expect(component.availableDate.length).toEqual(7);
       expect(component.availableDays).toEqual(['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']);
-      expect(component.selectedDate.getTime()).toEqual(new Date(component.availableDate[0]).setHours(0, 0, 0, 0));
+      expect(component.selectedDate.getTime()).toEqual(new Date(dates[n]).setHours(0, 0, 0, 0));
+
+      // check for lecturer `Professor ${n}`, each day different lecturer
+      fixture.checkNoChanges(); // no changes without event
+      expect(fixture.nativeElement.querySelector('ion-grid').textContent).toContain(`Professor ${n}`);
 
       // clicks each day
       const weekDe = fixture.debugElement.query(By.css('ion-segment'));
       weekDe.children[0].triggerEventHandler('click', { button: 0 });
       fixture.checkNoChanges(); // no changes to click on the same day
-      expect(fixture.nativeElement.querySelector('ion-grid').textContent).toContain('Professor 0');
-      weekDe.children[1].triggerEventHandler('click', { button: 0 });
+      // expect(fixture.nativeElement.querySelector('ion-grid').textContent).toContain('Professor 0');
+      // weekDe.children[1].triggerEventHandler('click', { button: 0 });
       // TODO: detect change event
       // console.log(weekDe);
       // tick();
       // fixture.detectChanges();
       // expect(component.selectedDate.getTime()).toEqual(new Date(component.availableDate[1]).setHours(0, 0, 0, 0));
       // expect(fixture.nativeElement.querySelector('ion-grid').textContent).toContain('Professor 1');
-    }));
+    })));
   });
 
   describe('lecturer', () => {
@@ -243,14 +255,12 @@ describe('StudentTimetablePage', () => {
   });
 
   it('should send to print', fakeAsync(() => {
+    jasmine.clock().mockDate(new Date('2020-01-13'));
     activatedRoute.setParams({});
-    const monday = new Date();
-    monday.setHours(0, 0, 0, 0);
-    monday.setDate(monday.getDate() - (monday.getDay() + 6) % 7);
     const intake = 'UC3F1906CS(DA)';
     // one timetable every day
-    const timetables = [...Array(7).keys()].map(n => {
-      const d = new Date(new Date(monday).setDate(monday.getDate() + n));
+    const timetables = ['2020-01-13', '2020-01-14', '2020-01-15', '2020-01-16',
+      '2020-01-17', '2020-01-18', '2020-01-19'].map((d, n) => {
       return {
         INTAKE: intake,
         MODID: 'CT100-0-0-XXXX-L',
@@ -261,7 +271,7 @@ describe('StudentTimetablePage', () => {
         NAME: `Professor ${n}`,
         SAMACCOUNTNAME: 'professor',
         DATESTAMP: '',
-        DATESTAMP_ISO: `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`,
+        DATESTAMP_ISO: d,
         TIME_FROM: '08:30 AM',
         TIME_TO: '10:30 PM',
       };
