@@ -1,0 +1,48 @@
+.name {
+  font-weight: bold;
+}
+
+ion-list {
+  margin-bottom: 10px !important;
+}
+
+ion-item {
+  --inner-padding-end: 0px;
+  --padding-start: 0px;
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+}
+
+.margin-auto {
+  margin: auto;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.table-item:nth-child(even) {
+  --background: var(--tertiary-bg-color) !important;
+}
+
+.table-item:hover {
+  --background: #e0e0e0 !important;
+}
+
+ion-label {
+  margin-top: 10px;
+  margin-left: 15px;
+}
+
+// Small Screen (Mobile)
+@media only screen and (max-width: 576px) {
+  ion-icon[name="arrow-forward"] {
+    display: none;
+  }
+
+  .list {
+    margin: 10px;
+    // padding-left: 5px;
+    padding-top: 0px !important;
+  }
+}

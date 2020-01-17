@@ -39,7 +39,7 @@ ion-select.form-input {
   }
 }
 
-.small-margin-bottom{
+.small-margin-bottom {
   margin-bottom: 7px;
 }
 
@@ -53,6 +53,7 @@ ion-select.form-input {
     background-color: var(--tertiary-bg-color);
   }
 }
+
 .multi-steps {
   display: table;
   table-layout: fixed;
@@ -112,4 +113,17 @@ ion-select.form-input {
       }
     }
   }
+}
+
+.margin-auto {
+  margin: auto;
+}
+ion-avatar {
+  width: 140px;
+  height: 140px;
+}
+
+
+.text-wrap-normal{
+  white-space: normal !important;
 }

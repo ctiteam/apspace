@@ -9,9 +9,9 @@ import {
 } from 'rxjs/operators';
 
 import {
-  AttendanceGQL, InitAttendanceGQL, InitAttendanceMutation,
-  MarkAttendanceGQL, NewStatusGQL, NewStatusSubscription, ScheduleInput,
-  Status
+  AttendanceGQL, AttendanceQuery, InitAttendanceGQL, InitAttendanceMutation,
+  MarkAttendanceGQL, NewStatusGQL, NewStatusSubscription, SaveLectureLogGQL,
+  ScheduleInput, Status
 } from '../../../../generated/graphql';
 
 @Component({
@@ -28,6 +28,8 @@ export class MarkAttendancePage implements OnInit {
   term = '';
   type: 'Y' | 'L' | 'N' | 'R' | '' = 'N';
 
+  lectureUpdate = '';
+
   otp$: Observable<number>;
   lastMarked$: Observable<Pick<NewStatusSubscription, 'newStatus'>[]>;
   students$: Observable<Partial<Status>[]>;
@@ -42,6 +44,7 @@ export class MarkAttendancePage implements OnInit {
     private markAttendance: MarkAttendanceGQL,
     private newStatus: NewStatusGQL,
     private route: ActivatedRoute,
+    private saveLectureLog: SaveLectureLogGQL,
     public toastCtrl: ToastController
   ) { }
 
@@ -61,12 +64,21 @@ export class MarkAttendancePage implements OnInit {
     // get attendance state from query and use manual mode if attendance initialized
     const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
       catchError(() => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }))),
-      catchError(err => (this.toast(err.message.replace('GraphQL error: ', '')), console.error(err), NEVER)),
+      catchError(err => {
+        this.toast('Failed to mark attendance: ' + err.message.replace('GraphQL error: ', ''), 'danger');
+        console.error(err);
+        return NEVER;
+      }),
       pluck('data'),
       finalize(() => 'initAttendance ended'),
-      tap((query: InitAttendanceMutation) => {
+      tap((query: AttendanceQuery | InitAttendanceMutation) => {
         studentsNameById = query.attendance.students.reduce((acc, s) => (acc[s.id] = s, acc), {});
-      })
+      }),
+      tap((query: AttendanceQuery) => {
+        if (query.attendance.log) {
+          this.lectureUpdate = query.attendance.log.lectureUpdate;
+        }
+      }),
     );
 
     // keep updating attendancesState$ with new changes
@@ -155,13 +167,22 @@ export class MarkAttendancePage implements OnInit {
     );
   }
 
+  /** Save lecture update notes. */
+  save(lectureUpdate: string) {
+    const schedule = this.schedule;
+    this.saveLectureLog.mutate({ schedule, log: { lectureUpdate } }).subscribe(
+      () => this.toast('Lecture update saved', 'success'),
+      e => { this.toast('Lecture update failed: ' + e, 'failure'); console.error(e); }
+    );
+  }
+
   /** Helper function to toast error message. */
-  toast(message: string) {
+  toast(message: string, color: string) {
     this.toastCtrl.create({
-      message: 'Failed to mark attendance: ' + message,
+      message,
       duration: 2000,
       position: 'top',
-      color: 'danger'
+      color
     }).then(toast => toast.present());
   }
 

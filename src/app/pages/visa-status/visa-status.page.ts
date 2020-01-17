@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 
 import { CountryData, Role, StudentProfile, VisaDetails } from '../../interfaces';
 
+import { ToastController } from '@ionic/angular';
 import { SettingsService, WsApiService } from '../../services';
 
 @Component({
@@ -32,6 +33,7 @@ export class VisaStatusPage implements OnInit {
   skeletons = new Array(5);
 
   constructor(
+    public toastCtrl: ToastController,
     private ws: WsApiService,
     private settings: SettingsService
   ) { }
@@ -82,12 +84,32 @@ export class VisaStatusPage implements OnInit {
     ).subscribe();
   }
 
-  getVisa() {
+  getVisa(refresher?) {
+    const caching = refresher ? 'network-or-cache' : 'cache-only';
+
+    if (!(this.alpha3Code && this.passportNumber)) {
+      this.toastCtrl.create({
+        message: 'You cannot search or refresh while having a blank field.',
+        duration: 5000,
+        position: 'top',
+        color: 'danger',
+        showCloseButton: true,
+        animated: true
+      }).then(toast => {
+        toast.present();
+      });
+      refresher.target.complete();
+      return;
+    }
+
     this.sendRequest = true;
     this.visa$ = this.ws.get<VisaDetails>(`/student/visa_renewal_status/${this.alpha3Code}/${this.passportNumber}`, {
       auth: false,
-      caching: 'cache-only',
-    }).pipe(tap(r => console.log(r)));
+      caching,
+    }).pipe(
+      tap(r => console.log(r)),
+      finalize(() => refresher && refresher.target.complete())
+    );
   }
 
   toggleHistoryCard() {

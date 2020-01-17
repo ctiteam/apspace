@@ -131,7 +131,7 @@
                     <ion-grid>
                       <ion-row>
                         <ion-col size="6" *ngFor="let phoneNumber of department.dept_phone">
-                          {{phoneNumber}}
+                        <a class="colored-text text-bold" href="tel:{{phoneNumber}}">{{phoneNumber}}</a>
                         </ion-col>
                       </ion-row>
                     </ion-grid>

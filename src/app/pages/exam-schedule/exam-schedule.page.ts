@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ModalController, Platform } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -12,8 +13,8 @@ import { IntakeListingService, SettingsService, WsApiService } from '../../servi
   styleUrls: ['./exam-schedule.page.scss'],
 })
 export class ExamSchedulePage {
-  exam$: Observable<ExamSchedule[]>;
 
+  exam$: Observable<ExamSchedule[]>;
   intake: string;
   intakes: string[];
   selectedIntake: string;
@@ -27,6 +28,7 @@ export class ExamSchedulePage {
     private il: IntakeListingService,
     private ws: WsApiService,
     private settings: SettingsService,
+    private iab: InAppBrowser
   ) { }
 
   /** Check and update intake on change. */
@@ -90,5 +92,9 @@ export class ExamSchedulePage {
     if (intake) {
       this.changeIntake(intake);
     }
+  }
+
+  openGuidlines() {
+    this.iab.create('https://kb.sites.apiit.edu.my/knowledge-base/examination-guidelines/', '_system', 'location=true');
   }
 }

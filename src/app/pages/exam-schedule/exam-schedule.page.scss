@@ -1,6 +1,14 @@
 ion-card {
-  ion-card-header {
-    border-bottom: 2px solid;
+  ion-card-title {
+    color: var(--main-txt-color) !important;
+  }
+
+  ion-card-subtitle {
+    border: 2px solid;
+    border-radius: 6px;
+    text-align: center;
+    margin-top: 26px;
+    color: var(--primary-color);
   }
 
   ion-icon {
@@ -12,5 +20,12 @@ ion-card {
       color: var(--secondary-txt-color);
       font-weight: bold;
     }
+  }
+}
+
+ion-button {
+  &.danger-border {
+    --border-color: var(--danger-color);
+    --color: var(--danger-color);
   }
 }

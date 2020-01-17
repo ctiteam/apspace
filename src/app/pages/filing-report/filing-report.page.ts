@@ -1,6 +1,9 @@
-import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AlertController, LoadingController, Platform, ToastController } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { BeAPUStudentDetails } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 
 @Component({
@@ -8,10 +11,14 @@ import { WsApiService } from 'src/app/services';
   templateUrl: './filing-report.page.html',
   styleUrls: ['./filing-report.page.scss'],
 })
+
 export class FilingReportPage implements OnInit {
-  readPolicyCheckbox = false;
+  studentDetails$: Observable<BeAPUStudentDetails[]>;
+  studentRecords$: Observable<any>; // records are too long & complicated and keys are numbers
+  disableNextButton = false;
+  studentName = '';
+  skeletons = new Array(3);
   loading: HTMLIonLoadingElement;
-  stagingUrl = 'http://forms.sites-staging.apiit.edu.my/wp-json/gf/v2';
   mainCategories = [
     'Attire',
     'Behaviour',
@@ -54,13 +61,13 @@ export class FilingReportPage implements OnInit {
   selectedLocation = this.locations[0];
   totalSteps = new Array(3);
   currentStepNumber = 0;
-  show: 'records' | 'no records' | 'empty' | '';
   constructor(
     private loadingController: LoadingController,
     public platform: Platform,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
-    private ws: WsApiService
+    private ws: WsApiService,
+    private iab: InAppBrowser
   ) { }
 
   ngOnInit() { }
@@ -69,7 +76,7 @@ export class FilingReportPage implements OnInit {
     this.loading = await this.loadingController.create({
       spinner: 'dots',
       duration: 90000,
-      message: 'Analyzing the picture...',
+      message: 'Submitting the report...',
       translucent: true,
     });
     return await this.loading.present();
@@ -91,17 +98,26 @@ export class FilingReportPage implements OnInit {
   }
 
   nextStep() {
-    this.show = '';
     this.currentStepNumber++;
     // for Demo. It will be removed after the backend created
-    if (this.currentStepNumber === 1 && this.studentId === 'TP037354') {
-      this.show = 'records';
-    } else if (this.currentStepNumber === 1 && this.studentId === 'TP047417') {
-      this.show = 'no records';
-    } else if (this.currentStepNumber === 1) {
-      this.show = 'empty';
+    if (this.currentStepNumber === 1) {
+      this.studentDetails$ = this.ws.post<BeAPUStudentDetails[]>('/student/image', {
+        url: 'https://u1cd2ltoq6.execute-api.ap-southeast-1.amazonaws.com/dev',
+        body: {
+          id: [this.studentId]
+        }
+      }).pipe(
+        tap(studentDetails => {
+          if (studentDetails.length === 0) {
+            this.disableNextButton = true;
+          } else {
+            this.studentName = studentDetails[0].name;
+            this.disableNextButton = false;
+          }
+        })
+      );
+      this.studentRecords$ = this.ws.get(`/dresscode/history?student_id=${this.studentId}`);
     }
-    console.log(this.show);
   }
 
   cancel() {
@@ -123,37 +139,32 @@ export class FilingReportPage implements OnInit {
           text: 'Yes',
           handler: () => {
             // START THE LOADING
+            if (this.selectedMainCategory === this.mainCategories[1]) {
+              this.selectedSubCategory = ''; // subcategory is not needed when submitting anything for behaviour
+            }
             this.presentLoading();
             const body = {
-              form_id: 157,
-              1: 'TP037354',
-              2: 'some description',
-              4: 'Classrooms',
-              5: 'Friday',
-              6: 'Jeans'
+              student_id: this.studentId,
+              description: this.description,
+              location: this.selectedLocation,
+              day: this.selectedDay,
+              category: this.selectedMainCategory,
+              sub_category: this.selectedSubCategory,
+              student_name: this.studentName
             };
-            const headers = new HttpHeaders();
-            headers.append('Content-Type', 'application/json');
-            headers.append('Authorization', 'Basic ' + btoa('gravityformsapi:uee9DPh7r8Q9r20qG5fokRxl'));
-            this.ws.post<any>('/entries', {
-              body,
-              headers,
-              url: this.stagingUrl
+            this.ws.post('/dresscode/submit', {
+              body
             }).subscribe(
               {
-                next: res => {
-                  console.log(res);
-                  this.showToastMessage('Student behaviors has been updated successfully!', 'success');
-                },
                 error: err => {
-                  console.log(err);
-                  this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
-                  this.cancel(); // reset the form
+                  this.showToastMessage(err.error.error, 'danger');
+                  this.dismissLoading();
                 },
                 complete: () => {
+                  this.showToastMessage('Report Submitted Successfully!', 'success');
+                  this.emptyForm();
                   this.dismissLoading();
-                  this.cancel(); // reset the form
-                }
+                },
               }
             );
             // this.showToastMessage('Report has been submitted successfully!', 'success');
@@ -162,5 +173,20 @@ export class FilingReportPage implements OnInit {
         }
       ]
     }).then(confirm => confirm.present());
+  }
+
+  emptyForm() {
+    this.selectedMainCategory = this.mainCategories[0];
+    this.selectedSubCategory = this.subCategories[0].title;
+    this.selectedDay = new Date().getDay() !== 5 ? this.days[0] : this.days[1];
+    this.selectedLocation = this.locations[0];
+    this.studentId = 'TP';
+    this.description = '';
+    this.currentStepNumber = 0; // navigate back to step 1
+  }
+
+  openStudentHandbook() {
+    const studentHandbookUrl = 'https://cdn.webspace.apiit.edu.my/public/2019-12/APU%20Student%20Handbook%20vDec2019_0.pdf';
+    this.iab.create(`${studentHandbookUrl}`, '_system', 'location=true');
   }
 }

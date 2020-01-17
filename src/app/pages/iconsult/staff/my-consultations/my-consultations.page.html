@@ -5,8 +5,8 @@
     </ion-buttons>
     <ion-title>My Consultations</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="danger" [disabled]="this.slotsToBeCancelled.length > 0"
-        class="colored-border colored-text" fill="outline" (click)="toggleCancelSlot()">
+      <ion-button color="danger" [disabled]="this.slotsToBeCancelled.length > 0" class="colored-border colored-text"
+        fill="outline" (click)="toggleCancelSlot()">
         <ion-icon [name]="onSelect? 'close' : 'trash'"></ion-icon>
       </ion-button>
       <ion-button class="colored-border colored-text" fill="outline" (click)="showSummary()">
@@ -15,8 +15,12 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar *ngIf="onSelect">
-    <span *ngIf="!onRange; else rangeMessage"><p class="ion-margin-start">Select more than one slot to cancel</p></span>
-    <ng-template #rangeMessage><p class="ion-margin-start">Select start and end date to cancel</p></ng-template>
+    <span *ngIf="!onRange; else rangeMessage">
+      <p class="ion-margin-start">Select more than one slot to cancel</p>
+    </span>
+    <ng-template #rangeMessage>
+      <p class="ion-margin-start">Select start and end date to cancel</p>
+    </ng-template>
     <ion-buttons slot="end">
       <ion-button [disabled]="this.slotsToBeCancelled.length > 0" class="colored-border colored-text" fill="outline"
         (click)="toggleCancelSlotOptions()">
@@ -91,9 +95,9 @@
                                 }">
                     <ion-grid class="grid-padding">
                       <ion-row *ngIf="slot.status !== 'Cancelled' && slot.status !== 'Cancelled by lecturer'">
-                        <ion-col size-xs="2" size-xl="1" *ngIf="onSelect">
-                          <ion-checkbox color="primary" (ngModelChange)="getSelectedSlot(slot)"
-                            [(ngModel)]="slot.isChecked"></ion-checkbox>
+                        <ion-col size-xs="2" size-xl="1" *ngIf="onSelect && (slot | validateCheckbox)">
+                        <ion-checkbox (ngModelChange)="getSelectedSlot(slot)" [(ngModel)]="slot.isChecked">
+                          </ion-checkbox>
                         </ion-col>
                         <ion-col size-xs="7" size-sm="8">
                           <span class="title">
@@ -107,8 +111,7 @@
                         <ion-col size-xs="5" size-sm="4" class="margin-auto" *ngIf="!onSelect">
                           <ng-container>
                             <ion-button class="cursor-pointer" size="small" expand="block"
-                              *ngIf="slot.status !== 'Available'"
-                              (click)="openSlotDetailsModal(slot)">
+                              *ngIf="slot.status !== 'Available'" (click)="openSlotDetailsModal(slot)">
                               View Details
                             </ion-button>
                           </ng-container>
@@ -158,7 +161,7 @@
             </ion-card-header>
             <ion-card-content>
               <div class="event-calendar">
-                <div class="event" *ngFor="let slot of slotsToBeCancelled;">
+                <div class="event" *ngFor="let slot of slotsToBeCancelled; let i = index;">
                   <div class="event-container" [ngClass]="{
                                         'booked': slot.status === 'Booked',
                                         'available': slot.status === 'Available',
@@ -175,15 +178,13 @@
                             {{slot.room_code}} | {{slot.venue}}
                           </span>
                         </ion-col>
-                        <!-- <ion-col size-xs="5" size-sm="4" class="margin-auto">
-                              <ng-container>
-                                <ion-button class="cursor-pointer" size="small" expand="block"
-                                  [disabled]="slot.status === 'Clossed'" *ngIf="slot.status !== 'Available'"
-                                  (click)="openSlotDetailsModal(slot.slotid, slot.time, slot.endTime, slot.dateandtime, slot.availibilityid, slot.date, slot.timee)">
-                                  View Details
-                                </ion-button>
-                              </ng-container>
-                            </ion-col> -->
+                        <ion-col class="ion-text-end">
+                          <ion-buttons class="close-button-align">
+                            <ion-button (click)="removeRangeSelectedSlot(i)">
+                              <ion-icon color="medium" slot="icon-only" name="close"></ion-icon>
+                            </ion-button>
+                          </ion-buttons>
+                        </ion-col>
                       </ion-row>
                     </ion-grid>
                   </div>
@@ -204,16 +205,61 @@
       </ng-template>
     </ion-row>
   </ion-grid>
+
+  <!--Skeleton Text-->
   <ng-template #loadingContent>
     <ion-grid>
       <ion-row>
-        <ion-col size-xs="12" size-md="5">
-          <ion-skeleton-text animated style="width: 100%; line-height: 300px;"></ion-skeleton-text>
+        <ion-col size="12" size-md="5">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>
+                <h3 class="responsive-h1">
+                  <ion-skeleton-text animated style="width: 38%;"></ion-skeleton-text>
+                </h3>
+                <h3 class="small-text small-margin-top">
+                  <ion-skeleton-text animated style="width: 96%;"></ion-skeleton-text>
+                </h3>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item class="ion-no-padding">
+                <ion-grid>
+                  <ion-row class="ion-align-items-start">
+                    <ion-col>
+                      <ion-skeleton-text animated style="width: 100%; line-height: 50px;"></ion-skeleton-text>
+                    </ion-col>
+                    <ion-col class="skeleton-content-center">
+                      <ion-skeleton-text animated style="width: 100%; line-height: 50px;"></ion-skeleton-text>
+                    </ion-col>
+                    <ion-col class="skeleton-content-center">
+                      <ion-skeleton-text animated style="width: 100%; line-height: 50px;"></ion-skeleton-text>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-skeleton-text animated class="ion-margin-start ion-margin-end ion-margin-top"
+                style="width: 90%; line-height: 28px;"></ion-skeleton-text>
+              <ion-skeleton-text animated class="ion-margin" style="width: 90%; line-height: 20px;"></ion-skeleton-text>
+              <ion-skeleton-text animated class="ion-margin-start ion-margin-end ion-margin-bottom"
+                style="width: 90%; line-height: 212px;">
+              </ion-skeleton-text>
+            </ion-card-content>
+          </ion-card>
         </ion-col>
-        <ion-col size-xs="12" size-md="7">
-          <ion-item *ngFor="let _ of skeletonItemsNumber">
-            <ion-skeleton-text animated style="width: 100%; line-height: 50px;"></ion-skeleton-text>
-          </ion-item>
+        <ion-col size="12" size-md="7">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>
+                <ion-skeleton-text animated class="ion-margin-bottom" style="width: 100%; line-height: 30px;"></ion-skeleton-text>
+                <ion-skeleton-text animated style="width: 56%; line-height: 30px;"></ion-skeleton-text>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-skeleton-text *ngFor="let _ of skeletonItemsNumber" animated style="width: 100%; line-height: 90px;">
+              </ion-skeleton-text>
+            </ion-card-content>
+          </ion-card>
         </ion-col>
       </ion-row>
     </ion-grid>

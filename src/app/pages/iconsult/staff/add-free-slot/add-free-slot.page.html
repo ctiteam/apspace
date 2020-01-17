@@ -57,7 +57,7 @@
               (addFreeSlotForm.get('startDate').hasError('required') && addFreeSlotForm.get('startDate').touched) ||
               submitted && addFreeSlotForm.get('startDate').hasError('required')"
                 class="ion-padding-start danger-text">
-                ** Date field cannot be empty
+                Date field cannot be empty
               </div>
 
               <div *ngIf="addFreeSlotForm.get('slotType').value === consultationTypeOptions[1].value">
@@ -74,7 +74,7 @@
                 (addFreeSlotForm.get('noOfWeeks').hasError('required') && addFreeSlotForm.get('noOfWeeks').touched) ||
                 submitted && addFreeSlotForm.get('noOfWeeks').hasError('required')"
                   class="ion-padding-start danger-text">
-                  ** Number of Weeks field cannot be empty & it must be a number
+                  Number of Weeks field cannot be empty & it must be a number
                 </div>
               </div>
 
@@ -92,7 +92,7 @@
                 (addFreeSlotForm.get('endDate').hasError('required') && addFreeSlotForm.get('endDate').touched) ||
                 submitted && addFreeSlotForm.get('endDate').hasError('required')"
                   class="ion-padding-start danger-text">
-                  ** Repeat Until field cannot be empty
+                  Repeat Until field cannot be empty
                 </div>
               </div>
 
@@ -113,7 +113,7 @@
                   (addFreeSlotForm.get('repeatOn').hasError('required') && addFreeSlotForm.get('repeatOn').touched) ||
                   submitted && addFreeSlotForm.get('repeatOn').hasError('required')"
                   class="ion-padding-start danger-text">
-                  ** Repeat On field cannot be empty
+                  Repeat On field cannot be empty
                 </div>
               </div>
 
@@ -155,7 +155,7 @@
                       ||
                       (submitted && timeFormData.controls[i].status === 'INVALID')"
                       class="danger-text ion-padding-start">
-                      ** Time (Slot {{i+1}}) field cannot be empty or duplicated time is not allowed
+                      Time (Slot {{i+1}}) field cannot be empty or duplicated time is not allowed
                     </div>
                   </section>
 
@@ -198,16 +198,16 @@
                           (addFreeSlotForm.get('location').hasError('required') && addFreeSlotForm.get('location').touched) ||
                           submitted && addFreeSlotForm.get('location').hasError('required')"
                       class="ion-padding-start danger-text">
-                      ** Location field cannot be empty
+                      Location field cannot be empty
                     </div>
                   </ion-col>
                   <ion-col class="ion-no-padding" size-xs="12" size-md="7"
                     *ngIf="!addFreeSlotForm.get('location').hasError('required')">
-                    <ion-item lines="none" *ngIf="venues$ | async as venues; else loadingVenues">
+                    <ion-item lines="none">
                       <ion-label position="stacked" [ngClass]="{ 'danger-text': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
                       submitted && addFreeSlotForm.get('venue').hasError('required') }">Venue
                       </ion-label>
-                      <ion-select placeholder="Click to select" interface="alert" formControlName="venue" [ngClass]="{ 'is-invalid': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
+                      <ion-select *ngIf="venues$ | async as venues; else loadingVenues" placeholder="Click to select" interface="alert" formControlName="venue" [ngClass]="{ 'is-invalid': (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
                       submitted && addFreeSlotForm.get('venue').hasError('required') }" class="form-input">
                         <ion-select-option *ngFor="let venue of venues" [value]="venue.id">
                           {{ venue.room_code }}
@@ -215,15 +215,13 @@
                       </ion-select>
                     </ion-item>
                     <ng-template #loadingVenues>
-                      <ion-item lines="none">
-                        <ion-skeleton-text animated class="ion-padding-vertical ion-margin-top"></ion-skeleton-text>
-                      </ion-item>
+                        <ion-skeleton-text animated class="ion-padding-vertical"></ion-skeleton-text>
                     </ng-template>
                     <div *ngIf="
                         (addFreeSlotForm.get('venue').hasError('required') && addFreeSlotForm.get('venue').touched) ||
                         submitted && addFreeSlotForm.get('venue').hasError('required')"
                       class="ion-padding-start danger-text">
-                      ** Venue field cannot be empty
+                      Venue field cannot be empty
                     </div>
                   </ion-col>
                 </ion-row>

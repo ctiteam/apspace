@@ -1,0 +1,208 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ this.module }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button outline small (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment class="ion-padding" [(ngModel)]="selectedSegment" (ngModelChange)="segmentChanged($event)">
+      <ion-segment-button value="attendance">Attendance</ion-segment-button>
+      <ion-segment-button value="result">Result</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div [ngSwitch]="selectedSegment">
+    <div *ngSwitchCase="'attendance'">
+      <ion-card>
+        <ion-card-content class="ion-no-padding">
+          <ng-container *ngIf="(attendance$ | async) as attendances; else loadingAttendance">
+            <ng-container *ngIf="attendances.length > 0; else emptyAttendance">
+              <ion-item lines="none" class="ion-no-padding table-top">
+                <ion-grid class="ion-no-padding">
+                  <ion-row>
+                    <ion-col class="bold" size="1">
+                      Date
+                    </ion-col>
+
+                    <ion-col class="bold" size="2">
+                      Time
+                    </ion-col>
+
+                    <ion-col class="bold" size="3">
+                      Class Code
+                    </ion-col>
+
+                    <ion-col class="bold" size="1">
+                      Class Type
+                    </ion-col>
+
+                    <ion-col class="bold" size="1">
+                      Status
+                    </ion-col>
+
+                    <ion-col class="bold" size="4">
+                      Remarks
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+
+              <ion-item lines="none" class="table-item" *ngFor="let attendance of attendances" [ngClass]="
+                {
+                  'danger-text': attendance.ATTENDANCE_STATUS === 'N',
+                  'warning-text': attendance.ATTENDANCE_STATUS === 'R'
+                }
+              ">
+                <ion-grid class="ion-no-padding">
+                  <ion-row>
+                    <ion-col class="margin-auto" size-lg="1" size="12">
+                      <span class="marker">Date:</span>
+                      {{ attendance.CLASS_DATE | date: "EEE, d MMM y" }}
+                    </ion-col>
+
+                    <ion-col class="margin-auto" size-lg="2" size="12">
+                      <span class="marker">Time:</span>
+                      {{ attendance.TIME_FROM }} - {{ attendance.TIME_TO }}
+                    </ion-col>
+
+                    <ion-col class="margin-auto" size-lg="3" size="12">
+                      {{ attendance.CLASS_CODE }}
+                    </ion-col>
+
+                    <ion-col class="margin-auto" size-lg="1" size="12">
+                      <span class="marker">Type:</span>
+                      {{ attendance.CLASS_TYPE }}
+                    </ion-col>
+
+                    <ion-col class="margin-auto" size-lg="1" size="12">
+                      <span class="marker">Status:</span>
+                      {{ attendance.ATTENDANCE_STATUS }}
+                    </ion-col>
+
+                    <ion-col class="margin-auto" size-lg="4" size="12">
+                      <span class="marker">Remarks:</span>
+                      {{ attendance.ABSENT_REASON || "N/A" }}
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #loadingAttendance>
+            <ion-skeleton-text animated style="line-height: 200px;"></ion-skeleton-text>
+          </ng-template>
+
+          <ng-template #emptyAttendance>
+            <app-message-with-svg messageTitle="No attendance found!"
+              messageContent="Looks like there's no data to be shown here." imageUrl="assets/img/empty.svg"
+              wrapperOffset="3" wrapperSize="6">
+            </app-message-with-svg>
+          </ng-template>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div *ngSwitchCase="'result'">
+      <ion-card>
+        <ion-card-content>
+
+          <ng-container *ngIf="(result$ | async) as results; else loadingResults">
+            <ng-container *ngIf="results.length > 0; else emptyResult">
+              <ion-item lines="none" class="ion-no-padding table-top">
+                <ion-grid>
+                  <ion-row>
+                    <ion-col class="bold" size-lg="6" size="12">
+                      Exam Code
+                    </ion-col>
+
+                    <ion-col class="bold" size-lg="1" size="12">
+                      Exam Date
+                    </ion-col>
+
+                    <ion-col class="bold" size-lg="1" size="12">
+                      Assesment Type
+                    </ion-col>
+
+                    <ion-col class="bold" size-lg="1" size="12">
+                      Exam Status
+                    </ion-col>
+
+                    <ion-col class="bold" size-lg="1" size="12">
+                      Assessment Code
+                    </ion-col>
+
+                    <ion-col class="bold" size-lg="1" size="12">
+                      Grade
+                    </ion-col>
+
+                    <ion-col class="bold" size-lg="1" size="12">
+                      Marks
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+
+              <ion-item lines="none" *ngFor="let result of results" class="table-item">
+                <ion-grid class="ion-no-padding">
+                  <ion-row>
+                    <ion-col class="margin-auto" size-lg="6" size="12">
+                      {{ result.EXAM_CODE }}
+                    </ion-col>
+
+                    <ion-col class="margin auto" size-lg="1" size="12">
+                      <span class="marker">Exam Date:</span>
+                      {{ result.EXAM_DATE | date: "EEE, d MMM y" }}
+                    </ion-col>
+
+                    <ion-col class="margin auto" size-lg="1" size="12">
+                      <span class="marker">Assesment Type:</span>
+                      {{ result.ASSESMENT_TYPE }}
+                    </ion-col>
+
+                    <ion-col class="margin auto" size-lg="1" size="12">
+                      <span class="marker">Exam Status:</span>
+                      {{ result.EXAM_STATUS }}
+                    </ion-col>
+
+                    <ion-col class="margin auto" size-lg="1" size="12">
+                      <span class="marker">Assesment Code:</span>
+                      {{ result.ASSESMENT_CODE }}
+                    </ion-col>
+
+                    <ion-col class="margin auto" size-lg="1" size="12">
+                      <span class="marker">Grade:</span>
+                      {{ result.GRADE }}
+                    </ion-col>
+
+                    <ion-col class="margin auto" size-lg="1" size="12">
+                      <span class="marker">Marks:</span>
+                      {{ result.MARKS }}
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #loadingResults>
+            <ion-skeleton-text animated style="line-height: 200px;"></ion-skeleton-text>
+          </ng-template>
+
+          <ng-template #emptyResult>
+            <app-message-with-svg messageTitle="No result found!"
+              messageContent="Looks like there's no data to be shown here." imageUrl="assets/img/empty.svg"
+              wrapperOffset="3" wrapperSize="6">
+            </app-message-with-svg>
+          </ng-template>
+
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

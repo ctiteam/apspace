@@ -88,10 +88,17 @@ input:-webkit-autofill:active {
   }
 }
 
-// iConsult Modal Height
+// Modal Height
 .add-min-height {
   .modal-wrapper {
     min-height: 85%;
+  }
+}
+
+.add-min-height-width {
+  .modal-wrapper{
+    min-height: 90%;
+    min-width: 90%;
   }
 }
 
@@ -364,4 +371,9 @@ ion-refresher-content {
       color: var(--main-txt-color);
     }
   }
+}
+
+/** --color not set in ion-select */
+ion-select {
+  color: var(--main-txt-color);
 }

@@ -9,9 +9,9 @@
         {{ intake || 'Intakes' }}
       </ion-button>
     </ion-buttons>
-
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
@@ -19,18 +19,31 @@
   <ng-template [ngIf]="!showNoIntakeMessage" [ngIfElse]="noIntakeSelected">
     <ng-template let-exams [ngIf]="exam$ | async" [ngIfElse]="loadingExams">
       <ng-template [ngIf]="exams.length !== 0" [ngIfElse]="noExams">
-        <h5 class="secondary-txt-color ion-text-center ion-padding">Selected intake: {{ intake }}</h5>
         <ion-grid class="ion-no-padding ion-padding-start ion-padding-end">
           <ion-row>
-            <ion-col size="12" size-lg="6" *ngFor="let exam of exams">
+            <ion-col size="12" size-lg="6" offset-lg="3">
+              <div class="ion-padding ion-text-center">
+                <h5 class="secondary-txt-color ion-padding-bottom">Selected intake: {{ intake }}</h5>
+                <h6 class="text-bold danger-text">Important Note:</h6>
+                <p class="secondary-txt-color ion-padding-bottom">
+                  By using the exam schedule service in APSpace, you are agreeing to our exam guidelines and
+                  procedures.
+                  Please make sure to read them carefully.
+                </p>
+                <ion-button class="danger-border" fill="outline" (click)="openGuidlines()">
+                  View Examination Guideline
+                </ion-button>
+              </div>
+            </ion-col>
+            <ion-col size="12" size-lg="6" offset-lg="3" *ngFor="let exam of exams">
               <div>
                 <ion-card class="ion-no-margin">
-                  <ion-card-header class="colored-border">
+                  <ion-card-header>
                     <ion-card-title class="responsive-h1">
                       {{ exam.subjectDescription }}
                     </ion-card-title>
-                    <ion-card-subtitle>
-                      On {{ exam.since | date: "EEEE, dd MMM y" }}
+                    <ion-card-subtitle class="responsive-h1">
+                      {{ exam.since | date: "EEEE, dd MMM y" }}
                     </ion-card-subtitle>
                   </ion-card-header>
                   <ion-card-content class="ion-no-padding">
@@ -99,6 +112,8 @@
         </app-message-with-svg>
       </ng-template>
     </ng-template>
+
+
     <!-- Loading -->
     <ng-template #loadingExams>
       <ion-grid>

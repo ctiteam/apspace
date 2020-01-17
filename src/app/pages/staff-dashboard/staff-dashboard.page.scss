@@ -132,3 +132,12 @@ ion-card.trip-card {
     margin-top: 4px;
   }
 }
+@media only screen and (max-width: 540px) {
+  div.swiper-button-next {
+      background: transparent;
+  }
+
+  div.swiper-button-prev {
+      background: transparent;
+  }
+}

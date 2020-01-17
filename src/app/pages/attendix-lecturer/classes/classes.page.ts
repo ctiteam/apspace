@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonSelect, ModalController } from '@ionic/angular';
+import { IonSelect, LoadingController, ModalController, ToastController } from '@ionic/angular';
 
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -44,18 +44,38 @@ export class ClassesPage implements AfterViewInit, OnInit {
   manualClasscodes: string[];
   manualDates: string[];
   manualStartTimes = [
-    '08:00 AM', '08:15 AM', '08:30 AM', '08:45 AM', '09:00 AM', '09:15 AM',
-    '09:30 AM', '09:45 AM', '10:00 AM', '10:15 AM', '10:30 AM', '10:45 AM',
-    '11:00 AM', '11:15 AM', '11:30 AM', '11:45 AM', '12:00 PM', '12:15 PM',
-    '12:30 PM', '12:45 PM', '01:00 PM', '01:15 PM', '01:30 PM', '01:45 PM',
-    '02:00 PM', '02:15 PM', '02:30 PM', '02:45 PM', '03:00 PM', '03:15 PM',
-    '03:30 PM', '03:45 PM', '04:00 PM', '04:15 PM', '04:30 PM', '04:45 PM',
-    '05:00 PM', '05:15 PM', '05:30 PM', '05:45 PM', '06:00 PM', '06:15 PM',
-    '06:30 PM', '06:45 PM', '07:00 PM', '07:15 PM', '07:30 PM', '07:45 PM',
-    '08:00 PM', '08:15 PM', '08:30 PM', '08:45 PM', '09:00 PM', '09:15 PM',
-    '09:30 PM', '09:45 PM', '10:00 PM', '10:15 PM', '10:30 PM', '10:45 PM',
-    '10:00 PM', '11:15 PM', '11:30 PM', '11:45 PM', '11:00 PM', '11:15 PM',
-    '11:30 PM', '11:45 PM'];
+    '08:00 AM', '08:05 AM', '08:10 AM', '08:15 AM', '08:20 AM', '08:25 AM',
+    '08:30 AM', '08:35 AM', '08:40 AM', '08:45 AM', '08:50 AM', '08:55 AM',
+    '09:00 AM', '09:05 AM', '09:10 AM', '09:15 AM', '09:20 AM', '09:25 AM',
+    '09:30 AM', '09:35 AM', '09:40 AM', '09:45 AM', '09:50 AM', '09:55 AM',
+    '10:00 AM', '10:05 AM', '10:10 AM', '10:15 AM', '10:20 AM', '10:25 AM',
+    '10:30 AM', '10:35 AM', '10:40 AM', '10:45 AM', '10:50 AM', '10:55 AM',
+    '11:00 AM', '11:05 AM', '11:10 AM', '11:15 AM', '11:20 AM', '11:25 AM',
+    '11:30 AM', '11:35 AM', '11:40 AM', '11:45 AM', '11:50 AM', '11:55 AM',
+    '12:00 PM', '12:05 PM', '12:10 PM', '12:15 PM', '12:20 PM', '12:25 PM',
+    '12:30 PM', '12:35 PM', '12:40 PM', '12:45 PM', '12:50 PM', '12:55 PM',
+    '01:00 PM', '01:05 PM', '01:10 PM', '01:15 PM', '01:20 PM', '01:25 PM',
+    '01:30 PM', '01:35 PM', '01:40 PM', '01:45 PM', '01:50 PM', '01:55 PM',
+    '02:00 PM', '02:05 PM', '02:10 PM', '02:15 PM', '02:20 PM', '02:25 PM',
+    '02:30 PM', '02:35 PM', '02:40 PM', '02:45 PM', '02:50 PM', '02:55 PM',
+    '03:00 PM', '03:05 PM', '03:10 PM', '03:15 PM', '03:20 PM', '03:25 PM',
+    '03:30 PM', '03:35 PM', '03:40 PM', '03:45 PM', '03:50 PM', '03:55 PM',
+    '04:00 PM', '04:05 PM', '04:10 PM', '04:15 PM', '04:20 PM', '04:25 PM',
+    '04:30 PM', '04:35 PM', '04:40 PM', '04:45 PM', '04:50 PM', '04:55 PM',
+    '05:00 PM', '05:05 PM', '05:10 PM', '05:15 PM', '05:20 PM', '05:25 PM',
+    '05:30 PM', '05:35 PM', '05:40 PM', '05:45 PM', '05:50 PM', '05:55 PM',
+    '06:00 PM', '06:05 PM', '06:10 PM', '06:15 PM', '06:20 PM', '06:25 PM',
+    '06:30 PM', '06:35 PM', '06:40 PM', '06:45 PM', '06:50 PM', '06:55 PM',
+    '07:00 PM', '07:05 PM', '07:10 PM', '07:15 PM', '07:20 PM', '07:25 PM',
+    '07:30 PM', '07:35 PM', '07:40 PM', '07:45 PM', '07:50 PM', '07:55 PM',
+    '08:00 PM', '08:05 PM', '08:10 PM', '08:15 PM', '08:20 PM', '08:25 PM',
+    '08:30 PM', '08:35 PM', '08:40 PM', '08:45 PM', '08:50 PM', '08:55 PM',
+    '09:00 PM', '09:05 PM', '09:10 PM', '09:15 PM', '09:20 PM', '09:25 PM',
+    '09:30 PM', '09:35 PM', '09:40 PM', '09:45 PM', '09:50 PM', '09:55 PM',
+    '10:00 PM', '10:05 PM', '10:10 PM', '10:15 PM', '10:20 PM', '10:25 PM',
+    '10:30 PM', '10:35 PM', '10:40 PM', '10:45 PM', '10:50 PM', '10:55 PM',
+    '11:00 PM', '11:05 PM', '11:10 PM', '11:15 PM', '11:20 PM', '11:25 PM',
+    '11:30 PM', '11:35 PM', '11:40 PM', '11:45 PM', '11:50 PM', '11:55 PM'];
   manualEndTimes: string[];
 
   manualClasscode: string;
@@ -70,13 +90,23 @@ export class ClassesPage implements AfterViewInit, OnInit {
     private tt: StudentTimetableService,
     private ws: WsApiService,
     private router: Router,
+    public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
+    public toastCtrl: ToastController,
   ) { }
 
   ngOnInit() {
     const d = new Date();
     this.date = this.isoDate(d);
     const nowMins = d.getHours() * 60 + d.getMinutes();
+
+    const loadingCtrl = this.loadingCtrl.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+    });
+    loadingCtrl.then(loading => loading.present());
 
     const timetables$ = forkJoin([this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }), this.tt.get()]).pipe(
       map(([profile, timetables]) => timetables.filter(timetable =>
@@ -90,9 +120,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
       const joined = timetables.map(timetable => ({
         ...classcodes.find(classcode => {
           // Classcode BM006-3-2-CRI-L-UC2F1805CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
-          // Take only BM006-3-2-CRI-L- (+3 extra characters for L, T1, T2)
+          // Take only BM006-3-2-CRI-L- (+3 extra characters with '-' pad for L, T1, T2)
           const len = classcode.SUBJECT_CODE.length;
-          return classcode.CLASS_CODE.slice(0, len + 3) === timetable.MODID.slice(0, len + 3)
+          return classcode.CLASS_CODE.slice(0, len + 3) === (timetable.MODID + '-').slice(0, len + 3)
             && classcode.COURSE_CODE_ALIAS === timetable.INTAKE;
         }),
         ...timetable
@@ -127,7 +157,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
           ({ DATESTAMP_ISO: DATE, TIME_FROM, TIME_TO, CLASS_CODE, TYPE })));
       this.schedules = this.schedules.concat.apply([], mapped);
       this.classcodes = [...new Set(this.schedules.map(schedule => schedule.CLASS_CODE).filter(Boolean))].sort();
-      console.log('filtered', this.schedules, this.classcodes);
+
+      loadingCtrl.then(loading => loading.dismiss());
+      // console.log('filtered', this.schedules, this.classcodes);
 
       // manual classcodes
       this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
@@ -156,6 +188,13 @@ export class ClassesPage implements AfterViewInit, OnInit {
     });
 
     if (new Set(guessSchedules.map(schedule => schedule.MODID)).size !== 1) {
+      this.toastCtrl.create({
+        message: 'Fail to auto complete, switched to \'Manual\' mode',
+        duration: 3000,
+        position: 'top',
+        showCloseButton: true,
+      }).then(toast => toast.present());
+      this.auto = false;
       console.warn('fail to auto complete', guessSchedules);
       return;
     }
@@ -164,7 +203,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     this.changeClasscode(this.classcode = currentSchedule.CLASS_CODE, false);
     this.changeDate(this.date = date, false);
     this.changeStartTime(this.startTime = currentSchedule.TIME_FROM);
-    console.log('currentSchedule', currentSchedule);
+    // console.log('currentSchedule', currentSchedule);
   }
 
   /** Parse time into minutes of day in 12:59 PM format. */
@@ -201,7 +240,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
   /** Change classcode, auto select class type. */
   changeClasscode(classcode: string, propagate = true) {
     this.schedulesByClasscode = this.schedules.filter(schedule => schedule.CLASS_CODE === classcode);
-    this.dates = [...new Set(this.schedulesByClasscode.map(schedule => schedule.DATESTAMP_ISO))].sort();
+    this.dates = [...new Set(this.schedulesByClasscode.map(schedule => schedule.DATESTAMP_ISO))].sort().reverse();
     this.date = '';
 
     if (propagate && this.dates.length === 1) {
@@ -243,7 +282,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
   }
 
   /** Mark attendance, send feedback if necessary. */
-  mark() {
+  async mark() {
     if (!this.auto) {
       const body = {
         classcodes: this.classcodes,
@@ -255,6 +294,12 @@ export class ClassesPage implements AfterViewInit, OnInit {
         startTimes: this.startTimes,
         endTimes: this.endTimes,
 
+        classcode: this.classcode,
+        date: this.date,
+        startTime: this.startTime,
+        endTime: this.endTime,
+        classType: this.classType,
+
         manualClasscodes: this.manualClasscodes,
         manualDates: this.manualDates,
         manualStartTimes: this.manualStartTimes,
@@ -265,8 +310,10 @@ export class ClassesPage implements AfterViewInit, OnInit {
         manualStartTime: this.manualStartTime,
         manualEndTime: this.manualEndTime,
         manualClassType: this.manualClassType,
+
+        now: new Date(),
       };
-      this.ws.post('/attendix/selection', { body }).subscribe();
+      await this.ws.post('/attendix/selection', { body }).toPromise();
     }
     this.router.navigate(['/attendix/mark-attendance', {
       classcode: this.auto ? this.classcode : this.manualClasscode,

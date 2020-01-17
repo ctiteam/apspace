@@ -21,7 +21,7 @@ import { ClassesPipe } from './classes.pipe';
 export class StudentTimetablePage implements OnInit {
 
   printUrl = 'https://api.apiit.edu.my/timetable-print/index.php';
-  wday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  wday = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
   legends = [
     {
@@ -111,11 +111,8 @@ export class StudentTimetablePage implements OnInit {
 
     // select current start of week
     const date = new Date();
-    if (date.getDay() !== 6) { // 6 is saturday
-      date.setDate(date.getDate() - date.getDay());
-    } else {
-      date.setDate(date.getDate() + 1);  // include saturdays with the new week
-    }
+    date.setDate(date.getDate() - (date.getDay() + 6) % 7);
+    date.setHours(0, 0, 0, 0);
     this.selectedWeek = date;
 
     // optional room paramMap to filter timetables by room (separated from intake filter)
@@ -145,12 +142,13 @@ export class StudentTimetablePage implements OnInit {
       // tslint:disable-next-line: no-bitwise
       if (this.settings.get('role') & Role.Student) { // intake is not defined & user role is student
         this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).subscribe(p => {
-          this.intake = (p || {} as StudentProfile).INTAKE || '';
+          this.intake = p.INTAKE;
           this.changeDetectorRef.markForCheck();
           this.settings.set('intakeHistory', [this.intake]);
           this.doRefresh();
         });
       } else {
+        this.settings.set('intakeHistory', []);
         // intake is not defined & user role is staff or lecturers
         this.doRefresh();
       }
@@ -189,13 +187,10 @@ export class StudentTimetablePage implements OnInit {
   changeIntake(intake: string) {
     if (intake !== null && intake !== this.intake) {
       this.intake = intake;
-      // tslint:disable-next-line: no-bitwise
-      if (this.settings.get('role') & Role.Student) {
-        this.settings.set('intakeHistory', this.settings.get('intakeHistory')
-          .concat(intake)
-          .filter((v, i, a) => a.lastIndexOf(v) === i)
-          .slice(-5));
-      }
+      this.settings.set('intakeHistory', this.settings.get('intakeHistory')
+        .concat(intake)
+        .filter((v, i, a) => a.lastIndexOf(v) === i)
+        .slice(-5));
       this.changeDetectorRef.markForCheck();
       this.timetable$.subscribe();
     }
@@ -219,7 +214,7 @@ export class StudentTimetablePage implements OnInit {
 
   /** Check if the day is in week. */
   dayInWeek(date: Date) {
-    date.setDate(date.getDate() - date.getDay());
+    date.setDate(date.getDate() - (date.getDay() + 6) % 7); // monday
     return date.getFullYear() === this.selectedWeek.getFullYear()
       && date.getMonth() === this.selectedWeek.getMonth()
       && date.getDate() === this.selectedWeek.getDate();
@@ -253,7 +248,8 @@ export class StudentTimetablePage implements OnInit {
     // get week
     this.availableWeek = Array.from(new Set(tt.map(t => {
       const date = new Date(t.DATESTAMP_ISO);
-      date.setDate(date.getDate() - date.getDay());
+      date.setHours(0, 0, 0, 0);
+      date.setDate(date.getDate() - (date.getDay() + 6) % 7); // monday
       return date.valueOf();
     }))).sort().map(d => new Date(d));
 
@@ -267,7 +263,7 @@ export class StudentTimetablePage implements OnInit {
     this.availableDate = Array.from(new Set(tt
       .filter(t => this.dayInWeek(new Date(t.DATESTAMP_ISO)))
       .map(t => t.DATESTAMP_ISO))).map(d => new Date(d));
-    this.availableDays = this.availableDate.map(d => this.wday[d.getDay()]);
+    this.availableDays = this.availableDate.map(d => this.wday[(d.getDay() + 6) % 7]); // monday
 
     // set default day
     if (this.availableDate.length === 0) {
@@ -283,12 +279,8 @@ export class StudentTimetablePage implements OnInit {
     this.changeDetectorRef.markForCheck();
   }
 
-  view_hideToolbar() {
-    this.show2ndToolbar = !this.show2ndToolbar;
-  }
-
   sendToPrint() {
-    const week = moment(this.selectedWeek).add(1, 'day').format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
+    const week = moment(this.selectedWeek).format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
     // For student timetable:
     // printUrl?Week=2019-11-18&Intake=APTDF1805DSM(VFX)&print_request=print_tt
     // For lecturer timetable:

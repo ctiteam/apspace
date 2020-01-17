@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { NEVER } from 'rxjs';
 
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { RouterLinkDirectiveStub } from '../../../testing';
 import { SettingsService, WsApiService } from '../../services';
 import { EndtimePipe } from './endtime.pipe';
@@ -32,6 +33,7 @@ describe('LecturerTimetablePage', () => {
         { provide: Router, useValue: { url: '/' } },
         { provide: SettingsService, useValue: settingsSpy },
         { provide: WsApiService, useValue: wsSpy },
+        { provide: InAppBrowser, useValue: {} },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();

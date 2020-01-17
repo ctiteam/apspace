@@ -3,9 +3,14 @@ ion-card {
     margin-top: 16px;
     font-size: 1.1rem;
   }
+
   ion-card-header {
     padding-top: 10px !important;
     padding-bottom: 10px !important;
+
+    ion-card-title {
+      color: var(--main-txt-color) !important;
+    }
   }
 
   ion-card-content {
@@ -24,6 +29,17 @@ ion-card {
 
 }
 
+ion-item {
+  --inner-padding-end: 0px;
+  --padding-start: 0px;
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+}
+
+.table-item:nth-child(even) {
+  --background: var(--tertiary-bg-color) !important;
+}
+
 .table-top {
   display: none;
 }
@@ -38,9 +54,25 @@ ion-card {
   max-width: 110px;
 }
 
+.sem {
+  background-color: var(--primary-color);
+  color: hsla(0,0%,100%,.84);
+  display: inline-table;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
 @media (min-width: 600px) { // Bigger screen
   .marker {
       display: none;
+  }
+
+  .description {
+    text-align: unset !important;
   }
 
   .special-border {
@@ -68,15 +100,4 @@ ion-card {
     border-radius: 15px;
     margin: auto;
   }
-
-}
-  .sem{
-    background-color: var(--primary-color);
-    color: hsla(0,0%,100%,.84);
-    display: inline-table;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-right: 15px;
-    padding-left: 15px;
-    width: 100%;
 }

@@ -6,5 +6,6 @@ export interface MenuItem {
   url: string;
   img: string;
   role: Role;
+  attachTicket?: boolean; // set to true if the service needs a service ticket
   tags: string[];
 }

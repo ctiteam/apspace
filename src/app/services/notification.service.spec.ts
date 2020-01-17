@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
+import { Badge } from '@ionic-native/badge/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
@@ -18,6 +19,7 @@ describe('NotificationService', () => {
         { provide: Platform, useValue: {} },
         { provide: Network, useValue: {} },
         { provide: Storage, useValue: {} },
+        { provide: Badge, useValue: {} },
       ]
     });
   });

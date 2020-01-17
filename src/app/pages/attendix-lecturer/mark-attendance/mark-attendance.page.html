@@ -16,29 +16,37 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid *ngIf="auto; else override">
-    <ion-row *ngIf="otp$ | async as otp">
-      <ion-col size="9">
-        <qrcode *ngIf="otp" [qrdata]="otp" size="520" level="H"></qrcode>
-      </ion-col>
-      <ion-col size="3">
-        <div *ngFor="let c of otp | chars" class="otp">
-          {{ c }}
-        </div>
-        <ion-list lines="none">
-          <ion-item *ngFor="let student of lastMarked$ | async">
-            {{ student.name }}
+  <ng-template [ngIf]="auto" [ngIfElse]="override">
+    <ion-grid>
+      <ion-row *ngIf="otp$ | async as otp">
+        <ion-col size="12" sizeSm="9">
+          <qrcode *ngIf="otp" [qrdata]="otp" width="600"
+            errorCorrectionLevel="H"></qrcode>
+        </ion-col>
+        <ion-col size="10" offset="1" sizeSm="3" offsetSm="0">
+          <div *ngFor="let c of otp | chars" class="otp">
+            {{ c }}
+          </div>
+          <ion-item>
+            <ion-label color="medium" position="floating">Lecture Update</ion-label>
+            <ion-textarea [(ngModel)]="lectureUpdate"
+              (ionChange)="save(lectureUpdate)" debounce="2000"></ion-textarea>
           </ion-item>
-        </ion-list>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+          <ion-list lines="none">
+            <ion-item *ngFor="let student of lastMarked$ | async">
+              {{ student.name }}
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
   <ng-template #override>
     <!-- just subscribe for the side effects -->
     <ng-template [ngIf]="lastMarked$ | async"></ng-template>
     <ion-grid>
       <ion-row>
-        <ion-col size="9" sizeMd="10">
+        <ion-col size="9" sizeMd="7">
           <ion-searchbar [(ngModel)]="term"></ion-searchbar>
         </ion-col>
         <ion-col size="3" sizeMd="2">
@@ -50,15 +58,23 @@
             <ion-select-option value="R">Absent with reason</ion-select-option>
           </ion-select>
         </ion-col>
+        <ion-col size="12" sizeMd="3">
+          <ion-item lines="none">
+            <ion-textarea [(ngModel)]="lectureUpdate" (ionChange)="save(lectureUpdate)" debounce="5000"
+              placeholder="Lecture Update" rows="1" class="ion-no-padding"></ion-textarea>
+          </ion-item>
+        </ion-col>
       </ion-row>
     </ion-grid>
     <div class="ion-padding-bottom">
       <ion-virtual-scroll [items]="students$ | async | attendance:type | search:term"
         [trackBy]="trackById" approxItemHeight="48px">
         <ion-card *virtualItem="let student">
-          <ion-item [ngClass]="'state' + student.attendance">
+          <ion-item [ngClass]="'state' + student.attendance" lines="none">
+            <!-- XXX profile image API not ready
             <ion-img slot="start" src="error"
               (ionError)="$event.target.src = 'assets/img/profile.png'"></ion-img>
+            -->
             <ion-label>{{ student.id }} {{ student.name }}</ion-label>
             <ng-container slot="end">
               <ion-item *ngIf="student.attendance === 'N' || student.attendance === 'R'">

@@ -1,6 +1,7 @@
 mutation markAttendance(
   $schedule: ScheduleInput!
-  $student: String! $attendance: String!
+  $student: String!
+  $attendance: String!
   $absentReason: String
 ) {
   markAttendance(

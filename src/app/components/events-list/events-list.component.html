@@ -7,8 +7,8 @@
                     'no-hover': event.pass,
                     'class-type': event.type==='class',
                     'exam-type': event.type==='exam',
-                    'holiday-type': event.type==='holiday',
-                    'iconsult-type': event.type==='iconsult'
+                    'iconsult-type': event.type==='iconsult',
+                    'holiday-type': event.type !=='class' && event.type !=='exam' && event.type !=='iconsult'
                 }"                
                 >
                 <div class="left-part-container ion-text-center">
@@ -26,7 +26,7 @@
                 </div>
                 <div class="right-part-container">
                     <span *ngIf="event.title" class="title">{{event.title}}</span>
-                    <span class="type">
+                    <span class="type" *ngIf="event.type">
                         <a>
                             {{event.type | titlecase}}
                         </a>

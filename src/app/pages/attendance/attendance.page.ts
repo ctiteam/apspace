@@ -48,10 +48,9 @@ export class AttendancePage implements OnInit {
   }
 
   doRefresh(refresher?) {
-    const caching = refresher ? 'network-or-cache' : 'cache-only';
-    this.course$ = this.ws.get<Course[]>('/student/courses', { caching }).pipe(
+    this.course$ = this.ws.get<Course[]>('/student/courses', { caching: 'network-or-cache' }).pipe(
       tap(c => (this.selectedIntake = c[0].INTAKE_CODE)),
-      tap(_ => this.attendance$ = this.getAttendance(this.selectedIntake, refresher)),
+      tap(_ => this.attendance$ = this.getAttendance(this.selectedIntake)),
       tap(
         c =>
           (this.intakeLabels = Array.from(
@@ -69,7 +68,7 @@ export class AttendancePage implements OnInit {
         text: intake,
         handler: () => {
           this.selectedIntake = intake;
-          this.attendance$ = this.getAttendance(this.selectedIntake, true);
+          this.attendance$ = this.getAttendance(this.selectedIntake);
         },
       } as ActionSheetButton;
     });
@@ -82,11 +81,10 @@ export class AttendancePage implements OnInit {
 
   }
 
-  getAttendance(intake: string, refresh?: boolean): Observable<any[]> {
+  getAttendance(intake: string): Observable<any[]> {
     this.average = -2;
     const url = `/student/attendance?intake=${intake}`;
-    const caching = refresh ? 'network-or-cache' : 'cache-only';
-    return (this.attendance$ = this.ws.get<Attendance[]>(url, { caching }).pipe(
+    return (this.attendance$ = this.ws.get<Attendance[]>(url, { caching: 'network-or-cache' }).pipe(
       tap(a => this.calculateAverage(a)),
       map(res => this.groupAttendanceBySemester(res)),
     ));

@@ -9,6 +9,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { AppLauncherService } from 'src/app/services';
 import { LecturerTimetableComponentModule } from '../../components/lecturer-timetable/lecturer-timetable.module';
 import { UrldecodePipe } from '../../pipes/urldecode.pipe';
+import { ByIdPipe } from './by-id.pipe';
 import { StaffDirectoryInfoPage } from './staff-directory-info.page';
 
 const routes: Routes = [
@@ -28,6 +29,6 @@ const routes: Routes = [
     LecturerTimetableComponentModule
   ],
   providers: [AppLauncherService],
-  declarations: [StaffDirectoryInfoPage, UrldecodePipe]
+  declarations: [StaffDirectoryInfoPage, UrldecodePipe, ByIdPipe]
 })
 export class StaffDirectoryInfoPageModule { }

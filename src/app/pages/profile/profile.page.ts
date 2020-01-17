@@ -20,7 +20,7 @@ export class ProfilePage implements OnInit {
   indecitor = false;
   skeltons = [80, 30, 100, 45, 60, 76];
 
-  local = false;
+  local = true; // Set the initial value to true so the Visa status does not flash
   studentRole = false;
   countryName: string;
   constructor(
