@@ -18,7 +18,7 @@
         <ion-card-content class="ion-no-padding">
           <ion-list class="ion-no-margin">
             <ion-item-group>
-              <ion-item *ngFor="let item of group.value" (click)="openPage(item.url, (item.attachTicket || false))" class="cursor-pointer">
+              <ion-item *ngFor="let item of group.value" (click)="openPage(item.url, item.attachTicket)" class="cursor-pointer">
                 <ion-avatar slot="start">
                   <img [src]="item.img">
                 </ion-avatar>
