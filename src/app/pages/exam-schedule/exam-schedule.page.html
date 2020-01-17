@@ -38,12 +38,12 @@
             <ion-col size="12" size-lg="6" offset-lg="3" *ngFor="let exam of exams">
               <div>
                 <ion-card class="ion-no-margin">
-                  <ion-card-header class="colored-border">
+                  <ion-card-header>
                     <ion-card-title class="responsive-h1">
                       {{ exam.subjectDescription }}
                     </ion-card-title>
-                    <ion-card-subtitle>
-                      On {{ exam.since | date: "EEEE, dd MMM y" }}
+                    <ion-card-subtitle class="responsive-h1">
+                      {{ exam.since | date: "EEEE, dd MMM y" }}
                     </ion-card-subtitle>
                   </ion-card-header>
                   <ion-card-content class="ion-no-padding">
