@@ -71,6 +71,7 @@ export class MorePage implements OnInit {
       title: 'e-Forms (Forms & Applications)',
       group: 'Collaboration & Information Resources',
       url: 'http://forms.sites.apiit.edu.my/home/',
+      attachTicket: true,
       img: 'assets/img/forms-and-applications.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['purchase', 'incident', 'maintenance', 'order', 'exit', 'event']
@@ -110,7 +111,7 @@ export class MorePage implements OnInit {
     {
       title: 'Knowledge Base',
       group: 'Collaboration & Information Resources',
-      url: 'http://kb.sites.apiit.edu.my/home/',
+      url: 'http://kb.sites.apiit.edu.my/home/', // no ticket
       img: 'assets/img/kb.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['articles', 'Q&A', 'FAQ', 'questions', 'answers', 'how to', 'kb']
@@ -135,6 +136,7 @@ export class MorePage implements OnInit {
       title: 'My Library',
       group: 'Collaboration & Information Resources',
       url: 'http://opac.apiit.edu.my/cgi-bin/koha/opac-user.pl',
+      attachTicket: true,
       img: 'assets/img/my-library.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['book', 'articles', 'resource']
@@ -197,7 +199,7 @@ export class MorePage implements OnInit {
     //   title: 'Campus Map',
     //   group: 'Campus Life',
     //   img: 'assets/img/webmail.png',
-    //   url: 'https://outlook.office.com/owa/?realm=mail.apu.edu.my',
+    //   url: '',
     //   role: Role.Student | Role.Lecturer | Role.Admin,
     //   tags: ['mail', 'email']
     // },
@@ -291,7 +293,7 @@ export class MorePage implements OnInit {
     {
       title: 'DingDong',
       group: 'Academic Operation',
-      url: 'https://dingdong.apu.edu.my/login', // no ticket required
+      url: 'https://dingdong.apu.edu.my/login', // no ticket
       img: 'assets/img/dingdong.png',
       role: Role.Lecturer | Role.Admin,
       tags: ['meesage', 'sms', 'email', 'push', 'notification', 'announce']
@@ -299,7 +301,7 @@ export class MorePage implements OnInit {
     {
       title: 'Exam Paper Scheduling',
       group: 'Academic Operation',
-      url: 'https://examscheduling.apu.edu.my/epaperschedule/login_page.asp',
+      url: 'https://examscheduling.apu.edu.my/epaperschedule/login_page.asp', // no ticket
       img: 'assets/img/exam-scheduling.png',
       role: Role.Lecturer | Role.Admin,
       tags: []
@@ -332,6 +334,7 @@ export class MorePage implements OnInit {
       title: 'My Reports Panel',
       group: 'Academic Operation',
       url: 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check',
+      attachTicket: true,
       img: 'assets/img/reports.png',
       role: Role.Lecturer | Role.Admin,
       tags: ['report', 'admin', 'jasper']
@@ -345,7 +348,7 @@ export class MorePage implements OnInit {
     {
       title: 'Corporate Communication',
       group: 'Corporate',
-      url: 'http://apiitgroupcomm.sites.apiit.edu.my/',
+      url: 'http://apiitgroupcomm.sites.apiit.edu.my/', // no ticket
       img: 'assets/img/corcum.png',
       role: Role.Lecturer | Role.Admin,
       tags: []
@@ -361,7 +364,7 @@ export class MorePage implements OnInit {
     {
       title: 'Quality Procedure',
       group: 'Corporate',
-      url: 'http://kb.sites.apiit.edu.my/knowledge-base/quality-procedures-information-and-personal-data-protection/',
+      url: 'http://kb.sites.apiit.edu.my/knowledge-base/quality-procedures-information-and-personal-data-protection/', // no ticket
       img: 'assets/img/quality.png',
       role: Role.Lecturer | Role.Admin,
       tags: ['rules']
@@ -422,7 +425,7 @@ export class MorePage implements OnInit {
     {
       title: 'Intake Calendar',
       group: 'Academic & Enrollment',
-      url: 'http://www.apu.edu.my/study-apu/intake-calendar',
+      url: 'http://www.apu.edu.my/study-apu/intake-calendar', // no ticket
       img: 'assets/img/intake-calendar.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['intake date', 'intake duration', 'next intake']
@@ -438,9 +441,10 @@ export class MorePage implements OnInit {
     {
       title: 'Moodle (Course Material)',
       group: 'Academic & Enrollment',
-      url: 'https://lms2.apiit.edu.my/login/index.php',
+      url: 'https://lms2.apiit.edu.my/login/index.php', // with ticket
       img: 'assets/img/moodle.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
+      attachTicket: true,
       tags: ['material', 'modules', 'lecturer note', 'assignment']
     },
     {
@@ -486,7 +490,7 @@ export class MorePage implements OnInit {
     {
       title: 'Retake Modules, Resit & EC Fees',
       group: 'Academic & Enrollment',
-      url: 'https://cdn.webspace.apiit.edu.my/public/2020-01/Retake%20Module%20Resit%20%20EC%20Fees-2020.pdf',
+      url: 'https://cdn.webspace.apiit.edu.my/public/2020-01/Retake%20Module%20Resit%20%20EC%20Fees-2020.pdf', // no ticket
       img: 'assets/img/fees.svg',
       role: Role.Student,
       tags: []
@@ -500,7 +504,7 @@ export class MorePage implements OnInit {
     {
       title: 'Corporate Training Homepage',
       group: 'Career Centre & Corporate Training',
-      url: 'http://training.apiit.edu.my/',
+      url: 'http://training.apiit.edu.my/', // no ticket
       img: 'assets/img/training.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: []
@@ -508,7 +512,7 @@ export class MorePage implements OnInit {
     {
       title: 'APLink',
       group: 'Career Centre & Corporate Training',
-      url: 'https://apu-joblink-csm.symplicity.com/students/',
+      url: 'https://apu-joblink-csm.symplicity.com/students/', // no ticket
       img: 'assets/img/aplink.png',
       role: Role.Student,
       tags: []
@@ -516,7 +520,7 @@ export class MorePage implements OnInit {
     {
       title: 'APLink',
       group: 'Career Centre & Corporate Training',
-      url: 'https://apu-joblink-csm.symplicity.com/faculty/',
+      url: 'https://apu-joblink-csm.symplicity.com/faculty/', // no ticket
       img: 'assets/img/aplink.png',
       role: Role.Lecturer | Role.Admin,
       tags: []
@@ -629,13 +633,11 @@ export class MorePage implements OnInit {
   }
 
   /** Open page, manually check for third party pages. */
-  openPage(url: string) {
+  openPage(url: string, attachTicket: boolean) {
     // external pages does not use relative or absolute link
     if (url.startsWith('http://') || url.startsWith('https://')) {
       // Manually exclude sites that do not need service ticket
-      if (url.startsWith('https://outlook.office.com')
-        || url.startsWith('http://kb.sites.apiit.edu.my')
-        || url === 'https://graduation.sites.apiit.edu.my/') {
+      if (!attachTicket) {
         this.iab.create(url, '_system', 'location=true');
       } else {
         if (this.network.type !== 'none') {
