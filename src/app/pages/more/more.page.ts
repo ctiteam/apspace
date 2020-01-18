@@ -54,12 +54,20 @@ export class MorePage implements OnInit {
       tags: ['loan']
     },
     {
-      title: 'Scholarship & Loan (Malaysians Only)',
+      title: 'Scholarship & Loan (Malaysians)',
       group: 'Finance',
       url: 'http://www.apu.edu.my/study-apu/financing-your-study/education-study-loans', // No ticket
       img: 'assets/img/scholarship.png',
       role: Role.Student,
       tags: ['loan']
+    },
+    {
+      title: 'Retake Modules, Resit & EC Fees',
+      group: 'Finance',
+      url: 'http://kb.sites.apiit.edu.my/knowledge-base/retake-modules-resit-ec-fees/', // no ticket
+      img: 'assets/img/fees.svg',
+      role: Role.Student,
+      tags: []
     },
     // END OF FINANCE
 
@@ -236,14 +244,6 @@ export class MorePage implements OnInit {
       tags: []
     },
     {
-      title: 'Student ARC Homepage',
-      group: 'Campus Life',
-      url: 'https://www.studentaffairs.apu.edu.my/home/student-council/', // no ticket
-      img: 'assets/img/student_affairs.png',
-      role: Role.Student,
-      tags: []
-    },
-    {
       title: 'Student Handbook',
       group: 'Campus Life',
       img: 'assets/img/handbook.png',
@@ -296,7 +296,7 @@ export class MorePage implements OnInit {
       url: 'https://dingdong.apu.edu.my/login', // no ticket
       img: 'assets/img/dingdong.png',
       role: Role.Lecturer | Role.Admin,
-      tags: ['meesage', 'sms', 'email', 'push', 'notification', 'announce']
+      tags: ['message', 'sms', 'email', 'push', 'notification', 'announce']
     },
     {
       title: 'Exam Paper Scheduling',
@@ -486,14 +486,6 @@ export class MorePage implements OnInit {
       img: 'assets/img/timetable.png',
       role: Role.Lecturer | Role.Admin,
       tags: ['class', 'schedule', 'break']
-    },
-    {
-      title: 'Retake Modules, Resit & EC Fees',
-      group: 'Academic & Enrollment',
-      url: 'https://cdn.webspace.apiit.edu.my/public/2020-01/Retake%20Module%20Resit%20%20EC%20Fees-2020.pdf', // no ticket
-      img: 'assets/img/fees.svg',
-      role: Role.Student,
-      tags: []
     },
     // END OF Academic & Enrollment
 
