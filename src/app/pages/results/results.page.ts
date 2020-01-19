@@ -111,6 +111,7 @@ export class ResultsPage {
   }
 
   generateInterimPDF() {
+    this.presentLoading();
     return forkJoin([
       this.requestInterimST('UCFF1904CT'),
     ]).pipe(
@@ -124,17 +125,17 @@ export class ResultsPage {
           });
 
           if (response.startsWith('https://')) { // Only respond and do things if the response is a URL
-            return this.iab.create(response, '_system', 'location=true');
+            this.dismissLoading();
+            this.iab.create(response, '_system', 'location=true');
+            return;
           } else {
-            return this.presentToast('Oops! Unable to generate PDF', 3000);
+            this.dismissLoading();
+            this.presentToast('Oops! Unable to generate PDF', 3000);
+            return;
           }
         });
       })
-    ).subscribe(
-      {
-        complete: () => { }
-      }
-    );
+    ).subscribe();
   }
 
   requestInterimST(intakeCode: string) {
