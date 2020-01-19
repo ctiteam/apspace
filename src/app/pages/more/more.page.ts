@@ -27,129 +27,82 @@ export class MorePage implements OnInit {
 
   /* tslint:disable:no-bitwise */
   menuFull: MenuItem[] = [
+    // START OF FINANCE
     {
       title: 'APCard',
-      group: 'Main',
+      group: 'Finance',
       url: 'apcard',
       img: 'assets/img/apcard.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['transactions', 'money', 'card', 'credit', 'expenses']
     },
     {
-      title: 'Bus Shuttle Services',
-      group: 'Main',
-      url: 'bus-shuttle-services',
-      img: 'assets/img/bus-shuttle-services.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['bus', 'trips', 'schedule']
-    },
-    {
-      title: 'Forms & Application',
-      group: 'Main',
-      url: 'http://forms.sites.apiit.edu.my/home/',
-      img: 'assets/img/forms-and-applications.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['purchase', 'incident', 'maintenance', 'order', 'exit', 'event']
-    },
-    {
-      title: 'Holidays',
-      group: 'Main',
-      url: 'holidays',
-      img: 'assets/img/holidays.svg',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['vacation', 'break']
-    },
-    {
-      title: 'Human Resource',
-      group: 'Main',
-      url: 'hr',
-      img: 'assets/img/hr.png',
-      role: Role.Lecturer | Role.Admin,
-      tags: ['leave', 'break', 'mc']
-    },
-    {
-      title: 'Knowledge Base',
-      group: 'Main',
-      url: 'http://kb.sites.apiit.edu.my/home/',
-      img: 'assets/img/kb.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['articles', 'Q&A', 'FAQ', 'questions', 'answers', 'how to']
-    },
-    {
-      title: 'Mentorship',
-      group: 'Main',
-      url: 'mentorship',
-      img: 'assets/img/mentorship.png',
-      role: Role.Lecturer | Role.Admin,
-      tags: ['mentor', 'mentee', 'performance', 'attendance', 'results', 'my students']
-    },
-    {
-      title: 'News Feed',
-      group: 'Main',
-      url: 'news',
-      img: 'assets/img/news.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['events']
-    },
-    {
-      title: 'Profile',
-      group: 'Main',
-      url: 'profile',
-      img: 'assets/img/profile.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['mentor', 'programme leader', 'visa']
-    },
-    {
-      title: 'Webmail',
-      group: 'Main',
-      img: 'assets/img/webmail.png',
-      url: 'https://outlook.office.com/owa/?realm=mail.apu.edu.my',
-      role: Role.Student,
-      tags: ['mail', 'email']
-    },
-    {
-      title: 'APLC Progress Report',
-      group: 'Main',
-      url: 'aplc-progress-report',
-      img: 'assets/img/aplc-progress-report.png',
-      role: Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'Attendance',
-      group: 'Course Related',
-      url: 'attendance',
-      img: 'assets/img/attendance.png',
-      role: Role.Student,
-      tags: []
-    },
-    {
-      title: 'Course Schedule',
-      group: 'Course Related',
-      url: 'http://kb.sites.apiit.edu.my/knowledge-base/course-schedule/',
-      img: 'assets/img/course-schedule.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'Exam Schedule',
-      group: 'Course Related',
-      url: 'exam-schedule',
-      img: 'assets/img/exam-schedule.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
       title: 'Fees',
-      group: 'Course Related',
+      group: 'Finance',
       url: 'fees',
       img: 'assets/img/fees.svg',
       role: Role.Student,
       tags: ['payment', 'pricing', 'money', 'outstanding', 'overdue']
     },
     {
+      title: 'PTPTN',
+      group: 'Finance',
+      // tslint:disable-next-line: max-line-length
+      url: 'http://www.apu.edu.my/study-apu/financing-your-study/education-study-loans/national-higher-education-fund-perbadanan', // No ticket
+      img: 'assets/img/ptptn.png',
+      role: Role.Student,
+      tags: ['loan']
+    },
+    {
+      title: 'Scholarship & Loan (Malaysians)',
+      group: 'Finance',
+      url: 'http://www.apu.edu.my/study-apu/financing-your-study/education-study-loans', // No ticket
+      img: 'assets/img/scholarship.png',
+      role: Role.Student,
+      tags: ['loan']
+    },
+    {
+      title: 'Retake Modules, Resit & EC Fees',
+      group: 'Finance',
+      url: 'http://kb.sites.apiit.edu.my/knowledge-base/retake-modules-resit-ec-fees/', // no ticket
+      img: 'assets/img/fees.svg',
+      role: Role.Student,
+      tags: []
+    },
+    // END OF FINANCE
+
+
+
+
+    // START OF Collaboration & Information Resources
+    {
+      title: 'e-Forms (Forms & Applications)',
+      group: 'Collaboration & Information Resources',
+      url: 'http://forms.sites.apiit.edu.my/home/',
+      attachTicket: true,
+      img: 'assets/img/forms-and-applications.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['purchase', 'incident', 'maintenance', 'order', 'exit', 'event']
+    },
+    {
+      title: 'Feedback',
+      group: 'Collaboration & Information Resources',
+      url: 'feedback',
+      img: 'assets/img/feedback.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['apspace feedback', 'app not working', 'issue']
+    },
+    {
+      title: 'Help Center',
+      group: 'Collaboration & Information Resources',
+      url: 'https://apiit.atlassian.net/servicedesk/customer/portals', // No ticket
+      img: 'assets/img/help-center.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['issue', 'ticket', 'jira', 'help', 'ask', 'feature', 'question']
+    },
+    {
       title: 'iConsult',
-      group: 'Course Related',
+      group: 'Collaboration & Information Resources',
       img: 'assets/img/iconsult.png',
       url: 'iconsult/my-consultations',
       role: Role.Lecturer | Role.Admin,
@@ -157,47 +110,362 @@ export class MorePage implements OnInit {
     },
     {
       title: 'iConsult',
-      group: 'Course Related',
+      group: 'Collaboration & Information Resources',
       url: 'iconsult/my-appointments',
       img: 'assets/img/iconsult.png',
       role: Role.Student,
       tags: ['consultation', 'booking']
     },
     {
-      title: 'Moodle (Course Material)',
-      group: 'Course Related',
-      url: 'https://lms2.apiit.edu.my/login/index.php',
-      img: 'assets/img/moodle.png',
+      title: 'Knowledge Base',
+      group: 'Collaboration & Information Resources',
+      url: 'http://kb.sites.apiit.edu.my/home/', // no ticket
+      img: 'assets/img/kb.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['material', 'modules', 'lecturer note', 'assignment']
+      tags: ['articles', 'Q&A', 'FAQ', 'questions', 'answers', 'how to', 'kb']
+    },
+    // { To be added to moodle later on (not available now)
+    //   title: 'Lecturer Reference Kit',
+    //   group: 'Collaboration & Information Resources',
+    //   url: 'http://kb.sites.apiit.edu.my/home/',
+    //   img: 'assets/img/kb.png',
+    //   role: Role.Student | Role.Lecturer | Role.Admin,
+    //   tags: ['articles', 'Q&A', 'FAQ', 'questions', 'answers', 'how to']
+    // },
+    {
+      title: 'Library Homepage',
+      group: 'Collaboration & Information Resources',
+      url: 'https://library.apiit.edu.my/', // No Ticket
+      img: 'assets/img/library.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: []
     },
     {
       title: 'My Library',
-      group: 'Course Related',
+      group: 'Collaboration & Information Resources',
       url: 'http://opac.apiit.edu.my/cgi-bin/koha/opac-user.pl',
+      attachTicket: true,
       img: 'assets/img/my-library.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['book']
+      tags: ['book', 'articles', 'resource']
+    },
+    {
+      title: 'News Feed',
+      group: 'Collaboration & Information Resources',
+      url: 'news',
+      img: 'assets/img/news.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['events', 'slider']
+    },
+    {
+      title: 'Newsletters',
+      group: 'Collaboration & Information Resources',
+      url: 'https://library.sites.apiit.edu.my/newsletters/', // no ticket
+      img: 'assets/img/newsletter.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    {
+      title: 'Notification',
+      group: 'Collaboration & Information Resources',
+      url: 'notifications',
+      img: 'assets/img/notifications.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['messages']
+    },
+    {
+      title: 'Office 365',
+      group: 'Collaboration & Information Resources',
+      img: 'assets/img/webmail.png',
+      url: 'https://portal.office.com/', // no ticket
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['mail', 'email', 'teams', 'microsoft']
+    },
+    {
+      title: 'Regulations & Policies',
+      group: 'Collaboration & Information Resources',
+      img: 'assets/img/policies.png',
+      url: 'https://lms2.apiit.edu.my/course/view.php?id=750',  // no ticket
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['rules']
+    },
+    // END OF Collaboration & Information Resources
+
+
+
+
+    // START Campus Life
+    {
+      title: 'Bus Shuttle Services',
+      group: 'Campus Life',
+      url: 'bus-shuttle-services',
+      img: 'assets/img/bus-shuttle-services.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['bus', 'trips', 'schedule']
+    },
+    // {
+    //   title: 'Campus Map',
+    //   group: 'Campus Life',
+    //   img: 'assets/img/webmail.png',
+    //   url: '',
+    //   role: Role.Student | Role.Lecturer | Role.Admin,
+    //   tags: ['mail', 'email']
+    // },
+    {
+      title: 'Holidays',
+      group: 'Campus Life',
+      url: 'holidays',
+      img: 'assets/img/holidays.svg',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['vacation', 'break']
+    },
+    {
+      title: 'Operation Hours',
+      group: 'Campus Life',
+      url: 'operation-hours',
+      img: 'assets/img/operation-hours.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['opening hours', 'time', 'working hours']
+    },
+    {
+      title: 'Personal Counseling',
+      group: 'Campus Life',
+      url: 'http://kb.sites.apiit.edu.my/knowledge-base/personal-counseling/', // no ticket
+      img: 'assets/img/counseling.png',
+      role: Role.Student,
+      tags: ['issue', 'discuss', 'talk']
+    },
+    {
+      title: 'Student Affairs Homepage',
+      group: 'Campus Life',
+      url: 'https://www.studentaffairs.apu.edu.my/', // no ticket
+      img: 'assets/img/student_affairs.png',
+      role: Role.Student,
+      tags: []
+    },
+    {
+      title: 'Student Handbook',
+      group: 'Campus Life',
+      img: 'assets/img/handbook.png',
+      url: 'http://kb.sites.apiit.edu.my/knowledge-base/student-handbook/', // no ticket
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    {
+      title: 'Transport & Parking',
+      group: 'Campus Life',
+      url: 'http://kb.sites.apiit.edu.my/knowledge-base/category/students/campus-life/transportation/', // No ticket
+      img: 'assets/img/transport.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['lrt', 'rapid', 'kl']
+    },
+    // END Campus Life
+
+
+
+
+
+    // START OF Academic Operations
+    {
+      title: 'APLC Progress Report',
+      group: 'Academic Operation',
+      url: 'aplc-progress-report',
+      img: 'assets/img/aplc-progress-report.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['progression']
+    },
+    // {
+    //   title: 'APTime',
+    //   group: 'Academic Operation',
+    //   url: 'aplc-progress-report',
+    //   img: 'assets/img/aplc-progress-report.png',
+    //   role: Role.Student | Role.Lecturer | Role.Admin,
+    //   tags: []
+    // },
+    {
+      title: 'BeAPU',
+      group: 'Academic Operation',
+      url: 'beapu',
+      img: 'assets/img/beapu.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['report', 'attire', 'formal']
+    },
+    {
+      title: 'DingDong',
+      group: 'Academic Operation',
+      url: 'https://dingdong.apu.edu.my/login', // no ticket
+      img: 'assets/img/dingdong.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['message', 'sms', 'email', 'push', 'notification', 'announce']
+    },
+    {
+      title: 'Exam Paper Scheduling',
+      group: 'Academic Operation',
+      url: 'https://examscheduling.apu.edu.my/epaperschedule/login_page.asp', // no ticket
+      img: 'assets/img/exam-scheduling.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    {
+      title: 'Graduation Verification Service',
+      group: 'Academic Operation',
+      url: 'graduate-verification-service',
+      img: 'assets/img/graduate-verification-service.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    {
+      title: 'Mentorship',
+      group: 'Academic Operation',
+      url: 'mentorship',
+      img: 'assets/img/mentorship.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['mentor', 'mentee', 'performance', 'attendance', 'results', 'my students']
+    },
+    {
+      title: 'Monthly Returns',
+      group: 'Academic Operation',
+      url: 'https://monthlyreturns.apiit.edu.my', // no tickets
+      img: 'assets/img/monthly-returns.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: []
     },
     {
       title: 'My Reports Panel',
-      group: 'Course Related',
+      group: 'Academic Operation',
       url: 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check',
+      attachTicket: true,
       img: 'assets/img/reports.png',
       role: Role.Lecturer | Role.Admin,
       tags: ['report', 'admin', 'jasper']
     },
+    // END OF Academic Operations
+
+
+
+
+    // START OF Corporate
+    {
+      title: 'Corporate Communication',
+      group: 'Corporate',
+      url: 'http://apiitgroupcomm.sites.apiit.edu.my/', // no ticket
+      img: 'assets/img/corcum.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    {
+      title: 'Human Resource',
+      group: 'Corporate',
+      url: 'hr',
+      img: 'assets/img/hr.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['leave', 'break', 'mc']
+    },
+    {
+      title: 'Quality Procedure',
+      group: 'Corporate',
+      url: 'http://kb.sites.apiit.edu.my/knowledge-base/quality-procedures-information-and-personal-data-protection/', // no ticket
+      img: 'assets/img/quality.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['rules']
+    },
+    // {
+    //   title: 'Report an Exception',
+    //   group: 'Corporate',
+    //   url: 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check',
+    //   img: 'assets/img/reports.png',
+    //   role: Role.Lecturer | Role.Admin,
+    //   tags: ['report', 'admin', 'jasper']
+    // },
+    // END OF Corporate
+
+
+
+    // START OF Academic & Enrollment
+    {
+      title: 'Attendance',
+      group: 'Academic & Enrollment',
+      url: 'attendance',
+      img: 'assets/img/attendance.png',
+      role: Role.Student,
+      tags: []
+    },
+    // {
+    //   title: 'Course Progression Pathway',
+    //   group: 'Academic & Enrollment',
+    //   url: 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check',
+    //   img: 'assets/img/reports.png',
+    //   role: Role.Student | Role.Lecturer | Role.Admin,
+    //   tags: ['report', 'admin', 'jasper']
+    // },
+    {
+      title: 'Course Schedule',
+      group: 'Academic & Enrollment',
+      url: 'http://kb.sites.apiit.edu.my/knowledge-base/course-schedule/',
+      img: 'assets/img/course-schedule.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    {
+      title: 'Exam Schedule',
+      group: 'Academic & Enrollment',
+      url: 'exam-schedule',
+      img: 'assets/img/exam-schedule.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    {
+      title: 'FYP Bank Homepage',
+      group: 'Academic & Enrollment',
+      url: 'https://fypbank.apiit.edu.my/', // no ticket
+      img: 'assets/img/fyp.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['fyp', 'bank', 'final project', 'project']
+    },
+    {
+      title: 'Intake Calendar',
+      group: 'Academic & Enrollment',
+      url: 'http://www.apu.edu.my/study-apu/intake-calendar', // no ticket
+      img: 'assets/img/intake-calendar.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['intake date', 'intake duration', 'next intake']
+    },
+    // {
+    //   title: 'Module Appraisal',
+    //   group: 'Academic & Enrollment',
+    //   url: 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check',
+    //   img: 'assets/img/reports.png',
+    //   role: Role.Student | Role.Lecturer | Role.Admin,
+    //   tags: ['report', 'admin', 'jasper']
+    // },
+    {
+      title: 'Moodle (Course Material)',
+      group: 'Academic & Enrollment',
+      url: 'https://lms2.apiit.edu.my/login/index.php', // with ticket
+      img: 'assets/img/moodle.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      attachTicket: true,
+      tags: ['material', 'modules', 'lecturer note', 'assignment']
+    },
     {
       title: 'My Timetable',
-      group: 'Course Related',
+      group: 'Academic & Enrollment',
       url: 'lecturer-timetable',
       img: 'assets/img/timetable.png',
       role: Role.Lecturer,
       tags: ['class', 'schedule']
     },
     {
+      title: 'PGD Bank Homepage',
+      group: 'Academic & Enrollment',
+      url: 'https://pgd.apiit.edu.my/', // no ticket
+      img: 'assets/img/fyp.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['fyp', 'bank', 'final project', 'project']
+    },
+    {
       title: 'Results',
-      group: 'Course Related',
+      group: 'Academic & Enrollment',
       url: 'results',
       img: 'assets/img/results.png',
       role: Role.Student,
@@ -205,7 +473,7 @@ export class MorePage implements OnInit {
     },
     {
       title: 'Timetable',
-      group: 'Course Related',
+      group: 'Academic & Enrollment',
       url: 'student-timetable',
       img: 'assets/img/timetable.png',
       role: Role.Student,
@@ -213,20 +481,72 @@ export class MorePage implements OnInit {
     },
     {
       title: 'Student Timetable',
-      group: 'Course Related',
+      group: 'Academic & Enrollment',
       url: 'student-timetable',
       img: 'assets/img/timetable.png',
       role: Role.Lecturer | Role.Admin,
-      tags: ['class', 'schedule']
+      tags: ['class', 'schedule', 'break']
     },
     {
-      title: 'BeAPU',
-      group: 'Others',
-      url: 'beapu',
-      img: 'assets/img/beapu.png',
+      title: 'Web Attendance (Legacy)',
+      group: 'Academic & Enrollment',
+      url: 'https://titan.apiit.edu.my/gims/attendance/default.asp?CAMPUS=TPM',
+      img: 'assets/img/web-attendance.png',
       role: Role.Lecturer | Role.Admin,
-      tags: ['report', 'attire', 'formal']
+      tags: ['mark', 'students attendance', 'update']
     },
+    // END OF Academic & Enrollment
+
+
+
+
+    // START OF Career Centre & Corporate Training
+    {
+      title: 'Corporate Training Homepage',
+      group: 'Career Centre & Corporate Training',
+      url: 'http://training.apiit.edu.my/', // no ticket
+      img: 'assets/img/training.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    {
+      title: 'APLink',
+      group: 'Career Centre & Corporate Training',
+      url: 'https://apu-joblink-csm.symplicity.com/students/', // no ticket
+      img: 'assets/img/aplink.png',
+      role: Role.Student,
+      tags: []
+    },
+    {
+      title: 'APLink',
+      group: 'Career Centre & Corporate Training',
+      url: 'https://apu-joblink-csm.symplicity.com/faculty/', // no ticket
+      img: 'assets/img/aplink.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    {
+      title: 'Career Centre Facebook',
+      group: 'Career Centre & Corporate Training',
+      url: 'https://www.facebook.com/apucc?ref=hl', // no ticket
+      img: 'assets/img/career.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    // END OF Career Centre & Corporate Training
+
+
+
+
+    // START OF OTHERS
+    // { To be added
+    //   title: 'About',
+    //   group: 'Others',
+    //   url: 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check',
+    //   img: 'assets/img/reports.png',
+    //   role: Role.Student | Role.Lecturer | Role.Admin,
+    //   tags: ['report', 'admin', 'jasper']
+    // },
     {
       title: 'Classroom Finder',
       group: 'Others',
@@ -236,20 +556,20 @@ export class MorePage implements OnInit {
       tags: ['empty', 'class', 'lab', 'auditorium', 'workshop', 'room']
     },
     {
-      title: 'Graduate Verification Service',
+      title: 'Profile',
       group: 'Others',
-      url: 'graduate-verification-service',
-      img: 'assets/img/graduate-verification-service.png',
+      url: 'profile',
+      img: 'assets/img/profile.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
+      tags: ['mentor', 'programme leader', 'visa']
     },
     {
-      title: 'Operation Hours',
+      title: 'Settings',
       group: 'Others',
-      url: 'operation-hours',
-      img: 'assets/img/operation-hours.png',
+      url: 'settings',
+      img: 'assets/img/settings.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['opening hours', 'time', 'working hours']
+      tags: []
     },
     {
       title: 'Staff Directory',
@@ -259,6 +579,7 @@ export class MorePage implements OnInit {
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['lecturer', 'academic', 'teacher']
     },
+
     {
       title: 'Track Student Visa Status',
       group: 'Others',
@@ -268,45 +589,28 @@ export class MorePage implements OnInit {
       tags: ['visa']
     },
     {
-      title: 'Upcoming Graduation',
-      group: 'Others',
-      url: 'https://graduation.sites.apiit.edu.my/',
-      img: 'assets/img/upcoming-graduations.png',
-      role: Role.Student,
-      tags: ['graduation', 'cermony']
-    },
-    {
-      title: 'Feedback',
-      group: 'App Related',
-      url: 'feedback',
-      img: 'assets/img/feedback.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'Notification',
-      group: 'App Related',
-      url: 'notifications',
-      img: 'assets/img/notifications.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['messages']
-    },
-    {
-      title: 'Settings',
-      group: 'App Related',
-      url: 'settings',
-      img: 'assets/img/settings.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
       title: 'Logout',
-      group: 'App Related',
+      group: 'Others',
       url: 'logout',
       img: 'assets/img/logout.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['exit', 'log out', 'log-out']
+      tags: ['exit', 'log out', 'log-out', 'sign out', 'sign-out']
     },
+    // END OF OTHERS
+
+
+
+
+    // START OF UNGROUPED
+    // {
+    //   title: 'Upcoming Graduation',
+    //   group: 'UNGROUPED',
+    //   url: 'https://graduation.sites.apiit.edu.my/',
+    //   img: 'assets/img/upcoming-graduations.png',
+    //   role: Role.Student,
+    //   tags: ['graduation', 'cermony']
+    // },
+    // END OF UNGROUPED
   ];
   /* tslint:enable:no-bitwise */
 
@@ -329,13 +633,11 @@ export class MorePage implements OnInit {
   }
 
   /** Open page, manually check for third party pages. */
-  openPage(url: string) {
+  openPage(url: string, attachTicket = false) {
     // external pages does not use relative or absolute link
     if (url.startsWith('http://') || url.startsWith('https://')) {
       // Manually exclude sites that do not need service ticket
-      if (url.startsWith('https://outlook.office.com')
-        || url.startsWith('http://kb.sites.apiit.edu.my')
-        || url === 'https://graduation.sites.apiit.edu.my/') {
+      if (!attachTicket) {
         this.iab.create(url, '_system', 'location=true');
       } else {
         if (this.network.type !== 'none') {
