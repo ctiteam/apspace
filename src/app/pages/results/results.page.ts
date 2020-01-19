@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
-import { ActionSheetController, NavController } from '@ionic/angular';
+import { ActionSheetController, LoadingController, NavController, ToastController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 
 import { Observable, forkJoin } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NavigationExtras } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import {
   ClassificationLegend, Course, CourseDetails, DeterminationLegend,
   InterimLegend, MPULegend, StudentPhoto, StudentProfile, Subcourse
 } from '../../interfaces';
-import { WsApiService } from '../../services';
+import { CasTicketService, WsApiService } from '../../services';
 
 @Component({
   selector: 'app-results',
@@ -27,6 +29,7 @@ export class ResultsPage {
   classificationLegend$: Observable<ClassificationLegend[]>;
   studentProfile: StudentProfile;
   photo$: Observable<StudentPhoto>;
+  loading: HTMLIonLoadingElement;
 
   type = 'bar';
   data: any;
@@ -53,8 +56,13 @@ export class ResultsPage {
 
   constructor(
     private ws: WsApiService,
+    private http: HttpClient,
     private actionSheetCtrl: ActionSheetController,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController,
+    private cas: CasTicketService,
+    private iab: InAppBrowser
   ) { }
 
   ionViewDidEnter() {
@@ -85,7 +93,6 @@ export class ResultsPage {
     });
   }
 
-
   showActionSheet() {
     const intakesButton = this.intakeLabels.map(intake => {
       return {
@@ -101,6 +108,91 @@ export class ResultsPage {
     }).then(
       actionSheet => actionSheet.present()
     );
+  }
+
+  generateInterimPDF() {
+    this.presentLoading();
+    return forkJoin([
+      this.requestInterimST('UCFF1904CT'),
+    ]).pipe(
+      map(([serviceTickets]) => {
+        const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
+        // tslint:disable-next-line: max-line-length
+        return this.http.post<any>('https://api.apiit.edu.my/interim-transcript/index.php', serviceTickets, { headers, responseType: 'text' as 'json' }).subscribe((response: string) => {
+          if (response.startsWith('https://')) { // Only respond and do things if the response is a URl
+            this.iab.create(response, '_system', 'location=true');
+          } else {
+            return this.presentToast('Oops! Unable to generate PDF', 3000);
+          }
+        });
+      })
+    ).subscribe(
+      {
+        complete: () => {
+          this.dismissLoading();
+        }
+      }
+    );
+  }
+
+  requestInterimST(intakeCode: string) {
+    return forkJoin([
+      this.cas.getST('https://api.apiit.edu.my/student/courses'),
+      this.cas.getST('https://api.apiit.edu.my/student/subcourses'),
+      this.cas.getST('https://api.apiit.edu.my/student/interim_legend'),
+      this.cas.getST('https://api.apiit.edu.my/student/sub_and_course_details'),
+      this.cas.getST('https://api.apiit.edu.my/student/profile'),
+      this.cas.getST('https://api.apiit.edu.my/student/mpu_legend'),
+      this.cas.getST('https://api.apiit.edu.my/student/classification_legend'),
+      this.cas.getST('https://api.apiit.edu.my/student/su_legend'),
+      this.cas.getST('https://api.apiit.edu.my/student/determination_legend')
+    ]).pipe(
+      // tslint:disable-next-line: variable-name && tslint:disable-next-line: max-line-length
+      map(([coursesST, subcoursesST, interim_legendST, sub_and_course_detailsST, profileST, mpu_legendST, classification_legendST, su_legendST, determination_legendST]) => {
+        const payload = {
+          intake: intakeCode,
+          tickets: {
+            courses: coursesST,
+            subcourses: subcoursesST,
+            interim_legend: interim_legendST,
+            sub_and_course_details: sub_and_course_detailsST,
+            profile: profileST,
+            mpu_legend: mpu_legendST,
+            classification_legend: classification_legendST,
+            su_legend: su_legendST,
+            determination_legend: determination_legendST,
+          }
+        };
+
+        return payload;
+      })
+    );
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
+  }
+
+  async presentToast(msg: string, duration: number) {
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      duration,
+      color: 'medium',
+      position: 'top',
+      showCloseButton: true
+    });
+
+    toast.present();
   }
 
   getResults(
