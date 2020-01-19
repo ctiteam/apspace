@@ -111,7 +111,7 @@ export class ResultsPage {
   }
 
   generateInterimPDF() {
-    this.presentLoading();
+    this.presentToast('It might take some time...', 3000);
     return forkJoin([
       this.requestInterimST('UCFF1904CT'),
     ]).pipe(
@@ -119,7 +119,7 @@ export class ResultsPage {
         const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
         // tslint:disable-next-line: max-line-length
         return this.http.post<any>('https://api.apiit.edu.my/interim-transcript/index.php', serviceTickets, { headers, responseType: 'text' as 'json' }).subscribe((response: string) => {
-          if (response.startsWith('https://')) { // Only respond and do things if the response is a URl
+          if (response.startsWith('https://')) { // Only respond and do things if the response is a URL
             this.iab.create(response, '_system', 'location=true');
           } else {
             return this.presentToast('Oops! Unable to generate PDF', 3000);
@@ -128,24 +128,24 @@ export class ResultsPage {
       })
     ).subscribe(
       {
-        complete: () => {
-          this.dismissLoading();
-        }
+        complete: () => { }
       }
     );
   }
 
   requestInterimST(intakeCode: string) {
+    const api = 'https://api.apiit.edu.my';
+
     return forkJoin([
-      this.cas.getST('https://api.apiit.edu.my/student/courses'),
-      this.cas.getST('https://api.apiit.edu.my/student/subcourses'),
-      this.cas.getST('https://api.apiit.edu.my/student/interim_legend'),
-      this.cas.getST('https://api.apiit.edu.my/student/sub_and_course_details'),
-      this.cas.getST('https://api.apiit.edu.my/student/profile'),
-      this.cas.getST('https://api.apiit.edu.my/student/mpu_legend'),
-      this.cas.getST('https://api.apiit.edu.my/student/classification_legend'),
-      this.cas.getST('https://api.apiit.edu.my/student/su_legend'),
-      this.cas.getST('https://api.apiit.edu.my/student/determination_legend')
+      this.cas.getST(api + '/student/courses'),
+      this.cas.getST(api + '/student/subcourses'),
+      this.cas.getST(api + '/student/interim_legend'),
+      this.cas.getST(api + '/student/sub_and_course_details'),
+      this.cas.getST(api + '/student/profile'),
+      this.cas.getST(api + '/student/mpu_legend'),
+      this.cas.getST(api + '/student/classification_legend'),
+      this.cas.getST(api + '/student/su_legend'),
+      this.cas.getST(api + '/student/determination_legend')
     ]).pipe(
       // tslint:disable-next-line: variable-name && tslint:disable-next-line: max-line-length
       map(([coursesST, subcoursesST, interim_legendST, sub_and_course_detailsST, profileST, mpu_legendST, classification_legendST, su_legendST, determination_legendST]) => {
