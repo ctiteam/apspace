@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -41,7 +42,7 @@ export class HrPage implements OnInit {
   //   centeredContent: true,
   //   spaceBetween: 8
   // };
-  constructor(private ws: WsApiService) { }
+  constructor(private ws: WsApiService, private iab: InAppBrowser) { }
 
   ngOnInit() {
     // commented until the backend is fixed
@@ -174,5 +175,9 @@ export class HrPage implements OnInit {
       return 0;
     }
     );
+  }
+
+  openHrSystem() {
+    this.iab.create('https://hr.apiit.edu.my', '_system', 'location=true');
   }
 }
