@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { ActionSheetController, LoadingController, NavController, ToastController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 
-import { Observable, forkJoin } from 'rxjs';
-import { finalize, map, tap } from 'rxjs/operators';
+import { NEVER, Observable, forkJoin } from 'rxjs';
+import { catchError, finalize, map, tap } from 'rxjs/operators';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NavigationExtras } from '@angular/router';
@@ -56,13 +56,13 @@ export class ResultsPage {
 
   constructor(
     private ws: WsApiService,
+    private cas: CasTicketService,
     private http: HttpClient,
+    private iab: InAppBrowser,
     private actionSheetCtrl: ActionSheetController,
     private navCtrl: NavController,
     private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController,
-    private cas: CasTicketService,
-    private iab: InAppBrowser
+    private loadingCtrl: LoadingController
   ) { }
 
   ionViewDidEnter() {
@@ -111,7 +111,6 @@ export class ResultsPage {
   }
 
   generateInterimPDF() {
-    this.presentToast('It might take some time...', 3000);
     return forkJoin([
       this.requestInterimST('UCFF1904CT'),
     ]).pipe(
@@ -119,8 +118,13 @@ export class ResultsPage {
         const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
         // tslint:disable-next-line: max-line-length
         return this.http.post<any>('https://api.apiit.edu.my/interim-transcript/index.php', serviceTickets, { headers, responseType: 'text' as 'json' }).subscribe((response: string) => {
+          catchError(err => {
+            this.presentToast('Failed to generate: ' + err.message, 3000);
+            return NEVER;
+          });
+
           if (response.startsWith('https://')) { // Only respond and do things if the response is a URL
-            this.iab.create(response, '_system', 'location=true');
+            return this.iab.create(response, '_system', 'location=true');
           } else {
             return this.presentToast('Oops! Unable to generate PDF', 3000);
           }
