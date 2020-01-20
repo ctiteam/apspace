@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {
   ActionSheetController, AlertController, LoadingController, MenuController, ModalController, NavController,
   Platform, PopoverController, ToastController
@@ -48,7 +47,6 @@ export class AppComponent {
     private popoverCtrl: PopoverController,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    private statusBar: StatusBar
   ) {
     this.getUserSettings();
     this.versionService.checkForUpdate().subscribe();
@@ -62,8 +60,8 @@ export class AppComponent {
       // }
 
       // FOR TESTING PURPOSE
-      this.statusBar.backgroundColorByHexString('#000000');
-      this.statusBar.backgroundColorByName('black');
+      // this.statusBar.backgroundColorByHexString('#000000');
+      // this.statusBar.backgroundColorByName('black');
 
       platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
         this.shake.startWatch(40).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
