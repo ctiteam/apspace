@@ -135,9 +135,9 @@ class Particle {
 export class FireworksComponent implements AfterViewInit {
   PARTICLES_PER_FIREWORK = 100; // 100 - 400 or try 1000
   FIREWORK_CHANCE = 0.1; // percentage, set to 0 and click instead
-  BASE_PARTICLE_SPEED = 1; // between 0-4, controls the size of the overall fireworks
+  BASE_PARTICLE_SPEED = 2; // between 0-4, controls the size of the overall fireworks
   FIREWORK_LIFESPAN = 200; // ms
-  PARTICLE_INITIAL_SPEED = 6; // 2-8
+  PARTICLE_INITIAL_SPEED = 2; // 2-8
 
   // not so fun options =\
   GRAVITY = 2.8;
@@ -211,7 +211,7 @@ export class FireworksComponent implements AfterViewInit {
       }
     });
 
-    this.requestId = requestAnimationFrame(this.loop);
+    this.requestId = window.requestAnimationFrame(this.loop);
   }
 
   createFirework(
@@ -269,14 +269,14 @@ export class FireworksComponent implements AfterViewInit {
 
   terminateFireworksWithTimer() {
     this.timeoutHandler = window.setTimeout(() => {
-      cancelAnimationFrame(this.requestId);
+      window.cancelAnimationFrame(this.requestId);
       this.hideFireworks = true;
     }, 5000);
   }
 
   terminateFireworks() {
     window.clearTimeout(this.timeoutHandler);
-    cancelAnimationFrame(this.requestId);
+    window.cancelAnimationFrame(this.requestId);
     this.hideFireworks = true;
   }
 }
