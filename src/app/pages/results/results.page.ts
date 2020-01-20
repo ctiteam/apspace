@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActionSheetController, LoadingController, NavController, ToastController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 
-import { NEVER, Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -113,7 +113,7 @@ export class ResultsPage {
   generateInterimPDF() {
     this.presentLoading();
     return forkJoin([
-      this.requestInterimST('UCFF1904CT'),
+      this.requestInterimST(this.selectedIntake),
     ]).pipe(
       map(([serviceTickets]) => {
         const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
@@ -121,7 +121,7 @@ export class ResultsPage {
         return this.http.post<any>('https://api.apiit.edu.my/interim-transcript/index.php', serviceTickets, { headers, responseType: 'text' as 'json' }).subscribe((response: string) => {
           catchError(err => {
             this.presentToast('Failed to generate: ' + err.message, 3000);
-            return NEVER;
+            return err;
           });
 
           if (response.startsWith('https://')) { // Only respond and do things if the response is a URL
