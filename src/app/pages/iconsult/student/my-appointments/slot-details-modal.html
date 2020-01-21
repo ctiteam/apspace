@@ -1,5 +1,5 @@
 <ion-header no-border>
-  <ion-toolbar>
+  <ion-toolbar mode="md">
     <ion-title>Booking Details</ion-title>
     <ion-buttons slot="start">
       <ion-button outline small (click)="dismiss()">
@@ -15,7 +15,7 @@
       <ion-card-content class="ion-no-padding">
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="person" slot="start"></ion-icon>
-          <ion-label>
+          <ion-label class="ion-text-wrap">
             <p class="tertiary-txt-color">Staff Name:</p>
             <h4 class="main-text-color">{{ booking.staff_detail.FULLNAME }}</h4>
           </ion-label>
@@ -58,14 +58,14 @@
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="help-circle" slot="start"></ion-icon>
-          <ion-label>
+          <ion-label class="ion-text-wrap">
             <p class="tertiary-txt-color">Appointment Reason</p>
             <h4 class="main-text-color">{{ booking.reason }}</h4>
           </ion-label>
         </ion-item>
         <ion-item *ngIf="booking.additional_note">
           <ion-icon class="tertiary-txt-color" name="bookmark" slot="start"></ion-icon>
-          <ion-label>
+          <ion-label class="ion-text-wrap">
             <p class="tertiary-txt-color">Note</p>
             <h4 class="main-text-color">{{ booking.additional_note }}</h4>
           </ion-label>
@@ -76,7 +76,7 @@
             <ion-icon class="tertiary-txt-color" name="clipboard" slot="start"></ion-icon>
           </ng-template>
 
-          <ion-label>
+          <ion-label class="ion-text-wrap">
             <span *ngIf="!(booking.status === 'Passed'); else consultationRemarks">
               <p class="danger-text">Cancellation Reason</p>
             </span>
