@@ -202,6 +202,18 @@ const routes: Routes = [
       .then(m => m.ChangePasswordPageModule)
   },
   {
+    path: 'change-webspace-password',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/settings/change-webspace-password/change-webspace-password.module')
+      .then( m => m.ChangeWebspacePasswordPageModule)
+  },
+  {
+    path: 'reset-webspace-password',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/settings/reset-webspace-password/reset-webspace-password.module')
+      .then( m => m.ResetWebspacePasswordPageModule)
+  },
+  {
     path: 'visa-status',
     canActivate: [AuthGuard],
     data: { role: Role.Admin | Role.Student },
