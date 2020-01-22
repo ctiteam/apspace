@@ -187,7 +187,7 @@
                               <ion-col>
                                 <ion-item lines="none" class="item-box-shadow">
                                   <ion-label>Completing Assignments</ion-label>
-                                  <ion-select [(ngModel)]="studentBehavior.COMPLETING_BEH">
+                                  <ion-select [(ngModel)]="studentBehavior.COMPLETING_BEH" interface="popover">
                                     <ion-select-option *ngFor="let score of scores" [value]="score">
                                       {{score}}
                                     </ion-select-option>
@@ -195,7 +195,7 @@
                                 </ion-item>
                                 <ion-item lines="none" class="item-box-shadow">
                                   <ion-label>Academic Behaviour</ion-label>
-                                  <ion-select [(ngModel)]="studentBehavior.ACADEMIC_BEH">
+                                  <ion-select [(ngModel)]="studentBehavior.ACADEMIC_BEH" interface="popover">
                                     <ion-select-option *ngFor="let score of scores" [value]="score">
                                       {{score}}
                                     </ion-select-option>
@@ -203,7 +203,7 @@
                                 </ion-item>
                                 <ion-item lines="none" class="item-box-shadow">
                                   <ion-label>Understanding Key Concepts</ion-label>
-                                  <ion-select [(ngModel)]="studentBehavior.CONCEPT_BEH">
+                                  <ion-select [(ngModel)]="studentBehavior.CONCEPT_BEH" interface="popover">
                                     <ion-select-option *ngFor="let score of scores" [value]="score">
                                       {{score}}
                                     </ion-select-option>
@@ -211,7 +211,7 @@
                                 </ion-item>
                                 <ion-item class="item-box-shadow" lines="none">
                                   <ion-label>Social Behaviour</ion-label>
-                                  <ion-select [(ngModel)]="studentBehavior.SOCIAL_BEH">
+                                  <ion-select [(ngModel)]="studentBehavior.SOCIAL_BEH" interface="popover">
                                     <ion-select-option *ngFor="let score of scores" [value]="score">
                                       {{score}}
                                     </ion-select-option>
