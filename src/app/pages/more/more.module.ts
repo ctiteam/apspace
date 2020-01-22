@@ -3,12 +3,13 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-
 import { IonicModule } from '@ionic/angular';
-
 import { SharedPipesModule } from '../../shared/shared-pipes.module';
 import { ByGroupPipe } from './by-group.pipe';
+import { ItemInFavPipe } from './item-in-fav.pipe';
 import { MorePage } from './more.page';
+
+
 
 const routes: Routes = [
   {
@@ -28,6 +29,6 @@ const routes: Routes = [
   providers: [
     InAppBrowser
   ],
-  declarations: [MorePage, ByGroupPipe]
+  declarations: [MorePage, ByGroupPipe, ItemInFavPipe]
 })
 export class MorePageModule { }
