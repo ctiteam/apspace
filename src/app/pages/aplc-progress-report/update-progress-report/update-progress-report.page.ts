@@ -11,6 +11,7 @@ import { WsApiService } from 'src/app/services';
   styleUrls: ['./update-progress-report.page.scss'],
 })
 export class UpdateProgressReportPage implements OnInit {
+  remarksLimit = 200;
   subjects$: Observable<APLCSubject[]>;
   classes$: Observable<APLCClass[]>;
   scoreLegend$: Observable<any>; // Keys are dynamic

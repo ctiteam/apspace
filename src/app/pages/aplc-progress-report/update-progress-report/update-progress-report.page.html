@@ -225,6 +225,11 @@
                           <small class="d-md-none text-bold mt-3">Remarks:</small>
                           <ion-textarea class="form-input" rows="5" placeholder="Remarks"
                             [(ngModel)]="studentBehavior.REMARK">
+                            <p class="ion-text-right"
+                              [class.success-text]="remarksLimit >= studentBehavior.REMARK.length"
+                              [class.danger-text]="remarksLimit < studentBehavior.REMARK.length">
+                              {{studentBehavior.REMARK.length}}/<span class="text-bold">{{remarksLimit}}</span>
+                            </p>
                           </ion-textarea>
                         </ion-col>
                       </ion-row>
@@ -247,8 +252,8 @@
                       There is no students added under the class code {{classCode}}
                     </h6>
                   </div>
-              </ion-col>
-            </ion-row>
+                </ion-col>
+              </ion-row>
             </ng-template>
           </ion-grid>
         </ion-card-content>
