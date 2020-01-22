@@ -22,7 +22,7 @@
       <ion-card-content class="ion-no-padding">
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="person" slot="start"></ion-icon>
-          <ion-label>
+          <ion-label class="ion-text-wrap">
             <p class="tertiary-txt-color">Student Name - ID:</p>
             <h4 class="main-text-color">
               {{slot.booking_detail.student_name + '-' + slot.booking_detail.student_sam_account_name}}</h4>
@@ -73,14 +73,14 @@
         </ion-item>
         <ion-item>
           <ion-icon class="tertiary-txt-color" name="help-circle" slot="start"></ion-icon>
-          <ion-label>
+          <ion-label class="ion-text-wrap">
             <p class="tertiary-txt-color">Appointment Reason:</p>
             <h4 class="main-text-color">{{ slot.booking_detail.reason }}</h4>
           </ion-label>
         </ion-item>
         <ion-item *ngIf="slot.booking_detail.additional_note">
           <ion-icon class="tertiary-txt-color" name="bookmark" slot="start"></ion-icon>
-          <ion-label>
+          <ion-label class="ion-text-wrap">
             <p class="tertiary-txt-color">Additional Note:</p>
             <h4 class="main-text-color">{{ slot.booking_detail.additional_note }}</h4>
           </ion-label>

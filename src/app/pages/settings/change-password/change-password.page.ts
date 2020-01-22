@@ -137,7 +137,7 @@ export class ChangePasswordPage implements OnInit {
               this.changePasswordService.changePassword(this.changePasswordForm.value)
                 .subscribe({
                   next: _ => {
-                    this.presentToast('Your passowrd has been changed. Please log in again', 'success');
+                    this.presentToast('Your password has been changed. Please log in again', 'success');
                     this.router.navigate(['/logout']);
                   },
                   error: _ => {
