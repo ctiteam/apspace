@@ -225,7 +225,7 @@
                           <small class="d-md-none text-bold mt-3">Remarks:</small>
                           <ion-textarea class="form-input" rows="5" placeholder="Remarks"
                             [(ngModel)]="studentBehavior.REMARK">
-                            <p class="ion-text-right"
+                            <p class="ion-text-right" *ngIf="studentBehavior.REMARK"
                               [class.success-text]="remarksLimit >= studentBehavior.REMARK.length"
                               [class.danger-text]="remarksLimit < studentBehavior.REMARK.length">
                               {{studentBehavior.REMARK.length}}/<span class="text-bold">{{remarksLimit}}</span>
