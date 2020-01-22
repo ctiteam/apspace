@@ -102,7 +102,7 @@ export class ResetWebspacePasswordPage implements OnInit {
               error: (err) => {
                 this.dismissLoading();
                 // tslint:disable-next-line: max-line-length
-                this.presentToast(err.error.msg.replace('Error: ', '') + ' Please try again or contact us via the feedback page', 'danger');
+                this.presentToast(err.error.error, 'danger');
               },
               complete: () => this.dismissLoading()
             });
