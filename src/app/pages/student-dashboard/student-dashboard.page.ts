@@ -333,7 +333,11 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       component: ShakespearModalPage,
       cssClass: 'controlled-modal',
       componentProps: {
+<<<<<<< HEAD
         imagePath: 'https://i.imgur.com/CUi8Na8.jpg'
+=======
+        imagePath: 'https://i.imgur.com/GGeAbyD.jpg'
+>>>>>>> chore: borrowing student dashboard
       }
     });
 
