@@ -79,7 +79,7 @@ export class UpdateProgressReportPage implements OnInit {
   }
 
 
-  submit(studentBehaviors: any[]) {
+  submit(studentBehaviors: APLCStudentBehaviour[]) {
     this.alertCtrl.create({
       header: 'Confirm!',
       subHeader: 'You are about to update the students\' behaviors. Do you want to continue?',
@@ -92,23 +92,45 @@ export class UpdateProgressReportPage implements OnInit {
           text: 'Yes',
           handler: () => {
             // START THE LOADING
+            let formValidFalg = true;
             this.presentLoading();
-            this.ws.put<any>('/aplc/student-behavior', {
-              body: studentBehaviors
-            }).subscribe(
-              {
-                next: _ => {
-                  this.showToastMessage('Student behaviors has been updated successfully!', 'success');
-                },
-                error: _ => {
-                  this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
-                },
-                complete: () => {
-                  this.dismissLoading();
-                  this.initData();
-                }
+            console.log(studentBehaviors);
+            studentBehaviors.forEach(studentBehavior => {
+              if (
+                (studentBehavior.COMPLETING_BEH === 0 ||
+                studentBehavior.CONCEPT_BEH === 0 ||
+                studentBehavior.SOCIAL_BEH === 0 ||
+                studentBehavior.ACADEMIC_BEH === 0) && (
+                  studentBehavior.COMPLETING_BEH !== 0 ||
+                studentBehavior.CONCEPT_BEH !== 0 ||
+                studentBehavior.SOCIAL_BEH !== 0 ||
+                studentBehavior.ACADEMIC_BEH !== 0
+                ) // user submitted part of a student behavior only
+              ) {
+                formValidFalg = false;
               }
-            );
+            });
+            if (formValidFalg) {
+              this.ws.put<any>('/aplc/student-behavior', {
+                body: studentBehaviors
+              }).subscribe(
+                {
+                  next: _ => {
+                    this.showToastMessage('Student behaviors has been updated successfully!', 'success');
+                  },
+                  error: _ => {
+                    this.showToastMessage('Something went wrong! please try again or contact us via the feedback page', 'danger');
+                  },
+                  complete: () => {
+                    this.dismissLoading();
+                    this.initData();
+                  }
+                }
+              );
+            } else {
+              this.dismissLoading();
+              this.showToastMessage('Once you start filling up the behavior for a student you must finish all his/her behaviors', 'danger');
+            }
           }
         }
       ]
@@ -132,7 +154,7 @@ export class UpdateProgressReportPage implements OnInit {
   showToastMessage(message: string, color: 'danger' | 'success') {
     this.toastCtrl.create({
       message,
-      duration: 6000,
+      duration: 7000,
       position: 'top',
       color,
       showCloseButton: true,
