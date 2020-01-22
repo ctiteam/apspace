@@ -1,13 +1,18 @@
+<<<<<<< HEAD
 import { Component, Input, OnInit } from '@angular/core';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { FeedbackService, VersionService } from 'src/app/services';
+=======
+import { Component, Input } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+>>>>>>> chore(shakespear): removed oninit
 
 @Component({
   selector: 'app-shakespear-modal',
   templateUrl: './shakespear-modal.page.html',
   styleUrls: ['./shakespear-modal.page.scss'],
 })
-export class ShakespearModalPage implements OnInit {
+export class ShakespearModalPage {
 
   @Input() imagePath: string;
 
