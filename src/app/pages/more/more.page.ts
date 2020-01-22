@@ -9,14 +9,14 @@ import { CasTicketService, SettingsService, UserSettingsService } from '../../se
 import { Network } from '@ionic-native/network/ngx';
 import { NavController, ToastController } from '@ionic/angular';
 import { MenuItem } from './menu.interface';
-
 @Component({
   selector: 'app-more',
   templateUrl: './more.page.html',
-  styleUrls: ['./more.page.scss'],
+  styleUrls: ['./more.page.scss']
 })
 export class MorePage implements OnInit {
   view$: Observable<'list' | 'cards'>;
+  editMode = false;
   term = '';
 
   options: Fuse.FuseOptions<MenuItem> = {
@@ -166,7 +166,7 @@ export class MorePage implements OnInit {
       tags: []
     },
     {
-      title: 'Notification',
+      title: 'Notifications',
       group: 'Collaboration & Information Resources',
       url: 'notifications',
       img: 'assets/img/notifications.png',
@@ -579,7 +579,6 @@ export class MorePage implements OnInit {
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['lecturer', 'academic', 'teacher']
     },
-
     {
       title: 'Track Student Visa Status',
       group: 'Others',
@@ -614,6 +613,130 @@ export class MorePage implements OnInit {
   ];
   /* tslint:enable:no-bitwise */
 
+  /* tslint:disable:no-bitwise */
+  // Default Faviorate Items
+  fav: MenuItem[] = [
+    {
+      title: 'APCard',
+      group: 'Finance',
+      url: 'apcard',
+      img: 'assets/img/apcard.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['transactions', 'money', 'card', 'credit', 'expenses']
+    },
+    {
+      title: 'Classroom Finder',
+      group: 'Others',
+      url: 'classroom-finder',
+      img: 'assets/img/classroom-finder.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['empty', 'class', 'lab', 'auditorium', 'workshop', 'room']
+    },
+    {
+      title: 'e-Forms (Forms & Applications)',
+      group: 'Collaboration & Information Resources',
+      url: 'http://forms.sites.apiit.edu.my/home/',
+      attachTicket: true,
+      img: 'assets/img/forms-and-applications.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['purchase', 'incident', 'maintenance', 'order', 'exit', 'event']
+    },
+    {
+      title: 'Fees',
+      group: 'Finance',
+      url: 'fees',
+      img: 'assets/img/fees.svg',
+      role: Role.Student,
+      tags: ['payment', 'pricing', 'money', 'outstanding', 'overdue']
+    },
+    {
+      title: 'iConsult',
+      group: 'Collaboration & Information Resources',
+      img: 'assets/img/iconsult.png',
+      url: 'iconsult/my-consultations',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['consultation', 'slot']
+    },
+    {
+      title: 'iConsult',
+      group: 'Collaboration & Information Resources',
+      url: 'iconsult/my-appointments',
+      img: 'assets/img/iconsult.png',
+      role: Role.Student,
+      tags: ['consultation', 'booking']
+    },
+    {
+      title: 'Monthly Returns',
+      group: 'Academic Operation',
+      url: 'https://monthlyreturns.apiit.edu.my', // no tickets
+      img: 'assets/img/monthly-returns.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: []
+    },
+    {
+      title: 'Moodle (Course Material)',
+      group: 'Academic & Enrollment',
+      url: 'https://lms2.apiit.edu.my/login/index.php', // with ticket
+      img: 'assets/img/moodle.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      attachTicket: true,
+      tags: ['material', 'modules', 'lecturer note', 'assignment']
+    },
+    {
+      title: 'My Reports Panel',
+      group: 'Academic Operation',
+      url: 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check',
+      attachTicket: true,
+      img: 'assets/img/reports.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['report', 'admin', 'jasper']
+    },
+    {
+      title: 'News Feed',
+      group: 'Collaboration & Information Resources',
+      url: 'news',
+      img: 'assets/img/news.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['events', 'slider']
+    },
+    {
+      title: 'Notifications',
+      group: 'Collaboration & Information Resources',
+      url: 'notifications',
+      img: 'assets/img/notifications.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['messages']
+    },
+    {
+      title: 'Profile',
+      group: 'Others',
+      url: 'profile',
+      img: 'assets/img/profile.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['mentor', 'programme leader', 'visa']
+    },
+    {
+      title: 'Results',
+      group: 'Academic & Enrollment',
+      url: 'results',
+      img: 'assets/img/results.png',
+      role: Role.Student,
+      tags: ['marks']
+    },
+    {
+      title: 'Staff Directory',
+      group: 'Others',
+      url: 'staffs',
+      img: 'assets/img/staff-directory.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['lecturer', 'academic', 'teacher']
+    },
+  ];
+  /* tslint:enable:no-bitwise */
+
+  newFav: MenuItem[] = [];
+
+
   constructor(
     public navCtrl: NavController,
     public iab: InAppBrowser,
@@ -627,9 +750,17 @@ export class MorePage implements OnInit {
   ngOnInit() {
     this.view$ = this.userSettings.getMenuUI();
 
+    const storageMenuItems = this.settings.get('favoriteItems');
+    if (storageMenuItems) {
+      this.fav = storageMenuItems;
+    }
+
     const role = this.settings.get('role');
     // tslint:disable-next-line:no-bitwise
     this.menuFiltered = this.menuFull.filter(menu => menu.role & role);
+
+    // tslint:disable-next-line:no-bitwise
+    this.fav = this.fav.filter(menuItem => menuItem.role & role);
   }
 
   /** Open page, manually check for third party pages. */
@@ -657,6 +788,25 @@ export class MorePage implements OnInit {
   /** No sorting for KeyValuePipe. */
   noop(): number {
     return 0;
+  }
+
+  addToFav(item: MenuItem) {
+    const index = this.fav.map(favItem => `${favItem.title},${favItem.url}`).indexOf(`${item.title},${item.url}`);
+    if (index > -1) {
+      this.fav.splice(index, 1);
+      this.newFav = [...this.fav];
+    } else {
+      this.newFav = [ // this way is used because pipes detect changes on arrays, lists... by refrence
+        ...this.fav,
+        item
+      ];
+    }
+    this.fav = this.newFav;
+    this.settings.set('favoriteItems', this.fav);
+  }
+
+  enableEditMode() {
+    this.editMode = !this.editMode;
   }
 
   async presentToast(msg: string) {
