@@ -184,13 +184,11 @@ export class AppComponent {
               component: ShakespearModalPage,
               cssClass: 'controlled-modal',
               componentProps: {
-                imagePath: 'https://i.imgur.com/CUi8Na8.jpg'
+                imagePath: res.URI
               }
             });
 
-            console.log(res);
-
-            return modal.present();
+            await modal.present();
           });
         });
       });
