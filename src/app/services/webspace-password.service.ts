@@ -11,7 +11,10 @@ export class WebspacePasswordService {
 
   url = 'https://api.apiit.edu.my/webspace-id';
 
-  constructor(private http: HttpClient, private cas: CasTicketService) { }
+  constructor(
+    private http: HttpClient,
+    private cas: CasTicketService
+  ) { }
 
   changePassword(body: { current: string, new: string }): Observable<any> {
     const formBody = new HttpParams().set('new', body.new).set('current', body.current);
@@ -30,10 +33,10 @@ export class WebspacePasswordService {
   resetPassword(passportNumber: string): Observable<any> {
     const formBody = new HttpParams().set('passport', passportNumber);
 
-    return this.cas.getST(`${this.url}/change`).pipe(
+    return this.cas.getST(`${this.url}/reset`).pipe(
       switchMap(ticket => {
         return this.http.post(
-          `${this.url}/change?ticket=${ticket}`,
+          `${this.url}/reset?ticket=${ticket}`,
           formBody.toString(),
           { headers: new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded') }
         );

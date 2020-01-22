@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 
+import { Router } from '@angular/router';
 import { WebspacePasswordService } from 'src/app/services/webspace-password.service';
 import { PasswordValidator } from '../../../validators/password.validator';
 
@@ -20,6 +21,7 @@ export class ChangeWebspacePasswordPage implements OnInit {
   // hasSpeacialCharacter = false;
 
   constructor(
+    private router: Router,
     private toastCtrl: ToastController,
     private loadingController: LoadingController,
     private webspacePasswordService: WebspacePasswordService,
@@ -93,11 +95,12 @@ export class ChangeWebspacePasswordPage implements OnInit {
             .subscribe({
               next: _ => {
                 this.presentToast('Your Webspace password has been changed.', 'success');
+                this.router.navigate(['/settings']);
               },
-              error: _ => {
+              error: (err) => {
                 this.dismissLoading();
                 // tslint:disable-next-line: max-line-length
-                this.presentToast('Something went wrong from our side. Please try again or contact us via the feedback page', 'danger');
+                this.presentToast(err.error.msg.replace('Error: ', '') + ' Please try again or contact us via the feedback page', 'danger');
               },
               complete: () => this.dismissLoading()
             });

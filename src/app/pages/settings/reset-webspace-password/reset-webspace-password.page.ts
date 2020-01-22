@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 import { WebspacePasswordService } from 'src/app/services/webspace-password.service';
 
 @Component({
@@ -23,6 +24,7 @@ export class ResetWebspacePasswordPage implements OnInit {
 
   constructor(
     private router: Router,
+    private storage: Storage,
     private toastCtrl: ToastController,
     private loadingController: LoadingController,
     private alertCtrl: AlertController,
@@ -30,8 +32,13 @@ export class ResetWebspacePasswordPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.storage.get('/student/profile').then(
+      studentProfile => {
+        this.username = studentProfile.STUDENT_NUMBER;
+      }
+    );
+
     this.resetWebspaceIDPasswordForm = new FormGroup({
-      usernameOrTPNumber: new FormControl('', [Validators.required]),
       ICOrPassportNumber: new FormControl('', [Validators.required]),
     });
   }
@@ -86,19 +93,16 @@ export class ResetWebspacePasswordPage implements OnInit {
           text: 'Continue',
           handler: () => {
             this.presentLoading();
-            const resetPassword = {
-              passport: this.resetWebspaceIDPasswordForm.value.ICOrPassportNumber
-            };
-            this.webspacePasswordService.resetPassword(resetPassword)
+            this.webspacePasswordService.resetPassword(this.resetWebspaceIDPasswordForm.value.ICOrPassportNumber)
             .subscribe({
               next: _ => {
-                this.presentToast('Your passowrd has been reset.', 'success');
-                this.router.navigate(['/logout']);
+                this.presentToast('Your password has been reset. Please check your Email for the new password.', 'success');
+                this.router.navigate(['/settings']);
               },
-              error: _ => {
+              error: (err) => {
                 this.dismissLoading();
                 // tslint:disable-next-line: max-line-length
-                this.presentToast('Something went wrong from our side. Please try again or contact us via the feedback page', 'danger');
+                this.presentToast(err.error.msg.replace('Error: ', '') + ' Please try again or contact us via the feedback page', 'danger');
               },
               complete: () => this.dismissLoading()
             });

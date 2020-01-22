@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { RouterModule, Routes } from '@angular/router';
+import { IonicStorageModule } from '@ionic/storage';
 import { ResetWebspacePasswordPage } from './reset-webspace-password.page';
 
 const routes: Routes = [
@@ -20,7 +21,8 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    IonicStorageModule.forRoot(),
   ],
   declarations: [ResetWebspacePasswordPage]
 })
