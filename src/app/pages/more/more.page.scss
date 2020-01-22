@@ -61,6 +61,18 @@ ion-avatar {
   }
 }
 
+ion-col.menu-item{
+  .edit-overlay {
+    top: 5px;
+    left: 5px;
+    height: calc(100% - 9px);
+    width: calc(100% - 10px);
+    ion-icon {
+      top: 10px;
+    }
+  }
+}
+
 .hide {
   display: none;
 }
