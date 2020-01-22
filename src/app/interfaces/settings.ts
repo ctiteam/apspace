@@ -1,3 +1,5 @@
+import { MenuItem } from '../pages/more/menu.interface';
+
 /* tslint:disable:no-bitwise */
 export enum Role {
   Student = 1 << 0,
@@ -22,4 +24,6 @@ export interface Settings {
   defaultVenue: string;
   /* attendix */
   scan: boolean;
+  /* more page */
+  favoriteItems: MenuItem[];
 }
