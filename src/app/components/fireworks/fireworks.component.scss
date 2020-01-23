@@ -1,0 +1,76 @@
+@import url("https://fonts.googleapis.com/css?family=Gelasio|Ma+Shan+Zheng&display=swap");
+
+div.wrapper{
+    position: fixed;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    color: white;
+    overflow: hidden;
+
+    div.text{
+        position: absolute;
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        line-height: 50px;
+        word-wrap: break-word;
+        letter-spacing: 3px;
+    }
+
+    &.hide-fireworks {
+        display: none;
+    }
+}
+  
+canvas#fireworks{
+    position: relative;
+    z-index: 1;
+}
+
+div.lantern-container {
+    display: flex;
+    justify-content: center;
+
+    img.header-image {
+        position: absolute;
+        width: 400px;
+    }
+}
+
+@keyframes shake {
+    1%, 9% {
+        transform: translate3d(-0.5px, 0, 0);
+    }
+
+    2%, 8% {
+        transform: translate3d(1px, 0, 0);
+    }
+
+    3%, 5%, 7% {
+        transform: translate3d(-2px, 0, 0);
+    }
+
+    4%, 6% {
+        transform: translate3d(2px, 0, 0);
+    }
+}
+
+img.launch {
+    position: absolute;
+    z-index: 3;
+    animation: shake 8.20s infinite cubic-bezier(.36,.07,.19,.97) both;
+    cursor: pointer;
+}
+
+ion-icon.terminate {
+    position: absolute;
+    z-index: 3;
+    top: 30px;
+    font-size: 36px;
+    color: white;
+    cursor: pointer;
+}

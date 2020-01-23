@@ -21,7 +21,7 @@
   <div *ngIf="(view$ | async) === 'list'; else menuCardsUI" class="masonry-list">
 
     <!-- FAVORITE -->
-    <div class="masonry-item" *ngIf="!editMode">
+    <div class="masonry-item" *ngIf="!editMode && (fav | byItem: term) as filteredFavMenu">
       <ion-card class="ion-no-margin">
         <ion-card-header class="ter-background">
           <ion-card-title>
@@ -30,8 +30,8 @@
         </ion-card-header>
         <ion-card-content class="ion-no-padding">
           <ion-list class="ion-no-margin ter-background">
-            <ion-item-group *ngIf="fav.length > 0; else noFav">
-              <div *ngFor="let item of fav" style="position: relative;">
+            <ion-item-group *ngIf="filteredFavMenu.length > 0; else noFav">
+              <div *ngFor="let item of filteredFavMenu" style="position: relative;">
                 <div [class.edit-overlay]="editMode" [class.hide]="!editMode">
                   <ion-icon (click)="addToFav(item)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
                     class="colored-text"></ion-icon>
@@ -47,9 +47,16 @@
               </div>
             </ion-item-group>
             <ng-template #noFav>
-              <p class="ion-margin-top ion-margin-bottom ion-text-center ion-padding">
-                Click on edit button and add items now to your favorite menu :)
-              </p>
+              <ng-container *ngIf="!term; else noSearchResults">
+                <p class="ion-margin-top ion-margin-bottom ion-text-center ion-padding">
+                  Click on edit button and add items now to your favorite menu :)
+                </p>
+              </ng-container>
+              <ng-template #noSearchResults>
+                <p class="ion-margin-top ion-margin-bottom ion-text-center ion-padding">
+                  No results in favorite for {{term}} :(
+                </p>
+              </ng-template>
             </ng-template>
           </ion-list>
         </ion-card-content>
@@ -95,12 +102,13 @@
     <ion-grid>
 
       <!-- FAVORITE -->
-      <ion-row *ngIf="!editMode">
+      <ion-row *ngIf="!editMode && (fav | byItem: term) as filteredFavMenu">
         <ion-col size="12" class="ion-margin-top ion-margin-bottom">
           <h5 class="colored-text ion-text-center">Favorite</h5>
         </ion-col>
-        <ng-container *ngIf="fav.length > 0; else noFavCard">
-          <ion-col *ngFor="let item of fav" class="menu-item ion-text-center" size-xs="6" size-md="4" size-lg="3">
+        <ng-container *ngIf="filteredFavMenu.length > 0; else noFavCard">
+          <ion-col *ngFor="let item of filteredFavMenu" class="menu-item ion-text-center" size-xs="6" size-md="4"
+            size-lg="3">
             <ion-card (click)="openPage(item.url)" class="ion-no-margin cursor-pointer ter--background">
               <ion-card-content>
                 <div class="wrapper">
@@ -113,9 +121,16 @@
         </ng-container>
         <ng-template #noFavCard>
           <ion-col size="12">
-            <p class="ion-margin-top ion-margin-bottom ion-text-center ion-padding">
-              Click on edit button and add items now to your favorite menu :)
-            </p>
+            <ng-container *ngIf="!term; else noSearchResults">
+              <p class="ion-margin-top ion-margin-bottom ion-text-center ion-padding">
+                Click on edit button and add items now to your favorite menu :)
+              </p>
+            </ng-container>
+            <ng-template #noSearchResults>
+              <p class="ion-margin-top ion-margin-bottom ion-text-center ion-padding">
+                No results in favorite for {{term}} :(
+              </p>
+            </ng-template>
           </ion-col>
         </ng-template>
       </ion-row>

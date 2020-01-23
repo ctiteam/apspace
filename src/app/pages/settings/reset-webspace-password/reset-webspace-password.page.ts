@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
-import { Role } from 'src/app/interfaces';
-import { SettingsService } from 'src/app/services';
+import { map, pluck } from 'rxjs/operators';
+import { Role, StaffProfile, StudentProfile } from 'src/app/interfaces';
+import { SettingsService, WsApiService } from 'src/app/services';
 import { WebspacePasswordService } from 'src/app/services/webspace-password.service';
 
 @Component({
@@ -16,42 +16,30 @@ export class ResetWebspacePasswordPage implements OnInit {
   resetWebspaceIDPasswordForm: FormGroup;
   loading: HTMLIonLoadingElement;
   isStudent = false;
-  username = '';
+  name = '';
   currentPassword = '';
-  // passwordLengthMatch = false;
-  // hasUpperCase = false;
-  // hasLowerCase = false;
-  // hasDigit = false;
-  // hasSpeacialCharacter = false;
 
   constructor(
     private router: Router,
-    private storage: Storage,
     private settings: SettingsService,
     private toastCtrl: ToastController,
     private loadingController: LoadingController,
     private alertCtrl: AlertController,
-    private webspacePasswordService: WebspacePasswordService
+    private webspacePasswordService: WebspacePasswordService,
+    private ws: WsApiService
   ) { }
 
   ngOnInit() {
     this.settings.ready().then(() => {
       const role = this.settings.get('role');
       // tslint:disable-next-line:no-bitwise
-      if (role & Role.Student) {
-        this.storage.get('/student/profile').then(
-          studentProfile => {
-            this.username = studentProfile.STUDENT_NUMBER;
-          }
-        );
-        // tslint:disable-next-line:no-bitwise
-      } else if (role & (Role.Lecturer | Role.Admin)) {
-        this.storage.get('/staff/profile').then(
-          staffProfile => {
-            this.username = staffProfile[0].CODE;
-          }
-        );
-      }
+      (role & Role.Student
+        ? this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).pipe(pluck('NAME'))
+        : this.ws.get<StaffProfile>('/staff/profile', { caching: 'cache-only' }).pipe(map(profile => (profile[0] || {}).FULLNAME))
+      ).subscribe(
+        (name: string) => this.name = name || 'No profile found',
+        () => this.name = 'No profile found',
+      );
     });
 
     this.resetWebspaceIDPasswordForm = new FormGroup({
@@ -110,55 +98,22 @@ export class ResetWebspacePasswordPage implements OnInit {
           handler: () => {
             this.presentLoading();
             this.webspacePasswordService.resetPassword(this.resetWebspaceIDPasswordForm.value.ICOrPassportNumber)
-            .subscribe({
-              next: _ => {
-                this.presentToast('Your password has been reset. Please check your Email for the new password.', 'success');
-                this.router.navigate(['/settings']);
-              },
-              error: (err) => {
-                this.dismissLoading();
-                // tslint:disable-next-line: max-line-length
-                this.presentToast(err.error.error, 'danger');
-              },
-              complete: () => this.dismissLoading()
-            });
+              .subscribe({
+                next: _ => {
+                  this.presentToast('Your password has been reset. Please check your Email for the new password.', 'success');
+                  this.router.navigate(['/settings']);
+                },
+                error: (err) => {
+                  this.dismissLoading();
+                  // tslint:disable-next-line: max-line-length
+                  this.presentToast(err.error.error, 'danger');
+                },
+                complete: () => this.dismissLoading()
+              });
           }
         }
       ]
     }).then(confirm => confirm.present());
   }
-
-  // checkValidation(event) {
-  //   const newPassword = event.detail.value;
-  //   const upperCaseRegExp = /^(?=.*[A-Z])/;
-  //   const lowerCaseRegExp = /^(?=.*[a-z])/;
-  //   const digitRegExp = /^(?=.*\d)/;
-  //   const specialCharacterRegExp = /(?=.*?[#?!@$%~()_{}-])/;
-  //   if (upperCaseRegExp.test(newPassword)) {
-  //     this.hasUpperCase = true;
-  //   } else {
-  //     this.hasUpperCase = false;
-  //   }
-  //   if (digitRegExp.test(newPassword)) {
-  //     this.hasDigit = true;
-  //   } else {
-  //     this.hasDigit = false;
-  //   }
-  //   if (lowerCaseRegExp.test(newPassword)) {
-  //     this.hasLowerCase = true;
-  //   } else {
-  //     this.hasLowerCase = false;
-  //   }
-  //   if (newPassword.length < 8) {
-  //     this.passwordLengthMatch = false;
-  //   } else {
-  //     this.passwordLengthMatch = true;
-  //   }
-  //   if (specialCharacterRegExp.test(newPassword)) {
-  //     this.hasSpeacialCharacter = true;
-  //   } else {
-  //     this.hasSpeacialCharacter = false;
-  //   }
-  // }
 
 }

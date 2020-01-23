@@ -6,6 +6,7 @@ import { Observable, of, zip } from 'rxjs';
 import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 // tslint:disable-next-line: max-line-length
 import { APULocation, APULocations, Apcard, BusTrips, ConsultationSlot, DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday, Holidays, LecturerTimetable, News, Quote, StaffProfile } from 'src/app/interfaces';
+import { FireworksSettings } from 'src/app/interfaces/fireworks-settings';
 import { NewsService, NotificationService, UserSettingsService, WsApiService } from '../../services';
 import { NewsModalPage } from '../news/news-modal';
 
@@ -15,6 +16,26 @@ import { NewsModalPage } from '../news/news-modal';
   styleUrls: ['./staff-dashboard.page.scss'],
 })
 export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
+  // Setting fireworks animation
+  fireworksSettings: FireworksSettings = {
+    message: '新年快乐',
+    subMessage: 'Happy Chinese New Year',
+    fontStyle: {
+      color: 'lemonchiffon',
+      textShadow: '0 0 10px orange, 0 0 10px darkorange',
+      fontFamily: `'Ma Shan Zheng', cursive`,
+      fontSize: '300%'
+    },
+    launchImageStyle: {
+      launchImage: 'assets/img/lantern.png',
+      top: '16px',
+      left: '280px',
+      width: '30px'
+    },
+    headerImage: 'assets/img/6325321.png',
+    backgroundColor: '#192D46'
+  };
+
   // USER SETTINGS
   @ViewChild('slides', { static: false }) slides: IonSlides;
   @ViewChild('dragulaContainer', { static: true }) container: ElementRef; // access the dragula container
