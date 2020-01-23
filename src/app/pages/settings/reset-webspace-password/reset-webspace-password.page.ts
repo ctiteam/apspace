@@ -48,7 +48,12 @@ export class ResetWebspacePasswordPage implements OnInit {
       } else if (role & (Role.Lecturer | Role.Admin)) {
         this.storage.get('/staff/profile').then(
           staffProfile => {
-            this.username = staffProfile[0].CODE;
+            if (staffProfile.length === 0) {
+              this.username = 'No Profile found';
+              this.resetWebspaceIDPasswordForm.disable();
+            } else {
+              this.username = staffProfile[0].CODE;
+            }
           }
         );
       }
