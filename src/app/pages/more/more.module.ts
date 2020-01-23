@@ -6,6 +6,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { IonicModule } from '@ionic/angular';
 import { SharedPipesModule } from '../../shared/shared-pipes.module';
 import { ByGroupPipe } from './by-group.pipe';
+import { ByItemPipe } from './by-item.pipe';
 import { ItemInFavPipe } from './item-in-fav.pipe';
 import { MorePage } from './more.page';
 
@@ -29,6 +30,6 @@ const routes: Routes = [
   providers: [
     InAppBrowser
   ],
-  declarations: [MorePage, ByGroupPipe, ItemInFavPipe]
+  declarations: [MorePage, ByGroupPipe, ItemInFavPipe, ByItemPipe]
 })
 export class MorePageModule { }
