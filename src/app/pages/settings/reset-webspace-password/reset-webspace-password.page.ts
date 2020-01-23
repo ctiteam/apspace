@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { Role } from 'src/app/interfaces';
+import { SettingsService } from 'src/app/services';
 import { WebspacePasswordService } from 'src/app/services/webspace-password.service';
 
 @Component({
@@ -25,6 +27,7 @@ export class ResetWebspacePasswordPage implements OnInit {
   constructor(
     private router: Router,
     private storage: Storage,
+    private settings: SettingsService,
     private toastCtrl: ToastController,
     private loadingController: LoadingController,
     private alertCtrl: AlertController,
@@ -32,11 +35,24 @@ export class ResetWebspacePasswordPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.storage.get('/student/profile').then(
-      studentProfile => {
-        this.username = studentProfile.STUDENT_NUMBER;
+    this.settings.ready().then(() => {
+      const role = this.settings.get('role');
+      // tslint:disable-next-line:no-bitwise
+      if (role & Role.Student) {
+        this.storage.get('/student/profile').then(
+          studentProfile => {
+            this.username = studentProfile.STUDENT_NUMBER;
+          }
+        );
+        // tslint:disable-next-line:no-bitwise
+      } else if (role & (Role.Lecturer | Role.Admin)) {
+        this.storage.get('/staff/profile').then(
+          staffProfile => {
+            this.username = staffProfile[0].CODE;
+          }
+        );
       }
-    );
+    });
 
     this.resetWebspaceIDPasswordForm = new FormGroup({
       ICOrPassportNumber: new FormControl('', [Validators.required]),
