@@ -1,18 +1,49 @@
 <ion-content>
-  <!-- <ion-img [src]="imagePath" (ionError)="$event.target.src = 'assets/img/no_img.png'"></ion-img> -->
-  <div class="ion-margin">
+  <div class="ion-margin" style="margin-bottom: 0px;">
     <div class="ion-text-center ion-margin-bottom">
       <h4>Report a Problem</h4>
       <h6 class="secondary-txt-color">Your feedback helps us to improve APSpace</h6>
     </div>
-
+    
     <app-message-with-svg
       messageTitle=""
       messageContent="" 
       imageUrl="assets/img/feedback.svg"
       wrapperOffset="3" 
-      wrapperSize="6">
-    </app-message-with-svg
+      wrapperSize="6"
     >
+    </app-message-with-svg>
+
+    <div class="feedback-form">
+      <ion-item lines="none">
+        <ion-label position="stacked">Message:</ion-label>
+        <ion-textarea class="form-input" autosize rows="4" [(ngModel)]="message"
+          (ngModelChange)="onMessageFieldChange($event)" required="true"></ion-textarea>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Contact Number: <small>(Optional)</small></ion-label>
+        <ion-input class="form-input" type="text" [(ngModel)]="contactNo" (ngModelChange)="onPhoneNumberChange()">
+        </ion-input>
+      </ion-item>
+      <div class="ion-padding-start ion-padding-end">
+        <small *ngIf="contactNo && !phoneNumberValid" class="danger-text">Phone
+          number is invalid. Please check the
+          number and enter a correct phone number (Exactly 10 or 11 digits)
+        </small>
+      </div>
+    </div>
+  
+    <div class="screenshot" style="margin-left: 250px; top: 54%; position: absolute; max-width: 109px !important; max-height: 109px !important;">
+      <ion-icon name="remove-circle" style="position: absolute !important; margin-left: 73px; margin-top: 3px; font-size: 20px;"></ion-icon>
+      <ion-img [src]="imagePath" (ionError)="$event.target.src = 'assets/img/no_img.png'" style="border: 2px solid black; margin-right: 15px; border-radius: 4px;"></ion-img>
+    </div>
   </div>
 </ion-content>
+
+<!-- 
+
+To be added in the Future (Categories)
+- Will confirm with Reza
+
+-->
