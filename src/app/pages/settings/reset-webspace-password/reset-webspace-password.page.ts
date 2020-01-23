@@ -48,7 +48,6 @@ export class ResetWebspacePasswordPage implements OnInit {
       } else if (role & (Role.Lecturer | Role.Admin)) {
         this.storage.get('/staff/profile').then(
           staffProfile => {
-            console.log(staffProfile);
             this.username = staffProfile[0].CODE;
           }
         );
