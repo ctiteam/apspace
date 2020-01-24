@@ -328,18 +328,6 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     ).subscribe();
   }
 
-  async openModal() {
-    const modal = await this.modalCtrl.create({
-      component: ShakespearModalPage,
-      cssClass: 'controlled-modal',
-      componentProps: {
-        imagePath: 'https://i.imgur.com/GGeAbyD.jpg'
-      }
-    });
-
-    await modal.present();
-  }
-
   // NOTIFICATIONS FUNCTIONS
   getBadge() {
     this.notificationService.getMessages().subscribe(res => {
