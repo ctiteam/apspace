@@ -1,4 +1,21 @@
-// .screenshot > ion-img {
-//     height: 100px;
-//     margin-left: 200px;
-// }
+.screenshot {
+    margin-left: 65vw; 
+    position: absolute;
+    top: 60vh;
+    max-width: 109px !important; 
+    max-height: 109px !important;
+
+    
+    ion-button {
+        position: absolute !important; 
+        margin-left: 60px; 
+        margin-top: 3px; 
+        font-size: 9px;
+    }
+}
+
+ion-img {
+    // border: 2px solid black; 
+    // border-radius: 4px;
+    height: 157px;
+}

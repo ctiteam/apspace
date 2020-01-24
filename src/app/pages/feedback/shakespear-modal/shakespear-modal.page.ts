@@ -1,9 +1,25 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { FeedbackService, VersionService } from 'src/app/services';
 
 @Component({
   selector: 'app-shakespear-modal',
+  animations: [
+    trigger('slideIn', [
+      state('*', style({ 'overflow-y': 'hidden' })),
+      state('void', style({ 'overflow-y': 'hidden' })),
+      transition('* => void', [
+        style({ height: '*' }),
+        animate(250, style({ height: 0 }))
+      ]),
+      transition('void => *', [
+        style({ height: '0' }),
+        animate(250, style({ height: '*' }))
+      ])
+    ])
+  ],
   templateUrl: './shakespear-modal.page.html',
   styleUrls: ['./shakespear-modal.page.scss'],
 })
@@ -11,6 +27,7 @@ export class ShakespearModalPage implements OnInit {
 
   @Input() imagePath: string;
 
+  showImage = false;
   phoneNumberValidationPattern = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4,5})$/;
   phoneNumberValid = false;
 
@@ -26,17 +43,22 @@ export class ShakespearModalPage implements OnInit {
   loading: HTMLIonLoadingElement;
 
   constructor(
+    private router: Router,
     private feedback: FeedbackService,
     private toastCtrl: ToastController,
     private version: VersionService,
     private loadingController: LoadingController
   ) { }
 
+  toggleImage() {
+    this.showImage = !this.showImage;
+  }
+
   submitFeedback() {
     const feedback = {
       contactNo: this.contactNo || '',
       platform: this.platform,
-      message: this.message,
+      message: this.message + '\n' + `Url: ${this.router.url}` + '\n' + 'Image Url:' + this.imagePath,
       appVersion: this.appVersion,
       screenSize: this.screenSize,
     };

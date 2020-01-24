@@ -17,7 +17,7 @@
     <div class="feedback-form">
       <ion-item lines="none">
         <ion-label position="stacked">Message:</ion-label>
-        <ion-textarea class="form-input" autosize rows="4" [(ngModel)]="message"
+        <ion-textarea class="form-input" autosize rows="3" [(ngModel)]="message"
           (ngModelChange)="onMessageFieldChange($event)" required="true"></ion-textarea>
       </ion-item>
 
@@ -32,15 +32,37 @@
           number and enter a correct phone number (Exactly 10 or 11 digits)
         </small>
       </div>
-    </div>
-  
-    <div class="screenshot" style="margin-left: 250px; top: 54%; position: absolute; max-width: 109px !important; max-height: 109px !important;">
-      <ion-icon name="remove-circle" style="position: absolute !important; margin-left: 73px; margin-top: 3px; font-size: 20px;"></ion-icon>
-      <ion-img [src]="imagePath" (ionError)="$event.target.src = 'assets/img/no_img.png'" style="border: 2px solid black; margin-right: 15px; border-radius: 4px;"></ion-img>
+
+      <div class="ion-padding">
+        <ion-button expand="full" class="colored-background" (click)="submitFeedback()"
+          [disabled]="!message || (!phoneNumberValid && contactNo !== '')">
+          Submit
+        </ion-button>
+      </div>
     </div>
   </div>
 </ion-content>
 
+<ion-footer style="background-color: #f2f2f2;">
+  <div style="margin: 0px 20px 0px;">
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col size="12">
+          <p>Attachment(s):
+            <ion-button [color]="showImage ? 'danger' : 'primary'" size="small" (click)="toggleImage()">
+              <ion-icon button [name]="showImage ? 'remove' : 'add'"></ion-icon>
+            </ion-button>
+          </p>
+        </ion-col>
+        <ion-col size="12">
+          <div>
+            <ion-img *ngIf="showImage" [src]="imagePath" @slideIn></ion-img>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-footer>
 <!-- 
 
 To be added in the Future (Categories)
