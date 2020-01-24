@@ -48,16 +48,19 @@
     <ion-grid class="ion-no-padding">
       <ion-row>
         <ion-col size="12">
-          <p>Attachment(s):
+          <p>
+            Attachment(s):
             <ion-button [color]="showImage ? 'danger' : 'primary'" size="small" (click)="toggleImage()">
               <ion-icon button [name]="showImage ? 'remove' : 'add'"></ion-icon>
             </ion-button>
           </p>
         </ion-col>
         <ion-col size="12">
-          <div>
-            <ion-img *ngIf="showImage" [src]="imagePath" @slideIn></ion-img>
-          </div>
+          <ion-slides #slides [options]="screenshotSliderOpts" *ngIf="showImage" @slideIn>
+            <ion-slide *ngFor="let img of images">
+              <ion-img *ngIf="showImage" [src]="img"></ion-img>
+            </ion-slide>
+          </ion-slides>
         </ion-col>
       </ion-row>
     </ion-grid>
