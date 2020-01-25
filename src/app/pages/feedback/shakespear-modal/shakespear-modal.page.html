@@ -56,7 +56,7 @@
           </p>
         </ion-col>
         <ion-col size="12">
-          <ion-slides #slides [options]="screenshotSliderOpts" *ngIf="showImage" @slideIn>
+          <ion-slides #slides [options]="screenshotSliderOpts" *ngIf="showImage" @slideLeft>
             <ion-slide *ngFor="let img of images">
               <ion-img *ngIf="showImage" [src]="img"></ion-img>
             </ion-slide>
@@ -68,7 +68,7 @@
 </ion-footer>
 <!-- 
 
-To be added in the Future (Categories)
+To be added in the future (Categories)
 - Will confirm with Reza
 
 -->
