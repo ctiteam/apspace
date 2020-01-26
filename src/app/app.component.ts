@@ -75,7 +75,6 @@ export class AppComponent {
       // this.statusBar.backgroundColorByHexString('#000000');
       // this.statusBar.backgroundColorByName('blac k');
 
-
       platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
         this.shake.startWatch(40).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
           if (!await this.cas.isAuthenticated()) {

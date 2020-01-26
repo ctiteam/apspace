@@ -149,7 +149,8 @@
       "cordova-plugin-qrscanner": {},
       "cordova-plugin-badge": {},
       "cordova-plugin-shake": {},
-      "cordova-plugin-splashscreen": {}
+      "cordova-plugin-splashscreen": {},
+      "com.darktalker.cordova.screenshot": {}
     },
     "platforms": [
       "android",

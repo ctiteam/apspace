@@ -22,7 +22,7 @@ export class ShakespearModalPage implements OnInit {
   @Input() imagePath: string;
 
   showImage = false;
-  images = ['https://i.imgur.com/GGeAbyD.jpg'];
+  images = [this.imagePath];
   onlineFeedbackSystemURL = 'https://erp.apiit.edu.my/easymoo/web/en/user/feedback/feedbackusersend';
 
   phoneNumberValidationPattern = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4,5})$/;
@@ -43,7 +43,6 @@ export class ShakespearModalPage implements OnInit {
         const swiper = this;
         swiper.classNames.push(`${swiper.params.containerModifierClass}fade`);
         const overwriteParams = {
-          pager: false,
           slidesPerView: 3,
           noSwiping: true,
           watchSlidesProgress: true,
@@ -109,6 +108,10 @@ export class ShakespearModalPage implements OnInit {
 
   toggleImage() {
     this.showImage = !this.showImage;
+  }
+
+  removeImage(image: string) {
+    this.images = this.images.filter(imgUrl => imgUrl !== image);
   }
 
   submitFeedback() {

@@ -14,6 +14,23 @@
     }
 }
 
+ion-footer {
+    background-color: #f2f2f2;
+}
+
 ion-img {
     height: 157px;
+}
+
+.flex-container {
+    align-self: flex-start !important;
+}
+
+.scroll-content {
+    display: flex !important;
+    flex-direction: column !important;
+    
+    ion-slides {
+        display: flex !important;
+    }
 }

@@ -43,7 +43,7 @@
   </div>
 </ion-content>
 
-<ion-footer style="background-color: #f2f2f2;">
+<ion-footer>
   <div style="margin: 0px 20px 0px;">
     <ion-grid class="ion-no-padding">
       <ion-row>
@@ -56,8 +56,11 @@
           </p>
         </ion-col>
         <ion-col size="12">
-          <ion-slides #slides [options]="screenshotSliderOpts" *ngIf="showImage" @slideLeft>
-            <ion-slide *ngFor="let img of images">
+          <ion-slides #slides pager="true" [options]="screenshotSliderOpts" *ngIf="showImage" @slideLeft>
+            <ion-slide *ngFor="let img of images; let i = index">
+              <ion-button [color]="'danger'" size="small" (click)="removeImage(img)" style="position: absolute !important;">
+                <ion-icon button [name]="'trash'"></ion-icon>
+              </ion-button>
               <ion-img *ngIf="showImage" [src]="img"></ion-img>
             </ion-slide>
           </ion-slides>
