@@ -22,7 +22,8 @@ export class ShakespearModalPage implements OnInit {
   @Input() imagePath: string;
 
   showImage = false;
-  images = [this.imagePath];
+  images = [];
+
   onlineFeedbackSystemURL = 'https://erp.apiit.edu.my/easymoo/web/en/user/feedback/feedbackusersend';
 
   phoneNumberValidationPattern = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4,5})$/;
@@ -43,11 +44,9 @@ export class ShakespearModalPage implements OnInit {
         const swiper = this;
         swiper.classNames.push(`${swiper.params.containerModifierClass}fade`);
         const overwriteParams = {
+          initialSlide: 0,
+          speed: 400,
           slidesPerView: 3,
-          noSwiping: true,
-          watchSlidesProgress: true,
-          spaceBetween: 0,
-          virtualTranslate: true,
           autoHeight: true
         };
         swiper.params = Object.assign(swiper.params, overwriteParams);
@@ -106,6 +105,13 @@ export class ShakespearModalPage implements OnInit {
     private loadingController: LoadingController
   ) { }
 
+  ngOnInit() {
+    this.platform = this.feedback.platform();
+    this.appVersion = this.version.name;
+
+    this.images.push(this.imagePath);
+  }
+
   toggleImage() {
     this.showImage = !this.showImage;
   }
@@ -114,11 +120,29 @@ export class ShakespearModalPage implements OnInit {
     this.images = this.images.filter(imgUrl => imgUrl !== image);
   }
 
+  async browseImage() {
+    const toast = await this.toastCtrl.create({
+      message: 'Now, it should ask to browse Gallery',
+      position: 'top',
+      duration: 3000,
+      color: 'primary',
+      buttons: [
+        {
+          icon: 'close',
+          role: 'cancel',
+          handler: () => { }
+        }
+      ]
+    });
+
+    await toast.present();
+  }
+
   submitFeedback() {
     const feedback = {
       contactNo: this.contactNo || '',
       platform: this.platform,
-      message: this.message + '\n' + `Url: ${this.router.url}` + '\n' + 'Image Url:' + this.imagePath,
+      message: this.message + '\n' + `Url: ${this.router.url}` + '\n' + 'Image Url: ' + this.imagePath,
       appVersion: this.appVersion,
       screenSize: this.screenSize,
     };
@@ -148,11 +172,6 @@ export class ShakespearModalPage implements OnInit {
       this.dismissLoading();
       this.submitting = false;
     });
-  }
-
-  ngOnInit() {
-    this.platform = this.feedback.platform();
-    this.appVersion = this.version.name;
   }
 
   onMessageFieldChange(event) {
