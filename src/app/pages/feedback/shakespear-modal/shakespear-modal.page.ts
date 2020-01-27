@@ -1,4 +1,4 @@
-import { animate, style, transition, trigger } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
@@ -12,7 +12,15 @@ import { FeedbackService, VersionService } from 'src/app/services';
         style({ opacity: 0, transform: 'translateX(150%)' }),
         animate('200ms 100ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
       ])
-    ])
+    ]),
+    trigger('slideIn', [
+      state('*', style({ 'overflow-y': 'hidden' })),
+      state('void', style({ 'overflow-y': 'hidden' })),
+      transition('* => void', [
+        style({ height: '*' }),
+        animate(250, style({ height: 0 }))
+      ]),
+    ]),
   ],
   templateUrl: './shakespear-modal.page.html',
   styleUrls: ['./shakespear-modal.page.scss'],
