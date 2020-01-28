@@ -9,6 +9,10 @@ ion-fab-button {
 
 ion-footer {
     background-color: #f2f2f2;
+
+    ion-fab-button {
+        position: relative !important;
+    }
     
     .overlayBtn {
         position: absolute !important;
@@ -25,9 +29,13 @@ ion-footer {
         padding-top: 2px;
     }
 
+    ion-col {
+        padding-left: 5px;
+    }
+
     ion-buttons {
         display: inline !important; 
-        margin-left: 25%;
+        margin-left: 15vw;
     }
 }
   

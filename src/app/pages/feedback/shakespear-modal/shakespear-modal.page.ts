@@ -1,7 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
+import { ActionSheetController, LoadingController, ToastController } from '@ionic/angular';
 import { FeedbackService, VersionService } from 'src/app/services';
 
 @Component({
@@ -20,7 +21,7 @@ import { FeedbackService, VersionService } from 'src/app/services';
         style({ height: '*' }),
         animate(250, style({ height: 0 }))
       ]),
-    ]),
+    ])
   ],
   templateUrl: './shakespear-modal.page.html',
   styleUrls: ['./shakespear-modal.page.scss'],
@@ -109,8 +110,10 @@ export class ShakespearModalPage implements OnInit {
     private router: Router,
     private feedback: FeedbackService,
     private toastCtrl: ToastController,
+    private actionSheetCtrl: ActionSheetController,
     private version: VersionService,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private camera: Camera
   ) { }
 
   ngOnInit() {
@@ -128,11 +131,51 @@ export class ShakespearModalPage implements OnInit {
     this.images = this.images.filter(imgUrl => imgUrl !== image);
   }
 
+  pickImage(sourceType: any) {
+    const options: CameraOptions = {
+      quality: 100,
+      sourceType,
+      destinationType: this.camera.DestinationType.NATIVE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    };
+
+    this.camera.getPicture(options).then((imageData) => {
+      console.log('IMG', imageData);
+      const base64Image = 'data:image/jpeg;base64,' + imageData;
+      this.images.push(base64Image);
+    }, (err) => {
+      console.log(err);
+      this.presentToast('Unable to pick image');
+    });
+  }
+
   async browseImage() {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Please select',
+      buttons: [
+        {
+          text: 'Load from library',
+          handler: () => {
+            this.pickImage(this.camera.PictureSourceType.PHOTOLIBRARY);
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'Cancel'
+        }
+      ]
+    });
+
+    await actionSheet.present();
+  }
+
+  async presentToast(msg: string, duration: number = 3000) {
     const toast = await this.toastCtrl.create({
-      message: 'Now, it should ask to browse Gallery',
+      header: msg,
+      // message: err,
       position: 'top',
-      duration: 3000,
+      duration,
       color: 'primary',
       buttons: [
         {

@@ -24,6 +24,8 @@ import { RequestCache, RequestCacheWithMapStorage } from './services';
 // export function disableNavAnimation(AnimationC: Animation): Promise<Animation> { return Promise.resolve(new AnimationC()); }
 
 import { Badge } from '@ionic-native/badge/ngx';
+import { Camera } from '@ionic-native/Camera/ngx';
+import { File } from '@ionic-native/file/ngx';
 import { Screenshot } from '@ionic-native/screenshot/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
 import { GraphQLModule } from './graphql.module';
@@ -64,6 +66,8 @@ import { NotificationModalModule } from './pages/notifications/notification-moda
     Shake,
     Screenshot,
     StatusBar,
+    Camera,
+    File,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: RequestCache, useClass: RequestCacheWithMapStorage },
     httpInterceptorProviders,

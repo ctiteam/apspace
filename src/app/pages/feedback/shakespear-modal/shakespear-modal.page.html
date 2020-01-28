@@ -46,7 +46,7 @@
 </ion-content>
 
 <ion-footer>
-  <ion-item lines="none">
+  <ion-item lines="none" >
     <ion-grid class="ion-no-padding ion-no-margin">
       <ion-row>
         <ion-col size="12">
@@ -56,7 +56,7 @@
                 <p style="margin-top: 1px;">
                   Attachment(s):
                   <ion-buttons>
-                    <ion-button [color]="showImage ? 'danger' : 'primary'" size="small" (click)="toggleImage()">
+                    <ion-button [color]="showImage ? 'danger' : 'primary'" size="large" (click)="toggleImage()">
                       <ion-icon slot="icon-only" [name]="showImage ? 'arrow-dropdown' : 'arrow-dropup'"></ion-icon>
                     </ion-button>
                   </ion-buttons>
