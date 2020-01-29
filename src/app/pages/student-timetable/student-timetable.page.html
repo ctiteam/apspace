@@ -26,11 +26,11 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="rotateView()" size="small" fill="outline" [class.colored-text]="viewWeek"
+      <ion-item lines="none" (click)="rotateView()" size="small" fill="outline" [class.colored-text]="viewWeek"
         [class.colored-border]="viewWeek">
-        <ion-label>Weekly</ion-label>
+        <ion-label style="margin-right: 5px;">Weekly</ion-label>
         <ion-toggle style="padding-left: 0; padding-right: 0;" [checked]="viewWeek"></ion-toggle>
-      </ion-button>
+      </ion-item>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
