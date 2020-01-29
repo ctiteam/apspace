@@ -46,59 +46,54 @@
 </ion-content>
 
 <ion-footer>
-  <ion-item lines="none" >
-    <ion-grid class="ion-no-padding ion-no-margin">
-      <ion-row>
-        <ion-col size="12">
-          <ion-grid class="ion-no-padding ion-no-margin">
-            <ion-row>
-              <ion-col size="8">
-                <p style="margin-top: 1px;">
-                  Attachment(s):
-                  <ion-buttons>
-                    <ion-button [color]="showImage ? 'danger' : 'primary'" size="large" (click)="toggleImage()">
-                      <ion-icon slot="icon-only" [name]="showImage ? 'arrow-dropdown' : 'arrow-dropup'"></ion-icon>
-                    </ion-button>
-                  </ion-buttons>
-                </p>
-              </ion-col>
+  <ion-grid class="ion-no-padding ion-no-margin" style="margin-top: 5px; margin-bottom: 5px;">
+    <ion-row>
+      <ion-col size="12">
+        <ion-grid class="ion-no-padding ion-no-margin">
+          <ion-row>
+            <ion-col size="4" style="padding-left: 20px; padding-top: 3%;">
+              <p>Attachment(s):</p>
+            </ion-col>
 
-              <ion-col size="4" class="submitBtn">
-                <ion-fab horizontal="end">
-                  <ion-fab-button
-                    color="success"
-                    size="small"
-                    [disabled]="!message || (!phoneNumberValid && contactNo !== '')"
-                    (click)="submitFeedback()">
-                    <ion-icon name="checkmark"></ion-icon>
-                  </ion-fab-button>
-                </ion-fab>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-col>
-
-        <ion-col size="12" *ngIf="showImage" @slideIn>
-          <ion-slides #slides pager="true" [options]="screenshotSliderOpts" *ngIf="showImage" @slideLeft>
-            <ion-slide *ngFor="let img of images">
-              <ion-button [color]="'danger'" size="small" (click)="removeImage(img)" class="overlayBtn">
-                <ion-icon button [name]="'trash'"></ion-icon>
+            <ion-col size="4">
+              <ion-button [color]="showImage ? 'danger' : 'primary'" fill="clear" expand="block" (click)="toggleImage()">
+                <ion-icon slot="icon-only" [name]="showImage ? 'arrow-dropdown' : 'arrow-dropup'"></ion-icon>
               </ion-button>
-              <ion-img [src]="img"></ion-img>
-            </ion-slide>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
 
-            <ion-slide>
-              <ion-button [color]="'primary'" size="small" (click)="browseImage()" class="overlayBtn">
-                <ion-icon button [name]="'add'"></ion-icon>
-              </ion-button>
-              <ion-img [src]="'assets/img/shakespear_placeholder.jpg'"></ion-img>
-            </ion-slide>
-          </ion-slides>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-item>
+      <ion-col size="12" *ngIf="showImage" @slideIn>
+        <ion-slides pager="true" [options]="screenshotSliderOpts" @slideLeft>
+          <ion-slide *ngFor="let img of images">
+            <ion-button [color]="'danger'" size="small" (click)="removeImage(img)" class="overlayBtn">
+              <ion-icon button [name]="'trash'"></ion-icon>
+            </ion-button>
+            <ion-img [src]="img"></ion-img>
+          </ion-slide>
+
+          <ion-slide>
+            <ion-button [color]="'primary'" size="small" (click)="browseImage()" class="overlayBtn">
+              <ion-icon button [name]="'add'"></ion-icon>
+            </ion-button>
+            <ion-img [src]="'assets/img/shakespear_placeholder.jpg'"></ion-img>
+          </ion-slide>
+        </ion-slides>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-footer>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button
+    color="success"
+    size="large"
+    [disabled]="!message || (!phoneNumberValid && contactNo !== '')"
+    (click)="submitFeedback()">
+    <ion-icon name="checkmark" size="large"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
 <!-- 
 
 To be added in the future (Categories)

@@ -10,32 +10,16 @@ ion-fab-button {
 ion-footer {
     background-color: #f2f2f2;
 
-    ion-fab-button {
-        position: relative !important;
+    ion-col {
+        padding: 0px;
     }
-    
+
     .overlayBtn {
         position: absolute !important;
     }
+}
 
-    ion-item {
-        --inner-padding-end: 0px;
-        --padding-start: 0px;
-        --padding-top: 0px;
-        --padding-bottom: 0px;
-    }
-
-    .submitBtn {
-        padding-top: 2px;
-    }
-
-    ion-col {
-        padding-left: 5px;
-    }
-
-    ion-buttons {
-        display: inline !important; 
-        margin-left: 15vw;
-    }
+ion-fab {
+    bottom: 30px;
 }
   

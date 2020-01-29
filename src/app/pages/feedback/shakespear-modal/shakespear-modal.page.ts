@@ -30,7 +30,7 @@ export class ShakespearModalPage implements OnInit {
 
   @Input() imagePath: string;
 
-  showImage = false;
+  showImage = true;
   images = [];
 
   onlineFeedbackSystemURL = 'https://erp.apiit.edu.my/easymoo/web/en/user/feedback/feedbackusersend';
@@ -79,16 +79,17 @@ export class ShakespearModalPage implements OnInit {
     this.images = this.images.filter(imgUrl => imgUrl !== image);
   }
 
-  pickImage(sourceType: any) {
+  pickImage(srcType: any) {
     const options: CameraOptions = {
       quality: 100,
-      sourceType,
-      destinationType: this.camera.DestinationType.NATIVE_URI,
+      sourceType: srcType,
+      destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
     };
 
     this.camera.getPicture(options).then((imageData) => {
+      this.presentToast(imageData);
       console.log('IMG', imageData);
       const base64Image = 'data:image/jpeg;base64,' + imageData;
       this.images.push(base64Image);
