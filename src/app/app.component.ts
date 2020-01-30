@@ -85,6 +85,12 @@ export class AppComponent {
             return;
           }
 
+          // const active = this.modalCtrl.getTop();
+
+          // if (active) {
+          //   (await active).dismiss();
+          // }
+
           this.screenshot.URI(80).then(async (res) => {
             const modal = await this.modalCtrl.create({
               component: ShakespearModalPage,

@@ -30,7 +30,8 @@ export class ShakespearModalPage implements OnInit {
 
   @Input() imagePath: string;
 
-  showImage = true;
+  base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+  showImage = false;
   images = [];
 
   onlineFeedbackSystemURL = 'https://erp.apiit.edu.my/easymoo/web/en/user/feedback/feedbackusersend';
@@ -51,7 +52,9 @@ export class ShakespearModalPage implements OnInit {
     initialSlide: 0,
     speed: 400,
     slidesPerView: 3,
-    autoHeight: true
+    autoHeight: true,
+    preloadImages: true,
+    updateOnImagesReady: true,
   };
 
   constructor(
@@ -67,8 +70,11 @@ export class ShakespearModalPage implements OnInit {
   ngOnInit() {
     this.platform = this.feedback.platform();
     this.appVersion = this.version.name;
-
     this.images.push(this.imagePath);
+
+    setTimeout(() => {
+      this.showImage = true;
+    }, 500);
   }
 
   toggleImage() {
@@ -88,14 +94,19 @@ export class ShakespearModalPage implements OnInit {
       mediaType: this.camera.MediaType.PICTURE
     };
 
-    this.camera.getPicture(options).then((imageData) => {
-      this.presentToast(imageData);
-      console.log('IMG', imageData);
-      const base64Image = 'data:image/jpeg;base64,' + imageData;
-      this.images.push(base64Image);
+    this.camera.getPicture(options).then((imageData: string) => {
+      if (this.base64regex.test(imageData)) {
+        const base64image = 'data:image/jpeg;base64,' + imageData;
+        this.images.push(base64image);
+      } else {
+        this.images.push(imageData);
+      }
     }, (err) => {
-      console.log(err);
-      this.presentToast('Unable to pick image');
+      if (err === 'cordova_not_available') {
+        this.presentToast('Only available on Mobile', 'danger');
+      } else {
+        this.presentToast('You did not give APSpace Permission to storage', 'danger');
+      }
     });
   }
 
@@ -119,13 +130,12 @@ export class ShakespearModalPage implements OnInit {
     await actionSheet.present();
   }
 
-  async presentToast(msg: string, duration: number = 3000) {
+  async presentToast(msg: string, color: string = 'primary') {
     const toast = await this.toastCtrl.create({
       header: msg,
-      // message: err,
       position: 'top',
-      duration,
-      color: 'primary',
+      duration: 3000,
+      color,
       buttons: [
         {
           icon: 'close',
