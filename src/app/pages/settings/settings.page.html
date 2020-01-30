@@ -32,22 +32,23 @@
                 </ion-label>
               </ion-item-divider>
               <ion-item class="ion-no-padding">
-                <ion-label>Dark Theme</ion-label>
-                <ion-toggle [(ngModel)]="darkThemeEnabled" [disabled]="pureDarkThemeEnabled"
-                  (ngModelChange)="toggleDarkTheme()">
-                </ion-toggle>
-              </ion-item>
-              <ion-item class="ion-no-padding">
-                <ion-label>Pure Dark</ion-label>
-                <ion-toggle [(ngModel)]="pureDarkThemeEnabled" [disabled]="!darkThemeEnabled"
-                  (ngModelChange)="togglePureDarkTheme()"></ion-toggle>
+                <ion-label>Theme</ion-label>
+                <ion-select [ngModel]="userSettings.theme | async"
+                  (ngModelChange)="userSettings.theme.next($event)">
+                  <ion-select-option value="">Auto (Default)</ion-select-option>
+                  <ion-select-option value="light">Light</ion-select-option>
+                  <ion-select-option value="dark">Dark</ion-select-option>
+                  <ion-select-option value="dark pure">Dark (Pure)</ion-select-option>
+                </ion-select>
               </ion-item>
               <ion-item class="ion-no-padding">
                 <ion-label>Accent Color</ion-label>
-                <ion-select [(ngModel)]="activeAccentColor" [disabled]="pureDarkThemeEnabled"
-                  (ngModelChange)="toggleAccentColor()">
-                  <ion-select-option *ngFor="let accentColor of accentColors" [value]="accentColor.value">
-                    {{accentColor.title}}
+                <ion-select [ngModel]="userSettings.accentColor | async"
+                  (ngModelChange)="userSettings.accentColor.next($event)"
+                  [disabled]="userSettings.theme.value.includes('pure')">
+                  <ion-select-option *ngFor="let accentColor of userSettings.accentColors"
+                    [value]="accentColor.name">
+                    {{ accentColor.title }}
                   </ion-select-option>
                 </ion-select>
               </ion-item>

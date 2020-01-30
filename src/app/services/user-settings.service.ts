@@ -3,29 +3,27 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
+import { skip } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserSettingsService {
-  activeAccentColor = 'blue-accent-color';
-  private darkTheme: BehaviorSubject<boolean>;
-  private pureDarkTheme: BehaviorSubject<boolean>;
-  private accentColor: BehaviorSubject<string>;
   private dashboardSections: BehaviorSubject<string[]>;
   private menuUI: BehaviorSubject<'cards' | 'list'>;
   private casheCleaered: BehaviorSubject<boolean>;
-  private shakeSensitivity: BehaviorSubject<string>;
   private busShuttleServiceSettings: BehaviorSubject<{ firstLocation: string, secondLocation: string, alarmBefore: string }>;
-  timetable: BehaviorSubject<{ blacklists: string[] }>;
 
-  accentColors = [
-    { name: 'red-accent-color', value: '#e54d42', rgbaValues: '229, 77, 66' },
-    { name: 'yellow-accent-color', value: '#DFA847', rgbaValues: '223, 168, 71' },
-    { name: 'blue-accent-color', value: '#3A99D9', rgbaValues: '58, 153, 217' },
-    { name: 'green-accent-color', value: '#08a14f', rgbaValues: '8, 161, 79' },
-    { name: 'red-accent-color', value: '#ec2a4d', rgbaValues: '236, 42, 77' },
-    { name: 'white-accent-color', value: '#b0acac', rgbaValues: '175, 175, 175' }
+  timetable = new BehaviorSubject({ blacklists: [] as string[] });
+  theme = new BehaviorSubject('');
+  accentColor = new BehaviorSubject('blue-accent-color');
+
+  readonly accentColors = [
+    { title: 'Sky (Default)', name: 'blue-accent-color', value: '#3a99d9', rgbaValues: '58, 153, 217' },
+    { title: 'Forest', name: 'green-accent-color', value: '#08a14f', rgbaValues: '8, 161, 79' },
+    { title: 'Fire', name: 'red-accent-color', value: '#e54d42', rgbaValues: '229, 77, 66' },
+    { title: 'Flower', name: 'pink-accent-color', value: '#ec2a4d', rgbaValues: '236, 42, 77' },
+    { title: 'Lightning', name: 'yellow-accent-color', value: '#dfa847', rgbaValues: '223, 168, 71' },
   ];
 
   // Default dasbhoard sections (will be added when the application loads /app.componenet/)
@@ -63,25 +61,10 @@ export class UserSettingsService {
     public statusBar: StatusBar,
     private platform: Platform
   ) {
-    this.darkTheme = new BehaviorSubject(false);
-    this.pureDarkTheme = new BehaviorSubject(false);
-    this.accentColor = new BehaviorSubject('blue-accent-color');
     this.dashboardSections = new BehaviorSubject(this.defaultDashboardSectionsSettings);
     this.menuUI = new BehaviorSubject('list');
     this.busShuttleServiceSettings = new BehaviorSubject(this.defaultBusShuttleServicesSettings);
     this.casheCleaered = new BehaviorSubject(false);
-    this.shakeSensitivity = new BehaviorSubject('60');
-    this.timetable = new BehaviorSubject({ blacklists: [] });
-  }
-
-  // DARK THEME
-  toggleDarkTheme(val: boolean) {
-    this.storage.set('dark-theme', val);
-    this.darkTheme.next(val);
-  }
-
-  darkThemeActivated() {
-    return this.darkTheme.asObservable();
   }
 
   clearStorage() {
@@ -128,34 +111,9 @@ export class UserSettingsService {
     return this.busShuttleServiceSettings.asObservable();
   }
 
-  // PURE DARK THEME
-  togglePureDarkTheme(val: boolean) {
-    this.storage.set('pure-dark-theme', val);
-    this.pureDarkTheme.next(val);
-  }
-
-  PureDarkThemeActivated() {
-    return this.pureDarkTheme.asObservable();
-  }
-
-  // ACCENT COLORS
-  getAccentColor() {
-    return this.accentColor.asObservable();
-  }
-
-  setAccentColor(val: string) {
-    this.storage.set('accent-color', val);
-    this.accentColor.next(val);
-  }
-
-  getAccentColorRgbaValue() {
-    let value = '';
-    this.accentColors.forEach(accentColor => {
-      if (accentColor.name === this.accentColor.value) {
-        value = accentColor.rgbaValues;
-      }
-    });
-    return value;
+  getAccentColorRgbaValue(): string {
+    const accentColor = this.accentColors.find(ac => ac.name === this.accentColor.value);
+    return accentColor ? accentColor.rgbaValues : '';
   }
 
   setDefaultDashboardSections(userType: 'students' | 'staff') {
@@ -169,15 +127,7 @@ export class UserSettingsService {
     this.dashboardSections.next(value);
   }
 
-  // Shake Sensitivity
-  getShakeSensitivity() {
-    return this.shakeSensitivity.asObservable();
-  }
 
-  setShakeSensitivity(val: string) {
-    this.storage.set('shake-sensitivity', val);
-    this.shakeSensitivity.next(val);
-  }
 
   // DASHBOARD SECTIONS
   setShownDashboardSections(val: string[]) {
@@ -214,27 +164,9 @@ export class UserSettingsService {
   getUserSettingsFromStorage() {
     // GETTING THE USER SETTINGS FROM STORAGE
     // IT IS CALLED ONLY IN APP COMPONENT AND THE VALUE PASSED BACK TO HERE
-    this.storage.get('dark-theme').then(value => {
-      if (value) {
-        this.toggleDarkTheme(value);
-        this.changeStatusBarColor(value);
-      } else {
-        this.toggleDarkTheme(false);
-        this.changeStatusBarColor(false);
-      }
-    });
-    this.storage.get('pure-dark-theme').then(value => {
-      if (value) {
-        this.togglePureDarkTheme(value);
-      } else {
-        this.togglePureDarkTheme(false);
-      }
-    });
-    this.storage.get('accent-color').then(value => {
-      value
-        ? this.setAccentColor(value)
-        : this.setAccentColor('blue-accent-color');
-    });
+    this.track(this.theme, 'theme', newValue => this.changeStatusBarColor(newValue.includes('dark')));
+    this.track(this.accentColor, 'accent-color');
+    this.track(this.timetable, 'timetable');
     this.storage.get('menu-ui').then(value => {
       value
         ? this.setMenuUI(value)
@@ -252,16 +184,22 @@ export class UserSettingsService {
         this.setBusShuttleServicesSettings(this.defaultBusShuttleServicesSettings);
       }
     });
-    this.storage.get('timetable').then((value: { blacklists: [] }) => {
-      if (value && value.blacklists.length > 0) {
-        this.timetable.next(value || { blacklists: [] });
-      }
-      this.timetable.subscribe(newValue => this.storage.set('timetable', newValue));
-    });
-    this.storage.get('shake-sensitivity').then(value => {
-      value
-        ? this.setShakeSensitivity(value)
-        : this.setShakeSensitivity('60');
+  }
+
+  /**
+   * Helper to keep track of values in user settings.
+   *
+   * @param subject reference to behavior subject stored
+   * @param key storage key
+   * @param handler callback when value changed
+   */
+  private track<T>(subject: BehaviorSubject<T>, key: string, handler: (newValue: T) => void = () => {}) {
+    this.storage.get(key).then(value => {
+      subject.next(value || subject.value);
+      subject.pipe(skip(1)).subscribe(newValue => {
+        this.storage.set(key, newValue);
+        handler(newValue);
+      });
     });
   }
 

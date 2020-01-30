@@ -19,12 +19,8 @@ import {
 export class SettingsPage implements OnInit {
   userRole = false;
   test = false;
-  activeAccentColor: string;
   defaultCampus = '';
   defaultVenue = '';
-  shakeSensitivity: number;
-  darkThemeEnabled = false;
-  pureDarkThemeEnabled = false;
   busShuttleServiceSettings = {
     firstLocation: '',
     secondLocation: '',
@@ -36,20 +32,6 @@ export class SettingsPage implements OnInit {
   venues$: Observable<Venue[]>;
 
   menuUI: 'cards' | 'list' = 'list';
-  sensitivityOptions = [
-    { index: 0, value: '40' },
-    { index: 1, value: '50' },
-    { index: 2, value: '60' },
-    { index: 3, value: '70' },
-    { index: 4, value: '80' }
-  ];
-  accentColors = [
-    { title: 'Sky (Default)', value: 'blue-accent-color' },
-    { title: 'Forest', value: 'green-accent-color' },
-    { title: 'Fire', value: 'red-accent-color' },
-    { title: 'Flower', value: 'pink-accent-color' },
-    { title: 'Lightning', value: 'yellow-accent-color' }
-  ];
   locationOptions = [
     'New Campus',
     'TPM',
@@ -66,26 +48,6 @@ export class SettingsPage implements OnInit {
     private alertCtrl: AlertController,
   ) {
     this.userSettings
-      .darkThemeActivated()
-      .subscribe(
-        {
-          next: value => (this.darkThemeEnabled = value)
-        }
-      );
-    this.userSettings
-      .PureDarkThemeActivated()
-      .subscribe(
-        {
-          next: value => (this.pureDarkThemeEnabled = value)
-        }
-      );
-    this.userSettings
-      .getAccentColor()
-      .subscribe(
-        {
-          next: value => (this.activeAccentColor = value)
-        });
-    this.userSettings
       .getMenuUI()
       .subscribe(
         {
@@ -97,13 +59,6 @@ export class SettingsPage implements OnInit {
         {
           next: value => this.busShuttleServiceSettings = value
         });
-    this.userSettings
-        .getShakeSensitivity()
-        .subscribe(
-          {
-            next: value => (this.shakeSensitivity = this.sensitivityOptions.findIndex(item => item.value === value))
-          });
-    this.timetable$ = this.userSettings.timetable.asObservable();
   }
 
 
@@ -113,6 +68,7 @@ export class SettingsPage implements OnInit {
       this.userRole = true;
     }
     this.locations$ = this.getLocations();
+    this.timetable$ = this.userSettings.timetable.asObservable();
     this.getDefaultLocation();
     if (this.defaultCampus) {
       this.getVenues();
@@ -136,22 +92,6 @@ export class SettingsPage implements OnInit {
 
   setBusShuttleServicesSettings() {
     this.userSettings.setBusShuttleServicesSettings(this.busShuttleServiceSettings);
-  }
-
-  toggleDarkTheme() {
-    this.pureDarkThemeEnabled = false;
-    this.userSettings.toggleDarkTheme(this.darkThemeEnabled);
-  }
-
-  togglePureDarkTheme() {
-    this.userSettings.togglePureDarkTheme(this.pureDarkThemeEnabled);
-    this.pureDarkThemeEnabled
-      ? this.userSettings.setAccentColor('white-accent-color')
-      : this.userSettings.setAccentColor('blue-accent-color');
-  }
-
-  toggleAccentColor() {
-    this.userSettings.setAccentColor(this.activeAccentColor);
   }
 
   toggleMenuUI() {

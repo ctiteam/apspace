@@ -14,11 +14,6 @@ import { ShakespearFeedbackService } from './services/shakespear-feedback.servic
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  darkThemeActivated = false;
-  pureDarkThemeActivated = false;
-  selectedAccentColor = 'blue-accent-color';
-  shakeSensitivity: number;
-
   // back button vars
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
@@ -126,25 +121,6 @@ export class AppComponent {
 
   getUserSettings() {
     this.userSettings.getUserSettingsFromStorage();
-    this.userSettings
-      .darkThemeActivated()
-      .subscribe((val) => {
-        this.darkThemeActivated = val;
-        this.userSettings.changeStatusBarColor(val);
-      });
-    this.userSettings
-      .PureDarkThemeActivated()
-      .subscribe((val) => {
-        this.pureDarkThemeActivated = val;
-      });
-    this.userSettings
-      .getAccentColor()
-      .subscribe(val => (this.selectedAccentColor = val));
-    this.userSettings
-      .getShakeSensitivity()
-      .subscribe(val => {
-        this.shakeSensitivity = Number(val);
-      });
   }
 
 }

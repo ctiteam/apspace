@@ -1,11 +1,3 @@
-<div [class]="selectedAccentColor">
-  <div [ngClass]="{
-    'light-theme': !darkThemeActivated && !pureDarkThemeActivated,
-    'dark-theme': darkThemeActivated,
-    'pure': pureDarkThemeActivated
-}">
-    <ion-app>
-      <ion-router-outlet></ion-router-outlet>
-    </ion-app>
-  </div>
-</div>
+<ion-app [ngClass]="[userSettings.theme | async, userSettings.accentColor | async]">
+  <ion-router-outlet></ion-router-outlet>
+</ion-app>
