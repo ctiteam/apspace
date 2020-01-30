@@ -184,7 +184,7 @@ export class ShakespearModalPage implements OnInit {
     });
   }
 
-  onMessageFieldChange(event) {
+  onMessageFieldChange(event: any) {
     this.message = event.trim();
   }
 
