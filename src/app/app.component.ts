@@ -31,22 +31,12 @@ export class AppComponent {
   loading: HTMLIonLoadingElement;
 
   constructor(
-    private actionSheetCtrl: ActionSheetController,
-    private alertCtrl: AlertController,
     private cas: CasTicketService,
     private fcm: FCM,
-    private feedback: FeedbackService,
-    private loadingCtrl: LoadingController,
-    private menuCtrl: MenuController,
-    private modalCtrl: ModalController,
-    private navCtrl: NavController,
     private network: Network,
-    private notificationService: NotificationService,
     private platform: Platform,
-    private popoverCtrl: PopoverController,
     private router: Router,
     private shake: Shake,
-    private toastCtrl: ToastController,
     private userSettings: UserSettingsService,
     private notificationService: NotificationService,
     private versionService: VersionService,
