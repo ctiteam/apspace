@@ -13,7 +13,11 @@ import { PasswordValidator } from '../../../validators/password.validator';
 })
 export class ChangeWebspacePasswordPage implements OnInit {
   loading: HTMLIonLoadingElement;
-  changePasswordForm: FormGroup;
+  changePasswordForm = new FormGroup({
+    current_password: new FormControl('', [Validators.required]),
+    new_password: new FormControl('', [Validators.required]),
+    confirm_password: new FormControl('', [Validators.required])
+  }, { validators: PasswordValidator });
   // passwordLengthMatch = false;
   // hasUpperCase = false;
   // hasLowerCase = false;
@@ -29,12 +33,6 @@ export class ChangeWebspacePasswordPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.changePasswordForm = new FormGroup({
-      current_password: new FormControl('', [Validators.required]),
-      new_password: new FormControl('', [Validators.required]),
-      confirm_password: new FormControl('', [Validators.required])
-    }, { validators: PasswordValidator }
-    );
   }
 
   changePassword() {
