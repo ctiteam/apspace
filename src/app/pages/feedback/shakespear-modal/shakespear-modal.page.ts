@@ -95,6 +95,7 @@ export class ShakespearModalPage implements OnInit {
     };
 
     this.camera.getPicture(options).then((imageData: string) => {
+      console.log(imageData);
       if (this.base64regex.test(imageData)) {
         const base64image = 'data:image/jpeg;base64,' + imageData;
         this.images.push(base64image);
@@ -118,6 +119,12 @@ export class ShakespearModalPage implements OnInit {
           text: 'Load from library',
           handler: () => {
             this.pickImage(this.camera.PictureSourceType.PHOTOLIBRARY);
+          }
+        },
+        {
+          text: 'Capture image',
+          handler: () => {
+            this.pickImage(this.camera.PictureSourceType.CAMERA);
           }
         },
         {

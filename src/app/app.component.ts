@@ -73,7 +73,7 @@ export class AppComponent {
 
       // FOR TESTING PURPOSE
       // this.statusBar.backgroundColorByHexString('#000000');
-      // this.statusBar.backgroundColorByName('blac k');
+      // this.statusBar.backgroundColorByName('black');
 
       platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
         this.shake.startWatch(40).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
@@ -85,18 +85,21 @@ export class AppComponent {
             return;
           }
 
-          this.screenshot.URI(80).then(async (res) => {
-            this.vibration.vibrate(1000); // Vibrate for 1s (1000ms)
-            const modal = await this.modalCtrl.create({
-              component: ShakespearModalPage,
-              cssClass: 'controlled-modal',
-              componentProps: {
-                imagePath: res.URI
-              }
-            });
+          const modalIsOpen = await this.modalCtrl.getTop();
+          if (!modalIsOpen) {
+            this.screenshot.URI(80).then(async (res) => {
+              this.vibration.vibrate(1000); // Vibrate for 1s (1000ms)
+              const modal = await this.modalCtrl.create({
+                component: ShakespearModalPage,
+                cssClass: 'controlled-modal',
+                componentProps: {
+                  imagePath: res.URI
+                }
+              });
 
-            await modal.present();
-          });
+              await modal.present();
+            });
+          }
         });
       });
 
