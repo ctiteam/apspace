@@ -14,6 +14,7 @@ import { FCM } from '@ionic-native/fcm/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -68,6 +69,7 @@ import { NotificationModalModule } from './pages/notifications/notification-moda
     StatusBar,
     Camera,
     File,
+    Vibration,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: RequestCache, useClass: RequestCacheWithMapStorage },
     httpInterceptorProviders,

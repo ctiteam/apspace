@@ -4,6 +4,7 @@ import { FCM } from '@ionic-native/fcm/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Screenshot } from '@ionic-native/screenshot/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
+import { Vibration } from '@ionic-native/vibration/ngx';
 import {
   ActionSheetController, LoadingController, MenuController, ModalController, NavController,
   Platform, PopoverController, ToastController
@@ -47,7 +48,6 @@ export class AppComponent {
     private shake: Shake,
     private toastCtrl: ToastController,
     private userSettings: UserSettingsService,
-    // private feedback: FeedbackService,
     private notificationService: NotificationService,
     private versionService: VersionService,
     private toastCtrl: ToastController,
@@ -56,9 +56,9 @@ export class AppComponent {
     private actionSheetCtrl: ActionSheetController,
     private menuCtrl: MenuController,
     private popoverCtrl: PopoverController,
-    // private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    private screenshot: Screenshot
+    private screenshot: Screenshot,
+    private vibration: Vibration
   ) {
     this.getUserSettings();
     this.versionService.checkForUpdate().subscribe();
@@ -85,13 +85,8 @@ export class AppComponent {
             return;
           }
 
-          // const active = this.modalCtrl.getTop();
-
-          // if (active) {
-          //   (await active).dismiss();
-          // }
-
           this.screenshot.URI(80).then(async (res) => {
+            this.vibration.vibrate(1000); // Vibrate for 1s (1000ms)
             const modal = await this.modalCtrl.create({
               component: ShakespearModalPage,
               cssClass: 'controlled-modal',
