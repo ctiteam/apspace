@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 
@@ -11,9 +11,13 @@ import { PasswordValidator } from '../../../validators/password.validator';
   templateUrl: './change-webspace-password.page.html',
   styleUrls: ['./change-webspace-password.page.scss'],
 })
-export class ChangeWebspacePasswordPage implements OnInit {
+export class ChangeWebspacePasswordPage {
   loading: HTMLIonLoadingElement;
-  changePasswordForm: FormGroup;
+  changePasswordForm = new FormGroup({
+    current_password: new FormControl('', [Validators.required]),
+    new_password: new FormControl('', [Validators.required]),
+    confirm_password: new FormControl('', [Validators.required])
+  }, { validators: PasswordValidator });
   // passwordLengthMatch = false;
   // hasUpperCase = false;
   // hasLowerCase = false;
@@ -27,15 +31,6 @@ export class ChangeWebspacePasswordPage implements OnInit {
     private webspacePasswordService: WebspacePasswordService,
     private alertCtrl: AlertController
   ) { }
-
-  ngOnInit() {
-    this.changePasswordForm = new FormGroup({
-      current_password: new FormControl('', [Validators.required]),
-      new_password: new FormControl('', [Validators.required]),
-      confirm_password: new FormControl('', [Validators.required])
-    }, { validators: PasswordValidator }
-    );
-  }
 
   changePassword() {
     if (!this.changePasswordForm.valid) {
