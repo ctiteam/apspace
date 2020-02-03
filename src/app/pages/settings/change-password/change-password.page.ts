@@ -55,7 +55,7 @@ export class ChangePasswordPage implements OnInit {
     } else {
       this.ws.get<StaffProfile>('/staff/profile', { caching: 'cache-only' }).pipe(
         tap(staffProfile => {
-          this.username = staffProfile[0].CODE;
+          this.username = staffProfile[0].ID;
         }),
       ).subscribe();
     }
