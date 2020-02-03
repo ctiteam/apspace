@@ -253,11 +253,15 @@ const routes: Routes = [
     data: { role: Role.Admin | Role.Lecturer },
     loadChildren: './pages/mentorship/mentorship.module#MentorshipPageModule'
   },
+  {
+    path: 'students-search',
+    loadChildren: () => import('./pages/students-search/students-search.module').then( m => m.StudentsSearchPageModule)
+  },
   { // this path must always be at the end of the routes array
     path: '**',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundPageModule)
-  }
+  },
 ];
 
 @NgModule({

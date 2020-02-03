@@ -1,0 +1,98 @@
+.input-elements-wrabber {
+  border-radius: 20px;
+  border: 1.4px solid #cebaba;
+  .input-wrapper {
+    border-right: 2px solid #cebaba;
+  }
+}
+
+ion-avatar{
+    width: 100px;
+    height: 130px;
+    --border-radius: 15px !important;
+    padding: 2px;
+    border: 1px solid var(--primary-color);
+    margin-left: 16px;
+}
+
+ion-item {
+  --inner-padding-end: 0px;
+  --padding-start: 0px;
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+}
+
+.table-item:nth-child(even) {
+  --background: var(--tertiary-bg-color) !important;
+}
+
+.table-top {
+  display: none;
+}
+
+.special-border {
+  display: none;
+}
+
+.img-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 110px;
+}
+
+.sem {
+  background-color: var(--primary-color);
+  color: hsla(0, 0%, 100%, 0.84);
+  display: inline-table;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.center-text-small{
+    text-align: center !important;
+}
+
+@media (min-width: 600px) {
+  // Bigger screen
+
+  .center-text-small{
+    text-align: unset !important;
+  }
+
+  .marker {
+    display: none;
+  }
+
+  .description {
+    text-align: unset !important;
+  }
+
+  .special-border {
+    display: inline-block;
+    border-bottom: none;
+  }
+
+  .special-card-header {
+    display: none;
+  }
+
+  .table-top {
+    display: block;
+    visibility: visible;
+    padding-bottom: 4px !important;
+  }
+  .profile-photo {
+    max-height: 150px;
+    max-width: 122px;
+  }
+
+  ion-img {
+    height: 100%;
+    border-radius: 15px;
+    margin: auto;
+  }
+}
