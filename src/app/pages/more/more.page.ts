@@ -764,7 +764,7 @@ export class MorePage implements OnInit {
     }
 
     const role = this.settings.get('role');
-    const canAccessResults = this.settings.get('canAccessResults');
+    // const canAccessResults = this.settings.get('canAccessResults');
     // tslint:disable-next-line:no-bitwise
     this.menuFiltered = this.menuFull.filter(menu => menu.role & role);
 
