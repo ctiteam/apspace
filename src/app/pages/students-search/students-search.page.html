@@ -30,7 +30,8 @@
               </ion-row>
             </ion-grid>
             <p class="danger-text">
-              <span class="text-bold">Note:</span> To be able to click on the search button, You must enter at least two characters in the search box.
+              <span class="text-bold">Note:</span> To be able to click on the search button, You must enter at least two
+              characters in the search box.
             </p>
           </ion-card-content>
         </ion-card>
@@ -97,7 +98,8 @@
                       {{studentProfile.BLOCK ? '' : 'Blocked'}}
                     </ion-badge>
                   </ion-card-title>
-                  <ion-card-subtitle class="colored-text center-text-small">{{studentProfile.STUDENT_NUMBER}}</ion-card-subtitle>
+                  <ion-card-subtitle class="colored-text center-text-small">{{studentProfile.STUDENT_NUMBER}}
+                  </ion-card-subtitle>
                 </ion-card-header>
               </ion-col>
             </ion-row>
@@ -251,7 +253,7 @@
                     </ion-row>
                   </ion-grid>
 
-                  <ng-container *ngFor="let result of semesterResult.value; last as last; trackBy: trackByFn">
+                  <ng-container *ngFor="let result of semesterResult.value; last as last;">
                     <ion-item lines="none" class="table-item">
                       <ion-grid>
                         <ion-row>
@@ -261,27 +263,11 @@
                           </ion-col>
                           <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
                             <span class="marker">Grade: </span>
-                            <ng-container
-                              *ngIf="result.GRADE.toLowerCase() !== 'Pending Survey'.toLowerCase(); else resultsPendingSurvey">
-                              {{ result.GRADE || "N/A" }}
-                            </ng-container>
-                            <ng-template #resultsPendingSurvey>
-                              <a (click)="openSurveyPage(result.MODULE_CODE)" class="colored-text"
-                                style="text-decoration: underline;">Pending
-                                Survey</a>
-                            </ng-template>
+                            {{ result.GRADE || "N/A" }}
                           </ion-col>
                           <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
                             <span class="marker">Grade Point: </span>
-                            <ng-container
-                              *ngIf="result.GRADE_POINT.toLowerCase() !== 'Pending Survey'.toLowerCase(); else resultsPendingSurvey">
-                              {{ result.GRADE_POINT || "N/A" }}
-                            </ng-container>
-                            <ng-template #resultsPendingSurvey>
-                              <a (click)="openSurveyPage(result.MODULE_CODE)" class="colored-text"
-                                style="text-decoration: underline !important;">Pending
-                                Survey</a>
-                            </ng-template>
+                            {{ result.GRADE_POINT || "N/A" }}
                           </ion-col>
                           <ion-col size="12" size-sm="3" size-md="3" class="ion-text-center">
                             <span class="marker">Internal Result: </span>
