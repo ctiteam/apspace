@@ -143,6 +143,13 @@ export class CasTicketService {
           return throwError(new Error('Group not supported'));
         }
 
+        const memberOf = res.serviceResponse.authenticationSuccess.attributes.memberOf
+          .join().toLowerCase().split(',');
+
+        if (memberOf.indexOf('cn=gims_web_result') !== -1) {
+          this.settings.set('canAccessResults', true);
+        }
+
         this.settings.set('role', role);
         return of(role);
       }),

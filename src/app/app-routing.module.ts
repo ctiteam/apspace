@@ -20,6 +20,7 @@ const routes: Routes = [
   {
     path: 'tabs',
     canActivate: [AuthGuard],
+    data: { role: Role.Student | Role.Lecturer | Role.Admin },
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
   },
 
@@ -253,11 +254,17 @@ const routes: Routes = [
     data: { role: Role.Admin | Role.Lecturer },
     loadChildren: './pages/mentorship/mentorship.module#MentorshipPageModule'
   },
+  // {
+  //   path: 'students-results',
+  //   canActivate: [AuthGuard],
+  //   data: { role: Role.Admin | Role.Lecturer },
+  //   loadChildren: () => import('./pages/students-search/students-search.module').then( m => m.StudentsSearchPageModule)
+  // },
   { // this path must always be at the end of the routes array
     path: '**',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundPageModule)
-  }
+  },
 ];
 
 @NgModule({

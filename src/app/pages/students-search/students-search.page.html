@@ -1,0 +1,476 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Students' Results</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+
+      <ion-col size="12" size-md="10" offset-md="1" size-xl="8" offset-xl="2">
+        <ion-card>
+          <ion-card-content>
+            <p class="text-bold">
+              Enter Student's ID/Name to search:
+            </p>
+            <ion-grid class="ion-no-padding ion-padding-bottom">
+              <ion-row class="input-elements-wrabber">
+                <ion-col size="10" class="ion-no-padding input-wrapper">
+                  <ion-input class="ion-padding-start" placeholder="Student ID/Name"
+                    (keyup.enter)="searchKeyword.length > 2 ? searchForStudents() : ''" [(ngModel)]="searchKeyword">
+                  </ion-input>
+                </ion-col>
+                <ion-col size="2" class="ion-no-padding">
+                  <ion-button class="colored-text ion-no-margin" fill="clear" expand="full"
+                    [disabled]="searchKeyword.length < 2" (click)="searchKeyword.length > 2 ? searchForStudents() : ''">
+                    <ion-icon class="responsive-icon" slot="icon-only" name="search"></ion-icon>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <p class="danger-text">
+              <span class="text-bold">Note:</span> To be able to click on the search button, You must enter at least two characters in the search box.
+            </p>
+          </ion-card-content>
+        </ion-card>
+        <ion-card *ngIf="showResults && !studentSelected">
+          <ion-card-header>
+            <ion-card-title>Search Results</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list>
+              <ng-container *ngIf="studentsList$ | async as students; else loadingList">
+                <ng-container *ngIf="students.length > 0; else noResults">
+                  <ion-item *ngFor="let student of students" tappable (click)="getStudentData(student)">
+                    <ion-label>
+                      <h4 class="text-bold">{{student.NAME}}</h4>
+                      <p>{{student.STUDENT_NUMBER}}</p>
+                    </ion-label>
+                  </ion-item>
+                </ng-container>
+                <ng-template #noResults>
+                  <h4 class="ion-text-center text-bold">
+                    <ion-text color="danger">
+                      No Results for {{searchResults}}!
+                    </ion-text>
+                  </h4>
+                </ng-template>
+              </ng-container>
+              <ng-template #loadingList>
+                <ion-item *ngFor="let _ of skeletons">
+                  <ion-label>
+                    <h4 class="text-bold">
+                      <ion-skeleton-text animated style="line-height: 25px; width: 70%;"></ion-skeleton-text>
+                    </h4>
+                    <p>
+                      <ion-skeleton-text animated style="line-height: 15px; width: 45%;"></ion-skeleton-text>
+                    </p>
+                  </ion-label>
+                </ion-item>
+              </ng-template>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="12" size-md="10" offset-md="1" size-xl="8" offset-xl="2" *ngIf="studentSelected">
+        <ion-card *ngIf="studentProfile$ | async as studentProfile; else loadingProfile">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="auto" *ngIf="studentDetails$ | async as studentDetails; else loadingDetails">
+                <ion-avatar>
+                  <img [src]="'data:image/jpg;base64,' +
+                  studentDetails[0].base64_photo" alt="img" alt="">
+                </ion-avatar>
+              </ion-col>
+              <ng-template #loadingDetails>
+                <ion-avatar>
+                  <ion-skeleton-text style="width: 100%; line-height: 100%;"></ion-skeleton-text>
+                </ion-avatar>
+              </ng-template>
+              <ion-col size="auto">
+                <ion-card-header>
+                  <ion-card-title class="center-text-small">
+                    {{studentProfile.NAME}}
+                    <ion-badge color="danger" *ngIf="!studentProfile.BLOCK">
+                      {{studentProfile.BLOCK ? '' : 'Blocked'}}
+                    </ion-badge>
+                  </ion-card-title>
+                  <ion-card-subtitle class="colored-text center-text-small">{{studentProfile.STUDENT_NUMBER}}</ion-card-subtitle>
+                </ion-card-header>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12" size-md="6">
+                  <p>Program Leader:</p>
+                  <p class="text-bold">{{studentProfile.PL_NAME}}</p>
+                  <p>Mentor:</p>
+                  <p class="text-bold">{{studentProfile.MENTOR_NAME}}</p>
+                </ion-col>
+                <ion-col size="12" size-md="6">
+                  <p>Student Status:</p>
+                  <p class="text-bold">{{studentProfile.STUDENT_STATUS}}</p>
+                  <p>Current/Last Intake:</p>
+                  <p class="text-bold">{{studentProfile.INTAKE}}</p>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="12" class="ion-text-center">
+                  <ng-container *ngIf="studentCourses$ | async as courses; else loadingCources">
+                    <ion-button *ngFor="let course of courses" class="colored-background"
+                      (click)="getStudentResults(studentProfile, course.INTAKE_CODE)">
+                      {{course.INTAKE_CODE}}
+                    </ion-button>
+                  </ng-container>
+                  <ng-template #loadingCources>
+                    loading the courses
+                  </ng-template>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+        <ng-template #loadingProfile>
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>
+                <ion-skeleton-text animated style="width: 60%; line-height: 20px;"></ion-skeleton-text>
+              </ion-card-title>
+              <ion-card-subtitle>
+                <ion-skeleton-text animated style="width: 30%; line-height: 17px;"></ion-skeleton-text>
+              </ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="12" size-md="6">
+                    <p>
+                      <ion-skeleton-text animated style="width: 45%; line-height: 15px;"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 60%; line-height: 15px;"></ion-skeleton-text>
+                    </p>
+
+                    <p>
+                      <ion-skeleton-text animated style="width: 35%; line-height: 15px;"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
+                    </p>
+
+                    <p>
+                      <ion-skeleton-text animated style="width: 60%; line-height: 15px;"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 50%; line-height: 15px;"></ion-skeleton-text>
+                    </p>
+
+                  </ion-col>
+                  <ion-col size="12" size-md="6">
+                    <p>
+                      <ion-skeleton-text animated style="width: 45%; line-height: 15px;"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 60%; line-height: 15px;"></ion-skeleton-text>
+                    </p>
+
+                    <p>
+                      <ion-skeleton-text animated style="width: 35%; line-height: 15px;"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
+                    </p>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
+
+
+        <ng-container *ngIf="studentSelected && intakeSelected">
+          <ng-container *ngIf="studentsResults$ | async as results; else loadingResults">
+            <ng-container *ngIf="results.length > 0; else noResultsYet">
+              <ion-card *ngFor="let semesterResult of results">
+                <ion-card-header class="sem">
+                  <ion-card-title style="color: white !important;">Semester {{ semesterResult.semester }}
+                  </ion-card-title>
+                </ion-card-header>
+
+                <ion-card-content>
+                  <div style="border-bottom: 2px solid var(--secondary-txt-color);">
+                    <ion-grid class="ion-no-padding">
+                      <ion-row>
+                        <ion-col size-lg="6" size="12">
+                          <span class="text-bold">Total Modules Passed</span>
+                          <span
+                            class="ion-float-right right-notch">{{ semesterResult.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</span>
+                        </ion-col>
+                        <ion-col size-lg="6" size="12">
+                          <span class="text-bold">Total Credit hours</span>
+                          <span
+                            class="ion-float-right right-notch">{{ semesterResult.summary[0]?.TOTAL_CREDIT_HOURS || 'N/A' }}</span>
+                        </ion-col>
+
+                        <ion-col size-lg="6" size="12">
+                          <span class="text-bold">Credits transferred</span>
+                          <span
+                            class="ion-float-right right-notch">{{ semesterResult.summary[0]?.CREDIT_TRANSFERRED || 'N/A' }}</span>
+                        </ion-col>
+
+                        <ion-col size-lg="6" size="12">
+                          <span class="text-bold">GPA</span>
+                          <span class="ion-float-right right-notch">{{ semesterResult.summary[0]?.GPA || 'N/A' }}</span>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </div>
+
+                  <ion-grid class="table-top">
+                    <ion-row>
+                      <ion-col size="12" size-sm="3" size-md="5">
+                        <h2 class="text-bold">Module</h2>
+                      </ion-col>
+
+                      <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
+                        <h2 class="text-bold">Result</h2>
+                      </ion-col>
+
+                      <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
+                        <h2 class="text-bold">Grade Point</h2>
+                      </ion-col>
+
+                      <ion-col size="12" size-sm="3" size-md="3" class="ion-text-center">
+                        <h2 class="text-bold">Internal Result Release Date</h2>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+
+                  <ng-container *ngFor="let result of semesterResult.value; last as last; trackBy: trackByFn">
+                    <ion-item lines="none" class="table-item">
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="12" size-sm="3" size-md="5"
+                            class="text-bold colored-border description ion-text-center">
+                            {{ result.MODULE_DESCRIPTION }}
+                          </ion-col>
+                          <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
+                            <span class="marker">Grade: </span>
+                            <ng-container
+                              *ngIf="result.GRADE.toLowerCase() !== 'Pending Survey'.toLowerCase(); else resultsPendingSurvey">
+                              {{ result.GRADE || "N/A" }}
+                            </ng-container>
+                            <ng-template #resultsPendingSurvey>
+                              <a (click)="openSurveyPage(result.MODULE_CODE)" class="colored-text"
+                                style="text-decoration: underline;">Pending
+                                Survey</a>
+                            </ng-template>
+                          </ion-col>
+                          <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
+                            <span class="marker">Grade Point: </span>
+                            <ng-container
+                              *ngIf="result.GRADE_POINT.toLowerCase() !== 'Pending Survey'.toLowerCase(); else resultsPendingSurvey">
+                              {{ result.GRADE_POINT || "N/A" }}
+                            </ng-container>
+                            <ng-template #resultsPendingSurvey>
+                              <a (click)="openSurveyPage(result.MODULE_CODE)" class="colored-text"
+                                style="text-decoration: underline !important;">Pending
+                                Survey</a>
+                            </ng-template>
+                          </ion-col>
+                          <ion-col size="12" size-sm="3" size-md="3" class="ion-text-center">
+                            <span class="marker">Internal Result: </span>
+
+                            {{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A'  }}
+                          </ion-col>
+                          <ion-col *ngIf="result.RECOMMENDATION">
+                            <span class="text-bold">Recommendation:</span> <br>
+                            <span class="danger-text">{{ result.RECOMMENDATION }}</span>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-item>
+                  </ng-container>
+                </ion-card-content>
+              </ion-card>
+            </ng-container>
+            <ng-template #noResultsYet>
+              <!-- <ion-card class="ion-no-margin ion-margin-top ion-margin-bottom ion-no-padding">
+              <ion-card-content>
+                <app-message-with-svg imageUrl='/assets/img/no-consultations.svg'
+                  messageTitle='No Results Data for {{selectedIntake}}'
+                  messageContent='Either the intake just started or there are not results published yet'
+                  wrapperMarginTop="20px" wrapperOffset="3" wrapperSize="6">
+                </app-message-with-svg>
+              </ion-card-content>
+            </ion-card> -->
+            </ng-template>
+          </ng-container>
+          <ng-template #loadingResults>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>
+                  <ion-skeleton-text animated style="width: 60%; line-height: 20px;"></ion-skeleton-text>
+                </ion-card-title>
+                <ion-card-subtitle>
+                  <ion-skeleton-text animated style="width: 30%; line-height: 17px;"></ion-skeleton-text>
+                </ion-card-subtitle>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="12" size-md="6">
+                      <p>
+                        <ion-skeleton-text animated style="width: 45%; line-height: 15px;"></ion-skeleton-text>
+                      </p>
+                      <p>
+                        <ion-skeleton-text animated style="width: 60%; line-height: 15px;"></ion-skeleton-text>
+                      </p>
+
+                      <p>
+                        <ion-skeleton-text animated style="width: 35%; line-height: 15px;"></ion-skeleton-text>
+                      </p>
+                      <p>
+                        <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
+                      </p>
+
+                      <p>
+                        <ion-skeleton-text animated style="width: 60%; line-height: 15px;"></ion-skeleton-text>
+                      </p>
+                      <p>
+                        <ion-skeleton-text animated style="width: 50%; line-height: 15px;"></ion-skeleton-text>
+                      </p>
+
+                    </ion-col>
+                    <ion-col size="12" size-md="6">
+                      <p>
+                        <ion-skeleton-text animated style="width: 45%; line-height: 15px;"></ion-skeleton-text>
+                      </p>
+                      <p>
+                        <ion-skeleton-text animated style="width: 60%; line-height: 15px;"></ion-skeleton-text>
+                      </p>
+
+                      <p>
+                        <ion-skeleton-text animated style="width: 35%; line-height: 15px;"></ion-skeleton-text>
+                      </p>
+                      <p>
+                        <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
+                      </p>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+            </ion-card>
+          </ng-template>
+
+          <ng-container *ngIf="interimLegend$ | async as interimLegend; else loadingInterimLegend">
+            <ion-card>
+              <ion-card-header class="colored-border" style="border-bottom: 2px solid">
+                <ion-card-title>Marks and Grades</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-grid>
+                  <div *ngFor="let interim of interimLegend">
+                    <ion-row class="ion-no-padding" *ngIf="!interim.CLASSIFICATION; else suMaster">
+                      <ion-col>
+                        <div *ngIf="interim.MARK_FROM">
+                          {{ interim.MARK_FROM + "-" + interim.MARK_TO || "" }}
+                        </div>
+                      </ion-col>
+                      <ion-col>
+                        <div>
+                          {{ interim.GRADE || "" }}
+                        </div>
+                      </ion-col>
+                      <ion-col>
+                        <div>
+                          {{ interim.GRADING_POINT || "" }}
+                        </div>
+                      </ion-col>
+                      <ion-col>
+                        <div>
+                          {{ interim.GRADE_DESCRIPTION || "" }}
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                    <ng-template #suMaster>
+                      <ion-row>
+                        <ion-col>{{ interim.CLASSIFICATION }}:</ion-col>
+                        <ion-col>{{ interim.GRADE }}</ion-col>
+                      </ion-row>
+                    </ng-template>
+                  </div>
+                </ion-grid>
+                <div style="padding: 5px !important">
+                  <h2>
+                    <span class="text-bold">R</span> = Awarding of module credit by passing module referral
+                    assessments.
+                  </h2>
+                  <h2>
+                    <span class="text-bold">C</span> = Awarding of module credit through compensation at the
+                    discretion of the Examination Board, based on the student's
+                    overall academic performance. No referral assessment is requried
+                    for module.
+                  </h2>
+                  <ng-container *ngIf="mpuLegend$ | async as mpu">
+                    <h2 *ngIf="mpu.length > 0">
+                      {{ mpu[0].MPU }}
+                    </h2>
+                  </ng-container>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ng-container>
+          <ng-template #loadingInterimLegend>
+            <ion-card>
+              <ion-card-content>
+                <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
+                <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
+                <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
+                <ion-skeleton-text animated style="width: 90%; line-height: 30px"></ion-skeleton-text>
+              </ion-card-content>
+            </ion-card>
+          </ng-template>
+
+          <ng-container
+            *ngIf="(classificationLegend$ | async) as classificationLegend; else loadingClassificationLegend">
+            <ng-container *ngIf="classificationLegend.length > 0">
+              <ion-card>
+                <ion-card-header class="colored-border" style="border-bottom: 2px solid">
+                  <ion-card-title>Degree Classification</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-row *ngFor="let classification of classificationLegend">
+                    <ion-col>
+                      {{ classification.GRADE || "" }}
+                    </ion-col>
+                    <ion-col>
+                      {{ classification.CLASSIFICATION || "" }}
+                    </ion-col>
+                  </ion-row>
+                </ion-card-content>
+              </ion-card>
+            </ng-container>
+          </ng-container>
+          <ng-template #loadingClassificationLegend>
+            <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
+            <ion-skeleton-text animated style="width: 90%; line-height: 30px"></ion-skeleton-text>
+          </ng-template>
+
+
+        </ng-container>
+
+
+
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+</ion-content>
