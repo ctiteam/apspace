@@ -20,6 +20,7 @@ const routes: Routes = [
   {
     path: 'tabs',
     canActivate: [AuthGuard],
+    data: { role: Role.Student | Role.Lecturer | Role.Admin },
     loadChildren: () => import('./pages/tabs/tabs.module').then(m => m.TabsPageModule)
   },
 

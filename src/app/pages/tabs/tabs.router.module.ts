@@ -49,11 +49,17 @@ const routes: Routes = [
         loadChildren: () => import('../profile/profile.module').then(m => m.ProfilePageModule)
       },
       {
+        canActivate: [AuthGuard],
         path: 'apcard',
+        // tslint:disable-next-line:no-bitwise
+        data: { role: Role.Student | Role.Lecturer | Role.Admin },
         loadChildren: () => import('../apcard/apcard.module').then(m => m.ApcardPageModule)
       },
       {
+        canActivate: [AuthGuard],
         path: 'more',
+        // tslint:disable-next-line:no-bitwise
+        data: { role: Role.Student | Role.Lecturer | Role.Admin },
         loadChildren: () => import('../more/more.module').then(m => m.MorePageModule)
       },
     ]
