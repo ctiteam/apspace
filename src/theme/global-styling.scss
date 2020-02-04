@@ -377,3 +377,43 @@ ion-refresher-content {
 ion-select {
   color: var(--main-txt-color);
 }
+
+
+/* FIX FOR ION-SELECT SCROLLBAR IN CHROME*/
+.alert-radio-group::-webkit-scrollbar {
+  width: 1em;
+  display: block !important;
+  background-color: rgb(241,241,241);
+}
+
+.alert-radio-group::-webkit-scrollbar-thumb {
+  background-color: rgb(193,193,193);
+  height: 1em;
+}
+
+/* Buttons */
+.alert-radio-group::-webkit-scrollbar-button:single-button {
+  background-color: rgb(241,241,241);
+  display: block;
+  border-style: solid;
+  height: 13px;
+  width: 16px;
+}
+/* Up */
+.alert-radio-group::-webkit-scrollbar-button:single-button:vertical:decrement {
+  border-width: 0 8px 8px 8px;
+  border-color: transparent transparent rgb(80,80,80) transparent;
+}
+
+.alert-radio-group::-webkit-scrollbar-button:single-button:vertical:decrement:hover {
+  border-color: transparent transparent #777777 transparent;
+}
+/* Down */
+.alert-radio-group::-webkit-scrollbar-button:single-button:vertical:increment {
+  border-width: 8px 8px 0 8px;
+  border-color: rgb(80,80,80) transparent transparent transparent;
+}
+
+.alert-radio-group::-webkit-scrollbar-button:vertical:single-button:increment:hover {
+  border-color: #777777 transparent transparent transparent;
+}
