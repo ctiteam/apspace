@@ -26,4 +26,6 @@ export interface Settings {
   scan: boolean;
   /* more page */
   favoriteItems: MenuItem[];
+  /* admin-front-line */
+  canAccessResults: boolean;
 }
