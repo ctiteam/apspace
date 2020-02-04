@@ -471,14 +471,15 @@ export class MorePage implements OnInit {
       role: Role.Student,
       tags: ['marks']
     },
-    // {
-    //   title: 'Students\' Results',
-    //   group: 'Academic & Enrollment',
-    //   url: 'students-results',
-    //   img: 'assets/img/results.png',
-    //   role: Role.Lecturer | Role.Admin,
-    //   tags: ['marks', 'web results']
-    // },
+    {
+      title: 'Students\' Results',
+      group: 'Academic & Enrollment',
+      url: 'students-results',
+      img: 'assets/img/results.png',
+      role: Role.Lecturer | Role.Admin,
+      canAccess: true,
+      tags: ['marks', 'web results']
+    },
     {
       title: 'Timetable',
       group: 'Academic & Enrollment',
@@ -764,9 +765,11 @@ export class MorePage implements OnInit {
     }
 
     const role = this.settings.get('role');
-    // const canAccessResults = this.settings.get('canAccessResults');
-    // tslint:disable-next-line:no-bitwise
-    this.menuFiltered = this.menuFull.filter(menu => menu.role & role);
+    const canAccessResults = this.settings.get('canAccessResults');
+    this.menuFiltered = this.menuFull.filter(
+      // tslint:disable-next-line:no-bitwise
+      menu => (menu.role & role) && ((menu.canAccess && menu.canAccess === canAccessResults) || !menu.canAccess)
+    );
 
     // tslint:disable-next-line:no-bitwise
     this.fav = this.fav.filter(menuItem => menuItem.role & role);

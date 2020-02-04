@@ -7,5 +7,6 @@ export interface MenuItem {
   img: string;
   role: Role;
   attachTicket?: boolean; // set to true if the service needs a service ticket
+  canAccess?: boolean;
   tags: string[];
 }
