@@ -1,427 +1,425 @@
 <ion-content>
-  <app-fireworks [fireworksSettings]="fireworksSettings">
-    <ion-refresher *ngIf="!editableList" slot="fixed" pullMax="400" pullMin="60 " (ionRefresh)="doRefresh($event)">
-      <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
-    </ion-refresher>
-  
-    <!-- MAIN GRID CLASS -->
-    <div class="masonry-list">
-  
-      <!-- PROFILE SECTION (Not included in the drag and drop list) -->
-      <div id="profile" class="masonry-item no-drag">
-        <ion-card class="ion-no-margin">
-          <ion-card-header class="ion-no-padding">
-            <ion-grid>
-              <ion-row>
-                <ion-col>
-                  <ion-avatar *ngIf="staffProfile$ | async as staffProfile"
-                    class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
-                    <img [src]="staffProfile[0].PHOTO" onerror="this.src='assets/img/no_img.png'" alt="Avatar">
-                  </ion-avatar>
-                  <div class="welcome-message-wrapper ion-padding-start float-left"
-                    *ngIf="staffFirstName; else loadingProfile">
+  <ion-refresher *ngIf="!editableList" slot="fixed" pullMax="400" pullMin="60 " (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- MAIN GRID CLASS -->
+  <div class="masonry-list">
+
+    <!-- PROFILE SECTION (Not included in the drag and drop list) -->
+    <div id="profile" class="masonry-item no-drag">
+      <ion-card class="ion-no-margin">
+        <ion-card-header class="ion-no-padding">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-avatar *ngIf="staffProfile$ | async as staffProfile"
+                  class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
+                  <img [src]="staffProfile[0].PHOTO" onerror="this.src='assets/img/no_img.png'" alt="Avatar">
+                </ion-avatar>
+                <div class="welcome-message-wrapper ion-padding-start float-left"
+                  *ngIf="staffFirstName; else loadingProfile">
+                  <ion-card-title>
+                    <h3 class="responsive-h1">{{greetingMessage}}, <span>{{staffFirstName | titlecase}}</span>
+                    </h3>
+                  </ion-card-title>
+                  <ion-card-subtitle>
+                    <h3 class="responsive-h2">Nice to see you again.</h3>
+                  </ion-card-subtitle>
+                </div>
+                <ng-template #loadingProfile>
+                  <div class="welcome-message-wrapper ion-padding-start float-left" style="width: 75%; padding-top: 0">
                     <ion-card-title>
-                      <h3 class="responsive-h1">{{greetingMessage}}, <span>{{staffFirstName | titlecase}}</span>
+                      <h3 class="responsive-h1">
+                        <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
                       </h3>
                     </ion-card-title>
                     <ion-card-subtitle>
-                      <h3 class="responsive-h2">Nice to see you again.</h3>
+                      <h3 class="responsive-h2">
+                        <ion-skeleton-text animated style="width: 75%; line-height: 25px"></ion-skeleton-text>
+                      </h3>
                     </ion-card-subtitle>
                   </div>
-                  <ng-template #loadingProfile>
-                    <div class="welcome-message-wrapper ion-padding-start float-left" style="width: 75%; padding-top: 0">
-                      <ion-card-title>
-                        <h3 class="responsive-h1">
-                          <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
-                        </h3>
-                      </ion-card-title>
-                      <ion-card-subtitle>
-                        <h3 class="responsive-h2">
-                          <ion-skeleton-text animated style="width: 75%; line-height: 25px"></ion-skeleton-text>
-                        </h3>
-                      </ion-card-subtitle>
+                </ng-template>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <div class="icons ion-margin-top ion-text-right">
+                  <a (click)="toggleReorderingMode()" class="ion-margin-end">
+                    <ion-icon *ngIf="!editableList" class="responsive-icon colored-text" name="md-create"></ion-icon>
+                  </a>
+                  <a (click)="navigateToPage('/settings')" class="ion-margin-end">
+                    <ion-icon class="anim-rotate-360-deg animated responsive-icon colored-text" name="settings">
+                    </ion-icon>
+                  </a>
+                  <a class="notifications ion-margin-end" (click)="navigateToPage('/notifications')">
+                    <ion-badge *ngIf="numberOfUnreadMsgs > 0" color="danger">{{ numberOfUnreadMsgs }}</ion-badge>
+                    <ion-icon class="responsive-icon colored-text anim-ring" name="notifications"></ion-icon>
+                  </a>
+                  <a class="notifications" (click)="navigateToPage('/logout')">
+                    <ion-icon class="responsive-icon danger-text anim-ring" name="log-out"></ion-icon>
+                  </a>
+                </div>
+              </ion-col>
+            </ion-row>
+            <!-- Add new section button -->
+            <ion-row *ngIf="editableList">
+              <ion-col>
+                <ion-button class="colored-background" expand="block" (click)="openDashboardSectionsSelectBox()">Add
+                  Dashboard
+                  Card</ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button *ngIf="editableList" class="success-background" expand="block"
+                  (click)="toggleReorderingMode()">
+                  Done Editing
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-header>
+      </ion-card>
+    </div>
+
+    <!-- ion-select hidden behind the shown dashboard sections item  -->
+    <ion-item [hidden]="true">
+      <ion-label>Choose Section(s):</ion-label>
+      <ion-select [(ngModel)]="dashboardSectionsSelectBoxModel" (ionChange)="dashboardSectionsChanged($event)"
+        multiple="true" okText="Add" [hidden]="true" #dashboardSectionsSelectBox>
+        <ion-select-option [disabled]="dashboardSection | disabled : dragulaModelArray" [value]="dashboardSection"
+          *ngFor="let dashboardSection of allDashboardSections">
+          {{ dashboardSection | sectionName }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <div #dragulaContainer [dragula]="editableList" [(dragulaModel)]="dragulaModelArray">
+
+      <!-- TODAY'S SCHEDULE -->
+      <div id="todaysSchedule" class="masonry-item" *ngIf="shownDashboardSections.includes('todaysSchedule')">
+        <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+          <ion-icon name="move" class="handle"></ion-icon>
+          <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('todaysSchedule')"></ion-icon>
+        </div>
+        <dashboard-card [cardTitle]='todaysScheduleCardConfigurations.cardTitle'
+          [cardSubtitle]='todaysScheduleCardConfigurations.cardSubtitle'
+          [withOptionsButton]='todaysScheduleCardConfigurations.withOptionsButton'
+          [options]='todaysScheduleCardConfigurations.options'>
+          <events-list [observable$]="todaysSchedule$"></events-list>
+        </dashboard-card>
+      </div>
+
+
+      <!-- INSPIRATIONAL QUOTES -->
+      <div id="inspirationalQuote" class="masonry-item" *ngIf="shownDashboardSections.includes('inspirationalQuote')">
+        <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+          <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('inspirationalQuote')"></ion-icon>
+          <ion-icon name="move" class="handle"></ion-icon>
+        </div>
+        <ion-card class="ion-no-margin">
+          <ion-card-header>
+            <ion-card-title>
+              Inspirational Quote
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-card class="inner-card">
+              <ion-card-content class="ion-no-padding">
+                <ng-container *ngIf="quote$ | async as quote; else loadingQuotes">
+                  <p *ngIf="quote.QUOTE" style="font-style: 18px;">
+                    <ion-icon class="floating-icon" name="quote"></ion-icon>
+                    {{ quote.QUOTE }}
+                  </p>
+                  <h4 *ngIf="quote.AUTHOR" class="text-bold ion-text-right">
+                    {{ quote.AUTHOR }}
+                  </h4>
+                </ng-container>
+                <ng-template #loadingQuotes>
+                  <p>
+                    <ion-skeleton-text style="width: 100%; line-height: 20px;" animated></ion-skeleton-text>
+                    <ion-skeleton-text style="width: 100%; line-height: 20px;" animated></ion-skeleton-text>
+                    <ion-skeleton-text style="width: 60%; line-height: 20px;" animated></ion-skeleton-text>
+                  </p>
+                  <h4 class="ion-text-right">
+                    <ion-skeleton-text class="ion-float-right" style="width: 30%; line-height: 25px;" animated>
+                    </ion-skeleton-text>
+                    <div class="clearfix"></div>
+                  </h4>
+                </ng-template>
+              </ion-card-content>
+            </ion-card>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- UPCOMING EVENTS -->
+      <div id="upcomingEvents" class="masonry-item" *ngIf="shownDashboardSections.includes('upcomingEvents')">
+        <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+          <ion-icon name="move" class="handle"></ion-icon>
+          <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('upcomingEvents')"></ion-icon>
+        </div>
+        <dashboard-card style="width: 100%;" [cardTitle]='upcomingEventsCardConfigurations.cardTitle'
+          [cardSubtitle]='upcomingEventsCardConfigurations.cardSubtitle'
+          [withOptionsButton]='upcomingEventsCardConfigurations.withOptionsButton'
+          [options]='upcomingEventsCardConfigurations.options'>
+          <events-list [observable$]="upcomingEvent$"></events-list>
+        </dashboard-card>
+      </div>
+
+      <!-- NEWS SECTION -->
+      <div id="news" *ngIf="shownDashboardSections.includes('news')">
+        <div class="masonry-item">
+          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+            <ion-icon name="move" class="handle"></ion-icon>
+            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('news')"></ion-icon>
+          </div>
+          <dashboard-card [cardTitle]='newsCardConfigurations.cardTitle'
+            [contentPadding]='newsCardConfigurations.contentPadding'
+            [withOptionsButton]='newsCardConfigurations.withOptionsButton'>
+            <ion-grid class="ion-no-padding" *ngIf="news$ | async as news; else loadingNews">
+              <ion-row *ngIf="news.length > 0; else noNews">
+                <ion-col class="ion-no-padding" size="12">
+                  <ion-list class="ion-no-padding ion-padding-bottom" style="margin-top: 2px;">
+                    <div class="news-wrapper" *ngFor="let newsItem of news; let i = index">
+                      <ion-item button *ngIf="newsItem" (click)="showMore(i)">
+                        <ion-avatar slot="start" *ngIf="newsItem.field_news_image[0]"
+                          [style.display]="newsIndexToShow === i ? 'none' : 'block'">
+                          <img [src]="newsItem.field_news_image[0].url" alt="news image">
+                        </ion-avatar>
+                        <ion-label [class.ion-text-center]="newsIndexToShow === i">
+                          <p
+                            [ngClass]="{ 'colored-text': newsIndexToShow === i, 'secondary-txt-color': newsIndexToShow !== i, 'text-bold' : true }">
+                            {{newsItem.title[0].value}}</p>
+                          <p class="small-text">{{newsItem.changed[0].value * 1000 | date}}</p>
+                        </ion-label>
+                      </ion-item>
+                      <div class="button-wrapper" [style.display]="newsIndexToShow !== i ? 'none' : 'block'">
+                        <img *ngIf="newsItem.field_news_image[0]" [src]="newsItem.field_news_image[0].url">
+                        <ion-button fill="claer" size="small" class="colored-text" (click)="openNewsModal(newsItem)">
+                          Read More</ion-button>
+                        <div class="clearfix"></div>
+                      </div>
                     </div>
-                  </ng-template>
+                  </ion-list>
                 </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col>
-                  <div class="icons ion-margin-top ion-text-right">
-                    <a (click)="toggleReorderingMode()" class="ion-margin-end">
-                      <ion-icon *ngIf="!editableList" class="responsive-icon colored-text" name="md-create"></ion-icon>
-                    </a>
-                    <a (click)="navigateToPage('/settings')" class="ion-margin-end">
-                      <ion-icon class="anim-rotate-360-deg animated responsive-icon colored-text" name="settings">
-                      </ion-icon>
-                    </a>
-                    <a class="notifications ion-margin-end" (click)="navigateToPage('/notifications')">
-                      <ion-badge *ngIf="numberOfUnreadMsgs > 0" color="danger">{{ numberOfUnreadMsgs }}</ion-badge>
-                      <ion-icon class="responsive-icon colored-text anim-ring" name="notifications"></ion-icon>
-                    </a>
-                    <a class="notifications" (click)="navigateToPage('/logout')">
-                      <ion-icon class="responsive-icon danger-text anim-ring" name="log-out"></ion-icon>
-                    </a>
-                  </div>
-                </ion-col>
-              </ion-row>
-              <!-- Add new section button -->
-              <ion-row *ngIf="editableList">
-                <ion-col>
-                  <ion-button class="colored-background" expand="block" (click)="openDashboardSectionsSelectBox()">Add
-                    Dashboard
-                    Card</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button *ngIf="editableList" class="success-background" expand="block"
-                    (click)="toggleReorderingMode()">
-                    Done Editing
+                <ion-col size="10" offset="1">
+                  <ion-button expand="block" routerLink="/news">
+                    Show All
                   </ion-button>
                 </ion-col>
               </ion-row>
+              <ng-template #noNews>
+                <app-message-with-svg messageTitle="List of news is empty!" messageContent="There are no news to show."
+                  imageUrl="assets/img/empty.svg" wrapperOffset="3" wrapperSize="6">
+                </app-message-with-svg>
+              </ng-template>
             </ion-grid>
-          </ion-card-header>
-        </ion-card>
-      </div>
-  
-      <!-- ion-select hidden behind the shown dashboard sections item  -->
-      <ion-item [hidden]="true">
-        <ion-label>Choose Section(s):</ion-label>
-        <ion-select [(ngModel)]="dashboardSectionsSelectBoxModel" (ionChange)="dashboardSectionsChanged($event)"
-          multiple="true" okText="Add" [hidden]="true" #dashboardSectionsSelectBox>
-          <ion-select-option [disabled]="dashboardSection | disabled : dragulaModelArray" [value]="dashboardSection"
-            *ngFor="let dashboardSection of allDashboardSections">
-            {{ dashboardSection | sectionName }}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-  
-      <div #dragulaContainer [dragula]="editableList" [(dragulaModel)]="dragulaModelArray">
-  
-        <!-- TODAY'S SCHEDULE -->
-        <div id="todaysSchedule" class="masonry-item" *ngIf="shownDashboardSections.includes('todaysSchedule')">
-          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-            <ion-icon name="move" class="handle"></ion-icon>
-            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('todaysSchedule')"></ion-icon>
-          </div>
-          <dashboard-card [cardTitle]='todaysScheduleCardConfigurations.cardTitle'
-            [cardSubtitle]='todaysScheduleCardConfigurations.cardSubtitle'
-            [withOptionsButton]='todaysScheduleCardConfigurations.withOptionsButton'
-            [options]='todaysScheduleCardConfigurations.options'>
-            <events-list [observable$]="todaysSchedule$"></events-list>
-          </dashboard-card>
-        </div>
-  
-  
-        <!-- INSPIRATIONAL QUOTES -->
-        <div id="inspirationalQuote" class="masonry-item" *ngIf="shownDashboardSections.includes('inspirationalQuote')">
-          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('inspirationalQuote')"></ion-icon>
-            <ion-icon name="move" class="handle"></ion-icon>
-          </div>
-          <ion-card class="ion-no-margin">
-            <ion-card-header>
-              <ion-card-title>
-                Inspirational Quote
-              </ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-card class="inner-card">
-                <ion-card-content class="ion-no-padding">
-                  <ng-container *ngIf="quote$ | async as quote; else loadingQuotes">
-                    <p *ngIf="quote.QUOTE" style="font-style: 18px;">
-                      <ion-icon class="floating-icon" name="quote"></ion-icon>
-                      {{ quote.QUOTE }}
-                    </p>
-                    <h4 *ngIf="quote.AUTHOR" class="text-bold ion-text-right">
-                      {{ quote.AUTHOR }}
-                    </h4>
-                  </ng-container>
-                  <ng-template #loadingQuotes>
-                    <p>
-                      <ion-skeleton-text style="width: 100%; line-height: 20px;" animated></ion-skeleton-text>
-                      <ion-skeleton-text style="width: 100%; line-height: 20px;" animated></ion-skeleton-text>
-                      <ion-skeleton-text style="width: 60%; line-height: 20px;" animated></ion-skeleton-text>
-                    </p>
-                    <h4 class="ion-text-right">
-                      <ion-skeleton-text class="ion-float-right" style="width: 30%; line-height: 25px;" animated>
-                      </ion-skeleton-text>
-                      <div class="clearfix"></div>
-                    </h4>
-                  </ng-template>
-                </ion-card-content>
-              </ion-card>
-            </ion-card-content>
-          </ion-card>
-        </div>
-  
-        <!-- UPCOMING EVENTS -->
-        <div id="upcomingEvents" class="masonry-item" *ngIf="shownDashboardSections.includes('upcomingEvents')">
-          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-            <ion-icon name="move" class="handle"></ion-icon>
-            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('upcomingEvents')"></ion-icon>
-          </div>
-          <dashboard-card style="width: 100%;" [cardTitle]='upcomingEventsCardConfigurations.cardTitle'
-            [cardSubtitle]='upcomingEventsCardConfigurations.cardSubtitle'
-            [withOptionsButton]='upcomingEventsCardConfigurations.withOptionsButton'
-            [options]='upcomingEventsCardConfigurations.options'>
-            <events-list [observable$]="upcomingEvent$"></events-list>
-          </dashboard-card>
-        </div>
-  
-        <!-- NEWS SECTION -->
-        <div id="news" *ngIf="shownDashboardSections.includes('news')">
-          <div class="masonry-item">
-            <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-              <ion-icon name="move" class="handle"></ion-icon>
-              <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('news')"></ion-icon>
-            </div>
-            <dashboard-card [cardTitle]='newsCardConfigurations.cardTitle'
-              [contentPadding]='newsCardConfigurations.contentPadding'
-              [withOptionsButton]='newsCardConfigurations.withOptionsButton'>
-              <ion-grid class="ion-no-padding" *ngIf="news$ | async as news; else loadingNews">
-                <ion-row *ngIf="news.length > 0; else noNews">
-                  <ion-col class="ion-no-padding" size="12">
-                    <ion-list class="ion-no-padding ion-padding-bottom" style="margin-top: 2px;">
-                      <div class="news-wrapper" *ngFor="let newsItem of news; let i = index">
-                        <ion-item button *ngIf="newsItem" (click)="showMore(i)">
-                          <ion-avatar slot="start" *ngIf="newsItem.field_news_image[0]"
-                            [style.display]="newsIndexToShow === i ? 'none' : 'block'">
-                            <img [src]="newsItem.field_news_image[0].url" alt="news image">
-                          </ion-avatar>
-                          <ion-label [class.ion-text-center]="newsIndexToShow === i">
-                            <p
-                              [ngClass]="{ 'colored-text': newsIndexToShow === i, 'secondary-txt-color': newsIndexToShow !== i, 'text-bold' : true }">
-                              {{newsItem.title[0].value}}</p>
-                            <p class="small-text">{{newsItem.changed[0].value * 1000 | date}}</p>
-                          </ion-label>
-                        </ion-item>
-                        <div class="button-wrapper" [style.display]="newsIndexToShow !== i ? 'none' : 'block'">
-                          <img *ngIf="newsItem.field_news_image[0]" [src]="newsItem.field_news_image[0].url">
-                          <ion-button fill="claer" size="small" class="colored-text" (click)="openNewsModal(newsItem)">
-                            Read More</ion-button>
-                          <div class="clearfix"></div>
+            <ng-template #loadingNews>
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-list style="margin-top: 2px;">
+                      <div class="news-wrapper">
+                        <ion-skeleton-text style="width: 50%; line-height: 30px;" animated></ion-skeleton-text>
+                        <div class="button-wrapper">
+                          <ion-skeleton-text style="width: 100%; line-height: 200px;" animated></ion-skeleton-text>
+                        </div>
+                      </div>
+                      <div class="news-wrapper">
+                        <ion-skeleton-text style="width: 100%; line-height: 30px;" animated></ion-skeleton-text>
+                        <div class="button-wrapper">
+                        </div>
+                      </div>
+                      <div class="news-wrapper">
+                        <ion-skeleton-text style="width: 100%; line-height: 30px;" animated></ion-skeleton-text>
+                        <div class="button-wrapper">
                         </div>
                       </div>
                     </ion-list>
                   </ion-col>
-                  <ion-col size="10" offset="1">
-                    <ion-button expand="block" routerLink="/news">
-                      Show All
-                    </ion-button>
+                </ion-row>
+              </ion-grid>
+            </ng-template>
+          </dashboard-card>
+        </div>
+      </div>
+
+      <!-- Notice Board SECTION -->
+      <div id="noticeBoard" *ngIf="shownDashboardSections.includes('noticeBoard')">
+        <div class="masonry-item">
+          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+            <ion-icon name="move" class="handle"></ion-icon>
+            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('noticeBoard')"></ion-icon>
+          </div>
+          <dashboard-card [cardTitle]='noticeBoardCardConfigurations.cardTitle'
+            [contentPadding]='noticeBoardCardConfigurations.contentPadding'
+            [withOptionsButton]='noticeBoardCardConfigurations.withOptionsButton'>
+            <ion-grid class="ion-no-padding"
+              *ngIf="noticeBoardItems$ | async as noticeBoardItems; else loadingSlideshow">
+              <ion-row *ngIf="noticeBoardItems.length > 0; else noSlides">
+                <ion-col class="ion-no-padding" size="12">
+                  <ion-slides #slides pager="true" [options]="noticeBoardSliderOpts">
+                    <ion-slide *ngFor="let noticeBoardItem of noticeBoardItems">
+                      <ion-card class="ion-no-margin">
+                        <ion-card-content class="ion-no-padding">
+                          <div [innerHTML]="noticeBoardItem.field_image_link[0].value">
+                          </div>
+                        </ion-card-content>
+                      </ion-card>
+                    </ion-slide>
+                  </ion-slides>
+                  <div class="swiper-button-next" (click)="nextSlide()"></div>
+                  <div class="swiper-button-prev" (click)="prevSlide()"></div>
+                </ion-col>
+              </ion-row>
+              <ng-template #noSlides>
+                <app-message-with-svg messageTitle="No Images Added to The Board!"
+                  messageContent="There are no notices to show." imageUrl="assets/img/empty.svg" wrapperOffset="3"
+                  wrapperSize="6">
+                </app-message-with-svg>
+              </ng-template>
+            </ion-grid>
+            <ng-template #loadingSlideshow>
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-list style="margin-top: 2px;">
+                      <div class="news-wrapper">
+                        <ion-skeleton-text style="width: 100%; line-height: 200px;" animated></ion-skeleton-text>
+                      </div>
+                    </ion-list>
                   </ion-col>
                 </ion-row>
-                <ng-template #noNews>
-                  <app-message-with-svg messageTitle="List of news is empty!" messageContent="There are no news to show."
-                    imageUrl="assets/img/empty.svg" wrapperOffset="3" wrapperSize="6">
-                  </app-message-with-svg>
-                </ng-template>
               </ion-grid>
-              <ng-template #loadingNews>
-                <ion-grid class="ion-no-padding">
-                  <ion-row>
-                    <ion-col size="12">
-                      <ion-list style="margin-top: 2px;">
-                        <div class="news-wrapper">
-                          <ion-skeleton-text style="width: 50%; line-height: 30px;" animated></ion-skeleton-text>
-                          <div class="button-wrapper">
-                            <ion-skeleton-text style="width: 100%; line-height: 200px;" animated></ion-skeleton-text>
-                          </div>
-                        </div>
-                        <div class="news-wrapper">
-                          <ion-skeleton-text style="width: 100%; line-height: 30px;" animated></ion-skeleton-text>
-                          <div class="button-wrapper">
-                          </div>
-                        </div>
-                        <div class="news-wrapper">
-                          <ion-skeleton-text style="width: 100%; line-height: 30px;" animated></ion-skeleton-text>
-                          <div class="button-wrapper">
-                          </div>
-                        </div>
-                      </ion-list>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-              </ng-template>
-            </dashboard-card>
-          </div>
+            </ng-template>
+          </dashboard-card>
         </div>
-  
-        <!-- Notice Board SECTION -->
-        <div id="noticeBoard" *ngIf="shownDashboardSections.includes('noticeBoard')">
-          <div class="masonry-item">
-            <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-              <ion-icon name="move" class="handle"></ion-icon>
-              <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('noticeBoard')"></ion-icon>
-            </div>
-            <dashboard-card [cardTitle]='noticeBoardCardConfigurations.cardTitle'
-              [contentPadding]='noticeBoardCardConfigurations.contentPadding'
-              [withOptionsButton]='noticeBoardCardConfigurations.withOptionsButton'>
-              <ion-grid class="ion-no-padding"
-                *ngIf="noticeBoardItems$ | async as noticeBoardItems; else loadingSlideshow">
-                <ion-row *ngIf="noticeBoardItems.length > 0; else noSlides">
-                  <ion-col class="ion-no-padding" size="12">
-                    <ion-slides #slides pager="true" [options]="noticeBoardSliderOpts">
-                      <ion-slide *ngFor="let noticeBoardItem of noticeBoardItems">
-                        <ion-card class="ion-no-margin">
-                          <ion-card-content class="ion-no-padding">
-                            <div [innerHTML]="noticeBoardItem.field_image_link[0].value">
-                            </div>
-                          </ion-card-content>
-                        </ion-card>
-                      </ion-slide>
-                    </ion-slides>
-                    <div class="swiper-button-next" (click)="nextSlide()"></div>
-                    <div class="swiper-button-prev" (click)="prevSlide()"></div>
-                  </ion-col>
-                </ion-row>
-                <ng-template #noSlides>
-                  <app-message-with-svg messageTitle="No Images Added to The Board!"
-                    messageContent="There are no notices to show." imageUrl="assets/img/empty.svg" wrapperOffset="3"
-                    wrapperSize="6">
-                  </app-message-with-svg>
-                </ng-template>
-              </ion-grid>
-              <ng-template #loadingSlideshow>
-                <ion-grid class="ion-no-padding">
-                  <ion-row>
-                    <ion-col size="12">
-                      <ion-list style="margin-top: 2px;">
-                        <div class="news-wrapper">
-                          <ion-skeleton-text style="width: 100%; line-height: 200px;" animated></ion-skeleton-text>
-                        </div>
-                      </ion-list>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-              </ng-template>
-            </dashboard-card>
+      </div>
+
+      <!-- BUS SHUTTLE SERVICES -->
+      <div id="upcomingTrips" *ngIf="shownDashboardSections.includes('upcomingTrips')">
+        <div class="masonry-item">
+          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+            <ion-icon name="move" class="handle"></ion-icon>
+            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('upcomingTrips')"></ion-icon>
           </div>
-        </div>
-  
-        <!-- BUS SHUTTLE SERVICES -->
-        <div id="upcomingTrips" *ngIf="shownDashboardSections.includes('upcomingTrips')">
-          <div class="masonry-item">
-            <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-              <ion-icon name="move" class="handle"></ion-icon>
-              <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('upcomingTrips')"></ion-icon>
-            </div>
-            <dashboard-card [cardTitle]='busCardConfigurations.cardTitle'
-              [contentPadding]='busCardConfigurations.contentPadding'
-              [withOptionsButton]='busCardConfigurations.withOptionsButton'>
-              <ng-container *ngIf="(upcomingTrips$ | async) as upcomingTrips; else loadingTrips">
-                <ng-container *ngIf="!showSetLocationsSettings; else locationsSettings">
-                  <ng-container *ngIf="upcomingTrips.length > 0; else noTrips">
-                    <ion-card class="trip-card ion-no-margin ion-margin-bottom"
-                      *ngFor="let upcomingTrip of upcomingTrips">
-                      <ion-card-content class="ion-no-padding">
-                        <ion-grid class="ion-no-padding">
-                          <ion-row>
-                            <ion-col class="ion-no-padding" size="1">
-                              <div class="full-background" [style.background]="upcomingTrip.trip_from_color"></div>
-                            </ion-col>
-                            <ion-col size="11" class="ion-padding">
-                              <h3 class="trips-locations text-bolder">{{ upcomingTrip.trip_from }} <ion-icon
-                                  name="arrow-dropright">
-                                </ion-icon> {{upcomingTrip.trip_to}}</h3>
-                              <p>
-                                <span class="trip-time" *ngIf="upcomingTrip.times[0]"> {{upcomingTrip.times[0]}}
-                                </span>
-                                <span class="trip-time" *ngIf="upcomingTrip.times[1]"> {{upcomingTrip.times[1]}}
-                                </span>
-                                <span class="trip-time" *ngIf="upcomingTrip.times[2]"> {{upcomingTrip.times[2]}}
-                                </span>
-                                <span class="trip-time" *ngIf="upcomingTrip.times[3]">
-                                  {{upcomingTrip.times[3]}} </span>
-                              </p>
-                            </ion-col>
-                          </ion-row>
-                        </ion-grid>
-                      </ion-card-content>
-                    </ion-card>
-                  </ng-container>
-                  <ng-template #noTrips>
-                    <app-message-with-svg messageTitle="No More Trips!"
-                      messageContent="No more trips for the selected line." imageUrl="assets/img/sad.svg"
-                      wrapperOffset="3" wrapperSize="6">
-                    </app-message-with-svg>
-                  </ng-template>
+          <dashboard-card [cardTitle]='busCardConfigurations.cardTitle'
+            [contentPadding]='busCardConfigurations.contentPadding'
+            [withOptionsButton]='busCardConfigurations.withOptionsButton'>
+            <ng-container *ngIf="(upcomingTrips$ | async) as upcomingTrips; else loadingTrips">
+              <ng-container *ngIf="!showSetLocationsSettings; else locationsSettings">
+                <ng-container *ngIf="upcomingTrips.length > 0; else noTrips">
+                  <ion-card class="trip-card ion-no-margin ion-margin-bottom"
+                    *ngFor="let upcomingTrip of upcomingTrips">
+                    <ion-card-content class="ion-no-padding">
+                      <ion-grid class="ion-no-padding">
+                        <ion-row>
+                          <ion-col class="ion-no-padding" size="1">
+                            <div class="full-background" [style.background]="upcomingTrip.trip_from_color"></div>
+                          </ion-col>
+                          <ion-col size="11" class="ion-padding">
+                            <h3 class="trips-locations text-bolder">{{ upcomingTrip.trip_from }} <ion-icon
+                                name="arrow-dropright">
+                              </ion-icon> {{upcomingTrip.trip_to}}</h3>
+                            <p>
+                              <span class="trip-time" *ngIf="upcomingTrip.times[0]"> {{upcomingTrip.times[0]}}
+                              </span>
+                              <span class="trip-time" *ngIf="upcomingTrip.times[1]"> {{upcomingTrip.times[1]}}
+                              </span>
+                              <span class="trip-time" *ngIf="upcomingTrip.times[2]"> {{upcomingTrip.times[2]}}
+                              </span>
+                              <span class="trip-time" *ngIf="upcomingTrip.times[3]">
+                                {{upcomingTrip.times[3]}} </span>
+                            </p>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-card-content>
+                  </ion-card>
                 </ng-container>
-                <ng-template #locationsSettings>
-                  <app-message-with-svg messageTitle="Section is not configured!"
-                    messageContent="You can configure this section from the settings page, under the bus shuttle services card."
-                    imageUrl="assets/img/config.svg" wrapperOffset="3" wrapperSize="6">
+                <ng-template #noTrips>
+                  <app-message-with-svg messageTitle="No More Trips!"
+                    messageContent="No more trips for the selected line." imageUrl="assets/img/sad.svg"
+                    wrapperOffset="3" wrapperSize="6">
                   </app-message-with-svg>
-                  <ion-grid>
-                    <ion-row>
-                      <ion-col size="10" offset="1">
-                        <ion-button routerLink="/settings" routerDirection="forward" class="colored-background"
-                          expand="block">
-                          Open Settings
-                        </ion-button>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
                 </ng-template>
               </ng-container>
-              <ng-template #loadingTrips>
-                <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 50%; line-height: 30px;"
-                  animated>
-                </ion-skeleton-text>
-                <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 90%; line-height: 30px;"
-                  animated>
-                </ion-skeleton-text>
-                <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 30%; line-height: 30px;"
-                  animated>
-                </ion-skeleton-text>
-                <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 70%; line-height: 30px;"
-                  animated>
-                </ion-skeleton-text>
+              <ng-template #locationsSettings>
+                <app-message-with-svg messageTitle="Section is not configured!"
+                  messageContent="You can configure this section from the settings page, under the bus shuttle services card."
+                  imageUrl="assets/img/config.svg" wrapperOffset="3" wrapperSize="6">
+                </app-message-with-svg>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="10" offset="1">
+                      <ion-button routerLink="/settings" routerDirection="forward" class="colored-background"
+                        expand="block">
+                        Open Settings
+                      </ion-button>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
               </ng-template>
-            </dashboard-card>
-          </div>
+            </ng-container>
+            <ng-template #loadingTrips>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 50%; line-height: 30px;"
+                animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 90%; line-height: 30px;"
+                animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 30%; line-height: 30px;"
+                animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 70%; line-height: 30px;"
+                animated>
+              </ion-skeleton-text>
+            </ng-template>
+          </dashboard-card>
         </div>
-  
-        <!-- APCard Transactions -->
-        <div id="apcard" *ngIf="shownDashboardSections.includes('apcard')">
-          <div class="masonry-item" *ngIf="apcardTransaction$ | async; else loadingApcardTransactions">
-            <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
-              <ion-icon name="move" class="handle"></ion-icon>
-              <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('apcard')"></ion-icon>
-            </div>
-            <dashboard-card [cardTitle]='apcardTransactionsCardConfigurations.cardTitle'
-              [cardSubtitle]='currentBalance !== -1 ? "Balance: " + (currentBalance | currency: "MYR": "RM"): "Balance: --"'
-              [options]='apcardTransactionsCardConfigurations.options'
-              [contentPadding]='apcardTransactionsCardConfigurations.contentPadding'
-              [withOptionsButton]='apcardTransactionsCardConfigurations.withOptionsButton'>
-              <chart height="600" *ngIf="apcardChart.data" [type]="apcardChart.type" [data]="apcardChart.data"
-                [options]="apcardChart.options">
-              </chart>
-            </dashboard-card>
-          </div>
-          <ng-template #loadingApcardTransactions>
-            <ion-card>
-              <ion-card-header>
-                <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 50%; line-height: 30px;"
-                  animated>
-                </ion-skeleton-text>
-                <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 90%; line-height: 30px;"
-                  animated>
-                </ion-skeleton-text>
-                <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 30%; line-height: 30px;"
-                  animated>
-                </ion-skeleton-text>
-                <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 70%; line-height: 30px;"
-                  animated>
-                </ion-skeleton-text>
-              </ion-card-content>
-            </ion-card>
-          </ng-template>
-        </div>
-  
       </div>
+
+      <!-- APCard Transactions -->
+      <div id="apcard" *ngIf="shownDashboardSections.includes('apcard')">
+        <div class="masonry-item" *ngIf="apcardTransaction$ | async; else loadingApcardTransactions">
+          <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
+            <ion-icon name="move" class="handle"></ion-icon>
+            <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('apcard')"></ion-icon>
+          </div>
+          <dashboard-card [cardTitle]='apcardTransactionsCardConfigurations.cardTitle'
+            [cardSubtitle]='currentBalance !== -1 ? "Balance: " + (currentBalance | currency: "MYR": "RM"): "Balance: --"'
+            [options]='apcardTransactionsCardConfigurations.options'
+            [contentPadding]='apcardTransactionsCardConfigurations.contentPadding'
+            [withOptionsButton]='apcardTransactionsCardConfigurations.withOptionsButton'>
+            <chart height="600" *ngIf="apcardChart.data" [type]="apcardChart.type" [data]="apcardChart.data"
+              [options]="apcardChart.options">
+            </chart>
+          </dashboard-card>
+        </div>
+        <ng-template #loadingApcardTransactions>
+          <ion-card>
+            <ion-card-header>
+              <ion-skeleton-text style="width: 70%; line-height: 30px;" animated></ion-skeleton-text>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 50%; line-height: 30px;"
+                animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 90%; line-height: 30px;"
+                animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 30%; line-height: 30px;"
+                animated>
+              </ion-skeleton-text>
+              <ion-skeleton-text class="ion-margin-top ion-margin-bottom" style="width: 70%; line-height: 30px;"
+                animated>
+              </ion-skeleton-text>
+            </ion-card-content>
+          </ion-card>
+        </ng-template>
+      </div>
+
     </div>
-  </app-fireworks>
+  </div>
 </ion-content>

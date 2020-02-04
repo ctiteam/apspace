@@ -13,7 +13,6 @@ import { NewsService, NotificationService, StudentTimetableService, UserSettings
 
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
-import { FireworksSettings } from 'src/app/interfaces/fireworks-settings';
 import { NewsModalPage } from '../news/news-modal';
 @Component({
   selector: 'app-student-dashboard',
@@ -21,26 +20,6 @@ import { NewsModalPage } from '../news/news-modal';
   styleUrls: ['./student-dashboard.page.scss'],
 })
 export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
-   // Setting fireworks animation
-   fireworksSettings: FireworksSettings = {
-    message: '新年快乐',
-    subMessage: 'Happy Chinese New Year',
-    fontStyle: {
-      color: 'lemonchiffon',
-      textShadow: '0 0 10px orange, 0 0 10px darkorange',
-      fontFamily: `'Ma Shan Zheng', cursive`,
-      fontSize: '300%'
-    },
-    launchImageStyle: {
-      launchImage: 'assets/img/lantern.png',
-      top: '16px',
-      left: '280px',
-      width: '30px'
-    },
-    headerImage: 'assets/img/6325321.png',
-    backgroundColor: '#192D46'
-  };
-
   // USER SETTINGS
   @ViewChild('dragulaContainer', { static: true }) container: ElementRef; // access the dragula container
   @ViewChild('dashboardSectionsSelectBox', { static: true }) dashboardSectionsselectBoxRef: IonSelect; // hidden selectbox
