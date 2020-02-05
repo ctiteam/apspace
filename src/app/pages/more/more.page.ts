@@ -529,7 +529,7 @@ export class MorePage implements OnInit {
     {
       title: 'APLink',
       group: 'Career Centre & Corporate Training',
-      url: 'https://apu-joblink-csm.symplicity.com/faculty/', // no ticket
+      url: 'https://apu-joblink-csm.symplicity.com/sso/faculty/', // no ticket
       img: 'assets/img/aplink.png',
       role: Role.Lecturer | Role.Admin,
       tags: []
