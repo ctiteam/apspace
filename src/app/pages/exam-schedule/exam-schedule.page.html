@@ -43,7 +43,7 @@
                       {{ exam.subjectDescription }}
                     </ion-card-title>
                     <ion-card-subtitle class="responsive-h1">
-                      {{ exam.since | date: "EEEE, dd MMM y" }}
+                      {{ exam.since | customdatetime: "EEEE, dd MMM y" }}
                     </ion-card-subtitle>
                   </ion-card-header>
                   <ion-card-content class="ion-no-padding">
@@ -59,8 +59,8 @@
                       <ion-item lines="none">
                         <ion-icon name="time"></ion-icon>
                         <p class="ion-padding-start">
-                          {{ exam.since | date: "h:mm a" }} -
-                          {{ exam.until | date: "h:mm a" }}
+                          {{ exam.since | customdatetime: "h:mm a" }} -
+                          {{ exam.until | customdatetime: "h:mm a" }}
                         </p>
                       </ion-item>
                     </ion-list>
@@ -74,7 +74,7 @@
                           </span>
                         </ion-col>
                         <ion-col size="5" class="ion-text-right">
-                          <p>{{ exam.docketsDue | date: "EEE, dd MMM y" }}</p>
+                          <p>{{ exam.docketsDue | customdatetime: "EEE, dd MMM y" }}</p>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="exam.appraisalsDue">
@@ -84,7 +84,7 @@
                           </span>
                         </ion-col>
                         <ion-col size="5" class="ion-text-right">
-                          <p>{{ exam.appraisalsDue | date: "EEE, dd MMM y" }}</p>
+                          <p>{{ exam.appraisalsDue | customdatetime: "EEE, dd MMM y" }}</p>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="exam.resultDate">
@@ -94,7 +94,7 @@
                           </span>
                         </ion-col>
                         <ion-col size="5" class="ion-text-right">
-                          <p>{{ exam.resultDate | date: "EEE, dd MMM y" }}</p>
+                          <p>{{ exam.resultDate | customdatetime: "EEE, dd MMM y" }}</p>
                         </ion-col>
                       </ion-row>
                     </ion-grid>

@@ -35,6 +35,8 @@ export class SettingsPage implements OnInit {
   venues$: Observable<Venue[]>;
 
   menuUI: 'cards' | 'list' = 'list';
+  timeFormat: '12-hours' | '24-hours';
+
   accentColors = [
     { title: 'Blue (Default)', value: 'blue-accent-color' },
     { title: 'Green', value: 'green-accent-color' },
@@ -89,9 +91,14 @@ export class SettingsPage implements OnInit {
         {
           next: value => this.busShuttleServiceSettings = value
         });
+    this.userSettings
+      .getTimeFormat()
+      .subscribe(
+        {
+          next: value => (this.timeFormat = value)
+        });
     this.timetable$ = this.userSettings.timetable.asObservable();
   }
-
 
   ngOnInit() {
     // tslint:disable-next-line: no-bitwise
@@ -138,6 +145,10 @@ export class SettingsPage implements OnInit {
 
   toggleMenuUI() {
     this.userSettings.setMenuUI(this.menuUI);
+  }
+
+  toggleTimeFormat() {
+    this.userSettings.setTimeFormat(this.timeFormat);
   }
 
   updateDefaultLocation(locationType: 'venue' | 'campus') { // for staff only (set iconsult default location)

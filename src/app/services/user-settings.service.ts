@@ -15,8 +15,14 @@ export class UserSettingsService {
   private dashboardSections: BehaviorSubject<string[]>;
   private menuUI: BehaviorSubject<'cards' | 'list'>;
   private casheCleaered: BehaviorSubject<boolean>;
+  private activeTimeFormat: BehaviorSubject<'24-hours' | '12-hours'>;
   private busShuttleServiceSettings: BehaviorSubject<{ firstLocation: string, secondLocation: string, alarmBefore: string }>;
   timetable: BehaviorSubject<{ blacklists: string[] }>;
+
+  timeFormats = [
+    { name: '12-hours', value: '12-hours' },
+    { name: '24-hours', value: '24-hours' }
+  ];
 
   accentColors = [
     { name: 'red-accent-color', value: '#e54d42', rgbaValues: '229, 77, 66' },
@@ -67,6 +73,7 @@ export class UserSettingsService {
     this.accentColor = new BehaviorSubject('blue-accent-color');
     this.dashboardSections = new BehaviorSubject(this.defaultDashboardSectionsSettings);
     this.menuUI = new BehaviorSubject('list');
+    this.activeTimeFormat = new BehaviorSubject('24-hours');
     this.busShuttleServiceSettings = new BehaviorSubject(this.defaultBusShuttleServicesSettings);
     this.casheCleaered = new BehaviorSubject(false);
     this.timetable = new BehaviorSubject({ blacklists: [] });
@@ -144,6 +151,16 @@ export class UserSettingsService {
   setAccentColor(val: string) {
     this.storage.set('accent-color', val);
     this.accentColor.next(val);
+  }
+
+  // TIME FORMAT
+  setTimeFormat(val: '12-hours' | '24-hours') {
+    this.storage.set('time-format', val);
+    this.activeTimeFormat.next(val);
+  }
+
+  getTimeFormat() {
+    return this.activeTimeFormat.asObservable();
   }
 
   getAccentColorRgbaValue() {
