@@ -471,15 +471,15 @@ export class MorePage implements OnInit {
       role: Role.Student,
       tags: ['marks']
     },
-    {
-      title: 'Students\' Results',
-      group: 'Academic & Enrollment',
-      url: 'students-results',
-      img: 'assets/img/results.png',
-      role: Role.Lecturer | Role.Admin,
-      canAccess: true,
-      tags: ['marks', 'web results']
-    },
+    // {
+    //   title: 'Students\' Results',
+    //   group: 'Academic & Enrollment',
+    //   url: 'students-results',
+    //   img: 'assets/img/results.png',
+    //   role: Role.Lecturer | Role.Admin,
+    //   canAccess: true,
+    //   tags: ['marks', 'web results']
+    // },
     {
       title: 'Timetable',
       group: 'Academic & Enrollment',
