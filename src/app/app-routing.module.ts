@@ -118,6 +118,17 @@ const routes: Routes = [
     loadChildren: () => import('./pages/exam-schedule/exam-schedule.module').then(m => m.ExamSchedulePageModule)
   },
   {
+    path: 'exam-schedule-admin',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/exam-schedule-admin/exam-schedule-admin.module').then( m => m.ExamScheduleAdminPageModule)
+  },
+  {
+    path: 'exam-schedule-details',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./pages/exam-schedule-admin/exam-schedule-details/exam-schedule-details.module').then(m => m.ExamScheduleDetailsPageModule)
+  },
+  {
     path: 'news',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/news/news.module').then(m => m.NewsPageModule)
@@ -264,7 +275,7 @@ const routes: Routes = [
     path: '**',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundPageModule)
-  },
+  }
 ];
 
 @NgModule({

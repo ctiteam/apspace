@@ -415,6 +415,14 @@ export class MorePage implements OnInit {
       tags: []
     },
     {
+      title: 'Exam Schedule Admin',
+      group: 'Academic & Enrollment',
+      url: 'exam-schedule-admin',
+      img: '',
+      role: Role.Admin,
+      tags: []
+    },
+    {
       title: 'FYP Bank Homepage',
       group: 'Academic & Enrollment',
       url: 'https://fypbank.apiit.edu.my/', // no ticket

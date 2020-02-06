@@ -1,0 +1,114 @@
+<ion-header>
+  <ion-toolbar mode="md">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Exam List</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleRemoveExamSchedule()" color="danger" class="colored-border colored-text"
+        fill="outline">
+        <ion-icon [name]="onDelete? 'close' : 'trash'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card class="ion-no-margin">
+          <ion-card-content class="ion-no-padding">
+            <ion-grid *ngIf="!onDelete" class="ion-no-padding grid-background">
+              <ion-row class="ion-no-padding">
+                <ion-col class="ion-no-padding">
+                  <ion-segment mode="md" class="align-segment">
+                    <ion-segment-button 
+                      checked
+                      mode="md" 
+                      *ngFor="let examScheduleListOption of examScheduleListOptions"
+                      [value]="examScheduleListOption">
+                      {{ examScheduleListOption }}
+                    </ion-segment-button>
+                  </ion-segment>
+                </ion-col>
+                <ion-col size="3" class="ion-text-right">
+                  <ion-button (click)="toggleExamView()" class="colored-background">
+                    <span *ngIf="!isPast; else past">PAST</span>
+                    <ng-template #past>
+                      CURRENT
+                    </ng-template>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+        
+            <ion-item class="table-header">
+              <ion-grid>
+                <ion-row>
+                  <ion-col class="ion-no-padding">
+                    <h2 class="text-bold">Module</h2>
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    <h2 class="text-bold">Date & Time</h2>
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    <h2 class="text-bold">Publication Date</h2>
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    <h2 class="text-bold">Created By</h2>
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    <h2 class="text-bold">Status</h2>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+
+            <ion-item 
+              button 
+              (click)="viewExamScheduleDetails()"
+              [style.border-left-color]="(examSchedule.module | strToColor)"
+              [ngClass]="{'clickable-item' : !onDelete}"
+              class="table-item" 
+              *ngFor="let examSchedule of examSchedules">
+              <ion-grid>
+                <ion-row>
+                  <ion-col class="text-bold ion-no-padding">
+                    {{examSchedule.module}}
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    {{examSchedule.dateTime}}
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    {{examSchedule.publicationDate}}
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    {{examSchedule.createdBy}}
+                  </ion-col>
+                  <ion-col class="ion-no-padding is-inactive" [ngClass]="{'is-active': examSchedule.status === 'Active'}">
+                    {{examSchedule.status}}
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+              <ion-checkbox *ngIf="onDelete"></ion-checkbox>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row class="remove-button-margin" *ngIf="onDelete">
+      <ion-col class="ion-text-end">
+        <ion-button class="danger-background">REMOVE</ion-button> 
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button class="colored-background">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-footer>
