@@ -1,0 +1,157 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Exam Schedule Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card class="ion-no-margin">
+          <ion-card-content class="ion-no-padding">
+            <ion-list lines="none">
+              <ion-item *ngFor="let examScheduleDetail of examScheduleDetails; let i = index">
+                <ion-grid class="ion-no-padding">
+                  <ion-row class="ion-no-padding">
+                    <ion-col size="1" class="ion-no-padding">
+                      {{examScheduleDetail.title}} :
+                    </ion-col>
+                    <ion-col class="text-bold ion-no-padding">
+                      {{examScheduleDetail.detail}}
+                    </ion-col>
+                    <ion-col *ngIf="i === 0" class="ion-text-end ion-no-padding">
+                      <ion-icon name="create" class="clickable-icon"></ion-icon>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-card class="ion-no-margin">
+          <ion-card-content class="ion-no-padding">
+            <ion-item>
+              <ion-grid class="ion-no-padding">
+                <ion-row class="ion-no-padding">
+                  <ion-col size="1" class="ion-align-self-center ion-no-padding">
+                    Status :
+                  </ion-col>
+                  <ion-col 
+                    class="text-bold ion-align-self-center is-inactive ion-no-padding" 
+                    [ngClass]="{'is-active': status === 'Active'}">
+                    {{ status }}
+                  </ion-col>
+                  <ion-col class="ion-text-end ion-no-padding">
+                    <ion-button class="danger-background">
+                      <span class="ion-margin">ACTIVATE THIS EXAM SCHEDULE</span>
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-card class="ion-no-margin">
+          <ion-card-header class="custom-background">
+            <ion-card-title>
+              <ion-grid class="ion-no-padding">
+                <ion-row class="ion-no-padding">
+                  <ion-col class="ion-no-padding ion-align-self-center">
+                    <h5>
+                      Exam Schedule - Intakes
+                    </h5>
+                  </ion-col> 
+                  <ion-col size="3" class="ion-no-padding ion-text-end ion-align-self-center">
+                    <ion-icon [name]="onEdit ? 'close' : 'trash'" class="clickable-icon-danger" (click)="toggleEditIntake()"></ion-icon>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content class="ion-no-padding">
+            <ion-item class="table-header">
+              <ion-grid>
+                <ion-row>
+                  <ion-col class="ion-no-padding">
+                    <h2 class="text-bold">Intake</h2>
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    <h2 class="text-bold">Type</h2>
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    <h2 class="text-bold">Venue</h2>
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    <h2 class="text-bold">Dockets Issuance</h2>
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    <h2 class="text-bold">Exam Result Date</h2>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+
+            <ion-item 
+              [button]="!onEdit"
+              (click)="!onEdit"
+              [style.border-left-color]="(intake.intake | strToColor)"
+              [ngClass]="{'clickable-item' : !onEdit}"
+              class="table-item clickable-item" 
+              *ngFor="let intake of intakes">
+              <ion-grid>
+                <ion-row>
+                  <ion-col class="text-bold ion-no-padding">
+                    {{intake.intake}}
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    {{intake.type}}
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    {{intake.venue}}
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    {{intake.docketsIssuance}}
+                  </ion-col>
+                  <ion-col class="ion-no-padding">
+                    <div class="flex-col-item">
+                      {{intake.resultDate}}
+                      <ion-checkbox *ngIf="onEdit" class="ion-no-margin"></ion-checkbox>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row class="button-margin" *ngIf="onEdit">
+      <ion-col class="ion-text-end">
+        <ion-button class="danger-background">REMOVE</ion-button> 
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+
+<ion-footer>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button class="colored-background">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-footer>
