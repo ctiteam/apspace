@@ -36,7 +36,7 @@ ion-segment-button {
     background: var(--main-bg-color);
 }
 
-.remove-button-margin {
+.button-margin {
     margin-bottom: 65px;
 }
 
@@ -51,4 +51,10 @@ ion-item.clickable-item {
   &:active {
     border-left-width: 12px !important;
   }
+}
+
+.flex-col-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

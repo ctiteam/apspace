@@ -66,8 +66,8 @@
             </ion-item>
 
             <ion-item 
-              button 
-              (click)="viewExamScheduleDetails()"
+              [button]="!onDelete"
+              (click)="!onDelete && viewExamScheduleDetails()"
               [style.border-left-color]="(examSchedule.module | strToColor)"
               [ngClass]="{'clickable-item' : !onDelete}"
               class="table-item" 
@@ -87,17 +87,19 @@
                     {{examSchedule.createdBy}}
                   </ion-col>
                   <ion-col class="ion-no-padding is-inactive" [ngClass]="{'is-active': examSchedule.status === 'Active'}">
-                    {{examSchedule.status}}
+                    <div class="flex-col-item">
+                      {{examSchedule.status}}
+                      <ion-checkbox class="ion-no-margin" *ngIf="onDelete"></ion-checkbox>
+                    </div>
                   </ion-col>
                 </ion-row>
               </ion-grid>
-              <ion-checkbox *ngIf="onDelete"></ion-checkbox>
             </ion-item>
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
-    <ion-row class="remove-button-margin" *ngIf="onDelete">
+    <ion-row class="button-margin" *ngIf="onDelete">
       <ion-col class="ion-text-end">
         <ion-button class="danger-background">REMOVE</ion-button> 
       </ion-col>
