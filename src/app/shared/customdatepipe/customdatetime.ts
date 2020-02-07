@@ -19,7 +19,7 @@ export class CustomDateTimePipe implements PipeTransform {
 
   // tslint:disable-next-line: no-shadowed-variable
   transform(value: any, format?: string) {
-    if (format !== 'h:mm a' && format !== 'HH:mm') { // The best statement to make this all work
+    if (format !== 'h:mm a' && format !== 'HH:mm') { // The best statement to make all this work
       return formatDate(value, format, 'en-US'); // Fast quit
     }
 

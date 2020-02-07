@@ -242,6 +242,11 @@ export class UserSettingsService {
         ? this.setAccentColor(value)
         : this.setAccentColor('blue-accent-color');
     });
+    this.storage.get('time-format').then(value => {
+      value
+        ? this.setTimeFormat(value)
+        : this.setTimeFormat('12-hours');
+    });
     this.storage.get('menu-ui').then(value => {
       value
         ? this.setMenuUI(value)
