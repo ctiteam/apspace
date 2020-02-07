@@ -4,6 +4,11 @@
     <ion-buttons slot="start" [hidden]='comingFromTabs()'>
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="generateMonthlyTransactionsPdf()">
+        <ion-icon name="home" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
