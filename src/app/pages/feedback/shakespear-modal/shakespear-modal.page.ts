@@ -30,7 +30,7 @@ export class ShakespearModalPage implements OnInit {
 
   @Input() imagePath: string;
 
-  base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+  // base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
   showImage = false;
   images = [];
 
@@ -95,8 +95,7 @@ export class ShakespearModalPage implements OnInit {
     };
 
     this.camera.getPicture(options).then((imageData: string) => {
-      console.log(imageData);
-      if (this.base64regex.test(imageData)) {
+      if (imageData.startsWith('/9j')) {
         const base64image = 'data:image/jpeg;base64,' + imageData;
         this.images.push(base64image);
       } else {
@@ -116,15 +115,15 @@ export class ShakespearModalPage implements OnInit {
       header: 'Please select',
       buttons: [
         {
-          text: 'Load from library',
-          handler: () => {
-            this.pickImage(this.camera.PictureSourceType.PHOTOLIBRARY);
-          }
-        },
-        {
           text: 'Capture image',
           handler: () => {
             this.pickImage(this.camera.PictureSourceType.CAMERA);
+          }
+        },
+        {
+          text: 'Load from your smelly gallery',
+          handler: () => {
+            this.pickImage(this.camera.PictureSourceType.PHOTOLIBRARY);
           }
         },
         {
