@@ -16,6 +16,7 @@ ion-segment-button {
 }
 
 .table-header{
+    display: none;
     --background: var(--tertiary-bg-color) !important;
 }
 
@@ -36,7 +37,7 @@ ion-segment-button {
     background: var(--main-bg-color);
 }
 
-.button-margin {
+.row-margin {
     margin-bottom: 65px;
 }
 
@@ -57,4 +58,20 @@ ion-item.clickable-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.display-on-sm {
+    vertical-align: -2.5px;
+    padding-left: 4px;
+    padding-right: 8px;
+}
+
+@media (min-width: 576px) {
+    .table-header {
+        display: block;
+    }
+
+    .display-on-sm {
+        display: none;
+    }
 }

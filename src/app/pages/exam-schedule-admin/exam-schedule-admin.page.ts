@@ -3,7 +3,8 @@ import { NavController } from '@ionic/angular';
 
 interface ExamSchedule {
   module: string;
-  dateTime: string;
+  date: string;
+  time: string;
   publicationDate: string;
   createdBy: string;
   status: string;
@@ -24,143 +25,195 @@ export class ExamScheduleAdminPage implements OnInit {
   examSchedules: ExamSchedule[] = [
     {
       module: 'CT001-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Inactive'
     },
     {
-      module: 'CT022-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Active'
     },
     {
       module: 'CT001-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Inactive'
     },
     {
-      module: 'CT022-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Inactive'
+    },
+    {
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Inactive'
+    },
+    {
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Active'
     },
     {
       module: 'CT001-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Inactive'
     },
     {
-      module: 'CT022-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Inactive'
+    },
+    {
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Inactive'
+    },
+    {
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Active'
     },
     {
       module: 'CT001-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Inactive'
     },
     {
-      module: 'CT022-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Inactive'
+    },
+    {
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Inactive'
+    },
+    {
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Active'
     },
     {
       module: 'CT001-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Inactive'
     },
     {
-      module: 'CT022-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Inactive'
+    },
+    {
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Inactive'
+    },
+    {
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Active'
     },
     {
       module: 'CT001-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Inactive'
     },
     {
-      module: 'CT022-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Inactive'
+    },
+    {
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Inactive'
+    },
+    {
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Active'
     },
     {
       module: 'CT001-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Inactive'
-    },
-    {
-      module: 'CT022-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Active'
     },
     {
       module: 'CT001-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Inactive'
-    },
-    {
-      module: 'CT022-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Active'
-    },
-    {
-      module: 'CT001-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT022-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Active'
-    },
-    {
-      module: 'CT001-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT022-3-2',
-      dateTime: '19-Sep-2019, 11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Active'
     },
   ];
 

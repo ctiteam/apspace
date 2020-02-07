@@ -404,6 +404,12 @@ ion-fab-button {
     --background-activated: var(--primary-color) !important;
     --background-hover: var(--sub-primary-color);
   }
+
+  &.danger-background {
+    --background: var(--danger-color) !important;
+    --background-activated: var(--danger-color) !important;
+    --background-hover: var(--danger-hover-color);
+  }
 }
 
 ion-alert {
