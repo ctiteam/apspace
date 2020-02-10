@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
+import { AddExamSchedulePage } from './add-exam-schedule/add-exam-schedule.page';
 
 interface ExamSchedule {
   module: string;
@@ -221,7 +222,7 @@ export class ExamScheduleAdminPage implements OnInit {
   isPast = false;
   selectedExamScheduleOption = 'Exam Schedule';
 
-  constructor(public navCtrl: NavController) { }
+  constructor(public navCtrl: NavController, public modalCtrl: ModalController) { }
 
   ngOnInit() {
   }
@@ -236,5 +237,12 @@ export class ExamScheduleAdminPage implements OnInit {
 
   viewExamScheduleDetails() {
     this.navCtrl.navigateForward(['exam-schedule-details']);
+  }
+
+  addNewExamSchedule() {
+    this.modalCtrl.create({
+      component: AddExamSchedulePage,
+      cssClass: 'full-page-modal'
+    }).then(modal => modal.present());
   }
 }

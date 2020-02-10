@@ -114,7 +114,7 @@
 
 <ion-footer>
   <ion-fab *ngIf="!onDelete; else fabDelete" vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button class="colored-background">
+    <ion-fab-button (click)="addNewExamSchedule()" class="colored-background">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>

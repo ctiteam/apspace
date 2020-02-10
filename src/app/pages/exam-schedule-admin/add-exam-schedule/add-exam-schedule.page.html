@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button class="colored-text" (click)="closeModal()">
+        CLOSE
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Create Exam Schedule</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col class="ion-no-padding" size-xs="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3">
+        <ion-card>
+          <ion-card-content>
+            <ion-item lines="none">
+              <ion-label position="stacked" class="item-label">
+                Publication Date
+              </ion-label>
+              <ion-calendar class="form-input"></ion-calendar>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-label position="stacked" class="item-label">
+                Module
+              </ion-label>
+              <ion-select class="form-input"></ion-select>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-label position="stacked" class="item-label">
+                Date <ion-checkbox></ion-checkbox> (check this options only if hte exam date is not decided)
+              </ion-label>
+              <ion-calendar class="form-input"></ion-calendar>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-label position="stacked" class="item-label">
+                Time
+              </ion-label>
+              <ion-datetime class="form-input"></ion-datetime>
+              Till
+              <ion-datetime class="form-input"></ion-datetime>
+            </ion-item>
+            
+            <ion-item lines="none">
+              <ion-label position="stacked" class="item-label">
+                Remarks
+              </ion-label>
+              <ion-input class="form-input"></ion-input>
+            </ion-item>
+            <ion-button>SUBMIT</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
