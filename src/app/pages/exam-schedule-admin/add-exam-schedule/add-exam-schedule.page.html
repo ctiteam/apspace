@@ -14,7 +14,7 @@
     <ion-row>
       <ion-col class="ion-no-padding" size-xs="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3">
         <ion-card>
-          <ion-card-content>
+          <ion-card-content class="ion-no-padding">
             <ion-item lines="none">
               <ion-label position="stacked" class="item-label">
                 Publication Date
@@ -31,19 +31,35 @@
 
             <ion-item lines="none">
               <ion-label position="stacked" class="item-label">
-                Date <ion-checkbox></ion-checkbox> (check this options only if hte exam date is not decided)
+                Date 
               </ion-label>
-              <ion-calendar class="form-input"></ion-calendar>
+              <ion-datetime class="form-input"></ion-datetime>
             </ion-item>
 
             <ion-item lines="none">
-              <ion-label position="stacked" class="item-label">
-                Time
+              <ion-label>
+                (check this options only if the exam date is not decided)
               </ion-label>
-              <ion-datetime class="form-input"></ion-datetime>
-              Till
-              <ion-datetime class="form-input"></ion-datetime>
+              <ion-checkbox></ion-checkbox> 
             </ion-item>
+
+            <ion-grid class="ion-no-padding">
+              <ion-row class="ion-no-padding">
+                <ion-col class="ion-no-padding ion-align-self-end">
+                  <ion-item lines="none">
+                    <ion-label position="stacked" class="item-label">
+                      Time
+                    </ion-label>
+                    <ion-datetime placeholder="Start Time" class="form-input"></ion-datetime>
+                  </ion-item>
+                </ion-col>
+                <ion-col class="ion-no-padding ion-align-self-end">
+                  <ion-item lines="none">
+                    <ion-datetime placeholder="End Time" class="form-input"></ion-datetime>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
             
             <ion-item lines="none">
               <ion-label position="stacked" class="item-label">
@@ -51,7 +67,7 @@
               </ion-label>
               <ion-input class="form-input"></ion-input>
             </ion-item>
-            <ion-button>SUBMIT</ion-button>
+            <ion-button expand="block" class="success-background ion-margin">SUBMIT</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>

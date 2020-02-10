@@ -1,3 +1,10 @@
+ion-item {
+    // HIDE EFFECTS FOR ION ITEM
+    --background-hover: var(--secondary-bg-color) !important;
+    --background-focused: var(--secondary-bg-color) !important;
+    --background-activated: var(--secondary-bg-color) !important;
+}
+
 ion-label.item-label {
     // font-size: 24px;
     font-weight: bold;
@@ -11,4 +18,21 @@ ion-label.item-label {
     margin-top: 10px;
     border: 1px solid var(--tertiary-bg-color);
     min-height: 40px;
+}
+
+ion-select.form-input {
+    padding: 8px 10px 9px 10px !important;
+}
+
+ion-datetime.form-input {
+    width: 100%;
+    min-height: 32px !important;
+    padding: 6px 4px 0px 10px !important;
+}
+
+.flex-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
