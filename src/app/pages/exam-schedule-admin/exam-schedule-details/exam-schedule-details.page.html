@@ -23,7 +23,7 @@
                     <ion-col class="text-bold ion-no-padding">
                       <div class="flex-col-item">
                         {{examScheduleDetail.detail}}
-                        <ion-icon *ngIf="i === 0" name="create" class="clickable-icon"></ion-icon>
+                        <ion-icon (click)="editExamSchedule()" *ngIf="i === 0" name="create" class="clickable-icon"></ion-icon>
                       </div>
                     </ion-col>
                   </ion-row>
@@ -151,7 +151,7 @@
 
 <ion-footer>
   <ion-fab *ngIf="!onDelete; else fabDelete" vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button class="colored-background">
+    <ion-fab-button (click)="addNewIntake()" class="colored-background">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>

@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: ExamScheduleDetailsPage
+  },
+  {
+    path: 'add-intake',
+    loadChildren: () => import('./add-intake/add-intake.module').then( m => m.AddIntakePageModule)
   }
 ];
 

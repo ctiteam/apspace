@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { AddExamSchedulePage } from '../add-exam-schedule/add-exam-schedule.page';
+import { AddIntakePage } from './add-intake/add-intake.page';
 
 interface ExamScheduleDetails {
   title: string;
@@ -133,12 +136,26 @@ export class ExamScheduleDetailsPage implements OnInit {
   status = 'Inactive';
   onDelete = false;
 
-  constructor() { }
+  constructor(public modalCtrl: ModalController) { }
 
   ngOnInit() {
   }
 
   toggleEditIntake() {
     this.onDelete = !this.onDelete;
+  }
+
+  editExamSchedule() {
+    this.modalCtrl.create({
+      component: AddExamSchedulePage,
+      cssClass: 'full-page-modal'
+    }).then(modal => modal.present());
+  }
+
+  addNewIntake() {
+    this.modalCtrl.create({
+      component: AddIntakePage,
+      cssClass: 'full-page-modal'
+    }).then(modal => modal.present());
   }
 }
