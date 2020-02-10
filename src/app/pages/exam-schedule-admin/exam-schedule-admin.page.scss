@@ -1,14 +1,5 @@
 $animation-standard-easing: cubic-bezier(0.4, 0.0, 0.2, 1);
 
-ion-segment-button {
-    // Fit all week days without scrolling
-    --padding-end: 0 !important;
-    --padding-start: 0 !important;
-    --margin-start: 0 !important;
-    --margin-end: 100 !important;
-    min-width: 50px !important;
-}
-
 .table-item {
     &:nth-child(odd) {
         --background: var(--main-bg-color) !important;
@@ -17,7 +8,6 @@ ion-segment-button {
 
 .table-header{
     display: none;
-    --background: var(--tertiary-bg-color) !important;
 }
 
 .is-inactive {
@@ -69,6 +59,7 @@ ion-item.clickable-item {
 @media (min-width: 576px) {
     .table-header {
         display: block;
+        --background: var(--tertiary-bg-color) !important;
     }
 
     .display-on-sm {
