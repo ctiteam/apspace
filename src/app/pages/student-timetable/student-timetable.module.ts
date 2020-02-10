@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
+import { SharedPipesModule } from 'src/app/shared/shared-pipes.module';
 import { RouterLinkDirectiveStub } from 'src/testing';
 import { ComponentsModule } from '../../components/components.module';
 import { ClassesPipe } from './classes.pipe';
@@ -32,6 +33,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ComponentsModule,
+    SharedPipesModule
   ],
   declarations: [
     StudentTimetablePage,

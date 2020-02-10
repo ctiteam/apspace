@@ -22,7 +22,7 @@
     <ion-buttons slot="start">
       <ion-button size="small" fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
         class="colored-text colored-border">
-        {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
+        {{ ((viewWeek ? selectedWeek : selectedDate) | customdatetime) || 'Weeks' }}
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
@@ -59,7 +59,7 @@
                           {{intake || room || ''}} Timetable
                         </h4>
                         <h5 class="small-margin-top">
-                          Week: <span class="text-bold">{{selectedWeek | date : 'dd MMM yyy'}}</span>
+                          Week: <span class="text-bold">{{selectedWeek | customdatetime : 'dd MMM yyy'}}</span>
                         </h5>
                       </ion-label>
                       <ion-button fill="outline" slot="end" class="print-button colored-border" (click)="sendToPrint()">
@@ -70,7 +70,7 @@
                 </ion-card-header>
                 <ion-card-content class="ion-no-padding padding-bottom">
                   <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
-                    <ion-segment class="week-segment" [ngModel]="selectedDate | date:'E' | uppercase"
+                    <ion-segment class="week-segment" [ngModel]="selectedDate | customdatetime:'E' | uppercase"
                                  (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]" scrollable>
                       <ion-segment-button *ngFor="let day of availableDays" [value]="day">
                         {{ day }}
@@ -137,14 +137,14 @@
                             <span class="marker">
                               <ion-icon name="calendar"></ion-icon>
                             </span>
-                            {{ timetable.DATESTAMP_ISO | date: "EEE, d MMM " }}
+                            {{ timetable.DATESTAMP_ISO | customdatetime: "EEE, d MMM " }}
                           </ion-col>
                           <ion-col size="12" size-sm="2"
                                              class="ion-no-padding md-text-center">
                             <span class="marker">
                               <ion-icon name="time"></ion-icon>
                             </span>
-                            {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
+                            {{ (timetable.DATESTAMP_ISO + " " + timetable.TIME_FROM) | customdatetime: "h:mm a"}} - {{ (timetable.DATESTAMP_ISO + " "  + timetable.TIME_TO) | customdatetime: "h:mm a"}}
                           </ion-col>
                           <ion-col size="12" size-sm="2"
                                              class="flex-on-print-table-hide-on-card ion-no-padding md-text-center">
@@ -179,7 +179,7 @@
                             <span class="marker">
                               <ion-icon name="time"></ion-icon>
                             </span>
-                            {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
+                            {{ (timetable.DATESTAMP_ISO + " " + timetable.TIME_FROM) | customdatetime: "h:mm a"}} - {{ (timetable.DATESTAMP_ISO + " " + timetable.TIME_TO) | customdatetime: "h:mm a" }}
                           </ion-col>
                           <ion-col size="12" size-sm="3" class="ion-no-padding">
                             <span class="marker">
@@ -219,7 +219,7 @@
         <ion-card-content>
           <ng-container *ngIf="intake; else noIntakeSelected">
             <app-message-with-svg imageUrl="assets/img/happy.svg"
-                                  messageTitle="Hooray! No classes for {{intake}} on the week that starts on {{selectedWeek | date: 'EEEE, dd MM yyy'}}"
+                                  messageTitle="Hooray! No classes for {{intake}} on the week that starts on {{selectedWeek | customdatetime: 'EEEE, dd MM yyy'}}"
                                   wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
             </app-message-with-svg>
           </ng-container>
