@@ -69,6 +69,17 @@
                   </ion-select-option>
                 </ion-select>
               </ion-item>
+              <ion-item class="ion-no-padding">
+                <ion-label>Time Format</ion-label>
+                <ion-select [(ngModel)]="timeFormat" (ngModelChange)="toggleTimeFormat()">
+                  <ion-select-option [value]="'24-hours'">
+                    24 Hours
+                  </ion-select-option>
+                  <ion-select-option [value]="'12-hours'">
+                    12 Hours
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
               <ion-item class="ion-no-padding" button (click)="clearCache()">
                 <ion-label color="danger">Clear cache</ion-label>
               </ion-item>
