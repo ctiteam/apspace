@@ -93,7 +93,7 @@ export class MorePage implements OnInit {
       tags: ['apspace feedback', 'app not working', 'issue']
     },
     {
-      title: 'Help Center',
+      title: 'Help Centre',
       group: 'Collaboration & Information Resources',
       url: 'https://apiit.atlassian.net/servicedesk/customer/portals', // No ticket
       img: 'assets/img/help-center.png',
