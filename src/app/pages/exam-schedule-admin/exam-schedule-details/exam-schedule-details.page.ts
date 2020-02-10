@@ -23,19 +23,23 @@ export class ExamScheduleDetailsPage implements OnInit {
   examScheduleDetails: ExamScheduleDetails[] = [
     {
       title: 'Module',
-      detail: 'testing'
+      detail: 'CT001-3-2'
     },
     {
-      title: 'DateTime',
-      detail: 'testing'
+      title: 'Date',
+      detail: '19-Sep-2019'
+    },
+    {
+      title: 'Time',
+      detail: '11:00 AM - 1:00AM'
     },
     {
       title: 'Publication',
-      detail: 'testing'
+      detail: '19-Sep-2019 - 20-Sep-2019'
     },
     {
       title: 'Remarks',
-      detail: 'testing'
+      detail: 'Lorem Ispum'
     },
   ];
 
@@ -127,7 +131,7 @@ export class ExamScheduleDetailsPage implements OnInit {
   ];
 
   status = 'Inactive';
-  onEdit = false;
+  onDelete = false;
 
   constructor() { }
 
@@ -135,6 +139,6 @@ export class ExamScheduleDetailsPage implements OnInit {
   }
 
   toggleEditIntake() {
-    this.onEdit = !this.onEdit;
+    this.onDelete = !this.onDelete;
   }
 }

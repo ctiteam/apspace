@@ -14,17 +14,17 @@
         <ion-card class="ion-no-margin">
           <ion-card-content class="ion-no-padding">
             <ion-list lines="none">
-              <ion-item *ngFor="let examScheduleDetail of examScheduleDetails; let i = index">
+              <ion-item *ngFor="let examScheduleDetail of examScheduleDetails; let i = index;">
                 <ion-grid class="ion-no-padding">
                   <ion-row class="ion-no-padding">
-                    <ion-col size="1" class="ion-no-padding">
+                    <ion-col size="12" size-sm="2" class="ion-no-padding">
                       {{examScheduleDetail.title}} :
                     </ion-col>
                     <ion-col class="text-bold ion-no-padding">
-                      {{examScheduleDetail.detail}}
-                    </ion-col>
-                    <ion-col *ngIf="i === 0" class="ion-text-end ion-no-padding">
-                      <ion-icon name="create" class="clickable-icon"></ion-icon>
+                      <div class="flex-col-item">
+                        {{examScheduleDetail.detail}}
+                        <ion-icon *ngIf="i === 0" name="create" class="clickable-icon"></ion-icon>
+                      </div>
                     </ion-col>
                   </ion-row>
                 </ion-grid>
@@ -41,18 +41,18 @@
             <ion-item>
               <ion-grid class="ion-no-padding">
                 <ion-row class="ion-no-padding">
-                  <ion-col size="1" class="ion-align-self-center ion-no-padding">
+                  <ion-col size="12" size-sm="2" class="ion-align-self-center ion-no-padding">
                     Status :
                   </ion-col>
                   <ion-col 
                     class="text-bold ion-align-self-center is-inactive ion-no-padding" 
                     [ngClass]="{'is-active': status === 'Active'}">
-                    {{ status }}
-                  </ion-col>
-                  <ion-col class="ion-text-end ion-no-padding">
-                    <ion-button class="danger-background">
-                      <span class="ion-margin">ACTIVATE THIS EXAM SCHEDULE</span>
-                    </ion-button>
+                    <div class="flex-col-item">
+                      {{ status }}
+                      <ion-button class="danger-background">
+                        <span class="ion-margin">ACTIVATE THIS EXAM SCHEDULE</span>
+                      </ion-button>
+                    </div>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -62,7 +62,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
+    <ion-row [ngClass]="{'row-margin': onDelete}">
       <ion-col>
         <ion-card class="ion-no-margin">
           <ion-card-header class="custom-background">
@@ -75,7 +75,7 @@
                     </h5>
                   </ion-col> 
                   <ion-col size="3" class="ion-no-padding ion-text-end ion-align-self-center">
-                    <ion-icon [name]="onEdit ? 'close' : 'trash'" class="clickable-icon-danger" (click)="toggleEditIntake()"></ion-icon>
+                    <ion-icon [name]="onDelete ? 'close' : 'trash'" class="clickable-icon-danger" (click)="toggleEditIntake()"></ion-icon>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -86,19 +86,19 @@
             <ion-item class="table-header">
               <ion-grid>
                 <ion-row>
-                  <ion-col class="ion-no-padding">
+                  <ion-col size="12" size-sm="2.5" class="ion-no-padding">
                     <h2 class="text-bold">Intake</h2>
                   </ion-col>
-                  <ion-col class="ion-no-padding">
+                  <ion-col size="12" size-sm="1" class="ion-no-padding">
                     <h2 class="text-bold">Type</h2>
                   </ion-col>
-                  <ion-col class="ion-no-padding">
+                  <ion-col size="12" size-sm="3" class="ion-no-padding">
                     <h2 class="text-bold">Venue</h2>
                   </ion-col>
-                  <ion-col class="ion-no-padding">
+                  <ion-col size="12" size-sm="2" class="ion-no-padding">
                     <h2 class="text-bold">Dockets Issuance</h2>
                   </ion-col>
-                  <ion-col class="ion-no-padding">
+                  <ion-col size="12" size-sm="3.5" class="ion-no-padding">
                     <h2 class="text-bold">Exam Result Date</h2>
                   </ion-col>
                 </ion-row>
@@ -106,30 +106,36 @@
             </ion-item>
 
             <ion-item 
-              [button]="!onEdit"
-              (click)="!onEdit"
+              [button]="!onDelete"
+              (click)="!onDelete"
               [style.border-left-color]="(intake.intake | strToColor)"
-              [ngClass]="{'clickable-item' : !onEdit}"
+              [ngClass]="{'clickable-item' : !onDelete}"
               class="table-item clickable-item" 
               *ngFor="let intake of intakes">
               <ion-grid>
                 <ion-row>
-                  <ion-col class="text-bold ion-no-padding">
+                  <ion-col size="12" size-sm="2.5" class="text-bold ion-no-padding">
                     {{intake.intake}}
                   </ion-col>
-                  <ion-col class="ion-no-padding">
+                  <ion-col size="12" size-sm="1" class="ion-no-padding">
+                    <ion-icon class="display-on-sm" name="people"></ion-icon>
                     {{intake.type}}
                   </ion-col>
-                  <ion-col class="ion-no-padding">
+                  <ion-col size="12" size-sm="3" class="ion-no-padding">
+                    <ion-icon class="display-on-sm" name="pin"></ion-icon>
                     {{intake.venue}}
                   </ion-col>
-                  <ion-col class="ion-no-padding">
+                  <ion-col size="12" size-sm="2" class="ion-no-padding">
+                    <ion-icon class="display-on-sm" name="paper"></ion-icon>
                     {{intake.docketsIssuance}}
                   </ion-col>
-                  <ion-col class="ion-no-padding">
+                  <ion-col size="12" size-sm="3.5" class="ion-no-padding">
                     <div class="flex-col-item">
-                      {{intake.resultDate}}
-                      <ion-checkbox *ngIf="onEdit" class="ion-no-margin"></ion-checkbox>
+                      <div>
+                        <ion-icon class="display-on-sm" name="pie"></ion-icon>
+                        {{intake.resultDate}}
+                      </div>
+                      <ion-checkbox *ngIf="onDelete" class="ion-no-margin"></ion-checkbox>
                     </div>
                   </ion-col>
                 </ion-row>
@@ -139,19 +145,22 @@
         </ion-card>
       </ion-col>
     </ion-row>
-    <ion-row class="button-margin" *ngIf="onEdit">
-      <ion-col class="ion-text-end">
-        <ion-button class="danger-background">REMOVE</ion-button> 
-      </ion-col>
-    </ion-row>
   </ion-grid>
 
 </ion-content>
 
 <ion-footer>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab *ngIf="!onDelete; else fabDelete" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button class="colored-background">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
+  <ng-template #fabDelete>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button class="danger-background">
+        <ion-icon name="trash"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ng-template>
 </ion-footer>

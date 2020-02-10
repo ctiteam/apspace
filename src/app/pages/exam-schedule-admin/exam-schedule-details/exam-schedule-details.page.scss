@@ -47,7 +47,7 @@ $animation-standard-easing: cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .table-header{
-    --background: var(--tertiary-bg-color) !important;
+    display: none;
 }
 
 ion-item.clickable-item {
@@ -69,6 +69,23 @@ ion-item.clickable-item {
     align-items: center;
 }
 
-.button-margin {
+.row-margin {
     margin-bottom: 65px;
+}
+
+.display-on-sm {
+    vertical-align: -2.5px;
+    padding-left: 4px;
+    padding-right: 8px;
+}
+
+@media (min-width: 576px) {
+    .table-header {
+        display: block;
+        --background: var(--tertiary-bg-color) !important;
+    }
+
+    .display-on-sm {
+        display: none;
+    }
 }
