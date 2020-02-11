@@ -17,6 +17,7 @@ export class OperationHoursPage {
   skeletons = new Array(4);
   quixCompanies$: Observable<QuixCustomer[]>;
   selectedSegment: 'APU' | 'APIIT' = 'APU';
+  dateNow = new Date(); // used for customdatetime pipe
 
   constructor(
     private ws: WsApiService,

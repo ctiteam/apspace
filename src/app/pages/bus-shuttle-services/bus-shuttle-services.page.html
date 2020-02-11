@@ -138,7 +138,7 @@
                     <ion-row>
                       <ion-col [class.passed]="timeNow >= tripData.trip_time" class="ion-text-center colored-text"
                         *ngFor="let tripData of destination.value" size="3" size-md="4">
-                        {{ ((dateNow | customdatetime: "dd MM yyyy") + " "  + tripData.trip_time ) | customdatetime: "h:mm a" }}
+                        {{ ((dateNow | customdatetime: "dd MM yyyy") + " "  + tripData.trip_time) | customdatetime: "h:mm a" }}
                       </ion-col>
                     </ion-row>
                   </ion-grid>
