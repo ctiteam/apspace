@@ -121,8 +121,10 @@ export class ClassesPage implements AfterViewInit, OnInit {
         ...classcodes.find(classcode => {
           // Classcode BM006-3-2-CRI-L-UC2F1805CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
           // Take only BM006-3-2-CRI-L- (+3 extra characters with '-' pad for L, T1, T2)
+          // Timetable BM006-3-2-CRI-L (or T-1 or T-2, need to strip the '-')
           const len = classcode.SUBJECT_CODE.length;
-          return classcode.CLASS_CODE.slice(0, len + 3) === (timetable.MODID + '-').slice(0, len + 3)
+          return classcode.CLASS_CODE.slice(0, len + 3) ===
+            (timetable.MODID.replace(/-([TL])-(\d)$/, '-$1$2') + '-').slice(0, len + 3)
             && classcode.COURSE_CODE_ALIAS === timetable.INTAKE;
         }),
         ...timetable
