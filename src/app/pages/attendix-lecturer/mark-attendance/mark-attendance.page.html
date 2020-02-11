@@ -7,9 +7,9 @@
       {{ schedule!.classcode }} {{ totalPresentStudents$ | async }}/{{ totalStudents$ | async }}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button fill="outline" size="small" class="colored-text colored-border"
-        (click)="auto = !auto">
-        {{ auto ? 'Manual' : 'Auto' }}
+      <ion-button>
+        <ion-label>Auto</ion-label>
+        <ion-toggle [(ngModel)]="auto"></ion-toggle>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
