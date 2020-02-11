@@ -11,6 +11,14 @@ interface ExamSchedule {
   status: string;
 }
 
+interface Resit {
+  module: string;
+  date: string;
+  time: string;
+  venue: string;
+  status: string;
+}
+
 @Component({
   selector: 'app-exam-schedule-admin',
   templateUrl: './exam-schedule-admin.page.html',
@@ -55,167 +63,45 @@ export class ExamScheduleAdminPage implements OnInit {
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
       status: 'Inactive'
-    },
+    }
+  ];
+
+  resits: Resit[] = [
     {
       module: 'CT001-3-2',
       date: '19-Sep-2019',
       time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
+      venue: '1, APIIT@TPM',
       status: 'Inactive'
     },
     {
       module: 'CT001-3-2',
       date: '19-Sep-2019',
       time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Active'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
+      venue: '1, APIIT@TPM',
       status: 'Inactive'
     },
     {
       module: 'CT001-3-2',
       date: '19-Sep-2019',
       time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
+      venue: '1, APIIT@TPM',
       status: 'Inactive'
     },
     {
       module: 'CT001-3-2',
       date: '19-Sep-2019',
       time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
+      venue: '1, APIIT@TPM',
       status: 'Inactive'
     },
     {
       module: 'CT001-3-2',
       date: '19-Sep-2019',
       time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Active'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
+      venue: '1, APIIT@TPM',
       status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Active'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Active'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Active'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive'
-    },
+    }
   ];
 
   onDelete = false;
@@ -244,5 +130,9 @@ export class ExamScheduleAdminPage implements OnInit {
       component: AddExamSchedulePage,
       cssClass: 'full-page-modal'
     }).then(modal => modal.present());
+  }
+
+  segmentChanged(event) {
+    this.selectedExamScheduleOption = event.detail.value;
   }
 }

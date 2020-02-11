@@ -44,6 +44,10 @@ ion-item.clickable-item {
   }
 }
 
+ion-item.view-item {
+    border-left: 4px solid #bdbdbd;
+}
+
 .flex-col-item {
     display: flex;
     justify-content: space-between;
