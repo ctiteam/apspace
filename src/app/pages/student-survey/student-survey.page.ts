@@ -231,7 +231,7 @@ export class StudentSurveyPage implements OnInit {
             const moduleStartDate = new Date(amodule.START_DATE); // module start date
             const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49)); // week 7 of the module
             const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 70)); // week 10 of the module
-            if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 10 is not included
+            if (todaysDate >= startDateForMid && todaysDate <= endDateForMid) { // week 10 is not included (11-Feb-2020, week 10 included)
               this.surveyType = 'Mid-Semester';
             }
           } else if (this.courseType.includes('Master')) { // masters students
