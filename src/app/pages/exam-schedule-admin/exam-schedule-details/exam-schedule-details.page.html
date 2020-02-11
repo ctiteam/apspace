@@ -23,7 +23,8 @@
                     <ion-col class="text-bold ion-no-padding">
                       <div class="flex-col-item">
                         {{examScheduleDetail.detail}}
-                        <ion-icon (click)="editExamSchedule()" *ngIf="i === 0" name="create" class="clickable-icon"></ion-icon>
+                        <ion-icon (click)="editExamSchedule()" *ngIf="i === 0" name="create" class="clickable-icon">
+                        </ion-icon>
                       </div>
                     </ion-col>
                   </ion-row>
@@ -44,15 +45,20 @@
                   <ion-col size="12" size-sm="2" class="ion-align-self-center ion-no-padding">
                     Status :
                   </ion-col>
-                  <ion-col 
-                    class="text-bold ion-align-self-center is-inactive ion-no-padding" 
+                  <ion-col class="text-bold ion-align-self-center is-inactive ion-no-padding"
                     [ngClass]="{'is-active': status === 'Active'}">
-                    <div class="flex-col-item">
-                      {{ status }}
-                      <ion-button class="danger-background">
-                        <span class="ion-margin">ACTIVATE THIS EXAM SCHEDULE</span>
-                      </ion-button>
-                    </div>
+                    <ion-grid class="ion-no-padding">
+                      <ion-row class="ion-no-padding ion-align-items-center">
+                        <ion-col class="ion-no-padding">
+                          {{ status }}
+                        </ion-col>
+                        <ion-col class="ion-no-padding ion-text-end">
+                          <ion-button class="danger-background">
+                            <span class="ion-margin">ACTIVATE THIS EXAM SCHEDULE</span>
+                          </ion-button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -73,9 +79,10 @@
                     <h5>
                       Exam Schedule - Intakes
                     </h5>
-                  </ion-col> 
+                  </ion-col>
                   <ion-col size="3" class="ion-no-padding ion-text-end ion-align-self-center">
-                    <ion-icon [name]="onDelete ? 'close' : 'trash'" class="clickable-icon-danger" (click)="toggleEditIntake()"></ion-icon>
+                    <ion-icon [name]="onDelete ? 'close' : 'trash'" class="clickable-icon-danger"
+                      (click)="toggleEditIntake()"></ion-icon>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -105,12 +112,8 @@
               </ion-grid>
             </ion-item>
 
-            <ion-item 
-              [button]="!onDelete"
-              (click)="!onDelete"
-              [style.border-left-color]="(intake.intake | strToColor)"
-              [ngClass]="{'clickable-item' : !onDelete}"
-              class="table-item clickable-item" 
+            <ion-item [button]="!onDelete" (click)="!onDelete && editIntake()" [style.border-left-color]="(intake.intake | strToColor)"
+              [ngClass]="{'clickable-item' : !onDelete}" class="table-item clickable-item"
               *ngFor="let intake of intakes">
               <ion-grid>
                 <ion-row>

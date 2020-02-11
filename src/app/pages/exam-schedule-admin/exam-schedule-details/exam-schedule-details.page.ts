@@ -158,4 +158,11 @@ export class ExamScheduleDetailsPage implements OnInit {
       cssClass: 'full-page-modal'
     }).then(modal => modal.present());
   }
+
+  editIntake() {
+    this.modalCtrl.create({
+      component: AddIntakePage,
+      cssClass: 'full-page-modal'
+    }).then(modal => modal.present());
+  }
 }
