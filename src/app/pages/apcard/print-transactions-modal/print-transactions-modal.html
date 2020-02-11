@@ -19,7 +19,7 @@
             <ion-item>
               <ion-label>Month</ion-label>
               <ion-datetime placeholder="Click to select" displayFormat="MMM-YYYY" pickerFormat="MMM YYYY"
-                min="2019-01-01" [max]="max" [(ngModel)]="yearMonthModel">
+                min="2019-01-01" [max]="max" [(ngModel)]="yearMonthModel" (ngModelChange)="noRecordsForSelectedMonth = false">
               </ion-datetime>
             </ion-item>
 
@@ -36,6 +36,8 @@
               class="ion-margin-top" color="success" expand="block">
               Generate Report
             </ion-button>
+
+          <h4 class="ion-text-center danger-text" *ngIf="noRecordsForSelectedMonth">No Transactions For The Selected Month</h4>
 
           </ion-card-content>
         </ion-card>

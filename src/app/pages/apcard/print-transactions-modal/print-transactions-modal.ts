@@ -15,25 +15,17 @@ export class PrintTransactionsModalPage implements OnInit {
   transactions: Apcard[];
   now = new Date();
   max = moment(this.now).format('YYYY-MM-DD').toString();
-  transactionTypes = ['All', 'Credit', 'Debit'];
+  transactionTypes = ['all', 'credit', 'debit'];
   transactionTypeModel = '';
   yearMonthModel = '';
   pdfObj = null; // used to generate report
   tableBody: any;
   summaryBody: any;
-  ngOnInit() {
-    console.log(this.transactions);
-    console.log(this.max);
-    // console.log(this.now.getFullYear() + '-' + this.now.getMonth() + '-' + this.now.getDate());
-  }
+  noRecordsForSelectedMonth = false;
 
-  constructor(private modalCtrl: ModalController) {
-    // this.item = this.params.get('item');
-  }
+  ngOnInit() { }
 
-  ionViewWillEnter() {
-  }
-
+  constructor(private modalCtrl: ModalController) { }
 
   dismiss() {
     this.modalCtrl.dismiss();
@@ -55,7 +47,14 @@ export class PrintTransactionsModalPage implements OnInit {
     ];
     this.transactions.filter(transaction => {
       const spendDateObj = new Date(transaction.SpendDate);
-      return (spendDateObj.getMonth() === yearMonthDate.getMonth() && spendDateObj.getFullYear() === yearMonthDate.getFullYear());
+      return (spendDateObj.getMonth() === yearMonthDate.getMonth() && spendDateObj.getFullYear() === yearMonthDate.getFullYear()) &&
+        (this.transactionTypeModel === 'credit'
+          ? transaction.ItemName.toLowerCase() === 'top up'
+          : this.transactionTypeModel === 'debit'
+            ? transaction.ItemName.toLowerCase() !== 'top up'
+            : true
+        );
+
     }).reverse().forEach((transaction, index: number) => {
       const studentData = [
         { text: index + 1, alignment: 'center', style: transaction.ItemName === 'Top Up' ? 'greenText' : 'tableCell' },
@@ -77,11 +76,11 @@ export class PrintTransactionsModalPage implements OnInit {
     });
 
     if (this.tableBody.length === 1) {
-      console.log('no transactions at that month');
+      this.noRecordsForSelectedMonth = true;
       return false;
     }
 
-    const pdfTitle = `apcard_transactions_for_${yearMonthDate.getFullYear()}_${yearMonthDate.getMonth() + 1}`;
+    const pdfTitle = `${this.transactionTypeModel}_apcard_transactions_for_${yearMonthDate.getFullYear()}_${yearMonthDate.getMonth() + 1}`;
 
     const docDefinition = {
       info: {
@@ -114,6 +113,13 @@ export class PrintTransactionsModalPage implements OnInit {
           style: 'subheader',
           alignment: 'center',
           margin: [0, 10, 0, 0]
+        },
+
+        {
+          text: this.transactionTypeModel === 'credit' ? '** Credit Only **' : this.transactionTypeModel === 'debit' ? '** Debit Only **' : '',
+          style: this.transactionTypeModel === 'credit' ? 'green_subheader' : this.transactionTypeModel === 'debit' ? 'red_subheader' : '',
+          alignment: 'center',
+          margin: this.transactionTypeModel === 'all' ? [0, 0, 0, 0] : [0, 10, 0, 0]
         },
 
         { text: '', margin: [5, 20, 5, 10] },
@@ -216,6 +222,18 @@ export class PrintTransactionsModalPage implements OnInit {
           bold: true,
           margin: [0, 15, 0, 0]
         },
+        green_subheader: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 15, 0, 0],
+          color: '#346948'
+        },
+        red_subheader: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 15, 0, 0],
+          color: '#e54d42'
+        },
         subheader2bold: {
           fontSize: 12,
           bold: true,
@@ -247,7 +265,6 @@ export class PrintTransactionsModalPage implements OnInit {
     };
     this.pdfObj = pdfMake.createPdf(docDefinition);
     this.pdfObj.download(pdfTitle + '.pdf');
-
   }
 
 }
