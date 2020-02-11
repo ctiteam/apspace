@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar mode="md">
     <ion-buttons slot="start">
       <ion-button class="colored-text" (click)="closeModal()">
         CLOSE
@@ -19,16 +19,18 @@
               <ion-label position="stacked" class="item-label">
                 Intakes
               </ion-label>
-              <ion-searchbar [(ngModel)]="searchTerm" (ngModelChange)="setFilteredItems()" class="search-intake"></ion-searchbar>
               <div class="form-input">
-                <ion-list class="masonry-list ion-no-padding" lines="none">
-                  <ion-item class="masonry-item" *ngFor="let item of items">
-                    <ion-label class="ion-text-wrap">
-                      {{item.value}}
-                    </ion-label>
-                    <ion-checkbox></ion-checkbox> 
-                  </ion-item>
-                </ion-list>
+                <ion-searchbar [(ngModel)]="searchTerm" (ngModelChange)="setFilteredItems()" class="search-intake"></ion-searchbar>
+                <div class="scrollable-div">
+                  <ion-list class="masonry-list ion-no-padding" lines="none">
+                    <ion-item class="masonry-item" *ngFor="let item of items">
+                      <ion-label class="ion-text-wrap">
+                        {{item.value}}
+                      </ion-label>
+                      <ion-checkbox></ion-checkbox> 
+                    </ion-item>
+                  </ion-list>
+                </div>
               </div>
             </ion-item>
 
