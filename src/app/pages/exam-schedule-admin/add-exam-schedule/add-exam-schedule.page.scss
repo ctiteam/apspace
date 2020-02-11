@@ -30,6 +30,10 @@ ion-datetime.form-input {
     padding: 6px 4px 0px 10px !important;
 }
 
+ion-calendar.form-input {
+    z-index : 0;
+}
+
 .flex-item {
     width: 100%;
     display: flex;
