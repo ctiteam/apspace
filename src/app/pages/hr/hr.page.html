@@ -96,7 +96,7 @@
               <ion-list class="on-leave-list" *ngFor="let staffOnLeaveGroupedByDate of staffsOnLeaveList">
                 <ion-list-header class="colored-header ion-no-padding">
                   <h5 class="ion-padding-start ion-padding-end">
-                    {{staffOnLeaveGroupedByDate.date | date: 'EEE, dd MMM yyy'}}
+                    {{staffOnLeaveGroupedByDate.date | customdatetime: 'EEE, dd MMM yyy'}}
                   </h5>
                 </ion-list-header>
                 <ion-item *ngFor="let staffOnLeave of staffOnLeaveGroupedByDate.value">
@@ -105,7 +105,7 @@
                   </ion-avatar>
                   <ion-label>
                     <h2>{{staffOnLeave.FULLNAME}}</h2>
-                    <h3 class="text-bold">{{staffOnLeave.LEAVEDATE | date: 'EEE, dd MMM yyy'}}</h3>
+                    <h3 class="text-bold">{{staffOnLeave.LEAVEDATE | customdatetime: 'EEE, dd MMM yyy'}}</h3>
                     <p><span class="text-bold">Email: </span> <a class="colored-text text-bold"
                         href="mailto:{{staffOnLeave.EMAIL}}">{{staffOnLeave.EMAIL}}</a></p>
                   </ion-label>
@@ -142,7 +142,7 @@
                     </p>
                     <p>
                       <ion-icon class="text-bold" name="calendar"></ion-icon>
-                      {{pendingApproval.LEAVEDATE | date: 'EEE, dd MMM yyy'}}
+                      {{pendingApproval.LEAVEDATE | customdatetime: 'EEE, dd MMM yyy'}}
                     </p>
                   </ion-label>
                   <ion-badge color="danger">{{pendingApproval.STATUS}}</ion-badge>
@@ -190,10 +190,10 @@
                           <ion-label>
                             <h4 class="text-bold responsive-h1">{{historyItem.LEAVE_TYPE}}</h4>
                             <p *ngIf="historyItem.LEAVE_DATE">
-                              {{historyItem.LEAVE_DATE | date : 'EEE, dd MMM yyy'}}
+                              {{historyItem.LEAVE_DATE | customdatetime : 'EEE, dd MMM yyy'}}
                             </p>
                             <p *ngIf="historyItem.RESPONSE_DATE">
-                              *Response Date: {{historyItem.RESPONSE_DATE | date : 'EEE, dd MMM yyy'}}
+                              *Response Date: {{historyItem.RESPONSE_DATE | customdatetime : 'EEE, dd MMM yyy'}}
                             </p>
                           </ion-label>
                           <ion-badge slot="end">{{historyItem.STATUS}}</ion-badge>
