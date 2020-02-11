@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { CalendarModule } from 'ion2-calendar';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { SharedPipesModule } from 'src/app/shared/shared-pipes.module';
 import { BookSlotModalPage } from './book-slot-modal';
 import { CalendarFilterModalPage } from './calendar-filter-modal/calendar-filter-modal';
 import { FilterSlotsByDayPipe } from './filter-slots-by-day.pipe';
@@ -27,6 +28,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
+    SharedPipesModule
   ],
   declarations: [OpenedSlotsPage, BookSlotModalPage, CalendarFilterModalPage, FilterSlotsByDayPipe],
   entryComponents: [BookSlotModalPage, CalendarFilterModalPage],

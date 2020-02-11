@@ -92,7 +92,7 @@
             <ion-card-content>
               <p class="small-margin-top">
                 You have filtered the data to show only the slots opened on <span
-                  class="text-bold">{{dateToFilter | date : 'EEEE, dd MMMM y'}}</span>
+                  class="text-bold">{{dateToFilter | customdatetime : 'EEEE, dd MMMM y'}}</span>
               </p>
               <p class="small-margin-top danger-text text-bold cursor-pointer" style="text-decoration: underline;"
                 (click)="dateToFilter = ''">
@@ -111,14 +111,14 @@
                 <ion-card-header class="ion-padding-start cursor-pointer">
                   <ion-card-title>
                     <h5 style="display: inline-block" class="responsive-h1 main-text-color">
-                      {{ slotsForMonthYear.key | date: 'MMMM y' }} </h5>
+                      {{ slotsForMonthYear.key | customdatetime: 'MMMM y' }} </h5>
                   </ion-card-title>
                 </ion-card-header>
                 <ion-card-content class="ion-no-padding">
                   <div class="event-calendar">
                     <div class="event-list"
                       *ngFor="let slotsGroupedbyDay of slotsForMonthYear.value | filterSlotsByDay: dateToFilter | keyvalue">
-                      <h2 class="day">{{slotsGroupedbyDay.key | date: 'EEEE, dd MMMM'}}</h2>
+                      <h2 class="day">{{slotsGroupedbyDay.key | customdatetime: 'EEEE, dd MMMM'}}</h2>
                       <div class="event" *ngFor="let slot of slotsGroupedbyDay.value.items | keyvalue">
                         <div class="event-container" [ngClass]="{
                                               'booked': slot.value.status == 'Booked',
@@ -129,7 +129,7 @@
                             <ion-row>
                               <ion-col size="9" size-lg="10">
                                 <span class="title">
-                                  {{slot.value.start_time | date: "HH:mm" : '+0800'}} - {{slot.value.end_time | date: "HH:mm" : '+0800'}}
+                                  {{slot.value.start_time | customdatetime: "h:mm a" : '+0800'}} - {{slot.value.end_time | customdatetime: "h:mm a" : '+0800'}}
                                 </span>
                                 <span class="description small-margin-top">
                                   <ion-icon name="pin"></ion-icon>

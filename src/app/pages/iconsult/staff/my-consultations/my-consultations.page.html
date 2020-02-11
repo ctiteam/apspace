@@ -81,7 +81,7 @@
           <ion-card>
             <ion-card-header>
               <ion-card-title>
-                List of slots opened on {{todaysDate | date}}
+                List of slots opened on {{todaysDate | customdatetime}}
               </ion-card-title>
 
             </ion-card-header>
@@ -101,7 +101,7 @@
                         </ion-col>
                         <ion-col size-xs="7" size-sm="8">
                           <span class="title">
-                            {{slot.start_time | date: "HH:mm" : "+0800"}} - {{slot.end_time | date: "HH:mm" : "+0800"}}
+                            {{slot.start_time | customdatetime: "h:mm a" : "+0800"}} - {{slot.end_time | customdatetime: "h:mm a" : "+0800"}}
                           </span>
                           <span class="description small-margin-top">
                             <ion-icon name="pin"></ion-icon>
@@ -138,7 +138,7 @@
             <ion-card-content>
               <app-message-with-svg imageUrl='/assets/img/no-consultations.svg'
                 messageTitle='No Consultations Added on the Selected Date!'
-                messageContent='You have not added any consultations on {{todaysDate | date}}. You can check consultations added for other days by changing the date on the calendar to one of the coloured dates'
+                messageContent='You have not added any consultations on {{todaysDate | customdatetime}}. You can check consultations added for other days by changing the date on the calendar to one of the coloured dates'
                 wrapperMarginTop="20px" wrapperOffset="3" wrapperSize="6">
               </app-message-with-svg>
             </ion-card-content>
@@ -152,7 +152,7 @@
             <ion-card-header>
               <ion-card-title>
                 <span *ngIf="slotsToBeCancelled.length > 0; else noRangeSlots">List of slots opened from
-                  {{dateRange.from | date}} to {{dateRange.to | date}}</span>
+                  {{dateRange.from | customdatetime}} to {{dateRange.to | customdatetime}}</span>
                 <ng-template #noRangeSlots>
                   No slots found
                 </ng-template>
@@ -171,7 +171,7 @@
                       <ion-row *ngIf="slot.status !== 'Cancelled' && slot.status !== 'Cancelled by lecturer'">
                         <ion-col size-xs="7" size-sm="8">
                           <span class="title">
-                            {{slot.start_time | date: "HH:mm" : "+0800"}} - {{slot.end_time | date: "HH:mm" : "+0800"}}
+                            {{slot.start_time | customdatetime: "h:mm a" : "+0800"}} - {{slot.end_time | customdatetime: "h:mm a" : "+0800"}}
                           </span>
                           <span class="description small-margin-top">
                             <ion-icon name="pin"></ion-icon>
