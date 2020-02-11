@@ -39,7 +39,7 @@
                   <div class="card-number"></div>
                   <div class="end">
                     <label>LAST TRANSACTION: </label>
-                    <span class="end-date">{{ transactions[0].SpendDate | date: 'dd/MMM' }}
+                    <span class="end-date">{{ transactions[0].SpendDate | customdatetime: 'dd/MMM' }}
                     </span>
                   </div>
                   <div class="card-holder">
@@ -76,7 +76,7 @@
                 <ion-label>
                   <h2 class="value">{{ getAbsoluteValue(transaction.SpendVal) | currency: "RM" }}</h2>
                   <p class="main-text-color">{{ transaction.ItemName }}</p>
-                  <h3 class="secondary-txt-color">{{ transaction.SpendDate | date: "EEE, d MMM y" }}</h3>
+                  <h3 class="secondary-txt-color">{{ transaction.SpendDate | customdatetime: "EEE, d MMM y" }}</h3>
                 </ion-label>
               </ion-item>
             </ion-virtual-scroll>
