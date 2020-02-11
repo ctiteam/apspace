@@ -22,6 +22,7 @@ export class AppComponent {
   darkThemeActivated = false;
   pureDarkThemeActivated = false;
   selectedAccentColor = 'blue-accent-color';
+  shakeSensitivity: number;
 
   // back button vars
   lastTimeBackPress = 0;
@@ -58,38 +59,38 @@ export class AppComponent {
       }
       this.runCodeOnReceivingNotification(); // notifications
       // if (this.platform.is('ios')) {
-      //   this.statusBar.overlaysWebView(false); // status bar for ios
-      // }
+        //   this.statusBar.overlaysWebView(false); // status bar for ios
+        // }
 
-      // FOR TESTING PURPOSE
-      // this.statusBar.backgroundColorByHexString('#000000');
-      // this.statusBar.backgroundColorByName('black');
+        // FOR TESTING PURPOSE
+        // this.statusBar.backgroundColorByHexString('#000000');
+        // this.statusBar.backgroundColorByName('black');
 
       platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
-        this.shake.startWatch(40).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
-          if (!await this.cas.isAuthenticated()) {
-            return; // Do nothing if they aren't logged in
-          }
+          // tslint:disable-next-line: max-line-length
+          this.shake.startWatch(this.shakeSensitivity).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
+            if (!await this.cas.isAuthenticated()) {
+              return; // Do nothing if they aren't logged in
+            }
+            if (this.router.url.startsWith('/feedback')) {
+              return;
+            }
 
-          if (this.router.url.startsWith('/feedback')) {
-            return;
-          }
+            const modalIsOpen = await this.modalCtrl.getTop();
+            if (!modalIsOpen) {
+              this.screenshot.URI(80).then(async (res) => {
+                this.vibration.vibrate(1000); // Vibrate for 1s (1000ms)
+                const modal = await this.modalCtrl.create({
+                  component: ShakespearModalPage,
+                  cssClass: 'controlled-modal',
+                  componentProps: {
+                    imagePath: res.URI
+                  }
+                });
 
-          const modalIsOpen = await this.modalCtrl.getTop();
-          if (!modalIsOpen) {
-            this.screenshot.URI(80).then(async (res) => {
-              this.vibration.vibrate(1000); // Vibrate for 1s (1000ms)
-              const modal = await this.modalCtrl.create({
-                component: ShakespearModalPage,
-                cssClass: 'controlled-modal',
-                componentProps: {
-                  imagePath: res.URI
-                }
+                await modal.present();
               });
-
-              await modal.present();
-            });
-          }
+            }
         });
       });
 
@@ -208,6 +209,11 @@ export class AppComponent {
     this.userSettings
       .getAccentColor()
       .subscribe(val => (this.selectedAccentColor = val));
+    this.userSettings
+      .getShakeSensitivity()
+      .subscribe(val => {
+        this.shakeSensitivity = Number(val);
+      });
   }
 
 }

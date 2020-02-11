@@ -2,3 +2,10 @@ ion-item-divider{
     --color: var(--primary-color) !important;
     font-weight: bold;
 }
+
+ion-range {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 12px;
+    padding-left: 12px;
+}
