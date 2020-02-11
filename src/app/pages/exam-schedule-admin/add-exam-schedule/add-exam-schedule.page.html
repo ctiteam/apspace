@@ -19,7 +19,7 @@
               <ion-label position="stacked" class="item-label">
                 Publication Date
               </ion-label>
-              <ion-calendar class="form-input"></ion-calendar>
+              <ion-calendar [(ngModel)]="dateRange" [options]="optionsRange" [type]="type" class="form-input"></ion-calendar>
             </ion-item>
 
             <ion-item lines="none">
