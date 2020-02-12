@@ -72,14 +72,14 @@
               <ion-item class="ion-no-padding ion-no-margin hidden-lg-up">
                 <ion-grid class="ion-no-padding">
                   <ion-row>
-                    <ion-col size="12" size-sm="12" style="margin: auto; padding-left: 0px; padding-top: 10px; padding-right: 0px;">
+                    <ion-col size="12" size-sm="12" class="controlled-col">
                       Shake Sensitivity
                     </ion-col>
                     <ion-col size="12" size-sm="12" style="padding-top: 0px; padding-bottom: 10px;">
                       <ion-range pin="true" min="0" max="4" step="1" ticks="true" snaps="true" [(ngModel)]="shakeSensitivity" (ionChange)="getSensitivitySlider()" ></ion-range>
                       <ion-label>
                         Slow
-                        <div style="padding-left: 28%; display: inline;">
+                        <div class="centered-text">
                           Medium
                         </div>
                         <div class="ion-float-end">
