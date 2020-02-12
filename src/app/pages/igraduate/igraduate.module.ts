@@ -26,6 +26,5 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [IgraduatePage, FilterPipe, StudentDetailsModalPage],
-  entryComponents: [StudentDetailsModalPage]
 })
 export class IgraduatePageModule {}

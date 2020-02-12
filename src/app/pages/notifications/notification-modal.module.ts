@@ -11,6 +11,5 @@ import { NotificationModalPage } from './notification-modal';
     IonicModule,
     SharedPipesModule
   ],
-  entryComponents: [NotificationModalPage]
 })
 export class NotificationModalModule { }

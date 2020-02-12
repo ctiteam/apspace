@@ -27,6 +27,5 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [ViewStudentPage, ShowDetailsPage, FilterPipe, SearchPipe],
-  entryComponents: [ShowDetailsPage]
 })
 export class ViewStudentPageModule {}

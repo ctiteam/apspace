@@ -30,7 +30,7 @@ export class MarkAttendancePage implements OnInit {
 
   lectureUpdate = '';
 
-  otp$: Observable<number>;
+  otp$: Observable<string>;
   lastMarked$: Observable<Pick<NewStatusSubscription, 'newStatus'>[]>;
   students$: Observable<Partial<Status>[]>;
   totalPresentStudents$: Observable<number>;

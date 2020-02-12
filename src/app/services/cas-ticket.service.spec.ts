@@ -24,7 +24,7 @@ describe('CasTicketService', () => {
   it('should be created', () => {
     storage.get.and.callFake(() => Promise.resolve(null));
 
-    const service: CasTicketService = TestBed.get(CasTicketService);
+    const service: CasTicketService = TestBed.inject(CasTicketService);
     expect(service).toBeTruthy();
   });
 });

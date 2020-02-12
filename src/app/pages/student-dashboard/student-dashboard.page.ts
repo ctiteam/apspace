@@ -23,7 +23,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // USER SETTINGS
   @ViewChild('dragulaContainer', { static: true }) container: ElementRef; // access the dragula container
   @ViewChild('dashboardSectionsSelectBox', { static: true }) dashboardSectionsselectBoxRef: IonSelect; // hidden selectbox
-  @ViewChild('slides', { static: false }) slides: IonSlides;
+  @ViewChild('slides') slides: IonSlides;
   dashboardSectionsSelectBoxModel; // select box dashboard sections value
   allDashboardSections = [ // alldashboardSections will not be modified and it will be used in the select box
     'quickAccess',

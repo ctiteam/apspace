@@ -19,7 +19,7 @@ describe('IntakeListingService', () => {
   });
 
   it('should be created', () => {
-    const service: IntakeListingService = TestBed.get(IntakeListingService);
+    const service: IntakeListingService = TestBed.inject(IntakeListingService);
     expect(service).toBeTruthy();
   });
 });

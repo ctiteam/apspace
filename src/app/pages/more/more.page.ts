@@ -826,8 +826,13 @@ export class MorePage implements OnInit {
       message: msg,
       color: 'danger',
       duration: 6000,
-      showCloseButton: true,
-      position: 'top'
+      position: 'top',
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ],
     });
     toast.present();
   }

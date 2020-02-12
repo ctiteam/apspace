@@ -22,7 +22,6 @@ const routes: Routes = [
     ComponentsModule,
   ],
   declarations: [NewsPage],
-  entryComponents: []
 })
 
 export class NewsPageModule {}

@@ -32,7 +32,7 @@ describe('WsApiService', () => {
         { provide: Storage, useValue: storageSpy },
       ]
     });
-    service = TestBed.get(WsApiService);
+    service = TestBed.inject(WsApiService);
   });
 
   it('should be created', () => {

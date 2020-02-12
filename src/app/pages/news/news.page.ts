@@ -13,7 +13,7 @@ import { NewsModalPage } from './news-modal';
   styleUrls: ['./news.page.scss'],
 })
 export class NewsPage {
-  @ViewChild('slides', { static: false }) slides: IonSlides;
+  @ViewChild('slides') slides: IonSlides;
   news$: Observable<News[]>;
   noticeBoardItems$: Observable<any[]>;
   noticeBoardSliderOpts = {

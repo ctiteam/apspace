@@ -92,8 +92,13 @@ export class FilingReportPage implements OnInit {
       duration: 6000,
       position: 'top',
       color,
-      showCloseButton: true,
       animated: true,
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ],
     }).then(toast => toast.present());
   }
 

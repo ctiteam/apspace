@@ -21,7 +21,7 @@ describe('VersionService', () => {
   });
 
   it('should be created', () => {
-    const service: VersionService = TestBed.get(VersionService);
+    const service: VersionService = TestBed.inject(VersionService);
     expect(service).toBeTruthy();
   });
 });

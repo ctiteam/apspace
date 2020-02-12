@@ -32,7 +32,6 @@ import { NotificationModalModule } from './pages/notifications/notification-moda
 @NgModule({
   // notificationPageModal is needed here because it is called in app.component.ts, NewsModal is called in dashboards also
   declarations: [AppComponent],
-  entryComponents: [],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

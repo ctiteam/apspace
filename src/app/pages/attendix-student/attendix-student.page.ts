@@ -16,7 +16,7 @@ import { SettingsService } from '../../services';
 export class AttendixStudentPage implements OnInit, OnDestroy {
 
   digits = new Array(3);
-  @ViewChild('otpInput', { static: false }) otpInput: ElementRef<HTMLInputElement>;
+  @ViewChild('otpInput') otpInput: ElementRef<HTMLInputElement>;
 
   isCordova: boolean;
   scan = false;
@@ -83,8 +83,8 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
     const el = ev.target as HTMLInputElement;
     if ('0' <= ev.key && ev.key <= '9') {
       el.value = ev.key;
-      if (el.nextSibling) {
-        (el.nextSibling as HTMLInputElement).focus();
+      if (el.nextElementSibling) {
+        (el.nextElementSibling as HTMLInputElement).focus();
       } else {
         let otp = '';
         for (let prev = el; prev != null; prev = prev.previousElementSibling as HTMLInputElement) {
@@ -133,7 +133,12 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
       duration: 9000,
       position: 'top',
       color,
-      showCloseButton: true
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ],
     }).then(toast => toast.present());
   }
 

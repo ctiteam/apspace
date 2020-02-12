@@ -19,7 +19,7 @@ describe('NewsService', () => {
   });
 
   it('should be created', () => {
-    const service: NewsService = TestBed.get(NewsService);
+    const service: NewsService = TestBed.inject(NewsService);
     expect(service).toBeTruthy();
   });
 });

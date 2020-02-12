@@ -16,7 +16,7 @@ describe('AppLauncherService', () => {
   });
 
   it('should be created', () => {
-    const service: AppLauncherService = TestBed.get(AppLauncherService);
+    const service: AppLauncherService = TestBed.inject(AppLauncherService);
     expect(service).toBeTruthy();
   });
 });

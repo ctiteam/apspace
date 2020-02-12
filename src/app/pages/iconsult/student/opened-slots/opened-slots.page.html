@@ -105,7 +105,7 @@
 
       <ion-col size="12" size-md="6" size-lg="7">
         <ng-container *ngIf="(slots$ | async) as allSlotsGroupedByMonthYear; else loadingSlots">
-          <ng-container *ngIf="(allSlotsGroupedByMonthYear | keyvalue)?.length > 0; else noSlots">
+          <ng-container *ngIf="((allSlotsGroupedByMonthYear | keyvalue) || []).length; else noSlots">
             <ng-container *ngFor="let slotsForMonthYear of allSlotsGroupedByMonthYear | keyvalue">
               <ion-card>
                 <ion-card-header class="ion-padding-start cursor-pointer">

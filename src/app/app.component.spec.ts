@@ -88,10 +88,10 @@ describe('AppComponent', () => {
     versionServiceSpy.checkForUpdate.and.callFake(() => NEVER);
     shakeSpy.startWatch.and.callFake(() => NEVER);
 
-    const platform = TestBed.get(Platform);
-    spyOn(platform, 'is').and.callFake(() => 'cordova');
+    const platform = TestBed.inject(Platform);
+    spyOn(platform, 'is').and.callFake(() => true);
     const fixture = TestBed.createComponent(AppComponent);
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     const navigateSpy = spyOn(router, 'navigate');
 
     fixture.detectChanges();
@@ -113,7 +113,7 @@ describe('AppComponent', () => {
     shakeSpy.startWatch.and.callFake(() => NEVER);
 
     const fixture = TestBed.createComponent(AppComponent);
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     const navigateSpy = spyOn(router, 'navigate');
 
     fixture.detectChanges();

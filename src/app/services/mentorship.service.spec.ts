@@ -11,7 +11,7 @@ describe('MentorshipService', () => {
   }));
 
   it('should be created', () => {
-    const service: MentorshipService = TestBed.get(MentorshipService);
+    const service: MentorshipService = TestBed.inject(MentorshipService);
     expect(service).toBeTruthy();
   });
 });

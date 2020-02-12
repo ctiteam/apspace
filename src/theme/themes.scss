@@ -158,7 +158,7 @@ ion-card {
 ion-item {
   --background: var(--secondary-bg-color) !important;
   --color: var(--main-txt-color) !important;
-  --background-activated: var(--tertiary-bg-color) !important;
+  --button-background-activated: var(--tertiary-bg-color) !important;
   --border-color: var(--tertiary-bg-color) !important;
 }
 
@@ -401,7 +401,7 @@ ion-button {
 ion-fab-button {
   &.colored-background {
     --background: var(--primary-color) !important;
-    --background-activated: var(--primary-color) !important;
+    --button-background-activated: var(--primary-color) !important;
     --background-hover: var(--sub-primary-color);
   }
 }
@@ -462,7 +462,7 @@ ion-toolbar:not(.ion-color) .sc-ion-buttons-ios-h.sc-ion-buttons-ios-s .button-c
   ion-fab-button {
     &.colored-background {
       --background: var(--tertiary-bg-color) !important;
-      --background-activated: var(--tertiary-bg-color) !important;
+      --button-background-activated: var(--tertiary-bg-color) !important;
       --background-hover: var(--tertiary-bg-color);
     }
   }

@@ -12,8 +12,7 @@
         {{ intake || 'Intakes' }}
       </ion-button>
       <ion-button fill="icon" size="small" (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
-        <ion-icon *ngIf="!show2ndToolbar" md="ios-arrow-down" name="arrow-down"></ion-icon>
-        <ion-icon *ngIf="show2ndToolbar" md="ios-arrow-up" name="arrow-up"></ion-icon>
+        <ion-icon [name]="show2ndToolbar ? 'arrow-up' : 'arrow-down'"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -160,7 +159,7 @@
                             <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]"
                               class="md-text-center">
                               <span class="marker main-text-color">
-                                <ion-icon name="contact"></ion-icon>
+                                <ion-icon name="person-circle"></ion-icon>
                               </span>
                               <span class="colored-text">
                                 {{ timetable.NAME }}
@@ -190,7 +189,7 @@
                           <ion-col size="12" size-sm="4" class="ion-no-padding" *ngIf="timetable.NAME">
                             <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]">
                               <span class="marker main-text-color">
-                                <ion-icon name="contact"></ion-icon>
+                                <ion-icon name="person-circle"></ion-icon>
                               </span>
                               <span class="colored-text">
                                 {{ timetable.NAME }}

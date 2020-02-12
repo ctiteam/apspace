@@ -33,8 +33,5 @@ import { SearchModalComponent } from './search-modal/search-modal.component';
     QuickAccessItemComponent,
     MessageWithSvgComponent
   ],
-  entryComponents: [
-    SearchModalComponent,
-  ]
 })
 export class ComponentsModule { }

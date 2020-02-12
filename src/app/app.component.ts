@@ -111,7 +111,12 @@ export class AppComponent {
                       position: 'top',
                       color: 'danger',
                       duration: 5000,
-                      showCloseButton: true,
+                      buttons: [
+                        {
+                          text: 'Close',
+                          role: 'cancel'
+                        }
+                      ],
                     }).then(toast => toast.present());
                   }
 
@@ -135,7 +140,12 @@ export class AppComponent {
                           position: 'top',
                           color: 'success',
                           duration: 5000,
-                          showCloseButton: true,
+                          buttons: [
+                            {
+                              text: 'Close',
+                              role: 'cancel'
+                            }
+                          ],
                         }).then(toast => toast.present());
 
                         this.isOpen = false;
@@ -148,7 +158,12 @@ export class AppComponent {
                           cssClass: 'danger',
                           position: 'top',
                           duration: 5000,
-                          showCloseButton: true,
+                          buttons: [
+                            {
+                              text: 'Close',
+                              role: 'cancel'
+                            }
+                          ],
                         }).then(toast => toast.present());
                       },
                       complete: () => {
@@ -200,7 +215,12 @@ export class AppComponent {
       duration,
       color: 'medium',
       position: 'top',
-      showCloseButton: true
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ],
     });
     toast.present();
   }

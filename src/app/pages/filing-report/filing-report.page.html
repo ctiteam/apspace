@@ -194,7 +194,7 @@
                 <ion-col *ngIf="currentStepNumber === 1 || currentStepNumber === 2" size="4">
                   <div class="ion-margin-top">
                     <ion-button class="danger-background ion-text-left" expand="block" (click)="cancel()">
-                      <ion-icon name="ios-arrow-back" slot="start"></ion-icon>
+                      <ion-icon name="arrow-back" slot="start"></ion-icon>
                       <span>Cancel</span>
                     </ion-button>
                   </div>
@@ -205,7 +205,7 @@
                       <ion-button color="primary" class="ion-text-right" expand="block" (click)="nextStep()"
                         [disabled]="(currentStepNumber === 0 && studentId.length < 3) || (currentStepNumber === 1 && disableNextButton)">
                         <span>Next</span>
-                        <ion-icon name="ios-arrow-forward" slot="end"></ion-icon>
+                        <ion-icon name="arrow-forward" slot="end"></ion-icon>
                       </ion-button>
                     </ng-container>
                     <ng-template #submit>

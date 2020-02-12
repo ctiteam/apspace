@@ -50,7 +50,12 @@ export class FeedbackPage implements OnInit {
         position: 'top',
         color: 'success',
         duration: 5000,
-        showCloseButton: true,
+        buttons: [
+          {
+            text: 'Close',
+            role: 'cancel'
+          }
+        ],
       }).then(toast => toast.present());
       this.submitting = false;
       this.dismissLoading();
@@ -60,7 +65,12 @@ export class FeedbackPage implements OnInit {
         cssClass: 'danger',
         position: 'top',
         duration: 5000,
-        showCloseButton: true,
+        buttons: [
+          {
+            text: 'Close',
+            role: 'cancel'
+          }
+        ],
       }).then(toast => toast.present());
       // finally not invoked as error does not complete
       this.dismissLoading();

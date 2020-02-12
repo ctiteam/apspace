@@ -22,7 +22,7 @@ describe('MaintenanceAndUpdatePage', () => {
   }));
 
   it('should create', () => {
-    const router = TestBed.get(Router);
+    const router = TestBed.inject(Router);
     spyOn(router, 'getCurrentNavigation').and.returnValue({
       id: 1,
       initialUrl: router.createUrlTree(['/']),

@@ -84,7 +84,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
   manualEndTime: string;
   manualClassType: string;
 
-  @ViewChild('classcodeInput', { static: false }) classcodeInput: IonSelect;
+  @ViewChild('classcodeInput') classcodeInput: IonSelect;
 
   constructor(
     private tt: StudentTimetableService,
@@ -194,7 +194,12 @@ export class ClassesPage implements AfterViewInit, OnInit {
         message: 'Fail to auto complete, switched to \'Manual\' mode',
         duration: 3000,
         position: 'top',
-        showCloseButton: true,
+        buttons: [
+          {
+            text: 'Close',
+            role: 'cancel'
+          }
+        ],
       }).then(toast => toast.present());
       this.auto = false;
       console.warn('fail to auto complete', guessSchedules);

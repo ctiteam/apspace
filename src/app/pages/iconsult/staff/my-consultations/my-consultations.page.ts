@@ -391,8 +391,13 @@ export class MyConsultationsPage {
         duration: 6000,
         position: 'top',
         color,
-        showCloseButton: true,
-        animated: true
+        animated: true,
+        buttons: [
+          {
+            text: 'Close',
+            role: 'cancel'
+          }
+        ],
         // enterAnimation: toastMessageEnterAnimation,
         // leaveAnimation: toastMessageLeaveAnimation
       })

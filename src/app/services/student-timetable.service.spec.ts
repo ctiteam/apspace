@@ -19,7 +19,7 @@ describe('StudentTimetableService', () => {
       imports: [RouterTestingModule, HttpClientTestingModule]
     });
 
-    httpTestingController = TestBed.get(HttpTestingController);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
@@ -27,13 +27,13 @@ describe('StudentTimetableService', () => {
   });
 
   it('should be created', () => {
-    const service: StudentTimetableService = TestBed.get(StudentTimetableService);
+    const service: StudentTimetableService = TestBed.inject(StudentTimetableService);
     expect(service).toBeTruthy();
   });
 
   it('should save to cache', () => {
     const testData = [];
-    const service: StudentTimetableService = TestBed.get(StudentTimetableService);
+    const service: StudentTimetableService = TestBed.inject(StudentTimetableService);
 
     service.get(false).subscribe(
       data => expect(data).toEqual(testData),
@@ -69,7 +69,7 @@ describe('StudentTimetableService', () => {
         TIME_TO: '',
       }
     ];
-    const service: StudentTimetableService = TestBed.get(StudentTimetableService);
+    const service: StudentTimetableService = TestBed.inject(StudentTimetableService);
     networkSpy.type = 'none';
 
     service.get(false).subscribe(
