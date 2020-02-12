@@ -6,12 +6,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Network } from '@ionic-native/network/ngx';
+import { Screenshot } from '@ionic-native/screenshot/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
 import { ModalController, Platform, PopoverController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 import { NEVER } from 'rxjs';
 
+import { Vibration } from '@ionic-native/vibration/ngx';
 import { AppComponent } from './app.component';
 import { CasTicketService, FeedbackService, NotificationService, UserSettingsService, VersionService } from './services';
 
@@ -24,6 +26,7 @@ describe('AppComponent', () => {
     darkThemeActivated: jasmine.Spy;
     PureDarkThemeActivated: jasmine.Spy;
     getAccentColor: jasmine.Spy;
+    getShakeSensitivity: jasmine.Spy;
   };
   let versionServiceSpy: { checkForUpdate: jasmine.Spy };
   let shakeSpy: jasmine.SpyObj<Shake>;
@@ -34,7 +37,7 @@ describe('AppComponent', () => {
     networkSpy = jasmine.createSpyObj('Network', ['type']);
     shakeSpy = jasmine.createSpyObj('Shake', ['startWatch']);
     userSettingsServiceSpy = jasmine.createSpyObj('UserSettingsService',
-      ['getUserSettingsFromStorage', 'darkThemeActivated', 'PureDarkThemeActivated', 'getAccentColor']);
+      ['getUserSettingsFromStorage', 'darkThemeActivated', 'PureDarkThemeActivated', 'getAccentColor', 'getShakeSensitivity']);
     versionServiceSpy = jasmine.createSpyObj('VersionService', ['checkForUpdate']);
 
     TestBed.configureTestingModule({
@@ -57,6 +60,8 @@ describe('AppComponent', () => {
         { provide: UserSettingsService, useValue: userSettingsServiceSpy },
         { provide: VersionService, useValue: versionServiceSpy },
         { provide: Shake, useValue: shakeSpy },
+        { provide: Screenshot, useValue: {} },
+        { provide: Vibration, useValue: {} }
       ],
       imports: [
         RouterTestingModule.withRoutes([])
@@ -70,6 +75,7 @@ describe('AppComponent', () => {
     userSettingsServiceSpy.darkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.PureDarkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.getAccentColor.and.callFake(() => NEVER);
+    userSettingsServiceSpy.getShakeSensitivity.and.callFake(() => NEVER);
     versionServiceSpy.checkForUpdate.and.callFake(() => NEVER);
     shakeSpy.startWatch.and.callFake(() => NEVER);
 
@@ -85,6 +91,7 @@ describe('AppComponent', () => {
     userSettingsServiceSpy.darkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.PureDarkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.getAccentColor.and.callFake(() => NEVER);
+    userSettingsServiceSpy.getShakeSensitivity.and.callFake(() => NEVER);
     versionServiceSpy.checkForUpdate.and.callFake(() => NEVER);
     shakeSpy.startWatch.and.callFake(() => NEVER);
 
@@ -109,6 +116,7 @@ describe('AppComponent', () => {
     userSettingsServiceSpy.darkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.PureDarkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.getAccentColor.and.callFake(() => NEVER);
+    userSettingsServiceSpy.getShakeSensitivity.and.callFake(() => NEVER);
     versionServiceSpy.checkForUpdate.and.callFake(() => NEVER);
     shakeSpy.startWatch.and.callFake(() => NEVER);
 
