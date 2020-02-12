@@ -78,7 +78,7 @@ export class AppComponent {
 
             const modalIsOpen = await this.modalCtrl.getTop();
             if (!modalIsOpen) {
-              this.screenshot.URI(80).then(async (res) => {
+              this.screenshot.URI(100).then(async (res) => { // "100" is screenshot quality
                 this.vibration.vibrate(1000); // Vibrate for 1s (1000ms)
                 const modal = await this.modalCtrl.create({
                   component: ShakespearModalPage,

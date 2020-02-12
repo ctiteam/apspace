@@ -70,7 +70,7 @@ export class UserSettingsService {
     this.menuUI = new BehaviorSubject('list');
     this.busShuttleServiceSettings = new BehaviorSubject(this.defaultBusShuttleServicesSettings);
     this.casheCleaered = new BehaviorSubject(false);
-    this.shakeSensitivity = new BehaviorSubject('40');
+    this.shakeSensitivity = new BehaviorSubject('60');
     this.timetable = new BehaviorSubject({ blacklists: [] });
   }
 
@@ -261,7 +261,7 @@ export class UserSettingsService {
     this.storage.get('shake-sensitivity').then(value => {
       value
         ? this.setShakeSensitivity(value)
-        : this.setShakeSensitivity('40');
+        : this.setShakeSensitivity('60');
     });
   }
 
