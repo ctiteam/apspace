@@ -234,16 +234,16 @@ export class StudentSurveyPage implements OnInit {
               // tslint:disable-next-line: max-line-length
               const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 21)); // start of week 4 of the module
               // tslint:disable-next-line: max-line-length
-              const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 42)); // start of week 7 of the module
-              if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 7 is not included
+              const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49)); // start of week 8 of the module
+              if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 8 is not included
                 this.surveyType = 'Mid-Semester';
               }
             } else {
               // tslint:disable-next-line: max-line-length
               const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 14)); // start of week 3 of the module
               // tslint:disable-next-line: max-line-length
-              const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 35)); // start of week 6 of the module
-              if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 6 is not included
+              const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 42)); // start of week 7 of the module
+              if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 7 is not included
                 this.surveyType = 'Mid-Semester';
               }
             }
