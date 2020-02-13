@@ -24,11 +24,11 @@
             </p>
             <p>
                 <span class="colored-text">Sent on:</span> <span class="text-bold">
-                    {{message.sent_on | date: 'EEEE, dd MMMM y'}}</span>
+                    {{message.sent_on | customdatetime: 'EEEE, dd MMMM y'}}</span>
             </p>
             <p>
                 <span class="colored-text">Sent at:</span> <span class="text-bold">
-                    {{ message.sent_on | date : 'hh:mm aaa' }}</span>
+                    {{ message.sent_on | customdatetime : 'hh:mm aaa' }}</span>
             </p>
         </ion-card-content>
     </ion-card>

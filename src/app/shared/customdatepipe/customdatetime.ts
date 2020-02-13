@@ -2,6 +2,7 @@ import { formatDate } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 import { UserSettingsService } from 'src/app/services';
 
+// Implemented everywhere except for ClassroomFinder page (time picker)
 @Pipe({
   name: 'customdatetime'
 })

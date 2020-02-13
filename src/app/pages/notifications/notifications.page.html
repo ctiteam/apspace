@@ -70,8 +70,8 @@
           </ion-card-header>
           <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end ion-padding-bottom">
             <p><span class="text-bold">Sender:</span> {{message.staff_name}}</p>
-            <p><span class="text-bold">Sent on:</span> {{message.sent_on | date: 'EEEE, dd MMMM y'}}</p>
-            <p><span class="text-bold">Sent at:</span> {{message.sent_on | date: 'hh:mm aaa'}}</p>
+            <p><span class="text-bold">Sent on:</span> {{message.sent_on | customdatetime: 'EEEE, dd MMMM y'}}</p>
+            <p><span class="text-bold">Sent at:</span> {{message.sent_on | customdatetime: 'hh:mm aaa'}}</p>
             <ion-badge class="small-margin-top new" style="float: left;"
               *ngIf="(!message.read && openedMessages.indexOf(message.message_id) === -1)">
               New
