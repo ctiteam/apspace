@@ -65,12 +65,14 @@
     "apollo-link": "^1.2.13",
     "apollo-link-http": "^1.5.16",
     "aws-appsync": "^2.0.2",
+    "com.darktalker.cordova.screenshot": "^0.1.6",
     "cordova-android": "^8.1.0",
     "cordova-browser": "^6.0.0",
     "cordova-ios": "^5.1.1",
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-appavailability": "^0.4.2",
     "cordova-plugin-badge": "^0.8.8",
+    "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-device-motion": "^2.0.1",
     "cordova-plugin-fcm-with-dependecy-updated": "^4.1.1",
     "cordova-plugin-file": "^6.0.2",
@@ -154,10 +156,10 @@
       "cordova-plugin-qrscanner": {},
       "cordova-plugin-badge": {},
       "cordova-plugin-shake": {},
+      "cordova-plugin-vibration": {},
       "com.darktalker.cordova.screenshot": {},
-      "cordova-plugin-camera": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-vibration": {}
+      "cordova-plugin-camera": {}
     },
     "platforms": [
       "android",
