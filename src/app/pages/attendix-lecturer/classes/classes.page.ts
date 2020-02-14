@@ -2,8 +2,8 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonSelect, LoadingController, ModalController, ToastController } from '@ionic/angular';
 
-import { forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, forkJoin } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
 import { Classcode, StaffProfile, StudentTimetable } from '../../../interfaces';
@@ -21,6 +21,8 @@ type Schedule = Pick<Classcode, 'CLASS_CODE'>
 export class ClassesPage implements AfterViewInit, OnInit {
 
   auto = true; // manual mode to record mismatched data
+
+  timetablesprofile$: Observable<[StaffProfile[], StudentTimetable[]]>;
 
   /* computed */
   classcodes: string[];
@@ -96,6 +98,13 @@ export class ClassesPage implements AfterViewInit, OnInit {
   ) { }
 
   ngOnInit() {
+    const profile$ = this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' });
+    this.timetablesprofile$ = forkJoin([profile$, this.tt.get()]).pipe(
+      shareReplay(1), // no need to refresh rigid data when user came back
+    );
+  }
+
+  ionViewDidEnter() {
     const d = new Date();
     this.date = this.isoDate(d);
     const nowMins = d.getHours() * 60 + d.getMinutes();
@@ -108,7 +117,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     });
     loadingCtrl.then(loading => loading.present());
 
-    const timetables$ = forkJoin([this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }), this.tt.get()]).pipe(
+    const timetables$ = this.timetablesprofile$.pipe(
       map(([profile, timetables]) => timetables.filter(timetable =>
         profile[0].ID === timetable.SAMACCOUNTNAME
         && this.parseTime(timetable.TIME_FROM) <= nowMins)),

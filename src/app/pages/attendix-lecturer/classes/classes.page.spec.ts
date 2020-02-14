@@ -125,6 +125,8 @@ describe('ClassesPage', () => {
       fixture = TestBed.createComponent(ClassesPage);
       component = fixture.componentInstance;
       fixture.detectChanges();
+      component.ionViewDidEnter();
+      fixture.detectChanges();
 
       expect(component).toBeTruthy();
       expect(ttSpy.get).toHaveBeenCalledTimes(1);
