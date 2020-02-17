@@ -17,7 +17,7 @@
         </ion-card-header>
         <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end ion-padding-bottom">
             <div class="ion-margin-bottom ion-padding-top ion-padding-bottom message-content">
-                <p [innerHTML]="message.content | safe: 'sanitizeHtml'"></p>
+                <p [innerHTML]="message.content"></p>
             </div>
             <p>
                 <span class="colored-text">Sender:</span> <span class="text-bold"> {{ message.staff_name }}</span>
