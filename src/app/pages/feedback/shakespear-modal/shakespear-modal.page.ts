@@ -114,14 +114,14 @@ export class ShakespearModalPage implements OnInit {
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Please select',
       buttons: [
+        // {
+        //   text: 'Capture image',
+        //   handler: () => {
+        //     this.pickImage(this.camera.PictureSourceType.CAMERA);
+        //   }
+        // },
         {
-          text: 'Capture image',
-          handler: () => {
-            this.pickImage(this.camera.PictureSourceType.CAMERA);
-          }
-        },
-        {
-          text: 'Load from your smelly gallery',
+          text: 'Load from gallery',
           handler: () => {
             this.pickImage(this.camera.PictureSourceType.PHOTOLIBRARY);
           }

@@ -33,6 +33,14 @@
   display: none;
 }
 
+.controlled-modal .modal-wrapper {
+  height: 93%;
+  top: 7%;
+  position: absolute;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
 // Screen size hidden (Responsive sizes, eliminates Media Query Tag)
 .invisible {
   visibility: hidden !important;
