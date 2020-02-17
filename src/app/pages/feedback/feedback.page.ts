@@ -46,7 +46,7 @@ export class FeedbackPage implements OnInit {
       this.message = '';
       this.toastCtrl.create({
         // tslint:disable-next-line: max-line-length
-        message: '<span style="font-weight: bold;">Feedback submitted! </span> The team will get back to you as soon as possbile via Email. Thank you for your feedback',
+        message: '<span style="font-weight: bold;">Feedback submitted! </span> The team will get back to you as soon as possible via Email. Thank you for your feedback',
         position: 'top',
         color: 'success',
         duration: 5000,

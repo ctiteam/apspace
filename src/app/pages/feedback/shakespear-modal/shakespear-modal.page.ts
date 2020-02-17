@@ -158,17 +158,20 @@ export class ShakespearModalPage implements OnInit {
     const feedback = {
       contactNo: this.contactNo || '',
       platform: this.platform,
-      message: this.message + '\n' + `Url: ${this.router.url}` + '\n' + 'Image Url: ' + this.imagePath,
+      message: this.message,
+      attachments: this.images.map((img: string) => img.replace('data:image/jpeg;base64,', '').trim()).join('&&'),
+      pageUrl: `${this.router.url}`,
       appVersion: this.appVersion,
       screenSize: this.screenSize,
     };
+    console.log(feedback);
     this.presentLoading();
     this.submitting = true;
     this.feedback.sendFeedback(feedback).subscribe(_ => {
       this.message = '';
       this.toastCtrl.create({
         // tslint:disable-next-line: max-line-length
-        message: '<span style="font-weight: bold;">Feedback submitted! </span> The team will get back to you as soon as possbile via Email. Thank you for your feedback',
+        message: '<span style="font-weight: bold;">Feedback submitted! </span> The team will get back to you as soon as possible via Email. Thank you for your feedback',
         position: 'top',
         color: 'success',
         duration: 5000,

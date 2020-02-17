@@ -2,16 +2,13 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Network } from '@ionic-native/network/ngx';
-import { Screenshot } from '@ionic-native/screenshot/ngx';
-import { Shake } from '@ionic-native/shake/ngx';
-import { Vibration } from '@ionic-native/vibration/ngx';
 import {
   ActionSheetController, LoadingController, MenuController, ModalController, NavController,
   Platform, PopoverController, ToastController
 } from '@ionic/angular';
-import { ShakespearModalPage } from './pages/feedback/shakespear-modal/shakespear-modal.page';
 import { NotificationModalPage } from './pages/notifications/notification-modal';
-import { CasTicketService, NotificationService, UserSettingsService, VersionService } from './services';
+import { NotificationService, UserSettingsService, VersionService } from './services';
+import { ShakespearFeedbackService } from './services/shakespear-feedback.service';
 
 @Component({
   selector: 'app-root',
@@ -32,12 +29,10 @@ export class AppComponent {
   loading: HTMLIonLoadingElement;
 
   constructor(
-    private cas: CasTicketService,
     private fcm: FCM,
     private network: Network,
     private platform: Platform,
     private router: Router,
-    private shake: Shake,
     private userSettings: UserSettingsService,
     private notificationService: NotificationService,
     private versionService: VersionService,
@@ -48,8 +43,7 @@ export class AppComponent {
     private menuCtrl: MenuController,
     private popoverCtrl: PopoverController,
     private loadingCtrl: LoadingController,
-    private screenshot: Screenshot,
-    private vibration: Vibration
+    private shakespear: ShakespearFeedbackService
   ) {
     this.getUserSettings();
     this.versionService.checkForUpdate().subscribe();
@@ -67,57 +61,32 @@ export class AppComponent {
         // this.statusBar.backgroundColorByName('black');
 
       platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
-          // tslint:disable-next-line: max-line-length
-          this.shake.startWatch(this.shakeSensitivity).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
-            if (!await this.cas.isAuthenticated()) {
-              return; // Do nothing if they aren't logged in
+        this.shakespear.initShakespear(this.shakeSensitivity);
+        this.platform.backButton.subscribe(async () => { // back button clicked
+          if (this.router.url.startsWith('/tabs') || this.router.url.startsWith('/maintenance-and-update')) {
+            const timePressed = new Date().getTime();
+            if ((timePressed - this.lastTimeBackPress) < this.timePeriodToExit) {
+              // tslint:disable-next-line: no-string-literal
+              navigator['app'].exitApp();
+            } else {
+              this.presentToast('Press again to exit App', 3000);
+              this.lastTimeBackPress = timePressed;
             }
-            if (this.router.url.startsWith('/feedback')) {
+          } else {
+            if (this.menuCtrl.getOpen()) {
+              this.menuCtrl.close();
               return;
             }
 
-            const modalIsOpen = await this.modalCtrl.getTop();
-            if (!modalIsOpen) {
-              this.screenshot.URI(100).then(async (res) => { // "100" is screenshot quality
-                this.vibration.vibrate(1000); // Vibrate for 1s (1000ms)
-                const modal = await this.modalCtrl.create({
-                  component: ShakespearModalPage,
-                  cssClass: 'controlled-modal',
-                  componentProps: {
-                    imagePath: res.URI
-                  }
-                });
-
-                await modal.present();
-              });
+            const active = this.actionSheetCtrl.getTop() || this.popoverCtrl.getTop() || this.modalCtrl.getTop();
+            if (active) {
+              (await active).dismiss();
+              return;
+            } else {
+              this.navCtrl.pop();
             }
+          }
         });
-      });
-
-      this.platform.backButton.subscribe(async () => { // back button clicked
-        if (this.router.url.startsWith('/tabs') || this.router.url.startsWith('/maintenance-and-update')) {
-          const timePressed = new Date().getTime();
-          if ((timePressed - this.lastTimeBackPress) < this.timePeriodToExit) {
-            // tslint:disable-next-line: no-string-literal
-            navigator['app'].exitApp();
-          } else {
-            this.presentToast('Press again to exit App', 3000);
-            this.lastTimeBackPress = timePressed;
-          }
-        } else {
-          if (this.menuCtrl.getOpen()) {
-            this.menuCtrl.close();
-            return;
-          }
-
-          const active = this.actionSheetCtrl.getTop() || this.popoverCtrl.getTop() || this.modalCtrl.getTop();
-          if (active) {
-            (await active).dismiss();
-            return;
-          } else {
-            this.navCtrl.pop();
-          }
-        }
       });
     }
   }
