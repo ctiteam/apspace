@@ -21,8 +21,8 @@
         <div class="otp-wrapper">
           <input
             #otpInput *ngFor="let _ of digits; i as index"
-            autofocus class="otp" type="tel" maxlength="1"
-            (keydown)="onKey($event)">
+            autofocus class="otp" inputmode="numeric" type="number" maxlength="1"
+            (keydown)="onKey($event)" (keyup)="onKey($event)">
         </div>
       </ion-col>
     </ion-row>
