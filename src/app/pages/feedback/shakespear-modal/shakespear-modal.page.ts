@@ -87,7 +87,7 @@ export class ShakespearModalPage implements OnInit {
 
   pickImage(srcType: any) {
     const options: CameraOptions = {
-      quality: 100,
+      quality: 30,
       sourceType: srcType,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
@@ -114,12 +114,12 @@ export class ShakespearModalPage implements OnInit {
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Please select',
       buttons: [
-        // {
-        //   text: 'Capture image',
-        //   handler: () => {
-        //     this.pickImage(this.camera.PictureSourceType.CAMERA);
-        //   }
-        // },
+        {
+          text: 'Capture image',
+          handler: () => {
+            this.pickImage(this.camera.PictureSourceType.CAMERA);
+          }
+        },
         {
           text: 'Load from gallery',
           handler: () => {
