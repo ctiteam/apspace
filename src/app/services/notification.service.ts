@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Badge } from '@ionic-native/badge/ngx';
-import { FCM } from '@ionic-native/fcm/ngx';
 import { Network } from '@ionic-native/network/ngx';
+import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Observable, from, of } from 'rxjs';
@@ -21,12 +21,33 @@ export class NotificationService {
   constructor(
     public http: HttpClient,
     public cas: CasTicketService,
-    public fcm: FCM,
     private platform: Platform,
     private network: Network,
     private storage: Storage,
-    private badge: Badge
+    private badge: Badge,
+    private push: Push
   ) { }
+
+  checkPushPermission() {
+    return this.push.hasPermission().then((res: any) => {
+      if (res.isEnabled) {
+        this.createPushChannel();
+      } else {
+        console.log('We do not have permission to send push notifications');
+      }
+    });
+  }
+
+  createPushChannel() {
+    this.push.createChannel(
+      {
+        id: 'apspacepushchannel1',
+        description: 'Push channel 1 specifically for android to get messages',
+        importance: 3,
+        vibration: true
+      }
+    ).then(() => console.log('channel created for get message'));
+  }
 
   /**
    * GET: send token and service ticket on Log in and response is the history of notifications
@@ -35,12 +56,23 @@ export class NotificationService {
     if (this.network.type !== 'none') {
       let token = '';
       if (this.platform.is('cordova')) {
-        return from(
-          this.fcm.getToken()
-        ).pipe(
+        this.checkPushPermission();
+
+        const options: PushOptions = {
+          android: {},
+          ios: {
+            alert: 'true',
+            badge: 'true',
+            sound: 'true'
+          }
+        };
+
+        const pushObject: PushObject = this.push.init(options);
+        return pushObject.on('registration').pipe(
           switchMap(
-            responseToken => {
-              token = responseToken;
+            data => {
+              token = data.registrationId;
+              console.log('token successfully obtained', token);
               return this.cas.getST(this.serviceUrl);
             },
           ),
@@ -83,12 +115,22 @@ export class NotificationService {
   sendTokenOnLogout() {
     let token = '';
     if (this.platform.is('cordova')) {
-      return from(
-        this.fcm.getToken()
-      ).pipe(
+      this.checkPushPermission();
+
+      const options: PushOptions = {
+        android: {},
+        ios: {
+          alert: 'true',
+          badge: 'true',
+          sound: 'true'
+        }
+      };
+
+      const pushObject: PushObject = this.push.init(options);
+      return pushObject.on('registration').pipe(
         switchMap(
-          responseToken => {
-            token = responseToken;
+          data => {
+            token = data.registrationId;
             return this.cas.getST(this.serviceUrl);
           },
         ),

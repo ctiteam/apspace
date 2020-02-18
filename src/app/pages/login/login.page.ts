@@ -6,8 +6,8 @@ import { AlertController, ModalController, Platform, ToastController } from '@io
 import { throwError } from 'rxjs';
 import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 
-import { FCM } from '@ionic-native/fcm/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
 import { Role } from '../../interfaces';
 import {
   CasTicketService,
@@ -42,12 +42,12 @@ export class LoginPage {
     public alertCtrl: AlertController,
     private cas: CasTicketService,
     private dc: DataCollectorService,
-    private fcm: FCM,
     public iab: InAppBrowser,
     private modalCtrl: ModalController,
     private network: Network,
     private notificationService: NotificationService,
     private plt: Platform,
+    private push: Push,
     private router: Router,
     private route: ActivatedRoute,
     private settings: SettingsService,
@@ -140,10 +140,44 @@ export class LoginPage {
     }).then(toast => toast.present());
   }
 
+  checkPushPermission() {
+    return this.push.hasPermission().then((res: any) => {
+      if (res.isEnabled) {
+        this.createPushChannel();
+      } else {
+        console.log('We do not have permission to send push notifications');
+      }
+    });
+  }
+
+  createPushChannel() {
+    this.push.createChannel(
+      {
+        id: 'apspacepushchannel1',
+        description: 'Push channel 1 specifically for android to get messages',
+        importance: 3,
+        vibration: true
+      }
+    ).then(() => console.log('channel created for get message'));
+  }
+
   // this will fail when the user opens the app for the first time and login because it will run before login
   runCodeOnReceivingNotification() {
-    this.fcm.onNotification().subscribe(data => {
-      if (data.wasTapped) { // Notification received in background
+    this.checkPushPermission();
+
+    const options: PushOptions = {
+      android: {},
+      ios: {
+        alert: 'true',
+        badge: 'true',
+        sound: 'true'
+      }
+    };
+
+    const pushObject: PushObject = this.push.init(options);
+
+    pushObject.on('notification').subscribe(data => {
+      if (data.additionalData.coldstart) { // Notification received in background
         this.openNotificationModal(data);
       } else { // Notification received in foreground
         this.presentToastWithOptions(data);

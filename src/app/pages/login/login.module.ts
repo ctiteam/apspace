@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { LoginPage } from './login.page';
 
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Push } from '@ionic-native/push/ngx';
 import { ComponentsModule } from '../../components/components.module';
 
 const routes: Routes = [
@@ -26,7 +27,8 @@ const routes: Routes = [
     ComponentsModule
   ],
   providers: [
-    InAppBrowser
+    InAppBrowser,
+    Push
   ],
   declarations: [LoginPage]
 })

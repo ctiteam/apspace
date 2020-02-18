@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FCM } from '@ionic-native/fcm/ngx';
 import { Network } from '@ionic-native/network/ngx';
+import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
 import {
   ActionSheetController, AlertController, LoadingController, MenuController, ModalController, NavController,
@@ -32,7 +32,6 @@ export class AppComponent {
     private actionSheetCtrl: ActionSheetController,
     private alertCtrl: AlertController,
     private cas: CasTicketService,
-    private fcm: FCM,
     private feedback: FeedbackService,
     private loadingCtrl: LoadingController,
     private menuCtrl: MenuController,
@@ -42,6 +41,7 @@ export class AppComponent {
     private notificationService: NotificationService,
     private platform: Platform,
     private popoverCtrl: PopoverController,
+    private push: Push,
     private router: Router,
     private shake: Shake,
     private toastCtrl: ToastController,
@@ -219,11 +219,44 @@ export class AppComponent {
     return await this.loading.dismiss();
   }
 
+  checkPushPermission() {
+    return this.push.hasPermission().then((res: any) => {
+      if (res.isEnabled) {
+        this.createPushChannel();
+      } else {
+        console.log('We do not have permission to send push notifications');
+      }
+    });
+  }
+
+  createPushChannel() {
+    this.push.createChannel(
+      {
+        id: 'apspacepushchannel1',
+        description: 'Push channel 1 specifically for android to get messages',
+        importance: 3,
+        vibration: true
+      }
+    ).then(() => console.log('channel created for get message'));
+  }
+
   // this will fail when the user opens the app for the first time and login because it will run before login
   // => we need to call it here and in login page as well
   runCodeOnReceivingNotification() {
-    this.fcm.onNotification().subscribe(data => {
-      if (data.wasTapped) { // Notification received in background
+    this.checkPushPermission();
+
+    const options: PushOptions = {
+      android: {},
+      ios: {
+        alert: 'true',
+        badge: 'true',
+        sound: 'true'
+      }
+    };
+
+    const pushObject: PushObject = this.push.init(options);
+    pushObject.on('notification').subscribe(data => {
+      if (data.additionalData.coldstart) { // Notification received in background
         this.openNotificationModal(data);
       } else { // Notification received in foreground
         this.showNotificationAsToast(data);
