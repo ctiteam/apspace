@@ -267,6 +267,14 @@ export class MorePage implements OnInit {
 
     // START OF Academic Operations
     {
+      title: 'APiX / ERP (Legacy)',
+      group: 'Academic Operation',
+      url: 'https://erp.apiit.edu.my/easymoo/web/en/auth/security/login',
+      img: 'assets/img/apix.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['exception', 'feedback', 'legacy', 'old']
+    },
+    {
       title: 'APLC Progress Report',
       group: 'Academic Operation',
       url: 'aplc-progress-report',
