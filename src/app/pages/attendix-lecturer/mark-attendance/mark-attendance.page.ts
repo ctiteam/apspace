@@ -1,6 +1,7 @@
+import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { authenticator } from 'otplib/otplib-browser';
 import { NEVER, Observable, Subject, timer } from 'rxjs';
 import {
@@ -10,8 +11,8 @@ import {
 
 import {
   AttendanceGQL, AttendanceQuery, InitAttendanceGQL, InitAttendanceMutation,
-  MarkAttendanceGQL, NewStatusGQL, NewStatusSubscription, SaveLectureLogGQL,
-  ScheduleInput, Status
+  MarkAttendanceGQL, NewStatusGQL, NewStatusSubscription, ResetAttendanceGQL,
+  SaveLectureLogGQL, ScheduleInput, Status
 } from '../../../../generated/graphql';
 
 @Component({
@@ -27,6 +28,7 @@ export class MarkAttendancePage implements OnInit {
   auto = true;
   term = '';
   type: 'Y' | 'L' | 'N' | 'R' | '' = 'N';
+  resetable = false;
 
   lectureUpdate = '';
 
@@ -41,11 +43,14 @@ export class MarkAttendancePage implements OnInit {
   constructor(
     private attendance: AttendanceGQL,
     private initAttendance: InitAttendanceGQL,
+    private location: Location,
     private markAttendance: MarkAttendanceGQL,
     private newStatus: NewStatusGQL,
+    private resetAttendance: ResetAttendanceGQL,
     private route: ActivatedRoute,
     private saveLectureLog: SaveLectureLogGQL,
-    public toastCtrl: ToastController
+    public alertCtrl: AlertController,
+    public toastCtrl: ToastController,
   ) { }
 
   ngOnInit() {
@@ -60,6 +65,11 @@ export class MarkAttendancePage implements OnInit {
       classType: this.route.snapshot.paramMap.get('classType')
     };
     let studentsNameById: { [student: string]: string };
+
+    // limit updates to 30 days in the past
+    const today = new Date(new Date().setHours(8, 0, 0, 0));
+    const limit = new Date(today).setDate(today.getDate() - 30);
+    this.resetable = limit <= Date.parse(schedule.date);
 
     // get attendance state from query and use manual mode if attendance initialized
     const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
@@ -174,6 +184,31 @@ export class MarkAttendancePage implements OnInit {
       () => this.toast('Lecture update saved', 'success'),
       e => { this.toast('Lecture update failed: ' + e, 'failure'); console.error(e); }
     );
+  }
+
+  /** Reset attendance, double confirm. */
+  reset() {
+    this.alertCtrl.create({
+      header: 'Confirm!',
+      message: 'Attendance will be <strong>deleted</strong>!',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+        },
+        {
+          text: 'Okay',
+          handler: () => {
+            const schedule = this.schedule;
+            this.resetAttendance.mutate({ schedule }).subscribe(
+              () => { this.toast('Attendance resetted', 'success'), this.location.back(); },
+              e => { this.toast('Attendance reset failed: ' + e, 'failure'); console.error(e); }
+            );
+          }
+        }
+      ]
+    }).then(alert => alert.present());
   }
 
   /** Helper function to toast error message. */

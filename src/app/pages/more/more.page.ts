@@ -93,7 +93,7 @@ export class MorePage implements OnInit {
       tags: ['apspace feedback', 'app not working', 'issue']
     },
     {
-      title: 'Help Center',
+      title: 'Help Centre',
       group: 'Collaboration & Information Resources',
       url: 'https://apiit.atlassian.net/servicedesk/customer/portals', // No ticket
       img: 'assets/img/help-center.png',
@@ -266,6 +266,14 @@ export class MorePage implements OnInit {
 
 
     // START OF Academic Operations
+    {
+      title: 'APiX / ERP (Legacy)',
+      group: 'Academic Operation',
+      url: 'https://erp.apiit.edu.my/easymoo/web/en/auth/security/login',
+      img: 'assets/img/apix.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['exception', 'feedback', 'legacy', 'old']
+    },
     {
       title: 'APLC Progress Report',
       group: 'Academic Operation',

@@ -38,7 +38,7 @@
             1<sup>st</sup> Attempt:
           </p>
           <h5 class="text-bold">
-            {{ (studentDetails[0].first_attempt_date | date: 'EEE, dd MMM yyyy @ HH:mm a') || 'N/A'  }}
+            {{ (studentDetails[0].first_attempt_date | customdatetime: 'EEE, dd MMM yyyy @ HH:mm a') || 'N/A'  }}
           </h5>
         </ion-label>
       </ion-item>
@@ -48,7 +48,7 @@
             2<sup>nd</sup> Attempt:
           </p>
           <h5 class="text-bold">
-            {{ (studentDetails[0].second_attempt_date| date: 'EEE, dd MMM yyyy @ HH:mm a') || 'N/A'  }}
+            {{ (studentDetails[0].second_attempt_date| customdatetime: 'EEE, dd MMM yyyy @ HH:mm a') || 'N/A'  }}
           </h5>
         </ion-label>
       </ion-item>

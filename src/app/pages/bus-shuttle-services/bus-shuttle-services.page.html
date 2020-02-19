@@ -137,8 +137,8 @@
                   <ion-grid class="ion-no-padding">
                     <ion-row>
                       <ion-col [class.passed]="timeNow >= tripData.trip_time" class="ion-text-center colored-text"
-                        *ngFor="let tripData of destination.value" size="3" size-md="4">
-                        {{tripData.trip_time}}
+                        *ngFor="let tripData of destination.value" size="4" size-sm="3" size-md="4">
+                        {{ ((dateNow | customdatetime: "dd MMM yyyy") + " "  + tripData.trip_time) | customdatetime: "h:mm a" }}
                       </ion-col>
                     </ion-row>
                   </ion-grid>
@@ -182,7 +182,7 @@
                   <ion-skeleton-text animated style="width: 45%; line-height: 25px"></ion-skeleton-text>
                   <ion-grid class="ion-no-padding">
                     <ion-row>
-                      <ion-col *ngFor="let time of skeletonSettings.numberOfTimesPerTrip" size="3" size-md="4"
+                      <ion-col *ngFor="let time of skeletonSettings.numberOfTimesPerTrip" size="4" size-sm="3" size-md="4"
                         class="ion-text-center">
                         <ion-skeleton-text animated style="width: 100%; line-height: 21px"></ion-skeleton-text>
                       </ion-col>

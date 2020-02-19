@@ -136,6 +136,12 @@
                     loading the courses
                   </ng-template>
                 </ion-col>
+                <ion-col size="10" offset="1" *ngIf="studentSelected && intakeSelected">
+                  <ion-button class="ion-margin-top" expand="block" color="danger" (click)="generateTranscriptsPdf()">
+                    {{selectedIntake}} Interim Transcript
+                    <ion-icon name="print" slot="end"></ion-icon>
+                  </ion-button>
+                </ion-col>
               </ion-row>
             </ion-grid>
           </ion-card-content>

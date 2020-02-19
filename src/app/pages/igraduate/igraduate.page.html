@@ -70,11 +70,11 @@
                             </ion-col>
                             <ion-col size="12" size-md="1" class="margin-auto">
                               <span class="h-desktop-d-mobile">1<sup>st</sup>Attempt:</span>
-                              {{ (student.first_attempt_date | date : 'EEE, dd MMM yyyy') || 'N/A' }}
+                              {{ (student.first_attempt_date | customdatetime : 'EEE, dd MMM yyyy') || 'N/A' }}
                             </ion-col>
                             <ion-col size="12" size-md="1" class="margin-auto">
                               <span class="h-desktop-d-mobile">2<sup>nd</sup>Attempt:</span>
-                              {{ (student.second_attempt_date| date : 'EEE, dd MMM yyyy') || 'N/A' }}
+                              {{ (student.second_attempt_date| customdatetime : 'EEE, dd MMM yyyy') || 'N/A' }}
                             </ion-col>
                             <ion-col size="12" size-md="1" class="margin-auto">
                               <span class="h-desktop-d-mobile">Reset:</span>
@@ -82,11 +82,11 @@
                             </ion-col>
                             <ion-col size="12" size-md="1" class="margin-auto">
                               <span class="h-desktop-d-mobile">Reset Date:</span>
-                              {{ (student.reset_date| date : 'EEE, dd MMM yyyy') || 'N/A' }}
+                              {{ (student.reset_date| customdatetime : 'EEE, dd MMM yyyy') || 'N/A' }}
                             </ion-col>
                             <ion-col size="12" size-md="1" class="margin-auto">
                               <span class="h-desktop-d-mobile">Collection:</span>
-                              {{ (student.collection_date | date : 'EEE, dd MMM yyyy') || 'N/A' }}
+                              {{ (student.collection_date | customdatetime : 'EEE, dd MMM yyyy') || 'N/A' }}
                             </ion-col>
                             <ion-col size="12" size-md="1" class="margin-auto">
                               <span class="h-desktop-d-mobile">Size:</span>
@@ -187,11 +187,11 @@
                             </ion-col>
                             <ion-col size="12" size-md="4">
                               <span class="h-desktop-d-mobile">Creation Date:</span>
-                              {{ (exception.creation_date | date: 'EEE, dd MMM yyyy') || 'N/A' }}
+                              {{ (exception.creation_date | customdatetime: 'EEE, dd MMM yyyy') || 'N/A' }}
                             </ion-col>
                             <ion-col size="12" size-md="4">
                               <span class="h-desktop-d-mobile">Creation Time:</span>
-                              {{ (exception.creation_date | date: 'HH:mm a') || 'N/A' }}
+                              {{ (exception.creation_date | customdatetime: 'HH:mm a') || 'N/A' }}
                             </ion-col>
                           </ion-row>
                         </ion-grid>

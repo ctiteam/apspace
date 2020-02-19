@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { ChartModule } from 'angular2-chartjs';
 import { CalendarModule } from 'ion2-calendar';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { SharedPipesModule } from 'src/app/shared/shared-pipes.module';
 import { FilterSlotsPipe } from './filter-slots.pipe';
 import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
@@ -30,7 +31,8 @@ const routes: Routes = [
     IonicModule,
     CalendarModule,
     ChartModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedPipesModule
   ],
   declarations: [
     MyConsultationsPage,

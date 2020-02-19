@@ -18,6 +18,13 @@ $ ionic cordova run android -lc  # android
 ```
 Android live-reload have CORS issues.
 
+Need to downgrade graphql to update GraphQL schema for Attendix.
+```shell
+$ yarn add graphql@latest
+$ yarn generate
+$ yarn add graphql@^0.11
+```
+
 [cors]: https://addons.mozilla.org/en-US/firefox/addon/cors-everywhere/
 
 ### Production

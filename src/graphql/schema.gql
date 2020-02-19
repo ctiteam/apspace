@@ -66,6 +66,8 @@ type Mutation {
 
   saveLectureLog(schedule: ScheduleInput! log: LogInput!): Boolean # void
 
+  resetAttendance(schedule: ScheduleInput!): Boolean # void
+
   # student
   updateAttendance(otp: String!): Status!
 }

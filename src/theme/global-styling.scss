@@ -96,9 +96,18 @@ input:-webkit-autofill:active {
 }
 
 .add-min-height-width {
-  .modal-wrapper{
+  .modal-wrapper {
     min-height: 90%;
     min-width: 90%;
+  }
+}
+
+.generateTransactionsPdf {
+  .modal-wrapper {
+    min-width: 97%;
+    height: 90%;
+    position: absolute;
+    bottom: 0;
   }
 }
 
@@ -378,22 +387,21 @@ ion-select {
   color: var(--main-txt-color);
 }
 
-
 /* FIX FOR ION-SELECT SCROLLBAR IN CHROME*/
 .alert-radio-group::-webkit-scrollbar {
   width: 1em;
   display: block !important;
-  background-color: rgb(241,241,241);
+  background-color: rgb(241, 241, 241);
 }
 
 .alert-radio-group::-webkit-scrollbar-thumb {
-  background-color: rgb(193,193,193);
+  background-color: rgb(193, 193, 193);
   height: 1em;
 }
 
 /* Buttons */
 .alert-radio-group::-webkit-scrollbar-button:single-button {
-  background-color: rgb(241,241,241);
+  background-color: rgb(241, 241, 241);
   display: block;
   border-style: solid;
   height: 13px;
@@ -402,7 +410,7 @@ ion-select {
 /* Up */
 .alert-radio-group::-webkit-scrollbar-button:single-button:vertical:decrement {
   border-width: 0 8px 8px 8px;
-  border-color: transparent transparent rgb(80,80,80) transparent;
+  border-color: transparent transparent rgb(80, 80, 80) transparent;
 }
 
 .alert-radio-group::-webkit-scrollbar-button:single-button:vertical:decrement:hover {
@@ -411,7 +419,7 @@ ion-select {
 /* Down */
 .alert-radio-group::-webkit-scrollbar-button:single-button:vertical:increment {
   border-width: 8px 8px 0 8px;
-  border-color: rgb(80,80,80) transparent transparent transparent;
+  border-color: rgb(80, 80, 80) transparent transparent transparent;
 }
 
 .alert-radio-group::-webkit-scrollbar-button:vertical:single-button:increment:hover {

@@ -143,7 +143,7 @@ export class CasTicketService {
           return throwError(new Error('Group not supported'));
         }
 
-        if (res.serviceResponse.authenticationSuccess.attributes.memberOf) {
+        if (res.serviceResponse.authenticationSuccess.attributes.memberOf) { // some user do not have memberOf attribute
           const memberOf = res.serviceResponse.authenticationSuccess.attributes.memberOf
             .join().toLowerCase().split(',');
 
