@@ -36,7 +36,7 @@ export class SettingsPage implements OnInit {
 
   menuUI: 'cards' | 'list' = 'list';
   accentColors = [
-    { title: 'Water (Default)', value: 'blue-accent-color' },
+    { title: 'Sky (Default)', value: 'blue-accent-color' },
     { title: 'Forest', value: 'green-accent-color' },
     { title: 'Fire', value: 'red-accent-color' },
     { title: 'Magnet', value: 'pink-accent-color' },
