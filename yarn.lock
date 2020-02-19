@@ -1419,13 +1419,6 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/fcm@^5.15.0":
-  version "5.17.1"
-  resolved "https://registry.yarnpkg.com/@ionic-native/fcm/-/fcm-5.17.1.tgz#5518777bbe40c4f068385bbec51a035caa0a8d20"
-  integrity sha512-rb5+ldaeUccp76ovKuOvOaSgNrnzSVcFSprcf0uyKAfSxc5pO8fHL6hVQymkuJws+RBZJ1a2jtQUSgysg5RW7Q==
-  dependencies:
-    "@types/cordova" latest
-
 "@ionic-native/in-app-browser@^5.15.0":
   version "5.17.1"
   resolved "https://registry.yarnpkg.com/@ionic-native/in-app-browser/-/in-app-browser-5.17.1.tgz#7d7667a848f365962ce9bb4f46ec00fad010f086"
@@ -1437,6 +1430,13 @@
   version "5.17.1"
   resolved "https://registry.yarnpkg.com/@ionic-native/network/-/network-5.17.1.tgz#d30cc2a6ec5711ce6c0f476059aaa73f7d3ed7f2"
   integrity sha512-JPRhDe0KT2sLt2le7GbXVUpX1tp1sOjKvbi6ho7VoaEdvXJhZhEapA1kPg7Q4sO44GynLOcGepwA2ht+l+1bIg==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/push@^5.21.5":
+  version "5.21.5"
+  resolved "https://registry.yarnpkg.com/@ionic-native/push/-/push-5.21.5.tgz#7e69c73120085b4d64c401f1fd04125c31b6a5c3"
+  integrity sha512-RJNXhhoqXcA4lkctwi/vvMqcBtJ4hsKBWGaShsiRf4KpflsYFnb3ZDN/OOmXVCkB2nfmYY5BAbEH0tEI7OfJ3g==
   dependencies:
     "@types/cordova" latest
 
@@ -4078,11 +4078,6 @@ cordova-plugin-device@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/cordova-plugin-device/-/cordova-plugin-device-2.0.3.tgz#c2b41b7efd0455dd097f89356d85bfdd5dadeb0f"
   integrity sha512-Jb3V72btxf3XHpkPQsGdyc8N6tVBYn1vsxSFj43fIz9vonJDUThYPCJJHqk6PX6N4dJw6I4FjxkpfCR4LDYMlw==
-
-cordova-plugin-fcm-with-dependecy-updated@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-fcm-with-dependecy-updated/-/cordova-plugin-fcm-with-dependecy-updated-4.1.1.tgz#b33258af2293261ea768983de038335be5c6512e"
-  integrity sha512-2pZZ9EZ2tAGOE3KlyzBuWEPAB6DqDt8GIMMXAnAaHWlpZ5warL3DcoUKJJ/pEAUsEhXQ0+4OqlgBLGiyBBIRJw==
 
 cordova-plugin-inappbrowser@^3.1.0:
   version "3.1.0"
