@@ -163,6 +163,7 @@ export class LoginPage {
 
   // this will fail when the user opens the app for the first time and login because it will run before login
   runCodeOnReceivingNotification() {
+    console.log('runcode on receivingnotification is executed at login page.');
     this.checkPushPermission();
 
     const options: PushOptions = {
@@ -180,6 +181,7 @@ export class LoginPage {
       if (data.additionalData.coldstart) { // Notification received in background
         this.openNotificationModal(data);
       } else { // Notification received in foreground
+        console.log('dude this function is work', data);
         this.presentToastWithOptions(data);
       }
     });

@@ -243,6 +243,7 @@ export class AppComponent {
   // this will fail when the user opens the app for the first time and login because it will run before login
   // => we need to call it here and in login page as well
   runCodeOnReceivingNotification() {
+    console.log('runcode on receivingnotification is executed at app component');
     this.checkPushPermission();
 
     const options: PushOptions = {
@@ -256,9 +257,10 @@ export class AppComponent {
 
     const pushObject: PushObject = this.push.init(options);
     pushObject.on('notification').subscribe(data => {
-      if (data.additionalData.coldstart) { // Notification received in background
+      if (!data.additionalData.coldstart) { // Notification received in background
         this.openNotificationModal(data);
       } else { // Notification received in foreground
+        console.log('dude this function is work', data);
         this.showNotificationAsToast(data);
       }
     });
