@@ -36,11 +36,11 @@ export class SettingsPage implements OnInit {
 
   menuUI: 'cards' | 'list' = 'list';
   accentColors = [
-    { title: 'Blue (Default)', value: 'blue-accent-color' },
-    { title: 'Green', value: 'green-accent-color' },
-    { title: 'Red', value: 'red-accent-color' },
-    { title: 'Pink', value: 'pink-accent-color' },
-    { title: 'Yellow', value: 'yellow-accent-color' }
+    { title: 'Water (Default)', value: 'blue-accent-color' },
+    { title: 'Forest', value: 'green-accent-color' },
+    { title: 'Fire', value: 'red-accent-color' },
+    { title: 'Magnet', value: 'pink-accent-color' },
+    { title: 'Lightning', value: 'yellow-accent-color' }
   ];
   locationOptions = [
     'New Campus',
