@@ -39,7 +39,7 @@ export class SettingsPage implements OnInit {
     { title: 'Sky (Default)', value: 'blue-accent-color' },
     { title: 'Forest', value: 'green-accent-color' },
     { title: 'Fire', value: 'red-accent-color' },
-    { title: 'Magnet', value: 'pink-accent-color' },
+    { title: 'Flower', value: 'pink-accent-color' },
     { title: 'Lightning', value: 'yellow-accent-color' }
   ];
   locationOptions = [
