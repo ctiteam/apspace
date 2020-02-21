@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
+import { SharedPipesModule } from 'src/app/shared/shared-pipes.module';
 import { AtPipe } from './at.pipe';
 import { ClassroomFinderPage } from './classroom-finder.page';
 import { ForPipe } from './for.pipe';
@@ -22,7 +23,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedPipesModule
   ],
   declarations: [ClassroomFinderPage, AtPipe, ForPipe, OnPipe]
 })

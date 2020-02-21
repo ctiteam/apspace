@@ -43,7 +43,8 @@
                       {{ exam.subjectDescription }}
                     </ion-card-title>
                     <ion-card-subtitle class="responsive-h1">
-                      {{ exam.since | customdatetime: "EEEE, dd MMM y" }}
+                      <!--FORCE +08-->
+                      {{ exam.since | customdatetime: "EEEE, dd MMM y" : "+0800"}}
                     </ion-card-subtitle>
                   </ion-card-header>
                   <ion-card-content class="ion-no-padding">
@@ -59,8 +60,9 @@
                       <ion-item lines="none">
                         <ion-icon name="time"></ion-icon>
                         <p class="ion-padding-start">
-                          {{ exam.since | customdatetime: "h:mm a" }} -
-                          {{ exam.until | customdatetime: "h:mm a" }}
+                          <!--FORCE +08-->
+                          {{ exam.since | customdatetime: "h:mm a" : "+0800"}} -
+                          {{ exam.until | customdatetime: "h:mm a" : "+0800"}}
                         </p>
                       </ion-item>
                     </ion-list>
@@ -74,7 +76,8 @@
                           </span>
                         </ion-col>
                         <ion-col size="5" class="ion-text-right">
-                          <p>{{ exam.docketsDue | customdatetime: "EEE, dd MMM y" }}</p>
+                          <!--FORCE +08-->
+                          <p>{{ exam.docketsDue | customdatetime: "EEE, dd MMM y"}}</p>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="exam.appraisalsDue">
@@ -84,7 +87,8 @@
                           </span>
                         </ion-col>
                         <ion-col size="5" class="ion-text-right">
-                          <p>{{ exam.appraisalsDue | customdatetime: "EEE, dd MMM y" }}</p>
+                          <!--FORCE +08-->
+                          <p>{{ exam.appraisalsDue | customdatetime: "EEE, dd MMM y"}}</p>
                         </ion-col>
                       </ion-row>
                       <ion-row *ngIf="exam.resultDate">
@@ -94,7 +98,8 @@
                           </span>
                         </ion-col>
                         <ion-col size="5" class="ion-text-right">
-                          <p>{{ exam.resultDate | customdatetime: "EEE, dd MMM y" }}</p>
+                          <!--FORCE +08-->
+                          <p>{{ exam.resultDate | customdatetime: "EEE, dd MMM y"}}</p>
                         </ion-col>
                       </ion-row>
                     </ion-grid>

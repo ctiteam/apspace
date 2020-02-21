@@ -18,16 +18,13 @@ export class CustomDateTimePipe implements PipeTransform {
   }
 
   // tslint:disable-next-line: no-shadowed-variable
-  transform(value: any, format?: string) {
+  // FORCE +08
+  transform(value: any, format?: string, offset ?: string) {
     if (format !== 'h:mm a' && format !== 'HH:mm') { // The best statement to make all this work
-      return formatDate(value, format, 'en-US'); // Fast quit
+      return formatDate(value, format, 'en-US', offset); // Fast quit
     }
 
     // Here comes the Magic
-    if (this.activeTimeFormat === '12-hours') {
-      return formatDate(value, 'h:mm a', 'en-US');
-    } else {
-      return formatDate(value, 'HH:mm', 'en-US');
-    }
+    return formatDate(value, this.activeTimeFormat === '12-hours' ? 'h:mm a' : 'HH:mm', 'en-US', offset);
   }
 }

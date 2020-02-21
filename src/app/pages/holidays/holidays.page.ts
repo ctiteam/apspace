@@ -9,7 +9,7 @@ import { WsApiService } from 'src/app/services';
 @Component({
   selector: 'app-holidays',
   templateUrl: './holidays.page.html',
-  styleUrls: ['./holidays.page.scss'],
+  styleUrls: ['./holidays.page.scss']
 })
 export class HolidaysPage {
   holiday$: Observable<Holiday[]>;
@@ -20,7 +20,9 @@ export class HolidaysPage {
   weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-  todaysDate = new Date();
+  // FORCE +08
+  todaysDate = moment(moment(new Date()).utcOffset('+0800').format('YYYY-MM-DD'), 'YYYY-MM-DD').toDate();
+
   filterObject: {
     show: 'all' | 'upcoming',
     filterDays: string,

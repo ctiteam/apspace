@@ -59,7 +59,8 @@ export class BusShuttleServicesPage {
   }
 
   doRefresh(refresher) {
-    this.timeNow = moment(this.dateNow).format('kk:mm'); // update current time when user refresh
+    // FORCE +08
+    this.timeNow = moment(this.dateNow).utcOffset('+0800').format('kk:mm'); // update current time when user refresh
     this.filteredTrip$ = forkJoin([this.getLocations(refresher), this.getTrips(refresher)]).pipe(
       map(res => res[1]),
       tap(_ => this.onFilter(refresher)),

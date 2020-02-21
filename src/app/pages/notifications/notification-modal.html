@@ -28,7 +28,8 @@
             </p>
             <p>
                 <span class="colored-text">Sent at:</span> <span class="text-bold">
-                    {{ message.sent_on | customdatetime : 'hh:mm aaa' }}</span>
+                    <!--FORCE +08-->
+                    {{ message.sent_on | customdatetime : 'hh:mm aaa' : '+0800' }}</span>
             </p>
         </ion-card-content>
     </ion-card>

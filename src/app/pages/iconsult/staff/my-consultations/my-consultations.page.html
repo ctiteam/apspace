@@ -81,7 +81,8 @@
           <ion-card>
             <ion-card-header>
               <ion-card-title>
-                List of slots opened on {{todaysDate | customdatetime}}
+                <!--FORCE +08-->
+                List of slots opened on {{todaysDate | customdatetime : 'MMM dd, yyyy'}}
               </ion-card-title>
 
             </ion-card-header>
@@ -151,8 +152,9 @@
           <ion-card>
             <ion-card-header>
               <ion-card-title>
+                <!--FORCE +08-->
                 <span *ngIf="slotsToBeCancelled.length > 0; else noRangeSlots">List of slots opened from
-                  {{dateRange.from | customdatetime}} to {{dateRange.to | customdatetime}}</span>
+                  {{dateRange.from | customdatetime : 'MMM dd, yyyy'}} to {{dateRange.to | customdatetime : 'MMM dd, yyyy'}}</span>
                 <ng-template #noRangeSlots>
                   No slots found
                 </ng-template>

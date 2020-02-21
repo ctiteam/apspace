@@ -507,7 +507,11 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
-    const dateNow = new Date();
+    // FORCE +08
+    const dateNow = moment(
+      moment(new Date()).utcOffset('+0800').format('YYYY-MM-DDTHH:mm:ss'),
+      'YYYY-MM-DDTHH:mm:ss'
+    ).toDate();
     const consultationsEventMode: EventComponentConfigurations[] = [];
     return forkJoin([this.ws.get<ConsultationHour[]>('/iconsult/bookings?'),
       this.ws.get<StaffDirectory[]>('/staff/listing')
@@ -608,13 +612,20 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       { auth: false, caching },
     ).pipe(
       map(examsList => {
-        return examsList.filter(exam => this.eventIsComing(new Date(exam.since), todaysDate));
+        // FORCE +08
+        return examsList.filter(exam => this.eventIsComing(
+          moment(moment(exam.since).utcOffset('+0800').format('HH:mm:ss'), 'HH:mm:ss').toDate(),
+          moment(moment(todaysDate).utcOffset('+0800').format('HH:mm:ss'), 'HH:mm:ss').toDate()
+        ));
       }),
       map(examsList => {
         const examsListEventMode: EventComponentConfigurations[] = [];
         examsList.forEach((exam: ExamSchedule) => {
-          const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(new Date(exam.since), new Date(exam.until));
-          const formattedStartDate = moment(new Date(exam.since)).format('DD MMM YYYY');
+          // FORCE +08
+          const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
+            moment(moment(exam.since).utcOffset('+0800').format('HH:mm A'), 'HH:mm A').toDate(),
+            moment(moment(exam.until).utcOffset('+0800').format('HH:mm A'), 'HH:mm A').toDate()
+          );
           examsListEventMode.push({
             title: exam.subjectDescription,
             firstDescription: exam.venue,
@@ -625,7 +636,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
             passColor: '#d7dee3',
             outputFormat: 'event-with-date-only',
             type: 'exam',
-            dateOrTime: formattedStartDate
+            // FORCE +08
+            dateOrTime: moment(exam.since).utcOffset('+0800').format('DD MMM YYYY')
           });
         });
         return examsListEventMode;
@@ -965,7 +977,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       return of({});
     }
     this.showSetLocationsSettings = false;
-    const dateNow = new Date();
+    // FORCE +08
+    const dateNow = moment(moment(new Date()).utcOffset('+0800').format('YYYY-MM-DDTHH:mm:ss'), 'YYYY-MM-DDTHH:mm:ss').toDate();
     return this.ws.get<BusTrips>(`/transix/trips/applicable`, { auth: false }).pipe(
       map(res => res.trips),
       map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS

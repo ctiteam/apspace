@@ -469,7 +469,11 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
-    const dateNow = new Date();
+    // FORCE +08
+    const dateNow = moment(
+      moment(new Date()).utcOffset('+0800').format('YYYY-MM-DDTHH:mm:ss'),
+      'YYYY-MM-DDTHH:mm:ss'
+    ).toDate();
     const consultationsEventMode: EventComponentConfigurations[] = [];
     return this.ws.get<ConsultationSlot[]>('/iconsult/slots?').pipe(
       map(consultations =>
@@ -617,7 +621,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       return of({});
     }
     this.showSetLocationsSettings = false;
-    const dateNow = new Date();
+    // FORCE +08
+    const dateNow = moment(moment(new Date()).utcOffset('+0800').format('YYYY-MM-DDTHH:mm:ss'), 'YYYY-MM-DDTHH:mm:ss').toDate();
     const caching = refresher ? 'network-or-cache' : 'cache-only';
     return this.ws.get<BusTrips>(`/transix/trips/applicable`, { auth: false, caching }).pipe(
       map(res => res.trips),
