@@ -1,11 +1,18 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { IonSelect, IonSlides, ModalController, NavController } from '@ionic/angular';
+
+import { format, parse, parseISO } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
 import { Observable, of, zip } from 'rxjs';
 import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
-// tslint:disable-next-line: max-line-length
-import { APULocation, APULocations, Apcard, BusTrips, ConsultationSlot, DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday, Holidays, LecturerTimetable, News, Quote, StaffProfile } from 'src/app/interfaces';
+
+import {
+  APULocation, APULocations, Apcard, BusTrips, ConsultationSlot,
+  DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday,
+  Holidays, LecturerTimetable, News, Quote, StaffProfile
+} from 'src/app/interfaces';
 import { NewsService, NotificationService, UserSettingsService, WsApiService } from '../../services';
 import { NewsModalPage } from '../news/news-modal';
 
@@ -165,7 +172,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   upcomingEventsCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
     cardTitle: 'Upcoming Events',
-    cardSubtitle: 'Today: ' + moment().format('DD MMMM YYYY')
+    cardSubtitle: 'Today: ' + format(new Date(), 'dd MMMM yyyy')
   };
 
 
@@ -407,9 +414,9 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
         return eventsList.sort((eventA, eventB) => {
-          return moment(eventA.dateOrTime, 'HH:mm A').toDate() > moment(eventB.dateOrTime, 'HH:mm A').toDate()
+          return parse(eventA.dateOrTime, 'HH:mm a', new Date()) > parse(eventB.dateOrTime, 'HH:mm a', new Date())
             ? 1
-            : moment(eventA.dateOrTime, 'HH:mm A').toDate() < moment(eventB.dateOrTime, 'HH:mm A').toDate()
+            : parse(eventA.dateOrTime, 'HH:mm a', new Date()) < parse(eventB.dateOrTime, 'HH:mm a', new Date())
               ? -1
               : 0;
         });
@@ -444,7 +451,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
         timetables.forEach((timetable: LecturerTimetable) => {
           let classPass = false;
-          if (this.eventPass(moment(timetable.time).format('HH:mm A'), d)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
+          if (this.eventPass(format(new Date(timetable.time), 'HH:mm a'), d)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
             classPass = true;
           }
 
@@ -458,7 +465,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
             passColor: '#d7dee3',
             outputFormat: 'event-with-time-and-hyperlink',
             type: 'class',
-            dateOrTime: moment(moment(timetable.time).toDate()).format('hh mm A'), // EXPECTED FORMAT HH MM A
+            dateOrTime: format(new Date(timetable.time), 'hh mm a'), // EXPECTED FORMAT HH MM A
           });
 
         });
@@ -470,10 +477,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
     // FORCE +08
-    const dateNow = moment(
-      moment(new Date()).utcOffset('+0800').format('YYYY-MM-DDTHH:mm:ss'),
-      'YYYY-MM-DDTHH:mm:ss'
-    ).toDate();
+    const dateNow = utcToZonedTime(new Date(), 'Asia/Kuala_Lumpur');
     const consultationsEventMode: EventComponentConfigurations[] = [];
     return this.ws.get<ConsultationSlot[]>('/iconsult/slots?').pipe(
       map(consultations =>
@@ -545,13 +549,13 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
         const holiday = holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday;
 
         const examsListEventMode: EventComponentConfigurations[] = [];
-        const formattedStartDate = moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('DD MMM YYYY');
+        const formattedStartDate = format(parseISO(holiday.holiday_start_date), 'dd MMM yyyy');
         examsListEventMode.push({
           title: holiday.holiday_name,
           firstDescription: 'Until: ' + holiday.holiday_end_date,
           thirdDescription: this.getNumberOfDaysForHoliday(
-            moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
-            moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()),
+            parseISO(holiday.holiday_start_date),
+            parseISO(holiday.holiday_start_date)),
           color: '#273160',
           pass: false,
           passColor: '#d7dee3',
@@ -622,13 +626,13 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     }
     this.showSetLocationsSettings = false;
     // FORCE +08
-    const dateNow = moment(moment(new Date()).utcOffset('+0800').format('YYYY-MM-DDTHH:mm:ss'), 'YYYY-MM-DDTHH:mm:ss').toDate();
+    const dateNow = utcToZonedTime(new Date(), 'Asia/Kuala_Lumpur');
     const caching = refresher ? 'network-or-cache' : 'cache-only';
     return this.ws.get<BusTrips>(`/transix/trips/applicable`, { auth: false, caching }).pipe(
       map(res => res.trips),
       map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
         return trips.filter(trip => {
-          return moment(trip.trip_time, 'kk:mm').toDate() >= dateNow
+          return parse(trip.trip_time, 'kk:mm', new Date()) >= dateNow
             && trip.trip_day === this.getTodayDay(dateNow)
             && ((trip.trip_from === firstLocation && trip.trip_to === secondLocation)
               || (trip.trip_from === secondLocation && trip.trip_to === firstLocation));
@@ -712,7 +716,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   eventPass(eventTime: string, todaysDate: Date) {
-    if (moment(eventTime, 'HH:mm A').toDate() >= todaysDate) {
+    if (parse(eventTime, 'HH:mm a', new Date()) >= todaysDate) {
       return false;
     }
     return true;
