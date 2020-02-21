@@ -110,9 +110,9 @@ export class HrPage implements OnInit {
       map((res: []) => {
         const results = this.sortArrayOfDateKey(res, 'LEAVE_DATE', 'desc').reduce((previous: any, current: any) => {
           if (!previous[format(new Date(current.LEAVE_DATE), 'MMMM yyyy')]) {
-            previous[format(current.LEAVE_DATE, 'MMMM yyyy')] = [current];
+            previous[format(new Date(current.LEAVE_DATE), 'MMMM yyyy')] = [current];
           } else {
-            previous[format(current.LEAVE_DATE, 'MMMM yyyy')].push(current);
+            previous[format(new Date(current.LEAVE_DATE), 'MMMM yyyy')].push(current);
           }
           return previous;
         }, {});

@@ -716,7 +716,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   eventPass(eventTime: string, todaysDate: Date) {
-    if (parse(eventTime, 'HH:mm a', new Date()) >= todaysDate) {
+    if (parse(eventTime, 'hh:mm a', new Date()) >= todaysDate) {
       return false;
     }
     return true;
