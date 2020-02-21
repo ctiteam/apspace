@@ -11,7 +11,8 @@ import {
 } from 'src/app/interfaces';
 import { NewsService, NotificationService, StudentTimetableService, UserSettingsService, WsApiService } from 'src/app/services';
 
-import * as moment from 'moment';
+import { format, parse } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 import { DragulaService } from 'ng2-dragula';
 import { NewsModalPage } from '../news/news-modal';
 @Component({
@@ -70,7 +71,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   upcomingEventsCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
     cardTitle: 'Upcoming Events',
-    cardSubtitle: 'Today: ' + moment().format('DD MMMM YYYY')
+    cardSubtitle: 'Today: ' + format(new Date(), 'dd MMMM yyyy')
   };
 
   // ATTENDANCE
@@ -440,9 +441,9 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
         return eventsList.sort((eventA, eventB) => {
-          return moment(eventA.dateOrTime, 'HH:mm A').toDate() > moment(eventB.dateOrTime, 'HH:mm A').toDate()
+          return parse(eventA.dateOrTime, 'HH:mm a', new Date()) > parse(eventB.dateOrTime, 'HH:mm a', new Date())
             ? 1
-            : moment(eventA.dateOrTime, 'HH:mm A').toDate() < moment(eventB.dateOrTime, 'HH:mm A').toDate()
+            : parse(eventA.dateOrTime, 'HH:mm a', new Date()) < parse(eventB.dateOrTime, 'HH:mm a', new Date())
               ? -1
               : 0;
         });
@@ -482,8 +483,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
         const timetableEventMode: EventComponentConfigurations[] = [];
         timetables.forEach((timetable: StudentTimetable) => {
           const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
-            moment(timetable.TIME_FROM, 'HH:mm A').toDate(),
-            moment(timetable.TIME_TO, 'HH:mm A').toDate());
+            parse(timetable.TIME_FROM, 'HH:mm a', new Date()),
+            parse(timetable.TIME_TO, 'HH:mm a', new Date()));
           let classPass = false;
           if (this.eventPass(timetable.TIME_FROM, dateNow)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
             classPass = true;
@@ -498,7 +499,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
             passColor: '#d7dee3',
             outputFormat: 'event-with-time-and-hyperlink',
             type: 'class',
-            dateOrTime: moment(moment(timetable.TIME_FROM, 'HH:mm A').toDate()).format('hh mm A'), // EXPECTED FORMAT HH MM A
+            dateOrTime: format(parse(timetable.TIME_FROM, 'HH:mm a', new Date()), 'hh mm a'), // EXPECTED FORMAT HH MM A
           });
         });
         return timetableEventMode;
@@ -508,17 +509,14 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
     // FORCE +08
-    const dateNow = moment(
-      moment(new Date()).utcOffset('+0800').format('YYYY-MM-DDTHH:mm:ss'),
-      'YYYY-MM-DDTHH:mm:ss'
-    ).toDate();
+    const dateNow = utcToZonedTime(new Date(), 'Asia/Kuala_Lumpur');
     const consultationsEventMode: EventComponentConfigurations[] = [];
     return forkJoin([this.ws.get<ConsultationHour[]>('/iconsult/bookings?'),
       this.ws.get<StaffDirectory[]>('/staff/listing')
     ]).pipe(
       map(([consultations, staffList]) => {
         const filteredConsultations = consultations.filter(
-          consultation => this.eventIsToday(new Date(moment(consultation.slot_start_time).utcOffset('+0800').format()), dateNow)
+          consultation => this.eventIsToday(utcToZonedTime(new Date(consultation.slot_start_time), 'Asia/Kuala_Lumpur'), dateNow)
                           && consultation.status === 'Booked'
         );
 
@@ -545,13 +543,15 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
         listOfBookingWithStaffDetail.forEach(upcomingConsultation => {
           let consultationPass = false;
-          if (this.eventPass(moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh:mm A'), dateNow)) {
+          const slotStartTime = format(utcToZonedTime(new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur'), 'hh:mm a');
+          if (this.eventPass(slotStartTime, dateNow)) {
             // CHANGE CLASS STATUS TO PASS IF IT PASS
             consultationPass = true;
           }
           const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
-            moment(moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate(),
-            moment(moment(upcomingConsultation.slot_end_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate());
+            utcToZonedTime(new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur'),
+            utcToZonedTime(new Date(upcomingConsultation.slot_end_time), 'Asia/Kuala_Lumpur')
+          );
           consultationsEventMode.push({
             title: 'Consultation Hour',
             color: '#d35400',
@@ -562,7 +562,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
             firstDescription: upcomingConsultation.slot_room_code + ' | ' + upcomingConsultation.slot_venue,
             secondDescription: upcomingConsultation.staff_detail.FULLNAME,
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
-            dateOrTime: moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh mm A'),
+            dateOrTime: format(utcToZonedTime(new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur'), 'hh mm a'),
           });
         });
 
@@ -587,7 +587,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   eventPass(eventTime: string, todaysDate: Date) {
-    if (moment(eventTime, 'HH:mm A').toDate() >= todaysDate) {
+    if (parse(eventTime, 'HH:mm a', new Date()) >= todaysDate) {
       return false;
     }
     return true;
@@ -612,10 +612,11 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       { auth: false, caching },
     ).pipe(
       map(examsList => {
+        const todaysDateLocal = utcToZonedTime(new Date(todaysDate), 'Asia/Kuala_Lumpur');
         // FORCE +08
         return examsList.filter(exam => this.eventIsComing(
-          moment(moment(exam.since).utcOffset('+0800').format('HH:mm:ss'), 'HH:mm:ss').toDate(),
-          moment(moment(todaysDate).utcOffset('+0800').format('HH:mm:ss'), 'HH:mm:ss').toDate()
+          utcToZonedTime(new Date(exam.since), 'Asia/Kuala_Lumpur'),
+          todaysDateLocal
         ));
       }),
       map(examsList => {
@@ -623,13 +624,13 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
         examsList.forEach((exam: ExamSchedule) => {
           // FORCE +08
           const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
-            moment(moment(exam.since).utcOffset('+0800').format('HH:mm A'), 'HH:mm A').toDate(),
-            moment(moment(exam.until).utcOffset('+0800').format('HH:mm A'), 'HH:mm A').toDate()
+            utcToZonedTime(new Date(exam.since), 'Asia/Kuala_Lumpur'),
+            utcToZonedTime(new Date(exam.until), 'Asia/Kuala_Lumpur')
           );
           examsListEventMode.push({
             title: exam.subjectDescription,
             firstDescription: exam.venue,
-            secondDescription: moment(new Date(exam.since)).format('hh:mm A'),
+            secondDescription: format(new Date(exam.since), 'hh:mm a'),
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
             color: '#ff0000',
             pass: false,
@@ -637,7 +638,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
             outputFormat: 'event-with-date-only',
             type: 'exam',
             // FORCE +08
-            dateOrTime: moment(exam.since).utcOffset('+0800').format('DD MMM YYYY')
+            dateOrTime: format(utcToZonedTime(new Date(exam.since), 'Asia/Kuala_Lumpur'), 'dd MMM yyyy')
           });
         });
         return examsListEventMode;
@@ -651,13 +652,14 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       map(res => res.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday),
       map(holiday => {
         const examsListEventMode: EventComponentConfigurations[] = [];
-        const formattedStartDate = moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('DD MMM YYYY');
+        const formattedStartDate = format(new Date(holiday.holiday_start_date), 'dd MMM yyyy');
         examsListEventMode.push({
           title: holiday.holiday_name,
           firstDescription: 'Until: ' + holiday.holiday_end_date,
           thirdDescription: this.getNumberOfDaysForHoliday(
-            moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
-            moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()),
+            new Date(holiday.holiday_start_date),
+            new Date(holiday.holiday_end_date)
+          ),
           color: '#273160',
           pass: false,
           passColor: '#d7dee3',
@@ -978,12 +980,12 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     }
     this.showSetLocationsSettings = false;
     // FORCE +08
-    const dateNow = moment(moment(new Date()).utcOffset('+0800').format('YYYY-MM-DDTHH:mm:ss'), 'YYYY-MM-DDTHH:mm:ss').toDate();
+    const dateNow = utcToZonedTime(new Date(), 'Asia/Kuala_Lumpur');
     return this.ws.get<BusTrips>(`/transix/trips/applicable`, { auth: false }).pipe(
       map(res => res.trips),
       map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
         return trips.filter(trip => {
-          return moment(trip.trip_time, 'kk:mm').toDate() >= dateNow
+          return parse(trip.trip_time, 'kk:mm', new Date()) >= dateNow
             && trip.trip_day === this.getTodayDay(dateNow)
             && ((trip.trip_from === firstLocation && trip.trip_to === secondLocation)
               || (trip.trip_from === secondLocation && trip.trip_to === firstLocation));
