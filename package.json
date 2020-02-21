@@ -75,6 +75,7 @@
     "cordova-plugin-shake": "^0.7.0",
     "cordova-plugin-statusbar": "^2.4.3",
     "core-js": "^2.5.4",
+    "date-fns": "^2.9.0",
     "fuse.js": "^3.4.5",
     "graphql": "^0.11",
     "graphql-tag": "^2.10.1",
