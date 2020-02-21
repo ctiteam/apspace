@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
-import * as moment from 'moment';
+
+import { format, max, parse } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
+import { parseISO } from 'date-fns/fp';
 import { Observable, forkJoin } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
+
 import { APULocation, APULocations, BusTrip, BusTrips } from 'src/app/interfaces';
 import { SettingsService, WsApiService } from 'src/app/services';
 
@@ -60,7 +64,8 @@ export class BusShuttleServicesPage {
 
   doRefresh(refresher) {
     // FORCE +08
-    this.timeNow = moment(this.dateNow).utcOffset('+0800').format('kk:mm'); // update current time when user refresh
+    // update current time when user refresh
+    this.timeNow = format(utcToZonedTime(this.dateNow, 'Asia/Kuala_Lumpur'), 'kk:mm');
     this.filteredTrip$ = forkJoin([this.getLocations(refresher), this.getTrips(refresher)]).pipe(
       map(res => res[1]),
       tap(_ => this.onFilter(refresher)),
@@ -115,7 +120,7 @@ export class BusShuttleServicesPage {
           filteredArray = filteredArray.filter(trip => {
             // FILTER TRIPS TO UPCOMING TRIPS ONLY
             // return this.strToDate(trip.trip_time) >= this.dateNow;
-            return moment(trip.trip_time, 'kk:mm').toDate() >= this.dateNow;
+            return parse(trip.trip_time, 'kk:mm', new Date()) >= this.dateNow;
           });
         }
         if (filteredArray.length === 0) { // NO RESULTS => SHOW 'THERE ARE NO TRIPS' MESSAGE
@@ -125,9 +130,8 @@ export class BusShuttleServicesPage {
       }),
       tap(trips => {
         // STORE LATEST UPDATE DATE
-        this.latestUpdate = moment(Math.max(...trips.map(trip =>
-          moment(trip.applicable_from, 'YYYY-MM-DD').toDate().getTime())))
-          .format('dddd, Do MMMM YYYY');
+        const latestUpdate = max([...new Set(trips.map(trip => trip.applicable_from))].map(parseISO));
+        this.latestUpdate = format(latestUpdate, 'EEEE, Do MMMM yyyy');
       }),
       map(trips => {
         const result = trips.reduce((r, a) => {
