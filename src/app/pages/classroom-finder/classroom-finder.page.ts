@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { utcToZonedTime } from 'date-fns-tz';
 import { Observable } from 'rxjs';
 
 import { CustomDateTimePipe } from 'src/app/shared/customdatepipe/customdatetime';
 import { StudentTimetable } from '../../interfaces';
 import { StudentTimetableService } from '../../services';
 import { classroomTypes } from './types';
-
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-classroom-finder',
@@ -32,7 +31,7 @@ export class ClassroomFinderPage implements OnInit {
   ngOnInit() {
     this.timetables$ = this.tt.get();
     // FORCE +08
-    const date = moment(moment(new Date()).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate();
+    const date = utcToZonedTime(new Date(), 'Asia/Kuala_Lumpur');
 
     // days start from monday
     this.day = this.days[(date.getDay() + 6) % 7];
