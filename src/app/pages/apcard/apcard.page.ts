@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import * as moment from 'moment';
+
+import { format } from 'date-fns';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
+
 import { WsApiService } from 'src/app/services';
 import { Apcard } from '../../interfaces';
 import { PrintTransactionsModalPage } from './print-transactions-modal/print-transactions-modal';
+
 @Component({
   selector: 'app-apcard',
   templateUrl: './apcard.page.html',
@@ -50,10 +53,10 @@ export class ApcardPage implements OnInit {
   /** Generating header value (virtual scroll) */
   seperatebyMonth(record: Apcard, recordIndex: number, records: Apcard[]) {
     if (recordIndex === 0) { // first header value - current month
-      return moment(record.SpendDate).format('MMMM YYYY').toUpperCase();
+      return format(new Date(record.SpendDate), 'MMMM yyyy').toUpperCase();
     }
-    const previousRecordDate = moment(records[recordIndex - 1].SpendDate).format('MMMM YYYY');
-    const currentRecordDate = moment(record.SpendDate).format('MMMM YYYY');
+    const previousRecordDate = format(new Date(records[recordIndex - 1].SpendDate), 'MMMM yyyy');
+    const currentRecordDate = format(new Date(record.SpendDate), 'MMMM yyyy');
 
     if (previousRecordDate !== currentRecordDate) {
       return currentRecordDate.toUpperCase();
