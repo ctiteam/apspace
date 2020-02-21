@@ -1,10 +1,9 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed, async, fakeAsync, tick } from '@angular/core/testing';
-// import { APP_BASE_HREF, PathLocationStrategy, Location, LocationStrategy } from '@angular/common';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { FCM } from '@ionic-native/fcm/ngx';
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
 import { ModalController, Platform, PopoverController } from '@ionic/angular';
@@ -16,8 +15,7 @@ import { AppComponent } from './app.component';
 import { CasTicketService, FeedbackService, NotificationService, UserSettingsService, VersionService } from './services';
 
 describe('AppComponent', () => {
-  // let routerSpy: { url: jasmine.Spy };
-  let fcmSpy: { onNotification: jasmine.Spy };
+  let firebaseXSpy: { onMessageReceived: jasmine.Spy };
   let networkSpy: { type: jasmine.Spy };
   let userSettingsServiceSpy: {
     getUserSettingsFromStorage: jasmine.Spy;
@@ -29,8 +27,7 @@ describe('AppComponent', () => {
   let shakeSpy: jasmine.SpyObj<Shake>;
 
   beforeEach(async(() => {
-    // routerSpy = jasmine.createSpyObj('Router', ['url']);
-    fcmSpy = jasmine.createSpyObj('FCM', ['onNotification']);
+    firebaseXSpy = jasmine.createSpyObj('FirebaseX', ['onMessageReceived']);
     networkSpy = jasmine.createSpyObj('Network', ['type']);
     shakeSpy = jasmine.createSpyObj('Shake', ['startWatch']);
     userSettingsServiceSpy = jasmine.createSpyObj('UserSettingsService',
@@ -41,12 +38,8 @@ describe('AppComponent', () => {
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        // Location,
-        // { provide: LocationStrategy, useValue: PathLocationStrategy },
-        // { provide: APP_BASE_HREF, useValue: '/' },
-        // { provide: Router, useValue: routerSpy },
         Platform,
-        { provide: FCM, useValue: fcmSpy },
+        { provide: FirebaseX, useValue: firebaseXSpy },
         { provide: ModalController, useValue: {} },
         { provide: Network, useValue: networkSpy },
         { provide: NotificationService, useValue: {} },
@@ -65,7 +58,7 @@ describe('AppComponent', () => {
   }));
 
   it('should create the app', () => {
-    fcmSpy.onNotification.and.returnValue(NEVER);
+    firebaseXSpy.onMessageReceived.and.returnValue(NEVER);
     networkSpy.type.and.returnValue('wifi');
     userSettingsServiceSpy.darkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.PureDarkThemeActivated.and.callFake(() => NEVER);
@@ -79,8 +72,7 @@ describe('AppComponent', () => {
   });
 
   it('should initialize the app (mobile)', fakeAsync(() => {
-    // routerSpy.url.and.returnValue('/tabs');
-    fcmSpy.onNotification.and.returnValue(NEVER);
+    firebaseXSpy.onMessageReceived.and.returnValue(NEVER);
     networkSpy.type.and.returnValue('wifi');
     userSettingsServiceSpy.darkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.PureDarkThemeActivated.and.callFake(() => NEVER);
@@ -95,7 +87,7 @@ describe('AppComponent', () => {
     const navigateSpy = spyOn(router, 'navigate');
 
     fixture.detectChanges();
-    expect(fcmSpy.onNotification).toHaveBeenCalled();
+    expect(firebaseXSpy.onMessageReceived).toHaveBeenCalled();
     expect(navigateSpy).not.toHaveBeenCalled();
     expect(platform.is).toHaveBeenCalledTimes(1);
     expect(versionServiceSpy.checkForUpdate).toHaveBeenCalledTimes(1);
@@ -104,8 +96,7 @@ describe('AppComponent', () => {
   }));
 
   it('should initialize the app (web)', fakeAsync(() => {
-    // routerSpy.url.and.returnValue('/tabs');
-    fcmSpy.onNotification.and.returnValue(NEVER);
+    firebaseXSpy.onMessageReceived.and.returnValue(NEVER);
     userSettingsServiceSpy.darkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.PureDarkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.getAccentColor.and.callFake(() => NEVER);
@@ -117,7 +108,7 @@ describe('AppComponent', () => {
     const navigateSpy = spyOn(router, 'navigate');
 
     fixture.detectChanges();
-    expect(fcmSpy.onNotification).not.toHaveBeenCalled();
+    expect(firebaseXSpy.onMessageReceived).not.toHaveBeenCalled();
     expect(navigateSpy).not.toHaveBeenCalled();
     expect(versionServiceSpy.checkForUpdate).toHaveBeenCalledTimes(1);
     tick(); // wait for platform promise

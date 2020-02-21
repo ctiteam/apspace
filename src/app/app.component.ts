@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FCM } from '@ionic-native/fcm/ngx';
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
 import {
@@ -32,7 +32,7 @@ export class AppComponent {
     private actionSheetCtrl: ActionSheetController,
     private alertCtrl: AlertController,
     private cas: CasTicketService,
-    private fcm: FCM,
+    private firebaseX: FirebaseX,
     private feedback: FeedbackService,
     private loadingCtrl: LoadingController,
     private menuCtrl: MenuController,
@@ -48,124 +48,127 @@ export class AppComponent {
     private userSettings: UserSettingsService,
     private versionService: VersionService,
   ) {
-    this.getUserSettings();
     this.versionService.checkForUpdate().subscribe();
-    if (this.platform.is('cordova')) {
-      if (this.network.type === 'none') {
-        this.presentToast('You are now offline, only data stored in the cache will be accessable.', 6000);
+
+    // if (this.platform.is('ios')) {
+    //   this.statusBar.overlaysWebView(false); // status bar for ios
+    // }
+
+    // FOR TESTING PURPOSE
+    // this.statusBar.backgroundColorByHexString('#000000');
+    // this.statusBar.backgroundColorByName('black');
+
+    platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
+      this.getUserSettings();
+
+      if (this.platform.is('cordova')) {
+        if (this.network.type === 'none') {
+          this.presentToast('You are now offline, only data stored in the cache will be accessable.', 6000);
+        }
+        this.firebaseX.getToken().then(_ => {}); // needed for firebase
+        this.firebaseX.onTokenRefresh().subscribe(_ => {}); // needed for firebase
+        this.runCodeOnReceivingNotification(); // notifications
       }
-      this.runCodeOnReceivingNotification(); // notifications
-      // if (this.platform.is('ios')) {
-      //   this.statusBar.overlaysWebView(false); // status bar for ios
-      // }
 
-      // FOR TESTING PURPOSE
-      // this.statusBar.backgroundColorByHexString('#000000');
-      // this.statusBar.backgroundColorByName('black');
+      this.shake.startWatch(40).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
+        if (!await this.cas.isAuthenticated()) {
+          return; // Do nothing if they aren't logged in
+        }
 
-      platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
-        this.shake.startWatch(40).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
-          if (!await this.cas.isAuthenticated()) {
-            return; // Do nothing if they aren't logged in
-          }
+        if (this.router.url.startsWith('/feedback')) {
+          return;
+        }
 
-          if (this.router.url.startsWith('/feedback')) {
-            return;
-          }
+        if (this.isOpen) {
+          return;
+        }
 
-          if (this.isOpen) {
-            return;
-          }
-
-          this.isOpen = true; // Prevent double alert to be opened
-          const alert = await this.alertCtrl.create({
-            header: 'Report a problem',
-            subHeader: 'Your feedback helps us to improve APSpace',
-            inputs: [
-              {
-                name: 'message',
-                type: 'text',
-                placeholder: 'Message',
-              },
-              {
-                name: 'contactNo',
-                type: 'text',
-                placeholder: 'Contact Number (Optional)'
+        this.isOpen = true; // Prevent double alert to be opened
+        const alert = await this.alertCtrl.create({
+          header: 'Report a problem',
+          subHeader: 'Your feedback helps us to improve APSpace',
+          inputs: [
+            {
+              name: 'message',
+              type: 'text',
+              placeholder: 'Message',
+            },
+            {
+              name: 'contactNo',
+              type: 'text',
+              placeholder: 'Contact Number (Optional)'
+            }
+          ],
+          buttons: [
+            {
+              text: 'Dismiss',
+              role: 'cancel',
+              handler: () => {
+                this.isOpen = false;
               }
-            ],
-            buttons: [
-              {
-                text: 'Dismiss',
-                role: 'cancel',
-                handler: () => {
+            }, {
+              text: 'Submit',
+              handler: async (data) => {
+                if (!data.message) {
                   this.isOpen = false;
+                  return this.toastCtrl.create({
+                    // tslint:disable-next-line: max-line-length
+                    message: 'Please make sure the Message field is filled up.',
+                    position: 'top',
+                    color: 'danger',
+                    duration: 5000,
+                    showCloseButton: true,
+                  }).then(toast => toast.present());
                 }
-              }, {
-                text: 'Submit',
-                handler: async (data) => {
-                  if (!data.message) {
-                    this.isOpen = false;
-                    return this.toastCtrl.create({
-                      // tslint:disable-next-line: max-line-length
-                      message: 'Please make sure the Message field is filled up.',
-                      position: 'top',
-                      color: 'danger',
-                      duration: 5000,
-                      showCloseButton: true,
-                    }).then(toast => toast.present());
-                  }
 
-                  // tslint:disable-next-line: no-shadowed-variable
-                  const feedback = {
-                    contactNo: data.contactNo || '',
-                    platform: this.feedback.platform(),
-                    message: data.message + '\n' + `Url: ${this.router.url}`,
-                    appVersion: this.versionService.version,
-                    screenSize: screen.width + 'x' + screen.height,
-                  };
+                // tslint:disable-next-line: no-shadowed-variable
+                const feedback = {
+                  contactNo: data.contactNo || '',
+                  platform: this.feedback.platform(),
+                  message: data.message + '\n' + `Url: ${this.router.url}`,
+                  appVersion: this.versionService.version,
+                  screenSize: screen.width + 'x' + screen.height,
+                };
 
-                  this.presentLoading();
-                  this.feedback.sendFeedback(feedback).subscribe(
-                    {
-                      next: () => {
-                        data.message = '';
-                        this.toastCtrl.create({
-                          // tslint:disable-next-line: max-line-length
-                          message: '<span style="font-weight: bold;">Feedback submitted! </span> The team will get back to you as soon as possbile via Email. Thank you for your feedback',
-                          position: 'top',
-                          color: 'success',
-                          duration: 5000,
-                          showCloseButton: true,
-                        }).then(toast => toast.present());
+                this.presentLoading();
+                this.feedback.sendFeedback(feedback).subscribe(
+                  {
+                    next: () => {
+                      data.message = '';
+                      this.toastCtrl.create({
+                        // tslint:disable-next-line: max-line-length
+                        message: '<span style="font-weight: bold;">Feedback submitted! </span> The team will get back to you as soon as possbile via Email. Thank you for your feedback',
+                        position: 'top',
+                        color: 'success',
+                        duration: 5000,
+                        showCloseButton: true,
+                      }).then(toast => toast.present());
 
-                        this.isOpen = false;
-                        this.dismissLoading();
-                      },
-                      error: (err) => {
-                        this.isOpen = false;
-                        this.toastCtrl.create({
-                          message: err.message,
-                          cssClass: 'danger',
-                          position: 'top',
-                          duration: 5000,
-                          showCloseButton: true,
-                        }).then(toast => toast.present());
-                      },
-                      complete: () => {
-                        this.isOpen = false;
-                        this.dismissLoading();
-                      }
+                      this.isOpen = false;
+                      this.dismissLoading();
+                    },
+                    error: (err) => {
+                      this.isOpen = false;
+                      this.toastCtrl.create({
+                        message: err.message,
+                        cssClass: 'danger',
+                        position: 'top',
+                        duration: 5000,
+                        showCloseButton: true,
+                      }).then(toast => toast.present());
+                    },
+                    complete: () => {
+                      this.isOpen = false;
+                      this.dismissLoading();
                     }
-                  );
-                }
+                  }
+                );
               }
-            ]
-          });
-
-          alert.present();
+            }
+          ]
         });
+        alert.present();
       });
-
       this.platform.backButton.subscribe(async () => { // back button clicked
         if (this.router.url.startsWith('/tabs') || this.router.url.startsWith('/maintenance-and-update')) {
           const timePressed = new Date().getTime();
@@ -191,7 +194,7 @@ export class AppComponent {
           }
         }
       });
-    }
+    });
   }
 
   async presentToast(msg: string, duration: number) {
@@ -222,8 +225,8 @@ export class AppComponent {
   // this will fail when the user opens the app for the first time and login because it will run before login
   // => we need to call it here and in login page as well
   runCodeOnReceivingNotification() {
-    this.fcm.onNotification().subscribe(data => {
-      if (data.wasTapped) { // Notification received in background
+    this.firebaseX.onMessageReceived().subscribe(data => {
+      if (data.tap) { // Notification received in background
         this.openNotificationModal(data);
       } else { // Notification received in foreground
         this.showNotificationAsToast(data);
