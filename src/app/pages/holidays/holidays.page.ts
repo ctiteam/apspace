@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { MenuController } from '@ionic/angular';
-import * as moment from 'moment';
+
+import { format, parseISO } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
+
 import { EventComponentConfigurations, Holiday, Holidays } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 
@@ -21,7 +24,7 @@ export class HolidaysPage {
   months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   // FORCE +08
-  todaysDate = moment(moment(new Date()).utcOffset('+0800').format('YYYY-MM-DD'), 'YYYY-MM-DD').toDate();
+  todaysDate = utcToZonedTime(new Date(), 'Asia/Kuala_Lumpur');
 
   filterObject: {
     show: 'all' | 'upcoming',
@@ -65,29 +68,26 @@ export class HolidaysPage {
         this.numberOfHolidays = 1; // HIDE 'THERE ARE NO HOLIDAYS' MESSAGE
         let filteredArray = holidays.filter(holiday => {
           // FILTER HOLIDAYS BY DAY & MONTH
+          const holidayStartDate = parseISO(holiday.holiday_start_date);
           return (
-            moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('dddd').includes(this.filterObject.filterDays) &&
-            moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('MMMM').includes(this.filterObject.filterMonths) &&
+            format(holidayStartDate, 'DDD').includes(this.filterObject.filterDays) &&
+            format(holidayStartDate, 'MMMM').includes(this.filterObject.filterMonths) &&
             holiday.holiday_people_affected.includes(this.filterObject.affecting)
           );
         });
         if (this.filterObject.show === 'upcoming') {
           filteredArray = filteredArray.filter(holiday => {
             // FILTER HOLIDAYS TO THE ONCE UPCOMING ONLY
-            return moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate() > this.todaysDate;
+            return parseISO(holiday.holiday_start_date) > this.todaysDate;
           });
         }
 
         if (this.filterObject.numberOfDays !== '') {
           filteredArray = filteredArray.filter(holiday => {
             if (this.filterObject.numberOfDays === '1 days') {
-              return this.getNumberOfDaysForHoliday(
-                moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
-                moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()) === '1 day';
+              return this.getNumberOfDaysForHoliday(parseISO(holiday.holiday_start_date), parseISO(holiday.holiday_end_date)) === '1 day';
             } else {
-              return this.getNumberOfDaysForHoliday(
-                moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
-                moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()) !== '1 day';
+              return this.getNumberOfDaysForHoliday(parseISO(holiday.holiday_start_date), parseISO(holiday.holiday_end_date)) !== '1 day';
             }
           });
         }
@@ -108,18 +108,17 @@ export class HolidaysPage {
             secondDescription: 'Ends on ' + (
               holiday.holiday_end_date === holiday.holiday_start_date
                 ? 'the same day'
-                : moment(moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate())
-                  .format('dddd, DD MMM YYYY')
+                : format(parseISO(holiday.holiday_end_date), 'EEEE, dd MMM yyyy')
             ), // EXPECTED FORMAT HH MM A,
             thirdDescription: this.getNumberOfDaysForHoliday(
-              moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
-              moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()),
+              parseISO(holiday.holiday_start_date),
+              parseISO(holiday.holiday_end_date)),
             color: '#27ae60',
             passColor: '#a49999',
-            pass: moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate() < this.todaysDate,
+            pass: parseISO(holiday.holiday_start_date) < this.todaysDate,
             outputFormat: 'event-with-date-only',
             type: holiday.holiday_start_date.split('-')[0],
-            dateOrTime: moment(moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate()).format('DD MMM (ddd)'), // EXPECTED FORMAT HH MM A
+            dateOrTime: format(parseISO(holiday.holiday_start_date), 'dd MMM (eee)'), // EXPECTED FORMAT HH MM A
           });
         });
         return holidaysEventMode;
