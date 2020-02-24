@@ -195,5 +195,7 @@ ion-buttons.close-button-align {
 
   ion-button {
     --background: transparent !important;
+    --background-hover: transparent !important;
+    --background-clicked: transparent !important;
   }
 }
