@@ -137,12 +137,13 @@ export class MyAppointmentsPage {
     const startDate = moment(booking.slot_start_time).format('YYYY-MM-DD');
     const alert = await this.alertController.create({
       header: `Cancelling Appointment with ${booking.staff_detail.FULLNAME} on ${startDate}`,
-      message: 'Please provide us with the cancellation reason:',
+      message: `Please provide us with the cancellation reason <br /> (Max 50 Characters):`,
       inputs: [
         {
           name: 'cancellationReason',
+          id: 'maxLength50',
           type: 'text',
-          placeholder: 'Enter The Cancellation Reason',
+          placeholder: 'Enter The Cancellation Reason'
         },
       ],
       buttons: [
@@ -181,7 +182,7 @@ export class MyAppointmentsPage {
         }
       ]
     });
-    await alert.present();
+    await alert.present().then(_ => document.getElementById('maxLength50').setAttribute('maxlength', '50'));
   }
 
   async presentLoading() {
