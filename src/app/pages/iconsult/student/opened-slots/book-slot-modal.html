@@ -75,19 +75,26 @@
                     <ion-label [ngClass]="{ 'danger-text': reason.touched && reason.invalid }" position="stacked">Reason
                       For Appointment</ion-label>
                     <ion-textarea [(ngModel)]="formModel.reason" #reason="ngModel"
+                      [maxlength]="maxLength"
                       [ngClass]="{ 'is-invalid': reason.touched && reason.invalid }" required name="reason"
                       class="form-input" rows="6"></ion-textarea>
                   </ion-item>
+                  <div class="ion-padding-start">
+                    {{ formModel.reason.length }}/{{maxLength}}
+                  </div>
                   <div *ngIf="reason.touched && reason.invalid" class="ion-padding-start danger-text">
                     <div *ngIf="reason?.errors.required">This field is required</div>
                   </div>
 
                   <ion-item lines="none">
                     <ion-label position="stacked">Additional Note (Optional)</ion-label>
-                    <ion-textarea rows="2" [(ngModel)]="formModel.additional_note" #note="ngModel" type="text" name="note"
+                    <ion-textarea [maxlength]="maxLength" rows="2" [(ngModel)]="formModel.additional_note" #note="ngModel" type="text" name="note"
                       class="form-input">
                     </ion-textarea>
                   </ion-item>
+                  <div class="ion-padding-start">
+                    {{ formModel.additional_note.length }}/{{maxLength}}
+                  </div>
 
                   <ion-item-divider class="colored-border">
                     <ion-label class="form-section-label">
