@@ -14,6 +14,7 @@ import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Vibration } from '@ionic-native/vibration/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,15 +25,20 @@ import { RequestCache, RequestCacheWithMapStorage } from './services';
 // export function disableNavAnimation(AnimationC: Animation): Promise<Animation> { return Promise.resolve(new AnimationC()); }
 
 import { Badge } from '@ionic-native/badge/ngx';
+import { Camera } from '@ionic-native/camera/ngx';
+import { File } from '@ionic-native/file/ngx';
+import { Screenshot } from '@ionic-native/screenshot/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
 import { GraphQLModule } from './graphql.module';
+import { ShakespearModalPageModule } from './pages/feedback/shakespear-modal/shakespear-modal.module';
+import { ShakespearModalPage } from './pages/feedback/shakespear-modal/shakespear-modal.page';
 import { NewsModalPageModule } from './pages/news/news-modal.module';
 import { NotificationModalModule } from './pages/notifications/notification-modal.module';
 
 @NgModule({
   // notificationPageModal is needed here because it is called in app.component.ts, NewsModal is called in dashboards also
   declarations: [AppComponent],
-  entryComponents: [],
+  entryComponents: [ShakespearModalPage],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -47,7 +53,8 @@ import { NotificationModalModule } from './pages/notifications/notification-moda
     AppRoutingModule,
     GraphQLModule,
     NewsModalPageModule,
-    NotificationModalModule
+    NotificationModalModule,
+    ShakespearModalPageModule
   ],
   providers: [
     ActionSheet,
@@ -58,7 +65,11 @@ import { NotificationModalModule } from './pages/notifications/notification-moda
     Network,
     Device,
     Shake,
+    Screenshot,
     StatusBar,
+    Camera,
+    File,
+    Vibration,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: RequestCache, useClass: RequestCacheWithMapStorage },
     httpInterceptorProviders,
