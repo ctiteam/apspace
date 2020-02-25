@@ -21,7 +21,14 @@ export class StaffDirectoryPage {
   staffType$: Observable<string[]>;
   skeletons = new Array(6);
   options: Fuse.FuseOptions<StaffDirectory> = {
-    keys: ['FULLNAME', 'CODE', 'ID', 'EMAIL', 'EXTENSION', 'TITLE']
+    keys: [
+      {name: 'FULLNAME', weight: 1.0},
+      {name: 'CODE', weight: 0.5},
+      {name: 'ID', weight: 0.5},
+      {name: 'EMAIL', weight: 0.5},
+      {name: 'EXTENSION', weight: 0.5},
+      {name: 'TITLE', weight: 0.5},
+    ]
   };
 
   constructor(private ws: WsApiService) { }
