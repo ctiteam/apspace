@@ -40,6 +40,7 @@ export type Mutation = {
   initAttendance: Attendance,
   markAttendance: Status,
   saveLectureLog?: Maybe<Scalars['Boolean']>,
+  resetAttendance?: Maybe<Scalars['Boolean']>,
   updateAttendance: Status,
 };
 
@@ -60,6 +61,11 @@ export type MutationMarkAttendanceArgs = {
 export type MutationSaveLectureLogArgs = {
   schedule: ScheduleInput,
   log: LogInput
+};
+
+
+export type MutationResetAttendanceArgs = {
+  schedule: ScheduleInput
 };
 
 
@@ -198,6 +204,16 @@ export type NewStatusSubscription = (
   )> }
 );
 
+export type ResetAttendanceMutationVariables = {
+  schedule: ScheduleInput
+};
+
+
+export type ResetAttendanceMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'resetAttendance'>
+);
+
 export type SaveLectureLogMutationVariables = {
   schedule: ScheduleInput,
   log: LogInput
@@ -307,6 +323,19 @@ export const NewStatusDocument = gql`
   })
   export class NewStatusGQL extends Apollo.Subscription<NewStatusSubscription, NewStatusSubscriptionVariables> {
     document = NewStatusDocument;
+    
+  }
+export const ResetAttendanceDocument = gql`
+    mutation resetAttendance($schedule: ScheduleInput!) {
+  resetAttendance(schedule: $schedule)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ResetAttendanceGQL extends Apollo.Mutation<ResetAttendanceMutation, ResetAttendanceMutationVariables> {
+    document = ResetAttendanceDocument;
     
   }
 export const SaveLectureLogDocument = gql`

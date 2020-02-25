@@ -227,29 +227,42 @@ export class StudentSurveyPage implements OnInit {
           }
         }
         if (!amodule.COURSE_APPRAISAL2) { // student did not do mid-semester appraisal
-          if (this.courseType.includes('Level')) { // bachelor students
-            const moduleStartDate = new Date(amodule.START_DATE); // module start date
-            const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49)); // week 7 of the module
-            const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 70)); // week 10 of the module
-            if (todaysDate >= startDateForMid && todaysDate <= endDateForMid) { // week 10 is not included (11-Feb-2020, week 10 included)
-              this.surveyType = 'Mid-Semester';
-            }
-          } else if (this.courseType.includes('Master')) { // masters students
+
+          if (this.courseType.toLowerCase().includes('master')) { // masters students
             const moduleStartDate = new Date(amodule.START_DATE); // module start date
             if (amodule.STUDY_MODE === 'FullTime') { // full time student
               // tslint:disable-next-line: max-line-length
-              const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 28)); // week 4 of the module
-              const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49)); // week 7 of the module
-              if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 7 is not included
+              const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 21)); // start of week 4 of the module
+              // tslint:disable-next-line: max-line-length
+              const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 49)); // start of week 8 of the module
+              if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 8 is not included
                 this.surveyType = 'Mid-Semester';
               }
             } else {
               // tslint:disable-next-line: max-line-length
-              const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 21)); // week 3 of the module
-              const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 42)); // week 6 of the module
-              if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 6 is not included
+              const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 14)); // start of week 3 of the module
+              // tslint:disable-next-line: max-line-length
+              const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 42)); // start of week 7 of the module
+              if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 7 is not included
                 this.surveyType = 'Mid-Semester';
               }
+            }
+          } else { // all students except master, aplc and phd
+            if (
+              !this.courseType.toLowerCase().includes('language') && // hide mid-survey for language
+              !this.courseType.toLowerCase().includes('ielts') && // hide mid-survey for english
+              !this.courseType.toLowerCase().includes('phd') // hide mid-survey for english
+            ) {
+              const moduleStartDate = new Date(amodule.START_DATE); // module start date
+              // tslint:disable-next-line: max-line-length
+              const startDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 42)); // start of week 7 of the module
+              // tslint:disable-next-line: max-line-length
+              const endDateForMid = new Date(new Date(amodule.START_DATE).setDate(moduleStartDate.getDate() + 70)); // start of week 11 of the module
+
+              if (todaysDate >= startDateForMid && todaysDate < endDateForMid) { // week 10 is not included (11-Feb-2020, week 10 included)
+                this.surveyType = 'Mid-Semester';
+              }
+
             }
           }
         }

@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { LoadingController, ToastController } from '@ionic/angular';
 import { Observable, forkJoin } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import {
   BeAPUStudentDetails, ClassificationLegend, Course, CourseDetails, DeterminationLegend,
   InterimLegend, MPULegend, StudentProfile, StudentSearch, Subcourse
@@ -12,7 +15,7 @@ import { CasTicketService, WsApiService } from 'src/app/services';
   templateUrl: './students-search.page.html',
   styleUrls: ['./students-search.page.scss'],
 })
-export class StudentsSearchPage implements OnInit {
+export class StudentsSearchPage {
   searchKeyword = '';
   searchResults = '';
 
@@ -22,6 +25,7 @@ export class StudentsSearchPage implements OnInit {
 
   skeletons = new Array(8);
   selectedIntake = '';
+  selectedStudentId = '';
 
   studentsList$: Observable<StudentSearch[]>;
   studentProfile$: Observable<StudentProfile>;
@@ -33,11 +37,17 @@ export class StudentsSearchPage implements OnInit {
   classificationLegend$: Observable<ClassificationLegend[]>;
   courseDetail$: Observable<CourseDetails>;
   studentDetails$: Observable<BeAPUStudentDetails[]>;
+  loading: HTMLIonLoadingElement;
+
 
   devUrl = 'https://u1cd2ltoq6.execute-api.ap-southeast-1.amazonaws.com/dev/student';
   constructor(
     private ws: WsApiService,
-    private cas: CasTicketService
+    private cas: CasTicketService,
+    private loadingCtrl: LoadingController,
+    private iab: InAppBrowser,
+    private toastCtrl: ToastController,
+    private http: HttpClient
   ) { }
 
   searchForStudents() {
@@ -79,8 +89,6 @@ export class StudentsSearchPage implements OnInit {
           { url: this.devUrl, auth: false, attempts: 1 }
         );
       })
-    ).pipe(
-      tap(res => console.log(res))
     );
 
     this.studentDetails$ = this.ws.post<BeAPUStudentDetails[]>('/student/image', {
@@ -92,7 +100,6 @@ export class StudentsSearchPage implements OnInit {
   }
 
   getStudentCourses(student: StudentSearch) {
-    console.log('courses called');
     // we need to get st for the service including the params (?id=)
     this.studentCourses$ = this.cas.getST(`${this.devUrl}/courses?id=${student.STUDENT_NUMBER}`).pipe(
       switchMap((st) => {
@@ -107,6 +114,8 @@ export class StudentsSearchPage implements OnInit {
   getStudentResults(student: StudentSearch, intake: string) {
     this.intakeSelected = true;
     this.studentSelected = true;
+    this.selectedStudentId = student.STUDENT_NUMBER;
+    this.selectedIntake = intake;
     const url = `/student/subcourses?intake=${intake}&id=${student.STUDENT_NUMBER}`;
 
     this.studentsResults$ = forkJoin([
@@ -154,9 +163,99 @@ export class StudentsSearchPage implements OnInit {
     }));
   }
 
+  generateTranscriptsPdf() {
+    this.presentLoading();
+    return forkJoin([
+      this.requestInterimST(this.selectedStudentId, this.selectedIntake),
+    ]).pipe(
+      map(([serviceTickets]) => {
+        const headers = new HttpHeaders().set('Content-Type', 'text/plain; charset=utf-8');
+        // tslint:disable-next-line: max-line-length
+        return this.http.post<any>('https://api.apiit.edu.my/interim-transcript/index.php', serviceTickets, { headers, responseType: 'text' as 'json' }).subscribe((response: string) => {
+          catchError(err => {
+            this.presentToast('Failed to generate: ' + err.message, 3000);
+            return err;
+          });
 
-  ngOnInit() {
+          if (response.startsWith('https://')) { // Only respond and do things if the response is a URL
+            this.dismissLoading();
+            this.iab.create(response, '_system', 'location=true');
+            return;
+          } else {
+
+            this.dismissLoading();
+            this.presentToast('Oops! Unable to generate PDF', 3000);
+            return;
+          }
+        });
+      })
+    ).subscribe();
   }
+
+  requestInterimST(studentId: string, intakeCode: string) {
+    const api = 'https://api.apiit.edu.my';
+
+    return forkJoin([
+      this.cas.getST(api + `/student/courses?id=${studentId}`),
+      this.cas.getST(api + '/student/subcourses'),
+      this.cas.getST(api + '/student/interim_legend'),
+      this.cas.getST(api + '/student/sub_and_course_details'),
+      this.cas.getST(api + `/student/profile?id=${studentId}`),
+      this.cas.getST(api + '/student/mpu_legend'),
+      this.cas.getST(api + '/student/classification_legend'),
+      this.cas.getST(api + '/student/su_legend'),
+      this.cas.getST(api + '/student/determination_legend')
+    ]).pipe(
+      // tslint:disable-next-line: variable-name && tslint:disable-next-line: max-line-length
+      map(([coursesST, subcoursesST, interim_legendST, sub_and_course_detailsST, profileST, mpu_legendST, classification_legendST, su_legendST, determination_legendST]) => {
+        const payload = {
+          intake: intakeCode,
+          id: studentId,
+          tickets: {
+            courses: coursesST,
+            subcourses: subcoursesST,
+            interim_legend: interim_legendST,
+            sub_and_course_details: sub_and_course_detailsST,
+            profile: profileST,
+            mpu_legend: mpu_legendST,
+            classification_legend: classification_legendST,
+            su_legend: su_legendST,
+            determination_legend: determination_legendST,
+          }
+        };
+
+        return payload;
+      })
+    );
+  }
+
+
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
+  }
+
+  async presentToast(msg: string, duration: number) {
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      duration,
+      color: 'medium',
+      position: 'top',
+      showCloseButton: true
+    });
+
+    toast.present();
+  }
+
 
 
 }

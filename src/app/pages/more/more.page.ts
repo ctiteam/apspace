@@ -76,6 +76,14 @@ export class MorePage implements OnInit {
 
     // START OF Collaboration & Information Resources
     {
+      title: 'APSpace Feedback',
+      group: 'Collaboration & Information Resources',
+      url: 'feedback',
+      img: 'assets/img/feedback.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['apspace feedback', 'app not working', 'issue']
+    },
+    {
       title: 'e-Forms (Forms & Applications)',
       group: 'Collaboration & Information Resources',
       url: 'http://forms.sites.apiit.edu.my/home/',
@@ -83,14 +91,6 @@ export class MorePage implements OnInit {
       img: 'assets/img/forms-and-applications.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['purchase', 'incident', 'maintenance', 'order', 'exit', 'event']
-    },
-    {
-      title: 'Feedback',
-      group: 'Collaboration & Information Resources',
-      url: 'feedback',
-      img: 'assets/img/feedback.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['apspace feedback', 'app not working', 'issue']
     },
     {
       title: 'Help Centre',
@@ -266,6 +266,14 @@ export class MorePage implements OnInit {
 
 
     // START OF Academic Operations
+    {
+      title: 'APiX / ERP (Legacy)',
+      group: 'Academic Operation',
+      url: 'https://erp.apiit.edu.my/easymoo/web/en/auth/security/login',
+      img: 'assets/img/apix.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['exception', 'feedback', 'legacy', 'old']
+    },
     {
       title: 'APLC Progress Report',
       group: 'Academic Operation',

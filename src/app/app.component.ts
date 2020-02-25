@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FCM } from '@ionic-native/fcm/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import {
   ActionSheetController, LoadingController, MenuController, ModalController, NavController,
   Platform, PopoverController, ToastController
 } from '@ionic/angular';
-import { NotificationModalPage } from './pages/notifications/notification-modal';
-import { NotificationService, UserSettingsService, VersionService } from './services';
+import { UserSettingsService, VersionService } from './services';
 import { ShakespearFeedbackService } from './services/shakespear-feedback.service';
 
 @Component({
@@ -29,12 +27,10 @@ export class AppComponent {
   loading: HTMLIonLoadingElement;
 
   constructor(
-    private fcm: FCM,
     private network: Network,
     private platform: Platform,
     private router: Router,
     private userSettings: UserSettingsService,
-    private notificationService: NotificationService,
     private versionService: VersionService,
     private toastCtrl: ToastController,
     private navCtrl: NavController,
@@ -45,39 +41,51 @@ export class AppComponent {
     private loadingCtrl: LoadingController,
     private shakespear: ShakespearFeedbackService
   ) {
-    this.getUserSettings();
     this.versionService.checkForUpdate().subscribe();
-    if (this.platform.is('cordova')) {
-      if (this.network.type === 'none') {
-        this.presentToast('You are now offline, only data stored in the cache will be accessable.', 6000);
+
+    // if (this.platform.is('ios')) {
+    //   this.statusBar.overlaysWebView(false); // status bar for ios
+    // }
+
+    // FOR TESTING PURPOSE
+    // this.statusBar.backgroundColorByHexString('#000000');
+    // this.statusBar.backgroundColorByName('black');
+
+    platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
+      this.getUserSettings();
+      if (this.platform.is('cordova')) {
+        if (this.network.type === 'none') {
+          this.presentToast('You are now offline, only data stored in the cache will be accessable.', 6000);
+        }
       }
-      this.runCodeOnReceivingNotification(); // notifications
-      // if (this.platform.is('ios')) {
-        //   this.statusBar.overlaysWebView(false); // status bar for ios
-        // }
+      this.shakespear.initShakespear(this.shakeSensitivity);
+      this.platform.backButton.subscribe(async () => { // back button clicked
+        if (this.router.url.startsWith('/tabs') || this.router.url.startsWith('/maintenance-and-update')) {
+          const timePressed = new Date().getTime();
+          if ((timePressed - this.lastTimeBackPress) < this.timePeriodToExit) {
+            // tslint:disable-next-line: no-string-literal
+            navigator['app'].exitApp();
+          } else {
+            this.presentToast('Press again to exit App', 3000);
+            this.lastTimeBackPress = timePressed;
+          }
+        } else {
+          if (this.menuCtrl.getOpen()) {
+            this.menuCtrl.close();
+            return;
+          }
 
-        // FOR TESTING PURPOSE
-        // this.statusBar.backgroundColorByHexString('#000000');
-        // this.statusBar.backgroundColorByName('black');
-
-      platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
-        this.shakespear.initShakespear(this.shakeSensitivity);
-        this.platform.backButton.subscribe(async () => { // back button clicked
-          if (this.router.url.startsWith('/tabs') || this.router.url.startsWith('/maintenance-and-update')) {
-            const timePressed = new Date().getTime();
-            if ((timePressed - this.lastTimeBackPress) < this.timePeriodToExit) {
-              // tslint:disable-next-line: no-string-literal
-              navigator['app'].exitApp();
-            } else {
-              this.presentToast('Press again to exit App', 3000);
-              this.lastTimeBackPress = timePressed;
-            }
+          const active = this.actionSheetCtrl.getTop() || this.popoverCtrl.getTop() || this.modalCtrl.getTop();
+          if (active) {
+            (await active).dismiss();
+            return;
           } else {
             if (this.menuCtrl.getOpen()) {
               this.menuCtrl.close();
               return;
             }
 
+            // tslint:disable-next-line: no-shadowed-variable
             const active = this.actionSheetCtrl.getTop() || this.popoverCtrl.getTop() || this.modalCtrl.getTop();
             if (active) {
               (await active).dismiss();
@@ -86,9 +94,9 @@ export class AppComponent {
               this.navCtrl.pop();
             }
           }
-        });
+        }
       });
-    }
+    });
   }
 
   async presentToast(msg: string, duration: number) {
@@ -114,52 +122,6 @@ export class AppComponent {
 
   async dismissLoading() {
     return await this.loading.dismiss();
-  }
-
-  // this will fail when the user opens the app for the first time and login because it will run before login
-  // => we need to call it here and in login page as well
-  runCodeOnReceivingNotification() {
-    this.fcm.onNotification().subscribe(data => {
-      if (data.wasTapped) { // Notification received in background
-        this.openNotificationModal(data);
-      } else { // Notification received in foreground
-        this.showNotificationAsToast(data);
-      }
-    });
-  }
-
-  async showNotificationAsToast(data: any) {
-    // need to check with dingdong team about response type
-    const toast = await this.toastCtrl.create({
-      header: 'New Message',
-      message: data.title,
-      position: 'top',
-      color: 'primary',
-      buttons: [
-        {
-          icon: 'open',
-          handler: () => {
-            this.openNotificationModal(data);
-          }
-        }, {
-          icon: 'close',
-          role: 'cancel',
-          handler: () => { }
-        }
-      ]
-    });
-    toast.present();
-  }
-
-  async openNotificationModal(message: any) {
-    // need to check with dingdong team about response type
-    const modal = await this.modalCtrl.create({
-      component: NotificationModalPage,
-      componentProps: { message, notFound: 'No Message Selected' },
-    });
-    this.notificationService.sendRead(message.message_id).subscribe();
-    await modal.present();
-    await modal.onDidDismiss();
   }
 
   getUserSettings() {

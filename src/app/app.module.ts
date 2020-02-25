@@ -10,7 +10,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { ActionSheet } from '@ionic-native/action-sheet/ngx';
 import { AppAvailability } from '@ionic-native/app-availability/ngx';
 import { Device } from '@ionic-native/device/ngx';
-import { FCM } from '@ionic-native/fcm/ngx';
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -59,7 +59,7 @@ import { NotificationModalModule } from './pages/notifications/notification-moda
   providers: [
     ActionSheet,
     Badge,
-    FCM,
+    FirebaseX,
     InAppBrowser,
     AppAvailability,
     Network,

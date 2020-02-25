@@ -44,11 +44,11 @@ export class SettingsPage implements OnInit {
     { index: 4, value: '80' }
   ];
   accentColors = [
-    { title: 'Blue (Default)', value: 'blue-accent-color' },
-    { title: 'Green', value: 'green-accent-color' },
-    { title: 'Red', value: 'red-accent-color' },
-    { title: 'Pink', value: 'pink-accent-color' },
-    { title: 'Yellow', value: 'yellow-accent-color' }
+    { title: 'Sky (Default)', value: 'blue-accent-color' },
+    { title: 'Forest', value: 'green-accent-color' },
+    { title: 'Fire', value: 'red-accent-color' },
+    { title: 'Flower', value: 'pink-accent-color' },
+    { title: 'Lightning', value: 'yellow-accent-color' }
   ];
   locationOptions = [
     'New Campus',
