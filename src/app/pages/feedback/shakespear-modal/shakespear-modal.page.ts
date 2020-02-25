@@ -2,7 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-import { ActionSheetController, LoadingController, ToastController } from '@ionic/angular';
+import { ActionSheetController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { FeedbackService, VersionService } from 'src/app/services';
 
 @Component({
@@ -11,7 +11,7 @@ import { FeedbackService, VersionService } from 'src/app/services';
     trigger('slideLeft', [
       transition('void => *', [
         style({ opacity: 0, transform: 'translateX(150%)' }),
-        animate('200ms 100ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }, ))
+        animate('200ms 100ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }))
       ])
     ]),
     trigger('slideIn', [
@@ -27,14 +27,10 @@ import { FeedbackService, VersionService } from 'src/app/services';
   styleUrls: ['./shakespear-modal.page.scss'],
 })
 export class ShakespearModalPage implements OnInit {
-
   @Input() imagePath: string;
 
-  // base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
   showImage = false;
   images = [];
-
-  onlineFeedbackSystemURL = 'https://erp.apiit.edu.my/easymoo/web/en/user/feedback/feedbackusersend';
 
   phoneNumberValidationPattern = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4,5})$/;
   phoneNumberValid = false;
@@ -64,7 +60,8 @@ export class ShakespearModalPage implements OnInit {
     private actionSheetCtrl: ActionSheetController,
     private version: VersionService,
     private loadingController: LoadingController,
-    private camera: Camera
+    private camera: Camera,
+    private modalCtrl: ModalController
   ) { }
 
   ngOnInit() {
@@ -177,8 +174,6 @@ export class ShakespearModalPage implements OnInit {
         duration: 5000,
         showCloseButton: true,
       }).then(toast => toast.present());
-      this.submitting = false;
-      this.dismissLoading();
     }, err => {
       this.toastCtrl.create({
         message: err.message,
@@ -190,6 +185,10 @@ export class ShakespearModalPage implements OnInit {
       // finally not invoked as error does not complete
       this.dismissLoading();
       this.submitting = false;
+    }, () => {
+      this.submitting = false;
+      this.dismissLoading();
+      this.modalCtrl.dismiss();
     });
   }
 
@@ -204,7 +203,7 @@ export class ShakespearModalPage implements OnInit {
   async presentLoading() {
     this.loading = await this.loadingController.create({
       spinner: 'dots',
-      duration: 5000,
+      duration: 10000,
       message: 'Please wait...',
       translucent: true,
     });
