@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { IonSelect, IonSlides, ModalController, NavController } from '@ionic/angular';
+import { IonSelect, IonSlides, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import { Observable, combineLatest, forkJoin, of, zip } from 'rxjs';
 import { catchError, concatMap, finalize, flatMap, map, share, tap, toArray } from 'rxjs/operators';
 
@@ -11,9 +11,11 @@ import {
 } from 'src/app/interfaces';
 import { NewsService, NotificationService, StudentTimetableService, UserSettingsService, WsApiService } from 'src/app/services';
 
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
 import { NewsModalPage } from '../news/news-modal';
+import { NotificationModalPage } from '../notifications/notification-modal';
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.page.html',
@@ -263,6 +265,9 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     private renderer: Renderer2,
     private news: NewsService,
     private modalCtrl: ModalController,
+    private platform: Platform,
+    private firebaseX: FirebaseX,
+    private toastCtrl: ToastController,
   ) {
     // Create the dragula group (drag and drop)
     this.dragulaService.createGroup('editable-list', {
@@ -295,6 +300,9 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
         next: data => data ? this.doRefresh() : ''
       }
     );
+    if (this.platform.is('cordova')) {
+      this.runCodeOnReceivingNotification(); // notifications
+    }
     this.doRefresh();
   }
 
@@ -333,6 +341,52 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     this.notificationService.getMessages().subscribe(res => {
       this.numberOfUnreadMsgs = +res.num_of_unread_messages;
     });
+  }
+
+  // this will fail when the user opens the app for the first time and login because it will run before login
+  // => we need to call it here and in login page as well
+  runCodeOnReceivingNotification() {
+    this.firebaseX.onMessageReceived().subscribe(data => {
+      if (data.tap) { // Notification received in background
+        this.openNotificationModal(data);
+      } else { // Notification received in foreground
+        this.showNotificationAsToast(data);
+      }
+    });
+  }
+
+  async showNotificationAsToast(data: any) {
+    // need to check with dingdong team about response type
+    const toast = await this.toastCtrl.create({
+      header: 'New Message',
+      message: data.title,
+      position: 'top',
+      color: 'primary',
+      buttons: [
+        {
+          icon: 'open',
+          handler: () => {
+            this.openNotificationModal(data);
+          }
+        }, {
+          icon: 'close',
+          role: 'cancel',
+          handler: () => { }
+        }
+      ]
+    });
+    toast.present();
+  }
+
+  async openNotificationModal(message: any) {
+    // need to check with dingdong team about response type
+    const modal = await this.modalCtrl.create({
+      component: NotificationModalPage,
+      componentProps: { message, notFound: 'No Message Selected' },
+    });
+    this.notificationService.sendRead(message.message_id).subscribe();
+    await modal.present();
+    await modal.onDidDismiss();
   }
 
   // DRAG AND DROP FUNCTIONS (DASHBOARD CUSTOMIZATION)
@@ -510,34 +564,34 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     const dateNow = new Date();
     const consultationsEventMode: EventComponentConfigurations[] = [];
     return forkJoin([this.ws.get<ConsultationHour[]>('/iconsult/bookings?'),
-      this.ws.get<StaffDirectory[]>('/staff/listing')
+    this.ws.get<StaffDirectory[]>('/staff/listing')
     ]).pipe(
       map(([consultations, staffList]) => {
         const filteredConsultations = consultations.filter(
           consultation => this.eventIsToday(new Date(moment(consultation.slot_start_time).utcOffset('+0800').format()), dateNow)
-                          && consultation.status === 'Booked'
+            && consultation.status === 'Booked'
         );
 
         const staffUsernames = new Set(filteredConsultations.map(consultation =>
           consultation.slot_lecturer_sam_account_name.toLowerCase()));
         const staffKeyMap = staffList
-            .filter(staff => staffUsernames.has(staff.ID.toLowerCase()))
-            .reduce(
-              (previous, current) => {
-                previous[current.ID] = current;
+          .filter(staff => staffUsernames.has(staff.ID.toLowerCase()))
+          .reduce(
+            (previous, current) => {
+              previous[current.ID] = current;
 
-                return previous;
-              },
-              {}
-            );
-        const listOfBookingWithStaffDetail = filteredConsultations.map(
-            consultation => ({
-              ...consultation,
-              ...{
-                staff_detail: staffKeyMap[consultation.slot_lecturer_sam_account_name]
-              }
-            })
+              return previous;
+            },
+            {}
           );
+        const listOfBookingWithStaffDetail = filteredConsultations.map(
+          consultation => ({
+            ...consultation,
+            ...{
+              staff_detail: staffKeyMap[consultation.slot_lecturer_sam_account_name]
+            }
+          })
+        );
 
         listOfBookingWithStaffDetail.forEach(upcomingConsultation => {
           let consultationPass = false;
