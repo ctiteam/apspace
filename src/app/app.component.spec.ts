@@ -3,7 +3,6 @@ import { TestBed, async, fakeAsync, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
 import { ModalController, Platform, PopoverController } from '@ionic/angular';
@@ -15,7 +14,6 @@ import { AppComponent } from './app.component';
 import { CasTicketService, FeedbackService, NotificationService, UserSettingsService, VersionService } from './services';
 
 describe('AppComponent', () => {
-  let firebaseXSpy: { onMessageReceived: jasmine.Spy };
   let networkSpy: { type: jasmine.Spy };
   let userSettingsServiceSpy: {
     getUserSettingsFromStorage: jasmine.Spy;
@@ -27,7 +25,6 @@ describe('AppComponent', () => {
   let shakeSpy: jasmine.SpyObj<Shake>;
 
   beforeEach(async(() => {
-    firebaseXSpy = jasmine.createSpyObj('FirebaseX', ['onMessageReceived']);
     networkSpy = jasmine.createSpyObj('Network', ['type']);
     shakeSpy = jasmine.createSpyObj('Shake', ['startWatch']);
     userSettingsServiceSpy = jasmine.createSpyObj('UserSettingsService',
@@ -39,7 +36,6 @@ describe('AppComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         Platform,
-        { provide: FirebaseX, useValue: firebaseXSpy },
         { provide: ModalController, useValue: {} },
         { provide: Network, useValue: networkSpy },
         { provide: NotificationService, useValue: {} },
@@ -58,7 +54,6 @@ describe('AppComponent', () => {
   }));
 
   it('should create the app', () => {
-    firebaseXSpy.onMessageReceived.and.returnValue(NEVER);
     networkSpy.type.and.returnValue('wifi');
     userSettingsServiceSpy.darkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.PureDarkThemeActivated.and.callFake(() => NEVER);
@@ -72,7 +67,6 @@ describe('AppComponent', () => {
   });
 
   it('should initialize the app (mobile)', fakeAsync(() => {
-    firebaseXSpy.onMessageReceived.and.returnValue(NEVER);
     networkSpy.type.and.returnValue('wifi');
     userSettingsServiceSpy.darkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.PureDarkThemeActivated.and.callFake(() => NEVER);
@@ -87,7 +81,6 @@ describe('AppComponent', () => {
     const navigateSpy = spyOn(router, 'navigate');
 
     fixture.detectChanges();
-    expect(firebaseXSpy.onMessageReceived).toHaveBeenCalled();
     expect(navigateSpy).not.toHaveBeenCalled();
     expect(platform.is).toHaveBeenCalledTimes(1);
     expect(versionServiceSpy.checkForUpdate).toHaveBeenCalledTimes(1);
@@ -96,7 +89,6 @@ describe('AppComponent', () => {
   }));
 
   it('should initialize the app (web)', fakeAsync(() => {
-    firebaseXSpy.onMessageReceived.and.returnValue(NEVER);
     userSettingsServiceSpy.darkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.PureDarkThemeActivated.and.callFake(() => NEVER);
     userSettingsServiceSpy.getAccentColor.and.callFake(() => NEVER);
@@ -108,7 +100,6 @@ describe('AppComponent', () => {
     const navigateSpy = spyOn(router, 'navigate');
 
     fixture.detectChanges();
-    expect(firebaseXSpy.onMessageReceived).not.toHaveBeenCalled();
     expect(navigateSpy).not.toHaveBeenCalled();
     expect(versionServiceSpy.checkForUpdate).toHaveBeenCalledTimes(1);
     tick(); // wait for platform promise

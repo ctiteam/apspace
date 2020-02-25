@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
 import {
   ActionSheetController, AlertController, LoadingController, MenuController, ModalController, NavController,
   Platform, PopoverController, ToastController
 } from '@ionic/angular';
-import { NotificationModalPage } from './pages/notifications/notification-modal';
-import { CasTicketService, FeedbackService, NotificationService, UserSettingsService, VersionService } from './services';
+import { CasTicketService, FeedbackService, UserSettingsService, VersionService } from './services';
 
 @Component({
   selector: 'app-root',
@@ -32,14 +30,12 @@ export class AppComponent {
     private actionSheetCtrl: ActionSheetController,
     private alertCtrl: AlertController,
     private cas: CasTicketService,
-    private firebaseX: FirebaseX,
     private feedback: FeedbackService,
     private loadingCtrl: LoadingController,
     private menuCtrl: MenuController,
     private modalCtrl: ModalController,
     private navCtrl: NavController,
     private network: Network,
-    private notificationService: NotificationService,
     private platform: Platform,
     private popoverCtrl: PopoverController,
     private router: Router,
@@ -65,9 +61,6 @@ export class AppComponent {
         if (this.network.type === 'none') {
           this.presentToast('You are now offline, only data stored in the cache will be accessable.', 6000);
         }
-        this.firebaseX.getToken().then(_ => {}); // needed for firebase
-        this.firebaseX.onTokenRefresh().subscribe(_ => {}); // needed for firebase
-        this.runCodeOnReceivingNotification(); // notifications
       }
 
       this.shake.startWatch(40).subscribe(async () => { // "shaked" the phone, "40" is the sensitivity of the shake. The lower the better!
@@ -220,52 +213,6 @@ export class AppComponent {
 
   async dismissLoading() {
     return await this.loading.dismiss();
-  }
-
-  // this will fail when the user opens the app for the first time and login because it will run before login
-  // => we need to call it here and in login page as well
-  runCodeOnReceivingNotification() {
-    this.firebaseX.onMessageReceived().subscribe(data => {
-      if (data.tap) { // Notification received in background
-        this.openNotificationModal(data);
-      } else { // Notification received in foreground
-        this.showNotificationAsToast(data);
-      }
-    });
-  }
-
-  async showNotificationAsToast(data: any) {
-    // need to check with dingdong team about response type
-    const toast = await this.toastCtrl.create({
-      header: 'New Message',
-      message: data.title,
-      position: 'top',
-      color: 'primary',
-      buttons: [
-        {
-          icon: 'open',
-          handler: () => {
-            this.openNotificationModal(data);
-          }
-        }, {
-          icon: 'close',
-          role: 'cancel',
-          handler: () => { }
-        }
-      ]
-    });
-    toast.present();
-  }
-
-  async openNotificationModal(message: any) {
-    // need to check with dingdong team about response type
-    const modal = await this.modalCtrl.create({
-      component: NotificationModalPage,
-      componentProps: { message, notFound: 'No Message Selected' },
-    });
-    this.notificationService.sendRead(message.message_id).subscribe();
-    await modal.present();
-    await modal.onDidDismiss();
   }
 
   getUserSettings() {
