@@ -61,10 +61,6 @@ export class SearchModalComponent implements AfterViewInit, OnInit {
     const filteredItems = term.length !== 0
       ? items.filter(item => item.indexOf(term) !== -1)
       : items;
-    // auto-select if there is only one item left
-    if (filteredItems.length === 1) {
-      this.select(filteredItems[0]);
-    }
     return filteredItems;
   }
 
