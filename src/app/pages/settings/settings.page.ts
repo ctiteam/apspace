@@ -204,7 +204,8 @@ export class SettingsPage implements OnInit {
 
   timetableModuleBlacklistsRemove(value) {
     const setting = this.userSettings.timetable.value;
-    setting.blacklists.splice(value, 1);
+    const selectedModule = setting.blacklists.indexOf(value);
+    setting.blacklists.splice(selectedModule, 1);
     this.userSettings.timetable.next(setting);
   }
 
