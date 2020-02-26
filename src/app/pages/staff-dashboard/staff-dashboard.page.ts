@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
-import { IonSelect, IonSlides, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, IonSelect, IonSlides, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
 import { Observable, of, zip } from 'rxjs';
@@ -235,6 +235,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     private ws: WsApiService,
     private userSettings: UserSettingsService,
     private navCtrl: NavController,
+    private alertCtrl: AlertController,
     private dragulaService: DragulaService,
     private notificationService: NotificationService,
     private renderer: Renderer2,
@@ -738,6 +739,24 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   navigateToPage(pageName: string) {
     this.navCtrl.navigateForward(pageName);
+  }
+
+  logout() {
+    this.alertCtrl.create({
+      header: 'Are you sure you want to log out?',
+      buttons: [
+        {
+          text: 'Log Out',
+          cssClass: 'alert-logout',
+          handler: () => {
+            this.navCtrl.navigateForward('/logout');
+          }
+        }, {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    }).then(alert => alert.present());
   }
 
   getNumberOfDaysForHoliday(startDate: Date, endDate: Date): string {

@@ -425,3 +425,7 @@ ion-select {
 .alert-radio-group::-webkit-scrollbar-button:vertical:single-button:increment:hover {
   border-color: #777777 transparent transparent transparent;
 }
+
+.alert-logout {
+  color: var(--danger-color) !important;
+}

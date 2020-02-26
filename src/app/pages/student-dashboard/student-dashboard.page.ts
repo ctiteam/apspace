@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { IonSelect, IonSlides, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, IonSelect, IonSlides, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import { Observable, combineLatest, forkJoin, of, zip } from 'rxjs';
 import { catchError, concatMap, finalize, flatMap, map, share, tap, toArray } from 'rxjs/operators';
 
@@ -260,6 +260,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     private studentTimetableService: StudentTimetableService,
     private userSettings: UserSettingsService,
     private navCtrl: NavController,
+    private alertCtrl: AlertController,
     private dragulaService: DragulaService,
     private notificationService: NotificationService,
     private renderer: Renderer2,
@@ -1085,6 +1086,24 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   navigateToPage(pageName: string) {
     this.navCtrl.navigateForward(pageName);
+  }
+
+  logout() {
+    this.alertCtrl.create({
+      header: 'Are you sure you want to log out?',
+      buttons: [
+        {
+          text: 'Log Out',
+          cssClass: 'alert-logout',
+          handler: () => {
+            this.navCtrl.navigateForward('/logout');
+          }
+        }, {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    }).then(alert => alert.present());
   }
 
   // GET DAY SHORT NAME (LIKE 'SAT' FOR SATURDAY)

@@ -57,7 +57,7 @@
                     <ion-badge *ngIf="numberOfUnreadMsgs > 0" color="danger">{{ numberOfUnreadMsgs }}</ion-badge>
                     <ion-icon class="responsive-icon colored-text anim-ring" name="notifications"></ion-icon>
                   </a>
-                  <a class="notifications" (click)="navigateToPage('/logout')">
+                  <a class="notifications" (click)="logout()">
                     <ion-icon class="responsive-icon danger-text anim-ring" name="log-out"></ion-icon>
                   </a>
                 </div>

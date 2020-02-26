@@ -7,7 +7,7 @@ import { Role } from '../../interfaces';
 import { CasTicketService, SettingsService, UserSettingsService } from '../../services';
 
 import { Network } from '@ionic-native/network/ngx';
-import { NavController, ToastController } from '@ionic/angular';
+import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { MenuItem } from './menu.interface';
 @Component({
   selector: 'app-more',
@@ -756,6 +756,7 @@ export class MorePage implements OnInit {
 
   constructor(
     public navCtrl: NavController,
+    public alertCtrl: AlertController,
     public iab: InAppBrowser,
     private cas: CasTicketService,
     private settings: SettingsService,
@@ -801,8 +802,26 @@ export class MorePage implements OnInit {
 
       }
     } else {
-      this.navCtrl.navigateForward([url]);
+      url !== 'logout' ? this.navCtrl.navigateForward([url]) : this.logout();
     }
+  }
+
+  logout() {
+    this.alertCtrl.create({
+      header: 'Are you sure you want to log out?',
+      buttons: [
+        {
+          text: 'Log Out',
+          cssClass: 'alert-logout',
+          handler: () => {
+            this.navCtrl.navigateForward('/logout');
+          }
+        }, {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    }).then(alert => alert.present());
   }
 
   /** No sorting for KeyValuePipe. */
