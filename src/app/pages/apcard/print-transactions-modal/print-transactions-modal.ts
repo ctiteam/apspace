@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { LoadingController, ModalController, Platform } from '@ionic/angular';
 import * as moment from 'moment';
 import { Apcard } from 'src/app/interfaces';
 
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { File } from '@ionic-native/file/ngx';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -12,6 +14,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
   templateUrl: 'print-transactions-modal.html',
 })
 export class PrintTransactionsModalPage implements OnInit {
+  loading: HTMLIonLoadingElement;
   transactions: Apcard[];
   now = new Date();
   max = moment(this.now).format('YYYY-MM-DD').toString();
@@ -22,16 +25,38 @@ export class PrintTransactionsModalPage implements OnInit {
   tableBody: any;
   summaryBody: any;
   noRecordsForSelectedMonth = false;
+  pdfTitle = '';
 
   ngOnInit() { }
 
-  constructor(private modalCtrl: ModalController) { }
+  constructor(
+    private modalCtrl: ModalController,
+    private plt: Platform,
+    private file: File,
+    private fileOpener: FileOpener,
+    private loadingCtrl: LoadingController
+  ) { }
 
   dismiss() {
     this.modalCtrl.dismiss();
   }
 
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
+  }
+
   generatePdf() {
+    this.presentLoading();
     const yearMonthDate = new Date(this.yearMonthModel);
     let numberOfItems = 0, totalSpent = 0, totalTopup = 0;
     // let firstTransaction: Apcard;
@@ -76,15 +101,16 @@ export class PrintTransactionsModalPage implements OnInit {
     });
 
     if (this.tableBody.length === 1) {
+      this.dismissLoading();
       this.noRecordsForSelectedMonth = true;
       return false;
     }
 
-    const pdfTitle = `${this.transactionTypeModel}_apcard_transactions_for_${yearMonthDate.getFullYear()}_${yearMonthDate.getMonth() + 1}`;
+    this.pdfTitle = `${this.transactionTypeModel}_apcard_transactions_for_${yearMonthDate.getFullYear()}_${yearMonthDate.getMonth() + 1}`;
 
     const docDefinition = {
       info: {
-        title: pdfTitle,
+        title: this.pdfTitle,
         author: 'APSpace_Reports',
         subject: `APCard @ ${this.now.toString()}`,
         keywords: 'APCard APSpace Reports',
@@ -264,7 +290,27 @@ export class PrintTransactionsModalPage implements OnInit {
       }
     };
     this.pdfObj = pdfMake.createPdf(docDefinition);
-    this.pdfObj.download(pdfTitle + '.pdf');
+    this.downloadFile();
+    // this.pdfObj.download(pdfTitle + '.pdf');
+  }
+
+  downloadFile() {
+    if (this.plt.is('cordova')) {
+      this.pdfObj.getBuffer((buffer) => {
+        const blob = new Blob([buffer], { type: 'application/pdf' });
+
+        // Save the PDF to the data Directory of our App
+        this.file.writeFile(this.file.dataDirectory, `${this.pdfTitle}.pdf`, blob, { replace: true }).then(_ => {
+          // Open the PDf with the correct OS tools
+          this.dismissLoading();
+          this.fileOpener.open(this.file.dataDirectory + `${this.pdfTitle}.pdf`, 'application/pdf');
+        });
+      });
+    } else {
+      // On a browser simply use download!
+      this.dismissLoading();
+      this.pdfObj.download(this.pdfTitle + '.pdf');
+    }
   }
 
 }
