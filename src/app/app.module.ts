@@ -10,6 +10,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { ActionSheet } from '@ionic-native/action-sheet/ngx';
 import { AppAvailability } from '@ionic-native/app-availability/ngx';
 import { Device } from '@ionic-native/device/ngx';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
@@ -69,6 +70,7 @@ import { NotificationModalModule } from './pages/notifications/notification-moda
     StatusBar,
     Camera,
     File,
+    FileOpener,
     Vibration,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: RequestCache, useClass: RequestCacheWithMapStorage },
