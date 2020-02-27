@@ -19,14 +19,14 @@
             <ion-col size="12" size-md="6">
               <ion-item lines="none">
                 <ion-label position="stacked">Travel Document Number</ion-label>
-                <ion-input [(ngModel)]="passportNumber" placeholder="Passport Number" class="form-input">
+                <ion-input [disabled]="isStudent" [(ngModel)]="passportNumber" placeholder="Passport Number" class="form-input">
                 </ion-input>
               </ion-item>
             </ion-col>
             <ion-col size="12" size-md="6">
               <ion-item lines="none">
                 <ion-label position="stacked">Nationality</ion-label>
-                <ion-select [(ngModel)]="alpha3Code" interface="popover" placeholder="Click to select"
+                <ion-select [disabled]="isStudent" [(ngModel)]="alpha3Code" interface="popover" placeholder="Click to select"
                   class="form-input">
                   <ion-select-option *ngFor="let country of listOfCountries" [value]="country.alpha3Code">
                     {{ country.name }}
@@ -35,7 +35,7 @@
               </ion-item>
             </ion-col>
           </ion-row>
-          <ion-row class="ion-padding-start ion-padding-end">
+          <ion-row *ngIf="!isStudent" class="ion-padding-start ion-padding-end">
             <ion-col size="12" size-md="3">
               <ion-button expand="block" class="colored-background" (click)="getVisa(true)">Search</ion-button>
             </ion-col>

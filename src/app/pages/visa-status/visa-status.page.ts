@@ -24,11 +24,11 @@ export class VisaStatusPage implements OnInit {
   // used to show and hide card
   historyStatus = true;
 
-  countryName: string;
   passportNumber: string;
   alpha3Code = '';
   listOfCountries: CountryData[];
   sendRequest = false;
+  isStudent = false;
   // skeleton
   skeletons = new Array(5);
 
@@ -41,6 +41,7 @@ export class VisaStatusPage implements OnInit {
   ngOnInit() {
     // tslint:disable-next-line: no-bitwise
     if (this.settings.get('role') & Role.Student) {
+      this.isStudent = true;
       this.sendRequest = true;
       this.getProfile();
     }
@@ -60,27 +61,15 @@ export class VisaStatusPage implements OnInit {
   getProfile() {
     this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).pipe(
       tap(p => {
-        this.countryName = p.COUNTRY;
         this.passportNumber = p.IC_PASSPORT_NO;
-        if (p.COUNTRY === 'Malaysia') {
+        this.alpha3Code = p.EMGS_COUNTRY_CODE;
+        if (this.alpha3Code === 'MYS') {
           this.local = true;
         } else {
           this.local = false;
         }
-        this.getAlpha3Code();
+        this.getVisa();
       }),
-    ).subscribe();
-  }
-
-  getAlpha3Code() {
-    // alpha 3 code example: Libya => LBY
-    this.ws.get<CountryData[]>(`/name/${this.countryName}?fields=name;alpha3Code`, {
-      url: 'https://restcountries.eu/rest/v2',
-      auth: false,
-      caching: 'cache-only',
-    }).pipe(
-      tap(res => this.alpha3Code = res[0].alpha3Code),
-      tap(_ => this.getVisa()),
     ).subscribe();
   }
 
