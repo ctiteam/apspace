@@ -14,7 +14,7 @@ import { CalendarComponentOptions } from 'ion2-calendar';
 import { Venue } from 'src/app/interfaces';
 import { SettingsService, WsApiService } from 'src/app/services';
 
-import * as moment from 'moment';
+import { add, format, parseISO } from 'date-fns';
 import { shareReplay } from 'rxjs/operators';
 import { AddFreeSlotValidator } from './add-free-slot.validator';
 
@@ -34,25 +34,15 @@ export class AddFreeSlotPage implements OnInit {
 
   // Options for the ion-calendar (start date)
   mainDateOptions: CalendarComponentOptions = {
-    from: moment(this.todaysDate)
-      .add(1, 'day')
-      .toDate(),
-    to: moment(this.todaysDate)
-      .add(1, 'day')
-      .add(12, 'month')
-      .toDate(),
+    from: add(parseISO(this.todaysDate), {days: 1}),
+    to: add(parseISO(this.todaysDate), {days: 1, months: 12}),
     disableWeeks: [0]
   };
 
   // Options for the ion-calendar (end date)
   repeatUntilDateOptions: CalendarComponentOptions = {
-    from: moment(this.todaysDate)
-      .add(2, 'day')
-      .toDate(),
-    to: moment(this.todaysDate)
-      .add(1, 'day')
-      .add(12, 'month')
-      .toDate()
+    from: add(parseISO(this.todaysDate), {days: 2}),
+    to: add(parseISO(this.todaysDate), {days: 1, months: 12})
   };
 
   consultationTypeOptions = [
@@ -92,9 +82,7 @@ export class AddFreeSlotPage implements OnInit {
     this.addFreeSlotForm = this.formBuilder.group({
       slotType: [this.consultationTypeOptions[0].value, Validators.required], // alwayes required
       startDate: [
-        moment(this.todaysDate)
-          .add(1, 'day')
-          .format('YYYY-MM-DD'),
+        format(add(parseISO(this.todaysDate), {days: 1}), 'yyyy-MM-dd'),
         Validators.required
       ], // always required
       repeatOn: [[]],
@@ -173,7 +161,7 @@ export class AddFreeSlotPage implements OnInit {
       this.addFreeSlotForm.value.time.forEach(time => {
         const timeSlot = {
           location_id: this.addFreeSlotForm.value.venue,
-          datetime: startDate + 'T' + moment(time.slotsTime).format('HH:mm:00+0800')
+          datetime: startDate + 'T' + format(parseISO(time.slotsTime), 'HH:mm:00+0800')
         };
 
         body.push(timeSlot);
@@ -182,18 +170,16 @@ export class AddFreeSlotPage implements OnInit {
       let endDate = this.addFreeSlotForm.value.endDate;
 
       if (this.addFreeSlotForm.value.noOfWeeks > 0) {
-        endDate = moment(this.addFreeSlotForm.value.startDate, 'YYYY-MM-DD')
-          .add((+this.addFreeSlotForm.value.noOfWeeks * 7) - 1, 'days')
-          .format('YYYY-MM-DD');
+        endDate = format(add(this.addFreeSlotForm.value.startDate, {days: (+this.addFreeSlotForm.value.noOfWeeks * 7) - 1}), 'yyyy-MM-dd');
       }
 
       while (startDate < endDate) {
-        const dayName = moment(startDate).format('ddd');
+        const dayName = format(startDate, 'ddd');
         if (this.addFreeSlotForm.value.repeatOn.includes(dayName)) {
           this.addFreeSlotForm.value.time.forEach(time => {
             const timeSlot = {
               location_id: this.addFreeSlotForm.value.venue,
-              datetime: startDate + 'T' + moment(time.slotsTime).format('HH:mm:00+0800')
+              datetime: startDate + 'T' + format(parseISO(time.slotsTime), 'HH:mm:00+0800')
               // 2019-11-27T17:00:00Z
             };
 
@@ -201,7 +187,7 @@ export class AddFreeSlotPage implements OnInit {
           });
         }
 
-        const nextDate = moment(startDate).add(1, 'd').format('YYYY-MM-DD');
+        const nextDate = format(add(startDate, {days: 1}), 'yyyy-MM-dd');
         startDate = nextDate;
       }
     }
@@ -215,7 +201,7 @@ export class AddFreeSlotPage implements OnInit {
             'Are you sure you want to add new slot(s) with the following details:',
           message: `<p><strong>Slot Date: </strong> ${this.addFreeSlotForm.value.startDate}</p>
                     <p><strong>Slot Time: </strong>
-                    ${this.addFreeSlotForm.value.time.map(time => moment(time.slotsTime).format('kk:mm'))}</p>
+                    ${this.addFreeSlotForm.value.time.map(time => format(parseISO(time.slotsTime), 'kk:mm'))}</p>
                     <p><strong>Slot Location: </strong> ${this.addFreeSlotForm.value.location}</p>
                     <p><strong>Slot Venue: </strong> ${venue.room_code} </p>`,
           buttons: [
@@ -362,19 +348,12 @@ export class AddFreeSlotPage implements OnInit {
       this.formFields.slotType.value === this.consultationTypeOptions[2].value
     ) {
       this.repeatUntilDateOptions = {
-        from: moment(event, 'YYYY-MM-DD')
-          .add(1, 'day')
-          .toDate(),
-        to: moment(this.todaysDate)
-          .add(1, 'day')
-          .add(12, 'month')
-          .toDate()
+        from: add(event, {days: 1}),
+        to: add(parseISO(this.todaysDate), {days: 1, months: 12})
       };
       // Set the end date to the first available day
       this.formFields.endDate.setValue(
-        moment(event, 'YYYY-MM-DD')
-          .add(1, 'day')
-          .format('YYYY-MM-DD')
+        format(add(event, {days: 1}), 'yyyy-MM-dd')
       );
     }
   }

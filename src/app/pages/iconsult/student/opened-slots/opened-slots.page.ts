@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
 import { DatePipe } from '@angular/common';
-import * as moment from 'moment';
+import { parseISO } from 'date-fns';
 import { ConsultationSlot, StaffDirectory } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { BookSlotModalPage } from './book-slot-modal';
@@ -94,7 +94,7 @@ export class OpenedSlotsPage {
                       : null;
 
                 this.daysConfigrations.push({
-                  date: moment(day, 'YYYY-MM-DD').toDate(),
+                  date: parseISO(day),
                   subTitle: '.',
                   cssClass: cssClass + ' colored',
                   disable: false

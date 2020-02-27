@@ -11,7 +11,8 @@ import { AppLauncherService, WsApiService } from 'src/app/services';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 import { SlotDetailsModalPage } from './slot-details-modal';
 
-import * as moment from 'moment';
+import { format } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 @Component({
   selector: 'app-my-appointments',
@@ -46,7 +47,8 @@ export class MyAppointmentsPage {
     const bookings$: Observable<ConsultationHour[]> = this.ws.get<ConsultationHour[]>('/iconsult/bookings?').pipe(
       map(bookingList => { // Check if slot is passed and modify its status to passed
         return bookingList.map(bookings => {
-          if (bookings.status === 'Booked' && new Date(moment(bookings.slot_start_time).utcOffset('+0800').format()) < new Date()) {
+          if (bookings.status === 'Booked' && utcToZonedTime(new Date(bookings.slot_start_time), 'Asia/Kuala_Lumpur')
+          < utcToZonedTime(new Date(), 'Asia/Kuala_Lumpur')) {
             bookings.status = 'Passed';
           }
           return bookings;
@@ -134,7 +136,7 @@ export class MyAppointmentsPage {
   }
 
   async cancelBooking(booking) {
-    const startDate = moment(booking.slot_start_time).format('YYYY-MM-DD');
+    const startDate = format(new Date(booking.slot_start_time), 'yyyy-MM-dd');
     const alert = await this.alertController.create({
       header: `Cancelling Appointment with ${booking.staff_detail.FULLNAME} on ${startDate}`,
       message: 'Please provide us with the cancellation reason:',
