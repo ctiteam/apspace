@@ -3,7 +3,6 @@ import { IonSelect, IonSlides, ModalController, NavController } from '@ionic/ang
 
 import { format, parse, parseISO } from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
-import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
 import { Observable, of, zip } from 'rxjs';
 import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
@@ -414,9 +413,9 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
         return eventsList.sort((eventA, eventB) => {
-          return parse(eventA.dateOrTime, 'HH:mm a', new Date()) > parse(eventB.dateOrTime, 'HH:mm a', new Date())
+          return parse(eventA.dateOrTime, 'hh:mm a', new Date()) > parse(eventB.dateOrTime, 'hh:mm a', new Date())
             ? 1
-            : parse(eventA.dateOrTime, 'HH:mm a', new Date()) < parse(eventB.dateOrTime, 'HH:mm a', new Date())
+            : parse(eventA.dateOrTime, 'hh:mm a', new Date()) < parse(eventB.dateOrTime, 'hh:mm a', new Date())
               ? -1
               : 0;
         });
@@ -451,7 +450,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
         timetables.forEach((timetable: LecturerTimetable) => {
           let classPass = false;
-          if (this.eventPass(format(new Date(timetable.time), 'HH:mm a'), d)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
+          if (this.eventPass(format(new Date(timetable.time), 'hh:mm a'), d)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
             classPass = true;
           }
 
@@ -482,20 +481,21 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     return this.ws.get<ConsultationSlot[]>('/iconsult/slots?').pipe(
       map(consultations =>
         consultations.filter(
-          consultation => this.eventIsToday(new Date(moment(consultation.start_time).utcOffset('+0800').format()), dateNow)
+          consultation => this.eventIsToday(utcToZonedTime(new Date(consultation.start_time), 'Asia/Kuala_Lumpur'), dateNow)
             && consultation.status === 'Booked'
         )
       ),
       map(upcomingConsultations => {
         upcomingConsultations.forEach(upcomingConsultation => {
           let consultationPass = false;
-          if (this.eventPass(moment(upcomingConsultation.start_time).utcOffset('+0800').format('hh:mm A'), dateNow)) {
+          if (this.eventPass(format(utcToZonedTime(new Date(upcomingConsultation.start_time), 'Asia/Kuala_Lumpur'), 'hh:mm a'), dateNow)) {
             // CHANGE CLASS STATUS TO PASS IF IT PASS
             consultationPass = true;
           }
           const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
-            moment(moment(upcomingConsultation.start_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate(),
-            moment(moment(upcomingConsultation.end_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate());
+            utcToZonedTime(new Date(upcomingConsultation.start_time), 'Asia/Kuala_Lumpur'),
+            utcToZonedTime(new Date(upcomingConsultation.end_time), 'Asia/Kuala_Lumpur')
+          );
           consultationsEventMode.push({
             title: 'Consultation Hour',
             color: '#d35400',
@@ -506,7 +506,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
             firstDescription: upcomingConsultation.room_code + ' | ' + upcomingConsultation.venue,
             // secondDescription: upcomingConsultation.lecname,
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
-            dateOrTime: moment(upcomingConsultation.start_time).utcOffset('+0800').format('hh mm A'),
+            dateOrTime: format(utcToZonedTime(new Date(upcomingConsultation.start_time), 'Asia/Kuala_Lumpur'), 'hh mm a'),
           });
         });
         return consultationsEventMode;

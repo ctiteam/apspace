@@ -441,9 +441,9 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
         return eventsList.sort((eventA, eventB) => {
-          return parse(eventA.dateOrTime, 'HH:mm a', new Date()) > parse(eventB.dateOrTime, 'HH:mm a', new Date())
+          return parse(eventA.dateOrTime, 'hh:mm a', new Date()) > parse(eventB.dateOrTime, 'hh:mm a', new Date())
             ? 1
-            : parse(eventA.dateOrTime, 'HH:mm a', new Date()) < parse(eventB.dateOrTime, 'HH:mm a', new Date())
+            : parse(eventA.dateOrTime, 'hh:mm a', new Date()) < parse(eventB.dateOrTime, 'hh:mm a', new Date())
               ? -1
               : 0;
         });
@@ -483,8 +483,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
         const timetableEventMode: EventComponentConfigurations[] = [];
         timetables.forEach((timetable: StudentTimetable) => {
           const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
-            parse(timetable.TIME_FROM, 'HH:mm a', new Date()),
-            parse(timetable.TIME_TO, 'HH:mm a', new Date()));
+            parse(timetable.TIME_FROM, 'hh:mm a', new Date()),
+            parse(timetable.TIME_TO, 'hh:mm a', new Date()));
           let classPass = false;
           if (this.eventPass(timetable.TIME_FROM, dateNow)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
             classPass = true;
@@ -499,7 +499,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
             passColor: '#d7dee3',
             outputFormat: 'event-with-time-and-hyperlink',
             type: 'class',
-            dateOrTime: format(parse(timetable.TIME_FROM, 'HH:mm a', new Date()), 'hh mm a'), // EXPECTED FORMAT HH MM A
+            dateOrTime: format(parse(timetable.TIME_FROM, 'hh:mm a', new Date()), 'hh mm a'), // EXPECTED FORMAT HH MM A
           });
         });
         return timetableEventMode;
@@ -587,7 +587,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   eventPass(eventTime: string, todaysDate: Date) {
-    if (parse(eventTime, 'HH:mm a', new Date()) >= todaysDate) {
+    if (parse(eventTime, 'hh:mm a', new Date()) >= todaysDate) {
       return false;
     }
     return true;
@@ -1033,7 +1033,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   // GENERAL FUNCTIONS
   getSecondsDifferenceBetweenTwoDates(startDate: Date, endDate: Date): number {
-    // PARAMETERS MUST BE STRING. FORMAT IS ('HH:mm A')
+    // PARAMETERS MUST BE STRING. FORMAT IS ('hh:mm A')
     // RETURN TYPE IS STRING. FORMAT: 'HH hrs mm min'
     return (endDate.getTime() - startDate.getTime()) / 1000;
   }
