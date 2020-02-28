@@ -453,7 +453,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       }),
       tap(studentProfile => this.defaultIntake = studentProfile.INTAKE),
       tap(studentProfile => this.studentFirstName$ = of(studentProfile.NAME.split(' ')[0])),
-      tap(studentProfile => this.getTodaysSchdule(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR TIMETABLE
+      tap(studentProfile => this.getTodaysSchdule(studentProfile.INTAKE, refresher)),
       tap(studentProfile => this.getUpcomingEvents(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR EXAMS
       tap(studentProfile => this.getAttendance(studentProfile.INTAKE, true)), // no-cache for attendance
       // tap(studentProfile => this.getUpcomingExam(studentProfile.INTAKE)),
@@ -489,7 +489,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   getTodaysSchdule(intake: string, refresher: boolean) {
     // MERGE TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
     this.todaysSchedule$ = combineLatest([
-      this.getUpcomingClasses(intake, refresher),
+      // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
+      this.getUpcomingClasses(intake.replace(/[(]AP[)]|[(]BP[)]/g, ''), refresher),
       this.getUpcomingConsultations() // no-cache for upcoming consultations (students)
     ]).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
@@ -515,6 +516,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getUpcomingClasses(intake: string, refresher): Observable<EventComponentConfigurations[]> {
+    console.log(intake);
     const dateNow = new Date();
     return combineLatest([
       this.studentTimetableService.get(refresher),
@@ -649,7 +651,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   getUpcomingEvents(intake: string, refresher: boolean) {
     const todaysDate = new Date();
     this.upcomingEvent$ = zip(
-      this.getupcomingExams(intake, todaysDate, true),
+      // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
+      this.getupcomingExams(intake.replace(/[(]AP[)]|[(]BP[)]/g, ''), todaysDate, true),
       this.getUpcomingHoliday(todaysDate, refresher)
     ).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
