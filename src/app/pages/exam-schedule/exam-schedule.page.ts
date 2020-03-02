@@ -50,7 +50,8 @@ export class ExamSchedulePage {
 
         /* tslint:enable:no-bitwise */
         this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
-          this.intake = p.INTAKE;
+          // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
+          this.intake = p.INTAKE.replace(/[(]AP[)]|[(]BP[)]/g, '');
         },
           (_) => { },
           () => this.doRefresh()
