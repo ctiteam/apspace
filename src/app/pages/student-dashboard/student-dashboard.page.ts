@@ -55,7 +55,9 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // PROFILE
   photo$: Observable<StudentPhoto>;
   greetingMessage = '';
-  defaultIntake = '';
+  // attendance default intake can be different from timetable default intake
+  attendanceDefaultIntake = '';
+  timetableDefaultIntake = '';
   studentFirstName$: Observable<string>;
   block = false;
   numberOfUnreadMsgs: number;
@@ -451,7 +453,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
           this.block = true;
         }
       }),
-      tap(studentProfile => this.defaultIntake = studentProfile.INTAKE),
+      tap(studentProfile => this.attendanceDefaultIntake = studentProfile.INTAKE),
       tap(studentProfile => this.studentFirstName$ = of(studentProfile.NAME.split(' ')[0])),
       tap(studentProfile => this.getTodaysSchdule(studentProfile.INTAKE, refresher)),
       tap(studentProfile => this.getUpcomingEvents(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR EXAMS
@@ -516,7 +518,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getUpcomingClasses(intake: string, refresher): Observable<EventComponentConfigurations[]> {
-    console.log(intake);
+    this.timetableDefaultIntake = intake;
     const dateNow = new Date();
     return combineLatest([
       this.studentTimetableService.get(refresher),

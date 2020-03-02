@@ -193,7 +193,7 @@
           <events-list [observable$]="todaysSchedule$"></events-list>
           <div class="ion-padding">
             <p><span class="danger-text">Note:</span> The upcoming classes in this section belong to your default intake
-              which is: <span class="text-bold">{{defaultIntake}}</span></p>
+              which is: <span class="text-bold">{{timetableDefaultIntake}}</span></p>
           </div>
         </dashboard-card>
       </div>
@@ -262,7 +262,7 @@
             [cardSubtitle]='"Overall: " + (overallAttendancePercent.value != "-1" ? ((overallAttendancePercent.value | number: "1.0-1") + "%") : "--")'
             [contentPadding]='lowAttendanceCardConfigurations.contentPadding'
             [withOptionsButton]='lowAttendanceCardConfigurations.withOptionsButton'>
-            <app-message-with-svg messageTitle="Your Attendance is Above 80% in all {{defaultIntake}} Modules!"
+            <app-message-with-svg messageTitle="Your Attendance is Above 80% in all {{attendanceDefaultIntake}} Modules!"
               messageContent="Great Job. You are attending the classes regularly." imageUrl="assets/img/happy.svg"
               wrapperOffset="3" wrapperSize="6">
             </app-message-with-svg>
