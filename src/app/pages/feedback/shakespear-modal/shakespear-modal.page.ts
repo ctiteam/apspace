@@ -156,12 +156,12 @@ export class ShakespearModalPage implements OnInit {
       contactNo: this.contactNo || '',
       platform: this.platform,
       message: this.message,
+      mobile: 'Yes', // Confident that Shakespear will only work on Devices with 'Cordova'.
       attachments: this.images.map((img: string) => img.replace('data:image/jpeg;base64,', '').trim()).join('&&'),
       pageUrl: `${this.router.url}`,
       appVersion: this.appVersion,
       screenSize: this.screenSize,
     };
-    console.log(feedback);
     this.presentLoading();
     this.submitting = true;
     this.feedback.sendFeedback(feedback).subscribe(_ => {
