@@ -76,7 +76,7 @@
                       Shake Sensitivity
                     </ion-col>
                     <ion-col size="12" size-sm="12" style="padding-top: 0px; padding-bottom: 10px;">
-                      <ion-range pin="true" min="0" max="4" step="1" ticks="true" snaps="true" [(ngModel)]="shakeSensitivity" (ionChange)="getSensitivitySlider()" ></ion-range>
+                      <ion-range pin="true" class="dynamic" min="0" max="4" step="1" ticks="true" snaps="true" [(ngModel)]="shakeSensitivity" (ionChange)="getSensitivitySlider()" ></ion-range>
                       <ion-label>
                         Slow
                         <div class="centered-text">
