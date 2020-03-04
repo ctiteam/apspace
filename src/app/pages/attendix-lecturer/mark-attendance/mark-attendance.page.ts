@@ -5,8 +5,8 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { authenticator } from 'otplib/otplib-browser';
 import { NEVER, Observable, Subject, timer } from 'rxjs';
 import {
-  catchError, finalize, first, map, pluck, scan, shareReplay, startWith,
-  switchMap, tap,
+  catchError, endWith, finalize, first, map, pluck, scan, shareReplay,
+  startWith, switchMap, takeUntil, tap,
 } from 'rxjs/operators';
 
 import {
@@ -108,12 +108,16 @@ export class MarkAttendancePage implements OnInit {
       shareReplay(1) // used shareReplay for observable subscriptions time gap
     );
 
-    // only regenerate otp when needed
+    // only regenerate otp when needed until class ends with 5 minutes buffer
+    const hh = +schedule.endTime.slice(0, 2) % 12 + (schedule.endTime.slice(-2) === 'PM' ? 12 : 0);
+    const mm = +schedule.endTime.slice(3, 5) + 5;
     this.otp$ = secret$.pipe(
       switchMap(secret =>
         timer(authenticator.timeRemaining() * 1000, authenticator.options.step * 1000).pipe(
+          takeUntil(timer(new Date(schedule.date).setHours(hh, mm) - new Date().getTime())),
           startWith(() => authenticator.generate(secret)),
-          map(() => authenticator.generate(secret))
+          map(() => authenticator.generate(secret)),
+          endWith('---')
         )
       )
     );

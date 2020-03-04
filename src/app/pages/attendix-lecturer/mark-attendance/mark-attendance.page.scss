@@ -16,6 +16,15 @@
   font-family: 'Hack', 'Iconsolata', monospace;
 }
 
+.dead {
+  position: absolute;
+  top: calc(50vh - 3ex);
+  left: calc((100% - 600px) / 2 + 1em);
+  font-size: 5rem;
+  color: red;
+  text-shadow: white 2px 5px;
+}
+
 .stateR {
   --color: #000000;
   --background: #e0e0e0 !important;

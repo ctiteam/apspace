@@ -1405,6 +1405,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/camera@^5.20.0":
+  version "5.21.6"
+  resolved "https://registry.yarnpkg.com/@ionic-native/camera/-/camera-5.21.6.tgz#4392bcd453abc48900318b453bb2daeb73690271"
+  integrity sha512-qw0YcCPfyM0kRgKhncBPWScqMmCV6qQStSFzQSmK1qlp8+vAuljMgSnQ1giG2ORFrjRd3+KPogKZ28mEXpCpXA==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/core@^5.15.0":
   version "5.17.1"
   resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-5.17.1.tgz#d64c68c1792a5c1907c5754aaf9d00c9f6793e43"
@@ -1419,10 +1426,24 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/fcm@^5.15.0":
-  version "5.17.1"
-  resolved "https://registry.yarnpkg.com/@ionic-native/fcm/-/fcm-5.17.1.tgz#5518777bbe40c4f068385bbec51a035caa0a8d20"
-  integrity sha512-rb5+ldaeUccp76ovKuOvOaSgNrnzSVcFSprcf0uyKAfSxc5pO8fHL6hVQymkuJws+RBZJ1a2jtQUSgysg5RW7Q==
+"@ionic-native/file-opener@^5.21.6":
+  version "5.21.6"
+  resolved "https://registry.yarnpkg.com/@ionic-native/file-opener/-/file-opener-5.21.6.tgz#e9626a57c5899fd0652af26803af014aab470970"
+  integrity sha512-0nHimjm97hNA8Mtuhmm01BjXNBxi53KNpE1uEGOmfLNv8gO8o2W6LKrM3S54dbXmsrfiO103Hp9R6gnCs11MCg==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/file@^5.20.0":
+  version "5.21.6"
+  resolved "https://registry.yarnpkg.com/@ionic-native/file/-/file-5.21.6.tgz#da10249af0b51c445def889e26f4136e4a69d757"
+  integrity sha512-RBa9xCNMAwTRRxRHXJsALSniAu12B9/16Oy2JkoA7ghvo1Qocfy7x2OkmSEtc3PmJDJFxVs0sBifvnItKQ+xiQ==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/firebase-x@^5.21.5":
+  version "5.21.6"
+  resolved "https://registry.yarnpkg.com/@ionic-native/firebase-x/-/firebase-x-5.21.6.tgz#7aca5c7e47245c3ca0fe5ad481fe142af210eafa"
+  integrity sha512-NS7FEa1DMP3mBOrrOOMPan9cj+VCyLbqHPBcUooFchIGtsrYcMiBHq+q7NQyrKhry3BFSG2PusKR8oTr0TCyoQ==
   dependencies:
     "@types/cordova" latest
 
@@ -1447,6 +1468,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/screenshot@^5.19.1":
+  version "5.21.6"
+  resolved "https://registry.yarnpkg.com/@ionic-native/screenshot/-/screenshot-5.21.6.tgz#68fe4b44b86ab0cc3e263a68083577ba21ba4ac3"
+  integrity sha512-m4J88hAvbe/+NmfC/gVmmfOGDEvhdVWxWLISeZJL1Av6PYRJoia7aj0JH3xXnRvjV3/8it/Oz5MI6ZLKto6xBA==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/shake@^5.19.1":
   version "5.19.1"
   resolved "https://registry.yarnpkg.com/@ionic-native/shake/-/shake-5.19.1.tgz#3a2f86bf1994fbd6700498ab5213fa6aae1154f0"
@@ -1465,6 +1493,13 @@
   version "5.17.1"
   resolved "https://registry.yarnpkg.com/@ionic-native/status-bar/-/status-bar-5.17.1.tgz#8a6cbe30eacaf315ace142e0b1cc02326117f097"
   integrity sha512-RaccJY1A2lMugg3vIzG3/HZ6NrYW4XcFLG9qxJMLrRxLlsNv/F2L/MznJFJL31Tl+cOm5L7BaQePeWhcQPZhpg==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/vibration@^5.20.0":
+  version "5.21.6"
+  resolved "https://registry.yarnpkg.com/@ionic-native/vibration/-/vibration-5.21.6.tgz#e62a9efd964fc88ab68a66515f757db1a1a590e6"
+  integrity sha512-sVmB4sHJ0MG+3IwmSvaHUATEM9D8ZFKko/1orHALTwGN57o0Ncf/n37PKWdPp8BANmYhTAoj6iOBd+YNonhf3w==
   dependencies:
     "@types/cordova" latest
 
@@ -3765,6 +3800,11 @@ colors@^1.1.0, colors@^1.1.2:
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.4.0.tgz#c50491479d4c1bdaed2c9ced32cf7c7dc2360f78"
   integrity sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==
 
+com.darktalker.cordova.screenshot@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/com.darktalker.cordova.screenshot/-/com.darktalker.cordova.screenshot-0.1.6.tgz#647a53450f9617219b63283f586685e27cdb96b3"
+  integrity sha1-ZHpTRQ+WFyGbYyg/WGaF4nzblrM=
+
 combined-stream@^1.0.6, combined-stream@~1.0.6:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.8.tgz#c3d45a8b34fd730631a110a8a2520682b31d5a7f"
@@ -4059,6 +4099,22 @@ cordova-plugin-actionsheet@^2.3.3:
   resolved "https://registry.yarnpkg.com/cordova-plugin-actionsheet/-/cordova-plugin-actionsheet-2.3.3.tgz#e9261b2d004a8da407388d60df534c156c52ff11"
   integrity sha1-6SYbLQBKjaQHOI1g31NMFWxS/xE=
 
+cordova-plugin-androidx-adapter@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-androidx-adapter/-/cordova-plugin-androidx-adapter-1.1.0.tgz#5696f0c972242ded2ecbd73bd6dadfdb42d6e274"
+  integrity sha512-V09W27ViYnh54fR2eilswXt10DrQ1P23fo+3JdbrHqU5HkNfufWojK9dWPzDYQ6xKQkOkUJcEh6tLWxg5hQdgg==
+  dependencies:
+    performance-now "^2.1.0"
+    q "^1.4.1"
+    recursive-readdir "^2.2.2"
+
+cordova-plugin-androidx@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-androidx/-/cordova-plugin-androidx-1.0.2.tgz#a48d3fabf20beb4273171fdece0b524362b2643f"
+  integrity sha512-gA0Ugz3xXRndZ5+QV+T2BjigNt5YraC+uDA/gOEM6p4m4ofwqFAPoHA4Q17VIHnRtn9++OYoa1Gi44+l6blGhA==
+  dependencies:
+    q "^1.4.1"
+
 cordova-plugin-appavailability@^0.4.2:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/cordova-plugin-appavailability/-/cordova-plugin-appavailability-0.4.2.tgz#a017aaf0f8827ee599dc778b6245dcc1350bcba8"
@@ -4068,6 +4124,11 @@ cordova-plugin-badge@^0.8.8:
   version "0.8.8"
   resolved "https://registry.yarnpkg.com/cordova-plugin-badge/-/cordova-plugin-badge-0.8.8.tgz#0924018699b48f92dd3b33615452737582144c96"
   integrity sha512-RhIBtd5xhD/iLnxjt35jvOae28oNW/wtMZBOmQR3Rf0y4wirvA1bpAZEhBoFqL+rZGhsd6ddOdQXdex1T0DRyQ==
+
+cordova-plugin-camera@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-camera/-/cordova-plugin-camera-4.1.0.tgz#6474a3e080c4662aa00fd7425705d301c693ddc0"
+  integrity sha512-fCLhWjWYn49q3X5xaypAPgTz6MAWSKFFQvD2Gpi5SuVlrRPRphtX2jIqR2zCBuDTBR082QVnlc+yUDXt65Mjgw==
 
 cordova-plugin-device-motion@^2.0.1:
   version "2.0.1"
@@ -4079,10 +4140,24 @@ cordova-plugin-device@^2.0.3:
   resolved "https://registry.yarnpkg.com/cordova-plugin-device/-/cordova-plugin-device-2.0.3.tgz#c2b41b7efd0455dd097f89356d85bfdd5dadeb0f"
   integrity sha512-Jb3V72btxf3XHpkPQsGdyc8N6tVBYn1vsxSFj43fIz9vonJDUThYPCJJHqk6PX6N4dJw6I4FjxkpfCR4LDYMlw==
 
-cordova-plugin-fcm-with-dependecy-updated@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-fcm-with-dependecy-updated/-/cordova-plugin-fcm-with-dependecy-updated-4.1.1.tgz#b33258af2293261ea768983de038335be5c6512e"
-  integrity sha512-2pZZ9EZ2tAGOE3KlyzBuWEPAB6DqDt8GIMMXAnAaHWlpZ5warL3DcoUKJJ/pEAUsEhXQ0+4OqlgBLGiyBBIRJw==
+cordova-plugin-file-opener2@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-file-opener2/-/cordova-plugin-file-opener2-3.0.0.tgz#2c0724296564731db3fa25f1726ac232281fab01"
+  integrity sha512-yQcJ5coOlfkDcTfIhFJEL2A7SWtLhy50y51Cb+EEkI7Y0lP74Ec2tsMtIOhe9i8wPSoSfnDcN77Hj6CSeIjogA==
+
+cordova-plugin-file@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-file/-/cordova-plugin-file-6.0.2.tgz#f3911479f8357e9aacb5576674f8d95b31a1fb20"
+  integrity sha512-m7cughw327CjONN/qjzsTpSesLaeybksQh420/gRuSXJX5Zt9NfgsSbqqKDon6jnQ9Mm7h7imgyO2uJ34XMBtA==
+
+cordova-plugin-firebasex@^8.0.0:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-firebasex/-/cordova-plugin-firebasex-8.0.1.tgz#1ce6a88dd3f56e72f224d6c736211d7bbc1f6980"
+  integrity sha512-V/yXwf0EdS9unDngAfrctUv2s/xWHLdoEodS1yZ+cDQkmZPc2w45Qzi3Rug9OzMx9yEjpLp9n3kU0kJxOMP+Zw==
+  dependencies:
+    plist "^3.0.1"
+    xcode "^2.0.0"
+    xml-js "^1.6.11"
 
 cordova-plugin-inappbrowser@^3.1.0:
   version "3.1.0"
@@ -4120,10 +4195,20 @@ cordova-plugin-shake@^0.7.0:
     fs "^0.0.1-security"
     path "^0.12.7"
 
+cordova-plugin-splashscreen@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-splashscreen/-/cordova-plugin-splashscreen-5.0.3.tgz#02820472771c3e10b43ceedd54b0a1e4674efa6d"
+  integrity sha512-rnoDXMDfzoeHDBvsnu6JmzDE/pV5YJCAfc5hYX/Mb2BIXGgSjFJheByt0tU6kp3Wl40tSyFX4pYfBwFblBGyRg==
+
 cordova-plugin-statusbar@^2.4.3:
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/cordova-plugin-statusbar/-/cordova-plugin-statusbar-2.4.3.tgz#cc557aef66c27484e0f7f045004040d03321f82d"
   integrity sha512-ThmXzl6QIKWFXf4wWw7Q/zpB+VKkz3VM958+5A0sXD4jmR++u7KnGttLksXshVwWr6lvGwUebLYtIyXwS4Ovcg==
+
+cordova-plugin-vibration@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-vibration/-/cordova-plugin-vibration-3.1.1.tgz#38fcdd9a7675cfb44d86339c1b2cb129017e9e00"
+  integrity sha512-qgv67Rueo4Pydfant3TwnXeFiN9dl+6lKMM6h5jYg9XewiGAGOr8vfWsTvQssC3m3xMKGS1ap3xPNH+BzZ4RMA==
 
 cordova-plugin-whitelist@^1.3.4:
   version "1.3.4"
@@ -9923,6 +10008,13 @@ readdirp@~3.2.0:
   dependencies:
     picomatch "^2.0.4"
 
+recursive-readdir@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/recursive-readdir/-/recursive-readdir-2.2.2.tgz#9946fb3274e1628de6e36b2f6714953b4845094f"
+  integrity sha512-nRCcW9Sj7NuZwa2XvH9co8NPeXUBhZP7CRKJtU+cS6PW9FpCIFoI5ib0NT1ZrbNuPoRy0ylyCaUL8Gih4LSyFg==
+  dependencies:
+    minimatch "3.0.4"
+
 redent@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/redent/-/redent-2.0.0.tgz#c1b2007b42d57eb1389079b3c8333639d5e1ccaa"
@@ -12637,6 +12729,13 @@ xml-escape@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/xml-escape/-/xml-escape-1.1.0.tgz#3904c143fa8eb3a0030ec646d2902a2f1b706c44"
   integrity sha1-OQTBQ/qOs6ADDsZG0pAqLxtwbEQ=
+
+xml-js@^1.6.11:
+  version "1.6.11"
+  resolved "https://registry.yarnpkg.com/xml-js/-/xml-js-1.6.11.tgz#927d2f6947f7f1c19a316dd8eea3614e8b18f8e9"
+  integrity sha512-7rVi2KMfwfWFl+GpPg6m80IVMWXLRjO+PxTq7V2CDhoGak0wzYzFgUY2m4XJ47OGdXd8eLE8EmwfAmdjw7lC1g==
+  dependencies:
+    sax "^1.2.4"
 
 xml2js@0.4.19:
   version "0.4.19"
