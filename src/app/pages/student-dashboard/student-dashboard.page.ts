@@ -12,6 +12,7 @@ import {
 import { NewsService, NotificationService, StudentTimetableService, UserSettingsService, WsApiService } from 'src/app/services';
 
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
+import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
 import { NewsModalPage } from '../news/news-modal';
@@ -271,6 +272,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     private platform: Platform,
     private firebaseX: FirebaseX,
     private toastCtrl: ToastController,
+    private storage: Storage
   ) {
     // Create the dragula group (drag and drop)
     this.dragulaService.createGroup('editable-list', {
@@ -454,7 +456,24 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
         }
       }),
       tap(studentProfile => this.attendanceDefaultIntake = studentProfile.INTAKE),
-      tap(studentProfile => this.studentFirstName$ = of(studentProfile.NAME.split(' ')[0])),
+      tap(studentProfile => {
+        this.storage.get('name-display').then(lsStudentName => {
+          const apiStudentName = {
+            nameArray: studentProfile.NAME.split(' '),
+            selectedName: studentProfile.NAME.split(' ')[0]
+          };
+
+          if (!lsStudentName || lsStudentName.nameArray.join[' '] !== apiStudentName.nameArray.join[' ']) {
+            this.userSettings.setNameDisplay(apiStudentName);
+          } else {
+            this.userSettings.setNameDisplay(lsStudentName);
+          }
+        });
+
+        this.studentFirstName$ = this.userSettings.getNameDisplay().pipe(
+          map(data => data.selectedName)
+        );
+      }),
       tap(studentProfile => this.getTodaysSchdule(studentProfile.INTAKE, refresher)),
       tap(studentProfile => this.getUpcomingEvents(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR EXAMS
       tap(studentProfile => this.getAttendance(studentProfile.INTAKE, true)), // no-cache for attendance

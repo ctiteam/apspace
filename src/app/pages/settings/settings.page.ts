@@ -3,6 +3,7 @@ import { AlertController, ModalController, NavController, ToastController } from
 import { Observable } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
+import { Storage } from '@ionic/storage';
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 import { APULocation, APULocations, Role, StudentProfile, Venue } from '../../interfaces';
 import {
@@ -29,6 +30,10 @@ export class SettingsPage implements OnInit {
     firstLocation: '',
     secondLocation: '',
     alarmBefore: ''
+  };
+  studentName = {
+    nameArray: [],
+    selectedName: ''
   };
 
   locations$: Observable<APULocation[]>;
@@ -64,6 +69,7 @@ export class SettingsPage implements OnInit {
     private userSettings: UserSettingsService,
     private ws: WsApiService,
     private alertCtrl: AlertController,
+    private storage: Storage
   ) {
     this.userSettings
       .darkThemeActivated()
@@ -104,6 +110,16 @@ export class SettingsPage implements OnInit {
             next: value => (this.shakeSensitivity = this.sensitivityOptions.findIndex(item => item.value === value))
           });
     this.timetable$ = this.userSettings.timetable.asObservable();
+
+    this.storage.get('name-display').then(value => {
+      this.userSettings.setNameDisplay(value);
+
+      this.userSettings
+      .getNameDisplay()
+      .subscribe({
+        next: data => this.studentName = data
+      });
+    });
   }
 
 
@@ -156,6 +172,10 @@ export class SettingsPage implements OnInit {
 
   toggleMenuUI() {
     this.userSettings.setMenuUI(this.menuUI);
+  }
+
+  changeNameDisplay() {
+    this.userSettings.setNameDisplay(this.studentName);
   }
 
   updateDefaultLocation(locationType: 'venue' | 'campus') { // for staff only (set iconsult default location)

@@ -14,6 +14,7 @@ export class UserSettingsService {
   private accentColor: BehaviorSubject<string>;
   private dashboardSections: BehaviorSubject<string[]>;
   private menuUI: BehaviorSubject<'cards' | 'list'>;
+  private nameDisplay: BehaviorSubject<{nameArray: string[], selectedName: string}>;
   private casheCleaered: BehaviorSubject<boolean>;
   private shakeSensitivity: BehaviorSubject<string>;
   private busShuttleServiceSettings: BehaviorSubject<{ firstLocation: string, secondLocation: string, alarmBefore: string }>;
@@ -72,6 +73,7 @@ export class UserSettingsService {
     this.casheCleaered = new BehaviorSubject(false);
     this.shakeSensitivity = new BehaviorSubject('60');
     this.timetable = new BehaviorSubject({ blacklists: [] });
+    this.nameDisplay = new BehaviorSubject({ nameArray: [], selectedName: ''});
   }
 
   // DARK THEME
@@ -197,6 +199,16 @@ export class UserSettingsService {
 
   getMenuUI() {
     return this.menuUI.asObservable();
+  }
+
+  // NAME DISPLAY
+  setNameDisplay(val: {nameArray: string[], selectedName: string}) {
+    this.storage.set('name-display', val);
+    this.nameDisplay.next(val);
+  }
+
+  getNameDisplay() {
+    return this.nameDisplay.asObservable();
   }
 
   changeStatusBarColor(darkThemeSelected: boolean) {

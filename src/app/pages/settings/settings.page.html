@@ -69,6 +69,14 @@
                   </ion-select-option>
                 </ion-select>
               </ion-item>
+              <ion-item class="ion-no-padding">
+                <ion-label>Name Display</ion-label>
+                <ion-select [(ngModel)]="studentName.selectedName" (ngModelChange)="changeNameDisplay()">
+                  <ion-select-option [value]="nameArray" *ngFor="let nameArray of studentName.nameArray">
+                    {{nameArray}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
               <ion-item class="ion-no-padding ion-no-margin hidden-lg-up">
                 <ion-grid class="ion-no-padding">
                   <ion-row>
