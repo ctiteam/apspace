@@ -18,11 +18,18 @@
 
 .dead {
   position: absolute;
-  top: calc(50vh - 3ex);
-  left: calc((100% - 600px) / 2 + 1em);
-  font-size: 5rem;
-  color: red;
+  top: calc(30vh - 3ex);
+  width: 100%;
+  text-align: center;
+  padding: 30px;
+  color: var(--danger-color);
   text-shadow: white 2px 5px;
+  background: white;
+
+  h2, p{
+    font-size: 3rem;
+
+  }
 }
 
 .stateR {
