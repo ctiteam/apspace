@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { AlertController, IonSelect, IonSlides, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
 import { Observable, of, zip } from 'rxjs';
@@ -54,8 +55,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   };
 
   // PROFILE
+  staffFirstName$: Observable<string>;
   greetingMessage = '';
-  staffFirstName: string;
   numberOfUnreadMsgs: number;
 
   // TODAY'S SCHEDULE
@@ -243,7 +244,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     private modalCtrl: ModalController,
     private platform: Platform,
     private toastCtrl: ToastController,
-    private firebaseX: FirebaseX
+    private firebaseX: FirebaseX,
+    private storage: Storage
   ) {
     this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
   }
@@ -437,7 +439,24 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   getProfile(refresher: boolean) {
     const caching = refresher ? 'network-or-cache' : 'cache-only';
     return this.staffProfile$ = this.ws.get<StaffProfile>('/staff/profile', { caching }).pipe(
-      tap(staffProfile => this.staffFirstName = staffProfile[0].FULLNAME.split(' ')[0]),
+      tap(staffProfile => {
+        this.storage.get('name-display').then(lsStaffName => {
+          const apiStaffName = {
+            nameArray: staffProfile[0].FULLNAME.split(' '),
+            selectedName: staffProfile[0].FULLNAME.split(' ')[0]
+          };
+
+          if (!lsStaffName || lsStaffName.nameArray.join[' '] !== apiStaffName.nameArray.join[' ']) {
+            this.userSettings.setNameDisplay(apiStaffName);
+          } else {
+            this.userSettings.setNameDisplay(lsStaffName);
+          }
+        });
+
+        this.staffFirstName$ = this.userSettings.getNameDisplay().pipe(
+          map(data => data.selectedName)
+        );
+      }),
       tap(staffProfile => this.getTodaysSchdule(staffProfile[0].ID))
     );
   }

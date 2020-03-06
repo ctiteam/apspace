@@ -18,7 +18,7 @@
                   <img [src]="staffProfile[0].PHOTO" onerror="this.src='assets/img/no_img.png'" alt="Avatar">
                 </ion-avatar>
                 <div class="welcome-message-wrapper ion-padding-start float-left"
-                  *ngIf="staffFirstName; else loadingProfile">
+                  *ngIf="staffFirstName$ | async as staffFirstName; else loadingProfile">
                   <ion-card-title>
                     <h3 class="responsive-h1">{{greetingMessage}}, <span>{{staffFirstName | titlecase}}</span>
                     </h3>
