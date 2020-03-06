@@ -71,7 +71,7 @@
               </ion-item>
               <ion-item class="ion-no-padding">
                 <ion-label>Name Display</ion-label>
-                <ion-select [(ngModel)]="studentName.selectedName" (ngModelChange)="changeNameDisplay()">
+                <ion-select [disabled]="studentName.nameArray.length <= 1" [(ngModel)]="studentName.selectedName" (ngModelChange)="changeNameDisplay()">
                   <ion-select-option [value]="nameArray" *ngFor="let nameArray of studentName.nameArray">
                     {{nameArray}}
                   </ion-select-option>
