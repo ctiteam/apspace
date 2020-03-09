@@ -6803,11 +6803,6 @@ ion2-calendar@^3.0.0-rc.0:
   resolved "https://registry.yarnpkg.com/ion2-calendar/-/ion2-calendar-3.0.0-rc.0.tgz#93fc20e8a5fe85922eb23a05594ccffe78eff607"
   integrity sha512-OOq1cCY8v4K6lKiHKHK7T6kmr+H1AuVY0xH3WmCAQGNhjevHbRlGgRDA1l0a9KOuPtojfepb1ChbT7JuVO1ofw==
 
-ionic-selectable@^4.4.1:
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/ionic-selectable/-/ionic-selectable-4.5.1.tgz#575204bb74d360f019cf61b4c342583ff9d8cda1"
-  integrity sha512-0cCeEHNbeA+661FAo+Zqa6swPaI3ro4vnWysJXdFBvpFH+W4M14UV3toFZXb0318hvAoXlq9LNgdLhXO6kghLQ==
-
 ionicons@^4.6.3:
   version "4.6.3"
   resolved "https://registry.yarnpkg.com/ionicons/-/ionicons-4.6.3.tgz#e4f3a3e9b66761eb8c0db27798cc1a8ce97777d2"
