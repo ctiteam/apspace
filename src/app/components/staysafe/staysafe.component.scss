@@ -22,6 +22,10 @@
 .icon {
     margin-top: auto; 
     margin-bottom: auto;
+
+    @media only screen and (min-width: 770px) {
+        border-right: 2px solid var(--secondary-txt-color);
+    }
 }
 
 h6 {
