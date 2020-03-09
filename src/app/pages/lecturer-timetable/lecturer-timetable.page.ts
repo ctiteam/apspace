@@ -16,7 +16,7 @@ const chosenOnes = [
   'zailan', 'qusay', 'behrang', 'meisam', 'debbie.liew', 'dr.mahmood.bathaee',
   'bawani', 'eizal.afiq', 'christine.lim.ps', 'nglishin', 'ooi.aikkhong',
   'edwin.pio', 'leroy.fong', 'azim.hulaimi', 'jan.wong', 'angeline.anoosia',
-  'harvinder.kaur', 'jonathanj'
+  'harvinder.kaur', 'jonathanj', 'mani', 'sivakumar.p'
 ];
 
 @Component({
