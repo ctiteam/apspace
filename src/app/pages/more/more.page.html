@@ -103,7 +103,7 @@
 
       <!-- FAVORITE -->
       <ion-row *ngIf="!editMode && (fav | byItem: term) as filteredFavMenu">
-        <ion-col size="12" class="ion-margin-top ion-margin-bottom">
+        <ion-col size="12" class="ion-margin-vertical">
           <h5 class="custom-theme ion-text-center">Favorite</h5>
         </ion-col>
         <ng-container *ngIf="filteredFavMenu.length > 0; else noFavCard">
@@ -119,12 +119,12 @@
         <ng-template #noFavCard>
           <ion-col size="12">
             <ng-container *ngIf="!term; else noSearchResults">
-              <p class="ion-margin-top ion-margin-bottom ion-text-center ion-padding">
+              <p class="light-text ion-margin-top ion-margin-bottom ion-text-center ion-padding">
                 Click on edit button and add items now to your favorite menu :)
               </p>
             </ng-container>
             <ng-template #noSearchResults>
-              <p class="ion-margin-top ion-margin-bottom ion-text-center ion-padding">
+              <p class="light-text ion-margin-top ion-margin-bottom ion-text-center ion-padding">
                 No results in favorite for {{term}} :(
               </p>
             </ng-template>
@@ -171,7 +171,6 @@
 
             <h5 class="ion-text-start ion-padding">Logout</h5>
           </ion-item>
-
         </ion-col>
         <ion-item-divider></ion-item-divider>
       </ion-row>

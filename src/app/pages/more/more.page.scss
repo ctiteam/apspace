@@ -7,6 +7,10 @@ ion-avatar {
   color: var(--ion-color-light);
 }
 
+.light-text {
+  color: var(--ion-color-light);
+}
+
 ion-item-divider {
   border-bottom: 1.5px solid var(--ion-color-light);
   min-height: 0;
@@ -27,16 +31,6 @@ ion-item-divider {
   width: 100%;
   column-gap: 10px;
   margin: 5px;
-
-  .page-title {
-    font-size: 1.05rem;
-  }
-
-  img {
-    margin-right: 20px;
-    max-width: 36px;
-    max-height: 36px;
-  }
 }
 
 .custom-card {
