@@ -62,7 +62,9 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
         console.assert(status.authorized);
         // scanning only takes the first valid code
         this.scanSub = this.qrScanner.scan().subscribe((text: string) => {
-          if (text.length === this.digits.length) {
+          if (this.sending) {
+            return;
+          } else if (text.length === this.digits.length) {
             this.sendOtp(text);
           } else {
             this.toast(`Invalid OTP (should be ${this.digits.length} digits)`, 'danger');
