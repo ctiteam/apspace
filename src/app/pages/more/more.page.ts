@@ -9,12 +9,26 @@ import { CasTicketService, SettingsService, UserSettingsService } from '../../se
 import { Network } from '@ionic-native/network/ngx';
 import { NavController, ToastController } from '@ionic/angular';
 import { MenuItem } from './menu.interface';
+
+interface KeyIconMap { [key: string]: string; }
+
 @Component({
   selector: 'app-more',
   templateUrl: './more.page.html',
   styleUrls: ['./more.page.scss']
 })
 export class MorePage implements OnInit {
+  keyList = [];
+  keyIcon: KeyIconMap = {
+    ['Finance']: 'assets/img/finance.png',
+    ['Collaboration & Information Resources']: 'assets/img/collab-info.png',
+    ['Campus Life']: 'assets/img/campus-life.png',
+    ['Academic Operation']: 'assets/img/academic-op.png',
+    ['Academic & Enrollment']: 'assets/img/academic-enroll.png',
+    ['Career Centre & Corporate Training']: 'assets/img/career-training.png',
+    ['Others']: 'assets/img/others.png'
+  };
+
   view$: Observable<'list' | 'cards'>;
   editMode = false;
   term = '';
@@ -595,15 +609,15 @@ export class MorePage implements OnInit {
       img: 'assets/img/visa-status.png',
       role: Role.Admin,
       tags: ['visa']
-    },
-    {
-      title: 'Logout',
-      group: 'Others',
-      url: 'logout',
-      img: 'assets/img/logout.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['exit', 'log out', 'log-out', 'sign out', 'sign-out']
-    },
+    }
+    // {
+    //   title: 'Logout',
+    //   group: 'Others',
+    //   url: 'logout',
+    //   img: 'assets/img/logout.png',
+    //   role: Role.Student | Role.Lecturer | Role.Admin,
+    //   tags: ['exit', 'log out', 'log-out', 'sign out', 'sign-out']
+    // },
     // END OF OTHERS
 
 
@@ -773,6 +787,18 @@ export class MorePage implements OnInit {
 
     // tslint:disable-next-line:no-bitwise
     this.fav = this.fav.filter(menuItem => menuItem.role & role);
+  }
+
+  showMore(groupKey) {
+    if (this.keyList.includes(groupKey)) {
+      const index = this.keyList.indexOf(groupKey, 0);
+      if (index > -1) {
+        this.keyList.splice(index, 1);
+      }
+      return;
+    }
+
+    this.keyList.push(groupKey);
   }
 
   /** Open page, manually check for third party pages. */

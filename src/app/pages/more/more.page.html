@@ -15,7 +15,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [class]="(view$ | async) !== 'list' ? 'gradient-background' : ''">
 
   <!-- LISTS UI -->
   <div *ngIf="(view$ | async) === 'list'; else menuCardsUI" class="masonry-list">
@@ -104,20 +104,17 @@
       <!-- FAVORITE -->
       <ion-row *ngIf="!editMode && (fav | byItem: term) as filteredFavMenu">
         <ion-col size="12" class="ion-margin-top ion-margin-bottom">
-          <h5 class="colored-text ion-text-center">Favorite</h5>
+          <h5 class="custom-theme ion-text-center">Favorite</h5>
         </ion-col>
         <ng-container *ngIf="filteredFavMenu.length > 0; else noFavCard">
-          <ion-col *ngFor="let item of filteredFavMenu" class="menu-item ion-text-center" size-xs="6" size-md="4"
-            size-lg="3">
-            <ion-card (click)="openPage(item.url)" class="ion-no-margin cursor-pointer ter--background">
-              <ion-card-content>
-                <div class="wrapper">
-                  <img [src]="item.img">
-                  <p class="page-title">{{ item.title }}</p>
-                </div>
-              </ion-card-content>
-            </ion-card>
-          </ion-col>
+          <div class="card-view-masonry-list">
+            <div *ngFor="let item of filteredFavMenu" (click)="openPage(item.url)" class="card-view-masonry-item custom-card cursor-pointer">
+              <div>
+                <img [src]="item.img">
+                <p class="page-title">{{ item.title }}</p>
+              </div>
+            </div>
+          </div>
         </ng-container>
         <ng-template #noFavCard>
           <ion-col size="12">
@@ -136,24 +133,47 @@
       </ion-row>
 
       <!-- MENU -->
-      <ion-row *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop">
-        <ion-col size="12" class="ion-margin-top ion-margin-bottom">
-          <h5 class="colored-text ion-text-center">{{ group.key }}</h5>
+      <ion-row *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop;">
+        <ion-col size="12">
+          <ion-item lines="none" color="none" class="custom-theme" (click)="showMore(group.key)">
+            <ion-avatar slot="start">
+              <img [src]="keyIcon[group.key]">
+            </ion-avatar>
+
+            <h5 class="ion-text-start ion-padding">{{ group.key }}</h5>
+            <ion-icon slot="end" [name]="keyList.includes(group.key) ? 'chevron-up-outline' : 'chevron-down-outline'" ></ion-icon>
+          </ion-item>
         </ion-col>
-        <ion-col *ngFor="let item of group.value" class="menu-item ion-text-center" size-xs="6" size-md="4" size-lg="3">
+        <ion-col
+          [style.display]="keyList.includes(group.key) ? 'block' : 'none'"
+          *ngFor="let item of group.value" 
+          class="menu-item ion-text-start" 
+          size="12" size-md="6" size-lg="4" size-xl="3">
           <div [class.edit-overlay]="editMode" [class.hide]="!editMode">
             <ion-icon (click)="addToFav(item)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
               class="colored-text"></ion-icon>
           </div>
-          <ion-card (click)="openPage(item.url)" class="ion-no-margin cursor-pointer">
-            <ion-card-content>
-              <div class="wrapper">
-                <img [src]="item.img">
-                <p class="page-title">{{ item.title }}</p>
-              </div>
-            </ion-card-content>
-          </ion-card>
+          <div (click)="openPage(item.url)" class="custom-card cursor-pointer">
+            <div class="flex-content">
+              <img [src]="item.img">
+              <p class="page-title">{{ item.title }}</p>              
+            </div>
+          </div>
         </ion-col>
+        <ion-item-divider [class.set-divider-margin]="keyList.includes(group.key)"></ion-item-divider>
+      </ion-row>
+      <ion-row *ngIf="!editMode">
+        <ion-col>
+          <ion-item lines="none" color="none" class="custom-theme" (click)="openPage('logout')">
+            <ion-avatar slot="start">
+              <img src="assets/img/log-out.png">
+            </ion-avatar>
+
+            <h5 class="ion-text-start ion-padding">Logout</h5>
+          </ion-item>
+
+        </ion-col>
+        <ion-item-divider></ion-item-divider>
       </ion-row>
     </ion-grid>
   </ng-template>
