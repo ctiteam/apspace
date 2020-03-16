@@ -9,16 +9,6 @@ import { finalize, switchMap, tap } from 'rxjs/operators';
 import { LecturerTimetable, StaffProfile } from '../../interfaces';
 import { SettingsService, WsApiService } from '../../services';
 
-
-const chosenOnes = [
-  'appsteststaff1', 'abbhirami', 'abubakar_s',
-  'haslina.hashim', 'muhammad.danish', 'sireesha.prathi', 'suresh.saminathan',
-  'zailan', 'qusay', 'behrang', 'meisam', 'debbie.liew', 'dr.mahmood.bathaee',
-  'bawani', 'eizal.afiq', 'christine.lim.ps', 'nglishin', 'ooi.aikkhong',
-  'edwin.pio', 'leroy.fong', 'azim.hulaimi', 'jan.wong', 'angeline.anoosia',
-  'harvinder.kaur', 'jonathanj', 'mani', 'sivakumar.p'
-];
-
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-lecturer-timetable',
@@ -117,7 +107,6 @@ export class LecturerTimetablePage implements OnInit {
         this.lecturerName = profile[0].FULLNAME;
         this.lecturerCode = profile[0].CODE;
       }),
-      tap(profile => this.showAttendixFeature = chosenOnes.includes(profile[0].ID)),
       switchMap(([{ ID }]) => this.ws.get<LecturerTimetable[]>(`/lecturer-timetable/v2/${ID}`, { auth: false })),
       tap(tt => this.updateDay(tt)),
       finalize(() => refresher && refresher.complete()),
