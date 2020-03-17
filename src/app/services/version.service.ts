@@ -24,7 +24,7 @@ export class VersionService {
     private storage: Storage
   ) { }
 
-  readonly version = '2.1.2';
+  readonly version = '2.1.3';
 
   /** Application version name. */
   get name(): string {
