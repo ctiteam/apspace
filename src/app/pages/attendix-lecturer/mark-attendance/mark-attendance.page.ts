@@ -66,7 +66,7 @@ export class MarkAttendancePage implements OnInit {
     };
     let studentsNameById: { [student: string]: string };
 
-    // limit updates to 30 days in the past
+    // limit reset to 30 days in the past
     const today = new Date(new Date().setHours(8, 0, 0, 0));
     const limit = new Date(today).setDate(today.getDate() - 30);
     this.resetable = limit <= Date.parse(schedule.date);
