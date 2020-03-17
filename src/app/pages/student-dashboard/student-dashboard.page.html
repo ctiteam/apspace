@@ -75,7 +75,14 @@
                   Done Editing
                 </ion-button>
               </ion-col>
-
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-button color="success" expand="block" [routerLink]="['/attendix/update']">
+                  Sign Attendance
+                  <ion-icon name="checkmark-circle-outline" slot="end"></ion-icon>
+                </ion-button>
+              </ion-col>
             </ion-row>
           </ion-grid>
         </ion-card-header>
@@ -102,7 +109,7 @@
         <ion-grid class="ion-no-padding">
           <ion-row>
             <!-- QUICK ACCESS ITEM: ATTENDANCE -->
-            <ion-col class="ion-padding-start" *ngIf="shownDashboardSections.includes('quickAccess')">
+            <!-- <ion-col class="ion-padding-start" *ngIf="shownDashboardSections.includes('quickAccess')">
               <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
                 <ion-icon name="move" class="handle"></ion-icon>
               </div>
@@ -125,7 +132,7 @@
                   </ion-card-content>
                 </ion-card>
               </ng-template>
-            </ion-col>
+            </ion-col> -->
 
             <!-- QUICK ACCESS ITEM: APCARD BALANCE -->
             <ion-col *ngIf="shownDashboardSections.includes('quickAccess')">
@@ -214,7 +221,7 @@
 
       <!-- LOW ATTENDANCE -->
       <div id="lowAttendance" *ngIf="shownDashboardSections.includes('lowAttendance')">
-        <div class="masonry-item" *ngIf="modulesWithLowAttendance$ | async; else loadingAttendance">
+        <!-- <div class="masonry-item" *ngIf="modulesWithLowAttendance$ | async; else loadingAttendance">
           <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
             <ion-icon name="move" class="handle"></ion-icon>
             <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('lowAttendance')"></ion-icon>
@@ -262,12 +269,13 @@
             [cardSubtitle]='"Overall: " + (overallAttendancePercent.value != "-1" ? ((overallAttendancePercent.value | number: "1.0-1") + "%") : "--")'
             [contentPadding]='lowAttendanceCardConfigurations.contentPadding'
             [withOptionsButton]='lowAttendanceCardConfigurations.withOptionsButton'>
-            <app-message-with-svg messageTitle="Your Attendance is Above 80% in all {{attendanceDefaultIntake}} Modules!"
+            <app-message-with-svg
+              messageTitle="Your Attendance is Above 80% in all {{attendanceDefaultIntake}} Modules!"
               messageContent="Great Job. You are attending the classes regularly." imageUrl="assets/img/happy.svg"
               wrapperOffset="3" wrapperSize="6">
             </app-message-with-svg>
           </dashboard-card>
-        </ng-template>
+        </ng-template> -->
       </div>
 
       <!-- BUS SHUTTLE SERVICES -->

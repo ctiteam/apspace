@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { AlertController, IonSelect, IonSlides, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import { Observable, combineLatest, forkJoin, of, zip } from 'rxjs';
-import { catchError, concatMap, finalize, flatMap, map, share, tap, toArray } from 'rxjs/operators';
+import { catchError, concatMap, finalize, flatMap, map, tap, toArray } from 'rxjs/operators';
 
 import {
   APULocation, APULocations,
-  Apcard, Attendance, BusTrips, CgpaPerIntake, ConsultationHour, Course,
+  Apcard, BusTrips, CgpaPerIntake, ConsultationHour, Course,
   CourseDetails, DashboardCardComponentConfigurations, EventComponentConfigurations, ExamSchedule, FeesTotalSummary,
   Holiday, Holidays, News, StaffDirectory, StudentPhoto, StudentProfile, StudentTimetable
 } from 'src/app/interfaces';
@@ -56,7 +56,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   photo$: Observable<StudentPhoto>;
   greetingMessage = '';
   // attendance default intake can be different from timetable default intake
-  attendanceDefaultIntake = '';
+  // attendanceDefaultIntake = '';
   timetableDefaultIntake = '';
   studentFirstName$: Observable<string>;
   block = false;
@@ -78,8 +78,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   };
 
   // ATTENDANCE
-  modulesWithLowAttendance$: Observable<Attendance[]>;
-  overallAttendancePercent$: Observable<{ value: number }>;
+  // modulesWithLowAttendance$: Observable<Attendance[]>;
+  // overallAttendancePercent$: Observable<{ value: number }>;
   subject: string;
   lowAttendanceCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
@@ -453,11 +453,11 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
           this.block = true;
         }
       }),
-      tap(studentProfile => this.attendanceDefaultIntake = studentProfile.INTAKE),
+      // tap(studentProfile => this.attendanceDefaultIntake = studentProfile.INTAKE),
       tap(studentProfile => this.studentFirstName$ = of(studentProfile.NAME.split(' ')[0])),
       tap(studentProfile => this.getTodaysSchdule(studentProfile.INTAKE, refresher)),
       tap(studentProfile => this.getUpcomingEvents(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR EXAMS
-      tap(studentProfile => this.getAttendance(studentProfile.INTAKE, true)), // no-cache for attendance
+      // tap(studentProfile => this.getAttendance(studentProfile.INTAKE, true)), // no-cache for attendance
       // tap(studentProfile => this.getUpcomingExam(studentProfile.INTAKE)),
     );
   }
@@ -725,94 +725,94 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // ATTENDANCE FUNCTIONS
-  getAttendance(intake: string, refresher: boolean) {
-    const url = `/student/attendance?intake=${intake}`;
-    const caching = refresher ? 'network-or-cache' : 'cache-only';
-    this.modulesWithLowAttendance$ = this.ws.get<Attendance[]>(url, { caching }).pipe(
-      tap(attendanceData => {
-        // GETTING THE OVERALL ATTENDANCE VALUE FOR QUICK ACCESS ITEM
-        if (attendanceData.length > 0) {
-          const totalClasses = attendanceData.reduce((a, b) => a + b.TOTAL_CLASSES, 0);
-          const totalAbsentClasses = attendanceData.reduce((a, b) => a + b.TOTAL_ABSENT, 0);
-          const totalAttendedClasses = totalClasses - totalAbsentClasses;
+  // getAttendance(intake: string, refresher: boolean) {
+  //   const url = `/student/attendance?intake=${intake}`;
+  //   const caching = refresher ? 'network-or-cache' : 'cache-only';
+  //   this.modulesWithLowAttendance$ = this.ws.get<Attendance[]>(url, { caching }).pipe(
+  //     tap(attendanceData => {
+  //       // GETTING THE OVERALL ATTENDANCE VALUE FOR QUICK ACCESS ITEM
+  //       if (attendanceData.length > 0) {
+  //         const totalClasses = attendanceData.reduce((a, b) => a + b.TOTAL_CLASSES, 0);
+  //         const totalAbsentClasses = attendanceData.reduce((a, b) => a + b.TOTAL_ABSENT, 0);
+  //         const totalAttendedClasses = totalClasses - totalAbsentClasses;
 
-          this.overallAttendancePercent$ = of({ value: totalAttendedClasses / totalClasses * 100 });
-        } else {
-          this.overallAttendancePercent$ = of({ value: -1 }); // -1 means there is no attendance data in the selected intake
-        }
-      }),
-      // NEED TO THROUGH ERROR
-      map(attendanceData => {
-        const currentSemester = Math.max(
-          ...attendanceData.map(attendance => attendance.SEMESTER),
-        );
-        return (attendanceData || []).filter(
-          attendance =>
-            attendance.SEMESTER === currentSemester &&
-            attendance.PERCENTAGE < 80,
-        );
-      }),
-      tap(
-        attendanceData =>
-          (this.subject = attendanceData[0] && attendanceData[0].SUBJECT_CODE),
-      ),
-      tap(modulesWithLowAttendance => {
-        this.lowAttendanceChart = {
-          type: 'horizontalBar',
-          options: {
-            scales: {
-              xAxes: [{
-                ticks: {
-                  min: 0,
-                  max: 80
-                }
-              },
-              ],
-              yAxes: [{
-                gridLines: {
-                  color: 'rgba(0, 0, 0, 0)',
-                },
-                ticks: {
-                  beginAtZero: true,
-                  mirror: true,
-                  fontColor: 'rgba(' + this.activeAccentColor + ', 1)',
-                  fontStyle: 900,
-                  padding: -10
-                },
-              }]
-            },
-            responsive: true,
-            legend: {
-              display: false,
-            },
-            title: {
-              display: false,
-            },
-          },
-          data: {
-            datasets: [
-              {
-                backgroundColor: 'rgba(98, 98, 98, 0.3)',
-                hoverBackgroundColor: 'rgba(' + this.activeAccentColor + ', 0.3)',
-                borderColor: '#636363',
-                borderWidth: 2,
-                hoverBorderColor: 'rgba(' + this.activeAccentColor + ', 1)',
-                hoverBorderWidth: 2,
-                data: [],
-              },
-            ],
-            labels: []
-          }
-        };
-        modulesWithLowAttendance.forEach(module => {
-          this.lowAttendanceChart.data.labels.push(module.MODULE_ATTENDANCE);
-          this.lowAttendanceChart.data.datasets[0].data.push(module.PERCENTAGE);
-        });
-      }
-      ),
-      share(),
-    );
-  }
+  //         this.overallAttendancePercent$ = of({ value: totalAttendedClasses / totalClasses * 100 });
+  //       } else {
+  //         this.overallAttendancePercent$ = of({ value: -1 }); // -1 means there is no attendance data in the selected intake
+  //       }
+  //     }),
+  //     // NEED TO THROUGH ERROR
+  //     map(attendanceData => {
+  //       const currentSemester = Math.max(
+  //         ...attendanceData.map(attendance => attendance.SEMESTER),
+  //       );
+  //       return (attendanceData || []).filter(
+  //         attendance =>
+  //           attendance.SEMESTER === currentSemester &&
+  //           attendance.PERCENTAGE < 80,
+  //       );
+  //     }),
+  //     tap(
+  //       attendanceData =>
+  //         (this.subject = attendanceData[0] && attendanceData[0].SUBJECT_CODE),
+  //     ),
+  //     tap(modulesWithLowAttendance => {
+  //       this.lowAttendanceChart = {
+  //         type: 'horizontalBar',
+  //         options: {
+  //           scales: {
+  //             xAxes: [{
+  //               ticks: {
+  //                 min: 0,
+  //                 max: 80
+  //               }
+  //             },
+  //             ],
+  //             yAxes: [{
+  //               gridLines: {
+  //                 color: 'rgba(0, 0, 0, 0)',
+  //               },
+  //               ticks: {
+  //                 beginAtZero: true,
+  //                 mirror: true,
+  //                 fontColor: 'rgba(' + this.activeAccentColor + ', 1)',
+  //                 fontStyle: 900,
+  //                 padding: -10
+  //               },
+  //             }]
+  //           },
+  //           responsive: true,
+  //           legend: {
+  //             display: false,
+  //           },
+  //           title: {
+  //             display: false,
+  //           },
+  //         },
+  //         data: {
+  //           datasets: [
+  //             {
+  //               backgroundColor: 'rgba(98, 98, 98, 0.3)',
+  //               hoverBackgroundColor: 'rgba(' + this.activeAccentColor + ', 0.3)',
+  //               borderColor: '#636363',
+  //               borderWidth: 2,
+  //               hoverBorderColor: 'rgba(' + this.activeAccentColor + ', 1)',
+  //               hoverBorderWidth: 2,
+  //               data: [],
+  //             },
+  //           ],
+  //           labels: []
+  //         }
+  //       };
+  //       modulesWithLowAttendance.forEach(module => {
+  //         this.lowAttendanceChart.data.labels.push(module.MODULE_ATTENDANCE);
+  //         this.lowAttendanceChart.data.datasets[0].data.push(module.PERCENTAGE);
+  //       });
+  //     }
+  //     ),
+  //     share(),
+  //   );
+  // }
 
   // APCARD FUNCTIONS
   getTransactions(refresher) {
