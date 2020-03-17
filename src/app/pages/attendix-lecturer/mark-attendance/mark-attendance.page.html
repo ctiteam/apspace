@@ -7,7 +7,8 @@
       {{ schedule!.classcode }} {{ totalPresentStudents$ | async }}/{{ totalStudents$ | async }}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="resetable" (click)="reset()" color="danger">Reset</ion-button>
+      <!-- To avoid confusion with reset, delete term will be shown to users -->
+      <ion-button *ngIf="resetable" (click)="reset()" color="danger">Delete</ion-button>
       <ion-button>
         <ion-label>Auto</ion-label>
         <ion-toggle [(ngModel)]="auto"></ion-toggle>

@@ -206,8 +206,8 @@ export class MarkAttendancePage implements OnInit {
           handler: () => {
             const schedule = this.schedule;
             this.resetAttendance.mutate({ schedule }).subscribe(
-              () => { this.toast('Attendance resetted', 'success'), this.location.back(); },
-              e => { this.toast('Attendance reset failed: ' + e, 'failure'); console.error(e); }
+              () => { this.toast('Attendance deleted', 'success'), this.location.back(); },
+              e => { this.toast('Attendance delete failed: ' + e, 'failure'); console.error(e); }
             );
           }
         }
