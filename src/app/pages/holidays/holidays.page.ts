@@ -32,7 +32,7 @@ export class HolidaysPage {
       filterDays: '',
       filterMonths: '',
       numberOfDays: '',
-      affecting: ''
+      affecting: this.settings.get('role') === Role.Student ? 'students' : 'staff'
     };
   constructor(
     private ws: WsApiService,
@@ -62,9 +62,6 @@ export class HolidaysPage {
     this.filteredHoliday$ = this.holiday$.pipe(
       map(holidays => {
         this.numberOfHolidays = 1; // HIDE 'THERE ARE NO HOLIDAYS' MESSAGE
-
-        // AUTO FILTER HOLIDAYS BASED ON ROLE
-        this.settings.get('role') === Role.Student ? this.filterObject.affecting = 'students' : this.filterObject.affecting = 'staff';
 
         let filteredArray = holidays.filter(holiday => {
           // FILTER HOLIDAYS BY DAY & MONTH
@@ -157,7 +154,7 @@ export class HolidaysPage {
       filterMonths: '',
       numberOfDays: '',
       show: 'all',
-      affecting: ''
+      affecting: this.settings.get('role') === Role.Student ? 'students' : 'staff'
     };
     this.onFilter();
   }
