@@ -3,8 +3,8 @@ import { MenuController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
-import { EventComponentConfigurations, Holiday, Holidays } from 'src/app/interfaces';
-import { WsApiService } from 'src/app/services';
+import { EventComponentConfigurations, Holiday, Holidays, Role } from 'src/app/interfaces';
+import { SettingsService, WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-holidays',
@@ -37,6 +37,7 @@ export class HolidaysPage {
   constructor(
     private ws: WsApiService,
     private menu: MenuController,
+    private settings: SettingsService
   ) { }
 
   ionViewDidEnter() {
@@ -61,6 +62,10 @@ export class HolidaysPage {
     this.filteredHoliday$ = this.holiday$.pipe(
       map(holidays => {
         this.numberOfHolidays = 1; // HIDE 'THERE ARE NO HOLIDAYS' MESSAGE
+
+        // AUTO FILTER HOLIDAYS BASED ON ROLE
+        this.settings.get('role') === Role.Student ? this.filterObject.affecting = 'students' : this.filterObject.affecting = 'staff';
+
         let filteredArray = holidays.filter(holiday => {
           // FILTER HOLIDAYS BY DAY & MONTH
           return (
