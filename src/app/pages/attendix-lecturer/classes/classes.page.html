@@ -29,7 +29,7 @@
         <ion-item>
           <ion-label>Date</ion-label>
           <ion-select [ngModel]="auto ? date : manualDate"
-            (ngModelChange)="auto ? changeDate(date = $event) : (manualDate = $event)"
+            (ngModelChange)="auto ? changeDate(date = $event) : changeDate(manualDate = $event)"
             [disabled]="auto ? !classcode : !manualClasscode"
             interface="popover" placeholder="Date">
             <ion-select-option *ngFor="let d of auto ? dates : manualDates"

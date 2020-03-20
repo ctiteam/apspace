@@ -24,28 +24,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
 
   timetablesprofile$: Observable<[StaffProfile[], StudentTimetable[]]>;
 
-  /* computed */
-  classcodes: string[];
-  schedules: Schedule[];
-  schedulesByClasscode: Schedule[];
-  schedulesByClasscodeDate: Schedule[];
-
-  dates: string[];
-  startTimes: string[];
-  endTimes: string[];
-  classTypes = ['Lecture', 'Tutorial', 'Lab'];
-
-  /* selected */
-  classcode: string;
-  date: string;  // 2019-01-01
-  startTime: string;
-  endTime: string;
-  classType: string;
-
-  /* manual */
-  manualClasscodes: string[];
-  manualDates: string[];
-  manualStartTimes = [
+  timings = [
     '08:00 AM', '08:05 AM', '08:10 AM', '08:15 AM', '08:20 AM', '08:25 AM',
     '08:30 AM', '08:35 AM', '08:40 AM', '08:45 AM', '08:50 AM', '08:55 AM',
     '09:00 AM', '09:05 AM', '09:10 AM', '09:15 AM', '09:20 AM', '09:25 AM',
@@ -78,6 +57,29 @@ export class ClassesPage implements AfterViewInit, OnInit {
     '10:30 PM', '10:35 PM', '10:40 PM', '10:45 PM', '10:50 PM', '10:55 PM',
     '11:00 PM', '11:05 PM', '11:10 PM', '11:15 PM', '11:20 PM', '11:25 PM',
     '11:30 PM', '11:35 PM', '11:40 PM', '11:45 PM', '11:50 PM', '11:55 PM'];
+
+  /* computed */
+  classcodes: string[];
+  schedules: Schedule[];
+  schedulesByClasscode: Schedule[];
+  schedulesByClasscodeDate: Schedule[];
+
+  dates: string[];
+  startTimes: string[];
+  endTimes: string[];
+  classTypes = ['Lecture', 'Tutorial', 'Lab'];
+
+  /* selected */
+  classcode: string;
+  date: string;  // 2019-01-01
+  startTime: string;
+  endTime: string;
+  classType: string;
+
+  /* manual */
+  manualClasscodes: string[];
+  manualDates: string[];
+  manualStartTimes: string[];
   manualEndTimes: string[];
 
   manualClasscode: string;
@@ -271,14 +273,25 @@ export class ClassesPage implements AfterViewInit, OnInit {
 
   /** Change date. */
   changeDate(date: string, propagate = true) {
-    this.schedulesByClasscodeDate = this.schedulesByClasscode.filter(schedule => schedule.DATESTAMP_ISO === date);
-    this.startTimes = [...new Set(this.schedulesByClasscodeDate.map(schedule => schedule.TIME_FROM))].sort();
-    this.endTimes = [...new Set(this.schedulesByClasscodeDate.map(schedule => schedule.TIME_TO))].sort();
-    this.startTime = '';
-    this.endTime = '';
+    if (this.auto) {
+      this.schedulesByClasscodeDate = this.schedulesByClasscode.filter(schedule => schedule.DATESTAMP_ISO === date);
+      this.startTimes = [...new Set(this.schedulesByClasscodeDate.map(schedule => schedule.TIME_FROM))].sort();
+      this.endTimes = [...new Set(this.schedulesByClasscodeDate.map(schedule => schedule.TIME_TO))].sort();
+      this.startTime = '';
+      this.endTime = '';
 
-    if (propagate && this.startTimes.length === 1) {
-      this.changeStartTime(this.startTime = this.startTimes[0]);
+      if (propagate && this.startTimes.length === 1) {
+        this.changeStartTime(this.startTime = this.startTimes[0]);
+      }
+    } else {
+      const d = new Date();
+      if (date === this.isoDate(d)) { // current day
+        const nowMins = d.getHours() * 60 + d.getMinutes();
+        const firstFutureClass = this.timings.find(time => nowMins < this.parseTime(time));
+        this.manualStartTimes = this.timings.slice(0, this.timings.indexOf(firstFutureClass));
+      } else {
+        this.manualStartTimes = this.timings;
+      }
     }
   }
 
@@ -298,7 +311,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
       this.endTime = schedule.TIME_TO;
       this.classType = schedule.TYPE;
     } else {
-      this.manualEndTimes = this.manualStartTimes.slice(this.manualStartTimes.indexOf(startTime) + 1);
+      this.manualEndTimes = this.timings.slice(this.timings.indexOf(startTime) + 1);
     }
   }
 
