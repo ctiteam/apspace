@@ -5,8 +5,8 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { authenticator } from 'otplib/otplib-browser';
 import { NEVER, Observable, Subject, timer } from 'rxjs';
 import {
-  catchError, endWith, finalize, first, map, pluck, scan, shareReplay,
-  startWith, switchMap, takeUntil, tap,
+  catchError, endWith, first, map, pluck, scan, shareReplay, startWith,
+  switchMap, takeUntil, tap,
 } from 'rxjs/operators';
 
 import {
@@ -14,6 +14,7 @@ import {
   MarkAttendanceGQL, NewStatusGQL, NewStatusSubscription, ResetAttendanceGQL,
   SaveLectureLogGQL, ScheduleInput, Status
 } from '../../../../generated/graphql';
+import { isoDate, parseTime } from '../date';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,9 +26,9 @@ export class MarkAttendancePage implements OnInit {
 
   schedule: ScheduleInput;
 
-  auto = true;
+  auto: boolean;
   term = '';
-  type: 'Y' | 'L' | 'N' | 'R' | '' = 'N';
+  type: 'Y' | 'L' | 'N' | 'R' | '';
   resetable = false;
 
   lectureUpdate = '';
@@ -71,16 +72,24 @@ export class MarkAttendancePage implements OnInit {
     const limit = new Date(today).setDate(today.getDate() - 30);
     this.resetable = limit <= Date.parse(schedule.date);
 
+    // initAttendance and attendance query order based on probability
+    const init = () => (this.auto = true, this.type = 'N', this.initAttendance.mutate({ schedule }));
+    const list = () => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }));
+    const d = new Date();
+    const nowMins = d.getHours() * 60 + d.getMinutes();
+    // should be start <= now <= end + 5 but can ignore this because of classes page
+    const attendance$ = schedule.date === isoDate(today) && parseTime(schedule.startTime) <= nowMins
+      ? init().pipe(catchError(list))
+      : list().pipe(catchError(init));
+
     // get attendance state from query and use manual mode if attendance initialized
-    const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
-      catchError(() => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }))),
+    const attendancesState$ = attendance$.pipe(
       catchError(err => {
         this.toast('Failed to mark attendance: ' + err.message.replace('GraphQL error: ', ''), 'danger');
         console.error(err);
         return NEVER;
       }),
       pluck('data'),
-      finalize(() => 'initAttendance ended'),
       tap((query: AttendanceQuery | InitAttendanceMutation) => {
         studentsNameById = query.attendance.students.reduce((acc, s) => (acc[s.id] = s, acc), {});
       }),
