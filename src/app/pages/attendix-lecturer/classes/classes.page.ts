@@ -185,7 +185,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
       // manual classcodes
       this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
       this.manualDates = [...Array(30).keys()]
-        .map(n => new Date(new Date().setDate(new Date().getDate() - n)).toISOString().slice(0, 10));
+        .map(n => this.isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
     });
   }
 
