@@ -8,6 +8,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
 import { Classcode, StaffProfile, StudentTimetable } from '../../../interfaces';
 import { StudentTimetableService, WsApiService } from '../../../services';
+import { between, isoDate, parseTime } from '../date';
 
 type Schedule = Pick<Classcode, 'CLASS_CODE'>
   & Pick<StudentTimetable, 'DATESTAMP_ISO' | 'TIME_FROM' | 'TIME_TO'>
@@ -108,7 +109,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
 
   ionViewDidEnter() {
     const d = new Date();
-    this.date = this.isoDate(d);
+    this.date = isoDate(d);
     const nowMins = d.getHours() * 60 + d.getMinutes();
 
     const loadingCtrl = this.loadingCtrl.create({
@@ -122,7 +123,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     const timetables$ = this.timetablesprofile$.pipe(
       map(([profile, timetables]) => timetables.filter(timetable =>
         profile[0].ID === timetable.SAMACCOUNTNAME
-        && this.parseTime(timetable.TIME_FROM) <= nowMins)),
+        && parseTime(timetable.TIME_FROM) <= nowMins)),
     );
     const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes');
 
@@ -187,7 +188,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
       // manual classcodes
       this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
       this.manualDates = [...Array(30).keys()]
-        .map(n => this.isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
+        .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
     });
   }
 
@@ -202,12 +203,12 @@ export class ClassesPage implements AfterViewInit, OnInit {
   /** Guess the current classcode based on timetable. */
   guessWork(schedules: (Classcode & StudentTimetable)[], nowMins: number) {
     const d = new Date();
-    const date = this.isoDate(d);
+    const date = isoDate(d);
 
     const guessSchedules = schedules.filter(schedule => {
       return schedule.DATESTAMP_ISO === date
         && schedule.CLASS_CODE // CLASS_CODE may not be matched
-        && this.between(schedule.TIME_FROM, schedule.TIME_TO, nowMins);
+        && between(schedule.TIME_FROM, schedule.TIME_TO, nowMins);
     });
 
     if (new Set(guessSchedules.map(schedule => schedule.MODID)).size !== 1) {
@@ -227,16 +228,6 @@ export class ClassesPage implements AfterViewInit, OnInit {
     this.changeDate(this.date = date, false);
     this.changeStartTime(this.startTime = currentSchedule.TIME_FROM);
     // console.log('currentSchedule', currentSchedule);
-  }
-
-  /** Parse time into minutes of day in 12:59 PM format. */
-  parseTime(time: string): number {
-    return ((time.slice(-2) === 'PM' ? 12 : 0) + +time.slice(0, 2) % 12) * 60 + +time.slice(3, 5);
-  }
-
-  /** Identify if time is between start and end time in 12:59 PM format. */
-  between(start: string, end: string, nowMins: number): boolean {
-    return this.parseTime(start) <= nowMins && nowMins <= this.parseTime(end);
   }
 
   /** Display search modal to choose classcode. */
@@ -285,9 +276,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
       }
     } else {
       const d = new Date();
-      if (date === this.isoDate(d)) { // current day
+      if (date === isoDate(d)) { // current day
         const nowMins = d.getHours() * 60 + d.getMinutes();
-        const firstFutureClass = this.timings.find(time => nowMins < this.parseTime(time));
+        const firstFutureClass = this.timings.find(time => nowMins < parseTime(time));
         this.manualStartTimes = this.timings.slice(0, this.timings.indexOf(firstFutureClass));
       } else {
         this.manualStartTimes = this.timings;
@@ -356,11 +347,6 @@ export class ClassesPage implements AfterViewInit, OnInit {
       endTime: this.auto ? this.endTime : this.manualEndTime,
       classType: this.auto ? this.classType : this.manualClassType,
     }]);
-  }
-
-  /** Helper function to get ISO 8601 Date from Date. */
-  private isoDate(d: Date): string {
-    return `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`;
   }
 
 }
