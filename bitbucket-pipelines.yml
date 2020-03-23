@@ -40,5 +40,6 @@ pipelines:
 definitions:
   services:
     deploy-to-prod:
-      image: cticti/aws-cli:node-ionic-alpine
+      image:
+        name: cticti/aws-cli:node-ionic-alpine
       memory: 2048
