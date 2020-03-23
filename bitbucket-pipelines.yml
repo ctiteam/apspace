@@ -19,7 +19,6 @@ pipelines:
     production:
     - step:
         image: cticti/aws-cli:node-ionic-alpine
-        size: 2x
         caches:
           - node
         script:
