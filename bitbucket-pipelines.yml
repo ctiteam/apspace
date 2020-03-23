@@ -19,7 +19,7 @@ pipelines:
     production:
       - step:
           services:
-            - deploy_to_prod
+            - deploy-to-prod
           caches:
             - node
           script:
@@ -39,6 +39,6 @@ pipelines:
 
 definitions:
   services:
-    deploy_to_prod:
+    deploy-to-prod:
       image: cticti/aws-cli:node-ionic-alpine
       memory: 2048
