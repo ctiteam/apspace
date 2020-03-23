@@ -216,6 +216,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
         message: 'Fail to auto complete, switched to \'Manual\' mode',
         duration: 3000,
         position: 'top',
+        color: 'warning',
         showCloseButton: true,
       }).then(toast => toast.present());
       this.auto = false;
