@@ -73,14 +73,13 @@ export class MarkAttendancePage implements OnInit {
     this.resetable = limit <= Date.parse(schedule.date);
 
     // initAttendance and attendance query order based on probability
-    const init = () => (this.auto = true, this.type = 'N', this.initAttendance.mutate({ schedule }));
-    const list = () => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }));
     const d = new Date();
     const nowMins = d.getHours() * 60 + d.getMinutes();
     // should be start <= now <= end + 5 but can ignore this because of classes page
-    const attendance$ = schedule.date === isoDate(today) && parseTime(schedule.startTime) <= nowMins
-      ? init().pipe(catchError(list))
-      : list().pipe(catchError(init));
+    const thisClass = schedule.date === isoDate(today) && parseTime(schedule.startTime) <= nowMins;
+    const init = () => (this.auto = thisClass, this.type = 'N', this.initAttendance.mutate({ schedule }));
+    const list = () => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }));
+    const attendance$ = thisClass ? init().pipe(catchError(list)) : list().pipe(catchError(init));
 
     // get attendance state from query and use manual mode if attendance initialized
     const attendancesState$ = attendance$.pipe(
