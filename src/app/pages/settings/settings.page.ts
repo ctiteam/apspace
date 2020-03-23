@@ -53,6 +53,7 @@ export class SettingsPage implements OnInit {
   locationOptions = [
     'New Campus',
     'TPM',
+    'Online'
   ];
 
   constructor(
