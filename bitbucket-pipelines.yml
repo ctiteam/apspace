@@ -1,5 +1,4 @@
 image: node:erbium-alpine
-
 pipelines:
   # default:
   #   - step: &build-test
@@ -18,15 +17,16 @@ pipelines:
   #     - step: *build-test
   branches:
     production:
-    - step:
-        image: cticti/aws-cli:node-ionic-alpine
-        caches:
-          - node
-        script:
-          - npm i
-          - ionic build --prod
-          - aws s3 sync www/ s3://apspace-production/ --acl public-read
-          - aws cloudfront create-invalidation --distribution-id E2U0MAK0TADMRA --paths "/*"
+      - step:
+          services:
+            - docker
+          caches:
+            - node
+          script:
+            - npm i
+            - ionic build --prod
+            - aws s3 sync www/ s3://apspace-production/ --acl public-read
+            - aws cloudfront create-invalidation --distribution-id E2U0MAK0TADMRA --paths "/*"
     staging:
     - step:
         image: cticti/aws-cli:node-ionic-alpine
@@ -36,3 +36,9 @@ pipelines:
           - npm i
           - ionic build --prod
           - aws s3 sync www/ s3://apspace-staging/ --acl public-read
+
+definitions:
+  services:
+    docker:
+      image: cticti/aws-cli:node-ionic-alpine
+      memory: 2048
