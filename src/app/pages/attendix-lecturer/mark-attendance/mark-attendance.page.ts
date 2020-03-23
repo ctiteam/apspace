@@ -195,7 +195,7 @@ export class MarkAttendancePage implements OnInit {
     const schedule = this.schedule;
     this.saveLectureLog.mutate({ schedule, log: { lectureUpdate } }).subscribe(
       () => this.toast('Lecture update saved', 'success'),
-      e => { this.toast('Lecture update failed: ' + e, 'failure'); console.error(e); }
+      e => { this.toast('Lecture update failed: ' + e, 'danger'); console.error(e); }
     );
   }
 
@@ -216,7 +216,7 @@ export class MarkAttendancePage implements OnInit {
             const schedule = this.schedule;
             this.resetAttendance.mutate({ schedule }).subscribe(
               () => { this.toast('Attendance deleted', 'success'), this.location.back(); },
-              e => { this.toast('Attendance delete failed: ' + e, 'failure'); console.error(e); }
+              e => { this.toast('Attendance delete failed: ' + e, 'danger'); console.error(e); }
             );
           }
         }
