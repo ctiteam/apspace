@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { authenticator } from 'otplib/otplib-browser';
 import { NEVER, Observable, Subject, timer } from 'rxjs';
 import {
@@ -52,6 +52,7 @@ export class MarkAttendancePage implements OnInit {
     private saveLectureLog: SaveLectureLogGQL,
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
+    public loadingCtrl: LoadingController
   ) { }
 
   ngOnInit() {
@@ -156,6 +157,28 @@ export class MarkAttendancePage implements OnInit {
       map(students => students.length),
       first() // total does not change so stop counting
     );
+  }
+
+  // Mark all student as present
+  markAllPresent() {
+    let studentsArray = [];
+
+    this.students$.pipe(
+      tap(students => studentsArray = students)
+    ).subscribe();
+
+    this.loadingCtrl.create({
+      message: 'Please wait...'
+    }).then(loading => {
+      loading.present().then(() => {
+        studentsArray.forEach(student => {
+          if (student.attendance !== 'Y') {
+            this.mark(student.id, 'Y');
+          }
+        });
+        loading.dismiss().then(() => this.toast('All students has been marked as present.', 'success'));
+      });
+    });
   }
 
   /** Mark student attendance. */

@@ -74,6 +74,13 @@
           </ion-item>
         </ion-col>
       </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-end">
+          <ion-button (click)="markAllPresent()">
+            MARK ALL PRESENT
+          </ion-button>
+        </ion-col>
+      </ion-row>
     </ion-grid>
     <div class="ion-padding-bottom">
       <ion-virtual-scroll [items]="students$ | async | attendance:type | search:term"
