@@ -5,6 +5,7 @@ import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 
+import { Vibration } from '@ionic-native/vibration/ngx';
 import { UpdateAttendanceGQL } from '../../../generated/graphql';
 import { SettingsService } from '../../services';
 
@@ -32,7 +33,8 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
     public alertCtrl: AlertController,
     public plt: Platform,
     public qrScanner: QRScanner,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    public vibration: Vibration
   ) { }
 
   ngOnInit() {
@@ -130,6 +132,8 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
       this.sending = true;
       this.updateAttendance.mutate({ otp }).subscribe(d => {
         this.sending = false;
+        // Vibrator (Vibrate til death!)
+        this.vibration.vibrate(1000);
         this.toast('Attendance updated', 'success');
         console.log(d);
         res(true);
