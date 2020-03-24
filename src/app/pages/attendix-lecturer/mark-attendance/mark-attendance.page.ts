@@ -79,7 +79,9 @@ export class MarkAttendancePage implements OnInit {
     const thisClass = schedule.date === isoDate(today) && parseTime(schedule.startTime) <= nowMins;
     const init = () => (this.auto = thisClass, this.type = 'N', this.initAttendance.mutate({ schedule }));
     const list = () => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }));
-    const attendance$ = thisClass ? init().pipe(catchError(list)) : list().pipe(catchError(init));
+    // TODO: use this later after backend was fixed
+    // const attendance$ = thisClass ? init().pipe(catchError(list)) : list().pipe(catchError(init));
+    const attendance$ = list().pipe(catchError(init));
 
     // get attendance state from query and use manual mode if attendance initialized
     const attendancesState$ = attendance$.pipe(
