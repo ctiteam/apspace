@@ -3,16 +3,17 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { authenticator } from 'otplib/otplib-browser';
-import { NEVER, Observable, Subject, timer } from 'rxjs';
+import { NEVER, Observable, Subject, forkJoin, of, timer } from 'rxjs';
 import {
-  catchError, endWith, first, map, pluck, scan, shareReplay, startWith,
-  switchMap, takeUntil, tap,
+  catchError, endWith, finalize, first, map, mergeMap, pluck, scan,
+  shareReplay, startWith, switchMap, takeUntil, tap,
 } from 'rxjs/operators';
 
 import {
   AttendanceGQL, AttendanceQuery, InitAttendanceGQL, InitAttendanceMutation,
-  MarkAttendanceGQL, NewStatusGQL, NewStatusSubscription, ResetAttendanceGQL,
-  SaveLectureLogGQL, ScheduleInput, Status
+  MarkAttendanceGQL, MarkAttendanceMutation, NewStatusGQL,
+  NewStatusSubscription, ResetAttendanceGQL, SaveLectureLogGQL, ScheduleInput,
+  Status
 } from '../../../../generated/graphql';
 import { isoDate, parseTime } from '../date';
 
@@ -157,36 +158,12 @@ export class MarkAttendancePage implements OnInit {
     );
   }
 
-  // Mark all student as present
-  markAllPresent() {
-    let studentsArray = [];
-
-    this.students$.pipe(
-      tap(students => studentsArray = students)
-    ).subscribe();
-
-    this.loadingCtrl.create({
-      message: 'Please wait...'
-    }).then(loading => {
-      loading.present().then(() => {
-        studentsArray.forEach(student => {
-          if (student.attendance !== 'Y') {
-            this.mark(student.id, 'Y');
-          }
-        });
-        loading.dismiss().then(() => this.toast('All students has been marked as present.', 'success'));
-      });
-    });
-  }
-
-  /** Mark student attendance. */
-  mark(student: string, attendance: string, absentEvent?: KeyboardEvent) {
-    const el = absentEvent && absentEvent.target as HTMLInputElement;
-    if (el) {
-      el.blur();
-    }
-    const absentReason = el && el.value || null;
-
+  /** Generate mark attendance subscription. */
+  private _mark(
+    student: string,
+    attendance: string,
+    absentReason: string = null,
+  ): Observable<MarkAttendanceMutation> {
     // fallback to absent if reason is left empty
     if (attendance === 'R' && absentReason === null) {
       attendance = 'N';
@@ -206,9 +183,39 @@ export class MarkAttendancePage implements OnInit {
       }
     };
     const schedule = this.schedule;
-    this.markAttendance.mutate({ schedule, student, attendance, absentReason }, options).subscribe(
+    return this.markAttendance.mutate({ schedule, student, attendance, absentReason }, options);
+  }
+
+  /** Mark all student as present. */
+  markAllPresent() {
+    this.loadingCtrl.create({ message: 'Updating' }).then(loading => {
+      loading.present();
+      this.students$.pipe(
+        // run for all students at the same time and wait
+        mergeMap(students => forkJoin(...students
+          .filter(({ attendance }) => attendance !== 'Y')
+          .map(({ id }) => this._mark(id, 'Y')),
+          of(null) // complete observable if all already present
+        )),
+        finalize(() => loading.dismiss()),
+        first() // stop running once this is done
+      ).subscribe(
+        () => this.toast('Marked all present', 'success'),
+        e => { this.toast('Mark all present failed: ' + e, 'danger'); console.error(e); },
+      );
+    });
+  }
+
+  /** Mark student attendance. */
+  mark(student: string, attendance: string, absentEvent?: KeyboardEvent) {
+    const el = absentEvent && absentEvent.target as HTMLInputElement;
+    if (el) {
+      el.blur();
+    }
+    const absentReason = el && el.value || null;
+    this._mark(student, attendance, absentReason).subscribe(
       () => {},
-      e => console.error(e) // XXX: retry attendance$ on failure
+      e => console.error(e)
     );
   }
 
