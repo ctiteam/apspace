@@ -26,10 +26,8 @@
             [ngStyle]="{filter: otp === '---' ? 'blur(5px)' : '',
                         opacity: otp === '---' ? '0.5' : ''}"></qrcode>
           <div *ngIf="otp === '---'" class="dead">
-            <h2>System Closed</h2>
-            <p>
-              No more attendance can be taken
-            </p>
+            <p><strong>System Closed</strong></p>
+            <p>No more attendance can be taken</p>
           </div>
         </ion-col>
         <ion-col size="10" offset="1" sizeSm="3" offsetSm="0">

@@ -23,12 +23,11 @@
   text-align: center;
   padding: 30px;
   color: var(--danger-color);
-  text-shadow: white 2px 5px;
-  background: white;
+  background-color: var(--secondary-bg-color);
+  text-shadow: var(--tertiary-bg-color) 2px 3px;
 
-  h2, p{
+  p {
     font-size: 3rem;
-
   }
 }
 
