@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { authenticator } from 'otplib/otplib-browser';
-import { NEVER, Observable, Subject, forkJoin, of, timer } from 'rxjs';
+import { NEVER, Observable, Subject, forkJoin, interval, of, timer } from 'rxjs';
 import {
   catchError, endWith, finalize, first, map, mergeMap, pluck, scan,
   shareReplay, startWith, switchMap, takeUntil, tap,
@@ -36,7 +36,10 @@ export class MarkAttendancePage implements OnInit {
 
   lectureUpdate = '';
 
+  countdown$: Observable<number>;
+  timeLeft$: Observable<number>;
   otp$: Observable<number>;
+
   lastMarked$: Observable<Pick<NewStatusSubscription, 'newStatus'>[]>;
   students$: Observable<Partial<Status>[]>;
   totalPresentStudents$: Observable<number>;
@@ -120,13 +123,29 @@ export class MarkAttendancePage implements OnInit {
       shareReplay(1) // used shareReplay for observable subscriptions time gap
     );
 
-    // only regenerate otp when needed until class ends with 5 minutes buffer
+    // stop timer until class ends with 5 minutes buffer
     const hh = +schedule.endTime.slice(0, 2) % 12 + (schedule.endTime.slice(-2) === 'PM' ? 12 : 0);
     const mm = +schedule.endTime.slice(3, 5) + 5;
+    const stopTimer$ = timer(new Date(schedule.date).setHours(hh, mm) - new Date().getTime());
+    const reload$ = timer(authenticator.timeRemaining() * 1000, authenticator.options.step * 1000).pipe(
+      takeUntil(stopTimer$),
+      shareReplay(1)
+    );
+
+    // display countdown timer
+    this.timeLeft$ = reload$.pipe(
+      startWith(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000),
+      map(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000)
+    );
+    this.countdown$ = interval(1000).pipe(
+      takeUntil(stopTimer$),
+      map(() => authenticator.timeRemaining() + 29) // ignore current second
+    );
+
+    // only regenerate otp when needed during class
     this.otp$ = secret$.pipe(
       switchMap(secret =>
-        timer(authenticator.timeRemaining() * 1000, authenticator.options.step * 1000).pipe(
-          takeUntil(timer(new Date(schedule.date).setHours(hh, mm) - new Date().getTime())),
+        reload$.pipe(
           startWith(() => authenticator.generate(secret)),
           map(() => authenticator.generate(secret)),
           endWith('---')
