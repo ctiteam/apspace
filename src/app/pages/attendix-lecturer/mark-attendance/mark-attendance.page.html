@@ -54,11 +54,11 @@
     <!-- just subscribe for the side effects -->
     <ng-template [ngIf]="lastMarked$ | async"></ng-template>
     <ion-grid>
-      <ion-row>
-        <ion-col size="9" sizeMd="7">
+      <ion-row class="ion-align-items-center">
+        <ion-col size="12" sizeMd="12" sizeXl="5">
           <ion-searchbar [(ngModel)]="term"></ion-searchbar>
         </ion-col>
-        <ion-col size="3" sizeMd="2">
+        <ion-col size="12" sizeMd="12" sizeXl="2">
           <ion-select [(ngModel)]="type" placeholder="Attendance" interface="popover">
             <ion-select-option value="">Any</ion-select-option>
             <ion-select-option value="Y">Present</ion-select-option>
@@ -67,15 +67,13 @@
             <ion-select-option value="R">Absent with reason</ion-select-option>
           </ion-select>
         </ion-col>
-        <ion-col size="12" sizeMd="3">
+        <ion-col size="12" sizeMd="12" sizeXl="3">
           <ion-item lines="none">
             <ion-textarea [(ngModel)]="lectureUpdate" (ionChange)="save(lectureUpdate)" debounce="5000"
               placeholder="Lecture Update" rows="1" class="ion-no-padding"></ion-textarea>
           </ion-item>
         </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col class="ion-text-end">
+        <ion-col size="12" sizeMd="12" sizeXl="2" class="ion-text-end">
           <ion-button (click)="markAllPresent()">
             MARK ALL PRESENT
           </ion-button>
