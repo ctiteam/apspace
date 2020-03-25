@@ -163,7 +163,7 @@ describe('MarkAttendancePage', () => {
       tick();
 
       expect(component).toBeTruthy();
-      expect(component.auto).toEqual(true);
+      expect(component.auto).toEqual(false);
     }));
   });
 });
