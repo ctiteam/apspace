@@ -120,10 +120,11 @@ export class ClassesPage implements AfterViewInit, OnInit {
     });
     loadingCtrl.then(loading => loading.present());
 
+    // get self timetable but filter out future classes
     const timetables$ = this.timetablesprofile$.pipe(
       map(([profile, timetables]) => timetables.filter(timetable =>
         profile[0].ID === timetable.SAMACCOUNTNAME
-        && parseTime(timetable.TIME_FROM) <= nowMins)),
+        && (timetable.DATESTAMP_ISO !== this.date || parseTime(timetable.TIME_FROM) <= nowMins))),
     );
     const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes');
 
@@ -202,11 +203,8 @@ export class ClassesPage implements AfterViewInit, OnInit {
 
   /** Guess the current classcode based on timetable. */
   guessWork(schedules: (Classcode & StudentTimetable)[], nowMins: number) {
-    const d = new Date();
-    const date = isoDate(d);
-
     const guessSchedules = schedules.filter(schedule => {
-      return schedule.DATESTAMP_ISO === date
+      return schedule.DATESTAMP_ISO === this.date
         && schedule.CLASS_CODE // CLASS_CODE may not be matched
         && between(schedule.TIME_FROM, schedule.TIME_TO, nowMins);
     });
@@ -226,7 +224,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     const currentSchedule = guessSchedules[0];
 
     this.changeClasscode(this.classcode = currentSchedule.CLASS_CODE, false);
-    this.changeDate(this.date = date, false);
+    this.changeDate(this.date, false);  // this.date set on ionViewDidLoad
     this.changeStartTime(this.startTime = currentSchedule.TIME_FROM);
     // console.log('currentSchedule', currentSchedule);
   }
