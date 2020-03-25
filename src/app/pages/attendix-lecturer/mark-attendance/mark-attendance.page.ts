@@ -192,11 +192,11 @@ export class MarkAttendancePage implements OnInit {
       loading.present();
       this.students$.pipe(
         // run for all students at the same time and wait
-        mergeMap(students => forkJoin(...students
+        mergeMap(students => forkJoin([...students
           .filter(({ attendance }) => attendance !== 'Y')
           .map(({ id }) => this._mark(id, 'Y')),
           of(null) // complete observable if all already present
-        )),
+        ])),
         finalize(() => loading.dismiss()),
         first() // stop running once this is done
       ).subscribe(
