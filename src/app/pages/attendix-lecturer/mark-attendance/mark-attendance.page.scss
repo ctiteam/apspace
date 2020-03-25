@@ -59,6 +59,11 @@
   --background-hover: #519657 !important;
 }
 
+ion-button#mark-all {
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
 ion-card > ion-item > ion-label {
   --color: #000000 !important;
   min-width: 15ex; /* force occupy some space on mobile */

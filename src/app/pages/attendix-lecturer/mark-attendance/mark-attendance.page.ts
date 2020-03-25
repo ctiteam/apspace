@@ -17,6 +17,8 @@ import {
 } from '../../../../generated/graphql';
 import { isoDate, parseTime } from '../date';
 
+type Attendance = 'Y' | 'L' | 'N' | 'R' | '';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-mark-attendance',
@@ -29,7 +31,7 @@ export class MarkAttendancePage implements OnInit {
 
   auto: boolean;
   term = '';
-  type: 'Y' | 'L' | 'N' | 'R' | '';
+  type: Attendance;
   resetable = false;
 
   lectureUpdate = '';
@@ -186,15 +188,17 @@ export class MarkAttendancePage implements OnInit {
     return this.markAttendance.mutate({ schedule, student, attendance, absentReason }, options);
   }
 
-  /** Mark all student as present. */
-  markAllPresent() {
-    this.loadingCtrl.create({ message: 'Updating' }).then(loading => {
+  /** Mark all student as ... */
+  markAll() {
+    const markAll = (newAttendance: Attendance) => this.loadingCtrl.create({
+      message: 'Updating'
+    }).then(loading => {
       loading.present();
       this.students$.pipe(
         // run for all students at the same time and wait
         mergeMap(students => forkJoin([...students
-          .filter(({ attendance }) => attendance !== 'Y')
-          .map(({ id }) => this._mark(id, 'Y')),
+          .filter(({ attendance }) => attendance !== newAttendance)
+          .map(({ id }) => this._mark(id, newAttendance)),
           of(null) // complete observable if all already present
         ])),
         finalize(() => loading.dismiss()),
@@ -204,6 +208,28 @@ export class MarkAttendancePage implements OnInit {
         e => { this.toast('Mark all present failed: ' + e, 'danger'); console.error(e); },
       );
     });
+    this.alertCtrl.create({
+      header: 'Mark all students as ...',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Present',
+          handler: () => markAll('Y')
+        },
+        {
+          text: 'Late',
+          handler: () => markAll('L')
+        },
+        {
+          text: 'Absent',
+          handler: () => markAll('N')
+        }
+      ]
+    }).then(alert => alert.present());
   }
 
   /** Mark student attendance. */
