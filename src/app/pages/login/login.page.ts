@@ -1,25 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Network } from '@ionic-native/network/ngx';
-import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
-
-import { throwError } from 'rxjs';
-import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
-
 import { FCM } from '@ionic-native/fcm/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Network } from '@ionic-native/network/ngx';
+import { AlertController, IonContent, IonSlides, ModalController, Platform, ToastController } from '@ionic/angular';
+import { throwError } from 'rxjs';
+import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 import { Role } from '../../interfaces';
-import {
-  CasTicketService,
-  DataCollectorService,
-  NotificationService,
-  SettingsService,
-  UserSettingsService,
-  WsApiService
-} from '../../services';
+import { CasTicketService, DataCollectorService, NotificationService, SettingsService, UserSettingsService, WsApiService } from '../../services';
 import { NotificationModalPage } from '../notifications/notification-modal';
-// import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
-// import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
+
+
 
 @Component({
   selector: 'app-login',
@@ -27,7 +18,24 @@ import { NotificationModalPage } from '../notifications/notification-modal';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
-
+  screenHeight: number;
+  screenWidth: number;
+  @ViewChild('content', { static: true }) content: IonContent;
+  @ViewChild('sliderSlides') sliderSlides: IonSlides;
+  slideOpts = {
+    initialSlide: 1,
+    autoplay: true,
+    speed: 400,
+    loop: true,
+    autoplayDisableOnInteraction: false,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+      renderBullet: (_, className) => {
+        return '<span style="width: 10px; height: 10px; background-color: #753a88 !important;" class="' + className + '"></span>';
+      }
+    }
+  };
   apkey: string;
   password: string;
   showPassword: boolean;
@@ -47,14 +55,16 @@ export class LoginPage {
     private modalCtrl: ModalController,
     private network: Network,
     private notificationService: NotificationService,
-    private plt: Platform,
+    public plt: Platform,
     private router: Router,
     private route: ActivatedRoute,
     private settings: SettingsService,
     private toastCtrl: ToastController,
     private userSettings: UserSettingsService,
     private ws: WsApiService
-  ) { }
+  ) {
+    this.getScreenSize();
+  }
 
   login() {
     this.userDidLogin = true;
@@ -215,6 +225,39 @@ export class LoginPage {
 
   openApkeyTroubleshooting() {
     this.iab.create('http://kb.sites.apiit.edu.my/knowledge-base/unable-to-sign-in-using-apkey-apkey-troubleshooting/', '_system', 'location=true');
+  }
+
+  logScrollStart() {
+    console.log('scroll start');
+  }
+
+  logScrolling(ev) {
+    console.log('scrolling', ev);
+    console.log(this.screenHeight);
+
+  }
+
+  logScrollEnd() {
+    console.log('scroll ends');
+  }
+
+  @HostListener('window:resize', ['$event'])
+  getScreenSize() {
+    this.screenHeight = window.innerHeight;
+    this.screenWidth = window.innerWidth;
+  }
+
+  moveToNextPage() {
+    this.content.scrollByPoint(0, this.screenHeight, 900);
+  }
+
+  // SLIDER
+  prevSlide() {
+    this.sliderSlides.slidePrev();
+  }
+
+  nextSlide() {
+    this.sliderSlides.slideNext();
   }
 
 }
