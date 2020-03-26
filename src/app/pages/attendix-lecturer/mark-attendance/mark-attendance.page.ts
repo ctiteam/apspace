@@ -268,11 +268,14 @@ export class MarkAttendancePage implements OnInit {
 
   /** Save lecture update notes. */
   save(lectureUpdate: string) {
-    const schedule = this.schedule;
-    this.saveLectureLog.mutate({ schedule, log: { lectureUpdate } }).subscribe(
-      () => this.toast('Lecture update saved', 'success'),
-      e => { this.toast('Lecture update failed: ' + e, 'danger'); console.error(e); }
-    );
+    if (this.lectureUpdate !== lectureUpdate) {
+      const schedule = this.schedule;
+      this.saveLectureLog.mutate({ schedule, log: { lectureUpdate } }).subscribe(
+        () => this.toast('Lecture update saved', 'success'),
+        e => { this.toast('Lecture update failed: ' + e, 'danger'); console.error(e); }
+      );
+      this.lectureUpdate = lectureUpdate;
+    }
   }
 
   /** Reset attendance, double confirm. */
