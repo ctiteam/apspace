@@ -19,6 +19,8 @@ import { isoDate, parseTime } from '../date';
 
 type Attendance = 'Y' | 'L' | 'N' | 'R' | '';
 
+const stateMap = {Y: 'present', L: 'late', N: 'absent', R: 'absent with reason'};
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-mark-attendance',
@@ -223,8 +225,8 @@ export class MarkAttendancePage implements OnInit {
         finalize(() => loading.dismiss()),
         first() // stop running once this is done
       ).subscribe(
-        () => this.toast('Marked all present', 'success'),
-        e => { this.toast('Mark all present failed: ' + e, 'danger'); console.error(e); },
+        () => this.toast(`Marked all ${stateMap[newAttendance]}`, 'success'),
+        e => { this.toast(`Mark all ${stateMap[newAttendance]} failed: ${e}`, 'danger'); console.error(e); },
       );
     });
     this.alertCtrl.create({
@@ -260,7 +262,7 @@ export class MarkAttendancePage implements OnInit {
     const absentReason = el && el.value || null;
     this._mark(student, attendance, absentReason).subscribe(
       () => {},
-      e => console.error(e)
+      e => { this.toast(`Mark ${stateMap[attendance]} failed: ` + e, 'danger'); console.error(e); }
     );
   }
 
