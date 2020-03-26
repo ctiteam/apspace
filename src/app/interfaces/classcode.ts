@@ -8,5 +8,11 @@ export interface Classcode {
     TIME_FROM: string;
     TIME_TO: string;
     TYPE: string;
+    TOTAL: Array<{
+      PRESENT: number;
+      LATE: number;
+      ABSENT: number;
+      REASON_REASON: number;
+    }>;
   }>;
 }
