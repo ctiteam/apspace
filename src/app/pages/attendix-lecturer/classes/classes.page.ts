@@ -109,7 +109,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
 
   ionViewDidEnter() {
     const d = new Date();
-    this.date = isoDate(d);
+    const date = isoDate(d);
     const nowMins = d.getHours() * 60 + d.getMinutes();
 
     const loadingCtrl = this.loadingCtrl.create({
@@ -124,7 +124,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     const timetables$ = this.timetablesprofile$.pipe(
       map(([profile, timetables]) => timetables.filter(timetable =>
         profile[0].ID === timetable.SAMACCOUNTNAME
-        && (timetable.DATESTAMP_ISO !== this.date || parseTime(timetable.TIME_FROM) <= nowMins))),
+        && (timetable.DATESTAMP_ISO !== date || parseTime(timetable.TIME_FROM) <= nowMins))),
     );
     const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes');
 
@@ -174,7 +174,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
           TYPE: guessClassType,
         };
       });
-      this.guessWork(joined, nowMins);
+      this.guessWork(joined, date, nowMins);
 
       // append existing timetable after guess work
       const mapped = classcodes.map(({ CLASS_CODE, CLASSES }) =>
@@ -202,9 +202,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
   }
 
   /** Guess the current classcode based on timetable. */
-  guessWork(schedules: (Classcode & StudentTimetable)[], nowMins: number) {
+  guessWork(schedules: (Classcode & StudentTimetable)[], date: string, nowMins: number) {
     const guessSchedules = schedules.filter(schedule => {
-      return schedule.DATESTAMP_ISO === this.date
+      return schedule.DATESTAMP_ISO === date
         && schedule.CLASS_CODE // CLASS_CODE may not be matched
         && between(schedule.TIME_FROM, schedule.TIME_TO, nowMins);
     });
@@ -223,8 +223,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
     }
     const currentSchedule = guessSchedules[0];
 
+    // set inputs only if all are found
     this.changeClasscode(this.classcode = currentSchedule.CLASS_CODE, false);
-    this.changeDate(this.date, false);  // this.date set on ionViewDidLoad
+    this.changeDate(this.date = date, false);
     this.changeStartTime(this.startTime = currentSchedule.TIME_FROM);
     // console.log('currentSchedule', currentSchedule);
   }
