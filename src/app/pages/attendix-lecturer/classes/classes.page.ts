@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonSelect, LoadingController, ModalController, ToastController } from '@ionic/angular';
 
 import { Observable, forkJoin } from 'rxjs';
@@ -59,6 +59,12 @@ export class ClassesPage implements AfterViewInit, OnInit {
     '11:00 PM', '11:05 PM', '11:10 PM', '11:15 PM', '11:20 PM', '11:25 PM',
     '11:30 PM', '11:35 PM', '11:40 PM', '11:45 PM', '11:50 PM', '11:55 PM'];
 
+  /* optional paramMap from lecturer timetable */
+  paramModuleId: string | null = this.route.snapshot.paramMap.get('moduleId');
+  paramDate: string | null = this.route.snapshot.paramMap.get('date'); // 2020-12-31
+  paramStartTime: string | null = this.route.snapshot.paramMap.get('startTime');
+  paramEndTime: string | null = this.route.snapshot.paramMap.get('endTime');
+
   /* computed */
   classcodes: string[];
   schedules: Schedule[];
@@ -72,7 +78,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
 
   /* selected */
   classcode: string;
-  date: string;  // 2019-01-01
+  date: string; // 2020-12-31
   startTime: string;
   endTime: string;
   classType: string;
@@ -94,6 +100,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
   constructor(
     private tt: StudentTimetableService,
     private ws: WsApiService,
+    private route: ActivatedRoute,
     private router: Router,
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
@@ -108,10 +115,6 @@ export class ClassesPage implements AfterViewInit, OnInit {
   }
 
   ionViewDidEnter() {
-    const d = new Date();
-    const date = isoDate(d);
-    const nowMins = d.getHours() * 60 + d.getMinutes();
-
     const loadingCtrl = this.loadingCtrl.create({
       spinner: 'dots',
       duration: 5000,
@@ -120,77 +123,97 @@ export class ClassesPage implements AfterViewInit, OnInit {
     });
     loadingCtrl.then(loading => loading.present());
 
-    // get self timetable but filter out future classes
-    const timetables$ = this.timetablesprofile$.pipe(
-      map(([profile, timetables]) => timetables.filter(timetable =>
-        profile[0].ID === timetable.SAMACCOUNTNAME
-        && (timetable.DATESTAMP_ISO !== date || parseTime(timetable.TIME_FROM) <= nowMins))),
-    );
+    const d = new Date();
+    const date = isoDate(d);
+    const nowMins = d.getHours() * 60 + d.getMinutes();
+
     const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes');
 
-    forkJoin([timetables$, classcodes$]).subscribe(([timetables, classcodes]) => {
-      // left join on classcodes
-      const joined = timetables.map(timetable => ({
-        ...(
-          classcodes.find(classcode => {
-            // Classcode BM006-3-2-CRI-L-UC2F1805CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
-            // Take only BM006-3-2-CRI-L- (+3 extra characters with '-' pad for L, T1, T2)
-            // Timetable BM006-3-2-CRI-L (or T-1 or T-2, need to strip the '-')
-            const len = classcode.SUBJECT_CODE.length;
-            return classcode.CLASS_CODE.slice(0, len + 3) ===
-              (timetable.MODID.replace(/-([TL])-(\d)$/, '-$1$2') + '-').slice(0, len + 3)
-              && classcode.COURSE_CODE_ALIAS === timetable.INTAKE;
-          }) // fallback without checking the class type (-L)
-          || classcodes.find(classcode => {
-            // Classcode MPU3272-WPCS-UC2F1910SOE-SOT-SOMM-SUH
-            // Take only MPU3272-WPCS
-            // Timetable MPU3272-WPCS-T
-            const len = classcode.SUBJECT_CODE.length;
-            return classcode.CLASS_CODE.slice(0, len) === timetable.MODID.slice(0, len)
-              && classcode.COURSE_CODE_ALIAS === timetable.INTAKE;
-          })
-        ),
-        ...timetable
-      }));
+    // override if paramMap is specified
+    if (this.paramModuleId || this.paramDate || this.paramStartTime || this.paramEndTime) {
+      // TODO below use manual for now, remove it later
+      this.auto = false;
 
-      // lay out base schedules for guessing
-      this.schedules = joined.map(data => {
-        let guessClassType: string | null;
-        if (data.SUBJECT_CODE) {
-          const len = data.SUBJECT_CODE.length;
-          if (data.CLASS_CODE[len + 1] === 'T') {
-            guessClassType = 'Tutorial';
-          } else if (data.CLASS_CODE[len + 2] === 'A') {
-            guessClassType = 'Lab';
-          } else if (data.CLASS_CODE[len + 1] === 'L') {
-            guessClassType = 'Lecture';
-          }
-        }
-        return {
-          CLASS_CODE: data.CLASS_CODE,
-          DATESTAMP_ISO: data.DATESTAMP_ISO,
-          TIME_FROM: data.TIME_FROM,
-          TIME_TO: data.TIME_TO,
-          TYPE: guessClassType,
-        };
+      classcodes$.subscribe(classcodes => {
+        this.fillManualInputs(classcodes);
+
+        // TODO find classcode for module (reuse the same logic below)
+        this.changeDate(this.manualDate = this.paramDate, false);
+        this.changeStartTime(this.manualStartTime = this.paramStartTime);
+        this.manualEndTime = this.paramEndTime;
+
+        loadingCtrl.then(loading => loading.dismiss());
       });
-      this.guessWork(joined, date, nowMins);
+    } else {
+      // get self timetable but filter out future classes
+      const timetables$ = this.timetablesprofile$.pipe(
+        map(([profile, timetables]) => timetables.filter(timetable =>
+          profile[0].ID === timetable.SAMACCOUNTNAME
+          && (timetable.DATESTAMP_ISO !== date
+            || parseTime(timetable.TIME_FROM) <= nowMins))),
+      );
 
-      // append existing timetable after guess work
-      const mapped = classcodes.map(({ CLASS_CODE, CLASSES }) =>
-        CLASSES.map(({ DATE, TIME_FROM, TIME_TO, TYPE }) =>
-          ({ DATESTAMP_ISO: DATE, TIME_FROM, TIME_TO, CLASS_CODE, TYPE })));
-      this.schedules = this.schedules.concat.apply([], mapped);
-      this.classcodes = [...new Set(this.schedules.map(schedule => schedule.CLASS_CODE).filter(Boolean))].sort();
+      forkJoin([timetables$, classcodes$]).subscribe(([timetables, classcodes]) => {
+        // left join on classcodes
+        const joined = timetables.map(timetable => ({
+          ...(
+            classcodes.find(classcode => {
+              // Classcode BM006-3-2-CRI-L-UC2F1805CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
+              // Take only BM006-3-2-CRI-L- (+3 extra characters with '-' pad for L, T1, T2)
+              // Timetable BM006-3-2-CRI-L (or T-1 or T-2, need to strip the '-')
+              const len = classcode.SUBJECT_CODE.length;
+              return classcode.CLASS_CODE.slice(0, len + 3) ===
+                (timetable.MODID.replace(/-([TL])-(\d)$/, '-$1$2') + '-').slice(0, len + 3)
+                && classcode.COURSE_CODE_ALIAS === timetable.INTAKE;
+            }) // fallback without checking the class type (-L)
+            || classcodes.find(classcode => {
+              // Classcode MPU3272-WPCS-UC2F1910SOE-SOT-SOMM-SUH
+              // Take only MPU3272-WPCS
+              // Timetable MPU3272-WPCS-T
+              const len = classcode.SUBJECT_CODE.length;
+              return classcode.CLASS_CODE.slice(0, len) === timetable.MODID.slice(0, len)
+                && classcode.COURSE_CODE_ALIAS === timetable.INTAKE;
+            })
+          ),
+          ...timetable
+        }));
 
-      loadingCtrl.then(loading => loading.dismiss());
-      // console.log('filtered', this.schedules, this.classcodes);
+        // lay out base schedules for guessing
+        this.schedules = joined.map(data => {
+          let guessClassType: string | null;
+          if (data.SUBJECT_CODE) {
+            const len = data.SUBJECT_CODE.length;
+            if (data.CLASS_CODE[len + 1] === 'T') {
+              guessClassType = 'Tutorial';
+            } else if (data.CLASS_CODE[len + 2] === 'A') {
+              guessClassType = 'Lab';
+            } else if (data.CLASS_CODE[len + 1] === 'L') {
+              guessClassType = 'Lecture';
+            }
+          }
+          return {
+            CLASS_CODE: data.CLASS_CODE,
+            DATESTAMP_ISO: data.DATESTAMP_ISO,
+            TIME_FROM: data.TIME_FROM,
+            TIME_TO: data.TIME_TO,
+            TYPE: guessClassType,
+          };
+        });
+        this.guessWork(joined, date, nowMins);
 
-      // manual classcodes
-      this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
-      this.manualDates = [...Array(30).keys()]
-        .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
-    });
+        // append existing timetable after guess work
+        const mapped = classcodes.map(({ CLASS_CODE, CLASSES }) =>
+          CLASSES.map(({ DATE, TIME_FROM, TIME_TO, TYPE }) =>
+            ({ DATESTAMP_ISO: DATE, TIME_FROM, TIME_TO, CLASS_CODE, TYPE })));
+        this.schedules = this.schedules.concat.apply([], mapped);
+        this.classcodes = [...new Set(this.schedules.map(schedule => schedule.CLASS_CODE).filter(Boolean))].sort();
+
+        this.fillManualInputs(classcodes);
+
+        // console.log('filtered', this.schedules, this.classcodes);
+        loadingCtrl.then(loading => loading.dismiss());
+      });
+    }
   }
 
   ngAfterViewInit() {
@@ -249,6 +272,13 @@ export class ClassesPage implements AfterViewInit, OnInit {
     } else {
       this.manualClasscode = classcode;
     }
+  }
+
+  /** Fill manual inputs. */
+  fillManualInputs(classcodes: Classcode[]) {
+    this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
+    this.manualDates = [...Array(30).keys()]
+      .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
   }
 
   /** Change classcode, auto select class type. */

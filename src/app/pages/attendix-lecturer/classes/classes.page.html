@@ -20,7 +20,7 @@
         <ion-item>
           <ion-label>Class Code</ion-label>
           <ion-select #classcodeInput [ngModel]="auto ? classcode : manualClasscode"
-            [disabled]="!classcodes" placeholder="Class Code">
+            [disabled]="auto && !classcodes" placeholder="Class Code">
             <ion-select-option *ngFor="let classcode of auto ? classcodes : manualClasscodes"
               [value]="classcode">{{ classcode }}</ion-select-option>
           </ion-select>
