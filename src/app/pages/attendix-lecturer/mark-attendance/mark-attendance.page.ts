@@ -6,7 +6,7 @@ import { authenticator } from 'otplib/otplib-browser';
 import { NEVER, Observable, Subject, forkJoin, interval, of, timer } from 'rxjs';
 import {
   catchError, endWith, finalize, first, map, mergeMap, pluck, scan,
-  shareReplay, startWith, switchMap, takeUntil, tap,
+  share, shareReplay, startWith, switchMap, takeUntil, tap,
 } from 'rxjs/operators';
 
 import {
@@ -131,28 +131,32 @@ export class MarkAttendancePage implements OnInit {
     const stopTimer$ = timer(new Date(schedule.date).setHours(hh, mm) - new Date().getTime());
     const reload$ = timer(authenticator.timeRemaining() * 1000, authenticator.options.step * 1000).pipe(
       takeUntil(stopTimer$),
-      shareReplay(1)
+      share()
+      // shareReplay(1) // XXX this should use share but why is there a time gap?
     );
 
     // display countdown timer
     this.timeLeft$ = reload$.pipe(
       startWith(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000),
-      map(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000)
+      map(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000),
+      shareReplay(1) // keep track while switching mode
     );
     this.countdown$ = interval(1000).pipe(
       takeUntil(stopTimer$),
-      map(() => authenticator.timeRemaining() + 29) // ignore current second
+      map(() => authenticator.timeRemaining() + 29), // ignore current second
+      shareReplay(1) // keep track while switching mode
     );
 
     // only regenerate otp when needed during class
     this.otp$ = secret$.pipe(
       switchMap(secret =>
         reload$.pipe(
-          startWith(() => authenticator.generate(secret)),
+          startWith(() => null), // start immediately
           map(() => authenticator.generate(secret)),
           endWith('---')
         )
-      )
+      ),
+      shareReplay(1) // keep track while switching mode
     );
 
     // take last 10 values updated and ignore duplicates
@@ -163,7 +167,7 @@ export class MarkAttendancePage implements OnInit {
       tap(({ id, attendance, absentReason }) => this.statusUpdate.next({ id, attendance, absentReason })),
       scan((acc, { id }) => acc.includes(studentsNameById[id])
         ? acc : [...acc, studentsNameById[id]].slice(-10), []),
-      shareReplay(1) // keep track when enter manual mode
+      shareReplay(1) // keep track while switching mode
     );
 
     this.students$ = attendances$.pipe(
