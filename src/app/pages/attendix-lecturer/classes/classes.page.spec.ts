@@ -110,7 +110,13 @@ describe('ClassesPage', () => {
                 DATE: date,
                 TIME_FROM: startTime,
                 TIME_TO: endTime,
-                TYPE: classType
+                TYPE: classType,
+                TOTAL: {
+                  PRESENT: 0,
+                  LATE: 0,
+                  ABSENT: 1,
+                  ABSENT_REASON: 0
+                }
               }],
               COURSE_CODE_ALIAS: 'XXX',
               LECTURER_CODE: 'DOE',
