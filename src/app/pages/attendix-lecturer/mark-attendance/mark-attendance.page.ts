@@ -2,7 +2,7 @@ import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
-import { authenticator } from '@otplib/preset-browser';
+import { authenticator } from 'otplib/otplib-browser';
 import { NEVER, Observable, Subject, forkJoin, interval, of, timer } from 'rxjs';
 import {
   catchError, endWith, finalize, first, map, mergeMap, pluck, scan,
@@ -65,7 +65,7 @@ export class MarkAttendancePage implements OnInit {
 
   ngOnInit() {
     // totp options
-    authenticator.options = { digits: 3, step: 30, window: [0, 30] };
+    authenticator.options = { digits: 3 };
 
     const schedule = this.schedule = {
       classcode: this.route.snapshot.paramMap.get('classcode'),
