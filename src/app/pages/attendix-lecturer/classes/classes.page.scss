@@ -1,7 +1,67 @@
+// general
 .transparent {
   --background: transparent !important;
 }
 
-ion-select.in-item {
-  max-width: 80%;
+.no-box-shadow {
+  box-shadow: none !important;
+}
+
+.margin-auto {
+  margin: auto;
+}
+
+.top-bottom-margin-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+// mark new attendance
+.form-input {
+  border-radius: 7px;
+  background: var(--main-bg-color);
+  padding: 3px 10px !important;
+  margin-top: 10px;
+  border: 1px solid var(--tertiary-bg-color);
+  min-height: 40px;
+}
+
+ion-select.form-input {
+  width: 100%;
+  padding: 8px 10px 9px 10px !important;
+}
+
+
+// attendance logs
+.select-container {
+  .input {
+    border: 1px solid var(--tertiary-bg-color);
+  }
+}
+
+.table {
+  .table-container {
+    padding-top: 5px;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+
+    .table-header {
+      padding-bottom: 5px;
+      border-bottom: 1px solid #cccccc;
+
+      ion-text {
+        font-size: 1rem;
+      }
+    }
+
+    .table-row {
+      padding-top: 5px;
+      padding-bottom: 0;
+
+      &:hover {
+        background: #ececec;
+      }
+    }
+  }
 }
