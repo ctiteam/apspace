@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ComponentsModule } from 'src/app/components/components.module';
 import { HrPage } from './hr.page';
+import { PrintPayslipModalPage } from './print-payslip-modal/print-payslip-modal.page';
 import { SortByDatePipe } from './sort-by-date.pipe';
 
 const routes: Routes = [
@@ -26,6 +27,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [HrPage, SortByDatePipe]
+  declarations: [HrPage, SortByDatePipe, PrintPayslipModalPage],
+  entryComponents: [PrintPayslipModalPage]
 })
 export class HrPageModule { }

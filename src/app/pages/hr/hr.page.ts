@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { OnLeaveOnMyCluster, PendingApproval, StaffDirectory } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
+import { PrintPayslipModalPage } from './print-payslip-modal/print-payslip-modal.page';
 @Component({
   selector: 'app-hr',
   templateUrl: './hr.page.html',
@@ -42,7 +44,7 @@ export class HrPage implements OnInit {
   //   centeredContent: true,
   //   spaceBetween: 8
   // };
-  constructor(private ws: WsApiService, private iab: InAppBrowser) { }
+  constructor(public modalCtrl: ModalController, private ws: WsApiService, private iab: InAppBrowser) { }
 
   ngOnInit() {
     // commented until the backend is fixed
@@ -179,5 +181,15 @@ export class HrPage implements OnInit {
 
   openHrSystem() {
     this.iab.create('https://hr.apiit.edu.my', '_system', 'location=true');
+  }
+
+  openGeneratePayslipPdf() {
+    this.modalCtrl.create({
+      component: PrintPayslipModalPage,
+      cssClass: 'custom-modal-style',
+    }).then(modal => {
+      modal.present();
+      modal.onDidDismiss();
+    });
   }
 }

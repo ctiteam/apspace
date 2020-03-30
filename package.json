@@ -42,8 +42,10 @@
     "@ionic-native/camera": "^5.20.0",
     "@ionic-native/core": "^5.15.0",
     "@ionic-native/device": "^5.15.0",
+    "@ionic-native/document-viewer": "^5.23.0",
     "@ionic-native/file": "^5.20.0",
     "@ionic-native/file-opener": "^5.21.6",
+    "@ionic-native/file-transfer": "^5.23.0",
     "@ionic-native/firebase-x": "^5.21.5",
     "@ionic-native/in-app-browser": "^5.15.0",
     "@ionic-native/network": "^5.15.0",
@@ -78,8 +80,10 @@
     "cordova-plugin-badge": "^0.8.8",
     "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-device-motion": "^2.0.1",
+    "cordova-plugin-document-viewer": "^0.9.13",
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-file-opener2": "^3.0.0",
+    "cordova-plugin-file-transfer": "^1.7.1",
     "cordova-plugin-firebasex": "^8.0.0",
     "cordova-plugin-inappbrowser": "^3.1.0",
     "cordova-plugin-network-information": "^2.0.2",
@@ -167,7 +171,9 @@
       "cordova-plugin-camera": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-firebasex": {},
-      "cordova-plugin-file-opener2": {}
+      "cordova-plugin-file-opener2": {},
+      "cordova-plugin-document-viewer": {},
+      "cordova-plugin-file-transfer": {}
     },
     "platforms": [
       "android",

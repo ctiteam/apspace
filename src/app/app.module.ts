@@ -27,6 +27,8 @@ import { RequestCache, RequestCacheWithMapStorage } from './services';
 
 import { Badge } from '@ionic-native/badge/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
+import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
+import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Screenshot } from '@ionic-native/screenshot/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
@@ -71,6 +73,8 @@ import { NotificationModalModule } from './pages/notifications/notification-moda
     Camera,
     File,
     FileOpener,
+    FileTransfer,
+    DocumentViewer,
     Vibration,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: RequestCache, useClass: RequestCacheWithMapStorage },

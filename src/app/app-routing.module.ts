@@ -264,7 +264,7 @@ const routes: Routes = [
     path: '**',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/not-found/not-found.module').then(m => m.NotFoundPageModule)
-  },
+  }
 ];
 
 @NgModule({

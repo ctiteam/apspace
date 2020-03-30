@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar mode="md">
+    <ion-title>Generate Payslip PDF</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-md="6">
+        <ion-card>
+          <ion-card-content>
+            <!-- <ion-item>
+              <ion-label>Date</ion-label>
+              <ion-datetime>
+
+              </ion-datetime>
+            </ion-item>
+            <ion-item>
+              <ion-select>
+                
+              </ion-select>
+            </ion-item> -->
+
+            <ion-button (click)="generatePayslipPdf()" class="ion-margin-top" color="success" expand="block">
+              Generate Payslip
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

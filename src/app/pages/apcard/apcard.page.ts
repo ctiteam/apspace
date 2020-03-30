@@ -99,7 +99,7 @@ export class ApcardPage implements OnInit {
       componentProps: {
         transactions: this.transactions
       },
-      cssClass: 'generateTransactionsPdf',
+      cssClass: 'custom-modal-style',
     });
     await modal.present();
     await modal.onDidDismiss();

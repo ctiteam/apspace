@@ -19,6 +19,12 @@
                 <ion-icon slot="end" name="open"></ion-icon>
               </ion-button>
             </ion-col>
+            <ion-col>
+              <ion-button (click)="openGeneratePayslipPdf()" expand="block">
+                Generate Payslip
+                <ion-icon slot="end" name="print"></ion-icon>
+              </ion-button>
+            </ion-col>
           </ion-row>
         </ion-grid>
         <!-- <ng-container *ngIf="leaves$ | async as leaves; else loadingLeaves">
