@@ -25,20 +25,22 @@ export class PrintPayslipModalPage implements OnInit {
   }
 
   generatePayslipPdf() {
-    const path = this.platform.is('ios') ? this.file.documentsDirectory : this.file.dataDirectory;
+    this.fileOpener.open('https://ztmu4mdu21.execute-api.ap-southeast-1.amazonaws.com/dev/staff/download_payslip/U6942.2020-02-End Month.Payslip.PDF', 'application/pdf');
+    // const path = this.platform.is('ios') ? this.file.documentsDirectory : this.file.dataDirectory;
 
-    console.log(path);
+    // console.log(path);
 
-    const transfer = this.transfer.create();
+    // const transfer = this.transfer.create();
 
-    transfer.download(
-      'https://ztmu4mdu21.execute-api.ap-southeast-1.amazonaws.com/dev/staff/download_payslip/U6942.2020-02-End Month.Payslip.PDF',
-      path + 'myfile.pdf'
-    ).then(_ => {
-      // const url = entry.toURL();
-      // this.document.viewDocument(url, 'application/pdf', {});
-      this.fileOpener.open(this.file.dataDirectory + `myfile.pdf`, 'application/pdf');
-    });
+
+    // transfer.download(
+    //   'https://ztmu4mdu21.execute-api.ap-southeast-1.amazonaws.com/dev/staff/download_payslip/U6942.2020-02-End Month.Payslip.PDF',
+    //   path + 'myfile.pdf'
+    // ).then(_ => {
+    //   // const url = entry.toURL();
+    //   // this.document.viewDocument(url, 'application/pdf', {});
+    //   this.fileOpener.open(path + `myfile.pdf`, 'application/pdf');
+    // });
   }
 
   dismiss() {
