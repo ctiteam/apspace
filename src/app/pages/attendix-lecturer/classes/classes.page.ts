@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IonSelect, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import {
+  AlertController, IonSelect, LoadingController, ModalController, ToastController
+} from '@ionic/angular';
 
 import { Observable, forkJoin } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -102,6 +104,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     private ws: WsApiService,
     private route: ActivatedRoute,
     private router: Router,
+    public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
@@ -377,6 +380,25 @@ export class ClassesPage implements AfterViewInit, OnInit {
       endTime: this.auto ? this.endTime : this.manualEndTime,
       classType: this.auto ? this.classType : this.manualClassType,
     }]);
+  }
+
+  /** Mark confirmation. */
+  confirmMark() {
+    this.alertCtrl.create({
+      header: 'Confirm mark / edit attendance?',
+      message: 'All records will be absent by default if uninitialized, can be deleted later.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Confirm',
+          handler: () => this.mark()
+        }
+      ]
+    }).then(alert => alert.present());
   }
 
 }

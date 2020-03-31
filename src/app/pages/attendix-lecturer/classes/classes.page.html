@@ -70,7 +70,7 @@
           </ion-select>
         </ion-item>
 
-        <ion-button (click)="mark()"
+        <ion-button (click)="confirmMark()"
           [disabled]="auto ? !classcode || !date || !startTime || !endTime || !classType : !manualClasscode || !manualDate || !manualStartTime || !manualEndTime || !manualClassType"
           size="large" expand="block">
           Mark / Edit Attendance
