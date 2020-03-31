@@ -35,8 +35,11 @@ export class PrintPayslipModalPage implements OnInit {
     ).then(entry => {
       // const url = entry.toURL();
       // this.document.viewDocument(url, 'application/pdf', {});
-      this.fileOpener.open(entry.toURL(), 'application/pdf');
-    });
+      console.log('this is entry to url ', entry.toURL());
+      this.fileOpener.open(entry.toURL(), 'application/pdf').then(() => {
+        console.log('file is opened');
+      }).catch(e => console.log('ERROR ERROR ', e));
+    }, (error) => console.log('download error ', error));
   }
 
   dismiss() {
