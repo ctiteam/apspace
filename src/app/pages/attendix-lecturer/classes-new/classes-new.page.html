@@ -1,0 +1,257 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Classes</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/lecturer-timetable"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="attendix-content">
+
+  <!-- new attendance -->
+  <ion-card class="transparent no-box-shadow">
+    <ion-card-header class="ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col class="margin-auto ion-no-padding">
+            <ion-card-title>Mark New Attendance</ion-card-title>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-header>
+    <ion-card-content class="ion-no-padding">
+
+      <ion-card>
+        <ion-card-content class="ion-no-padding ion-padding-bottom">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <ion-item class="input-item" lines="none">
+                  <ion-label position="stacked">Class Code</ion-label>
+                  <ion-select class="form-input" #classcodeInput [ngModel]="manualClasscode"
+                    [disabled]="!manualClasscodes" placeholder="Click to Select">
+                    <ion-select-option *ngFor="let classcode of manualClasscodes" [value]="classcode">
+                      {{ classcode }}</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col size="12">
+                <ion-item lines="none" class="input-item">
+                  <ion-label position="stacked">Date</ion-label>
+                  <ion-select class="form-input" [ngModel]="manualDate"
+                    (ngModelChange)="changeDate(manualDate = $event)" interface="popover"
+                    placeholder="Date">
+                    <ion-select-option *ngFor="let d of manualDates" [value]="d">{{ d }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+
+            </ion-row>
+            <ion-row>
+              <ion-col size="12" size-md="6">
+                <ion-item lines="none" class="input-item">
+                  <ion-label position="stacked">Start Time</ion-label>
+                  <ion-select class="form-input" [(ngModel)]="manualStartTime"
+                    (ngModelChange)="changeStartTime(manualStartTime = $event)" interface="popover" placeholder="Start Time">
+                    <ion-select-option *ngFor="let t of manualStartTimes" [value]="t">{{ t }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+
+
+
+              <ion-col size="12" size-md="6">
+                <ion-item lines="none" class="input-item">
+                  <ion-label position="stacked">Class Duration</ion-label>
+                  <ion-select class="form-input" [ngModel]="manualDuration" (ngModelChange)="calculateEndTime(manualDuration = $event)"
+                    interface="popover"
+                    placeholder="Class Duration">
+                    <ion-select-option *ngFor="let d of durations" [value]="d.value">{{ d.title }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+
+
+              <ion-col size="12" size-md="7">
+                <ion-list class="ion-no-padding ion-padding-start">
+                  <ion-radio-group class="input-item ion-no-padding" [ngModel]="manualClassType"
+                    (ngModelChange)="manualClassType = $event">
+                    <ion-list-header class="ion-no-padding">
+                      <ion-label position="stacked">Class Type</ion-label>
+                    </ion-list-header>
+                    <ion-grid class="form-input grid ion-no-padding">
+                      <ion-row>
+                        <ion-col size="4" class="ion-no-padding" *ngFor="let t of classTypes">
+                          <ion-item lines="none" class="transparent">
+                            <ion-label [color]="classType === t || manualClassType === t ? 'primary' : ''">{{ t }}
+                            </ion-label>
+                            <ion-radio slot="start" [value]="t"></ion-radio>
+                          </ion-item>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-radio-group>
+                </ion-list>
+              </ion-col>
+
+
+              <ion-col size="12" size-md="5">
+                <ion-list class="ion-no-padding ion-padding-end">
+                  <ion-radio-group class="input-item ion-no-padding" [ngModel]="manualMarkAllAs"
+                    (ngModelChange)="manualMarkAllAs = $event">
+                    <ion-list-header class="ion-no-padding">
+                      <ion-label position="stacked">Mark all students as</ion-label>
+                    </ion-list-header>
+                    <ion-grid class="form-input grid ion-no-padding">
+                      <ion-row>
+                        <ion-col size="6" class="ion-no-padding">
+                          <ion-item lines="none" class="transparent">
+                            <ion-label [color]="manualMarkAllAs === 'N' ? 'primary' : ''">Absent</ion-label>
+                            <ion-radio slot="start" value="N"></ion-radio>
+                          </ion-item>
+                        </ion-col>
+                        <ion-col size="6" class="ion-no-padding">
+                          <ion-item lines="none" class="transparent">
+                            <ion-label [color]="manualMarkAllAs === 'Y' ? 'primary' : ''">Present</ion-label>
+                            <ion-radio slot="start" value="Y"></ion-radio>
+                          </ion-item>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-radio-group>
+                </ion-list>
+              </ion-col>
+            </ion-row>
+
+            <ion-row class="ion-margin-top ion-padding-end">
+              <ion-col size="12" offset-md="9" size-md="3" class="ion-text-right ion-no-padding">
+                <ion-button (click)="mark()" color="success"
+                  [disabled]="!manualClasscode || !manualDate || !manualStartTime || !manualEndTime || !manualClassType || !manualMarkAllAs">
+                  Mark Attendance
+                  <ion-icon name="checkmark" slot="end"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- attendance records -->
+  <ion-card class="transparent no-box-shadow">
+    <ion-card-header class="ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col class="margin-auto ion-no-padding">
+            <ion-card-title>
+              Attendance Logs
+            </ion-card-title>
+          </ion-col>
+          <ion-col class="ion-no-padding select-container">
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col class="ion-no-padding ion-margin-end">
+                  <ion-select class="input" placeholder="Duration" [(ngModel)]="timeFrame">
+                    <ion-select-option [value]="7">
+                      Last 7 days
+                    </ion-select-option>
+                    <ion-select-option [value]="30">
+                      Last 30 days
+                    </ion-select-option>
+                    <ion-select-option [value]="98">
+                      Last 98 days
+                    </ion-select-option>
+                  </ion-select>
+                </ion-col>
+                <ion-col class="ion-no-padding">
+                  <ion-searchbar class="input ion-no-padding no-box-shadow" placeholder="Class Code"
+                    [(ngModel)]="keyword"></ion-searchbar>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </ion-card-header>
+    <ion-card-content class="ion-no-padding">
+      <!-- table -->
+      <ion-card class="table">
+        <ion-card-content class="table-container">
+          <ion-grid>
+            <!-- table header -->
+            <ion-row class="table-header">
+              <ion-col>
+                <ion-text>Class Code</ion-text>
+              </ion-col>
+              <ion-col class="ion-text-center">
+                <ion-text>Intake</ion-text>
+              </ion-col>
+              <ion-col class="ion-text-center">
+                <ion-text>Date</ion-text>
+              </ion-col>
+              <ion-col class="ion-text-center">
+                <ion-text>Time</ion-text>
+              </ion-col>
+              <ion-col class="ion-text-center">
+                <ion-text>Attended</ion-text>
+              </ion-col>
+              <ion-col class="ion-text-center">
+                <ion-text>Type</ion-text>
+              </ion-col>
+              <ion-col>
+                <!-- empty col -->
+              </ion-col>
+            </ion-row>
+
+            <!-- table body -->
+            <ng-container *ngFor="let classcode of classcodesList | classcodesFilter: keyword">
+              <ion-row class="table-row text-bold"
+                *ngFor="let class of (classcode.CLASSES | timeFrameFilter: timeFrame )">
+                <ion-col class="margin-auto">
+                  <ion-text>{{classcode.CLASS_CODE}}</ion-text>
+                </ion-col>
+                <ion-col class="margin-auto ion-text-center">
+                  <ion-text>{{classcode.COURSE_CODE_ALIAS}}</ion-text>
+                </ion-col>
+                <ion-col class="margin-auto ion-text-center">
+                  <ion-text>{{class.DATE}}</ion-text>
+                </ion-col>
+                <ion-col class="margin-auto ion-text-center">
+                  <ion-text>{{class.TIME_FROM}} - {{class.TIME_TO}}</ion-text>
+                </ion-col>
+                <ion-col class="margin-auto ion-text-center">
+                  <ion-text color="success">{{class.TOTAL.PRESENT}}</ion-text>
+                  <ion-text>/{{class.TOTAL.ABSENT + class.TOTAL.ABSENT_REASON + class.TOTAL.LATE + class.TOTAL.PRESENT}}
+                  </ion-text>
+                </ion-col>
+                <ion-col class="margin-auto ion-text-center">
+                  <ion-text>{{class.TYPE}}</ion-text>
+                </ion-col>
+                <ion-col class="margin-auto">
+                  <ion-buttons>
+                    <ion-button size="small" color="primary"
+                      (click)="edit(classcode.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
+                      <ion-icon slot="icon-only" name="create"></ion-icon>
+                    </ion-button>
+                    <ion-button size="small" color="danger"
+                      (click)="delete(classcode.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
+                      <ion-icon slot="icon-only" name="trash"></ion-icon>
+                    </ion-button>
+                  </ion-buttons>
+                </ion-col>
+              </ion-row>
+            </ng-container>
+
+
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

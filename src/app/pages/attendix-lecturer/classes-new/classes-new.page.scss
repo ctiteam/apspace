@@ -1,0 +1,85 @@
+// general
+.transparent {
+    --background: transparent !important;
+  }
+  
+  .no-box-shadow {
+    box-shadow: none !important;
+  }
+  
+  .margin-auto {
+    margin: auto;
+  }
+  
+  .top-bottom-margin-auto {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  
+  // mark new attendance
+  .input-item {
+    ion-label {
+      padding-left: 2px;
+    }
+  
+    &.item-interactive-disabled {
+      ion-label {
+        opacity: .5 !important;
+      }
+    }
+  }
+  
+  .form-input {
+    border-radius: 3px;
+    background: var(--main-bg-color);
+    border: 1px solid var(--tertiary-bg-color);
+    min-height: 40px;
+    margin-top: 10px;
+    padding: 3px 10px !important;
+  
+    &.grid {
+      padding: 0;
+      margin-top: 0;
+    }
+  }
+  
+  ion-select.form-input {
+    width: 100%;
+    padding: 8px 10px 9px 10px !important;
+  }
+  
+  
+  // attendance logs
+  .select-container {
+    .input {
+      border: 1px solid var(--tertiary-bg-color);
+    }
+  }
+  
+  .table {
+    .table-container {
+      padding-top: 5px;
+      padding-bottom: 0;
+      padding-left: 0;
+      padding-right: 0;
+  
+      .table-header {
+        padding-bottom: 5px;
+        border-bottom: 1px solid #cccccc;
+  
+        ion-text {
+          font-size: 1rem;
+        }
+      }
+  
+      .table-row {
+        padding-top: 5px;
+        padding-bottom: 0;
+  
+        &:hover {
+          background: var(--tertiary-bg-color);
+        }
+      }
+    }
+  }
+  
