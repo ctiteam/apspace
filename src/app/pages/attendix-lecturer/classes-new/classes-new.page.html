@@ -87,7 +87,7 @@
                       <ion-row>
                         <ion-col size="4" class="ion-no-padding" *ngFor="let t of classTypes">
                           <ion-item lines="none" class="transparent">
-                            <ion-label [color]="classType === t || manualClassType === t ? 'primary' : ''">{{ t }}
+                            <ion-label [color]="manualClassType === t ? 'primary' : ''">{{ t }}
                             </ion-label>
                             <ion-radio slot="start" [value]="t"></ion-radio>
                           </ion-item>
