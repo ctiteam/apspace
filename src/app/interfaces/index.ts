@@ -3,7 +3,7 @@ export { APLCClass, APLCClassDescription, APLCStudentBehaviour, APLCSubject } fr
 export { Attendance } from './attendance';
 export { AttendanceLegend } from './attendance-legend';
 export { BusTrips, APULocations, APULocation, BusTrip } from './bus-shuttle-services';
-export { Classcode } from './classcode';
+export { AttendixClass, Classcode } from './classcode';
 export { ClassificationLegend } from './classfication-legend';
 export { Course } from './courses';
 export { CourseDetails } from './course-details';
