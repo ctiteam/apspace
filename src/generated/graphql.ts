@@ -39,6 +39,7 @@ export type Mutation = {
    __typename?: 'Mutation',
   initAttendance: Attendance,
   markAttendance: Status,
+  markAttendanceAll: Array<Status>,
   saveLectureLog?: Maybe<Scalars['Boolean']>,
   resetAttendance?: Maybe<Scalars['Boolean']>,
   updateAttendance: Status,
@@ -46,7 +47,8 @@ export type Mutation = {
 
 
 export type MutationInitAttendanceArgs = {
-  schedule: ScheduleInput
+  schedule: ScheduleInput,
+  attendance?: Maybe<Scalars['String']>
 };
 
 
@@ -55,6 +57,12 @@ export type MutationMarkAttendanceArgs = {
   student: Scalars['String'],
   attendance: Scalars['String'],
   absentReason?: Maybe<Scalars['String']>
+};
+
+
+export type MutationMarkAttendanceAllArgs = {
+  schedule: ScheduleInput,
+  attendance: Scalars['String']
 };
 
 
