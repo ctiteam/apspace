@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, IonSelect, LoadingController, ModalController, ToastController } from '@ionic/angular';
 
 import { Observable, forkJoin } from 'rxjs';
-import { shareReplay, tap } from 'rxjs/operators';
+import { map, shareReplay, tap } from 'rxjs/operators';
 
 import * as moment from 'moment';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
@@ -136,10 +136,89 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
 
   getClasscodes() {
     this.ws.get<Classcode[]>('/attendix/classcodes').pipe(
-      tap(classcodes => this.classcodesList = classcodes),
-      tap(classcodes => this.fillManualInputs(classcodes))
+      tap(classcodes => this.fillManualInputs(classcodes)),
+      map(classcodes => {
+        classcodes.push({
+          CLASS_CODE: 'CTI -DEMO1',
+          COURSE_CODE_ALIAS: 'UCMP1111SE3',
+          LECTURER_CODE: 'APPSTESTSTAFF1',
+          SUBJECT_CODE: 'CE00731-8',
+          CLASSES: []
+        });
+        return classcodes;
+      }),
+      tap(classcodes => console.log('test: ', classcodes)),
+      tap(classcodes => this.classcodesList = classcodes.slice()),
+      // tap(_ => console.log(this.mergeObjectsInUnique(this.classcodesList, 'COURSE_CODE_ALIAS'))),
+      // tap(_ => console.log(this.mergeObjects(this.classcodesList)))
+      // tap(_ => this.moveAllDataInsideArray()),
+      // tap(_ => this.extractData()),
+      // tap(_ => this.mergeArrays())
     ).subscribe();
   }
+
+  // Testing
+  // moveAllDataInsideArray() {
+  //   this.classcodesList.forEach(classcodeObj => {
+  //     classcodeObj.CLASSES.forEach(classObj => {
+  //       classObj['CLASS_CODE'] = classcodeObj.CLASS_CODE;
+  //       classObj['LECTURER_CODE'] = classcodeObj.LECTURER_CODE;
+  //       classObj['SUBJECT_CODE'] = classcodeObj.SUBJECT_CODE;
+  //     });
+  //   });
+  //   console.log(this.classcodesList);
+  // }
+  // testArray = [];
+  // extractData() {
+  //   this.testArray = this.classcodesList.map(({ CLASSES }) => CLASSES);
+  // }
+
+  // mergeArrays() {
+  //   console.log([].concat.apply([], this.testArray));
+  // }
+
+  mergeObjectsInUnique<T>(array: T[], property: any): T[] {
+    const newArray = new Map();
+
+    array.forEach((item: T) => {
+      const propertyValue = item[property];
+      newArray.has(propertyValue)
+        ? newArray.set(propertyValue, { ...item, ...newArray.get(propertyValue) })
+        : newArray.set(propertyValue, item);
+    });
+
+    return Array.from(newArray.values());
+  }
+
+  // mergeObjects(arr: Classcode[]) {
+  //   const resultArray = [];
+  //   const classcodes = [];
+  //   // tslint:disable-next-line: forin
+  //   for (const item in arr) {
+  //     const itemIndex = classcodes.indexOf(arr[item].CLASS_CODE);
+  //     if (itemIndex === -1) {
+  //       classcodes.push(arr[item].CLASS_CODE);
+  //       const obj = {
+  //         CLASS_CODE: arr[item].CLASS_CODE,
+  //         LECTURER_CODE: arr[item].LECTURER_CODE,
+  //         SUBJECT_CODE: arr[item].SUBJECT_CODE,
+  //         // INTAKES: [],
+  //         CLASSES: []
+  //       };
+  //       for (const classObj in arr[item].CLASSES) {
+  //         const classObjIndex = obj.CLASSES.indexOf()
+  //       }
+  //       // obj.CLASSES.push(arr[item].CLASSES);
+  //       // obj.INTAKES.push(arr[item].COURSE_CODE_ALIAS);
+  //       resultArray.push(obj);
+  //     } else {
+  //       // resultArray[itemIndex].INTAKES.push(arr[item].COURSE_CODE_ALIAS);
+  //       // resultArray[itemIndex].CLASSES.push(arr[item].CLASSES);
+  //     }
+
+  //   }
+  //   return resultArray;
+  // }
 
   ngAfterViewInit() {
     // prevent ion-select click bubbling
