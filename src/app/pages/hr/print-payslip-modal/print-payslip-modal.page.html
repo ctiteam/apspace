@@ -15,23 +15,12 @@
       <ion-col size="12" size-md="6">
         <ion-card>
           <ion-card-content>
-            <!-- <ion-item>
-              <ion-label>Date</ion-label>
-              <ion-datetime>
-
-              </ion-datetime>
-            </ion-item>
             <ion-item>
-              <ion-select>
-                
-              </ion-select>
-            </ion-item> -->
-
-            <ion-button (click)="generatePayslipPdf()" class="ion-margin-top" color="success" expand="block">
+              <ion-label>Date</ion-label>
+              <ion-datetime [(ngModel)]="selectedDate" [min]="this.minDate" [max]="this.maxDate" displayFormat="YYYY-MMM"></ion-datetime>
+            </ion-item>
+            <ion-button [disabled]="!selectedDate" (click)="generatePayslipPdf()" class="ion-margin-top" color="success" expand="block">
               Generate Payslip
-            </ion-button>
-            <ion-button href="https://ztmu4mdu21.execute-api.ap-southeast-1.amazonaws.com/dev/staff/download_payslip/U6942.2020-02-End Month.Payslip.PDF">
-              Generate Payslip (with href)
             </ion-button>
           </ion-card-content>
         </ion-card>
