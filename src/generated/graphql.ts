@@ -38,6 +38,7 @@ export type LogInput = {
 export type Mutation = {
    __typename?: 'Mutation',
   initAttendance: Attendance,
+  initAttendanceAsPresent: Attendance,
   markAttendance: Status,
   markAttendanceAll: Array<Status>,
   saveLectureLog?: Maybe<Scalars['Boolean']>,
@@ -49,6 +50,12 @@ export type Mutation = {
 export type MutationInitAttendanceArgs = {
   schedule: ScheduleInput,
   attendance?: Maybe<Scalars['String']>
+};
+
+
+export type MutationInitAttendanceAsPresentArgs = {
+  schedule: ScheduleInput,
+  students: Array<Scalars['String']>
 };
 
 
@@ -163,7 +170,8 @@ export type AttendanceQuery = (
 );
 
 export type InitAttendanceMutationVariables = {
-  schedule: ScheduleInput
+  schedule: ScheduleInput,
+  attendance: Scalars['String']
 };
 
 
@@ -274,8 +282,8 @@ export const AttendanceDocument = gql`
     
   }
 export const InitAttendanceDocument = gql`
-    mutation initAttendance($schedule: ScheduleInput!) {
-  attendance: initAttendance(schedule: $schedule) {
+    mutation initAttendance($schedule: ScheduleInput!, $attendance: String!) {
+  attendance: initAttendance(schedule: $schedule, attendance: $attendance) {
     secret
     students {
       id

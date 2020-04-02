@@ -1,5 +1,5 @@
-mutation initAttendance($schedule: ScheduleInput!) {
-  attendance: initAttendance(schedule: $schedule) {
+mutation initAttendance($schedule: ScheduleInput! $attendance: String!) {
+  attendance: initAttendance(schedule: $schedule attendance: $attendance) {
     secret
     students {
       id
