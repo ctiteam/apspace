@@ -66,7 +66,9 @@ export class MarkAttendancePage implements OnInit {
   ngOnInit() {
     // totp options
     authenticator.options = { digits: 3 };
+  }
 
+  ionViewDidLoad() {
     const schedule = this.schedule = {
       classcode: this.route.snapshot.paramMap.get('classcode'),
       date: this.route.snapshot.paramMap.get('date'),
