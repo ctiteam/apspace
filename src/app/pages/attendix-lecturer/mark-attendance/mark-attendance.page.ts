@@ -66,16 +66,18 @@ export class MarkAttendancePage implements OnInit {
   ngOnInit() {
     // totp options
     authenticator.options = { digits: 3 };
-  }
 
-  ionViewDidLoad() {
-    const schedule = this.schedule = {
+    this.schedule = {
       classcode: this.route.snapshot.paramMap.get('classcode'),
       date: this.route.snapshot.paramMap.get('date'),
       startTime: this.route.snapshot.paramMap.get('startTime'),
       endTime: this.route.snapshot.paramMap.get('endTime'),
       classType: this.route.snapshot.paramMap.get('classType')
     };
+  }
+
+  ionViewDidLoad() {
+    const schedule = this.schedule;
     let studentsNameById: { [student: string]: string };
 
     // limit reset to 30 days in the past
