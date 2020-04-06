@@ -1,4 +1,4 @@
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
@@ -16,19 +16,34 @@ import {
   Status
 } from '../../../../generated/graphql';
 import { isoDate, parseTime } from '../date';
-
 type Attendance = 'Y' | 'L' | 'N' | 'R' | '';
 
-const stateMap = {Y: 'present', L: 'late', N: 'absent', R: 'absent with reason'};
+const stateMap = { Y: 'present', L: 'late', N: 'absent', R: 'absent with reason' };
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-mark-attendance-new',
   templateUrl: './mark-attendance-new.page.html',
   styleUrls: ['./mark-attendance-new.page.scss'],
+  providers: [DatePipe]
 })
 export class MarkAttendanceNewPage implements OnInit {
 
+  doughnutChart = {
+    type: 'pie',
+    options: {
+      responsive: false,
+      legend: {
+        display: true,
+        position: 'right',
+      }
+    },
+    data: {}
+  };
+
   schedule: ScheduleInput;
+  defaultAttendance;
+  editMode = '';
+  showQr = true;
 
   auto: boolean;
   term = '';
@@ -44,8 +59,10 @@ export class MarkAttendanceNewPage implements OnInit {
   lastMarked$: Observable<Pick<NewStatusSubscription, 'newStatus'>[]>;
   students$: Observable<Partial<Status>[]>;
   totalPresentStudents$: Observable<number>;
+  totalAbsentStudents$: Observable<number>;
+  totalOtherStudents$: Observable<number>;
   totalStudents$: Observable<number>;
-
+  studentsChartData$: Observable<any>;
   statusUpdate = new Subject<{ id: string; attendance: string; absentReason: string | null; }>();
 
   constructor(
@@ -59,7 +76,8 @@ export class MarkAttendanceNewPage implements OnInit {
     private saveLectureLog: SaveLectureLogGQL,
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
@@ -73,6 +91,18 @@ export class MarkAttendanceNewPage implements OnInit {
       endTime: this.route.snapshot.paramMap.get('endTime'),
       classType: this.route.snapshot.paramMap.get('classType')
     };
+    // default attendance either N or Y
+    this.defaultAttendance = this.route.snapshot.paramMap.get('defaultAttendance');
+    this.editMode = this.route.snapshot.paramMap.get('editMode');
+    // disable qr code page when: default attendance is set to Y OR user is in edit mode
+    if (this.defaultAttendance === 'Y' || this.editMode) {
+      this.showQr = false;
+      this.auto = false;
+    } else {
+      // default all values other than Y to N
+      this.defaultAttendance = 'N';
+    }
+
     let studentsNameById: { [student: string]: string };
 
     // limit reset to 30 days in the past
@@ -85,7 +115,8 @@ export class MarkAttendanceNewPage implements OnInit {
     const nowMins = d.getHours() * 60 + d.getMinutes();
     // should be start <= now <= end + 5 but can ignore this because of classes page
     const thisClass = schedule.date === isoDate(today) && parseTime(schedule.startTime) <= nowMins;
-    const init = () => (this.auto = thisClass, this.type = 'N', this.initAttendance.mutate({ schedule }));
+    // tslint:disable-next-line: max-line-length
+    const init = () => (this.auto = thisClass, this.type = '', this.initAttendance.mutate({ schedule, attendance: this.defaultAttendance }));
     const list = () => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }));
     const attendance$ = thisClass ? init().pipe(catchError(list)) : list().pipe(catchError(init));
 
@@ -174,8 +205,40 @@ export class MarkAttendanceNewPage implements OnInit {
       shareReplay(1)
     );
 
-    this.totalPresentStudents$ = this.students$.pipe(
-      map(students => students.filter(student => student.attendance === 'Y').length)
+    this.studentsChartData$ = this.students$.pipe(
+      map(students => {
+        return {
+          labels: ['Present', 'Absent', 'Absent With Reason', 'Late'],
+          datasets: [{
+            label: '# of Votes',
+            data: [
+              students.filter(student => student.attendance === 'Y').length,
+              students.filter(student => student.attendance === 'N').length,
+              students.filter(student => student.attendance === 'R').length,
+              students.filter(student => student.attendance === 'L').length
+            ],
+            backgroundColor: [
+              'rgba(73, 181, 113, 0.5)',
+              'rgba(229, 77, 66, 0.5)',
+              'rgba(54, 162, 235, 0.5)',
+              'rgba(255, 206, 86, 0.5)'
+            ],
+            hoverBackgroundColor: [
+              '#49b571', // green
+              '#e54d42', // red
+              '#36A2EB', // blue
+              '#FFCE56' // orange
+            ],
+            borderColor: [
+              '#49b571', // green
+              '#e54d42', // red
+              '#36A2EB', // blue
+              '#FFCE56' // orange
+            ],
+            borderWidth: 3
+          }]
+        };
+      })
     );
 
     this.totalStudents$ = this.students$.pipe(
@@ -223,7 +286,7 @@ export class MarkAttendanceNewPage implements OnInit {
         mergeMap(students => forkJoin([...students
           .filter(({ attendance }) => attendance !== newAttendance)
           .map(({ id }) => this._mark(id, newAttendance)),
-          of(null) // complete observable if all already present
+        of(null) // complete observable if all already present
         ])),
         finalize(() => loading.dismiss()),
         first() // stop running once this is done
@@ -236,22 +299,25 @@ export class MarkAttendanceNewPage implements OnInit {
       header: 'Mark all students as ...',
       buttons: [
         {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary'
-        },
-        {
           text: 'Present',
-          handler: () => markAll('Y')
+          handler: () => markAll('Y'),
+          cssClass: 'present inline'
         },
         {
           text: 'Late',
-          handler: () => markAll('L')
+          handler: () => markAll('L'),
+          cssClass: 'late inline'
         },
         {
           text: 'Absent',
-          handler: () => markAll('N')
-        }
+          handler: () => markAll('N'),
+          cssClass: 'absent inline'
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'cancel inline'
+        },
       ]
     }).then(alert => alert.present());
   }
@@ -264,7 +330,7 @@ export class MarkAttendanceNewPage implements OnInit {
     }
     const absentReason = el && el.value || null;
     this._mark(student, attendance, absentReason).subscribe(
-      () => {},
+      () => { },
       e => { this.toast(`Mark ${stateMap[attendance]} failed: ` + e, 'danger'); console.error(e); }
     );
   }
@@ -284,16 +350,18 @@ export class MarkAttendanceNewPage implements OnInit {
   /** Reset attendance, double confirm. */
   reset() {
     this.alertCtrl.create({
-      header: 'Confirm!',
-      message: 'Attendance will be <strong>deleted</strong>!',
+      cssClass: 'delete-warning',
+      header: 'Delete Attendance Record!',
+      message: `Are you sure that you want to <span class="danger-text text-bold">Permanently Delete</span> the selected attendance record?<br><br> <span class="text-bold">Class Code:</span> ${this.schedule.classcode}<br> <span class="text-bold">Class Date:</span> ${this.datePipe.transform(this.schedule.date, 'EEE, dd MMM yyy')}<br> <span class="text-bold">Class Time:</span> ${this.schedule.startTime} - ${this.schedule.endTime}<br> <span class="text-bold">Class Type:</span> ${this.schedule.classType}`,
       buttons: [
         {
           text: 'Cancel',
           role: 'cancel',
-          cssClass: 'secondary',
+          cssClass: 'secondary-txt-color',
         },
         {
-          text: 'Okay',
+          text: 'Delete',
+          cssClass: 'danger-text',
           handler: () => {
             const schedule = this.schedule;
             this.resetAttendance.mutate({ schedule }).subscribe(

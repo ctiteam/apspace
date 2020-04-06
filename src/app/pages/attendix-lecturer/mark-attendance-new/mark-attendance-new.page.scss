@@ -1,98 +1,198 @@
 .back-btn:hover {
-    padding: 4px 8px;
-    background-color: rgba(4, 54, 95, 0.925);
-    color: white;
-    border-radius: 5px;
-  }
-  
-  .otp {
-    display: inline-block;
-    background-color: #eeeeee;
-    font-size: 48px;
-    margin: 5px 9px;
-    padding: 12px;
-    padding-bottom: calc(12px - 5px);
-    border-bottom: 5px solid #bcbcbc;
-    font-family: 'Hack', 'Iconsolata', monospace;
-  }
+  padding: 4px 8px;
+  background-color: rgba(4, 54, 95, 0.925);
+  color: white;
+  border-radius: 5px;
+}
 
-  .form-input {
-    border-radius: 3px;
-    background: var(--main-bg-color);
-    border: 1px solid var(--tertiary-bg-color);
-    min-height: 40px;
-    margin-top: 10px;
-    padding: 3px 10px !important;
+.otp {
+  display: inline-block;
+  background-color: #ffffff;
+  font-size: 48px;
+  margin: 5px 9px;
+  padding: 12px;
+  padding-bottom: calc(12px - 5px);
+  border-bottom: 5px solid var(--primary-color);
+  color: #000000;
+  font-family: 'Hack', 'Iconsolata', monospace;
+}
+
+.form-input {
+  border-radius: 3px;
+  background: var(--main-bg-color);
+  border: 1px solid var(--tertiary-bg-color);
+  min-height: 40px;
+  margin-top: 10px;
+  padding: 3px 10px !important;
+}
+
+.dead {
+  position: absolute;
+  top: calc(30vh - 3ex);
+  width: 100%;
+  text-align: center;
+  padding: 30px;
+  color: var(--danger-color);
+  background-color: var(--secondary-bg-color);
+  text-shadow: var(--tertiary-bg-color) 2px 3px;
+
+  p {
+    font-size: 3rem;
   }
-  
-  .dead {
-    position: absolute;
-    top: calc(30vh - 3ex);
-    width: 100%;
-    text-align: center;
-    padding: 30px;
-    color: var(--danger-color);
-    background-color: var(--secondary-bg-color);
-    text-shadow: var(--tertiary-bg-color) 2px 3px;
-  
-    p {
-      font-size: 3rem;
+}
+
+.stateR {
+  color: #FFFFFF;
+  background: #36A2EB !important;
+  border-color: #36A2EB !important;
+  --background-hover: #aeaeae !important;
+}
+
+.stateN {
+  color: #FFFFFF;
+  background: #e54d42 !important;
+  border-color: #e54d42 !important;
+  --background-hover: #af4448 !important;
+}
+
+.stateL {
+  color: #FFFFFF;
+  background: #FFCE56 !important;
+  border-color: #FFCE56 !important;
+  --background-hover: #cabf45 !important;
+}
+
+.stateY {
+  color: #FFFFFF;
+  background: #49b571 !important;
+  border-color: #49b571 !important;
+  --background-hover: #519657 !important;
+}
+
+ion-button#mark-all {
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+ion-card>ion-item>ion-label {
+  --color: #000000 !important;
+  min-width: 15ex;
+  /* force occupy some space on mobile */
+}
+
+ion-list,
+ion-item {
+  background: transparent !important;
+  --background: transparent !important;
+}
+
+ion-img {
+  width: 48px;
+  height: 48px;
+  margin-right: 8px;
+}
+
+qrcode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.margin-auto {
+  margin: auto;
+}
+
+.statistics-bar {
+  height: 30px;
+  width: 70%;
+  background-color: var(--tertiary-bg-color);
+  margin: auto;
+
+  .progress-bar {
+    transition: width .6s;
+    height: 30px;
+    display: inline-block;
+    float: left;
+    line-height: 30px;
+    color: #FFFFFF;
+
+    &.absent {
+      background-color: var(--ion-color-danger);
+    }
+
+    &.others {
+      background-color: var(--ion-color-dark);
+    }
+
+    &.present {
+      background-color: var(--ion-color-success);
     }
   }
-  
-  .stateR {
-    --color: #000000;
-    --background: #e0e0e0 !important;
-    --border-color: #e0e0e0 !important;
-    --background-color: #aeaeae !important;
+}
+
+.legend {
+  display: inline-block;
+  padding: 2px 5px;
+  color: #FFFFFF;
+
+  &.absent {
+    background-color: var(--ion-color-danger);
   }
-  
-  .stateN {
-    --color: #000000;
-    --background: #e57373 !important;
-    --border-color: #e57373 !important;
-    --background-hover: #af4448 !important;
+
+  &.present {
+    background-color: var(--ion-color-success);
   }
-  
-  .stateL {
-    --color: #000000;
-    --background: #fff176 !important;
-    --border-color: #fff176 !important;
-    --background-hover: #cabf45 !important;
+
+  &.others {
+    background-color: var(--ion-color-dark);
   }
-  
-  .stateY {
-    --color: #000000;
-    --background: #81c784 !important;
-    --border-color: #81c784 !important;
-    --background-hover: #519657 !important;
+}
+
+
+// general
+.transparent {
+  --background: transparent !important;
+}
+
+.no-box-shadow {
+  box-shadow: none !important;
+}
+
+.margin-auto {
+  margin: auto;
+}
+
+// attendance logs
+.select-container {
+  .input {
+    border: 1px solid var(--tertiary-bg-color);
   }
-  
-  ion-button#mark-all {
-    text-overflow: ellipsis;
-    width: 100%;
+}
+
+.table {
+  .table-container {
+    padding-top: 5px;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+
+    .table-header {
+      padding: 5px 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #cccccc;
+
+      ion-text {
+        font-size: 1rem;
+      }
+    }
+
+    .table-row {
+      padding-top: 5px;
+      padding-bottom: 0;
+
+      &:hover {
+        background: var(--tertiary-bg-color);
+      }
+    }
   }
-  
-  ion-card > ion-item > ion-label {
-    --color: #000000 !important;
-    min-width: 15ex; /* force occupy some space on mobile */
-  }
-  
-  ion-list,
-  ion-item {
-    background: transparent !important;
-    --background: transparent !important;
-  }
-  
-  ion-img {
-    width: 48px;
-    height: 48px;
-    margin-right: 8px;
-  }
-  
-  qrcode {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
+}

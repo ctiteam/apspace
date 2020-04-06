@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angularx-qrcode';
 import { MarkAttendanceNewPage } from './mark-attendance-new.page';
 
+import { ChartModule } from 'angular2-chartjs';
 import { AttendancePipe } from './attendance.pipe';
 import { CharsPipe } from './chars.pipe';
 import { SearchPipe } from './search.pipe';
@@ -21,6 +22,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    ChartModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
