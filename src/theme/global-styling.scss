@@ -488,3 +488,40 @@ ion-select {
     }
   }
 }
+
+.delete-warning {
+  .alert-wrapper {
+    max-width: 40% !important;
+
+    .alert-head {
+      .alert-title {
+        color: var(--danger-color) !important;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.alert-wrapper {
+  .inline {
+    &.absent{
+      background: var(--danger-color);
+    }
+    &.present {
+      background-color: var(--success-color);
+    }
+    &.late{
+      background-color: var(--ion-color-warning);
+    }
+    &.cancel{
+      span {
+        color: var(--main-txt-color) !important;
+      }
+    }
+    span {
+      justify-content: space-around;
+      padding: 10px;
+      color: #FFF;
+    }
+  }
+}
