@@ -73,7 +73,7 @@ export class MarkAttendancePage implements OnInit {
       startTime: this.route.snapshot.paramMap.get('startTime'),
       endTime: this.route.snapshot.paramMap.get('endTime'),
       classType: this.route.snapshot.paramMap.get('classType')
-    }
+    };
   }
 
   ionViewDidEnter() {
