@@ -285,7 +285,7 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
     this.alertCtrl.create({
       cssClass: 'delete-warning',
       header: 'Warning!',
-      message: `By clicking on <span class="text-bold">'Continue'</span>, all students will be marked as ${this.defaultAttendance === 'Y' ? 'Presnet' : 'Absent'} by default! ${this.defaultAttendance === 'Y' ? '<br><br> <span class="text-bold">**Since you chose to mark all as Present by default, there will be no QR code displayd.</span>' : '.'}`,
+      message: `By clicking on <span class="text-bold">'Continue'</span>, all students will be marked as ${this.defaultAttendance === 'Y' ? 'Present' : 'Absent'} by default! ${this.defaultAttendance === 'Y' ? '<br><br> <span class="text-bold">**Since you chose to mark all as Present by default, there will be no QR code displayed.</span>' : '.'}`,
       buttons: [
         {
           text: 'Cancel',
