@@ -74,9 +74,7 @@ export class MarkAttendancePage implements OnInit {
       endTime: this.route.snapshot.paramMap.get('endTime'),
       classType: this.route.snapshot.paramMap.get('classType')
     };
-  }
 
-  ionViewDidEnter() {
     const schedule = this.schedule;
     let studentsNameById: { [student: string]: string };
 
