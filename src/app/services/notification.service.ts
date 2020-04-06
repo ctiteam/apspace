@@ -143,4 +143,20 @@ export class NotificationService {
       return from(this.storage.get('dingdong-categories-cache'));
     }
   }
+
+
+
+
+  getMessageDetail(messageID): Observable<any> {
+    if (this.network.type !== 'none') {
+      return this.cas.getST(this.serviceUrl).pipe(
+        switchMap(st => {
+          const url = `${this.apiUrl}/client/messages/${messageID}?ticket=${st}`;
+          return this.http.get(url);
+        }),
+      );
+    } else {
+      return from('network none');
+    }
+  }
 }

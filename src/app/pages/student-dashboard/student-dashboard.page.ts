@@ -351,7 +351,9 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   runCodeOnReceivingNotification() {
     this.firebaseX.onMessageReceived().subscribe(data => {
       if (data.tap) { // Notification received in background
-        this.openNotificationModal(data);
+        this.notificationService.getMessageDetail(data.message_id).subscribe(notificationData => {
+          this.openNotificationModal(notificationData);
+        });
       } else { // Notification received in foreground
         this.showNotificationAsToast(data);
       }
@@ -387,7 +389,6 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       component: NotificationModalPage,
       componentProps: { message, notFound: 'No Message Selected' },
     });
-    this.notificationService.sendRead(message.message_id).subscribe();
     await modal.present();
     await modal.onDidDismiss();
   }
