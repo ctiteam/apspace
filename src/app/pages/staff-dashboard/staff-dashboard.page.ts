@@ -321,7 +321,9 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
   runCodeOnReceivingNotification() {
     this.firebaseX.onMessageReceived().subscribe(data => {
       if (data.tap) { // Notification received in background
-        this.openNotificationModal(data);
+        this.notificationService.getMessageDetail(data.message_id).subscribe(notificationData => {
+          this.openNotificationModal(notificationData);
+        });
       } else { // Notification received in foreground
         this.showNotificationAsToast(data);
       }
@@ -339,7 +341,9 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
         {
           icon: 'open',
           handler: () => {
-            this.openNotificationModal(data);
+            this.notificationService.getMessageDetail(data.message_id).subscribe(notificationData => {
+              this.openNotificationModal(notificationData);
+            });
           }
         }, {
           icon: 'close',
