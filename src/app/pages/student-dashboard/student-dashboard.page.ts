@@ -371,7 +371,10 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
         {
           icon: 'open',
           handler: () => {
-            this.openNotificationModal(data);
+            this.notificationService.getMessageDetail(data.message_id).subscribe(notificationData => {
+              this.openNotificationModal(notificationData);
+            });
+            // this.openNotificationModal(data);
           }
         }, {
           icon: 'close',
