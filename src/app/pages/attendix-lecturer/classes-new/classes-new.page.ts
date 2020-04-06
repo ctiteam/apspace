@@ -1,15 +1,15 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, IonSelect, LoadingController, ModalController, ToastController } from '@ionic/angular';
 
-import { Observable, forkJoin } from 'rxjs';
-import { map, shareReplay, tap } from 'rxjs/operators';
-
+import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
-import { Classcode, StaffProfile, StudentTimetable } from '../../../interfaces';
-import { StudentTimetableService, WsApiService } from '../../../services';
+import { Classcode, StudentTimetable } from '../../../interfaces';
+import { WsApiService } from '../../../services';
 import { isoDate, parseTime } from '../date';
 
 type Schedule = Pick<Classcode, 'CLASS_CODE'>
@@ -20,12 +20,12 @@ type Schedule = Pick<Classcode, 'CLASS_CODE'>
   selector: 'app-classes-new',
   templateUrl: './classes-new.page.html',
   styleUrls: ['./classes-new.page.scss'],
+  providers: [DatePipe]
 })
 export class ClassesNewPage implements AfterViewInit, OnInit {
   auto = false; // manual mode to record mismatched data
   keyword = ''; // keyword used to search inside attendance logs
   timeFrame = 7;
-  timetablesprofile$: Observable<[StaffProfile[], StudentTimetable[]]>;
 
   timings = [
     '08:00 AM', '08:05 AM', '08:10 AM', '08:15 AM', '08:20 AM', '08:25 AM',
@@ -81,7 +81,7 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
 
   classTypes = ['Lecture', 'Tutorial', 'Lab'];
   classcodesList: Classcode[];
-
+  skeletons = new Array(2);
 
   /* optional paramMap from lecturer timetable */
   paramModuleId: string | null = this.route.snapshot.paramMap.get('moduleId');
@@ -107,12 +107,12 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
   manualEndTime: string;
   manualClassType: string;
   manualDuration: string;
-  manualMarkAllAs = 'N';
+  defaultAttendance = 'N'; // default is absent
 
-  @ViewChild('classcodeInput', { static: false }) classcodeInput: IonSelect;
+  @ViewChildren('classcodeInput')
+  public classcodeInput: QueryList<IonSelect>;
 
   constructor(
-    private tt: StudentTimetableService,
     private ws: WsApiService,
     private route: ActivatedRoute,
     private router: Router,
@@ -120,112 +120,112 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
     private resetAttendance: ResetAttendanceGQL,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
-    const profile$ = this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' });
-    this.timetablesprofile$ = forkJoin([profile$, this.tt.get()]).pipe(
-      shareReplay(1), // no need to refresh rigid data when user came back
-    );
   }
 
   ionViewDidEnter() {
     this.getClasscodes();
   }
 
+  // tslint:disable-next-line: member-ordering
+  classcodes$: Observable<Classcode[]>;
   getClasscodes() {
-    this.ws.get<Classcode[]>('/attendix/classcodes').pipe(
+    this.classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes').pipe(
       tap(classcodes => this.fillManualInputs(classcodes)),
-      map(classcodes => {
-        classcodes.push({
-          CLASS_CODE: 'CTI -DEMO1',
-          COURSE_CODE_ALIAS: 'UCMP1111SE3',
-          LECTURER_CODE: 'APPSTESTSTAFF1',
-          SUBJECT_CODE: 'CE00731-8',
-          CLASSES: []
-        });
-        return classcodes;
-      }),
-      tap(classcodes => console.log('test: ', classcodes)),
-      tap(classcodes => this.classcodesList = classcodes.slice()),
-      // tap(_ => console.log(this.mergeObjectsInUnique(this.classcodesList, 'COURSE_CODE_ALIAS'))),
-      // tap(_ => console.log(this.mergeObjects(this.classcodesList)))
-      // tap(_ => this.moveAllDataInsideArray()),
-      // tap(_ => this.extractData()),
-      // tap(_ => this.mergeArrays())
-    ).subscribe();
+      tap(_ => this.stopClasscodeSelectChanges()),
+      // map(classcodes => {
+      //   const newClass = {
+      //     DATE: "2020-03-27",
+      //     TIME_FROM: "01:30 PM",
+      //     TIME_TO: "03:01 PM",
+      //     TOTAL: { PRESENT: 0, LATE: 0, ABSENT: 0, ABSENT_REASON: 0 },
+      //     TYPE: "Revision"
+      //   };
+      //   classcodes[1].CLASSES.push(newClass);
+      //   // classcodes.push({
+      //   //   CLASS_CODE: 'CTI -DEMO',
+      //   //   COURSE_CODE_ALIAS: 'UCMP1111SE',
+      //   //   LECTURER_CODE: 'APPSTESTSTAFF1',
+      //   //   SUBJECT_CODE: 'CE00731-7',
+      //   //   CLASSES: [
+
+      //   //   ]
+      //   // });
+      //   return classcodes;
+      // }),
+      // map(classcodes => this.test),
+      // tap(classcodes => console.log('test before ', classcodes)),
+      // map(classcodes => this.test.filter(t => t.CLASS_CODE === 'CT049-3-1-OS-L-APU1F2002IT-SE')), has difference
+      tap(classcodes => console.log('before grouping: ', classcodes)),
+      tap(classcodes => this.classcodesList = this.mergeObjects(classcodes.slice())),
+      tap(_ => console.log('after grouping: ', this.classcodesList)),
+    );
   }
 
   // Testing
-  // moveAllDataInsideArray() {
-  //   this.classcodesList.forEach(classcodeObj => {
-  //     classcodeObj.CLASSES.forEach(classObj => {
-  //       classObj['CLASS_CODE'] = classcodeObj.CLASS_CODE;
-  //       classObj['LECTURER_CODE'] = classcodeObj.LECTURER_CODE;
-  //       classObj['SUBJECT_CODE'] = classcodeObj.SUBJECT_CODE;
-  //     });
-  //   });
-  //   console.log(this.classcodesList);
-  // }
-  // testArray = [];
-  // extractData() {
-  //   this.testArray = this.classcodesList.map(({ CLASSES }) => CLASSES);
-  // }
+  mergeObjects(arr: Classcode[]) {
+    const resultArray = [];
+    const classcodes = [];
+    // tslint:disable-next-line: forin
+    for (const item in arr) {
+      const itemIndex = classcodes.indexOf(arr[item].CLASS_CODE);
+      if (itemIndex === -1) {
+        classcodes.push(arr[item].CLASS_CODE);
+        const obj = {
+          CLASS_CODE: arr[item].CLASS_CODE,
+          LECTURER_CODE: arr[item].LECTURER_CODE,
+          SUBJECT_CODE: arr[item].SUBJECT_CODE,
+          CLASSES: arr[item].CLASSES,
+          INTAKES: []
+        };
+        resultArray.push(obj);
+      } else {
 
-  // mergeArrays() {
-  //   console.log([].concat.apply([], this.testArray));
-  // }
+        // Find values that are in result2 but not in result1
+        const uniqueResultTwo = arr[item].CLASSES.filter((obj) => {
+          return !resultArray[itemIndex].CLASSES.some((obj2) => {
+            if (obj.DATE === obj2.DATE && obj.TIME_FROM === obj2.TIME_FROM && obj.TIME_TO === obj2.TIME_TO && obj.TYPE === obj2.TYPE) {
+              obj2.TOTAL.PRESENT += obj.TOTAL.PRESENT;
+              obj2.TOTAL.LATE += obj.TOTAL.LATE;
+              obj2.TOTAL.ABSENT += obj.TOTAL.ABSENT;
+              obj2.TOTAL.ABSENT_REASON += obj.TOTAL.ABSENT_REASON;
+              return true;
+            }
+          });
+        });
 
-  mergeObjectsInUnique<T>(array: T[], property: any): T[] {
-    const newArray = new Map();
+        // console.log(uniqueResultTwo);
+        resultArray[itemIndex].CLASSES = resultArray[itemIndex].CLASSES.concat(uniqueResultTwo);
+        resultArray[itemIndex].INTAKES.push(arr[item].COURSE_CODE_ALIAS); // add other intakes
+      }
 
-    array.forEach((item: T) => {
-      const propertyValue = item[property];
-      newArray.has(propertyValue)
-        ? newArray.set(propertyValue, { ...item, ...newArray.get(propertyValue) })
-        : newArray.set(propertyValue, item);
-    });
-
-    return Array.from(newArray.values());
+    }
+    return resultArray;
   }
 
-  // mergeObjects(arr: Classcode[]) {
-  //   const resultArray = [];
-  //   const classcodes = [];
-  //   // tslint:disable-next-line: forin
-  //   for (const item in arr) {
-  //     const itemIndex = classcodes.indexOf(arr[item].CLASS_CODE);
-  //     if (itemIndex === -1) {
-  //       classcodes.push(arr[item].CLASS_CODE);
-  //       const obj = {
-  //         CLASS_CODE: arr[item].CLASS_CODE,
-  //         LECTURER_CODE: arr[item].LECTURER_CODE,
-  //         SUBJECT_CODE: arr[item].SUBJECT_CODE,
-  //         // INTAKES: [],
-  //         CLASSES: []
-  //       };
-  //       for (const classObj in arr[item].CLASSES) {
-  //         const classObjIndex = obj.CLASSES.indexOf()
-  //       }
-  //       // obj.CLASSES.push(arr[item].CLASSES);
-  //       // obj.INTAKES.push(arr[item].COURSE_CODE_ALIAS);
-  //       resultArray.push(obj);
-  //     } else {
-  //       // resultArray[itemIndex].INTAKES.push(arr[item].COURSE_CODE_ALIAS);
-  //       // resultArray[itemIndex].CLASSES.push(arr[item].CLASSES);
-  //     }
-
-  //   }
-  //   return resultArray;
-  // }
+  stopClasscodeSelectChanges() {
+    this.classcodeInput.changes.subscribe((selects: QueryList<IonSelect>) => {
+      (selects.first as any).el.addEventListener('click', (ev: MouseEvent) => {
+        ev.stopPropagation();
+        this.chooseClasscode();
+      }, true);
+    });
+  }
 
   ngAfterViewInit() {
+
     // prevent ion-select click bubbling
-    (this.classcodeInput as any).el.addEventListener('click', (ev: MouseEvent) => {
-      ev.stopPropagation();
-      this.chooseClasscode();
-    }, true);
+    // console.log(this.classcodeInput)
+    // if(this.classcodeInput) {
+    //   (this.classcodeInput.first as any).el.addEventListener('click', (ev: MouseEvent) => {
+    //     ev.stopPropagation();
+    //     this.chooseClasscode();
+    //   }, true);
+    // }
   }
 
   /** Display search modal to choose classcode. */
@@ -282,48 +282,76 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
 
   /** Mark attendance, send feedback if necessary. */
   async mark() {
-    const body = {
-      classcodes: this.classcodes,
-      schedules: this.schedules,
-      schedulesByClasscode: this.schedulesByClasscode,
-      schedulesByClasscodeDate: this.schedulesByClasscodeDate,
+    this.alertCtrl.create({
+      cssClass: 'delete-warning',
+      header: 'Warning!',
+      message: `By clicking on <span class="text-bold">'Continue'</span>, all students will be marked as ${this.defaultAttendance === 'Y' ? 'Presnet' : 'Absent'} by default! ${this.defaultAttendance === 'Y' ? '<br><br> <span class="text-bold">**Since you chose to mark all as Present by default, there will be no QR code displayd.</span>' : '.'}`,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary-txt-color',
+        },
+        {
+          text: 'Continue',
+          cssClass: 'colored-text',
+          handler: () => {
+            const body = {
+              classcodes: this.classcodes,
+              schedules: this.schedules,
+              schedulesByClasscode: this.schedulesByClasscode,
+              schedulesByClasscodeDate: this.schedulesByClasscodeDate,
 
-      dates: [],
-      startTimes: [],
-      endTimes: [],
+              dates: [],
+              startTimes: [],
+              endTimes: [],
 
-      classcode: '',
-      date: '',
-      startTime: '',
-      endTime: '',
-      classType: '',
+              classcode: '',
+              date: '',
+              startTime: '',
+              endTime: '',
+              classType: '',
 
-      manualClasscodes: this.manualClasscodes,
-      manualDates: this.manualDates,
-      manualStartTimes: this.manualStartTimes,
-      manualEndTimes: this.manualEndTimes,
+              manualClasscodes: this.manualClasscodes,
+              manualDates: this.manualDates,
+              manualStartTimes: this.manualStartTimes,
+              manualEndTimes: this.manualEndTimes,
 
-      manualClasscode: this.manualClasscode,
-      manualDate: this.manualDate,
-      manualStartTime: this.manualStartTime,
-      manualEndTime: this.manualEndTime,
-      manualClassType: this.manualClassType,
+              manualClasscode: this.manualClasscode,
+              manualDate: this.manualDate,
+              manualStartTime: this.manualStartTime,
+              manualEndTime: this.manualEndTime,
+              manualClassType: this.manualClassType,
 
-      now: new Date(),
-    };
-    await this.ws.post('/attendix/selection', { body }).toPromise();
-    this.router.navigate(['/attendix/mark-attendance-new', {
-      classcode: this.manualClasscode,
-      date: this.manualDate,
-      startTime: this.manualStartTime,
-      endTime: this.manualEndTime,
-      classType: this.manualClassType,
-      markAllAs: this.manualMarkAllAs
-    }]);
+              now: new Date(),
+            };
+            this.ws.post('/attendix/selection', { body }).toPromise();
+            this.router.navigate(['/attendix/mark-attendance-new', {
+              classcode: this.manualClasscode,
+              date: this.manualDate,
+              startTime: this.manualStartTime,
+              endTime: this.manualEndTime,
+              classType: this.manualClassType,
+              defaultAttendance: this.defaultAttendance
+            }]).then(_ => this.clearFormData());
+          }
+        }
+      ]
+    }).then(alert => alert.present());
+  }
+
+  clearFormData() {
+    this.manualClasscode = '';
+    this.manualDate = '';
+    this.manualStartTime = '';
+    this.manualEndTime = '';
+    this.manualClassType = '';
+    this.defaultAttendance = 'N';
+    this.manualDuration = '';
   }
 
   edit(classcode: string, date: string, startTime: string, endTime: string, classType: string) {
-    this.router.navigate(['/attendix/mark-attendance-new', { classcode, date, startTime, endTime, classType }]);
+    this.router.navigate(['/attendix/mark-attendance-new', { classcode, date, startTime, endTime, classType, editMode: true }]);
   }
 
   /** delete (reset) attendance, double confirm. */
@@ -331,16 +359,18 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
     const schedule: ScheduleInput = { classcode, date, startTime, endTime, classType };
 
     this.alertCtrl.create({
-      header: 'Warning!',
-      message: `The attendance record for ${classcode} on ${date} will be <strong>deleted</strong>!`,
+      cssClass: 'delete-warning',
+      header: 'Delete Attendance Record!',
+      message: `Are you sure that you want to <span class="danger-text text-bold">Permanently Delete</span> the selected attendance record?<br><br> <span class="text-bold">Class Code:</span> ${classcode}<br> <span class="text-bold">Class Date:</span> ${this.datePipe.transform(date, 'EEE, dd MMM yyy')}<br> <span class="text-bold">Class Time:</span> ${startTime} - ${endTime}<br> <span class="text-bold">Class Type:</span> ${classType}`,
       buttons: [
         {
           text: 'Cancel',
           role: 'cancel',
-          cssClass: 'secondary',
+          cssClass: 'secondary-txt-color',
         },
         {
           text: 'Delete',
+          cssClass: 'danger-text',
           handler: () => {
             this.resetAttendance.mutate({ schedule }).subscribe(
               () => {
