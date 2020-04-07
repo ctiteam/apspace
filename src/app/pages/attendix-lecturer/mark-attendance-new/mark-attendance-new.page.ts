@@ -276,7 +276,8 @@ export class MarkAttendanceNewPage implements OnInit {
   }
 
   /** Mark all student as ... */
-  markAll() {
+  markAll(resetClicked?: boolean) {
+    console.log('called');
     const markAll = (newAttendance: Attendance) => this.loadingCtrl.create({
       message: 'Updating'
     }).then(loading => {
@@ -291,35 +292,57 @@ export class MarkAttendanceNewPage implements OnInit {
         finalize(() => loading.dismiss()),
         first() // stop running once this is done
       ).subscribe(
-        () => this.toast(`Marked all ${stateMap[newAttendance]}`, 'success'),
-        e => { this.toast(`Mark all ${stateMap[newAttendance]} failed: ${e}`, 'danger'); console.error(e); },
+        () => this.toast(`Marked all students as ${stateMap[newAttendance]}`, 'success'),
+        e => { this.toast(`Mark all students as ${stateMap[newAttendance]} failed: ${e}`, 'danger'); console.error(e); },
       );
     });
-    this.alertCtrl.create({
-      header: 'Mark all students as ...',
-      buttons: [
-        {
-          text: 'Present',
-          handler: () => markAll('Y'),
-          cssClass: 'present inline'
-        },
-        {
-          text: 'Late',
-          handler: () => markAll('L'),
-          cssClass: 'late inline'
-        },
-        {
-          text: 'Absent',
-          handler: () => markAll('N'),
-          cssClass: 'absent inline'
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'cancel inline'
-        },
-      ]
-    }).then(alert => alert.present());
+    if (!resetClicked) {
+      this.alertCtrl.create({
+        header: 'Mark all students as ...',
+        buttons: [
+          {
+            text: 'Present',
+            handler: () => markAll('Y'),
+            cssClass: 'present inline'
+          },
+          {
+            text: 'Late',
+            handler: () => markAll('L'),
+            cssClass: 'late inline'
+          },
+          {
+            text: 'Absent',
+            handler: () => markAll('N'),
+            cssClass: 'absent inline'
+          },
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'cancel inline'
+          },
+        ]
+      }).then(alert => alert.present());
+    } else {
+      this.alertCtrl.create({
+        cssClass: 'delete-warning',
+        header: 'Reset All To Absent!',
+        message: `Are you sure that you want to <span class="danger-text text-bold">Reset</span> the attendance for all students to 'Absent'?`,
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'secondary-txt-color',
+          },
+          {
+            text: 'Reset',
+            cssClass: 'danger-text',
+            handler: () => {
+              markAll('N');
+            }
+          }
+        ]
+      }).then(alert => alert.present());
+    }
   }
 
   /** Mark student attendance. */
@@ -347,8 +370,12 @@ export class MarkAttendanceNewPage implements OnInit {
     }
   }
 
-  /** Reset attendance, double confirm. */
   reset() {
+    this.markAll(true);
+  }
+
+  /** delete attendance, double confirm. */
+  delete() {
     this.alertCtrl.create({
       cssClass: 'delete-warning',
       header: 'Delete Attendance Record!',
