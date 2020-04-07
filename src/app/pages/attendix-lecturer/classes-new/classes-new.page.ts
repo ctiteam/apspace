@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, IonSelect, LoadingController, ModalController, ToastController } from '@ionic/angular';
 
@@ -22,10 +22,10 @@ type Schedule = Pick<Classcode, 'CLASS_CODE'>
   styleUrls: ['./classes-new.page.scss'],
   providers: [DatePipe]
 })
-export class ClassesNewPage implements AfterViewInit, OnInit {
+export class ClassesNewPage {
   auto = false; // manual mode to record mismatched data
   keyword = ''; // keyword used to search inside attendance logs
-  timeFrame = 7;
+  timeFrame = 7; // show the attendance history for the last 7 days by default
 
   timings = [
     '08:00 AM', '08:05 AM', '08:10 AM', '08:15 AM', '08:20 AM', '08:25 AM',
@@ -89,13 +89,13 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
   paramStartTime: string | null = this.route.snapshot.paramMap.get('startTime');
   paramEndTime: string | null = this.route.snapshot.paramMap.get('endTime');
 
-  /* computed */
-  classcodes: string[];
+  /* computed (not sure if we still need this data) */
   schedules: Schedule[];
   schedulesByClasscode: Schedule[];
   schedulesByClasscodeDate: Schedule[];
 
   /* manual */
+  classcodes$: Observable<Classcode[]>;
   manualClasscodes: string[];
   manualDates: string[];
   manualStartTimes: string[];
@@ -124,56 +124,26 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
     private datePipe: DatePipe
   ) { }
 
-  ngOnInit() {
-  }
-
   ionViewDidEnter() {
     this.getClasscodes();
   }
 
-  // tslint:disable-next-line: member-ordering
-  classcodes$: Observable<Classcode[]>;
   getClasscodes() {
     this.classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes').pipe(
       tap(classcodes => this.fillManualInputs(classcodes)),
-      tap(_ => this.stopClasscodeSelectChanges()),
-      // map(classcodes => {
-      //   const newClass = {
-      //     DATE: "2020-03-27",
-      //     TIME_FROM: "01:30 PM",
-      //     TIME_TO: "03:01 PM",
-      //     TOTAL: { PRESENT: 0, LATE: 0, ABSENT: 0, ABSENT_REASON: 0 },
-      //     TYPE: "Revision"
-      //   };
-      //   classcodes[1].CLASSES.push(newClass);
-      //   // classcodes.push({
-      //   //   CLASS_CODE: 'CTI -DEMO',
-      //   //   COURSE_CODE_ALIAS: 'UCMP1111SE',
-      //   //   LECTURER_CODE: 'APPSTESTSTAFF1',
-      //   //   SUBJECT_CODE: 'CE00731-7',
-      //   //   CLASSES: [
-
-      //   //   ]
-      //   // });
-      //   return classcodes;
-      // }),
-      // map(classcodes => this.test),
-      // tap(classcodes => console.log('test before ', classcodes)),
-      // map(classcodes => this.test.filter(t => t.CLASS_CODE === 'CT049-3-1-OS-L-APU1F2002IT-SE')), has difference
-      tap(classcodes => console.log('before grouping: ', classcodes)),
-      tap(classcodes => this.classcodesList = this.mergeObjects(classcodes.slice())),
-      tap(_ => console.log('after grouping: ', this.classcodesList)),
+      tap(_ => this.stopClasscodeIonSelectChanges()),
+      tap(classcodes => this.classcodesList = this.mergeClassCodes(classcodes.slice())),
     );
   }
 
-  // Testing
-  mergeObjects(arr: Classcode[]) {
+  // merge classcodes that has differernt intakes
+  mergeClassCodes(arr: Classcode[]) {
     const resultArray = [];
     const classcodes = [];
     // tslint:disable-next-line: forin
     for (const item in arr) {
       const itemIndex = classcodes.indexOf(arr[item].CLASS_CODE);
-      if (itemIndex === -1) {
+      if (itemIndex === -1) { // classcode is not added yet
         classcodes.push(arr[item].CLASS_CODE);
         const obj = {
           CLASS_CODE: arr[item].CLASS_CODE,
@@ -183,9 +153,9 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
           INTAKES: []
         };
         resultArray.push(obj);
-      } else {
+      } else { // classcode repeated with different intake
 
-        // Find values that are in result2 but not in result1
+        // find classes that are in second classcode object but not in first classcode object
         const uniqueResultTwo = arr[item].CLASSES.filter((obj) => {
           return !resultArray[itemIndex].CLASSES.some((obj2) => {
             if (obj.DATE === obj2.DATE && obj.TIME_FROM === obj2.TIME_FROM && obj.TIME_TO === obj2.TIME_TO && obj.TYPE === obj2.TYPE) {
@@ -198,34 +168,22 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
           });
         });
 
-        // console.log(uniqueResultTwo);
+        // add the resoult of the previous find method
         resultArray[itemIndex].CLASSES = resultArray[itemIndex].CLASSES.concat(uniqueResultTwo);
         resultArray[itemIndex].INTAKES.push(arr[item].COURSE_CODE_ALIAS); // add other intakes
       }
-
     }
     return resultArray;
   }
 
-  stopClasscodeSelectChanges() {
+  // stop default behaviour for the ion-select (classcode) select and replace it with our modal
+  stopClasscodeIonSelectChanges() {
     this.classcodeInput.changes.subscribe((selects: QueryList<IonSelect>) => {
       (selects.first as any).el.addEventListener('click', (ev: MouseEvent) => {
         ev.stopPropagation();
         this.chooseClasscode();
       }, true);
     });
-  }
-
-  ngAfterViewInit() {
-
-    // prevent ion-select click bubbling
-    // console.log(this.classcodeInput)
-    // if(this.classcodeInput) {
-    //   (this.classcodeInput.first as any).el.addEventListener('click', (ev: MouseEvent) => {
-    //     ev.stopPropagation();
-    //     this.chooseClasscode();
-    //   }, true);
-    // }
   }
 
   /** Display search modal to choose classcode. */
@@ -240,11 +198,10 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
     });
     await modal.present();
     const { data: { item: classcode } } = await modal.onDidDismiss();
-
     this.manualClasscode = classcode;
   }
 
-  // /** Fill manual inputs. */
+  /** Fill manual inputs. */
   fillManualInputs(classcodes: Classcode[]) {
     this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
     this.manualDates = [...Array(30).keys()]
@@ -273,14 +230,10 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
 
   // endtime = starttime + duration (in minutes)
   calculateEndTime() {
-    // TODO: all console.log are for testing purposes | will be removed before deploying
-    console.log('start time is: ', this.manualStartTime);
-    console.log('duration is: ', this.manualDuration);
     this.manualEndTime = moment(this.manualStartTime, 'hh:mm A').add(this.manualDuration, 'minutes').format('hh:mm A').toString();
-    console.log('end time is: ', this.manualEndTime);
   }
 
-  /** Mark attendance, send feedback if necessary. */
+  /** Mark attendance, send feedback if necessary. double confirm */
   async mark() {
     this.alertCtrl.create({
       cssClass: 'delete-warning',
@@ -297,7 +250,7 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
           cssClass: 'colored-text',
           handler: () => {
             const body = {
-              classcodes: this.classcodes,
+              classcodes: [],
               schedules: this.schedules,
               schedulesByClasscode: this.schedulesByClasscode,
               schedulesByClasscodeDate: this.schedulesByClasscodeDate,
@@ -340,6 +293,7 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
     }).then(alert => alert.present());
   }
 
+  /* clear all form data */
   clearFormData() {
     this.manualClasscode = '';
     this.manualDate = '';
@@ -350,6 +304,7 @@ export class ClassesNewPage implements AfterViewInit, OnInit {
     this.manualDuration = '';
   }
 
+  /* edit current attendance */
   edit(classcode: string, date: string, startTime: string, endTime: string, classType: string) {
     this.router.navigate(['/attendix/mark-attendance-new', { classcode, date, startTime, endTime, classType, editMode: true }]);
   }
