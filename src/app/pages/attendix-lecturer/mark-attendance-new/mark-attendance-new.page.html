@@ -1,32 +1,26 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/attendix/classes"></ion-back-button>
+      <ion-back-button defaultHref="/attendix/classes-new"></ion-back-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">
-      {{ schedule!.classcode }}
-    </ion-title>
+    <ion-title>AttendiX | {{editMode ? 'Edit' : 'New'}} Attendance </ion-title>
     <ion-buttons slot="end">
-      <!-- To avoid confusion with reset, delete term will be shown to users -->
-      <!-- <ion-button *ngIf="resetable" (click)="reset()" color="danger">Delete</ion-button> -->
-      <ion-button>
-        <ion-label>Auto</ion-label>
-        <!-- <ion-toggle [(ngModel)]="auto"></ion-toggle> -->
-        <ion-toggle [disabled]="!showQr" [(ngModel)]="auto"></ion-toggle>
+      <ion-button [color]="auto? 'success' : ''" fill="outline">
+        <ion-toggle [disabled]="!showQr" [(ngModel)]="auto" [color]="auto? 'success' : ''"></ion-toggle>
+        <ion-label [color]="auto? 'success' : ''">QR</ion-label>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="attendix-content">
-  <!-- <ng-template [ngIf]="auto" [ngIfElse]="override"> -->
-    <ng-template [ngIf]="showQr && auto" [ngIfElse]="override">
+  <!-- QR code page -->
+  <ng-template [ngIf]="showQr && auto" [ngIfElse]="override">
     <ion-grid class="ion-no-padding">
       <ion-row *ngIf="otp$ | async as otp">
         <ion-col size="12" size-md="9" size-lg="7">
           <ion-card class="ion-no-margin ion-margin-top">
             <ion-card-content class="ion-no-padding">
-
               <qrcode *ngIf="otp" [qrdata]="otp" width="600" errorCorrectionLevel="H" [ngStyle]="{filter: otp === '---' ? 'blur(5px)' : '',
                             opacity: otp === '---' ? '0.5' : ''}"></qrcode>
               <div *ngIf="otp === '---'" class="dead">
@@ -55,7 +49,8 @@
                 </div>
                 <div class="ion-margin-top">
                   <h3>Class Type & Date</h3>
-                  <h2 class="text-bold">{{ schedule!.classType }} on {{ schedule!.date | date : 'EEE, dd MMM yyy' }}</h2>
+                  <h2 class="text-bold">{{ schedule!.classType }} on {{ schedule!.date | date : 'EEE, dd MMM yyy' }}
+                  </h2>
                 </div>
                 <div class="ion-margin-top">
                   <h3>Class Time</h3>
@@ -76,7 +71,6 @@
                 <div class="ion-margin-top" *ngIf="resetable">
                   <ion-button fill="outline" (click)="reset()" color="danger">Reset All to Absent</ion-button>
                 </div>
-                <!--  -->
                 <div class="ion-margin-top">
                   <ion-item lines="none" class="ion-no-padding">
                     <ion-label position="stacked">Lecture Update</ion-label>
@@ -91,52 +85,18 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <ion-card class="ion-no-margin ion-margin-top ion-margin-bottom" *ngIf="lastMarked$ | async as students">
+    <ion-card class="ion-no-margin ion-margin-top ion-margin-bottom">
       <ion-card-content>
-        <h2 class="text-bold colored-text">Last Marked</h2>
-        <ion-chip *ngFor="let student of students">
-          <ion-label>{{student.name}}</ion-label>
-        </ion-chip>
-      </ion-card-content>
-      <!-- <ion-card-content>
         <h2 class="text-bold colored-text">Last 10 Students Scanned QR Code</h2>
-        <ion-chip color="success">
-          <ion-label>Mohamad Al Ghayeb</ion-label>
-        </ion-chip>
-        <ion-chip color="success">
-          <ion-label>Majd Al Ghayeb</ion-label>
-        </ion-chip>
-        <ion-chip color="success">
-          <ion-label>Karam Al Ghayeb</ion-label>
-        </ion-chip>
-        <ion-chip color="success">
-          <ion-label>Mohamad Al Ghayeb</ion-label>
-        </ion-chip>
-        <ion-chip color="success">
-          <ion-label>Majd Al Ghayeb</ion-label>
-        </ion-chip>
-        <ion-chip color="success">
-          <ion-label>Karam Al Ghayeb</ion-label>
-        </ion-chip>
-        <ion-chip color="success">
-          <ion-label>Mohamad Al Ghayeb</ion-label>
-        </ion-chip>
-        <ion-chip color="success">
-          <ion-label>Majd Al Ghayeb</ion-label>
-        </ion-chip>
-        <ion-chip color="success">
-          <ion-label>Karam Al Ghayeb</ion-label>
-        </ion-chip>
-        <ion-chip color="success">
-          <ion-label>Mohamad Al Ghayeb</ion-label>
-        </ion-chip>
-      </ion-card-content> -->
+        <ng-container *ngIf="lastMarked$ | async as students">
+          <ion-chip *ngFor="let student of students">
+            <ion-label>{{student.name}}</ion-label>
+          </ion-chip>
+        </ng-container>
+      </ion-card-content>
     </ion-card>
-
-
-
-
   </ng-template>
+  <!-- manual mode page -->
   <ng-template #override>
     <!-- just subscribe for the side effects -->
     <ng-template [ngIf]="lastMarked$ | async"></ng-template>
@@ -145,8 +105,8 @@
         <ion-grid>
           <ion-row>
             <ion-col size="12">
-              <h2 class="colored-text" style="font-size: 30px; padding-left: 0;">
-                <span *ngIf="editMode">Edit </span>Class Attendance
+              <h2 class="colored-text main-title">
+                {{editMode ? 'Edit ' : ''}}Class Attendance
               </h2>
               <p>For {{schedule!.classcode}}</p>
             </ion-col>
@@ -185,20 +145,15 @@
               </ion-button>
               <br>
               <ion-button fill="outline" color="danger" (click)="reset()">
-                Remove Class Attendance
+                Delete Class Attendance
               </ion-button>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="12">
             </ion-col>
           </ion-row>
         </ion-grid>
       </ion-card-content>
     </ion-card>
 
-
-    <!-- attendance records -->
+    <!-- students list -->
     <ion-card class="transparent no-box-shadow">
       <ion-card-header class="ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
         <ion-grid class="ion-no-padding">
@@ -213,7 +168,7 @@
                 <ion-row>
                   <ion-col class="ion-no-padding ion-margin-end">
                     <ion-select class="input" [(ngModel)]="type" placeholder="Status" interface="popover">
-                      <ion-select-option value="">Any</ion-select-option>
+                      <ion-select-option value="">Any Status</ion-select-option>
                       <ion-select-option value="Y">Present</ion-select-option>
                       <ion-select-option value="L">Late</ion-select-option>
                       <ion-select-option value="N">Absent</ion-select-option>
@@ -253,50 +208,29 @@
               </ion-row>
 
               <!-- table body -->
-              <!-- 
-              <ion-virtual-scroll [items]="students$ | async | attendance:type | search:term" [trackBy]="trackById"
-              approxItemHeight="48px">
-              <ion-card *virtualItem="let student">
-                <ion-item [ngClass]="'state' + student.attendance" lines="none">
-                  <ion-label>{{ student.id }} {{ student.name }}</ion-label>
-                  <ng-container slot="end">
-                    <ion-item *ngIf="student.attendance === 'N' || student.attendance === 'R'">
-                      <ion-input [value]="student.absentReason" placeholder="Absent with reason"
-                        (change)="mark(student.id, 'R', $event)"></ion-input>
-                    </ion-item>
-                    <ion-button [disabled]="student.attendance === 'Y'" class="stateY" (click)="mark(student.id, 'Y')">Present
-                    </ion-button>
-                    <ion-button [disabled]="student.attendance === 'L'" class="stateL" (click)="mark(student.id, 'L')">Late
-                    </ion-button>
-                    <ion-button [disabled]="student.attendance === 'N'" class="stateN" (click)="mark(student.id, 'N')">Absent
-                    </ion-button>
-                  </ng-container>
-                </ion-item>
-              </ion-card>
-            </ion-virtual-scroll> -->
-
               <ng-container *ngIf="students$ | async as studentsList">
                 <ng-container *ngIf="(studentsList | attendance:type | search:term) as filteredStudents">
                   <ng-container *ngIf="filteredStudents.length > 0; else noFilteredStudents">
                     <ion-virtual-scroll [items]="filteredStudents" [trackBy]="trackById" approxItemHeight="48px">
-                      <ion-row style="padding: 10px; margin: 4px 0;" class="table-row text-bold"
+                      <ion-row class="table-row text-bold"
                         *virtualItem="let student; let i = index;" [ngClass]="'state' + student.attendance">
                         <ion-col class="margin-auto" size="auto">
-                          <p style="font-size: 16px;">
+                          <p class="larger-font-size">
                             <ion-text>{{i + 1}}.</ion-text>
                           </p>
                         </ion-col>
                         <ion-col class="margin-auto" size="auto">
-                          <p style="font-size: 16px;">
+                          <p class="larger-font-size">
                             <ion-text class="text-bold">{{ student.id }}</ion-text>
                           </p>
                         </ion-col>
                         <ion-col class="margin-auto">
-                          <p style="font-size: 16px;">
+                          <p class="larger-font-size">
                             <ion-text class="text-bold">{{ student.name }}</ion-text>
                           </p>
                         </ion-col>
-                        <ion-col class="margin-auto ion-no-padding" *ngIf="student.attendance === 'N' || student.attendance === 'R'">
+                        <ion-col class="margin-auto ion-no-padding"
+                          *ngIf="student.attendance === 'N' || student.attendance === 'R'">
                           <ion-input [value]="student.absentReason" placeholder="Absent with reason"
                             (change)="mark(student.id, 'R', $event)"></ion-input>
                         </ion-col>
@@ -315,9 +249,6 @@
                         </ion-col>
                       </ion-row>
                     </ion-virtual-scroll>
-
-
-
                   </ng-container>
                   <ng-template #noFilteredStudents>
                     <ion-row>
@@ -330,14 +261,11 @@
                     </ion-row>
                   </ng-template>
                 </ng-container>
-
               </ng-container>
-
             </ion-grid>
           </ion-card-content>
         </ion-card>
       </ion-card-content>
     </ion-card>
-
   </ng-template>
 </ion-content>

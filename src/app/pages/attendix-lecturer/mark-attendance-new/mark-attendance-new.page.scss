@@ -1,10 +1,32 @@
-.back-btn:hover {
-  padding: 4px 8px;
-  background-color: rgba(4, 54, 95, 0.925);
-  color: white;
-  border-radius: 5px;
+// general
+.transparent {
+  --background: transparent !important;
 }
 
+.no-box-shadow {
+  box-shadow: none !important;
+}
+
+.margin-auto {
+  margin: auto;
+}
+
+.larger-font-size{
+  font-size: 16px !important;
+}
+
+ion-item {
+  background: transparent !important;
+  --background: transparent !important;
+}
+
+ion-card>ion-item>ion-label {
+  --color: #000000 !important;
+  min-width: 15ex;
+  /* force occupy some space on mobile */
+}
+
+// details & qr code section
 .otp {
   display: inline-block;
   background-color: #ffffff;
@@ -41,128 +63,18 @@
   }
 }
 
-.stateR {
-  color: #FFFFFF;
-  background: #36A2EB !important;
-  border-color: #36A2EB !important;
-  --background-hover: #aeaeae !important;
-}
-
-.stateN {
-  color: #FFFFFF;
-  background: #e54d42 !important;
-  border-color: #e54d42 !important;
-  --background-hover: #af4448 !important;
-}
-
-.stateL {
-  color: #FFFFFF;
-  background: #FFCE56 !important;
-  border-color: #FFCE56 !important;
-  --background-hover: #cabf45 !important;
-}
-
-.stateY {
-  color: #FFFFFF;
-  background: #49b571 !important;
-  border-color: #49b571 !important;
-  --background-hover: #519657 !important;
-}
-
-ion-button#mark-all {
-  text-overflow: ellipsis;
-  width: 100%;
-}
-
-ion-card>ion-item>ion-label {
-  --color: #000000 !important;
-  min-width: 15ex;
-  /* force occupy some space on mobile */
-}
-
-ion-list,
-ion-item {
-  background: transparent !important;
-  --background: transparent !important;
-}
-
-ion-img {
-  width: 48px;
-  height: 48px;
-  margin-right: 8px;
-}
-
 qrcode {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.margin-auto {
-  margin: auto;
+.main-title {
+  font-size: 30px;
+  padding-left: 0;
 }
 
-.statistics-bar {
-  height: 30px;
-  width: 70%;
-  background-color: var(--tertiary-bg-color);
-  margin: auto;
-
-  .progress-bar {
-    transition: width .6s;
-    height: 30px;
-    display: inline-block;
-    float: left;
-    line-height: 30px;
-    color: #FFFFFF;
-
-    &.absent {
-      background-color: var(--ion-color-danger);
-    }
-
-    &.others {
-      background-color: var(--ion-color-dark);
-    }
-
-    &.present {
-      background-color: var(--ion-color-success);
-    }
-  }
-}
-
-.legend {
-  display: inline-block;
-  padding: 2px 5px;
-  color: #FFFFFF;
-
-  &.absent {
-    background-color: var(--ion-color-danger);
-  }
-
-  &.present {
-    background-color: var(--ion-color-success);
-  }
-
-  &.others {
-    background-color: var(--ion-color-dark);
-  }
-}
-
-
-// general
-.transparent {
-  --background: transparent !important;
-}
-
-.no-box-shadow {
-  box-shadow: none !important;
-}
-
-.margin-auto {
-  margin: auto;
-}
-
-// attendance logs
+// students list section
 .select-container {
   .input {
     border: 1px solid var(--tertiary-bg-color);
@@ -187,12 +99,39 @@ qrcode {
     }
 
     .table-row {
-      padding-top: 5px;
-      padding-bottom: 0;
-
+      padding: 10px; 
+      margin: 4px 0;
       &:hover {
         background: var(--tertiary-bg-color);
       }
     }
+  }
+
+  // Attendance Status (stateR: absent with reason, stateL: Late, stateN: absent, stateY: present)
+  .stateR {
+    color: #FFFFFF;
+    background: #36A2EB !important;
+    border-color: #36A2EB !important;
+  }
+
+  .stateN {
+    color: #FFFFFF;
+    background: #e54d42 !important;
+    border-color: #e54d42 !important;
+    --background-hover: #af4448 !important;
+  }
+
+  .stateL {
+    color: #FFFFFF;
+    background: #FFCE56 !important;
+    border-color: #FFCE56 !important;
+    --background-hover: #cabf45 !important;
+  }
+
+  .stateY {
+    color: #FFFFFF;
+    background: #49b571 !important;
+    border-color: #49b571 !important;
+    --background-hover: #519657 !important;
   }
 }

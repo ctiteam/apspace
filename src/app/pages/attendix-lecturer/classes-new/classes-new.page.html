@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Attendix</ion-title>
+    <ion-title>Attendix | Home</ion-title>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/lecturer-timetable"></ion-back-button>
     </ion-buttons>
@@ -141,7 +141,7 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- attendance records -->
+    <!-- attendance history -->
     <ion-card class="transparent no-box-shadow">
       <ion-card-header class="ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
         <ion-grid class="ion-no-padding">
@@ -221,15 +221,14 @@
                           <ion-text>{{class.TIME_FROM}} - {{class.TIME_TO}}</ion-text>
                         </ion-col>
                         <ion-col class="margin-auto ion-text-center">
-                          <!-- {{class.TOTAL | json}} -->
                           <ion-text color="success">{{class.TOTAL.PRESENT}}</ion-text>
-                           |
-                           <ion-text color="danger">{{class.TOTAL.ABSENT}}</ion-text>
-                           |
-                           <ion-text color="primary">{{class.TOTAL.ABSENT_REASON}}</ion-text>
-                           |
-                           <ion-text color="warning">{{class.TOTAL.LATE}}</ion-text>
-                           |
+                          |
+                          <ion-text color="danger">{{class.TOTAL.ABSENT}}</ion-text>
+                          |
+                          <ion-text color="primary">{{class.TOTAL.ABSENT_REASON}}</ion-text>
+                          |
+                          <ion-text color="warning">{{class.TOTAL.LATE}}</ion-text>
+                          |
                           {{class.TOTAL.ABSENT + class.TOTAL.ABSENT_REASON + class.TOTAL.LATE + class.TOTAL.PRESENT}}
                         </ion-col>
                         <ion-col class="margin-auto ion-text-center">
@@ -317,7 +316,6 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- attendance records -->
     <ion-card class="transparent no-box-shadow">
       <ion-card-header class="ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
         <ion-grid class="ion-no-padding">
@@ -345,11 +343,9 @@
 
       </ion-card-header>
       <ion-card-content class="ion-no-padding">
-        <!-- table -->
         <ion-card class="table">
           <ion-card-content class="table-container">
             <ion-grid>
-              <!-- table header -->
               <ion-row class="table-header">
                 <ion-col>
                   <ion-text>Class Code</ion-text>
@@ -370,7 +366,6 @@
                   <!-- empty col -->
                 </ion-col>
               </ion-row>
-              <!-- table body -->
               <ion-row class="table-row text-bold" *ngFor="let class of skeletons;">
                 <ion-col class="margin-auto">
                   <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
