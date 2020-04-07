@@ -1,0 +1,11 @@
+mutation markAttendanceAll(
+  $schedule: ScheduleInput!
+  $attendance: String!
+) {
+  markAttendanceAll(
+    schedule: $schedule
+    attendance: $attendance
+  ) {
+    id
+  }
+}

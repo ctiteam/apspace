@@ -4,165 +4,165 @@ import * as Apollo from 'apollo-angular';
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string,
-  String: string,
-  Boolean: boolean,
-  Int: number,
-  Float: number,
+  ID: string;
+  String: string;
+  Boolean: boolean;
+  Int: number;
+  Float: number;
 };
 
 
 
 
-export type Attendance = {
-   __typename?: 'Attendance',
-  schedule: Schedule,
-  secret: Scalars['String'],
-  students: Array<Status>,
-  log?: Maybe<Log>,
-};
-
-export type Log = {
-   __typename?: 'Log',
-  lectureUpdate?: Maybe<Scalars['String']>,
-  otherInfo?: Maybe<Scalars['String']>,
-  nextLecturePlan?: Maybe<Scalars['String']>,
+export type ScheduleInput = {
+  classcode: Scalars['String'];
+  date: Scalars['String'];
+  startTime: Scalars['String'];
+  endTime: Scalars['String'];
+  classType: Scalars['String'];
 };
 
 export type LogInput = {
-  lectureUpdate?: Maybe<Scalars['String']>,
-  otherInfo?: Maybe<Scalars['String']>,
-  nextLecturePlan?: Maybe<Scalars['String']>,
+  lectureUpdate?: Maybe<Scalars['String']>;
+  otherInfo?: Maybe<Scalars['String']>;
+  nextLecturePlan?: Maybe<Scalars['String']>;
 };
 
-export type Mutation = {
-   __typename?: 'Mutation',
-  initAttendance: Attendance,
-  initAttendanceAsPresent: Attendance,
-  markAttendance: Status,
-  markAttendanceAll: Array<Status>,
-  saveLectureLog?: Maybe<Scalars['Boolean']>,
-  resetAttendance?: Maybe<Scalars['Boolean']>,
-  updateAttendance: Status,
+export type Attendance = {
+   __typename?: 'Attendance';
+  schedule: Schedule;
+  secret: Scalars['String'];
+  students: Array<Status>;
+  log?: Maybe<Log>;
 };
 
-
-export type MutationInitAttendanceArgs = {
-  schedule: ScheduleInput,
-  attendance?: Maybe<Scalars['String']>
+export type Schedule = {
+   __typename?: 'Schedule';
+  classcode: Scalars['String'];
+  date: Scalars['String'];
+  startTime: Scalars['String'];
+  endTime: Scalars['String'];
+  classType: Scalars['String'];
 };
 
-
-export type MutationInitAttendanceAsPresentArgs = {
-  schedule: ScheduleInput,
-  students: Array<Scalars['String']>
+export type Status = {
+   __typename?: 'Status';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  attendance: Scalars['String'];
+  absentReason?: Maybe<Scalars['String']>;
+  classcode: Scalars['String'];
+  date: Scalars['String'];
+  startTime: Scalars['String'];
+  endTime: Scalars['String'];
+  classType: Scalars['String'];
 };
 
-
-export type MutationMarkAttendanceArgs = {
-  schedule: ScheduleInput,
-  student: Scalars['String'],
-  attendance: Scalars['String'],
-  absentReason?: Maybe<Scalars['String']>
-};
-
-
-export type MutationMarkAttendanceAllArgs = {
-  schedule: ScheduleInput,
-  attendance: Scalars['String']
-};
-
-
-export type MutationSaveLectureLogArgs = {
-  schedule: ScheduleInput,
-  log: LogInput
-};
-
-
-export type MutationResetAttendanceArgs = {
-  schedule: ScheduleInput
-};
-
-
-export type MutationUpdateAttendanceArgs = {
-  otp: Scalars['String']
+export type Log = {
+   __typename?: 'Log';
+  lectureUpdate?: Maybe<Scalars['String']>;
+  otherInfo?: Maybe<Scalars['String']>;
+  nextLecturePlan?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
-   __typename?: 'Query',
-  attendance?: Maybe<Attendance>,
+   __typename?: 'Query';
+  attendance?: Maybe<Attendance>;
 };
 
 
 export type QueryAttendanceArgs = {
-  schedule: ScheduleInput
+  schedule: ScheduleInput;
 };
 
-export type Schedule = {
-   __typename?: 'Schedule',
-  classcode: Scalars['String'],
-  date: Scalars['String'],
-  startTime: Scalars['String'],
-  endTime: Scalars['String'],
-  classType: Scalars['String'],
+export type Mutation = {
+   __typename?: 'Mutation';
+  initAttendance: Attendance;
+  initAttendanceAsPresent: Attendance;
+  markAttendance: Status;
+  markAttendanceAll: Array<Status>;
+  saveLectureLog?: Maybe<Scalars['Boolean']>;
+  resetAttendance?: Maybe<Scalars['Boolean']>;
+  updateAttendance: Status;
 };
 
-export type ScheduleInput = {
-  classcode: Scalars['String'],
-  date: Scalars['String'],
-  startTime: Scalars['String'],
-  endTime: Scalars['String'],
-  classType: Scalars['String'],
+
+export type MutationInitAttendanceArgs = {
+  schedule: ScheduleInput;
+  attendance?: Maybe<Scalars['String']>;
 };
 
-export type Schema = {
-   __typename?: 'schema',
-  query?: Maybe<Query>,
-  mutation?: Maybe<Mutation>,
-  subscription?: Maybe<Subscription>,
+
+export type MutationInitAttendanceAsPresentArgs = {
+  schedule: ScheduleInput;
+  students: Array<Scalars['String']>;
 };
 
-export type Status = {
-   __typename?: 'Status',
-  id: Scalars['String'],
-  name: Scalars['String'],
-  attendance: Scalars['String'],
-  absentReason?: Maybe<Scalars['String']>,
-  classcode: Scalars['String'],
-  date: Scalars['String'],
-  startTime: Scalars['String'],
-  endTime: Scalars['String'],
-  classType: Scalars['String'],
+
+export type MutationMarkAttendanceArgs = {
+  schedule: ScheduleInput;
+  student: Scalars['String'];
+  attendance: Scalars['String'];
+  absentReason?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationMarkAttendanceAllArgs = {
+  schedule: ScheduleInput;
+  attendance: Scalars['String'];
+};
+
+
+export type MutationSaveLectureLogArgs = {
+  schedule: ScheduleInput;
+  log: LogInput;
+};
+
+
+export type MutationResetAttendanceArgs = {
+  schedule: ScheduleInput;
+};
+
+
+export type MutationUpdateAttendanceArgs = {
+  otp: Scalars['String'];
 };
 
 export type Subscription = {
-   __typename?: 'Subscription',
-  newStatus?: Maybe<Status>,
+   __typename?: 'Subscription';
+  newStatus?: Maybe<Status>;
 };
 
 
 export type SubscriptionNewStatusArgs = {
-  classcode: Scalars['String'],
-  date: Scalars['String'],
-  startTime: Scalars['String'],
-  endTime: Scalars['String'],
-  classType: Scalars['String']
+  classcode: Scalars['String'];
+  date: Scalars['String'];
+  startTime: Scalars['String'];
+  endTime: Scalars['String'];
+  classType: Scalars['String'];
+};
+
+export type Schema = {
+   __typename?: 'schema';
+  query?: Maybe<Query>;
+  mutation?: Maybe<Mutation>;
+  subscription?: Maybe<Subscription>;
 };
 
 export type AttendanceQueryVariables = {
-  schedule: ScheduleInput
+  schedule: ScheduleInput;
 };
 
 
 export type AttendanceQuery = (
   { __typename?: 'Query' }
-  & { attendance: Maybe<(
+  & { attendance?: Maybe<(
     { __typename?: 'Attendance' }
     & Pick<Attendance, 'secret'>
     & { students: Array<(
       { __typename?: 'Status' }
       & Pick<Status, 'id' | 'name' | 'attendance' | 'absentReason'>
-    )>, log: Maybe<(
+    )>, log?: Maybe<(
       { __typename?: 'Log' }
       & Pick<Log, 'lectureUpdate' | 'otherInfo' | 'nextLecturePlan'>
     )> }
@@ -170,8 +170,8 @@ export type AttendanceQuery = (
 );
 
 export type InitAttendanceMutationVariables = {
-  schedule: ScheduleInput,
-  attendance: Scalars['String']
+  schedule: ScheduleInput;
+  attendance: Scalars['String'];
 };
 
 
@@ -187,11 +187,25 @@ export type InitAttendanceMutation = (
   ) }
 );
 
+export type MarkAttendanceAllMutationVariables = {
+  schedule: ScheduleInput;
+  attendance: Scalars['String'];
+};
+
+
+export type MarkAttendanceAllMutation = (
+  { __typename?: 'Mutation' }
+  & { markAttendanceAll: Array<(
+    { __typename?: 'Status' }
+    & Pick<Status, 'id'>
+  )> }
+);
+
 export type MarkAttendanceMutationVariables = {
-  schedule: ScheduleInput,
-  student: Scalars['String'],
-  attendance: Scalars['String'],
-  absentReason?: Maybe<Scalars['String']>
+  schedule: ScheduleInput;
+  student: Scalars['String'];
+  attendance: Scalars['String'];
+  absentReason?: Maybe<Scalars['String']>;
 };
 
 
@@ -204,24 +218,24 @@ export type MarkAttendanceMutation = (
 );
 
 export type NewStatusSubscriptionVariables = {
-  classcode: Scalars['String'],
-  date: Scalars['String'],
-  startTime: Scalars['String'],
-  endTime: Scalars['String'],
-  classType: Scalars['String']
+  classcode: Scalars['String'];
+  date: Scalars['String'];
+  startTime: Scalars['String'];
+  endTime: Scalars['String'];
+  classType: Scalars['String'];
 };
 
 
 export type NewStatusSubscription = (
   { __typename?: 'Subscription' }
-  & { newStatus: Maybe<(
+  & { newStatus?: Maybe<(
     { __typename?: 'Status' }
     & Pick<Status, 'id' | 'attendance' | 'absentReason'>
   )> }
 );
 
 export type ResetAttendanceMutationVariables = {
-  schedule: ScheduleInput
+  schedule: ScheduleInput;
 };
 
 
@@ -231,8 +245,8 @@ export type ResetAttendanceMutation = (
 );
 
 export type SaveLectureLogMutationVariables = {
-  schedule: ScheduleInput,
-  log: LogInput
+  schedule: ScheduleInput;
+  log: LogInput;
 };
 
 
@@ -242,7 +256,7 @@ export type SaveLectureLogMutation = (
 );
 
 export type UpdateAttendanceMutationVariables = {
-  otp: Scalars['String']
+  otp: Scalars['String'];
 };
 
 
@@ -253,7 +267,6 @@ export type UpdateAttendanceMutation = (
     & Pick<Status, 'id' | 'attendance' | 'classcode' | 'date' | 'startTime' | 'endTime' | 'classType'>
   ) }
 );
-
 
 export const AttendanceDocument = gql`
     query attendance($schedule: ScheduleInput!) {
@@ -300,6 +313,21 @@ export const InitAttendanceDocument = gql`
   })
   export class InitAttendanceGQL extends Apollo.Mutation<InitAttendanceMutation, InitAttendanceMutationVariables> {
     document = InitAttendanceDocument;
+    
+  }
+export const MarkAttendanceAllDocument = gql`
+    mutation markAttendanceAll($schedule: ScheduleInput!, $attendance: String!) {
+  markAttendanceAll(schedule: $schedule, attendance: $attendance) {
+    id
+  }
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class MarkAttendanceAllGQL extends Apollo.Mutation<MarkAttendanceAllMutation, MarkAttendanceAllMutationVariables> {
+    document = MarkAttendanceAllDocument;
     
   }
 export const MarkAttendanceDocument = gql`

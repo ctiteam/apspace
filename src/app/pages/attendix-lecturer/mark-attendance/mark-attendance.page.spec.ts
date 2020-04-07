@@ -64,7 +64,6 @@ describe('MarkAttendancePage', () => {
 
       fixture = TestBed.createComponent(MarkAttendancePage);
       component = fixture.componentInstance;
-      component.ionViewDidEnter();
       fixture.detectChanges();
     });
 
@@ -128,7 +127,6 @@ describe('MarkAttendancePage', () => {
 
       fixture = TestBed.createComponent(MarkAttendancePage);
       component = fixture.componentInstance;
-      component.ionViewDidEnter();
       fixture.detectChanges();
     });
 
