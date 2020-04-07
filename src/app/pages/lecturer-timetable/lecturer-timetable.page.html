@@ -133,17 +133,9 @@
                     [class.freeTime]='timetable.MODID === "FREE"'>
                     <ion-grid>
                       <ng-container *ngIf="viewWeek; else viewDaily">
-                        <ion-row *ngIf="timetable | endtime as endTime" class="table-data">
+                        <ion-row class="table-data">
                           <ion-col size="12" size-sm="2" class="hide-on-print-table-flex-on-card text-bold ion-no-padding md-text-center">
                             {{ timetable.module }}
-                            <ion-button [routerLink]="['/attendix/classes', {
-                              moduleId: timetable.module,
-                              date: (timetable.time | date:'yyyy-mm-dd'),
-                              startTime: (timetable.time | date:'hh:mm a'),
-                              endTime: (endTime | date:'hh:mm a') }
-                            ]" fill="outline" size="small">
-                              Mark
-                            </ion-button>
                           </ion-col>
                           <ion-col size="12" size-sm="1" class="ion-no-padding md-text-center">
                             <span class="marker">
@@ -155,18 +147,10 @@
                             <span class="marker">
                               <ion-icon name="time"></ion-icon>
                             </span>
-                            {{ timetable.time | date:'shortTime' }} - {{ endTime | date:'shortTime' }}
+                            {{ timetable.time | date:'shortTime' }} - {{ timetable | endtime | date:'shortTime' }}
                           </ion-col>
                           <ion-col size="12" size-sm="2" class="flex-on-print-table-hide-on-card ion-no-padding md-text-center">
                             {{ timetable.module }}
-                            <ion-button [routerLink]="['/attendix/classes', {
-                              moduleId: timetable.module,
-                              date: (timetable.time | date:'yyyy-mm-dd'),
-                              startTime: (timetable.time | date:'hh:mm a'),
-                              endTime: (endTime | date:'hh:mm a') }
-                            ]" fill="outline" size="small">
-                              Mark
-                            </ion-button>
                           </ion-col>
                           <ion-col size="12" size-sm="2" class="ion-no-padding md-text-center">
                             <span class="marker">
@@ -181,23 +165,15 @@
                       </ng-container>
 
                       <ng-template #viewDaily>
-                        <ion-row *ngIf="timetable | endtime as endTime">
+                        <ion-row>
                           <ion-col size="12" size-sm="3" class="text-bold ion-no-padding">
                             {{ timetable.module }}
-                            <ion-button [routerLink]="['/attendix/classes', {
-                              moduleId: timetable.module,
-                              date: (timetable.time | date:'yyyy-mm-dd'),
-                              startTime: (timetable.time | date:'hh:mm a'),
-                              endTime: (endTime | date:'hh:mm a') }
-                            ]" fill="outline" size="small">
-                              Mark
-                            </ion-button>
                           </ion-col>
                           <ion-col size="12" size-sm="2" class="ion-no-padding">
                             <span class="marker">
                               <ion-icon name="time"></ion-icon>
                             </span>
-                            {{ timetable.time | date:'shortTime' }} - {{ endTime | date:'shortTime' }}
+                            {{ timetable.time | date:'shortTime' }} - {{ timetable | endtime | date:'shortTime' }}
                           </ion-col>
                           <ion-col size="12" size-sm="3" class="ion-no-padding">
                             <span class="marker">
