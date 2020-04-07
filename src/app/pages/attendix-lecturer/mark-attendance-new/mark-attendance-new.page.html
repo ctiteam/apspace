@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>AttendiX | {{editMode ? 'Edit' : 'New'}} Attendance </ion-title>
     <ion-buttons slot="end">
-      <ion-button [color]="auto? 'success' : ''" fill="outline">
+      <ion-button [disabled]="!showQr" [color]="auto? 'success' : ''" fill="outline">
         <ion-toggle [disabled]="!showQr" [(ngModel)]="auto" [color]="auto? 'success' : ''"></ion-toggle>
         <ion-label [color]="auto? 'success' : ''">QR</ion-label>
       </ion-button>
