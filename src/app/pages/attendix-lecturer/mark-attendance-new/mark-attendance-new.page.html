@@ -47,17 +47,16 @@
                   <h3>Class Code</h3>
                   <h2 class="text-bold">{{ schedule!.classcode }}</h2>
                 </div>
-                <div class="ion-margin-top">
+                <div class="small-margin-top">
                   <h3>Class Type & Date</h3>
                   <h2 class="text-bold">{{ schedule!.classType }} on {{ schedule!.date | date : 'EEE, dd MMM yyy' }}
                   </h2>
                 </div>
-                <div class="ion-margin-top">
+                <div class="small-margin-top">
                   <h3>Class Time</h3>
                   <h2 class="text-bold">{{ schedule!.startTime }} to {{ schedule!.endTime }}</h2>
                 </div>
                 <div class="ion-margin-top">
-                  <h3>Class Statistics</h3>
                   <ion-grid class="ion-no-padding">
                     <ion-row>
                       <ion-col size="6" offset="3" class="ion-no-padding">
@@ -69,11 +68,11 @@
                   </ion-grid>
                 </div>
                 <div class="ion-margin-top" *ngIf="resetable">
-                  <ion-button fill="outline" (click)="reset()" color="danger">Reset All to Absent</ion-button>
+                  <ion-button size="small" fill="outline" (click)="reset()" color="danger">Reset All to Absent
+                  </ion-button>
                 </div>
                 <div class="ion-margin-top">
                   <ion-item lines="none" class="ion-no-padding">
-                    <ion-label position="stacked">Lecture Update</ion-label>
                     <ion-textarea placeholder="Add your notes here" rows="1" class="form-input"
                       [ngModel]="lectureUpdate" (ionChange)="save($event.target.value)"
                       (ionBlur)="save($event.target.value)" debounce="2000"></ion-textarea>
@@ -212,8 +211,8 @@
                 <ng-container *ngIf="(studentsList | attendance:type | search:term) as filteredStudents">
                   <ng-container *ngIf="filteredStudents.length > 0; else noFilteredStudents">
                     <ion-virtual-scroll [items]="filteredStudents" [trackBy]="trackById" approxItemHeight="48px">
-                      <ion-row class="table-row text-bold"
-                        *virtualItem="let student; let i = index;" [ngClass]="'state' + student.attendance">
+                      <ion-row class="table-row text-bold" *virtualItem="let student; let i = index;"
+                        [ngClass]="'state' + student.attendance">
                         <ion-col class="margin-auto" size="auto">
                           <p class="larger-font-size">
                             <ion-text>{{i + 1}}.</ion-text>
