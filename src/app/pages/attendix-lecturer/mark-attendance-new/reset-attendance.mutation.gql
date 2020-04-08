@@ -1,3 +1,0 @@
-mutation resetAttendance($schedule: ScheduleInput!) {
-  resetAttendance(schedule: $schedule)
-}

@@ -1,3 +1,0 @@
-mutation saveLectureLog($schedule: ScheduleInput! $log: LogInput!) {
-  saveLectureLog(schedule: $schedule log: $log)
-}
