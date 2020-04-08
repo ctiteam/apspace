@@ -157,6 +157,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
       );
 
       forkJoin([timetables$, classcodes$]).subscribe(([timetables, classcodes]) => {
+        // temporarily reverse classcodes to find nearest class
+        classcodes.reverse();
+
         // left join on classcodes
         const joined = timetables.map(timetable => ({
           ...(
@@ -180,6 +183,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
           ),
           ...timetable
         }));
+
+        // reverse it back
+        classcodes.reverse();
 
         // lay out base schedules for guessing
         this.schedules = joined.map(data => {
