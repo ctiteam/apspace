@@ -9,7 +9,7 @@ import { tap } from 'rxjs/operators';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
 import { Classcode, StudentTimetable } from '../../../interfaces';
-import { WsApiService } from '../../../services';
+import { SettingsService, WsApiService } from '../../../services';
 import { isoDate, parseTime } from '../date';
 
 type Schedule = Pick<Classcode, 'CLASS_CODE'>
@@ -113,15 +113,16 @@ export class ClassesNewPage {
   public classcodeInput: QueryList<IonSelect>;
 
   constructor(
-    private ws: WsApiService,
-    private route: ActivatedRoute,
-    private router: Router,
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
-    private resetAttendance: ResetAttendanceGQL,
     private alertCtrl: AlertController,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private resetAttendance: ResetAttendanceGQL,
+    private route: ActivatedRoute,
+    private router: Router,
+    private settings: SettingsService,
+    private ws: WsApiService,
   ) { }
 
   ionViewDidEnter() {
@@ -279,7 +280,7 @@ export class ClassesNewPage {
               now: new Date(),
             };
             this.ws.post('/attendix/selection', { body }).toPromise();
-            this.router.navigate(['/attendix/mark-attendance-new', {
+            this.router.navigate(['/attendix/mark-attendance', {
               classcode: this.manualClasscode,
               date: this.manualDate,
               startTime: this.manualStartTime,
@@ -306,7 +307,7 @@ export class ClassesNewPage {
 
   /* edit current attendance */
   edit(classcode: string, date: string, startTime: string, endTime: string, classType: string) {
-    this.router.navigate(['/attendix/mark-attendance-new', { classcode, date, startTime, endTime, classType, editMode: true }]);
+    this.router.navigate(['/attendix/mark-attendance', { classcode, date, startTime, endTime, classType, editMode: true }]);
   }
 
   /** delete (reset) attendance, double confirm. */
@@ -354,4 +355,12 @@ export class ClassesNewPage {
       ]
     }).then(alert => alert.present());
   }
+
+  /** Set settings to old attendix ui/ux update. */
+  tryv0() {
+    this.settings.set('attendixv1', false);
+    this.router.navigate(['/attendix/classes'],
+      { queryParamsHandling: 'preserve', replaceUrl: true });
+  }
+
 }

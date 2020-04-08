@@ -9,7 +9,7 @@ import { map, shareReplay } from 'rxjs/operators';
 
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
 import { Classcode, StaffProfile, StudentTimetable } from '../../../interfaces';
-import { StudentTimetableService, WsApiService } from '../../../services';
+import { SettingsService, StudentTimetableService, WsApiService } from '../../../services';
 import { between, isoDate, parseTime } from '../date';
 
 type Schedule = Pick<Classcode, 'CLASS_CODE'>
@@ -107,6 +107,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
+    public settings: SettingsService,
     public toastCtrl: ToastController,
   ) { }
 
@@ -399,6 +400,13 @@ export class ClassesPage implements AfterViewInit, OnInit {
         }
       ]
     }).then(alert => alert.present());
+  }
+
+  /** Set settings to use attendix ui/ux update. */
+  tryv1() {
+    this.settings.set('attendixv1', true);
+    this.router.navigate(['/attendix/classes/new'],
+      { queryParamsHandling: 'preserve', replaceUrl: true });
   }
 
 }

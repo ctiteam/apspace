@@ -8,6 +8,16 @@
 </ion-header>
 
 <ion-content class="attendix-content">
+  <ion-card class="transparent no-box-shadow">
+    <ion-card-header>
+      <p class="ion-text-right">
+        <a (click)="tryv0()">Revert to classic</a>
+        or
+        <a>Give us feedback</a>
+      </p>
+    </ion-card-header>
+  </ion-card>
+
   <ng-container *ngIf="classcodes$ | async; else loadingClasscodes">
     <!-- new attendance -->
     <ion-card class="transparent no-box-shadow">
