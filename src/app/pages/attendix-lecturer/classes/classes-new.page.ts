@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChildren } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, IonSelect, LoadingController, ModalController, ToastController } from '@ionic/angular';
 
@@ -109,8 +109,18 @@ export class ClassesNewPage {
   manualDuration: string;
   defaultAttendance = 'N'; // default is absent
 
-  @ViewChildren('classcodeInput')
-  public classcodeInput: QueryList<IonSelect>;
+  @ViewChild('classcodeInput', { static: false })
+  set classcodeInput(select: IonSelect) {
+    if (select) {
+      // Ignore protected field
+      const el = (select as any).el as HTMLInputElement;
+      // Stop default behaviour for the ion-select (classcode) select and replace it with our modal
+      el.addEventListener('click', (ev: MouseEvent) => {
+        ev.stopPropagation();
+        this.chooseClasscode();
+      }, true);
+    }
+  }
 
   constructor(
     public loadingCtrl: LoadingController,
@@ -132,7 +142,6 @@ export class ClassesNewPage {
   getClasscodes() {
     this.classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes').pipe(
       tap(classcodes => this.fillManualInputs(classcodes)),
-      tap(_ => this.stopClasscodeIonSelectChanges()),
       tap(classcodes => this.classcodesList = this.mergeClassCodes(classcodes.slice())),
     );
   }
@@ -175,16 +184,6 @@ export class ClassesNewPage {
       }
     }
     return resultArray;
-  }
-
-  // stop default behaviour for the ion-select (classcode) select and replace it with our modal
-  stopClasscodeIonSelectChanges() {
-    this.classcodeInput.changes.subscribe((selects: QueryList<IonSelect>) => {
-      (selects.first as any).el.addEventListener('click', (ev: MouseEvent) => {
-        ev.stopPropagation();
-        this.chooseClasscode();
-      }, true);
-    });
   }
 
   /** Display search modal to choose classcode. */
