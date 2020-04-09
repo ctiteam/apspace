@@ -525,3 +525,9 @@ ion-select {
     }
   }
 }
+
+ion-radio-group {
+  ion-label {
+    color: var(--main-txt-color);
+  }
+}
