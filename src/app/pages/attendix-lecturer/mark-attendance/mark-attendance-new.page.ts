@@ -53,7 +53,6 @@ export class MarkAttendanceNewPage implements OnInit {
   lectureUpdate = '';
 
   countdown$: Observable<number>;
-  timeLeft$: Observable<number>;
   otp$: Observable<number>;
 
   lastMarked$: Observable<Pick<NewStatusSubscription, 'newStatus'>[]>;
@@ -166,11 +165,6 @@ export class MarkAttendanceNewPage implements OnInit {
     );
 
     // display countdown timer
-    this.timeLeft$ = reload$.pipe(
-      startWith(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000),
-      map(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000),
-      shareReplay(1) // keep track while switching mode
-    );
     this.countdown$ = interval(1000).pipe(
       takeUntil(stopTimer$),
       map(() => authenticator.timeRemaining() + 29), // ignore current second
