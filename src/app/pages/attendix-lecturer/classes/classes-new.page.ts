@@ -22,9 +22,6 @@ type Schedule = Pick<Classcode, 'CLASS_CODE'>
   providers: [DatePipe]
 })
 export class ClassesNewPage {
-  auto = false; // manual mode to record mismatched data
-  keyword = ''; // keyword used to search inside attendance logs
-  timeFrame = 7; // show the attendance history for the last 7 days by default
 
   timings = [
     '08:00 AM', '08:05 AM', '08:10 AM', '08:15 AM', '08:20 AM', '08:25 AM',
@@ -81,24 +78,27 @@ export class ClassesNewPage {
   classTypes = ['Lecture', 'Tutorial', 'Lab'];
   skeletons = new Array(2);
 
+  auto = false; // manual mode to record mismatched data
+  term = ''; // classcode search term
+  timeFrame = 7; // show the attendance history for the last 7 days by default
+
   /* optional paramMap from lecturer timetable */
   paramModuleId: string | null = this.route.snapshot.paramMap.get('moduleId');
   paramDate: string | null = this.route.snapshot.paramMap.get('date'); // 2020-12-31
   paramStartTime: string | null = this.route.snapshot.paramMap.get('startTime');
   paramEndTime: string | null = this.route.snapshot.paramMap.get('endTime');
 
-  /* manual */
   classcodes$: Observable<Classcode[]>;
-  manualClasscodes: string[];
-  manualDates: string[];
-  manualStartTimes: string[];
+  classcodes: string[];
+  dates: string[];
+  startTimes: string[];
 
-  manualClasscode: string;
-  manualDate: string;
-  manualStartTime: string;
-  manualEndTime: string;
-  manualClassType: string;
-  manualDuration: number;
+  classcode: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  classType: string;
+  duration: number;
   defaultAttendance = 'N'; // default is absent
 
   @ViewChild('classcodeInput', { static: false })
@@ -130,21 +130,21 @@ export class ClassesNewPage {
   ionViewDidEnter() {
     if (this.paramModuleId && this.paramDate && this.paramStartTime && this.paramEndTime) {
       // TODO: module id
-      this.changeDate(this.manualDate = this.paramDate);
-      this.manualStartTime = this.paramStartTime;
-      this.manualEndTime = this.paramEndTime;
-      this.manualDuration = parseTime(this.manualEndTime) - parseTime(this.manualStartTime);
+      this.changeDate(this.date = this.paramDate);
+      this.startTime = this.paramStartTime;
+      this.endTime = this.paramEndTime;
+      this.duration = parseTime(this.endTime) - parseTime(this.startTime);
     }
 
     this.getClasscodes();
-    this.manualDates = [...Array(30).keys()]
+    this.dates = [...Array(30).keys()]
       .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
   }
 
   getClasscodes() {
     this.classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes').pipe(
       map(classcodes => this.mergeClasscodes(classcodes)), // side effect
-      tap(classcodes => this.manualClasscodes = classcodes.map(classcode => classcode.CLASS_CODE)),
+      tap(classcodes => this.classcodes = classcodes.map(classcode => classcode.CLASS_CODE)),
     );
   }
 
@@ -185,14 +185,14 @@ export class ClassesNewPage {
     const modal = await this.modalCtrl.create({
       component: SearchModalComponent,
       componentProps: {
-        items: this.manualClasscodes,
-        defaultItems: this.manualClasscodes,
+        items: this.classcodes,
+        defaultItems: this.classcodes,
         notFound: 'No classcode selected'
       }
     });
     await modal.present();
     const { data: { item: classcode } } = await modal.onDidDismiss();
-    this.manualClasscode = classcode;
+    this.classcode = classcode;
   }
 
   /** Change date. */
@@ -201,15 +201,15 @@ export class ClassesNewPage {
     if (date === isoDate(d)) { // current day
       const nowMins = d.getHours() * 60 + d.getMinutes();
       const firstFutureClass = this.timings.find(time => nowMins < parseTime(time));
-      this.manualStartTimes = this.timings.slice(0, this.timings.indexOf(firstFutureClass));
+      this.startTimes = this.timings.slice(0, this.timings.indexOf(firstFutureClass));
     } else {
-      this.manualStartTimes = this.timings;
+      this.startTimes = this.timings;
     }
   }
 
   /** Calculate end time using start time and duration. */
   calculateEndTime(duration: number) {
-    this.manualEndTime = formatTime(parseTime(this.manualStartTime) + duration);
+    this.endTime = formatTime(parseTime(this.startTime) + duration);
   }
 
   /** Mark attendance, send feedback if necessary. double confirm */
@@ -229,11 +229,11 @@ export class ClassesNewPage {
           cssClass: 'colored-text',
           handler: () => {
             this.router.navigate(['/attendix/mark-attendance', {
-              classcode: this.manualClasscode,
-              date: this.manualDate,
-              startTime: this.manualStartTime,
-              endTime: this.manualEndTime,
-              classType: this.manualClassType,
+              classcode: this.classcode,
+              date: this.date,
+              startTime: this.startTime,
+              endTime: this.endTime,
+              classType: this.classType,
               defaultAttendance: this.defaultAttendance
             }]);
           }
@@ -244,13 +244,13 @@ export class ClassesNewPage {
 
   /** Clear all form data. */
   ionViewDidLeave() {
-    this.manualClasscode = '';
-    this.manualDate = '';
-    this.manualStartTime = '';
-    this.manualEndTime = '';
-    this.manualClassType = '';
+    this.classcode = '';
+    this.date = '';
+    this.startTime = '';
+    this.endTime = '';
+    this.classType = '';
     this.defaultAttendance = 'N';
-    this.manualDuration = 0;
+    this.duration = 0;
   }
 
   /** Edit current attendance. */

@@ -39,9 +39,9 @@
                 <ion-col size="12">
                   <ion-item class="input-item" lines="none">
                     <ion-label position="stacked">Class Code</ion-label>
-                    <ion-select class="form-input" #classcodeInput [ngModel]="manualClasscode"
-                      [disabled]="!manualClasscodes" placeholder="Click to Select">
-                      <ion-select-option *ngFor="let classcode of manualClasscodes" [value]="classcode">
+                    <ion-select class="form-input" #classcodeInput [ngModel]="classcode"
+                      [disabled]="!classcodes" placeholder="Click to Select">
+                      <ion-select-option *ngFor="let classcode of classcodes" [value]="classcode">
                         {{ classcode }}</ion-select-option>
                     </ion-select>
                   </ion-item>
@@ -49,9 +49,9 @@
                 <ion-col size="12">
                   <ion-item lines="none" class="input-item">
                     <ion-label position="stacked">Date</ion-label>
-                    <ion-select class="form-input" [ngModel]="manualDate"
-                      (ngModelChange)="changeDate(manualDate = $event)" interface="popover" placeholder="Date">
-                      <ion-select-option *ngFor="let d of manualDates" [value]="d">{{ d | date : 'EEE, dd MMM yyy' }}
+                    <ion-select class="form-input" [ngModel]="date"
+                      (ngModelChange)="changeDate(date = $event)" interface="popover" placeholder="Date">
+                      <ion-select-option *ngFor="let d of dates" [value]="d">{{ d | date : 'EEE, dd MMM yyy' }}
                       </ion-select-option>
                     </ion-select>
                   </ion-item>
@@ -62,9 +62,9 @@
                 <ion-col size="12" size-md="6">
                   <ion-item lines="none" class="input-item">
                     <ion-label position="stacked">Start Time</ion-label>
-                    <ion-select [disabled]="!manualDate" class="form-input" [(ngModel)]="manualStartTime"
+                    <ion-select [disabled]="!date" class="form-input" [(ngModel)]="startTime"
                       interface="popover" placeholder="Start Time">
-                      <ion-select-option *ngFor="let t of manualStartTimes" [value]="t">{{ t }}
+                      <ion-select-option *ngFor="let t of startTimes" [value]="t">{{ t }}
                       </ion-select-option>
                     </ion-select>
                   </ion-item>
@@ -74,8 +74,8 @@
                 <ion-col size="12" size-md="6">
                   <ion-item lines="none" class="input-item">
                     <ion-label position="stacked">Class Duration</ion-label>
-                    <ion-select [disabled]="!manualDate" class="form-input" [ngModel]="manualDuration"
-                      (ngModelChange)="calculateEndTime(manualDuration = $event)" interface="popover"
+                    <ion-select [disabled]="!date" class="form-input" [ngModel]="duration"
+                      (ngModelChange)="calculateEndTime(duration = $event)" interface="popover"
                       placeholder="Class Duration">
                       <ion-select-option *ngFor="let d of durations" [value]="d.value">{{ d.title }}
                       </ion-select-option>
@@ -86,8 +86,8 @@
 
                 <ion-col size="12" size-md="7">
                   <ion-list class="ion-no-padding ion-padding-start">
-                    <ion-radio-group class="input-item ion-no-padding" [ngModel]="manualClassType"
-                      (ngModelChange)="manualClassType = $event">
+                    <ion-radio-group class="input-item ion-no-padding" [ngModel]="classType"
+                      (ngModelChange)="classType = $event">
                       <ion-list-header class="ion-no-padding">
                         <ion-label position="stacked">Class Type</ion-label>
                       </ion-list-header>
@@ -95,7 +95,7 @@
                         <ion-row>
                           <ion-col size="4" class="ion-no-padding" *ngFor="let t of classTypes">
                             <ion-item lines="none" class="transparent">
-                              <ion-label [color]="manualClassType === t ? 'primary' : ''">{{ t }}
+                              <ion-label [color]="classType === t ? 'primary' : ''">{{ t }}
                               </ion-label>
                               <ion-radio slot="start" [value]="t"></ion-radio>
                             </ion-item>
@@ -138,7 +138,7 @@
               <ion-row class="ion-margin-top ion-padding-end">
                 <ion-col size="12" offset-md="9" size-md="3" class="ion-text-right ion-no-padding">
                   <ion-button (click)="mark()" color="success"
-                    [disabled]="!manualClasscode || !manualDate || !manualStartTime || !manualEndTime || !manualClassType || !defaultAttendance">
+                    [disabled]="!classcode || !date || !startTime || !endTime || !classType || !defaultAttendance">
                     Mark Attendance
                     <ion-icon name="checkmark" slot="end"></ion-icon>
                   </ion-button>
@@ -178,7 +178,7 @@
                   </ion-col>
                   <ion-col class="ion-no-padding">
                     <ion-searchbar class="input ion-no-padding no-box-shadow" placeholder="Class Code"
-                      [(ngModel)]="keyword"></ion-searchbar>
+                      [(ngModel)]="term"></ion-searchbar>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -215,7 +215,7 @@
               </ion-row>
 
               <!-- table body -->
-              <ng-container *ngIf="classcodes | classcodesFilter:keyword:timeFrame as filteredClassCode">
+              <ng-container *ngIf="classcodes | classcodesFilter:term:timeFrame as filteredClassCode">
                 <ng-container *ngIf="filteredClassCode.length > 0; else noFilteredClassCode">
                   <ng-container *ngFor="let classcode of filteredClassCode">
                     <ion-row class="table-row text-bold" *ngFor="let class of classcode.CLASSES">
@@ -263,8 +263,8 @@
                     <ion-col size="12">
                       <h2 class="ion-text-center ion-padding">No attendance records have been added in the
                         <span class="text-bold danger-text"> last {{timeFrame}} days</span>
-                        <ng-container *ngIf="keyword"> for a class code that contains <span
-                            class="text-bold danger-text">{{keyword}}</span></ng-container>.
+                        <ng-container *ngIf="term"> for a class code that contains <span
+                            class="text-bold danger-text">{{ term }}</span></ng-container>.
                       </h2>
                     </ion-col>
                   </ion-row>
