@@ -133,6 +133,13 @@ export class ClassesNewPage {
   ) { }
 
   ionViewDidEnter() {
+    if (this.paramModuleId && this.paramDate && this.paramStartTime && this.paramEndTime) {
+      // TODO: module id
+      this.manualDate = this.paramDate;
+      this.manualStartTime = this.paramStartTime;
+      this.manualEndTime = this.paramEndTime;
+    }
+
     this.getClasscodes();
     this.manualDates = [...Array(30).keys()]
       .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
