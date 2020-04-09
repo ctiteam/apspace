@@ -7,13 +7,9 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
-import { Classcode, StudentTimetable } from '../../../interfaces';
+import { Classcode } from '../../../interfaces';
 import { SettingsService, WsApiService } from '../../../services';
 import { formatTime, isoDate, parseTime } from '../date';
-
-type Schedule = Pick<Classcode, 'CLASS_CODE'>
-  & Pick<StudentTimetable, 'DATESTAMP_ISO' | 'TIME_FROM' | 'TIME_TO'>
-  & { TYPE: string; };
 
 @Component({
   selector: 'app-classes-new',
