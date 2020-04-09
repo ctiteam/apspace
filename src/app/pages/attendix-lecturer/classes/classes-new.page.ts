@@ -309,8 +309,8 @@ export class ClassesNewPage {
     this.router.navigate(['/attendix/mark-attendance', { classcode, date, startTime, endTime, classType, editMode: true }]);
   }
 
-  /** delete (reset) attendance, double confirm. */
-  delete(classcode: string, date: string, startTime: string, endTime: string, classType: string) {
+  /** Delete (reset) attendance, double confirm. */
+  reset(classcode: string, date: string, startTime: string, endTime: string, classType: string) {
     const schedule: ScheduleInput = { classcode, date, startTime, endTime, classType };
 
     this.alertCtrl.create({
