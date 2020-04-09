@@ -3,11 +3,11 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/attendix/classes"></ion-back-button>
     </ion-buttons>
-    <ion-title>AttendiX | {{editMode ? 'Edit' : 'New'}} Attendance </ion-title>
+    <ion-title>AttendiX | {{ thisClass ? 'Edit' : 'New' }} Attendance </ion-title>
     <ion-buttons slot="end">
-      <ion-button [disabled]="!showQr" [color]="auto? 'success' : ''" fill="outline">
-        <ion-toggle [disabled]="!showQr" [(ngModel)]="auto" [color]="auto? 'success' : ''"></ion-toggle>
-        <ion-label [color]="auto? 'success' : ''">QR</ion-label>
+      <ion-button [disabled]="!thisClass" [color]="auto ? 'success' : ''" fill="outline">
+        <ion-toggle [disabled]="!thisClass" [(ngModel)]="auto" [color]="auto ? 'success' : ''"></ion-toggle>
+        <ion-label [color]="auto ? 'success' : ''">QR</ion-label>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -15,7 +15,7 @@
 
 <ion-content class="attendix-content">
   <!-- QR code page -->
-  <ng-template [ngIf]="showQr && auto" [ngIfElse]="override">
+  <ng-template [ngIf]="auto" [ngIfElse]="override">
     <ion-grid class="ion-no-padding">
       <ion-row *ngIf="otp$ | async as otp">
         <ion-col size="12" size-md="9" size-lg="7">
@@ -108,9 +108,9 @@
           <ion-row>
             <ion-col size="12">
               <h2 class="colored-text main-title">
-                {{editMode ? 'Edit ' : ''}}Class Attendance
+                {{ thisClass ? '' : 'Edit' }} Class Attendance
               </h2>
-              <p>For {{schedule!.classcode}}</p>
+              <p>For {{ schedule!.classcode }}</p>
             </ion-col>
           </ion-row>
           <ion-row>

@@ -259,7 +259,7 @@ export class ClassesNewPage {
 
   /** Edit current attendance. */
   edit(classcode: string, date: string, startTime: string, endTime: string, classType: string) {
-    this.router.navigate(['/attendix/mark-attendance', { classcode, date, startTime, endTime, classType, editMode: true }]);
+    this.router.navigate(['/attendix/mark-attendance', { classcode, date, startTime, endTime, classType }]);
   }
 
   /** Delete (reset) attendance, double confirm. */

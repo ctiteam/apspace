@@ -41,13 +41,11 @@ export class MarkAttendanceNewPage implements OnInit {
   };
 
   schedule: ScheduleInput;
-  defaultAttendance;
-  editMode = '';
-  showQr = true;
 
   auto: boolean;
   term = '';
-  type: Attendance;
+  type: Attendance = '';
+  thisClass = false;
   resetable = false;
 
   lectureUpdate = '';
@@ -90,17 +88,6 @@ export class MarkAttendanceNewPage implements OnInit {
       endTime: this.route.snapshot.paramMap.get('endTime'),
       classType: this.route.snapshot.paramMap.get('classType')
     };
-    // default attendance either N or Y
-    this.defaultAttendance = this.route.snapshot.paramMap.get('defaultAttendance');
-    this.editMode = this.route.snapshot.paramMap.get('editMode');
-    // disable qr code page when: default attendance is set to Y OR user is in edit mode
-    if (this.defaultAttendance === 'Y' || this.editMode) {
-      this.showQr = false;
-      this.auto = false;
-    } else {
-      // default all values other than Y to N
-      this.defaultAttendance = 'N';
-    }
 
     let studentsNameById: { [student: string]: string };
 
@@ -112,12 +99,18 @@ export class MarkAttendanceNewPage implements OnInit {
     // initAttendance and attendance query order based on probability
     const d = new Date();
     const nowMins = d.getHours() * 60 + d.getMinutes();
-    // should be start <= now <= end + 5 but can ignore this because of classes page
-    const thisClass = schedule.date === isoDate(today) && parseTime(schedule.startTime) <= nowMins;
-    // tslint:disable-next-line: max-line-length
-    const init = () => (this.auto = thisClass, this.type = '', this.initAttendance.mutate({ schedule, attendance: this.defaultAttendance }));
-    const list = () => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }));
-    const attendance$ = thisClass ? init().pipe(catchError(list)) : list().pipe(catchError(init));
+    // if this is the current class
+    this.thisClass = schedule.date === isoDate(today)
+      && parseTime(schedule.startTime) <= nowMins
+      && nowMins <= parseTime(schedule.endTime) + 5;
+
+    const init = () => {
+      const attendance = this.route.snapshot.paramMap.get('attendance') || 'N';
+      this.auto = this.thisClass;
+      return this.initAttendance.mutate({ schedule, attendance });
+    };
+    const list = () => (this.auto = false, this.attendance.fetch({ schedule }));
+    const attendance$ = this.thisClass ? init().pipe(catchError(list)) : list().pipe(catchError(init));
 
     // get attendance state from query and use manual mode if attendance initialized
     const attendancesState$ = attendance$.pipe(

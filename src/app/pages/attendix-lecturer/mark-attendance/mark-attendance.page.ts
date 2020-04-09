@@ -88,7 +88,13 @@ export class MarkAttendancePage implements OnInit {
     const nowMins = d.getHours() * 60 + d.getMinutes();
     // should be start <= now <= end + 5 but can ignore this because of classes page
     const thisClass = schedule.date === isoDate(today) && parseTime(schedule.startTime) <= nowMins;
-    const init = () => (this.auto = thisClass, this.type = 'N', this.initAttendance.mutate({ schedule, attendance: 'N' }));
+
+    const init = () => {
+      const attendance = this.route.snapshot.paramMap.get('attendance') || 'N';
+      this.auto = thisClass;
+      this.type = 'N';
+      return this.initAttendance.mutate({ schedule, attendance });
+    };
     const list = () => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }));
     const attendance$ = thisClass ? init().pipe(catchError(list)) : list().pipe(catchError(init));
 
