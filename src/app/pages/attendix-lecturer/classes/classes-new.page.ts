@@ -249,36 +249,6 @@ export class ClassesNewPage {
           text: 'Continue',
           cssClass: 'colored-text',
           handler: () => {
-            const body = {
-              classcodes: [],
-              schedules: this.schedules,
-              schedulesByClasscode: this.schedulesByClasscode,
-              schedulesByClasscodeDate: this.schedulesByClasscodeDate,
-
-              dates: [],
-              startTimes: [],
-              endTimes: [],
-
-              classcode: '',
-              date: '',
-              startTime: '',
-              endTime: '',
-              classType: '',
-
-              manualClasscodes: this.manualClasscodes,
-              manualDates: this.manualDates,
-              manualStartTimes: this.manualStartTimes,
-              manualEndTimes: this.manualEndTimes,
-
-              manualClasscode: this.manualClasscode,
-              manualDate: this.manualDate,
-              manualStartTime: this.manualStartTime,
-              manualEndTime: this.manualEndTime,
-              manualClassType: this.manualClassType,
-
-              now: new Date(),
-            };
-            this.ws.post('/attendix/selection', { body }).toPromise();
             this.router.navigate(['/attendix/mark-attendance', {
               classcode: this.manualClasscode,
               date: this.manualDate,
