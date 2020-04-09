@@ -87,11 +87,6 @@ export class ClassesNewPage {
   paramStartTime: string | null = this.route.snapshot.paramMap.get('startTime');
   paramEndTime: string | null = this.route.snapshot.paramMap.get('endTime');
 
-  /* computed (not sure if we still need this data) */
-  schedules: Schedule[];
-  schedulesByClasscode: Schedule[];
-  schedulesByClasscodeDate: Schedule[];
-
   /* manual */
   classcodes$: Observable<Classcode[]>;
   manualClasscodes: string[];
