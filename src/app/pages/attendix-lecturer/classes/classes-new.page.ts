@@ -130,9 +130,10 @@ export class ClassesNewPage {
   ionViewDidEnter() {
     if (this.paramModuleId && this.paramDate && this.paramStartTime && this.paramEndTime) {
       // TODO: module id
-      this.manualDate = this.paramDate;
+      this.changeDate(this.manualDate = this.paramDate);
       this.manualStartTime = this.paramStartTime;
       this.manualEndTime = this.paramEndTime;
+      this.manualDuration = parseTime(this.manualEndTime) - parseTime(this.manualStartTime);
     }
 
     this.getClasscodes();
