@@ -14,3 +14,13 @@ export function isoDate(d: Date): string {
 export function parseTime(time: string): number {
   return ((time.slice(-2) === 'PM' ? 12 : 0) + +time.slice(0, 2) % 12) * 60 + +time.slice(3, 5);
 }
+
+/** Format time into string in 12:59 PM format. */
+export function formatTime(time: number): string {
+  const hours = time / 60 | 0;
+  const minutes = time % 60;
+  const m = hours < 12 ? 'AM' : 'PM'; // fail 24:00 without hours % 24
+  const hh = ('0' + (hours % 12 || 12)).slice(-2);
+  const mm = ('0' + minutes).slice(-2);
+  return `${hh}:${mm} ${m}`;
+}

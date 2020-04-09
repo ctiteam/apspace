@@ -3,14 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, IonSelect, LoadingController, ModalController, ToastController } from '@ionic/angular';
 
 import { DatePipe } from '@angular/common';
-import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
 import { Classcode, StudentTimetable } from '../../../interfaces';
 import { SettingsService, WsApiService } from '../../../services';
-import { isoDate, parseTime } from '../date';
+import { formatTime, isoDate, parseTime } from '../date';
 
 type Schedule = Pick<Classcode, 'CLASS_CODE'>
   & Pick<StudentTimetable, 'DATESTAMP_ISO' | 'TIME_FROM' | 'TIME_TO'>
@@ -99,14 +98,13 @@ export class ClassesNewPage {
   manualClasscodes: string[];
   manualDates: string[];
   manualStartTimes: string[];
-  manualEndTimes: string[];
 
   manualClasscode: string;
   manualDate: string;
   manualStartTime: string;
   manualEndTime: string;
   manualClassType: string;
-  manualDuration: string;
+  manualDuration: number;
   defaultAttendance = 'N'; // default is absent
 
   @ViewChild('classcodeInput', { static: false })
@@ -220,17 +218,9 @@ export class ClassesNewPage {
     }
   }
 
-  /** Change start time, find matching end time. */
-  changeStartTime(startTime: string) {
-    this.manualEndTimes = this.timings.slice(this.timings.indexOf(startTime) + 1);
-    if (this.manualDuration) { // if duration was selected before start date => update it
-      this.calculateEndTime();
-    }
-  }
-
-  // endtime = starttime + duration (in minutes)
-  calculateEndTime() {
-    this.manualEndTime = moment(this.manualStartTime, 'hh:mm A').add(this.manualDuration, 'minutes').format('hh:mm A').toString();
+  /** Calculate end time using start time and duration. */
+  calculateEndTime(duration: number) {
+    this.manualEndTime = formatTime(parseTime(this.manualStartTime) + duration);
   }
 
   /** Mark attendance, send feedback if necessary. double confirm */
@@ -256,25 +246,25 @@ export class ClassesNewPage {
               endTime: this.manualEndTime,
               classType: this.manualClassType,
               defaultAttendance: this.defaultAttendance
-            }]).then(_ => this.clearFormData());
+            }]);
           }
         }
       ]
     }).then(alert => alert.present());
   }
 
-  /* clear all form data */
-  clearFormData() {
+  /** Clear all form data. */
+  ionViewDidLeave() {
     this.manualClasscode = '';
     this.manualDate = '';
     this.manualStartTime = '';
     this.manualEndTime = '';
     this.manualClassType = '';
     this.defaultAttendance = 'N';
-    this.manualDuration = '';
+    this.manualDuration = 0;
   }
 
-  /* edit current attendance */
+  /** Edit current attendance. */
   edit(classcode: string, date: string, startTime: string, endTime: string, classType: string) {
     this.router.navigate(['/attendix/mark-attendance', { classcode, date, startTime, endTime, classType, editMode: true }]);
   }

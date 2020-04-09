@@ -63,8 +63,7 @@
                   <ion-item lines="none" class="input-item">
                     <ion-label position="stacked">Start Time</ion-label>
                     <ion-select [disabled]="!manualDate" class="form-input" [(ngModel)]="manualStartTime"
-                      (ngModelChange)="changeStartTime(manualStartTime = $event)" interface="popover"
-                      placeholder="Start Time">
+                      interface="popover" placeholder="Start Time">
                       <ion-select-option *ngFor="let t of manualStartTimes" [value]="t">{{ t }}
                       </ion-select-option>
                     </ion-select>
