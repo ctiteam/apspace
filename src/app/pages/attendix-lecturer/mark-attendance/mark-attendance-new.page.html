@@ -67,8 +67,8 @@
                     </ion-row>
                   </ion-grid>
                 </div>
-                <div class="ion-margin-top" *ngIf="resetable">
-                  <ion-button size="small" fill="outline" (click)="reset()" color="danger">Reset All to Absent
+                <div class="ion-margin-top">
+                  <ion-button size="small" fill="outline" (click)="markAllAbsent()" color="danger">Reset All to Absent
                   </ion-button>
                 </div>
                 <div class="ion-margin-top">
@@ -146,7 +146,7 @@
                 Mark All As ..
               </ion-button>
               <br>
-              <ion-button fill="outline" color="danger" (click)="delete()">
+              <ion-button *ngIf="resetable" fill="outline" color="danger" (click)="reset()">
                 Delete Class Attendance
               </ion-button>
             </ion-col>
@@ -211,7 +211,7 @@
 
               <!-- table body -->
               <ng-container *ngIf="students$ | async as studentsList">
-                <ng-container *ngIf="(studentsList | attendance:type | search:term) as filteredStudents">
+                <ng-container *ngIf="studentsList | attendance:type | search:term as filteredStudents">
                   <ng-container *ngIf="filteredStudents.length > 0; else noFilteredStudents">
                     <ion-virtual-scroll [items]="filteredStudents" [trackBy]="trackById" approxItemHeight="48px">
                       <ion-row class="table-row text-bold" *virtualItem="let student; let i = index;"
