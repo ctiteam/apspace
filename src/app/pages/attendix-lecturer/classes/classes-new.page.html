@@ -77,7 +77,8 @@
                     <ion-select [disabled]="!date" class="form-input" [ngModel]="duration"
                       (ngModelChange)="calculateEndTime(duration = $event)" interface="popover"
                       placeholder="Class Duration">
-                      <ion-select-option *ngFor="let d of durations" [value]="d.value">{{ d.title }}
+                      <ion-select-option *ngFor="let d of durations" [value]="d.value">
+                        {{ d.title }}
                       </ion-select-option>
                     </ion-select>
                   </ion-item>
@@ -95,7 +96,8 @@
                         <ion-row>
                           <ion-col size="4" class="ion-no-padding" *ngFor="let t of classTypes">
                             <ion-item lines="none" class="transparent">
-                              <ion-label [color]="classType === t ? 'primary' : ''">{{ t }}
+                              <ion-label [color]="classType === t ? 'primary' : ''">
+                                {{ t }}
                               </ion-label>
                               <ion-radio slot="start" [value]="t"></ion-radio>
                             </ion-item>
