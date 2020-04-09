@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
-import { AttendixClass, Classcode, StudentTimetable } from '../../../interfaces';
+import { Classcode, StudentTimetable } from '../../../interfaces';
 import { SettingsService, WsApiService } from '../../../services';
 import { formatTime, isoDate, parseTime } from '../date';
 
@@ -145,14 +145,14 @@ export class ClassesNewPage {
     );
   }
 
-  /** Merge classcodes by intakes, this mutates the original array. */
+  /** Merge and sort classcodes by intakes, this mutates the original array. */
   mergeClasscodes(classcodes: Classcode[]): Classcode[] {
     const merged = classcodes.reduce((acc, classcode) => {
       const sameClasscode = acc.get(classcode.CLASS_CODE);
       if (sameClasscode) {
         // merge statistics repeated with different intake
         const uniqueClasses = classcode.CLASSES.filter(klass => {
-          const sameClass = sameClasscode.CLASSES.find((sklass: AttendixClass) =>
+          const sameClass = sameClasscode.CLASSES.find(sklass =>
             sklass.DATE === klass.DATE && sklass.TIME_FROM === klass.TIME_FROM
             && sklass.TIME_TO === klass.TIME_TO && sklass.TYPE === klass.TYPE);
           if (sameClass) { // add the current stats the previous stats
@@ -168,7 +168,12 @@ export class ClassesNewPage {
         acc.set(classcode.CLASS_CODE, classcode);
       }
       return acc;
-    }, new Map());
+    }, new Map() as Map<string, Classcode>);
+    // sort it once by date and time from
+    for (const classcode of merged.values()) {
+      classcode.CLASSES.sort((a, b) => Date.parse(b.DATE) - Date.parse(a.DATE)
+        + parseTime(b.TIME_FROM) - parseTime(a.TIME_FROM));
+    }
     return Array.from(merged.values());
   }
 

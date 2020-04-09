@@ -20,7 +20,6 @@ export class ClasscodesFilterPipe implements PipeTransform {
     return filteredClasscodes.filter(classcode => {
       if (searchRegExp.test(classcode.CLASS_CODE.toLowerCase())) { // filter classcode by keyword (using regex)
         const classes = classcode.CLASSES.slice()
-          .sort((a, b) => moment(b.DATE, 'YYYY-MM-DD').toDate().getTime() - moment(a.DATE, 'YYYY-MM-DD').toDate().getTime())
           .filter(c => moment(today).diff(moment(c.DATE, 'YYYY-MM-DD').subtract(), 'days') <= timeframe);
         if (classes.length > 0) { // filter classes by time frame (last 7, 30, or 98 days).
           classcode.CLASSES = classes;
