@@ -4,10 +4,10 @@ import { AlertController, IonSelect, LoadingController, ModalController, ToastCo
 
 import { DatePipe } from '@angular/common';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
-import { Classcode, StudentTimetable } from '../../../interfaces';
+import { AttendixClass, Classcode, StudentTimetable } from '../../../interfaces';
 import { SettingsService, WsApiService } from '../../../services';
 import { formatTime, isoDate, parseTime } from '../date';
 
@@ -79,7 +79,6 @@ export class ClassesNewPage {
   ];
 
   classTypes = ['Lecture', 'Tutorial', 'Lab'];
-  classcodesList: Classcode[];
   skeletons = new Array(2);
 
   /* optional paramMap from lecturer timetable */
@@ -135,53 +134,42 @@ export class ClassesNewPage {
 
   ionViewDidEnter() {
     this.getClasscodes();
+    this.manualDates = [...Array(30).keys()]
+      .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
   }
 
   getClasscodes() {
     this.classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes').pipe(
-      tap(classcodes => this.fillManualInputs(classcodes)),
-      tap(classcodes => this.classcodesList = this.mergeClassCodes(classcodes.slice())),
+      map(classcodes => this.mergeClasscodes(classcodes)), // side effect
+      tap(classcodes => this.manualClasscodes = classcodes.map(classcode => classcode.CLASS_CODE)),
     );
   }
 
-  // merge classcodes that has differernt intakes
-  mergeClassCodes(arr: Classcode[]) {
-    const resultArray = [];
-    const classcodes = [];
-    // tslint:disable-next-line: forin
-    for (const item in arr) {
-      const itemIndex = classcodes.indexOf(arr[item].CLASS_CODE);
-      if (itemIndex === -1) { // classcode is not added yet
-        classcodes.push(arr[item].CLASS_CODE);
-        const obj = {
-          CLASS_CODE: arr[item].CLASS_CODE,
-          LECTURER_CODE: arr[item].LECTURER_CODE,
-          SUBJECT_CODE: arr[item].SUBJECT_CODE,
-          CLASSES: arr[item].CLASSES,
-          INTAKES: []
-        };
-        resultArray.push(obj);
-      } else { // classcode repeated with different intake
-
-        // find classes that are in second classcode object but not in first classcode object
-        const uniqueResultTwo = arr[item].CLASSES.filter((obj) => {
-          return !resultArray[itemIndex].CLASSES.some((obj2) => {
-            if (obj.DATE === obj2.DATE && obj.TIME_FROM === obj2.TIME_FROM && obj.TIME_TO === obj2.TIME_TO && obj.TYPE === obj2.TYPE) {
-              obj2.TOTAL.PRESENT += obj.TOTAL.PRESENT;
-              obj2.TOTAL.LATE += obj.TOTAL.LATE;
-              obj2.TOTAL.ABSENT += obj.TOTAL.ABSENT;
-              obj2.TOTAL.ABSENT_REASON += obj.TOTAL.ABSENT_REASON;
-              return true;
-            }
-          });
+  /** Merge classcodes by intakes, this mutates the original array. */
+  mergeClasscodes(classcodes: Classcode[]): Classcode[] {
+    const merged = classcodes.reduce((acc, classcode) => {
+      const sameClasscode = acc.get(classcode.CLASS_CODE);
+      if (sameClasscode) {
+        // merge statistics repeated with different intake
+        const uniqueClasses = classcode.CLASSES.filter(klass => {
+          const sameClass = sameClasscode.CLASSES.find((sklass: AttendixClass) =>
+            sklass.DATE === klass.DATE && sklass.TIME_FROM === klass.TIME_FROM
+            && sklass.TIME_TO === klass.TIME_TO && sklass.TYPE === klass.TYPE);
+          if (sameClass) { // add the current stats the previous stats
+            sameClass.TOTAL.PRESENT += klass.TOTAL.PRESENT;
+            sameClass.TOTAL.LATE += klass.TOTAL.LATE;
+            sameClass.TOTAL.ABSENT += klass.TOTAL.ABSENT;
+            sameClass.TOTAL.ABSENT_REASON += klass.TOTAL.ABSENT_REASON;
+          }
+          return !sameClass; // only filter those not processed
         });
-
-        // add the resoult of the previous find method
-        resultArray[itemIndex].CLASSES = resultArray[itemIndex].CLASSES.concat(uniqueResultTwo);
-        resultArray[itemIndex].INTAKES.push(arr[item].COURSE_CODE_ALIAS); // add other intakes
+        sameClasscode.CLASSES.push(...uniqueClasses);
+      } else { // classcode not found it map yet
+        acc.set(classcode.CLASS_CODE, classcode);
       }
-    }
-    return resultArray;
+      return acc;
+    }, new Map());
+    return Array.from(merged.values());
   }
 
   /** Display search modal to choose classcode. */
@@ -197,13 +185,6 @@ export class ClassesNewPage {
     await modal.present();
     const { data: { item: classcode } } = await modal.onDidDismiss();
     this.manualClasscode = classcode;
-  }
-
-  /** Fill manual inputs. */
-  fillManualInputs(classcodes: Classcode[]) {
-    this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
-    this.manualDates = [...Array(30).keys()]
-      .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
   }
 
   /** Change date. */

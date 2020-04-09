@@ -18,7 +18,7 @@
     </ion-card-header>
   </ion-card>
 
-  <ng-container *ngIf="classcodes$ | async; else loadingClasscodes">
+  <ng-container *ngIf="classcodes$ | async as classcodes; else loadingClasscodes">
     <!-- new attendance -->
     <ion-card class="transparent no-box-shadow">
       <ion-card-header class="ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
@@ -215,65 +215,61 @@
               </ion-row>
 
               <!-- table body -->
-              <ng-container *ngIf="classcodesList">
-                <ng-container *ngIf="(classcodesList | classcodesFilter: keyword : timeFrame) as filteredClassCode">
-                  <ng-container *ngIf="filteredClassCode.length > 0; else noFilteredClassCode">
-                    <ng-container *ngFor="let classcode of filteredClassCode">
-                      <ion-row class="table-row text-bold" *ngFor="let class of classcode.CLASSES;">
-                        <ion-col class="margin-auto">
-                          <ion-text>{{classcode.CLASS_CODE}}</ion-text>
-                        </ion-col>
-                        <ion-col class="margin-auto ion-text-center">
-                          <ion-text>{{class.DATE | date : 'EEE, dd MMM yyy' }}</ion-text>
-                        </ion-col>
-                        <ion-col class="margin-auto ion-text-center">
-                          <ion-text>{{class.TIME_FROM}} - {{class.TIME_TO}}</ion-text>
-                        </ion-col>
-                        <ion-col class="margin-auto ion-text-center">
-                          <ion-text color="success">{{class.TOTAL.PRESENT}}</ion-text>
-                          |
-                          <ion-text color="danger">{{class.TOTAL.ABSENT}}</ion-text>
-                          |
-                          <ion-text color="primary">{{class.TOTAL.ABSENT_REASON}}</ion-text>
-                          |
-                          <ion-text color="warning">{{class.TOTAL.LATE}}</ion-text>
-                          |
-                          {{class.TOTAL.ABSENT + class.TOTAL.ABSENT_REASON + class.TOTAL.LATE + class.TOTAL.PRESENT}}
-                        </ion-col>
-                        <ion-col class="margin-auto ion-text-center">
-                          <ion-text>{{class.TYPE}}</ion-text>
-                        </ion-col>
-                        <ion-col class="margin-auto">
-                          <ion-buttons>
-                            <ion-button size="small" color="primary"
-                              (click)="edit(classcode.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
-                              <ion-icon slot="icon-only" name="create"></ion-icon>
-                            </ion-button>
-                            <ion-button size="small" color="danger"
-                              (click)="reset(classcode.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
-                              <ion-icon slot="icon-only" name="trash"></ion-icon>
-                            </ion-button>
-                          </ion-buttons>
-                        </ion-col>
-                      </ion-row>
-
-                    </ng-container>
-                  </ng-container>
-                  <ng-template #noFilteredClassCode>
-                    <ion-row>
-                      <ion-col size="12">
-                        <h2 class="ion-text-center ion-padding">No attendance records have been added in the
-                          <span class="text-bold danger-text"> last {{timeFrame}} days</span>
-                          <ng-container *ngIf="keyword"> for a class code that contains <span
-                              class="text-bold danger-text">{{keyword}}</span></ng-container>.
-                        </h2>
+              <ng-container *ngIf="classcodes | classcodesFilter:keyword:timeFrame as filteredClassCode">
+                <ng-container *ngIf="filteredClassCode.length > 0; else noFilteredClassCode">
+                  <ng-container *ngFor="let classcode of filteredClassCode">
+                    <ion-row class="table-row text-bold" *ngFor="let class of classcode.CLASSES">
+                      <ion-col class="margin-auto">
+                        <ion-text>{{classcode.CLASS_CODE}}</ion-text>
+                      </ion-col>
+                      <ion-col class="margin-auto ion-text-center">
+                        <ion-text>{{class.DATE | date : 'EEE, dd MMM yyy' }}</ion-text>
+                      </ion-col>
+                      <ion-col class="margin-auto ion-text-center">
+                        <ion-text>{{class.TIME_FROM}} - {{class.TIME_TO}}</ion-text>
+                      </ion-col>
+                      <ion-col class="margin-auto ion-text-center">
+                        <ion-text color="success">{{class.TOTAL.PRESENT}}</ion-text>
+                        |
+                        <ion-text color="danger">{{class.TOTAL.ABSENT}}</ion-text>
+                        |
+                        <ion-text color="primary">{{class.TOTAL.ABSENT_REASON}}</ion-text>
+                        |
+                        <ion-text color="warning">{{class.TOTAL.LATE}}</ion-text>
+                        |
+                        {{class.TOTAL.ABSENT + class.TOTAL.ABSENT_REASON + class.TOTAL.LATE + class.TOTAL.PRESENT}}
+                      </ion-col>
+                      <ion-col class="margin-auto ion-text-center">
+                        <ion-text>{{class.TYPE}}</ion-text>
+                      </ion-col>
+                      <ion-col class="margin-auto">
+                        <ion-buttons>
+                          <ion-button size="small" color="primary"
+                            (click)="edit(classcode.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
+                            <ion-icon slot="icon-only" name="create"></ion-icon>
+                          </ion-button>
+                          <ion-button size="small" color="danger"
+                            (click)="reset(classcode.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
+                            <ion-icon slot="icon-only" name="trash"></ion-icon>
+                          </ion-button>
+                        </ion-buttons>
                       </ion-col>
                     </ion-row>
-                  </ng-template>
+
+                  </ng-container>
                 </ng-container>
-
+                <ng-template #noFilteredClassCode>
+                  <ion-row>
+                    <ion-col size="12">
+                      <h2 class="ion-text-center ion-padding">No attendance records have been added in the
+                        <span class="text-bold danger-text"> last {{timeFrame}} days</span>
+                        <ng-container *ngIf="keyword"> for a class code that contains <span
+                            class="text-bold danger-text">{{keyword}}</span></ng-container>.
+                      </h2>
+                    </ion-col>
+                  </ion-row>
+                </ng-template>
               </ng-container>
-
             </ion-grid>
           </ion-card-content>
         </ion-card>
