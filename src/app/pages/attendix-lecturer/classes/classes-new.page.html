@@ -8,15 +8,6 @@
 </ion-header>
 
 <ion-content class="attendix-content">
-  <ion-card class="transparent no-box-shadow">
-    <ion-card-header>
-      <p class="ion-text-right">
-        <a (click)="tryv0()">Revert to classic</a>
-        or
-        <a>Give us feedback</a>
-      </p>
-    </ion-card-header>
-  </ion-card>
 
   <ng-container *ngIf="classcodes$ | async as classcodes; else loadingClasscodes">
     <!-- new attendance -->
@@ -26,6 +17,11 @@
           <ion-row>
             <ion-col class="margin-auto ion-no-padding">
               <ion-card-title>Mark New Attendance</ion-card-title>
+            </ion-col>
+            <ion-col class="ion-text-right">
+              <ion-button size="small" fill="outline" color="primary" (click)="tryv0()">
+                Revert to classic
+              </ion-button>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -51,8 +47,8 @@
                 <ion-col size="12">
                   <ion-item lines="none" class="input-item">
                     <ion-label position="stacked">Date</ion-label>
-                    <ion-select class="form-input" [ngModel]="date"
-                      (ngModelChange)="changeDate(date = $event)" interface="popover" placeholder="Date">
+                    <ion-select class="form-input" [ngModel]="date" (ngModelChange)="changeDate(date = $event)"
+                      interface="popover" placeholder="Date">
                       <ion-select-option *ngFor="let d of dates" [value]="d">{{ d | date : 'EEE, dd MMM yyy' }}
                       </ion-select-option>
                     </ion-select>
@@ -65,8 +61,8 @@
                   <ion-item lines="none" class="input-item">
                     <ion-label position="stacked">Start Time</ion-label>
                     <ion-select [disabled]="!date" class="form-input" [(ngModel)]="startTime"
-                    (ngModelChange)="changeStartTime(startTime = $event)" interface="popover"
-                    placeholder="Start Time">
+                      (ngModelChange)="changeStartTime(startTime = $event)" interface="popover"
+                      placeholder="Start Time">
                       <ion-select-option *ngFor="let t of startTimes" [value]="t">{{ t }}
                       </ion-select-option>
                     </ion-select>
