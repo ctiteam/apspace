@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/attendix/classes"></ion-back-button>
     </ion-buttons>
-    <ion-title>AttendiX | {{ thisClass ? 'Edit' : 'New' }} Attendance </ion-title>
+    <ion-title>AttendiX | {{ thisClass ? 'New' : 'Edit' }} Attendance </ion-title>
     <ion-buttons slot="end">
       <ion-button [disabled]="!thisClass" [color]="auto ? 'success' : ''" fill="outline">
         <ion-toggle [disabled]="!thisClass" [(ngModel)]="auto" [color]="auto ? 'success' : ''"></ion-toggle>
