@@ -75,7 +75,7 @@
                 <ion-col size="12" size-md="6">
                   <ion-item lines="none" class="input-item">
                     <ion-label position="stacked">Class Duration</ion-label>
-                    <ion-select [disabled]="!date" class="form-input" [ngModel]="duration"
+                    <ion-select [disabled]="!date || !startTime" class="form-input" [ngModel]="duration"
                       (ngModelChange)="calculateEndTime(duration = $event)" interface="popover"
                       placeholder="Class Duration">
                       <ion-select-option *ngFor="let d of durations" [value]="d.value">
