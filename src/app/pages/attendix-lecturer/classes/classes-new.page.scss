@@ -1,85 +1,130 @@
 // general
 .transparent {
-    --background: transparent !important;
+  --background: transparent !important;
+}
+
+.no-box-shadow {
+  box-shadow: none !important;
+}
+
+.margin-auto {
+  margin: auto;
+}
+
+.top-bottom-margin-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+// mark new attendance
+.input-item {
+  --background-hover: transparent !important;
+  --background-activated: transparent !important;
+  --ripple-color: transparent !important;
+  ion-label {
+    padding-left: 2px;
   }
-  
-  .no-box-shadow {
-    box-shadow: none !important;
-  }
-  
-  .margin-auto {
-    margin: auto;
-  }
-  
-  .top-bottom-margin-auto {
-    margin-top: auto;
-    margin-bottom: auto;
-  }
-  
-  // mark new attendance
-  .input-item {
+
+  &.item-interactive-disabled {
     ion-label {
-      padding-left: 2px;
+      opacity: .5 !important;
     }
-  
-    &.item-interactive-disabled {
-      ion-label {
-        opacity: .5 !important;
+  }
+}
+
+.select-box {
+  border-radius: 3px;
+  background: var(--main-bg-color);
+  border: 1px solid var(--tertiary-bg-color);
+  min-height: 40px;
+  margin-top: 10px;
+  width: 100%;
+  padding: 8px 10px 9px 10px !important;
+  &:hover{
+    background-color: var(--tertiary-bg-color);
+  }
+  span {
+    float: left;
+
+    &.text {
+      color: var(--main-txt-color);
+      overflow: hidden;
+      white-space: pre;
+      display: block;
+      text-overflow: ellipsis;
+      width: 92%;
+
+      &.placeholder {
+        opacity: .33;
       }
     }
+
+    &.icon {
+      width: 8%;
+      display: block;
+      text-align: right;
+      ion-icon{
+        opacity: .33;
+        font-size: 17px !important;
+      }
+    }
+
   }
-  
-  .form-input {
-    border-radius: 3px;
-    background: var(--main-bg-color);
+}
+
+.form-input {
+  border-radius: 3px;
+  background: var(--main-bg-color);
+  border: 1px solid var(--tertiary-bg-color);
+  min-height: 40px;
+  margin-top: 10px;
+  padding: 3px 10px !important;
+
+  &.grid {
+    padding: 0;
+    margin-top: 0;
+  }
+  &:hover{
+    background-color: var(--tertiary-bg-color);
+  }
+}
+
+ion-select.form-input {
+  width: 100%;
+  padding: 8px 10px 9px 10px !important;
+}
+
+
+// attendance logs
+.select-container {
+  .input {
     border: 1px solid var(--tertiary-bg-color);
-    min-height: 40px;
-    margin-top: 10px;
-    padding: 3px 10px !important;
-  
-    &.grid {
-      padding: 0;
-      margin-top: 0;
+  }
+}
+
+.table {
+  .table-container {
+    padding-top: 5px;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+
+    .table-header {
+      padding-bottom: 5px;
+      border-bottom: 1px solid #cccccc;
+
+      ion-text {
+        font-size: 1rem;
+      }
     }
-  }
-  
-  ion-select.form-input {
-    width: 100%;
-    padding: 8px 10px 9px 10px !important;
-  }
-  
-  
-  // attendance logs
-  .select-container {
-    .input {
-      border: 1px solid var(--tertiary-bg-color);
-    }
-  }
-  
-  .table {
-    .table-container {
+
+    .table-row {
       padding-top: 5px;
       padding-bottom: 0;
-      padding-left: 0;
-      padding-right: 0;
-  
-      .table-header {
-        padding-bottom: 5px;
-        border-bottom: 1px solid #cccccc;
-  
-        ion-text {
-          font-size: 1rem;
-        }
-      }
-  
-      .table-row {
-        padding-top: 5px;
-        padding-bottom: 0;
-  
-        &:hover {
-          background: var(--tertiary-bg-color);
-        }
+
+      &:hover {
+        background: var(--tertiary-bg-color);
       }
     }
   }
-  
+}

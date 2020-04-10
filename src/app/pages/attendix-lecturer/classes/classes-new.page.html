@@ -37,13 +37,15 @@
             <ion-grid>
               <ion-row>
                 <ion-col size="12">
-                  <ion-item class="input-item" lines="none">
+                  <ion-item tappable class="input-item" lines="none" (click)="chooseClasscode()">
                     <ion-label position="stacked">Class Code</ion-label>
-                    <ion-select class="form-input" #classcodeInput [ngModel]="classcode"
-                      [disabled]="!classcodes" placeholder="Click to Select">
-                      <ion-select-option *ngFor="let classcode of classcodes" [value]="classcode.CLASS_CODE">
-                        {{ classcode.CLASS_CODE }}</ion-select-option>
-                    </ion-select>
+                    <div class="select-box" expand="block">
+                      <span *ngIf="!classcode" class="text placeholder">Click to Select</span>
+                      <span *ngIf="classcode" class="text value">{{classcode}}</span>
+                      <span class="icon">
+                        <ion-icon name="md-arrow-dropdown"></ion-icon>
+                      </span>
+                    </div>
                   </ion-item>
                 </ion-col>
                 <ion-col size="12">
