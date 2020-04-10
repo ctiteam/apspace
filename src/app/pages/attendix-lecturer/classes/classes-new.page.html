@@ -41,8 +41,8 @@
                     <ion-label position="stacked">Class Code</ion-label>
                     <ion-select class="form-input" #classcodeInput [ngModel]="classcode"
                       [disabled]="!classcodes" placeholder="Click to Select">
-                      <ion-select-option *ngFor="let classcode of classcodes" [value]="classcode">
-                        {{ classcode }}</ion-select-option>
+                      <ion-select-option *ngFor="let classcode of classcodes" [value]="classcode.CLASS_CODE">
+                        {{ classcode.CLASS_CODE }}</ion-select-option>
                     </ion-select>
                   </ion-item>
                 </ion-col>
