@@ -203,6 +203,13 @@ export class ClassesNewPage {
     }
   }
 
+  /** if start time updated after duration => update duration . */
+  changeStartTime(_startTime: string) {
+    if (this.duration) {
+      this.calculateEndTime(this.duration);
+    }
+  }
+
   /** Calculate end time using start time and duration. */
   calculateEndTime(duration: number) {
     this.endTime = formatTime(parseTime(this.startTime) + duration);
