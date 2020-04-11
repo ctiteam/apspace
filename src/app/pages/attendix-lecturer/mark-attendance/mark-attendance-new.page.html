@@ -86,7 +86,7 @@
     </ion-grid>
     <ion-card class="ion-no-margin ion-margin-top ion-margin-bottom">
       <ion-card-content>
-        <h2 class="text-bold colored-text">Last 10 Students Scanned QR Code</h2>
+        <h2 class="text-bold colored-text">Last 10 Students Signed The Attendance</h2>
         <ng-container *ngIf="lastMarked$ && (lastMarked$ | async) as students; else noStudents">
           <ion-chip *ngFor="let student of students">
             <ion-label>{{student.name}}</ion-label>
