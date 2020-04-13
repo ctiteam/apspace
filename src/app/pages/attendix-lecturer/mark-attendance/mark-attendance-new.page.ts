@@ -208,19 +208,19 @@ export class MarkAttendanceNewPage implements OnInit {
               'rgba(73, 181, 113, 0.5)',
               'rgba(229, 77, 66, 0.5)',
               'rgba(54, 162, 235, 0.5)',
-              'rgba(255, 206, 86, 0.5)'
+              'rgba(212, 154, 13, 0.5)'
             ],
             hoverBackgroundColor: [
               '#49b571', // green
               '#e54d42', // red
               '#36A2EB', // blue
-              '#FFCE56' // orange
+              '#d49a0d' // orange
             ],
             borderColor: [
               '#49b571', // green
               '#e54d42', // red
               '#36A2EB', // blue
-              '#FFCE56' // orange
+              '#d49a0d' // orange
             ],
             borderWidth: 3
           }]
