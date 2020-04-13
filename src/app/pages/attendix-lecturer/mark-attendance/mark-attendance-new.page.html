@@ -5,8 +5,8 @@
     </ion-buttons>
     <ion-title>AttendiX | {{ thisClass ? 'New' : 'Edit' }} Attendance </ion-title>
     <ion-buttons slot="end">
-      <ion-button [disabled]="!thisClass" [color]="auto ? 'success' : ''" fill="outline">
-        <ion-toggle [disabled]="!thisClass" [(ngModel)]="auto" [color]="auto ? 'success' : ''"></ion-toggle>
+      <ion-button [disabled]="!thisClass || hideQr" [color]="auto ? 'success' : ''" fill="outline">
+        <ion-toggle [disabled]="!thisClass || hideQr" [(ngModel)]="auto" [color]="auto ? 'success' : ''"></ion-toggle>
         <ion-label [color]="auto ? 'success' : ''">QR</ion-label>
       </ion-button>
     </ion-buttons>
@@ -15,7 +15,7 @@
 
 <ion-content class="attendix-content">
   <!-- QR code page -->
-  <ng-template [ngIf]="auto" [ngIfElse]="override">
+  <ng-template [ngIf]="auto && !hideQr" [ngIfElse]="override">
     <ion-grid class="ion-no-padding">
       <ion-row *ngIf="otp$ | async as otp">
         <ion-col size="12" size-md="9" size-lg="7">

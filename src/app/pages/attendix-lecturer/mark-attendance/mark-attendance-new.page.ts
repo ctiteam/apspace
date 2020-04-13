@@ -46,7 +46,7 @@ export class MarkAttendanceNewPage implements OnInit {
   type: Attendance = '';
   thisClass = false;
   resetable = false;
-
+  hideQr = false;
   lectureUpdate = '';
 
   countdown$: Observable<number>;
@@ -102,7 +102,10 @@ export class MarkAttendanceNewPage implements OnInit {
       && nowMins <= parseTime(schedule.endTime) + 5;
 
     const init = () => {
-      const attendance = this.route.snapshot.paramMap.get('attendance') || 'N';
+      const attendance = this.route.snapshot.paramMap.get('defaultAttendance') || 'N';
+      if (attendance === 'Y') {
+        this.hideQr = true;
+      }
       this.auto = this.thisClass;
       return this.initAttendance.mutate({ schedule, attendance });
     };
@@ -259,7 +262,7 @@ export class MarkAttendanceNewPage implements OnInit {
     };
     const schedule = this.schedule;
     this.markAttendance.mutate({ schedule, student, attendance, absentReason }, options).subscribe(
-      () => {},
+      () => { },
       e => { this.toast(`Mark ${stateMap[attendance]} failed: ` + e, 'danger'); console.error(e); }
     );
   }
