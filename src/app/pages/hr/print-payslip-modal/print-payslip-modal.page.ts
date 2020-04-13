@@ -1,25 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { ModalController, Platform, ToastController } from '@ionic/angular';
-import { map, tap} from 'rxjs/operators';
-import { WsApiService } from 'src/app/services';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { CasTicketService, WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-print-payslip-modal',
   templateUrl: './print-payslip-modal.page.html',
   styleUrls: ['./print-payslip-modal.page.scss'],
 })
-export class PrintPayslipModalPage implements OnInit {
-  payslips = [];
+
+export class PrintPayslipModalPage {
+  payslips$: Observable<[]>;
   payslipsUrl = 'https://ztmu4mdu21.execute-api.ap-southeast-1.amazonaws.com';
   payslipsEndpoint = '/dev/staff/payslips';
-
-  minDate;
-  maxDate;
-
-  selectedDate;
 
   constructor(
     public modalCtrl: ModalController,
@@ -28,32 +25,25 @@ export class PrintPayslipModalPage implements OnInit {
     private file: File,
     private transfer: FileTransfer,
     private fileOpener: FileOpener,
-    private ws: WsApiService
+    private ws: WsApiService,
+    private cas: CasTicketService
   ) { }
 
-  ngOnInit() {
-    this.ws.get<any>(this.payslipsEndpoint, { url: this.payslipsUrl }).pipe(
-      map(payslips => payslips.payslips),
-      tap(payslips => this.payslips = payslips),
-      tap(payslips => {
-        const dates = [...payslips.map(payslip => payslip.split('.', 2)[1].replace('-End Month', ''))];
-        this.minDate = dates[0];
-        this.maxDate = dates[dates.length - 1];
-      })
-    ).subscribe();
+  ionViewWillEnter() {
+    this.payslips$ = this.ws.get<any>(this.payslipsEndpoint, { url: this.payslipsUrl }).pipe(
+      map(payslips => payslips.payslips)
+    );
   }
 
-  generatePayslipPdf() {
+  generatePayslipPdf(payslip) {
     const downloadPayslipEndpoint = '/dev/staff/download_payslip/';
-    const filteredSelectedDate = this.selectedDate.substring(0, 7);
-    const fileName = this.payslips.find(element => element.includes(filteredSelectedDate));
-
+    const link = this.payslipsUrl + downloadPayslipEndpoint + payslip;
     const transfer = this.transfer.create();
 
     if (this.platform.is('cordova')) {
       transfer.download(
-        this.payslipsUrl + downloadPayslipEndpoint + fileName,
-        this.file.dataDirectory + fileName
+        link,
+        this.file.dataDirectory + payslip
       ).then((entry) => {
         console.log('this is entry to url ', entry.toURL());
         this.fileOpener.open(entry.toURL(), 'application/pdf').then(() => {
@@ -61,7 +51,9 @@ export class PrintPayslipModalPage implements OnInit {
         }).catch(e => console.log('ERROR ERROR ', e));
       }, (error) => console.log('download error ', error));
     } else {
-      window.open(this.payslipsUrl + downloadPayslipEndpoint + fileName);
+      this.cas.getST(link).subscribe(st => {
+        window.open(link + `?ticket=${st}`);
+      });
     }
   }
 

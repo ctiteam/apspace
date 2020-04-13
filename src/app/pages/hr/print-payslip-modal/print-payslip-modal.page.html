@@ -11,17 +11,23 @@
 
 <ion-content>
   <ion-grid>
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="12" size-md="6">
+    <ion-row>
+      <ion-col size="12" size-md="6" size-xl="4" *ngFor="let payslip of payslips$ | async as payslips;">
         <ion-card>
+          <img class="month-image" src="{{payslip | getDate | date: 'MMM' | generateMonthImg}}" />
+
+          <ion-card-header>
+            <ion-fab horizontal="end" vertical="top" edge>
+              <ion-fab-button (click)="generatePayslipPdf(payslip)" class="colored-background">
+                <ion-icon name="download"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+            <ion-card-title>
+              {{payslip | getDate | date : 'MMM yyyy'}}
+            </ion-card-title>
+          </ion-card-header>
           <ion-card-content>
-            <ion-item>
-              <ion-label>Date</ion-label>
-              <ion-datetime [(ngModel)]="selectedDate" [min]="this.minDate" [max]="this.maxDate" displayFormat="YYYY-MMM"></ion-datetime>
-            </ion-item>
-            <ion-button [disabled]="!selectedDate" (click)="generatePayslipPdf()" class="ion-margin-top" color="success" expand="block">
-              Generate Payslip
-            </ion-button>
+            {{payslip}}
           </ion-card-content>
         </ion-card>
       </ion-col>
