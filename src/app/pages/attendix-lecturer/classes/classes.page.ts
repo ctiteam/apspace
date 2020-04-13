@@ -380,7 +380,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
       startTime: this.auto ? this.startTime : this.manualStartTime,
       endTime: this.auto ? this.endTime : this.manualEndTime,
       classType: this.auto ? this.classType : this.manualClassType,
-      attendance: 'N',
+      defaultAttendance: 'N',
     }]);
   }
 

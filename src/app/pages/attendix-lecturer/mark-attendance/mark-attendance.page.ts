@@ -90,7 +90,7 @@ export class MarkAttendancePage implements OnInit {
     const thisClass = schedule.date === isoDate(today) && parseTime(schedule.startTime) <= nowMins;
 
     const init = () => {
-      const attendance = this.route.snapshot.paramMap.get('attendance') || 'N';
+      const attendance = this.route.snapshot.paramMap.get('defaultAttendance') || 'N';
       this.auto = thisClass;
       this.type = 'N';
       return this.initAttendance.mutate({ schedule, attendance });
