@@ -216,27 +216,27 @@
                     <ion-virtual-scroll [items]="filteredStudents" [trackBy]="trackById" approxItemHeight="48px">
                       <ion-row class="table-row text-bold" *virtualItem="let student; let i = index;"
                         [ngClass]="'state' + student.attendance">
-                        <ion-col class="margin-auto" size="auto">
+                        <ion-col class="margin-auto" size="1" size-sm="auto">
                           <p class="larger-font-size">
                             <ion-text>{{i + 1}}.</ion-text>
                           </p>
                         </ion-col>
-                        <ion-col class="margin-auto" size="auto">
+                        <ion-col class="margin-auto" size="4" size-sm="auto">
                           <p class="larger-font-size">
                             <ion-text class="text-bold">{{ student.id }}</ion-text>
                           </p>
                         </ion-col>
-                        <ion-col class="margin-auto">
+                        <ion-col class="margin-auto" size="7" size-sm="">
                           <p class="larger-font-size">
                             <ion-text class="text-bold">{{ student.name }}</ion-text>
                           </p>
                         </ion-col>
-                        <ion-col class="margin-auto ion-no-padding"
+                        <ion-col size="3" size-sm="" class="margin-auto ion-no-padding"
                           *ngIf="student.attendance === 'N' || student.attendance === 'R'">
                           <ion-input [value]="student.absentReason" placeholder="Absent with reason"
                             (change)="mark(student.id, 'R', $event)"></ion-input>
                         </ion-col>
-                        <ion-col class="margin-auto ion-text-right">
+                        <ion-col size="9" size-sm="" class="margin-auto ion-text-right">
                           <ion-buttons class="ion-float-right">
                             <ion-button size="small" [disabled]="student.attendance === 'Y'" class="stateY"
                               (click)="mark(student.id, 'Y')">Present
