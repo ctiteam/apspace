@@ -4,7 +4,7 @@ import { AlertController, LoadingController, ModalController, ToastController } 
 
 import { DatePipe } from '@angular/common';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
 import { Classcode } from '../../../interfaces';
@@ -85,7 +85,6 @@ export class ClassesNewPage {
   paramEndTime: string | null = this.route.snapshot.paramMap.get('endTime');
 
   classcodes$: Observable<Classcode[]>;
-  classcodes: string[];
   dates: string[];
   startTimes: string[];
 
@@ -127,7 +126,7 @@ export class ClassesNewPage {
   getClasscodes() {
     this.classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes').pipe(
       map(classcodes => this.mergeClasscodes(classcodes)), // side effect
-      tap(classcodes => this.classcodes = classcodes.map(classcode => classcode.CLASS_CODE)),
+      shareReplay(1),
     );
   }
 
@@ -165,11 +164,12 @@ export class ClassesNewPage {
 
   /** Display search modal to choose classcode. */
   async chooseClasscode() {
+    const classcodes = (await this.classcodes$.toPromise()).map(c => c.CLASS_CODE);
     const modal = await this.modalCtrl.create({
       component: SearchModalComponent,
       componentProps: {
-        items: this.classcodes,
-        defaultItems: this.classcodes,
+        items: classcodes,
+        defaultItems: classcodes,
         notFound: 'No classcode selected'
       }
     });
