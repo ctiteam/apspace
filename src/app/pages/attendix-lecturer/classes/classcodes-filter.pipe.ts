@@ -8,8 +8,6 @@ import { Classcode } from 'src/app/interfaces';
 export class ClasscodesFilterPipe implements PipeTransform {
 
   transform(classcodes: Classcode[], keyword: string, timeframe: number) {
-    console.log(classcodes);
-    const filteredClasscodes: Classcode[] = JSON.parse(JSON.stringify(classcodes)); // to prevent updating the original object
     if (keyword) { // do this only if the user enters data in search box
       keyword = keyword.toLowerCase().replace(/%/g, '.*')
         .replace(/\(/g, '\\(').replace(/\)/g, '\\)') // escape parenthesis
@@ -18,17 +16,14 @@ export class ClasscodesFilterPipe implements PipeTransform {
     }
     const searchRegExp = new RegExp(keyword, 'i');
     const today = new Date();
-    return filteredClasscodes.filter(classcode => {
-      if (searchRegExp.test(classcode.CLASS_CODE.toLowerCase())) { // filter classcode by keyword (using regex)
-        const classes = classcode.CLASSES
-          .filter(c => moment(today).diff(moment(c.DATE, 'YYYY-MM-DD').subtract(), 'days') <= timeframe);
-        if (classes.length > 0) { // filter classes by time frame (last 7, 30, or 98 days).
-          classcode.CLASSES = classes;
-          return true;
-        }
-      }
-
-    });
+    return classcodes
+      .filter(classcode => searchRegExp.test(classcode.CLASS_CODE.toLowerCase()))
+      .map(classcode => ({ // create a new object to prevent modifying previous object
+        ...classcode,
+        CLASSES: classcode.CLASSES.slice().filter(c =>
+          moment(today).diff(moment(c.DATE, 'YYYY-MM-DD').subtract(), 'days') <= timeframe),
+      }))
+      .filter(classcode => classcode.CLASSES.length > 0);
   }
 
 }
