@@ -103,9 +103,7 @@ export class MarkAttendanceNewPage implements OnInit {
 
     const init = () => {
       const attendance = this.route.snapshot.paramMap.get('defaultAttendance') || 'N';
-      if (attendance === 'Y') {
-        this.hideQr = true;
-      }
+      this.hideQr = attendance === 'Y';
       this.auto = this.thisClass;
       return this.initAttendance.mutate({ schedule, attendance });
     };
