@@ -5,8 +5,8 @@ import { AlertController, LoadingController, ToastController } from '@ionic/angu
 import { authenticator } from 'otplib/otplib-browser';
 import { NEVER, Observable, Subject, interval, timer } from 'rxjs';
 import {
-  catchError, endWith, first, map, pluck, scan, share, shareReplay, startWith,
-  switchMap, takeUntil, tap,
+  catchError, endWith, filter, first, map, pluck, scan, share, shareReplay,
+  startWith, switchMap, takeUntil, tap,
 } from 'rxjs/operators';
 
 import {
@@ -173,6 +173,7 @@ export class MarkAttendancePage implements OnInit {
       pluck('data', 'newStatus'),
       tap(({ id }) => console.log('new', id, studentsNameById[id])),
       tap(({ id, attendance, absentReason }) => this.statusUpdate.next({ id, attendance, absentReason })),
+      filter(({ attendance }) => attendance === 'Y'),
       scan((acc, { id }) => acc.includes(studentsNameById[id])
         ? acc : [...acc, studentsNameById[id]].slice(-10), []),
       shareReplay(1) // keep track while switching mode
