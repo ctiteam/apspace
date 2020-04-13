@@ -16,6 +16,14 @@
   margin-bottom: auto;
 }
 
+.show-only-on-small-devices{
+  display: none !important;
+}
+
+.show-only-on-other-devices{
+  display: inline-block !important;
+}
+
 // mark new attendance
 .input-item {
   --background-hover: transparent !important;
@@ -127,4 +135,54 @@ ion-select.form-input {
       }
     }
   }
+}
+
+// media queries for changing table to card design in small devices
+@media (max-width: 575px) { // small screen
+  .table-header{
+    display: none;
+  }
+  .table-row{
+    &.text-bold.no-bold-on-small-devices{
+      font-weight: normal !important;
+    }
+    .ion-text-center.no-center-on-small-devices{
+      text-align: left !important;
+    }
+    .title-on-small-devices{
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+  }
+
+  .show-only-on-small-devices{
+    display: inline-block !important;
+  }
+  .show-only-on-other-devices{
+    display: none !important;
+  }
+
+  .border-bottom{
+    border-bottom: 1px solid var(--main-txt-color) !important;
+  }
+
+  .bold-on-small-devices{
+    font-weight: bold;
+  }
+  // .table-item {
+  //   --background: var(--secondary-bg-color) !important;
+
+  //   &:nth-child(even) {
+  //     --background: var(--secondary-bg-color) !important;
+  //   }
+  //   &:not(:last-child) {
+  //     margin-bottom: 15px;
+  //   }
+  //   --padding-top: 5px;
+  //   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  // }
+  // ion-card.table-background {
+  //   --background: transparent !important;
+  //   box-shadow: none !important;
+  // }
 }
