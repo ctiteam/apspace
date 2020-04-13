@@ -117,19 +117,19 @@
             <ion-col size="12" size-md="6" size-lg="4">
               <div>
                 <ion-item class="ion-no-padding" lines="none">
-                  <ion-icon slot="start" name="calendar"></ion-icon>
+                  <ion-icon slot="start" name="calendar" class="main-text-color"></ion-icon>
                   <ion-label>{{schedule!.classType}} on {{schedule!.date | date : 'EEE, dd MMM yyy' }}</ion-label>
                 </ion-item>
                 <ion-item class="ion-no-padding" lines="none">
-                  <ion-icon slot="start" name="alarm"></ion-icon>
+                  <ion-icon slot="start" name="alarm" class="main-text-color"></ion-icon>
                   <ion-label>{{schedule!.startTime}} to {{schedule!.endTime}}</ion-label>
                 </ion-item>
                 <ion-item class="ion-no-padding" lines="none">
-                  <ion-icon slot="start" name="ios-people"></ion-icon>
+                  <ion-icon slot="start" name="ios-people" class="main-text-color"></ion-icon>
                   <ion-label>{{totalStudents$ | async}} Students</ion-label>
                 </ion-item>
                 <ion-item class="ion-no-padding" lines="none">
-                  <ion-icon slot="start" name="pricetag"></ion-icon>
+                  <ion-icon slot="start" name="pricetag" class="main-text-color"></ion-icon>
                   <ion-textarea [ngModel]="lectureUpdate" (ionChange)="save($event.target.value)"
                     (ionBlur)="save($event.target.value)" debounce="5000" placeholder="Add your notes here" rows="1"
                     class="ion-no-padding"></ion-textarea>
