@@ -86,13 +86,11 @@
 
 
                 <ion-col size="12" size-md="7">
-                  <ion-list class="ion-no-padding">
-                    <ion-radio-group class="input-item ion-no-padding" [ngModel]="classType"
+                  <ion-item lines="none" class="input-item">
+                    <ion-label position="stacked">Class Type</ion-label>
+                    <ion-radio-group class="form-input ion-no-padding" [ngModel]="classType"
                       (ngModelChange)="classType = $event">
-                      <ion-list-header class="ion-no-padding">
-                        <ion-label position="stacked">Class Type</ion-label>
-                      </ion-list-header>
-                      <ion-grid class="form-input grid ion-no-padding">
+                      <ion-grid class="grid ion-no-padding">
                         <ion-row>
                           <ion-col size="12" size-md="4" class="ion-no-padding" *ngFor="let t of classTypes">
                             <ion-item lines="none" class="transparent">
@@ -105,18 +103,15 @@
                         </ion-row>
                       </ion-grid>
                     </ion-radio-group>
-                  </ion-list>
+                  </ion-item>
                 </ion-col>
 
-
                 <ion-col size="12" size-md="5">
-                  <ion-list class="ion-no-padding">
-                    <ion-radio-group class="input-item ion-no-padding" [ngModel]="defaultAttendance"
+                  <ion-item lines="none" class="input-item">
+                    <ion-label position="stacked">Mark all students as</ion-label>
+                    <ion-radio-group class="form-input ion-no-padding" [ngModel]="defaultAttendance"
                       (ngModelChange)="defaultAttendance = $event">
-                      <ion-list-header class="ion-no-padding">
-                        <ion-label position="stacked">Mark all students as</ion-label>
-                      </ion-list-header>
-                      <ion-grid class="form-input grid ion-no-padding">
+                      <ion-grid class="grid ion-no-padding">
                         <ion-row>
                           <ion-col size="12" size-md="6" class="ion-no-padding">
                             <ion-item lines="none" class="transparent">
@@ -133,7 +128,7 @@
                         </ion-row>
                       </ion-grid>
                     </ion-radio-group>
-                  </ion-list>
+                  </ion-item>
                 </ion-col>
               </ion-row>
 
