@@ -217,7 +217,8 @@ export class ClassesNewPage {
         && startTimeMins < parseTime(klass.TIME_TO) && endTimeMins > parseTime(klass.TIME_FROM));
       if (overlap) {
         // go directly to overlapped class if it have the exact same time
-        if (this.startTime === overlap.TIME_FROM && this.endTime === overlap.TIME_TO) {
+        if (this.startTime === overlap.TIME_FROM && this.endTime === overlap.TIME_TO
+          && this.classType === overlap.classType) {
           this.router.navigate(['/attendix/mark-attendance', {
             classcode: this.classcode,
             date: this.date,
