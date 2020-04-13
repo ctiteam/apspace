@@ -204,34 +204,66 @@ export class ClassesNewPage {
     this.endTime = formatTime(parseTime(this.startTime) + duration);
   }
 
-  /** Mark attendance, send feedback if necessary. double confirm */
-  async mark() {
-    this.alertCtrl.create({
-      cssClass: 'delete-warning',
-      header: 'Warning!',
-      message: `By clicking on <span class="text-bold">'Continue'</span>, all students will be marked as ${this.defaultAttendance === 'Y' ? 'Present' : 'Absent'} by default! ${this.defaultAttendance === 'Y' ? '<br><br> <span class="text-bold">**Since you chose to mark all as Present by default, there will be no QR code displayed.</span>' : '.'}`,
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary-txt-color',
-        },
-        {
-          text: 'Continue',
-          cssClass: 'colored-text',
-          handler: () => {
-            this.router.navigate(['/attendix/mark-attendance', {
-              classcode: this.classcode,
-              date: this.date,
-              startTime: this.startTime,
-              endTime: this.endTime,
-              classType: this.classType,
-              defaultAttendance: this.defaultAttendance
-            }]);
-          }
+  /** Mark attendance with validation. Double confirm */
+  mark() {
+    this.classcodes$.subscribe(classcodes => {
+      const startTimeMins = parseTime(this.startTime);
+      const endTimeMins = parseTime(this.endTime);
+      // search for overlapped class
+      const classes = [].concat(...classcodes
+        .filter(classcode => this.classcode === classcode.CLASS_CODE)
+        .map(classcode => classcode.CLASSES)); // use flat in es2019
+      const overlap = classes.find(klass => this.date === klass.DATE
+        && startTimeMins < parseTime(klass.TIME_TO) && endTimeMins > parseTime(klass.TIME_FROM));
+      if (overlap) {
+        // go directly to overlapped class if it have the exact same time
+        if (this.startTime === overlap.TIME_FROM && this.endTime === overlap.TIME_TO) {
+          this.router.navigate(['/attendix/mark-attendance', {
+            classcode: this.classcode,
+            date: this.date,
+            startTime: this.startTime,
+            endTime: this.endTime,
+            classType: this.classType,
+            defaultAttendance: this.defaultAttendance
+          }]);
+        } else {
+          this.toastCtrl.create({
+            message: 'Class overlapped with existing class',
+            duration: 3000,
+            position: 'top',
+            color: 'danger',
+            showCloseButton: true,
+          }).then(toast => toast.present());
         }
-      ]
-    }).then(alert => alert.present());
+        return;
+      }
+      this.alertCtrl.create({
+        cssClass: 'delete-warning',
+        header: 'Warning!',
+        message: `By clicking on <span class="text-bold">'Continue'</span>, all students will be marked as ${this.defaultAttendance === 'Y' ? 'Present' : 'Absent'} by default! ${this.defaultAttendance === 'Y' ? '<br><br> <span class="text-bold">**Since you chose to mark all as Present by default, there will be no QR code displayed.</span>' : '.'}`,
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'secondary-txt-color',
+          },
+          {
+            text: 'Continue',
+            cssClass: 'colored-text',
+            handler: () => {
+              this.router.navigate(['/attendix/mark-attendance', {
+                classcode: this.classcode,
+                date: this.date,
+                startTime: this.startTime,
+                endTime: this.endTime,
+                classType: this.classType,
+                defaultAttendance: this.defaultAttendance
+              }]);
+            }
+          }
+        ]
+      }).then(alert => alert.present());
+    });
   }
 
   /** Clear all form data. */
