@@ -174,11 +174,10 @@ export class ClassesNewPage {
       }
     });
     await modal.present();
-    await modal.onDidDismiss().then(data => {
-      if (data.data) {
-        this.classcode = data.data.item;
-      }
-    });
+    const { data: { item: classcode } = { item: this.classcode } } = await modal.onDidDismiss();
+    if (classcode !== this.classcode) {
+      this.classcode = classcode;
+    }
   }
 
   /** Change date. */
