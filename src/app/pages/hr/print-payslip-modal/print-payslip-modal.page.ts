@@ -35,7 +35,7 @@ export class PrintPayslipModalPage {
     );
   }
 
-  generatePayslipPdf(payslip) {
+  downloadPayslipPdf(payslip) {
     const downloadPayslipEndpoint = '/dev/staff/download_payslip/';
     const link = this.payslipsUrl + downloadPayslipEndpoint + payslip;
     const transfer = this.transfer.create();

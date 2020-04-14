@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar mode="md">
-    <ion-title>Generate Payslip PDF</ion-title>
+    <ion-title>Download Payslip</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -18,7 +18,7 @@
 
           <ion-card-header>
             <ion-fab horizontal="end" vertical="top" edge>
-              <ion-fab-button (click)="generatePayslipPdf(payslip)" class="colored-background">
+              <ion-fab-button (click)="downloadPayslipPdf(payslip)" class="colored-background">
                 <ion-icon name="download"></ion-icon>
               </ion-fab-button>
             </ion-fab>

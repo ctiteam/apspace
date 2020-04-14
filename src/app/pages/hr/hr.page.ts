@@ -183,7 +183,7 @@ export class HrPage implements OnInit {
     this.iab.create('https://hr.apiit.edu.my', '_system', 'location=true');
   }
 
-  openGeneratePayslipPdf() {
+  openPayslipPdf() {
     this.modalCtrl.create({
       component: PrintPayslipModalPage,
       cssClass: 'custom-modal-style',
