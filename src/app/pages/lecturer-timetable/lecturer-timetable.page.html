@@ -148,34 +148,34 @@
                     <ion-grid>
                       <ng-container *ngIf="viewWeek; else viewDaily">
                         <ion-row *ngIf="timetable | endtime as endTime" class="table-data">
-                          <ion-col size="12" size-sm="" class="hide-on-print-table-flex-on-card text-bold ion-no-padding md-text-center">
+                          <ion-col size="12" size-sm="" class="hide-on-print-table-flex-on-card text-bold ion-no-padding md-text-center margin-auto">
                             {{ timetable.module }}
                           </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding md-text-center">
+                          <ion-col size="12" size-sm="" class="ion-no-padding md-text-center margin-auto">
                             <span class="marker">
                               <ion-icon name="calendar"></ion-icon>
                             </span>
                             {{ timetable.time | date:'EEE, d MMM' }}
                           </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding md-text-center">
+                          <ion-col size="12" size-sm="" class="ion-no-padding md-text-center margin-auto">
                             <span class="marker">
                               <ion-icon name="time"></ion-icon>
                             </span>
                             {{ timetable.time | date:'shortTime' }} - {{ endTime | date:'shortTime' }}
                           </ion-col>
-                          <ion-col size="12" size-sm="" class="flex-on-print-table-hide-on-card ion-no-padding md-text-center">
+                          <ion-col size="12" size-sm="" class="flex-on-print-table-hide-on-card ion-no-padding md-text-center margin-auto">
                             {{ timetable.module }}
                           </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding md-text-center">
+                          <ion-col size="12" size-sm="" class="ion-no-padding md-text-center margin-auto">
                             <span class="marker">
                               <ion-icon name="locate"></ion-icon>
                             </span>
                             {{ timetable.room }} | {{ timetable.location }}
                           </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding">
+                          <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
                             <ng-container *ngTemplateOutlet="intakes; context: {$implicit: timetable}"></ng-container>
                           </ion-col>
-                          <ion-col size="12" size-sm="auto">
+                          <ion-col size="12" size-sm="auto" class="margin-auto">
                             <ion-button [disabled]="(timetable.time | date : 'yyyy-MM-dd') > (today | date : 'yyyy-MM-dd')" class="ion-float-right" [routerLink]="['/attendix/classes', {
                               moduleId: timetable.module,
                               date: (timetable.time | date:'yyyy-MM-dd'),
@@ -191,22 +191,22 @@
 
                       <ng-template #viewDaily>
                         <ion-row *ngIf="timetable | endtime as endTime">
-                          <ion-col size="12" size-sm="" class="text-bold ion-no-padding">
+                          <ion-col size="12" size-sm="" class="text-bold ion-no-padding margin-auto">
                             {{ timetable.module }}
                           </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding">
+                          <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
                             <span class="marker">
                               <ion-icon name="time"></ion-icon>
                             </span>
                             {{ timetable.time | date:'shortTime' }} - {{ endTime | date:'shortTime' }}
                           </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding">
+                          <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
                             <span class="marker">
                               <ion-icon name="locate"></ion-icon>
                             </span>
                             {{ timetable.room }} | {{ timetable.location }}
                           </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding">
+                          <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
                             <ng-container *ngTemplateOutlet="intakes; context: {$implicit: timetable}"></ng-container>
                           </ion-col>
                           <ion-col size="12" size-sm="auto" class="ion-no-padding margin-auto">
