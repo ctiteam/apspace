@@ -90,39 +90,53 @@
                       <ion-grid class="ion-no-margin ion-no-padding">
                         <ng-container *ngIf="viewWeek; else viewDaily">
                           <ion-row>
-                            <ion-col class="hide-on-print-table-flex-on-card ion-no-padding" size="12" size-sm="2">
+                            <ion-col class="hide-on-print-table-flex-on-card ion-no-padding" size="12" size-sm="">
                               <h2 class="text-bold">Module</h2>
                             </ion-col>
-                            <ion-col size="12" size-sm="1" class="ion-no-padding">
+                            <ion-col size="12" size-sm="" class="ion-no-padding">
                               <h2 class="text-bold">Date</h2>
                             </ion-col>
-                            <ion-col size="12" size-sm="2" class="ion-no-padding">
+                            <ion-col size="12" size-sm="" class="ion-no-padding">
                               <h2 class="text-bold md-text-center">Time</h2>
                             </ion-col>
-                            <ion-col size="12" size-sm="2" class="flex-on-print-table-hide-on-card ion-no-padding">
+                            <ion-col size="12" size-sm="" class="flex-on-print-table-hide-on-card ion-no-padding">
                               <h2 class="text-bold md-text-center ">Module</h2>
                             </ion-col>
-                            <ion-col size="12" size-sm="2" class="ion-no-padding">
+                            <ion-col size="12" size-sm="" class="ion-no-padding">
                               <h2 class="text-bold md-text-center">Location</h2>
                             </ion-col>
-                            <ion-col size="12" size-sm="3" class="ion-no-padding">
+                            <ion-col size="12" size-sm="" class="ion-no-padding">
                               <h2 class="text-bold md-text-center">Lecturer</h2>
+                            </ion-col>
+                            <ion-col size="12" size-sm="auto" class="ion-no-padding">
+                              <!-- empty column - all data isnide is hidden - added it because the size-sm is auto -->
+                              <ion-button class="ion-float-right" style="visibility: hidden;" fill="outline" color="danger" size="small">
+                                Attendance
+                                <ion-icon slot="end" name="md-clipboard"></ion-icon>
+                              </ion-button>
                             </ion-col>
                           </ion-row>
                         </ng-container>
                         <ng-template #viewDaily>
                           <ion-row>
-                            <ion-col class="ion-no-padding" size="12" size-sm="3">
+                            <ion-col class="ion-no-padding" size="12" size-sm="">
                               <h2 class="text-bold">Module</h2>
                             </ion-col>
-                            <ion-col size="12" size-sm="2" class="ion-no-padding">
+                            <ion-col size="12" size-sm="" class="ion-no-padding">
                               <h2 class="time text-bold">Time</h2>
                             </ion-col>
-                            <ion-col size="12" size-sm="3" class="ion-no-padding">
+                            <ion-col size="12" size-sm="" class="ion-no-padding">
                               <h2 class="text-bold">Location</h2>
                             </ion-col>
-                            <ion-col size="12" size-sm="4" class="ion-no-padding">
+                            <ion-col size="12" size-sm="" class="ion-no-padding">
                               <h2 class="text-bold">Intakes</h2>
+                            </ion-col>
+                            <ion-col size="12" size-sm="auto" class="ion-no-padding">
+                              <!-- empty column - all data isnide is hidden - added it because the size-sm is auto -->
+                              <ion-button class="ion-float-right" style="visibility: hidden;" fill="outline" color="danger" size="small">
+                                Attendance
+                                <ion-icon slot="end" name="md-clipboard"></ion-icon>
+                              </ion-button>
                             </ion-col>
                           </ion-row>
                         </ng-template>
@@ -134,79 +148,77 @@
                     <ion-grid>
                       <ng-container *ngIf="viewWeek; else viewDaily">
                         <ion-row *ngIf="timetable | endtime as endTime" class="table-data">
-                          <ion-col size="12" size-sm="2" class="hide-on-print-table-flex-on-card text-bold ion-no-padding md-text-center">
+                          <ion-col size="12" size-sm="" class="hide-on-print-table-flex-on-card text-bold ion-no-padding md-text-center">
                             {{ timetable.module }}
-                            <ion-button [routerLink]="['/attendix/classes', {
-                              moduleId: timetable.module,
-                              date: (timetable.time | date:'yyyy-mm-dd'),
-                              startTime: (timetable.time | date:'hh:mm a'),
-                              endTime: (endTime | date:'hh:mm a') }
-                            ]" fill="outline" size="small">
-                              Mark
-                            </ion-button>
                           </ion-col>
-                          <ion-col size="12" size-sm="1" class="ion-no-padding md-text-center">
+                          <ion-col size="12" size-sm="" class="ion-no-padding md-text-center">
                             <span class="marker">
                               <ion-icon name="calendar"></ion-icon>
                             </span>
                             {{ timetable.time | date:'EEE, d MMM' }}
                           </ion-col>
-                          <ion-col size="12" size-sm="2" class="ion-no-padding md-text-center">
+                          <ion-col size="12" size-sm="" class="ion-no-padding md-text-center">
                             <span class="marker">
                               <ion-icon name="time"></ion-icon>
                             </span>
                             {{ timetable.time | date:'shortTime' }} - {{ endTime | date:'shortTime' }}
                           </ion-col>
-                          <ion-col size="12" size-sm="2" class="flex-on-print-table-hide-on-card ion-no-padding md-text-center">
+                          <ion-col size="12" size-sm="" class="flex-on-print-table-hide-on-card ion-no-padding md-text-center">
                             {{ timetable.module }}
-                            <ion-button [routerLink]="['/attendix/classes', {
-                              moduleId: timetable.module,
-                              date: (timetable.time | date:'yyyy-mm-dd'),
-                              startTime: (timetable.time | date:'hh:mm a'),
-                              endTime: (endTime | date:'hh:mm a') }
-                            ]" fill="outline" size="small">
-                              Mark
-                            </ion-button>
                           </ion-col>
-                          <ion-col size="12" size-sm="2" class="ion-no-padding md-text-center">
+                          <ion-col size="12" size-sm="" class="ion-no-padding md-text-center">
                             <span class="marker">
                               <ion-icon name="locate"></ion-icon>
                             </span>
                             {{ timetable.room }} | {{ timetable.location }}
                           </ion-col>
-                          <ion-col size="12" size-sm="3" class="ion-no-padding">
+                          <ion-col size="12" size-sm="" class="ion-no-padding">
                             <ng-container *ngTemplateOutlet="intakes; context: {$implicit: timetable}"></ng-container>
+                          </ion-col>
+                          <ion-col size="12" size-sm="auto">
+                            <ion-button class="ion-float-right" [routerLink]="['/attendix/classes', {
+                              moduleId: timetable.module,
+                              date: (timetable.time | date:'yyyy-mm-dd'),
+                              startTime: (timetable.time | date:'hh:mm a'),
+                              endTime: (endTime | date:'hh:mm a') }
+                            ]" fill="outline" color="danger" size="small">
+                            Attendance
+                            <ion-icon slot="end" name="md-clipboard"></ion-icon>
+                            </ion-button>
                           </ion-col>
                         </ion-row>
                       </ng-container>
 
                       <ng-template #viewDaily>
                         <ion-row *ngIf="timetable | endtime as endTime">
-                          <ion-col size="12" size-sm="3" class="text-bold ion-no-padding">
+                          <ion-col size="12" size-sm="" class="text-bold ion-no-padding">
                             {{ timetable.module }}
-                            <ion-button [routerLink]="['/attendix/classes', {
-                              moduleId: timetable.module,
-                              date: (timetable.time | date:'yyyy-mm-dd'),
-                              startTime: (timetable.time | date:'hh:mm a'),
-                              endTime: (endTime | date:'hh:mm a') }
-                            ]" fill="outline" size="small">
-                              Mark
-                            </ion-button>
                           </ion-col>
-                          <ion-col size="12" size-sm="2" class="ion-no-padding">
+                          <ion-col size="12" size-sm="" class="ion-no-padding">
                             <span class="marker">
                               <ion-icon name="time"></ion-icon>
                             </span>
                             {{ timetable.time | date:'shortTime' }} - {{ endTime | date:'shortTime' }}
                           </ion-col>
-                          <ion-col size="12" size-sm="3" class="ion-no-padding">
+                          <ion-col size="12" size-sm="" class="ion-no-padding">
                             <span class="marker">
                               <ion-icon name="locate"></ion-icon>
                             </span>
                             {{ timetable.room }} | {{ timetable.location }}
                           </ion-col>
-                          <ion-col size="12" size-sm="4" class="ion-no-padding">
+                          <ion-col size="12" size-sm="" class="ion-no-padding">
                             <ng-container *ngTemplateOutlet="intakes; context: {$implicit: timetable}"></ng-container>
+                          </ion-col>
+                          <ion-col size="12" size-sm="auto" class="ion-no-padding margin-auto">
+                            <ion-button class="ion-float-right" [routerLink]="['/attendix/classes', {
+                              moduleId: timetable.module,
+                              date: (timetable.time | date:'yyyy-mm-dd'),
+                              startTime: (timetable.time | date:'hh:mm a'),
+                              endTime: (endTime | date:'hh:mm a') }
+                            ]" fill="outline" color="danger" size="small">
+                              Attendance
+                              <ion-icon slot="end" name="md-clipboard"></ion-icon>
+                            </ion-button>
                           </ion-col>
                         </ion-row>
                       </ng-template>
