@@ -178,7 +178,7 @@
                           <ion-col size="12" size-sm="auto">
                             <ion-button class="ion-float-right" [routerLink]="['/attendix/classes', {
                               moduleId: timetable.module,
-                              date: (timetable.time | date:'yyyy-mm-dd'),
+                              date: (timetable.time | date:'yyyy-MM-dd'),
                               startTime: (timetable.time | date:'hh:mm a'),
                               endTime: (endTime | date:'hh:mm a') }
                             ]" fill="outline" color="danger" size="small">
@@ -212,7 +212,7 @@
                           <ion-col size="12" size-sm="auto" class="ion-no-padding margin-auto">
                             <ion-button class="ion-float-right" [routerLink]="['/attendix/classes', {
                               moduleId: timetable.module,
-                              date: (timetable.time | date:'yyyy-mm-dd'),
+                              date: (timetable.time | date:'yyyy-MM-dd'),
                               startTime: (timetable.time | date:'hh:mm a'),
                               endTime: (endTime | date:'hh:mm a') }
                             ]" fill="outline" color="danger" size="small">
