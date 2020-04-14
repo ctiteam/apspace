@@ -216,26 +216,14 @@ export class ClassesNewPage {
       const overlap = classes.find(klass => this.date === klass.DATE
         && startTimeMins < parseTime(klass.TIME_TO) && endTimeMins > parseTime(klass.TIME_FROM));
       if (overlap) {
-        // go directly to overlapped class if it have the exact same time
-        if (this.startTime === overlap.TIME_FROM && this.endTime === overlap.TIME_TO
-          && this.classType === overlap.classType) {
-          this.router.navigate(['/attendix/mark-attendance', {
-            classcode: this.classcode,
-            date: this.date,
-            startTime: this.startTime,
-            endTime: this.endTime,
-            classType: this.classType,
-            defaultAttendance: this.defaultAttendance
-          }]);
-        } else {
-          this.toastCtrl.create({
-            message: 'Class overlapped with existing class',
-            duration: 3000,
-            position: 'top',
-            color: 'danger',
-            showCloseButton: true,
-          }).then(toast => toast.present());
-        }
+        this.toastCtrl.create({
+          message: `Sorry! There is another record (${this.datePipe.transform(overlap.DATE, 'EEE, dd MMM yyy')} ${overlap.TIME_FROM} - ${overlap.TIME_TO}) in the attendance history, that overlaps with this class which you are trying to mark attendance (${this.datePipe.transform(this.date, 'EEE, dd MMM yyy')} ${this.startTime} - ${this.endTime}). Please check the details you have entered carefully`,
+          duration: 8000,
+          position: 'top',
+          color: 'danger',
+          showCloseButton: true,
+        }).then(toast => toast.present());
+
         return;
       }
       this.alertCtrl.create({
