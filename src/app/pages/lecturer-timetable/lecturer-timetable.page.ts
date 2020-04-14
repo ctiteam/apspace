@@ -20,7 +20,7 @@ export class LecturerTimetablePage implements OnInit {
   printUrl = 'https://api.apiit.edu.my/timetable-print/index.php';
 
   wday = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
-
+  today = new Date();
   timetable$: Observable<LecturerTimetable[]>;
   selectedWeek: Date; // week is the first day of week
   availableWeek: Date[] = [];

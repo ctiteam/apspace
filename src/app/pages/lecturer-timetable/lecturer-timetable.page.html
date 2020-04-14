@@ -176,7 +176,7 @@
                             <ng-container *ngTemplateOutlet="intakes; context: {$implicit: timetable}"></ng-container>
                           </ion-col>
                           <ion-col size="12" size-sm="auto">
-                            <ion-button class="ion-float-right" [routerLink]="['/attendix/classes', {
+                            <ion-button [disabled]="(timetable.time | date : 'yyyy-MM-dd') > (today | date : 'yyyy-MM-dd')" class="ion-float-right" [routerLink]="['/attendix/classes', {
                               moduleId: timetable.module,
                               date: (timetable.time | date:'yyyy-MM-dd'),
                               startTime: (timetable.time | date:'hh:mm a'),
@@ -210,7 +210,7 @@
                             <ng-container *ngTemplateOutlet="intakes; context: {$implicit: timetable}"></ng-container>
                           </ion-col>
                           <ion-col size="12" size-sm="auto" class="ion-no-padding margin-auto">
-                            <ion-button class="ion-float-right" [routerLink]="['/attendix/classes', {
+                            <ion-button [disabled]="(timetable.time | date : 'yyyy-MM-dd') > (today | date : 'yyyy-MM-dd')" class="ion-float-right" [routerLink]="['/attendix/classes', {
                               moduleId: timetable.module,
                               date: (timetable.time | date:'yyyy-MM-dd'),
                               startTime: (timetable.time | date:'hh:mm a'),
