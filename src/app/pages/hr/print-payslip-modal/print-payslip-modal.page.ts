@@ -23,6 +23,7 @@ export class PrintPayslipModalPage {
     public toastCtrl: ToastController,
     private platform: Platform,
     private file: File,
+    // tslint:disable-next-line
     private transfer: FileTransfer,
     private fileOpener: FileOpener,
     private ws: WsApiService,

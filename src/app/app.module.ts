@@ -73,6 +73,7 @@ import { NotificationModalModule } from './pages/notifications/notification-moda
     Camera,
     File,
     FileOpener,
+    // tslint:disable-next-line
     FileTransfer,
     DocumentViewer,
     Vibration,
