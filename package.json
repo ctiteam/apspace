@@ -59,7 +59,7 @@
     "angular-svg-round-progressbar": "^3.0.1",
     "angular2-chartjs": "^0.5.1",
     "angularx-qrcode": "^2.1.0",
-    "apollo-angular": "^1.8.0",
+    "apollo-angular": "1.8.0",
     "apollo-angular-link-http": "^1.9.0",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",
