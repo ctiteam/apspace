@@ -84,7 +84,7 @@ export class ClassesNewPage {
   paramDate: string | null = this.route.snapshot.paramMap.get('date'); // 2020-12-31
   paramStartTime: string | null = this.route.snapshot.paramMap.get('startTime');
   paramEndTime: string | null = this.route.snapshot.paramMap.get('endTime');
-  paramIntakes: string | null = this.route.snapshot.paramMap.get('intakes');
+  paramIntakes: string | null = this.route.snapshot.paramMap.get('intakes'); // list of intakes seperated by ','
 
   classcodes$: Observable<Classcode[]>;
   dates: string[];
@@ -113,13 +113,15 @@ export class ClassesNewPage {
   ) { }
 
   ionViewDidEnter() {
-    if (this.paramModuleId && this.paramDate && this.paramStartTime && this.paramEndTime) {
+    if (this.paramModuleId && this.paramDate && this.paramStartTime && this.paramEndTime) { // user is using the quick attendance button
       this.changeDate(this.date = this.paramDate);
       this.startTime = this.paramStartTime;
       this.endTime = this.paramEndTime;
       this.duration = parseTime(this.endTime) - parseTime(this.startTime);
       this.classcodes$ = this.getClasscodes().pipe(
+        // store the list of class codes in an array
         tap(classcodes => classcodes.forEach(classCode => this.classCodesToFilter.push(classCode.CLASS_CODE))),
+        // find the most similar class codes
         tap(_ => this.findMostSimilarClassCodes())
       );
     } else {
@@ -129,6 +131,7 @@ export class ClassesNewPage {
       .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
   }
 
+  /* find the most similar class codes and pass them to the modal page */
   findMostSimilarClassCodes() {
     /*
       - the code is not finalized and it has been seperated into steps to make the test process easeir.
@@ -136,49 +139,63 @@ export class ClassesNewPage {
       - some parts of this function will be grouped together after finalizing the code
     */
     console.log('selected module code is: ', this.paramModuleId);
-    const cleanModuleCode = this.paramModuleId.replace(/\(.*\)/g, ''); // remove (**) from module code if any. it affect the regex results
-    console.log('clean module code is: ', cleanModuleCode);
     console.log('All classcodes are: ', this.classCodesToFilter);
+
+    // step 1: remove curly brace, square bracket and parenthesis with data isnide them from module code
+    const cleanModuleCode = this.paramModuleId.replace(/\(.*\)|\[.*\]|\{.*\}/g, '');
+    console.log('clean module code is: ', cleanModuleCode);
+
+    // step 2: convert intakes string to array (split on ',')
     const intakes = this.paramIntakes.split(',');
     console.log('intakes are: ', intakes);
+
+    // step 3: remove specialisms from intakes
     const intakesWithoutSpec = intakes.map(intake => intake.replace(/\(.*\)/g, ''));
     console.log('intakes without spec: ', intakesWithoutSpec);
+
+    // step 4: remove duplicates from intakes array
     const uniqueIntakes = intakesWithoutSpec.filter((v, i) => intakesWithoutSpec.indexOf(v) === i);
     console.log('intakes unique are: ', uniqueIntakes);
 
-    // step 1: split module code on -
+    // step 5: split module code into parts (split on '-')
     const moduleCodeParts = cleanModuleCode.split('-');
     console.log('module code parts are ', moduleCodeParts);
 
-    // step 2: filter classcodes to the one that matches first part (before first -) in module code
+    // step 6: filter classcodes to the one that matches first part (before first -) in module code
     const firstPartOfModuleCode = moduleCodeParts[0];
+
+    // step 7: filter class codes to the ones that have the same starting
     console.log('first part of module code is', firstPartOfModuleCode);
     const classCodesToSearchInto = this.classCodesToFilter.filter((cc: string) => cc.startsWith(firstPartOfModuleCode));
     console.log('classcodes filtered based on first part are ', classCodesToSearchInto);
 
-    // step 3: remove any part of the module code that has numbers only
+    // step 8: remove any part of the module code that has numbers only numbers are common and can reduce
     const moduleCodePartsWithoutNumbers = moduleCodeParts.filter(part => !part.match(/^\d+$/));
     console.log('module code parts without numbers: ', moduleCodePartsWithoutNumbers);
 
-    // step 4: if 'L' or 'T' is part of the array => add '-' before it
+    // step 9: if 'L' or 'T' is part of the module code array => add '-' before it to increase the chance of getting the currect class code
     // tslint:disable-next-line: max-line-length
     const moduleCodePartsWithSingleLetterModified = moduleCodePartsWithoutNumbers.map(part => part === 'T' || part === 'L' ? '-' + part : part);
     console.log('module code parts with modified single letter: ', moduleCodePartsWithSingleLetterModified);
 
-    // step 5: join the array again and seperate items with |
+    // step 10: join the module code array and use 'or wildcard (|)' to sepearate them
     let moduleCodePartsCombinedWithOr = moduleCodePartsWithSingleLetterModified.join('|');
     console.log('module code combined with OR: ', moduleCodePartsCombinedWithOr);
 
+    // step 11: if list of intakes is not empty, add the intakes to the module code array
     if (uniqueIntakes.length > 0) {
       moduleCodePartsCombinedWithOr = moduleCodePartsCombinedWithOr + '|' + uniqueIntakes.join('|');
       console.log('intake/s found');
       console.log('module code combined with OR With intakes: ', moduleCodePartsCombinedWithOr);
     }
 
-    // step 6: create results array
+    // step 12: create results array
     const results: { value: string, matches: number }[] = [];
 
-    // step 7: search if there is results for or
+    // step 13: finding the results:
+    //    1. loop throw the list of class codes that matches the first part of module code
+    //    2. see how many parts of the module code match each class code
+    //    3. store the class code in the results array alongside with the number of matches
     const searchRegExpOr = new RegExp(moduleCodePartsCombinedWithOr, 'gi');
     classCodesToSearchInto.forEach(classCode => {
       if (classCode.match(searchRegExpOr)) {
@@ -187,12 +204,14 @@ export class ClassesNewPage {
       }
     });
 
-    // step 8: sort last step results based on matches (highest to lowest)
+    // step 14: sort the results array from the class code that has highest matches to the lowest
     results.sort((a, b) => b.matches - a.matches);
     console.log('sorted results: ', results);
 
-    // step 9: check results
+    // step 15: check the results array
     console.log('final results are: ', results);
+
+    // step 16: ONLY if results array length is more than 0, open the modal
     if (results.length > 0) {
       this.openconfirmClassCodeModal(results);
     }
@@ -399,6 +418,7 @@ export class ClassesNewPage {
       { queryParamsHandling: 'preserve', replaceUrl: true });
   }
 
+  /* one last step modal that will open automatically when user uses quick attendnace button */
   async openconfirmClassCodeModal(filteredClassCodes: any[]) { // TODO: add type
     const modal = await this.modalCtrl.create({
       component: ConfirmClassCodeModalPage,
