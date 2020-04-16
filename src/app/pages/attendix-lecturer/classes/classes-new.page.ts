@@ -293,7 +293,7 @@ export class ClassesNewPage {
       if (overlap) {
         this.toastCtrl.create({
           message: `Sorry! There is another record (${this.datePipe.transform(overlap.DATE, 'EEE, dd MMM yyy')} ${overlap.TIME_FROM} - ${overlap.TIME_TO}) in the attendance history, that overlaps with this class which you are trying to mark attendance (${this.datePipe.transform(this.date, 'EEE, dd MMM yyy')} ${this.startTime} - ${this.endTime}). Please check the details you have entered carefully`,
-          duration: 8000,
+          duration: 10000,
           position: 'top',
           color: 'danger',
           showCloseButton: true,
