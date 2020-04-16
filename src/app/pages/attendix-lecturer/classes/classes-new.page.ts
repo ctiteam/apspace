@@ -4,12 +4,13 @@ import { AlertController, LoadingController, ModalController, ToastController } 
 
 import { DatePipe } from '@angular/common';
 import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, tap } from 'rxjs/operators';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
 import { Classcode } from '../../../interfaces';
 import { SettingsService, WsApiService } from '../../../services';
 import { formatTime, isoDate, parseTime } from '../date';
+import { ConfirmClassCodeModalPage } from './confirm-class-code/confirm-class-code-modal';
 
 @Component({
   selector: 'app-classes-new',
@@ -72,21 +73,23 @@ export class ClassesNewPage {
   ];
 
   classTypes = ['Lecture', 'Tutorial', 'Lab'];
-  skeletons = new Array(2);
 
   auto = false; // manual mode to record mismatched data
   term = ''; // classcode search term
   timeFrame = 7; // show the attendance history for the last 7 days by default
+  skeletons = new Array(2);
 
   /* optional paramMap from lecturer timetable */
   paramModuleId: string | null = this.route.snapshot.paramMap.get('moduleId');
   paramDate: string | null = this.route.snapshot.paramMap.get('date'); // 2020-12-31
   paramStartTime: string | null = this.route.snapshot.paramMap.get('startTime');
   paramEndTime: string | null = this.route.snapshot.paramMap.get('endTime');
+  paramIntakes: string | null = this.route.snapshot.paramMap.get('intakes');
 
   classcodes$: Observable<Classcode[]>;
   dates: string[];
   startTimes: string[];
+  classCodesToFilter = [];
 
   classcode: string;
   date: string;
@@ -111,20 +114,92 @@ export class ClassesNewPage {
 
   ionViewDidEnter() {
     if (this.paramModuleId && this.paramDate && this.paramStartTime && this.paramEndTime) {
-      // TODO: module id
       this.changeDate(this.date = this.paramDate);
       this.startTime = this.paramStartTime;
       this.endTime = this.paramEndTime;
       this.duration = parseTime(this.endTime) - parseTime(this.startTime);
+      this.classcodes$ = this.getClasscodes().pipe(
+        tap(classcodes => classcodes.forEach(classCode => this.classCodesToFilter.push(classCode.CLASS_CODE))),
+        tap(_ => this.findMostSimilarClassCodes())
+      );
+    } else {
+      this.classcodes$ = this.getClasscodes();
     }
-
-    this.getClasscodes();
     this.dates = [...Array(30).keys()]
       .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
   }
 
+  findMostSimilarClassCodes() {
+    /*
+      - the code is not finalized and it has been seperated into steps to make the test process easeir.
+      - all console logs will be removed before deploying
+      - some parts of this function will be grouped together after finalizing the code
+    */
+    console.log('selected module code is: ', this.paramModuleId);
+    const cleanModuleCode = this.paramModuleId.replace(/\(.*\)/g, ''); // remove (**) from module code if any. it affect the regex results
+    console.log('clean module code is: ', cleanModuleCode);
+    console.log('All classcodes are: ', this.classCodesToFilter);
+    const intakes = this.paramIntakes.split(',');
+    console.log('intakes are: ', intakes);
+    const intakesWithoutSpec = intakes.map(intake => intake.replace(/\(.*\)/g, ''));
+    console.log('intakes without spec: ', intakesWithoutSpec);
+    const uniqueIntakes = intakesWithoutSpec.filter((v, i) => intakesWithoutSpec.indexOf(v) === i);
+    console.log('intakes unique are: ', uniqueIntakes);
+
+    // step 1: split module code on -
+    const moduleCodeParts = cleanModuleCode.split('-');
+    console.log('module code parts are ', moduleCodeParts);
+
+    // step 2: filter classcodes to the one that matches first part (before first -) in module code
+    const firstPartOfModuleCode = moduleCodeParts[0];
+    console.log('first part of module code is', firstPartOfModuleCode);
+    const classCodesToSearchInto = this.classCodesToFilter.filter((cc: string) => cc.startsWith(firstPartOfModuleCode));
+    console.log('classcodes filtered based on first part are ', classCodesToSearchInto);
+
+    // step 3: remove any part of the module code that has numbers only
+    const moduleCodePartsWithoutNumbers = moduleCodeParts.filter(part => !part.match(/^\d+$/));
+    console.log('module code parts without numbers: ', moduleCodePartsWithoutNumbers);
+
+    // step 4: if 'L' or 'T' is part of the array => add '-' before it
+    // tslint:disable-next-line: max-line-length
+    const moduleCodePartsWithSingleLetterModified = moduleCodePartsWithoutNumbers.map(part => part === 'T' || part === 'L' ? '-' + part : part);
+    console.log('module code parts with modified single letter: ', moduleCodePartsWithSingleLetterModified);
+
+    // step 5: join the array again and seperate items with |
+    let moduleCodePartsCombinedWithOr = moduleCodePartsWithSingleLetterModified.join('|');
+    console.log('module code combined with OR: ', moduleCodePartsCombinedWithOr);
+
+    if (uniqueIntakes.length > 0) {
+      moduleCodePartsCombinedWithOr = moduleCodePartsCombinedWithOr + '|' + uniqueIntakes.join('|');
+      console.log('intake/s found');
+      console.log('module code combined with OR With intakes: ', moduleCodePartsCombinedWithOr);
+    }
+
+    // step 6: create results array
+    const results: { value: string, matches: number }[] = [];
+
+    // step 7: search if there is results for or
+    const searchRegExpOr = new RegExp(moduleCodePartsCombinedWithOr, 'gi');
+    classCodesToSearchInto.forEach(classCode => {
+      if (classCode.match(searchRegExpOr)) {
+        results.push({ value: classCode, matches: classCode.match(searchRegExpOr).length });
+        console.log('Found this that match some: ', classCode, classCode.match(searchRegExpOr));
+      }
+    });
+
+    // step 8: sort last step results based on matches (highest to lowest)
+    results.sort((a, b) => b.matches - a.matches);
+    console.log('sorted results: ', results);
+
+    // step 9: check results
+    console.log('final results are: ', results);
+    if (results.length > 0) {
+      this.openconfirmClassCodeModal(results);
+    }
+  }
+
   getClasscodes() {
-    this.classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes').pipe(
+    return this.ws.get<Classcode[]>('/attendix/classcodes').pipe(
       map(classcodes => this.mergeClasscodes(classcodes)), // side effect
       shareReplay(1),
     );
@@ -298,7 +373,7 @@ export class ClassesNewPage {
                   color: 'success',
                   showCloseButton: true,
                 }).then(toast => toast.present());
-                this.getClasscodes();
+                this.classcodes$ = this.getClasscodes();
               },
               e => {
                 this.toastCtrl.create({
@@ -322,6 +397,24 @@ export class ClassesNewPage {
     this.settings.set('attendixv1', false);
     this.router.navigate(['/attendix/classes'],
       { queryParamsHandling: 'preserve', replaceUrl: true });
+  }
+
+  async openconfirmClassCodeModal(filteredClassCodes: any[]) { // TODO: add type
+    const modal = await this.modalCtrl.create({
+      component: ConfirmClassCodeModalPage,
+      cssClass: 'generateTransactionsPdf',
+      componentProps: {
+        classTypes: this.classTypes,
+        classCodes: filteredClassCodes
+      }
+    });
+    await modal.present();
+    await modal.onDidDismiss().then(data => {
+      if (data.data) {
+        this.classcode = data.data.code;
+        this.classType = data.data.type;
+      }
+    });
   }
 
 }
