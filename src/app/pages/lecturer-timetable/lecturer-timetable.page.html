@@ -179,6 +179,7 @@
                             <ion-button [disabled]="(timetable.time | date : 'yyyy-MM-dd') > (today | date : 'yyyy-MM-dd')" class="ion-float-right" [routerLink]="['/attendix/classes', {
                               moduleId: timetable.module,
                               date: (timetable.time | date:'yyyy-MM-dd'),
+                              intakes: timetable.intakes.toString(),
                               startTime: (timetable.time | date:'hh:mm a'),
                               endTime: (endTime | date:'hh:mm a') }
                             ]" fill="outline" color="danger" size="small">
@@ -213,6 +214,7 @@
                             <ion-button [disabled]="(timetable.time | date : 'yyyy-MM-dd') > (today | date : 'yyyy-MM-dd')" class="ion-float-right" [routerLink]="['/attendix/classes', {
                               moduleId: timetable.module,
                               date: (timetable.time | date:'yyyy-MM-dd'),
+                              intakes: timetable.intakes.toString(),
                               startTime: (timetable.time | date:'hh:mm a'),
                               endTime: (endTime | date:'hh:mm a') }
                             ]" fill="outline" color="danger" size="small">
