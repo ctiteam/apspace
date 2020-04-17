@@ -377,8 +377,8 @@ export class ClassesNewPage {
   /** Set settings to old attendix ui/ux update. */
   tryv0() {
     this.settings.set('attendixv1', false);
-    this.router.navigate(['/attendix/classes'],
-      { queryParamsHandling: 'preserve', replaceUrl: true });
+    this.router.navigate(['attendix', 'classes', this.route.snapshot.params],
+      { replaceUrl: true });
   }
 
   /* one last step modal that will open automatically when user uses quick attendnace button */

@@ -406,8 +406,8 @@ export class ClassesPage implements AfterViewInit, OnInit {
   /** Set settings to use attendix ui/ux update. */
   tryv1() {
     this.settings.set('attendixv1', true);
-    this.router.navigate(['/attendix/classes/new'],
-      { queryParamsHandling: 'preserve', replaceUrl: true });
+    this.router.navigate(['attendix', 'classes', 'new', this.route.snapshot.params],
+      { replaceUrl: true });
   }
 
 }

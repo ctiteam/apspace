@@ -25,6 +25,7 @@ export class AttendixNewGuard implements CanActivate {
       segments.push(new UrlSegment('new', segments[segments.length - 1].parameters));
       segments[segments.length - 2].parameters = {};
     } else {
+      segments[segments.length - 2].parameters = segments[segments.length - 1].parameters;
       segments.pop();
     }
     return tree;
