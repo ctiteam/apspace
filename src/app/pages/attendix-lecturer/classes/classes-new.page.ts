@@ -4,7 +4,7 @@ import { AlertController, LoadingController, ModalController, ToastController } 
 
 import { DatePipe } from '@angular/common';
 import { Observable } from 'rxjs';
-import { map, shareReplay, tap } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
 import { Classcode } from '../../../interfaces';
@@ -112,29 +112,26 @@ export class ClassesNewPage {
   ) { }
 
   ionViewDidEnter() {
+    this.getClasscodes();
+    this.dates = [...Array(30).keys()]
+      .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
     if (this.paramModuleId && this.paramDate && this.paramStartTime && this.paramEndTime) { // user is using the quick attendance button
       this.changeDate(this.date = this.paramDate);
       this.startTime = this.paramStartTime;
       this.endTime = this.paramEndTime;
       this.duration = parseTime(this.endTime) - parseTime(this.startTime);
-      this.classcodes$ = this.getClasscodes().pipe(
-        // find the most similar class codes
-        tap(classcodes => this.findMostSimilarClassCodes(classcodes.map(classcode => classcode.CLASS_CODE)))
-      );
-    } else {
-      this.classcodes$ = this.getClasscodes();
+      this.findMostSimilarClassCodes();
     }
-    this.dates = [...Array(30).keys()]
-      .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
   }
 
   /* find the most similar class codes and pass them to the modal page */
-  findMostSimilarClassCodes(classcodes: string[]) {
+  async findMostSimilarClassCodes() {
     /*
       - the code is not finalized and it has been seperated into steps to make the test process easeir.
       - all console logs will be removed before deploying
       - some parts of this function will be grouped together after finalizing the code
     */
+    const classcodes = (await this.classcodes$.toPromise()).map(c => c.CLASS_CODE);
     console.log('selected module code is: ', this.paramModuleId);
     console.log('All classcodes are: ', classcodes);
 
@@ -211,11 +208,13 @@ export class ClassesNewPage {
     // step 16: ONLY if results array length is more than 0, open the modal
     if (results.length > 0) {
       this.openconfirmClassCodeModal(results);
+    } else {
+      this.chooseClasscode();
     }
   }
 
   getClasscodes() {
-    return this.ws.get<Classcode[]>('/attendix/classcodes').pipe(
+    this.classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes').pipe(
       map(classcodes => this.mergeClasscodes(classcodes)), // side effect
       shareReplay(1),
     );
@@ -389,7 +388,7 @@ export class ClassesNewPage {
                   color: 'success',
                   showCloseButton: true,
                 }).then(toast => toast.present());
-                this.classcodes$ = this.getClasscodes();
+                this.getClasscodes();
               },
               e => {
                 this.toastCtrl.create({
