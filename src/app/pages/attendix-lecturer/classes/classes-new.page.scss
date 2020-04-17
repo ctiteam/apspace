@@ -87,10 +87,17 @@
   min-height: 40px;
   margin-top: 10px;
 
-  ion-grid ion-item { // fix the same width as the other input
-    height: 43px; // original min-height 48px
-    margin-top: -4px;
-    margin-bottom: 3px;
+  ion-grid { // fix the same width as the other input
+    ion-col {
+      height: 43px; // original min-height 48px
+      margin-top: -4px;
+      margin-bottom: 3px;
+      ion-item {
+        margin-top: -2px;
+        top: 5px;
+        --min-height: 43px;
+      }
+    }
   }
   &:hover{
     background-color: var(--tertiary-bg-color);
