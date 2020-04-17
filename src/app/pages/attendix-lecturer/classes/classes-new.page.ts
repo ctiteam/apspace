@@ -89,7 +89,6 @@ export class ClassesNewPage {
   classcodes$: Observable<Classcode[]>;
   dates: string[];
   startTimes: string[];
-  classCodesToFilter = [];
 
   classcode: string;
   date: string;
@@ -119,10 +118,8 @@ export class ClassesNewPage {
       this.endTime = this.paramEndTime;
       this.duration = parseTime(this.endTime) - parseTime(this.startTime);
       this.classcodes$ = this.getClasscodes().pipe(
-        // store the list of class codes in an array
-        tap(classcodes => classcodes.forEach(classCode => this.classCodesToFilter.push(classCode.CLASS_CODE))),
         // find the most similar class codes
-        tap(_ => this.findMostSimilarClassCodes())
+        tap(classcodes => this.findMostSimilarClassCodes(classcodes.map(classcode => classcode.CLASS_CODE)))
       );
     } else {
       this.classcodes$ = this.getClasscodes();
@@ -132,14 +129,14 @@ export class ClassesNewPage {
   }
 
   /* find the most similar class codes and pass them to the modal page */
-  findMostSimilarClassCodes() {
+  findMostSimilarClassCodes(classcodes: string[]) {
     /*
       - the code is not finalized and it has been seperated into steps to make the test process easeir.
       - all console logs will be removed before deploying
       - some parts of this function will be grouped together after finalizing the code
     */
     console.log('selected module code is: ', this.paramModuleId);
-    console.log('All classcodes are: ', this.classCodesToFilter);
+    console.log('All classcodes are: ', classcodes);
 
     // step 1: remove curly brace, square bracket and parenthesis with data isnide them from module code
     const cleanModuleCode = this.paramModuleId.replace(/\(.*\)|\[.*\]|\{.*\}/g, '');
@@ -166,7 +163,7 @@ export class ClassesNewPage {
 
     // step 7: filter class codes to the ones that have the same starting
     console.log('first part of module code is', firstPartOfModuleCode);
-    const classCodesToSearchInto = this.classCodesToFilter.filter((cc: string) => cc.startsWith(firstPartOfModuleCode));
+    const classCodesToSearchInto = classcodes.filter((cc: string) => cc.startsWith(firstPartOfModuleCode));
     console.log('classcodes filtered based on first part are ', classCodesToSearchInto);
 
     // step 8: remove any part of the module code that has numbers only numbers are common and can reduce
