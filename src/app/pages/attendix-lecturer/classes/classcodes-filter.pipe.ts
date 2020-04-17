@@ -1,13 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
-import { Classcode } from 'src/app/interfaces';
+import { Classcodev1 } from 'src/app/interfaces';
 
 @Pipe({
   name: 'classcodesFilter'
 })
 export class ClasscodesFilterPipe implements PipeTransform {
 
-  transform(classcodes: Classcode[], keyword: string, timeframe: number) {
+  transform(classcodes: Classcodev1[], keyword: string, timeframe: number) {
     if (keyword) { // do this only if the user enters data in search box
       keyword = keyword.toLowerCase().replace(/%/g, '.*')
         .replace(/\(/g, '\\(').replace(/\)/g, '\\)') // escape parenthesis

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
-import { Classcode } from '../../../interfaces';
+import { Classcodev1 } from '../../../interfaces';
 import { SettingsService, WsApiService } from '../../../services';
 import { formatTime, isoDate, parseTime } from '../date';
 import { ConfirmClassCodeModalPage } from './confirm-class-code/confirm-class-code-modal';
@@ -86,7 +86,7 @@ export class ClassesNewPage {
   paramEndTime: string | null = this.route.snapshot.paramMap.get('endTime');
   paramIntakes: string | null = this.route.snapshot.paramMap.get('intakes'); // list of intakes seperated by ','
 
-  classcodes$: Observable<Classcode[]>;
+  classcodes$: Observable<Classcodev1[]>;
   dates: string[];
   startTimes: string[];
 
@@ -214,7 +214,7 @@ export class ClassesNewPage {
   }
 
   getClasscodes() {
-    this.classcodes$ = this.ws.get<Classcode[]>('/attendix/v1/classcodes').pipe(
+    this.classcodes$ = this.ws.get<Classcodev1[]>('/attendix/v1/classcodes').pipe(
       shareReplay(1),
     );
   }

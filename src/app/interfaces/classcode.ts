@@ -6,6 +6,14 @@ export interface Classcode {
   CLASSES: AttendixClass[];
 }
 
+export interface Classcodev1 {
+  CLASS_CODE: string;
+  SUBJECT_CODE: string;
+  LECTURER_CODE: string;
+  COURSE_CODE_ALIASES: string[];
+  CLASSES: AttendixClass[];
+}
+
 export interface AttendixClass {
   DATE: string;
   TIME_FROM: string;
