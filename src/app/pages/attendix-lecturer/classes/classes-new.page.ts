@@ -125,9 +125,10 @@ export class ClassesNewPage implements OnInit {
   ionViewDidEnter() {
     if (!this.paramModuleId) {
       this.getClasscodes();
-      this.dates = [...Array(30).keys()]
-        .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
     }
+    this.dates = [...Array(30).keys()]
+    .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
+
   }
 
   /* find the most similar class codes and pass them to the modal page */
