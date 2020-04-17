@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
@@ -104,6 +105,7 @@ export class ClassesNewPage implements OnInit {
     public toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private datePipe: DatePipe,
+    private location: Location,
     private resetAttendance: ResetAttendanceGQL,
     private route: ActivatedRoute,
     private router: Router,
@@ -112,7 +114,7 @@ export class ClassesNewPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (this.paramModuleId && this.paramDate && this.paramStartTime && this.paramEndTime) { // user is using the quick attendance button
+    if (this.paramModuleId) { // user is using the quick attendance button
       this.getClasscodes();
       this.changeDate(this.date = this.paramDate);
       this.startTime = this.paramStartTime;
@@ -123,12 +125,11 @@ export class ClassesNewPage implements OnInit {
   }
 
   ionViewDidEnter() {
-    if (!this.paramModuleId) {
+    if (!this.paramModuleId) { // call this only on mobile
       this.getClasscodes();
     }
     this.dates = [...Array(30).keys()]
-    .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
-
+      .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
   }
 
   /* find the most similar class codes and pass them to the modal page */
@@ -304,6 +305,7 @@ export class ClassesNewPage implements OnInit {
             text: 'Continue',
             cssClass: 'colored-text',
             handler: () => {
+              this.clearParamMap();
               this.router.navigate(['/attendix/mark-attendance', {
                 classcode: this.classcode,
                 date: this.date,
@@ -332,7 +334,7 @@ export class ClassesNewPage implements OnInit {
 
   /** Edit current attendance. */
   edit(classcode: string, date: string, startTime: string, endTime: string, classType: string) {
-    this.router.navigate(['/attendix/mark-attendance', { classcode, date, startTime, endTime, classType }]);
+    this.clearParamMap();
     this.router.navigate(['/attendix/mark-attendance', { classcode, date, startTime, endTime, classType }]);
   }
 
@@ -406,6 +408,14 @@ export class ClassesNewPage implements OnInit {
         this.classType = data.data.type;
       }
     });
+  }
+
+  /** Clear paramMap on angular. */
+  private clearParamMap() {
+    const [base, params] = this.location.path().split(';');
+    if (params) {
+      this.location.replaceState(base);
+    }
   }
 
 }
