@@ -14,22 +14,32 @@
     <ion-row>
       <ion-col size="12" offset-md="1" size-md="7" class="margin-auto">
         <ion-card>
-          <ion-card-content class="ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
-            <h2 class="ion-margin-bottom">Based on the module code you have selected, we have found <span
+          <ion-card-content class="ion-no-padding">
+            <h2 class="ion-padding">Based on the module code you have selected, we have found <span
                 class="text-bold colored-text">{{classCodes.length}} class codes</span> that match your class. Please
               select the one that
               you are looking for:</h2>
-            <ion-radio-group class="form-input ion-no-padding" [(ngModel)]="selectedClassCode">
-              <ion-item class="transparent" *ngFor="let classcode of classCodes; let i=index;">
-                <ion-radio slot="start" [value]="classcode.value"></ion-radio>
-                <ion-label [color]="selectedClassCode === classcode.value ? 'primary' : ''">
-                  {{ classcode.value }}
-                </ion-label>
-                <ion-badge slot="end" *ngIf="classCodes.length > 1 && (i === 0 || i === classCodes.length-1)"
-                  [color]="i === 0 ? 'success' : 'danger'">
-                  {{i === 0 ? 'Highest' : 'Lowest'}}
-                </ion-badge>
-              </ion-item>
+            <ion-radio-group class="form-input ion-no-padding ion-margin-top" [(ngModel)]="selectedClassCode">
+              <ng-container *ngFor="let classcode of classCodes; let i=index">
+
+                <ion-item-divider [color]="i === 0 ? 'success' : 'primary'" *ngIf="classCodes.length > 1 && (i===0 || ( i !== 0 && classcode.matches !== classCodes[0].matches && classcode.matches !== classCodes[i-1].matches))">
+                  <ion-label class="text-bold">
+                    <span *ngIf="i === 0">Most Related Class Codes</span>
+                    <span *ngIf="i !== 0">Class Codes With {{classcode.matches}} {{classcode.matches !== 1 ? 'Matches': 'Match'}}</span>
+                  </ion-label>
+                  <ion-badge color="light" slot="end" class="ion-margin-end" *ngIf="i===0">
+                    <ion-label color="success">{{classcode.matches}} Matches</ion-label>
+                  </ion-badge>
+                </ion-item-divider>
+
+                <ion-item class="transparent">
+                  <ion-radio slot="start" [value]="classcode.value"></ion-radio>
+                  <ion-label [color]="selectedClassCode === classcode.value ? 'primary' : ''">
+                    {{ classcode.value }}
+                  </ion-label>
+                </ion-item>
+              </ng-container>
+
             </ion-radio-group>
           </ion-card-content>
         </ion-card>
@@ -47,12 +57,12 @@
           </ion-card-content>
         </ion-card>
       </ion-col>
-      <ion-col size="12" size-md="4" class="margin-auto ion-text-center">
-        <h2 style="margin-left: 10%; width: 80%; text-transform: uppercase; margin-bottom: 45px; color: #3a99d9"
+      <ion-col size="12" size-md="4" class="ion-text-center">
+        <h2 style="margin-left: 10%; width: 80%; text-transform: uppercase; margin-bottom: 20px; margin-top: 20px; color: #3a99d9"
           class="ion-text-center text-bold ion-margin-top hide-on-small">Just
           One More Step ...</h2>
         <svg class="hide-on-small" id="a43d4114-cd98-41f6-b9a0-b0700c71b140" data-name="Layer 1"
-          xmlns="http://www.w3.org/2000/svg" width="80%" height="80%" viewBox="0 0 722 628.5076">
+          xmlns="http://www.w3.org/2000/svg" width="80%" height="40%" viewBox="0 0 722 628.5076">
           <ellipse cx="325" cy="618.5076" rx="199" ry="10" fill="#e6e6e6" />
           <circle cx="98.7538" cy="98.7538" r="98.7538" fill="#e6e6e6" />
           <circle cx="98.7538" cy="98.7538" r="82.29483" fill="#3a99d9" />
