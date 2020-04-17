@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 
@@ -18,7 +18,7 @@ import { ConfirmClassCodeModalPage } from './confirm-class-code/confirm-class-co
   styleUrls: ['./classes-new.page.scss'],
   providers: [DatePipe]
 })
-export class ClassesNewPage {
+export class ClassesNewPage implements OnInit {
 
   timings = [
     '08:00 AM', '08:05 AM', '08:10 AM', '08:15 AM', '08:20 AM', '08:25 AM',
@@ -111,17 +111,24 @@ export class ClassesNewPage {
     private ws: WsApiService,
   ) { }
 
-  ionViewDidEnter() {
-    this.getClasscodes();
-    this.dates = [...Array(30).keys()]
-      .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
+  ngOnInit() {
     if (this.paramModuleId && this.paramDate && this.paramStartTime && this.paramEndTime) { // user is using the quick attendance button
+      this.getClasscodes();
       this.changeDate(this.date = this.paramDate);
       this.startTime = this.paramStartTime;
       this.endTime = this.paramEndTime;
       this.duration = parseTime(this.endTime) - parseTime(this.startTime);
       this.findMostSimilarClassCodes();
     }
+  }
+
+  ionViewDidEnter() {
+    if (!this.paramModuleId) {
+      this.getClasscodes();
+    }
+    this.dates = [...Array(30).keys()]
+    .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
+
   }
 
   /* find the most similar class codes and pass them to the modal page */
@@ -325,6 +332,7 @@ export class ClassesNewPage {
 
   /** Edit current attendance. */
   edit(classcode: string, date: string, startTime: string, endTime: string, classType: string) {
+    this.router.navigate(['/attendix/mark-attendance', { classcode, date, startTime, endTime, classType }]);
     this.router.navigate(['/attendix/mark-attendance', { classcode, date, startTime, endTime, classType }]);
   }
 
