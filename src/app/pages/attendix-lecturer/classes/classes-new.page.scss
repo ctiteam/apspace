@@ -86,11 +86,11 @@
   border: 1px solid var(--tertiary-bg-color);
   min-height: 40px;
   margin-top: 10px;
-  padding: 3px 10px !important;
 
-  &.grid {
-    padding: 0;
-    margin-top: 0;
+  ion-grid ion-item { // fix the same width as the other input
+    height: 43px; // original min-height 48px
+    margin-top: -4px;
+    margin-bottom: 3px;
   }
   &:hover{
     background-color: var(--tertiary-bg-color);
