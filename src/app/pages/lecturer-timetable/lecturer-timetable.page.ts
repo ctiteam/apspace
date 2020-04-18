@@ -163,13 +163,13 @@ export class LecturerTimetablePage implements OnInit {
   }
 
   quickAttendnace(moduleId: string, date: string, intakes: string, startTime: string, endTime: string) {
+    const newAttendixEnabled = this.settings.get('attendixv1');
     console.log('sending the data');
     console.log('moduleId', moduleId);
     console.log('date', this.datePipe.transform(date, 'yyyy-MM-dd'));
     console.log('intakes', intakes);
     console.log('startTime', this.datePipe.transform(startTime, 'hh:mm a'));
     console.log('endTime', this.datePipe.transform(endTime, 'hh:mm a'));
-
     const navigationExtras: NavigationExtras = {
       state: {
         moduleId,
@@ -179,7 +179,13 @@ export class LecturerTimetablePage implements OnInit {
         endTime: this.datePipe.transform(endTime, 'hh:mm a')
       }
     };
-    this.router.navigateByUrl('/attendix/classes', navigationExtras);
+    // always redirect users to attendix 2.0
+    // the feature will not be used in classic attenidx that has the auto mode
+    if (!newAttendixEnabled) {
+      this.settings.set('attendixv1', true);
+    }
+    this.router.navigateByUrl('/attendix/classes/new', navigationExtras);
+
   }
 
 }
