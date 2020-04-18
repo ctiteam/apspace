@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController, IonRefresher } from '@ionic/angular';
 import * as moment from 'moment';
@@ -14,6 +14,7 @@ import { SettingsService, WsApiService } from '../../services';
   selector: 'app-lecturer-timetable',
   templateUrl: './lecturer-timetable.page.html',
   styleUrls: ['./lecturer-timetable.page.scss'],
+  providers: [DatePipe]
 })
 export class LecturerTimetablePage implements OnInit {
 
@@ -47,6 +48,7 @@ export class LecturerTimetablePage implements OnInit {
     private router: Router,
     private settings: SettingsService,
     private ws: WsApiService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
@@ -158,6 +160,26 @@ export class LecturerTimetablePage implements OnInit {
     const week = moment(this.selectedWeek).format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
     // tslint:disable-next-line: max-line-length
     this.iab.create(`${this.printUrl}?LectID=${this.lecturerCode}&Submit=Submit&Week=${week}&print_request=print`, '_system', 'location=true');
+  }
+
+  quickAttendnace(moduleId: string, date: string, intakes: string, startTime: string, endTime: string) {
+    console.log('sending the data');
+    console.log('moduleId', moduleId);
+    console.log('date', this.datePipe.transform(date, 'yyyy-MM-dd'));
+    console.log('intakes', intakes);
+    console.log('startTime', this.datePipe.transform(startTime, 'hh:mm a'));
+    console.log('endTime', this.datePipe.transform(endTime, 'hh:mm a'));
+
+    const navigationExtras: NavigationExtras = {
+      state: {
+        moduleId,
+        date: this.datePipe.transform(date, 'yyyy-MM-dd'),
+        intakes,
+        startTime: this.datePipe.transform(startTime, 'hh:mm a'),
+        endTime: this.datePipe.transform(endTime, 'hh:mm a')
+      }
+    };
+    this.router.navigateByUrl('/attendix/classes', navigationExtras);
   }
 
 }
