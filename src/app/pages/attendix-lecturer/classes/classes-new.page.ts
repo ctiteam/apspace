@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
@@ -79,13 +78,7 @@ export class ClassesNewPage implements OnInit {
   term = ''; // classcode search term
   timeFrame = 7; // show the attendance history for the last 7 days by default
   skeletons = new Array(2);
-
-  /* optional paramMap from lecturer timetable */
-  paramModuleId: string | null = this.route.snapshot.paramMap.get('moduleId');
-  paramDate: string | null = this.route.snapshot.paramMap.get('date'); // 2020-12-31
-  paramStartTime: string | null = this.route.snapshot.paramMap.get('startTime');
-  paramEndTime: string | null = this.route.snapshot.paramMap.get('endTime');
-  paramIntakes: string | null = this.route.snapshot.paramMap.get('intakes'); // list of intakes seperated by ','
+  userCameFromTimetableFlag: string;
 
   classcodes$: Observable<Classcodev1[]>;
   dates: string[];
@@ -105,7 +98,6 @@ export class ClassesNewPage implements OnInit {
     public toastCtrl: ToastController,
     private alertCtrl: AlertController,
     private datePipe: DatePipe,
-    private location: Location,
     private resetAttendance: ResetAttendanceGQL,
     private route: ActivatedRoute,
     private router: Router,
@@ -114,41 +106,53 @@ export class ClassesNewPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (this.paramModuleId) { // user is using the quick attendance button
-      this.getClasscodes();
-      this.changeDate(this.date = this.paramDate);
-      this.startTime = this.paramStartTime;
-      this.endTime = this.paramEndTime;
-      this.duration = parseTime(this.endTime) - parseTime(this.startTime);
-      this.findMostSimilarClassCodes();
-    }
+    // must run in both cases and before everything
+    this.dates = [...Array(30).keys()]
+      .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
+
+    // get navigation extras if any
+    this.route.queryParams.subscribe(() => {
+      if (this.router.getCurrentNavigation() && this.router.getCurrentNavigation().extras.state) {
+        // set value to userCameFromTimetableFlag to prevent code inside ionViewDidEnter from running
+        const paramModuleId: string | null = this.userCameFromTimetableFlag = this.router.getCurrentNavigation().extras.state.moduleId;
+        const paramDate: string | null = this.router.getCurrentNavigation().extras.state.date; // 2020-12-31
+        const paramStartTime: string | null = this.router.getCurrentNavigation().extras.state.startTime;
+        const paramEndTime: string | null = this.router.getCurrentNavigation().extras.state.endTime;
+        const paramIntakes: string | null = this.router.getCurrentNavigation().extras.state.intakes; // list of intakes seperated by ','
+        this.getClasscodes();
+        this.changeDate(this.date = paramDate);
+        this.startTime = paramStartTime;
+        this.endTime = paramEndTime;
+        this.duration = parseTime(this.endTime) - parseTime(this.startTime);
+        this.findMostSimilarClassCodes(paramModuleId, paramIntakes);
+      }
+    });
   }
 
   ionViewDidEnter() {
-    if (!this.paramModuleId) { // call this only on mobile
+    // run only if the user is not coming from timetable "quick attendance button"
+    if (!this.userCameFromTimetableFlag) {
       this.getClasscodes();
     }
-    this.dates = [...Array(30).keys()]
-      .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
   }
 
   /* find the most similar class codes and pass them to the modal page */
-  async findMostSimilarClassCodes() {
+  async findMostSimilarClassCodes(paramModuleId, paramIntakes) {
     /*
       - the code is not finalized and it has been seperated into steps to make the test process easeir.
       - all console logs will be removed before deploying
       - some parts of this function will be grouped together after finalizing the code
     */
     const classcodes = (await this.classcodes$.toPromise()).map(c => c.CLASS_CODE);
-    console.log('selected module code is: ', this.paramModuleId);
+    console.log('selected module code is: ', paramModuleId);
     console.log('All classcodes are: ', classcodes);
 
     // step 1: remove curly brace, square bracket and parenthesis with data isnide them from module code
-    const cleanModuleCode = this.paramModuleId.replace(/\(.*\)|\[.*\]|\{.*\}/g, '');
+    const cleanModuleCode = paramModuleId.replace(/\(.*\)|\[.*\]|\{.*\}/g, '');
     console.log('clean module code is: ', cleanModuleCode);
 
     // step 2: convert intakes string to array (split on ',')
-    const intakes = this.paramIntakes.split(',');
+    const intakes = paramIntakes.split(',');
     console.log('intakes are: ', intakes);
 
     // step 3: remove specialisms from intakes
@@ -305,7 +309,6 @@ export class ClassesNewPage implements OnInit {
             text: 'Continue',
             cssClass: 'colored-text',
             handler: () => {
-              this.clearParamMap();
               this.router.navigate(['/attendix/mark-attendance', {
                 classcode: this.classcode,
                 date: this.date,
@@ -330,11 +333,11 @@ export class ClassesNewPage implements OnInit {
     this.classType = '';
     this.defaultAttendance = 'N';
     this.duration = 0;
+    this.userCameFromTimetableFlag = '';
   }
 
   /** Edit current attendance. */
   edit(classcode: string, date: string, startTime: string, endTime: string, classType: string) {
-    this.clearParamMap();
     this.router.navigate(['/attendix/mark-attendance', { classcode, date, startTime, endTime, classType }]);
   }
 
@@ -408,14 +411,6 @@ export class ClassesNewPage implements OnInit {
         this.classType = data.data.type;
       }
     });
-  }
-
-  /** Clear paramMap on angular. */
-  private clearParamMap() {
-    const [base, params] = this.location.path().split(';');
-    if (params) {
-      this.location.replaceState(base);
-    }
   }
 
 }
