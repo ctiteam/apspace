@@ -67,21 +67,10 @@ const routes: Routes = [
           () => import('./pages/attendix-lecturer/classes/classes.module').then(m => m.ClassesPageModule)
       },
       {
-        path: 'classes-new',
-        data: { role: Role.Lecturer | Role.Admin },
-        loadChildren: () => import('./pages/attendix-lecturer/classes-new/classes-new.module').then( m => m.ClassesNewPageModule)
-      },
-      {
         path: 'mark-attendance',
         data: { role: Role.Lecturer | Role.Admin },
         loadChildren:
           () => import('./pages/attendix-lecturer/mark-attendance/mark-attendance.module').then(m => m.MarkAttendancePageModule)
-      },
-      {
-        path: 'mark-attendance-new',
-        data: { role: Role.Lecturer | Role.Admin },
-        loadChildren: () => import('./pages/attendix-lecturer/mark-attendance-new/mark-attendance-new.module')
-          .then( m => m.MarkAttendanceNewPageModule)
       },
       {
         path: 'update',

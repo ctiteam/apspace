@@ -24,6 +24,7 @@ export interface Settings {
   defaultVenue: string;
   /* attendix */
   scan: boolean;
+  attendixv1: boolean; // ui/ux update
   /* more page */
   favoriteItems: MenuItem[];
   /* admin-front-line */

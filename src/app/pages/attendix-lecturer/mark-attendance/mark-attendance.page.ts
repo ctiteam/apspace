@@ -5,8 +5,8 @@ import { AlertController, LoadingController, ToastController } from '@ionic/angu
 import { authenticator } from 'otplib/otplib-browser';
 import { NEVER, Observable, Subject, interval, timer } from 'rxjs';
 import {
-  catchError, endWith, first, map, pluck, scan, share, shareReplay, startWith,
-  switchMap, takeUntil, tap,
+  catchError, endWith, filter, first, map, pluck, scan, share, shareReplay,
+  startWith, switchMap, takeUntil, tap,
 } from 'rxjs/operators';
 
 import {
@@ -88,7 +88,13 @@ export class MarkAttendancePage implements OnInit {
     const nowMins = d.getHours() * 60 + d.getMinutes();
     // should be start <= now <= end + 5 but can ignore this because of classes page
     const thisClass = schedule.date === isoDate(today) && parseTime(schedule.startTime) <= nowMins;
-    const init = () => (this.auto = thisClass, this.type = 'N', this.initAttendance.mutate({ schedule, attendance: 'N' }));
+
+    const init = () => {
+      const attendance = this.route.snapshot.paramMap.get('defaultAttendance') || 'N';
+      this.auto = thisClass;
+      this.type = 'N';
+      return this.initAttendance.mutate({ schedule, attendance });
+    };
     const list = () => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }));
     const attendance$ = thisClass ? init().pipe(catchError(list)) : list().pipe(catchError(init));
 
@@ -167,6 +173,7 @@ export class MarkAttendancePage implements OnInit {
       pluck('data', 'newStatus'),
       tap(({ id }) => console.log('new', id, studentsNameById[id])),
       tap(({ id, attendance, absentReason }) => this.statusUpdate.next({ id, attendance, absentReason })),
+      filter(({ attendance }) => attendance === 'Y'),
       scan((acc, { id }) => acc.includes(studentsNameById[id])
         ? acc : [...acc, studentsNameById[id]].slice(-10), []),
       shareReplay(1) // keep track while switching mode
