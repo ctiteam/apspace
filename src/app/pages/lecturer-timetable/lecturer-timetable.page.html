@@ -178,8 +178,8 @@
                           </ion-col>
                           <ion-col size="12" size-sm="auto" class="margin-auto" *ngIf="showNewAttendix">
                             <ion-button
-                              [disabled]="(timetable.time | date : 'yyyy-MM-dd') > (today | date : 'yyyy-MM-dd')"
-                              class="ion-float-right"
+                            [disabled]="(timetable.time | date : 'yyyy-MM-dd HH:mm') > (today | date : 'yyyy-MM-dd HH:mm')"
+                            class="ion-float-right"
                               (click)="quickAttendnace(timetable.module, timetable.time, timetable.intakes.toString(), timetable.time, endTime)"
                               fill="outline" color="danger" size="small">
                               Attendance
@@ -211,7 +211,7 @@
                           </ion-col>
                           <ion-col size="12" size-sm="auto" class="ion-no-padding margin-auto" *ngIf="showNewAttendix">
                             <ion-button
-                              [disabled]="(timetable.time | date : 'yyyy-MM-dd') > (today | date : 'yyyy-MM-dd')"
+                              [disabled]="(timetable.time | date : 'yyyy-MM-dd HH:mm') > (today | date : 'yyyy-MM-dd HH:mm')"
                               class="ion-float-right"
                               (click)="quickAttendnace(timetable.module, timetable.time, timetable.intakes.toString(), timetable.time, endTime)"
                               fill="outline" color="danger" size="small">
