@@ -5,7 +5,7 @@ import {
 } from '@ionic/angular';
 
 import { Observable, forkJoin } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, tap } from 'rxjs/operators';
 
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
 import { Classcode, StaffProfile, StudentTimetable } from '../../../interfaces';
@@ -15,6 +15,14 @@ import { between, isoDate, parseTime } from '../date';
 type Schedule = Pick<Classcode, 'CLASS_CODE'>
   & Pick<StudentTimetable, 'DATESTAMP_ISO' | 'TIME_FROM' | 'TIME_TO'>
   & { TYPE: string; };
+
+const chosenOnes = [
+  'appsteststaff1', 'abbhirami', 'abubakar_s', 'alexander', 'lim.chiasien', 'azim.hulaimi',
+  'debbie.liew', 'behrang', 'jasonturner', 'edwin.pio', 'mindy.goh', 'haslina.hashim',
+  'jerry', 'jonathanj', 'jack.lai', 'leroy.fong', 'meisam', 'mohamad.shahiman', 'muhammad.danish',
+  'nadiah', 'nglishin', 'ooi.aikkhong', 'qusay', 'sathiapriya', 'sireesha.prathi', 'suresh.saminathan',
+  'vicknisha.balu', 'chung.wei', 'zailan'
+];
 
 @Component({
   selector: 'app-classes',
@@ -91,6 +99,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
   manualEndTime: string;
   manualClassType: string;
 
+  // temp until attendix 2.0 is enabled campus-wide
+  showNewAttendix = false;
+
   @ViewChild('classcodeInput', { static: false }) classcodeInput: IonSelect;
 
   constructor(
@@ -106,7 +117,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
   ) { }
 
   ngOnInit() {
-    const profile$ = this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' });
+    const profile$ = this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }).pipe(
+      tap(profile => this.showNewAttendix = chosenOnes.includes(profile[0].ID)),
+    );
     this.timetablesprofile$ = forkJoin([profile$, this.tt.get()]).pipe(
       shareReplay(1), // no need to refresh rigid data when user came back
     );

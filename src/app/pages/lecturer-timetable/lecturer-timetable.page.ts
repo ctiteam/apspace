@@ -9,6 +9,14 @@ import { finalize, switchMap, tap } from 'rxjs/operators';
 import { LecturerTimetable, StaffProfile } from '../../interfaces';
 import { SettingsService, WsApiService } from '../../services';
 
+const chosenOnes = [
+  'appsteststaff1', 'abbhirami', 'abubakar_s', 'alexander', 'lim.chiasien', 'azim.hulaimi',
+  'debbie.liew', 'behrang', 'jasonturner', 'edwin.pio', 'mindy.goh', 'haslina.hashim',
+  'jerry', 'jonathanj', 'jack.lai', 'leroy.fong', 'meisam', 'mohamad.shahiman', 'muhammad.danish',
+  'nadiah', 'nglishin', 'ooi.aikkhong', 'qusay', 'sathiapriya', 'sireesha.prathi', 'suresh.saminathan',
+  'vicknisha.balu', 'chung.wei', 'zailan'
+];
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-lecturer-timetable',
@@ -34,6 +42,9 @@ export class LecturerTimetablePage implements OnInit {
   show2ndToolbar = false;
   showAttendixFeature = false;
   comingFromTabs = this.router.url.split('/')[1].split('/')[0] === 'tabs';
+
+  // temp until attendix 2.0 is enabled campus-wide
+  showNewAttendix = false;
 
   room: string;
   intake: string;
@@ -109,6 +120,7 @@ export class LecturerTimetablePage implements OnInit {
         this.lecturerName = profile[0].FULLNAME;
         this.lecturerCode = profile[0].CODE;
       }),
+      tap(profile => this.showNewAttendix = chosenOnes.includes(profile[0].ID)),
       switchMap(([{ ID }]) => this.ws.get<LecturerTimetable[]>(`/lecturer-timetable/v2/${ID}`, { auth: false })),
       tap(tt => this.updateDay(tt)),
       finalize(() => refresher && refresher.complete()),
