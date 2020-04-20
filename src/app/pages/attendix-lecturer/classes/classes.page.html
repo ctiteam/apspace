@@ -19,10 +19,10 @@
       <ion-col class="ion-align-self-center" size-md="6" size-lg="5" size-xs="12">
         <ion-item>
           <ion-label>Class Code</ion-label>
-          <ion-select #classcodeInput [ngModel]="auto ? classcode : manualClasscode"
-            [disabled]="auto && !classcodes" placeholder="Class Code">
-            <ion-select-option *ngFor="let classcode of auto ? classcodes : manualClasscodes"
-              [value]="classcode">{{ classcode }}</ion-select-option>
+          <ion-select #classcodeInput [ngModel]="auto ? classcode : manualClasscode" [disabled]="auto && !classcodes"
+            placeholder="Class Code">
+            <ion-select-option *ngFor="let classcode of auto ? classcodes : manualClasscodes" [value]="classcode">
+              {{ classcode }}</ion-select-option>
           </ion-select>
         </ion-item>
 
@@ -30,10 +30,8 @@
           <ion-label>Date</ion-label>
           <ion-select [ngModel]="auto ? date : manualDate"
             (ngModelChange)="auto ? changeDate(date = $event) : changeDate(manualDate = $event)"
-            [disabled]="auto ? !classcode : !manualClasscode"
-            interface="popover" placeholder="Date">
-            <ion-select-option *ngFor="let d of auto ? dates : manualDates"
-              [value]="d">{{ d }}</ion-select-option>
+            [disabled]="auto ? !classcode : !manualClasscode" interface="popover" placeholder="Date">
+            <ion-select-option *ngFor="let d of auto ? dates : manualDates" [value]="d">{{ d }}</ion-select-option>
           </ion-select>
         </ion-item>
 
@@ -41,10 +39,10 @@
           <ion-label>Start Time</ion-label>
           <ion-select [(ngModel)]="auto ? startTime : manualStartTime"
             (ngModelChange)="auto ? changeStartTime(startTime = $event) : changeStartTime(manualStartTime = $event)"
-            [disabled]="auto ? !classcode || !date : !manualClasscode || !manualDate"
-            interface="popover" placeholder="Start Time">
-            <ion-select-option *ngFor="let t of auto ? startTimes : manualStartTimes"
-              [value]="t">{{ t }}</ion-select-option>
+            [disabled]="auto ? !classcode || !date : !manualClasscode || !manualDate" interface="popover"
+            placeholder="Start Time">
+            <ion-select-option *ngFor="let t of auto ? startTimes : manualStartTimes" [value]="t">{{ t }}
+            </ion-select-option>
           </ion-select>
         </ion-item>
 
@@ -52,10 +50,10 @@
           <ion-label>End Time</ion-label>
           <ion-select [ngModel]="auto ? endTime : manualEndTime"
             (ngModelChange)="auto && (endTime = $event) || (manualEndTime = $event)"
-            [disabled]="auto ? true : !manualClasscode || !manualDate || !manualStartTime"
-            interface="popover" placeholder="End Time">
-            <ion-select-option *ngFor="let t of auto ? endTimes : manualEndTimes"
-              [value]="t">{{ t }}</ion-select-option>
+            [disabled]="auto ? true : !manualClasscode || !manualDate || !manualStartTime" interface="popover"
+            placeholder="End Time">
+            <ion-select-option *ngFor="let t of auto ? endTimes : manualEndTimes" [value]="t">{{ t }}
+            </ion-select-option>
           </ion-select>
         </ion-item>
 
@@ -63,10 +61,8 @@
           <ion-label>Class Type</ion-label>
           <ion-select [ngModel]="auto ? classType : manualClassType"
             (ngModelChange)="auto && (classType = $event) || (manualClassType = $event)"
-            [disabled]="auto ? !startTime || classType : !manualStartTime"
-            interface="popover" placeholder="Class Type">
-            <ion-select-option *ngFor="let t of classTypes"
-              [value]="t">{{ t }}</ion-select-option>
+            [disabled]="auto ? !startTime || classType : !manualStartTime" interface="popover" placeholder="Class Type">
+            <ion-select-option *ngFor="let t of classTypes" [value]="t">{{ t }}</ion-select-option>
           </ion-select>
         </ion-item>
 
@@ -75,6 +71,35 @@
           size="large" expand="block">
           Mark / Edit Attendance
         </ion-button>
+
+        <ion-card class="ion-margin-top" *ngIf="showNewAttendix">
+          <ion-card-content class="ion-padding-bottom">
+            <h2 class="text-bold main-text-color">You're invited to the new AttendiX Design</h2>
+            <p>We're excited for you to try a fresh, simpler experience of the AttendiX system</p>
+            <ion-list class="ion-no-padding">
+              <ion-item lines="full">
+                <ion-icon slot="start" name="ios-flash" class="main-text-color" size="large"></ion-icon>
+                <ion-label>
+                  <p class="text-bold main-text-color">Navigate & Search Faster</p>
+                  <p class="secondary-txt-color">Get there fast with our new streamlined way to navigate</p>
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-icon slot="start" name="glasses" class="main-text-color" size="large"></ion-icon>
+                <ion-label>
+                  <p class="text-bold main-text-color">Cleaner Look</p>
+                  <p class="secondary-txt-color">Simplified user interface to make it easier to do what you want</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <div class="ion-text-right">
+              <ion-button color="success" (click)="tryv1()">
+                Try New AttendiX
+                <ion-icon slot="end" name="ios-arrow-forward"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>

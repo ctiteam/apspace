@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController, IonRefresher } from '@ionic/angular';
 import * as moment from 'moment';
@@ -9,18 +9,27 @@ import { finalize, switchMap, tap } from 'rxjs/operators';
 import { LecturerTimetable, StaffProfile } from '../../interfaces';
 import { SettingsService, WsApiService } from '../../services';
 
+const chosenOnes = [
+  'appsteststaff1', 'abbhirami', 'abubakar_s', 'alexander', 'lim.chiasien', 'azim.hulaimi',
+  'debbie.liew', 'behrang', 'jasonturner', 'edwin.pio', 'mindy.goh', 'haslina.hashim',
+  'jerry', 'jonathanj', 'jack.lai', 'leroy.fong', 'meisam', 'mohamad.shahiman', 'muhammad.danish',
+  'nadiah', 'nglishin', 'ooi.aikkhong', 'qusay', 'sathiapriya', 'sireesha.prathi', 'suresh.saminathan',
+  'vicknisha.balu', 'chung.wei', 'zailan'
+];
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-lecturer-timetable',
   templateUrl: './lecturer-timetable.page.html',
   styleUrls: ['./lecturer-timetable.page.scss'],
+  providers: [DatePipe]
 })
 export class LecturerTimetablePage implements OnInit {
 
   printUrl = 'https://api.apiit.edu.my/timetable-print/index.php';
 
   wday = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
-
+  today = new Date();
   timetable$: Observable<LecturerTimetable[]>;
   selectedWeek: Date; // week is the first day of week
   availableWeek: Date[] = [];
@@ -33,6 +42,9 @@ export class LecturerTimetablePage implements OnInit {
   show2ndToolbar = false;
   showAttendixFeature = false;
   comingFromTabs = this.router.url.split('/')[1].split('/')[0] === 'tabs';
+
+  // temp until attendix 2.0 is enabled campus-wide
+  showNewAttendix = false;
 
   room: string;
   intake: string;
@@ -47,6 +59,7 @@ export class LecturerTimetablePage implements OnInit {
     private router: Router,
     private settings: SettingsService,
     private ws: WsApiService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
@@ -107,6 +120,7 @@ export class LecturerTimetablePage implements OnInit {
         this.lecturerName = profile[0].FULLNAME;
         this.lecturerCode = profile[0].CODE;
       }),
+      tap(profile => this.showNewAttendix = chosenOnes.includes(profile[0].ID)),
       switchMap(([{ ID }]) => this.ws.get<LecturerTimetable[]>(`/lecturer-timetable/v2/${ID}`, { auth: false })),
       tap(tt => this.updateDay(tt)),
       finalize(() => refresher && refresher.complete()),
@@ -158,6 +172,32 @@ export class LecturerTimetablePage implements OnInit {
     const week = moment(this.selectedWeek).format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
     // tslint:disable-next-line: max-line-length
     this.iab.create(`${this.printUrl}?LectID=${this.lecturerCode}&Submit=Submit&Week=${week}&print_request=print`, '_system', 'location=true');
+  }
+
+  quickAttendnace(moduleId: string, date: string, intakes: string, startTime: string, endTime: string) {
+    const newAttendixEnabled = this.settings.get('attendixv1');
+    console.log('sending the data');
+    console.log('moduleId', moduleId);
+    console.log('date', this.datePipe.transform(date, 'yyyy-MM-dd'));
+    console.log('intakes', intakes);
+    console.log('startTime', this.datePipe.transform(startTime, 'hh:mm a'));
+    console.log('endTime', this.datePipe.transform(endTime, 'hh:mm a'));
+    const navigationExtras: NavigationExtras = {
+      state: {
+        moduleId,
+        date: this.datePipe.transform(date, 'yyyy-MM-dd'),
+        intakes,
+        startTime: this.datePipe.transform(startTime, 'hh:mm a'),
+        endTime: this.datePipe.transform(endTime, 'hh:mm a')
+      }
+    };
+    // always redirect users to attendix 2.0
+    // the feature will not be used in classic attenidx that has the auto mode
+    if (!newAttendixEnabled) {
+      this.settings.set('attendixv1', true);
+    }
+    this.router.navigateByUrl('/attendix/classes/new', navigationExtras);
+
   }
 
 }

@@ -359,7 +359,7 @@ button.picker-button {
 }
 
 .warning-text {
-  color: #dfa847 !important;
+  color: #FFCE56 !important;
 }
 
 .colored-text {
@@ -367,7 +367,7 @@ button.picker-button {
 }
 
 .success-text {
-  color: var(--success-color);
+  color: var(--success-color) !important;
 }
 
 .colored-border {
@@ -466,4 +466,10 @@ ion-toolbar:not(.ion-color) .sc-ion-buttons-ios-h.sc-ion-buttons-ios-s .button-c
       --background-hover: var(--tertiary-bg-color);
     }
   }
+}
+
+ion-searchbar {
+  --icon-color: #666 !important;  // default color
+  --cancel-button-color: #666 !important; // default #1a1a1a, not readable on dark theme
+  --clear-button-color: #666 !important; // default initial, does not look good on dark theme
 }

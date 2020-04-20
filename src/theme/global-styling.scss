@@ -67,10 +67,12 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
+
 /* FIX OVERLAPPING ISSUE IN SWIPER */
 .swiper-wrapper {
   margin-bottom: 15px !important;
 }
+
 .swiper-pagination {
   position: relative !important;
   bottom: 5px !important;
@@ -144,66 +146,87 @@ input:-webkit-autofill:active {
   0% {
     transform: rotate(0);
   }
+
   1% {
     transform: rotate(30deg);
   }
+
   3% {
     transform: rotate(-28deg);
   }
+
   5% {
     transform: rotate(34deg);
   }
+
   7% {
     transform: rotate(-32deg);
   }
+
   9% {
     transform: rotate(30deg);
   }
+
   11% {
     transform: rotate(-28deg);
   }
+
   13% {
     transform: rotate(26deg);
   }
+
   15% {
     transform: rotate(-24deg);
   }
+
   17% {
     transform: rotate(22deg);
   }
+
   19% {
     transform: rotate(-20deg);
   }
+
   21% {
     transform: rotate(18deg);
   }
+
   23% {
     transform: rotate(-16deg);
   }
+
   25% {
     transform: rotate(14deg);
   }
+
   27% {
     transform: rotate(-12deg);
   }
+
   29% {
     transform: rotate(10deg);
   }
+
   31% {
     transform: rotate(-8deg);
   }
+
   33% {
     transform: rotate(6deg);
   }
+
   35% {
     transform: rotate(-4deg);
   }
+
   37% {
     transform: rotate(2deg);
   }
+
   39% {
     transform: rotate(-1deg);
   }
+
   41% {
     transform: rotate(1deg);
   }
@@ -211,6 +234,7 @@ input:-webkit-autofill:active {
   43% {
     transform: rotate(0);
   }
+
   100% {
     transform: rotate(0);
   }
@@ -226,10 +250,12 @@ input:-webkit-autofill:active {
   filter: alpha(opacity=80);
   pointer-events: none;
 }
+
 /* high-performance display:none; helper */
 .gu-hide {
   left: -9999px !important;
 }
+
 /* added to mirrorContainer (default = body) while dragging */
 .gu-unselectable {
   -webkit-user-select: none !important;
@@ -237,6 +263,7 @@ input:-webkit-autofill:active {
   -ms-user-select: none !important;
   user-select: none !important;
 }
+
 /* added to the source element while its mirror is dragged */
 .gu-transit {
   opacity: 0.2;
@@ -247,6 +274,7 @@ input:-webkit-autofill:active {
 // Popover width & white space
 .popover-content {
   --width: 70% !important;
+
   .item.sc-ion-label-md-h,
   .item .sc-ion-label-md-h {
     white-space: pre-line;
@@ -257,10 +285,12 @@ input:-webkit-autofill:active {
 ion-calendar {
   background-color: var(--secondary-bg-color) !important;
   padding: 0 !important;
+
   .month-packer-item {
     button {
       color: var(--main-txt-color) !important;
     }
+
     &.this-month {
       button {
         border-color: var(--primary-color) !important;
@@ -273,6 +303,7 @@ ion-calendar {
     p {
       color: var(--main-txt-color) !important;
     }
+
     &[disabled] p {
       color: var(--passed-event-color) !important;
     }
@@ -283,6 +314,7 @@ ion-calendar {
 
     &.on-selected {
       background: var(--primary-color) !important;
+
       p {
         color: var(--main-txt-color) !important;
       }
@@ -290,9 +322,11 @@ ion-calendar {
 
     &.available {
       background: var(--success-color) !important;
+
       &.on-selected {
         background-color: transparent !important;
         border: 3px solid var(--success-color) !important;
+
         p {
           color: var(--success-color) !important;
         }
@@ -301,9 +335,11 @@ ion-calendar {
 
     &.booked {
       background: var(--danger-color) !important;
+
       &.on-selected {
         background-color: transparent !important;
         border: 3px solid var(--danger-color) !important;
+
         p {
           color: var(--danger-color) !important;
         }
@@ -312,12 +348,15 @@ ion-calendar {
 
     &.unavailable {
       background: var(--main-txt-color) !important;
+
       p {
         color: var(--main-bg-color) !important;
       }
+
       &.on-selected {
         background-color: transparent !important;
         border: 3px solid var(--main-txt-color) !important;
+
         p {
           color: var(--main-txt-color) !important;
         }
@@ -331,6 +370,7 @@ ion-calendar {
       border-radius: 13px;
       height: 23%;
       margin-left: 2%;
+
       &.on-selected {
         background-color: transparent !important;
         border: 3px solid var(--passed-event-color) !important;
@@ -339,9 +379,11 @@ ion-calendar {
 
     &.partially-booked {
       background: #dfa847 !important;
+
       &.on-selected {
         background-color: transparent !important;
         border: 3px solid #dfa847 !important;
+
         p {
           color: #dfa847 !important;
         }
@@ -353,9 +395,11 @@ ion-calendar {
     .days-btn.today p {
       color: var(--passed-event-color) !important;
     }
+
     .days-btn.today.colored p {
       color: var(--main-txt-color) !important;
     }
+
     .days-btn.on-selected {
       background-color: transparent !important;
     }
@@ -369,6 +413,7 @@ ion-refresher-content {
 
   .refresher-pulling {
     margin-top: 50px;
+
     ion-icon {
       color: var(--main-txt-color);
     }
@@ -376,6 +421,7 @@ ion-refresher-content {
 
   .refresher-refreshing {
     margin-top: 70px;
+
     ion-spinner {
       color: var(--main-txt-color);
     }
@@ -407,6 +453,7 @@ ion-select {
   height: 13px;
   width: 16px;
 }
+
 /* Up */
 .alert-radio-group::-webkit-scrollbar-button:single-button:vertical:decrement {
   border-width: 0 8px 8px 8px;
@@ -416,6 +463,7 @@ ion-select {
 .alert-radio-group::-webkit-scrollbar-button:single-button:vertical:decrement:hover {
   border-color: transparent transparent #777777 transparent;
 }
+
 /* Down */
 .alert-radio-group::-webkit-scrollbar-button:single-button:vertical:increment {
   border-width: 8px 8px 0 8px;
@@ -428,4 +476,58 @@ ion-select {
 
 .alert-logout {
   color: var(--danger-color) !important;
+}
+
+// search bar in attendix
+.attendix-content {
+  .select-container {
+    .input.no-box-shadow .searchbar-input {
+      --box-shadow: none !important;
+      box-shadow: none !important;
+
+    }
+  }
+}
+
+.delete-warning {
+  .alert-wrapper {
+    max-width: 40% !important;
+
+    .alert-head {
+      .alert-title {
+        color: var(--danger-color) !important;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.alert-wrapper {
+  .inline {
+    &.absent{
+      background: var(--danger-color);
+    }
+    &.present {
+      background-color: var(--success-color);
+    }
+    &.late{
+      background-color: var(--ion-color-warning);
+    }
+    &.cancel{
+      span {
+        color: var(--main-txt-color) !important;
+      }
+    }
+    span {
+      justify-content: space-around;
+      padding: 10px;
+      color: #FFF;
+    }
+  }
+}
+
+ion-radio-group {
+  ion-label {
+    color: var(--main-txt-color);
+  }
 }
