@@ -140,59 +140,59 @@ export class ClassesNewPage implements OnInit {
   async findMostSimilarClassCodes(paramModuleId, paramIntakes) {
     /*
       - the code is not finalized and it has been seperated into steps to make the test process easeir.
-      - all console logs will be removed before deploying
+      - all console logs are commented and will be removed once we make sure there is no issue at all
       - some parts of this function will be grouped together after finalizing the code
     */
     const classcodes = (await this.classcodes$.toPromise()).map(c => c.CLASS_CODE);
-    console.log('selected module code is: ', paramModuleId);
-    console.log('All classcodes are: ', classcodes);
+    // console.log('selected module code is: ', paramModuleId);
+    // console.log('All classcodes are: ', classcodes);
 
     // step 1: remove curly brace, square bracket and parenthesis with data isnide them from module code
     const cleanModuleCode = paramModuleId.replace(/\(.*\)|\[.*\]|\{.*\}/g, '');
-    console.log('clean module code is: ', cleanModuleCode);
+    // console.log('clean module code is: ', cleanModuleCode);
 
     // step 2: convert intakes string to array (split on ',')
     const intakes = paramIntakes.split(',');
-    console.log('intakes are: ', intakes);
+    // console.log('intakes are: ', intakes);
 
     // step 3: remove specialisms from intakes
     const intakesWithoutSpec = intakes.map(intake => intake.replace(/\(.*\)/g, ''));
-    console.log('intakes without spec: ', intakesWithoutSpec);
+    // console.log('intakes without spec: ', intakesWithoutSpec);
 
     // step 4: remove duplicates from intakes array
     const uniqueIntakes = intakesWithoutSpec.filter((v, i) => intakesWithoutSpec.indexOf(v) === i);
-    console.log('intakes unique are: ', uniqueIntakes);
+    // console.log('intakes unique are: ', uniqueIntakes);
 
     // step 5: split module code into parts (split on '-')
     const moduleCodeParts = cleanModuleCode.split('-');
-    console.log('module code parts are ', moduleCodeParts);
+    // console.log('module code parts are ', moduleCodeParts);
 
     // step 6: filter classcodes to the one that matches first part (before first -) in module code
     const firstPartOfModuleCode = moduleCodeParts[0];
 
     // step 7: filter class codes to the ones that have the same starting
-    console.log('first part of module code is', firstPartOfModuleCode);
+    // console.log('first part of module code is', firstPartOfModuleCode);
     const classCodesToSearchInto = classcodes.filter((cc: string) => cc.startsWith(firstPartOfModuleCode));
-    console.log('classcodes filtered based on first part are ', classCodesToSearchInto);
+    // console.log('classcodes filtered based on first part are ', classCodesToSearchInto);
 
     // step 8: remove any part of the module code that has numbers only numbers are common and can reduce
     const moduleCodePartsWithoutNumbers = moduleCodeParts.filter(part => !part.match(/^\d+$/));
-    console.log('module code parts without numbers: ', moduleCodePartsWithoutNumbers);
+    // console.log('module code parts without numbers: ', moduleCodePartsWithoutNumbers);
 
     // step 9: if 'L' or 'T' is part of the module code array => add '-' before it to increase the chance of getting the currect class code
     // tslint:disable-next-line: max-line-length
     const moduleCodePartsWithSingleLetterModified = moduleCodePartsWithoutNumbers.map(part => part === 'T' || part === 'L' ? '-' + part : part);
-    console.log('module code parts with modified single letter: ', moduleCodePartsWithSingleLetterModified);
+    // console.log('module code parts with modified single letter: ', moduleCodePartsWithSingleLetterModified);
 
     // step 10: join the module code array and use 'or wildcard (|)' to sepearate them
     let moduleCodePartsCombinedWithOr = moduleCodePartsWithSingleLetterModified.join('|');
-    console.log('module code combined with OR: ', moduleCodePartsCombinedWithOr);
+    // console.log('module code combined with OR: ', moduleCodePartsCombinedWithOr);
 
     // step 11: if list of intakes is not empty, add the intakes to the module code array
     if (uniqueIntakes.length > 0) {
       moduleCodePartsCombinedWithOr = moduleCodePartsCombinedWithOr + '|' + uniqueIntakes.join('|');
-      console.log('intake/s found');
-      console.log('module code combined with OR With intakes: ', moduleCodePartsCombinedWithOr);
+      // console.log('intake/s found');
+      // console.log('module code combined with OR With intakes: ', moduleCodePartsCombinedWithOr);
     }
 
     // step 12: create results array
@@ -206,16 +206,16 @@ export class ClassesNewPage implements OnInit {
     classCodesToSearchInto.forEach(classCode => {
       if (classCode.match(searchRegExpOr)) {
         results.push({ value: classCode, matches: classCode.match(searchRegExpOr).length });
-        console.log('Found this that match some: ', classCode, classCode.match(searchRegExpOr));
+        // console.log('Found this that match some: ', classCode, classCode.match(searchRegExpOr));
       }
     });
 
     // step 14: sort the results array from the class code that has highest matches to the lowest
     results.sort((a, b) => b.matches - a.matches);
-    console.log('sorted results: ', results);
+    // console.log('sorted results: ', results);
 
     // step 15: check the results array
-    console.log('final results are: ', results);
+    // console.log('final results are: ', results);
 
     // step 16: ONLY if results array length is more than 0, open the modal
     if (results.length > 0) {
