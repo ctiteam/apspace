@@ -4,10 +4,10 @@ import { AlertController, LoadingController, ModalController, ToastController } 
 
 import { DatePipe } from '@angular/common';
 import { Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
-import { Classcodev1 } from '../../../interfaces';
+import { Classcode } from '../../../interfaces';
 import { SettingsService, WsApiService } from '../../../services';
 import { formatTime, isoDate, parseTime } from '../date';
 import { ConfirmClassCodeModalPage } from './confirm-class-code/confirm-class-code-modal';
@@ -80,7 +80,7 @@ export class ClassesNewPage implements OnInit {
   skeletons = new Array(2);
   userCameFromTimetableFlag: string;
 
-  classcodes$: Observable<Classcodev1[]>;
+  classcodes$: Observable<Classcode[]>;
   dates: string[];
   startTimes: string[];
 
@@ -134,6 +134,38 @@ export class ClassesNewPage implements OnInit {
     if (!this.userCameFromTimetableFlag) {
       this.getClasscodes();
     }
+  }
+
+  /** Merge and sort classcodes by intakes, this mutates the original array. */
+  mergeClasscodes(classcodes: Classcode[]): Classcode[] {
+    const merged = classcodes.reduce((acc, classcode) => {
+      const sameClasscode = acc.get(classcode.CLASS_CODE);
+      if (sameClasscode) {
+        // merge statistics repeated with different intake
+        const uniqueClasses = classcode.CLASSES.filter(klass => {
+          const sameClass = sameClasscode.CLASSES.find(sklass =>
+            sklass.DATE === klass.DATE && sklass.TIME_FROM === klass.TIME_FROM
+            && sklass.TIME_TO === klass.TIME_TO && sklass.TYPE === klass.TYPE);
+          if (sameClass) { // add the current stats the previous stats
+            sameClass.TOTAL.PRESENT += klass.TOTAL.PRESENT;
+            sameClass.TOTAL.LATE += klass.TOTAL.LATE;
+            sameClass.TOTAL.ABSENT += klass.TOTAL.ABSENT;
+            sameClass.TOTAL.ABSENT_REASON += klass.TOTAL.ABSENT_REASON;
+          }
+          return !sameClass; // only filter those not processed
+        });
+        sameClasscode.CLASSES.push(...uniqueClasses);
+      } else { // classcode not found it map yet
+        acc.set(classcode.CLASS_CODE, classcode);
+      }
+      return acc;
+    }, new Map() as Map<string, Classcode>);
+    // sort it once by date and time from
+    for (const classcode of merged.values()) {
+      classcode.CLASSES.sort((a, b) => Date.parse(b.DATE) - Date.parse(a.DATE)
+        + parseTime(b.TIME_FROM) - parseTime(a.TIME_FROM));
+    }
+    return Array.from(merged.values());
   }
 
   /* find the most similar class codes and pass them to the modal page */
@@ -226,7 +258,8 @@ export class ClassesNewPage implements OnInit {
   }
 
   getClasscodes() {
-    this.classcodes$ = this.ws.get<Classcodev1[]>('/attendix/v1/classcodes').pipe(
+    this.classcodes$ = this.ws.get<Classcode[]>('/attendix/v1/classcodes').pipe(
+      map(classcodes => this.mergeClasscodes(classcodes)), // side effect
       shareReplay(1),
     );
   }
