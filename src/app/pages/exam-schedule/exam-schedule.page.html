@@ -82,6 +82,10 @@
                         <ion-icon name="book"></ion-icon>
                         <p class="ion-padding-start">{{ exam.module }}</p>
                       </ion-item>
+                      <ion-item lines="none" *ngIf="exam.assessmentType">
+                        <ion-icon name="pricetag"></ion-icon>
+                        <p class="ion-padding-start">{{ exam.assessmentType }}</p>
+                      </ion-item>
                       <ion-item lines="none">
                         <ion-icon name="pin"></ion-icon>
                         <p class="ion-padding-start">{{ exam.venue }}</p>
