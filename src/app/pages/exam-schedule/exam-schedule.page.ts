@@ -13,7 +13,8 @@ import { IntakeListingService, SettingsService, WsApiService } from '../../servi
   styleUrls: ['./exam-schedule.page.scss'],
 })
 export class ExamSchedulePage {
-
+  today = new Date();
+  newAnnouncementDate = new Date(2020, 4, 1);
   exam$: Observable<ExamSchedule[]>;
   intake: string;
   intakes: string[];
