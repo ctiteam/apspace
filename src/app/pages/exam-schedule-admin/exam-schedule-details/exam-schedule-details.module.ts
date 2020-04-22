@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ExamScheduleDetailsPageRoutingModule } from './exam-schedule-details-routing.module';
 
+import { ComponentsModule } from 'src/app/components/components.module';
 import { AddExamSchedulePageModule } from '../add-exam-schedule/add-exam-schedule.module';
 import { AddIntakePageModule } from './add-intake/add-intake.module';
 import { ExamScheduleDetailsPage } from './exam-schedule-details.page';
@@ -18,7 +19,8 @@ import { StrToColorPipe } from './str-to-color.pipe';
     IonicModule,
     ExamScheduleDetailsPageRoutingModule,
     AddExamSchedulePageModule,
-    AddIntakePageModule
+    AddIntakePageModule,
+    ComponentsModule
   ],
   declarations: [ExamScheduleDetailsPage, StrToColorPipe]
 })

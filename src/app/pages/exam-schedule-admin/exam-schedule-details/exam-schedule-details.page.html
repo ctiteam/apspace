@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar mode="md">
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-title>Exam Schedule Details</ion-title>
   </ion-toolbar>
@@ -70,7 +70,7 @@
 
     <ion-row [ngClass]="{'row-margin': onDelete}">
       <ion-col>
-        <ion-card class="ion-no-margin">
+        <ion-card *ngIf="intakes.length >= 1; else noIntakes" class="ion-no-margin">
           <ion-card-header class="custom-background">
             <ion-card-title>
               <ion-grid class="ion-no-padding">
@@ -146,6 +146,13 @@
             </ion-item>
           </ion-card-content>
         </ion-card>
+
+        <ng-template #noIntakes>
+          <app-message-with-svg imageUrl="assets/img/empty.svg"
+            messageTitle="Opps! You have not added any intakes yet."
+            wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+          </app-message-with-svg>
+        </ng-template>
       </ion-col>
     </ion-row>
   </ion-grid>
