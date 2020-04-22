@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { CalendarComponentOptions } from 'ion2-calendar';
 
@@ -8,6 +8,7 @@ import { CalendarComponentOptions } from 'ion2-calendar';
   styleUrls: ['./add-exam-schedule.page.scss'],
 })
 export class AddExamSchedulePage implements OnInit {
+  @Input() edit: boolean;
   dateRange: { from: string; to: string; };
   type: 'string'; // 'string' | 'js-date' | 'moment' | 'time' | 'object'
   optionsRange: CalendarComponentOptions = {

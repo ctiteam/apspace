@@ -5,7 +5,10 @@
         CLOSE
       </ion-button>
     </ion-buttons>
-    <ion-title>Create Exam Schedule</ion-title>
+    <ion-title *ngIf="!edit else editTitle">Create Exam Schedule</ion-title>
+    <ng-template #editTitle>
+      <ion-title>Edit Exam Schedule</ion-title>
+    </ng-template>
   </ion-toolbar>
 </ion-header>
 
@@ -34,13 +37,6 @@
                 Date 
               </ion-label>
               <ion-datetime class="form-input"></ion-datetime>
-            </ion-item>
-
-            <ion-item lines="none">
-              <ion-label class="ion-text-wrap">
-                (check this options only if the exam date is not decided)
-              </ion-label>
-              <ion-checkbox></ion-checkbox> 
             </ion-item>
 
             <ion-grid class="ion-no-padding">

@@ -9,6 +9,7 @@ interface ExamSchedule {
   publicationDate: string;
   createdBy: string;
   status: string;
+  lastEdited: string;
 }
 
 interface Resit {
@@ -38,7 +39,8 @@ export class ExamScheduleAdminPage implements OnInit {
       time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
-      status: 'Inactive'
+      status: 'Inactive',
+      lastEdited: '*Username'
     },
     {
       module: 'CT001-3-2',
@@ -46,7 +48,8 @@ export class ExamScheduleAdminPage implements OnInit {
       time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
-      status: 'Active'
+      status: 'Active',
+      lastEdited: '*Username'
     },
     {
       module: 'CT001-3-2',
@@ -54,7 +57,8 @@ export class ExamScheduleAdminPage implements OnInit {
       time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
-      status: 'Inactive'
+      status: 'Inactive',
+      lastEdited: '*Username'
     },
     {
       module: 'CT001-3-2',
@@ -62,7 +66,8 @@ export class ExamScheduleAdminPage implements OnInit {
       time: '11:00 AM - 1:00AM',
       publicationDate: '19-Sep-2019 - 20-Sep-2019',
       createdBy: 'MUSTAFA',
-      status: 'Inactive'
+      status: 'Inactive',
+      lastEdited: '*Username'
     }
   ];
 

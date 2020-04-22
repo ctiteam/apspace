@@ -81,8 +81,8 @@
                     </h5>
                   </ion-col>
                   <ion-col size="3" class="ion-no-padding ion-text-end ion-align-self-center">
-                    <ion-icon [name]="onDelete ? 'close' : 'trash'" class="clickable-icon-danger"
-                      (click)="toggleEditIntake()"></ion-icon>
+                    <ion-icon [name]="onDelete ? 'close' : 'checkbox'" class="clickable-icon-danger"
+                      (click)="toggleBulkDeleteIntake()"></ion-icon>
                   </ion-col>
                 </ion-row>
               </ion-grid>
@@ -93,46 +93,46 @@
             <ion-item class="table-header">
               <ion-grid>
                 <ion-row>
-                  <ion-col size="12" size-sm="2.5" class="ion-no-padding">
+                  <ion-col class="ion-no-padding">
                     <h2 class="text-bold">Intake</h2>
                   </ion-col>
-                  <ion-col size="12" size-sm="1" class="ion-no-padding">
+                  <ion-col class="ion-no-padding">
                     <h2 class="text-bold">Type</h2>
                   </ion-col>
-                  <ion-col size="12" size-sm="3" class="ion-no-padding">
+                  <ion-col class="ion-no-padding">
                     <h2 class="text-bold">Venue</h2>
                   </ion-col>
-                  <ion-col size="12" size-sm="2" class="ion-no-padding">
+                  <ion-col class="ion-no-padding">
                     <h2 class="text-bold">Dockets Issuance</h2>
                   </ion-col>
-                  <ion-col size="12" size-sm="3.5" class="ion-no-padding">
+                  <ion-col class="ion-no-padding">
                     <h2 class="text-bold">Exam Result Date</h2>
                   </ion-col>
                 </ion-row>
               </ion-grid>
             </ion-item>
 
-            <ion-item [button]="!onDelete" (click)="!onDelete && editIntake()" [style.border-left-color]="(intake.intake | strToColor)"
+            <ion-item detail=false [button]="!onDelete" (click)="!onDelete && editIntake()" [style.border-left-color]="(intake.intake | strToColor)"
               [ngClass]="{'clickable-item' : !onDelete}" class="table-item clickable-item"
               *ngFor="let intake of intakes">
               <ion-grid>
                 <ion-row>
-                  <ion-col size="12" size-sm="2.5" class="text-bold ion-no-padding">
+                  <ion-col size="12" size-sm="" class="text-bold ion-no-padding">
                     {{intake.intake}}
                   </ion-col>
-                  <ion-col size="12" size-sm="1" class="ion-no-padding">
+                  <ion-col size="12" size-sm="" class="ion-no-padding">
                     <ion-icon class="display-on-sm" name="people"></ion-icon>
                     {{intake.type}}
                   </ion-col>
-                  <ion-col size="12" size-sm="3" class="ion-no-padding">
+                  <ion-col size="12" size-sm="" class="ion-no-padding">
                     <ion-icon class="display-on-sm" name="pin"></ion-icon>
                     {{intake.venue}}
                   </ion-col>
-                  <ion-col size="12" size-sm="2" class="ion-no-padding">
+                  <ion-col size="12" size-sm="" class="ion-no-padding">
                     <ion-icon class="display-on-sm" name="paper"></ion-icon>
                     {{intake.docketsIssuance}}
                   </ion-col>
-                  <ion-col size="12" size-sm="3.5" class="ion-no-padding">
+                  <ion-col size="12" size-sm="" class="ion-no-padding">
                     <div class="flex-col-item">
                       <div>
                         <ion-icon class="display-on-sm" name="pie"></ion-icon>

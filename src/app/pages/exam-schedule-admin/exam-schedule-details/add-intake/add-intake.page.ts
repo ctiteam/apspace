@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -7,6 +7,7 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./add-intake.page.scss'],
 })
 export class AddIntakePage implements OnInit {
+  @Input() edit: boolean;
   searchTerm = '';
   items: any;
 

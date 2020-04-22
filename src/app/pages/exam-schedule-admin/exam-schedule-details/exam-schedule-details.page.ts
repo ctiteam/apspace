@@ -141,13 +141,16 @@ export class ExamScheduleDetailsPage implements OnInit {
   ngOnInit() {
   }
 
-  toggleEditIntake() {
+  toggleBulkDeleteIntake() {
     this.onDelete = !this.onDelete;
   }
 
   editExamSchedule() {
     this.modalCtrl.create({
       component: AddExamSchedulePage,
+      componentProps: {
+        edit: 'true'
+      },
       cssClass: 'full-page-modal'
     }).then(modal => modal.present());
   }
@@ -162,6 +165,9 @@ export class ExamScheduleDetailsPage implements OnInit {
   editIntake() {
     this.modalCtrl.create({
       component: AddIntakePage,
+      componentProps: {
+        edit: 'true'
+      },
       cssClass: 'full-page-modal'
     }).then(modal => modal.present());
   }
