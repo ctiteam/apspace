@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController, ToastController } from '@ionic/angular';
 import { AddExamSchedulePage } from '../add-exam-schedule/add-exam-schedule.page';
 import { AddIntakePage } from './add-intake/add-intake.page';
 
@@ -136,7 +136,11 @@ export class ExamScheduleDetailsPage implements OnInit {
   status = 'Inactive';
   onDelete = false;
 
-  constructor(public modalCtrl: ModalController) { }
+  constructor(
+    public modalCtrl: ModalController,
+    public alertCtrl: AlertController,
+    public toastCtrl: ToastController
+  ) { }
 
   ngOnInit() {
   }
@@ -170,5 +174,53 @@ export class ExamScheduleDetailsPage implements OnInit {
       },
       cssClass: 'full-page-modal'
     }).then(modal => modal.present());
+  }
+
+  showToastMessage(message, duration, color) {
+    this.toastCtrl.create({
+      message,
+      duration,
+      color,
+      position: 'top'
+    }).then(toast => toast.present());
+  }
+
+  activateExamSchedule() {
+    this.alertCtrl.create({
+      header: 'Activate Exam Schedule',
+      subHeader: 'To confirm activate the following exam schedule, type "yes" at the bottom input field.',
+      inputs: [
+        {
+          name: 'activateConfirmation',
+          type: 'text',
+          placeholder: 'Type "yes" to proceed.',
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {}
+        },
+        {
+          text: 'Submit',
+          handler: (data) => {
+            if (data.activateConfirmation.toUpperCase() === 'YES') {
+              this.showToastMessage(
+                'Activation Success!',
+                3000,
+                'success'
+              );
+            } else {
+              this.showToastMessage(
+                'The input is incorrect. Activation Failed.',
+                3000,
+                'danger'
+              );
+            }
+          }
+        }
+      ]
+    }).then(alertCancelBooked => alertCancelBooked.present());
   }
 }
