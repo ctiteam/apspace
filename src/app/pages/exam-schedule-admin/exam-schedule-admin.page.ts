@@ -71,6 +71,45 @@ export class ExamScheduleAdminPage implements OnInit {
     }
   ];
 
+  pastExamSchedules: ExamSchedule[] = [
+    {
+      module: 'CT001-1-1',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Inactive',
+      lastEdited: '*Username'
+    },
+    {
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Active',
+      lastEdited: '*Username'
+    },
+    {
+      module: 'CT001-1-1',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Inactive',
+      lastEdited: '*Username'
+    },
+    {
+      module: 'CT001-3-2',
+      date: '19-Sep-2019',
+      time: '11:00 AM - 1:00AM',
+      publicationDate: '19-Sep-2019 - 20-Sep-2019',
+      createdBy: 'MUSTAFA',
+      status: 'Inactive',
+      lastEdited: '*Username'
+    }
+  ];
+
   resits: Resit[] = [
     {
       module: 'CT001-3-2',
