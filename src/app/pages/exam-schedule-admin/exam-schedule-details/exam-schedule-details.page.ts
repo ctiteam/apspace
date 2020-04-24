@@ -153,7 +153,7 @@ export class ExamScheduleDetailsPage implements OnInit {
     this.modalCtrl.create({
       component: AddExamSchedulePage,
       componentProps: {
-        edit: 'true'
+        onEdit: 'true'
       },
       cssClass: 'full-page-modal'
     }).then(modal => modal.present());
@@ -170,7 +170,7 @@ export class ExamScheduleDetailsPage implements OnInit {
     this.modalCtrl.create({
       component: AddIntakePage,
       componentProps: {
-        edit: 'true'
+        onEdit: 'true'
       },
       cssClass: 'full-page-modal'
     }).then(modal => modal.present());

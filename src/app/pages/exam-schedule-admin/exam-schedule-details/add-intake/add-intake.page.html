@@ -5,7 +5,7 @@
         CLOSE
       </ion-button>
     </ion-buttons>
-    <ion-title *ngIf="!edit else editTitle" >New Intake Entry</ion-title>
+    <ion-title *ngIf="!onEdit else editTitle" >New Intake Entry</ion-title>
     <ng-template #editTitle>
       <ion-title>Edit Intake Entry</ion-title>
     </ng-template>
@@ -22,7 +22,7 @@
               <ion-label position="stacked" class="item-label">
                 Intakes
               </ion-label>
-              <div *ngIf="!edit else editMode" class="form-input">
+              <div *ngIf="!onEdit else editMode" class="form-input">
                 <ion-searchbar [(ngModel)]="searchTerm" (ngModelChange)="setFilteredItems()" class="search-intake"></ion-searchbar>
                 <div class="scrollable-div">
                   <ion-list class="masonry-list ion-no-padding" lines="none">
