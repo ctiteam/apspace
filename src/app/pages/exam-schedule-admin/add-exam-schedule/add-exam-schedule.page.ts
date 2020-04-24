@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { CalendarComponentOptions } from 'ion2-calendar';
 
@@ -8,7 +9,8 @@ import { CalendarComponentOptions } from 'ion2-calendar';
   styleUrls: ['./add-exam-schedule.page.scss'],
 })
 export class AddExamSchedulePage implements OnInit {
-  @Input() edit: boolean;
+  @Input() onEdit: boolean;
+
   dateRange: { from: string; to: string; };
   type: 'string'; // 'string' | 'js-date' | 'moment' | 'time' | 'object'
   optionsRange: CalendarComponentOptions = {
@@ -16,6 +18,9 @@ export class AddExamSchedulePage implements OnInit {
   };
   searchTerm = '';
   items: any;
+
+  addExamScheduleForm: FormGroup;
+  modules = [];
 
   tests = [
     {
@@ -137,10 +142,36 @@ export class AddExamSchedulePage implements OnInit {
     }
   ];
 
-  constructor(public modalCtrl: ModalController) { }
+  constructor(
+    public modalCtrl: ModalController,
+    private formBuilder: FormBuilder
+  ) { }
 
   ngOnInit() {
     this.setFilteredItems();
+
+    this.addExamScheduleForm = this.formBuilder.group({
+      publicationDate: ['', Validators.required],
+      module: [''],
+      date: ['', Validators.required],
+      startTime: ['', Validators.required],
+      endTime: ['', Validators.required],
+      remarks: ['']
+    });
+
+    this.addExamScheduleForm.valueChanges.subscribe(value => console.log(value));
+  }
+
+  getSelectedModules(moduleObject: any) {
+    if (!(this.modules.find(module => module.value === moduleObject.value))) {
+      this.modules.push(moduleObject);
+    } else {
+      this.modules.forEach((module, index) => {
+        if (module.value === moduleObject.value) {
+          this.modules.splice(index, 1);
+        }
+      });
+    }
   }
 
   filterItems(searchTerm) {
@@ -151,6 +182,10 @@ export class AddExamSchedulePage implements OnInit {
 
   setFilteredItems() {
     this.items = this.filterItems(this.searchTerm);
+  }
+
+  submit() {
+    console.log(this.addExamScheduleForm.value);
   }
 
   closeModal() {
