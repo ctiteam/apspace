@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar *ngIf="!isModal">
+    <ion-title>Email Preference</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-margin">
+    <div class="ion-text-center ion-margin-bottom">
+      <h4 class="main-text-color">Jin Wei disturbing you?</h4>
+      <h6 class="secondary-txt-color">You may shut him up here!</h6>
+    </div>
+
+    <app-message-with-svg messageTitle="" messageContent="" imageUrl="assets/img/notify.svg" wrapperOffset="2"
+      wrapperSize="8">
+    </app-message-with-svg>
+
+    <h6 style="font-weight: normal;">{{ message }}</h6>
+    <div style="margin-top: 10px;">
+      <ng-container *ngIf="(status$ | async) as status; else loading">
+        <ion-button color="danger" expand="full" *ngIf="isSubscribed && !isProcessing" (click)="onUnsubscribe()">
+          Unsubscribe</ion-button>
+        <ion-button expand="full" [color]="isProcessing && !isSubscribed ? 'primary' : 'danger'" *ngIf="isProcessing">
+          <loading-spinner></loading-spinner>
+        </ion-button>
+        <ion-button color="primary" expand="full" *ngIf="!isSubscribed && !isProcessing" (click)="onSubscribe()">
+          Subscribe</ion-button>
+      </ng-container>
+    </div>
+    
+    <ng-template #loading>
+      <ion-skeleton-text animated style="line-height: 40px;"></ion-skeleton-text>
+    </ng-template>
+  </div>
+</ion-content>

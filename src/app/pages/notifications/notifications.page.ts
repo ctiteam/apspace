@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 import { NotificationHistory } from 'src/app/interfaces';
 import { NotificationService } from 'src/app/services';
+import { DingdongPreferencesPage } from '../settings/dingdong-preferences/dingdong-preferences.page';
 import { NotificationModalPage } from './notification-modal';
 
 @Component({
@@ -53,6 +54,14 @@ export class NotificationsPage {
   openMenu() {
     this.menu.enable(true, 'notifications-filter-menu');
     this.menu.open('notifications-filter-menu');
+  }
+
+  async openPreferences() {
+    await this.modalCtrl.create({
+      cssClass: 'controlled-modal-dingdong',
+      component: DingdongPreferencesPage,
+      componentProps: { isModal: true },
+    }).then((modal) => modal.present());
   }
 
   closeMenu() {

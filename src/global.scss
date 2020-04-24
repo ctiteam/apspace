@@ -41,6 +41,14 @@
   border-top-right-radius: 15px;
 }
 
+.controlled-modal-dingdong .modal-wrapper {
+  height: 93%;
+  top: 54%;
+  position: absolute;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+}
+
 // Screen size hidden (Responsive sizes, eliminates Media Query Tag)
 .invisible {
   visibility: hidden !important;
