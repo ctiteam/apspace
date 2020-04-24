@@ -8,7 +8,7 @@ import { Storage } from '@ionic/storage';
 import { Observable, from, of, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { NotificationHistory } from '../interfaces';
-import { NotificationStatus, NotificationSubscribe, NotificationUnsubscribe } from '../interfaces/dingdong';
+import { NotificationStatus, NotificationSubStatus } from '../interfaces/dingdong';
 import { CasTicketService } from './cas-ticket.service';
 import { WsApiService } from './ws-api.service';
 @Injectable({
@@ -230,12 +230,12 @@ export class NotificationService {
     }
   }
 
-  doUnsubscribe(): Observable<NotificationUnsubscribe> {
+  doUnsubscribe(): Observable<NotificationSubStatus> {
     if (this.network.type !== 'none') {
       return this.cas.getST(this.serviceUrl).pipe(
         switchMap(st => {
           const url = `${this.apiUrl}/client/preferences/personal_email_subscription?ticket=${st}`;
-          return this.http.delete<NotificationUnsubscribe>(url).pipe(
+          return this.http.delete<NotificationSubStatus>(url).pipe(
             catchError(err => {
               if (400 <= err.status && err.status < 500) {
                 this.toastCtrl.create({
@@ -253,12 +253,12 @@ export class NotificationService {
     }
   }
 
-  doSubscribe(): Observable<NotificationSubscribe> {
+  doSubscribe(): Observable<NotificationSubStatus> {
     if (this.network.type !== 'none') {
       return this.cas.getST(this.serviceUrl).pipe(
         switchMap(st => {
           const url = `${this.apiUrl}/client/preferences/personal_email_subscription?ticket=${st}`;
-          return this.http.put<NotificationSubscribe>(url, {
+          return this.http.put<NotificationSubStatus>(url, {
             withCredentials: false
           }).pipe(
             catchError(err => {

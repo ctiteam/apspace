@@ -2,10 +2,6 @@ export interface NotificationStatus {
     active: boolean;
 }
 
-export interface NotificationSubscribe {
-    msg: string;
-}
-
-export interface NotificationUnsubscribe {
+export interface NotificationSubStatus {
     msg: string;
 }
