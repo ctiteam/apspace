@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
     <ion-title>Students' Results</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -133,6 +136,12 @@
                     loading the courses
                   </ng-template>
                 </ion-col>
+                <ion-col size="10" offset="1" *ngIf="studentSelected && intakeSelected">
+                  <ion-button class="ion-margin-top" expand="block" color="danger" (click)="generateTranscriptsPdf()">
+                    {{selectedIntake}} Interim Transcript
+                    <ion-icon name="print" slot="end"></ion-icon>
+                  </ion-button>
+                </ion-col>
               </ion-row>
             </ion-grid>
           </ion-card-content>
@@ -212,17 +221,6 @@
                           <span class="text-bold">Total Modules Passed</span>
                           <span
                             class="ion-float-right right-notch">{{ semesterResult.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</span>
-                        </ion-col>
-                        <ion-col size-lg="6" size="12">
-                          <span class="text-bold">Total Credit hours</span>
-                          <span
-                            class="ion-float-right right-notch">{{ semesterResult.summary[0]?.TOTAL_CREDIT_HOURS || 'N/A' }}</span>
-                        </ion-col>
-
-                        <ion-col size-lg="6" size="12">
-                          <span class="text-bold">Credits transferred</span>
-                          <span
-                            class="ion-float-right right-notch">{{ semesterResult.summary[0]?.CREDIT_TRANSFERRED || 'N/A' }}</span>
                         </ion-col>
 
                         <ion-col size-lg="6" size="12">

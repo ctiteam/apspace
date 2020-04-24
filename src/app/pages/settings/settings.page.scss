@@ -2,3 +2,27 @@ ion-item-divider{
     --color: var(--primary-color) !important;
     font-weight: bold;
 }
+
+ion-range {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 12px;
+    padding-left: 12px;
+    --bar-background: var(--primary-color);
+    --pin-background: var(--primary-color);
+    --pin-color: var(--main-txt-color);
+    --bar-background-active: var(--primary-color);
+}
+
+
+.controlled-col {
+    margin: auto; 
+    padding-left: 0px; 
+    padding-top: 10px; 
+    padding-right: 0px;
+}
+
+.centered-text {
+    padding-left: 28%;
+    display: inline;
+}

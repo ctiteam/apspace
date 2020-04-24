@@ -7,7 +7,7 @@ import { Role } from '../../interfaces';
 import { CasTicketService, SettingsService, UserSettingsService } from '../../services';
 
 import { Network } from '@ionic-native/network/ngx';
-import { NavController, ToastController } from '@ionic/angular';
+import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { MenuItem } from './menu.interface';
 @Component({
   selector: 'app-more',
@@ -76,6 +76,14 @@ export class MorePage implements OnInit {
 
     // START OF Collaboration & Information Resources
     {
+      title: 'APSpace Feedback',
+      group: 'Collaboration & Information Resources',
+      url: 'feedback',
+      img: 'assets/img/feedback.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['apspace feedback', 'app not working', 'issue']
+    },
+    {
       title: 'e-Forms (Forms & Applications)',
       group: 'Collaboration & Information Resources',
       url: 'http://forms.sites.apiit.edu.my/home/',
@@ -85,15 +93,7 @@ export class MorePage implements OnInit {
       tags: ['purchase', 'incident', 'maintenance', 'order', 'exit', 'event']
     },
     {
-      title: 'Feedback',
-      group: 'Collaboration & Information Resources',
-      url: 'feedback',
-      img: 'assets/img/feedback.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['apspace feedback', 'app not working', 'issue']
-    },
-    {
-      title: 'Help Center',
+      title: 'Help Centre',
       group: 'Collaboration & Information Resources',
       url: 'https://apiit.atlassian.net/servicedesk/customer/portals', // No ticket
       img: 'assets/img/help-center.png',
@@ -266,6 +266,14 @@ export class MorePage implements OnInit {
 
 
     // START OF Academic Operations
+    {
+      title: 'APiX / ERP (Legacy)',
+      group: 'Academic Operation',
+      url: 'https://erp.apiit.edu.my/easymoo/web/en/auth/security/login',
+      img: 'assets/img/apix.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['exception', 'feedback', 'legacy', 'old']
+    },
     {
       title: 'APLC Progress Report',
       group: 'Academic Operation',
@@ -537,7 +545,7 @@ export class MorePage implements OnInit {
     {
       title: 'APLink',
       group: 'Career Centre & Corporate Training',
-      url: 'https://apu-joblink-csm.symplicity.com/faculty/', // no ticket
+      url: 'https://apu-joblink-csm.symplicity.com/sso/faculty/', // no ticket
       img: 'assets/img/aplink.png',
       role: Role.Lecturer | Role.Admin,
       tags: []
@@ -756,6 +764,7 @@ export class MorePage implements OnInit {
 
   constructor(
     public navCtrl: NavController,
+    public alertCtrl: AlertController,
     public iab: InAppBrowser,
     private cas: CasTicketService,
     private settings: SettingsService,
@@ -801,8 +810,26 @@ export class MorePage implements OnInit {
 
       }
     } else {
-      this.navCtrl.navigateForward([url]);
+      url !== 'logout' ? this.navCtrl.navigateForward([url]) : this.logout();
     }
+  }
+
+  logout() {
+    this.alertCtrl.create({
+      header: 'Are you sure you want to log out?',
+      buttons: [
+        {
+          text: 'Log Out',
+          cssClass: 'alert-logout',
+          handler: () => {
+            this.navCtrl.navigateForward('/logout');
+          }
+        }, {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    }).then(alert => alert.present());
   }
 
   /** No sorting for KeyValuePipe. */

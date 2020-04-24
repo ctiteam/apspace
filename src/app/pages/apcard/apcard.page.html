@@ -4,6 +4,11 @@
     <ion-buttons slot="start" [hidden]='comingFromTabs()'>
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="generateMonthlyTransactionsPdf()" fill="clear" class="colored-border colored-text">
+        <ion-icon name="print" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -106,7 +111,7 @@
           </ion-card-header>
           <ion-card-content>
             <ion-list>
-              <ion-item lines="none" class="ion-no-padding" *ngFor="let transactions of skelton.numOfTrans">
+              <ion-item lines="none" class="ion-no-padding" style="border-left: none;" *ngFor="let transactions of skelton.numOfTrans">
                 <ion-avatar slot="start">
                   <ion-skeleton-text animated style="width: 100%; line-height: 33px"></ion-skeleton-text>
                 </ion-avatar>

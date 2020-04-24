@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, Platform } from '@ionic/angular';
+import { LoadingController, NavController, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
+import { tap } from 'rxjs/operators';
 import { DataCollectorService, NotificationService, SettingsService } from '../../services';
 
 @Component({
@@ -14,6 +15,7 @@ export class LogoutPage implements OnInit {
   constructor(
     public navCtrl: NavController,
     public storage: Storage,
+    public loadingCtrl: LoadingController,
     private settings: SettingsService,
     private notification: NotificationService,
     private dc: DataCollectorService,
@@ -21,14 +23,33 @@ export class LogoutPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.settings.clear();
-    this.storage.clear();
-    if (this.platform.is('cordova')) {
-      this.notification.sendTokenOnLogout().subscribe(); // works only on phones
-      this.dc.logout().subscribe();
-    }
-    // destroy all cached/active views which angular router does not
-    this.navCtrl.navigateRoot('/login', { replaceUrl: true });
+    this.loadingCtrl.create({
+      spinner: 'dots',
+      message: 'Please wait...',
+      translucent: true,
+    }).then(loading => {
+      loading.present();
+      if (this.platform.is('cordova')) {
+        this.notification.sendTokenOnLogout().pipe(
+          tap(_ => this.dc.logout().subscribe())
+        ).
+          subscribe(
+            {
+              complete: () => {
+                this.settings.clear();
+                this.storage.clear();
+                this.navCtrl.navigateRoot('/login', { replaceUrl: true });
+              }
+            }
+          ); // works only on phones
+      } else {
+        this.settings.clear();
+        this.storage.clear();
+        this.navCtrl.navigateRoot('/login', { replaceUrl: true });
+      }
+      // destroy all cached/active views which angular router does not
+      loading.dismiss();
+    });
   }
 
 }

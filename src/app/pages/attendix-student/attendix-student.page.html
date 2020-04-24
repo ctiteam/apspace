@@ -3,9 +3,11 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/attendance"></ion-back-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">
+
+    <ion-title>
       {{ scan ? 'Scan QR Code' : 'Enter Digits' }}
     </ion-title>
+
     <ion-buttons slot="end">
       <ion-button *ngIf="isCordova" (click)="swapMode()" color="primary">
         <ion-icon slot="icon-only" [name]="scan ? 'code' : 'qr-scanner'"></ion-icon>
@@ -21,8 +23,8 @@
         <div class="otp-wrapper">
           <input
             #otpInput *ngFor="let _ of digits; i as index"
-            autofocus class="otp" type="tel" maxlength="1"
-            (keydown)="onKey($event)">
+            autofocus class="otp" inputmode="numeric" type="number" maxlength="1"
+            (keydown)="onKey($event)" (keyup)="onKey($event)">
         </div>
       </ion-col>
     </ion-row>

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 import { WsApiService } from 'src/app/services';
 import { Apcard } from '../../interfaces';
+import { PrintTransactionsModalPage } from './print-transactions-modal/print-transactions-modal';
 @Component({
   selector: 'app-apcard',
   templateUrl: './apcard.page.html',
@@ -12,8 +14,8 @@ import { Apcard } from '../../interfaces';
 })
 export class ApcardPage implements OnInit {
   transaction$: Observable<Apcard[]>;
+  transactions: Apcard[];
   indecitor = false;
-
   skeletonConfig = [
     { numOfTrans: new Array(4) },
     { numOfTrans: new Array(1) },
@@ -27,6 +29,7 @@ export class ApcardPage implements OnInit {
   constructor(
     private ws: WsApiService,
     private router: Router,
+    private modalCtrl: ModalController
   ) { }
 
   ngOnInit() {
@@ -77,6 +80,7 @@ export class ApcardPage implements OnInit {
     this.isLoading = true;
     this.transaction$ = this.ws.get<Apcard[]>('/apcard/', refresher).pipe(
       map(transactions => this.signTransactions(transactions)),
+      tap(transactions => this.transactions = transactions),
       finalize(() => refresher && refresher.target.complete()),
       finalize(() => (this.isLoading = false))
     );
@@ -87,6 +91,18 @@ export class ApcardPage implements OnInit {
       return true;
     }
     return false;
+  }
+
+  async generateMonthlyTransactionsPdf() {
+    const modal = await this.modalCtrl.create({
+      component: PrintTransactionsModalPage,
+      componentProps: {
+        transactions: this.transactions
+      },
+      cssClass: 'generateTransactionsPdf',
+    });
+    await modal.present();
+    await modal.onDidDismiss();
   }
 
 }

@@ -16,6 +16,21 @@
   font-family: 'Hack', 'Iconsolata', monospace;
 }
 
+.dead {
+  position: absolute;
+  top: calc(30vh - 3ex);
+  width: 100%;
+  text-align: center;
+  padding: 30px;
+  color: var(--danger-color);
+  background-color: var(--secondary-bg-color);
+  text-shadow: var(--tertiary-bg-color) 2px 3px;
+
+  p {
+    font-size: 3rem;
+  }
+}
+
 .stateR {
   --color: #000000;
   --background: #e0e0e0 !important;
@@ -42,6 +57,11 @@
   --background: #81c784 !important;
   --border-color: #81c784 !important;
   --background-hover: #519657 !important;
+}
+
+ion-button#mark-all {
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 ion-card > ion-item > ion-label {

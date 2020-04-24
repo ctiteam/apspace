@@ -1,0 +1,47 @@
+<ion-header no-border>
+  <ion-toolbar mode="md">
+    <ion-title>Generate Transactions PDF</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content parallax-header>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="6" offset-md="3">
+        <ion-card>
+          <ion-card-content>
+
+            <ion-item>
+              <ion-label>Month</ion-label>
+              <ion-datetime placeholder="Click to select" displayFormat="MMM-YYYY" pickerFormat="MMM YYYY"
+                min="2019-01-01" [max]="max" [(ngModel)]="yearMonthModel" (ngModelChange)="noRecordsForSelectedMonth = false">
+              </ion-datetime>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Transaction Type:</ion-label>
+              <ion-select placeholder="Select a type" [(ngModel)]="transactionTypeModel" interface="popover">
+                <ion-select-option *ngFor="let transactionType of transactionTypes" [value]="transactionType">
+                  {{transactionType}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-button (click)="generatePdf()" [disabled]="!yearMonthModel || !transactionTypeModel"
+              class="ion-margin-top" color="success" expand="block">
+              Generate Report
+            </ion-button>
+
+          <h4 class="ion-text-center danger-text" *ngIf="noRecordsForSelectedMonth">No Transactions For The Selected Month</h4>
+
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -22,6 +22,7 @@ export class SettingsPage implements OnInit {
   activeAccentColor: string;
   defaultCampus = '';
   defaultVenue = '';
+  shakeSensitivity: number;
   darkThemeEnabled = false;
   pureDarkThemeEnabled = false;
   busShuttleServiceSettings = {
@@ -35,16 +36,24 @@ export class SettingsPage implements OnInit {
   venues$: Observable<Venue[]>;
 
   menuUI: 'cards' | 'list' = 'list';
+  sensitivityOptions = [
+    { index: 0, value: '40' },
+    { index: 1, value: '50' },
+    { index: 2, value: '60' },
+    { index: 3, value: '70' },
+    { index: 4, value: '80' }
+  ];
   accentColors = [
-    { title: 'Blue (Default)', value: 'blue-accent-color' },
-    { title: 'Green', value: 'green-accent-color' },
-    { title: 'Red', value: 'red-accent-color' },
-    { title: 'Pink', value: 'pink-accent-color' },
-    { title: 'Yellow', value: 'yellow-accent-color' }
+    { title: 'Sky (Default)', value: 'blue-accent-color' },
+    { title: 'Forest', value: 'green-accent-color' },
+    { title: 'Fire', value: 'red-accent-color' },
+    { title: 'Flower', value: 'pink-accent-color' },
+    { title: 'Lightning', value: 'yellow-accent-color' }
   ];
   locationOptions = [
     'New Campus',
     'TPM',
+    'Online'
   ];
 
   constructor(
@@ -89,6 +98,12 @@ export class SettingsPage implements OnInit {
         {
           next: value => this.busShuttleServiceSettings = value
         });
+    this.userSettings
+        .getShakeSensitivity()
+        .subscribe(
+          {
+            next: value => (this.shakeSensitivity = this.sensitivityOptions.findIndex(item => item.value === value))
+          });
     this.timetable$ = this.userSettings.timetable.asObservable();
   }
 
@@ -103,6 +118,10 @@ export class SettingsPage implements OnInit {
     if (this.defaultCampus) {
       this.getVenues();
     }
+  }
+
+  getSensitivitySlider() {
+    this.userSettings.setShakeSensitivity(this.sensitivityOptions[this.shakeSensitivity].value);
   }
 
   getLocations() {
@@ -186,7 +205,8 @@ export class SettingsPage implements OnInit {
 
   timetableModuleBlacklistsRemove(value) {
     const setting = this.userSettings.timetable.value;
-    setting.blacklists.splice(value, 1);
+    const selectedModule = setting.blacklists.indexOf(value);
+    setting.blacklists.splice(selectedModule, 1);
     this.userSettings.timetable.next(setting);
   }
 

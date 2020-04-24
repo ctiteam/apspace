@@ -1,17 +1,28 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { IonSelect, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  AlertController, IonSelect, LoadingController, ModalController, ToastController
+} from '@ionic/angular';
 
-import { forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, forkJoin } from 'rxjs';
+import { map, shareReplay, tap } from 'rxjs/operators';
 
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
 import { Classcode, StaffProfile, StudentTimetable } from '../../../interfaces';
-import { StudentTimetableService, WsApiService } from '../../../services';
+import { SettingsService, StudentTimetableService, WsApiService } from '../../../services';
+import { between, isoDate, parseTime } from '../date';
 
 type Schedule = Pick<Classcode, 'CLASS_CODE'>
   & Pick<StudentTimetable, 'DATESTAMP_ISO' | 'TIME_FROM' | 'TIME_TO'>
   & { TYPE: string; };
+
+const chosenOnes = [
+  'appsteststaff1', 'abbhirami', 'abubakar_s', 'alexander', 'lim.chiasien', 'azim.hulaimi',
+  'debbie.liew', 'behrang', 'jasonturner', 'edwin.pio', 'mindy.goh', 'haslina.hashim',
+  'jerry', 'jonathanj', 'jack.lai', 'leroy.fong', 'meisam', 'mohamad.shahiman', 'muhammad.danish',
+  'nadiah', 'nglishin', 'ooi.aikkhong', 'qusay', 'sathiapriya', 'sireesha.prathi', 'suresh.saminathan',
+  'vicknisha.balu', 'chung.wei', 'zailan'
+];
 
 @Component({
   selector: 'app-classes',
@@ -22,28 +33,9 @@ export class ClassesPage implements AfterViewInit, OnInit {
 
   auto = true; // manual mode to record mismatched data
 
-  /* computed */
-  classcodes: string[];
-  schedules: Schedule[];
-  schedulesByClasscode: Schedule[];
-  schedulesByClasscodeDate: Schedule[];
+  timetablesprofile$: Observable<[StaffProfile[], StudentTimetable[]]>;
 
-  dates: string[];
-  startTimes: string[];
-  endTimes: string[];
-  classTypes = ['Lecture', 'Tutorial', 'Lab'];
-
-  /* selected */
-  classcode: string;
-  date: string;  // 2019-01-01
-  startTime: string;
-  endTime: string;
-  classType: string;
-
-  /* manual */
-  manualClasscodes: string[];
-  manualDates: string[];
-  manualStartTimes = [
+  timings = [
     '08:00 AM', '08:05 AM', '08:10 AM', '08:15 AM', '08:20 AM', '08:25 AM',
     '08:30 AM', '08:35 AM', '08:40 AM', '08:45 AM', '08:50 AM', '08:55 AM',
     '09:00 AM', '09:05 AM', '09:10 AM', '09:15 AM', '09:20 AM', '09:25 AM',
@@ -76,6 +68,29 @@ export class ClassesPage implements AfterViewInit, OnInit {
     '10:30 PM', '10:35 PM', '10:40 PM', '10:45 PM', '10:50 PM', '10:55 PM',
     '11:00 PM', '11:05 PM', '11:10 PM', '11:15 PM', '11:20 PM', '11:25 PM',
     '11:30 PM', '11:35 PM', '11:40 PM', '11:45 PM', '11:50 PM', '11:55 PM'];
+
+  /* computed */
+  classcodes: string[];
+  schedules: Schedule[];
+  schedulesByClasscode: Schedule[];
+  schedulesByClasscodeDate: Schedule[];
+
+  dates: string[];
+  startTimes: string[];
+  endTimes: string[];
+  classTypes = ['Lecture', 'Tutorial', 'Lab'];
+
+  /* selected */
+  classcode: string;
+  date: string; // 2020-12-31
+  startTime: string;
+  endTime: string;
+  classType: string;
+
+  /* manual */
+  manualClasscodes: string[];
+  manualDates: string[];
+  manualStartTimes: string[];
   manualEndTimes: string[];
 
   manualClasscode: string;
@@ -84,22 +99,33 @@ export class ClassesPage implements AfterViewInit, OnInit {
   manualEndTime: string;
   manualClassType: string;
 
+  // temp until attendix 2.0 is enabled campus-wide
+  showNewAttendix = false;
+
   @ViewChild('classcodeInput', { static: false }) classcodeInput: IonSelect;
 
   constructor(
     private tt: StudentTimetableService,
     private ws: WsApiService,
+    private route: ActivatedRoute,
     private router: Router,
+    public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
+    public settings: SettingsService,
     public toastCtrl: ToastController,
   ) { }
 
   ngOnInit() {
-    const d = new Date();
-    this.date = this.isoDate(d);
-    const nowMins = d.getHours() * 60 + d.getMinutes();
+    const profile$ = this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }).pipe(
+      tap(profile => this.showNewAttendix = chosenOnes.includes(profile[0].ID)),
+    );
+    this.timetablesprofile$ = forkJoin([profile$, this.tt.get()]).pipe(
+      shareReplay(1), // no need to refresh rigid data when user came back
+    );
+  }
 
+  ionViewDidEnter() {
     const loadingCtrl = this.loadingCtrl.create({
       spinner: 'dots',
       duration: 5000,
@@ -108,23 +134,42 @@ export class ClassesPage implements AfterViewInit, OnInit {
     });
     loadingCtrl.then(loading => loading.present());
 
-    const timetables$ = forkJoin([this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }), this.tt.get()]).pipe(
+    const d = new Date();
+    const date = isoDate(d);
+    const nowMins = d.getHours() * 60 + d.getMinutes();
+
+    const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes');
+
+    // get self timetable but filter out future classes
+    const timetables$ = this.timetablesprofile$.pipe(
       map(([profile, timetables]) => timetables.filter(timetable =>
         profile[0].ID === timetable.SAMACCOUNTNAME
-        && this.parseTime(timetable.TIME_FROM) <= nowMins)),
+        && (timetable.DATESTAMP_ISO !== date
+          || parseTime(timetable.TIME_FROM) <= nowMins))),
     );
-    const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes');
 
     forkJoin([timetables$, classcodes$]).subscribe(([timetables, classcodes]) => {
       // left join on classcodes
       const joined = timetables.map(timetable => ({
-        ...classcodes.find(classcode => {
-          // Classcode BM006-3-2-CRI-L-UC2F1805CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
-          // Take only BM006-3-2-CRI-L- (+3 extra characters with '-' pad for L, T1, T2)
-          const len = classcode.SUBJECT_CODE.length;
-          return classcode.CLASS_CODE.slice(0, len + 3) === (timetable.MODID + '-').slice(0, len + 3)
-            && classcode.COURSE_CODE_ALIAS === timetable.INTAKE;
-        }),
+        ...(
+          classcodes.find(classcode => {
+            // Classcode BM006-3-2-CRI-L-UC2F1805CGD-CS-DA-IS-IT-BIS-CC-DBA-ISS-MBT-NC-MMT-SE-HLH
+            // Take only BM006-3-2-CRI-L- (+3 extra characters with '-' pad for L, T1, T2)
+            // Timetable BM006-3-2-CRI-L (or T-1 or T-2, need to strip the '-')
+            const len = classcode.SUBJECT_CODE.length;
+            return classcode.CLASS_CODE.slice(0, len + 3) ===
+              (timetable.MODID.replace(/-([TL])-(\d)$/, '-$1$2') + '-').slice(0, len + 3)
+              && classcode.COURSE_CODE_ALIAS === timetable.INTAKE;
+          }) // fallback without checking the class type (-L)
+          || classcodes.find(classcode => {
+            // Classcode MPU3272-WPCS-UC2F1910SOE-SOT-SOMM-SUH
+            // Take only MPU3272-WPCS
+            // Timetable MPU3272-WPCS-T
+            const len = classcode.SUBJECT_CODE.length;
+            return classcode.CLASS_CODE.slice(0, len) === timetable.MODID.slice(0, len)
+              && classcode.COURSE_CODE_ALIAS === timetable.INTAKE;
+          })
+        ),
         ...timetable
       }));
 
@@ -149,7 +194,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
           TYPE: guessClassType,
         };
       });
-      this.guessWork(joined, nowMins);
+      this.guessWork(joined, date, nowMins);
 
       // append existing timetable after guess work
       const mapped = classcodes.map(({ CLASS_CODE, CLASSES }) =>
@@ -158,13 +203,10 @@ export class ClassesPage implements AfterViewInit, OnInit {
       this.schedules = this.schedules.concat.apply([], mapped);
       this.classcodes = [...new Set(this.schedules.map(schedule => schedule.CLASS_CODE).filter(Boolean))].sort();
 
-      loadingCtrl.then(loading => loading.dismiss());
-      // console.log('filtered', this.schedules, this.classcodes);
+      this.fillManualInputs(classcodes);
 
-      // manual classcodes
-      this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
-      this.manualDates = [...Array(30).keys()]
-        .map(n => new Date(new Date().setDate(new Date().getDate() - n)).toISOString().slice(0, 10));
+      // console.log('filtered', this.schedules, this.classcodes);
+      loadingCtrl.then(loading => loading.dismiss());
     });
   }
 
@@ -177,14 +219,11 @@ export class ClassesPage implements AfterViewInit, OnInit {
   }
 
   /** Guess the current classcode based on timetable. */
-  guessWork(schedules: (Classcode & StudentTimetable)[], nowMins: number) {
-    const d = new Date();
-    const date = this.isoDate(d);
-
+  guessWork(schedules: (Classcode & StudentTimetable)[], date: string, nowMins: number) {
     const guessSchedules = schedules.filter(schedule => {
       return schedule.DATESTAMP_ISO === date
         && schedule.CLASS_CODE // CLASS_CODE may not be matched
-        && this.between(schedule.TIME_FROM, schedule.TIME_TO, nowMins);
+        && between(schedule.TIME_FROM, schedule.TIME_TO, nowMins);
     });
 
     if (new Set(guessSchedules.map(schedule => schedule.MODID)).size !== 1) {
@@ -192,6 +231,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
         message: 'Fail to auto complete, switched to \'Manual\' mode',
         duration: 3000,
         position: 'top',
+        color: 'warning',
         showCloseButton: true,
       }).then(toast => toast.present());
       this.auto = false;
@@ -200,20 +240,11 @@ export class ClassesPage implements AfterViewInit, OnInit {
     }
     const currentSchedule = guessSchedules[0];
 
+    // set inputs only if all are found
     this.changeClasscode(this.classcode = currentSchedule.CLASS_CODE, false);
     this.changeDate(this.date = date, false);
     this.changeStartTime(this.startTime = currentSchedule.TIME_FROM);
     // console.log('currentSchedule', currentSchedule);
-  }
-
-  /** Parse time into minutes of day in 12:59 PM format. */
-  parseTime(time: string): number {
-    return ((time.slice(-2) === 'PM' ? 12 : 0) + +time.slice(0, 2) % 12) * 60 + +time.slice(3, 5);
-  }
-
-  /** Identify if time is between start and end time in 12:59 PM format. */
-  between(start: string, end: string, nowMins: number): boolean {
-    return this.parseTime(start) <= nowMins && nowMins <= this.parseTime(end);
   }
 
   /** Display search modal to choose classcode. */
@@ -237,6 +268,13 @@ export class ClassesPage implements AfterViewInit, OnInit {
     }
   }
 
+  /** Fill manual inputs. */
+  fillManualInputs(classcodes: Classcode[]) {
+    this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
+    this.manualDates = [...Array(30).keys()]
+      .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
+  }
+
   /** Change classcode, auto select class type. */
   changeClasscode(classcode: string, propagate = true) {
     this.schedulesByClasscode = this.schedules.filter(schedule => schedule.CLASS_CODE === classcode);
@@ -250,14 +288,25 @@ export class ClassesPage implements AfterViewInit, OnInit {
 
   /** Change date. */
   changeDate(date: string, propagate = true) {
-    this.schedulesByClasscodeDate = this.schedulesByClasscode.filter(schedule => schedule.DATESTAMP_ISO === date);
-    this.startTimes = [...new Set(this.schedulesByClasscodeDate.map(schedule => schedule.TIME_FROM))].sort();
-    this.endTimes = [...new Set(this.schedulesByClasscodeDate.map(schedule => schedule.TIME_TO))].sort();
-    this.startTime = '';
-    this.endTime = '';
+    if (this.auto) {
+      this.schedulesByClasscodeDate = this.schedulesByClasscode.filter(schedule => schedule.DATESTAMP_ISO === date);
+      this.startTimes = [...new Set(this.schedulesByClasscodeDate.map(schedule => schedule.TIME_FROM))].sort();
+      this.endTimes = [...new Set(this.schedulesByClasscodeDate.map(schedule => schedule.TIME_TO))].sort();
+      this.startTime = '';
+      this.endTime = '';
 
-    if (propagate && this.startTimes.length === 1) {
-      this.changeStartTime(this.startTime = this.startTimes[0]);
+      if (propagate && this.startTimes.length === 1) {
+        this.changeStartTime(this.startTime = this.startTimes[0]);
+      }
+    } else {
+      const d = new Date();
+      if (date === isoDate(d)) { // current day
+        const nowMins = d.getHours() * 60 + d.getMinutes();
+        const firstFutureClass = this.timings.find(time => nowMins < parseTime(time));
+        this.manualStartTimes = this.timings.slice(0, this.timings.indexOf(firstFutureClass));
+      } else {
+        this.manualStartTimes = this.timings;
+      }
     }
   }
 
@@ -277,7 +326,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
       this.endTime = schedule.TIME_TO;
       this.classType = schedule.TYPE;
     } else {
-      this.manualEndTimes = this.manualStartTimes.slice(this.manualStartTimes.indexOf(startTime) + 1);
+      this.manualEndTimes = this.timings.slice(this.timings.indexOf(startTime) + 1);
     }
   }
 
@@ -321,12 +370,34 @@ export class ClassesPage implements AfterViewInit, OnInit {
       startTime: this.auto ? this.startTime : this.manualStartTime,
       endTime: this.auto ? this.endTime : this.manualEndTime,
       classType: this.auto ? this.classType : this.manualClassType,
+      defaultAttendance: 'N',
     }]);
   }
 
-  /** Helper function to get ISO 8601 Date from Date. */
-  private isoDate(d: Date): string {
-    return `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)}`;
+  /** Mark confirmation. */
+  confirmMark() {
+    this.alertCtrl.create({
+      header: 'Confirm mark / edit attendance?',
+      message: 'All records will be absent by default if uninitialized, can be deleted later.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Confirm',
+          handler: () => this.mark()
+        }
+      ]
+    }).then(alert => alert.present());
+  }
+
+  /** Set settings to use attendix ui/ux update. */
+  tryv1() {
+    this.settings.set('attendixv1', true);
+    this.router.navigate(['attendix', 'classes', 'new', this.route.snapshot.params],
+      { replaceUrl: true });
   }
 
 }

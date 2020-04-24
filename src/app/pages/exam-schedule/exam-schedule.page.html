@@ -16,6 +16,47 @@
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-lg="6" offset-lg="3">
+        <ion-card color="danger">
+          <ion-card-header color="danger">
+            <ion-card-title class="ion-text-center" style="color: #FFFFFF !important;">
+              IMPORTANT NOTICE
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content *ngIf="today >= newAnnouncementDate; else showOldOne">
+            <p class="secondary-txt-color ion-padding-bottom" style="color: #FFFFFF !important;">
+              All examinations in May 2020 (Resit & Final Examinations) will be replaced with alternative assessment
+              methods- assignments, take home exam, online exams & etc. The examination schedule for the month of May
+              2020 is published in the Announcement in APSpace.</p>
+            <p class="secondary-txt-color ion-padding-bottom text-bold" style="color: #FFFFFF !important;">
+              Kindly keep in contact with your module lecturers via Microsoft Teams/Moodle for details.
+            </p>
+          </ion-card-content>
+          <ng-template #showOldOne>
+            <ion-card-content>
+              <p class="secondary-txt-color ion-padding-bottom" style="color: #FFFFFF !important;">
+                All Exams in April & May 2020 (Resit & Final Examinations) will be replaced with Alternative Assessment
+                Methods - assignments, take home exam, online exams & etc. You will be notified via email on the
+                schedule and name of lecturers involved..</p>
+              <p class="secondary-txt-color ion-padding-bottom text-bold" style="color: #FFFFFF !important;">
+                Keep in contact with your module lecturers via Microsoft Teams/Moodle for details.
+              </p>
+            </ion-card-content>
+          </ng-template>
+        </ion-card>
+
+        <!-- <div class="ion-padding ion-text-center">
+          <h6 class="text-bold danger-text"></h6>
+
+          <ion-button class="danger-border" fill="outline" (click)="openGuidlines()">
+            View Examination Guideline
+          </ion-button>
+        </div> -->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   <ng-template [ngIf]="!showNoIntakeMessage" [ngIfElse]="noIntakeSelected">
     <ng-template let-exams [ngIf]="exam$ | async" [ngIfElse]="loadingExams">
       <ng-template [ngIf]="exams.length !== 0" [ngIfElse]="noExams">
@@ -51,6 +92,10 @@
                       <ion-item lines="none">
                         <ion-icon name="book"></ion-icon>
                         <p class="ion-padding-start">{{ exam.module }}</p>
+                      </ion-item>
+                      <ion-item lines="none" *ngIf="exam.assessmentType">
+                        <ion-icon name="pricetag"></ion-icon>
+                        <p class="ion-padding-start">{{ exam.assessmentType }}</p>
                       </ion-item>
                       <ion-item lines="none">
                         <ion-icon name="pin"></ion-icon>

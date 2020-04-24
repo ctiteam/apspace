@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { Badge } from '@ionic-native/badge/ngx';
-import { FCM } from '@ionic-native/fcm/ngx';
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -15,7 +15,7 @@ describe('NotificationService', () => {
       providers: [
         { provide: CasTicketService, useValue: {} },
         { provide: HttpClient, useValue: {} },
-        { provide: FCM, useValue: {} },
+        { provide: FirebaseX, useValue: {} },
         { provide: Platform, useValue: {} },
         { provide: Network, useValue: {} },
         { provide: Storage, useValue: {} },

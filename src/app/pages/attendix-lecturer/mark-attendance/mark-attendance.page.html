@@ -7,9 +7,11 @@
       {{ schedule!.classcode }} {{ totalPresentStudents$ | async }}/{{ totalStudents$ | async }}
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button fill="outline" size="small" class="colored-text colored-border"
-        (click)="auto = !auto">
-        {{ auto ? 'Manual' : 'Auto' }}
+      <!-- To avoid confusion with reset, delete term will be shown to users -->
+      <ion-button *ngIf="resetable" (click)="reset()" color="danger">Delete</ion-button>
+      <ion-button>
+        <ion-label>Auto</ion-label>
+        <ion-toggle [(ngModel)]="auto"></ion-toggle>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -20,17 +22,27 @@
     <ion-grid>
       <ion-row *ngIf="otp$ | async as otp">
         <ion-col size="12" sizeSm="9">
-          <qrcode *ngIf="otp" [qrdata]="otp" width="600"
-            errorCorrectionLevel="H"></qrcode>
+          <qrcode *ngIf="otp" [qrdata]="otp" width="600" errorCorrectionLevel="H"
+            [ngStyle]="{filter: otp === '---' ? 'blur(5px)' : '',
+                        opacity: otp === '---' ? '0.5' : ''}"></qrcode>
+          <div *ngIf="otp === '---'" class="dead">
+            <p><strong>System Closed</strong></p>
+            <p>No more attendance can be taken</p>
+          </div>
         </ion-col>
         <ion-col size="10" offset="1" sizeSm="3" offsetSm="0">
+          <ion-text *ngIf="otp !== '---'" color="secondary">
+            <p>OTP valid until {{ timeLeft$ | async | date:'medium' }} ({{ countdown$ | async }}s)</p>
+          </ion-text>
           <div *ngFor="let c of otp | chars" class="otp">
             {{ c }}
           </div>
           <ion-item>
             <ion-label color="medium" position="floating">Lecture Update</ion-label>
-            <ion-textarea [(ngModel)]="lectureUpdate"
-              (ionChange)="save(lectureUpdate)" debounce="2000"></ion-textarea>
+            <ion-textarea [ngModel]="lectureUpdate"
+              (ionChange)="save($event.target.value)"
+              (ionBlur)="save($event.target.value)"
+              debounce="2000"></ion-textarea>
           </ion-item>
           <ion-list lines="none">
             <ion-item *ngFor="let student of lastMarked$ | async">
@@ -45,11 +57,11 @@
     <!-- just subscribe for the side effects -->
     <ng-template [ngIf]="lastMarked$ | async"></ng-template>
     <ion-grid>
-      <ion-row>
-        <ion-col size="9" sizeMd="7">
+      <ion-row class="ion-align-items-center">
+        <ion-col size="12" sizeMd="4" sizeXl="5">
           <ion-searchbar [(ngModel)]="term"></ion-searchbar>
         </ion-col>
-        <ion-col size="3" sizeMd="2">
+        <ion-col size="12" sizeMd="3">
           <ion-select [(ngModel)]="type" placeholder="Attendance" interface="popover">
             <ion-select-option value="">Any</ion-select-option>
             <ion-select-option value="Y">Present</ion-select-option>
@@ -60,9 +72,17 @@
         </ion-col>
         <ion-col size="12" sizeMd="3">
           <ion-item lines="none">
-            <ion-textarea [(ngModel)]="lectureUpdate" (ionChange)="save(lectureUpdate)" debounce="5000"
-              placeholder="Lecture Update" rows="1" class="ion-no-padding"></ion-textarea>
+            <ion-textarea [ngModel]="lectureUpdate"
+              (ionChange)="save($event.target.value)"
+              (ionBlur)="save($event.target.value)"
+              debounce="5000" placeholder="Lecture Update" rows="1"
+              class="ion-no-padding"></ion-textarea>
           </ion-item>
+        </ion-col>
+        <ion-col size="12" sizeMd="2" sizeXl="1">
+          <ion-button (click)="markAll()" id="mark-all">
+            Mark all ...
+          </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

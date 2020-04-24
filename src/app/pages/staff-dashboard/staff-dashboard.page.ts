@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { IonSelect, IonSlides, ModalController, NavController } from '@ionic/angular';
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
+import { AlertController, IonSelect, IonSlides, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
 import { Observable, of, zip } from 'rxjs';
@@ -8,6 +9,7 @@ import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { APULocation, APULocations, Apcard, BusTrips, ConsultationSlot, DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday, Holidays, LecturerTimetable, News, Quote, StaffProfile } from 'src/app/interfaces';
 import { NewsService, NotificationService, UserSettingsService, WsApiService } from '../../services';
 import { NewsModalPage } from '../news/news-modal';
+import { NotificationModalPage } from '../notifications/notification-modal';
 
 @Component({
   selector: 'app-staff-dashboard',
@@ -233,11 +235,15 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     private ws: WsApiService,
     private userSettings: UserSettingsService,
     private navCtrl: NavController,
+    private alertCtrl: AlertController,
     private dragulaService: DragulaService,
     private notificationService: NotificationService,
     private renderer: Renderer2,
     private news: NewsService,
     private modalCtrl: ModalController,
+    private platform: Platform,
+    private toastCtrl: ToastController,
+    private firebaseX: FirebaseX
   ) {
     this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
   }
@@ -268,6 +274,9 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     );
 
     this.enableCardReordering();
+    if (this.platform.is('cordova')) {
+      this.runCodeOnReceivingNotification(); // notifications
+    }
     this.doRefresh();
   }
 
@@ -305,6 +314,56 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     this.notificationService.getMessages().subscribe(res => {
       this.numberOfUnreadMsgs = +res.num_of_unread_messages;
     });
+  }
+
+  // this will fail when the user opens the app for the first time and login because it will run before login
+  // => we need to call it here and in login page as well
+  runCodeOnReceivingNotification() {
+    this.firebaseX.onMessageReceived().subscribe(data => {
+      if (data.tap) { // Notification received in background
+        this.notificationService.getMessageDetail(data.message_id).subscribe(notificationData => {
+          this.openNotificationModal(notificationData);
+        });
+      } else { // Notification received in foreground
+        this.showNotificationAsToast(data);
+      }
+    });
+  }
+
+  async showNotificationAsToast(data: any) {
+    // need to check with dingdong team about response type
+    const toast = await this.toastCtrl.create({
+      header: 'New Message',
+      message: data.title,
+      position: 'top',
+      color: 'primary',
+      buttons: [
+        {
+          icon: 'open',
+          handler: () => {
+            this.notificationService.getMessageDetail(data.message_id).subscribe(notificationData => {
+              this.openNotificationModal(notificationData);
+            });
+          }
+        }, {
+          icon: 'close',
+          role: 'cancel',
+          handler: () => { }
+        }
+      ]
+    });
+    toast.present();
+  }
+
+  async openNotificationModal(message: any) {
+    // need to check with dingdong team about response type
+    const modal = await this.modalCtrl.create({
+      component: NotificationModalPage,
+      componentProps: { message, notFound: 'No Message Selected' },
+    });
+    this.notificationService.sendRead(message.message_id).subscribe();
+    await modal.present();
+    await modal.onDidDismiss();
   }
 
   // GET DETAILS FOR HOLIDAYS
@@ -684,6 +743,24 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   navigateToPage(pageName: string) {
     this.navCtrl.navigateForward(pageName);
+  }
+
+  logout() {
+    this.alertCtrl.create({
+      header: 'Are you sure you want to log out?',
+      buttons: [
+        {
+          text: 'Log Out',
+          cssClass: 'alert-logout',
+          handler: () => {
+            this.navCtrl.navigateForward('/logout');
+          }
+        }, {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    }).then(alert => alert.present());
   }
 
   getNumberOfDaysForHoliday(startDate: Date, endDate: Date): string {

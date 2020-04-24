@@ -1,19 +1,21 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { IonSelect, IonSlides, ModalController, NavController } from '@ionic/angular';
+import { AlertController, IonSelect, IonSlides, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import { Observable, combineLatest, forkJoin, of, zip } from 'rxjs';
-import { catchError, concatMap, finalize, flatMap, map, share, tap, toArray } from 'rxjs/operators';
+import { catchError, concatMap, finalize, flatMap, map, tap, toArray } from 'rxjs/operators';
 
 import {
   APULocation, APULocations,
-  Apcard, Attendance, BusTrips, CgpaPerIntake, ConsultationHour, Course,
+  Apcard, BusTrips, CgpaPerIntake, ConsultationHour, Course,
   CourseDetails, DashboardCardComponentConfigurations, EventComponentConfigurations, ExamSchedule, FeesTotalSummary,
   Holiday, Holidays, News, StaffDirectory, StudentPhoto, StudentProfile, StudentTimetable
 } from 'src/app/interfaces';
 import { NewsService, NotificationService, StudentTimetableService, UserSettingsService, WsApiService } from 'src/app/services';
 
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
 import { NewsModalPage } from '../news/news-modal';
+import { NotificationModalPage } from '../notifications/notification-modal';
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.page.html',
@@ -53,7 +55,9 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // PROFILE
   photo$: Observable<StudentPhoto>;
   greetingMessage = '';
-  defaultIntake = '';
+  // attendance default intake can be different from timetable default intake
+  // attendanceDefaultIntake = '';
+  timetableDefaultIntake = '';
   studentFirstName$: Observable<string>;
   block = false;
   numberOfUnreadMsgs: number;
@@ -74,8 +78,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   };
 
   // ATTENDANCE
-  modulesWithLowAttendance$: Observable<Attendance[]>;
-  overallAttendancePercent$: Observable<{ value: number }>;
+  // modulesWithLowAttendance$: Observable<Attendance[]>;
+  // overallAttendancePercent$: Observable<{ value: number }>;
   subject: string;
   lowAttendanceCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
@@ -258,11 +262,15 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     private studentTimetableService: StudentTimetableService,
     private userSettings: UserSettingsService,
     private navCtrl: NavController,
+    private alertCtrl: AlertController,
     private dragulaService: DragulaService,
     private notificationService: NotificationService,
     private renderer: Renderer2,
     private news: NewsService,
     private modalCtrl: ModalController,
+    private platform: Platform,
+    private firebaseX: FirebaseX,
+    private toastCtrl: ToastController,
   ) {
     // Create the dragula group (drag and drop)
     this.dragulaService.createGroup('editable-list', {
@@ -295,6 +303,9 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
         next: data => data ? this.doRefresh() : ''
       }
     );
+    if (this.platform.is('cordova')) {
+      this.runCodeOnReceivingNotification(); // notifications
+    }
     this.doRefresh();
   }
 
@@ -333,6 +344,56 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     this.notificationService.getMessages().subscribe(res => {
       this.numberOfUnreadMsgs = +res.num_of_unread_messages;
     });
+  }
+
+  // this will fail when the user opens the app for the first time and login because it will run before login
+  // => we need to call it here and in login page as well
+  runCodeOnReceivingNotification() {
+    this.firebaseX.onMessageReceived().subscribe(data => {
+      if (data.tap) { // Notification received in background
+        this.notificationService.getMessageDetail(data.message_id).subscribe(notificationData => {
+          this.openNotificationModal(notificationData);
+        });
+      } else { // Notification received in foreground
+        this.showNotificationAsToast(data);
+      }
+    });
+  }
+
+  async showNotificationAsToast(data: any) {
+    // need to check with dingdong team about response type
+    const toast = await this.toastCtrl.create({
+      header: 'New Message',
+      message: data.title,
+      position: 'top',
+      color: 'primary',
+      buttons: [
+        {
+          icon: 'open',
+          handler: () => {
+            this.notificationService.getMessageDetail(data.message_id).subscribe(notificationData => {
+              this.openNotificationModal(notificationData);
+            });
+            // this.openNotificationModal(data);
+          }
+        }, {
+          icon: 'close',
+          role: 'cancel',
+          handler: () => { }
+        }
+      ]
+    });
+    toast.present();
+  }
+
+  async openNotificationModal(message: any) {
+    // need to check with dingdong team about response type
+    const modal = await this.modalCtrl.create({
+      component: NotificationModalPage,
+      componentProps: { message, notFound: 'No Message Selected' },
+    });
+    await modal.present();
+    await modal.onDidDismiss();
   }
 
   // DRAG AND DROP FUNCTIONS (DASHBOARD CUSTOMIZATION)
@@ -396,11 +457,11 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
           this.block = true;
         }
       }),
-      tap(studentProfile => this.defaultIntake = studentProfile.INTAKE),
+      // tap(studentProfile => this.attendanceDefaultIntake = studentProfile.INTAKE),
       tap(studentProfile => this.studentFirstName$ = of(studentProfile.NAME.split(' ')[0])),
-      tap(studentProfile => this.getTodaysSchdule(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR TIMETABLE
+      tap(studentProfile => this.getTodaysSchdule(studentProfile.INTAKE, refresher)),
       tap(studentProfile => this.getUpcomingEvents(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR EXAMS
-      tap(studentProfile => this.getAttendance(studentProfile.INTAKE, true)), // no-cache for attendance
+      // tap(studentProfile => this.getAttendance(studentProfile.INTAKE, true)), // no-cache for attendance
       // tap(studentProfile => this.getUpcomingExam(studentProfile.INTAKE)),
     );
   }
@@ -434,7 +495,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   getTodaysSchdule(intake: string, refresher: boolean) {
     // MERGE TWO OBSERVABLES TOGETHER (UPCOMING CONSULTATIONS AND UPCOMING CLASSES)
     this.todaysSchedule$ = combineLatest([
-      this.getUpcomingClasses(intake, refresher),
+      // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
+      this.getUpcomingClasses(intake.replace(/[(]AP[)]|[(]BP[)]/g, ''), refresher),
       this.getUpcomingConsultations() // no-cache for upcoming consultations (students)
     ]).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
@@ -460,6 +522,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getUpcomingClasses(intake: string, refresher): Observable<EventComponentConfigurations[]> {
+    this.timetableDefaultIntake = intake;
     const dateNow = new Date();
     return combineLatest([
       this.studentTimetableService.get(refresher),
@@ -510,34 +573,34 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     const dateNow = new Date();
     const consultationsEventMode: EventComponentConfigurations[] = [];
     return forkJoin([this.ws.get<ConsultationHour[]>('/iconsult/bookings?'),
-      this.ws.get<StaffDirectory[]>('/staff/listing')
+    this.ws.get<StaffDirectory[]>('/staff/listing')
     ]).pipe(
       map(([consultations, staffList]) => {
         const filteredConsultations = consultations.filter(
           consultation => this.eventIsToday(new Date(moment(consultation.slot_start_time).utcOffset('+0800').format()), dateNow)
-                          && consultation.status === 'Booked'
+            && consultation.status === 'Booked'
         );
 
         const staffUsernames = new Set(filteredConsultations.map(consultation =>
           consultation.slot_lecturer_sam_account_name.toLowerCase()));
         const staffKeyMap = staffList
-            .filter(staff => staffUsernames.has(staff.ID.toLowerCase()))
-            .reduce(
-              (previous, current) => {
-                previous[current.ID] = current;
+          .filter(staff => staffUsernames.has(staff.ID.toLowerCase()))
+          .reduce(
+            (previous, current) => {
+              previous[current.ID] = current;
 
-                return previous;
-              },
-              {}
-            );
-        const listOfBookingWithStaffDetail = filteredConsultations.map(
-            consultation => ({
-              ...consultation,
-              ...{
-                staff_detail: staffKeyMap[consultation.slot_lecturer_sam_account_name]
-              }
-            })
+              return previous;
+            },
+            {}
           );
+        const listOfBookingWithStaffDetail = filteredConsultations.map(
+          consultation => ({
+            ...consultation,
+            ...{
+              staff_detail: staffKeyMap[consultation.slot_lecturer_sam_account_name]
+            }
+          })
+        );
 
         listOfBookingWithStaffDetail.forEach(upcomingConsultation => {
           let consultationPass = false;
@@ -594,7 +657,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   getUpcomingEvents(intake: string, refresher: boolean) {
     const todaysDate = new Date();
     this.upcomingEvent$ = zip(
-      this.getupcomingExams(intake, todaysDate, true),
+      // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
+      this.getupcomingExams(intake.replace(/[(]AP[)]|[(]BP[)]/g, ''), todaysDate, true),
       this.getUpcomingHoliday(todaysDate, refresher)
     ).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
@@ -665,94 +729,94 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // ATTENDANCE FUNCTIONS
-  getAttendance(intake: string, refresher: boolean) {
-    const url = `/student/attendance?intake=${intake}`;
-    const caching = refresher ? 'network-or-cache' : 'cache-only';
-    this.modulesWithLowAttendance$ = this.ws.get<Attendance[]>(url, { caching }).pipe(
-      tap(attendanceData => {
-        // GETTING THE OVERALL ATTENDANCE VALUE FOR QUICK ACCESS ITEM
-        if (attendanceData.length > 0) {
-          const totalClasses = attendanceData.reduce((a, b) => a + b.TOTAL_CLASSES, 0);
-          const totalAbsentClasses = attendanceData.reduce((a, b) => a + b.TOTAL_ABSENT, 0);
-          const totalAttendedClasses = totalClasses - totalAbsentClasses;
+  // getAttendance(intake: string, refresher: boolean) {
+  //   const url = `/student/attendance?intake=${intake}`;
+  //   const caching = refresher ? 'network-or-cache' : 'cache-only';
+  //   this.modulesWithLowAttendance$ = this.ws.get<Attendance[]>(url, { caching }).pipe(
+  //     tap(attendanceData => {
+  //       // GETTING THE OVERALL ATTENDANCE VALUE FOR QUICK ACCESS ITEM
+  //       if (attendanceData.length > 0) {
+  //         const totalClasses = attendanceData.reduce((a, b) => a + b.TOTAL_CLASSES, 0);
+  //         const totalAbsentClasses = attendanceData.reduce((a, b) => a + b.TOTAL_ABSENT, 0);
+  //         const totalAttendedClasses = totalClasses - totalAbsentClasses;
 
-          this.overallAttendancePercent$ = of({ value: totalAttendedClasses / totalClasses * 100 });
-        } else {
-          this.overallAttendancePercent$ = of({ value: -1 }); // -1 means there is no attendance data in the selected intake
-        }
-      }),
-      // NEED TO THROUGH ERROR
-      map(attendanceData => {
-        const currentSemester = Math.max(
-          ...attendanceData.map(attendance => attendance.SEMESTER),
-        );
-        return (attendanceData || []).filter(
-          attendance =>
-            attendance.SEMESTER === currentSemester &&
-            attendance.PERCENTAGE < 80,
-        );
-      }),
-      tap(
-        attendanceData =>
-          (this.subject = attendanceData[0] && attendanceData[0].SUBJECT_CODE),
-      ),
-      tap(modulesWithLowAttendance => {
-        this.lowAttendanceChart = {
-          type: 'horizontalBar',
-          options: {
-            scales: {
-              xAxes: [{
-                ticks: {
-                  min: 0,
-                  max: 80
-                }
-              },
-              ],
-              yAxes: [{
-                gridLines: {
-                  color: 'rgba(0, 0, 0, 0)',
-                },
-                ticks: {
-                  beginAtZero: true,
-                  mirror: true,
-                  fontColor: 'rgba(' + this.activeAccentColor + ', 1)',
-                  fontStyle: 900,
-                  padding: -10
-                },
-              }]
-            },
-            responsive: true,
-            legend: {
-              display: false,
-            },
-            title: {
-              display: false,
-            },
-          },
-          data: {
-            datasets: [
-              {
-                backgroundColor: 'rgba(98, 98, 98, 0.3)',
-                hoverBackgroundColor: 'rgba(' + this.activeAccentColor + ', 0.3)',
-                borderColor: '#636363',
-                borderWidth: 2,
-                hoverBorderColor: 'rgba(' + this.activeAccentColor + ', 1)',
-                hoverBorderWidth: 2,
-                data: [],
-              },
-            ],
-            labels: []
-          }
-        };
-        modulesWithLowAttendance.forEach(module => {
-          this.lowAttendanceChart.data.labels.push(module.MODULE_ATTENDANCE);
-          this.lowAttendanceChart.data.datasets[0].data.push(module.PERCENTAGE);
-        });
-      }
-      ),
-      share(),
-    );
-  }
+  //         this.overallAttendancePercent$ = of({ value: totalAttendedClasses / totalClasses * 100 });
+  //       } else {
+  //         this.overallAttendancePercent$ = of({ value: -1 }); // -1 means there is no attendance data in the selected intake
+  //       }
+  //     }),
+  //     // NEED TO THROUGH ERROR
+  //     map(attendanceData => {
+  //       const currentSemester = Math.max(
+  //         ...attendanceData.map(attendance => attendance.SEMESTER),
+  //       );
+  //       return (attendanceData || []).filter(
+  //         attendance =>
+  //           attendance.SEMESTER === currentSemester &&
+  //           attendance.PERCENTAGE < 80,
+  //       );
+  //     }),
+  //     tap(
+  //       attendanceData =>
+  //         (this.subject = attendanceData[0] && attendanceData[0].SUBJECT_CODE),
+  //     ),
+  //     tap(modulesWithLowAttendance => {
+  //       this.lowAttendanceChart = {
+  //         type: 'horizontalBar',
+  //         options: {
+  //           scales: {
+  //             xAxes: [{
+  //               ticks: {
+  //                 min: 0,
+  //                 max: 80
+  //               }
+  //             },
+  //             ],
+  //             yAxes: [{
+  //               gridLines: {
+  //                 color: 'rgba(0, 0, 0, 0)',
+  //               },
+  //               ticks: {
+  //                 beginAtZero: true,
+  //                 mirror: true,
+  //                 fontColor: 'rgba(' + this.activeAccentColor + ', 1)',
+  //                 fontStyle: 900,
+  //                 padding: -10
+  //               },
+  //             }]
+  //           },
+  //           responsive: true,
+  //           legend: {
+  //             display: false,
+  //           },
+  //           title: {
+  //             display: false,
+  //           },
+  //         },
+  //         data: {
+  //           datasets: [
+  //             {
+  //               backgroundColor: 'rgba(98, 98, 98, 0.3)',
+  //               hoverBackgroundColor: 'rgba(' + this.activeAccentColor + ', 0.3)',
+  //               borderColor: '#636363',
+  //               borderWidth: 2,
+  //               hoverBorderColor: 'rgba(' + this.activeAccentColor + ', 1)',
+  //               hoverBorderWidth: 2,
+  //               data: [],
+  //             },
+  //           ],
+  //           labels: []
+  //         }
+  //       };
+  //       modulesWithLowAttendance.forEach(module => {
+  //         this.lowAttendanceChart.data.labels.push(module.MODULE_ATTENDANCE);
+  //         this.lowAttendanceChart.data.datasets[0].data.push(module.PERCENTAGE);
+  //       });
+  //     }
+  //     ),
+  //     share(),
+  //   );
+  // }
 
   // APCARD FUNCTIONS
   getTransactions(refresher) {
@@ -1031,6 +1095,24 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   navigateToPage(pageName: string) {
     this.navCtrl.navigateForward(pageName);
+  }
+
+  logout() {
+    this.alertCtrl.create({
+      header: 'Are you sure you want to log out?',
+      buttons: [
+        {
+          text: 'Log Out',
+          cssClass: 'alert-logout',
+          handler: () => {
+            this.navCtrl.navigateForward('/logout');
+          }
+        }, {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    }).then(alert => alert.present());
   }
 
   // GET DAY SHORT NAME (LIKE 'SAT' FOR SATURDAY)

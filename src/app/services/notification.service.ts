@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Badge } from '@ionic-native/badge/ngx';
-import { FCM } from '@ionic-native/fcm/ngx';
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -21,7 +21,7 @@ export class NotificationService {
   constructor(
     public http: HttpClient,
     public cas: CasTicketService,
-    public fcm: FCM,
+    public firebaseX: FirebaseX,
     private platform: Platform,
     private network: Network,
     private storage: Storage,
@@ -36,7 +36,7 @@ export class NotificationService {
       let token = '';
       if (this.platform.is('cordova')) {
         return from(
-          this.fcm.getToken()
+          this.firebaseX.getToken()
         ).pipe(
           switchMap(
             responseToken => {
@@ -84,7 +84,7 @@ export class NotificationService {
     let token = '';
     if (this.platform.is('cordova')) {
       return from(
-        this.fcm.getToken()
+        this.firebaseX.getToken()
       ).pipe(
         switchMap(
           responseToken => {
@@ -141,6 +141,22 @@ export class NotificationService {
       );
     } else {
       return from(this.storage.get('dingdong-categories-cache'));
+    }
+  }
+
+
+
+
+  getMessageDetail(messageID): Observable<any> {
+    if (this.network.type !== 'none') {
+      return this.cas.getST(this.serviceUrl).pipe(
+        switchMap(st => {
+          const url = `${this.apiUrl}/client/messages/${messageID}?ticket=${st}`;
+          return this.http.get(url);
+        }),
+      );
+    } else {
+      return from('network none');
     }
   }
 }

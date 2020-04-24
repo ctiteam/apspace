@@ -64,6 +64,10 @@ ion-segment.week-segment {
   display: none;
 }
 
+.margin-auto{
+  margin: auto !important;
+}
+
 @media (min-width: 576px) {
   .marker {
     display: none;

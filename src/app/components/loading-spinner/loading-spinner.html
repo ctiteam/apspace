@@ -1,5 +1,8 @@
-<div class="loader">
-  <div class="inner one"></div>
-  <div class="inner two"></div>
-  <div class="inner three"></div>
+<div class="flex-container">
+  <div class="loader" [ngStyle]="{'height': size, 'width': size}">
+    <div class="inner one"></div>
+    <div class="inner two"></div>
+    <div class="inner three"></div>
+  </div>
+  <p *ngIf="message" class="text-alignment ion-text-wrap">{{message}}</p>
 </div>

@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { ApcardPage } from './apcard.page';
+import { PrintTransactionsModalPage } from './print-transactions-modal/print-transactions-modal';
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
     ComponentsModule,
     FormsModule
   ],
-  declarations: [ApcardPage]
+  declarations: [ApcardPage, PrintTransactionsModalPage],
+  entryComponents: [PrintTransactionsModalPage]
 })
 export class ApcardPageModule { }

@@ -5,6 +5,7 @@ import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { AlertController, Platform, ToastController } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 
+import { Vibration } from '@ionic-native/vibration/ngx';
 import { UpdateAttendanceGQL } from '../../../generated/graphql';
 import { SettingsService } from '../../services';
 
@@ -20,6 +21,7 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
 
   isCordova: boolean;
   scan = false;
+  sending = false;
 
   status: QRScannerStatus;  // scan availability
   qrScan$: Observable<number>;
@@ -31,7 +33,8 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
     public alertCtrl: AlertController,
     public plt: Platform,
     public qrScanner: QRScanner,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    public vibration: Vibration
   ) { }
 
   ngOnInit() {
@@ -40,6 +43,10 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
     if (this.isCordova && this.settings.get('scan') !== false) {
       this.swapMode();
     }
+  }
+
+  ionViewDidEnter() {
+    this.otpInput.nativeElement.focus();
   }
 
   ngOnDestroy() {
@@ -57,7 +64,9 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
         console.assert(status.authorized);
         // scanning only takes the first valid code
         this.scanSub = this.qrScanner.scan().subscribe((text: string) => {
-          if (text.length === this.digits.length) {
+          if (this.sending) {
+            return;
+          } else if (text.length === this.digits.length) {
             this.sendOtp(text);
           } else {
             this.toast(`Invalid OTP (should be ${this.digits.length} digits)`, 'danger');
@@ -78,11 +87,18 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
     }
   }
 
-  /** Handle keydown event. */
+  /** Handle keydown and keyup event, detect key input by value in target, prevent key spam. */
   onKey(ev: KeyboardEvent): boolean {
     const el = ev.target as HTMLInputElement;
-    if ('0' <= ev.key && ev.key <= '9') {
-      el.value = ev.key;
+    // do not process key when sending (ignore key spamming)
+    if (this.sending) {
+      // prevent double input for last input on older browsers
+      el.value = el.value.slice(0, 1);
+      return false;
+    }
+    // ev.key not usable in UC browser fallback
+    // get the value from element instead of event
+    if ('0' <= el.value && el.value <= '9') {
       if (el.nextSibling) {
         (el.nextSibling as HTMLInputElement).focus();
       } else {
@@ -93,23 +109,36 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
         this.sendOtp(otp).then(() => this.clear(el));
       }
     } else if (ev.key === 'Backspace') {
-      const prev = el.previousSibling as HTMLInputElement;
-      prev.value = '';
-      prev.focus();
+      if (ev.type === 'keyup') { // ignore backspace on keyup
+        return true;
+      } else if (!el.nextSibling && el.value) { // last input not empty
+        el.value = '';
+      } else {
+        const prev = el.previousSibling as HTMLInputElement;
+        prev.value = '';
+        prev.focus();
+      }
+    } else { // invalid character not handled by older browsers html
+      el.value = '';
     }
     // prevent change to value
-    return false;
+    return '0' <= ev.key && ev.key <= '9' && el.value.length === 0;
   }
 
   /** Send OTP. */
   sendOtp(otp: string): Promise<boolean> {
     console.assert(otp.length === this.digits.length);
     return new Promise(res => {
+      this.sending = true;
       this.updateAttendance.mutate({ otp }).subscribe(d => {
+        this.sending = false;
+        // Vibrator (Vibrate til death!)
+        this.vibration.vibrate(1000);
         this.toast('Attendance updated', 'success');
         console.log(d);
         res(true);
       }, err => {
+        this.sending = false;
         this.toast('Failed to update attendance. ' + err.message.replace('GraphQL error: ', ''), 'danger');
         console.error(err);
         res(true);

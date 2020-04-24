@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
 import { SettingsService, WsApiService } from '../../services';
@@ -19,7 +19,8 @@ export class ProfilePage implements OnInit {
   visa$: Observable<any>;
   indecitor = false;
   skeltons = [80, 30, 100, 45, 60, 76];
-
+  intakeModified = false;
+  timetableAndExamScheduleIntake = '';
   local = true; // Set the initial value to true so the Visa status does not flash
   studentRole = false;
   countryName: string;
@@ -48,6 +49,14 @@ export class ProfilePage implements OnInit {
           this.studentRole = true;
           this.photo$ = this.ws.get<StudentPhoto>('/student/photo');
           this.profile$ = this.ws.get<StudentProfile>('/student/profile').pipe(
+            map(studentProfile => {
+              // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
+              if (studentProfile.INTAKE.includes('(AP)') || studentProfile.INTAKE.includes('(BP)')) {
+                this.intakeModified = true;
+                this.timetableAndExamScheduleIntake = studentProfile.INTAKE.replace(/[(]AP[)]|[(]BP[)]/g, '');
+              }
+              return studentProfile;
+            }),
             tap(p => {
               this.countryName = p.COUNTRY;
               if (p.COUNTRY === 'Malaysia') {

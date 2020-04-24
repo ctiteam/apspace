@@ -1,25 +1,20 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Network } from '@ionic-native/network/ngx';
-import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, Platform, ToastController } from '@ionic/angular';
 
 import { throwError } from 'rxjs';
 import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
 
-import { FCM } from '@ionic-native/fcm/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Role } from '../../interfaces';
 import {
   CasTicketService,
   DataCollectorService,
-  NotificationService,
   SettingsService,
   UserSettingsService,
   WsApiService
 } from '../../services';
-import { NotificationModalPage } from '../notifications/notification-modal';
-// import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
-// import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
 @Component({
   selector: 'app-login',
@@ -42,11 +37,8 @@ export class LoginPage {
     public alertCtrl: AlertController,
     private cas: CasTicketService,
     private dc: DataCollectorService,
-    private fcm: FCM,
     public iab: InAppBrowser,
-    private modalCtrl: ModalController,
     private network: Network,
-    private notificationService: NotificationService,
     private plt: Platform,
     private router: Router,
     private route: ActivatedRoute,
@@ -102,7 +94,6 @@ export class LoginPage {
         },
         () => {
           if (this.plt.is('cordova')) {
-            this.runCodeOnReceivingNotification(); // it is called here and in app.component (more details in the app component.ts file)
             this.dc.login().subscribe();
           }
           this.loginProcessLoading = false;
@@ -135,20 +126,7 @@ export class LoginPage {
       position: 'top',
       animated: true,
       color: 'danger',
-      // enterAnimation: toastMessageEnterAnimation,
-      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
-  }
-
-  // this will fail when the user opens the app for the first time and login because it will run before login
-  runCodeOnReceivingNotification() {
-    this.fcm.onNotification().subscribe(data => {
-      if (data.wasTapped) { // Notification received in background
-        this.openNotificationModal(data);
-      } else { // Notification received in foreground
-        this.presentToastWithOptions(data);
-      }
-    });
   }
 
   showConfirmationMessage() {
@@ -169,40 +147,6 @@ export class LoginPage {
         }
       ]
     }).then(confirm => confirm.present());
-  }
-
-  async openNotificationModal(message: any) {
-    // need to check with dingdong team about response type
-    const modal = await this.modalCtrl.create({
-      component: NotificationModalPage,
-      componentProps: { message, notFound: 'No Message Selected' },
-    });
-    this.notificationService.sendRead(message.message_id).subscribe();
-    await modal.present();
-    await modal.onDidDismiss();
-  }
-
-  async presentToastWithOptions(data: any) {
-    // need to check with dingdong team about response type
-    const toast = await this.toastCtrl.create({
-      header: 'New Message',
-      message: data.title,
-      position: 'top',
-      color: 'primary',
-      buttons: [
-        {
-          icon: 'open',
-          handler: () => {
-            this.openNotificationModal(data);
-          }
-        }, {
-          icon: 'close',
-          role: 'cancel',
-          handler: () => { }
-        }
-      ]
-    });
-    toast.present();
   }
 
   cacheApi(role: Role) {
