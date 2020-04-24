@@ -42,11 +42,18 @@
 }
 
 .controlled-modal-dingdong .modal-wrapper {
-  height: 93%;
-  top: 54%;
+  height: 100%;
   position: absolute;
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
+
+  @media only screen and (max-device-width: 399px) {
+    top: 44%;
+  }
+
+  @media only screen and (min-device-width: 400px) {
+    top: 40%;
+  }
 }
 
 // Screen size hidden (Responsive sizes, eliminates Media Query Tag)

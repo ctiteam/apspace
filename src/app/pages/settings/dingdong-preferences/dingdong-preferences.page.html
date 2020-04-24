@@ -10,8 +10,8 @@
 <ion-content>
   <div class="ion-margin">
     <div class="ion-text-center ion-margin-bottom">
-      <h4 class="main-text-color">Jin Wei disturbing you?</h4>
-      <h6 class="secondary-txt-color">You may shut him up here!</h6>
+      <h4 class="main-text-color">Personal Email {{ !isSubscribed ? "not cluttered" : "cluttered" }}?</h4>
+      <h6 class="secondary-txt-color">You can {{ !isSubscribed ? "subscribe" : "unsubscribe" }} to our emails here!</h6>
     </div>
 
     <app-message-with-svg messageTitle="" messageContent="" imageUrl="assets/img/notify.svg" wrapperOffset="2"

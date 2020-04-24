@@ -14,7 +14,7 @@ export class DingdongPreferencesPage {
 
   isModal: true | false = false;
   isProcessing: true | false = false;
-  isSubscribed: true | false = false;
+  isSubscribed: true | false = true; // Most of the students are subscribed so why not? Let's save some mem.
   message: string;
 
   status$: Observable<NotificationStatus>;
