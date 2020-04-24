@@ -30,13 +30,16 @@
                       <ion-label class="ion-text-wrap">
                         {{item.value}}
                       </ion-label>
-                      <ion-checkbox></ion-checkbox> 
+                      <ion-checkbox (ngModelChange)="getSelectedIntakes(item)" [(ngModel)]="item.isChecked"></ion-checkbox> 
                     </ion-item>
                   </ion-list>
                 </div>
               </div>
               <ng-template #editMode>
-                <ion-select class="form-input"></ion-select>
+                <ion-select class="form-input">
+                  <ion-select-option value="intaketest1">Intake Test 1</ion-select-option>
+                  <ion-select-option value="intaketest2">Intake Test 2</ion-select-option>
+                </ion-select>
               </ng-template>
             </ion-item>
 
@@ -44,7 +47,10 @@
               <ion-label position="stacked" class="item-label">
                 Type
               </ion-label>
-              <ion-select class="form-input"></ion-select>
+              <ion-select [formControl]="addIntakeForm.controls['type']" class="form-input">]
+                <ion-select-option value="typetest1">Type Test 1</ion-select-option>
+                <ion-select-option value="typetest2">Type Test 2</ion-select-option>
+              </ion-select>
             </ion-item>
 
             <ion-grid class="ion-no-padding">
@@ -54,12 +60,15 @@
                     <ion-label position="stacked" class="item-label">
                       Venue
                     </ion-label>
-                    <ion-select class="form-input"></ion-select>
+                    <ion-select [formControl]="addIntakeForm.controls['location']" class="form-input">
+                      <ion-select-option value="venuetypetest1">Venue Test 1</ion-select-option>
+                      <ion-select-option value="venuetypetest2">Venue Test 2</ion-select-option>
+                    </ion-select>
                   </ion-item>
                 </ion-col>
                 <ion-col size="12" size-sm="6" class="ion-no-padding">
                   <ion-item lines="none">
-                    <ion-input class="form-input"></ion-input>
+                    <ion-input [formControl]="addIntakeForm.controls['venue']" class="form-input"></ion-input>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -69,16 +78,16 @@
               <ion-label position="stacked" class="item-label">
                 Docket Issuance
               </ion-label>
-              <ion-datetime class="form-input"></ion-datetime>
+              <ion-datetime [formControl]="addIntakeForm.controls['docketIssuance']" class="form-input"></ion-datetime>
             </ion-item>
             
             <ion-item lines="none">
               <ion-label position="stacked" class="item-label">
                 Exam Result Date
               </ion-label>
-              <ion-datetime class="form-input"></ion-datetime>
+              <ion-datetime [formControl]="addIntakeForm.controls['examResultDate']" class="form-input"></ion-datetime>
             </ion-item>
-            <ion-button expand="block" class="success-background ion-margin">SUBMIT</ion-button>
+            <ion-button [disabled]="addIntakeForm.invalid || intakes.length < 1" expand="block" class="success-background ion-margin">SUBMIT</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>

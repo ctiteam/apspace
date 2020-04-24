@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -10,6 +11,9 @@ export class AddIntakePage implements OnInit {
   @Input() onEdit: boolean;
   searchTerm = '';
   items: any;
+
+  addIntakeForm: FormGroup;
+  intakes = [];
 
   tests = [
     {
@@ -131,14 +135,46 @@ export class AddIntakePage implements OnInit {
     }
   ];
 
-  constructor(public modalCtrl: ModalController) { }
+  constructor(
+    public modalCtrl: ModalController,
+    private formBuilder: FormBuilder
+  ) { }
 
   ngOnInit() {
     this.setFilteredItems();
+
+    this.addIntakeForm = this.formBuilder.group({
+      intake: [''],
+      type: ['', Validators.required],
+      location: ['', Validators.required],
+      venue: ['', Validators.required],
+      docketIssuance: ['', Validators.required],
+      examResultDate: ['', Validators.required]
+    });
+
+    this.addIntakeForm.valueChanges.subscribe(console.log);
   }
 
   closeModal() {
     this.modalCtrl.dismiss();
+  }
+
+  submit() {
+    console.log(this.addIntakeForm.value);
+  }
+
+  getSelectedIntakes(intakeObject) {
+    if (!(this.intakes.find(intake => intake.value === intakeObject.value))) {
+      this.intakes.push(intakeObject);
+    } else {
+      this.intakes.forEach((module, index) => {
+        if (module.value === intakeObject.value) {
+          this.intakes.splice(index, 1);
+        }
+      });
+    }
+
+    console.log(this.intakes);
   }
 
   filterItems(searchTerm) {
