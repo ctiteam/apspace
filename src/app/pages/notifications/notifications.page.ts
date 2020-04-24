@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MenuController, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
-import { NotificationHistory } from 'src/app/interfaces';
-import { NotificationService } from 'src/app/services';
+import { NotificationHistory, Role } from 'src/app/interfaces';
+import { NotificationService, SettingsService } from 'src/app/services';
 import { DingdongPreferencesPage } from '../settings/dingdong-preferences/dingdong-preferences.page';
 import { NotificationModalPage } from './notification-modal';
 
@@ -12,7 +12,8 @@ import { NotificationModalPage } from './notification-modal';
   templateUrl: './notifications.page.html',
   styleUrls: ['./notifications.page.scss'],
 })
-export class NotificationsPage {
+export class NotificationsPage implements OnInit {
+  isStaff: true | false = true; // By default, set true
   messages$: Observable<NotificationHistory>;
   categories = [];
   allCategories = {};
@@ -26,8 +27,16 @@ export class NotificationsPage {
   constructor(
     private notificationService: NotificationService,
     private modalCtrl: ModalController,
+    private settings: SettingsService,
     private menu: MenuController,
   ) { }
+
+  ngOnInit() {
+    // tslint:disable-next-line: no-bitwise
+    if (this.settings.get('role') & Role.Student) {
+      this.isStaff = false;
+    }
+  }
 
   ionViewDidEnter() {
     this.doRefresh();

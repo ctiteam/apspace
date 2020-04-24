@@ -5,7 +5,7 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button class="animated anim-scale" (click)="openPreferences()">
+      <ion-button class="animated anim-scale" (click)="openPreferences()" *ngIf="!isStaff">
         <ion-icon name="settings"></ion-icon>
       </ion-button>
 
