@@ -15,7 +15,6 @@ import { WsApiService } from 'src/app/services';
   providers: [DatePipe]
 })
 export class AttendanceDetailsModalPage implements OnInit {
-  loading: HTMLIonLoadingElement;
   records$: Observable<AttendanceDetails[]>;
 
   title: string;
@@ -112,17 +111,16 @@ export class AttendanceDetailsModalPage implements OnInit {
   }
 
   async presentLoading() {
-    this.loading = await this.loadingCtrl.create({
+    await this.loadingCtrl.create({
       spinner: 'dots',
       duration: 5000,
       message: 'Please wait...',
       translucent: true,
-    });
-    return await this.loading.present();
+    }).then((loading) => loading.present());
   }
 
   async dismissLoading() {
-    return await this.loading.dismiss();
+    return await this.loadingCtrl.dismiss();
   }
 
   dismiss() {
