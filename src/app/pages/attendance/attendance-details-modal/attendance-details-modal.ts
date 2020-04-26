@@ -15,12 +15,12 @@ import { WsApiService } from 'src/app/services';
   providers: [DatePipe]
 })
 export class AttendanceDetailsModalPage implements OnInit {
-  records$: Observable<AttendanceDetails[]>;
 
   title: string;
   intake: string;
   module: string;
 
+  recordsArray: AttendanceDetails[] = [];
   datesConfig: DayConfig[] = [];
   openDate: string;
 
@@ -52,7 +52,6 @@ export class AttendanceDetailsModalPage implements OnInit {
   }
 
   ngOnInit() {
-    this.records$ = this.getRecords();
     this.showOnCalendar();
   }
 
@@ -64,41 +63,53 @@ export class AttendanceDetailsModalPage implements OnInit {
 
   showOnCalendar() {
     this.presentLoading();
+    this.getRecords().subscribe(
+      {
+        next: (records) => {
+          records.map((record) => {
+            // pushes css configs based on attendance status, css declared in global
+            const css =
+              record.ATTENDANCE_STATUS === 'Y'
+                ? `attended`
+                : record.ATTENDANCE_STATUS === 'N'
+                  ? `absent`
+                  : record.ATTENDANCE_STATUS === 'R'
+                    ? `absent-reason`
+                    : record.ATTENDANCE_STATUS === 'L'
+                      ? `late`
+                      : null;
 
-    this.records$.subscribe(records => records.forEach(record => {
+            this.datesConfig.push({
+              date: new Date(record.CLASS_DATE),
+              subTitle: '.',
+              marked: true,
+              cssClass: css,
+              disable: false
+            });
 
-      // pushes css configs based on attendance status, css declared in global
-      const css =
-        record.ATTENDANCE_STATUS === 'Y'
-          ? `attended`
-          : record.ATTENDANCE_STATUS === 'N'
-            ? `absent`
-            : record.ATTENDANCE_STATUS === 'R'
-              ? `absent-reason`
-              : record.ATTENDANCE_STATUS === 'L'
-                ? `late`
-                : null;
+            this.recordsArray.push({
+              ATTENDANCE_STATUS: record.ATTENDANCE_STATUS,
+              CLASS_DATE: record.CLASS_DATE,
+              CLASS_TYPE: record.CLASS_TYPE,
+              TIME_FROM: record.TIME_FROM,
+              TIME_TO: record.TIME_TO
+            });
 
-      this.datesConfig.push({
-        date: new Date(record.CLASS_DATE),
-        subTitle: '.',
-        marked: true,
-        cssClass: css,
-        disable: false
-      });
-
-      // picks first date from api and opens it in calendar
-      this.openDate = this.datePipe.transform(new Date(record.CLASS_DATE), 'yyyy-MM-dd');
-
-      this.loaded = true;
-      this.dismissLoading();
-    }
-    ));
+            // picks first date from api and opens it in calendar
+            this.openDate = this.datePipe.transform(new Date(record.CLASS_DATE), 'yyyy-MM-dd');
+          });
+        },
+        complete: () => {
+          this.loaded = true;
+          this.dismissLoading();
+        }
+      }
+    );
   }
 
   // show additional info about class on click
   onChange($event: string) {
-    this.records$.subscribe(records => records.forEach(record => {
+    this.recordsArray.map((record) => {
       const date = this.datePipe.transform(new Date(record.CLASS_DATE), 'yyyy-MM-dd');
 
       if ($event === date) {
@@ -107,7 +118,7 @@ export class AttendanceDetailsModalPage implements OnInit {
         this.timeTo = record.TIME_TO;
         this.showDetails = true;
       }
-    }));
+    });
   }
 
   async presentLoading() {
