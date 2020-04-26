@@ -18,9 +18,9 @@ export class AttendanceDetailsModalPage implements OnInit {
   loading: HTMLIonLoadingElement;
   records$: Observable<AttendanceDetails[]>;
 
-  title = this.navPrms.data.title;
-  intake = this.navPrms.data.intake;
-  module = this.navPrms.data.module;
+  title: string;
+  intake: string;
+  module: string;
 
   datesConfig: DayConfig[] = [];
   openDate: string;
@@ -46,14 +46,18 @@ export class AttendanceDetailsModalPage implements OnInit {
     private ws: WsApiService,
     private loadingCtrl: LoadingController,
     private datePipe: DatePipe
-  ) { }
+  ) {
+    this.title = this.navPrms.data.title;
+    this.intake = this.navPrms.data.intake;
+    this.module = this.navPrms.data.module;
+  }
 
   ngOnInit() {
     this.records$ = this.getRecords();
     this.showOnCalendar();
   }
 
-  getRecords() {
+  getRecords(): Observable<AttendanceDetails[]> {
     return this.ws.get<AttendanceDetails[]>(`/student/attendance_details?intake_code=${this.intake}&module_code=${this.module}`, {
       url: 'https://u1cd2ltoq6.execute-api.ap-southeast-1.amazonaws.com/dev'
     });

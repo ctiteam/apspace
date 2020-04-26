@@ -137,7 +137,6 @@ export class AttendancePage implements OnInit {
       cssClass: 'attendanceDetailsModal'
     });
     await modal.present();
-    await modal.onDidDismiss();
   }
 
   comingFromTabs() {
