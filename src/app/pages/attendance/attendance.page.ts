@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 import { Attendance, AttendanceLegend, Course } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
+import { AttendanceDetailsModalPage } from './attendance-details-modal/attendance-details-modal';
 
 @Component({
   selector: 'app-attendance',
@@ -29,6 +31,7 @@ export class AttendancePage implements OnInit {
     private ws: WsApiService,
     public actionSheetCtrl: ActionSheetController,
     private router: Router,
+    private modalCtrl: ModalController
   ) { }
 
   ngOnInit() {
@@ -121,6 +124,20 @@ export class AttendancePage implements OnInit {
     } else {
       this.average = -1;
     }
+  }
+
+  async attendanceDetails(moduleName: string, intakeCode: string, moduleCode: string ) {
+    const modal = await this.modalCtrl.create({
+      component: AttendanceDetailsModalPage,
+      componentProps: {
+        title: moduleName,
+        intake: intakeCode,
+        module: moduleCode
+      },
+      cssClass: 'attendanceDetailsModal'
+    });
+    await modal.present();
+    await modal.onDidDismiss();
   }
 
   comingFromTabs() {

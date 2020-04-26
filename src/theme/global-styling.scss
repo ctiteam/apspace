@@ -113,6 +113,15 @@ input:-webkit-autofill:active {
   }
 }
 
+.attendanceDetailsModal {
+  .modal-wrapper {
+    min-width: 67%;
+    height: 75%;
+    position: absolute;
+    bottom: 0;
+  }
+}
+
 // ANIMATIONS
 .animated {
   transition: all 0.5s;
@@ -333,6 +342,19 @@ ion-calendar {
       }
     }
 
+    &.available {
+      background: var(--success-color) !important;
+
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--success-color) !important;
+
+        p {
+          color: var(--success-color) !important;
+        }
+      }
+    }
+
     &.booked {
       background: var(--danger-color) !important;
 
@@ -386,6 +408,58 @@ ion-calendar {
 
         p {
           color: #dfa847 !important;
+        }
+      }
+    }
+
+    &.attended {
+      background: var(--success-color) !important;
+  
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--success-color) !important;
+  
+        p {
+          color: var(--success-color) !important;
+        }
+      }
+    }
+
+    &.absent {
+      background: var(--danger-color) !important;
+  
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--danger-color) !important;
+  
+        p {
+          color: var(--danger-color) !important;
+        }
+      }
+    }
+
+    &.absent-reason {
+      background: #dfa847 !important;
+  
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid #dfa847 !important;
+  
+        p {
+          color: #dfa847 !important;
+        }
+      }
+    }
+
+    &.late {
+      background: #808080 !important;
+  
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid #808080 !important;
+  
+        p {
+          color: #808080 !important;
         }
       }
     }

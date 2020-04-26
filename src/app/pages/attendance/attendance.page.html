@@ -189,6 +189,13 @@
                                 {{ a.EXAM_ELIGIBILITY }}
                               </span>
                             </ion-col>
+                            <ion-col class="details-button ion-text-center">
+                              <ion-button (click)='attendanceDetails(a.MODULE_ATTENDANCE, selectedIntake, a.SUBJECT_CODE)' 
+                                class="ion-margin-top" color='success'  fill='solid'
+                                >
+                                  See Details
+                              </ion-button>
+                            </ion-col>
                           </ion-row>
                         </ion-grid>
                       </ion-item>
