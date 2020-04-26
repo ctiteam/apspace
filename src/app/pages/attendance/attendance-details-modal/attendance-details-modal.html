@@ -29,7 +29,7 @@
                 <ion-label class="colored-text text-bold">
                   Type:
                 </ion-label>
-                <ion-badge *ngIf="showCard; else template" class="details">
+                <ion-badge *ngIf="showDetails; else template" class="details">
                   {{ classType }}
                 </ion-badge>
                 <ng-template #template>
@@ -42,7 +42,7 @@
                 <ion-label class="colored-text text-bold">
                   Time:
                 </ion-label>
-                <ion-badge *ngIf="showCard; else template" class="details">
+                <ion-badge *ngIf="showDetails; else template" class="details">
                   {{ timeFrom + ' - ' + timeTo }}
                 </ion-badge>
                 <ng-template #template>

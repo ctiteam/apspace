@@ -29,7 +29,7 @@ export class AttendanceDetailsModalPage implements OnInit {
   timeFrom: string;
   timeTo: string;
   classType: string;
-  showCard = false;
+  showDetails = false;
 
   loaded = false;
 
@@ -102,7 +102,7 @@ export class AttendanceDetailsModalPage implements OnInit {
         this.classType = record.CLASS_TYPE;
         this.timeFrom = record.TIME_FROM;
         this.timeTo = record.TIME_TO;
-        this.showCard = true;
+        this.showDetails = true;
       }
     }));
   }
