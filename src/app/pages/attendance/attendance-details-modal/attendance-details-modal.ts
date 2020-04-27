@@ -100,7 +100,6 @@ export class AttendanceDetailsModalPage implements OnInit {
           });
         },
         complete: () => {
-          this.loaded = true;
           this.dismissLoading();
         }
       }
