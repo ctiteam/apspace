@@ -121,8 +121,8 @@ export class AttendanceDetailsModalPage implements OnInit {
     });
   }
 
-  async presentLoading() {
-    await this.loadingCtrl.create({
+  presentLoading() {
+    this.loadingCtrl.create({
       spinner: 'dots',
       duration: 5000,
       message: 'Please wait...',
@@ -130,8 +130,8 @@ export class AttendanceDetailsModalPage implements OnInit {
     }).then((loading) => loading.present());
   }
 
-  async dismissLoading() {
-    return await this.loadingCtrl.dismiss();
+  dismissLoading() {
+    return this.loadingCtrl.dismiss();
   }
 
   dismiss() {
