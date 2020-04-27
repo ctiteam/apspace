@@ -22,8 +22,8 @@
               <ion-label position="stacked" class="item-label">
                 Publication Date
               </ion-label>
-              <ion-calendar [formControl]="addExamScheduleForm.controls['publicationDate']" [options]="optionsRange"
-                [type]="type" class="form-input"></ion-calendar>
+              <ion-calendar [formControl]="examScheduleForm.controls['publicationDate']" [options]="optionsRange"
+                [type]="type" [format]="'YYYY-MMM-DD'" class="form-input"></ion-calendar>
             </ion-item>
 
             <ion-item lines="none">
@@ -35,19 +35,19 @@
                 </ion-searchbar>
                 <div class="scrollable-div">
                   <ion-list class="masonry-list ion-no-padding" lines="none">
-                    <ion-item class="masonry-item" *ngFor="let item of items">
+                    <ion-item class="masonry-item" *ngFor="let module of modulesToBeSearched;">
                       <ion-label class="ion-text-wrap">
-                        {{item.value}}
+                        {{module.value}}
                       </ion-label>
-                      <ion-checkbox (ngModelChange)="getSelectedModules(item)" [(ngModel)]="item.isChecked">
+                      <ion-checkbox (ngModelChange)="addSelectedModules(module)" [(ngModel)]="module.isChecked">
                       </ion-checkbox>
                     </ion-item>
                   </ion-list>
                 </div>
               </div>
               <ng-template #editMode>
-                <ion-select [ngModel]="selectedModule.value" (ngModelChange)="moduleChange(value = $event)" class="form-input">
-                  <ion-select-option *ngFor="let module of modules" [value]="module.value">{{ module.title }}</ion-select-option>
+                <ion-select [formControl]="examScheduleForm.controls['module']" class="form-input">
+                  <ion-select-option *ngFor="let module of modules" [value]="module.value">{{ module.value }}</ion-select-option>
                 </ion-select>
               </ng-template>
             </ion-item>
@@ -56,7 +56,7 @@
               <ion-label position="stacked" class="item-label">
                 Date
               </ion-label>
-              <ion-datetime [formControl]="addExamScheduleForm.controls['date']" class="form-input"></ion-datetime>
+              <ion-datetime [formControl]="examScheduleForm.controls['date']" class="form-input"></ion-datetime>
             </ion-item>
 
             <ion-grid class="ion-no-padding">
@@ -66,13 +66,13 @@
                     <ion-label position="stacked" class="item-label">
                       Time
                     </ion-label>
-                    <ion-datetime [formControl]="addExamScheduleForm.controls['startTime']" displayFormat="h:mm A"
+                    <ion-datetime [formControl]="examScheduleForm.controls['startTime']" displayFormat="h:mm A"
                       placeholder="Start Time" class="form-input"></ion-datetime>
                   </ion-item>
                 </ion-col>
                 <ion-col class="ion-no-padding ion-align-self-end">
                   <ion-item lines="none">
-                    <ion-datetime [formControl]="addExamScheduleForm.controls['endTime']" displayFormat="h:mm A"
+                    <ion-datetime [formControl]="examScheduleForm.controls['endTime']" displayFormat="h:mm A"
                       placeholder="End Time" class="form-input"></ion-datetime>
                   </ion-item>
                 </ion-col>
@@ -83,9 +83,9 @@
               <ion-label position="stacked" class="item-label">
                 Remarks
               </ion-label>
-              <ion-input class="form-input"></ion-input>
+              <ion-input [formControl]="examScheduleForm.controls['remarks']" class="form-input"></ion-input>
             </ion-item>
-            <ion-button (click)="submit()" [disabled]="addExamScheduleForm.invalid || modules.length < 1" expand="block"
+            <ion-button (click)="submit()" [disabled]="examScheduleForm.invalid" expand="block"
               class="success-background ion-margin">SUBMIT</ion-button>
           </ion-card-content>
         </ion-card>

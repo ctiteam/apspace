@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { CalendarComponentOptions } from 'ion2-calendar';
 
@@ -11,19 +11,18 @@ import { CalendarComponentOptions } from 'ion2-calendar';
 export class AddExamSchedulePage implements OnInit {
   @Input() onEdit: boolean;
 
-  dateRange: { from: string; to: string; };
-  type: 'string'; // 'string' | 'js-date' | 'moment' | 'time' | 'object'
+  type = 'string'; // 'string' | 'js-date' | 'moment' | 'time' | 'object'
   optionsRange: CalendarComponentOptions = {
     pickMode: 'range'
   };
+
   searchTerm = '';
-  items: any;
+  modulesToBeSearched = [];
 
-  addExamScheduleForm: FormGroup;
+  examScheduleForm: FormGroup;
   selectedModule;
-  modules = [];
 
-  tests = [
+  modules = [
     {
       value: '1Lorem Ipsum'
     },
@@ -43,103 +42,16 @@ export class AddExamSchedulePage implements OnInit {
       value: '6Lorem Ipsum'
     },
     {
-      value: 'Lorem 7Ipsum'
+      value: '7Lorem Ipsum'
     },
     {
-      value: 'Lorem Ipsum'
+      value: '8Lorem Ipsum'
     },
     {
-      value: 'Lorem 8Ipsum'
+      value: '9Lorem Ipsum'
     },
     {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem 9Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ip10sum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lo11rem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
+      value: '10Lorem Ipsum'
     }
   ];
 
@@ -151,69 +63,53 @@ export class AddExamSchedulePage implements OnInit {
   ngOnInit() {
     this.setFilteredItems();
 
-    this.addExamScheduleForm = this.formBuilder.group({
+    this.examScheduleForm = this.formBuilder.group({
       publicationDate: ['', Validators.required],
+      module: this.initializeModule(),
       date: ['', Validators.required],
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
       remarks: ['']
     });
 
-    if (this.onEdit) {
-      this.modules = [
-        {
-          title: '1Lorem Ipsum',
-          value: '1loremipsum'
-        },
-        {
-          title: '2Lorem Ipsum',
-          value: '2loremipsum'
-        },
-        {
-          title: '3Lorem Ipsum',
-          value: '3loremipsum'
-        }
-      ];
-
-      this.selectedModule = {
-        title: '2Lorem Ipsum',
-        value: '2loremipsum'
-      };
-    }
-
-    this.addExamScheduleForm.valueChanges.subscribe(value => console.log(value));
+    this.examScheduleForm.valueChanges.subscribe(value => console.log(value));
   }
 
-  moduleChange(value) {
-    this.selectedModule = this.modules.find(module => module.value === value);
-    console.log(this.selectedModule);
-  }
-
-  getSelectedModules(moduleObject: any) {
-    if (!(this.modules.find(module => module.value === moduleObject.value))) {
-      this.modules.push(moduleObject);
+  initializeModule() {
+    if (!(this.onEdit)) {
+      return this.formBuilder.array([], [Validators.required]);
     } else {
-      this.modules.forEach((module, index) => {
-        if (module.value === moduleObject.value) {
-          this.modules.splice(index, 1);
-        }
-      });
+      this.selectedModule = '4Lorem Ipsum';
+      return [this.selectedModule, Validators.required];
+    }
+  }
+
+  get moduleArray() {
+    return this.examScheduleForm.get('module') as FormArray;
+  }
+
+  addSelectedModules(moduleObject: any) {
+    if (!(this.moduleArray.value.find(module => module.value === moduleObject.value))) {
+      this.moduleArray.push(this.formBuilder.group({
+        value: [moduleObject.value, Validators.required],
+      }));
+    } else {
+      this.moduleArray.removeAt(this.moduleArray.value.findIndex(module => module.value === moduleObject.value));
     }
   }
 
   filterItems(searchTerm) {
-    return this.tests.filter(test => {
-      return test.value.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+    return this.modules.filter(module => {
+      return module.value.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
     });
   }
 
   setFilteredItems() {
-    this.items = this.filterItems(this.searchTerm);
+    this.modulesToBeSearched = this.filterItems(this.searchTerm);
   }
 
   submit() {
-    console.log(this.addExamScheduleForm.value);
-    console.log(this.modules);
+    console.log(this.examScheduleForm.value);
   }
 
   closeModal() {
