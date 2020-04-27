@@ -16,8 +16,14 @@
         <ion-card *ngIf="loaded">
           <ion-card-content>
 
-            <ion-calendar [(ngModel)]="openDate" (change)="onChange($event)" [options]="options" [type]="'string'"
-              [format]="'YYYY-MM-DD'">
+            <ion-calendar 
+              [(ngModel)]="openDate" 
+              (change)="onChange
+              ($event)" 
+              [options]="options" 
+              [type]="'string'"
+              [format]="'YYYY-MM-DD'"
+            >
             </ion-calendar>
             <ion-list>
               <ion-item lines="none">
