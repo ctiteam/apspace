@@ -20,6 +20,7 @@ export class AddExamSchedulePage implements OnInit {
   items: any;
 
   addExamScheduleForm: FormGroup;
+  selectedModule;
   modules = [];
 
   tests = [
@@ -152,14 +153,40 @@ export class AddExamSchedulePage implements OnInit {
 
     this.addExamScheduleForm = this.formBuilder.group({
       publicationDate: ['', Validators.required],
-      module: [''],
       date: ['', Validators.required],
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
       remarks: ['']
     });
 
+    if (this.onEdit) {
+      this.modules = [
+        {
+          title: '1Lorem Ipsum',
+          value: '1loremipsum'
+        },
+        {
+          title: '2Lorem Ipsum',
+          value: '2loremipsum'
+        },
+        {
+          title: '3Lorem Ipsum',
+          value: '3loremipsum'
+        }
+      ];
+
+      this.selectedModule = {
+        title: '2Lorem Ipsum',
+        value: '2loremipsum'
+      };
+    }
+
     this.addExamScheduleForm.valueChanges.subscribe(value => console.log(value));
+  }
+
+  moduleChange(value) {
+    this.selectedModule = this.modules.find(module => module.value === value);
+    console.log(this.selectedModule);
   }
 
   getSelectedModules(moduleObject: any) {
@@ -186,6 +213,7 @@ export class AddExamSchedulePage implements OnInit {
 
   submit() {
     console.log(this.addExamScheduleForm.value);
+    console.log(this.modules);
   }
 
   closeModal() {
