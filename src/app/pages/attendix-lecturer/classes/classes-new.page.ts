@@ -10,6 +10,7 @@ import { SearchModalComponent } from '../../../components/search-modal/search-mo
 import { Classcode } from '../../../interfaces';
 import { SettingsService, WsApiService } from '../../../services';
 import { formatTime, isoDate, parseTime } from '../date';
+import { AttendanceIntegrityModalPage } from './attendance-integrity/attendance-integrity-modal';
 import { ConfirmClassCodeModalPage } from './confirm-class-code/confirm-class-code-modal';
 
 @Component({
@@ -442,6 +443,40 @@ export class ClassesNewPage implements OnInit {
       if (data.data) {
         this.classcode = data.data.code;
         this.classType = data.data.type;
+      }
+    });
+  }
+
+  async checkIntegrity() {
+    const classCodes = (await this.classcodes$.toPromise());
+    const possibleExtraClasses = [];
+    classCodes.forEach(classcode => {
+      classcode.CLASSES.forEach(klass => {
+        if (klass.TOTAL.ABSENT === klass.TOTAL.ABSENT + klass.TOTAL.PRESENT + klass.TOTAL.LATE + klass.TOTAL.ABSENT_REASON) {
+          possibleExtraClasses.push(
+            {
+              classCode: classcode.CLASS_CODE,
+              date: klass.DATE,
+              timeFrom: klass.TIME_FROM,
+              timeTo: klass.TIME_TO,
+              total: klass.TOTAL.ABSENT,
+              type: klass.TYPE,
+              checked: false
+            }
+          );
+        }
+      });
+    });
+    const modal = await this.modalCtrl.create({
+      component: AttendanceIntegrityModalPage,
+      cssClass: 'generateTransactionsPdf',
+      componentProps: { possibleClasses: possibleExtraClasses }
+    });
+    await modal.present();
+    await modal.onDidDismiss().then(data => {
+      this.getClasscodes();
+      if (data.data) {
+        this.getClasscodes();
       }
     });
   }

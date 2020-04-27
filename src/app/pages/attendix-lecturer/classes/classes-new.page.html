@@ -162,7 +162,7 @@
                 <ion-row>
                   <ion-col class="ion-no-padding ion-margin-end">
                     <ion-select class="input" placeholder="Duration" [(ngModel)]="timeFrame">
-                      <ion-select-option [value]="7">
+                      <ion-select-option [value]="7"> 
                         Last 7 days
                       </ion-select-option>
                       <ion-select-option [value]="30">
@@ -176,6 +176,12 @@
                   <ion-col class="ion-no-padding">
                     <ion-searchbar class="input ion-no-padding no-box-shadow" placeholder="Class Code"
                       [(ngModel)]="term"></ion-searchbar>
+                  </ion-col>
+                  <ion-col class="ion-no-padding ion-margin-start">
+                    <ion-button color="danger" (click)="checkIntegrity()">
+                      Check Attendance Integrity
+                      <ion-icon name="done-all"></ion-icon>
+                    </ion-button>
                   </ion-col>
                 </ion-row>
               </ion-grid>

@@ -1,0 +1,81 @@
+// general
+.margin-auto {
+  margin: auto;
+}
+
+.show-only-on-small-devices {
+  display: none !important;
+}
+
+// attendance logs
+.select-container {
+  .input {
+    border: 1px solid var(--tertiary-bg-color);
+  }
+}
+
+.table {
+  .table-container {
+    padding-top: 5px;
+
+    .table-header {
+      padding-bottom: 10px;
+      border-bottom: 1px solid #cccccc;
+
+      ion-text {
+        font-size: 1rem;
+      }
+    }
+
+    .table-row {
+      padding-top: 5px;
+      padding-bottom: 0;
+
+      &:hover {
+        background: var(--main-bg-color) !important;
+      }
+    }
+  }
+}
+
+// media queries for changing table to card design in small devices
+@media (max-width: 575px) {
+
+  // small screen
+  .table-header {
+    display: none;
+  }
+
+  .table-row {
+    &.text-bold.no-bold-on-small-devices {
+      font-weight: normal !important;
+    }
+
+    .ion-text-center.no-center-on-small-devices {
+      text-align: left !important;
+    }
+
+    .title-on-small-devices {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+  }
+
+  .show-only-on-small-devices {
+    display: inline-block !important;
+  }
+
+  .border-bottom {
+    border-bottom: 1px solid var(--main-txt-color) !important;
+  }
+
+  .bold-on-small-devices {
+    font-weight: bold;
+  }
+}
+
+@media (max-width: 767px) {
+  .hide-on-small {
+    display: none;
+  }
+}
