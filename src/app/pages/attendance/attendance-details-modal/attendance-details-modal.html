@@ -16,18 +16,13 @@
         <ion-card *ngIf="loaded">
           <ion-card-content>
 
-            <ion-calendar
-              [(ngModel)]="openDate"
-              (change)="onChange($event)"
-              [options]="options"
-              [type]="'string'"
-              [format]="'YYYY-MM-DD'"
-            >
+            <ion-calendar [(ngModel)]="openDate" (change)="onChange($event)" [options]="options" [type]="'string'"
+              [format]="'YYYY-MM-DD'">
             </ion-calendar>
             <ion-list>
               <ion-item lines="none">
                 <ion-label class="colored-text text-bold">
-                  Type:
+                  Class:
                 </ion-label>
                 <ion-badge *ngIf="showDetails; else template" class="details">
                   {{ classType }}
@@ -55,27 +50,23 @@
             <ion-item class="ion-no-padding" lines="none">
               <ion-grid>
                 <ion-row >
-                  <ion-col class="ion-text-center">
-                    <ion-row>
-                      <ion-col class="attended">
-                        <ion-badge>Present</ion-badge>
-                      </ion-col>
-                      <ion-col class="absent-reason">
-                        <ion-badge>Absent with Reason</ion-badge> 
-                      </ion-col>
-                    </ion-row>
-                    <ion-row>
-                      <ion-col class="absent">
-                        <ion-badge>Absent</ion-badge> 
-                      </ion-col>
-                      <ion-col class="late">
-                        <ion-badge>Late</ion-badge>
-                      </ion-col>
-                    </ion-row>
+                  <ion-col class="ion-text-center" offset="0.5">
+                    <ion-col class="attended">
+                      <ion-badge>Present</ion-badge>
+                    </ion-col>
+                    <ion-col class="absent">
+                      <ion-badge>Absent</ion-badge>
+                    </ion-col>
+                    <ion-col class="late">
+                      <ion-badge>Late</ion-badge>
+                    </ion-col>
+                    <ion-col class="absent-reason">
+                      <ion-badge>Absent with Reason</ion-badge>
+                    </ion-col>
                   </ion-col>
                 </ion-row>
               </ion-grid>
-            </ion-item>       
+            </ion-item>
           </ion-card-content>
         </ion-card>
       </ion-col>
