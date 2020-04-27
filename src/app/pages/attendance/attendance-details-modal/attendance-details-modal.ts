@@ -94,12 +94,11 @@ export class AttendanceDetailsModalPage implements OnInit {
               TIME_FROM: record.TIME_FROM,
               TIME_TO: record.TIME_TO
             });
-
-            // picks first date from api and opens it in calendar
-            this.openDate = this.datePipe.transform(new Date(record.CLASS_DATE), 'yyyy-MM-dd');
           });
         },
         complete: () => {
+          // picks first date from array(most recent) and opens it in calendar
+          this.openDate = this.datePipe.transform(new Date(this.recordsArray[0].CLASS_DATE), 'yyyy-MM-dd');
           this.dismissLoading();
         }
       }
