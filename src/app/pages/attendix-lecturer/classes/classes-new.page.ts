@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
-import { Classcode } from '../../../interfaces';
+import { Classcodev1, FlatClasscodev1 } from '../../../interfaces';
 import { SettingsService, WsApiService } from '../../../services';
 import { formatTime, isoDate, parseTime } from '../date';
 import { AttendanceIntegrityModalPage } from './attendance-integrity/attendance-integrity-modal';
@@ -81,7 +81,7 @@ export class ClassesNewPage implements OnInit {
   skeletons = new Array(2);
   userCameFromTimetableFlag: string;
 
-  classcodes$: Observable<Classcode[]>;
+  classcodes$: Observable<FlatClasscodev1[]>;
   dates: string[];
   startTimes: string[];
 
@@ -137,36 +137,27 @@ export class ClassesNewPage implements OnInit {
     }
   }
 
-  /** Merge and sort classcodes by intakes, this mutates the original array. */
-  mergeClasscodes(classcodes: Classcode[]): Classcode[] {
-    const merged = classcodes.reduce((acc, classcode) => {
-      const sameClasscode = acc.get(classcode.CLASS_CODE);
-      if (sameClasscode) {
-        // merge statistics repeated with different intake
-        const uniqueClasses = classcode.CLASSES.filter(klass => {
-          const sameClass = sameClasscode.CLASSES.find(sklass =>
-            sklass.DATE === klass.DATE && sklass.TIME_FROM === klass.TIME_FROM
-            && sklass.TIME_TO === klass.TIME_TO && sklass.TYPE === klass.TYPE);
-          if (sameClass) { // add the current stats the previous stats
-            sameClass.TOTAL.PRESENT += klass.TOTAL.PRESENT;
-            sameClass.TOTAL.LATE += klass.TOTAL.LATE;
-            sameClass.TOTAL.ABSENT += klass.TOTAL.ABSENT;
-            sameClass.TOTAL.ABSENT_REASON += klass.TOTAL.ABSENT_REASON;
-          }
-          return !sameClass; // only filter those not processed
-        });
-        sameClasscode.CLASSES.push(...uniqueClasses);
-      } else { // classcode not found it map yet
-        acc.set(classcode.CLASS_CODE, classcode);
-      }
-      return acc;
-    }, new Map() as Map<string, Classcode>);
-    // sort it once by date and time from
-    for (const classcode of merged.values()) {
-      classcode.CLASSES.sort((a, b) => Date.parse(b.DATE) - Date.parse(a.DATE)
-        + parseTime(b.TIME_FROM) - parseTime(a.TIME_FROM));
-    }
-    return Array.from(merged.values());
+  /**
+   * Flat the classcodes response (remove the grouping by classcode).
+   * add classcode, code_aliases, subject code and lecturer code inside each class object from the CLASSES
+   */
+  mergeClasscodes(classcodes: Classcodev1[]): FlatClasscodev1[] {
+    const finalResults = [];
+    classcodes.map(classcode => {
+      return classcode.CLASSES.map(klass => {
+        const updatedClass = (
+          {
+            ...klass,
+            CLASS_CODE: classcode.CLASS_CODE,
+            COURSE_CODE_ALIASES: classcode.COURSE_CODE_ALIASES, // to check with Ivan
+            SUBJECT_CODE: classcode.SUBJECT_CODE,
+            LECTURER_CODE: classcode.LECTURER_CODE
+          });
+        finalResults.push(updatedClass);
+        return updatedClass;
+      });
+    });
+    return finalResults;
   }
 
   /* find the most similar class codes and pass them to the modal page */
@@ -239,7 +230,6 @@ export class ClassesNewPage implements OnInit {
     classCodesToSearchInto.forEach(classCode => {
       if (classCode.match(searchRegExpOr)) {
         results.push({ value: classCode, matches: classCode.match(searchRegExpOr).length });
-        // console.log('Found this that match some: ', classCode, classCode.match(searchRegExpOr));
       }
     });
 
@@ -259,7 +249,7 @@ export class ClassesNewPage implements OnInit {
   }
 
   getClasscodes() {
-    this.classcodes$ = this.ws.get<Classcode[]>('/attendix/v1/classcodes').pipe(
+    this.classcodes$ = this.ws.get<Classcodev1[]>('/attendix/v1/classcodes').pipe(
       map(classcodes => this.mergeClasscodes(classcodes)), // side effect
       shareReplay(1),
     );
@@ -267,7 +257,7 @@ export class ClassesNewPage implements OnInit {
 
   /** Display search modal to choose classcode. */
   async chooseClasscode() {
-    const classcodes = (await this.classcodes$.toPromise()).map(c => c.CLASS_CODE);
+    const classcodes = [...new Set((await this.classcodes$.toPromise()).map(c => c.CLASS_CODE))];
     const modal = await this.modalCtrl.create({
       component: SearchModalComponent,
       componentProps: {
@@ -314,8 +304,7 @@ export class ClassesNewPage implements OnInit {
       const endTimeMins = parseTime(this.endTime);
       // search for overlapped class
       const classes = [].concat(...classcodes
-        .filter(classcode => this.classcode === classcode.CLASS_CODE)
-        .map(classcode => classcode.CLASSES)); // use flat in es2019
+        .filter(classcode => this.classcode === classcode.CLASS_CODE)); // use flat in es2019
       const overlap = classes.find(klass => this.date === klass.DATE
         && startTimeMins < parseTime(klass.TIME_TO) && endTimeMins > parseTime(klass.TIME_FROM));
       if (overlap) {
@@ -450,31 +439,35 @@ export class ClassesNewPage implements OnInit {
   async checkIntegrity() {
     const classCodes = (await this.classcodes$.toPromise());
     const possibleExtraClasses = [];
-    classCodes.forEach(classcode => {
-      classcode.CLASSES.forEach(klass => {
-        if (klass.TOTAL.ABSENT === klass.TOTAL.ABSENT + klass.TOTAL.PRESENT + klass.TOTAL.LATE + klass.TOTAL.ABSENT_REASON) {
-          possibleExtraClasses.push(
-            {
-              classCode: classcode.CLASS_CODE,
-              date: klass.DATE,
-              timeFrom: klass.TIME_FROM,
-              timeTo: klass.TIME_TO,
-              total: klass.TOTAL.ABSENT,
-              type: klass.TYPE,
-              checked: false
-            }
-          );
-        }
-      });
+    classCodes.forEach(klass => {
+      if (klass.TOTAL.ABSENT === klass.TOTAL.ABSENT + klass.TOTAL.PRESENT + klass.TOTAL.LATE + klass.TOTAL.ABSENT_REASON) {
+        possibleExtraClasses.push(
+          {
+            classCode: klass.CLASS_CODE,
+            date: klass.DATE,
+            timeFrom: klass.TIME_FROM,
+            timeTo: klass.TIME_TO,
+            total: klass.TOTAL.ABSENT,
+            type: klass.TYPE,
+            checked: false
+          }
+        );
+      }
     });
     const modal = await this.modalCtrl.create({
       component: AttendanceIntegrityModalPage,
       cssClass: 'generateTransactionsPdf',
-      componentProps: { possibleClasses: possibleExtraClasses }
+      componentProps: {
+        possibleClasses: possibleExtraClasses.sort(
+          (a, b) =>
+            new Date(+b.date.split('-')[0], +b.date.split('-')[1], +b.date.split('-')[2]).getTime()
+            - new Date(+a.date.split('-')[0], +a.date.split('-')[1], +a.date.split('-')[2]).getTime()
+        )
+      },
+      backdropDismiss: false
     });
     await modal.present();
     await modal.onDidDismiss().then(data => {
-      this.getClasscodes();
       if (data.data) {
         this.getClasscodes();
       }

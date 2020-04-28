@@ -161,8 +161,8 @@
               <ion-grid class="ion-no-padding">
                 <ion-row>
                   <ion-col class="ion-no-padding ion-margin-end">
-                    <ion-select class="input" placeholder="Duration" [(ngModel)]="timeFrame">
-                      <ion-select-option [value]="7"> 
+                    <ion-select interface="popover" class="input" placeholder="Duration" [(ngModel)]="timeFrame">
+                      <ion-select-option [value]="7">
                         Last 7 days
                       </ion-select-option>
                       <ion-select-option [value]="30">
@@ -220,68 +220,65 @@
               <!-- table body -->
               <ng-container *ngIf="classcodes | classcodesFilter:term:timeFrame as filteredClassCode">
                 <ng-container *ngIf="filteredClassCode.length > 0; else noFilteredClassCode">
-                  <ng-container *ngFor="let classcode of filteredClassCode">
-                    <ion-row class="table-row text-bold no-bold-on-small-devices"
-                      *ngFor="let class of classcode.CLASSES">
-                      <ion-col size="12" size-sm="" class="margin-auto">
-                        <ion-text class="title-on-small-devices">{{classcode.CLASS_CODE}}</ion-text>
-                      </ion-col>
-                      <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
-                        <span class="show-only-on-small-devices bold-on-small-devices">Date:&nbsp;</span>
-                        <ion-text>{{class.DATE | date : 'EEE, dd MMM yyy' }}</ion-text>
-                      </ion-col>
-                      <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
-                        <span class="show-only-on-small-devices bold-on-small-devices">Time:&nbsp;</span>
-                        <ion-text>{{class.TIME_FROM}} - {{class.TIME_TO}}</ion-text>
-                      </ion-col>
-                      <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
-                        <span class="show-only-on-small-devices bold-on-small-devices">Statistics:&nbsp;</span>
-                        <ion-text color="success">{{class.TOTAL.PRESENT}}</ion-text>
-                        |
-                        <ion-text color="danger">{{class.TOTAL.ABSENT}}</ion-text>
-                        |
-                        <ion-text color="primary">{{class.TOTAL.ABSENT_REASON}}</ion-text>
-                        |
-                        <ion-text color="warning">{{class.TOTAL.LATE}}</ion-text>
-                        |
-                        {{class.TOTAL.ABSENT + class.TOTAL.ABSENT_REASON + class.TOTAL.LATE + class.TOTAL.PRESENT}}
-                      </ion-col>
-                      <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
-                        <span class="show-only-on-small-devices bold-on-small-devices">Type:&nbsp;</span>
-                        <ion-text>{{class.TYPE}}</ion-text>
-                      </ion-col>
-                      <ion-col size="12" size-sm="" class="margin-auto">
-                        <!-- small devices only -->
-                        <ion-buttons class="show-only-on-small-devices ion-float-right">
-                          <ion-button fill="outline" class="ion-margin-end" color="primary"
-                            (click)="edit(classcode.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
-                            Edit
-                            <ion-icon slot="end" name="create"></ion-icon>
-                          </ion-button>
-                          <ion-button fill="solid" color="danger"
-                            (click)="reset(classcode.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
-                            Delete
-                            <ion-icon slot="end" name="trash"></ion-icon>
-                          </ion-button>
-                        </ion-buttons>
-                        <!-- other devices (medium, large..) -->
-                        <ion-buttons class="show-only-on-other-devices">
-                          <ion-button size="small" color="primary"
-                            (click)="edit(classcode.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
-                            <ion-icon slot="icon-only" name="create"></ion-icon>
-                          </ion-button>
-                          <ion-button size="small" color="danger"
-                            (click)="reset(classcode.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
-                            <ion-icon slot="icon-only" name="trash"></ion-icon>
-                          </ion-button>
-                        </ion-buttons>
-                      </ion-col>
-                      <ion-col size="8" offset="2" class="show-only-on-small-devices border-bottom ion-margin-bottom">
-                        
-                      </ion-col>
-                    </ion-row>
+                  <ion-row class="table-row text-bold no-bold-on-small-devices" *ngFor="let class of filteredClassCode">
+                    <ion-col size="12" size-sm="" class="margin-auto">
+                      <ion-text class="title-on-small-devices">{{class.CLASS_CODE}}</ion-text>
+                    </ion-col>
+                    <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
+                      <span class="show-only-on-small-devices bold-on-small-devices">Date:&nbsp;</span>
+                      <ion-text>{{class.DATE | date : 'EEE, dd MMM yyy' }}</ion-text>
+                    </ion-col>
+                    <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
+                      <span class="show-only-on-small-devices bold-on-small-devices">Time:&nbsp;</span>
+                      <ion-text>{{class.TIME_FROM}} - {{class.TIME_TO}}</ion-text>
+                    </ion-col>
+                    <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
+                      <span class="show-only-on-small-devices bold-on-small-devices">Statistics:&nbsp;</span>
+                      <ion-text color="success">{{class.TOTAL.PRESENT}}</ion-text>
+                      |
+                      <ion-text color="danger">{{class.TOTAL.ABSENT}}</ion-text>
+                      |
+                      <ion-text color="primary">{{class.TOTAL.ABSENT_REASON}}</ion-text>
+                      |
+                      <ion-text color="warning">{{class.TOTAL.LATE}}</ion-text>
+                      |
+                      {{class.TOTAL.ABSENT + class.TOTAL.ABSENT_REASON + class.TOTAL.LATE + class.TOTAL.PRESENT}}
+                    </ion-col>
+                    <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
+                      <span class="show-only-on-small-devices bold-on-small-devices">Type:&nbsp;</span>
+                      <ion-text>{{class.TYPE}}</ion-text>
+                    </ion-col>
+                    <ion-col size="12" size-sm="" class="margin-auto">
+                      <!-- small devices only -->
+                      <ion-buttons class="show-only-on-small-devices ion-float-right">
+                        <ion-button fill="outline" class="ion-margin-end" color="primary"
+                          (click)="edit(class.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
+                          Edit
+                          <ion-icon slot="end" name="create"></ion-icon>
+                        </ion-button>
+                        <ion-button fill="solid" color="danger"
+                          (click)="reset(class.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
+                          Delete
+                          <ion-icon slot="end" name="trash"></ion-icon>
+                        </ion-button>
+                      </ion-buttons>
+                      <!-- other devices (medium, large..) -->
+                      <ion-buttons class="show-only-on-other-devices">
+                        <ion-button size="small" color="primary"
+                          (click)="edit(class.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
+                          <ion-icon slot="icon-only" name="create"></ion-icon>
+                        </ion-button>
+                        <ion-button size="small" color="danger"
+                          (click)="reset(class.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
+                          <ion-icon slot="icon-only" name="trash"></ion-icon>
+                        </ion-button>
+                      </ion-buttons>
+                    </ion-col>
+                    <ion-col size="8" offset="2" class="show-only-on-small-devices border-bottom ion-margin-bottom">
 
-                  </ng-container>
+                    </ion-col>
+                  </ion-row>
+
                 </ng-container>
                 <ng-template #noFilteredClassCode>
                   <ion-row>
