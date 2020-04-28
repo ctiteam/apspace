@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>Exam List</ion-title>
     <ion-buttons slot="end" *ngIf="selectedExamScheduleOption === 'Exam Schedule'">
-      <ion-button (click)="toggleRemoveExamSchedule()" color="danger" class="colored-border colored-text"
+      <ion-button [disabled]="examScheduleToBeDeleted.length >= 1" (click)="toggleRemoveExamSchedule()" color="danger" class="colored-border colored-text"
         fill="outline">
         <ion-icon [name]="onDelete? 'close' : 'checkbox'"></ion-icon>
       </ion-button>
@@ -110,7 +110,7 @@
                         <ion-col size="12" size-sm="" class="ion-no-padding is-inactive" [ngClass]="{'is-active': examSchedule.status === 'Active'}">
                           <div class="flex-col-item">
                             {{examSchedule.status}}
-                            <ion-checkbox class="ion-no-margin" *ngIf="onDelete"></ion-checkbox>
+                            <ion-checkbox (ngModelChange)="addSelectedExamSchedule(examSchedule)" [(ngModel)]="examSchedule.isChecked" class="ion-no-margin" *ngIf="onDelete"></ion-checkbox>
                           </div>
                         </ion-col>
                       </ion-row>
@@ -157,7 +157,7 @@
                         <ion-col size="12" size-sm="" class="ion-no-padding is-inactive" [ngClass]="{'is-active': pastExamSchedule.status === 'Active'}">
                           <div class="flex-col-item">
                             {{pastExamSchedule.status}}
-                            <ion-checkbox class="ion-no-margin" *ngIf="onDelete"></ion-checkbox>
+                            <ion-checkbox (ngModelChange)="addSelectedExamSchedule(pastExamSchedule)" [(ngModel)]="pastExamSchedule.isChecked" class="ion-no-margin" *ngIf="onDelete"></ion-checkbox>
                           </div>
                         </ion-col>
                       </ion-row>
@@ -232,6 +232,7 @@
                 </app-message-with-svg>
               </ng-template>
             </div>
+
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -248,7 +249,7 @@
 
   <ng-template #fabDelete>
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button class="danger-background">
+      <ion-fab-button [disabled]="examScheduleToBeDeleted.length < 1" (click)="deleteSelectedExamSchedule()" class="danger-background">
         <ion-icon name="trash"></ion-icon>
       </ion-fab-button>
     </ion-fab>
