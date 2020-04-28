@@ -236,6 +236,8 @@ export class WsApiService {
         }
       }),
       timeout(options.timeout),
+      publishLast(),
+      refCount(),
     );
   }
 
