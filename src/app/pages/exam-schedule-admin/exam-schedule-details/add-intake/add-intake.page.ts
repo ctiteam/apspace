@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -9,13 +9,14 @@ import { ModalController } from '@ionic/angular';
 })
 export class AddIntakePage implements OnInit {
   @Input() onEdit: boolean;
+
   searchTerm = '';
-  items: any;
+  intakesToBeSearched = [];
 
-  addIntakeForm: FormGroup;
-  intakes = [];
+  intakeForm: FormGroup;
+  selectedIntake;
 
-  tests = [
+  intakes = [
     {
       value: '1Lorem Ipsum'
     },
@@ -35,104 +36,29 @@ export class AddIntakePage implements OnInit {
       value: '6Lorem Ipsum'
     },
     {
-      value: 'Lorem 7Ipsum'
+      value: '7Lorem Ipsum'
     },
     {
-      value: 'Lorem Ipsum'
+      value: '8Lorem Ipsum'
     },
     {
-      value: 'Lorem 8Ipsum'
+      value: '9Lorem Ipsum'
     },
     {
-      value: 'Lorem Ipsum'
+      value: '10Lorem Ipsum'
     },
-    {
-      value: 'Lorem 9Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ip10sum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lo11rem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    },
-    {
-      value: 'Lorem Ipsum'
-    }
+  ];
+
+  types = [
+    'Lorem Ipsum1',
+    'Lorem Ipsum2',
+    'Lorem Ipsum3'
+  ];
+
+  locations = [
+    'Lorem Ipsum1',
+    'Lorem Ipsum2',
+    'Lorem Ipsum3'
   ];
 
   constructor(
@@ -143,8 +69,8 @@ export class AddIntakePage implements OnInit {
   ngOnInit() {
     this.setFilteredItems();
 
-    this.addIntakeForm = this.formBuilder.group({
-      intake: [''],
+    this.intakeForm = this.formBuilder.group({
+      intake: this.initializeIntake(),
       type: ['', Validators.required],
       location: ['', Validators.required],
       venue: ['', Validators.required],
@@ -152,7 +78,20 @@ export class AddIntakePage implements OnInit {
       examResultDate: ['', Validators.required]
     });
 
-    this.addIntakeForm.valueChanges.subscribe(console.log);
+    this.intakeForm.valueChanges.subscribe(console.log);
+  }
+
+  initializeIntake() {
+    if (!(this.onEdit)) {
+      return this.formBuilder.array([], [Validators.required]);
+    } else {
+      this.selectedIntake = '4Lorem Ipsum';
+      return [this.selectedIntake, Validators.required];
+    }
+  }
+
+  get intakeArray() {
+    return this.intakeForm.get('intake') as FormArray;
   }
 
   closeModal() {
@@ -160,30 +99,26 @@ export class AddIntakePage implements OnInit {
   }
 
   submit() {
-    console.log(this.addIntakeForm.value);
+    console.log(this.intakeForm.value);
   }
 
-  getSelectedIntakes(intakeObject) {
-    if (!(this.intakes.find(intake => intake.value === intakeObject.value))) {
-      this.intakes.push(intakeObject);
+  addSelectedIntakes(intakeObject: any) {
+    if (!(this.intakeArray.value.find(intake => intake.value === intakeObject.value))) {
+      this.intakeArray.push(this.formBuilder.group({
+        value: [intakeObject.value, Validators.required],
+      }));
     } else {
-      this.intakes.forEach((module, index) => {
-        if (module.value === intakeObject.value) {
-          this.intakes.splice(index, 1);
-        }
-      });
+      this.intakeArray.removeAt(this.intakeArray.value.findIndex(intake => intake.value === intakeObject.value));
     }
-
-    console.log(this.intakes);
   }
 
   filterItems(searchTerm) {
-    return this.tests.filter(test => {
-      return test.value.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+    return this.intakes.filter(intake => {
+      return intake.value.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
     });
   }
 
   setFilteredItems() {
-    this.items = this.filterItems(this.searchTerm);
+    this.intakesToBeSearched = this.filterItems(this.searchTerm);
   }
 }
