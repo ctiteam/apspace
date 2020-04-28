@@ -20,7 +20,6 @@ export class AlertControllerStub {
     this._opts = opts;
     return Promise.resolve({
       present: (): Promise<void> => {
-        console.log('present called');
         this.presentCalled = true;
         return Promise.resolve();
       }
