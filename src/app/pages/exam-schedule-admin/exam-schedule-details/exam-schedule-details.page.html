@@ -23,8 +23,10 @@
                     <ion-col class="text-bold ion-no-padding">
                       <div class="flex-col-item">
                         {{examScheduleDetail.detail}}
-                        <ion-icon (click)="editExamSchedule()" *ngIf="i === 0" name="create" class="clickable-icon">
-                        </ion-icon>
+                        <div *ngIf="!onDelete">
+                          <ion-icon (click)="editExamSchedule()" *ngIf="i === 0" name="create" class="clickable-icon">
+                          </ion-icon>
+                        </div>
                       </div>
                     </ion-col>
                   </ion-row>
@@ -53,7 +55,7 @@
                           {{ status }}
                         </ion-col>
                         <ion-col class="ion-no-padding ion-text-end">
-                          <ion-button (click)="activateExamSchedule()" class="danger-background">
+                          <ion-button [disabled]="onDelete" (click)="activateExamSchedule()" class="danger-background">
                             <span class="ion-margin">ACTIVATE THIS EXAM SCHEDULE</span>
                           </ion-button>
                         </ion-col>
