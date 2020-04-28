@@ -13,7 +13,7 @@ import { NotificationModalPage } from './notification-modal';
   styleUrls: ['./notifications.page.scss'],
 })
 export class NotificationsPage implements OnInit {
-  isStaff: true | false = true; // By default, set true
+  isStudent = false; // By default, set false
   messages$: Observable<NotificationHistory>;
   categories = [];
   allCategories = {};
@@ -33,9 +33,7 @@ export class NotificationsPage implements OnInit {
 
   ngOnInit() {
     // tslint:disable-next-line: no-bitwise
-    if (this.settings.get('role') & Role.Student) {
-      this.isStaff = false;
-    }
+    this.isStudent = this.settings.get('role') & Role.Student << 0 ? false : true;
   }
 
   ionViewDidEnter() {
@@ -70,7 +68,7 @@ export class NotificationsPage implements OnInit {
       cssClass: 'controlled-modal-dingdong',
       component: DingdongPreferencesPage,
       componentProps: { isModal: true },
-    }).then((modal) => modal.present());
+    }).then(modal => modal.present());
   }
 
   closeMenu() {

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavParams, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { NotificationStatus } from 'src/app/interfaces/dingdong';
+import { NotificationStatus } from 'src/app/interfaces/notifications';
 import { NotificationService } from 'src/app/services';
 
 @Component({
@@ -12,9 +12,9 @@ import { NotificationService } from 'src/app/services';
 })
 export class DingdongPreferencesPage {
 
-  isModal: true | false = false;
-  isProcessing: true | false = false;
-  isSubscribed: true | false = true; // Most of the students are subscribed so why not? Let's save some mem.
+  isModal = false;
+  isProcessing = false;
+  isSubscribed = true; // Most of the students are subscribed so why not? Let's save some mem.
   message: string;
 
   status$: Observable<NotificationStatus>;
@@ -45,9 +45,9 @@ export class DingdongPreferencesPage {
   }
 
   changeState(value: boolean) {
-    value
-      ? this.message = 'By unsubscribing, you will no longer receive any future updates from us in your personal email.'
-      : this.message = 'By subscribing, you will receive any future updates from us in your personal email.';
+    this.message = value
+                    ? 'By unsubscribing, you will no longer receive any future updates from us in your personal email.'
+                    : 'By subscribing, you will receive any future updates from us in your personal email.';
     this.isSubscribed = value;
   }
 

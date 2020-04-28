@@ -8,7 +8,7 @@ import { Storage } from '@ionic/storage';
 import { Observable, from, of, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { NotificationHistory } from '../interfaces';
-import { NotificationStatus, NotificationSubStatus } from '../interfaces/dingdong';
+import { NotificationStatus, NotificationSubStatus } from '../interfaces/notifications';
 import { CasTicketService } from './cas-ticket.service';
 import { WsApiService } from './ws-api.service';
 @Injectable({
