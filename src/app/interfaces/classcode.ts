@@ -26,3 +26,20 @@ export interface AttendixClass {
     ABSENT_REASON: number;
   };
 }
+
+export interface FlatClasscodev1 {
+  CLASS_CODE: string;
+  SUBJECT_CODE: string;
+  LECTURER_CODE: string;
+  COURSE_CODE_ALIASES: string;
+  DATE: string;
+  TIME_FROM: string;
+  TIME_TO: string;
+  TYPE: string;
+  TOTAL: {
+    PRESENT: number;
+    LATE: number;
+    ABSENT: number;
+    ABSENT_REASON: number;
+  };
+}
