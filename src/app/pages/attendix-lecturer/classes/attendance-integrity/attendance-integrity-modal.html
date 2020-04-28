@@ -2,7 +2,7 @@
   <ion-toolbar mode="md">
     <ion-title>Attendance Records Integrity</ion-title>
     <ion-buttons slot="end">
-      <ion-button outline (click)="dismiss()">
+      <ion-button outline (click)="dismiss(false)">
         <ion-icon class="colored-text" name="close"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -287,7 +287,7 @@
                 <ion-icon slot="end" name="trash"></ion-icon>
               </ion-button>
               <br>
-              <ion-button size="large" fill="outline" color="medium" class="ion-margin-top" (click)="dismiss()">
+              <ion-button size="large" fill="outline" color="medium" class="ion-margin-top" (click)="dismiss(false)">
                 Cancel
                 <ion-icon slot="end" name="ios-arrow-back"></ion-icon>
               </ion-button>

@@ -468,7 +468,7 @@ export class ClassesNewPage implements OnInit {
     });
     await modal.present();
     await modal.onDidDismiss().then(data => {
-      if (data.data) {
+      if (data.data && data.data.refresh) {
         this.getClasscodes();
       }
     });

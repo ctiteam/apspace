@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable, of } from 'rxjs';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 @Component({
@@ -14,7 +14,8 @@ export class AttendanceIntegrityModalPage implements OnInit {
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    private resetAttendance: ResetAttendanceGQL
+    private resetAttendance: ResetAttendanceGQL,
+    private loadingCtrl: LoadingController
   ) {
   }
   /* input from classes page */
@@ -37,6 +38,7 @@ export class AttendanceIntegrityModalPage implements OnInit {
     checked: boolean
   }[] = [];
 
+  loading: HTMLIonLoadingElement;
   checkAll = false;
 
   recordsDeleted = [];
@@ -44,7 +46,6 @@ export class AttendanceIntegrityModalPage implements OnInit {
 
   ngOnInit() {
     this.possibleExtraClasses$ = of(this.possibleClasses);
-
   }
 
   async checkAllClasses() {
@@ -53,19 +54,13 @@ export class AttendanceIntegrityModalPage implements OnInit {
       : (await this.possibleExtraClasses$.toPromise()).map(record => record.checked = false);
   }
 
-  done() {
-    this.modalCtrl.dismiss({ refresh: true });
-  }
-
-  dismiss() {
-    this.modalCtrl.dismiss();
+  dismiss(withRefresh: boolean) {
+    this.modalCtrl.dismiss(this.recordsDeleted.length > 0 || withRefresh ? { refresh: true } : {});
   }
 
   /** Delete (reset) attendance, double confirm. */
   async reset() {
     const recordsToDelete = (await this.possibleExtraClasses$.toPromise()).filter(record => record.checked);
-    console.log('delete: ', recordsToDelete);
-
     this.alertCtrl.create({
       cssClass: 'delete-warning',
       header: 'Delete Attendance Record(s)!',
@@ -80,7 +75,9 @@ export class AttendanceIntegrityModalPage implements OnInit {
           text: 'Delete',
           cssClass: 'danger-text',
           handler: () => {
-
+            if (recordsToDelete.length !== 0) {
+              this.presentLoading();
+            }
             // tslint:disable-next-line: prefer-const
             let results = recordsToDelete.reduce((promiseChain, record) => {
               return promiseChain.then(() => new Promise((resolve) => {
@@ -98,7 +95,6 @@ export class AttendanceIntegrityModalPage implements OnInit {
                   showCloseButton: true,
                 }).then(toast => toast.present());
               } else {
-                console.log('not: ', this.recordsNotDeleted.length);
                 this.toastCtrl.create({
                   message: `<h3>${this.recordsDeleted.length} record(s) deleted successfully and we could not delete ${this.recordsNotDeleted.length} record(s)</h3>
                             <p>Records not deleted are: ${this.recordsNotDeleted.toString()}</p>`,
@@ -108,6 +104,11 @@ export class AttendanceIntegrityModalPage implements OnInit {
                   showCloseButton: true,
                 }).then(toast => toast.present());
               }
+              this.dismissLoading();
+              // close the modal if no more extra items
+              if (this.possibleClasses.length === 0) {
+                this.dismiss(true);
+              }
             });
           }
         }
@@ -116,7 +117,6 @@ export class AttendanceIntegrityModalPage implements OnInit {
   }
 
   deleteRecord(record, cb) {
-    console.log('called: ', record);
     const schedule: ScheduleInput = {
       classcode: record.classCode,
       date: record.date,
@@ -127,23 +127,38 @@ export class AttendanceIntegrityModalPage implements OnInit {
 
     this.resetAttendance.mutate({ schedule }).subscribe(
       () => {
-        console.log('pushed');
         this.recordsDeleted.push(record);
-        this.possibleExtraClasses$ = of(this.possibleClasses.filter(possibleRecord => !(record.classCode === possibleRecord.classCode
+        this.possibleClasses = this.possibleClasses.filter(possibleRecord => !(record.classCode === possibleRecord.classCode
           && record.date === possibleRecord.date
           && record.timeFrom === possibleRecord.timeFrom
           && record.timeTo === possibleRecord.timeTo && record.type === possibleRecord.type)
-        )
         );
+        this.possibleExtraClasses$ = of(this.possibleClasses);
       },
       e => {
-        console.log('error', e);
         this.recordsNotDeleted.push(record.classCode + ' on ' + record.date + ' (' + e + ').');
         console.error(e);
         cb();
       },
       () => cb()
     );
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      duration: 20000,
+      message: 'Deleting Records ...',
+      translucent: true,
+      animated: true
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    if (this.loading) {
+      return await this.loading.dismiss();
+    }
   }
 
 }
