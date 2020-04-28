@@ -116,7 +116,7 @@ export class WsApiService {
   /**
    * POST: Simple request WS API.
    *
-   * @param endpoint - <apiUrl><endpoint> for service, used for caching
+   * @param endpoint - <apiUrl><endpoint> for service
    * @param options.auth - authentication required (default: true)
    * @param options.body - request body (default: null)
    * @param options.headers - http headers (default: {})
@@ -182,7 +182,7 @@ export class WsApiService {
   /**
    * PUT: Simple request WS API.
    *
-   * @param endpoint - <apiUrl><endpoint> for service, used for caching
+   * @param endpoint - <apiUrl><endpoint> for service
    * @param options.auth - authentication required (default: true)
    * @param options.body - request body (default: null)
    * @param options.headers - http headers (default: {})
