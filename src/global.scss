@@ -41,6 +41,10 @@
   border-top-right-radius: 15px;
 }
 
+.dark-theme.pure .controlled-modal-dingdong ion-content {
+    --background: var(--secondary-bg-color);
+}
+
 .controlled-modal-dingdong .modal-wrapper {
   height: 100%;
   position: absolute;

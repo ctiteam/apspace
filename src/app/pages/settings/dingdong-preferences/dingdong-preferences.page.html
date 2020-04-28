@@ -18,7 +18,7 @@
       wrapperSize="8">
     </app-message-with-svg>
 
-    <h6 style="font-weight: normal;">{{ message }}</h6>
+    <h6 style="font-weight: normal;" class="tertiary-txt-color">{{ message }}</h6>
     <div style="margin-top: 10px;">
       <ng-container *ngIf="(status$ | async) as status; else loading">
         <ion-button color="danger" expand="full" *ngIf="isSubscribed && !isProcessing" (click)="onUnsubscribe()">
