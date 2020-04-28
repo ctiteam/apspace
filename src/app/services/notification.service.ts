@@ -62,12 +62,7 @@ export class NotificationService {
           ),
           catchError(err => {
             if (400 <= err.status && err.status < 500) {
-              this.toastCtrl.create({
-                message: 'Something happened while we get your messages.',
-                duration: 3000,
-                position: 'top',
-                color: 'danger'
-              }).then(toast => toast.present());
+              this.sendToast('Something happened while we get your messages.');
               return throwError(err.message);
             }
           })
@@ -137,12 +132,7 @@ export class NotificationService {
             tap(_ => this.badge.decrease(1)),
             catchError(err => {
               if (400 <= err.status && err.status < 500) {
-                this.toastCtrl.create({
-                  message: 'Something happened while we get the message details.',
-                  duration: 3000,
-                  position: 'top',
-                  color: 'danger'
-                }).then(toast => toast.present());
+                this.sendToast('Something happened while we get the message details.');
                 return throwError(err.message);
               }
             })
@@ -166,12 +156,7 @@ export class NotificationService {
         tap(categories => this.storage.set('dingdong-categories-cache', categories)),
         catchError(err => {
           if (400 <= err.status && err.status < 500) {
-            this.toastCtrl.create({
-              message: 'Something happened while we get the categories.',
-              duration: 3000,
-              position: 'top',
-              color: 'danger'
-            }).then(toast => toast.present());
+            this.sendToast('Something happened while we get the categories.');
             return throwError(err.message);
           }
         })
@@ -189,12 +174,7 @@ export class NotificationService {
           return this.http.get(url).pipe(
             catchError(err => {
               if (400 <= err.status && err.status < 500) {
-                this.toastCtrl.create({
-                  message: 'Something happened while we get the message details.',
-                  duration: 3000,
-                  position: 'top',
-                  color: 'danger'
-                }).then(toast => toast.present());
+                this.sendToast('Something happened while we get the message details.');
                 return throwError(err.message);
               }
             })
@@ -214,12 +194,7 @@ export class NotificationService {
           return this.http.get<NotificationStatus>(url).pipe(
             catchError(err => {
               if (400 <= err.status && err.status < 500) {
-                this.toastCtrl.create({
-                  message: 'Something happened while we tunnel your request.',
-                  duration: 3000,
-                  position: 'top',
-                  color: 'danger'
-                }).then(toast => toast.present());
+                this.sendToast('Something happened while we tunnel your request.');
                 return throwError(err.message);
               }
             })
@@ -237,12 +212,7 @@ export class NotificationService {
           return this.http.delete<NotificationSubStatus>(url).pipe(
             catchError(err => {
               if (400 <= err.status && err.status < 500) {
-                this.toastCtrl.create({
-                  message: 'Your unsubscription request was not fulfilled. Please try again.',
-                  duration: 3000,
-                  position: 'top',
-                  color: 'danger'
-                }).then(toast => toast.present());
+                this.sendToast('Your subscription request was not fulfilled. Please try again.');
                 return throwError(err.message);
               }
             })
@@ -262,12 +232,7 @@ export class NotificationService {
           }).pipe(
             catchError(err => {
               if (400 <= err.status && err.status < 500) {
-                this.toastCtrl.create({
-                  message: 'Your subscription request was not fulfilled. Please try again.',
-                  duration: 3000,
-                  position: 'top',
-                  color: 'danger'
-                }).then(toast => toast.present());
+                this.sendToast('Your subscription request was not fulfilled. Please try again.');
                 return throwError(err.message);
               }
             })
@@ -275,5 +240,14 @@ export class NotificationService {
         }),
       );
     }
+  }
+
+  sendToast(msg: string) {
+    this.toastCtrl.create({
+      message: msg,
+      duration: 3000,
+      position: 'top',
+      color: 'danger'
+    }).then(toast => toast.present());
   }
 }
