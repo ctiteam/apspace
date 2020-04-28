@@ -1,4 +1,6 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient, HttpErrorResponse, HttpHeaders, HttpParams
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform, ToastController } from '@ionic/angular';
@@ -154,13 +156,10 @@ export class WsApiService {
     };
 
     if (this.plt.is('cordova') && this.network.type === 'none') {
-      this.toastCtrl.create({
-        message: 'You are now offline.',
-        duration: 3000,
-        position: 'top',
-      }).then(toast => toast.present());
-      return throwError(new Error('offline'));
+      return this.handleOffline();
     }
+
+    console.log('network', this.network.type);
 
     return (!options.auth // always get ticket if auth is true
       ? this.http.post<T>(url, options.body, opt)
@@ -168,11 +167,7 @@ export class WsApiService {
         switchMap(ticket => this.http.post<T>(url, options.body, { ...opt, params: { ...opt.params, ticket } })),
       )
     ).pipe(
-      catchError(err => {
-        if (400 <= err.status && err.status < 500) {
-          return throwError(err);
-        }
-      }),
+      catchError(this.handleClientError),
       timeout(options.timeout),
       publishLast(),
       refCount(),
@@ -220,12 +215,7 @@ export class WsApiService {
     };
 
     if (this.plt.is('cordova') && this.network.type === 'none') {
-      this.toastCtrl.create({
-        message: 'You are now offline.',
-        duration: 3000,
-        position: 'top',
-      }).then(toast => toast.present());
-      return throwError(new Error('offline'));
+      return this.handleOffline();
     }
 
     return (!options.auth // always get ticket if auth is true
@@ -234,15 +224,28 @@ export class WsApiService {
         switchMap(ticket => this.http.put<T>(url, options.body, { ...opt, params: { ...opt.params, ticket } })),
       )
     ).pipe(
-      catchError(err => {
-        if (400 <= err.status && err.status < 500) {
-          return throwError(err);
-        }
-      }),
+      catchError(this.handleClientError),
       timeout(options.timeout),
       publishLast(),
       refCount(),
     );
+  }
+
+  /** Handle client error by rethrowing 4xx. */
+  private handleClientError(err: HttpErrorResponse): Observable<never> | never {
+    if (400 <= err.status && err.status < 500) {
+      return throwError(err);
+    }
+  }
+
+  /** Toast and throw error observable when offline. */
+  private handleOffline(): Observable<never> {
+    this.toastCtrl.create({
+      message: 'You are now offline.',
+      duration: 3000,
+      position: 'top',
+    }).then(toast => toast.present());
+    return throwError(new Error('offline'));
   }
 
 }
