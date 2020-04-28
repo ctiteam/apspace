@@ -56,9 +56,7 @@ export class AttendanceDetailsModalPage implements OnInit {
   }
 
   getRecords(): Observable<AttendanceDetails[]> {
-    return this.ws.get<AttendanceDetails[]>(`/student/attendance_details?intake_code=${this.intake}&module_code=${this.module}`, {
-      url: 'https://u1cd2ltoq6.execute-api.ap-southeast-1.amazonaws.com/dev'
-    });
+    return this.ws.get<AttendanceDetails[]>(`/student/attendance_details?intake_code=${this.intake}&module_code=${this.module}`);
   }
 
   showOnCalendar() {
