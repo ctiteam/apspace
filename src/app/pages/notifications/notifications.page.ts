@@ -63,8 +63,8 @@ export class NotificationsPage implements OnInit {
     this.menu.open('notifications-filter-menu');
   }
 
-  async openPreferences() {
-    await this.modalCtrl.create({
+  openPreferences() {
+    this.modalCtrl.create({
       cssClass: 'controlled-modal-dingdong',
       component: DingdongPreferencesPage,
       componentProps: { isModal: true },
