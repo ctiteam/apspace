@@ -193,6 +193,7 @@ export class WsApiService {
    * @return data observable
    */
   put<T>(endpoint: string, options: {
+    auth?: boolean,
     body?: any | null,
     headers?: HttpHeaders | { [header: string]: string | string[]; },
     params?: HttpParams | { [param: string]: string | string[]; },
@@ -201,6 +202,7 @@ export class WsApiService {
     withCredentials?: boolean,
   } = {}): Observable<T> {
     options = {
+      auth: true,
       body: null,
       headers: {},
       params: {},
@@ -226,9 +228,11 @@ export class WsApiService {
       return throwError(new Error('offline'));
     }
 
-    return this.cas.getST(url.split('?').shift()).pipe(
-      switchMap(ticket => this.http.put<T>(url, options.body,
-        { ...opt, params: { ...opt.params, ticket } })),
+    return (!options.auth // always get ticket if auth is true
+      ? this.http.put<T>(url, options.body, opt)
+      : this.cas.getST(url.split('?').shift()).pipe( // remove service url params
+        switchMap(ticket => this.http.put<T>(url, options.body, { ...opt, params: { ...opt.params, ticket } })),
+      )
     ).pipe(
       catchError(err => {
         if (400 <= err.status && err.status < 500) {
