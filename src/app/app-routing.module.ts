@@ -214,12 +214,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/settings/reset-webspace-password/reset-webspace-password.module')
       .then(m => m.ResetWebspacePasswordPageModule)
   },
-  // {
-  //   path: 'dingdong-preferences',
-  //   canActivate: [AuthGuard],
-  //   loadChildren: () => import('./pages/settings/dingdong-preferences/dingdong-preferences.module')
-  //     .then(m => m.DingdongPreferencesPageModule)
-  // },
   {
     path: 'visa-status',
     canActivate: [AuthGuard],
