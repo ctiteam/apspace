@@ -1,13 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
-import { Classcodev1 } from 'src/app/interfaces';
+import { FlatClasscodev1 } from 'src/app/interfaces';
 
 @Pipe({
   name: 'classcodesFilter'
 })
 export class ClasscodesFilterPipe implements PipeTransform {
 
-  transform(classcodes: Classcodev1[], keyword: string, timeframe: number) {
+  transform(classcodes: FlatClasscodev1[], keyword: string, timeframe: number) {
     if (keyword) { // do this only if the user enters data in search box
       keyword = keyword.toLowerCase().replace(/%/g, '.*')
         .replace(/\(/g, '\\(').replace(/\)/g, '\\)') // escape parenthesis
@@ -17,13 +17,17 @@ export class ClasscodesFilterPipe implements PipeTransform {
     const searchRegExp = new RegExp(keyword, 'i');
     const today = new Date();
     return classcodes
-      .filter(classcode => searchRegExp.test(classcode.CLASS_CODE.toLowerCase()))
-      .map(classcode => ({ // create a new object to prevent modifying previous object
-        ...classcode,
-        CLASSES: classcode.CLASSES.slice().filter(c =>
-          moment(today).diff(moment(c.DATE, 'YYYY-MM-DD').subtract(), 'days') <= timeframe),
-      }))
-      .filter(classcode => classcode.CLASSES.length > 0);
+      .filter(classcode =>
+        searchRegExp.test(classcode.CLASS_CODE.toLowerCase())
+        && moment(today).diff(moment(classcode.DATE, 'YYYY-MM-DD').subtract(), 'days') <= timeframe
+      ).sort((a, b) => {
+        // same date => sort DESC by start time
+        if (moment(b.DATE, 'YYYY-MM-DD').toDate().getTime() === moment(a.DATE, 'YYYY-MM-DD').toDate().getTime()) {
+          return moment(b.TIME_FROM, 'h:mm A').toDate().getTime() - moment(a.TIME_FROM, 'h:mm A').toDate().getTime();
+        }
+        // sort DESC by date
+        return moment(b.DATE, 'YYYY-MM-DD').toDate().getTime() - moment(a.DATE, 'YYYY-MM-DD').toDate().getTime();
+      });
   }
 
 }
