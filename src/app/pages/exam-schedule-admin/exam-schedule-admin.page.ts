@@ -1,16 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ModalController, NavController, ToastController } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
+import { ExamScheduleAdmin } from 'src/app/interfaces/exam-schedule-admin';
+import { WsApiService } from 'src/app/services';
 import { AddExamSchedulePage } from './add-exam-schedule/add-exam-schedule.page';
-
-// interface ExamSchedule {
-//   module: string;
-//   date: string;
-//   time: string;
-//   publicationDate: string;
-//   createdBy: string;
-//   status: string;
-//   lastEdited: string;
-// }
 
 interface Resit {
   module: string;
@@ -32,83 +26,8 @@ export class ExamScheduleAdminPage implements OnInit {
     'Resits'
   ];
 
-  examSchedules: any = [
-    {
-      module: 'CT001-3-1',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive',
-      lastEdited: '*Username'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Active',
-      lastEdited: '*Username'
-    },
-    {
-      module: 'CT001-3-3',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive',
-      lastEdited: '*Username'
-    },
-    {
-      module: 'CT001-3-4',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive',
-      lastEdited: '*Username'
-    }
-  ];
-
-  pastExamSchedules: any = [
-    {
-      module: 'CT001-1-1',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive',
-      lastEdited: '*Username'
-    },
-    {
-      module: 'CT001-3-5',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Active',
-      lastEdited: '*Username'
-    },
-    {
-      module: 'CT001-1-1',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive',
-      lastEdited: '*Username'
-    },
-    {
-      module: 'CT001-3-6',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      publicationDate: '19-Sep-2019 - 20-Sep-2019',
-      createdBy: 'MUSTAFA',
-      status: 'Inactive',
-      lastEdited: '*Username'
-    }
-  ];
+  examSchedules$: Observable<ExamScheduleAdmin[]>;
+  pastExamSchedules$: Observable<ExamScheduleAdmin[]>;
 
   resits: Resit[] = [
     {
@@ -152,28 +71,46 @@ export class ExamScheduleAdminPage implements OnInit {
   isPast = false;
   selectedExamScheduleOption = 'Exam Schedule';
 
-  examScheduleToBeDeleted = [];
+  examScheduleToBeDeleted: ExamScheduleAdmin[] = [];
+
+  devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
 
   constructor(
     public toastCtrl: ToastController,
     public navCtrl: NavController,
     public modalCtrl: ModalController,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    private ws: WsApiService
   ) { }
 
   ngOnInit() {
+    this.examSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/current_exam', {url: this.devUrl}).pipe(
+      shareReplay()
+    );
+
+    this.pastExamSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/past_exam', {url: this.devUrl}).pipe(
+      map(pastExamSchedules => [pastExamSchedules[0]]),
+      shareReplay()
+    );
   }
 
-  addSelectedExamSchedule(selectedExamSchedule) {
-    if (!(this.examScheduleToBeDeleted.find(examSchedule => examSchedule.module === selectedExamSchedule.module))) {
+  addSelectedExamSchedule(selectedExamSchedule: ExamScheduleAdmin) {
+    if (!(this.examScheduleToBeDeleted.find(examSchedule => examSchedule.EXAMID === selectedExamSchedule.EXAMID))) {
       this.examScheduleToBeDeleted.push(selectedExamSchedule);
     } else {
       this.examScheduleToBeDeleted.forEach((examSchedule, index, examScheduleToBeDeleted) => {
-        if (examSchedule.module === selectedExamSchedule.module) {
+        if (examSchedule.EXAMID === selectedExamSchedule.EXAMID) {
           examScheduleToBeDeleted.splice(index, 1);
         }
       });
     }
+  }
+
+  resetSelectedExamSchedule(examSchedules) {
+    const examSchedulesKeys = Object.keys(examSchedules);
+    examSchedulesKeys.forEach(examScheduleKeys => delete examSchedules[examScheduleKeys].isChecked);
+
+    this.examScheduleToBeDeleted = [];
   }
 
   deleteSelectedExamSchedule() {
