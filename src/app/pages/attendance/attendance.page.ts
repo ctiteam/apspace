@@ -5,7 +5,7 @@ import { ModalController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
-import { Attendance, AttendanceLegend, Course } from 'src/app/interfaces';
+import { AttendanceLegend, Attendancev2, Course } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { AttendanceDetailsModalPage } from './attendance-details-modal/attendance-details-modal';
 
@@ -86,8 +86,8 @@ export class AttendancePage implements OnInit {
 
   getAttendance(intake: string): Observable<any[]> {
     this.average = -2;
-    const url = `/student/attendance?intake=${intake}`;
-    return (this.attendance$ = this.ws.get<Attendance[]>(url, { caching: 'network-or-cache' }).pipe(
+    const url = `/student/attendancev2?intake=${intake}`;
+    return (this.attendance$ = this.ws.get<Attendancev2[]>(url, { caching: 'network-or-cache' }).pipe(
       tap(a => this.calculateAverage(a)),
       map(res => this.groupAttendanceBySemester(res)),
     ));
@@ -111,7 +111,7 @@ export class AttendancePage implements OnInit {
     this.legend$ = this.ws.get<AttendanceLegend>('/student/attendance_legend', { caching });
   }
 
-  calculateAverage(aa: Attendance[] | null) {
+  calculateAverage(aa: Attendancev2[] | null) {
     if (!Array.isArray(aa)) {
       return;
     }

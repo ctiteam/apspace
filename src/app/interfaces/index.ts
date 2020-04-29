@@ -1,6 +1,6 @@
 export { Apcard } from './apcard';
 export { APLCClass, APLCClassDescription, APLCStudentBehaviour, APLCSubject } from './aplc';
-export { Attendance } from './attendance';
+export { Attendancev2 } from './attendance';
 export { AttendanceLegend } from './attendance-legend';
 export { BusTrips, APULocations, APULocation, BusTrip } from './bus-shuttle-services';
 export { AttendixClass, Classcode, Classcodev1, FlatClasscodev1 } from './classcode';
