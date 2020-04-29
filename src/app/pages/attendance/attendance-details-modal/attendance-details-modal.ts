@@ -43,7 +43,6 @@ export class AttendanceDetailsModalPage implements OnInit {
     private modalCtrl: ModalController,
     private navPrms: NavParams,
     private ws: WsApiService,
-    private loadingCtrl: LoadingController,
     private datePipe: DatePipe
   ) {
     this.title = this.navPrms.data.title;
@@ -60,7 +59,6 @@ export class AttendanceDetailsModalPage implements OnInit {
   }
 
   showOnCalendar() {
-    this.presentLoading();
     this.getRecords().subscribe(
       {
         next: (records) => {
@@ -97,7 +95,7 @@ export class AttendanceDetailsModalPage implements OnInit {
         complete: () => {
           // picks first date from array(most recent) and opens it in calendar
           this.openDate = this.datePipe.transform(new Date(this.recordsArray[0].CLASS_DATE), 'yyyy-MM-dd');
-          this.dismissLoading();
+          this.loaded = true;
         }
       }
     );
@@ -115,19 +113,6 @@ export class AttendanceDetailsModalPage implements OnInit {
         this.showDetails = true;
       }
     });
-  }
-
-  presentLoading() {
-    this.loadingCtrl.create({
-      spinner: 'dots',
-      duration: 5000,
-      message: 'Please wait...',
-      translucent: true,
-    }).then((loading) => loading.present());
-  }
-
-  dismissLoading() {
-    return this.loadingCtrl.dismiss();
   }
 
   dismiss() {

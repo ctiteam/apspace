@@ -13,7 +13,7 @@
   <ion-grid>
     <ion-row>
       <ion-col size="12" size-md="8" size-xl="10" offset-md="2" offset-xl="1">
-        <ion-card>
+        <ion-card *ngIf="loaded; else loadingCalendar">
           <ion-card-content>
 
             <ion-calendar 
@@ -54,7 +54,7 @@
             </ion-list>
             <ion-item class="ion-no-padding" lines="none">
               <ion-grid>
-                <ion-row >
+                <ion-row>
                   <ion-col class="ion-text-center" offset="0.5">
                     <ion-col class="attended">
                       <ion-badge>Present</ion-badge>
@@ -77,4 +77,40 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  <ng-template #loadingCalendar>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-xl="10" offset-xl="1">
+          <ion-card>
+            <ion-card-content>
+              <ion-skeleton-text animated style="width: 100%; line-height: 300px"></ion-skeleton-text>
+              <ion-list>
+                <ion-item lines="none">
+                  <ion-label class="colored-text text-bold">
+                    <ion-skeleton-text animated style="width: 20%; line-height: 10px"></ion-skeleton-text>
+                  </ion-label>
+                  <ion-skeleton-text animated style="width: 20%; line-height: 10px"></ion-skeleton-text>
+                </ion-item>
+                <ion-item>
+                  <ion-label class="colored-text text-bold">
+                    <ion-skeleton-text animated style="width: 20%; line-height: 10px"></ion-skeleton-text>
+                  </ion-label>
+                  <ion-skeleton-text animated style="width: 35%; line-height: 10px"></ion-skeleton-text>
+                </ion-item>
+              </ion-list>
+              <ion-item class="ion-no-padding" lines="none">
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="8" offset="2">
+                      <ion-skeleton-text animated style="width: 100%; line-height: 10px"></ion-skeleton-text>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
 </ion-content>
