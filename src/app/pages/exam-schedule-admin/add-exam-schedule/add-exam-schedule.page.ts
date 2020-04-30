@@ -82,15 +82,19 @@ export class AddExamSchedulePage implements OnInit {
     let splitTime;
     let startTime = '';
     let endTime = '';
+    let publicationDate;
 
     if (this.onEdit && examScheduleDetails.TIME) {
       splitTime = examScheduleDetails.TIME.split(' ');
       startTime = `${splitTime[0]} ${splitTime[1]}`;
       endTime = `${splitTime[3]} ${splitTime[4]}`;
+      publicationDate = {from: examScheduleDetails.FROMDATE, to: examScheduleDetails.TILLDATE};
     }
 
+    console.log(publicationDate);
+
     this.examScheduleForm = this.formBuilder.group({
-      publicationDate: [{from: examScheduleDetails.FROMDATE, to: examScheduleDetails.TILLDATE}, Validators.required],
+      publicationDate: [publicationDate, Validators.required],
       module: [examScheduleDetails.MODULE, Validators.required],
       date: [examScheduleDetails.DATEDAY, Validators.required],
       startTime: [moment(startTime, ['h:mm A']).format('HH:mm:00'), Validators.required],
@@ -128,12 +132,12 @@ export class AddExamSchedulePage implements OnInit {
     if (this.examScheduleForm.valid) {
       const body = new FormData();
 
-      body.append('from_date', this.examScheduleForm.get('publicationDate').value.from);
-      body.append('till_date', this.examScheduleForm.get('publicationDate').value.to);
+      body.append('from_date', this.examScheduleForm.get('publicationDate').value.from.toUpperCase());
+      body.append('till_date', this.examScheduleForm.get('publicationDate').value.to.toUpperCase());
       body.append('module', this.examScheduleForm.get('module').value);
-      body.append('venue', '');
+      body.append('venue', 'APIIT');
       body.append('dateday', moment(this.examScheduleForm.get('date').value).format('DD-MMM-YYYY').toUpperCase());
-      body.append('time', `${moment(this.examScheduleForm.get('startTime').value).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value).format('h:mm A')}`);
+      body.append('time', `${moment(this.examScheduleForm.get('startTime').value, ['HH:mm']).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value, ['HH:mm']).format('h:mm A')}`);
       body.append('remarks', this.examScheduleForm.get('remarks').value);
       body.append('status', 'Inactive');
       body.append('created_by', this.staffCode);
