@@ -23,19 +23,28 @@
                 Publication Date
               </ion-label>
               <ion-calendar [formControl]="examScheduleForm.controls['publicationDate']" [options]="optionsRange"
-                [type]="type" [format]="'YYYY-MMM-DD'" class="form-input"></ion-calendar>
+                [type]="type" [format]="'DD-MMM-YYYY'" class="form-input"></ion-calendar>
             </ion-item>
 
-            <ion-item lines="none">
+            <ion-item lines="none" *ngIf="modules$ | async as modules">
+              <ion-label position="stacked" class="item-label">
+                Module
+              </ion-label>
+              <ion-select [formControl]="examScheduleForm.controls['module']" class="form-input">
+                <ion-select-option *ngFor="let module of modules" [value]="module.MODULE_CODE">{{ module.MODULE_CODE }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <!-- <ion-item lines="none">
               <ion-label position="stacked" class="item-label">
                 Module
               </ion-label>
               <div *ngIf="!onEdit else editMode" class="form-input">
-                <ion-searchbar [(ngModel)]="searchTerm" (ngModelChange)="setFilteredItems()" class="search-intake">
+                <ion-searchbar [(ngModel)]="keyword" class="search-intake">
                 </ion-searchbar>
-                <div class="scrollable-div">
+                <div class="scrollable-div" *ngIf="modules$ | async as modules">
                   <ion-list class="masonry-list ion-no-padding" lines="none">
-                    <ion-item class="masonry-item" *ngFor="let module of modulesToBeSearched;">
+                    <ion-item class="masonry-item" *ngFor="let module of modules | modulesFilter:keyword as filteredModules">
                       <ion-label class="ion-text-wrap">
                         {{module.value}}
                       </ion-label>
@@ -43,14 +52,14 @@
                       </ion-checkbox>
                     </ion-item>
                   </ion-list>
+                  <ng-template #editMode>
+                    <ion-select [formControl]="examScheduleForm.controls['module']" class="form-input">
+                      <ion-select-option *ngFor="let module of modules" [value]="module.value">{{ module.value }}</ion-select-option>
+                    </ion-select>
+                  </ng-template>
                 </div>
               </div>
-              <ng-template #editMode>
-                <ion-select [formControl]="examScheduleForm.controls['module']" class="form-input">
-                  <ion-select-option *ngFor="let module of modules" [value]="module.value">{{ module.value }}</ion-select-option>
-                </ion-select>
-              </ng-template>
-            </ion-item>
+            </ion-item> -->
 
             <ion-item lines="none">
               <ion-label position="stacked" class="item-label">
@@ -66,20 +75,29 @@
                     <ion-label position="stacked" class="item-label">
                       Time
                     </ion-label>
-                    <ion-datetime [formControl]="examScheduleForm.controls['startTime']" displayFormat="h:mm A"
+                    <ion-datetime [formControl]="examScheduleForm.controls['startTime']" displayFormat="h:mm A" pickerFormat="h:mm A"
                       placeholder="Start Time" class="form-input"></ion-datetime>
                   </ion-item>
                 </ion-col>
                 <ion-col class="ion-no-padding ion-align-self-end">
                   <ion-item lines="none">
-                    <ion-datetime [formControl]="examScheduleForm.controls['endTime']" displayFormat="h:mm A"
+                    <ion-datetime [formControl]="examScheduleForm.controls['endTime']" displayFormat="h:mm A" pickerFormat="h:mm A"
                       placeholder="End Time" class="form-input"></ion-datetime>
                   </ion-item>
                 </ion-col>
               </ion-row>
             </ion-grid>
 
-            <ion-item *ngIf="onEdit" lines="none">
+            <ion-item lines="none" *ngIf="assessmentTypes$ | async as assessmentTypes">
+              <ion-label position="stacked" class="item-label">
+                Assessment Type
+              </ion-label>
+              <ion-select [formControl]="examScheduleForm.controls['assessmentType']" class="form-input">
+                <ion-select-option *ngFor="let assessmentType of assessmentTypes" [value]="assessmentType.ASSESSMENT_TYPE">{{ assessmentType.ASSESSMENT_TYPE }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item lines="none">
               <ion-label position="stacked" class="item-label">
                 Remarks
               </ion-label>

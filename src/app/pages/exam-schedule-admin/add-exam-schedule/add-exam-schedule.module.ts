@@ -8,6 +8,7 @@ import { AddExamSchedulePageRoutingModule } from './add-exam-schedule-routing.mo
 
 import { CalendarModule } from 'ion2-calendar';
 import { AddExamSchedulePage } from './add-exam-schedule.page';
+import { ModulesFilterPipe } from './modules-filter.pipe';
 
 @NgModule({
   imports: [
@@ -18,6 +19,6 @@ import { AddExamSchedulePage } from './add-exam-schedule.page';
     CalendarModule,
     ReactiveFormsModule
   ],
-  declarations: [AddExamSchedulePage]
+  declarations: [AddExamSchedulePage, ModulesFilterPipe]
 })
 export class AddExamSchedulePageModule {}
