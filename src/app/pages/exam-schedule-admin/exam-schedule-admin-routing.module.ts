@@ -8,10 +8,10 @@ const routes: Routes = [
     path: '',
     component: ExamScheduleAdminPage
   },
-  {
-    path: 'exam-schedule-details',
-    loadChildren: () => import('./exam-schedule-details/exam-schedule-details.module').then( m => m.ExamScheduleDetailsPageModule)
-  },
+  // {
+  //   path: 'exam-schedule-details',
+  //   loadChildren: () => import('./exam-schedule-details/exam-schedule-details.module').then( m => m.ExamScheduleDetailsPageModule)
+  // },
   {
     path: 'add-exam-schedule',
     loadChildren: () => import('./add-exam-schedule/add-exam-schedule.module').then( m => m.AddExamSchedulePageModule)

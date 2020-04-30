@@ -1,5 +1,7 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController, NavController, ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { ExamScheduleAdmin } from 'src/app/interfaces/exam-schedule-admin';
@@ -21,6 +23,8 @@ interface Resit {
 })
 
 export class ExamScheduleAdminPage implements OnInit {
+  loading: HTMLIonLoadingElement;
+
   examScheduleListOptions = [
     'Exam Schedule',
     'Resits'
@@ -77,13 +81,18 @@ export class ExamScheduleAdminPage implements OnInit {
 
   constructor(
     public toastCtrl: ToastController,
-    public navCtrl: NavController,
+    public router: Router,
     public modalCtrl: ModalController,
     public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
     private ws: WsApiService
   ) { }
 
   ngOnInit() {
+    this.doRefresh();
+  }
+
+  doRefresh() {
     this.examSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/current_exam', {url: this.devUrl}).pipe(
       shareReplay()
     );
@@ -115,6 +124,10 @@ export class ExamScheduleAdminPage implements OnInit {
 
   deleteSelectedExamSchedule() {
     if (this.examScheduleToBeDeleted) {
+      const body = new FormData();
+
+      this.examScheduleToBeDeleted.forEach(examSchedule => body.append('exam_id[]', examSchedule.EXAMID.toString()));
+
       this.alertCtrl.create({
         header: 'Warning',
         subHeader: 'You have exam schedules that you\'re about to cancel. Do you want to continue?',
@@ -127,21 +140,64 @@ export class ExamScheduleAdminPage implements OnInit {
           {
             text: 'Yes',
             handler: () => {
-              this.toastCtrl.create({
-                message: 'Successfully deleted the exam schedule.',
-                color: 'success',
-                duration: 3000,
-                position: 'top'
-              }).then(toast => {
-                this.examScheduleToBeDeleted = [];
-                this.toggleRemoveExamSchedule();
-                toast.present();
+              this.presentLoading();
+              this.ws.post<any>('/exam/delete_exam_schedule', {
+                url: this.devUrl,
+                body,
+                headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
+              })
+              .subscribe({
+                next: () => {
+                  this.showToastMessage(
+                    'Exam Schedule deleted successfully!',
+                    'success'
+                  );
+                },
+                error: (err) => {
+                  this.dismissLoading();
+                  this.showToastMessage(
+                    err.status + ': ' + err.error.error,
+                    'danger'
+                  );
+                },
+                complete: () => {
+                  this.examScheduleToBeDeleted = [];
+                  this.toggleRemoveExamSchedule();
+                  this.dismissLoading().then(() => this.doRefresh());
+                }
               });
             }
           }
         ]
       }).then(alert => alert.present());
     }
+  }
+
+  showToastMessage(message: string, color: 'danger' | 'success') {
+    this.toastCtrl
+      .create({
+        message,
+        duration: 5000,
+        position: 'top',
+        color,
+        showCloseButton: true,
+        animated: true
+      })
+      .then(toast => toast.present());
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
   }
 
   toggleRemoveExamSchedule() {
@@ -152,15 +208,24 @@ export class ExamScheduleAdminPage implements OnInit {
     this.isPast = !this.isPast;
   }
 
-  viewExamScheduleDetails() {
-    this.navCtrl.navigateForward(['exam-schedule-details']);
+  viewExamScheduleDetails(examId) {
+    console.log('before send ', examId);
+    this.router.navigate(['exam-schedule-details', examId], {replaceUrl: false});
   }
 
-  addNewExamSchedule() {
-    this.modalCtrl.create({
+  async addNewExamSchedule() {
+    const modal = await this.modalCtrl.create({
       component: AddExamSchedulePage,
       cssClass: 'full-page-modal'
-    }).then(modal => modal.present());
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data.data !== null) {
+        this.doRefresh();
+      }
+    });
+
+    return await modal.present();
   }
 
   segmentChanged(event) {

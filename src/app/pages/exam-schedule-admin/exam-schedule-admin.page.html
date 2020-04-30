@@ -78,7 +78,7 @@
                     <ion-item
                       [button]="!onDelete"
                       detail=false
-                      (click)="!onDelete && viewExamScheduleDetails()"
+                      (click)="!onDelete && viewExamScheduleDetails(examSchedule.EXAMID)"
                       [style.border-left-color]="(examSchedule.MODULE | strToColor)"
                       [ngClass]="{'clickable-item' : !onDelete}"
                       class="table-item" 
