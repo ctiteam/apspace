@@ -1,21 +1,14 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, ModalController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { ExamScheduleAdmin } from 'src/app/interfaces/exam-schedule-admin';
+import { ExamScheduleAdmin, IntakeExamSchedule } from 'src/app/interfaces/exam-schedule-admin';
 import { WsApiService } from 'src/app/services';
 import { AddExamSchedulePage } from '../add-exam-schedule/add-exam-schedule.page';
 import { AddIntakePage } from './add-intake/add-intake.page';
-
-interface Intake {
-  intake: string;
-  type: string;
-  venue: string;
-  docketsIssuance: string;
-  resultDate: string;
-}
 
 @Component({
   selector: 'app-exam-schedule-details',
@@ -26,104 +19,21 @@ interface Intake {
 export class ExamScheduleDetailsPage implements OnInit {
   devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
   examScheduleDetails$: Observable<any[]>;
+  intakes$: Observable<IntakeExamSchedule[]>;
+  loading: HTMLIonLoadingElement;
+
   examScheduleDetailsToBeEdited;
+  intakesToBeDeleted: IntakeExamSchedule[] = [];
 
-  intakes: Intake[] = [
-    {
-      intake: 'UCPP1702MGMT',
-      type: 'First',
-      venue: '1, APIIT@TPM',
-      docketsIssuance: '2020-02-04',
-      resultDate: '2020-02-13'
-    },
-    {
-      intake: 'AFCF1805AS',
-      type: 'First',
-      venue: '1, APIIT@TPM',
-      docketsIssuance: '2020-02-04',
-      resultDate: '2020-02-13'
-    },
-    {
-      intake: 'UC1F1904HRM',
-      type: 'First',
-      venue: '1, APIIT@TPM',
-      docketsIssuance: '2020-02-04',
-      resultDate: '2020-02-13'
-    },
-    {
-      intake: 'UCPP1702MGMT',
-      type: 'First',
-      venue: '1, APIIT@TPM',
-      docketsIssuance: '2020-02-04',
-      resultDate: '2020-02-13'
-    },
-    {
-      intake: 'UCPP1702MGMT',
-      type: 'First',
-      venue: '1, APIIT@TPM',
-      docketsIssuance: '2020-02-04',
-      resultDate: '2020-02-13'
-    },
-    {
-      intake: 'AFCF1805AS',
-      type: 'First',
-      venue: '1, APIIT@TPM',
-      docketsIssuance: '2020-02-04',
-      resultDate: '2020-02-13'
-    },
-    {
-      intake: 'UC1F1904HRM',
-      type: 'First',
-      venue: '1, APIIT@TPM',
-      docketsIssuance: '2020-02-04',
-      resultDate: '2020-02-13'
-    },
-    {
-      intake: 'UCPP1702MGMT',
-      type: 'First',
-      venue: '1, APIIT@TPM',
-      docketsIssuance: '2020-02-04',
-      resultDate: '2020-02-13'
-    },
-    {
-      intake: 'UCPP1702MGMT',
-      type: 'First',
-      venue: '1, APIIT@TPM',
-      docketsIssuance: '2020-02-04',
-      resultDate: '2020-02-13'
-    },
-    {
-      intake: 'AFCF1805AS',
-      type: 'First',
-      venue: '1, APIIT@TPM',
-      docketsIssuance: '2020-02-04',
-      resultDate: '2020-02-13'
-    },
-    {
-      intake: 'UC1F1904HRM',
-      type: 'First',
-      venue: '1, APIIT@TPM',
-      docketsIssuance: '2020-02-04',
-      resultDate: '2020-02-13'
-    },
-    {
-      intake: 'UCPP1702MGMT',
-      type: 'First',
-      venue: '1, APIIT@TPM',
-      docketsIssuance: '2020-02-04',
-      resultDate: '2020-02-13'
-    },
-  ];
-
-  status = 'Inactive';
   onDelete = false;
-
   examId;
+  status;
 
   constructor(
     public modalCtrl: ModalController,
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
+    public loadingCtrl: LoadingController,
     private route: ActivatedRoute,
     private ws: WsApiService
   ) {
@@ -136,7 +46,10 @@ export class ExamScheduleDetailsPage implements OnInit {
 
   doRefresh() {
     this.examScheduleDetails$ = this.ws.get<ExamScheduleAdmin>(`/exam/exam_details?exam_id=${this.examId}`, {url: this.devUrl}).pipe(
-      tap(examScheduleDetails => this.examScheduleDetailsToBeEdited = examScheduleDetails),
+      tap(examScheduleDetails => {
+        this.examScheduleDetailsToBeEdited = examScheduleDetails;
+        this.status = this.examScheduleDetailsToBeEdited.STATUS;
+      }),
       map(examScheduleDetails =>
         [
           {
@@ -162,10 +75,83 @@ export class ExamScheduleDetailsPage implements OnInit {
         ]
       )
     );
+
+    this.intakes$ = this.ws.get<IntakeExamSchedule[]>(`/exam/intake_details?exam_id=${this.examId}`, {url: this.devUrl});
   }
 
   toggleBulkDeleteIntake() {
     this.onDelete = !this.onDelete;
+  }
+
+  addSelectedIntake(selectedIntake: IntakeExamSchedule) {
+    if (!(this.intakesToBeDeleted.find(intake => intake.ENTRYID === selectedIntake.ENTRYID))) {
+      this.intakesToBeDeleted.push(selectedIntake);
+    } else {
+      this.intakesToBeDeleted.forEach((intake, index, intakesToBeDeleted) => {
+        if (intake.ENTRYID === selectedIntake.ENTRYID) {
+          intakesToBeDeleted.splice(index, 1);
+        }
+      });
+    }
+  }
+
+  resetSelectedIntake(intakes) {
+    const intakesKeys = Object.keys(intakes);
+    intakesKeys.forEach(intakeKey => delete intakes[intakeKey].isChecked);
+
+    this.intakesToBeDeleted = [];
+  }
+
+  deleteSelectedIntakes() {
+    if (this.intakesToBeDeleted) {
+      const bodyObject = {
+        'entries[]' : []
+      };
+
+      this.intakesToBeDeleted.forEach(intake => {
+        bodyObject['entries[]'].push(intake.ENTRYID);
+      });
+
+      this.alertCtrl.create({
+        header: 'Warning',
+        subHeader: 'You have intakes that you\'re about to delete. Do you want to continue?',
+        buttons: [
+          {
+            text: 'No',
+            role: 'cancel',
+            handler: () => {}
+          },
+          {
+            text: 'Yes',
+            handler: () => {
+              this.presentLoading();
+              const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
+              const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+              this.ws.post('/exam/remove_entry', { url: this.devUrl, body, headers }).subscribe({
+                next: () => {
+                  this.showToastMessage(
+                    'Intakes deleted successfully!',
+                    'success'
+                  );
+                },
+                error: (err) => {
+                  this.dismissLoading();
+                  this.showToastMessage(
+                    err.status + ': ' + err.error.error,
+                    'danger'
+                  );
+                },
+                complete: () => {
+                  this.intakesToBeDeleted = [];
+                  this.toggleBulkDeleteIntake();
+                  this.dismissLoading().then(() => this.doRefresh());
+                }
+              });
+            }
+          }
+        ]
+      }).then(alert => alert.present());
+    }
   }
 
   async editExamSchedule() {
@@ -204,13 +190,31 @@ export class ExamScheduleDetailsPage implements OnInit {
     }).then(modal => modal.present());
   }
 
-  showToastMessage(message, duration, color) {
-    this.toastCtrl.create({
-      message,
-      duration,
-      color,
-      position: 'top'
-    }).then(toast => toast.present());
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
+  }
+
+  showToastMessage(message: string, color: 'danger' | 'success') {
+    this.toastCtrl
+      .create({
+        message,
+        duration: 5000,
+        position: 'top',
+        color,
+        showCloseButton: true,
+        animated: true
+      })
+      .then(toast => toast.present());
   }
 
   activateExamSchedule() {

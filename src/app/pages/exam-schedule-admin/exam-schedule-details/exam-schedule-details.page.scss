@@ -8,6 +8,19 @@ $animation-standard-easing: cubic-bezier(0.4, 0.0, 0.2, 1);
     color: var(--success-color);
 }
 
+.is-inactive-bg-color {
+    --background: var(--danger-color);
+    --background-hover: var(--danger-color);
+    --background-clicked: var(--danger-color);
+}
+
+.is-active-bg-color {
+    --background: var(--primary-color);
+    --background-hover: var(--primary-color);
+    --background-clicked: var(--primary-color);
+}
+
+
 .clickable-icon {
     cursor: pointer;
     color: var(--primary-color);

@@ -8,13 +8,13 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid>
+  <ion-grid *ngIf="examScheduleDetails$ | async as examScheduleDetails">
     <ion-row>
       <ion-col>
         <ion-card class="ion-no-margin">
           <ion-card-content class="ion-no-padding">
             <ion-list lines="none">
-              <ion-item *ngFor="let examScheduleDetail of examScheduleDetails$ | async as examScheduleDetails; let i = index;">
+              <ion-item *ngFor="let examScheduleDetail of examScheduleDetails; let i = index;">
                 <ion-grid class="ion-no-padding">
                   <ion-row class="ion-no-padding">
                     <ion-col size="12" size-sm="2" class="ion-no-padding">
@@ -23,7 +23,7 @@
                     <ion-col class="text-bold ion-no-padding">
                       <div class="flex-col-item">
                         {{examScheduleDetail.detail}}
-                        <div *ngIf="!onDelete">
+                        <div *ngIf="!onDelete && status === 'Inactive'">
                           <ion-icon (click)="editExamSchedule()" *ngIf="i === 0" name="create" class="clickable-icon">
                           </ion-icon>
                         </div>
@@ -55,8 +55,11 @@
                           {{ status }}
                         </ion-col>
                         <ion-col class="ion-no-padding ion-text-end">
-                          <ion-button [disabled]="onDelete" (click)="activateExamSchedule()" class="danger-background">
-                            <span class="ion-margin">ACTIVATE THIS EXAM SCHEDULE</span>
+                          <ion-button [disabled]="onDelete" (click)="activateExamSchedule()" class="is-inactive-bg-color" [ngClass]="{'is-active-bg-color': status === 'Active'}">
+                            <span *ngIf="status === 'Inactive'; else deactivate;" class="ion-margin">ACTIVATE THIS EXAM SCHEDULE</span>
+                            <ng-template #deactivate>
+                              <span>DEACTIVATE THIS EXAM SCHEDULE</span>
+                            </ng-template>
                           </ion-button>
                         </ion-col>
                       </ion-row>
@@ -72,82 +75,90 @@
 
     <ion-row [ngClass]="{'row-margin': onDelete}">
       <ion-col>
-        <ion-card *ngIf="intakes.length >= 1; else noIntakes" class="ion-no-margin">
-          <ion-card-header class="custom-background">
-            <ion-card-title>
-              <ion-grid class="ion-no-padding">
-                <ion-row class="ion-no-padding">
-                  <ion-col class="ion-no-padding ion-align-self-center">
-                    <h5>
-                      Exam Schedule - Intakes
-                    </h5>
-                  </ion-col>
-                  <ion-col size="3" class="ion-no-padding ion-text-end ion-align-self-center">
-                    <ion-icon [name]="onDelete ? 'close' : 'checkbox'" class="clickable-icon-danger"
-                      (click)="toggleBulkDeleteIntake()"></ion-icon>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-card-title>
-          </ion-card-header>
-
-          <ion-card-content class="ion-no-padding">
-            <ion-item class="table-header">
-              <ion-grid>
-                <ion-row>
-                  <ion-col class="ion-no-padding">
-                    <h2 class="text-bold">Intake</h2>
-                  </ion-col>
-                  <ion-col class="ion-no-padding">
-                    <h2 class="text-bold">Type</h2>
-                  </ion-col>
-                  <ion-col class="ion-no-padding">
-                    <h2 class="text-bold">Venue</h2>
-                  </ion-col>
-                  <ion-col class="ion-no-padding">
-                    <h2 class="text-bold">Dockets Issuance</h2>
-                  </ion-col>
-                  <ion-col class="ion-no-padding">
-                    <h2 class="text-bold">Exam Result Date</h2>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-item>
-
-            <ion-item detail=false [button]="!onDelete" (click)="!onDelete && editIntake()" [style.border-left-color]="(intake.intake | strToColor)"
-              [ngClass]="{'clickable-item' : !onDelete}" class="table-item clickable-item"
-              *ngFor="let intake of intakes">
-              <ion-grid>
-                <ion-row>
-                  <ion-col size="12" size-sm="" class="text-bold ion-no-padding">
-                    {{intake.intake}}
-                  </ion-col>
-                  <ion-col size="12" size-sm="" class="ion-no-padding">
-                    <ion-icon class="display-on-sm" name="people"></ion-icon>
-                    {{intake.type}}
-                  </ion-col>
-                  <ion-col size="12" size-sm="" class="ion-no-padding">
-                    <ion-icon class="display-on-sm" name="pin"></ion-icon>
-                    {{intake.venue}}
-                  </ion-col>
-                  <ion-col size="12" size-sm="" class="ion-no-padding">
-                    <ion-icon class="display-on-sm" name="paper"></ion-icon>
-                    {{intake.docketsIssuance}}
-                  </ion-col>
-                  <ion-col size="12" size-sm="" class="ion-no-padding">
-                    <div class="flex-col-item">
-                      <div>
-                        <ion-icon class="display-on-sm" name="pie"></ion-icon>
-                        {{intake.resultDate}}
+        <div *ngIf="intakes$ | async as intakes">
+          <ion-card *ngIf="intakes.length > 0; else noIntakes" class="ion-no-margin">
+            <ion-card-header class="custom-background">
+              <ion-card-title>
+                <ion-grid class="ion-no-padding">
+                  <ion-row class="ion-no-padding">
+                    <ion-col class="ion-no-padding ion-align-self-center">
+                      <h5>
+                        Exam Schedule - Intakes
+                      </h5>
+                    </ion-col>
+                    <ion-col size="3" class="ion-no-padding ion-text-end ion-align-self-center">
+                      <ion-buttons class="ion-float-end" *ngIf="status === 'Inactive'">
+                        <ion-button [disabled]="intakesToBeDeleted.length > 0" (click)="toggleBulkDeleteIntake()">
+                          <ion-icon slot="icon-only" [name]="onDelete ? 'close' : 'checkbox'" class="clickable-icon-danger"></ion-icon>
+                        </ion-button>
+                      </ion-buttons>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-title>
+            </ion-card-header>
+  
+            <ion-card-content class="ion-no-padding">
+              <ion-item class="table-header">
+                <ion-grid>
+                  <ion-row>
+                    <ion-col class="ion-no-padding">
+                      <h2 class="text-bold">Intake</h2>
+                    </ion-col>
+                    <ion-col class="ion-no-padding">
+                      <h2 class="text-bold">Type</h2>
+                    </ion-col>
+                    <ion-col class="ion-no-padding">
+                      <h2 class="text-bold">Venue</h2>
+                    </ion-col>
+                    <ion-col class="ion-no-padding">
+                      <h2 class="text-bold">Dockets Issuance</h2>
+                    </ion-col>
+                    <ion-col class="ion-no-padding">
+                      <h2 class="text-bold">Exam Result Date</h2>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+  
+              <ion-item detail=false [button]="!onDelete && status === 'Inactive'" (click)="!onDelete && status === 'Inactive' && editIntake()" [style.border-left-color]="(intake.INTAKE | strToColor)"
+                [ngClass]="{'clickable-item' : !onDelete && status === 'Inactive'}" class="table-item clickable-item"
+                *ngFor="let intake of intakes">
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="12" size-sm="" class="text-bold ion-no-padding">
+                      {{intake.INTAKE}}
+                    </ion-col>
+                    <ion-col size="12" size-sm="" class="ion-no-padding">
+                      <ion-icon class="display-on-sm" name="people"></ion-icon>
+                      {{intake.TYPE}}
+                    </ion-col>
+                    <ion-col size="12" size-sm="" class="ion-no-padding">
+                      <ion-icon class="display-on-sm" name="pin"></ion-icon>
+                      {{intake.VENUE}}
+                    </ion-col>
+                    <ion-col size="12" size-sm="" class="ion-no-padding">
+                      <ion-icon class="display-on-sm" name="paper"></ion-icon>
+                      {{intake.DOCKETSDUE | date: 'dd-MMM-yyyy'}}
+                    </ion-col>
+                    <ion-col size="12" size-sm="" class="ion-no-padding">
+                      <div class="flex-col-item">
+                        <div>
+                          <ion-icon class="display-on-sm" name="pie"></ion-icon>
+                          {{intake.RESULT_DATE | date: 'dd-MMM-yyyy'}}
+                        </div>
+                        <ion-checkbox (ngModelChange)="addSelectedIntake(intake)" [(ngModel)]="intake.isChecked" class="ion-no-margin" *ngIf="onDelete"></ion-checkbox>
                       </div>
-                      <ion-checkbox *ngIf="onDelete" class="ion-no-margin"></ion-checkbox>
-                    </div>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-item>
-          </ion-card-content>
-        </ion-card>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+              <ion-button (click)="resetSelectedIntake(intakes)" [disabled]="intakesToBeDeleted.length < 1" *ngIf="onDelete" class="ion-float-end colored-background">
+                UNCHECK ALL
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </div>
 
         <ng-template #noIntakes>
           <app-message-with-svg imageUrl="assets/img/empty.svg"
@@ -161,7 +172,7 @@
 
 </ion-content>
 
-<ion-footer>
+<ion-footer *ngIf="status === 'Inactive'">
   <ion-fab *ngIf="!onDelete; else fabDelete" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="addNewIntake()" class="colored-background">
       <ion-icon name="add"></ion-icon>
@@ -170,7 +181,7 @@
 
   <ng-template #fabDelete>
     <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button class="danger-background">
+      <ion-fab-button [disabled]="intakesToBeDeleted.length < 1" (click)="deleteSelectedIntakes()" class="danger-background">
         <ion-icon name="trash"></ion-icon>
       </ion-fab-button>
     </ion-fab>
