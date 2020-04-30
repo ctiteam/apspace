@@ -66,7 +66,6 @@ export class AddExamSchedulePage implements OnInit {
   initializeForm(examScheduleDetails: ExamScheduleAdmin = {
     ASSESSMENT_TYPE: '',
     CHECK_WEEK: 0,
-    CREATEDBY: '',
     DATEDAY: '',
     EXAMID: 0,
     FROMDATE: '',
