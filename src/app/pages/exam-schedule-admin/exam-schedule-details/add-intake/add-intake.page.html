@@ -23,22 +23,30 @@
                 Intakes
               </ion-label>
               <div *ngIf="!onEdit else editMode" class="form-input">
-                <ion-searchbar [(ngModel)]="searchTerm" (ngModelChange)="setFilteredItems()" class="search-intake"></ion-searchbar>
+                <ion-button color="medium" fill="outline" expand="block" (click)="presentIntakeSearch()">
+                  <ion-icon name="add"></ion-icon>
+                </ion-button>
                 <div class="scrollable-div">
-                  <ion-list class="masonry-list ion-no-padding" lines="none">
+                  <ion-chip *ngFor="let intake of intakeArray.controls; let i = index;">
+                    <ion-label>{{intake.value}}</ion-label>
+                    <ion-icon (click)="removeIntake(i)" name="close-circle"></ion-icon>
+                  </ion-chip>
+                  <!-- <ion-list class="masonry-list ion-no-padding" lines="none">
                     <ion-item class="masonry-item" *ngFor="let intake of intakesToBeSearched">
                       <ion-label class="ion-text-wrap">
                         {{intake.value}}
                       </ion-label>
                       <ion-checkbox (ngModelChange)="addSelectedIntakes(intake)" [(ngModel)]="intake.isChecked"></ion-checkbox> 
                     </ion-item>
-                  </ion-list>
+                  </ion-list> -->
                 </div>
               </div>
               <ng-template #editMode>
-                <ion-select [formControl]="intakeForm.controls['intake']" class="form-input">
+                <ion-input (click)="presentIntakeSearch()" [formControl]="intakeForm.controls['intake']" class="form-input"></ion-input>
+
+                <!-- <ion-select [formControl]="intakeForm.controls['intake']" class="form-input">
                   <ion-select-option *ngFor="let intake of intakes" [value]="intake.value">{{ intake.value }}</ion-select-option>
-                </ion-select>
+                </ion-select> -->
               </ng-template>
             </ion-item>
 
@@ -46,9 +54,7 @@
               <ion-label position="stacked" class="item-label">
                 Type
               </ion-label>
-              <ion-select [formControl]="intakeForm.controls['type']" class="form-input">]
-                <ion-select-option *ngFor="let type of types" [value]="type">{{ type }}</ion-select-option>
-              </ion-select>
+              <ion-input [formControl]="intakeForm.controls['type']" class="form-input"></ion-input>
             </ion-item>
 
             <ion-grid class="ion-no-padding">
@@ -56,16 +62,16 @@
                 <ion-col size="12" size-sm="6" class="ion-no-padding">
                   <ion-item lines="none">
                     <ion-label position="stacked" class="item-label">
-                      Location & Venue
+                      Venue
                     </ion-label>
-                    <ion-select [formControl]="intakeForm.controls['location']" class="form-input">
-                      <ion-select-option *ngFor="let location of locations" [value]="location">{{ location }}</ion-select-option>
+                    <ion-select [formControl]="intakeForm.controls['venue']" class="form-input">
+                      <ion-select-option *ngFor="let venue of venues" [value]="venue">{{ venue }}</ion-select-option>
                     </ion-select>
                   </ion-item>
                 </ion-col>
                 <ion-col size="12" size-sm="6" class="ion-no-padding">
                   <ion-item lines="none">
-                    <ion-input [formControl]="intakeForm.controls['venue']" class="form-input"></ion-input>
+                    <ion-input [formControl]="intakeForm.controls['location']" class="form-input"></ion-input>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -84,7 +90,7 @@
               </ion-label>
               <ion-datetime [formControl]="intakeForm.controls['examResultDate']" class="form-input"></ion-datetime>
             </ion-item>
-            <ion-button [disabled]="intakeForm.invalid" expand="block" class="success-background ion-margin">SUBMIT</ion-button>
+            <ion-button (click)="submit()" [disabled]="intakeForm.invalid" expand="block" class="success-background ion-margin">SUBMIT</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>

@@ -1,6 +1,12 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import * as moment from 'moment';
+import { tap } from 'rxjs/operators';
+import { SearchModalComponent } from 'src/app/components/search-modal/search-modal.component';
+import { IntakeExamSchedule } from 'src/app/interfaces/exam-schedule-admin';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-add-intake',
@@ -9,97 +15,232 @@ import { ModalController } from '@ionic/angular';
 })
 export class AddIntakePage implements OnInit {
   @Input() onEdit: boolean;
+  @Input() intakeDetails: IntakeExamSchedule;
+  @Input() examId: number;
 
-  searchTerm = '';
-  intakesToBeSearched = [];
+  loading: HTMLIonLoadingElement;
+
+  devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
 
   intakeForm: FormGroup;
+  intakesToBeAdded = [];
   selectedIntake;
+  intakes = [];
 
-  intakes = [
-    {
-      value: '1Lorem Ipsum'
-    },
-    {
-      value: '2Lorem Ipsum'
-    },
-    {
-      value: '3Lorem Ipsum'
-    },
-    {
-      value: '4Lorem Ipsum'
-    },
-    {
-      value: '5Lorem Ipsum'
-    },
-    {
-      value: '6Lorem Ipsum'
-    },
-    {
-      value: '7Lorem Ipsum'
-    },
-    {
-      value: '8Lorem Ipsum'
-    },
-    {
-      value: '9Lorem Ipsum'
-    },
-    {
-      value: '10Lorem Ipsum'
-    },
-  ];
-
-  types = [
-    'Lorem Ipsum1',
-    'Lorem Ipsum2',
-    'Lorem Ipsum3'
-  ];
-
-  locations = [
-    'Lorem Ipsum1',
-    'Lorem Ipsum2',
-    'Lorem Ipsum3'
+  venues = [
+    'APITT@EXAM HALL',
+    'APU@EXAM HALL'
   ];
 
   constructor(
     public modalCtrl: ModalController,
-    private formBuilder: FormBuilder
+    public loadingCtrl: LoadingController,
+    public alertCtrl: AlertController,
+    public toastCtrl: ToastController,
+    private formBuilder: FormBuilder,
+    private ws: WsApiService
   ) { }
 
   ngOnInit() {
-    this.setFilteredItems();
+    this.ws.get<any>('/exam/intake_listing', { url: this.devUrl }).pipe(
+      tap(intakes => {
+        intakes.forEach(intake => this.intakes.push(intake.COURSE_CODE_ALIAS));
+      })
+    ).subscribe();
 
-    this.intakeForm = this.formBuilder.group({
-      intake: this.initializeIntake(),
-      type: ['', Validators.required],
-      location: ['', Validators.required],
-      venue: ['', Validators.required],
-      docketIssuance: ['', Validators.required],
-      examResultDate: ['', Validators.required]
-    });
+    this.initializeForm(this.intakeDetails);
 
     this.intakeForm.valueChanges.subscribe(console.log);
   }
 
-  initializeIntake() {
+  initializeForm(intakeDetails: IntakeExamSchedule = {
+    DOCKETSDUE: '',
+    ENTRYID: '',
+    INTAKE: '',
+    RESULT_DATE: '',
+    TYPE: '',
+    VENUE: ''
+  }) {
+    let splitVenue;
+    let location = '';
+    let venue = '';
+
+    if (this.onEdit && intakeDetails.VENUE) {
+      splitVenue = intakeDetails.VENUE.split(',');
+      location = splitVenue[0];
+      venue = splitVenue[1];
+    }
+
+    this.intakeForm = this.formBuilder.group({
+      intake: this.initializeIntake(intakeDetails.INTAKE),
+      type: [intakeDetails.TYPE, Validators.required],
+      location: [location, Validators.required],
+      venue: [venue, Validators.required],
+      docketIssuance: [intakeDetails.DOCKETSDUE, Validators.required],
+      examResultDate: [intakeDetails.RESULT_DATE, Validators.required]
+    });
+  }
+
+  initializeIntake(intake) {
     if (!(this.onEdit)) {
       return this.formBuilder.array([], [Validators.required]);
     } else {
-      this.selectedIntake = '4Lorem Ipsum';
-      return [this.selectedIntake, Validators.required];
+      return [intake, Validators.required];
     }
   }
+
+  async presentIntakeSearch() {
+    const modal = await this.modalCtrl.create({
+      component: SearchModalComponent,
+      componentProps: {
+        items: this.intakes,
+        notFound: 'No intake selected'
+      }
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data.data) {
+        if (this.onEdit) {
+          this.intakeForm.get('intake').patchValue(data.data.item);
+        } else {
+          this.intakeArray.push(this.formBuilder.control(data.data.item));
+        }
+      }
+    });
+
+    return await modal.present();
+  }
+
+  removeIntake(i) {
+    this.intakeArray.removeAt(i);
+  }
+
 
   get intakeArray() {
     return this.intakeForm.get('intake') as FormArray;
   }
 
-  closeModal() {
-    this.modalCtrl.dismiss();
+  submit() {
+    if (this.intakeForm.valid) {
+      const bodyObject = {
+        exam_id: this.examId.toString(),
+        docketdue: moment(this.intakeForm.get('docketIssuance').value).format('DD-MMM-YYYY').toUpperCase(),
+        appraisalsdue: '',
+        createdby: '',
+        types: this.intakeForm.get('type').value,
+        venue: `${this.intakeForm.get('location').value},${this.intakeForm.get('venue').value}`,
+        intake_group: '',
+        result_date: moment(this.intakeForm.get('examResultDate').value).format('DD-MMM-YYYY').toUpperCase()
+      };
+
+      if (this.onEdit) {
+        const entryId = { entryid: this.intakeDetails.ENTRYID };
+        this.presentLoading();
+        const body = new HttpParams({ fromObject: { ...entryId, ...bodyObject } }).toString();
+        const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+        this.ws.post<any>('/exam/update_intake_entry', {
+          url: this.devUrl,
+          body,
+          headers
+        })
+          .subscribe({
+            next: () => {
+              this.showToastMessage(
+                'Intake updated successfully!',
+                'success'
+              );
+            },
+            error: (err) => {
+              this.dismissLoading();
+              this.showToastMessage(
+                err.status + ': ' + err.error.error,
+                'danger'
+              );
+            },
+            complete: () => {
+              this.dismissLoading();
+              this.modalCtrl.dismiss('Wrapped Up!');
+            }
+          });
+      } else {
+        const bodyArray = {'intakes[]' : []};
+        const intakesMessage = this.intakeArray.value.join(', ');
+
+        this.intakeArray.value.forEach(intake => {
+          bodyArray['intakes[]'].push(intake);
+        });
+
+        this.alertCtrl.create({
+          header: 'Adding new intakes',
+          subHeader:
+            'Are you sure you want to add new intakes with the following details:',
+          message: `<p><strong>Intake: </strong> ${intakesMessage}</p>
+                    <p><strong>Type: </strong>${bodyObject.types}</p>
+                    <p><strong>Venue: </strong>${bodyObject.venue}</p>
+                    <p><strong>Docket Issuance: </strong> ${bodyObject.docketdue}</p>
+                    <p><strong>Exam Result Date: </strong> ${bodyObject.result_date} </p>`,
+          buttons: [
+            {
+              text: 'No',
+              handler: () => { }
+            },
+            {
+              text: 'Yes',
+              handler: () => {
+                this.presentLoading();
+                const body = new HttpParams({ fromObject: { ...bodyArray, ...bodyObject } }).toString();
+                const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+                this.ws.post('/exam/create_intake_entry', { url: this.devUrl, body, headers }).subscribe({
+                  next: () => {
+                    this.showToastMessage(
+                      'Intakes added successfully!',
+                      'success'
+                    );
+                  },
+                  error: (err) => {
+                    this.dismissLoading();
+                    this.showToastMessage(
+                      err.status + ': ' + err.error.error,
+                      'danger'
+                    );
+                  },
+                  complete: () => {
+                    this.dismissLoading().then(() => this.modalCtrl.dismiss('Wrapped Up!'));
+                  }
+                });
+              }
+            }
+          ]
+        }).then(alert => alert.present());
+      }
+    }
   }
 
-  submit() {
-    console.log(this.intakeForm.value);
+  showToastMessage(message: string, color: 'danger' | 'success') {
+    this.toastCtrl
+      .create({
+        message,
+        duration: 5000,
+        position: 'top',
+        color,
+        showCloseButton: true,
+        animated: true
+      })
+      .then(toast => toast.present());
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
   }
 
   addSelectedIntakes(intakeObject: any) {
@@ -112,13 +253,7 @@ export class AddIntakePage implements OnInit {
     }
   }
 
-  filterItems(searchTerm) {
-    return this.intakes.filter(intake => {
-      return intake.value.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
-    });
-  }
-
-  setFilteredItems() {
-    this.intakesToBeSearched = this.filterItems(this.searchTerm);
+  closeModal() {
+    this.modalCtrl.dismiss(null);
   }
 }
