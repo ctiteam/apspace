@@ -1,4 +1,4 @@
-import { HttpHeaders } from '@angular/common/http';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
@@ -124,9 +124,13 @@ export class ExamScheduleAdminPage implements OnInit {
 
   deleteSelectedExamSchedule() {
     if (this.examScheduleToBeDeleted) {
-      const body = new FormData();
+      const bodyObject = {
+        'exam_id[]' : []
+      };
 
-      this.examScheduleToBeDeleted.forEach(examSchedule => body.append('exam_id[]', examSchedule.EXAMID.toString()));
+      this.examScheduleToBeDeleted.forEach(examSchedule => {
+        bodyObject['exam_id[]'].push(examSchedule.EXAMID);
+      });
 
       this.alertCtrl.create({
         header: 'Warning',
@@ -141,12 +145,9 @@ export class ExamScheduleAdminPage implements OnInit {
             text: 'Yes',
             handler: () => {
               this.presentLoading();
-              this.ws.post<any>('/exam/delete_exam_schedule', {
-                url: this.devUrl,
-                body,
-                headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
-              })
-              .subscribe({
+              const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
+              const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+              this.ws.post('/exam/delete_exam_schedule', { url: this.devUrl, body, headers }).subscribe({
                 next: () => {
                   this.showToastMessage(
                     'Exam Schedule deleted successfully!',
