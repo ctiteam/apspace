@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AlertController, ModalController, ToastController } from '@ionic/angular';
+import * as moment from 'moment';
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { ExamScheduleAdmin } from 'src/app/interfaces/exam-schedule-admin';
+import { WsApiService } from 'src/app/services';
 import { AddExamSchedulePage } from '../add-exam-schedule/add-exam-schedule.page';
 import { AddIntakePage } from './add-intake/add-intake.page';
-
-interface ExamScheduleDetails {
-  title: string;
-  detail: string;
-}
 
 interface Intake {
   intake: string;
@@ -23,28 +24,9 @@ interface Intake {
 })
 
 export class ExamScheduleDetailsPage implements OnInit {
-  examScheduleDetails: ExamScheduleDetails[] = [
-    {
-      title: 'Module',
-      detail: 'CT001-3-2'
-    },
-    {
-      title: 'Date',
-      detail: '19-Sep-2019'
-    },
-    {
-      title: 'Time',
-      detail: '11:00 AM - 1:00AM'
-    },
-    {
-      title: 'Publication',
-      detail: '19-Sep-2019 - 20-Sep-2019'
-    },
-    {
-      title: 'Remarks',
-      detail: 'Lorem Ispum'
-    },
-  ];
+  devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
+  examScheduleDetails$: Observable<any[]>;
+  examScheduleDetailsToBeEdited;
 
   intakes: Intake[] = [
     {
@@ -136,13 +118,50 @@ export class ExamScheduleDetailsPage implements OnInit {
   status = 'Inactive';
   onDelete = false;
 
+  examId;
+
   constructor(
     public modalCtrl: ModalController,
     public alertCtrl: AlertController,
-    public toastCtrl: ToastController
-  ) { }
+    public toastCtrl: ToastController,
+    private route: ActivatedRoute,
+    private ws: WsApiService
+  ) {
+    this.examId = this.route.snapshot.paramMap.get('examId');
+  }
 
   ngOnInit() {
+    this.doRefresh();
+  }
+
+  doRefresh() {
+    this.examScheduleDetails$ = this.ws.get<ExamScheduleAdmin>(`/exam/exam_details?exam_id=${this.examId}`, {url: this.devUrl}).pipe(
+      tap(examScheduleDetails => this.examScheduleDetailsToBeEdited = examScheduleDetails),
+      map(examScheduleDetails =>
+        [
+          {
+            title: 'Module',
+            detail: examScheduleDetails.MODULE
+          },
+          {
+            title: 'Date',
+            detail: moment(examScheduleDetails.DATEDAY).format('DD-MMM-YYYY').toUpperCase()
+          },
+          {
+            title: 'Time',
+            detail: examScheduleDetails.TIME
+          },
+          {
+            title: 'Publication',
+            detail: `${moment(examScheduleDetails.FROMDATE).format('DD-MMM-YYYY').toUpperCase()} - ${moment(examScheduleDetails.TILLDATE).format('DD-MMM-YYYY').toUpperCase()}`
+          },
+          {
+            title: 'Remarks',
+            detail: examScheduleDetails.REMARKS
+          },
+        ]
+      )
+    );
   }
 
   toggleBulkDeleteIntake() {
@@ -153,7 +172,8 @@ export class ExamScheduleDetailsPage implements OnInit {
     this.modalCtrl.create({
       component: AddExamSchedulePage,
       componentProps: {
-        onEdit: 'true'
+        onEdit: 'true',
+        examScheduleDetails: this.examScheduleDetailsToBeEdited
       },
       cssClass: 'full-page-modal'
     }).then(modal => modal.present());

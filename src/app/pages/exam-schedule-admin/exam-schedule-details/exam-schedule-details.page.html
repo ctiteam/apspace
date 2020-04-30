@@ -14,7 +14,7 @@
         <ion-card class="ion-no-margin">
           <ion-card-content class="ion-no-padding">
             <ion-list lines="none">
-              <ion-item *ngFor="let examScheduleDetail of examScheduleDetails; let i = index;">
+              <ion-item *ngFor="let examScheduleDetail of examScheduleDetails$ | async as examScheduleDetails; let i = index;">
                 <ion-grid class="ion-no-padding">
                   <ion-row class="ion-no-padding">
                     <ion-col size="12" size-sm="2" class="ion-no-padding">
