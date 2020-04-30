@@ -1,4 +1,4 @@
-import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
@@ -129,20 +129,23 @@ export class AddExamSchedulePage implements OnInit {
   submit() {
     if (this.examScheduleForm.valid) {
       const bodyObject = {
-        from_date: moment(this.examScheduleForm.get('publicationDate').value.from).format('DD-MMM-YYYY').toUpperCase(),
-        till_date: moment(this.examScheduleForm.get('publicationDate').value.to).format('DD-MMM-YYYY').toUpperCase(),
+        from_date: this.examScheduleForm.get('publicationDate').value.from.toUpperCase(),
+        till_date: this.examScheduleForm.get('publicationDate').value.to.toUpperCase(),
         module: this.examScheduleForm.get('module').value,
-        venue: 'APIIT',
+        venue: '',
         dateday: moment(this.examScheduleForm.get('date').value).format('DD-MMM-YYYY').toUpperCase(),
         time: `${moment(this.examScheduleForm.get('startTime').value, ['HH:mm']).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value, ['HH:mm']).format('h:mm A')}`,
         remarks: this.examScheduleForm.get('remarks').value,
         status: 'Inactive',
-        result_date: '23-APR-2020',
+        result_date: '',
         check_week: '0',
         assessment_type: this.examScheduleForm.get('assessmentType').value
       };
 
       if (this.onEdit) {
+        bodyObject.from_date = moment(this.examScheduleForm.get('publicationDate').value.from).format('DD-MMM-YYYY').toUpperCase();
+        bodyObject.till_date = moment(this.examScheduleForm.get('publicationDate').value.till).format('DD-MMM-YYYY').toUpperCase();
+
         this.presentLoading();
         const body = new HttpParams({ fromObject: { exam_id: this.examScheduleDetails.EXAMID.toString(), ...bodyObject } }).toString();
         const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
