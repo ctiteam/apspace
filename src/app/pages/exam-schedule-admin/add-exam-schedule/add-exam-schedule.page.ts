@@ -87,7 +87,10 @@ export class AddExamSchedulePage implements OnInit {
       splitTime = examScheduleDetails.TIME.split(' ');
       startTime = `${splitTime[0]} ${splitTime[1]}`;
       endTime = `${splitTime[3]} ${splitTime[4]}`;
-      publicationDate = {from: examScheduleDetails.FROMDATE, to: examScheduleDetails.TILLDATE};
+      publicationDate = {
+        from: moment(examScheduleDetails.FROMDATE).format('DD-MMM-YYYY'),
+        to: moment(examScheduleDetails.TILLDATE).format('DD-MMM-YYYY')
+      };
     }
 
     this.examScheduleForm = this.formBuilder.group({
@@ -142,9 +145,6 @@ export class AddExamSchedulePage implements OnInit {
       };
 
       if (this.onEdit) {
-        bodyObject.from_date = moment(this.examScheduleForm.get('publicationDate').value.from).format('DD-MMM-YYYY').toUpperCase();
-        bodyObject.till_date = moment(this.examScheduleForm.get('publicationDate').value.till).format('DD-MMM-YYYY').toUpperCase();
-
         this.presentLoading();
         const body = new HttpParams({ fromObject: { exam_id: this.examScheduleDetails.EXAMID.toString(), ...bodyObject } }).toString();
         const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
@@ -156,7 +156,7 @@ export class AddExamSchedulePage implements OnInit {
         .subscribe({
           next: () => {
             this.showToastMessage(
-              'Exam Schedule added successfully!',
+              'Exam Schedule updated successfully!',
               'success'
             );
           },
