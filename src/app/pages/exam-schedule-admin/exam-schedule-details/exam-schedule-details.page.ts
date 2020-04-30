@@ -168,15 +168,23 @@ export class ExamScheduleDetailsPage implements OnInit {
     this.onDelete = !this.onDelete;
   }
 
-  editExamSchedule() {
-    this.modalCtrl.create({
+  async editExamSchedule() {
+    const modal = await this.modalCtrl.create({
       component: AddExamSchedulePage,
       componentProps: {
         onEdit: 'true',
         examScheduleDetails: this.examScheduleDetailsToBeEdited
       },
       cssClass: 'full-page-modal'
-    }).then(modal => modal.present());
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data.data !== null) {
+        this.doRefresh();
+      }
+    });
+
+    return await modal.present();
   }
 
   addNewIntake() {

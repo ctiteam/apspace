@@ -1,4 +1,4 @@
-import { HttpHeaders } from '@angular/common/http';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
@@ -91,8 +91,6 @@ export class AddExamSchedulePage implements OnInit {
       publicationDate = {from: examScheduleDetails.FROMDATE, to: examScheduleDetails.TILLDATE};
     }
 
-    console.log(publicationDate);
-
     this.examScheduleForm = this.formBuilder.group({
       publicationDate: [publicationDate, Validators.required],
       module: [examScheduleDetails.MODULE, Validators.required],
@@ -130,27 +128,28 @@ export class AddExamSchedulePage implements OnInit {
 
   submit() {
     if (this.examScheduleForm.valid) {
-      const body = new FormData();
-
-      body.append('from_date', this.examScheduleForm.get('publicationDate').value.from.toUpperCase());
-      body.append('till_date', this.examScheduleForm.get('publicationDate').value.to.toUpperCase());
-      body.append('module', this.examScheduleForm.get('module').value);
-      body.append('venue', 'APIIT');
-      body.append('dateday', moment(this.examScheduleForm.get('date').value).format('DD-MMM-YYYY').toUpperCase());
-      body.append('time', `${moment(this.examScheduleForm.get('startTime').value, ['HH:mm']).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value, ['HH:mm']).format('h:mm A')}`);
-      body.append('remarks', this.examScheduleForm.get('remarks').value);
-      body.append('status', 'Inactive');
-      body.append('created_by', this.staffCode);
-      body.append('result_date', '23-APR-2020');
-      body.append('check_week', '0');
-      body.append('assessment_type', this.examScheduleForm.get('assessmentType').value);
+      const bodyObject = {
+        from_date: moment(this.examScheduleForm.get('publicationDate').value.from).format('DD-MMM-YYYY').toUpperCase(),
+        till_date: moment(this.examScheduleForm.get('publicationDate').value.to).format('DD-MMM-YYYY').toUpperCase(),
+        module: this.examScheduleForm.get('module').value,
+        venue: 'APIIT',
+        dateday: moment(this.examScheduleForm.get('date').value).format('DD-MMM-YYYY').toUpperCase(),
+        time: `${moment(this.examScheduleForm.get('startTime').value, ['HH:mm']).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value, ['HH:mm']).format('h:mm A')}`,
+        remarks: this.examScheduleForm.get('remarks').value,
+        status: 'Inactive',
+        result_date: '23-APR-2020',
+        check_week: '0',
+        assessment_type: this.examScheduleForm.get('assessmentType').value
+      };
 
       if (this.onEdit) {
         this.presentLoading();
+        const body = new HttpParams({ fromObject: { exam_id: this.examScheduleDetails.EXAMID.toString(), ...bodyObject } }).toString();
+        const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
         this.ws.post<any>('/exam/update_exam_schedule', {
           url: this.devUrl,
           body,
-          headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
+          headers
         })
         .subscribe({
           next: () => {
@@ -167,7 +166,8 @@ export class AddExamSchedulePage implements OnInit {
             );
           },
           complete: () => {
-            this.dismissLoading().then(() => this.modalCtrl.dismiss('Wrapped Up!'));
+            this.dismissLoading();
+            this.modalCtrl.dismiss('Wrapped Up!');
           }
         });
       } else {
@@ -175,12 +175,12 @@ export class AddExamSchedulePage implements OnInit {
           header: 'Adding new exam schedule',
           subHeader:
             'Are you sure you want to add new exam schedule with the following details:',
-          message: `<p><strong>Publication Date: </strong> ${body.get('from_date')} - ${body.get('till_date')}</p>
-                    <p><strong>Module: </strong>${body.get('module')}</p>
-                    <p><strong>Date: </strong>${body.get('dateday')}</p>
-                    <p><strong>Time: </strong> ${body.get('time')}</p>
-                    <p><strong>Assessment Type: </strong> ${body.get('assessment_type')} </p>
-                    <p><strong>Remarks: </strong> ${body.get('remarks')} </p>`,
+          message: `<p><strong>Publication Date: </strong> ${bodyObject.from_date} - ${bodyObject.till_date}</p>
+                    <p><strong>Module: </strong>${bodyObject.module}</p>
+                    <p><strong>Date: </strong>${bodyObject.dateday}</p>
+                    <p><strong>Time: </strong> ${bodyObject.time}</p>
+                    <p><strong>Assessment Type: </strong> ${bodyObject.assessment_type} </p>
+                    <p><strong>Remarks: </strong> ${bodyObject.remarks} </p>`,
           buttons: [
             {
               text: 'No',
@@ -190,12 +190,9 @@ export class AddExamSchedulePage implements OnInit {
               text: 'Yes',
               handler: () => {
                 this.presentLoading();
-                this.ws.post<any>('/exam/create_exam_schedule', {
-                  url: this.devUrl,
-                  body,
-                  headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })
-                })
-                .subscribe({
+                const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
+                const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+                this.ws.post('/exam/create_exam_schedule', { url: this.devUrl, body, headers }).subscribe({
                   next: () => {
                     this.showToastMessage(
                       'Exam Schedule added successfully!',
