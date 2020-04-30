@@ -1,7 +1,6 @@
 export interface ExamScheduleAdmin {
     ASSESSMENT_TYPE: string;
     CHECK_WEEK: number;
-    CREATEDBY: string;
     DATEDAY: string;
     EXAMID: number;
     FROMDATE: string;
@@ -12,6 +11,15 @@ export interface ExamScheduleAdmin {
     TILLDATE: string;
     TIME: string;
     TIMESTAMP: string;
+    VENUE: string;
+}
+
+export interface IntakeExamSchedule {
+    DOCKETSDUE: string;
+    ENTRYID: string;
+    INTAKE: string;
+    RESULT_DATE: string;
+    TYPE: string;
     VENUE: string;
 }
 

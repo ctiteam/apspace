@@ -1,4 +1,4 @@
-import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
@@ -97,7 +97,7 @@ export class ExamScheduleAdminPage implements OnInit {
       shareReplay()
     );
 
-    this.pastExamSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/past_exam', {url: this.devUrl}).pipe(
+    this.pastExamSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/past_exam?year=2019', {url: this.devUrl}).pipe(
       map(pastExamSchedules => [pastExamSchedules[0]]),
       shareReplay()
     );
