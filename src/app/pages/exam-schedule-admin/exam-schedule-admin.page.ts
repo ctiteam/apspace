@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { shareReplay } from 'rxjs/operators';
 import { ExamScheduleAdmin } from 'src/app/interfaces/exam-schedule-admin';
 import { WsApiService } from 'src/app/services';
 import { AddExamSchedulePage } from './add-exam-schedule/add-exam-schedule.page';
@@ -32,6 +32,7 @@ export class ExamScheduleAdminPage implements OnInit {
 
   examSchedules$: Observable<ExamScheduleAdmin[]>;
   pastExamSchedules$: Observable<ExamScheduleAdmin[]>;
+  // resitExamSchedules$: Observable<
 
   resits: Resit[] = [
     {
@@ -98,7 +99,6 @@ export class ExamScheduleAdminPage implements OnInit {
     );
 
     this.pastExamSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/past_exam?year=2019', {url: this.devUrl}).pipe(
-      map(pastExamSchedules => [pastExamSchedules[0]]),
       shareReplay()
     );
   }
@@ -134,7 +134,7 @@ export class ExamScheduleAdminPage implements OnInit {
 
       this.alertCtrl.create({
         header: 'Warning',
-        subHeader: 'You have exam schedules that you\'re about to cancel. Do you want to continue?',
+        subHeader: 'You have exam schedules that you\'re about to delete. Do you want to continue?',
         buttons: [
           {
             text: 'No',
