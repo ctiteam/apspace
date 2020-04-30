@@ -69,9 +69,13 @@ export class ExamScheduleDetailsPage implements OnInit {
             detail: `${moment(examScheduleDetails.FROMDATE).format('DD-MMM-YYYY').toUpperCase()} - ${moment(examScheduleDetails.TILLDATE).format('DD-MMM-YYYY').toUpperCase()}`
           },
           {
+            title: 'Assessment Type',
+            detail: examScheduleDetails.ASSESSMENT_TYPE
+          },
+          {
             title: 'Remarks',
             detail: examScheduleDetails.REMARKS
-          },
+          }
         ]
       )
     );
@@ -173,18 +177,31 @@ export class ExamScheduleDetailsPage implements OnInit {
     return await modal.present();
   }
 
-  addNewIntake() {
-    this.modalCtrl.create({
+  async addNewIntake() {
+    const modal = await this.modalCtrl.create({
       component: AddIntakePage,
+      componentProps: {
+        examId: this.examId
+      },
       cssClass: 'full-page-modal'
-    }).then(modal => modal.present());
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data.data !== null) {
+        this.doRefresh();
+      }
+    });
+
+    return await modal.present();
   }
 
-  editIntake() {
+  editIntake(intake: IntakeExamSchedule) {
     this.modalCtrl.create({
       component: AddIntakePage,
       componentProps: {
-        onEdit: 'true'
+        onEdit: 'true',
+        intakeDetails: intake,
+        examId: this.examId
       },
       cssClass: 'full-page-modal'
     }).then(modal => modal.present());
@@ -218,12 +235,17 @@ export class ExamScheduleDetailsPage implements OnInit {
   }
 
   activateExamSchedule() {
+    const bodyObject = {
+      exam_id: this.examId,
+      status: this.status
+    };
+
     this.alertCtrl.create({
-      header: 'Activate Exam Schedule',
-      subHeader: 'To confirm activate the following exam schedule, type "yes" at the bottom input field.',
+      header: `${this.status} Exam Schedule`,
+      subHeader: `To confirm ${this.status} the following exam schedule, type "yes" at the bottom input field.`,
       inputs: [
         {
-          name: 'activateConfirmation',
+          name: 'statusConfirmation',
           type: 'text',
           placeholder: 'Type "yes" to proceed.',
         },
@@ -237,16 +259,31 @@ export class ExamScheduleDetailsPage implements OnInit {
         {
           text: 'Submit',
           handler: (data) => {
-            if (data.activateConfirmation.toUpperCase() === 'YES') {
-              this.showToastMessage(
-                'Activation Success!',
-                3000,
-                'success'
-              );
+            if (data.statusConfirmation.toUpperCase() === 'YES') {
+              this.presentLoading();
+              const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
+              const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+              this.ws.post('/exam/update_exam_schedule_status', { url: this.devUrl, body, headers }).subscribe({
+                next: () => {
+                  this.showToastMessage(
+                    'Status successfully updated!',
+                    'success'
+                  );
+                },
+                error: (err) => {
+                  this.dismissLoading();
+                  this.showToastMessage(
+                    err.status + ': ' + err.error.error,
+                    'danger'
+                  );
+                },
+                complete: () => {
+                  this.dismissLoading().then(() => this.doRefresh());
+                }
+              });
             } else {
               this.showToastMessage(
                 'The input is incorrect. Activation Failed.',
-                3000,
                 'danger'
               );
             }

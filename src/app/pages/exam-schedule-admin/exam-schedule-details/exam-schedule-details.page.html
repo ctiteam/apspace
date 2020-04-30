@@ -121,7 +121,7 @@
                 </ion-grid>
               </ion-item>
   
-              <ion-item detail=false [button]="!onDelete && status === 'Inactive'" (click)="!onDelete && status === 'Inactive' && editIntake()" [style.border-left-color]="(intake.INTAKE | strToColor)"
+              <ion-item detail=false [button]="!onDelete && status === 'Inactive'" (click)="!onDelete && status === 'Inactive' && editIntake(intake)" [style.border-left-color]="(intake.INTAKE | strToColor)"
                 [ngClass]="{'clickable-item' : !onDelete && status === 'Inactive'}" class="table-item clickable-item"
                 *ngFor="let intake of intakes">
                 <ion-grid>
