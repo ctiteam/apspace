@@ -23,6 +23,19 @@ export interface IntakeExamSchedule {
     VENUE: string;
 }
 
+export interface ResitExamSchedule {
+    APPRAISALSDUE: string;
+    CHECK_WEEK: number;
+    DATEDAY: string;
+    DOCKETSDUE: string;
+    INTAKE_GROUP: string;
+    MODULE: string;
+    STATUS: string;
+    SUBJECT_DESCRIPTION: string;
+    TIME: string;
+    VENUE: string;
+}
+
 
 
 

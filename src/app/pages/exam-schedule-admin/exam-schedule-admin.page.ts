@@ -3,18 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
-import { ExamScheduleAdmin } from 'src/app/interfaces/exam-schedule-admin';
+import { shareReplay, tap } from 'rxjs/operators';
+import { SearchModalComponent } from 'src/app/components/search-modal/search-modal.component';
+import { ExamScheduleAdmin, ResitExamSchedule } from 'src/app/interfaces/exam-schedule-admin';
 import { WsApiService } from 'src/app/services';
 import { AddExamSchedulePage } from './add-exam-schedule/add-exam-schedule.page';
-
-interface Resit {
-  module: string;
-  date: string;
-  time: string;
-  venue: string;
-  status: string;
-}
 
 @Component({
   selector: 'app-exam-schedule-admin',
@@ -32,51 +25,15 @@ export class ExamScheduleAdminPage implements OnInit {
 
   examSchedules$: Observable<ExamScheduleAdmin[]>;
   pastExamSchedules$: Observable<ExamScheduleAdmin[]>;
-  // resitExamSchedules$: Observable<
-
-  resits: Resit[] = [
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      venue: '1, APIIT@TPM',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      venue: '1, APIIT@TPM',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      venue: '1, APIIT@TPM',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      venue: '1, APIIT@TPM',
-      status: 'Inactive'
-    },
-    {
-      module: 'CT001-3-2',
-      date: '19-Sep-2019',
-      time: '11:00 AM - 1:00AM',
-      venue: '1, APIIT@TPM',
-      status: 'Inactive'
-    }
-  ];
+  resitExamSchedules$: Observable<ResitExamSchedule[]>;
 
   onDelete = false;
   isPast = false;
   selectedExamScheduleOption = 'Exam Schedule';
+  selectedIntakeForResit = '';
 
   examScheduleToBeDeleted: ExamScheduleAdmin[] = [];
+  intakes = [];
 
   devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
 
@@ -94,13 +51,47 @@ export class ExamScheduleAdminPage implements OnInit {
   }
 
   doRefresh() {
-    this.examSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/current_exam', {url: this.devUrl}).pipe(
-      shareReplay()
+    this.examSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/current_exam', { url: this.devUrl }).pipe(
+      shareReplay(1)
     );
 
-    this.pastExamSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/past_exam?year=2019', {url: this.devUrl}).pipe(
-      shareReplay()
+    this.pastExamSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/past_exam?year=2019', { url: this.devUrl }).pipe(
+      shareReplay(1)
     );
+
+    this.ws.get<any>('/exam/intake_listing', { url: this.devUrl }).pipe(
+      tap(intakes => {
+        intakes.forEach(intake => this.intakes.push(intake.COURSE_CODE_ALIAS));
+      })
+    ).subscribe();
+  }
+
+  doRefreshResit(selectedIntake) {
+    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    this.resitExamSchedules$ = this.ws.get<ResitExamSchedule[]>(
+      `/exam/resit_exam_schedule_by_intake?intake=${selectedIntake}&types=Resit`, { url: this.devUrl, headers}
+    ).pipe(
+      shareReplay(1)
+    );
+  }
+
+  async presentIntakeSearch() {
+    const modal = await this.modalCtrl.create({
+      component: SearchModalComponent,
+      componentProps: {
+        items: this.intakes,
+        notFound: 'No intake selected'
+      }
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data.data) {
+        this.selectedIntakeForResit = data.data.item;
+        this.doRefreshResit(this.selectedIntakeForResit);
+      }
+    });
+
+    return await modal.present();
   }
 
   addSelectedExamSchedule(selectedExamSchedule: ExamScheduleAdmin) {
@@ -125,7 +116,7 @@ export class ExamScheduleAdminPage implements OnInit {
   deleteSelectedExamSchedule() {
     if (this.examScheduleToBeDeleted) {
       const bodyObject = {
-        'exam_id[]' : []
+        'exam_id[]': []
       };
 
       this.examScheduleToBeDeleted.forEach(examSchedule => {
@@ -139,7 +130,7 @@ export class ExamScheduleAdminPage implements OnInit {
           {
             text: 'No',
             role: 'cancel',
-            handler: () => {}
+            handler: () => { }
           },
           {
             text: 'Yes',
@@ -211,7 +202,7 @@ export class ExamScheduleAdminPage implements OnInit {
 
   viewExamScheduleDetails(examId) {
     console.log('before send ', examId);
-    this.router.navigate(['exam-schedule-details', examId], {replaceUrl: false});
+    this.router.navigate(['exam-schedule-details', examId], { replaceUrl: false });
   }
 
   async addNewExamSchedule() {
