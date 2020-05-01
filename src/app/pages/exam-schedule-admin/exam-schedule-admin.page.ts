@@ -2,6 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { shareReplay, tap } from 'rxjs/operators';
 import { SearchModalComponent } from 'src/app/components/search-modal/search-modal.component';
@@ -55,7 +56,9 @@ export class ExamScheduleAdminPage implements OnInit {
       shareReplay(1)
     );
 
-    this.pastExamSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/past_exam?year=2019', { url: this.devUrl }).pipe(
+    const lastYear = moment(new Date()).subtract(1, 'years').format('YYYY');
+
+    this.pastExamSchedules$ = this.ws.get<ExamScheduleAdmin[]>(`/exam/past_exam?year=${lastYear}`, { url: this.devUrl }).pipe(
       shareReplay(1)
     );
 
