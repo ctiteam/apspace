@@ -6,6 +6,8 @@ import { Storage } from '@ionic/storage';
 import { CalendarComponentOptions } from 'ion2-calendar';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { SearchModalComponent } from 'src/app/components/search-modal/search-modal.component';
 import { ExamScheduleAdmin } from 'src/app/interfaces/exam-schedule-admin';
 import { WsApiService } from 'src/app/services';
 
@@ -22,8 +24,8 @@ export class AddExamSchedulePage implements OnInit {
   loading: HTMLIonLoadingElement;
 
   devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
-  modules$: Observable<any>;
   assessmentTypes$: Observable<any>;
+  modules = [];
 
   type = 'string'; // 'string' | 'js-date' | 'moment' | 'time' | 'object'
   optionsRange: CalendarComponentOptions = {
@@ -55,7 +57,12 @@ export class AddExamSchedulePage implements OnInit {
       }
     );
 
-    this.modules$ = this.ws.get<any>('/exam/module_list', { url: this.devUrl });
+    this.ws.get<any>('/exam/module_list', { url: this.devUrl }).pipe(
+      tap(modules => {
+        modules.forEach(module => this.modules.push(module.MODULE_CODE));
+      })
+    ).subscribe();
+
     this.assessmentTypes$ = this.ws.get<any>('/exam/assessment_type', { url: this.devUrl });
 
     this.initializeForm(this.examScheduleDetails);
@@ -127,6 +134,24 @@ export class AddExamSchedulePage implements OnInit {
   //     this.moduleArray.removeAt(this.moduleArray.value.findIndex(module => module.value === moduleObject.value));
   //   }
   // }
+
+  async presentModuleSearch() {
+    const modal = await this.modalCtrl.create({
+      component: SearchModalComponent,
+      componentProps: {
+        items: this.modules,
+        notFound: 'No modules selected'
+      }
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data.data) {
+        this.examScheduleForm.get('module').patchValue(data.data.item);
+      }
+    });
+
+    return await modal.present();
+  }
 
   submit() {
     if (this.examScheduleForm.valid) {

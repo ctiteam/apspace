@@ -26,13 +26,11 @@
                 [type]="type" [format]="'DD-MMM-YYYY'" class="form-input"></ion-calendar>
             </ion-item>
 
-            <ion-item lines="none" *ngIf="modules$ | async as modules">
+            <ion-item lines="none">
               <ion-label position="stacked" class="item-label">
                 Module
               </ion-label>
-              <ion-select [formControl]="examScheduleForm.controls['module']" class="form-input">
-                <ion-select-option *ngFor="let module of modules" [value]="module.MODULE_CODE">{{ module.MODULE_CODE }}</ion-select-option>
-              </ion-select>
+              <ion-input (click)="presentModuleSearch()" [formControl]="examScheduleForm.controls['module']" class="form-input"></ion-input>
             </ion-item>
 
             <!-- <ion-item lines="none">
@@ -88,13 +86,16 @@
               </ion-row>
             </ion-grid>
 
-            <ion-item lines="none" *ngIf="assessmentTypes$ | async as assessmentTypes">
+            <ion-item lines="none">
               <ion-label position="stacked" class="item-label">
                 Assessment Type
               </ion-label>
-              <ion-select [formControl]="examScheduleForm.controls['assessmentType']" class="form-input">
+              <ion-select *ngIf="assessmentTypes$ | async as assessmentTypes; else loading"[formControl]="examScheduleForm.controls['assessmentType']" class="form-input">
                 <ion-select-option *ngFor="let assessmentType of assessmentTypes" [value]="assessmentType.ASSESSMENT_TYPE">{{ assessmentType.ASSESSMENT_TYPE }}</ion-select-option>
               </ion-select>
+              <ng-template #loading>
+                <ion-skeleton-text animated class="ion-padding-vertical"></ion-skeleton-text>
+              </ng-template>
             </ion-item>
 
             <ion-item lines="none">
