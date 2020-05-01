@@ -124,7 +124,7 @@
                       <ion-item
                         [button]="!onDelete"
                         detail=false
-                        (click)="!onDelete && viewExamScheduleDetails()"
+                        (click)="!onDelete && viewExamScheduleDetails(pastExamSchedule.EXAMID)"
                         [style.border-left-color]="(pastExamSchedule.MODULE | strToColor)"
                         [ngClass]="{'clickable-item' : !onDelete}"
                         class="table-item" 
