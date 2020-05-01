@@ -20,6 +20,7 @@ export class ExamScheduleDetailsPage implements OnInit {
   devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
   examScheduleDetails$: Observable<any[]>;
   intakes$: Observable<IntakeExamSchedule[]>;
+
   loading: HTMLIonLoadingElement;
 
   examScheduleDetailsToBeEdited;

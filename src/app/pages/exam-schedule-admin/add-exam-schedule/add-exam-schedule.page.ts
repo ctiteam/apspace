@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
-import { Storage } from '@ionic/storage';
+// import { Storage } from '@ionic/storage';
 import { CalendarComponentOptions } from 'ion2-calendar';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
@@ -32,14 +32,10 @@ export class AddExamSchedulePage implements OnInit {
     pickMode: 'range'
   };
 
-  searchTerm = '';
-  modulesToBeSearched = [];
-
   examScheduleForm: FormGroup;
   modulesToBeValidated = [];
-  selectedModule;
 
-  staffCode;
+  // staffCode;
 
   constructor(
     public modalCtrl: ModalController,
@@ -47,16 +43,16 @@ export class AddExamSchedulePage implements OnInit {
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
     private formBuilder: FormBuilder,
-    private ws: WsApiService,
-    private storage: Storage
+    private ws: WsApiService
+    // private storage: Storage
   ) { }
 
   ngOnInit() {
-    this.storage.get('/staff/profile').then(
-      staffProfile => {
-        this.staffCode = staffProfile[0].CODE;
-      }
-    );
+    // this.storage.get('/staff/profile').then(
+    //   staffProfile => {
+    //     this.staffCode = staffProfile[0].CODE;
+    //   }
+    // );
 
     this.ws.get<any>('/exam/module_list', { url: this.devUrl }).pipe(
       tap(modules => {
@@ -79,8 +75,6 @@ export class AddExamSchedulePage implements OnInit {
     this.assessmentTypes$ = this.ws.get<any>('/exam/assessment_type', { url: this.devUrl });
 
     this.initializeForm(this.examScheduleDetails);
-
-    this.examScheduleForm.valueChanges.subscribe(value => console.log(value));
   }
 
   initializeForm(examScheduleDetails: ExamScheduleAdmin = {

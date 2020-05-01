@@ -165,6 +165,21 @@ export class ExamScheduleAdminPage implements OnInit {
     }
   }
 
+  async addNewExamSchedule() {
+    const modal = await this.modalCtrl.create({
+      component: AddExamSchedulePage,
+      cssClass: 'full-page-modal'
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data.data !== null) {
+        this.doRefresh();
+      }
+    });
+
+    return await modal.present();
+  }
+
   showToastMessage(message: string, color: 'danger' | 'success') {
     this.toastCtrl
       .create({
@@ -201,23 +216,7 @@ export class ExamScheduleAdminPage implements OnInit {
   }
 
   viewExamScheduleDetails(examId) {
-    console.log('before send ', examId);
     this.router.navigate(['exam-schedule-details', examId], { replaceUrl: false });
-  }
-
-  async addNewExamSchedule() {
-    const modal = await this.modalCtrl.create({
-      component: AddExamSchedulePage,
-      cssClass: 'full-page-modal'
-    });
-
-    modal.onDidDismiss().then((data) => {
-      if (data.data !== null) {
-        this.doRefresh();
-      }
-    });
-
-    return await modal.present();
   }
 
   segmentChanged(event) {

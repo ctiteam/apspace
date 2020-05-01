@@ -24,8 +24,6 @@ export class AddIntakePage implements OnInit {
   devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
 
   intakeForm: FormGroup;
-  intakesToBeAdded = [];
-  selectedIntake;
   intakes = [];
 
   venues = [
@@ -50,8 +48,6 @@ export class AddIntakePage implements OnInit {
     ).subscribe();
 
     this.initializeForm(this.intakeDetails);
-
-    this.intakeForm.valueChanges.subscribe(console.log);
   }
 
   initializeForm(intakeDetails: IntakeExamSchedule = {
@@ -118,6 +114,16 @@ export class AddIntakePage implements OnInit {
     });
 
     return await modal.present();
+  }
+
+  addSelectedIntakes(intakeObject: any) {
+    if (!(this.intakeArray.value.find(intake => intake.value === intakeObject.value))) {
+      this.intakeArray.push(this.formBuilder.group({
+        value: [intakeObject.value, Validators.required],
+      }));
+    } else {
+      this.intakeArray.removeAt(this.intakeArray.value.findIndex(intake => intake.value === intakeObject.value));
+    }
   }
 
   removeIntake(i) {
@@ -248,16 +254,6 @@ export class AddIntakePage implements OnInit {
 
   async dismissLoading() {
     return await this.loading.dismiss();
-  }
-
-  addSelectedIntakes(intakeObject: any) {
-    if (!(this.intakeArray.value.find(intake => intake.value === intakeObject.value))) {
-      this.intakeArray.push(this.formBuilder.group({
-        value: [intakeObject.value, Validators.required],
-      }));
-    } else {
-      this.intakeArray.removeAt(this.intakeArray.value.findIndex(intake => intake.value === intakeObject.value));
-    }
   }
 
   closeModal() {
