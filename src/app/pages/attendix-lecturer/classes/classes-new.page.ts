@@ -190,7 +190,7 @@ export class ClassesNewPage implements OnInit {
       - all console logs are commented and will be removed once we make sure there is no issue at all
       - some parts of this function will be grouped together after finalizing the code
     */
-    const classcodes = (await this.classcodes$.toPromise()).map(c => c.CLASS_CODE);
+    const classcodes = [...new Set((await this.classcodes$.toPromise()).map(c => c.CLASS_CODE))];
     // console.log('selected module code is: ', paramModuleId);
     // console.log('All classcodes are: ', classcodes);
 
