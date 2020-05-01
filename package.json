@@ -93,7 +93,7 @@
     "graphql-tag": "^2.10.1",
     "ion2-calendar": "^3.0.0-rc.0",
     "karma-firefox-launcher": "^1.1.0",
-    "moment": "^2.24.0",
+    "moment": "2.24.0",
     "ng2-dragula": "^2.1.1",
     "otplib": "^11.0.1",
     "pdfmake": "^0.1.63",
