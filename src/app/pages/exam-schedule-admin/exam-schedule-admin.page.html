@@ -104,7 +104,7 @@
                           <ion-col size="12" size-sm="" class="ion-no-padding is-inactive" [ngClass]="{'is-active': examSchedule.STATUS === 'Active'}">
                             <div class="flex-col-item">
                               {{examSchedule.STATUS}}
-                              <ion-checkbox (ngModelChange)="addSelectedExamSchedule(examSchedule)" [(ngModel)]="examSchedule.isChecked" class="ion-no-margin" *ngIf="onDelete"></ion-checkbox>
+                              <ion-checkbox (ngModelChange)="addSelectedExamSchedule(examSchedule)" [(ngModel)]="examSchedule.isChecked" class="ion-no-margin" *ngIf="onDelete && examSchedule.STATUS === 'Inactive'"></ion-checkbox>
                             </div>
                           </ion-col>
                         </ion-row>
@@ -153,7 +153,6 @@
                             <ion-col size="12" size-sm="" class="ion-no-padding is-inactive" [ngClass]="{'is-active': pastExamSchedule.STATUS === 'Active'}">
                               <div class="flex-col-item">
                                 {{pastExamSchedule.STATUS}}
-                                <!-- <ion-checkbox (ngModelChange)="addSelectedExamSchedule(pastExamSchedule)" [(ngModel)]="pastExamSchedule.isChecked" class="ion-no-margin" *ngIf="onDelete"></ion-checkbox> -->
                               </div>
                             </ion-col>
                           </ion-row>
