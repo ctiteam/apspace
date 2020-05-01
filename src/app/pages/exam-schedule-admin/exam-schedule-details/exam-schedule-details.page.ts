@@ -195,8 +195,8 @@ export class ExamScheduleDetailsPage implements OnInit {
     return await modal.present();
   }
 
-  editIntake(intake: IntakeExamSchedule) {
-    this.modalCtrl.create({
+  async editIntake(intake: IntakeExamSchedule) {
+    const modal = await this.modalCtrl.create({
       component: AddIntakePage,
       componentProps: {
         onEdit: 'true',
@@ -204,7 +204,15 @@ export class ExamScheduleDetailsPage implements OnInit {
         examId: this.examId
       },
       cssClass: 'full-page-modal'
-    }).then(modal => modal.present());
+    });
+
+    modal.onDidDismiss().then((data) => {
+      if (data.data !== null) {
+        this.doRefresh();
+      }
+    });
+
+    return await modal.present();
   }
 
   async presentLoading() {
@@ -237,7 +245,7 @@ export class ExamScheduleDetailsPage implements OnInit {
   activateExamSchedule() {
     const bodyObject = {
       exam_id: this.examId,
-      status: this.status
+      status: this.status === 'Inactive' ? 'Active' : 'Inactive'
     };
 
     this.alertCtrl.create({

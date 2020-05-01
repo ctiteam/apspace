@@ -54,7 +54,7 @@
                         <ion-col class="ion-no-padding">
                           {{ status }}
                         </ion-col>
-                        <ion-col class="ion-no-padding ion-text-end">
+                        <ion-col *ngIf="status !== 'Deleted'" class="ion-no-padding ion-text-end">
                           <ion-button [disabled]="onDelete" (click)="activateExamSchedule()" class="is-inactive-bg-color" [ngClass]="{'is-active-bg-color': status === 'Active'}">
                             <span *ngIf="status === 'Inactive'; else deactivate;" class="ion-margin">ACTIVATE THIS EXAM SCHEDULE</span>
                             <ng-template #deactivate>
