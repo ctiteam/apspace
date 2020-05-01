@@ -22,6 +22,7 @@ pipelines:
         caches:
           - node
         script:
+          - rm -r node_modules
           - npm i
           - npm i @babel/compat-data@7.8.0 # temp solution (build fails due to babel issues)
           - ionic build --prod
