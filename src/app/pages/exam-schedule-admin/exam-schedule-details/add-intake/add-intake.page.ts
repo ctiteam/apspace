@@ -16,7 +16,7 @@ import { WsApiService } from 'src/app/services';
 export class AddIntakePage implements OnInit {
   @Input() onEdit: boolean;
   @Input() intakeDetails: IntakeExamSchedule;
-  @Input() examId: number;
+  @Input() examId: any;
 
   loading: HTMLIonLoadingElement;
 
@@ -115,7 +115,6 @@ export class AddIntakePage implements OnInit {
     this.intakeArray.removeAt(i);
   }
 
-
   get intakeArray() {
     return this.intakeForm.get('intake') as FormArray;
   }
@@ -123,8 +122,8 @@ export class AddIntakePage implements OnInit {
   submit() {
     if (this.intakeForm.valid) {
       const bodyObject = {
-        exam_id: this.examId.toString(),
-        docketdue: moment(this.intakeForm.get('docketIssuance').value).format('DD-MMM-YYYY').toUpperCase(),
+        exam_id: this.examId,
+        docketsdue: moment(this.intakeForm.get('docketIssuance').value).format('DD-MMM-YYYY').toUpperCase(),
         appraisalsdue: '',
         createdby: '',
         types: this.intakeForm.get('type').value,
@@ -134,9 +133,9 @@ export class AddIntakePage implements OnInit {
       };
 
       if (this.onEdit) {
-        const entryId = { entryid: this.intakeDetails.ENTRYID };
+        const entryIdAndIntake = { entryid: this.intakeDetails.ENTRYID, intake: this.intakeForm.get('intake').value };
         this.presentLoading();
-        const body = new HttpParams({ fromObject: { ...entryId, ...bodyObject } }).toString();
+        const body = new HttpParams({ fromObject: { ...entryIdAndIntake, ...bodyObject } }).toString();
         const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
         this.ws.post<any>('/exam/update_intake_entry', {
           url: this.devUrl,
@@ -158,8 +157,7 @@ export class AddIntakePage implements OnInit {
               );
             },
             complete: () => {
-              this.dismissLoading();
-              this.modalCtrl.dismiss('Wrapped Up!');
+              this.dismissLoading().then(() => this.modalCtrl.dismiss('Wrapped Up!'));
             }
           });
       } else {
@@ -177,7 +175,7 @@ export class AddIntakePage implements OnInit {
           message: `<p><strong>Intake: </strong> ${intakesMessage}</p>
                     <p><strong>Type: </strong>${bodyObject.types}</p>
                     <p><strong>Venue: </strong>${bodyObject.venue}</p>
-                    <p><strong>Docket Issuance: </strong> ${bodyObject.docketdue}</p>
+                    <p><strong>Docket Issuance: </strong> ${bodyObject.docketsdue}</p>
                     <p><strong>Exam Result Date: </strong> ${bodyObject.result_date} </p>`,
           buttons: [
             {
