@@ -24,6 +24,7 @@ export class ExamScheduleDetailsPage implements OnInit {
 
   examScheduleDetailsToBeEdited;
   intakesToBeDeleted: IntakeExamSchedule[] = [];
+  intakesToBeValidated = [];
 
   onDelete = false;
   examId;
@@ -80,7 +81,9 @@ export class ExamScheduleDetailsPage implements OnInit {
       )
     );
 
-    this.intakes$ = this.ws.get<IntakeExamSchedule[]>(`/exam/intake_details?exam_id=${this.examId}`, {url: this.devUrl});
+    this.intakes$ = this.ws.get<IntakeExamSchedule[]>(`/exam/intake_details?exam_id=${this.examId}`, {url: this.devUrl}).pipe(
+      tap(intakesDetails => intakesDetails.forEach(intakeDetails => this.intakesToBeValidated.push(intakeDetails.INTAKE)))
+    );
   }
 
   toggleBulkDeleteIntake() {
@@ -181,7 +184,8 @@ export class ExamScheduleDetailsPage implements OnInit {
     const modal = await this.modalCtrl.create({
       component: AddIntakePage,
       componentProps: {
-        examId: this.examId
+        examId: this.examId,
+        intakesToBeValidated: this.intakesToBeValidated
       },
       cssClass: 'full-page-modal'
     });
@@ -195,13 +199,16 @@ export class ExamScheduleDetailsPage implements OnInit {
     return await modal.present();
   }
 
-  async editIntake(intake: IntakeExamSchedule) {
+  async editIntake(intakeDetails: IntakeExamSchedule) {
+    const filteredIntakesToBeValidated = this.intakesToBeValidated.filter(intake => intake !== intakeDetails.INTAKE);
+
     const modal = await this.modalCtrl.create({
       component: AddIntakePage,
       componentProps: {
         onEdit: 'true',
-        intakeDetails: intake,
-        examId: this.examId
+        intakeDetails,
+        examId: this.examId,
+        intakesToBeValidated: filteredIntakesToBeValidated
       },
       cssClass: 'full-page-modal'
     });

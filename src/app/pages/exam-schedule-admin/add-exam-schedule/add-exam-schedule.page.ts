@@ -19,7 +19,7 @@ import { WsApiService } from 'src/app/services';
 
 export class AddExamSchedulePage implements OnInit {
   @Input() onEdit: boolean;
-  @Input() examScheduleDetails: ExamScheduleAdmin;
+  @Input() examScheduleDetails?: ExamScheduleAdmin;
 
   loading: HTMLIonLoadingElement;
 
@@ -36,6 +36,7 @@ export class AddExamSchedulePage implements OnInit {
   modulesToBeSearched = [];
 
   examScheduleForm: FormGroup;
+  modulesToBeValidated = [];
   selectedModule;
 
   staffCode;
@@ -60,6 +61,18 @@ export class AddExamSchedulePage implements OnInit {
     this.ws.get<any>('/exam/module_list', { url: this.devUrl }).pipe(
       tap(modules => {
         modules.forEach(module => this.modules.push(module.MODULE_CODE));
+      })
+    ).subscribe();
+
+    this.ws.get<ExamScheduleAdmin[]>('/exam/current_exam', {url: this.devUrl}).pipe(
+      tap(examSchedules => {
+        let filteredExamSchedules = examSchedules;
+
+        if (this.onEdit) {
+          filteredExamSchedules = examSchedules.filter(examSchedule => examSchedule.MODULE !== this.examScheduleDetails.MODULE);
+        }
+
+        filteredExamSchedules.forEach(examSchedule => this.modulesToBeValidated.push(examSchedule.MODULE));
       })
     ).subscribe();
 
@@ -155,6 +168,14 @@ export class AddExamSchedulePage implements OnInit {
 
   submit() {
     if (this.examScheduleForm.valid) {
+      if (this.modulesToBeValidated.includes(this.examScheduleForm.get('module').value)) {
+        this.showToastMessage(
+          'You cannot create duplicate exam schedule with the same module.',
+          'danger'
+        );
+        return;
+      }
+
       const bodyObject = {
         from_date: this.examScheduleForm.get('publicationDate').value.from.toUpperCase(),
         till_date: this.examScheduleForm.get('publicationDate').value.to.toUpperCase(),

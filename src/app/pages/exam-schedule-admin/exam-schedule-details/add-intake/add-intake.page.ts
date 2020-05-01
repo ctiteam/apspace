@@ -17,6 +17,7 @@ export class AddIntakePage implements OnInit {
   @Input() onEdit: boolean;
   @Input() intakeDetails: IntakeExamSchedule;
   @Input() examId: any;
+  @Input() intakesToBeValidated: any;
 
   loading: HTMLIonLoadingElement;
 
@@ -99,7 +100,15 @@ export class AddIntakePage implements OnInit {
     });
 
     modal.onDidDismiss().then((data) => {
-      if (data.data) {
+      if (data.data && data.data.item) {
+        if (this.intakesToBeValidated.includes(data.data.item) || this.intakeArray.value.includes(data.data.item)) {
+          this.showToastMessage(
+            'You cannot create duplicate intakes entry with the same intake.',
+            'danger'
+          );
+          return;
+        }
+
         if (this.onEdit) {
           this.intakeForm.get('intake').patchValue(data.data.item);
         } else {
