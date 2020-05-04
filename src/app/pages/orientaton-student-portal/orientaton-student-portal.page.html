@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>E-Orientaton Student Portal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- table -->
+  <ion-card class="table">
+    <h2 class="ion-padding colored-text">Your Students List (30  Students)</h2>
+    <ion-card-content class="table-container">
+      <ion-grid class="ion-no-padding">
+        <!-- table header -->
+        <ion-row class="table-header">
+          <ion-col class="ion-text-center">
+            <ion-text>Student Name</ion-text>
+          </ion-col>
+          <ion-col class="ion-text-center">
+            <ion-text>Student ID No.</ion-text>
+          </ion-col>
+          <ion-col class="ion-text-center">
+            <ion-text>Course</ion-text>
+          </ion-col>
+          <ion-col class="ion-text-center">
+            <ion-text>Intake</ion-text>
+          </ion-col>
+          <ion-col>
+            <!-- empty col -->
+          </ion-col>
+        </ion-row>
+
+        <!-- table body -->
+        <!-- <ng-container *ngIf="classcodes | classcodesFilter:term:timeFrame as filteredClassCode"> -->
+        <!-- <ng-container *ngIf="filteredClassCode.length > 0; else noFilteredClassCode"> -->
+        <ion-row class="table-row text-bold no-bold-on-small-devices" *ngFor="let student of students">
+          <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
+            <ion-text class="title-on-small-devices">{{student.name}}</ion-text>
+          </ion-col>
+          <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
+            <span class="show-only-on-small-devices bold-on-small-devices">Student ID No.:&nbsp;</span>
+            <ion-text>{{student.id}}</ion-text>
+          </ion-col>
+          <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
+            <span class="show-only-on-small-devices bold-on-small-devices">Course:&nbsp;</span>
+            <ion-text>{{student.course}}</ion-text>
+          </ion-col>
+          <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
+            <span class="show-only-on-small-devices bold-on-small-devices">Intake:&nbsp;</span>
+            {{student.intake}}
+          </ion-col>
+          <ion-col size="12" size-sm="" class="margin-auto ion-text-center">
+            <!-- small devices only -->
+            <ion-button fill="outline" size="small" class="ion-margin-end" color="primary" (click)="viewProfile(student)">
+              View Full Profile
+              <ion-icon slot="end" name="eye"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col size="8" offset="2" class="show-only-on-small-devices border-bottom ion-margin-bottom">
+
+          </ion-col>
+        </ion-row>
+
+        <!-- </ng-container>
+          <ng-template #noFilteredClassCode>
+            <ion-row>
+              <ion-col size="12">
+                <h2 class="ion-text-center ion-padding">No attendance records have been added in the
+                  <span class="text-bold danger-text"> last {{timeFrame}} days</span>
+                  <ng-container *ngIf="term"> for a class code that contains <span
+                      class="text-bold danger-text">{{ term }}</span></ng-container>.
+                </h2>
+              </ion-col>
+            </ion-row>
+          </ng-template>
+        </ng-container> -->
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
