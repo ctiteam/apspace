@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 
 import { DatePipe } from '@angular/common';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
@@ -73,6 +74,27 @@ export class ClassesNewPage implements OnInit {
     { value: 240, title: '4 Hours' },
   ];
 
+  usefulLinks = [
+    {
+      sectionTitle: 'Reports',
+      url: 'https://report.apu.edu.my/jasperserver-pro/flow.html?_flowId=searchFlow&mode=library',
+      items: [
+        { name: 'Attendance Summary Report', url: 'https://report.apu.edu.my/jasperserver-pro/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=%2FAttendance&reportUnit=%2FAttendance%2FAttendance_Summary&standAlone=true' },
+        { name: 'Lecturer Class Report', url: 'https://report.apu.edu.my/jasperserver-pro/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=%2FAttendance&reportUnit=%2FAttendance%2FLecturer_Class_Report&standAlone=true' },
+        { name: 'Incourse Marksheet', url: 'https://report.apu.edu.my/jasperserver-pro/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=%2FAttendance&reportUnit=%2FAttendance%2FIncourse_Marksheet&standAlone=true' },
+      ]
+    },
+    {
+      sectionTitle: 'AttendiX 2.0 - How to?',
+      url: 'https://apiit.atlassian.net/servicedesk/customer/kb/view/221088330',
+      items: [
+        { name: 'Mark Attendance', url: 'https://apiit.atlassian.net/servicedesk/customer/portal/4/article/221218007' },
+        { name: 'Edit Attendance', url: 'https://apiit.atlassian.net/servicedesk/customer/portal/4/article/221218032' },
+        { name: 'Delete Attendance', url: 'https://apiit.atlassian.net/servicedesk/customer/portal/4/article/221152903' },
+      ]
+    }
+  ];
+
   classTypes = ['Lecture', 'Tutorial', 'Lab'];
 
   auto = false; // manual mode to record mismatched data
@@ -94,6 +116,7 @@ export class ClassesNewPage implements OnInit {
   defaultAttendance = 'N'; // default is absent
 
   constructor(
+    private iab: InAppBrowser,
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,
@@ -167,7 +190,7 @@ export class ClassesNewPage implements OnInit {
       - all console logs are commented and will be removed once we make sure there is no issue at all
       - some parts of this function will be grouped together after finalizing the code
     */
-    const classcodes = (await this.classcodes$.toPromise()).map(c => c.CLASS_CODE);
+    const classcodes = [...new Set((await this.classcodes$.toPromise()).map(c => c.CLASS_CODE))];
     // console.log('selected module code is: ', paramModuleId);
     // console.log('All classcodes are: ', classcodes);
 
@@ -472,6 +495,11 @@ export class ClassesNewPage implements OnInit {
         this.getClasscodes();
       }
     });
+  }
+
+  openExternalLink(linkUrl: string) {
+    this.iab.create(linkUrl, '_system', 'location=true');
+
   }
 
 }
