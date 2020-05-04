@@ -206,13 +206,13 @@ const routes: Routes = [
     path: 'change-webspace-password',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/settings/change-webspace-password/change-webspace-password.module')
-      .then( m => m.ChangeWebspacePasswordPageModule)
+      .then(m => m.ChangeWebspacePasswordPageModule)
   },
   {
     path: 'reset-webspace-password',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/settings/reset-webspace-password/reset-webspace-password.module')
-      .then( m => m.ResetWebspacePasswordPageModule)
+      .then(m => m.ResetWebspacePasswordPageModule)
   },
   {
     path: 'visa-status',
@@ -258,7 +258,7 @@ const routes: Routes = [
     path: 'students-results',
     canActivate: [AuthGuard],
     data: { role: Role.Admin | Role.Lecturer },
-    loadChildren: () => import('./pages/students-search/students-search.module').then( m => m.StudentsSearchPageModule)
+    loadChildren: () => import('./pages/students-search/students-search.module').then(m => m.StudentsSearchPageModule)
   },
   {
     path: 'orientaton-student-portal',

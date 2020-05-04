@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MenuController, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
-import { NotificationHistory } from 'src/app/interfaces';
-import { NotificationService } from 'src/app/services';
+import { NotificationHistory, Role } from 'src/app/interfaces';
+import { NotificationService, SettingsService } from 'src/app/services';
+import { DingdongPreferencesPage } from '../settings/dingdong-preferences/dingdong-preferences.page';
 import { NotificationModalPage } from './notification-modal';
 
 @Component({
@@ -11,7 +12,8 @@ import { NotificationModalPage } from './notification-modal';
   templateUrl: './notifications.page.html',
   styleUrls: ['./notifications.page.scss'],
 })
-export class NotificationsPage {
+export class NotificationsPage implements OnInit {
+  isStudent = false; // By default, set false
   messages$: Observable<NotificationHistory>;
   categories = [];
   allCategories = {};
@@ -25,8 +27,14 @@ export class NotificationsPage {
   constructor(
     private notificationService: NotificationService,
     private modalCtrl: ModalController,
+    private settings: SettingsService,
     private menu: MenuController,
   ) { }
+
+  ngOnInit() {
+    // tslint:disable-next-line: no-bitwise
+    this.isStudent = this.settings.get('role') & Role.Student << 0 ? false : true;
+  }
 
   ionViewDidEnter() {
     this.doRefresh();
@@ -53,6 +61,14 @@ export class NotificationsPage {
   openMenu() {
     this.menu.enable(true, 'notifications-filter-menu');
     this.menu.open('notifications-filter-menu');
+  }
+
+  openPreferences() {
+    this.modalCtrl.create({
+      cssClass: 'controlled-modal-dingdong',
+      component: DingdongPreferencesPage,
+      componentProps: { isModal: true },
+    }).then(modal => modal.present());
   }
 
   closeMenu() {
