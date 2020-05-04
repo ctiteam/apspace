@@ -102,7 +102,6 @@ export class FilingReportPage implements OnInit {
     // for Demo. It will be removed after the backend created
     if (this.currentStepNumber === 1) {
       this.studentDetails$ = this.ws.post<BeAPUStudentDetails[]>('/student/image', {
-        url: 'https://u1cd2ltoq6.execute-api.ap-southeast-1.amazonaws.com/dev',
         body: {
           id: [this.studentId]
         }
