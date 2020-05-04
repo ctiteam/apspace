@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { shareReplay, tap } from 'rxjs/operators';
+import { finalize, shareReplay, tap } from 'rxjs/operators';
 import { SearchModalComponent } from 'src/app/components/search-modal/search-modal.component';
 import { ExamScheduleAdmin, ResitExamSchedule } from 'src/app/interfaces/exam-schedule-admin';
 import { WsApiService } from 'src/app/services';
@@ -51,7 +51,7 @@ export class ExamScheduleAdminPage implements OnInit {
     this.doRefresh();
   }
 
-  doRefresh() {
+  doRefresh(refresher?) {
     this.examSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/current_exam', { url: this.devUrl }).pipe(
       shareReplay(1)
     );
@@ -65,7 +65,8 @@ export class ExamScheduleAdminPage implements OnInit {
     this.ws.get<any>('/exam/intake_listing', { url: this.devUrl }).pipe(
       tap(intakes => {
         intakes.forEach(intake => this.intakes.push(intake.COURSE_CODE_ALIAS));
-      })
+      }),
+      finalize(() => refresher && refresher.target.complete())
     ).subscribe();
   }
 

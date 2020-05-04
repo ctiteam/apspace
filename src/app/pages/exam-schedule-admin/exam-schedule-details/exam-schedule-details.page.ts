@@ -37,7 +37,7 @@ export class ExamScheduleDetailsPage implements OnInit {
     public toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
     private route: ActivatedRoute,
-    private ws: WsApiService
+    private ws: WsApiService,
   ) {
     this.examId = this.route.snapshot.paramMap.get('examId');
   }
@@ -47,6 +47,8 @@ export class ExamScheduleDetailsPage implements OnInit {
   }
 
   doRefresh() {
+    this.intakesToBeValidated = [];
+
     this.examScheduleDetails$ = this.ws.get<ExamScheduleAdmin>(`/exam/exam_details?exam_id=${this.examId}`, {url: this.devUrl}).pipe(
       tap(examScheduleDetails => {
         this.examScheduleDetailsToBeEdited = examScheduleDetails;
