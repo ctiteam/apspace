@@ -8,6 +8,363 @@
 </ion-header>
 
 <ion-content>
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col size="12" size-md="10" offset-md="1" class="ion-no-padding">
+        <ion-card>
+          <ion-card-content class="ion-no-padding">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="4" offset="4" size-md="3" offset-md="" push-md="9">
+                  <ng-template [ngIf]="photo$ | async">
+                    <ion-img class="profile-photo" [src]="
+                                              'data:image/jpg;base64,' +
+                                              (photo$ | async)?.base64_photo
+                                              " (ionError)="$event.target.src = 'assets/img/no_img.png'">
+                    </ion-img>
+                  </ng-template>
+                </ion-col>
+                <ion-col size="12" size-md="9" pull-md="3">
+                  <ng-template let-profile [ngIf]="profile$ | async" [ngIfElse]="loadingProfile">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col>
+                          <h1 class="text-bold colored-text">PERSONAL INFORMATION</h1>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>FULL NAME</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{ profile.NAME }}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>STUDENT ID NO.</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{ profile.STUDENT_NUMBER }}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>IC / PASSPORT NO.</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: 921008-14-5592</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>DATE OF BIRTH</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: 04-01-1995</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>GENDER</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: MALE</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>NATIONALITY</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: SYRIAN</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>COUNTRY OF ORIGIN</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: SYRIA</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>RACE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: ARAB</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>RELIGION</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: MUSLIM <a button (click)="change('Religion', 'MUSLIM')">[edit]</a></h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col>
+                          <h1 class="text-bold colored-text">CONTACT INFORMATION</h1>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>MOBILE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: 0182275610 <a button (click)="change('Mobile Number', '0182275610')">[edit]</a></h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>E-MAIL</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: mohammad17@hotmail.com <a button
+                              (click)="change('Email', 'mohammad17@hotmail.com')">[edit]</a></h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>RESIDENTIAL ADDRESS</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: T1-8-3, SKYVILLA CONDO, PERSIARAN UTARA, D’ISLAND RESIDENCE, 47130
+                            PUCHONG, SELANGOR <a button
+                              (click)="change('Address', 'T1-8-3, SKYVILLA CONDO, PERSIARAN UTARA, D’ISLAND RESIDENCE, 47130 PUCHONG, SELANGOR')">[edit]</a>
+                          </h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col>
+                          <h1 class="text-bold colored-text">PARENT / GUARDIAN (1) INFORMATION</h1>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>NAME</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: HATEM AL GHAYEB</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>RELATIONSHIP</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: FATHER</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>MOBILE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: 0182275610</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>EMAIL</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: hatem@hotmail.com</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col>
+                          <h1 class="text-bold colored-text">PARENT / GUARDIAN (2) INFORMATION</h1>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>NAME</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: HATEM AL GHAYEB</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>RELATIONSHIP</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: FATHER</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>MOBILE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: 0182275610</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>EMAIL</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: hatem@hotmail.com</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col>
+                          <h1 class="text-bold colored-text">COURSE INFORMATION</h1>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>COURSE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: FOUNDATION (COMPUTING & TECHNOLOGY) </h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>INTAKE DATE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: MAY 2020</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>INTAKE CODE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: UCFF2005CT</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>SCHOLARSHIP</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: MERIT SCHOLARSHIP - 50%</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>FEES SCHEME</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: SEMESTER PAYMENT</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col>
+                          <h1 class="text-bold colored-text">DOCUMENTATION UPDATE</h1>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col>
+                          <p>You are required to upload your IC Copy (Malaysian Students) / Passport Copy
+                            (International Students) for us to update our records.</p>
+                          <ion-input type="file" button></ion-input>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col>
+                          <h1 class="text-bold danger-text">REQUEST UPDATE</h1>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col>
+                          <p class="danger-text">** (TO ASK FOR THE TEXT HERE) If you want to update anything else</p>
+                          <ion-button color="success" (click)="requestChange()">REQUEST UPDATE ON MY PROFILE</ion-button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ng-template>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <h1 class="colored-text">
+                MEET YOUR E-COUNSELLOR!
+              </h1>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-no-padding">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12">
+                  <h3>
+                    Each student will be assigned to an E-Counsellor upon registration. Before your orientation, he/she
+                    will
+                    assist you in taking you through the Pre-Orientation processes. Stay in touch with your E-Counsellor
+                    and
+                    reach out to them if you need any assistance! Your E-Counsellor will be your mentor of guidance,
+                    throughout your Orientation journey and beyond.
+                  </h3>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="4" offset="4" size-md="3" offset-md="" push-md="9">
+                  <ng-template [ngIf]="photo$ | async">
+                    <ion-img class="profile-photo" [src]="
+                                              'data:image/jpg;base64,' +
+                                              (photo$ | async)?.base64_photo
+                                              " (ionError)="$event.target.src = 'assets/img/no_img.png'">
+                    </ion-img>
+                  </ng-template>
+                </ion-col>
+                <ion-col size="12" size-md="9" pull-md="3">
+                  <ion-grid>
+                    <ion-row>
+                      <ion-col size="6" size-md="4">
+                        <h2>E-COUNSELLOR’S NAME</h2>
+                      </ion-col>
+                      <ion-col size="6" offset-md="1" size-md="">
+                        <h2>: MOHAMAD AL GHAYEB</h2>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="6" size-md="4">
+                        <h2>E-COUNSELLOR’S E-MAIL</h2>
+                      </ion-col>
+                      <ion-col size="6" offset-md="1" size-md="">
+                        <h2>: mohamad.alghayeb@apu.edu.my</h2>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="6" size-md="4">
+                        <h2>E-COUNSELLOR’S WHATSAPP</h2>
+                      </ion-col>
+                      <ion-col size="6" offset-md="1" size-md="">
+                        <h2>: +60 18-227 5610</h2>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="12">
+                        <p>Your E-Counsellor will normally be available from 10am to 6pm, Mondays to Fridays</p>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col size="12">
+                        <ion-button color="primary" expand="block">
+                          CLICK HERE TO SEND A MESSAGE TO YOUR E-COUNSELLOR
+                        </ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   <ion-grid class="ion-margin-top ion-no-padding">
     <ion-row>
       <ion-col class="ion-margin-top" size-xs="12" size-md="6" offset-md="3" size-lg="4" offset-lg="4">

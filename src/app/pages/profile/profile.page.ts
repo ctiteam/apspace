@@ -4,8 +4,10 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
+import { AlertController, ModalController } from '@ionic/angular';
 import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
 import { SettingsService, WsApiService } from '../../services';
+import { RequestChangeModalPage } from './request-update-modal/request-update-modal';
 
 @Component({
   selector: 'app-profile',
@@ -25,9 +27,11 @@ export class ProfilePage implements OnInit {
   studentRole = false;
   countryName: string;
   constructor(
-    private ws: WsApiService,
-    private settings: SettingsService,
+    private alertCtrl: AlertController,
+    private modalCtrl: ModalController,
     private router: Router,
+    private settings: SettingsService,
+    private ws: WsApiService,
   ) {
   }
 
@@ -91,4 +95,56 @@ export class ProfilePage implements OnInit {
     return false;
 
   }
+
+  async change(itemToChange: 'Email' | 'Mobile Number' | 'Religion' | 'Address', value: string) {
+    const alert = await this.alertCtrl.create({
+      header: `Updating My ${itemToChange}`,
+      message: 'Please enter the new value:',
+      inputs: [
+        {
+          name: 'newValue',
+          value,
+          type: itemToChange === 'Email' ? 'email' : itemToChange === 'Mobile Number' ? 'tel' : 'text',
+          placeholder: `New ${itemToChange} Value`
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary-txt-color',
+          handler: () => { }
+        }, {
+          text: 'Update',
+          handler: () => {
+            // to check for null values, and to check for exact similar value
+            // to ask for limit of characters
+            console.log('Confirm Ok');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  /* one last step modal that will open automatically when user uses quick attendnace button */
+  async requestChange() { // TODO: add type
+    const modal = await this.modalCtrl.create({
+      component: RequestChangeModalPage,
+      cssClass: 'generateTransactionsPdf',
+      componentProps: {
+        // classTypes: this.classTypes,
+        // classCodes: filteredClassCodes
+      }
+    });
+    await modal.present();
+    await modal.onDidDismiss().then(data => {
+      if (data.data) {
+        // this.classcode = data.data.code;
+        // this.classType = data.data.type;
+      }
+    });
+  }
+
 }

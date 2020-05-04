@@ -1,0 +1,13 @@
+.margin-auto {
+  margin: auto;
+}
+
+ion-item>ion-label {
+  white-space: normal;
+}
+
+@media (max-width: 767px) {
+  .hide-on-small {
+    display: none;
+  }
+}
