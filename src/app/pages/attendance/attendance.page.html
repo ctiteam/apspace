@@ -120,14 +120,19 @@
                     <ion-item class="h-mobile-d-desktop table-item">
                       <ion-grid class="ion-no-margin ion-no-padding">
                         <ion-row>
-                          <ion-col class="ion-no-padding" size="12" size-sm="6">
+                          <ion-col class="ion-no-padding margin-auto" size="12" size-sm="">
                             <h2 class="text-bold">Module</h2>
                           </ion-col>
-                          <ion-col size="12" size-sm="3" class="print-less-width ion-no-padding">
+                          <ion-col size="12" size-sm="" class="print-less-width ion-no-padding margin-auto">
                             <h2 class="time text-bold">Classes</h2>
                           </ion-col>
-                          <ion-col size="12" size-sm="3" class="ion-no-padding">
+                          <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
                             <h2 class="text-bold">Exam Eligibility</h2>
+                          </ion-col>
+                          <ion-col size="12" size-sm="auto" class="ion-text-right margin-auto">
+                            <ion-button style="visibility: hidden;">
+                                See Details
+                            </ion-button>
                           </ion-col>
                         </ion-row>
                       </ion-grid>
@@ -141,7 +146,7 @@
                       <ion-item class="table-item" *ngFor="let a of semester.value">
                         <ion-grid>
                           <ion-row class="table-data">
-                            <ion-col size="12" size-sm="6" class="text-bold ion-no-padding md-text-center">
+                            <ion-col size="12" size-sm="" class="text-bold md-text-center margin-auto">
                               {{ a.MODULE_ATTENDANCE }}
                             </ion-col>
                             <ion-col size="12"
@@ -153,7 +158,7 @@
                             "></div>
                             </ion-col>
 
-                            <ion-col size="12" size-sm="3" class="ion-no-padding md-text-center">
+                            <ion-col size="12" size-sm="" class=" md-text-center margin-auto">
                               <ion-item lines="none" class="no-background h-desktop-d-mobile ion-no-padding">
                                 Classes
                                 <span slot="end">
@@ -176,7 +181,7 @@
                                       "%)" }}
                               </span>
                             </ion-col>
-                            <ion-col size="12" size-sm="3" class="ion-no-padding md-text-center">
+                            <ion-col size="12" size-sm="" class="md-text-center margin-auto">
                               <ion-item lines="none" class="no-background h-desktop-d-mobile ion-no-padding">
                                 Exam Eligibility
                                 <span slot="end" [style.font-weight]="'bold'"
@@ -189,10 +194,8 @@
                                 {{ a.EXAM_ELIGIBILITY }}
                               </span>
                             </ion-col>
-                            <ion-col class="details-button ion-text-center">
-                              <ion-button (click)='attendanceDetails(a.MODULE_ATTENDANCE, selectedIntake, a.SUBJECT_CODE)' 
-                                class="ion-margin-top" color='success'  fill='solid'
-                                >
+                            <ion-col size="12" size-sm="auto" class="details-button ion-text-center margin-auto">
+                              <ion-button (click)='attendanceDetails(a.MODULE_ATTENDANCE, selectedIntake, a.SUBJECT_CODE)' color='success'>
                                   See Details
                               </ion-button>
                             </ion-col>

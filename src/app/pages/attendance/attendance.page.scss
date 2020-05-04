@@ -12,13 +12,19 @@
   --background: transparent !important;
 }
 
+.margin-auto {
+  margin: auto;
+}
+
+
 .percentage-col {
   padding-top: 10px;
 }
 
-.colored-divider{
+.colored-divider {
   --background: var(--primary-color) !important;
-  ion-label{
+
+  ion-label {
     --color: var(--main-txt-color) !important;
   }
 }
@@ -121,6 +127,7 @@ ion-spinner * {
 }
 
 @media (max-width: 575px) {
+
   // small screens => card settings
   .table-item {
     --background: var(--secondary-bg-color) !important;
@@ -128,12 +135,17 @@ ion-spinner * {
     &:nth-child(even) {
       --background: var(--secondary-bg-color) !important;
     }
+
     &:not(:last-child) {
       margin-bottom: 15px;
     }
+
     --padding-top: 5px;
-    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
   }
+
   ion-card.table-background {
     --background: transparent !important;
     box-shadow: none !important;
@@ -141,19 +153,19 @@ ion-spinner * {
 }
 
 @media (min-width: 576px) {
+
   // large screens => table settings
   .h-mobile-d-desktop {
     display: block;
     visibility: visible;
   }
+
   .h-desktop-d-mobile {
     display: none;
   }
+
   .summary-col {
     margin-top: 10px !important;
-  }
-  .details-button {
-    text-align: left !important;
   }
 }
 
@@ -164,6 +176,7 @@ ion-spinner * {
   animation-duration: 2s;
   animation-fill-mode: forwards;
 }
+
 #waveShape {
   animation-name: waveAction;
   animation-iteration-count: infinite;
@@ -172,10 +185,12 @@ ion-spinner * {
   width: 100%;
   height: 100%;
 }
+
 @-webkit-keyframes fillAction {
   0% {
     transform: translate(0, 90px);
   }
+
   100% {
     transform: translate(0, 0px);
   }
@@ -185,6 +200,7 @@ ion-spinner * {
   0% {
     transform: translate(0, 90px);
   }
+
   100% {
     transform: translate(0, 0px);
   }
@@ -194,6 +210,7 @@ ion-spinner * {
   0% {
     transform: translate(0, 90px);
   }
+
   100% {
     transform: translate(0, 0px);
   }
@@ -203,6 +220,7 @@ ion-spinner * {
   0% {
     transform: translate(0, 0);
   }
+
   100% {
     transform: translate(-120px, 0);
   }
@@ -212,6 +230,7 @@ ion-spinner * {
   0% {
     transform: translate(0, 0);
   }
+
   100% {
     transform: translate(-120px, 0);
   }
@@ -221,10 +240,12 @@ ion-spinner * {
   0% {
     transform: translate(0, 0);
   }
+
   100% {
     transform: translate(-120px, 0);
   }
 }
+
 // END WAVES' STYLES
 
 // START BLUR CLASS
@@ -250,6 +271,7 @@ ion-spinner * {
   height: 150px;
   transform: translateX(-50%);
 }
+
 // END BLUR CLASS
 
 ion-skeleton-text {
