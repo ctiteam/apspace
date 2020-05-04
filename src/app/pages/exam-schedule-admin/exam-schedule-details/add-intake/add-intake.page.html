@@ -54,7 +54,9 @@
               <ion-label position="stacked" class="item-label">
                 Type
               </ion-label>
-              <ion-input [formControl]="intakeForm.controls['type']" class="form-input"></ion-input>
+              <ion-select [formControl]="intakeForm.controls['type']" class="form-input">
+                <ion-select-option *ngFor="let type of types" [value]="type">{{ type }}</ion-select-option>
+              </ion-select>
             </ion-item>
 
             <ion-grid class="ion-no-padding">
@@ -64,14 +66,15 @@
                     <ion-label position="stacked" class="item-label">
                       Venue
                     </ion-label>
-                    <ion-select [formControl]="intakeForm.controls['venue']" class="form-input">
-                      <ion-select-option *ngFor="let venue of venues" [value]="venue">{{ venue }}</ion-select-option>
-                    </ion-select>
+                    <ion-input [formControl]="intakeForm.controls['location']" class="form-input"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="12" size-sm="6" class="ion-no-padding">
                   <ion-item lines="none">
-                    <ion-input [formControl]="intakeForm.controls['location']" class="form-input"></ion-input>
+                    <ion-label position="stacked" class="item-label"></ion-label>
+                    <ion-select [formControl]="intakeForm.controls['venue']" class="form-input">
+                      <ion-select-option *ngFor="let venue of venues" [value]="venue">{{ venue }}</ion-select-option>
+                    </ion-select>
                   </ion-item>
                 </ion-col>
               </ion-row>

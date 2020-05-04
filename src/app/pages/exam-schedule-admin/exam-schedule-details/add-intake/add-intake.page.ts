@@ -31,6 +31,11 @@ export class AddIntakePage implements OnInit {
     'APU@EXAM HALL'
   ];
 
+  types = [
+    'First',
+    'Resit'
+  ];
+
   constructor(
     public modalCtrl: ModalController,
     public loadingCtrl: LoadingController,
@@ -73,8 +78,8 @@ export class AddIntakePage implements OnInit {
       type: [intakeDetails.TYPE, Validators.required],
       location: [location, Validators.required],
       venue: [venue, Validators.required],
-      docketIssuance: [intakeDetails.DOCKETSDUE, Validators.required],
-      examResultDate: [intakeDetails.RESULT_DATE, Validators.required]
+      docketIssuance: [intakeDetails.DOCKETSDUE],
+      examResultDate: [intakeDetails.RESULT_DATE]
     });
   }
 
@@ -138,13 +143,15 @@ export class AddIntakePage implements OnInit {
     if (this.intakeForm.valid) {
       const bodyObject = {
         exam_id: this.examId,
-        docketsdue: moment(this.intakeForm.get('docketIssuance').value).format('DD-MMM-YYYY').toUpperCase(),
+        docketsdue: this.intakeForm.get('docketIssuance').value ?
+                    moment(this.intakeForm.get('docketIssuance').value).format('DD-MMM-YYYY').toUpperCase() : '',
         appraisalsdue: '',
         createdby: '',
         types: this.intakeForm.get('type').value,
         venue: `${this.intakeForm.get('location').value},${this.intakeForm.get('venue').value}`,
         intake_group: '',
-        result_date: moment(this.intakeForm.get('examResultDate').value).format('DD-MMM-YYYY').toUpperCase()
+        result_date: this.intakeForm.get('examResultDate').value ?
+                     moment(this.intakeForm.get('examResultDate').value).format('DD-MMM-YYYY').toUpperCase() : ''
       };
 
       if (this.onEdit) {
