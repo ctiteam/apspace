@@ -189,7 +189,7 @@ ion-slides {
   --bullet-background-active: var(--primary-color) !important;
 }
 
-ion-card {
+ion-card:not(.ion-color-danger) {
   ion-card-title {
     color: var(--primary-color) !important;
   }
