@@ -148,7 +148,7 @@ export class AddIntakePage implements OnInit {
                     moment(this.intakeForm.get('docketIssuance').value).format('DD-MMM-YYYY').toUpperCase() : '',
         appraisalsdue: '',
         createdby: '',
-        // types: this.intakeForm.get('type').value ? this.intakeForm.get('type').value : '',
+        types: this.intakeForm.get('type').value ? this.intakeForm.get('type').value : '',
         venue: `${this.intakeForm.get('location').value},${this.intakeForm.get('venue').value}`,
         intake_group: '',
         result_date: moment(this.intakeForm.get('examResultDate').value).format('DD-MMM-YYYY').toUpperCase()
@@ -195,6 +195,7 @@ export class AddIntakePage implements OnInit {
           subHeader:
             'Are you sure you want to add new intakes with the following details:',
           message: `<p><strong>Intake: </strong> ${intakesMessage}</p>
+                    <p><strong>Type: </strong>${bodyObject.types}</p>
                     <p><strong>Venue: </strong>${bodyObject.venue}</p>
                     <p><strong>Docket Issuance: </strong> ${bodyObject.docketsdue}</p>
                     <p><strong>Exam Result Date: </strong> ${bodyObject.result_date} </p>`,
