@@ -9,7 +9,7 @@
 
 <ion-content>
   <!-- table -->
-  <ion-card class="table" *ngIf="studentsList$ | async as students">
+  <ion-card class="table" *ngIf="studentsList$ | async as students; else loadingList">
     <h2 class="ion-padding colored-text">Your Students List ({{students.length}} Students)</h2>
     <ion-card-content class="table-container">
       <ion-grid class="ion-no-padding">
@@ -66,4 +66,59 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
+  <ng-template #loadingList>
+    <ion-card class="table">
+      <h2 class="ion-padding colored-text">Your Students List </h2>
+      <ion-card-content class="table-container">
+        <ion-grid class="ion-no-padding">
+          <!-- table header -->
+          <ion-row class="table-header">
+            <ion-col class="ion-text-center">
+              <ion-text>Student Name</ion-text>
+            </ion-col>
+            <ion-col class="ion-text-center">
+              <ion-text>Student ID No.</ion-text>
+            </ion-col>
+            <ion-col class="ion-text-center">
+              <ion-text>Course</ion-text>
+            </ion-col>
+            <ion-col class="ion-text-center">
+              <ion-text>Intake</ion-text>
+            </ion-col>
+            <ion-col>
+              <!-- empty col -->
+            </ion-col>
+          </ion-row>
+
+          <!-- table body -->
+          <!-- <ng-container *ngIf="classcodes | classcodesFilter:term:timeFrame as filteredClassCode"> -->
+          <!-- <ng-container *ngIf="filteredClassCode.length > 0; else noFilteredClassCode"> -->
+          <ion-row class="table-row text-bold no-bold-on-small-devices" *ngFor="let skeleton of skeletons">
+            <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
+              <ion-skeleton-text animated style="width: 100%; line-height: 35px;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
+              <span class="show-only-on-small-devices bold-on-small-devices">Student ID No.:&nbsp;</span>
+              <ion-skeleton-text animated style="width: 100%; line-height: 35px;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
+              <span class="show-only-on-small-devices bold-on-small-devices">Course:&nbsp;</span>
+              <ion-skeleton-text animated style="width: 100%; line-height: 35px;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
+              <span class="show-only-on-small-devices bold-on-small-devices">Intake:&nbsp;</span>
+              <ion-skeleton-text animated style="width: 100%; line-height: 35px;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="12" size-sm="" class="margin-auto ion-text-center">
+              <!-- small devices only -->
+              <ion-skeleton-text animated style="width: 100%; line-height: 35px;"></ion-skeleton-text>
+            </ion-col>
+            <ion-col size="8" offset="2" class="show-only-on-small-devices border-bottom ion-margin-bottom">
+              <!-- to add border on card design (small devices) -->
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
 </ion-content>

@@ -11,8 +11,9 @@ import { ViewStudentProfileModalPage } from './view-student-profile/view-student
   styleUrls: ['./orientaton-student-portal.page.scss'],
 })
 export class OrientatonStudentPortalPage implements OnInit {
-
   studentsList$: Observable<OrientationStudentsList[]>;
+  skeletons = new Array(5);
+
   constructor(
     private ws: WsApiService,
     private modalCtrl: ModalController
