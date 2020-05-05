@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { AlertController, ModalController } from '@ionic/angular';
-import { Role, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
+import { OrientationStudentDetails, Role, StaffDirectory, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
 import { SettingsService, WsApiService } from '../../services';
 import { RequestChangeModalPage } from './request-update-modal/request-update-modal';
 
@@ -26,6 +26,10 @@ export class ProfilePage implements OnInit {
   local = true; // Set the initial value to true so the Visa status does not flash
   studentRole = false;
   countryName: string;
+  orientationStudentDetails$: Observable<OrientationStudentDetails>;
+  showOrientationProfile = false;
+  councelorProfile$: Observable<StaffDirectory>;
+
   constructor(
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
@@ -60,6 +64,25 @@ export class ProfilePage implements OnInit {
                 this.timetableAndExamScheduleIntake = studentProfile.INTAKE.replace(/[(]AP[)]|[(]BP[)]/g, '');
               }
               return studentProfile;
+            }),
+            tap(p => {
+              // to add condition here after upadting the profile api
+              this.showOrientationProfile = true;
+              this.orientationStudentDetails$ = this.ws.get<OrientationStudentDetails>(`orientation/student_details?id=${p.STUDENT_NUMBER}`,
+                { url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/' }
+              ).pipe(
+                tap(studentOrientationDetails => {
+                  if (studentOrientationDetails.councelor_details.length > 0) {
+                    this.councelorProfile$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
+                      map(res =>
+                        res.find(staff =>
+                          staff.ID.toLowerCase() === studentOrientationDetails.councelor_details[0].SAMACCOUNTNAME.toLowerCase()
+                        )
+                      )
+                    );
+                  }
+                })
+              );
             }),
             tap(p => {
               this.countryName = p.COUNTRY;
@@ -128,8 +151,7 @@ export class ProfilePage implements OnInit {
     await alert.present();
   }
 
-  /* one last step modal that will open automatically when user uses quick attendnace button */
-  async requestChange() { // TODO: add type
+  async requestChange() {
     const modal = await this.modalCtrl.create({
       component: RequestChangeModalPage,
       cssClass: 'generateTransactionsPdf',
