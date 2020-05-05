@@ -8,4 +8,5 @@ import { Component, Input } from '@angular/core';
 export class LoadingSpinnerComponent {
   @Input() message?: string;
   @Input() size?: string;
+  @Input() position ?: string;
 }
