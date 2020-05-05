@@ -466,8 +466,10 @@
                               </ion-row>
                               <ion-row>
                                 <ion-col size="12">
-                                  <ion-button color="primary" expand="block">
-                                    CLICK HERE TO SEND A MESSAGE TO YOUR E-COUNSELLOR
+                                  <ion-button color="primary" expand="block"
+                                    (click)="chatInTeams(orientationProfile.councelor_details[0].SAMACCOUNTNAME)">
+                                    SEND A MESSAGE TO YOUR E-COUNSELLOR
+                                    <ion-icon name="chatboxes" slot="end"></ion-icon>
                                   </ion-button>
                                 </ion-col>
                               </ion-row>
