@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
+import { OrientationStudentsList } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { ViewStudentProfileModalPage } from './view-student-profile/view-student-profile-modal';
 
@@ -11,12 +12,7 @@ import { ViewStudentProfileModalPage } from './view-student-profile/view-student
 })
 export class OrientatonStudentPortalPage implements OnInit {
 
-  studentsList$: Observable<{
-    COURSE: null | string,
-    INTAKE: string,
-    STUDENT_NAME: string,
-    STUDENT_NUMBER: string
-  }[]>;
+  studentsList$: Observable<OrientationStudentsList[]>;
   constructor(
     private ws: WsApiService,
     private modalCtrl: ModalController
@@ -24,7 +20,7 @@ export class OrientatonStudentPortalPage implements OnInit {
 
   ngOnInit() {
     // tslint:disable-next-line: max-line-length
-    this.studentsList$ = this.ws.get('orientation/student_list', { url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/' });
+    this.studentsList$ = this.ws.get<OrientationStudentsList[]>('orientation/student_list', { url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/' });
   }
 
 
