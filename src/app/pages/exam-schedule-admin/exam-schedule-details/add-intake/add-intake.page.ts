@@ -28,7 +28,8 @@ export class AddIntakePage implements OnInit {
 
   venues = [
     'APITT@EXAM HALL',
-    'APU@EXAM HALL'
+    'APU@EXAM HALL',
+    'Microsoft Teams(Online)'
   ];
 
   types = [
@@ -75,11 +76,11 @@ export class AddIntakePage implements OnInit {
 
     this.intakeForm = this.formBuilder.group({
       intake: this.initializeIntake(intakeDetails.INTAKE),
-      type: [intakeDetails.TYPE, Validators.required],
-      location: [location, Validators.required],
+      type: [intakeDetails.TYPE],
+      location: [location],
       venue: [venue, Validators.required],
       docketIssuance: [intakeDetails.DOCKETSDUE],
-      examResultDate: [intakeDetails.RESULT_DATE]
+      examResultDate: [intakeDetails.RESULT_DATE, Validators.required]
     });
   }
 
@@ -147,11 +148,10 @@ export class AddIntakePage implements OnInit {
                     moment(this.intakeForm.get('docketIssuance').value).format('DD-MMM-YYYY').toUpperCase() : '',
         appraisalsdue: '',
         createdby: '',
-        types: this.intakeForm.get('type').value,
+        // types: this.intakeForm.get('type').value ? this.intakeForm.get('type').value : '',
         venue: `${this.intakeForm.get('location').value},${this.intakeForm.get('venue').value}`,
         intake_group: '',
-        result_date: this.intakeForm.get('examResultDate').value ?
-                     moment(this.intakeForm.get('examResultDate').value).format('DD-MMM-YYYY').toUpperCase() : ''
+        result_date: moment(this.intakeForm.get('examResultDate').value).format('DD-MMM-YYYY').toUpperCase()
       };
 
       if (this.onEdit) {
@@ -195,7 +195,6 @@ export class AddIntakePage implements OnInit {
           subHeader:
             'Are you sure you want to add new intakes with the following details:',
           message: `<p><strong>Intake: </strong> ${intakesMessage}</p>
-                    <p><strong>Type: </strong>${bodyObject.types}</p>
                     <p><strong>Venue: </strong>${bodyObject.venue}</p>
                     <p><strong>Docket Issuance: </strong> ${bodyObject.docketsdue}</p>
                     <p><strong>Exam Result Date: </strong> ${bodyObject.result_date} </p>`,
