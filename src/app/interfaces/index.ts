@@ -51,3 +51,4 @@ export { Quote } from './quote';
 export { LeaveHistory, LeaveBalance, PendingApproval, OnLeaveOnMyCluster } from './hr';
 export { SurveyIntake, SurveyModule } from './student-survey';
 export { StudentSearch } from './student-search';
+export { OrientationStudentDetails, OrientationStudentsList } from './e-orientation';
