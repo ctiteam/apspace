@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { OrientatonStudentPortalPageRoutingModule } from './orientaton-student-portal-routing.module';
 
 import { OrientatonStudentPortalPage } from './orientaton-student-portal.page';
+import { ViewStudentProfileModalPage } from './view-student-profile/view-student-profile-modal';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { OrientatonStudentPortalPage } from './orientaton-student-portal.page';
     IonicModule,
     OrientatonStudentPortalPageRoutingModule
   ],
-  declarations: [OrientatonStudentPortalPage]
+  declarations: [OrientatonStudentPortalPage, ViewStudentProfileModalPage],
+  entryComponents: [ViewStudentProfileModalPage]
 })
 export class OrientatonStudentPortalPageModule {}
