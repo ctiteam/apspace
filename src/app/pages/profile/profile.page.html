@@ -207,7 +207,7 @@
                               </ion-col>
                               <ion-col size="6" offset-md="1" size-md="">
                                 <h2>: {{orientationProfile.student_details[0].RELIGION || 'N/A'}} <a button
-                                    (click)="change('Religion', 'MUSLIM')">[edit]</a></h2>
+                                    (click)="change('RELIGION', orientationProfile.student_details[0].RELIGION, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a></h2>
                               </ion-col>
                             </ion-row>
                             <ion-row>
@@ -221,7 +221,7 @@
                               </ion-col>
                               <ion-col size="6" offset-md="1" size-md="">
                                 <h2>: {{orientationProfile.student_details[0].STUDENT_MOBILE_NO || 'N/A'}} <a button
-                                    (click)="change('Mobile Number', '0182275610')">[edit]</a>
+                                    (click)="change('STUDENT_MOBILE_NO', orientationProfile.student_details[0].STUDENT_MOBILE_NO, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
                                 </h2>
                               </ion-col>
                             </ion-row>
@@ -231,7 +231,7 @@
                               </ion-col>
                               <ion-col size="6" offset-md="1" size-md="">
                                 <h2>: {{orientationProfile.student_details[0].STUDENT_EMAIL || 'N/A'}} <a button
-                                    (click)="change('Email', 'mohammad17@hotmail.com')">[edit]</a></h2>
+                                    (click)="change('STUDENT_EMAIL', orientationProfile.student_details[0].STUDENT_EMAIL, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a></h2>
                               </ion-col>
                             </ion-row>
                             <ion-row>
@@ -241,7 +241,7 @@
                               <ion-col size="6" offset-md="1" size-md="">
                                 <h2>: {{orientationProfile.student_details[0].STUDENT_RESIDENTIAL_ADDRESS || 'N/A'}}
                                   <a button
-                                    (click)="change('Address', 'T1-8-3, SKYVILLA CONDO, PERSIARAN UTARA, D’ISLAND RESIDENCE, 47130 PUCHONG, SELANGOR')">[edit]</a>
+                                    (click)="change('STUDENT_RESIDENTIAL_ADDRESS', orientationProfile.student_details[0].STUDENT_RESIDENTIAL_ADDRESS, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
                                 </h2>
                               </ion-col>
                             </ion-row>
