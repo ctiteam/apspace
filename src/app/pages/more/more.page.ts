@@ -307,6 +307,15 @@ export class MorePage implements OnInit {
       tags: ['message', 'sms', 'email', 'push', 'notification', 'announce']
     },
     {
+      title: 'E-Orientaton',
+      group: 'Academic Operation',
+      url: 'orientaton-student-portal',
+      attachTicket: true,
+      img: 'assets/img/counseling.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['orientation', 'counsellor']
+    },
+    {
       title: 'Exam Paper Scheduling',
       group: 'Academic Operation',
       url: 'https://examscheduling.apu.edu.my/epaperschedule/login_page.asp', // no ticket
