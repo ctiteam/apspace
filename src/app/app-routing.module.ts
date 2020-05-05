@@ -262,8 +262,10 @@ const routes: Routes = [
   },
   {
     path: 'orientaton-student-portal',
+    canActivate: [AuthGuard],
+    data: { role: Role.Admin | Role.Lecturer },
     loadChildren: () =>
-    import('./pages/orientaton-student-portal/orientaton-student-portal.module').then( m => m.OrientatonStudentPortalPageModule)
+      import('./pages/orientaton-student-portal/orientaton-student-portal.module').then(m => m.OrientatonStudentPortalPageModule)
   },
   { // this path must always be at the end of the routes array
     path: '**',
