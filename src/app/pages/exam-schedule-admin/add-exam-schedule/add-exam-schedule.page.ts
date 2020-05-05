@@ -99,8 +99,8 @@ export class AddExamSchedulePage implements OnInit {
 
     if (this.onEdit && examScheduleDetails.TIME) {
       splitTime = examScheduleDetails.TIME.split(' ');
-      startTime = `${splitTime[0]} ${splitTime[1]}`;
-      endTime = `${splitTime[3]} ${splitTime[4]}`;
+      startTime = moment(`${splitTime[0]} ${splitTime[1]}`, ['h:mm A']).format('HH:mm:00');
+      endTime = moment(`${splitTime[3]} ${splitTime[4]}`, ['h:mm A']).format('HH:mm:00');
       publicationDate = {
         from: moment(examScheduleDetails.FROMDATE).format('DD-MMM-YYYY'),
         to: moment(examScheduleDetails.TILLDATE).format('DD-MMM-YYYY')
@@ -111,8 +111,8 @@ export class AddExamSchedulePage implements OnInit {
       publicationDate: [publicationDate, Validators.required],
       module: [examScheduleDetails.MODULE, Validators.required],
       date: [examScheduleDetails.DATEDAY, Validators.required],
-      startTime: [moment(startTime, ['h:mm A']).format('HH:mm:00'), Validators.required],
-      endTime: [moment(endTime, ['h:mm A']).format('HH:mm:00'), Validators.required],
+      startTime: [startTime, Validators.required],
+      endTime: [endTime, Validators.required],
       assessmentType: [examScheduleDetails.ASSESSMENT_TYPE, Validators.required],
       remarks: [examScheduleDetails.REMARKS]
     });
@@ -176,7 +176,8 @@ export class AddExamSchedulePage implements OnInit {
         module: this.examScheduleForm.get('module').value,
         venue: '',
         dateday: moment(this.examScheduleForm.get('date').value).format('DD-MMM-YYYY').toUpperCase(),
-        time: `${moment(this.examScheduleForm.get('startTime').value, ['HH:mm']).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value, ['HH:mm']).format('h:mm A')}`,
+        time: this.onEdit ? `${moment(this.examScheduleForm.get('startTime').value, ['HH:mm']).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value, ['HH:mm']).format('h:mm A')}` :
+                            `${moment(this.examScheduleForm.get('startTime').value).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value).format('h:mm A')}`,
         remarks: this.examScheduleForm.get('remarks').value,
         status: 'Inactive',
         result_date: '',
