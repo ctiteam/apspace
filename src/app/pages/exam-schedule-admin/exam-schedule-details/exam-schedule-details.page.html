@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid *ngIf="examScheduleDetails$ | async as examScheduleDetails">
+  <ion-grid *ngIf="examScheduleDetails$ | async as examScheduleDetails; else loading;">
     <ion-row>
       <ion-col>
         <ion-card class="ion-no-margin">
@@ -75,7 +75,7 @@
 
     <ion-row [ngClass]="{'row-margin': onDelete}">
       <ion-col>
-        <div *ngIf="intakes$ | async as intakes">
+        <div *ngIf="intakes$ | async as intakes; else loading;">
           <ion-card *ngIf="intakes.length > 0; else noIntakes" class="ion-no-margin">
             <ion-card-header class="custom-background">
               <ion-card-title>
@@ -169,6 +169,12 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <ng-template #loading>
+    <div class="ion-padding">
+      <loading-spinner message="Loading..." size="50px"></loading-spinner>
+    </div>
+  </ng-template>
 </ion-content>
 
 <ion-footer *ngIf="status === 'Inactive'">

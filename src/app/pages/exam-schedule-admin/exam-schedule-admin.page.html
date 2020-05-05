@@ -76,7 +76,7 @@
               </ion-item>
   
               <div *ngIf="!isPast; else pastList">
-                <div *ngIf="examSchedules$ | async as examSchedules">
+                <div *ngIf="examSchedules$ | async as examSchedules; else loading;">
                   <div *ngIf="examSchedules.length > 0; else noExamSchedule">
                     <ion-item
                       [button]="!onDelete"
@@ -124,7 +124,7 @@
               </div>
 
               <ng-template #pastList>
-                <div *ngIf="pastExamSchedules$ | async as pastExamSchedules">
+                <div *ngIf="pastExamSchedules$ | async as pastExamSchedules; else loading;">
                   <div *ngIf="pastExamSchedules.length > 0; else noExamSchedule">
                     <ion-virtual-scroll [items]="pastExamSchedules">
                       <ion-item
@@ -212,7 +212,7 @@
                         </ion-col>
                         <ion-col size="12" size-sm="" class="ion-no-padding ion-align-self-center">
                           <ion-icon class="display-on-sm" name="calendar"></ion-icon>
-                          {{resit.DATEDAY}}
+                          {{resit.DATEDAY | date: 'dd-MMM-yyyy'}}
                         </ion-col>
                         <ion-col size="12" size-sm="" class="ion-no-padding">
                           <ion-icon class="display-on-sm" name="time"></ion-icon>
@@ -242,6 +242,12 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <ng-template #loading>
+    <div class="ion-padding">
+      <loading-spinner message="Loading..." size="50px"></loading-spinner>
+    </div>
+  </ng-template>
 </ion-content>
 
 <ion-footer *ngIf="selectedExamScheduleOption === 'Exam Schedule'">

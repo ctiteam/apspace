@@ -259,52 +259,38 @@ export class ExamScheduleDetailsPage implements OnInit {
     };
 
     this.alertCtrl.create({
-      header: `${this.status} Exam Schedule`,
-      subHeader: `To confirm ${this.status} the following exam schedule, type "yes" at the bottom input field.`,
-      inputs: [
-        {
-          name: 'statusConfirmation',
-          type: 'text',
-          placeholder: 'Type "yes" to proceed.',
-        },
-      ],
+      header: `Change Exam Schedule Status`,
+      subHeader: `Are you sure you would like to proceed changing the status?`,
       buttons: [
         {
-          text: 'Cancel',
+          text: 'No',
           role: 'cancel',
           handler: () => {}
         },
         {
-          text: 'Submit',
-          handler: (data) => {
-            if (data.statusConfirmation.toUpperCase() === 'YES') {
-              this.presentLoading();
-              const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
-              const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-              this.ws.post('/exam/update_exam_schedule_status', { url: this.devUrl, body, headers }).subscribe({
-                next: () => {
-                  this.showToastMessage(
-                    'Status successfully updated!',
-                    'success'
-                  );
-                },
-                error: (err) => {
-                  this.dismissLoading();
-                  this.showToastMessage(
-                    err.status + ': ' + err.error.error,
-                    'danger'
-                  );
-                },
-                complete: () => {
-                  this.dismissLoading().then(() => this.doRefresh());
-                }
-              });
-            } else {
-              this.showToastMessage(
-                'The input is incorrect. Activation Failed.',
-                'danger'
-              );
-            }
+          text: 'Yes',
+          handler: () => {
+            this.presentLoading();
+            const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
+            const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+            this.ws.post('/exam/update_exam_schedule_status', { url: this.devUrl, body, headers }).subscribe({
+              next: () => {
+                this.showToastMessage(
+                  'Status successfully changed!',
+                  'success'
+                );
+              },
+              error: (err) => {
+                this.dismissLoading();
+                this.showToastMessage(
+                  err.status + ': ' + err.error.error,
+                  'danger'
+                );
+              },
+              complete: () => {
+                this.dismissLoading().then(() => this.doRefresh());
+              }
+            });
           }
         }
       ]
