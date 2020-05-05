@@ -174,22 +174,14 @@ export class ProfilePage implements OnInit {
     await alert.present();
   }
 
-  async requestChange() {
+  async requestChange(orientationProfile: OrientationStudentDetails) {
     const modal = await this.modalCtrl.create({
       component: RequestChangeModalPage,
       cssClass: 'generateTransactionsPdf',
-      componentProps: {
-        // classTypes: this.classTypes,
-        // classCodes: filteredClassCodes
-      }
+      componentProps: {orientationProfile}
     });
     await modal.present();
-    await modal.onDidDismiss().then(data => {
-      if (data.data) {
-        // this.classcode = data.data.code;
-        // this.classType = data.data.type;
-      }
-    });
+    await modal.onDidDismiss();
   }
 
   chatInTeams(lecturerCasId: string) {

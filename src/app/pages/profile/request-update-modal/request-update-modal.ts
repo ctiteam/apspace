@@ -1,25 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { OrientationStudentDetails } from 'src/app/interfaces';
 @Component({
   selector: 'page-request-update-modal-modal',
   templateUrl: 'request-update-modal.html',
   styleUrls: ['request-update-modal.scss']
 })
 
-export class RequestChangeModalPage {
-  selectedClassCode: string;
-  selectedClassType: string;
+export class RequestChangeModalPage implements OnInit {
 
-  /* input from classes page */
-  classTypes: string[];
-  classCodes: {value: string, matches: number }[];
+  updatedOrientationProfile: OrientationStudentDetails;
+
+  /* input from profile page */
+  orientationProfile: OrientationStudentDetails;
 
   constructor(
     private modalCtrl: ModalController,
   ) { }
 
-  done() {
-    this.modalCtrl.dismiss({ code: this.selectedClassCode, type: this.selectedClassType });
+  ngOnInit() {
+    // clone the object, the backend needs the new object and the old one
+    this.updatedOrientationProfile = JSON.parse(JSON.stringify(this.orientationProfile));
+  }
+
+  submit() {
+    console.log('current', this.orientationProfile);
+    console.log('new', this.updatedOrientationProfile);
   }
 
   dismiss() {
