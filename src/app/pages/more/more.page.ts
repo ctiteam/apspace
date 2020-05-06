@@ -426,7 +426,7 @@ export class MorePage implements OnInit {
       title: 'Exam Schedule Admin',
       group: 'Academic & Enrollment',
       url: 'exam-schedule-admin',
-      img: '',
+      img: 'assets/img/exam-schedule-admin.png',
       role: Role.Admin,
       tags: []
     },
