@@ -23,7 +23,7 @@ export class AddExamSchedulePage implements OnInit {
 
   loading: HTMLIonLoadingElement;
 
-  devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
+  // devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
   assessmentTypes$: Observable<any>;
   modules = [];
 
@@ -54,13 +54,13 @@ export class AddExamSchedulePage implements OnInit {
     //   }
     // );
 
-    this.ws.get<any>('/exam/module_list', { url: this.devUrl }).pipe(
+    this.ws.get<any>('/exam/module_list').pipe(
       tap(modules => {
         modules.forEach(module => this.modules.push(module.MODULE_CODE));
       })
     ).subscribe();
 
-    this.ws.get<ExamScheduleAdmin[]>('/exam/current_exam', {url: this.devUrl}).pipe(
+    this.ws.get<ExamScheduleAdmin[]>('/exam/current_exam').pipe(
       tap(examSchedules => {
         let filteredExamSchedules = examSchedules;
 
@@ -72,7 +72,7 @@ export class AddExamSchedulePage implements OnInit {
       })
     ).subscribe();
 
-    this.assessmentTypes$ = this.ws.get<any>('/exam/assessment_type', { url: this.devUrl });
+    this.assessmentTypes$ = this.ws.get<any>('/exam/assessment_type');
 
     this.initializeForm(this.examScheduleDetails);
   }
@@ -190,7 +190,6 @@ export class AddExamSchedulePage implements OnInit {
         const body = new HttpParams({ fromObject: { exam_id: this.examScheduleDetails.EXAMID.toString(), ...bodyObject } }).toString();
         const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
         this.ws.post<any>('/exam/update_exam_schedule', {
-          url: this.devUrl,
           body,
           headers
         })
@@ -235,7 +234,7 @@ export class AddExamSchedulePage implements OnInit {
                 this.presentLoading();
                 const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
                 const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-                this.ws.post('/exam/create_exam_schedule', { url: this.devUrl, body, headers }).subscribe({
+                this.ws.post('/exam/create_exam_schedule', { body, headers }).subscribe({
                   next: () => {
                     this.showToastMessage(
                       'Exam Schedule added successfully!',
