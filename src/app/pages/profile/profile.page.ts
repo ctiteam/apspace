@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { AlertController, ModalController, ToastController } from '@ionic/angular';
 import { OrientationStudentDetails, Role, StaffDirectory, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
@@ -72,11 +72,15 @@ export class ProfilePage implements OnInit {
               return studentProfile;
             }),
             tap(p => {
-              // to add condition here after upadting the profile api
               this.showOrientationProfile = true;
               this.orientationStudentDetails$ = this.ws.get<OrientationStudentDetails>(`orientation/student_details?id=${p.STUDENT_NUMBER}`,
                 { url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/' }
               ).pipe(
+                catchError(err => {
+                  // api returns 401 when student should not access this orientation form
+                  this.showOrientationProfile = false;
+                  return of(err);
+                }),
                 tap(studentOrientationDetails => {
                   if (studentOrientationDetails.councelor_details.length > 0) {
                     this.councelorProfile$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
