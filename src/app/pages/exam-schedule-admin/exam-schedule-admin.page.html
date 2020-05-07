@@ -1,0 +1,267 @@
+<ion-header>
+  <ion-toolbar mode="md">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Exam List</ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="!isPast && selectedExamScheduleOption === 'Exam Schedule'" [disabled]="examScheduleToBeDeleted.length > 0" (click)="toggleRemoveExamSchedule()" color="danger" class="colored-border colored-text"
+        fill="outline">
+        <ion-icon [name]="onDelete? 'close' : 'checkbox'"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="selectedExamScheduleOption === 'Resits'" fill="outline" size="small" (click)="presentIntakeSearch()" class="colored-text colored-border">
+        {{ selectedIntakeForResit || 'Intakes' }}
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" pullMax="400" pullMin="60 " (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid>
+    <ion-row [ngClass]="{'row-margin': onDelete}">
+      <ion-col>
+        <ion-card class="ion-no-margin">
+          <ion-card-content class="ion-no-padding">
+            <ion-grid *ngIf="!onDelete" class="ion-no-padding grid-background">
+              <ion-row class="ion-no-padding">
+                <ion-col class="ion-no-padding">
+                  <ion-segment (ionChange)="segmentChanged($event)" mode="md" class="align-segment">
+                    <ion-segment-button 
+                      checked
+                      mode="md" 
+                      *ngFor="let examScheduleListOption of examScheduleListOptions"
+                      [value]="examScheduleListOption">
+                      {{ examScheduleListOption }}
+                    </ion-segment-button>
+                  </ion-segment>
+                </ion-col>
+                <ion-col size="12" size-sm="3" class="ion-text-right">
+                  <ion-button (click)="toggleExamView()" class="colored-background" *ngIf="selectedExamScheduleOption === 'Exam Schedule'">
+                    <span *ngIf="!isPast; else past">PAST</span>
+                    <ng-template #past>
+                      CURRENT
+                    </ng-template>
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+        
+            <div *ngIf="selectedExamScheduleOption === 'Exam Schedule'">
+              <ion-item class="table-header">
+                <ion-grid>
+                  <ion-row>
+                    <ion-col class="ion-no-padding">
+                      <h2 class="text-bold">Module</h2>
+                    </ion-col>
+                    <ion-col class="ion-no-padding">
+                      <h2 class="text-bold">Date</h2>
+                    </ion-col>
+                    <ion-col class="ion-no-padding">
+                      <h2 class="text-bold">Time</h2>
+                    </ion-col>
+                    <ion-col class="ion-no-padding">
+                      <h2 class="text-bold">Publication Date</h2>
+                    </ion-col>
+                    <ion-col class="ion-no-padding">
+                      <h2 class="text-bold">Assessment Type</h2>
+                    </ion-col>
+                    <ion-col class="ion-no-padding">
+                      <h2 class="text-bold">Status</h2>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
+  
+              <div *ngIf="!isPast; else pastList">
+                <div *ngIf="examSchedules$ | async as examSchedules; else loading;">
+                  <div *ngIf="examSchedules.length > 0; else noExamSchedule">
+                    <ion-item
+                      [button]="!onDelete"
+                      detail=false
+                      (click)="!onDelete && viewExamScheduleDetails(examSchedule.EXAMID)"
+                      [style.border-left-color]="(examSchedule.MODULE | strToColor)"
+                      [ngClass]="{'clickable-item' : !onDelete}"
+                      class="table-item" 
+                      *ngFor="let examSchedule of examSchedules">
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="12" size-sm="" class="text-bold ion-no-padding">
+                            {{examSchedule.MODULE}}
+                          </ion-col>
+                          <ion-col size="12" size-sm="" class="ion-no-padding ion-align-self-center">
+                            <ion-icon class="display-on-sm" name="calendar"></ion-icon>
+                            {{examSchedule.DATEDAY | date: 'dd-MMM-yyyy'}}
+                          </ion-col>
+                          <ion-col size="12" size-sm="" class="ion-no-padding">
+                            <ion-icon class="display-on-sm" name="time"></ion-icon>
+                            {{examSchedule.TIME}}
+                          </ion-col>
+                          <ion-col size="12" size-sm="" class="ion-no-padding">
+                            <ion-icon class="display-on-sm" name="hourglass"></ion-icon>
+                            {{examSchedule.FROMDATE | date: 'dd-MMM-yyyy'}} - {{examSchedule.TILLDATE | date: 'dd-MMM-yyyy'}}
+                          </ion-col>
+                          <ion-col size="12" size-sm="" class="ion-no-padding">
+                            <ion-icon class="display-on-sm" name="book"></ion-icon>
+                            {{examSchedule.ASSESSMENT_TYPE}}
+                          </ion-col>
+                          <ion-col size="12" size-sm="" class="ion-no-padding is-inactive" [ngClass]="{'is-active': examSchedule.STATUS === 'Active'}">
+                            <div class="flex-col-item">
+                              {{examSchedule.STATUS}}
+                              <ion-checkbox (ngModelChange)="addSelectedExamSchedule(examSchedule)" [(ngModel)]="examSchedule.isChecked" class="ion-no-margin" *ngIf="onDelete && examSchedule.STATUS === 'Inactive'"></ion-checkbox>
+                            </div>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-item>
+                    <ion-button (click)="resetSelectedExamSchedule(examSchedules)" [disabled]="examScheduleToBeDeleted.length < 1" *ngIf="onDelete" class="ion-float-end colored-background">
+                      UNCHECK ALL
+                    </ion-button>
+                  </div>
+                </div>
+              </div>
+
+              <ng-template #pastList>
+                <div *ngIf="pastExamSchedules$ | async as pastExamSchedules; else loading;">
+                  <div *ngIf="pastExamSchedules.length > 0; else noExamSchedule">
+                    <ion-virtual-scroll [items]="pastExamSchedules">
+                      <ion-item
+                        [button]="!onDelete"
+                        detail=false
+                        (click)="!onDelete && viewExamScheduleDetails(pastExamSchedule.EXAMID)"
+                        [style.border-left-color]="(pastExamSchedule.MODULE | strToColor)"
+                        [ngClass]="{'clickable-item' : !onDelete}"
+                        class="table-item" 
+                        *virtualItem="let pastExamSchedule">
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col size="12" size-sm="" class="text-bold ion-no-padding">
+                              {{pastExamSchedule.MODULE}}
+                            </ion-col>
+                            <ion-col size="12" size-sm="" class="ion-no-padding ion-align-self-center">
+                              <ion-icon class="display-on-sm" name="calendar"></ion-icon>
+                              {{pastExamSchedule.DATEDAY | date: 'dd-MMM-yyyy'}}
+                            </ion-col>
+                            <ion-col size="12" size-sm="" class="ion-no-padding">
+                              <ion-icon class="display-on-sm" name="time"></ion-icon>
+                              {{pastExamSchedule.TIME}}
+                            </ion-col>
+                            <ion-col size="12" size-sm="" class="ion-no-padding">
+                              <ion-icon class="display-on-sm" name="hourglass"></ion-icon>
+                              {{pastExamSchedule.FROMDATE | date: 'dd-MMM-yyyy'}} - {{pastExamSchedule.TILLDATE | date: 'dd-MMM-yyyy'}}
+                            </ion-col>
+                            <ion-col size="12" size-sm="" class="ion-no-padding">
+                              <ion-icon class="display-on-sm" name="book"></ion-icon>
+                              {{pastExamSchedule.ASSESSMENT_TYPE}}
+                            </ion-col>
+                            <ion-col size="12" size-sm="" class="ion-no-padding is-inactive" [ngClass]="{'is-active': pastExamSchedule.STATUS === 'Active'}">
+                              <div class="flex-col-item">
+                                {{pastExamSchedule.STATUS}}
+                              </div>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-item>
+                    </ion-virtual-scroll>
+                  </div>
+                </div>
+              </ng-template>
+              
+              <ng-template #noExamSchedule>
+                <app-message-with-svg imageUrl="assets/img/empty.svg"
+                  messageTitle="Opps! You have empty list."
+                  wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+                </app-message-with-svg>
+              </ng-template>
+            </div>
+
+            <div *ngIf="selectedExamScheduleOption === 'Resits'">
+              <div *ngIf="resitExamSchedules$ | async as resits; else noResits;">
+                <div *ngIf="resits.length > 0; else noResits">
+                  <ion-item class="table-header">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col class="ion-no-padding">
+                          <h2 class="text-bold">Module</h2>
+                        </ion-col>
+                        <ion-col class="ion-no-padding">
+                          <h2 class="text-bold">Date</h2>
+                        </ion-col>
+                        <ion-col class="ion-no-padding">
+                          <h2 class="text-bold">Time</h2>
+                        </ion-col>
+                        <ion-col class="ion-no-padding">
+                          <h2 class="text-bold">Venue</h2>
+                        </ion-col>
+                        <ion-col class="ion-no-padding">
+                          <h2 class="text-bold">Status</h2>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+      
+                  <ion-item
+                    class="table-item view-item" 
+                    *ngFor="let resit of resits">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col size="12" size-sm="" class="text-bold ion-no-padding">
+                          {{resit.MODULE}}
+                        </ion-col>
+                        <ion-col size="12" size-sm="" class="ion-no-padding ion-align-self-center">
+                          <ion-icon class="display-on-sm" name="calendar"></ion-icon>
+                          {{resit.DATEDAY | date: 'dd-MMM-yyyy'}}
+                        </ion-col>
+                        <ion-col size="12" size-sm="" class="ion-no-padding">
+                          <ion-icon class="display-on-sm" name="time"></ion-icon>
+                          {{resit.TIME}}
+                        </ion-col>
+                        <ion-col size="12" size-sm="" class="ion-no-padding">
+                          <ion-icon class="display-on-sm" name="pin"></ion-icon>
+                          {{resit.VENUE}}
+                        </ion-col>
+                        <ion-col size="12" size-sm="" class="ion-no-padding is-inactive" [ngClass]="{'is-active': resit.STATUS === 'Active'}">
+                          {{resit.STATUS}}
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-item>
+                </div>
+              </div>
+              <ng-template #noResits>
+                <app-message-with-svg imageUrl="assets/img/empty.svg"
+                  messageTitle="Resits is empty!"
+                  wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+                </app-message-with-svg>
+              </ng-template>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ng-template #loading>
+    <div class="ion-padding">
+      <loading-spinner message="Loading..." size="50px"></loading-spinner>
+    </div>
+  </ng-template>
+</ion-content>
+
+<ion-footer *ngIf="selectedExamScheduleOption === 'Exam Schedule'">
+  <ion-fab *ngIf="!onDelete; else fabDelete" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addNewExamSchedule()" class="colored-background">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ng-template #fabDelete>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button [disabled]="examScheduleToBeDeleted.length < 1" (click)="deleteSelectedExamSchedule()" class="danger-background">
+        <ion-icon name="trash"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ng-template>
+</ion-footer>
