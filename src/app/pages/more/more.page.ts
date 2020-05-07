@@ -316,6 +316,14 @@ export class MorePage implements OnInit {
     //   tags: ['orientation', 'counsellor']
     // },
     {
+      title: 'Exam Schedule (Admin)',
+      group: 'Academic Operation',
+      url: 'exam-schedule-admin',
+      img: 'assets/img/exam-schedule-admin.png',
+      role: Role.Admin,
+      tags: []
+    },
+    {
       title: 'Exam Paper Scheduling',
       group: 'Academic Operation',
       url: 'https://examscheduling.apu.edu.my/epaperschedule/login_page.asp', // no ticket
@@ -429,14 +437,6 @@ export class MorePage implements OnInit {
       url: 'exam-schedule',
       img: 'assets/img/exam-schedule.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: []
-    },
-    {
-      title: 'Exam Schedule Admin',
-      group: 'Academic & Enrollment',
-      url: 'exam-schedule-admin',
-      img: 'assets/img/exam-schedule-admin.png',
-      role: Role.Admin,
       tags: []
     },
     {
