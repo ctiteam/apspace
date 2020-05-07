@@ -71,30 +71,29 @@ export class ProfilePage implements OnInit {
               }
               return studentProfile;
             }),
-            // tap(p => {
-            //   this.showOrientationProfile = true;
-            // tslint:disable-next-line: max-line-length
-            //   this.orientationStudentDetails$ = this.ws.get<OrientationStudentDetails>(`orientation/student_details?id=${p.STUDENT_NUMBER}`,
-            //     { url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/' }
-            //   ).pipe(
-            //     catchError(err => {
-            //       // api returns 401 when student should not access this orientation form
-            //       this.showOrientationProfile = false;
-            //       return of(err);
-            //     }),
-            //     tap(studentOrientationDetails => {
-            //       if (studentOrientationDetails.councelor_details.length > 0) {
-            //         this.councelorProfile$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
-            //           map(res =>
-            //             res.find(staff =>
-            //               staff.ID.toLowerCase() === studentOrientationDetails.councelor_details[0].SAMACCOUNTNAME.toLowerCase()
-            //             )
-            //           )
-            //         );
-            //       }
-            //     })
-            //   );
-            // }),
+            tap(p => {
+              this.showOrientationProfile = true;
+              this.orientationStudentDetails$ = this.ws.get<OrientationStudentDetails>(`orientation/student_details?id=${p.STUDENT_NUMBER}`,
+                { url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/' }
+              ).pipe(
+                catchError(err => {
+                  // api returns 401 when student should not access this orientation form
+                  this.showOrientationProfile = false;
+                  return of(err);
+                }),
+                tap(studentOrientationDetails => {
+                  if (studentOrientationDetails.councelor_details.length > 0) {
+                    this.councelorProfile$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
+                      map(res =>
+                        res.find(staff =>
+                          staff.ID.toLowerCase() === studentOrientationDetails.councelor_details[0].SAMACCOUNTNAME.toLowerCase()
+                        )
+                      )
+                    );
+                  }
+                })
+              );
+            }),
             tap(p => {
               this.countryName = p.COUNTRY;
               if (p.COUNTRY === 'Malaysia') {

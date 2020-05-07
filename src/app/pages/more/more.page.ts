@@ -306,15 +306,15 @@ export class MorePage implements OnInit {
       role: Role.Lecturer | Role.Admin,
       tags: ['message', 'sms', 'email', 'push', 'notification', 'announce']
     },
-    // {
-    //   title: 'E-Orientaton',
-    //   group: 'Academic Operation',
-    //   url: 'orientaton-student-portal',
-    //   attachTicket: true,
-    //   img: 'assets/img/counseling.png',
-    //   role: Role.Lecturer | Role.Admin,
-    //   tags: ['orientation', 'counsellor']
-    // },
+    {
+      title: 'E-Orientaton',
+      group: 'Academic Operation',
+      url: 'orientaton-student-portal',
+      attachTicket: true,
+      img: 'assets/img/counseling.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['orientation', 'counsellor']
+    },
     {
       title: 'Exam Schedule (Admin)',
       group: 'Academic Operation',
