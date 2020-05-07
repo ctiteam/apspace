@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import { OrientationStudentDetails } from 'src/app/interfaces';
+import { WsApiService } from 'src/app/services';
 @Component({
   selector: 'page-request-update-modal-modal',
   templateUrl: 'request-update-modal.html',
@@ -16,7 +17,8 @@ export class RequestChangeModalPage implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private ws: WsApiService
   ) { }
 
   ngOnInit() {
@@ -58,8 +60,22 @@ export class RequestChangeModalPage implements OnInit {
       if (Object.keys(body).length <= 1) {
         this.showToastMessage('Nothing Has Been Changed In The Form, Request Cannot Be Submitted Without Any Changes.', 'danger');
       } else {
-        this.showToastMessage('Your Request Change Has Been Submitted Successfully. The Team Will Review Your Request Now.', 'success');
         console.log('request: ', body);
+        this.ws.post('orientation/profile_change_request?COUNSELLOR_EMAIL=a', {
+          body,
+          url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/'
+        }).subscribe(
+          res => {
+            console.log(res);
+          },
+          err => {
+            console.log('error ', err);
+          },
+          () => {
+            this.showToastMessage('Your Request Change Has Been Submitted Successfully. The Team Will Review Your Request Now.', 'success');
+            this.dismiss();
+          }
+        );
       }
     }
   }
