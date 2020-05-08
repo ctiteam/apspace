@@ -3,7 +3,8 @@ import {
 } from '@angular/core';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { AlertController, Platform } from '@ionic/angular';
-import { Observable, Subscription } from 'rxjs';
+import { EMPTY, Observable, Subscription } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
 
 import { Location } from '@angular/common';
 import { Vibration } from '@ionic-native/vibration/ngx';
@@ -129,22 +130,20 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
   /** Send OTP. */
   sendOtp(otp: string): Promise<boolean> {
     console.assert(otp.length === this.digits.length);
-    return new Promise(res => {
-      this.sending = true;
-      this.updateAttendance.mutate({ otp }).subscribe(d => {
-        this.sending = false;
-        // Vibrator (Vibrate til death!)
-        this.vibration.vibrate(1000);
+    this.sending = true;
+    return this.updateAttendance.mutate({ otp }).pipe(
+      tap(d => {
+        this.vibration.vibrate(1000); // vibrate till death!
         this.presentAlert('Success!', 'Attendance updated', 'success-alert');
         console.log(d);
-        res(true);
-      }, err => {
-        this.sending = false;
+      }),
+      catchError(err => {
         this.presentAlert('Alert!', 'Failed to update attendance. ' + err.message.replace('GraphQL error: ', ''), 'danger-alert');
         console.error(err);
-        res(true);
-      });
-    });
+        return EMPTY;
+      }),
+      finalize(() => this.sending = false),
+    ).toPromise();
   }
 
   /** Clear otp value. */
