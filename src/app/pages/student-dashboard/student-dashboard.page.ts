@@ -7,7 +7,7 @@ import {
   APULocation, APULocations,
   Apcard, BusTrips, CgpaPerIntake, ConsultationHour, Course,
   CourseDetails, DashboardCardComponentConfigurations, EventComponentConfigurations, ExamSchedule, FeesTotalSummary,
-  Holiday, Holidays, News, StaffDirectory, StudentPhoto, StudentProfile, StudentTimetable
+  Holiday, Holidays, News, OrientationStudentDetails, StaffDirectory, StudentPhoto, StudentProfile, StudentTimetable
 } from 'src/app/interfaces';
 import { NewsService, NotificationService, StudentTimetableService, UserSettingsService, WsApiService } from 'src/app/services';
 
@@ -55,13 +55,15 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // PROFILE
   photo$: Observable<StudentPhoto>;
   greetingMessage = '';
+  orientationStudentDetails$: Observable<OrientationStudentDetails>;
+  councelorProfile$: Observable<StaffDirectory>;
   // attendance default intake can be different from timetable default intake
   // attendanceDefaultIntake = '';
   timetableDefaultIntake = '';
   studentFirstName$: Observable<string>;
   block = false;
   numberOfUnreadMsgs: number;
-
+  showAnnouncement = false;
   // TODAY'S SCHEDULE
   todaysSchedule$: Observable<EventComponentConfigurations[] | any>;
   todaysScheduleCardConfigurations: DashboardCardComponentConfigurations = {
@@ -456,6 +458,29 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
         } else {
           this.block = true;
         }
+      }),
+      tap(p => {
+        this.showAnnouncement = true;
+        this.orientationStudentDetails$ = this.ws.get<OrientationStudentDetails>(`orientation/student_details?id=${p.STUDENT_NUMBER}`,
+          { url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/' }
+        ).pipe(
+          catchError(err => {
+            // api returns 401 when student should not access this orientation form
+            this.showAnnouncement = false;
+            return of(err);
+          }),
+          tap(studentOrientationDetails => {
+            if (studentOrientationDetails.councelor_details.length > 0) {
+              this.councelorProfile$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
+                map(res =>
+                  res.find(staff =>
+                    staff.ID.toLowerCase() === studentOrientationDetails.councelor_details[0].SAMACCOUNTNAME.toLowerCase()
+                  )
+                )
+              );
+            }
+          })
+        );
       }),
       // tap(studentProfile => this.attendanceDefaultIntake = studentProfile.INTAKE),
       tap(studentProfile => this.studentFirstName$ = of(studentProfile.NAME.split(' ')[0])),

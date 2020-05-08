@@ -7,8 +7,8 @@
   <div class="masonry-list">
 
     <!-- URGENT ANNOUNCEMENT SECTION (Not included in the drag and drop list) -->
-    <div id="profile" class="masonry-item no-drag">
-      <ion-card class="ion-no-margin" color="danger">
+    <div id="announcement" class="masonry-item no-drag" *ngIf="orientationStudentDetails$ | async as announcement">
+      <ion-card class="ion-no-margin" color="danger" *ngIf="showAnnouncement">
         <ion-card-header color="danger">
           <ion-card-title>
             Here is the title of the announcement
