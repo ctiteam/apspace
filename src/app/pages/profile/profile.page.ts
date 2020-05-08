@@ -93,6 +93,8 @@ export class ProfilePage implements OnInit {
                         )
                       )
                     );
+                  } else {
+                    this.showOrientationProfile = false;
                   }
                 })
               );
