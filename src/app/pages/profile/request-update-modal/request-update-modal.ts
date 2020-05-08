@@ -30,9 +30,11 @@ export class RequestChangeModalPage implements OnInit {
     if (this.orientationProfile.councelor_details.length < 1) {
       this.showToastMessage('No E-Counsellor Has Been Assigned To You Yet! Please Contact The Admin Office.', 'danger');
     } else {
-      // request body, COUNSELLOR_EMAIL is always requried
+      // request body, COUNSELLOR_EMAIL, COUNSELLOR_NAME, STUDENT_NAME are always requried
       const body = {
-        COUNSELLOR_EMAIL: this.orientationProfile.councelor_details[0].EMAIL
+        STUDENT_NAME: this.orientationProfile.student_details[0].STUDENT_NAME,
+        COUNSELLOR_EMAIL: this.orientationProfile.councelor_details[0].EMAIL,
+        COUNSELLOR_NAME: this.orientationProfile.councelor_details[0].COUNCELOR_NAME
       };
 
       // new data
@@ -53,15 +55,15 @@ export class RequestChangeModalPage implements OnInit {
           if (this.orientationProfile.councelor_details[0][key] !== newCounselorDetails[key]) {
             body['NEW_' + key] = newCounselorDetails[key];
             body['OLD_' + key] = this.orientationProfile.councelor_details[0][key];
-
           }
         }
       }
-      if (Object.keys(body).length <= 1) {
+      if (Object.keys(body).length <= 3) {
+        // three items are required all the time student name, counsellor email and counsellor date
         this.showToastMessage('Nothing Has Been Changed In The Form, Request Cannot Be Submitted Without Any Changes.', 'danger');
       } else {
         console.log('request: ', body);
-        this.ws.post('orientation/profile_change_request?COUNSELLOR_EMAIL=a', {
+        this.ws.post('orientation/profile_change_request', {
           body,
           url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/'
         }).subscribe(
