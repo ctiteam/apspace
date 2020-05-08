@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { AlertController, ModalController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { OrientationStudentDetails, Role, StaffDirectory, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
 import { AppLauncherService, SettingsService, WsApiService } from '../../services';
 import { RequestChangeModalPage } from './request-update-modal/request-update-modal';
@@ -18,7 +18,10 @@ export class ProfilePage implements OnInit {
   photo$: Observable<StudentPhoto>;
   profile$: Observable<StudentProfile>;
   staffProfile$: Observable<StaffProfile[]>;
+  councelorProfile$: Observable<StaffDirectory>;
+  orientationStudentDetails$: Observable<OrientationStudentDetails>;
   visa$: Observable<any>;
+
   indecitor = false;
   skeltons = [80, 30, 100, 45, 60, 76];
   intakeModified = false;
@@ -26,9 +29,9 @@ export class ProfilePage implements OnInit {
   local = true; // Set the initial value to true so the Visa status does not flash
   studentRole = false;
   countryName: string;
-  orientationStudentDetails$: Observable<OrientationStudentDetails>;
   showOrientationProfile = false;
-  councelorProfile$: Observable<StaffDirectory>;
+  file: File;
+  loading: HTMLIonLoadingElement;
 
   constructor(
     private alertCtrl: AlertController,
@@ -37,9 +40,9 @@ export class ProfilePage implements OnInit {
     private settings: SettingsService,
     private ws: WsApiService,
     private appLauncherService: AppLauncherService,
-    private toastCtrl: ToastController
-  ) {
-  }
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController
+  ) { }
 
   ngOnInit() {
     this.indecitor = true;
@@ -154,6 +157,7 @@ export class ProfilePage implements OnInit {
             if (!data.newValue) {
               this.showToastMessage('New Value Cannot Be Empty!!', 'danger');
             } else {
+              this.presentLoading();
               const body = {};
               body[itemToChange] = data.newValue;
               this.ws.post(`orientation/update_profile?id=${studentID}`,
@@ -163,9 +167,13 @@ export class ProfilePage implements OnInit {
                 }
               ).subscribe(
                 _ => this.showToastMessage(`${itemToChange} Has Been Updated Successfully!`, 'success'),
-                err => this.showToastMessage(`Error: ${err}`, 'danger'),
+                err => {
+                  this.showToastMessage(`Error: ${err.error.errors[0].message}`, 'danger');
+                  this.dismissLoading();
+                },
                 () => {
                   this.indecitor = true;
+                  this.dismissLoading();
                   this.getProfile();
                 }
               );
@@ -182,7 +190,7 @@ export class ProfilePage implements OnInit {
     const modal = await this.modalCtrl.create({
       component: RequestChangeModalPage,
       cssClass: 'generateTransactionsPdf',
-      componentProps: {orientationProfile}
+      componentProps: { orientationProfile }
     });
     await modal.present();
     await modal.onDidDismiss();
@@ -219,5 +227,55 @@ export class ProfilePage implements OnInit {
       })
       .then(toast => toast.present());
   }
+
+  changeListener($event): void {
+    this.file = $event.target.files[0];
+  }
+
+  uploadDocument(STUDENT_NAME: string, COUNSELLOR_NAME: string, COUNSELLOR_EMAIL: string) {
+    if (this.file.size > 1500000) {
+      this.showToastMessage('Error: Maximum File Size is 1.5MB', 'danger');
+    } else if (this.file.type === 'application/pdf' || this.file.type === 'image/jpeg' || this.file.type === 'image/png') {
+      this.presentLoading();
+      const reader = new FileReader();
+      reader.readAsDataURL(this.file);
+      reader.onload = () => {
+        const body = { STUDENT_NAME, COUNSELLOR_EMAIL, COUNSELLOR_NAME, DOCUMENT: reader.result };
+        this.ws.post<any>(
+          `/orientation/profile_change_request`, {
+          body,
+          url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev'
+        }
+        ).subscribe(
+          () => this.showToastMessage('Your Request Has Been Submitted Successfully. Your E-COUNSELLOR Will Review It And Get Back To You As Soon As Possible.', 'success'),
+          () => {
+            this.showToastMessage('Something Went Wrong From Our Side. Please Contact Your E-COUNSELLOR And Inform Him/Her About The Issue', 'danger');
+            this.dismissLoading();
+          },
+          () => this.dismissLoading()
+        );
+      };
+    } else {
+      this.showToastMessage('Error: File Format is not supported. File Format Should Be Either .png, .jpeg, or .pdf', 'danger');
+    }
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      duration: 20000,
+      message: 'Loading ...',
+      translucent: true,
+      animated: true
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    if (this.loading) {
+      return await this.loading.dismiss();
+    }
+  }
+
 
 }
