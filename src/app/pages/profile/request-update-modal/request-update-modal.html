@@ -25,122 +25,49 @@
                 <ion-col size="12">
                   <ion-item>
                     <ion-label position="floating" color="medium">Full Name</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].STUDENT_NAME" placeholder="Full Name"
-                      type="text" [value]="orientationProfile.student_details[0].STUDENT_NAME"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="12">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">IC / PASSPORT NO.</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].IC" placeholder="IC / PASSPORT NO."
-                      type="text" [value]="orientationProfile.student_details[0].IC"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="12">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">DATE OF BIRTH</ion-label>
-                    <ion-datetime placeholder="DATE OF BIRTH" [(ngModel)]="updatedOrientationProfile.student_details[0].DOB" [value]="orientationProfile.student_details[0].DOB | date"></ion-datetime>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="12">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">Gender</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].GENDER" placeholder="Gender" type="text"
-                      [value]="orientationProfile.student_details[0].GENDER">
+                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].STUDENT_NAME"
+                      placeholder="Full Name" type="text" [value]="orientationProfile.student_details[0].STUDENT_NAME">
                     </ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="12">
                   <ion-item>
+                    <ion-label position="floating" color="medium">IC / PASSPORT NO.</ion-label>
+                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].IC"
+                      placeholder="IC / PASSPORT NO." type="text" [value]="orientationProfile.student_details[0].IC">
+                    </ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="12">
+                  <ion-item>
+                    <ion-label position="floating" color="medium">DATE OF BIRTH</ion-label>
+                    <ion-datetime placeholder="DATE OF BIRTH"
+                      [(ngModel)]="updatedOrientationProfile.student_details[0].DOB"
+                      [value]="orientationProfile.student_details[0].DOB | date"></ion-datetime>
+                  </ion-item>
+                </ion-col>
+                <ion-col size="12">
+                  <ion-item>
                     <ion-label position="floating" color="medium">NATIONALITY</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].NATIONALITY" placeholder="NATIONALITY" type="text"
-                      [value]="orientationProfile.student_details[0].NATIONALITY"></ion-input>
+                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].NATIONALITY"
+                      placeholder="NATIONALITY" type="text" [value]="orientationProfile.student_details[0].NATIONALITY">
+                    </ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="12">
                   <ion-item>
                     <ion-label position="floating" color="medium">COUNTRY OF ORIGIN</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].COUNTRY_OF_ORIGIN" placeholder="COUNTRY OF ORIGIN" type="text"
+                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].COUNTRY_OF_ORIGIN"
+                      placeholder="COUNTRY OF ORIGIN" type="text"
                       [value]="orientationProfile.student_details[0].COUNTRY_OF_ORIGIN"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="12">
                   <ion-item>
                     <ion-label position="floating" color="medium">RACE</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].RACE" placeholder="RACE" type="text"
-                      [value]="orientationProfile.student_details[0].RACE">
+                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].RACE" placeholder="RACE"
+                      type="text" [value]="orientationProfile.student_details[0].RACE">
                     </ion-input>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col>
-                  <h1 class="text-bold colored-text">PARENT / GUARDIAN (1) INFORMATION</h1>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col size="12" size-md="7">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">NAME</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].PARENTS_NAME" placeholder="NAME" type="text"
-                      [value]="orientationProfile.student_details[0].PARENTS_NAME"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="12" size-md="5">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">RELATIONSHIP</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].PARENTS_RELATIONSHIP" placeholder="RELATIONSHIP" type="text"
-                      [value]="orientationProfile.student_details[0].PARENTS_RELATIONSHIP"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="12" size-md="7">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">EMAIL</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].PARENTS_EMAIL" placeholder="EMAIL" type="text"
-                      [value]="orientationProfile.student_details[0].PARENTS_EMAIL"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="12" size-md="5">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">MOBILE</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].PARENTS_MOBILE_TEL" placeholder="MOBILE" type="text"
-                      [value]="orientationProfile.student_details[0].PARENTS_MOBILE_TEL"></ion-input>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
-
-              <ion-row>
-                <ion-col>
-                  <h1 class="text-bold colored-text">PARENT / GUARDIAN (2) INFORMATION</h1>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col size="12" size-md="7">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">NAME</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].GUARDIAN_NAME" placeholder="NAME" type="text"
-                      [value]="orientationProfile.student_details[0].GUARDIAN_NAME"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="12" size-md="5">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">RELATIONSHIP</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].GUARDIAN_RELATIONSHIP" placeholder="RELATIONSHIP" type="text"
-                      [value]="orientationProfile.student_details[0].GUARDIAN_RELATIONSHIP"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="12" size-md="7">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">EMAIL</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].GUARDIAN_EMAIL" placeholder="EMAIL" type="text"
-                      [value]="orientationProfile.student_details[0].GUARDIAN_EMAIL"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="12" size-md="5">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">MOBILE</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].GUARDIAN_MOBILE_TEL" placeholder="MOBILE" type="text"
-                      [value]="orientationProfile.student_details[0].GUARDIAN_MOBILE_TEL"></ion-input>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -153,33 +80,12 @@
                 <ion-col size="12" size-md="8">
                   <ion-item>
                     <ion-label position="floating" color="medium">COURSE</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].COURSE" placeholder="COURSE" type="text"
-                      [value]="orientationProfile.student_details[0].COURSE">
+                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].COURSE" placeholder="COURSE"
+                      type="text" [value]="orientationProfile.student_details[0].COURSE">
                     </ion-input>
                   </ion-item>
                 </ion-col>
-                <ion-col size="12" size-md="4">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">INTAKE DATE</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].INTAKE_DATE" placeholder="INTAKE DATE" type="text"
-                      [value]="orientationProfile.student_details[0].INTAKE_DATE"></ion-input>
-                  </ion-item>
-                </ion-col>
 
-                <ion-col size="12" size-md="8">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">SCHOLARSHIP</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].SCHOLARSHIP" placeholder="SCHOLARSHIP" type="text"
-                      [value]="orientationProfile.student_details[0].SCHOLARSHIP"></ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="12" size-md="4">
-                  <ion-item>
-                    <ion-label position="floating" color="medium">FEES SCHEME</ion-label>
-                    <ion-input [(ngModel)]="updatedOrientationProfile.student_details[0].FEES_SCHEME" placeholder="FEES SCHEME" type="text"
-                      [value]="orientationProfile.student_details[0].FEES_SCHEME"></ion-input>
-                  </ion-item>
-                </ion-col>
               </ion-row>
             </ion-grid>
           </ion-card-content>
