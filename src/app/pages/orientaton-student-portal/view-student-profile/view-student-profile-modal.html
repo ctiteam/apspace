@@ -64,7 +64,7 @@
                           <h2>DATE OF BIRTH</h2>
                         </ion-col>
                         <ion-col size="6" offset-md="1" size-md="">
-                          <h2>: {{studentDetails.student_details[0].DOB || 'N/A'}}</h2>
+                          <h2>: {{(studentDetails.student_details[0].DOB | date) || 'N/A'}}</h2>
                         </ion-col>
                       </ion-row>
                       <ion-row>

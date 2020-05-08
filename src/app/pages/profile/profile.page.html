@@ -166,7 +166,7 @@
                                 <h2>DATE OF BIRTH</h2>
                               </ion-col>
                               <ion-col size="6" offset-md="1" size-md="">
-                                <h2>: {{orientationProfile.student_details[0].DOB || 'N/A'}}</h2>
+                                <h2>: {{(orientationProfile.student_details[0].DOB | date) || 'N/A'}}</h2>
                               </ion-col>
                             </ion-row>
                             <ion-row>
@@ -378,13 +378,14 @@
                             </ion-row>
                             <ion-row>
                               <ion-col>
-                                <h1 class="text-bold danger-text">REQUEST UPDATE</h1>
+                                <h1 class="text-bold colored-text">REQUEST FOR UPDATE</h1>
                               </ion-col>
                             </ion-row>
                             <ion-row>
                               <ion-col>
-                                <p class="danger-text">** (TO ASK FOR THE TEXT HERE) If you want to update
-                                  anything else</p>
+                                <p>
+                                  If you would like to request an update to the non-editable information, please submit your request here.
+                                </p>
                                 <ion-button color="success" (click)="requestChange(orientationProfile)">REQUEST UPDATE
                                   ON MY PROFILE
                                 </ion-button>
