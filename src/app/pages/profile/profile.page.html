@@ -118,6 +118,47 @@
             <ion-row>
               <ion-col size="12" size-md="10" offset-md="1" class="ion-no-padding">
                 <ion-card>
+                  <ion-card-content>
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col>
+                          <h1 class="text-bold colored-text">YOUR VIRTUAL CARD</h1>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="12" size-md="7" offset-md="" push-md="5">
+                          <ion-card class="ion-no-padding ion-float-right" style="width: 335px !important;">
+                            <img src="assets/img/student_card_apu.jpg">
+                            <ng-template [ngIf]="photo$ | async">
+                              <ion-img style="position: absolute;bottom: 7px;right: 10px; padding: 15px; height: 130px;" class="profile-photo"
+                                [src]="
+                                                  'data:image/jpg;base64,' +
+                                                  (photo$ | async)?.base64_photo
+                                                  " (ionError)="$event.target.src = 'assets/img/no_img.png'">
+                              </ion-img>
+                              <div style="position: absolute; top: 91px; color: #000 !important; left: 10px; width: 200px !important;">
+                                <h5 style="font-size: 0.9rem;" class="text-bold">{{ orientationProfile.student_details[0].STUDENT_NAME || 'N/A'}}
+                                </h5>
+                                <p style="margin-top: 14px;">STUDENT ID:&nbsp;&nbsp;&nbsp;
+                                  {{orientationProfile.student_details[0].STUDENT_NUMBER || 'N/A'}}</p>
+                                <p style="margin-top: 2px;">IC/PASSPORT:&nbsp; {{orientationProfile.student_details[0].IC || 'N/A'}}</p>
+                              </div>
+                            </ng-template>
+                          </ion-card>
+                        </ion-col>
+                        <ion-col  size="12" size-md="5" pull-md="7">
+                          Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, ullam! Molestias, quis delectus accusamus officia maiores odit placeat unde aut in alias dolore doloribus itaque. Ratione laboriosam maiores dolores eum!
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-card-content>
+                </ion-card>
+
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12" size-md="10" offset-md="1" class="ion-no-padding">
+                <ion-card>
                   <ion-card-content class="ion-no-padding">
                     <ion-grid>
                       <ion-row>
