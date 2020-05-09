@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ModalController, ToastController } from '@ionic/angular';
+import { LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { OrientationStudentDetails } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 @Component({
@@ -13,6 +13,7 @@ import { WsApiService } from 'src/app/services';
 export class RequestChangeModalPage implements OnInit {
 
   updatedOrientationProfile: OrientationStudentDetails;
+  loading: HTMLIonLoadingElement;
 
   /* input from profile page */
   orientationProfile: OrientationStudentDetails;
@@ -21,7 +22,8 @@ export class RequestChangeModalPage implements OnInit {
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
     private ws: WsApiService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private loadingCtrl: LoadingController
   ) { }
 
   ngOnInit() {
@@ -65,6 +67,7 @@ export class RequestChangeModalPage implements OnInit {
         // three items are required all the time student name, counsellor email and counsellor date
         this.showToastMessage('Nothing Has Been Changed In The Form, Request Cannot Be Submitted Without Any Changes.', 'danger');
       } else {
+        this.presentLoading();
         // tslint:disable-next-line: no-string-literal
         if (body['NEW_DOB']) {
           // tslint:disable-next-line: no-string-literal
@@ -78,9 +81,12 @@ export class RequestChangeModalPage implements OnInit {
             console.log(res);
           },
           err => {
-            console.log('error ', err);
+            this.dismissLoading();
+            this.showToastMessage('Something Went Wrong From Our Side. Please Contact Your E-COUNSELLOR And Inform Him/Her About The Issue', 'danger');
+            console.error('error ', err);
           },
           () => {
+            this.dismissLoading();
             this.showToastMessage('Your Request Change Has Been Submitted Successfully. The Team Will Review Your Request Now.', 'success');
             this.dismiss();
           }
@@ -104,5 +110,22 @@ export class RequestChangeModalPage implements OnInit {
         animated: true
       })
       .then(toast => toast.present());
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      duration: 20000,
+      message: 'Loading ...',
+      translucent: true,
+      animated: true
+    });
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    if (this.loading) {
+      return await this.loading.dismiss();
+    }
   }
 }
