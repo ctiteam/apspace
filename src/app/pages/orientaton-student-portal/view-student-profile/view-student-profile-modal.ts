@@ -23,7 +23,7 @@ export class ViewStudentProfileModalPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.studentDetails$ = this.ws.get<OrientationStudentDetails>(`orientation/student_details?id=${this.studentID}`)
+    this.studentDetails$ = this.ws.get<OrientationStudentDetails>(`/orientation/student_details?id=${this.studentID}`)
       .pipe(
         tap(studentDetails => {
           if (studentDetails.student_details.length > 0) {
