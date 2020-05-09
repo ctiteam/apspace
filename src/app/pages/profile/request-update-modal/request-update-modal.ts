@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ModalController, ToastController } from '@ionic/angular';
 import { OrientationStudentDetails } from 'src/app/interfaces';
@@ -5,7 +6,8 @@ import { WsApiService } from 'src/app/services';
 @Component({
   selector: 'page-request-update-modal-modal',
   templateUrl: 'request-update-modal.html',
-  styleUrls: ['request-update-modal.scss']
+  styleUrls: ['request-update-modal.scss'],
+  providers: [DatePipe]
 })
 
 export class RequestChangeModalPage implements OnInit {
@@ -18,7 +20,8 @@ export class RequestChangeModalPage implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private toastCtrl: ToastController,
-    private ws: WsApiService
+    private ws: WsApiService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
@@ -62,7 +65,11 @@ export class RequestChangeModalPage implements OnInit {
         // three items are required all the time student name, counsellor email and counsellor date
         this.showToastMessage('Nothing Has Been Changed In The Form, Request Cannot Be Submitted Without Any Changes.', 'danger');
       } else {
-        console.log('request: ', body);
+        // tslint:disable-next-line: no-string-literal
+        if (body['NEW_DOB']) {
+          // tslint:disable-next-line: no-string-literal
+          body['NEW_DOB'] = this.datePipe.transform(body['NEW_DOB'], 'EEE, dd MMM yyy') + ' 00:00:00 GMT';
+        }
         this.ws.post('orientation/profile_change_request', {
           body,
           url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/'
