@@ -236,25 +236,30 @@ export class ProfilePage implements OnInit {
   }
 
   uploadDocument(STUDENT_NAME: string, COUNSELLOR_NAME: string, COUNSELLOR_EMAIL: string) {
-    if (this.file.size > 1500000) {
-      this.showToastMessage('Error: Maximum File Size is 1.5MB', 'danger');
-    } else if (this.file.type === 'application/pdf' || this.file.type === 'image/jpeg' || this.file.type === 'image/png') {
-      this.presentLoading();
-      const reader = new FileReader();
-      reader.readAsDataURL(this.file);
-      reader.onload = () => {
-        const body = { STUDENT_NAME, COUNSELLOR_EMAIL, COUNSELLOR_NAME, DOCUMENT: reader.result };
-        this.ws.post<any>(`/orientation/profile_change_request`, { body }).subscribe(
-          () => this.showToastMessage('Your Request Has Been Submitted Successfully. Your E-COUNSELLOR Will Review It And Get Back To You As Soon As Possible.', 'success'),
-          () => {
-            this.showToastMessage('Something Went Wrong From Our Side. Please Contact Your E-COUNSELLOR And Inform Him/Her About The Issue', 'danger');
-            this.dismissLoading();
-          },
-          () => this.dismissLoading()
-        );
-      };
+    if (!this.file) {
+      this.showToastMessage('Error: File Cannot Be Empty!!', 'danger');
     } else {
-      this.showToastMessage('Error: File Format is not supported. File Format Should Be Either .png, .jpeg, or .pdf', 'danger');
+      if (this.file.size > 1500000) {
+        this.showToastMessage('Error: Maximum File Size is 1.5MB', 'danger');
+      } else if (this.file.type === 'application/pdf' || this.file.type === 'image/jpeg' || this.file.type === 'image/png') {
+        this.presentLoading();
+        const reader = new FileReader();
+        reader.readAsDataURL(this.file);
+        reader.onload = () => {
+          const body = { STUDENT_NAME, COUNSELLOR_EMAIL, COUNSELLOR_NAME, DOCUMENT: reader.result };
+          this.ws.post<any>(`/orientation/profile_change_request`, { body }).subscribe(
+            () => this.showToastMessage('Your Request Has Been Submitted Successfully. Your E-COUNSELLOR Will Review It And Get Back To You As Soon As Possible.', 'success'),
+            () => {
+              this.showToastMessage('Something Went Wrong From Our Side. Please Contact Your E-COUNSELLOR And Inform Him/Her About The Issue', 'danger');
+              this.dismissLoading();
+            },
+            () => this.dismissLoading()
+          );
+        };
+      } else {
+        this.showToastMessage('Error: File Format is not supported. File Format Should Be Either .png, .jpeg, or .pdf', 'danger');
+      }
+
     }
   }
 

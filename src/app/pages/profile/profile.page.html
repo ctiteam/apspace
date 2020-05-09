@@ -117,14 +117,13 @@
           <ion-grid class="ion-no-padding">
             <ion-row>
               <ion-col size="12" size-md="10" offset-md="1" class="ion-no-padding">
-                <ion-card>
+                <ion-card class="orientation">
                   <ion-card-content>
                     <ion-grid>
-                      <ion-row>
+                      <!-- <ion-row>
                         <ion-col>
-                          <h1 class="text-bold colored-text">YOUR VIRTUAL CARD</h1>
                         </ion-col>
-                      </ion-row>
+                      </ion-row> -->
                       <ion-row>
                         <ion-col size="12" size-md="7" offset-md="" push-md="5">
                           <ion-card class="ion-no-padding ion-float-right" style="width: 335px !important;">
@@ -149,10 +148,11 @@
                             </div>
                           </ion-card>
                         </ion-col>
-                        <ion-col size="12" size-md="5" pull-md="7">
-                          Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, ullam! Molestias, quis delectus
-                          accusamus officia maiores odit placeat unde aut in alias dolore doloribus itaque. Ratione
-                          laboriosam maiores dolores eum!
+                        <ion-col size="12" size-md="5" pull-md="7" class="margin-auto">
+                          <h1 class="text-bold colored-text">YOUR VIRTUAL CARD</h1>
+                          <h5 class="ion-margin-top">This is your Virtual Student Card. Once you resume face-to-face learning on campus, we
+                            will be
+                            issuing you the physical copy of your card.</h5>
                         </ion-col>
                       </ion-row>
                     </ion-grid>
@@ -163,7 +163,7 @@
             </ion-row>
             <ion-row>
               <ion-col size="12" size-md="10" offset-md="1" class="ion-no-padding">
-                <ion-card>
+                <ion-card class="orientation">
                   <ion-card-content class="ion-no-padding">
                     <ion-grid>
                       <ion-row>
@@ -434,7 +434,7 @@
                                   (change)="changeListener($event)"></ion-input>
                               </ion-col>
                               <ion-col size="12" size-md="6">
-                                <ion-button color="success"
+                                <ion-button color="success" [disabled]="!file"
                                   (click)="uploadDocument(orientationProfile.student_details[0].STUDENT_NAME, orientationProfile.councelor_details[0].COUNCELOR_NAME, orientationProfile.councelor_details[0].EMAIL)">
                                   Upload</ion-button>
                               </ion-col>
@@ -465,7 +465,7 @@
                   </ion-card-content>
                 </ion-card>
                 <ng-container *ngIf="orientationProfile.councelor_details.length > 0; else noCouncelor">
-                  <ion-card>
+                  <ion-card class="orientation">
                     <ion-card-header>
                       <ion-card-title>
                         <h1 class="colored-text">
@@ -549,7 +549,7 @@
                   </ion-card>
                 </ng-container>
                 <ng-template #noCouncelor>
-                  <ion-card color="danger">
+                  <ion-card color="danger" class="orientation">
                     <ion-card-header color="danger">
                       <ion-card-title class="ion-text-center">
                         No E-Counsellor Has Been Assigned To You Yet :(
