@@ -134,7 +134,12 @@ export class ProfilePage implements OnInit {
   }
 
   // tslint:disable-next-line: max-line-length
-  async change(itemToChange: 'STUDENT_EMAIL' | 'STUDENT_MOBILE_NO' | 'RELIGION' | 'STUDENT_PERMANENT_ADDRESS', value: string, studentID: string) {
+  async change(
+    itemToChange: 'STUDENT_EMAIL' | 'STUDENT_MOBILE_NO' | 'RELIGION' | 'STUDENT_PERMANENT_ADDRESS'
+      | 'PARENTS_NAME' | 'PARENTS_RELATIONSHIP' | 'PARENTS_MOBILE_TEL' | 'PARENTS_EMAIL'
+      | 'GUARDIAN_NAME' | 'GUARDIAN_RELATIONSHIP' | 'GUARDIAN_MOBILE_TEL' | 'GUARDIAN_EMAIL',
+    value: string, studentID: string
+  ) {
     const alert = await this.alertCtrl.create({
       header: `UPDATE ${itemToChange.replace(/_/g, ' ')}`,
       message: 'Please enter the new value:',
@@ -239,7 +244,7 @@ export class ProfilePage implements OnInit {
       reader.readAsDataURL(this.file);
       reader.onload = () => {
         const body = { STUDENT_NAME, COUNSELLOR_EMAIL, COUNSELLOR_NAME, DOCUMENT: reader.result };
-        this.ws.post<any>(`/orientation/profile_change_request`, {body}).subscribe(
+        this.ws.post<any>(`/orientation/profile_change_request`, { body }).subscribe(
           () => this.showToastMessage('Your Request Has Been Submitted Successfully. Your E-COUNSELLOR Will Review It And Get Back To You As Soon As Possible.', 'success'),
           () => {
             this.showToastMessage('Something Went Wrong From Our Side. Please Contact Your E-COUNSELLOR And Inform Him/Her About The Issue', 'danger');
