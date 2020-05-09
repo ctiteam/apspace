@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { LoadingController, ModalController, ToastController } from '@ionic/angular';
-import { OrientationStudentDetails } from 'src/app/interfaces';
+import { Observable } from 'rxjs';
+import { OrientationStudentDetails, StudentPhoto } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 @Component({
   selector: 'page-request-update-modal-modal',
@@ -11,9 +12,10 @@ import { WsApiService } from 'src/app/services';
 })
 
 export class RequestChangeModalPage implements OnInit {
-
+  photo$: Observable<StudentPhoto>;
   updatedOrientationProfile: OrientationStudentDetails;
   loading: HTMLIonLoadingElement;
+  file: File;
 
   /* input from profile page */
   orientationProfile: OrientationStudentDetails;
@@ -29,6 +31,7 @@ export class RequestChangeModalPage implements OnInit {
   ngOnInit() {
     // clone the object, the backend needs the new object and the old one
     this.updatedOrientationProfile = JSON.parse(JSON.stringify(this.orientationProfile));
+    this.photo$ = this.ws.get<StudentPhoto>('/student/photo');
   }
 
   submit() {
@@ -88,6 +91,37 @@ export class RequestChangeModalPage implements OnInit {
             this.dismiss();
           }
         );
+      }
+    }
+  }
+
+  changeListener($event): void {
+    this.file = $event.target.files[0];
+  }
+
+  uploadDocument(STUDENT_NAME: string, COUNSELLOR_NAME: string, COUNSELLOR_EMAIL: string) {
+    if (!this.file) {
+      this.showToastMessage('Error: Fule Cannot Be Empty!', 'danger');
+    } else {
+      if (this.file.size > 1500000) {
+        this.showToastMessage('Error: Maximum File Size is 1.5MB', 'danger');
+      } else if (this.file.type === 'application/pdf' || this.file.type === 'image/jpeg' || this.file.type === 'image/png') {
+        this.presentLoading();
+        const reader = new FileReader();
+        reader.readAsDataURL(this.file);
+        reader.onload = () => {
+          const body = { STUDENT_NAME, COUNSELLOR_EMAIL, COUNSELLOR_NAME, STUDENT_PHOTO: reader.result };
+          this.ws.post<any>(`/orientation/profile_change_request`, { body }).subscribe(
+            () => this.showToastMessage('Your Request Has Been Submitted Successfully. Your E-COUNSELLOR Will Review It And Get Back To You As Soon As Possible.', 'success'),
+            () => {
+              this.showToastMessage('Something Went Wrong From Our Side. Please Contact Your E-COUNSELLOR And Inform Him/Her About The Issue', 'danger');
+              this.dismissLoading();
+            },
+            () => this.dismissLoading()
+          );
+        };
+      } else {
+        this.showToastMessage('Error: File Format is not supported. File Format Should Be Either .png, .jpeg, or .pdf', 'danger');
       }
     }
   }
