@@ -64,21 +64,21 @@ export class AddIntakePage implements OnInit {
     TYPE: '',
     VENUE: ''
   }) {
-    let splitVenue;
-    let location = '';
-    let venue = '';
+    // let splitVenue;
+    // let location = '';
+    // let venue = '';
 
-    if (this.onEdit && intakeDetails.VENUE) {
-      splitVenue = intakeDetails.VENUE.split(',');
-      location = splitVenue[0];
-      venue = splitVenue[1];
-    }
+    // if (this.onEdit && intakeDetails.VENUE) {
+    //   splitVenue = intakeDetails.VENUE.split(',');
+    //   location = splitVenue[0];
+    //   venue = splitVenue[1];
+    // }
 
     this.intakeForm = this.formBuilder.group({
       intake: this.initializeIntake(intakeDetails.INTAKE),
       type: [intakeDetails.TYPE],
-      location: [location],
-      venue: [venue, Validators.required],
+      // location: [location],
+      venue: [intakeDetails.VENUE, Validators.required],
       docketIssuance: [intakeDetails.DOCKETSDUE],
       examResultDate: [intakeDetails.RESULT_DATE, Validators.required]
     });
@@ -149,7 +149,7 @@ export class AddIntakePage implements OnInit {
         appraisalsdue: '',
         createdby: '',
         types: this.intakeForm.get('type').value ? this.intakeForm.get('type').value : '',
-        venue: `${this.intakeForm.get('location').value},${this.intakeForm.get('venue').value}`,
+        venue: `${this.intakeForm.get('venue').value}`,
         intake_group: '',
         result_date: moment(this.intakeForm.get('examResultDate').value).format('DD-MMM-YYYY').toUpperCase()
       };
@@ -209,7 +209,10 @@ export class AddIntakePage implements OnInit {
                 this.presentLoading();
                 const body = new HttpParams({ fromObject: { ...bodyArray, ...bodyObject } }).toString();
                 const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-                this.ws.post('/exam/create_intake_entry', { body, headers }).subscribe({
+                this.ws.post('/exam/create_intake_entry', {
+                  body,
+                  headers
+                }).subscribe({
                   next: () => {
                     this.showToastMessage(
                       'Intakes added successfully!',

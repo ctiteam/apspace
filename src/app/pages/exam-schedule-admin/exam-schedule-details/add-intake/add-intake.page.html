@@ -59,17 +59,20 @@
               </ion-select>
             </ion-item> -->
 
-            <ion-grid class="ion-no-padding">
+            <!-- <ion-grid class="ion-no-padding">
               <ion-row class="ion-no-padding ion-align-items-end">
-                <ion-col size="12" size-sm="6" class="ion-no-padding">
+                <ion-col size="12" size-sm="6" class="ion-no-padding"> -->
                   <ion-item lines="none">
                     <ion-label position="stacked" class="item-label">
                       Venue
                     </ion-label>
-                    <ion-input [formControl]="intakeForm.controls['location']" class="form-input"></ion-input>
+                    <!-- <ion-input [formControl]="intakeForm.controls['location']" class="form-input"></ion-input> -->
+                    <ion-select [formControl]="intakeForm.controls['venue']" class="form-input">
+                      <ion-select-option *ngFor="let venue of venues" [value]="venue">{{ venue }}</ion-select-option>
+                    </ion-select>
                   </ion-item>
-                </ion-col>
-                <ion-col size="12" size-sm="6" class="ion-no-padding">
+                <!-- </ion-col> -->
+                <!-- <ion-col size="12" size-sm="6" class="ion-no-padding">
                   <ion-item lines="none">
                     <ion-label position="stacked" class="item-label"></ion-label>
                     <ion-select [formControl]="intakeForm.controls['venue']" class="form-input">
@@ -78,7 +81,7 @@
                   </ion-item>
                 </ion-col>
               </ion-row>
-            </ion-grid>
+            </ion-grid> -->
 
             <ion-item lines="none">
               <ion-label position="stacked" class="item-label">
