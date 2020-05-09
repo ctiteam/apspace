@@ -1,7 +1,7 @@
 @media screen and (max-width: 768px) {
   ion-col {
     border: none;
-    ion-card {
+    ion-card:not(.orientation) {
       box-shadow: none;
       --background: transparent !important;
     }
