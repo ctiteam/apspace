@@ -135,7 +135,7 @@ export class ProfilePage implements OnInit {
   }
 
   // tslint:disable-next-line: max-line-length
-  async change(itemToChange: 'STUDENT_EMAIL' | 'STUDENT_MOBILE_NO' | 'RELIGION' | 'STUDENT_RESIDENTIAL_ADDRESS', value: string, studentID: string) {
+  async change(itemToChange: 'STUDENT_EMAIL' | 'STUDENT_MOBILE_NO' | 'RELIGION' | 'STUDENT_PERMANENT_ADDRESS', value: string, studentID: string) {
     const alert = await this.alertCtrl.create({
       header: `UPDATE ${itemToChange.replace(/_/g, ' ')}`,
       message: 'Please enter the new value:',
