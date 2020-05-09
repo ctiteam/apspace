@@ -76,28 +76,27 @@ export class ProfilePage implements OnInit {
             }),
             tap(p => {
               this.showOrientationProfile = true;
-              this.orientationStudentDetails$ = this.ws.get<OrientationStudentDetails>(`orientation/student_details?id=${p.STUDENT_NUMBER}`,
-                { url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/' }
-              ).pipe(
-                catchError(err => {
-                  // api returns 401 when student should not access this orientation form
-                  this.showOrientationProfile = false;
-                  return of(err);
-                }),
-                tap(studentOrientationDetails => {
-                  if (studentOrientationDetails.councelor_details.length > 0) {
-                    this.councelorProfile$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
-                      map(res =>
-                        res.find(staff =>
-                          staff.ID.toLowerCase() === studentOrientationDetails.councelor_details[0].SAMACCOUNTNAME.toLowerCase()
-                        )
-                      )
-                    );
-                  } else {
+              this.orientationStudentDetails$ = this.ws.get<OrientationStudentDetails>(
+                `/orientation/student_details?id=${p.STUDENT_NUMBER}`).pipe(
+                  catchError(err => {
+                    // api returns 401 when student should not access this orientation form
                     this.showOrientationProfile = false;
-                  }
-                })
-              );
+                    return of(err);
+                  }),
+                  tap(studentOrientationDetails => {
+                    if (studentOrientationDetails.councelor_details.length > 0) {
+                      this.councelorProfile$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
+                        map(res =>
+                          res.find(staff =>
+                            staff.ID.toLowerCase() === studentOrientationDetails.councelor_details[0].SAMACCOUNTNAME.toLowerCase()
+                          )
+                        )
+                      );
+                    } else {
+                      this.showOrientationProfile = false;
+                    }
+                  })
+                );
             }),
             tap(p => {
               this.countryName = p.COUNTRY;
@@ -162,11 +161,8 @@ export class ProfilePage implements OnInit {
               this.presentLoading();
               const body = {};
               body[itemToChange] = data.newValue;
-              this.ws.post(`orientation/update_profile?id=${studentID}`,
-                {
-                  url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/',
-                  body
-                }
+              this.ws.post(`/orientation/update_profile?id=${studentID}`,
+                { body }
               ).subscribe(
                 _ => this.showToastMessage(`${itemToChange} Has Been Updated Successfully!`, 'success'),
                 err => {
@@ -243,12 +239,7 @@ export class ProfilePage implements OnInit {
       reader.readAsDataURL(this.file);
       reader.onload = () => {
         const body = { STUDENT_NAME, COUNSELLOR_EMAIL, COUNSELLOR_NAME, DOCUMENT: reader.result };
-        this.ws.post<any>(
-          `/orientation/profile_change_request`, {
-          body,
-          url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev'
-        }
-        ).subscribe(
+        this.ws.post<any>(`/orientation/profile_change_request`, {body}).subscribe(
           () => this.showToastMessage('Your Request Has Been Submitted Successfully. Your E-COUNSELLOR Will Review It And Get Back To You As Soon As Possible.', 'success'),
           () => {
             this.showToastMessage('Something Went Wrong From Our Side. Please Contact Your E-COUNSELLOR And Inform Him/Her About The Issue', 'danger');

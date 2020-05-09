@@ -73,10 +73,7 @@ export class RequestChangeModalPage implements OnInit {
           // tslint:disable-next-line: no-string-literal
           body['NEW_DOB'] = this.datePipe.transform(body['NEW_DOB'], 'EEE, dd MMM yyy') + ' 00:00:00 GMT';
         }
-        this.ws.post('orientation/profile_change_request', {
-          body,
-          url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/'
-        }).subscribe(
+        this.ws.post('/orientation/profile_change_request', { body }).subscribe(
           res => {
             console.log(res);
           },
