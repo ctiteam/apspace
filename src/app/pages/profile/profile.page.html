@@ -129,11 +129,11 @@
                         <ion-col size="12" size-md="7" offset-md="" push-md="5">
                           <ion-card class="ion-no-padding ion-float-right" style="width: 335px !important;">
                             <img src="assets/img/student_card_apu.jpg">
-                            <ng-template [ngIf]="photo$ | async">
+                            <ng-template let-photo [ngIf]="photo$ | async">
                               <ion-img style="position: absolute;bottom: 7px;right: 10px; padding: 15px; height: 130px;" class="profile-photo"
                                 [src]="
                                                   'data:image/jpg;base64,' +
-                                                  (photo$ | async)?.base64_photo
+                                                  photo?.base64_photo
                                                   " (ionError)="$event.target.src = 'assets/img/no_img.png'">
                               </ion-img>
                               <div style="position: absolute; top: 91px; color: #000 !important; left: 10px; width: 200px !important;">
@@ -162,16 +162,7 @@
                   <ion-card-content class="ion-no-padding">
                     <ion-grid>
                       <ion-row>
-                        <ion-col size="4" offset="4" size-md="3" offset-md="" push-md="9">
-                          <ng-template [ngIf]="photo$ | async">
-                            <ion-img class="profile-photo" [src]="
-                                                'data:image/jpg;base64,' +
-                                                (photo$ | async)?.base64_photo
-                                                " (ionError)="$event.target.src = 'assets/img/no_img.png'">
-                            </ion-img>
-                          </ng-template>
-                        </ion-col>
-                        <ion-col size="12" size-md="9" pull-md="3">
+                        <ion-col size="12">
                           <ion-grid>
                             <ion-row>
                               <ion-col>
