@@ -130,24 +130,29 @@
                           <ion-card class="ion-no-padding ion-float-right" style="width: 335px !important;">
                             <img src="assets/img/student_card_apu.jpg">
                             <ng-template let-photo [ngIf]="photo$ | async">
-                              <ion-img style="position: absolute;bottom: 7px;right: 10px; padding: 15px; height: 130px;" class="profile-photo"
-                                [src]="
+                              <ion-img style="position: absolute;bottom: 7px;right: 10px; padding: 15px; height: 130px;"
+                                class="profile-photo" [src]="
                                                   'data:image/jpg;base64,' +
                                                   photo?.base64_photo
                                                   " (ionError)="$event.target.src = 'assets/img/no_img.png'">
                               </ion-img>
-                              <div style="position: absolute; top: 91px; color: #000 !important; left: 10px; width: 200px !important;">
-                                <h5 style="font-size: 0.9rem;" class="text-bold">{{ orientationProfile.student_details[0].STUDENT_NAME || 'N/A'}}
-                                </h5>
-                                <p style="margin-top: 14px;">STUDENT ID:&nbsp;&nbsp;&nbsp;
-                                  {{orientationProfile.student_details[0].STUDENT_NUMBER || 'N/A'}}</p>
-                                <p style="margin-top: 2px;">IC/PASSPORT:&nbsp; {{orientationProfile.student_details[0].IC || 'N/A'}}</p>
-                              </div>
                             </ng-template>
+                            <div
+                              style="position: absolute; top: 91px; color: #000 !important; left: 10px; width: 200px !important;">
+                              <h5 style="font-size: 0.9rem;" class="text-bold">
+                                {{ orientationProfile.student_details[0].STUDENT_NAME || 'N/A'}}
+                              </h5>
+                              <p style="margin-top: 14px;">STUDENT ID:&nbsp;&nbsp;&nbsp;
+                                {{orientationProfile.student_details[0].STUDENT_NUMBER || 'N/A'}}</p>
+                              <p style="margin-top: 2px;">IC/PASSPORT:&nbsp;
+                                {{orientationProfile.student_details[0].IC || 'N/A'}}</p>
+                            </div>
                           </ion-card>
                         </ion-col>
-                        <ion-col  size="12" size-md="5" pull-md="7">
-                          Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, ullam! Molestias, quis delectus accusamus officia maiores odit placeat unde aut in alias dolore doloribus itaque. Ratione laboriosam maiores dolores eum!
+                        <ion-col size="12" size-md="5" pull-md="7">
+                          Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, ullam! Molestias, quis delectus
+                          accusamus officia maiores odit placeat unde aut in alias dolore doloribus itaque. Ratione
+                          laboriosam maiores dolores eum!
                         </ion-col>
                       </ion-row>
                     </ion-grid>
@@ -300,7 +305,8 @@
                               </ion-col>
                               <ion-col size="6" offset-md="1" size-md="">
                                 <h2>: {{orientationProfile.student_details[0].PARENTS_RELATIONSHIP || 'N/A'}} <a button
-                                  (click)="change('PARENTS_RELATIONSHIP', orientationProfile.student_details[0].PARENTS_RELATIONSHIP, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a></h2>
+                                    (click)="change('PARENTS_RELATIONSHIP', orientationProfile.student_details[0].PARENTS_RELATIONSHIP, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
+                                </h2>
                               </ion-col>
                             </ion-row>
                             <ion-row>
