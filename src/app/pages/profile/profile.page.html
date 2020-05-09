@@ -308,7 +308,8 @@
                                 <h2>RELATIONSHIP</h2>
                               </ion-col>
                               <ion-col size="6" offset-md="1" size-md="">
-                                <h2>: {{orientationProfile.student_details[0].PARENTS_RELATIONSHIP || 'N/A'}}</h2>
+                                <h2>: {{orientationProfile.student_details[0].PARENTS_RELATIONSHIP || 'N/A'}} <a button
+                                  (click)="change('PARENTS_RELATIONSHIP', orientationProfile.student_details[0].PARENTS_RELATIONSHIP, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a></h2>
                               </ion-col>
                             </ion-row>
                             <ion-row>
