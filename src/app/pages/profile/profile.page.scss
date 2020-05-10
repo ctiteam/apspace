@@ -1,10 +1,34 @@
-@media screen and (max-width: 768px) {
-  ion-col {
-    border: none;
-    ion-card:not(.orientation) {
-      box-shadow: none;
-      --background: transparent !important;
+.virtual-card {
+  float: right !important;
+  width: 310px !important;
+
+  .virtual-card-student-img {
+    position: absolute !important;
+    bottom: 6px !important;
+    right: 7px !important;
+    padding: 15px !important;
+    height: 123px !important;
+  }
+
+  .virtual-card-student-details {
+    position: absolute !important;
+    top: 91px !important;
+    color: #000 !important;
+    left: 10px !important;
+    width: 200px !important;
+
+    .virtual-card-student-name {
+      font-size: 0.9rem;
     }
+    .virtual-card-student-ids{
+      &.id{
+        margin-top: 14px;
+      }
+      &.passport{
+        margin-top: 2px;
+      }
+    }
+    
   }
 }
 
@@ -20,10 +44,55 @@ ion-img {
   margin: auto;
 }
 
-.margin-auto{
+.margin-auto {
   margin: auto;
 }
 
 h4 {
   font-weight: bold;
+}
+
+@media screen and (max-width: 768px) {
+  ion-col {
+    border: none;
+
+    ion-card:not(.orientation) {
+      box-shadow: none;
+      --background: transparent !important;
+    }
+  }
+
+  .virtual-card {
+    margin: auto !important;
+    float: none !important;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .virtual-card {
+    width: 268px !important;
+  
+    .virtual-card-student-img {
+      position: absolute !important;
+      bottom: 4px !important;
+      right: 7px !important;
+      padding: 13px !important;
+      height: 107px !important;
+    }
+  
+    .virtual-card-student-details {
+      position: absolute !important;
+      top: 71px !important;
+      color: #000 !important;
+      left: 10px !important;
+      width: 153px !important;
+  
+      .virtual-card-student-name {
+        font-size: 0.7rem;
+      }
+      .virtual-card-student-ids{
+        font-size: 0.7rem !important;
+      }
+    }
+  }
 }

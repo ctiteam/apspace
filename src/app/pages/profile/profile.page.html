@@ -118,7 +118,7 @@
             <ion-row>
               <ion-col size="12" size-md="10" offset-md="1" class="ion-no-padding">
                 <ion-card class="orientation">
-                  <ion-card-content>
+                  <ion-card-content class="ion-no-padding">
                     <ion-grid>
                       <!-- <ion-row>
                         <ion-col>
@@ -126,31 +126,29 @@
                       </ion-row> -->
                       <ion-row>
                         <ion-col size="12" size-md="7" offset-md="" push-md="5">
-                          <ion-card class="ion-no-padding ion-float-right" style="width: 335px !important;">
+                          <ion-card class="ion-no-margin ion-no-padding virtual-card">
                             <img src="assets/img/student_card_apu.jpg">
                             <ng-template let-photo [ngIf]="photo$ | async">
-                              <ion-img style="position: absolute;bottom: 7px;right: 10px; padding: 15px; height: 130px;"
-                                class="profile-photo" [src]="
+                              <ion-img class="profile-photo virtual-card-student-img" [src]="
                                                   'data:image/jpg;base64,' +
                                                   photo?.base64_photo
                                                   " (ionError)="$event.target.src = 'assets/img/no_img.png'">
                               </ion-img>
                             </ng-template>
-                            <div
-                              style="position: absolute; top: 91px; color: #000 !important; left: 10px; width: 200px !important;">
-                              <h5 style="font-size: 0.9rem;" class="text-bold">
+                            <div class="virtual-card-student-details">
+                              <h5 class="text-bold virtual-card-student-name">
                                 {{ orientationProfile.student_details[0].STUDENT_NAME || 'N/A'}}
                               </h5>
-                              <p style="margin-top: 14px;">STUDENT ID:&nbsp;&nbsp;&nbsp;
+                              <p class="virtual-card-student-ids id">STUDENT ID:&nbsp;&nbsp;&nbsp;
                                 {{orientationProfile.student_details[0].STUDENT_NUMBER || 'N/A'}}</p>
-                              <p style="margin-top: 2px;">IC/PASSPORT:&nbsp;
+                              <p class="virtual-card-student-ids passport">IC/PASSPORT:&nbsp;
                                 {{orientationProfile.student_details[0].IC || 'N/A'}}</p>
                             </div>
                           </ion-card>
                         </ion-col>
                         <ion-col size="12" size-md="5" pull-md="7" class="margin-auto">
-                          <h1 class="text-bold colored-text">YOUR VIRTUAL CARD</h1>
-                          <h5 class="ion-margin-top">This is your Virtual Student Card. Once you resume face-to-face learning on campus, we
+                          <h1 class="text-bold colored-text ion-padding-start ion-padding-end">YOUR VIRTUAL CARD</h1>
+                          <h5 class="ion-margin-top ion-padding-start ion-padding-end">This is your Virtual Student Card. Once you resume face-to-face learning on campus, we
                             will be
                             issuing you the physical copy of your card.</h5>
                         </ion-col>
