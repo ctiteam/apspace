@@ -167,12 +167,22 @@ export class ClassesNewPage implements OnInit {
   mergeClasscodes(classcodes: Classcodev1[]): FlatClasscodev1[] {
     const finalResults = [];
     classcodes.map(classcode => {
+      // if the classcode has no classes yet
+      if (classcode.CLASSES.length === 0) {
+        finalResults.push({
+          CLASSES: [],
+          CLASS_CODE: classcode.CLASS_CODE,
+          COURSE_CODE_ALIASES: classcode.COURSE_CODE_ALIASES,
+          SUBJECT_CODE: classcode.SUBJECT_CODE,
+          LECTURER_CODE: classcode.LECTURER_CODE
+        });
+      }
       return classcode.CLASSES.map(klass => {
         const updatedClass = (
           {
             ...klass,
             CLASS_CODE: classcode.CLASS_CODE,
-            COURSE_CODE_ALIASES: classcode.COURSE_CODE_ALIASES, // to check with Ivan
+            COURSE_CODE_ALIASES: classcode.COURSE_CODE_ALIASES,
             SUBJECT_CODE: classcode.SUBJECT_CODE,
             LECTURER_CODE: classcode.LECTURER_CODE
           });
