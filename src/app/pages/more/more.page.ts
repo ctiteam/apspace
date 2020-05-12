@@ -521,14 +521,6 @@ export class MorePage implements OnInit {
       role: Role.Lecturer | Role.Admin,
       tags: ['class', 'schedule', 'break']
     },
-    {
-      title: 'Web Attendance (Legacy)',
-      group: 'Academic & Enrollment',
-      url: 'https://titan.apiit.edu.my/gims/attendance/default.asp?CAMPUS=TPM',
-      img: 'assets/img/web-attendance.png',
-      role: Role.Lecturer | Role.Admin,
-      tags: ['mark', 'students attendance', 'update']
-    },
     // END OF Academic & Enrollment
 
 

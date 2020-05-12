@@ -33,7 +33,8 @@ export interface OrientationStudentDetails {
             STUDENT_MOBILE_NO: string,
             STUDENT_NAME: string,
             STUDENT_NUMBER: string,
-            STUDENT_RESIDENTIAL_ADDRESS: string
+            STUDENT_RESIDENTIAL_ADDRESS: string,
+            STUDENT_PERMANENT_ADDRESS: string
         }
     ];
 }

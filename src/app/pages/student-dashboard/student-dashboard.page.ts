@@ -460,8 +460,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
         }
       }),
       tap(p => {
-        this.orientationStudentDetails$ = this.ws.get<OrientationStudentDetails>(`orientation/student_details?id=${p.STUDENT_NUMBER}`,
-          { url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/' }
+        this.orientationStudentDetails$ = this.ws.get<OrientationStudentDetails>(`/orientation/student_details?id=${p.STUDENT_NUMBER}`,
         ).pipe(
           catchError(err => {
             return of(err);

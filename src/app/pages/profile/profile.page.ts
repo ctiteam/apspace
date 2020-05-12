@@ -76,28 +76,27 @@ export class ProfilePage implements OnInit {
             }),
             tap(p => {
               this.showOrientationProfile = true;
-              this.orientationStudentDetails$ = this.ws.get<OrientationStudentDetails>(`orientation/student_details?id=${p.STUDENT_NUMBER}`,
-                { url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/' }
-              ).pipe(
-                catchError(err => {
-                  // api returns 401 when student should not access this orientation form
-                  this.showOrientationProfile = false;
-                  return of(err);
-                }),
-                tap(studentOrientationDetails => {
-                  if (studentOrientationDetails.councelor_details.length > 0) {
-                    this.councelorProfile$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
-                      map(res =>
-                        res.find(staff =>
-                          staff.ID.toLowerCase() === studentOrientationDetails.councelor_details[0].SAMACCOUNTNAME.toLowerCase()
-                        )
-                      )
-                    );
-                  } else {
+              this.orientationStudentDetails$ = this.ws.get<OrientationStudentDetails>(
+                `/orientation/student_details?id=${p.STUDENT_NUMBER}`).pipe(
+                  catchError(err => {
+                    // api returns 401 when student should not access this orientation form
                     this.showOrientationProfile = false;
-                  }
-                })
-              );
+                    return of(err);
+                  }),
+                  tap(studentOrientationDetails => {
+                    if (studentOrientationDetails.councelor_details.length > 0) {
+                      this.councelorProfile$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
+                        map(res =>
+                          res.find(staff =>
+                            staff.ID.toLowerCase() === studentOrientationDetails.councelor_details[0].SAMACCOUNTNAME.toLowerCase()
+                          )
+                        )
+                      );
+                    } else {
+                      this.showOrientationProfile = false;
+                    }
+                  })
+                );
             }),
             tap(p => {
               this.countryName = p.COUNTRY;
@@ -135,7 +134,12 @@ export class ProfilePage implements OnInit {
   }
 
   // tslint:disable-next-line: max-line-length
-  async change(itemToChange: 'STUDENT_EMAIL' | 'STUDENT_MOBILE_NO' | 'RELIGION' | 'STUDENT_RESIDENTIAL_ADDRESS', value: string, studentID: string) {
+  async change(
+    itemToChange: 'STUDENT_EMAIL' | 'STUDENT_MOBILE_NO' | 'RELIGION' | 'STUDENT_PERMANENT_ADDRESS'
+      | 'PARENTS_NAME' | 'PARENTS_RELATIONSHIP' | 'PARENTS_MOBILE_TEL' | 'PARENTS_EMAIL'
+      | 'GUARDIAN_NAME' | 'GUARDIAN_RELATIONSHIP' | 'GUARDIAN_MOBILE_TEL' | 'GUARDIAN_EMAIL',
+    value: string, studentID: string
+  ) {
     const alert = await this.alertCtrl.create({
       header: `UPDATE ${itemToChange.replace(/_/g, ' ')}`,
       message: 'Please enter the new value:',
@@ -162,11 +166,8 @@ export class ProfilePage implements OnInit {
               this.presentLoading();
               const body = {};
               body[itemToChange] = data.newValue;
-              this.ws.post(`orientation/update_profile?id=${studentID}`,
-                {
-                  url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/',
-                  body
-                }
+              this.ws.post(`/orientation/update_profile?id=${studentID}`,
+                { body }
               ).subscribe(
                 _ => this.showToastMessage(`${itemToChange} Has Been Updated Successfully!`, 'success'),
                 err => {
@@ -235,30 +236,30 @@ export class ProfilePage implements OnInit {
   }
 
   uploadDocument(STUDENT_NAME: string, COUNSELLOR_NAME: string, COUNSELLOR_EMAIL: string) {
-    if (this.file.size > 1500000) {
-      this.showToastMessage('Error: Maximum File Size is 1.5MB', 'danger');
-    } else if (this.file.type === 'application/pdf' || this.file.type === 'image/jpeg' || this.file.type === 'image/png') {
-      this.presentLoading();
-      const reader = new FileReader();
-      reader.readAsDataURL(this.file);
-      reader.onload = () => {
-        const body = { STUDENT_NAME, COUNSELLOR_EMAIL, COUNSELLOR_NAME, DOCUMENT: reader.result };
-        this.ws.post<any>(
-          `/orientation/profile_change_request`, {
-          body,
-          url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev'
-        }
-        ).subscribe(
-          () => this.showToastMessage('Your Request Has Been Submitted Successfully. Your E-COUNSELLOR Will Review It And Get Back To You As Soon As Possible.', 'success'),
-          () => {
-            this.showToastMessage('Something Went Wrong From Our Side. Please Contact Your E-COUNSELLOR And Inform Him/Her About The Issue', 'danger');
-            this.dismissLoading();
-          },
-          () => this.dismissLoading()
-        );
-      };
+    if (!this.file) {
+      this.showToastMessage('Error: File Cannot Be Empty!!', 'danger');
     } else {
-      this.showToastMessage('Error: File Format is not supported. File Format Should Be Either .png, .jpeg, or .pdf', 'danger');
+      if (this.file.size > 1500000) {
+        this.showToastMessage('Error: Maximum File Size is 1.5MB', 'danger');
+      } else if (this.file.type === 'application/pdf' || this.file.type === 'image/jpeg' || this.file.type === 'image/png') {
+        this.presentLoading();
+        const reader = new FileReader();
+        reader.readAsDataURL(this.file);
+        reader.onload = () => {
+          const body = { STUDENT_NAME, COUNSELLOR_EMAIL, COUNSELLOR_NAME, DOCUMENT: reader.result };
+          this.ws.post<any>(`/orientation/profile_change_request`, { body }).subscribe(
+            () => this.showToastMessage('Your Request Has Been Submitted Successfully. Your E-COUNSELLOR Will Review It And Get Back To You As Soon As Possible.', 'success'),
+            () => {
+              this.showToastMessage('Something Went Wrong From Our Side. Please Contact Your E-COUNSELLOR And Inform Him/Her About The Issue', 'danger');
+              this.dismissLoading();
+            },
+            () => this.dismissLoading()
+          );
+        };
+      } else {
+        this.showToastMessage('Error: File Format is not supported. File Format Should Be Either .png, .jpeg, or .pdf', 'danger');
+      }
+
     }
   }
 

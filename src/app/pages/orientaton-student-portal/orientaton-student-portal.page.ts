@@ -26,7 +26,7 @@ export class OrientatonStudentPortalPage implements OnInit {
 
   ngOnInit() {
     // tslint:disable-next-line: max-line-length
-    this.studentsList$ = this.ws.get<OrientationStudentsList[]>('orientation/student_list', { url: 'https://gv8ap4lfw5.execute-api.ap-southeast-1.amazonaws.com/dev/' });
+    this.studentsList$ = this.ws.get<OrientationStudentsList[]>('/orientation/student_list');
   }
 
   openForms() {
