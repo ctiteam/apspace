@@ -33,7 +33,6 @@ export class AddExamSchedulePage implements OnInit {
   };
 
   examScheduleForm: FormGroup;
-  modulesToBeValidated = [];
 
   // staffCode;
 
@@ -60,18 +59,6 @@ export class AddExamSchedulePage implements OnInit {
       })
     ).subscribe();
 
-    this.ws.get<ExamScheduleAdmin[]>('/exam/current_exam').pipe(
-      tap(examSchedules => {
-        let filteredExamSchedules = examSchedules;
-
-        if (this.onEdit) {
-          filteredExamSchedules = examSchedules.filter(examSchedule => examSchedule.MODULE !== this.examScheduleDetails.MODULE);
-        }
-
-        filteredExamSchedules.forEach(examSchedule => this.modulesToBeValidated.push(examSchedule.MODULE));
-      })
-    ).subscribe();
-
     this.assessmentTypes$ = this.ws.get<any>('/exam/assessment_type');
 
     this.initializeForm(this.examScheduleDetails);
@@ -83,7 +70,8 @@ export class AddExamSchedulePage implements OnInit {
     DATEDAY: '',
     EXAMID: 0,
     FROMDATE: '',
-    MODULE: '',
+    MODULE_CODE: '',
+    MODULE_NAME: '',
     REMARKS: '',
     RESULT_DATE: '',
     STATUS: '',
@@ -109,7 +97,7 @@ export class AddExamSchedulePage implements OnInit {
 
     this.examScheduleForm = this.formBuilder.group({
       publicationDate: [publicationDate, Validators.required],
-      module: [examScheduleDetails.MODULE, Validators.required],
+      module: [examScheduleDetails.MODULE_CODE, Validators.required],
       date: [examScheduleDetails.DATEDAY, Validators.required],
       startTime: [startTime, Validators.required],
       endTime: [endTime, Validators.required],
@@ -162,101 +150,124 @@ export class AddExamSchedulePage implements OnInit {
 
   submit() {
     if (this.examScheduleForm.valid) {
-      if (this.modulesToBeValidated.includes(this.examScheduleForm.get('module').value)) {
-        this.showToastMessage(
-          'You cannot create duplicate exam schedule with the same module.',
-          'danger'
-        );
-        return;
-      }
+      let isDuplicated = false;
 
-      const bodyObject = {
-        from_date: this.examScheduleForm.get('publicationDate').value.from.toUpperCase(),
-        till_date: this.examScheduleForm.get('publicationDate').value.to.toUpperCase(),
-        module: this.examScheduleForm.get('module').value,
-        venue: '',
-        dateday: moment(this.examScheduleForm.get('date').value).format('DD-MMM-YYYY').toUpperCase(),
-        time: this.onEdit ? `${moment(this.examScheduleForm.get('startTime').value, ['HH:mm']).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value, ['HH:mm']).format('h:mm A')}` :
-                            `${moment(this.examScheduleForm.get('startTime').value).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value).format('h:mm A')}`,
-        remarks: this.examScheduleForm.get('remarks').value,
-        status: 'Inactive',
-        result_date: '',
-        check_week: '0',
-        assessment_type: this.examScheduleForm.get('assessmentType').value
-      };
+      this.ws.get<ExamScheduleAdmin[]>('/exam/current_exam').pipe(
+        tap(examSchedules => {
+          let filteredExamSchedule = examSchedules;
 
-      if (this.onEdit) {
-        this.presentLoading();
-        const body = new HttpParams({ fromObject: { exam_id: this.examScheduleDetails.EXAMID.toString(), ...bodyObject } }).toString();
-        const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-        this.ws.post<any>('/exam/update_exam_schedule', {
-          body,
-          headers
-        })
-        .subscribe({
-          next: () => {
-            this.showToastMessage(
-              'Exam Schedule updated successfully!',
-              'success'
+          if (this.onEdit) {
+            filteredExamSchedule = filteredExamSchedule.filter(examSchedule =>
+              examSchedule.MODULE_CODE !== this.examScheduleDetails.MODULE_CODE ||
+              moment(examSchedule.FROMDATE).format('DD-MMM-YYYY') !== moment(this.examScheduleDetails.FROMDATE).format('DD-MMM-YYYY') ||
+              moment(examSchedule.TILLDATE).format('DD-MMM-YYYY') !== moment(this.examScheduleDetails.TILLDATE).format('DD-MMM-YYYY')
             );
-          },
-          error: (err) => {
-            this.dismissLoading();
-            this.showToastMessage(
-              err.status + ': ' + err.error.error,
-              'danger'
-            );
-          },
-          complete: () => {
-            this.dismissLoading();
-            this.modalCtrl.dismiss('Wrapped Up!');
           }
-        });
-      } else {
-        this.alertCtrl.create({
-          header: 'Adding new exam schedule',
-          subHeader:
-            'Are you sure you want to add new exam schedule with the following details:',
-          message: `<p><strong>Publication Date: </strong> ${bodyObject.from_date} - ${bodyObject.till_date}</p>
-                    <p><strong>Module: </strong>${bodyObject.module}</p>
-                    <p><strong>Date: </strong>${bodyObject.dateday}</p>
-                    <p><strong>Time: </strong> ${bodyObject.time}</p>
-                    <p><strong>Assessment Type: </strong> ${bodyObject.assessment_type} </p>
-                    <p><strong>Remarks: </strong> ${bodyObject.remarks} </p>`,
-          buttons: [
-            {
-              text: 'No',
-              handler: () => { }
+
+          filteredExamSchedule.forEach(examSchedule =>
+            examSchedule.MODULE_CODE === this.examScheduleForm.get('module').value &&
+            moment(examSchedule.FROMDATE).format('DD-MMM-YYYY') === this.examScheduleForm.get('publicationDate').value.from &&
+            moment(examSchedule.TILLDATE).format('DD-MMM-YYYY') === this.examScheduleForm.get('publicationDate').value.to ?
+            isDuplicated = true : null
+          );
+        })
+      ).subscribe(_ => {
+        if (isDuplicated) {
+          this.showToastMessage(
+            'You cannot create duplicate exam schedule with the same module.',
+            'danger'
+          );
+          return;
+        }
+
+        const bodyObject = {
+          from_date: this.examScheduleForm.get('publicationDate').value.from.toUpperCase(),
+          till_date: this.examScheduleForm.get('publicationDate').value.to.toUpperCase(),
+          module: this.examScheduleForm.get('module').value,
+          venue: '',
+          dateday: moment(this.examScheduleForm.get('date').value).format('DD-MMM-YYYY').toUpperCase(),
+          time: this.onEdit ? `${moment(this.examScheduleForm.get('startTime').value, ['HH:mm']).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value, ['HH:mm']).format('h:mm A')}` :
+                              `${moment(this.examScheduleForm.get('startTime').value).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value).format('h:mm A')}`,
+          remarks: this.examScheduleForm.get('remarks').value,
+          status: 'Inactive',
+          result_date: '',
+          check_week: '0',
+          assessment_type: this.examScheduleForm.get('assessmentType').value
+        };
+
+        if (this.onEdit) {
+          this.presentLoading();
+          const body = new HttpParams({ fromObject: { exam_id: this.examScheduleDetails.EXAMID.toString(), ...bodyObject } }).toString();
+          const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+          this.ws.post<any>('/exam/update_exam_schedule', {
+            body,
+            headers
+          })
+          .subscribe({
+            next: () => {
+              this.showToastMessage(
+                'Exam Schedule updated successfully!',
+                'success'
+              );
             },
-            {
-              text: 'Yes',
-              handler: () => {
-                this.presentLoading();
-                const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
-                const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-                this.ws.post('/exam/create_exam_schedule', { body, headers }).subscribe({
-                  next: () => {
-                    this.showToastMessage(
-                      'Exam Schedule added successfully!',
-                      'success'
-                    );
-                  },
-                  error: (err) => {
-                    this.dismissLoading();
-                    this.showToastMessage(
-                      err.status + ': ' + err.error.error,
-                      'danger'
-                    );
-                  },
-                  complete: () => {
-                    this.dismissLoading().then(() => this.modalCtrl.dismiss('Wrapped Up!'));
-                  }
-                });
-              }
+            error: (err) => {
+              this.dismissLoading();
+              this.showToastMessage(
+                err.status + ': ' + err.error.error,
+                'danger'
+              );
+            },
+            complete: () => {
+              this.dismissLoading();
+              this.modalCtrl.dismiss('Wrapped Up!');
             }
-          ]
-        }).then(alert => alert.present());
-      }
+          });
+        } else {
+          this.alertCtrl.create({
+            header: 'Adding new exam schedule',
+            subHeader:
+              'Are you sure you want to add new exam schedule with the following details:',
+            message: `<p><strong>Publication Date: </strong> ${bodyObject.from_date} - ${bodyObject.till_date}</p>
+                      <p><strong>Module: </strong>${bodyObject.module}</p>
+                      <p><strong>Date: </strong>${bodyObject.dateday}</p>
+                      <p><strong>Time: </strong> ${bodyObject.time}</p>
+                      <p><strong>Assessment Type: </strong> ${bodyObject.assessment_type} </p>
+                      <p><strong>Remarks: </strong> ${bodyObject.remarks} </p>`,
+            buttons: [
+              {
+                text: 'No',
+                handler: () => { }
+              },
+              {
+                text: 'Yes',
+                handler: () => {
+                  this.presentLoading();
+                  const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
+                  const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+                  this.ws.post('/exam/create_exam_schedule', { body, headers }).subscribe({
+                    next: () => {
+                      this.showToastMessage(
+                        'Exam Schedule added successfully!',
+                        'success'
+                      );
+                    },
+                    error: (err) => {
+                      this.dismissLoading();
+                      this.showToastMessage(
+                        err.status + ': ' + err.error.error,
+                        'danger'
+                      );
+                    },
+                    complete: () => {
+                      this.dismissLoading().then(() => this.modalCtrl.dismiss('Wrapped Up!'));
+                    }
+                  });
+                }
+              }
+            ]
+          }).then(alert => alert.present());
+        }
+      });
     }
   }
 

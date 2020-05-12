@@ -4,7 +4,8 @@ export interface ExamScheduleAdmin {
     DATEDAY: string;
     EXAMID: number;
     FROMDATE: string;
-    MODULE: string;
+    MODULE_CODE: string;
+    MODULE_NAME: string;
     REMARKS: string;
     RESULT_DATE: string;
     STATUS: string;
