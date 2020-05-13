@@ -10,6 +10,10 @@
 </ion-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
+  </ion-refresher>
+
   <ion-grid *ngIf="payslips$ | async as payslips; else loading">
     <ion-row>
       <ion-col size="12" size-md="6" size-xl="4" *ngFor="let payslip of payslips">

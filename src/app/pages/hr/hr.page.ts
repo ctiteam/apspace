@@ -15,7 +15,17 @@ import { PrintPayslipModalPage } from './print-payslip-modal/print-payslip-modal
 export class HrPage implements OnInit {
   // temporary limiting some user for accessing payslip
   showPaySlip = false;
-  chosenOnes = ['we.yuan'];
+  chosenOnes = [
+    'tehcj',
+    'norasyikin.a',
+    'wendy.tham',
+    'reza.ganji',
+    'mohamad.alghayeb',
+    'pardeep',
+    'param',
+    'we.yuan',
+    'md.fazla'
+  ];
 
   // leaves$: Observable<LeaveBalance[]>;
   history$: any;

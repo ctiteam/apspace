@@ -4,7 +4,7 @@ import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { ModalController, Platform, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 import { CasTicketService, WsApiService } from 'src/app/services';
 
 @Component({
@@ -15,8 +15,9 @@ import { CasTicketService, WsApiService } from 'src/app/services';
 
 export class PrintPayslipModalPage {
   payslips$: Observable<[]>;
-  payslipsUrl = 'https://ztmu4mdu21.execute-api.ap-southeast-1.amazonaws.com';
-  payslipsEndpoint = '/dev/staff/payslips';
+  // payslipsUrl = 'https://ztmu4mdu21.execute-api.ap-southeast-1.amazonaws.com';
+  payslipsUrl = 'https://api.apiit.edu.my';
+  payslipsEndpoint = '/staff/payslips';
 
   constructor(
     public modalCtrl: ModalController,
@@ -31,13 +32,18 @@ export class PrintPayslipModalPage {
   ) { }
 
   ionViewWillEnter() {
-    this.payslips$ = this.ws.get<any>(this.payslipsEndpoint, { url: this.payslipsUrl }).pipe(
-      map(payslips => payslips.payslips)
+    this.doRefresh();
+  }
+
+  doRefresh(refresher?) {
+    this.payslips$ = this.ws.get<any>(this.payslipsEndpoint).pipe(
+      map(payslips => payslips.payslips),
+      finalize(() => refresher && refresher.target.complete())
     );
   }
 
   downloadPayslipPdf(payslip) {
-    const downloadPayslipEndpoint = '/dev/staff/download_payslip/';
+    const downloadPayslipEndpoint = '/staff/download_payslip/';
     const link = this.payslipsUrl + downloadPayslipEndpoint + payslip;
     const transfer = this.transfer.create();
 
