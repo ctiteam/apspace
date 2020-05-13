@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar mode="md">
+    <ion-title>Download Payslip</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="payslips$ | async as payslips; else loading">
+    <div *ngIf="payslips.length > 0; else noPayslips">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="6" size-xl="4" *ngFor="let payslip of payslips">
+            <ion-card>
+              <img class="month-image" src="{{payslip | getDate | date: 'MMM' | generateMonthImg}}" />
+    
+              <ion-card-header>
+                <ion-fab horizontal="end" vertical="top" edge>
+                  <ion-fab-button (click)="downloadPayslipPdf(payslip)" class="colored-background">
+                    <ion-icon name="download"></ion-icon>
+                  </ion-fab-button>
+                </ion-fab>
+                <ion-card-title>
+                  {{payslip | getDate | date : 'MMM yyyy'}}
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                {{payslip}}
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+
+  <ng-template #noPayslips>
+    <app-message-with-svg imageUrl="assets/img/empty.svg"
+      messageTitle="Opps! No payslips available at the moment."
+      wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+    </app-message-with-svg>
+  </ng-template>
+
+  <ng-template #loading>
+    <div class="loader-container">
+      <loading-spinner message="Loading..." size="50px"></loading-spinner>
+    </div>
+  </ng-template>
+</ion-content>
