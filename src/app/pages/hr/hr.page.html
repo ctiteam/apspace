@@ -19,7 +19,7 @@
                 <ion-icon slot="end" name="open"></ion-icon>
               </ion-button>
             </ion-col>
-            <ion-col>
+            <ion-col *ngIf="showPaySlip">
               <ion-button (click)="openPayslipPdf()" expand="block">
                 Payslip
                 <ion-icon slot="end" name="print"></ion-icon>

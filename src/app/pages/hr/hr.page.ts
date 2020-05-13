@@ -4,7 +4,7 @@ import { ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { OnLeaveOnMyCluster, PendingApproval, StaffDirectory } from 'src/app/interfaces';
+import { OnLeaveOnMyCluster, PendingApproval, StaffDirectory, StaffProfile } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { PrintPayslipModalPage } from './print-payslip-modal/print-payslip-modal.page';
 @Component({
@@ -13,6 +13,10 @@ import { PrintPayslipModalPage } from './print-payslip-modal/print-payslip-modal
   styleUrls: ['./hr.page.scss'],
 })
 export class HrPage implements OnInit {
+  // temporary limiting some user for accessing payslip
+  showPaySlip = false;
+  chosenOnes = ['we.yuan'];
+
   // leaves$: Observable<LeaveBalance[]>;
   history$: any;
   leaveInCluster$: any;
@@ -47,6 +51,9 @@ export class HrPage implements OnInit {
   constructor(public modalCtrl: ModalController, private ws: WsApiService, private iab: InAppBrowser) { }
 
   ngOnInit() {
+    this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }).pipe(
+      tap(profile => this.showPaySlip = this.chosenOnes.includes(profile[0].ID)),
+    ).subscribe();
     // commented until the backend is fixed
     // this.leaves$ = this.ws.get<LeaveBalance[]>('/staff/leave_balance').pipe(
     //   tap(leaves => {
