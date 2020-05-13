@@ -1,9 +1,10 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { IonSelect, ModalController } from '@ionic/angular';
+import { ComponentFixture, TestBed, async, fakeAsync, tick } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AlertController, IonSelect, ModalController } from '@ionic/angular';
 import { NEVER, of } from 'rxjs';
 
+import { ActivatedRouteStub, AlertControllerStub } from '../../../../testing';
 import { Classcode, StaffProfile } from '../../../interfaces';
 import { StudentTimetableService, WsApiService } from '../../../services';
 import { ClassesPage } from './classes.page';
@@ -11,11 +12,15 @@ import { ClassesPage } from './classes.page';
 describe('ClassesPage', () => {
   let component: ClassesPage;
   let fixture: ComponentFixture<ClassesPage>;
+  let activatedRoute: ActivatedRouteStub;
+  let alertCtrlStub: AlertControllerStub;
   let routerSpy: jasmine.SpyObj<Router>;
   let ttSpy: jasmine.SpyObj<StudentTimetableService>;
   let wsSpy: jasmine.SpyObj<WsApiService>;
 
   beforeEach(async(() => {
+    activatedRoute = new ActivatedRouteStub();
+    alertCtrlStub = new AlertControllerStub();
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     ttSpy = jasmine.createSpyObj('StudentTimetableService', ['get']);
     wsSpy = jasmine.createSpyObj('WsApiService', ['get', 'post']);
@@ -23,6 +28,8 @@ describe('ClassesPage', () => {
     TestBed.configureTestingModule({
       declarations: [ClassesPage, IonSelect],
       providers: [
+        { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: AlertController, useValue: alertCtrlStub },
         { provide: ModalController, useValue: {} },
         { provide: Router, useValue: routerSpy },
         { provide: StudentTimetableService, useValue: ttSpy },
@@ -54,7 +61,7 @@ describe('ClassesPage', () => {
   ];
 
   autoTests.forEach(test => {
-    it(`should auto match ${test.classType} (${test.classAbbr}) class and navigate`, () => {
+    it(`should auto match ${test.classType} (${test.classAbbr}) class and navigate`, fakeAsync(() => {
       const d = new Date();
       const hh = ('0' + (d.getHours() % 12 || 12)).slice(-2);
       const period = d.getHours() < 12 ? 'AM' : 'PM';
@@ -151,9 +158,14 @@ describe('ClassesPage', () => {
       expect(markEl.disabled).toBeFalse();
       markEl.click();
 
+      expect(alertCtrlStub.createCalled).toBeTrue();
+      tick(); // wait to present promise
+      expect(alertCtrlStub.presentCalled).toBeTrue();
+      alertCtrlStub.click('Confirm');
+
       expect(routerSpy.navigate).toHaveBeenCalledWith(['/attendix/mark-attendance',
         { classcode, date, startTime, endTime, classType }]);
       expect(wsSpy.post).not.toHaveBeenCalled();
-    });
+    }));
   });
 });

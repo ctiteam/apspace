@@ -3,7 +3,7 @@ export { APLCClass, APLCClassDescription, APLCStudentBehaviour, APLCSubject } fr
 export { Attendance } from './attendance';
 export { AttendanceLegend } from './attendance-legend';
 export { BusTrips, APULocations, APULocation, BusTrip } from './bus-shuttle-services';
-export { Classcode } from './classcode';
+export { AttendixClass, Classcode, Classcodev1, FlatClasscodev1 } from './classcode';
 export { ClassificationLegend } from './classfication-legend';
 export { Course } from './courses';
 export { CourseDetails } from './course-details';
@@ -51,3 +51,4 @@ export { Quote } from './quote';
 export { LeaveHistory, LeaveBalance, PendingApproval, OnLeaveOnMyCluster } from './hr';
 export { SurveyIntake, SurveyModule } from './student-survey';
 export { StudentSearch } from './student-search';
+export { OrientationStudentDetails, OrientationStudentsList } from './e-orientation';

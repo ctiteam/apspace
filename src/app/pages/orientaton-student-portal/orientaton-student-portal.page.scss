@@ -1,0 +1,87 @@
+.table {
+  .table-container {
+    padding-top: 5px;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+
+    .table-header {
+      padding: 7px 0 10px 0;
+      border-bottom: 1px solid #cccccc;
+      background-color: var(--primary-color);
+      color: #FFFFFF;
+      font-weight: bold;
+      ion-text {
+        font-size: 1rem;
+      }
+    }
+
+    .table-row {
+      padding-top: 5px;
+      padding-bottom: 0;
+
+      &:hover {
+        background: var(--tertiary-bg-color);
+      }
+    }
+  }
+}
+
+
+.show-only-on-small-devices {
+  display: none !important;
+}
+
+.show-only-on-other-devices {
+  display: inline-block !important;
+}
+
+.margin-auto {
+  margin: auto;
+}
+
+.top-bottom-margin-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+
+// media queries for changing table to card design in small devices
+@media (max-width: 575px) {
+
+  // small screen
+  .table-header {
+    display: none;
+  }
+
+  .table-row {
+    &.text-bold.no-bold-on-small-devices {
+      font-weight: normal !important;
+    }
+
+    .ion-text-center.no-center-on-small-devices {
+      text-align: left !important;
+    }
+
+    .title-on-small-devices {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+  }
+
+  .show-only-on-small-devices {
+    display: inline-block !important;
+  }
+
+  .show-only-on-other-devices {
+    display: none !important;
+  }
+
+  .border-bottom {
+    border-bottom: 1px solid var(--main-txt-color) !important;
+  }
+
+  .bold-on-small-devices {
+    font-weight: bold;
+  }
+}

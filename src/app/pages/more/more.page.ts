@@ -307,6 +307,23 @@ export class MorePage implements OnInit {
       tags: ['message', 'sms', 'email', 'push', 'notification', 'announce']
     },
     {
+      title: 'E-Orientaton',
+      group: 'Academic Operation',
+      url: 'orientaton-student-portal',
+      attachTicket: true,
+      img: 'assets/img/counseling.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['orientation', 'counsellor']
+    },
+    {
+      title: 'Exam Schedule (Admin)',
+      group: 'Academic Operation',
+      url: 'exam-schedule-admin',
+      img: 'assets/img/exam-schedule-admin.png',
+      role: Role.Admin,
+      tags: []
+    },
+    {
       title: 'Exam Paper Scheduling',
       group: 'Academic Operation',
       url: 'https://examscheduling.apu.edu.my/epaperschedule/login_page.asp', // no ticket
@@ -503,14 +520,6 @@ export class MorePage implements OnInit {
       img: 'assets/img/timetable.png',
       role: Role.Lecturer | Role.Admin,
       tags: ['class', 'schedule', 'break']
-    },
-    {
-      title: 'Web Attendance (Legacy)',
-      group: 'Academic & Enrollment',
-      url: 'https://titan.apiit.edu.my/gims/attendance/default.asp?CAMPUS=TPM',
-      img: 'assets/img/web-attendance.png',
-      role: Role.Lecturer | Role.Admin,
-      tags: ['mark', 'students attendance', 'update']
     },
     // END OF Academic & Enrollment
 

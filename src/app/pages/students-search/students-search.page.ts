@@ -41,6 +41,7 @@ export class StudentsSearchPage {
 
 
   devUrl = 'https://u1cd2ltoq6.execute-api.ap-southeast-1.amazonaws.com/dev/student';
+  prodUrl = 'https://api.apiit.edu.my/student';
   constructor(
     private ws: WsApiService,
     private cas: CasTicketService,
@@ -56,10 +57,10 @@ export class StudentsSearchPage {
     this.intakeSelected = false;
     this.searchResults = this.searchKeyword; // used for the error message
     // we need to get st for the service including the params (?id=)
-    this.studentsList$ = this.cas.getST(`${this.devUrl}/search?id=${this.searchKeyword}`).pipe(
+    this.studentsList$ = this.cas.getST(`${this.prodUrl}/search?id=${this.searchKeyword}`).pipe(
       switchMap((st) => {
         return this.ws.get<StudentSearch[]>(`/search?id=${this.searchKeyword}&ticket=${st}`,
-          { url: this.devUrl, auth: false, attempts: 1 }
+          { url: this.prodUrl, auth: false, attempts: 1 }
         );
       })
     ).pipe(
@@ -83,10 +84,10 @@ export class StudentsSearchPage {
 
   getStudentProfile(student: StudentSearch) {
     // we need to get st for the service including the params (?id=)
-    this.studentProfile$ = this.cas.getST(`${this.devUrl}/profile?id=${student.STUDENT_NUMBER}`).pipe(
+    this.studentProfile$ = this.cas.getST(`${this.prodUrl}/profile?id=${student.STUDENT_NUMBER}`).pipe(
       switchMap((st) => {
         return this.ws.get<StudentProfile>(`/profile?id=${student.STUDENT_NUMBER}&ticket=${st}`,
-          { url: this.devUrl, auth: false, attempts: 1 }
+          { url: this.prodUrl, auth: false, attempts: 1 }
         );
       })
     );
@@ -101,10 +102,10 @@ export class StudentsSearchPage {
 
   getStudentCourses(student: StudentSearch) {
     // we need to get st for the service including the params (?id=)
-    this.studentCourses$ = this.cas.getST(`${this.devUrl}/courses?id=${student.STUDENT_NUMBER}`).pipe(
+    this.studentCourses$ = this.cas.getST(`${this.prodUrl}/courses?id=${student.STUDENT_NUMBER}`).pipe(
       switchMap((st) => {
         return this.ws.get<any>(`/courses?id=${student.STUDENT_NUMBER}&ticket=${st}`,
-          { url: this.devUrl, auth: false, attempts: 1 }
+          { url: this.prodUrl, auth: false, attempts: 1 }
         );
       })
     );

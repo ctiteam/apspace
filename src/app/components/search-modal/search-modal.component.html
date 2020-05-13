@@ -1,7 +1,8 @@
 <ion-header>
   <ion-toolbar>
-    <ion-searchbar [formControl]="searchControl" showCancelButton="focus" [placeholder]="placeholder"
-      (ionInput)="$event.target.value = $event.target.value.toUpperCase()" (ionCancel)="select(null)">
+    <ion-searchbar [formControl]="searchControl" showCancelButton="focus"
+      [placeholder]="placeholder" ngDefaultControl (ionCancel)="select(null)"
+      (ionInput)="$event.target.value = $event.target.value.toUpperCase()">
     </ion-searchbar>
   </ion-toolbar>
 </ion-header>
@@ -12,7 +13,7 @@
     <ion-spinner></ion-spinner>
   </ng-template>
 
-  <ion-list lines="none" *ngIf="searchItem$ | async as items; else searching">
+  <ion-list lines="none" *ngIf="searchItems$ | async as items; else searching">
     <ng-template [ngIf]="items.length > 0" [ngIfElse]="noItem">
       <ion-item button *ngFor="let item of items" (click)="select(item)">
         {{ item }}

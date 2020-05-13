@@ -2,18 +2,17 @@ import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
-import { authenticator } from '@otplib/preset-browser';
-import { NEVER, Observable, Subject, forkJoin, interval, of, timer } from 'rxjs';
+import { authenticator } from 'otplib/otplib-browser';
+import { NEVER, Observable, Subject, interval, timer } from 'rxjs';
 import {
-  catchError, endWith, finalize, first, map, mergeMap, pluck, scan,
-  shareReplay, startWith, switchMap, takeUntil, tap,
+  catchError, endWith, filter, first, map, pluck, scan, share, shareReplay,
+  startWith, switchMap, takeUntil, tap,
 } from 'rxjs/operators';
 
 import {
   AttendanceGQL, AttendanceQuery, InitAttendanceGQL, InitAttendanceMutation,
-  MarkAttendanceGQL, MarkAttendanceMutation, NewStatusGQL,
-  NewStatusSubscription, ResetAttendanceGQL, SaveLectureLogGQL, ScheduleInput,
-  Status
+  MarkAttendanceAllGQL, MarkAttendanceGQL, NewStatusGQL, NewStatusSubscription,
+  ResetAttendanceGQL, SaveLectureLogGQL, ScheduleInput, Status
 } from '../../../../generated/graphql';
 import { isoDate, parseTime } from '../date';
 
@@ -54,6 +53,7 @@ export class MarkAttendancePage implements OnInit {
     private initAttendance: InitAttendanceGQL,
     private location: Location,
     private markAttendance: MarkAttendanceGQL,
+    private markAttendanceAll: MarkAttendanceAllGQL,
     private newStatus: NewStatusGQL,
     private resetAttendance: ResetAttendanceGQL,
     private route: ActivatedRoute,
@@ -65,15 +65,17 @@ export class MarkAttendancePage implements OnInit {
 
   ngOnInit() {
     // totp options
-    authenticator.options = { digits: 3, step: 30, window: [0, 30] };
+    authenticator.options = { digits: 3 };
 
-    const schedule = this.schedule = {
+    this.schedule = {
       classcode: this.route.snapshot.paramMap.get('classcode'),
       date: this.route.snapshot.paramMap.get('date'),
       startTime: this.route.snapshot.paramMap.get('startTime'),
       endTime: this.route.snapshot.paramMap.get('endTime'),
       classType: this.route.snapshot.paramMap.get('classType')
     };
+
+    const schedule = this.schedule;
     let studentsNameById: { [student: string]: string };
 
     // limit reset to 30 days in the past
@@ -85,8 +87,14 @@ export class MarkAttendancePage implements OnInit {
     const d = new Date();
     const nowMins = d.getHours() * 60 + d.getMinutes();
     // should be start <= now <= end + 5 but can ignore this because of classes page
-    const thisClass = schedule.date === isoDate(today) && nowMins <= parseTime(schedule.endTime) + 5;
-    const init = () => (this.auto = thisClass, this.type = 'N', this.initAttendance.mutate({ schedule }));
+    const thisClass = schedule.date === isoDate(today) && parseTime(schedule.startTime) <= nowMins;
+
+    const init = () => {
+      const attendance = this.route.snapshot.paramMap.get('defaultAttendance') || 'N';
+      this.auto = thisClass;
+      this.type = 'N';
+      return this.initAttendance.mutate({ schedule, attendance });
+    };
     const list = () => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }));
     const attendance$ = thisClass ? init().pipe(catchError(list)) : list().pipe(catchError(init));
 
@@ -131,28 +139,32 @@ export class MarkAttendancePage implements OnInit {
     const stopTimer$ = timer(new Date(schedule.date).setHours(hh, mm) - new Date().getTime());
     const reload$ = timer(authenticator.timeRemaining() * 1000, authenticator.options.step * 1000).pipe(
       takeUntil(stopTimer$),
-      shareReplay(1)
+      share()
+      // shareReplay(1) // XXX this should use share but why is there a time gap?
     );
 
     // display countdown timer
     this.timeLeft$ = reload$.pipe(
       startWith(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000),
-      map(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000)
+      map(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000),
+      shareReplay(1) // keep track while switching mode
     );
     this.countdown$ = interval(1000).pipe(
       takeUntil(stopTimer$),
-      map(() => authenticator.timeRemaining() + 29) // ignore current second
+      map(() => authenticator.timeRemaining() + 29), // ignore current second
+      shareReplay(1) // keep track while switching mode
     );
 
     // only regenerate otp when needed during class
     this.otp$ = secret$.pipe(
       switchMap(secret =>
         reload$.pipe(
-          startWith(() => authenticator.generate(secret)),
+          startWith(() => null), // start immediately
           map(() => authenticator.generate(secret)),
           endWith('---')
         )
-      )
+      ),
+      shareReplay(1) // keep track while switching mode
     );
 
     // take last 10 values updated and ignore duplicates
@@ -161,9 +173,10 @@ export class MarkAttendancePage implements OnInit {
       pluck('data', 'newStatus'),
       tap(({ id }) => console.log('new', id, studentsNameById[id])),
       tap(({ id, attendance, absentReason }) => this.statusUpdate.next({ id, attendance, absentReason })),
+      filter(({ attendance }) => attendance === 'Y'),
       scan((acc, { id }) => acc.includes(studentsNameById[id])
         ? acc : [...acc, studentsNameById[id]].slice(-10), []),
-      shareReplay(1) // keep track when enter manual mode
+      shareReplay(1) // keep track while switching mode
     );
 
     this.students$ = attendances$.pipe(
@@ -181,18 +194,19 @@ export class MarkAttendancePage implements OnInit {
     );
   }
 
-  /** Generate mark attendance subscription. */
-  private _mark(
-    student: string,
-    attendance: string,
-    absentReason: string = null,
-  ): Observable<MarkAttendanceMutation> {
+  /** Mark student attendance. */
+  mark(student: string, attendance: string, absentEvent?: KeyboardEvent) {
+    const el = absentEvent && absentEvent.target as HTMLInputElement;
+    if (el) {
+      el.blur();
+    }
+    const absentReason = el && el.value || null;
+
     // fallback to absent if reason is left empty
     if (attendance === 'R' && absentReason === null) {
       attendance = 'N';
     }
 
-    // TODO: optimistic ui does not work yet
     const options = {
       optimisticResponse: {
         __typename: 'Mutation' as 'Mutation',
@@ -206,27 +220,34 @@ export class MarkAttendancePage implements OnInit {
       }
     };
     const schedule = this.schedule;
-    return this.markAttendance.mutate({ schedule, student, attendance, absentReason }, options);
+    this.markAttendance.mutate({ schedule, student, attendance, absentReason }, options).subscribe(
+      () => {},
+      e => { this.toast(`Mark ${stateMap[attendance]} failed: ` + e, 'danger'); console.error(e); }
+    );
   }
 
   /** Mark all student as ... */
   markAll() {
-    const markAll = (newAttendance: Attendance) => this.loadingCtrl.create({
-      message: 'Updating'
-    }).then(loading => {
-      loading.present();
-      this.students$.pipe(
-        // run for all students at the same time and wait
-        mergeMap(students => forkJoin([...students
-          .filter(({ attendance }) => attendance !== newAttendance)
-          .map(({ id }) => this._mark(id, newAttendance)),
-          of(null) // complete observable if all already present
-        ])),
-        finalize(() => loading.dismiss()),
-        first() // stop running once this is done
+    const markAll = (attendance: Attendance) => this.students$.pipe(first()).subscribe(students => {
+      const options = {
+        optimisticResponse: {
+          __typename: 'Mutation' as 'Mutation',
+          markAttendanceAll: students.map(({ id }) => ({
+            __typename: 'Status' as 'Status',
+            id,
+          }))
+        }
+      };
+      const schedule = this.schedule;
+      const absentReason = null;
+      this.markAttendanceAll.mutate({ schedule, attendance }, options).pipe(
+        pluck('data', 'markAttendanceAll'),
+        tap(statuses => statuses.forEach(({ id }) =>
+          this.statusUpdate.next({ id, attendance, absentReason })
+        )),
       ).subscribe(
-        () => this.toast(`Marked all ${stateMap[newAttendance]}`, 'success'),
-        e => { this.toast(`Mark all ${stateMap[newAttendance]} failed: ${e}`, 'danger'); console.error(e); },
+        () => this.toast(`Marked all ${stateMap[attendance]}`, 'success'),
+        e => { this.toast(`Mark all ${stateMap[attendance]} failed: ${e}`, 'danger'); console.error(e); },
       );
     });
     this.alertCtrl.create({
@@ -251,19 +272,6 @@ export class MarkAttendancePage implements OnInit {
         }
       ]
     }).then(alert => alert.present());
-  }
-
-  /** Mark student attendance. */
-  mark(student: string, attendance: string, absentEvent?: KeyboardEvent) {
-    const el = absentEvent && absentEvent.target as HTMLInputElement;
-    if (el) {
-      el.blur();
-    }
-    const absentReason = el && el.value || null;
-    this._mark(student, attendance, absentReason).subscribe(
-      () => {},
-      e => { this.toast(`Mark ${stateMap[attendance]} failed: ` + e, 'danger'); console.error(e); }
-    );
   }
 
   /** Save lecture update notes. */

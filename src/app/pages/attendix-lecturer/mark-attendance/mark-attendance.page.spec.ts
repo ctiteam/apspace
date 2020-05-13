@@ -1,6 +1,8 @@
 import { Location } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, async, fakeAsync, tick } from '@angular/core/testing';
+import {
+  ComponentFixture, TestBed, async, discardPeriodicTasks, fakeAsync, tick
+} from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { QRCodeComponent } from 'angularx-qrcode';
 import {
@@ -81,6 +83,8 @@ describe('MarkAttendancePage', () => {
       fixture.detectChanges();
       apollo.expectOne(NewStatusDocument);
 
+      discardPeriodicTasks(); // countdown timer
+
       expect(component).toBeTruthy();
       expect(component.auto).toEqual(true);
     }));
@@ -103,6 +107,8 @@ describe('MarkAttendancePage', () => {
       fixture.detectChanges();
       apollo.expectOne(NewStatusDocument);
 
+      discardPeriodicTasks(); // countdown timer
+
       expect(component).toBeTruthy();
       expect(component.auto).toEqual(false);
     }));
@@ -124,7 +130,7 @@ describe('MarkAttendancePage', () => {
       fixture.detectChanges();
     });
 
-    it('should only request attendance', () => {
+    it('should only request attendance', fakeAsync(() => {
       const op = apollo.expectOne(AttendanceDocument);
       op.flush({
         data: {
@@ -135,12 +141,14 @@ describe('MarkAttendancePage', () => {
           }
         }
       });
+
+      tick();
       apollo.expectNone(InitAttendanceDocument);
       apollo.expectOne(NewStatusDocument);
 
       expect(component).toBeTruthy();
       expect(component.auto).toEqual(false);
-    });
+    }));
 
     it('should request attendance and init attendance', fakeAsync(() => {
       apollo.expectOne(AttendanceDocument).graphqlErrors([new GraphQLError('Attendance not initialized')]);
@@ -159,8 +167,6 @@ describe('MarkAttendancePage', () => {
       tick();
       fixture.detectChanges();
       apollo.expectOne(NewStatusDocument);
-
-      tick();
 
       expect(component).toBeTruthy();
       expect(component.auto).toEqual(false);

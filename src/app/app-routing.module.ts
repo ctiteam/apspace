@@ -118,6 +118,17 @@ const routes: Routes = [
     loadChildren: () => import('./pages/exam-schedule/exam-schedule.module').then(m => m.ExamSchedulePageModule)
   },
   {
+    path: 'exam-schedule-admin',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/exam-schedule-admin/exam-schedule-admin.module').then( m => m.ExamScheduleAdminPageModule)
+  },
+  {
+    path: 'exam-schedule-details/:examId',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./pages/exam-schedule-admin/exam-schedule-details/exam-schedule-details.module').then(m => m.ExamScheduleDetailsPageModule)
+  },
+  {
     path: 'news',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/news/news.module').then(m => m.NewsPageModule)
@@ -206,13 +217,13 @@ const routes: Routes = [
     path: 'change-webspace-password',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/settings/change-webspace-password/change-webspace-password.module')
-      .then( m => m.ChangeWebspacePasswordPageModule)
+      .then(m => m.ChangeWebspacePasswordPageModule)
   },
   {
     path: 'reset-webspace-password',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/settings/reset-webspace-password/reset-webspace-password.module')
-      .then( m => m.ResetWebspacePasswordPageModule)
+      .then(m => m.ResetWebspacePasswordPageModule)
   },
   {
     path: 'visa-status',
@@ -258,7 +269,14 @@ const routes: Routes = [
     path: 'students-results',
     canActivate: [AuthGuard],
     data: { role: Role.Admin | Role.Lecturer },
-    loadChildren: () => import('./pages/students-search/students-search.module').then( m => m.StudentsSearchPageModule)
+    loadChildren: () => import('./pages/students-search/students-search.module').then(m => m.StudentsSearchPageModule)
+  },
+  {
+    path: 'orientaton-student-portal',
+    canActivate: [AuthGuard],
+    data: { role: Role.Admin | Role.Lecturer },
+    loadChildren: () =>
+      import('./pages/orientaton-student-portal/orientaton-student-portal.module').then(m => m.OrientatonStudentPortalPageModule)
   },
   { // this path must always be at the end of the routes array
     path: '**',

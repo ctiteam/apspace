@@ -8,26 +8,27 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid class="ion-margin-top ion-no-padding">
-    <ion-row>
-      <ion-col class="ion-margin-top" size-xs="12" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
-        <!-- STUDENT PROFILE -->
-        <ng-template [ngIf]="studentRole" [ngIfElse]="userIsStaff">
-          <ion-card class="ion-no-margin ion-no-padding ion-text-center">
 
-            <!-- STUDENT IMAGE -->
-            <ng-template [ngIf]="photo$ | async" [ngIfElse]="loadingPicture">
-              <div class="img-wrapper ion-margin-top ion-margin-bottom">
-                <ion-img class="profile-photo" [src]="
-                                        'data:image/jpg;base64,' +
-                                        (photo$ | async)?.base64_photo
-                                        " (ionError)="$event.target.src = 'assets/img/no_img.png'">
-                </ion-img>
-              </div>
-            </ng-template>
+  <!-- STUDENT PROFILE -->
+  <ng-template [ngIf]="studentRole" [ngIfElse]="userIsStaff">
 
-            <!-- STUDENT PROFILE INFO -->
-            <ng-template let-profile [ngIf]="profile$ | async" [ngIfElse]="loadingProfile">
+    <ng-container *ngIf="profile$ | async as profile; else loadingProfile">
+      <!-- normal profile -->
+      <ion-grid class="ion-margin-top ion-no-padding" *ngIf="!showOrientationProfile; else showOrientProfile">
+        <ion-row>
+          <ion-col class="ion-margin-top" size-xs="12" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
+            <ion-card class="ion-no-margin ion-no-padding ion-text-center">
+              <!-- STUDENT IMAGE -->
+              <ng-template [ngIf]="photo$ | async" [ngIfElse]="loadingPicture">
+                <div class="img-wrapper ion-margin-top ion-margin-bottom">
+                  <ion-img class="profile-photo" [src]="
+                                          'data:image/jpg;base64,' +
+                                          (photo$ | async)?.base64_photo
+                                          " (ionError)="$event.target.src = 'assets/img/no_img.png'">
+                  </ion-img>
+                </div>
+              </ng-template>
+              <!-- STUDENT PROFILE INFO -->
               <ion-card-header>
                 <ion-card-title>
                   <h3 class="responsive-h1">{{ profile.NAME }}</h3>
@@ -90,27 +91,483 @@
                   <p>{{timetableAndExamScheduleIntake}}</p>
                 </div>
               </ion-card-content>
-            </ng-template>
-            <ion-footer *ngIf='!local'>
-              <ion-list class="ion-no-margin">
-                <ion-item-group>
-                  <ion-item lines="none" class="cursor-pointer" [routerLink]="'/visa-status'">
-                    <ion-avatar slot="start">
-                      <img src="assets/img/visa-status.png">
-                    </ion-avatar>
-                    <ion-label>
-                      <p class="secondary-txt-color">Submitted your application for visa renewal recently?</p>
-                      <h2>Track Your Visa Application</h2>
-                    </ion-label>
-                  </ion-item>
-                </ion-item-group>
-              </ion-list>
-            </ion-footer>
-          </ion-card>
-        </ng-template>
+              <ion-footer *ngIf='!local'>
+                <ion-list class="ion-no-margin">
+                  <ion-item-group>
+                    <ion-item lines="none" class="cursor-pointer" [routerLink]="'/visa-status'">
+                      <ion-avatar slot="start">
+                        <img src="assets/img/visa-status.png">
+                      </ion-avatar>
+                      <ion-label>
+                        <p class="secondary-txt-color">Submitted your application for visa renewal recently?</p>
+                        <h2>Track Your Visa Application</h2>
+                      </ion-label>
+                    </ion-item>
+                  </ion-item-group>
+                </ion-list>
+              </ion-footer>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
 
-        <!-- STAFF PROFILE -->
-        <ng-template #userIsStaff>
+      <!-- orientation profile -->
+      <ng-template #showOrientProfile>
+        <ng-template let-orientationProfile [ngIf]="orientationStudentDetails$ | async" [ngIfElse]="loadingProfile">
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col size="12" size-md="10" offset-md="1" class="ion-no-padding">
+                <ion-card class="orientation">
+                  <ion-card-content class="ion-no-padding">
+                    <ion-grid>
+                      <!-- <ion-row>
+                        <ion-col>
+                        </ion-col>
+                      </ion-row> -->
+                      <ion-row>
+                        <ion-col size="12" size-md="7" offset-md="" push-md="5">
+                          <ion-card class="ion-no-margin ion-no-padding virtual-card">
+                            <img src="assets/img/student_card_apu.jpg">
+                            <ng-template let-photo [ngIf]="photo$ | async">
+                              <ion-img class="profile-photo virtual-card-student-img" [src]="
+                                                  'data:image/jpg;base64,' +
+                                                  photo?.base64_photo
+                                                  " (ionError)="$event.target.src = 'assets/img/no_img.png'">
+                              </ion-img>
+                            </ng-template>
+                            <div class="virtual-card-student-details">
+                              <h5 class="text-bold virtual-card-student-name">
+                                {{ orientationProfile.student_details[0].STUDENT_NAME || 'N/A'}}
+                              </h5>
+                              <p class="virtual-card-student-ids id">STUDENT ID:&nbsp;&nbsp;&nbsp;
+                                {{orientationProfile.student_details[0].STUDENT_NUMBER || 'N/A'}}</p>
+                              <p class="virtual-card-student-ids passport">IC/PASSPORT:&nbsp;
+                                {{orientationProfile.student_details[0].IC || 'N/A'}}</p>
+                            </div>
+                          </ion-card>
+                        </ion-col>
+                        <ion-col size="12" size-md="5" pull-md="7" class="margin-auto">
+                          <h1 class="text-bold colored-text ion-padding-start ion-padding-end">YOUR VIRTUAL CARD</h1>
+                          <h5 class="ion-margin-top ion-padding-start ion-padding-end">This is your Virtual Student Card. Once you resume face-to-face learning on campus, we
+                            will be
+                            issuing you the physical copy of your card.</h5>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-card-content>
+                </ion-card>
+
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12" size-md="10" offset-md="1" class="ion-no-padding">
+                <ion-card class="orientation">
+                  <ion-card-content class="ion-no-padding">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col size="12">
+                          <ion-grid>
+                            <ion-row>
+                              <ion-col>
+                                <h1 class="text-bold colored-text">PERSONAL INFORMATION</h1>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>FULL NAME</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{ orientationProfile.student_details[0].STUDENT_NAME || 'N/A'}}</h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>STUDENT ID NO.</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].STUDENT_NUMBER || 'N/A'}}</h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>IC / PASSPORT NO.</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].IC || 'N/A'}}</h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>DATE OF BIRTH</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{(orientationProfile.student_details[0].DOB | date) || 'N/A'}}</h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>GENDER</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].GENDER || 'N/A'}}</h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>NATIONALITY</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].NATIONALITY || 'N/A'}}</h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>COUNTRY OF ORIGIN</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].COUNTRY_OF_ORIGIN || 'N/A'}}</h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>RACE</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].RACE || 'N/A'}}</h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>RELIGION</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].RELIGION || 'N/A'}} <a button
+                                    (click)="change('RELIGION', orientationProfile.student_details[0].RELIGION, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
+                                </h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <h1 class="text-bold colored-text">CONTACT INFORMATION</h1>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>MOBILE</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].STUDENT_MOBILE_NO || 'N/A'}} <a button
+                                    (click)="change('STUDENT_MOBILE_NO', orientationProfile.student_details[0].STUDENT_MOBILE_NO, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
+                                </h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>E-MAIL</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].STUDENT_EMAIL || 'N/A'}} <a button
+                                    (click)="change('STUDENT_EMAIL', orientationProfile.student_details[0].STUDENT_EMAIL, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
+                                </h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>PERMANENT ADDRESS</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].STUDENT_PERMANENT_ADDRESS || 'N/A'}}
+                                  <a button
+                                    (click)="change('STUDENT_PERMANENT_ADDRESS', orientationProfile.student_details[0].STUDENT_PERMANENT_ADDRESS, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
+                                </h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <h1 class="text-bold colored-text">PARENT / GUARDIAN (1) INFORMATION</h1>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>NAME</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].PARENTS_NAME || 'N/A'}} <a button
+                                    (click)="change('PARENTS_NAME', orientationProfile.student_details[0].PARENTS_NAME, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
+                                </h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>RELATIONSHIP</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].PARENTS_RELATIONSHIP || 'N/A'}} <a button
+                                    (click)="change('PARENTS_RELATIONSHIP', orientationProfile.student_details[0].PARENTS_RELATIONSHIP, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
+                                </h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>MOBILE</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].PARENTS_MOBILE_TEL || 'N/A'}} <a button
+                                    (click)="change('PARENTS_MOBILE_TEL', orientationProfile.student_details[0].PARENTS_MOBILE_TEL, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
+                                </h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>EMAIL</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].PARENTS_EMAIL || 'N/A'}} <a button
+                                    (click)="change('PARENTS_EMAIL', orientationProfile.student_details[0].PARENTS_EMAIL, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
+                                </h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <h1 class="text-bold colored-text">PARENT / GUARDIAN (2) INFORMATION</h1>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>NAME</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].GUARDIAN_NAME || 'N/A'}} <a button
+                                    (click)="change('GUARDIAN_NAME', orientationProfile.student_details[0].GUARDIAN_NAME, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
+                                </h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>RELATIONSHIP</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].GUARDIAN_RELATIONSHIP || 'N/A'}} <a button
+                                    (click)="change('GUARDIAN_RELATIONSHIP', orientationProfile.student_details[0].GUARDIAN_RELATIONSHIP, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
+                                </h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>MOBILE</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].GUARDIAN_MOBILE_TEL || 'N/A'}} <a button
+                                    (click)="change('GUARDIAN_MOBILE_TEL', orientationProfile.student_details[0].GUARDIAN_MOBILE_TEL, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
+                                </h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>EMAIL</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].GUARDIAN_EMAIL || 'N/A'}} <a button
+                                    (click)="change('GUARDIAN_EMAIL', orientationProfile.student_details[0].GUARDIAN_EMAIL, orientationProfile.student_details[0].STUDENT_NUMBER)">[edit]</a>
+                                </h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <h1 class="text-bold colored-text">COURSE INFORMATION</h1>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>COURSE</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].COURSE || 'N/A'}} </h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>INTAKE DATE</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].INTAKE_DATE || 'N/A'}}</h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>INTAKE CODE</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].INTAKE_CODE || 'N/A'}}</h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>SCHOLARSHIP</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].SCHOLARSHIP || 'N/A'}}</h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6" size-md="3" class="margin-auto">
+                                <h2>FEES SCHEME</h2>
+                              </ion-col>
+                              <ion-col size="6" offset-md="1" size-md="">
+                                <h2>: {{orientationProfile.student_details[0].FEES_SCHEME || 'N/A'}}</h2>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <h1 class="text-bold colored-text">DOCUMENTATION UPDATE</h1>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="12">
+                                <p>You are required to upload your IC Copy (Malaysian Students) / Passport Copy
+                                  (International Students) for us to update our records.</p>
+                              </ion-col>
+                              <ion-col size="12" size-md="6">
+                                <ion-input type="file" accept="application/pdf, image/jpeg, image/png" button
+                                  (change)="changeListener($event)"></ion-input>
+                              </ion-col>
+                              <ion-col size="12" size-md="6">
+                                <ion-button color="success" [disabled]="!file"
+                                  (click)="uploadDocument(orientationProfile.student_details[0].STUDENT_NAME, orientationProfile.councelor_details[0].COUNCELOR_NAME, orientationProfile.councelor_details[0].EMAIL)">
+                                  Upload</ion-button>
+                              </ion-col>
+                              <ion-col size="12">
+                                <small>Supported files are: PDF, PNG, and JPEG.</small>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <h1 class="text-bold colored-text">REQUEST FOR UPDATE</h1>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col>
+                                <p>
+                                  If you would like to request an update to the non-editable information, please submit
+                                  your request here.
+                                </p>
+                                <ion-button (click)="requestChange(orientationProfile)">REQUEST UPDATE
+                                  ON MY PROFILE
+                                </ion-button>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-card-content>
+                </ion-card>
+                <ng-container *ngIf="orientationProfile.councelor_details.length > 0; else noCouncelor">
+                  <ion-card class="orientation">
+                    <ion-card-header>
+                      <ion-card-title>
+                        <h1 class="colored-text">
+                          MEET YOUR E-COUNSELLOR!
+                        </h1>
+                      </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content class="ion-no-padding">
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="12">
+                            <h3>
+                              Each student will be assigned to an E-Counsellor upon registration. Before your
+                              orientation,
+                              he/she
+                              will
+                              assist you in taking you through the Pre-Orientation processes. Stay in touch with your
+                              E-Counsellor
+                              and
+                              reach out to them if you need any assistance! Your E-Counsellor will be your mentor of
+                              guidance,
+                              throughout your Orientation journey and beyond.
+                            </h3>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row>
+                          <ion-col size="4" offset="4" size-md="3" offset-md="" push-md="9">
+                            <ng-container *ngIf="councelorProfile$ | async as councelorProfile">
+                              <ion-img class="profile-photo"
+                                [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + councelorProfile.RefNo + '.jpg'"
+                                (ionError)="$event.target.src = 'assets/img/no_img.png'">
+                              </ion-img>
+                            </ng-container>
+                          </ion-col>
+                          <ion-col size="12" size-md="9" pull-md="3">
+                            <ion-grid>
+                              <ion-row>
+                                <ion-col size="6" size-md="4">
+                                  <h2>E-COUNSELLOR’S NAME</h2>
+                                </ion-col>
+                                <ion-col size="6" offset-md="1" size-md="">
+                                  <h2>: {{ orientationProfile.councelor_details[0].COUNCELOR_NAME || 'N/A'}}</h2>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="6" size-md="4">
+                                  <h2>E-COUNSELLOR’S E-MAIL</h2>
+                                </ion-col>
+                                <ion-col size="6" offset-md="1" size-md="">
+                                  <h2>: {{ orientationProfile.councelor_details[0].EMAIL || 'N/A'}}</h2>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="6" size-md="4">
+                                  <h2>E-COUNSELLOR’S WHATSAPP</h2>
+                                </ion-col>
+                                <ion-col size="6" offset-md="1" size-md="">
+                                  <h2>: {{ orientationProfile.councelor_details[0].MOBILE_NO || 'N/A'}}</h2>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="12">
+                                  <p>Your E-Counsellor will normally be available from 10am to 6pm, Mondays to Fridays
+                                  </p>
+                                </ion-col>
+                              </ion-row>
+                              <ion-row>
+                                <ion-col size="12">
+                                  <ion-button color="primary" expand="block"
+                                    (click)="chatInTeams(orientationProfile.councelor_details[0].SAMACCOUNTNAME)">
+                                    SEND A MESSAGE TO YOUR E-COUNSELLOR
+                                    <ion-icon name="chatboxes" slot="end"></ion-icon>
+                                  </ion-button>
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-card-content>
+                  </ion-card>
+                </ng-container>
+                <ng-template #noCouncelor>
+                  <ion-card color="danger" class="orientation">
+                    <ion-card-header color="danger">
+                      <ion-card-title class="ion-text-center">
+                        No E-Counsellor Has Been Assigned To You Yet :(
+                      </ion-card-title>
+                    </ion-card-header>
+                  </ion-card>
+                </ng-template>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ng-template>
+      </ng-template>
+    </ng-container>
+  </ng-template>
+
+  <!-- STAFF PROFILE -->
+  <ng-template #userIsStaff>
+    <ion-grid class="ion-margin-top ion-no-padding">
+      <ion-row>
+        <ion-col class="ion-margin-top" size-xs="12" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
           <ion-card class="ion-no-margin ion-no-padding ion-text-center">
             <ng-container *ngIf="staffProfile$ | async as staffProfile; else loadingProfile">
               <!-- STAFF IMAGE -->
@@ -141,17 +598,17 @@
                   <p>{{ staffProfile[0].DEPARTMENT }}</p>
                 </div>
 
-                <ng-template [ngIf]="staffProfile[0].DEPARTMENT1">
+                <ng-template [ngIf]="staffProfile[0].DEPARTMENT2">
                   <div class="ion-margin-top">
                     <h4>Department 1</h4>
-                    <p>{{ staffProfile[0].DEPARTMENT1 }}</p>
+                    <p>{{ staffProfile[0].DEPARTMENT2 }}</p>
                   </div>
                 </ng-template>
 
-                <ng-template [ngIf]="staffProfile[0].DEPARTMENT2">
+                <ng-template [ngIf]="staffProfile[0].DEPARTMENT3">
                   <div class="ion-margin-top">
                     <h4>Department 2</h4>
-                    <p>{{ staffProfile[0].DEPARTMENT2 }}</p>
+                    <p>{{ staffProfile[0].DEPARTMENT3 }}</p>
                   </div>
                 </ng-template>
 
@@ -162,20 +619,28 @@
               </ion-card-content>
             </ng-container>
           </ion-card>
-        </ng-template>
-        <ng-template #loadingPicture>
-          <div class="ion-margin-top">
-            <ion-skeleton-text animated style="width: 122px; line-height: 150px;margin: auto"></ion-skeleton-text>
-          </div>
-        </ng-template>
-        <ng-template #loadingProfile>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
+
+  <ng-template #loadingPicture>
+    <div class="ion-margin-top">
+      <ion-skeleton-text animated style="width: 122px; line-height: 150px;margin: auto"></ion-skeleton-text>
+    </div>
+  </ng-template>
+
+  <ng-template #loadingProfile>
+    <ion-grid class="ion-margin-top ion-no-padding">
+      <ion-row>
+        <ion-col class="ion-margin-top" size-xs="12" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
           <ion-item lines="none" *ngFor="let s of skeltons">
             <ion-skeleton-text animated [style.width]="s + '%'" style="line-height: 30px; margin:auto;">
             </ion-skeleton-text>
           </ion-item>
-        </ng-template>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
 
 </ion-content>

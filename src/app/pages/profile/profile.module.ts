@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ProfilePage } from './profile.page';
+import { RequestChangeModalPage } from './request-update-modal/request-update-modal';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ProfilePage]
+  declarations: [ProfilePage, RequestChangeModalPage],
+  entryComponents: [RequestChangeModalPage]
 })
 export class ProfilePageModule {}

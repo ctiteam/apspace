@@ -1,13 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
 import { RoundProgressModule } from 'angular-svg-round-progressbar';
 
+import { CalendarModule } from 'ion2-calendar';
+
 import { ComponentsModule } from 'src/app/components/components.module';
 import { SharedPipesModule } from '../../shared/shared-pipes.module';
+import { AttendanceDetailsModalPage } from './attendance-details-modal/attendance-details-modal';
 import { AttendancePage } from './attendance.page';
 
 const routes: Routes = [
@@ -24,8 +28,11 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     RoundProgressModule,
     ComponentsModule,
-    SharedPipesModule
+    SharedPipesModule,
+    FormsModule,
+    CalendarModule
   ],
-  declarations: [AttendancePage]
+  declarations: [AttendancePage, AttendanceDetailsModalPage],
+  entryComponents: [AttendanceDetailsModalPage]
 })
 export class AttendancePageModule { }

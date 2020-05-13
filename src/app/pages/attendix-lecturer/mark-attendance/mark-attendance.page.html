@@ -32,7 +32,7 @@
         </ion-col>
         <ion-col size="10" offset="1" sizeSm="3" offsetSm="0">
           <ion-text *ngIf="otp !== '---'" color="secondary">
-            OTP valid until {{ timeLeft$ | async | date:'medium' }} ({{ countdown$ | async }}s)
+            <p>OTP valid until {{ timeLeft$ | async | date:'medium' }} ({{ countdown$ | async }}s)</p>
           </ion-text>
           <div *ngFor="let c of otp | chars" class="otp">
             {{ c }}

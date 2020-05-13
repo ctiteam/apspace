@@ -102,7 +102,6 @@ export class FilingReportPage implements OnInit {
     // for Demo. It will be removed after the backend created
     if (this.currentStepNumber === 1) {
       this.studentDetails$ = this.ws.post<BeAPUStudentDetails[]>('/student/image', {
-        url: 'https://u1cd2ltoq6.execute-api.ap-southeast-1.amazonaws.com/dev',
         body: {
           id: [this.studentId]
         }
@@ -129,7 +128,7 @@ export class FilingReportPage implements OnInit {
   submitReport() {
     this.alertCtrl.create({
       header: 'Confirm!',
-      subHeader: 'You are about to file a report against the student with ID TP037354. Do you want to continue?',
+      subHeader: `You are about to file a report against the student with ID ${this.studentId}. Do you want to continue?`,
       buttons: [
         {
           text: 'No',

@@ -1,13 +1,15 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { IonSelect, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  AlertController, IonSelect, LoadingController, ModalController, ToastController
+} from '@ionic/angular';
 
 import { Observable, forkJoin } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
 import { Classcode, StaffProfile, StudentTimetable } from '../../../interfaces';
-import { StudentTimetableService, WsApiService } from '../../../services';
+import { SettingsService, StudentTimetableService, WsApiService } from '../../../services';
 import { between, isoDate, parseTime } from '../date';
 
 type Schedule = Pick<Classcode, 'CLASS_CODE'>
@@ -72,7 +74,7 @@ export class ClassesPage implements AfterViewInit, OnInit {
 
   /* selected */
   classcode: string;
-  date: string;  // 2019-01-01
+  date: string; // 2020-12-31
   startTime: string;
   endTime: string;
   classType: string;
@@ -94,9 +96,12 @@ export class ClassesPage implements AfterViewInit, OnInit {
   constructor(
     private tt: StudentTimetableService,
     private ws: WsApiService,
+    private route: ActivatedRoute,
     private router: Router,
+    public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
+    public settings: SettingsService,
     public toastCtrl: ToastController,
   ) { }
 
@@ -108,10 +113,6 @@ export class ClassesPage implements AfterViewInit, OnInit {
   }
 
   ionViewDidEnter() {
-    const d = new Date();
-    const date = isoDate(d);
-    const nowMins = d.getHours() * 60 + d.getMinutes();
-
     const loadingCtrl = this.loadingCtrl.create({
       spinner: 'dots',
       duration: 5000,
@@ -120,13 +121,19 @@ export class ClassesPage implements AfterViewInit, OnInit {
     });
     loadingCtrl.then(loading => loading.present());
 
+    const d = new Date();
+    const date = isoDate(d);
+    const nowMins = d.getHours() * 60 + d.getMinutes();
+
+    const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes');
+
     // get self timetable but filter out future classes
     const timetables$ = this.timetablesprofile$.pipe(
       map(([profile, timetables]) => timetables.filter(timetable =>
         profile[0].ID === timetable.SAMACCOUNTNAME
-        && (timetable.DATESTAMP_ISO !== date || parseTime(timetable.TIME_FROM) <= nowMins))),
+        && (timetable.DATESTAMP_ISO !== date
+          || parseTime(timetable.TIME_FROM) <= nowMins))),
     );
-    const classcodes$ = this.ws.get<Classcode[]>('/attendix/classcodes');
 
     forkJoin([timetables$, classcodes$]).subscribe(([timetables, classcodes]) => {
       // left join on classcodes
@@ -183,13 +190,10 @@ export class ClassesPage implements AfterViewInit, OnInit {
       this.schedules = this.schedules.concat.apply([], mapped);
       this.classcodes = [...new Set(this.schedules.map(schedule => schedule.CLASS_CODE).filter(Boolean))].sort();
 
-      loadingCtrl.then(loading => loading.dismiss());
-      // console.log('filtered', this.schedules, this.classcodes);
+      this.fillManualInputs(classcodes);
 
-      // manual classcodes
-      this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
-      this.manualDates = [...Array(30).keys()]
-        .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
+      // console.log('filtered', this.schedules, this.classcodes);
+      loadingCtrl.then(loading => loading.dismiss());
     });
   }
 
@@ -249,6 +253,13 @@ export class ClassesPage implements AfterViewInit, OnInit {
     } else {
       this.manualClasscode = classcode;
     }
+  }
+
+  /** Fill manual inputs. */
+  fillManualInputs(classcodes: Classcode[]) {
+    this.manualClasscodes = [...new Set(classcodes.map(classcode => classcode.CLASS_CODE))];
+    this.manualDates = [...Array(30).keys()]
+      .map(n => isoDate(new Date(new Date().setDate(new Date().getDate() - n))));
   }
 
   /** Change classcode, auto select class type. */
@@ -346,7 +357,34 @@ export class ClassesPage implements AfterViewInit, OnInit {
       startTime: this.auto ? this.startTime : this.manualStartTime,
       endTime: this.auto ? this.endTime : this.manualEndTime,
       classType: this.auto ? this.classType : this.manualClassType,
+      defaultAttendance: 'N',
     }]);
+  }
+
+  /** Mark confirmation. */
+  confirmMark() {
+    this.alertCtrl.create({
+      header: 'Confirm mark / edit attendance?',
+      message: 'All records will be absent by default if uninitialized, can be deleted later.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Confirm',
+          handler: () => this.mark()
+        }
+      ]
+    }).then(alert => alert.present());
+  }
+
+  /** Set settings to use attendix ui/ux update. */
+  tryv1() {
+    this.settings.set('attendixv1', true);
+    this.router.navigate(['attendix', 'classes', 'new', this.route.snapshot.params],
+      { replaceUrl: true });
   }
 
 }

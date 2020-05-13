@@ -1,7 +1,6 @@
 .loader {
-  position: relative;
-  /* top: calc(50% - 32px);
-  left: calc(50% - 11px); */
+  top: calc(50% - 32px);
+  left: calc(50% - 11px);
   width: 23px;
   height: 23px;
   border-radius: 50%;

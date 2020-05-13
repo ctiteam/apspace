@@ -8,4 +8,5 @@ export interface ExamSchedule {
   docketsDue: string;
   appraisalsDue: string | null;
   resultDate: string | null;
+  assessmentType?: string | null;
 }
