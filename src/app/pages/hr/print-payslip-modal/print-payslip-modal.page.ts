@@ -52,14 +52,26 @@ export class PrintPayslipModalPage {
         link,
         this.file.dataDirectory + payslip
       ).then((entry) => {
-        console.log('this is entry to url ', entry.toURL());
         this.fileOpener.open(entry.toURL(), 'application/pdf').then(() => {
-          console.log('file is opened');
-        }).catch(e => console.log('ERROR ERROR ', e));
+        }).catch(e => console.log('error open pdf ', e));
       }, (error) => console.log('download error ', error));
     } else {
       this.cas.getST(link).subscribe(st => {
-        window.open(link + `?ticket=${st}`);
+        fetch(link + `?ticket=${st}`).then(result => result.blob()).then(blob => {
+          const pdfBlob = new Blob([blob], {type: 'application/pdf'});
+          const blobUrl = URL.createObjectURL(pdfBlob);
+          const a: HTMLAnchorElement = document.createElement('a') as HTMLAnchorElement;
+
+          a.href = blobUrl;
+          a.download = payslip;
+          document.body.appendChild(a);
+          a.click();
+
+          setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(blobUrl);
+          }, 5000);
+        });
       });
     }
   }
