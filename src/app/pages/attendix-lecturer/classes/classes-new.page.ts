@@ -479,18 +479,20 @@ export class ClassesNewPage implements OnInit {
     const classCodes = (await this.classcodes$.toPromise());
     const possibleExtraClasses = [];
     classCodes.forEach(klass => {
-      if (klass.TOTAL.ABSENT === klass.TOTAL.ABSENT + klass.TOTAL.PRESENT + klass.TOTAL.LATE + klass.TOTAL.ABSENT_REASON) {
-        possibleExtraClasses.push(
-          {
-            classCode: klass.CLASS_CODE,
-            date: klass.DATE,
-            timeFrom: klass.TIME_FROM,
-            timeTo: klass.TIME_TO,
-            total: klass.TOTAL.ABSENT,
-            type: klass.TYPE,
-            checked: false
-          }
-        );
+      if (klass.TOTAL) {
+        if (klass.TOTAL.ABSENT === klass.TOTAL.ABSENT + klass.TOTAL.PRESENT + klass.TOTAL.LATE + klass.TOTAL.ABSENT_REASON) {
+          possibleExtraClasses.push(
+            {
+              classCode: klass.CLASS_CODE,
+              date: klass.DATE,
+              timeFrom: klass.TIME_FROM,
+              timeTo: klass.TIME_TO,
+              total: klass.TOTAL.ABSENT,
+              type: klass.TYPE,
+              checked: false
+            }
+          );
+        }
       }
     });
     const modal = await this.modalCtrl.create({
