@@ -37,7 +37,7 @@ export class PrintPayslipModalPage {
 
   doRefresh(refresher?) {
     this.payslips$ = this.ws.get<any>(this.payslipsEndpoint).pipe(
-      map(payslips => payslips.payslips),
+      map(payslips => payslips.payslips.sort((a, b) => 0 - (a > b ? 1 : -1))),
       finalize(() => refresher && refresher.target.complete())
     );
   }
