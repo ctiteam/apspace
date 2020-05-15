@@ -192,7 +192,7 @@ export class ProfilePage implements OnInit {
   async requestChange(orientationProfile: OrientationStudentDetails) {
     const modal = await this.modalCtrl.create({
       component: RequestChangeModalPage,
-      cssClass: 'generateTransactionsPdf',
+      cssClass: 'custom-modal-style',
       componentProps: { orientationProfile }
     });
     await modal.present();
