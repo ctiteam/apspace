@@ -58,7 +58,7 @@ export class ExamScheduleDetailsPage implements OnInit {
         [
           {
             title: 'Module',
-            detail: examScheduleDetails.MODULE
+            detail: `${examScheduleDetails.MODULE_NAME} (${examScheduleDetails.MODULE_CODE})`
           },
           {
             title: 'Date',
