@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
+// import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { ModalController, Platform, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
@@ -25,7 +25,7 @@ export class PrintPayslipModalPage {
     private platform: Platform,
     private file: File,
     // tslint:disable-next-line
-    private transfer: FileTransfer,
+    // private transfer: FileTransfer,
     private fileOpener: FileOpener,
     private ws: WsApiService,
     private cas: CasTicketService
@@ -45,16 +45,27 @@ export class PrintPayslipModalPage {
   downloadPayslipPdf(payslip) {
     const downloadPayslipEndpoint = '/staff/download_payslip/';
     const link = this.payslipsUrl + downloadPayslipEndpoint + payslip;
-    const transfer = this.transfer.create();
+    // const transfer = this.transfer.create();
 
     if (this.platform.is('cordova')) {
-      transfer.download(
-        link,
-        this.file.dataDirectory + payslip
-      ).then((entry) => {
-        this.fileOpener.open(entry.toURL(), 'application/pdf').then(() => {
-        }).catch(e => console.log('error open pdf ', e));
-      }, (error) => console.log('download error ', error));
+      // transfer.download(
+      //   link,
+      //   this.file.dataDirectory + payslip
+      // ).then((entry) => {
+      //   this.fileOpener.open(entry.toURL(), 'application/pdf').then(() => {
+      //   }).catch(e => console.log('error open pdf ', e));
+      // }, (error) => console.log('download error ', error));
+      this.cas.getST(link).subscribe(st => {
+        fetch(link + `?ticket=${st}`).then(result => result.blob()).then(blob => {
+          const pdfBlob = new Blob([blob], {type: 'application/pdf'});
+
+          // Save the PDF to the data Directory of our App
+          this.file.writeFile(this.file.dataDirectory, `${payslip}.pdf`, pdfBlob, { replace: true }).then(_ => {
+            // Open the PDf with the correct OS tools
+            this.fileOpener.open(this.file.dataDirectory + `${payslip}.pdf`, 'application/pdf');
+          });
+        });
+      });
     } else {
       this.cas.getST(link).subscribe(st => {
         fetch(link + `?ticket=${st}`).then(result => result.blob()).then(blob => {
