@@ -86,7 +86,10 @@
   border: 1px solid var(--tertiary-bg-color);
   min-height: 40px;
   margin-top: 10px;
-
+  &.date-picker{
+    min-height: auto !important;
+    padding: 8px 10px 9px 10px !important;
+  }
   ion-grid { // fix the same width as the other input
     ion-col {
       height: 43px; // original min-height 48px

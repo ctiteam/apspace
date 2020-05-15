@@ -14,6 +14,8 @@ import { formatTime, isoDate, parseTime } from '../date';
 import { AttendanceIntegrityModalPage } from './attendance-integrity/attendance-integrity-modal';
 import { ConfirmClassCodeModalPage } from './confirm-class-code/confirm-class-code-modal';
 
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-classes-new',
   templateUrl: './classes-new.page.html',
@@ -114,6 +116,8 @@ export class ClassesNewPage implements OnInit {
   classType: string;
   duration: number;
   defaultAttendance = 'N'; // default is absent
+  minDate = moment(new Date()).subtract(98, 'days').toDate().toISOString();
+  maxDate = new Date().toISOString();
 
   constructor(
     private iab: InAppBrowser,
@@ -308,6 +312,7 @@ export class ClassesNewPage implements OnInit {
 
   /** Change date. */
   changeDate(date: string) {
+    this.date = moment(date).format('YYYY-MM-DD');
     const d = new Date();
     if (date === isoDate(d)) { // current day
       const nowMins = d.getHours() * 60 + d.getMinutes();
@@ -332,6 +337,7 @@ export class ClassesNewPage implements OnInit {
 
   /** Mark attendance with validation. Double confirm */
   mark() {
+    console.log(this.date);
     this.classcodes$.subscribe(classcodes => {
       const startTimeMins = parseTime(this.startTime);
       const endTimeMins = parseTime(this.endTime);
@@ -454,7 +460,7 @@ export class ClassesNewPage implements OnInit {
   async openconfirmClassCodeModal(filteredClassCodes: any[]) { // TODO: add type
     const modal = await this.modalCtrl.create({
       component: ConfirmClassCodeModalPage,
-      cssClass: 'generateTransactionsPdf',
+      cssClass: 'custom-modal-style',
       componentProps: {
         classTypes: this.classTypes,
         classCodes: filteredClassCodes
@@ -489,7 +495,7 @@ export class ClassesNewPage implements OnInit {
     });
     const modal = await this.modalCtrl.create({
       component: AttendanceIntegrityModalPage,
-      cssClass: 'generateTransactionsPdf',
+      cssClass: 'custom-modal-style',
       componentProps: {
         possibleClasses: possibleExtraClasses.sort(
           (a, b) =>
