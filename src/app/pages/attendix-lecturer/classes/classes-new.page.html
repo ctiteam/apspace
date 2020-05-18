@@ -51,11 +51,9 @@
                       <ion-col size="12">
                         <ion-item lines="none" class="input-item">
                           <ion-label position="stacked">Date</ion-label>
-                          <ion-select class="form-input" [ngModel]="date" (ngModelChange)="changeDate(date = $event)"
-                            interface="popover" placeholder="Date">
-                            <ion-select-option *ngFor="let d of dates" [value]="d">{{ d | date : 'EEE, dd MMM yyy' }}
-                            </ion-select-option>
-                          </ion-select>
+                          <ion-datetime [ngModel]="date" (ngModelChange)="changeDate(date = $event)" [min]="minDate" [max]="maxDate"
+                            placeholder="Click to select" displayFormat="YYYY-MM-DD" pickerFormat="DD MMM YYYY"
+                            class="form-input date-picker"></ion-datetime>
                         </ion-item>
                       </ion-col>
 
@@ -183,7 +181,8 @@
                     </ion-item>
                     <ng-container *ngFor="let linksSection of usefulLinks">
                       <ion-item lines="full" color="primary">
-                        <ion-button fill="clear" slot="end" color="light" (click)="openExternalLink(linksSection.url)">See All</ion-button>
+                        <ion-button fill="clear" slot="end" color="light" (click)="openExternalLink(linksSection.url)">
+                          See All</ion-button>
                         <ion-label>
                           <ion-text class="text-bold">
                             {{linksSection.sectionTitle}}

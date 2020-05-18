@@ -42,7 +42,7 @@ export class OrientatonStudentPortalPage implements OnInit {
   async viewProfile(studentID: string) {
     const modal = await this.modalCtrl.create({
       component: ViewStudentProfileModalPage,
-      cssClass: 'generateTransactionsPdf',
+      cssClass: 'custom-modal-style',
       componentProps: { studentID }
     });
     await modal.present();

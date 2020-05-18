@@ -1,16 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { OnLeaveOnMyCluster, PendingApproval, StaffDirectory } from 'src/app/interfaces';
+import { OnLeaveOnMyCluster, PendingApproval, StaffDirectory, StaffProfile } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
+import { PrintPayslipModalPage } from './print-payslip-modal/print-payslip-modal.page';
 @Component({
   selector: 'app-hr',
   templateUrl: './hr.page.html',
   styleUrls: ['./hr.page.scss'],
 })
 export class HrPage implements OnInit {
+  // temporary limiting some user for accessing payslip
+  showPaySlip = false;
+  chosenOnes = [
+    'tehcj',
+    'norasyikin.a',
+    'wendy.tham',
+    'reza.ganji',
+    'mohamad.alghayeb',
+    'pardeep',
+    'param',
+    'we.yuan',
+    'md.fazla'
+  ];
+
   // leaves$: Observable<LeaveBalance[]>;
   history$: any;
   leaveInCluster$: any;
@@ -42,9 +58,12 @@ export class HrPage implements OnInit {
   //   centeredContent: true,
   //   spaceBetween: 8
   // };
-  constructor(private ws: WsApiService, private iab: InAppBrowser) { }
+  constructor(public modalCtrl: ModalController, private ws: WsApiService, private iab: InAppBrowser) { }
 
   ngOnInit() {
+    this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }).pipe(
+      tap(profile => this.showPaySlip = this.chosenOnes.includes(profile[0].ID)),
+    ).subscribe();
     // commented until the backend is fixed
     // this.leaves$ = this.ws.get<LeaveBalance[]>('/staff/leave_balance').pipe(
     //   tap(leaves => {
@@ -179,5 +198,15 @@ export class HrPage implements OnInit {
 
   openHrSystem() {
     this.iab.create('https://hr.apiit.edu.my', '_system', 'location=true');
+  }
+
+  openPayslipPdf() {
+    this.modalCtrl.create({
+      component: PrintPayslipModalPage,
+      cssClass: 'custom-modal-style',
+    }).then(modal => {
+      modal.present();
+      modal.onDidDismiss();
+    });
   }
 }
