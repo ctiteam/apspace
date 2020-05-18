@@ -7,10 +7,6 @@ const routes: Routes = [
   {
     path: '',
     component: AddExamSchedulePage
-  },
-  {
-    path: 'manage-assessment-types',
-    loadChildren: () => import('./manage-assessment-types/manage-assessment-types.module').then( m => m.ManageAssessmentTypesPageModule)
   }
 ];
 
