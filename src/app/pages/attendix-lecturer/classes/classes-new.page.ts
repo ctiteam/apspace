@@ -312,7 +312,7 @@ export class ClassesNewPage implements OnInit {
 
   /** Change date. */
   changeDate(date: string) {
-    this.date = moment(date).format('YYYY-MM-DD');
+    this.date = date = moment(date).format('YYYY-MM-DD');
     const d = new Date();
     if (date === isoDate(d)) { // current day
       const nowMins = d.getHours() * 60 + d.getMinutes();
