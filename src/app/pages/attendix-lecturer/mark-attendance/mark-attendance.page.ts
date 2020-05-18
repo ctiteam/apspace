@@ -65,7 +65,7 @@ export class MarkAttendancePage implements OnInit {
 
   ngOnInit() {
     // totp options
-    authenticator.options = { digits: 3 };
+    authenticator.options = { digits: 3, step: 4 * 60 + 29, window: 30 };
 
     this.schedule = {
       classcode: this.route.snapshot.paramMap.get('classcode'),
@@ -151,7 +151,7 @@ export class MarkAttendancePage implements OnInit {
     );
     this.countdown$ = interval(1000).pipe(
       takeUntil(stopTimer$),
-      map(() => authenticator.timeRemaining() + 29), // ignore current second
+      map(() => authenticator.timeRemaining() + authenticator.options.window - 1), // ignore current second
       shareReplay(1) // keep track while switching mode
     );
 
