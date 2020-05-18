@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import * as moment from 'moment';
@@ -8,6 +8,7 @@ import { finalize, shareReplay, tap } from 'rxjs/operators';
 import { SearchModalComponent } from 'src/app/components/search-modal/search-modal.component';
 import { ExamScheduleAdmin, ResitExamSchedule } from 'src/app/interfaces/exam-schedule-admin';
 import { WsApiService } from 'src/app/services';
+import { NotifierService } from 'src/app/shared/notifier/notifier.service';
 import { AddExamSchedulePage } from './add-exam-schedule/add-exam-schedule.page';
 
 @Component({
@@ -16,7 +17,7 @@ import { AddExamSchedulePage } from './add-exam-schedule/add-exam-schedule.page'
   styleUrls: ['./exam-schedule-admin.page.scss'],
 })
 
-export class ExamScheduleAdminPage implements OnInit {
+export class ExamScheduleAdminPage implements OnInit, OnDestroy {
   loading: HTMLIonLoadingElement;
 
   examScheduleListOptions = [
@@ -44,11 +45,22 @@ export class ExamScheduleAdminPage implements OnInit {
     public modalCtrl: ModalController,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
-    private ws: WsApiService
+    private ws: WsApiService,
+    private notifierService: NotifierService
   ) { }
 
   ngOnInit() {
+    this.notifierService.examScheduleUpdated.subscribe(data => {
+      if (data && data === 'SUCCESS') {
+        this.doRefresh();
+      }
+    });
+
     this.doRefresh();
+  }
+
+  ngOnDestroy() {
+    this.notifierService.examScheduleUpdated.unsubscribe();
   }
 
   doRefresh(refresher?) {

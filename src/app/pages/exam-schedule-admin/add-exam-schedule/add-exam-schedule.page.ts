@@ -10,6 +10,7 @@ import { tap } from 'rxjs/operators';
 import { SearchModalComponent } from 'src/app/components/search-modal/search-modal.component';
 import { ExamScheduleAdmin } from 'src/app/interfaces/exam-schedule-admin';
 import { WsApiService } from 'src/app/services';
+import { NotifierService } from 'src/app/shared/notifier/notifier.service';
 import { ManageAssessmentTypesPage } from './manage-assessment-types/manage-assessment-types.page';
 
 @Component({
@@ -43,7 +44,8 @@ export class AddExamSchedulePage implements OnInit {
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
     private formBuilder: FormBuilder,
-    private ws: WsApiService
+    private ws: WsApiService,
+    private notifierService: NotifierService
     // private storage: Storage
   ) { }
 
@@ -221,6 +223,7 @@ export class AddExamSchedulePage implements OnInit {
           })
           .subscribe({
             next: () => {
+              this.notifierService.examScheduleUpdated.next('SUCCESS');
               this.showToastMessage(
                 'Exam Schedule updated successfully!',
                 'success'
