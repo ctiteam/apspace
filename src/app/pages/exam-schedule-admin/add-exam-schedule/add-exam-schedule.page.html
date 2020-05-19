@@ -93,6 +93,7 @@
               <ion-select *ngIf="assessmentTypes$ | async as assessmentTypes; else loading"[formControl]="examScheduleForm.controls['assessmentType']" class="form-input">
                 <ion-select-option *ngFor="let assessmentType of assessmentTypes" [value]="assessmentType.ASSESSMENT_TYPE">{{ assessmentType.ASSESSMENT_TYPE }}</ion-select-option>
               </ion-select>
+              <!-- <ion-button (click)="manageAssessmentTypes()" class="colored-border colored-text" fill="outline">MANAGE ASSESSMENT TYPES</ion-button>  -->
               <ng-template #loading>
                 <ion-skeleton-text animated class="ion-padding-vertical"></ion-skeleton-text>
               </ng-template>
