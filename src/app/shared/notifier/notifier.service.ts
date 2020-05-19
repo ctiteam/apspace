@@ -6,4 +6,5 @@ import { Subject } from 'rxjs';
 })
 export class NotifierService {
   examScheduleUpdated = new Subject();
+  assessmentTypeUpdated = new Subject();
 }

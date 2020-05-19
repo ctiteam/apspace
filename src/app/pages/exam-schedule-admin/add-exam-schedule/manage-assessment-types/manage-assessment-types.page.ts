@@ -1,5 +1,9 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { WsApiService } from 'src/app/services';
+import { NotifierService } from 'src/app/shared/notifier/notifier.service';
 
 @Component({
   selector: 'app-manage-assessment-types',
@@ -7,32 +11,96 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./manage-assessment-types.page.scss'],
 })
 export class ManageAssessmentTypesPage implements OnInit {
-  onEdit = false;
-  assessmentTypeIndex;
+  // devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
+  loading: HTMLIonLoadingElement;
 
-  assessmentTypes = [
-    'Lorem Ipsum 1',
-    'Lorem Ipsum 2',
-    'Lorem Ipsum 3',
-    'Lorem Ipsum 4',
-    'Lorem Ipsum 5',
-    'Lorem Ipsum 6',
-    'Lorem Ipsum 7',
-    'Lorem Ipsum 8',
-    'Lorem Ipsum 9'
-  ];
+  assessmentType: string;
+  assessmentTypes$: Observable<any>;
 
-  constructor(public modalCtrl: ModalController) { }
+  constructor(
+    public modalCtrl: ModalController,
+    public toastCtrl: ToastController,
+    public loadingCtrl: LoadingController,
+    private ws: WsApiService,
+    private notifierService: NotifierService
+  ) { }
 
   ngOnInit() {
+    this.doRefresh();
   }
 
-  toggleEdit(i) {
-    this.onEdit = !this.onEdit;
+  doRefresh() {
+    this.assessmentTypes$ = this.ws.get<any>('/exam/assessment_type');
+  }
 
-    // if (this.onEdit) {
-    this.assessmentTypeIndex = i;
-    // }
+  addAssessmentType(assessmentTypes) {
+    let isDuplicated = false;
+
+    assessmentTypes.forEach(assessmentType =>
+      assessmentType.ASSESSMENT_TYPE.toUpperCase() === this.assessmentType.toUpperCase() ?
+      isDuplicated = true : null
+    );
+
+    if (isDuplicated) {
+      this.showToastMessage(
+        'Assessment Type is existed.',
+        'danger'
+      );
+
+      return;
+    }
+
+    const bodyObject = {assessment_type: this.assessmentType};
+    const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
+    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    this.ws.post('/exam/add_assessment_type', { body, headers }).subscribe({
+      next: () => {
+        this.notifierService.assessmentTypeUpdated.next('SUCCESS');
+      },
+      error: (err) => {
+        this.showToastMessage(
+          err.status + ': ' + err.error.error,
+          'danger'
+        );
+      },
+      complete: () => {
+        this.assessmentType = '';
+        this.doRefresh();
+      }
+    });
+  }
+
+  deleteAssessmentType(assessmentType) {
+    const bodyObject = {assessment_type: assessmentType};
+    const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
+    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    this.ws.post('/exam/delete_assessment_type', { body, headers }).subscribe({
+      next: () => {
+        this.notifierService.assessmentTypeUpdated.next('SUCCESS');
+      },
+      error: (err) => {
+        this.showToastMessage(
+          err.status + ': ' + err.error.error,
+          'danger'
+        );
+      },
+      complete: () => {
+        this.doRefresh();
+      }
+    });
+  }
+
+  showToastMessage(message: string, color: 'danger' | 'success') {
+    this.toastCtrl
+      .create({
+        message,
+        duration: 5000,
+        position: 'top',
+        color,
+        showCloseButton: true,
+        animated: true
+      })
+      .then(toast => toast.present());
   }
 
   closeModal() {
