@@ -8,6 +8,7 @@ import { AddExamSchedulePageRoutingModule } from './add-exam-schedule-routing.mo
 
 import { CalendarModule } from 'ion2-calendar';
 import { AddExamSchedulePage } from './add-exam-schedule.page';
+import { ManageAssessmentTypesPage } from './manage-assessment-types/manage-assessment-types.page';
 import { ModulesFilterPipe } from './modules-filter.pipe';
 
 @NgModule({
@@ -19,6 +20,7 @@ import { ModulesFilterPipe } from './modules-filter.pipe';
     CalendarModule,
     ReactiveFormsModule
   ],
-  declarations: [AddExamSchedulePage, ModulesFilterPipe]
+  entryComponents: [ManageAssessmentTypesPage],
+  declarations: [AddExamSchedulePage, ModulesFilterPipe, ManageAssessmentTypesPage]
 })
 export class AddExamSchedulePageModule {}

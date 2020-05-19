@@ -11,6 +11,7 @@ import { SearchModalComponent } from 'src/app/components/search-modal/search-mod
 import { ExamScheduleAdmin } from 'src/app/interfaces/exam-schedule-admin';
 import { WsApiService } from 'src/app/services';
 import { NotifierService } from 'src/app/shared/notifier/notifier.service';
+import { ManageAssessmentTypesPage } from './manage-assessment-types/manage-assessment-types.page';
 
 @Component({
   selector: 'app-add-exam-schedule',
@@ -146,6 +147,21 @@ export class AddExamSchedulePage implements OnInit {
         this.examScheduleForm.get('module').patchValue(data.data.item);
       }
     });
+
+    return await modal.present();
+  }
+
+  async manageAssessmentTypes() {
+    const modal = await this.modalCtrl.create({
+      component: ManageAssessmentTypesPage,
+      cssClass: 'full-page-modal'
+    });
+
+    // modal.onDidDismiss().then((data) => {
+    //   if (data.data) {
+    //     this.examScheduleForm.get('module').patchValue(data.data.item);
+    //   }
+    // });
 
     return await modal.present();
   }
