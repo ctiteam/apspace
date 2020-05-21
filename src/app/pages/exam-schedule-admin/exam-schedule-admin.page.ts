@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import * as moment from 'moment';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { finalize, shareReplay, tap } from 'rxjs/operators';
 import { SearchModalComponent } from 'src/app/components/search-modal/search-modal.component';
 import { ExamScheduleAdmin, ResitExamSchedule } from 'src/app/interfaces/exam-schedule-admin';
@@ -28,6 +28,7 @@ export class ExamScheduleAdminPage implements OnInit, OnDestroy {
   examSchedules$: Observable<ExamScheduleAdmin[]>;
   pastExamSchedules$: Observable<ExamScheduleAdmin[]>;
   resitExamSchedules$: Observable<ResitExamSchedule[]>;
+  notification: Subscription;
 
   onDelete = false;
   isPast = false;
@@ -50,17 +51,17 @@ export class ExamScheduleAdminPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.notifierService.examScheduleUpdated.subscribe(data => {
+    this.doRefresh();
+
+    this.notification = this.notifierService.examScheduleUpdated.subscribe(data => {
       if (data && data === 'SUCCESS') {
         this.doRefresh();
       }
     });
-
-    this.doRefresh();
   }
 
   ngOnDestroy() {
-    this.notifierService.examScheduleUpdated.unsubscribe();
+    this.notification.unsubscribe();
   }
 
   doRefresh(refresher?) {
@@ -85,7 +86,7 @@ export class ExamScheduleAdminPage implements OnInit, OnDestroy {
   doRefreshResit(selectedIntake) {
     const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
     this.resitExamSchedules$ = this.ws.get<ResitExamSchedule[]>(
-      `/exam/resit_exam_schedule_by_intake?intake=${selectedIntake}&types=Resit`, {headers}
+      `/exam/resit_exam_schedule_by_intake?intake=${selectedIntake}&types=Resit`, { headers }
     ).pipe(
       shareReplay(1)
     );

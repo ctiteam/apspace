@@ -1,16 +1,17 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 // import { Storage } from '@ionic/storage';
 import { CalendarComponentOptions } from 'ion2-calendar';
 import * as moment from 'moment';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SearchModalComponent } from 'src/app/components/search-modal/search-modal.component';
 import { ExamScheduleAdmin } from 'src/app/interfaces/exam-schedule-admin';
 import { WsApiService } from 'src/app/services';
 import { NotifierService } from 'src/app/shared/notifier/notifier.service';
+import { ManageAssessmentTypesPage } from './manage-assessment-types/manage-assessment-types.page';
 
 @Component({
   selector: 'app-add-exam-schedule',
@@ -18,7 +19,7 @@ import { NotifierService } from 'src/app/shared/notifier/notifier.service';
   styleUrls: ['./add-exam-schedule.page.scss'],
 })
 
-export class AddExamSchedulePage implements OnInit {
+export class AddExamSchedulePage implements OnInit, OnDestroy {
   @Input() onEdit: boolean;
   @Input() examScheduleDetails?: ExamScheduleAdmin;
 
@@ -26,6 +27,7 @@ export class AddExamSchedulePage implements OnInit {
 
   // devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
   assessmentTypes$: Observable<any>;
+  notification: Subscription;
   modules = [];
 
   type = 'string'; // 'string' | 'js-date' | 'moment' | 'time' | 'object'
@@ -61,9 +63,19 @@ export class AddExamSchedulePage implements OnInit {
       })
     ).subscribe();
 
-    this.assessmentTypes$ = this.ws.get<any>('/exam/assessment_type');
+    this.refreshAssessmentTypes();
 
     this.initializeForm(this.examScheduleDetails);
+
+    this.notification = this.notifierService.assessmentTypeUpdated.subscribe(data => {
+      if (data && data === 'SUCCESS') {
+        this.refreshAssessmentTypes();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.notification.unsubscribe();
   }
 
   initializeForm(examScheduleDetails: ExamScheduleAdmin = {
@@ -108,6 +120,9 @@ export class AddExamSchedulePage implements OnInit {
     });
   }
 
+  refreshAssessmentTypes() {
+    this.assessmentTypes$ = this.ws.get<any>('/exam/assessment_type');
+  }
 
   // initializeModule() {
   //   if (!(this.onEdit)) {
@@ -146,6 +161,21 @@ export class AddExamSchedulePage implements OnInit {
         this.examScheduleForm.get('module').patchValue(data.data.item);
       }
     });
+
+    return await modal.present();
+  }
+
+  async manageAssessmentTypes() {
+    const modal = await this.modalCtrl.create({
+      component: ManageAssessmentTypesPage,
+      cssClass: 'full-page-modal'
+    });
+
+    // modal.onDidDismiss().then((data) => {
+    //   if (data.data) {
+    //     this.examScheduleForm.get('module').patchValue(data.data.item);
+    //   }
+    // });
 
     return await modal.present();
   }
