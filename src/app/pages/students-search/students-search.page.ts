@@ -93,7 +93,6 @@ export class StudentsSearchPage {
     );
 
     this.studentDetails$ = this.ws.post<BeAPUStudentDetails[]>('/student/image', {
-      url: 'https://u1cd2ltoq6.execute-api.ap-southeast-1.amazonaws.com/dev',
       body: {
         id: [student.STUDENT_NUMBER]
       }
