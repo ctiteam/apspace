@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ManageAssessmentTypesPageRoutingModule } from './manage-assessment-types-routing.module';
 
+import { ComponentsModule } from 'src/app/components/components.module';
 import { ManageAssessmentTypesPage } from './manage-assessment-types.page';
 
 @NgModule({
@@ -13,7 +14,8 @@ import { ManageAssessmentTypesPage } from './manage-assessment-types.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ManageAssessmentTypesPageRoutingModule
+    ManageAssessmentTypesPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [ManageAssessmentTypesPage]
 })
