@@ -17,6 +17,7 @@ import { ManageAssessmentTypesPage } from './manage-assessment-types.page';
     ManageAssessmentTypesPageRoutingModule,
     ComponentsModule
   ],
+  exports: [ManageAssessmentTypesPage],
   declarations: [ManageAssessmentTypesPage]
 })
 export class ManageAssessmentTypesPageModule {}

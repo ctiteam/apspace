@@ -9,6 +9,7 @@ import { AddExamSchedulePageRoutingModule } from './add-exam-schedule-routing.mo
 import { CalendarModule } from 'ion2-calendar';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { AddExamSchedulePage } from './add-exam-schedule.page';
+import { ManageAssessmentTypesPageModule } from './manage-assessment-types/manage-assessment-types.module';
 import { ManageAssessmentTypesPage } from './manage-assessment-types/manage-assessment-types.page';
 import { ModulesFilterPipe } from './modules-filter.pipe';
 
@@ -20,9 +21,10 @@ import { ModulesFilterPipe } from './modules-filter.pipe';
     AddExamSchedulePageRoutingModule,
     CalendarModule,
     ReactiveFormsModule,
-    ComponentsModule
+    ComponentsModule,
+    ManageAssessmentTypesPageModule
   ],
   entryComponents: [ManageAssessmentTypesPage],
-  declarations: [AddExamSchedulePage, ModulesFilterPipe, ManageAssessmentTypesPage]
+  declarations: [AddExamSchedulePage, ModulesFilterPipe]
 })
 export class AddExamSchedulePageModule {}
