@@ -113,6 +113,17 @@ const routes: Routes = [
       .then(m => m.GraduateVerificationServicePageModule)
   },
   {
+    path: 'exam-schedule-admin',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/exam-schedule-admin/exam-schedule-admin.module').then( m => m.ExamScheduleAdminPageModule)
+  },
+  {
+    path: 'exam-schedule-details/:examId',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./pages/exam-schedule-admin/exam-schedule-details/exam-schedule-details.module').then(m => m.ExamScheduleDetailsPageModule)
+  },
+  {
     path: 'exam-schedule',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/exam-schedule/exam-schedule.module').then(m => m.ExamSchedulePageModule)
