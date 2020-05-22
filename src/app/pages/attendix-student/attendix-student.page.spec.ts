@@ -26,7 +26,7 @@ describe('AttendixStudentPage', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
 
-    apollo = TestBed.get(ApolloTestingController);
+    apollo = TestBed.inject(ApolloTestingController);
   }));
 
   beforeEach(() => {

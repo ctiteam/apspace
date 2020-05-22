@@ -8,7 +8,6 @@ import { IonicModule } from '@ionic/angular';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { SharedPipesModule } from 'src/app/shared/shared-pipes.module';
 import { DingdongPreferencesPageModule } from '../settings/dingdong-preferences/dingdong-preferences.module';
-import { DingdongPreferencesPage } from '../settings/dingdong-preferences/dingdong-preferences.page';
 import { NotificationCategoryPipe } from './notification-category.pipe';
 import { NotificationsPage } from './notifications.page';
 import { UnreadMessagesOnlyPipe } from './unread-messages-only.pipe';
@@ -21,7 +20,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  entryComponents: [DingdongPreferencesPage],
   imports: [
     CommonModule,
     ComponentsModule,

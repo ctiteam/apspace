@@ -36,6 +36,5 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [ClassesPage, ClassesNewPage, ClasscodesFilterPipe, ConfirmClassCodeModalPage, AttendanceIntegrityModalPage],
-  entryComponents: [ConfirmClassCodeModalPage, AttendanceIntegrityModalPage]
 })
 export class ClassesPageModule {}

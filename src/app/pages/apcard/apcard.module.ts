@@ -25,6 +25,5 @@ const routes: Routes = [
     FormsModule
   ],
   declarations: [ApcardPage, PrintTransactionsModalPage],
-  entryComponents: [PrintTransactionsModalPage]
 })
 export class ApcardPageModule { }

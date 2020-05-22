@@ -15,7 +15,7 @@ describe('UserSettingsService', () => {
   });
 
   it('should be created', () => {
-    const service: UserSettingsService = TestBed.get(UserSettingsService);
+    const service: UserSettingsService = TestBed.inject(UserSettingsService);
     expect(service).toBeTruthy();
   });
 });

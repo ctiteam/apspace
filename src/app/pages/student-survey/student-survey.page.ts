@@ -339,7 +339,12 @@ export class StudentSurveyPage implements OnInit {
         duration: 7000,
         color,
         position: 'top',
-        showCloseButton: true,
+        buttons: [
+          {
+            text: 'Close',
+            role: 'cancel'
+          }
+        ],
       });
     toast.present();
   }

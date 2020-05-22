@@ -44,7 +44,7 @@ describe('MarkAttendancePage', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
 
-    apollo = TestBed.get(ApolloTestingController);
+    apollo = TestBed.inject(ApolloTestingController);
   }));
 
   afterEach(() => {

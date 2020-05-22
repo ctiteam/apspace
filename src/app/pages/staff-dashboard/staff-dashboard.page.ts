@@ -19,7 +19,7 @@ import { NotificationModalPage } from '../notifications/notification-modal';
 export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   // USER SETTINGS
-  @ViewChild('slides', { static: false }) slides: IonSlides;
+  @ViewChild('slides') slides: IonSlides;
   @ViewChild('dragulaContainer', { static: true }) container: ElementRef; // access the dragula container
   @ViewChild('dashboardSectionsSelectBox', { static: true }) dashboardSectionsselectBoxRef: IonSelect; // hidden selectbox
   dashboardSectionsSelectBoxModel; // select box dashboard sections value

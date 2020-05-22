@@ -5,10 +5,10 @@
     </ion-buttons>
     <ion-title>Lecturer Timetable</ion-title>
     <ion-buttons slot="end">
-      <ion-button fill="outline" size="small" [routerLink]="['/attendix/classes']" class="colored-text colored-border">
+      <ion-button fill="outline" [routerLink]="['/attendix/classes']" class="colored-text colored-border">
         Mark Attendance
       </ion-button>
-      <ion-button fill="icon" size="small" (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
+      <ion-button fill="icon" (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
         <ng-template [ngIf]="show2ndToolbar" [ngIfElse]="collapse">
           <ion-icon md="ios-arrow-up" name="arrow-up"></ion-icon>
         </ng-template>
@@ -21,13 +21,13 @@
 
   <ion-toolbar *ngIf="show2ndToolbar">
     <ion-buttons slot="start">
-      <ion-button size="small" fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
+      <ion-button fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
         class="colored-text colored-border">
         {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="rotateView()" size="small" fill="outline" [class.colored-text]="viewWeek"
+      <ion-button (click)="rotateView()" fill="outline" [class.colored-text]="viewWeek"
         [class.colored-border]="viewWeek">
         <ion-label>Weekly</ion-label>
         <ion-toggle [checked]="viewWeek" style="padding-left: 0; padding-right: 0;"></ion-toggle>

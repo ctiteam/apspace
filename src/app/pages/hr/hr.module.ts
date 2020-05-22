@@ -30,6 +30,5 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [HrPage, SortByDatePipe, PrintPayslipModalPage, GetDatePipe, GenerateMonthImgPipe],
-  entryComponents: [PrintPayslipModalPage]
 })
 export class HrPageModule { }

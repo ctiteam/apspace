@@ -194,7 +194,12 @@ export class ResultsPage {
       duration,
       color: 'medium',
       position: 'top',
-      showCloseButton: true
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ],
     });
 
     toast.present();

@@ -95,9 +95,14 @@ export class ChangePasswordPage implements OnInit {
     const toast = await this.toastCtrl.create({
       message: msg,
       color,
-      showCloseButton: true,
       duration: 9000,
-      position: 'top'
+      position: 'top',
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ],
     });
 
     toast.present();

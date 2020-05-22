@@ -172,7 +172,12 @@ export class ShakespearModalPage implements OnInit {
         position: 'top',
         color: 'success',
         duration: 5000,
-        showCloseButton: true,
+        buttons: [
+          {
+            text: 'Close',
+            role: 'cancel'
+          }
+        ],
       }).then(toast => toast.present());
     }, err => {
       this.toastCtrl.create({
@@ -180,7 +185,12 @@ export class ShakespearModalPage implements OnInit {
         cssClass: 'danger',
         position: 'top',
         duration: 5000,
-        showCloseButton: true,
+        buttons: [
+          {
+            text: 'Close',
+            role: 'cancel'
+          }
+        ],
       }).then(toast => toast.present());
       // finally not invoked as error does not complete
       this.dismissLoading();

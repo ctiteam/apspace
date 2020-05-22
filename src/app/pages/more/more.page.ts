@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import * as Fuse from 'fuse.js';
+import Fuse from 'fuse.js';
 import { Observable } from 'rxjs';
 
 import { Role } from '../../interfaces';
@@ -19,7 +19,7 @@ export class MorePage implements OnInit {
   editMode = false;
   term = '';
 
-  options: Fuse.FuseOptions<MenuItem> = {
+  options: Fuse.IFuseOptions<MenuItem> = {
     keys: ['title', 'tags']
   };
 
@@ -862,8 +862,13 @@ export class MorePage implements OnInit {
       message: msg,
       color: 'danger',
       duration: 6000,
-      showCloseButton: true,
-      position: 'top'
+      position: 'top',
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ],
     });
     toast.present();
   }

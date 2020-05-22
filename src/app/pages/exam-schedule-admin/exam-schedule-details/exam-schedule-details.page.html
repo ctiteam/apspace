@@ -138,13 +138,13 @@
                       {{intake.VENUE}}
                     </ion-col>
                     <ion-col size="12" size-sm="" class="ion-no-padding">
-                      <ion-icon class="display-on-sm" name="paper"></ion-icon>
+                      <ion-icon class="display-on-sm" name="newspaper"></ion-icon>
                       {{intake.DOCKETSDUE | date: 'dd-MMM-yyyy'}}
                     </ion-col>
                     <ion-col size="12" size-sm="" class="ion-no-padding">
                       <div class="flex-col-item">
                         <div>
-                          <ion-icon class="display-on-sm" name="pie"></ion-icon>
+                          <ion-icon class="display-on-sm" name="pie-chart"></ion-icon>
                           {{intake.RESULT_DATE | date: 'dd-MMM-yyyy'}}
                         </div>
                         <ion-checkbox (ngModelChange)="addSelectedIntake(intake)" [(ngModel)]="intake.isChecked" class="ion-no-margin" *ngIf="onDelete"></ion-checkbox>

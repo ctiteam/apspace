@@ -7,11 +7,11 @@
       Timetable
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="intakeSelectable" fill="outline" size="small" (click)="presentIntakeSearch()"
+      <ion-button *ngIf="intakeSelectable" fill="outline" (click)="presentIntakeSearch()"
         class="colored-text colored-border">
         {{ intake || 'Intakes' }}
       </ion-button>
-      <ion-button fill="icon" size="small" (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
+      <ion-button fill="icon" (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
         <ion-icon *ngIf="!show2ndToolbar" md="ios-arrow-down" name="arrow-down"></ion-icon>
         <ion-icon *ngIf="show2ndToolbar" md="ios-arrow-up" name="arrow-up"></ion-icon>
       </ion-button>
@@ -20,13 +20,13 @@
 
   <ion-toolbar *ngIf="show2ndToolbar">
     <ion-buttons slot="start">
-      <ion-button size="small" fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
+      <ion-button fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
         class="colored-text colored-border">
         {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-item lines="none" (click)="rotateView()" size="small" fill="outline" [class.colored-text]="viewWeek"
+      <ion-item lines="none" (click)="rotateView()" fill="outline" [class.colored-text]="viewWeek"
         [class.colored-border]="viewWeek">
         <ion-label style="margin-right: 5px;">Weekly</ion-label>
         <ion-toggle style="padding-left: 0; padding-right: 0;" [checked]="viewWeek"></ion-toggle>
@@ -160,7 +160,7 @@
                             <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]"
                               class="md-text-center">
                               <span class="marker main-text-color">
-                                <ion-icon name="contact"></ion-icon>
+                                <ion-icon name="person-circle"></ion-icon>
                               </span>
                               <span class="colored-text">
                                 {{ timetable.NAME }}
@@ -190,7 +190,7 @@
                           <ion-col size="12" size-sm="4" class="ion-no-padding" *ngIf="timetable.NAME">
                             <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]">
                               <span class="marker main-text-color">
-                                <ion-icon name="contact"></ion-icon>
+                                <ion-icon name="person-circle"></ion-icon>
                               </span>
                               <span class="colored-text">
                                 {{ timetable.NAME }}

@@ -25,6 +25,5 @@ const routes: Routes = [
     ComponentsModule,
   ],
   declarations: [MyAppointmentsPage, SlotDetailsModalPage],
-  entryComponents: [SlotDetailsModalPage]
 })
 export class MyAppointmentsPageModule {}

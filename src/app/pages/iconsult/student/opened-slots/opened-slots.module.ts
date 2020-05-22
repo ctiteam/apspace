@@ -29,6 +29,5 @@ const routes: Routes = [
     RouterModule.forChild(routes),
   ],
   declarations: [OpenedSlotsPage, BookSlotModalPage, CalendarFilterModalPage, FilterSlotsByDayPipe],
-  entryComponents: [BookSlotModalPage, CalendarFilterModalPage],
 })
 export class OpenedSlotsPageModule {}

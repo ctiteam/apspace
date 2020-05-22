@@ -34,14 +34,12 @@ import { Screenshot } from '@ionic-native/screenshot/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
 import { GraphQLModule } from './graphql.module';
 import { ShakespearModalPageModule } from './pages/feedback/shakespear-modal/shakespear-modal.module';
-import { ShakespearModalPage } from './pages/feedback/shakespear-modal/shakespear-modal.page';
 import { NewsModalPageModule } from './pages/news/news-modal.module';
 import { NotificationModalModule } from './pages/notifications/notification-modal.module';
 
 @NgModule({
   // notificationPageModal is needed here because it is called in app.component.ts, NewsModal is called in dashboards also
   declarations: [AppComponent],
-  entryComponents: [ShakespearModalPage],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

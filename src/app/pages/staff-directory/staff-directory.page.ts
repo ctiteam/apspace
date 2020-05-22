@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, finalize, map } from 'rxjs/operators';
 
-import * as Fuse from 'fuse.js';
+import Fuse from 'fuse.js';
 
 import { StaffDirectory } from '../../interfaces';
 import { WsApiService } from '../../services';
@@ -20,7 +20,7 @@ export class StaffDirectoryPage {
   staff$: Observable<StaffDirectory[]>;
   staffType$: Observable<string[]>;
   skeletons = new Array(6);
-  options: Fuse.FuseOptions<StaffDirectory> = {
+  options: Fuse.IFuseOptions<StaffDirectory> = {
     keys: [
       {name: 'FULLNAME', weight: 0.2},
       {name: 'CODE', weight: 0.1},

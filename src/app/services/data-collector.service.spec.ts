@@ -19,7 +19,7 @@ describe('DataCollectorService', () => {
   });
 
   it('should be created', () => {
-    const service: DataCollectorService = TestBed.get(DataCollectorService);
+    const service: DataCollectorService = TestBed.inject(DataCollectorService);
     expect(service).toBeTruthy();
   });
 });

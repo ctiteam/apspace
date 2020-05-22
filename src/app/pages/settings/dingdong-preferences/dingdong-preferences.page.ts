@@ -39,8 +39,13 @@ export class DingdongPreferencesPage {
       message: msg,
       position: 'top',
       color: success ? 'success' : 'danger',
-      showCloseButton: true,
-      duration: 3000
+      duration: 3000,
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ],
     }).then((toast) => toast.present());
   }
 

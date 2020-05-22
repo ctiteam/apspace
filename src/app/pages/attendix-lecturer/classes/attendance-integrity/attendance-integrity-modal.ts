@@ -92,7 +92,12 @@ export class AttendanceIntegrityModalPage implements OnInit {
                   duration: 3000,
                   position: 'top',
                   color: 'success',
-                  showCloseButton: true,
+                  buttons: [
+                    {
+                      text: 'Close',
+                      role: 'cancel'
+                    }
+                  ],
                 }).then(toast => toast.present());
               } else {
                 this.toastCtrl.create({
@@ -101,7 +106,12 @@ export class AttendanceIntegrityModalPage implements OnInit {
                   duration: 15000,
                   position: 'top',
                   color: 'danger',
-                  showCloseButton: true,
+                  buttons: [
+                    {
+                      text: 'Close',
+                      role: 'cancel'
+                    }
+                  ],
                 }).then(toast => toast.present());
               }
               this.dismissLoading();

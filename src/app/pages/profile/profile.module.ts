@@ -23,6 +23,5 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   declarations: [ProfilePage, RequestChangeModalPage],
-  entryComponents: [RequestChangeModalPage]
 })
 export class ProfilePageModule {}

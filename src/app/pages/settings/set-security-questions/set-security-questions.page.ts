@@ -82,10 +82,15 @@ export class SetSecurityQuestionsPage implements OnInit {
     this.toastCtrl.create({
       message,
       duration: 6000,
-      showCloseButton: true,
       position: 'top',
       animated: true,
       color: colorToShow,
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ],
       // enterAnimation: toastMessageEnterAnimation,
       // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());

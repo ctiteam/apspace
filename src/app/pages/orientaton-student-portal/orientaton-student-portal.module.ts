@@ -17,6 +17,5 @@ import { ViewStudentProfileModalPage } from './view-student-profile/view-student
     OrientatonStudentPortalPageRoutingModule
   ],
   declarations: [OrientatonStudentPortalPage, ViewStudentProfileModalPage],
-  entryComponents: [ViewStudentProfileModalPage]
 })
 export class OrientatonStudentPortalPageModule {}

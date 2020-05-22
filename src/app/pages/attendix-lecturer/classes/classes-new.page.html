@@ -43,7 +43,7 @@
                             <span *ngIf="!classcode" class="text placeholder">Click to Select</span>
                             <span *ngIf="classcode" class="text value">{{classcode}}</span>
                             <span class="icon">
-                              <ion-icon name="md-arrow-dropdown"></ion-icon>
+                              <ion-icon name="caret-down"></ion-icon>
                             </span>
                           </div>
                         </ion-item>
@@ -172,7 +172,7 @@
                 <ion-card-content class="ion-no-padding">
                   <ion-list class="ion-no-padding">
                     <ion-item lines="full" color="danger" tappable (click)="checkIntegrity()">
-                      <ion-icon slot="end" name="done-all"></ion-icon>
+                      <ion-icon slot="end" name="checkmark-done"></ion-icon>
                       <ion-label>
                         <ion-text class="text-bold">
                           Check Attendance Integrity

@@ -5,7 +5,7 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="generateMonthlyTransactionsPdf()" fill="clear" class="colored-border colored-text">
+      <ion-button (click)="generateMonthlyTransactionsPdf()" class="colored-border colored-text">
         <ion-icon name="print" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -70,7 +70,7 @@
                 <ion-avatar slot="start">
                   <ion-icon class="transaction-icon" name="remove-circle-outline" *ngIf="transaction.SpendVal < 0">
                   </ion-icon>
-                  <ion-icon class="transaction-icon" name="add-circle-outline" *ngIf="0 < transaction.SpendVal">
+                  <ion-icon class="transaction-icon" name="circled-outline" *ngIf="0 < transaction.SpendVal">
                   </ion-icon>
                 </ion-avatar>
                 <ion-label>

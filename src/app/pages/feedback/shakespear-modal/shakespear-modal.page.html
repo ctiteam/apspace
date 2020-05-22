@@ -4,12 +4,12 @@
       <h4 class="main-text-color">Report a Problem</h4>
       <h6 class="secondary-txt-color">Your feedback helps us to improve APSpace</h6>
     </div>
-    
+
     <app-message-with-svg
       messageTitle=""
-      messageContent="" 
+      messageContent=""
       imageUrl="assets/img/feedback.svg"
-      wrapperOffset="3" 
+      wrapperOffset="3"
       wrapperSize="6"
     >
     </app-message-with-svg>
@@ -39,7 +39,7 @@
             [disabled]="!message || (!phoneNumberValid && contactNo !== '')">
             Submit
           </ion-button>
-        </div> 
+        </div>
       -->
     </div>
   </div>
@@ -57,7 +57,7 @@
 
             <ion-col size="4">
               <ion-button [color]="showImage ? 'danger' : 'primary'" fill="clear" expand="block" (click)="toggleImage()">
-                <ion-icon slot="icon-only" [name]="showImage ? 'arrow-dropdown' : 'arrow-dropup'"></ion-icon>
+                <ion-icon slot="icon-only" [name]="showImage ? 'caret-down' : 'caret-up'"></ion-icon>
               </ion-button>
             </ion-col>
           </ion-row>
@@ -72,7 +72,7 @@
             </ion-button>
             <ion-img [src]="'assets/img/shakespear_placeholder.jpg'"></ion-img>
           </ion-slide>
-          
+
           <ion-slide *ngFor="let img of images">
             <ion-button [color]="'danger'" size="small" (click)="removeImage(img)" class="overlayBtn">
               <ion-icon button [name]="'trash'"></ion-icon>
@@ -94,7 +94,7 @@
     <ion-icon name="checkmark" size="large"></ion-icon>
   </ion-fab-button>
 </ion-fab>
-<!-- 
+<!--
 
 To be added in the future (Categories)
 - Will confirm with Reza

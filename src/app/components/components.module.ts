@@ -36,8 +36,5 @@ import { StaysafeComponent } from './staysafe/staysafe.component';
     MessageWithSvgComponent,
     StaysafeComponent
   ],
-  entryComponents: [
-    SearchModalComponent,
-  ]
 })
 export class ComponentsModule { }

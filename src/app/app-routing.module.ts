@@ -263,7 +263,7 @@ const routes: Routes = [
     path: 'mentorship',
     canActivate: [AuthGuard],
     data: { role: Role.Admin | Role.Lecturer },
-    loadChildren: './pages/mentorship/mentorship.module#MentorshipPageModule'
+    loadChildren: () => import('./pages/mentorship/mentorship.module').then(m => m.MentorshipPageModule)
   },
   {
     path: 'students-results',

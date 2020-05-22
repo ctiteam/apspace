@@ -97,8 +97,13 @@ export class ManageAssessmentTypesPage implements OnInit {
         duration: 5000,
         position: 'top',
         color,
-        showCloseButton: true,
-        animated: true
+        animated: true,
+        buttons: [
+          {
+            text: 'Close',
+            role: 'cancel'
+          }
+        ],
       })
       .then(toast => toast.present());
   }

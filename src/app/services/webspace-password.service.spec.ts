@@ -6,7 +6,7 @@ describe('WebspacePasswordService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: WebspacePasswordService = TestBed.get(WebspacePasswordService);
+    const service: WebspacePasswordService = TestBed.inject(WebspacePasswordService);
     expect(service).toBeTruthy();
   });
 });

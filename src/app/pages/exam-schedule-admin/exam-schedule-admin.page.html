@@ -9,7 +9,7 @@
         fill="outline">
         <ion-icon [name]="onDelete? 'close' : 'checkbox'"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="selectedExamScheduleOption === 'Resits'" fill="outline" size="small" (click)="presentIntakeSearch()" class="colored-text colored-border">
+      <ion-button *ngIf="selectedExamScheduleOption === 'Resits'" fill="outline" (click)="presentIntakeSearch()" class="colored-text colored-border">
         {{ selectedIntakeForResit || 'Intakes' }}
       </ion-button>
     </ion-buttons>
@@ -29,9 +29,9 @@
               <ion-row class="ion-no-padding">
                 <ion-col class="ion-no-padding">
                   <ion-segment (ionChange)="segmentChanged($event)" mode="md" class="align-segment">
-                    <ion-segment-button 
+                    <ion-segment-button
                       checked
-                      mode="md" 
+                      mode="md"
                       *ngFor="let examScheduleListOption of examScheduleListOptions"
                       [value]="examScheduleListOption">
                       {{ examScheduleListOption }}
@@ -48,7 +48,7 @@
                 </ion-col>
               </ion-row>
             </ion-grid>
-        
+
             <div *ngIf="selectedExamScheduleOption === 'Exam Schedule'">
               <ion-item class="table-header">
                 <ion-grid>
@@ -74,7 +74,7 @@
                   </ion-row>
                 </ion-grid>
               </ion-item>
-  
+
               <div *ngIf="!isPast; else pastList">
                 <div *ngIf="examSchedules$ | async as examSchedules; else loading;">
                   <div *ngIf="examSchedules.length > 0; else noExamSchedule">
@@ -84,7 +84,7 @@
                       (click)="!onDelete && viewExamScheduleDetails(examSchedule.EXAMID)"
                       [style.border-left-color]="(examSchedule.MODULE_CODE | strToColor)"
                       [ngClass]="{'clickable-item' : !onDelete}"
-                      class="table-item" 
+                      class="table-item"
                       *ngFor="let examSchedule of examSchedules">
                       <ion-grid>
                         <ion-row>
@@ -133,7 +133,7 @@
                         (click)="!onDelete && viewExamScheduleDetails(pastExamSchedule.EXAMID)"
                         [style.border-left-color]="(pastExamSchedule.MODULE_CODE | strToColor)"
                         [ngClass]="{'clickable-item' : !onDelete}"
-                        class="table-item" 
+                        class="table-item"
                         *virtualItem="let pastExamSchedule">
                         <ion-grid>
                           <ion-row>
@@ -168,7 +168,7 @@
                   </div>
                 </div>
               </ng-template>
-              
+
               <ng-template #noExamSchedule>
                 <app-message-with-svg imageUrl="assets/img/empty.svg"
                   messageTitle="Opps! You have empty list."
@@ -201,9 +201,9 @@
                       </ion-row>
                     </ion-grid>
                   </ion-item>
-      
+
                   <ion-item
-                    class="table-item view-item" 
+                    class="table-item view-item"
                     *ngFor="let resit of resits">
                     <ion-grid>
                       <ion-row>

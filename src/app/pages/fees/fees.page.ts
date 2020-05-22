@@ -52,7 +52,7 @@ export class FeesPage {
   visibleLabels: string[];  // Used by filter pipe to determine card items to be displayed
 
   @ViewChild('content', { static: true }) content: IonContent;
-  @ViewChild('financialsChartComponent', { static: false })
+  @ViewChild('financialsChartComponent')
   financialsChartComponent: ChartComponent;
   financial$: Observable<FeesTotalSummary>;
   financialsChart: {

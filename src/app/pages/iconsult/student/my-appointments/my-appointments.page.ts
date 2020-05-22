@@ -126,8 +126,13 @@ export class MyAppointmentsPage {
       duration: 6000,
       position: 'top',
       color,
-      showCloseButton: true,
       animated: true,
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ],
       // enterAnimation: toastMessageEnterAnimation,
       // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());

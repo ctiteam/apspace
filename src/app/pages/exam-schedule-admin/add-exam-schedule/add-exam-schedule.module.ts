@@ -10,7 +10,6 @@ import { CalendarModule } from 'ion2-calendar';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { AddExamSchedulePage } from './add-exam-schedule.page';
 import { ManageAssessmentTypesPageModule } from './manage-assessment-types/manage-assessment-types.module';
-import { ManageAssessmentTypesPage } from './manage-assessment-types/manage-assessment-types.page';
 import { ModulesFilterPipe } from './modules-filter.pipe';
 
 @NgModule({
@@ -24,7 +23,6 @@ import { ModulesFilterPipe } from './modules-filter.pipe';
     ComponentsModule,
     ManageAssessmentTypesPageModule
   ],
-  entryComponents: [ManageAssessmentTypesPage],
   declarations: [AddExamSchedulePage, ModulesFilterPipe]
 })
 export class AddExamSchedulePageModule {}

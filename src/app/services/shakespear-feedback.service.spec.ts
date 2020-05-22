@@ -6,7 +6,7 @@ describe('ShakespearFeedbackService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: ShakespearFeedbackService = TestBed.get(ShakespearFeedbackService);
+    const service: ShakespearFeedbackService = TestBed.inject(ShakespearFeedbackService);
     expect(service).toBeTruthy();
   });
 });

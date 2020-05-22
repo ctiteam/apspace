@@ -29,6 +29,5 @@ const routes: Routes = [
   declarations: [
     ExamSchedulePage
   ],
-  entryComponents: []
 })
 export class ExamSchedulePageModule {}

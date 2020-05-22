@@ -17,7 +17,7 @@ describe('SettingsService', () => {
 
   it('should be created', () => {
     storageSpy.get.and.returnValue(Promise.resolve(null));
-    const service: SettingsService = TestBed.get(SettingsService);
+    const service: SettingsService = TestBed.inject(SettingsService);
     expect(service).toBeTruthy();
     expect(storageSpy.get).toHaveBeenCalledTimes(1);
   });

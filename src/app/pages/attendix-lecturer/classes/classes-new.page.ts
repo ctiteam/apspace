@@ -352,7 +352,12 @@ export class ClassesNewPage implements OnInit {
           duration: 10000,
           position: 'top',
           color: 'danger',
-          showCloseButton: true,
+          buttons: [
+            {
+              text: 'Close',
+              role: 'cancel'
+            }
+          ],
         }).then(toast => toast.present());
 
         return;
@@ -428,7 +433,12 @@ export class ClassesNewPage implements OnInit {
                   duration: 3000,
                   position: 'top',
                   color: 'success',
-                  showCloseButton: true,
+                  buttons: [
+                    {
+                      text: 'Close',
+                      role: 'cancel'
+                    }
+                  ],
                 }).then(toast => toast.present());
                 this.getClasscodes();
               },
@@ -438,7 +448,12 @@ export class ClassesNewPage implements OnInit {
                   duration: 3000,
                   position: 'top',
                   color: 'danger',
-                  showCloseButton: true,
+                  buttons: [
+                    {
+                      text: 'Close',
+                      role: 'cancel'
+                    }
+                  ],
                 }).then(toast => toast.present());
                 console.error(e);
               }

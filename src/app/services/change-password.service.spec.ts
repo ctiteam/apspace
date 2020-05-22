@@ -13,7 +13,7 @@ describe('ChangePasswordService', () => {
   });
 
   it('should be created', () => {
-    const service: ChangePasswordService = TestBed.get(ChangePasswordService);
+    const service: ChangePasswordService = TestBed.inject(ChangePasswordService);
     expect(service).toBeTruthy();
   });
 });

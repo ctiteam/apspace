@@ -42,6 +42,5 @@ const routes: Routes = [
     RouterLinkDirectiveStub,
     StrToColorPipe  // TODO: remove this if possible temporary fix
   ],
-  entryComponents: []
 })
 export class StudentTimetablePageModule { }

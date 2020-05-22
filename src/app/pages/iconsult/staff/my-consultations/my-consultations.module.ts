@@ -40,7 +40,6 @@ const routes: Routes = [
     LecturerSlotDetailsModalPage,
     UnavailabilityDetailsModalPage
   ],
-  entryComponents: [ConsultationsSummaryModalPage, LecturerSlotDetailsModalPage, UnavailabilityDetailsModalPage],
 
 })
 export class MyConsultationsPageModule {}

@@ -37,6 +37,5 @@ const routes: Routes = [
     SectionNamePipe
   ],
   providers: [DragulaService],
-  entryComponents: []
 })
 export class StudentDashboardPageModule { }

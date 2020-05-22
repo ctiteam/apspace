@@ -93,8 +93,13 @@ export class VisaStatusPage implements OnInit {
         duration: 5000,
         position: 'top',
         color: 'danger',
-        showCloseButton: true,
-        animated: true
+        animated: true,
+        buttons: [
+          {
+            text: 'Close',
+            role: 'cancel'
+          }
+        ],
       }).then(toast => {
         toast.present();
       });

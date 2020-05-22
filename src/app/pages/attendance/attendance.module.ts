@@ -5,8 +5,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { RoundProgressModule } from 'angular-svg-round-progressbar';
-
 import { CalendarModule } from 'ion2-calendar';
 
 import { ComponentsModule } from 'src/app/components/components.module';
@@ -26,13 +24,11 @@ const routes: Routes = [
     CommonModule,
     IonicModule,
     RouterModule.forChild(routes),
-    RoundProgressModule,
     ComponentsModule,
     SharedPipesModule,
     FormsModule,
     CalendarModule
   ],
   declarations: [AttendancePage, AttendanceDetailsModalPage],
-  entryComponents: [AttendanceDetailsModalPage]
 })
 export class AttendancePageModule { }

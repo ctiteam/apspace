@@ -17,7 +17,7 @@ import { SettingsService } from '../../services';
 export class AttendixStudentPage implements OnInit, OnDestroy {
 
   digits = new Array(3);
-  @ViewChild('otpInput', { static: false }) otpInput: ElementRef<HTMLInputElement>;
+  @ViewChild('otpInput') otpInput: ElementRef<HTMLInputElement>;
 
   isCordova: boolean;
   scan = false;
@@ -162,7 +162,12 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
       duration: 9000,
       position: 'top',
       color,
-      showCloseButton: true
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ],
     }).then(toast => toast.present());
   }
 

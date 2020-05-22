@@ -12,7 +12,6 @@ import { NewsModalPage } from './news-modal';
   ],
   declarations: [NewsModalPage],
   exports: [],
-  entryComponents: [NewsModalPage]
 })
 
 export class NewsModalPageModule {}

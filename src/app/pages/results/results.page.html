@@ -7,7 +7,7 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons *ngIf="block" slot="end">
-      <ion-button fill="outline" size="small" class="colored-text notification-button colored-border"
+      <ion-button fill="outline" class="colored-text notification-button colored-border"
         (click)="showActionSheet()">
         {{ selectedIntake }}
       </ion-button>
@@ -58,7 +58,7 @@
                 <ion-button class="ion-margin-top success-background" expand="block" size="large"
                   [routerLink]="['/student-survey']">
                   Survey
-                  <ion-icon slot="end" name="paper"></ion-icon>
+                  <ion-icon slot="end" name="newspaper"></ion-icon>
                 </ion-button>
 
                 <ion-button class="ion-margin-top danger-background" expand="block" size="large"
@@ -294,7 +294,7 @@
           <ion-button class="ion-margin-top success-background" expand="block" size="large"
             [routerLink]="['/student-survey']">
             Survey
-            <ion-icon slot="end" name="paper"></ion-icon>
+            <ion-icon slot="end" name="newspaper"></ion-icon>
           </ion-button>
         </ion-col>
         <ion-col size-xs="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3">

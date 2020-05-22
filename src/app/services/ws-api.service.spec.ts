@@ -37,7 +37,7 @@ describe('WsApiService', () => {
         { provide: ToastController, useValue: toastCtrlStub },
       ]
     });
-    service = TestBed.get(WsApiService);
+    service = TestBed.inject(WsApiService);
   });
 
   it('should be created', () => {
