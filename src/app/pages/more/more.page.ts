@@ -299,6 +299,14 @@ export class MorePage implements OnInit {
       tags: ['message', 'sms', 'email', 'push', 'notification', 'announce']
     },
     {
+      title: 'Exam Schedule (Admin)',
+      group: 'Academic Operation',
+      url: 'exam-schedule-admin',
+      img: 'assets/img/exam-schedule-admin.png',
+      role: Role.Admin,
+      tags: []
+    },
+    {
       title: 'Exam Paper Scheduling',
       group: 'Academic Operation',
       url: 'https://examscheduling.apu.edu.my/epaperschedule/login_page.asp', // no ticket

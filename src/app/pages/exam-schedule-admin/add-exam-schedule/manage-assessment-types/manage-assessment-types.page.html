@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar mode="md">
+    <ion-buttons slot="start">
+      <ion-button class="colored-text" (click)="closeModal()">
+        CLOSE
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Manage Assessment Types</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col class="ion-no-padding ion-align-self-center" size-xs="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3">
+        <div *ngIf="assessmentTypes$ | async as assessmentTypes; else loading">
+          <ion-card *ngIf="assessmentTypes.length > 0; else noAssessmentTypes">
+            <ion-card-content class="ion-no-padding">
+              <ion-item>
+                <ion-input [(ngModel)]="assessmentType" placeholder="Type new assessment type here"></ion-input>
+                <ion-button [disabled]="!assessmentType" (click)="addAssessmentType(assessmentTypes)">ADD</ion-button>
+              </ion-item>
+  
+              <ion-item *ngFor="let assessmentType of assessmentTypes" lines="none">
+                <ion-label>
+                  {{assessmentType.ASSESSMENT_TYPE}}
+                </ion-label>
+                <ion-buttons slot="end">
+                  <ion-button (click)="deleteAssessmentType(assessmentType.ASSESSMENT_TYPE)">
+                    <ion-icon color="danger" slot="icon-only" name="trash"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <ng-template #noAssessmentTypes>
+          <app-message-with-svg imageUrl="assets/img/empty.svg"
+            messageTitle="Opps! You have empty list."
+            wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+          </app-message-with-svg>
+        </ng-template>
+
+        <ng-template #loading>
+          <div class="ion-padding">
+            <loading-spinner message="Loading..." size="50px"></loading-spinner>
+          </div>
+        </ng-template>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
