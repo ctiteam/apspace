@@ -150,6 +150,7 @@ export class AddExamSchedulePage implements OnInit, OnDestroy {
   async presentModuleSearch() {
     const modal = await this.modalCtrl.create({
       component: SearchModalComponent,
+      cssClass: 'full-page-modal',
       componentProps: {
         items: this.modules,
         notFound: 'No modules selected'

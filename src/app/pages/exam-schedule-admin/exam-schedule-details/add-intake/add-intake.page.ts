@@ -95,6 +95,7 @@ export class AddIntakePage implements OnInit {
   async presentIntakeSearch() {
     const modal = await this.modalCtrl.create({
       component: SearchModalComponent,
+      cssClass: 'full-page-modal',
       componentProps: {
         items: this.intakes,
         notFound: 'No intake selected'
