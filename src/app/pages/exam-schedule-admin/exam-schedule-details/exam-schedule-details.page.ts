@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { ExamScheduleAdmin, IntakeExamSchedule } from 'src/app/interfaces/exam-schedule-admin';
 import { WsApiService } from 'src/app/services';
+import { NotifierService } from 'src/app/shared/notifier/notifier.service';
 import { AddExamSchedulePage } from '../add-exam-schedule/add-exam-schedule.page';
 import { AddIntakePage } from './add-intake/add-intake.page';
 
@@ -38,6 +39,7 @@ export class ExamScheduleDetailsPage implements OnInit {
     public loadingCtrl: LoadingController,
     private route: ActivatedRoute,
     private ws: WsApiService,
+    private notifierService: NotifierService
   ) {
     this.examId = this.route.snapshot.paramMap.get('examId');
   }
@@ -278,6 +280,7 @@ export class ExamScheduleDetailsPage implements OnInit {
             const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
             this.ws.post('/exam/update_exam_schedule_status', { url: this.devUrl, body, headers }).subscribe({
               next: () => {
+                this.notifierService.examScheduleUpdated.next('SUCCESS');
                 this.showToastMessage(
                   'Status successfully changed!',
                   'success'
