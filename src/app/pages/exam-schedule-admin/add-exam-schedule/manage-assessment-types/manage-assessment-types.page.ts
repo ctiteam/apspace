@@ -11,7 +11,7 @@ import { NotifierService } from 'src/app/shared/notifier/notifier.service';
   styleUrls: ['./manage-assessment-types.page.scss'],
 })
 export class ManageAssessmentTypesPage implements OnInit {
-  devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
+  // devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
   loading: HTMLIonLoadingElement;
 
   assessmentType: string;
@@ -30,7 +30,7 @@ export class ManageAssessmentTypesPage implements OnInit {
   }
 
   doRefresh() {
-    this.assessmentTypes$ = this.ws.get<any>('/exam/assessment_type', {url: this.devUrl});
+    this.assessmentTypes$ = this.ws.get<any>('/exam/assessment_type');
   }
 
   addAssessmentType(assessmentTypes) {
@@ -53,7 +53,7 @@ export class ManageAssessmentTypesPage implements OnInit {
     const bodyObject = {assessment_type: this.assessmentType};
     const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
     const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-    this.ws.post('/exam/add_assessment_type', { url: this.devUrl, body, headers }).subscribe({
+    this.ws.post('/exam/add_assessment_type', { body, headers }).subscribe({
       next: () => {
         this.notifierService.assessmentTypeUpdated.next('SUCCESS');
       },
@@ -74,7 +74,7 @@ export class ManageAssessmentTypesPage implements OnInit {
     const bodyObject = {assessment_type: assessmentType};
     const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
     const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-    this.ws.post('/exam/delete_assessment_type', { url: this.devUrl, body, headers }).subscribe({
+    this.ws.post('/exam/delete_assessment_type', { body, headers }).subscribe({
       next: () => {
         this.notifierService.assessmentTypeUpdated.next('SUCCESS');
       },
