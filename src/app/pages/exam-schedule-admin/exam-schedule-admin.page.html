@@ -28,10 +28,9 @@
             <ion-grid *ngIf="!onDelete" class="ion-no-padding grid-background">
               <ion-row class="ion-no-padding">
                 <ion-col class="ion-no-padding">
-                  <ion-segment (ionChange)="segmentChanged($event)" mode="md" class="align-segment">
+                  <ion-segment [value]="selectedExamScheduleOption" (ionChange)="segmentChanged($event)" mode="md" class="align-segment">
                     <ion-segment-button 
-                      checked
-                      mode="md" 
+                      mode="md"
                       *ngFor="let examScheduleListOption of examScheduleListOptions"
                       [value]="examScheduleListOption">
                       {{ examScheduleListOption }}

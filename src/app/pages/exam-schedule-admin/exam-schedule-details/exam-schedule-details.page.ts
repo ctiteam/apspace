@@ -17,7 +17,7 @@ import { AddIntakePage } from './add-intake/add-intake.page';
 })
 
 export class ExamScheduleDetailsPage implements OnInit {
-  // devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
+  devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
   examScheduleDetails$: Observable<any[]>;
   intakes$: Observable<IntakeExamSchedule[]>;
 
@@ -49,7 +49,7 @@ export class ExamScheduleDetailsPage implements OnInit {
   doRefresh() {
     this.intakesToBeValidated = [];
 
-    this.examScheduleDetails$ = this.ws.get<ExamScheduleAdmin>(`/exam/exam_details?exam_id=${this.examId}`).pipe(
+    this.examScheduleDetails$ = this.ws.get<ExamScheduleAdmin>(`/exam/exam_details?exam_id=${this.examId}`, {url: this.devUrl}).pipe(
       tap(examScheduleDetails => {
         this.examScheduleDetailsToBeEdited = examScheduleDetails;
         this.status = this.examScheduleDetailsToBeEdited.STATUS;
@@ -84,7 +84,7 @@ export class ExamScheduleDetailsPage implements OnInit {
       )
     );
 
-    this.intakes$ = this.ws.get<IntakeExamSchedule[]>(`/exam/intake_details?exam_id=${this.examId}`).pipe(
+    this.intakes$ = this.ws.get<IntakeExamSchedule[]>(`/exam/intake_details?exam_id=${this.examId}`, {url: this.devUrl}).pipe(
       tap(intakesDetails => intakesDetails.forEach(intakeDetails => this.intakesToBeValidated.push(intakeDetails.INTAKE)))
     );
   }
@@ -137,7 +137,7 @@ export class ExamScheduleDetailsPage implements OnInit {
               this.presentLoading();
               const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
               const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-              this.ws.post('/exam/remove_entry', { body, headers }).subscribe({
+              this.ws.post('/exam/remove_entry', { url: this.devUrl, body, headers }).subscribe({
                 next: () => {
                   this.showToastMessage(
                     'Intakes deleted successfully!',
@@ -240,16 +240,19 @@ export class ExamScheduleDetailsPage implements OnInit {
   }
 
   showToastMessage(message: string, color: 'danger' | 'success') {
-    this.toastCtrl
-      .create({
-        message,
-        duration: 5000,
-        position: 'top',
-        color,
-        showCloseButton: true,
-        animated: true
-      })
-      .then(toast => toast.present());
+    this.toastCtrl.create({
+      message,
+      duration: 7000,
+      position: 'top',
+      color,
+      animated: true,
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ]
+    }).then(toast => toast.present());
   }
 
   activateExamSchedule() {
@@ -273,7 +276,7 @@ export class ExamScheduleDetailsPage implements OnInit {
             this.presentLoading();
             const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
             const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-            this.ws.post('/exam/update_exam_schedule_status', { body, headers }).subscribe({
+            this.ws.post('/exam/update_exam_schedule_status', { url: this.devUrl, body, headers }).subscribe({
               next: () => {
                 this.showToastMessage(
                   'Status successfully changed!',
