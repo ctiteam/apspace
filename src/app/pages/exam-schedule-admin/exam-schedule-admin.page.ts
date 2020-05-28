@@ -38,7 +38,7 @@ export class ExamScheduleAdminPage implements OnInit, OnDestroy {
   examScheduleToBeDeleted: ExamScheduleAdmin[] = [];
   intakes = [];
 
-  // devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
+  devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
 
   constructor(
     public toastCtrl: ToastController,
@@ -65,17 +65,17 @@ export class ExamScheduleAdminPage implements OnInit, OnDestroy {
   }
 
   doRefresh(refresher?) {
-    this.examSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/current_exam').pipe(
+    this.examSchedules$ = this.ws.get<ExamScheduleAdmin[]>('/exam/current_exam', {url: this.devUrl}).pipe(
       shareReplay(1)
     );
 
     const lastYear = moment(new Date()).subtract(1, 'years').format('YYYY');
 
-    this.pastExamSchedules$ = this.ws.get<ExamScheduleAdmin[]>(`/exam/past_exam?year=${lastYear}`).pipe(
+    this.pastExamSchedules$ = this.ws.get<ExamScheduleAdmin[]>(`/exam/past_exam?year=${lastYear}`, {url: this.devUrl}).pipe(
       shareReplay(1)
     );
 
-    this.ws.get<any>('/exam/intake_listing').pipe(
+    this.ws.get<any>('/exam/intake_listing', {url: this.devUrl}).pipe(
       tap(intakes => {
         intakes.forEach(intake => this.intakes.push(intake.COURSE_CODE_ALIAS));
       }),
@@ -86,7 +86,7 @@ export class ExamScheduleAdminPage implements OnInit, OnDestroy {
   doRefreshResit(selectedIntake) {
     const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
     this.resitExamSchedules$ = this.ws.get<ResitExamSchedule[]>(
-      `/exam/resit_exam_schedule_by_intake?intake=${selectedIntake}&types=Resit`, { headers }
+      `/exam/resit_exam_schedule_by_intake?intake=${selectedIntake}&types=Resit`, { url: this.devUrl, headers }
     ).pipe(
       shareReplay(1)
     );
@@ -155,7 +155,7 @@ export class ExamScheduleAdminPage implements OnInit, OnDestroy {
               this.presentLoading();
               const body = new HttpParams({ fromObject: { ...bodyObject } }).toString();
               const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-              this.ws.post('/exam/delete_exam_schedule', { body, headers }).subscribe({
+              this.ws.post('/exam/delete_exam_schedule', { url: this.devUrl, body, headers }).subscribe({
                 next: () => {
                   this.showToastMessage(
                     'Exam Schedule deleted successfully!',
@@ -198,21 +198,19 @@ export class ExamScheduleAdminPage implements OnInit, OnDestroy {
   }
 
   showToastMessage(message: string, color: 'danger' | 'success') {
-    this.toastCtrl
-      .create({
-        message,
-        duration: 5000,
-        position: 'top',
-        color,
-        animated: true,
-        buttons: [
-          {
-            text: 'Close',
-            role: 'cancel'
-          }
-        ],
-      })
-      .then(toast => toast.present());
+    this.toastCtrl.create({
+      message,
+      duration: 7000,
+      position: 'top',
+      color,
+      animated: true,
+      buttons: [
+        {
+          text: 'Close',
+          role: 'cancel'
+        }
+      ]
+    }).then(toast => toast.present());
   }
 
   async presentLoading() {
