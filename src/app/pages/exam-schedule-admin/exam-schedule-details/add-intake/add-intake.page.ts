@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, PopoverController, ToastController } from '@ionic/angular';
 import * as moment from 'moment';
 import { tap } from 'rxjs/operators';
 import { SearchModalComponent } from 'src/app/components/search-modal/search-modal.component';
@@ -39,6 +39,7 @@ export class AddIntakePage implements OnInit {
 
   constructor(
     public modalCtrl: ModalController,
+    public popoverCtrl: PopoverController,
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
@@ -93,16 +94,16 @@ export class AddIntakePage implements OnInit {
   }
 
   async presentIntakeSearch() {
-    const modal = await this.modalCtrl.create({
+    const popover = await this.popoverCtrl.create({
       component: SearchModalComponent,
-      cssClass: 'full-page-modal',
       componentProps: {
         items: this.intakes,
+        isModal: false,
         notFound: 'No intake selected'
       }
     });
 
-    modal.onDidDismiss().then((data) => {
+    popover.onDidDismiss().then((data) => {
       if (data.data && data.data.item) {
         if (this.intakesToBeValidated.includes(data.data.item) || this.intakeArray.value.includes(data.data.item)) {
           this.showToastMessage(
@@ -120,7 +121,7 @@ export class AddIntakePage implements OnInit {
       }
     });
 
-    return await modal.present();
+    return await popover.present();
   }
 
   addSelectedIntakes(intakeObject: any) {

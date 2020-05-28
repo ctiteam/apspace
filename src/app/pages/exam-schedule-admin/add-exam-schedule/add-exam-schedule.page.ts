@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, PopoverController, ToastController } from '@ionic/angular';
 // import { Storage } from '@ionic/storage';
 import { CalendarComponentOptions } from 'ion2-calendar';
 import * as moment from 'moment';
@@ -41,6 +41,7 @@ export class AddExamSchedulePage implements OnInit, OnDestroy {
 
   constructor(
     public modalCtrl: ModalController,
+    public popoverCtrl: PopoverController,
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
@@ -148,22 +149,22 @@ export class AddExamSchedulePage implements OnInit, OnDestroy {
   // }
 
   async presentModuleSearch() {
-    const modal = await this.modalCtrl.create({
+    const popover = await this.popoverCtrl.create({
       component: SearchModalComponent,
-      cssClass: 'full-page-modal',
       componentProps: {
         items: this.modules,
+        isModal: false,
         notFound: 'No modules selected'
       }
     });
 
-    modal.onDidDismiss().then((data) => {
+    popover.onDidDismiss().then((data) => {
       if (data.data) {
         this.examScheduleForm.get('module').patchValue(data.data.item);
       }
     });
 
-    return await modal.present();
+    return await popover.present();
   }
 
   async manageAssessmentTypes() {
