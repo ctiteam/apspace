@@ -11,9 +11,9 @@
         class="colored-text colored-border">
         {{ intake || 'Intakes' }}
       </ion-button>
-      <ion-button fill="icon" (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
-        <ion-icon *ngIf="!show2ndToolbar" md="ios-arrow-down" name="arrow-down"></ion-icon>
-        <ion-icon *ngIf="show2ndToolbar" md="ios-arrow-up" name="arrow-up"></ion-icon>
+      <ion-button (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
+        <ion-icon *ngIf="!show2ndToolbar" name="arrow-down"></ion-icon>
+        <ion-icon *ngIf="show2ndToolbar" name="arrow-up"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>

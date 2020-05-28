@@ -54,7 +54,7 @@ export class TabsPage implements OnInit {
         {
           name: 'More',
           path: 'more',
-          icon: 'more'
+          icon: 'ellipsis-vertical'
         }
       ];
     } else if (this.settings.get('role') & Role.Lecturer) {
@@ -82,7 +82,7 @@ export class TabsPage implements OnInit {
         {
           name: 'More',
           path: 'more',
-          icon: 'more'
+          icon: 'ellipsis-vertical'
         }
       ];
     } else if (this.settings.get('role') & Role.Admin) {
@@ -105,7 +105,7 @@ export class TabsPage implements OnInit {
         {
           name: 'More',
           path: 'more',
-          icon: 'more'
+          icon: 'ellipsis-vertical'
         }
       ];
     } else {
