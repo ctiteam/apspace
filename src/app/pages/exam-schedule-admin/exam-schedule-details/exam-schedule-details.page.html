@@ -175,10 +175,11 @@
       <loading-spinner message="Loading..." size="50px"></loading-spinner>
     </div>
   </ng-template>
+
 </ion-content>
 
-<ion-footer *ngIf="status === 'Inactive'">
-  <ion-fab *ngIf="!onDelete; else fabDelete" vertical="bottom" horizontal="end" slot="fixed">
+<div *ngIf="status === 'Inactive'">
+  <ion-fab *ngIf="!onDelete; else fabDelete" horizontal="end" vertical="bottom" slot="fixed">
     <ion-fab-button (click)="addNewIntake()" class="colored-background">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
@@ -191,4 +192,4 @@
       </ion-fab-button>
     </ion-fab>
   </ng-template>
-</ion-footer>
+</div>

@@ -248,19 +248,20 @@
     </div>
   </ng-template>
 
-  <div *ngIf="selectedExamScheduleOption === 'Exam Schedule'">
-    <ion-fab *ngIf="!onDelete; else fabDelete" vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button (click)="addNewExamSchedule()" class="colored-background">
-        <ion-icon name="add"></ion-icon>
+</ion-content>
+
+<div *ngIf="selectedExamScheduleOption === 'Exam Schedule'">
+  <ion-fab *ngIf="!onDelete; else fabDelete" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addNewExamSchedule()" class="colored-background">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ng-template #fabDelete>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button [disabled]="examScheduleToBeDeleted.length < 1" (click)="deleteSelectedExamSchedule()" class="danger-background">
+        <ion-icon name="trash"></ion-icon>
       </ion-fab-button>
     </ion-fab>
-  
-    <ng-template #fabDelete>
-      <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button [disabled]="examScheduleToBeDeleted.length < 1" (click)="deleteSelectedExamSchedule()" class="danger-background">
-          <ion-icon name="trash"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
-    </ng-template>
-  </div>
-</ion-content>
+  </ng-template>
+</div>
