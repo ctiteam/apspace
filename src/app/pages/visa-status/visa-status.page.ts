@@ -103,7 +103,11 @@ export class VisaStatusPage implements OnInit {
       }).then(toast => {
         toast.present();
       });
-      refresher.target.complete();
+
+      if (refresher) {
+        refresher.target.complete();
+      }
+
       return;
     }
 
@@ -112,7 +116,6 @@ export class VisaStatusPage implements OnInit {
       auth: false,
       caching,
     }).pipe(
-      tap(r => console.log(r)),
       finalize(() => refresher && refresher.target.complete())
     );
   }
