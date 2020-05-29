@@ -8,7 +8,7 @@
       <ion-button fill="outline" [routerLink]="['/attendix/classes']" class="colored-text colored-border">
         Mark Attendance
       </ion-button>
-      <ion-button fill="icon" (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
+      <ion-button (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
         <ng-template [ngIf]="show2ndToolbar" [ngIfElse]="collapse">
           <ion-icon name="chevron-up"></ion-icon>
         </ng-template>
