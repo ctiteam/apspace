@@ -307,7 +307,7 @@ export class MorePage implements OnInit {
       tags: ['message', 'sms', 'email', 'push', 'notification', 'announce']
     },
     {
-      title: 'E-Orientaton',
+      title: 'E-Orientation',
       group: 'Academic Operation',
       url: 'orientaton-student-portal',
       attachTicket: true,
