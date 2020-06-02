@@ -43,12 +43,12 @@
           <ion-row>
             <ion-col size="12" size-sm="2">
               <span class="marker">Day: </span>
-              {{ day.start | date:'EEE, dd MMM' }}
+              {{ day.start | date:'EEE, dd MMM': "+0800" }}
             </ion-col>
 
             <ion-col size="12" size-sm="2">
               <span class="marker">Time: </span>
-              {{ day.start | date:'shortTime' }} - {{ day.end | date:'shortTime' }}
+              {{ day.start | date:'shortTime': "+0800" }} - {{ day.end | date:'shortTime': "+0800" }}
             </ion-col>
 
             <ion-col size="12" size-sm="2">

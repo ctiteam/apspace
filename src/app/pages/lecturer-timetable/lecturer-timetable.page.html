@@ -66,7 +66,7 @@
                           {{ lecturerName }} Timetable
                         </h4>
                         <h5 class="small-margin-top">
-                          Week: <span class="text-bold">{{ selectedWeek | date :'dd MMM yyy' }}</span>
+                          Week: <span class="text-bold">{{ selectedWeek | date :'dd MMM yyy': '+0800' }}</span>
                         </h5>
                       </ion-label>
                       <ion-button fill="outline" slot="end" class="print-button colored-border" (click)="sendToPrint()">
@@ -155,13 +155,13 @@
                             <span class="marker">
                               <ion-icon name="calendar"></ion-icon>
                             </span>
-                            {{ timetable.time | date:'EEE, d MMM' }}
+                            {{ timetable.time | date:'EEE, d MMM': '+0800' }}
                           </ion-col>
                           <ion-col size="12" size-sm="" class="ion-no-padding md-text-center margin-auto">
                             <span class="marker">
                               <ion-icon name="time"></ion-icon>
                             </span>
-                            {{ timetable.time | date:'shortTime' }} - {{ timetable | endtime | date:'shortTime' }}
+                            {{ timetable.time | date:'shortTime': '+0800' }} - {{ timetable | endtime | date:'shortTime': '+0800' }}
                           </ion-col>
                           <ion-col size="12" size-sm=""
                             class="flex-on-print-table-hide-on-card ion-no-padding md-text-center margin-auto">
@@ -178,7 +178,7 @@
                           </ion-col>
                           <ion-col size="12" size-sm="auto" class="margin-auto">
                             <ion-button
-                            [disabled]="(timetable.time | date : 'yyyy-MM-dd HH:mm') > (today | date : 'yyyy-MM-dd HH:mm')"
+                            [disabled]="(timetable.time | date : 'yyyy-MM-dd HH:mm': '+0800') > (today | date : 'yyyy-MM-dd HH:mm': '+0800')"
                             class="ion-float-right"
                               (click)="quickAttendnace(timetable.module, timetable.time, timetable.intakes.toString(), timetable.time, endTime)"
                               fill="outline" color="danger" size="small">
@@ -198,7 +198,7 @@
                             <span class="marker">
                               <ion-icon name="time"></ion-icon>
                             </span>
-                            {{ timetable.time | date:'shortTime' }} - {{ timetable | endtime | date:'shortTime' }}
+                            {{ timetable.time | date:'shortTime': '+0800' }} - {{ timetable | endtime | date:'shortTime': '+0800' }}
                           </ion-col>
                           <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
                             <span class="marker">
@@ -211,7 +211,7 @@
                           </ion-col>
                           <ion-col size="12" size-sm="auto" class="ion-no-padding margin-auto">
                             <ion-button
-                              [disabled]="(timetable.time | date : 'yyyy-MM-dd HH:mm') > (today | date : 'yyyy-MM-dd HH:mm')"
+                              [disabled]="(timetable.time | date : 'yyyy-MM-dd HH:mm': '+0800') > (today | date : 'yyyy-MM-dd HH:mm': '+0800')"
                               class="ion-float-right"
                               (click)="quickAttendnace(timetable.module, timetable.time, timetable.intakes.toString(), timetable.time, endTime)"
                               fill="outline" color="danger" size="small">
@@ -234,7 +234,7 @@
       <ion-card>
         <ion-card-content>
           <app-message-with-svg imageUrl="assets/img/happy.svg"
-            messageTitle="Hooray! No classes for {{intake}} on the week that starts on {{selectedWeek | date:'EEEE, dd MM yyy'}}"
+            messageTitle="Hooray! No classes for {{intake}} on the week that starts on {{selectedWeek | date:'EEEE, dd MM yyy': '+0800'}}"
             wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
           </app-message-with-svg>
         </ion-card-content>
