@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { ActionSheetController, IonRefresher, ModalController } from '@ionic/angular';
+import { ActionSheetController, IonRefresher, IonSelect, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import { Observable, combineLatest } from 'rxjs';
@@ -20,6 +20,7 @@ import { ClassesPipe } from './classes.pipe';
   styleUrls: ['./student-timetable.page.scss'],
 })
 export class StudentTimetablePage implements OnInit {
+  @ViewChild('groupingSelect', {static: false}) groupingSelectRef: IonSelect;
 
   printUrl = 'https://api.apiit.edu.my/timetable-print/index.php';
   wday = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
@@ -90,6 +91,9 @@ export class StudentTimetablePage implements OnInit {
 
   room: string;
   intake: string;
+  grouping: string;
+  groupingList = [];
+  hideGroupingList = true;
   freeTime = false;
 
   constructor(
@@ -161,6 +165,10 @@ export class StudentTimetablePage implements OnInit {
     }
   }
 
+  displayGroupingList() {
+    this.groupingSelectRef.open();
+  }
+
   presentActionSheet(labels: string[], handler: (_: string) => void) {
     const buttons = labels.map(text => ({ text, handler: () => handler.call(this, text) }));
     this.actionSheetCtrl.create({
@@ -196,8 +204,21 @@ export class StudentTimetablePage implements OnInit {
         .filter((v, i, a) => a.lastIndexOf(v) === i)
         .slice(-5));
       this.changeDetectorRef.markForCheck();
-      this.timetable$.subscribe();
+      this.timetable$.pipe(
+        tap(_ => this.groupingList = []),
+        tap(tt => tt.forEach(timetableInfo => {
+          if (timetableInfo.INTAKE === this.intake && this.groupingList.indexOf(timetableInfo.GROUPING) === -1) {
+            this.groupingList.push(timetableInfo.GROUPING);
+          }
+        })),
+        tap(_ => this.changeGrouping(this.groupingList[0]))
+      ).subscribe();
     }
+  }
+
+  changeGrouping(grouping: string) {
+    this.grouping = grouping;
+    this.settings.set('intakeGroup', this.grouping);
   }
 
   /** Display intake search modal. */
@@ -234,6 +255,13 @@ export class StudentTimetablePage implements OnInit {
       // initialize or update intake labels only if timetable might change
       tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)
         && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
+      tap(_ => this.groupingList = []),
+      tap(tt => tt.forEach(timetableInfo => {
+        if (timetableInfo.INTAKE === this.intake && this.groupingList.indexOf(timetableInfo.GROUPING) === -1) {
+          this.groupingList.push(timetableInfo.GROUPING);
+        }
+      })),
+      tap(_ => this.grouping = this.settings.get('intakeGroup') || this.groupingList[0])
     );
   }
 
@@ -246,7 +274,7 @@ export class StudentTimetablePage implements OnInit {
   updateDay(tt: StudentTimetable[]) {
     // filter by intake and room (need not to track intake)
     // XXX: remove this so that classes pipe is only called once
-    tt = new ClassesPipe().transform(tt, this.intake, this.room);
+    tt = new ClassesPipe().transform(tt, this.intake, this.room, this.grouping);
 
     // get week
     this.availableWeek = Array.from(new Set(tt.map(t => {

@@ -18,11 +18,15 @@ export class ClassesPipe implements PipeTransform {
    * @param room Filter by room if not null
    * @returns filtered Filtered timetable
    */
-  transform(timetables: StudentTimetable[], intake: string, room: string): StudentTimetable[] {
+  transform(timetables: StudentTimetable[], intake: string, room: string, grouping: string): StudentTimetable[] {
     if (!Array.isArray(timetables)) {
       return [];
+    } else if (intake && room && grouping) {
+      return timetables.filter(t => intake === t.INTAKE && room === t.ROOM && grouping === t.GROUPING);
     } else if (intake && room) {
       return timetables.filter(t => intake === t.INTAKE && room === t.ROOM);
+    } else if (intake && grouping) {
+      return timetables.filter(t => intake === t.INTAKE && grouping === t.GROUPING);
     } else if (intake) {
       return timetables.filter(t => intake === t.INTAKE);
     } else if (room) {

@@ -39,6 +39,7 @@ const defaultData: Settings = {
   intakeHistory: [],
   viewWeek: false,
   modulesBlacklist: [],
+  intakeGroup: null,
   examIntake: null,
   defaultCampus: '',
   defaultVenue: '',

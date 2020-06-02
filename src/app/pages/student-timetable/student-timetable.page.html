@@ -7,7 +7,11 @@
       Timetable
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="intakeSelectable" fill="outline" (click)="presentIntakeSearch()"
+      <ion-button *ngIf="intake && groupingList.length > 0" fill="outline" size="small" (click)="displayGroupingList()"
+        class="colored-text colored-border">
+        {{ grouping || 'Grouping' }}
+      </ion-button>
+      <ion-button *ngIf="intakeSelectable" fill="outline" size="small" (click)="presentIntakeSearch()"
         class="colored-text colored-border">
         {{ intake || 'Intakes' }}
       </ion-button>
@@ -16,6 +20,13 @@
         <ion-icon *ngIf="show2ndToolbar" name="chevron-up"></ion-icon>
       </ion-button>
     </ion-buttons>
+
+    <ion-item [hidden]='hideGroupingList'>
+      <ion-label>Choose Grouping</ion-label>
+      <ion-select [ngModel]="grouping" (ngModelChange)="changeGrouping(grouping = $event)" #groupingSelect>
+        <ion-select-option *ngFor="let grouping of groupingList" [value]="grouping">{{ grouping }}</ion-select-option>
+      </ion-select>
+    </ion-item>
   </ion-toolbar>
 
   <ion-toolbar *ngIf="show2ndToolbar">
@@ -44,7 +55,7 @@
   <!-- do not add filter pipe here as it affects loading -->
   <ng-container *ngIf="(timetable$ | async) as timetables; else loading">
     <ng-template let-timetables
-                 [ngIf]="!viewWeek ? (timetables | classes:intake:room | theday:selectedDate | gen:freeTime) : (timetables | classes:intake:room | theweek:selectedWeek | gen:freeTime)"
+                 [ngIf]="!viewWeek ? (timetables | classes:intake:room:grouping | theday:selectedDate | gen:freeTime) : (timetables | classes:intake:room:grouping | theweek:selectedWeek | gen:freeTime)"
                  [ngIfElse]="loading">
       <ng-container *ngIf="timetables!.length; else empty">
         <ion-grid>
