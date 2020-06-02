@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
+import { AutocompleteComponent } from './autocomplete/autocomplete.component';
 import { DashboardCardComponent } from './dashboard-card/dashboard-card.component';
 import { EventsListComponent } from './events-list/events-list.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner';
@@ -19,7 +20,8 @@ import { StaysafeComponent } from './staysafe/staysafe.component';
     DashboardCardComponent,
     QuickAccessItemComponent,
     MessageWithSvgComponent,
-    StaysafeComponent
+    StaysafeComponent,
+    AutocompleteComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { StaysafeComponent } from './staysafe/staysafe.component';
     DashboardCardComponent,
     QuickAccessItemComponent,
     MessageWithSvgComponent,
-    StaysafeComponent
+    StaysafeComponent,
+    AutocompleteComponent
   ],
 })
 export class ComponentsModule { }

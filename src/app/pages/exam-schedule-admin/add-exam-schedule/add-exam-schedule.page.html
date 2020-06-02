@@ -31,6 +31,9 @@
                 Module
               </ion-label>
               <ion-input (click)="presentModuleSearch()" [formControl]="examScheduleForm.controls['module']" class="form-input"></ion-input>
+              <app-autocomplete [items]="modules" [formControl]="examScheduleForm.controls['module']" ></app-autocomplete>
+              <!-- <app-autocomplete [items]="modules" [(inputModel)]="test" ></app-autocomplete> -->
+              {{test}}
             </ion-item>
 
             <!-- <ion-item lines="none">

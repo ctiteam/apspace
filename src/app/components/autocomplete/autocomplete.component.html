@@ -1,0 +1,24 @@
+<div *ngIf="formControl; else modelBasedFilter">
+  <ion-input [formControl]="formControl" placeholder="Type something here"></ion-input>
+  <div *ngIf="searchItems$ | async as items">
+    <div *ngIf="displayList">
+      <ion-list>
+        <ion-item (click)="select(item)" *ngFor="let item of items">
+          {{ item }}
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+</div>
+  
+<ng-template #modelBasedFilter>
+  <ion-input [(ngModel)]="inputModel" (ngModelChange)="inputModelChange.emit(inputModel) && ngModelBasedFiltering()" placeholder="Type something here"></ion-input>
+  <div *ngIf="displayList">
+    <ion-list>
+      <ion-item (click)="select(item)" *ngFor="let item of searchItems">
+        {{ item }}
+      </ion-item>
+    </ion-list>
+  </div>
+</ng-template>
+

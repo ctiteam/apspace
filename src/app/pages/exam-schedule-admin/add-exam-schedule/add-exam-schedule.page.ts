@@ -25,7 +25,7 @@ export class AddExamSchedulePage implements OnInit, OnDestroy {
 
   loading: HTMLIonLoadingElement;
 
-  // devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
+  devUrl = 'https://jeioi258m1.execute-api.ap-southeast-1.amazonaws.com/dev';
   assessmentTypes$: Observable<any>;
   notification: Subscription;
   modules = [];
@@ -36,6 +36,8 @@ export class AddExamSchedulePage implements OnInit, OnDestroy {
   };
 
   examScheduleForm: FormGroup;
+
+  test;
 
   // staffCode;
 
@@ -58,7 +60,7 @@ export class AddExamSchedulePage implements OnInit, OnDestroy {
     //   }
     // );
 
-    this.ws.get<any>('/exam/module_list').pipe(
+    this.ws.get<any>('/exam/module_list', {url: this.devUrl}).pipe(
       tap(modules => {
         modules.forEach(module => this.modules.push(module.MODULE_CODE));
       })
