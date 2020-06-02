@@ -15,6 +15,7 @@ export interface Settings {
   /* timetable */
   intakeHistory: string[];
   viewWeek: boolean; // shared with lecturer
+  intakeGroup: string;
   /* exam schedule */
   examIntake: string;
   /* contact number */
