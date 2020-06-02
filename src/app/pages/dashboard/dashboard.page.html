@@ -216,9 +216,10 @@
           [withOptionsButton]='todaysScheduleCardConfigurations.withOptionsButton'
           [options]='todaysScheduleCardConfigurations.options'>
           <events-list [observable$]="todaysSchedule$"></events-list>
-          <div *ngIf="isStudent" class="ion-padding">
-            <p><span class="danger-text">Note:</span> The upcoming classes in this section belong to your default intake
+          <div class="ion-padding">
+            <p><span class="danger-text">*Note:</span> The upcoming classes in this section belong to your default intake
               which is: <span class="text-bold">{{timetableDefaultIntake}}</span></p>
+              <p>**All times in this section are displayed in Malaysia Time Zone (GMT+8)</p>
           </div>
         </dashboard-card>
       </div>
@@ -276,6 +277,9 @@
           [withOptionsButton]='upcomingEventsCardConfigurations.withOptionsButton'
           [options]='upcomingEventsCardConfigurations.options'>
           <events-list [observable$]="upcomingEvent$"></events-list>
+          <div class="ion-padding">
+            <p>**All times in this section are displayed in Malaysia Time Zone (GMT+8)</p>
+          </div>
         </dashboard-card>
       </div>
 
