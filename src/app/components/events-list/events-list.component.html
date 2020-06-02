@@ -39,7 +39,12 @@
                             {{event.secondDescription}}
                         </a>
                         <ng-template #noHyperlink>
-                            {{event.secondDescription}}
+                            <ng-container *ngIf="event.secondDescriptionIsDate; else noDate">
+                                {{event.secondDescription | date: 'hh:mm a': '+0800'}}
+                            </ng-container>
+                            <ng-template #noDate>
+                                {{event.secondDescription}}
+                            </ng-template>
                         </ng-template>
                     </span>
                     <span *ngIf="event.thirdDescription"

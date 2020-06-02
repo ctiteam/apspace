@@ -8,5 +8,6 @@ export interface EventComponentConfigurations {
     dateOrTime: string;   // TIME FORMAT 'HH mm A', DATE FORMAT: 'DAY MONTH YEAR'
     firstDescription?: string;
     secondDescription?: string;
+    secondDescriptionIsDate?: boolean;
     thirdDescription?: string;
 }
