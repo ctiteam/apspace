@@ -206,12 +206,16 @@ export class StudentTimetablePage implements OnInit {
       this.changeDetectorRef.markForCheck();
       this.timetable$.pipe(
         tap(_ => this.groupingList = []),
-        tap(tt => tt.forEach(timetableInfo => {
-          if (timetableInfo.INTAKE === this.intake && this.groupingList.indexOf(timetableInfo.GROUPING) === -1) {
-            this.groupingList.push(timetableInfo.GROUPING);
-          }
-        })),
-        tap(_ => this.changeGrouping(this.groupingList[0]))
+        tap(tt => {
+          tt.forEach(timetableInfo => {
+            if (timetableInfo.INTAKE === this.intake && this.groupingList.indexOf(timetableInfo.GROUPING) === -1) {
+              this.groupingList.push(timetableInfo.GROUPING.toUpperCase()); // we do not trust the response
+            }
+          });
+          this.changeDetectorRef.detectChanges();
+        }),
+        tap(_ => this.changeGrouping(this.settings.get('intakeGroup') || this.groupingList.sort()[0])),
+        tap(_ => this.groupingList.push('All')) // add it to the end of the list
       ).subscribe();
     }
   }
@@ -256,12 +260,16 @@ export class StudentTimetablePage implements OnInit {
       tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)
         && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
       tap(_ => this.groupingList = []),
-      tap(tt => tt.forEach(timetableInfo => {
-        if (timetableInfo.INTAKE === this.intake && this.groupingList.indexOf(timetableInfo.GROUPING) === -1) {
-          this.groupingList.push(timetableInfo.GROUPING);
-        }
-      })),
-      tap(_ => this.grouping = this.settings.get('intakeGroup') || this.groupingList[0])
+      tap(tt => {
+        tt.forEach(timetableInfo => {
+          if (timetableInfo.INTAKE === this.intake && this.groupingList.indexOf(timetableInfo.GROUPING) === -1) {
+            this.groupingList.push(timetableInfo.GROUPING.toUpperCase()); // we do not trust the response
+          }
+        });
+        this.changeDetectorRef.detectChanges();
+      }),
+      tap(_ => this.changeGrouping(this.settings.get('intakeGroup') || this.groupingList.sort()[0])),
+      tap(_ => this.groupingList.push('All')) // add it to the end of the list
     );
   }
 

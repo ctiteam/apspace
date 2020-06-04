@@ -22,11 +22,11 @@ export class ClassesPipe implements PipeTransform {
     if (!Array.isArray(timetables)) {
       return [];
     } else if (intake && room && grouping) {
-      return timetables.filter(t => intake === t.INTAKE && room === t.ROOM && grouping === t.GROUPING);
+      return timetables.filter(t => intake === t.INTAKE && room === t.ROOM && (grouping === t.GROUPING || grouping === 'All'));
     } else if (intake && room) {
       return timetables.filter(t => intake === t.INTAKE && room === t.ROOM);
     } else if (intake && grouping) {
-      return timetables.filter(t => intake === t.INTAKE && grouping === t.GROUPING);
+      return timetables.filter(t => intake === t.INTAKE && (grouping === t.GROUPING || grouping === 'All'));
     } else if (intake) {
       return timetables.filter(t => intake === t.INTAKE);
     } else if (room) {

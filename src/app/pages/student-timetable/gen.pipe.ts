@@ -103,6 +103,7 @@ export class GenPipe implements PipeTransform {
       DATESTAMP_ISO: timetable.DATESTAMP_ISO,
       TIME_FROM: timeFrom,
       TIME_TO: timeTo,
+      GROUPING: ''
     };
   }
 
