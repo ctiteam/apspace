@@ -4,5 +4,5 @@
     <div class="inner two"></div>
     <div class="inner three"></div>
   </div>
-  <p *ngIf="message" class="text-alignment ion-text-wrap">{{message}}</p>
+  <p *ngIf="message" class="text-alignment ion-text-wrap" [ngStyle]="{'font-size': textSize}">{{message}}</p>
 </div>

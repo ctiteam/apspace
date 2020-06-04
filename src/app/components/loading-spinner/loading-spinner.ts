@@ -3,10 +3,11 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'loading-spinner',
   templateUrl: 'loading-spinner.html',
-  styleUrls: ['loading-spinner.css'],
+  styleUrls: ['loading-spinner.scss'],
 })
 export class LoadingSpinnerComponent {
   @Input() message?: string;
   @Input() size?: string;
   @Input() position ?: string;
+  @Input() textSize?: string;
 }
