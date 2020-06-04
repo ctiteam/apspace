@@ -31,10 +31,19 @@
                 Module
               </ion-label>
               <ion-input (click)="presentModuleSearch()" [formControl]="examScheduleForm.controls['module']" class="form-input"></ion-input>
-              <app-autocomplete [items]="modules" [formControl]="examScheduleForm.controls['module']" ></app-autocomplete>
-              <!-- <app-autocomplete [items]="modules" [(inputModel)]="test" ></app-autocomplete> -->
-              {{test}}
             </ion-item>
+
+            <!--  DEMONSTRATE AUTOCOMPLETE FOR EITHER SUPPORT NGMODEL OR FORMCONTROL -->
+            <!-- <app-autocomplete
+              title="Module"
+              [displayLimit]="6" 
+              [items]="modules" 
+              [inputControl]="examScheduleForm.controls['module']"></app-autocomplete> -->
+            <app-autocomplete 
+              title="Module"
+              [displayLimit]="6" 
+              [items]="modules" 
+              [(inputModel)]="test"></app-autocomplete>
 
             <!-- <ion-item lines="none">
               <ion-label position="stacked" class="item-label">

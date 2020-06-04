@@ -1,0 +1,28 @@
+.autocomplete-field {
+    position: relative;
+    overflow: visible;
+    margin-top: 10px;
+    padding: 0px 16px;
+}
+
+.autocomplete-list {
+    position: absolute;
+    z-index: 10000;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    top: auto;
+    left: auto;
+}
+
+.form-input {
+    border-radius: 7px;
+    background: var(--main-bg-color);
+    margin-top: 3px;
+    border: 1px solid var(--tertiary-bg-color);
+    min-height: 40px;
+}
+
+ion-label.item-label {
+    font-weight: bold;
+    font-size: 12px;
+    color: var(--primary-color);
+}

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, NgModel } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 
@@ -14,7 +14,7 @@ export class AutocompleteComponent implements OnInit {
   @Input() inputModel: string;
   @Output() inputModelChange = new EventEmitter<string>();
 
-  @Input() formControl?: FormControl;
+  @Input() inputControl?: FormControl;
 
   @Input() items = [];
 
@@ -29,17 +29,23 @@ export class AutocompleteComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.formControl) {
+    if (this.inputControl) {
       this.formControlBasedFiltering();
     }
   }
 
-  ngModelBasedFiltering() {
-    this.searchItems = this.search(this.items, this.inputModel);
+  ngModelBasedFiltering(term) {
+    const filteredItems = this.search(this.items, term);
+    this.searchItems = filteredItems.slice(0, this.displayLimit);
+    if (!this.displayList) {
+      this.displayList = !this.displayList;
+    }
   }
 
   formControlBasedFiltering() {
-    const searchChange$ = this.formControl.valueChanges.pipe(distinctUntilChanged());
+    const searchChange$ = this.inputControl.valueChanges.pipe(
+      distinctUntilChanged()
+    );
 
     const searchResult$ = searchChange$.pipe(
       map(term => this.search(this.items, term))
@@ -52,15 +58,14 @@ export class AutocompleteComponent implements OnInit {
   }
 
   select(item) {
-    this.formControl.patchValue(item);
+    this.inputControl ? this.inputControl.patchValue(item) : this.inputModelChange.emit(item);
     this.displayList = !this.displayList;
   }
 
   search(items: string[], term: string): string[] {
-    // start filter on input but accept EMPTY input too
     const filteredItems = term.length !== 0
-      ? items.filter(item => item.indexOf(term) !== -1)
-      : items;
+      ? items.filter(item => item.toLowerCase().indexOf(term.toLowerCase()) !== -1)
+      : [];
     return filteredItems;
   }
 }
