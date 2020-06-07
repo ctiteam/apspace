@@ -217,9 +217,14 @@
           [options]='todaysScheduleCardConfigurations.options'>
           <events-list [observable$]="todaysSchedule$"></events-list>
           <div class="ion-padding">
-            <p><span class="danger-text">*Note:</span> The upcoming classes in this section belong to your default intake
+            <p><span class="danger-text">*Note:</span> The upcoming classes in this section belong to your default
+              intake
               which is: <span class="text-bold">{{timetableDefaultIntake}}</span></p>
-              <p>**All times in this section are displayed in Malaysia Time Zone (GMT+8)</p>
+            <p>
+              * Timetable here is displayed for the intake grouping <span class="text-bold">({{intakeGroup}})</span>.
+              You can change the grouping settings from the timetable page and then refreshing this page.
+            </p>
+            <p>**All times in this section are displayed in Malaysia Time Zone (GMT+8)</p>
           </div>
         </dashboard-card>
       </div>

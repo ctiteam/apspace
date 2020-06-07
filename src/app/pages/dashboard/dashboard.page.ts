@@ -99,6 +99,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     withOptionsButton: false,
     cardTitle: 'Today\'s Schedule',
   };
+  intakeGroup = '';
 
   // UPCOMING EVENTS
   upcomingEvent$: Observable<EventComponentConfigurations[]> | any;
@@ -303,7 +304,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     private toastCtrl: ToastController,
     private settings: SettingsService,
     private storage: Storage,
-    private iab: InAppBrowser
+    private iab: InAppBrowser,
   ) {
     // Create the dragula group (drag and drop)
     this.dragulaService.createGroup('editable-list', {
@@ -621,6 +622,16 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
       // FILTER THE LIST OF TIMETABLES TO GET THE TIMETABLE FOR THE SELECTED INTAKE ONLY
       map(timetables => timetables.filter(timetable => timetable.INTAKE === intake)),
+
+      // FILTER GROUPING
+      map(timetables => {
+        this.intakeGroup = this.settings.get('intakeGroup');
+        if (this.intakeGroup && this.intakeGroup !== 'All') {
+          return timetables.filter(timetable => (timetable.GROUPING === this.intakeGroup));
+        } else {
+          return timetables;
+        }
+      }),
 
       // GET TODAYS CLASSES ONLY
       map(intakeTimetable => intakeTimetable.filter(timetable => this.eventIsToday(new Date(timetable.DATESTAMP_ISO), dateNow))),
