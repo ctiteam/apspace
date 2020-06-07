@@ -16,7 +16,7 @@ export { Holidays, Holiday } from './holiday';
 export { InterimLegend } from './interim-legend';
 export { LecturerTimetable } from './lecturer-timetable';
 export { MPULegend } from './mpu-legend';
-export { News } from './news';
+export { News, ShortNews } from './news';
 export { OperationHours } from './operation-hours';
 export { Role, Settings } from './settings';
 export { SecurityQuestionsAndAnswers } from './security-questions-and-answers';

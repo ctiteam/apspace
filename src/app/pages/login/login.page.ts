@@ -1,16 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Network } from '@ionic-native/network/ngx';
-import { AlertController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, IonContent, IonSlides, Platform, ToastController } from '@ionic/angular';
 
-import { throwError } from 'rxjs';
-import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap, timeout } from 'rxjs/operators';
 
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { Role } from '../../interfaces';
+import { Role, ShortNews } from '../../interfaces';
+
 import {
   CasTicketService,
   DataCollectorService,
+  NewsService,
   SettingsService,
   UserSettingsService,
   WsApiService
@@ -21,7 +23,42 @@ import {
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
+  activeSection = 1;
+  screenHeight: number;
+  screenWidth: number;
+
+  @ViewChild('content', { static: true }) content: IonContent;
+  @ViewChild('sliderSlides') sliderSlides: IonSlides;
+
+  noticeBoardItems$: Observable<any[]>;
+  news$: Observable<ShortNews[]>;
+
+
+  sections = [
+    { name: 'main', y: 0 },
+    { name: 'announcement', y: 1 },
+    { name: 'news', y: 2 },
+    {name: 'operationHours', y: 3},
+    // {name: 'mediaLinks', y: 4}
+  ];
+
+  test = new Array(4);
+  slideOpts = {
+    initialSlide: 1,
+    autoplay: true,
+    speed: 400,
+    loop: true,
+    autoplayDisableOnInteraction: false,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+      renderBullet: (_, className) => {
+        return '<span style="width: 10px; height: 10px; background-color: #753a88 !important;" class="' + className + '"></span>';
+      }
+    }
+  };
+
 
   apkey: string;
   password: string;
@@ -39,14 +76,50 @@ export class LoginPage {
     private dc: DataCollectorService,
     public iab: InAppBrowser,
     private network: Network,
-    private plt: Platform,
+    public plt: Platform,
     private router: Router,
     private route: ActivatedRoute,
     private settings: SettingsService,
     private toastCtrl: ToastController,
     private userSettings: UserSettingsService,
-    private ws: WsApiService
-  ) { }
+    private ws: WsApiService,
+    private news: NewsService
+  ) {
+    this.getScreenSize();
+  }
+
+  ngOnInit() {
+    const rex = /<img[^>]+src="?([^"\s]+)"?\s*\/>/;
+    this.moveToSection(0);
+    this.noticeBoardItems$ = this.news.getSlideshow().pipe(
+      map((noticeBoardItems: any) => {
+        return noticeBoardItems.map(item => {
+          if (item && item.field_image_link.length > 0 && item.field_image_link[0].value) {
+            return {
+              value: rex.exec(item.field_image_link[0].value)[1],
+              title: item.title.length > 0 && item.title[0].value ? item.title[0].value : '',
+              updated: item.changed.length > 0 && item.changed[0].value ? new Date(item.changed[0].value * 1000) : ''
+            };
+          }
+        });
+      }),
+    );
+    this.news$ = this.news.get().pipe(
+      map(newsList => {
+        return newsList.map(item => {
+          if (item && item.field_news_image.length > 0 && item.field_news_image[0].url) {
+            return {
+              url: item.field_news_image[0].url,
+              title: item.title.length > 0 && item.title[0].value ? item.title[0].value : '',
+              updated: item.changed.length > 0 && item.changed[0].value ? new Date(item.changed[0].value * 1000) : '',
+              body: item.body.length > 0 && item.body[0].value ? item.body[0].value : ''
+            };
+          }
+        }).slice(0, 6);
+      }),
+      tap(res => console.log(res))
+    );
+  }
 
   login() {
     this.userDidLogin = true;
@@ -159,6 +232,57 @@ export class LoginPage {
 
   openApkeyTroubleshooting() {
     this.iab.create('http://kb.sites.apiit.edu.my/knowledge-base/unable-to-sign-in-using-apkey-apkey-troubleshooting/', '_system', 'location=true');
+  }
+
+  logScrolling(ev) {
+    if (ev.detail.startY !== ev.detail.currentY) {
+      if (ev.detail.startY < ev.detail.currentY) {
+        console.log('scrolling down');
+        if (ev.detail.currentY >= (this.activeSection + 1) * this.screenHeight) {
+          console.log('time to switch active');
+          this.activeSection++;
+        }
+      } else {
+        console.log('scrolling up');
+        if (this.activeSection !== 0) { // only if the active is not the first section
+          if (ev.detail.currentY <= (this.activeSection - 1) * this.screenHeight) {
+            console.log('time to switch active');
+            this.activeSection--;
+          }
+        }
+      }
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  getScreenSize() {
+    this.screenHeight = window.innerHeight;
+    this.screenWidth = window.innerWidth;
+  }
+
+  moveToNextPage() {
+    this.content.scrollByPoint(0, this.screenHeight, 900);
+  }
+
+  moveToSection(sectionNumber: number) {
+    if (sectionNumber === 0) { // fast scroll to top
+      this.content.scrollToTop(900);
+    } else if (this.activeSection <= sectionNumber) {
+      this.content.scrollByPoint(0, sectionNumber * this.screenHeight, 900);
+    }
+    else {
+      this.content.scrollByPoint(0, (sectionNumber - this.activeSection) * this.screenHeight, 900);
+    }
+    this.activeSection = sectionNumber;
+  }
+
+  // SLIDER
+  prevSlide() {
+    this.sliderSlides.slidePrev();
+  }
+
+  nextSlide() {
+    this.sliderSlides.slideNext();
   }
 
 }

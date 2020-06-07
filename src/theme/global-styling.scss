@@ -612,3 +612,40 @@ ion-radio-group {
     color: var(--main-txt-color);
   }
 }
+
+
+// slider
+.slider-section {
+
+  .swiper-pagination-fraction,
+  .swiper-pagination-custom,
+  .swiper-container-horizontal>.swiper-pagination-bullets {
+    bottom: 0 !important;
+  }
+}
+
+.limit-lines {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+
+  &.one-line{
+    -webkit-line-clamp: 1;
+  }
+
+  &.two-lines {
+    -webkit-line-clamp: 2;
+    /* number of lines to show */
+  }
+
+  &.three-lines {
+    -webkit-line-clamp: 3;
+    /* number of lines to show */
+  }
+
+  &.four-lines {
+    -webkit-line-clamp: 3;
+    /* number of lines to show */
+  }
+}
