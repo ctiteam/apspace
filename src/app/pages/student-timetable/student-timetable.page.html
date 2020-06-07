@@ -261,7 +261,7 @@
                 </ng-template>
                 <ng-container *ngIf="selectedDate; else weekly;">
                   <app-message-with-svg imageUrl="assets/img/happy.svg"
-                    messageTitle="Hooray! No classes for {{intake}} {{grouping ? '('+ grouping +')' : '' }} on the on {{selectedDate | date: 'EEEE, dd MM yyy'}}"
+                    messageTitle="Hooray! No classes for {{intake}} {{grouping ? '('+ grouping +')' : '' }} on {{selectedDate | date: 'EEEE, dd MM yyy'}}"
                     wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
                   </app-message-with-svg>
                 </ng-container>
