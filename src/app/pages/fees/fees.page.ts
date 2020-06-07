@@ -155,7 +155,7 @@ export class FeesPage {
 
 
   updateChartLabelVisibility(labelIndex: number, visible: boolean) {
-    this.financialsChartComponent.chart.data.datasets[labelIndex]._meta['0'].hidden = !visible;
+    this.financialsChartComponent.chart.getDatasetMeta(labelIndex).hidden = !visible;
     this.financialsChartComponent.chart.update();
     this.visibleLabels = this.getVisibleLabels();
   }
@@ -166,7 +166,7 @@ export class FeesPage {
 
   getVisibleLabels(): string[] {
     return this.financialsChartComponent.chart.data.datasets
-      .filter(dataset => !dataset._meta['0'].hidden)
+      .filter((_, datasetIndex) => !this.financialsChartComponent.chart.getDatasetMeta(datasetIndex).hidden)
       .map(dataset => dataset.label);
   }
 

@@ -20,7 +20,7 @@
         <ion-row>
           <ion-col size="12" size-md="6" size-xl="4" *ngFor="let payslip of payslips">
             <ion-card>
-              <img class="month-image" src="{{payslip | getDate | date: 'MMM' | generateMonthImg}}" />
+              <img src="{{payslip | getDate | date: 'MMM' | generateMonthImg}}" />
     
               <ion-card-header>
                 <ion-fab horizontal="end" vertical="top" edge>
