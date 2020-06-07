@@ -197,6 +197,7 @@ export class StudentTimetablePage implements OnInit {
 
   /** Check and update intake on change. */
   changeIntake(intake: string) {
+    this.changeGrouping('All'); // fallback
     if (intake !== null && intake !== this.intake) {
       this.intake = intake;
       this.settings.set('intakeHistory', this.settings.get('intakeHistory')
@@ -214,9 +215,8 @@ export class StudentTimetablePage implements OnInit {
               }
             }
           });
-          this.changeDetectorRef.detectChanges();
         }),
-        tap(_ => this.groupingList.sort()[0]),
+        tap(_ => this.changeGrouping(this.groupingList.sort()[0])),
         tap(_ => this.groupingList.push('All')), // add it to the end of the list
         tap(_ => this.changeDetectorRef.detectChanges())
       ).subscribe();
