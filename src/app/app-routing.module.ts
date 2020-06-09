@@ -245,7 +245,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/students-search/students-search.module').then(m => m.StudentsSearchPageModule)
   },
   {
-    path: 'orientaton-student-portal',
+    path: 'orientation-student-portal',
     canActivate: [AuthGuard],
     data: { role: Role.Admin | Role.Lecturer },
     loadChildren: () =>
