@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { CalendarModule } from 'ion2-calendar';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { SharedFormModule } from 'src/app/components/shared-form.module';
 import { AddFreeSlotPage } from './add-free-slot.page';
 const routes: Routes = [
   {
@@ -23,7 +24,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     CalendarModule,
-    ComponentsModule
+    ComponentsModule,
+    SharedFormModule
   ],
   declarations: [AddFreeSlotPage]
 })

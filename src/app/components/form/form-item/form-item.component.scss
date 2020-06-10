@@ -1,0 +1,41 @@
+::ng-deep[calendar] ion-calendar{
+    border-radius: 7px;
+    background: var(--main-bg-color);
+    padding: 3px 10px !important;
+    margin-top: 10px;
+    border: 1px solid var(--tertiary-bg-color);
+    min-height: 40px;
+}
+
+::ng-deep[input] ion-input {
+    border-radius: 7px;
+    background: var(--main-bg-color);
+    padding: 3px 10px !important;
+    margin-top: 10px;
+    border: 1px solid var(--tertiary-bg-color);
+    min-height: 40px;
+}
+
+::ng-deep[select] ion-select {
+    border-radius: 7px;
+    background: var(--main-bg-color);
+    padding: 8px 10px 9px 10px !important;
+    margin-top: 10px;
+    border: 1px solid var(--tertiary-bg-color);
+    min-height: 40px;
+}
+
+::ng-deep[datetime] ion-datetime {
+    border-radius: 7px;
+    background: var(--main-bg-color);
+    padding: 6px 4px 0px 10px !important;
+    margin-top: 10px;
+    border: 1px solid var(--tertiary-bg-color);
+    min-height: 32px !important;
+}
+
+::ng-deep[item-label] ion-label {
+    // font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color) !important;
+}
