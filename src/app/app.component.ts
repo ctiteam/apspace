@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -11,6 +12,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { VersionValidator } from './interfaces';
+import { ApcardPage } from './pages/apcard/apcard.page';
 import {
   SettingsService, VersionService, WsApiService
 } from './services';
@@ -34,6 +36,7 @@ export class AppComponent {
 
   constructor(
     private actionSheetCtrl: ActionSheetController,
+    private deeplinks: Deeplinks,
     private iab: InAppBrowser,
     private loadingCtrl: LoadingController,
     private menuCtrl: MenuController,
@@ -96,6 +99,19 @@ export class AppComponent {
 
     platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
       this.accentColor$ = this.settings.get$('accentColor');
+
+      this.deeplinks.route({
+        '/apcard': ApcardPage
+      }).subscribe(match => {
+        // match.$route - the route we matched, which is the matched entry from the arguments to route()
+        // match.$args - the args passed in the link
+        // match.$link - the full link data
+        console.log('Successfully matched route', match);
+      }, nomatch => {
+        // nomatch.$link - the full link data
+        console.error('Got a deeplink that didn\'t match', nomatch);
+      });
+
       if (this.platform.is('cordova')) {
         this.theme$ = this.settings.get$('theme').pipe(
           tap(theme => {

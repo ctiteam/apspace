@@ -7,6 +7,7 @@ import { ActionSheet } from '@ionic-native/action-sheet/ngx';
 import { AppAvailability } from '@ionic-native/app-availability/ngx';
 import { Badge } from '@ionic-native/badge/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
+import { Deeplinks } from '@ionic-native/deeplinks/ngx';
 import { Device } from '@ionic-native/device/ngx';
 import { DocumentViewer } from '@ionic-native/document-viewer/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
@@ -32,7 +33,6 @@ import { RequestCache, RequestCacheWithMapStorage } from './services';
 // import { Animation } from '@ionic/core';
 
 // export function disableNavAnimation(AnimationC: Animation): Promise<Animation> { return Promise.resolve(new AnimationC()); }
-
 
 @NgModule({
   // notificationPageModal is needed here because it is called in app.component.ts, NewsModal is called in dashboards also
@@ -70,6 +70,7 @@ import { RequestCache, RequestCacheWithMapStorage } from './services';
     // tslint:disable-next-line
     FileTransfer,
     DocumentViewer,
+    Deeplinks,
     Vibration,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: RequestCache, useClass: RequestCacheWithMapStorage },

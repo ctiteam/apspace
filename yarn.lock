@@ -1659,6 +1659,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/deeplinks@^5.26.0":
+  version "5.27.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/deeplinks/-/deeplinks-5.27.0.tgz#d7d45bdcf5dc7d83300665d64dfed148fff94224"
+  integrity sha512-I2RxF2QnUDr5n5Db7levvssDPo0UrfQuS2vp4SchNKO1FxH4J+EStOlnQ4BVs3CVzJXMtvdV6/cc0ANWVq2CSw==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic-native/device@^5.26.0":
   version "5.26.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/device/-/device-5.26.0.tgz#f41ef316fa2e29f293d233f0b792671e48f79dfc"
@@ -7146,6 +7153,16 @@ ion2-calendar@^3.0.0-rc.0:
   resolved "https://registry.yarnpkg.com/ion2-calendar/-/ion2-calendar-3.0.0-rc.0.tgz#93fc20e8a5fe85922eb23a05594ccffe78eff607"
   integrity sha512-OOq1cCY8v4K6lKiHKHK7T6kmr+H1AuVY0xH3WmCAQGNhjevHbRlGgRDA1l0a9KOuPtojfepb1ChbT7JuVO1ofw==
 
+ionic-plugin-deeplinks@^1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/ionic-plugin-deeplinks/-/ionic-plugin-deeplinks-1.0.20.tgz#ac5f4f24f81ba6a77e721680bdbd68f0e22a109f"
+  integrity sha512-DCqg7GR15b9Gzttoo/Cv9a2FGwrR6WM5GdO7XuX5sF291dTZGW92gq9UmTu2z4ogJ0sQhUy8VDdBltIjBNK5bQ==
+  dependencies:
+    mkpath ">=1.0.0"
+    node-version-compare ">=1.0.1"
+    plist ">=1.2.0"
+    xml2js ">=0.4"
+
 ionicons@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/ionicons/-/ionicons-5.0.1.tgz#fb48475b042b04b3ed2ba9876800687917d4603d"
@@ -8809,6 +8826,11 @@ mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@~0.5.1, mkdirp@~0.5.x:
   dependencies:
     minimist "^1.2.5"
 
+mkpath@>=1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/mkpath/-/mkpath-1.0.0.tgz#ebb3a977e7af1c683ae6fda12b545a6ba6c5853d"
+  integrity sha1-67Opd+evHGg65v2hK1Raa6bFhT0=
+
 moment@2.24.0, moment@^2.10.2:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
@@ -8992,6 +9014,11 @@ node-releases@^1.1.53:
   version "1.1.53"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.53.tgz#2d821bfa499ed7c5dffc5e2f28c88e78a08ee3f4"
   integrity sha512-wp8zyQVwef2hpZ/dJH7SfSrIPD6YoJz6BDQDpGEkcA0s3LpAQoxBIYmfIq6QAhC1DhwsyCgTaTTcONwX8qzCuQ==
+
+node-version-compare@>=1.0.1:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/node-version-compare/-/node-version-compare-1.0.2.tgz#a3d8c1073746e3aa494b2190e2b23dfcda64c05a"
+  integrity sha512-OVcHSPS3nROlBQXcALptOR0j2lOabC9wE2S+y+Fvr7nSDqoO/LCNzRdVGVovipeHUXs5jAqq7GelWE1X4J1sEw==
 
 nopt@1.0.9:
   version "1.0.9"
@@ -9820,7 +9847,7 @@ please-upgrade-node@^3.2.0:
   dependencies:
     semver-compare "^1.0.0"
 
-plist@^3.0.1:
+plist@>=1.2.0, plist@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/plist/-/plist-3.0.1.tgz#a9b931d17c304e8912ef0ba3bdd6182baf2e1f8c"
   integrity sha512-GpgvHHocGRyQm74b6FWEZZVRroHKE1I0/BTjAmySaohK+cUn+hZpbqXkc3KWgW3gQYkqcQej35FohcT0FRlkRQ==
@@ -13484,7 +13511,7 @@ xml2js@0.4.19:
     sax ">=0.6.0"
     xmlbuilder "~9.0.1"
 
-xml2js@^0.4.17, xml2js@^0.4.19:
+xml2js@>=0.4, xml2js@^0.4.17, xml2js@^0.4.19:
   version "0.4.23"
   resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.23.tgz#a0c69516752421eb2ac758ee4d4ccf58843eac66"
   integrity sha512-ySPiMjM0+pLDftHgXY4By0uswI3SPKLDw/i3UXbnO8M/p28zqexCUoPmQFrYD+/1BzhGJSs2i1ERWKJAtiLrug==
