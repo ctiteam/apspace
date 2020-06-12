@@ -90,26 +90,25 @@
   <ng-template #webVersion>
     <ion-grid class="ion-no-padding web-grid">
       <ion-row>
+        <!-- main -->
         <ion-col size="12" class="ion-no-padding full-screen-section image-background login-section">
-          <ion-grid>
-            <ion-row class="background-height">
-              <!-- logo and title -->
-              <ion-col size="12" size-md="7">
-                <ion-grid>
-                  <ion-row>
-                    <ion-col size-sm="10" offset-sm="1" size-md="8" size-lg="6">
-                      <ion-img class="logo ion-margin-top" src="assets/img/apu.png"></ion-img>
-                    </ion-col>
-                    <ion-col class="system-name" size="10" offset="1">
-                      <h1>APSpace</h1>
-                      <h2>Your digital university companion</h2>
-                      <!-- <ion-button color="success" (click)="moveToNextPage()">Scroll</ion-button> -->
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
+          <ion-grid class="background-height">
+            <!-- logo + menu -->
+            <ion-row>
+              <ion-col size-xs="10" offset-xs="1" offset-md="" size-md="3" size-lg="2" offset-lg="1">
+                <ion-img class="logo ion-margin-top" src="assets/img/apu.png"></ion-img>
               </ion-col>
-              <!-- login form -->
-              <ion-col size="12" size-md="5" class="margin-auto">
+              <ion-col size-xs="12" size-md="9" size-lg="9" style="margin: auto; color: white;" class="ion-text-center">
+                <ul class="menu">
+                  <li class="menu-item">Student Timetable</li>
+                  <li class="menu-item">Course Materials</li>
+                  <li class="menu-item">News Feed</li>
+                </ul>
+              </ion-col>
+            </ion-row>
+            <!-- login -->
+            <ion-row class="form-row">
+              <ion-col size="12" offset-md="7" size-md="5" class="margin-auto">
                 <ion-grid>
                   <ion-row>
                     <ion-col size-xs="10" offset-xs="1" size-md="8" offset-md="2" size-lg="6" offset-md="3">
@@ -150,6 +149,19 @@
               <!-- style="width: 20px; height: 20px; margin: 10px 0; padding-left: 5%; border-radius: 15px; background-color: rgb(29, 71, 94); " -->
               <!-- </ion-col> -->
             </ion-row>
+            <ion-row class="system-name">
+              <ion-col size="12" size-md="7">
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="10" offset="1">
+                      <h1>APSpace</h1>
+                      <h2>Your digital university companion</h2>
+                      <!-- <ion-button color="success" (click)="moveToNextPage()">Scroll</ion-button> -->
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-col>
+            </ion-row>
           </ion-grid>
           <div class="scroll-pannel">
             <div class="scroll-pannel-item" [class.active]="section.y === activeSection"
@@ -163,32 +175,32 @@
           <div class="wrapper">
             <div class="content">
               <ion-grid>
+                <ion-row class="ion-padding-start ion-padding-end ion-margin-top">
+                  <ion-col>
+                    <h2>
+                      <ion-text color="primary">Our Important Announcements</ion-text>
+                    </h2>
+                    <h5>
+                      <ion-text color="medium">The latest & most important news that you must know</ion-text>
+                    </h5>
+                  </ion-col>
+                </ion-row>
                 <ion-row>
-                  <ion-col size="4" class="margin-auto">
+                  <!-- <ion-col size-xs="12" size-xl="4" class="margin-auto">
                     <h4 class="section-header">Our Important Announcements
                     </h4>
                     <p>The latest & most important news that you must know</p>
-                  </ion-col>
-                  <ion-col size="7" offset="1">
-                    <div class="first-wrapper" style="max-width: 725px; position: relative; margin: auto;">
+                  </ion-col> -->
+                  <ion-col size-xs="12" size-xl="8" class="ion-padding-start ion-padding-end">
+                    <div class="first-wrapper" style="max-width: 725px; position: relative;">
                       <div style="width: 100%;">
                         <ion-slides #sliderSlides pager="true" [options]="slideOpts"
                           *ngIf="noticeBoardItems$ | async as noticeBoardItems">
                           <ng-container *ngFor="let noticeBoardItem of noticeBoardItems">
                             <ion-slide>
-                              <ion-card>
+                              <div>
                                 <img class="slider-img" [src]="noticeBoardItem.value" alt="Slider">
-                                <ion-card-header
-                                  class="ion-no-padding ion-padding-start ion-padding-end ion-text-start">
-                                  <ion-card-title *ngIf="noticeBoardItem.title">
-                                    <h5 class="slider-title ion-no-margin">{{noticeBoardItem.title}}</h5>
-                                  </ion-card-title>
-                                  <ion-card-subtitle *ngIf="noticeBoardItem.updated">
-                                    <p class="slider-subtitle ion-no-margin">
-                                      {{noticeBoardItem.updated | date : 'EEE, dd-MMM-yyyy hh:mm aa'}}</p>
-                                  </ion-card-subtitle>
-                                </ion-card-header>
-                              </ion-card>
+                              </div>
                             </ion-slide>
                           </ng-container>
                         </ion-slides>
@@ -205,8 +217,8 @@
                 </ion-row>
               </ion-grid>
             </div>
-            <div class="background-shape">
-            </div>
+            <!-- <div class="background-shape">
+            </div> -->
           </div>
           <!-- <ion-button class="scroll-button" color="success" (click)="moveToNextPage()">Scroll</ion-button> -->
         </ion-col>

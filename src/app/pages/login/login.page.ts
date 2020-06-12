@@ -24,7 +24,7 @@ import {
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  activeSection = 1;
+  activeSection = 0;
   screenHeight: number;
   screenWidth: number;
 
@@ -45,8 +45,11 @@ export class LoginPage implements OnInit {
 
   test = new Array(4);
   slideOpts = {
-    initialSlide: 1,
+    initialSlide: 0,
+    slidesPerView: 1,
+    spaceBetween: 15,
     autoplay: true,
+    centeredContent: true,
     speed: 400,
     loop: true,
     autoplayDisableOnInteraction: false,

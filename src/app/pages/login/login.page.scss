@@ -68,15 +68,6 @@ ion-grid {
 
 /* Settings title
     ===============================*/
-h1,
-h2 {
-  color: $settings-text-color-header;
-  font-size: $settings-font-size-header;
-  font-weight: $settings-font-weight-header;
-  line-height: 29px;
-  font-size: 26px;
-  text-align: center;
-}
 
 .title-text-wrapper {
   margin: 15px 0 !important;
@@ -231,25 +222,41 @@ ion-item .item-inner {
 
 // Web Version
 .web-grid {
-  .logo {
-    max-height: 100%;
-    max-width: 100%;
-  }
-
-  .system-name {
-    position: absolute;
-    bottom: 30px;
-
-    h1 {
-      font-size: 4.2rem;
-      line-height: 95px !important;
-      font-weight: bold;
-      text-shadow: 1px 1px 2px #2b6f29, -1px -1px 2px #2b6f29;
+  .login-section{
+    .logo {
+      max-height: 100%;
+      max-width: 100%;
+    }
+  
+    h1,
+    h2 {
+      color: $settings-text-color-header;
+      font-size: $settings-font-size-header;
+      font-weight: $settings-font-weight-header;
+      line-height: 29px;
+      font-size: 26px;
     }
 
-    h2 {
-      font-size: 2.2rem;
-      line-height: 39px;
+    .form-row {
+      height: 80%;
+    }
+  
+    .system-name {
+      position: absolute;
+      bottom: 30px;
+      width: 100%;
+  
+      h1 {
+        font-size: 4.2rem;
+        line-height: 95px !important;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px #2b6f29, -1px -1px 2px #2b6f29;
+      }
+  
+      h2 {
+        font-size: 2.2rem;
+        line-height: 39px;
+      }
     }
   }
 
@@ -258,6 +265,7 @@ ion-item .item-inner {
   }
 
   .image-background {
+    min-height: 100vh;
     background-image: url('../../../assets/img/apu.jpg');
     background-attachment: fixed;
     background-position: center;
@@ -276,6 +284,13 @@ ion-item .item-inner {
   .login-section {
     .background-height {
       height: 100vh;
+
+      .menu {
+        .menu-item {
+          display: inline-block;
+          margin: 0 40px;
+        }
+      }
 
       div.login-form-container {
         background: rgba(29, 71, 94, 0.42);
@@ -366,7 +381,6 @@ ion-item .item-inner {
 
 
 // Slider
-
 .slider-section {
   .wrapper {
     width: 100%;
@@ -376,11 +390,11 @@ ion-item .item-inner {
     z-index: 1;
 
     .content {
-      color: white;
+      // color: white;
       position: absolute;
-      top: 22%;
-      width: 90%;
-      left: 9%;
+      // top: 22%;
+      width: 100%;
+      // left: 9%;
       z-index: 5;
 
       .section-header {
@@ -410,11 +424,11 @@ ion-item .item-inner {
 
 
       .swiper-button-prev {
-        left: -30px;
+        left: 20px;
       }
 
       .swiper-button-next {
-        right: -30px;
+        right: 20px;
       }
 
       .swiper-button-next,
@@ -462,17 +476,12 @@ ion-item .item-inner {
       z-index: 5;
       height: 100%;
 
-      ion-row.content-wrapper{
+      ion-row.content-wrapper {
         height: 100vh;
-        ion-col{
+
+        ion-col {
           margin: auto;
         }
-      }
-
-      .section-header {
-        font-size: 3.9em;
-        word-spacing: 9999rem;
-        word-wrap: normal;
       }
     }
 
