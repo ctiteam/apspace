@@ -16,7 +16,6 @@ export interface Settings {
   defaultVenue: string;
   /* attendix */
   scan: boolean;
-  attendixv1: boolean | null; // ui/ux update
   /* more page */
   favoriteItems: MenuItem[];
   /* theme, need to change this after auto */

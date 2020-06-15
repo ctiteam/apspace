@@ -44,7 +44,6 @@ const defaultData: Settings = {
   defaultCampus: '',
   defaultVenue: '',
   scan: false,
-  attendixv1: null, // deprecated
   favoriteItems: [],
   activeAccentColor: '', // deprecated
   darkTheme: false,
@@ -92,7 +91,7 @@ export class SettingsService {
       if (raw === null) { // keep default settings
         return;
       } else if ('role' in raw) { // migrate old storage method
-        const { role, canAccessResults, ...rest } = raw;
+        const { role, canAccessResults, attendixv1, ...rest } = raw;
 
         // move role and canAccessResults to storage
         this.storage.set('role', role);

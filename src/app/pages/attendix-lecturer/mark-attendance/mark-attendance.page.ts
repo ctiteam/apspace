@@ -1,4 +1,4 @@
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
@@ -15,37 +15,47 @@ import {
   ResetAttendanceGQL, SaveLectureLogGQL, ScheduleInput, Status
 } from '../../../../generated/graphql';
 import { isoDate, parseTime } from '../date';
-
 type Attendance = 'Y' | 'L' | 'N' | 'R' | '';
 
-const stateMap = {Y: 'present', L: 'late', N: 'absent', R: 'absent with reason'};
-
+const stateMap = { Y: 'present', L: 'late', N: 'absent', R: 'absent with reason' };
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-mark-attendance',
   templateUrl: './mark-attendance.page.html',
   styleUrls: ['./mark-attendance.page.scss'],
+  providers: [DatePipe]
 })
 export class MarkAttendancePage implements OnInit {
+
+  doughnutChart = {
+    type: 'pie',
+    options: {
+      responsive: false,
+      legend: {
+        display: true,
+        position: 'right',
+      }
+    },
+    data: {}
+  };
 
   schedule: ScheduleInput;
 
   auto: boolean;
   term = '';
-  type: Attendance;
+  type: Attendance = '';
+  thisClass = false;
   resetable = false;
-
+  hideQr = false;
   lectureUpdate = '';
 
   countdown$: Observable<number>;
-  timeLeft$: Observable<number>;
   otp$: Observable<number>;
 
   lastMarked$: Observable<Pick<NewStatusSubscription, 'newStatus'>[]>;
   students$: Observable<Partial<Status>[]>;
-  totalPresentStudents$: Observable<number>;
   totalStudents$: Observable<number>;
-
+  studentsChartData$: Observable<any>;
   statusUpdate = new Subject<{ id: string; attendance: string; absentReason: string | null; }>();
 
   constructor(
@@ -60,14 +70,15 @@ export class MarkAttendancePage implements OnInit {
     private saveLectureLog: SaveLectureLogGQL,
     public alertCtrl: AlertController,
     public toastCtrl: ToastController,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
     // totp options
     authenticator.options = { digits: 3, step: 4 * 60 + 29, window: 30 };
 
-    this.schedule = {
+    const schedule = this.schedule = {
       classcode: this.route.snapshot.paramMap.get('classcode'),
       date: this.route.snapshot.paramMap.get('date'),
       startTime: this.route.snapshot.paramMap.get('startTime'),
@@ -75,7 +86,6 @@ export class MarkAttendancePage implements OnInit {
       classType: this.route.snapshot.paramMap.get('classType')
     };
 
-    const schedule = this.schedule;
     let studentsNameById: { [student: string]: string };
 
     // limit reset to 30 days in the past
@@ -86,17 +96,19 @@ export class MarkAttendancePage implements OnInit {
     // initAttendance and attendance query order based on probability
     const d = new Date();
     const nowMins = d.getHours() * 60 + d.getMinutes();
-    // should be start <= now <= end + 5 but can ignore this because of classes page
-    const thisClass = schedule.date === isoDate(today) && parseTime(schedule.startTime) <= nowMins;
+    // if this is the current class
+    this.thisClass = schedule.date === isoDate(today)
+      && parseTime(schedule.startTime) <= nowMins
+      && nowMins <= parseTime(schedule.endTime) + 5;
 
     const init = () => {
       const attendance = this.route.snapshot.paramMap.get('defaultAttendance') || 'N';
-      this.auto = thisClass;
-      this.type = 'N';
+      this.hideQr = attendance === 'Y';
+      this.auto = this.thisClass;
       return this.initAttendance.mutate({ schedule, attendance });
     };
-    const list = () => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }));
-    const attendance$ = thisClass ? init().pipe(catchError(list)) : list().pipe(catchError(init));
+    const list = () => (this.auto = false, this.attendance.fetch({ schedule }));
+    const attendance$ = this.thisClass ? init().pipe(catchError(list)) : list().pipe(catchError(init));
 
     // get attendance state from query and use manual mode if attendance initialized
     const attendancesState$ = attendance$.pipe(
@@ -144,11 +156,6 @@ export class MarkAttendancePage implements OnInit {
     );
 
     // display countdown timer
-    this.timeLeft$ = reload$.pipe(
-      startWith(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000),
-      map(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000),
-      shareReplay(1) // keep track while switching mode
-    );
     this.countdown$ = interval(1000).pipe(
       takeUntil(stopTimer$),
       map(() => authenticator.timeRemaining() + authenticator.options.window - 1), // ignore current second
@@ -184,8 +191,41 @@ export class MarkAttendancePage implements OnInit {
       shareReplay(1)
     );
 
-    this.totalPresentStudents$ = this.students$.pipe(
-      map(students => students.filter(student => student.attendance === 'Y').length)
+    this.studentsChartData$ = this.students$.pipe(
+      map(students => {
+        return {
+          labels: ['Present', 'Absent', 'Absent With Reason', 'Late'],
+          datasets: [{
+            label: '# of Votes',
+            data: [
+              students.filter(student => student.attendance === 'Y').length,
+              students.filter(student => student.attendance === 'N').length,
+              students.filter(student => student.attendance === 'R').length,
+              students.filter(student => student.attendance === 'L').length
+            ],
+            backgroundColor: [
+              'rgba(73, 181, 113, 0.5)',
+              'rgba(229, 77, 66, 0.5)',
+              'rgba(54, 162, 235, 0.5)',
+              'rgba(212, 154, 13, 0.5)'
+            ],
+            hoverBackgroundColor: [
+              '#49b571', // green
+              '#e54d42', // red
+              '#36A2EB', // blue
+              '#d49a0d' // orange
+            ],
+            borderColor: [
+              '#49b571', // green
+              '#e54d42', // red
+              '#36A2EB', // blue
+              '#d49a0d' // orange
+            ],
+            borderWidth: 3
+          }]
+        };
+      }),
+      shareReplay(1) // keep track while switching mode
     );
 
     this.totalStudents$ = this.students$.pipe(
@@ -221,14 +261,13 @@ export class MarkAttendancePage implements OnInit {
     };
     const schedule = this.schedule;
     this.markAttendance.mutate({ schedule, student, attendance, absentReason }, options).subscribe(
-      () => {},
+      () => { },
       e => { this.toast(`Mark ${stateMap[attendance]} failed: ` + e, 'danger'); console.error(e); }
     );
   }
 
-  /** Mark all student as ... */
-  markAll() {
-    const markAll = (attendance: Attendance) => this.students$.pipe(first()).subscribe(students => {
+  private _markAll(attendance: Attendance) {
+    return this.students$.pipe(first()).subscribe(students => {
       const options = {
         optimisticResponse: {
           __typename: 'Mutation' as 'Mutation',
@@ -250,25 +289,53 @@ export class MarkAttendancePage implements OnInit {
         e => { this.toast(`Mark all ${stateMap[attendance]} failed: ${e}`, 'danger'); console.error(e); },
       );
     });
+  }
+
+  /** Mark all student as ... */
+  markAll() {
     this.alertCtrl.create({
       header: 'Mark all students as ...',
       buttons: [
         {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary'
-        },
-        {
           text: 'Present',
-          handler: () => markAll('Y')
+          cssClass: 'present inline',
+          handler: () => this._markAll('Y')
         },
         {
           text: 'Late',
-          handler: () => markAll('L')
+          cssClass: 'late inline',
+          handler: () => this._markAll('L')
         },
         {
           text: 'Absent',
-          handler: () => markAll('N')
+          cssClass: 'absent inline',
+          handler: () => this._markAll('N')
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'cancel inline'
+        },
+      ]
+    }).then(alert => alert.present());
+  }
+
+  /** Additional way to mark all as absent. */
+  markAllAbsent() {
+    this.alertCtrl.create({
+      cssClass: 'delete-warning',
+      header: 'Reset All To Absent!',
+      message: 'Are you sure that you want to <span class=\'danger-text text-bold\'>Reset</span> the attendance for all students to \'Absent\'?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary-txt-color',
+        },
+        {
+          text: 'Reset',
+          cssClass: 'danger-text',
+          handler: () => this._markAll('N')
         }
       ]
     }).then(alert => alert.present());
@@ -286,19 +353,21 @@ export class MarkAttendancePage implements OnInit {
     }
   }
 
-  /** Reset attendance, double confirm. */
+  /** Delete attendance, double confirm. */
   reset() {
     this.alertCtrl.create({
-      header: 'Confirm!',
-      message: 'Attendance will be <strong>deleted</strong>!',
+      cssClass: 'delete-warning',
+      header: 'Delete Attendance Record!',
+      message: `Are you sure that you want to <span class="danger-text text-bold">Permanently Delete</span> the selected attendance record?<br><br> <span class="text-bold">Class Code:</span> ${this.schedule.classcode}<br> <span class="text-bold">Class Date:</span> ${this.datePipe.transform(this.schedule.date, 'EEE, dd MMM yyy')}<br> <span class="text-bold">Class Time:</span> ${this.schedule.startTime} - ${this.schedule.endTime}<br> <span class="text-bold">Class Type:</span> ${this.schedule.classType}`,
       buttons: [
         {
           text: 'Cancel',
           role: 'cancel',
-          cssClass: 'secondary',
+          cssClass: 'secondary-txt-color',
         },
         {
-          text: 'Okay',
+          text: 'Delete',
+          cssClass: 'danger-text',
           handler: () => {
             const schedule = this.schedule;
             this.resetAttendance.mutate({ schedule }).subscribe(
