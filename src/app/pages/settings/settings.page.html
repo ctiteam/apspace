@@ -190,11 +190,11 @@
         </ion-card-header>
         <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
           <ion-list class="ion-no-padding">
-            <ion-item-group *ngIf="timetable$ | async as timetable">
+            <ion-item-group *ngIf="modulesBlacklist$ | async as modulesBlacklist">
               <ion-item-divider class="ion-no-padding ion-margin-bottom">
                 <ion-label>Hidden Modules</ion-label>
               </ion-item-divider>
-              <ion-chip *ngFor="let module of timetable?.blacklists" (click)="timetableModuleBlacklistsRemove(module)">
+              <ion-chip *ngFor="let module of modulesBlacklist" (click)="timetableModuleBlacklistsRemove(module)">
                 <ion-icon name="remove" color="danger"></ion-icon>
                 <ion-label>{{ module }}</ion-label>
               </ion-chip>

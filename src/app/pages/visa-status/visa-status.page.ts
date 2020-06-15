@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Storage } from '@ionic/storage';
 
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
@@ -6,7 +7,7 @@ import { finalize, tap } from 'rxjs/operators';
 import { CountryData, Role, StudentProfile, VisaDetails } from '../../interfaces';
 
 import { ToastController } from '@ionic/angular';
-import { SettingsService, WsApiService } from '../../services';
+import { WsApiService } from '../../services';
 
 @Component({
   selector: 'app-visa-status',
@@ -35,15 +36,17 @@ export class VisaStatusPage implements OnInit {
   constructor(
     public toastCtrl: ToastController,
     private ws: WsApiService,
-    private settings: SettingsService
+    private storage: Storage,
   ) { }
 
   ngOnInit() {
-    // tslint:disable-next-line: no-bitwise
-    if (this.settings.get('role') & Role.Student) {
-      this.sendRequest = true;
-      this.getProfile();
-    }
+    this.storage.get('role').then((role: Role) => {
+      // tslint:disable-next-line: no-bitwise
+      if (role & Role.Student) {
+        this.sendRequest = true;
+        this.getProfile();
+      }
+    });
     this.getListOfCountries(); // get the list of countries when the page loads and add the data to ion-select
   }
 

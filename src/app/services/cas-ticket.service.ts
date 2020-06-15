@@ -7,7 +7,6 @@ import { EMPTY, Observable, from as fromPromise, of, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
 import { Role } from '../interfaces';
-import { SettingsService } from './settings.service';
 
 /**
  * CAS Authentication with fallback mechanism.
@@ -27,18 +26,15 @@ export class CasTicketService {
 
   readonly casUrl = 'https://cas.apiit.edu.my';
 
-  /**
-   * Check if user is authenticated against presence of tgt in storage.
-   */
-
   constructor(
     public http: HttpClient,
     public storage: Storage,
     public router: Router,
-    private settings: SettingsService,
-  ) {
-  }
+  ) { }
 
+  /**
+   * Check if user is authenticated against presence of tgt in storage.
+   */
   isAuthenticated(): Promise<boolean> {
     return this.storage.get('tgt').then(tgt => !!tgt);
   }
@@ -126,6 +122,7 @@ export class CasTicketService {
         const parts = res.serviceResponse.authenticationSuccess.attributes.distinguishedName
           .join().toLowerCase().split(',');
         let role: Role = 0;
+        let canAccessResults = false;
 
         /* tslint:disable:no-bitwise */
         if (parts.indexOf('ou=students') !== -1) {
@@ -147,12 +144,11 @@ export class CasTicketService {
           const memberOf = res.serviceResponse.authenticationSuccess.attributes.memberOf
             .join().toLowerCase().split(',');
 
-          if (memberOf.indexOf('cn=gims_web_result') !== -1) {
-            this.settings.set('canAccessResults', true);
-          }
+          canAccessResults = memberOf.includes('cn=gims_web_result');
         }
 
-        this.settings.set('role', role);
+        this.storage.set('role', role);
+        this.storage.set('canAccessResults', canAccessResults);
         return of(role);
       }),
     );

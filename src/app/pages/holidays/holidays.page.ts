@@ -1,17 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
+
 import { EventComponentConfigurations, Holiday, Holidays, Role } from 'src/app/interfaces';
-import { SettingsService, WsApiService } from 'src/app/services';
+import { WsApiService } from 'src/app/services';
 
 @Component({
   selector: 'app-holidays',
   templateUrl: './holidays.page.html',
   styleUrls: ['./holidays.page.scss'],
 })
-export class HolidaysPage {
+export class HolidaysPage implements OnInit {
   holiday$: Observable<Holiday[]>;
   filteredHoliday$: Observable<Holiday[] | EventComponentConfigurations[]>;
 
@@ -27,18 +29,17 @@ export class HolidaysPage {
     filterMonths: string,
     numberOfDays: '' | '1 days' | 'many',
     affecting: '' | 'students' | 'staff'
-  } = {
-      show: 'all',
-      filterDays: '',
-      filterMonths: '',
-      numberOfDays: '',
-      affecting: this.settings.get('role') === Role.Student ? 'students' : 'staff'
-    };
+  };
+
   constructor(
     private ws: WsApiService,
     private menu: MenuController,
-    private settings: SettingsService
+    private storage: Storage,
   ) { }
+
+  ngOnInit() {
+    this.defaultFilter();
+  }
 
   ionViewDidEnter() {
     this.doRefresh();
@@ -148,14 +149,20 @@ export class HolidaysPage {
     this.menu.close('holiday-filter-menu');
   }
 
+  defaultFilter() {
+    this.storage.get('role').then((role: Role) => {
+      this.filterObject = {
+        show: 'all',
+        filterDays: '',
+        filterMonths: '',
+        numberOfDays: '',
+        affecting: role === Role.Student ? 'students' : 'staff'
+      };
+    });
+  }
+
   clearFilter() {
-    this.filterObject = {
-      filterDays: '',
-      filterMonths: '',
-      numberOfDays: '',
-      show: 'all',
-      affecting: this.settings.get('role') === Role.Student ? 'students' : 'staff'
-    };
+    this.defaultFilter();
     this.onFilter();
   }
 

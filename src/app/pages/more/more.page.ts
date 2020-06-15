@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Network } from '@ionic-native/network/ngx';
+import { AlertController, NavController, ToastController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 import Fuse from 'fuse.js';
 import { Observable } from 'rxjs';
 
 import { Role } from '../../interfaces';
-import { CasTicketService, SettingsService, UserSettingsService } from '../../services';
-
-import { Network } from '@ionic-native/network/ngx';
-import { AlertController, NavController, ToastController } from '@ionic/angular';
+import { CasTicketService, SettingsService } from '../../services';
 import { MenuItem } from './menu.interface';
+
 @Component({
   selector: 'app-more',
   templateUrl: './more.page.html',
@@ -769,28 +770,28 @@ export class MorePage implements OnInit {
     public iab: InAppBrowser,
     private cas: CasTicketService,
     private settings: SettingsService,
-    private userSettings: UserSettingsService,
+    private storage: Storage,
     private network: Network,
     private toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
-    this.view$ = this.userSettings.getMenuUI();
+    this.view$ = this.settings.get$('menuUI');
 
-    const storageMenuItems = this.settings.get('favoriteItems');
-    if (storageMenuItems) {
-      this.fav = storageMenuItems;
-    }
+    this.fav = this.settings.get('favoriteItems');
 
-    const role = this.settings.get('role');
-    const canAccessResults = this.settings.get('canAccessResults');
-    this.menuFiltered = this.menuFull.filter(
+    Promise.all([
+      this.storage.get('role'),
+      this.storage.get('canAccessResults')
+    ]).then(([role, canAccessResults = false]: [Role, boolean]) => {
+      this.menuFiltered = this.menuFull.filter(
+        // tslint:disable-next-line:no-bitwise
+        menu => (menu.role & role) && ((menu.canAccess && menu.canAccess === canAccessResults) || !menu.canAccess)
+      );
+
       // tslint:disable-next-line:no-bitwise
-      menu => (menu.role & role) && ((menu.canAccess && menu.canAccess === canAccessResults) || !menu.canAccess)
-    );
-
-    // tslint:disable-next-line:no-bitwise
-    this.fav = this.fav.filter(menuItem => menuItem.role & role);
+      this.fav = this.fav.filter(menuItem => menuItem.role & role);
+    });
   }
 
   /** Open page, manually check for third party pages. */

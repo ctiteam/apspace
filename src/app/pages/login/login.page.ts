@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Network } from '@ionic-native/network/ngx';
 import { AlertController, IonContent, IonSlides, Platform, ToastController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap, tap, timeout } from 'rxjs/operators';
@@ -10,11 +11,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Role, ShortNews } from '../../interfaces';
 
 import {
-  CasTicketService,
-  DataCollectorService,
-  NewsService,
-  SettingsService,
-  UserSettingsService,
+  CasTicketService, DataCollectorService, NewsService, SettingsService,
   WsApiService
 } from '../../services';
 
@@ -83,8 +80,8 @@ export class LoginPage implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private settings: SettingsService,
+    private storage: Storage,
     private toastCtrl: ToastController,
-    private userSettings: UserSettingsService,
     private ws: WsApiService,
     private news: NewsService
   ) {
@@ -158,7 +155,9 @@ export class LoginPage implements OnInit {
         tap(role => this.cacheApi(role)),
         timeout(15000),
       ).subscribe(
-        _ => { },
+        _ => {
+          // TODO default dashboard settings
+        },
         _ => {
           this.loginProcessLoading = false;
           this.userUnauthenticated = true;
@@ -175,14 +174,32 @@ export class LoginPage implements OnInit {
           this.loginProcessLoading = false;
           this.userAuthenticated = true;
           // GET USER ROLE HERE AND CHECK PUSH THE SETTINGS BASED ON THAT
-          this.settings.ready().then(() => {
-            const role = this.settings.get('role');
+          this.storage.get('role').then((role: Role) => {
             // tslint:disable-next-line:no-bitwise
             if (role & Role.Student) {
-              this.userSettings.setDefaultDashboardSections('students');
+              this.settings.set('dashboardSections', [
+                'quickAccess',
+                'todaysSchedule',
+                'upcomingEvents',
+                'lowAttendance',
+                'upcomingTrips',
+                'apcard',
+                'cgpa',
+                'financials',
+                'news',
+                'noticeBoard'
+              ], 0);
               // tslint:disable-next-line:no-bitwise
             } else if (role & (Role.Lecturer | Role.Admin)) {
-              this.userSettings.setDefaultDashboardSections('staff');
+              this.settings.set('dashboardSections', [
+                'inspirationalQuote',
+                'todaysSchedule',
+                'upcomingEvents',
+                'upcomingTrips',
+                'apcard',
+                'news',
+                'noticeBoard'
+              ], 0);
             }
           });
           setTimeout(() => {

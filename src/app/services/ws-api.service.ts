@@ -231,6 +231,60 @@ export class WsApiService {
     );
   }
 
+  /**
+   * DELETE: Simple request WS API.
+   *
+   * @param endpoint - <apiUrl><endpoint> for service
+   * @param options.auth - authentication required (default: true)
+   * @param options.headers - http headers (default: {})
+   * @param options.params - additional request parameters (default: {})
+   * @param options.timeout - request timeout (default: 10000)
+   * @param options.url - url of web service (default: apiUrl)
+   * @param options.withCredentials - request sent with cookies (default: false)
+   * @return data observable
+   */
+  delete<T>(endpoint: string, options: {
+    auth?: boolean,
+    headers?: HttpHeaders | { [header: string]: string | string[]; },
+    params?: HttpParams | { [param: string]: string | string[]; },
+    timeout?: number,
+    url?: string,
+    withCredentials?: boolean,
+  } = {}): Observable<T> {
+    options = {
+      auth: true,
+      headers: {},
+      params: {},
+      timeout: 10000,
+      url: this.apiUrl,
+      withCredentials: false,
+      ...options
+    };
+
+    const url = options.url + endpoint;
+    const opt = {
+      headers: options.headers,
+      params: options.params,
+      withCredentials: options.withCredentials,
+    };
+
+    if (this.plt.is('cordova') && this.network.type === 'none') {
+      return this.handleOffline();
+    }
+
+    return (!options.auth // always get ticket if auth is true
+      ? this.http.delete<T>(url, opt)
+      : this.cas.getST(url.split('?').shift()).pipe( // remove service url params
+        switchMap(ticket => this.http.delete<T>(url, { ...opt, params: { ...opt.params, ticket } })),
+      )
+    ).pipe(
+      catchError(this.handleClientError),
+      timeout(options.timeout),
+      publishLast(),
+      refCount(),
+    );
+  }
+
   /** Handle client error by rethrowing 4xx. */
   private handleClientError(err: HttpErrorResponse): Observable<never> | never {
     if (400 <= err.status && err.status < 500) {

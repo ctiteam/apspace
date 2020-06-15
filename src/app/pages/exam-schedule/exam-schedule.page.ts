@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ModalController, Platform } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 import { ExamSchedule, Role, StudentProfile } from '../../interfaces';
 import { IntakeListingService, SettingsService, WsApiService } from '../../services';
@@ -29,6 +31,7 @@ export class ExamSchedulePage {
     private il: IntakeListingService,
     private ws: WsApiService,
     private settings: SettingsService,
+    private storage: Storage,
     private iab: InAppBrowser
   ) { }
 
@@ -46,21 +49,23 @@ export class ExamSchedulePage {
       this.intake = intake;
       this.doRefresh();
     } else {
-      /* tslint:disable:no-bitwise */
-      if (this.settings.get('role') & Role.Student) {
+      this.storage.get('role').then((role: Role) => {
+        /* tslint:disable:no-bitwise */
+        if (role & Role.Student) {
 
-        /* tslint:enable:no-bitwise */
-        this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
-          // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
-          this.intake = p.INTAKE.replace(/[(]AP[)]|[(]BP[)]/g, '');
-        },
-          (_) => { },
-          () => this.doRefresh()
-        );
-      } else {
-        this.doRefresh();
-        this.showNoIntakeMessage = true;
-      }
+          /* tslint:enable:no-bitwise */
+          this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
+            // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
+            this.intake = p.INTAKE.replace(/[(]AP[)]|[(]BP[)]/g, '');
+          },
+            (_) => { },
+            () => this.doRefresh()
+          );
+        } else {
+          this.doRefresh();
+          this.showNoIntakeMessage = true;
+        }
+      });
     }
   }
   doRefresh(refresher?) {

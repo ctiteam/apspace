@@ -3,6 +3,7 @@ import {
   ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router,
   RouterStateSnapshot, UrlTree
 } from '@angular/router';
+import { Storage } from '@ionic/storage';
 
 import { CasTicketService, SettingsService } from '../services';
 
@@ -20,11 +21,12 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   constructor(
     private cas: CasTicketService,
     private settings: SettingsService,
+    private storage: Storage,
     private router: Router,
   ) { }
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<UrlTree | boolean> {
-    await this.settings.ready();
+    await this.settings.ready(); // migrate role to storage
 
     // authentication
     if (!await this.cas.isAuthenticated()) {
@@ -35,10 +37,10 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     }
 
     // authorization
+    const role = await this.storage.get('role');
     // tslint:disable-next-line:no-bitwise
-    if (route.data.role && !(route.data.role & this.settings.get('role'))) {
-      return this.router.createUrlTree([this.settings.get('role')
-        ? '/unauthorized' : '/logout']);
+    if (route.data.role && !(route.data.role & role)) {
+      return this.router.createUrlTree([role ? '/unauthorized' : '/logout']);
     }
 
     return true;

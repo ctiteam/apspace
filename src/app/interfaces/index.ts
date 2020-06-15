@@ -18,7 +18,7 @@ export { LecturerTimetable } from './lecturer-timetable';
 export { MPULegend } from './mpu-legend';
 export { News, ShortNews } from './news';
 export { OperationHours } from './operation-hours';
-export { Role, Settings } from './settings';
+export { Settings, SettingsOld } from './settings';
 export { SecurityQuestionsAndAnswers } from './security-questions-and-answers';
 export { StaffDirectory } from './staff-directory';
 export { StaffProfile } from './staff-profile';
@@ -52,3 +52,4 @@ export { LeaveHistory, LeaveBalance, PendingApproval, OnLeaveOnMyCluster } from 
 export { SurveyIntake, SurveyModule } from './student-survey';
 export { StudentSearch } from './student-search';
 export { OrientationStudentDetails, OrientationStudentsList } from './e-orientation';
+export { Role } from './role';

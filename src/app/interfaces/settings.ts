@@ -1,14 +1,40 @@
 import { MenuItem } from '../pages/more/menu.interface';
-
-/* tslint:disable:no-bitwise */
-export enum Role {
-  Student = 1 << 0,
-  Lecturer = 1 << 1,
-  Admin = 1 << 2,
-}
+import { Role } from './role';
 
 export interface Settings {
-  role: Role;
+  /* bus tracking */
+  tripFrom: string;
+  tripTo: string;
+  /* timetable */
+  intakeHistory: string[];
+  viewWeek: boolean | null; // shared with lecturer
+  modulesBlacklist: string[];
+  /* exam schedule */
+  examIntake: string | null;
+  /* default location (for staff only) */
+  defaultCampus: string;
+  defaultVenue: string;
+  /* attendix */
+  scan: boolean;
+  attendixv1: boolean | null; // ui/ux update
+  /* more page */
+  favoriteItems: MenuItem[];
+  /* theme, need to change this after auto */
+  activeAccentColor: string;
+  darkTheme: boolean;
+  accentColor: string;
+  /* dashboard */
+  dashboardSections: string[];
+  menuUI: 'cards' | 'list';
+  shakeSensitivity: number;
+  /* bus shuttle service */
+  busFirstLocation: string;
+  busSecondLocation: string;
+}
+
+/** Delete this in the future, used only for migration. */
+export interface SettingsOld {
+  role: Role; // @deprecated use storage instead
   /* bus tracking */
   tripFrom: string;
   tripTo: string;

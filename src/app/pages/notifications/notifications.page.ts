@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController, ModalController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
+
 import { NotificationHistory, Role } from 'src/app/interfaces';
-import { NotificationService, SettingsService } from 'src/app/services';
+import { NotificationService } from 'src/app/services';
 import { DingdongPreferencesPage } from '../settings/dingdong-preferences/dingdong-preferences.page';
 import { NotificationModalPage } from './notification-modal';
 
@@ -27,13 +29,15 @@ export class NotificationsPage implements OnInit {
   constructor(
     private notificationService: NotificationService,
     private modalCtrl: ModalController,
-    private settings: SettingsService,
+    private storage: Storage,
     private menu: MenuController,
   ) { }
 
   ngOnInit() {
-    // tslint:disable-next-line: no-bitwise
-    this.isStudent = this.settings.get('role') & Role.Student << 0 ? false : true;
+    this.storage.get('role').then((role: Role) => {
+      // tslint:disable-next-line: no-bitwise
+      this.isStudent = role & Role.Student << 0 ? false : true;
+    });
   }
 
   ionViewDidEnter() {

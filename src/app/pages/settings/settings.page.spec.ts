@@ -18,12 +18,10 @@ describe('SettingsPage', () => {
     const userSettingsServiceStub = {
       darkThemeActivated: () => NEVER,
       getAccentColor: () => NEVER,
-      getMenuUI: () => NEVER,
-      getBusShuttleServiceSettings: () => NEVER,
       PureDarkThemeActivated: () => NEVER,
-      timetable: new BehaviorSubject({ blacklists: [] }),
+      timetable: new BehaviorSubject({ modulesBlacklist: [] }),
     };
-    settings = jasmine.createSpyObj('SettingsService', ['get']);
+    settings = jasmine.createSpyObj('SettingsService', ['get', 'get$']);
     ws = jasmine.createSpyObj('WsApiService', ['get']);
 
     TestBed.configureTestingModule({

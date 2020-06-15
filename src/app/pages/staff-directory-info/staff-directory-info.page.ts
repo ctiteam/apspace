@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Storage } from '@ionic/storage';
 
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 
 import { Role, StaffDirectory } from '../../interfaces';
-import { AppLauncherService, SettingsService, WsApiService } from '../../services';
+import { AppLauncherService, WsApiService } from '../../services';
 
 /**
  * Display staff information. Can also be used as model.
@@ -27,19 +28,18 @@ export class StaffDirectoryInfoPage implements OnInit {
     private router: Router,
     private ws: WsApiService,
     private appLauncherService: AppLauncherService,
-    private settings: SettingsService
+    private storage: Storage,
   ) {}
 
   ngOnInit() {
     this.id = this.route.snapshot.params.id;
-    const role = this.settings.get('role');
     this.staffs$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
       share(),
     );
-    // tslint:disable-next-line: no-bitwise
-    if (role & Role.Student) {
-      this.isStudent = true;
-    }
+    this.storage.get('role').then((role: Role) => {
+      // tslint:disable-next-line: no-bitwise
+      this.isStudent = Boolean(role & Role.Student);
+    });
   }
 
   chatInTeams(lecturerCasId: string) {
