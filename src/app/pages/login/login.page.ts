@@ -152,6 +152,7 @@ export class LoginPage implements OnInit {
         switchMap(st => this.cas.validate(st).pipe(
           catchError(() => (this.showToastMessage('You are not authorized to use APSpace'), throwError(new Error('unauthorized'))))
         )),
+        tap(() => this.settings.initialSync()),
         tap(role => this.cacheApi(role)),
         timeout(15000),
       ).subscribe(

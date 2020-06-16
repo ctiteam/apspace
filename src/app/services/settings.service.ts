@@ -79,6 +79,9 @@ export class SettingsService {
 
   private readyPromise: Promise<void>;
 
+  // make sure initialSync only runned once per session
+  private initialSynced = false;
+
   constructor(
     public http: HttpClient,
     public network: Network,
@@ -224,6 +227,12 @@ export class SettingsService {
    * First attempt to sync settings, should be done on login or startup.
    */
   initialSync(): void {
+    // make sure initial sync only runs once per session
+    if (this.initialSynced) {
+      return;
+    }
+    this.initialSynced = true;
+
     const options = this.network.type !== 'none' ? { headers: { 'x-refresh': '' } } : {};
     from(this.storage.get('role')).pipe(
       // tslint:disable-next-line:no-bitwise
