@@ -147,12 +147,12 @@ export class SettingsService {
    *
    * @param key - key stored
    * @param value - value to be set
-   * @param newEpoch - override new epoch (default: current epoch)
    */
-  // tslint:disable-next-line:no-bitwise
-  set<K extends keyof Settings>(key: K, value: Settings[K], newEpoch = Date.now() / 1000 | 0): void {
+  set<K extends keyof Settings>(key: K, value: Settings[K]): void {
     if (this.data.value[key].data === value) { return; }
     const { data, epoch, oldData, lastEpoch } = this.data.value[key];
+    // tslint:disable-next-line:no-bitwise
+    const newEpoch = Date.now() / 1000 | 0;
     if (oldData === undefined) {
       this.data.next({...this.data.value, [key]: {epoch: newEpoch, data: value, oldData: data, lastEpoch: epoch}});
     } else if (!isEqual(oldData, value)) {
