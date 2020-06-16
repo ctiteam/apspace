@@ -218,8 +218,8 @@ export class SettingsService {
         }
         this.requests[k] = this.ws.put<any>(`/settings-sync/${k}`, { body }).subscribe(() => {
           this.data.next({...this.data.value, [k]: { epoch, data }});
-          delete this.requests[k]; // clear subscription
-        });
+          this.storage.set('settings', this.data.value);
+        }, err => console.error('sync', err), () => delete this.requests[k]); // clear subscription
       });
   }
 
