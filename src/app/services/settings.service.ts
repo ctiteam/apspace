@@ -283,6 +283,7 @@ export class SettingsService {
         ({[k]: {epoch: Date.now() / 1000 | 0, data: v}}))),
     });
     this.storage.set('settings', this.data.value);
+    this.initialSynced = false; // allow sync after logout
   }
 
 }
