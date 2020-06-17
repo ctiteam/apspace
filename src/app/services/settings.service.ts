@@ -242,7 +242,7 @@ export class SettingsService {
       switchMap(user => this.http.get<SettingsReq>(`${BUCKET_URL}/${user.toLowerCase()}`, options)),
       tap(data => this.data.next({
         ...this.data.value,
-        ...Object.assign({}, Object.keys(data)
+        ...Object.assign({}, ...Object.keys(data)
           .filter(k => !['version', 'appVersion'].includes(k))
           .map(k => k in defaultData
             // merge with current data according to timestamp
