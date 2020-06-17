@@ -246,9 +246,10 @@ export class SettingsService {
           .filter(k => !['version', 'appVersion'].includes(k))
           .map(k => k in defaultData
             // merge with current data according to timestamp
-            ? {[k]: data[k]?.epoch > this.data[k]?.epoch ? data[k] : this.data[k]}
+            ? {[k]: data[k]?.epoch > this.data.value[k]?.epoch ? data[k] : this.data.value[k]}
             // remove additional unused fields (not stored)
-            : this.ws.delete<any>(`/settings-sync/${k}`).subscribe())
+            : this.ws.delete<any>(`/settings-sync/${k}`).subscribe()
+          )
         )
       })),
       catchError(err => {
