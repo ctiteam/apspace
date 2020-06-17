@@ -70,8 +70,7 @@ export class SettingsService {
     version: '2020-05-27', // settings version
     appVersion: '1.2.3', // to be merged with synced version
     ...Object.assign({}, ...Object.entries(defaultData).map(([k, v]) =>
-      // tslint:disable-next-line:no-bitwise
-      ({[k]: {epoch: Date.now() / 1000 | 0, data: v}}))),
+      ({[k]: {epoch: 0, data: v}}))),
   });
 
   // keep track of all requests subscriptions, one at a time for each requests key
@@ -279,8 +278,7 @@ export class SettingsService {
       version: '2020-05-27', // settings version
       appVersion: '1.2.3', // to be merged with synced version
       ...Object.assign({}, ...Object.entries(defaultData).map(([k, v]) =>
-        // tslint:disable-next-line:no-bitwise
-        ({[k]: {epoch: Date.now() / 1000 | 0, data: v}}))),
+        ({[k]: {epoch: 0, data: v}}))),
     });
     this.storage.set('settings', this.data.value);
     this.initialSynced = false; // allow sync after logout
