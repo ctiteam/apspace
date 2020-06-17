@@ -150,6 +150,7 @@ describe('SettingsService', () => {
     ];
     tests.forEach(test => {
       it(`should merge data for ${test.name}`, fakeAsync(() => {
+        jasmine.clock().mockDate(new Date(2000)); // epoch 2
         storageSpy.get.and.callFake(key => {
           switch (key) {
             case 'role': return Promise.resolve(test.role);
