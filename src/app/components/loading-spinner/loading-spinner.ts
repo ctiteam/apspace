@@ -9,4 +9,5 @@ export class LoadingSpinnerComponent {
   @Input() message?: string;
   @Input() size?: string;
   @Input() textSize?: string;
+  @Input() color ?= '#666666';
 }
