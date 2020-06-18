@@ -1,0 +1,150 @@
+<ion-content>
+  <ion-grid>
+    <!-- <ion-row>
+      <ion-col size="12" size-md="10" offset-md="1" size-lg="8" offset-lg="2" size-xl="6" offset-xl="3">
+      </ion-col>
+    </ion-row> -->
+    <ion-row>
+      <ion-col size="12" size-md="10" offset-md="1" size-lg="8" offset-lg="2" size-xl="6" offset-xl="3">
+
+        <ion-card class="ion-no-padding ion-no-margin">
+          <img src="assets/img/covid-19-form.png" alt="COVID-19 Form Cover" class="cover">
+          <ion-card-header class="colored-border ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
+            <ion-card-title>Contact Information <ng-container *ngIf="response.role === 'visitor'">-
+                Visitors</ng-container>
+            </ion-card-title>
+            <ion-card-subtitle *ngIf="response.role === 'visitor'">
+              APU's Student or Staff? <a class="colored-text" routerLink='/login' routerDirection="forward">Login to
+                your APSPace account</a>
+            </ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content class="ion-no-padding ion-padding-bottom">
+            <ng-container *ngIf="response.role === 'visitor'; else userLoggedIn">
+
+              <ion-item lines="none">
+                <ion-label position="stacked">Purpose of Visit</ion-label>
+                <ion-select class="form-input" interface="popover" [(ngModel)]="response.purposeOfVisit">
+                  <ion-select-option *ngFor="let purpose of visitPurposes" [value]="purpose">
+                    {{purpose}}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item lines="none" *ngIf="response.purposeOfVisit === 'APU Student/Staff'">
+                <ion-label position="stacked">Student/Staff ID</ion-label>
+                <ion-input class="form-input" type="text" [(ngModel)]="response.id">
+                </ion-input>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-label position="stacked">Full Name</ion-label>
+                <ion-input class="form-input" type="text" [(ngModel)]="response.name"
+                  (ngModelChange)="checkValue('name')">
+                </ion-input>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-label position="stacked">Gender</ion-label>
+                <ion-select class="form-input" interface="popover" [(ngModel)]="response.gender">
+                  <ion-select-option value="female">
+                    Female
+                  </ion-select-option>
+                  <ion-select-option value="male">
+                    Male
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item lines="none">
+                <ion-label position="stacked" [class.danger-text]="response.email && !emailValid">Email
+                </ion-label>
+                <ion-input class="form-input" [style.borderColor]="response.email && !emailValid ? 'red' : ''"
+                  type="text" [(ngModel)]="response.email" (ngModelChange)="checkValue('email')"></ion-input>
+              </ion-item>
+              <div class="ion-padding-start ion-padding-end">
+                <small *ngIf="response.email && !emailValid" class="danger-text">Email is invalid. Please check the
+                  email you have entered again.
+                </small>
+              </div>
+
+              <ion-item lines="none">
+                <ion-label position="stacked" [class.danger-text]="response.phoneNumber && !phoneNumberValid">Phone
+                  Number
+                </ion-label>
+                <ion-input class="form-input"
+                  [style.borderColor]="response.phoneNumber && !phoneNumberValid ? 'red' : ''" type="text"
+                  [(ngModel)]="response.phoneNumber" (ngModelChange)="checkValue('phone')">
+                </ion-input>
+              </ion-item>
+              <div class="ion-padding-start ion-padding-end">
+                <small *ngIf="response.phoneNumber && !phoneNumberValid" class="danger-text">Phone
+                  number is invalid. Please check the
+                  number and enter a correct phone number (Exactly 10 or 11 digits)
+                </small>
+              </div>
+
+              <ion-item lines="none">
+                <ion-label position="stacked" [class.danger-text]="response.temperature && !temperatureValid">
+                  Temperature (Degree Celsius)</ion-label>
+                <ion-input class="form-input"
+                  [style.borderColor]="response.temperature && !temperatureValid ? 'red' : ''" type="number"
+                  [(ngModel)]="response.temperature" (ngModelChange)="checkValue('temperature')"></ion-input>
+              </ion-item>
+              <div class="ion-padding-start ion-padding-end">
+                <small *ngIf="response.temperature && !temperatureValid" class="danger-text">
+                  Temperature must be between 30 & 45 Degree Celsius
+                </small>
+              </div>
+
+            </ng-container>
+            <ng-template #userLoggedIn>
+              <ion-item lines="none">
+                <ion-label class="white-space-normal">
+                  <ion-text *ngIf="userName$ | async as userName; else loadingName">Since you are already logged to
+                    APSpace
+                    as
+                    <span class="text-bold colored-text">{{userName}}</span>, there is no need for you to enter
+                    your details and it's been captured automatically.</ion-text>
+                  <ng-template #loadingName>
+                    <ion-skeleton-text animated style="line-height: 20px; width: 100%;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="line-height: 20px; width: 100%;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="line-height: 20px; width: 70%;"></ion-skeleton-text>
+                  </ng-template>
+                </ion-label>
+              </ion-item>
+            </ng-template>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="ion-no-padding ion-no-margin ion-margin-top ion-margin-bottom">
+          <ion-card-header class="colored-border ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
+            <ion-card-title>
+              Declaration Section
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item lines="none">
+              <ion-radio slot="start" [(ngModel)]="response.declared"></ion-radio>
+              <ion-label class="white-space-normal">
+                <ion-text>
+                  I hereby declare that I have not been in contact with any patients that has contracted Covid-19 and I
+                  am
+                  not suffering from any symptoms of the disease.
+                </ion-text>
+              </ion-label>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+
+        <div>
+          <ion-button expand="full" class="colored-background" (click)="submitForm()"
+            [disabled]="(response.role !== 'visitor' && !response.declared) || (response.role === 'visitor' && (!emailValid || !phoneNumberValid || !temperatureValid || !response.name || !response.email || !response.gender || !response.phoneNumber || !response.purposeOfVisit || !response.temperature || !response.declared))">
+            Submit
+          </ion-button>
+        </div>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

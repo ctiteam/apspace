@@ -1,0 +1,16 @@
+.form-input {
+  border-radius: 7px;
+  background: var(--main-bg-color);
+  padding: 0 10px !important;
+  margin-top: 10px;
+  border: 1px solid var(--tertiary-bg-color);
+  min-height: 40px;
+}
+
+ion-select.form-input {
+  padding: 8px 10px 9px 10px !important;
+}
+
+.white-space-normal {
+  white-space: normal;
+}
