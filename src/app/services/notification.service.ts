@@ -5,7 +5,7 @@ import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { Observable, from, of, throwError } from 'rxjs';
+import { NEVER, Observable, from, of, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { NotificationHistory } from '../interfaces';
 import { NotificationStatus, NotificationSubStatus } from '../interfaces/notification';
@@ -64,6 +64,9 @@ export class NotificationService {
             if (400 <= err.status && err.status < 500) {
               this.sendToast('Something happened while we get your messages.');
               return throwError(err.message);
+            } else {
+              console.error('Unknown notification error', err);
+              return NEVER;
             }
           })
         );
@@ -134,6 +137,9 @@ export class NotificationService {
               if (400 <= err.status && err.status < 500) {
                 this.sendToast('Something happened while we get the message details.');
                 return throwError(err.message);
+              } else {
+                console.error('Unknown notification error', err);
+                return NEVER;
               }
             })
           );
@@ -158,6 +164,9 @@ export class NotificationService {
           if (400 <= err.status && err.status < 500) {
             this.sendToast('Something happened while we get the categories.');
             return throwError(err.message);
+          } else {
+            console.error('Unknown notification error', err);
+            return NEVER;
           }
         })
       );
@@ -176,6 +185,9 @@ export class NotificationService {
               if (400 <= err.status && err.status < 500) {
                 this.sendToast('Something happened while we get the message details.');
                 return throwError(err.message);
+              } else {
+                console.error('Unknown notification error', err);
+                return NEVER;
               }
             })
           );
@@ -196,6 +208,9 @@ export class NotificationService {
               if (400 <= err.status && err.status < 500) {
                 this.sendToast('Something happened while we tunnel your request.');
                 return throwError(err.message);
+              } else {
+                console.error('Unknown notification error', err);
+                return NEVER;
               }
             })
           );
@@ -214,6 +229,9 @@ export class NotificationService {
               if (400 <= err.status && err.status < 500) {
                 this.sendToast('Your subscription request was not fulfilled. Please try again.');
                 return throwError(err.message);
+              } else {
+                console.error('Unknown notification error', err);
+                return NEVER;
               }
             })
           );
@@ -234,6 +252,9 @@ export class NotificationService {
               if (400 <= err.status && err.status < 500) {
                 this.sendToast('Your subscription request was not fulfilled. Please try again.');
                 return throwError(err.message);
+              } else {
+                console.error('Unknown notification error', err);
+                return NEVER;
               }
             })
           );

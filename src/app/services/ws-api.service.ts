@@ -6,7 +6,7 @@ import { Network } from '@ionic-native/network/ngx';
 import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
-import { Observable, concat, from, iif, of, throwError } from 'rxjs';
+import { NEVER, Observable, concat, from, iif, of, throwError } from 'rxjs';
 import {
   catchError, concatMap, delay, publishLast, refCount, retryWhen, switchMap,
   tap, timeout,
@@ -289,6 +289,9 @@ export class WsApiService {
   private handleClientError(err: HttpErrorResponse): Observable<never> | never {
     if (400 <= err.status && err.status < 500) {
       return throwError(err);
+    } else {
+      console.error('Unknown http error response', err);
+      return NEVER;
     }
   }
 
