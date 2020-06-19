@@ -84,6 +84,24 @@ describe('WsApiService', () => {
       );
     }));
 
+    it('should return empty observable on 304 without retry', fakeAsync(() => {
+      const endpoint = '/api';
+      const errorResponse = new HttpErrorResponse({
+        error: 'test 304 error',
+        status: 304, statusText: 'Not Modified'
+      });
+
+      platformSpy.is.and.callFake(plt => plt === 'cordova');
+      storageSpy.get.and.returnValue(asyncData('data'));
+      casSpy.getST.and.returnValue(asyncData('ticket'));
+      httpClientSpy.get.and.returnValue(asyncError(errorResponse));
+
+      service.get(endpoint).subscribe(
+        data => expect(data).toBeUndefined(),
+        () => fail('should not receive an error'),
+      );
+    }));
+
     it('should return null on 500 after retries if not cached', fakeAsync(() => {
       const endpoint = '/api';
 
