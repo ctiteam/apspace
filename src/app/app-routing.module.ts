@@ -255,11 +255,6 @@ const routes: Routes = [
     path: 'visitor-form',
     loadChildren: () => import('./pages/covid-visitor-form/covid-visitor-form.module').then( m => m.CovidVisitorFormPageModule)
   },
-  {
-    path: 'visitor-session-pass',
-    loadChildren: () => import('./pages/covid-visitor-session-pass/covid-visitor-session-pass.module')
-      .then( m => m.CovidVisitorSessionPassPageModule)
-  },
   { // this path must always be at the end of the routes array
     path: '**',
     canActivate: [AuthGuard],
