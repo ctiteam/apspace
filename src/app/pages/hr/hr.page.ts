@@ -66,8 +66,7 @@ export class HrPage implements OnInit {
 
   ngOnInit() {
     this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }).pipe(
-      tap(profile => this.showPaySlip = this.chosenOnes.includes(profile[0].ID)),
-      tap(console.log)
+      tap(profile => this.showPaySlip = this.chosenOnes.includes(profile[0].ID))
     ).subscribe();
     // commented until the backend is fixed
     // this.leaves$ = this.ws.get<LeaveBalance[]>('/staff/leave_balance').pipe(
