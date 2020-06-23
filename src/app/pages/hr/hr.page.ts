@@ -16,6 +16,9 @@ export class HrPage implements OnInit {
   // temporary limiting some user for accessing payslip
   showPaySlip = false;
   chosenOnes = [
+    'kohyuanyi',
+    'melissa.chow',
+    'kubashni.sumarian',
     'tehcj',
     'norasyikin.a',
     'wendy.tham',
@@ -63,6 +66,7 @@ export class HrPage implements OnInit {
   ngOnInit() {
     this.ws.get<StaffProfile[]>('/staff/profile', { caching: 'cache-only' }).pipe(
       tap(profile => this.showPaySlip = this.chosenOnes.includes(profile[0].ID)),
+      tap(console.log)
     ).subscribe();
     // commented until the backend is fixed
     // this.leaves$ = this.ws.get<LeaveBalance[]>('/staff/leave_balance').pipe(
