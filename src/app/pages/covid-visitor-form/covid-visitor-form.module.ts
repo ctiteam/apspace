@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { CovidVisitorFormPageRoutingModule } from './covid-visitor-form-routing.module';
 
 import { CovidVisitorFormPage } from './covid-visitor-form.page';
+import { VisitHistoryModalPage } from './visit-history/visit-history-modal';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { CovidVisitorFormPage } from './covid-visitor-form.page';
     IonicModule,
     CovidVisitorFormPageRoutingModule
   ],
-  declarations: [CovidVisitorFormPage]
+  declarations: [CovidVisitorFormPage, VisitHistoryModalPage],
+  entryComponents: [VisitHistoryModalPage]
 })
 export class CovidVisitorFormPageModule {}

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { LoadingController, ToastController } from '@ionic/angular';
-import { Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { LoadingController, ModalController, ToastController } from '@ionic/angular';
+import * as moment from 'moment';
+import { Observable, Subscription, of, timer } from 'rxjs';
+import { map, shareReplay, tap } from 'rxjs/operators';
 import { Role, StaffProfile, StudentProfile } from 'src/app/interfaces';
 import { SettingsService, WsApiService } from 'src/app/services';
+import { VisitHistoryModalPage } from './visit-history/visit-history-modal';
 
 @Component({
   selector: 'app-covid-visitor-form',
@@ -24,6 +26,10 @@ export class CovidVisitorFormPage implements OnInit {
   showWelcomeMessage = false;
   declarationLog$: Observable<any>;
 
+  timer$ = timer(0, 1000);
+  timerSubscription$: Subscription;
+  counter: Date;
+  sessionExpired = false;
   visitPurposes = [
     'Supplier/Vendor/Contractor/Delivery',
     'Corporate Training',
@@ -51,7 +57,8 @@ export class CovidVisitorFormPage implements OnInit {
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private modalCtrl: ModalController
   ) { }
 
   ngOnInit() {
@@ -61,16 +68,20 @@ export class CovidVisitorFormPage implements OnInit {
       this.presentToast('Location param is missing from the URL on top. Please add ;location=your_location on top', 10000, 'danger');
     }
     this.settings.ready().then(() => {
+      console.log('settings are ready');
       const role = this.settings.get('role');
       if (role) {
         this.declarationLog$ = this.ws.get('/covid/declaration_log').pipe(
           tap(res => {
             console.log(res);
             if (res && res.is_valid) {
-              const navigationExtras: NavigationExtras = {
-                state: { new: false, data: res }
-              };
-              this.router.navigateByUrl('visitor-session-pass', navigationExtras);
+              const validUntil = new Date(res.valid_time);
+              const currentDate = new Date();
+              this.startTimer(moment(validUntil).diff(moment(currentDate), 'seconds'));
+              // const navigationExtras: NavigationExtras = {
+              //   state: { new: false, data: res }
+              // };
+              // this.router.navigateByUrl('visitor-session-pass', navigationExtras);
             }
           })
         );
@@ -81,13 +92,15 @@ export class CovidVisitorFormPage implements OnInit {
       if (role & Role.Student) {
         this.response.role = 'student';
         this.userName$ = this.ws.get<StudentProfile>('/student/profile').pipe(
-          map(res => res.NAME)
+          map(res => res.NAME),
+          shareReplay(1),
         );
         // tslint:disable-next-line: no-bitwise
       } else if (role & (Role.Lecturer | Role.Admin)) {
         this.response.role = 'staff';
         this.userName$ = this.ws.get<StaffProfile[]>('/staff/profile').pipe(
-          map(res => res[0].FULLNAME)
+          map(res => res[0].FULLNAME),
+          shareReplay(1),
         );
       }
     });
@@ -115,6 +128,43 @@ export class CovidVisitorFormPage implements OnInit {
       id: '',
       station: currentStation
     };
+  }
+
+  startTimer(counterValueInSeconds: number) {
+    const counterValue = moment('2015-01-01').startOf('day')
+      .seconds(counterValueInSeconds);
+    this.timerSubscription$ = this.timer$.subscribe(t => {
+      this.counter = counterValue.toDate();
+      // this.counter = new Date(0, 0, 0, 0, 0, 2);
+      this.counter.setSeconds(this.counter.getSeconds() - t);
+      if (this.counter.getHours() === 0 && this.counter.getMinutes() === 0 && this.counter.getSeconds() === 0) {
+        console.log('toto');
+        // this.showButtons = true;
+        this.sessionExpired = true;
+        this.timerSubscription$.unsubscribe();
+      }
+    });
+  }
+
+  scanQrCode() {
+
+  }
+
+  async viewHistory() {
+    const modal = await this.modalCtrl.create({
+      component: VisitHistoryModalPage,
+      cssClass: 'custom-modal-style',
+      componentProps: {
+        something: 'something'
+      }
+    });
+    await modal.present();
+    await modal.onDidDismiss().then(data => {
+      if (data.data) {
+        // this.classcode = data.data.code;
+        // this.classType = data.data.type;
+      }
+    });
   }
 
   submitForm() {
@@ -147,7 +197,10 @@ export class CovidVisitorFormPage implements OnInit {
         );
       } else {
         this.presentLoading();
-        this.ws.post('/covid/declaration').subscribe(
+        const body = {
+          station: this.response.station
+        };
+        this.ws.post('/covid/declaration', { body }).subscribe(
           res => console.log(res),
           err => console.log(err),
           () => {
