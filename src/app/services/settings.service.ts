@@ -130,6 +130,14 @@ export class SettingsService {
           } as SettingsRaw);
           this.storage.set('settings', this.data.value);
           this.initialSync();
+
+          const oldStorage = [
+            'dark-theme', 'pure-dark-theme', 'bus-shuttle-services', 'timetable',
+            'dashboard-sections', 'menu-ui', 'shake-sensitivity', 'accent-color',
+          ];
+          for (const key of oldStorage) {
+            this.storage.remove(key);
+          }
         });
       } else { // saved settings
         this.data.next(raw);
