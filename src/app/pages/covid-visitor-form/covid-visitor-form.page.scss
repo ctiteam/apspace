@@ -16,14 +16,38 @@ ion-select.form-input {
 }
 
 // valid_session
-.full-screen{
+.full-screen {
   height: 88vh;
 }
 
-.secondary-text{
+.secondary-text {
   color: var(--secondary-txt-color);
 }
 
-ion-chip.large{
-  font-size: 2em;   
+ion-chip.large {
+  font-size: 2em;
+}
+
+// mark new attendance
+.input-item {
+  --background-hover: transparent !important;
+  --background-activated: transparent !important;
+  --ripple-color: transparent !important;
+
+  ion-label {
+    padding-left: 2px;
+  }
+
+  &.item-interactive-disabled {
+    ion-label {
+      opacity: .5 !important;
+    }
+  }
+}
+.transparent {
+  --background: transparent !important;
+}
+
+ion-radio-group.form-input {
+  width: 100%;
 }

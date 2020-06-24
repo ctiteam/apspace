@@ -7,6 +7,7 @@ import { ModalController } from '@ionic/angular';
 })
 
 export class VisitHistoryModalPage {
+  show: 'history' | 'symptoms';
 
   constructor(
     private modalCtrl: ModalController,

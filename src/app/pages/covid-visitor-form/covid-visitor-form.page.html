@@ -4,16 +4,21 @@
       Valid Session Pass
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="viewHistory()">
+      <ion-button (click)="viewHistory()" class="colored-text">
         <ion-icon slot="icon-only" name="clipboard"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
   <ng-template #inactiveSession>
-    <ion-toolbar>
-      <ion-title class="ion-text-center">
+    <ion-toolbar mode="ios">
+      <ion-title>
         Visitor Form
       </ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="openReadMoreModal()" class="colored-text">
+          <ion-icon slot="icon-only" name="information-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-toolbar>
   </ng-template>
 </ion-header>
@@ -252,7 +257,7 @@
                         d="M423.56994,400.74915l-.0001,0a61.86135,61.86135,0,0,1-76.18878-33.48533L261.85015,175.1767A82.82877,82.82877,0,0,1,311.17107,62.95739l.00018-.00006a82.82878,82.82878,0,0,1,107.17563,60.44035l45.915,205.19459A61.86136,61.86136,0,0,1,423.56994,400.74915Z"
                         transform="translate(-47 -52.54523)" fill="#e54d42" />
                     </svg>
-                    <ion-button color="danger" routerLink='/visitor-form' routerDirection="backward">
+                    <ion-button color="danger" (click)="generateNewSession()">
                       <ion-icon slot="start" name="ios-arrow-back"></ion-icon>
                       Generate New Session
                     </ion-button>
@@ -412,6 +417,33 @@
                       [(ngModel)]="response.phoneNumber" (ngModelChange)="checkValue('phone')">
                     </ion-input>
                   </ion-item>
+
+                  <ion-item lines="none" class="input-item" *ngIf="showLocationOption">
+                    <ion-label position="stacked">Campus</ion-label>
+                    <ion-radio-group class="form-input ion-no-padding" [(ngModel)]="response.station">
+                      <ion-grid class="ion-no-padding">
+                        <ion-row>
+                          <ion-col size="12" size-md="6" class="ion-no-padding">
+                            <ion-item lines="none" class="transparent">
+                              <ion-label [color]="response.station === 'apiit' ? 'primary' : ''">
+                                APIIT
+                              </ion-label>
+                              <ion-radio slot="start" value="apiit"></ion-radio>
+                            </ion-item>
+                          </ion-col>
+                          <ion-col size="12" size-md="6" class="ion-no-padding">
+                            <ion-item lines="none" class="transparent">
+                              <ion-label [color]="response.station === 'apu' ? 'primary' : ''">
+                                APU
+                              </ion-label>
+                              <ion-radio slot="start" value="apu"></ion-radio>
+                            </ion-item>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-radio-group>
+                  </ion-item>
+
                   <div class="ion-padding-start ion-padding-end">
                     <small *ngIf="response.phoneNumber && !phoneNumberValid" class="danger-text">Phone
                       number is invalid. Please check the
@@ -476,7 +508,7 @@
 
             <div>
               <ion-button expand="full" class="colored-background" (click)="submitForm()"
-                [disabled]="(response.role !== 'visitor' && (!response.declared || !response.station)) || (response.role === 'visitor' && (!emailValid || !phoneNumberValid || !temperatureValid || !response.name || !response.email || !response.phoneNumber || !response.purposeOfVisit || !response.temperature || !response.declared || !response.station))">
+                [disabled]="(response.role !== 'visitor' && !response.declared) || (response.role === 'visitor' && (!emailValid || !phoneNumberValid || !temperatureValid || !response.name || !response.email || !response.phoneNumber || !response.purposeOfVisit || !response.temperature || !response.declared || !response.station))">
                 Submit
               </ion-button>
             </div>

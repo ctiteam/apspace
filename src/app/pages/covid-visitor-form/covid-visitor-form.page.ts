@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { LoadingController, ModalController, ToastController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Observable, Subscription, of, timer } from 'rxjs';
@@ -25,6 +25,7 @@ export class CovidVisitorFormPage implements OnInit {
   temperatureValid = false;
   showWelcomeMessage = false;
   declarationLog$: Observable<any>;
+  showLocationOption = false;
 
   timer$ = timer(0, 1000);
   timerSubscription$: Subscription;
@@ -56,17 +57,16 @@ export class CovidVisitorFormPage implements OnInit {
     private ws: WsApiService,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
-    private router: Router,
     private route: ActivatedRoute,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private changeDetRef: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
-    this.response.station = this.route.snapshot.paramMap.get('location');
-    console.log(this.route.snapshot.paramMap.get('location'));
-    if (!this.response.station) {
-      this.presentToast('Location param is missing from the URL on top. Please add ;location=your_location on top', 10000, 'danger');
-    }
+    this.getData();
+  }
+
+  getData() {
     this.settings.ready().then(() => {
       console.log('settings are ready');
       const role = this.settings.get('role');
@@ -82,11 +82,20 @@ export class CovidVisitorFormPage implements OnInit {
               //   state: { new: false, data: res }
               // };
               // this.router.navigateByUrl('visitor-session-pass', navigationExtras);
+            } else {
+              this.response.station = this.route.snapshot.paramMap.get('location');
+              if (!this.response.station) {
+                this.showLocationOption = true;
+              }
             }
           })
         );
       } else {
         this.declarationLog$ = of({ is_valid: false });
+        this.response.station = this.route.snapshot.paramMap.get('location');
+        if (!this.response.station) {
+          this.showLocationOption = true;
+        }
       }
       // tslint:disable-next-line: no-bitwise
       if (role & Role.Student) {
@@ -146,6 +155,11 @@ export class CovidVisitorFormPage implements OnInit {
     });
   }
 
+  generateNewSession() {
+    this.getData();
+    this.changeDetRef.detectChanges();
+  }
+
   scanQrCode() {
 
   }
@@ -155,7 +169,24 @@ export class CovidVisitorFormPage implements OnInit {
       component: VisitHistoryModalPage,
       cssClass: 'custom-modal-style',
       componentProps: {
-        something: 'something'
+        show: 'history'
+      }
+    });
+    await modal.present();
+    await modal.onDidDismiss().then(data => {
+      if (data.data) {
+        // this.classcode = data.data.code;
+        // this.classType = data.data.type;
+      }
+    });
+  }
+
+  async openReadMoreModal() {
+    const modal = await this.modalCtrl.create({
+      component: VisitHistoryModalPage,
+      cssClass: 'custom-modal-style',
+      componentProps: {
+        show: 'symptoms'
       }
     });
     await modal.present();
@@ -178,7 +209,7 @@ export class CovidVisitorFormPage implements OnInit {
           purpose: this.response.purposeOfVisit,
           email: this.response.email,
           phone: this.response.phoneNumber,
-          temperature: this.response.temperature,
+          temperature: `${this.response.temperature}`,
           station: this.response.station
         };
         if (this.response.purposeOfVisit === 'APU Student/Staff') {
@@ -198,7 +229,7 @@ export class CovidVisitorFormPage implements OnInit {
       } else {
         this.presentLoading();
         const body = {
-          station: this.response.station
+          role: this.response.role
         };
         this.ws.post('/covid/declaration', { body }).subscribe(
           res => console.log(res),
@@ -207,10 +238,8 @@ export class CovidVisitorFormPage implements OnInit {
             this.dismissLoading();
             this.clearForm(this.response.role, this.response.station);
             this.presentToast('Form Submitted Successfully!', 6000, 'success');
-            const navigationExtras: NavigationExtras = {
-              state: { new: true, data: null }
-            };
-            this.router.navigateByUrl('visitor-session-pass', navigationExtras);
+            this.getData();
+            this.changeDetRef.detectChanges();
           }
         );
       }
