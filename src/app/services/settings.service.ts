@@ -126,7 +126,9 @@ export class SettingsService {
             busFirstLocation,
             busSecondLocation,
             ...Object.assign({}, ...Object.entries(rest).map(([k, v]) =>
-              ({[k]: {epoch, data: v !== undefined ? v : defaultData[k], oldData: null, lastEpoch: 0}}))),
+              ({[k]: isEqual(v, defaultData[k]) || v === undefined // check if value changed
+                ? {epoch, data: defaultData[k]} // keep default
+                : {epoch, data: v, lastEpoch: 0, oldData: null}}))), // needs sync
           } as SettingsRaw);
           this.storage.set('settings', this.data.value);
           this.initialSync();
