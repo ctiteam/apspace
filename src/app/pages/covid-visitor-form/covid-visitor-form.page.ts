@@ -239,7 +239,8 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
       component: VisitHistoryModalPage,
       cssClass: 'custom-modal-style',
       componentProps: {
-        show: 'history'
+        show: 'history',
+        declarationId: this.declarationId
       }
     });
     await modal.present();
