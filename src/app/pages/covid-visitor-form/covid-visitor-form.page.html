@@ -3,6 +3,9 @@
     <ion-title color="success">
       Valid Session Pass
     </ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
     <ion-buttons slot="end">
       <ion-button (click)="viewHistory()" class="colored-text">
         <ion-icon slot="icon-only" name="clipboard"></ion-icon>
@@ -14,6 +17,9 @@
       <ion-title>
         Visitor Form
       </ion-title>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/"></ion-back-button>
+      </ion-buttons>
       <ion-buttons slot="end">
         <ion-button (click)="openReadMoreModal()" class="colored-text">
           <ion-icon slot="icon-only" name="information-circle-outline"></ion-icon>

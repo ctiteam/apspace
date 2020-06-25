@@ -77,7 +77,9 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.scanSub.unsubscribe();
+    if (this.scanSub) {
+      this.scanSub.unsubscribe();
+    }
     this.qrScanner.destroy();
   }
 
