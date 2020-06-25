@@ -94,19 +94,38 @@
                 </ion-button>
               </ion-col>
             </ion-row>
-            <ion-row *ngIf="isStudent">
-              <ion-col>
-                <ion-button color="success" expand="block" [routerLink]="['/attendix/update']">
-                  Sign Attendance
-                  <ion-icon name="checkmark-circle-outline" slot="end"></ion-icon>
-                </ion-button>
-              </ion-col>
-            </ion-row>
           </ion-grid>
         </ion-card-header>
       </ion-card>
     </div>
 
+    <!-- TODAY'S SCHEDULE -->
+    <div class="masonry-item no-drag">
+      <ion-grid class="ion-no-padding">
+        <ion-row class="ion-no-padding">
+          <ion-col>
+            <ion-card color="success" class="ion-no-margin ion-padding ion-text-center" tappable [routerLink]="['/attendix/update']">
+              <ion-card-content class="ion-no-padding" style="background: var(--ion-color-success)">
+                <p>Sign Attendance</p>
+                <h1 class="ion-margin-top">
+                  <ion-icon name="checkmark-circle-outline"></ion-icon>
+                </h1>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col class="ion-padding-end">
+            <ion-card color="primary" class="ion-no-margin ion-padding ion-text-center" tappable [routerLink]="['/visitor-form']">
+              <ion-card-content class="ion-no-padding" style="background: var(--ion-color-primary)">
+                <p>COVID-19 Declaration</p>
+                <h1 class="ion-margin-top">
+                  <ion-icon name="clipboard"></ion-icon>
+                </h1>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
     <!-- ion-select hidden behind the shown dashboard sections item  -->
     <ion-item [hidden]="true">
       <ion-label>Choose Section(s):</ion-label>

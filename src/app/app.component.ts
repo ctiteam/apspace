@@ -102,16 +102,18 @@ export class AppComponent {
 
       // deeplinks settings
       this.deeplinks.route({
-        '/visitor-form': CovidVisitorFormPage
+        '/visitor-form': CovidVisitorFormPage,
       }).subscribe(match => {
         // match.$route - the route we matched, which is the matched entry from the arguments to route()
         // match.$args - the args passed in the link
         // match.$link - the full link data
-        console.log('Successfully matched route', match);
-        this.router.navigate([match.$link.path]);
-      }, nomatch => {
-        // nomatch.$link - the full link data
-        console.error('Got a deeplink that didn\'t match', nomatch);
+        let queryParams = {};
+        if (match.$args) {
+          queryParams = {location: match.$args.location};
+        }
+        this.router.navigate([match.$link.path], {queryParams} );
+      }, _ => {
+        // _.$link - the full link data
       });
 
       if (this.platform.is('cordova')) {

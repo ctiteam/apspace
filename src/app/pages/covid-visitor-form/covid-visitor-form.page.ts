@@ -99,19 +99,33 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
               // };
               // this.router.navigateByUrl('visitor-session-pass', navigationExtras);
             } else {
-              this.response.station = this.route.snapshot.paramMap.get('location');
-              if (!this.response.station) {
-                this.showLocationOption = true;
-              }
+              this.route.queryParams.subscribe((params: any) => {
+                if (params) {
+                  if (params.location === 'apu' || params.location === 'apiit') {
+                    this.response.station = params.location;
+                  }
+                  if (!this.response.station) {
+                    this.showLocationOption = true;
+                  }
+                }
+              });
             }
           })
         );
       } else {
         this.declarationLog$ = of({ is_valid: false });
-        this.response.station = this.route.snapshot.paramMap.get('location');
-        if (!this.response.station) {
-          this.showLocationOption = true;
-        }
+
+        this.route.queryParams.subscribe((params: any) => {
+          if (params) {
+            if (params.location === 'apu' || params.location === 'apiit') {
+              this.response.station = params.location;
+            }
+            if (!this.response.station) {
+              this.showLocationOption = true;
+            }
+          }
+        });
+
       }
       // tslint:disable-next-line: no-bitwise
       if (role & Role.Student) {
@@ -163,7 +177,6 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
       // this.counter = new Date(0, 0, 0, 0, 0, 2);
       this.counter.setSeconds(this.counter.getSeconds() - t);
       if (this.counter.getHours() === 0 && this.counter.getMinutes() === 0 && this.counter.getSeconds() === 0) {
-        console.log('toto');
         // this.showButtons = true;
         this.sessionExpired = true;
         this.timerSubscription$.unsubscribe();
@@ -184,7 +197,6 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
 
   scanQrCode() {
     this.qrScanner.prepare().then(status => {
-      console.log('prepared');
       console.assert(status.authorized);
       // scanning only takes the first valid code
       this.scanSub = this.qrScanner.scan().subscribe((text: string) => {
