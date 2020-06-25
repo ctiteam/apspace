@@ -299,10 +299,7 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
         );
       } else {
         this.presentLoading();
-        const body = {
-          role: this.response.role
-        };
-        this.ws.post('/covid/declaration', { body }).subscribe(
+        this.ws.post('/covid/declaration').subscribe(
           res => console.log(res),
           err => console.log(err),
           () => {
