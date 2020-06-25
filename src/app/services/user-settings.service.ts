@@ -34,6 +34,7 @@ export class UserSettingsService {
   // Default dasbhoard sections for students (will be added to the local storage when student login)
   defaultStudentsDashboardSectionsSettings = [
     'quickAccess',
+    'inspirationalQuote',
     'todaysSchedule',
     'upcomingEvents',
     'lowAttendance',

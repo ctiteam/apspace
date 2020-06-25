@@ -11,6 +11,13 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
+        canActivate: [AuthGuard],
+        // tslint:disable-next-line: no-bitwise
+        data: { role: Role.Student | Role.Lecturer | Role.Admin },
+        path: 'dashboard',
+        loadChildren: () => import('../dashboard/dashboard.module').then( m => m.DashboardPageModule)
+      },
+      {
         path: 'student-dashboard',
         canActivate: [AuthGuard],
         data: { role: Role.Student },
