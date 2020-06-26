@@ -400,15 +400,15 @@ export const menusRaw = [
     role: Role.Lecturer | Role.Admin,
     tags: ['rules']
   },
-  // {
-  //   id: 'report-an-exception' as const,
-  //   title: 'Report an Exception',
-  //   group: 'Corporate',
-  //   url: 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check',
-  //   img: 'assets/img/reports.png',
-  //   role: Role.Lecturer | Role.Admin,
-  //   tags: ['report', 'admin', 'jasper']
-  // },
+  {
+    id: 'report-an-exception-legacy' as const,
+    title: 'Report an Exception (Legacy)',
+    group: 'Corporate',
+    url: 'http://asterix.apiit.edu.my/exception/login.jsp',
+    img: 'assets/img/filing-report.png',
+    role: Role.Lecturer | Role.Admin,
+    tags: ['report', 'admin', 'exception']
+  },
   // END OF Corporate
 
   // START OF Academic & Enrollment
