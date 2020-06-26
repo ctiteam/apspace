@@ -367,10 +367,13 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     }
     this.apcardTransaction$ = this.getTransactions(true); // no-cache for APCard transactions
     this.getBadge();
-    forkJoin([
-      this.getProfile(refresher),
-      this.financial$ = this.getOverdueFee(true)
-    ]).pipe(
+    const forkJoinArray = [this.getProfile(refresher)];
+
+    if (this.isStudent) {
+      forkJoinArray.push(this.financial$ = this.getOverdueFee(true));
+    }
+
+    forkJoin(forkJoinArray).pipe(
       finalize(() => refresher && refresher.target.complete()),
     ).subscribe();
   }
@@ -538,7 +541,8 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
       // tap(studentProfile => this.getUpcomingExam(studentProfile.INTAKE)),
     ) : this.staffProfile$ = this.ws.get<StaffProfile>('/staff/profile', { caching }).pipe(
       tap(staffProfile => this.firstName = staffProfile[0].FULLNAME.split(' ')[0]),
-      tap(staffProfile => this.getTodaysSchedule(staffProfile[0].ID))
+      tap(staffProfile => this.getTodaysSchedule(staffProfile[0].ID)),
+      shareReplay(1)
     );
   }
 

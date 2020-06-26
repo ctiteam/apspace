@@ -21,14 +21,6 @@ export class TabsPage implements OnInit {
 
     // tslint:disable:no-bitwise
     // no tabs selected
-    // if (this.selectedTab === 'tabs') {
-    //   if (this.settings.get('role') & Role.Student) {
-    //     this.router.navigate(['tabs', 'student-dashboard'], { replaceUrl: true });
-    //   } else {
-    //     this.router.navigate(['tabs', 'staff-dashboard'], { replaceUrl: true });
-    //   }
-    // }
-
     if (this.selectedTab === 'tabs') {
       this.router.navigate(['tabs', 'dashboard'], { replaceUrl: true });
     }
@@ -47,13 +39,8 @@ export class TabsPage implements OnInit {
         },
         {
           name: 'Dashboard',
-          path: 'student-dashboard',
-          icon: 'pulse'
-        },
-        {
-          name: 'Test Dashboard',
           path: 'dashboard',
-          icon: 'hammer'
+          icon: 'pulse'
         },
         {
           name: 'APCard',
@@ -80,13 +67,8 @@ export class TabsPage implements OnInit {
         },
         {
           name: 'Dashboard',
-          path: 'staff-dashboard',
-          icon: 'pulse'
-        },
-        {
-          name: 'Test Dashboard',
           path: 'dashboard',
-          icon: 'hammer'
+          icon: 'pulse'
         },
         {
           name: 'APCard',
@@ -108,13 +90,8 @@ export class TabsPage implements OnInit {
         },
         {
           name: 'Dashboard',
-          path: 'staff-dashboard',
-          icon: 'pulse'
-        },
-        {
-          name: 'Test Dashboard',
           path: 'dashboard',
-          icon: 'hammer'
+          icon: 'pulse'
         },
         {
           name: 'APCard',

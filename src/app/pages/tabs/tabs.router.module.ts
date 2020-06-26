@@ -18,12 +18,6 @@ const routes: Routes = [
         loadChildren: () => import('../dashboard/dashboard.module').then( m => m.DashboardPageModule)
       },
       {
-        path: 'student-dashboard',
-        canActivate: [AuthGuard],
-        data: { role: Role.Student },
-        loadChildren: () => import('../student-dashboard/student-dashboard.module').then(m => m.StudentDashboardPageModule)
-      },
-      {
         canActivate: [AuthGuard],
         data: { role: Role.Student },
         path: 'student-timetable',
@@ -40,13 +34,6 @@ const routes: Routes = [
         data: { role: Role.Student },
         path: 'attendance',
         loadChildren: () => import('../attendance/attendance.module').then(m => m.AttendancePageModule)
-      },
-      {
-        canActivate: [AuthGuard],
-        // tslint:disable-next-line: no-bitwise
-        data: { role: Role.Lecturer | Role.Admin },
-        path: 'staff-dashboard',
-        loadChildren: () => import('../staff-dashboard/staff-dashboard.module').then(m => m.StaffDashboardPageModule)
       },
       {
         canActivate: [AuthGuard],
