@@ -234,7 +234,7 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
     this.ws.post('/covid/room_attendance', { body }).subscribe(
       res => console.log(res),
       err => {
-        this.presentToast(`Error: ${err.Error}`, 7000, 'danger');
+        this.presentToast(`Error: ${err.error.Error}`, 7000, 'danger');
         this.dismissLoading();
       },
       () => {
