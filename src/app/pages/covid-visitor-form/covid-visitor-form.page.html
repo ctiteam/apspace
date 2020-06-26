@@ -462,7 +462,7 @@
                     <ion-label position="stacked" [class.danger-text]="response.temperature && !temperatureValid">
                       Temperature (Degree Celsius)</ion-label>
                     <ion-input class="form-input"
-                      [style.borderColor]="response.temperature && !temperatureValid ? 'red' : ''" type="number"
+                      [style.borderColor]="response.temperature && !temperatureValid ? 'red' : ''"
                       [(ngModel)]="response.temperature" (ngModelChange)="checkValue('temperature')"></ion-input>
                   </ion-item>
                   <div class="ion-padding-start ion-padding-end">

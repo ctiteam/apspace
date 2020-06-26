@@ -61,7 +61,6 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
   };
   constructor(
     public qrScanner: QRScanner,
-    private alertController: AlertController,
     private alertCtrl: AlertController,
     private changeDetRef: ChangeDetectorRef,
     private loadingCtrl: LoadingController,
@@ -156,7 +155,8 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
     } else if (itemToCheck === 'email') {
       this.emailValid = this.response.email.match(this.emailValidationPattern) !== null;
     } else if (itemToCheck === 'temperature') {
-      this.temperatureValid = +this.response.temperature > 30 && +this.response.temperature <= 45;
+      this.temperatureValid =
+      +this.response.temperature > 30 && +this.response.temperature <= 45 && /^[0-9]+$/.test(this.response.temperature);
     }
   }
 
@@ -239,7 +239,7 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
       },
       () => {
         this.dismissLoading();
-        this.presentAlert(roomName);
+        this.presentAlert('Confirm!', 'QR Code Scanned', `You may enter the room <span class="text-bold">"${roomName}"</span> Now.`);
         this.scan = false;
         this.scanSub.unsubscribe();
         this.qrScanner.destroy();
@@ -247,12 +247,12 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
     );
   }
 
-  async presentAlert(roomName: string) {
-    const alert = await this.alertController.create({
+  async presentAlert(header: string, subHeader: string, message: string) {
+    const alert = await this.alertCtrl.create({
       cssClass: 'success-alert',
-      header: 'Confirm!',
-      subHeader: 'QR Code Scanned',
-      message: `You may enter the room <span class="text-bold">"${roomName}"</span> Now.`,
+      header,
+      subHeader,
+      message,
       buttons: ['OK']
     });
 
@@ -320,7 +320,7 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
           },
           () => {
             this.dismissLoading();
-            this.presentToast('Form Submitted Successfully!', 6000, 'success');
+            this.presentAlert('Welcome to APU :)', 'Form Submitted Successfully!', `Dear ${body.full_name}, Thank you for submitting the declaration form.`);
             this.clearForm(this.response.role, this.response.station);
             this.showWelcomeMessage = true;
           }
