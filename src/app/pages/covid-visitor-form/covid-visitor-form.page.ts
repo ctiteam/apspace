@@ -235,12 +235,14 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
       res => console.log(res),
       err => {
         this.presentToast(`Error: ${err.error.Error}`, 7000, 'danger');
+        this.sending = false;
         this.dismissLoading();
       },
       () => {
         this.dismissLoading();
         this.presentAlert('Confirm!', 'QR Code Scanned', `You may enter the room <span class="text-bold">"${roomName}"</span> Now.`);
         this.scan = false;
+        this.sending = false;
         this.scanSub.unsubscribe();
         this.qrScanner.destroy();
       }
