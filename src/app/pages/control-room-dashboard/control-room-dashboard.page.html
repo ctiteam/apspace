@@ -1,0 +1,132 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Operations Room</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="ion-padding-start ion-padding-end ion-padding-top">
+      <ion-col>
+        <h2 class="text-bold colored-text">Dashboard</h2>
+      </ion-col>
+      <ion-col class="ion-text-right">
+        <p class="colored-text text-bold">Date/Time: {{today | date : 'yyyy-MM-dd HH:mm:ss': '+0800' }}</p>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-card color="primary">
+          <ion-card-content>
+            <h4>Classes</h4>
+            <p style="font-size: 2rem;">4,000 Classes</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card color="primary">
+          <ion-card-content>
+            <h4>Visitors</h4>
+            <p style="font-size: 2rem;">22 Visitors</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card color="primary">
+          <ion-card-content>
+            <h4>Students</h4>
+            <p style="font-size: 2rem;">10,000 Students</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card color="primary">
+          <ion-card-content>
+            <h4>Staff</h4>
+            <p style="font-size: 2rem;">700 Staff</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" size-md="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Visitors <small> (Per Hour)</small></ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <chart height="100" *ngIf="usersChart.data" [type]="usersChart.type" [data]="usersChart.data"
+              [options]="usersChart.options">
+            </chart>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" size-md="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Today's Classes <small> (Per Hour)</small></ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <chart height="100" *ngIf="classesChart.data" [type]="classesChart.type" [data]="classesChart.data"
+              [options]="classesChart.options">
+            </chart>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" size-md="4">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <ion-text color="danger">Unusual Temperature</ion-text>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-no-padding">
+            <ion-grid>
+              <ion-row class="table-header text-bold">
+                <ion-col>Username</ion-col>
+                <ion-col>Visit Time</ion-col>
+                <ion-col>Temperature</ion-col>
+              </ion-row>
+              <ion-row class="table-row">
+                <ion-col>TP037354</ion-col>
+                <ion-col>11:30</ion-col>
+                <ion-col>40.0</ion-col>
+              </ion-row>
+              <ion-row class="table-row">
+                <ion-col>TP055641</ion-col>
+                <ion-col>12:30</ion-col>
+                <ion-col>39.9</ion-col>
+              </ion-row>
+              <ion-row class="table-row">
+                <ion-col>TP043211</ion-col>
+                <ion-col>12:30</ion-col>
+                <ion-col>41.0</ion-col>
+              </ion-row>
+              <ion-row class="table-row">
+                <ion-col>TP055741</ion-col>
+                <ion-col>12:30</ion-col>
+                <ion-col>41.1</ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" size-md="8">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <ion-text>Lab Entries Count <small> (Per Level)</small></ion-text>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <chart height="100" *ngIf="labChart.data" [type]="labChart.type" [data]="labChart.data"
+            [options]="labChart.options">
+          </chart>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
