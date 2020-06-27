@@ -563,7 +563,7 @@
 </ion-content>
 
 <ion-footer *ngIf="counter && !sessionExpired && !scan">
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isCordova">
     <ion-fab-button (click)="scanQrCode()" class="colored-background">
       <ion-icon name="qr-scanner"></ion-icon>
     </ion-fab-button>
