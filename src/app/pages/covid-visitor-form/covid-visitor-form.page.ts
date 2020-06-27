@@ -80,7 +80,6 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('destroyed');
     if (this.scanSub) {
       this.scanSub.unsubscribe();
     }
@@ -92,7 +91,6 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
       if (role) {
         this.declarationLog$ = this.ws.get('/covid/declaration_log').pipe(
           tap(res => {
-            console.log(res);
             if (res && res.is_valid) {
               this.declarationId = res.id;
               const validUntil = new Date(res.valid_time);
@@ -232,7 +230,7 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
       declaration_id: this.declarationId
     };
     this.ws.post('/covid/room_attendance', { body }).subscribe(
-      res => console.log(res),
+      _ => {},
       err => {
         this.presentToast(`Error: ${err.error.Error}`, 7000, 'danger');
         this.sending = false;
@@ -271,12 +269,7 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
       }
     });
     await modal.present();
-    await modal.onDidDismiss().then(data => {
-      if (data.data) {
-        // this.classcode = data.data.code;
-        // this.classType = data.data.type;
-      }
-    });
+    await modal.onDidDismiss();
   }
 
   async openReadMoreModal() {
@@ -288,12 +281,7 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
       }
     });
     await modal.present();
-    await modal.onDidDismiss().then(data => {
-      if (data.data) {
-        // this.classcode = data.data.code;
-        // this.classType = data.data.type;
-      }
-    });
+    await modal.onDidDismiss();
   }
 
   submitForm() {
@@ -315,9 +303,9 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
           body['sam_account_name'] = this.response.id;
         }
         this.ws.post('/covid/visitor', { body, auth: false }).subscribe(
-          res => console.log(res),
+          _ => {},
           err => {
-            console.log(err);
+            console.error(err);
             this.dismissLoading();
           },
           () => {
@@ -330,8 +318,8 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
       } else {
         this.presentLoading();
         this.ws.post('/covid/declaration').subscribe(
-          res => console.log(res),
-          err => console.log(err),
+          _ => {},
+          err => console.error(err),
           () => {
             this.dismissLoading();
             this.clearForm(this.response.role, this.response.station);
@@ -413,7 +401,7 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
               id: this.declarationId
             };
             this.ws.put('/covid/declaration', { body }).subscribe(
-              res => console.log(res),
+              _ => {},
               err => {
                 this.presentToast(`Error: ${err}`, 7000, 'danger');
                 this.dismissLoading();
