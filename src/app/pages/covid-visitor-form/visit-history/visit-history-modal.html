@@ -130,22 +130,61 @@
     <ion-grid class="ion-padding">
       <ion-row>
         <ion-col>
-          <h3 class="text-bold colored-text ion-margin-vertical">Symptoms</h3>
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Itaque, quis excepturi? Officiis facilis sapiente
-            beatae numquam nisi rerum in vel quae provident maxime nihil aliquam dignissimos reprehenderit dolorem,
-            consequuntur commodi!</p>
-          <h3 class="text-bold colored-text ion-margin-vertical">Things to Do in Campus</h3>
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Itaque, quis excepturi? Officiis facilis sapiente
-            beatae numquam nisi rerum in vel quae provident maxime nihil aliquam dignissimos reprehenderit dolorem,
-            consequuntur commodi!</p>
-          <h3 class="text-bold colored-text ion-margin-vertical">Things to Do in Classroom</h3>
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Itaque, quis excepturi? Officiis facilis sapiente
-            beatae numquam nisi rerum in vel quae provident maxime nihil aliquam dignissimos reprehenderit dolorem,
-            consequuntur commodi!</p>
-          <h3 class="text-bold colored-text ion-margin-vertical">What to do if...?</h3>
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Itaque, quis excepturi? Officiis facilis sapiente
-            beatae numquam nisi rerum in vel quae provident maxime nihil aliquam dignissimos reprehenderit dolorem,
-            consequuntur commodi!</p>
+          <ng-container *ngIf="generalInformation$ | async as generalInformation; else loadingGeneralInformation">
+            <ng-container *ngIf="generalInformation; else noGeneralInformation">
+              <section *ngIf="generalInformation.introduction">
+                <ng-container *ngFor="let introductionParagraph of generalInformation.introduction">
+                  <p *ngIf="introductionParagraph && introductionParagraph !== '<empty>'; else noIntroductionContent"
+                    class="secondary-txt-color">
+                    {{introductionParagraph}}
+                  </p>
+                  <ng-template #noIntroductionContent>
+                    <p style="visibility: hidden;">empty</p>
+                    <p style="visibility: hidden;">empty</p>
+                  </ng-template>
+                </ng-container>
+              </section>
+              <section class="ion-margin-top" *ngIf="generalInformation.content">
+                <ng-container *ngFor="let contentItem of generalInformation.content">
+                  <h3 class="text-bold colored-text ion-margin-vertical" *ngIf="contentItem.header">
+                    {{contentItem.header}}
+                  </h3>
+                  <ng-container *ngIf="contentItem.body">
+                    <ng-container *ngFor="let bodyParagraph of contentItem.body">
+                      <p *ngIf="bodyParagraph !== '<empty>'; else noContent" class="secondary-txt-color">
+                        {{bodyParagraph}}
+                      </p>
+                      <ng-template #noContent>
+                        <p style="visibility: hidden;">empty</p>
+                        <p style="visibility: hidden;">empty</p>
+                      </ng-template>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </section>
+              <section *ngIf="generalInformation.conclusion">
+                <ng-container *ngFor="let conclusionParagraph of generalInformation.conclusion">
+                  <p *ngIf="conclusionParagraph && conclusionParagraph !== '<empty>'; else noConclusionContent;"
+                    class="secondary-txt-color">
+                    {{conclusionParagraph}}
+                  </p>
+                  <ng-template #noConclusionContent>
+                    <p style="visibility: hidden;">empty</p>
+                    <p style="visibility: hidden;">empty</p>
+                  </ng-template>
+                </ng-container>
+              </section>
+            </ng-container>
+            <ng-template #noGeneralInformation>
+              No General information
+            </ng-template>
+          </ng-container>
+          <ng-template #loadingGeneralInformation>
+            <p>
+              <ion-skeleton-text *ngFor="let skeleton of skeletons" animated
+                style="margin-top: 10px; line-height: 25px; width: 100%;"></ion-skeleton-text>
+            </p>
+          </ng-template>
         </ion-col>
       </ion-row>
     </ion-grid>
