@@ -19,7 +19,6 @@ import { VisitHistoryModalPage } from './visit-history/visit-history-modal';
 export class CovidVisitorFormPage implements OnInit, OnDestroy {
   // THIS REGULAR EXPERSSION FOLLOWS THE RFC 2822 STANDARD
   // tslint:disable-next-line: max-line-length
-  // digits = new Array(3);
   status: QRScannerStatus;  // scan availability
 
   emailValidationPattern = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
@@ -45,6 +44,9 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
     'Meeting/interview',
     'APU Student/Staff'
   ];
+  scanSub: Subscription;
+  sending = false;
+  scan = false;
   userName$: Observable<string>;
   declarationId: number;
 
@@ -101,10 +103,6 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
               const validUntil = new Date(res.valid_time);
               const currentDate = new Date();
               this.startTimer(moment(validUntil).diff(moment(currentDate), 'seconds'));
-              // const navigationExtras: NavigationExtras = {
-              //   state: { new: false, data: res }
-              // };
-              // this.router.navigateByUrl('visitor-session-pass', navigationExtras);
             } else {
               this.route.queryParams.subscribe((params: any) => {
                 if (params) {
@@ -182,10 +180,8 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
       .seconds(counterValueInSeconds);
     this.timerSubscription$ = this.timer$.subscribe(t => {
       this.counter = counterValue.toDate();
-      // this.counter = new Date(0, 0, 0, 0, 0, 2);
       this.counter.setSeconds(this.counter.getSeconds() - t);
       if (this.counter.getHours() === 0 && this.counter.getMinutes() === 0 && this.counter.getSeconds() === 0) {
-        // this.showButtons = true;
         this.sessionExpired = true;
         this.timerSubscription$.unsubscribe();
       }
@@ -196,17 +192,10 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
     this.getData();
     this.changeDetRef.detectChanges();
   }
-  // tslint:disable-next-line: member-ordering
-  scanSub: Subscription;
-  // tslint:disable-next-line: member-ordering
-  sending = false;
-  // tslint:disable-next-line: member-ordering
-  scan = false;
 
   scanQrCode() {
     this.qrScanner.prepare().then(status => {
       console.assert(status.authorized);
-      // scanning only takes the first valid code
       this.scanSub = this.qrScanner.scan().subscribe((text: string) => {
         if (this.sending) {
           return;
