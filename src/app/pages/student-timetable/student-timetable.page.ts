@@ -324,12 +324,13 @@ export class StudentTimetablePage implements OnInit {
   }
 
   sendToPrint() {
+    console.log(this.grouping);
     const week = moment(this.selectedWeek).format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
     // For student timetable:
     // printUrl?Week=2019-11-18&Intake=APTDF1805DSM(VFX)&print_request=print_tt
     // For lecturer timetable:
     // printUrl?LectID=ARW&Submit=Submit&Week=2019-11-18&print_request=print
-    this.iab.create(`${this.printUrl}?Week=${week}&Intake=${this.intake}&print_request=print_tt`, '_system', 'location=true');
+    this.iab.create(`${this.printUrl}?Week=${week}&Intake=${this.intake}&Intake_Group=${this.grouping}&print_request=print_tt`, '_system', 'location=true');
   }
 
 }
