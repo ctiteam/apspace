@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import * as Fuse from 'fuse.js';
+import Fuse from 'fuse.js';
 import { Observable } from 'rxjs';
 
 import { Role } from '../../interfaces';
 import { CasTicketService, SettingsService, UserSettingsService } from '../../services';
 
 import { Network } from '@ionic-native/network/ngx';
-import { NavController, ToastController } from '@ionic/angular';
+import { AlertController, NavController, ToastController } from '@ionic/angular';
 import { MenuItem } from './menu.interface';
 
 interface KeyIconMap { [key: string]: string; }
@@ -33,7 +33,7 @@ export class MorePage implements OnInit {
   editMode = false;
   term = '';
 
-  options: Fuse.FuseOptions<MenuItem> = {
+  options: Fuse.IFuseOptions<MenuItem> = {
     keys: ['title', 'tags']
   };
 
@@ -90,6 +90,14 @@ export class MorePage implements OnInit {
 
     // START OF Collaboration & Information Resources
     {
+      title: 'APSpace Feedback',
+      group: 'Collaboration & Information Resources',
+      url: 'feedback',
+      img: 'assets/img/feedback.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['apspace feedback', 'app not working', 'issue']
+    },
+    {
       title: 'e-Forms (Forms & Applications)',
       group: 'Collaboration & Information Resources',
       url: 'http://forms.sites.apiit.edu.my/home/',
@@ -97,14 +105,6 @@ export class MorePage implements OnInit {
       img: 'assets/img/forms-and-applications.png',
       role: Role.Student | Role.Lecturer | Role.Admin,
       tags: ['purchase', 'incident', 'maintenance', 'order', 'exit', 'event']
-    },
-    {
-      title: 'Feedback',
-      group: 'Collaboration & Information Resources',
-      url: 'feedback',
-      img: 'assets/img/feedback.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['apspace feedback', 'app not working', 'issue']
     },
     {
       title: 'Help Centre',
@@ -281,6 +281,14 @@ export class MorePage implements OnInit {
 
     // START OF Academic Operations
     {
+      title: 'APiX / ERP (Legacy)',
+      group: 'Academic Operation',
+      url: 'https://erp.apiit.edu.my/easymoo/web/en/auth/security/login',
+      img: 'assets/img/apix.png',
+      role: Role.Student | Role.Lecturer | Role.Admin,
+      tags: ['exception', 'feedback', 'legacy', 'old']
+    },
+    {
       title: 'APLC Progress Report',
       group: 'Academic Operation',
       url: 'aplc-progress-report',
@@ -311,6 +319,23 @@ export class MorePage implements OnInit {
       img: 'assets/img/dingdong.png',
       role: Role.Lecturer | Role.Admin,
       tags: ['message', 'sms', 'email', 'push', 'notification', 'announce']
+    },
+    {
+      title: 'E-Orientation',
+      group: 'Academic Operation',
+      url: 'orientaton-student-portal',
+      attachTicket: true,
+      img: 'assets/img/counseling.png',
+      role: Role.Lecturer | Role.Admin,
+      tags: ['orientation', 'counsellor']
+    },
+    {
+      title: 'Exam Schedule (Admin)',
+      group: 'Academic Operation',
+      url: 'exam-schedule-admin',
+      img: 'assets/img/exam-schedule-admin.png',
+      role: Role.Admin,
+      tags: []
     },
     {
       title: 'Exam Paper Scheduling',
@@ -509,14 +534,6 @@ export class MorePage implements OnInit {
       img: 'assets/img/timetable.png',
       role: Role.Lecturer | Role.Admin,
       tags: ['class', 'schedule', 'break']
-    },
-    {
-      title: 'Web Attendance (Legacy)',
-      group: 'Academic & Enrollment',
-      url: 'https://titan.apiit.edu.my/gims/attendance/default.asp?CAMPUS=TPM',
-      img: 'assets/img/web-attendance.png',
-      role: Role.Lecturer | Role.Admin,
-      tags: ['mark', 'students attendance', 'update']
     },
     // END OF Academic & Enrollment
 
@@ -762,6 +779,7 @@ export class MorePage implements OnInit {
 
   constructor(
     public navCtrl: NavController,
+    public alertCtrl: AlertController,
     public iab: InAppBrowser,
     private cas: CasTicketService,
     private settings: SettingsService,
@@ -819,8 +837,26 @@ export class MorePage implements OnInit {
 
       }
     } else {
-      this.navCtrl.navigateForward([url]);
+      url !== 'logout' ? this.navCtrl.navigateForward([url]) : this.logout();
     }
+  }
+
+  logout() {
+    this.alertCtrl.create({
+      header: 'Are you sure you want to log out?',
+      buttons: [
+        {
+          text: 'Log Out',
+          cssClass: 'alert-logout',
+          handler: () => {
+            this.navCtrl.navigateForward('/logout');
+          }
+        }, {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
+    }).then(alert => alert.present());
   }
 
   /** No sorting for KeyValuePipe. */

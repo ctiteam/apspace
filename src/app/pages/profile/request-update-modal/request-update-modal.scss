@@ -1,0 +1,25 @@
+.margin-auto {
+  margin: auto;
+}
+
+.profile-photo {
+  margin-top: 16px;
+  max-height: 150px;
+  max-width: 122px;
+}
+
+ion-img {
+  height: 100%;
+  border-radius: 15px;
+  margin: auto;
+}
+
+ion-item>ion-label {
+  white-space: normal;
+}
+
+@media (max-width: 767px) {
+  .hide-on-small {
+    display: none;
+  }
+}

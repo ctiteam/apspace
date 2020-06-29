@@ -70,7 +70,7 @@ export class AddFreeSlotPage implements OnInit {
     { name: 'Saturday', value: 'Sat' }
   ];
 
-  locationOptions = ['New Campus', 'TPM'];
+  locationOptions = ['New Campus', 'TPM', 'Online'];
 
   constructor(
     private ws: WsApiService,
@@ -87,6 +87,10 @@ export class AddFreeSlotPage implements OnInit {
       this.venues$ = this.ws.get<Venue[]>(
         `/iconsult/locations?venue=${this.settings.get('defaultCampus')}`
       ).pipe(shareReplay(1));
+    } else { // default location will be online
+      this.venues$ = this.ws.get<Venue[]>(
+        `/iconsult/locations?venue=Online`
+      ).pipe(shareReplay(1));
     }
 
     this.addFreeSlotForm = this.formBuilder.group({
@@ -100,7 +104,7 @@ export class AddFreeSlotPage implements OnInit {
       repeatOn: [[]],
       noOfWeeks: [0],
       endDate: [''],
-      location: [this.settings.get('defaultCampus') || '', Validators.required], // always required
+      location: [this.settings.get('defaultCampus') || 'Online', Validators.required], // default is online
       venue: [this.settings.get('defaultVenue') || {}, Validators.required], // alwayes required
       time: this.formBuilder.array([this.initTimeSlots()])
     });

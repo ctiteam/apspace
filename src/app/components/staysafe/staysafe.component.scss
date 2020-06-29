@@ -1,0 +1,47 @@
+.header {
+    font-weight: bold; 
+    font-size: 20px;
+
+    &.success {
+        color: var(--success-color);
+    }
+
+    &.primary {
+        color: var(--ion-color-primary);
+    }
+
+    &.danger {
+        color: var(--danger-color);
+    }
+}
+
+.responsive-h2 {
+    font-size: 17px !important;
+}
+
+.icon {
+    margin-top: auto; 
+    margin-bottom: auto;
+
+    @media only screen and (min-width: 770px) {
+        border-right: 2px solid var(--secondary-txt-color);
+    }
+}
+
+h6 {
+    font-size: 17px;
+}
+
+ion-col {
+    text-align: center;
+}
+
+.body {
+    margin-top: 10px; 
+    font-weight: bold; 
+    font-size: 17px;
+}
+
+ion-icon {
+    font-size: 85px;
+}

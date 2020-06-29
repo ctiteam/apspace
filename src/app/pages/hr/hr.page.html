@@ -19,6 +19,12 @@
                 <ion-icon slot="end" name="open"></ion-icon>
               </ion-button>
             </ion-col>
+            <ion-col *ngIf="showPaySlip">
+              <ion-button (click)="openPayslipPdf()" expand="block">
+                Payslip
+                <ion-icon slot="end" name="print"></ion-icon>
+              </ion-button>
+            </ion-col>
           </ion-row>
         </ion-grid>
         <!-- <ng-container *ngIf="leaves$ | async as leaves; else loadingLeaves">
@@ -95,9 +101,11 @@
             <ng-container *ngIf="staffsOnLeaveList.length > 0; else noStaffOnLeave">
               <ion-list class="on-leave-list" *ngFor="let staffOnLeaveGroupedByDate of staffsOnLeaveList">
                 <ion-list-header class="colored-header ion-no-padding">
-                  <h5 class="ion-padding-start ion-padding-end">
-                    {{staffOnLeaveGroupedByDate.date | date: 'EEE, dd MMM yyy'}}
-                  </h5>
+                  <ion-label>
+                    <h5 class="ion-padding-start ion-padding-end">
+                      {{staffOnLeaveGroupedByDate.date | date: 'EEE, dd MMM yyy'}}
+                    </h5>
+                  </ion-label>
                 </ion-list-header>
                 <ion-item *ngFor="let staffOnLeave of staffOnLeaveGroupedByDate.value">
                   <ion-avatar slot="start">
@@ -177,9 +185,11 @@
                   <ng-container *ngIf="history$ | async as historyList; else loadingHistory">
                     <ion-list *ngFor="let historyGroupedByMonth of historyList" class="ion-no-padding">
                       <ion-list-header class="colored-header ion-no-padding">
-                        <h5 class="ion-padding-start ion-padding-end">
-                          {{historyGroupedByMonth.date}}
-                        </h5>
+                        <ion-label>
+                          <h5 class="ion-padding-start ion-padding-end">
+                            {{historyGroupedByMonth.date}}
+                          </h5>
+                        </ion-label>
                       </ion-list-header>
                       <ng-container *ngFor="let historyItem of historyGroupedByMonth.value">
                         <ion-item [ngClass]="{

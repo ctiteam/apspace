@@ -13,7 +13,8 @@ import { IntakeListingService, SettingsService, WsApiService } from '../../servi
   styleUrls: ['./exam-schedule.page.scss'],
 })
 export class ExamSchedulePage {
-
+  today = new Date();
+  newAnnouncementDate = new Date(2020, 4, 1);
   exam$: Observable<ExamSchedule[]>;
   intake: string;
   intakes: string[];
@@ -50,7 +51,8 @@ export class ExamSchedulePage {
 
         /* tslint:enable:no-bitwise */
         this.ws.get<StudentProfile>('/student/profile').subscribe(p => {
-          this.intake = p.INTAKE;
+          // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
+          this.intake = p.INTAKE.replace(/[(]AP[)]|[(]BP[)]/g, '');
         },
           (_) => { },
           () => this.doRefresh()

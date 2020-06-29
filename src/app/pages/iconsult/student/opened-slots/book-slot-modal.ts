@@ -19,6 +19,8 @@ export class BookSlotModalPage implements OnInit {
   loading: HTMLIonLoadingElement;
   studentEmail: string;
 
+  maxLength = 128;
+
   formModel: {
     slot_id: number,
     consultation_with: string,

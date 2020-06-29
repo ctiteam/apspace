@@ -5,6 +5,7 @@ import {
   ApolloTestingController, ApolloTestingModule
 } from 'apollo-angular/testing';
 
+import { Vibration } from '@ionic-native/vibration/ngx';
 import { SettingsService } from '../../services';
 import { AttendixStudentPage } from './attendix-student.page';
 
@@ -18,6 +19,7 @@ describe('AttendixStudentPage', () => {
       declarations: [AttendixStudentPage],
       providers: [
         { provide: QRScanner, useValue: {} },
+        { provide: Vibration, useValue: {} },
         { provide: SettingsService, useValue: {} },
       ],
       imports: [ApolloTestingModule],

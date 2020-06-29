@@ -54,9 +54,19 @@ type Query {
 # service "https://api.apiit.edu.my/classcodes"
 
 type Mutation {
-  initAttendance(schedule: ScheduleInput!): Attendance!
-
   # lecturer
+  initAttendance(
+    schedule: ScheduleInput!
+    # added 2020-04-01, default 'N' for backward compatibility
+    # can add required constaint later
+    attendance: String
+  ): Attendance!
+
+  initAttendanceAsPresent(
+    schedule: ScheduleInput!
+    students: [String!]!
+  ): Attendance!
+
   markAttendance(
     schedule: ScheduleInput!
     student: String!
@@ -64,7 +74,14 @@ type Mutation {
     absentReason: String
   ): Status!
 
+  markAttendanceAll(
+    schedule: ScheduleInput!
+    attendance: String!
+  ): [Status!]!
+
   saveLectureLog(schedule: ScheduleInput! log: LogInput!): Boolean # void
+
+  resetAttendance(schedule: ScheduleInput!): Boolean # void
 
   # student
   updateAttendance(otp: String!): Status!

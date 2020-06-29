@@ -1,0 +1,360 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar mode="md">
+    <ion-title>Request Profile Update</ion-title>
+    <ion-buttons slot="end">
+      <ion-button outline (click)="dismiss()">
+        <ion-icon class="colored-text" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col size="12" class="ion-margin-top" *ngIf="studentDetails$ | async as studentDetails">
+
+        <ng-container *ngIf="studentDetails.student_details.length > 0; else noStudentDetails">
+          <ion-card>
+            <ion-card-content class="ion-no-padding">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="4" offset="4" size-md="3" offset-md="" push-md="9">
+                    <ng-container *ngIf="studentImage$ | async as studentImage">
+                      <ion-img class="profile-photo" [src]="
+                                              'data:image/jpg;base64,' +
+                                              studentImage[0].base64_photo
+                                              " (ionError)="$event.target.src = 'assets/img/no_img.png'">
+                      </ion-img>
+                    </ng-container>
+                  </ion-col>
+                  <ion-col size="12" size-md="9" pull-md="3">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col>
+                          <h1 class="text-bold colored-text">PERSONAL INFORMATION</h1>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>FULL NAME</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{ studentDetails.student_details[0].STUDENT_NAME || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>STUDENT ID NO.</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].STUDENT_NUMBER || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>IC / PASSPORT NO.</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].IC || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>DATE OF BIRTH</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{(studentDetails.student_details[0].DOB | date) || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>GENDER</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].GENDER || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>NATIONALITY</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].NATIONALITY || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>COUNTRY OF ORIGIN</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].COUNTRY_OF_ORIGIN || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>RACE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].RACE || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>RELIGION</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].RELIGION || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col>
+                          <h1 class="text-bold colored-text">CONTACT INFORMATION</h1>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>MOBILE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2 *ngIf="studentDetails.student_details[0].STUDENT_MOBILE_NO">: <a class="colored-text link"
+                              [href]="'tel:' + studentDetails.student_details[0].STUDENT_MOBILE_NO">{{studentDetails.student_details[0].STUDENT_MOBILE_NO}}</a>
+                          </h2>
+                          <h2 *ngIf="!studentDetails.student_details[0].STUDENT_MOBILE_NO">: N/A</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>E-MAIL</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2 *ngIf="studentDetails.student_details[0].STUDENT_EMAIL">: <a class="colored-text link"
+                              href="mailto:{{studentDetails.student_details[0].STUDENT_EMAIL}}">{{studentDetails.student_details[0].STUDENT_EMAIL}}</a>
+                          </h2>
+                          <h2 *ngIf="!studentDetails.student_details[0].STUDENT_EMAIL">: N/A</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>PERMANENT ADDRESS</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].STUDENT_PERMANENT_ADDRESS || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col>
+                          <h1 class="text-bold colored-text">PARENT / GUARDIAN (1) INFORMATION</h1>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>NAME</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].PARENTS_NAME || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>RELATIONSHIP</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].PARENTS_RELATIONSHIP || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>MOBILE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2 *ngIf="studentDetails.student_details[0].PARENTS_MOBILE_TEL">: <a
+                              class="colored-text link"
+                              [href]="'tel:' + studentDetails.student_details[0].PARENTS_MOBILE_TEL">{{studentDetails.student_details[0].PARENTS_MOBILE_TEL}}</a>
+                          </h2>
+                          <h2 *ngIf="!studentDetails.student_details[0].PARENTS_MOBILE_TEL">: N/A</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>EMAIL</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2 *ngIf="studentDetails.student_details[0].PARENTS_EMAIL">: <a class="colored-text link"
+                              href="mailto:{{studentDetails.student_details[0].PARENTS_EMAIL}}">{{studentDetails.student_details[0].PARENTS_EMAIL}}</a>
+                          </h2>
+                          <h2 *ngIf="!studentDetails.student_details[0].PARENTS_EMAIL">: N/A</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col>
+                          <h1 class="text-bold colored-text">PARENT / GUARDIAN (2) INFORMATION</h1>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>NAME</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].GUARDIAN_NAME || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>RELATIONSHIP</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].GUARDIAN_RELATIONSHIP || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>MOBILE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2 *ngIf="studentDetails.student_details[0].GUARDIAN_MOBILE_TEL">: <a
+                              class="colored-text link"
+                              [href]="'tel:' + studentDetails.student_details[0].GUARDIAN_MOBILE_TEL">{{studentDetails.student_details[0].GUARDIAN_MOBILE_TEL}}</a>
+                          </h2>
+                          <h2 *ngIf="!studentDetails.student_details[0].GUARDIAN_MOBILE_TEL">: N/A</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>EMAIL</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2 *ngIf="studentDetails.student_details[0].GUARDIAN_EMAIL">: <a class="colored-text link"
+                              href="mailto:{{studentDetails.student_details[0].GUARDIAN_EMAIL}}">{{studentDetails.student_details[0].GUARDIAN_EMAIL}}</a>
+                          </h2>
+                          <h2 *ngIf="!studentDetails.student_details[0].GUARDIAN_EMAIL">: N/A</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col>
+                          <h1 class="text-bold colored-text">COURSE INFORMATION</h1>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>COURSE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].COURSE || 'N/A'}} </h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>INTAKE DATE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].INTAKE_DATE || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>INTAKE CODE</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].INTAKE_CODE || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>SCHOLARSHIP</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].SCHOLARSHIP || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="3" class="margin-auto">
+                          <h2>FEES SCHEME</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{studentDetails.student_details[0].FEES_SCHEME || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ng-container>
+        <ng-template #noStudentDetails>
+          <ion-card color="danger">
+            <ion-card-header color="danger">
+              <ion-card-title class="ion-text-center">
+                Student Details is not available :(
+              </ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ng-template>
+        <ng-container *ngIf="studentDetails.councelor_details.length > 0; else noCouncelorDetails">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>
+                <h1 class="colored-text">
+                  E-COUNSELLOR DETAILS
+                </h1>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content class="ion-no-padding">
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="4" offset="4" size-md="3" offset-md="" push-md="9">
+                    <ng-container *ngIf="councelorProfile$ | async as councelorProfile">
+                      <ion-img class="profile-photo"
+                        [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + councelorProfile.RefNo + '.jpg'"
+                        (ionError)="$event.target.src = 'assets/img/no_img.png'">
+                      </ion-img>
+                    </ng-container>
+                  </ion-col>
+                  <ion-col size="12" size-md="9" pull-md="3">
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col size="6" size-md="4">
+                          <h2>E-COUNSELLOR’S NAME</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{ studentDetails.councelor_details[0].COUNCELOR_NAME || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="4">
+                          <h2>E-COUNSELLOR’S E-MAIL</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{ studentDetails.councelor_details[0].EMAIL || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="6" size-md="4">
+                          <h2>E-COUNSELLOR’S WHATSAPP</h2>
+                        </ion-col>
+                        <ion-col size="6" offset-md="1" size-md="">
+                          <h2>: {{ studentDetails.councelor_details[0].MOBILE_NO || 'N/A'}}</h2>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ng-container>
+        <ng-template #noCouncelorDetails>
+          <ion-card color="danger">
+            <ion-card-header color="danger">
+              <ion-card-title class="ion-text-center">
+                Councelor Details is not available :(
+              </ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ng-template>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

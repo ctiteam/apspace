@@ -9,6 +9,7 @@ import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner';
 import { MessageWithSvgComponent } from './message-with-svg/message-with-svg.component';
 import { QuickAccessItemComponent } from './quick-access-item/quick-access-item.component';
 import { SearchModalComponent } from './search-modal/search-modal.component';
+import { StaysafeComponent } from './staysafe/staysafe.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { SearchModalComponent } from './search-modal/search-modal.component';
     EventsListComponent,
     DashboardCardComponent,
     QuickAccessItemComponent,
-    MessageWithSvgComponent
+    MessageWithSvgComponent,
+    StaysafeComponent
   ],
   imports: [
     CommonModule,
@@ -31,7 +33,8 @@ import { SearchModalComponent } from './search-modal/search-modal.component';
     EventsListComponent,
     DashboardCardComponent,
     QuickAccessItemComponent,
-    MessageWithSvgComponent
+    MessageWithSvgComponent,
+    StaysafeComponent
   ],
 })
 export class ComponentsModule { }

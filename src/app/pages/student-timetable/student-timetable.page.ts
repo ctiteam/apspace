@@ -142,7 +142,8 @@ export class StudentTimetablePage implements OnInit {
       // tslint:disable-next-line: no-bitwise
       if (this.settings.get('role') & Role.Student) { // intake is not defined & user role is student
         this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).subscribe(p => {
-          this.intake = p.INTAKE;
+          // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
+          this.intake = p.INTAKE.replace(/[(]AP[)]|[(]BP[)]/g, '');
           this.changeDetectorRef.markForCheck();
           this.settings.set('intakeHistory', [this.intake]);
           this.doRefresh();

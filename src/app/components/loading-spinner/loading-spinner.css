@@ -1,5 +1,4 @@
 .loader {
-  position: relative;
   top: calc(50% - 32px);
   left: calc(50% - 11px);
   width: 23px;
@@ -62,4 +61,17 @@
   100% {
     transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg);
   }
+}
+
+.text-alignment {
+  margin-top: 10px;
+  text-align: center;
+  width: 250px;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

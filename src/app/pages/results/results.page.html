@@ -7,7 +7,7 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons *ngIf="block" slot="end">
-      <ion-button fill="outline" size="small" class="colored-text notification-button colored-border"
+      <ion-button fill="outline" class="colored-text notification-button colored-border"
         (click)="showActionSheet()">
         {{ selectedIntake }}
       </ion-button>
@@ -88,17 +88,6 @@
                         <span class="text-bold">Total Modules Passed</span>
                         <span
                           class="ion-float-right right-notch">{{ semesterResult.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</span>
-                      </ion-col>
-                      <ion-col size-lg="6" size="12">
-                        <span class="text-bold">Total Credit hours</span>
-                        <span
-                          class="ion-float-right right-notch">{{ semesterResult.summary[0]?.TOTAL_CREDIT_HOURS || 'N/A' }}</span>
-                      </ion-col>
-
-                      <ion-col size-lg="6" size="12">
-                        <span class="text-bold">Credits transferred</span>
-                        <span
-                          class="ion-float-right right-notch">{{ semesterResult.summary[0]?.CREDIT_TRANSFERRED || 'N/A' }}</span>
                       </ion-col>
 
                       <ion-col size-lg="6" size="12">

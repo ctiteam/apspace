@@ -15,6 +15,7 @@ export class UserSettingsService {
   private dashboardSections: BehaviorSubject<string[]>;
   private menuUI: BehaviorSubject<'cards' | 'list'>;
   private casheCleaered: BehaviorSubject<boolean>;
+  private shakeSensitivity: BehaviorSubject<string>;
   private busShuttleServiceSettings: BehaviorSubject<{ firstLocation: string, secondLocation: string, alarmBefore: string }>;
   timetable: BehaviorSubject<{ blacklists: string[] }>;
 
@@ -33,6 +34,7 @@ export class UserSettingsService {
   // Default dasbhoard sections for students (will be added to the local storage when student login)
   defaultStudentsDashboardSectionsSettings = [
     'quickAccess',
+    'inspirationalQuote',
     'todaysSchedule',
     'upcomingEvents',
     'lowAttendance',
@@ -69,6 +71,7 @@ export class UserSettingsService {
     this.menuUI = new BehaviorSubject('list');
     this.busShuttleServiceSettings = new BehaviorSubject(this.defaultBusShuttleServicesSettings);
     this.casheCleaered = new BehaviorSubject(false);
+    this.shakeSensitivity = new BehaviorSubject('40');
     this.timetable = new BehaviorSubject({ blacklists: [] });
   }
 
@@ -167,7 +170,15 @@ export class UserSettingsService {
     this.dashboardSections.next(value);
   }
 
+  // Shake Sensitivity
+  getShakeSensitivity() {
+    return this.shakeSensitivity.asObservable();
+  }
 
+  setShakeSensitivity(val: string) {
+    this.storage.set('shake-sensitivity', val);
+    this.shakeSensitivity.next(val);
+  }
 
   // DASHBOARD SECTIONS
   setShownDashboardSections(val: string[]) {
@@ -247,6 +258,11 @@ export class UserSettingsService {
         this.timetable.next(value || { blacklists: [] });
       }
       this.timetable.subscribe(newValue => this.storage.set('timetable', newValue));
+    });
+    this.storage.get('shake-sensitivity').then(value => {
+      value
+        ? this.setShakeSensitivity(value)
+        : this.setShakeSensitivity('40');
     });
   }
 

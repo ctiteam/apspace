@@ -12,7 +12,7 @@
   </ion-toolbar>
 
   <ion-toolbar *ngIf="(bankDraft$ | async) as bankDrafts; else loadingSegment">
-    <ion-segment class="ion-padding" [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
+    <ion-segment [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
       <ion-segment-button value="Summary">Summary</ion-segment-button>
       <ion-segment-button *ngIf="bankDrafts[0].BANKDRAFT_AMOUNT !== 0" value="Bank Draft">
         SU Fees
@@ -27,7 +27,7 @@
         <ion-row class="ion-justify-content-center">
           <ion-col class="ion-padding-horizontal" size="12" size-md="6" size-lg="4">
             <ion-item lines="none">
-              <ion-skeleton-text style="height: 38px; width: 100%" animated></ion-skeleton-text>
+              <ion-skeleton-text style="width: 100%; height: 38px;" animated></ion-skeleton-text>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -123,19 +123,19 @@
 
               <ion-card-content>
                 <ion-item lines="none">
-                  <ion-skeleton-text style="height: 46px; width: 100%" animated></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 100%; height: 46px;" animated></ion-skeleton-text>
                 </ion-item>
                 <ion-item lines="none">
-                  <ion-skeleton-text style="height: 46px; width: 100%" animated></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 100%; height: 46px;" animated></ion-skeleton-text>
                 </ion-item>
                 <ion-item lines="none">
-                  <ion-skeleton-text style="height: 46px; width: 100%" animated></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 100%; height: 46px;" animated></ion-skeleton-text>
                 </ion-item>
                 <ion-item lines="none">
-                  <ion-skeleton-text style="height: 46px; width: 100%" animated></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 100%; height: 46px;" animated></ion-skeleton-text>
                 </ion-item>
                 <ion-item lines="none">
-                  <ion-skeleton-text style="height: 46px; width: 100%" animated></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 100%; height: 46px;" animated></ion-skeleton-text>
                 </ion-item>
               </ion-card-content>
             </ion-card>
@@ -208,19 +208,19 @@
                     <ion-col size="12" size-xl="6" *ngFor="let _ of numberOfSkeletons">
                       <ion-card>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px;" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px;" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px;" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px;" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px;" animated></ion-skeleton-text>
                         </ion-item>
                       </ion-card>
                     </ion-col>
@@ -281,22 +281,22 @@
                     <ion-col size="12" size-xl="6" *ngFor="let _ of numberOfSkeletons">
                       <ion-card>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
                         </ion-item>
                       </ion-card>
                     </ion-col>
@@ -375,22 +375,22 @@
                     <ion-col size="12" size-xl="6" *ngFor="let _ of numberOfSkeletons">
                       <ion-card>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
                         </ion-item>
                         <ion-item lines="none">
-                          <ion-skeleton-text style="height: 42px; width: 100%" animated></ion-skeleton-text>
+                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
                         </ion-item>
                       </ion-card>
                     </ion-col>

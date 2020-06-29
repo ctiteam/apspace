@@ -1,0 +1,102 @@
+<ion-content>
+  <div class="ion-margin">
+    <div class="ion-text-center ion-margin-bottom">
+      <h4 class="main-text-color">Report a Problem</h4>
+      <h6 class="secondary-txt-color">Your feedback helps us to improve APSpace</h6>
+    </div>
+
+    <app-message-with-svg
+      messageTitle=""
+      messageContent=""
+      imageUrl="assets/img/feedback.svg"
+      wrapperOffset="3"
+      wrapperSize="6"
+    >
+    </app-message-with-svg>
+
+    <div class="feedback-form">
+      <ion-item lines="none">
+        <ion-label position="stacked">Message:</ion-label>
+        <ion-textarea class="form-input" autosize rows="3" [(ngModel)]="message"
+          (ngModelChange)="onMessageFieldChange($event)" required="true"></ion-textarea>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Contact Number: <small>(Optional)</small></ion-label>
+        <ion-input class="form-input" type="text" [(ngModel)]="contactNo" (ngModelChange)="onPhoneNumberChange()">
+        </ion-input>
+      </ion-item>
+      <div class="ion-padding-start ion-padding-end">
+        <small *ngIf="contactNo && !phoneNumberValid" class="danger-text">Phone
+          number is invalid. Please check the
+          number and enter a correct phone number (Exactly 10 or 11 digits)
+        </small>
+      </div>
+
+      <!--
+        <div class="ion-padding">
+          <ion-button expand="full" class="colored-background" (click)="submitFeedback()"
+            [disabled]="!message || (!phoneNumberValid && contactNo !== '')">
+            Submit
+          </ion-button>
+        </div>
+      -->
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-grid class="ion-no-padding ion-no-margin" style="margin-top: 5px; margin-bottom: 5px;">
+    <ion-row>
+      <ion-col size="12">
+        <ion-grid class="ion-no-padding ion-no-margin">
+          <ion-row>
+            <ion-col size="4" style="padding-left: 20px; padding-top: 3%;">
+              <p>Attachment(s):</p>
+            </ion-col>
+
+            <ion-col size="4">
+              <ion-button [color]="showImage ? 'danger' : 'primary'" fill="clear" expand="block" (click)="toggleImage()">
+                <ion-icon slot="icon-only" [name]="showImage ? 'caret-down' : 'caret-up'"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+
+      <ion-col size="12" *ngIf="showImage" @slideIn>
+        <ion-slides pager="true" [options]="screenshotSliderOpts" @slideLeft>
+          <ion-slide>
+            <ion-button [color]="'primary'" size="small" (click)="browseImage()" class="overlayBtn">
+              <ion-icon button [name]="'add'"></ion-icon>
+            </ion-button>
+            <ion-img [src]="'assets/img/shakespear_placeholder.jpg'"></ion-img>
+          </ion-slide>
+
+          <ion-slide *ngFor="let img of images">
+            <ion-button [color]="'danger'" size="small" (click)="removeImage(img)" class="overlayBtn">
+              <ion-icon button [name]="'trash'"></ion-icon>
+            </ion-button>
+            <ion-img [src]="img"></ion-img>
+          </ion-slide>
+        </ion-slides>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
+
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button
+    color="success"
+    size="large"
+    [disabled]="!message || (!phoneNumberValid && contactNo !== '')"
+    (click)="submitFeedback()">
+    <ion-icon name="checkmark" size="large"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+<!--
+
+To be added in the future (Categories)
+- Will confirm with Reza
+
+-->

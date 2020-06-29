@@ -11,7 +11,7 @@
           <ion-icon slot="end" class="cursor-pointer colored-text icon-hover" name="print"
             (click)='sendToPrint(week.key)'></ion-icon>
           <ion-icon slot="end" class="cursor-pointer colored-text icon-hover"
-            [name]=" selectedWeeks.includes(week.key) ? 'arrow-up' : 'ios-arrow-down'"
+            [name]=" selectedWeeks.includes(week.key) ? 'chevron-up' : 'chevron-down'"
             (click)='show(week.key, $event.target)'></ion-icon>
         </ion-item>
       </ion-card-header>
@@ -85,7 +85,11 @@
 <ng-template #loading>
   <ion-card>
     <ion-card-content>
+<<<<<<< HEAD
       <ion-skeleton-text animated style="line-height: 100px; width: 100%"></ion-skeleton-text>
+=======
+      <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
+>>>>>>> origin/v5
     </ion-card-content>
   </ion-card>
 </ng-template>

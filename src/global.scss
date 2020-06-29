@@ -33,7 +33,40 @@
   display: none;
 }
 
-// Screen size hidden
+.controlled-modal .modal-wrapper {
+  height: 93%;
+  top: 7%;
+  position: absolute;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.dark-theme.pure .controlled-modal-dingdong ion-content {
+    --background: var(--secondary-bg-color);
+}
+
+.controlled-modal-dingdong .modal-wrapper {
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  position: absolute; 
+  --height: 100%;
+  top: 40%;
+
+  .item-holder {
+    overflow: hidden;
+    padding: 20px 20px 0px 20px;
+  }
+
+  @media only screen and (max-device-width: 399px) {
+    top: 44%;
+  }
+
+  @media only screen and (min-device-width: 400px) {
+    top: 40%;
+  }
+}
+
+// Screen size hidden (Responsive sizes, eliminates Media Query Tag)
 .invisible {
   visibility: hidden !important;
 }

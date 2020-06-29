@@ -2,7 +2,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
-import { FCM } from '@ionic-native/fcm/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { ModalController } from '@ionic/angular';
@@ -31,7 +30,6 @@ describe('LoginPage', () => {
         { provide: ActivatedRoute, useValue: { snapshot: snapshotStub } },
         { provide: CasTicketService, useValue: casSpy },
         { provide: DataCollectorService, useValue: {} },
-        { provide: FCM, useValue: {} },
         { provide: InAppBrowser, useValue: {} },
         { provide: ModalController, useValue: {} },
         { provide: Network, useValue: {} },

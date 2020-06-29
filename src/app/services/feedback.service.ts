@@ -18,6 +18,7 @@ export class FeedbackService {
    * @param body Feedback data
    */
   sendFeedback(body: Feedback): Observable<any> {
+    // tslint:disable-next-line: max-line-length
     return this.ws.post('/apspacefeedback/submit', { body, timeout: 30000 });
   }
 

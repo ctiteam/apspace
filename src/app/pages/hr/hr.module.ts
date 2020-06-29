@@ -8,6 +8,9 @@ import { IonicModule } from '@ionic/angular';
 
 import { ComponentsModule } from 'src/app/components/components.module';
 import { HrPage } from './hr.page';
+import { GenerateMonthImgPipe } from './print-payslip-modal/generate-month-img.pipe';
+import { GetDatePipe } from './print-payslip-modal/get-date.pipe';
+import { PrintPayslipModalPage } from './print-payslip-modal/print-payslip-modal.page';
 import { SortByDatePipe } from './sort-by-date.pipe';
 
 const routes: Routes = [
@@ -26,6 +29,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [HrPage, SortByDatePipe]
+  declarations: [HrPage, SortByDatePipe, PrintPayslipModalPage, GetDatePipe, GenerateMonthImgPipe],
 })
 export class HrPageModule { }

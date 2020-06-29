@@ -16,7 +16,8 @@ export class ByIdPipe implements PipeTransform {
    * @returns Staff
    */
   transform(ss: StaffDirectory[] | null, id: string): StaffDirectory {
-    return (ss || []).find(s => s.ID === id);
+    id = id.toLowerCase();
+    return (ss || []).find(s => s.ID.toLowerCase() === id);
   }
 
 }

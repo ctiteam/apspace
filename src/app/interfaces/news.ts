@@ -24,6 +24,13 @@ export interface News {
   field_news_image: FieldNewsImage[];
 }
 
+export interface ShortNews {
+  url: string;
+  title: string;
+  updated: Date | string;
+  body: string;
+}
+
 export interface Body {
   value: string;
   format: string;

@@ -1,0 +1,141 @@
+// general
+.transparent {
+  --background: transparent !important;
+}
+
+.no-box-shadow {
+  box-shadow: none !important;
+}
+
+.margin-auto {
+  margin: auto;
+}
+
+.small-margin-top{
+  margin-top: 4px;
+}
+
+.larger-font-size{
+  font-size: 16px !important;
+}
+
+ion-item {
+  background: transparent !important;
+  --background: transparent !important;
+}
+
+ion-card>ion-item>ion-label {
+  --color: #000000 !important;
+  min-width: 15ex;
+  /* force occupy some space on mobile */
+}
+
+// details & qr code section
+.otp {
+  display: inline-block;
+  background-color: #ffffff;
+  font-size: 48px;
+  margin: 5px 9px;
+  padding: 12px;
+  padding-bottom: calc(12px - 5px);
+  border-bottom: 5px solid var(--primary-color);
+  color: #000000;
+  font-family: 'Hack', 'Iconsolata', monospace;
+}
+
+.form-input {
+  border-radius: 3px;
+  background: var(--main-bg-color);
+  border: 1px solid var(--tertiary-bg-color);
+  min-height: 40px;
+  margin-top: 10px;
+  padding: 3px 10px !important;
+}
+
+.dead {
+  position: absolute;
+  top: calc(30vh - 3ex);
+  width: 100%;
+  text-align: center;
+  padding: 30px;
+  color: var(--danger-color);
+  background-color: var(--secondary-bg-color);
+  text-shadow: var(--tertiary-bg-color) 2px 3px;
+
+  p {
+    font-size: 3rem;
+  }
+}
+
+qrcode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-title {
+  font-size: 30px;
+  padding-left: 0;
+}
+
+// students list section
+.select-container {
+  .input {
+    border: 1px solid var(--tertiary-bg-color);
+  }
+}
+
+.table {
+  .table-container {
+    padding-top: 5px;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+
+    .table-header {
+      padding: 5px 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #cccccc;
+
+      ion-text {
+        font-size: 1rem;
+      }
+    }
+
+    .table-row {
+      padding: 10px; 
+      margin: 4px 0;
+      &:hover {
+        background: var(--tertiary-bg-color);
+      }
+    }
+  }
+
+  // Attendance Status (stateR: absent with reason, stateL: Late, stateN: absent, stateY: present)
+  .stateR {
+    color: #FFFFFF;
+    background: #36A2EB !important;
+    border-color: #36A2EB !important;
+  }
+
+  .stateN {
+    color: #FFFFFF;
+    background: #e54d42 !important;
+    border-color: #e54d42 !important;
+    --background-hover: #af4448 !important;
+  }
+
+  .stateL {
+    color: #FFFFFF;
+    background: #d49a0d !important;
+    border-color: #d49a0d !important;
+    --background-hover: #cabf45 !important;
+  }
+
+  .stateY {
+    color: #FFFFFF;
+    background: #49b571 !important;
+    border-color: #49b571 !important;
+    --background-hover: #519657 !important;
+  }
+}

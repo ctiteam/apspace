@@ -45,7 +45,7 @@ export class StaffDirectoryInfoPage implements OnInit {
   chatInTeams(lecturerCasId: string) {
     const androidSchemeUrl = 'com.microsoft.teams';
     const iosSchemeUrl = 'microsoft-teams://';
-    const webUrl = `https://teams.microsoft.com/_#/apps/a2da8768-95d5-419e-9441-3b539865b118/search?q=?${lecturerCasId}`;
+    const webUrl = `https://teams.microsoft.com/l/chat/0/0?users=${lecturerCasId}@staffemail.apu.edu.my`;
     const appStoreUrl = 'https://itunes.apple.com/us/app/microsoft-teams/id1113153706?mt=8';
     const appViewUrl = 'https://teams.microsoft.com/l/chat/0/0?users=';
     // tslint:disable-next-line: max-line-length

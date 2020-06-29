@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { LoadingController, Platform, ToastController } from '@ionic/angular';
 
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { FeedbackService, VersionService } from '../../services';
@@ -26,6 +26,7 @@ export class FeedbackPage implements OnInit {
 
   constructor(
     private feedback: FeedbackService,
+    private plt: Platform,
     private toastCtrl: ToastController,
     private version: VersionService,
     private iab: InAppBrowser,
@@ -37,6 +38,7 @@ export class FeedbackPage implements OnInit {
       contactNo: this.contactNo || '',
       platform: this.platform,
       message: this.message,
+      mobile: this.plt.is('cordova') ? 'Yes' : 'No',
       appVersion: this.appVersion,
       screenSize: this.screenSize,
     };
@@ -46,7 +48,7 @@ export class FeedbackPage implements OnInit {
       this.message = '';
       this.toastCtrl.create({
         // tslint:disable-next-line: max-line-length
-        message: '<span style="font-weight: bold;">Feedback submitted! </span> The team will get back to you as soon as possbile via Email. Thank you for your feedback',
+        message: '<span style="font-weight: bold;">Feedback submitted! </span> The team will get back to you as soon as possible via Email. Thank you for your feedback',
         position: 'top',
         color: 'success',
         duration: 5000,

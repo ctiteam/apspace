@@ -5,7 +5,7 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="generateMonthlyTransactionsPdf()" fill="clear" class="colored-border colored-text">
+      <ion-button (click)="generateMonthlyTransactionsPdf()" class="colored-border colored-text">
         <ion-icon name="print" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -76,7 +76,7 @@
                 <ion-label>
                   <h2 class="value">{{ getAbsoluteValue(transaction.SpendVal) | currency: "RM" }}</h2>
                   <p class="main-text-color">{{ transaction.ItemName }}</p>
-                  <h3 class="secondary-txt-color">{{ transaction.SpendDate | date: "EEE, d MMM y" }}</h3>
+                  <h3 class="secondary-txt-color">{{ transaction.SpendDate | date: "EEE, d MMM y" }} @ {{ transaction.SpendTime | time }}</h3>
                 </ion-label>
               </ion-item>
             </ion-virtual-scroll>

@@ -1,0 +1,61 @@
+ion-item {
+    // HIDE EFFECTS FOR ION ITEM
+    --background-hover: var(--secondary-bg-color) !important;
+    --background-focused: var(--secondary-bg-color) !important;
+    --button-background-activated: var(--secondary-bg-color) !important;
+}
+
+ion-label.item-label {
+    // font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+ion-select.form-input {
+    padding: 8px 10px 9px 10px !important;
+}
+
+ion-datetime.form-input {
+    width: 100%;
+    min-height: 32px !important;
+    padding: 6px 4px 0px 10px !important;
+}
+
+ion-input.form-input {
+    height: 0 !important;
+}
+
+.search-intake {
+    padding-left: 2px;
+    padding-right: 2px;
+    position: sticky;
+    z-index: 100;
+    background: var(--secondary-bg-color);
+}
+
+div.form-input {
+    width: 100%;
+    height: 280px;
+    padding-top: 0 !important;
+    overflow: hidden;
+}
+
+div.scrollable-div {
+    width: 100%;
+    height: 220px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.form-input {
+    border-radius: 7px;
+    background: var(--main-bg-color);
+    padding: 3px 10px !important;
+    margin-top: 10px;
+    border: 1px solid var(--tertiary-bg-color);
+    min-height: 40px;
+}
+
+.masonry-item {
+    padding: 0;
+}

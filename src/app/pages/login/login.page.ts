@@ -1,32 +1,67 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Network } from '@ionic-native/network/ngx';
-import { AlertController, ModalController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, IonContent, IonSlides, Platform, ToastController } from '@ionic/angular';
 
-import { throwError } from 'rxjs';
-import { catchError, switchMap, tap, timeout } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap, timeout } from 'rxjs/operators';
 
-import { FCM } from '@ionic-native/fcm/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { Role } from '../../interfaces';
+import { Role, ShortNews } from '../../interfaces';
+
 import {
   CasTicketService,
   DataCollectorService,
-  NotificationService,
+  NewsService,
   SettingsService,
   UserSettingsService,
   WsApiService
 } from '../../services';
-import { NotificationModalPage } from '../notifications/notification-modal';
-// import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
-// import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
+  activeSection = 0;
+  screenHeight: number;
+  screenWidth: number;
+
+  @ViewChild('content', { static: true }) content: IonContent;
+  @ViewChild('sliderSlides') sliderSlides: IonSlides;
+
+  noticeBoardItems$: Observable<any[]>;
+  news$: Observable<ShortNews[]>;
+
+
+  sections = [
+    { name: 'main', y: 0 },
+    { name: 'announcement', y: 1 },
+    { name: 'news', y: 2 },
+    {name: 'operationHours', y: 3},
+    // {name: 'mediaLinks', y: 4}
+  ];
+
+  test = new Array(4);
+  slideOpts = {
+    initialSlide: 0,
+    slidesPerView: 1,
+    spaceBetween: 15,
+    autoplay: true,
+    centeredContent: true,
+    speed: 400,
+    loop: true,
+    autoplayDisableOnInteraction: false,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+      renderBullet: (_, className) => {
+        return '<span style="width: 10px; height: 10px; background-color: #753a88 !important;" class="' + className + '"></span>';
+      }
+    }
+  };
+
 
   apkey: string;
   password: string;
@@ -42,19 +77,52 @@ export class LoginPage {
     public alertCtrl: AlertController,
     private cas: CasTicketService,
     private dc: DataCollectorService,
-    private fcm: FCM,
     public iab: InAppBrowser,
-    private modalCtrl: ModalController,
     private network: Network,
-    private notificationService: NotificationService,
-    private plt: Platform,
+    public plt: Platform,
     private router: Router,
     private route: ActivatedRoute,
     private settings: SettingsService,
     private toastCtrl: ToastController,
     private userSettings: UserSettingsService,
-    private ws: WsApiService
-  ) { }
+    private ws: WsApiService,
+    private news: NewsService
+  ) {
+    this.getScreenSize();
+  }
+
+  ngOnInit() {
+    const rex = /<img[^>]+src="?([^"\s]+)"?\s*\/>/;
+    this.moveToSection(0);
+    this.noticeBoardItems$ = this.news.getSlideshow().pipe(
+      map((noticeBoardItems: any) => {
+        return noticeBoardItems.map(item => {
+          if (item && item.field_image_link.length > 0 && item.field_image_link[0].value) {
+            return {
+              value: rex.exec(item.field_image_link[0].value)[1],
+              title: item.title.length > 0 && item.title[0].value ? item.title[0].value : '',
+              updated: item.changed.length > 0 && item.changed[0].value ? new Date(item.changed[0].value * 1000) : ''
+            };
+          }
+        });
+      }),
+    );
+    this.news$ = this.news.get().pipe(
+      map(newsList => {
+        return newsList.map(item => {
+          if (item && item.field_news_image.length > 0 && item.field_news_image[0].url) {
+            return {
+              url: item.field_news_image[0].url,
+              title: item.title.length > 0 && item.title[0].value ? item.title[0].value : '',
+              updated: item.changed.length > 0 && item.changed[0].value ? new Date(item.changed[0].value * 1000) : '',
+              body: item.body.length > 0 && item.body[0].value ? item.body[0].value : ''
+            };
+          }
+        }).slice(0, 6);
+      }),
+      tap(res => console.log(res))
+    );
+  }
 
   login() {
     this.userDidLogin = true;
@@ -102,7 +170,6 @@ export class LoginPage {
         },
         () => {
           if (this.plt.is('cordova')) {
-            this.runCodeOnReceivingNotification(); // it is called here and in app.component (more details in the app component.ts file)
             this.dc.login().subscribe();
           }
           this.loginProcessLoading = false;
@@ -135,20 +202,7 @@ export class LoginPage {
       position: 'top',
       animated: true,
       color: 'danger',
-      // enterAnimation: toastMessageEnterAnimation,
-      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
-  }
-
-  // this will fail when the user opens the app for the first time and login because it will run before login
-  runCodeOnReceivingNotification() {
-    this.fcm.onNotification().subscribe(data => {
-      if (data.wasTapped) { // Notification received in background
-        this.openNotificationModal(data);
-      } else { // Notification received in foreground
-        this.presentToastWithOptions(data);
-      }
-    });
   }
 
   showConfirmationMessage() {
@@ -171,40 +225,6 @@ export class LoginPage {
     }).then(confirm => confirm.present());
   }
 
-  async openNotificationModal(message: any) {
-    // need to check with dingdong team about response type
-    const modal = await this.modalCtrl.create({
-      component: NotificationModalPage,
-      componentProps: { message, notFound: 'No Message Selected' },
-    });
-    this.notificationService.sendRead(message.message_id).subscribe();
-    await modal.present();
-    await modal.onDidDismiss();
-  }
-
-  async presentToastWithOptions(data: any) {
-    // need to check with dingdong team about response type
-    const toast = await this.toastCtrl.create({
-      header: 'New Message',
-      message: data.title,
-      position: 'top',
-      color: 'primary',
-      buttons: [
-        {
-          icon: 'open',
-          handler: () => {
-            this.openNotificationModal(data);
-          }
-        }, {
-          icon: 'close',
-          role: 'cancel',
-          handler: () => { }
-        }
-      ]
-    });
-    toast.present();
-  }
-
   cacheApi(role: Role) {
     // tslint:disable-next-line:no-bitwise
     const caches = role & Role.Student
@@ -215,6 +235,57 @@ export class LoginPage {
 
   openApkeyTroubleshooting() {
     this.iab.create('http://kb.sites.apiit.edu.my/knowledge-base/unable-to-sign-in-using-apkey-apkey-troubleshooting/', '_system', 'location=true');
+  }
+
+  logScrolling(ev) {
+    if (ev.detail.startY !== ev.detail.currentY) {
+      if (ev.detail.startY < ev.detail.currentY) {
+        console.log('scrolling down');
+        if (ev.detail.currentY >= (this.activeSection + 1) * this.screenHeight) {
+          console.log('time to switch active');
+          this.activeSection++;
+        }
+      } else {
+        console.log('scrolling up');
+        if (this.activeSection !== 0) { // only if the active is not the first section
+          if (ev.detail.currentY <= (this.activeSection - 1) * this.screenHeight) {
+            console.log('time to switch active');
+            this.activeSection--;
+          }
+        }
+      }
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  getScreenSize() {
+    this.screenHeight = window.innerHeight;
+    this.screenWidth = window.innerWidth;
+  }
+
+  moveToNextPage() {
+    this.content.scrollByPoint(0, this.screenHeight, 900);
+  }
+
+  moveToSection(sectionNumber: number) {
+    if (sectionNumber === 0) { // fast scroll to top
+      this.content.scrollToTop(900);
+    } else if (this.activeSection <= sectionNumber) {
+      this.content.scrollByPoint(0, sectionNumber * this.screenHeight, 900);
+    }
+    else {
+      this.content.scrollByPoint(0, (sectionNumber - this.activeSection) * this.screenHeight, 900);
+    }
+    this.activeSection = sectionNumber;
+  }
+
+  // SLIDER
+  prevSlide() {
+    this.sliderSlides.slidePrev();
+  }
+
+  nextSlide() {
+    this.sliderSlides.slideNext();
   }
 
 }

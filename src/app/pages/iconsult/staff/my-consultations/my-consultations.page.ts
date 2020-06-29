@@ -241,10 +241,11 @@ export class MyConsultationsPage {
               handler: () => {
                 this.alertController.create({
                   header: 'Cancelling Appointment',
-                  subHeader: 'Please provide us with the cancellation reason:',
+                  message: `Please provide us with the cancellation reason: <br /> (Max 50 Characters)`,
                   inputs: [
                     {
                       name: 'cancellationReason',
+                      id: 'maxLength50',
                       type: 'text',
                       placeholder: 'Enter The Cancellation Reason',
                     },
@@ -314,7 +315,10 @@ export class MyConsultationsPage {
                       }
                     }
                   ]
-                }).then(alertCancelBooked => alertCancelBooked.present());
+                }).then(alertCancelBooked => {
+                  alertCancelBooked.present();
+                  document.getElementById('maxLength50').setAttribute('maxlength', '50');
+                });
               }
             }
           ]

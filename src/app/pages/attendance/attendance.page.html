@@ -7,7 +7,7 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button fill="outline" size="small" class="colored-text colored-border" (click)="showActionSheet()">
+      <ion-button fill="outline" class="colored-text colored-border" (click)="showActionSheet()">
         {{ selectedIntake }}
       </ion-button>
     </ion-buttons>
@@ -26,20 +26,10 @@
           <!-- START BACKGROUND WAVES -->
           <div class="fill" [style.animation-iteration-count]="average">
             <svg width="200%" height="100%" viewBox="0 0 240 140" version="1.1">
-              <defs>
-                <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
-                  <stop [attr.stop-color]="average > 0.8 ? '#08a14f': '#e54d42'" offset="0%"></stop>
-                  <stop [attr.stop-color]="average > 0.8 ? '#08a14f': '#e54d42'" offset="50%"></stop>
-                </linearGradient>
-              </defs>
-              <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <g id="widget-copy-2" fill="url(#linearGradient-1)">
-                  <g id="wave-copy" transform="translate(0.000000, 1.000000)">
-                    <path
-                      d="M0,140 L0,2.59259259 C0,2.6670255 28.08,-4.12156133 66,3.88888889 C83.6331044,8.10263543 102,6.61060503 120,2.59259259 L120,140 L0,140 Z M120,140 L120,2.59259259 C120,2.6670255 148.08,-4.12156133 186,3.88888889 C203.633104,8.10263543 222,6.61060503 240,2.59259259 L240,140 L120,140 Z"
-                      id="waveShape"></path>
-                  </g>
-                </g>
+              <g [attr.fill]="average > 0.8 ? '#08a14f': '#e54d42'">
+                <path
+                  d="M0,140 L0,2.59259259 C0,2.6670255 28.08,-4.12156133 66,3.88888889 C83.6331044,8.10263543 102,6.61060503 120,2.59259259 L120,140 L0,140 Z M120,140 L120,2.59259259 C120,2.6670255 148.08,-4.12156133 186,3.88888889 C203.633104,8.10263543 222,6.61060503 240,2.59259259 L240,140 L120,140 Z"
+                  id="waveShape"></path>
               </g>
             </svg>
           </div>
@@ -82,7 +72,8 @@
             <ion-col size="10" offset="1">
               <ion-button class="ion-margin-top success-background" expand="block" [routerLink]="['/attendix/update']">
                 Sign Attendance
-                <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>              </ion-button>
+                <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
+              </ion-button>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -104,7 +95,7 @@
           <ng-template #loadLegend>
             <ion-card>
               <ion-item>
-                <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+                <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
               </ion-item>
             </ion-card>
           </ng-template>
@@ -120,14 +111,19 @@
                     <ion-item class="h-mobile-d-desktop table-item">
                       <ion-grid class="ion-no-margin ion-no-padding">
                         <ion-row>
-                          <ion-col class="ion-no-padding" size="12" size-sm="6">
+                          <ion-col class="ion-no-padding margin-auto" size="12" size-sm="">
                             <h2 class="text-bold">Module</h2>
                           </ion-col>
-                          <ion-col size="12" size-sm="3" class="print-less-width ion-no-padding">
+                          <ion-col size="12" size-sm="" class="print-less-width ion-no-padding margin-auto">
                             <h2 class="time text-bold">Classes</h2>
                           </ion-col>
-                          <ion-col size="12" size-sm="3" class="ion-no-padding">
+                          <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
                             <h2 class="text-bold">Exam Eligibility</h2>
+                          </ion-col>
+                          <ion-col size="12" size-sm="auto" class="ion-text-right margin-auto">
+                            <ion-button style="visibility: hidden;">
+                              See Details
+                            </ion-button>
                           </ion-col>
                         </ion-row>
                       </ion-grid>
@@ -141,7 +137,7 @@
                       <ion-item class="table-item" *ngFor="let a of semester.value">
                         <ion-grid>
                           <ion-row class="table-data">
-                            <ion-col size="12" size-sm="6" class="text-bold ion-no-padding md-text-center">
+                            <ion-col size="12" size-sm="" class="text-bold md-text-center margin-auto">
                               {{ a.MODULE_ATTENDANCE }}
                             </ion-col>
                             <ion-col size="12"
@@ -153,7 +149,7 @@
                             "></div>
                             </ion-col>
 
-                            <ion-col size="12" size-sm="3" class="ion-no-padding md-text-center">
+                            <ion-col size="12" size-sm="" class=" md-text-center margin-auto">
                               <ion-item lines="none" class="no-background h-desktop-d-mobile ion-no-padding">
                                 Classes
                                 <span slot="end">
@@ -176,7 +172,7 @@
                                       "%)" }}
                               </span>
                             </ion-col>
-                            <ion-col size="12" size-sm="3" class="ion-no-padding md-text-center">
+                            <ion-col size="12" size-sm="" class="md-text-center margin-auto">
                               <ion-item lines="none" class="no-background h-desktop-d-mobile ion-no-padding">
                                 Exam Eligibility
                                 <span slot="end" [style.font-weight]="'bold'"
@@ -188,6 +184,13 @@
                                 [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'">
                                 {{ a.EXAM_ELIGIBILITY }}
                               </span>
+                            </ion-col>
+                            <ion-col size="12" size-sm="auto" class="details-button ion-text-center margin-auto">
+                              <ion-button
+                                (click)='attendanceDetails(a.MODULE_ATTENDANCE, selectedIntake, a.SUBJECT_CODE)'
+                                color='success'>
+                                See Details
+                              </ion-button>
                             </ion-col>
                           </ion-row>
                         </ion-grid>
@@ -206,42 +209,42 @@
                 <ion-col size="12" size-md="6">
                   <ion-card>
                     <ion-item>
-                      <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+                      <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
                     </ion-item>
                   </ion-card>
                 </ion-col>
                 <ion-col size="12" size-md="6">
                   <ion-card>
                     <ion-item>
-                      <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+                      <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
                     </ion-item>
                   </ion-card>
                 </ion-col>
                 <ion-col size="12" size-md="6">
                   <ion-card>
                     <ion-item>
-                      <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+                      <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
                     </ion-item>
                   </ion-card>
                 </ion-col>
                 <ion-col size="12" size-md="6">
                   <ion-card>
                     <ion-item>
-                      <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+                      <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
                     </ion-item>
                   </ion-card>
                 </ion-col>
                 <ion-col size="12" size-md="6">
                   <ion-card>
                     <ion-item>
-                      <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+                      <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
                     </ion-item>
                   </ion-card>
                 </ion-col>
                 <ion-col size="12" size-md="6">
                   <ion-card>
                     <ion-item>
-                      <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+                      <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
                     </ion-item>
                   </ion-card>
                 </ion-col>
@@ -269,7 +272,7 @@
         <ng-template #loadLegend>
           <ion-card>
             <ion-item>
-              <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+              <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
             </ion-item>
           </ion-card>
         </ng-template>

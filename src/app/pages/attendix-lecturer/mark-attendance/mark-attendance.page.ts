@@ -1,18 +1,24 @@
+import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { authenticator } from 'otplib/otplib-browser';
-import { NEVER, Observable, Subject, timer } from 'rxjs';
+import { NEVER, Observable, Subject, interval, timer } from 'rxjs';
 import {
-  catchError, finalize, first, map, pluck, scan, shareReplay, startWith,
-  switchMap, tap,
+  catchError, endWith, filter, first, map, pluck, scan, share, shareReplay,
+  startWith, switchMap, takeUntil, tap,
 } from 'rxjs/operators';
 
 import {
   AttendanceGQL, AttendanceQuery, InitAttendanceGQL, InitAttendanceMutation,
-  MarkAttendanceGQL, NewStatusGQL, NewStatusSubscription, SaveLectureLogGQL,
-  ScheduleInput, Status
+  MarkAttendanceAllGQL, MarkAttendanceGQL, NewStatusGQL, NewStatusSubscription,
+  ResetAttendanceGQL, SaveLectureLogGQL, ScheduleInput, Status
 } from '../../../../generated/graphql';
+import { isoDate, parseTime } from '../date';
+
+type Attendance = 'Y' | 'L' | 'N' | 'R' | '';
+
+const stateMap = {Y: 'present', L: 'late', N: 'absent', R: 'absent with reason'};
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,13 +30,17 @@ export class MarkAttendancePage implements OnInit {
 
   schedule: ScheduleInput;
 
-  auto = true;
+  auto: boolean;
   term = '';
-  type: 'Y' | 'L' | 'N' | 'R' | '' = 'N';
+  type: Attendance;
+  resetable = false;
 
   lectureUpdate = '';
 
-  otp$: Observable<string>;
+  countdown$: Observable<number>;
+  timeLeft$: Observable<number>;
+  otp$: Observable<number>;
+
   lastMarked$: Observable<Pick<NewStatusSubscription, 'newStatus'>[]>;
   students$: Observable<Partial<Status>[]>;
   totalPresentStudents$: Observable<number>;
@@ -41,36 +51,61 @@ export class MarkAttendancePage implements OnInit {
   constructor(
     private attendance: AttendanceGQL,
     private initAttendance: InitAttendanceGQL,
+    private location: Location,
     private markAttendance: MarkAttendanceGQL,
+    private markAttendanceAll: MarkAttendanceAllGQL,
     private newStatus: NewStatusGQL,
+    private resetAttendance: ResetAttendanceGQL,
     private route: ActivatedRoute,
     private saveLectureLog: SaveLectureLogGQL,
-    public toastCtrl: ToastController
+    public alertCtrl: AlertController,
+    public toastCtrl: ToastController,
+    public loadingCtrl: LoadingController
   ) { }
 
   ngOnInit() {
     // totp options
-    authenticator.options = { digits: 3 };
+    authenticator.options = { digits: 3, step: 4 * 60 + 29, window: 30 };
 
-    const schedule = this.schedule = {
+    this.schedule = {
       classcode: this.route.snapshot.paramMap.get('classcode'),
       date: this.route.snapshot.paramMap.get('date'),
       startTime: this.route.snapshot.paramMap.get('startTime'),
       endTime: this.route.snapshot.paramMap.get('endTime'),
       classType: this.route.snapshot.paramMap.get('classType')
     };
+
+    const schedule = this.schedule;
     let studentsNameById: { [student: string]: string };
 
+    // limit reset to 30 days in the past
+    const today = new Date(new Date().setHours(8, 0, 0, 0));
+    const limit = new Date(today).setDate(today.getDate() - 30);
+    this.resetable = limit <= Date.parse(schedule.date);
+
+    // initAttendance and attendance query order based on probability
+    const d = new Date();
+    const nowMins = d.getHours() * 60 + d.getMinutes();
+    // should be start <= now <= end + 5 but can ignore this because of classes page
+    const thisClass = schedule.date === isoDate(today) && parseTime(schedule.startTime) <= nowMins;
+
+    const init = () => {
+      const attendance = this.route.snapshot.paramMap.get('defaultAttendance') || 'N';
+      this.auto = thisClass;
+      this.type = 'N';
+      return this.initAttendance.mutate({ schedule, attendance });
+    };
+    const list = () => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }));
+    const attendance$ = thisClass ? init().pipe(catchError(list)) : list().pipe(catchError(init));
+
     // get attendance state from query and use manual mode if attendance initialized
-    const attendancesState$ = this.initAttendance.mutate({ schedule }).pipe(
-      catchError(() => (this.auto = false, this.type = '', this.attendance.fetch({ schedule }))),
+    const attendancesState$ = attendance$.pipe(
       catchError(err => {
         this.toast('Failed to mark attendance: ' + err.message.replace('GraphQL error: ', ''), 'danger');
         console.error(err);
         return NEVER;
       }),
       pluck('data'),
-      finalize(() => 'initAttendance ended'),
       tap((query: AttendanceQuery | InitAttendanceMutation) => {
         studentsNameById = query.attendance.students.reduce((acc, s) => (acc[s.id] = s, acc), {});
       }),
@@ -98,14 +133,38 @@ export class MarkAttendancePage implements OnInit {
       shareReplay(1) // used shareReplay for observable subscriptions time gap
     );
 
-    // only regenerate otp when needed
+    // stop timer until class ends with 5 minutes buffer
+    const hh = +schedule.endTime.slice(0, 2) % 12 + (schedule.endTime.slice(-2) === 'PM' ? 12 : 0);
+    const mm = +schedule.endTime.slice(3, 5) + 5;
+    const stopTimer$ = timer(new Date(schedule.date).setHours(hh, mm) - new Date().getTime());
+    const reload$ = timer(authenticator.timeRemaining() * 1000, authenticator.options.step * 1000).pipe(
+      takeUntil(stopTimer$),
+      share()
+      // shareReplay(1) // XXX this should use share but why is there a time gap?
+    );
+
+    // display countdown timer
+    this.timeLeft$ = reload$.pipe(
+      startWith(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000),
+      map(() => Date.now() + (authenticator.timeRemaining() + 30) * 1000),
+      shareReplay(1) // keep track while switching mode
+    );
+    this.countdown$ = interval(1000).pipe(
+      takeUntil(stopTimer$),
+      map(() => authenticator.timeRemaining() + authenticator.options.window - 1), // ignore current second
+      shareReplay(1) // keep track while switching mode
+    );
+
+    // only regenerate otp when needed during class
     this.otp$ = secret$.pipe(
       switchMap(secret =>
-        timer(authenticator.timeRemaining() * 1000, authenticator.options.step * 1000).pipe(
-          startWith(() => authenticator.generate(secret)),
-          map(() => authenticator.generate(secret))
+        reload$.pipe(
+          startWith(() => null), // start immediately
+          map(() => authenticator.generate(secret)),
+          endWith('---')
         )
-      )
+      ),
+      shareReplay(1) // keep track while switching mode
     );
 
     // take last 10 values updated and ignore duplicates
@@ -114,9 +173,10 @@ export class MarkAttendancePage implements OnInit {
       pluck('data', 'newStatus'),
       tap(({ id }) => console.log('new', id, studentsNameById[id])),
       tap(({ id, attendance, absentReason }) => this.statusUpdate.next({ id, attendance, absentReason })),
+      filter(({ attendance }) => attendance === 'Y'),
       scan((acc, { id }) => acc.includes(studentsNameById[id])
         ? acc : [...acc, studentsNameById[id]].slice(-10), []),
-      shareReplay(1) // keep track when enter manual mode
+      shareReplay(1) // keep track while switching mode
     );
 
     this.students$ = attendances$.pipe(
@@ -147,7 +207,6 @@ export class MarkAttendancePage implements OnInit {
       attendance = 'N';
     }
 
-    // TODO: optimistic ui does not work yet
     const options = {
       optimisticResponse: {
         __typename: 'Mutation' as 'Mutation',
@@ -163,17 +222,93 @@ export class MarkAttendancePage implements OnInit {
     const schedule = this.schedule;
     this.markAttendance.mutate({ schedule, student, attendance, absentReason }, options).subscribe(
       () => {},
-      e => console.error(e) // XXX: retry attendance$ on failure
+      e => { this.toast(`Mark ${stateMap[attendance]} failed: ` + e, 'danger'); console.error(e); }
     );
+  }
+
+  /** Mark all student as ... */
+  markAll() {
+    const markAll = (attendance: Attendance) => this.students$.pipe(first()).subscribe(students => {
+      const options = {
+        optimisticResponse: {
+          __typename: 'Mutation' as 'Mutation',
+          markAttendanceAll: students.map(({ id }) => ({
+            __typename: 'Status' as 'Status',
+            id,
+          }))
+        }
+      };
+      const schedule = this.schedule;
+      const absentReason = null;
+      this.markAttendanceAll.mutate({ schedule, attendance }, options).pipe(
+        pluck('data', 'markAttendanceAll'),
+        tap(statuses => statuses.forEach(({ id }) =>
+          this.statusUpdate.next({ id, attendance, absentReason })
+        )),
+      ).subscribe(
+        () => this.toast(`Marked all ${stateMap[attendance]}`, 'success'),
+        e => { this.toast(`Mark all ${stateMap[attendance]} failed: ${e}`, 'danger'); console.error(e); },
+      );
+    });
+    this.alertCtrl.create({
+      header: 'Mark all students as ...',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary'
+        },
+        {
+          text: 'Present',
+          handler: () => markAll('Y')
+        },
+        {
+          text: 'Late',
+          handler: () => markAll('L')
+        },
+        {
+          text: 'Absent',
+          handler: () => markAll('N')
+        }
+      ]
+    }).then(alert => alert.present());
   }
 
   /** Save lecture update notes. */
   save(lectureUpdate: string) {
-    const schedule = this.schedule;
-    this.saveLectureLog.mutate({ schedule, log: { lectureUpdate } }).subscribe(
-      () => this.toast('Lecture update saved', 'success'),
-      e => { this.toast('Lecture update failed: ' + e, 'failure'); console.error(e); }
-    );
+    if (this.lectureUpdate !== lectureUpdate) {
+      const schedule = this.schedule;
+      this.saveLectureLog.mutate({ schedule, log: { lectureUpdate } }).subscribe(
+        () => this.toast('Lecture update saved', 'success'),
+        e => { this.toast('Lecture update failed: ' + e, 'danger'); console.error(e); }
+      );
+      this.lectureUpdate = lectureUpdate;
+    }
+  }
+
+  /** Reset attendance, double confirm. */
+  reset() {
+    this.alertCtrl.create({
+      header: 'Confirm!',
+      message: 'Attendance will be <strong>deleted</strong>!',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+        },
+        {
+          text: 'Okay',
+          handler: () => {
+            const schedule = this.schedule;
+            this.resetAttendance.mutate({ schedule }).subscribe(
+              () => { this.toast('Attendance deleted', 'success'), this.location.back(); },
+              e => { this.toast('Attendance delete failed: ' + e, 'danger'); console.error(e); }
+            );
+          }
+        }
+      ]
+    }).then(alert => alert.present());
   }
 
   /** Helper function to toast error message. */

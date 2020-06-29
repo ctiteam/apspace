@@ -11,7 +11,7 @@
 <ion-content>
   <!-- Segmants -->
   <ng-container *ngIf="(COURSE_CODE$ | async) as intakeCourseCode; else loadingIntakes">
-    <ion-segment class="ion-padding" [(ngModel)]="selectedIntake" (ngModelChange)="onIntakeCodeChanged()" scrollable>
+    <ion-segment [(ngModel)]="selectedIntake" (ngModelChange)="onIntakeCodeChanged()" scrollable>
       <ion-segment-button *ngFor="let intake of intakeCourseCode | reverse" [value]="intake">
         <ion-label>{{intake.COURSE_CODE_ALIAS}}</ion-label>
       </ion-segment-button>
