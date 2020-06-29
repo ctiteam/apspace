@@ -1,8 +1,8 @@
 <div class="flex-container">
-  <div class="loader" [ngStyle]="{'height': size, 'width': size, 'position': position}">
-    <div class="inner one"></div>
-    <div class="inner two"></div>
-    <div class="inner three"></div>
+  <div class="loader" [ngStyle]="{'height': size, 'width': size}">
+    <div class="inner one" [ngStyle]="{'border-bottom': '3px solid ' + color}"></div>
+    <div class="inner two" [ngStyle]="{'border-right': '3px solid ' + color}"></div>
+    <div class="inner three" [ngStyle]="{'border-top': '3px solid ' + color}"></div>
   </div>
-  <p *ngIf="message" class="text-alignment ion-text-wrap">{{message}}</p>
+  <p *ngIf="message" class="text-alignment ion-text-wrap" [ngStyle]="{'font-size': textSize, 'color': color}">{{message}}</p>
 </div>
