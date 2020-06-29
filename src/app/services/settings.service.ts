@@ -44,9 +44,9 @@ const defaultData: Settings = {
   defaultCampus: '',
   defaultVenue: '',
   scan: false,
-  favoriteItems: [],
+  favoriteItems: [], // TODO could be null previously
   theme: '',
-  accentColor: 'blue', // TODO change this and migration later
+  accentColor: 'blue',
   dashboardSections: [],
   menuUI: 'list',
   shakeSensitivity: 40,
