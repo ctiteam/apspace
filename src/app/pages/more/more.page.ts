@@ -641,7 +641,7 @@ export class MorePage implements OnInit {
   /* tslint:enable:no-bitwise */
 
   /* tslint:disable:no-bitwise */
-  // Default Faviorate Items
+  // Default Favorite Items
   fav: MenuItem[] = [
     {
       title: 'APCard',
