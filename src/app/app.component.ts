@@ -2,14 +2,17 @@ import { Component } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {
   ActionSheetController, LoadingController, MenuController, ModalController, NavController,
   Platform, PopoverController, ToastController
 } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { VersionValidator } from './interfaces';
 import {
-  SettingsService, UserSettingsService, VersionService, WsApiService
+  SettingsService, VersionService, WsApiService
 } from './services';
 import { ShakespearFeedbackService } from './services/shakespear-feedback.service';
 
@@ -19,10 +22,8 @@ import { ShakespearFeedbackService } from './services/shakespear-feedback.servic
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  darkThemeActivated = false;
-  pureDarkThemeActivated = false;
-  selectedAccentColor = 'blue-accent-color';
-  shakeSensitivity: number;
+  theme$: Observable<string>;
+  accentColor$: Observable<string>;
 
   // back button vars
   lastTimeBackPress = 0;
@@ -44,8 +45,8 @@ export class AppComponent {
     private router: Router,
     private settings: SettingsService,
     private shakespear: ShakespearFeedbackService,
+    private statusBar: StatusBar,
     private toastCtrl: ToastController,
-    private userSettings: UserSettingsService,
     private version: VersionService,
     private ws: WsApiService,
   ) {
@@ -94,13 +95,30 @@ export class AppComponent {
     // this.statusBar.backgroundColorByName('black');
 
     platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
-      this.getUserSettings();
+      this.accentColor$ = this.settings.get$('accentColor');
       if (this.platform.is('cordova')) {
+        this.theme$ = this.settings.get$('theme').pipe(
+          tap(theme => {
+            // TODO handle media query change
+            const autoDark = theme === '' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            // change status bar color
+            if (autoDark || theme.includes('dark')) {
+              this.statusBar.backgroundColorByHexString('#1d1b1b');
+              this.statusBar.styleLightContent();
+            } else {
+              this.statusBar.backgroundColorByHexString('#e7e7e7');
+              this.statusBar.styleDefault();
+            }
+          }),
+        );
         if (this.network.type === 'none') {
           this.presentToast('You are now offline, only data stored in the cache will be accessable.', 6000);
         }
+      } else {
+        this.theme$ = this.settings.get$('theme');
       }
-      this.shakespear.initShakespear(this.shakeSensitivity); // FIXME use observable to get latest value
+      const shakeSensitivity = this.settings.get('shakeSensitivity');
+      this.shakespear.initShakespear(shakeSensitivity); // FIXME use observable to get latest value
       this.platform.backButton.subscribe(async () => { // back button clicked
         if (this.router.url.startsWith('/tabs') || this.router.url.startsWith('/maintenance-and-update')) {
           const timePressed = new Date().getTime();
@@ -192,25 +210,6 @@ export class AppComponent {
 
   async dismissLoading() {
     return await this.loading.dismiss();
-  }
-
-  getUserSettings() {
-    this.userSettings.getUserSettingsFromStorage();
-    this.userSettings
-      .darkThemeActivated()
-      .subscribe((val) => {
-        this.darkThemeActivated = val;
-        this.userSettings.changeStatusBarColor(val);
-      });
-    this.userSettings
-      .PureDarkThemeActivated()
-      .subscribe((val) => {
-        this.pureDarkThemeActivated = val;
-      });
-    this.userSettings
-      .getAccentColor()
-      .subscribe(val => (this.selectedAccentColor = val));
-    this.settings.get$('shakeSensitivity').subscribe(val => this.shakeSensitivity = val);
   }
 
 }

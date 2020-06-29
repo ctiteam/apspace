@@ -7,7 +7,7 @@ export interface Settings {
   tripTo: string;
   /* timetable */
   intakeHistory: string[];
-  viewWeek: boolean | null; // shared with lecturer
+  viewWeek: boolean; // shared with lecturer
   modulesBlacklist: string[];
   /* exam schedule */
   examIntake: string | null;
@@ -19,8 +19,7 @@ export interface Settings {
   /* more page */
   favoriteItems: MenuItem[];
   /* theme, need to change this after auto */
-  activeAccentColor: string;
-  darkTheme: boolean;
+  theme: string;
   accentColor: string;
   /* dashboard */
   dashboardSections: string[];

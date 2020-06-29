@@ -8,7 +8,7 @@ import { NEVER, of } from 'rxjs';
 import { Settings } from '../../interfaces';
 import {
   NewsService, NotificationService, SettingsService, StudentTimetableService,
-  UserSettingsService, WsApiService
+  WsApiService,
 } from '../../services';
 import { DisabledPipe } from './disabled.pipe';
 import { SectionNamePipe } from './section-name.pipe';
@@ -20,7 +20,6 @@ describe('StudentDashboardPage', () => {
   let newsSpy: jasmine.SpyObj<NewsService>;
   let notificationSpy: jasmine.SpyObj<NotificationService>;
   let settingsSpy: jasmine.SpyObj<SettingsService>;
-  let userSettingsSpy: jasmine.SpyObj<UserSettingsService>;
   let wsSpy: jasmine.SpyObj<WsApiService>;
 
   beforeEach(async(() => {
@@ -28,8 +27,6 @@ describe('StudentDashboardPage', () => {
     notificationSpy = jasmine.createSpyObj('NotificationService', ['getMessages']);
     wsSpy = jasmine.createSpyObj('WsApiService', ['get']);
     settingsSpy = jasmine.createSpyObj('SettingsService', ['get$']);
-    userSettingsSpy = jasmine.createSpyObj('UserSettingsService',
-      ['getAccentColorRgbaValue']);
 
     TestBed.configureTestingModule({
       declarations: [StudentDashboardPage, DisabledPipe, SectionNamePipe],
@@ -41,7 +38,6 @@ describe('StudentDashboardPage', () => {
         { provide: NotificationService, useValue: notificationSpy },
         { provide: SettingsService, useValue: settingsSpy },
         { provide: StudentTimetableService, useValue: {} },
-        { provide: UserSettingsService, useValue: userSettingsSpy },
         { provide: WsApiService, useValue: wsSpy },
       ],
       imports: [ChartModule, DragulaModule],

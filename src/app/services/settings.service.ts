@@ -45,9 +45,8 @@ const defaultData: Settings = {
   defaultVenue: '',
   scan: false,
   favoriteItems: [],
-  activeAccentColor: '', // deprecated
-  darkTheme: false,
-  accentColor: 'blue',
+  theme: '',
+  accentColor: 'blue', // TODO change this and migration later
   dashboardSections: [],
   menuUI: 'list',
   shakeSensitivity: 40,
@@ -104,17 +103,18 @@ export class SettingsService {
 
         // change data into new format
         const busShuttleServices = this.storage.get('bus-shuttle-services');
-        Promise.all([ // TODO user settings
+        Promise.all([
           this.storage.get('timetable').then((value: { blacklists: [] }) => value?.blacklists || []),
           this.storage.get('dashboard-sections').then(value => value || defaultData.dashboardSections),
           this.storage.get('menu-ui').then(value => value || defaultData.menuUI),
           this.storage.get('shake-sensitivity').then(value => +value || defaultData.shakeSensitivity),
+          this.storage.get('accent-color').then(value => value?.slice(0, -13) || defaultData.accentColor),
           busShuttleServices.then(value => value?.firstLocation || defaultData.busFirstLocation),
           busShuttleServices.then(value => value?.secondLocation || defaultData.busSecondLocation),
         ]).then(items => items.map(data => ({ epoch, data })))
           .then(([
             modulesBlacklist, dashboardSections, menuUI, shakeSensitivity,
-            busFirstLocation, busSecondLocation
+            accentColor, busFirstLocation, busSecondLocation
           ]) => {
           this.data.next({
             ...this.data.value, // built with default value
@@ -123,8 +123,10 @@ export class SettingsService {
             dashboardSections,
             menuUI,
             shakeSensitivity,
+            accentColor,
             busFirstLocation,
             busSecondLocation,
+            theme: { epoch, data: '' },
             ...Object.assign({}, ...Object.entries(rest).map(([k, v]) =>
               ({[k]: isEqual(v, defaultData[k]) || v === undefined // check if value changed
                 ? {epoch, data: defaultData[k]} // keep default
@@ -188,9 +190,6 @@ export class SettingsService {
    * 1. default setting
    * 2. stored setting
    * 3. changed setting
-   *
-   * Note that the observable will complete when settings is cleared.
-   * The best choice here is to subscribe on ionViewDidLoad.
    *
    * @param key - key stored
    * @returns observable - observed values only if key and value changed
@@ -284,8 +283,7 @@ export class SettingsService {
 
   /** Clear settings, should be done on logout. */
   clear(): void {
-    this.data.complete(); // send complete to all observers
-    this.data = new BehaviorSubject<Readonly<SettingsRaw>>({
+    this.data.next({
       version: '2020-05-27', // settings version
       appVersion: '1.2.3', // to be merged with synced version
       ...Object.assign({}, ...Object.entries(defaultData).map(([k, v]) =>

@@ -1,11 +1,4 @@
-<div [class]="selectedAccentColor">
-  <div [ngClass]="{
-    'light-theme': !darkThemeActivated && !pureDarkThemeActivated,
-    'dark-theme': darkThemeActivated,
-    'pure': pureDarkThemeActivated
-}">
-    <ion-app>
-      <ion-router-outlet></ion-router-outlet>
-    </ion-app>
-  </div>
-</div>
+<!-- weird bug when [ngClass]="[theme$ | async, accentColor$ | async]", probably race condition -->
+<ion-app [class]="accentColor$ | async" [ngClass]="theme$ | async">
+  <ion-router-outlet></ion-router-outlet>
+</ion-app>

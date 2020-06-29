@@ -32,23 +32,26 @@
                 </ion-label>
               </ion-item-divider>
               <ion-item class="ion-no-padding">
-                <ion-label>Dark Theme</ion-label>
-                <ion-toggle [(ngModel)]="darkThemeEnabled" [disabled]="pureDarkThemeEnabled"
-                  (ngModelChange)="toggleDarkTheme()">
-                </ion-toggle>
-              </ion-item>
-              <ion-item class="ion-no-padding">
-                <ion-label>Pure Dark</ion-label>
-                <ion-toggle [(ngModel)]="pureDarkThemeEnabled" [disabled]="!darkThemeEnabled"
-                  (ngModelChange)="togglePureDarkTheme()"></ion-toggle>
+                <ion-label>Theme</ion-label>
+                <ion-select [ngModel]="theme$ | async"
+                  (ngModelChange)="changeTheme($event)">
+                  <ion-select-option value="">Auto (Default)</ion-select-option>
+                  <ion-select-option value="light">Light</ion-select-option>
+                  <ion-select-option value="dark">Dark</ion-select-option>
+                  <ion-select-option value="dark pure">Dark (Pure)</ion-select-option>
+                </ion-select>
               </ion-item>
               <ion-item class="ion-no-padding">
                 <ion-label>Accent Color</ion-label>
-                <ion-select [(ngModel)]="activeAccentColor" [disabled]="pureDarkThemeEnabled"
-                  (ngModelChange)="toggleAccentColor()">
-                  <ion-select-option *ngFor="let accentColor of accentColors" [value]="accentColor.value">
-                    {{accentColor.title}}
-                  </ion-select-option>
+                <ion-select [ngModel]="accentColor$ | async" [disabled]="theme$ | async | isPure"
+                  (ngModelChange)="changeAccentColor($event)">
+                  <ng-container *ngFor="let accentColor of accentColors">
+                    <ion-select-option
+                      *ngIf="(theme$ | async | isPure) ? accentColor.name === 'white' : accentColor.name !== 'white'"
+                      [value]="accentColor.name">
+                      {{ accentColor.title }}
+                    </ion-select-option>
+                  </ng-container>
                 </ion-select>
               </ion-item>
             </ion-item-group>
@@ -89,9 +92,6 @@
                     </ion-col>
                   </ion-row>
                 </ion-grid>
-              </ion-item>
-              <ion-item class="ion-no-padding" button (click)="clearCache()">
-                <ion-label color="danger">Clear cache</ion-label>
               </ion-item>
             </ion-item-group>
           </ion-list>

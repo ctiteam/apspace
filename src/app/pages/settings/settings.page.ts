@@ -5,10 +5,9 @@ import { Observable, combineLatest } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+import { accentColors } from '../../constants';
 import { APULocation, APULocations, Role, StudentProfile, Venue } from '../../interfaces';
-import {
-  SettingsService, StudentTimetableService, UserSettingsService, WsApiService
-} from '../../services';
+import { SettingsService, StudentTimetableService, WsApiService } from '../../services';
 // import { toastMessageEnterAnimation } from '../../animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from '../../animations/toast-message-animation/leave';
 
@@ -21,12 +20,9 @@ export class SettingsPage implements OnInit {
 
   userRole: boolean;
   test = false;
-  activeAccentColor: string;
   defaultCampus = '';
   defaultVenue = '';
   shakeSensitivity: number;
-  darkThemeEnabled = false;
-  pureDarkThemeEnabled = false;
   busShuttleServiceSettings = {
     firstLocation: '',
     secondLocation: '',
@@ -34,6 +30,8 @@ export class SettingsPage implements OnInit {
 
   locations$: Observable<APULocation[]>;
   venues$: Observable<Venue[]>;
+  theme$ = this.settings.get$('theme');
+  accentColor$ = this.settings.get$('accentColor');
   modulesBlacklist$ = this.settings.get$('modulesBlacklist');
 
   menuUI: 'cards' | 'list' = 'list';
@@ -44,18 +42,12 @@ export class SettingsPage implements OnInit {
     { index: 3, value: 70 },
     { index: 4, value: 80 }
   ];
-  accentColors = [
-    { title: 'Sky (Default)', value: 'blue-accent-color' },
-    { title: 'Forest', value: 'green-accent-color' },
-    { title: 'Fire', value: 'red-accent-color' },
-    { title: 'Flower', value: 'pink-accent-color' },
-    { title: 'Lightning', value: 'yellow-accent-color' }
-  ];
   locationOptions = [
     'New Campus',
     'TPM',
     'Online'
   ];
+  accentColors = accentColors;
 
   constructor(
     private modalCtrl: ModalController,
@@ -64,30 +56,10 @@ export class SettingsPage implements OnInit {
     private storage: Storage,
     private toastCtrl: ToastController,
     private tt: StudentTimetableService,
-    private userSettings: UserSettingsService,
     private ws: WsApiService,
     private alertCtrl: AlertController,
   ) {
-    this.userSettings
-      .darkThemeActivated()
-      .subscribe(
-        {
-          next: value => (this.darkThemeEnabled = value)
-        }
-      );
-    this.userSettings
-      .PureDarkThemeActivated()
-      .subscribe(
-        {
-          next: value => (this.pureDarkThemeEnabled = value)
-        }
-      );
-    this.userSettings
-      .getAccentColor()
-      .subscribe(
-        {
-          next: value => (this.activeAccentColor = value)
-        });
+
     this.settings.get$('menuUI').subscribe(value => this.menuUI = value);
     combineLatest([
       this.settings.get$('busFirstLocation'),
@@ -102,7 +74,6 @@ export class SettingsPage implements OnInit {
       this.shakeSensitivity = this.sensitivityOptions.findIndex(item => item.value === value);
     });
   }
-
 
   ngOnInit() {
     this.storage.get('role').then((role: Role) => {
@@ -136,20 +107,18 @@ export class SettingsPage implements OnInit {
     this.settings.set('busSecondLocation', this.busShuttleServiceSettings.secondLocation);
   }
 
-  toggleDarkTheme() {
-    this.pureDarkThemeEnabled = false;
-    this.userSettings.toggleDarkTheme(this.darkThemeEnabled);
+  changeTheme(theme: string) {
+    if (this.settings.get('theme').includes('pure')) { // from pure
+      this.settings.set('accentColor', 'blue');
+    }
+    this.settings.set('theme', theme);
+    if (theme.includes('pure')) { // to pure
+      this.settings.set('accentColor', 'white');
+    }
   }
 
-  togglePureDarkTheme() {
-    this.userSettings.togglePureDarkTheme(this.pureDarkThemeEnabled);
-    this.pureDarkThemeEnabled
-      ? this.userSettings.setAccentColor('white-accent-color')
-      : this.userSettings.setAccentColor('blue-accent-color');
-  }
-
-  toggleAccentColor() {
-    this.userSettings.setAccentColor(this.activeAccentColor);
+  changeAccentColor(accentColor: string) {
+    this.settings.set('accentColor', accentColor);
   }
 
   toggleMenuUI() {
@@ -205,12 +174,6 @@ export class SettingsPage implements OnInit {
     const selectedModule = modulesBlacklist.indexOf(value);
     modulesBlacklist.splice(selectedModule, 1);
     this.settings.set('modulesBlacklist', modulesBlacklist);
-  }
-
-  clearCache() {
-    this.userSettings.clearStorage().then(
-      () => this.showToastMessage('Cached has been cleared successfully. Please restart the APSpace to ensure cache is cleared.')
-    );
   }
 
   navigateToPage(pageName: string) {

@@ -5,11 +5,14 @@ import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
 import { Observable, combineLatest, of, zip } from 'rxjs';
 import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
-// tslint:disable-next-line: max-line-length
-import { APULocation, APULocations, Apcard, BusTrips, ConsultationSlot, DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday, Holidays, LecturerTimetable, News, Quote, StaffProfile } from 'src/app/interfaces';
 import {
-  NewsService, NotificationService, SettingsService, UserSettingsService,
-  WsApiService
+  APULocation, APULocations, Apcard, BusTrips, ConsultationSlot,
+  DashboardCardComponentConfigurations, EventComponentConfigurations,
+  Holiday, Holidays, LecturerTimetable, News, Quote, StaffProfile,
+} from 'src/app/interfaces';
+import { accentColors } from '../../constants';
+import {
+  NewsService, NotificationService, SettingsService, WsApiService,
 } from '../../services';
 import { NewsModalPage } from '../news/news-modal';
 import { NotificationModalPage } from '../notifications/notification-modal';
@@ -236,7 +239,6 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private ws: WsApiService,
-    private userSettings: UserSettingsService,
     private navCtrl: NavController,
     private alertCtrl: AlertController,
     private dragulaService: DragulaService,
@@ -249,7 +251,8 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     private firebaseX: FirebaseX,
     private settings: SettingsService,
   ) {
-    this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
+    // TODO handle value change
+    this.activeAccentColor = accentColors.find(ac => ac.name === this.settings.get('accentColor')).rgba;
   }
 
   ngOnInit() {

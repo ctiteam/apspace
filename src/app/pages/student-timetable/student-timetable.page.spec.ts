@@ -93,7 +93,7 @@ describe('StudentTimetablePage', () => {
       studentTimetableSpy.get.and.returnValue(NEVER);
       storageSpy.get.and.returnValue(Promise.resolve(Role.Student));
       settingsSpy.get.and.callFake(settingsFake({
-        intakeHistory: null,
+        intakeHistory: [],
         viewWeek: false,
         modulesBlacklist: [],
       }));
@@ -164,7 +164,7 @@ describe('StudentTimetablePage', () => {
       studentTimetableSpy.get.and.returnValue(asyncData(timetables));
       storageSpy.get.and.returnValue(Promise.resolve(Role.Student));
       settingsSpy.get.and.callFake(settingsFake({
-        intakeHistory: null,
+        intakeHistory: [],
         viewWeek: false,
         modulesBlacklist: [],
       }));
@@ -243,7 +243,7 @@ describe('StudentTimetablePage', () => {
       studentTimetableSpy.get.and.returnValue(NEVER);
       storageSpy.get.and.returnValue(Promise.resolve(Role.Lecturer));
       settingsSpy.get.and.callFake(settingsFake({
-        intakeHistory: null,
+        intakeHistory: [],
         viewWeek: false,
         modulesBlacklist: [],
       }));
@@ -254,8 +254,7 @@ describe('StudentTimetablePage', () => {
 
       expect(component).toBeTruthy();
       expect(wsSpy.get).not.toHaveBeenCalled();
-      expect(settingsSpy.set).toHaveBeenCalledTimes(1);
-      expect(settingsSpy.set).toHaveBeenCalledWith('intakeHistory', []);
+      expect(settingsSpy.set).not.toHaveBeenCalled();
     });
   });
 
@@ -284,7 +283,7 @@ describe('StudentTimetablePage', () => {
     studentTimetableSpy.get.and.returnValue(asyncData(timetables));
     storageSpy.get.and.returnValue(Promise.resolve(Role.Student));
     settingsSpy.get.and.callFake(settingsFake({
-      intakeHistory: null,
+      intakeHistory: [],
       viewWeek: false,
       modulesBlacklist: [],
     }));

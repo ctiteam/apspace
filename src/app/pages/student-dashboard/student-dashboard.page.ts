@@ -11,8 +11,9 @@ import {
 } from 'src/app/interfaces';
 import {
   NewsService, NotificationService, SettingsService, StudentTimetableService,
-  UserSettingsService, WsApiService,
+  WsApiService,
 } from 'src/app/services';
+import { accentColors } from '../../constants';
 
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import * as moment from 'moment';
@@ -266,7 +267,6 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     private ws: WsApiService,
     private studentTimetableService: StudentTimetableService,
     private settings: SettingsService,
-    private userSettings: UserSettingsService,
     private navCtrl: NavController,
     private alertCtrl: AlertController,
     private dragulaService: DragulaService,
@@ -285,7 +285,8 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       }
     });
     // getting the main accent color to color the chart.js (Temp until removing chart.js)
-    this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
+    // TODO handle value change
+    this.activeAccentColor = accentColors.find(ac => ac.name === this.settings.get('accentColor')).rgba;
   }
 
   ngOnInit() {
