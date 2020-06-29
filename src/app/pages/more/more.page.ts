@@ -23,6 +23,7 @@ export class MorePage implements OnInit {
     ['Finance']: 'assets/img/finance.png',
     ['Collaboration & Information Resources']: 'assets/img/collab-info.png',
     ['Campus Life']: 'assets/img/campus-life.png',
+    ['Corporate']: 'assets/img/corporate.png',
     ['Academic Operation']: 'assets/img/academic-op.png',
     ['Academic & Enrollment']: 'assets/img/academic-enroll.png',
     ['Career Centre & Corporate Training']: 'assets/img/career-training.png',
