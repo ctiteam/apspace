@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { ApcardPage } from './apcard.page';
 import { PrintTransactionsModalPage } from './print-transactions-modal/print-transactions-modal';
+import { TimePipe } from './time.pipe';
 
 const routes: Routes = [
   {
@@ -24,6 +25,6 @@ const routes: Routes = [
     ComponentsModule,
     FormsModule
   ],
-  declarations: [ApcardPage, PrintTransactionsModalPage],
+  declarations: [ApcardPage, PrintTransactionsModalPage, TimePipe],
 })
 export class ApcardPageModule { }
