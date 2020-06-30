@@ -162,14 +162,13 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
       header,
       subHeader,
       message,
-      buttons: [{
-        text: 'OK',
-        handler: () => {
-          if (cssClass === 'success-alert') {
-            this.location.back();
-          }
-        }
-      }]
+      buttons: ['OK']
+    });
+
+    alert.onDidDismiss().then(() => {
+      if (cssClass === 'success-alert') {
+        this.location.back();
+      }
     });
 
     await alert.present();
