@@ -2,9 +2,10 @@ import {
   Component, ElementRef, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
-import { AlertController, Platform, ToastController } from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 import { Observable, Subscription } from 'rxjs';
 
+import { Location } from '@angular/common';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { UpdateAttendanceGQL } from '../../../generated/graphql';
 import { SettingsService } from '../../services';
@@ -30,10 +31,10 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
   constructor(
     private updateAttendance: UpdateAttendanceGQL,
     private settings: SettingsService,
+    private location: Location,
     public alertCtrl: AlertController,
     public plt: Platform,
     public qrScanner: QRScanner,
-    public toastCtrl: ToastController,
     public vibration: Vibration
   ) { }
 
@@ -69,7 +70,7 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
           } else if (text.length === this.digits.length) {
             this.sendOtp(text);
           } else {
-            this.toast(`Invalid OTP (should be ${this.digits.length} digits)`, 'danger');
+            this.presentAlert('Alert!', `Invalid OTP (should be ${this.digits.length} digits)`, 'danger-alert');
           }
         });
         this.qrScanner.show();
@@ -134,12 +135,12 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
         this.sending = false;
         // Vibrator (Vibrate til death!)
         this.vibration.vibrate(1000);
-        this.toast('Attendance updated', 'success');
+        this.presentAlert('Success!', 'Attendance updated', 'success-alert');
         console.log(d);
         res(true);
       }, err => {
         this.sending = false;
-        this.toast('Failed to update attendance. ' + err.message.replace('GraphQL error: ', ''), 'danger');
+        this.presentAlert('Alert!', 'Failed to update attendance. ' + err.message.replace('GraphQL error: ', ''), 'danger-alert');
         console.error(err);
         res(true);
       });
@@ -155,20 +156,23 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
     }
   }
 
-  /** Toast helper. */
-  toast(message: string, color: string) {
-    this.toastCtrl.create({
+  async presentAlert(header: string, message: string, cssClass: string, subHeader?: string) {
+    const alert = await this.alertCtrl.create({
+      cssClass,
+      header,
+      subHeader,
       message,
-      duration: 9000,
-      position: 'top',
-      color,
-      buttons: [
-        {
-          text: 'Close',
-          role: 'cancel'
+      buttons: [{
+        text: 'OK',
+        handler: () => {
+          if (cssClass === 'success-alert') {
+            this.location.back();
+          }
         }
-      ],
-    }).then(toast => toast.present());
+      }]
+    });
+
+    await alert.present();
   }
 
   /** Request for permission. */

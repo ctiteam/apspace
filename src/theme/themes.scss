@@ -478,3 +478,39 @@ ion-searchbar {
   --cancel-button-color: #666 !important; // default #1a1a1a, not readable on dark theme
   --clear-button-color: #666 !important; // default initial, does not look good on dark theme
 }
+
+.success-alert{
+  .alert-wrapper{
+    .alert-head{
+      background-color: var(--success-color);
+      .alert-title, .alert-sub-title{
+        color: #FFFFFF !important;
+      }
+    }
+    .alert-message{
+      padding-top: 10px !important;
+      padding-bottom: 0 !important;
+    }
+    .alert-button{
+      color: var(--success-color) !important;
+    }
+  }
+}
+
+.danger-alert{
+  .alert-wrapper{
+    .alert-head{
+      background-color: var(--danger-color);
+      .alert-title, .alert-sub-title{
+        color: #FFFFFF !important;
+      }
+    }
+    .alert-message{
+      padding-top: 10px !important;
+      padding-bottom: 0 !important;
+    }
+    .alert-button{
+      color: var(--danger-color) !important;
+    }
+  }
+}
