@@ -23,7 +23,7 @@ export class VisitHistoryModalPage implements OnInit {
 
   ngOnInit() {
     this.roomsList$ = this.ws.get(`/covid/room_attendance_log?declaration_id=${this.declarationId}`);
-    this.generalInformation$ = this.ws.get('/covid/general_information');
+    this.generalInformation$ = this.ws.get('/covid/general_information', {auth: false});
   }
 
   dismiss() {
