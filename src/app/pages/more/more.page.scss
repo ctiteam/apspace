@@ -177,10 +177,5 @@ ion-col.menu-item{
     color: var(--ion-color-light);
   }
 }
-
-@import '../../../theme/themes.scss';
-::ng-deep .dark-theme .custom-theme {
-  @extend .colored-text;
-}
 // NEW CARD VIEW CUSTOM CSS ENDS HERE
 
