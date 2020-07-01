@@ -146,7 +146,7 @@
                         <ion-row class="table-data">
                           <ion-col size="12" size-sm="2"
                             class="text-bold hide-on-print-table-flex-on-card ion-no-padding md-text-center">
-                            {{ timetable.MODID }}
+                            <ion-text [color]="timetable.COLOR ? 'danger' : ''">{{ timetable.MODID }}</ion-text>
                           </ion-col>
                           <ion-col size="12" size-sm="2" class="ion-no-padding md-text-center">
                             <span class="marker">
@@ -162,7 +162,7 @@
                           </ion-col>
                           <ion-col size="12" size-sm="2"
                             class="flex-on-print-table-hide-on-card ion-no-padding md-text-center">
-                            {{ timetable.MODID }}
+                            <ion-text [color]="timetable.COLOR ? 'danger' : ''">{{ timetable.MODID }}</ion-text>
                           </ion-col>
                           <ion-col size="12" size-sm="3" class="ion-no-padding md-text-center">
                             <span class="marker">
@@ -186,7 +186,7 @@
                       <ng-template #viewDaily>
                         <ion-row>
                           <ion-col size="12" size-sm="3" class="text-bold ion-no-padding">
-                            {{ timetable.MODID }}
+                            <ion-text [color]="timetable.COLOR ? 'danger' : ''">{{ timetable.MODID }}</ion-text>
                           </ion-col>
                           <ion-col size="12" size-sm="2" class="ion-no-padding">
                             <span class="marker">
