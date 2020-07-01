@@ -1,4 +1,4 @@
-<ion-content #content [scrollEvents]="true" (ionScroll)="logScrolling($event)">
+<ion-content>
 
   <ng-container *ngIf="plt.is('cordova'); else webVersion">
     <ion-grid class="main-grid ion-no-padding">
@@ -88,192 +88,173 @@
   </ng-container>
 
   <ng-template #webVersion>
-    <ion-grid class="ion-no-padding web-grid">
-      <ion-row>
-        <!-- main -->
-        <ion-col size="12" class="ion-no-padding full-screen-section image-background login-section">
-          <ion-grid class="background-height">
-            <!-- logo + menu -->
+    <div class="main-container">
+      <section class="header">
+        <div class="container">
+          <ion-grid class="ion-no-padding">
             <ion-row>
-              <ion-col size-xs="10" offset-xs="1" offset-md="" size-md="3" size-lg="2" offset-lg="1">
-                <ion-img class="logo ion-margin-top" src="assets/img/apu.png"></ion-img>
-              </ion-col>
-              <ion-col size-xs="12" size-md="9" size-lg="9" style="margin: auto; color: white;" class="ion-text-center">
-                <ul class="menu">
-                  <li class="menu-item">Student Timetable</li>
-                  <li class="menu-item">Course Materials</li>
-                  <li class="menu-item">News Feed</li>
-                </ul>
-              </ion-col>
-            </ion-row>
-            <!-- login -->
-            <ion-row class="form-row">
-              <ion-col size="12" offset-md="7" size-md="5" class="margin-auto">
-                <ion-grid>
-                  <ion-row>
-                    <ion-col size-xs="10" offset-xs="1" size-md="8" offset-md="2" size-lg="6" offset-md="3">
-                      <form (ngSubmit)="login()" #loginForm="ngForm" class="ion-no-padding">
-                        <div class="login-form-container ion-padding">
-                          <div class="ion-margin-top ion-margin-bottom avatar-container">
-                            <ion-avatar>
-                              <img src="assets/img/no_img.png">
-                            </ion-avatar>
-                          </div>
-                          <div class="input-container ion-margin-top">
-                            <p class="text-bold">APKey</p>
-                            <ion-input placeholder="Ex: TP012345" type="text" [(ngModel)]="apkey"
-                              (keyup.enter)="login()" [autofocus]="true" [required]="true" name="apkey"></ion-input>
-                          </div>
-                          <div class="input-container ion-margin-top">
-                            <p class="text-bold">Password</p>
-                            <ion-input class="passowrd-input" placeholder="APKey Password"
-                              [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" clear-on-edit="false"
-                              (keyup.enter)="login()" [required]="true" name="password">
-                              <ion-button *ngIf="password" type="button" fill="clear" class="eye-button"
-                                (click)="showPassword = !showPassword">
-                                <ion-icon [name]="showPassword ? 'eye-off' : 'eye'" class="show-password"></ion-icon>
-                              </ion-button>
-                            </ion-input>
-                          </div>
-                          <div class="login-button-container">
-                            <ion-button color="success" type="submit" expand="block">Login</ion-button>
-                          </div>
-                        </div>
-                      </form>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
-              </ion-col>
-              <!-- <ion-col size="12" size-md="1" class="margin-auto"> -->
-              <!-- style="width: 24px !important; padding: 2px; border-radius: 5px; background-color: #cccccc !important;" -->
-              <!-- style="width: 20px; height: 20px; margin: 10px 0; padding-left: 5%; border-radius: 15px; background-color: rgb(29, 71, 94); " -->
-              <!-- </ion-col> -->
-            </ion-row>
-            <ion-row class="system-name">
-              <ion-col size="12" size-md="7">
-                <ion-grid>
-                  <ion-row>
-                    <ion-col size="10" offset="1">
-                      <h1>APSpace</h1>
-                      <h2>Your digital university companion</h2>
-                      <!-- <ion-button color="success" (click)="moveToNextPage()">Scroll</ion-button> -->
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
+              <ion-col class="ion-no-padding" size="10" offset="1" offset-sm="" size-sm="5" size-md="4" size-lg="3">
+                <ion-img class="logo" src="assets/img/apu.png"></ion-img>
               </ion-col>
             </ion-row>
           </ion-grid>
-          <div class="scroll-pannel">
-            <div class="scroll-pannel-item" [class.active]="section.y === activeSection"
-              *ngFor="let section of sections" (click)="moveToSection(section.y)">
-              <span></span>
-            </div>
-          </div>
-        </ion-col>
-        <!-- Slider -->
-        <ion-col size="12" class="ion-no-padding full-screen-section slider-section">
-          <div class="wrapper">
-            <div class="content">
-              <ion-grid>
-                <ion-row class="ion-padding-start ion-padding-end ion-margin-top">
-                  <ion-col>
-                    <h2>
-                      <ion-text color="primary">Our Important Announcements</ion-text>
-                    </h2>
-                    <h5>
-                      <ion-text color="medium">The latest & most important news that you must know</ion-text>
-                    </h5>
-                  </ion-col>
-                </ion-row>
-                <ion-row>
-                  <!-- <ion-col size-xs="12" size-xl="4" class="margin-auto">
-                    <h4 class="section-header">Our Important Announcements
-                    </h4>
-                    <p>The latest & most important news that you must know</p>
-                  </ion-col> -->
-                  <ion-col size-xs="12" size-xl="8" class="ion-padding-start ion-padding-end">
-                    <div class="first-wrapper" style="max-width: 725px; position: relative;">
-                      <div style="width: 100%;">
-                        <ion-slides #sliderSlides pager="true" [options]="slideOpts"
-                          *ngIf="noticeBoardItems$ | async as noticeBoardItems">
-                          <ng-container *ngFor="let noticeBoardItem of noticeBoardItems">
-                            <ion-slide>
-                              <div>
-                                <img class="slider-img" [src]="noticeBoardItem.value" alt="Slider">
-                              </div>
-                            </ion-slide>
-                          </ng-container>
-                        </ion-slides>
-                        <div class="swiper-button-next">
-                          <ion-icon name="chevron-forward-outline" size="large" tappable (click)="nextSlide()">
-                          </ion-icon>
-                        </div>
-                        <div class="swiper-button-prev">
-                          <ion-icon name="chevron-back-outline" tappable (click)="prevSlide()" size="large"></ion-icon>
-                        </div>
-                      </div>
-                    </div>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </div>
-            <!-- <div class="background-shape">
-            </div> -->
-          </div>
-          <!-- <ion-button class="scroll-button" color="success" (click)="moveToNextPage()">Scroll</ion-button> -->
-        </ion-col>
-        <ion-col size="12" class="ion-no-padding full-screen-section news-section">
-          <div class="wrapper">
-            <div class="content">
-              <ion-grid>
-                <ion-row class="content-wrapper">
-                  <ion-col size="8" offset="2">
-                    <ion-grid *ngIf="news$ | async as newsList">
-                      <ion-row>
-                        <ion-col size="12" class="ion-text-center">
-                          <ion-text color="primary">
-                            <h3>Latest News</h3>
-                          </ion-text>
-                        </ion-col>
-                        <ion-col size="12" size-md="2" size-lg="4" *ngFor="let newsItem of newsList">
-                          <ion-card>
-                            <ion-img [src]="newsItem.url"></ion-img>
-                            <ion-card-header>
-                              <ion-card-title *ngIf="newsItem.title">
-                                <h5 class="limit-lines one-line">{{newsItem.title}}</h5>
-                              </ion-card-title>
-                              <ion-card-subtitle *ngIf="newsItem.updated">
-                                <p>{{newsItem.updated | date : 'EEE, dd-MMM-yyyy hh:mm aa'}}</p>
-                              </ion-card-subtitle>
-                            </ion-card-header>
-                          </ion-card>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-              <div class="ion-text-center" style="position: absolute; bottom: 10px; width: 100%;">
-                <ion-button color="primary">
-                  See All
-                  <ion-icon slot="end" name="albums-outline"></ion-icon>
-                </ion-button>
-              </div>
-            </div>
-            <div class="background-shape">
-            </div>
-          </div>
-        </ion-col>
-        <ion-col size="12" class="ion-no-padding full-screen-section news-section">
-          <div class="wrapper">
-            <div class="content">
+        </div>
+      </section>
 
-            </div>
-            <div class="background-shape">
-            </div>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+      <section class="menu">
+        <div class="container">
+          Hello this is the menu
+        </div>
+      </section>
+
+      <section class="image-slider ion-padding-top ion-padding-bottom">
+        <div class="container">
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col size="12" class="ion-padding">
+                <ion-slides #sliderSlides pager="true" [options]="slideOpts">
+                  <ng-container *ngIf="noticeBoardItems$ | async as noticeBoardItems">
+                    <ion-slide *ngFor="let noticeBoardItem of noticeBoardItems">
+                      <div class="picture">
+                        <img [src]="'assets/img/banner_test.jpg'" alt="">
+                      </div>
+                    </ion-slide>
+                  </ng-container>
+
+                </ion-slides>
+                <div class="swiper-button-next">
+                  <ion-icon name="chevron-forward-outline" size="large" tappable (click)="nextSlide()">
+                  </ion-icon>
+                </div>
+                <div class="swiper-button-prev">
+                  <ion-icon name="chevron-back-outline" tappable (click)="prevSlide()" size="large"></ion-icon>
+                </div>
+
+              </ion-col>
+              <!-- <ion-col size="12" size-md="5" class="ion-padding">
+                <div class='box'>
+                  <ng-container *ngIf="news$ | async as newsItems">
+                    <div *ngFor="let newsItem of newsItems" class="new-item ion-margin-bottom">
+                      <ion-grid class="ion-no-padding">
+                        <ion-row>
+                          <ion-col class="ion-no-padding" size="5">
+                            <ion-img [src]="newsItem.url" *ngIf="newsItem.url"></ion-img>
+                          </ion-col>
+                          <ion-col class="ion-no-padding aps-margin-auto" size="7">
+                            <p *ngIf="newsItem.title" class="with-padding aps-text-bold aps-limit-lines aps-two-lines">
+                              <ion-text color="primary">{{newsItem.title}}</ion-text>
+                            </p>
+                            <small class="with-padding display-block" *ngIf="newsItem.updated">
+                              {{newsItem.updated | date : 'EEE, dd-MMM-yyyy hh:mm aa' : '+0800'}}
+                            </small>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                    <div class="with-padding ion-text-right">
+                      <ion-button color="primary" size="small" fill="clear">Show All</ion-button>
+                    </div>
+                  </ng-container>
+                </div>
+              </ion-col> -->
+            </ion-row>
+          </ion-grid>
+        </div>
+      </section>
+
+      <section class="main-items ion-padding-top ion-padding-bottom">
+        <div class="container">
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col size="12" size-sm="6" size-lg="3" class="ion-padding">
+                <div class='box course-materials'>
+                  <div class='wave -one'></div>
+                  <div class='wave -two'></div>
+                  <div class='wave -three'></div>
+                  <div class="icon">
+                    <ion-icon name="book-sharp"></ion-icon>
+                  </div>
+                  <div class='title'>Course Materials</div>
+                </div>
+              </ion-col>
+              <ion-col size="12" size-sm="6" size-lg="3" class="ion-padding">
+                <div class='box intake-timetable'>
+                  <div class='wave -one'></div>
+                  <div class='wave -two'></div>
+                  <div class='wave -three'></div>
+                  <div class="icon">
+                    <ion-icon name="calendar"></ion-icon>
+                  </div>
+                  <div class='title'>Intake Timetable</div>
+                </div>
+              </ion-col>
+              <ion-col size="12" size-sm="6" size-lg="3" class="ion-padding">
+                <div class='box holidays'>
+                  <div class='wave -one'></div>
+                  <div class='wave -two'></div>
+                  <div class='wave -three'></div>
+                  <div class="icon">
+                    <ion-icon name="bed"></ion-icon>
+                  </div>
+                  <div class='title'>Holidays Calendar</div>
+                </div>
+              </ion-col>
+              <ion-col size="12" size-sm="6" size-lg="3" class="ion-padding">
+                <div class='box graduation'>
+                  <div class='wave -one'></div>
+                  <div class='wave -two'></div>
+                  <div class='wave -three'></div>
+                  <div class="icon">
+                    <ion-icon name="school-sharp"></ion-icon>
+                  </div>
+                  <div class='title'>Graduation Ceremony</div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </section>
+
+      <section class="news">
+        <div class="container">
+          hello this is the news
+        </div>
+      </section>
+
+      <section class="operating-hours">
+        <div class="container">
+          hello this is the operating hours
+        </div>
+      </section>
+
+      <section class="stay-connected">
+        <div class="container">
+          hello this is the stay connected
+        </div>
+      </section>
+
+      <section class="footer">
+        <div class="container">
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col size="12" size-md="7" size-lg="6" class="ion-no-padding aps-margin-auto">
+                <p class="ion-text-left small-text">
+                  &copy; {{currentYear}} Asia Pacific University of Technology and Innovation (APU). All rights
+                  reserved.
+                </p>
+              </ion-col>
+              <ion-col size="12" size-md="5" size-lg="6" class="ion-no-padding ion-text-right">
+                <ion-button size="small" fill="clear" color="light">
+                  Privacy Policy
+                </ion-button>
+                <ion-button size="small" fill="clear" color="light">
+                  Terms of Use
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </section>
+    </div>
   </ng-template>
 </ion-content>
