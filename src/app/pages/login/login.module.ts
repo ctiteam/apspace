@@ -9,6 +9,8 @@ import { LoginPage } from './login.page';
 
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ComponentsModule } from '../../components/components.module';
+import { OperationHoursFilterPipe } from './operation-hours-filter/operation-hours-filter.pipe';
+import { TimeFormatterPipe } from './time-formatter/time-formatter.pipe';
 
 const routes: Routes = [
   {
@@ -28,6 +30,6 @@ const routes: Routes = [
   providers: [
     InAppBrowser
   ],
-  declarations: [LoginPage]
+  declarations: [LoginPage, OperationHoursFilterPipe, TimeFormatterPipe]
 })
 export class LoginPageModule { }

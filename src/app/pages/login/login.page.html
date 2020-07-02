@@ -129,34 +129,7 @@
                 <div class="swiper-button-prev">
                   <ion-icon name="chevron-back-outline" tappable (click)="prevSlide()" size="large"></ion-icon>
                 </div>
-
               </ion-col>
-              <!-- <ion-col size="12" size-md="5" class="ion-padding">
-                <div class='box'>
-                  <ng-container *ngIf="news$ | async as newsItems">
-                    <div *ngFor="let newsItem of newsItems" class="new-item ion-margin-bottom">
-                      <ion-grid class="ion-no-padding">
-                        <ion-row>
-                          <ion-col class="ion-no-padding" size="5">
-                            <ion-img [src]="newsItem.url" *ngIf="newsItem.url"></ion-img>
-                          </ion-col>
-                          <ion-col class="ion-no-padding aps-margin-auto" size="7">
-                            <p *ngIf="newsItem.title" class="with-padding aps-text-bold aps-limit-lines aps-two-lines">
-                              <ion-text color="primary">{{newsItem.title}}</ion-text>
-                            </p>
-                            <small class="with-padding display-block" *ngIf="newsItem.updated">
-                              {{newsItem.updated | date : 'EEE, dd-MMM-yyyy hh:mm aa' : '+0800'}}
-                            </small>
-                          </ion-col>
-                        </ion-row>
-                      </ion-grid>
-                    </div>
-                    <div class="with-padding ion-text-right">
-                      <ion-button color="primary" size="small" fill="clear">Show All</ion-button>
-                    </div>
-                  </ng-container>
-                </div>
-              </ion-col> -->
             </ion-row>
           </ion-grid>
         </div>
@@ -223,7 +196,121 @@
 
       <section class="operating-hours">
         <div class="container">
-          hello this is the operating hours
+          <ion-grid class="ion-no-padding" *ngIf="quixCompanies$ | async as quixCompanies">
+            <ion-row>
+              <ion-col size="12" size-sm="10" offset-sm="1" size-md="6" offset-md="3" size-lg="4" offset-lg="4"
+                class="ion-padding">
+                <ion-segment [(ngModel)]="selectedQuixSegment" mode="ios" class="operation-hours-companies">
+                  <ion-segment-button *ngFor="let company of quixCompanies" [value]="company.company_id">
+                    {{company.company_id}}
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12" class="ion-padding">
+                <ion-slides [options]="operationHoursSlider">
+                  <ng-container *ngIf="(quixCompanies | operationHoursFilter: selectedQuixSegment) as filteredCompany">
+                    <ng-container *ngIf="filteredCompany; else noCompanies">
+                      <ng-container *ngIf="filteredCompany.company_departments.length > 0; else noDepartments">
+                        <ion-slide *ngFor="let department of filteredCompany.company_departments">
+                          <div class="swiper-content">
+                            <div class="top with-background">
+                              <div class="calendar">
+                                <ion-icon name="home"></ion-icon>
+                              </div>
+                              <div class="photo-btn">
+                                <div class="text">{{filteredCompany.company_id}}
+                                </div>
+                              </div>
+                            </div>
+                            <div class="copy">
+                              <h1>{{department.dept_name}}</h1>
+                              <h3 *ngIf="department.dept_email">{{department.dept_email}}</h3>
+                              <ion-grid>
+                                <ion-row *ngIf="((department.shifts['Mon-Thu'].length === department.shifts['Fri'].length) 
+                                        && department.shifts['Mon-Thu'].length > 0
+                                        && (department.shifts['Mon-Thu'][0].start_time === department.shifts['Fri'][0].start_time)  
+                                        && (department.shifts['Mon-Thu'][0].end_time === department.shifts['Fri'][0].end_time)
+                                        && (department.shifts['Mon-Thu'][1]
+                                        ? (department.shifts['Mon-Thu'][1].start_time === department.shifts['Fri'][1].start_time)  
+                                        && (department.shifts['Mon-Thu'][1].end_time === department.shifts['Fri'][1].end_time)
+                                        : true)); else showSeperate">
+                                  <ion-col size-xs="12">
+                                    <p class="ion-text-center colored-text">Monday-Friday</p>
+                                    <div class="ion-text-center" *ngFor="let slot of department.shifts['Mon-Thu']">
+                                      <p *ngIf="slot.start_time" class="timeTxt">
+                                        {{ (slot.start_time | timeFormatter) }} - {{ (slot.end_time | timeFormatter) }}
+                                      </p>
+                                    </div>
+                                  </ion-col>
+                                </ion-row>
+                                <ng-template #showSeperate>
+                                  <ion-row class="ion-margin-top" *ngIf="department.shifts['Mon-Thu'].length > 0">
+                                    <ion-col size-xs="12">
+                                      <p class="ion-text-center colored-text">Monday-Thursday</p>
+                                      <div class="ion-text-center" *ngFor="let slot of department.shifts['Mon-Thu']">
+                                        <p *ngIf="slot.start_time" class="timeTxt">
+                                          {{ (slot.start_time | timeFormatter) }} -
+                                          {{ (slot.end_time | timeFormatter) }}
+                                        </p>
+                                      </div>
+                                    </ion-col>
+                                  </ion-row>
+                                  <ion-row class="ion-margin-top" *ngIf="department.shifts['Fri'].length > 0">
+                                    <ion-col size-xs="12">
+                                      <p class="ion-text-center colored-text">Friday</p>
+                                      <div class="ion-text-center" *ngFor="let slot of department.shifts['Fri']">
+                                        <p *ngIf="slot.start_time" class="timeTxt">
+                                          {{ (slot.start_time | timeFormatter) }} -
+                                          {{ (slot.end_time | timeFormatter) }}
+                                        </p>
+                                      </div>
+                                    </ion-col>
+                                  </ion-row>
+                                </ng-template>
+                                <ion-row class="ion-margin-top" *ngIf="department.shifts['Sat'].length > 0">
+                                  <ion-col size-xs="12">
+                                    <p class="ion-text-center colored-text">Saturday</p>
+                                    <div class="ion-text-center" *ngFor="let slot of department.shifts['Sat']">
+                                      <p *ngIf="slot.start_time" class="timeTxt">
+                                        {{ (slot.start_time | timeFormatter) }} - {{ (slot.end_time | timeFormatter) }}
+                                      </p>
+                                    </div>
+                                  </ion-col>
+                                </ion-row>
+                              </ion-grid>
+                              <div class="operation-hours-footer">
+                                <div>
+                                  <p>
+                                    <ion-icon name="call-sharp"></ion-icon>
+                                    {{department.dept_phone}}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </ion-slide>
+                      </ng-container>
+                      <ng-template #noDepartments>
+                        No Departments
+                      </ng-template>
+                    </ng-container>
+                    <ng-template #noCompanies>
+                      No Companies
+                    </ng-template>
+                  </ng-container>
+                </ion-slides>
+                <!-- <div class="swiper-button-next">
+                  <ion-icon name="chevron-forward-outline" size="large" tappable (click)="nextSlide()">
+                  </ion-icon>
+                </div>
+                <div class="swiper-button-prev">
+                  <ion-icon name="chevron-back-outline" tappable (click)="prevSlide()" size="large"></ion-icon>
+                </div> -->
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </div>
       </section>
 

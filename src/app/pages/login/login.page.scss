@@ -313,6 +313,130 @@
   }
 }
 
+.operating-hours {
+  background-color: #0d0a0b;
+  background-image: linear-gradient(1deg, #0d0a0b 0%, #14557b 80%);
+
+  h1 {
+    font-size: 1.8rem;
+    padding: 0;
+    margin: 0 10px 0 0;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+    padding: 0;
+    margin: 5px 0 5px 0;
+    color: darkred;
+  }
+
+  p {
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color: graytext;
+  }
+
+  ion-segment.operation-hours-companies{
+    ion-segment-button{
+      --color: white;
+      --color-checked: darkred !important;
+    }
+  }
+
+  .swiper-container {
+    width: 100%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .swiper-slide {
+    width: 400px;
+    height: 550px;
+    padding: 5px;
+  }
+
+  .swiper-content {
+    background-color: #fff;
+    width: 100%;
+    height: 100%;
+
+    .top {
+      width: 100%;
+      height: 175px;
+      position: relative;
+
+      .calendar {
+        width: 60px;
+        height: 60px;
+        float: right;
+        background-color: darkred;
+        border-radius: 50%;
+        margin-right: 15px;
+        margin-top: 15px;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .date {
+          font-size: 1.2rem;
+          line-height: 1.3rem;
+        }
+
+        .month {
+          font-size: .8rem;
+        }
+      }
+
+      .photo-btn {
+        position: absolute;
+        bottom: 0;
+        width: 100px;
+        height: 40px;
+        background-color: darkred;
+        border: none;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #fff;
+        transition: .2s all;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+
+        .text {
+          text-align: center;
+          line-height: 40px;
+        }
+      }
+
+      &.with-background {
+        background: url("https://daytripsontario.files.wordpress.com/2017/03/img_6859-copy.jpg");
+        background-position: center;
+        background-size: cover;
+      }
+    }
+
+    .copy {
+      padding-top: 20px;
+    }
+
+    .operation-hours-footer {
+      position: absolute;
+      bottom: 20px ;
+      // margin-bottom: 35px;
+      background-color: darkred;
+      width: calc(100% - 10px);
+      p{
+        color: white !important;
+      }
+    }
+  }
+}
+
 .footer {
   color: #FFFFFF;
   background-color: #0d0a0b;
