@@ -157,7 +157,7 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
       this.emailValid = this.response.email.match(this.emailValidationPattern) !== null;
     } else if (itemToCheck === 'temperature') {
       this.temperatureValid =
-        +this.response.temperature > 30 && +this.response.temperature <= 45 && /^[0-9]+$/.test(this.response.temperature);
+        +this.response.temperature > 30 && +this.response.temperature <= 45 && /^[1-9]\d*(\.\d+)?$/.test(this.response.temperature);
     }
   }
 
@@ -232,7 +232,7 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
       },
       () => {
         this.dismissLoading();
-        this.presentAlert('Confirm!', 'QR Code Scanned', `You may enter the room <span class="text-bold">"${roomName}"</span> Now.`);
+        this.presentAlert('Confirm!', 'QR Code Scanned', `You may enter the room <span class="text-bold">"${roomName}"</span> Now.`, 'success-alert');
         this.scan = false;
         this.sending = false;
         this.scanSub.unsubscribe();
@@ -241,9 +241,9 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
     );
   }
 
-  async presentAlert(header: string, subHeader: string, message: string) {
+  async presentAlert(header: string, subHeader: string, message: string, cssClass) {
     const alert = await this.alertCtrl.create({
-      cssClass: 'success-alert',
+      cssClass,
       header,
       subHeader,
       message,
@@ -304,7 +304,11 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
           },
           () => {
             this.dismissLoading();
-            this.presentAlert('Welcome to APU :)', 'Form Submitted Successfully!', `Dear ${body.full_name}, Thank you for submitting the declaration form.`);
+            if (+this.response.temperature >= 37.5) {
+              this.presentAlert('Warning!', 'High Temperature!', `Dear ${body.full_name}, Your body temperature is high and you will not be allowed to enter the campus. Please leave the campus & try to seek medical tre immediately.`, 'danger-alert');
+            } else {
+              this.presentAlert('Welcome to APU :)', 'Form Submitted Successfully!', `Dear ${body.full_name}, Thank you for submitting the declaration form. Please show this message to the security guard to allow you to enter the campus`, 'success-alert');
+            }
             this.clearForm(this.response.role, this.response.station);
             this.showWelcomeMessage = true;
           }
