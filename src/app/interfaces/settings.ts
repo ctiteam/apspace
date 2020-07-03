@@ -1,4 +1,4 @@
-import { MenuItem } from '../pages/more/menu.interface';
+import { MenuID, MenuItem } from '../pages/more/menu.interface';
 import { Role } from './role';
 
 export interface Settings {
@@ -17,7 +17,7 @@ export interface Settings {
   /* attendix */
   scan: boolean;
   /* more page */
-  favoriteItems: MenuItem[];
+  favoriteItems: MenuID[];
   /* theme, need to change this after auto */
   theme: string;
   accentColor: string;
