@@ -3,8 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
-import { EMPTY, Observable, from as fromPromise, of, throwError } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { EMPTY, Observable, forkJoin, from, of, throwError } from 'rxjs';
+import { catchError, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
 import { Role } from '../interfaces';
 
@@ -53,7 +53,7 @@ export class CasTicketService {
     };
     return (username && password
       ? of(new HttpParams().set('username', username).set('password', password).toString())
-      : fromPromise(this.storage.get('cred'))
+      : from(this.storage.get('cred'))
     ).pipe(
       switchMap(data => this.http.post(this.casUrl + '/cas/v1/tickets', data, options).pipe(
         catchError(res => res.status === 201 && res.headers.get('Location')
@@ -80,7 +80,7 @@ export class CasTicketService {
       responseType: 'text' as 'text', /* TODO: fix this in future angular */
       withCredentials: true,
     };
-    return (tgt ? of(tgt) : fromPromise(this.storage.get('tgt'))).pipe(
+    return (tgt ? of(tgt) : from(this.storage.get('tgt'))).pipe(
       switchMap(tgt => this.http.post(`${this.casUrl}/cas/v1/tickets/${tgt}`, null, options)),
       catchError(err => err.status !== 0
         ? this.getTGT().pipe(switchMap(tgt => this.getST(serviceUrl, tgt)))
@@ -98,7 +98,7 @@ export class CasTicketService {
       responseType: 'text' as 'text',
       withCredentials: true,
     };
-    return (tgt ? of(tgt) : fromPromise(this.storage.get('tgt'))).pipe(
+    return (tgt ? of(tgt) : from(this.storage.get('tgt'))).pipe(
       switchMap(tgt => this.http.delete(this.casUrl + '/cas/v1/tickets/' + tgt, options)),
     );
   }
@@ -147,9 +147,11 @@ export class CasTicketService {
           canAccessResults = memberOf.includes('cn=gims_web_result');
         }
 
-        this.storage.set('role', role);
-        this.storage.set('canAccessResults', canAccessResults);
-        return of(role);
+        // make sure storage tasks are done before returning
+        return forkJoin([
+          from(this.storage.set('role', role)),
+          from(this.storage.set('canAccessResults', canAccessResults)),
+        ]).pipe(switchMapTo(of(role)));
       }),
     );
   }
