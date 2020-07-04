@@ -305,7 +305,7 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
           () => {
             this.dismissLoading();
             if (+this.response.temperature >= 37.5) {
-              this.presentAlert('Warning!', 'High Temperature!', `Dear ${body.full_name}, Your body temperature is high and you will not be allowed to enter the campus. Please leave the campus & try to seek medical tre immediately.`, 'danger-alert');
+              this.presentAlert('Warning!', 'High Temperature!', `Dear ${body.full_name}, Your body temperature is high and you will not be allowed to enter the campus. Please leave the campus & try to seek medical treatment immediately.`, 'danger-alert');
             } else {
               this.presentAlert('Welcome to APU :)', 'Form Submitted Successfully!', `Dear ${body.full_name}, Thank you for submitting the declaration form. Please show this message to the security guard to allow you to enter the campus`, 'success-alert');
             }
