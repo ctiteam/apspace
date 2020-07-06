@@ -11,23 +11,16 @@
         class="colored-text colored-border">
         {{ intake || 'Intakes' }}
       </ion-button>
-      <ion-button *ngIf="intake && groupings.length > 0" fill="outline"
+      <ion-button *ngIf="intake && availableGrouping.length > 0" fill="outline"
         size="small" class="colored-text colored-border"
-        (click)="displayGroupingList()" [disabled]="groupings.length <= 2"> <!-- ALL, T1 -->
-        {{ grouping || 'Grouping' }}
+        (click)="chooseGrouping()" [disabled]="availableGrouping.length <= 2"> <!-- ALL, T1 -->
+        {{ selectedGrouping || 'Grouping' }}
       </ion-button>
       <ion-button fill="icon" size="small" (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
         <ion-icon *ngIf="!show2ndToolbar" md="ios-arrow-down" name="arrow-down"></ion-icon>
         <ion-icon *ngIf="show2ndToolbar" md="ios-arrow-up" name="arrow-up"></ion-icon>
       </ion-button>
     </ion-buttons>
-
-    <ion-item [hidden]='hideGroupingList'>
-      <ion-label>Choose Grouping</ion-label>
-      <ion-select [ngModel]="grouping" (ngModelChange)="changeGrouping(grouping = $event)" #groupingSelect>
-        <ion-select-option *ngFor="let grouping of groupings" [value]="grouping">{{ grouping }}</ion-select-option>
-      </ion-select>
-    </ion-item>
   </ion-toolbar>
 
   <ion-toolbar *ngIf="show2ndToolbar">
@@ -56,7 +49,7 @@
   <!-- do not add filter pipe here as it affects loading -->
   <ng-container *ngIf="(timetable$ | async) as timetables; else loading">
     <ng-template let-timetables
-      [ngIf]="!viewWeek ? (timetables | classes:intake:room:grouping | theday:selectedDate | gen:freeTime) : (timetables | classes:intake:room:grouping | theweek:selectedWeek | gen:freeTime)"
+      [ngIf]="!viewWeek ? (timetables | classes:intake:room:selectedGrouping | theday:selectedDate | gen:freeTime) : (timetables | classes:intake:room:selectedGrouping | theweek:selectedWeek | gen:freeTime)"
       [ngIfElse]="loading">
       <ng-container *ngIf="timetables!.length; else empty">
         <ion-grid>
@@ -73,8 +66,8 @@
                         <h5 class="small-margin-top">
                           Week: <span class="text-bold">{{selectedWeek | date : 'dd MMM yyy'}}</span>
                         </h5>
-                        <h5 class="small-margin-top white-space-normal" *ngIf="grouping">
-                          This timetable is for the intake grouping: <span class="danger-text text-bold">{{grouping}}</span>. If you do not belong to this intake
+                        <h5 class="small-margin-top white-space-normal" *ngIf="selectedGrouping">
+                          This timetable is for the intake grouping: <span class="danger-text text-bold">{{ selectedGrouping }}</span>. If you do not belong to this intake
                           grouping, change it by clicking on the button next to the intake button on top.
                         </h5>
                       </ion-label>
@@ -243,8 +236,8 @@
                       <h5 class="small-margin-top">
                         Week: <span class="text-bold">{{selectedWeek | date : 'dd MMM yyy'}}</span>
                       </h5>
-                      <h5 class="small-margin-top" *ngIf="grouping">
-                        This timetable is for the intake grouping: <span class="danger-text text-bold">{{grouping}}</span>. If you do not belong to this intake
+                      <h5 class="small-margin-top" *ngIf="selectedGrouping">
+                        This timetable is for the intake grouping: <span class="danger-text text-bold">{{ selectedGrouping }}</span>. If you do not belong to this intake
                         grouping, change it by clicking on the button next to the intake button on top.
                       </h5>
                     </ion-label>
@@ -262,13 +255,13 @@
                 </ng-template>
                 <ng-container *ngIf="selectedDate; else weekly;">
                   <app-message-with-svg imageUrl="assets/img/happy.svg"
-                    messageTitle="Hooray! No classes for {{intake}} {{grouping ? '('+ grouping +')' : '' }} on {{selectedDate | date: 'EEEE, dd MM yyy'}}"
+                    messageTitle="Hooray! No classes for {{intake}} {{selectedGrouping ? '('+ selectedGrouping +')' : '' }} on {{selectedDate | date: 'EEEE, dd MM yyy'}}"
                     wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
                   </app-message-with-svg>
                 </ng-container>
                 <ng-template #weekly>
                   <app-message-with-svg imageUrl="assets/img/happy.svg"
-                    messageTitle="Hooray! No classes for {{intake}} {{grouping ? '('+ grouping +')' : '' }} on the week that starts on {{selectedWeek | date: 'EEEE, dd MM yyy'}}"
+                    messageTitle="Hooray! No classes for {{intake}} {{selectedGrouping ? '('+ selectedGrouping +')' : '' }} on the week that starts on {{selectedWeek | date: 'EEEE, dd MM yyy'}}"
                     wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
                   </app-message-with-svg>
                 </ng-template>

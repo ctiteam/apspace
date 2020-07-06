@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { ActionSheetController, IonRefresher, IonSelect, ModalController } from '@ionic/angular';
+import { ActionSheetController, IonRefresher, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import { Observable, combineLatest } from 'rxjs';
@@ -20,8 +20,6 @@ import { ClassesPipe } from './classes.pipe';
   styleUrls: ['./student-timetable.page.scss'],
 })
 export class StudentTimetablePage implements OnInit {
-  @ViewChild('groupingSelect', {static: false}) groupingSelectRef: IonSelect;
-
   printUrl = 'https://api.apiit.edu.my/timetable-print/index.php';
   wday = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
@@ -84,16 +82,15 @@ export class StudentTimetablePage implements OnInit {
   selectedDate: Date;
   availableDate: Date[];
   availableDays: string[]; // wday[d.getDay()] for availableDate
+  availableGrouping: string[] = [];
+  selectedGrouping: string;
   intakeLabels: string[] = [];
-  groupings: string[] = [];
   intakeSelectable = true;
   viewWeek: boolean; // weekly or daily display
   show2ndToolbar = false;
 
   room: string;
   intake: string;
-  grouping: string;
-  hideGroupingList = true;
   freeTime = false;
 
   constructor(
@@ -165,10 +162,6 @@ export class StudentTimetablePage implements OnInit {
     }
   }
 
-  displayGroupingList() {
-    this.groupingSelectRef.open();
-  }
-
   presentActionSheet(labels: string[], handler: (_: string) => void) {
     const buttons = labels.map(text => ({ text, handler: () => handler.call(this, text) }));
     this.actionSheetCtrl.create({
@@ -197,21 +190,29 @@ export class StudentTimetablePage implements OnInit {
 
   /** Check and update intake on change. */
   changeIntake(intake: string) {
-    this.changeGrouping('All'); // fallback
     if (intake !== null && intake !== this.intake) {
       this.intake = intake;
       this.settings.set('intakeHistory', this.settings.get('intakeHistory')
         .concat(intake)
         .filter((v, i, a) => a.lastIndexOf(v) === i)
         .slice(-5));
-      this.changeDetectorRef.markForCheck();
-      this.timetable$.subscribe();
+      this.timetable$.subscribe(() => {
+        // always reset grouping to the only intake or 'All' as fallback after changing intake and recalculation
+        this.selectedGrouping = this.availableGrouping.length <= 2 ? this.availableGrouping[0] : 'All';
+        this.settings.set('intakeGroup', this.selectedGrouping);
+      });
     }
   }
 
-  changeGrouping(grouping: string) {
-    this.grouping = grouping;
-    this.settings.set('intakeGroup', this.grouping);
+  /** Choose selectedGrouping with presentActionSheet. */
+  chooseGrouping() {
+    this.presentActionSheet(this.availableGrouping, (selectedGrouping: string) => {
+      if (this.selectedGrouping !== selectedGrouping) {
+        this.settings.set('intakeGroup', this.selectedGrouping = selectedGrouping);
+        this.changeDetectorRef.markForCheck();
+        this.timetable$.subscribe();
+      }
+    });
   }
 
   /** Display intake search modal. */
@@ -248,15 +249,15 @@ export class StudentTimetablePage implements OnInit {
       // initialize or update intake labels only if timetable might change
       tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)
         && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
-      // always recalculate groupings based on intake selected, then update grouping selected
+      // always recalculate availableGrouping based on intake selected, then update selectedGrouping selected
       tap(tt => {
-        this.groupings = [
+        this.availableGrouping = [
           ...Array.from(new Set(
             (tt || []).filter(t => t.INTAKE === this.intake && t.GROUPING).map(t => t.GROUPING.toUpperCase())
           )).sort(),
           'All'
         ];
-        this.changeGrouping(this.settings.get('intakeGroup') || this.groupings[0]);
+        this.selectedGrouping = this.settings.get('intakeGroup') || this.availableGrouping[0];
       }),
       tap(() => this.changeDetectorRef.markForCheck()),
     );
@@ -271,7 +272,7 @@ export class StudentTimetablePage implements OnInit {
   updateDay(tt: StudentTimetable[]) {
     // filter by intake and room (need not to track intake)
     // XXX: remove this so that classes pipe is only called once
-    tt = new ClassesPipe().transform(tt, this.intake, this.room, this.grouping);
+    tt = new ClassesPipe().transform(tt, this.intake, this.room, this.selectedGrouping);
 
     // get week
     this.availableWeek = Array.from(new Set(tt.map(t => {
@@ -306,13 +307,12 @@ export class StudentTimetablePage implements OnInit {
   }
 
   sendToPrint() {
-    console.log(this.grouping);
     const week = moment(this.selectedWeek).format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
     // For student timetable:
     // printUrl?Week=2019-11-18&Intake=APTDF1805DSM(VFX)&print_request=print_tt
     // For lecturer timetable:
     // printUrl?LectID=ARW&Submit=Submit&Week=2019-11-18&print_request=print
-    this.iab.create(`${this.printUrl}?Week=${week}&Intake=${this.intake}&Intake_Group=${this.grouping}&print_request=print_tt`, '_system', 'location=true');
+    this.iab.create(`${this.printUrl}?Week=${week}&Intake=${this.intake}&Intake_Group=${this.selectedGrouping}&print_request=print_tt`, '_system', 'location=true');
   }
 
 }
