@@ -11,9 +11,9 @@
         class="colored-text colored-border">
         {{ intake || 'Intakes' }}
       </ion-button>
-      <ion-button *ngIf="intake && groupingList.length > 0" fill="outline"
+      <ion-button *ngIf="intake && groupings.length > 0" fill="outline"
         size="small" class="colored-text colored-border"
-        (click)="displayGroupingList()" [disabled]="groupingList.length <= 2"> <!-- ALL, T1 -->
+        (click)="displayGroupingList()" [disabled]="groupings.length <= 2"> <!-- ALL, T1 -->
         {{ grouping || 'Grouping' }}
       </ion-button>
       <ion-button fill="icon" size="small" (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
@@ -25,7 +25,7 @@
     <ion-item [hidden]='hideGroupingList'>
       <ion-label>Choose Grouping</ion-label>
       <ion-select [ngModel]="grouping" (ngModelChange)="changeGrouping(grouping = $event)" #groupingSelect>
-        <ion-select-option *ngFor="let grouping of groupingList" [value]="grouping">{{ grouping }}</ion-select-option>
+        <ion-select-option *ngFor="let grouping of groupings" [value]="grouping">{{ grouping }}</ion-select-option>
       </ion-select>
     </ion-item>
   </ion-toolbar>

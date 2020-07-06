@@ -85,6 +85,7 @@ export class StudentTimetablePage implements OnInit {
   availableDate: Date[];
   availableDays: string[]; // wday[d.getDay()] for availableDate
   intakeLabels: string[] = [];
+  groupings: string[] = [];
   intakeSelectable = true;
   viewWeek: boolean; // weekly or daily display
   show2ndToolbar = false;
@@ -92,7 +93,6 @@ export class StudentTimetablePage implements OnInit {
   room: string;
   intake: string;
   grouping: string;
-  groupingList = [];
   hideGroupingList = true;
   freeTime = false;
 
@@ -205,21 +205,7 @@ export class StudentTimetablePage implements OnInit {
         .filter((v, i, a) => a.lastIndexOf(v) === i)
         .slice(-5));
       this.changeDetectorRef.markForCheck();
-      this.timetable$.pipe(
-        tap(_ => this.groupingList = []),
-        tap(tt => {
-          tt.forEach(timetableInfo => {
-            if (timetableInfo.GROUPING) { // handle empty groupings
-              if (timetableInfo.INTAKE === this.intake && this.groupingList.indexOf(timetableInfo.GROUPING) === -1) {
-                this.groupingList.push(timetableInfo.GROUPING.toUpperCase()); // we do not trust the response
-              }
-            }
-          });
-        }),
-        tap(_ => this.changeGrouping(this.groupingList.sort()[0])),
-        tap(_ => this.groupingList.push('All')), // add it to the end of the list
-        tap(_ => this.changeDetectorRef.detectChanges())
-      ).subscribe();
+      this.timetable$.subscribe();
     }
   }
 
@@ -262,19 +248,17 @@ export class StudentTimetablePage implements OnInit {
       // initialize or update intake labels only if timetable might change
       tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)
         && (this.intakeLabels = Array.from(new Set((tt || []).map(t => t.INTAKE))).sort())),
-      tap(_ => this.groupingList = []),
+      // always recalculate groupings based on intake selected, then update grouping selected
       tap(tt => {
-        tt.forEach(timetableInfo => {
-          if (timetableInfo.GROUPING) { // handle empty groupings
-            if (timetableInfo.INTAKE === this.intake && this.groupingList.indexOf(timetableInfo.GROUPING) === -1) {
-              this.groupingList.push(timetableInfo.GROUPING.toUpperCase()); // we do not trust the response
-            }
-          }
-        });
+        this.groupings = [
+          ...Array.from(new Set(
+            (tt || []).filter(t => t.INTAKE === this.intake && t.GROUPING).map(t => t.GROUPING.toUpperCase())
+          )).sort(),
+          'All'
+        ];
+        this.changeGrouping(this.settings.get('intakeGroup') || this.groupings[0]);
       }),
-      tap(_ => this.changeGrouping(this.settings.get('intakeGroup') || this.groupingList.sort()[0])),
-      tap(_ => this.groupingList.push('All')), // add it to the end of the list
-      tap(_ => this.changeDetectorRef.detectChanges())
+      tap(() => this.changeDetectorRef.markForCheck()),
     );
   }
 
@@ -319,8 +303,6 @@ export class StudentTimetablePage implements OnInit {
     } else if (!this.availableDate.some(d => d.getDate() === this.selectedDate.getDate())) {
       this.selectedDate = this.availableDate.find(d => d.getDay() === this.selectedDate.getDay());
     }
-
-    this.changeDetectorRef.markForCheck();
   }
 
   sendToPrint() {
