@@ -8,7 +8,7 @@ import { catchError, finalize, tap } from 'rxjs/operators';
 
 import { Location } from '@angular/common';
 import { Vibration } from '@ionic-native/vibration/ngx';
-import { UpdateAttendanceGQL } from '../../../generated/graphql';
+import { UpdateAttendanceGQL, UpdateAttendanceMutation } from '../../../generated/graphql';
 import { SettingsService } from '../../services';
 
 @Component({
@@ -128,7 +128,7 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
   }
 
   /** Send OTP. */
-  sendOtp(otp: string): Promise<boolean> {
+  sendOtp(otp: string): Promise<UpdateAttendanceMutation> {
     console.assert(otp.length === this.digits.length);
     this.sending = true;
     return this.updateAttendance.mutate({ otp }).pipe(
