@@ -7,17 +7,18 @@
       Timetable
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="intake && groupingList.length > 0" fill="outline" size="small" (click)="displayGroupingList()"
-        class="colored-text colored-border">
-        {{ grouping || 'Grouping' }}
-      </ion-button>
       <ion-button *ngIf="intakeSelectable" fill="outline" size="small" (click)="presentIntakeSearch()"
         class="colored-text colored-border">
         {{ intake || 'Intakes' }}
       </ion-button>
-      <ion-button (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
-        <ion-icon *ngIf="!show2ndToolbar" name="chevron-down"></ion-icon>
-        <ion-icon *ngIf="show2ndToolbar" name="chevron-up"></ion-icon>
+      <ion-button *ngIf="intake && groupingList.length > 0" fill="outline"
+        size="small" class="colored-text colored-border"
+        (click)="displayGroupingList()" [disabled]="groupingList.length <= 2"> <!-- ALL, T1 -->
+        {{ grouping || 'Grouping' }}
+      </ion-button>
+      <ion-button fill="icon" size="small" (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
+        <ion-icon *ngIf="!show2ndToolbar" md="ios-arrow-down" name="arrow-down"></ion-icon>
+        <ion-icon *ngIf="show2ndToolbar" md="ios-arrow-up" name="arrow-up"></ion-icon>
       </ion-button>
     </ion-buttons>
 
