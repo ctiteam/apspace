@@ -131,14 +131,6 @@ export class MorePage implements OnInit {
       role: Role.Student,
       tags: ['consultation', 'booking']
     },
-    {
-      title: 'Knowledge Base',
-      group: 'Collaboration & Information Resources',
-      url: 'http://kb.sites.apiit.edu.my/home/', // no ticket
-      img: 'assets/img/kb.png',
-      role: Role.Student | Role.Lecturer | Role.Admin,
-      tags: ['articles', 'Q&A', 'FAQ', 'questions', 'answers', 'how to', 'kb']
-    },
     // { To be added to moodle later on (not available now)
     //   title: 'Lecturer Reference Kit',
     //   group: 'Collaboration & Information Resources',
