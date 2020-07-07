@@ -24,26 +24,13 @@
               [format]="'YYYY-MM-DD'"
             >
             </ion-calendar>
-            <ion-list>
+            <ion-list *ngFor="let detail of detailsList">
               <ion-item lines="none">
                 <ion-label class="colored-text text-bold">
-                  Class:
+                  Class / Time:
                 </ion-label>
                 <ion-badge *ngIf="showDetails; else template" class="details">
-                  {{ classType }}
-                </ion-badge>
-                <ng-template #template>
-                  <ion-badge class="details">
-                    ---
-                  </ion-badge>
-                </ng-template>
-              </ion-item>
-              <ion-item>
-                <ion-label class="colored-text text-bold">
-                  Time:
-                </ion-label>
-                <ion-badge *ngIf="showDetails; else template" class="details">
-                  {{ timeFrom + ' - ' + timeTo }}
+                  {{ detail.CLASS_TYPE }} / {{ detail.TIME_TO + ' - ' + detail.TIME_FROM }}
                 </ion-badge>
                 <ng-template #template>
                   <ion-badge class="details">
