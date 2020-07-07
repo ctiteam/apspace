@@ -25,9 +25,7 @@ export class AttendanceDetailsModalPage implements OnInit {
   openDate: string;
 
 
-  timeFrom: string;
-  timeTo: string;
-  classType: string;
+  detailsList: AttendanceDetails[] = [];
   showDetails = false;
 
   loaded = false;
@@ -108,9 +106,14 @@ export class AttendanceDetailsModalPage implements OnInit {
       const date = this.datePipe.transform(new Date(record.CLASS_DATE), 'yyyy-MM-dd');
 
       if ($event === date) {
-        this.classType = record.CLASS_TYPE;
-        this.timeFrom = record.TIME_FROM;
-        this.timeTo = record.TIME_TO;
+        this.detailsList.push({
+          CLASS_TYPE: record.CLASS_TYPE,
+          TIME_FROM: record.TIME_FROM,
+          TIME_TO: record.TIME_TO,
+          ATTENDANCE_STATUS: record.ATTENDANCE_STATUS,
+          CLASS_DATE: record.CLASS_DATE
+        });
+
         this.showDetails = true;
       }
     });
