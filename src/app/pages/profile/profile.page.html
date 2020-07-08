@@ -17,24 +17,31 @@
       <ion-grid class="ion-margin-top ion-no-padding" *ngIf="!showOrientationProfile; else showOrientProfile">
         <ion-row>
           <ion-col class="ion-margin-top" size-xs="12" size-md="6" offset-md="3" size-lg="4" offset-lg="4">
-            <ion-card class="ion-no-margin ion-no-padding ion-text-center">
-              <!-- STUDENT IMAGE -->
-              <ng-template [ngIf]="photo$ | async" [ngIfElse]="loadingPicture">
-                <div class="img-wrapper ion-margin-top ion-margin-bottom">
-                  <ion-img class="profile-photo" [src]="
-                                          'data:image/jpg;base64,' +
-                                          (photo$ | async)?.base64_photo
-                                          " (ionError)="$event.target.src = 'assets/img/no_img.png'">
-                  </ion-img>
-                </div>
+            <ion-card class="ion-no-margin ion-no-padding virtual-card">
+              <img src="assets/img/student_card_apu.jpg">
+              <ng-template let-photo [ngIf]="photo$ | async">
+                <ion-img class="profile-photo virtual-card-student-img" [src]="
+                                    'data:image/jpg;base64,' +
+                                    photo?.base64_photo
+                                    " (ionError)="$event.target.src = 'assets/img/no_img.png'">
+                </ion-img>
               </ng-template>
+              <div class="virtual-card-student-details">
+                <h5 class="text-bold virtual-card-student-name">
+                  {{ profile.NAME || 'N/A'}}
+                </h5>
+                <p class="virtual-card-student-ids id">STUDENT ID:&nbsp;&nbsp;&nbsp;
+                  {{ profile.STUDENT_NUMBER || 'N/A'}}</p>
+                <p class="virtual-card-student-ids passport">IC/PASSPORT:&nbsp;
+                  {{ profile.IC_PASSPORT_NO || 'N/A'}}</p>
+              </div>
+            </ion-card>
+            
+            <ion-card class="ion-no-margin ion-no-padding ion-text-center">
               <!-- STUDENT PROFILE INFO -->
               <ion-card-header>
-                <ion-card-title>
-                  <h3 class="responsive-h1">{{ profile.NAME }}</h3>
-                </ion-card-title>
                 <ion-card-subtitle>
-                  <h5 class="responsive-h2">{{ profile.STUDENT_NUMBER }} | {{ profile.INTAKE }}</h5>
+                  <h5 class="responsive-h2">{{ profile.INTAKE }}</h5>
                 </ion-card-subtitle>
               </ion-card-header>
               <ion-card-content>
@@ -126,7 +133,7 @@
                       </ion-row> -->
                       <ion-row>
                         <ion-col size="12" size-md="7" offset-md="" push-md="5">
-                          <ion-card class="ion-no-margin ion-no-padding virtual-card">
+                          <ion-card class="ion-no-margin ion-no-padding ion-float-end virtual-card">
                             <img src="assets/img/student_card_apu.jpg">
                             <ng-template let-photo [ngIf]="photo$ | async">
                               <ion-img class="profile-photo virtual-card-student-img" [src]="
