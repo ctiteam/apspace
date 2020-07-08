@@ -88,7 +88,7 @@
   </ng-container>
 
   <ng-template #webVersion>
-    <div class="main-container web-version">
+    <div class="main-container">
       <section class="header">
         <div class="container">
           <ion-grid class="ion-no-padding">
@@ -114,20 +114,9 @@
               <ion-col size="12" class="ion-padding">
                 <ion-slides #sliderSlides pager="true" [options]="slideOpts">
                   <ng-container *ngIf="noticeBoardItems$ | async as noticeBoardItems">
-                    <!-- <ion-slide *ngFor="let noticeBoardItem of noticeBoardItems"> -->
-                      <ion-slide>
+                    <ion-slide *ngFor="let noticeBoardItem of noticeBoardItems">
                       <div class="picture">
                         <img [src]="'assets/img/banner_test.jpg'" alt="">
-                      </div>
-                    </ion-slide>
-                    <ion-slide>
-                      <div class="picture">
-                        <img [src]="'http://www.apu.edu.my/sites/default/files/web_post-covid-19_960_resized.jpg'" alt="">
-                      </div>
-                    </ion-slide>
-                    <ion-slide>
-                      <div class="picture">
-                        <img [src]="'http://www.apu.edu.my/sites/default/files/covid_banner_updated.jpeg'" alt="">
                       </div>
                     </ion-slide>
                   </ng-container>
@@ -227,18 +216,17 @@
                         <ion-slide *ngFor="let department of filteredCompany.company_departments">
                           <div class="swiper-content">
                             <div class="top with-background">
-                              <!-- [style.background]="department.img ? 'url(' + department.img + ')' : 'blue'" -->
-                              <div class="calendar" [style.backgroundColor]="department.dept_icon_color">
-                                <ion-icon [name]="department.dept_icon"></ion-icon>
+                              <div class="calendar">
+                                <ion-icon name="home"></ion-icon>
                               </div>
-                              <div class="photo-btn" [style.backgroundColor]="department.dept_icon_color">
+                              <div class="photo-btn">
                                 <div class="text">{{filteredCompany.company_id}}
                                 </div>
                               </div>
                             </div>
                             <div class="copy">
                               <h1>{{department.dept_name}}</h1>
-                              <h3 *ngIf="department.dept_email" [style.color]="department.dept_icon_color">{{department.dept_email}}</h3>
+                              <h3 *ngIf="department.dept_email">{{department.dept_email}}</h3>
                               <ion-grid>
                                 <ion-row *ngIf="((department.shifts['Mon-Thu'].length === department.shifts['Fri'].length) 
                                         && department.shifts['Mon-Thu'].length > 0
@@ -292,7 +280,7 @@
                                   </ion-col>
                                 </ion-row>
                               </ion-grid>
-                              <div class="operation-hours-footer" [style.backgroundColor]="department.dept_icon_color">
+                              <div class="operation-hours-footer">
                                 <div>
                                   <p>
                                     <ion-icon name="call-sharp"></ion-icon>
@@ -337,7 +325,7 @@
           <ion-grid class="ion-no-padding">
             <ion-row>
               <ion-col size="12" size-md="7" size-lg="6" class="ion-no-padding aps-margin-auto">
-                <p class="ion-no-margin ion-no-padding ion-text-left small-text">
+                <p class="ion-text-left small-text">
                   &copy; {{currentYear}} Asia Pacific University of Technology and Innovation (APU). All rights
                   reserved.
                 </p>
