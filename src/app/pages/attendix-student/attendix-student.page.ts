@@ -1,14 +1,15 @@
+import { Location } from '@angular/common';
 import {
   Component, ElementRef, OnDestroy, OnInit, ViewChild
 } from '@angular/core';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
+import { Vibration } from '@ionic-native/vibration/ngx';
 import { AlertController, Platform } from '@ionic/angular';
+import { SubscriptionResult } from 'apollo-angular';
 import { EMPTY, Observable, Subscription } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 
-import { Location } from '@angular/common';
-import { Vibration } from '@ionic-native/vibration/ngx';
-import { UpdateAttendanceGQL } from '../../../generated/graphql';
+import { UpdateAttendanceGQL, UpdateAttendanceMutation } from '../../../generated/graphql';
 import { SettingsService } from '../../services';
 
 @Component({
@@ -128,7 +129,7 @@ export class AttendixStudentPage implements OnInit, OnDestroy {
   }
 
   /** Send OTP. */
-  sendOtp(otp: string): Promise<any> {
+  sendOtp(otp: string): Promise<SubscriptionResult<UpdateAttendanceMutation>> {
     console.assert(otp.length === this.digits.length);
     this.sending = true;
     return this.updateAttendance.mutate({ otp }).pipe(
