@@ -93,8 +93,11 @@
         <div class="container">
           <ion-grid class="ion-no-padding">
             <ion-row>
-              <ion-col class="ion-no-padding" size="10" offset="1" offset-sm="" size-sm="5" size-md="4" size-lg="3">
+              <ion-col class="ion-padding" size="10" offset="1" offset-sm="" size-sm="5" size-md="4" size-lg="3">
                 <ion-img class="logo" src="assets/img/apu.png"></ion-img>
+              </ion-col>
+              <ion-col class="aps-margin-auto ion-padding-end ion-padding-start" size="10" offset="1" offset-sm="" size-sm="7" size-md="8" size-lg="9">
+                <h1 class="system-title ion-text-end"><span>APS</span>pace</h1>
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -103,7 +106,16 @@
 
       <section class="menu">
         <div class="container">
-          Hello this is the menu
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col class="ion-no-padding ion-padding-start ion-padding-end ion-text-right">
+                <ion-button size="small" fill="clear" color="light">
+                  Login
+                  <ion-icon slot="end" name="person-circle"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </div>
       </section>
 
@@ -190,7 +202,33 @@
 
       <section class="news">
         <div class="container">
-          hello this is the news
+          <ng-container *ngIf="news$ | async as news; else loadingNews">
+            <ng-container *ngIf="news.length > 0; else noNews">
+              <ion-grid class="ion-no-padding ion-padding-top ion-padding-bottom">
+                <ion-row>
+                  <ion-col class="ion-padding" size="12" size-sm="6" size-lg="4" *ngFor="let newsItem of news">
+                    <ion-card class="ion-no-margin">
+                      <img style="max-height: 200px; width: 100%;" [src]="newsItem.url">
+                      <ion-card-header>
+                        <ion-card-title class="aps-limit-lines aps-one-line">
+                          {{newsItem.title}}
+                        </ion-card-title>
+                        <ion-card-subtitle>
+                          {{newsItem.updated | date : 'yyyy-MM-dd HH:mm:ss' : "+0800"}}
+                        </ion-card-subtitle>
+                      </ion-card-header>
+                    </ion-card>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ng-container>
+            <ng-template #noNews>
+
+            </ng-template>
+          </ng-container>
+          <ng-template #loadingNews>
+
+          </ng-template>
         </div>
       </section>
 
@@ -314,15 +352,70 @@
         </div>
       </section>
 
-      <section class="stay-connected">
+      <section class="sub-footer">
         <div class="container">
-          hello this is the stay connected
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col size="12" size-md="4" class="group ion-padding">
+                <h3 class="title">APIIT Education Group</h3>
+                <h3 class="sub-title">
+                  <ion-text color="primary" tappable>APU</ion-text>
+                </h3>
+                <h3 class="sub-title">
+                  <ion-text color="primary" tappable>APIIT</ion-text>
+                </h3>
+                <h3 class="sub-title">
+                  <ion-text color="primary" tappable>APLC</ion-text>
+                </h3>
+                <h3 class="sub-title">
+                  <ion-text color="primary" tappable>Corporate Training</ion-text>
+                </h3>
+                <div class="stay-connected ion-margin-top">
+                  <h3 class="title">Stay Connected</h3>
+                  <ion-icon class="facebook" name="logo-facebook"></ion-icon>
+                  <ion-icon class="twitter" name="logo-twitter"></ion-icon>
+                  <ion-icon class="playstore" name="logo-google-playstore"></ion-icon>
+                  <ion-icon class="apple" name="logo-apple"></ion-icon>
+
+                </div>
+              </ion-col>
+              <ion-col size="12" size-md="8" class="support ion-padding">
+                <h3 class="title">Support</h3>
+                <ion-grid class="ion-no-padding">
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="support-item general">
+                        <h3 class="sub-title">General Line</h3>
+                        <p><span class="aps-text-bold">Tel:</span> +603-89961000 / 1 300 888 278 (Toll-free)</p>
+                        <p><span class="aps-text-bold">Mon - Fri: </span> 8:30 AM - 7:00 PM</p>
+                        <p><span class="aps-text-bold">Saturday: </span> 8:30 AM - 1:00 PM</p>
+                      </div>
+                    </ion-col>
+                    <ion-col size="12" size-md="6">
+                      <div class="support-item emergency">
+                        <h3 class="sub-title">APU Security/Emergency Hotline</h3>
+                        <p><span class="aps-text-bold">HP:</span> 017-238 1300</p>
+                        <p>7:00 PM - 7:00 AM</p>
+                      </div>
+                    </ion-col>
+                    <ion-col size="12" size-md="6">
+                      <div class="support-item weekends">
+                        <h3 class="sub-title"> Weekends, Public Holidays Only</h3>
+                        <p><span class="aps-text-bold">HP:</span> 017-379 1700</p>
+                        <p>7:00 AM - 7:00 PM</p>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </div>
       </section>
 
       <section class="footer">
         <div class="container">
-          <ion-grid class="ion-no-padding">
+          <ion-grid class="ion-padding">
             <ion-row>
               <ion-col size="12" size-md="7" size-lg="6" class="ion-no-padding aps-margin-auto">
                 <p class="ion-text-left small-text">

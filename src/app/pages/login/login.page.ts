@@ -201,8 +201,6 @@ export class LoginPage implements OnInit {
           }
         }).slice(0, 6);
       }),
-      tap(res => console.log(res)),
-      map(res => res.slice(0, 3))
     );
 
     const headers = { 'X-Filename': 'quix-customers' };
