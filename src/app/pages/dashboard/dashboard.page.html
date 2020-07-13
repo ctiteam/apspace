@@ -61,6 +61,9 @@
             <ion-row>
               <ion-col>
                 <div class="icons ion-margin-top ion-text-right">
+                  <a (click)="openHelpCentre()" class="ion-margin-end">
+                    <ion-icon class="responsive-icon colored-text" name="help-circle"></ion-icon>
+                  </a>
                   <a (click)="toggleReorderingMode()" class="ion-margin-end">
                     <ion-icon *ngIf="!editableList" class="responsive-icon colored-text" name="pencil"></ion-icon>
                   </a>

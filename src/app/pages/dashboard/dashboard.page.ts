@@ -14,6 +14,7 @@ import {
 import { NewsService, NotificationService, SettingsService, StudentTimetableService, UserSettingsService, WsApiService } from 'src/app/services';
 
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
 import { NewsModalPage } from '../news/news-modal';
@@ -298,7 +299,8 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     private platform: Platform,
     private firebaseX: FirebaseX,
     private toastCtrl: ToastController,
-    private settings: SettingsService
+    private settings: SettingsService,
+    private iab: InAppBrowser
   ) {
     // Create the dragula group (drag and drop)
     this.dragulaService.createGroup('editable-list', {
@@ -1264,5 +1266,9 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     } else {
       return 'sat';
     }
+  }
+
+  openHelpCentre() {
+    this.iab.create('https://apiit.atlassian.net/servicedesk/customer/portals', '_system', 'location=true');
   }
 }
