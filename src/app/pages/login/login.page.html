@@ -74,7 +74,7 @@
                     <!-- KB APKey Troubleshooting Link -->
                     <ion-col size="12" class="ion-no-padding ion-no-margin">
                       <p class="ion-no-margin ion-no-padding">Forgot Your Password? <a
-                          (click)="openApkeyTroubleshooting()">APKey Troubleshooting</a>
+                          (click)="openLink('troubleshooting')">APKey Troubleshooting</a>
                       </p>
                     </ion-col>
                   </ion-row>
@@ -96,7 +96,8 @@
               <ion-col class="ion-padding" size="10" offset="1" offset-sm="" size-sm="5" size-md="4" size-lg="3">
                 <ion-img class="logo" src="assets/img/apu.png"></ion-img>
               </ion-col>
-              <ion-col class="aps-margin-auto ion-padding-end ion-padding-start" size="10" offset="1" offset-sm="" size-sm="7" size-md="8" size-lg="9">
+              <ion-col class="aps-margin-auto ion-padding-end ion-padding-start" size="10" offset="1" offset-sm=""
+                size-sm="7" size-md="8" size-lg="9">
                 <h1 class="system-title ion-text-end"><span>APS</span>pace</h1>
               </ion-col>
             </ion-row>
@@ -104,15 +105,71 @@
         </div>
       </section>
 
-      <section class="menu">
+      <section class="login">
         <div class="container">
           <ion-grid class="ion-no-padding">
             <ion-row>
               <ion-col class="ion-no-padding ion-padding-start ion-padding-end ion-text-right">
-                <ion-button size="small" fill="clear" color="light">
+                <ion-button size="small" fill="clear" color="light" (click)="showLoginSection = !showLoginSection">
                   Login
                   <ion-icon slot="end" name="person-circle"></ion-icon>
                 </ion-button>
+              </ion-col>
+            </ion-row>
+            <ion-row class="login-hidden-section" [style.maxHeight]="showLoginSection ? '1000px' : 0"
+              [style.paddingBottom]="showLoginSection ? '20px' : 0">
+              <ion-col size="10" offset="1" size-md="4" offset-md="1">
+                <form (ngSubmit)="login()" #loginForm="ngForm" class="ion-no-padding">
+                  <div class="login-form-container ion-padding">
+                    <div class="input-container ion-margin-top">
+                      <p class="text-bold">APKey</p>
+                      <ion-input placeholder="Ex: TP012345" type="text" [(ngModel)]="apkey" (keyup.enter)="login()"
+                        [autofocus]="true" [required]="true" name="apkey"></ion-input>
+                    </div>
+                    <div class="input-container ion-margin-top">
+                      <p class="text-bold">Password</p>
+                      <ion-input class="passowrd-input" placeholder="APKey Password"
+                        [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" clear-on-edit="false"
+                        (keyup.enter)="login()" [required]="true" name="password">
+                        <ion-button *ngIf="password" type="button" fill="clear" class="eye-button"
+                          (click)="showPassword = !showPassword">
+                          <ion-icon [name]="showPassword ? 'eye-off' : 'eye'" class="show-password"></ion-icon>
+                        </ion-button>
+                      </ion-input>
+                    </div>
+                    <div class="login-button-container">
+                      <ion-button color="success" type="submit" expand="block">Login</ion-button>
+                    </div>
+                  </div>
+                </form>
+              </ion-col>
+              <ion-col size="12" size-md="1" class="hide-on-small-devices">
+                <div class="vl"></div>
+              </ion-col>
+              <ion-col class="login-instruction" size="10" offset="1" offset-sm="" size-md="5">
+                <h4 class="aps-text-bold">Login Instructions:</h4>
+                <div class="ion-padding-start">
+                  <li class="high-line-hight">Enter your APKey <ion-icon tappable color="success"
+                      (click)="openLink('apkey')" name="help-circle"></ion-icon>
+                  </li>
+                  <li class="high-line-hight">Enter your APKey Password <ion-icon tappable color="success"
+                      (click)="openLink('apkeyPassword')" name="help-circle"></ion-icon>
+                  </li>
+                  <li class="high-line-hight">Click on the green "Login" Button</li>
+                </div>
+                <p>
+                  <ion-text color="medium">For more information, check this troubleshooting <a tappable
+                      (click)="openLink('troubleshooting')">
+                      <ion-text color="success">article</ion-text>
+                    </a></ion-text>
+                </p>
+                <p>
+                  <ion-text color="medium">Still having troubles, no worries! you can reach us at <a
+                      class="aps-success-color" tappable href="mailto:assist@staffemail.edu.my">
+                      <ion-text color="success">assist@staffemail.edu.my</ion-text>
+                    </a> and our team will assist you.</ion-text>
+                </p>
+
               </ion-col>
             </ion-row>
           </ion-grid>
@@ -123,7 +180,7 @@
         <div class="container">
           <ion-grid class="ion-no-padding">
             <ion-row>
-              <ion-col size="12" class="ion-padding">
+              <ion-col size="12" class="ion-padding no-padding-on-small-devices">
                 <ion-slides #sliderSlides pager="true" [options]="slideOpts">
                   <ng-container *ngIf="noticeBoardItems$ | async as noticeBoardItems">
                     <ion-slide *ngFor="let noticeBoardItem of noticeBoardItems">
@@ -151,8 +208,8 @@
         <div class="container">
           <ion-grid class="ion-no-padding">
             <ion-row>
-              <ion-col size="12" size-sm="6" size-lg="3" class="ion-padding">
-                <div class='box course-materials'>
+              <ion-col size="6" size-sm="6" size-lg="3" class="ion-padding">
+                <div class='box course-materials' (click)="openLink('moodle')">
                   <div class='wave -one'></div>
                   <div class='wave -two'></div>
                   <div class='wave -three'></div>
@@ -162,8 +219,8 @@
                   <div class='title'>Course Materials</div>
                 </div>
               </ion-col>
-              <ion-col size="12" size-sm="6" size-lg="3" class="ion-padding">
-                <div class='box intake-timetable'>
+              <ion-col size="6" size-sm="6" size-lg="3" class="ion-padding">
+                <div class='box intake-timetable' (click)="openLink('timetable')">
                   <div class='wave -one'></div>
                   <div class='wave -two'></div>
                   <div class='wave -three'></div>
@@ -173,8 +230,8 @@
                   <div class='title'>Intake Timetable</div>
                 </div>
               </ion-col>
-              <ion-col size="12" size-sm="6" size-lg="3" class="ion-padding">
-                <div class='box holidays'>
+              <ion-col size="6" size-sm="6" size-lg="3" class="ion-padding">
+                <div class='box holidays' (click)="openLink('holiday')">
                   <div class='wave -one'></div>
                   <div class='wave -two'></div>
                   <div class='wave -three'></div>
@@ -184,8 +241,8 @@
                   <div class='title'>Holidays Calendar</div>
                 </div>
               </ion-col>
-              <ion-col size="12" size-sm="6" size-lg="3" class="ion-padding">
-                <div class='box graduation'>
+              <ion-col size="6" size-sm="6" size-lg="3" class="ion-padding">
+                <div class='box graduation' tappable (click)="openLink('graduation')">
                   <div class='wave -one'></div>
                   <div class='wave -two'></div>
                   <div class='wave -three'></div>
@@ -356,27 +413,28 @@
         <div class="container">
           <ion-grid class="ion-no-padding">
             <ion-row>
-              <ion-col size="12" size-md="4" class="group ion-padding">
+              <ion-col size="12" size-md="4" class="group ion-padding ion-no-padding-bottom-on-small-devices">
                 <h3 class="title">APIIT Education Group</h3>
                 <h3 class="sub-title">
-                  <ion-text color="primary" tappable>APU</ion-text>
+                  <ion-text color="primary" tappable (click)="openLink('apu')">APU</ion-text>
                 </h3>
                 <h3 class="sub-title">
-                  <ion-text color="primary" tappable>APIIT</ion-text>
+                  <ion-text color="primary" tappable (click)="openLink('apiit')">APIIT</ion-text>
                 </h3>
                 <h3 class="sub-title">
-                  <ion-text color="primary" tappable>APLC</ion-text>
+                  <ion-text color="primary" tappable (click)="openLink('aplc')">APLC</ion-text>
                 </h3>
                 <h3 class="sub-title">
-                  <ion-text color="primary" tappable>Corporate Training</ion-text>
+                  <ion-text color="primary" tappable (click)="openLink('corporateTraining')">Corporate Training
+                  </ion-text>
                 </h3>
                 <div class="stay-connected ion-margin-top">
                   <h3 class="title">Stay Connected</h3>
-                  <ion-icon class="facebook" name="logo-facebook"></ion-icon>
-                  <ion-icon class="twitter" name="logo-twitter"></ion-icon>
-                  <ion-icon class="playstore" name="logo-google-playstore"></ion-icon>
-                  <ion-icon class="apple" name="logo-apple"></ion-icon>
-
+                  <ion-icon (click)="openLink('facebook')" class="facebook" name="logo-facebook"></ion-icon>
+                  <ion-icon (click)="openLink('twitter')" class="twitter" name="logo-twitter"></ion-icon>
+                  <ion-icon (click)="openLink('linkedin')" class="linkedin" name="logo-linkedin"></ion-icon>
+                  <ion-icon (click)="openLink('playStore')" class="playstore" name="logo-google-playstore"></ion-icon>
+                  <ion-icon (click)="openLink('appStore')" class="apple" name="logo-apple"></ion-icon>
                 </div>
               </ion-col>
               <ion-col size="12" size-md="8" class="support ion-padding">
@@ -424,10 +482,10 @@
                 </p>
               </ion-col>
               <ion-col size="12" size-md="5" size-lg="6" class="ion-no-padding ion-text-right">
-                <ion-button size="small" fill="clear" color="light">
+                <ion-button size="small" fill="clear" color="light" (click)="openLink('privacyPolicy')">
                   Privacy Policy
                 </ion-button>
-                <ion-button size="small" fill="clear" color="light">
+                <ion-button size="small" fill="clear" color="light" (click)="openLink('termsOfUse')">
                   Terms of Use
                 </ion-button>
               </ion-col>

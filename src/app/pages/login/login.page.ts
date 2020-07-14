@@ -149,6 +149,7 @@ export class LoginPage implements OnInit {
   apkey: string;
   password: string;
   showPassword: boolean;
+  showLoginSection: boolean;
 
   // LOGIN BUTTON ANIMATIONS ITEMS
   userDidLogin = false;
@@ -306,7 +307,7 @@ export class LoginPage implements OnInit {
         {
           text: 'Open The documentation',
           handler: () => {
-            this.openApkeyTroubleshooting();
+            this.openLink('troubleshooting');
           }
         }
       ]
@@ -321,8 +322,69 @@ export class LoginPage implements OnInit {
     caches.forEach(endpoint => this.ws.get(endpoint).subscribe());
   }
 
-  openApkeyTroubleshooting() {
-    this.iab.create('http://kb.sites.apiit.edu.my/knowledge-base/unable-to-sign-in-using-apkey-apkey-troubleshooting/', '_system', 'location=true');
+  openLink(
+    linkName: 'timetable' | 'holiday' | 'moodle' | 'graduation' | 'apkey' | 'apkeyPassword' | 'troubleshooting' | 'apu' | 'aplc' | 'apiit' | 'corporateTraining' | 'facebook' | 'twitter' | 'linkedin' | 'playStore' | 'appStore' | 'privacyPolicy' | 'termsOfUse') {
+    let url = '';
+    switch (linkName) {
+      case 'timetable':
+        url = 'https://apspace.apu.edu.my/student-timetable';
+        break;
+      case 'holiday':
+        url = 'https://cdn.webspace.apiit.edu.my/public/2020-04/2020%20APU%20student%20holidays-update.pdf';
+        break;
+      case 'moodle':
+        url = 'https://lms2.apiit.edu.my/login/index.php?authCAS=CAS';
+        break;
+      case 'graduation':
+        url = 'https://graduation.sites.apiit.edu.my/';
+        break;
+      case 'apkey':
+        url = 'https://apiit.atlassian.net/servicedesk/customer/portal/4/article/219086900';
+        break;
+      case 'apkeyPassword':
+        url = 'https://apiit.atlassian.net/servicedesk/customer/kb/view/218759221';
+        break;
+      case 'troubleshooting':
+        url = 'https://apiit.atlassian.net/servicedesk/customer/kb/view/218726429';
+        break;
+      case 'apu':
+        url = 'https://www.apu.edu.my/';
+        break;
+      case 'apiit':
+        url = 'https://www.apu.edu.my/';
+        break;
+      case 'corporateTraining':
+        url = 'https://www.apu.edu.my/our-courses/corporate-training';
+        break;
+      case 'aplc':
+        url = 'https://www.apu.edu.my/our-courses/english-language-study';
+        break;
+      case 'facebook':
+        url = 'https://www.facebook.com/apuniversity/';
+        break;
+      case 'twitter':
+        url = 'https://twitter.com/AsiaPacificU';
+        break;
+      case 'linkedin':
+        url = 'https://www.linkedin.com/edu/school?id=15321&trk=edu-cp-title';
+        break;
+      case 'playStore':
+        url = 'https://play.google.com/store/apps/details?id=my.edu.apiit.apspace';
+        break;
+      case 'appStore':
+        url = 'https://itunes.apple.com/us/app/apspace/id1413678891';
+        break;
+      case 'privacyPolicy':
+        url = 'https://www.apu.edu.my/privacy-policy-0';
+        break;
+      case 'termsOfUse':
+        url = 'https://www.apu.edu.my/terms-use';
+        break;
+      default:
+        break;
+    }
+    this.iab.create(url, '_system', 'location=true');
+
   }
 
   // SLIDER
