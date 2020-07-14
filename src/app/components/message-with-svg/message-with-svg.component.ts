@@ -12,6 +12,7 @@ export class MessageWithSvgComponent {
   @Input() wrapperMarginTop = '0px';
   @Input() wrapperOffset: string;
   @Input() wrapperSize: string;
+  @Input() advancedMode ?= false;
 
   constructor() { }
 

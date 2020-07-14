@@ -2,6 +2,7 @@ import {
   AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, ViewChild
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { IonSearchbar, ModalController, PopoverController } from '@ionic/angular';
 import { Observable, concat, of } from 'rxjs';
 import { distinctUntilChanged, map, startWith } from 'rxjs/operators';
@@ -40,7 +41,12 @@ export class SearchModalComponent implements AfterViewInit, OnInit {
   searchControl = new FormControl();
   searchItems$: Observable<string[]>;
 
-  constructor(private modalCtrl: ModalController, private popoverCtrl: PopoverController) { }
+  constructor(
+    private modalCtrl: ModalController,
+    private popoverCtrl: PopoverController,
+    private router: Router
+  ) { }
+
 
   ngOnInit() {
     // convert all items to uppercase
@@ -91,6 +97,10 @@ export class SearchModalComponent implements AfterViewInit, OnInit {
       ? items.filter(item => item.indexOf(term) !== -1)
       : items;
     return filteredItems;
+  }
+
+  goToFeedback() {
+    this.modalCtrl.dismiss().then(_ => this.router.navigateByUrl('/feedback'));
   }
 
 }

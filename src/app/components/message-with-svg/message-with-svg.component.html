@@ -5,9 +5,12 @@
     </ion-col>
     <ion-col size="10" offset="1" class="ion-margin-top">
       <h3 class="ion-text-center secondary-txt-color text-bolder">{{ messageTitle }}</h3>
-      <p class="secondary-txt-color ion-margin-top ion-text-center">
+      <p *ngIf="messageContent" class="secondary-txt-color ion-margin-top ion-text-center">
         {{ messageContent }}
       </p>
+      <div *ngIf="advancedMode">
+        <ng-content></ng-content>
+      </div>
     </ion-col>
   </ion-row>
 </ion-grid>

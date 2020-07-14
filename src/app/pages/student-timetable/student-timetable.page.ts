@@ -203,8 +203,7 @@ export class StudentTimetablePage implements OnInit {
       component: SearchModalComponent,
       componentProps: {
         items: this.intakeLabels,
-        defaultItems: this.settings.get('intakeHistory'),
-        notFound: 'No intake selected'
+        defaultItems: this.settings.get('intakeHistory')
       }
     });
     await modal.present();
