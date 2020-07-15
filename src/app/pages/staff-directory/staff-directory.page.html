@@ -28,19 +28,36 @@
   </ion-list>
 
   <ng-template let-staffs [ngIf]="staff$ | async" [ngIfElse]="loadingStaffs">
-    <ion-virtual-scroll [items]="staffs | department:dept | fuse:term:options" [trackBy]="trackById"
-      approxItemHeight="68px">
-      <ion-item *virtualItem="let staff" button [routerLink]="[staff.ID]" style="padding-top: 1px">
-        <ion-avatar slot="start">
-          <ion-img [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '_64x64.jpg'"
-            (ionError)="$event.target.src = 'assets/img/no_img.png'"></ion-img>
-        </ion-avatar>
-        <ion-text>
-          <h2>{{ staff.FULLNAME }}</h2>
-          <p>{{ staff.EMAIL }}</p>
-        </ion-text>
-      </ion-item>
-    </ion-virtual-scroll>
+    <div *ngIf="(staffs | department:dept | fuse:term:options).length > 0; else notFound">
+      <ion-virtual-scroll [items]="staffs | department:dept | fuse:term:options" [trackBy]="trackById"
+        approxItemHeight="68px">
+        <ion-item *virtualItem="let staff" button [routerLink]="[staff.ID]" style="padding-top: 1px">
+          <ion-avatar slot="start">
+            <ion-img [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '_64x64.jpg'"
+              (ionError)="$event.target.src = 'assets/img/no_img.png'"></ion-img>
+          </ion-avatar>
+          <ion-text>
+            <h2>{{ staff.FULLNAME }}</h2>
+            <p>{{ staff.EMAIL }}</p>
+          </ion-text>
+        </ion-item>
+      </ion-virtual-scroll>
+    </div>
+    <ng-template #notFound>
+      <app-message-with-svg imageUrl="assets/img/search-not-found.svg" messageTitle="Opps! Item not found."
+        messageContent="Perhaps you can try this:" wrapperSize="4" wrapperMarginTop="30px" wrapperOffset="4"
+        [advancedMode]="true">
+        <div class="flex-container">
+          <ul class="list-txt-color">
+            <li>Make sure the keyword is matched with one of the items</li>
+            <li>Make sure you have typed a valid item code.</li>
+            <li>Make sure there is no special characters included.</li>
+          </ul>
+            
+          <p>Still having trouble? No worries! Just click <a (click)="goToFeedback()">here</a> and report to us for this issue.</p>
+        </div>
+      </app-message-with-svg>
+    </ng-template>
   </ng-template>
   <ng-template #loadingStaffs>
     <ion-item *ngFor="let _ of skeletons" style="padding-top: 1px">

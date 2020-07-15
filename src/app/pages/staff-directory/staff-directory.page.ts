@@ -5,6 +5,7 @@ import { filter, finalize, map } from 'rxjs/operators';
 
 import Fuse from 'fuse.js';
 
+import { Router } from '@angular/router';
 import { StaffDirectory } from '../../interfaces';
 import { WsApiService } from '../../services';
 
@@ -31,7 +32,10 @@ export class StaffDirectoryPage {
     ]
   };
 
-  constructor(private ws: WsApiService) { }
+  constructor(
+    private ws: WsApiService,
+    private router: Router
+  ) { }
 
   ionViewDidEnter() {
     this.doRefresh();
@@ -49,6 +53,10 @@ export class StaffDirectoryPage {
 
   trackById(value: StaffDirectory): string {
     return value.CODE;
+  }
+
+  goToFeedback() {
+    this.router.navigateByUrl('/feedback');
   }
 
 }
