@@ -10,14 +10,15 @@ import {
   IonSegment, IonSegmentButton, ModalController, RadioValueAccessor,
   SelectValueAccessor, TextValueAccessor
 } from '@ionic/angular';
-import { BehaviorSubject, NEVER } from 'rxjs';
+import { Storage } from '@ionic/storage';
+import { NEVER } from 'rxjs';
 
 import {
   ActivatedRouteStub, RouterLinkDirectiveStub, asyncData
 } from '../../../testing';
 import { Role, Settings } from '../../interfaces';
 import {
-  SettingsService, StudentTimetableService, UserSettingsService, WsApiService
+  SettingsService, StudentTimetableService, WsApiService
 } from '../../services';
 import { ClassesPipe } from './classes.pipe';
 import { GenPipe } from './gen.pipe';
@@ -26,10 +27,10 @@ import { StudentTimetablePage } from './student-timetable.page';
 import { ThedayPipe } from './theday.pipe';
 import { TheWeekPipe } from './theweek.pipe';
 
-function settingsFake<K extends keyof Settings>(data: Settings): (key: K) => Settings[K] {
+function settingsFake<K extends keyof Settings>(data: Partial<Settings>): (key: K) => Settings[K] {
   return key => {
     if (data[key] !== undefined) {
-      return data[key];
+      return data[key] as Settings[K];
     } else {
       fail(key);
     }
@@ -42,6 +43,7 @@ describe('StudentTimetablePage', () => {
   let fixture: ComponentFixture<StudentTimetablePage>;
   let iabSpy: jasmine.SpyObj<InAppBrowser>;
   let settingsSpy: jasmine.SpyObj<SettingsService>;
+  let storageSpy: jasmine.SpyObj<Storage>;
   let studentTimetableSpy: jasmine.SpyObj<StudentTimetableService>;
   let wsSpy: jasmine.SpyObj<WsApiService>;
 
@@ -49,9 +51,9 @@ describe('StudentTimetablePage', () => {
     activatedRoute = new ActivatedRouteStub();
     iabSpy = jasmine.createSpyObj('InAppBrowser', ['create']);
     settingsSpy = jasmine.createSpyObj('SettingsService', ['get', 'set']);
+    storageSpy = jasmine.createSpyObj('Storage', ['get']);
     studentTimetableSpy = jasmine.createSpyObj('StudentTimetableService', ['get']);
     wsSpy = jasmine.createSpyObj('WsApiService', ['get']);
-    const userSettingsServiceStub = { timetable: new BehaviorSubject({ blacklists: [] }) };
 
     TestBed.configureTestingModule({
       imports: [FormsModule],
@@ -77,8 +79,8 @@ describe('StudentTimetablePage', () => {
         { provide: ModalController, useValue: {} },
         { provide: Router, useValue: { url: '/' } },
         { provide: SettingsService, useValue: settingsSpy },
+        { provide: Storage, useValue: storageSpy },
         { provide: StudentTimetableService, useValue: studentTimetableSpy },
-        { provide: UserSettingsService, useValue: userSettingsServiceStub },
         { provide: WsApiService, useValue: wsSpy },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -89,11 +91,12 @@ describe('StudentTimetablePage', () => {
     it('should create (default load)', fakeAsync(() => {
       activatedRoute.setParams({});
       studentTimetableSpy.get.and.returnValue(NEVER);
+      storageSpy.get.and.returnValue(Promise.resolve(Role.Student));
       settingsSpy.get.and.callFake(settingsFake({
-        intakeHistory: null,
-        role: Role.Student,
+        intakeHistory: [],
         viewWeek: false,
-      } as Settings));
+        modulesBlacklist: [],
+      }));
       const intake = 'UCFF0000CTI';
       wsSpy.get.and.returnValue(asyncData({
         STUDENT_NUMBER: '',
@@ -159,11 +162,12 @@ describe('StudentTimetablePage', () => {
       timetables.push(newTimetable('2020-01-20', 7));
 
       studentTimetableSpy.get.and.returnValue(asyncData(timetables));
+      storageSpy.get.and.returnValue(Promise.resolve(Role.Student));
       settingsSpy.get.and.callFake(settingsFake({
-        intakeHistory: null,
-        role: Role.Student,
+        intakeHistory: [],
         viewWeek: false,
-      } as Settings));
+        modulesBlacklist: [],
+      }));
       wsSpy.get.and.returnValue(asyncData({
         STUDENT_NUMBER: '',
         EMGS_COUNTRY_CODE: '',
@@ -237,11 +241,12 @@ describe('StudentTimetablePage', () => {
     it('should create (default load)', () => {
       activatedRoute.setParams({});
       studentTimetableSpy.get.and.returnValue(NEVER);
+      storageSpy.get.and.returnValue(Promise.resolve(Role.Lecturer));
       settingsSpy.get.and.callFake(settingsFake({
-        intakeHistory: null,
-        role: Role.Lecturer,
+        intakeHistory: [],
         viewWeek: false,
-      } as Settings));
+        modulesBlacklist: [],
+      }));
 
       fixture = TestBed.createComponent(StudentTimetablePage);
       component = fixture.componentInstance;
@@ -249,8 +254,7 @@ describe('StudentTimetablePage', () => {
 
       expect(component).toBeTruthy();
       expect(wsSpy.get).not.toHaveBeenCalled();
-      expect(settingsSpy.set).toHaveBeenCalledTimes(1);
-      expect(settingsSpy.set).toHaveBeenCalledWith('intakeHistory', []);
+      expect(settingsSpy.set).not.toHaveBeenCalled();
     });
   });
 
@@ -277,11 +281,12 @@ describe('StudentTimetablePage', () => {
       };
     });
     studentTimetableSpy.get.and.returnValue(asyncData(timetables));
+    storageSpy.get.and.returnValue(Promise.resolve(Role.Student));
     settingsSpy.get.and.callFake(settingsFake({
-      intakeHistory: null,
-      role: Role.Student,
+      intakeHistory: [],
       viewWeek: false,
-    } as Settings));
+      modulesBlacklist: [],
+    }));
     wsSpy.get.and.returnValue(asyncData({
       STUDENT_NUMBER: '',
       EMGS_COUNTRY_CODE: '',

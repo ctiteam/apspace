@@ -5,9 +5,10 @@ import { ChartModule } from 'angular2-chartjs';
 import { DragulaModule, DragulaService } from 'ng2-dragula';
 import { NEVER, of } from 'rxjs';
 
+import { Settings } from '../../interfaces';
 import {
-  NewsService, NotificationService, StudentTimetableService,
-  UserSettingsService, WsApiService
+  NewsService, NotificationService, SettingsService, StudentTimetableService,
+  WsApiService,
 } from '../../services';
 import { DisabledPipe } from './disabled.pipe';
 import { SectionNamePipe } from './section-name.pipe';
@@ -18,16 +19,14 @@ describe('StudentDashboardPage', () => {
   let fixture: ComponentFixture<StudentDashboardPage>;
   let newsSpy: jasmine.SpyObj<NewsService>;
   let notificationSpy: jasmine.SpyObj<NotificationService>;
-  let userSettingsSpy: jasmine.SpyObj<UserSettingsService>;
+  let settingsSpy: jasmine.SpyObj<SettingsService>;
   let wsSpy: jasmine.SpyObj<WsApiService>;
 
   beforeEach(async(() => {
     newsSpy = jasmine.createSpyObj('NewsService', ['get', 'getSlideshow']);
     notificationSpy = jasmine.createSpyObj('NotificationService', ['getMessages']);
     wsSpy = jasmine.createSpyObj('WsApiService', ['get']);
-    userSettingsSpy = jasmine.createSpyObj('UserSettingsService',
-      ['getAccentColorRgbaValue', 'getBusShuttleServiceSettings',
-        'getShownDashboardSections', 'subscribeToCacheClear']);
+    settingsSpy = jasmine.createSpyObj('SettingsService', ['get$']);
 
     TestBed.configureTestingModule({
       declarations: [StudentDashboardPage, DisabledPipe, SectionNamePipe],
@@ -37,8 +36,8 @@ describe('StudentDashboardPage', () => {
         { provide: NavController, useValue: {} },
         { provide: NewsService, useValue: newsSpy },
         { provide: NotificationService, useValue: notificationSpy },
+        { provide: SettingsService, useValue: settingsSpy },
         { provide: StudentTimetableService, useValue: {} },
-        { provide: UserSettingsService, useValue: userSettingsSpy },
         { provide: WsApiService, useValue: wsSpy },
       ],
       imports: [ChartModule, DragulaModule],
@@ -48,10 +47,13 @@ describe('StudentDashboardPage', () => {
 
   it('should create', () => {
     newsSpy.get.and.returnValue(NEVER);
+    settingsSpy.get$.and.callFake(<K extends keyof Settings>(key: K) => {
+      switch (key) {
+        case 'dashboardSections': return of([] as Settings[K]);
+        default: return NEVER;
+      }
+    });
     notificationSpy.getMessages.and.returnValue(NEVER);
-    userSettingsSpy.getBusShuttleServiceSettings.and.returnValue(NEVER);
-    userSettingsSpy.getShownDashboardSections.and.returnValue(of([]));
-    userSettingsSpy.subscribeToCacheClear.and.returnValue(NEVER);
     wsSpy.get.and.returnValue(NEVER);
 
     fixture = TestBed.createComponent(StudentDashboardPage);

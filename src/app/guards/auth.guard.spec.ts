@@ -1,24 +1,28 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { Router, UrlSegment } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Storage } from '@ionic/storage';
 
 import { Role } from '../interfaces';
 import { CasTicketService, SettingsService } from '../services';
 import { AuthGuard } from './auth.guard';
 
 describe('AuthGuard', () => {
-  let settingsSpy: { ready: jasmine.Spy, get: jasmine.Spy };
   let casTicketServiceSpy: { isAuthenticated: jasmine.Spy };
+  let settingsSpy: { ready: jasmine.Spy };
+  let storageSpy: jasmine.SpyObj<Storage>;
 
   beforeEach(() => {
-    settingsSpy = jasmine.createSpyObj('SettingsService', ['ready', 'get']);
     casTicketServiceSpy = jasmine.createSpyObj('CasTicketService', ['isAuthenticated']);
+    settingsSpy = jasmine.createSpyObj('SettingsService', ['ready']);
+    storageSpy = jasmine.createSpyObj('Storage', ['get']);
 
     TestBed.configureTestingModule({
       providers: [
         AuthGuard,
         { provide: CasTicketService, useValue: casTicketServiceSpy },
-        { provide: SettingsService, useValue: settingsSpy }
+        { provide: SettingsService, useValue: settingsSpy },
+        { provide: Storage, useValue: storageSpy },
       ],
       imports: [RouterTestingModule]
     });
@@ -28,13 +32,13 @@ describe('AuthGuard', () => {
   ['canActivate', 'canActivateChild'].forEach(test => describe(test, () => {
     it('should redirect if authenticated', inject([Router, AuthGuard], async (router, guard) => {
       spyOn(router, 'createUrlTree').and.callThrough();
-      settingsSpy.ready.and.returnValue(Promise.resolve());
       casTicketServiceSpy.isAuthenticated.and.returnValue(Promise.resolve(true));
+      settingsSpy.ready.and.returnValue(Promise.resolve());
       const route = { url: new UrlSegment('tabs', {}), data: {} };
       const state = { url: route.url.toString() };
 
       expect(await guard[test](route, state)).toEqual(true);
-      expect(settingsSpy.get).not.toHaveBeenCalled();
+      expect(storageSpy.get).not.toHaveBeenCalled();
       expect(router.createUrlTree).not.toHaveBeenCalled();
     }));
 
@@ -48,6 +52,7 @@ describe('AuthGuard', () => {
       const expected = router.parseUrl('/login');
       expected.fragment = undefined;
       expect(await guard[test](route, state)).toEqual(expected);
+      expect(storageSpy.get).not.toHaveBeenCalled();
       expect(router.createUrlTree).toHaveBeenCalledTimes(1);
     }));
 
@@ -67,7 +72,7 @@ describe('AuthGuard', () => {
     it('should redirect if no settings', inject([Router, AuthGuard], async (router, guard) => {
       spyOn(router, 'createUrlTree').and.callThrough();
       settingsSpy.ready.and.returnValue(Promise.resolve());
-      settingsSpy.get.and.returnValue(undefined);
+      storageSpy.get.and.returnValue(Promise.resolve());
       casTicketServiceSpy.isAuthenticated.and.returnValue(Promise.resolve(true));
       const route = { url: new UrlSegment('tabs', {}), data: { role: Role.Lecturer } };
       const state = { url: route.url.toString() };
@@ -76,14 +81,14 @@ describe('AuthGuard', () => {
       expected.fragment = undefined;
       expect(await guard[test](route, state)).toEqual(expected);
       expect(router.createUrlTree).toHaveBeenCalledTimes(1);
-      expect(settingsSpy.get).toHaveBeenCalledTimes(1);
-      expect(settingsSpy.get).toHaveBeenCalledWith('role');
+      expect(storageSpy.get).toHaveBeenCalledTimes(1);
+      expect(storageSpy.get).toHaveBeenCalledWith('role');
     }));
 
     it('should redirect if not authorized', inject([Router, AuthGuard], async (router, guard) => {
       spyOn(router, 'createUrlTree').and.callThrough();
       settingsSpy.ready.and.returnValue(Promise.resolve());
-      settingsSpy.get.and.returnValue(Role.Student);
+      storageSpy.get.and.returnValue(Promise.resolve(Role.Student));
       casTicketServiceSpy.isAuthenticated.and.returnValue(Promise.resolve(true));
       const route = { url: new UrlSegment('tabs', {}), data: { role: Role.Lecturer } };
       const state = { url: route.url.toString() };
@@ -92,8 +97,8 @@ describe('AuthGuard', () => {
       expected.fragment = undefined;
       expect(await guard[test](route, state)).toEqual(expected);
       expect(router.createUrlTree).toHaveBeenCalledTimes(1);
-      expect(settingsSpy.get).toHaveBeenCalledTimes(1);
-      expect(settingsSpy.get).toHaveBeenCalledWith('role');
+      expect(storageSpy.get).toHaveBeenCalledTimes(1);
+      expect(storageSpy.get).toHaveBeenCalledWith('role');
     }));
   }));
 });

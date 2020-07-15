@@ -3,13 +3,14 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { ActivatedRoute, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController, IonRefresher, ModalController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import { Observable, combineLatest } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
 import { Role, StudentProfile, StudentTimetable } from '../../interfaces';
-import { SettingsService, StudentTimetableService, UserSettingsService, WsApiService } from '../../services';
+import { SettingsService, StudentTimetableService, WsApiService } from '../../services';
 import { ClassesPipe } from './classes.pipe';
 
 @Component({
@@ -99,8 +100,8 @@ export class StudentTimetablePage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private settings: SettingsService,
+    private storage: Storage,
     private tt: StudentTimetableService,
-    private userSettings: UserSettingsService,
     private ws: WsApiService,
   ) { }
 
@@ -131,28 +132,30 @@ export class StudentTimetablePage implements OnInit {
     }
 
     // intake from params -> intake from settings -> student default intake
-    const intakeHistory = this.settings.get('intakeHistory') || [];
+    const intakeHistory = this.settings.get('intakeHistory');
     this.intake = intake || intakeHistory[intakeHistory.length - 1];
 
     // default to daily view
-    this.viewWeek = !!this.settings.get('viewWeek');
+    this.viewWeek = this.settings.get('viewWeek');
 
     // default intake to student current intake
     if (this.intake === undefined) {
-      // tslint:disable-next-line: no-bitwise
-      if (this.settings.get('role') & Role.Student) { // intake is not defined & user role is student
-        this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).subscribe(p => {
-          // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
-          this.intake = p.INTAKE.replace(/[(]AP[)]|[(]BP[)]/g, '');
-          this.changeDetectorRef.markForCheck();
-          this.settings.set('intakeHistory', [this.intake]);
+      this.storage.get('role').then((role: Role) => {
+        // tslint:disable-next-line: no-bitwise
+        if (role & Role.Student) { // intake is not defined & user role is student
+          this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).subscribe(p => {
+            // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
+            this.intake = p.INTAKE.replace(/[(]AP[)]|[(]BP[)]/g, '');
+            this.changeDetectorRef.markForCheck();
+            this.settings.set('intakeHistory', [this.intake]);
+            this.doRefresh();
+          });
+        } else {
+          this.settings.set('intakeHistory', []);
+          // intake is not defined & user role is staff or lecturers
           this.doRefresh();
-        });
-      } else {
-        this.settings.set('intakeHistory', []);
-        // intake is not defined & user role is staff or lecturers
-        this.doRefresh();
-      }
+        }
+      });
     } else { // intake is defined
       this.doRefresh();
     }
@@ -225,8 +228,8 @@ export class StudentTimetablePage implements OnInit {
     const timetable$ = this.tt.get(Boolean(refresher)).pipe(
       finalize(() => refresher && refresher.complete())
     );
-    this.timetable$ = combineLatest([timetable$, this.userSettings.timetable.asObservable()]).pipe(
-      map(([tt, { blacklists }]) => blacklists ? tt.filter(t => !blacklists.includes(t.MODID)) : tt),
+    this.timetable$ = combineLatest([timetable$, this.settings.get$('modulesBlacklist')]).pipe(
+      map(([tt, modulesBlacklist]) => tt.filter(t => !modulesBlacklist.includes(t.MODID))),
       tap(tt => this.updateDay(tt)),
       // initialize or update intake labels only if timetable might change
       tap(tt => (Boolean(refresher) || this.intakeLabels.length === 0)

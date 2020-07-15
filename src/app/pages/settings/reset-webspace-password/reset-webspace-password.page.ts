@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 import { map, pluck } from 'rxjs/operators';
+
 import { Role, StaffProfile, StudentProfile } from 'src/app/interfaces';
-import { SettingsService, WsApiService } from 'src/app/services';
+import { WsApiService } from 'src/app/services';
 import { WebspacePasswordService } from 'src/app/services/webspace-password.service';
 
 @Component({
@@ -21,7 +23,7 @@ export class ResetWebspacePasswordPage implements OnInit {
 
   constructor(
     private router: Router,
-    private settings: SettingsService,
+    private storage: Storage,
     private toastCtrl: ToastController,
     private loadingController: LoadingController,
     private alertCtrl: AlertController,
@@ -30,8 +32,7 @@ export class ResetWebspacePasswordPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.settings.ready().then(() => {
-      const role = this.settings.get('role');
+    this.storage.get('role').then((role: Role) => {
       // tslint:disable-next-line:no-bitwise
       (role & Role.Student
         ? this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).pipe(pluck('NAME'))

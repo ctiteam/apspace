@@ -3,11 +3,17 @@ import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { AlertController, IonSelect, IonSlides, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
-import { Observable, of, zip } from 'rxjs';
+import { Observable, combineLatest, of, zip } from 'rxjs';
 import { finalize, map, shareReplay, switchMap, tap } from 'rxjs/operators';
-// tslint:disable-next-line: max-line-length
-import { APULocation, APULocations, Apcard, BusTrips, ConsultationSlot, DashboardCardComponentConfigurations, EventComponentConfigurations, Holiday, Holidays, LecturerTimetable, News, Quote, StaffProfile } from 'src/app/interfaces';
-import { NewsService, NotificationService, UserSettingsService, WsApiService } from '../../services';
+import {
+  APULocation, APULocations, Apcard, BusTrips, ConsultationSlot,
+  DashboardCardComponentConfigurations, EventComponentConfigurations,
+  Holiday, Holidays, LecturerTimetable, News, Quote, StaffProfile,
+} from 'src/app/interfaces';
+import { accentColors } from '../../constants';
+import {
+  NewsService, NotificationService, SettingsService, WsApiService,
+} from '../../services';
 import { NewsModalPage } from '../news/news-modal';
 import { NotificationModalPage } from '../notifications/notification-modal';
 
@@ -233,7 +239,6 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private ws: WsApiService,
-    private userSettings: UserSettingsService,
     private navCtrl: NavController,
     private alertCtrl: AlertController,
     private dragulaService: DragulaService,
@@ -243,40 +248,33 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
     private modalCtrl: ModalController,
     private platform: Platform,
     private toastCtrl: ToastController,
-    private firebaseX: FirebaseX
+    private firebaseX: FirebaseX,
+    private settings: SettingsService,
   ) {
-    this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
+    // TODO handle value change
+    this.activeAccentColor = accentColors.find(ac => ac.name === this.settings.get('accentColor')).rgba;
   }
 
   ngOnInit() {
-    this.userSettings.getShownDashboardSections().subscribe(
-      {
-        next: data => this.shownDashboardSections = data,
-      }
-    );
+    this.settings.get$('dashboardSections')
+      .subscribe(data => this.shownDashboardSections = data);
 
     this.holidays$ = this.getHolidays(false);
 
-    this.userSettings.getBusShuttleServiceSettings().subscribe(
-      {
-        next: data => {
-          this.firstLocation = data.firstLocation;
-          this.secondLocation = data.secondLocation;
-          this.upcomingTrips$ = this.getUpcomingTrips(data.firstLocation, data.secondLocation, true);
-        },
-      }
-    );
-    this.userSettings.subscribeToCacheClear().subscribe(
-      {
-        // tslint:disable-next-line: no-trailing-whitespace
-        next: data => data ? this.doRefresh() : ''
-      }
-    );
+    combineLatest([
+      this.settings.get$('busFirstLocation'),
+      this.settings.get$('busSecondLocation'),
+    ]).subscribe(([busFirstLocation, busSecondLocation]) => {
+      this.firstLocation = busFirstLocation;
+      this.secondLocation = busSecondLocation;
+      this.upcomingTrips$ = this.getUpcomingTrips(busFirstLocation, busSecondLocation, true);
+    });
 
     this.enableCardReordering();
     if (this.platform.is('cordova')) {
       this.runCodeOnReceivingNotification(); // notifications
     }
+    this.settings.initialSync();
     this.doRefresh();
   }
 
@@ -434,7 +432,7 @@ export class StaffDashboardPage implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     });
-    this.userSettings.setShownDashboardSections(itemsToStore);
+    this.settings.set('dashboardSections', itemsToStore);
   }
 
   // PROFILE AND GREETING MESSAGE FUNCTIONS

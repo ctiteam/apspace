@@ -6,7 +6,9 @@ import { Network } from '@ionic-native/network/ngx';
 import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
-import { Observable, concat, from, iif, of, throwError } from 'rxjs';
+import {
+  EMPTY, NEVER, Observable, concat, from, iif, of, throwError,
+} from 'rxjs';
 import {
   catchError, concatMap, delay, publishLast, refCount, retryWhen, switchMap,
   tap, timeout,
@@ -231,10 +233,69 @@ export class WsApiService {
     );
   }
 
-  /** Handle client error by rethrowing 4xx. */
-  private handleClientError(err: HttpErrorResponse): Observable<never> | never {
+  /**
+   * DELETE: Simple request WS API.
+   *
+   * @param endpoint - <apiUrl><endpoint> for service
+   * @param options.auth - authentication required (default: true)
+   * @param options.headers - http headers (default: {})
+   * @param options.params - additional request parameters (default: {})
+   * @param options.timeout - request timeout (default: 10000)
+   * @param options.url - url of web service (default: apiUrl)
+   * @param options.withCredentials - request sent with cookies (default: false)
+   * @return data observable
+   */
+  delete<T>(endpoint: string, options: {
+    auth?: boolean,
+    headers?: HttpHeaders | { [header: string]: string | string[]; },
+    params?: HttpParams | { [param: string]: string | string[]; },
+    timeout?: number,
+    url?: string,
+    withCredentials?: boolean,
+  } = {}): Observable<T> {
+    options = {
+      auth: true,
+      headers: {},
+      params: {},
+      timeout: 10000,
+      url: this.apiUrl,
+      withCredentials: false,
+      ...options
+    };
+
+    const url = options.url + endpoint;
+    const opt = {
+      headers: options.headers,
+      params: options.params,
+      withCredentials: options.withCredentials,
+    };
+
+    if (this.plt.is('cordova') && this.network.type === 'none') {
+      return this.handleOffline();
+    }
+
+    return (!options.auth // always get ticket if auth is true
+      ? this.http.delete<T>(url, opt)
+      : this.cas.getST(url.split('?').shift()).pipe( // remove service url params
+        switchMap(ticket => this.http.delete<T>(url, { ...opt, params: { ...opt.params, ticket } })),
+      )
+    ).pipe(
+      catchError(this.handleClientError),
+      timeout(options.timeout),
+      publishLast(),
+      refCount(),
+    );
+  }
+
+  /** Handle client error by rethrowing 4xx or return empty observable for 304. */
+  private handleClientError(err: HttpErrorResponse): Observable<never> {
     if (400 <= err.status && err.status < 500) {
       return throwError(err);
+    } else if (err.status === 304) {
+      return EMPTY;
+    } else {
+      console.error('Unknown http error response', err);
+      return NEVER;
     }
   }
 

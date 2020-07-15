@@ -9,13 +9,13 @@
     </ion-button>
     <ion-button *ngIf="editMode" (click)="enableEditMode()" slot="end" fill="outline"
       class="success-text success-border">
-      Save ({{fav.length}})
+      Save ({{ (fav$ | async).length }})
       <ion-icon slot="end" name="Save"></ion-icon>
     </ion-button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [class]="(view$ | async) !== 'list' ? 'gradient-background' : ''">
+<ion-content *ngIf="fav$ | async as fav" [class]="(view$ | async) !== 'list' ? 'gradient-background' : ''">
 
   <!-- LISTS UI -->
   <div *ngIf="(view$ | async) === 'list'; else menuCardsUI" class="masonry-list">
@@ -33,7 +33,7 @@
             <ion-item-group *ngIf="filteredFavMenu.length > 0; else noFav">
               <div *ngFor="let item of filteredFavMenu" style="position: relative;">
                 <div [class.edit-overlay]="editMode" [class.hide]="!editMode">
-                  <ion-icon (click)="addToFav(item)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
+                  <ion-icon (click)="addToFav(item.id)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
                     class="colored-text"></ion-icon>
                 </div>
                 <ion-item class="cursor-pointer ter--background" (click)="openPage(item.url, item.attachTicket)">
@@ -76,7 +76,7 @@
             <ion-item-group>
               <div *ngFor="let item of group.value" style="position: relative;">
                 <div [class.edit-overlay]="editMode" [class.hide]="!editMode">
-                  <ion-icon (click)="addToFav(item)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
+                  <ion-icon (click)="addToFav(item.id)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
                     class="colored-text"></ion-icon>
                 </div>
                 <ion-item class="cursor-pointer" (click)="openPage(item.url, item.attachTicket)">
@@ -146,17 +146,17 @@
         </ion-col>
         <ion-col
           [style.display]="keyList.includes(group.key) ? 'block' : 'none'"
-          *ngFor="let item of group.value" 
-          class="menu-item ion-text-start" 
+          *ngFor="let item of group.value"
+          class="menu-item ion-text-start"
           size="12" size-md="6" size-lg="4" size-xl="3">
           <div [class.edit-overlay]="editMode" [class.hide]="!editMode">
-            <ion-icon (click)="addToFav(item)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
+            <ion-icon (click)="addToFav(item.id)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
               class="colored-text"></ion-icon>
           </div>
           <div (click)="openPage(item.url)" class="custom-card cursor-pointer">
             <div class="flex-content">
               <img [src]="item.img">
-              <p class="page-title">{{ item.title }}</p>              
+              <p class="page-title">{{ item.title }}</p>
             </div>
           </div>
         </ion-col>

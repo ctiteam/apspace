@@ -13,25 +13,18 @@ import { NEVER } from 'rxjs';
 
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { AppComponent } from './app.component';
-import { CasTicketService, FeedbackService, NotificationService, UserSettingsService, VersionService } from './services';
+import { CasTicketService, FeedbackService, NotificationService, SettingsService, VersionService } from './services';
 
 describe('AppComponent', () => {
   let networkSpy: { type: jasmine.Spy };
-  let userSettingsServiceSpy: {
-    getUserSettingsFromStorage: jasmine.Spy;
-    darkThemeActivated: jasmine.Spy;
-    PureDarkThemeActivated: jasmine.Spy;
-    getAccentColor: jasmine.Spy;
-    getShakeSensitivity: jasmine.Spy;
-  };
+  let settingsSpy: { get$: jasmine.Spy };
   let versionServiceSpy: { checkForUpdate: jasmine.Spy };
   let shakeSpy: jasmine.SpyObj<Shake>;
 
   beforeEach(async(() => {
     networkSpy = jasmine.createSpyObj('Network', ['type']);
     shakeSpy = jasmine.createSpyObj('Shake', ['startWatch']);
-    userSettingsServiceSpy = jasmine.createSpyObj('UserSettingsService',
-      ['getUserSettingsFromStorage', 'darkThemeActivated', 'PureDarkThemeActivated', 'getAccentColor', 'getShakeSensitivity']);
+    settingsSpy = jasmine.createSpyObj('SettingsService', ['get$']);
     versionServiceSpy = jasmine.createSpyObj('VersionService', ['checkForUpdate']);
 
     TestBed.configureTestingModule({
@@ -46,7 +39,7 @@ describe('AppComponent', () => {
         { provide: FeedbackService, useValue: {} },
         { provide: PopoverController, useValue: {} },
         { provide: Storage, useValue: {} },
-        { provide: UserSettingsService, useValue: userSettingsServiceSpy },
+        { provide: SettingsService, useValue: settingsSpy },
         { provide: VersionService, useValue: versionServiceSpy },
         { provide: Shake, useValue: shakeSpy },
         { provide: Screenshot, useValue: {} },
@@ -60,10 +53,7 @@ describe('AppComponent', () => {
 
   it('should create the app', () => {
     networkSpy.type.and.returnValue('wifi');
-    userSettingsServiceSpy.darkThemeActivated.and.callFake(() => NEVER);
-    userSettingsServiceSpy.PureDarkThemeActivated.and.callFake(() => NEVER);
-    userSettingsServiceSpy.getAccentColor.and.callFake(() => NEVER);
-    userSettingsServiceSpy.getShakeSensitivity.and.callFake(() => NEVER);
+    settingsSpy.get$.and.returnValue(NEVER);
     versionServiceSpy.checkForUpdate.and.callFake(() => NEVER);
     shakeSpy.startWatch.and.callFake(() => NEVER);
 
@@ -74,10 +64,7 @@ describe('AppComponent', () => {
 
   it('should initialize the app (mobile)', fakeAsync(() => {
     networkSpy.type.and.returnValue('wifi');
-    userSettingsServiceSpy.darkThemeActivated.and.callFake(() => NEVER);
-    userSettingsServiceSpy.PureDarkThemeActivated.and.callFake(() => NEVER);
-    userSettingsServiceSpy.getAccentColor.and.callFake(() => NEVER);
-    userSettingsServiceSpy.getShakeSensitivity.and.callFake(() => NEVER);
+    settingsSpy.get$.and.returnValue(NEVER);
     versionServiceSpy.checkForUpdate.and.callFake(() => NEVER);
     shakeSpy.startWatch.and.callFake(() => NEVER);
 
@@ -96,10 +83,7 @@ describe('AppComponent', () => {
   }));
 
   it('should initialize the app (web)', fakeAsync(() => {
-    userSettingsServiceSpy.darkThemeActivated.and.callFake(() => NEVER);
-    userSettingsServiceSpy.PureDarkThemeActivated.and.callFake(() => NEVER);
-    userSettingsServiceSpy.getAccentColor.and.callFake(() => NEVER);
-    userSettingsServiceSpy.getShakeSensitivity.and.callFake(() => NEVER);
+    settingsSpy.get$.and.returnValue(NEVER);
     versionServiceSpy.checkForUpdate.and.callFake(() => NEVER);
     shakeSpy.startWatch.and.callFake(() => NEVER);
 

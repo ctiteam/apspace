@@ -1,11 +1,19 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 import {
   ActionSheetController, LoadingController, MenuController, ModalController, NavController,
   Platform, PopoverController, ToastController
 } from '@ionic/angular';
-import { UserSettingsService, VersionService } from './services';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+import { VersionValidator } from './interfaces';
+import {
+  SettingsService, VersionService, WsApiService
+} from './services';
 import { ShakespearFeedbackService } from './services/shakespear-feedback.service';
 
 @Component({
@@ -14,10 +22,8 @@ import { ShakespearFeedbackService } from './services/shakespear-feedback.servic
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  darkThemeActivated = false;
-  pureDarkThemeActivated = false;
-  selectedAccentColor = 'blue-accent-color';
-  shakeSensitivity: number;
+  theme$: Observable<string>;
+  accentColor$: Observable<string>;
 
   // back button vars
   lastTimeBackPress = 0;
@@ -27,21 +33,58 @@ export class AppComponent {
   loading: HTMLIonLoadingElement;
 
   constructor(
+    private actionSheetCtrl: ActionSheetController,
+    private iab: InAppBrowser,
+    private loadingCtrl: LoadingController,
+    private menuCtrl: MenuController,
+    private modalCtrl: ModalController,
+    private navCtrl: NavController,
     private network: Network,
     private platform: Platform,
-    private router: Router,
-    private userSettings: UserSettingsService,
-    private versionService: VersionService,
-    private toastCtrl: ToastController,
-    private navCtrl: NavController,
-    private modalCtrl: ModalController,
-    private actionSheetCtrl: ActionSheetController,
-    private menuCtrl: MenuController,
     private popoverCtrl: PopoverController,
-    private loadingCtrl: LoadingController,
-    private shakespear: ShakespearFeedbackService
+    private router: Router,
+    private settings: SettingsService,
+    private shakespear: ShakespearFeedbackService,
+    private statusBar: StatusBar,
+    private toastCtrl: ToastController,
+    private version: VersionService,
+    private ws: WsApiService,
   ) {
-    this.versionService.checkForUpdate().subscribe();
+    if (this.network.type !== 'none') {
+      this.ws.get<VersionValidator>('/apspace_mandatory_update.json', {
+        url: 'https://d370klgwtx3ftb.cloudfront.net',
+        auth: false
+      }).subscribe(res => {
+        let navigationExtras: NavigationExtras;
+        const currentAppVersion = this.version.name;
+        const currentAppPlatform = this.version.platform;
+        if (res.maintenanceMode) { // maintenance mode is on
+          navigationExtras = {
+            state: { forceUpdate: false }
+          };
+          this.navCtrl.navigateRoot(['/maintenance-and-update'], navigationExtras);
+        } else { // maintenance mode is off
+          navigationExtras = {
+            state: { forceUpdate: true, storeUrl: '' }
+          };
+          if (currentAppPlatform === 'Android') { // platform is android
+            if (res.android.minimum > currentAppVersion) { // force update
+              navigationExtras.state.storeUrl = res.android.url;
+              this.navCtrl.navigateRoot(['/maintenance-and-update'], navigationExtras);
+            } else if (res.android.latest > currentAppVersion) { // optional update
+              this.presentUpdateToast('A new update for APSpace is available', res.android.url);
+            }
+          } else if (currentAppPlatform === 'iOS') { // platform is ios
+            if (res.ios.minimum > currentAppVersion) { // force update
+              navigationExtras.state.storeUrl = res.ios.url;
+              this.navCtrl.navigateRoot(['/maintenance-and-update'], navigationExtras);
+            } else if (res.ios.latest > currentAppVersion) { // optional update
+              this.presentUpdateToast('Updating the app ensures that you get the latest features', res.ios.url);
+            }
+          }
+        }
+      });
+    }
 
     // if (this.platform.is('ios')) {
     //   this.statusBar.overlaysWebView(false); // status bar for ios
@@ -52,13 +95,30 @@ export class AppComponent {
     // this.statusBar.backgroundColorByName('black');
 
     platform.ready().then(() => { // Do not remove this, this is needed for shake plugin to work
-      this.getUserSettings();
+      this.accentColor$ = this.settings.get$('accentColor');
       if (this.platform.is('cordova')) {
+        this.theme$ = this.settings.get$('theme').pipe(
+          tap(theme => {
+            // TODO handle media query change
+            const autoDark = theme === '' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            // change status bar color
+            if (autoDark || theme.includes('dark')) {
+              this.statusBar.backgroundColorByHexString('#1d1b1b');
+              this.statusBar.styleLightContent();
+            } else {
+              this.statusBar.backgroundColorByHexString('#e7e7e7');
+              this.statusBar.styleDefault();
+            }
+          }),
+        );
         if (this.network.type === 'none') {
           this.presentToast('You are now offline, only data stored in the cache will be accessable.', 6000);
         }
+      } else {
+        this.theme$ = this.settings.get$('theme');
       }
-      this.shakespear.initShakespear(this.shakeSensitivity);
+      const shakeSensitivity = this.settings.get('shakeSensitivity');
+      this.shakespear.initShakespear(shakeSensitivity); // FIXME use observable to get latest value
       this.platform.backButton.subscribe(async () => { // back button clicked
         if (this.router.url.startsWith('/tabs') || this.router.url.startsWith('/maintenance-and-update')) {
           const timePressed = new Date().getTime();
@@ -99,6 +159,29 @@ export class AppComponent {
     });
   }
 
+  async presentUpdateToast(message: string, url: string) {
+    const toast = await this.toastCtrl.create({
+      header: 'An Update Available!',
+      message,
+      duration: 6000,
+      position: 'top',
+      color: 'primary',
+      buttons: [
+        {
+          icon: 'open',
+          handler: () => {
+            this.iab.create(url, '_system', 'location=true');
+          }
+        }, {
+          icon: 'close',
+          role: 'cancel',
+          handler: () => { }
+        }
+      ]
+    });
+    toast.present();
+  }
+
   async presentToast(msg: string, duration: number) {
     const toast = await this.toastCtrl.create({
       message: msg,
@@ -127,29 +210,6 @@ export class AppComponent {
 
   async dismissLoading() {
     return await this.loading.dismiss();
-  }
-
-  getUserSettings() {
-    this.userSettings.getUserSettingsFromStorage();
-    this.userSettings
-      .darkThemeActivated()
-      .subscribe((val) => {
-        this.darkThemeActivated = val;
-        this.userSettings.changeStatusBarColor(val);
-      });
-    this.userSettings
-      .PureDarkThemeActivated()
-      .subscribe((val) => {
-        this.pureDarkThemeActivated = val;
-      });
-    this.userSettings
-      .getAccentColor()
-      .subscribe(val => (this.selectedAccentColor = val));
-    this.userSettings
-      .getShakeSensitivity()
-      .subscribe(val => {
-        this.shakeSensitivity = Number(val);
-      });
   }
 
 }

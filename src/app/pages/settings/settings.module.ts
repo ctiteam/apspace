@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ComponentsModule } from '../../components/components.module';
+import { IsPurePipe } from './is-pure.pipe';
 import { SettingsPage } from './settings.page';
 
 const routes: Routes = [
@@ -23,6 +24,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ComponentsModule
   ],
-  declarations: [SettingsPage]
+  declarations: [SettingsPage, IsPurePipe]
 })
 export class SettingsPageModule {}

@@ -1,22 +1,23 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Storage } from '@ionic/storage';
 
-import { SettingsService } from '../../services';
+import { Role } from '../../interfaces';
 import { TabsPage } from './tabs.page';
 
 describe('TabsPage', () => {
   let component: TabsPage;
   let fixture: ComponentFixture<TabsPage>;
-  let settings: { get: jasmine.Spy };
+  let storageSpy: jasmine.SpyObj<Storage>;
 
   beforeEach(async(() => {
-    settings = jasmine.createSpyObj('SettingsService', ['get']);
+    storageSpy = jasmine.createSpyObj('Storage', ['get']);
 
     TestBed.configureTestingModule({
       declarations: [TabsPage],
       providers: [
-        { provide: SettingsService, useValue: settings },
+        { provide: Storage, useValue: storageSpy },
       ],
       imports: [RouterTestingModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -30,7 +31,7 @@ describe('TabsPage', () => {
   });
 
   it('should create', () => {
-    settings.get.and.returnValue(null);
+    storageSpy.get.and.returnValue(Promise.resolve(Role.Student));
     expect(component).toBeTruthy();
   });
 });

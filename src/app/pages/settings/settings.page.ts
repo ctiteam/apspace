@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ModalController, NavController, ToastController } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { Storage } from '@ionic/storage';
+import { Observable, combineLatest } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
 
 import { SearchModalComponent } from '../../components/search-modal/search-modal.component';
+import { accentColors } from '../../constants';
 import { APULocation, APULocations, Role, StudentProfile, Venue } from '../../interfaces';
-import {
-  SettingsService, StudentTimetableService, UserSettingsService, WsApiService
-} from '../../services';
+import { SettingsService, StudentTimetableService, WsApiService } from '../../services';
 // import { toastMessageEnterAnimation } from '../../animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from '../../animations/toast-message-animation/leave';
 
@@ -17,102 +17,69 @@ import {
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
-  userRole = false;
+
+  userRole: boolean;
   test = false;
-  activeAccentColor: string;
   defaultCampus = '';
   defaultVenue = '';
   shakeSensitivity: number;
-  darkThemeEnabled = false;
-  pureDarkThemeEnabled = false;
   busShuttleServiceSettings = {
     firstLocation: '',
     secondLocation: '',
-    alarmBefore: ''
   };
 
   locations$: Observable<APULocation[]>;
-  timetable$: Observable<{ blacklists: string[] }>;
   venues$: Observable<Venue[]>;
+  theme$ = this.settings.get$('theme');
+  accentColor$ = this.settings.get$('accentColor');
+  modulesBlacklist$ = this.settings.get$('modulesBlacklist');
 
   menuUI: 'cards' | 'list' = 'list';
   sensitivityOptions = [
-    { index: 0, value: '40' },
-    { index: 1, value: '50' },
-    { index: 2, value: '60' },
-    { index: 3, value: '70' },
-    { index: 4, value: '80' }
-  ];
-  accentColors = [
-    { title: 'Sky (Default)', value: 'blue-accent-color' },
-    { title: 'Forest', value: 'green-accent-color' },
-    { title: 'Fire', value: 'red-accent-color' },
-    { title: 'Flower', value: 'pink-accent-color' },
-    { title: 'Lightning', value: 'yellow-accent-color' }
+    { index: 0, value: 40 },
+    { index: 1, value: 50 },
+    { index: 2, value: 60 },
+    { index: 3, value: 70 },
+    { index: 4, value: 80 }
   ];
   locationOptions = [
     'New Campus',
     'TPM',
     'Online'
   ];
+  accentColors = accentColors;
 
   constructor(
     private modalCtrl: ModalController,
     private navCtrl: NavController,
     private settings: SettingsService,
+    private storage: Storage,
     private toastCtrl: ToastController,
     private tt: StudentTimetableService,
-    private userSettings: UserSettingsService,
     private ws: WsApiService,
     private alertCtrl: AlertController,
   ) {
-    this.userSettings
-      .darkThemeActivated()
-      .subscribe(
-        {
-          next: value => (this.darkThemeEnabled = value)
-        }
-      );
-    this.userSettings
-      .PureDarkThemeActivated()
-      .subscribe(
-        {
-          next: value => (this.pureDarkThemeEnabled = value)
-        }
-      );
-    this.userSettings
-      .getAccentColor()
-      .subscribe(
-        {
-          next: value => (this.activeAccentColor = value)
-        });
-    this.userSettings
-      .getMenuUI()
-      .subscribe(
-        {
-          next: value => (this.menuUI = value)
-        });
-    this.userSettings
-      .getBusShuttleServiceSettings()
-      .subscribe(
-        {
-          next: value => this.busShuttleServiceSettings = value
-        });
-    this.userSettings
-        .getShakeSensitivity()
-        .subscribe(
-          {
-            next: value => (this.shakeSensitivity = this.sensitivityOptions.findIndex(item => item.value === value))
-          });
-    this.timetable$ = this.userSettings.timetable.asObservable();
+
+    this.settings.get$('menuUI').subscribe(value => this.menuUI = value);
+    combineLatest([
+      this.settings.get$('busFirstLocation'),
+      this.settings.get$('busSecondLocation'),
+    ]).subscribe(([busFirstLocation, busSecondLocation]) => {
+      this.busShuttleServiceSettings = {
+        firstLocation: busFirstLocation,
+        secondLocation: busSecondLocation,
+      };
+    });
+    this.settings.get$('shakeSensitivity').subscribe(value => {
+      this.shakeSensitivity = this.sensitivityOptions.findIndex(item => item.value === value);
+    });
   }
 
-
   ngOnInit() {
-    // tslint:disable-next-line: no-bitwise
-    if (this.settings.get('role') & Role.Student) {
-      this.userRole = true;
-    }
+    this.storage.get('role').then((role: Role) => {
+      // tslint:disable-next-line: no-bitwise
+      this.userRole = Boolean(role & Role.Student);
+    });
     this.locations$ = this.getLocations();
     this.getDefaultLocation();
     if (this.defaultCampus) {
@@ -121,7 +88,7 @@ export class SettingsPage implements OnInit {
   }
 
   getSensitivitySlider() {
-    this.userSettings.setShakeSensitivity(this.sensitivityOptions[this.shakeSensitivity].value);
+    this.settings.set('shakeSensitivity', this.sensitivityOptions[this.shakeSensitivity].value);
   }
 
   getLocations() {
@@ -136,27 +103,26 @@ export class SettingsPage implements OnInit {
 
 
   setBusShuttleServicesSettings() {
-    this.userSettings.setBusShuttleServicesSettings(this.busShuttleServiceSettings);
+    this.settings.set('busFirstLocation', this.busShuttleServiceSettings.firstLocation);
+    this.settings.set('busSecondLocation', this.busShuttleServiceSettings.secondLocation);
   }
 
-  toggleDarkTheme() {
-    this.pureDarkThemeEnabled = false;
-    this.userSettings.toggleDarkTheme(this.darkThemeEnabled);
+  changeTheme(theme: string) {
+    if (this.settings.get('theme').includes('pure')) { // from pure
+      this.settings.set('accentColor', 'blue');
+    }
+    this.settings.set('theme', theme);
+    if (theme.includes('pure')) { // to pure
+      this.settings.set('accentColor', 'white');
+    }
   }
 
-  togglePureDarkTheme() {
-    this.userSettings.togglePureDarkTheme(this.pureDarkThemeEnabled);
-    this.pureDarkThemeEnabled
-      ? this.userSettings.setAccentColor('white-accent-color')
-      : this.userSettings.setAccentColor('blue-accent-color');
-  }
-
-  toggleAccentColor() {
-    this.userSettings.setAccentColor(this.activeAccentColor);
+  changeAccentColor(accentColor: string) {
+    this.settings.set('accentColor', accentColor);
   }
 
   toggleMenuUI() {
-    this.userSettings.setMenuUI(this.menuUI);
+    this.settings.set('menuUI', this.menuUI);
   }
 
   updateDefaultLocation(locationType: 'venue' | 'campus') { // for staff only (set iconsult default location)
@@ -176,15 +142,15 @@ export class SettingsPage implements OnInit {
   }
 
   async timetableModuleBlacklistsAdd() {
-    const setting = this.userSettings.timetable.value;
+    const modulesBlacklist = this.settings.get('modulesBlacklist');
     const timetables = await this.tt.get().toPromise();
 
-    const intakeHistory = this.settings.get('intakeHistory') || [];
+    const intakeHistory = this.settings.get('intakeHistory');
     const intake = intakeHistory[intakeHistory.length - 1]
       || await this.ws.get<StudentProfile>('/student/profile', { caching: 'cache-only' }).pipe(pluck('INTAKE')).toPromise();
 
     // ignored those that are blacklisted
-    const filtered = timetables.filter(timetable => !setting.blacklists.includes(timetable.MODID));
+    const filtered = timetables.filter(timetable => !modulesBlacklist.includes(timetable.MODID));
     const items = [...new Set(filtered.map(timetable => timetable.MODID))];
     const defaultItems = [...new Set(filtered
       .filter(timetable => timetable.INTAKE === intake)
@@ -198,22 +164,16 @@ export class SettingsPage implements OnInit {
     await modal.present();
     const { data } = await modal.onDidDismiss();
     if (data && data.item) {
-      setting.blacklists.push(data.item);
-      this.userSettings.timetable.next(setting);
+      modulesBlacklist.push(data.item);
+      this.settings.set('modulesBlacklist', modulesBlacklist);
     }
   }
 
   timetableModuleBlacklistsRemove(value) {
-    const setting = this.userSettings.timetable.value;
-    const selectedModule = setting.blacklists.indexOf(value);
-    setting.blacklists.splice(selectedModule, 1);
-    this.userSettings.timetable.next(setting);
-  }
-
-  clearCache() {
-    this.userSettings.clearStorage().then(
-      () => this.showToastMessage('Cached has been cleared successfully. Please restart the APSpace to ensure cache is cleared.')
-    );
+    const modulesBlacklist = this.settings.get('modulesBlacklist');
+    const selectedModule = modulesBlacklist.indexOf(value);
+    modulesBlacklist.splice(selectedModule, 1);
+    this.settings.set('modulesBlacklist', modulesBlacklist);
   }
 
   navigateToPage(pageName: string) {

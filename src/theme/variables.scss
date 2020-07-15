@@ -1,19 +1,17 @@
 /**
  * ----- CUSTOMIZED STYLING (Forked from IONIC 5) -----
- * If you wish to overwrite any of the class (accent) stylings in :root, you can easily add the class to the theme & overwrite it.
- * If you want to inherit the same color as "light" theme, just don't add the constrain.
  *
  * Example:
  *
  * .ios body {
  *  &.dark {
- *    .pink-accent-color {
+ *    .pink {
  *      --ion-color-primary: #d86586; // Overwrite
  *    }
  *  }
  *
  *  &.pure {
- *    .pink-accent-color {
+ *    .pink {
  *      --ion-color-primary: #d86586; // Overwrite
  *    }
  *  }
@@ -23,20 +21,21 @@
  * Accent Color binding does not need to be changed, you may remain the same function inside of APSpace.
  *
  * Dark/Pure/Light theme guide:
- * <body> - Denotes light theme
+ * <body> - Automatic (depending on system)
+ * <body class="light"> - Denotes light theme
  * <body class="dark"> - Denotes dark theme
- * <body class="pure"> - Denotes pure dark theme
+ * <body class="dark pure"> - Denotes pure dark theme
  *
  * Should you have any query, please send me a Message on Teams.
  *
  * ~ Raeveen Pasupathy
  * -----
-*/
+ */
 
 /*
-  * Default Light Theme (Inheritable by other themes)
-  * -------------------------------------------
-*/
+ * Accent color
+ * ------------
+ */
 
 :root {
   /** primary **/
@@ -63,7 +62,7 @@
   --ion-color-tertiary-shade: #633ce0;
   --ion-color-tertiary-tint: #7e57ff;
 
-  .pink-accent-color {
+  .pink {
     --ion-color-primary: #d86586;
     --ion-color-primary-rgb: 216, 101, 134;
     --ion-color-primary-contrast: #000000;
@@ -72,7 +71,7 @@
     --ion-color-primary-tint: #dc7492;
   }
 
-  .red-accent-color {
+  .red {
     --ion-color-primary: #e54d42;
     --ion-color-primary-rgb: 229, 77, 66;
     --ion-color-primary-contrast: #ffffff;
@@ -81,7 +80,7 @@
     --ion-color-primary-tint: #e85f55;
   }
 
-  .green-accent-color {
+  .green {
     --ion-color-primary: #08a14f;
     --ion-color-primary-rgb: 8, 161, 79;
     --ion-color-primary-contrast: #ffffff;
@@ -90,7 +89,7 @@
     --ion-color-primary-tint: #21aa61;
   }
 
-  .blue-accent-color {
+  .blue {
     --ion-color-primary: #3a99d9;
     --ion-color-primary-rgb: 58, 153, 217;
     --ion-color-primary-contrast: #000000;
@@ -99,7 +98,7 @@
     --ion-color-primary-tint: #4ea3dd;
   }
 
-  .yellow-accent-color {
+  .yellow {
     --ion-color-primary: #dfa847;
     --ion-color-primary-rgb: 223, 168, 71;
     --ion-color-primary-contrast: #000000;
@@ -110,12 +109,49 @@
 }
 
 /*
-  * iOS Theme
-  * -------------------------------------------
+  * Theming
+  * -------
 */
 
-.ios body {
-  &.dark {
+@mixin light-theme {
+  .md,
+  .ios {
+    --ion-background-color: #ffffff;
+    --ion-background-color-rgb: 255, 255, 255;
+
+    --ion-text-color: #000000;
+    --ion-text-color-rgb: 0, 0, 0;
+
+    // these step colors look weird
+    --ion-color-step-50: #232323;
+    --ion-color-step-100: #2e2e2e;
+    --ion-color-step-150: #3a3a3a;
+    --ion-color-step-200: #454545;
+    --ion-color-step-250: #515151;
+    --ion-color-step-300: #5d5d5d;
+    --ion-color-step-350: #686868;
+    --ion-color-step-400: #747474;
+    --ion-color-step-450: #7f7f7f;
+    --ion-color-step-500: #8b8b8b;
+    --ion-color-step-550: #979797;
+    --ion-color-step-600: #a2a2a2;
+    --ion-color-step-650: #aeaeae;
+    --ion-color-step-700: #b9b9b9;
+    --ion-color-step-750: #c5c5c5;
+    --ion-color-step-800: #d1d1d1;
+    --ion-color-step-850: #dcdcdc;
+    --ion-color-step-900: #e8e8e8;
+    --ion-color-step-950: #f3f3f3;
+
+    --ion-toolbar-background: #f2f2f2;
+
+    --ion-item-background: #ffffff;
+  }
+}
+
+// Is a separate dark theme really needed?
+@mixin dark-theme {
+  .ios {
     --ion-background-color: #000000;
     --ion-background-color-rgb: 0, 0, 0;
 
@@ -147,18 +183,7 @@
     --ion-item-background: #000000;
   }
 
-  &.pure {
-    --ion-background-color: #101010;
-  }
-}
-
-/*
-  * Material Design Theme (Android & Web)
-  * -------------------------------------------
-*/
-
-.md body {
-  &.dark {
+  .md {
     --ion-background-color: #121212;
     --ion-background-color-rgb: 18, 18, 18;
 
@@ -193,8 +218,40 @@
 
     --ion-tab-bar-background: #1f1f1f;
   }
+}
 
-  &.pure {
-    --ion-background-color: #101010;
+/**
+ * Automatic selector
+ * ------------------
+ */
+
+// fallback if prefers-color-scheme is not recognized
+:root {
+  @include light-theme
+}
+
+// by media queries
+@media (prefers-color-scheme: no-preferences), (prefers-color-scheme: light) {
+  :root {
+    @include light-theme
   }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    @include dark-theme
+  }
+}
+
+// user specified
+:root .light {
+  @include light-theme
+}
+
+:root .dark {
+  @include dark-theme
+}
+
+:root .dark.pure {
+  --ion-background-color: #101010;
 }

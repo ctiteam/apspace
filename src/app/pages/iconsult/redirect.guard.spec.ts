@@ -1,21 +1,21 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { Router, UrlSegment } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Storage } from '@ionic/storage';
 
 import { Role } from '../../interfaces';
-import { SettingsService } from '../../services';
 import { RedirectGuard } from './redirect.guard';
 
 describe('RedirectGuard', () => {
-  let settingsSpy: { get: jasmine.Spy };
+  let storageSpy: { get: jasmine.Spy };
 
   beforeEach(() => {
-    settingsSpy = jasmine.createSpyObj('SettingsService', ['get']);
+    storageSpy = jasmine.createSpyObj('Storage', ['get']);
 
     TestBed.configureTestingModule({
       providers: [
         RedirectGuard,
-        { provide: SettingsService, useValue: settingsSpy }
+        { provide: Storage, useValue: storageSpy }
       ],
       imports: [RouterTestingModule]
     });
@@ -29,7 +29,7 @@ describe('RedirectGuard', () => {
 
   tests.forEach(test => it(`should redirect ${test.name} to ${test.path}`, inject([Router, RedirectGuard], async (router, guard) => {
     spyOn(router, 'createUrlTree').and.callThrough();
-    settingsSpy.get.and.returnValue(test.role);
+    storageSpy.get.and.returnValue(Promise.resolve(test.role));
     const route = { url: new UrlSegment('iconsult', {}), data: {} };
     const state = { url: route.url.toString() };
 

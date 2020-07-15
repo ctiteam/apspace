@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Storage } from '@ionic/storage';
 
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { OrientationStudentDetails, Role, StaffDirectory, StaffProfile, StudentPhoto, StudentProfile } from '../../interfaces';
-import { AppLauncherService, SettingsService, WsApiService } from '../../services';
+import { AppLauncherService, WsApiService } from '../../services';
 import { RequestChangeModalPage } from './request-update-modal/request-update-modal';
 
 @Component({
@@ -37,7 +38,7 @@ export class ProfilePage implements OnInit {
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     private router: Router,
-    private settings: SettingsService,
+    private storage: Storage,
     private ws: WsApiService,
     private appLauncherService: AppLauncherService,
     private toastCtrl: ToastController,
@@ -59,8 +60,7 @@ export class ProfilePage implements OnInit {
 
   getProfile() {
     if (this.indecitor) {
-      this.settings.ready().then(() => {
-        const role = this.settings.get('role');
+      this.storage.get('role').then((role: Role) => {
         // tslint:disable-next-line:no-bitwise
         if (role & Role.Student) {
           this.studentRole = true;

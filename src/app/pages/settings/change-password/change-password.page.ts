@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 
 import { tap } from 'rxjs/operators';
 import { Role, StaffProfile, StudentProfile } from 'src/app/interfaces';
-import { CasTicketService, ChangePasswordService, SettingsService, WsApiService } from '../../../services';
+import { CasTicketService, ChangePasswordService, WsApiService } from '../../../services';
 import { PasswordValidator } from '../../../validators/password.validator';
 
 @Component({
@@ -30,15 +31,17 @@ export class ChangePasswordPage implements OnInit {
     private toastCtrl: ToastController,
     private loadingController: LoadingController,
     private changePasswordService: ChangePasswordService,
-    private settings: SettingsService,
+    private storage: Storage,
     private ws: WsApiService,
     private cas: CasTicketService,
     private alertCtrl: AlertController
   ) { }
 
   ngOnInit() {
-    // tslint:disable-next-line: no-bitwise
-    this.isStudent = Boolean(this.settings.get('role') & Role.Student);
+    this.storage.get('role').then((role: Role) => {
+      // tslint:disable-next-line: no-bitwise
+      this.isStudent = Boolean(role & Role.Student);
+    });
     this.getUserUsername(); // username is needed to validate the current password with cas
     this.changePasswordForm = new FormGroup({
       new_password: new FormControl('', [Validators.required]),

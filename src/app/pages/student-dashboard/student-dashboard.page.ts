@@ -9,7 +9,11 @@ import {
   CourseDetails, DashboardCardComponentConfigurations, EventComponentConfigurations, ExamSchedule, FeesTotalSummary,
   Holiday, Holidays, News, OrientationStudentDetails, StaffDirectory, StudentPhoto, StudentProfile, StudentTimetable
 } from 'src/app/interfaces';
-import { NewsService, NotificationService, StudentTimetableService, UserSettingsService, WsApiService } from 'src/app/services';
+import {
+  NewsService, NotificationService, SettingsService, StudentTimetableService,
+  WsApiService,
+} from 'src/app/services';
+import { accentColors } from '../../constants';
 
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import * as moment from 'moment';
@@ -262,7 +266,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private ws: WsApiService,
     private studentTimetableService: StudentTimetableService,
-    private userSettings: UserSettingsService,
+    private settings: SettingsService,
     private navCtrl: NavController,
     private alertCtrl: AlertController,
     private dragulaService: DragulaService,
@@ -281,33 +285,25 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
       }
     });
     // getting the main accent color to color the chart.js (Temp until removing chart.js)
-    this.activeAccentColor = this.userSettings.getAccentColorRgbaValue();
+    // TODO handle value change
+    this.activeAccentColor = accentColors.find(ac => ac.name === this.settings.get('accentColor')).rgba;
   }
 
   ngOnInit() {
-    this.userSettings.getShownDashboardSections().subscribe(
-      {
-        next: data => this.shownDashboardSections = data,
-      }
-    );
-    this.userSettings.getBusShuttleServiceSettings().subscribe(
-      {
-        next: data => {
-          this.firstLocation = data.firstLocation;
-          this.secondLocation = data.secondLocation;
-          this.upcomingTrips$ = this.getUpcomingTrips(data.firstLocation, data.secondLocation);
-        },
-      }
-    );
-    this.userSettings.subscribeToCacheClear().subscribe(
-      {
-        // tslint:disable-next-line: no-trailing-whitespace
-        next: data => data ? this.doRefresh() : ''
-      }
-    );
+    this.settings.get$('dashboardSections')
+      .subscribe(data => this.shownDashboardSections = data);
+    combineLatest([
+      this.settings.get$('busFirstLocation'),
+      this.settings.get$('busSecondLocation'),
+    ]).subscribe(([busFirstLocation, busSecondLocation]) => {
+      this.firstLocation = busFirstLocation;
+      this.secondLocation = busSecondLocation;
+      this.upcomingTrips$ = this.getUpcomingTrips(busFirstLocation, busSecondLocation);
+    });
     if (this.platform.is('cordova')) {
       this.runCodeOnReceivingNotification(); // notifications
     }
+    this.settings.initialSync();
     this.doRefresh();
   }
 
@@ -443,7 +439,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
         }
       });
     });
-    this.userSettings.setShownDashboardSections(itemsToStore);
+    this.settings.set('dashboardSections', itemsToStore);
   }
 
 
@@ -548,13 +544,12 @@ export class StudentDashboardPage implements OnInit, OnDestroy, AfterViewInit {
     const dateNow = new Date();
     return combineLatest([
       this.studentTimetableService.get(refresher),
-      this.userSettings.timetable.asObservable()
+      this.settings.get('modulesBlacklist'),
     ]).pipe(
 
       // FILTER BLACKLISTED TIMETABLE
-      map(([timetables, { blacklists }]) => blacklists
-        ? timetables.filter(timetable => !blacklists.includes(timetable.MODID))
-        : timetables),
+      map(([timetables, modulesBlacklist]) =>
+        timetables.filter(timetable => !modulesBlacklist.includes(timetable.MODID))),
 
       // FILTER THE LIST OF TIMETABLES TO GET THE TIMETABLE FOR THE SELECTED INTAKE ONLY
       map(timetables => timetables.filter(timetable => timetable.INTAKE === intake)),

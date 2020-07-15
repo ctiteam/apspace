@@ -9,8 +9,7 @@ import { of } from 'rxjs';
 
 import {
   CasTicketService, DataCollectorService, NotificationService, SettingsService,
-  UserSettingsService,
-  WsApiService
+  WsApiService,
 } from '../../services';
 import { LoginPage } from './login.page';
 
@@ -36,7 +35,6 @@ describe('LoginPage', () => {
         { provide: NotificationService, useValue: {} },
         { provide: Router, useValue: {} },
         { provide: SettingsService, useValue: {} },
-        { provide: UserSettingsService, useValue: {} },
         { provide: WsApiService, useValue: {} },
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
