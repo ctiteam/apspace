@@ -129,9 +129,14 @@
   <ng-template #readMore>
     <ion-grid class="ion-padding">
       <ion-row>
+        <ion-col size="12" size-md="6" offset-md="3">
+          <img style="width: 100%;" src="assets/img/general-info.jpg" alt="General Information">
+        </ion-col>
+      </ion-row>
+      <ion-row>
         <ion-col>
           <ng-container *ngIf="generalInformation$ | async as generalInformation; else loadingGeneralInformation">
-            <ng-container *ngIf="generalInformation; else noGeneralInformation">
+            <ng-container *ngIf="generalInformation">
               <section *ngIf="generalInformation.introduction">
                 <ng-container *ngFor="let introductionParagraph of generalInformation.introduction">
                   <p *ngIf="introductionParagraph && introductionParagraph !== '<empty>'; else noIntroductionContent"
@@ -175,9 +180,6 @@
                 </ng-container>
               </section>
             </ng-container>
-            <ng-template #noGeneralInformation>
-              No General information
-            </ng-template>
           </ng-container>
           <ng-template #loadingGeneralInformation>
             <p>
