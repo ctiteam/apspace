@@ -6,3 +6,9 @@
 .list-txt-color {
     color: var(--ion-color-tertiary)
 }
+
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

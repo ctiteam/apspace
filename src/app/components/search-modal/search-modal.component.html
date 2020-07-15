@@ -29,17 +29,18 @@
 
       <ng-template #itemNotFound>
         <app-message-with-svg imageUrl="assets/img/search-not-found.svg" messageTitle="Opps! Item not found."
-          wrapperSize="6" wrapperMarginTop="30px" wrapperOffset="3"
+          messageContent="Perhaps you can try this:" wrapperSize="6" wrapperMarginTop="30px" wrapperOffset="3"
           [advancedMode]="true">
 
-          <p class="ion-text-center ion-margin-bottom">Perhaps you can try this:</p>
-          <ul class="ion-margin-start list-txt-color">
-            <li>Make sure the keyword is matched with one of the items</li>
-            <li>Make sure you have typed a valid item code.</li>
-            <li>Make sure there is no special characters included.</li>
-          </ul>
-            
-          <p>Still having trouble? No worries! Just click <a (click)="goToFeedback()">here</a> and report to us for this issue.</p>
+          <div class="flex-container">
+            <ul class="list-txt-color">
+              <li>Make sure the keyword is matched with one of the items</li>
+              <li>Make sure you have typed a valid item code.</li>
+              <li>Make sure there is no special characters included.</li>
+            </ul>
+              
+            <p>Still having trouble? No worries! Just click <a (click)="goToFeedback()">here</a> and report to us for this issue.</p>
+          </div>
         </app-message-with-svg>
       </ng-template>
     </ng-template>
