@@ -322,27 +322,27 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
       this.role = role;
       // tslint:disable-next-line: no-bitwise
       this.isStudent = Boolean(role & Role.Student);
+
+      this.settings.get$('dashboardSections')
+        .subscribe(data => this.shownDashboardSections = data);
+
+      this.holidays$ = this.getHolidays(false);
+
+      combineLatest([
+        this.settings.get$('busFirstLocation'),
+        this.settings.get$('busSecondLocation'),
+      ]).subscribe(([busFirstLocation, busSecondLocation]) => {
+        this.firstLocation = busFirstLocation;
+        this.secondLocation = busSecondLocation;
+        this.upcomingTrips$ = this.getUpcomingTrips(busFirstLocation, busSecondLocation);
+      });
+
+      if (this.platform.is('cordova')) {
+        this.runCodeOnReceivingNotification(); // notifications
+      }
+      this.settings.initialSync();
+      this.doRefresh();
     });
-
-    this.settings.get$('dashboardSections')
-      .subscribe(data => this.shownDashboardSections = data);
-
-    this.holidays$ = this.getHolidays(false);
-
-    combineLatest([
-      this.settings.get$('busFirstLocation'),
-      this.settings.get$('busSecondLocation'),
-    ]).subscribe(([busFirstLocation, busSecondLocation]) => {
-      this.firstLocation = busFirstLocation;
-      this.secondLocation = busSecondLocation;
-      this.upcomingTrips$ = this.getUpcomingTrips(busFirstLocation, busSecondLocation);
-    });
-
-    if (this.platform.is('cordova')) {
-      this.runCodeOnReceivingNotification(); // notifications
-    }
-    this.settings.initialSync();
-    this.doRefresh();
   }
 
   ngAfterViewInit() {
@@ -1158,7 +1158,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
           }
         ),
         catchError(err => {
-          console.log(err);
+          console.error(err);
           return of();
         }
         )
