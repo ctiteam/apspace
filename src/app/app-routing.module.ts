@@ -202,12 +202,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/aplc-progress-report/aplc-progress-report.module').then(m => m.AplcProgressReportPageModule)
   },
   {
-    path: 'staff-dashboard',
-    canActivate: [AuthGuard],
-    data: { role: Role.Lecturer },
-    loadChildren: () => import('./pages/staff-dashboard/staff-dashboard.module').then(m => m.StaffDashboardPageModule)
-  },
-  {
     path: 'change-password',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/settings/change-password/change-password.module')
