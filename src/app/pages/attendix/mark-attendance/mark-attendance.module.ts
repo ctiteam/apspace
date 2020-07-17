@@ -24,8 +24,8 @@ const routes: Routes = [
     ChartModule,
     FormsModule,
     IonicModule,
+    QRCodeModule,
     RouterModule.forChild(routes),
-    QRCodeModule
   ],
   declarations: [MarkAttendancePage, CharsPipe, SearchPipe, AttendancePipe]
 })

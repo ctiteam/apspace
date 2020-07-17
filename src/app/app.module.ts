@@ -32,7 +32,6 @@ import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { Screenshot } from '@ionic-native/screenshot/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
-import { GraphQLModule } from './graphql.module';
 import { ShakespearModalPageModule } from './pages/feedback/shakespear-modal/shakespear-modal.module';
 import { NewsModalPageModule } from './pages/news/news-modal.module';
 import { NotificationModalModule } from './pages/notifications/notification-modal.module';
@@ -52,7 +51,6 @@ import { NotificationModalModule } from './pages/notifications/notification-moda
     ),
     IonicStorageModule.forRoot(),
     AppRoutingModule,
-    GraphQLModule,
     NewsModalPageModule,
     NotificationModalModule,
     ShakespearModalPageModule

@@ -7,16 +7,16 @@ import {
 
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { SettingsService } from '../../services';
-import { AttendixStudentPage } from './attendix-student.page';
+import { StudentPage } from './attendix.page';
 
-describe('AttendixStudentPage', () => {
-  let component: AttendixStudentPage;
-  let fixture: ComponentFixture<AttendixStudentPage>;
+describe('StudentPage', () => {
+  let component: StudentPage;
+  let fixture: ComponentFixture<StudentPage>;
   let apollo: ApolloTestingController;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AttendixStudentPage],
+      declarations: [StudentPage],
       providers: [
         { provide: QRScanner, useValue: {} },
         { provide: Vibration, useValue: {} },
@@ -30,7 +30,7 @@ describe('AttendixStudentPage', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AttendixStudentPage);
+    fixture = TestBed.createComponent(StudentPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

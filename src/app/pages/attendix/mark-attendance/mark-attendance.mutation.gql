@@ -9,7 +9,7 @@ mutation markAttendance(
     student: $student
     attendance: $attendance
     absentReason: $absentReason
-  ) {
+  ) @NgModule(module: "src/app/graphql.module#GraphQLModule") {
     id
     attendance
     absentReason

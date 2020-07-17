@@ -58,27 +58,7 @@ const routes: Routes = [
   },
   {
     path: 'attendix',
-    canActivateChild: [AuthGuard],
-    children: [
-      {
-        path: 'classes',
-        data: { role: Role.Lecturer | Role.Admin },
-        loadChildren:
-          () => import('./pages/attendix-lecturer/classes/classes.module').then(m => m.ClassesPageModule)
-      },
-      {
-        path: 'mark-attendance',
-        data: { role: Role.Lecturer | Role.Admin },
-        loadChildren:
-          () => import('./pages/attendix-lecturer/mark-attendance/mark-attendance.module').then(m => m.MarkAttendancePageModule)
-      },
-      {
-        path: 'update',
-        data: { role: Role.Student },
-        loadChildren:
-          () => import('./pages/attendix-student/attendix-student.module').then(m => m.AttendixStudentPageModule)
-      }
-    ]
+    loadChildren: () => import('./pages/attendix/attendix.module').then(m => m.AttendixModule)
   },
   {
     path: 'more',

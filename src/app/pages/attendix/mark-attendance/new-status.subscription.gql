@@ -11,7 +11,7 @@ subscription NewStatus(
     startTime: $startTime
     endTime: $endTime
     classType: $classType
-  ) {
+  ) @NgModule(module: "src/app/graphql.module#GraphQLModule") {
     id
     attendance
     absentReason

@@ -1,5 +1,6 @@
 query attendance($schedule: ScheduleInput!) {
-  attendance(schedule: $schedule) {
+  attendance(schedule: $schedule)
+  @NgModule(module: "src/app/graphql.module#GraphQLModule") {
     secret
     students {
       id

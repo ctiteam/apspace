@@ -1,0 +1,9 @@
+mutation markAttendanceAll(
+  $schedule: ScheduleInput!
+  $attendance: String!
+) {
+  markAttendanceAll(schedule: $schedule attendance: $attendance)
+  @NgModule(module: "src/app/graphql.module#GraphQLModule") {
+    id
+  }
+}

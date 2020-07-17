@@ -1,5 +1,6 @@
 mutation updateAttendance($otp: String!) {
-  updateAttendance(otp: $otp) {
+  updateAttendance(otp: $otp)
+  @NgModule(module: "src/app/graphql.module#GraphQLModule") {
     id
     attendance
     # Schedule

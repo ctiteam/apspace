@@ -9,15 +9,15 @@ import { SubscriptionResult } from 'apollo-angular';
 import { EMPTY, Observable, Subscription } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 
-import { UpdateAttendanceGQL, UpdateAttendanceMutation } from '../../../generated/graphql';
-import { SettingsService } from '../../services';
+import { UpdateAttendanceGQL, UpdateAttendanceMutation } from '../../../../generated/graphql';
+import { SettingsService } from '../../../services';
 
 @Component({
-  selector: 'app-attendix-student',
-  templateUrl: './attendix-student.page.html',
-  styleUrls: ['./attendix-student.page.scss'],
+  selector: 'app-student',
+  templateUrl: './student.page.html',
+  styleUrls: ['./student.page.scss'],
 })
-export class AttendixStudentPage implements OnInit, OnDestroy {
+export class StudentPage implements OnInit, OnDestroy {
 
   digits = new Array(3);
   @ViewChild('otpInput') otpInput: ElementRef<HTMLInputElement>;

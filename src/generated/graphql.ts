@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import { Injectable } from '@angular/core';
 import * as Apollo from 'apollo-angular';
+import { GraphQLModule } from 'src/app/graphql.module';
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -29,7 +30,7 @@ export type LogInput = {
 };
 
 export type Attendance = {
-   __typename?: 'Attendance';
+  __typename?: 'Attendance';
   schedule: Schedule;
   secret: Scalars['String'];
   students: Array<Status>;
@@ -37,7 +38,7 @@ export type Attendance = {
 };
 
 export type Schedule = {
-   __typename?: 'Schedule';
+  __typename?: 'Schedule';
   classcode: Scalars['String'];
   date: Scalars['String'];
   startTime: Scalars['String'];
@@ -46,7 +47,7 @@ export type Schedule = {
 };
 
 export type Status = {
-   __typename?: 'Status';
+  __typename?: 'Status';
   id: Scalars['String'];
   name: Scalars['String'];
   attendance: Scalars['String'];
@@ -59,14 +60,14 @@ export type Status = {
 };
 
 export type Log = {
-   __typename?: 'Log';
+  __typename?: 'Log';
   lectureUpdate?: Maybe<Scalars['String']>;
   otherInfo?: Maybe<Scalars['String']>;
   nextLecturePlan?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
-   __typename?: 'Query';
+  __typename?: 'Query';
   attendance?: Maybe<Attendance>;
 };
 
@@ -76,7 +77,7 @@ export type QueryAttendanceArgs = {
 };
 
 export type Mutation = {
-   __typename?: 'Mutation';
+  __typename?: 'Mutation';
   initAttendance: Attendance;
   initAttendanceAsPresent: Attendance;
   markAttendance: Status;
@@ -129,7 +130,7 @@ export type MutationUpdateAttendanceArgs = {
 };
 
 export type Subscription = {
-   __typename?: 'Subscription';
+  __typename?: 'Subscription';
   newStatus?: Maybe<Status>;
 };
 
@@ -143,7 +144,7 @@ export type SubscriptionNewStatusArgs = {
 };
 
 export type Schema = {
-   __typename?: 'schema';
+  __typename?: 'schema';
   query?: Maybe<Query>;
   mutation?: Maybe<Mutation>;
   subscription?: Maybe<Subscription>;
@@ -288,7 +289,7 @@ export const AttendanceDocument = gql`
     `;
 
   @Injectable({
-    providedIn: 'root'
+    providedIn: GraphQLModule
   })
   export class AttendanceGQL extends Apollo.Query<AttendanceQuery, AttendanceQueryVariables> {
     document = AttendanceDocument;
@@ -309,7 +310,7 @@ export const InitAttendanceDocument = gql`
     `;
 
   @Injectable({
-    providedIn: 'root'
+    providedIn: GraphQLModule
   })
   export class InitAttendanceGQL extends Apollo.Mutation<InitAttendanceMutation, InitAttendanceMutationVariables> {
     document = InitAttendanceDocument;
@@ -324,7 +325,7 @@ export const MarkAttendanceAllDocument = gql`
     `;
 
   @Injectable({
-    providedIn: 'root'
+    providedIn: GraphQLModule
   })
   export class MarkAttendanceAllGQL extends Apollo.Mutation<MarkAttendanceAllMutation, MarkAttendanceAllMutationVariables> {
     document = MarkAttendanceAllDocument;
@@ -346,7 +347,7 @@ export const MarkAttendanceDocument = gql`
     `;
 
   @Injectable({
-    providedIn: 'root'
+    providedIn: GraphQLModule
   })
   export class MarkAttendanceGQL extends Apollo.Mutation<MarkAttendanceMutation, MarkAttendanceMutationVariables> {
     document = MarkAttendanceDocument;
@@ -363,7 +364,7 @@ export const NewStatusDocument = gql`
     `;
 
   @Injectable({
-    providedIn: 'root'
+    providedIn: GraphQLModule
   })
   export class NewStatusGQL extends Apollo.Subscription<NewStatusSubscription, NewStatusSubscriptionVariables> {
     document = NewStatusDocument;
@@ -376,7 +377,7 @@ export const ResetAttendanceDocument = gql`
     `;
 
   @Injectable({
-    providedIn: 'root'
+    providedIn: GraphQLModule
   })
   export class ResetAttendanceGQL extends Apollo.Mutation<ResetAttendanceMutation, ResetAttendanceMutationVariables> {
     document = ResetAttendanceDocument;
@@ -389,7 +390,7 @@ export const SaveLectureLogDocument = gql`
     `;
 
   @Injectable({
-    providedIn: 'root'
+    providedIn: GraphQLModule
   })
   export class SaveLectureLogGQL extends Apollo.Mutation<SaveLectureLogMutation, SaveLectureLogMutationVariables> {
     document = SaveLectureLogDocument;
@@ -410,7 +411,7 @@ export const UpdateAttendanceDocument = gql`
     `;
 
   @Injectable({
-    providedIn: 'root'
+    providedIn: GraphQLModule
   })
   export class UpdateAttendanceGQL extends Apollo.Mutation<UpdateAttendanceMutation, UpdateAttendanceMutationVariables> {
     document = UpdateAttendanceDocument;
