@@ -102,8 +102,8 @@ export class StudentPage implements OnInit, OnDestroy {
     // ev.key not usable in UC browser fallback
     // get the value from element instead of event
     if ('0' <= el.value && el.value <= '9') {
-      if (el.nextSibling) {
-        (el.nextSibling as HTMLInputElement).focus();
+      if (el.nextElementSibling) {
+        (el.nextElementSibling as HTMLInputElement).focus();
       } else {
         let otp = '';
         for (let prev = el; prev != null; prev = prev.previousElementSibling as HTMLInputElement) {
@@ -114,7 +114,7 @@ export class StudentPage implements OnInit, OnDestroy {
     } else if (ev.key === 'Backspace') {
       if (ev.type === 'keyup') { // ignore backspace on keyup
         return true;
-      } else if (!el.nextSibling && el.value) { // last input not empty
+      } else if (!el.nextElementSibling && el.value) { // last input not empty
         el.value = '';
       } else {
         const prev = el.previousSibling as HTMLInputElement;
