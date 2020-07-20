@@ -613,7 +613,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     const dateNow = new Date();
     return combineLatest([
       this.studentTimetableService.get(refresher),
-      this.settings.get('modulesBlacklist'),
+      this.settings.get$('modulesBlacklist'),
     ]).pipe(
 
       // FILTER BLACKLISTED TIMETABLE
