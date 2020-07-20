@@ -65,7 +65,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // dragulaModelArray will be modified whenever there is a change to the order of the dashboard sections
   dragulaModelArray = this.allDashboardSections;
   // shownDashboardSections get the data from local storage and hide/show elements based on that
-  shownDashboardSections: string[];
+  shownDashboardSections: string[] = [];
 
   activeAccentColor = '';
   lowAttendanceChart: any;

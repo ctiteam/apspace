@@ -19,6 +19,10 @@ export class TabsPage implements OnInit {
   ngOnInit() {
     this.selectedTab = this.router.url.split('/').pop();
 
+    if (this.selectedTab === 'tabs') {
+      this.router.navigate(['tabs', 'dashboard'], { replaceUrl: true });
+    }
+
     this.storage.get('role').then((role: Role) => {
       // tslint:disable:no-bitwise
       if (role & Role.Student) {
