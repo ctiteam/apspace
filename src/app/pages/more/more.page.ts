@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
-import { AlertController, NavController, ToastController } from '@ionic/angular';
+import { AlertController, NavController, Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import Fuse from 'fuse.js';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { Router } from '@angular/router';
 import { Role } from '../../interfaces';
 import { CasTicketService, SettingsService } from '../../services';
 import { menus } from './menu';
@@ -44,6 +45,8 @@ export class MorePage implements OnInit {
   menuFiltered = [] as MenuItem[];
   menuFull: MenuItem[] = menus;
 
+  isMobile = this.platform.is('cordova');
+
   constructor(
     public navCtrl: NavController,
     public alertCtrl: AlertController,
@@ -52,7 +55,9 @@ export class MorePage implements OnInit {
     private settings: SettingsService,
     private storage: Storage,
     private network: Network,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private router: Router,
+    private platform: Platform
   ) { }
 
   ngOnInit() {
@@ -80,6 +85,10 @@ export class MorePage implements OnInit {
           .filter(menu => menu !== undefined)),
       );
     });
+  }
+
+  goToFeedback() {
+    this.router.navigateByUrl('/feedback');
   }
 
   showMore(groupKey) {

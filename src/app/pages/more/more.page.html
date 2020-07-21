@@ -124,9 +124,23 @@
               </p>
             </ng-container>
             <ng-template #noSearchResults>
-              <p class="light-text ion-margin-top ion-margin-bottom ion-text-center ion-padding">
+              <!-- <p class="light-text ion-margin-top ion-margin-bottom ion-text-center ion-padding">
                 No results in favorite for {{term}} :(
-              </p>
+              </p> -->
+              <app-message-with-svg imageUrl="assets/img/search-not-found.svg" messageTitle="Opps! No results in favorite for {{term}}"
+                messageContent="Perhaps you can try this:" wrapperSize="{{isMobile ? '6' : '3'}}" wrapperMarginTop="30px" wrapperOffset="{{isMobile ? '3' : '4.5'}}"
+                [advancedMode]="true">
+
+                <div class="flex-container">
+                  <ul class="list-txt-color">
+                    <li>Make sure the keyword is matched with one of the items</li>
+                    <li>Make sure you have typed a valid item code.</li>
+                    <li>Make sure there is no special characters included.</li>
+                  </ul>
+                    
+                  <p>Still having trouble? No worries! Just click <a (click)="goToFeedback()">here</a> and report to us for this issue.</p>
+                </div>
+              </app-message-with-svg>
             </ng-template>
           </ion-col>
         </ng-template>

@@ -134,6 +134,16 @@ ion-col.menu-item{
   --border-color: var(--success-color);
 }
 
+.list-txt-color {
+  color: var(--ion-color-tertiary)
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 // NEW CARD VIEW CUSTOM CSS STARTS HERE
 @media only screen and (min-width: 1px) {
   .card-view-masonry-list {
