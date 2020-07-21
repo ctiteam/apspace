@@ -309,7 +309,7 @@ export const menusRaw = [
     id: 'e-orientation' as const,
     title: 'E-Orientation',
     group: 'Academic Operation',
-    url: 'orientaton-student-portal',
+    url: 'orientation-student-portal',
     attachTicket: true,
     img: 'assets/img/counseling.png',
     role: Role.Lecturer | Role.Admin,
