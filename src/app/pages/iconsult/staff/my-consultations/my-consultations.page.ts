@@ -4,12 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   AlertController, LoadingController, ModalController, ToastController
 } from '@ionic/angular';
+import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
+import * as moment from 'moment';
 import { Observable, forkJoin } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
-import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
-
-import * as moment from 'moment';
 import { ConsultationHour, ConsultationSlot } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';

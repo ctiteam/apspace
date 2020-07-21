@@ -6,17 +6,17 @@ import {
   LoadingController,
   ToastController
 } from '@ionic/angular';
+import { CalendarComponentOptions } from 'ion2-calendar';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
+
+import { Venue } from 'src/app/interfaces';
+import { SettingsService, WsApiService } from 'src/app/services';
+import { AddFreeSlotValidator } from './add-free-slot.validator';
 
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
-import { CalendarComponentOptions } from 'ion2-calendar';
-import { Venue } from 'src/app/interfaces';
-import { SettingsService, WsApiService } from 'src/app/services';
-
-import * as moment from 'moment';
-import { shareReplay } from 'rxjs/operators';
-import { AddFreeSlotValidator } from './add-free-slot.validator';
 
 @Component({
   selector: 'app-add-free-slot',

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
+
 import { News } from '../../interfaces';
 @Component({
   selector: 'page-news-modal',

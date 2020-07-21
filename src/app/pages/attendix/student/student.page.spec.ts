@@ -1,11 +1,11 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { QRScanner } from '@ionic-native/qr-scanner/ngx';
+import { Vibration } from '@ionic-native/vibration/ngx';
 import {
   ApolloTestingController, ApolloTestingModule
 } from 'apollo-angular/testing';
 
-import { Vibration } from '@ionic-native/vibration/ngx';
 import { SettingsService } from '../../services';
 import { StudentPage } from './attendix.page';
 

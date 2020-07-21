@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { LoadingController, Platform, ToastController } from '@ionic/angular';
 
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { FeedbackService, VersionService } from '../../services';
 
 @Component({

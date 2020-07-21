@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
-
 import { Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
 

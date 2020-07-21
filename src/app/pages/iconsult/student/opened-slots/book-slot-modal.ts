@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs';
+
 import { ConsultationSlot, SlotDuplicated, StaffDirectory } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 

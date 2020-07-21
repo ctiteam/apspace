@@ -1,9 +1,9 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { NEVER } from 'rxjs';
 
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { RouterLinkDirectiveStub } from '../../../testing';
 import { SettingsService, WsApiService } from '../../services';
 import { EndtimePipe } from './endtime.pipe';

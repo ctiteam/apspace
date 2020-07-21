@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
-
 import { IonContent } from '@ionic/angular';
+import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+
 import { QuixCustomer } from 'src/app/interfaces/quix';
 import { WsApiService } from 'src/app/services';
 

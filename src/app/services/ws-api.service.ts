@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-
 import {
   EMPTY, NEVER, Observable, concat, from, iif, of, throwError,
 } from 'rxjs';

@@ -1,6 +1,10 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AlertController, IonSelect, IonSlides, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import * as moment from 'moment';
+import { DragulaService } from 'ng2-dragula';
 import { Observable, combineLatest, forkJoin, of, zip } from 'rxjs';
 import { catchError, concatMap, finalize, flatMap, map, shareReplay, switchMap, tap, toArray } from 'rxjs/operators';
 
@@ -17,11 +21,6 @@ import {
   NewsService, NotificationService, SettingsService, StudentTimetableService,
   WsApiService,
 } from 'src/app/services';
-
-import { FirebaseX } from '@ionic-native/firebase-x/ngx';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import * as moment from 'moment';
-import { DragulaService } from 'ng2-dragula';
 import { NewsModalPage } from '../news/news-modal';
 import { NotificationModalPage } from '../notifications/notification-modal';
 

@@ -1,11 +1,12 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
-
-import { DatePipe } from '@angular/common';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 import { SearchModalComponent } from '../../../components/search-modal/search-modal.component';
 import { Classcodev1, FlatClasscodev1 } from '../../../interfaces';
@@ -13,8 +14,6 @@ import { WsApiService } from '../../../services';
 import { formatTime, isoDate, parseTime } from '../date';
 import { AttendanceIntegrityModalPage } from './attendance-integrity/attendance-integrity-modal';
 import { ConfirmClassCodeModalPage } from './confirm-class-code/confirm-class-code-modal';
-
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-classes',

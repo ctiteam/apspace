@@ -1,12 +1,10 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ViewChild } from '@angular/core';
-
+import { IonContent, MenuController } from '@ionic/angular';
+import { ChartComponent } from 'angular2-chartjs';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
-
-import { IonContent, MenuController } from '@ionic/angular';
-
-import { ChartComponent } from 'angular2-chartjs';
 
 import { WsApiService } from 'src/app/services';
 import {
@@ -15,8 +13,6 @@ import {
   FeesSummary,
   FeesTotalSummary
 } from '../../interfaces';
-
-import * as moment from 'moment';
 
 declare var Chart: any;
 

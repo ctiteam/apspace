@@ -1,13 +1,12 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { NavigationExtras } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController, LoadingController, NavController, ToastController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
-
 import { Observable, forkJoin } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { NavigationExtras } from '@angular/router';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import {
   ClassificationLegend, Course, CourseDetails, DeterminationLegend,
   InterimLegend, MPULegend, StudentPhoto, StudentProfile, Subcourse

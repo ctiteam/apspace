@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import { Network } from '@ionic-native/network/ngx';
+import { Storage } from '@ionic/storage';
 import { Observable, from } from 'rxjs';
 import { publishLast, refCount, tap } from 'rxjs/operators';
 
-import { Network } from '@ionic-native/network/ngx';
-import { Storage } from '@ionic/storage';
 import { News } from '../interfaces';
 
 @Injectable({

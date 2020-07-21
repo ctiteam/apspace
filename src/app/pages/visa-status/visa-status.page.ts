@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 
 import { CountryData, Role, StudentProfile, VisaDetails } from '../../interfaces';
-
-import { ToastController } from '@ionic/angular';
 import { WsApiService } from '../../services';
 
 @Component({

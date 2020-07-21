@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { AlertController, NavController, Platform, ToastController } from '@ionic/angular';
@@ -7,7 +8,6 @@ import Fuse from 'fuse.js';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Router } from '@angular/router';
 import { Role } from '../../interfaces';
 import { CasTicketService, SettingsService } from '../../services';
 import { menus } from './menu';

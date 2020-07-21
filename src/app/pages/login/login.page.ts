@@ -1,15 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { AlertController, IonSlides, Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap, tap, timeout } from 'rxjs/operators';
 
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { QuixCustomer, Role, ShortNews } from '../../interfaces';
-
 import {
   CasTicketService, DataCollectorService, NewsService, SettingsService,
   WsApiService

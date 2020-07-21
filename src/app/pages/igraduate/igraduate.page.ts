@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+
 import { WsApiService } from 'src/app/services';
 import { StudentDetailsModalPage } from './student-details-modal';
 

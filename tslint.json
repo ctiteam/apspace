@@ -103,7 +103,9 @@
     "ordered-imports": [
       true,
       {
-        "named-imports-order": "lowercase-last"
+        "named-imports-order": "lowercase-last",
+        "grouped-imports": true,
+        "groups": ["^(?!src/|\\.)"]
       }
     ],
     "quotemark": [

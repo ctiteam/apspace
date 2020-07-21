@@ -4,6 +4,7 @@ import { Screenshot } from '@ionic-native/screenshot/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
 import { Vibration } from '@ionic-native/vibration/ngx';
 import { ModalController } from '@ionic/angular';
+
 import { ShakespearModalPage } from '../pages/feedback/shakespear-modal/shakespear-modal.page';
 import { CasTicketService } from './cas-ticket.service';
 

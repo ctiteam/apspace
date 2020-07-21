@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { LoadingController, ModalController, Platform } from '@ionic/angular';
-import * as moment from 'moment';
-import { Apcard } from 'src/app/interfaces';
-
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { File } from '@ionic-native/file/ngx';
+import { LoadingController, ModalController, Platform } from '@ionic/angular';
+import * as moment from 'moment';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+
+import { Apcard } from 'src/app/interfaces';
+
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({

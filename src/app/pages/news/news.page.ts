@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { IonSlides, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+
 import { News } from '../../interfaces';
 import { NewsService } from '../../services';
 import { NewsModalPage } from './news-modal';

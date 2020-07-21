@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
-
 import { Observable } from 'rxjs';
 
 import { Feedback } from '../interfaces';

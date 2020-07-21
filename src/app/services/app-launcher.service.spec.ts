@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { AppAvailability } from '@ionic-native/app-availability/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavParams, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+
 import { NotificationStatus } from 'src/app/interfaces/notification';
 import { NotificationService } from 'src/app/services';
 

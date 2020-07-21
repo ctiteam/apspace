@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LoadingController, ModalController, NavParams, ToastController } from '@ionic/angular';
+
 import { WsApiService } from 'src/app/services';
 @Component({
   selector: 'page-student-details-modal',

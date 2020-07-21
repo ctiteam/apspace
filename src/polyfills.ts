@@ -52,19 +52,20 @@
  *
  */
 
+import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js';
+import 'zone.js/dist/zone';  // Included with Angular CLI.
+
 import './zone-flags.ts';
 
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
 
-import 'zone.js/dist/zone';  // Included with Angular CLI.
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
 
-import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js';
 
 // aws-sdk requires global to exist
 (window as any).global = window;

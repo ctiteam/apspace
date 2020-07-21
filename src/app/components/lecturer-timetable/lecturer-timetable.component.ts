@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import * as moment from 'moment';
 import { LecturerTimetable } from '../../interfaces';
 import { WsApiService } from '../../services';
 @Component({

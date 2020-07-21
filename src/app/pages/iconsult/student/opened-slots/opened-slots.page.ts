@@ -1,12 +1,12 @@
+import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
-import { DatePipe } from '@angular/common';
-import * as moment from 'moment';
 import { ConsultationSlot, StaffDirectory } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { BookSlotModalPage } from './book-slot-modal';

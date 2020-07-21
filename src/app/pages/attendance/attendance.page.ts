@@ -5,6 +5,7 @@ import { ModalController } from '@ionic/angular';
 import { ActionSheetButton } from '@ionic/core';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
+
 import { AttendanceLegend, Attendancev2, Course } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 import { AttendanceDetailsModalPage } from './attendance-details-modal/attendance-details-modal';

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadingController, NavController, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-
 import { tap } from 'rxjs/operators';
+
 import { DataCollectorService, NotificationService, SettingsService } from '../../services';
 
 @Component({

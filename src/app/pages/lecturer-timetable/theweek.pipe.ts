@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+
 import { LecturerTimetable } from '../../interfaces';
 
 @Pipe({ name: 'theweek' })

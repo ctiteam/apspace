@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable } from 'rxjs';
+
 import { OrientationStudentDetails, StudentPhoto } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
 @Component({

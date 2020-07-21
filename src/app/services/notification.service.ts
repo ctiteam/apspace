@@ -7,6 +7,7 @@ import { Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { NEVER, Observable, from, of, throwError } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
+
 import { NotificationHistory } from '../interfaces';
 import { NotificationStatus, NotificationSubStatus } from '../interfaces/notification';
 import { CasTicketService } from './cas-ticket.service';

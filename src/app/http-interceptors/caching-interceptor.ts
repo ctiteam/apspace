@@ -2,7 +2,6 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } fr
 import { Injectable } from '@angular/core';
 import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
-
 import { Observable, of } from 'rxjs';
 import { catchError, startWith, switchMap, tap } from 'rxjs/operators';
 

@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
+
 import { EventComponentConfigurations } from 'src/app/interfaces';
 
 @Component({

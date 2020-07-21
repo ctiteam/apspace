@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Device } from '@ionic-native/device/ngx';
-
 import { Observable } from 'rxjs';
 
 import { VersionService } from './version.service';

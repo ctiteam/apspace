@@ -4,6 +4,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Observable, forkJoin } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
+
 import {
   BeAPUStudentDetails, ClassificationLegend, Course, CourseDetails, DeterminationLegend,
   InterimLegend, MPULegend, StudentProfile, StudentSearch, Subcourse

@@ -1,17 +1,16 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import * as moment from 'moment';
 import { Observable, forkJoin } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
 import { ConsultationHour, SlotDetails, StaffDirectory } from 'src/app/interfaces';
 import { AppLauncherService, WsApiService } from 'src/app/services';
+import { SlotDetailsModalPage } from './slot-details-modal';
 
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
 // import { toastMessageLeaveAnimation } from 'src/app/animations/toast-message-animation/leave';
-import { SlotDetailsModalPage } from './slot-details-modal';
-
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-my-appointments',

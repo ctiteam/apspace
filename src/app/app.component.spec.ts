@@ -2,16 +2,14 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed, async, fakeAsync, tick } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-
 import { Network } from '@ionic-native/network/ngx';
 import { Screenshot } from '@ionic-native/screenshot/ngx';
 import { Shake } from '@ionic-native/shake/ngx';
+import { Vibration } from '@ionic-native/vibration/ngx';
 import { ModalController, Platform, PopoverController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-
 import { NEVER } from 'rxjs';
 
-import { Vibration } from '@ionic-native/vibration/ngx';
 import { AppComponent } from './app.component';
 import { CasTicketService, FeedbackService, NotificationService, SettingsService, VersionService } from './services';
 

@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 
 import { ConsultationHour, ConsultationSlot } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
-
-import * as moment from 'moment';
 @Component({
   selector: 'page-lecturer-slot-details-modal',
   templateUrl: 'lecturer-slot-details-modal.html',

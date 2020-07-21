@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Observable, of } from 'rxjs';
+
 import { ResetAttendanceGQL, ScheduleInput } from 'src/generated/graphql';
 @Component({
   selector: 'page-attendance-integrity-modal',

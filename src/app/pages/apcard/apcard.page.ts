@@ -4,9 +4,11 @@ import { ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
+
 import { WsApiService } from 'src/app/services';
 import { Apcard } from '../../interfaces';
 import { PrintTransactionsModalPage } from './print-transactions-modal/print-transactions-modal';
+
 @Component({
   selector: 'app-apcard',
   templateUrl: './apcard.page.html',

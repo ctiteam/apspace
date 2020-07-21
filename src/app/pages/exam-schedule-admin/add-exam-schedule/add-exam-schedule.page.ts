@@ -7,6 +7,7 @@ import { CalendarComponentOptions } from 'ion2-calendar';
 import * as moment from 'moment';
 import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
+
 import { SearchModalComponent } from 'src/app/components/search-modal/search-modal.component';
 import { ExamScheduleAdmin } from 'src/app/interfaces/exam-schedule-admin';
 import { WsApiService } from 'src/app/services';

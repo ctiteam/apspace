@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 
-import { Router } from '@angular/router';
 import { WebspacePasswordService } from 'src/app/services/webspace-password.service';
 import { PasswordValidator } from '../../../validators/password.validator';
 

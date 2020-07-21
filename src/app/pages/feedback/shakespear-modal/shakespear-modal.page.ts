@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ActionSheetController, LoadingController, ModalController, ToastController } from '@ionic/angular';
+
 import { FeedbackService, VersionService } from 'src/app/services';
 
 @Component({

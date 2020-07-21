@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-
+import { Router } from '@angular/router';
+import Fuse from 'fuse.js';
 import { Observable } from 'rxjs';
 import { filter, finalize, map } from 'rxjs/operators';
 
-import Fuse from 'fuse.js';
-
-import { Router } from '@angular/router';
 import { StaffDirectory } from '../../interfaces';
 import { WsApiService } from '../../services';
 

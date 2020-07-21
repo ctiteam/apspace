@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Network } from '@ionic-native/network/ngx';
-
 import { Observable, of } from 'rxjs';
 import { publishLast, refCount, switchMap } from 'rxjs/operators';
 

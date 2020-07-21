@@ -4,8 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { NEVER } from 'rxjs';
-import { SettingsService, WsApiService } from 'src/app/services';
 
+import { SettingsService, WsApiService } from 'src/app/services';
 import { WebspacePasswordService } from 'src/app/services/webspace-password.service';
 import { ResetWebspacePasswordPage } from './reset-webspace-password.page';
 

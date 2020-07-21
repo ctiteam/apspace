@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
+
 import { DashboardCardComponentConfigurations } from 'src/app/interfaces';
 
 @Component({
