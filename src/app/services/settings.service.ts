@@ -1,5 +1,5 @@
 /**
- * Manage settings and sync to could when possible.
+ * Manage settings and sync to cloud when possible.
  *
  * New settings additions, change Settings interface and add it to defaultData.
  * Note, if a value is null by default, specify it in the interface as well.
