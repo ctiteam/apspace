@@ -42,6 +42,7 @@ export class SettingsPage implements OnInit {
     { index: 3, value: 70 },
     { index: 4, value: 80 }
   ];
+  hideProfilePicture;
   locationOptions = [
     'New Campus',
     'TPM',
@@ -73,6 +74,9 @@ export class SettingsPage implements OnInit {
     this.settings.get$('shakeSensitivity').subscribe(value => {
       this.shakeSensitivity = this.sensitivityOptions.findIndex(item => item.value === value);
     });
+    this.settings.get$('hideProfilePicture').subscribe(value =>
+      this.hideProfilePicture = value
+    );
   }
 
   ngOnInit() {
@@ -89,6 +93,10 @@ export class SettingsPage implements OnInit {
 
   getSensitivitySlider() {
     this.settings.set('shakeSensitivity', this.sensitivityOptions[this.shakeSensitivity].value);
+  }
+
+  toggleDisplayProfilePicture() {
+    this.settings.set('hideProfilePicture', this.hideProfilePicture);
   }
 
   getLocations() {

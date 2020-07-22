@@ -66,6 +66,8 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // shownDashboardSections get the data from local storage and hide/show elements based on that
   shownDashboardSections: string[] = [];
 
+  hideProfilePicture;
+
   activeAccentColor = '';
   lowAttendanceChart: any;
   editableList = null;
@@ -325,6 +327,10 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
       this.settings.get$('dashboardSections')
         .subscribe(data => this.shownDashboardSections = data);
+
+      this.settings.get$('hideProfilePicture').subscribe(data =>
+        this.hideProfilePicture = data
+      );
 
       this.holidays$ = this.getHolidays(false);
 

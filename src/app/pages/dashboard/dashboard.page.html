@@ -22,16 +22,18 @@
           <ion-grid>
             <ion-row>
               <ion-col>
-                <ion-avatar *ngIf="isStudent; else staffImg" class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
-                  <img [src]="'data:image/jpg;base64,' +(photo$ | async)?.base64_photo"
-                    onerror="this.src='assets/img/no_img.png'" alt="Avatar">
-                </ion-avatar>
-                <ng-template #staffImg>
-                  <ion-avatar *ngIf="staffProfile$ | async as staffProfile"
-                    class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
-                    <img [src]="staffProfile[0].PHOTO" onerror="this.src='assets/img/no_img.png'" alt="Avatar">
+                <div *ngIf="!hideProfilePicture">
+                  <ion-avatar *ngIf="isStudent; else staffImg" class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
+                    <img [src]="'data:image/jpg;base64,' +(photo$ | async)?.base64_photo"
+                      onerror="this.src='assets/img/no_img.png'" alt="Avatar">
                   </ion-avatar>
-                </ng-template>
+                  <ng-template #staffImg>
+                    <ion-avatar *ngIf="staffProfile$ | async as staffProfile"
+                      class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
+                      <img [src]="staffProfile[0].PHOTO" onerror="this.src='assets/img/no_img.png'" alt="Avatar">
+                    </ion-avatar>
+                  </ng-template>
+                </div>
                 <div class="welcome-message-wrapper ion-padding-start float-left"
                   *ngIf="firstName; else loadingProfile">
                   <ion-card-title>

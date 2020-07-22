@@ -26,6 +26,7 @@ export interface Settings {
   dashboardSections: string[];
   menuUI: 'cards' | 'list';
   shakeSensitivity: number;
+  hideProfilePicture: boolean;
   /* bus shuttle service */
   busFirstLocation: string;
   busSecondLocation: string;

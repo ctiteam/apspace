@@ -65,6 +65,7 @@ const defaultData: Settings = {
   dashboardSections: [],
   menuUI: 'list',
   shakeSensitivity: 40,
+  hideProfilePicture: false,
   busFirstLocation: '',
   busSecondLocation: '',
 };
@@ -123,13 +124,14 @@ export class SettingsService {
           this.storage.get('dashboard-sections').then(value => value || defaultData.dashboardSections),
           this.storage.get('menu-ui').then(value => value || defaultData.menuUI),
           this.storage.get('shake-sensitivity').then(value => +value || defaultData.shakeSensitivity),
+          this.storage.get('hideProfilePicture').then(value => value || defaultData.hideProfilePicture),
           this.storage.get('accent-color').then(value => value?.slice(0, -13) || defaultData.accentColor),
           busShuttleServices.then(value => value?.firstLocation || defaultData.busFirstLocation),
           busShuttleServices.then(value => value?.secondLocation || defaultData.busSecondLocation),
         ]).then(items => items.map(data => ({ epoch, data })))
           .then(([
             modulesBlacklist, dashboardSections, menuUI, shakeSensitivity,
-            accentColor, busFirstLocation, busSecondLocation
+            hideProfilePicture, accentColor, busFirstLocation, busSecondLocation
           ]) => {
           this.data.next({
             ...this.data.value, // built with default value
@@ -138,6 +140,7 @@ export class SettingsService {
             dashboardSections,
             menuUI,
             shakeSensitivity,
+            hideProfilePicture,
             accentColor,
             busFirstLocation,
             busSecondLocation,
@@ -152,7 +155,7 @@ export class SettingsService {
 
           const oldStorage = [
             'dark-theme', 'pure-dark-theme', 'bus-shuttle-services', 'timetable',
-            'dashboard-sections', 'menu-ui', 'shake-sensitivity', 'accent-color',
+            'dashboard-sections', 'menu-ui', 'shake-sensitivity', 'hideProfilePicture', 'accent-color',
           ];
           for (const key of oldStorage) {
             this.storage.remove(key);
