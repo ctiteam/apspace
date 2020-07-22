@@ -1,3 +1,9 @@
+/**
+ * Manage settings and sync to could when possible.
+ *
+ * New settings additions, change Settings interface and add it to defaultData.
+ * Note, if a value is null by default, specify it in the interface as well.
+ */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Network } from '@ionic-native/network/ngx';
@@ -12,12 +18,14 @@ import { Role, Settings, SettingsOld, StaffProfile, StudentProfile } from '../in
 import { VersionService } from './version.service';
 import { WsApiService } from './ws-api.service';
 
+/** Settings metadata. */
 interface SettingsMeta {
   version: string;
   appVersion: string;
 }
 
-type SettingsRaw = { // storage
+/** Raw settings, how it was stored in ionic storage. */
+type SettingsRaw = {
   [K in keyof Settings]: {
     epoch: number; // epoch
     data: Settings[K];
@@ -26,13 +34,16 @@ type SettingsRaw = { // storage
   }
 } & SettingsMeta;
 
+/** Settings request to S3, it is how it was stored in S3. */
 type SettingsReq = { [K in keyof Settings]: SettingReq<K> } & SettingsMeta;
 
+/** Individual setting change request to be sent to lambda. */
 type SettingReq<K extends keyof Settings> = {
   epoch: number;
   data: Settings[K];
 };
 
+/** Default data for settings, first observed value until settings is loaded. */
 const defaultData: Settings = {
   tripFrom: '',
   tripTo: '',
@@ -91,6 +102,7 @@ export class SettingsService {
   // keep track of all requests subscriptions, one at a time for each requests key
   private requests = {} as Record<keyof Settings, Subscription>;
 
+  // deprecated way to check if settings is ready, keeping it for compatibility
   private readyPromise: Promise<void>;
 
   // make sure initialSync only runned once per session
@@ -124,14 +136,13 @@ export class SettingsService {
           this.storage.get('dashboard-sections').then(value => value || defaultData.dashboardSections),
           this.storage.get('menu-ui').then(value => value || defaultData.menuUI),
           this.storage.get('shake-sensitivity').then(value => +value || defaultData.shakeSensitivity),
-          this.storage.get('hideProfilePicture').then(value => value || defaultData.hideProfilePicture),
           this.storage.get('accent-color').then(value => value?.slice(0, -13) || defaultData.accentColor),
           busShuttleServices.then(value => value?.firstLocation || defaultData.busFirstLocation),
           busShuttleServices.then(value => value?.secondLocation || defaultData.busSecondLocation),
         ]).then(items => items.map(data => ({ epoch, data })))
           .then(([
             modulesBlacklist, dashboardSections, menuUI, shakeSensitivity,
-            hideProfilePicture, accentColor, busFirstLocation, busSecondLocation
+            accentColor, busFirstLocation, busSecondLocation,
           ]) => {
           this.data.next({
             ...this.data.value, // built with default value
@@ -140,7 +151,6 @@ export class SettingsService {
             dashboardSections,
             menuUI,
             shakeSensitivity,
-            hideProfilePicture,
             accentColor,
             busFirstLocation,
             busSecondLocation,
@@ -155,7 +165,7 @@ export class SettingsService {
 
           const oldStorage = [
             'dark-theme', 'pure-dark-theme', 'bus-shuttle-services', 'timetable',
-            'dashboard-sections', 'menu-ui', 'shake-sensitivity', 'hideProfilePicture', 'accent-color',
+            'dashboard-sections', 'menu-ui', 'shake-sensitivity', 'accent-color',
           ];
           for (const key of oldStorage) {
             this.storage.remove(key);
@@ -169,6 +179,8 @@ export class SettingsService {
 
   /**
    * Return a promise to check if settings provider is initialized.
+   *
+   * @deprecated use `get` or `get$` directly.
    */
   ready(): Promise<void> {
     return this.readyPromise;

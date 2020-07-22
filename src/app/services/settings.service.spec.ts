@@ -37,6 +37,7 @@ describe('SettingsService', () => {
     it('should be created', () => {
       expect(service).toBeTruthy();
       expect(storageSpy.get).toHaveBeenCalledTimes(1);
+      // tslint:disable-next-line:deprecation
       return expectAsync(service.ready()).toBeResolved();
     });
 

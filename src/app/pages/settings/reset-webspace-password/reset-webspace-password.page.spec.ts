@@ -17,7 +17,7 @@ describe('ResetWebspacePasswordPage', () => {
 
   beforeEach(async(() => {
     webspacePasswordSpy = jasmine.createSpyObj('WebspacePasswordService', ['resetPassword']);
-    settingsSpy = jasmine.createSpyObj('SettingsService', ['get', 'ready']);
+    settingsSpy = jasmine.createSpyObj('SettingsService', ['get']);
     TestBed.configureTestingModule({
       declarations: [ResetWebspacePasswordPage],
       imports: [
@@ -37,7 +37,6 @@ describe('ResetWebspacePasswordPage', () => {
 
   it('should create', () => {
     webspacePasswordSpy.resetPassword.and.returnValue(NEVER);
-    settingsSpy.ready.and.returnValue(Promise.resolve());
 
     fixture = TestBed.createComponent(ResetWebspacePasswordPage);
     component = fixture.componentInstance;

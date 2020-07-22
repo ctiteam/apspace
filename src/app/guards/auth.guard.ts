@@ -26,7 +26,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   ) { }
 
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<UrlTree | boolean> {
-    await this.settings.ready(); // migrate role to storage
+    // tslint:disable-next-line:deprecation
+    await this.settings.ready(); // migrate role to storage needed for backwards compatibility
 
     // authentication
     if (!await this.cas.isAuthenticated()) {
