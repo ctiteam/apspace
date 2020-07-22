@@ -301,6 +301,68 @@
         </div>
       </section>
 
+      <section class="sub-footer">
+        <div class="container">
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col size="12" size-md="4" class="group ion-padding ion-no-padding-bottom-on-small-devices">
+                <h3 class="title">APIIT Education Group</h3>
+                <h3 class="sub-title">
+                  <ion-text color="primary" tappable (click)="openLink('apu')">APU</ion-text>
+                </h3>
+                <h3 class="sub-title">
+                  <ion-text color="primary" tappable (click)="openLink('apiit')">APIIT</ion-text>
+                </h3>
+                <h3 class="sub-title">
+                  <ion-text color="primary" tappable (click)="openLink('aplc')">APLC</ion-text>
+                </h3>
+                <h3 class="sub-title">
+                  <ion-text color="primary" tappable (click)="openLink('corporateTraining')">Corporate Training
+                  </ion-text>
+                </h3>
+                <div class="stay-connected ion-margin-top">
+                  <h3 class="title">Stay Connected</h3>
+                  <ion-icon (click)="openLink('facebook')" class="facebook" name="logo-facebook"></ion-icon>
+                  <ion-icon (click)="openLink('twitter')" class="twitter" name="logo-twitter"></ion-icon>
+                  <ion-icon (click)="openLink('linkedin')" class="linkedin" name="logo-linkedin"></ion-icon>
+                  <ion-icon (click)="openLink('playStore')" class="playstore" name="logo-google-playstore"></ion-icon>
+                  <ion-icon (click)="openLink('appStore')" class="apple" name="logo-apple"></ion-icon>
+                </div>
+              </ion-col>
+              <ion-col size="12" size-md="8" class="support ion-padding">
+                <h3 class="title">Support</h3>
+                <ion-grid class="ion-no-padding">
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="support-item general">
+                        <h3 class="sub-title">General Line</h3>
+                        <p><span class="glob-text-bold">Tel:</span> +603-89961000 / 1 300 888 278 (Toll-free)</p>
+                        <p><span class="glob-text-bold">Mon - Fri: </span> 8:30 AM - 7:00 PM</p>
+                        <p><span class="glob-text-bold">Saturday: </span> 8:30 AM - 1:00 PM</p>
+                      </div>
+                    </ion-col>
+                    <ion-col size="12" size-md="6">
+                      <div class="support-item emergency">
+                        <h3 class="sub-title">APU Security/Emergency Hotline</h3>
+                        <p><span class="glob-text-bold">HP:</span> 017-238 1300</p>
+                        <p>7:00 PM - 7:00 AM</p>
+                      </div>
+                    </ion-col>
+                    <ion-col size="12" size-md="6">
+                      <div class="support-item weekends">
+                        <h3 class="sub-title"> Weekends, Public Holidays Only</h3>
+                        <p><span class="glob-text-bold">HP:</span> 017-379 1700</p>
+                        <p>7:00 AM - 7:00 PM</p>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </section>
+
       <section class="operating-hours">
         <div class="container">
           <ion-grid class="ion-no-padding" *ngIf="quixCompanies$ | async as quixCompanies">
@@ -323,9 +385,9 @@
                         <ion-slide *ngFor="let department of filteredCompany.company_departments">
                           <div class="swiper-content">
                             <div class="top with-background">
-                                <!-- [style.background]="department.img ? 'url(' + department.img + ')' : 'blue'" -->
+                              <!-- [style.background]="department.img ? 'url(' + department.img + ')' : 'blue'" -->
                               <div class="calendar" [style.backgroundColor]="department.dept_icon_color">
-                                  <ion-icon [name]="department.dept_icon"></ion-icon>
+                                <ion-icon [name]="department.dept_icon"></ion-icon>
                               </div>
                               <div class="photo-btn" [style.backgroundColor]="department.dept_icon_color">
                                 <div class="text">{{filteredCompany.company_id}}
@@ -334,7 +396,8 @@
                             </div>
                             <div class="copy">
                               <h1>{{department.dept_name}}</h1>
-                              <h3 *ngIf="department.dept_email" [style.color]="department.dept_icon_color">{{department.dept_email}}</h3>
+                              <h3 *ngIf="department.dept_email" [style.color]="department.dept_icon_color">
+                                {{department.dept_email}}</h3>
                               <ion-grid>
                                 <ion-row *ngIf="((department.shifts['Mon-Thu'].length === department.shifts['Fri'].length) 
                                         && department.shifts['Mon-Thu'].length > 0
@@ -409,68 +472,6 @@
                     </ng-template>
                   </ng-container>
                 </ion-slides>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </div>
-      </section>
-
-      <section class="sub-footer">
-        <div class="container">
-          <ion-grid class="ion-no-padding">
-            <ion-row>
-              <ion-col size="12" size-md="4" class="group ion-padding ion-no-padding-bottom-on-small-devices">
-                <h3 class="title">APIIT Education Group</h3>
-                <h3 class="sub-title">
-                  <ion-text color="primary" tappable (click)="openLink('apu')">APU</ion-text>
-                </h3>
-                <h3 class="sub-title">
-                  <ion-text color="primary" tappable (click)="openLink('apiit')">APIIT</ion-text>
-                </h3>
-                <h3 class="sub-title">
-                  <ion-text color="primary" tappable (click)="openLink('aplc')">APLC</ion-text>
-                </h3>
-                <h3 class="sub-title">
-                  <ion-text color="primary" tappable (click)="openLink('corporateTraining')">Corporate Training
-                  </ion-text>
-                </h3>
-                <div class="stay-connected ion-margin-top">
-                  <h3 class="title">Stay Connected</h3>
-                  <ion-icon (click)="openLink('facebook')" class="facebook" name="logo-facebook"></ion-icon>
-                  <ion-icon (click)="openLink('twitter')" class="twitter" name="logo-twitter"></ion-icon>
-                  <ion-icon (click)="openLink('linkedin')" class="linkedin" name="logo-linkedin"></ion-icon>
-                  <ion-icon (click)="openLink('playStore')" class="playstore" name="logo-google-playstore"></ion-icon>
-                  <ion-icon (click)="openLink('appStore')" class="apple" name="logo-apple"></ion-icon>
-                </div>
-              </ion-col>
-              <ion-col size="12" size-md="8" class="support ion-padding">
-                <h3 class="title">Support</h3>
-                <ion-grid class="ion-no-padding">
-                  <ion-row>
-                    <ion-col size="12">
-                      <div class="support-item general">
-                        <h3 class="sub-title">General Line</h3>
-                        <p><span class="glob-text-bold">Tel:</span> +603-89961000 / 1 300 888 278 (Toll-free)</p>
-                        <p><span class="glob-text-bold">Mon - Fri: </span> 8:30 AM - 7:00 PM</p>
-                        <p><span class="glob-text-bold">Saturday: </span> 8:30 AM - 1:00 PM</p>
-                      </div>
-                    </ion-col>
-                    <ion-col size="12" size-md="6">
-                      <div class="support-item emergency">
-                        <h3 class="sub-title">APU Security/Emergency Hotline</h3>
-                        <p><span class="glob-text-bold">HP:</span> 017-238 1300</p>
-                        <p>7:00 PM - 7:00 AM</p>
-                      </div>
-                    </ion-col>
-                    <ion-col size="12" size-md="6">
-                      <div class="support-item weekends">
-                        <h3 class="sub-title"> Weekends, Public Holidays Only</h3>
-                        <p><span class="glob-text-bold">HP:</span> 017-379 1700</p>
-                        <p>7:00 AM - 7:00 PM</p>
-                      </div>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
               </ion-col>
             </ion-row>
           </ion-grid>
