@@ -1,0 +1,34 @@
+.glob-margin-auto {
+  margin: auto;
+}
+
+.glob-text-bold {
+  font-weight: bold;
+}
+
+.glob-limit-lines {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+
+  &.glob-one-line {
+    -webkit-line-clamp: 1;
+  }
+
+  &.glob-two-lines {
+    -webkit-line-clamp: 2;
+  }
+
+  &.glob-three-lines {
+    -webkit-line-clamp: 3;
+  }
+
+  &.glob-four-lines {
+    -webkit-line-clamp: 4;
+  }
+}
+
+.glob-text-success {
+  color: var(--ion-color-success) !important;
+}
