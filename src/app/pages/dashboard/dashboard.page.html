@@ -105,7 +105,7 @@
     <div class="masonry-item no-drag">
       <ion-grid class="ion-no-padding">
         <ion-row class="ion-no-padding">
-          <ion-col>
+          <ion-col *ngIf="isStudent">
             <ion-card color="success" class="ion-no-margin ion-padding ion-text-center" tappable [routerLink]="['/attendix/update']">
               <ion-card-content class="ion-no-padding" style="background: var(--ion-color-success)">
                 <p>Sign Attendance</p>
