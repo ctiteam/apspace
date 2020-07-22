@@ -19,20 +19,23 @@ import {
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  activeSection = 0;
-  screenHeight: number;
-  screenWidth: number;
-
   @ViewChild('sliderSlides') sliderSlides: IonSlides;
 
   noticeBoardItems$: Observable<any[]>;
   news$: Observable<ShortNews[]>;
   quixCompanies$: Observable<any[]>;
+
   selectedQuixSegment: 'APU' | 'APIIT' = 'APU';
-
-
+  apkey: string;
+  password: string;
+  showPassword: boolean;
+  showLoginSection: boolean;
+  // LOGIN BUTTON ANIMATIONS ITEMS
+  userDidLogin = false;
+  loginProcessLoading = false;
+  userAuthenticated = false;
+  userUnauthenticated = false;
   currentYear = new Date().getFullYear();
-  test = new Array(4);
 
   slideOpts = {
     initialSlide: 0,
@@ -140,18 +143,6 @@ export class LoginPage implements OnInit {
       }
     }
   };
-
-
-  apkey: string;
-  password: string;
-  showPassword: boolean;
-  showLoginSection: boolean;
-
-  // LOGIN BUTTON ANIMATIONS ITEMS
-  userDidLogin = false;
-  loginProcessLoading = false;
-  userAuthenticated = false;
-  userUnauthenticated = false;
 
   constructor(
     public alertCtrl: AlertController,
