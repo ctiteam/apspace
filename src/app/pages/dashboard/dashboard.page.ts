@@ -5,7 +5,7 @@ import { AlertController, IonSelect, IonSlides, ModalController, NavController, 
 import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 import { DragulaService } from 'ng2-dragula';
-import { Observable, combineLatest, forkJoin, of, zip } from 'rxjs';
+import { Observable, Subscription, combineLatest, forkJoin, of, zip } from 'rxjs';
 import { catchError, concatMap, finalize, flatMap, map, shareReplay, switchMap, tap, toArray } from 'rxjs/operators';
 
 import { accentColors } from 'src/app/constants';
@@ -21,6 +21,7 @@ import {
   NewsService, NotificationService, SettingsService, StudentTimetableService,
   WsApiService,
 } from 'src/app/services';
+import { NotifierService } from 'src/app/shared/notifier/notifier.service';
 import { NewsModalPage } from '../news/news-modal';
 import { NotificationModalPage } from '../notifications/notification-modal';
 
@@ -67,6 +68,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   shownDashboardSections: string[] = [];
 
   hideProfilePicture;
+  notification: Subscription;
 
   activeAccentColor = '';
   lowAttendanceChart: any;
@@ -307,6 +309,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     private settings: SettingsService,
     private storage: Storage,
     private iab: InAppBrowser,
+    private notifierService: NotifierService
   ) {
     // Create the dragula group (drag and drop)
     this.dragulaService.createGroup('editable-list', {
@@ -348,6 +351,16 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
       }
       this.settings.initialSync();
       this.doRefresh();
+
+      // for student profile picture
+      // tslint:disable-next-line: no-bitwise
+      if (this.role & Role.Student) {
+        this.notification = this.notifierService.hideProfilePictureUpdated.subscribe(data => {
+          if (data === false) {
+            this.photo$ = this.ws.get<StudentPhoto>('/student/photo');
+          }
+        });
+      }
     });
   }
 
@@ -362,6 +375,13 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     this.dragulaService.destroy('editable-list');
   }
 
+  ionViewDidLeave() {
+    // tslint:disable-next-line: no-bitwise
+    if (this.role & Role.Student) {
+      this.notification.unsubscribe();
+    }
+  }
+
   doRefresh(refresher?) {
     this.getLocations(refresher);
     this.news$ = this.news.get(refresher).pipe(
@@ -371,7 +391,10 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     this.holidays$ = this.getHolidays(true);
     this.noticeBoardItems$ = this.news.getSlideshow(refresher);
     this.upcomingTrips$ = this.getUpcomingTrips(this.firstLocation, this.secondLocation);
-    this.photo$ = this.ws.get<StudentPhoto>('/student/photo');  // no-cache for student photo
+    // tslint:disable-next-line: no-bitwise
+    if ((this.role & Role.Student) && !this.hideProfilePicture) {
+      this.photo$ = this.ws.get<StudentPhoto>('/student/photo');  // no-cache for student photo
+    }
     this.displayGreetingMessage();
     if (!this.isStudent) {
       this.getUpcomingEvents();
