@@ -68,9 +68,8 @@
               <ion-item [class.credit]="0 < transaction.SpendVal" [class.deposit]="0 > transaction.SpendVal"
                 *virtualItem="let transaction">
                 <ion-avatar slot="start">
-                  <ion-icon class="transaction-icon" name="remove-circle-outline" *ngIf="transaction.SpendVal < 0">
-                  </ion-icon>
-                  <ion-icon class="transaction-icon" name="circled-outline" *ngIf="0 < transaction.SpendVal">
+                  <ion-icon class="transaction-icon"
+                    [name]="transaction.SpendVal >= 0 ? 'add-circle-outline' : 'remove-circle-outline'">
                   </ion-icon>
                 </ion-avatar>
                 <ion-label>
