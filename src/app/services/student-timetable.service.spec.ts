@@ -58,6 +58,7 @@ describe('StudentTimetableService', () => {
         INTAKE: '',
         MODID: '',
         DAY: '',
+        GROUPING: '',
         LOCATION: '',
         ROOM: '',
         LECTID: '',

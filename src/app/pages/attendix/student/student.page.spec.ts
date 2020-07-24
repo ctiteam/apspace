@@ -6,8 +6,8 @@ import {
   ApolloTestingController, ApolloTestingModule
 } from 'apollo-angular/testing';
 
-import { SettingsService } from '../../services';
-import { StudentPage } from './attendix.page';
+import { SettingsService } from '../../../services';
+import { StudentPage } from './student.page';
 
 describe('StudentPage', () => {
   let component: StudentPage;

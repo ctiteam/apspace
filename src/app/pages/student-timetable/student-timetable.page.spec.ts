@@ -50,7 +50,7 @@ describe('StudentTimetablePage', () => {
   beforeEach(async(() => {
     activatedRoute = new ActivatedRouteStub();
     iabSpy = jasmine.createSpyObj('InAppBrowser', ['create']);
-    settingsSpy = jasmine.createSpyObj('SettingsService', ['get', 'set']);
+    settingsSpy = jasmine.createSpyObj('SettingsService', ['get', 'get$', 'set']);
     storageSpy = jasmine.createSpyObj('Storage', ['get']);
     studentTimetableSpy = jasmine.createSpyObj('StudentTimetableService', ['get']);
     wsSpy = jasmine.createSpyObj('WsApiService', ['get']);
@@ -95,8 +95,9 @@ describe('StudentTimetablePage', () => {
       settingsSpy.get.and.callFake(settingsFake({
         intakeHistory: [],
         viewWeek: false,
-        modulesBlacklist: [],
+        intakeGroup: null,
       }));
+      settingsSpy.get$.and.returnValue(asyncData([])); // modulesBlacklist
       const intake = 'UCFF0000CTI';
       wsSpy.get.and.returnValue(asyncData({
         STUDENT_NUMBER: '',
@@ -125,6 +126,8 @@ describe('StudentTimetablePage', () => {
       fixture.detectChanges();
 
       expect(component).toBeTruthy();
+
+      tick(); // storage role
       expect(wsSpy.get).toHaveBeenCalledTimes(1);
       expect(wsSpy.get).toHaveBeenCalledWith('/student/profile', { caching: 'cache-only' });
 
@@ -146,6 +149,7 @@ describe('StudentTimetablePage', () => {
         INTAKE: intake,
         MODID: 'CT100-0-0-XXXX-L',
         DAY: '',
+        GROUPING: 'T1',
         LOCATION: 'APU',
         ROOM: 'ROOM',
         LECTID: 'PRO',
@@ -166,8 +170,9 @@ describe('StudentTimetablePage', () => {
       settingsSpy.get.and.callFake(settingsFake({
         intakeHistory: [],
         viewWeek: false,
-        modulesBlacklist: [],
+        intakeGroup: null,
       }));
+      settingsSpy.get$.and.returnValue(asyncData([])); // modulesBlacklist
       wsSpy.get.and.returnValue(asyncData({
         STUDENT_NUMBER: '',
         EMGS_COUNTRY_CODE: '',
@@ -195,6 +200,8 @@ describe('StudentTimetablePage', () => {
       fixture.detectChanges();
 
       expect(component).toBeTruthy();
+
+      tick(); // storage role
       expect(wsSpy.get).toHaveBeenCalledTimes(1);
       expect(wsSpy.get).toHaveBeenCalledWith('/student/profile', { caching: 'cache-only' });
 
@@ -205,7 +212,7 @@ describe('StudentTimetablePage', () => {
       expect(settingsSpy.set).toHaveBeenCalledWith('intakeHistory', [intake]);
       expect(component.intake).toEqual(intake);
       expect(studentTimetableSpy.get).toHaveBeenCalledTimes(1);
-      expect(studentTimetableSpy.get).toHaveBeenCalledWith(false);
+      expect(studentTimetableSpy.get).toHaveBeenCalledWith(true); // XXX force refresh for now
 
       // check weeks and days, mainly updateDay function
       tick(); // subscribe student timetable
@@ -245,8 +252,9 @@ describe('StudentTimetablePage', () => {
       settingsSpy.get.and.callFake(settingsFake({
         intakeHistory: [],
         viewWeek: false,
-        modulesBlacklist: [],
+        intakeGroup: null,
       }));
+      settingsSpy.get$.and.returnValue(asyncData([])); // modulesBlacklist
 
       fixture = TestBed.createComponent(StudentTimetablePage);
       component = fixture.componentInstance;
@@ -262,6 +270,7 @@ describe('StudentTimetablePage', () => {
     jasmine.clock().mockDate(new Date('2020-01-13'));
     activatedRoute.setParams({});
     const intake = 'UC3F1906CS(DA)';
+    const grouping = 'T1';
     // one timetable every day
     const timetables = ['2020-01-13', '2020-01-14', '2020-01-15', '2020-01-16',
       '2020-01-17', '2020-01-18', '2020-01-19'].map((d, n) => {
@@ -269,6 +278,7 @@ describe('StudentTimetablePage', () => {
         INTAKE: intake,
         MODID: 'CT100-0-0-XXXX-L',
         DAY: '',
+        GROUPING: grouping,
         LOCATION: 'APU',
         ROOM: 'ROOM',
         LECTID: 'PRO',
@@ -285,8 +295,9 @@ describe('StudentTimetablePage', () => {
     settingsSpy.get.and.callFake(settingsFake({
       intakeHistory: [],
       viewWeek: false,
-      modulesBlacklist: [],
+      intakeGroup: null,
     }));
+    settingsSpy.get$.and.returnValue(asyncData([])); // modulesBlacklist
     wsSpy.get.and.returnValue(asyncData({
       STUDENT_NUMBER: '',
       EMGS_COUNTRY_CODE: '',
@@ -314,6 +325,8 @@ describe('StudentTimetablePage', () => {
     fixture.detectChanges();
 
     expect(component).toBeTruthy();
+
+    tick(); // storage role
     expect(wsSpy.get).toHaveBeenCalledTimes(1);
     expect(wsSpy.get).toHaveBeenCalledWith('/student/profile', { caching: 'cache-only' });
 
@@ -323,7 +336,7 @@ describe('StudentTimetablePage', () => {
     expect(settingsSpy.set).toHaveBeenCalledWith('intakeHistory', [intake]);
     expect(component.intake).toEqual(intake);
     expect(studentTimetableSpy.get).toHaveBeenCalledTimes(1);
-    expect(studentTimetableSpy.get).toHaveBeenCalledWith(false);
+    expect(studentTimetableSpy.get).toHaveBeenCalledWith(true); // XXX force refresh for now
 
     tick(); // subscribe student timetable
     fixture.detectChanges(); // render days
@@ -337,7 +350,7 @@ describe('StudentTimetablePage', () => {
     const sendToPrintDe = fixture.debugElement.query(By.css('ion-button.print-button'));
     sendToPrintDe.triggerEventHandler('click', { button: 0 });
     expect(iabSpy.create).toHaveBeenCalledTimes(1);
-    expect(iabSpy.create).toHaveBeenCalledWith(`${component.printUrl}?Week=${timetables[0].DATESTAMP_ISO}&Intake=${intake}&print_request=print_tt`,
+    expect(iabSpy.create).toHaveBeenCalledWith(`${component.printUrl}?Week=${timetables[0].DATESTAMP_ISO}&Intake=${intake}&Intake_Group=${grouping}&print_request=print_tt`,
       '_system', 'location=true');
   }));
 });
