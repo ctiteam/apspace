@@ -159,8 +159,8 @@ describe('SettingsService', () => {
             case 'settings': return Promise.resolve({
               version: '2020-05-27',
               appVersion: '1.2.3',
-              tripFrom: { epoch: 3, data: 'vista' }, // new
-              tripTo: { epoch: 1, data: 'mosque' },  // old
+              tripFrom: { epoch: 3, data: 'vista' }, // newer
+              tripTo: { epoch: 1, data: 'mosque' },  // older
               intakeHistory: { epoch: 2, data: [] }, // same
               // viewWeek not stored
             });
@@ -170,8 +170,8 @@ describe('SettingsService', () => {
         httpClientSpy.get.and.returnValue(asyncData({
           version: '2020-05-27',
           appVersion: '1.2.3',
-          tripFrom: { epoch: 1, data: 'endah' }, // old
-          tripTo: { epoch: 3, data: 'fortune' }, // new
+          tripFrom: { epoch: 1, data: 'endah' }, // older
+          tripTo: { epoch: 3, data: 'fortune' }, // newer
           intakeHistory: { epoch: 2, data: [] }, // same
           abracadabra: { epoch: 1, data: null }, // deprecated
         }));
@@ -182,6 +182,7 @@ describe('SettingsService', () => {
           tripTo: ['', 'mosque', 'fortune'],
           intakeHistory: [[]],
           viewWeek: [false],
+          examIntake: [null], // new (not in storage or cloud)
         };
         service = TestBed.inject(SettingsService);
         Object.keys(expected).forEach(key => {
