@@ -138,6 +138,14 @@ export const menusRaw = [
     tags: ['book', 'articles', 'resource']
   },
   {
+    id: 'koha' as const,
+    title: 'Koha',
+    group: 'Collaboration & Information Resources',
+    url: 'koha',
+    role: Role.Student,
+    tags: ['library', 'library fee', 'library checkout', 'book']
+  },
+  {
     id: 'news-feed' as const,
     title: 'News Feed',
     group: 'Collaboration & Information Resources',
