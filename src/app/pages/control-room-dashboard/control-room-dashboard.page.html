@@ -11,7 +11,7 @@
         <h2 class="text-bold colored-text">Dashboard</h2>
       </ion-col>
       <ion-col class="ion-text-right">
-        <p class="colored-text text-bold">Date/Time: {{today | date : 'yyyy-MM-dd HH:mm:ss': '+0800' }}</p>
+        <p class="colored-text text-bold">Date/Time: {{today | dateWithTimezone : 'yyyy-MM-dd HH:mm:ss' }}</p>
       </ion-col>
     </ion-row>
     <ion-row>

@@ -40,7 +40,7 @@
                         </a>
                         <ng-template #noHyperlink>
                             <ng-container *ngIf="event.secondDescriptionIsDate; else noDate">
-                                {{event.secondDescription | date: 'hh:mm a': '+0800'}}
+                                {{event.secondDescription | dateWithTimezone: 'hh:mm a'}}
                             </ng-container>
                             <ng-template #noDate>
                                 {{event.secondDescription}}

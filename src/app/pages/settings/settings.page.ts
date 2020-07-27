@@ -43,6 +43,7 @@ export class SettingsPage implements OnInit {
     { index: 4, value: 80 }
   ];
   hideProfilePicture;
+  enableMalaysiaTimezone;
   locationOptions = [
     'New Campus',
     'TPM',
@@ -77,6 +78,9 @@ export class SettingsPage implements OnInit {
     this.settings.get$('hideProfilePicture').subscribe(value =>
       this.hideProfilePicture = value
     );
+    this.settings.get$('enableMalaysiaTimezone').subscribe(value =>
+      this.enableMalaysiaTimezone = value
+    );
   }
 
   ngOnInit() {
@@ -97,6 +101,10 @@ export class SettingsPage implements OnInit {
 
   toggleDisplayProfilePicture() {
     this.settings.set('hideProfilePicture', this.hideProfilePicture);
+  }
+
+  toggleDisplayMalaysiaTimezone() {
+    this.settings.set('enableMalaysiaTimezone', this.enableMalaysiaTimezone);
   }
 
   getLocations() {

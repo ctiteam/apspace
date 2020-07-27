@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
+import { SharedPipesModule } from '../shared/shared-pipes.module';
 import { DashboardCardComponent } from './dashboard-card/dashboard-card.component';
 import { EventsListComponent } from './events-list/events-list.component';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner';
@@ -27,7 +28,8 @@ import { StaysafeComponent } from './staysafe/staysafe.component';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    RouterModule
+    RouterModule,
+    SharedPipesModule
   ],
   exports: [
     SearchModalComponent,

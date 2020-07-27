@@ -27,6 +27,7 @@ export interface Settings {
   menuUI: 'cards' | 'list';
   shakeSensitivity: number;
   hideProfilePicture: boolean;
+  enableMalaysiaTimezone: boolean;
   /* bus shuttle service */
   busFirstLocation: string;
   busSecondLocation: string;

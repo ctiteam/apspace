@@ -77,6 +77,7 @@ const defaultData: Settings = {
   menuUI: 'list',
   shakeSensitivity: 40,
   hideProfilePicture: false,
+  enableMalaysiaTimezone: true,
   busFirstLocation: '',
   busSecondLocation: '',
 };

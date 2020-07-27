@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { IntakeListingService } from 'src/app/services';
+import { SharedPipesModule } from 'src/app/shared/shared-pipes.module';
 import { ComponentsModule } from '../../components/components.module';
 import { ExamSchedulePage } from './exam-schedule.page';
 
@@ -22,7 +23,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ComponentsModule
+    ComponentsModule,
+    SharedPipesModule
   ],
   providers: [IntakeListingService],
   declarations: [

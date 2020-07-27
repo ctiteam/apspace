@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { IonicModule } from '@ionic/angular';
 
+import { SharedPipesModule } from 'src/app/shared/shared-pipes.module';
 import { ComponentsModule } from '../../components/components.module';
 import { LoginPage } from './login.page';
 import { OperationHoursFilterPipe } from './operation-hours-filter/operation-hours-filter.pipe';
@@ -23,7 +24,8 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    ComponentsModule
+    ComponentsModule,
+    SharedPipesModule
   ],
   providers: [
     InAppBrowser

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
+import { SharedPipesModule } from 'src/app/shared/shared-pipes.module';
 import { ComponentsModule } from '../../components/components.module';
 import { EndtimePipe } from './endtime.pipe';
 import { LecturerTimetablePage } from './lecturer-timetable.page';
@@ -24,6 +25,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ComponentsModule,
+    SharedPipesModule
   ],
   declarations: [
     LecturerTimetablePage,
