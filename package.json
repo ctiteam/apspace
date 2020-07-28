@@ -16,7 +16,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tslint -p .",
+      "pre-commit": "ng lint --silent",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
