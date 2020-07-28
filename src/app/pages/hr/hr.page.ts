@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ModalController } from '@ionic/angular';
-import * as moment from 'moment';
+import { format } from 'date-fns';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
@@ -130,10 +130,10 @@ export class HrPage implements OnInit {
     return this.ws.get('/staff/leave_status').pipe(
       map((res: []) => {
         const results = this.sortArrayOfDateKey(res, 'LEAVE_DATE', 'desc').reduce((previous: any, current: any) => {
-          if (!previous[moment(current.LEAVE_DATE).format('MMMM YYYY')]) {
-            previous[moment(current.LEAVE_DATE).format('MMMM YYYY')] = [current];
+          if (!previous[format(current.LEAVE_DATE, 'MMMM yyyy')]) {
+            previous[format(current.LEAVE_DATE, 'MMMM yyyy')] = [current];
           } else {
-            previous[moment(current.LEAVE_DATE).format('MMMM YYYY')].push(current);
+            previous[format(current.LEAVE_DATE, 'MMMM yyyy')].push(current);
           }
           return previous;
         }, {});
@@ -189,10 +189,10 @@ export class HrPage implements OnInit {
 
   sortArrayOfDateKey(array: any[], key: string, sortType: 'asc' | 'desc') {
     return array.sort((a: any, b: any) => {
-      if (moment(a[key]).toDate() > moment(b[key]).toDate()) {
+      if (new Date(a[key]) > new Date(b[key])) {
         return sortType === 'asc' ? 1 : -1;
       }
-      if (moment(a[key]).toDate() < moment(b[key]).toDate()) {
+      if (new Date(a[key]) < new Date(b[key])) {
         return sortType === 'asc' ? -1 : 1;
       }
       return 0;

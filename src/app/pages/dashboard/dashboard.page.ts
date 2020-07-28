@@ -3,10 +3,11 @@ import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AlertController, IonSelect, IonSlides, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import * as moment from 'moment';
+import { format, parse, parseISO } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 import { DragulaService } from 'ng2-dragula';
 import { Observable, combineLatest, forkJoin, of, zip } from 'rxjs';
-import { catchError, concatMap, finalize, flatMap, map, shareReplay, switchMap, tap, toArray } from 'rxjs/operators';
+import { catchError, concatMap, finalize, map, mergeMap, shareReplay, switchMap, tap, toArray } from 'rxjs/operators';
 
 import { accentColors } from 'src/app/constants';
 import {
@@ -108,7 +109,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   upcomingEventsCardConfigurations: DashboardCardComponentConfigurations = {
     withOptionsButton: false,
     cardTitle: 'Upcoming Events',
-    cardSubtitle: 'Today: ' + moment().format('DD MMMM YYYY')
+    cardSubtitle: 'Today: ' + format(new Date(), 'dd MMMM yyyy')
   };
 
   // ATTENDANCE
@@ -594,9 +595,9 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
         return eventsList.sort((eventA, eventB) => {
-          return moment(eventA.dateOrTime, 'HH:mm A').toDate() > moment(eventB.dateOrTime, 'HH:mm A').toDate()
+          return parse(eventA.dateOrTime, 'HH:mm a', new Date()) > parse(eventB.dateOrTime, 'HH:mm a', new Date())
             ? 1
-            : moment(eventA.dateOrTime, 'HH:mm A').toDate() < moment(eventB.dateOrTime, 'HH:mm A').toDate()
+            : parse(eventA.dateOrTime, 'HH:mm a', new Date()) < parse(eventB.dateOrTime, 'HH:mm a', new Date())
               ? -1
               : 0;
         });
@@ -647,8 +648,8 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
         const timetableEventMode: EventComponentConfigurations[] = [];
         timetables.forEach((timetable: StudentTimetable) => {
           const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
-            moment(timetable.TIME_FROM, 'HH:mm A').toDate(),
-            moment(timetable.TIME_TO, 'HH:mm A').toDate());
+            parse(timetable.TIME_FROM, 'HH:mm a', new Date()),
+            parse(timetable.TIME_TO, 'HH:mm a', new Date()));
           let classPass = false;
           if (this.eventPass(timetable.TIME_FROM, dateNow)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
             classPass = true;
@@ -663,7 +664,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
             passColor: '#d7dee3',
             outputFormat: 'event-with-time-and-hyperlink',
             type: 'class',
-            dateOrTime: moment(moment(timetable.TIME_FROM, 'HH:mm A').toDate()).format('hh mm A'), // EXPECTED FORMAT HH MM A
+            dateOrTime: format(parse(timetable.TIME_FROM, 'HH:mm a', new Date()), 'hh mm a'), // EXPECTED FORMAT HH MM A
           });
         });
         return timetableEventMode;
@@ -699,7 +700,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
         timetables.forEach((timetable: LecturerTimetable) => {
           let classPass = false;
-          if (this.eventPass(moment(timetable.time).format('HH:mm A'), d)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
+          if (this.eventPass(format(new Date(timetable.time), 'HH:mm a'), d)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
             classPass = true;
           }
 
@@ -713,7 +714,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
             passColor: '#d7dee3',
             outputFormat: 'event-with-time-and-hyperlink',
             type: 'class',
-            dateOrTime: moment(moment(timetable.time).toDate()).format('hh mm A'), // EXPECTED FORMAT HH MM A
+            dateOrTime: format(new Date(timetable.time), 'hh mm a'), // EXPECTED FORMAT HH MM A
           });
 
         });
@@ -731,7 +732,8 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     ]).pipe(
       map(([consultations, staffList]) => {
         const filteredConsultations = consultations.filter(
-          consultation => this.eventIsToday(new Date(moment(consultation.slot_start_time).utcOffset('+0800').format()), dateNow)
+          consultation => this.eventIsToday(utcToZonedTime(
+            new Date(consultation.slot_start_time), 'Asia/Kuala_Lumpur'), dateNow)
             && consultation.status === 'Booked'
         );
 
@@ -758,13 +760,14 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
         listOfBookingWithStaffDetail.forEach(upcomingConsultation => {
           let consultationPass = false;
-          if (this.eventPass(moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh:mm A'), dateNow)) {
+          if (this.eventPass(format(utcToZonedTime(
+            new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur'), 'hh:mm a'), dateNow)) {
             // CHANGE CLASS STATUS TO PASS IF IT PASS
             consultationPass = true;
           }
           const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
-            moment(moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate(),
-            moment(moment(upcomingConsultation.slot_end_time).utcOffset('+0800').format('hh:mm A'), 'HH:mm A').toDate());
+            utcToZonedTime(new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur'),
+            utcToZonedTime(new Date(upcomingConsultation.slot_end_time), 'Asia/Kuala_Lumpur'));
           consultationsEventMode.push({
             title: 'Consultation Hour',
             color: '#d35400',
@@ -775,7 +778,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
             firstDescription: upcomingConsultation.slot_room_code + ' | ' + upcomingConsultation.slot_venue,
             secondDescription: upcomingConsultation.staff_detail.FULLNAME,
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
-            dateOrTime: moment(upcomingConsultation.slot_start_time).utcOffset('+0800').format('hh mm A'),
+            dateOrTime: format(utcToZonedTime(new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur'), 'hh mm a'),
           });
         });
 
@@ -800,7 +803,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   eventPass(eventTime: string, todaysDate: Date) {
-    if (moment(eventTime, 'HH:mm A').toDate() >= todaysDate) {
+    if (parse(eventTime, 'HH:mm a', new Date()) >= todaysDate) {
       return false;
     }
     return true;
@@ -832,7 +835,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
         const examsListEventMode: EventComponentConfigurations[] = [];
         examsList.forEach((exam: ExamSchedule) => {
           const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(new Date(exam.since), new Date(exam.until));
-          const formattedStartDate = moment(new Date(exam.since)).format('DD MMM YYYY');
+          const formattedStartDate = format(new Date(exam.since), 'dd MMM yyyy');
           examsListEventMode.push({
             title: exam.subjectDescription,
             firstDescription: exam.venue,
@@ -863,13 +866,13 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
                                        : staffHolidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday;
 
         const examsListEventMode: EventComponentConfigurations[] = [];
-        const formattedStartDate = moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('DD MMM YYYY');
+        const formattedStartDate = format(parseISO(holiday.holiday_start_date), 'dd MMM yyyy');
         examsListEventMode.push({
           title: holiday.holiday_name,
           firstDescription: 'Until: ' + holiday.holiday_end_date,
           thirdDescription: this.getNumberOfDaysForHoliday(
-            moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
-            moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()),
+            parseISO(holiday.holiday_start_date),
+            parseISO(holiday.holiday_end_date)),
           color: '#273160',
           pass: false,
           passColor: '#d7dee3',
@@ -1091,7 +1094,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     return this.ws
       .get<Course[]>('/student/courses', { caching })
       .pipe(
-        flatMap(intakes => intakes),
+        mergeMap(intakes => intakes),
         concatMap(intake => {
           const url = `/student/sub_and_course_details?intake=${
             intake.INTAKE_CODE
@@ -1194,7 +1197,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
       map(res => res.trips),
       map(trips => { // FILTER TRIPS TO UPCOMING ONLY FROM THE SELCETED LOCATIONS
         return trips.filter(trip => {
-          return moment(trip.trip_time, 'kk:mm').toDate() >= dateNow
+          return parse(trip.trip_time, 'kk:mm', new Date()) >= dateNow
             && trip.trip_day === this.getTodayDay(dateNow)
             && ((trip.trip_from === firstLocation && trip.trip_to === secondLocation)
               || (trip.trip_from === secondLocation && trip.trip_to === firstLocation));

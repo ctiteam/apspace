@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
-import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
@@ -94,7 +93,7 @@ export class OpenedSlotsPage {
                       : null;
 
                 this.daysConfigrations.push({
-                  date: moment(day, 'YYYY-MM-DD').toDate(),
+                  date: new Date(day),
                   subTitle: '.',
                   cssClass: cssClass + ' colored',
                   disable: false

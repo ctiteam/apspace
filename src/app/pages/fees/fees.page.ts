@@ -2,7 +2,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ViewChild } from '@angular/core';
 import { IonContent, MenuController } from '@ionic/angular';
 import { ChartComponent } from 'angular2-chartjs';
-import * as moment from 'moment';
+import { parse } from 'date-fns';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 
@@ -97,7 +97,7 @@ export class FeesPage {
     );
     this.bankDraft$ = this.ws.get('/student/bankdraft_amount', refresher);
     this.detail$ = this.ws.get<FeesDetails[]>('/student/overall_fee', refresher).pipe(
-      tap(details => details.map(detail => detail.DUE_DATE = moment(detail.DUE_DATE, 'DD-MMM-YY').toString()))
+      tap(details => details.map(detail => detail.DUE_DATE = parse(detail.DUE_DATE, 'dd-MMM-yy', new Date()).toString()))
     );
 
     this.totalSummary$ = this.totalSummary$.pipe(

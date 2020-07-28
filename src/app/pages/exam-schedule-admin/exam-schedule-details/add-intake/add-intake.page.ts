@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ModalController, PopoverController, ToastController } from '@ionic/angular';
-import * as moment from 'moment';
+import { format } from 'date-fns';
 import { tap } from 'rxjs/operators';
 
 import { SearchModalComponent } from 'src/app/components/search-modal/search-modal.component';
@@ -148,13 +148,13 @@ export class AddIntakePage implements OnInit {
       const bodyObject = {
         exam_id: this.examId,
         docketsdue: this.intakeForm.get('docketIssuance').value ?
-                    moment(this.intakeForm.get('docketIssuance').value).format('DD-MMM-YYYY').toUpperCase() : '',
+                    format(new Date(this.intakeForm.get('docketIssuance').value), 'dd-MMM-yyyy').toUpperCase() : '',
         appraisalsdue: '',
         createdby: '',
         types: this.intakeForm.get('type').value ? this.intakeForm.get('type').value : '',
         venue: `${this.intakeForm.get('venue').value}`,
         intake_group: '',
-        result_date: moment(this.intakeForm.get('examResultDate').value).format('DD-MMM-YYYY').toUpperCase()
+        result_date: format(new Date(this.intakeForm.get('examResultDate').value), 'dd-MMM-yyyy').toUpperCase()
       };
 
       if (this.onEdit) {

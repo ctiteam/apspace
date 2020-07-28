@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { NavigationExtras, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController, IonRefresher } from '@ionic/angular';
-import * as moment from 'moment';
+import { formatISO } from 'date-fns';
 import { Observable } from 'rxjs';
 import { finalize, switchMap, tap } from 'rxjs/operators';
 
@@ -158,7 +158,7 @@ export class LecturerTimetablePage implements OnInit {
   }
 
   sendToPrint() {
-    const week = moment(this.selectedWeek).format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
+    const week = formatISO(this.selectedWeek, { representation: 'date' }); // week in apspace starts with sunday, API starts with monday
     // tslint:disable-next-line: max-line-length
     this.iab.create(`${this.printUrl}?LectID=${this.lecturerCode}&Submit=Submit&Week=${week}&print_request=print`, '_system', 'location=true');
   }

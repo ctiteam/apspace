@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 import { AlertController, LoadingController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import * as moment from 'moment';
+import { differenceInSeconds, setSeconds, startOfDay } from 'date-fns';
 import { Observable, Subscription, of, timer } from 'rxjs';
 import { map, shareReplay, tap } from 'rxjs/operators';
 
@@ -102,7 +102,7 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
               this.declarationId = res.id;
               const validUntil = new Date(res.valid_time);
               const currentDate = new Date();
-              this.startTimer(moment(validUntil).diff(moment(currentDate), 'seconds'));
+              this.startTimer(differenceInSeconds(validUntil, currentDate));
             } else {
               this.route.queryParams.subscribe((params: any) => {
                 if (params) {
@@ -176,10 +176,8 @@ export class CovidVisitorFormPage implements OnInit, OnDestroy {
   }
 
   startTimer(counterValueInSeconds: number) {
-    const counterValue = moment('2015-01-01').startOf('day')
-      .seconds(counterValueInSeconds);
+    this.counter = setSeconds(startOfDay(new Date('2015-01-01')), counterValueInSeconds);
     this.timerSubscription$ = this.timer$.subscribe(t => {
-      this.counter = counterValue.toDate();
       this.counter.setSeconds(this.counter.getSeconds() - t);
       if (this.counter.getHours() === 0 && this.counter.getMinutes() === 0 && this.counter.getSeconds() === 0) {
         this.sessionExpired = true;

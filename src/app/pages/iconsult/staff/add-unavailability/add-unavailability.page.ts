@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import { add, addDays, format, formatISO, parseISO } from 'date-fns';
 import { CalendarComponentOptions } from 'ion2-calendar';
-import * as moment from 'moment';
 
 import { WsApiService } from 'src/app/services';
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
@@ -23,15 +23,15 @@ export class AddUnavailabilityPage implements OnInit {
 
   // Options for the ion-calendar (start date)
   startDateOptions: CalendarComponentOptions = {
-    from: moment(this.todaysDate).add(1, 'day').toDate(),
-    to: moment(this.todaysDate).add(1, 'day').add(12, 'month').toDate(),
+    from: add(new Date(this.todaysDate), {days: 1}),
+    to: add(new Date(this.todaysDate), {days: 1, months: 12}),
     disableWeeks: [0]
   };
 
   // Options for the ion-calendar (end date)
   endDateOptions: CalendarComponentOptions = {
-    from: moment(this.todaysDate).add(2, 'day').toDate(),
-    to: moment(this.todaysDate).add(1, 'day').add(12, 'month').toDate()
+    from: add(new Date(this.todaysDate), {days: 2}),
+    to: add(new Date(this.todaysDate), {days: 1, months: 12})
   };
 
   weekDaysOptions = [
@@ -55,9 +55,9 @@ export class AddUnavailabilityPage implements OnInit {
 
   ngOnInit() {
     this.addUnavailabilityForm = this.formBuilder.group({
-      startDate: [moment(this.todaysDate).add(1, 'day').format('YYYY-MM-DD'), Validators.required],
+      startDate: [formatISO(addDays(new Date(this.todaysDate), 1), {representation: 'date'}), Validators.required],
       repeatOn: [[], Validators.required],
-      endDate: [moment(this.todaysDate).add(2, 'day').format('YYYY-MM-DD'), Validators.required],
+      endDate: [formatISO(addDays(new Date(this.todaysDate), 2), {representation: 'date'}), Validators.required],
       time: this.formBuilder.array([
         this.initTimeSlots(),
       ]),
@@ -101,7 +101,7 @@ export class AddUnavailabilityPage implements OnInit {
       end_date: this.addUnavailabilityForm.value.endDate,
       entry_datetime: '', // always empty from backend
       repeat: this.addUnavailabilityForm.value.repeatOn,
-      start_time: this.addUnavailabilityForm.value.time.map(el => moment(el.slotsTime).format('kk:mm')),
+      start_time: this.addUnavailabilityForm.value.time.map(el => format(new Date(el.slotsTime), 'kk:mm')),
       user_id: '' // alwayes empty from backend
     };
 
@@ -179,26 +179,26 @@ export class AddUnavailabilityPage implements OnInit {
   mainDateChanged(event) {
     // Calculate the range of date the user can select when the start date is changed
     this.endDateOptions = {
-      from: moment(event, 'YYYY-MM-DD').add(1, 'day').toDate(),
-      to: moment(this.todaysDate).add(1, 'day').add(12, 'month').toDate(),
+      from: add(parseISO(event), {days: 1}),
+      to: add(new Date(this.todaysDate), {days: 1, months: 12}),
     };
     // Set the end date to the first available day
-    this.formFields.endDate.setValue(moment(event, 'YYYY-MM-DD').add(1, 'day').format('YYYY-MM-DD'));
+    this.formFields.endDate.setValue(formatISO(addDays(parseISO(event), 1), {representation: 'date'}));
   }
 
   // Checking for duplication in slots time and remove it when the user enters the data
   timeChanged(index: number) {
     const control = this.formFields.time as FormArray;
     this.formFields.time.value.map(
-      el => moment(el.slotsTime).format('kk:mm')
+      el => format(new Date(el.slotsTime), 'kk:mm')
     ).filter((v, i) => {
       if (this.formFields.time.value.map(
-        el => moment(el.slotsTime).format('kk:mm')
+        el => format(new Date(el.slotsTime), 'kk:mm')
       ).indexOf(v) !== i) {
         control.removeAt(index);
       }
       return this.formFields.time.value.map(
-        el => moment(el.slotsTime).format('kk:mm')
+        el => format(new Date(el.slotsTime), 'kk:mm')
       ).indexOf(v) === i;
     });
   }

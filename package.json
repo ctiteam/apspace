@@ -103,7 +103,6 @@
     "ionic-plugin-deeplinks": "^1.0.20",
     "karma-firefox-launcher": "^1.1.0",
     "lodash-es": "^4.17.15",
-    "moment": "2.24.0",
     "ng2-dragula": "^2.1.1",
     "otplib": "^11",
     "pdfmake": "^0.1.66",

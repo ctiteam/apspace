@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
-import * as moment from 'moment';
+import { formatISO } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 import { Observable, forkJoin } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
@@ -45,7 +46,8 @@ export class MyAppointmentsPage {
     const bookings$: Observable<ConsultationHour[]> = this.ws.get<ConsultationHour[]>('/iconsult/bookings?').pipe(
       map(bookingList => { // Check if slot is passed and modify its status to passed
         return bookingList.map(bookings => {
-          if (bookings.status === 'Booked' && new Date(moment(bookings.slot_start_time).utcOffset('+0800').format()) < new Date()) {
+          if (bookings.status === 'Booked' && utcToZonedTime(new Date(bookings.slot_start_time), 'Asia/Kuala_Lumpur')
+            < utcToZonedTime(new Date(), 'Asia/Kuala_Lumpur')) {
             bookings.status = 'Passed';
           }
           return bookings;
@@ -138,7 +140,7 @@ export class MyAppointmentsPage {
   }
 
   async cancelBooking(booking) {
-    const startDate = moment(booking.slot_start_time).format('YYYY-MM-DD');
+    const startDate = formatISO(new Date(booking.slot_start_time), { representation: 'date' });
     const alert = await this.alertController.create({
       header: `Cancelling Appointment with ${booking.staff_detail.FULLNAME} on ${startDate}`,
       message: `Please provide us with the cancellation reason <br /> (Max 50 Characters):`,

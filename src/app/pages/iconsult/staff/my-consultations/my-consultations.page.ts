@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   AlertController, LoadingController, ModalController, ToastController
 } from '@ionic/angular';
+import { add } from 'date-fns';
 import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
-import * as moment from 'moment';
 import { Observable, forkJoin } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
@@ -51,13 +51,8 @@ export class MyConsultationsPage {
   dateRange: { from: string; to: string; };
   optionsRange: CalendarComponentOptions = {
     pickMode: 'range',
-    from: moment(this.todaysDate)
-      .add(1, 'day')
-      .toDate(),
-    to: moment(this.todaysDate)
-      .add(1, 'day')
-      .add(12, 'month')
-      .toDate(),
+    from: add(new Date(this.todaysDate), {days: 1}),
+    to: add(new Date(this.todaysDate), {days: 1, months: 12}),
     disableWeeks: [0]
   };
   onSelect = false; // enable or disable select more than one slot to cancel.
@@ -154,7 +149,7 @@ export class MyConsultationsPage {
       dates[currentDateString].items.forEach(item => {
         // only push the slots that is not a passed or within 24 hours slots.
         if (!(new Date(this.datePipe.transform(item.start_time, 'medium', '+0800'))
-          <= moment(new Date()).add(24, 'hours').toDate())) {
+          <= add(new Date(), {hours: 24}))) {
             this.slotsToBeCancelled.push(item);
           }
       });
@@ -203,7 +198,7 @@ export class MyConsultationsPage {
       let isWithin24Hrs = false;
       this.slotsToBeCancelled.forEach(slotToBeCancelled => {
         if (new Date(this.datePipe.transform(slotToBeCancelled.start_time, 'medium', '+0800'))
-        <= moment(new Date()).add(24, 'hours').toDate()) {
+        <= add(new Date(), {hours: 24})) {
           isWithin24Hrs = true;
           return;
         }

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import * as moment from 'moment';
+import { add, formatISO } from 'date-fns';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
@@ -78,9 +78,8 @@ export class LecturerTimetableComponent implements OnInit {
     const lastDateOfWeekZero = 315993600000;
     const secondsPerWeek = 604800000;  // 7 * 24 * 60 * 60 * 1000
     const secondsPerDay = 86400000;  // 24 * 60 * 60 * 1000
-    const weekDateMomentObj = moment(+week * secondsPerWeek + lastDateOfWeekZero + secondsPerDay);
-    // tslint:disable-next-line: max-line-length
-    const formattedWeek = weekDateMomentObj.add(1, 'day').format('YYYY-MM-DD'); // week in apspace starts with sunday, API starts with monday
+    const nextDay = add(+week * secondsPerWeek + lastDateOfWeekZero + secondsPerDay, { days: 1 });
+    const formattedWeek = formatISO(nextDay, { representation: 'date' });
     // tslint:disable-next-line: max-line-length
     this.iab.create(`${this.printUrl}?LectID=${this.code}&Submit=Submit&Week=${formattedWeek}&print_request=print`, '_system', 'location=true');
   }

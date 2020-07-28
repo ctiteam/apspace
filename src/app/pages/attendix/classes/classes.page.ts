@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
-import * as moment from 'moment';
+import { formatISO, subDays } from 'date-fns';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
@@ -115,7 +115,7 @@ export class ClassesPage implements OnInit {
   classType: string;
   duration: number;
   defaultAttendance = 'N'; // default is absent
-  minDate = moment(new Date()).subtract(98, 'days').toDate().toISOString();
+  minDate = subDays(new Date(), 98).toISOString();
   maxDate = new Date().toISOString();
 
   constructor(
@@ -310,7 +310,7 @@ export class ClassesPage implements OnInit {
 
   /** Change date. */
   changeDate(date: string) {
-    this.date = date = moment(date).format('YYYY-MM-DD');
+    this.date = formatISO(new Date(date), { representation: 'date' });
     const d = new Date();
     if (date === isoDate(d)) { // current day
       const nowMins = d.getHours() * 60 + d.getMinutes();

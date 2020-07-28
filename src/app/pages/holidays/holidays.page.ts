@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import * as moment from 'moment';
+import { format, parseISO } from 'date-fns';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
@@ -66,16 +66,17 @@ export class HolidaysPage implements OnInit {
 
         let filteredArray = holidays.filter(holiday => {
           // FILTER HOLIDAYS BY DAY & MONTH
+          const holidayStartDate = parseISO(holiday.holiday_start_date);
           return (
-            moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('dddd').includes(this.filterObject.filterDays) &&
-            moment(holiday.holiday_start_date, 'YYYY-MM-DD').format('MMMM').includes(this.filterObject.filterMonths) &&
+            format(holidayStartDate, 'eeee').includes(this.filterObject.filterDays) &&
+            format(holidayStartDate, 'MMMM').includes(this.filterObject.filterMonths) &&
             holiday.holiday_people_affected.includes(this.filterObject.affecting)
           );
         });
         if (this.filterObject.show === 'upcoming') {
           filteredArray = filteredArray.filter(holiday => {
             // FILTER HOLIDAYS TO THE ONCE UPCOMING ONLY
-            return moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate() > this.todaysDate;
+            return parseISO(holiday.holiday_start_date) > this.todaysDate;
           });
         }
 
@@ -83,12 +84,12 @@ export class HolidaysPage implements OnInit {
           filteredArray = filteredArray.filter(holiday => {
             if (this.filterObject.numberOfDays === '1 days') {
               return this.getNumberOfDaysForHoliday(
-                moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
-                moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()) === '1 day';
+                parseISO(holiday.holiday_start_date),
+                parseISO(holiday.holiday_end_date)) === '1 day';
             } else {
               return this.getNumberOfDaysForHoliday(
-                moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
-                moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()) !== '1 day';
+                parseISO(holiday.holiday_start_date),
+                parseISO(holiday.holiday_end_date)) !== '1 day';
             }
           });
         }
@@ -109,18 +110,17 @@ export class HolidaysPage implements OnInit {
             secondDescription: 'Ends on ' + (
               holiday.holiday_end_date === holiday.holiday_start_date
                 ? 'the same day'
-                : moment(moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate())
-                  .format('dddd, DD MMM YYYY')
+                : format(parseISO(holiday.holiday_end_date), 'eeee, dd MMM yyyy')
             ), // EXPECTED FORMAT HH MM A,
             thirdDescription: this.getNumberOfDaysForHoliday(
-              moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate(),
-              moment(holiday.holiday_end_date, 'YYYY-MM-DD').toDate()),
+              parseISO(holiday.holiday_start_date),
+              parseISO(holiday.holiday_end_date)),
             color: '#27ae60',
             passColor: '#a49999',
-            pass: moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate() < this.todaysDate,
+            pass: parseISO(holiday.holiday_start_date) < this.todaysDate,
             outputFormat: 'event-with-date-only',
             type: holiday.holiday_start_date.split('-')[0],
-            dateOrTime: moment(moment(holiday.holiday_start_date, 'YYYY-MM-DD').toDate()).format('DD MMM (ddd)'), // EXPECTED FORMAT HH MM A
+            dateOrTime: format(parseISO(holiday.holiday_start_date), 'dd MMM (eee)'), // EXPECTED FORMAT HH MM A
           });
         });
         return holidaysEventMode;
@@ -128,6 +128,7 @@ export class HolidaysPage implements OnInit {
     );
   }
 
+  // XXX use differentInDays from date-fns instead
   getNumberOfDaysForHoliday(startDate: Date, endDate: Date): string {
     const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(startDate, endDate);
     const daysDiff = Math.floor(secondsDiff / (3600 * 24));

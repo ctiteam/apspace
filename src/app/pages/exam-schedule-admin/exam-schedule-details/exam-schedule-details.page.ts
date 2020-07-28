@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
-import * as moment from 'moment';
+import { format } from 'date-fns';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
@@ -65,7 +65,7 @@ export class ExamScheduleDetailsPage implements OnInit {
           },
           {
             title: 'Date',
-            detail: moment(examScheduleDetails.DATEDAY).format('DD-MMM-YYYY').toUpperCase()
+            detail: format(new Date(examScheduleDetails.DATEDAY), 'dd-MMM-yyyy').toUpperCase()
           },
           {
             title: 'Time',
@@ -73,7 +73,7 @@ export class ExamScheduleDetailsPage implements OnInit {
           },
           {
             title: 'Publication',
-            detail: `${moment(examScheduleDetails.FROMDATE).format('DD-MMM-YYYY').toUpperCase()} - ${moment(examScheduleDetails.TILLDATE).format('DD-MMM-YYYY').toUpperCase()}`
+            detail: `${format(new Date(examScheduleDetails.FROMDATE), 'dd-MMM-yyyy').toUpperCase()} - ${format(new Date(examScheduleDetails.TILLDATE), 'dd-MMM-yyyy').toUpperCase()}`
           },
           {
             title: 'Assessment Type',

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { LoadingController, ModalController, Platform } from '@ionic/angular';
-import * as moment from 'moment';
+import { format, formatISO } from 'date-fns';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
@@ -18,7 +18,7 @@ export class PrintTransactionsModalPage implements OnInit {
   loading: HTMLIonLoadingElement;
   transactions: Apcard[];
   now = new Date();
-  max = moment(this.now).format('YYYY-MM-DD').toString();
+  max = formatISO(this.now, { representation: 'date' });
   transactionTypes = ['all', 'credit', 'debit'];
   transactionTypeModel = '';
   yearMonthModel = '';
@@ -84,7 +84,7 @@ export class PrintTransactionsModalPage implements OnInit {
     }).reverse().forEach((transaction, index: number) => {
       const studentData = [
         { text: index + 1, alignment: 'center', style: transaction.ItemName === 'Top Up' ? 'greenText' : 'tableCell' },
-        { text: moment(new Date(transaction.SpendDate)).format('YYYY-MM-DD'), style: transaction.ItemName === 'Top Up' ? 'greenText' : 'tableCell' },
+        { text: formatISO(new Date(transaction.SpendDate), { representation: 'date' }), style: transaction.ItemName === 'Top Up' ? 'greenText' : 'tableCell' },
         { text: transaction.SpendTime, alignment: 'center', style: transaction.ItemName === 'Top Up' ? 'greenText' : 'tableCell' },
         { text: transaction.ItemName, style: transaction.ItemName === 'Top Up' ? 'greenText' : 'tableCell' },
         { text: Math.abs(transaction.SpendVal), alignment: 'center', style: transaction.ItemName === 'Top Up' ? 'greenText' : 'redText' },
@@ -136,7 +136,7 @@ export class PrintTransactionsModalPage implements OnInit {
         },
 
         {
-          text: `Report for ${moment(yearMonthDate.getMonth() + 1, 'M').format('MMMM').toString()}, ${yearMonthDate.getFullYear()}`,
+          text: `Report for ${format(yearMonthDate, 'MMMM, yyyy')}`,
           style: 'subheader',
           alignment: 'center',
           margin: [0, 10, 0, 0]

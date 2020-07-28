@@ -2,9 +2,9 @@ import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ModalController, PopoverController, ToastController } from '@ionic/angular';
+import { format, parse } from 'date-fns';
 // import { Storage } from '@ionic/storage';
 import { CalendarComponentOptions } from 'ion2-calendar';
-import * as moment from 'moment';
 import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -103,11 +103,11 @@ export class AddExamSchedulePage implements OnInit, OnDestroy {
 
     if (this.onEdit && examScheduleDetails.TIME) {
       splitTime = examScheduleDetails.TIME.split(' ');
-      startTime = moment(`${splitTime[0]} ${splitTime[1]}`, ['h:mm A']).format('HH:mm:00');
-      endTime = moment(`${splitTime[3]} ${splitTime[4]}`, ['h:mm A']).format('HH:mm:00');
+      startTime = format(parse(`${splitTime[0]} ${splitTime[1]}`, 'h:mm a', new Date()), 'HH:mm:00');
+      endTime = format(parse(`${splitTime[3]} ${splitTime[4]}`, 'h:mm a', new Date()), 'HH:mm:00');
       publicationDate = {
-        from: moment(examScheduleDetails.FROMDATE).format('DD-MMM-YYYY'),
-        to: moment(examScheduleDetails.TILLDATE).format('DD-MMM-YYYY')
+        from: format(new Date(examScheduleDetails.FROMDATE), 'dd-MMM-yyyy'),
+        to: format(new Date(examScheduleDetails.TILLDATE), 'dd-MMM-yyyy')
       };
     }
 
@@ -194,15 +194,17 @@ export class AddExamSchedulePage implements OnInit, OnDestroy {
           if (this.onEdit) {
             filteredExamSchedule = filteredExamSchedule.filter(examSchedule =>
               examSchedule.MODULE_CODE !== this.examScheduleDetails.MODULE_CODE ||
-              moment(examSchedule.FROMDATE).format('DD-MMM-YYYY') !== moment(this.examScheduleDetails.FROMDATE).format('DD-MMM-YYYY') ||
-              moment(examSchedule.TILLDATE).format('DD-MMM-YYYY') !== moment(this.examScheduleDetails.TILLDATE).format('DD-MMM-YYYY')
+              format(new Date(examSchedule.FROMDATE), 'dd-MMM-yyyy')
+              !== format(new Date(this.examScheduleDetails.FROMDATE), 'dd-MMM-yyyy')
+              || format(new Date(examSchedule.TILLDATE), 'dd-MMM-yyyy')
+              !== format(new Date(this.examScheduleDetails.TILLDATE), 'dd-MMM-yyyy')
             );
           }
 
           filteredExamSchedule.forEach(examSchedule =>
             examSchedule.MODULE_CODE === this.examScheduleForm.get('module').value &&
-            moment(examSchedule.FROMDATE).format('DD-MMM-YYYY') === this.examScheduleForm.get('publicationDate').value.from &&
-            moment(examSchedule.TILLDATE).format('DD-MMM-YYYY') === this.examScheduleForm.get('publicationDate').value.to ?
+            format(new Date(examSchedule.FROMDATE), 'dd-MMM-yyyy') === this.examScheduleForm.get('publicationDate').value.from &&
+            format(new Date(examSchedule.TILLDATE), 'dd-MMM-yyyy') === this.examScheduleForm.get('publicationDate').value.to ?
             isDuplicated = true : null
           );
         })
@@ -220,9 +222,9 @@ export class AddExamSchedulePage implements OnInit, OnDestroy {
           till_date: this.examScheduleForm.get('publicationDate').value.to.toUpperCase(),
           module: this.examScheduleForm.get('module').value,
           venue: '',
-          dateday: moment(this.examScheduleForm.get('date').value).format('DD-MMM-YYYY').toUpperCase(),
-          time: this.onEdit ? `${moment(this.examScheduleForm.get('startTime').value, ['HH:mm']).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value, ['HH:mm']).format('h:mm A')}` :
-                              `${moment(this.examScheduleForm.get('startTime').value).format('h:mm A')} till ${moment(this.examScheduleForm.get('endTime').value).format('h:mm A')}`,
+          dateday: format(new Date(this.examScheduleForm.get('date').value), 'dd-MMM-yyyy').toUpperCase(),
+          time: this.onEdit ? `${format(parse(this.examScheduleForm.get('startTime').value, 'HH:mm', new Date()), 'h:mm a')} till ${format(parse(this.examScheduleForm.get('endTime').value, 'HH:mm', new Date()), 'h:mm a')}` :
+                              `${format(new Date(this.examScheduleForm.get('startTime').value), 'h:mm a')} till ${format(new Date(this.examScheduleForm.get('endTime').value), 'h:mm a')}`,
           remarks: this.examScheduleForm.get('remarks').value,
           status: 'Inactive',
           result_date: '',

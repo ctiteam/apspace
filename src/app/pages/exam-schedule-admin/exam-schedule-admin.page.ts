@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
-import * as moment from 'moment';
+import { format, subYears } from 'date-fns';
 import { Observable, Subscription } from 'rxjs';
 import { finalize, shareReplay, tap } from 'rxjs/operators';
 
@@ -70,7 +70,7 @@ export class ExamScheduleAdminPage implements OnInit, OnDestroy {
       shareReplay(1)
     );
 
-    const lastYear = moment(new Date()).subtract(1, 'years').format('YYYY');
+    const lastYear = format(subYears(new Date(), 1), 'yyyy');
 
     this.pastExamSchedules$ = this.ws.get<ExamScheduleAdmin[]>(`/exam/past_exam?year=${lastYear}`).pipe(
       shareReplay(1)

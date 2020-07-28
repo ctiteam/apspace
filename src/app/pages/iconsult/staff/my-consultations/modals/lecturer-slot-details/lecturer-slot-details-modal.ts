@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
-import * as moment from 'moment';
+import { utcToZonedTime } from 'date-fns-tz';
 import { Observable } from 'rxjs';
 
 import { ConsultationHour, ConsultationSlot } from 'src/app/interfaces';
@@ -29,8 +29,9 @@ export class LecturerSlotDetailsModalPage implements OnInit {
     private loadingController: LoadingController
   ) { }
 
-  ngOnInit() { // MIGHT NEED TO INSTALL TIMEZONE IN MOMENT JS
-    if (moment(this.slot.start_time).toDate() <= this.dateNow) {
+  ngOnInit() {
+    if (utcToZonedTime(new Date(this.slot.start_time), 'Asia/Kuala_Lumpur')
+      <= utcToZonedTime(this.dateNow, 'Asia/Kuala_Lumpur')) {
       this.showRemarks = true;
     }
   }

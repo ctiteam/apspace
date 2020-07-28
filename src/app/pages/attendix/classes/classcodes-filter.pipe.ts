@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import * as moment from 'moment';
+import { differenceInDays, parse, parseISO } from 'date-fns';
 
 import { FlatClasscodev1 } from 'src/app/interfaces';
 
@@ -20,14 +20,15 @@ export class ClasscodesFilterPipe implements PipeTransform {
     return classcodes
       .filter(classcode =>
         searchRegExp.test(classcode.CLASS_CODE.toLowerCase())
-        && moment(today).diff(moment(classcode.DATE, 'YYYY-MM-DD').subtract(), 'days') <= timeframe
+        && differenceInDays(today, parseISO(classcode.DATE)) <= timeframe
       ).sort((a, b) => {
         // same date => sort DESC by start time
-        if (moment(b.DATE, 'YYYY-MM-DD').toDate().getTime() === moment(a.DATE, 'YYYY-MM-DD').toDate().getTime()) {
-          return moment(b.TIME_FROM, 'h:mm A').toDate().getTime() - moment(a.TIME_FROM, 'h:mm A').toDate().getTime();
+        if (parseISO(b.DATE).getTime() === parseISO(a.DATE).getTime()) {
+          return parse(b.TIME_FROM, 'h:mm a', new Date()).getTime()
+            - parse(a.TIME_FROM, 'h:mm a', new Date()).getTime();
         }
         // sort DESC by date
-        return moment(b.DATE, 'YYYY-MM-DD').toDate().getTime() - moment(a.DATE, 'YYYY-MM-DD').toDate().getTime();
+        return parseISO(b.DATE).getTime() - parseISO(a.DATE).getTime();
       });
   }
 
