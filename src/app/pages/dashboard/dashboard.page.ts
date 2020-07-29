@@ -28,7 +28,7 @@ import { NotificationModalPage } from '../notifications/notification-modal';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
-  styleUrls: ['./dashboard.page.scss'],
+  styleUrls: ['./dashboard.page.scss']
 })
 export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // USER SETTINGS
@@ -292,6 +292,9 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     contentPadding: true
   };
 
+  // timezone
+  enableMalaysiaTimezone;
+
   constructor(
     private ws: WsApiService,
     private studentTimetableService: StudentTimetableService,
@@ -331,6 +334,10 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
       this.settings.get$('hideProfilePicture').subscribe(data =>
         this.hideProfilePicture = data
+      );
+
+      this.settings.get$('enableMalaysiaTimezone').subscribe(data =>
+        this.enableMalaysiaTimezone = data
       );
 
       this.holidays$ = this.getHolidays(false);
@@ -732,8 +739,9 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     ]).pipe(
       map(([consultations, staffList]) => {
         const filteredConsultations = consultations.filter(
-          consultation => this.eventIsToday(utcToZonedTime(
-            new Date(consultation.slot_start_time), 'Asia/Kuala_Lumpur'), dateNow)
+          consultation => this.eventIsToday(
+            this.enableMalaysiaTimezone ? utcToZonedTime(new Date(consultation.slot_start_time), 'Asia/Kuala_Lumpur')
+            : new Date(consultation.slot_start_time), dateNow)
             && consultation.status === 'Booked'
         );
 
@@ -760,14 +768,18 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
         listOfBookingWithStaffDetail.forEach(upcomingConsultation => {
           let consultationPass = false;
-          if (this.eventPass(format(utcToZonedTime(
-            new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur'), 'hh:mm a'), dateNow)) {
+          if (this.eventPass(format(
+            this.enableMalaysiaTimezone ? utcToZonedTime(new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur')
+            : new Date(upcomingConsultation.slot_start_time), 'hh:mm a'), dateNow)) {
             // CHANGE CLASS STATUS TO PASS IF IT PASS
             consultationPass = true;
           }
-          const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
+          const secondsDiff = this.enableMalaysiaTimezone ? this.getSecondsDifferenceBetweenTwoDates(
             utcToZonedTime(new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur'),
-            utcToZonedTime(new Date(upcomingConsultation.slot_end_time), 'Asia/Kuala_Lumpur'));
+            utcToZonedTime(new Date(upcomingConsultation.slot_end_time), 'Asia/Kuala_Lumpur'))
+            : this.getSecondsDifferenceBetweenTwoDates(
+              new Date(upcomingConsultation.slot_start_time),
+              new Date(upcomingConsultation.slot_end_time));
           consultationsEventMode.push({
             title: 'Consultation Hour',
             color: '#d35400',
@@ -778,7 +790,9 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
             firstDescription: upcomingConsultation.slot_room_code + ' | ' + upcomingConsultation.slot_venue,
             secondDescription: upcomingConsultation.staff_detail.FULLNAME,
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
-            dateOrTime: format(utcToZonedTime(new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur'), 'hh mm a'),
+            dateOrTime: format(
+              this.enableMalaysiaTimezone ? utcToZonedTime(new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur')
+              : new Date(upcomingConsultation.slot_start_time), 'hh mm a'),
           });
         });
 

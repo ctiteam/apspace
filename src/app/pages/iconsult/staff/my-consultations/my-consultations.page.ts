@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -11,6 +10,7 @@ import { finalize, map, tap } from 'rxjs/operators';
 
 import { ConsultationHour, ConsultationSlot } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
+import { DateWithTimezonePipe } from 'src/app/shared/date-with-timezone/date-with-timezone.pipe';
 import { LecturerSlotDetailsModalPage } from './modals/lecturer-slot-details/lecturer-slot-details-modal';
 import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
 // import { UnavailabilityDetailsModalPage } from './modals/unavailability-details/unavailability-details-modal';
@@ -22,12 +22,12 @@ import { ConsultationsSummaryModalPage } from './modals/summary/summary-modal';
   selector: 'app-my-consultations',
   templateUrl: './my-consultations.page.html',
   styleUrls: ['./my-consultations.page.scss'],
-  providers: [DatePipe]
+  providers: [DateWithTimezonePipe]
 })
 export class MyConsultationsPage {
   url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
   slots$: Observable<{}>;
-  todaysDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+  todaysDate = this.dateWithTimezonePipe.transform(new Date(), 'yyyy-MM-dd');
   skeletonItemsNumber = new Array(4);
   loading: HTMLIonLoadingElement;
   summaryDetails: {
@@ -67,7 +67,7 @@ export class MyConsultationsPage {
     private toastCtrl: ToastController,
     private route: ActivatedRoute,
     private router: Router,
-    private datePipe: DatePipe
+    private dateWithTimezonePipe: DateWithTimezonePipe
   ) { }
 
   async showSummary() {
@@ -145,10 +145,10 @@ export class MyConsultationsPage {
     const filteredDates = datesKeys.filter(date => startDate <= date && date <= endDate);
 
     filteredDates.forEach(filteredDate => {
-      const currentDateString = this.datePipe.transform(filteredDate, 'yyyy-MM-dd', '+0800');
+      const currentDateString = this.dateWithTimezonePipe.transform(filteredDate, 'yyyy-MM-dd');
       dates[currentDateString].items.forEach(item => {
         // only push the slots that is not a passed or within 24 hours slots.
-        if (!(new Date(this.datePipe.transform(item.start_time, 'medium', '+0800'))
+        if (!(new Date(this.dateWithTimezonePipe.transform(item.start_time, 'medium'))
           <= add(new Date(), {hours: 24}))) {
             this.slotsToBeCancelled.push(item);
           }
@@ -172,8 +172,8 @@ export class MyConsultationsPage {
     const filteredTimes = [] as { date: string; times: string[]; }[];
 
     slotsToBeCancelled.forEach(slotTBC => {
-      const startDate = this.datePipe.transform(slotTBC.start_time, 'yyyy-MM-dd', '+0800');
-      const startTime = this.datePipe.transform(slotTBC.start_time, 'HH:mm', '+0800');
+      const startDate = this.dateWithTimezonePipe.transform(slotTBC.start_time, 'yyyy-MM-dd');
+      const startTime = this.dateWithTimezonePipe.transform(slotTBC.start_time, 'HH:mm');
 
       if (!(filteredTimes.find(filteredTime => filteredTime.date === startDate))) {
         filteredTimes.push({ date: startDate, times: [startTime] });
@@ -197,7 +197,7 @@ export class MyConsultationsPage {
 
       let isWithin24Hrs = false;
       this.slotsToBeCancelled.forEach(slotToBeCancelled => {
-        if (new Date(this.datePipe.transform(slotToBeCancelled.start_time, 'medium', '+0800'))
+        if (new Date(this.dateWithTimezonePipe.transform(slotToBeCancelled.start_time, 'medium'))
         <= add(new Date(), {hours: 24})) {
           isWithin24Hrs = true;
           return;
@@ -375,7 +375,7 @@ export class MyConsultationsPage {
   resetPage() {
     this.daysConfigurations = [];
     this.slotsToBeCancelled = [];
-    this.todaysDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+    this.todaysDate = this.dateWithTimezonePipe.transform(new Date(), 'yyyy-MM-dd');
     this.dateToFilter = this.todaysDate;
     this.onSelect = false;
     this.onRange = false;
@@ -472,10 +472,9 @@ export class MyConsultationsPage {
               a.booking_detail = getBooking[0];
             }
 
-            const consultationsDate = this.datePipe.transform(
+            const consultationsDate = this.dateWithTimezonePipe.transform(
               a.start_time,
-              'yyyy-MM-dd',
-              '+0800'
+              'yyyy-MM-dd'
             );
             r[consultationsDate] = r[consultationsDate] || {};
             r[consultationsDate].items = r[consultationsDate].items || [];

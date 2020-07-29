@@ -7,7 +7,7 @@ import { Observable, forkJoin } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
 import { ConsultationHour, SlotDetails, StaffDirectory } from 'src/app/interfaces';
-import { AppLauncherService, WsApiService } from 'src/app/services';
+import { AppLauncherService, SettingsService, WsApiService } from 'src/app/services';
 import { SlotDetailsModalPage } from './slot-details-modal';
 
 // import { toastMessageEnterAnimation } from 'src/app/animations/toast-message-animation/enter';
@@ -27,6 +27,8 @@ export class MyAppointmentsPage {
 
   skeltonArray = new Array(4);
 
+  enableMalaysiaTimezone;
+
   constructor(
     private alertController: AlertController,
     private appLauncherService: AppLauncherService,
@@ -34,11 +36,15 @@ export class MyAppointmentsPage {
     private modalCtrl: ModalController,
     private router: Router,
     private toastCtrl: ToastController,
-    private ws: WsApiService
+    private ws: WsApiService,
+    private settings: SettingsService
   ) {
   }
 
   ionViewDidEnter() {
+    this.settings.get$('enableMalaysiaTimezone').subscribe(data =>
+      this.enableMalaysiaTimezone = data
+    );
     this.doRefresh();
   }
 
@@ -46,10 +52,18 @@ export class MyAppointmentsPage {
     const bookings$: Observable<ConsultationHour[]> = this.ws.get<ConsultationHour[]>('/iconsult/bookings?').pipe(
       map(bookingList => { // Check if slot is passed and modify its status to passed
         return bookingList.map(bookings => {
-          if (bookings.status === 'Booked' && utcToZonedTime(new Date(bookings.slot_start_time), 'Asia/Kuala_Lumpur')
-            < utcToZonedTime(new Date(), 'Asia/Kuala_Lumpur')) {
-            bookings.status = 'Passed';
+          if (this.enableMalaysiaTimezone) {
+            if (bookings.status === 'Booked' && utcToZonedTime(new Date(bookings.slot_start_time), 'Asia/Kuala_Lumpur')
+              < utcToZonedTime(new Date(), 'Asia/Kuala_Lumpur')) {
+              bookings.status = 'Passed';
+            }
+          } else {
+            if (bookings.status === 'Booked' && new Date(bookings.slot_start_time)
+              < new Date()) {
+              bookings.status = 'Passed';
+            }
           }
+
           return bookings;
         });
       }),

@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -6,12 +5,13 @@ import { Observable } from 'rxjs';
 
 import { ConsultationSlot, SlotDuplicated, StaffDirectory } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
+import { DateWithTimezonePipe } from 'src/app/shared/date-with-timezone/date-with-timezone.pipe';
 
 @Component({
   selector: 'page-book-slot-modal',
   templateUrl: 'book-slot-modal.html',
   styleUrls: ['book-slot-modal.scss'],
-  providers: [DatePipe]
+  providers: [DateWithTimezonePipe]
 })
 export class BookSlotModalPage implements OnInit {
   url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
@@ -55,7 +55,7 @@ export class BookSlotModalPage implements OnInit {
     public alertCtrl: AlertController,
     private loadingController: LoadingController,
     private toastCtrl: ToastController,
-    private datePipe: DatePipe
+    private dateWithTimezonePipe: DateWithTimezonePipe
   ) {
   }
   ngOnInit() {
@@ -75,10 +75,10 @@ export class BookSlotModalPage implements OnInit {
     };
 
     this.slotSchedule = {
-      start_date: this.datePipe.transform(this.dataToSend.slotData.start_time, 'yyyy-MM-dd', '+0800'),
-      time: this.datePipe.transform(this.dataToSend.slotData.start_time, 'HH:mm', '+0800') +
+      start_date: this.dateWithTimezonePipe.transform(this.dataToSend.slotData.start_time, 'yyyy-MM-dd'),
+      time: this.dateWithTimezonePipe.transform(this.dataToSend.slotData.start_time, 'HH:mm') +
             ' - ' +
-            this.datePipe.transform(this.dataToSend.slotData.end_time, 'HH:mm', '+0800')
+            this.dateWithTimezonePipe.transform(this.dataToSend.slotData.end_time, 'HH:mm')
     };
   }
 

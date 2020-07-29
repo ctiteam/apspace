@@ -4,7 +4,7 @@ import { utcToZonedTime } from 'date-fns-tz';
 import { Observable } from 'rxjs';
 
 import { ConsultationHour, ConsultationSlot } from 'src/app/interfaces';
-import { WsApiService } from 'src/app/services';
+import { SettingsService, WsApiService } from 'src/app/services';
 @Component({
   selector: 'page-lecturer-slot-details-modal',
   templateUrl: 'lecturer-slot-details-modal.html',
@@ -21,18 +21,32 @@ export class LecturerSlotDetailsModalPage implements OnInit {
   bookingDetails$: Observable<ConsultationHour>;
   loading: HTMLIonLoadingElement;
 
+  enableMalaysiaTimezone;
+
   constructor(
     private modalCtrl: ModalController,
     private ws: WsApiService,
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private settings: SettingsService
   ) { }
 
   ngOnInit() {
-    if (utcToZonedTime(new Date(this.slot.start_time), 'Asia/Kuala_Lumpur')
-      <= utcToZonedTime(this.dateNow, 'Asia/Kuala_Lumpur')) {
-      this.showRemarks = true;
+    this.settings.get$('enableMalaysiaTimezone').subscribe(data =>
+      this.enableMalaysiaTimezone = data
+    );
+
+    if (this.enableMalaysiaTimezone) {
+      if (utcToZonedTime(new Date(this.slot.start_time), 'Asia/Kuala_Lumpur')
+        <= utcToZonedTime(this.dateNow, 'Asia/Kuala_Lumpur')) {
+        this.showRemarks = true;
+      }
+    } else {
+      if (new Date(this.slot.start_time)
+        <= this.dateNow) {
+        this.showRemarks = true;
+      }
     }
   }
 

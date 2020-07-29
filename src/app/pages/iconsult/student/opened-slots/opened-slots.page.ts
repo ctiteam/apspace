@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
@@ -8,6 +7,7 @@ import { finalize, map, tap } from 'rxjs/operators';
 
 import { ConsultationSlot, StaffDirectory } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
+import { DateWithTimezonePipe } from 'src/app/shared/date-with-timezone/date-with-timezone.pipe';
 import { BookSlotModalPage } from './book-slot-modal';
 import { CalendarFilterModalPage } from './calendar-filter-modal/calendar-filter-modal';
 
@@ -15,7 +15,7 @@ import { CalendarFilterModalPage } from './calendar-filter-modal/calendar-filter
   selector: 'app-opened-slots',
   templateUrl: './opened-slots.page.html',
   styleUrls: ['./opened-slots.page.scss'],
-  providers: [DatePipe]
+  providers: [DateWithTimezonePipe]
 })
 export class OpenedSlotsPage {
   url = 'https://iuvvf9sxt7.execute-api.ap-southeast-1.amazonaws.com/staging';
@@ -42,7 +42,7 @@ export class OpenedSlotsPage {
     private route: ActivatedRoute,
     private ws: WsApiService,
     private modalCtrl: ModalController,
-    private datePipe: DatePipe
+    private dateWithTimezonePipe: DateWithTimezonePipe
   ) { }
 
   ionViewWillEnter() {
@@ -62,7 +62,7 @@ export class OpenedSlotsPage {
     this.slots$ = this.ws.get<ConsultationSlot[]>('/iconsult/slots?lecturer_sam_account_name=' + this.staffCasId).pipe(
       map(
         slots => slots.reduce((r, a) => { // Grouping the slots daily
-          const startDate = this.datePipe.transform(a.start_time, 'yyyy-MM-dd', '+0800');
+          const startDate = this.dateWithTimezonePipe.transform(a.start_time, 'yyyy-MM-dd');
           const consultationsYearMonth = startDate.split('-')[0] + '-' + startDate.split('-')[1];
           this.totalOpenedSlots = ++totalOpenedSlots; // get the total number of opened slots
           this.totalAvailableSlots = a.status === 'Available' ? ++totalAvailableSlots : totalAvailableSlots;
