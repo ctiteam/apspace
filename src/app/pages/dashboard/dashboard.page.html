@@ -3,17 +3,58 @@
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
 
+  <ion-grid class="ion-no-padding">
+    <ion-row>
+      <ion-col size-xs="12" size-md="4" class="ion-padding">
+        <ion-card class="ion-no-margin">
+          <ng-container *ngIf="orientationStudentDetails$ | async as announcement">
+            <ng-container *ngIf="showAnnouncement">
+              <img src="assets/img/e-orientation.jpg" button [routerLink]="['/', 'profile']" router-direction="forward">
+            </ng-container>
+          </ng-container>
+          <ion-avatar class="glob-margin-auto ion-margin-top" (click)="navigateToPage('profile')" *ngIf="!hideProfilePicture">
+            <ng-container *ngIf="isStudent; else staffImage">
+              <img [src]="'data:image/jpg;base64,' +(photo$ | async)?.base64_photo"
+                onerror="this.src='assets/img/no_img.png'" alt="Profile">
+            </ng-container>
+            <ng-template #staffImage>
+              <ng-container *ngIf="staffProfile$ | async as staffProfile">
+                <img [src]="staffProfile[0].PHOTO" onerror="this.src='assets/img/no_img.png'" alt="Profile">
+              </ng-container>
+            </ng-template>
+          </ion-avatar>
+          <ion-card-header>
+            <ion-card-title class="ion-text-center">
+              {{isStudent ? (userProfile.NAME | titlecase) : (userProfile[0].FULLNAME | titlecase)}}
+            </ion-card-title>
+            <ion-card-subtitle class="ion-text-center">
+              {{isStudent ? (userProfile.STUDENT_NUMBER + ' | ' + userProfile.INTAKE) : (userProfile[0].TITLE | titlecase)}}
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content class="ion-text-center ion-no-padding ion-padding-bottom">
+            <ion-button color="light" fill="clear" (click)="navigateToPage('/settings')">
+              <ion-icon name="settings-outline" size="large"></ion-icon>
+            </ion-button>
+            <ion-button color="warning" fill="clear" (click)="navigateToPage('/notifications')">
+              <ion-icon color="warning" size="large" name="notifications-outline"></ion-icon>
+            </ion-button>
+            <ion-button color="danger" fill="clear" (click)="logout()">
+              <ion-icon slot="icon-only" color="danger" size="large" name="log-out-outline"></ion-icon>
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size-xs="12" size-md="8">
+        Main
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
   <!-- MAIN GRID CLASS -->
   <div class="masonry-list">
 
-    <!-- URGENT ANNOUNCEMENT SECTION (Not included in the drag and drop list) --><!--FOR STUDENT-->
-    <ng-container *ngIf="orientationStudentDetails$ | async as announcement">
-      <div id="announcement" class="masonry-item no-drag" *ngIf="showAnnouncement">
-        <ion-card class="ion-no-margin" button [routerLink]="['/', 'profile']" router-direction="forward">
-          <img src="assets/img/e-orientation.jpg">
-        </ion-card>
-      </div>
-    </ng-container>
+    <!-- URGENT ANNOUNCEMENT SECTION (Not included in the drag and drop list) -->
+    <!--FOR STUDENT-->
 
     <!-- PROFILE SECTION (Not included in the drag and drop list) -->
     <div id="profile" class="masonry-item no-drag">
@@ -22,42 +63,7 @@
           <ion-grid>
             <ion-row>
               <ion-col>
-                <div *ngIf="!hideProfilePicture">
-                  <ion-avatar *ngIf="isStudent; else staffImg" class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
-                    <img [src]="'data:image/jpg;base64,' +(photo$ | async)?.base64_photo"
-                      onerror="this.src='assets/img/no_img.png'" alt="Avatar">
-                  </ion-avatar>
-                  <ng-template #staffImg>
-                    <ion-avatar *ngIf="staffProfile$ | async as staffProfile"
-                      class="dashboard-avatar cursor-pointer float-left" (click)="navigateToPage('profile')">
-                      <img [src]="staffProfile[0].PHOTO" onerror="this.src='assets/img/no_img.png'" alt="Avatar">
-                    </ion-avatar>
-                  </ng-template>
-                </div>
-                <div class="welcome-message-wrapper ion-padding-start float-left"
-                  *ngIf="firstName; else loadingProfile">
-                  <ion-card-title>
-                    <h3 class="responsive-h1">{{greetingMessage}}, <span>{{firstName | titlecase}}</span>
-                    </h3>
-                  </ion-card-title>
-                  <ion-card-subtitle>
-                    <h3 class="responsive-h2">Nice to see you again.</h3>
-                  </ion-card-subtitle>
-                </div>
-                <ng-template #loadingProfile>
-                  <div class="welcome-message-wrapper ion-padding-start float-left" style="width: 75%; padding-top: 0">
-                    <ion-card-title>
-                      <h3 class="responsive-h1">
-                        <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
-                      </h3>
-                    </ion-card-title>
-                    <ion-card-subtitle>
-                      <h3 class="responsive-h2">
-                        <ion-skeleton-text animated style="width: 75%; line-height: 25px"></ion-skeleton-text>
-                      </h3>
-                    </ion-card-subtitle>
-                  </div>
-                </ng-template>
+
               </ion-col>
             </ion-row>
             <ion-row>
@@ -106,7 +112,8 @@
       <ion-grid class="ion-no-padding">
         <ion-row class="ion-no-padding">
           <ion-col *ngIf="isStudent">
-            <ion-card color="success" class="ion-no-margin ion-padding ion-text-center" tappable [routerLink]="['/attendix/update']">
+            <ion-card color="success" class="ion-no-margin ion-padding ion-text-center" tappable
+              [routerLink]="['/attendix/update']">
               <ion-card-content class="ion-no-padding" style="background: var(--ion-color-success)">
                 <p>Sign Attendance</p>
                 <h1 class="ion-margin-top">
@@ -116,7 +123,8 @@
             </ion-card>
           </ion-col>
           <ion-col class="ion-padding-end">
-            <ion-card color="primary" class="ion-no-margin ion-padding ion-text-center" tappable [routerLink]="['/visitor-form']">
+            <ion-card color="primary" class="ion-no-margin ion-padding ion-text-center" tappable
+              [routerLink]="['/visitor-form']">
               <ion-card-content class="ion-no-padding" style="background: var(--ion-color-primary)">
                 <p>Health Declaration</p>
                 <h1 class="ion-margin-top">

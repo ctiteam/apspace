@@ -38,7 +38,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   role: Role;
   isStudent: boolean;
-
+  isCordova: boolean;
   dashboardSectionsSelectBoxModel; // select box dashboard sections value
   allDashboardSections = this.isStudent ? [ // alldashboardSections will not be modified and it will be used in the select box
     'inspirationalQuote',
@@ -91,7 +91,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // attendance default intake can be different from timetable default intake
   // attendanceDefaultIntake = '';
   timetableDefaultIntake = '';
-  firstName: string;
+  userProfile: any;
   block = false;
   numberOfUnreadMsgs: number;
   showAnnouncement = false;
@@ -324,6 +324,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    this.isCordova = this.platform.is('cordova');
     this.storage.get('role').then((role: Role) => {
       this.role = role;
       // tslint:disable-next-line: no-bitwise
@@ -553,13 +554,13 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
         );
       }),
       // tap(studentProfile => this.attendanceDefaultIntake = studentProfile.INTAKE),
-      tap(studentProfile => this.firstName = studentProfile.NAME.split(' ')[0]),
+      tap(studentProfile => this.userProfile = studentProfile),
       tap(studentProfile => this.getTodaysSchedule(studentProfile.INTAKE, refresher)),
       tap(studentProfile => this.getUpcomingEvents(studentProfile.INTAKE, refresher)), // INTAKE NEEDED FOR EXAMS
       // tap(studentProfile => this.getAttendance(studentProfile.INTAKE, true)), // no-cache for attendance
       // tap(studentProfile => this.getUpcomingExam(studentProfile.INTAKE)),
     ) : this.staffProfile$ = this.ws.get<StaffProfile>('/staff/profile', { caching }).pipe(
-      tap(staffProfile => this.firstName = staffProfile[0].FULLNAME.split(' ')[0]),
+      tap(staffProfile => this.userProfile = staffProfile),
       tap(staffProfile => this.getTodaysSchedule(staffProfile[0].ID)),
       shareReplay(1)
     );
