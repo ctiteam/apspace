@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Checkouts, Fines, History, LatestAdditions } from 'src/app/interfaces/koha';
+import { Checkouts, Fine, History, LatestAdditions } from 'src/app/interfaces/koha';
 import { WsApiService } from 'src/app/services';
 
 @Component({
@@ -13,14 +13,12 @@ export class KohaPage implements OnInit {
 
   checkouts$: Observable<Checkouts>;
   historyList$: Observable<History>;
-  fines$: Observable<Fines>;
   recentAdditions$: Observable<LatestAdditions>;
 
   fine: number;
   fineLoading = false;
 
   selectedSegment: 'checkouts' | 'history' | 'latest-additions' = 'checkouts';
-
 
   constructor(
     private ws: WsApiService
@@ -38,7 +36,7 @@ export class KohaPage implements OnInit {
   }
 
   getKohaFine() {
-    this.ws.get<Fines>('/koha/fines').subscribe((res) => {
+    this.ws.get<Fine>('/koha/fines').subscribe((res) => {
       this.fine = Number(res.fine);
       this.fineLoading = true;
     });

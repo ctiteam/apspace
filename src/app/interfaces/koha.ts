@@ -13,7 +13,7 @@ export interface History {
     title: string;
 }
 
-export interface Fines {
+export interface Fine {
     fine: string;
     name: string;
     user_id: string;
