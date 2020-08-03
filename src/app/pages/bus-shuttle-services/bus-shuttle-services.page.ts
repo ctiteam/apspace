@@ -2,18 +2,19 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuController } from '@ionic/angular';
 import { format, max, parse } from 'date-fns';
-import { utcToZonedTime } from 'date-fns-tz';
 import { parseISO } from 'date-fns/fp';
 import { Observable, forkJoin } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
 import { APULocation, APULocations, BusTrip, BusTrips } from 'src/app/interfaces';
 import { SettingsService, WsApiService } from 'src/app/services';
+import { DateWithTimezonePipe } from 'src/app/shared/date-with-timezone/date-with-timezone.pipe';
 
 @Component({
   selector: 'app-bus-shuttle-services',
   templateUrl: './bus-shuttle-services.page.html',
   styleUrls: ['./bus-shuttle-services.page.scss'],
+  providers: [DateWithTimezonePipe]
 })
 export class BusShuttleServicesPage {
   trip$: Observable<BusTrip[]>;
@@ -48,6 +49,7 @@ export class BusShuttleServicesPage {
     private settings: SettingsService,
     private ws: WsApiService,
     private router: Router,
+    private dateWithTimezonePipe: DateWithTimezonePipe
   ) { }
 
   ionViewDidEnter() {
@@ -63,7 +65,7 @@ export class BusShuttleServicesPage {
 
   doRefresh(refresher) {
     // update current time when user refresh
-    this.timeNow = format(utcToZonedTime(this.dateNow, 'Asia/Kuala_Lumpur'), 'kk:mm');
+    this.timeNow = this.dateWithTimezonePipe.transform(this.dateNow, 'HH:mm');
     this.filteredTrip$ = forkJoin([this.getLocations(refresher), this.getTrips(refresher)]).pipe(
       map(res => res[1]),
       tap(_ => this.onFilter(refresher)),
@@ -75,7 +77,21 @@ export class BusShuttleServicesPage {
     const caching = refresher ? 'network-or-cache' : 'cache-only';
     return this.trip$ = this.ws.get<BusTrips>(`/transix/trips/applicable`, { auth: false, caching }).pipe(
       map(res => res.trips),
-    );
+      map(r => {
+        return r.map(item => {
+          const tripHours = item.trip_time.split(':')[0];
+          const tripMinutes = item.trip_time.split(':')[1];
+
+          const todaysDate = this.dateWithTimezonePipe.transform(this.dateNow, 'yyyy-MM-dd');
+
+          const finalDate = todaysDate + 'T' + tripHours + ':' + tripMinutes + ':00+08:00';
+
+          item.trip_time = this.dateWithTimezonePipe.transform(new Date(finalDate), 'HH:mm');
+
+          return item;
+        });
+      }
+    ));
   }
 
   getLocations(refresher: boolean) {
