@@ -53,14 +53,14 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     'news',
     'noticeBoard'
   ] : [
-    'inspirationalQuote',
-    'todaysSchedule',
-    'upcomingEvents',
-    'news',
-    'upcomingTrips',
-    'apcard',
-    'noticeBoard'
-  ];
+      'inspirationalQuote',
+      'todaysSchedule',
+      'upcomingEvents',
+      'news',
+      'upcomingTrips',
+      'apcard',
+      'noticeBoard'
+    ];
 
   // dragulaModelArray will be modified whenever there is a change to the order of the dashboard sections
   dragulaModelArray = this.allDashboardSections;
@@ -91,7 +91,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   // attendance default intake can be different from timetable default intake
   // attendanceDefaultIntake = '';
   timetableDefaultIntake = '';
-  userProfile: any;
+  userProfile: any = {};
   block = false;
   numberOfUnreadMsgs: number;
   showAnnouncement = false;
@@ -539,16 +539,18 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
           catchError(err => {
             return of(err);
           }),
-          tap(studentOrientationDetails => {
-            if (studentOrientationDetails.councelor_details.length > 0) {
-              this.showAnnouncement = true;
-              this.councelorProfile$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
-                map(res =>
-                  res.find(staff =>
-                    staff.ID.toLowerCase() === studentOrientationDetails.councelor_details[0].SAMACCOUNTNAME.toLowerCase()
+          tap(response => {
+            if (response.status === 200) {
+              if (response.councelor_details.length > 0) {
+                this.showAnnouncement = true;
+                this.councelorProfile$ = this.ws.get<StaffDirectory[]>('/staff/listing', { caching: 'cache-only' }).pipe(
+                  map(res =>
+                    res.find(staff =>
+                      staff.ID.toLowerCase() === response.councelor_details[0].SAMACCOUNTNAME.toLowerCase()
+                    )
                   )
-                )
-              );
+                );
+              }
             }
           })
         );
@@ -560,7 +562,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
       // tap(studentProfile => this.getAttendance(studentProfile.INTAKE, true)), // no-cache for attendance
       // tap(studentProfile => this.getUpcomingExam(studentProfile.INTAKE)),
     ) : this.staffProfile$ = this.ws.get<StaffProfile>('/staff/profile', { caching }).pipe(
-      tap(staffProfile => this.userProfile = staffProfile),
+      tap(staffProfile => this.userProfile = staffProfile[0]),
       tap(staffProfile => this.getTodaysSchedule(staffProfile[0].ID)),
       shareReplay(1)
     );
@@ -597,7 +599,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     this.todaysSchedule$ = combineLatest([
       // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
       this.isStudent ? this.getUpcomingClassesForStudent(intakeOrStaffId.replace(/[(]AP[)]|[(]BP[)]/g, ''), refresher)
-                     : this.getUpcomingClassesForLecturer(intakeOrStaffId),
+        : this.getUpcomingClassesForLecturer(intakeOrStaffId),
       this.getUpcomingConsultations() // no-cache for upcoming consultations (students)
     ]).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
@@ -742,7 +744,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
         const filteredConsultations = consultations.filter(
           consultation => this.eventIsToday(
             this.enableMalaysiaTimezone ? utcToZonedTime(new Date(consultation.slot_start_time), 'Asia/Kuala_Lumpur')
-            : new Date(consultation.slot_start_time), dateNow)
+              : new Date(consultation.slot_start_time), dateNow)
             && consultation.status === 'Booked'
         );
 
@@ -771,7 +773,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
           let consultationPass = false;
           if (this.eventPass(format(
             this.enableMalaysiaTimezone ? utcToZonedTime(new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur')
-            : new Date(upcomingConsultation.slot_start_time), 'hh:mm a'), dateNow)) {
+              : new Date(upcomingConsultation.slot_start_time), 'hh:mm a'), dateNow)) {
             // CHANGE CLASS STATUS TO PASS IF IT PASS
             consultationPass = true;
           }
@@ -793,7 +795,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
             thirdDescription: this.secondsToHrsAndMins(secondsDiff),
             dateOrTime: format(
               this.enableMalaysiaTimezone ? utcToZonedTime(new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur')
-              : new Date(upcomingConsultation.slot_start_time), 'hh mm a'),
+                : new Date(upcomingConsultation.slot_start_time), 'hh mm a'),
           });
         });
 
@@ -878,7 +880,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     ]).pipe(
       map(([studentHolidays, staffHolidays]) => {
         const holiday = this.isStudent ? studentHolidays.holidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday
-                                       : staffHolidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday;
+          : staffHolidays.find(h => date < new Date(h.holiday_start_date)) || {} as Holiday;
 
         const examsListEventMode: EventComponentConfigurations[] = [];
         const formattedStartDate = format(parseISO(holiday.holiday_start_date), 'dd MMM yyyy');
