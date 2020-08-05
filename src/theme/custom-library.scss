@@ -1,9 +1,13 @@
+.glob-clearfix {
+  clear: both;
+}
+
 .glob-margin-auto {
   margin: auto;
 }
 
 .glob-text-bold {
-  font-weight: bold;
+  font-weight: bold !important;
 }
 
 .glob-limit-lines {
