@@ -39,6 +39,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   role: Role;
   isStudent: boolean;
   isCordova: boolean;
+  skeletons = new Array(5);
   dashboardSectionsSelectBoxModel; // select box dashboard sections value
   allDashboardSections = this.isStudent ? [ // alldashboardSections will not be modified and it will be used in the select box
     'inspirationalQuote',
@@ -605,9 +606,9 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
         return eventsList.sort((eventA, eventB) => {
-          return parse(eventA.dateOrTime, 'HH:mm a', new Date()) > parse(eventB.dateOrTime, 'HH:mm a', new Date())
+          return parse(eventA.dateOrTime, 'hh:mm a', new Date()) > parse(eventB.dateOrTime, 'hh:mm a', new Date())
             ? 1
-            : parse(eventA.dateOrTime, 'HH:mm a', new Date()) < parse(eventB.dateOrTime, 'HH:mm a', new Date())
+            : parse(eventA.dateOrTime, 'hh:mm a', new Date()) < parse(eventB.dateOrTime, 'hh:mm a', new Date())
               ? -1
               : 0;
         });
@@ -657,9 +658,6 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
       map((timetables: StudentTimetable[]) => {
         const timetableEventMode: EventComponentConfigurations[] = [];
         timetables.forEach((timetable: StudentTimetable) => {
-          const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(
-            parse(timetable.TIME_FROM, 'HH:mm a', new Date()),
-            parse(timetable.TIME_TO, 'HH:mm a', new Date()));
           let classPass = false;
           if (this.eventPass(timetable.TIME_FROM, dateNow)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
             classPass = true;
@@ -668,13 +666,13 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
             title: timetable.MODID,
             firstDescription: timetable.LOCATION + ' | ' + timetable.ROOM,
             secondDescription: timetable.NAME,
-            thirdDescription: this.secondsToHrsAndMins(secondsDiff),
+            thirdDescription: format(parse(timetable.TIME_TO, 'hh:mm a', new Date()), 'hh:mm a'),
             color: '#27ae60',
             pass: classPass,
             passColor: '#d7dee3',
             outputFormat: 'event-with-time-and-hyperlink',
             type: 'class',
-            dateOrTime: format(parse(timetable.TIME_FROM, 'HH:mm a', new Date()), 'hh mm a'), // EXPECTED FORMAT HH MM A
+            dateOrTime: format(parse(timetable.TIME_FROM, 'hh:mm a', new Date()), 'hh:mm a'), // EXPECTED FORMAT HH MM A
           });
         });
         return timetableEventMode;
@@ -710,7 +708,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
         timetables.forEach((timetable: LecturerTimetable) => {
           let classPass = false;
-          if (this.eventPass(format(new Date(timetable.time), 'HH:mm a'), d)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
+          if (this.eventPass(format(new Date(timetable.time), 'hh:mm a'), d)) { // CHANGE CLASS STATUS TO PASS IF IT PASS
             classPass = true;
           }
 
@@ -777,12 +775,6 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
             // CHANGE CLASS STATUS TO PASS IF IT PASS
             consultationPass = true;
           }
-          const secondsDiff = this.enableMalaysiaTimezone ? this.getSecondsDifferenceBetweenTwoDates(
-            utcToZonedTime(new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur'),
-            utcToZonedTime(new Date(upcomingConsultation.slot_end_time), 'Asia/Kuala_Lumpur'))
-            : this.getSecondsDifferenceBetweenTwoDates(
-              new Date(upcomingConsultation.slot_start_time),
-              new Date(upcomingConsultation.slot_end_time));
           consultationsEventMode.push({
             title: 'Consultation Hour',
             color: '#d35400',
@@ -792,10 +784,12 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
             passColor: '#d7dee3',
             firstDescription: upcomingConsultation.slot_room_code + ' | ' + upcomingConsultation.slot_venue,
             secondDescription: upcomingConsultation.staff_detail.FULLNAME,
-            thirdDescription: this.secondsToHrsAndMins(secondsDiff),
+            thirdDescription: format(
+              this.enableMalaysiaTimezone ? utcToZonedTime(new Date(upcomingConsultation.slot_end_time), 'Asia/Kuala_Lumpur')
+                : new Date(upcomingConsultation.slot_end_time), 'hh:mm a'),
             dateOrTime: format(
               this.enableMalaysiaTimezone ? utcToZonedTime(new Date(upcomingConsultation.slot_start_time), 'Asia/Kuala_Lumpur')
-                : new Date(upcomingConsultation.slot_start_time), 'hh mm a'),
+                : new Date(upcomingConsultation.slot_start_time), 'hh:mm a'),
           });
         });
 
@@ -820,7 +814,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   eventPass(eventTime: string, todaysDate: Date) {
-    if (parse(eventTime, 'HH:mm a', new Date()) >= todaysDate) {
+    if (parse(eventTime, 'hh:mm a', new Date()) >= todaysDate) {
       return false;
     }
     return true;
