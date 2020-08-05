@@ -34,7 +34,8 @@
                 <ion-icon name="settings-outline" size="large"></ion-icon>
               </ion-button>
               <ion-button color="warning" fill="clear" (click)="navigateToPage('/notifications')">
-                <ion-badge class="notification-badge" *ngIf="numberOfUnreadMsgs > 0" color="warning">{{ numberOfUnreadMsgs }}</ion-badge>
+                <ion-badge class="notification-badge" *ngIf="numberOfUnreadMsgs > 0" color="warning">
+                  {{ numberOfUnreadMsgs }}</ion-badge>
                 <ion-icon color="warning" size="large" name="notifications-outline"></ion-icon>
               </ion-button>
               <ion-button color="danger" fill="clear" (click)="logout()">
@@ -53,95 +54,201 @@
         <ion-card class="todays-schedule ion-no-margin ion-margin-top">
           <ion-card-header>
             <ion-card-title>
-              Today's Schedule
+              Schedule
             </ion-card-title>
           </ion-card-header>
+          <ion-segment [(ngModel)]="scheduleSegment">
+            <ion-segment-button value="today">
+              <ion-label>Today</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="upcoming">
+              <ion-label>Upcoming</ion-label>
+            </ion-segment-button>
+          </ion-segment>
           <ion-card-content class="ion-no-padding">
-            <ng-container *ngIf="todaysSchedule$ | async as todaysScheduleList; else loadingTodaysSchedule">
-              <div class="todays-schedule-container" *ngIf="todaysScheduleList.length > 0; else noTodaysScheduleList">
-                <div *ngFor="let event of todaysScheduleList">
-                  <div class="event-container"
-                    [ngClass]="{'passed-event': event.pass,'no-hover': event.pass,'class-type': event.type==='class', 'iconsult-type': event.type === 'iconsult'}">
-                    <h2 class="colored-with-type glob-text-bold">{{event.dateOrTime}} - {{event.thirdDescription}}</h2>
-                    <p class="glob-text-bold">
-                      <ion-text color="light">{{event.title}}</ion-text>
-                    </p>
-                    <ion-grid class="ion-no-padding">
-                      <ion-row class="info-item">
-                        <ion-col size="auto" class="ion-no-padding">
-                          <ion-icon class="ion-no-margin small-margin colored-with-type" size="small"
-                            name="location-outline"></ion-icon>
-                        </ion-col>
-                        <ion-col class="ion-no-padding">
-                          <p>
-                            <ion-text class="ion-no-margin" color="medium">{{event.firstDescription}}</ion-text>
-                          </p>
-                        </ion-col>
-                      </ion-row>
-                      <ion-row class="info-item">
-                        <ion-col size="auto" class="ion-no-padding">
-                          <ion-icon class="ion-no-margin small-margin colored-with-type" size="small" name="person">
-                          </ion-icon>
-                        </ion-col>
-                        <ion-col class="ion-no-padding">
-                          <p>
-                            <ion-text class="ion-no-margin" color="medium">{{event.secondDescription}}</ion-text>
-                          </p>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </div>
-                </div>
-              </div>
-              <ng-template #noTodaysScheduleList>
-                <app-message-with-svg imageUrl="assets/img/empty.svg" messageTitle="The list is empty!" wrapperSize="6"
-                  wrapperOffset="3" messageContent="Either no items to show for today, or the list has finished">
-                </app-message-with-svg>
-              </ng-template>
-            </ng-container>
-            <ng-template #loadingTodaysSchedule>
-              <div class="event-calendar">
-                <div class="event-list">
-                  <div class="event" *ngFor="let _ of skeletons">
-                    <div class="event-container no-hover ion-padding-end" style="border: none">
-                      <div class="left-part-container" style="padding-top: 5px;">
-                        <span class="left-part">
-                          <span class="primaryDateTime d-block" style="padding: 2px 20px">
-                            <ion-skeleton-text animated style="width: 100%; line-height: 25px"></ion-skeleton-text>
-                          </span>
-                          <span class="left-part-item small d-block" style="padding: 2px 15px">
-                            <ion-skeleton-text animated style="width: 100%; line-height: 17px"></ion-skeleton-text>
-                          </span>
-                          <span class="left-part-item smallest d-block" style="padding: 2px 20px">
-                            <ion-skeleton-text animated style="width: 100%; line-height: 17px"></ion-skeleton-text>
-                          </span>
-                        </span>
+            <ng-container [ngSwitch]='scheduleSegment'>
+              <ng-container *ngSwitchCase="'today'">
+                <ng-container *ngIf="todaysSchedule$ | async as todaysScheduleList; else loadingTodaysSchedule">
+                  <div class="todays-schedule-container"
+                    *ngIf="todaysScheduleList.length > 0; else noTodaysScheduleList">
+                    <div *ngFor="let event of todaysScheduleList">
+                      <div class="event-container"
+                        [ngClass]="{'passed-event': event.pass,'no-hover': event.pass,'class-type': event.type==='class', 'iconsult-type': event.type === 'iconsult'}">
+                        <h2 class="colored-with-type glob-text-bold">{{event.dateOrTime}} - {{event.thirdDescription}}
+                        </h2>
+                        <p class="glob-text-bold">
+                          <ion-text color="light">{{event.title}}</ion-text>
+                        </p>
+                        <ion-grid class="ion-no-padding">
+                          <ion-row class="info-item">
+                            <ion-col size="auto" class="ion-no-padding">
+                              <ion-icon class="ion-no-margin small-margin colored-with-type" size="small"
+                                name="location-outline"></ion-icon>
+                            </ion-col>
+                            <ion-col class="ion-no-padding">
+                              <p>
+                                <ion-text class="ion-no-margin" color="medium">{{event.firstDescription}}</ion-text>
+                              </p>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row class="info-item">
+                            <ion-col size="auto" class="ion-no-padding">
+                              <ion-icon class="ion-no-margin small-margin colored-with-type" size="small" name="person">
+                              </ion-icon>
+                            </ion-col>
+                            <ion-col class="ion-no-padding">
+                              <p>
+                                <ion-text class="ion-no-margin" color="medium">{{event.secondDescription}}</ion-text>
+                              </p>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
                       </div>
-                      <div class="right-part-container">
-                        <span class="title">
-                          <ion-skeleton-text animated style="width: 90%; line-height: 25px"></ion-skeleton-text>
-                        </span>
-                        <span class="type">
-                          <ion-skeleton-text animated style="width: 100%; line-height: 20px"></ion-skeleton-text>
-                        </span>
-                        <div class="glob-clearfix"></div>
-                        <span class="description">
-                          <ion-skeleton-text animated style="width: 70%; line-height: 18px"></ion-skeleton-text>
-                        </span>
-                        <span class="description">
-                          <ion-skeleton-text animated style="width: 90%; line-height: 18px"></ion-skeleton-text>
-                        </span>
-                        <span class="ion-text-right description">
-                          <ion-skeleton-text animated style="width: 40%; line-height: 18px; float: right">
-                          </ion-skeleton-text>
-                        </span>
-                      </div>
-                      <div class="glob-clearfix"></div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </ng-template>
+                  <ng-template #noTodaysScheduleList>
+                    <app-message-with-svg imageUrl="assets/img/empty.svg" messageTitle="The list is empty!"
+                      wrapperSize="6" wrapperOffset="3"
+                      messageContent="Either no items to show for today, or the list has finished">
+                    </app-message-with-svg>
+                  </ng-template>
+                </ng-container>
+                <ng-template #loadingTodaysSchedule>
+                  <div class="event-calendar">
+                    <div class="event-list">
+                      <div class="event" *ngFor="let _ of skeletons">
+                        <div class="event-container no-hover ion-padding-end" style="border: none">
+                          <div class="left-part-container" style="padding-top: 5px;">
+                            <span class="left-part">
+                              <span class="primaryDateTime d-block" style="padding: 2px 20px">
+                                <ion-skeleton-text animated style="width: 100%; line-height: 25px"></ion-skeleton-text>
+                              </span>
+                              <span class="left-part-item small d-block" style="padding: 2px 15px">
+                                <ion-skeleton-text animated style="width: 100%; line-height: 17px"></ion-skeleton-text>
+                              </span>
+                              <span class="left-part-item smallest d-block" style="padding: 2px 20px">
+                                <ion-skeleton-text animated style="width: 100%; line-height: 17px"></ion-skeleton-text>
+                              </span>
+                            </span>
+                          </div>
+                          <div class="right-part-container">
+                            <span class="title">
+                              <ion-skeleton-text animated style="width: 90%; line-height: 25px"></ion-skeleton-text>
+                            </span>
+                            <span class="type">
+                              <ion-skeleton-text animated style="width: 100%; line-height: 20px"></ion-skeleton-text>
+                            </span>
+                            <div class="glob-clearfix"></div>
+                            <span class="description">
+                              <ion-skeleton-text animated style="width: 70%; line-height: 18px"></ion-skeleton-text>
+                            </span>
+                            <span class="description">
+                              <ion-skeleton-text animated style="width: 90%; line-height: 18px"></ion-skeleton-text>
+                            </span>
+                            <span class="ion-text-right description">
+                              <ion-skeleton-text animated style="width: 40%; line-height: 18px; float: right">
+                              </ion-skeleton-text>
+                            </span>
+                          </div>
+                          <div class="glob-clearfix"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </ng-container>
+              <ng-container *ngSwitchCase="'upcoming'">
+                <ng-container *ngIf="upcomingEvent$ | async as upcomingEvents; else loadingupcomingEvents">
+                  <div class="todays-schedule-container"
+                    *ngIf="upcomingEvents.length > 0; else noUpcomingEvents">
+                    <div *ngFor="let event of upcomingEvents">
+                      <div class="event-container"
+                        [ngClass]="{'passed-event': event.pass,'no-hover': event.pass,'class-type': event.type==='class', 'iconsult-type': event.type === 'iconsult', 'exam-type': event.type === 'exam', 'holiday-type': event.type === 'holiday'}">
+                        <h2 class="colored-with-type glob-text-bold">{{event.dateOrTime}}
+                        </h2>
+                        <p class="glob-text-bold">
+                          <ion-text color="light">{{event.title}}</ion-text>
+                        </p>
+                        <ion-grid class="ion-no-padding">
+                          <ion-row class="info-item">
+                            <ion-col size="auto" class="ion-no-padding">
+                              <ion-icon class="ion-no-margin small-margin colored-with-type" size="small"
+                                [name]="event.type === 'exam' ? 'location-outline' : 'time-outline'"></ion-icon>
+                            </ion-col>
+                            <ion-col class="ion-no-padding">
+                              <p>
+                                <ion-text class="ion-no-margin" color="medium">{{event.firstDescription}}</ion-text>
+                              </p>
+                            </ion-col>
+                          </ion-row>
+                          <ion-row class="info-item" *ngIf="event.type === 'exam'">
+                            <ion-col size="auto" class="ion-no-padding">
+                              <ion-icon class="ion-no-margin small-margin colored-with-type" size="small" name="time-outline">
+                              </ion-icon>
+                            </ion-col>
+                            <ion-col class="ion-no-padding">
+                              <p>
+                                <ion-text class="ion-no-margin" color="medium">{{event.secondDescription | date : 'hh:mm a' :  '+08:00'}} - {{event.thirdDescription | date : 'hh:mm a'}}</ion-text>
+                              </p>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-template #noUpcomingEvents>
+                    <app-message-with-svg imageUrl="assets/img/empty.svg" messageTitle="The list is empty!"
+                      wrapperSize="6" wrapperOffset="3"
+                      messageContent="Either no items to show for today, or the list has finished">
+                    </app-message-with-svg>
+                  </ng-template>
+                </ng-container>
+                <ng-template #loadingupcomingEvents>
+                  <div class="event-calendar">
+                    <div class="event-list">
+                      <div class="event" *ngFor="let _ of skeletons">
+                        <div class="event-container no-hover ion-padding-end" style="border: none">
+                          <div class="left-part-container" style="padding-top: 5px;">
+                            <span class="left-part">
+                              <span class="primaryDateTime d-block" style="padding: 2px 20px">
+                                <ion-skeleton-text animated style="width: 100%; line-height: 25px"></ion-skeleton-text>
+                              </span>
+                              <span class="left-part-item small d-block" style="padding: 2px 15px">
+                                <ion-skeleton-text animated style="width: 100%; line-height: 17px"></ion-skeleton-text>
+                              </span>
+                              <span class="left-part-item smallest d-block" style="padding: 2px 20px">
+                                <ion-skeleton-text animated style="width: 100%; line-height: 17px"></ion-skeleton-text>
+                              </span>
+                            </span>
+                          </div>
+                          <div class="right-part-container">
+                            <span class="title">
+                              <ion-skeleton-text animated style="width: 90%; line-height: 25px"></ion-skeleton-text>
+                            </span>
+                            <span class="type">
+                              <ion-skeleton-text animated style="width: 100%; line-height: 20px"></ion-skeleton-text>
+                            </span>
+                            <div class="glob-clearfix"></div>
+                            <span class="description">
+                              <ion-skeleton-text animated style="width: 70%; line-height: 18px"></ion-skeleton-text>
+                            </span>
+                            <span class="description">
+                              <ion-skeleton-text animated style="width: 90%; line-height: 18px"></ion-skeleton-text>
+                            </span>
+                            <span class="ion-text-right description">
+                              <ion-skeleton-text animated style="width: 40%; line-height: 18px; float: right">
+                              </ion-skeleton-text>
+                            </span>
+                          </div>
+                          <div class="glob-clearfix"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </ng-container>
+            </ng-container>
+
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -391,7 +498,7 @@
       </div>
 
       <!-- UPCOMING EVENTS -->
-      <div id="upcomingEvents" class="masonry-item" *ngIf="shownDashboardSections.includes('upcomingEvents')">
+      <!-- <div id="upcomingEvents" class="masonry-item" *ngIf="shownDashboardSections.includes('upcomingEvents')">
         <div [class.edit-overlay]="editableList" [class.hide]="!editableList">
           <ion-icon name="move" class="handle"></ion-icon>
           <ion-icon name="trash" class="remove" (click)="removeSectionFromDashboard('upcomingEvents')"></ion-icon>
@@ -405,7 +512,7 @@
             <p>**All times in this section are displayed in Malaysia Time Zone (GMT+8)</p>
           </div>
         </dashboard-card>
-      </div>
+      </div> -->
 
       <!-- LOW ATTENDANCE -->
       <div id="lowAttendance" *ngIf="shownDashboardSections.includes('lowAttendance')">

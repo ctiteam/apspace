@@ -40,6 +40,9 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   isStudent: boolean;
   isCordova: boolean;
   skeletons = new Array(5);
+
+  scheduleSegment: 'today' | 'upcoming' = 'today';
+
   dashboardSectionsSelectBoxModel; // select box dashboard sections value
   allDashboardSections = this.isStudent ? [ // alldashboardSections will not be modified and it will be used in the select box
     'inspirationalQuote',
@@ -845,14 +848,13 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
       map(examsList => {
         const examsListEventMode: EventComponentConfigurations[] = [];
         examsList.forEach((exam: ExamSchedule) => {
-          const secondsDiff = this.getSecondsDifferenceBetweenTwoDates(new Date(exam.since), new Date(exam.until));
           const formattedStartDate = format(new Date(exam.since), 'dd MMM yyyy');
           examsListEventMode.push({
             title: exam.subjectDescription,
             firstDescription: exam.venue,
             secondDescription: exam.since,
             secondDescriptionIsDate: true,
-            thirdDescription: this.secondsToHrsAndMins(secondsDiff),
+            thirdDescription: exam.until,
             color: '#ff0000',
             pass: false,
             passColor: '#d7dee3',
@@ -880,8 +882,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
         const formattedStartDate = format(parseISO(holiday.holiday_start_date), 'dd MMM yyyy');
         examsListEventMode.push({
           title: holiday.holiday_name,
-          firstDescription: 'Until: ' + holiday.holiday_end_date,
-          thirdDescription: this.getNumberOfDaysForHoliday(
+          firstDescription: this.getNumberOfDaysForHoliday(
             parseISO(holiday.holiday_start_date),
             parseISO(holiday.holiday_end_date)),
           color: '#273160',

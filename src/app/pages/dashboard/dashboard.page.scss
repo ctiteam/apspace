@@ -46,6 +46,30 @@
         }
       }
 
+      &.exam-type{
+        border-left-color: var(--ion-color-danger);
+
+        .colored-with-type {
+          color: var(--ion-color-danger);
+        }
+
+        .description a {
+          color: var(--ion-color-danger);
+        }
+      }
+
+      &.holiday-type{
+        border-left-color: var(--ion-color-warning);
+
+        .colored-with-type {
+          color: var(--ion-color-warning);
+        }
+
+        .description a {
+          color: var(--ion-color-warning);
+        }
+      }
+
       &.passed-event {
         border-left-color: #a1a1a1;
 
