@@ -36,6 +36,38 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('dashboardSectionsSelectBox', { static: true }) dashboardSectionsselectBoxRef: IonSelect; // hidden selectbox
   @ViewChild('slides') slides: IonSlides;
 
+  @ViewChild('imageSliderSlides') sliderSlides: IonSlides;
+  imageSliderOpts = {
+    initialSlide: 0,
+    slidesPerView: 1,
+    spaceBetween: 10,
+    autoplay: true,
+    centeredContent: true,
+    speed: 400,
+    loop: true,
+    autoplayDisableOnInteraction: true,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+      renderBullet: (_, className) => {
+        return '<span style="width: 10px; height: 10px; background-color: #14557b !important;" class="' + className + '"></span>';
+      }
+    }
+  };
+
+  newsSliderOpts = {
+    slidesPerView: 3,
+    spaceBetween: 30,
+    freeMode: true,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+      renderBullet: (_, className) => {
+        return '<span style="width: 10px; height: 10px; background-color: #14557b !important;" class="' + className + '"></span>';
+      }
+    }
+  };
+
   role: Role;
   isStudent: boolean;
   isCordova: boolean;
@@ -617,15 +649,6 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
         });
       })
     );
-  }
-
-  // SLIDER
-  prevSlide() {
-    this.slides.slidePrev();
-  }
-
-  nextSlide() {
-    this.slides.slideNext();
   }
 
   // FUNCTION POSSIBLE TO MERGE? M01
@@ -1304,5 +1327,14 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   openHelpCentre() {
     this.iab.create('https://apiit.atlassian.net/servicedesk/customer/portals', '_system', 'location=true');
+  }
+
+  // SLIDER
+  prevSlide() {
+    this.sliderSlides.slidePrev();
+  }
+
+  nextSlide() {
+    this.sliderSlides.slideNext();
   }
 }
