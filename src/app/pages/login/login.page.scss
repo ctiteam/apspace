@@ -459,16 +459,14 @@ ion-item .item-inner {
       position: relative;
       overflow: hidden;
 
-      .new-item {}
     }
-  }
-
-  .swiper-button-next,
-  .swiper-button-prev {
-    background-image: none !important;
-
-    ion-icon {
-      color: #14557b;
+    .swiper-button-next,
+    .swiper-button-prev {
+      background-image: none !important;
+  
+      ion-icon {
+        color: #14557b;
+      }
     }
   }
 
