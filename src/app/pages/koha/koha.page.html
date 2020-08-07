@@ -16,8 +16,8 @@
             </ion-card-header>
             <ion-card-content>
               <h1 class="ion-text-center" *ngIf="fineLoading; else loading"
-                [ngStyle]="{'color': (fine == 0 ) ? '#2dd36f' : '#eb445a'}">
-                {{ fine }} RM
+                [ngStyle]="{'color': (fine === 0 ) ? '#2dd36f' : '#eb445a'}">
+                RM {{ fine }}
               </h1>
               <ng-template #loading>
                 <h3>
