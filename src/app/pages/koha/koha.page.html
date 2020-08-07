@@ -1,0 +1,225 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Koha</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="fine-background">
+    <ion-grid>
+      <ion-row>
+        <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4">
+          <ion-card class="fines" size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4">
+            <ion-card-header class="ion-text-center">
+              <h3>Library Fine</h3>
+            </ion-card-header>
+            <ion-card-content>
+              <h1 class="ion-text-center" *ngIf="fineLoading; else loading"
+                [ngStyle]="{'color': (fine === 0 ) ? '#2dd36f' : '#eb445a'}">
+                RM {{ fine }}
+              </h1>
+              <ng-template #loading>
+                <h3>
+                  <loading-spinner></loading-spinner>
+                </h3>
+              </ng-template>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4">
+        <ion-segment [(ngModel)]="selectedSegment" mode="ios" class="segment">
+          <ion-segment-button value="checkouts">
+            <ion-label>
+              Checkout
+            </ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="history">
+            <ion-label>
+              History
+            </ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="latest-additions">
+            <ion-label>
+              Recent Additions
+            </ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ng-container [ngSwitch]="selectedSegment">
+
+    <ng-container *ngSwitchCase="'checkouts'">
+      <ion-grid>
+        <ion-row>
+          <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4"
+            *ngIf="checkouts$ | async as checkouts; else loadingCardList">
+            <ng-template [ngIf]="checkouts.length > 0" [ngIfElse]="noBooks">
+              <ion-card *ngFor="let checkout of checkouts">
+                <ion-card-header>
+                  <ion-card-title>
+                    {{ checkout.title }}
+                  </ion-card-title>
+                  <ion-card-subtitle>
+                    {{ checkout.author }}
+                  </ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-list>
+                    <ion-item lines="none">
+                      <ion-label>
+                        Checkout Date:
+                      </ion-label>
+                      <ion-badge color="primary" slot="end">
+                        {{ checkout.issue_date }}
+                      </ion-badge>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-label>
+                        Due Date:
+                      </ion-label>
+                      <ion-badge color="primary" slot="end">
+                        in {{ checkout.date_due | daysLeft }}
+                      </ion-badge>
+                    </ion-item>
+                  </ion-list>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'history'">
+      <ion-grid>
+        <ion-row>
+          <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4"
+            *ngIf="historyList$ | async as historyList; else loadingCardList">
+            <ng-template [ngIf]="historyList.length > 0" [ngIfElse]="noBooks">
+              <ion-card *ngFor="let history of historyList">
+                <ion-card-header>
+                  <ion-card-title>
+                    {{ history.title }}
+                  </ion-card-title>
+                  <ion-card-subtitle>
+                    {{ history.author }}
+                  </ion-card-subtitle>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-list>
+                    <ion-item lines="none">
+                      <ion-label>
+                        Checkout Date:
+                      </ion-label>
+                      <ion-badge color="primary" slot="end">
+                        {{ history.issue_date }}
+                      </ion-badge>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-label>
+                        Return Date:
+                      </ion-label>
+                      <ion-badge color="primary" slot="end">
+                        {{ history.return_date }}
+                      </ion-badge>
+                    </ion-item>
+                  </ion-list>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'latest-additions'">
+      <ion-grid>
+        <ion-row>
+          <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4"
+            *ngIf="recentAdditions$ | async as recentAdditions; else loadingList">
+            <ion-list *ngFor="let addition of recentAdditions" lines="none">
+              <ion-item>
+                <ion-label>
+                  <h3>{{ addition.title }}</h3>
+                  <p>{{ addition.author }}</p>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-container>
+
+    <ng-template #noBooks>
+      <app-message-with-svg imageUrl="assets/img/no-books.svg" messageTitle="No books found!"
+        messageContent="Perhaps it is a good time time to grab one :)" wrapperSize="6" wrapperMarginTop="30px"
+        wrapperOffset="3"></app-message-with-svg>
+    </ng-template>
+
+    <ng-template #loadingCardList>
+      <ion-grid>
+        <ion-row>
+          <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>
+                  <ion-skeleton-text style="width: 70%"></ion-skeleton-text>
+                </ion-card-title>
+                <ion-card-subtitle>
+                  <ion-skeleton-text style="width: 30%"></ion-skeleton-text>
+                </ion-card-subtitle>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-list>
+                  <ion-item lines="none">
+                    <ion-label>
+                      <ion-skeleton-text></ion-skeleton-text>
+                    </ion-label>
+                    <ion-label slot="end">
+                      <ion-skeleton-text></ion-skeleton-text>
+                    </ion-label>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-label>
+                      <ion-skeleton-text></ion-skeleton-text>
+                    </ion-label>
+                    <ion-label slot="end">
+                      <ion-skeleton-text></ion-skeleton-text>
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+
+    <ng-template #loadingList>
+      <ion-grid>
+        <ion-row>
+          <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4">
+            <ion-list lines="none">
+              <ion-item>
+                <ion-label>
+                  <ion-skeleton-text style="width: 70%"></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 30%"></ion-skeleton-text>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+
+  </ng-container>
+</ion-content>

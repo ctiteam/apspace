@@ -99,7 +99,7 @@ const routes: Routes = [
   {
     path: 'exam-schedule-admin',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./pages/exam-schedule-admin/exam-schedule-admin.module').then( m => m.ExamScheduleAdminPageModule)
+    loadChildren: () => import('./pages/exam-schedule-admin/exam-schedule-admin.module').then(m => m.ExamScheduleAdminPageModule)
   },
   {
     path: 'exam-schedule-details/:examId',
@@ -161,6 +161,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { role: Role.Lecturer },
     loadChildren: () => import('./pages/lecturer-timetable/lecturer-timetable.module').then(m => m.LecturerTimetablePageModule)
+  },
+  {
+    path: 'koha',
+    canActivate: [AuthGuard],
+    data: { role: Role.Student },
+    loadChildren: () => import('./pages/koha/koha.module').then(m => m.KohaPageModule)
   },
   {
     path: 'logout',
