@@ -229,23 +229,9 @@ ion-item .item-inner {
     padding-right: 5px;
   }
 
-  .container {
-    margin: 0 auto;
-    max-width: 1280px;
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-  }
+
 
   @media screen and (max-width: 756px) {
-    .container {
-      padding-right: 0px !important;
-      padding-left: 0px !important;
-      margin-right: 0px !important;
-      margin-left: 0px !important;
-      width: 100% !important;
-    }
-
     .hide-on-small-devices {
       display: none;
     }
@@ -292,24 +278,6 @@ ion-item .item-inner {
       .group.ion-padding.ion-no-padding-bottom-on-small-devices {
         padding-bottom: 0 !important;
       }
-    }
-  }
-
-  @media screen and (min-width: 768px) {
-    .container {
-      width: 750px;
-    }
-  }
-
-  @media screen and (min-width: 992px) {
-    .container {
-      width: 970px;
-    }
-  }
-
-  @media screen and (min-width: 1200px) {
-    .container {
-      width: 1170px;
     }
   }
 

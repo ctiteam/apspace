@@ -90,7 +90,7 @@
   <ng-template #webVersion>
     <div class="main-container web-version">
       <section class="header">
-        <div class="container">
+        <div class="glob-container">
           <ion-grid class="ion-no-padding">
             <ion-row>
               <ion-col class="ion-padding" size="10" offset="1" offset-sm="" size-sm="5" size-md="4" size-lg="3">
@@ -106,7 +106,7 @@
       </section>
 
       <section class="login">
-        <div class="container">
+        <div class="glob-container">
           <ion-grid class="ion-no-padding">
             <ion-row>
               <ion-col class="ion-no-padding ion-padding-start ion-padding-end ion-text-right">
@@ -177,7 +177,7 @@
       </section>
 
       <section class="image-slider ion-padding-top ion-padding-bottom">
-        <div class="container">
+        <div class="glob-container">
           <ion-grid class="ion-no-padding">
             <ion-row>
               <ion-col size="12" class="ion-padding no-padding-on-small-devices">
@@ -217,7 +217,7 @@
       </section>
 
       <section class="main-items ion-padding-top ion-padding-bottom">
-        <div class="container">
+        <div class="glob-container">
           <ion-grid class="ion-no-padding">
             <ion-row>
               <ion-col size="6" size-sm="6" size-lg="3" class="ion-padding">
@@ -270,7 +270,7 @@
       </section>
 
       <section class="news">
-        <div class="container">
+        <div class="glob-container">
           <ng-container *ngIf="news$ | async as news; else loadingNews">
             <ng-container *ngIf="news.length > 0; else noNews">
               <ion-grid class="ion-no-padding ion-padding-top ion-padding-bottom">
@@ -302,7 +302,7 @@
       </section>
 
       <section class="sub-footer">
-        <div class="container">
+        <div class="glob-container">
           <ion-grid class="ion-no-padding">
             <ion-row>
               <ion-col size="12" size-md="4" class="group ion-padding ion-no-padding-bottom-on-small-devices">
@@ -364,7 +364,7 @@
       </section>
 
       <section class="operating-hours">
-        <div class="container">
+        <div class="glob-container">
           <ion-grid class="ion-no-padding" *ngIf="quixCompanies$ | async as quixCompanies">
             <ion-row>
               <ion-col size="12" size-sm="10" offset-sm="1" size-md="6" offset-md="3" size-lg="4" offset-lg="4"
@@ -479,7 +479,7 @@
       </section>
 
       <section class="footer">
-        <div class="container">
+        <div class="glob-container">
           <ion-grid class="ion-padding">
             <ion-row>
               <ion-col size="12" size-md="7" size-lg="6" class="ion-no-padding glob-margin-auto">
