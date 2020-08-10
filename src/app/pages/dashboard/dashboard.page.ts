@@ -55,19 +55,6 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     }
   };
 
-  newsSliderOpts = {
-    slidesPerView: 3,
-    spaceBetween: 30,
-    freeMode: true,
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-      renderBullet: (_, className) => {
-        return '<span style="width: 10px; height: 10px; background-color: #14557b !important;" class="' + className + '"></span>';
-      }
-    }
-  };
-
   role: Role;
   isStudent: boolean;
   isCordova: boolean;

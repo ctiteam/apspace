@@ -1,3 +1,20 @@
+ion-col[scrollx=true], ion-col[scrolly=true] {
+  position: relative;
+  overflow: hidden;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+ion-col[scrollx=true] {
+  overflow-x: auto;
+}
+
+ion-col[scrolly=true] {
+  overflow-y: auto;
+}
+
 .profile {
   .avatar {
     width: 100px;
