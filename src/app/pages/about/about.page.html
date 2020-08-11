@@ -14,12 +14,12 @@
 
         <div class="ion-text-center">
           <img class="logo" src="../../../assets/icon/favicon.png">
-          <h1>
+          <h2 style="font-weight: bold;">
             APSpace
-          </h1>
-          <h3>
+          </h2>
+          <p>
             version: {{ version }}
-          </h3>
+          </p>
         </div>
 
         <ion-card class="ion-margin-top">
@@ -40,18 +40,23 @@
         <div class="ion-padding ion-text-center">
           <ion-list lines="none">
             <ion-item href="https://kb.sites.apiit.edu.my/knowledge-base/apspace-faq/" detail="true">
+              <ion-icon name="help-circle-outline" slot="start"></ion-icon>
               <ion-label>FAQ</ion-label>
             </ion-item>
             <ion-item routerLink="/feedback" detail="true">
+              <ion-icon name="mail-outline" slot="start"></ion-icon>
               <ion-label>Contact Us</ion-label>
             </ion-item>
             <ion-item href="https://bitbucket.org/ctiteam/apspace" detail="true">
+              <ion-icon name="logo-bitbucket" slot="start"></ion-icon>
               <ion-label>Project Repository</ion-label>
             </ion-item>
             <ion-item href="http://www.apu.edu.my/terms-use" detail="true">
+              <ion-icon name="book-outline" slot="start"></ion-icon>
               <ion-label>Terms of Use</ion-label>
             </ion-item>
             <ion-item href="http://www.apu.edu.my/privacy-policy-0" detail="true">
+              <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
               <ion-label>Privacy Policy</ion-label>
             </ion-item>
           </ion-list>
