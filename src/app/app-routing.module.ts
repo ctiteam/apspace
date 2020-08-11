@@ -169,9 +169,9 @@ const routes: Routes = [
     loadChildren: () => import('./pages/koha/koha.module').then(m => m.KohaPageModule)
   },
   {
-    path: 'about-us',
+    path: 'about',
     canActivate: [AuthGuard],
-    loadChildren: () => import('./pages/about-us/about-us.module').then(m => m.AboutUsPageModule)
+    loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule)
   },
   {
     path: 'logout',

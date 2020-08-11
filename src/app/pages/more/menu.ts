@@ -636,12 +636,12 @@ export const menusRaw = [
     tags: ['visa']
   },
   {
-    id: 'about-us' as const,
-    title: 'About Us',
+    id: 'about' as const,
+    title: 'About',
     group: 'Others',
-    url: 'about-us',
+    url: 'about',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['about', 'developer', 'contact', 'version', 'cti']
+    tags: ['about', 'developer', 'contact', 'version', 'cti', 'who']
   },
   {
     id: 'logout' as const,
