@@ -11,65 +11,63 @@
   <ion-grid>
     <ion-row>
       <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4">
-        <ion-card>
+
+        <div class="ion-text-center">
+          <img class="logo" src="../../../assets/icon/favicon.png">
+          <h1>
+            APSpace
+          </h1>
+          <h3>
+            version: {{ version }}
+          </h3>
+        </div>
+
+        <ion-card class="ion-margin-top">
+          <ion-card-header>
+            <ion-card-title>
+              Who are we?
+            </ion-card-title>
+          </ion-card-header>
           <ion-card-content>
-
-            <div class="ion-text-center">
-              <img class="logo" src="../../../assets/icon/favicon.png">
-              <h1>
-                APSpace
-              </h1>
-              <h3>
-                version: {{ version }}
-              </h3>
-            </div>
-
-            <ion-card class="ion-margin-top">
-              <ion-card-header>
-                <ion-card-title>
-                  Who are we?
-                </ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                <p>
-                  We are The Centre of Technology and Innovation (CTI), an international team of developers, engineers,
-                  multimedia developers, designer and business experts aimed towards understanding and solving cutomer
-                  problems.
-                </p>
-              </ion-card-content>
-            </ion-card>
-
-            <div class="ion-padding ion-text-center">
-              <ion-list lines="none">
-                <ion-item href="https://kb.sites.apiit.edu.my/knowledge-base/apspace-faq/" detail="true">
-                  <ion-label>FAQ</ion-label>
-                </ion-item>
-                <ion-item routerLink="/feedback" detail="true">
-                  <ion-label>Contact Us</ion-label>
-                </ion-item>
-                <ion-item href="https://bitbucket.org/ctiteam/apspace" detail="true">
-                  <ion-label>Project Repository</ion-label>
-                </ion-item>
-                <ion-item href="http://www.apu.edu.my/terms-use" detail="true">
-                  <ion-label>Terms of Use</ion-label>
-                </ion-item>
-                <ion-item href="http://www.apu.edu.my/privacy-policy-0" detail="true">
-                  <ion-label>Privacy Policy</ion-label>
-                </ion-item>
-              </ion-list>
-            </div>
-
-
-
-            <ion-footer class="ion-text-center">
-              <p class="ion-padding-top">© 2020 Asia Pacific University of Technology & Innovation (APU). All rights
-                reserved.</p>
-            </ion-footer>
-
+            <p>
+              We are The Centre of Technology and Innovation (CTI), an international team of developers, engineers,
+              multimedia developers, designer and business experts aimed towards understanding and solving cutomer
+              problems.
+            </p>
           </ion-card-content>
         </ion-card>
+
+        <div class="ion-padding ion-text-center">
+          <ion-list lines="none">
+            <ion-item href="https://kb.sites.apiit.edu.my/knowledge-base/apspace-faq/" detail="true">
+              <ion-label>FAQ</ion-label>
+            </ion-item>
+            <ion-item routerLink="/feedback" detail="true">
+              <ion-label>Contact Us</ion-label>
+            </ion-item>
+            <ion-item href="https://bitbucket.org/ctiteam/apspace" detail="true">
+              <ion-label>Project Repository</ion-label>
+            </ion-item>
+            <ion-item href="http://www.apu.edu.my/terms-use" detail="true">
+              <ion-label>Terms of Use</ion-label>
+            </ion-item>
+            <ion-item href="http://www.apu.edu.my/privacy-policy-0" detail="true">
+              <ion-label>Privacy Policy</ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+
+
+
+
+
       </ion-col>
     </ion-row>
   </ion-grid>
 
 </ion-content>
+
+<ion-footer class="ion-text-center">
+  <p>© 2020 Asia Pacific University of Technology & Innovation (APU). All rights
+    reserved.</p>
+</ion-footer>
