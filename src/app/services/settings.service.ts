@@ -78,6 +78,7 @@ const defaultData: Settings = {
   shakeSensitivity: 40,
   hideProfilePicture: false,
   enableMalaysiaTimezone: true,
+  timeFormat: '24',
   busFirstLocation: '',
   busSecondLocation: '',
 };

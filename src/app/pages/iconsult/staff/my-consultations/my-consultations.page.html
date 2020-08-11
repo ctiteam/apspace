@@ -101,7 +101,7 @@
                         </ion-col>
                         <ion-col size-xs="7" size-sm="8">
                           <span class="title">
-                            {{slot.start_time | dateWithTimezone: "HH:mm"}} - {{slot.end_time | dateWithTimezone: "HH:mm"}}
+                            {{slot.start_time | dateWithTimezone: "time"}} - {{slot.end_time | dateWithTimezone: "time"}}
                           </span>
                           <span class="description small-margin-top">
                             <ion-icon name="pin"></ion-icon>
@@ -171,7 +171,7 @@
                       <ion-row *ngIf="slot.status !== 'Cancelled' && slot.status !== 'Cancelled by lecturer'">
                         <ion-col size-xs="7" size-sm="8">
                           <span class="title">
-                            {{slot.start_time | dateWithTimezone: "HH:mm"}} - {{slot.end_time | dateWithTimezone: "HH:mm"}}
+                            {{slot.start_time | dateWithTimezone: "time"}} - {{slot.end_time | dateWithTimezone: "time"}}
                           </span>
                           <span class="description small-margin-top">
                             <ion-icon name="pin"></ion-icon>

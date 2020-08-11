@@ -44,6 +44,7 @@ export class SettingsPage implements OnInit {
   ];
   hideProfilePicture;
   enableMalaysiaTimezone;
+  timeFormat;
   locationOptions = [
     'New Campus',
     'TPM',
@@ -81,6 +82,9 @@ export class SettingsPage implements OnInit {
     this.settings.get$('enableMalaysiaTimezone').subscribe(value =>
       this.enableMalaysiaTimezone = value
     );
+    this.settings.get$('timeFormat').subscribe(value =>
+      this.timeFormat = value
+    );
   }
 
   ngOnInit() {
@@ -105,6 +109,10 @@ export class SettingsPage implements OnInit {
 
   toggleDisplayMalaysiaTimezone() {
     this.settings.set('enableMalaysiaTimezone', this.enableMalaysiaTimezone);
+  }
+
+  toggleTimeFormat() {
+    this.settings.set('timeFormat', this.timeFormat);
   }
 
   getLocations() {

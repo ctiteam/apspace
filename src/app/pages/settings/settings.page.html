@@ -80,6 +80,13 @@
                 <ion-label>Enable Malaysia Timezone</ion-label>
                 <ion-toggle [(ngModel)]="enableMalaysiaTimezone" (ngModelChange)="toggleDisplayMalaysiaTimezone()"></ion-toggle>
               </ion-item>
+              <ion-item class="ion-no-padding">
+                <ion-label>Time Format</ion-label>
+                <ion-select [(ngModel)]="timeFormat" (ngModelChange)="toggleTimeFormat()">
+                  <ion-select-option value="12">12 Hours</ion-select-option>
+                  <ion-select-option value="24">24 Hours</ion-select-option>
+                </ion-select>
+              </ion-item>
               <ion-item class="ion-no-padding ion-no-margin hidden-lg-up">
                 <ion-grid class="ion-no-padding">
                   <ion-row>

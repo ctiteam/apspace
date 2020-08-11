@@ -173,7 +173,7 @@ export class MyConsultationsPage {
 
     slotsToBeCancelled.forEach(slotTBC => {
       const startDate = this.dateWithTimezonePipe.transform(slotTBC.start_time, 'yyyy-MM-dd');
-      const startTime = this.dateWithTimezonePipe.transform(slotTBC.start_time, 'HH:mm');
+      const startTime = this.dateWithTimezonePipe.transform(slotTBC.start_time, 'time');
 
       if (!(filteredTimes.find(filteredTime => filteredTime.date === startDate))) {
         filteredTimes.push({ date: startDate, times: [startTime] });

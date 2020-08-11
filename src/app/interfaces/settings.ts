@@ -28,6 +28,7 @@ export interface Settings {
   shakeSensitivity: number;
   hideProfilePicture: boolean;
   enableMalaysiaTimezone: boolean;
+  timeFormat: string;
   /* bus shuttle service */
   busFirstLocation: string;
   busSecondLocation: string;

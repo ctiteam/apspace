@@ -60,8 +60,8 @@
           <ion-icon class="tertiary-txt-color" name="time" slot="start"></ion-icon>
           <ion-label>
             <p class="tertiary-txt-color">Appointment Time:</p>
-            <h4 class="main-text-color">{{ slot.start_time | dateWithTimezone: 'HH:mm' }} -
-              {{ slot.end_time | dateWithTimezone: 'HH:mm' }}</h4>
+            <h4 class="main-text-color">{{ slot.start_time | dateWithTimezone: 'time' }} -
+              {{ slot.end_time | dateWithTimezone: 'time' }}</h4>
           </ion-label>
         </ion-item>
         <ion-item>

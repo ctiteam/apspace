@@ -65,7 +65,7 @@ export class BusShuttleServicesPage {
 
   doRefresh(refresher) {
     // update current time when user refresh
-    this.timeNow = this.dateWithTimezonePipe.transform(this.dateNow, 'HH:mm');
+    this.timeNow = this.dateWithTimezonePipe.transform(this.dateNow, 'time');
     this.filteredTrip$ = forkJoin([this.getLocations(refresher), this.getTrips(refresher)]).pipe(
       map(res => res[1]),
       tap(_ => this.onFilter(refresher)),
@@ -86,7 +86,7 @@ export class BusShuttleServicesPage {
 
           const finalDate = todaysDate + 'T' + tripHours + ':' + tripMinutes + ':00+08:00';
 
-          item.trip_time = this.dateWithTimezonePipe.transform(new Date(finalDate), 'HH:mm');
+          item.trip_time = this.dateWithTimezonePipe.transform(new Date(finalDate), 'time');
 
           return item;
         });
