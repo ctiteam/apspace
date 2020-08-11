@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>About</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4">
+
+        <div class="ion-text-center">
+          <img class="logo" src="../../../assets/icon/favicon.png">
+          <h2 style="font-weight: bold;">
+            APSpace
+          </h2>
+          <p>
+            version: {{ version }}
+          </p>
+        </div>
+
+        <ion-card class="ion-margin-top">
+          <ion-card-header>
+            <ion-card-title>
+              Who are we?
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>
+              We are The Centre of Technology and Innovation (CTI), an international team of developers, engineers,
+              multimedia developers, designer and business experts aimed towards understanding and solving cutomer
+              problems.
+            </p>
+          </ion-card-content>
+        </ion-card>
+
+        <div class="ion-padding ion-text-center">
+          <ion-list lines="none">
+            <ion-item (click)="openUrl('https://kb.sites.apiit.edu.my/knowledge-base/apspace-faq/')" detail="true" button="true">
+              <ion-icon name="help-circle-outline" slot="start"></ion-icon>
+              <ion-label>FAQ</ion-label>
+            </ion-item>
+            <ion-item routerLink="/feedback" detail="true" button="true">
+              <ion-icon name="mail-outline" slot="start"></ion-icon>
+              <ion-label>Contact Us</ion-label>
+            </ion-item>
+            <ion-item (click)="openUrl('https://bitbucket.org/ctiteam/apspace')" detail="true" button="true">
+              <ion-icon name="logo-bitbucket" slot="start"></ion-icon>
+              <ion-label>Project Repository</ion-label>
+            </ion-item>
+            <ion-item (click)="openUrl('http://www.apu.edu.my/terms-use')" detail="true" button="true">
+              <ion-icon name="book-outline" slot="start"></ion-icon>
+              <ion-label>Terms of Use</ion-label>
+            </ion-item>
+            <ion-item (click)="openUrl('http://www.apu.edu.my/privacy-policy-0')" detail="true" button="true">
+              <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
+              <ion-label>Privacy Policy</ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+
+
+
+
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+
+<ion-footer class="ion-text-center">
+  <p class="ion-padding">© 2020 Asia Pacific University of Technology & Innovation (APU). All rights
+    reserved.</p>
+</ion-footer>

@@ -636,6 +636,14 @@ export const menusRaw = [
     tags: ['visa']
   },
   {
+    id: 'about' as const,
+    title: 'About',
+    group: 'Others',
+    url: 'about',
+    role: Role.Student | Role.Lecturer | Role.Admin,
+    tags: ['about', 'developer', 'contact', 'version', 'cti', 'who']
+  },
+  {
     id: 'logout' as const,
     title: 'Logout',
     group: 'Others',

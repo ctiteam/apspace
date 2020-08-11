@@ -169,6 +169,11 @@ const routes: Routes = [
     loadChildren: () => import('./pages/koha/koha.module').then(m => m.KohaPageModule)
   },
   {
+    path: 'about',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule)
+  },
+  {
     path: 'logout',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/logout/logout.module').then(m => m.LogoutPageModule)
@@ -259,7 +264,7 @@ const routes: Routes = [
   },
   {
     path: 'visitor-form',
-    loadChildren: () => import('./pages/covid-visitor-form/covid-visitor-form.module').then( m => m.CovidVisitorFormPageModule)
+    loadChildren: () => import('./pages/covid-visitor-form/covid-visitor-form.module').then(m => m.CovidVisitorFormPageModule)
   },
   // {
   //   path: 'control-room-dashboard',
