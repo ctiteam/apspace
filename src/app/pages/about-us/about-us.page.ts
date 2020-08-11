@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { version } from '../../../../package.json';
+import { VersionService } from 'src/app/services/version.service';
 
 @Component({
   selector: 'app-about-us',
@@ -10,12 +10,12 @@ import { version } from '../../../../package.json';
 })
 export class AboutUsPage implements OnInit {
 
-  version = version;
+  version = this.ver.version;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private ver: VersionService
   ) { }
-
 
   ngOnInit() {
   }
