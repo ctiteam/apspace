@@ -1,20 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 import { VersionService } from 'src/app/services/version.service';
+
 
 @Component({
   selector: 'app-about',
   templateUrl: './about.page.html',
   styleUrls: ['./about.page.scss'],
 })
-export class AboutPage implements OnInit {
+export class AboutPage {
 
   version = this.ver.version;
 
   constructor(
+    public aib: InAppBrowser,
     private ver: VersionService
   ) { }
 
-  ngOnInit() {
+  openUrl(url: string) {
+    this.aib.create(url, '_system', 'location=true');
   }
 }
