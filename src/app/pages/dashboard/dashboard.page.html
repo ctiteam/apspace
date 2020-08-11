@@ -50,6 +50,32 @@
             </ion-card-content>
           </ion-card>
 
+          <ion-card class="quick-access-buttons ion-no-margin ion-margin-top">
+            <ion-card-header class="ion-padding">
+              <ion-card-title>
+                Quick Access
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-grid>
+                <ion-row>
+                  <ion-col class="auto">
+                    <ion-button expand="block" [routerLink]="['/visitor-form']">
+                      Update Your Location
+                      <ion-icon name="qr-code-outline" slot="end"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                  <ion-col class="auto">
+                    <ion-button expand="block" [routerLink]="['/attendix/update']">
+                      Sign Class Attendance
+                      <ion-icon name="checkmark-done-circle-outline" slot="end"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+
           <ion-card class="todays-schedule ion-no-margin ion-margin-top">
             <ion-card-header class="ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
               <ion-card-title>
