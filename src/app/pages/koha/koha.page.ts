@@ -36,7 +36,7 @@ export class KohaPage implements OnInit {
   }
 
   getKohaFine() {
-    this.ws.get<Fine>('/koha/fines').subscribe((res) => {
+    this.ws.get<Fine>('/koha/fine').subscribe((res) => {
       this.fine = Number(res.fine);
       this.fineLoading = true;
     });
