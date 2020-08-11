@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { finalize, map, tap } from 'rxjs/operators';
 
 import { StudentTimetable } from '../../interfaces';
 import { StudentTimetableService } from '../../services';
@@ -12,7 +13,8 @@ import { classroomTypes } from './types';
 })
 export class ClassroomFinderPage implements OnInit {
 
-  location = 'NEW CAMPUS';
+  locations = [];
+  location: string;
   day: string;
   since: string;
   until: string;
@@ -23,11 +25,12 @@ export class ClassroomFinderPage implements OnInit {
 
   timetables$: Observable<StudentTimetable[]>;
 
-  constructor(public tt: StudentTimetableService) { }
+  constructor(
+    public tt: StudentTimetableService
+  ) { }
 
   ngOnInit() {
-    this.timetables$ = this.tt.get();
-
+    this.timetables$ = this.getTimetableData();
     const date = new Date();
 
     // days start from monday
@@ -35,6 +38,28 @@ export class ClassroomFinderPage implements OnInit {
 
     this.since = `${('0' + date.getHours()).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`;
     this.until = `${('0' + (date.getHours() + 1)).slice(-2)}:${('0' + date.getMinutes()).slice(-2)}`;
+  }
+
+  doRefresh(refresher?) {
+    this.timetables$ = this.getTimetableData().pipe(
+      finalize(() => refresher && refresher.target.complete())
+    );
+  }
+
+  getTimetableData() {
+    return this.tt.get()
+      .pipe(
+        tap(data => {
+          this.locations = []; // Clean the array (just incase)
+          data.map(item => {
+            if (this.locations.indexOf(item.LOCATION) === -1) {
+              this.locations.push(item.LOCATION);
+            }
+          });
+        }),
+        tap(_ => this.location = this.locations[0]),
+        map(data => data)
+      );
   }
 
   changeSince(value: string) {

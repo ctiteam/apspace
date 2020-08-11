@@ -8,49 +8,63 @@
 </ion-header>
 
 <ion-content>
-  <ion-card>
-    <ion-item>
-      <ion-label>Location</ion-label>
-      <ion-select [(ngModel)]="location" interface="popover">
-        <ion-select-option value="NEW CAMPUS">APU</ion-select-option>
-        <ion-select-option value="TPM">APIIT</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label>Day</ion-label>
-      <ion-select [(ngModel)]="day" interface="popover">
-        <ion-select-option *ngFor="let day of days" [value]="day">{{ day }}</ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label>Start</ion-label>
-      <ion-datetime [(ngModel)]="since" displayFormat="HH:mm" hourValues="[7,8,9,10,11,12,13,14,15,16,17,18,19,20]"
-        (ionChange)="changeSince($event.target.value)">
-      </ion-datetime>
-    </ion-item>
-    <ion-item>
-      <ion-label>End</ion-label>
-      <ion-datetime [(ngModel)]="until" displayFormat="HH:mm" (ionChange)="changeUntil($event.target.value)">
-      </ion-datetime>
-    </ion-item>
-    <ion-item lines="none">
-      <ion-label>Room Types</ion-label>
-      <ion-select [(ngModel)]="types" multiple>
-        <ion-select-option *ngFor="let type of classroomTypes" [value]="type.key">
-          {{ type.name }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
-  </ion-card>
+  <ng-container *ngIf="timetables$ | async as timetable; else loadingTimetableData">
+    <ion-refresher slot="fixed" pullFactor="0.5" pullMin="100" pullMax="200" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
-  <ion-card *ngIf="timetables$ | async | at:location | for:types | on:day:since:until as rooms">
-    <ion-card-header>
-      <ion-card-title>{{ rooms.length }} available rooms</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-chip *ngFor="let room of rooms; trackBy: trackByName" [routerLink]="['/student-timetable', { room: room }]">
-        {{ room }}
-      </ion-chip>
-    </ion-card-content>
-  </ion-card>
+    <ion-card>
+      <ion-item>
+        <ion-label>Location</ion-label>
+        <ion-select [(ngModel)]="location" interface="popover">
+          <ion-select-option *ngFor="let location of locations" [value]="location">{{ location }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Day</ion-label>
+        <ion-select [(ngModel)]="day" interface="popover">
+          <ion-select-option *ngFor="let day of days" [value]="day">{{ day }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>Start</ion-label>
+        <ion-datetime [(ngModel)]="since" displayFormat="HH:mm" hourValues="[7,8,9,10,11,12,13,14,15,16,17,18,19,20]"
+          (ionChange)="changeSince($event.target.value)">
+        </ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>End</ion-label>
+        <ion-datetime [(ngModel)]="until" displayFormat="HH:mm" (ionChange)="changeUntil($event.target.value)">
+        </ion-datetime>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label>Room Types</ion-label>
+        <ion-select [(ngModel)]="types" multiple>
+          <ion-select-option *ngFor="let type of classroomTypes" [value]="type.key">
+            {{ type.name }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card>
+
+    <ion-card *ngIf="timetable | at:location | for:types | on:day:since:until as rooms">
+      <ion-card-header>
+        <ion-card-title>{{ rooms.length }} available rooms</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-chip *ngFor="let room of rooms; trackBy: trackByName"
+          [routerLink]="['/student-timetable', { room: room }]">
+          {{ room }}
+        </ion-chip>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <ng-template #loadingTimetableData>
+    <ion-card>
+      <ion-card-content>
+        <ion-skeleton-text animated style="line-height: 150px;"></ion-skeleton-text>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
 </ion-content>
