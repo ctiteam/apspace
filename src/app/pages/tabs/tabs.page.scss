@@ -1,0 +1,61 @@
+.tabs-searchbar {
+  width: 248px;
+  position: absolute;
+  top: 0px;
+  left: 16px;
+  --border-radius: 50px;
+  text-align: left;
+  --background: rgba(74, 74, 74, 0.75);
+  display: none;
+}
+
+.extra-tab {
+  display: none;
+  visibility: hidden;
+}
+
+@media screen and (min-width: 720px) {
+  .tabs-searchbar {
+    display: block;
+  }
+  .extra-tab{
+      display: block;
+  }
+}
+
+
+@media screen and (min-width: 976px) {
+  .extra-tab.extra-tab-1 {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1240px) {
+  .extra-tab.extra-tab-1 {
+    display: none;
+  }
+
+  .extra-tab.extra-tab-2 {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1425px) {
+  .extra-tab.extra-tab-1 {
+    display: none;
+  }
+
+  .extra-tab.extra-tab-2 {
+    display: none;
+  }
+
+  .extra-tab.extra-tab-3 {
+    display: none;
+  }
+}
+
+
+// 720px with 3 extra tabs
+// 976px with 2 extra tabs
+// 1240px with 1 extra tab
+// 1425px with 0 extra tabs + 16px left

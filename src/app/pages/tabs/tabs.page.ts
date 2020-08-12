@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
 
@@ -13,10 +13,12 @@ import { TabItem } from './tab-item.interface';
 export class TabsPage implements OnInit {
   selectedTab: string;
   tabs: TabItem[];
+  bottomTabs = false;
 
   constructor(private router: Router, private storage: Storage) { }
 
   ngOnInit() {
+    this.onResize();
     this.selectedTab = this.router.url.split('/').pop();
 
     if (this.selectedTab === 'tabs') {
@@ -109,6 +111,11 @@ export class TabsPage implements OnInit {
       }
     });
     // tslint:enable:no-bitwise
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.bottomTabs = window.innerWidth <= 720;
   }
 
 }
