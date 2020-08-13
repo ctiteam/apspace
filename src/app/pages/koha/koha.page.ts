@@ -15,12 +15,10 @@ export class KohaPage implements OnInit {
   checkouts$: Observable<Checkouts>;
   historyList$: Observable<History>;
   recentAdditions$: Observable<LatestAdditions>;
-
   fine$: Observable<number>;
 
   selectedSegment: 'checkouts' | 'history' | 'latest-additions' = 'checkouts';
 
-  url = 'https://ousb3s0l8k.execute-api.ap-southeast-1.amazonaws.com/dev/koha/';
 
   constructor(
     private ws: WsApiService
@@ -42,11 +40,4 @@ export class KohaPage implements OnInit {
       })
     );
   }
-
-  getKohaDataTest() {
-    this.checkouts$ = this.ws.get<Checkouts>('checkouts', { url: this.url });
-    this.historyList$ = this.ws.get<History>('history', { url: this.url });
-    this.recentAdditions$ = this.ws.get<LatestAdditions>('latestadditions', { url: this.url });
-  }
-
 }
