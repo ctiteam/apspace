@@ -7,35 +7,9 @@
       Timetable
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button *ngIf="intakeSelectable" fill="outline" (click)="presentIntakeSearch()"
-        class="colored-text colored-border">
-        {{ intake || 'Intakes' }}
+      <ion-button class="print-button colored-border" (click)="sendToPrint()">
+        <ion-icon slot="icon-only" name="print" class="colored-text"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="intake && availableGrouping.length > 0" fill="outline"
-        class="colored-text colored-border"
-        (click)="chooseGrouping()" [disabled]="availableGrouping.length <= 2"> <!-- ALL, T1 -->
-        {{ selectedGrouping || 'Grouping' }}
-      </ion-button>
-      <ion-button fill="icon" (click)="show2ndToolbar = !show2ndToolbar" class="colored-text">
-        <ion-icon *ngIf="!show2ndToolbar" md="ios-arrow-down" name="arrow-down"></ion-icon>
-        <ion-icon *ngIf="show2ndToolbar" md="ios-arrow-up" name="arrow-up"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-
-  <ion-toolbar *ngIf="show2ndToolbar">
-    <ion-buttons slot="start">
-      <ion-button fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
-        class="colored-text colored-border">
-        {{ ((viewWeek ? selectedWeek : selectedDate) | date) || 'Weeks' }}
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-item lines="none" (click)="rotateView()" fill="outline" [class.colored-text]="viewWeek"
-        [class.colored-border]="viewWeek">
-        <ion-label style="margin-right: 5px;">Weekly</ion-label>
-        <ion-toggle style="padding-left: 0; padding-right: 0;" [checked]="viewWeek"></ion-toggle>
-      </ion-item>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -55,27 +29,40 @@
         <ion-grid>
           <ion-row>
             <ion-col>
+              <ion-row>
+                <ion-buttons class="filters">
+                  <ion-row>
+                    <ion-button *ngIf="intakeSelectable" fill="outline" (click)="presentIntakeSearch()"
+                      class="colored-text colored-border">
+                      {{ intake || 'Intakes' }}
+                      <ion-icon name="chevron-down-outline" style="padding-right: 0px;"></ion-icon>
+                    </ion-button>
+                    <ion-button fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
+                      class="colored-text colored-border">
+                      {{selectedWeek | date : 'dd MMM yyy'}}
+                      <ion-icon name="chevron-down-outline" style="padding-right: 0px;"></ion-icon>
+                    </ion-button>
+                    <ion-button *ngIf="intake && availableGrouping.length > 0" fill="outline"
+                      class="colored-text colored-border" (click)="chooseGrouping()"
+                      [disabled]="availableGrouping.length <= 2">
+                      <!-- ALL, T1 -->
+                      {{ selectedGrouping || 'Grouping' }}
+                      <ion-icon name="chevron-down-outline" style="padding-right: 0px;"></ion-icon>
+                    </ion-button>
+                  </ion-row>
+                </ion-buttons>
+              </ion-row>
               <ion-card class="ion-no-margin">
-                <ion-card-header style="margin-bottom: 0; padding: 0!important; padding-left:16px !important;">
-                  <ion-card-title>
-                    <ion-item lines="none" class="ion-no-padding ion-no-margin">
-                      <ion-label>
-                        <h4 class="text-bold colored-text">
-                          {{intake || room || ''}} Timetable
-                        </h4>
-                        <h5 class="small-margin-top">
-                          Week: <span class="text-bold">{{selectedWeek | date : 'dd MMM yyy'}}</span>
-                        </h5>
-                        <h5 class="small-margin-top white-space-normal" *ngIf="selectedGrouping">
-                          This timetable is for the intake grouping: <span class="danger-text text-bold">{{ selectedGrouping }}</span>. If you do not belong to this intake
-                          grouping, change it by clicking on the button next to the intake button on top.
-                        </h5>
-                      </ion-label>
-                      <ion-button fill="outline" slot="end" class="print-button colored-border" (click)="sendToPrint()">
-                        <ion-icon slot="icon-only" name="print" class="colored-text"></ion-icon>
+                <ion-card-header>
+                  <ion-card-subtitle>
+                    <ion-item lines="none">
+                      <ion-button slot="end" fill="none" (click)="rotateView()" [class.colored-text]="viewWeek"
+                        [class.colored-border]="viewWeek">
+                        <ion-label>Weekly</ion-label>
+                        <ion-toggle [checked]="viewWeek"></ion-toggle>
                       </ion-button>
                     </ion-item>
-                  </ion-card-title>
+                  </ion-card-subtitle>
                 </ion-card-header>
                 <ion-card-content class="ion-no-padding padding-bottom">
                   <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
@@ -237,7 +224,9 @@
                         Week: <span class="text-bold">{{selectedWeek | date : 'dd MMM yyy'}}</span>
                       </h5>
                       <h5 class="small-margin-top" *ngIf="selectedGrouping">
-                        This timetable is for the intake grouping: <span class="danger-text text-bold">{{ selectedGrouping }}</span>. If you do not belong to this intake
+                        This timetable is for the intake grouping: <span
+                          class="danger-text text-bold">{{ selectedGrouping }}</span>. If you do not belong to this
+                        intake
                         grouping, change it by clicking on the button next to the intake button on top.
                       </h5>
                     </ion-label>
