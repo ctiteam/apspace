@@ -36,3 +36,20 @@
 .glob-text-success {
   color: var(--ion-color-success) !important;
 }
+
+.glob-system-title {
+  font-family: 'Righteous', cursive;
+  background-color: #1b2845;
+  background-image: linear-gradient(315deg, #1b2845 0%, #274060 74%);
+  font-weight: bolder;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  span {
+    background-color: #63a91f;
+    background-image: linear-gradient(314deg, #1a512e 0%, #509111 74%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+  }
+}
