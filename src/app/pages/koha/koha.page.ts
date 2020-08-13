@@ -34,7 +34,7 @@ export class KohaPage implements OnInit {
     this.recentAdditions$ = this.ws.get<LatestAdditions>('/koha/latestadditions');
 
     // coverting to a number
-    this.fine$ = this.ws.get<Fine>('fine', { url: this.url }).pipe(
+    this.fine$ = this.ws.get<Fine>('/koha/fine').pipe(
       map(res => {
         return +res.fine;
       })
