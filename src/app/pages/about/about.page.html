@@ -31,7 +31,7 @@
           <ion-card-content>
             <p>
               We are The Centre of Technology and Innovation (CTI), an international team of developers, engineers,
-              multimedia developers, designer and business experts aimed towards understanding and solving cutomer
+              multimedia developers, designer and business experts aimed towards understanding and solving customer
               problems.
             </p>
           </ion-card-content>
@@ -39,7 +39,8 @@
 
         <div class="ion-padding ion-text-center">
           <ion-list lines="none">
-            <ion-item (click)="openUrl('https://kb.sites.apiit.edu.my/knowledge-base/apspace-faq/')" detail="true" button="true">
+            <ion-item (click)="openUrl('https://kb.sites.apiit.edu.my/knowledge-base/apspace-faq/')" detail="true"
+              button="true">
               <ion-icon name="help-circle-outline" slot="start"></ion-icon>
               <ion-label>FAQ</ion-label>
             </ion-item>
@@ -72,7 +73,9 @@
 
 </ion-content>
 
-<ion-footer class="ion-text-center">
-  <p class="ion-padding">© 2020 Asia Pacific University of Technology & Innovation (APU). All rights
-    reserved.</p>
+<ion-footer>
+  <p style="font-size: 11px; padding: 5px; width: 70%; margin-left: auto; margin-right: auto; text-align: center;">
+    © {{ year }} Asia Pacific University of Technology & Innovation (APU). All rights
+    reserved.
+  </p>
 </ion-footer>
