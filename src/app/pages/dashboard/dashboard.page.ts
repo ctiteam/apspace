@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FirebaseX } from '@ionic-native/firebase-x/ngx';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AlertController, IonSelect, IonSlides, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { format, parse, parseISO } from 'date-fns';
@@ -350,8 +349,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     private firebaseX: FirebaseX,
     private toastCtrl: ToastController,
     private settings: SettingsService,
-    private storage: Storage,
-    private iab: InAppBrowser,
+    private storage: Storage
   ) {
     // Create the dragula group (drag and drop)
     this.dragulaService.createGroup('editable-list', {
@@ -1328,10 +1326,6 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     } else {
       return 'sat';
     }
-  }
-
-  openHelpCentre() {
-    this.iab.create('https://apiit.atlassian.net/servicedesk/customer/portals', '_system', 'location=true');
   }
 
   // SLIDER

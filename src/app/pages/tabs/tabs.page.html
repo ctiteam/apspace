@@ -1,44 +1,52 @@
-<ion-header *ngIf="bottomTabs">
+<ion-header *ngIf="smallScreen">
   <ion-toolbar>
-    <ion-title>APSpace</ion-title>
+    <ion-title class="ion-text-left" mode="md">
+      <h2 class="glob-system-title system-title ion-no-margin">
+        <img src="assets/icon/favicon.png" alt="Icon">
+        <span>APS</span>pace
+      </h2>
+    </ion-title>
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button color="light" (click)="toggleSearchBar()">
         <ion-icon slot="icon-only" name="search"></ion-icon>
       </ion-button>
-      <ion-button>
+      <ion-button color="primary" (click)="openHelpCentre()">
         <ion-icon slot="icon-only" name="information-circle-sharp"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  <ion-toolbar *ngIf="shownSearchBar">
+    <ion-searchbar></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
-<ion-tabs>
+<ion-content>
+  <ion-tabs>
+    <ion-tab-bar *ngIf="!smallScreen" slot="top">
+      <ion-searchbar placeholder="Search APSpace" class="tabs-searchbar"></ion-searchbar>
+      <ion-tab-button class="extra-tab extra-tab-3">
+        <ion-label>Empty</ion-label>
+        <ion-icon name="home"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button class="extra-tab extra-tab-2">
+        <ion-label>Empty</ion-label>
+        <ion-icon name="home"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button class="extra-tab extra-tab-1">
+        <ion-label>Empty</ion-label>
+        <ion-icon name="home"></ion-icon>
+      </ion-tab-button>
+      <ion-tab-button *ngFor="let tab of tabs" [tab]="tab.path">
+        <ion-label>{{ tab.name }}</ion-label>
+        <ion-icon [name]="tab.icon"></ion-icon>
+      </ion-tab-button>
+    </ion-tab-bar>
 
-  <ion-tab-bar *ngIf="!bottomTabs" slot="top">
-    <ion-searchbar placeholder="Search APSpace" class="tabs-searchbar"></ion-searchbar>
-    <ion-tab-button class="extra-tab extra-tab-3">
-      <ion-label>Empty</ion-label>
-      <ion-icon name="home"></ion-icon>
-    </ion-tab-button>
-    <ion-tab-button class="extra-tab extra-tab-2">
-      <ion-label>Empty</ion-label>
-      <ion-icon name="home"></ion-icon>
-    </ion-tab-button>
-    <ion-tab-button class="extra-tab extra-tab-1">
-      <ion-label>Empty</ion-label>
-      <ion-icon name="home"></ion-icon>
-    </ion-tab-button>
-    <ion-tab-button *ngFor="let tab of tabs" [tab]="tab.path">
-      <ion-label>{{ tab.name }}</ion-label>
-      <ion-icon [name]="tab.icon"></ion-icon>
-    </ion-tab-button>
-  </ion-tab-bar>
-
-  <ion-tab-bar *ngIf="bottomTabs">
-    <ion-tab-button *ngFor="let tab of tabs" [tab]="tab.path">
-      <ion-label>{{ tab.name }}</ion-label>
-      <ion-icon [name]="tab.icon"></ion-icon>
-    </ion-tab-button>
-  </ion-tab-bar>
-
-</ion-tabs>
+    <ion-tab-bar *ngIf="smallScreen">
+      <ion-tab-button *ngFor="let tab of tabs" [tab]="tab.path">
+        <ion-label>{{ tab.name }}</ion-label>
+        <ion-icon [name]="tab.icon"></ion-icon>
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+</ion-content>

@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Storage } from '@ionic/storage';
 
 import { Role } from '../../interfaces';
@@ -13,9 +14,10 @@ import { TabItem } from './tab-item.interface';
 export class TabsPage implements OnInit {
   selectedTab: string;
   tabs: TabItem[];
-  bottomTabs = false;
+  smallScreen;
+  shownSearchBar = false;
 
-  constructor(private router: Router, private storage: Storage) { }
+  constructor(private router: Router, private storage: Storage, private iab: InAppBrowser) { }
 
   ngOnInit() {
     this.onResize();
@@ -115,7 +117,15 @@ export class TabsPage implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this.bottomTabs = window.innerWidth <= 720;
+    this.smallScreen = window.innerWidth <= 720;
+  }
+
+  toggleSearchBar() {
+    this.shownSearchBar = !this.shownSearchBar;
+  }
+
+  openHelpCentre() {
+    this.iab.create('https://apiit.atlassian.net/servicedesk/customer/portals', '_system', 'location=true');
   }
 
 }

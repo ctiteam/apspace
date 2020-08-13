@@ -1,3 +1,16 @@
+.system-title {
+  position: relative;
+  left: 36px;
+
+  img {
+    position: absolute;
+    top: -2px;
+    left: -36px;
+    width: 33px;
+    z-index: 1;
+  }
+}
+
 .tabs-searchbar {
   width: 248px;
   position: absolute;
@@ -18,8 +31,9 @@
   .tabs-searchbar {
     display: block;
   }
-  .extra-tab{
-      display: block;
+
+  .extra-tab {
+    display: block;
   }
 }
 
