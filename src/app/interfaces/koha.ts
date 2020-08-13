@@ -15,8 +15,6 @@ export interface History {
 
 export interface Fine {
     fine: string;
-    name: string;
-    user_id: string;
 }
 
 export interface LatestAdditions {
