@@ -12,6 +12,7 @@ import { VersionService } from 'src/app/services/version.service';
 export class AboutPage {
 
   version = this.ver.version;
+  year = new Date().getFullYear();
 
   constructor(
     public aib: InAppBrowser,
