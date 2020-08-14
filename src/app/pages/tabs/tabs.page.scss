@@ -18,7 +18,8 @@
   left: 16px;
   --border-radius: 50px;
   text-align: left;
-  --background: rgba(74, 74, 74, 0.75);
+  --background: var(--ion-color-step-700);
+  --placeholder-color: var(--ion-color-step-50);
   display: none;
 }
 
