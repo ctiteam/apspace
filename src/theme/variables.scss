@@ -1,67 +1,4 @@
-/**
- * ----- CUSTOMIZED STYLING (Forked from IONIC 5) -----
- *
- * Example:
- *
- * .ios body {
- *  &.dark {
- *    .pink {
- *      --ion-color-primary: #d86586; // Overwrite
- *    }
- *  }
- *
- *  &.pure {
- *    .pink {
- *      --ion-color-primary: #d86586; // Overwrite
- *    }
- *  }
- * }
- *
- * Class binding:
- * Accent Color binding does not need to be changed, you may remain the same function inside of APSpace.
- *
- * Dark/Pure/Light theme guide:
- * <body> - Automatic (depending on system)
- * <body class="light"> - Denotes light theme
- * <body class="dark"> - Denotes dark theme
- * <body class="dark pure"> - Denotes pure dark theme
- *
- * Should you have any query, please send me a Message on Teams.
- *
- * ~ Raeveen Pasupathy
- * -----
- */
-
-/*
- * Accent color
- * ------------
- */
-
 :root {
-  /** primary **/
-  --ion-color-primary: #3880ff;
-  --ion-color-primary-rgb: 56, 128, 255;
-  --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #3171e0;
-  --ion-color-primary-tint: #4c8dff;
-
-  /** secondary **/
-  --ion-color-secondary: #0cd1e8;
-  --ion-color-secondary-rgb: 12, 209, 232;
-  --ion-color-secondary-contrast: #000000;
-  --ion-color-secondary-contrast-rgb: 0, 0, 0;
-  --ion-color-secondary-shade: #0bb8cc;
-  --ion-color-secondary-tint: #24d6ea;
-
-  /** tertiary **/
-  --ion-color-tertiary: #7044ff;
-  --ion-color-tertiary-rgb: 112, 68, 255;
-  --ion-color-tertiary-contrast: #ffffff;
-  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
-  --ion-color-tertiary-shade: #633ce0;
-  --ion-color-tertiary-tint: #7e57ff;
-
   /** danger **/
   --ion-color-danger: #dc3545;
   --ion-color-danger-rgb: 220, 53, 69;
@@ -138,12 +75,29 @@
   }
 
   .blue {
-    --ion-color-primary: #3a99d9;
-    --ion-color-primary-rgb: 58, 153, 217;
-    --ion-color-primary-contrast: #000000;
-    --ion-color-primary-contrast-rgb: 0, 0, 0;
-    --ion-color-primary-shade: #3387bf;
-    --ion-color-primary-tint: #4ea3dd;
+  /** primary **/
+  --ion-color-primary: #1070a1;
+  --ion-color-primary-rgb: 16,112,161;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255,255,255;
+  --ion-color-primary-shade: #0e638e;
+  --ion-color-primary-tint: #287eaa;
+
+  /** secondary **/
+  --ion-color-secondary: #07567D;
+  --ion-color-secondary-rgb: 7,86,125;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255,255,255;
+  --ion-color-secondary-shade: #064c6e;
+  --ion-color-secondary-tint: #20678a;
+
+  /** tertiary **/
+  --ion-color-tertiary: #E50565;
+  --ion-color-tertiary-rgb: 229,5,101;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255,255,255;
+  --ion-color-tertiary-shade: #ca0459;
+  --ion-color-tertiary-tint: #e81e74;
   }
 
   .yellow {
@@ -156,20 +110,16 @@
   }
 }
 
-/*
-  * Theming
-  * -------
-*/
 
 @mixin light-theme {
 
   .md,
   .ios {
-    --ion-background-color: #ffffff;
-    --ion-background-color-rgb: 255, 255, 255;
+    --ion-background-color: #fafafa;
+    --ion-background-color-rgb: 250, 250, 250;
 
-    --ion-text-color: #000000;
-    --ion-text-color-rgb: 0, 0, 0;
+    --ion-text-color: #454343;
+    --ion-text-color-rgb: 69, 67, 67;
 
     // these step colors look weird
     --ion-color-step-50: #232323;
@@ -192,13 +142,15 @@
     --ion-color-step-900: #e8e8e8;
     --ion-color-step-950: #f3f3f3;
 
-    --ion-toolbar-background: #f2f2f2;
+    --ion-toolbar-background: #e0e0e0;
+    --ion-tab-bar-background: #e0e0e0;
+    --ion-tab-bar-color: var(--ion-text-color);
+    --ion-border-color: #cccccc;
 
-    --ion-item-background: #ffffff;
+    --ion-item-background: #f5f5f5;
   }
 }
 
-// Is a separate dark theme really needed?
 @mixin dark-theme {
   .ios {
     --ion-background-color: #000000;
@@ -269,10 +221,6 @@
   }
 }
 
-/**
- * Automatic selector
- * ------------------
- */
 
 // fallback if prefers-color-scheme is not recognized
 :root {
@@ -280,8 +228,7 @@
 }
 
 // by media queries
-@media (prefers-color-scheme: no-preferences),
-(prefers-color-scheme: light) {
+@media (prefers-color-scheme: no-preferences), (prefers-color-scheme: light) {
   :root {
     @include light-theme
   }
