@@ -20,7 +20,7 @@
               </ng-template>
             </ion-avatar>
             <ion-card-header>
-              <ion-card-title class="ion-text-center">
+              <ion-card-title class="ion-text-center" color="primary">
                 {{isStudent ? (userProfile.NAME | titlecase) : (userProfile.FULLNAME | titlecase)}}
               </ion-card-title>
               <ion-card-subtitle class="ion-text-center">
@@ -52,7 +52,7 @@
 
           <ion-card class="quick-access-buttons ion-no-margin ion-margin-top">
             <ion-card-header class="ion-padding">
-              <ion-card-title>
+              <ion-card-title color="primary">
                 Quick Access
               </ion-card-title>
             </ion-card-header>
@@ -78,7 +78,7 @@
 
           <ion-card class="todays-schedule ion-no-margin ion-margin-top">
             <ion-card-header class="ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
-              <ion-card-title>
+              <ion-card-title color="primary">
                 My Schedule
               </ion-card-title>
             </ion-card-header>
@@ -322,7 +322,7 @@
                 <ion-card-subtitle>
                   {{currentBalance !== -1 ? "Balance: " + (currentBalance | currency: "MYR": "RM"): "Balance: --"}}
                 </ion-card-subtitle>
-                <ion-card-title>
+                <ion-card-title color="primary">
                   APCard
                 </ion-card-title>
               </ion-card-header>
@@ -340,7 +340,7 @@
                 <ion-card-subtitle>
                   {{"Overdue: " + (financialSummary[0].TOTAL_OVERDUE | currency: "MYR": "RM")}}
                 </ion-card-subtitle>
-                <ion-card-title>
+                <ion-card-title color="primary">
                   Financial
                 </ion-card-title>
               </ion-card-header>
@@ -358,7 +358,7 @@
                 <ion-card-subtitle>
                   {{"Overall: " + (overallCgpa | number: "1.0-2")}}
                 </ion-card-subtitle>
-                <ion-card-title>
+                <ion-card-title color="primary">
                   CGPA Per Intake
                 </ion-card-title>
               </ion-card-header>
