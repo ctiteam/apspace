@@ -53,3 +53,192 @@
 
   }
 }
+
+.glob-calendar {
+  background-color: var(--secondary-bg-color) !important;
+  padding: 0 !important;
+
+  .month-packer-item {
+    button {
+      color: var(--ion-text-color) !important;
+    }
+
+    &.this-month {
+      button {
+        border-color: var(--ion-color-primary) !important;
+        color: var(--ion-color-primary) !important;
+      }
+    }
+  }
+
+  .days-btn {
+    p {
+      color: var(--ion-text-color) !important;
+    }
+
+    &[disabled] p {
+      color: var(--ion-color-medium) !important;
+    }
+
+    &.today p {
+      color: var(--ion-color-primary-shade) !important;
+    }
+
+    &.on-selected {
+      background: var(--ion-color-primary) !important;
+
+      p {
+        color: var(--ion-text-color) !important;
+      }
+    }
+
+    &.available {
+      background: var(--ion-color-success) !important;
+
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--ion-color-success) !important;
+
+        p {
+          color: var(--ion-color-success) !important;
+        }
+      }
+    }
+
+    &.available {
+      background: var(--ion-color-success) !important;
+
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--ion-color-success) !important;
+
+        p {
+          color: var(--ion-color-success) !important;
+        }
+      }
+    }
+
+    &.booked {
+      background: var(--ion-color-danger) !important;
+
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--ion-color-danger) !important;
+
+        p {
+          color: var(--ion-color-danger) !important;
+        }
+      }
+    }
+
+    &.unavailable {
+      background: var(--ion-text-color) !important;
+
+      p {
+        color: var(--ion-background-color) !important;
+      }
+
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--ion-text-color) !important;
+
+        p {
+          color: var(--ion-text-color) !important;
+        }
+      }
+    }
+
+    &.clossed small {
+      background: var(--ion-color-medium) !important;
+      color: var(--ion-color-medium) !important;
+      width: 24%;
+      border-radius: 13px;
+      height: 23%;
+      margin-left: 2%;
+
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--ion-color-medium) !important;
+      }
+    }
+
+    &.partially-booked {
+      background: #dfa847 !important;
+
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid #dfa847 !important;
+
+        p {
+          color: #dfa847 !important;
+        }
+      }
+    }
+
+    &.attended {
+      background: var(--ion-color-success) !important;
+  
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--ion-color-success) !important;
+  
+        p {
+          color: var(--ion-color-success) !important;
+        }
+      }
+    }
+
+    &.absent {
+      background: var(--ion-color-danger) !important;
+  
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid var(--ion-color-danger) !important;
+  
+        p {
+          color: var(--ion-color-danger) !important;
+        }
+      }
+    }
+
+    &.absent-reason {
+      background: #dfa847 !important;
+  
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid #dfa847 !important;
+  
+        p {
+          color: #dfa847 !important;
+        }
+      }
+    }
+
+    &.late {
+      background: #808080 !important;
+  
+      &.on-selected {
+        background-color: transparent !important;
+        border: 3px solid #808080 !important;
+  
+        p {
+          color: #808080 !important;
+        }
+      }
+    }
+  }
+
+  &.filter-date-picker {
+    .days-btn.today p {
+      color: var(--ion-color-medium) !important;
+    }
+
+    .days-btn.today.colored p {
+      color: var(--ion-text-color) !important;
+    }
+
+    .days-btn.on-selected {
+      background-color: transparent !important;
+    }
+  }
+}

@@ -5,20 +5,20 @@ ion-col {
   }
   &.available {
     ion-badge {
-      --background: var(--success-color);
-      --color: var(--success-color);
+      --background: var(--ion-color-success);
+      --color: var(--ion-color-success);
     }
   }
   &.p-booked {
     ion-badge {
-      --background: #dfa847;
-      --color: #dfa847;
+      --background: var(--ion-color-warning);
+      --color: var(--ion-color-warning);
     }
   }
   &.booked {
     ion-badge {
-      --background: var(--danger-color);
-      --color: var(--danger-color);
+      --background: var(--ion-color-danger);
+      --color: var(--ion-color-danger);
     }
   }
 }

@@ -11,132 +11,133 @@
   <ion-refresher slot="fixed" pullMax="400" pullMin="60 " (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
-  <ion-grid>
-    <ion-row>
-      <ng-container *ngIf="bookings$ | async as bookings; else loadingSlots">
-        <ng-container *ngIf="bookings.length > 0; else noConsultations">
-          <ion-col size-xs="12" size-md="6" size-lg="4" *ngFor="let booking of bookings">
-            <ion-card
-              [ngClass]="{cancelled: booking.status !== 'Booked' && booking.status !== 'Passed', passed: booking.status === 'Passed'}">
-              <ion-card-header class="ion-no-padding ion-padding-top">
-                <ion-card-title>
-                  <ion-item lines="none" class="ion-no-padding ion-padding-start">
-                    <ion-label class="card-header-title main-text-color text-bolder">
-                      {{ booking.staff_detail.FULLNAME }}
+  <div class="glob-container">
+    <ion-grid>
+      <ion-row>
+        <ng-container *ngIf="bookings$ | async as bookings; else loadingSlots">
+          <ng-container *ngIf="bookings.length > 0; else noConsultations">
+            <ion-col size-xs="12" size-md="6" size-lg="4" *ngFor="let booking of bookings">
+              <ion-card
+                [ngClass]="{cancelled: booking.status !== 'Booked' && booking.status !== 'Passed', passed: booking.status === 'Passed'}">
+                <ion-card-header class="ion-no-padding ion-padding-top">
+                  <ion-card-title>
+                    <ion-item lines="none" class="ion-no-padding ion-padding-start">
+                      <ion-label class="card-header-title text-color glob-text-bold">
+                        {{ booking.staff_detail.FULLNAME }}
+                      </ion-label>
+                      <ion-badge *ngIf="booking.status !== 'Booked'" slot="end">
+                        {{ booking.status === 'Cancelled by lecturer'
+                                ? 'Cancelled By Lecturer'
+                                : booking.status === 'Cancelled by student'
+                                  ? 'Cancelled By Student'
+                                  : booking.status === 'Passed'
+                                    ? 'Passed'
+                                    : ''
+                              }}
+                      </ion-badge>
+                    </ion-item>
+                  </ion-card-title>
+                </ion-card-header>
+                <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end ion-padding-bottom">
+                  <ion-item lines="none">
+                    <ion-icon class="tertiary-txt-color" name="calendar" slot="start"></ion-icon>
+                    <ion-label>
+                      <p class="tertiary-txt-color">Appointment Date:</p>
+                      <h4 class="text-color">{{ booking.slot_start_time | dateWithTimezone: 'EEEE, dd MMM yyyy' }}</h4>
                     </ion-label>
-                    <ion-badge *ngIf="booking.status !== 'Booked'" class="small-margin-top" slot="end">
-                      {{ booking.status === 'Cancelled by lecturer'
-                              ? 'Cancelled By Lecturer'
-                              : booking.status === 'Cancelled by student'
-                                ? 'Cancelled By Student'
-                                : booking.status === 'Passed'
-                                  ? 'Passed'
-                                  : ''
-                            }}
-                    </ion-badge>
                   </ion-item>
-                </ion-card-title>
+                  <ion-item lines="none">
+                    <ion-icon class="tertiary-txt-color" name="time" slot="start"></ion-icon>
+                    <ion-label>
+                      <p class="tertiary-txt-color">Appointment Time:</p>
+                      <h4 class="text-color">{{ booking.slot_start_time | dateWithTimezone: 'time' }} - {{ booking.slot_end_time | dateWithTimezone: 'time' }}</h4>
+                    </ion-label>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-icon class="tertiary-txt-color" name="pin" slot="start"></ion-icon>
+                    <ion-label>
+                      <p class="tertiary-txt-color">Appointment Location:</p>
+                      <h4 class="text-color">{{ booking.slot_venue }} | {{ booking.slot_room_code }}</h4>
+                    </ion-label>
+                  </ion-item>
+  
+                  <ion-grid class="ion-no-padding">
+                    <ion-row>
+                      <ion-col size="12">
+                        <ion-button (click)="openSlotDetailsModal(booking)" color="primary" expand="block">
+                          View Details
+                          <ion-icon name="list" slot="end"></ion-icon>
+                        </ion-button>
+                      </ion-col>
+                      <ion-col size="12">
+                        <ion-button (click)="chatInTeams(booking.casid)" class="chat-in-teams" expand="block">
+                          Chat In Teams
+                          <ion-icon name="chatbubbles" slot="end"></ion-icon>
+                        </ion-button>
+                      </ion-col>
+                      <ion-col size-xs="12">
+                        <ion-button *ngIf="booking.status === 'Booked'" (click)="cancelBooking(booking)"
+                          color="danger" expand="block">
+                          Cancel Booking
+                          <ion-icon name="close" slot="end"></ion-icon>
+                        </ion-button>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ng-container>
+          <ng-template #noConsultations>
+            <ion-col class="ion-margin-top" size-xs="12" offset-md="3" size-md="6" offset-xl="4" size-xl="4">
+              <app-message-with-svg messageTitle='No Upcoming Appointments' imageUrl='assets/img/empty.svg'
+                wrapperMarginTop="50px" wrapperOffset="2" wrapperSize="8"
+                messageContent="Currently, you have no upcoming appointments. If you have any academic related question, or concerns, you can book a new one by clicking on the (+)">
+              </app-message-with-svg>
+            </ion-col>
+          </ng-template>
+        </ng-container>
+        <ng-template #loadingSlots>
+          <ion-col size-xs="12" size-md="6" size-lg="4" *ngFor="let _ of skeltonArray">
+            <ion-card>
+              <ion-card-header>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="8">
+                      <ion-skeleton-text animated style="width: 100%; line-height: 30px;"></ion-skeleton-text>
+                    </ion-col>
+                    <ion-col size="3" offset="1">
+                      <ion-skeleton-text animated style="width: 100%; line-height: 30px;"></ion-skeleton-text>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
               </ion-card-header>
-              <ion-card-content class="ion-no-padding ion-padding-start ion-padding-end ion-padding-bottom">
-                <ion-item lines="none">
-                  <ion-icon class="tertiary-txt-color" name="calendar" slot="start"></ion-icon>
-                  <ion-label>
-                    <p class="tertiary-txt-color">Appointment Date:</p>
-                    <h4 class="main-txt-color">{{ booking.slot_start_time | dateWithTimezone: 'EEEE, dd MMM yyyy' }}</h4>
-                  </ion-label>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-icon class="tertiary-txt-color" name="time" slot="start"></ion-icon>
-                  <ion-label>
-                    <p class="tertiary-txt-color">Appointment Time:</p>
-                    <h4 class="main-txt-color">{{ booking.slot_start_time | dateWithTimezone: 'time' }} - {{ booking.slot_end_time | dateWithTimezone: 'time' }}</h4>
-                  </ion-label>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-icon class="tertiary-txt-color" name="pin" slot="start"></ion-icon>
-                  <ion-label>
-                    <p class="tertiary-txt-color">Appointment Location:</p>
-                    <h4 class="main-txt-color">{{ booking.slot_venue }} | {{ booking.slot_room_code }}</h4>
-                  </ion-label>
-                </ion-item>
-
+              <ion-card-content>
                 <ion-grid class="ion-no-padding">
+                  <ion-skeleton-text animated style="width: 100%; line-height: 30px;"></ion-skeleton-text>
+                  <ion-skeleton-text animated style="width: 50%; line-height: 30px;"></ion-skeleton-text>
+                  <ion-skeleton-text animated style="width: 80%; line-height: 30px;"></ion-skeleton-text>
+                  <ion-skeleton-text animated style="width: 30%; line-height: 30px;"></ion-skeleton-text>
                   <ion-row>
                     <ion-col size-xs="12" size-sm="6">
-                      <ion-button (click)="openSlotDetailsModal(booking)" class="colored-background" expand="block">
-                        View Details
-                        <ion-icon name="list" slot="end"></ion-icon>
-                      </ion-button>
+                      <ion-skeleton-text animated style="line-height: 30px; width: 100%;"></ion-skeleton-text>
                     </ion-col>
                     <ion-col size-xs="12" size-sm="6">
-                      <ion-button (click)="chatInTeams(booking.casid)" class="chat-in-teams" expand="block">
-                        Chat In Teams
-                        <ion-icon name="chatbubbles" slot="end"></ion-icon>
-                      </ion-button>
-                    </ion-col>
-                    <ion-col size-xs="12">
-                      <ion-button *ngIf="booking.status === 'Booked'" (click)="cancelBooking(booking)"
-                        class="danger-background" expand="block">
-                        Cancel Booking
-                        <ion-icon name="close" slot="end"></ion-icon>
-                      </ion-button>
+                      <ion-skeleton-text animated style="line-height: 30px; width: 100%;"></ion-skeleton-text>
                     </ion-col>
                   </ion-row>
                 </ion-grid>
               </ion-card-content>
             </ion-card>
           </ion-col>
-        </ng-container>
-        <ng-template #noConsultations>
-          <ion-col class="ion-margin-top" size-xs="12" offset-md="3" size-md="6" offset-xl="4" size-xl="4">
-            <app-message-with-svg messageTitle='No Upcoming Appointments' imageUrl='assets/img/empty.svg'
-              wrapperMarginTop="50px" wrapperOffset="2" wrapperSize="8"
-              messageContent="Currently, you have no upcoming appointments. If you have any academic related question, or concerns, you can book a new one by clicking on the (+)">
-            </app-message-with-svg>
-          </ion-col>
         </ng-template>
-      </ng-container>
-      <ng-template #loadingSlots>
-        <ion-col size-xs="12" size-md="6" size-lg="4" *ngFor="let _ of skeltonArray">
-          <ion-card>
-            <ion-card-header>
-              <ion-grid>
-                <ion-row>
-                  <ion-col size="8">
-                    <ion-skeleton-text animated style="width: 100%; line-height: 30px;"></ion-skeleton-text>
-                  </ion-col>
-                  <ion-col size="3" offset="1">
-                    <ion-skeleton-text animated style="width: 100%; line-height: 30px;"></ion-skeleton-text>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-grid class="ion-no-padding">
-                <ion-skeleton-text animated style="width: 100%; line-height: 30px;"></ion-skeleton-text>
-                <ion-skeleton-text animated style="width: 50%; line-height: 30px;"></ion-skeleton-text>
-                <ion-skeleton-text animated style="width: 80%; line-height: 30px;"></ion-skeleton-text>
-                <ion-skeleton-text animated style="width: 30%; line-height: 30px;"></ion-skeleton-text>
-                <ion-row>
-                  <ion-col size-xs="12" size-sm="6">
-                    <ion-skeleton-text animated style="line-height: 30px; width: 100%;"></ion-skeleton-text>
-                  </ion-col>
-                  <ion-col size-xs="12" size-sm="6">
-                    <ion-skeleton-text animated style="line-height: 30px; width: 100%;"></ion-skeleton-text>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ng-template>
-    </ion-row>
-  </ion-grid>
-
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
 
 <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-  <ion-fab-button class="colored-background" (click)="openStaffDirectory()">
+  <ion-fab-button color="primary" (click)="openStaffDirectory()">
     <ion-icon name="add"></ion-icon>
   </ion-fab-button>
 </ion-fab>

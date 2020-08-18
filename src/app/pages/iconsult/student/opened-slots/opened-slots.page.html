@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>List of Consultations</ion-title>
     <ion-buttons slot="end">
-      <ion-button class="colored-text" (click)="openCalendarModal()">
+      <ion-button color="primary" (click)="openCalendarModal()">
         <ion-icon name="search"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -17,168 +17,169 @@
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
   <!-- MAIN GRID -->
-  <ion-grid class="ion-no-padding">
-    <ion-row>
-      <ion-col size="12" size-md="6" size-lg="5">
-        <ion-card>
-          <ng-container *ngIf="(staff$ | async) as staff; else loadingUserData">
-            <ion-grid>
-              <ion-row>
-                <!-- USER IMAGE -->
-                <ion-col size="12">
-                  <ion-avatar class="margin-auto">
-                    <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '.jpg'"
-                      onerror="this.src='assets/img/no_img.png'">
-                  </ion-avatar>
-                </ion-col>
-                <!-- USER DATA -->
-                <ion-col size="12" class="ion-text-center">
-                  <ion-card-header class="ion-no-padding ion-padding-top">
-                    <ion-card-title>
-                      <h5 class="responsive-h1">{{staff.FULLNAME}}</h5>
-                      <h5 class="responsive-h2 secondary-text-color">{{staff.TITLE}}</h5>
-                    </ion-card-title>
-                    <ion-card-subtitle>
-                      <p class="small-margin-top" *ngIf="staff.LOCATION">
-                        Office:
-                        {{staff.LOCATION}}
-                      </p>
-                      <p *ngIf="staff.EMAIL">
-                        Email:
-                        <a class="colored-text text-bold" href="mailto:{{staff.EMAIL}}">{{ staff.EMAIL }}</a>
-                      </p>
-                      <p class="small-margin-top">
-                        Total Opened Slots:
-                        <span>{{totalOpenedSlots === -1 ? '--' : totalOpenedSlots}}</span>
-                      </p>
-                      <p class="small-margin-top">
-                        Total Available Slots:
-                        <span class="success-text">{{totalAvailableSlots === -1 ? '--' : totalAvailableSlots}}</span>
-                      </p>
-                    </ion-card-subtitle>
-                  </ion-card-header>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ng-container>
-          <ng-template #loadingUserData>
-            <ion-grid>
-              <ion-row>
-                <ion-col size="auto" class="ion-margin-end ion-margin-top">
-                  <ion-skeleton-text animated style="width: 123px; line-height: 170px"></ion-skeleton-text>
-                </ion-col>
-                <ion-col>
-                  <ion-card-header class="ion-no-padding ion-padding-top">
-                    <ion-card-title>
-                      <ion-skeleton-text animated style="width: 70%; line-height: 30px"></ion-skeleton-text>
-                    </ion-card-title>
-                    <ion-card-subtitle>
-                      <ion-skeleton-text *ngFor="let skeleton of skeletons" [style.width]="skeleton" animated
-                        style="line-height: 30px"></ion-skeleton-text>
-                    </ion-card-subtitle>
-                  </ion-card-header>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ng-template>
-        </ion-card>
-        <ng-container *ngIf="dateToFilter">
+  <div class="glob-container">
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col size="12" size-md="6" size-lg="5">
           <ion-card>
-            <ion-card-header>
-              <ion-card-title>
-                <h5 class="warning-text responsive-h1">Data is filtered!</h5>
-              </ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <p class="small-margin-top">
-                You have filtered the data to show only the slots opened on <span
-                  class="text-bold">{{dateToFilter | date : 'EEEE, dd MMMM y'}}</span>
-              </p>
-              <p class="small-margin-top danger-text text-bold cursor-pointer" style="text-decoration: underline;"
-                (click)="dateToFilter = ''">
-                Clear Filters and Show All Slots
-              </p>
-            </ion-card-content>
+            <ng-container *ngIf="(staff$ | async) as staff; else loadingUserData">
+              <ion-grid>
+                <ion-row>
+                  <!-- USER IMAGE -->
+                  <ion-col size="12">
+                    <ion-avatar class="glob-margin-auto">
+                      <img id="bg" [src]="'https://d37plr7tnxt7lb.cloudfront.net/' + staff.RefNo + '.jpg'"
+                        onerror="this.src='assets/img/no_img.png'">
+                    </ion-avatar>
+                  </ion-col>
+                  <!-- USER DATA -->
+                  <ion-col size="12" class="ion-text-center">
+                    <ion-card-header class="ion-no-padding ion-padding-top">
+                      <ion-card-title>
+                        <h5>{{staff.FULLNAME}}</h5>
+                        <h5 class="primary-text">{{staff.TITLE}}</h5>
+                      </ion-card-title>
+                      <ion-card-subtitle>
+                        <p *ngIf="staff.LOCATION">
+                          Office:
+                          {{staff.LOCATION}}
+                        </p>
+                        <p *ngIf="staff.EMAIL">
+                          Email:
+                          <a class="glob-text-bold" href="mailto:{{staff.EMAIL}}">{{ staff.EMAIL }}</a>
+                        </p>
+                        <p>
+                          Total Opened Slots:
+                          <span>{{totalOpenedSlots === -1 ? '--' : totalOpenedSlots}}</span>
+                        </p>
+                        <p>
+                          Total Available Slots:
+                          <span class="success-text">{{totalAvailableSlots === -1 ? '--' : totalAvailableSlots}}</span>
+                        </p>
+                      </ion-card-subtitle>
+                    </ion-card-header>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ng-container>
+            <ng-template #loadingUserData>
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="auto" class="ion-margin-end ion-margin-top">
+                    <ion-skeleton-text animated style="width: 123px; line-height: 170px"></ion-skeleton-text>
+                  </ion-col>
+                  <ion-col>
+                    <ion-card-header class="ion-no-padding ion-padding-top">
+                      <ion-card-title>
+                        <ion-skeleton-text animated style="width: 70%; line-height: 30px"></ion-skeleton-text>
+                      </ion-card-title>
+                      <ion-card-subtitle>
+                        <ion-skeleton-text *ngFor="let skeleton of skeletons" [style.width]="skeleton" animated
+                          style="line-height: 30px"></ion-skeleton-text>
+                      </ion-card-subtitle>
+                    </ion-card-header>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ng-template>
           </ion-card>
-        </ng-container>
-      </ion-col>
-
-      <ion-col size="12" size-md="6" size-lg="7">
-        <ng-container *ngIf="(slots$ | async) as allSlotsGroupedByMonthYear; else loadingSlots">
-          <ng-container *ngIf="((allSlotsGroupedByMonthYear | keyvalue) || []).length; else noSlots">
-            <ng-container *ngFor="let slotsForMonthYear of allSlotsGroupedByMonthYear | keyvalue">
-              <ion-card>
-                <ion-card-header class="ion-padding-start cursor-pointer">
-                  <ion-card-title>
-                    <h5 style="display: inline-block" class="responsive-h1 main-text-color">
-                      {{ slotsForMonthYear.key | date: 'MMMM y' }} </h5>
-                  </ion-card-title>
-                </ion-card-header>
-                <ion-card-content class="ion-no-padding">
-                  <div class="event-calendar">
-                    <div class="event-list"
-                      *ngFor="let slotsGroupedbyDay of slotsForMonthYear.value | filterSlotsByDay: dateToFilter | keyvalue">
-                      <h2 class="day">{{slotsGroupedbyDay.key | date: 'EEEE, dd MMMM'}}</h2>
-                      <div class="event" *ngFor="let slot of slotsGroupedbyDay.value.items | keyvalue">
-                        <div class="event-container" [ngClass]="{
-                                              'booked': slot.value.status == 'Booked',
-                                              'no-hover': slot.value.status == 'Booked',
-                                              'available': slot.value.status == 'Available'
-                                          }">
-                          <ion-grid class="grid-padding">
-                            <ion-row>
-                              <ion-col size="9" size-lg="10">
-                                <span class="title">
-                                  {{slot.value.start_time | dateWithTimezone: "time"}} - {{slot.value.end_time | dateWithTimezone: "time"}}
-                                </span>
-                                <span class="description small-margin-top">
-                                  <ion-icon name="pin"></ion-icon>
-                                  {{slot.value.room_code}} | {{slot.value.venue}}
-                                </span>
-                              </ion-col>
-                              <ion-col size="3" size-lg="2">
-                                <ion-button (click)="openBookingModal(slot.value)" class="cursor-pointer" expand="block"
-                                  [disabled]="slot.value.status === 'Booked'">
-                                  {{slot.value.status === 'Available'? 'Book': 'Booked'}}
-                                </ion-button>
-                              </ion-col>
-                            </ion-row>
-                          </ion-grid>
+          <ng-container *ngIf="dateToFilter">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>
+                  <h5 class="warning-text">Data is filtered!</h5>
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <p>
+                  You have filtered the data to show only the slots opened on <span
+                    class="glob-text-bold">{{dateToFilter | date : 'EEEE, dd MMMM y'}}</span>
+                </p>
+                <p class="danger-text glob-text-bold" style="text-decoration: underline;"
+                  (click)="dateToFilter = ''">
+                  Clear Filters and Show All Slots
+                </p>
+              </ion-card-content>
+            </ion-card>
+          </ng-container>
+        </ion-col>
+  
+        <ion-col size="12" size-md="6" size-lg="7">
+          <ng-container *ngIf="(slots$ | async) as allSlotsGroupedByMonthYear; else loadingSlots">
+            <ng-container *ngIf="((allSlotsGroupedByMonthYear | keyvalue) || []).length; else noSlots">
+              <ng-container *ngFor="let slotsForMonthYear of allSlotsGroupedByMonthYear | keyvalue">
+                <ion-card>
+                  <ion-card-header class="ion-padding-start">
+                    <ion-card-title>
+                      <h5 style="display: inline-block" class="text-color ion-no-margin">
+                        {{ slotsForMonthYear.key | date: 'MMMM y' }} </h5>
+                    </ion-card-title>
+                  </ion-card-header>
+                  <ion-card-content class="ion-no-padding">
+                    <div class="event-calendar">
+                      <div class="event-list"
+                        *ngFor="let slotsGroupedbyDay of slotsForMonthYear.value | filterSlotsByDay: dateToFilter | keyvalue">
+                        <h2 class="day">{{slotsGroupedbyDay.key | date: 'EEEE, dd MMMM'}}</h2>
+                        <div class="event" *ngFor="let slot of slotsGroupedbyDay.value.items | keyvalue">
+                          <div class="event-container" [ngClass]="{
+                                                'booked': slot.value.status == 'Booked',
+                                                'no-hover': slot.value.status == 'Booked',
+                                                'available': slot.value.status == 'Available'
+                                            }">
+                            <ion-grid class="ion-padding-horizontal">
+                              <ion-row class="ion-align-items-center">
+                                <ion-col size="9" size-lg="10">
+                                  <span class="title">
+                                    {{slot.value.start_time | dateWithTimezone: "time"}} - {{slot.value.end_time | dateWithTimezone: "time"}}
+                                  </span>
+                                  <span class="description">
+                                    <ion-icon name="pin"></ion-icon>
+                                    {{slot.value.room_code}} | {{slot.value.venue}}
+                                  </span>
+                                </ion-col>
+                                <ion-col size="3" size-lg="2">
+                                  <ion-button (click)="openBookingModal(slot.value)" expand="block"
+                                    [disabled]="slot.value.status === 'Booked'">
+                                    {{slot.value.status === 'Available'? 'Book': 'Booked'}}
+                                  </ion-button>
+                                </ion-col>
+                              </ion-row>
+                            </ion-grid>
+                          </div>
                         </div>
-                        <div class="spacer"></div>
                       </div>
                     </div>
-                  </div>
+                  </ion-card-content>
+                </ion-card>
+              </ng-container>
+            </ng-container>
+            <ng-template #noSlots>
+              <ion-card>
+                <ion-card-content>
+                  <app-message-with-svg imageUrl="assets/img/no-consultations.svg"
+                    messageTitle="No Consultations has been Added by the Staff!" wrapperSize="6" wrapperOffset="3"
+                    messageContent="This staff has not added any consultations. You can contact him/her via Email"
+                    wrapperMarginTop="20px">
+                  </app-message-with-svg>
                 </ion-card-content>
               </ion-card>
-            </ng-container>
+            </ng-template>
+  
           </ng-container>
-          <ng-template #noSlots>
+          <ng-template #loadingSlots>
             <ion-card>
+              <ion-card-header>
+                <ion-skeleton-text animated style="width:70%;line-height: 30px;"></ion-skeleton-text>
+              </ion-card-header>
               <ion-card-content>
-                <app-message-with-svg imageUrl="assets/img/no-consultations.svg"
-                  messageTitle="No Consultations has been Added by the Staff!" wrapperSize="6" wrapperOffset="3"
-                  messageContent="This staff has not added any consultations. You can contact him/her via Email"
-                  wrapperMarginTop="20px">
-                </app-message-with-svg>
+                <ion-item *ngFor="let skeleton of skeletons">
+                  <ion-skeleton-text animated [style.width]="skeleton" style="line-height: 30px;"></ion-skeleton-text>
+                </ion-item>
               </ion-card-content>
             </ion-card>
           </ng-template>
-
-        </ng-container>
-        <ng-template #loadingSlots>
-          <ion-card>
-            <ion-card-header>
-              <ion-skeleton-text animated style="width:70%;line-height: 30px;"></ion-skeleton-text>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-item *ngFor="let skeleton of skeletons">
-                <ion-skeleton-text animated [style.width]="skeleton" style="line-height: 30px;"></ion-skeleton-text>
-              </ion-item>
-            </ion-card-content>
-          </ion-card>
-        </ng-template>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>

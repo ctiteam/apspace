@@ -5,11 +5,11 @@
     </ion-buttons>
     <ion-title>My Consultations</ion-title>
     <ion-buttons slot="end">
-      <ion-button color="danger" [disabled]="this.slotsToBeCancelled.length > 0" class="colored-border colored-text"
+      <ion-button color="danger" [disabled]="this.slotsToBeCancelled.length > 0"
         fill="outline" (click)="toggleCancelSlot()">
         <ion-icon [name]="onSelect? 'close' : 'trash'"></ion-icon>
       </ion-button>
-      <ion-button class="colored-border colored-text" fill="outline" (click)="showSummary()">
+      <ion-button fill="outline" (click)="showSummary()">
         <ion-icon name="pie-chart"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -22,7 +22,7 @@
       <p class="ion-margin-start">Select start and end date to cancel</p>
     </ng-template>
     <ion-buttons slot="end">
-      <ion-button [disabled]="this.slotsToBeCancelled.length > 0" class="colored-border colored-text" fill="outline"
+      <ion-button [disabled]="this.slotsToBeCancelled.length > 0" fill="outline"
         (click)="toggleCancelSlotOptions()">
         <span *ngIf="!onRange; else range">Range</span>
       </ion-button>
@@ -37,238 +37,237 @@
   <ion-refresher slot="fixed" pullMax="400" pullMin="60 " (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
-  <ion-grid *ngIf="(slots$ | async) as dates; else loadingContent">
-    <ion-row>
-      <ion-col size="12" size-md="5">
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>
-              <h3 class="responsive-h1">
-                Calendar Filter
-              </h3>
-              <h3 class="small-text small-margin-top">Choose a day to see the list of slots opened on that day</h3>
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-item class="ion-no-padding">
-              <ion-grid>
-                <ion-row>
-                  <ion-col class="available ion-text-center">
-                    <ion-badge>.</ion-badge> Available
-                  </ion-col>
-                  <ion-col class="p-booked ion-text-center">
-                    <ion-badge>.</ion-badge> Partially Booked
-                  </ion-col>
-                  <ion-col class="booked ion-text-center">
-                    <ion-badge>.</ion-badge> Booked
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-item>
-            <ion-calendar *ngIf="!onRange; else rangeCalendar" class="filter-date-picker" (change)="todaysDate = $event"
-              [(ngModel)]="dateToFilter" [options]="options" [type]="'string'" [format]="'YYYY-MM-DD'">
-            </ion-calendar>
-            <ng-template #rangeCalendar>
-              <ion-calendar [(ngModel)]="dateRange" (ngModelChange)="getSelectedRangeSlot(dates)"
-                [options]="optionsRange" [type]="'string'" [format]="'YYYY-MM-DD'">
-              </ion-calendar>
-            </ng-template>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-      <ion-col size="12" size-md="7" *ngIf="!onRange; else rangeSlots">
-        <ng-container *ngIf="dateToFilter && (dates | slots: todaysDate) as slots; else noSlotsTodat">
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>
-                List of slots opened on {{todaysDate | date}}
-              </ion-card-title>
-
-            </ion-card-header>
-            <ion-card-content>
-              <div class="event-calendar">
-                <div class="event" *ngFor="let slot of slots.items;">
-                  <div class="event-container" [ngClass]="{
-                                    'booked': slot.status === 'Booked',
-                                    'available': slot.status === 'Available',
-                                    'no-hover': slot.status === 'Clossed'
-                                }">
-                    <ion-grid class="grid-padding">
-                      <ion-row *ngIf="slot.status !== 'Cancelled' && slot.status !== 'Cancelled by lecturer'">
-                        <ion-col size-xs="2" size-xl="1" *ngIf="onSelect && (slot | validateCheckbox)">
-                        <ion-checkbox (ngModelChange)="getSelectedSlot(slot)" [(ngModel)]="slot.isChecked">
-                          </ion-checkbox>
-                        </ion-col>
-                        <ion-col size-xs="7" size-sm="8">
-                          <span class="title">
-                            {{slot.start_time | dateWithTimezone: "time"}} - {{slot.end_time | dateWithTimezone: "time"}}
-                          </span>
-                          <span class="description small-margin-top">
-                            <ion-icon name="pin"></ion-icon>
-                            {{slot.room_code}} | {{slot.venue}}
-                          </span>
-                        </ion-col>
-                        <ion-col size-xs="5" size-sm="4" class="margin-auto" *ngIf="!onSelect">
-                          <ng-container>
-                            <ion-button class="cursor-pointer" size="small" expand="block"
-                              *ngIf="slot.status !== 'Available'" (click)="openSlotDetailsModal(slot)">
-                              View Details
-                            </ion-button>
-                          </ng-container>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </div>
-                  <div class="spacer"></div>
-                </div>
-                <ion-button class="cursor-pointer ion-margin-top" color="primary" size="small" expand="block"
-                  (click)="resetSelectedSlots(dates)" *ngIf="onSelect && this.slotsToBeCancelled.length > 0">
-                  Uncheck All
-                </ion-button>
-                <ion-button class="cursor-pointer ion-margin-top" color="danger" size="small" expand="block"
-                  (click)="cancelAvailableSlot()" *ngIf="onSelect" [disabled]="slotsToBeCancelled.length <= 0">
-                  Cancel Slot
-                </ion-button>
-              </div>
-            </ion-card-content>
-          </ion-card>
-        </ng-container>
-        <ng-template #noSlotsTodat>
-          <ion-card>
-            <ion-card-content>
-              <app-message-with-svg imageUrl='/assets/img/no-consultations.svg'
-                messageTitle='No Consultations Added on the Selected Date!'
-                messageContent='You have not added any consultations on {{todaysDate | date}}. You can check consultations added for other days by changing the date on the calendar to one of the coloured dates'
-                wrapperMarginTop="20px" wrapperOffset="3" wrapperSize="6">
-              </app-message-with-svg>
-            </ion-card-content>
-          </ion-card>
-        </ng-template>
-      </ion-col>
-
-      <ng-template #rangeSlots>
-        <ion-col size="12" size-md="7">
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>
-                <span *ngIf="slotsToBeCancelled.length > 0; else noRangeSlots">List of slots opened from
-                  {{dateRange.from | date}} to {{dateRange.to | date}}</span>
-                <ng-template #noRangeSlots>
-                  No slots found
-                </ng-template>
-              </ion-card-title>
-
-            </ion-card-header>
-            <ion-card-content>
-              <div class="event-calendar">
-                <div class="event" *ngFor="let slot of slotsToBeCancelled; let i = index;">
-                  <div class="event-container" [ngClass]="{
-                                        'booked': slot.status === 'Booked',
-                                        'available': slot.status === 'Available',
-                                        'no-hover': slot.status === 'Clossed'
-                                    }">
-                    <ion-grid class="grid-padding">
-                      <ion-row *ngIf="slot.status !== 'Cancelled' && slot.status !== 'Cancelled by lecturer'">
-                        <ion-col size-xs="7" size-sm="8">
-                          <span class="title">
-                            {{slot.start_time | dateWithTimezone: "time"}} - {{slot.end_time | dateWithTimezone: "time"}}
-                          </span>
-                          <span class="description small-margin-top">
-                            <ion-icon name="pin"></ion-icon>
-                            {{slot.room_code}} | {{slot.venue}}
-                          </span>
-                        </ion-col>
-                        <ion-col class="ion-text-end">
-                          <ion-buttons class="close-button-align">
-                            <ion-button (click)="removeRangeSelectedSlot(i)">
-                              <ion-icon color="medium" slot="icon-only" name="close"></ion-icon>
-                            </ion-button>
-                          </ion-buttons>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </div>
-                  <div class="spacer"></div>
-                </div>
-                <ion-button class="cursor-pointer ion-margin-top" color="primary" size="small" expand="block"
-                  (click)="resetSelectedSlots(dates)" *ngIf="onSelect && this.slotsToBeCancelled.length > 0">
-                  Uncheck All
-                </ion-button>
-                <ion-button class="cursor-pointer ion-margin-top" color="danger" size="small" expand="block"
-                  (click)="cancelAvailableSlot()" *ngIf="onSelect" [disabled]="slotsToBeCancelled.length <= 0">
-                  Cancel Slot
-                </ion-button>
-              </div>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ng-template>
-    </ion-row>
-  </ion-grid>
-
-  <!--Skeleton Text-->
-  <ng-template #loadingContent>
-    <ion-grid>
+  <div class="glob-container">
+    <ion-grid *ngIf="(slots$ | async) as dates; else loadingContent">
       <ion-row>
         <ion-col size="12" size-md="5">
           <ion-card>
             <ion-card-header>
               <ion-card-title>
-                <h3 class="responsive-h1">
-                  <ion-skeleton-text animated style="width: 38%;"></ion-skeleton-text>
+                <h3>
+                  Calendar Filter
                 </h3>
-                <h3 class="small-text small-margin-top">
-                  <ion-skeleton-text animated style="width: 96%;"></ion-skeleton-text>
-                </h3>
+                <h5>Choose a day to see the list of slots opened on that day</h5>
               </ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <ion-item class="ion-no-padding">
                 <ion-grid>
-                  <ion-row class="ion-align-items-start">
-                    <ion-col>
-                      <ion-skeleton-text animated style="width: 100%; line-height: 50px;"></ion-skeleton-text>
+                  <ion-row>
+                    <ion-col class="available ion-text-center">
+                      <ion-badge>.</ion-badge> Available
                     </ion-col>
-                    <ion-col class="skeleton-content-center">
-                      <ion-skeleton-text animated style="width: 100%; line-height: 50px;"></ion-skeleton-text>
+                    <ion-col class="p-booked ion-text-center">
+                      <ion-badge>.</ion-badge> Partially Booked
                     </ion-col>
-                    <ion-col class="skeleton-content-center">
-                      <ion-skeleton-text animated style="width: 100%; line-height: 50px;"></ion-skeleton-text>
+                    <ion-col class="booked ion-text-center">
+                      <ion-badge>.</ion-badge> Booked
                     </ion-col>
                   </ion-row>
                 </ion-grid>
               </ion-item>
-              <ion-skeleton-text animated class="ion-margin-start ion-margin-end ion-margin-top"
-                style="width: 90%; line-height: 28px;"></ion-skeleton-text>
-              <ion-skeleton-text animated class="ion-margin" style="width: 90%; line-height: 20px;"></ion-skeleton-text>
-              <ion-skeleton-text animated class="ion-margin-start ion-margin-end ion-margin-bottom"
-                style="width: 90%; line-height: 212px;">
-              </ion-skeleton-text>
+              <ion-calendar *ngIf="!onRange; else rangeCalendar" class="filter-date-picker glob-calendar" (change)="todaysDate = $event"
+                [(ngModel)]="dateToFilter" [options]="options" [type]="'string'" [format]="'YYYY-MM-DD'">
+              </ion-calendar>
+              <ng-template #rangeCalendar>
+                <ion-calendar class="glob-calendar" [(ngModel)]="dateRange" (ngModelChange)="getSelectedRangeSlot(dates)"
+                  [options]="optionsRange" [type]="'string'" [format]="'YYYY-MM-DD'">
+                </ion-calendar>
+              </ng-template>
             </ion-card-content>
           </ion-card>
         </ion-col>
-        <ion-col size="12" size-md="7">
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>
-                <ion-skeleton-text animated class="ion-margin-bottom" style="width: 100%; line-height: 30px;"></ion-skeleton-text>
-                <ion-skeleton-text animated style="width: 56%; line-height: 30px;"></ion-skeleton-text>
-              </ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-skeleton-text *ngFor="let _ of skeletonItemsNumber" animated style="width: 100%; line-height: 90px;">
-              </ion-skeleton-text>
-            </ion-card-content>
-          </ion-card>
+        <ion-col size="12" size-md="7" *ngIf="!onRange; else rangeSlots">
+          <ng-container *ngIf="dateToFilter && (dates | slots: todaysDate) as slots; else noSlotsTodat">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>
+                  List of slots opened on {{todaysDate | date}}
+                </ion-card-title>
+  
+              </ion-card-header>
+              <ion-card-content>
+                <div class="event-calendar">
+                  <div class="event" *ngFor="let slot of slots.items;">
+                    <div class="event-container" [ngClass]="{
+                                      'booked': slot.status === 'Booked',
+                                      'available': slot.status === 'Available',
+                                      'no-hover': slot.status === 'Clossed'
+                                  }">
+                      <ion-grid class="grid-padding">
+                        <ion-row *ngIf="slot.status !== 'Cancelled' && slot.status !== 'Cancelled by lecturer'">
+                          <ion-col size-xs="2" size-xl="1" *ngIf="onSelect && (slot | validateCheckbox)">
+                          <ion-checkbox (ngModelChange)="getSelectedSlot(slot)" [(ngModel)]="slot.isChecked">
+                            </ion-checkbox>
+                          </ion-col>
+                          <ion-col size-xs="7" size-sm="8">
+                            <span class="title">
+                              {{slot.start_time | dateWithTimezone: "time"}} - {{slot.end_time | dateWithTimezone: "time"}}
+                            </span>
+                            <span class="description">
+                              <ion-icon name="pin"></ion-icon>
+                              {{slot.room_code}} | {{slot.venue}}
+                            </span>
+                          </ion-col>
+                          <ion-col size-xs="5" size-sm="4" class="margin-auto" *ngIf="!onSelect">
+                            <ng-container>
+                              <ion-button size="small" expand="block"
+                                *ngIf="slot.status !== 'Available'" (click)="openSlotDetailsModal(slot)">
+                                View Details
+                              </ion-button>
+                            </ng-container>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                  </div>
+                  <ion-button class="ion-margin-top" color="primary" size="small" expand="block"
+                    (click)="resetSelectedSlots(dates)" *ngIf="onSelect && this.slotsToBeCancelled.length > 0">
+                    Uncheck All
+                  </ion-button>
+                  <ion-button class="ion-margin-top" color="danger" size="small" expand="block"
+                    (click)="cancelAvailableSlot()" *ngIf="onSelect" [disabled]="slotsToBeCancelled.length <= 0">
+                    Cancel Slot
+                  </ion-button>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ng-container>
+          <ng-template #noSlotsTodat>
+            <ion-card>
+              <ion-card-content>
+                <app-message-with-svg imageUrl='/assets/img/no-consultations.svg'
+                  messageTitle='No Consultations Added on the Selected Date!'
+                  messageContent='You have not added any consultations on {{todaysDate | date}}. You can check consultations added for other days by changing the date on the calendar to one of the coloured dates'
+                  wrapperMarginTop="20px" wrapperOffset="3" wrapperSize="6">
+                </app-message-with-svg>
+              </ion-card-content>
+            </ion-card>
+          </ng-template>
         </ion-col>
+  
+        <ng-template #rangeSlots>
+          <ion-col size="12" size-md="7">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>
+                  <span *ngIf="slotsToBeCancelled.length > 0; else noRangeSlots">List of slots opened from
+                    {{dateRange.from | date}} to {{dateRange.to | date}}</span>
+                  <ng-template #noRangeSlots>
+                    No slots found
+                  </ng-template>
+                </ion-card-title>
+  
+              </ion-card-header>
+              <ion-card-content>
+                <div class="event-calendar">
+                  <div class="event" *ngFor="let slot of slotsToBeCancelled; let i = index;">
+                    <div class="event-container" [ngClass]="{
+                                          'booked': slot.status === 'Booked',
+                                          'available': slot.status === 'Available',
+                                          'no-hover': slot.status === 'Clossed'
+                                      }">
+                      <ion-grid class="grid-padding">
+                        <ion-row *ngIf="slot.status !== 'Cancelled' && slot.status !== 'Cancelled by lecturer'">
+                          <ion-col size-xs="7" size-sm="8">
+                            <span class="title">
+                              {{slot.start_time | dateWithTimezone: "time"}} - {{slot.end_time | dateWithTimezone: "time"}}
+                            </span>
+                            <span class="description">
+                              <ion-icon name="pin"></ion-icon>
+                              {{slot.room_code}} | {{slot.venue}}
+                            </span>
+                          </ion-col>
+                          <ion-col class="ion-text-end">
+                            <ion-buttons class="close-button-align">
+                              <ion-button (click)="removeRangeSelectedSlot(i)">
+                                <ion-icon color="medium" slot="icon-only" name="close"></ion-icon>
+                              </ion-button>
+                            </ion-buttons>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </div>
+                  </div>
+                  <ion-button class="ion-margin-top" color="primary" size="small" expand="block"
+                    (click)="resetSelectedSlots(dates)" *ngIf="onSelect && this.slotsToBeCancelled.length > 0">
+                    Uncheck All
+                  </ion-button>
+                  <ion-button class="ion-margin-top" color="danger" size="small" expand="block"
+                    (click)="cancelAvailableSlot()" *ngIf="onSelect" [disabled]="slotsToBeCancelled.length <= 0">
+                    Cancel Slot
+                  </ion-button>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ng-template>
       </ion-row>
     </ion-grid>
-  </ng-template>
-
+  
+    <!--Skeleton Text-->
+    <ng-template #loadingContent>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="5">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>
+                  <h3>
+                    <ion-skeleton-text animated style="width: 38%;"></ion-skeleton-text>
+                  </h3>
+                  <h3>
+                    <ion-skeleton-text animated style="width: 96%;"></ion-skeleton-text>
+                  </h3>
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-item class="ion-no-padding">
+                  <ion-grid>
+                    <ion-row class="ion-align-items-start">
+                      <ion-col>
+                        <ion-skeleton-text animated style="width: 100%; line-height: 50px;"></ion-skeleton-text>
+                      </ion-col>
+                      <ion-col class="skeleton-content-center">
+                        <ion-skeleton-text animated style="width: 100%; line-height: 50px;"></ion-skeleton-text>
+                      </ion-col>
+                      <ion-col class="skeleton-content-center">
+                        <ion-skeleton-text animated style="width: 100%; line-height: 50px;"></ion-skeleton-text>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                </ion-item>
+                <ion-skeleton-text animated class="ion-margin-start ion-margin-end ion-margin-top"
+                  style="width: 90%; line-height: 28px;"></ion-skeleton-text>
+                <ion-skeleton-text animated class="ion-margin" style="width: 90%; line-height: 20px;"></ion-skeleton-text>
+                <ion-skeleton-text animated class="ion-margin-start ion-margin-end ion-margin-bottom"
+                  style="width: 90%; line-height: 212px;">
+                </ion-skeleton-text>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col size="12" size-md="7">
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>
+                  <ion-skeleton-text animated class="ion-margin-bottom" style="width: 100%; line-height: 30px;"></ion-skeleton-text>
+                  <ion-skeleton-text animated style="width: 56%; line-height: 30px;"></ion-skeleton-text>
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-skeleton-text *ngFor="let _ of skeletonItemsNumber" animated style="width: 100%; line-height: 90px;">
+                </ion-skeleton-text>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+  </div>
 </ion-content>
 
 <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-  <ion-fab-button [disabled]="onSelect" class="colored-background" routerLink="/iconsult/add-free-slot"
+  <ion-fab-button [disabled]="onSelect" color="primary" routerLink="/iconsult/add-free-slot"
     routerDirection="forward">
     <ion-icon name="add"></ion-icon>
   </ion-fab-button>

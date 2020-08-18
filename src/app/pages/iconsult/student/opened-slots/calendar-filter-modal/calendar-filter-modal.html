@@ -13,11 +13,11 @@
   <ion-card>
     <ion-card-header>
       <ion-card-title>
-        <h3 class="responsive-h1">
+        <h3>
           Calendar Filter
         </h3>
-        <h3 class="small-text small-margin-top">Choose a day to see the list of consultations opened on it
-        </h3>
+        <h5>Choose a day to see the list of consultations opened on it
+        </h5>
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
@@ -36,7 +36,7 @@
           </ion-row>
         </ion-grid>
       </ion-item>
-      <ion-calendar class="filter-date-picker" [(ngModel)]="dateToFilter" (change)="dateChosen()" [options]="options" [type]="'string'"
+      <ion-calendar class="filter-date-picker glob-calendar" [(ngModel)]="dateToFilter" (change)="dateChosen()" [options]="options" [type]="'string'"
         [format]="'YYYY-MM-DD'">
       </ion-calendar>
     </ion-card-content>

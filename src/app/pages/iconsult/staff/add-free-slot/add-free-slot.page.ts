@@ -179,7 +179,7 @@ export class AddFreeSlotPage implements OnInit {
       }
 
       while (startDate < endDate) {
-        const dayName = format(startDate, 'ddd');
+        const dayName = format(Date.parse(startDate), 'EEE');
         if (this.addFreeSlotForm.value.repeatOn.includes(dayName)) {
           this.addFreeSlotForm.value.time.forEach(time => {
             const timeSlot = {
@@ -192,7 +192,7 @@ export class AddFreeSlotPage implements OnInit {
           });
         }
 
-        const nextDate = formatISO(add(startDate, {days: 1}), { representation: 'date' });
+        const nextDate = formatISO(add(Date.parse(startDate), {days: 1}), { representation: 'date' });
         startDate = nextDate;
       }
     }

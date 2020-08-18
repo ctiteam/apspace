@@ -15,7 +15,7 @@
         <ion-card>
           <form [formGroup]="addFreeSlotForm" (ngSubmit)="submit()">
             <ion-card-content class="ion-no-padding">
-              <ion-item-divider class="colored-border">
+              <ion-item-divider>
                 <ion-label class="form-section-label">
                   Slot Type
                 </ion-label>
@@ -31,7 +31,7 @@
                 </ion-radio-group>
               </ion-item>
 
-              <ion-item-divider class="colored-border">
+              <ion-item-divider>
                 <ion-label class="form-section-label">
                   Slot Date & Repeat Options
                 </ion-label>
@@ -48,7 +48,7 @@
                 submitted && addFreeSlotForm.get('startDate').hasError('required') }">
                   Start Date
                 </ion-label>
-                <ion-calendar class="form-input" formControlName="startDate" [options]="mainDateOptions"
+                <ion-calendar class="form-input glob-calendar" formControlName="startDate" [options]="mainDateOptions"
                   (change)="mainDateChanged($event)" [type]="'string'" [format]="'YYYY-MM-DD'" [ngClass]="{ 'is-invalid': (addFreeSlotForm.get('startDate').hasError('required') && addFreeSlotForm.get('startDate').touched) ||
                   submitted && addFreeSlotForm.get('startDate').hasError('required') }">
                 </ion-calendar>
@@ -83,7 +83,7 @@
                   <ion-label position="stacked" [ngClass]="{ 'danger-text': (addFreeSlotForm.get('endDate').hasError('required') && addFreeSlotForm.get('endDate').touched) ||
                   submitted && addFreeSlotForm.get('endDate').hasError('required') }">
                     Repeat Until</ion-label>
-                  <ion-calendar class="form-input" formControlName="endDate" [options]="repeatUntilDateOptions"
+                  <ion-calendar class="form-input glob-calendar" formControlName="endDate" [options]="repeatUntilDateOptions"
                     [type]="'string'" [format]="'YYYY-MM-DD'" [ngClass]="{ 'is-invalid': (addFreeSlotForm.get('endDate').hasError('required') && addFreeSlotForm.get('endDate').touched) ||
                     submitted && addFreeSlotForm.get('endDate').hasError('required') }">
                   </ion-calendar>
@@ -118,7 +118,7 @@
               </div>
 
 
-              <ion-item-divider class="colored-border">
+              <ion-item-divider class="ion-margin-top">
                 <ion-label class="form-section-label">
                   Slot(s) Time
                 </ion-label>
@@ -149,7 +149,7 @@
                       </ion-row>
                     </ion-grid>
 
-                    <div class="clearfix"></div>
+                    <div class="glob-clearfix"></div>
                     <div *ngIf="
                       (timeFormData.controls[i].touched && timeFormData.controls[i].status === 'INVALID')
                       ||
@@ -172,7 +172,7 @@
                 </div>
               </ion-list>
 
-              <ion-item-divider class="colored-border">
+              <ion-item-divider>
                 <ion-label class="form-section-label">
                   Slot Location & Venue
                 </ion-label>
@@ -228,7 +228,7 @@
               </ion-grid>
 
               <div class="ion-padding">
-                <ion-button type="submit" expand="block" class="success-background">
+                <ion-button type="submit" expand="block" color="success">
                   Submit
                 </ion-button>
               </div>

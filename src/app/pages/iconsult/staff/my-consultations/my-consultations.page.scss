@@ -14,47 +14,39 @@ ion-label {
 }
 ion-card.booked {
   .card-header-title {
-    color: var(--danger-color) !important;
+    color: var(--ion-color-danger) !important;
   }
-  box-shadow: 0 3px 1px -2px var(--danger-color), 0 2px 2px 0 var(--danger-color), 0 1px 5px 0 var(--danger-color);
+  box-shadow: 0 3px 1px -2px var(--ion-color-danger), 0 2px 2px 0 var(--ion-color-danger), 0 1px 5px 0 var(--ion-color-danger);
   ion-badge {
-    background: var(--danger-color);
+    background: var(--ion-color-danger);
   }
 }
 
 ion-card.passed {
   .card-header-title {
-    color: var(--primary-color) !important;
+    color: var(--ion-color-primary) !important;
   }
-  box-shadow: 0 3px 1px -2px var(--primary-color), 0 2px 2px 0 var(--primary-color), 0 1px 5px 0 var(--primary-color);
+  box-shadow: 0 3px 1px -2px var(--ion-color-primary), 0 2px 2px 0 var(--ion-color-primary), 0 1px 5px 0 var(--ion-color-primary);
   ion-badge {
-    background: var(--primary-color);
-    color: var(--main-bg-color);
-  }
-  ion-button.colored-background {
-    --background: var(--primary-color) !important;
-    --background-hover: var(--primary-color);
+    background: var(--ion-color-primary);
+    color: var(--ion-background-color);
   }
 }
 
 ion-card.unavailable {
   .card-header-title {
-    color: var(--passed-event-color) !important;
+    color: var(--ion-color-medium) !important;
   }
-  box-shadow: 0 3px 1px -2px var(--passed-event-color), 0 2px 2px 0 var(--passed-event-color),
-    0 1px 5px 0 var(--passed-event-color);
+  box-shadow: 0 3px 1px -2px var(--ion-color-medium), 0 2px 2px 0 var(--ion-color-medium),
+    0 1px 5px 0 var(--ion-color-medium);
   ion-badge {
-    background: var(--passed-event-color);
-  }
-  ion-button.colored-background {
-    --background: var(--passed-event-color) !important;
-    --background-hover: var(--passed-event-color);
+    background: var(--ion-color-medium);
   }
 }
 
 ion-button.danger-background {
-  --background: var(--danger-color) !important;
-  --background-hover: var(--danger-hover-color);
+  --background: var(--ion-color-danger) !important;
+  --background-hover: var(--ion-color-danger-shade);
 }
 
 ion-fab-button[data-desc] {
@@ -82,8 +74,8 @@ ion-col {
   }
   &.available {
     ion-badge {
-      --background: var(--success-color);
-      --color: var(--success-color);
+      --background: var(--ion-color-success);
+      --color: var(--ion-color-success);
     }
   }
   &.p-booked {
@@ -94,14 +86,14 @@ ion-col {
   }
   &.booked {
     ion-badge {
-      --background: var(--danger-color);
-      --color: var(--danger-color);
+      --background: var(--ion-color-danger);
+      --color: var(--ion-color-danger);
     }
   }
   &.unavailable {
     ion-badge {
-      --background: var(--main-txt-color);
-      --color: var(--main-txt-color);
+      --background: var(--ion-text-color);
+      --color: var(--ion-text-color);
     }
   }
 }
@@ -119,7 +111,7 @@ ion-col {
 .day {
   padding: 15px;
   font-weight: bold;
-  color: var(--main-txt-color);
+  color: var(--ion-text-color);
   background-color: var(--tertiary-bg-color);
 }
 
@@ -127,34 +119,34 @@ ion-col {
   transition: all 0.2s ease;
   border-left: 3px solid;
   background: var(--secondary-bg-color);
-  color: var(--main-txt-color);
+  color: var(--ion-text-color);
 
   &.available {
-    border-color: var(--success-color);
+    border-color: var(--ion-color-success);
     ion-button {
-      --background: var(--success-color);
-      --background-hover: var(--success-hover-color);
+      --background: var(--ion-color-success);
+      --background-hover: var(--ion-color-success-shade);
     }
   }
 
   // &:not(.no-hover):hover {
-  //   background: var(--main-bg-color);
+  //   background: var(--ion-background-color);
   // }
 
   &.booked {
-    border-color: var(--danger-color);
+    border-color: var(--ion-color-danger);
     ion-button {
-      --background: var(--danger-color);
-      --background-hover: var(--danger-hover-color);
+      --background: var(--ion-color-danger);
+      --background-hover: var(--ion-color-danger-shade);
     }
   }
 
   &.unavailable {
-    border-color: var(--main-txt-color);
+    border-color: var(--ion-text-color);
     ion-button {
-      --background: var(--main-txt-color);
+      --background: var(--ion-text-color);
       --background-hover: var(--secondary-txt-color);
-      --color: var(--main-bg-color);
+      --color: var(--ion-background-color);
     }
   }
 }

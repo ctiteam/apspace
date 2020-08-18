@@ -1,7 +1,13 @@
 .form-section-label {
   font-size: 1.3em !important;
-  color: var(--primary-color) !important;
+  color: var(--ion-color-primary) !important;
 }
+
+.item-divider {
+  --background: none;
+  border-bottom: 2px solid var(--ion-color-primary);
+}
+
 ion-item {
   // HIDE EFFECTS FOR ION ITEM
   --background-hover: var(--secondary-bg-color) !important;
@@ -11,7 +17,7 @@ ion-item {
 
 .form-input {
   border-radius: 7px;
-  background: var(--main-bg-color);
+  background: var(--ion-background-color);
   padding: 3px 10px !important;
   margin-top: 10px;
   border: 1px solid var(--tertiary-bg-color);
@@ -22,8 +28,8 @@ ion-select.form-input {
   }
 .danger-text,
 .item-has-focus.danger-text {
-  color: var(--danger-color) !important;
+  color: var(--ion-color-danger) !important;
 }
 .is-invalid {
-  border-color: var(--danger-color);
+  border-color: var(--ion-color-danger);
 }

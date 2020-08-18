@@ -19,42 +19,62 @@ ion-avatar {
   text-decoration: none;
 }
 
+.text-color {
+  color: var(--ion-text-color);
+}
+
+.primary-text {
+  color: var(--ion-color-primary);
+}
+
+.success-text {
+  color: var(--ion-color-success);
+}
+
+.warning-text {
+  color: var(--ion-color-warning);
+}
+
+.danger-text {
+  color: var(--ion-color-danger);
+}
+
 .day {
   padding: 15px;
   font-weight: bold;
-  color: var(--main-txt-color);
-  background-color: var(--tertiary-bg-color);
+  color: var(--ion-text-color);
+  background-color: var(--ion-background-color);
 }
 
 .event-container {
   transition: all 0.2s ease;
   border-left: 3px solid;
   background: var(--secondary-bg-color);
-  color: var(--main-txt-color);
+  color: var(--ion-text-color);
 
   &.available {
-    border-color: var(--success-color);
+    border-color: var(--ion-color-success);
     ion-button {
-      background-color: var(--success-color);
-      --background: var(--success-color);
-      --background-hover: var(--success-hover-color);
+      background-color: var(--ion-color-success);
+      --background: var(--ion-color-success);
+      --background-hover: var(--ion-color-success-shade);
     }
   }
 
   &:not(.no-hover):hover {
-    background: var(--main-bg-color);
+    background: var(--ion-background-color);
   }
 
   &.booked {
-    border-color: var(--danger-color);
+    border-color: var(--ion-color-danger);
     background-color: var(--secondary-bg-color);
     .title,
     .description {
-      color: var(--passed-event-color);
+      color: var(--ion-color-medium);
     }
     ion-button {
-      background-color: var(--danger-color);
-      --background: var(--danger-color);
+      background-color: var(--ion-color-danger);
+      --background: var(--ion-color-danger);
     }
   }
 }
