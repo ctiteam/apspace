@@ -1,6 +1,7 @@
 ion-item-divider{
-    --color: var(--primary-color) !important;
+    --color: var(--ion-color-primary) !important;
     font-weight: bold;
+    --background: none;
 }
 
 ion-range {
@@ -8,10 +9,10 @@ ion-range {
     padding-bottom: 0px;
     padding-right: 12px;
     padding-left: 12px;
-    --bar-background: var(--primary-color);
-    --pin-background: var(--primary-color);
-    --pin-color: var(--main-txt-color);
-    --bar-background-active: var(--primary-color);
+    --bar-background: var(--ion-color-primary);
+    --pin-background: var(--ion-color-primary);
+    --pin-color: var(--ion-text-color);
+    --bar-background-active: var(--ion-color-primary);
 }
 
 
@@ -25,4 +26,14 @@ ion-range {
 .centered-text {
     padding-left: 28%;
     display: inline;
+}
+
+.visibility {
+    display: none;
+}
+
+@media screen and (max-width: 1024px) {
+    .visibility {
+        display: block;
+    }
 }
