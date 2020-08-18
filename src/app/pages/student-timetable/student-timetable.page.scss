@@ -10,7 +10,7 @@ ion-card {
   }
 
   .freeTime {
-    --background: var(--success-color) !important;
+    --background: var(--ion-color-success) !important;
     --color: #ffffff !important;
   }
 
@@ -57,7 +57,7 @@ ion-segment.week-segment {
 }
 
 .table-item:nth-child(odd) {
-  --background: var(--main-bg-color) !important;
+  --background: var(--ion-background-color) !important;
 }
 
 .table-top {
@@ -74,6 +74,18 @@ ion-segment.week-segment {
 
 .white-space-normal{
   white-space: normal !important;
+}
+
+.text-color {
+  color: var(--ion-text-color);
+}
+
+.primary-text {
+  color: var(--ion-color-primary);
+}
+
+.danger-text {
+  color: var(--ion-color-danger);
 }
 
 @media (min-width: 576px) {
