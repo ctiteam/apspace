@@ -1,6 +1,6 @@
 ion-card {
   ion-card-title {
-    color: var(--main-txt-color) !important;
+    color: var(--ion-text-color) !important;
   }
 
   ion-card-subtitle {
@@ -8,7 +8,7 @@ ion-card {
     border-radius: 6px;
     text-align: center;
     margin-top: 26px;
-    color: var(--primary-color);
+    color: var(--ion-color-primary);
   }
 
   ion-icon {
@@ -25,7 +25,11 @@ ion-card {
 
 ion-button {
   &.danger-border {
-    --border-color: var(--danger-color);
-    --color: var(--danger-color);
+    --border-color: var(--ion-color-danger);
+    --color: var(--ion-color-danger);
   }
+}
+
+.danger-text {
+  color: var(--ion-color-danger);
 }

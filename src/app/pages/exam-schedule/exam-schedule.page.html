@@ -5,7 +5,7 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button fill="outline" (click)="presentIntakeSearch()" class="colored-text colored-border">
+      <ion-button fill="outline" (click)="presentIntakeSearch()">
         {{ intake || 'Intakes' }}
       </ion-button>
     </ion-buttons>
@@ -26,10 +26,10 @@
             </ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <p class="secondary-txt-color ion-padding-bottom" style="color: #FFFFFF !important;">
+            <p class="ion-padding-bottom" style="color: #FFFFFF !important;">
               All examinations in June & July 2020 (Resit & Final Examinations) will be replaced with alternative
               assessment methods- Assignments, take home exam, online exams & etc.</p>
-            <p class="secondary-txt-color ion-padding-bottom text-bold" style="color: #FFFFFF !important;">
+            <p class="ion-padding-bottom glob-text-bold" style="color: #FFFFFF !important;">
               Kindly keep in contact with your module lecturers via Microsoft Teams /Moodle for details.
             </p>
           </ion-card-content>
@@ -52,14 +52,14 @@
           <ion-row>
             <ion-col size="12" size-lg="6" offset-lg="3">
               <div class="ion-padding ion-text-center">
-                <h5 class="secondary-txt-color ion-padding-bottom">Selected intake: {{ intake }}</h5>
-                <h6 class="text-bold danger-text">Important Note:</h6>
-                <p class="secondary-txt-color ion-padding-bottom">
+                <h5 class="ion-padding-bottom">Selected intake: {{ intake }}</h5>
+                <h6 class="glob-text-bold danger-text">Important Note:</h6>
+                <p class="ion-padding-bottom">
                   By using the exam schedule service in APSpace, you are agreeing to our exam guidelines and
                   procedures.
                   Please make sure to read them carefully.
                 </p>
-                <p class="danger-text ion-padding-bottom text-bold">
+                <p class="danger-text ion-padding-bottom -globtext-bold">
                   All exam times are displayed in Malaysia Time Zone (GMT+8)
                 </p>
                 <ion-button class="danger-border" fill="outline" (click)="openGuidlines()">
@@ -69,12 +69,12 @@
             </ion-col>
             <ion-col size="12" size-lg="6" offset-lg="3" *ngFor="let exam of exams">
               <div>
-                <ion-card class="ion-no-margin">
+                <ion-card class="ion-no-margin ion-margin-vertical">
                   <ion-card-header>
-                    <ion-card-title class="responsive-h1">
+                    <ion-card-title>
                       {{ exam.subjectDescription }}
                     </ion-card-title>
-                    <ion-card-subtitle class="responsive-h1">
+                    <ion-card-subtitle>
                       {{ exam.since | dateWithTimezone: 'EEEE, dd MMM y' }}
                     </ion-card-subtitle>
                   </ion-card-header>
@@ -109,7 +109,7 @@
                             *Dockets Issuance (Week Of):
                           </span>
                         </ion-col>
-                        <ion-col size="5" class="ion-text-right">
+                        <ion-col size="5" class="ion-text-end">
                           <p>{{ exam.docketsDue | date: 'EEE, dd MMM y' }}</p>
                         </ion-col>
                       </ion-row>
@@ -119,17 +119,17 @@
                             *Appraisals Due:
                           </span>
                         </ion-col>
-                        <ion-col size="5" class="ion-text-right">
+                        <ion-col size="5" class="ion-text-end">
                           <p>{{ exam.appraisalsDue | date: 'EEE, dd MMM y' }}</p>
                         </ion-col>
                       </ion-row>
-                      <ion-row *ngIf="exam.resultDate">
-                        <ion-col size="7">
+                      <ion-row class="ion-align-items-center ion-padding-horizontal" *ngIf="exam.resultDate">
+                        <ion-col size="6">
                           <span>
                             *Expected Result Release Date:
                           </span>
                         </ion-col>
-                        <ion-col size="5" class="ion-text-right">
+                        <ion-col size="6" class="ion-text-end">
                           <p>{{ exam.resultDate | date: 'EEE, dd MMM y' }}</p>
                         </ion-col>
                       </ion-row>
@@ -158,7 +158,7 @@
             <div>
               <ion-card>
                 <ion-card-header>
-                  <ion-card-title class="responsive-h1">
+                  <ion-card-title>
                     <ion-skeleton-text animated style="width: 60%; line-height: 20px"></ion-skeleton-text>
                   </ion-card-title>
                 </ion-card-header>
