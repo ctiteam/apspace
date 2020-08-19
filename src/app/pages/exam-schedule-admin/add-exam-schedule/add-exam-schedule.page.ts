@@ -171,7 +171,7 @@ export class AddExamSchedulePage implements OnInit, OnDestroy {
   async manageAssessmentTypes() {
     const modal = await this.modalCtrl.create({
       component: ManageAssessmentTypesPage,
-      cssClass: 'full-page-modal'
+      cssClass: 'glob-full-page-modal'
     });
 
     // modal.onDidDismiss().then((data) => {

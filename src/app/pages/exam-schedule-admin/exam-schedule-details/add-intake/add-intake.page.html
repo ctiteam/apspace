@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar mode="md">
     <ion-buttons slot="start">
-      <ion-button class="colored-text" (click)="closeModal()">
+      <ion-button color="primary" (click)="closeModal()">
         CLOSE
       </ion-button>
     </ion-buttons>
@@ -96,7 +96,7 @@
               </ion-label>
               <ion-datetime [formControl]="intakeForm.controls['examResultDate']" class="form-input"></ion-datetime>
             </ion-item>
-            <ion-button (click)="submit()" [disabled]="intakeForm.invalid" expand="block" class="success-background ion-margin">SUBMIT</ion-button>
+            <ion-button (click)="submit()" [disabled]="intakeForm.invalid" expand="block" color="primary" class="ion-margin">SUBMIT</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>

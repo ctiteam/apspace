@@ -186,7 +186,7 @@ export class ExamScheduleAdminPage implements OnInit, OnDestroy {
   async addNewExamSchedule() {
     const modal = await this.modalCtrl.create({
       component: AddExamSchedulePage,
-      cssClass: 'full-page-modal'
+      cssClass: 'glob-full-page-modal'
     });
 
     modal.onDidDismiss().then((data) => {

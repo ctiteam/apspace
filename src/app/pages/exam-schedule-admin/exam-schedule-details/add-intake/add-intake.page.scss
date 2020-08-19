@@ -8,7 +8,7 @@ ion-item {
 ion-label.item-label {
     // font-size: 24px;
     font-weight: bold;
-    color: var(--primary-color);
+    color: var(--ion-color-primary);
 }
 
 ion-select.form-input {
@@ -49,7 +49,7 @@ div.scrollable-div {
 
 .form-input {
     border-radius: 7px;
-    background: var(--main-bg-color);
+    background: var(--ion-background-color);
     padding: 3px 10px !important;
     margin-top: 10px;
     border: 1px solid var(--tertiary-bg-color);

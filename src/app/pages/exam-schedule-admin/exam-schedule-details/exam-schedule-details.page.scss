@@ -1,29 +1,29 @@
 $animation-standard-easing: cubic-bezier(0.4, 0.0, 0.2, 1);
 
 .is-inactive {
-    color: var(--danger-color);
+    color: var(--ion-color-danger);
 }
 
 .is-active {
-    color: var(--success-color);
+    color: var(--ion-color-success);
 }
 
 .is-inactive-bg-color {
-    --background: var(--danger-color);
-    --background-hover: var(--danger-color);
-    --background-clicked: var(--danger-color);
+    --background: var(--ion-color-danger);
+    --background-hover: var(--ion-color-danger);
+    --background-clicked: var(--ion-color-danger);
 }
 
 .is-active-bg-color {
-    --background: var(--primary-color);
-    --background-hover: var(--primary-color);
-    --background-clicked: var(--primary-color);
+    --background: var(--ion-color-primary);
+    --background-hover: var(--ion-color-primary);
+    --background-clicked: var(--ion-color-primary);
 }
 
 
 .clickable-icon {
     cursor: pointer;
-    color: var(--primary-color);
+    color: var(--ion-color-primary);
     font-size: 20px;
 
     &:hover {
@@ -37,7 +37,7 @@ $animation-standard-easing: cubic-bezier(0.4, 0.0, 0.2, 1);
 
 .clickable-icon-danger {
     cursor: pointer;
-    color: var(--danger-color);
+    color: var(--ion-color-danger);
     font-size: 20px;
 
     &:hover {
@@ -50,12 +50,12 @@ $animation-standard-easing: cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .custom-background {
-    background: var(--main-bg-color);
+    background: var(--ion-background-color);
 }
 
 .table-item {
     &:nth-child(even) {
-        --background: var(--main-bg-color) !important;
+        --background: var(--ion-background-color) !important;
     }
 }
 

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar mode="md">
     <ion-buttons slot="start">
-      <ion-button class="colored-text" (click)="closeModal()">
+      <ion-button color="primary" (click)="closeModal()">
         CLOSE
       </ion-button>
     </ion-buttons>
@@ -23,7 +23,7 @@
                 Publication Date
               </ion-label>
               <ion-calendar [formControl]="examScheduleForm.controls['publicationDate']" [options]="optionsRange"
-                [type]="type" [format]="'DD-MMM-YYYY'" class="form-input"></ion-calendar>
+                [type]="type" [format]="'DD-MMM-YYYY'" class="form-input glob-calendar"></ion-calendar>
             </ion-item>
 
             <ion-item lines="none">
@@ -97,7 +97,7 @@
                 <ion-skeleton-text animated class="ion-padding-vertical"></ion-skeleton-text>
               </ng-template>
             </ion-item>
-            <ion-button (click)="manageAssessmentTypes()" class="colored-border colored-text ion-margin-horizontal" fill="outline">MANAGE ASSESSMENT TYPES</ion-button> 
+            <ion-button (click)="manageAssessmentTypes()" color="primary" class="ion-margin-horizontal" fill="outline">MANAGE ASSESSMENT TYPES</ion-button> 
 
             <ion-item lines="none">
               <ion-label position="stacked" class="item-label">
@@ -106,7 +106,7 @@
               <ion-input [formControl]="examScheduleForm.controls['remarks']" class="form-input"></ion-input>
             </ion-item>
             <ion-button (click)="submit()" [disabled]="examScheduleForm.invalid" expand="block"
-              class="success-background ion-margin">SUBMIT</ion-button>
+              class="ion-margin" color="primary">SUBMIT</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>

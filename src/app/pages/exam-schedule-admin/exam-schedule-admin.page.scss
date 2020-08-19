@@ -1,34 +1,34 @@
 $animation-standard-easing: cubic-bezier(0.4, 0.0, 0.2, 1);
 
 .table-item {
-    &:nth-child(odd) {
-        --background: var(--main-bg-color) !important;
-    }
+  &:nth-child(odd) {
+    --background: var(--ion-background-color) !important;
+  }
 }
 
-.table-header{
-    display: none;
+.table-header {
+  display: none;
 }
 
 .is-inactive {
-    color: var(--danger-color);
+  color: var(--ion-color-danger);
 }
 
 .is-active {
-    color: var(--success-color);
+  color: var(--ion-color-success);
 }
 
 .align-segment {
-    display: flex;
-    justify-content: left;
+  display: flex;
+  justify-content: left;
 }
 
 .grid-background {
-    background: var(--main-bg-color);
+  background: var(--ion-background-color);
 }
 
 .row-margin {
-    margin-bottom: 65px;
+  margin-bottom: 65px;
 }
 
 ion-item.clickable-item {
@@ -45,28 +45,28 @@ ion-item.clickable-item {
 }
 
 ion-item.view-item {
-    border-left: 4px solid #bdbdbd;
+  border-left: 4px solid #bdbdbd;
 }
 
 .flex-col-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .display-on-sm {
-    vertical-align: -2.5px;
-    padding-left: 4px;
-    padding-right: 8px;
+  vertical-align: -2.5px;
+  padding-left: 4px;
+  padding-right: 8px;
 }
 
 @media (min-width: 576px) {
-    .table-header {
-        display: block;
-        --background: var(--tertiary-bg-color) !important;
-    }
+  .table-header {
+    display: block;
+    --background: var(--tertiary-bg-color) !important;
+  }
 
-    .display-on-sm {
-        display: none;
-    }
+  .display-on-sm {
+    display: none;
+  }
 }
