@@ -1,6 +1,6 @@
 .table-item {
   &:nth-child(even) {
-    --background: var(--main-bg-color) !important;
+    --background: var(--ion-background-color) !important;
   }
 }
 
@@ -22,10 +22,10 @@
 }
 
 .colored-divider {
-  --background: var(--primary-color) !important;
+  --background: var(--ion-color-primary) !important;
 
   ion-label {
-    --color: var(--main-txt-color) !important;
+    --color: var(--ion-text-color) !important;
   }
 }
 
@@ -73,11 +73,6 @@ loading-spinner {
   width: 100%;
   margin-bottom: -7px;
   overflow: hidden;
-}
-
-.circle-progress {
-  display: block;
-  margin: auto;
 }
 
 .current {

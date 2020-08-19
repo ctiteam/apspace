@@ -3,11 +3,11 @@
     <ion-title *ngIf="course$ | async">
       Attendance
     </ion-title>
-    <ion-buttons slot="start" [hidden]='comingFromTabs() ? true : false'>
+    <ion-buttons slot="start" [hidden]="comingFromTabs() ? true : false">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button fill="outline" class="colored-text colored-border" (click)="showActionSheet()">
+      <ion-button fill="outline" color="primary" (click)="showActionSheet()">
         {{ selectedIntake }}
       </ion-button>
     </ion-buttons>
@@ -40,7 +40,7 @@
           <!-- END BLUR LAYER (OVERLAY) -->
 
           <!-- START CIRCLE -->
-          <div class="circle ion-text-center" id="widget-content"></div>
+          <div class="ion-text-center" id="widget-content"></div>
           <!-- END CIRCLE -->
 
           <!-- START TEXT -->
@@ -70,7 +70,7 @@
         <ion-grid>
           <ion-row>
             <ion-col size="10" offset="1">
-              <ion-button class="ion-margin-top success-background" expand="block" [routerLink]="['/attendix/update']">
+              <ion-button color="primary" class="ion-margin-top" expand="block" [routerLink]="['/attendix/update']">
                 Sign Attendance
                 <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
               </ion-button>
@@ -101,7 +101,7 @@
           </ng-template>
         </div>
       </ion-col>
-      <ion-col size="12" size-md="8" class="ion-no-padding data-col">
+      <ion-col size="12" size-md="8" class="ion-no-padding">
         <ng-template let-attendances [ngIf]="attendance$ | async" [ngIfElse]="loadAttendance">
           <ion-grid class="ion-no-padding">
             <ion-row>
@@ -112,13 +112,13 @@
                       <ion-grid class="ion-no-margin ion-no-padding">
                         <ion-row>
                           <ion-col class="ion-no-padding margin-auto" size="12" size-sm="">
-                            <h2 class="text-bold">Module</h2>
-                          </ion-col>
-                          <ion-col size="12" size-sm="" class="print-less-width ion-no-padding margin-auto">
-                            <h2 class="time text-bold">Classes</h2>
+                            <h2 class="glob-text-bold">Module</h2>
                           </ion-col>
                           <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
-                            <h2 class="text-bold">Exam Eligibility</h2>
+                            <h2 class="glob-text-bold">Classes</h2>
+                          </ion-col>
+                          <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
+                            <h2 class="glob-text-bold">Exam Eligibility</h2>
                           </ion-col>
                           <ion-col size="12" size-sm="auto" class="ion-text-right margin-auto">
                             <ion-button style="visibility: hidden;">
@@ -130,14 +130,14 @@
                     </ion-item>
                     <ion-list *ngFor="let semester of attendances | reverse" class="ion-no-padding">
                       <ion-item-divider class="colored-divider">
-                        <ion-label class="ion-text-center text-bold">
+                        <ion-label class="ion-text-center glob-text-bold">
                           Semester {{semester.semester}}
                         </ion-label>
                       </ion-item-divider>
                       <ion-item class="table-item" *ngFor="let a of semester.value">
                         <ion-grid>
                           <ion-row class="table-data">
-                            <ion-col size="12" size-sm="" class="text-bold md-text-center margin-auto">
+                            <ion-col size="12" size-sm="" class="glob-text-bold md-text-center margin-auto">
                               {{ a.MODULE_ATTENDANCE }}
                             </ion-col>
                             <ion-col size="12"
@@ -149,7 +149,7 @@
                             "></div>
                             </ion-col>
 
-                            <ion-col size="12" size-sm="" class=" md-text-center margin-auto">
+                            <ion-col size="12" size-sm="" class="md-text-center margin-auto">
                               <ion-item lines="none" class="no-background h-desktop-d-mobile ion-no-padding">
                                 Classes
                                 <span slot="end">
@@ -185,7 +185,7 @@
                                 {{ a.EXAM_ELIGIBILITY }}
                               </span>
                             </ion-col>
-                            <ion-col size="12" size-sm="auto" class="details-button ion-text-center margin-auto">
+                            <ion-col size="12" size-sm="auto" class="ion-text-center margin-auto">
                               <ion-button
                                 (click)='attendanceDetails(a.MODULE_ATTENDANCE, selectedIntake, a.SUBJECT_CODE)'
                                 color='success'>
