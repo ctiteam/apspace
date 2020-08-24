@@ -17,80 +17,86 @@
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
 
-  <ng-container *ngIf="transaction$ | async as transactions; else apCardBalanceLoading">
-    <ng-container *ngIf="transactions.length > 0 else noTransactions">
-      <ion-grid class="ion-no-padding">
-        <ion-row class="ion-margin-bottom">
-          <ion-col class="ion-no-padding ion-padding-top ion-padding-bottom" size-xs="12" size-md="6" offset-md="3"
-            size-lg="4" offset-lg="4">
-            <div class="card ion-padding-top ion-padding-bottom">
-              <div class="front">
-                <div class="strip-bottom"></div>
-                <div class="strip-top"></div>
-                <div class="card-details">
-                  <div class="investor">APCard</div>
-                  <div class="chip">
-                    <div class="chip-line"></div>
-                    <div class="chip-line"></div>
-                    <div class="chip-line"></div>
-                    <div class="chip-line"></div>
-                    <div class="chip-main"></div>
-                  </div>
-                  <div class="card-number"></div>
-                  <div class="end">
-                    <label>LAST TRANSACTION: </label>
-                    <span class="end-date">{{ transactions[0].SpendDate | date: 'dd/MMM' }}
-                    </span>
-                  </div>
-                  <div class="card-holder">
-                    <label>CARD HOLDER: </label>
-                    <span>{{ transactions[0].SNO }}</span>
-                  </div>
-                  <div class="card-holder">
-                    <label>BALANCE: </label>
-                    <span>{{ transactions[0].Balance | currency:"RM" }}</span>
+  <div class="glob-container">
+    <ng-container *ngIf="transaction$ | async as transactions; else apCardBalanceLoading">
+      <ng-container *ngIf="transactions.length > 0 else noTransactions">
+        <ion-grid>
+          <ion-row>
+            <ion-col lass="ion-no-padding ion-padding-top ion-padding-bottom" size-xs="12" size-md="6" offset-md="3">
+              <div class="card ion-padding-top ion-padding-bottom">
+                <div class="front">
+                  <div class="strip-bottom"></div>
+                  <div class="strip-top"></div>
+                  <div class="card-details">
+                    <div class="investor">APCard</div>
+                    <div class="chip">
+                      <div class="chip-line"></div>
+                      <div class="chip-line"></div>
+                      <div class="chip-line"></div>
+                      <div class="chip-line"></div>
+                      <div class="chip-main"></div>
+                    </div>
+                    <div class="card-number"></div>
+                    <div class="end">
+                      <label>LAST TRANSACTION: </label>
+                      <span class="end-date">{{ transactions[0].SpendDate | dateWithTimezone: 'dd/MMM' }}
+                      </span>
+                    </div>
+                    <div class="card-holder">
+                      <label>CARD HOLDER: </label>
+                      <span>{{ transactions[0].SNO }}</span>
+                    </div>
+                    <div class="card-holder">
+                      <label>BALANCE: </label>
+                      <span>{{ transactions[0].Balance | currency:"RM" }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col class="ion-no-padding ion-padding-top ion-padding-bottom" size-xs="12" size-md="6" offset-md="3"
-            size-lg="4" offset-lg="4">
-            <ion-virtual-scroll [items]="transactions" approxItemHeight="92px" approxHeaderHeight="46" approx
-              [headerFn]="seperatebyMonth">
-              <ion-item-divider class="colored-background" *virtualHeader="let header">
-                <ion-label>
-                  {{ header }}
-                </ion-label>
-              </ion-item-divider>
-              <ion-item [class.credit]="0 < transaction.SpendVal" [class.deposit]="0 > transaction.SpendVal"
-                *virtualItem="let transaction">
-                <ion-avatar slot="start">
-                  <ion-icon class="transaction-icon"
-                    [name]="transaction.SpendVal >= 0 ? 'add-circle-outline' : 'remove-circle-outline'">
-                  </ion-icon>
-                </ion-avatar>
-                <ion-label>
-                  <h2 class="value">{{ getAbsoluteValue(transaction.SpendVal) | currency: "RM" }}</h2>
-                  <p class="main-text-color">{{ transaction.ItemName }}</p>
-                  <h3 class="secondary-txt-color">{{ transaction.SpendDate | date: "EEE, d MMM y" }} @ {{ transaction.SpendTime | time }}</h3>
-                </ion-label>
-              </ion-item>
-            </ion-virtual-scroll>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="ion-no-padding ion-padding-top ion-padding-bottom" size-xs="12" size-md="6" offset-md="3">
+              <ion-virtual-scroll [items]="transactions" approxItemHeight="92px" approxHeaderHeight="46" approx
+                [headerFn]="seperatebyMonth">
+                <ion-item-divider class="colored-background" *virtualHeader="let header">
+                  <ion-label>
+                    {{ header }}
+                  </ion-label>
+                </ion-item-divider>
+                <ion-item [class.credit]="0 < transaction.SpendVal" [class.deposit]="0 > transaction.SpendVal"
+                  *virtualItem="let transaction">
+                  <ion-avatar slot="start">
+                    <ion-icon class="transaction-icon"
+                      [name]="transaction.SpendVal >= 0 ? 'add-circle-outline' : 'remove-circle-outline'">
+                    </ion-icon>
+                  </ion-avatar>
+                  <ion-label>
+                    <h2 class="value">{{ getAbsoluteValue(transaction.SpendVal) | currency: "RM" }}</h2>
+                    <ion-text color="primary">
+                      <p>{{ transaction.ItemName }}</p>
+                    </ion-text>
+                    <ion-text color="secondary">
+                      <h3>{{ transaction.SpendDate | dateWithTimezone: "EEE, d MMM y" }} @
+                        {{todayDate + ' ' + transaction.SpendTime | dateWithTimezone: "time" }}</h3>
+                    </ion-text>
+                  </ion-label>
+                </ion-item>
+              </ion-virtual-scroll>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ng-container>
 
+      <ng-template #noTransactions>
+        <app-message-with-svg messageTitle="No Data To Show!"
+          messageContent="Your APCard is not activated, or you have not made any transactions using your APCard yet."
+          imageUrl="assets/img/card_not_activated.svg" wrapperOffset="4" wrapperSize="4" wrapperMarginTop="50px">
+        </app-message-with-svg>
+      </ng-template>
     </ng-container>
-    <ng-template #noTransactions>
-      <app-message-with-svg messageTitle="No Data To Show!"
-        messageContent="Your APCard is not activated, or you have not made any transactions using your APCard yet."
-        imageUrl="assets/img/card_not_activated.svg" wrapperOffset="4" wrapperSize="4" wrapperMarginTop="50px">
-      </app-message-with-svg>
-    </ng-template>
-  </ng-container>
+  </div>
+
   <!-- LOADING TEMPLATE -->
   <ng-template #apCardBalanceLoading>
     <div class="masonry-list">
@@ -110,7 +116,8 @@
           </ion-card-header>
           <ion-card-content>
             <ion-list>
-              <ion-item lines="none" class="ion-no-padding" style="border-left: none;" *ngFor="let transactions of skelton.numOfTrans">
+              <ion-item lines="none" class="ion-no-padding" style="border-left: none;"
+                *ngFor="let transactions of skelton.numOfTrans">
                 <ion-avatar slot="start">
                   <ion-skeleton-text animated style="width: 100%; line-height: 33px"></ion-skeleton-text>
                 </ion-avatar>

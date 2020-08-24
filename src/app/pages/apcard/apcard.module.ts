@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ComponentsModule } from 'src/app/components/components.module';
+import { SharedPipesModule } from '../../shared/shared-pipes.module';
 import { ApcardPage } from './apcard.page';
 import { PrintTransactionsModalPage } from './print-transactions-modal/print-transactions-modal';
 import { TimePipe } from './time.pipe';
@@ -22,7 +23,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ComponentsModule,
-    FormsModule
+    FormsModule,
+    SharedPipesModule
   ],
   declarations: [ApcardPage, PrintTransactionsModalPage, TimePipe],
 })
