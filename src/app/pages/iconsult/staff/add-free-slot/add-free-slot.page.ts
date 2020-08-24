@@ -175,10 +175,10 @@ export class AddFreeSlotPage implements OnInit {
 
       if (this.addFreeSlotForm.value.noOfWeeks > 0) {
         endDate = formatISO(add(parseISO(this.addFreeSlotForm.value.startDate),
-          {days: (+this.addFreeSlotForm.value.noOfWeeks * 7) - 1}), { representation: 'date' });
+        {days: (+this.addFreeSlotForm.value.noOfWeeks * 7) - 1}), { representation: 'date' });
       }
 
-      while (startDate < endDate) {
+      while (startDate <= endDate) {
         const dayName = format(Date.parse(startDate), 'EEE');
         if (this.addFreeSlotForm.value.repeatOn.includes(dayName)) {
           this.addFreeSlotForm.value.time.forEach(time => {
