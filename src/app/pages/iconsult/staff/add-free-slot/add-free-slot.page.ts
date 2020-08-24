@@ -159,6 +159,7 @@ export class AddFreeSlotPage implements OnInit {
     // Add slots algorithmn starts here
     const body = [];
     let startDate = this.addFreeSlotForm.value.startDate;
+    let endDate;
 
     // if else: single adding slot, else multiple adding slot.
     if (this.addFreeSlotForm.value.slotType === this.consultationTypeOptions[0].value) {
@@ -171,7 +172,7 @@ export class AddFreeSlotPage implements OnInit {
         body.push(timeSlot);
       });
     } else {
-      let endDate = this.addFreeSlotForm.value.endDate;
+      endDate = this.addFreeSlotForm.value.endDate;
 
       if (this.addFreeSlotForm.value.noOfWeeks > 0) {
         endDate = formatISO(add(parseISO(this.addFreeSlotForm.value.startDate),
@@ -199,12 +200,23 @@ export class AddFreeSlotPage implements OnInit {
 
     this.venues$.subscribe(venues => {
       const venue = venues.find(v => v.id === this.addFreeSlotForm.value.venue);
+      const slotDateMessage = this.addFreeSlotForm.value.slotType === this.consultationTypeOptions[0].value ?
+                              `<p><strong>Slot Date: </strong> ${this.addFreeSlotForm.value.startDate} </p>` :
+                              `<p><strong>Slot Date: </strong> ${this.addFreeSlotForm.value.startDate} until ${endDate}</p>`;
+      const repeatOnMessage = this.addFreeSlotForm.value.slotType === this.consultationTypeOptions[0].value ?
+                              '' :
+                              `<p><strong>Repeat On: </strong> ${this.addFreeSlotForm.value.repeatOn}</p>`;
+
+      console.log(this.addFreeSlotForm.value.repeatOn);
+      console.log(this.addFreeSlotForm.value.time.map(time => format(parseISO(time.slotsTime), 'kk:mm')));
+
       this.alertCtrl
         .create({
           header: 'Adding new slot(s)',
           subHeader:
             'Are you sure you want to add new slot(s) with the following details:',
-          message: `<p><strong>Slot Date: </strong> ${this.addFreeSlotForm.value.startDate}</p>
+          message: `${slotDateMessage}
+                    ${repeatOnMessage}
                     <p><strong>Slot Time: </strong>
                     ${this.addFreeSlotForm.value.time.map(time => format(parseISO(time.slotsTime), 'kk:mm'))}</p>
                     <p><strong>Slot Location: </strong> ${this.addFreeSlotForm.value.location}</p>
