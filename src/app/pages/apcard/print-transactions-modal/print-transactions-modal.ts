@@ -28,7 +28,9 @@ export class PrintTransactionsModalPage implements OnInit {
   noRecordsForSelectedMonth = false;
   pdfTitle = '';
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.createLoading();
+  }
 
   constructor(
     private modalCtrl: ModalController,
@@ -42,18 +44,21 @@ export class PrintTransactionsModalPage implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  async presentLoading() {
+  async createLoading() {
     this.loading = await this.loadingCtrl.create({
       spinner: 'dots',
       duration: 5000,
       message: 'Please wait...',
       translucent: true,
     });
-    return await this.loading.present();
+  }
+
+  async presentLoading() {
+    await this.loading.present();
   }
 
   async dismissLoading() {
-    return await this.loading.dismiss();
+    await this.loading.dismiss();
   }
 
   generatePdf() {
@@ -106,6 +111,7 @@ export class PrintTransactionsModalPage implements OnInit {
       this.noRecordsForSelectedMonth = true;
       return false;
     }
+
 
     this.pdfTitle = `${this.transactionTypeModel}_apcard_transactions_for_${yearMonthDate.getFullYear()}_${yearMonthDate.getMonth() + 1}`;
 

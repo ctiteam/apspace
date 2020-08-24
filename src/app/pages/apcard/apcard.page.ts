@@ -27,6 +27,8 @@ export class ApcardPage implements OnInit {
   ];
   isLoading: boolean;
 
+  todayDate = format(new Date(), 'dd MMM yyyy');
+
 
   constructor(
     private ws: WsApiService,
