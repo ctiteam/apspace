@@ -11,7 +11,7 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <ion-toolbar *ngIf="(bankDraft$ | async) as bankDrafts; else loadingSegment">
+  <ion-toolbar *ngIf="(bankDraft$ | async) as bankDrafts">
     <ion-segment [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
       <ion-segment-button value="Summary">Summary</ion-segment-button>
       <ion-segment-button *ngIf="bankDrafts[0].BANKDRAFT_AMOUNT !== 0" value="Bank Draft">
@@ -21,19 +21,6 @@
     </ion-segment>
   </ion-toolbar>
 
-  <ng-template #loadingSegment>
-    <ion-toolbar>
-      <ion-grid>
-        <ion-row class="ion-justify-content-center">
-          <ion-col class="ion-padding-horizontal" size="12" size-md="6" size-lg="4">
-            <ion-item lines="none">
-              <ion-skeleton-text style="width: 100%; height: 38px;" animated></ion-skeleton-text>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-toolbar>
-  </ng-template>
 </ion-header>
 
 <ion-menu menuId="filter-menu" contentId="fee-content" side="end" type="overlay">
@@ -59,10 +46,11 @@
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
-  <div class="ion-no-padding">
+
+  <div class="glob-container">
     <ion-grid>
-      <ion-row class="ion-justify-content-center">
-        <ion-col size="12" size-md="6" size-lg="4">
+      <ion-row>
+        <ion-col size-xs="12" size-md="7">
           <ng-template let-totalSummary [ngIf]="totalSummary$ | async" [ngIfElse]="loadingTotalSummary">
             <ion-card class="content-card" #total_summary_card [ngClass]="{
             'green-total-summary-card': (totalSummary[0].TOTAL_PAYABLE === totalSummary[0].TOTAL_PAID),
@@ -78,34 +66,34 @@
                 <chart #financialsChartComponent *ngIf="financialsChart.data" [type]="financialsChart.type"
                   [data]="financialsChart.data" [options]="financialsChart.options">
                 </chart>
-                <ion-item class="bold green-text" lines="none">
+                <ion-item class="glob-text-bold green-text" lines="none">
                   <ion-label>
                     <h3>Total Payable</h3>
                   </ion-label>
                   <ion-note slot="end">{{ (totalSummary[0]?.TOTAL_PAYABLE || 0) | currency:'MYR':'RM' }}
                   </ion-note>
                 </ion-item>
-                <ion-item class="bold green-text" lines="none">
+                <ion-item class="glob-text-bold green-text" lines="none">
                   <ion-label>
                     <h3>Total Paid</h3>
                   </ion-label>
                   <ion-note slot="end">{{ (totalSummary[0]?.TOTAL_PAID || 0) | currency:'MYR':'RM' }}</ion-note>
                 </ion-item>
-                <ion-item class="bold yellow-text" lines="none">
+                <ion-item class="glob-text-bold yellow-text" lines="none">
                   <ion-label>
                     <h3>Total Outstanding</h3>
                   </ion-label>
                   <ion-note slot="end">{{ (totalSummary[0]?.TOTAL_OUTSTANDING || 0) | currency:'MYR':'RM' }}
                   </ion-note>
                 </ion-item>
-                <ion-item class="bold red-text" lines="none">
+                <ion-item class="glob-text-bold red-text" lines="none">
                   <ion-label>
                     <h3>Total Overdue</h3>
                   </ion-label>
                   <ion-note slot="end">{{ (totalSummary[0]?.TOTAL_OVERDUE || 0) | currency:'MYR':'RM' }}
                   </ion-note>
                 </ion-item>
-                <ion-item class="bold pink-text" lines="none">
+                <ion-item class="glob-text-bold pink-text" lines="none">
                   <ion-label>
                     <h3>Fine</h3>
                   </ion-label>
@@ -118,284 +106,300 @@
           <ng-template #loadingTotalSummary>
             <ion-card class="content-card">
               <ion-card-header>
-                <ion-card-title class="ion-text-center">Total Summary</ion-card-title>
+                <ion-skeleton-text class="glob-margin-auto" style="width: 50%; height: 20px" animated></ion-skeleton-text>
               </ion-card-header>
 
               <ion-card-content>
                 <ion-item lines="none">
-                  <ion-skeleton-text style="width: 100%; height: 46px;" animated></ion-skeleton-text>
+                  <ion-skeleton-text class="glob-margin-auto" style="width: 90%; height: 120px; padding-bottom: 10px; padding-top: 5px" animated>
+                  </ion-skeleton-text>
                 </ion-item>
                 <ion-item lines="none">
-                  <ion-skeleton-text style="width: 100%; height: 46px;" animated></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 28%; height: 15px;" animated></ion-skeleton-text>
+                  <ion-skeleton-text slot="end" style="width: 15%; height: 15px;" animated></ion-skeleton-text>
                 </ion-item>
                 <ion-item lines="none">
-                  <ion-skeleton-text style="width: 100%; height: 46px;" animated></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 26%; height: 15px;" animated></ion-skeleton-text>
+                  <ion-skeleton-text slot="end" style="width: 15%; height: 15px;" animated></ion-skeleton-text>
                 </ion-item>
                 <ion-item lines="none">
-                  <ion-skeleton-text style="width: 100%; height: 46px;" animated></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 30%; height: 15px;" animated></ion-skeleton-text>
+                  <ion-skeleton-text slot="end" style="width: 10%; height: 15px;" animated></ion-skeleton-text>
                 </ion-item>
                 <ion-item lines="none">
-                  <ion-skeleton-text style="width: 100%; height: 46px;" animated></ion-skeleton-text>
+                  <ion-skeleton-text style="width: 28%; height: 15px;" animated></ion-skeleton-text>
+                  <ion-skeleton-text slot="end" style="width: 10%; height: 15px;" animated></ion-skeleton-text>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-skeleton-text style="width: 15%; height: 15px;" animated></ion-skeleton-text>
+                  <ion-skeleton-text slot="end" style="width: 10%; height: 15px;" animated></ion-skeleton-text>
                 </ion-item>
               </ion-card-content>
             </ion-card>
           </ng-template>
         </ion-col>
 
-        <ion-col size="12" size-md="6" size-lg="8">
+        <ion-col size-xs="12" size-md="5">
           <ng-container [ngSwitch]='selectedSegment'>
             <ng-container *ngSwitchCase="'Summary'">
               <ng-template let-summaries [ngIf]="summary$ | async" [ngIfElse]="loadingSummary">
-                <ion-grid>
-                  <ion-row class="ion-justify-content-center">
-                    <ion-col size="12" size-xl="6" *ngFor="let summary of summaries">
-                      <ion-card class="content-card">
-                        <ion-card-header>
-                          <ion-card-subtitle>{{ summary.INVOICE_DESCRIPTION }}</ion-card-subtitle>
-                        </ion-card-header>
+                <ion-card class="content-card" *ngFor="let summary of summaries">
+                  <ion-card-header>
+                    <ion-card-subtitle>{{ summary.INVOICE_DESCRIPTION }}</ion-card-subtitle>
+                  </ion-card-header>
 
-                        <ion-card-content class="ion-no-padding">
-                          <ion-item lines="none">
-                            <ion-label>
-                              <h3>Due Date</h3>
-                            </ion-label>
-                            <ion-note color="text-color" slot="end">
-                              {{ summary.PAYMENT_DUE_DATE ? (summary.PAYMENT_DUE_DATE | date: "EEE, d MMM y") : 'N/A'   }}
-                            </ion-note>
-                          </ion-item>
-                          <ion-item lines="none">
-                            <ion-label>
-                              <h3>Amount Payable</h3>
-                            </ion-label>
-                            <ion-note color="text-color" slot="end">
-                              {{ (summary.PAYABLE_AMOUNT | currency:'MYR':'RM') || 'N/A' }}
-                            </ion-note>
-                          </ion-item>
-                          <ion-item lines="none">
-                            <ion-label>
-                              <h3>Total Collected</h3>
-                            </ion-label>
-                            <ion-note color="text-color" slot="end">
-                              {{ (summary.TOTAL_COLLECTED | currency:'MYR':'RM') || 'N/A' }}
-                            </ion-note>
-                          </ion-item>
-                          <ion-item lines="none">
-                            <ion-label>
-                              <h3>Outstanding</h3>
-                            </ion-label>
-                            <ion-note color="text-color" slot="end">
-                              {{ (summary.OUTSTANDING | currency:'MYR':'RM') || 'N/A' }}
-                            </ion-note>
-                          </ion-item>
-                          <ion-item lines="none">
-                            <ion-label>
-                              <h3>Fine</h3>
-                            </ion-label>
-                            <ion-note color="text-color" slot="end">
-                              {{ (summary.FINE | currency:'MYR':'RM') || 'N/A' }}
-                            </ion-note>
-                          </ion-item>
-                        </ion-card-content>
-                      </ion-card>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
+                  <ion-card-content class="ion-no-padding">
+                    <ion-item lines="none">
+                      <ion-label>
+                        <h3>Due Date</h3>
+                      </ion-label>
+                      <ion-note color="text-color" slot="end">
+                        {{ summary.PAYMENT_DUE_DATE ? (summary.PAYMENT_DUE_DATE | dateWithTimezone: "EEE, d MMM y") : 'N/A'   }}
+                      </ion-note>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-label>
+                        <h3>Amount Payable</h3>
+                      </ion-label>
+                      <ion-note color="text-color" slot="end">
+                        {{ (summary.PAYABLE_AMOUNT | currency:'MYR':'RM') || 'N/A' }}
+                      </ion-note>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-label>
+                        <h3>Total Collected</h3>
+                      </ion-label>
+                      <ion-note color="text-color" slot="end">
+                        {{ (summary.TOTAL_COLLECTED | currency:'MYR':'RM') || 'N/A' }}
+                      </ion-note>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-label>
+                        <h3>Outstanding</h3>
+                      </ion-label>
+                      <ion-note color="text-color" slot="end">
+                        {{ (summary.OUTSTANDING | currency:'MYR':'RM') || 'N/A' }}
+                      </ion-note>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-label>
+                        <h3>Fine</h3>
+                      </ion-label>
+                      <ion-note color="text-color" slot="end">
+                        {{ (summary.FINE | currency:'MYR':'RM') || 'N/A' }}
+                      </ion-note>
+                    </ion-item>
+                  </ion-card-content>
+                </ion-card>
               </ng-template>
 
               <ng-template #loadingSummary>
-                <ion-grid>
-                  <ion-row class="ion-justify-content-center">
-                    <ion-col size="12" size-xl="6" *ngFor="let _ of numberOfSkeletons">
-                      <ion-card>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px;" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px;" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px;" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px;" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px;" animated></ion-skeleton-text>
-                        </ion-item>
-                      </ion-card>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
+                <ion-card class="content-card">
+                  <ion-card-header>
+                    <ion-card-subtitle>
+                      <ion-skeleton-text style="width: 70%; height: 15px" animated></ion-skeleton-text>
+                    </ion-card-subtitle>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 20%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 25%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 30%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 28%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 26%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 24%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 17%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                  </ion-card-content>
+                </ion-card>
               </ng-template>
             </ng-container>
 
             <ng-container *ngSwitchCase="'Bank Draft'">
               <ng-template let-bankDrafts [ngIf]="bankDraft$ | async" [ngIfElse]="loadingBankDraft">
-                <ion-grid>
-                  <ion-row class="ion-justify-content-center">
-                    <ion-col size="12" size-xl="6" *ngFor="let bankDraft of bankDrafts">
-                      <ion-card class="content-card">
-                        <ion-list-header>
-                          <ion-label>{{ bankDraft.COURSE_CODE || 'Course Code' }}</ion-label>
-                        </ion-list-header>
-                        <ion-card-content class="ion-no-padding">
-                          <ion-item lines="none">
-                            Amount Payable
-                            <ion-note color="text-color" slot="end">
-                              {{ bankDraft.BANKDRAFT_AMOUNT | currency:'GBP' }}
-                            </ion-note>
-                          </ion-item>
-                          <ion-item lines="none">
-                            Due Date
-                            <ion-note color="text-color" slot="end">
-                              {{ bankDraft.BANKDRAFT_DUE_DATE | date: "EEE, d MMM y"  }}
-                            </ion-note>
-                          </ion-item>
-                          <ion-item lines="none">
-                            Date Collected
-                            <ion-note color="text-color" slot="end">
-                              {{ bankDraft.DATE_COLLECTED | date: "EEE, d MMM y"  }}
-                            </ion-note>
-                          </ion-item>
-                          <ion-item lines="none">
-                            Registration Date
-                            <ion-note color="text-color" slot="end">
-                              {{ bankDraft.REGISTRATION_DATE | date: "EEE, d MMM y"  }}
-                            </ion-note>
-                          </ion-item>
-                          <ion-item lines="none">
-                            Amount Collected
-                            <ion-note color="success" slot="end">
-                              {{ bankDraft.AMOUNT_COLLECTED | currency:'GBP' }}
-                            </ion-note>
-                          </ion-item>
-                        </ion-card-content>
-                      </ion-card>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
+                <ion-card class="content-card" *ngFor="let bankDraft of bankDrafts">
+                  <ion-list-header>
+                    <ion-label>{{ bankDraft.COURSE_CODE || 'Course Code' }}</ion-label>
+                  </ion-list-header>
+                  <ion-card-content class="ion-no-padding">
+                    <ion-item lines="none">
+                      Amount Payable
+                      <ion-note color="text-color" slot="end">
+                        {{ bankDraft.BANKDRAFT_AMOUNT | currency:'GBP' }}
+                      </ion-note>
+                    </ion-item>
+                    <ion-item lines="none">
+                      Due Date
+                      <ion-note color="text-color" slot="end">
+                        {{ bankDraft.BANKDRAFT_DUE_DATE | dateWithTimezone: "EEE, d MMM y"  }}
+                      </ion-note>
+                    </ion-item>
+                    <ion-item lines="none">
+                      Date Collected
+                      <ion-note color="text-color" slot="end">
+                        {{ bankDraft.DATE_COLLECTED | dateWithTimezone: "EEE, d MMM y"  }}
+                      </ion-note>
+                    </ion-item>
+                    <ion-item lines="none">
+                      Registration Date
+                      <ion-note color="text-color" slot="end">
+                        {{ bankDraft.REGISTRATION_DATE | dateWithTimezone: "EEE, d MMM y"  }}
+                      </ion-note>
+                    </ion-item>
+                    <ion-item lines="none">
+                      Amount Collected
+                      <ion-note color="success" slot="end">
+                        {{ bankDraft.AMOUNT_COLLECTED | currency:'GBP' }}
+                      </ion-note>
+                    </ion-item>
+                  </ion-card-content>
+                </ion-card>
               </ng-template>
+
               <ng-template #loadingBankDraft>
-                <ion-grid>
-                  <ion-row class="ion-justify-content-center">
-                    <ion-col size="12" size-xl="6" *ngFor="let _ of numberOfSkeletons">
-                      <ion-card>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
-                        </ion-item>
-                      </ion-card>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
+                <ion-card class="content-card">
+                  <ion-card-header>
+                    <ion-card-subtitle>
+                      <ion-skeleton-text style="width: 70%; height: 15px" animated></ion-skeleton-text>
+                    </ion-card-subtitle>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 20%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 25%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 30%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 28%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 26%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 24%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 17%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                  </ion-card-content>
+                </ion-card>
               </ng-template>
             </ng-container>
 
             <ng-container *ngSwitchCase="'Details'">
               <ng-template let-details [ngIf]="detail$ | async" [ngIfElse]="loadingDetails">
-                <ion-grid>
-                  <ion-row class="ion-justify-content-center">
-                    <ion-col size="12" size-xl="6" *ngFor="let detail of (details | reverse | filter: visibleLabels)">
-                      <ion-card class="content-card">
-                        <ion-card-header>
-                          <ion-card-subtitle>{{ detail.ITEM_DESCRIPTION }}</ion-card-subtitle>
-                        </ion-card-header>
+                <ion-card class="content-card" *ngFor="let detail of (details | reverse | filter: visibleLabels)">
+                  <ion-card-header>
+                    <ion-card-subtitle>{{ detail.ITEM_DESCRIPTION }}</ion-card-subtitle>
+                  </ion-card-header>
 
-                        <ion-card-content class="ion-no-padding">
-                          <ion-item lines="none">
-                            <h3>Due Date</h3>
-                            <ion-note color="text-color" slot="end">
-                              {{ detail.DUE_DATE | date: "EEE, d MMM y" }}
-                            </ion-note>
-                          </ion-item>
-                          <ion-item lines="none">
-                            <ion-label>
-                              <h3>Amount Payable</h3>
-                            </ion-label>
-                            <ion-note color="text-color" slot="end">
-                              {{ isNumber(detail.AMOUNT_PAYABLE)
+                  <ion-card-content class="ion-no-padding">
+                    <ion-item lines="none">
+                      <h3>Due Date</h3>
+                      <ion-note color="text-color" slot="end">
+                        {{ detail.DUE_DATE | dateWithTimezone: "EEE, d MMM y" }}
+                      </ion-note>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-label>
+                        <h3>Amount Payable</h3>
+                      </ion-label>
+                      <ion-note color="text-color" slot="end">
+                        {{ isNumber(detail.AMOUNT_PAYABLE)
                                           ? (detail.AMOUNT_PAYABLE | currency:'MYR':'RM')
                                           : detail.AMOUNT_PAYABLE }}
-                            </ion-note>
-                          </ion-item>
-                          <ion-item lines="none">
-                            <ion-label>
-                              <h3>Total Collected</h3>
-                            </ion-label>
-                            <ion-note slot="end">
-                              {{ isNumber(detail.TOTAL_COLLECTED)
+                      </ion-note>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-label>
+                        <h3>Total Collected</h3>
+                      </ion-label>
+                      <ion-note slot="end">
+                        {{ isNumber(detail.TOTAL_COLLECTED)
                                           ? (detail.TOTAL_COLLECTED | currency:'MYR':'RM')
                                           : detail.TOTAL_COLLECTED }}
-                            </ion-note>
-                          </ion-item>
-                          <ion-item [style.color]="detail.OUTSTANDING>0 ? '#d50000': ''" lines="none">
-                            <ion-label>
-                              <h3>Outstanding</h3>
-                            </ion-label>
-                            <ion-note [style.color]="detail.OUTSTANDING>0 ? '#d50000': ''" slot="end">
-                              {{ isNumber(detail.OUTSTANDING)
+                      </ion-note>
+                    </ion-item>
+                    <ion-item [style.color]="detail.OUTSTANDING>0 ? '#d50000': ''" lines="none">
+                      <ion-label>
+                        <h3>Outstanding</h3>
+                      </ion-label>
+                      <ion-note [style.color]="detail.OUTSTANDING>0 ? '#d50000': ''" slot="end">
+                        {{ isNumber(detail.OUTSTANDING)
                                           ? (detail.OUTSTANDING | currency:'MYR':'RM')
                                           : detail.OUTSTANDING }}
-                            </ion-note>
-                          </ion-item>
-                          <ion-item [style.color]="detail.FINE>0 ? '#c51162': ''" lines="none">
-                            <ion-label>
-                              <h3>Fine</h3>
-                            </ion-label>
-                            <ion-note [style.color]="detail.FINE>0 ? '#c51162': ''" slot="end">
-                              {{ isNumber(detail.FINE)
+                      </ion-note>
+                    </ion-item>
+                    <ion-item [style.color]="detail.FINE>0 ? '#c51162': ''" lines="none">
+                      <ion-label>
+                        <h3>Fine</h3>
+                      </ion-label>
+                      <ion-note [style.color]="detail.FINE>0 ? '#c51162': ''" slot="end">
+                        {{ isNumber(detail.FINE)
                                           ? (detail.FINE | currency:'MYR':'RM')
                                           : detail.FINE }}
-                            </ion-note>
-                          </ion-item>
-                        </ion-card-content>
-                      </ion-card>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
+                      </ion-note>
+                    </ion-item>
+                  </ion-card-content>
+                </ion-card>
               </ng-template>
 
               <ng-template #loadingDetails>
-                <ion-grid>
-                  <ion-row class="ion-justify-content-center">
-                    <ion-col size="12" size-xl="6" *ngFor="let _ of numberOfSkeletons">
-                      <ion-card>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
-                        </ion-item>
-                        <ion-item lines="none">
-                          <ion-skeleton-text style="width: 100%; height: 42px" animated></ion-skeleton-text>
-                        </ion-item>
-                      </ion-card>
-                    </ion-col>
-                  </ion-row>
-                </ion-grid>
+                <ion-card class="content-card" *ngFor="let _ of numberOfSkeletons">
+                  <ion-card-header>
+                    <ion-card-subtitle>
+                      <ion-skeleton-text style="width: 70%; height: 15px" animated></ion-skeleton-text>
+                    </ion-card-subtitle>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 20%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 25%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 30%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 28%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 26%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 24%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item lines="none">
+                      <ion-skeleton-text style="width: 17%; height: 15px" animated></ion-skeleton-text>
+                      <ion-skeleton-text slot="end" style="width: 10%; height: 15px" animated></ion-skeleton-text>
+                    </ion-item>
+                  </ion-card-content>
+                </ion-card>
               </ng-template>
             </ng-container>
           </ng-container>
