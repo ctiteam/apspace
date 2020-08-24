@@ -13,75 +13,86 @@
   </ion-refresher>
 
   <!-- Notice Board SECTION -->
-  <ion-grid class="ion-no-padding slider-container" *ngIf="noticeBoardItems$ | async as noticeBoardItems; else loadingSlideshow">
-    <ion-row *ngIf="noticeBoardItems.length > 0; else noSlides">
-      <ion-col class="ion-no-padding" size="12">
-        <ion-slides #slides pager="true" [options]="noticeBoardSliderOpts">
-          <ion-slide *ngFor="let noticeBoardItem of noticeBoardItems">
-            <ion-card class="ion-no-margin">
-              <ion-card-content class="ion-no-padding">
-                <div [innerHTML]="noticeBoardItem.field_image_link[0].value">
-                </div>
-              </ion-card-content>
-            </ion-card>
-          </ion-slide>
-        </ion-slides>
-        <div class="swiper-button-next" (click)="nextSlide()"></div>
-        <div class="swiper-button-prev" (click)="prevSlide()"></div>
-      </ion-col>
-    </ion-row>
-    <ng-template #noSlides>
-      <app-message-with-svg messageTitle="No Images Added to The Board!" messageContent="There are no notices to show."
-        imageUrl="assets/img/empty.svg" wrapperOffset="3" wrapperSize="6">
-      </app-message-with-svg>
+  <div class="glob-container">
+    <ion-grid class="ion-no-padding slider-container"
+      *ngIf="noticeBoardItems$ | async as noticeBoardItems; else loadingSlideshow">
+      <ion-row *ngIf="noticeBoardItems.length > 0; else noSlides">
+        <ion-col class="ion-no-padding" size="12">
+          <ion-slides #slides pager="true" [options]="noticeBoardSliderOpts">
+            <ion-slide *ngFor="let noticeBoardItem of noticeBoardItems">
+              <ion-card class="ion-no-margin">
+                <ion-card-content class="ion-no-padding">
+                  <div [innerHTML]="noticeBoardItem.field_image_link[0].value" style="max-width: 700px; height: 490px;">
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            </ion-slide>
+          </ion-slides>
+          <div class="swiper-button-next" (click)="nextSlide()"></div>
+          <div class="swiper-button-prev" (click)="prevSlide()"></div>
+        </ion-col>
+      </ion-row>
+      <ng-template #noSlides>
+        <app-message-with-svg messageTitle="No Images Added to The Board!"
+          messageContent="There are no notices to show." imageUrl="assets/img/empty.svg" wrapperOffset="3"
+          wrapperSize="6">
+        </app-message-with-svg>
+      </ng-template>
+    </ion-grid>
+    <ng-template #loadingSlideshow>
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col size="12">
+            <ion-list style="margin-top: 2px;">
+              <div class="news-wrapper">
+                <ion-skeleton-text style="width: 100%; line-height: 200px;" animated></ion-skeleton-text>
+              </div>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ng-template>
-  </ion-grid>
-  <ng-template #loadingSlideshow>
-    <ion-grid class="ion-no-padding">
+
+
+
+    <ion-grid>
       <ion-row>
-        <ion-col size="12">
-          <ion-list style="margin-top: 2px;">
-            <div class="news-wrapper">
-              <ion-skeleton-text style="width: 100%; line-height: 200px;" animated></ion-skeleton-text>
+        <ion-col size="12" size-md="8" size-xl="6" offset-md="2" offset-xl="3">
+          <ng-template let-news [ngIf]="news$ | async" [ngIfElse]="loadingNews">
+            <ng-template [ngIf]="news && news.length > 0" [ngIfElse]="nonews">
+              <ion-text color="primary">
+                <h2 class="news-header" class="ion-text-center ion-padding">News</h2>
+              </ion-text>
+              <div *ngFor="let item of news">
+                <ion-card class="ion-no-margin" tappable (click)="openModal(item)">
+                  <img *ngIf="item.field_news_image.length > 0" [src]="item.field_news_image[0].url" />
+                  <ion-card-content *ngIf="item.title.length > 0">
+                    {{ item.title[0].value }}
+                  </ion-card-content>
+                </ion-card>
+              </div>
+            </ng-template>
+            <ng-template #nonews>
+              <ion-card class="ion-padding">
+                <ion-card-content>
+                  <p>No news available</p>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
+          </ng-template>
+          <ng-template #loadingNews>
+            <div *ngFor="let s of skeletonSettings.numberOfSkeltons">
+              <ion-card tappable>
+                <ion-skeleton-text class="ion-no-margin" animated style="width: 100%; line-height: 200px">
+                </ion-skeleton-text>
+                <ion-card-content>
+                  <ion-skeleton-text animated style="width: 60%; line-height: 15px"></ion-skeleton-text>
+                </ion-card-content>
+              </ion-card>
             </div>
-          </ion-list>
+          </ng-template>
         </ion-col>
       </ion-row>
     </ion-grid>
-  </ng-template>
-
-  <h2 class="news-header">News</h2>
-  
-  <div class="masonry-list">
-    <ng-template let-news [ngIf]="news$ | async" [ngIfElse]="loadingNews">
-      <ng-template [ngIf]="news && news.length > 0" [ngIfElse]="nonews">
-        <div class="masonry-item" *ngFor="let item of news">
-          <ion-card class="ion-no-margin" tappable (click)="openModal(item)">
-            <img *ngIf="item.field_news_image.length > 0" [src]="item.field_news_image[0].url" />
-            <ion-card-content *ngIf="item.title.length > 0">
-              {{ item.title[0].value }}
-            </ion-card-content>
-          </ion-card>
-        </div>
-      </ng-template>
-      <ng-template #nonews>
-        <ion-card class="ion-padding">
-          <ion-card-content>
-            <p>No news available</p>
-          </ion-card-content>
-        </ion-card>
-      </ng-template>
-    </ng-template>
-    <ng-template #loadingNews>
-      <div class="masonry-item" *ngFor="let s of skeletonSettings.numberOfSkeltons">
-        <ion-card tappable>
-          <ion-skeleton-text class="ion-no-margin" animated style="width: 100%; line-height: 200px"></ion-skeleton-text>
-          <ion-card-content>
-            <ion-skeleton-text animated style="width: 60%; line-height: 15px"></ion-skeleton-text>
-          </ion-card-content>
-        </ion-card>
-      </div>
-    </ng-template>
   </div>
-
 </ion-content>
