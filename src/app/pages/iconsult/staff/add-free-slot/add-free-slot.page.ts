@@ -207,9 +207,6 @@ export class AddFreeSlotPage implements OnInit {
                               '' :
                               `<p><strong>Repeat On: </strong> ${this.addFreeSlotForm.value.repeatOn}</p>`;
 
-      console.log(this.addFreeSlotForm.value.repeatOn);
-      console.log(this.addFreeSlotForm.value.time.map(time => format(parseISO(time.slotsTime), 'kk:mm')));
-
       this.alertCtrl
         .create({
           header: 'Adding new slot(s)',

@@ -173,6 +173,9 @@
                             <span class="title">
                               {{slot.start_time | dateWithTimezone: "time"}} - {{slot.end_time | dateWithTimezone: "time"}}
                             </span>
+                            <span>
+                               | {{ slot.start_time | dateWithTimezone: "dd-MM-yyyy"}}
+                            </span>
                             <span class="description">
                               <ion-icon name="pin"></ion-icon>
                               {{slot.room_code}} | {{slot.venue}}
