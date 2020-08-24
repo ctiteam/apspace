@@ -11,7 +11,7 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <ion-toolbar *ngIf="(bankDraft$ | async) as bankDrafts">
+  <ion-toolbar *ngIf="(bankDraft$ | async) as bankDrafts; else loadingSegment">
     <ion-segment [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
       <ion-segment-button value="Summary">Summary</ion-segment-button>
       <ion-segment-button *ngIf="bankDrafts[0].BANKDRAFT_AMOUNT !== 0" value="Bank Draft">
@@ -20,6 +20,20 @@
       <ion-segment-button value="Details">Details</ion-segment-button>
     </ion-segment>
   </ion-toolbar>
+
+  <ng-template #loadingSegment>
+    <ion-toolbar>
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ion-col class="ion-padding-horizontal" size="12" size-md="6" size-lg="4">
+            <ion-item lines="none">
+              <ion-skeleton-text style="width: 100%; height: 38px;" animated></ion-skeleton-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-toolbar>
+  </ng-template>
 
 </ion-header>
 
@@ -106,12 +120,14 @@
           <ng-template #loadingTotalSummary>
             <ion-card class="content-card">
               <ion-card-header>
-                <ion-skeleton-text class="glob-margin-auto" style="width: 50%; height: 20px" animated></ion-skeleton-text>
+                <ion-skeleton-text class="glob-margin-auto" style="width: 50%; height: 20px" animated>
+                </ion-skeleton-text>
               </ion-card-header>
 
               <ion-card-content>
                 <ion-item lines="none">
-                  <ion-skeleton-text class="glob-margin-auto" style="width: 90%; height: 120px; padding-bottom: 10px; padding-top: 5px" animated>
+                  <ion-skeleton-text class="glob-margin-auto"
+                    style="width: 90%; height: 120px; padding-bottom: 10px; padding-top: 5px" animated>
                   </ion-skeleton-text>
                 </ion-item>
                 <ion-item lines="none">
