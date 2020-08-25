@@ -16,185 +16,175 @@
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12" size-lg="6" offset-lg="3">
-        <ion-card color="danger">
-          <ion-card-header color="danger">
-            <ion-card-title class="ion-text-center" style="color: #FFFFFF !important;">
-              IMPORTANT NOTICE
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <p class="ion-padding-bottom" style="color: #FFFFFF !important;">
-              All examinations in June & July 2020 (Resit & Final Examinations) will be replaced with alternative
-              assessment methods- Assignments, take home exam, online exams & etc.</p>
-            <p class="ion-padding-bottom glob-text-bold" style="color: #FFFFFF !important;">
-              Kindly keep in contact with your module lecturers via Microsoft Teams /Moodle for details.
-            </p>
-          </ion-card-content>
-        </ion-card>
+  <div class="glob-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-card color="danger">
+            <ion-card-header color="danger">
+              <ion-card-title class="ion-text-center" style="color: #FFFFFF !important;">
+                IMPORTANT NOTICE
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p class="ion-padding-bottom" style="color: #FFFFFF !important;">
+                All examinations in June & July 2020 (Resit & Final Examinations) will be replaced with alternative
+                assessment methods- Assignments, take home exam, online exams & etc.</p>
+              <p class="ion-padding-bottom glob-text-bold" style="color: #FFFFFF !important;">
+                Kindly keep in contact with your module lecturers via Microsoft Teams /Moodle for details.
+              </p>
+            </ion-card-content>
+          </ion-card>
 
-        <!-- <div class="ion-padding ion-text-center">
-          <h6 class="text-bold danger-text"></h6>
+          <!-- <div class="ion-padding ion-text-center">
+            <h6 class="text-bold danger-text"></h6>
+  
+            <ion-button class="danger-border" fill="outline" (click)="openGuidlines()">
+              View Examination Guideline
+            </ion-button>
+          </div> -->
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ng-template [ngIf]="!showNoIntakeMessage" [ngIfElse]="noIntakeSelected">
+      <ng-template let-exams [ngIf]="exam$ | async" [ngIfElse]="loadingExams">
+        <ng-template [ngIf]="exams.length !== 0" [ngIfElse]="noExams">
+          <ion-grid class="ion-no-padding ion-padding-start ion-padding-end">
+            <ion-row>
+              <ion-col>
+                <div class="ion-padding ion-text-center">
+                  <h5 class="ion-padding-bottom">Selected intake: {{ intake }}</h5>
+                  <h6 class="glob-text-bold danger-text">Important Note:</h6>
+                  <p class="ion-padding-bottom">
+                    By using the exam schedule service in APSpace, you are agreeing to our exam guidelines and
+                    procedures.
+                    Please make sure to read them carefully.
+                  </p>
+                  <p class="danger-text ion-padding-bottom glob-text-bold">
+                    All exam times are displayed in Malaysia Time Zone (GMT+8)
+                  </p>
+                  <ion-button class="danger-border" fill="outline" (click)="openGuidlines()">
+                    View Examination Guideline
+                  </ion-button>
+                </div>
+              </ion-col>
+              <ion-col size="12" size-lg="6" offset-lg="3" *ngFor="let exam of exams">
+                <div>
+                  <ion-card class="ion-no-margin ion-margin-vertical">
+                    <ion-card-header>
+                      <ion-card-title>
+                        {{ exam.subjectDescription }}
+                      </ion-card-title>
+                      <ion-card-subtitle>
+                        {{ exam.since | dateWithTimezone: 'EEEE, dd MMM y' }}
+                      </ion-card-subtitle>
+                    </ion-card-header>
+                    <ion-card-content class="ion-no-padding">
+                      <ion-list>
+                        <ion-item lines="none">
+                          <ion-icon name="book"></ion-icon>
+                          <p class="ion-padding-start">{{ exam.module }}</p>
+                        </ion-item>
+                        <ion-item lines="none" *ngIf="exam.assessmentType">
+                          <ion-icon name="pricetag"></ion-icon>
+                          <p class="ion-padding-start">{{ exam.assessmentType }}</p>
+                        </ion-item>
+                        <ion-item lines="none">
+                          <ion-icon name="pin"></ion-icon>
+                          <p class="ion-padding-start">{{ exam.venue }}</p>
+                        </ion-item>
+                        <ion-item lines="none">
+                          <ion-icon name="time"></ion-icon>
+                          <p class="ion-padding-start">
+                            {{ exam.since | dateWithTimezone: 'time' }} -
+                            {{ exam.until | dateWithTimezone: 'time' }}
+                          </p>
+                        </ion-item>
+                      </ion-list>
+                    </ion-card-content>
+                    <ion-footer>
+                      <ion-grid>
+                        <ion-row *ngIf="exam.docketsDue">
+                          <ion-col size="7">
+                            <span>
+                              *Dockets Issuance (Week Of):
+                            </span>
+                          </ion-col>
+                          <ion-col size="5" class="ion-text-end">
+                            <p>{{ exam.docketsDue | date: 'EEE, dd MMM y' }}</p>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row *ngIf="exam.appraisalsDue">
+                          <ion-col size="7">
+                            <span t>
+                              *Appraisals Due:
+                            </span>
+                          </ion-col>
+                          <ion-col size="5" class="ion-text-end">
+                            <p>{{ exam.appraisalsDue | date: 'EEE, dd MMM y' }}</p>
+                          </ion-col>
+                        </ion-row>
+                        <ion-row class="ion-align-items-center ion-padding-horizontal" *ngIf="exam.resultDate">
+                          <ion-col size="6">
+                            <span>
+                              *Expected Result Release Date:
+                            </span>
+                          </ion-col>
+                          <ion-col size="6" class="ion-text-end">
+                            <p>{{ exam.resultDate | date: 'EEE, dd MMM y' }}</p>
+                          </ion-col>
+                        </ion-row>
+                      </ion-grid>
+                    </ion-footer>
+                  </ion-card>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ng-template>
+        <ng-template #noExams>
+          <app-message-with-svg imageUrl="assets/img/empty.svg" messageTitle="No Exam Schedule For {{intake}}!"
+            wrapperSize="6" wrapperMarginTop="30px" wrapperOffset="3"
+            messageContent="The exam schedule for the selected intake has not been published yet">
+          </app-message-with-svg>
+        </ng-template>
+      </ng-template>
 
-          <ion-button class="danger-border" fill="outline" (click)="openGuidlines()">
-            View Examination Guideline
-          </ion-button>
-        </div> -->
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <ng-template [ngIf]="!showNoIntakeMessage" [ngIfElse]="noIntakeSelected">
-    <ng-template let-exams [ngIf]="exam$ | async" [ngIfElse]="loadingExams">
-      <ng-template [ngIf]="exams.length !== 0" [ngIfElse]="noExams">
-        <ion-grid class="ion-no-padding ion-padding-start ion-padding-end">
+
+      <!-- Loading -->
+      <ng-template #loadingExams>
+        <ion-grid>
           <ion-row>
-            <ion-col size="12" size-lg="6" offset-lg="3">
-              <div class="ion-padding ion-text-center">
-                <h5 class="ion-padding-bottom">Selected intake: {{ intake }}</h5>
-                <h6 class="glob-text-bold danger-text">Important Note:</h6>
-                <p class="ion-padding-bottom">
-                  By using the exam schedule service in APSpace, you are agreeing to our exam guidelines and
-                  procedures.
-                  Please make sure to read them carefully.
-                </p>
-                <p class="danger-text ion-padding-bottom glob-text-bold">
-                  All exam times are displayed in Malaysia Time Zone (GMT+8)
-                </p>
-                <ion-button class="danger-border" fill="outline" (click)="openGuidlines()">
-                  View Examination Guideline
-                </ion-button>
-              </div>
-            </ion-col>
-            <ion-col size="12" size-lg="6" offset-lg="3" *ngFor="let exam of exams">
+            <ion-col size="12" size-lg="6" offset-lg="3" *ngFor="let s of skeletonSettings.numberOfSkeltons">
               <div>
-                <ion-card class="ion-no-margin ion-margin-vertical">
+                <ion-card>
                   <ion-card-header>
                     <ion-card-title>
-                      {{ exam.subjectDescription }}
+                      <ion-skeleton-text animated style="width: 60%; line-height: 20px"></ion-skeleton-text>
                     </ion-card-title>
-                    <ion-card-subtitle>
-                      {{ exam.since | dateWithTimezone: 'EEEE, dd MMM y' }}
-                    </ion-card-subtitle>
                   </ion-card-header>
                   <ion-card-content class="ion-no-padding">
                     <ion-list>
                       <ion-item lines="none">
-                        <ion-icon name="book"></ion-icon>
-                        <p class="ion-padding-start">{{ exam.module }}</p>
-                      </ion-item>
-                      <ion-item lines="none" *ngIf="exam.assessmentType">
-                        <ion-icon name="pricetag"></ion-icon>
-                        <p class="ion-padding-start">{{ exam.assessmentType }}</p>
+                        <ion-skeleton-text animated style="width: 20%; line-height: 20px"></ion-skeleton-text>
                       </ion-item>
                       <ion-item lines="none">
-                        <ion-icon name="pin"></ion-icon>
-                        <p class="ion-padding-start">{{ exam.venue }}</p>
+                        <ion-skeleton-text animated style="width: 20%; line-height: 20px" class="ion-padding-start">
+                        </ion-skeleton-text>
                       </ion-item>
                       <ion-item lines="none">
-                        <ion-icon name="time"></ion-icon>
-                        <p class="ion-padding-start">
-                          {{ exam.since | dateWithTimezone: 'time' }} -
-                          {{ exam.until | dateWithTimezone: 'time' }}
-                        </p>
+                        <ion-skeleton-text animated style="width: 20%; line-height: 20px" class="ion-padding-start">
+                        </ion-skeleton-text>
+                      </ion-item>
+                      <ion-item lines="none">
+                        <ion-skeleton-text animated style="width: 20%; line-height: 20px" class="ion-padding-start">
+                        </ion-skeleton-text>
                       </ion-item>
                     </ion-list>
                   </ion-card-content>
+                  <hr />
                   <ion-footer>
                     <ion-grid>
-                      <ion-row *ngIf="exam.docketsDue">
-                        <ion-col size="7">
-                          <span>
-                            *Dockets Issuance (Week Of):
-                          </span>
-                        </ion-col>
-                        <ion-col size="5" class="ion-text-end">
-                          <p>{{ exam.docketsDue | date: 'EEE, dd MMM y' }}</p>
-                        </ion-col>
-                      </ion-row>
-                      <ion-row *ngIf="exam.appraisalsDue">
-                        <ion-col size="7">
-                          <span t>
-                            *Appraisals Due:
-                          </span>
-                        </ion-col>
-                        <ion-col size="5" class="ion-text-end">
-                          <p>{{ exam.appraisalsDue | date: 'EEE, dd MMM y' }}</p>
-                        </ion-col>
-                      </ion-row>
-                      <ion-row class="ion-align-items-center ion-padding-horizontal" *ngIf="exam.resultDate">
-                        <ion-col size="6">
-                          <span>
-                            *Expected Result Release Date:
-                          </span>
-                        </ion-col>
-                        <ion-col size="6" class="ion-text-end">
-                          <p>{{ exam.resultDate | date: 'EEE, dd MMM y' }}</p>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-footer>
-                </ion-card>
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ng-template>
-      <ng-template #noExams>
-        <app-message-with-svg imageUrl="assets/img/empty.svg" messageTitle="No Exam Schedule For {{intake}}!"
-          wrapperSize="6" wrapperMarginTop="30px" wrapperOffset="3"
-          messageContent="The exam schedule for the selected intake has not been published yet">
-        </app-message-with-svg>
-      </ng-template>
-    </ng-template>
-
-
-    <!-- Loading -->
-    <ng-template #loadingExams>
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12" size-lg="6" *ngFor="let s of skeletonSettings.numberOfSkeltons">
-            <div>
-              <ion-card>
-                <ion-card-header>
-                  <ion-card-title>
-                    <ion-skeleton-text animated style="width: 60%; line-height: 20px"></ion-skeleton-text>
-                  </ion-card-title>
-                </ion-card-header>
-                <ion-card-content class="ion-no-padding">
-                  <ion-list>
-                    <ion-item lines="none">
-                      <ion-skeleton-text animated style="width: 20%; line-height: 20px"></ion-skeleton-text>
-                    </ion-item>
-                    <ion-item lines="none">
-                      <ion-skeleton-text animated style="width: 20%; line-height: 20px" class="ion-padding-start">
-                      </ion-skeleton-text>
-                    </ion-item>
-                    <ion-item lines="none">
-                      <ion-skeleton-text animated style="width: 20%; line-height: 20px" class="ion-padding-start">
-                      </ion-skeleton-text>
-                    </ion-item>
-                    <ion-item lines="none">
-                      <ion-skeleton-text animated style="width: 20%; line-height: 20px" class="ion-padding-start">
-                      </ion-skeleton-text>
-                    </ion-item>
-                  </ion-list>
-                </ion-card-content>
-                <hr />
-                <ion-footer>
-                  <ion-grid>
-                    <ion-row>
-                      <ion-col size="7">
-                        <span>
-                          <ion-skeleton-text animated style="width: 20%; line-height: 20px"></ion-skeleton-text>
-                        </span>
-                      </ion-col>
-                      <ion-col size="5">
-                        <ion-skeleton-text animated style="width: 20%; line-height: 20px"></ion-skeleton-text>
-                      </ion-col>
-                    </ion-row>
-                    <div>
                       <ion-row>
                         <ion-col size="7">
                           <span>
@@ -205,16 +195,29 @@
                           <ion-skeleton-text animated style="width: 20%; line-height: 20px"></ion-skeleton-text>
                         </ion-col>
                       </ion-row>
-                    </div>
-                  </ion-grid>
-                </ion-footer>
-              </ion-card>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+                      <div>
+                        <ion-row>
+                          <ion-col size="7">
+                            <span>
+                              <ion-skeleton-text animated style="width: 20%; line-height: 20px"></ion-skeleton-text>
+                            </span>
+                          </ion-col>
+                          <ion-col size="5">
+                            <ion-skeleton-text animated style="width: 20%; line-height: 20px"></ion-skeleton-text>
+                          </ion-col>
+                        </ion-row>
+                      </div>
+                    </ion-grid>
+                  </ion-footer>
+                </ion-card>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ng-template>
     </ng-template>
-  </ng-template>
+  </div>
+
   <!-- No Intake Selected -->
   <ng-template #noIntakeSelected>
     <app-message-with-svg imageUrl="assets/img/config.svg" messageTitle="No Intake Has Been Selected!" wrapperSize="6"
