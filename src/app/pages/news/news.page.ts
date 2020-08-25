@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonSlides, ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
-import { News } from '../../interfaces';
+import { ShortNews } from '../../interfaces';
 import { NewsService } from '../../services';
 import { NewsModalPage } from './news-modal';
 
@@ -15,7 +15,7 @@ import { NewsModalPage } from './news-modal';
 })
 export class NewsPage {
   @ViewChild('slides') slides: IonSlides;
-  news$: Observable<News[]>;
+  news$: Observable<ShortNews[]>;
   noticeBoardItems$: Observable<any[]>;
   noticeBoardSliderOpts = {
     autoplay: true,
@@ -83,7 +83,6 @@ export class NewsPage {
     numberOfSkeltons: new Array(5),
   };
   constructor(
-
     private news: NewsService,
     private modalCtrl: ModalController,
   ) { }
@@ -91,9 +90,20 @@ export class NewsPage {
 
   doRefresh(refresher?) {
     this.news$ = this.news.get(Boolean(refresher)).pipe(
-      finalize(() => refresher && refresher.target.complete()),
+      map(newsList => {
+        return newsList.map(item => {
+          if (item && item.field_news_image.length > 0 && item.field_news_image[0].url) {
+            return {
+              url: item.field_news_image[0].url,
+              title: item.title.length > 0 && item.title[0].value ? item.title[0].value : '',
+              updated: item.changed.length > 0 && item.changed[0].value ? new Date(item.changed[0].value * 1000) : '',
+              body: item.body.length > 0 && item.body[0].value ? item.body[0].value : ''
+            };
+          }
+        }).slice(0, 6);
+      }),
+      finalize(() => refresher && refresher.target.complete())
     );
-
     this.noticeBoardItems$ = this.news.getSlideshow(refresher);
   }
 
@@ -101,11 +111,11 @@ export class NewsPage {
     this.doRefresh();
   }
 
-  async openModal(item: News) {
+  async openModal(newsItem: ShortNews) {
     const modal = await this.modalCtrl.create({
       component: NewsModalPage,
       // TODO: store search history
-      componentProps: { item, notFound: 'No news Selected' },
+      componentProps: { newsItem, notFound: 'No news Selected' },
     });
     await modal.present();
     // default item to current intake if model dismissed without data

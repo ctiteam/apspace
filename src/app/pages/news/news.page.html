@@ -25,11 +25,11 @@
                   <div [innerHTML]="noticeBoardItem.field_image_link[0].value" style="max-width: 700px; height: 490px;">
                   </div>
                 </ion-card-content>
+                <div class="swiper-button-next" (click)="nextSlide()"></div>
+                <div class="swiper-button-prev" (click)="prevSlide()"></div>
               </ion-card>
             </ion-slide>
           </ion-slides>
-          <div class="swiper-button-next" (click)="nextSlide()"></div>
-          <div class="swiper-button-prev" (click)="prevSlide()"></div>
         </ion-col>
       </ion-row>
       <ng-template #noSlides>
@@ -61,17 +61,27 @@
           <ng-template let-news [ngIf]="news$ | async" [ngIfElse]="loadingNews">
             <ng-template [ngIf]="news && news.length > 0" [ngIfElse]="nonews">
               <ion-text color="primary">
-                <h2 class="news-header" class="ion-text-center ion-padding">News</h2>
+                <h2 class="news-header" class="glob-text-bold ion-text-center ion-padding">News</h2>
               </ion-text>
-              <div *ngFor="let item of news">
-                <ion-card class="ion-no-margin" tappable (click)="openModal(item)">
-                  <img *ngIf="item.field_news_image.length > 0" [src]="item.field_news_image[0].url" />
-                  <ion-card-content *ngIf="item.title.length > 0">
-                    {{ item.title[0].value }}
+              <div *ngFor="let newsItem of news">
+                <ion-card class="ion-margin" tappable (click)="openModal(newsItem)">
+                  <img [src]="newsItem.url" />
+                  <ion-card-content>
+                    <ion-text>
+                      <p>
+                    {{ newsItem.title }}
+                      </p>
+                    </ion-text>
+                    <ion-text>
+                      <p>
+                        {{ newsItem.updated | dateWithTimezone : 'yyyy-MM-dd HH:mm:ss'}} 
+                      </p>
+                    </ion-text>
                   </ion-card-content>
                 </ion-card>
               </div>
             </ng-template>
+
             <ng-template #nonews>
               <ion-card class="ion-padding">
                 <ion-card-content>
