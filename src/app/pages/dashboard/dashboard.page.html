@@ -29,7 +29,7 @@
             </ion-card-header>
             <ion-card-content class="ion-text-center ion-no-padding">
               <div class="ion-margin-bottom">
-                <ion-button color="light" fill="clear" (click)="navigateToPage('/settings')">
+                <ion-button color="medium" fill="clear" (click)="navigateToPage('/settings')">
                   <ion-icon name="settings-outline" size="large"></ion-icon>
                 </ion-button>
                 <ion-button color="warning" fill="clear" (click)="navigateToPage('/notifications')">
@@ -101,8 +101,8 @@
                           [ngClass]="{'passed-event': event.pass,'no-hover': event.pass,'class-type': event.type==='class', 'iconsult-type': event.type === 'iconsult'}">
                           <h2 class="colored-with-type glob-text-bold">{{event.dateOrTime}} - {{event.thirdDescription}}
                           </h2>
-                          <p class="glob-text-bold">
-                            <ion-text color="light">{{event.title}}</ion-text>
+                          <p class="glob-text-bold colored-with-type">
+                            {{event.title}}
                           </p>
                           <ion-grid class="ion-no-padding">
                             <ion-row class="info-item">
@@ -112,7 +112,7 @@
                               </ion-col>
                               <ion-col class="ion-no-padding">
                                 <p>
-                                  <ion-text class="ion-no-margin" color="medium">{{event.firstDescription}}</ion-text>
+                                  <ion-text class="ion-no-margin">{{event.firstDescription}}</ion-text>
                                 </p>
                               </ion-col>
                             </ion-row>
@@ -124,7 +124,7 @@
                               </ion-col>
                               <ion-col class="ion-no-padding">
                                 <p>
-                                  <ion-text class="ion-no-margin" color="medium">{{event.secondDescription}}</ion-text>
+                                  <ion-text class="ion-no-margin">{{event.secondDescription}}</ion-text>
                                 </p>
                               </ion-col>
                             </ion-row>
@@ -140,48 +140,28 @@
                     </ng-template>
                   </ng-container>
                   <ng-template #loadingTodaysSchedule>
-                    <div class="event-calendar">
-                      <div class="event-list">
-                        <div class="event" *ngFor="let _ of skeletons">
-                          <div class="event-container no-hover ion-padding-end" style="border: none">
-                            <div class="left-part-container" style="padding-top: 5px;">
-                              <span class="left-part">
-                                <span class="primaryDateTime d-block" style="padding: 2px 20px">
-                                  <ion-skeleton-text animated style="width: 100%; line-height: 25px">
-                                  </ion-skeleton-text>
-                                </span>
-                                <span class="left-part-item small d-block" style="padding: 2px 15px">
-                                  <ion-skeleton-text animated style="width: 100%; line-height: 17px">
-                                  </ion-skeleton-text>
-                                </span>
-                                <span class="left-part-item smallest d-block" style="padding: 2px 20px">
-                                  <ion-skeleton-text animated style="width: 100%; line-height: 17px">
-                                  </ion-skeleton-text>
-                                </span>
-                              </span>
-                            </div>
-                            <div class="right-part-container">
-                              <span class="title">
-                                <ion-skeleton-text animated style="width: 90%; line-height: 25px"></ion-skeleton-text>
-                              </span>
-                              <span class="type">
-                                <ion-skeleton-text animated style="width: 100%; line-height: 20px"></ion-skeleton-text>
-                              </span>
-                              <div class="glob-clearfix"></div>
-                              <span class="description">
-                                <ion-skeleton-text animated style="width: 70%; line-height: 18px"></ion-skeleton-text>
-                              </span>
-                              <span class="description">
-                                <ion-skeleton-text animated style="width: 90%; line-height: 18px"></ion-skeleton-text>
-                              </span>
-                              <span class="ion-text-right description">
-                                <ion-skeleton-text animated style="width: 40%; line-height: 18px; float: right">
-                                </ion-skeleton-text>
-                              </span>
-                            </div>
-                            <div class="glob-clearfix"></div>
-                          </div>
-                        </div>
+                    <div *ngFor="let _ of skeletons" class="ion-padding-start ion-padding-end ion-padding-top">
+                      <div class="event-container">
+                        <h2 class="colored-with-type glob-text-bold">
+                          <ion-skeleton-text animated style="width: 45%; line-height: 25px;"></ion-skeleton-text>
+                        </h2>
+                        <p class="glob-text-bold colored-with-type">
+                          <ion-skeleton-text animated style="width: 70%; line-height: 17px; margin-bottom: 5px;"></ion-skeleton-text>
+                        </p>
+                        <ion-grid class="ion-no-padding">
+                          <ion-row class="info-item ion-padding-start ion-padding-end">
+                            <ion-col size="12" class="ion-no-padding">
+                              <p>
+                                <ion-skeleton-text animated style="width: 85%; line-height: 15px;"></ion-skeleton-text>
+                              </p>
+                            </ion-col>
+                            <ion-col size="12" class="ion-no-padding">
+                              <p>
+                                <ion-skeleton-text animated style="width: 85%; line-height: 15px;"></ion-skeleton-text>
+                              </p>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
                       </div>
                     </div>
                   </ng-template>
@@ -194,8 +174,8 @@
                           [ngClass]="{'passed-event': event.pass,'no-hover': event.pass,'class-type': event.type==='class', 'iconsult-type': event.type === 'iconsult', 'exam-type': event.type === 'exam', 'holiday-type': event.type === 'holiday'}">
                           <h2 class="colored-with-type glob-text-bold">{{event.dateOrTime}}
                           </h2>
-                          <p class="glob-text-bold">
-                            <ion-text color="light">{{event.title}}</ion-text>
+                          <p class="glob-text-bold colored-with-type">
+                            {{event.title}}
                           </p>
                           <ion-grid class="ion-no-padding">
                             <ion-row class="info-item">
@@ -205,7 +185,7 @@
                               </ion-col>
                               <ion-col class="ion-no-padding">
                                 <p>
-                                  <ion-text class="ion-no-margin" color="medium">{{event.firstDescription}}</ion-text>
+                                  <ion-text class="ion-no-margin">{{event.firstDescription}}</ion-text>
                                 </p>
                               </ion-col>
                             </ion-row>
@@ -217,9 +197,9 @@
                               </ion-col>
                               <ion-col class="ion-no-padding">
                                 <p>
-                                  <ion-text class="ion-no-margin" color="medium">
-                                    {{event.secondDescription | date : 'hh:mm a' :  '+08:00'}} -
-                                    {{event.thirdDescription | date : 'hh:mm a'}}</ion-text>
+                                  <ion-text class="ion-no-margin">
+                                    {{event.secondDescription | date : 'hh:mm a' : '+08:00'}} -
+                                    {{event.thirdDescription | date : 'hh:mm a' : '+08:00'}}</ion-text>
                                 </p>
                               </ion-col>
                             </ion-row>
@@ -235,48 +215,28 @@
                     </ng-template>
                   </ng-container>
                   <ng-template #loadingupcomingEvents>
-                    <div class="event-calendar">
-                      <div class="event-list">
-                        <div class="event" *ngFor="let _ of skeletons">
-                          <div class="event-container no-hover ion-padding-end" style="border: none">
-                            <div class="left-part-container" style="padding-top: 5px;">
-                              <span class="left-part">
-                                <span class="primaryDateTime d-block" style="padding: 2px 20px">
-                                  <ion-skeleton-text animated style="width: 100%; line-height: 25px">
-                                  </ion-skeleton-text>
-                                </span>
-                                <span class="left-part-item small d-block" style="padding: 2px 15px">
-                                  <ion-skeleton-text animated style="width: 100%; line-height: 17px">
-                                  </ion-skeleton-text>
-                                </span>
-                                <span class="left-part-item smallest d-block" style="padding: 2px 20px">
-                                  <ion-skeleton-text animated style="width: 100%; line-height: 17px">
-                                  </ion-skeleton-text>
-                                </span>
-                              </span>
-                            </div>
-                            <div class="right-part-container">
-                              <span class="title">
-                                <ion-skeleton-text animated style="width: 90%; line-height: 25px"></ion-skeleton-text>
-                              </span>
-                              <span class="type">
-                                <ion-skeleton-text animated style="width: 100%; line-height: 20px"></ion-skeleton-text>
-                              </span>
-                              <div class="glob-clearfix"></div>
-                              <span class="description">
-                                <ion-skeleton-text animated style="width: 70%; line-height: 18px"></ion-skeleton-text>
-                              </span>
-                              <span class="description">
-                                <ion-skeleton-text animated style="width: 90%; line-height: 18px"></ion-skeleton-text>
-                              </span>
-                              <span class="ion-text-right description">
-                                <ion-skeleton-text animated style="width: 40%; line-height: 18px; float: right">
-                                </ion-skeleton-text>
-                              </span>
-                            </div>
-                            <div class="glob-clearfix"></div>
-                          </div>
-                        </div>
+                    <div *ngFor="let _ of skeletons" class="ion-padding-start ion-padding-end ion-padding-top">
+                      <div class="event-container">
+                        <h2 class="colored-with-type glob-text-bold">
+                          <ion-skeleton-text animated style="width: 45%; line-height: 25px;"></ion-skeleton-text>
+                        </h2>
+                        <p class="glob-text-bold colored-with-type">
+                          <ion-skeleton-text animated style="width: 70%; line-height: 17px; margin-bottom: 5px;"></ion-skeleton-text>
+                        </p>
+                        <ion-grid class="ion-no-padding">
+                          <ion-row class="info-item ion-padding-start ion-padding-end">
+                            <ion-col size="12" class="ion-no-padding">
+                              <p>
+                                <ion-skeleton-text animated style="width: 85%; line-height: 15px;"></ion-skeleton-text>
+                              </p>
+                            </ion-col>
+                            <ion-col size="12" class="ion-no-padding">
+                              <p>
+                                <ion-skeleton-text animated style="width: 85%; line-height: 15px;"></ion-skeleton-text>
+                              </p>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
                       </div>
                     </div>
                   </ng-template>
