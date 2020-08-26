@@ -114,15 +114,12 @@ export class NewsPage {
   async openModal(newsItem: ShortNews) {
     const modal = await this.modalCtrl.create({
       component: NewsModalPage,
-      // TODO: store search history
-      componentProps: { newsItem, notFound: 'No news Selected' },
+      componentProps: { newsItem },
     });
     await modal.present();
-    // default item to current intake if model dismissed without data
     await modal.onDidDismiss();
   }
 
-  // SLIDER
   prevSlide() {
     this.slides.slidePrev();
   }
