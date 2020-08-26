@@ -13,41 +13,44 @@
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
 
-  <ng-container *ngIf="quixCompanies$ | async as quixCompanies; else loadingTheFile">
-    <ng-container *ngIf="quixCompanies.length > 0; else noData">
-      <ion-segment [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
-        <ion-segment-button *ngFor="let company of quixCompanies" [value]="company.company_id">{{company.company_id}}
-        </ion-segment-button>
-      </ion-segment>
-      <ng-container [ngSwitch]='selectedSegment'>
-        <ng-container *ngFor="let company of quixCompanies | filterByCompany : selectedSegment">
-          <ion-grid>
-            <ion-row>
-              <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4">
-                <h6 *ngIf="company.lastModified" class="main-text-color">
-                  Last Modified: <span class="text-bold">{{company.lastModified}}</span>
-                </h6>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-          <ion-grid>
-            <ion-row>
-              <ion-col *ngFor="let department of company.company_departments" size-xs="12" size-md="6" size-xl="4"
-                offset-md="3" offset-xl="4">
-                <ion-card>
-                  <ion-card-header>
-                    <ion-card-title>
-                      <h4 class="text-bold ion-text-capitalize">{{department.dept_name}}</h4>
-                      <h4 *ngIf="department.dept_email" class="small-text">
-                        <a class="secondary-txt-color" style="text-decoration: underline"
-                          href="mailto:{{ department.dept_email }}">{{department.dept_email}}</a>
-                      </h4>
-                    </ion-card-title>
-                  </ion-card-header>
-                  <ion-card-content>
-                    <ng-container *ngIf="department.shifts; else noOperations">
-                      <ion-grid>
-                        <ion-row *ngIf="((department.shifts['Mon-Thu'].length === department.shifts['Fri'].length) 
+  <div class="glob-conatiner">
+    <ng-container *ngIf="quixCompanies$ | async as quixCompanies; else loadingTheFile">
+      <ng-container *ngIf="quixCompanies.length > 0; else noData">
+        <ion-segment [(ngModel)]="selectedSegment" (ngModelChange)="segmentValueChanged()">
+          <ion-segment-button *ngFor="let company of quixCompanies" [value]="company.company_id">{{company.company_id}}
+          </ion-segment-button>
+        </ion-segment>
+        <ng-container [ngSwitch]='selectedSegment'>
+          <ng-container *ngFor="let company of quixCompanies | filterByCompany : selectedSegment">
+            <ion-grid>
+              <ion-row>
+                <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4">
+                  <h6 *ngIf="company.lastModified">
+                    Last Modified: <span class="glob-text-bold">{{company.lastModified}}</span>
+                  </h6>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+            <ion-grid>
+              <ion-row>
+                <ion-col *ngFor="let department of company.company_departments" size-xs="12" size-md="6" size-xl="4"
+                  offset-md="3" offset-xl="4">
+                  <ion-card>
+                    <ion-card-header>
+                      <ion-card-title>
+                        <h4 class="glob-text-bold ion-text-capitalize">{{department.dept_name}}</h4>
+                      </ion-card-title>
+                      <ion-card-subtitle>
+                        <p *ngIf="department.dept_email">
+                          <a style="text-decoration: underline"
+                            href="mailto:{{ department.dept_email }}">{{department.dept_email}}</a>
+                        </p>
+                      </ion-card-subtitle>
+                    </ion-card-header>
+                    <ion-card-content>
+                      <ng-container *ngIf="department.shifts; else noOperations">
+                        <ion-grid>
+                          <ion-row *ngIf="((department.shifts['Mon-Thu'].length === department.shifts['Fri'].length) 
                               && department.shifts['Mon-Thu'].length > 0
                               && (department.shifts['Mon-Thu'][0].start_time === department.shifts['Fri'][0].start_time)  
                               && (department.shifts['Mon-Thu'][0].end_time === department.shifts['Fri'][0].end_time)
@@ -55,25 +58,10 @@
                               ? (department.shifts['Mon-Thu'][1].start_time === department.shifts['Fri'][1].start_time)  
                               && (department.shifts['Mon-Thu'][1].end_time === department.shifts['Fri'][1].end_time)
                               : true)); else showSeperate">
-                          <ion-col size-xs="12" size-md="4">
-                            <p class="ion-text-center colored-text">Monday-Friday</p>
-                          </ion-col>
-                          <ion-col size-xs="12" size-md="8">
-                            <div class="ion-text-center" *ngFor="let slot of department.shifts['Mon-Thu']">
-                              <span *ngIf="slot.start_time" class="timeTxt">
-                                {{ (slot.start_time | time) }}
-                              </span>
-                              To
-                              <span *ngIf="slot.end_time" class="timeTxt">
-                                {{ (slot.end_time | time) }}
-                              </span>
-                            </div>
-                          </ion-col>
-                        </ion-row>
-                        <ng-template #showSeperate>
-                          <ion-row *ngIf="department.shifts['Mon-Thu'].length > 0">
                             <ion-col size-xs="12" size-md="4">
-                              <p class="ion-text-center colored-text">Monday-Thursday</p>
+                              <ion-text color="primary">
+                                <p class="ion-text-center">Monday-Friday</p>
+                              </ion-text>
                             </ion-col>
                             <ion-col size-xs="12" size-md="8">
                               <div class="ion-text-center" *ngFor="let slot of department.shifts['Mon-Thu']">
@@ -87,12 +75,52 @@
                               </div>
                             </ion-col>
                           </ion-row>
-                          <ion-row *ngIf="department.shifts['Fri'].length > 0">
+                          <ng-template #showSeperate>
+                            <ion-row *ngIf="department.shifts['Mon-Thu'].length > 0">
+                              <ion-col size-xs="12" size-md="4">
+                                <ion-text color="primary">
+                                  <p class="ion-text-center">Monday-Thursday</p>
+                                </ion-text>
+                              </ion-col>
+                              <ion-col size-xs="12" size-md="8">
+                                <div class="ion-text-center" *ngFor="let slot of department.shifts['Mon-Thu']">
+                                  <span *ngIf="slot.start_time" class="timeTxt">
+                                    {{ (slot.start_time | time) }}
+                                  </span>
+                                  To
+                                  <span *ngIf="slot.end_time" class="timeTxt">
+                                    {{ (slot.end_time | time) }}
+                                  </span>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row *ngIf="department.shifts['Fri'].length > 0">
+                              <ion-col size-xs="12" size-md="4">
+                                <ion-text color="primary">
+                                  <p class="ion-text-center">Friday</p>
+                                </ion-text>
+                              </ion-col>
+                              <ion-col size-xs="12" size-md="8">
+                                <div class="ion-text-center" *ngFor="let slot of department.shifts['Fri']">
+                                  <span *ngIf="slot.start_time" class="timeTxt">
+                                    {{ (slot.start_time | time) }}
+                                  </span>
+                                  To
+                                  <span *ngIf="slot.end_time" class="timeTxt">
+                                    {{ (slot.end_time | time) }}
+                                  </span>
+                                </div>
+                              </ion-col>
+                            </ion-row>
+                          </ng-template>
+                          <ion-row *ngIf="department.shifts['Sat'].length > 0">
                             <ion-col size-xs="12" size-md="4">
-                              <p class="ion-text-center colored-text">Friday</p>
+                              <ion-text color="primary">
+                                <p class="ion-text-center">Saturday</p>
+                              </ion-text>
                             </ion-col>
                             <ion-col size-xs="12" size-md="8">
-                              <div class="ion-text-center" *ngFor="let slot of department.shifts['Fri']">
+                              <div class="ion-text-center" *ngFor="let slot of department.shifts['Sat']">
                                 <span *ngIf="slot.start_time" class="timeTxt">
                                   {{ (slot.start_time | time) }}
                                 </span>
@@ -103,123 +131,110 @@
                               </div>
                             </ion-col>
                           </ion-row>
-                        </ng-template>
-                        <ion-row *ngIf="department.shifts['Sat'].length > 0">
-                          <ion-col size-xs="12" size-md="4">
-                            <p class="ion-text-center colored-text">Saturday</p>
-                          </ion-col>
-                          <ion-col size-xs="12" size-md="8">
-                            <div class="ion-text-center" *ngFor="let slot of department.shifts['Sat']">
-                              <span *ngIf="slot.start_time" class="timeTxt">
-                                {{ (slot.start_time | time) }}
-                              </span>
-                              To
-                              <span *ngIf="slot.end_time" class="timeTxt">
-                                {{ (slot.end_time | time) }}
-                              </span>
-                            </div>
+                        </ion-grid>
+                      </ng-container>
+                      <ng-template #noOperations>
+                        <p class="ion-text-center">No operation hours added for this department</p>
+                      </ng-template>
+                    </ion-card-content>
+                    <ion-footer class="ion-padding" *ngIf="department.dept_phone.length > 0">
+                      <h6 class="glob-text-bold">Phone Number<span *ngIf="department.dept_phone.length > 1">s</span>:
+                      </h6>
+                      <ion-grid>
+                        <ion-row>
+                          <ion-col size="6" *ngFor="let phoneNumber of department.dept_phone">
+                            <ion-text color="primary">
+                              <a class="glob-text-bold" href="tel:{{phoneNumber}}">{{phoneNumber}}</a>
+                            </ion-text>
                           </ion-col>
                         </ion-row>
                       </ion-grid>
-                    </ng-container>
-                    <ng-template #noOperations>
-                      <p class="main-text-color ion-text-center">No operation hours added for this department</p>
-                    </ng-template>
-                  </ion-card-content>
-                  <ion-footer class="ion-padding" *ngIf="department.dept_phone.length > 0">
-                    <h6 class="text-bold">Phone Number<span *ngIf="department.dept_phone.length > 1">s</span>:</h6>
-                    <ion-grid>
-                      <ion-row>
-                        <ion-col size="6" *ngFor="let phoneNumber of department.dept_phone">
-                        <a class="colored-text text-bold" href="tel:{{phoneNumber}}">{{phoneNumber}}</a>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-footer>
-                </ion-card>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
+                    </ion-footer>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ng-container>
         </ng-container>
       </ng-container>
+      <ng-template #noData>
+        <app-message-with-svg messageTitle="No Data To Show!"
+          messageContent="There are no operation hours configured by the system admin yet."
+          imageUrl="assets/img/empty.svg" wrapperOffset="4" wrapperSize="4" wrapperMarginTop="50px">
+        </app-message-with-svg>
+      </ng-template>
     </ng-container>
-    <ng-template #noData>
-      <app-message-with-svg messageTitle="No Data To Show!"
-        messageContent="There are no operation hours configured by the system admin yet."
-        imageUrl="assets/img/empty.svg" wrapperOffset="4" wrapperSize="4" wrapperMarginTop="50px">
-      </app-message-with-svg>
+    <ng-template #loadingTheFile>
+      <ion-grid>
+        <ion-row>
+          <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4">
+            <ion-card *ngFor="let _ of skeletons">
+              <ion-card-header>
+                <ion-card-title>
+                  <h4 class="glob-text-bold ion-text-capitalize">
+                    <ion-skeleton-text animated style="width: 60%; line-height: 20px;"></ion-skeleton-text>
+                  </h4>
+                  <h4>
+                    <ion-skeleton-text animated style="width: 90%; line-height: 15px;"></ion-skeleton-text>
+                  </h4>
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size-xs="12" size-md="4">
+                      <p class="ion-text-center">
+                        <ion-skeleton-text animated style="width: 50%; line-height: 15px;"></ion-skeleton-text>
+                      </p>
+                    </ion-col>
+                    <ion-col size-xs="12" size-md="8">
+                      <div class="ion-text-center">
+                        <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size-xs="12" size-md="4">
+                      <p class="ion-text-center">
+                        <ion-skeleton-text animated style="width: 50%; line-height: 15px;"></ion-skeleton-text>
+                      </p>
+                    </ion-col>
+                    <ion-col size-xs="12" size-md="8">
+                      <div class="ion-text-center">
+                        <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size-xs="12" size-md="4">
+                      <p class="ion-text-center">
+                        <ion-skeleton-text animated style="width: 50%; line-height: 15px;"></ion-skeleton-text>
+                      </p>
+                    </ion-col>
+                    <ion-col size-xs="12" size-md="8">
+                      <div class="ion-text-center">
+                        <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+              <ion-footer class="ion-padding">
+                <h6>
+                  <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
+                </h6>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="6">
+                      <ion-skeleton-text animated style="width: 100%; line-height: 15px;"></ion-skeleton-text>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-footer>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ng-template>
-  </ng-container>
-  <ng-template #loadingTheFile>
-    <ion-grid>
-      <ion-row>
-        <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4">
-          <ion-card *ngFor="let _ of skeletons">
-            <ion-card-header>
-              <ion-card-title>
-                <h4 class="text-bold ion-text-capitalize">
-                  <ion-skeleton-text animated style="width: 60%; line-height: 20px;"></ion-skeleton-text>
-                </h4>
-                <h4>
-                  <ion-skeleton-text animated style="width: 90%; line-height: 15px;"></ion-skeleton-text>
-                </h4>
-              </ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-grid>
-                <ion-row>
-                  <ion-col size-xs="12" size-md="4">
-                    <p class="ion-text-center colored-text">
-                      <ion-skeleton-text animated style="width: 50%; line-height: 15px;"></ion-skeleton-text>
-                    </p>
-                  </ion-col>
-                  <ion-col size-xs="12" size-md="8">
-                    <div class="ion-text-center">
-                      <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
-                    </div>
-                  </ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col size-xs="12" size-md="4">
-                    <p class="ion-text-center colored-text">
-                      <ion-skeleton-text animated style="width: 50%; line-height: 15px;"></ion-skeleton-text>
-                    </p>
-                  </ion-col>
-                  <ion-col size-xs="12" size-md="8">
-                    <div class="ion-text-center">
-                      <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
-                    </div>
-                  </ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col size-xs="12" size-md="4">
-                    <p class="ion-text-center colored-text">
-                      <ion-skeleton-text animated style="width: 50%; line-height: 15px;"></ion-skeleton-text>
-                    </p>
-                  </ion-col>
-                  <ion-col size-xs="12" size-md="8">
-                    <div class="ion-text-center">
-                      <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
-                    </div>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-card-content>
-            <ion-footer class="ion-padding">
-              <h6>
-                <ion-skeleton-text animated style="width: 70%; line-height: 15px;"></ion-skeleton-text>
-              </h6>
-              <ion-grid>
-                <ion-row>
-                  <ion-col size="6">
-                    <ion-skeleton-text animated style="width: 100%; line-height: 15px;"></ion-skeleton-text>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-footer>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ng-template>
+  </div>
 </ion-content>
