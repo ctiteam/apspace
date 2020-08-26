@@ -100,7 +100,7 @@ export class NewsPage {
               body: item.body.length > 0 && item.body[0].value ? item.body[0].value : ''
             };
           }
-        }).slice(0, 6);
+        });
       }),
       finalize(() => refresher && refresher.target.complete())
     );
