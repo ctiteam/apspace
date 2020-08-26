@@ -2,9 +2,10 @@
   transform: rotate(90deg);
 }
 
-.location-title{
-  color: #ffffff;
-}
 .passed{
-  color: var(--passed-event-color) !important;
+  color: var(--ion-color-medium) !important;
+}
+
+.primary-color {
+  color: var(--ion-color-primary);
 }
