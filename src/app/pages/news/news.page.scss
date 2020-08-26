@@ -2,6 +2,10 @@ h2.news-header {
     color: var(--primary-color);
 }
 
+div.swiper-buttons {
+    max-width: 60%;
+}
+
 @media (max-width: 540px) {
     div.swiper-button-next {
         background: transparent;

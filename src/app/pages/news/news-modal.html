@@ -1,6 +1,6 @@
 <ion-header class="ion-no-border">
   <ion-toolbar mode="md">
-    <ion-title>{{item.title[0].value}}</ion-title>
+    <ion-title>{{ newsItem.title }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">
         <ion-icon name="close"></ion-icon>
@@ -10,9 +10,9 @@
 </ion-header>
 
 <ion-content parallax-header>
-  <ion-img *ngIf="item.field_news_image.length > 0" [src]="item.field_news_image[0].url"></ion-img>
+  <ion-img [src]="newsItem.url"></ion-img>
   <div class="ion-padding">
-    <h3 *ngIf="item.title.length > 0" class="colored-text ion-margin-top ion-margin-bottom">{{item.title[0].value}}</h3>
-    <article  *ngIf="item.body.length > 0" class="main-text-color ion-padding-start" [innerHTML]="item.body[0].value | safe: 'sanitizeHtml'"></article>
+    <h3 *ngIf="newsItem.title.length > 0" class="colored-text ion-margin-top ion-margin-bottom">{{ newsItem.title }}</h3>
+    <article  *ngIf="newsItem.body.length > 0" class="main-text-color ion-padding-start" [innerHTML]="newsItem.body | safe: 'sanitizeHtml'"></article>
   </div>
 </ion-content>
