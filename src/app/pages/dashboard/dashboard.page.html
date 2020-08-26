@@ -101,8 +101,10 @@
                           [ngClass]="{'passed-event': event.pass,'no-hover': event.pass,'class-type': event.type==='class', 'iconsult-type': event.type === 'iconsult'}">
                           <h2 class="colored-with-type glob-text-bold">{{event.dateOrTime}} - {{event.thirdDescription}}
                           </h2>
-                          <p class="glob-text-bold colored-with-type">
-                            {{event.title}}
+                          <p class="glob-text-bold">
+                            <ion-text color="medium">
+                              {{event.title}}
+                            </ion-text>
                           </p>
                           <ion-grid class="ion-no-padding">
                             <ion-row class="info-item">
@@ -146,7 +148,8 @@
                           <ion-skeleton-text animated style="width: 45%; line-height: 25px;"></ion-skeleton-text>
                         </h2>
                         <p class="glob-text-bold colored-with-type">
-                          <ion-skeleton-text animated style="width: 70%; line-height: 17px; margin-bottom: 5px;"></ion-skeleton-text>
+                          <ion-skeleton-text animated style="width: 70%; line-height: 17px; margin-bottom: 5px;">
+                          </ion-skeleton-text>
                         </p>
                         <ion-grid class="ion-no-padding">
                           <ion-row class="info-item ion-padding-start ion-padding-end">
@@ -175,7 +178,9 @@
                           <h2 class="colored-with-type glob-text-bold">{{event.dateOrTime}}
                           </h2>
                           <p class="glob-text-bold colored-with-type">
-                            {{event.title}}
+                            <ion-text color="medium">
+                              {{event.title}}
+                            </ion-text>
                           </p>
                           <ion-grid class="ion-no-padding">
                             <ion-row class="info-item">
@@ -221,7 +226,8 @@
                           <ion-skeleton-text animated style="width: 45%; line-height: 25px;"></ion-skeleton-text>
                         </h2>
                         <p class="glob-text-bold colored-with-type">
-                          <ion-skeleton-text animated style="width: 70%; line-height: 17px; margin-bottom: 5px;"></ion-skeleton-text>
+                          <ion-skeleton-text animated style="width: 70%; line-height: 17px; margin-bottom: 5px;">
+                          </ion-skeleton-text>
                         </p>
                         <ion-grid class="ion-no-padding">
                           <ion-row class="info-item ion-padding-start ion-padding-end">
