@@ -24,7 +24,7 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
-    <ion-list>
+    <ion-list *ngIf="filterObject">
       <ion-item-group>
         <ion-item-divider>
           <ion-label>
@@ -110,12 +110,12 @@
           <ion-card-header>
             <ion-card-title>
               <h5 class="responsive-h1">
-                {{filterObject.show === 'upcoming' ? 'Upcoming ' : 'All '}}
+                {{filterObject?.show === 'upcoming' ? 'Upcoming ' : 'All '}}
                 Public Holidays
               </h5>
               <h6 class="small-text small-margin-top">
-                {{filterObject.affecting !== '' ? 'Filtered ' : ''}}for
-                {{filterObject.affecting === '' ? ('staff and students') : (filterObject.affecting + ' only')}}
+                {{filterObject?.affecting !== '' ? 'Filtered ' : ''}}for
+                {{filterObject?.affecting === '' ? ('staff and students') : (filterObject?.affecting + ' only')}}
               </h6>
             </ion-card-title>
           </ion-card-header>
