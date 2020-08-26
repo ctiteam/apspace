@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ModalController, NavController, ToastController } from '@ionic/angular';
+import { AlertController, ModalController, NavController, Platform, ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Observable, combineLatest } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
@@ -8,8 +8,6 @@ import { SearchModalComponent } from '../../components/search-modal/search-modal
 import { accentColors } from '../../constants';
 import { APULocation, APULocations, Role, StudentProfile, Venue } from '../../interfaces';
 import { SettingsService, StudentTimetableService, WsApiService } from '../../services';
-// import { toastMessageEnterAnimation } from '../../animations/toast-message-animation/enter';
-// import { toastMessageLeaveAnimation } from '../../animations/toast-message-animation/leave';
 
 @Component({
   selector: 'app-settings',
@@ -18,7 +16,7 @@ import { SettingsService, StudentTimetableService, WsApiService } from '../../se
 })
 export class SettingsPage implements OnInit {
 
-  userRole: boolean;
+  isStudent: boolean;
   test = false;
   defaultCampus = '';
   defaultVenue = '';
@@ -51,7 +49,7 @@ export class SettingsPage implements OnInit {
     'Online'
   ];
   accentColors = accentColors;
-
+  isCordova: boolean;
   constructor(
     private modalCtrl: ModalController,
     private navCtrl: NavController,
@@ -61,6 +59,7 @@ export class SettingsPage implements OnInit {
     private tt: StudentTimetableService,
     private ws: WsApiService,
     private alertCtrl: AlertController,
+    private plt: Platform
   ) {
 
     this.settings.get$('menuUI').subscribe(value => this.menuUI = value);
@@ -88,9 +87,10 @@ export class SettingsPage implements OnInit {
   }
 
   ngOnInit() {
+    this.isCordova = this.plt.is('cordova');
     this.storage.get('role').then((role: Role) => {
       // tslint:disable-next-line: no-bitwise
-      this.userRole = Boolean(role & Role.Student);
+      this.isStudent = Boolean(role & Role.Student);
     });
     this.locations$ = this.getLocations();
     this.getDefaultLocation();
@@ -217,8 +217,6 @@ export class SettingsPage implements OnInit {
           role: 'cancel'
         }
       ],
-      // enterAnimation: toastMessageEnterAnimation,
-      // leaveAnimation: toastMessageLeaveAnimation
     }).then(toast => toast.present());
   }
 
