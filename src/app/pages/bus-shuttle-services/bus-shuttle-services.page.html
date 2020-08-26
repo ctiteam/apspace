@@ -5,7 +5,7 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button class="animated anim-scale" (click)="openMenu()">
+      <ion-button (click)="openMenu()">
         <ion-icon name="options"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -17,7 +17,7 @@
     <ion-toolbar>
       <ion-title>Filter</ion-title>
       <ion-buttons slot="end">
-        <ion-button class="animated anim-rotate-360-deg" shape="round" (click)="closeMenu()">
+        <ion-button shape="round" (click)="closeMenu()">
           <ion-icon name="close"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -31,8 +31,8 @@
             Locations
           </ion-label>
           <ion-buttons slot="end">
-            <ion-button class="swap-button animated anim-rotate-270-deg" shape="round" (click)="swapLocations()">
-              <ion-icon class="colored-text" name="repeat"></ion-icon>
+            <ion-button class="swap-button" color="primary" shape="round" (click)="swapLocations()">
+              <ion-icon name="repeat"></ion-icon>
             </ion-button>
           </ion-buttons>
         </ion-item-divider>
@@ -95,85 +95,92 @@
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
-  <div *ngIf="filteredTrip$ | async as trips; else loadingTrips" class="ion-no-padding">
-    <ion-grid>
-      <ion-row *ngIf="numberOfTrips !== 0">
-        <ion-col>
-          <h6 class="main-text-color">
-            Effective from: <span class="text-bold">{{latestUpdate}}</span>
-          </h6>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-    <div class="masonry-list" *ngIf="numberOfTrips !== 0; else noTrips">
-      <div class="masonry-item" *ngFor="let trip of trips | keyvalue">
-        <ion-card class="ion-no-margin ion-margin-bottom">
-          <ion-card-header [ngStyle]="{
-            background:
-              'linear-gradient(35deg, ' +
-              getLocationColor(trip.key) + ' 0%' +
-              ',' +
-              '#E7E9BB' + ' 90%' +
-              ',' +
-              getLocationColor(trip.key) + ' 100%' +
-              ')'
-          }">
-            <ion-card-title class="card-title float-left">
-              <h3 class="small-margin-top location-title responsive-h1">
-                {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} <small
-                  *ngIf="trip.key === 'mosque'">(Friday Only)</small></h3>
-            </ion-card-title>
-            <div class="clearfix"></div>
-          </ion-card-header>
-          <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
-            <ion-list class="ion-no-padding">
-              <ion-item lines="none" *ngFor="let destination of trip.value | keyvalue">
-                <ion-label>
-                  <h2 class="responsive-h2 text-bold main-text-color">
-                    {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} ->
-                    {{ destination.key | uppercase }}
-                    <small *ngIf="destination.key === 'mosque'">(Friday Only)</small>
-                  </h2>
-                  <ion-grid class="ion-no-padding">
-                    <ion-row>
-                      <ion-col [class.passed]="timeNow >= tripData.trip_time" class="ion-text-center colored-text"
-                        *ngFor="let tripData of destination.value" size="3" size-md="4">
-                        {{tripData.trip_time}}
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
-                </ion-label>
-              </ion-item>
-            </ion-list>
-          </ion-card-content>
-        </ion-card>
-      </div>
+  <div class="glob-container">
+    <div *ngIf="filteredTrip$ | async as trips; else loadingTrips" class="ion-no-padding">
+      <ion-grid>
+        <ion-row *ngIf="numberOfTrips !== 0">
+          <ion-col size="12" size-lg="6" offset-lg="3">
+            <h6>
+              <ion-text color="primary">
+                Effective from: <span class="glob-text-bold">{{latestUpdate}}</span>
+              </ion-text>
+            </h6>
+            <div *ngIf="numberOfTrips !== 0; else noTrips">
+              <div *ngFor="let trip of trips | keyvalue">
+                <ion-card class="ion-no-margin ion-margin-bottom">
+                  <ion-card-header [ngStyle]="{
+                    background:
+                      'linear-gradient(35deg, ' +
+                      getLocationColor(trip.key) + ' 0%' +
+                      ',' +
+                      '#E7E9BB' + ' 90%' +
+                      ',' +
+                      getLocationColor(trip.key) + ' 100%' +
+                      ')'
+                  }">
+                    <ion-card-title class="ion-float-start">
+                      <h3>
+                        {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} <small
+                          *ngIf="trip.key === 'mosque'">(Friday Only)</small></h3>
+                    </ion-card-title>
+                    <div class="glob-clearfix"></div>
+                  </ion-card-header>
+                  <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
+                    <ion-list class="ion-no-padding">
+                      <ion-item lines="none" *ngFor="let destination of trip.value | keyvalue">
+                        <ion-label>
+                          <h2 class="glob-text-bold">
+                            <ion-text color="primary">
+                              {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} ->
+                              {{ destination.key | uppercase }}
+                              <small *ngIf="destination.key === 'mosque'">(Friday Only)</small>
+                            </ion-text>
+                          </h2>
+                          <ion-grid class="ion-no-padding">
+                            <ion-row>
+                              <ion-col [class.passed]="timeNow >= tripData.trip_time" class="ion-text-center primary-color"
+                                *ngFor="let tripData of destination.value" size="3" size-md="4">
+                                  {{tripData.trip_time}}
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </ion-card-content>
+                </ion-card>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ng-template #noTrips>
+        <ion-row>
+          <ion-col>
+            <app-message-with-svg messageTitle="No {{filterObject.show === 'upcoming' ? 'Upcoming': ''}} Trips To Show!"
+              messageContent="{{filterObject.show === 'upcoming' ? 'Bus trips has finished for today. Try showing all the trips by changing the show filter to all trips instead of upcoming only.': 'No trips schedule has been added for today!'}}"
+              imageUrl="assets/img/empty.svg" wrapperOffset="4" wrapperSize="4" wrapperMarginTop="50px">
+            </app-message-with-svg>
+          </ion-col>
+        </ion-row>
+      </ng-template>
     </div>
-    <ng-template #noTrips>
-      <ion-row>
-        <ion-col>
-          <app-message-with-svg messageTitle="No {{filterObject.show === 'upcoming' ? 'Upcoming': ''}} Trips To Show!"
-            messageContent="{{filterObject.show === 'upcoming' ? 'Bus trips has finished for today. Try showing all the trips by changing the show filter to all trips instead of upcoming only.': 'No trips schedule has been added for today!'}}"
-            imageUrl="assets/img/empty.svg" wrapperOffset="4" wrapperSize="4" wrapperMarginTop="50px">
-          </app-message-with-svg>
-        </ion-col>
-      </ion-row>
-    </ng-template>
   </div>
+
   <ng-template #loadingTrips>
     <ion-grid>
       <ion-row>
         <ion-skeleton-text animated style="width: 48%; line-height: 35px"></ion-skeleton-text>
       </ion-row>
     </ion-grid>
-    <div class="masonry-list">
-      <div class="masonry-item" *ngFor="let s of skeletonSettings.numberOfSkeltons">
+    <div>
+      <div *ngFor="let s of skeletonSettings.numberOfSkeltons">
         <ion-card class="ion-no-margin ion-margin-bottom">
           <ion-card-header>
-            <ion-card-title class="card-title">
+            <ion-card-title>
               <ion-skeleton-text animated style="width: 100%; line-height: 35px"></ion-skeleton-text>
             </ion-card-title>
-            <div class="clearfix"></div>
+            <div class="glob-clearfix"></div>
           </ion-card-header>
           <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
             <ion-list class="ion-no-padding">
