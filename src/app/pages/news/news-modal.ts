@@ -13,7 +13,6 @@ export class NewsModalPage {
   constructor(
     public params: NavParams,
     private modalCtrl: ModalController) {
-    this.newsItem = this.params.get('newsItem');
   }
 
   ionViewWillEnter() {
