@@ -1,3 +1,8 @@
+ion-content {
+  color: #454343 !important;
+  --color: #454343 !important;
+}
+
 /* Settings font size
   =========================================*/
 $settings-font-size-header: 24px;
@@ -246,8 +251,8 @@ ion-item .item-inner {
     .main-items {
       .box {
         height: 141px !important;
-        
-        .wave{
+
+        .wave {
           top: -96% !important
         }
 
@@ -255,7 +260,7 @@ ion-item .item-inner {
           font-size: .9em !important;
         }
 
-        .icon{
+        .icon {
           font-size: 2em !important;
           top: 20px !important;
         }
@@ -274,7 +279,8 @@ ion-item .item-inner {
         padding-bottom: 0 !important;
       }
     }
-    .sub-footer{
+
+    .sub-footer {
       .group.ion-padding.ion-no-padding-bottom-on-small-devices {
         padding-bottom: 0 !important;
       }
@@ -411,16 +417,16 @@ ion-item .item-inner {
       overflow: hidden;
 
     }
+
     .swiper-button-next,
     .swiper-button-prev {
       background-image: none !important;
-  
+
       ion-icon {
         color: #14557b;
       }
     }
   }
-
 
   .main-items {
     background-color: #f0f7fa;
@@ -583,6 +589,15 @@ ion-item .item-inner {
     }
   }
 
+  .news{
+    ion-card{
+      --background: #f5f5f5;
+      ion-card-title{
+        --color: #14557b;
+      }
+    }
+  }
+
   .operating-hours {
     background-color: #7fcec5;
     background-image: linear-gradient(315deg, #7fcec5 0%, #14557b 74%);
@@ -608,13 +623,13 @@ ion-item .item-inner {
       margin: 0;
       font-size: 1rem;
       line-height: 1.5rem;
-      color: graytext;
     }
 
     ion-segment.operation-hours-companies {
       ion-segment-button {
         --color: white;
         --color-checked: darkred !important;
+        --indicator-color: white;
       }
     }
 
