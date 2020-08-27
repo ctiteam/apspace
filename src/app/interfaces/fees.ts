@@ -17,6 +17,7 @@ export interface FeesDetails {
   OUTSTANDING: number;
   STUDENT_NUMBER: string;
   TOTAL_COLLECTED: number;
+  FINE: number;
 }
 
 export interface FeesSummary {

@@ -3,6 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { IonContent, MenuController } from '@ionic/angular';
 import { ChartComponent } from 'angular2-chartjs';
 import { parse } from 'date-fns';
+import Fuse from 'fuse.js';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 
@@ -46,6 +47,18 @@ export class FeesPage {
     visible: boolean;
   }[];
   visibleLabels: string[];  // Used by filter pipe to determine card items to be displayed
+
+  searchTerm = '';
+
+  optionsDetails: Fuse.IFuseOptions<FeesDetails> = {
+    keys: [
+      { name: 'ITEM_DESCRIPTION', weight: 0.2 },
+      { name: 'DUE_DATE', weight: 0.1 },
+      { name: 'AMOUNT_PAYABLE', weight: 0.1 },
+      { name: 'OUTSTANDING', weight: 0.1 },
+      { name: 'TOTAL_COLLECTED', weight: 0.1 }
+    ]
+  };
 
   @ViewChild('content', { static: true }) content: IonContent;
   @ViewChild('financialsChartComponent')
@@ -92,8 +105,8 @@ export class FeesPage {
 
     this.totalSummary$ = this.ws.get('/student/summary_overall_fee', refresher);
     this.summary$ = this.ws.get<FeesSummary[]>('/student/outstanding_fee', refresher).pipe(
-      tap(summuries => summuries
-        .map(summury => summury.PAYMENT_DUE_DATE ? summury.PAYMENT_DUE_DATE = summury.PAYMENT_DUE_DATE.replace(/-/g, ' ') : ''))
+      tap(summaries => summaries
+        .map(summary => summary.PAYMENT_DUE_DATE ? summary.PAYMENT_DUE_DATE = summary.PAYMENT_DUE_DATE.replace(/-/g, ' ') : ''))
     );
     this.bankDraft$ = this.ws.get('/student/bankdraft_amount', refresher);
     this.detail$ = this.ws.get<FeesDetails[]>('/student/overall_fee', refresher).pipe(
