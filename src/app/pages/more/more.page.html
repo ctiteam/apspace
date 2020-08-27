@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar class="small-padding-start-end">
     <ion-searchbar [(ngModel)]="term" placeholder="Search (e.g. 'staff', 'timetable', ...)" showCancelButton="focus">
     </ion-searchbar>
@@ -13,181 +13,187 @@
       <ion-icon slot="end" name="Save"></ion-icon>
     </ion-button>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
+<!-- TODO: add the edit fav button & move the search functionality to a service or tabs page -->
+<!-- TODO: What if fav$ failed? This will affect all the menu items -->
 <ion-content *ngIf="fav$ | async as fav" [class]="(view$ | async) !== 'list' ? 'gradient-background' : ''">
 
-  <!-- LISTS UI -->
-  <div *ngIf="(view$ | async) === 'list'; else menuCardsUI" class="masonry-list">
+  <div class="glob-container">
+    <!-- LISTS UI -->
+    <div *ngIf="(view$ | async) === 'list'; else menuCardsUI" class="masonry-list">
 
-    <!-- FAVORITE -->
-    <div class="masonry-item" *ngIf="!editMode && (fav | byItem: term) as filteredFavMenu">
-      <ion-card class="ion-no-margin">
-        <ion-card-header class="ter-background">
-          <ion-card-title>
-            <h3>Favorite</h3>
-          </ion-card-title>
-        </ion-card-header>
-        <ion-card-content class="ion-no-padding">
-          <ion-list class="ion-no-margin ter-background">
-            <ion-item-group *ngIf="filteredFavMenu.length > 0; else noFav">
-              <div *ngFor="let item of filteredFavMenu" style="position: relative;">
-                <div [class.edit-overlay]="editMode" [class.hide]="!editMode">
-                  <ion-icon (click)="addToFav(item.id)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
-                    class="colored-text"></ion-icon>
+      <!-- FAVORITE -->
+      <div class="masonry-item" *ngIf="!editMode && (fav | byItem: term) as filteredFavMenu">
+        <ion-card class="ion-no-margin">
+          <ion-card-header class="ter-background">
+            <ion-card-title>
+              <h3>Favorite</h3>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-no-padding">
+            <ion-list class="ion-no-margin ter-background">
+              <ion-item-group *ngIf="filteredFavMenu.length > 0; else noFav">
+                <div *ngFor="let item of filteredFavMenu" style="position: relative;">
+                  <div [class.edit-overlay]="editMode" [class.hide]="!editMode">
+                    <ion-icon (click)="addToFav(item.id)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
+                      class="colored-text"></ion-icon>
+                  </div>
+                  <ion-item class="cursor-pointer ter--background" (click)="openPage(item.url, item.attachTicket)">
+                    <ion-avatar slot="start">
+                      <img [src]="item.img">
+                    </ion-avatar>
+                    <ion-label>
+                      <h2>{{ item.title }}</h2>
+                    </ion-label>
+                  </ion-item>
                 </div>
-                <ion-item class="cursor-pointer ter--background" (click)="openPage(item.url, item.attachTicket)">
-                  <ion-avatar slot="start">
-                    <img [src]="item.img">
-                  </ion-avatar>
-                  <ion-label>
-                    <h2>{{ item.title }}</h2>
-                  </ion-label>
-                </ion-item>
+              </ion-item-group>
+              <ng-template #noFav>
+                <ng-container *ngIf="!term; else noSearchResults">
+                  <p class="ion-margin-top ion-margin-bottom ion-text-center ion-padding">
+                    Click on edit button and add items now to your favorite menu :)
+                  </p>
+                </ng-container>
+                <ng-template #noSearchResults>
+                  <p class="ion-margin-top ion-margin-bottom ion-text-center ion-padding">
+                    No results in favorite for {{term}} :(
+                  </p>
+                </ng-template>
+              </ng-template>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <!-- MENU -->
+      <div *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop" class="masonry-item">
+        <ion-card class="ion-no-margin">
+          <ion-card-header>
+            <ion-card-title>
+              <h3>{{ group.key }}</h3>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content class="ion-no-padding">
+            <ion-list class="ion-no-margin">
+              <ion-item-group>
+                <div *ngFor="let item of group.value" style="position: relative;">
+                  <div [class.edit-overlay]="editMode" [class.hide]="!editMode">
+                    <ion-icon (click)="addToFav(item.id)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
+                      class="colored-text"></ion-icon>
+                  </div>
+                  <ion-item class="cursor-pointer" (click)="openPage(item.url, item.attachTicket)">
+                    <ion-avatar slot="start">
+                      <img [src]="item.img">
+                    </ion-avatar>
+                    <ion-label>
+                      <h2>{{ item.title }}</h2>
+                    </ion-label>
+                  </ion-item>
+                </div>
+
+              </ion-item-group>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+
+    <!-- CARDS UI -->
+    <ng-template #menuCardsUI>
+
+      <ion-grid>
+
+        <!-- FAVORITE -->
+        <ion-row *ngIf="!editMode && (fav | byItem: term) as filteredFavMenu">
+          <ion-col size="12" class="ion-margin-vertical">
+            <h5 class="custom-theme ion-text-center">Favorite</h5>
+          </ion-col>
+          <ng-container *ngIf="filteredFavMenu.length > 0; else noFavCard">
+            <div class="card-view-masonry-list">
+              <div *ngFor="let item of filteredFavMenu" (click)="openPage(item.url)"
+                class="card-view-masonry-item custom-card cursor-pointer">
+                <div>
+                  <img [src]="item.img">
+                  <p class="page-title">{{ item.title }}</p>
+                </div>
               </div>
-            </ion-item-group>
-            <ng-template #noFav>
+            </div>
+          </ng-container>
+          <ng-template #noFavCard>
+            <ion-col size="12">
               <ng-container *ngIf="!term; else noSearchResults">
-                <p class="ion-margin-top ion-margin-bottom ion-text-center ion-padding">
+                <p class="light-text ion-margin-top ion-margin-bottom ion-text-center ion-padding">
                   Click on edit button and add items now to your favorite menu :)
                 </p>
               </ng-container>
               <ng-template #noSearchResults>
-                <p class="ion-margin-top ion-margin-bottom ion-text-center ion-padding">
-                  No results in favorite for {{term}} :(
-                </p>
+                <!-- <p class="light-text ion-margin-top ion-margin-bottom ion-text-center ion-padding">
+                No results in favorite for {{term}} :(
+              </p> -->
+                <app-message-with-svg imageUrl="assets/img/search-not-found.svg"
+                  messageTitle="Opps! No results in favorite for {{term}}" messageContent="Perhaps you can try this:"
+                  wrapperSize="{{isMobile ? '6' : '3'}}" wrapperMarginTop="30px"
+                  wrapperOffset="{{isMobile ? '3' : '4.5'}}" [advancedMode]="true">
+
+                  <div class="flex-container">
+                    <ul class="list-txt-color">
+                      <li>Make sure the keyword is matched with one of the items</li>
+                      <li>Make sure you have typed a valid item code.</li>
+                      <li>Make sure there is no special characters included.</li>
+                    </ul>
+
+                    <p>Still having trouble? No worries! Just click <a (click)="goToFeedback()">here</a> and report to
+                      us for this issue.</p>
+                  </div>
+                </app-message-with-svg>
               </ng-template>
-            </ng-template>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-    </div>
+            </ion-col>
+          </ng-template>
+        </ion-row>
 
-    <!-- MENU -->
-    <div *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop" class="masonry-item">
-      <ion-card class="ion-no-margin">
-        <ion-card-header>
-          <ion-card-title>
-            <h3>{{ group.key }}</h3>
-          </ion-card-title>
-        </ion-card-header>
-        <ion-card-content class="ion-no-padding">
-          <ion-list class="ion-no-margin">
-            <ion-item-group>
-              <div *ngFor="let item of group.value" style="position: relative;">
-                <div [class.edit-overlay]="editMode" [class.hide]="!editMode">
-                  <ion-icon (click)="addToFav(item.id)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
-                    class="colored-text"></ion-icon>
-                </div>
-                <ion-item class="cursor-pointer" (click)="openPage(item.url, item.attachTicket)">
-                  <ion-avatar slot="start">
-                    <img [src]="item.img">
-                  </ion-avatar>
-                  <ion-label>
-                    <h2>{{ item.title }}</h2>
-                  </ion-label>
-                </ion-item>
-              </div>
+        <!-- MENU -->
+        <ion-row *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop;">
+          <ion-col size="12">
+            <ion-item lines="none" color="none" class="custom-theme" (click)="showMore(group.key)">
+              <ion-avatar slot="start">
+                <img [src]="keyIcon[group.key]">
+              </ion-avatar>
 
-            </ion-item-group>
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
-    </div>
-  </div>
-
-  <!-- CARDS UI -->
-  <ng-template #menuCardsUI>
-
-    <ion-grid>
-
-      <!-- FAVORITE -->
-      <ion-row *ngIf="!editMode && (fav | byItem: term) as filteredFavMenu">
-        <ion-col size="12" class="ion-margin-vertical">
-          <h5 class="custom-theme ion-text-center">Favorite</h5>
-        </ion-col>
-        <ng-container *ngIf="filteredFavMenu.length > 0; else noFavCard">
-          <div class="card-view-masonry-list">
-            <div *ngFor="let item of filteredFavMenu" (click)="openPage(item.url)" class="card-view-masonry-item custom-card cursor-pointer">
-              <div>
+              <h5 class="ion-text-start ion-padding">{{ group.key }}</h5>
+              <ion-icon slot="end" [name]="keyList.includes(group.key) ? 'chevron-up-outline' : 'chevron-down-outline'">
+              </ion-icon>
+            </ion-item>
+          </ion-col>
+          <ion-col [style.display]="keyList.includes(group.key) ? 'block' : 'none'" *ngFor="let item of group.value"
+            class="menu-item ion-text-start" size="12" size-md="6" size-lg="4" size-xl="3">
+            <div [class.edit-overlay]="editMode" [class.hide]="!editMode">
+              <ion-icon (click)="addToFav(item.id)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
+                class="colored-text"></ion-icon>
+            </div>
+            <div (click)="openPage(item.url)" class="custom-card cursor-pointer">
+              <div class="flex-content">
                 <img [src]="item.img">
                 <p class="page-title">{{ item.title }}</p>
               </div>
             </div>
-          </div>
-        </ng-container>
-        <ng-template #noFavCard>
-          <ion-col size="12">
-            <ng-container *ngIf="!term; else noSearchResults">
-              <p class="light-text ion-margin-top ion-margin-bottom ion-text-center ion-padding">
-                Click on edit button and add items now to your favorite menu :)
-              </p>
-            </ng-container>
-            <ng-template #noSearchResults>
-              <!-- <p class="light-text ion-margin-top ion-margin-bottom ion-text-center ion-padding">
-                No results in favorite for {{term}} :(
-              </p> -->
-              <app-message-with-svg imageUrl="assets/img/search-not-found.svg" messageTitle="Opps! No results in favorite for {{term}}"
-                messageContent="Perhaps you can try this:" wrapperSize="{{isMobile ? '6' : '3'}}" wrapperMarginTop="30px" wrapperOffset="{{isMobile ? '3' : '4.5'}}"
-                [advancedMode]="true">
-
-                <div class="flex-container">
-                  <ul class="list-txt-color">
-                    <li>Make sure the keyword is matched with one of the items</li>
-                    <li>Make sure you have typed a valid item code.</li>
-                    <li>Make sure there is no special characters included.</li>
-                  </ul>
-                    
-                  <p>Still having trouble? No worries! Just click <a (click)="goToFeedback()">here</a> and report to us for this issue.</p>
-                </div>
-              </app-message-with-svg>
-            </ng-template>
           </ion-col>
-        </ng-template>
-      </ion-row>
+          <ion-item-divider [class.set-divider-margin]="keyList.includes(group.key)"></ion-item-divider>
+        </ion-row>
+        <ion-row *ngIf="!editMode">
+          <ion-col>
+            <ion-item lines="none" color="none" class="custom-theme" (click)="openPage('logout')">
+              <ion-avatar slot="start">
+                <img src="assets/img/log-out.png">
+              </ion-avatar>
 
-      <!-- MENU -->
-      <ion-row *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop;">
-        <ion-col size="12">
-          <ion-item lines="none" color="none" class="custom-theme" (click)="showMore(group.key)">
-            <ion-avatar slot="start">
-              <img [src]="keyIcon[group.key]">
-            </ion-avatar>
+              <h5 class="ion-text-start ion-padding">Logout</h5>
+            </ion-item>
+          </ion-col>
+          <ion-item-divider></ion-item-divider>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+  </div>
 
-            <h5 class="ion-text-start ion-padding">{{ group.key }}</h5>
-            <ion-icon slot="end" [name]="keyList.includes(group.key) ? 'chevron-up-outline' : 'chevron-down-outline'" ></ion-icon>
-          </ion-item>
-        </ion-col>
-        <ion-col
-          [style.display]="keyList.includes(group.key) ? 'block' : 'none'"
-          *ngFor="let item of group.value"
-          class="menu-item ion-text-start"
-          size="12" size-md="6" size-lg="4" size-xl="3">
-          <div [class.edit-overlay]="editMode" [class.hide]="!editMode">
-            <ion-icon (click)="addToFav(item.id)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
-              class="colored-text"></ion-icon>
-          </div>
-          <div (click)="openPage(item.url)" class="custom-card cursor-pointer">
-            <div class="flex-content">
-              <img [src]="item.img">
-              <p class="page-title">{{ item.title }}</p>
-            </div>
-          </div>
-        </ion-col>
-        <ion-item-divider [class.set-divider-margin]="keyList.includes(group.key)"></ion-item-divider>
-      </ion-row>
-      <ion-row *ngIf="!editMode">
-        <ion-col>
-          <ion-item lines="none" color="none" class="custom-theme" (click)="openPage('logout')">
-            <ion-avatar slot="start">
-              <img src="assets/img/log-out.png">
-            </ion-avatar>
-
-            <h5 class="ion-text-start ion-padding">Logout</h5>
-          </ion-item>
-        </ion-col>
-        <ion-item-divider></ion-item-divider>
-      </ion-row>
-    </ion-grid>
-  </ng-template>
 </ion-content>

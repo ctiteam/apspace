@@ -1,14 +1,9 @@
-<ion-header>
+<ion-header [hidden]='comingFromTabs'>
   <ion-toolbar mode="md">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/" [hidden]='comingFromTabs'></ion-back-button>
+      <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-title>Lecturer Timetable</ion-title>
-    <ion-buttons slot="end">
-      <ion-button fill="outline" [routerLink]="['/attendix/classes']" class="colored-text colored-border">
-        Mark Attendance
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 
 
@@ -26,103 +21,198 @@
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
 
-  <!-- do not add filter pipe here as it affects loading -->
-  <ng-template let-timetables [ngIf]="timetable$ | async" [ngIfElse]="loading">
-    <ng-template let-timetables
-      [ngIf]="!viewWeek ? (timetables | theday:selectedDate) : (timetables | theweek:selectedWeek)"
-      [ngIfElse]="loading">
-      <ng-template [ngIf]="timetables!.length" [ngIfElse]="empty">
-        <ion-grid>
-          <ion-row>
-            <ion-col>
-              <ion-row>
-                <ion-col>
-                  <ion-buttons class="ion-padding-bottom">
-                    <ion-button fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
-                      class="colored-text colored-border">
-                      {{ selectedWeek | dateWithTimezone :'dd MMM yyy' }}
-                      <ion-icon name="chevron-down-outline" style="padding-right: 0px;"></ion-icon>
-                    </ion-button>
-                  </ion-buttons>
-                </ion-col>
-                <ion-col size="auto">
-                  <ion-buttons class="ion-padding-bottom">
-                    <ion-button fill="outline" slot="end" class="print-button colored-border" (click)="sendToPrint()">
-                      <ion-icon slot="icon-only" name="print" class="colored-text"></ion-icon>
-                    </ion-button>
-                  </ion-buttons>
-                </ion-col>
-              </ion-row>
-              <ion-card class="ion-no-margin">
-                <ion-card-header style="margin-bottom: 0; padding: 0 !important; padding-left:16px !important;">
-                  <ion-card-subtitle>
-                    <ion-item lines="none">
-                      <ion-button slot="end" (click)="rotateView()" fill="none" [class.colored-text]="viewWeek"
-                        [class.colored-border]="viewWeek">
-                        <ion-label>Weekly</ion-label>
-                        <ion-toggle [checked]="viewWeek"></ion-toggle>
+  <div class="glob-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="4" offset-md="8" class="ion-text-center">
+          <ion-button fill="outline" [routerLink]="['/attendix/classes']" class="colored-text colored-border">
+            Mark Attendance
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- do not add filter pipe here as it affects loading -->
+    <ng-template let-timetables [ngIf]="timetable$ | async" [ngIfElse]="loading">
+      <ng-template let-timetables
+        [ngIf]="!viewWeek ? (timetables | theday:selectedDate) : (timetables | theweek:selectedWeek)"
+        [ngIfElse]="loading">
+        <ng-template [ngIf]="timetables!.length" [ngIfElse]="empty">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-row>
+                  <ion-col>
+                    <ion-buttons class="ion-padding-bottom">
+                      <ion-button fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
+                        class="colored-text colored-border">
+                        {{ selectedWeek | dateWithTimezone :'dd MMM yyy' }}
+                        <ion-icon name="chevron-down-outline" style="padding-right: 0px;"></ion-icon>
                       </ion-button>
-                    </ion-item>
-                  </ion-card-subtitle>
-                </ion-card-header>
-                <ion-card-content class="ion-no-padding padding-bottom">
-                  <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
-                    <ion-segment class="week-segment" [ngModel]="selectedDate | date:'E' | uppercase"
-                      (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]" scrollable>
-                      <ion-segment-button *ngFor="let day of availableDays" [value]="day">
-                        {{ day }}
-                      </ion-segment-button>
-                    </ion-segment>
-                  </ng-template>
-                  <ng-template [ngIf]="selectedDate">
-                    <ion-item class="table-top" style.borderLeft="0.7rem solid transparent">
-                      <ion-grid class="ion-no-margin ion-no-padding">
+                    </ion-buttons>
+                  </ion-col>
+                  <ion-col size="auto">
+                    <ion-buttons class="ion-padding-bottom">
+                      <ion-button fill="outline" slot="end" class="print-button colored-border" (click)="sendToPrint()">
+                        <ion-icon slot="icon-only" name="print" class="colored-text"></ion-icon>
+                      </ion-button>
+                    </ion-buttons>
+                  </ion-col>
+                </ion-row>
+                <ion-card class="ion-no-margin">
+                  <ion-card-header style="margin-bottom: 0; padding: 0 !important; padding-left:16px !important;">
+                    <ion-card-subtitle>
+                      <ion-item lines="none">
+                        <ion-button slot="end" (click)="rotateView()" fill="none" [class.colored-text]="viewWeek"
+                          [class.colored-border]="viewWeek">
+                          <ion-label>Weekly</ion-label>
+                          <ion-toggle [checked]="viewWeek"></ion-toggle>
+                        </ion-button>
+                      </ion-item>
+                    </ion-card-subtitle>
+                  </ion-card-header>
+                  <ion-card-content class="ion-no-padding padding-bottom">
+                    <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
+                      <ion-segment class="week-segment" [ngModel]="selectedDate | date:'E' | uppercase"
+                        (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]" scrollable>
+                        <ion-segment-button *ngFor="let day of availableDays" [value]="day">
+                          {{ day }}
+                        </ion-segment-button>
+                      </ion-segment>
+                    </ng-template>
+                    <ng-template [ngIf]="selectedDate">
+                      <ion-item class="table-top" style.borderLeft="0.7rem solid transparent">
+                        <ion-grid class="ion-no-margin ion-no-padding">
+                          <ng-container *ngIf="viewWeek; else viewDaily">
+                            <ion-row>
+                              <ion-col class="hide-on-print-table-flex-on-card ion-no-padding" size="12" size-sm="">
+                                <h2 class="text-bold">Module</h2>
+                              </ion-col>
+                              <ion-col size="12" size-sm="" class="ion-no-padding">
+                                <h2 class="text-bold">Date</h2>
+                              </ion-col>
+                              <ion-col size="12" size-sm="" class="ion-no-padding">
+                                <h2 class="text-bold md-text-center">Time</h2>
+                              </ion-col>
+                              <ion-col size="12" size-sm="" class="flex-on-print-table-hide-on-card ion-no-padding">
+                                <h2 class="text-bold md-text-center ">Module</h2>
+                              </ion-col>
+                              <ion-col size="12" size-sm="" class="ion-no-padding">
+                                <h2 class="text-bold md-text-center">Location</h2>
+                              </ion-col>
+                              <ion-col size="12" size-sm="" class="ion-no-padding">
+                                <h2 class="text-bold md-text-center">Lecturer</h2>
+                              </ion-col>
+                              <ion-col size="12" size-sm="auto" class="ion-no-padding">
+                                <ion-button class="ion-float-right" style="visibility: hidden;" fill="outline"
+                                  color="danger" size="small">
+                                  Attendance
+                                  <ion-icon slot="end" name="md-clipboard"></ion-icon>
+                                </ion-button>
+                              </ion-col>
+                            </ion-row>
+                          </ng-container>
+                          <ng-template #viewDaily>
+                            <ion-row>
+                              <ion-col class="ion-no-padding" size="12" size-sm="">
+                                <h2 class="text-bold">Module</h2>
+                              </ion-col>
+                              <ion-col size="12" size-sm="" class="ion-no-padding">
+                                <h2 class="time text-bold">Time</h2>
+                              </ion-col>
+                              <ion-col size="12" size-sm="" class="ion-no-padding">
+                                <h2 class="text-bold">Location</h2>
+                              </ion-col>
+                              <ion-col size="12" size-sm="" class="ion-no-padding">
+                                <h2 class="text-bold">Intakes</h2>
+                              </ion-col>
+                              <ion-col size="12" size-sm="auto" class="ion-no-padding">
+                                <ion-button class="ion-float-right" style="visibility: hidden;" fill="outline"
+                                  color="danger" size="small">
+                                  Attendance
+                                  <ion-icon slot="end" name="md-clipboard"></ion-icon>
+                                </ion-button>
+                              </ion-col>
+                            </ion-row>
+                          </ng-template>
+                        </ion-grid>
+                      </ion-item>
+                    </ng-template>
+                    <ion-item class="table-item" *ngFor="let timetable of timetables; trackBy: trackByIndex"
+                      [class.freeTime]='timetable.MODID === "FREE"'>
+                      <ion-grid>
                         <ng-container *ngIf="viewWeek; else viewDaily">
-                          <ion-row>
-                            <ion-col class="hide-on-print-table-flex-on-card ion-no-padding" size="12" size-sm="">
-                              <h2 class="text-bold">Module</h2>
+                          <ion-row *ngIf="timetable | endtime as endTime" class="table-data">
+                            <ion-col size="12" size-sm=""
+                              class="hide-on-print-table-flex-on-card text-bold ion-no-padding md-text-center margin-auto">
+                              {{ timetable.module }}
                             </ion-col>
-                            <ion-col size="12" size-sm="" class="ion-no-padding">
-                              <h2 class="text-bold">Date</h2>
+                            <ion-col size="12" size-sm="" class="ion-no-padding md-text-center margin-auto">
+                              <span class="marker">
+                                <ion-icon name="calendar"></ion-icon>
+                              </span>
+                              {{ timetable.time | dateWithTimezone:'EEE, d MMM' }}
                             </ion-col>
-                            <ion-col size="12" size-sm="" class="ion-no-padding">
-                              <h2 class="text-bold md-text-center">Time</h2>
+                            <ion-col size="12" size-sm="" class="ion-no-padding md-text-center margin-auto">
+                              <span class="marker">
+                                <ion-icon name="time"></ion-icon>
+                              </span>
+                              {{ timetable.time | dateWithTimezone:'time' }} -
+                              {{ timetable | endtime | dateWithTimezone:'time' }}
                             </ion-col>
-                            <ion-col size="12" size-sm="" class="flex-on-print-table-hide-on-card ion-no-padding">
-                              <h2 class="text-bold md-text-center ">Module</h2>
+                            <ion-col size="12" size-sm=""
+                              class="flex-on-print-table-hide-on-card ion-no-padding md-text-center margin-auto">
+                              {{ timetable.module }}
                             </ion-col>
-                            <ion-col size="12" size-sm="" class="ion-no-padding">
-                              <h2 class="text-bold md-text-center">Location</h2>
+                            <ion-col size="12" size-sm="" class="ion-no-padding md-text-center margin-auto">
+                              <span class="marker">
+                                <ion-icon name="locate"></ion-icon>
+                              </span>
+                              {{ timetable.room }} | {{ timetable.location }}
                             </ion-col>
-                            <ion-col size="12" size-sm="" class="ion-no-padding">
-                              <h2 class="text-bold md-text-center">Lecturer</h2>
+                            <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
+                              <ng-container *ngTemplateOutlet="intakes; context: {$implicit: timetable}"></ng-container>
                             </ion-col>
-                            <ion-col size="12" size-sm="auto" class="ion-no-padding">
-                              <ion-button class="ion-float-right" style="visibility: hidden;" fill="outline"
-                                color="danger" size="small">
+                            <ion-col size="12" size-sm="auto" class="margin-auto">
+                              <ion-button
+                                [disabled]="(timetable.time | dateWithTimezone : 'yyyy-MM-dd HH:mm') > (today | dateWithTimezone : 'yyyy-MM-dd HH:mm')"
+                                class="ion-float-right"
+                                (click)="quickAttendnace(timetable.module, timetable.time, timetable.intakes.toString(), timetable.time, endTime)"
+                                fill="outline" color="danger" size="small">
                                 Attendance
                                 <ion-icon slot="end" name="md-clipboard"></ion-icon>
                               </ion-button>
                             </ion-col>
                           </ion-row>
                         </ng-container>
+
                         <ng-template #viewDaily>
-                          <ion-row>
-                            <ion-col class="ion-no-padding" size="12" size-sm="">
-                              <h2 class="text-bold">Module</h2>
+                          <ion-row *ngIf="timetable | endtime as endTime">
+                            <ion-col size="12" size-sm="" class="text-bold ion-no-padding margin-auto">
+                              {{ timetable.module }}
                             </ion-col>
-                            <ion-col size="12" size-sm="" class="ion-no-padding">
-                              <h2 class="time text-bold">Time</h2>
+                            <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
+                              <span class="marker">
+                                <ion-icon name="time"></ion-icon>
+                              </span>
+                              {{ timetable.time | dateWithTimezone:'time' }} -
+                              {{ timetable | endtime | dateWithTimezone:'time' }}
                             </ion-col>
-                            <ion-col size="12" size-sm="" class="ion-no-padding">
-                              <h2 class="text-bold">Location</h2>
+                            <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
+                              <span class="marker">
+                                <ion-icon name="locate"></ion-icon>
+                              </span>
+                              {{ timetable.room }} | {{ timetable.location }}
                             </ion-col>
-                            <ion-col size="12" size-sm="" class="ion-no-padding">
-                              <h2 class="text-bold">Intakes</h2>
+                            <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
+                              <ng-container *ngTemplateOutlet="intakes; context: {$implicit: timetable}"></ng-container>
                             </ion-col>
-                            <ion-col size="12" size-sm="auto" class="ion-no-padding">
-                              <ion-button class="ion-float-right" style="visibility: hidden;" fill="outline"
-                                color="danger" size="small">
+                            <ion-col size="12" size-sm="auto" class="ion-no-padding margin-auto">
+                              <ion-button
+                                [disabled]="(timetable.time | dateWithTimezone : 'yyyy-MM-dd HH:mm') > (today | dateWithTimezone : 'yyyy-MM-dd HH:mm')"
+                                class="ion-float-right"
+                                (click)="quickAttendnace(timetable.module, timetable.time, timetable.intakes.toString(), timetable.time, endTime)"
+                                fill="outline" color="danger" size="small">
                                 Attendance
                                 <ion-icon slot="end" name="md-clipboard"></ion-icon>
                               </ion-button>
@@ -131,130 +221,47 @@
                         </ng-template>
                       </ion-grid>
                     </ion-item>
-                  </ng-template>
-                  <ion-item class="table-item" *ngFor="let timetable of timetables; trackBy: trackByIndex"
-                    [class.freeTime]='timetable.MODID === "FREE"'>
-                    <ion-grid>
-                      <ng-container *ngIf="viewWeek; else viewDaily">
-                        <ion-row *ngIf="timetable | endtime as endTime" class="table-data">
-                          <ion-col size="12" size-sm=""
-                            class="hide-on-print-table-flex-on-card text-bold ion-no-padding md-text-center margin-auto">
-                            {{ timetable.module }}
-                          </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding md-text-center margin-auto">
-                            <span class="marker">
-                              <ion-icon name="calendar"></ion-icon>
-                            </span>
-                            {{ timetable.time | dateWithTimezone:'EEE, d MMM' }}
-                          </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding md-text-center margin-auto">
-                            <span class="marker">
-                              <ion-icon name="time"></ion-icon>
-                            </span>
-                            {{ timetable.time | dateWithTimezone:'time' }} -
-                            {{ timetable | endtime | dateWithTimezone:'time' }}
-                          </ion-col>
-                          <ion-col size="12" size-sm=""
-                            class="flex-on-print-table-hide-on-card ion-no-padding md-text-center margin-auto">
-                            {{ timetable.module }}
-                          </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding md-text-center margin-auto">
-                            <span class="marker">
-                              <ion-icon name="locate"></ion-icon>
-                            </span>
-                            {{ timetable.room }} | {{ timetable.location }}
-                          </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
-                            <ng-container *ngTemplateOutlet="intakes; context: {$implicit: timetable}"></ng-container>
-                          </ion-col>
-                          <ion-col size="12" size-sm="auto" class="margin-auto">
-                            <ion-button
-                              [disabled]="(timetable.time | dateWithTimezone : 'yyyy-MM-dd HH:mm') > (today | dateWithTimezone : 'yyyy-MM-dd HH:mm')"
-                              class="ion-float-right"
-                              (click)="quickAttendnace(timetable.module, timetable.time, timetable.intakes.toString(), timetable.time, endTime)"
-                              fill="outline" color="danger" size="small">
-                              Attendance
-                              <ion-icon slot="end" name="md-clipboard"></ion-icon>
-                            </ion-button>
-                          </ion-col>
-                        </ion-row>
-                      </ng-container>
-
-                      <ng-template #viewDaily>
-                        <ion-row *ngIf="timetable | endtime as endTime">
-                          <ion-col size="12" size-sm="" class="text-bold ion-no-padding margin-auto">
-                            {{ timetable.module }}
-                          </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
-                            <span class="marker">
-                              <ion-icon name="time"></ion-icon>
-                            </span>
-                            {{ timetable.time | dateWithTimezone:'time' }} -
-                            {{ timetable | endtime | dateWithTimezone:'time' }}
-                          </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
-                            <span class="marker">
-                              <ion-icon name="locate"></ion-icon>
-                            </span>
-                            {{ timetable.room }} | {{ timetable.location }}
-                          </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
-                            <ng-container *ngTemplateOutlet="intakes; context: {$implicit: timetable}"></ng-container>
-                          </ion-col>
-                          <ion-col size="12" size-sm="auto" class="ion-no-padding margin-auto">
-                            <ion-button
-                              [disabled]="(timetable.time | dateWithTimezone : 'yyyy-MM-dd HH:mm') > (today | dateWithTimezone : 'yyyy-MM-dd HH:mm')"
-                              class="ion-float-right"
-                              (click)="quickAttendnace(timetable.module, timetable.time, timetable.intakes.toString(), timetable.time, endTime)"
-                              fill="outline" color="danger" size="small">
-                              Attendance
-                              <ion-icon slot="end" name="md-clipboard"></ion-icon>
-                            </ion-button>
-                          </ion-col>
-                        </ion-row>
-                      </ng-template>
-                    </ion-grid>
-                  </ion-item>
-                </ion-card-content>
-              </ion-card>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ng-template>
+      </ng-template>
+      <ng-template #empty>
+        <ion-card>
+          <ion-card-content>
+            <app-message-with-svg imageUrl="assets/img/happy.svg"
+              messageTitle="Hooray! No classes for {{intake}} on the week that starts on {{selectedWeek | dateWithTimezone:'EEEE, dd MM yyy'}}"
+              wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+            </app-message-with-svg>
+          </ion-card-content>
+        </ion-card>
       </ng-template>
     </ng-template>
-    <ng-template #empty>
-      <ion-card>
-        <ion-card-content>
-          <app-message-with-svg imageUrl="assets/img/happy.svg"
-            messageTitle="Hooray! No classes for {{intake}} on the week that starts on {{selectedWeek | dateWithTimezone:'EEEE, dd MM yyy'}}"
-            wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
-          </app-message-with-svg>
+
+    <ng-template #loading>
+      <ion-card class="ion-no-padding">
+        <ion-card-content class="ion-no-padding">
+          <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
+        </ion-card-content>
+      </ion-card>
+      <ion-card class="ion-no-padding">
+        <ion-card-content class="ion-no-padding">
+          <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
+        </ion-card-content>
+      </ion-card>
+      <ion-card class="ion-no-padding">
+        <ion-card-content class="ion-no-padding">
+          <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
+        </ion-card-content>
+      </ion-card>
+      <ion-card class="ion-no-padding">
+        <ion-card-content class="ion-no-padding">
+          <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
         </ion-card-content>
       </ion-card>
     </ng-template>
-  </ng-template>
-
-  <ng-template #loading>
-    <ion-card class="ion-no-padding">
-      <ion-card-content class="ion-no-padding">
-        <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="ion-no-padding">
-      <ion-card-content class="ion-no-padding">
-        <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="ion-no-padding">
-      <ion-card-content class="ion-no-padding">
-        <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="ion-no-padding">
-      <ion-card-content class="ion-no-padding">
-        <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
-      </ion-card-content>
-    </ion-card>
-  </ng-template>
+  </div>
 
 </ion-content>
