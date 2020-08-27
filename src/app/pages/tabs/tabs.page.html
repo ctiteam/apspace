@@ -7,7 +7,7 @@
       </h2>
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button color="light" (click)="toggleSearchBar()">
+      <ion-button [color]="shownSearchBar ? 'tertiary' : 'primary'" (click)="toggleSearchBar()">
         <ion-icon slot="icon-only" name="search"></ion-icon>
       </ion-button>
       <ion-button color="primary" (click)="openHelpCentre()">
