@@ -10,6 +10,11 @@ img {
 }
 
 .hr-custom {
-  border: 2px solid var(--secondary-txt-color);
+  border: 2px solid var(--ion-color-secondary);
   width: 100%;
+}
+
+.chat-in-teams {
+  --background: #464775;
+  --background-hover: #5f60a3;
 }

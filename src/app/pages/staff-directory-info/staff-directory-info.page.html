@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="staffs$ | async as staffs; else loading" class="staff-directory-info-header">
+  <div *ngIf="staffs$ | async as staffs; else loading">
     <ion-grid *ngIf="staffs | byId:id as staff; else notFound">
       <ion-row>
         <ion-col size-xs="12" size-lg="4">
@@ -21,37 +21,43 @@
               <hr class="ion-margin-top ion-margin-button hr-custom" />
             </ion-card-header>
             <ion-card-content style="padding-top: 0px">
-              <h2 class="secondary-txt-color">Name:</h2>
-              <h2 class="main-text-color text-bold">{{ staff.FULLNAME }}</h2>
+              <h2>Name:</h2>
+              <h2 class="glob-text-bold">{{ staff.FULLNAME }}</h2>
               <br>
-              <h2 class="secondary-txt-color">Job Title:</h2>
-              <h2 class="main-text-color text-bold" [innerHTML]="staff.TITLE"></h2>
+              <h2>Job Title:</h2>
+              <h2 class="glob-text-bold" [innerHTML]="staff.TITLE"></h2>
               <br>
-              <h2 class="secondary-txt-color">Email:</h2>
-              <h2><a class="colored-text text-bold" href="mailto:{{staff.EMAIL}}">{{ staff.EMAIL }}</a></h2>
+              <h2>Email:</h2>
+              <h2><a class="glob-text-bold" href="mailto:{{staff.EMAIL}}">
+                  <ion-text color="primary">
+                    {{ staff.EMAIL }}
+                  </ion-text>
+                </a></h2>
               <br>
               <div *ngIf="staff.LOCATION">
-                <h2 class="secondary-txt-color">Office Location:</h2>
-                <h2 class="text-bold main-text-color">{{ staff.LOCATION }}</h2>
+                <h2>Office Location:</h2>
+                <h2 class="glob-text-bold">{{ staff.LOCATION }}</h2>
                 <br>
               </div>
-              <h2 class="secondary-txt-color">Contact Number:</h2>
-              <h2><a class="colored-text text-bold" href="tel:+60389961000">+6 03-8996 1000 (Ext.
-                  {{ staff.EXTENSION }})</a>
-              </h2>
+              <h2>Contact Number:</h2>
+              <h2><a class="glob-text-bold" href="tel:+60389961000">
+                  <ion-text color="primary">
+                    +6 03-8996 1000 (Ext. {{ staff.EXTENSION }})
+                  </ion-text>
+                </a></h2>
               <br>
               <div *ngIf="staff.DEPARTMENT || staff.DEPARTMENT2 || staff.DEPARTMENT3">
-                <h2 class="secondary-txt-color">Functional Area(s):</h2>
-                <h2 class="text-bold main-text-color" *ngIf="staff.DEPARTMENT" [innerHTML]="staff.DEPARTMENT"></h2>
-                <h2 class="text-bold main-text-color" *ngIf="staff.DEPARTMENT2" [innerHTML]="staff.DEPARTMENT2"></h2>
-                <h2 class="text-bold main-text-color" *ngIf="staff.DEPARTMENT3" [innerHTML]="staff.DEPARTMENT3"></h2>
+                <h2>Functional Area(s):</h2>
+                <h2 class="glob-text-bold" *ngIf="staff.DEPARTMENT" [innerHTML]="staff.DEPARTMENT"></h2>
+                <h2 class="glob-text-bold" *ngIf="staff.DEPARTMENT2" [innerHTML]="staff.DEPARTMENT2"></h2>
+                <h2 class="glob-text-bold" *ngIf="staff.DEPARTMENT3" [innerHTML]="staff.DEPARTMENT3"></h2>
                 <br>
               </div>
               <ion-grid>
                 <ion-row>
                   <ion-col *ngIf="isStudent">
-                    <ion-button expand="full" class="colored-background" (click)="navigateToIconsult(staff.ID)">Book
-                      Consultation Hour
+                    <ion-button expand="full" color="primary" (click)="navigateToIconsult(staff.ID)">
+                      Book Consultation Hour
                     </ion-button>
                   </ion-col>
                   <ion-col>
@@ -67,7 +73,11 @@
           <ion-card>
             <ion-card-header>
               <ion-text>
-                <h2 class="colored-text">Timetable</h2>
+                <h2>
+                  <ion-text color="primary">
+                    Timetable
+                  </ion-text>
+                </h2>
               </ion-text>
             </ion-card-header>
           </ion-card>
@@ -94,28 +104,28 @@
               <hr class="ion-margin-top ion-margin-button hr-custom" />
             </ion-card-header>
             <ion-card-content style="padding-top: 0px">
-              <h2 class="secondary-txt-color">
+              <h2>
                 <ion-skeleton-text animated style="line-height: 25px; width: 40%;"></ion-skeleton-text>
               </h2>
-              <h2 class="main-text-color">
+              <h2>
                 <ion-skeleton-text animated style="line-height: 20px; width: 70%;"></ion-skeleton-text>
               </h2>
               <br>
-              <h2 class="secondary-txt-color">
+              <h2>
                 <ion-skeleton-text animated style="line-height: 25px; width: 60%;"></ion-skeleton-text>
               </h2>
-              <h2 class="main-text-color text-bold">
+              <h2>
                 <ion-skeleton-text animated style="line-height: 20px; width: 40%;"></ion-skeleton-text>
               </h2>
               <br>
-              <h2 class="secondary-txt-color">
+              <h2>
                 <ion-skeleton-text animated style="line-height: 25px; width: 70%;"></ion-skeleton-text>
               </h2>
               <h2>
                 <ion-skeleton-text animated style="line-height: 20px; width: 40%;"></ion-skeleton-text>
               </h2>
               <br>
-              <h2 class="secondary-txt-color">
+              <h2>
                 <ion-skeleton-text animated style="line-height: 25px; width: 20%;"></ion-skeleton-text>
               </h2>
               <h2>
