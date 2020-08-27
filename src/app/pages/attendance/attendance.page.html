@@ -1,15 +1,10 @@
-<ion-header>
+<ion-header [hidden]="comingFromTabs()">
   <ion-toolbar mode="md">
-    <ion-title *ngIf="course$ | async">
+    <ion-title>
       Attendance
     </ion-title>
-    <ion-buttons slot="start" [hidden]="comingFromTabs() ? true : false">
+    <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button fill="outline" color="primary" (click)="showActionSheet()">
-        {{ selectedIntake }}
-      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -18,66 +13,250 @@
   <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
-  <!-- START COVER -->
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12" size-md="4" class="ion-no-padding summary-col">
-        <div class="cover" *ngIf="average >= 0">
-          <!-- START BACKGROUND WAVES -->
-          <div class="fill" [style.animation-iteration-count]="average">
-            <svg width="200%" height="100%" viewBox="0 0 240 140" version="1.1">
-              <g [attr.fill]="average > 0.8 ? '#08a14f': '#e54d42'">
-                <path
-                  d="M0,140 L0,2.59259259 C0,2.6670255 28.08,-4.12156133 66,3.88888889 C83.6331044,8.10263543 102,6.61060503 120,2.59259259 L120,140 L0,140 Z M120,140 L120,2.59259259 C120,2.6670255 148.08,-4.12156133 186,3.88888889 C203.633104,8.10263543 222,6.61060503 240,2.59259259 L240,140 L120,140 Z"
-                  id="waveShape"></path>
-              </g>
-            </svg>
+  <div class="glob-container">
+    <ion-grid *ngIf="course$ | async">
+      <ion-row>
+        <ion-col size="12" offset-md="8" size-md="4">
+          <ion-button fill="outline" color="primary" (click)="showActionSheet()">
+            {{ selectedIntake }}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" size-md="4" class="ion-no-padding summary-col">
+          <div class="cover" *ngIf="average >= 0">
+            <!-- START BACKGROUND WAVES -->
+            <div class="fill" [style.animation-iteration-count]="average">
+              <svg width="200%" height="100%" viewBox="0 0 240 140" version="1.1">
+                <g [attr.fill]="average > 0.8 ? '#08a14f': '#e54d42'">
+                  <path
+                    d="M0,140 L0,2.59259259 C0,2.6670255 28.08,-4.12156133 66,3.88888889 C83.6331044,8.10263543 102,6.61060503 120,2.59259259 L120,140 L0,140 Z M120,140 L120,2.59259259 C120,2.6670255 148.08,-4.12156133 186,3.88888889 C203.633104,8.10263543 222,6.61060503 240,2.59259259 L240,140 L120,140 Z"
+                    id="waveShape"></path>
+                </g>
+              </svg>
+            </div>
+            <!-- END BACKGROUND WAVES -->
+
+            <!-- START BLUR LAYER (OVERLAY) -->
+            <div class="blur"></div>
+            <!-- END BLUR LAYER (OVERLAY) -->
+
+            <!-- START CIRCLE -->
+            <div class="ion-text-center" id="widget-content"></div>
+            <!-- END CIRCLE -->
+
+            <!-- START TEXT -->
+            <div id="widget-value">{{ average * 100 | number: "1.0-1" }}%</div>
+            <!-- END TEXT -->
           </div>
-          <!-- END BACKGROUND WAVES -->
+          <!-- END COVER -->
 
-          <!-- START BLUR LAYER (OVERLAY) -->
-          <div class="blur"></div>
-          <!-- END BLUR LAYER (OVERLAY) -->
+          <!-- IF THERE IS NO DATA RETURNED FROM API -->
+          <ng-container *ngIf="average == -1">
+            <app-message-with-svg imageUrl='/assets/img/no-consultations.svg'
+              messageTitle='No Attendance Data for {{selectedIntake}}'
+              messageContent='Either the intake just started or your lecturers did not upload your attendance for any of your modules'
+              wrapperMarginTop="20px" wrapperOffset="3" wrapperSize="6">
+            </app-message-with-svg>
+          </ng-container>
+          <!-- END THERE IS NO DATA -->
 
-          <!-- START CIRCLE -->
-          <div class="ion-text-center" id="widget-content"></div>
-          <!-- END CIRCLE -->
-
-          <!-- START TEXT -->
-          <div id="widget-value">{{ average * 100 | number: "1.0-1" }}%</div>
-          <!-- END TEXT -->
-        </div>
-        <!-- END COVER -->
-
-        <!-- IF THERE IS NO DATA RETURNED FROM API -->
-        <ng-container *ngIf="average == -1">
-          <app-message-with-svg imageUrl='/assets/img/no-consultations.svg'
-            messageTitle='No Attendance Data for {{selectedIntake}}'
-            messageContent='Either the intake just started or your lecturers did not upload your attendance for any of your modules'
-            wrapperMarginTop="20px" wrapperOffset="3" wrapperSize="6">
-          </app-message-with-svg>
-        </ng-container>
-        <!-- END THERE IS NO DATA -->
-
-        <!-- SHOWING LOADING WHEN ATTENDANCE VALUE IS -2 (INITIAL VALUE) -->
-        <div class="cover" *ngIf="average == -2">
-          <div class="blur"></div>
-          <div id="widget-value">
-            <loading-spinner></loading-spinner>
+          <!-- SHOWING LOADING WHEN ATTENDANCE VALUE IS -2 (INITIAL VALUE) -->
+          <div class="cover" *ngIf="average == -2">
+            <div class="blur"></div>
+            <div id="widget-value">
+              <loading-spinner></loading-spinner>
+            </div>
           </div>
-        </div>
-        <!-- END LOADING -->
-        <ion-grid>
-          <ion-row>
-            <ion-col size="10" offset="1">
-              <ion-button color="primary" class="ion-margin-top" expand="block" [routerLink]="['/attendix/update']">
-                Sign Attendance
-                <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
-              </ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-        <div class="h-mobile-d-desktop ion-margin-top">
+          <!-- END LOADING -->
+          <ion-grid>
+            <ion-row>
+              <ion-col size="10" offset="1">
+                <ion-button color="primary" class="ion-margin-top" expand="block" [routerLink]="['/attendix/update']">
+                  Sign Attendance
+                  <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          <div class="h-mobile-d-desktop ion-margin-top">
+            <div *ngIf="legend$ | async as legend; else loadLegend">
+              <ion-card class="legend ion-no-margin">
+                <ion-card-header>
+                  <h2>Legend</h2>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-row *ngFor="let l of legend | keyvalue">
+                    <ion-col col-3>{{ l.key }}</ion-col>
+                    <ion-col col-9>{{ l.value }}</ion-col>
+                  </ion-row>
+                </ion-card-content>
+              </ion-card>
+            </div>
+
+            <ng-template #loadLegend>
+              <ion-card>
+                <ion-item>
+                  <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
+                </ion-item>
+              </ion-card>
+            </ng-template>
+          </div>
+        </ion-col>
+        <ion-col size="12" size-md="8" class="ion-no-padding">
+          <ng-template let-attendances [ngIf]="attendance$ | async" [ngIfElse]="loadAttendance">
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <ion-col class="ion-no-padding" size="12" size-md="12">
+                  <ion-card class="table-background">
+                    <ion-card-content class="ion-no-padding">
+                      <ion-item class="h-mobile-d-desktop table-item">
+                        <ion-grid class="ion-no-margin ion-no-padding">
+                          <ion-row>
+                            <ion-col class="ion-no-padding margin-auto" size="12" size-sm="">
+                              <h2 class="glob-text-bold">Module</h2>
+                            </ion-col>
+                            <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
+                              <h2 class="glob-text-bold">Classes</h2>
+                            </ion-col>
+                            <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
+                              <h2 class="glob-text-bold">Exam Eligibility</h2>
+                            </ion-col>
+                            <ion-col size="12" size-sm="auto" class="ion-text-right margin-auto">
+                              <ion-button style="visibility: hidden;">
+                                See Details
+                              </ion-button>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-item>
+                      <ion-list *ngFor="let semester of attendances | reverse" class="ion-no-padding">
+                        <ion-item-divider class="colored-divider">
+                          <ion-label class="ion-text-center glob-text-bold">
+                            Semester {{semester.semester}}
+                          </ion-label>
+                        </ion-item-divider>
+                        <ion-item class="table-item" *ngFor="let a of semester.value">
+                          <ion-grid>
+                            <ion-row class="table-data">
+                              <ion-col size="12" size-sm="" class="glob-text-bold md-text-center margin-auto">
+                                {{ a.MODULE_ATTENDANCE }}
+                              </ion-col>
+                              <ion-col size="12"
+                                class="percentage-col h-desktop-d-mobile ion-no-padding ion-padding-bottom">
+                                <div class="progress-bar" [style.width]="a.PERCENTAGE + '%'" [style.background]="
+                              a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100
+                                ? '#0dbd53'
+                                : '#f04141'
+                            "></div>
+                              </ion-col>
+
+                              <ion-col size="12" size-sm="" class="md-text-center margin-auto">
+                                <ion-item lines="none" class="no-background h-desktop-d-mobile ion-no-padding">
+                                  Classes
+                                  <span slot="end">
+                                    {{ a.TOTAL_CLASSES -
+                                        a.TOTAL_ABSENT +
+                                        "/" +
+                                        a.TOTAL_CLASSES +
+                                        " (" +
+                                        a.PERCENTAGE +
+                                        "%)" }}
+                                  </span>
+                                </ion-item>
+                                <span class="h-mobile-d-desktop">
+                                  {{ a.TOTAL_CLASSES -
+                                      a.TOTAL_ABSENT +
+                                      "/" +
+                                      a.TOTAL_CLASSES +
+                                      " (" +
+                                      a.PERCENTAGE +
+                                      "%)" }}
+                                </span>
+                              </ion-col>
+                              <ion-col size="12" size-sm="" class="md-text-center margin-auto">
+                                <ion-item lines="none" class="no-background h-desktop-d-mobile ion-no-padding">
+                                  Exam Eligibility
+                                  <span slot="end" [style.font-weight]="'bold'"
+                                    [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'">
+                                    {{ a.EXAM_ELIGIBILITY }}
+                                  </span>
+                                </ion-item>
+                                <span class="h-mobile-d-desktop" [style.font-weight]="'bold'"
+                                  [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'">
+                                  {{ a.EXAM_ELIGIBILITY }}
+                                </span>
+                              </ion-col>
+                              <ion-col size="12" size-sm="auto" class="ion-text-center margin-auto">
+                                <ion-button
+                                  (click)='attendanceDetails(a.MODULE_ATTENDANCE, selectedIntake, a.SUBJECT_CODE)'
+                                  color='success'>
+                                  See Details
+                                </ion-button>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-item>
+                      </ion-list>
+                    </ion-card-content>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ng-template>
+          <ng-template #loadAttendance>
+            <ion-card>
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="12" size-md="6">
+                    <ion-card>
+                      <ion-item>
+                        <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
+                      </ion-item>
+                    </ion-card>
+                  </ion-col>
+                  <ion-col size="12" size-md="6">
+                    <ion-card>
+                      <ion-item>
+                        <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
+                      </ion-item>
+                    </ion-card>
+                  </ion-col>
+                  <ion-col size="12" size-md="6">
+                    <ion-card>
+                      <ion-item>
+                        <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
+                      </ion-item>
+                    </ion-card>
+                  </ion-col>
+                  <ion-col size="12" size-md="6">
+                    <ion-card>
+                      <ion-item>
+                        <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
+                      </ion-item>
+                    </ion-card>
+                  </ion-col>
+                  <ion-col size="12" size-md="6">
+                    <ion-card>
+                      <ion-item>
+                        <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
+                      </ion-item>
+                    </ion-card>
+                  </ion-col>
+                  <ion-col size="12" size-md="6">
+                    <ion-card>
+                      <ion-item>
+                        <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
+                      </ion-item>
+                    </ion-card>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card>
+          </ng-template>
+        </ion-col>
+
+        <ion-col size="12" size-md="4" class="h-desktop-d-mobile">
           <div *ngIf="legend$ | async as legend; else loadLegend">
             <ion-card class="legend ion-no-margin">
               <ion-card-header>
@@ -99,185 +278,9 @@
               </ion-item>
             </ion-card>
           </ng-template>
-        </div>
-      </ion-col>
-      <ion-col size="12" size-md="8" class="ion-no-padding">
-        <ng-template let-attendances [ngIf]="attendance$ | async" [ngIfElse]="loadAttendance">
-          <ion-grid class="ion-no-padding">
-            <ion-row>
-              <ion-col class="ion-no-padding" size="12" size-md="12">
-                <ion-card class="table-background">
-                  <ion-card-content class="ion-no-padding">
-                    <ion-item class="h-mobile-d-desktop table-item">
-                      <ion-grid class="ion-no-margin ion-no-padding">
-                        <ion-row>
-                          <ion-col class="ion-no-padding margin-auto" size="12" size-sm="">
-                            <h2 class="glob-text-bold">Module</h2>
-                          </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
-                            <h2 class="glob-text-bold">Classes</h2>
-                          </ion-col>
-                          <ion-col size="12" size-sm="" class="ion-no-padding margin-auto">
-                            <h2 class="glob-text-bold">Exam Eligibility</h2>
-                          </ion-col>
-                          <ion-col size="12" size-sm="auto" class="ion-text-right margin-auto">
-                            <ion-button style="visibility: hidden;">
-                              See Details
-                            </ion-button>
-                          </ion-col>
-                        </ion-row>
-                      </ion-grid>
-                    </ion-item>
-                    <ion-list *ngFor="let semester of attendances | reverse" class="ion-no-padding">
-                      <ion-item-divider class="colored-divider">
-                        <ion-label class="ion-text-center glob-text-bold">
-                          Semester {{semester.semester}}
-                        </ion-label>
-                      </ion-item-divider>
-                      <ion-item class="table-item" *ngFor="let a of semester.value">
-                        <ion-grid>
-                          <ion-row class="table-data">
-                            <ion-col size="12" size-sm="" class="glob-text-bold md-text-center margin-auto">
-                              {{ a.MODULE_ATTENDANCE }}
-                            </ion-col>
-                            <ion-col size="12"
-                              class="percentage-col h-desktop-d-mobile ion-no-padding ion-padding-bottom">
-                              <div class="progress-bar" [style.width]="a.PERCENTAGE + '%'" [style.background]="
-                              a.PERCENTAGE >= 80 && a.PERCENTAGE <= 100
-                                ? '#0dbd53'
-                                : '#f04141'
-                            "></div>
-                            </ion-col>
-
-                            <ion-col size="12" size-sm="" class="md-text-center margin-auto">
-                              <ion-item lines="none" class="no-background h-desktop-d-mobile ion-no-padding">
-                                Classes
-                                <span slot="end">
-                                  {{ a.TOTAL_CLASSES -
-                                        a.TOTAL_ABSENT +
-                                        "/" +
-                                        a.TOTAL_CLASSES +
-                                        " (" +
-                                        a.PERCENTAGE +
-                                        "%)" }}
-                                </span>
-                              </ion-item>
-                              <span class="h-mobile-d-desktop">
-                                {{ a.TOTAL_CLASSES -
-                                      a.TOTAL_ABSENT +
-                                      "/" +
-                                      a.TOTAL_CLASSES +
-                                      " (" +
-                                      a.PERCENTAGE +
-                                      "%)" }}
-                              </span>
-                            </ion-col>
-                            <ion-col size="12" size-sm="" class="md-text-center margin-auto">
-                              <ion-item lines="none" class="no-background h-desktop-d-mobile ion-no-padding">
-                                Exam Eligibility
-                                <span slot="end" [style.font-weight]="'bold'"
-                                  [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'">
-                                  {{ a.EXAM_ELIGIBILITY }}
-                                </span>
-                              </ion-item>
-                              <span class="h-mobile-d-desktop" [style.font-weight]="'bold'"
-                                [style.color]="a.EXAM_ELIGIBILITY === 'Eligible' ? '#0dbd53' : '#f04141'">
-                                {{ a.EXAM_ELIGIBILITY }}
-                              </span>
-                            </ion-col>
-                            <ion-col size="12" size-sm="auto" class="ion-text-center margin-auto">
-                              <ion-button
-                                (click)='attendanceDetails(a.MODULE_ATTENDANCE, selectedIntake, a.SUBJECT_CODE)'
-                                color='success'>
-                                See Details
-                              </ion-button>
-                            </ion-col>
-                          </ion-row>
-                        </ion-grid>
-                      </ion-item>
-                    </ion-list>
-                  </ion-card-content>
-                </ion-card>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ng-template>
-        <ng-template #loadAttendance>
-          <ion-card>
-            <ion-grid>
-              <ion-row>
-                <ion-col size="12" size-md="6">
-                  <ion-card>
-                    <ion-item>
-                      <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
-                    </ion-item>
-                  </ion-card>
-                </ion-col>
-                <ion-col size="12" size-md="6">
-                  <ion-card>
-                    <ion-item>
-                      <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
-                    </ion-item>
-                  </ion-card>
-                </ion-col>
-                <ion-col size="12" size-md="6">
-                  <ion-card>
-                    <ion-item>
-                      <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
-                    </ion-item>
-                  </ion-card>
-                </ion-col>
-                <ion-col size="12" size-md="6">
-                  <ion-card>
-                    <ion-item>
-                      <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
-                    </ion-item>
-                  </ion-card>
-                </ion-col>
-                <ion-col size="12" size-md="6">
-                  <ion-card>
-                    <ion-item>
-                      <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
-                    </ion-item>
-                  </ion-card>
-                </ion-col>
-                <ion-col size="12" size-md="6">
-                  <ion-card>
-                    <ion-item>
-                      <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
-                    </ion-item>
-                  </ion-card>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-card>
-        </ng-template>
-      </ion-col>
-
-      <ion-col size="12" size-md="4" class="h-desktop-d-mobile">
-        <div *ngIf="legend$ | async as legend; else loadLegend">
-          <ion-card class="legend ion-no-margin">
-            <ion-card-header>
-              <h2>Legend</h2>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-row *ngFor="let l of legend | keyvalue">
-                <ion-col col-3>{{ l.key }}</ion-col>
-                <ion-col col-9>{{ l.value }}</ion-col>
-              </ion-row>
-            </ion-card-content>
-          </ion-card>
-        </div>
-
-        <ng-template #loadLegend>
-          <ion-card>
-            <ion-item>
-              <ion-skeleton-text style="width: 100%" animated></ion-skeleton-text>
-            </ion-item>
-          </ion-card>
-        </ng-template>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 
 </ion-content>
