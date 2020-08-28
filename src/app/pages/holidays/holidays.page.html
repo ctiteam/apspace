@@ -4,126 +4,101 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button class="animated anim-scale" (click)="openMenu()">
-        <ion-icon name="options"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-menu side="end" contentId="content" menuId="holiday-filter-menu" type="overlay">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Filter</ion-title>
-      <ion-buttons slot="end">
-        <ion-button class="animated anim-rotate-360-deg" shape="round" (click)="closeMenu()">
-          <ion-icon name="close"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list *ngIf="filterObject">
-      <ion-item-group>
-        <ion-item-divider>
-          <ion-label>
-            Filter by:
-          </ion-label>
-        </ion-item-divider>
-        <ion-item>
-          <ion-label>Day</ion-label>
-          <ion-select interface="popover" [(ngModel)]="filterObject.filterDays" (ngModelChange)="onFilter()">
-            <ion-select-option value="">
-              Any
-            </ion-select-option>
-            <ion-select-option *ngFor="let day of weekDays" [value]="day">
-              {{ day }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-label>Month</ion-label>
-          <ion-select interface="popover" [(ngModel)]="filterObject.filterMonths" (ngModelChange)="onFilter()">
-            <ion-select-option value="">
-              Any
-            </ion-select-option>
-            <ion-select-option *ngFor="let month of months" [value]="month">
-              {{ month }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-      </ion-item-group>
-      <ion-item-group>
-        <ion-item-divider>
-          <ion-label>
-            Show:
-          </ion-label>
-        </ion-item-divider>
-        <ion-item>
-          <ion-label>Affecting:</ion-label>
-          <ion-select interface="popover" [(ngModel)]="filterObject.affecting" (ngModelChange)="onFilter()">
-            <ion-select-option value="students">Students only</ion-select-option>
-            <ion-select-option value="staff">Staff only</ion-select-option>
-            <ion-select-option value="">
-              All
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-label>Number of days</ion-label>
-          <ion-select interface="popover" [(ngModel)]="filterObject.numberOfDays" (ngModelChange)="onFilter()">
-            <ion-select-option value="">
-              Any
-            </ion-select-option>
-            <ion-select-option value="1 days">One day</ion-select-option>
-            <ion-select-option value="many">More than one</ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-item>
-          <ion-label>Show</ion-label>
-          <ion-select interface="popover" [(ngModel)]="filterObject.show" (ngModelChange)="onFilter()">
-            <ion-select-option value="all">All Holidays</ion-select-option>
-            <ion-select-option value="upcoming">Upcoming Holidays Only</ion-select-option>
-          </ion-select>
-        </ion-item>
-        <div class="ion-padding">
-          <ion-button fill="outline" color="danger" expand="block" (click)="clearFilter()">
-            Clear Filters
-            <ion-icon slot="end" name="trash"></ion-icon>
-          </ion-button>
-        </div>
-      </ion-item-group>
-    </ion-list>
-  </ion-content>
-</ion-menu>
-
-<ion-content id="content">
+<ion-content>
   <!-- refresher -->
   <ion-refresher slot="fixed" pullMax="400" pullMin="60 " (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
-  <ion-grid class="ion-no-padding">
-    <ion-row class="ion-no-padding">
-      <ion-col class="ion-no-padding" size="12" size-md="8" offset-md="2" size-lg="6" offset-md="3">
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>
-              <h5 class="responsive-h1">
-                {{filterObject?.show === 'upcoming' ? 'Upcoming ' : 'All '}}
-                Public Holidays
-              </h5>
-              <h6 class="small-text small-margin-top">
-                {{filterObject?.affecting !== '' ? 'Filtered ' : ''}}for
-                {{filterObject?.affecting === '' ? ('staff and students') : (filterObject?.affecting + ' only')}}
-              </h6>
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content class="ion-no-padding">
-            <events-list [observable$]="filteredHoliday$"></events-list>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <div class="glob-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="4" offset-md="8">
+          <ion-list *ngIf="affecting">
+            <ion-item lines="none">
+              <ion-label>Affecting:</ion-label>
+              <ion-select interface="popover" [(ngModel)]="affecting" (ngModelChange)="onFilter()">
+                <ion-select-option value="students">Students only</ion-select-option>
+                <ion-select-option value="staff">Staff only</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-card>
+      <ion-card-content>
+        <ng-container *ngIf="filteredHoliday$ | async; else loadingHolidays">
+          <ion-calendar class="holidays" [(ngModel)]="openDate" (change)="holidayItemOnChange($event)" [options]="options"
+            [type]="'string'" [format]="'YYYY-MM-DD'">
+          </ion-calendar>
+          <ng-container *ngIf="userClickedOnce; else noClick">
+            <ng-container *ngIf="showDetails; else NoHolidaySelected">
+              <ion-list>
+                <ion-item lines="none" class="glob-margin-auto">
+                  <!-- (click)="showMore = !showMore" to be enabled in the future -->
+                  <ion-label>
+                    <h2>{{ holidayTitle }}</h2>
+                    <p>{{ remainingDays }}</p>
+                  </ion-label>
+                  <ion-badge color="primary">
+                    {{holidaysAffected === 'students,staff' ? 'Students & Staff' : holidaysAffected === 'students' ? 'Students' : 'Staff'}}
+                  </ion-badge>
+                </ion-item>
+                <!-- To Be enabled in the Future -->
+                <!-- <ion-item class="hidden-data" [style.maxHeight]="showMore ? '1000px' : 0">
+                  <ion-label>Affecting</ion-label>
+                  <ion-badge color="tertiary">
+                    {{holidaysAffected === 'students,staff' ? 'Students & Staff' : holidaysAffected === 'students' ? 'Students' : 'Staff'}}
+                  </ion-badge>
+              </ion-item> -->
+              </ion-list>
+            </ng-container>
+            <ng-template #NoHolidaySelected>
+              <ion-list>
+                <ion-item lines="none" style="width: 90%;" class="glob-margin-auto">
+                  <ion-label>
+                    <p>No Events to View On This Day</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ng-template>
+          </ng-container>
+          <ng-template #noClick>
+            <ion-list>
+              <ion-item lines="none">
+                <ion-label color="tertiary" class="ion-text-center ion-margin-top" style="font-size: 20px;">
+                  Please select a day to view more details
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ng-template>
+        </ng-container>
+        <ng-template #loadingHolidays>
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12" size-xl="10" offset-xl="1">
+                <ion-skeleton-text animated style="width: 100%; line-height: 300px"></ion-skeleton-text>
+                <ion-list>
+                  <ion-item lines="none">
+                    <ion-label class="colored-text text-bold">
+                      <ion-skeleton-text animated style="width: 20%; line-height: 10px"></ion-skeleton-text>
+                    </ion-label>
+                    <ion-skeleton-text animated style="width: 20%; line-height: 10px"></ion-skeleton-text>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-label class="colored-text text-bold">
+                      <ion-skeleton-text animated style="width: 20%; line-height: 10px"></ion-skeleton-text>
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ng-template>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
