@@ -210,7 +210,7 @@
 
       <ng-template #empty>
         <ng-container *ngIf="intake; else noIntakeSelected">
-          <ion-card class="ion-no-margin">
+          <ion-card>
             <ion-card-header style="margin-bottom: 0; padding: 0!important; padding-left:16px !important;">
               <ion-card-title>
                 <ion-item lines="none" class="ion-no-padding ion-no-margin">
@@ -253,7 +253,6 @@
                   wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
                 </app-message-with-svg>
               </ng-template>
-
             </ion-card-content>
           </ion-card>
         </ng-container>
