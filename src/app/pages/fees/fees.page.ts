@@ -84,7 +84,7 @@ export class FeesPage {
 
   numberOfSkeletons = new Array(6);
 
-  constructor( private ws: WsApiService) { }
+  constructor(private ws: WsApiService) { }
 
   ionViewDidEnter() {
     this.doRefresh();
