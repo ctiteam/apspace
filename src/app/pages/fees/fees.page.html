@@ -65,7 +65,7 @@
                     N/A
                   </ion-note>
                   <ng-template #totalSummaryTotalPayable>
-                    <ion-note>
+                    <ion-note slot="end">
                       {{ (totalSummary[0]?.TOTAL_PAYABLE || 0) | currency:'MYR':'RM' }}
                     </ion-note>
                   </ng-template>
@@ -78,7 +78,7 @@
                     N/A
                   </ion-note>
                   <ng-template #totalSummaryTotalPaid>
-                    <ion-note>
+                    <ion-note slot="end">
                       {{ (totalSummary[0]?.TOTAL_PAID || 0) | currency:'MYR':'RM' }}
                     </ion-note>
                   </ng-template>
@@ -92,7 +92,7 @@
                     N/A
                   </ion-note>
                   <ng-template #totalSummaryTotalOutstanding>
-                    <ion-note>
+                    <ion-note slot="end">
                       {{ (totalSummary[0]?.TOTAL_OUTSTANDING || 0) | currency:'MYR':'RM' }}
                     </ion-note>
                   </ng-template>
@@ -105,7 +105,7 @@
                     N/A
                   </ion-note>
                   <ng-template #totalSummaryTotalOverdue>
-                    <ion-note>
+                    <ion-note slot="end">
                       {{ (totalSummary[0]?.TOTAL_OVERDUE || 0) | currency:'MYR':'RM' }}
                     </ion-note>
                   </ng-template>
@@ -118,7 +118,7 @@
                     N/A
                   </ion-note>
                   <ng-template #totalSummaryFine>
-                    <ion-note>
+                    <ion-note slot="end">
                       {{ (totalSummary[0]?.FINE || 0) | currency:'MYR':'RM' }}
                     </ion-note>
                   </ng-template>
@@ -179,12 +179,11 @@
                       <ion-label>
                         <h3>Due Date</h3>
                       </ion-label>
-                      <ion-note slot="end"
-                        *ngIf="summary.PAYMENT_DUE_DATE === 'N/A'; else paymentDueDate">
+                      <ion-note slot="end" *ngIf="summary.PAYMENT_DUE_DATE === 'N/A'; else paymentDueDate">
                         N/A
                       </ion-note>
                       <ng-template #paymentDueDate>
-                        <ion-note>
+                        <ion-note slot="end">
                           {{ summary.PAYMENT_DUE_DATE ? (summary.PAYMENT_DUE_DATE | dateWithTimezone: "EEE, d MMM y") : 'N/A'   }}
                         </ion-note>
                       </ng-template>
@@ -193,12 +192,11 @@
                       <ion-label>
                         <h3>Amount Payable</h3>
                       </ion-label>
-                      <ion-note slot="end"
-                        *ngIf="summary.PAYABLE_AMOUNT === 'N/A'; else payableAmount">
+                      <ion-note slot="end" *ngIf="summary.PAYABLE_AMOUNT === 'N/A'; else payableAmount">
                         N/A
                       </ion-note>
                       <ng-template #payableAmount>
-                        <ion-note>
+                        <ion-note slot="end">
                           {{ (summary.PAYABLE_AMOUNT | currency:'MYR':'RM') || 'N/A' }}
                         </ion-note>
                       </ng-template>
@@ -207,12 +205,11 @@
                       <ion-label>
                         <h3>Total Collected</h3>
                       </ion-label>
-                      <ion-note slot="end"
-                        *ngIf="summary.TOTAL_COLLECTED === 'N/A'; else summaryTotalCollected">
+                      <ion-note slot="end" *ngIf="summary.TOTAL_COLLECTED === 'N/A'; else summaryTotalCollected">
                         N/A
                       </ion-note>
                       <ng-template #summaryTotalCollected>
-                        <ion-note>
+                        <ion-note slot="end">
                           {{ (summary.TOTAL_COLLECTED | currency:'MYR':'RM') || 'N/A' }}
                         </ion-note>
                       </ng-template>
@@ -221,12 +218,11 @@
                       <ion-label>
                         <h3>Outstanding</h3>
                       </ion-label>
-                      <ion-note slot="end"
-                        *ngIf="summary.OUTSTANDING === 'N/A'; else summaryOutstanding">
+                      <ion-note slot="end" *ngIf="summary.OUTSTANDING === 'N/A'; else summaryOutstanding">
                         N/A
                       </ion-note>
                       <ng-template #summaryOutstanding>
-                        <ion-note>
+                        <ion-note slot="end">
                           {{ (summary.OUTSTANDING | currency:'MYR':'RM') || 'N/A' }}
                         </ion-note>
                       </ng-template>
@@ -239,7 +235,7 @@
                         N/A
                       </ion-note>
                       <ng-template #summaryFine>
-                        <ion-note>
+                        <ion-note slot="end">
                           {{ (summary.FINE | currency:'MYR':'RM') || 'N/A' }}
                         </ion-note>
                       </ng-template>
@@ -294,12 +290,11 @@
                   <ion-card-content class="ion-no-padding">
                     <ion-item lines="none">
                       Amount Payable
-                      <ion-note slot="end"
-                        *ngIf="bankDraft.BANKDRAFT_AMOUNT === 'N/A'; else bankDraftAmount">
+                      <ion-note slot="end" *ngIf="bankDraft.BANKDRAFT_AMOUNT === 'N/A'; else bankDraftAmount">
                         N/A
                       </ion-note>
                       <ng-template #bankDraftAmount>
-                        <ion-note>
+                        <ion-note slot="end">
                           {{ bankDraft.BANKDRAFT_AMOUNT | currency:'GBP' }}
                         </ion-note>
                       </ng-template>
@@ -324,12 +319,12 @@
                     </ion-item>
                     <ion-item lines="none">
                       Amount Collected
-                      <ion-note color="success" slot="end"
+                      <ion-note slot="end"
                         *ngIf="bankDraft.AMOUNT_COLLECTED === 'N/A'; else bankDraftAmountCollected">
                         N/A
                       </ion-note>
                       <ng-template #bankDraftAmountCollected>
-                        <ion-note>
+                        <ion-note color="success" slot="end">
                           {{ bankDraft.AMOUNT_COLLECTED | currency:'GBP' }}
                         </ion-note>
                       </ng-template>
@@ -400,12 +395,11 @@
                         <ion-label>
                           <h3>Amount Payable</h3>
                         </ion-label>
-                        <ion-note slot="end"
-                          *ngIf="detail.AMOUNT_PAYABLE === 'N/A'; else amountPayable">
+                        <ion-note slot="end" *ngIf="detail.AMOUNT_PAYABLE === 'N/A'; else amountPayable">
                           N/A
                         </ion-note>
                         <ng-template #amountPayable>
-                          <ion-note>
+                          <ion-note slot="end">
                             {{ (detail.AMOUNT_PAYABLE | currency:'MYR':'RM') || 'N/A' }}
                           </ion-note>
                         </ng-template>
@@ -418,7 +412,7 @@
                           N/A
                         </ion-note>
                         <ng-template #detailsTotalCollected>
-                          <ion-note>
+                          <ion-note slot="end">
                             {{ (detail.TOTAL_COLLECTED | currency:'MYR':'RM') || 'N/A' }}
                           </ion-note>
                         </ng-template>
@@ -427,12 +421,11 @@
                         <ion-label>
                           <h3>Outstanding</h3>
                         </ion-label>
-                        <ion-note [style.color]="detail.OUTSTANDING>0 ? '#d50000': ''" slot="end"
-                          *ngIf="detail.OUTSTANDING === 'N/A'; else detailOutstanding">
+                        <ion-note slot="end" *ngIf="detail.OUTSTANDING === 'N/A'; else detailOutstanding">
                           N/A
                         </ion-note>
                         <ng-template #detailOutstanding>
-                          <ion-note>
+                          <ion-note [style.color]="detail.OUTSTANDING>0 ? '#d50000': ''" slot="end">
                             {{ (detail.OUTSTANDING | currency:'MYR':'RM') || 'N/A' }}
                           </ion-note>
                         </ng-template>
@@ -441,12 +434,11 @@
                         <ion-label>
                           <h3>Fine</h3>
                         </ion-label>
-                        <ion-note [style.color]="detail.FINE>0 ? '#c51162': ''" slot="end"
-                          *ngIf="detail.FINE === 'N/A'; else detailFine">
+                        <ion-note *ngIf="detail.FINE === 'N/A'; else detailFine">
                           N/A
                         </ion-note>
                         <ng-template #detailFine>
-                          <ion-note>
+                          <ion-note [style.color]="detail.FINE>0 ? '#c51162': ''" slot="end">
                             {{ (detail.FINE | currency:'MYR':'RM') || 'N/A' }}
                           </ion-note>
                         </ng-template>
