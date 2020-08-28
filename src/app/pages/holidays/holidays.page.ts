@@ -32,9 +32,7 @@ export class HolidaysPage implements OnInit {
   remainingDays: string;
   recordsArray: Holiday[] = [];
   todaysDate = new Date();
-  filterObject: {
-    affecting: 'students' | 'staff'
-  };
+  affecting: 'students' | 'staff';
 
   constructor(
     private ws: WsApiService,
@@ -91,16 +89,15 @@ export class HolidaysPage implements OnInit {
     this.filteredHoliday$ = this.holiday$.pipe(
       map(holidays => {
 
-        const filteredArray = holidays.filter(holiday => {
+        return holidays.filter(holiday => {
 
           return (
-            holiday.holiday_people_affected.includes(this.filterObject.affecting)
+            holiday.holiday_people_affected.includes(this.affecting)
           );
         });
-        return filteredArray;
       }),
       tap(filteredHolidays => {
-
+        // Did not user global variable of today's date because we are modifying the const
         const today = new Date();
 
         today.setMonth(0);
@@ -150,15 +147,8 @@ export class HolidaysPage implements OnInit {
 
   defaultFilter() {
     this.storage.get('role').then((role: Role) => {
-      this.filterObject = {
-        affecting: role === Role.Student ? 'students' : 'staff'
-      };
+      this.affecting = role === Role.Student ? 'students' : 'staff';
     });
-  }
-
-  clearFilter() {
-    this.defaultFilter();
-    this.onFilter();
   }
 
 }

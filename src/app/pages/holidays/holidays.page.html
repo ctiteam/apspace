@@ -16,10 +16,10 @@
     <ion-grid>
       <ion-row>
         <ion-col size="12" size-md="4" offset-md="8">
-          <ion-list *ngIf="filterObject">
+          <ion-list *ngIf="affecting">
             <ion-item lines="none">
               <ion-label>Affecting:</ion-label>
-              <ion-select interface="popover" [(ngModel)]="filterObject.affecting" (ngModelChange)="onFilter()">
+              <ion-select interface="popover" [(ngModel)]="affecting" (ngModelChange)="onFilter()">
                 <ion-select-option value="students">Students only</ion-select-option>
                 <ion-select-option value="staff">Staff only</ion-select-option>
               </ion-select>
@@ -31,13 +31,13 @@
     <ion-card>
       <ion-card-content>
         <ng-container *ngIf="filteredHoliday$ | async; else loadingHolidays">
-          <ion-calendar [(ngModel)]="openDate" (change)="holidayItemOnChange($event)" [options]="options"
+          <ion-calendar class="holidays" [(ngModel)]="openDate" (change)="holidayItemOnChange($event)" [options]="options"
             [type]="'string'" [format]="'YYYY-MM-DD'">
           </ion-calendar>
           <ng-container *ngIf="userClickedOnce; else noClick">
             <ng-container *ngIf="showDetails; else NoHolidaySelected">
               <ion-list>
-                <ion-item lines="none" style="width: 90%;" class="glob-margin-auto">
+                <ion-item lines="none" class="glob-margin-auto">
                   <!-- (click)="showMore = !showMore" to be enabled in the future -->
                   <ion-label>
                     <h2>{{ holidayTitle }}</h2>
@@ -88,7 +88,7 @@
                     </ion-label>
                     <ion-skeleton-text animated style="width: 20%; line-height: 10px"></ion-skeleton-text>
                   </ion-item>
-                  <ion-item>
+                  <ion-item lines="none">
                     <ion-label class="colored-text text-bold">
                       <ion-skeleton-text animated style="width: 20%; line-height: 10px"></ion-skeleton-text>
                     </ion-label>
