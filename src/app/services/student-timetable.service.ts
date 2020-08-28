@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Network } from '@ionic-native/network/ngx';
 import { Observable, of } from 'rxjs';
 import { publishLast, refCount, switchMap } from 'rxjs/operators';
 
@@ -12,12 +11,8 @@ import { StudentTimetable } from '../interfaces';
 export class StudentTimetableService {
 
   readonly timetableUrl = 'https://s3-ap-southeast-1.amazonaws.com/open-ws/weektimetable';
-  readonly cache = 'timetable-cache';
 
-  constructor(
-    public http: HttpClient,
-    public network: Network,
-  ) { }
+  constructor(public http: HttpClient) { }
 
   /**
    * GET: Request timetable.
@@ -37,7 +32,7 @@ export class StudentTimetableService {
    * @param refresh force refresh (default: false)
    */
   private request(refresh: boolean): Observable<StudentTimetable[]> {
-    const options = this.network.type !== 'none' && refresh ? { headers: { 'x-refresh': '' } } : {};
+    const options = refresh ? { headers: { 'x-refresh': '' } } : {};
     return this.http.get<StudentTimetable[]>(this.timetableUrl, options).pipe(
       switchMap(tt => !refresh && this.outdated(tt) ? this.request(true) : of(tt)),
     );
