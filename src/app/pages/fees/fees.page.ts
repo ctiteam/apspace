@@ -1,8 +1,9 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ViewChild } from '@angular/core';
-import { IonContent, MenuController } from '@ionic/angular';
+import { IonContent } from '@ionic/angular';
 import { ChartComponent } from 'angular2-chartjs';
 import { parse } from 'date-fns';
+import Fuse from 'fuse.js';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 
@@ -41,11 +42,17 @@ export class FeesPage {
   detail$: Observable<FeesDetails[]>;
   summary$: Observable<FeesSummary[]>;
 
-  labels: {
-    name: string;
-    visible: boolean;
-  }[];
-  visibleLabels: string[];  // Used by filter pipe to determine card items to be displayed
+  searchTerm = '';
+
+  optionsDetails: Fuse.IFuseOptions<FeesDetails> = {
+    keys: [
+      { name: 'ITEM_DESCRIPTION', weight: 0.2 },
+      { name: 'DUE_DATE', weight: 0.1 },
+      { name: 'AMOUNT_PAYABLE', weight: 0.1 },
+      { name: 'OUTSTANDING', weight: 0.1 },
+      { name: 'TOTAL_COLLECTED', weight: 0.1 }
+    ]
+  };
 
   @ViewChild('content', { static: true }) content: IonContent;
   @ViewChild('financialsChartComponent')
@@ -77,23 +84,18 @@ export class FeesPage {
 
   numberOfSkeletons = new Array(6);
 
-  constructor(private menuCtrl: MenuController, private ws: WsApiService) { }
+  constructor(private ws: WsApiService) { }
 
   ionViewDidEnter() {
     this.doRefresh();
   }
 
-  openFilterMenu() {
-    this.menuCtrl.toggle();
-  }
-
   doRefresh(refresher?) {
-    const that = this;
 
     this.totalSummary$ = this.ws.get('/student/summary_overall_fee', refresher);
     this.summary$ = this.ws.get<FeesSummary[]>('/student/outstanding_fee', refresher).pipe(
-      tap(summuries => summuries
-        .map(summury => summury.PAYMENT_DUE_DATE ? summury.PAYMENT_DUE_DATE = summury.PAYMENT_DUE_DATE.replace(/-/g, ' ') : ''))
+      tap(summaries => summaries
+        .map(summary => summary.PAYMENT_DUE_DATE ? summary.PAYMENT_DUE_DATE = summary.PAYMENT_DUE_DATE.replace(/-/g, ' ') : ''))
     );
     this.bankDraft$ = this.ws.get('/student/bankdraft_amount', refresher);
     this.detail$ = this.ws.get<FeesDetails[]>('/student/overall_fee', refresher).pipe(
@@ -127,13 +129,6 @@ export class FeesPage {
             }
           ]
         };
-
-        this.labels = this.financialsChart.data.datasets.map(
-          dataset => ({
-            name: dataset.label,
-            visible: true
-          })
-        );
       }),
       finalize(() => refresher && refresher.target.complete()),
 
@@ -142,28 +137,12 @@ export class FeesPage {
 
     this.financialsChart.options.legend.onClick = function(event, legendItem) {
       Chart.defaults.global.legend.onClick.call(this, event, legendItem);
-
-      that.labels[legendItem.datasetIndex].visible = legendItem.hidden;
-      that.visibleLabels = that.getVisibleLabels();
     };
 
   }
 
-
-  updateChartLabelVisibility(labelIndex: number, visible: boolean) {
-    this.financialsChartComponent.chart.getDatasetMeta(labelIndex).hidden = !visible;
-    this.financialsChartComponent.chart.update();
-    this.visibleLabels = this.getVisibleLabels();
-  }
-
   segmentValueChanged() {
     this.content.scrollToTop();
-  }
-
-  getVisibleLabels(): string[] {
-    return this.financialsChartComponent.chart.data.datasets
-      .filter((_, datasetIndex) => !this.financialsChartComponent.chart.getDatasetMeta(datasetIndex).hidden)
-      .map(dataset => dataset.label);
   }
 
   isNumber(val: any): boolean {
