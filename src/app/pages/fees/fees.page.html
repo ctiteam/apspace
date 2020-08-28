@@ -327,9 +327,7 @@
                           <h3>Amount Payable</h3>
                         </ion-label>
                         <ion-note color="text-color" slot="end">
-                          {{ isNumber(detail.AMOUNT_PAYABLE)
-                                          ? (detail.AMOUNT_PAYABLE | currency:'MYR':'RM')
-                                          : detail.AMOUNT_PAYABLE }}
+                          {{ (detail.AMOUNT_PAYABLE | currency:'MYR':'RM') || 'N/A' }}
                         </ion-note>
                       </ion-item>
                       <ion-item lines="none">
@@ -337,9 +335,7 @@
                           <h3>Total Collected</h3>
                         </ion-label>
                         <ion-note slot="end">
-                          {{ isNumber(detail.TOTAL_COLLECTED)
-                                          ? (detail.TOTAL_COLLECTED | currency:'MYR':'RM')
-                                          : detail.TOTAL_COLLECTED }}
+                          {{ (detail.TOTAL_COLLECTED | currency:'MYR':'RM') || 'N/A' }}
                         </ion-note>
                       </ion-item>
                       <ion-item [style.color]="detail.OUTSTANDING>0 ? '#d50000': ''" lines="none">
@@ -347,9 +343,7 @@
                           <h3>Outstanding</h3>
                         </ion-label>
                         <ion-note [style.color]="detail.OUTSTANDING>0 ? '#d50000': ''" slot="end">
-                          {{ isNumber(detail.OUTSTANDING)
-                                          ? (detail.OUTSTANDING | currency:'MYR':'RM')
-                                          : detail.OUTSTANDING }}
+                          {{ (detail.OUTSTANDING | currency:'MYR':'RM') || 'N/A' }}
                         </ion-note>
                       </ion-item>
                       <ion-item [style.color]="detail.FINE>0 ? '#c51162': ''" lines="none">
@@ -357,9 +351,7 @@
                           <h3>Fine</h3>
                         </ion-label>
                         <ion-note [style.color]="detail.FINE>0 ? '#c51162': ''" slot="end">
-                          {{ isNumber(detail.FINE)
-                                          ? (detail.FINE | currency:'MYR':'RM')
-                                          : detail.FINE }}
+                          {{ (detail.FINE | currency:'MYR':'RM') || 'N/A' }}
                         </ion-note>
                       </ion-item>
                     </ion-card-content>
