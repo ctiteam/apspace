@@ -1,12 +1,15 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { MenuController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { format, parseISO } from 'date-fns';
+import differenceInDays from 'date-fns/differenceInDays';
+import { CalendarComponentOptions, DayConfig } from 'ion2-calendar';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
-import { EventComponentConfigurations, Holiday, Holidays, Role } from 'src/app/interfaces';
+import { Holiday, Holidays, Role } from 'src/app/interfaces';
 import { WsApiService } from 'src/app/services';
+
+
 
 @Component({
   selector: 'app-holidays',
@@ -15,25 +18,27 @@ import { WsApiService } from 'src/app/services';
 })
 export class HolidaysPage implements OnInit {
   holiday$: Observable<Holiday[]>;
-  filteredHoliday$: Observable<Holiday[] | EventComponentConfigurations[]>;
-
-  numberOfHolidays = 1;
-
-  weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
+  filteredHoliday$: Observable<Holiday[]>;
+  openDate: string;
+  datesConfig: DayConfig[] = [];
+  options: CalendarComponentOptions = {
+    daysConfig: this.datesConfig,
+    weekStart: 1,
+  };
+  holidayTitle: string;
+  holidaysAffected: string;
+  showDetails: boolean;
+  userClickedOnce: boolean;
+  remainingDays: string;
+  recordsArray: Holiday[] = [];
   todaysDate = new Date();
   filterObject: {
-    show: 'all' | 'upcoming',
-    filterDays: string,
-    filterMonths: string,
-    numberOfDays: '' | '1 days' | 'many',
-    affecting: '' | 'students' | 'staff'
+    affecting: 'students' | 'staff'
   };
 
   constructor(
     private ws: WsApiService,
-    private menu: MenuController,
+    private datePipe: DatePipe,
     private storage: Storage,
   ) { }
 
@@ -59,71 +64,73 @@ export class HolidaysPage implements OnInit {
     );
   }
 
+  holidayItemOnChange($event: any) {
+    this.userClickedOnce = true;
+    this.showDetails = false;
+    this.recordsArray.forEach((res) => {
+      const date = this.datePipe.transform(new Date(res.holiday_start_date), 'yyyy-MM-dd');
+
+      if ($event === date) {
+
+        const dayDifference = differenceInDays(
+          new Date(res.holiday_start_date),
+          this.todaysDate
+        );
+        if (date === res.holiday_start_date) {
+          this.holidayTitle = res.holiday_name;
+          this.holidaysAffected = res.holiday_people_affected;
+          // tslint:disable-next-line: max-line-length
+          this.remainingDays = dayDifference < 0 ? Math.abs(dayDifference) + ' Days Ago' : dayDifference === 0 ? 'Today' : dayDifference === 1 ? '1 Day Remaining' : dayDifference + ' Days Remaining';
+          this.showDetails = true;
+        }
+      }
+    });
+  }
+
   onFilter() {
     this.filteredHoliday$ = this.holiday$.pipe(
       map(holidays => {
-        this.numberOfHolidays = 1; // HIDE 'THERE ARE NO HOLIDAYS' MESSAGE
 
-        let filteredArray = holidays.filter(holiday => {
-          // FILTER HOLIDAYS BY DAY & MONTH
-          const holidayStartDate = parseISO(holiday.holiday_start_date);
+        const filteredArray = holidays.filter(holiday => {
+
           return (
-            format(holidayStartDate, 'eeee').includes(this.filterObject.filterDays) &&
-            format(holidayStartDate, 'MMMM').includes(this.filterObject.filterMonths) &&
             holiday.holiday_people_affected.includes(this.filterObject.affecting)
           );
         });
-        if (this.filterObject.show === 'upcoming') {
-          filteredArray = filteredArray.filter(holiday => {
-            // FILTER HOLIDAYS TO THE ONCE UPCOMING ONLY
-            return parseISO(holiday.holiday_start_date) > this.todaysDate;
-          });
-        }
-
-        if (this.filterObject.numberOfDays !== '') {
-          filteredArray = filteredArray.filter(holiday => {
-            if (this.filterObject.numberOfDays === '1 days') {
-              return this.getNumberOfDaysForHoliday(
-                parseISO(holiday.holiday_start_date),
-                parseISO(holiday.holiday_end_date)) === '1 day';
-            } else {
-              return this.getNumberOfDaysForHoliday(
-                parseISO(holiday.holiday_start_date),
-                parseISO(holiday.holiday_end_date)) !== '1 day';
-            }
-          });
-        }
-        if (filteredArray.length === 0) { // NO RESULTS => SHOW 'THERE ARE NO HOLIDAYS' MESSAGE
-          this.numberOfHolidays = 0;
-        }
         return filteredArray;
       }),
-      map(holidays => {
-        const holidaysEventMode: EventComponentConfigurations[] = [];
-        holidays.forEach(holiday => {
-          holidaysEventMode.push({
-            title: holiday.holiday_name,
-            firstDescription: 'For ' + (
-              holiday.holiday_people_affected.includes(',')
-                ? holiday.holiday_people_affected.replace(',', ' and ')
-                : holiday.holiday_people_affected.replace(',', ' and ') + ' only'),
-            secondDescription: 'Ends on ' + (
-              holiday.holiday_end_date === holiday.holiday_start_date
-                ? 'the same day'
-                : format(parseISO(holiday.holiday_end_date), 'eeee, dd MMM yyyy')
-            ), // EXPECTED FORMAT HH MM A,
-            thirdDescription: this.getNumberOfDaysForHoliday(
-              parseISO(holiday.holiday_start_date),
-              parseISO(holiday.holiday_end_date)),
-            color: '#27ae60',
-            passColor: '#a49999',
-            pass: parseISO(holiday.holiday_start_date) < this.todaysDate,
-            outputFormat: 'event-with-date-only',
-            type: holiday.holiday_start_date.split('-')[0],
-            dateOrTime: format(parseISO(holiday.holiday_start_date), 'dd MMM (eee)'), // EXPECTED FORMAT HH MM A
+      tap(filteredHolidays => {
+
+        const today = new Date();
+
+        today.setMonth(0);
+        today.setDate(0);
+
+        this.options = {
+          from: today,
+          daysConfig: this.datesConfig,
+        };
+
+        filteredHolidays.forEach(holiday => {
+          this.datesConfig.push({
+            date: new Date(holiday.holiday_start_date),
+            marked: true,
+            disable: false,
+            subTitle: '.',
+            cssClass: 'holiday',
+          });
+
+          this.recordsArray.push({
+            holiday_id: holiday.holiday_id,
+            holiday_name: holiday.holiday_name,
+            holiday_description: holiday.holiday_description,
+            holiday_start_date: holiday.holiday_start_date,
+            holiday_end_date: holiday.holiday_end_date,
+            holiday_people_affected: holiday.holiday_people_affected
+
           });
         });
-        return holidaysEventMode;
+
       })
     );
   }
@@ -141,22 +148,9 @@ export class HolidaysPage implements OnInit {
     return (endDate.getTime() - startDate.getTime()) / 1000;
   }
 
-  openMenu() {
-    this.menu.enable(true, 'holiday-filter-menu');
-    this.menu.open('holiday-filter-menu');
-  }
-
-  closeMenu() {
-    this.menu.close('holiday-filter-menu');
-  }
-
   defaultFilter() {
     this.storage.get('role').then((role: Role) => {
       this.filterObject = {
-        show: 'all',
-        filterDays: '',
-        filterMonths: '',
-        numberOfDays: '',
         affecting: role === Role.Student ? 'students' : 'staff'
       };
     });

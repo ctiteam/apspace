@@ -14,3 +14,37 @@
 @import './theme/custom-library.scss';
 @import './theme/responsive-design.scss';
 
+    // Styling ion-calendar
+    ion-calendar {
+      background-color: var(--secondary-bg-color) !important;
+      padding: 0 !important;
+
+      .month-packer-item {
+        button {
+          color: var(--ion-color-step-400) !important;
+        }
+      }
+
+      .days-btn {
+        p {
+          color: var(--ion-color-step-950) !important;
+        }
+
+        small {
+          position: absolute;
+          background: var(--ion-color-tertiary);
+          width: 6px;
+          height: 6px;
+          border-radius: 10px;
+          top: 28px;
+          left: 15px !important;
+        }
+
+        &.on-selected {
+          background-color: var(--ion-color-primary) !important;
+          p {
+            color: var(--ion-color-light) !important;
+          }
+        }
+      }
+    }
