@@ -8,7 +8,6 @@ import { ChartModule } from 'angular2-chartjs';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { SharedPipesModule } from '../../shared/shared-pipes.module';
 import { FeesPage } from './fees.page';
-import { FilterPipe } from './filter.pipe';
 
 const routes: Routes = [
   {
@@ -27,6 +26,6 @@ const routes: Routes = [
     ComponentsModule,
     SharedPipesModule
   ],
-  declarations: [FeesPage, FilterPipe]
+  declarations: [FeesPage]
 })
 export class FeesPageModule {}

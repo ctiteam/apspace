@@ -1,6 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ViewChild } from '@angular/core';
-import { IonContent, MenuController } from '@ionic/angular';
+import { IonContent } from '@ionic/angular';
 import { ChartComponent } from 'angular2-chartjs';
 import { parse } from 'date-fns';
 import Fuse from 'fuse.js';
@@ -41,12 +41,6 @@ export class FeesPage {
   bankDraft$: Observable<FeesBankDraft[]>;
   detail$: Observable<FeesDetails[]>;
   summary$: Observable<FeesSummary[]>;
-
-  labels: {
-    name: string;
-    visible: boolean;
-  }[];
-  visibleLabels: string[];  // Used by filter pipe to determine card items to be displayed
 
   searchTerm = '';
 
@@ -90,18 +84,13 @@ export class FeesPage {
 
   numberOfSkeletons = new Array(6);
 
-  constructor(private menuCtrl: MenuController, private ws: WsApiService) { }
+  constructor( private ws: WsApiService) { }
 
   ionViewDidEnter() {
     this.doRefresh();
   }
 
-  openFilterMenu() {
-    this.menuCtrl.toggle();
-  }
-
   doRefresh(refresher?) {
-    const that = this;
 
     this.totalSummary$ = this.ws.get('/student/summary_overall_fee', refresher);
     this.summary$ = this.ws.get<FeesSummary[]>('/student/outstanding_fee', refresher).pipe(
@@ -140,43 +129,20 @@ export class FeesPage {
             }
           ]
         };
-
-        this.labels = this.financialsChart.data.datasets.map(
-          dataset => ({
-            name: dataset.label,
-            visible: true
-          })
-        );
       }),
       finalize(() => refresher && refresher.target.complete()),
 
 
     );
 
-    this.financialsChart.options.legend.onClick = function(event, legendItem) {
+    this.financialsChart.options.legend.onClick = function (event, legendItem) {
       Chart.defaults.global.legend.onClick.call(this, event, legendItem);
-
-      that.labels[legendItem.datasetIndex].visible = legendItem.hidden;
-      that.visibleLabels = that.getVisibleLabels();
     };
 
   }
 
-
-  updateChartLabelVisibility(labelIndex: number, visible: boolean) {
-    this.financialsChartComponent.chart.getDatasetMeta(labelIndex).hidden = !visible;
-    this.financialsChartComponent.chart.update();
-    this.visibleLabels = this.getVisibleLabels();
-  }
-
   segmentValueChanged() {
     this.content.scrollToTop();
-  }
-
-  getVisibleLabels(): string[] {
-    return this.financialsChartComponent.chart.data.datasets
-      .filter((_, datasetIndex) => !this.financialsChartComponent.chart.getDatasetMeta(datasetIndex).hidden)
-      .map(dataset => dataset.label);
   }
 
   isNumber(val: any): boolean {
