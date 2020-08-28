@@ -11,10 +11,11 @@
   <ion-refresher pullMax="400" pullMin="60" slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
-  
+
   <ion-list lines="none" style="margin-bottom: 0px">
     <ion-item>
-      <ion-searchbar [(ngModel)]="term" placeholder="Staff name, job title, extension number.." showCancelButton="focus">
+      <ion-searchbar [(ngModel)]="term" placeholder="Staff name, job title, extension number.."
+        showCancelButton="focus">
       </ion-searchbar>
     </ion-item>
     <ion-item *ngIf="staffType$ | async as staffTypes">
@@ -27,7 +28,7 @@
     </ion-item>
   </ion-list>
   <div class="glob-container">
-  
+
     <ng-template let-staffs [ngIf]="staff$ | async" [ngIfElse]="loadingStaffs">
       <div *ngIf="(staffs | department:dept | fuse:term:options).length > 0; else notFound">
         <ion-virtual-scroll [items]="staffs | department:dept | fuse:term:options" [trackBy]="trackById"
@@ -54,14 +55,15 @@
               <li>Make sure you have typed a valid item code.</li>
               <li>Make sure there is no special characters included.</li>
             </ul>
-              
-            <p>Still having trouble? No worries! Just click <a (click)="goToFeedback()">here</a> and report to us for this issue.</p>
+
+            <p>Still having trouble? No worries! Just click <a [routerLink]="'/feedback'">here</a> and report to us for
+              this issue.</p>
           </div>
         </app-message-with-svg>
       </ng-template>
     </ng-template>
   </div>
-  
+
   <ng-template #loadingStaffs>
     <ion-item *ngFor="let _ of skeletons" style="padding-top: 1px">
       <ion-avatar slot="start">

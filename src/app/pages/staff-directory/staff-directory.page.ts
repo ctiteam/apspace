@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import Fuse from 'fuse.js';
 import { Observable } from 'rxjs';
 import { filter, finalize, map } from 'rxjs/operators';
@@ -21,18 +20,17 @@ export class StaffDirectoryPage {
   skeletons = new Array(6);
   options: Fuse.IFuseOptions<StaffDirectory> = {
     keys: [
-      {name: 'FULLNAME', weight: 0.2},
-      {name: 'CODE', weight: 0.1},
-      {name: 'ID', weight: 0.1},
-      {name: 'EMAIL', weight: 0.1},
-      {name: 'EXTENSION', weight: 0.1},
-      {name: 'TITLE', weight: 0.1},
+      { name: 'FULLNAME', weight: 0.2 },
+      { name: 'CODE', weight: 0.1 },
+      { name: 'ID', weight: 0.1 },
+      { name: 'EMAIL', weight: 0.1 },
+      { name: 'EXTENSION', weight: 0.1 },
+      { name: 'TITLE', weight: 0.1 },
     ]
   };
 
   constructor(
     private ws: WsApiService,
-    private router: Router
   ) { }
 
   ionViewDidEnter() {
@@ -52,9 +50,4 @@ export class StaffDirectoryPage {
   trackById(value: StaffDirectory): string {
     return value.CODE;
   }
-
-  goToFeedback() {
-    this.router.navigateByUrl('/feedback');
-  }
-
 }

@@ -22,6 +22,28 @@
 
   <!-- do not add filter pipe here as it affects loading -->
   <div class="glob-container">
+    <ion-grid>
+      <ion-row>
+        <ion-buttons class="glob-margin-auto" style="margin-top: 8px">
+          <ion-row>
+            <ion-button *ngIf="intakeSelectable" fill="outline" (click)="presentIntakeSearch()" color="primary">
+              {{ intake || 'Intakes' }}
+              <ion-icon name="chevron-down-outline" style="padding-right: 0px;"></ion-icon>
+            </ion-button>
+            <ion-button fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0" color="primary">
+              {{selectedWeek | date : 'dd MMM yyy'}}
+              <ion-icon name="chevron-down-outline" style="padding-right: 0px;"></ion-icon>
+            </ion-button>
+            <ion-button *ngIf="intake && availableGrouping.length > 0" fill="outline" color="primary"
+              (click)="chooseGrouping()" [disabled]="availableGrouping.length <= 2">
+              <!-- ALL, T1 -->
+              {{ selectedGrouping || 'Grouping' }}
+              <ion-icon name="chevron-down-outline" style="padding-right: 0px;"></ion-icon>
+            </ion-button>
+          </ion-row>
+        </ion-buttons>
+      </ion-row>
+    </ion-grid>
     <ng-container *ngIf="(timetable$ | async) as timetables; else loading">
       <ng-template let-timetables
         [ngIf]="!viewWeek ? (timetables | classes:intake:room:selectedGrouping | theday:selectedDate | gen:freeTime) : (timetables | classes:intake:room:selectedGrouping | theweek:selectedWeek | gen:freeTime)"
@@ -30,29 +52,6 @@
           <ion-grid>
             <ion-row>
               <ion-col>
-                <ion-row>
-                  <ion-buttons class="filters">
-                    <ion-row>
-                      <ion-button *ngIf="intakeSelectable" fill="outline" (click)="presentIntakeSearch()"
-                        color="primary">
-                        {{ intake || 'Intakes' }}
-                        <ion-icon name="chevron-down-outline" style="padding-right: 0px;"></ion-icon>
-                      </ion-button>
-                      <ion-button fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0"
-                        color="primary">
-                        {{selectedWeek | date : 'dd MMM yyy'}}
-                        <ion-icon name="chevron-down-outline" style="padding-right: 0px;"></ion-icon>
-                      </ion-button>
-                      <ion-button *ngIf="intake && availableGrouping.length > 0" fill="outline"
-                        color="primary" (click)="chooseGrouping()"
-                        [disabled]="availableGrouping.length <= 2">
-                        <!-- ALL, T1 -->
-                        {{ selectedGrouping || 'Grouping' }}
-                        <ion-icon name="chevron-down-outline" style="padding-right: 0px;"></ion-icon>
-                      </ion-button>
-                    </ion-row>
-                  </ion-buttons>
-                </ion-row>
                 <ion-card class="ion-no-margin">
                   <ion-card-header>
                     <ion-card-subtitle>
@@ -75,7 +74,7 @@
                       </ion-segment>
                     </ng-template>
                     <ng-template [ngIf]="selectedDate">
-  
+
                       <ion-item class="table-top" [style.borderLeft]="'0.7rem solid transparent'">
                         <ion-grid class="ion-no-margin ion-no-padding">
                           <ng-container *ngIf="viewWeek; else viewDaily">
@@ -164,7 +163,7 @@
                             </ion-col>
                           </ion-row>
                         </ng-container>
-  
+
                         <ng-template #viewDaily>
                           <ion-row>
                             <ion-col size="12" size-sm="3" class="glob-text-bold ion-no-padding">
@@ -205,79 +204,74 @@
               </ion-col>
             </ion-row>
           </ion-grid>
-  
+
         </ng-container>
       </ng-template>
-  
+
       <ng-template #empty>
-        <ion-card>
-          <ion-card-content>
-            <ng-container *ngIf="intake; else noIntakeSelected">
-              <ion-card class="ion-no-margin">
-                <ion-card-header style="margin-bottom: 0; padding: 0!important; padding-left:16px !important;">
-                  <ion-card-title>
-                    <ion-item lines="none" class="ion-no-padding ion-no-margin">
-                      <ion-label>
-                        <h4 class="glob-text-bold primary-text">
-                          {{intake || room || ''}} Timetable
-                        </h4>
-                        <h5>
-                          Week: <span class="glob-text-bold">{{selectedWeek | date : 'dd MMM yyy'}}</span>
-                        </h5>
-                        <h5 *ngIf="selectedGrouping">
-                          This timetable is for the intake grouping: <span
-                            class="danger-text glob-text-bold">{{ selectedGrouping }}</span>. If you do not belong to this
-                          intake
-                          grouping, change it by clicking on the button next to the intake button on top.
-                        </h5>
-                      </ion-label>
-                    </ion-item>
-                  </ion-card-title>
-                </ion-card-header>
-                <ion-card-content class="ion-no-padding ion-padding-bottom">
-                  <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
-                    <ion-segment class="week-segment" [ngModel]="selectedDate | date:'E' | uppercase"
-                      (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]" scrollable>
-                      <ion-segment-button *ngFor="let day of availableDays" [value]="day">
-                        {{ day }}
-                      </ion-segment-button>
-                    </ion-segment>
-                  </ng-template>
-                  <ng-container *ngIf="selectedDate; else weekly;">
-                    <app-message-with-svg imageUrl="assets/img/happy.svg"
-                      messageTitle="Hooray! No classes for {{intake}} {{selectedGrouping ? '('+ selectedGrouping +')' : '' }} on {{selectedDate | date: 'EEEE, dd MM yyy'}}"
-                      wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
-                    </app-message-with-svg>
-                  </ng-container>
-                  <ng-template #weekly>
-                    <app-message-with-svg imageUrl="assets/img/happy.svg"
-                      messageTitle="Hooray! No classes for {{intake}} {{selectedGrouping ? '('+ selectedGrouping +')' : '' }} on the week that starts on {{selectedWeek | date: 'EEEE, dd MM yyy'}}"
-                      wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
-                    </app-message-with-svg>
-                  </ng-template>
-  
-                </ion-card-content>
-              </ion-card>
-            </ng-container>
-            <ng-template #noIntakeSelected>
-              <ng-container *ngIf="room; else emptyIntake">
-                <app-message-with-svg imageUrl="assets/img/no-consultations.svg"
-                  messageContent="The room selected does not exist or its timetable is not available"
-                  messageTitle="Room Timetable is not Available!" wrapperSize="4" wrapperOffset="4"
-                  wrapperMarginTop="20px">
+        <ng-container *ngIf="intake; else noIntakeSelected">
+          <ion-card>
+            <ion-card-header style="margin-bottom: 0; padding: 0!important; padding-left:16px !important;">
+              <ion-card-title>
+                <ion-item lines="none" class="ion-no-padding ion-no-margin">
+                  <ion-label>
+                    <h4 class="glob-text-bold primary-text">
+                      {{intake || room || ''}} Timetable
+                    </h4>
+                    <h5>
+                      Week: <span class="glob-text-bold">{{selectedWeek | date : 'dd MMM yyy'}}</span>
+                    </h5>
+                    <h5 *ngIf="selectedGrouping">
+                      This timetable is for the intake grouping: <span
+                        class="danger-text glob-text-bold">{{ selectedGrouping }}</span>. If you do not belong to
+                      this
+                      intake
+                      grouping, change it by clicking on the button next to the intake button on top.
+                    </h5>
+                  </ion-label>
+                </ion-item>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content class="ion-no-padding ion-padding-bottom">
+              <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
+                <ion-segment class="week-segment" [ngModel]="selectedDate | date:'E' | uppercase"
+                  (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]" scrollable>
+                  <ion-segment-button *ngFor="let day of availableDays" [value]="day">
+                    {{ day }}
+                  </ion-segment-button>
+                </ion-segment>
+              </ng-template>
+              <ng-container *ngIf="selectedDate; else weekly;">
+                <app-message-with-svg imageUrl="assets/img/happy.svg"
+                  messageTitle="Hooray! No classes for {{intake}} {{selectedGrouping ? '('+ selectedGrouping +')' : '' }} on {{selectedDate | date: 'EEEE, dd MM yyy'}}"
+                  wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
                 </app-message-with-svg>
               </ng-container>
-              <ng-template #emptyIntake>
-                <app-message-with-svg imageUrl="assets/img/config.svg"
-                  messageContent="Please choose an intake from the intakes button on the top right of the page"
-                  messageTitle="No intake selected!" wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+              <ng-template #weekly>
+                <app-message-with-svg imageUrl="assets/img/happy.svg"
+                  messageTitle="Hooray! No classes for {{intake}} {{selectedGrouping ? '('+ selectedGrouping +')' : '' }} on the week that starts on {{selectedWeek | date: 'EEEE, dd MM yyy'}}"
+                  wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
                 </app-message-with-svg>
               </ng-template>
-            </ng-template>
-          </ion-card-content>
-        </ion-card>
+            </ion-card-content>
+          </ion-card>
+        </ng-container>
+        <ng-template #noIntakeSelected>
+          <ng-container *ngIf="room; else emptyIntake">
+            <app-message-with-svg imageUrl="assets/img/no-consultations.svg"
+              messageContent="The room selected does not exist or its timetable is not available"
+              messageTitle="Room Timetable is not Available!" wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+            </app-message-with-svg>
+          </ng-container>
+          <ng-template #emptyIntake>
+            <app-message-with-svg imageUrl="assets/img/config.svg"
+              messageContent="Please choose an intake from the intakes button on the top right of the page"
+              messageTitle="No intake selected!" wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+            </app-message-with-svg>
+          </ng-template>
+        </ng-template>
       </ng-template>
-  
+
       <!-- trivial message but must be displayed -->
       <ion-grid class="ion-no-padding">
         <ion-row>

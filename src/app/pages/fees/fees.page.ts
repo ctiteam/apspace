@@ -144,8 +144,4 @@ export class FeesPage {
   segmentValueChanged() {
     this.content.scrollToTop();
   }
-
-  isNumber(val: any): boolean {
-    return typeof val === 'number';
-  }
 }
