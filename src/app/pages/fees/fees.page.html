@@ -4,11 +4,6 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-buttons @buttonEnterOut slot="secondary" *ngIf="selectedSegment === 'Details'" slot="end">
-      <ion-button (click)="openFilterMenu()">
-        <ion-icon slot="icon-only" name="options"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 
   <ion-toolbar *ngIf="(bankDraft$ | async) as bankDrafts; else loadingSegment">
@@ -36,24 +31,6 @@
   </ng-template>
 
 </ion-header>
-
-<ion-menu menuId="filter-menu" contentId="fee-content" side="end" type="overlay">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Filter Details</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list>
-      <ion-item *ngFor="let label of labels; let label_index = index;"
-        (click)="updateChartLabelVisibility(label_index, label.visible)">
-        <ion-label>{{ label.name }}</ion-label>
-        <ion-checkbox [(ngModel)]="label.visible">
-        </ion-checkbox>
-      </ion-item>
-    </ion-list>
-  </ion-content>
-</ion-menu>
 
 <ion-content id="fee-content" #content>
   <!-- refresher -->
@@ -275,7 +252,7 @@
                       Registration Date
                       <ion-note color="text-color" slot="end">
                         {{ bankDraft.REGISTRATION_DATE | dateWithTimezone: "EEE, d MMM y"  }}
-                      </ion-note>
+                      </ion-note>apspace
                     </ion-item>
                     <ion-item lines="none">
                       Amount Collected
@@ -333,7 +310,7 @@
               <ng-template let-details [ngIf]="detail$ | async" [ngIfElse]="loadingDetails">
                 <div *ngIf="(details | fuse:searchTerm:optionsDetails).length > 0; else notFound">
                   <ion-card class="content-card"
-                    *ngFor="let detail of (details | reverse | filter: visibleLabels | fuse:searchTerm:optionsDetails)">
+                    *ngFor="let detail of (details | reverse | fuse:searchTerm:optionsDetails)">
                     <ion-card-header>
                       <ion-card-subtitle>{{ detail.ITEM_DESCRIPTION }}</ion-card-subtitle>
                     </ion-card-header>
