@@ -135,7 +135,7 @@ export class FeesPage {
 
     );
 
-    this.financialsChart.options.legend.onClick = function (event, legendItem) {
+    this.financialsChart.options.legend.onClick = function(event, legendItem) {
       Chart.defaults.global.legend.onClick.call(this, event, legendItem);
     };
 
