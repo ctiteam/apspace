@@ -28,4 +28,4 @@ const routes: Routes = [
   ],
   declarations: [FeesPage]
 })
-export class FeesPageModule {}
+export class FeesPageModule { }
