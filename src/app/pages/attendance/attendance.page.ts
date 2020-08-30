@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActionSheetController } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
-import { ActionSheetButton } from '@ionic/core';
 import { Observable } from 'rxjs';
 import { finalize, map, tap } from 'rxjs/operators';
 
@@ -25,8 +24,7 @@ export class AttendancePage implements OnInit {
   average: number;
   averageColor = '';
   intakeLabels: any;
-
-  isLoading: boolean;
+  skeletons = new Array(5);
 
   constructor(
     private ws: WsApiService,
@@ -66,23 +64,8 @@ export class AttendancePage implements OnInit {
     );
   }
 
-  showActionSheet() {
-    const intakesButton = this.intakeLabels.map(intake => {
-      return {
-        text: intake,
-        handler: () => {
-          this.selectedIntake = intake;
-          this.attendance$ = this.getAttendance(this.selectedIntake);
-        },
-      } as ActionSheetButton;
-    });
-
-    this.actionSheetCtrl.create({
-      buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }],
-    }).then(
-      actionSheet => actionSheet.present()
-    );
-
+  intakeChanged() {
+    this.attendance$ = this.getAttendance(this.selectedIntake);
   }
 
   getAttendance(intake: string): Observable<any[]> {
