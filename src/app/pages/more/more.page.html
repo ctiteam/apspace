@@ -3,12 +3,12 @@
     <ion-searchbar [(ngModel)]="term" placeholder="Search (e.g. 'staff', 'timetable', ...)" showCancelButton="focus">
     </ion-searchbar>
     <ion-button *ngIf="!editMode" (click)="enableEditMode()" slot="end" fill="outline"
-      class="colored-text colored-border">
+      color="primary">
       Edit
       <ion-icon slot="end" name="star"></ion-icon>
     </ion-button>
     <ion-button *ngIf="editMode" (click)="enableEditMode()" slot="end" fill="outline"
-      class="success-text success-border">
+      color="primary">
       Save ({{ (fav$ | async).length }})
       <ion-icon slot="end" name="Save"></ion-icon>
     </ion-button>
@@ -17,7 +17,7 @@
 
 <!-- TODO: add the edit fav button & move the search functionality to a service or tabs page -->
 <!-- TODO: What if fav$ failed? This will affect all the menu items -->
-<ion-content *ngIf="fav$ | async as fav" [class]="(view$ | async) !== 'list' ? 'gradient-background' : ''">
+<ion-content *ngIf="fav$ | async as fav">
 
   <div class="glob-container">
     <!-- LISTS UI -->
@@ -107,7 +107,7 @@
         <!-- FAVORITE -->
         <ion-row *ngIf="!editMode && (fav | byItem: term) as filteredFavMenu">
           <ion-col size="12" class="ion-margin-vertical">
-            <h5 class="custom-theme ion-text-center">Favorite</h5>
+            <h5 class="ion-text-center">Favorite</h5>
           </ion-col>
           <ng-container *ngIf="filteredFavMenu.length > 0; else noFavCard">
             <div class="card-view-masonry-list">
@@ -155,7 +155,7 @@
         <!-- MENU -->
         <ion-row *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop;">
           <ion-col size="12">
-            <ion-item lines="none" color="none" class="custom-theme" (click)="showMore(group.key)">
+            <ion-item lines="none" color="none" (click)="showMore(group.key)">
               <ion-avatar slot="start">
                 <img [src]="keyIcon[group.key]">
               </ion-avatar>
@@ -182,7 +182,7 @@
         </ion-row>
         <ion-row *ngIf="!editMode">
           <ion-col>
-            <ion-item lines="none" color="none" class="custom-theme" (click)="openPage('logout')">
+            <ion-item lines="none" color="none" (click)="openPage('logout')">
               <ion-avatar slot="start">
                 <img src="assets/img/log-out.png">
               </ion-avatar>

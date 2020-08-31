@@ -3,9 +3,6 @@ ion-avatar {
 }
 
 // NEW CARD VIEW CUSTOM CSS STARTS HERE
-.custom-theme {
-  color: var(--ion-color-light);
-}
 
 .light-text {
   color: var(--ion-color-light);
@@ -15,6 +12,10 @@ ion-item-divider {
   border-bottom: 1.5px solid var(--ion-color-light);
   min-height: 0;
   margin: 0 5px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .set-divider-margin {
@@ -35,7 +36,7 @@ ion-item-divider {
 
 .custom-card {
   padding: 1em;
-  background-color: var(--ion-color-light);
+  background-color: var(--ion-more-page-card-background-color);
   border-radius: 10px;
   box-shadow: 0 4px 0 rgba(0,0,0,0.12);
 
@@ -58,7 +59,7 @@ ion-item-divider {
 }
 
 .logout {
-  background: var(--danger-color) !important;
+  background: var(--ion-color-danger) !important;
 
   .page-title {
     color: var(--ion-color-light);
@@ -72,7 +73,7 @@ ion-item-divider {
 // NEEDED TO CHECK WITH REZA IF WE NEED A BACKGROUND IMAGE FOR EACH MENU ITEM
 // &::after {
 //   content: "";
-//   background: var(--tertiary-bg-color);
+//   background: var(--ion-color-tertiary);
 //   opacity: 0.4;
 //   top: 0;
 //   left: 0;
@@ -117,11 +118,11 @@ ion-col.menu-item{
 }
 
 .ter--background {
-  --background: var(--tertiary-bg-color) !important;
-  --border-color: var(--main-bg-color) !important;
+  --background: var(--ion-background-color) !important;
+  --border-color: var(--ion-color-primary) !important;
 }
 .ter-background {
-  background: var(--tertiary-bg-color) !important;
+  background: var(--ion-background-color) !important;
 }
 
 .small-padding-start-end{
@@ -130,8 +131,8 @@ ion-col.menu-item{
 }
 
 .success-border {
-  border-color: var(--success-color);
-  --border-color: var(--success-color);
+  border-color: var(--ion-color-success);
+  --border-color: var(--ion-color-success);
 }
 
 .list-txt-color {
@@ -166,25 +167,6 @@ ion-col.menu-item{
 @media only screen and (min-width: 1200px) {
   .card-view-masonry-list {
     column-count: 4 !important;
-  }
-}
-
-::ng-deep .light-theme .gradient-background {
-  --ion-background-color: #3a99d9;  /* fallback for old browsers */
-  --ion-background-color: linear-gradient(to right, #148ad9, #3a99d9ee);
-}
-
-::ng-deep .dark-theme .custom-card{
-  background: #303030;
-  .page-title {
-    color: var(--ion-color-light);
-  }
-}
-
-::ng-deep .dark-theme.pure .custom-card{
-  background: #1d1d1d;
-  .page-title {
-    color: var(--ion-color-light);
   }
 }
 // NEW CARD VIEW CUSTOM CSS ENDS HERE
