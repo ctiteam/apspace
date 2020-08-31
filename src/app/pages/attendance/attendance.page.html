@@ -115,88 +115,81 @@
 
         <ion-col size="12" size-md="8" pull-md="4">
           <ng-template let-attendances [ngIf]="attendance$ | async" [ngIfElse]="loadAttendance">
-            <ion-grid class="ion-no-padding">
-              <ion-row>
-                <ion-col class="ion-no-padding" size="12" size-md="12">
-                  <ng-container *ngIf="attendances.length > 0; else noAttendanceRecords">
-                    <ng-container *ngFor="let semester of attendances | reverse">
-                      <ion-card class="ion-no-margin ion-margin-top">
-                        <ion-card-header color="secondary">
-                          <ion-card-title>Semester {{semester.semester}}</ion-card-title>
-                        </ion-card-header>
-                        <ion-card-content class="ion-no-padding">
-                          <ion-list class="ion-no-padding">
-                            <ion-item lines="full" *ngFor="let module of semester.value" detail="true" button="true"
-                              tappable="true">
-                              <ion-label class="glob-white-space-normal">
-                                <ion-grid>
-                                  <ion-row>
-                                    <ion-col size="12">
-                                      <ion-text>
-                                        <h3 class="glob-text-bold">
-                                          {{ module.MODULE_ATTENDANCE }}
-                                        </h3>
-                                      </ion-text>
-                                    </ion-col>
-                                  </ion-row>
-                                  <ion-row>
-                                    <ion-col size="6">
-                                      <p>
-                                        <small>Classes:</small>
-                                        <ion-text [color]="module.PERCENTAGE >= 80 ? 'success' : 'danger'"
-                                          class="glob-text-bold">
-                                          {{ module.TOTAL_CLASSES -
+            <ng-container *ngIf="attendances.length > 0; else noAttendanceRecords">
+              <ng-container *ngFor="let semester of attendances | reverse">
+                <ion-card class="ion-no-margin ion-margin-top">
+                  <ion-card-header color="secondary">
+                    <ion-card-title>Semester {{semester.semester}}</ion-card-title>
+                  </ion-card-header>
+                  <ion-card-content class="ion-no-padding">
+                    <ion-list class="ion-no-padding">
+                      <ion-item lines="full" *ngFor="let module of semester.value" detail="true" button="true"
+                        tappable="true">
+                        <ion-label class="glob-white-space-normal">
+                          <ion-grid>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-text>
+                                  <h3 class="glob-text-bold">
+                                    {{ module.MODULE_ATTENDANCE }}
+                                  </h3>
+                                </ion-text>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row>
+                              <ion-col size="6">
+                                <p>
+                                  <small>Classes:</small>
+                                  <ion-text [color]="module.PERCENTAGE >= 80 ? 'success' : 'danger'"
+                                    class="glob-text-bold">
+                                    {{ module.TOTAL_CLASSES -
                                                 module.TOTAL_ABSENT +
                                                   "/" +
                                                   module.TOTAL_CLASSES +
                                                   " (" +
                                                   module.PERCENTAGE +
                                                   "%)" }}
-                                        </ion-text>
-                                      </p>
-                                    </ion-col>
-                                    <ion-col size="6">
-                                      <p>
-                                        <small>Exam Eligibility:</small>
-                                        <ion-text class="glob-text-bold"
-                                          [color]="module.EXAM_ELIGIBILITY === 'Eligible' ? 'success' : 'danger'">
-                                          {{ module.EXAM_ELIGIBILITY }}
-                                        </ion-text>
-                                      </p>
-                                    </ion-col>
-                                  </ion-row>
-                                </ion-grid>
-                              </ion-label>
-                            </ion-item>
-                          </ion-list>
-                        </ion-card-content>
-                      </ion-card>
-                    </ng-container>
-                  </ng-container>
-                  <ng-template #noAttendanceRecords>
-                    <ion-card class="ion-no-margin">
-                      <ion-card-content>
-                        <app-message-with-svg imageUrl="assets/img/search-not-found.svg"
-                          messageTitle="Opps! No Attendance Records Found for {{selectedIntake}}."
-                          messageContent="Perhaps you can try this:" wrapperSize="4" wrapperMarginTop="30px"
-                          wrapperOffset="4" [advancedMode]="true">
-                          <div class="flex-container">
-                            <ul class="list-txt-color">
-                              <li>Make sure you selected the right intake</li>
-                              <li>Make sure your lecturer marked your attendance at least once using AttendiX</li>
-                            </ul>
+                                  </ion-text>
+                                </p>
+                              </ion-col>
+                              <ion-col size="6">
+                                <p>
+                                  <small>Exam Eligibility:</small>
+                                  <ion-text class="glob-text-bold"
+                                    [color]="module.EXAM_ELIGIBILITY === 'Eligible' ? 'success' : 'danger'">
+                                    {{ module.EXAM_ELIGIBILITY }}
+                                  </ion-text>
+                                </p>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </ion-card-content>
+                </ion-card>
+              </ng-container>
+            </ng-container>
+            <ng-template #noAttendanceRecords>
+              <ion-card class="ion-no-margin">
+                <ion-card-content>
+                  <app-message-with-svg imageUrl="assets/img/search-not-found.svg"
+                    messageTitle="Opps! No Attendance Records Found for {{selectedIntake}}."
+                    messageContent="Perhaps you can try this:" wrapperSize="4" wrapperMarginTop="30px" wrapperOffset="4"
+                    [advancedMode]="true">
+                    <div class="flex-container">
+                      <ul class="list-txt-color">
+                        <li>Make sure you selected the right intake</li>
+                        <li>Make sure your lecturer marked your attendance at least once using AttendiX</li>
+                      </ul>
 
-                            <p>Still having trouble? No worries! Just click <a [routerLink]="'/feedback'">here</a> and
-                              report the issue to us.</p>
-                          </div>
-                        </app-message-with-svg>
-                      </ion-card-content>
-                    </ion-card>
-                  </ng-template>
-
-                </ion-col>
-              </ion-row>
-            </ion-grid>
+                      <p>Still having trouble? No worries! Just click <a [routerLink]="'/feedback'">here</a> and
+                        report the issue to us.</p>
+                    </div>
+                  </app-message-with-svg>
+                </ion-card-content>
+              </ion-card>
+            </ng-template>
           </ng-template>
           <ng-template #loadAttendance>
             <ion-card>
