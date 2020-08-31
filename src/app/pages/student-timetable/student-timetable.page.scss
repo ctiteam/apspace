@@ -1,8 +1,8 @@
 ion-card {
   ion-card-content ion-icon {
-    vertical-align: -2.5px;
-    padding-left: 4px;
-    padding-right: 8px;
+    vertical-align: -1.2px;
+    padding-left: 0px;
+    padding-right: 0px;
   }
 
   ion-card-content a {
@@ -15,98 +15,19 @@ ion-card {
   }
 
   ion-card-header {
-    padding: 9px 12px 9px 12px;
-    margin-bottom: 10px;
+    padding-bottom: 5px;
   }
 
   &.card-special {
     margin-top: 10px !important;
     margin-bottom: 1px !important;
-    &.title {
-      border-radius: 10px 10px 0 0;
-    }
   }
 }
 
-.print-button {
-  --padding-start: 10px;
-  --padding-end: 10px;
-  --padding-top: 15px;
-  --padding-bottom: 15px;
-  margin-top: 0;
-}
-
-ion-segment-button {
-  // Fit all week days without scrolling
-  --padding-end: 0 !important;
-  --padding-start: 0 !important;
-  --margin-start: 0 !important;
-  --margin-end: 100 !important;
-  min-width: 50px !important;
-}
-
-.segment-scrollable {
-  overflow-x: auto !important;
-  justify-content: center;
-}
-
-ion-segment.week-segment {
-  margin-bottom: 30px;
-  background: var(--tertiary-bg-color);
-  --background: var(--tertiary-bg-color);
+ion-segment{
+  --background: var(--ion-color-light);
 }
 
 .table-item:nth-child(odd) {
   --background: var(--ion-background-color) !important;
-}
-
-.table-top {
-  display: none;
-}
-
-.hide-on-print-table-flex-on-card {
-  display: flex;
-}
-
-.flex-on-print-table-hide-on-card {
-  display: none;
-}
-
-.white-space-normal{
-  white-space: normal !important;
-}
-
-.text-color {
-  color: var(--ion-text-color);
-}
-
-.primary-text {
-  color: var(--ion-color-primary);
-}
-
-.danger-text {
-  color: var(--ion-color-danger);
-}
-
-@media (min-width: 576px) {
-  .marker {
-    display: none;
-  }
-  .hide-on-print-table-flex-on-card {
-    display: none;
-  }
-
-  .flex-on-print-table-hide-on-card {
-    display: flex;
-  }
-
-  .table-top {
-    display: block;
-    visibility: visible;
-    padding-bottom: 4px !important;
-  }
-
-  .card-side {
-    border-left: none !important;
-  }
 }

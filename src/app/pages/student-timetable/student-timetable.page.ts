@@ -87,7 +87,7 @@ export class StudentTimetablePage implements OnInit {
   intakeLabels: string[] = [];
   intakeSelectable = true;
   viewWeek: boolean; // weekly or daily display
-  show2ndToolbar = false;
+  skeletons = new Array(5);
 
   room: string;
   intake: string;
