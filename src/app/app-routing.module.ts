@@ -263,14 +263,10 @@ const routes: Routes = [
       import('./pages/orientaton-student-portal/orientaton-student-portal.module').then(m => m.OrientatonStudentPortalPageModule)
   },
   {
-    path: 'visitor-form',
-    loadChildren: () => import('./pages/covid-visitor-form/covid-visitor-form.module').then(m => m.CovidVisitorFormPageModule)
+    path: 'apcard-qr-code',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/apcard-qr-code/apcard-qr-code.module').then(m => m.ApcardQrCodePageModule)
   },
-  // {
-  //   path: 'control-room-dashboard',
-  // tslint:disable-next-line: max-line-length
-  //   loadChildren: () => import('./pages/control-room-dashboard/control-room-dashboard.module').then( m => m.ControlRoomDashboardPageModule)
-  // },
   { // this path must always be at the end of the routes array
     path: '**',
     canActivate: [AuthGuard],

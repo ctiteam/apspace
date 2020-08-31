@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { VersionValidator } from './interfaces';
-import { CovidVisitorFormPage } from './pages/covid-visitor-form/covid-visitor-form.page';
+import { ApcardQrCodePage } from './pages/apcard-qr-code/apcard-qr-code.page';
 import {
   SettingsService, VersionService, WsApiService
 } from './services';
@@ -102,7 +102,7 @@ export class AppComponent {
 
       // deeplinks settings
       this.deeplinks.route({
-        '/visitor-form': CovidVisitorFormPage,
+        '/apcard-qr-code': ApcardQrCodePage,
       }).subscribe(match => {
         // match.$route - the route we matched, which is the matched entry from the arguments to route()
         // match.$args - the args passed in the link
