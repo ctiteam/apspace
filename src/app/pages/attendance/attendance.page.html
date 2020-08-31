@@ -19,7 +19,7 @@
         <ion-col size="12" size-md="4" push-md="8">
           <ng-container *ngIf="average >= 0; else noAverageAvailable">
             <ion-card class="ion-no-margin ion-margin-top" [color]="average >= 0.8 ? 'success' : 'danger'">
-              <ion-card-header class="ion-no-padding">
+              <ion-card-header class="ion-no-padding ion-padding-bottom">
                 <ion-item [color]="average >= 0.8 ? 'success' : 'danger'">
                   <ion-label position="floating">Intake</ion-label>
                   <ion-select [(ngModel)]="selectedIntake" (ngModelChange)="intakeChanged()" value="notifications"
@@ -28,18 +28,19 @@
                     </ion-select-option>
                   </ion-select>
                 </ion-item>
-                <ion-card-title
-                  class="ion-text-center ion-padding-start ion-padding-end ion-padding-top glob-text-bold ion-no-margin"
-                  [color]="average >= 0.8 ? 'success' : 'danger'">
-                  {{ average * 100 | number: "1.0-1" }}%
-                </ion-card-title>
-                <ion-card-subtitle class="ion-text-center ion-padding-start ion-padding-end ion-padding-bottom"
+                <ion-card-subtitle class="ion-text-center ion-padding-top"
                   color="medium">
                   Overall Intake Attendance
                 </ion-card-subtitle>
+                <ion-card-title
+                  class="ion-text-center glob-text-bold"
+                  [color]="average >= 0.8 ? 'success' : 'danger'">
+                  <h2 class="ion-no-margin">{{ average * 100 | number: "1.0-1" }}%</h2>
+                </ion-card-title>
               </ion-card-header>
-              <ion-card-content class="ion-no-padding">
-                <ion-button class="ion-no-margin" expand="full" color="primary" [routerLink]="['/attendix/update']">
+              <ion-card-content class="ion-no-padding ion-padding-bottom ion-text-center">
+                <ion-button class="ion-no-margin" size="small" color="light" fill="outline"
+                  [routerLink]="['/attendix/update']">
                   Sign Class Attendance
                   <ion-icon name="checkmark-done-circle-outline" slot="end"></ion-icon>
                 </ion-button>
