@@ -101,9 +101,7 @@
         <ion-row *ngIf="numberOfTrips !== 0">
           <ion-col size="12" size-lg="6" offset-lg="3">
             <h6>
-              <ion-text color="primary">
-                Effective from: <span class="glob-text-bold">{{latestUpdate}}</span>
-              </ion-text>
+              Effective from: <span class="glob-text-bold">{{latestUpdate}}</span>
             </h6>
             <div *ngIf="numberOfTrips !== 0; else noTrips">
               <div *ngFor="let trip of trips | keyvalue">
@@ -120,8 +118,11 @@
                   }">
                     <ion-card-title class="ion-float-start">
                       <h3>
-                        {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} <small
-                          *ngIf="trip.key === 'mosque'">(Friday Only)</small></h3>
+                        <ion-text color="light">
+                          {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} <small
+                            *ngIf="trip.key === 'mosque'">(Friday Only)</small>
+                        </ion-text>
+                      </h3>
                     </ion-card-title>
                     <div class="glob-clearfix"></div>
                   </ion-card-header>
@@ -130,17 +131,15 @@
                       <ion-item lines="none" *ngFor="let destination of trip.value | keyvalue">
                         <ion-label>
                           <h2 class="glob-text-bold">
-                            <ion-text color="primary">
                               {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} ->
                               {{ destination.key | uppercase }}
                               <small *ngIf="destination.key === 'mosque'">(Friday Only)</small>
-                            </ion-text>
                           </h2>
                           <ion-grid class="ion-no-padding">
                             <ion-row>
-                              <ion-col [class.passed]="timeNow >= tripData.trip_time" class="ion-text-center primary-color"
+                              <ion-col [class.passed]="tripData.trip_time | checkPassedTime" class="ion-text-center primary-color"
                                 *ngFor="let tripData of destination.value" size="3" size-md="4">
-                                  {{tripData.trip_time}}
+                                {{tripData.trip_time}}
                               </ion-col>
                             </ion-row>
                           </ion-grid>

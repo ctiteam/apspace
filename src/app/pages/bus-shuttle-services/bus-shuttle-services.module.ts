@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { SharedPipesModule } from 'src/app/shared/shared-pipes.module';
 import { BusShuttleServicesPage } from './bus-shuttle-services.page';
+import { CheckPassedTimePipe } from './check-passed-time.pipe';
 
 const routes: Routes = [
   {
@@ -24,6 +25,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedPipesModule
   ],
-  declarations: [BusShuttleServicesPage]
+  declarations: [BusShuttleServicesPage, CheckPassedTimePipe]
 })
 export class BusShuttleServicesPageModule { }
