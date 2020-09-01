@@ -92,7 +92,7 @@
                       iConsult Default Location
                     </ion-label>
                   </ion-item-divider>
-                  <ion-item class="ion-no-padding">
+                  <ion-item>
                     <ion-label>Campus</ion-label>
                     <ion-select [(ngModel)]="defaultCampus" (ngModelChange)="updateDefaultLocation('campus')">
                       <ion-select-option *ngFor="let location of locationOptions" [value]="location">
@@ -100,7 +100,7 @@
                       </ion-select-option>
                     </ion-select>
                   </ion-item>
-                  <ion-item class="ion-no-padding">
+                  <ion-item>
                     <ion-label>Venue</ion-label>
                     <ion-select interface="alert" *ngIf="venues$ | async as venues" [disabled]="!defaultCampus"
                       [(ngModel)]="defaultVenue" (ngModelChange)="updateDefaultLocation('venue')">
