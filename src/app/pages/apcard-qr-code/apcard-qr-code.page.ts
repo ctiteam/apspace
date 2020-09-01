@@ -57,7 +57,7 @@ export class ApcardQrCodePage implements OnInit, OnDestroy {
     }).catch(err => {
       this.scan = false;
       if (err === 'cordova_not_available') {
-        // this.presentToast('QR scanner does not support web version of APSpace. It works only on the mobile app', 7000, 'danger');
+        this.presentToast('QR scanner does not support web version of APSpace. It works only on the mobile app', 7000, 'danger');
       } else if (err.name === 'CAMERA_ACCESS_DENIED') {
         this.presentToast('Access Denied, please allow the app to access the camera to scan QR codes', 9000, 'warning');
         this.requestPerm();
