@@ -7,7 +7,11 @@
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="viewHistory()" class="colored-text">
+      <!-- TODO: remove this button -->
+      <ion-button (click)="openDressCodeReminderPage()" color="danger" fill="clear">
+        Test
+      </ion-button>
+      <ion-button (click)="viewHistory()" color="primary" fill="clear">
         <ion-icon slot="icon-only" name="clipboard"></ion-icon>
       </ion-button>
     </ion-buttons>

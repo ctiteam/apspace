@@ -1,0 +1,17 @@
+.table-header {
+  background-color: var(--primary-color) !important;
+  padding: 5px 0;
+
+  ion-text {
+    color: white !important;
+  }
+}
+
+.table-row {
+  border-bottom: 1px solid #cccccc;
+  padding: 5px 0;
+}
+
+.margin-auto {
+  margin: auto;
+}

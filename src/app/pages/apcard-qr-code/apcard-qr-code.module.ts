@@ -6,8 +6,8 @@ import { QRScanner } from '@ionic-native/qr-scanner/ngx';
 import { IonicModule } from '@ionic/angular';
 
 import { ApcardQrCodePage } from './apcard-qr-code.page';
+import { DressCodeReminderModalPage } from './dress-code-reminder/dress-code-reminder-modal';
 import { VisitHistoryModalPage } from './visit-history/visit-history-modal';
-
 const routes: Routes = [
   {
     path: '',
@@ -22,8 +22,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ApcardQrCodePage, VisitHistoryModalPage],
-  entryComponents: [VisitHistoryModalPage],
+  declarations: [ApcardQrCodePage, VisitHistoryModalPage, DressCodeReminderModalPage],
+  entryComponents: [VisitHistoryModalPage, DressCodeReminderModalPage],
   providers: [QRScanner]
 })
 export class ApcardQrCodePageModule { }

@@ -1,0 +1,52 @@
+<ion-header no-border>
+  <ion-toolbar mode="md">
+    <ion-title>
+      Dress Code Reminder
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button outline (click)="dismiss()">
+        <ion-icon class="colored-text" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content class="ion-no-padding">
+      <ion-item lines="inset">
+        <ion-icon color="primary" slot="start" name="pin"></ion-icon>
+        <ion-label>Zone</ion-label>
+        <ion-select multiple="true" [(ngModel)]="zone">
+          <ion-select-option value="Cafeterias">Cafeterias</ion-select-option>
+          <ion-select-option value="Sports">Sports Facilities</ion-select-option>
+          <ion-select-option value="Stores">Convenience Stores</ion-select-option>
+          <ion-select-option value="Kiosks">F&B Kiosks</ion-select-option>
+          <ion-select-option value="s_Lounges">Student Lounges</ion-select-option>
+          <ion-select-option value="Accommodation">On-Campus Accommodation</ion-select-option>
+          <ion-select-option value="r_Lounge">Residents’ Lounge</ion-select-option>
+          <ion-select-option value="c_Lounge">Campus Connect Lounge</ion-select-option>
+          <ion-select-option value="Clinic">On-Campus Clinic</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-icon name="reader-outline" slot="start" color="danger"></ion-icon>
+        <ion-label class="glob-white-space-normal">
+          <ion-text color="danger">
+            <h2>Note</h2>
+          </ion-text>
+          <p>
+            Please note that you are required to adhere to the APU/APIIT
+            Professional Dress Code as you are entering the
+            campus for official matters. Non-conformance may result in refused entry into the “Dress Code Official Zone”
+            and/or refused service.
+          </p>
+        </ion-label>
+      </ion-item>
+      <div class="ion-padding ion-text-center">
+        <ion-button (click)="submit()" [disabled]="!zone" color="primary" expand="block">Submit</ion-button>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -4,6 +4,7 @@ import { AlertController, LoadingController, ModalController, NavController, Toa
 import { Subscription } from 'rxjs';
 
 import { WsApiService } from 'src/app/services';
+import { DressCodeReminderModalPage } from './dress-code-reminder/dress-code-reminder-modal';
 import { VisitHistoryModalPage } from './visit-history/visit-history-modal';
 
 @Component({
@@ -48,7 +49,7 @@ export class ApcardQrCodePage implements OnInit, OnDestroy {
         if (this.sending) {
           return;
         } else {
-          this.sendRoomRequest(text);
+          this.sendRequest(text);
         }
       });
       this.scan = true;
@@ -56,7 +57,7 @@ export class ApcardQrCodePage implements OnInit, OnDestroy {
     }).catch(err => {
       this.scan = false;
       if (err === 'cordova_not_available') {
-        this.presentToast('QR scanner does not support web version of APSpace. It works only on the mobile app', 7000, 'danger');
+        // this.presentToast('QR scanner does not support web version of APSpace. It works only on the mobile app', 7000, 'danger');
       } else if (err.name === 'CAMERA_ACCESS_DENIED') {
         this.presentToast('Access Denied, please allow the app to access the camera to scan QR codes', 9000, 'warning');
         this.requestPerm();
@@ -66,33 +67,39 @@ export class ApcardQrCodePage implements OnInit, OnDestroy {
     });
   }
 
-  sendRoomRequest(qrValue: string) {
+  sendRequest(qrValue: string) {
     this.sending = true;
     this.presentLoading();
-    const body = {
-      id_value: qrValue,
-    };
-    this.ws.post('/qr_code/check_in', { body }).subscribe(
-      _ => { },
-      err => {
-        this.presentToast(`Error: ${err.error.error}`, 7000, 'danger');
-        this.sending = false;
-        this.scan = false;
-        this.dismissLoading();
-        this.scanSub.unsubscribe();
-        this.qrScanner.destroy();
-        this.navCtrl.back();
-      },
-      () => {
-        this.dismissLoading();
-        this.presentAlert('Confirm!', 'QR Code Scanned', `You have successfully scanned the QR code.`, 'success-alert');
-        this.scan = false;
-        this.sending = false;
-        this.scanSub.unsubscribe();
-        this.qrScanner.destroy();
-        this.navCtrl.back();
-      }
-    );
+    if (qrValue !== 'apu-dress-code-reminder') {
+      const body = {
+        id_value: qrValue,
+      };
+      this.ws.post('/qr_code/check_in', { body }).subscribe(
+        _ => { },
+        err => {
+          this.presentToast(`Error: ${err.error.error}`, 7000, 'danger');
+          this.sending = false;
+          this.scan = false;
+          this.dismissLoading();
+          this.scanSub.unsubscribe();
+          this.qrScanner.destroy();
+          this.navCtrl.back();
+        },
+        () => {
+          this.dismissLoading();
+          this.presentAlert('Confirm!', 'QR Code Scanned', `You have successfully scanned the QR code.`, 'success-alert');
+          this.scan = false;
+          this.sending = false;
+          this.scanSub.unsubscribe();
+          this.qrScanner.destroy();
+          this.navCtrl.back();
+        }
+      );
+    } else {
+      this.openDressCodeReminderPage();
+      // addd dress code page here and access it from here
+    }
+
   }
 
   async presentAlert(header: string, subHeader: string, message: string, cssClass) {
@@ -105,6 +112,15 @@ export class ApcardQrCodePage implements OnInit, OnDestroy {
     });
 
     await alert.present();
+  }
+
+  async openDressCodeReminderPage() {
+    const modal = await this.modalCtrl.create({
+      component: DressCodeReminderModalPage,
+      cssClass: 'custom-modal-style'
+    });
+    await modal.present();
+    await modal.onDidDismiss();
   }
 
   async viewHistory() {
