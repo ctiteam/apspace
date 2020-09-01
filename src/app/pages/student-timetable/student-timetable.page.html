@@ -107,10 +107,12 @@
                           </p>
                         </ion-col>
                         <ion-col size-xs="12" size-sm="12" size-md="5" *ngIf="timetable.NAME">
-                          <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]">
-                            <ion-icon class="glob-text-bold" name="person-circle-outline"></ion-icon>
-                            {{ timetable.NAME }}
-                          </a>
+                          <p>
+                            <a [routerLink]="['/staffs', timetable.SAMACCOUNTNAME]">
+                              <ion-icon class="glob-text-bold" name="person-circle-outline"></ion-icon>
+                              {{ timetable.NAME }}
+                            </a>
+                          </p>
                         </ion-col>
                       </ion-row>
                     </ion-grid>
