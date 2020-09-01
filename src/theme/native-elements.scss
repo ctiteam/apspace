@@ -7,37 +7,84 @@
   }
 }
 
-    // Styling ion-calendar on Holidays page
-    ion-calendar.holidays {
-      background-color: var(--secondary-bg-color) !important;
-      padding: 0 !important;
+// Styling ion-calendar on Holidays page
+ion-calendar.holidays {
+  background-color: var(--secondary-bg-color) !important;
+  padding: 0 !important;
 
-      .month-packer-item {
-        button {
-          color: var(--ion-color-step-400) !important;
-        }
-      }
+  .month-packer-item {
+    button {
+      color: var(--ion-color-step-400) !important;
+    }
+  }
 
-      .days-btn {
-        p {
-          color: var(--ion-color-step-950) !important;
-        }
+  .days-btn {
+    p {
+      color: var(--ion-color-step-950) !important;
+    }
 
-        small {
-          position: absolute;
-          background: var(--ion-color-tertiary);
-          width: 6px;
-          height: 6px;
-          border-radius: 10px;
-          top: 28px;
-          left: 15px !important;
-        }
+    small {
+      position: absolute;
+      background: var(--ion-color-tertiary);
+      width: 6px;
+      height: 6px;
+      border-radius: 10px;
+      top: 28px;
+      left: 15px !important;
+    }
 
-        &.on-selected {
-          background-color: var(--ion-color-primary) !important;
-          p {
-            color: var(--ion-color-light) !important;
-          }
-        }
+    &.on-selected {
+      background-color: var(--ion-color-primary) !important;
+
+      p {
+        color: var(--ion-color-light) !important;
       }
     }
+  }
+}
+
+
+// Alert
+.success-alert {
+  .alert-wrapper {
+    .alert-head {
+      background-color: var(--ion-color-success);
+
+      .alert-title,
+      .alert-sub-title {
+        color: #FFFFFF !important;
+      }
+    }
+
+    .alert-message {
+      padding-top: 10px !important;
+      padding-bottom: 0 !important;
+    }
+
+    .alert-button {
+      color: var(--ion-color-success) !important;
+    }
+  }
+}
+
+.danger-alert {
+  .alert-wrapper {
+    .alert-head {
+      background-color: var(--ion-color-danger);
+
+      .alert-title,
+      .alert-sub-title {
+        color: #FFFFFF !important;
+      }
+    }
+
+    .alert-message {
+      padding-top: 10px !important;
+      padding-bottom: 0 !important;
+    }
+
+    .alert-button {
+      color: var(--ion-color-danger) !important;
+    }
+  }
+}
