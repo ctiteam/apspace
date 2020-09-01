@@ -174,7 +174,7 @@ export class ExamScheduleDetailsPage implements OnInit {
         onEdit: 'true',
         examScheduleDetails: this.examScheduleDetailsToBeEdited
       },
-      cssClass: 'full-page-modal'
+      cssClass: 'glob-full-page-modal'
     });
 
     modal.onDidDismiss().then((data) => {
@@ -193,7 +193,7 @@ export class ExamScheduleDetailsPage implements OnInit {
         examId: this.examId,
         intakesToBeValidated: this.intakesToBeValidated
       },
-      cssClass: 'full-page-modal'
+      cssClass: 'glob-full-page-modal'
     });
 
     modal.onDidDismiss().then((data) => {
@@ -216,7 +216,7 @@ export class ExamScheduleDetailsPage implements OnInit {
         examId: this.examId,
         intakesToBeValidated: filteredIntakesToBeValidated
       },
-      cssClass: 'full-page-modal'
+      cssClass: 'glob-full-page-modal'
     });
 
     modal.onDidDismiss().then((data) => {
