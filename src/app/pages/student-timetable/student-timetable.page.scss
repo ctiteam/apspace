@@ -24,6 +24,10 @@ ion-card {
   }
 }
 
+ion-segment{
+  --background: var(--ion-color-light);
+}
+
 .table-item:nth-child(odd) {
   --background: var(--ion-background-color) !important;
 }
