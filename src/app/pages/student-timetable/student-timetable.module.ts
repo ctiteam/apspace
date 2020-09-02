@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
+import { SharedPipesModule } from 'src/app/shared/shared-pipes.module';
 import { RouterLinkDirectiveStub } from 'src/testing';
 import { ComponentsModule } from '../../components/components.module';
 import { ClassesPipe } from './classes.pipe';
@@ -12,6 +13,7 @@ import { StrToColorPipe } from './str-to-color.pipe';
 import { StudentTimetablePage } from './student-timetable.page';
 import { ThedayPipe } from './theday.pipe';
 import { TheWeekPipe } from './theweek.pipe';
+import { TimeParserPipe } from './time-parser.pipe';
 
 const routes: Routes = [
   {
@@ -31,6 +33,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     ComponentsModule,
+    SharedPipesModule
   ],
   declarations: [
     StudentTimetablePage,
@@ -39,7 +42,8 @@ const routes: Routes = [
     TheWeekPipe,
     GenPipe,
     RouterLinkDirectiveStub,
-    StrToColorPipe  // TODO: remove this if possible temporary fix
+    StrToColorPipe, // TODO: remove this if possible temporary fix
+    TimeParserPipe
   ],
 })
 export class StudentTimetablePageModule { }

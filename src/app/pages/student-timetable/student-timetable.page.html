@@ -27,7 +27,7 @@
         </ion-col>
         <ion-col size="auto">
           <ion-button fill="outline" (click)="chooseWeek()" [disabled]="availableWeek!.length === 0" color="primary">
-            {{selectedWeek | date : 'dd MMM yyy'}}
+            {{selectedWeek | dateWithTimezone : 'dd MMM yyy'}}
             <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
           </ion-button>
         </ion-col>
@@ -60,7 +60,7 @@
           <ion-card class="ion-no-margin">
 
             <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
-              <ion-segment [ngModel]="selectedDate | date:'E' | uppercase" color="primary"
+              <ion-segment [ngModel]="selectedDate | dateWithTimezone:'E' | uppercase" color="primary"
                 (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]" scrollable>
                 <ion-segment-button *ngFor="let day of availableDays" [value]="day">
                   {{ day }}
@@ -76,7 +76,7 @@
                     *ngIf="i===0 || (i !== 0 && (timetable.DATESTAMP_ISO !== timetables[i-1].DATESTAMP_ISO))"
                     lines="none" color="secondary">
                     <ion-label class="glob-text-bold">
-                      {{ timetable.DATESTAMP_ISO | date: "EEE, d MMM " }}
+                      {{ timetable.DATESTAMP_ISO | dateWithTimezone: "EEE, d MMM " }}
                     </ion-label>
                   </ion-item-divider>
                 </ng-container>
@@ -97,7 +97,7 @@
                         <ion-col size-xs="12" size-sm="6" size-md="3">
                           <p>
                             <ion-icon class="glob-text-bold" name="time-outline"></ion-icon>
-                            {{ timetable.TIME_FROM }} - {{ timetable.TIME_TO }}
+                            {{ timetable.TIME_FROM | timeParser }} - {{ timetable.TIME_TO | timeParser }}
                           </p>
                         </ion-col>
                         <ion-col size-xs="12" size-sm="6" size-md="4">
@@ -135,7 +135,7 @@
           <ion-card>
             <ion-card-content class="ion-no-padding ion-padding-bottom">
               <ng-template [ngIf]="!viewWeek && availableWeek!.length > 0">
-                <ion-segment [ngModel]="selectedDate | date:'E' | uppercase" color="primary"
+                <ion-segment [ngModel]="selectedDate | dateWithTimezone:'E' | uppercase" color="primary"
                   (ngModelChange)="selectedDate = availableDate[availableDays.indexOf($event)]" scrollable>
                   <ion-segment-button *ngFor="let day of availableDays" [value]="day">
                     {{ day }}
