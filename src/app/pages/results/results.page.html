@@ -1,16 +1,10 @@
 <ion-header>
   <ion-toolbar mode="md">
-    <ion-title *ngIf="course$ | async">
+    <ion-title>
       Results
     </ion-title>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
-    </ion-buttons>
-    <ion-buttons *ngIf="block" slot="end">
-      <ion-button fill="outline" color="primary"
-        (click)="showActionSheet()">
-        {{ selectedIntake }}
-      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -21,155 +15,163 @@
   </ion-refresher>
   <div class="glob-container">
     <ng-template [ngIf]="block" [ngIfElse]="accountIsBlocked">
-      <ion-grid>
+      <ion-grid *ngIf="course$ | async">
         <ion-row *ngIf="results$ | async as results; else loadingResults">
-          <!-- Profile & Chart -->
-          <ion-col size-xs="12" size-lg="4">
-            <ng-container *ngIf="courseDetail$ | async as courseDetail; else loadingCourseDetail">
-              <ion-card class="ion-no-margin ion-margin-top" *ngIf="courseDetail.length > 1; else noCourseDetail">
-                <ion-card-content>
-                  <ng-container>
-                    <h4 class="summary-header ion-padding-start glob-text-bold">
-                      <ion-text color="primary">
-                        Results Summary Chart
-                      </ion-text>
+          <ion-col size-xs="12" size-md="4" push-md="8">
+            <ion-card class="ion-no-margin ion-margin-top">
+              <ion-card-header class="ion-no-padding ion-padding-bottom">
+                <ion-item color="primary">
+                  <ion-label position="floating">Intake</ion-label>
+                  <ion-select [(ngModel)]="selectedIntake" (ngModelChange)="intakeChanged()" value="notifications"
+                    interface="action-sheet">
+                    <ion-select-option *ngFor="let intake of intakeLabels" [value]="intake">{{intake}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-card-header>
+              <ion-card-content class="ion-no-padding ion-padding-bottom">
+                <ng-container *ngIf="courseDetail$ | async as courseDetail; else loadingCourseDetail">
+                  <ng-container *ngIf="courseDetail.length > 1; else noCourseDetail">
+                    <h4 class="ion-no-margin glob-text-bold ion-padding-start ion-padding-end">
+                      <ion-text color="primary">Results Summary Chart</ion-text>
                     </h4>
-                    <chart class="ion-margin-top" *ngIf="data" [type]="type" [data]="data" [options]="options"></chart>
+                    <div class="ion-text-center">
+                      <chart class="ion-margin-top" *ngIf="data" [type]="type" [data]="data" [options]="options">
+                      </chart>
+                    </div>
                   </ng-container>
-                </ion-card-content>
-              </ion-card>
-              <ng-template #noCourseDetail>
-                <ion-card class="ion-no-margin ion-margin-top">
-                  <ion-card-header>
-                    <ion-card-title>
-                      Summary
-                    </ion-card-title>
-                  </ion-card-header>
-                  <ion-card-content>
-                    <p class="ion-padding">Course details is not available for the selected intake.</p>
-                  </ion-card-content>
-                </ion-card>
-              </ng-template>
-            </ng-container>
-            <ng-template #loadingCourseDetail>
-              <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
-              <ion-skeleton-text animated style="width: 100%; line-height: 100px"></ion-skeleton-text>
-            </ng-template>
-            <ion-grid>
-              <ion-row>
-                <ion-col>
-                  <ion-button class="ion-margin-top" color="success" expand="block" size="large"
+                  <ng-template #noCourseDetail>
+                    <h4 class="ion-no-margin glob-text-bold ion-padding-start ion-padding-end">
+                      <ion-text color="primary">Results Summary Chart</ion-text>
+                    </h4>
+                    <div class="ion-text-center">
+                      <ion-text color="danger">
+                        <p class="ion-padding">Course details is not available for the selected intake.</p>
+                      </ion-text>
+                    </div>
+                  </ng-template>
+                </ng-container>
+                <ng-template #loadingCourseDetail>
+                  <div class="ion-padding-start ion-padding-end ion-padding-bottom">
+                    <ion-skeleton-text animated style="width: 58%; height: 30px"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 100%; line-height: 140px"></ion-skeleton-text>
+                  </div>
+                </ng-template>
+                <ion-buttons>
+                  <ion-button class="ion-no-margin glob-margin-auto" size="small" color="primary" fill="outline"
                     [routerLink]="['/student-survey']">
                     Survey
-                    <ion-icon slot="end" name="newspaper"></ion-icon>
+                    <ion-icon name="newspaper" slot="end"></ion-icon>
                   </ion-button>
-  
-                  <ion-button class="ion-margin-top" color="danger" expand="block" size="large"
+                  <ion-button class="ion-no-margin glob-margin-auto" size="small" color="danger" fill="outline"
                     (click)="generateInterimPDF()">
                     Interim Transcript
-                    <ion-icon slot="end" name="document"></ion-icon>
+                    <ion-icon name="document" slot="end"></ion-icon>
                   </ion-button>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
+                </ion-buttons>
+              </ion-card-content>
+            </ion-card>
+
           </ion-col>
-  
-          <!-- Results -->
-          <ion-col size-xs="12" size-lg="8">
+
+          <ion-col size-xs="12" size-md="8" pull-md="4">
             <ng-container *ngIf="results.length > 0; else noResultsYet">
-              <ion-card *ngFor="let semesterResult of results"
-                class="ion-no-padding ion-no-margin ion-margin-top ion-margin-bottom ion-padding-bottom">
-                <ion-card-header class="sem">
-                  <ion-card-title color="light">Semester {{ semesterResult.semester }}</ion-card-title>
-                </ion-card-header>
-  
-                <ion-card-content>
-                  <div style="border-bottom: 2px solid var(--ion-color-medium);">
-                    <ion-grid class="ion-no-padding">
-                      <ion-row>
-                        <ion-col size-lg="6" size="12">
-                          <span class="glob-text-bold">Total Modules Passed</span>
-                          <span
-                            class="ion-float-right right-notch">{{ semesterResult.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</span>
-                        </ion-col>
-  
-                        <ion-col size-lg="6" size="12">
-                          <span class="glob-text-bold">GPA</span>
-                          <span class="ion-float-right">{{ semesterResult.summary[0]?.GPA || 'N/A' }}</span>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </div>
-  
-                  <ion-grid class="table-top">
-                    <ion-row>
-                      <ion-col size="12" size-sm="3" size-md="5">
-                        <h2 class="glob-text-bold">Module</h2>
-                      </ion-col>
-  
-                      <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
-                        <h2 class="glob-text-bold">Result</h2>
-                      </ion-col>
-  
-                      <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
-                        <h2 class="glob-text-bold">Grade Point</h2>
-                      </ion-col>
-  
-                      <ion-col size="12" size-sm="3" size-md="3" class="ion-text-center">
-                        <h2 class="glob-text-bold">Internal Result Release Date</h2>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
-  
-                  <ng-container *ngFor="let result of semesterResult.value; last as last; trackBy: trackByFn">
-                    <ion-item lines="none" class="table-item">
-                      <ion-grid>
-                        <ion-row>
-                          <ion-col size="12" size-sm="3" size-md="5"
-                            class="glob-text-bold description ion-text-center">
-                            {{ result.MODULE_DESCRIPTION }}
+
+              <ng-container *ngFor="let semesterResult of results">
+                <ion-card class="ion-no-margin ion-margin-top">
+                  <ion-card-header color="secondary">
+                    <ion-card-title>Semester {{ semesterResult.semester }}</ion-card-title>
+                    <ion-card-subtitle>
+                      <ion-grid class="ion-no-padding ion-no-margin">
+                        <ion-row class="ion-no-padding ion-no-margin">
+                          <ion-col class="ion-no-padding ion-no-margin">
+                            <p class="ion-no-margin"><small class="ion-no-margin">Modules Passed:</small>
+                              {{ semesterResult.summary[0]?.TOTAL_MODULES_PASSED || 'N/A' }}</p>
                           </ion-col>
-                          <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
-                            <span class="marker">Grade: </span>
-                            <ng-container
-                              *ngIf="result.GRADE.toLowerCase() !== 'Pending Survey'.toLowerCase(); else resultsPendingSurvey">
-                              {{ result.GRADE || "N/A" }}
-                            </ng-container>
-                            <ng-template #resultsPendingSurvey>
-                              <a (click)="openSurveyPage(result.MODULE_CODE)" color="primary"
-                                style="text-decoration: underline;">
-                                Pending Survey
-                              </a>
-                            </ng-template>
-                          </ion-col>
-                          <ion-col size="12" size-sm="3" size-md="2" class="ion-text-center">
-                            <span class="marker">Grade Point: </span>
-                            <ng-container
-                              *ngIf="result.GRADE_POINT.toLowerCase() !== 'Pending Survey'.toLowerCase(); else resultsPendingSurvey">
-                              {{ result.GRADE_POINT || "N/A" }}
-                            </ng-container>
-                            <ng-template #resultsPendingSurvey>
-                              <a (click)="openSurveyPage(result.MODULE_CODE)" color="primary"
-                                style="text-decoration: underline !important;">
-                                Pending Survey
-                              </a>
-                            </ng-template>
-                          </ion-col>
-                          <ion-col size="12" size-sm="3" size-md="3" class="ion-text-center">
-                            <span class="marker">Internal Result: </span>
-  
-                            {{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A'  }}
-                          </ion-col>
-                          <ion-col *ngIf="result.RECOMMENDATION">
-                            <span class="glob-text-bold">Recommendation:</span> <br>
-                            <span><ion-text color="danger">{{ result.RECOMMENDATION }}</ion-text></span>
+                          <ion-col class="ion-no-padding ion-no-margin">
+                            <p class="ion-no-margin"><small class="ion-no-margin">GPA:</small>
+                              {{ semesterResult.summary[0]?.GPA || 'N/A' }}</p>
                           </ion-col>
                         </ion-row>
                       </ion-grid>
-                    </ion-item>
-                  </ng-container>
-                </ion-card-content>
-              </ion-card>
+                    </ion-card-subtitle>
+                  </ion-card-header>
+                  <ion-card-content class="ion-no-padding">
+                    <ion-list class="ion-no-padding">
+                      <ion-item lines="full" *ngFor="let result of semesterResult.value; trackBy: trackByFn"
+                        [color]="result.GRADE.toLowerCase() === 'Pending Survey'.toLowerCase() ? 'warning' : ''">
+                        <ion-label class="ion-no-margin glob-white-space-normal">
+                          <ion-grid>
+                            <ion-row>
+                              <ion-col size="12">
+                                <ion-text>
+                                  <h3 class="glob-text-bold">
+                                    <ion-text color="secondary">{{ result.MODULE_DESCRIPTION }}</ion-text>
+                                  </h3>
+                                </ion-text>
+                              </ion-col>
+                            </ion-row>
+                            <ion-row
+                              *ngIf="result.GRADE.toLowerCase() !== 'Pending Survey'.toLowerCase(); else pendingSurvey">
+                              <ion-col size="6" size-md="4">
+                                <p>
+                                  <small>Result:</small>
+                                  <ion-text class="glob-text-bold">
+                                    {{ result.GRADE || "N/A" }}
+                                  </ion-text>
+                                </p>
+                              </ion-col>
+                              <ion-col size="6" size-md="4">
+                                <p>
+                                  <small>Grade:</small>
+                                  <ion-text class="glob-text-bold">
+                                    {{ result.GRADE_POINT || "N/A" }}
+                                  </ion-text>
+                                </p>
+                              </ion-col>
+                              <ion-col size="12" size-md="4">
+                                <p>
+                                  <small>Internal Release Date:</small>
+                                  <ion-text class="glob-text-bold">
+                                    {{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A'  }}
+                                  </ion-text>
+                                </p>
+                              </ion-col>
+                              <ion-col size="12" *ngIf="result.RECOMMENDATION">
+                                <ion-text color="danger">
+                                  <small class="glob-text-bold">Recommendations: {{ result.RECOMMENDATION }}</small>
+                                </ion-text>
+                              </ion-col>
+                            </ion-row>
+                            <ng-template #pendingSurvey>
+                              <ion-row>
+                                <ion-col size="6">
+                                  <p>
+                                    <small>Result & Grade: </small>
+                                    <ion-text class="glob-text-bold">
+                                      <a tappable (click)="openSurveyPage(result.MODULE_CODE)" color="primary"
+                                        style="text-decoration: underline;">Pending Survey</a>
+                                    </ion-text>
+                                  </p>
+                                </ion-col>
+                                <ion-col size="6">
+                                  <p>
+                                    <small>Internal Release Date:</small>
+                                    <ion-text class="glob-text-bold">
+                                      {{ result.INTERNAL_RESULT_RELEASE_DATE || 'N/A'  }}
+                                    </ion-text>
+                                  </p>
+                                </ion-col>
+                              </ion-row>
+                            </ng-template>
+                            <ion-row></ion-row>
+                          </ion-grid>
+                        </ion-label>
+                      </ion-item>
+                    </ion-list>
+                  </ion-card-content>
+                </ion-card>
+              </ng-container>
             </ng-container>
             <ng-template #noResultsYet>
               <ion-card class="ion-no-margin ion-margin-top ion-margin-bottom ion-no-padding">
@@ -221,20 +223,20 @@
                     </div>
                   </ion-grid>
                   <div style="padding: 5px !important">
-                    <h2>
+                    <p>
                       <span class="glob-text-bold">R</span> = Awarding of module credit by passing module referral
                       assessments.
-                    </h2>
-                    <h2>
+                    </p>
+                    <p>
                       <span class="glob-text-bold">C</span> = Awarding of module credit through compensation at the
                       discretion of the Examination Board, based on the student's
                       overall academic performance. No referral assessment is requried
                       for module.
-                    </h2>
+                    </p>
                     <ng-container *ngIf="mpuLegend$ | async as mpu">
-                      <h2 *ngIf="mpu.length > 0">
+                      <p *ngIf="mpu.length > 0">
                         {{ mpu[0].MPU }}
-                      </h2>
+                      </p>
                     </ng-container>
                   </div>
                 </ion-card-content>
@@ -243,7 +245,7 @@
             <ng-template #loadingInterimLegend>
               <ion-skeleton-text animated style="width: 100%; line-height: 300px"></ion-skeleton-text>
             </ng-template>
-  
+
             <ng-container
               *ngIf="(classificationLegend$ | async) as classificationLegend; else loadingClassificationLegend">
               <div *ngIf="classificationLegend.length > 0">
@@ -272,19 +274,27 @@
         <ng-template #loadingResults>
           <ion-grid>
             <ion-row>
-              <ion-col size-xs="12" size-lg="3">
-                <ion-card class="ion-no-padding">
-                  <ion-card-content class="ion-no-padding">
-                    <ion-skeleton-text animated style="width: 100%; line-height: 200px"></ion-skeleton-text>
-                  </ion-card-content>
-                </ion-card>
-                <ion-card class="ion-no-padding">
-                  <ion-card-content class="ion-no-padding">
-                    <ion-skeleton-text animated style="width: 100%; line-height: 400px"></ion-skeleton-text>
+              <ion-col size-xs="12" size-md="4" push-md="8">
+                <ion-card class="ion-no-margin ion-margin-top">
+                  <ion-card-header class="ion-no-padding ion-padding-bottom">
+                    <ion-item color="primary">
+                      <ion-label position="floating">Intake</ion-label>
+                      <ion-select [(ngModel)]="selectedIntake" (ngModelChange)="intakeChanged()" value="notifications"
+                        interface="action-sheet">
+                        <ion-select-option *ngFor="let intake of intakeLabels" [value]="intake">{{intake}}
+                        </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ion-card-header>
+                  <ion-card-content class="ion-no-padding ion-padding-bottom">
+                    <div class="ion-padding-start ion-padding-end ion-padding-bottom">
+                      <ion-skeleton-text animated style="width: 58%; height: 30px"></ion-skeleton-text>
+                      <ion-skeleton-text animated style="width: 100%; line-height: 140px"></ion-skeleton-text>
+                    </div>
                   </ion-card-content>
                 </ion-card>
               </ion-col>
-              <ion-col size-xs="12" size-lg="9">
+              <ion-col size-xs="12" size-md="8" pull-md="4">
                 <ion-skeleton-text animated style="width: 100%; line-height: 600px"></ion-skeleton-text>
               </ion-col>
             </ion-row>
@@ -292,35 +302,33 @@
         </ng-template>
       </ion-grid>
     </ng-template>
-  </div>
 
-  <ng-template #accountIsBlocked>
-    <ion-grid>
-      <ion-row>
-        <ion-col size="10" offset="1">
-          <ion-button class="ion-margin-top" color="success" expand="block" size="large"
-            [routerLink]="['/student-survey']">
-            Survey
-            <ion-icon slot="end" name="newspaper"></ion-icon>
-          </ion-button>
-        </ion-col>
-        <ion-col size-xs="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3">
-          <ion-card class="account-disabled">
-            <ion-card-header>
-              <ion-card-title>
-                <h4>
-                  <ion-text color="danger">
-                    Your account has been disabled
-                  </ion-text>
-                </h4>
-              </ion-card-title>
-            </ion-card-header>
-            <ion-card-content class="ion-padding">
-              <pre>{{ message }}</pre>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ng-template>
+    <ng-template #accountIsBlocked>
+      <ion-grid>
+        <ion-row>
+          <ion-col size-xs="12" size-md="8" offset-md="2" size-lg="6" offset-lg="3">
+            <ion-button class="ion-margin-top ion-margin-bottom" color="success" expand="block" size="large"
+              [routerLink]="['/student-survey']">
+              Survey
+              <ion-icon slot="end" name="newspaper"></ion-icon>
+            </ion-button>
+            <ion-card class="account-disabled">
+              <ion-card-header>
+                <ion-card-title>
+                  <h4>
+                    <ion-text color="danger">
+                      Your account has been disabled
+                    </ion-text>
+                  </h4>
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content class="ion-padding">
+                <pre>{{ message }}</pre>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+  </div>
 </ion-content>

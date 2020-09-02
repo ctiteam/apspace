@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { NavigationExtras } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController, LoadingController, NavController, ToastController } from '@ionic/angular';
-import { ActionSheetButton } from '@ionic/core';
 import { Observable, forkJoin } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 
@@ -92,21 +91,9 @@ export class ResultsPage {
     });
   }
 
-  showActionSheet() {
-    const intakesButton = this.intakeLabels.map(intake => {
-      return {
-        text: intake, handler: () => {
-          this.selectedIntake = intake;
-          this.results$ = this.getResults(this.selectedIntake, { caching: 'network-or-cache' });
-          this.getCourseDetails(this.selectedIntake, { caching: 'network-or-cache' });
-        },
-      } as ActionSheetButton;
-    });
-    this.actionSheetCtrl.create({
-      buttons: [...intakesButton, { text: 'Cancel', role: 'cancel' }],
-    }).then(
-      actionSheet => actionSheet.present()
-    );
+  intakeChanged() {
+    this.results$ = this.getResults(this.selectedIntake, { caching: 'network-or-cache' });
+    this.getCourseDetails(this.selectedIntake, { caching: 'network-or-cache' });
   }
 
   generateInterimPDF() {
