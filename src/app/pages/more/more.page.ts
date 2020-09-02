@@ -46,6 +46,7 @@ export class MorePage implements OnInit {
   menuFull: MenuItem[] = menus;
 
   isMobile = this.platform.is('cordova');
+  isExpand = false;
 
   constructor(
     public navCtrl: NavController,
@@ -97,10 +98,30 @@ export class MorePage implements OnInit {
       if (index > -1) {
         this.keyList.splice(index, 1);
       }
+
+      if (this.keyList.length === 0) {
+        this.isExpand = false;
+      }
       return;
     }
 
     this.keyList.push(groupKey);
+
+    const keyIconLength = Object.keys(this.keyIcon).length;
+    if (keyIconLength === this.keyList.length) {
+      this.isExpand = true;
+    }
+  }
+
+  toggleExpandAll() {
+    this.isExpand = !this.isExpand;
+
+    if (this.isExpand) {
+      this.keyList = Object.keys(this.keyIcon);
+    } else {
+      this.keyList = [];
+    }
+
   }
 
   /** Open page, manually check for third party pages. */

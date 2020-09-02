@@ -4,8 +4,9 @@ ion-avatar {
 
 // NEW CARD VIEW CUSTOM CSS STARTS HERE
 
-.light-text {
-  color: var(--ion-color-light);
+.gradient-background {
+  --ion-background-color: #3a99d9 !important;  /* fallback for old browsers */;
+  --ion-background-color: var(--ion-more-page-background-color) !important;
 }
 
 ion-item-divider {
@@ -38,7 +39,8 @@ ion-item-divider {
   padding: 1em;
   background-color: var(--ion-more-page-card-background-color);
   border-radius: 10px;
-  box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 
   .flex-content{
     display: flex;
@@ -56,6 +58,10 @@ ion-item-divider {
     max-width: 36px;
     max-height: 36px;
   }
+}
+
+.custom-card:hover {
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 .logout {

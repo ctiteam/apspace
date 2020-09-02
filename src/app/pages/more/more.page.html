@@ -17,7 +17,7 @@
 
 <!-- TODO: add the edit fav button & move the search functionality to a service or tabs page -->
 <!-- TODO: What if fav$ failed? This will affect all the menu items -->
-<ion-content *ngIf="fav$ | async as fav">
+<ion-content *ngIf="fav$ | async as fav" [class]="(view$ | async) !== 'list' ? 'gradient-background' : ''">
 
   <div class="glob-container">
     <!-- LISTS UI -->
@@ -107,7 +107,11 @@
         <!-- FAVORITE -->
         <ion-row *ngIf="!editMode && (fav | byItem: term) as filteredFavMenu">
           <ion-col size="12" class="ion-margin-vertical">
-            <h5 class="ion-text-center">Favorite</h5>
+            <h5 class="ion-text-center">
+              <ion-text color="light">
+                Favorite
+              </ion-text>
+            </h5>
           </ion-col>
           <ng-container *ngIf="filteredFavMenu.length > 0; else noFavCard">
             <div class="card-view-masonry-list">
@@ -123,8 +127,10 @@
           <ng-template #noFavCard>
             <ion-col size="12">
               <ng-container *ngIf="!term; else noSearchResults">
-                <p class="light-text ion-margin-top ion-margin-bottom ion-text-center ion-padding">
-                  Click on edit button and add items now to your favorite menu :)
+                <p class="ion-margin-top ion-margin-bottom ion-text-center ion-padding">
+                  <ion-text color="light">
+                    Click on edit button and add items now to your favorite menu :)
+                  </ion-text>
                 </p>
               </ng-container>
               <ng-template #noSearchResults>
@@ -151,17 +157,25 @@
             </ion-col>
           </ng-template>
         </ion-row>
-
+        <ion-row>
+          <ion-col class="ion-text-end">
+            <ion-button color="primary" (click)="toggleExpandAll()">{{isExpand ? 'Collapse All' : 'Expand All'}}</ion-button>
+          </ion-col>
+        </ion-row>
         <!-- MENU -->
         <ion-row *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop;">
           <ion-col size="12">
-            <ion-item lines="none" color="none" (click)="showMore(group.key)">
+            <ion-item class="cursor-pointer" lines="none" color="none" (click)="showMore(group.key)">
               <ion-avatar slot="start">
                 <img [src]="keyIcon[group.key]">
               </ion-avatar>
 
-              <h5 class="ion-text-start ion-padding">{{ group.key }}</h5>
-              <ion-icon slot="end" [name]="keyList.includes(group.key) ? 'chevron-up-outline' : 'chevron-down-outline'">
+              <h5 class="ion-text-start ion-padding">
+                <ion-text color="light">
+                  {{ group.key }}
+                </ion-text>
+              </h5>
+              <ion-icon color="light" slot="end" [name]="keyList.includes(group.key) ? 'chevron-up-outline' : 'chevron-down-outline'">
               </ion-icon>
             </ion-item>
           </ion-col>
@@ -182,15 +196,18 @@
         </ion-row>
         <ion-row *ngIf="!editMode">
           <ion-col>
-            <ion-item lines="none" color="none" (click)="openPage('logout')">
+            <ion-item class="cursor-pointer" lines="none" color="none" (click)="openPage('logout')">
               <ion-avatar slot="start">
                 <img src="assets/img/log-out.png">
               </ion-avatar>
 
-              <h5 class="ion-text-start ion-padding">Logout</h5>
+              <h5 class="ion-text-start ion-padding">
+                <ion-text color="light">
+                  Logout
+                </ion-text>
+              </h5>
             </ion-item>
           </ion-col>
-          <ion-item-divider></ion-item-divider>
         </ion-row>
       </ion-grid>
     </ng-template>
