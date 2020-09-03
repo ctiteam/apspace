@@ -745,7 +745,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
             title: timetable.module,
             firstDescription: timetable.location + ' | ' + timetable.room,
             secondDescription: timetable.intakes.join(', '),
-            thirdDescription: this.secondsToHrsAndMins(timetable.duration),
+            thirdDescription: format(Date.parse(timetable.time) + timetable.duration * 1000, 'hh mm a'),
             color: '#27ae60',
             pass: classPass,
             passColor: '#d7dee3',
