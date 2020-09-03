@@ -191,7 +191,7 @@
               <ion-icon (click)="addToFav(item.id)" [name]="(fav | itemInFav: item) ? 'star' : 'star-outline'"
                 class="colored-text"></ion-icon>
             </div>
-            <div (click)="openPage(item.url)" class="custom-card cursor-pointer">
+            <div *ngIf="item.title !== 'Logout'" (click)="openPage(item.url)" class="custom-card cursor-pointer">
               <div class="flex-content">
                 <img [src]="item.img">
                 <p class="page-title">{{ item.title }}</p>
