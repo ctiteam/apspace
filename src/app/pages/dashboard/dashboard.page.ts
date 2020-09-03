@@ -74,6 +74,7 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   role: Role;
   isStudent: boolean;
+  isLecturer: boolean;
   isCordova: boolean;
   skeletons = new Array(5);
 
@@ -368,6 +369,8 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
       this.role = role;
       // tslint:disable-next-line: no-bitwise
       this.isStudent = Boolean(role & Role.Student);
+      // tslint:disable-next-line: no-bitwise
+      this.isLecturer = Boolean(role & Role.Lecturer);
 
       this.settings.get$('dashboardSections')
         .subscribe(data => this.shownDashboardSections = data);

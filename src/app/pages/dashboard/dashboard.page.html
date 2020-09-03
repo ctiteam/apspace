@@ -59,16 +59,28 @@
             <ion-card-content>
               <ion-grid>
                 <ion-row>
-                  <ion-col class="auto">
+                  <ion-col size="12">
                     <ion-button expand="block" [routerLink]="['/apcard-qr-code']">
                       Scan Qr Code
                       <ion-icon name="qr-code-outline" slot="end"></ion-icon>
                     </ion-button>
                   </ion-col>
-                  <ion-col class="auto">
+                  <ion-col size="12" *ngIf="isStudent">
                     <ion-button expand="block" [routerLink]="['/attendix/update']">
                       Sign Class Attendance
                       <ion-icon name="checkmark-done-circle-outline" slot="end"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                  <ion-col size="12" *ngIf="isLecturer">
+                    <ion-button expand="block" [routerLink]="['/attendix/classes']">
+                      Mark Class Attendance
+                      <ion-icon name="checkmark-done-circle-outline" slot="end"></ion-icon>
+                    </ion-button>
+                  </ion-col>
+                  <ion-col size="12" *ngIf="!isStudent">
+                    <ion-button expand="block" [routerLink]="['/hr']">
+                      Human Resources
+                      <ion-icon name="people-circle" slot="end"></ion-icon>
                     </ion-button>
                   </ion-col>
                 </ion-row>
