@@ -57,7 +57,6 @@ export class ResultsPage {
     private cas: CasTicketService,
     private http: HttpClient,
     private iab: InAppBrowser,
-    private actionSheetCtrl: ActionSheetController,
     private navCtrl: NavController,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController
