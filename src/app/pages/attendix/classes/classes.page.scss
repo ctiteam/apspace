@@ -1,43 +1,30 @@
-// general
-.transparent {
-  --background: transparent !important;
+ion-item.radio {
+  ion-radio {
+    width: 15px !important;
+    height: 15px !important;
+    margin-right: 3px !important;
+  }
+
+  ion-label {
+    font-size: 0.8em !important;
+  }
+}
+
+ion-select.select-with-border{
+  border: 1px solid var(--ion-border-color);
+  padding-left: 6px;
 }
 
 .no-box-shadow {
   box-shadow: none !important;
 }
 
-.margin-auto {
-  margin: auto;
-}
-
-.top-bottom-margin-auto {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-.show-only-on-small-devices{
+.show-only-on-small-devices {
   display: none !important;
 }
 
-.show-only-on-other-devices{
-  display: inline-block !important;
-}
-
-// mark new attendance
-.input-item {
-  --background-hover: transparent !important;
-  --button-background-activated: transparent !important;
-  --ripple-color: transparent !important;
-  ion-label {
-    padding-left: 2px;
-  }
-
-  &.item-interactive-disabled {
-    ion-label {
-      opacity: .5 !important;
-    }
-  }
+.show-only-on-other-devices {
+  display: block !important;
 }
 
 .select-box {
@@ -48,9 +35,11 @@
   margin-top: 10px;
   width: 100%;
   padding: 8px 10px 9px 10px !important;
-  &:hover{
+
+  &:hover {
     background-color: var(--tertiary-bg-color);
   }
+
   span {
     float: left;
 
@@ -71,7 +60,8 @@
       width: 8%;
       display: block;
       text-align: right;
-      ion-icon{
+
+      ion-icon {
         opacity: .33;
         font-size: 17px !important;
       }
@@ -86,15 +76,13 @@
   border: 1px solid var(--tertiary-bg-color);
   min-height: 40px;
   margin-top: 10px;
-  &.date-picker{
-    min-height: auto !important;
-    padding: 8px 10px 9px 10px !important;
-  }
-  ion-grid { // fix the same width as the other input
+
+  ion-grid {
     ion-col {
       height: 43px; // original min-height 48px
       margin-top: -4px;
       margin-bottom: 3px;
+
       ion-item {
         margin-top: -2px;
         top: 5px;
@@ -102,25 +90,10 @@
       }
     }
   }
-  &:hover{
-    background-color: var(--tertiary-bg-color);
-  }
-}
-
-ion-select.form-input {
-  width: 100%;
-  padding: 8px 10px 9px 10px !important;
 }
 
 ion-radio-group.form-input {
   width: 100%;
-}
-
-// attendance logs
-.select-container {
-  .input {
-    border: 1px solid var(--tertiary-bg-color);
-  }
 }
 
 .table {
@@ -150,52 +123,51 @@ ion-radio-group.form-input {
   }
 }
 
+.duration-item {
+  --border-width: 0 0 1px 1px !important;
+}
+
 // media queries for changing table to card design in small devices
-@media (max-width: 575px) { // small screen
-  .table-header{
+@media (max-width: 575px) {
+  // small screen
+
+  .duration-item {
+    --border-width: 0 0 1px 0 !important;
+  }
+
+  .table-header {
     display: none;
   }
-  .table-row{
-    &.text-bold.no-bold-on-small-devices{
+
+  .table-row {
+    &.text-bold.no-bold-on-small-devices {
       font-weight: normal !important;
     }
-    .ion-text-center.no-center-on-small-devices{
+
+    .ion-text-center.no-center-on-small-devices {
       text-align: left !important;
     }
-    .title-on-small-devices{
+
+    .title-on-small-devices {
       font-size: 1.1rem;
       font-weight: bold;
     }
   }
 
-  .show-only-on-small-devices{
-    display: inline-block !important;
+  .show-only-on-small-devices {
+    display: block !important;
   }
-  .show-only-on-other-devices{
+
+  .show-only-on-other-devices {
     display: none !important;
   }
 
-  .border-bottom{
+  .border-bottom {
     border-bottom: 1px solid var(--main-txt-color) !important;
   }
 
-  .bold-on-small-devices{
+  .bold-on-small-devices {
     font-weight: bold;
   }
-  // .table-item {
-  //   --background: var(--secondary-bg-color) !important;
 
-  //   &:nth-child(even) {
-  //     --background: var(--secondary-bg-color) !important;
-  //   }
-  //   &:not(:last-child) {
-  //     margin-bottom: 15px;
-  //   }
-  //   --padding-top: 5px;
-  //   box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-  // }
-  // ion-card.table-background {
-  //   --background: transparent !important;
-  //   box-shadow: none !important;
-  // }
 }

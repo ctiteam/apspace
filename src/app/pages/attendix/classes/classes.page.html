@@ -8,455 +8,428 @@
 </ion-header>
 
 <ion-content class="attendix-content">
-
-  <ng-container *ngIf="classcodes$ | async as classcodes; else loadingClasscodes">
-    <ion-grid class="ion-no-padding">
-      <ion-row>
-        <ion-col size="12" size-md="8" class="ion-no-padding">
-          <!-- new attendance -->
-          <ion-card class="transparent no-box-shadow">
-            <ion-card-header class="ion-no-padding ion-padding-start ion-padding-end">
-              <ion-grid class="ion-no-padding">
-                <ion-row>
-                  <ion-col class="margin-auto ion-no-padding">
-                    <ion-card-title>Mark New Attendance</ion-card-title>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-card-header>
-            <ion-card-content class="ion-no-padding">
-
-              <ion-card>
-                <ion-card-content class="ion-no-padding ion-padding-bottom">
-                  <ion-grid>
-                    <ion-row>
-                      <ion-col size="12">
-                        <ion-item tappable class="input-item" lines="none" (click)="chooseClasscode()">
-                          <ion-label position="stacked">Class Code</ion-label>
-                          <div class="select-box" expand="block">
-                            <span *ngIf="!classcode" class="text placeholder">Click to Select</span>
-                            <span *ngIf="classcode" class="text value">{{classcode}}</span>
-                            <span class="icon">
-                              <ion-icon name="caret-down"></ion-icon>
-                            </span>
-                          </div>
-                        </ion-item>
-                      </ion-col>
-                      <ion-col size="12">
-                        <ion-item lines="none" class="input-item">
-                          <ion-label position="stacked">Date</ion-label>
-                          <ion-datetime [ngModel]="date" (ngModelChange)="changeDate(date = $event)" [min]="minDate" [max]="maxDate"
-                            placeholder="Click to select" displayFormat="YYYY-MM-DD" pickerFormat="DD MMM YYYY"
-                            class="form-input date-picker"></ion-datetime>
-                        </ion-item>
-                      </ion-col>
-
-                    </ion-row>
-                    <ion-row>
-                      <ion-col size="12" size-md="6">
-                        <ion-item lines="none" class="input-item">
-                          <ion-label position="stacked">Start Time</ion-label>
-                          <ion-select [disabled]="!date" class="form-input" [(ngModel)]="startTime"
-                            (ngModelChange)="changeStartTime(startTime = $event)" interface="popover"
-                            placeholder="Start Time">
-                            <ion-select-option *ngFor="let t of startTimes" [value]="t">{{ t }}
-                            </ion-select-option>
-                          </ion-select>
-                        </ion-item>
-                      </ion-col>
-
-
-                      <ion-col size="12" size-md="6">
-                        <ion-item lines="none" class="input-item">
-                          <ion-label position="stacked">Class Duration</ion-label>
-                          <ion-select [disabled]="!date || !startTime" class="form-input" [ngModel]="duration"
-                            (ngModelChange)="calculateEndTime(duration = $event)" interface="popover"
-                            placeholder="Class Duration">
-                            <ion-select-option *ngFor="let d of durations" [value]="d.value">
-                              {{ d.title }}
-                            </ion-select-option>
-                          </ion-select>
-                        </ion-item>
-                      </ion-col>
-
-
-                      <ion-col size="12" size-md="7">
-                        <ion-item lines="none" class="input-item">
-                          <ion-label position="stacked">Class Type</ion-label>
-                          <ion-radio-group class="form-input ion-no-padding" [ngModel]="classType"
-                            (ngModelChange)="classType = $event">
-                            <ion-grid class="ion-no-padding">
-                              <ion-row>
-                                <ion-col size="12" size-md="4" class="ion-no-padding" *ngFor="let t of classTypes">
-                                  <ion-item lines="none" class="transparent">
-                                    <ion-label [color]="classType === t ? 'primary' : ''">
-                                      {{ t }}
-                                    </ion-label>
-                                    <ion-radio slot="start" [value]="t"></ion-radio>
-                                  </ion-item>
-                                </ion-col>
-                              </ion-row>
-                            </ion-grid>
-                          </ion-radio-group>
-                        </ion-item>
-                      </ion-col>
-
-                      <ion-col size="12" size-md="5">
-                        <ion-item lines="none" class="input-item">
-                          <ion-label position="stacked">Mark all students as</ion-label>
-                          <ion-radio-group class="form-input ion-no-padding" [ngModel]="defaultAttendance"
-                            (ngModelChange)="defaultAttendance = $event">
-                            <ion-grid class="ion-no-padding">
-                              <ion-row>
-                                <ion-col size="12" size-md="6" class="ion-no-padding">
-                                  <ion-item lines="none" class="transparent">
-                                    <ion-label [color]="defaultAttendance === 'N' ? 'primary' : ''">Absent</ion-label>
-                                    <ion-radio slot="start" value="N"></ion-radio>
-                                  </ion-item>
-                                </ion-col>
-                                <ion-col size="12" size-md="6" class="ion-no-padding">
-                                  <ion-item lines="none" class="transparent">
-                                    <ion-label [color]="defaultAttendance === 'Y' ? 'primary' : ''">Present</ion-label>
-                                    <ion-radio slot="start" value="Y"></ion-radio>
-                                  </ion-item>
-                                </ion-col>
-                              </ion-row>
-                            </ion-grid>
-                          </ion-radio-group>
-                        </ion-item>
-                      </ion-col>
-                    </ion-row>
-
-                    <ion-row class="ion-margin-top ion-padding-end">
-                      <ion-col size="12" offset-md="9" size-md="3" class="ion-text-right ion-no-padding">
-                        <ion-button (click)="mark()" color="success"
-                          [disabled]="!classcode || !date || !startTime || !endTime || !classType || !defaultAttendance">
-                          Mark Attendance
-                          <ion-icon name="checkmark" slot="end"></ion-icon>
-                        </ion-button>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
-                </ion-card-content>
-              </ion-card>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-        <ion-col size="12" size-md="4" class="ion-no-padding">
-          <!-- new attendance -->
-          <ion-card class="transparent no-box-shadow">
-            <ion-card-header class="ion-no-padding ion-padding-start ion-padding-end">
-              <ion-grid class="ion-no-padding">
-                <ion-row>
-                  <ion-col class="margin-auto ion-no-padding">
-                    <ion-card-title>Useful Links</ion-card-title>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-card-header>
-            <ion-card-content class="ion-no-padding">
-              <ion-card>
-                <ion-card-content class="ion-no-padding">
-                  <ion-list class="ion-no-padding">
-                    <ion-item lines="full" color="danger" tappable (click)="checkIntegrity()">
-                      <ion-icon slot="end" name="checkmark-done"></ion-icon>
-                      <ion-label>
-                        <ion-text class="text-bold">
-                          Check Attendance Integrity
-                        </ion-text>
-                      </ion-label>
-                    </ion-item>
-                    <ng-container *ngFor="let linksSection of usefulLinks">
-                      <ion-item lines="full" color="primary">
-                        <ion-button fill="clear" slot="end" color="light" (click)="openExternalLink(linksSection.url)">
-                          See All</ion-button>
-                        <ion-label>
-                          <ion-text class="text-bold">
-                            {{linksSection.sectionTitle}}
-                          </ion-text>
-                        </ion-label>
-                      </ion-item>
-                      <ion-item tappable (click)="openExternalLink(item.url)" *ngFor="let item of linksSection.items">
-                        <ion-icon slot="end" name="open" color="primary"></ion-icon>
-                        <ion-label>{{item.name}}</ion-label>
-                      </ion-item>
-                    </ng-container>
-                  </ion-list>
-                </ion-card-content>
-              </ion-card>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
-
-    <!-- attendance history -->
-    <ion-card class="transparent no-box-shadow">
-      <ion-card-header class="ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
-        <ion-grid class="ion-no-padding">
-          <ion-row>
-            <ion-col size="12" size-sm="" class="margin-auto ion-no-padding">
-              <ion-card-title class="align-center-on-small-devices">
-                Attendance History
-              </ion-card-title>
-            </ion-col>
-            <ion-col size="12" size-sm="" class="ion-no-padding select-container">
-              <ion-grid class="ion-no-padding">
-                <ion-row>
-                  <ion-col class="ion-no-padding ion-margin-end">
-                    <ion-select interface="popover" class="input" placeholder="Duration" [(ngModel)]="timeFrame">
-                      <ion-select-option [value]="7">
-                        Last 7 days
-                      </ion-select-option>
-                      <ion-select-option [value]="30">
-                        Last 30 days
-                      </ion-select-option>
-                      <ion-select-option [value]="98">
-                        Last 98 days
-                      </ion-select-option>
-                    </ion-select>
-                  </ion-col>
-                  <ion-col class="ion-no-padding">
-                    <ion-searchbar class="input ion-no-padding no-box-shadow" placeholder="Class Code"
-                      [(ngModel)]="term"></ion-searchbar>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-
-      </ion-card-header>
-      <ion-card-content class="ion-no-padding">
-        <!-- table -->
-        <ion-card class="table">
-          <ion-card-content class="table-container">
-            <ion-grid>
-              <!-- table header -->
-              <ion-row class="table-header">
-                <ion-col>
-                  <ion-text>Class Code</ion-text>
-                </ion-col>
-                <ion-col class="ion-text-center">
-                  <ion-text>Date</ion-text>
-                </ion-col>
-                <ion-col class="ion-text-center">
-                  <ion-text>Time</ion-text>
-                </ion-col>
-                <ion-col class="ion-text-center">
-                  <ion-text>Statistics</ion-text>
-                </ion-col>
-                <ion-col class="ion-text-center">
-                  <ion-text>Type</ion-text>
-                </ion-col>
-                <ion-col>
-                  <!-- empty col -->
-                </ion-col>
-              </ion-row>
-
-              <!-- table body -->
-              <ng-container *ngIf="classcodes | classcodesFilter:term:timeFrame as filteredClassCode">
-                <ng-container *ngIf="filteredClassCode.length > 0; else noFilteredClassCode">
-                  <ion-row class="table-row text-bold no-bold-on-small-devices" *ngFor="let class of filteredClassCode">
-                    <ion-col size="12" size-sm="" class="margin-auto">
-                      <ion-text class="title-on-small-devices">{{class.CLASS_CODE}}</ion-text>
-                    </ion-col>
-                    <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
-                      <span class="show-only-on-small-devices bold-on-small-devices">Date:&nbsp;</span>
-                      <ion-text>{{class.DATE | date : 'EEE, dd MMM yyy' }}</ion-text>
-                    </ion-col>
-                    <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
-                      <span class="show-only-on-small-devices bold-on-small-devices">Time:&nbsp;</span>
-                      <ion-text>{{class.TIME_FROM}} - {{class.TIME_TO}}</ion-text>
-                    </ion-col>
-                    <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
-                      <span class="show-only-on-small-devices bold-on-small-devices">Statistics:&nbsp;</span>
-                      <ion-text color="success">{{class.TOTAL.PRESENT}}</ion-text>
-                      |
-                      <ion-text color="danger">{{class.TOTAL.ABSENT}}</ion-text>
-                      |
-                      <ion-text color="primary">{{class.TOTAL.ABSENT_REASON}}</ion-text>
-                      |
-                      <ion-text color="warning">{{class.TOTAL.LATE}}</ion-text>
-                      |
-                      {{class.TOTAL.ABSENT + class.TOTAL.ABSENT_REASON + class.TOTAL.LATE + class.TOTAL.PRESENT}}
-                    </ion-col>
-                    <ion-col size="12" size-sm="" class="margin-auto ion-text-center no-center-on-small-devices">
-                      <span class="show-only-on-small-devices bold-on-small-devices">Type:&nbsp;</span>
-                      <ion-text>{{class.TYPE}}</ion-text>
-                    </ion-col>
-                    <ion-col size="12" size-sm="" class="margin-auto">
-                      <!-- small devices only -->
-                      <ion-buttons class="show-only-on-small-devices ion-float-right">
-                        <ion-button fill="outline" class="ion-margin-end" color="primary"
-                          (click)="edit(class.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
-                          Edit
-                          <ion-icon slot="end" name="create"></ion-icon>
-                        </ion-button>
-                        <ion-button fill="solid" color="danger"
-                          (click)="reset(class.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
-                          Delete
-                          <ion-icon slot="end" name="trash"></ion-icon>
-                        </ion-button>
-                      </ion-buttons>
-                      <!-- other devices (medium, large..) -->
-                      <ion-buttons class="show-only-on-other-devices">
-                        <ion-button size="small" color="primary"
-                          (click)="edit(class.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
-                          <ion-icon slot="icon-only" name="create"></ion-icon>
-                        </ion-button>
-                        <ion-button size="small" color="danger"
-                          (click)="reset(class.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
-                          <ion-icon slot="icon-only" name="trash"></ion-icon>
-                        </ion-button>
-                      </ion-buttons>
-                    </ion-col>
-                    <ion-col size="8" offset="2" class="show-only-on-small-devices border-bottom ion-margin-bottom">
-
-                    </ion-col>
-                  </ion-row>
-
-                </ng-container>
-                <ng-template #noFilteredClassCode>
+  <div class="glob-container">
+    <ng-container *ngIf="classcodes$ | async as classcodes; else loadingClasscodes">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col size="12" size-md="8" class="ion-no-padding">
+            <ion-card>
+              <ion-card-header color="success">
+                <ion-card-title>Mark New Attendance</ion-card-title>
+              </ion-card-header>
+              <ion-card-content class="ion-no-padding">
+                <ion-grid class="ion-no-padding">
                   <ion-row>
                     <ion-col size="12">
-                      <h2 class="ion-text-center ion-padding">No attendance records have been added in the
-                        <span class="text-bold danger-text"> last {{timeFrame}} days</span>
-                        <ng-container *ngIf="term"> for a class code that contains <span
-                            class="text-bold danger-text">{{ term }}</span></ng-container>.
-                      </h2>
+                      <ion-item tappable="true" button="true" lines="full" (click)="chooseClasscode()">
+                        <ion-label position="stacked">Class Code</ion-label>
+                        <div class="select-box" expand="block">
+                          <span *ngIf="!classcode" class="text placeholder">Click to Select</span>
+                          <span *ngIf="classcode" class="text value">{{classcode}}</span>
+                          <span class="icon">
+                            <ion-icon name="caret-down"></ion-icon>
+                          </span>
+                        </div>
+                      </ion-item>
+                    </ion-col>
+                    <ion-col size="12">
+                      <ion-item>
+                        <ion-label position="stacked">Date</ion-label>
+                        <ion-datetime [ngModel]="date" (ngModelChange)="changeDate(date = $event)" [min]="minDate"
+                          [max]="maxDate" placeholder="Click to select" displayFormat="YYYY-MM-DD"
+                          pickerFormat="DD MMM YYYY"></ion-datetime>
+                      </ion-item>
+                    </ion-col>
+
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="12" size-md="6">
+                      <ion-item lines="full">
+                        <ion-label position="stacked">Start Time</ion-label>
+                        <ion-select [disabled]="!date" [(ngModel)]="startTime"
+                          (ngModelChange)="changeStartTime(startTime = $event)" interface="popover"
+                          placeholder="Start Time">
+                          <ion-select-option *ngFor="let t of startTimes" [value]="t">{{ t }}
+                          </ion-select-option>
+                        </ion-select>
+                      </ion-item>
+                    </ion-col>
+
+
+                    <ion-col size="12" size-md="6">
+                      <ion-item lines="full" class="duration-item">
+                        <ion-label position="stacked">Duration</ion-label>
+                        <ion-select [disabled]="!date || !startTime" [ngModel]="duration"
+                          (ngModelChange)="calculateEndTime(duration = $event)" interface="popover"
+                          placeholder="Class Duration">
+                          <ion-select-option *ngFor="let d of durations" [value]="d.value">
+                            {{ d.title }}
+                          </ion-select-option>
+                        </ion-select>
+                      </ion-item>
+                    </ion-col>
+
+
+                    <ion-col size="12">
+                      <ion-item lines="full">
+                        <ion-label position="stacked">Class Type</ion-label>
+                        <ion-radio-group class="form-input ion-no-padding" [ngModel]="classType"
+                          (ngModelChange)="classType = $event">
+                          <ion-grid class="ion-no-padding">
+                            <ion-row>
+                              <ion-col size="12" size-md="4" class="ion-no-padding" *ngFor="let t of classTypes">
+                                <ion-item class="ion-no-padding radio" lines="none">
+                                  <ion-label [color]="classType === t ? 'primary' : ''">
+                                    {{ t }}
+                                  </ion-label>
+                                  <ion-radio slot="start" [value]="t"></ion-radio>
+                                </ion-item>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-radio-group>
+                      </ion-item>
+                    </ion-col>
+
+                    <ion-col size="12">
+                      <ion-item lines="full">
+                        <ion-label position="stacked">Mark all students as</ion-label>
+                        <ion-radio-group class="form-input ion-no-padding" [ngModel]="defaultAttendance"
+                          (ngModelChange)="defaultAttendance = $event">
+                          <ion-grid class="ion-no-padding">
+                            <ion-row>
+                              <ion-col size="12" size-md="6" class="ion-no-padding">
+                                <ion-item lines="none" class="radio">
+                                  <ion-label [color]="defaultAttendance === 'N' ? 'primary' : ''">Absent</ion-label>
+                                  <ion-radio slot="start" value="N"></ion-radio>
+                                </ion-item>
+                              </ion-col>
+                              <ion-col size="12" size-md="6" class="ion-no-padding">
+                                <ion-item lines="none" class="ion-no-padding radio">
+                                  <ion-label [color]="defaultAttendance === 'Y' ? 'primary' : ''">Present
+                                  </ion-label>
+                                  <ion-radio slot="start" value="Y"></ion-radio>
+                                </ion-item>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-radio-group>
+                      </ion-item>
                     </ion-col>
                   </ion-row>
-                </ng-template>
-              </ng-container>
-            </ion-grid>
-          </ion-card-content>
-        </ion-card>
-      </ion-card-content>
-    </ion-card>
-  </ng-container>
+                </ion-grid>
 
-  <ng-template #loadingClasscodes>
-    <ion-card class="transparent no-box-shadow">
-      <ion-card-header class="ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
-        <ion-grid class="ion-no-padding">
-          <ion-row>
-            <ion-col class="margin-auto ion-no-padding">
-              <ion-card-title>Mark New Attendance</ion-card-title>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-header>
-      <ion-card-content class="ion-no-padding">
-        <ion-card>
-          <ion-card-content class="ion-no-padding ion-padding-bottom">
-            <ion-grid>
-              <ion-row>
-                <ion-col size="12">
-                  <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
-                </ion-col>
-                <ion-col size="12">
-                  <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
-                </ion-col>
-                <ion-col size="12" size-md="6">
-                  <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
-                </ion-col>
-                <ion-col size="12" size-md="6">
-                  <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
-                </ion-col>
-                <ion-col size="12" size-md="7">
-                  <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
-                </ion-col>
-                <ion-col size="12" size-md="5">
-                  <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
-                </ion-col>
-                <ion-col size="2" offset="10">
-                  <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-card-content>
-        </ion-card>
-      </ion-card-content>
-    </ion-card>
+                <div class="ion-padding ion-text-right">
+                  <ion-button (click)="mark()" color="success"
+                    [disabled]="!classcode || !date || !startTime || !endTime || !classType || !defaultAttendance">
+                    Mark Attendance
+                    <ion-icon name="checkmark" slot="end"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          <ion-col size="12" size-md="4" class="ion-no-padding">
+            <ion-card>
+              <ion-card-header color="primary">
+                <ion-card-title>Useful Links</ion-card-title>
+              </ion-card-header>
+              <ion-card-content class="ion-no-padding">
+                <ion-list class="ion-no-padding">
+                  <ng-container *ngFor="let linksSection of usefulLinks">
+                    <ion-item-divider lines="full" color="light">
+                      <ion-button fill="clear" size="small" slot="end" color="primary"
+                        (click)="openExternalLink(linksSection.url)">
+                        See All
+                      </ion-button>
+                      <ion-label color="primary">
+                        {{linksSection.sectionTitle}}
+                      </ion-label>
+                    </ion-item-divider>
+                    <ion-item tappable="true" detail="true" (click)="openExternalLink(item.url)"
+                      *ngFor="let item of linksSection.items; let last=last" [lines]="last ? 'none' : 'inset'">
+                      <ion-label>{{item.name}}</ion-label>
+                    </ion-item>
+                  </ng-container>
+                  <ion-item color="light" lines="none" tappable="true" (click)="checkIntegrity()">
+                    <ion-icon color="danger" slot="end" name="checkmark-done"></ion-icon>
+                    <ion-label color="danger">
+                      Check Attendance Integrity
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
 
-    <ion-card class="transparent no-box-shadow">
-      <ion-card-header class="ion-no-padding ion-padding-top ion-padding-start ion-padding-end">
-        <ion-grid class="ion-no-padding">
-          <ion-row>
-            <ion-col class="margin-auto ion-no-padding">
-              <ion-card-title>
-                Attendance History
-              </ion-card-title>
-            </ion-col>
-            <ion-col class="ion-no-padding select-container">
-              <ion-grid class="ion-no-padding">
-                <ion-row>
-                  <ion-col class="ion-no-padding ion-margin-end">
-                    <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
 
+      <!-- attendance history -->
+      <ion-card>
+        <ion-card-header color="primary">
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col size="12" size-sm="" class="glob-margin-auto ion-no-padding">
+                <ion-card-title class="align-center-on-small-devices">
+                  Attendance History
+                </ion-card-title>
+              </ion-col>
+              <ion-col size="12" size-sm="" class="ion-no-padding select-container">
+                <ion-grid class="ion-no-padding">
+                  <ion-row>
+                    <ion-col class="ion-no-padding ion-margin-end">
+                      <ion-select interface="popover" class="select-with-border" placeholder="Duration"
+                        [(ngModel)]="timeFrame">
+                        <ion-select-option [value]="7">
+                          Last 7 days
+                        </ion-select-option>
+                        <ion-select-option [value]="30">
+                          Last 30 days
+                        </ion-select-option>
+                        <ion-select-option [value]="98">
+                          Last 98 days
+                        </ion-select-option>
+                      </ion-select>
+                    </ion-col>
+                    <ion-col class="ion-no-padding">
+                      <ion-searchbar class="input ion-no-padding no-box-shadow" placeholder="Class Code"
+                        [(ngModel)]="term"></ion-searchbar>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+        </ion-card-header>
+        <ion-card-content class="ion-no-padding">
+          <!-- table -->
+          <ion-card class="table ion-no-margin">
+            <ion-card-content class="table-container">
+              <ion-grid>
+                <!-- table header -->
+                <ion-row class="table-header">
+                  <ion-col>
+                    <ion-text>Class Code</ion-text>
                   </ion-col>
-                  <ion-col class="ion-no-padding">
+                  <ion-col class="ion-text-center">
+                    <ion-text>Date</ion-text>
+                  </ion-col>
+                  <ion-col class="ion-text-center">
+                    <ion-text>Time</ion-text>
+                  </ion-col>
+                  <ion-col class="ion-text-center">
+                    <ion-text>Statistics</ion-text>
+                  </ion-col>
+                  <ion-col class="ion-text-center">
+                    <ion-text>Type</ion-text>
+                  </ion-col>
+                  <ion-col class="ion-text-center">
+                    Actions
+                  </ion-col>
+                </ion-row>
+
+                <!-- table body -->
+                <ng-container *ngIf="classcodes | classcodesFilter:term:timeFrame as filteredClassCode">
+                  <ng-container *ngIf="filteredClassCode.length > 0; else noFilteredClassCode">
+                    <ion-row class="table-row text-bold no-bold-on-small-devices"
+                      *ngFor="let class of filteredClassCode">
+                      <ion-col size="12" size-sm="" class="glob-margin-auto">
+                        <ion-text class="title-on-small-devices">{{class.CLASS_CODE}}</ion-text>
+                      </ion-col>
+                      <ion-col size="12" size-sm="" class="glob-margin-auto ion-text-center no-center-on-small-devices">
+                        <span class="show-only-on-small-devices bold-on-small-devices">Date:&nbsp;</span>
+                        <ion-text>{{class.DATE | date : 'EEE, dd MMM yyy' }}</ion-text>
+                      </ion-col>
+                      <ion-col size="12" size-sm="" class="glob-margin-auto ion-text-center no-center-on-small-devices">
+                        <span class="show-only-on-small-devices bold-on-small-devices">Time:&nbsp;</span>
+                        <ion-text>{{class.TIME_FROM}} - {{class.TIME_TO}}</ion-text>
+                      </ion-col>
+                      <ion-col size="12" size-sm="" class="glob-margin-auto ion-text-center no-center-on-small-devices">
+                        <span class="show-only-on-small-devices bold-on-small-devices">Statistics:&nbsp;</span>
+                        <ion-text color="success">{{class.TOTAL.PRESENT}}</ion-text>
+                        |
+                        <ion-text color="danger">{{class.TOTAL.ABSENT}}</ion-text>
+                        |
+                        <ion-text color="primary">{{class.TOTAL.ABSENT_REASON}}</ion-text>
+                        |
+                        <ion-text color="warning">{{class.TOTAL.LATE}}</ion-text>
+                        |
+                        {{class.TOTAL.ABSENT + class.TOTAL.ABSENT_REASON + class.TOTAL.LATE + class.TOTAL.PRESENT}}
+                      </ion-col>
+                      <ion-col size="12" size-sm="" class="glob-margin-auto ion-text-center no-center-on-small-devices">
+                        <span class="show-only-on-small-devices bold-on-small-devices">Type:&nbsp;</span>
+                        <ion-text>{{class.TYPE}}</ion-text>
+                      </ion-col>
+                      <ion-col size="12" size-sm="" class="glob-margin-auto">
+                        <!-- small devices only -->
+                        <div class="show-only-on-small-devices ion-text-right">
+                          <ion-button fill="outline" class="ion-margin-end" color="primary"
+                            (click)="edit(class.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
+                            Edit
+                            <ion-icon slot="end" name="create"></ion-icon>
+                          </ion-button>
+                          <ion-button fill="solid" color="danger"
+                            (click)="reset(class.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
+                            Delete
+                            <ion-icon slot="end" name="trash"></ion-icon>
+                          </ion-button>
+                        </div>
+                        <!-- other devices (medium, large..) -->
+                        <div class="show-only-on-other-devices ion-text-center">
+                          <ion-button fill="clear" size="small" color="primary"
+                            (click)="edit(class.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
+                            <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+                          </ion-button>
+                          <ion-button fill="clear" size="small" color="danger"
+                            (click)="reset(class.CLASS_CODE, class.DATE, class.TIME_FROM, class.TIME_TO, class.TYPE)">
+                            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                          </ion-button>
+                        </div>
+                      </ion-col>
+                      <ion-col size="8" offset="2" class="show-only-on-small-devices border-bottom ion-margin-bottom">
+
+                      </ion-col>
+                    </ion-row>
+
+                  </ng-container>
+                  <ng-template #noFilteredClassCode>
+                    <ion-row>
+                      <ion-col size="12">
+                        <h2 class="ion-text-center ion-padding">No attendance records have been added in the
+                          <span class="text-bold danger-text"> last {{timeFrame}} days</span>
+                          <ng-container *ngIf="term"> for a class code that contains <span
+                              class="text-bold danger-text">{{ term }}</span></ng-container>.
+                        </h2>
+                      </ion-col>
+                    </ion-row>
+                  </ng-template>
+                </ng-container>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+
+    <ng-template #loadingClasscodes>
+      <ion-card>
+        <ion-card-header color="primary">
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col class="glob-margin-auto ion-no-padding">
+                <ion-card-title>Mark New Attendance</ion-card-title>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-header>
+        <ion-card-content class="ion-no-padding">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+              </ion-col>
+              <ion-col size="12">
+                <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+              </ion-col>
+              <ion-col size="12" size-md="6">
+                <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+              </ion-col>
+              <ion-col size="12" size-md="6">
+                <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+              </ion-col>
+              <ion-col size="12" size-md="7">
+                <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+              </ion-col>
+              <ion-col size="12" size-md="5">
+                <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+              </ion-col>
+              <ion-col size="2" offset="10">
+                <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header color="primary">
+          <ion-grid class="ion-no-padding">
+            <ion-row>
+              <ion-col class="glob-margin-auto ion-no-padding">
+                <ion-card-title>
+                  Attendance History
+                </ion-card-title>
+              </ion-col>
+              <ion-col class="ion-no-padding select-container">
+                <ion-grid class="ion-no-padding">
+                  <ion-row>
+                    <ion-col class="ion-no-padding ion-margin-end">
+                      <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+
+                    </ion-col>
+                    <ion-col class="ion-no-padding">
+                      <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+        </ion-card-header>
+        <ion-card-content class="ion-no-padding">
+          <ion-card class="ion-no-margin">
+            <ion-card-content class="table-container">
+              <ion-grid>
+                <ion-row class="table-header">
+                  <ion-col>
+                    <ion-text>Class Code</ion-text>
+                  </ion-col>
+                  <ion-col class="ion-text-center">
+                    <ion-text>Date</ion-text>
+                  </ion-col>
+                  <ion-col class="ion-text-center">
+                    <ion-text>Time</ion-text>
+                  </ion-col>
+                  <ion-col class="ion-text-center">
+                    <ion-text>Statistics</ion-text>
+                  </ion-col>
+                  <ion-col class="ion-text-center">
+                    <ion-text>Type</ion-text>
+                  </ion-col>
+                  <ion-col>
+                    <!-- empty col -->
+                  </ion-col>
+                </ion-row>
+                <ion-row class="table-row text-bold" *ngFor="let class of skeletons;">
+                  <ion-col class="glob-margin-auto">
+                    <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+                  </ion-col>
+                  <ion-col class="glob-margin-auto ion-text-center">
+                    <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+                  </ion-col>
+                  <ion-col class="glob-margin-auto ion-text-center">
+                    <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+                  </ion-col>
+                  <ion-col class="glob-margin-auto ion-text-center">
+                    <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+                  </ion-col>
+                  <ion-col class="glob-margin-auto ion-text-center">
+                    <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
+                  </ion-col>
+                  <ion-col class="glob-margin-auto">
                     <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
                   </ion-col>
                 </ion-row>
               </ion-grid>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ion-card-content>
+      </ion-card>
 
-      </ion-card-header>
-      <ion-card-content class="ion-no-padding">
-        <ion-card class="table">
-          <ion-card-content class="table-container">
-            <ion-grid>
-              <ion-row class="table-header">
-                <ion-col>
-                  <ion-text>Class Code</ion-text>
-                </ion-col>
-                <ion-col class="ion-text-center">
-                  <ion-text>Date</ion-text>
-                </ion-col>
-                <ion-col class="ion-text-center">
-                  <ion-text>Time</ion-text>
-                </ion-col>
-                <ion-col class="ion-text-center">
-                  <ion-text>Statistics</ion-text>
-                </ion-col>
-                <ion-col class="ion-text-center">
-                  <ion-text>Type</ion-text>
-                </ion-col>
-                <ion-col>
-                  <!-- empty col -->
-                </ion-col>
-              </ion-row>
-              <ion-row class="table-row text-bold" *ngFor="let class of skeletons;">
-                <ion-col class="margin-auto">
-                  <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
-                </ion-col>
-                <ion-col class="margin-auto ion-text-center">
-                  <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
-                </ion-col>
-                <ion-col class="margin-auto ion-text-center">
-                  <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
-                </ion-col>
-                <ion-col class="margin-auto ion-text-center">
-                  <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
-                </ion-col>
-                <ion-col class="margin-auto ion-text-center">
-                  <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
-                </ion-col>
-                <ion-col class="margin-auto">
-                  <ion-skeleton-text animated style="width: 100%; line-height: 40px;"></ion-skeleton-text>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-card-content>
-        </ion-card>
-      </ion-card-content>
-    </ion-card>
-
-  </ng-template>
+    </ng-template>
+  </div>
 
 </ion-content>
