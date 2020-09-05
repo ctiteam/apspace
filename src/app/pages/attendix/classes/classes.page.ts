@@ -312,7 +312,7 @@ export class ClassesPage implements OnInit {
   changeDate(date: string) {
     this.date = formatISO(new Date(date), { representation: 'date' });
     const d = new Date();
-    if (date === isoDate(d)) { // current day
+    if (isoDate(new Date(date)) === isoDate(d)) { // current day
       const nowMins = d.getHours() * 60 + d.getMinutes();
       const firstFutureClass = this.timings.find(time => nowMins < parseTime(time));
       this.startTimes = this.timings.slice(0, this.timings.indexOf(firstFutureClass));
