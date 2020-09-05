@@ -122,6 +122,17 @@
             </ion-card-header>
             <ion-card-content class="ion-no-padding">
               <ng-container *ngIf="history$ | async as historyList; else loadingHistory">
+                <ng-container *ngIf="historyList.length > 0; else noHistoryAvailable">
+
+                </ng-container>
+                <ng-template #noHistoryAvailable>
+                  <div class="ion-margin-top">
+                    <app-message-with-svg messageTitle="Your leave history is not available!"
+                    messageContent="Your leave history is empty. If you believe that there is an issue with that, please contact us via the feedback page"
+                    imageUrl="assets/img/empty.svg" wrapperOffset="3" wrapperSize="6">
+                  </app-message-with-svg>
+                </div>
+                </ng-template>
                 <ion-list *ngFor="let historyGroupedByMonth of historyList" class="ion-no-padding">
                   <ion-item-divider color="light">
                     <ion-label color="secondary" class="glob-text-bold">
