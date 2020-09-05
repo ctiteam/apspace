@@ -33,7 +33,7 @@ export class MarkAttendancePage implements OnInit {
       responsive: false,
       legend: {
         display: true,
-        position: 'right',
+        position: 'bottom',
       }
     },
     data: {}

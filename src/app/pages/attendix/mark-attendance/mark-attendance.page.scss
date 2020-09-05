@@ -11,11 +11,11 @@
   margin: auto;
 }
 
-.small-margin-top{
+.small-margin-top {
   margin-top: 4px;
 }
 
-.larger-font-size{
+.larger-font-size {
   font-size: 16px !important;
 }
 
@@ -81,30 +81,20 @@ qrcode {
 // students list section
 .select-container {
   .input {
-    border: 1px solid var(--tertiary-bg-color);
+    border: 1px solid var(--ion-border-color);
   }
 }
 
 .table {
   .table-container {
-    padding-top: 5px;
-    padding-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
+    padding: 0;
 
-    .table-header {
-      padding: 5px 10px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #cccccc;
-
-      ion-text {
-        font-size: 1rem;
-      }
-    }
 
     .table-row {
-      padding: 10px; 
-      margin: 4px 0;
+      min-height: 42px;
+      padding: 10px;
+      border-bottom: 1px solid var(--ion-border-color);
+
       &:hover {
         background: var(--tertiary-bg-color);
       }
@@ -115,27 +105,27 @@ qrcode {
   .stateR {
     color: #FFFFFF;
     background: #36A2EB !important;
-    border-color: #36A2EB !important;
+    // border-color: #36A2EB !important;
   }
 
   .stateN {
     color: #FFFFFF;
     background: #e54d42 !important;
-    border-color: #e54d42 !important;
+    // border-color: #e54d42 !important;
     --background-hover: #af4448 !important;
   }
 
   .stateL {
     color: #FFFFFF;
     background: #d49a0d !important;
-    border-color: #d49a0d !important;
+    // border-color: #d49a0d !important;
     --background-hover: #cabf45 !important;
   }
 
   .stateY {
     color: #FFFFFF;
     background: #49b571 !important;
-    border-color: #49b571 !important;
+    // border-color: #49b571 !important;
     --background-hover: #519657 !important;
   }
 }
