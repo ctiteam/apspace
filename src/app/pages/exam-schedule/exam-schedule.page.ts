@@ -20,9 +20,7 @@ export class ExamSchedulePage {
   intakes: string[];
   selectedIntake: string;
   showNoIntakeMessage = false;
-  skeletonSettings = {
-    numberOfSkeltons: new Array(9),
-  };
+  skeletons = new Array(5);
   constructor(
     public plt: Platform,
     private modalCtrl: ModalController,
