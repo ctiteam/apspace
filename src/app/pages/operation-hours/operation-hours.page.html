@@ -25,26 +25,21 @@
             <ion-grid>
               <ion-row>
                 <ion-col size-xs="12" size-md="6" size-xl="4" offset-md="3" offset-xl="4">
-                  <h6 *ngIf="company.lastModified">
+                  <h6 *ngIf="company.lastModified" class="ion-text-center">
                     Last Modified: <span class="glob-text-bold">{{company.lastModified}}</span>
                   </h6>
                 </ion-col>
               </ion-row>
-            </ion-grid>
-            <ion-grid>
               <ion-row>
                 <ion-col *ngFor="let department of company.company_departments" size-xs="12" size-md="6" size-xl="4"
                   offset-md="3" offset-xl="4">
                   <ion-card>
-                    <ion-card-header>
-                      <ion-card-title>
-                        <h4 class="glob-text-bold ion-text-capitalize">{{department.dept_name}}</h4>
+                    <ion-card-header color="primary">
+                      <ion-card-title class="glob-text-bold ion-text-capitalize">
+                        {{department.dept_name}}
                       </ion-card-title>
-                      <ion-card-subtitle>
-                        <p *ngIf="department.dept_email">
-                          <a style="text-decoration: underline"
-                            href="mailto:{{ department.dept_email }}">{{department.dept_email}}</a>
-                        </p>
+                      <ion-card-subtitle *ngIf="department.dept_email">
+                        <a class="email" href="mailto:{{ department.dept_email }}">{{department.dept_email}}</a>
                       </ion-card-subtitle>
                     </ion-card-header>
                     <ion-card-content>
@@ -137,12 +132,12 @@
                         <p class="ion-text-center">No operation hours added for this department</p>
                       </ng-template>
                     </ion-card-content>
-                    <ion-footer class="ion-padding" *ngIf="department.dept_phone.length > 0">
-                      <h6 class="glob-text-bold">Phone Number<span *ngIf="department.dept_phone.length > 1">s</span>:
-                      </h6>
+                    <ion-footer class="ion-padding ion-text-center" *ngIf="department.dept_phone.length > 0">
+                      <p class="glob-text-bold ion-no-margin">Phone Number<span *ngIf="department.dept_phone.length > 1">s</span>
+                      </p>
                       <ion-grid>
                         <ion-row>
-                          <ion-col size="6" *ngFor="let phoneNumber of department.dept_phone">
+                          <ion-col class="ion-no-padding" *ngFor="let phoneNumber of department.dept_phone">
                             <ion-text color="primary">
                               <a class="glob-text-bold" href="tel:{{phoneNumber}}">{{phoneNumber}}</a>
                             </ion-text>
