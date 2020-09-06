@@ -5,18 +5,3 @@
     border-right: 2px solid #cebaba;
   }
 }
-
-ion-card {
-  &.success-card {
-    box-shadow: 0 3px 1px -2px var(--success-color), 0 2px 2px 0 var(--success-color), 0 1px 5px 0 var(--success-color) !important;
-    h4, ion-card-title {
-      color: var(--success-color) !important;
-    }
-  }
-  &.danger-card {
-    box-shadow: 0 3px 1px -2px var(--danger-color), 0 2px 2px 0 var(--danger-color), 0 1px 5px 0 var(--danger-color) !important;
-    ion-card-title {
-      color: var(--danger-color) !important;
-    }
-  }
-}
