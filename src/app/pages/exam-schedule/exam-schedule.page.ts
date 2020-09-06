@@ -43,7 +43,7 @@ export class ExamSchedulePage {
   }
   ionViewDidEnter() { // using oninit is casing some issues in naviagting to this page; the data loaded is huge (intake listing)
     const intake = this.settings.get('examIntake');
-    if (intake !== undefined) { // intake might be ''
+    if (intake !== undefined && intake !== null) { // intake might be ''
       this.intake = intake;
       this.doRefresh();
     } else {
