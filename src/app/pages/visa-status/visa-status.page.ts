@@ -20,9 +20,6 @@ export class VisaStatusPage implements OnInit {
 
   // handle errors for locals
   local = false;
-  // used to show and hide card
-  historyStatus = true;
-
   countryName: string;
   passportNumber: string;
   alpha3Code = '';
@@ -119,10 +116,6 @@ export class VisaStatusPage implements OnInit {
     }).pipe(
       finalize(() => refresher && refresher.target.complete())
     );
-  }
-
-  toggleHistoryCard() {
-    this.historyStatus = !this.historyStatus;
   }
 
   trackAnotherApplication() {

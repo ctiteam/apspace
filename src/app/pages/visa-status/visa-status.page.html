@@ -8,267 +8,258 @@
 </ion-header>
 
 <ion-content>
-  <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="getVisa($event)">
-    <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
-  </ion-refresher>
-  <ng-container *ngIf="!local; else isLocal">
-    <ion-card>
-      <ion-card-content class="ion-no-padding">
-        <ion-grid>
-          <ion-row>
-            <ion-col size="12" size-md="6">
-              <ion-item lines="none">
-                <ion-label position="stacked">Travel Document Number</ion-label>
-                <ion-input [(ngModel)]="passportNumber" placeholder="Passport Number" class="form-input">
-                </ion-input>
-              </ion-item>
-            </ion-col>
-            <ion-col size="12" size-md="6">
-              <ion-item lines="none">
-                <ion-label position="stacked">Nationality</ion-label>
-                <ion-select [(ngModel)]="alpha3Code" interface="popover" placeholder="Click to select"
-                  class="form-input">
-                  <ion-select-option *ngFor="let country of listOfCountries" [value]="country.alpha3Code">
-                    {{ country.name }}
-                  </ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-col>
-          </ion-row>
-          <ion-row class="ion-padding-start ion-padding-end">
-            <ion-col size="12" size-md="3">
-              <ion-button expand="block" class="colored-background" (click)="getVisa()">Search</ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
-    <ng-container *ngIf="sendRequest; else enterDataToSearch">
-      <ng-container *ngIf="(visa$ | async) as visaDetails; else loading">
-        <ng-container *ngIf="visaDetails.found === 'true'; else wrongData">
-          <ion-grid>
-            <ion-row>
-              <ion-col size="12" size-md="5">
-                <ion-card class="ion-no-margin ion-margin-bottom">
-                  <ion-card-header class="colored-border titleBorder">
-                    <ion-card-title class="responsive-h1">
+  <div class="glob-container">
+    <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="getVisa($event)">
+      <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
+    </ion-refresher>
+    <ng-container *ngIf="!local; else isLocal">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="4" push-md="8">
+            <!-- search card -->
+            <ion-card>
+              <ion-card-header color="primary">
+                <ion-card-title>Search Criteria</ion-card-title>
+              </ion-card-header>
+              <ion-card-content class="ion-no-padding">
+                <ion-item lines="full">
+                  <ion-label position="stacked">Nationality</ion-label>
+                  <ion-select [(ngModel)]="alpha3Code" interface="popover" placeholder="Click to select">
+                    <ion-select-option *ngFor="let country of listOfCountries" [value]="country.alpha3Code">
+                      {{ country.name }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item lines="full">
+                  <ion-label position="stacked">Travel Document Number</ion-label>
+                  <ion-input [(ngModel)]="passportNumber" placeholder="Ex. N123456">
+                  </ion-input>
+                </ion-item>
+                <div class="ion-text-right padding-small">
+                  <ion-button (click)="getVisa()">
+                    Search
+                    <ion-icon slot="end" name="search"></ion-icon>
+                  </ion-button>
+                </div>
+              </ion-card-content>
+            </ion-card>
+
+            <!-- legend cards  -->
+            <ion-card>
+              <ion-card-header color="primary">
+                <ion-card-title>
+                  Color Legends
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="1" class="glob-margin-auto">
+                      <div class="square success"></div>
+                    </ion-col>
+                    <ion-col size="11">
+                      <p>Your application is progressing accordingly.</p>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="1" class="glob-margin-auto">
+                      <div class="square warning"></div>
+                    </ion-col>
+                    <ion-col size="11">
+                      <p>Your application is pending additional documents or correction by your institution.
+                      </p>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="1" class="glob-margin-auto">
+                      <div class="square danger"></div>
+                    </ion-col>
+                    <ion-col size="11">
+                      <p>Your application has been rejected at the current stage. Please contact your
+                        institution
+                        for
+                        advice.</p>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+            </ion-card>
+
+          </ion-col>
+          <ion-col size="12" size-md="8" pull-md="4">
+
+            <ng-container *ngIf="sendRequest; else enterDataToSearch">
+              <ng-container *ngIf="(visa$ | async) as visaDetails; else loading">
+                <ng-container *ngIf="visaDetails.found === 'true'; else wrongData">
+                  <ion-card>
+                    <ion-card-header color="primary">
+                      <ion-card-title>
+                        Summary
+                      </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                      <div class="ion-padding-top">
+                        <ion-text>
+                          <p>Full Name: <span class="glob-text-bold">{{ visaDetails.applicant_fullname }}</span></p>
+                          <p>Travel Document Number: <span
+                              class="glob-text-bold">{{ visaDetails.applicant_traveldocno }}</span></p>
+                          <p>Application Number: <span class="glob-text-bold">{{ visaDetails.applicant_id }}</span></p>
+                          <p>Application Status: <span class="glob-text-bold" [style.color]="
+                              '#' + visaDetails.status_historys[0].progress_color
+                            ">{{ visaDetails.status_historys[0].status_title }}</span></p>
+                          <div class="ion-margin-top" [style.width]="visaDetails.status_historys[0].complete + '%'"
+                            [style.background]="
+                            '#' + visaDetails.status_historys[0].progress_color
+                          ">
+                            <p class="ion-text-center" style="color: white">
+                              {{visaDetails.status_historys[0].complete}}%</p>
+                          </div>
+                        </ion-text>
+                      </div>
+                    </ion-card-content>
+                  </ion-card>
+                  <ion-card>
+                    <ion-card-header color="primary">
+                      <ion-card-title>
+                        Application Progress History
+                      </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content class="ion-no-padding">
+                      <ion-item lines="full" *ngFor="let status of visaDetails.status_historys">
+                        <ion-label class="glob-white-space-normal">
+                          <ion-grid class="ion-no-padding">
+                            <ion-row>
+                              <ion-col size="12" class="ion-margin-bottom">
+                                <ion-text
+                                  [color]="status.status_title === 'Application completed' ? 'success' : 'primary'">
+                                  <h3 class="glob-text-bold">
+                                    {{ status.remark }}
+                                  </h3>
+                                </ion-text>
+                              </ion-col>
+                            </ion-row>
+
+                            <ion-row>
+                              <ion-col size-xs="12" size-md="6">
+                                <ion-text [color]="status.status_title === 'Application completed' ? 'success' : ''">
+                                  <h3>
+                                    <ion-icon
+                                      [color]="status.status_title === 'Application completed' ? 'success' : 'primary'"
+                                      name="calendar-outline"></ion-icon>
+                                    {{ status.created_at}}
+                                  </h3>
+                                </ion-text>
+                              </ion-col>
+                              <ion-col size-xs="12" size-md="6">
+                                <ion-text [color]="status.status_title === 'Application completed' ? 'success' : ''">
+                                  <h3>
+                                    <ion-icon
+                                      [color]="status.status_title === 'Application completed' ? 'success' : 'primary'"
+                                      name="bar-chart-outline"></ion-icon>
+                                    {{ status.status_title}}
+                                  </h3>
+                                </ion-text>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-label>
+                      </ion-item>
+                    </ion-card-content>
+                  </ion-card>
+                </ng-container>
+                <ng-template #wrongData>
+                  <ion-card>
+                    <ion-card-header color="danger">
+                      <ion-card-title>No Application Found!!</ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                      <app-message-with-svg wrapperMarginTop="20px" wrapperOffset="4" wrapperSize="4"
+                        imageUrl="assets/img/empty.svg" messageTitle="No Data To Show!"
+                        messageContent="No Application found for Travel Document Number: ({{passportNumber}}), with the country code: ({{alpha3Code}})">
+                      </app-message-with-svg>
+                    </ion-card-content>
+                  </ion-card>
+                </ng-template>
+              </ng-container>
+              <ng-template #loading>
+                <ion-card>
+                  <ion-card-header color="primary">
+                    <ion-card-title>
                       Summary
                     </ion-card-title>
                   </ion-card-header>
                   <ion-card-content>
-                    <ion-text class="display ion-padding-bottom ion-padding-top">
-                      <span class="text-bold">Full Name:</span> {{ visaDetails.applicant_fullname }}
-                    </ion-text>
-                    <ion-text class="display ion-padding-bottom">
-                      <span class="text-bold">Travel Document Number:</span> {{ visaDetails.applicant_traveldocno }}
-                    </ion-text>
-                    <ion-text class="display ion-padding-bottom">
-                      <span class="text-bold">Application Number:</span> {{ visaDetails.applicant_id }}
-                    </ion-text>
-                    <ion-text class="display">
-                      <span class="text-bold"> Application Status:</span>
-                      {{ visaDetails.status_historys[0].status_title }}
-                    </ion-text>
-                    <div class="progress-bar ion-margin-top"
-                      [style.width]="visaDetails.status_historys[0].complete + '%'" [style.background]="
-                            '#' + visaDetails.status_historys[0].progress_color
-                          ">
-                      <p class="ion-text-center" style="color: white">{{visaDetails.status_historys[0].complete}}%</p>
+                    <div class="ion-padding-top">
+                      <ion-skeleton-text *ngFor="let _ of skeletons" animated style="height: 25px; width: 80%;">
+                      </ion-skeleton-text>
                     </div>
                   </ion-card-content>
                 </ion-card>
-                <ion-card class="ion-no-margin">
-                  <ion-card-header class="colored-border titleBorder">
-                    <ion-card-title class="responsive-h1">
-                      Color Info
-                    </ion-card-title>
-                  </ion-card-header>
-                  <ion-card-content>
-                    <ion-grid>
-                      <ion-row>
-                        <ion-col size="1" class="set-margin-auto">
-                          <div class="greenSquare"></div>
-                        </ion-col>
-                        <ion-col size="11">
-                          <p>Your application is progressing accordingly.</p>
-                        </ion-col>
-                      </ion-row>
-                      <ion-row>
-                        <ion-col size="1" class="set-margin-auto">
-                          <div class="yellowSquare"></div>
-                        </ion-col>
-                        <ion-col size="11">
-                          <p>Your application is pending additional documents or correction by your institution.</p>
-                        </ion-col>
-                      </ion-row>
-                      <ion-row>
-                        <ion-col size="1" class="set-margin-auto">
-                          <div class="redSquare"></div>
-                        </ion-col>
-                        <ion-col size="11">
-                          <p>Your application has been rejected at the current stage. Please contact your institution
-                            for
-                            advice.</p>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                  </ion-card-content>
-                </ion-card>
-              </ion-col>
-              <ion-col size="12" size-md="7">
-                <ion-card class="ion-no-margin">
-                  <ion-card-header class="colored-border titleBorder" (click)="toggleHistoryCard()">
-                    <ion-card-title class="responsive-h1">
+                <ion-card>
+                  <ion-card-header color="primary">
+                    <ion-card-title>
                       Application Progress History
                     </ion-card-title>
-                    <a>
-                      <ion-icon name="caret-down"></ion-icon>
-                    </a>
                   </ion-card-header>
-                  <ion-card-content *ngIf="historyStatus">
-                    <ion-grid class="hide-card-show-table">
-                      <ion-row class="ion-padding-top ">
-                        <ion-col class="ion-padding-start" size="12" size-sm="4">
-                          <h2 class="text-bold">Date</h2>
-                        </ion-col>
-                        <ion-col size="12" size-sm="4">
-                          <h2 class="text-bold">Status</h2>
-                        </ion-col>
-                        <ion-col size="12" size-sm="4" class="ion-padding-start">
-                          <h2 class="text-bold">Remark</h2>
-                        </ion-col>
-                      </ion-row>
-                    </ion-grid>
-                    <ion-card *ngFor="let status of visaDetails.status_historys">
-                      <ion-card-content>
-                        <ion-grid>
+                  <ion-card-content class="ion-no-padding">
+                    <ion-item lines="full" *ngFor="let _ of skeletons">
+                      <ion-label class="glob-white-space-normal">
+                        <ion-grid class="ion-no-padding">
                           <ion-row>
-                            <ion-col size="12" size-sm="4" class="set-margin-auto">
-                              <p class="text-bold show-card-hide-table ion-padding-rignt"> Date:</p>
-                              {{ status.created_at}}
+                            <ion-col size="12" class="ion-margin-bottom">
+                              <ion-skeleton-text animated style="height: 25px; width: 80%;">
+                              </ion-skeleton-text>
                             </ion-col>
-                            <ion-col size="12" size-sm="4" class="set-margin-auto">
-                              <p class="text-bold show-card-hide-table ion-padding-rignt"> Status:</p>
-                              {{ status.status_title }}
+                          </ion-row>
+
+                          <ion-row>
+                            <ion-col size-xs="12" size-md="6">
+                              <ion-skeleton-text animated style="height: 25px; width: 100%;"></ion-skeleton-text>
                             </ion-col>
-                            <ion-col size="12" size-sm="4" class="set-margin-auto">
-                              <p class="text-bold show-card-hide-table ion-padding-rignt"> Remark:</p>
-                              {{ status.remark }}
+                            <ion-col size-xs="12" size-md="6">
+                              <ion-skeleton-text animated style="height: 25px; width: 100%;"></ion-skeleton-text>
                             </ion-col>
                           </ion-row>
                         </ion-grid>
-                      </ion-card-content>
-                    </ion-card>
+                      </ion-label>
+                    </ion-item>
                   </ion-card-content>
                 </ion-card>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ng-container>
-        <ng-template #wrongData>
-          <app-message-with-svg wrapperMarginTop="20px" wrapperOffset="4" wrapperSize="4"
-            imageUrl="assets/img/empty.svg" messageTitle="No Data To Show!"
-            messageContent="No Application found for Travel Document Number: ({{passportNumber}}), with the country code: ({{alpha3Code}})">
-          </app-message-with-svg>
-        </ng-template>
-      </ng-container>
-      <ng-template #loading>
-        <ion-grid>
-          <ion-row>
-            <ion-col size="12" size-md="5">
-              <!-- loading for Summary section-->
-              <ion-card class="ion-no-margin ion-margin-bottom">
-                <ion-card-header>
-                  <ion-card-title>
-                    <ion-skeleton-text animated style="width: 30%; line-height: 20px"></ion-skeleton-text>
-                  </ion-card-title>
+              </ng-template>
+            </ng-container>
+            <ng-template #enterDataToSearch>
+              <ion-card>
+                <ion-card-header color="danger">
+                  <ion-card-title>Search Criteria Missing!!</ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
-                  <ion-text class="display ion-padding-bottom ion-padding-top">
-                    <ion-skeleton-text animated style="width: 70%; line-height: 20px"></ion-skeleton-text>
-                  </ion-text>
-                  <ion-text class="display ion-padding-bottom">
-                    <ion-skeleton-text animated style="width: 50%; line-height: 20px"></ion-skeleton-text>
-                  </ion-text>
-                  <ion-text class="display ion-padding-bottom">
-                    <ion-skeleton-text animated style="width: 50%; line-height: 20px"></ion-skeleton-text>
-                  </ion-text>
-                  <ion-text class="display">
-                    <ion-skeleton-text animated style="width: 40%; line-height: 20px"></ion-skeleton-text>
-                  </ion-text>
-                  <div class="progress-bar ion-margin-top">
-                    <ion-skeleton-text animated style="width: 100%; line-height: 30px"></ion-skeleton-text>
-                  </div>
+                  <app-message-with-svg wrapperMarginTop="20px" wrapperOffset="4" wrapperSize="4"
+                    imageUrl="assets/img/select.svg"
+                    messageTitle="Enter students' Travel Document Number and Nationality to check his/her visa application">
+                  </app-message-with-svg>
                 </ion-card-content>
               </ion-card>
-              <!-- loading for Color Info section-->
-              <ion-card class="ion-no-margin">
-                <ion-card-header>
-                  <ion-card-title class="responsive-h1">
-                    <ion-skeleton-text animated style="width: 30%; line-height: 20px"></ion-skeleton-text>
-                  </ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                  <ion-skeleton-text class="ion-margin-top" animated style="width: 60%; line-height: 20px">
-                  </ion-skeleton-text>
-                  <ion-skeleton-text animated style="width: 50%; line-height: 20px"></ion-skeleton-text>
-                  <ion-skeleton-text animated style="width: 70%; line-height: 20px"></ion-skeleton-text>
-                </ion-card-content>
-              </ion-card>
-            </ion-col>
-            <!-- loading for Status History section-->
-            <ion-col size="12" size-md="7">
-              <ion-card class="ion-no-margin">
-                <ion-card-header>
-                  <ion-card-title>
-                    <ion-skeleton-text animated style="width: 30%; line-height: 20px"></ion-skeleton-text>
-                  </ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                  <ion-card *ngFor="let s of skeletons">
-                    <ion-card-content>
-                      <ion-grid>
-                        <ion-row>
-                          <ion-col size="12" size-sm="4" class="set-margin-auto">
-                            <ion-skeleton-text animated style="width: 20%; line-height: 20px"></ion-skeleton-text>
-                          </ion-col>
-                          <ion-col size="12" size-sm="4" class="set-margin-auto">
-                            <ion-skeleton-text animated style="width: 30%; line-height: 20px"></ion-skeleton-text>
-                          </ion-col>
-                          <ion-col size="12" size-sm="4" class="set-margin-auto">
-                            <ion-skeleton-text animated style="width: 70%; line-height: 20px"></ion-skeleton-text>
-                          </ion-col>
-                        </ion-row>
-                      </ion-grid>
-                    </ion-card-content>
-                  </ion-card>
-                </ion-card-content>
-              </ion-card>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ng-template>
+            </ng-template>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ng-container>
-    <ng-template #enterDataToSearch>
-        <app-message-with-svg wrapperMarginTop="20px" wrapperOffset="4" wrapperSize="4"
-        imageUrl="assets/img/select.svg" messageTitle="Enter students' Travel Document Number and Nationality to check his/her visa application">
-      </app-message-with-svg>
-    </ng-template>
-  </ng-container>
 
-  <ng-template #isLocal>
-    <app-message-with-svg wrapperMarginTop="20px" wrapperOffset="4" wrapperSize="4"
-      imageUrl="assets/img/access_denied.svg" messageTitle="Sorry! This Service is not Available For You!"
-      messageContent="Local students do not need to apply for a visa to study in Malaysia">
-    </app-message-with-svg>
-    <ion-grid>
-      <ion-row>
-        <ion-col size="12" size-md="6" offset-md="3">
-          <ion-button expand="block" class="colored-background" (click)="trackAnotherApplication()">
-            Track Another Application
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ng-template>
+    <ng-template #isLocal>
+      <app-message-with-svg wrapperMarginTop="20px" wrapperOffset="4" wrapperSize="4"
+        imageUrl="assets/img/access_denied.svg" messageTitle="Sorry! This service is not available for local students!"
+        messageContent="Local students do not need to apply for a visa to study in Malaysia">
+      </app-message-with-svg>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="6" offset-md="3">
+            <ion-button expand="block" class="colored-background" (click)="trackAnotherApplication()">
+              Track Another Application
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ng-template>
+  </div>
+
 </ion-content>
