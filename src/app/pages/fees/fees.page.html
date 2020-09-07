@@ -57,8 +57,7 @@
                 <chart #financialsChartComponent *ngIf="financialsChart.data" [type]="financialsChart.type"
                   [data]="financialsChart.data" [options]="financialsChart.options">
                 </chart>
-
-                <ion-item-divider></ion-item-divider>
+                <div class="ion-padding" style="border-bottom: 1px solid;"></div>
                 <ion-row class="ion-margin-top " style="text-align: center;">
                   <ion-col class="border">
                     <ion-text>
@@ -161,7 +160,6 @@
 
               <ion-card-content>
                 <loading-spinner size="50px" message="Loading..." style="padding: 20px"></loading-spinner>
-                <ion-item-divider></ion-item-divider>
                 <ion-row class="ion-margin-top">
                   <ion-col>
                     <ion-skeleton-text animated class="glob-margin-auto" style="width: 70%; line-height: 20px;">
