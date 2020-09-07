@@ -11,11 +11,11 @@ import { catchError, concatMap, finalize, map, mergeMap, shareReplay, switchMap,
 import { accentColors } from 'src/app/constants';
 import {
   APULocation, APULocations,
-  Apcard, BusTrips, CgpaPerIntake, ConsultationHour, Course,
-  CourseDetails, DashboardCardComponentConfigurations, EventComponentConfigurations,
-  ExamSchedule, FeesTotalSummary, Holiday, Holidays, LecturerTimetable, News,
-  OrientationStudentDetails, Quote, Role, StaffDirectory, StaffProfile,
-  StudentPhoto, StudentProfile, StudentTimetable
+  Apcard, BusTrips, CgpaPerIntake, ConsultationHour, ConsultationSlot,
+  Course, CourseDetails, DashboardCardComponentConfigurations,
+  EventComponentConfigurations, ExamSchedule, FeesTotalSummary, Holiday, Holidays, LecturerTimetable,
+  News, OrientationStudentDetails, Quote, Role, StaffDirectory,
+  StaffProfile, StudentPhoto, StudentProfile, StudentTimetable
 } from 'src/app/interfaces';
 import {
   NewsService, NotificationService, SettingsService, StudentTimetableService,
@@ -642,7 +642,8 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
       // AP & BP Removed Temp (Requested by Management | DON'T TOUCH)
       this.isStudent ? this.getUpcomingClassesForStudent(intakeOrStaffId.replace(/[(]AP[)]|[(]BP[)]/g, ''), refresher)
         : this.getUpcomingClassesForLecturer(intakeOrStaffId),
-      this.getUpcomingConsultations() // no-cache for upcoming consultations (students)
+      // tslint:disable-next-line: max-line-length
+      this.isStudent ? this.getUpcomingConsultationsForStudents() : this.getUpcomingConsultationsForStaff() // no-cache for upcoming consultations (students)
     ]).pipe(
       map(x => x[0].concat(x[1])), // MERGE THE TWO ARRAYS TOGETHER
       map(eventsList => {  // SORT THE EVENTS LIST BY TIME
@@ -764,12 +765,13 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
-  getUpcomingConsultations(): Observable<EventComponentConfigurations[]> {
+  getUpcomingConsultationsForStudents(): Observable<EventComponentConfigurations[]> {
     const dateNow = new Date();
-    const consultationsEventMode: EventComponentConfigurations[] = [];
+    let consultationsEventMode: EventComponentConfigurations[] = [];
     return forkJoin([this.ws.get<ConsultationHour[]>('/iconsult/bookings?'),
     this.ws.get<StaffDirectory[]>('/staff/listing')
     ]).pipe(
+      tap(_ => consultationsEventMode = []),
       map(([consultations, staffList]) => {
         const filteredConsultations = consultations.filter(
           consultation => this.eventIsToday(
@@ -828,6 +830,48 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
         return consultationsEventMode;
       }
       )
+    );
+  }
+
+  getUpcomingConsultationsForStaff(): Observable<EventComponentConfigurations[]> {
+    const dateNow = new Date();
+    let consultationsEventMode: EventComponentConfigurations[] = [];
+    return this.ws.get<ConsultationSlot[]>('/iconsult/slots?').pipe(
+      tap(_ => consultationsEventMode = []),
+      map(consultations =>
+        consultations.filter(
+          consultation => this.eventIsToday(
+            this.enableMalaysiaTimezone ? utcToZonedTime(new Date(consultation.start_time), 'Asia/Kuala_Lumpur')
+              : new Date(consultation.start_time), dateNow)
+            && consultation.status === 'Booked'
+        )
+      ),
+      map(upcomingConsultations => {
+        upcomingConsultations.forEach(upcomingConsultation => {
+          let consultationPass = false;
+          if (this.eventPass(format(
+            this.enableMalaysiaTimezone ? utcToZonedTime(new Date(upcomingConsultation.start_time), 'Asia/Kuala_Lumpur')
+              : new Date(upcomingConsultation.start_time), 'hh:mm a'), dateNow)) {
+            consultationPass = true;
+          }
+          consultationsEventMode.push({
+            title: 'Consultation Hour',
+            color: '#d35400',
+            outputFormat: 'event-with-time-and-hyperlink',
+            type: 'iconsult',
+            pass: consultationPass,
+            passColor: '#d7dee3',
+            firstDescription: upcomingConsultation.room_code + ' | ' + upcomingConsultation.venue,
+            thirdDescription: format(
+              this.enableMalaysiaTimezone ? utcToZonedTime(new Date(upcomingConsultation.end_time), 'Asia/Kuala_Lumpur')
+                : new Date(upcomingConsultation.end_time), 'hh:mm a'),
+            dateOrTime: format(
+              this.enableMalaysiaTimezone ? utcToZonedTime(new Date(upcomingConsultation.start_time), 'Asia/Kuala_Lumpur')
+                : new Date(upcomingConsultation.start_time), 'hh:mm a'),
+          });
+        });
+        return consultationsEventMode;
+      })
     );
   }
 
