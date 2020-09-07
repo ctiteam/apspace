@@ -413,7 +413,7 @@ export const menusRaw = [
     title: 'Report an Exception (Legacy)',
     group: 'Corporate',
     url: 'http://asterix.apiit.edu.my/exception/login.jsp',
-    img: 'assets/img/filing-report.png',
+    img: 'assets/img/report-an-exception.png',
     role: Role.Lecturer | Role.Admin,
     tags: ['report', 'admin', 'exception']
   },
@@ -640,6 +640,7 @@ export const menusRaw = [
     title: 'About',
     group: 'Others',
     url: 'about',
+    img: 'assets/img/about.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
     tags: ['about', 'developer', 'contact', 'version', 'cti', 'who']
   },
