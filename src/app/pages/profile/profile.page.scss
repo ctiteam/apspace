@@ -1,34 +1,45 @@
 .virtual-card {
   margin: auto;
   width: 310px !important;
+  --background: invisible;
+
+	img {
+    border-radius: 10px;
+	}
 
   .virtual-card-student-img {
     position: absolute !important;
-    bottom: 6px !important;
-    right: 7px !important;
-    padding: 15px !important;
+    bottom: 15px !important;
+    right: 0 !important;
+    padding: 15px 0 !important;
     height: 123px !important;
   }
 
   .virtual-card-student-details {
     position: absolute !important;
-    top: 91px !important;
+    top: 80px !important;
     color: #000 !important;
     left: 10px !important;
     width: 200px !important;
 
     .virtual-card-student-name {
+      margin: 0;
       font-size: 0.9rem;
+      margin-bottom: 20px;
     }
-    .virtual-card-student-ids{
-      &.id{
-        margin-top: 14px;
+    .virtual-card-student-ids {
+      font-size: 0.5rem;
+      margin-top: 2px;
+      margin-bottom: 0;
+      .attr {
+        display: inline-block;
+        width: 9em;
       }
-      &.passport{
-        margin-top: 2px;
+      .attr::after {
+        content: ':';
       }
     }
-    
+
   }
 }
 
@@ -75,22 +86,23 @@ h4 {
 @media screen and (max-width: 360px) {
   .virtual-card {
     width: 268px !important;
-  
+
     .virtual-card-student-img {
       position: absolute !important;
       bottom: 4px !important;
-      right: 7px !important;
-      padding: 13px !important;
-      height: 107px !important;
+      right: 0 !important;
+      padding-top: 4px !important;
+      padding-bottom: 25px !important;
+      height: 120px !important;
     }
-  
+
     .virtual-card-student-details {
       position: absolute !important;
       top: 71px !important;
       color: #000 !important;
       left: 10px !important;
       width: 153px !important;
-  
+
       .virtual-card-student-name {
         font-size: 0.7rem;
       }
