@@ -92,6 +92,7 @@ export class FeesPage {
       type: 'doughnut',
       options: {
         responsive: true,
+        aspectRatio: 1.5,
         legend: {}
       },
       data: null
