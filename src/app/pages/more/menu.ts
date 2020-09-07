@@ -65,7 +65,7 @@ export const menusRaw = [
   },
   {
     id: 'e-forms' as const,
-    title: 'e-Forms (Forms & Applications)',
+    title: 'e-Forms',
     group: 'Collaboration & Information Resources',
     url: 'http://forms.sites.apiit.edu.my/home/',
     attachTicket: true,
