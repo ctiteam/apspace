@@ -140,30 +140,31 @@ export class FeesPage {
       tap(res => res.forEach(amount => {
 
         // upload data to categories object
-        this.categories.course.data += amount.ITEM_DESCRIPTION.includes('Course Fee') || amount.ITEM_DESCRIPTION.includes('SU')
-          ? amount.TOTAL_COLLECTED
-          : 0;
+        if ((amount.ITEM_DESCRIPTION.includes('Course Fee') || amount.ITEM_DESCRIPTION.includes('SU'))) {
+          this.categories.course.data += amount.TOTAL_COLLECTED;
+        }
 
-        this.categories.accommodation.data += amount.ITEM_DESCRIPTION.includes('Accommodation')
-          ? amount.TOTAL_COLLECTED
-          : 0;
+        if (amount.ITEM_DESCRIPTION.includes('Accommodation')) {
+          this.categories.accommodation.data += amount.TOTAL_COLLECTED;
+        }
 
-        this.categories.emgs.data += amount.ITEM_DESCRIPTION.includes('EMGS') || amount.ITEM_DESCRIPTION.includes('Immigration')
-          ? amount.TOTAL_COLLECTED
-          : 0;
+        if ((amount.ITEM_DESCRIPTION.includes('EMGS') || amount.ITEM_DESCRIPTION.includes('Immigration'))) {
+          this.categories.emgs.data += amount.TOTAL_COLLECTED;
+        }
 
-        this.categories.bus.data += amount.ITEM_DESCRIPTION.includes('Shuttle')
-          ? amount.TOTAL_COLLECTED
-          : 0;
+        if (amount.ITEM_DESCRIPTION.includes('Shuttle')) {
+          this.categories.bus.data += amount.TOTAL_COLLECTED;
+        }
 
-        this.categories.others.data += !amount.ITEM_DESCRIPTION.includes('Course Fee') &&
+        if ((!amount.ITEM_DESCRIPTION.includes('Course Fee') &&
           !amount.ITEM_DESCRIPTION.includes('SU') &&
           !amount.ITEM_DESCRIPTION.includes('Accommodation') &&
           !amount.ITEM_DESCRIPTION.includes('EMGS') &&
           !amount.ITEM_DESCRIPTION.includes('Immigration') &&
-          !amount.ITEM_DESCRIPTION.includes('Shuttle')
-          ? amount.TOTAL_COLLECTED
-          : 0;
+          !amount.ITEM_DESCRIPTION.includes('Shuttle'))) {
+
+          this.categories.others.data += amount.TOTAL_COLLECTED;
+        }
 
         // data taken from categories object
         this.financialsChart.data = {
