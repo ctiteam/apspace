@@ -19,6 +19,8 @@ export class PrintPayslipModalPage {
   payslipsUrl = 'https://api.apiit.edu.my';
   payslipsEndpoint = '/staff/payslips';
 
+  date;
+
   constructor(
     public modalCtrl: ModalController,
     public toastCtrl: ToastController,

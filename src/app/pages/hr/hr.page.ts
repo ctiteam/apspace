@@ -129,7 +129,7 @@ export class HrPage implements OnInit {
   openPayslipPdf() {
     this.modalCtrl.create({
       component: PrintPayslipModalPage,
-      cssClass: 'custom-modal-style',
+      cssClass: 'glob-partial-page-modal',
     }).then(modal => {
       modal.present();
       modal.onDidDismiss();

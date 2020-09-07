@@ -98,15 +98,14 @@
   <div class="glob-container">
     <div *ngIf="filteredTrip$ | async as trips; else loadingTrips" class="ion-no-padding">
       <ion-grid>
-        <ion-row *ngIf="numberOfTrips !== 0">
+        <ion-row *ngIf="numberOfTrips !== 0; else noTrips;">
           <ion-col size="12" size-lg="6" offset-lg="3">
             <h6>
               Effective from: <span class="glob-text-bold">{{latestUpdate}}</span>
             </h6>
-            <div *ngIf="numberOfTrips !== 0; else noTrips">
-              <div *ngFor="let trip of trips | keyvalue">
-                <ion-card class="ion-no-margin ion-margin-bottom">
-                  <ion-card-header [ngStyle]="{
+            <div *ngFor="let trip of trips | keyvalue">
+              <ion-card class="ion-no-margin ion-margin-bottom">
+                <ion-card-header [ngStyle]="{
                     background:
                       'linear-gradient(35deg, ' +
                       getLocationColor(trip.key) + ' 0%' +
@@ -116,39 +115,39 @@
                       getLocationColor(trip.key) + ' 100%' +
                       ')'
                   }">
-                    <ion-card-title class="ion-float-start">
-                      <h3>
-                        <ion-text color="light">
-                          {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} <small
-                            *ngIf="trip.key === 'mosque'">(Friday Only)</small>
-                        </ion-text>
-                      </h3>
-                    </ion-card-title>
-                    <div class="glob-clearfix"></div>
-                  </ion-card-header>
-                  <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
-                    <ion-list class="ion-no-padding">
-                      <ion-item lines="none" *ngFor="let destination of trip.value | keyvalue">
-                        <ion-label>
-                          <h2 class="glob-text-bold">
-                              {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} ->
-                              {{ destination.key | uppercase }}
-                              <small *ngIf="destination.key === 'mosque'">(Friday Only)</small>
-                          </h2>
-                          <ion-grid class="ion-no-padding">
-                            <ion-row>
-                              <ion-col [class.passed]="tripData.trip_time | checkPassedTime" class="ion-text-center primary-color"
-                                *ngFor="let tripData of destination.value" size="3" size-md="4">
-                                {{tripData.trip_time}}
-                              </ion-col>
-                            </ion-row>
-                          </ion-grid>
-                        </ion-label>
-                      </ion-item>
-                    </ion-list>
-                  </ion-card-content>
-                </ion-card>
-              </div>
+                  <ion-card-title class="ion-float-start">
+                    <h3>
+                      <ion-text color="light">
+                        {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} <small
+                          *ngIf="trip.key === 'mosque'">(Friday Only)</small>
+                      </ion-text>
+                    </h3>
+                  </ion-card-title>
+                  <div class="glob-clearfix"></div>
+                </ion-card-header>
+                <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
+                  <ion-list class="ion-no-padding">
+                    <ion-item lines="none" *ngFor="let destination of trip.value | keyvalue">
+                      <ion-label>
+                        <h2 class="glob-text-bold">
+                          {{ getLocationDisplayNameAndType(trip.key).split('&&')[0] | uppercase }} ->
+                          {{ destination.key | uppercase }}
+                          <small *ngIf="destination.key === 'mosque'">(Friday Only)</small>
+                        </h2>
+                        <ion-grid class="ion-no-padding">
+                          <ion-row>
+                            <ion-col [class.passed]="tripData.trip_time | checkPassedTime"
+                              class="ion-text-center primary-color" *ngFor="let tripData of destination.value" size="3"
+                              size-md="4">
+                              {{tripData.trip_time}}
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-label>
+                    </ion-item>
+                  </ion-list>
+                </ion-card-content>
+              </ion-card>
             </div>
           </ion-col>
         </ion-row>

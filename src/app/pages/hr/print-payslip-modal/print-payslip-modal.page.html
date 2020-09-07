@@ -17,8 +17,16 @@
   <div *ngIf="payslips$ | async as payslips; else loading">
     <div *ngIf="payslips.length > 0; else noPayslips">
       <ion-grid>
+        <ion-row class="ion-justify-content-end">
+          <ion-col class="ion-padding-horizontal" size="12" size-md="4">
+            <ion-item color="primary" style="border-radius: 6px;">
+              <ion-label>Date</ion-label>
+              <ion-datetime placeholder="Select Date to Filter" displayFormat="MMM YYYY" [(ngModel)]="date"></ion-datetime>
+            </ion-item>
+          </ion-col>
+        </ion-row>
         <ion-row>
-          <ion-col size="12" size-md="6" size-xl="4" *ngFor="let payslip of payslips">
+          <ion-col size="12" size-md="6" size-xl="4" *ngFor="let payslip of (payslips | filter:date)">
             <ion-card>
               <img src="{{payslip | getDate | date: 'MMM' | generateMonthImg}}" />
     

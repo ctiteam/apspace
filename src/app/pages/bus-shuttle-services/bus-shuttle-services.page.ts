@@ -134,7 +134,9 @@ export class BusShuttleServicesPage {
           filteredArray = filteredArray.filter(trip => {
             // FILTER TRIPS TO UPCOMING TRIPS ONLY
             // return this.strToDate(trip.trip_time) >= this.dateNow;
-            return parse(trip.trip_time, 'kk:mm', new Date()) >= this.dateNow;
+            const timeFilter = this.settings.get('timeFormat') === '24' ? parse(trip.trip_time, 'kk:mm', new Date()) >= this.dateNow :
+                                                                          parse(trip.trip_time, 'hh:mm aa', new Date()) >= this.dateNow;
+            return timeFilter;
           });
         }
         if (filteredArray.length === 0) { // NO RESULTS => SHOW 'THERE ARE NO TRIPS' MESSAGE
@@ -143,10 +145,12 @@ export class BusShuttleServicesPage {
         return filteredArray;
       }),
       tap(trips => {
-        // STORE LATEST UPDATE DATE
-        const applicableFroms = [...new Set(trips.map(trip => trip.applicable_from))];
-        const latestUpdate = max(applicableFroms.map(parseISO));
-        this.latestUpdate = format(latestUpdate, 'dddd, do MMMM yyyy');
+        if (trips.length > 0) {
+          // STORE LATEST UPDATE DATE
+          const applicableFroms = [...new Set(trips.map(trip => trip.applicable_from))];
+          const latestUpdate = max(applicableFroms.map(parseISO));
+          this.latestUpdate = format(latestUpdate, 'dddd, do MMMM yyyy') || '';
+        }
       }),
       map(trips => {
         const result = trips.reduce((r, a) => {

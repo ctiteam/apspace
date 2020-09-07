@@ -7,6 +7,7 @@ import { ChartModule } from 'angular2-chartjs';
 
 import { ComponentsModule } from 'src/app/components/components.module';
 import { HrPage } from './hr.page';
+import { FilterPipe } from './print-payslip-modal/filter.pipe';
 import { GenerateMonthImgPipe } from './print-payslip-modal/generate-month-img.pipe';
 import { GetDatePipe } from './print-payslip-modal/get-date.pipe';
 import { PrintPayslipModalPage } from './print-payslip-modal/print-payslip-modal.page';
@@ -28,6 +29,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [HrPage, SortByDatePipe, PrintPayslipModalPage, GetDatePipe, GenerateMonthImgPipe],
+  declarations: [HrPage, SortByDatePipe, PrintPayslipModalPage, GetDatePipe, GenerateMonthImgPipe, FilterPipe],
 })
 export class HrPageModule { }

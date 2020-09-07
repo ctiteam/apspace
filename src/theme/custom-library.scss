@@ -71,6 +71,15 @@
   --height: 100%;
 }
 
+.glob-partial-page-modal {
+  .modal-wrapper {
+    min-width: 97%;
+    height: 90%;
+    position: absolute;
+    bottom: 0;
+  }
+}
+
 .glob-calendar {
   background-color: var(--secondary-bg-color) !important;
   padding: 0 !important;
