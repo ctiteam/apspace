@@ -4,10 +4,10 @@
 
 .form-input {
   border-radius: 7px;
-  background: var(--main-bg-color);
+  background: var(--ion-color-light);
   padding: 3px 10px !important;
   margin-top: 10px;
-  border: 1px solid var(--tertiary-bg-color);
+  border: 1px solid var(--ion-color-medium);
   min-height: 40px;
 }
 
@@ -25,11 +25,11 @@ ion-select.form-input {
 }
 .input-elements-wrabber {
   border-radius: 7px;
-  border: 1.4px solid var(--tertiary-bg-color);
+  border: 1.4px solid var(--ion-color-medium);
   .input-wrapper {
-    border-right: 2px solid var(--tertiary-bg-color);
+    border-right: 2px solid var(--ion-color-medium);
     ion-input {
-      --background: var(--main-bg-color);
+      --background: var(--ion-color-light);
       border-radius: 7px 0 0 7px;
       padding: 3px 10px !important;
     }
@@ -50,7 +50,7 @@ ion-select.form-input {
     font-weight: 700;
   }
   &:after {
-    background-color: var(--tertiary-bg-color);
+    background-color: var(--ion-color-medium);
   }
 }
 
@@ -64,12 +64,12 @@ ion-select.form-input {
     text-align: center;
     display: table-cell;
     position: relative;
-    color: var(--primary-color);
+    color: var(--ion-color-primary);
     &:before {
       content: "\2713";
       display: block;
       margin: 0 auto 4px;
-      background-color: var(--main-bg-color);
+      background-color: var(--ion-color-light);
       width: 36px;
       height: 36px;
       line-height: 32px;
@@ -78,7 +78,7 @@ ion-select.form-input {
       border: {
         width: 2px;
         style: solid;
-        color: var(--primary-color);
+        color: var(--ion-color-primary);
         radius: 50%;
       }
     }
@@ -86,7 +86,7 @@ ion-select.form-input {
       content: "";
       height: 2px;
       width: 100%;
-      background-color: var(--primary-color);
+      background-color: var(--ion-color-primary);
       position: absolute;
       top: 16px;
       left: 50%;
@@ -100,15 +100,15 @@ ion-select.form-input {
     &.is-active {
       @extend %remain-steps;
       &:before {
-        background-color: var(--main-bg-color);
-        border-color: var(--primary-color);
+        background-color: var(--ion-color-light);
+        border-color: var(--ion-color-primary);
       }
       ~ li {
-        color: #808080;
+        color: var(--ion-color-medium);
         @extend %remain-steps;
         &:before {
-          background-color: var(--tertiary-bg-color);
-          border-color: var(--tertiary-bg-color);
+          background-color: var(--ion-color-light);
+          border-color: var(--ion-color-medium);
         }
       }
     }

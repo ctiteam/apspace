@@ -15,7 +15,7 @@
           <ion-card-content class="ion-no-padding ion-padding-bottom ion-padding-start ion-padding-end">
             <div class="container-fluid">
               <br /><br />
-              <ul class="list-unstyled multi-steps">
+              <ul class="multi-steps">
                 <li *ngFor="let _ of totalSteps; let i = index" [class.is-active]="i===currentStepNumber"></li>
               </ul>
             </div>
@@ -37,7 +37,7 @@
               <ion-row>
                 <ion-col class="ion-text-center ion-margin-top">
                   <p>Step 2</p>
-                  <h4 class="text-bold">Records History:</h4>
+                  <h4 class="glob-text-bold">Records History:</h4>
                 </ion-col>
               </ion-row>
               <ion-row>
@@ -46,64 +46,86 @@
                   <!-- TODO: STUDENT IMAGE NEED TO BE ADDED HERE -->
                   <ng-container *ngIf="studentDetails$ | async as studentDetails; else loadingDetails">
                     <ng-container *ngIf="studentDetails.length > 0; else noStudentsData">
-                      <ion-avatar class="margin-auto">
+                      <ion-avatar class="glob-margin-auto">
                         <img [src]="'data:image/jpg;base64,' +
                         studentDetails[0].base64_photo" alt="img">
                       </ion-avatar>
-                      <h2 class="text-bold main-text-color ion-text-center">{{studentDetails[0].name}} | {{studentId}}
-                      </h2>
+                      <div class="ion-margin-top">
+                        <ion-text color="primary">
+                          <h2 class="glob-text-bold ion-text-center">{{studentDetails[0].name}} | {{studentId}}
+                          </h2>
+                        </ion-text>
+                      </div>
 
-                      <p style="margin-top: 16px; margin-bottom: 0;">Recent Records:</p>
+                      <div class="ion-margin-top ion-text-center">
+                        <ion-button color="primary" (click)="nextStep()">
+                          <span></span>Next
+                          <ion-icon name="arrow-forward" slot="end"></ion-icon>
+                        </ion-button>
+                      </div>
+
+                      <p class="ion-no-margin ion-margin-top">Recent Records:</p>
 
                       <ng-container *ngIf="studentRecords$ | async as studentRecords; else loadingRecords">
                         <ng-container *ngIf="studentRecords.total_count > 0; else noRecords">
                           <ion-item *ngFor="let studentRecord of studentRecords.entries">
-                            <ion-label class="text-wrap-normal">
-                              <h2 class="text-bold main-text-color small-margin-bottom">
-                                {{studentRecord['6'] + (studentRecord['7'] ? ' | ' : '') + studentRecord['7']}}</h2>
+                            <ion-label class="glob-white-space-normal">
+                              <ion-text color="danger">
+                                <h2 class="glob-text-bold small-margin-bottom">
+                                  {{studentRecord['6'] + (studentRecord['7'] ? ' | ' : '') + studentRecord['7']}}</h2>
+                              </ion-text>
                               <p>
-                                <ion-icon name="calendar"></ion-icon>
+                                <ion-icon color="danger" name="calendar-outline"></ion-icon>
                                 {{studentRecord['date_created']}}
                               </p>
                               <p>
-                                <ion-icon name="pin"></ion-icon>
+                                <ion-icon color="danger" name="pin-outline"></ion-icon>
                                 {{studentRecord['4']}}
                               </p>
                               <p>
-                                <ion-icon name="person"></ion-icon>
+                                <ion-icon color="danger" name="person-outline"></ion-icon>
                                 {{studentRecord['8']}}
                               </p>
                               <p>
-                                <span class="text-bold">Description: </span>{{studentRecord['2']}}
+                                <ion-icon name="reader-outline" color="danger"></ion-icon>
+                                {{studentRecord['2']}}
                               </p>
                             </ion-label>
                           </ion-item>
                         </ng-container>
                         <ng-template #noRecords>
-                          <h2 class="text-bold success-text ion-text-center">No previous records has been recorded
-                            against
-                            this student.</h2>
+                          <ion-text color="success">
+                            <h2 class="text-bold ion-text-center">No previous records has been recorded
+                              against
+                              this student.</h2>
+                          </ion-text>
                         </ng-template>
                       </ng-container>
                       <ng-template #loadingRecords>
                         <ng-container *ngFor="let skeleton of skeletons">
                           <ion-item>
                             <ion-label class="text-wrap-normal">
-                              <h2 class="text-bold main-text-color small-margin-bottom">
-                                <ion-skeleton-text animated style="display: inline-block; line-height: 25px; width: 100%;"></ion-skeleton-text>
+                              <h2 class="glob-text-bold small-margin-bottom">
+                                <ion-skeleton-text animated
+                                  style="display: inline-block; line-height: 25px; width: 100%;"></ion-skeleton-text>
                               </h2>
                               <p>
-                                <ion-skeleton-text animated style="display: inline-block; line-height: 25px; width: 80%;"></ion-skeleton-text>
+                                <ion-skeleton-text animated
+                                  style="display: inline-block; line-height: 25px; width: 80%;"></ion-skeleton-text>
                               </p>
                               <p>
-                                <ion-skeleton-text animated style="display: inline-block; line-height: 25px; width: 90%;"></ion-skeleton-text>
+                                <ion-skeleton-text animated
+                                  style="display: inline-block; line-height: 25px; width: 90%;"></ion-skeleton-text>
                               </p>
                               <p>
-                                <ion-skeleton-text animated style="display: inline-block; line-height: 25px; width: 40%;"></ion-skeleton-text>
+                                <ion-skeleton-text animated
+                                  style="display: inline-block; line-height: 25px; width: 40%;"></ion-skeleton-text>
                               </p>
                               <p>
-                                <ion-skeleton-text animated style="display: inline-block; line-height: 25px; width: 100%;"></ion-skeleton-text>
-                                <ion-skeleton-text animated style="display: inline-block; line-height: 25px; width: 90%;"></ion-skeleton-text>
+                                <ion-skeleton-text animated
+                                  style="display: inline-block; line-height: 25px; width: 100%;"></ion-skeleton-text>
+                                <ion-skeleton-text animated
+                                  style="display: inline-block; line-height: 25px; width: 90%;"></ion-skeleton-text>
                               </p>
                             </ion-label>
                           </ion-item>
@@ -111,8 +133,10 @@
                       </ng-template>
                     </ng-container>
                     <ng-template #noStudentsData>
-                      <h2 class="text-bold danger-text ion-text-center">The student ID you have entered does not exist
-                        in the system.</h2>
+                      <ion-text color="danger">
+                        <h2 class="text-bold ion-text-center">The student ID you have entered does not exist
+                          in the system.</h2>
+                      </ion-text>
                     </ng-template>
                   </ng-container>
                   <ng-template #loadingDetails>
@@ -222,8 +246,9 @@
           </ion-card-content>
           <ion-footer>
             <p class="ion-padding main-text-color">**View the dress code policy <span
-                style="text-decoration: underline;" class="colored-text text-bold cursor-pointer" (click)="openStudentHandbook()">here</span>
-               <small>- under the section:  <span class="text-bold">PROFESSIONAL CODE OF CONDUCT</span>.</small>
+                style="text-decoration: underline;" class="colored-text text-bold cursor-pointer"
+                (click)="openStudentHandbook()">here</span>
+              <small>- under the section: <span class="text-bold">PROFESSIONAL CODE OF CONDUCT</span>.</small>
             </p>
           </ion-footer>
         </ion-card>
