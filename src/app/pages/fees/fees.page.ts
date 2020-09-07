@@ -85,7 +85,6 @@ export class FeesPage {
       datasets: {
         data: number[];
         backgroundColor: string[];
-        weight: [number]
       }[];
     };
   } = {
@@ -178,8 +177,7 @@ export class FeesPage {
                 this.categories.bus.data,
                 this.categories.others.data,
               ],
-              backgroundColor: ['#0081a7', '#00afb9', '#fdfcdc', '#f07167', '#fed9b7'],
-              weight: [600]
+              backgroundColor: ['#0081a7', '#00afb9', '#fdfcdc', '#f07167', '#fed9b7']
             },
           ]
         };
