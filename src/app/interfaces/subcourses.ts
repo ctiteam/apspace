@@ -13,4 +13,5 @@ export interface Subcourse {
   SEMESTER: number;
   YEAR: string;
   GRADING_SCHEME: string;
+  SUBJECT_PASS_FAIL?: string | null;
 }

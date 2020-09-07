@@ -113,23 +113,24 @@
                             </ion-row>
                             <ion-row
                               *ngIf="result.GRADE.toLowerCase() !== 'Pending Survey'.toLowerCase(); else pendingSurvey">
-                              <ion-col size="6" size-md="4">
+                              <ion-col size="6" size-md="6">
                                 <p>
-                                  <small>Result:</small>
-                                  <ion-text class="glob-text-bold">
+                                  Result:
+                                  <ion-text class="glob-text-bold"
+                                    [color]="result.SUBJECT_PASS_FAIL === 'Pass' ? 'success' : result.SUBJECT_PASS_FAIL === 'Fail' ? 'danger' : ''">
                                     {{ result.GRADE || "N/A" }}
                                   </ion-text>
                                 </p>
                               </ion-col>
-                              <ion-col size="6" size-md="4">
+                              <ion-col size="6" size-md="6">
                                 <p>
-                                  <small>Grade:</small>
-                                  <ion-text class="glob-text-bold">
+                                  Grade:
+                                  <ion-text class="glob-text-bold" [color]="result.SUBJECT_PASS_FAIL === 'Pass' ? 'success' : result.SUBJECT_PASS_FAIL === 'Fail' ? 'danger' : ''">
                                     {{ result.GRADE_POINT || "N/A" }}
                                   </ion-text>
                                 </p>
                               </ion-col>
-                              <ion-col size="12" size-md="4">
+                              <ion-col size="12">
                                 <p>
                                   <small>Internal Release Date:</small>
                                   <ion-text class="glob-text-bold">
