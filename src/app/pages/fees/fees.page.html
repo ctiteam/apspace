@@ -40,8 +40,8 @@
 
   <div class="glob-container">
     <ion-grid>
-      <ion-row>
-        <ion-col size-xs="12" size-md="7">
+      <ion-row class="ion-margin-top">
+        <ion-col size-xs="12" size-md="6" push-md="6">
           <ng-template let-totalSummary [ngIf]="totalSummary$ | async" [ngIfElse]="loadingTotalSummary">
             <ion-card class="content-card" #total_summary_card [ngClass]="{
             'green-total-summary-card': (totalSummary[0].TOTAL_PAYABLE === totalSummary[0].TOTAL_PAID),
@@ -57,72 +57,97 @@
                 <chart #financialsChartComponent *ngIf="financialsChart.data" [type]="financialsChart.type"
                   [data]="financialsChart.data" [options]="financialsChart.options">
                 </chart>
-                <ion-item class="glob-text-bold green-text" lines="none">
-                  <ion-label>
-                    <h3>Total Payable</h3>
-                  </ion-label>
-                  <ion-note slot="end" *ngIf="totalSummary[0]?.TOTAL_PAYABLE === 'N/A'; else totalSummaryTotalPayable">
-                    N/A
-                  </ion-note>
-                  <ng-template #totalSummaryTotalPayable>
-                    <ion-note slot="end">
-                      {{ (totalSummary[0]?.TOTAL_PAYABLE || 0) | currency:'MYR':'RM' }}
-                    </ion-note>
-                  </ng-template>
-                </ion-item>
-                <ion-item class="glob-text-bold green-text" lines="none">
-                  <ion-label>
-                    <h3>Total Paid</h3>
-                  </ion-label>
-                  <ion-note slot="end" *ngIf="totalSummary[0]?.TOTAL_PAID === 'N/A'; else totalSummaryTotalPaid">
-                    N/A
-                  </ion-note>
-                  <ng-template #totalSummaryTotalPaid>
-                    <ion-note slot="end">
-                      {{ (totalSummary[0]?.TOTAL_PAID || 0) | currency:'MYR':'RM' }}
-                    </ion-note>
-                  </ng-template>
-                </ion-item>
-                <ion-item class="glob-text-bold yellow-text" lines="none">
-                  <ion-label>
-                    <h3>Total Outstanding</h3>
-                  </ion-label>
-                  <ion-note slot="end"
-                    *ngIf="totalSummary[0]?.TOTAL_OUTSTANDING === 'N/A'; else totalSummaryTotalOutstanding">
-                    N/A
-                  </ion-note>
-                  <ng-template #totalSummaryTotalOutstanding>
-                    <ion-note slot="end">
-                      {{ (totalSummary[0]?.TOTAL_OUTSTANDING || 0) | currency:'MYR':'RM' }}
-                    </ion-note>
-                  </ng-template>
-                </ion-item>
-                <ion-item class="glob-text-bold red-text" lines="none">
-                  <ion-label>
-                    <h3>Total Overdue</h3>
-                  </ion-label>
-                  <ion-note slot="end" *ngIf="totalSummary[0]?.TOTAL_OVERDUE === 'N/A'; else totalSummaryTotalOverdue">
-                    N/A
-                  </ion-note>
-                  <ng-template #totalSummaryTotalOverdue>
-                    <ion-note slot="end">
-                      {{ (totalSummary[0]?.TOTAL_OVERDUE || 0) | currency:'MYR':'RM' }}
-                    </ion-note>
-                  </ng-template>
-                </ion-item>
-                <ion-item class="glob-text-bold pink-text" lines="none">
-                  <ion-label>
-                    <h3>Fine</h3>
-                  </ion-label>
-                  <ion-note slot="end" *ngIf="totalSummary[0]?.FINE === 'N/A'; else totalSummaryFine">
-                    N/A
-                  </ion-note>
-                  <ng-template #totalSummaryFine>
-                    <ion-note slot="end">
-                      {{ (totalSummary[0]?.FINE || 0) | currency:'MYR':'RM' }}
-                    </ion-note>
-                  </ng-template>
-                </ion-item>
+
+                <ion-item-divider></ion-item-divider>
+                <ion-row class="ion-margin-top " style="text-align: center;">
+                  <ion-col class="border">
+                    <ion-text>
+                      <h3>Payable</h3>
+                    </ion-text>
+                    <ion-text *ngIf="totalSummary[0]?.TOTAL_PAYABLE === 'N/A'; else totalSummaryTotalPayable">
+                      <h3 class="amount">
+                        N/A
+                      </h3>
+                    </ion-text>
+                    <ng-template #totalSummaryTotalPayable>
+                      <ion-text>
+                        <h3 class="amount">
+                          {{ (totalSummary[0]?.TOTAL_PAYABLE || 0) | currency:'MYR':'RM' }}
+                        </h3>
+                      </ion-text>
+                    </ng-template>
+                  </ion-col>
+                  <ion-col>
+                    <ion-text>
+                      <h3>Paid</h3>
+                    </ion-text>
+                    <ion-text *ngIf="totalSummary[0]?.TOTAL_PAID === 'N/A'; else totalSummaryTotalPaid">
+                      <h3 class="amount">
+                        N/A
+                      </h3>
+                    </ion-text>
+                    <ng-template #totalSummaryTotalPaid>
+                      <ion-text>
+                        <h3 class="amount">
+                          {{ (totalSummary[0]?.TOTAL_PAID || 0) | currency:'MYR':'RM' }}
+                        </h3>
+                      </ion-text>
+                    </ng-template>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="ion-margin-top" style="text-align: center;">
+                  <ion-col class="border">
+                    <ion-text>
+                      <h3>Outstanding</h3>
+                    </ion-text>
+                    <ion-text *ngIf="totalSummary[0]?.TOTAL_OUTSTANDING === 'N/A'; else totalSummaryTotalOutstanding">
+                      <h3 class="amount">
+                        N/A
+                      </h3>
+                    </ion-text>
+                    <ng-template #totalSummaryTotalOutstanding>
+                      <ion-text>
+                        <h3 class="amount">
+                          {{ (totalSummary[0]?.TOTAL_OUTSTANDING || 0) | currency:'MYR':'RM' }}
+                        </h3>
+                      </ion-text>
+                    </ng-template>
+                  </ion-col>
+                  <ion-col class="border">
+                    <ion-text>
+                      <h3>Overdue</h3>
+                    </ion-text>
+                    <ion-text *ngIf="totalSummary[0]?.TOTAL_OVERDUE === 'N/A'; else totalSummaryTotalOverdue">
+                      <h3>
+                        N/A
+                      </h3>
+                    </ion-text>
+                    <ng-template #totalSummaryTotalOverdue>
+                      <ion-text>
+                        <h3 class="amount">
+                          {{ (totalSummary[0]?.TOTAL_OVERDUE || 0) | currency:'MYR':'RM' }}
+                        </h3>
+                      </ion-text>
+                    </ng-template>
+                  </ion-col>
+                  <ion-col>
+                    <ion-text>
+                      <h3>Fine</h3>
+                    </ion-text>
+                    <ion-text *ngIf="totalSummary[0]?.FINE === 'N/A'; else totalSummaryFine">
+                      <h3 class="amount">
+                        N/A
+                      </h3>
+                    </ion-text>
+                    <ng-template #totalSummaryFine>
+                      <ion-text>
+                        <h3 class="amount">
+                          {{ (totalSummary[0]?.FINE || 0) | currency:'MYR':'RM' }}
+                        </h3>
+                      </ion-text>
+                    </ng-template>
+                  </ion-col>
+                </ion-row>
               </ion-card-content>
             </ion-card>
           </ng-template>
@@ -135,37 +160,38 @@
               </ion-card-header>
 
               <ion-card-content>
-                <ion-item lines="none">
-                  <ion-skeleton-text class="glob-margin-auto"
-                    style="width: 90%; height: 120px; padding-bottom: 10px; padding-top: 5px" animated>
-                  </ion-skeleton-text>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-skeleton-text style="width: 28%; height: 15px;" animated></ion-skeleton-text>
-                  <ion-skeleton-text slot="end" style="width: 15%; height: 15px;" animated></ion-skeleton-text>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-skeleton-text style="width: 26%; height: 15px;" animated></ion-skeleton-text>
-                  <ion-skeleton-text slot="end" style="width: 15%; height: 15px;" animated></ion-skeleton-text>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-skeleton-text style="width: 30%; height: 15px;" animated></ion-skeleton-text>
-                  <ion-skeleton-text slot="end" style="width: 10%; height: 15px;" animated></ion-skeleton-text>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-skeleton-text style="width: 28%; height: 15px;" animated></ion-skeleton-text>
-                  <ion-skeleton-text slot="end" style="width: 10%; height: 15px;" animated></ion-skeleton-text>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-skeleton-text style="width: 15%; height: 15px;" animated></ion-skeleton-text>
-                  <ion-skeleton-text slot="end" style="width: 10%; height: 15px;" animated></ion-skeleton-text>
-                </ion-item>
+                <loading-spinner size="50px" message="Loading..." style="padding: 20px"></loading-spinner>
+                <ion-item-divider></ion-item-divider>
+                <ion-row class="ion-margin-top">
+                  <ion-col>
+                    <ion-skeleton-text animated class="glob-margin-auto" style="width: 70%; line-height: 20px;">
+                    </ion-skeleton-text>
+                  </ion-col>
+                  <ion-col>
+                    <ion-skeleton-text animated class="glob-margin-auto" style="width: 70%; line-height: 20px;">
+                    </ion-skeleton-text>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="ion-margin-top">
+                  <ion-col>
+                    <ion-skeleton-text animated class="glob-margin-auto" style="width: 70%; line-height: 20px;">
+                    </ion-skeleton-text>
+                  </ion-col>
+                  <ion-col>
+                    <ion-skeleton-text animated class="glob-margin-auto" style="width: 70%; line-height: 20px;">
+                    </ion-skeleton-text>
+                  </ion-col>
+                  <ion-col>
+                    <ion-skeleton-text animated class="glob-margin-auto" style="width: 70%; line-height: 20px;">
+                    </ion-skeleton-text>
+                  </ion-col>
+                </ion-row>
               </ion-card-content>
             </ion-card>
           </ng-template>
         </ion-col>
 
-        <ion-col size-xs="12" size-md="5">
+        <ion-col size-xs="12" size-md="6" pull-md="6">
           <ng-container [ngSwitch]='selectedSegment'>
             <ng-container *ngSwitchCase="'Summary'">
               <ng-template let-summaries [ngIf]="summary$ | async" [ngIfElse]="loadingSummary">
@@ -319,8 +345,7 @@
                     </ion-item>
                     <ion-item lines="none">
                       Amount Collected
-                      <ion-note slot="end"
-                        *ngIf="bankDraft.AMOUNT_COLLECTED === 'N/A'; else bankDraftAmountCollected">
+                      <ion-note slot="end" *ngIf="bankDraft.AMOUNT_COLLECTED === 'N/A'; else bankDraftAmountCollected">
                         N/A
                       </ion-note>
                       <ng-template #bankDraftAmountCollected>

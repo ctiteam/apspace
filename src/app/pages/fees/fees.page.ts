@@ -177,7 +177,7 @@ export class FeesPage {
                 this.categories.bus.data,
                 this.categories.others.data,
               ],
-              backgroundColor: ['#FF0000', '#FFD700', '#008000', '#0000FF', '#000000'],
+              backgroundColor: ['#0081a7', '#00afb9', '#fdfcdc', '#f07167', '#fed9b7'],
               weight: [600]
             },
           ]
