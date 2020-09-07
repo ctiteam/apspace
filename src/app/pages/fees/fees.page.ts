@@ -42,6 +42,25 @@ export class FeesPage {
   detail$: Observable<FeesDetails[]>;
   summary$: Observable<FeesSummary[]>;
 
+  // categories used for chart
+  categories: {
+    course: {
+      data: number;
+    };
+    accommodation: {
+      data: number;
+    };
+    emgs: {
+      data: number;
+    };
+    bus: {
+      data: number;
+    };
+    others: {
+      data: number;
+    }
+  };
+
   searchTerm = '';
 
   optionsDetails: Fuse.IFuseOptions<FeesDetails> = {
@@ -64,19 +83,15 @@ export class FeesPage {
     data: {
       labels: string[];
       datasets: {
-        label: string;
-        data: [number];
-        backgroundColor: string;
+        data: number[];
+        backgroundColor: string[];
       }[];
     };
   } = {
-      type: 'bar',
+      type: 'doughnut',
       options: {
-        scales: {
-          xAxes: [{ stacked: true }],
-          yAxes: [{ stacked: true }]
-        },
         responsive: true,
+        aspectRatio: 1.5,
         legend: {}
       },
       data: null
@@ -102,43 +117,76 @@ export class FeesPage {
       tap(details => details.map(detail => detail.DUE_DATE = parse(detail.DUE_DATE, 'dd-MMM-yy', new Date()).toString()))
     );
 
-    this.totalSummary$ = this.totalSummary$.pipe(
-      tap(overdueSummary => {
-        this.financialsChart.data = {
-          labels: ['Financial Status'],
-          datasets: [
-            {
-              label: 'Paid',
-              data: [+overdueSummary[0].TOTAL_PAID],
-              backgroundColor: '#49b571' // Green
-            },
-            {
-              label: 'Outstanding',
-              data: [+overdueSummary[0].TOTAL_OUTSTANDING],
-              backgroundColor: '#dfa847' // Yellow
-            },
-            {
-              label: 'Overdue',
-              data: [+overdueSummary[0].TOTAL_OVERDUE],
-              backgroundColor: '#e54d42' // Red
-            },
-            {
-              label: 'Fine',
-              data: [+overdueSummary[0].FINE],
-              backgroundColor: '#ec2a4d' // Pink
-            }
-          ]
-        };
-      }),
-      finalize(() => refresher && refresher.target.complete()),
-
-
-    );
-
-    this.financialsChart.options.legend.onClick = function(event, legendItem) {
-      Chart.defaults.global.legend.onClick.call(this, event, legendItem);
+    // this categories are loaded to chart later, initialized with 0
+    this.categories = {
+      course: {
+        data: 0
+      },
+      accommodation: {
+        data: 0
+      },
+      emgs: {
+        data: 0
+      },
+      bus: {
+        data: 0
+      },
+      others: {
+        data: 0
+      }
     };
 
+    this.detail$.pipe(
+      tap(res => res.forEach(amount => {
+
+        // upload data to categories object
+        if ((amount.ITEM_DESCRIPTION.includes('Course Fee') || amount.ITEM_DESCRIPTION.includes('SU'))) {
+          this.categories.course.data += amount.TOTAL_COLLECTED;
+        }
+
+        if (amount.ITEM_DESCRIPTION.includes('Accommodation')) {
+          this.categories.accommodation.data += amount.TOTAL_COLLECTED;
+        }
+
+        if ((amount.ITEM_DESCRIPTION.includes('EMGS') || amount.ITEM_DESCRIPTION.includes('Immigration'))) {
+          this.categories.emgs.data += amount.TOTAL_COLLECTED;
+        }
+
+        if (amount.ITEM_DESCRIPTION.includes('Shuttle')) {
+          this.categories.bus.data += amount.TOTAL_COLLECTED;
+        }
+
+        if ((!amount.ITEM_DESCRIPTION.includes('Course Fee') &&
+          !amount.ITEM_DESCRIPTION.includes('SU') &&
+          !amount.ITEM_DESCRIPTION.includes('Accommodation') &&
+          !amount.ITEM_DESCRIPTION.includes('EMGS') &&
+          !amount.ITEM_DESCRIPTION.includes('Immigration') &&
+          !amount.ITEM_DESCRIPTION.includes('Shuttle'))) {
+
+          this.categories.others.data += amount.TOTAL_COLLECTED;
+        }
+
+        // data taken from categories object
+        this.financialsChart.data = {
+          labels: ['Course Fee', 'Accommodation', 'EMGS', 'Shuttle Card', 'Others'],
+          datasets: [
+            {
+              data: [
+                this.categories.course.data,
+                this.categories.accommodation.data,
+                this.categories.emgs.data,
+                this.categories.bus.data,
+                this.categories.others.data,
+              ],
+              backgroundColor: ['#0081a7', '#00afb9', '#fdfcdc', '#f07167', '#fed9b7']
+            },
+          ]
+        };
+      })),
+
+      finalize(() => refresher && refresher.target.complete())
+
+    ).subscribe();
   }
 
   segmentValueChanged() {

@@ -40,8 +40,8 @@
 
   <div class="glob-container">
     <ion-grid>
-      <ion-row>
-        <ion-col size-xs="12" size-md="7">
+      <ion-row class="ion-margin-top">
+        <ion-col size-xs="12" size-md="6" push-md="6">
           <ng-template let-totalSummary [ngIf]="totalSummary$ | async" [ngIfElse]="loadingTotalSummary">
             <ion-card class="content-card" #total_summary_card [ngClass]="{
             'green-total-summary-card': (totalSummary[0].TOTAL_PAYABLE === totalSummary[0].TOTAL_PAID),
@@ -54,75 +54,103 @@
               </ion-card-header>
 
               <ion-card-content>
-                <chart #financialsChartComponent *ngIf="financialsChart.data" [type]="financialsChart.type"
-                  [data]="financialsChart.data" [options]="financialsChart.options">
-                </chart>
-                <ion-item class="glob-text-bold green-text" lines="none">
-                  <ion-label>
-                    <h3>Total Payable</h3>
-                  </ion-label>
-                  <ion-note slot="end" *ngIf="totalSummary[0]?.TOTAL_PAYABLE === 'N/A'; else totalSummaryTotalPayable">
-                    N/A
-                  </ion-note>
-                  <ng-template #totalSummaryTotalPayable>
-                    <ion-note slot="end">
-                      {{ (totalSummary[0]?.TOTAL_PAYABLE || 0) | currency:'MYR':'RM' }}
-                    </ion-note>
-                  </ng-template>
-                </ion-item>
-                <ion-item class="glob-text-bold green-text" lines="none">
-                  <ion-label>
-                    <h3>Total Paid</h3>
-                  </ion-label>
-                  <ion-note slot="end" *ngIf="totalSummary[0]?.TOTAL_PAID === 'N/A'; else totalSummaryTotalPaid">
-                    N/A
-                  </ion-note>
-                  <ng-template #totalSummaryTotalPaid>
-                    <ion-note slot="end">
-                      {{ (totalSummary[0]?.TOTAL_PAID || 0) | currency:'MYR':'RM' }}
-                    </ion-note>
-                  </ng-template>
-                </ion-item>
-                <ion-item class="glob-text-bold yellow-text" lines="none">
-                  <ion-label>
-                    <h3>Total Outstanding</h3>
-                  </ion-label>
-                  <ion-note slot="end"
-                    *ngIf="totalSummary[0]?.TOTAL_OUTSTANDING === 'N/A'; else totalSummaryTotalOutstanding">
-                    N/A
-                  </ion-note>
-                  <ng-template #totalSummaryTotalOutstanding>
-                    <ion-note slot="end">
-                      {{ (totalSummary[0]?.TOTAL_OUTSTANDING || 0) | currency:'MYR':'RM' }}
-                    </ion-note>
-                  </ng-template>
-                </ion-item>
-                <ion-item class="glob-text-bold red-text" lines="none">
-                  <ion-label>
-                    <h3>Total Overdue</h3>
-                  </ion-label>
-                  <ion-note slot="end" *ngIf="totalSummary[0]?.TOTAL_OVERDUE === 'N/A'; else totalSummaryTotalOverdue">
-                    N/A
-                  </ion-note>
-                  <ng-template #totalSummaryTotalOverdue>
-                    <ion-note slot="end">
-                      {{ (totalSummary[0]?.TOTAL_OVERDUE || 0) | currency:'MYR':'RM' }}
-                    </ion-note>
-                  </ng-template>
-                </ion-item>
-                <ion-item class="glob-text-bold pink-text" lines="none">
-                  <ion-label>
-                    <h3>Fine</h3>
-                  </ion-label>
-                  <ion-note slot="end" *ngIf="totalSummary[0]?.FINE === 'N/A'; else totalSummaryFine">
-                    N/A
-                  </ion-note>
-                  <ng-template #totalSummaryFine>
-                    <ion-note slot="end">
-                      {{ (totalSummary[0]?.FINE || 0) | currency:'MYR':'RM' }}
-                    </ion-note>
-                  </ng-template>
-                </ion-item>
+                <div style="text-align: center; justify-content: center;">
+                  <chart #financialsChartComponent *ngIf="financialsChart.data" [type]="financialsChart.type"
+                    [data]="financialsChart.data" [options]="financialsChart.options">
+                  </chart>
+                </div>
+                <div class="ion-padding" style="border-bottom: 1px solid;"></div>
+                <ion-row class="ion-margin-top " style="text-align: center;">
+                  <ion-col>
+                    <ion-text>
+                      <h3>Fine</h3>
+                    </ion-text>
+                    <ion-text *ngIf="totalSummary[0]?.FINE; else noTotalSummaryFine">
+                      <h3 class="amount">
+                        {{ totalSummary[0]?.FINE | currency:'MYR':'RM' }}
+                      </h3>
+                    </ion-text>
+                    <ng-template #noTotalSummaryFine>
+                      <ion-text>
+                        <h3 class="amount">
+                          N/A
+                        </h3>
+                      </ion-text>
+                    </ng-template>
+                  </ion-col>
+                  <ion-col class="border">
+                    <ion-text>
+                      <h3>Overdue</h3>
+                    </ion-text>
+                    <ion-text *ngIf="totalSummary[0]?.TOTAL_OVERDUE; else noTotalSummaryTotalOverdue">
+                      <h3 class="amount">
+                        {{ totalSummary[0]?.TOTAL_OVERDUE | currency:'MYR':'RM' }}
+                      </h3>
+                    </ion-text>
+                    <ng-template #noTotalSummaryTotalOverdue>
+                      <ion-text>
+                        <h3 class="amount">
+                          N/A
+                        </h3>
+                      </ion-text>
+                    </ng-template>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="ion-margin-top" style="text-align: center;">
+                  <ion-col>
+                    <ion-text>
+                      <h3>Paid</h3>
+                    </ion-text>
+                    <ion-text *ngIf="totalSummary[0]?.TOTAL_PAID; else noTotalSummaryTotalPaid">
+                      <h3 class="amount">
+                        {{ (totalSummary[0]?.TOTAL_PAID || 0) | currency:'MYR':'RM' }}
+                      </h3>
+                    </ion-text>
+                    <ng-template #noTotalSummaryTotalPaid>
+                      <ion-text>
+                        <h3 class="amount">
+                          N/A
+                        </h3>
+                      </ion-text>
+                    </ng-template>
+                  </ion-col>
+                  <ion-col class="border">
+                    <ion-text>
+                      <h3>Outstanding</h3>
+                    </ion-text>
+                    <ion-text *ngIf="totalSummary[0]?.TOTAL_OUTSTANDING; else noTotalSummaryTotalOutstanding">
+                      <h3 class="amount">
+                        {{ (totalSummary[0]?.TOTAL_OUTSTANDING || 0) | currency:'MYR':'RM' }}
+                      </h3>
+                    </ion-text>
+                    <ng-template #noTotalSummaryTotalOutstanding>
+                      <ion-text>
+                        <h3 class="amount">
+                          N/A
+                        </h3>
+                      </ion-text>
+                    </ng-template>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="ion-margin-top" style="text-align: center;">
+                  <ion-col>
+                    <ion-text>
+                      <h3>Payable</h3>
+                    </ion-text>
+                    <ion-text *ngIf="totalSummary[0]?.TOTAL_PAYABLE; else noTotalSummaryTotalPayable">
+                      <h3 class="amount">
+                        {{ totalSummary[0]?.TOTAL_PAYABLE | currency:'MYR':'RM' }}
+                      </h3>
+                    </ion-text>
+                    <ng-template #noTotalSummaryTotalPayable>
+                      <ion-text>
+                        <h3 class="amount">
+                          N/A
+                        </h3>
+                      </ion-text>
+                    </ng-template>
+                  </ion-col>
+                </ion-row>
               </ion-card-content>
             </ion-card>
           </ng-template>
@@ -135,111 +163,155 @@
               </ion-card-header>
 
               <ion-card-content>
-                <ion-item lines="none">
-                  <ion-skeleton-text class="glob-margin-auto"
-                    style="width: 90%; height: 120px; padding-bottom: 10px; padding-top: 5px" animated>
-                  </ion-skeleton-text>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-skeleton-text style="width: 28%; height: 15px;" animated></ion-skeleton-text>
-                  <ion-skeleton-text slot="end" style="width: 15%; height: 15px;" animated></ion-skeleton-text>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-skeleton-text style="width: 26%; height: 15px;" animated></ion-skeleton-text>
-                  <ion-skeleton-text slot="end" style="width: 15%; height: 15px;" animated></ion-skeleton-text>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-skeleton-text style="width: 30%; height: 15px;" animated></ion-skeleton-text>
-                  <ion-skeleton-text slot="end" style="width: 10%; height: 15px;" animated></ion-skeleton-text>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-skeleton-text style="width: 28%; height: 15px;" animated></ion-skeleton-text>
-                  <ion-skeleton-text slot="end" style="width: 10%; height: 15px;" animated></ion-skeleton-text>
-                </ion-item>
-                <ion-item lines="none">
-                  <ion-skeleton-text style="width: 15%; height: 15px;" animated></ion-skeleton-text>
-                  <ion-skeleton-text slot="end" style="width: 10%; height: 15px;" animated></ion-skeleton-text>
-                </ion-item>
+                <loading-spinner size="50px" message="Loading..." style="padding: 20px"></loading-spinner>
+                <ion-row class="ion-margin-top">
+                  <ion-col>
+                    <ion-skeleton-text animated class="glob-margin-auto" style="width: 70%; line-height: 20px;">
+                    </ion-skeleton-text>
+                  </ion-col>
+                  <ion-col>
+                    <ion-skeleton-text animated class="glob-margin-auto" style="width: 70%; line-height: 20px;">
+                    </ion-skeleton-text>
+                  </ion-col>
+                </ion-row>
+                <ion-row class="ion-margin-top">
+                  <ion-col>
+                    <ion-skeleton-text animated class="glob-margin-auto" style="width: 70%; line-height: 20px;">
+                    </ion-skeleton-text>
+                  </ion-col>
+                  <ion-col>
+                    <ion-skeleton-text animated class="glob-margin-auto" style="width: 70%; line-height: 20px;">
+                    </ion-skeleton-text>
+                  </ion-col>
+                  <ion-col>
+                    <ion-skeleton-text animated class="glob-margin-auto" style="width: 70%; line-height: 20px;">
+                    </ion-skeleton-text>
+                  </ion-col>
+                </ion-row>
               </ion-card-content>
             </ion-card>
           </ng-template>
         </ion-col>
 
-        <ion-col size-xs="12" size-md="5">
+        <ion-col size-xs="12" size-md="6" pull-md="6">
           <ng-container [ngSwitch]='selectedSegment'>
             <ng-container *ngSwitchCase="'Summary'">
               <ng-template let-summaries [ngIf]="summary$ | async" [ngIfElse]="loadingSummary">
-                <ion-card class="content-card" *ngFor="let summary of summaries">
-                  <ion-card-header>
-                    <ion-card-subtitle>{{ summary.INVOICE_DESCRIPTION }}</ion-card-subtitle>
-                  </ion-card-header>
+                <ng-container *ngIf="!summaries[0].MESSAGE else noSummary">
+                  <ion-card class="content-card" *ngFor="let summary of summaries">
+                    <ion-card-header color="primary">
+                      <ion-card-subtitle>{{ summary.INVOICE_DESCRIPTION }}</ion-card-subtitle>
+                    </ion-card-header>
 
-                  <ion-card-content class="ion-no-padding">
-                    <ion-item lines="none">
-                      <ion-label>
-                        <h3>Due Date</h3>
-                      </ion-label>
-                      <ion-note slot="end" *ngIf="summary.PAYMENT_DUE_DATE === 'N/A'; else paymentDueDate">
-                        N/A
-                      </ion-note>
-                      <ng-template #paymentDueDate>
-                        <ion-note slot="end">
-                          {{ summary.PAYMENT_DUE_DATE ? (summary.PAYMENT_DUE_DATE | dateWithTimezone: "EEE, d MMM y") : 'N/A'   }}
-                        </ion-note>
-                      </ng-template>
-                    </ion-item>
-                    <ion-item lines="none">
-                      <ion-label>
-                        <h3>Amount Payable</h3>
-                      </ion-label>
-                      <ion-note slot="end" *ngIf="summary.PAYABLE_AMOUNT === 'N/A'; else payableAmount">
-                        N/A
-                      </ion-note>
-                      <ng-template #payableAmount>
-                        <ion-note slot="end">
-                          {{ (summary.PAYABLE_AMOUNT | currency:'MYR':'RM') || 'N/A' }}
-                        </ion-note>
-                      </ng-template>
-                    </ion-item>
-                    <ion-item lines="none">
-                      <ion-label>
-                        <h3>Total Collected</h3>
-                      </ion-label>
-                      <ion-note slot="end" *ngIf="summary.TOTAL_COLLECTED === 'N/A'; else summaryTotalCollected">
-                        N/A
-                      </ion-note>
-                      <ng-template #summaryTotalCollected>
-                        <ion-note slot="end">
-                          {{ (summary.TOTAL_COLLECTED | currency:'MYR':'RM') || 'N/A' }}
-                        </ion-note>
-                      </ng-template>
-                    </ion-item>
-                    <ion-item lines="none">
-                      <ion-label>
-                        <h3>Outstanding</h3>
-                      </ion-label>
-                      <ion-note slot="end" *ngIf="summary.OUTSTANDING === 'N/A'; else summaryOutstanding">
-                        N/A
-                      </ion-note>
-                      <ng-template #summaryOutstanding>
-                        <ion-note slot="end">
-                          {{ (summary.OUTSTANDING | currency:'MYR':'RM') || 'N/A' }}
-                        </ion-note>
-                      </ng-template>
-                    </ion-item>
-                    <ion-item lines="none">
-                      <ion-label>
-                        <h3>Fine</h3>
-                      </ion-label>
-                      <ion-note slot="end" *ngIf="summary.FINE === 'N/A'; else summaryFine">
-                        N/A
-                      </ion-note>
-                      <ng-template #summaryFine>
-                        <ion-note slot="end">
-                          {{ (summary.FINE | currency:'MYR':'RM') || 'N/A' }}
-                        </ion-note>
-                      </ng-template>
-                    </ion-item>
+                    <ion-card-content class="ion-no-padding">
+                      <ion-item lines="none">
+                        <ion-label color="primary">
+                          <h3>Due Date</h3>
+                        </ion-label>
+                        <ion-text slot="end" *ngIf="summary.PAYMENT_DUE_DATE; else noSummaryDueDate">
+                          <h3 class="glob-text-bold">
+                            {{ summary.PAYMENT_DUE_DATE | dateWithTimezone: "EEE, d MMM y" }}
+                          </h3>
+                        </ion-text>
+                        <ng-template #noSummaryDueDate>
+                          <ion-text slot="end">
+                            <h3 class="glob-text-bold">
+                              N/A
+                            </h3>
+                          </ion-text>
+                        </ng-template>
+                      </ion-item>
+                      <ion-item lines="none">
+                        <ion-label color="primary">
+                          <h3>Amount Payable</h3>
+                        </ion-label>
+                        <ion-text slot="end" *ngIf="summary.PAYABLE_AMOUNT; else noSummaryPayableAmount">
+                          <h3 class="glob-text-bold">
+                            {{ summary.PAYABLE_AMOUNT | currency:'MYR':'RM' }}
+                          </h3>
+                        </ion-text>
+                        <ng-template #noSummaryPayableAmount>
+                          <ion-text slot="end">
+                            <h3 class="glob-text-bold">
+                              N/A
+                            </h3>
+                          </ion-text>
+                        </ng-template>
+                      </ion-item>
+                      <ion-item lines="none">
+                        <ion-label color="primary">
+                          <h3>Total Collected</h3>
+                        </ion-label>
+                        <ion-text slot="end" *ngIf="summary.TOTAL_COLLECTED; else noSummaryTotalCollected">
+                          <h3 class="glob-text-bold">
+                            {{ summary.TOTAL_COLLECTED | currency:'MYR':'RM' }}
+                          </h3>
+                        </ion-text>
+                        <ng-template #noSummaryTotalCollected>
+                          <ion-text slot="end">
+                            <h3 class="glob-text-bold">
+                              N/A
+                            </h3>
+                          </ion-text>
+                        </ng-template>
+                      </ion-item>
+                      <ion-item lines="none">
+                        <ion-label color="primary">
+                          <h3>Outstanding</h3>
+                        </ion-label>
+                        <ion-text *ngIf="summary.OUTSTANDING; else noSummaryOutstanding"
+                          [style.color]="summary.OUTSTANDING > 0 ? '#ffc409': ''" slot="end">
+                          <h3 class="glob-text-bold">
+                            {{ summary.OUTSTANDING | currency:'MYR':'RM' }}
+                          </h3>
+                        </ion-text>
+                        <ng-template #noSummaryOutstanding>
+                          <ion-text slot="end">
+                            <h3 class="glob-text-bold">
+                              N/A
+                            </h3>
+                          </ion-text>
+                        </ng-template>
+                      </ion-item>
+                      <ion-item lines="none">
+                        <ion-label color="primary">
+                          <h3>Fine</h3>
+                        </ion-label>
+                        <ion-text *ngIf="summary.FINE; else noSummaryFine"
+                          [style.color]="summary.FINE > 0 ? '#eb445a' : ''" slot="end">
+                          <h3 class="glob-text-bold">
+                            {{ summary.FINE | currency:'MYR':'RM' }}
+                          </h3>
+                        </ion-text>
+                        <ng-template #noSummaryFine>
+                          <ion-text slot="end">
+                            <h3 class="glob-text-bold">
+                              N/A
+                            </h3>
+                          </ion-text>
+                        </ng-template>
+                      </ion-item>
+                    </ion-card-content>
+                  </ion-card>
+                </ng-container>
+              </ng-template>
+
+              <ng-template #noSummary>
+                <ion-card>
+                  <ion-card-content>
+                    <app-message-with-svg imageUrl="assets/img/search-not-found.svg"
+                      messageTitle="Opps! No summary available."
+                      messageContent="In the case if you are looking for something else:" wrapperSize="4"
+                      wrapperMarginTop="30px" wrapperOffset="4" [advancedMode]="true">
+                      <div class="flex-container">
+                        <ul class="list-txt-color">
+                          <li>Click on the Details button at the top of this window</li>
+                        </ul>
+                        <p>Still having trouble? No worries! Just click <a [routerLink]="'/feedback'">here</a> and
+                          report to
+                          us for this issue.</p>
+                      </div>
+                    </app-message-with-svg>
                   </ion-card-content>
                 </ion-card>
               </ng-template>
@@ -289,45 +361,64 @@
                   </ion-list-header>
                   <ion-card-content class="ion-no-padding">
                     <ion-item lines="none">
-                      Amount Payable
-                      <ion-note slot="end" *ngIf="bankDraft.BANKDRAFT_AMOUNT === 'N/A'; else bankDraftAmount">
-                        N/A
-                      </ion-note>
-                      <ng-template #bankDraftAmount>
-                        <ion-note slot="end">
+                      <ion-label color="primary">
+                        <h3>
+                          Amount Payable
+                        </h3>
+                      </ion-label>
+                      <ion-text slot="end">
+                        <h3 class="glob-text-bold">
                           {{ bankDraft.BANKDRAFT_AMOUNT | currency:'GBP' }}
-                        </ion-note>
-                      </ng-template>
+                        </h3>
+                      </ion-text>
                     </ion-item>
                     <ion-item lines="none">
-                      Due Date
-                      <ion-note slot="end">
-                        {{ bankDraft.BANKDRAFT_DUE_DATE | dateWithTimezone: "EEE, d MMM y"  }}
-                      </ion-note>
+                      <ion-label color="primary">
+                        <h3>
+                          Due Date
+                        </h3>
+                      </ion-label>
+                      <ion-text slot="end">
+                        <h3 class="glob-text-bold">
+                          {{ bankDraft.BANKDRAFT_DUE_DATE | dateWithTimezone: "EEE, d MMM y"  }}
+                        </h3>
+                      </ion-text>
                     </ion-item>
                     <ion-item lines="none">
-                      Date Collected
-                      <ion-note slot="end">
-                        {{ bankDraft.DATE_COLLECTED | dateWithTimezone: "EEE, d MMM y"  }}
-                      </ion-note>
+                      <ion-label color="primary">
+                        <h3>
+                          Date Collected
+                        </h3>
+                      </ion-label>
+                      <ion-text slot="end">
+                        <h3 class="glob-text-bold">
+                          {{ bankDraft.DATE_COLLECTED | dateWithTimezone: "EEE, d MMM y"  }}
+                        </h3>
+                      </ion-text>
                     </ion-item>
                     <ion-item lines="none">
-                      Registration Date
-                      <ion-note slot="end">
-                        {{ bankDraft.REGISTRATION_DATE | dateWithTimezone: "EEE, d MMM y"  }}
-                      </ion-note>
+                      <ion-label color="primary">
+                        <h3>
+                          Registration Date
+                        </h3>
+                      </ion-label>
+                      <ion-text slot="end">
+                        <h3 class="glob-text-bold">
+                          {{ bankDraft.REGISTRATION_DATE | dateWithTimezone: "EEE, d MMM y"  }}
+                        </h3>
+                      </ion-text>
                     </ion-item>
                     <ion-item lines="none">
-                      Amount Collected
-                      <ion-note slot="end"
-                        *ngIf="bankDraft.AMOUNT_COLLECTED === 'N/A'; else bankDraftAmountCollected">
-                        N/A
-                      </ion-note>
-                      <ng-template #bankDraftAmountCollected>
-                        <ion-note color="success" slot="end">
+                      <ion-label color="primary">
+                        <h3>
+                          Amount Collected
+                        </h3>
+                      </ion-label>
+                      <ion-text color="success" slot="end">
+                        <h3 class="glob-text-bold">
                           {{ bankDraft.AMOUNT_COLLECTED | currency:'GBP' }}
-                        </ion-note>
-                      </ng-template>
+                        </h3>
+                      </ion-text>
                     </ion-item>
                   </ion-card-content>
                 </ion-card>
@@ -380,68 +471,60 @@
                 <div *ngIf="(details | fuse:searchTerm:optionsDetails).length > 0; else notFound">
                   <ion-card class="content-card"
                     *ngFor="let detail of (details | reverse | fuse:searchTerm:optionsDetails)">
-                    <ion-card-header>
+                    <ion-card-header color="primary">
                       <ion-card-subtitle>{{ detail.ITEM_DESCRIPTION }}</ion-card-subtitle>
                     </ion-card-header>
 
                     <ion-card-content class="ion-no-padding">
                       <ion-item lines="none">
-                        <h3>Due Date</h3>
-                        <ion-note slot="end">
-                          {{ detail.DUE_DATE | dateWithTimezone: "EEE, d MMM y" }}
-                        </ion-note>
+                        <ion-label color="primary">
+                          <h3>Due Date</h3>
+                        </ion-label>
+                        <ion-text slot="end">
+                          <h3 class="glob-text-bold">
+                            {{ detail.DUE_DATE | dateWithTimezone: "EEE, d MMM y" }}
+                          </h3>
+                        </ion-text>
                       </ion-item>
                       <ion-item lines="none">
-                        <ion-label>
+                        <ion-label color="primary">
                           <h3>Amount Payable</h3>
                         </ion-label>
-                        <ion-note slot="end" *ngIf="detail.AMOUNT_PAYABLE === 'N/A'; else amountPayable">
-                          N/A
-                        </ion-note>
-                        <ng-template #amountPayable>
-                          <ion-note slot="end">
-                            {{ (detail.AMOUNT_PAYABLE | currency:'MYR':'RM') || 'N/A' }}
-                          </ion-note>
-                        </ng-template>
+                        <ion-text slot="end">
+                          <h3 class="glob-text-bold">
+                            {{ detail.AMOUNT_PAYABLE | currency:'MYR':'RM' }}
+                          </h3>
+                        </ion-text>
                       </ion-item>
                       <ion-item lines="none">
-                        <ion-label>
+                        <ion-label color="primary">
                           <h3>Total Collected</h3>
                         </ion-label>
-                        <ion-note slot="end" *ngIf="detail.TOTAL_COLLECTED === 'N/A'; else detailsTotalCollected">
-                          N/A
-                        </ion-note>
-                        <ng-template #detailsTotalCollected>
-                          <ion-note slot="end">
-                            {{ (detail.TOTAL_COLLECTED | currency:'MYR':'RM') || 'N/A' }}
-                          </ion-note>
-                        </ng-template>
+                        <ion-text slot="end">
+                          <h3 class="glob-text-bold">
+                            {{ detail.TOTAL_COLLECTED | currency:'MYR':'RM' }}
+                          </h3>
+                        </ion-text>
                       </ion-item>
-                      <ion-item [style.color]="detail.OUTSTANDING>0 ? '#d50000': ''" lines="none">
-                        <ion-label>
+                      <ion-item lines="none">
+                        <ion-label color="primary">
                           <h3>Outstanding</h3>
                         </ion-label>
-                        <ion-note slot="end" *ngIf="detail.OUTSTANDING === 'N/A'; else detailOutstanding">
-                          N/A
-                        </ion-note>
-                        <ng-template #detailOutstanding>
-                          <ion-note [style.color]="detail.OUTSTANDING>0 ? '#d50000': ''" slot="end">
-                            {{ (detail.OUTSTANDING | currency:'MYR':'RM') || 'N/A' }}
-                          </ion-note>
-                        </ng-template>
+                        <ion-text [style.color]="detail.OUTSTANDING>0 ? '#ffc409': ''" slot="end">
+                          <h3 class="glob-text-bold">
+                            {{ detail.OUTSTANDING | currency:'MYR':'RM' }}
+                          </h3>
+                        </ion-text>
                       </ion-item>
-                      <ion-item [style.color]="detail.FINE>0 ? '#c51162': ''" lines="none">
-                        <ion-label>
+                      <ion-item lines="none">
+                        <ion-label color="primary">
                           <h3>Fine</h3>
                         </ion-label>
-                        <ion-note *ngIf="detail.FINE === 'N/A'; else detailFine">
-                          N/A
-                        </ion-note>
-                        <ng-template #detailFine>
-                          <ion-note [style.color]="detail.FINE>0 ? '#c51162': ''" slot="end">
-                            {{ (detail.FINE | currency:'MYR':'RM') || 'N/A' }}
-                          </ion-note>
-                        </ng-template>
+                        <ion-text [style.color]="detail.FINE>0 ? '#eb445a': ''" slot="end">
+                          <h3 class="glob-text-bold">
+                            {{ detail.FINE | currency:'MYR':'RM' }}
+                          </h3>
+                        </ion-text>
                       </ion-item>
                     </ion-card-content>
                   </ion-card>
@@ -449,20 +532,26 @@
               </ng-template>
 
               <ng-template #notFound>
-                <app-message-with-svg imageUrl="assets/img/search-not-found.svg" messageTitle="Opps! Item not found."
-                  messageContent="Perhaps you can try this:" wrapperSize="4" wrapperMarginTop="30px" wrapperOffset="4"
-                  [advancedMode]="true">
-                  <div class="flex-container">
-                    <ul class="list-txt-color">
-                      <li>Make sure the keyword is matched with one of the items</li>
-                      <li>Make sure you have typed a valid item code.</li>
-                      <li>Make sure there is no special characters included.</li>
-                    </ul>
+                <ion-card>
+                  <ion-card-content>
+                    <app-message-with-svg imageUrl="assets/img/search-not-found.svg"
+                      messageTitle="Opps! Item not found." messageContent="Perhaps you can try this:" wrapperSize="4"
+                      wrapperMarginTop="30px" wrapperOffset="4" [advancedMode]="true">
+                      <div class="flex-container">
+                        <ul class="list-txt-color">
+                          <li>Make sure the keyword is matched with one of the items</li>
+                          <li>Make sure you have typed a valid item code.</li>
+                          <li>Make sure there is no special characters included.</li>
+                        </ul>
 
-                    <p>Still having trouble? No worries! Just click <a [routerLink]="'/feedback'">here</a> and report to
-                      us for this issue.</p>
-                  </div>
-                </app-message-with-svg>
+                        <p>Still having trouble? No worries! Just click <a [routerLink]="'/feedback'">here</a> and
+                          report to
+                          us for this issue.</p>
+                      </div>
+                    </app-message-with-svg>
+                  </ion-card-content>
+                </ion-card>
+
               </ng-template>
 
               <ng-template #loadingDetails>
