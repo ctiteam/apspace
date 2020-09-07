@@ -506,21 +506,21 @@
                           </h3>
                         </ion-text>
                       </ion-item>
-                      <ion-item [style.color]="detail.OUTSTANDING > 0 ? '#d50000' : ''" lines="none">
+                      <ion-item lines="none">
                         <ion-label color="primary">
                           <h3>Outstanding</h3>
                         </ion-label>
-                        <ion-text [style.color]="detail.OUTSTANDING>0 ? '#d50000': ''" slot="end">
+                        <ion-text [style.color]="detail.OUTSTANDING>0 ? '#ffc409': ''" slot="end">
                           <h3 class="glob-text-bold">
                             {{ detail.OUTSTANDING | currency:'MYR':'RM' }}
                           </h3>
                         </ion-text>
                       </ion-item>
-                      <ion-item [style.color]="detail.FINE>0 ? '#c51162': ''" lines="none">
+                      <ion-item lines="none">
                         <ion-label color="primary">
                           <h3>Fine</h3>
                         </ion-label>
-                        <ion-text [style.color]="detail.FINE>0 ? '#c51162': ''" slot="end">
+                        <ion-text [style.color]="detail.FINE>0 ? '#eb445a': ''" slot="end">
                           <h3 class="glob-text-bold">
                             {{ detail.FINE | currency:'MYR':'RM' }}
                           </h3>
