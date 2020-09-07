@@ -181,23 +181,25 @@ export class SettingsPage implements OnInit {
       .map(timetable => timetable.MODID))];
     const placeholder = 'Search all modules';
     const notFound = 'No module selected';
+    const itemMapper = item => item;  // no-op item mapper, disables default uppercase
     const modal = await this.modalCtrl.create({
       component: SearchModalComponent,
-      componentProps: { items, defaultItems, placeholder, notFound }
+      componentProps: { items, defaultItems, placeholder, notFound, itemMapper }
     });
     await modal.present();
     const { data } = await modal.onDidDismiss();
     if (data && data.item) {
-      modulesBlacklist.push(data.item);
-      this.settings.set('modulesBlacklist', modulesBlacklist);
+      const newModulesBlacklist = [...modulesBlacklist, data.item];
+      this.settings.set('modulesBlacklist', newModulesBlacklist);
     }
   }
 
   timetableModuleBlacklistsRemove(value) {
     const modulesBlacklist = this.settings.get('modulesBlacklist');
     const selectedModule = modulesBlacklist.indexOf(value);
-    modulesBlacklist.splice(selectedModule, 1);
-    this.settings.set('modulesBlacklist', modulesBlacklist);
+    const newModulesBlacklist = modulesBlacklist.slice(0, selectedModule)
+      .concat(modulesBlacklist.slice(selectedModule + 1, modulesBlacklist.length));
+    this.settings.set('modulesBlacklist', newModulesBlacklist);
   }
 
   navigateToPage(pageName: string) {

@@ -15,6 +15,12 @@ import { distinctUntilChanged, map, startWith } from 'rxjs/operators';
 })
 export class SearchModalComponent implements AfterViewInit, OnInit {
 
+  constructor(
+    private modalCtrl: ModalController,
+    private popoverCtrl: PopoverController,
+    private router: Router
+  ) { }
+
   @ViewChild(IonSearchbar, { static: true }) searchbar: IonSearchbar;
 
   /** Items to be searched or filtered. */
@@ -41,17 +47,13 @@ export class SearchModalComponent implements AfterViewInit, OnInit {
   searchControl = new FormControl();
   searchItems$: Observable<string[]>;
 
-  constructor(
-    private modalCtrl: ModalController,
-    private popoverCtrl: PopoverController,
-    private router: Router
-  ) { }
-
+  /** Map each item by function, defaults to `item => item.toUpperCase()`. */
+  @Input() itemMapper = (item: string) => item.toUpperCase();
 
   ngOnInit() {
     // convert all items to uppercase
-    const searchItems = Array.from(new Set(this.items.map(item => item.toUpperCase()))).sort();
-    const defaultItems = this.defaultItems.map(item => item.toUpperCase());
+    const searchItems = Array.from(new Set(this.items.map(this.itemMapper))).sort();
+    const defaultItems = this.defaultItems.map(this.itemMapper);
 
     // observable to process inputs when value changes
     let searchChange$ = this.searchControl.valueChanges.pipe(
@@ -62,10 +64,10 @@ export class SearchModalComponent implements AfterViewInit, OnInit {
     if (this.defaultTerm) {
       // only pre-search when default items is not specified
       if (this.defaultItems.length === 0) {
-        searchChange$ = searchChange$.pipe(startWith(this.defaultTerm.toUpperCase()));
+        searchChange$ = searchChange$.pipe(startWith(this.itemMapper(this.defaultTerm)));
       }
       // set default term in view, handle change event ourselves
-      this.searchControl.setValue(this.defaultTerm.toUpperCase(), { emitEvent: false });
+      this.searchControl.setValue(this.itemMapper(this.defaultTerm), { emitEvent: false });
     }
 
     const searchResult$ = searchChange$.pipe(

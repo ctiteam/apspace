@@ -189,7 +189,8 @@ export class SettingsService {
   }
 
   /**
-   * Set value in settings.
+   * Set value in settings. It is not possible to change by reference
+   * with set so be careful with non-primitive types like array.
    *
    * @param key - key stored
    * @param value - value to be set
