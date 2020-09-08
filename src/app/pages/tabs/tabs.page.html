@@ -16,14 +16,14 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar *ngIf="shownSearchBar">
-    <ion-searchbar></ion-searchbar>
+    <ion-searchbar [(ngModel)]="term"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-tabs>
     <ion-tab-bar *ngIf="!smallScreen" slot="top">
-      <ion-searchbar placeholder="Search APSpace" class="tabs-searchbar"></ion-searchbar>
+      <ion-searchbar [(ngModel)]="term" placeholder="Search APSpace" class="tabs-searchbar"></ion-searchbar>
       <ion-tab-button class="extra-tab extra-tab-3">
         <ion-label>Empty</ion-label>
         <ion-icon name="home"></ion-icon>
@@ -48,5 +48,28 @@
         <ion-icon [name]="tab.icon"></ion-icon>
       </ion-tab-button>
     </ion-tab-bar>
+
+    <div class="menu" [style.display]="term ? 'flex' : 'none'">
+      <div *ngFor="let group of menuFiltered | fuse:term:options | byGroup | keyvalue:noop" class="menu-group">
+        <h2>{{ group.key }}</h2>
+        <ng-container *ngFor="let item of group.value">
+          <ng-container *ngIf="item.url.startsWith('http://') || item.url.startsWith('https://'); else internalLink">
+            <a [href]="item.url">
+              <p>
+                {{ item.title }}
+              </p>
+            </a>
+          </ng-container>
+          <ng-template #internalLink>
+            <a [routerLink]="'/' + item.url">
+              <p>
+                <span *ngFor="let parent of item.parents" class="parent">{{ menusTitle[parent] }}</span>
+                {{ item.title }}
+              </p>
+            </a>
+          </ng-template>
+        </ng-container>
+      </div>
+    </div>
   </ion-tabs>
 </ion-content>

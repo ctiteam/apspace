@@ -17,4 +17,5 @@ export interface MenuItem {
   attachTicket?: boolean; // set to true if the service needs a service ticket
   canAccess?: boolean;
   tags: string[];
+  parents: MenuID[]; // hierarchy to reach page refering id of other item
 }

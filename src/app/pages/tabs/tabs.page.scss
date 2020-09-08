@@ -1,3 +1,32 @@
+.menu {
+  display: flex;
+  justify-content: space-around;
+  position: absolute;
+  overflow-y: scroll;
+  max-height: 90vh;
+  border-top: 56px solid transparent;
+  background-color: var(--ion-tab-bar-background, var(--ion-background-color, #444));
+  padding: 0 32px;
+  width: 100%;
+
+  a {
+    text-decoration: none;
+    color: #eee;
+  }
+
+  a:hover {
+    color: #fff;
+  }
+
+  .parent {
+    color: #eee6;
+  }
+
+  .parent::after {
+    content: ' »';
+  }
+}
+
 .system-title {
   position: relative;
   left: 36px;

@@ -2,8 +2,11 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { Storage } from '@ionic/storage';
+import Fuse from 'fuse.js';
 
 import { Role } from '../../interfaces';
+import { menus, menusTitle } from '../more/menu';
+import { MenuItem } from '../more/menu.interface';
 import { TabItem } from './tab-item.interface';
 
 @Component({
@@ -17,15 +20,31 @@ export class TabsPage implements OnInit {
   smallScreen;
   shownSearchBar = false;
 
+  term = '';
+
+  options: Fuse.IFuseOptions<MenuItem> = {
+    keys: ['title', 'tags']
+  };
+  menuFull: MenuItem[] = menus;
+  menuFiltered = [] as MenuItem[];
+  menusTitle: { [id: string]: string } = menusTitle;
+
   constructor(private router: Router, private storage: Storage, private iab: InAppBrowser) { }
 
   ngOnInit() {
-    this.onResize();
     this.selectedTab = this.router.url.split('/').pop();
-
-    if (this.selectedTab === 'tabs') {
+    if (this.selectedTab === 'tabs') { // TODO do this on routing level instead
       this.router.navigate(['tabs', 'dashboard'], { replaceUrl: true });
     }
+
+    // assert no duplicate id (probably not able to be done during compile time)
+    this.menuFull.forEach((menu, _i, arr) => {
+      if (arr.find(m => m.id === menu.id) !== menu) {
+        console.warn(`duplicate '${menu.id}' in menuFull`);
+      }
+    });
+
+    this.onResize();
 
     this.storage.get('role').then((role: Role) => {
       // tslint:disable:no-bitwise
@@ -111,6 +130,13 @@ export class TabsPage implements OnInit {
       } else {
         console.error('Invalid role');
       }
+
+      this.storage.get('canAccessResults').then((canAccessResults = false) => {
+        this.menuFiltered = this.menuFull.filter(
+          // tslint:disable-next-line:no-bitwise
+          menu => (menu.role & role) && ((menu.canAccess && menu.canAccess === canAccessResults) || !menu.canAccess)
+        );
+      });
     });
     // tslint:enable:no-bitwise
   }
@@ -126,6 +152,10 @@ export class TabsPage implements OnInit {
 
   openHelpCentre() {
     this.iab.create('https://apiit.atlassian.net/servicedesk/customer/portals', '_system', 'location=true');
+  }
+
+  noop(): number {
+    return 0;
   }
 
 }

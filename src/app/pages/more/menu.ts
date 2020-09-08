@@ -12,7 +12,8 @@ export const menusRaw = [
     url: 'apcard',
     img: 'assets/img/apcard.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['transactions', 'money', 'card', 'credit', 'expenses']
+    tags: ['transactions', 'money', 'card', 'credit', 'expenses'],
+    parents: [],
   },
   {
     id: 'fees' as const,
@@ -21,7 +22,8 @@ export const menusRaw = [
     url: 'fees',
     img: 'assets/img/fees.svg',
     role: Role.Student,
-    tags: ['payment', 'pricing', 'money', 'outstanding', 'overdue']
+    tags: ['payment', 'pricing', 'money', 'outstanding', 'overdue'],
+    parents: [],
   },
   {
     id: 'ptptn' as const,
@@ -31,7 +33,8 @@ export const menusRaw = [
     url: 'http://www.apu.edu.my/study-apu/financing-your-study/education-study-loans/national-higher-education-fund-perbadanan', // No ticket
     img: 'assets/img/ptptn.png',
     role: Role.Student,
-    tags: ['loan']
+    tags: ['loan'],
+    parents: [],
   },
   {
     id: 'scholarship-loan' as const,
@@ -40,7 +43,8 @@ export const menusRaw = [
     url: 'http://www.apu.edu.my/study-apu/financing-your-study/education-study-loans', // No ticket
     img: 'assets/img/scholarship.png',
     role: Role.Student,
-    tags: ['loan']
+    tags: ['loan'],
+    parents: [],
   },
   {
     id: 'retake-reset-ec' as const,
@@ -49,7 +53,8 @@ export const menusRaw = [
     url: 'http://kb.sites.apiit.edu.my/knowledge-base/retake-modules-resit-ec-fees/', // no ticket
     img: 'assets/img/fees.svg',
     role: Role.Student,
-    tags: []
+    tags: [],
+    parents: [],
   },
   // END OF FINANCE
 
@@ -61,7 +66,8 @@ export const menusRaw = [
     url: 'feedback',
     img: 'assets/img/feedback.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['apspace feedback', 'app not working', 'issue']
+    tags: ['apspace feedback', 'app not working', 'issue'],
+    parents: [],
   },
   {
     id: 'e-forms' as const,
@@ -71,7 +77,8 @@ export const menusRaw = [
     attachTicket: true,
     img: 'assets/img/forms-and-applications.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['purchase', 'incident', 'maintenance', 'order', 'exit', 'event']
+    tags: ['purchase', 'incident', 'maintenance', 'order', 'exit', 'event'],
+    parents: [],
   },
   {
     id: 'help-centre' as const,
@@ -80,7 +87,8 @@ export const menusRaw = [
     url: 'https://apiit.atlassian.net/servicedesk/customer/portals', // No ticket
     img: 'assets/img/help-center.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['issue', 'ticket', 'jira', 'help', 'ask', 'feature', 'question']
+    tags: ['issue', 'ticket', 'jira', 'help', 'ask', 'feature', 'question'],
+    parents: [],
   },
   {
     id: 'iconsult-staff' as const,
@@ -89,7 +97,8 @@ export const menusRaw = [
     img: 'assets/img/iconsult.png',
     url: 'iconsult/my-consultations',
     role: Role.Lecturer | Role.Admin,
-    tags: ['consultation', 'slot']
+    tags: ['consultation', 'slot'],
+    parents: [],
   },
   {
     id: 'iconsult-student' as const,
@@ -98,7 +107,8 @@ export const menusRaw = [
     url: 'iconsult/my-appointments',
     img: 'assets/img/iconsult.png',
     role: Role.Student,
-    tags: ['consultation', 'booking']
+    tags: ['consultation', 'booking'],
+    parents: [],
   },
   {
     id: 'knowledge-base' as const,
@@ -107,7 +117,8 @@ export const menusRaw = [
     url: 'http://kb.sites.apiit.edu.my/home/', // no ticket
     img: 'assets/img/kb.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['articles', 'Q&A', 'FAQ', 'questions', 'answers', 'how to', 'kb']
+    tags: ['articles', 'Q&A', 'FAQ', 'questions', 'answers', 'how to', 'kb'],
+    parents: [],
   },
   // { To be added to moodle later on (not available now)
   //   id: 'lecturer-reference-kit' as const,
@@ -116,7 +127,8 @@ export const menusRaw = [
   //   url: 'http://kb.sites.apiit.edu.my/home/',
   //   img: 'assets/img/kb.png',
   //   role: Role.Student | Role.Lecturer | Role.Admin,
-  //   tags: ['articles', 'Q&A', 'FAQ', 'questions', 'answers', 'how to']
+  //   tags: ['articles', 'Q&A', 'FAQ', 'questions', 'answers', 'how to'],
+  //   parents: [],
   // },
   {
     id: 'library' as const,
@@ -125,7 +137,8 @@ export const menusRaw = [
     url: 'https://library.apiit.edu.my/', // No Ticket
     img: 'assets/img/library.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'my-library' as const,
@@ -135,15 +148,18 @@ export const menusRaw = [
     attachTicket: true,
     img: 'assets/img/my-library.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['book', 'articles', 'resource']
+    tags: ['book', 'articles', 'resource'],
+    parents: [],
   },
   {
     id: 'koha' as const,
     title: 'Koha',
     group: 'Collaboration & Information Resources',
     url: 'koha',
+    img: 'TODO',
     role: Role.Student,
-    tags: ['library', 'library fee', 'library checkout', 'book']
+    tags: ['library', 'library fee', 'library checkout', 'book'],
+    parents: [],
   },
   {
     id: 'news-feed' as const,
@@ -152,7 +168,8 @@ export const menusRaw = [
     url: 'news',
     img: 'assets/img/news.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['events', 'slider']
+    tags: ['events', 'slider'],
+    parents: [],
   },
   {
     id: 'newsletters' as const,
@@ -161,7 +178,8 @@ export const menusRaw = [
     url: 'https://library.sites.apiit.edu.my/newsletters/', // no ticket
     img: 'assets/img/newsletter.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'notifications' as const,
@@ -170,7 +188,8 @@ export const menusRaw = [
     url: 'notifications',
     img: 'assets/img/notifications.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['messages']
+    tags: ['messages'],
+    parents: [],
   },
   {
     id: 'office365' as const,
@@ -179,7 +198,8 @@ export const menusRaw = [
     img: 'assets/img/webmail.png',
     url: 'https://portal.office.com/', // no ticket
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['mail', 'email', 'teams', 'microsoft']
+    tags: ['mail', 'email', 'teams', 'microsoft'],
+    parents: [],
   },
   {
     id: 'regulations-policies' as const,
@@ -188,7 +208,8 @@ export const menusRaw = [
     img: 'assets/img/policies.png',
     url: 'https://lms2.apiit.edu.my/course/view.php?id=750',  // no ticket
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['rules']
+    tags: ['rules'],
+    parents: [],
   },
   // END OF Collaboration & Information Resources
 
@@ -200,7 +221,8 @@ export const menusRaw = [
     url: 'bus-shuttle-services',
     img: 'assets/img/bus-shuttle-services.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['bus', 'trips', 'schedule']
+    tags: ['bus', 'trips', 'schedule'],
+    parents: [],
   },
   // {
   //   id: 'campus-map' as const,
@@ -209,7 +231,8 @@ export const menusRaw = [
   //   img: 'assets/img/webmail.png',
   //   url: '',
   //   role: Role.Student | Role.Lecturer | Role.Admin,
-  //   tags: ['mail', 'email']
+  //   tags: ['mail', 'email'],
+  //   parents: [],
   // },
   {
     id: 'holidays' as const,
@@ -218,7 +241,8 @@ export const menusRaw = [
     url: 'holidays',
     img: 'assets/img/holidays.svg',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['vacation', 'break']
+    tags: ['vacation', 'break'],
+    parents: [],
   },
   {
     id: 'operations-hours' as const,
@@ -227,7 +251,8 @@ export const menusRaw = [
     url: 'operation-hours',
     img: 'assets/img/operation-hours.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['opening hours', 'time', 'working hours']
+    tags: ['opening hours', 'time', 'working hours'],
+    parents: [],
   },
   {
     id: 'personal-counseling' as const,
@@ -236,7 +261,8 @@ export const menusRaw = [
     url: 'http://kb.sites.apiit.edu.my/knowledge-base/personal-counseling/', // no ticket
     img: 'assets/img/counseling.png',
     role: Role.Student,
-    tags: ['issue', 'discuss', 'talk']
+    tags: ['issue', 'discuss', 'talk'],
+    parents: [],
   },
   {
     id: 'student-affairs' as const,
@@ -245,7 +271,8 @@ export const menusRaw = [
     url: 'https://www.studentaffairs.apu.edu.my/', // no ticket
     img: 'assets/img/student_affairs.png',
     role: Role.Student,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'student-handbook' as const,
@@ -254,7 +281,8 @@ export const menusRaw = [
     img: 'assets/img/handbook.png',
     url: 'http://kb.sites.apiit.edu.my/knowledge-base/student-handbook/', // no ticket
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'transport-parking' as const,
@@ -263,7 +291,8 @@ export const menusRaw = [
     url: 'http://kb.sites.apiit.edu.my/knowledge-base/category/students/campus-life/transportation/', // No ticket
     img: 'assets/img/transport.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['lrt', 'rapid', 'kl']
+    tags: ['lrt', 'rapid', 'kl'],
+    parents: [],
   },
   // END Campus Life
 
@@ -275,7 +304,8 @@ export const menusRaw = [
     url: 'https://erp.apiit.edu.my/easymoo/web/en/auth/security/login',
     img: 'assets/img/apix.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['exception', 'feedback', 'legacy', 'old']
+    tags: ['exception', 'feedback', 'legacy', 'old'],
+    parents: [],
   },
   {
     id: 'aplc-progress-report' as const,
@@ -284,7 +314,8 @@ export const menusRaw = [
     url: 'aplc-progress-report',
     img: 'assets/img/aplc-progress-report.png',
     role: Role.Lecturer | Role.Admin,
-    tags: ['progression']
+    tags: ['progression'],
+    parents: [],
   },
   // {
   //   id: 'aptime' as const,
@@ -293,7 +324,8 @@ export const menusRaw = [
   //   url: 'aplc-progress-report',
   //   img: 'assets/img/aplc-progress-report.png',
   //   role: Role.Student | Role.Lecturer | Role.Admin,
-  //   tags: []
+  //   tags: [],
+  //   parents: [],
   // },
   {
     id: 'beapu' as const,
@@ -302,7 +334,8 @@ export const menusRaw = [
     url: 'beapu',
     img: 'assets/img/beapu.png',
     role: Role.Lecturer | Role.Admin,
-    tags: ['report', 'attire', 'formal']
+    tags: ['report', 'attire', 'formal'],
+    parents: [],
   },
   {
     id: 'dingdong' as const,
@@ -311,7 +344,8 @@ export const menusRaw = [
     url: 'https://dingdong.apu.edu.my/login', // no ticket
     img: 'assets/img/dingdong.png',
     role: Role.Lecturer | Role.Admin,
-    tags: ['message', 'sms', 'email', 'push', 'notification', 'announce']
+    tags: ['message', 'sms', 'email', 'push', 'notification', 'announce'],
+    parents: [],
   },
   {
     id: 'e-orientation' as const,
@@ -321,7 +355,8 @@ export const menusRaw = [
     attachTicket: true,
     img: 'assets/img/counseling.png',
     role: Role.Lecturer | Role.Admin,
-    tags: ['orientation', 'counsellor']
+    tags: ['orientation', 'counsellor'],
+    parents: [],
   },
   {
     id: 'exam-schedule-admin' as const,
@@ -330,7 +365,8 @@ export const menusRaw = [
     url: 'exam-schedule-admin',
     img: 'assets/img/exam-schedule-admin.png',
     role: Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'exam-paper-scheduling' as const,
@@ -339,7 +375,8 @@ export const menusRaw = [
     url: 'https://examscheduling.apu.edu.my/epaperschedule/login_page.asp', // no ticket
     img: 'assets/img/exam-scheduling.png',
     role: Role.Lecturer | Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'graduation-verification-service' as const,
@@ -348,7 +385,8 @@ export const menusRaw = [
     url: 'graduate-verification-service',
     img: 'assets/img/graduate-verification-service.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'mentorship' as const,
@@ -357,7 +395,8 @@ export const menusRaw = [
     url: 'mentorship',
     img: 'assets/img/mentorship.png',
     role: Role.Lecturer | Role.Admin,
-    tags: ['mentor', 'mentee', 'performance', 'attendance', 'results', 'my students']
+    tags: ['mentor', 'mentee', 'performance', 'attendance', 'results', 'my students'],
+    parents: [],
   },
   {
     id: 'monthly-returns' as const,
@@ -366,7 +405,8 @@ export const menusRaw = [
     url: 'https://monthlyreturns.apiit.edu.my', // no tickets
     img: 'assets/img/monthly-returns.png',
     role: Role.Lecturer | Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'my-reports-panel' as const,
@@ -376,7 +416,8 @@ export const menusRaw = [
     attachTicket: true,
     img: 'assets/img/reports.png',
     role: Role.Lecturer | Role.Admin,
-    tags: ['report', 'admin', 'jasper']
+    tags: ['report', 'admin', 'jasper'],
+    parents: [],
   },
   // END OF Academic Operations
 
@@ -388,7 +429,8 @@ export const menusRaw = [
     url: 'http://apiitgroupcomm.sites.apiit.edu.my/', // no ticket
     img: 'assets/img/corcum.png',
     role: Role.Lecturer | Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'human-resource' as const,
@@ -397,7 +439,8 @@ export const menusRaw = [
     url: 'hr',
     img: 'assets/img/hr.png',
     role: Role.Lecturer | Role.Admin,
-    tags: ['leave', 'break', 'mc']
+    tags: ['leave', 'break', 'mc'],
+    parents: [],
   },
   {
     id: 'quality-procedure' as const,
@@ -406,7 +449,8 @@ export const menusRaw = [
     url: 'http://kb.sites.apiit.edu.my/knowledge-base/quality-procedures-information-and-personal-data-protection/', // no ticket
     img: 'assets/img/quality.png',
     role: Role.Lecturer | Role.Admin,
-    tags: ['rules']
+    tags: ['rules'],
+    parents: [],
   },
   {
     id: 'report-an-exception-legacy' as const,
@@ -415,7 +459,8 @@ export const menusRaw = [
     url: 'http://asterix.apiit.edu.my/exception/login.jsp',
     img: 'assets/img/report-an-exception.png',
     role: Role.Lecturer | Role.Admin,
-    tags: ['report', 'admin', 'exception']
+    tags: ['report', 'admin', 'exception'],
+    parents: [],
   },
   // END OF Corporate
 
@@ -427,7 +472,8 @@ export const menusRaw = [
     url: 'attendance',
     img: 'assets/img/attendance.png',
     role: Role.Student,
-    tags: []
+    tags: [],
+    parents: [],
   },
   // {
   //   id: 'course-progression-pathway' as const,
@@ -436,7 +482,8 @@ export const menusRaw = [
   //   url: 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check',
   //   img: 'assets/img/reports.png',
   //   role: Role.Student | Role.Lecturer | Role.Admin,
-  //   tags: ['report', 'admin', 'jasper']
+  //   tags: ['report', 'admin', 'jasper'],
+  //   parents: [],
   // },
   {
     id: 'course-schedule' as const,
@@ -445,7 +492,8 @@ export const menusRaw = [
     url: 'http://kb.sites.apiit.edu.my/knowledge-base/course-schedule/',
     img: 'assets/img/course-schedule.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'exam-schedule' as const,
@@ -454,7 +502,8 @@ export const menusRaw = [
     url: 'exam-schedule',
     img: 'assets/img/exam-schedule.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'fyp-bank' as const,
@@ -463,7 +512,8 @@ export const menusRaw = [
     url: 'https://fypbank.apiit.edu.my/', // no ticket
     img: 'assets/img/fyp.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['fyp', 'bank', 'final project', 'project']
+    tags: ['fyp', 'bank', 'final project', 'project'],
+    parents: [],
   },
   {
     id: 'intake-calendar' as const,
@@ -472,7 +522,8 @@ export const menusRaw = [
     url: 'http://www.apu.edu.my/study-apu/intake-calendar', // no ticket
     img: 'assets/img/intake-calendar.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['intake date', 'intake duration', 'next intake']
+    tags: ['intake date', 'intake duration', 'next intake'],
+    parents: [],
   },
   // {
   //   id: 'module-appraisal' as const,
@@ -481,7 +532,8 @@ export const menusRaw = [
   //   url: 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check',
   //   img: 'assets/img/reports.png',
   //   role: Role.Student | Role.Lecturer | Role.Admin,
-  //   tags: ['report', 'admin', 'jasper']
+  //   tags: ['report', 'admin', 'jasper'],
+  //   parents: [],
   // },
   {
     id: 'moodle' as const,
@@ -491,7 +543,8 @@ export const menusRaw = [
     img: 'assets/img/moodle.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
     attachTicket: true,
-    tags: ['material', 'modules', 'lecturer note', 'assignment']
+    tags: ['material', 'modules', 'lecturer note', 'assignment'],
+    parents: [],
   },
   {
     id: 'lecturer-timetable' as const,
@@ -500,7 +553,8 @@ export const menusRaw = [
     url: 'lecturer-timetable',
     img: 'assets/img/timetable.png',
     role: Role.Lecturer,
-    tags: ['class', 'schedule']
+    tags: ['class', 'schedule'],
+    parents: [],
   },
   {
     id: 'pgd-bank' as const,
@@ -509,7 +563,8 @@ export const menusRaw = [
     url: 'https://pgd.apiit.edu.my/', // no ticket
     img: 'assets/img/fyp.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['fyp', 'bank', 'final project', 'project']
+    tags: ['fyp', 'bank', 'final project', 'project'],
+    parents: [],
   },
   {
     id: 'results' as const,
@@ -518,7 +573,8 @@ export const menusRaw = [
     url: 'results',
     img: 'assets/img/results.png',
     role: Role.Student,
-    tags: ['marks']
+    tags: ['marks'],
+    parents: [],
   },
   {
     id: 'students-results' as const,
@@ -528,7 +584,8 @@ export const menusRaw = [
     img: 'assets/img/results.png',
     role: Role.Lecturer | Role.Admin,
     canAccess: true,
-    tags: ['marks', 'web results']
+    tags: ['marks', 'web results'],
+    parents: [],
   },
   {
     id: 'student-timetable' as const,
@@ -537,7 +594,8 @@ export const menusRaw = [
     url: 'student-timetable',
     img: 'assets/img/timetable.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['class', 'schedule', 'break']
+    tags: ['class', 'schedule', 'break'],
+    parents: [],
   },
   // END OF Academic & Enrollment
 
@@ -549,7 +607,8 @@ export const menusRaw = [
     url: 'http://training.apiit.edu.my/', // no ticket
     img: 'assets/img/training.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'aplink-student' as const,
@@ -558,7 +617,8 @@ export const menusRaw = [
     url: 'https://apu-joblink-csm.symplicity.com/students/', // no ticket
     img: 'assets/img/aplink.png',
     role: Role.Student,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'aplink-staff' as const,
@@ -567,7 +627,8 @@ export const menusRaw = [
     url: 'https://apu-joblink-csm.symplicity.com/sso/faculty/', // no ticket
     img: 'assets/img/aplink.png',
     role: Role.Lecturer | Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
   },
   {
     id: 'career-centre-facebook' as const,
@@ -576,7 +637,8 @@ export const menusRaw = [
     url: 'https://www.facebook.com/apucc?ref=hl', // no ticket
     img: 'assets/img/career.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
   },
   // END OF Career Centre & Corporate Training
 
@@ -588,7 +650,8 @@ export const menusRaw = [
   //   url: 'https://report.apu.edu.my/jasperserver-pro/j_spring_security_check',
   //   img: 'assets/img/reports.png',
   //   role: Role.Student | Role.Lecturer | Role.Admin,
-  //   tags: ['report', 'admin', 'jasper']
+  //   tags: ['report', 'admin', 'jasper'],
+  //   parents: [],
   // },
   {
     id: 'classroom-finder' as const,
@@ -597,7 +660,8 @@ export const menusRaw = [
     url: 'classroom-finder',
     img: 'assets/img/classroom-finder.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['empty', 'class', 'lab', 'auditorium', 'workshop', 'room']
+    tags: ['empty', 'class', 'lab', 'auditorium', 'workshop', 'room'],
+    parents: [],
   },
   {
     id: 'profile' as const,
@@ -606,7 +670,8 @@ export const menusRaw = [
     url: 'profile',
     img: 'assets/img/profile.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['mentor', 'programme leader', 'visa']
+    tags: ['mentor', 'programme leader', 'visa'],
+    parents: [],
   },
   {
     id: 'settings' as const,
@@ -615,7 +680,18 @@ export const menusRaw = [
     url: 'settings',
     img: 'assets/img/settings.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: []
+    tags: [],
+    parents: [],
+  },
+  {
+    id: 'settings-set-security-question' as const,
+    title: 'Security Question',
+    group: 'Others',
+    url: 'set-security-questions',
+    img: 'assets/img/settings.png',
+    role: Role.Student | Role.Lecturer | Role.Admin,
+    tags: [],
+    parents: ['settings' as const],
   },
   {
     id: 'staff-directory' as const,
@@ -624,7 +700,8 @@ export const menusRaw = [
     url: 'staffs',
     img: 'assets/img/staff-directory.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['lecturer', 'academic', 'teacher']
+    tags: ['lecturer', 'academic', 'teacher'],
+    parents: [],
   },
   {
     id: 'track-student-visa-status' as const,
@@ -633,7 +710,8 @@ export const menusRaw = [
     url: 'visa-status',
     img: 'assets/img/visa-status.png',
     role: Role.Admin,
-    tags: ['visa']
+    tags: ['visa'],
+    parents: [],
   },
   {
     id: 'about' as const,
@@ -642,7 +720,8 @@ export const menusRaw = [
     url: 'about',
     img: 'assets/img/about.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['about', 'developer', 'contact', 'version', 'cti', 'who']
+    tags: ['about', 'developer', 'contact', 'version', 'cti', 'who'],
+    parents: [],
   },
   {
     id: 'logout' as const,
@@ -651,7 +730,8 @@ export const menusRaw = [
     url: 'logout',
     img: 'assets/img/logout.png',
     role: Role.Student | Role.Lecturer | Role.Admin,
-    tags: ['exit', 'log out', 'log-out', 'sign out', 'sign-out']
+    tags: ['exit', 'log out', 'log-out', 'sign out', 'sign-out'],
+    parents: [],
   },
   // END OF OTHERS
 
@@ -663,10 +743,12 @@ export const menusRaw = [
   //   url: 'https://graduation.sites.apiit.edu.my/',
   //   img: 'assets/img/upcoming-graduations.png',
   //   role: Role.Student,
-  //   tags: ['graduation', 'cermony']
+  //   tags: ['graduation', 'cermony'],
+  //   parents: [],
   // },
   // END OF UNGROUPED
 ];
 /* tslint:enable:no-bitwise */
 
-export const menus = menusRaw as MenuItem[];
+export const menus: MenuItem[] = menusRaw;
+export const menusTitle = menus.reduce((acc, menu) => ({...acc, [menu.id]: menu.title}), {});

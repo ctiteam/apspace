@@ -41,9 +41,8 @@ export class MorePage implements OnInit {
   options: Fuse.IFuseOptions<MenuItem> = {
     keys: ['title', 'tags']
   };
-
-  menuFiltered = [] as MenuItem[];
   menuFull: MenuItem[] = menus;
+  menuFiltered = [] as MenuItem[];
 
   isMobile = this.platform.is('cordova');
   isExpand = false;
