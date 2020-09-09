@@ -14,52 +14,108 @@
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
 
-  <div *ngIf="payslips$ | async as payslips; else loading">
-    <div *ngIf="payslips.length > 0; else noPayslips">
-      <ion-grid>
-        <ion-row class="ion-justify-content-end">
-          <ion-col class="ion-padding-horizontal" size="12" size-md="4">
-            <ion-item color="primary" style="border-radius: 6px;">
+  <div class="glob-container">
+    <ion-grid>
+      <ion-row *ngIf="isHumanResourceAdmin">
+        <ion-col class="ion-padding">
+          <ion-segment [(ngModel)]="segmentValue" (ionChange)="segmentChanged($event)">
+            <ion-segment-button value="myFiles">
+              <ion-label>My Files</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="findFiles">
+              <ion-label>Find Files</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="segmentValue === 'findFiles'" class="ion-justify-content-end ion-align-items-center">
+        <ion-col *ngIf="whileFirstSearch" class="margin-vertical" size="12">
+        </ion-col>
+        <ion-col size="12" size-md="10">
+          <ion-searchbar [(ngModel)]="term"></ion-searchbar>
+        </ion-col>
+        <ion-col size="12" size-md="2" class="ion-padding">
+          <ion-button (click)="searchFiles()" expand="block">
+            <ion-icon slot="icon-only" name="search"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+      <div *ngIf="!whileFirstSearch">
+        <ion-row class="ion-align-items-center">
+          <ion-col class="ion-padding">
+            <ion-item lines="none" class="custom-item">
               <ion-label>Date</ion-label>
-              <ion-datetime placeholder="Select Date to Filter" displayFormat="MMM YYYY" [(ngModel)]="date"></ion-datetime>
+              <ion-datetime placeholder="Select Date to Filter" displayFormat="MMM YYYY" [(ngModel)]="dateToFilter">
+              </ion-datetime>
             </ion-item>
           </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="12" size-md="6" size-xl="4" *ngFor="let payslip of (payslips | filter:date)">
-            <ion-card>
-              <img src="{{payslip | getDate | date: 'MMM' | generateMonthImg}}" />
-    
-              <ion-card-header>
-                <ion-fab horizontal="end" vertical="top" edge>
-                  <ion-fab-button (click)="downloadPayslipPdf(payslip)" class="colored-background">
-                    <ion-icon name="download"></ion-icon>
-                  </ion-fab-button>
-                </ion-fab>
-                <ion-card-title>
-                  {{payslip | getDate | date : 'MMM yyyy'}}
-                </ion-card-title>
-              </ion-card-header>
-              <ion-card-content>
-                {{payslip}}
-              </ion-card-content>
-            </ion-card>
+          <ion-col class="ion-padding">
+            <ion-item lines="none" class="custom-item">
+              <ion-label>File</ion-label>
+              <ion-select [(ngModel)]="fileToFilter" placeholder="Select File to Filter">
+                <ion-select-option value="Payslip">Payslip</ion-select-option>
+                <ion-select-option value="EA Form">EA Form</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12" size-md="2">
+            <ion-button 
+              *ngIf="segmentValue === 'myFiles'; else syncButton"
+              [disabled]="!dateToFilter && !fileToFilter"
+              expand="block"
+              (click)="displayAllFiles()"
+            >
+              Show All
+            </ion-button>
+
+            <ng-template #syncButton>
+              <ion-button *ngIf="!whileFirstSearch" color="tertiary" expand="block">
+                <ion-icon slot="icon-only" name="sync"></ion-icon>
+              </ion-button>
+            </ng-template>
           </ion-col>
         </ion-row>
-      </ion-grid>
-    </div>
+
+        <div *ngIf="files$ | async as files; else loading;">
+          <div *ngIf="(files | filter:dateToFilter:fileToFilter).length > 0; else noFiles;">
+            <ion-row>
+              <ion-col size="12" size-md="6" size-xl="4" *ngFor="let payslip of (files | filter:dateToFilter:fileToFilter)">
+                <ion-card>
+                  <img src="{{payslip | getDate | date: 'MMM' | generateMonthImg}}" />
+
+                  <ion-card-header>
+                    <ion-fab horizontal="end" vertical="top" edge>
+                      <ion-fab-button (click)="downloadPayslipPdf(payslip)" class="colored-background">
+                        <ion-icon name="download"></ion-icon>
+                      </ion-fab-button>
+                    </ion-fab>
+                    <ion-card-title>
+                      {{payslip | getDate | date : 'MMM yyyy'}}
+                    </ion-card-title>
+                  </ion-card-header>
+                  <ion-card-content>
+                    {{payslip}}
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </div>
+        </div>
+      </div>
+    </ion-grid>
+
+    <ng-template #noFiles>
+      <app-message-with-svg imageUrl="assets/img/empty.svg" messageTitle="Opps! No files available at the moment."
+        wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
+      </app-message-with-svg>
+    </ng-template>
+
+    <ng-template #loading>
+      <div class="loader-container">
+        <loading-spinner message="Loading..." size="50px"></loading-spinner>
+      </div>
+    </ng-template>
   </div>
-
-  <ng-template #noPayslips>
-    <app-message-with-svg imageUrl="assets/img/empty.svg"
-      messageTitle="Opps! No payslips available at the moment."
-      wrapperSize="4" wrapperOffset="4" wrapperMarginTop="20px">
-    </app-message-with-svg>
-  </ng-template>
-
-  <ng-template #loading>
-    <div class="loader-container">
-      <loading-spinner message="Loading..." size="50px"></loading-spinner>
-    </div>
-  </ng-template>
 </ion-content>
