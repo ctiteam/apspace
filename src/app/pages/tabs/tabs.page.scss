@@ -25,6 +25,10 @@
   .parent::after {
     content: ' »';
   }
+
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+  }
 }
 
 .system-title {

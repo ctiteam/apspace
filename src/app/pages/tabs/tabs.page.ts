@@ -1,6 +1,7 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { IonSearchbar } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import Fuse from 'fuse.js';
 
@@ -20,7 +21,10 @@ export class TabsPage implements OnInit {
   smallScreen;
   shownSearchBar = false;
 
+  @ViewChild(IonSearchbar, { static: false }) searchbar: IonSearchbar;
+
   term = '';
+  searching = false; // user focusing on searchbar
 
   options: Fuse.IFuseOptions<MenuItem> = {
     keys: ['title', 'tags']
@@ -141,6 +145,19 @@ export class TabsPage implements OnInit {
     // tslint:enable:no-bitwise
   }
 
+  @HostListener('document:keydown.f1')
+  @HostListener('document:keydown.?')
+  @HostListener('document:keydown.shift.?')
+  onKeydownHelp() {
+    window.location.href = 'https://apiit.atlassian.net/servicedesk/customer';
+  }
+
+  @HostListener('document:keydown.s')
+  onKeydownS() {
+    // prevent key 's' propagated into search
+    setTimeout(() => this.searchbar.setFocus(), 10);
+  }
+
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.smallScreen = window.innerWidth <= 720;
@@ -152,6 +169,11 @@ export class TabsPage implements OnInit {
 
   openHelpCentre() {
     this.iab.create('https://apiit.atlassian.net/servicedesk/customer/portals', '_system', 'location=true');
+  }
+
+  /** Stop searching after some time, for link clicking time. */
+  stopSearching() {
+    setTimeout(() => this.searching = false, 100);
   }
 
   noop(): number {
