@@ -2,6 +2,10 @@
   <ion-toolbar mode="md">
     <ion-title>Download Payslip</ion-title>
     <ion-buttons slot="end">
+      <ion-button *ngIf="isHumanResourceAdmin" color="tertiary" fill="outline" (click)="syncFiles()">
+        SYNC
+        <ion-icon name="sync" slot="end"></ion-icon>
+      </ion-button>
       <ion-button (click)="dismiss()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
@@ -10,7 +14,8 @@
 </ion-header>
 
 <ion-content>
-  <ion-refresher slot="fixed" pullMax="400" pullMin="60" (ionRefresh)="doRefresh($event)">
+  <ion-refresher *ngIf="segmentValue ==='myFiles'" slot="fixed" pullMax="400" pullMin="60"
+    (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshing-spinner="dots" pullingIcon="refresh"></ion-refresher-content>
   </ion-refresher>
 
@@ -33,55 +38,45 @@
         <ion-col *ngIf="whileFirstSearch" class="margin-vertical" size="12">
         </ion-col>
         <ion-col size="12" size-md="10">
-          <ion-searchbar [(ngModel)]="term"></ion-searchbar>
+          <ion-searchbar placeholder="Enter Staff ID" [(ngModel)]="term"></ion-searchbar>
         </ion-col>
-        <ion-col size="12" size-md="2" class="ion-padding">
-          <ion-button (click)="searchFiles()" expand="block">
+        <ion-col size="12" size-md="2">
+          <ion-button [disabled]="!term" (click)="searchFiles()" expand="block">
             <ion-icon slot="icon-only" name="search"></ion-icon>
           </ion-button>
         </ion-col>
       </ion-row>
 
       <div *ngIf="!whileFirstSearch">
-        <ion-row class="ion-align-items-center">
-          <ion-col class="ion-padding">
-            <ion-item lines="none" class="custom-item">
-              <ion-label>Date</ion-label>
-              <ion-datetime placeholder="Select Date to Filter" displayFormat="MMM YYYY" [(ngModel)]="dateToFilter">
-              </ion-datetime>
-            </ion-item>
-          </ion-col>
-          <ion-col class="ion-padding">
-            <ion-item lines="none" class="custom-item">
-              <ion-label>File</ion-label>
-              <ion-select [(ngModel)]="fileToFilter" placeholder="Select File to Filter">
-                <ion-select-option value="Payslip">Payslip</ion-select-option>
-                <ion-select-option value="EA Form">EA Form</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
-          <ion-col size="12" size-md="2">
-            <ion-button 
-              *ngIf="segmentValue === 'myFiles'; else syncButton"
-              [disabled]="!dateToFilter && !fileToFilter"
-              expand="block"
-              (click)="displayAllFiles()"
-            >
-              Show All
-            </ion-button>
-
-            <ng-template #syncButton>
-              <ion-button *ngIf="!whileFirstSearch" color="tertiary" expand="block">
-                <ion-icon slot="icon-only" name="sync"></ion-icon>
-              </ion-button>
-            </ng-template>
-          </ion-col>
-        </ion-row>
-
         <div *ngIf="files$ | async as files; else loading;">
+          <ion-row class="ion-align-items-center">
+            <ion-col class="ion-padding">
+              <ion-item lines="none" class="custom-item">
+                <ion-label>Date</ion-label>
+                <ion-datetime placeholder="Select Date to Filter" displayFormat="MMM YYYY" [(ngModel)]="dateToFilter">
+                </ion-datetime>
+              </ion-item>
+            </ion-col>
+            <ion-col class="ion-padding">
+              <ion-item lines="none" class="custom-item">
+                <ion-label>File</ion-label>
+                <ion-select [(ngModel)]="fileToFilter" placeholder="Select File to Filter">
+                  <ion-select-option value="Payslip">Payslip</ion-select-option>
+                  <ion-select-option value="EA Form">EA Form</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+            <ion-col size="12" size-md="2">
+              <ion-button [disabled]="!dateToFilter && !fileToFilter" expand="block" (click)="displayAllFiles()">
+                Show All
+              </ion-button>
+            </ion-col>
+          </ion-row>
+
           <div *ngIf="(files | filter:dateToFilter:fileToFilter).length > 0; else noFiles;">
             <ion-row>
-              <ion-col size="12" size-md="6" size-xl="4" *ngFor="let payslip of (files | filter:dateToFilter:fileToFilter)">
+              <ion-col size="12" size-md="6" size-xl="4"
+                *ngFor="let payslip of (files | filter:dateToFilter:fileToFilter)">
                 <ion-card>
                   <img src="{{payslip | getDate | date: 'MMM' | generateMonthImg}}" />
 
