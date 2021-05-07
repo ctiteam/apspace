@@ -2387,7 +2387,7 @@ angular2-chartjs@^0.5.1:
   dependencies:
     chart.js "^2.3.0"
 
-angularx-qrcode@^2.1.0:
+angularx-qrcode@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/angularx-qrcode/-/angularx-qrcode-2.1.0.tgz#94ba30647f851305c58b6365ec9eb8fb91bb97dc"
   integrity sha512-4mtlPJmemQINEz8OH6cYOllLJ77kFamk38G1L8OLF4X/nrxWaFIxMiKcPHf/HVeqATSAPismgqPu9aM5RhF/ig==
@@ -12230,9 +12230,9 @@ typescript@3.5.3, typescript@~3.5.3:
   integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
 
 ua-parser-js@^0.7.18:
-  version "0.7.21"
-  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.21.tgz#853cf9ce93f642f67174273cc34565ae6f308777"
-  integrity sha512-+O8/qh/Qj8CgC6eYBVBykMrNtp5Gebn4dlGD/kKXVkJNDwyrAwSIqwz8CDf+tsAIWVycKcku6gIXJ0qwx/ZXaQ==
+  version "0.7.28"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.28.tgz#8ba04e653f35ce210239c64661685bf9121dec31"
+  integrity sha512-6Gurc1n//gjp9eQNXjD9O3M/sMwVtN5S8Lv9bvOYBfKfDNiIIhqiyi01vMBO45u4zkDE420w/e0se7Vs+sIg+g==
 
 ultron@~1.1.0:
   version "1.1.1"
