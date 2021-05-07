@@ -2387,7 +2387,7 @@ angular2-chartjs@^0.5.1:
   dependencies:
     chart.js "^2.3.0"
 
-angularx-qrcode@^2.1.0:
+angularx-qrcode@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/angularx-qrcode/-/angularx-qrcode-2.1.0.tgz#94ba30647f851305c58b6365ec9eb8fb91bb97dc"
   integrity sha512-4mtlPJmemQINEz8OH6cYOllLJ77kFamk38G1L8OLF4X/nrxWaFIxMiKcPHf/HVeqATSAPismgqPu9aM5RhF/ig==
@@ -12240,9 +12240,9 @@ ultron@~1.1.0:
   integrity sha512-UIEXBNeYmKptWH6z8ZnqTeS8fV74zG0/eRU9VGkpzz+LIJNs8W/zM/L+7ctCkRrgbNnnR0xxw4bKOr0cW0N0Og==
 
 underscore@^1.8.3:
-  version "1.10.2"
-  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.10.2.tgz#73d6aa3668f3188e4adb0f1943bd12cfd7efaaaf"
-  integrity sha512-N4P+Q/BuyuEKFJ43B9gYuOj4TQUHXX+j2FqguVOpjkssLUUrnJofCcBccJSCoeturDoZU6GorDTHSvUDlSQbTg==
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.13.1.tgz#0c1c6bd2df54b6b69f2314066d65b6cde6fcf9d1"
+  integrity sha512-hzSoAVtJF+3ZtiFX0VgfFPHEDRm7Y/QPjGyNo4TVdnDTdft3tr8hEkD25a1jC+TjTuE7tkHGKkhwCgs9dgBB2g==
 
 unherit@^1.0.4:
   version "1.1.3"
