@@ -2387,7 +2387,7 @@ angular2-chartjs@^0.5.1:
   dependencies:
     chart.js "^2.3.0"
 
-angularx-qrcode@^2.1.0:
+angularx-qrcode@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/angularx-qrcode/-/angularx-qrcode-2.1.0.tgz#94ba30647f851305c58b6365ec9eb8fb91bb97dc"
   integrity sha512-4mtlPJmemQINEz8OH6cYOllLJ77kFamk38G1L8OLF4X/nrxWaFIxMiKcPHf/HVeqATSAPismgqPu9aM5RhF/ig==
@@ -8735,10 +8735,10 @@ mkdirp@1.0.3:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.3.tgz#4cf2e30ad45959dddea53ad97d518b6c8205e1ea"
   integrity sha512-6uCP4Qc0sWsgMLy1EOqqS/3rjDHOEnsStVr/4vtAIK2Y5i2kA7lFFejYrpIyiN9w0pYf4ckeCYT9f1r1P9KX5g==
 
-moment@^2.10.2, moment@^2.24.0:
-  version "2.24.0"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
-  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
+moment@^2.10.2, moment@^2.24.0, moment@^2.29.4:
+  version "2.29.4"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 move-concurrently@^1.0.1:
   version "1.0.1"
